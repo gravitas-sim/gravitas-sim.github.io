@@ -15,7 +15,7 @@
 // putting one at a precise point on an H-R diagram would be inventing numbers
 // the model does not contain. It is an illustration and the panel says so.
 //
-// An **interior**, schematic, optional and labelled as conceptual. The bundled
+// An **interior**, schematic, optional and labeled as conceptual. The bundled
 // tracks are surface quantities: a temperature, a luminosity, a mass. They
 // carry no radial structure at all, so the shells drawn here are a diagram of
 // which process is releasing the energy, sized to be legible and to nothing
@@ -192,7 +192,7 @@ function parkAt(state, spec) {
 //
 // A step that carries `bind` names a staged star, and from then on that body
 // and the marker on the H-R diagram are the same object. Everything the reader
-// can read about it - the colour on the canvas, the radius, the inspector card
+// can read about it - the color on the canvas, the radius, the inspector card
 // - comes from `starNow`, which is the same function that places the marker.
 // There is no second copy of the star's state and therefore nothing that can
 // disagree.
@@ -201,7 +201,7 @@ function parkAt(state, spec) {
 //
 //   the cloud     Before the track begins. The model has nothing to say here,
 //                 so nothing is written: the body holds the track's first
-//                 sample and the readout says the collapse is not modelled.
+//                 sample and the readout says the collapse is not modeled.
 //
 //   the track     The star. Temperature, radius, luminosity and current mass
 //                 are written every frame from the sample the marker is on.
@@ -696,7 +696,7 @@ function positionAlong(state, trackFraction) {
  * One scale runs through the star's whole life, set by the largest radius the
  * track ever reaches, so a main-sequence star really is a speck beside the
  * supergiant it becomes. A star too small to draw at that scale is drawn as a
- * marker and labelled, exactly as the comparison stage does it.
+ * marker and labeled, exactly as the comparison stage does it.
  */
 function drawStage(g, r, state, colors, spec) {
   const f = frameOf(state);
@@ -738,7 +738,7 @@ function drawStage(g, r, state, colors, spec) {
   const trueScale = peak > 0 ? room / peak : 1;
   const fitted = spec.sizeMode === 'fit';
   // Fitted draws the star at whatever size the box allows, which shows the
-  // colour and the phase at every moment and says nothing about size. True
+  // color and the phase at every moment and says nothing about size. True
   // scale keeps one scale for the whole life, which is the only way the
   // expansion means anything - and makes a main-sequence star a speck.
   const px = fitted ? Math.max(4, room * 0.72) : now.radiusSun * trueScale;
@@ -839,7 +839,7 @@ function hexToRgb(hex) {
  * A collapsing cloud, before there is a star.
  *
  * Deliberately crude: a few seeded blobs contracting towards a brightening
- * centre. It carries no temperature, no radius and no age, because the model
+ * center. It carries no temperature, no radius and no age, because the model
  * behind everything else in this panel does not describe this stage at all.
  */
 function drawCloud(g, cx, cy, room, state, colors, within) {
@@ -852,7 +852,7 @@ function drawCloud(g, cx, cy, room, state, colors, within) {
       s: 0.12 + rand() * 0.22,
     });
   }
-  // Contract towards the centre as the stage runs. With reduced motion the
+  // Contract towards the center as the stage runs. With reduced motion the
   // stage is drawn at a fixed halfway point instead of animating.
   const shrink = prefersReducedMotion() ? 0.5 : 1 - 0.75 * within;
   g.save();
@@ -866,7 +866,7 @@ function drawCloud(g, cx, cy, room, state, colors, within) {
     g.globalAlpha = 0.13;
     g.fill();
   }
-  // A brightening centre, not yet a photosphere.
+  // A brightening center, not yet a photosphere.
   g.globalAlpha = 0.25 + 0.55 * within;
   g.beginPath();
   g.arc(cx, cy, Math.max(2, room * 0.12 * (0.4 + within)), 0, Math.PI * 2);
@@ -908,7 +908,7 @@ function drawShells(g, cx, cy, room, state, colors, lostFraction) {
 /**
  * A schematic of where the energy is coming from.
  *
- * Conceptual, and labelled as conceptual wherever it is shown. The bundled
+ * Conceptual, and labeled as conceptual wherever it is shown. The bundled
  * tracks are surface quantities and contain no radial structure whatsoever, so
  * the radii of these shells are chosen to be legible and mean nothing. What
  * they do carry is which process the track's phase says is running, which is
@@ -1673,5 +1673,5 @@ function capture(state) {
 /** Every widget this module contributes. */
 export const STELLAR_EVOLUTION_WIDGETS = [STELLAR_EVOLUTION];
 
-/** Loaded with the rest of the catalogue's prose. */
+/** Loaded with the rest of the catalog's prose. */
 ensureDeferredMessages().catch(() => {});

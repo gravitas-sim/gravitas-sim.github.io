@@ -258,7 +258,7 @@ export function provenanceOf({
   initialStateHash = null,
   recordedAt = null,
   observedEpochs = null,
-  analysedAt = null,
+  analyzedAt = null,
   scheduleFingerprint = null,
   uncertaintySeed = null,
   uncertainty = null,
@@ -276,7 +276,7 @@ export function provenanceOf({
     // simulation clock under its own name. All three, because the clock is in
     // simulation time units whose length depends on the gravitational
     // constant: a reader given only "seconds" cannot check the arithmetic, and
-    // a reader given a number labelled seconds that is really units has been
+    // a reader given a number labeled seconds that is really units has been
     // told something false.
     simTimeUnits: num(simTimeUnits),
     simTimeSeconds: num(simTimeSeconds),
@@ -350,7 +350,7 @@ export function provenanceOf({
      * same reason: none of the three is a fact about how the observations
      * were generated.
      */
-    analysedAt: analysedAt === null ? null : String(analysedAt),
+    analyzedAt: analyzedAt === null ? null : String(analyzedAt),
     /** Which observing schedule produced the measurements. */
     scheduleFingerprint:
       scheduleFingerprint === null ? null : String(scheduleFingerprint),
@@ -398,7 +398,7 @@ export function newEntryId() {
  * edited. Which is the one thing it exists to detect.
  *
  * @param {*} value - Anything JSON can hold
- * @returns {string} A stable serialisation
+ * @returns {string} A stable serialization
  */
 function canonical(value) {
   if (value === null || typeof value !== 'object') return JSON.stringify(value);

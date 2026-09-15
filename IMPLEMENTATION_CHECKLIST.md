@@ -42,7 +42,7 @@ real control, a real measurement, or a real dataset.
 | #   | Criterion                                                                                                                                              | Where it is checked                  |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
 | A1  | Waveform model reproduces published closed-form limits (chirp mass, `f(tau)`, ISCO, amplitude scaling) against independently computed reference values | `tests/gwWaveform.test.js`           |
-| A2  | Sandbox physics, sandbox audio and merger ripples are unchanged and still labelled illustrative                                                        | `tools/physics-checks.mjs`, `tests/` |
+| A2  | Sandbox physics, sandbox audio and merger ripples are unchanged and still labeled illustrative                                                        | `tools/physics-checks.mjs`, `tests/` |
 | A3  | One canonical timeline drives plots, audio, source phase and captures                                                                                  | `tests/gwTimeline.test.js`           |
 | A4  | Audio is generated from the signal at a signal sample rate, never from the animation loop                                                              | `tests/gwAudio.test.js`              |
 | A5  | No audio without an explicit user gesture; no duplicate merger audio                                                                                   | `e2e/gwAudio.spec.js`                |
@@ -56,7 +56,7 @@ real control, a real measurement, or a real dataset.
 - [x] Audit `js/audio.js`, merger events, ripple rendering, compact-object
       scenarios, observing panels, charts, event pause, A/B bench, notebook,
       share/save, investigation authoring, classroom activities
-- [x] Confirm the two things that must not be relabelled: sandbox audio is
+- [x] Confirm the two things that must not be relabeled: sandbox audio is
       designed sonification (`quantizeMidi`, a minor pentatonic scale), and the
       sandbox inspiral is `orbit_decay_rate` damping
 - [x] Confirm the duplicate-merger-audio defect exists
@@ -73,12 +73,12 @@ real control, a real measurement, or a real dataset.
       (`modelTimeline`, `sampledTimeline`), one shape. `envelope()` is O(buckets)
       and resolves a bucket analytically when it holds a whole cycle, so a
       158-second neutron-star inspiral draws into 900 buckets in 1.3 ms
-- [x] `js/gw/fft.js`, `js/gw/noise.js` - radix-2 transform; seeded coloured
+- [x] `js/gw/fft.js`, `js/gw/noise.js` - radix-2 transform; seeded colored
       noise from the published Advanced LIGO design curve
 - [x] `js/gw/audioRender.js` - buffers filled by evaluating the timeline at the
       device rate. Two speed modes, both described in the returned `mapping`;
       pitch-preserving stretch is exact for an analytic phase
-- [x] `js/gw/match.js` - normalised overlap ("similarity", never SNR), plus
+- [x] `js/gw/match.js` - normalized overlap ("similarity", never SNR), plus
       whitening and a Tukey taper
 - [ ] The lab panel itself: presets, controls, plots, source view, transport
 - [ ] Notebook capture and the comparison contract
@@ -126,7 +126,7 @@ real control, a real measurement, or a real dataset.
 ### Stage 4 - Audio that explains itself
 
 - [x] The speaker opens a panel: mode, what is playing, volume, stop, a
-      labelled example, a link to the lesson, and the sentence that permission
+      labeled example, a link to the lesson, and the sentence that permission
       is not playback
 - [x] Six states distinguished - unsupported, muted, blocked, ready, playing,
       and which of the two modes. An AudioContext existing is never treated as
@@ -152,7 +152,7 @@ real control, a real measurement, or a real dataset.
 - [x] `js/data/gw/gw150914.js` (23.0 KB) - eight published traces: observed
       strain H1/L1, numerical-relativity reconstruction H1/L1, residual H1/L1,
       Keplerian separation, post-Newtonian velocity
-- [x] `js/data/gw/README.md` - full provenance, per-file SHA-256, licence,
+- [x] `js/data/gw/README.md` - full provenance, per-file SHA-256, license,
       attribution, every processing step and every step deliberately not taken
 - [x] The build **measures** the H1/L1 lag and sign and records them as
       findings rather than applying them: as published the observations
@@ -224,7 +224,7 @@ evidence export before B4 begins.
   Stefan-Boltzmann closure moves.
 
 **The API.** `js/stellar/geometry.js` (the exact relation, three ways),
-`js/stellar/mainSequence.js` (the estimates, labelled as estimates),
+`js/stellar/mainSequence.js` (the estimates, labeled as estimates),
 `js/stellar/tracks.js` (`stateAtAge`, `stateAtEep`, `mainSequenceAt`,
 `trackBounds`, `trackSamples`, `nearestTrack`) and `js/stellar/state.js` (the
 shared description, `supportsHabitableZone`, `supportsTransitPhotometry`,
@@ -237,14 +237,14 @@ shared description, `supportsHabitableZone`, `supportsTransitPhotometry`,
 - `js/lightCurve.js` no longer has its own mass-radius power law.
 - The inspector's star card is rebuilt on the shared description: measured
   values are used where they exist and guessed ones are marked _(estimated)_.
-- The star constructor no longer invents a `baseColor`, so an authored colour
-  is distinguishable from a generated one - and a generated star is coloured by
+- The star constructor no longer invents a `baseColor`, so an authored color
+  is distinguishable from a generated one - and a generated star is colored by
   its temperature, in the 2D renderer, the trails and the 3D view.
-- The colour memo is keyed on the temperature, so a temperature change at
+- The color memo is keyed on the temperature, so a temperature change at
   fixed mass repaints.
-- Six modelled fields are persisted and carried in a share link, additively:
+- Six modeled fields are persisted and carried in a share link, additively:
   an older link restores with nulls, which is the right description of a star
-  nobody modelled.
+  nobody modeled.
 - No stellar aging in the sandbox. Nothing advances a star's age on the
   simulation clock.
 
@@ -278,7 +278,7 @@ shared description, `supportsHabitableZone`, `supportsTransitPhotometry`,
 | `budget:check`                                                                                    | initial **830.0 of 830.0 KB**, deferred 3286.2 of 3350.0 |
 
 **Warning for B2: the initial download has zero headroom.** It was paid for by
-moving 63 strings out of the eager catalogue - the front door, the export
+moving 63 strings out of the eager catalog - the front door, the export
 dialog, the activity bridge, the tidal model and the stellar phase names - and
 there is nothing cheap left. The next eager byte needs a deferral first. The
 identified candidate is `js/scenarioBrowser.js` (4.9 KB eager, opened from a
@@ -293,7 +293,7 @@ wiring a lazy handler for the gallery button.
   age can resolve. 212, 201 and 105 samples on the 1, 2 and 5 solar-mass tracks
   cannot be addressed by age; `trackBounds().unreachableByAge` reports the
   count and `stateAtEep` reaches them.
-- MIST states a citation requirement and no explicit redistribution licence.
+- MIST states a citation requirement and no explicit redistribution license.
   The bundle is a heavily reduced derived subset, fully attributed, and the
   build reproduces it from their download in one command.
 - Nothing yet _uses_ the tracks in the interface. That is B2.
@@ -315,7 +315,7 @@ wiring a lazy handler for the gallery button.
 
 **The two modes are two different kinds of claim.**
 
-- [x] _Explore modelled stars_: mass, phase, age, total main-sequence lifetime
+- [x] _Explore modeled stars_: mass, phase, age, total main-sequence lifetime
       and time remaining, all from the track.
 - [x] _Explore temperature and luminosity_: a point the student chose, its
       radius from Stefan-Boltzmann, and **no mass, no age, no lifetime**.
@@ -351,11 +351,11 @@ wiring a lazy handler for the gallery button.
 * [x] A widget that declares `pick` gets pointer-down/move on its canvas,
       routed through the same `applied()` path a slider uses - so the sliders
       move to match, the value is remembered with the step, and the redraw is
-      the same one. Every other widget in the catalogue is untouched.
+      the same one. Every other widget in the catalog is untouched.
 * [x] The canvas becomes focusable and the arrow keys step the two controls the
       widget names in `pickAxes` (shift for the coarse move), so the diagram is
       drivable without a mouse. The sliders remain the numeric entry.
-* [x] A click in _modelled_ mode is refused rather than dragging the star off
+* [x] A click in _modeled_ mode is refused rather than dragging the star off
       its track.
 
 **Checks at this stage**
@@ -388,7 +388,7 @@ turns it green.
       and the four were often the same mass four times. It now prefers one per
       distinct mass and says how many more there are.
 
-**Spanish, corrected across package A as well as B.** 266 catalogue strings I
+**Spanish, corrected across package A as well as B.** 266 catalog strings I
 wrote for `gwW`, `sound`, `stelW` and `nb.stellar` had no diacritics at all,
 while 652 lines of the same file have them. 116 values were corrected - the
 unambiguous words from a table, and every `esta`/`esta`, `cual`/`cual`,
@@ -462,9 +462,9 @@ screen.
 
 **Defects found by the browser walk, not by a unit test**
 
-- [x] Seeded pins pinned the _free cursor_ rather than the modelled star
+- [x] Seeded pins pinned the _free cursor_ rather than the modeled star
       whenever an earlier step had left the lab in free mode - so step 6's two
-      stars were both the Sun. `seedPins` now pins as a modelled star and
+      stars were both the Sun. `seedPins` now pins as a modeled star and
       restores the mode.
 - [x] The step's pacing was applied _after_ its pins, so a pin given as a
       fraction was resolved against the wrong mapping.
@@ -475,7 +475,7 @@ screen.
       H-R diagram" and named no model at all. It is titled by what was
       captured and always names the grid.
 - [x] The per-star "smaller than a pixel here" caption is wider than a slot on
-      a narrow canvas and collided with its neighbours; it is a two-word mark
+      a narrow canvas and collided with its neighbors; it is a two-word mark
       now, with the sentence in the readout. An HTML entity in it was being
       drawn literally on the canvas.
 
@@ -513,7 +513,7 @@ them. One age drives every linked view.
 - [x] Mass selection, physical age and phase, play/pause, scrubber, previous
       and next phase, restart, an H-R trace, a linked appearance and readout,
       an optional interior schematic, and a second track pinned as a ghost.
-- [x] Two pacings, both labelled, with a **duration summary**: for the current
+- [x] Two pacings, both labeled, with a **duration summary**: for the current
       phase the readout prints the real length beside the share of the
       playback it gets. On a solar-mass star the thermally-pulsing AGB is
       0.01% of the life and 45% of the phase-paced playhead, and it says so.
@@ -548,7 +548,7 @@ them. One age drives every linked view.
 
 - [x] Three tracks reach a white dwarf and their remnant masses are their own
       last samples (0.54, 0.59, 0.89 M☉). Every other endpoint is a published
-      result quoted for the nearest modelled progenitor, and `fromTrack` is the
+      result quoted for the nearest modeled progenitor, and `fromTrack` is the
       flag that separates the two. Both are asserted for every entry.
 - [x] No formula from initial mass to remnant mass anywhere. Progenitor mass is
       never quoted as remnant mass - a test checks it on every entry.
@@ -597,7 +597,7 @@ them. One age drives every linked view.
 **Honest remaining limitations of B4**
 
 - The interior schematic knows which process is burning and nothing else. Its
-  shell radii are chosen for legibility and are labelled as meaningless.
+  shell radii are chosen for legibility and are labeled as meaningless.
 - The 40 M☉ track stops during helium ignition, earlier than the 10 and 20 M☉
   tracks stop, so the gap between where the model ends and where the star ends
   is widest exactly where the endpoint is least directly supported. The
@@ -616,7 +616,7 @@ naming a limitation of the models.
 
 - [x] Four masses followed end to end: a solar-mass star to a white dwarf, 10
       to a neutron star, 40 to a black hole, and a red dwarf that does none of
-      it. The H-R diagram is the organising view throughout, with exactly three
+      it. The H-R diagram is the organizing view throughout, with exactly three
       exceptions named as exceptions each time - the cloud, the explosion and
       the black hole.
 - [x] Every number checked against the models before it was written. Two first
@@ -678,7 +678,7 @@ naming a limitation of the models.
 
 - Step validators are functions, so their feedback is not reachable by the
   translation shadow and a Spanish student sees English validation text. True
-  of every lesson in the catalogue, not introduced here.
+  of every lesson in the catalog, not introduced here.
 - The lesson asserts a number of facts that are not in the models and are
   stated in prose instead: what happens between carbon ignition and core
   collapse, why iron ends the sequence, what a pulsar needs. Each is flagged
@@ -709,7 +709,7 @@ naming a limitation of the models.
 - [x] **Also found:** a merger spawned up to 220 more of them, so two black
       holes merging in vacuum produced both a flare and a mass gain that came
       from the renderer.
-- [x] **Also found:** the emissivity normalisation took a square root of a
+- [x] **Also found:** the emissivity normalization took a square root of a
       quantity that was already one, so the profile was about twice what it
       should be and clamped flat across the whole inner disk.
 
@@ -737,7 +737,7 @@ naming a limitation of the models.
       scenario's collisions moved.
 - [x] The drawn size is compressed and the inspector says so.
 - [x] The outline is at the drawn edge and is described as a boundary and a
-      selection aid. There is no bright ring at a multiple of it labelled a
+      selection aid. There is no bright ring at a multiple of it labeled a
       photon sphere.
 
 **What is drawn**
@@ -782,8 +782,8 @@ same simple mark the far level of detail uses. 829.8 of 830.0.
 - The Doppler contrast and the jet beaming are **bounded illustrations**, not
   computed factors. The engine has no velocity in units of c, and both say so
   where they are defined and in the documentation.
-- The colours are illustrative. No temperature and no observing band is
-  modelled anywhere.
+- The colors are illustrative. No temperature and no observing band is
+  modeled anywhere.
 - The interior of the disk has no vertical structure: at high inclination it is
   a flat annulus, not a torus with thickness.
 - `AccretionDiskParticle` still exists and is still drawn if a restored save

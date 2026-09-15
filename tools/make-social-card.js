@@ -245,7 +245,7 @@ const ihdr = Buffer.alloc(13);
 ihdr.writeUInt32BE(W, 0);
 ihdr.writeUInt32BE(H, 4);
 ihdr[8] = 8; // bit depth
-ihdr[9] = 2; // color type: truecolour
+ihdr[9] = 2; // color type: truecolor
 const png = Buffer.concat([
   Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
   chunk('IHDR', ihdr),

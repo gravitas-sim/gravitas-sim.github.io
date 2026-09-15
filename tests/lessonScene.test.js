@@ -48,7 +48,7 @@ import {
   stars,
 } from '../js/physics.js';
 import {
-  MODELLED_FIELDS,
+  MODELED_FIELDS,
   applySelection,
   fieldsFromSelection,
   nearestTrackByMass,
@@ -149,7 +149,7 @@ describe('a role resolves to one body in one world', () => {
 });
 
 describe('a body a model owns is not moved by the integrator', () => {
-  test('it stays exactly where it was put, while its neighbour does not', () => {
+  test('it stays exactly where it was put, while its neighbor does not', () => {
     world({ starNames: ['Sun'], planetNames: ['Mars', 'Venus'] });
     bindRoles(
       { red: { name: 'Mars' }, hot: { name: 'Venus' } },
@@ -164,7 +164,7 @@ describe('a body a model owns is not moved by the integrator', () => {
     }
     expect(mars.pos.x).toBeCloseTo(held.x, 12);
     expect(mars.pos.y).toBeCloseTo(held.y, 12);
-    // Its neighbour, under the same call, does move - so the guard is what
+    // Its neighbor, under the same call, does move - so the guard is what
     // held it and not a still world.
     expect(
       Math.hypot(venus.pos.x - other.x, venus.pos.y - other.y)
@@ -293,7 +293,7 @@ describe('the scope a lesson borrows', () => {
 });
 
 describe('a stellar model writing onto a star', () => {
-  const modelled = {
+  const modeled = {
     source: 'model',
     teffK: 5772,
     luminositySun: 1,
@@ -310,8 +310,8 @@ describe('a stellar model writing onto a star', () => {
     radiusSun: 0.33,
   };
 
-  test('a modelled point supplies everything the track knows', () => {
-    expect(fieldsFromSelection(modelled)).toEqual({
+  test('a modeled point supplies everything the track knows', () => {
+    expect(fieldsFromSelection(modeled)).toEqual({
       temperature: 5772,
       luminosityInSuns: 1,
       radiusInSuns: 1,
@@ -334,7 +334,7 @@ describe('a stellar model writing onto a star', () => {
       radiusInSuns: 0.33,
       // Said out loud rather than left to the absence of the others: a reader
       // and a notebook entry both need to know this point is a place somebody
-      // clicked, not a star anybody modelled.
+      // clicked, not a star anybody modeled.
       modelSource: 'free',
     });
     for (const withheld of [
@@ -352,7 +352,7 @@ describe('a stellar model writing onto a star', () => {
     // star showing the track's mass beside a temperature from somewhere else,
     // and nothing on the card said the two had stopped belonging together.
     const star = {};
-    applySelection(star, modelled);
+    applySelection(star, modeled);
     expect(star.massInSuns).toBe(1);
     expect(star.modelSource).toBe('model');
     applySelection(star, free);
@@ -362,9 +362,9 @@ describe('a stellar model writing onto a star', () => {
     expect(star.radiusInSuns).toBe(0.33);
   });
 
-  test('moving from a modelled point to a free one takes the age back', () => {
+  test('moving from a modeled point to a free one takes the age back', () => {
     const star = {};
-    applySelection(star, modelled);
+    applySelection(star, modeled);
     expect(star.ageYr).toBe(4.6e9);
     applySelection(star, free);
     expect(star.ageYr).toBe(null);
@@ -374,8 +374,8 @@ describe('a stellar model writing onto a star', () => {
 
   test('writing the same selection twice changes nothing the second time', () => {
     const star = {};
-    expect(applySelection(star, modelled)).toBe(true);
-    expect(applySelection(star, modelled)).toBe(false);
+    expect(applySelection(star, modeled)).toBe(true);
+    expect(applySelection(star, modeled)).toBe(false);
   });
 
   test('a star can be read and put back exactly', () => {
@@ -385,7 +385,7 @@ describe('a stellar model writing onto a star', () => {
     expect(star.temperature).toBe(10000);
     writeStarState(star, saved);
     expect(star.temperature).toBe(5772);
-    expect(MODELLED_FIELDS.every(k => k in star)).toBe(true);
+    expect(MODELED_FIELDS.every(k => k in star)).toBe(true);
   });
 
   test('where a star already is, when it says', () => {
@@ -405,7 +405,7 @@ describe('a stellar model writing onto a star', () => {
       initialMassSun: m,
     }));
     // 3 solar masses is 0.48 of the way from 2 to 5 linearly, and 0.16 of the
-    // way in log, which is the spacing the catalogue actually has.
+    // way in log, which is the spacing the catalog actually has.
     expect(nearestTrackByMass(3, tracks)).toBe('2');
     expect(nearestTrackByMass(1.05, tracks)).toBe('1');
     expect(nearestTrackByMass(38, tracks)).toBe('40');

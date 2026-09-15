@@ -129,14 +129,14 @@ describe('one selection function, one distance, one definition of flux', () => {
 
   test('the four populations are four different numbers', () => {
     const s = at(1e-4);
-    // Drawn, then modelled, then passing the cut - three shrinking numbers -
-    // and a bounded canvas subsample of the modelled ones, of which the ones
+    // Drawn, then modeled, then passing the cut - three shrinking numbers -
+    // and a bounded canvas subsample of the modeled ones, of which the ones
     // that pass are what stands on screen.
     expect(s.requested).toBeGreaterThan(s.total);
     expect(s.total).toBeGreaterThan(s.visible);
     expect(s.subsample).toBeLessThanOrEqual(s.total);
     expect(s.shown.length).toBeLessThanOrEqual(s.subsample);
-    // At the lesson's own settings the shelf holds the whole modelled set, so
+    // At the lesson's own settings the shelf holds the whole modeled set, so
     // the canvas shows every star the cut keeps rather than whichever of a
     // hundred and twenty happened to be bright. The readout still reports the
     // subsample separately; it is a different quantity that is equal here.

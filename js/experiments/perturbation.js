@@ -21,7 +21,7 @@
 /** Components that can be nudged. */
 export const AXES = ['x', 'y', 'vx', 'vy'];
 
-/** One simulation length unit in metres. 1 unit = 0.01 AU. */
+/** One simulation length unit in meters. 1 unit = 0.01 AU. */
 const UNIT_M = 1.495978707e9;
 
 /**
@@ -120,7 +120,7 @@ export function systemExtent(payload) {
 /**
  * A perturbation in words and in physical units.
  *
- * Simulation units mean nothing to a student. Kilometres do, and so does the
+ * Simulation units mean nothing to a student. Kilometers do, and so does the
  * ratio to the size of the system: those two together are what make "a very
  * small change" a quantity rather than an adjective.
  *

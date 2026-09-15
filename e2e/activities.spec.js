@@ -154,7 +154,7 @@ test.describe('a link that names nothing real', () => {
     await page.waitForSelector('#teachActivities article');
     await expect(page.locator('#activityFallback')).toBeVisible();
     await expect(page.locator('#activityFallback')).toContainText('nope');
-    // And the real formats are all still offered. Counted from the catalogue:
+    // And the real formats are all still offered. Counted from the catalog:
     // a literal here is the same defect the page itself was built to avoid.
     await expect(page.locator('.teach-activity-format')).toHaveCount(
       allFormats().length
@@ -237,7 +237,7 @@ test.describe('two formats are two different pieces of work', () => {
       }
       return out;
     });
-    // Every format in the catalogue, not just one activity's: two sharing an
+    // Every format in the catalog, not just one activity's: two sharing an
     // id would share one progress namespace and mark each other complete.
     expect(new Set(ids).size).toBe(allFormats().length);
   });
@@ -249,7 +249,7 @@ test.describe('the two doors', () => {
   }) => {
     await page.goto(`${TEACHING}#activities`);
     await page.waitForSelector('#teachActivities article');
-    // Out to the whole catalogue...
+    // Out to the whole catalog...
     const browse = page.locator('a[data-i18n="teach.activities.browse"]');
     await expect(browse).toHaveAttribute('href', /investigationBrowser/);
     // ...and to the investigation this activity is cut from.
@@ -282,7 +282,7 @@ test.describe('the two doors', () => {
     page,
     app,
   }) => {
-    // Existing URLs keep their behaviour: the whole lesson, no assignment.
+    // Existing URLs keep their behavior: the whole lesson, no assignment.
     await app.boot();
     await page.evaluate(() => {
       window.location.hash = '#investigation=keplers-laws';
@@ -347,7 +347,7 @@ test.describe('both languages, and the keyboard', () => {
     }
   });
 
-  test('the format a link names is marked without relying on colour', async ({
+  test('the format a link names is marked without relying on color', async ({
     page,
   }) => {
     await page.goto(`${TEACHING}?activity=orbital-speed&format=lab#activities`);

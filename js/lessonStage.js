@@ -59,7 +59,7 @@ import {
   white_dwarfs,
 } from './physics.js';
 import { bindRoles, releaseModelOwnership, selectBody } from './lessonScene.js';
-import { barycentreOf, circularBinary } from './lesson/barycentre.js';
+import { barycenterOf, circularBinary } from './lesson/barycenter.js';
 import { trackBounds, trackIds } from './stellar/tracks.js';
 import { populationOf, resolveStarSpec } from './stellarLab.js';
 import { brightSubset } from './stellar/population.js';
@@ -72,7 +72,7 @@ export { SCALE };
  * What the model says a staged star is.
  *
  * Three ways for a step to name one, in the order a lesson tends to mean them:
- * a track and an age, which is a modelled star with a mass and a history; a
+ * a track and an age, which is a modeled star with a mass and a history; a
  * temperature and a luminosity, which is a *hypothetical* point with a radius
  * and nothing else; or a track alone, which is the middle of its main
  * sequence. Nothing is invented: a hypothetical star comes back with no mass
@@ -113,7 +113,7 @@ let lastSource = null;
 let lastBinary = null;
 /** The hole declaration in force, so a mass change can restate it. */
 let lastHole = null;
-/** Labelled "then" copies a reader has pinned, in the order they took them. */
+/** Labeled "then" copies a reader has pinned, in the order they took them. */
 let snapshots = [];
 /**
  * A fit that has been asked for and not yet performed.
@@ -122,7 +122,7 @@ let snapshots = [];
  * instrument have been laid out - and on the first step of all, before the
  * application has finished setting up its own camera, which then overwrites
  * whatever the fit did. So the request is recorded here and taken by whoever
- * is in a position to honour it: js/investigations.js calls takeFit() from the
+ * is in a position to honor it: js/investigations.js calls takeFit() from the
  * panel's own tick, which runs after layout and after the boot has settled.
  */
 let pendingFit = false;
@@ -615,7 +615,7 @@ export const remnantKindOf = role =>
   staged.find(e => e.role === role)?.remnantKind ?? null;
 
 /**
- * Pin a labelled copy of a staged star as it is right now.
+ * Pin a labeled copy of a staged star as it is right now.
  *
  * "Then and now" as two objects a reader can select and compare, rather than
  * one object and a memory. The copy is an ordinary staged star: model-owned,
@@ -1112,7 +1112,7 @@ export function restageHole(spec = {}) {
  * A star and a black hole of the same mass, each with a body in the same orbit.
  *
  * The controlled comparison. Two systems side by side, identical in every way
- * a student can vary except what sits at the centre, and the thing being
+ * a student can vary except what sits at the center, and the thing being
  * demonstrated is that the orbits are indistinguishable - because outside a
  * spherical body the field depends on the mass and nothing else, and a black
  * hole is not a special kind of gravity.
@@ -1166,11 +1166,11 @@ export function applyEqualMassStage(spec = {}) {
   );
   const v = Math.sqrt((G * mass) / r);
   [
-    { centre: hole, role: 'hole', label: 'Orbiting the black hole' },
-    { centre: star, role: 'star', label: 'Orbiting the star' },
-  ].forEach(({ centre, role, label }) => {
+    { center: hole, role: 'hole', label: 'Orbiting the black hole' },
+    { center: star, role: 'star', label: 'Orbiting the star' },
+  ].forEach(({ center, role, label }) => {
     const body = new Asteroid(
-      { x: centre.pos.x + r, y: centre.pos.y },
+      { x: center.pos.x + r, y: center.pos.y },
       { x: 0, y: v }
     );
     body.name = label;
@@ -1209,7 +1209,7 @@ export function applyEqualMassStage(spec = {}) {
 }
 
 /**
- * Stand two stars on the canvas, on circular orbits about their barycentre.
+ * Stand two stars on the canvas, on circular orbits about their barycenter.
  *
  * Engine-owned on purpose. "Weighing the Stars" measures a period and a
  * separation off the main scene and puts them into Newton's form of Kepler's
@@ -1217,7 +1217,7 @@ export function applyEqualMassStage(spec = {}) {
  * actually produced - a prescribed one would be the lesson quoting its own
  * answer back at itself.
  *
- * The initial conditions come from js/lesson/barycentre.js and carry zero net
+ * The initial conditions come from js/lesson/barycenter.js and carry zero net
  * momentum, so the balance point stays where it is drawn instead of sliding
  * off the view over a few orbits.
  *
@@ -1311,7 +1311,7 @@ export function restageStarPair(spec = {}) {
 }
 
 /**
- * The barycentre of the staged pair, and each star's distance from it.
+ * The barycenter of the staged pair, and each star's distance from it.
  *
  * Read live off the bodies rather than from the declaration, so it is a
  * measurement of what the integrator is doing and not a restatement of what it
@@ -1319,11 +1319,11 @@ export function restageStarPair(spec = {}) {
  *
  * @returns {?object} {x, y, arms: [{role, name, r}], separation}
  */
-export function stagedBarycentre() {
+export function stagedBarycenter() {
   const pair = staged.filter(e => e.star && stars.includes(e.star));
   if (pair.length < 2) return null;
   const bodies = pair.map(e => e.star);
-  const c = barycentreOf(bodies);
+  const c = barycenterOf(bodies);
   if (!c) return null;
   const arms = pair.map(e => ({
     role: e.role,
@@ -1347,7 +1347,7 @@ export function stagedBarycentre() {
  *
  * Called every frame from the lab, with the separation and orbital phase the
  * waveform is being drawn from, so the picture and the plot cannot drift apart.
- * The components sit either side of the centre of mass in the mass ratio, which
+ * The components sit either side of the center of mass in the mass ratio, which
  * is the one piece of orbital mechanics this picture does assert.
  *
  * @param {number} separationRs - Separation, in Schwarzschild radii
@@ -1378,7 +1378,7 @@ export function placeBinary(
   );
   const ux = Math.cos(phase);
   const uy = Math.sin(phase) * squash;
-  // Each component's distance from the centre of mass is the *other* one's
+  // Each component's distance from the center of mass is the *other* one's
   // share of the total, which is why the lighter one swings furthest.
   a.star.pos.x = ux * d * (m2 / total);
   a.star.pos.y = uy * d * (m2 / total);
@@ -1559,7 +1559,7 @@ export function restageStar(role, model) {
   // Rewinding past the endpoint. The body on the canvas is a WhiteDwarf, a
   // NeutronStar or a BlackHole, and the model being written onto it is a point
   // on a track - a star. Writing a temperature and a luminosity onto a white
-  // dwarf leaves a white dwarf labelled main-sequence: the card says one
+  // dwarf leaves a white dwarf labeled main-sequence: the card says one
   // thing, the class says another, and the H-R point is plotted for a body
   // that is not there. So the remnant is taken back off and a star put back.
   if (entry.remnantKind && entry.remnantKind !== 'unfinished') {
@@ -1569,7 +1569,7 @@ export function restageStar(role, model) {
   entry.model = model;
   entry.physicalRadiusSun = model.radiusSun;
   entry.star.stageRadius = displayRadius(model.radiusSun, stagedScale);
-  // The engine mass follows the modelled one, or the two disagree: the card
+  // The engine mass follows the modeled one, or the two disagree: the card
   // would show the track's mass while gravity used the mass the star was
   // built with. A free point supplies none, and then the engine mass is left
   // alone rather than being invented - the body has to weigh something, and
@@ -1607,7 +1607,7 @@ export function populationSample({
 } = {}) {
   // populationOf answers with the whole synthetic survey - the stars it drew,
   // and what it had to leave out and why - not a bare array. `stars` is the
-  // modelled subset, which is what can be put on a canvas or on a diagram; the
+  // modeled subset, which is what can be put on a canvas or on a diagram; the
   // ones it could not model are counted in the object beside it and belong in
   // the readout rather than being quietly dropped into a total.
   const survey = populationOf({
@@ -1618,7 +1618,7 @@ export function populationSample({
   const total = all.length;
   const requested = survey?.requested ?? count;
 
-  // The bounded canvas subsample, chosen ONCE from the whole modelled
+  // The bounded canvas subsample, chosen ONCE from the whole modeled
   // population and never from the selection. This is the fix for the thing
   // that made the third loop unteachable: the stride used to be computed over
   // the stars that passed the cut, so moving the threshold did not add or
@@ -1647,7 +1647,7 @@ export function populationSample({
     shown,
     total,
     requested,
-    /** How many of the whole modelled population pass the cut. */
+    /** How many of the whole modeled population pass the cut. */
     visible: selected ? selected.size : total,
     /** How many stand on the canvas before the cut is applied. */
     subsample: subsample.length,
@@ -1910,12 +1910,12 @@ export function fitStage() {
  * Put the selected body in the middle of the view, at the zoom it is at.
  *
  * Deliberately not a follow *mode*: nothing on a stage moves, so there is
- * nothing to track. It centres once, on request, which is what a reader who
+ * nothing to track. It centers once, on request, which is what a reader who
  * has just selected a speck at true scale actually wants.
  *
  * @returns {boolean} Whether the camera moved
  */
-export function centreOnSelected() {
+export function centerOnSelected() {
   const body = state.selectedObject?.object;
   if (!body?.pos) return false;
   state.pan = { x: -body.pos.x * state.zoom, y: -body.pos.y * state.zoom };
@@ -1923,7 +1923,7 @@ export function centreOnSelected() {
 }
 
 /** Every bundled track, lightest first, with its birth mass. For a stage. */
-export const trackCatalogue = () =>
+export const trackCatalog = () =>
   trackIds().map(id => ({
     id,
     initialMassSun: trackBounds(id).initialMassSun,

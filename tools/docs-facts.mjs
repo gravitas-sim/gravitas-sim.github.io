@@ -186,7 +186,7 @@ async function cheapFacts() {
     new URL('../js/i18n/index.js', import.meta.url)
   );
   const { EN } = await import(new URL('../js/i18n/en.js', import.meta.url));
-  // The other half of the same catalogue. Imported here rather than at the top
+  // The other half of the same catalog. Imported here rather than at the top
   // of the file so that a failure to read it is a failure of this fact and not
   // of the whole tool.
   const { EN_DEFERRED } = await import(
@@ -211,11 +211,11 @@ async function cheapFacts() {
     localeNames: LOCALES.map(l => l.endonym).join(', '),
     // Base plus deferred, de-duplicated.
     //
-    // This counted the base catalogue alone, so every string moved out of the
+    // This counted the base catalog alone, so every string moved out of the
     // start-up path to keep the download budget silently left the total: the
     // widget and panel families that went deferred took the reported figure
     // from 1620 down to 1295 while the application gained strings. The two
-    // halves are one catalogue as far as a reader is concerned, and
+    // halves are one catalog as far as a reader is concerned, and
     // tests/i18n.test.js already guarantees no id is in both, so a union is
     // the right count and the Set is a guard rather than a fix.
     uiStrings: new Set([...Object.keys(EN), ...Object.keys(EN_DEFERRED)]).size,
@@ -227,7 +227,7 @@ async function cheapFacts() {
     stabilityScenarios: stabilityScenarioCount(),
     // Scenarios whose preset asks for asteroids or comets. Derived by applying
     // each preset to a fresh settings object, which is what the world builder
-    // does, so the number cannot drift from the catalogue.
+    // does, so the number cannot drift from the catalog.
     smallBodyScenarios: await smallBodyScenarioCount(),
   };
 

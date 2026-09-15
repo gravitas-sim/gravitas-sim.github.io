@@ -345,7 +345,7 @@ describe('residual structure', () => {
 
     const folded = foldOnPeriod(pts, search.best);
     const s = residualStructure(folded);
-    // Far fewer sign changes than chance, and strongly correlated neighbours:
+    // Far fewer sign changes than chance, and strongly correlated neighbors:
     // the residuals have a shape.
     expect(s.runsRatio).toBeLessThan(0.5);
     expect(s.lag1).toBeGreaterThan(0.5);

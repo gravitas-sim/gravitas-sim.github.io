@@ -86,10 +86,10 @@ function accelAt(r, settings, centralMass = 14.7) {
   clearWorld();
   updatePhysicsSettings({ ...BASE, ...settings });
 
-  const centre = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, centralMass);
-  centre.name = 'Centre';
-  centre.isCentralBody = true;
-  stars.push(centre);
+  const center = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, centralMass);
+  center.name = 'Center';
+  center.isCentralBody = true;
+  stars.push(center);
 
   const tracer = new StarObject({ x: r, y: 0 }, { x: 0, y: 0 }, 1e-6);
   tracer.name = 'Tracer';
@@ -254,9 +254,9 @@ describe('each mode changes the force law in the way it claims', () => {
   test('the boost the breakdown reports matches the field it returns', () => {
     clearWorld();
     updatePhysicsSettings({ ...BASE, ...GALAXY_SCALE, galaxy_gravity: 'mond' });
-    const centre = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 14.7);
-    centre.isCentralBody = true;
-    stars.push(centre);
+    const center = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 14.7);
+    center.isCentralBody = true;
+    stars.push(center);
     const tracer = new StarObject({ x: 600, y: 0 }, { x: 0, y: 0 }, 1e-6);
     stars.push(tracer);
     bumpWorldGeneration();
@@ -292,10 +292,10 @@ describe('each mode changes the force law in the way it claims', () => {
         ...GALAXY_SCALE,
         galaxy_gravity: mode,
       });
-      const centre = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 14.7);
-      centre.isCentralBody = true;
-      centre.persistent = true;
-      stars.push(centre);
+      const center = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 14.7);
+      center.isCentralBody = true;
+      center.persistent = true;
+      stars.push(center);
       const r0 = 700;
       const tracer = new StarObject({ x: r0, y: 0 }, { x: 0, y: vFlat }, 1e-6);
       tracer.persistent = true;
@@ -319,9 +319,9 @@ describe('each mode changes the force law in the way it claims', () => {
     for (const mode of ['newtonian', 'halo', 'mond']) {
       clearWorld();
       updatePhysicsSettings({ ...BASE, ...GALAXY_SCALE, galaxy_gravity: mode });
-      const centre = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 14.7);
-      centre.isCentralBody = true;
-      stars.push(centre);
+      const center = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 14.7);
+      center.isCentralBody = true;
+      stars.push(center);
       for (let i = 0; i < 12; i++) {
         const r = 150 + i * 60;
         stars.push(new StarObject({ x: r, y: 0 }, { x: 0, y: 11 }, 0.03));

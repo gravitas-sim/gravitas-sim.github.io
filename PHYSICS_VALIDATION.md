@@ -82,7 +82,7 @@ the reference is *quoted* to, not by what would be convenient. Where a paper
 gives two significant figures, the tolerance says so.
 
 **approximation** — an educational model that is not the full physics. Validated
-against the equation it says it uses, never against reality, and labelled
+against the equation it says it uses, never against reality, and labeled
 `APPROX` in the table so the two cannot be confused. See
 [Educational approximations](#educational-approximations).
 
@@ -267,7 +267,7 @@ only one still getting worse.
 **Angular momentum separates the two symplectic schemes from RK4 in kind, not in
 size.** Verlet's kicks are each along the line joining the bodies, so the torque
 cancels exactly at any step. RK4 mixes four stages evaluated at four different
-positions, so its cancellation is a truncation error that shrinks with the step
+positions, so its cancelation is a truncation error that shrinks with the step
 rather than an identity. The error is tiny either way; the claims are different.
 
 Two things are deliberately outside the selectable schemes. Black holes keep
@@ -510,7 +510,7 @@ stored radius back.
 
 ## Educational approximations
 
-These are labelled `APPROX` in the table. They are validated against the equation
+These are labeled `APPROX` in the table. They are validated against the equation
 they claim to use, never against reality, and they are documented on the
 [public model page](model/) as approximations.
 
@@ -536,7 +536,7 @@ integrated here, general relativity would show the rate rising by a factor of
 4.95; Gravitas holds it at 1.00.
 
 That is a PASS, and it is a PASS because the code matches its documentation — the
-model page states that "the characteristic runaway at the end is not reproduced".
+model page states that "the characteriztic runaway at the end is not reproduced".
 It would FAIL if someone swapped in a different decay law without updating that
 page.
 
@@ -566,7 +566,7 @@ r_new = (m_bh r_bh + m_body r_body) / M
 v_new = (m_bh v_bh + m_body v_body) / M
 ```
 
-Mass, total linear momentum and the pair's centre of mass are conserved exactly
+Mass, total linear momentum and the pair's center of mass are conserved exactly
 (all three measured at 0 to round-off). Kinetic energy is not, and is not meant
 to be.
 
@@ -580,7 +580,7 @@ merger already built its product at the mass-weighted mean of both position and
 velocity.
 
 **What cannot be conserved.** Total angular momentum splits into the motion of
-the centre of mass and the pair's motion about it:
+the center of mass and the pair's motion about it:
 
 ```
 L_total = L_com + L_spin,   L_spin = mu (r_rel x v_rel),   mu = m_bh m_body / M
@@ -787,7 +787,7 @@ the solver builds its source list from stars, black holes and galaxies. The
 Earth–Moon System preset never set it, and it is the one scenario in the
 application whose entire subject is two planets and no star.
 
-The Moon travelled in a straight line. Over a run its separation from the Earth
+The Moon traveled in a straight line. Over a run its separation from the Earth
 drifted from 35 units to 36 while its trail drew something close enough to the
 start of an arc to survive a glance.
 
@@ -829,7 +829,7 @@ Stated plainly, because a coverage claim is only useful with an edge.
 - **Tidal disruption, debris generation and particle effects.** Momentum
   bookkeeping across debris creation is not audited.
 - **Collision outcome classification.** Which object type results from a merger
-  is a modelling choice, not a conservation law; only momentum and mass are
+  is a modeling choice, not a conservation law; only momentum and mass are
   checked.
 - **Long-term N-body statistics.** Cluster relaxation, mass segregation and
   ejection rates are not compared against any reference. A dense cluster in

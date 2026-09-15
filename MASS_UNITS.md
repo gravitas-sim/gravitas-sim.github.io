@@ -51,7 +51,7 @@ Read off the running app. `stored` is `massInEarths`, `derived` is
 | Kuiper Belt | a dwarf planet | before | 0.204 | 0.068 | 67.9 |
 | | | after | 0.2045 | 0.2045 | 0.2045 |
 
-The Solar System was already right, because its local patch cancelled the error.
+The Solar System was already right, because its local patch canceled the error.
 Everything that did not carry a patch was wrong by 1000x, and the Kuiper Belt was
 wrong three different ways at once.
 
@@ -128,7 +128,7 @@ and three units derived from them in `js/physics.js`, each through the single
 
 `Asteroid` now takes a mass in Ceres masses and defaults to one Ceres. `Comet`
 already counted in Halley masses and said so in a comment; only its multiplier
-was wrong. `Debris` takes a count of kilometre-scale fragments.
+was wrong. `Debris` takes a count of kilometer-scale fragments.
 
 Ceres is the largest asteroid rather than a typical one. It is the right end of
 the distribution to anchor to here, because the simulation's asteroids are the
@@ -141,14 +141,14 @@ this document already used when it named the bug.
 `Comet.tidal_mass_loss` once `this.mass <= 0.01`. Both numbers were the class's
 own construction mass written out again as a literal, so both conditions were
 already true on the frame a body entered the tidal radius - which is the
-behaviour the scenarios were built around. Left alone they would have stayed
+behavior the scenarios were built around. Left alone they would have stayed
 true for a reason nobody could read off the line. They are now
 `CERES_MASS_UNIT` and `0.1 * HALLEY_MASS_UNIT`: the same outcome, derived.
 
 Two conversions in `js/ui.js` moved for the same reason. The inspector's mass
 slider multiplied a comet's mass by a second hardcoded `0.1`, and
 `transformCometToAsteroid` assigned `.mass` and left `massInCeres` behind -
-the same "gravitates as one thing, labelled as another" failure this document
+the same "gravitates as one thing, labeled as another" failure this document
 opens with.
 
 ### The scenario sweep

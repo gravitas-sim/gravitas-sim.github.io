@@ -18,7 +18,7 @@
 //   positions would slide off the thing it was measuring the moment the view
 //   was panned or zoomed, and would report a different length each time. Stored
 //   in the world, it stays on what it was put on and its reading does not
-//   change with the zoom - which is the only behaviour that makes the number
+//   change with the zoom - which is the only behavior that makes the number
 //   trustworthy.
 //
 //   Everything draws onto the simulation canvas, in screen space, at the end of
@@ -57,7 +57,7 @@ import {
 import { formatNumber } from './format.js';
 import { t } from './i18n/index.js';
 
-/** Metres in one simulation length unit. */
+/** Meters in one simulation length unit. */
 const METERS_PER_UNIT = AU_METERS / SIM_UNITS_PER_AU;
 
 // The instruments are drawn in one accent family so they read as a set and as
@@ -594,10 +594,10 @@ export function drawInstrumentation(
   // What stays on the canvas is what a saved image cannot do without. A
   // screenshot has to document its own scale and its own clock, or it is a
   // picture of some objects at some size at some time. The vector key stays
-  // for the same reason: an arrow whose colour is unexplained is a decoration.
+  // for the same reason: an arrow whose color is unexplained is a decoration.
   const readings = [];
   if (capturing && settings.show_elapsed_time !== false) {
-    // Labelled, unlike the live readout, where the row it sits in says what it
+    // Labeled, unlike the live readout, where the row it sits in says what it
     // is. A bare '6.59 d' in the corner of a figure in somebody's lab report
     // could be a period, an age or an exposure; 't =' makes it the one thing
     // it is, at the cost of three characters.

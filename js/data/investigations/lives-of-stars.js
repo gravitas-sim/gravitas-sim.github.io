@@ -179,7 +179,7 @@ const LIVES_OF_STARS = {
              \n\nThe panel is showing that as an illustration, and the readout
              is refusing to put numbers on it. Read why.`,
       checklist: [
-        'Look at the "the star now" panel: a cloud contracting towards a brightening centre',
+        'Look at the "the star now" panel: a cloud contracting towards a brightening center',
         'Read the caption underneath it',
         'Read the two rows in the list: "Stage" and "Why there are no numbers"',
         'Notice that the diagram on the left is empty — nothing is plotted yet',
@@ -262,7 +262,7 @@ const LIVES_OF_STARS = {
       title: 'Which way across the diagram?',
       kind: 'choice',
       body: `Follow the marker along the pre-main-sequence stage and watch
-             where it goes on the diagram. The faint grey line is the whole
+             where it goes on the diagram. The faint gray line is the whole
              track; the bright line is where the star has been so far.
              \n\nRemember the axes: hotter to the left, more luminous upwards.`,
       prompt: 'Across the pre-main-sequence stage, a solar-mass model moves…',
@@ -557,7 +557,7 @@ const LIVES_OF_STARS = {
         interior: true,
         capture: true,
       }),
-      tip: 'Its surface is cooler because it is spread over a hundred times the radius — ten thousand times the area. Each square metre is radiating less, and there are so many more of them that the total goes up by a factor of a thousand.',
+      tip: 'Its surface is cooler because it is spread over a hundred times the radius — ten thousand times the area. Each square meter is radiating less, and there are so many more of them that the total goes up by a factor of a thousand.',
     },
 
     // -----------------------------------------------------------------------
@@ -636,7 +636,7 @@ const LIVES_OF_STARS = {
       title: 'To scale, and beside itself',
       body: `Park the playhead on the main sequence and press
              <strong>Freeze this moment</strong>. A copy of the star as it is
-             right now stays on the canvas, labelled with the age it was taken
+             right now stays on the canvas, labeled with the age it was taken
              at, and stops there for good — nothing that follows will change
              it.
              \n\nNow run forward to the tip of the red-giant branch. The
@@ -765,7 +765,7 @@ const LIVES_OF_STARS = {
       ],
       answer: 1,
       because:
-        'A wind. Strong for a star, glacial for an explosion: the material leaves over hundreds of thousands of years at speeds of tens of kilometres per second, not the tens of thousands a supernova reaches. Nothing detonates and nothing collapses. The readout for this track says so where it names the endpoint: "A visible supernova? No. Nothing here explodes." The Sun will not explode, and the step where something does is nineteen steps away.',
+        'A wind. Strong for a star, glacial for an explosion: the material leaves over hundreds of thousands of years at speeds of tens of kilometers per second, not the tens of thousands a supernova reaches. Nothing detonates and nothing collapses. The readout for this track says so where it names the endpoint: "A visible supernova? No. Nothing here explodes." The Sun will not explode, and the step where something does is nineteen steps away.',
       tool: evol({ track: 'm100', phase: 'post-agb-and-cooling' }),
       tip: 'A supernova needs a core massive enough to collapse. The Sun&rsquo;s will end up at about 0.54 solar masses, and electron degeneracy holds that up indefinitely.',
     },
@@ -783,7 +783,7 @@ const LIVES_OF_STARS = {
              planets involved and never were.
              \n\nTwo things this model does not tell you. When the nebula
              becomes visible is not the instant the envelope left: the gas has
-             to be ionised by the central star, which happens as that star
+             to be ionized by the central star, which happens as that star
              heats up over thousands of years. And how long it lasts — a few
              tens of thousands of years before it disperses — is not in these
              tracks either. The star is followed; the gas is not.`,
@@ -819,7 +819,7 @@ const LIVES_OF_STARS = {
         return {
           level: 'ok',
           message:
-            'About 48,000 K, 1.6 solar luminosities, 0.018 solar radii — roughly twice the size of the Earth, holding 0.54 solar masses. It shines because it is hot, and it is hot because it used to be the inside of a star. Nothing is being burnt. It will cool for longer than the Universe has existed.',
+            'About 48,000 K, 1.6 solar luminosities, 0.018 solar radii — roughly twice the size of the Earth, holding 0.54 solar masses. It shines because it is hot, and it is hot because it used to be the inside of a star. Nothing is being burned. It will cool for longer than the Universe has existed.',
         };
       },
       tool: evol({ track: 'm100', phase: 'end', capture: true }),
@@ -890,7 +890,7 @@ const LIVES_OF_STARS = {
         'becomes a red giant, like the Sun will, only sooner',
         'has barely changed at all — a few per cent in luminosity',
         'has already died and left a white dwarf',
-        'has burnt out and gone dark',
+        'has burned out and gone dark',
       ],
       answer: 1,
       because:
@@ -1101,7 +1101,7 @@ const LIVES_OF_STARS = {
       ],
       answer: 2,
       because:
-        'They part company. The core collapses in about a second to something a few tens of kilometres across; whether the envelope is expelled is a separate question with a separate answer, and it is not always yes. Where the explosion succeeds, the ejecta and the remnant are two different objects with two different fates: the ejecta enrich the interstellar medium, the remnant stays. Where it fails, the envelope falls back in and there is no bright supernova at all. Steps 29 and 31 are those two cases.',
+        'They part company. The core collapses in about a second to something a few tens of kilometers across; whether the envelope is expelled is a separate question with a separate answer, and it is not always yes. Where the explosion succeeds, the ejecta and the remnant are two different objects with two different fates: the ejecta enrich the interstellar medium, the remnant stays. Where it fails, the envelope falls back in and there is no bright supernova at all. Steps 29 and 31 are those two cases.',
       tool: evol({ track: 'm1000', phase: 'advanced-burning' }),
       tip: 'This is a prediction about the model&rsquo;s endpoint prescription, not about the track — the track has already stopped by here, and the readout says so.',
     },
@@ -1154,7 +1154,7 @@ const LIVES_OF_STARS = {
       kind: 'choice',
       body: `The white dwarf you measured at step 20 was about twice the radius
              of the Earth, holding 0.54 solar masses. This neutron star holds
-             about 1.4 solar masses in roughly twenty kilometres across.
+             about 1.4 solar masses in roughly twenty kilometers across.
              \n\nIt is often said that neutron stars are pulsars. Think about
              what that claim requires.`,
       prompt: 'A neutron star is observed as a pulsar when…',
@@ -1168,7 +1168,7 @@ const LIVES_OF_STARS = {
       because:
         'Three conditions, and the last one is luck. A pulsar is a neutron star whose beam happens to point our way once per rotation; if the geometry is wrong we never see the pulses, however close it is. Many neutron stars are not observed as pulsars at all, and older ones slow down and stop producing detectable pulses regardless of geometry. Nothing in this lab models any of it - the endpoint here is a mass and a kind, and calling it a pulsar would be adding a claim the model does not make.',
       tool: evol({ track: 'm1000', phase: 'end' }),
-      tip: 'Twenty kilometres for 1.4 solar masses is about a hundred million tonnes in a teaspoon. It has no photosphere in the ordinary sense, which is why it has no place on the diagram.',
+      tip: 'Twenty kilometers for 1.4 solar masses is about a hundred million tonnes in a teaspoon. It has no photosphere in the ordinary sense, which is why it has no place on the diagram.',
     },
     {
       sid: 'the-black-hole',
@@ -1314,7 +1314,7 @@ const LIVES_OF_STARS = {
       prompt:
         'Explain what determines how a star lives and how it ends, referring to at least two of your own measurements — and name one thing these models do not tell you.',
       rubric:
-        'Mark on the connections and on the limitation, not on coverage. Look for: mass sets the luminosity, steeply, and therefore sets the lifetime, because lifetime is fuel over the rate of spending it; leaving the main sequence is core hydrogen exhaustion and not the end of the star; what happens afterwards depends on mass, with a white dwarf for the Sun-like case, a neutron star for ten solar masses and a black hole for forty; and the red dwarf does none of it on any timescale that has yet elapsed. A strong answer cites the 1.14 trillion against 8.65 million year lifetimes, or the 0.90 to 173 solar radii swing of one star.\\n\\nFor the limitation, accept any of: the tracks are single stars with no companion, so no mass transfer and no merger; they stop before core collapse, so every remnant beyond a white dwarf is a quoted prescription rather than a computed result; they are one composition and no rotation; the endpoint at forty solar masses is a range spanning a factor of three; the 1.1 trillion year lifetime is unverifiable in principle. Do NOT accept "the animation is not to scale in time" alone - that is a property of the display, which the lesson states repeatedly, rather than of the models.\\n\\nCredit an answer that revises the step 1 prediction and credit one that defends it, provided the defence engages with what was measured.',
+        'Mark on the connections and on the limitation, not on coverage. Look for: mass sets the luminosity, steeply, and therefore sets the lifetime, because lifetime is fuel over the rate of spending it; leaving the main sequence is core hydrogen exhaustion and not the end of the star; what happens afterwards depends on mass, with a white dwarf for the Sun-like case, a neutron star for ten solar masses and a black hole for forty; and the red dwarf does none of it on any timescale that has yet elapsed. A strong answer cites the 1.14 trillion against 8.65 million year lifetimes, or the 0.90 to 173 solar radii swing of one star.\\n\\nFor the limitation, accept any of: the tracks are single stars with no companion, so no mass transfer and no merger; they stop before core collapse, so every remnant beyond a white dwarf is a quoted prescription rather than a computed result; they are one composition and no rotation; the endpoint at forty solar masses is a range spanning a factor of three; the 1.1 trillion year lifetime is unverifiable in principle. Do NOT accept "the animation is not to scale in time" alone - that is a property of the display, which the lesson states repeatedly, rather than of the models.\\n\\nCredit an answer that revises the step 1 prediction and credit one that defends it, provided the defense engages with what was measured.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,

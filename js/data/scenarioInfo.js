@@ -7,7 +7,7 @@
 // The prose moved to js/i18n/en.js when the interface was internationalized.
 // That keeps the rule this file has always had - there is exactly one copy of a
 // scenario's title and summary anywhere in the application - while making the
-// message catalogue the single place a translator works. The shape exported
+// message catalog the single place a translator works. The shape exported
 // here is unchanged: SCENARIO_INFO[key].title and .summary still read as plain
 // English strings, which is what the thumbnail generator, the instructor
 // material builder and the catalog tests expect of them.
@@ -271,7 +271,7 @@ export const SCENARIO_INFO = Object.fromEntries(
     key,
     {
       // Falling back to the key rather than to an empty string: a scenario
-      // added to the structure and forgotten in the catalogue should show up
+      // added to the structure and forgotten in the catalog should show up
       // as its own name in the gallery, which is odd enough to be noticed and
       // harmless enough not to break the page.
       title: EN[`scenario.${key}.title`] ?? key,

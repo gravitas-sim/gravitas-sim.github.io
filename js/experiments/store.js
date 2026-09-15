@@ -147,8 +147,8 @@ export function migrate(record) {
     out = {
       ...rest,
       runs: {
-        ...(runA ? { A: normaliseRun(runA) } : {}),
-        ...(runB ? { B: normaliseRun(runB) } : {}),
+        ...(runA ? { A: normalizeRun(runA) } : {}),
+        ...(runB ? { B: normalizeRun(runB) } : {}),
       },
       units: out.units || {},
     };
@@ -156,7 +156,7 @@ export function migrate(record) {
   return { ok: true, record: { ...out, v: SCHEMA_VERSION }, reason: '' };
 }
 
-function normaliseRun(run) {
+function normalizeRun(run) {
   if (Array.isArray(run)) return { samples: run, recordedAt: 0 };
   return {
     samples: Array.isArray(run.samples) ? run.samples : [],

@@ -16,7 +16,7 @@
 // the first time and named on the screen where each one first appears:
 //
 //   an illustration   the two discs on the canvas, the rings, the marker ring.
-//                     Drawn, exaggerated, and labelled as drawn.
+//                     Drawn, exaggerated, and labeled as drawn.
 //   a model           the waveform, the separation, the frequency. Computed,
 //                     in real units, valid over a stated range.
 //   an observation    the GW150914 trace on screen 22, and nothing else in
@@ -145,7 +145,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       reveal: 'meet-the-two-objects',
       title: 'Something can travel without shining',
       body: `Two objects are on the canvas, circling each other. They are
-             paused, and they give off no light: no glow, no colour, nothing a
+             paused, and they give off no light: no glow, no color, nothing a
              telescope could photograph.
              \n\nCommit to an answer before going on. You are not expected to
              know this one.`,
@@ -153,7 +153,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         'If these two objects emit no light at all, could we still find out that they are moving?',
       options: [
         'No — with no light there is nothing to detect',
-        'Yes — anything with mass bends space, and moving mass can send that bending outwards as a travelling disturbance',
+        'Yes — anything with mass bends space, and moving mass can send that bending outwards as a traveling disturbance',
         'Yes — we would hear them, because sound travels through space',
         'Only if something else nearby lit them up',
       ],
@@ -205,7 +205,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       prompt:
         'A single mass that never moves. What reaches a distant observer from it?',
       options: [
-        'A steady pull, unchanging — and no travelling wave',
+        'A steady pull, unchanging — and no traveling wave',
         'A stream of gravitational waves, spreading outwards for ever',
         'Nothing at all, because gravity needs motion',
         'A wave, but only if the observer is moving',
@@ -296,7 +296,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              \n\n<strong>C.</strong> Two heavy balls circling each other.
              \n\nOne of these three sends out gravitational waves. Commit
              before reading on.`,
-      prompt: 'Which one produces a travelling gravitational wave?',
+      prompt: 'Which one produces a traveling gravitational wave?',
       options: [
         'A, because it has the most concentrated mass',
         'B, because it is moving and moving mass makes waves',
@@ -415,7 +415,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              nothing holding them and nothing pushing them.
              \n\nOne thing about how it is drawn matters more than it looks.
              You are seeing that ring <strong>face on to the wave</strong> -
-             looking back along the direction the wave is travelling. It is not
+             looking back along the direction the wave is traveling. It is not
              the orbit seen from above, and the dots are not the two objects.
              They are somewhere else entirely, out where the wave has got to.
              \n\nWatch what the wave does to them.`,
@@ -428,7 +428,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       type: 'question',
       title: 'Stretch one way',
       kind: 'choice',
-      body: `The inset labelled <strong>Ring of markers</strong> shows what a
+      body: `The inset labeled <strong>Ring of markers</strong> shows what a
              ring of freely floating markers does as the wave goes past. This
              screen is looking at the binary <em>edge-on</em>, which is the
              simplest case: one polarisation only.
@@ -446,7 +446,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 1,
       because:
-        'Closer together. That is the characteristic thing a gravitational wave does, and it is why the ring becomes an oval rather than a bigger circle: it stretches along one direction and squeezes along the direction at right angles, both at once. Nothing has grown overall. And both of those directions are at right angles to the way the wave is travelling, which is why it is called a <em>transverse</em> wave.',
+        'Closer together. That is the characteriztic thing a gravitational wave does, and it is why the ring becomes an oval rather than a bigger circle: it stretches along one direction and squeezes along the direction at right angles, both at once. Nothing has grown overall. And both of those directions are at right angles to the way the wave is traveling, which is why it is called a <em>transverse</em> wave.',
       tool: lab({
         view: 'both',
         autoplay: false,
@@ -565,8 +565,8 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              amount. The useful number is not the change itself but the
              <strong>fraction</strong>: how much it changed, divided by how
              long it was. That fraction is called the <strong>strain</strong>.
-             \n\nStart with numbers you can hold. A 4-kilometre arm that
-             changes by 4 millimetres has a strain of 0.004 divided by 4000,
+             \n\nStart with numbers you can hold. A 4-kilometer arm that
+             changes by 4 millimeters has a strain of 0.004 divided by 4000,
              which is 0.000001, or one part in a million.
              \n\nNow the real one. Read <strong>Strain amplitude</strong> off
              the readout - the largest fraction this wave reaches - and write
@@ -591,7 +591,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
             return {
               level: 'warn',
               message:
-                'Not quite. One millimetre is 0.001 m, and 0.001 divided by 10 is 0.0001. The strain is a fraction, so it has no units.',
+                'Not quite. One millimeter is 0.001 m, and 0.001 divided by 10 is 0.0001. The strain is a fraction, so it has no units.',
             };
           }
         }
@@ -621,7 +621,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         capture: true,
         hide: ['m1', 'm2', 'distance', 'inclination'],
       }),
-      tip: 'Strain is a fraction, so it has no units — a strain of 10⁻²¹ means the same thing whether the length is a metre or a light year.',
+      tip: 'Strain is a fraction, so it has no units — a strain of 10⁻²¹ means the same thing whether the length is a meter or a light year.',
     },
     {
       sid: 'can-space-carry-a-sound',
@@ -914,7 +914,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       type: 'explore',
       title: 'An observatory measures a difference',
       body: `Now the instrument. An observatory like LIGO is an
-             <strong>L</strong>: two long arms at right angles, four kilometres
+             <strong>L</strong>: two long arms at right angles, four kilometers
              each, with light bouncing along both.
              \n\nYou already know why that shape. A passing wave stretches one
              direction while squeezing the direction at right angles — so it
@@ -923,7 +923,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              <em>difference</em> between two lengths, which is a far easier
              thing to do well.
              \n\nThe two arms are drawn over the marker ring in the inset
-             labelled <strong>Ring of markers</strong>. Move the
+             labeled <strong>Ring of markers</strong>. Move the
              <strong>Where in the signal</strong> playhead and watch them: one
              lengthens as the other shortens. The readout gives both as
              numbers, and gives the difference — which is what the instrument
@@ -931,7 +931,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       checklist: [
         'Move "Where in the signal" and watch the two arms change in opposite directions',
         'Read "What an L would read" and note the two fractions have opposite signs',
-        'Read the difference, and the four-kilometre figure in metres beside it',
+        'Read the difference, and the four-kilometer figure in meters beside it',
         'Say why an L is the right shape for the instrument',
       ],
       tool: lab({
@@ -941,7 +941,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         // describes rather than rotating past each other.
         values: { inclination: 90 },
       }),
-      tip: 'Four kilometres changing by a ten-thousandth of the width of a proton. The number in the readout is the real one; the picture beside it is amplified, and says by how much.',
+      tip: 'Four kilometers changing by a ten-thousandth of the width of a proton. The number in the readout is the real one; the picture beside it is amplified, and says by how much.',
     },
     {
       sid: 'what-two-observatories-recorded',
@@ -950,9 +950,9 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       title: 'What two observatories actually recorded',
       body: `This panel is showing something different: not a model, but a
              recording. On 14 September 2015 two observatories three thousand
-             kilometres apart recorded the same thing, seven milliseconds
+             kilometers apart recorded the same thing, seven milliseconds
              apart, and that is what is plotted.
-             \n\nYou are not asked to analyse it. Look at it, and notice that
+             \n\nYou are not asked to analyze it. Look at it, and notice that
              it has the shape you have spent twenty screens learning to
              expect — a wobble that speeds up and grows. That is the point. The
              model you have been using is simple enough for a first lesson, and
@@ -1038,7 +1038,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       kind: 'short',
       body: `Last screen. Put it together in your own words.
              \n\nYou have a pair of objects circling each other, something
-             leaving them and travelling outwards, and an instrument a long way
+             leaving them and traveling outwards, and an instrument a long way
              off whose two arms change length by different amounts.
              \n\nGo back to screen 1 for a moment. You were asked whether we
              could learn that two dark objects were moving. Look at what you

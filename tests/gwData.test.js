@@ -47,7 +47,7 @@ describe('provenance is complete enough to audit', () => {
     expect(PROVENANCE.paper).toMatch(/Abbott/);
   });
 
-  test('is CC BY 4.0 and carries the GWOSC acknowledgement', () => {
+  test('is CC BY 4.0 and carries the GWOSC acknowledgment', () => {
     expect(PROVENANCE.license).toMatch(/CC BY 4\.0/);
     expect(PROVENANCE.attribution).toMatch(
       /Gravitational Wave Open Science Center/

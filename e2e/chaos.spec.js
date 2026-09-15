@@ -117,9 +117,9 @@ function verdict(page) {
       shape(exp.runs.A),
       shape(exp.runs.B)
     );
-    const v = window.__chaos.analyseDivergence(series);
+    const v = window.__chaos.analyzedivergence(series);
     return {
-      behaviour: v.behaviour,
+      behavior: v.behavior,
       tau: v.tau,
       r2: v.r2,
       linearR2: v.linearR2,
@@ -172,7 +172,7 @@ test.describe('the chaos investigation', () => {
 
     const v = await verdict(page);
     expect(v.points).toBeGreaterThan(20);
-    expect(v.behaviour).toBe('identical');
+    expect(v.behavior).toBe('identical');
     expect(v.tau).toBeNull();
   });
 
@@ -210,7 +210,7 @@ test.describe('the chaos investigation', () => {
 
     // The whole point of the control: it comes apart, and it is not chaos.
     expect(v.growth).toBeGreaterThan(2);
-    expect(v.behaviour).not.toBe('exponential');
+    expect(v.behavior).not.toBe('exponential');
     expect(v.tau).toBeNull();
     expect(v.linearR2).toBeGreaterThan(0.9);
   });
@@ -246,7 +246,7 @@ test.describe('the chaos investigation', () => {
     await record(page, 'B');
 
     const v = await verdict(page);
-    expect(v.behaviour).toBe('exponential');
+    expect(v.behavior).toBe('exponential');
     expect(v.tau).toBeGreaterThan(4);
     expect(v.tau).toBeLessThan(11);
     expect(v.r2).toBeGreaterThan(0.98);
@@ -276,11 +276,11 @@ test.describe('the chaos investigation', () => {
       return window.__chaos.refinementVerdict([
         {
           tau: exp.numericalControls[0].tau,
-          behaviour: exp.numericalControls[0].behaviour,
+          behavior: exp.numericalControls[0].behavior,
         },
         {
           tau: exp.numericalControls[0].tau,
-          behaviour: exp.numericalControls[0].behaviour,
+          behavior: exp.numericalControls[0].behavior,
         },
       ]);
     });

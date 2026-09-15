@@ -468,7 +468,7 @@ function draw(snap) {
   // The selected model is a solid line in a different hue, and the two models
   // are given different hues from each other as well as from the data, because
   // a reader switching between halo and MOND is comparing two curves they
-  // cannot see at the same time and the colour is the only thing carrying
+  // cannot see at the same time and the color is the only thing carrying
   // which is which.
   drawModel(m => m.vb, t.warm, [5, 4]);
   if (snap.mode === 'halo' && snap.halo) drawModel(m => m.vt, t.cool, []);
@@ -532,7 +532,7 @@ function renderReadout(snap) {
   // are adjusted until the curve matches: they are fitted, per galaxy, and the
   // sliders that set them are right there. MOND's one number is not adjustable
   // here at all, because a0 is a constant of the proposed law and the same for
-  // every galaxy - so it is displayed rather than offered, and labelled fixed.
+  // every galaxy - so it is displayed rather than offered, and labeled fixed.
   //
   // Saying this in the panel matters because the two models can produce curves
   // of similar quality, and a reader who does not know that one of them spent

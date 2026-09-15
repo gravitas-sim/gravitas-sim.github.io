@@ -87,7 +87,7 @@ describe('a declaration means one thing', () => {
 });
 
 describe('the canvas and the card resolve the same star', () => {
-  // The behavioural claim, stated over the actual lesson data rather than
+  // The behavioral claim, stated over the actual lesson data rather than
   // over an example: for every step that compares its staged stars, each
   // pinned star IS one of the stars standing on the canvas - the same track,
   // the same point on it, to the last digit.

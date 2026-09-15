@@ -27,7 +27,7 @@
 // original and break a layout, and because `lang` has to follow the interface
 // or a screen reader pronounces Spanish with an English voice. Theme, because
 // contrast is a property of the palette: Daylight and Midnight are different
-// colour systems and passing in one says nothing about the other.
+// color systems and passing in one says nothing about the other.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -243,9 +243,9 @@ const LOCALES = [
  * Wait until nothing is still animating.
  *
  * Panels fade in, and a contrast check taken during the fade measures the text
- * colour blended toward the background rather than the colour it settles at.
+ * color blended toward the background rather than the color it settles at.
  * That produced a suite that failed on two or three different combinations
- * every full run - #828ca8 was reported as #707992, which is the same colour
+ * every full run - #828ca8 was reported as #707992, which is the same color
  * at about 85% opacity - and passed whenever the spec was run on its own,
  * because an idle machine finishes the transition inside the fixed wait.
  *
@@ -273,7 +273,7 @@ async function waitForStableStyles(page) {
     .catch(() => {});
 }
 
-async function analyse(page, context) {
+async function analyze(page, context) {
   await waitForStableStyles(page);
   let builder = new AxeBuilder({ page }).withTags(TAGS);
   for (const [rule, on] of Object.entries(OFF)) {
@@ -329,7 +329,7 @@ async function assertConfigured(page, locale, theme) {
         page.evaluate(() => ({
           // Midnight is the default and css/tokens.css defines it on bare
           // :root, so the attribute is absent rather than set to 'midnight'.
-          // Normalised here so the assertion describes the theme in force
+          // Normalized here so the assertion describes the theme in force
           // rather than the mechanism that selected it.
           theme:
             document.documentElement.getAttribute('data-theme') ?? 'midnight',
@@ -369,7 +369,7 @@ for (const surface of SURFACES) {
             });
           }
 
-          const violations = await analyse(
+          const violations = await analyze(
             page,
             `${surface.name} / ${locale.label} / ${theme.label}`
           );

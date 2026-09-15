@@ -522,7 +522,7 @@ const PLANET_RADIUS = 5; // From physics.js
 const GAS_GIANT_RADIUS = 8; // From physics.js
 // 10, matching physics.js. It said 20 here, and had since the inspector was
 // copied out of the original file, so every star's radius row was reported at
-// half its real value in both solar radii and kilometres - and the surface
+// half its real value in both solar radii and kilometers - and the surface
 // gravity and escape velocity derived from it were wrong by four and by the
 // square root of two. The other four constants in this block do match.
 const STAR_OBJ_RADIUS = 10; // From physics.js
@@ -2349,11 +2349,11 @@ const toggleOverlayMinimize = e => {
 };
 
 /**
- * Apply the minimised/expanded state to the readout panel and its control.
+ * Apply the minimized/expanded state to the readout panel and its control.
  * The button carries a word as well as a glyph - a bare "−" gave no clue that
  * the panel could be collapsed, and the collapsed state was an unlabeled box.
  * @param {HTMLElement} overlay - The overlay panel
- * @param {HTMLElement} btn - The minimise/expand button
+ * @param {HTMLElement} btn - The minimize/expand button
  * @param {boolean} minimized - Target state
  */
 const setOverlayMinimized = (overlay, btn, minimized) => {
@@ -3031,7 +3031,7 @@ const paintInspectorHeader = view => {
   if (kind && kind.textContent !== view.kind) kind.textContent = view.kind;
 
   // Offered only for something that is actually in orbit around something.
-  // A burn on a star at the centre of its own system is not a manoeuvre, and
+  // A burn on a star at the center of its own system is not a maneuver, and
   // the planner has nothing to draw for it.
   const burn = document.getElementById('inspectorManeuver');
   if (burn) {
@@ -3107,7 +3107,7 @@ const massControlModel = (object, type) => {
   // Returns a view model rather than markup: js/objectInspector.js owns the
   // HTML now, and the ranges and units are the part that belongs here, next to
   // the object types they describe. massLabel is no longer rendered - the
-  // control is labelled "Mass" in one compact row - but the switch above still
+  // control is labeled "Mass" in one compact row - but the switch above still
   // sets it, so it is read here to keep the linter honest about the branch.
   void massLabel;
   return {
@@ -3417,7 +3417,7 @@ const updateObjectMass = (object, type, newMass) => {
       object.mass = newMass * EARTH_MASS_UNIT;
       // The slider works in Earth masses, so the Ceres count the class carries
       // has to be recomputed from it. Leaving it behind is how a body ends up
-      // gravitating as one thing and being labelled as another.
+      // gravitating as one thing and being labeled as another.
       object.massInCeres = object.mass / CERES_MASS_UNIT;
       // Asteroid radius scales with mass
       object.radius = Math.pow(newMass * 1000, 0.33) * ASTEROID_RADIUS;
@@ -3839,7 +3839,7 @@ const show_enhanced_scenario_info = scenarioName => {
 // icon that switches to a loudspeaker at that moment has told them something
 // false. So the glyph distinguishes muted, permitted-but-silent, and actually
 // playing, and the panel behind it spells out the rest: which mode, what is
-// playing, the volume, a labelled example to check the speakers with, and a
+// playing, the volume, a labeled example to check the speakers with, and a
 // link to the lesson the signal audio belongs to.
 //
 // Mute stays one keystroke away on M rather than one click, because the button
@@ -3886,7 +3886,7 @@ const refreshSonificationToggle = () => {
         ? SOUND_GLYPH.ready
         : SOUND_GLYPH.off;
   toggle.dataset.state = status;
-  const label = t('sound.button.labelled', {
+  const label = t('sound.button.labeled', {
     state: t(`sound.state.${status}`),
   });
   toggle.title = label;
@@ -3908,10 +3908,10 @@ function refreshSoundPanel() {
    * A deferred string, or nothing.
    *
    * t() answers with the id when a message is missing, which is the right
-   * behaviour for a developer and the wrong thing to put in front of a reader.
-   * The panel's prose is in the deferred half of the catalogue and can be a
+   * behavior for a developer and the wrong thing to put in front of a reader.
+   * The panel's prose is in the deferred half of the catalog and can be a
    * moment behind the panel itself, so an unresolved id becomes an empty
-   * paragraph that fills in when the catalogue lands - and the paragraph is
+   * paragraph that fills in when the catalog lands - and the paragraph is
    * hidden while it is empty, rather than leaving a gap.
    */
   const phrase = key => {
@@ -3928,9 +3928,9 @@ function refreshSoundPanel() {
     el.textContent = phrase(key);
     el.hidden = !el.textContent;
   };
-  // The panel's own prose lives in the deferred catalogue and is written from
+  // The panel's own prose lives in the deferred catalog and is written from
   // here rather than through data-i18n, so that it is never on screen as a
-  // message id while that catalogue is still arriving.
+  // message id while that catalog is still arriving.
   set('soundPanelTitle', phrase('sound.title'));
   prose('soundPanelPermission', 'sound.permission');
   prose('soundPanelPreviewNote', 'sound.preview.note');
@@ -4107,9 +4107,9 @@ if (sonificationToggleBtn) {
 }
 
 /**
- * A short, quiet, clearly labelled example.
+ * A short, quiet, clearly labeled example.
  *
- * It is a modelled black-hole chirp rather than a beep, because a beep tells a
+ * It is a modeled black-hole chirp rather than a beep, because a beep tells a
  * reader nothing about what this application would play and because the panel
  * has to link somewhere. The panel says in words that it is a model and not
  * the simulation's own sound. Loaded on demand: nothing about the lab is in
@@ -4330,7 +4330,7 @@ const build_simulation = () =>
  * The label an option menu shows for one of its values.
  *
  * The scenario preset list is the exception: its values are scenario keys, and
- * those already have titles in the catalogue under their own ids, so it defers
+ * those already have titles in the catalog under their own ids, so it defers
  * to those rather than carrying a second copy. Everything else looks up
  * `settings.option.<key>.<value>` and falls back to the raw value, which is
  * always English and always readable.
@@ -4373,7 +4373,7 @@ onLocaleChange(() => {
     /* likewise */
   }
   // The scenario card is written once, when the world is built. On a Spanish
-  // first load that happens before the Spanish catalogue has arrived - it is a
+  // first load that happens before the Spanish catalog has arrived - it is a
   // dynamic import - so the card is drawn in English and then never touched
   // again. Rewriting it here is what makes the very first card a reader sees
   // be in their own language.
@@ -4456,7 +4456,7 @@ const setting_items = [
     type: 'option',
     options: INTEGRATORS,
   },
-  // Its own section, named for what it is. It sat unlabelled under
+  // Its own section, named for what it is. It sat unlabeled under
   // "Simulation" beside the integrator, which is where somebody looking for it
   // would never think to look and where somebody not looking for it kept
   // finding it.
@@ -4493,8 +4493,8 @@ const setting_items = [
   },
   { labelId: 'settings.section.visuals', type: 'separator' },
   {
-    labelId: 'settings.label.trailColourMode',
-    key: 'trail_colour_mode',
+    labelId: 'settings.label.trailColorMode',
+    key: 'trail_color_mode',
     type: 'option',
     options: ['type', 'speed'],
   },
@@ -4692,8 +4692,8 @@ const setting_items = [
     type: 'bool',
   },
   {
-    labelId: 'settings.label.realisticDiskPhysics',
-    key: 'realistic_disk_physics',
+    labelId: 'settings.label.realizticDiskPhysics',
+    key: 'realiztic_disk_physics',
     type: 'bool',
   },
   { labelId: 'settings.label.showBhJets', key: 'show_bh_jets', type: 'bool' },
@@ -4764,8 +4764,8 @@ const setting_items = [
   },
   { labelId: 'settings.section.educational', type: 'separator' },
   {
-    labelId: 'settings.label.habitableZoneOptimism',
-    key: 'habitable_zone_optimism',
+    labelId: 'settings.label.habitableZoneOptimizm',
+    key: 'habitable_zone_optimizm',
     type: 'float',
     min: 0.5,
     max: 2.0,
@@ -5151,8 +5151,8 @@ const getSettingTooltip = (key, label) => {
       'Controls simulation speed and precision. Smaller steps = more accuracy but slower performance.',
 
     // Educational
-    habitable_zone_optimism:
-      'Which published habitable-zone definition the ring shows. Below 1.3 draws the conservative zone, bounded by the runaway and maximum greenhouse limits. 1.3 and above draws the optimistic zone, bounded by the empirical recent-Venus and early-Mars limits. The edges also depend on the star, not just this setting.',
+    habitable_zone_optimizm:
+      'Which published habitable-zone definition the ring shows. Below 1.3 draws the conservative zone, bounded by the runaway and maximum greenhouse limits. 1.3 and above draws the optimiztic zone, bounded by the empirical recent-Venus and early-Mars limits. The edges also depend on the star, not just this setting.',
   };
 
   return (
@@ -5410,9 +5410,9 @@ const buildSettingsMenu = () => {
       // cell of the grid, which a sighted reader pairs with the control by
       // position and a screen reader cannot pair with it at all. The two
       // sliders build their own <label for> inside their container and were
-      // fine; the selects, the on/off buttons and the two colour pickers were
-      // not. The colour pickers had no accessible name of any kind - a reader
-      // heard "colour picker" twice with nothing to say which was the star and
+      // fine; the selects, the on/off buttons and the two color pickers were
+      // not. The color pickers had no accessible name of any kind - a reader
+      // heard "color picker" twice with nothing to say which was the star and
       // which the planet.
       //
       // Applied here, after the branch, so it covers every control type at once
@@ -5766,7 +5766,7 @@ const captureShareState = ({
   //
   // These used to be carried only for the A/B bench, on the reasoning that a
   // share link pays for every character. But an inclination of 30 degrees, a
-  // rotating frame centred on Jupiter and an assumed distance of 480 parsecs
+  // rotating frame centerd on Jupiter and an assumed distance of 480 parsecs
   // are not incidental settings - they are what the sender is demonstrating,
   // and a link that drops them reopens on a different measurement while
   // looking like the same one. The codec omits every field still at its
@@ -6086,7 +6086,7 @@ const takeScreenshot = () => {
       toast(t('capture.screenshotFailed'));
     } finally {
       // A recording holds capture mode on for its whole length. A still taken
-      // during one must not switch the burnt-in caption and clock off in the
+      // during one must not switch the burned-in caption and clock off in the
       // middle of the clip.
       if (isRecording()) setCaptureMode(true, { caption: captureCaption() });
       else setCaptureMode(false);
@@ -6162,7 +6162,7 @@ export function cancelKeyboardPlacement({ quiet = false } = {}) {
   keyboardAim = null;
   state.adding_mass = false;
   state.orbit_helper.preview = null;
-  if (!quiet) announce(t('place.keyboard.cancelled'));
+  if (!quiet) announce(t('place.keyboard.canceled'));
   return true;
 }
 
@@ -6804,7 +6804,7 @@ const deleteSelectedObject = () => {
 
 document.getElementById('inspectorDelete').onclick = deleteSelectedObject;
 
-// The manoeuvre planner, opened from the body it is about. Deliberately not a
+// The maneuver planner, opened from the body it is about. Deliberately not a
 // rail chip: the Tools group already fills the height it has, and a burn is a
 // thing you do to a particular object rather than a tool you reach for in the
 // abstract. Lazy - most visitors never plan one.
@@ -7215,7 +7215,7 @@ const paintRecordingState = status => {
   const capMb = status.maxBytes / (1024 * 1024);
   recordingReadout.textContent = `REC ${clockText(status.seconds)}  ${mb.toFixed(0)}/${capMb.toFixed(0)} MB`;
   // Within a tenth of either budget the recording is about to stop itself,
-  // which is worth a colour rather than a surprise.
+  // which is worth a color rather than a surprise.
   const nearly =
     status.seconds > status.maxSeconds * 0.9 ||
     status.bytes > status.maxBytes * 0.9;
@@ -7265,7 +7265,7 @@ const toggleRecording = () => {
     onTick: status => {
       // Re-read the caption rather than holding the one the take started with:
       // a lecturer who loads a second scenario mid-clip would otherwise have
-      // the rest of the recording labelled with the first one's name.
+      // the rest of the recording labeled with the first one's name.
       setCaptureMode(true, { caption: captureCaption() });
       paintRecordingState(status);
     },
@@ -7281,7 +7281,7 @@ const toggleRecording = () => {
 
 if (recordBtn) {
   // Nothing to offer where MediaRecorder or captureStream is missing: a button
-  // that can only apologise is worse than no button.
+  // that can only apologize is worse than no button.
   if (!canRecord()) recordBtn.hidden = true;
   else recordBtn.onclick = toggleRecording;
 }
@@ -7624,7 +7624,7 @@ function positionPlacementStatus() {
  * Match the add control to whether placement is allowed at all.
  *
  * Exported for the lesson runner. A step that locks placement clears
- * interactive_add, and placementArmed() honours that on its own - but the
+ * interactive_add, and placementArmed() honors that on its own - but the
  * crosshair and the lit button would go on promising a click that now does
  * nothing, and the picker would still open, over the lesson panel it is
  * anchored beside on a narrow window. Disabling the button says the same thing
@@ -8144,7 +8144,7 @@ canvas.addEventListener(
         let newZoom = oldZoom * limitedZoomFactor;
         newZoom = Math.max(0.01, Math.min(newZoom, 100));
 
-        // Zoom towards the centre of the two touches, in canvas pixels.
+        // Zoom towards the center of the two touches, in canvas pixels.
         //
         // Both halves of an anchored zoom have to be in the same space:
         // screen_to_world and worldToScreen speak canvas pixels, and clientX

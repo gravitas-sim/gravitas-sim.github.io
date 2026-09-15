@@ -2,7 +2,7 @@
 
 Gravitas is a tool for reading numbers off a screen, and until now its numbers
 were formatted wherever they happened to be printed. The interface around them
-had been rebuilt twice; they still read as though a programmer had written them.
+had been rebuilt twice; they still read as though a programr had written them.
 
 Everything is now decided in one place, [`js/format.js`](js/format.js).
 

@@ -48,7 +48,7 @@ async function openNotebook(page, app) {
  * recording into the workspace. The provenance still comes from the live
  * world, which is what these tests are about.
  */
-async function analyseSynthetic(
+async function analyzeSynthetic(
   page,
   { target = 'Star A', seed = 'nb1' } = {}
 ) {
@@ -123,7 +123,7 @@ test.describe('a reading survives the world it came from', () => {
     await app.boot();
     await app.loadScenario('Exoplanet Characterization Lab');
     await app.waitForFrames(10);
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     await keepFit(page, 'The period is about three and a half days.');
 
     const before = await readNotebook(page);
@@ -162,7 +162,7 @@ test.describe('a reading survives the world it came from', () => {
     app,
   }) => {
     await app.boot();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     await keepFit(page, 'A claim.');
 
     const attempts = await page.evaluate(async () => {
@@ -224,7 +224,7 @@ test.describe('a reading survives the world it came from', () => {
     await app.boot();
     await app.loadScenario('Exoplanet Characterization Lab');
     await app.waitForFrames(10);
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
 
     // Press save, then change the world while the claim box is still open.
     // The numbers were frozen at capture, so what gets stored is the reading
@@ -258,7 +258,7 @@ test.describe('what a saved reading records', () => {
     await app.boot();
     await app.loadScenario('Exoplanet Characterization Lab');
     await app.waitForFrames(40);
-    await analyseSynthetic(page, { target: 'HD 12345', seed: 'seed-x' });
+    await analyzeSynthetic(page, { target: 'HD 12345', seed: 'seed-x' });
     await keepFit(page, '');
 
     const [entry] = await readNotebook(page);
@@ -315,7 +315,7 @@ test.describe('what a saved reading records', () => {
     app,
   }) => {
     await app.boot();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     // Reveal first, so the entry carries both kinds and the flag.
     await page.locator('#rvFitReveal').click();
     await keepFit(page, '');
@@ -341,9 +341,9 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
-    await analyseSynthetic(page, { target: 'First' });
+    await analyzeSynthetic(page, { target: 'First' });
     await keepFit(page, 'First claim.');
-    await analyseSynthetic(page, { target: 'Second' });
+    await analyzeSynthetic(page, { target: 'Second' });
     await keepFit(page, 'Second claim.');
     await expect(page.locator('.nb-entry')).toHaveCount(2);
 
@@ -359,7 +359,7 @@ test.describe('the panel', () => {
     await page.keyboard.press('Enter');
     await expect.poll(titles).toEqual([before[1], before[0]]);
 
-    // Annotate. The textarea is labelled, so it can be found by its label.
+    // Annotate. The textarea is labeled, so it can be found by its label.
     const claim = page
       .locator('.nb-entry')
       .first()
@@ -384,7 +384,7 @@ test.describe('the panel', () => {
 
   test('a refused delete keeps the entry', async ({ page, app }) => {
     await app.boot();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     await keepFit(page, 'Keep me.');
     page.once('dialog', d => d.dismiss());
     await page.locator('[data-delete]').click();
@@ -396,9 +396,9 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
-    await analyseSynthetic(page, { target: 'One' });
+    await analyzeSynthetic(page, { target: 'One' });
     await keepFit(page, 'a');
-    await analyseSynthetic(page, { target: 'Two' });
+    await analyzeSynthetic(page, { target: 'Two' });
     await keepFit(page, 'b');
     await page.locator('.nb-entry').nth(1).locator('[data-move="-1"]').click();
     const order = (await readNotebook(page)).map(e => e.id);
@@ -421,7 +421,7 @@ test.describe('the panel', () => {
     await app.boot();
     await openNotebook(page, app);
     await expect(page.locator('.nb-status')).toBeVisible();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     await keepFit(page, 'x');
     await expect(page.locator('.nb-status')).toContainText('1');
   });
@@ -431,7 +431,7 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     // Make every write fail, the way private browsing does.
     await page.evaluate(async () => {
       const store = await import('/js/notebook/store.js');
@@ -466,7 +466,7 @@ test.describe('the files', () => {
     await app.boot();
     await app.loadScenario('Exoplanet Characterization Lab');
     await app.waitForFrames(20);
-    await analyseSynthetic(page, { target: 'HD 999', seed: 'file-seed' });
+    await analyzeSynthetic(page, { target: 'HD 999', seed: 'file-seed' });
     await keepFit(page, 'A claim worth keeping.');
     const before = await readNotebook(page);
 
@@ -507,7 +507,7 @@ test.describe('the files', () => {
     app,
   }) => {
     await app.boot();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     await keepFit(page, 'Original.');
 
     const download = await Promise.all([
@@ -548,7 +548,7 @@ test.describe('the files', () => {
 
   test('the report downloads, and is a PDF', async ({ page, app }) => {
     await app.boot();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     await keepFit(page, 'For the report.');
 
     const download = await Promise.all([
@@ -570,7 +570,7 @@ test.describe('the files', () => {
 test.describe('everyone can use it', () => {
   test('the whole panel is translated', async ({ page, app }) => {
     await app.boot();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     await keepFit(page, 'Una afirmación.');
 
     await page.evaluate(async () => {
@@ -612,7 +612,7 @@ test.describe('everyone can use it', () => {
     app,
   }) => {
     await app.boot();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     await keepFit(page, 'x');
     for (const l of ['es', 'en', 'es']) {
       await page.evaluate(async locale => {
@@ -632,7 +632,7 @@ test.describe('everyone can use it', () => {
   }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await app.boot();
-    await analyseSynthetic(page);
+    await analyzeSynthetic(page);
     await keepFit(page, 'On a phone.');
 
     const overflow = await page.evaluate(() => {

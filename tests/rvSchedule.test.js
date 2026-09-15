@@ -35,7 +35,7 @@ describe('reading a list of times', () => {
 
   test('anything unreadable is returned rather than dropped', () => {
     // Silently observing on a shorter schedule than somebody typed is the one
-    // behaviour that would be worse than refusing.
+    // behavior that would be worse than refusing.
     const out = parseEpochList('0 1 oops 2 -3 NaN');
     expect(out.offsets).toEqual([0, 1, 2]);
     expect(out.rejected).toEqual(['oops', '-3', 'NaN']);
@@ -128,7 +128,7 @@ describe('reading a list of times', () => {
     expect(parseEpochList(formatEpochList(offsets)).offsets).toEqual(offsets);
   });
 });
-describe('a schedule the instrument cannot honour is refused, not adjusted', () => {
+describe('a schedule the instrument cannot honor is refused, not adjusted', () => {
   test('a decimal comma is ambiguous and is named as such', () => {
     // "0,5 1,5" would silently become three observations at 0, 1 and 5. The
     // comma is the list separator in both languages this ships in, so the
@@ -384,7 +384,7 @@ describe('the shapes share a count and a baseline', () => {
   });
 
   test('an empty explicit list refuses rather than substituting a comb', () => {
-    // It used to fall back to a regular cadence, which is the one behaviour
+    // It used to fall back to a regular cadence, which is the one behavior
     // this feature cannot have: the panel would tell the student their own
     // times were being used and observe on an evenly spaced comb instead.
     const plan = planSchedule({

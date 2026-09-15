@@ -196,7 +196,7 @@ export function nearbyModels(
     const s = trackSamples(id);
     if (!s) continue;
     // One match per track at most, and per phase within it: a track passes
-    // through a neighbourhood many times and six samples of the same moment
+    // through a neighborhood many times and six samples of the same moment
     // are not six alternatives.
     const bestByPhase = new Map();
     for (let i = 0; i < s.count; i++) {

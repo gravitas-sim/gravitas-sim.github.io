@@ -59,13 +59,13 @@ describe('every step points at something that exists', () => {
 describe('every step is fully translated', () => {
   const LOCALES = { en: EN, es: ES };
 
-  for (const [locale, catalogue] of Object.entries(LOCALES)) {
+  for (const [locale, catalog] of Object.entries(LOCALES)) {
     test(`${locale} has a title, body and tip for every step`, () => {
       const missing = [];
       for (const step of TUTORIAL_STEPS) {
         for (const part of ['title', 'body', 'tip']) {
           const key = `tutorial.${step.id}.${part}`;
-          if (!catalogue[key]) missing.push(key);
+          if (!catalog[key]) missing.push(key);
         }
       }
       expect(missing).toEqual([]);
@@ -77,15 +77,15 @@ describe('every step is fully translated', () => {
         'tutorial.next',
         'tutorial.finish',
       ]) {
-        expect(catalogue[key]).toBeTruthy();
+        expect(catalog[key]).toBeTruthy();
       }
     });
   }
 
   test('the step counter carries both placeholders', () => {
-    for (const catalogue of Object.values(LOCALES)) {
-      expect(catalogue['tutorial.stepCount']).toContain('{n}');
-      expect(catalogue['tutorial.stepCount']).toContain('{total}');
+    for (const catalog of Object.values(LOCALES)) {
+      expect(catalog['tutorial.stepCount']).toContain('{n}');
+      expect(catalog['tutorial.stepCount']).toContain('{total}');
     }
   });
 });
@@ -101,12 +101,12 @@ describe('the tour does not describe an interface that is gone', () => {
   });
 
   test('it explains that placement has to be armed', () => {
-    // The single most important behavioural change a returning reader needs.
+    // The single most important behavioral change a returning reader needs.
     expect(bodies).toMatch(/arm/i);
   });
 
   test('it does not quote a scenario count that has moved on', () => {
-    // Any number here has to be the real one. Checked against the catalogue
+    // Any number here has to be the real one. Checked against the catalog
     // rather than hardcoded, so this fails when scenarios are added and the
     // tour is not updated.
     const claimed = bodies.match(

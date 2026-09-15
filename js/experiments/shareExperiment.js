@@ -110,7 +110,7 @@ export function readExperimentBlock(payload) {
  * numbers that must agree are one number.
  *
  * @param {string} fragment - Encoded fragment
- * @param {string} [base] - Base URL, for a realistic total
+ * @param {string} [base] - Base URL, for a realiztic total
  * @returns {{ok:boolean, length:number, limit:number}} Whether it fits
  */
 export function fragmentFits(fragment, base = '') {

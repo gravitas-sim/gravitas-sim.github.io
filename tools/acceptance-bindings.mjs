@@ -141,7 +141,7 @@ function bodyFrom(lines, from) {
  *
  * @param {object} input - Everything gathered
  * @param {object} input.acceptance - The parsed acceptance map
- * @param {Array<{id: string}>} input.lessons - The generated catalogue
+ * @param {Array<{id: string}>} input.lessons - The generated catalog
  * @param {Map<string, string>|object} input.sources - Spec path to contents,
  *   covering every spec file so a stray tag elsewhere is still found
  * @param {?Array<{file: string, title: string}>} input.collected - What

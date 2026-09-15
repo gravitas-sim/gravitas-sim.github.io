@@ -138,7 +138,7 @@ describe('v^4 = G M a0', () => {
     expect(v ** 4).toBeCloseTo(G_GALACTIC * M * A0_GALACTIC, 0);
   });
 
-  test('it reproduces the baryonic Tully-Fisher normalisation', () => {
+  test('it reproduces the baryonic Tully-Fisher normalization', () => {
     // The observed BTFR is M ~ 47 v^4 with M in solar masses and v in km/s
     // (McGaugh 2012). MOND's prediction is M = v^4/(G a0), so the coefficient
     // 1/(G a0) has to land near 47 or the theory is not describing real
@@ -352,7 +352,7 @@ describe('the galaxy mapping also fixes the speed scale', () => {
     expect(simSpeedToKmS(SCALE, 0)).toBe(0);
   });
 
-  test('the scale model’s flat curve is a realistic galactic speed', () => {
+  test('the scale model’s flat curve is a realiztic galactic speed', () => {
     const V = simSpeedToKmS(SCALE, 1);
     // 11 simulation units is the flat speed the disc scenario shows.
     expect(11 * V).toBeGreaterThan(110);

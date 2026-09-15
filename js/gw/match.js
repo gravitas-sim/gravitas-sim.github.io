@@ -1,8 +1,8 @@
 // =============================================================================
 // Comparing two signals, and whitening one
 // -----------------------------------------------------------------------------
-// What this returns is a *match*: a normalised, noise-weighted overlap between
-// two traces, maximised over time shift and over overall phase. It runs from 0
+// What this returns is a *match*: a normalized, noise-weighted overlap between
+// two traces, maximized over time shift and over overall phase. It runs from 0
 // to 1 and it is the same inner product a matched filter is built on.
 //
 // What it is not, and what nothing in this application may call it
@@ -46,7 +46,7 @@ export function sampleOnto(timeline, { sampleRate, t0, t1, length } = {}) {
  *
  * The taper is the honest part of the preprocessing: without it the abrupt
  * start of a segment puts power at every frequency, and both the match and any
- * whitened plot show a filter artefact rather than a signal.
+ * whitened plot show a filter artifact rather than a signal.
  *
  * @param {number} n - Length
  * @param {number} [alpha] - Fraction of the window spent tapering, total
@@ -116,7 +116,7 @@ export function whiten(
 }
 
 /**
- * The normalised overlap between two traces, maximised over time and phase.
+ * The normalized overlap between two traces, maximized over time and phase.
  *
  * @param {Float64Array|Float32Array} a - First trace, strain
  * @param {Float64Array|Float32Array} b - Second, same rate

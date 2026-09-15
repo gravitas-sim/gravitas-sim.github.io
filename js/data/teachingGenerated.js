@@ -2,7 +2,7 @@
 // Showcase-page data - GENERATED, do not edit
 // -----------------------------------------------------------------------------
 // Written by tools/build-teaching-demos.mjs from the `state` blocks in
-// ./teaching.js and from the scenario catalogue. Run `npm run teaching:data`
+// ./teaching.js and from the scenario catalog. Run `npm run teaching:data`
 // after changing either.
 //
 // DEMO_LINKS: each value is the text after the '#' of an ordinary Gravitas

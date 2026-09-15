@@ -21,7 +21,7 @@ import { SCENARIO_TAGS, TAG_ORDER } from './data/scenarioTags.js';
 import {
   scenarioTitle,
   scenarioSummary,
-  tagLabelLocalized as tagLabel,
+  tagLabelocalized as tagLabel,
   tagDescription,
 } from './i18n/scenario.js';
 import { t, onLocaleChange } from './i18n/index.js';

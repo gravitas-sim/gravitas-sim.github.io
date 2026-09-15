@@ -127,9 +127,9 @@ export const GALILEAN = {
       color: '#6f6152',
     },
   ],
-  /** Published behaviour of the Laplace argument, for the validation suite. */
+  /** Published behavior of the Laplace argument, for the validation suite. */
   published: {
-    laplaceCentreDeg: 180,
+    laplaceCenterDeg: 180,
     laplaceAmplitudeDeg: 0.064,
     laplacePeriodDays: 2071,
     ratioEuropaIo: 2.0073,
@@ -153,7 +153,7 @@ export const GALILEAN = {
  * published distances, because the resonance is a statement about mean motions:
  * n_Io - 3 n_Europa + 2 n_Ganymede = 0 holds in the real system to about one
  * part in ten million, and reproducing it is the whole point. Deriving the
- * axes instead from the published kilometres leaves a residual fifty times the
+ * axes instead from the published kilometers leaves a residual fifty times the
  * real one, which is a third of the libration frequency and would put the model
  * near the edge of the resonance rather than in it.
  *
@@ -245,7 +245,7 @@ export function galileanBodies(G, opts = {}) {
  *             in the real system by the precession of Pluto's perihelion, which
  *             enters the argument and which this model does not reproduce at
  *             the right rate. Starting at the exact commensurability puts the
- *             libration centre where it belongs.
+ *             libration center where it belongs.
  */
 export const PLUTO_NEPTUNE = {
   id: 'pluto-neptune',
@@ -290,7 +290,7 @@ export const PLUTO_NEPTUNE = {
   /** Where the argument sits, and what the model has to reproduce. */
   published: {
     argument: '3*lambda_Pluto - 2*lambda_Neptune - varpi_Pluto',
-    centreDeg: 180,
+    centerDeg: 180,
     amplitudeDeg: 82,
     periodYears: 19670,
     minimumSeparationAU: 17.2,
@@ -298,7 +298,7 @@ export const PLUTO_NEPTUNE = {
   },
   /**
    * Where the argument starts. A hundred degrees is eighty short of the
-   * libration centre, and starting at a turning point of the libration - which
+   * libration center, and starting at a turning point of the libration - which
    * is what the exact commensurability makes it - gives an amplitude of eighty
    * degrees, the observed one.
    */
@@ -387,7 +387,7 @@ export function plutoBodies(G, opts = {}) {
  * Jupiter, so they are, and L3 - which is also an equilibrium - is not.
  *
  * The five test bodies are the lesson. Two are real Trojans placed with
- * realistic libration amplitudes, one marks the equilibrium itself, one starts
+ * realiztic libration amplitudes, one marks the equilibrium itself, one starts
  * one degree off the unstable equilibrium, and one is on an ordinary orbit ten
  * percent wider and is not co-orbital at all. Their masses are a billionth of a
  * mass unit: enough to exist, far too little to disturb anything.
@@ -476,7 +476,7 @@ export const JUPITER_TROJANS = {
  *
  * Built in the circular restricted frame rather than as a Sun at rest with a
  * planet round it, because the triangular points are only exact when both
- * massive bodies turn about their common centre at the same rate. Placed the
+ * massive bodies turn about their common center at the same rate. Placed the
  * other way, an "exact" L4 body drifts by a degree or so - which looks like
  * physics and is arithmetic.
  *
@@ -498,7 +498,7 @@ export function trojanBodies(G) {
   const a = S.jupiter.aAU * UNITS_PER_AU;
   const n = Math.sqrt((G * total) / a ** 3);
 
-  // Both on the x axis about a barycentre at the origin, turning at rate n.
+  // Both on the x axis about a barycenter at the origin, turning at rate n.
   const rSun = -(jupiterMass / total) * a;
   const rJup = (sunMass / total) * a;
 
@@ -614,10 +614,10 @@ export function stateFromElements({ a, e, varpiDeg, lambdaDeg, mu }) {
 }
 
 /**
- * Shift a set of bodies so their barycentre is at rest at the origin.
+ * Shift a set of bodies so their barycenter is at rest at the origin.
  *
- * Not cosmetic: a system whose centre of mass drifts leaves the view, and one
- * whose centre of mass is off-origin makes every angle measured from the origin
+ * Not cosmetic: a system whose center of mass drifts leaves the view, and one
+ * whose center of mass is off-origin makes every angle measured from the origin
  * slightly wrong. The Trojan scenario builds itself balanced already; the other
  * two are balanced here.
  *
@@ -646,7 +646,7 @@ export function balance(bodies) {
 }
 
 /**
- * Simulated seconds to days, honouring a scenario's own time scale.
+ * Simulated seconds to days, honoring a scenario's own time scale.
  * @param {number} simSeconds - A duration in simulated seconds
  * @param {number} [timeScale] - Divide by this; SCALE_JOVIAN^1.5 for the moons
  * @returns {number} Days
@@ -655,7 +655,7 @@ export const simSecondsToDays = (simSeconds, timeScale = 1) =>
   (simSeconds * DAYS_PER_SIM_SECOND) / timeScale;
 
 /**
- * Simulated seconds to years, honouring a scenario's own time scale.
+ * Simulated seconds to years, honoring a scenario's own time scale.
  * @param {number} simSeconds - A duration in simulated seconds
  * @param {number} [timeScale] - Divide by this
  * @returns {number} Years

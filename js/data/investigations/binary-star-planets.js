@@ -112,7 +112,7 @@ const BINARY_STAR_PLANETS = {
   duration: '40-50 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'stars', 'chaos'],
   lock: { placement: true },
@@ -536,7 +536,7 @@ The published boundary is at 0.177. Commit before you run it.`,
                 islands of stability outside it, and twenty periods is short
                 enough that a slow instability has not finished happening. What
                 you should expect is a change of outcome somewhere in the
-                neighbourhood of 0.177, and no guarantee about exactly where.`,
+                neighborhood of 0.177, and no guarantee about exactly where.`,
       tip: 'A prediction you have written down is what makes the result evidence rather than a demonstration.',
     },
     {
@@ -626,7 +626,7 @@ Watch what it reports as it goes. Each trial ends with an
       prompt: 'Why not join them up?',
       options: [
         'Because five points are not enough to fit a curve to',
-        'Because a line would assert that everything between two tested radii behaves like its neighbours, which is the claim the paper explicitly denies',
+        'Because a line would assert that everything between two tested radii behaves like its neighbors, which is the claim the paper explicitly denies',
         'Because the outcomes are words rather than numbers',
         'Because the trials were run in a random order',
       ],
@@ -671,7 +671,7 @@ This is the same test you did by hand at 0.25, applied to the
       prompt: 'What has that established?',
       options: [
         'That the planet is unstable at that radius',
-        'That the ejection is not an artefact of the step size, over these twenty periods',
+        'That the ejection is not an artifact of the step size, over these twenty periods',
         'That the published boundary is wrong',
         'That the sweep can be trusted at every other radius too',
       ],
@@ -1162,7 +1162,7 @@ The published boundary for this configuration is 3.61. Predict
                 configuration, the initial condition, the length of the
                 integration and the outside evidence, and it leaves the reader
                 able to check any of them. The first claims more than a
-                twenty-period run can support. The third generalises from one
+                twenty-period run can support. The third generalizes from one
                 mass ratio and one eccentricity. The fourth throws away a real
                 result — a converged, well-conserved run that agrees with the
                 literature is worth something, just not everything.`,

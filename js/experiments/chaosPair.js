@@ -30,7 +30,7 @@
 // substep cap binds, halving the speed halves the number of substeps and
 // leaves their size alone. A control that assumes otherwise is a control that
 // may have changed nothing. So the step is measured, per run, from the steps
-// the engine actually took, and the control is labelled with what it did rather
+// the engine actually took, and the control is labeled with what it did rather
 // than with what was asked for.
 // =============================================================================
 
@@ -53,7 +53,7 @@ export const CONFIGURATIONS = Object.freeze({
     km: 1500,
     /** How long to watch, in the pair's own orbits. */
     orbits: 4,
-    /** What the lesson expects, so a wild answer can be recognised as one. */
+    /** What the lesson expects, so a wild answer can be recognized as one. */
     expect: 'linear',
   }),
   triple: Object.freeze({
@@ -195,7 +195,7 @@ export function controlLabel({ integrator, mean, steps }) {
  * the controls actually changed the arithmetic, and that an inadequate set of
  * controls is an UNRESOLVED result rather than a missing one.
  *
- * @param {Array<object>} controls - {label, tau, behaviour, differs}
+ * @param {Array<object>} controls - {label, tau, behavior, differs}
  * @param {number} [tolerance] - Allowed fractional spread in tau
  * @returns {object} The verdict, and why
  */

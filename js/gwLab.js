@@ -9,11 +9,11 @@
 // The bounded window
 // -----------------------------------------------------------------------------
 // A pair of neutron stars entering the band at 20 Hz radiates for 158 seconds
-// and five thousand cycles. Nothing good comes of modelling all of it: the
+// and five thousand cycles. Nothing good comes of modeling all of it: the
 // audio would be truncated, the noise array would be six hundred thousand
 // samples, and a student would be asked to wait. So each preset declares a
 // window - the last N seconds before the model's own end - and the lab reports
-// both numbers, always: what it modelled, and what the whole inspiral would be.
+// both numbers, always: what it modeled, and what the whole inspiral would be.
 // The window is a stated excerpt rather than a silent truncation.
 // =============================================================================
 
@@ -28,7 +28,7 @@ import {
   fidelityBand,
   effectiveDistance,
 } from './gw/waveform.js';
-import { colouredNoise } from './gw/noise.js';
+import { coloredNoise } from './gw/noise.js';
 
 /** The lowest frequency any preset starts at. Below this no detector is looking. */
 export const BAND_FLOOR_HZ = 20;
@@ -36,7 +36,7 @@ export const BAND_FLOOR_HZ = 20;
 /** The rate the noise realization and the local strain view are computed at. */
 export const SIGNAL_RATE_HZ = 4096;
 
-/** A hard cap on the modelled window, so no array here is unbounded. */
+/** A hard cap on the modeled window, so no array here is unbounded. */
 export const MAX_WINDOW_SECONDS = 8;
 
 /**
@@ -136,12 +136,12 @@ const referenceCache = new Map();
  * The strain that maps to full scale when a comparison is being listened to.
  *
  * A controlled comparison needs one reference that does **not** move when the
- * thing being compared moves. The lab used to normalise every playback against
+ * thing being compared moves. The lab used to normalize every playback against
  * the signal's own loudest moment, so doubling the distance halved the strain,
  * halved the reference with it, and produced an identical sound: three
  * distances, three plots differing by a factor of four, and one audio
  * amplitude. The ratio the student was being asked to hear was the one
- * quantity the normalisation removed.
+ * quantity the normalization removed.
  *
  * The reference is the preset's peak at its **own default parameters**, so it
  * belongs to the preset and not to whatever the student has changed. Moving a
@@ -165,11 +165,11 @@ export function referenceStrainFor(presetId) {
 }
 
 /**
- * The frequency at which a modelled window of a given length starts.
+ * The frequency at which a modeled window of a given length starts.
  *
  * Never below the band floor: a window longer than the whole inspiral from
  * 20 Hz gets the whole inspiral, and the lab says the window was shorter than
- * asked for rather than modelling a binary nobody could hear.
+ * asked for rather than modeling a binary nobody could hear.
  *
  * @param {object} p - Clamped parameters
  * @returns {number} Hz
@@ -199,7 +199,7 @@ export function describe(params) {
     totalMassSun: total,
     iscoHz: isco,
     fStartHz: fStart,
-    /** The modelled excerpt. */
+    /** The modeled excerpt. */
     windowActualSeconds:
       timeToCoalescence(fStart, mc) - timeToCoalescence(isco, mc),
     cyclesInWindow: cyclesRemaining(fStart, mc) - cyclesRemaining(isco, mc),
@@ -348,7 +348,7 @@ export function noiseFor(state) {
     Math.ceil(MAX_WINDOW_SECONDS * SIGNAL_RATE_HZ),
     Math.max(64, Math.ceil(state.timeline.duration * SIGNAL_RATE_HZ) + 1)
   );
-  state.noise = colouredNoise({
+  state.noise = coloredNoise({
     samples,
     sampleRate: SIGNAL_RATE_HZ,
     seed: state.noiseSeed,

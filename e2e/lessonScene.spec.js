@@ -228,7 +228,7 @@ test.describe('a bound star', () => {
     // The chip shows a reader-facing label rather than the lesson's own key.
     // `cursor` happens to be the same word in both; the shelf below is where
     // that stops being true.
-    // Screen 9 is the same free cursor; screen 12 is the eight modelled stars.
+    // Screen 9 is the same free cursor; screen 12 is the eight modeled stars.
     await page.goto('/?author=a-universe-of-stars&step=12');
     await page.waitForFunction(() => window.splashScreenEnded === true, {
       timeout: 20_000,

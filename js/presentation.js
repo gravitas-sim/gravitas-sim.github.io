@@ -104,7 +104,7 @@ export function onPresentationChange(fn) {
  * parameter, whatever else that link already carries.
  *
  * Accepts the values a hand-written embed is likely to use. `embed=0` and
- * `embed=false` are honoured as "no", so a template that always writes the
+ * `embed=false` are honored as "no", so a template that always writes the
  * parameter can turn it off without deleting it.
  *
  * @param {string} [search] - Query string; defaults to the current one

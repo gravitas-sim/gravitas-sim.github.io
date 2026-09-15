@@ -165,7 +165,7 @@ test.describe('Kuiper Belt scenario contract', () => {
   }) => {
     // Both builds are loaded paused. A running world moves between the two
     // snapshots, and this test is about what initialization produces, not about
-    // how far the belt has travelled since.
+    // how far the belt has traveled since.
     await app.loadScenario('Kuiper Belt', 'kbo-seeded', { run: false });
     const first = await namedBodies(page);
     await app.loadScenario('Kuiper Belt', 'kbo-seeded', { run: false });

@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The follow block in js/physics.js assigned state.pan outright on every step,
 // so a drag or a wheel zoom made while following was overwritten before the
-// next frame. The behaviour chosen instead is documented in js/followCamera.js:
+// next frame. The behavior chosen instead is documented in js/followCamera.js:
 // manual input becomes an offset from the followed body and Follow keeps
 // following.
 // =============================================================================
@@ -38,13 +38,13 @@ const freshView = () => ({
 });
 
 describe('following a body', () => {
-  test('centres it on the first step', () => {
+  test('centers it on the first step', () => {
     const view = freshView();
     step(view, { x: 50, y: -30 });
     expect(view.pan).toEqual({ x: -100, y: -60 });
   });
 
-  test('keeps it centred as it moves', () => {
+  test('keeps it centerd as it moves', () => {
     const view = freshView();
     step(view, { x: 50, y: -30 });
     step(view, { x: 60, y: -20 });

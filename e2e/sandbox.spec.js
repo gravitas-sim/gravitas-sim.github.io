@@ -172,7 +172,7 @@ test.describe('the space bar', () => {
   });
 
   test('the transport button follows the key', async ({ page, app }) => {
-    // The handler that was cancelling the other one did not refresh the
+    // The handler that was canceling the other one did not refresh the
     // transport bar, so even when it did win the button disagreed with the
     // simulation. The surviving one does.
     await app.boot();
@@ -342,7 +342,7 @@ test.describe('placing an object is deliberate', () => {
     const before = await bodyCount(page);
     expect(before).toBeGreaterThan(0);
 
-    // Three clicks on empty sky, which under the old behaviour was three stars.
+    // Three clicks on empty sky, which under the old behavior was three stars.
     await page.mouse.click(1000, 620);
     await page.mouse.click(1040, 660);
     await page.mouse.click(980, 700);

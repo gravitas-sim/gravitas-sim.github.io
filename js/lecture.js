@@ -2,14 +2,14 @@
 // Lecture mode: the simulation projected on a wall
 // -----------------------------------------------------------------------------
 // Not a fullscreen sandbox. The constraint is a 1024x768 projector and a
-// student in the back row of a lecture theatre, which is a different design
+// student in the back row of a lecture theater, which is a different design
 // problem from a laptop at arm's length: type has to be larger than a desktop
 // interface would ever justify, controls have to be hittable while the lecturer
 // is looking at the room rather than the screen, and the palette has to survive
 // a projector's washed-out black point.
 //
 // The last of those is why entering switches to Daylight. A near-black chrome
-// on a projector in a lit room is a grey rectangle; the light theme already
+// on a projector in a lit room is a gray rectangle; the light theme already
 // exists for exactly this and is documented as such in the theme picker. It is
 // borrowed, not imposed: the previous theme is remembered on the way in and
 // restored on the way out, so a lecturer who prefers Observatory still has it
@@ -436,7 +436,7 @@ function onKeyDown(e) {
   if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
   if (isTypingTarget(e.target)) return;
   // A focused range slider moves with the arrow keys and that is the correct
-  // behaviour for it; stealing them would make the speed control unusable with
+  // behavior for it; stealing them would make the speed control unusable with
   // the keyboard.
   if (
     typeof e.target?.matches === 'function' &&
@@ -514,7 +514,7 @@ export function initLecture() {
 
 // The module wires itself when it loads, whoever loaded it.
 //
-// It used to be initialised from js/main.js on every visit, which put five
+// It used to be initialized from js/main.js on every visit, which put five
 // kilobytes of sequence handling, spotlight drawing and a sheet editor into the
 // start-up download for the great majority of visits that never present
 // anything. The V shortcut already imported this module on demand - so

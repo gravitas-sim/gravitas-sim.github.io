@@ -18,7 +18,7 @@
 //                       typed. A rebuild between two steps of one measurement
 //                       is the version of this that hurts.
 //
-// These are behaviour tests on purpose. Counting probes or asserting that a
+// These are behavior tests on purpose. Counting probes or asserting that a
 // panel opens proves the wiring exists; it does not prove a student who
 // mis-clicked can carry on, which is the thing being claimed.
 // =============================================================================
@@ -236,7 +236,7 @@ test.describe('a missed moment is catchable', () => {
 });
 
 test.describe('an instrument and the scene describe the same thing', () => {
-  // Behaviour, not wiring. Each of these changes something on the canvas and
+  // Behavior, not wiring. Each of these changes something on the canvas and
   // checks that the reading follows, which is what "connected" has to mean -
   // a probe that exists and never moves proves nothing.
 
@@ -303,7 +303,7 @@ test.describe('an instrument and the scene describe the same thing', () => {
     await open(page, app, 'tides');
     await goTo(page, 'Three points, three pulls');
     const text = await page.locator('#investigationProbe').innerText();
-    // Near side pulled harder than the centre, far side less: the sign pattern
+    // Near side pulled harder than the center, far side less: the sign pattern
     // is the entire explanation for two bulges, so it is asserted rather than
     // just checked for being present.
     const near = Number(text.match(/Near side[\s\S]*?(-?[\d.]+)%/)?.[1]);
@@ -335,7 +335,7 @@ test.describe('an instrument and the scene describe the same thing', () => {
       /Whole-system energy/i
     );
     // The distinction the lesson turns on has to be legible: whatever the
-    // number is, it is labelled as arithmetic rather than as physics.
+    // number is, it is labeled as arithmetic rather than as physics.
     await expect(page.locator('#investigationProbe')).toContainText(
       /unchanged to the precision worth quoting|numerical drift, not physics/
     );

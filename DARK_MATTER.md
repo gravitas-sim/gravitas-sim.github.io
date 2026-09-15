@@ -184,7 +184,7 @@ exists. The other reading is that gravity is what is missing, and Gravitas
 offers it as a selectable alternative rather than a footnote.
 
 **The law.** Milgrom (1983) observed that rotation curves stop falling at a
-characteristic *acceleration* rather than at a characteristic radius or
+characteriztic *acceleration* rather than at a characteriztic radius or
 brightness, and proposed that below a₀ ≈ 1.2 × 10⁻¹⁰ m/s² the relation between
 gravity and motion departs from Newton's. Gravitas applies it algebraically to
 the summed Newtonian field of the visible matter,
@@ -222,7 +222,7 @@ is 1.4 × 10¹⁰ M☉. The mass scale was chosen so that the model galaxy is a 
 one — that mass with a flat curve near 122 km/s sits on the observed baryonic
 Tully-Fisher relation, and the validation suite checks it does. Under that
 mapping MOND reproduces the scenario's flat curve from the visible mass alone.
-**That agreement is a consequence of having built a realistic galaxy, not
+**That agreement is a consequence of having built a realiztic galaxy, not
 evidence gathered by this simulation**, and the scenario source says so where the
 mapping is declared.
 

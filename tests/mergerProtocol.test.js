@@ -272,11 +272,11 @@ describe.each(PAIRS)('$name', ({ build, into, resultClass, resultList }) => {
     expect(evt.velocity).toEqual({ x: result.vel.x, y: result.vel.y });
   });
 
-  test('puts the result at the centre of mass', () => {
+  test('puts the result at the center of mass', () => {
     const { before, events } = merge();
     const [evt] = events;
     // The star+BH family is the exception and says so: the hole survives where
-    // it was rather than moving to the barycentre.
+    // it was rather than moving to the barycenter.
     if (evt.resultId === before.ids[0] || evt.resultId === before.ids[1])
       return;
     expect(evt.position.x).toBeCloseTo(before.comX, 6);

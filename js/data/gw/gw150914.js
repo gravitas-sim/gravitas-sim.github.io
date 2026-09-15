@@ -36,7 +36,7 @@ export const PROVENANCE = {
   notApplied: [
     'No time shift between detectors.',
     'No sign inversion.',
-    'No additional filtering, whitening, normalisation or alignment.',
+    'No additional filtering, whitening, normalization or alignment.',
   ],
   priorProcessingByPublisher: [
     'Band-pass 35-350 Hz.',

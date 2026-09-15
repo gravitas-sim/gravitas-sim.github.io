@@ -179,8 +179,8 @@ for (const tier of ['full', 'low']) {
         ],
         changed: [{ id: 2, x: cx + 50, y: cy }],
       },
-      // Symmetric spread about the same centre: whatever the zoom does, the
-      // world point at that centre must not move.
+      // Symmetric spread about the same center: whatever the zoom does, the
+      // world point at that center must not move.
       {
         type: 'touchmove',
         touches: [
@@ -224,7 +224,7 @@ test('two unrelated touches do not reset the view', async ({ page, app }) => {
   await app.setPaused(true);
   // An empty world, so the touchstart handler's hit test has nothing to walk.
   //
-  // The recogniser measures a real 250ms tap threshold against the page's own
+  // The recognizer measures a real 250ms tap threshold against the page's own
   // clock, and everything the application does synchronously between the down
   // and the up counts against it - the hit test over every body most of all.
   // On a saturated runner that was enough to lose the gesture, which made this
@@ -279,7 +279,7 @@ test('two real taps in the same place still reset the view', async ({
   await app.setPaused(true);
   // An empty world, so the touchstart handler's hit test has nothing to walk.
   //
-  // The recogniser measures a real 250ms tap threshold against the page's own
+  // The recognizer measures a real 250ms tap threshold against the page's own
   // clock, and everything the application does synchronously between the down
   // and the up counts against it - the hit test over every body most of all.
   // On a saturated runner that was enough to lose the gesture, which made this

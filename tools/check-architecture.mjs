@@ -18,7 +18,7 @@
  *
  *   No cycles. A cycle means neither module can be understood, tested or loaded
  *   without the other, and in ES modules it also means one of them observes the
- *   other mid-initialisation - a class of bug that shows up as an undefined
+ *   other mid-initialization - a class of bug that shows up as an undefined
  *   binding on a cold load and nowhere else.
  *
  *   No upward imports. Every module is assigned a layer, and a module may
@@ -66,7 +66,7 @@ const LAYERS = [
       /^js\/followCamera\.js$/,
       /^js\/gestures\.js$/,
       // The drawing policy - level of detail, deterministic per-object
-      // variation, star colour, tail geometry. Values in, values out; the one
+      // variation, star color, tail geometry. Values in, values out; the one
       // exception is the sprite cache, which creates an offscreen canvas and
       // no more, the same way js/i18n/dom.js is a leaf that happens to touch
       // the DOM. Down here because every body class in the engine reads it.
@@ -185,7 +185,7 @@ const ALLOWED_UPWARD = new Map([
   [
     'js/maneuverBridge.js -> js/ui.js',
     'The same deliberate lazy edge as the bench bridge above: ui.js is dynamic-' +
-      'imported inside the path that loads the manoeuvre planner, so the ' +
+      'imported inside the path that loads the maneuver planner, so the ' +
       'planner and its prose stay out of the initial download. A static import ' +
       'would satisfy the layering and undo the lazy load.',
   ],
@@ -193,7 +193,7 @@ const ALLOWED_UPWARD = new Map([
     'js/investigations.js -> js/ui.js',
     'A lesson steps the world: it loads scenarios, suppresses the inspector, ' +
       'draws area-sweep wedges and restores share state. That is coordinator ' +
-      'behaviour rather than shared data, so a state module does not help - ' +
+      'behavior rather than shared data, so a state module does not help - ' +
       'it needs a command interface, which is a larger change than this pass.',
   ],
   [
@@ -253,7 +253,7 @@ export function layerOf(file) {
  * a dozen more, nearly all of the same shape: a lazily loaded bridge reaching
  * back into js/ui.js or js/controls.js, which is how every deferred feature in
  * this application is wired. Each is a lazy edge that cannot deadlock module
- * initialisation, and untangling them is a restructuring of the bridge pattern
+ * initialization, and untangling them is a restructuring of the bridge pattern
  * rather than a bug fix. Worth doing; too large to do as a side effect of
  * whatever feature notices it.
  *
@@ -287,7 +287,7 @@ export async function buildGraph() {
  * Johnson's algorithm would be the textbook answer; this is a depth-first
  * search that records a cycle when it meets a node already on the stack, which
  * finds the same set for a graph this size and is a great deal easier to read.
- * Each cycle is normalised to start at its lowest-sorting member so the same
+ * Each cycle is normalized to start at its lowest-sorting member so the same
  * loop discovered from two entry points is reported once.
  *
  * @param {Map<string, Set<string>>} graph - The import graph

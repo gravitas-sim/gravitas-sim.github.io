@@ -6,7 +6,7 @@
 // these tests is about them staying the same thing while a reader changes
 // something.
 //
-// The defect they were written against: the preset labelled "two neutron stars"
+// The defect they were written against: the preset labeled "two neutron stars"
 // set the masses to 1.4 apiece, moved the separation, redrew the waveform - and
 // left two black holes standing on the canvas. Every number was right and the
 // picture was of a different kind of object.
@@ -189,7 +189,7 @@ test.describe('distance is a fixed-reference comparison', () => {
     expect(near / far).toBeCloseTo(2, 2);
 
     // And the step plots against a fixed peak, so the picture shrinks instead
-    // of being renormalised - which is the only way the comparison means
+    // of being renormalized - which is the only way the comparison means
     // anything.
     const fixed = await page.evaluate(async () => {
       const inv =

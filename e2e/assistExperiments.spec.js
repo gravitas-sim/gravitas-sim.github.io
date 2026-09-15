@@ -306,7 +306,7 @@ test.describe('the optional sweep', () => {
     await page.locator('#assistSweepCancel').click();
     const report = await reportFrom(page, 'sweep', LONG - 60_000);
 
-    expect(report.cancelled).toBe(true);
+    expect(report.canceled).toBe(true);
     // Values that never ran are in the table, marked, rather than missing.
     expect(report.encounters).toHaveLength(5);
     expect(report.encounters.some(enc => enc.outcome === 'notRun')).toBe(true);

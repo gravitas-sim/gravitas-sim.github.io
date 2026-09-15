@@ -45,7 +45,7 @@ let enabled = false;
 let els = null;
 let tick = null;
 // Whether the reader has dismissed the panel for the scenario they are in.
-// Reset on a scenario change, honoured within one.
+// Reset on a scenario change, honored within one.
 let dismissed = false;
 
 /** The scenarios this panel has anything to say about. */
@@ -491,7 +491,7 @@ function showForCurrentScenario() {
 // The retained comparison, and the optional sweep
 // -----------------------------------------------------------------------------
 // Both run on the bench: the same runner the binary lesson's sweep uses, with
-// the same world capture and restoration, the same cancellation and the same
+// the same world capture and restoration, the same cancelation and the same
 // per-trial statuses. What is local is which values, what is held, and how the
 // result is read - and the reading is done by js/experiments/assistSweep.js
 // against js/assistWatch.js, so the numbers here are the same numbers the
@@ -624,7 +624,7 @@ async function runAssistExperiment(which) {
     numerics: result.numerics,
     duration: result.duration,
     wallMs: result.wallMs,
-    cancelled: result.cancelled,
+    canceled: result.canceled,
     ranAt: result.ranAt,
   };
 
@@ -655,7 +655,7 @@ async function runAssistExperiment(which) {
   renderExperiments();
 }
 
-/** The colour a row and a point are drawn in, by what the encounter was. */
+/** The color a row and a point are drawn in, by what the encounter was. */
 const ENCOUNTER_INK = {
   complete: '#7fe3a0',
   incomplete: '#ffd27f',
@@ -664,7 +664,7 @@ const ENCOUNTER_INK = {
   notRun: '#8892a6',
 };
 
-/** A cell, with the outcome's colour when it is one. */
+/** A cell, with the outcome's color when it is one. */
 function cell(row, text, { head = false, ink = null } = {}) {
   const td = document.createElement(head ? 'th' : 'td');
   if (head) td.scope = 'row';
@@ -798,7 +798,7 @@ function renderComparisonCaveat() {
       })
     );
   }
-  if (comparisonConfig?.cancelled) parts.push(t('assist.ab.caveat.cancelled'));
+  if (comparisonConfig?.canceled) parts.push(t('assist.ab.caveat.canceled'));
 
   const sides = comparison.sides;
   if (sides) {
@@ -921,7 +921,7 @@ function renderSweep() {
  * Deflection and speed change against impact parameter, as points.
  *
  * Two quantities in two units on one pair of axes, which is only honest if the
- * axes are labelled and the marks are distinguishable - so the turn is drawn
+ * axes are labeled and the marks are distinguishable - so the turn is drawn
  * as an open circle read against the left axis and the speed change as a
  * filled square read against the right one. No line through either. Five
  * points do not establish the shape of a curve, and the question the lesson
@@ -1013,7 +1013,7 @@ function renderSweepCaveat() {
       })
     );
   }
-  if (sweepConfig?.cancelled) parts.push(t('assist.ab.caveat.cancelled'));
+  if (sweepConfig?.canceled) parts.push(t('assist.ab.caveat.canceled'));
 
   const verdict = sweepConfig?.verdict;
   if (verdict) {
@@ -1103,7 +1103,7 @@ function syncExperimentSections() {
 
 /** Wire the panel up. Called once at boot. */
 export function initAssist() {
-  // This panel's strings are not in the start-up catalogue, so it registers
+  // This panel's strings are not in the start-up catalog, so it registers
   // them itself rather than trusting whoever opened it to have done so. The
   // bridge does register them first in the normal path; a lesson, a share link
   // or a test that drives the panel directly does not, and a panel that renders
@@ -1115,11 +1115,11 @@ export function initAssist() {
     })
     .catch(() => {});
 
-  // The catalogue can arrive after this panel does. These strings are not in
+  // The catalog can arrive after this panel does. These strings are not in
   // the start-up bundle, and although the bridge registers them before it
   // imports this module, anything that drives the panel directly - a lesson, a
   // share link, a test - can render before that await resolves and paint
-  // message ids. Redrawing when the catalogue changes removes the race rather
+  // message ids. Redrawing when the catalog changes removes the race rather
   // than narrowing it, and is the same subscription a language switch needs.
   onLocaleChange(() => {
     render();

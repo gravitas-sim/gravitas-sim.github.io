@@ -133,10 +133,10 @@ export const DEFAULT_SETTINGS = {
   // The tracer, as a fraction of the pair. A billionth: far below the
   // threshold at which it would perturb the orbit it is being predicted
   // against, and not zero, because a massless body drops out of the
-  // barycentre and out of the conservation diagnostics.
+  // barycenter and out of the conservation diagnostics.
   lagrange_tracer_fraction: 1e-9,
   // Where the tracer starts, in units of the separation, measured in the
-  // rotating frame from the barycentre. The default puts it just inside L1.
+  // rotating frame from the barycenter. The default puts it just inside L1.
   lagrange_tracer_x: 0.6,
   lagrange_tracer_y: 0,
   // Its velocity in the rotating frame, which is what sets the Jacobi constant
@@ -154,7 +154,7 @@ export const DEFAULT_SETTINGS = {
   transfer_inner_au: 1, // spacecraft's starting circular radius
   transfer_outer_au: 2.5, // the target's circular radius
   // The spacecraft's mass, as a fraction of the star's. Not zero: a massless
-  // body drops out of the barycentre and out of the energy bookkeeping the
+  // body drops out of the barycenter and out of the energy bookkeeping the
   // conservation diagnostics use. Small enough that the two-body formulae,
   // which assume it, are right to well past the precision anybody reads.
   transfer_probe_mass_ratio: 1e-9,
@@ -167,7 +167,7 @@ export const DEFAULT_SETTINGS = {
   // --- The gravity assist laboratory ------------------------------------------
   // A moving planet and a very light spacecraft, and nothing else in the
   // isolated case. Same reasoning as the binary lab: the two shipped Slingshot
-  // scenarios are randomised fields of dozens of bodies under mutual gravity,
+  // scenarios are randomized fields of dozens of bodies under mutual gravity,
   // which is fine to watch and impossible to interpret - there is no isolated
   // encounter in them, no defined before and after, and no controlled impact
   // parameter.
@@ -220,7 +220,7 @@ export const DEFAULT_SETTINGS = {
   bh_disk_inclination: 62,
   show_bh_glow: true,
   show_accretion_disk: true,
-  realistic_disk_physics: true,
+  realiztic_disk_physics: true,
   show_bh_jets: false,
   show_dynamic_overlays: true,
   enable_asteroids: true,
@@ -237,7 +237,7 @@ export const DEFAULT_SETTINGS = {
   // Visual fidelity
   show_object_lensing: true,
   lensing_quality: 'medium',
-  trail_colour_mode: 'type',
+  trail_color_mode: 'type',
   disk_doppler: true,
   // Dark matter. These have to be here, not only in physicsSettings:
   // applyPreset rebuilds SETTINGS from these defaults on every scenario load,
@@ -251,7 +251,7 @@ export const DEFAULT_SETTINGS = {
   // explanations for the same observation - cannot both be switched on. The
   // older `dark_matter_halo` boolean is still accepted on the way in, so
   // shared links and saved games from before this existed still load; see
-  // normaliseGalaxyGravity in js/physics.js.
+  // normalizeGalaxyGravity in js/physics.js.
   galaxy_gravity: 'newtonian',
   halo_v_flat: 6.0,
   halo_core_radius: 300,
@@ -267,7 +267,7 @@ export const DEFAULT_SETTINGS = {
   preset_zoom: 1.5,
   // 1.0 selects the conservative habitable zone; see
   // habitableZoneModelFromSettings() in render.js, which switches at 1.3.
-  habitable_zone_optimism: 1.0,
+  habitable_zone_optimizm: 1.0,
   // Per-neutron-star masses, the same shape as bh_masses above.
   use_individual_ns_masses: false,
   ns_masses: [],
@@ -410,7 +410,7 @@ export const state = {
     /** Said on screen: the propagation speed here is a display choice. */
     illustrative: true,
   },
-  barycentreOverlay: {
+  barycenterOverlay: {
     active: false,
     // Which bodies to average over. The renderer resolves these each frame;
     // everything below is the answer it wrote back, for a readout to quote.

@@ -78,7 +78,7 @@ describe('the fingerprint is now a cross-check, not an identity', () => {
   // Identity is the step's `sid`. The fingerprint survives only so a restore
   // from a pre-sid backup can notice that the lesson changed under a position,
   // and say so, instead of hunting for a step that merely looks the same.
-  // tests/progressIdentity.test.js covers that behaviour end to end.
+  // tests/progressIdentity.test.js covers that behavior end to end.
 
   test('it ignores the title, so it survives a translation', () => {
     const english = measure('Four distances', ['d1', 't1']);

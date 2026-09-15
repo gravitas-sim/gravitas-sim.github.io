@@ -27,7 +27,7 @@ import {
   CI_SETUP_STEPS,
   CI_SETUP_COMMANDS,
   CI_EQUIVALENTS,
-  summarise,
+  summarize,
 } from '../tools/checks.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -264,14 +264,14 @@ describe('the summary cannot overstate a run', () => {
   const row = (status, label = status) => ({ status, label });
 
   test('all passing is the only way to be green', () => {
-    const s = summarise([row(OUTCOMES.PASS), row(OUTCOMES.PASS)]);
+    const s = summarize([row(OUTCOMES.PASS), row(OUTCOMES.PASS)]);
     expect(s.green).toBe(true);
     expect(s.complete).toBe(true);
     expect(s.headline).toBe('All 2 checks passed.');
   });
 
   test('unavailable is not passed', () => {
-    const s = summarise([row(OUTCOMES.PASS), row(OUTCOMES.UNAVAILABLE)]);
+    const s = summarize([row(OUTCOMES.PASS), row(OUTCOMES.UNAVAILABLE)]);
     expect(s.green).toBe(false);
     expect(s.complete).toBe(false);
     expect(s.counts[OUTCOMES.PASS]).toBe(1);
@@ -280,13 +280,13 @@ describe('the summary cannot overstate a run', () => {
   });
 
   test('skipped is not passed', () => {
-    const s = summarise([row(OUTCOMES.PASS), row(OUTCOMES.SKIP)]);
+    const s = summarize([row(OUTCOMES.PASS), row(OUTCOMES.SKIP)]);
     expect(s.green).toBe(false);
     expect(s.headline).toMatch(/not a statement about the release/);
   });
 
   test('passing only on a retry is not passed', () => {
-    const s = summarise([row(OUTCOMES.PASS), row(OUTCOMES.RETRIED)]);
+    const s = summarize([row(OUTCOMES.PASS), row(OUTCOMES.RETRIED)]);
     expect(s.green).toBe(false);
     // It ran, so it is not an incomplete run - it is a run that did not settle.
     expect(s.complete).toBe(true);
@@ -294,7 +294,7 @@ describe('the summary cannot overstate a run', () => {
   });
 
   test('a failure outranks everything else in the headline', () => {
-    const s = summarise([
+    const s = summarize([
       row(OUTCOMES.FAIL),
       row(OUTCOMES.SKIP),
       row(OUTCOMES.RETRIED),
@@ -315,7 +315,7 @@ describe('the summary cannot overstate a run', () => {
         row(OUTCOMES.SKIP, c.label)
       ),
     ];
-    const s = summarise(results);
+    const s = summarize(results);
     expect(s.green).toBe(false);
     expect(s.headline).not.toMatch(/All \d+ checks passed/);
     expect(s.headline).toMatch(/did not run/);
@@ -333,7 +333,7 @@ describe('the summary cannot overstate a run', () => {
     const provenance = CHECKS.filter(c => c.tier === 'provenance');
     expect(structural).toHaveLength(2);
     expect(provenance).toHaveLength(2);
-    const s = summarise([
+    const s = summarize([
       ...structural.map(c => row(OUTCOMES.PASS, c.label)),
       ...provenance.map(c => row(OUTCOMES.UNAVAILABLE, c.label)),
     ]);
@@ -343,7 +343,7 @@ describe('the summary cannot overstate a run', () => {
   });
 
   test('a provenance failure is a failure, not an incomplete run', () => {
-    const s = summarise([
+    const s = summarize([
       row(OUTCOMES.PASS, 'GW150914 data is complete and self-consistent'),
       row(OUTCOMES.FAIL, 'GW150914 regenerates from the published traces'),
     ]);
@@ -352,7 +352,7 @@ describe('the summary cannot overstate a run', () => {
   });
 
   test('an empty run is not green', () => {
-    const s = summarise([]);
+    const s = summarize([]);
     expect(s.green).toBe(false);
   });
 
@@ -360,7 +360,7 @@ describe('the summary cannot overstate a run', () => {
   // one. Calling it a failure sends somebody looking for a bug that is not
   // there; calling it a pass is worse.
   test('a browser that would not launch is its own outcome', () => {
-    const s = summarise([row(OUTCOMES.PASS), row(OUTCOMES.LAUNCH_FAILED)]);
+    const s = summarize([row(OUTCOMES.PASS), row(OUTCOMES.LAUNCH_FAILED)]);
     expect(s.green).toBe(false);
     expect(s.complete).toBe(false);
     expect(s.counts[OUTCOMES.LAUNCH_FAILED]).toBe(1);
@@ -369,7 +369,7 @@ describe('the summary cannot overstate a run', () => {
   });
 
   test('every outcome has a column in the tally', () => {
-    const s = summarise([row(OUTCOMES.PASS)]);
+    const s = summarize([row(OUTCOMES.PASS)]);
     for (const key of Object.values(OUTCOMES)) {
       expect({ key, counted: typeof s.counts[key] }).toEqual({
         key,
@@ -381,7 +381,7 @@ describe('the summary cannot overstate a run', () => {
   // A suite can exit zero having declined to run part of itself, and the exit
   // code cannot say so.
   test('tests skipped inside a passing check are counted and reported', () => {
-    const s = summarise([
+    const s = summarize([
       { status: OUTCOMES.PASS, label: 'browser suite', skippedTests: 4 },
       { status: OUTCOMES.PASS, label: 'lint' },
     ]);

@@ -8,19 +8,19 @@
 // asks for it. Every one of them was reported missing, and the report was
 // wrong.
 //
-// The catalogue itself cannot answer "is this id real?" before it has loaded -
+// The catalog itself cannot answer "is this id real?" before it has loaded -
 // that is what makes it deferred. What can be answered cheaply is which
-// namespaces the deferred catalogue covers, and that is enough: an id in one of
-// them is held rather than reported, and re-checked once the catalogue settles.
+// namespaces the deferred catalog covers, and that is enough: an id in one of
+// them is held rather than reported, and re-checked once the catalog settles.
 // If it is still missing then, it is missing, and the warning says so.
 //
-// Ten of these namespaces also appear in the eager catalogue, which does not
+// Ten of these namespaces also appear in the eager catalog, which does not
 // matter. An eager id resolves and never reaches the warning path at all; the
 // list is only ever used to decide whether being absent right now is worth
 // mentioning yet.
 //
 // Kept honest by tests/i18nDeferredNamespaces.test.js, which regenerates this
-// list from the two deferred catalogues and fails if it has drifted.
+// list from the two deferred catalogs and fails if it has drifted.
 // =============================================================================
 
 /** Namespaces whose strings arrive with a lazily imported panel. */

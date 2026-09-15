@@ -27,8 +27,8 @@
 // used to say both, which contradicted the screen below that tells a reader in
 // as many words that the dark disc "is drawn at whatever size lets four orbits
 // fit in a window, which is a choice about the picture and carries no
-// information". A real horizon at ten solar masses is thirty kilometres and the
-// disc on screen is not drawn thirty kilometres wide, so a multiple of the
+// information". A real horizon at ten solar masses is thirty kilometers and the
+// disc on screen is not drawn thirty kilometers wide, so a multiple of the
 // drawn radius is a multiple of nothing physical, and the ISCO - three
 // Schwarzschild radii - is not a length this canvas has.
 //
@@ -64,7 +64,7 @@ const BLACK_HOLES = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['compact-objects', 'gravity'],
   // The inspector stays available here. Every number this lesson quotes is one
@@ -201,7 +201,7 @@ const BLACK_HOLES = {
              and it fits inside a medium sized city.
              \n\nOne thing to be careful about, and it is the reason the panel
              exists at all. The dark disc on the main canvas is <em>not</em>
-             drawn thirty kilometres wide. It is drawn at whatever size lets
+             drawn thirty kilometers wide. It is drawn at whatever size lets
              four orbits fit in a window, which is a choice about the picture
              and carries no information. The bars in the panel are the physical
              comparison, drawn at one honest scale, and the two numbers below
@@ -479,7 +479,7 @@ const BLACK_HOLES = {
              There are now two systems on it, side by side: a black hole of
              eight solar masses on the left, and an ordinary star of eight solar
              masses on the right. Each has a small body in orbit at the same
-             distance from its centre.
+             distance from its center.
              \n\nWatch them for a few laps before you answer. Only one thing
              differs between the two systems, and the orbits are the measurement.`,
       checklist: [
@@ -504,7 +504,7 @@ const BLACK_HOLES = {
         }
         rows.push({
           label: 'What differs between the two',
-          value: 'only what is at the centre',
+          value: 'only what is at the center',
         });
         return rows;
       },
@@ -786,7 +786,7 @@ const BLACK_HOLES = {
         id: 'bh-lifetime',
         values: { logm: 1 },
         title: 'How long until it evaporates',
-        note: 'Bar length counts the zeros. The two grey bars are there for comparison and never move.',
+        note: 'Bar length counts the zeros. The two gray bars are there for comparison and never move.',
       },
       checklist: [
         'Press 1 M☉ and compare the orange bar with the age of the universe',

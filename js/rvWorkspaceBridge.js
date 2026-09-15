@@ -4,7 +4,7 @@
 // The same shape as js/experimentsBridge.js and for the same reason: most
 // visitors never take a recording, and the workspace draws its own charts. This
 // is what the start-up path sees instead - a function, and an import that
-// happens the first time somebody asks to analyse something.
+// happens the first time somebody asks to analyze something.
 //
 // The fitting core has no dependencies at all, so the chunk this pulls in is
 // the two modules and nothing else.

@@ -176,7 +176,7 @@ describe('the visibility floor', () => {
   });
 
   test('neutron stars, comets and asteroids live on the floor', () => {
-    // Which is honest: a neutron star is twenty kilometres across.
+    // Which is honest: a neutron star is twenty kilometers across.
     for (const [r, type] of [
       [3, 'NeutronStar'],
       [2, 'Asteroid'],

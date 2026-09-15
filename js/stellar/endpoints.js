@@ -1,5 +1,5 @@
 // =============================================================================
-// What each modelled star ends as
+// What each modeled star ends as
 // -----------------------------------------------------------------------------
 // The bundled MIST tracks do not answer this question and were never meant to.
 // Three of them run through to a cooling white dwarf and so answer it
@@ -30,7 +30,7 @@
 // What is deliberately not here
 // -----------------------------------------------------------------------------
 // A formula from initial mass to remnant mass. Every entry below is one
-// representative outcome for one modelled star, with the range the source
+// representative outcome for one modeled star, with the range the source
 // reports, and nothing interpolates between them.
 // =============================================================================
 
@@ -62,9 +62,9 @@ export const ENDPOINT_PROVENANCE = Object.freeze({
     }),
   ]),
   scope:
-    'Single stars, solar composition, no rotation, no binary companion. A star with a close companion can lose its envelope, gain mass, or merge, and none of those paths is modelled anywhere in this project.',
+    'Single stars, solar composition, no rotation, no binary companion. A star with a close companion can lose its envelope, gain mass, or merge, and none of those paths is modeled anywhere in this project.',
   notCalculated:
-    'Nothing here was computed by Gravitas. The white-dwarf masses are read off the bundled tracks; the neutron-star and black-hole outcomes are published results quoted for the nearest modelled progenitor.',
+    'Nothing here was computed by Gravitas. The white-dwarf masses are read off the bundled tracks; the neutron-star and black-hole outcomes are published results quoted for the nearest modeled progenitor.',
 });
 
 /** The final state of a bundled track, read from the track itself. */
@@ -83,7 +83,7 @@ function finalOf(trackId) {
 }
 
 /**
- * What each modelled star ends as.
+ * What each modeled star ends as.
  *
  * `kind` is one of:
  *   white-dwarf     the track reaches one
@@ -173,7 +173,7 @@ const PRESCRIPTIONS = {
 };
 
 /**
- * What a modelled star ends as, and how much of that is a model output.
+ * What a modeled star ends as, and how much of that is a model output.
  *
  * @param {string} trackId - A bundled track
  * @returns {?object} The endpoint, or null for an unknown track

@@ -22,9 +22,9 @@ import { starColor } from './bodyVisuals.js';
 import { estimateTeffFromMass } from './stellar/mainSequence.js';
 
 /**
- * A star's colour from its temperature, or from its mass where it has none.
+ * A star's color from its temperature, or from its mass where it has none.
  * @param {Object} obj - A star-like body
- * @returns {?string} A hex colour, or null when there is nothing to go on
+ * @returns {?string} A hex color, or null when there is nothing to go on
  */
 function starHexFor(obj) {
   const teff = Number.isFinite(obj?.temperature)
@@ -116,7 +116,7 @@ const OBJECT_BASE_ALTITUDE = 42;
 const OBJECT_ALTITUDE_SPREAD = 26;
 const BLACK_HOLE_ALTITUDE_OFFSET = -18;
 let gridMesh = null;
-// The grid's current width in world units. It stays centred on the origin, so
+// The grid's current width in world units. It stays centerd on the origin, so
 // a vertex's local x/z are also its world x/z and everything that deforms the
 // grid can go on comparing them directly with body positions.
 let gridSize = SPACETIME_SIZE;
@@ -457,7 +457,7 @@ function addEnvironment() {
  * scene's scale.
  *
  * @param {number} size - Width and depth of the grid in world units
- * @returns {THREE.BufferGeometry} Line-segment geometry centred on the origin
+ * @returns {THREE.BufferGeometry} Line-segment geometry centerd on the origin
  */
 function buildGridGeometry(size) {
   const points = [];
@@ -497,7 +497,7 @@ function buildGridGeometry(size) {
  * A grid 3000 units across is right for a binary, and nowhere near the Solar
  * System, whose comets reach 186 AU - 18,600 units - so the sheet the bodies
  * are supposed to be sitting in was a small square near the middle of an
- * otherwise empty view. It stays centred on the origin, which every scenario
+ * otherwise empty view. It stays centerd on the origin, which every scenario
  * is built around, so nothing that reads a vertex position has to learn about
  * an offset.
  *
@@ -783,10 +783,10 @@ function getStyleForObject(obj) {
   if (!obj) return fallback;
   switch (obj.obj_type) {
     case 'StarObject': {
-      // The same order the 2D renderer uses: an authored colour wins, then the
+      // The same order the 2D renderer uses: an authored color wins, then the
       // star's temperature, and the mass table only where there is no mass to
       // estimate a temperature from. The three views have to agree about what
-      // colour a star is.
+      // color a star is.
       const starHex = obj.baseColor || starHexFor(obj) || '#ffd89c';
       return {
         color: starHex,
@@ -1032,7 +1032,7 @@ function focusScene(force = false) {
  * scenario and useless for a wide one: the Solar System with its comets spans
  * about 20,000 units, so the camera was parked 30,000 units back and the
  * entire scene sat behind the far plane. The view opened, reported "LIVE · 32
- * bodies", and drew nothing but the background colour.
+ * bodies", and drew nothing but the background color.
  *
  * The near plane has to move with it too. A ratio much beyond 1e5 between the
  * planes exhausts the depth buffer and surfaces start punching through each

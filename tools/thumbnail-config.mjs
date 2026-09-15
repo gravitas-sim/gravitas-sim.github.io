@@ -104,7 +104,7 @@ export const CAPTURE = {
   'Binary Star System': { settle: 20, speed: 6, zoom: 1.9, trail: 1400 },
   // The star's reflex orbit is a ten-thousandth of the planet's, so framing on
   // the pair means framing on the planet's orbit and letting the star sit at
-  // the centre looking stationary. That is the honest picture: the wobble is
+  // the center looking stationary. That is the honest picture: the wobble is
   // real and invisible, which is the scenario's whole point.
   'Exoplanet Characterization Lab': { settle: 16, speed: 6, trail: 1400 },
 

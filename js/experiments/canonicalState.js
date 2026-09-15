@@ -59,7 +59,7 @@ export const EXTRAS_VERSION = 1;
 export const COSMETIC_SETTINGS = new Set([
   'trail_length',
   'trail_style',
-  'trail_colour_mode',
+  'trail_color_mode',
   'planet_base_color',
   'star_base_color',
   'star_density',
@@ -110,7 +110,7 @@ export const isVariableKey = key =>
  * Two payloads describing the same world must produce the same string, or the
  * initial-state hash is decorative. Object key order is not guaranteed across
  * a save/load round trip, and a float that has been through a text format can
- * come back differing in the last bit, so both are normalised here.
+ * come back differing in the last bit, so both are normalized here.
  *
  * @param {*} value - Any JSON-compatible value
  * @returns {string} A stable serialization
@@ -198,7 +198,7 @@ export function withExtras(payload, extras = {}) {
   }
   if (extras.frame && extras.frame.mode && extras.frame.mode !== 'world') {
     // Tested against null rather than for truthiness: body ids start at zero,
-    // so `objectId ? ...` dropped the target of a frame centred on the first
+    // so `objectId ? ...` dropped the target of a frame centerd on the first
     // body in the world. It went unnoticed while only the A/B bench carried
     // frames, because the bench's own state names the body separately.
     const target = extras.frame.objectId;

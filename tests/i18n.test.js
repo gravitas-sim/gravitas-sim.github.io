@@ -18,22 +18,22 @@ import { ES as ES_BASE } from '../js/i18n/es.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 
-// One catalogue, in two files. The split is a code-splitting measure - a
+// One catalog, in two files. The split is a code-splitting measure - a
 // single message object cannot be deferred, so the strings for panels most
 // visitors never open live beside the chunks that use them - and every check
-// below is about the catalogue as a whole.
+// below is about the catalog as a whole.
 const EN = { ...EN_BASE, ...EN_DEFERRED };
 const ES = { ...ES_BASE, ...ES_DEFERRED };
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import {
   scenarioTitle,
   scenarioSummary,
-  tagLabelLocalized,
+  tagLabelocalized,
 } from '../js/i18n/scenario.js';
 import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
 import { SCENARIO_TAGS, TAG_ORDER } from '../js/data/scenarioTags.js';
 
-// The catalogue is the one place a user-facing string is written down, so most
+// The catalog is the one place a user-facing string is written down, so most
 // of what is worth testing about it is structural: that the two locales line up,
 // that nothing falls through to a blank, and that the boundary the language
 // picker promises - a Spanish interface and English lessons - is real.
@@ -42,7 +42,7 @@ beforeEach(async () => {
   await setLocale('en', { persist: false });
 });
 
-describe('the catalogue', () => {
+describe('the catalog', () => {
   test('English is complete and Spanish carries the same ids', async () => {
     const en = Object.keys(EN);
     const es = Object.keys(ES);
@@ -55,11 +55,11 @@ describe('the catalogue', () => {
   });
 
   test('no message is empty, and none is left as a TODO', async () => {
-    for (const [catalogue, name] of [
+    for (const [catalog, name] of [
       [EN, 'en'],
       [ES, 'es'],
     ]) {
-      for (const [id, value] of Object.entries(catalogue)) {
+      for (const [id, value] of Object.entries(catalog)) {
         const forms =
           typeof value === 'string' ? [value] : Object.values(value);
         for (const form of forms) {
@@ -117,7 +117,7 @@ describe('looking a message up', () => {
   test('falls back to English rather than to a blank', async () => {
     // Proven by asking for an id English has and Spanish is pretending not to.
     // Mutating ES_BASE rather than the merged view: the merge above is a copy,
-    // and deleting from a copy would leave the runtime's catalogue untouched
+    // and deleting from a copy would leave the runtime's catalog untouched
     // and the test passing for the wrong reason.
     const id = 'settings.settingsCancel';
     const saved = ES_BASE[id];
@@ -210,7 +210,7 @@ describe('choosing a language', () => {
   });
 
   test('a locale states its own coverage, in its own language', async () => {
-    // Carried on the registry rather than in the catalogue, so it can be shown
+    // Carried on the registry rather than in the catalog, so it can be shown
     // for a language that has not been fetched yet.
     //
     // This sentence used to say the investigations were still English. They are
@@ -222,7 +222,7 @@ describe('choosing a language', () => {
     expect(es.coverage).toMatch(/español/i);
     expect(es.coverage).toMatch(/investigaciones/i);
     expect(es.coverage).not.toMatch(/inglés/i);
-    // And the same sentence is in the catalogue, so a translator meets it with
+    // And the same sentence is in the catalog, so a translator meets it with
     // everything else.
     expect(ES['locale.coverage.es']).toBe(es.coverage);
   });
@@ -250,11 +250,11 @@ describe('choosing a language', () => {
   });
 
   test('coverage is measured against English, not asserted', async () => {
-    // The Spanish catalogue is fetched on demand, so it has to be in memory
+    // The Spanish catalog is fetched on demand, so it has to be in memory
     // before it can be counted.
     await setLocale('es', { persist: false });
     const { translated, total } = coverageOf('es');
-    // Against the loaded catalogues, not the merged view: the deferred half
+    // Against the loaded catalogs, not the merged view: the deferred half
     // is registered by the bridge that loads its panel, and in a bare test
     // environment no panel has been loaded.
     expect(total).toBe(Object.keys(EN_BASE).length);
@@ -262,7 +262,7 @@ describe('choosing a language', () => {
   });
 });
 
-describe('the catalogue split', () => {
+describe('the catalog split', () => {
   test('both halves are present in both languages', () => {
     // The split exists so a panel most visitors never open does not cost them
     // its prose at start-up. It is only safe while the two halves stay in
@@ -285,19 +285,19 @@ describe('the catalogue split', () => {
     // A string used by the start-up path would render as its own id until
     // somebody opened an unrelated panel.
     // reliability.* belongs here because the bench that shows it is itself
-    // lazy: its bridge registers this catalogue before the panel renders.
+    // lazy: its bridge registers this catalog before the panel renders.
     // rvsched.* and most of rv.survey.* belong here for the same reason one
     // level down: the radial velocity panel is eager, but its synthetic
     // observing run is opt-in and its controls are inside a section that is
     // hidden until the reader switches it on - which is the moment the panel
-    // registers this catalogue and re-sweeps the document. What stays behind
+    // registers this catalog and re-sweeps the document. What stays behind
     // in the start-up half is rv.survey.enable, which is the label on the
     // checkbox that does the switching, and the two chart dataset labels,
     // which are written whenever the chart is built and not only during a run.
     // dmW, bhW and transitW joined the list when their thirteen kilobytes of
     // instrument labels were moved out of the start-up download to pay for the
     // gravitational-wave lab. Nothing in the entry graph reaches those three
-    // modules; each now registers this catalogue itself, the way chaosW and
+    // modules; each now registers this catalog itself, the way chaosW and
     // resW already did.
     // gwW is the gravitational-wave lab, which is a widget family like the
     // rest. sound.* is the *body* of the speaker panel, which is written from
@@ -308,10 +308,10 @@ describe('the catalogue split', () => {
     // export dialog, the activity bridge and the tidal-disruption model joined
     // the list when the stellar foundation needed room in the start-up
     // download. All four are loaded on demand and none of them can be reached
-    // from the entry graph; js/main.js awaits this catalogue before it shows
+    // from the entry graph; js/main.js awaits this catalog before it shows
     // the front door, so a first visit never paints a message id.
     // stellar.phase.* is here for the same reason: a phase name is read only
-    // for a star something has modelled, which cannot happen before a deferred
+    // for a star something has modeled, which cannot happen before a deferred
     // panel has loaded. The luminosity-class words stayed behind - the
     // inspector prints one on every star's card - and are checked for below.
     // lessonFn.* is every sentence a lesson *computes* - probe rows and
@@ -319,12 +319,12 @@ describe('the catalogue split', () => {
     // the only module that reads them and js/investigations.js is the only
     // module that imports it, so a visitor who never opened a lesson was
     // downloading 133 of them in order to render none. The loader awaits this
-    // catalogue before initInvestigations(), so the lookup cannot outrun it.
+    // catalog before initInvestigations(), so the lookup cannot outrun it.
     // summary.life.* is the one family here that a core module reads:
     // js/canvasSummary.js runs on every frame for everybody. It is allowed
     // because the branch that reads it is guarded on state.evolutionOverlay
     // being active, and only a lesson makes it active - so the lookup cannot
-    // happen before the lesson engine, and therefore this catalogue, has
+    // happen before the lesson engine, and therefore this catalog, has
     // loaded. The rest of summary.* stayed eager and is checked for below:
     // those sentences describe an ordinary sandbox and are read on a first
     // visit with no lesson anywhere near.
@@ -359,7 +359,7 @@ describe('the catalogue split', () => {
     // they must not have gone with the panel's prose.
     for (const id of [
       'sound.button.label',
-      'sound.button.labelled',
+      'sound.button.labeled',
       'sound.state.muted',
       'sound.state.playing',
     ]) {
@@ -380,7 +380,7 @@ describe('the catalogue split', () => {
 });
 
 describe('the boundary around the investigations', () => {
-  test('no lesson text is in the catalogue at all', async () => {
+  test('no lesson text is in the catalog at all', async () => {
     // Structural rather than a promise: a lesson cannot be half-translated if
     // none of it is here to translate. Ids are checked rather than prose,
     // because prose about investigations does appear - the rail button that
@@ -393,7 +393,7 @@ describe('the boundary around the investigations', () => {
 });
 
 describe('scenario prose', () => {
-  test('every scenario has a title and a summary in the catalogue', async () => {
+  test('every scenario has a title and a summary in the catalog', async () => {
     for (const key of Object.keys(SCENARIO_INFO)) {
       expect(Object.keys(EN)).toContain(`scenario.${key}.title`);
       expect(Object.keys(EN)).toContain(`scenario.${key}.summary`);
@@ -413,10 +413,10 @@ describe('scenario prose', () => {
     await setLocale('es', { persist: false });
     expect(scenarioTitle('Solar System')).toBe('Sistema solar');
     expect(scenarioSummary('Solar System')).toMatch(/sistema solar/i);
-    expect(tagLabelLocalized('dark-matter')).toBe('Materia oscura');
+    expect(tagLabelocalized('dark-matter')).toBe('Materia oscura');
     await setLocale('en', { persist: false });
     expect(scenarioTitle('Solar System')).toBe('Solar System');
-    expect(tagLabelLocalized('dark-matter')).toBe('Dark Matter');
+    expect(tagLabelocalized('dark-matter')).toBe('Dark Matter');
   });
 
   test('every concept tag has a label and a description', async () => {
@@ -432,19 +432,19 @@ describe('scenario prose', () => {
     // t(`inv.step.kind.${step.type}`), and t() falls back to printing the key
     // itself. Two step types unique to Kepler's Laws - the reshapeable ellipse
     // and the swept-area wedges - had no entry, so the first lesson in the
-    // catalogue displayed the literal text "inv.step.kind.ellipse" as a badge
+    // catalog displayed the literal text "inv.step.kind.ellipse" as a badge
     // and logged an i18n warning to every reader's console.
     const types = [
       ...new Set(INVESTIGATIONS.flatMap(inv => inv.steps.map(s => s.type))),
     ];
     expect(types.length).toBeGreaterThan(4);
     const missing = [];
-    for (const [locale, catalogue] of [
+    for (const [locale, catalog] of [
       ['en', EN],
       ['es', ES],
     ]) {
       for (const type of types) {
-        if (!(`inv.step.kind.${type}` in catalogue)) {
+        if (!(`inv.step.kind.${type}` in catalog)) {
           missing.push(`${locale}: inv.step.kind.${type}`);
         }
       }
@@ -453,7 +453,7 @@ describe('scenario prose', () => {
   });
 
   test('no scenario card overflows its limits in any language', () => {
-    // js/ui.js validates the catalogue at start-up against a 500-character
+    // js/ui.js validates the catalog at start-up against a 500-character
     // summary and a 100-character title, and warns to the console when a
     // scenario breaks either. It validates SCENARIO_INFO, which is English, so
     // the limits were only ever enforced in one language: five Spanish
@@ -464,11 +464,11 @@ describe('scenario prose', () => {
     // 506 characters, so every visitor's console carried a validation warning
     // on every load.
     const problems = [];
-    for (const [locale, catalogue] of [
+    for (const [locale, catalog] of [
       ['en', EN],
       ['es', ES],
     ]) {
-      for (const [key, value] of Object.entries(catalogue)) {
+      for (const [key, value] of Object.entries(catalog)) {
         if (typeof value !== 'string') continue;
         if (/^scenario\..*\.summary$/.test(key) && value.length > 500) {
           problems.push(`${locale} ${key}: ${value.length} chars (max 500)`);
@@ -483,7 +483,7 @@ describe('scenario prose', () => {
 
   test('a Spanish title is not simply the English one copied over', async () => {
     // A locale file that has been filled in mechanically shows up here: at
-    // least most of the catalogue should actually differ.
+    // least most of the catalog should actually differ.
     const keys = Object.keys(SCENARIO_INFO);
     const identical = keys.filter(
       k => ES[`scenario.${k}.summary`] === EN[`scenario.${k}.summary`]
@@ -493,17 +493,17 @@ describe('scenario prose', () => {
 });
 
 // An escape sequence that survived into the rendered string is not a typo the
-// eye catches in a catalogue of two thousand entries: `'M\\u2609'` in a
+// eye catches in a catalog of two thousand entries: `'M\\u2609'` in a
 // single-quoted JS string is the seven characters backslash-u-2-6-0-9, and the
 // settings panel drew "Default BH Mass (M☉)" on every load in English.
 // Spanish had the character itself, which is how the two came to disagree.
-describe('catalogue strings are text, not source', () => {
+describe('catalog strings are text, not source', () => {
   const LOCALES = { en: EN, es: ES };
   const ESCAPE = /\\u[0-9a-fA-F]{4}|\\x[0-9a-fA-F]{2}/;
 
-  for (const [locale, catalogue] of Object.entries(LOCALES)) {
+  for (const [locale, catalog] of Object.entries(LOCALES)) {
     test(`no ${locale} message carries a literal escape sequence`, () => {
-      const offenders = Object.entries(catalogue)
+      const offenders = Object.entries(catalog)
         .filter(([, value]) => typeof value === 'string' && ESCAPE.test(value))
         .map(([key, value]) => `${key}: ${value}`);
       expect(offenders).toEqual([]);

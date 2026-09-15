@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-# Development artefacts that should not be indexed
+# Development artifacts that should not be indexed
 Disallow: /coverage/
 Disallow: /tests/
 Disallow: /dist/

@@ -116,7 +116,7 @@ const isExternal = value =>
 // They are not skipped. A fragment naming a lesson that does not exist is
 // exactly as broken as a missing anchor, and it fails more quietly: the page
 // opens, the lesson does not, and nothing says why. So a route is resolved
-// against the catalogue it names.
+// against the catalog it names.
 const ROUTES = [
   {
     pattern: /^investigation=([\w-]+)$/,

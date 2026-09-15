@@ -150,7 +150,7 @@ test('start-up completes with no unhandled rejections', async ({
   // this suite would rightly fail on.
   //
   // What this asserts is the property that matters in a browser: the interface
-  // finishes initialising and nothing left a promise unhandled on the way.
+  // finishes initializing and nothing left a promise unhandled on the way.
   await page.addInitScript(() => {
     window.__rejections = [];
     window.addEventListener('unhandledrejection', e => {
@@ -169,7 +169,7 @@ test('start-up completes with no unhandled rejections', async ({
 test('the built site behaves the same way', async ({ page, app }) => {
   // Source and production differ in exactly the place this change lives: the
   // bundler decides what is in the start-up chunk and what is a separate one.
-  // Asserted through behaviour rather than through chunk names, which differ
+  // Asserted through behavior rather than through chunk names, which differ
   // by hash between the two.
   await app.boot();
   const before = await page.evaluate(async () => {

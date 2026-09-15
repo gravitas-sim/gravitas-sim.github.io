@@ -199,7 +199,7 @@ describe('dm-shapes: mass distribution decides curve shape', () => {
 
   test('all four distributions hold the same mass inside 30 kpc', () => {
     // The comparison is about arrangement, not amount, so a difference in the
-    // normalisation would make the whole panel misleading.
+    // normalization would make the whole panel misleading.
     for (let kind = 0; kind <= 3; kind++) {
       const f = w.compute({ kind, mass: 8, size: 4 });
       const implied = enclosedMassFromSpeed(30, f.speedAt(30));

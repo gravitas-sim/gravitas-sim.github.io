@@ -110,7 +110,7 @@ const transitRows = ctx => {
     { label: 'Planet', value: g.name || 'planet' },
     { label: 'Where it is', value: g.phase, emphasis: true },
     {
-      label: 'Distance from disc centre',
+      label: 'Distance from disc center',
       value: `${g.impact.toFixed(2)} stellar radii`,
     }
   );
@@ -127,7 +127,7 @@ const TRANSITS = {
   duration: '50-70 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
@@ -1009,7 +1009,7 @@ const TRANSITS = {
       prompt: 'The most likely explanation is that…',
       options: [
         'the planet is physically larger when observed at 1.4 μm',
-        'water vapour makes the atmosphere opaque at 1.4 μm, so the planet blocks a slightly wider disk',
+        'water vapor makes the atmosphere opaque at 1.4 μm, so the planet blocks a slightly wider disk',
         'the star is brighter at 1.4 μm, which deepens the transit',
         'the orbit is slightly different on the transits taken at 1.4 μm',
       ],
@@ -1320,7 +1320,7 @@ const TRANSITS = {
              a big enough telescope to find out what else is in the aperture.
              Every one of those thousands of planet radii is only as good as the
              answer.`,
-      tip: 'A note on numbers: the survey results quoted here come from the Robo-AO Kepler Survey and the SOAR TESS Survey, both of which set out to image every planet-candidate host they could reach. The Robo-AO census covers 3,857 Kepler hosts; the SOAR programme has observed close to 3,000 TESS targets and finds a median primary-host radius correction of about 1.07, rising to 1.33 for the worst tenth.',
+      tip: 'A note on numbers: the survey results quoted here come from the Robo-AO Kepler Survey and the SOAR TESS Survey, both of which set out to image every planet-candidate host they could reach. The Robo-AO census covers 3,857 Kepler hosts; the SOAR program has observed close to 3,000 TESS targets and finds a median primary-host radius correction of about 1.07, rising to 1.33 for the worst tenth.',
     },
   ],
 };

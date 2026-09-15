@@ -259,7 +259,7 @@ test.describe('re-ordering the comparison', () => {
     expect(before).toContain('Supergiant');
     await setControl(page, 'order', 1);
     const after = (await rows()).join(' ');
-    // The same three stars are named; the card is not relabelling them by
+    // The same three stars are named; the card is not relabeling them by
     // position, which is what "Star 1..N" used to do.
     for (const name of ['The Sun', 'Red giant', 'Supergiant']) {
       expect(after).toContain(name);
@@ -287,7 +287,7 @@ test.describe('the free cursor and the star it names', () => {
   }) => {
     test.slow();
     await openLesson(page, app);
-    await goTo(page, 'What temperature does to colour');
+    await goTo(page, 'What temperature does to color');
     await page.waitForTimeout(700);
 
     const read = () =>
@@ -335,7 +335,7 @@ test.describe('the free cursor and the star it names', () => {
   test('the arrow keys move it too', async ({ page, app }) => {
     test.slow();
     await openLesson(page, app);
-    await goTo(page, 'What temperature does to colour');
+    await goTo(page, 'What temperature does to color');
     await page.waitForTimeout(700);
 
     const teff = () =>
@@ -414,7 +414,7 @@ test.describe('the population, in two views of one sample', () => {
       // scene counts as passing. These used to be two filters in two units.
       expect(seen.sceneVisible).toBe(seen.panelKept);
       // And what stands on the canvas is exactly the ones that passed, at the
-      // lesson's own settings, where the shelf holds the whole modelled set.
+      // lesson's own settings, where the shelf holds the whole modeled set.
       expect(seen.onCanvas).toBe(seen.panelKept);
     }
   });
@@ -477,7 +477,7 @@ test.describe('the population, in two views of one sample', () => {
         .locator('#investigationToolReadout .inv-tool-row')
         .allInnerTexts()
     ).join(' ');
-    // Drawn, modelled, passing, and standing on the canvas: four numbers that
+    // Drawn, modeled, passing, and standing on the canvas: four numbers that
     // are routinely read as one.
     expect(text).toMatch(/On the canvas/i);
     expect(text).toMatch(/400/);
@@ -548,7 +548,7 @@ test.describe('switching between a model and a chosen point', () => {
   }) => {
     test.slow();
     await openLesson(page, app);
-    await goTo(page, 'What temperature does to colour');
+    await goTo(page, 'What temperature does to color');
     await page.waitForTimeout(700);
 
     const read = () =>
@@ -572,7 +572,7 @@ test.describe('switching between a model and a chosen point', () => {
     expect(free.mass).toBeNull();
     expect(free.age).toBeNull();
 
-    // Switch the lab to a modelled star. Same body - same id - and now it
+    // Switch the lab to a modeled star. Same body - same id - and now it
     // carries a mass and an age, because a track supplies them.
     await page.evaluate(async () => {
       const w = await import('/js/stellarWidgets.js');
@@ -587,14 +587,14 @@ test.describe('switching between a model and a chosen point', () => {
       el.dispatchEvent(new window.Event('input', { bubbles: true }));
     });
     await page.waitForTimeout(600);
-    const modelled = await read();
-    expect(modelled.id).toBe(free.id);
-    expect(modelled.source).toBe('model');
-    expect(Number.isFinite(modelled.mass)).toBe(true);
-    expect(Number.isFinite(modelled.age)).toBe(true);
+    const modeled = await read();
+    expect(modeled.id).toBe(free.id);
+    expect(modeled.source).toBe('model');
+    expect(Number.isFinite(modeled.mass)).toBe(true);
+    expect(Number.isFinite(modeled.age)).toBe(true);
 
     // And back. The numbers a track supplied have to go again rather than
-    // being left on a body nothing is modelling any more - a stale mass on a
+    // being left on a body nothing is modeling any more - a stale mass on a
     // hypothetical point is exactly the claim the two modes exist to keep
     // apart.
     await page.evaluate(async () => {

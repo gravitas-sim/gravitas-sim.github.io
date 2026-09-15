@@ -21,8 +21,8 @@ This document summarizes the performance optimizations implemented in the Gravit
   (~180 trailed objects, ~4400 trail points) this alone cost ~12 ms/frame -
   most of the 16.67 ms budget for 60fps.
 - **Solution**: `getGlowSprite()` in `js/render.js` pre-renders the gradient once
-  per colour into an offscreen canvas and `drawImage`s it per point, using
-  `globalAlpha` to reproduce the old per-stop alphas exactly. Colours are
+  per color into an offscreen canvas and `drawImage`s it per point, using
+  `globalAlpha` to reproduce the old per-stop alphas exactly. Colors are
   quantised to 5 bits per channel and the cache is capped, so it stays small.
 - **Impact**: measured 12.37 ms -> 6.88 ms for the trail pass (1.8x), visually
   identical output.
@@ -213,4 +213,4 @@ These optimizations provide significant performance improvements while maintaini
 - **Lower-End Devices**: Better frame rates on mobile and older hardware
 - **Development**: Better debugging with performance monitoring
 
-The optimizations are backward compatible and can be easily disabled for debugging purposes. Performance monitoring provides ongoing visibility into simulation performance characteristics. 
+The optimizations are backward compatible and can be easily disabled for debugging purposes. Performance monitoring provides ongoing visibility into simulation performance characteriztics. 

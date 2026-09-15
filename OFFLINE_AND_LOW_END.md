@@ -78,7 +78,7 @@ payload. The reasoning: the lesson a class is already in when the wifi dies is
 by definition already fetched, so precaching buys nothing there. What it buys is
 the teacher who *switches lesson after the drop*, which is exactly the moment a
 runtime cache has nothing. A tenth of the payload to remove that cliff is worth
-it, and picking a favourite subset would be guessing which lesson a class is
+it, and picking a favorite subset would be guessing which lesson a class is
 about to want.
 
 **The twelve Spanish shadows are not** — a further 439 KB that is only ever
@@ -133,7 +133,7 @@ the interval catches that and the work time does not.
 Filtering: the first 1.5 seconds are discarded (start-up is not
 representative); intervals over 500 ms are discarded as interruptions rather
 than slow frames, since `requestAnimationFrame` stops entirely in a hidden tab
-and counting the resumption would demote a machine for being minimised; and the
+and counting the resumption would demote a machine for being minimized; and the
 **median** is used, so one 300 ms hitch cannot outvote a hundred good frames.
 
 Thresholds are far apart — below 32 fps to demote, above 48 fps for eight
@@ -174,7 +174,7 @@ Read, not written. The first version of this assigned the caps into the live
 `SETTINGS` — the same mistake the effects section below was careful to avoid —
 on the reasoning that the generator reads those keys in too many places to
 thread an override through. It reads them in nineteen. `SETTINGS` is the
-reader's document: it is what a share link serialises, what a saved state
+reader's document: it is what a share link serializes, what a saved state
 restores and what the A/B bench hashes to decide whether two runs differ, so a
 teacher on a slow laptop would have exported a capped world to a class on
 faster machines. `star_density` and `trail_length` were in this list too and
@@ -267,7 +267,7 @@ than fill rate is what those scenarios are bound by.
 ## What a 2019 Chromebook actually gets
 
 **I did not test one.** There is no Chromebook attached to this machine, and
-everything below is either extrapolation or explicitly labelled as measured on
+everything below is either extrapolation or explicitly labeled as measured on
 a proxy. Saying so is more useful than a confident number I made up.
 
 Measurements were taken on an **Intel Core i5-10500 @ 3.10 GHz** (6 cores, 12

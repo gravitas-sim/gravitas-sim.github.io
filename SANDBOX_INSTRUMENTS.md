@@ -65,13 +65,13 @@ Three buttons in the Tools rail: **📏 Ruler**, **📐 Protractor**, **⏱ Stop
 positions would slide off the thing it was measuring the moment the view was
 panned, and would report a different length at every zoom. Stored in the world,
 it stays on what it was put on and its reading does not change with the zoom,
-which is the only behaviour that makes the number worth writing down. There is a
+which is the only behavior that makes the number worth writing down. There is a
 test that drags a handle at three different zoom levels and lands in the same
 world position each time, and another that reads the ruler at five zoom levels
 and gets one string.
 
-**The ruler** reads in AU and in kilometres, always both and always in that
-order: AU is the unit the scene is laid out in and kilometres is the one a
+**The ruler** reads in AU and in kilometers, always both and always in that
+order: AU is the unit the scene is laid out in and kilometers is the one a
 student has a feel for, and a ruler whose unit changed while you were using it
 would be worse than one with no units at all.
 
@@ -122,12 +122,12 @@ would be saying the same thing twice — live. For the one frame a capture is
 taken from, `setCaptureMode` switches them on, along with the **scenario name**
 across the top left. Three facts, and they are the three a figure has to carry
 to be worth citing: which run this is, how big it is, and how far into it the
-picture was taken. The clock is labelled `t =` there and not in the readout,
+picture was taken. The clock is labeled `t =` there and not in the readout,
 where the row it sits in already says what it is.
 
 The panel measures the page's own bottom-left chrome — the transport bar and the
 tutorial button — a few times a second and sits above it, because both of them
-move: the transport bar is centred on the window and is a different size on a
+move: the transport bar is centerd on the window and is a different size on a
 phone. On a narrow canvas the panel drops the longest row and shortens the rest
 rather than running off the edge.
 
@@ -182,13 +182,13 @@ Three Settings toggles, all off by default:
 All of it is drawn for the **selected** body only, which keeps the picture
 readable and the cost flat.
 
-### The colours are the argument
+### The colors are the argument
 
 Velocity is a cool green that appears nowhere else in the application.
-Acceleration is a hot magenta, its opposite on the colour wheel. The per-source
+Acceleration is a hot magenta, its opposite on the color wheel. The per-source
 arrows are a muted amber family, dashed, deliberately lower in contrast than the
 total — they are components of it, and reading louder than their own sum would
-be the wrong emphasis. Each source keeps its colour across merges, because it is
+be the wrong emphasis. Each source keeps its color across merges, because it is
 keyed on the source's identity rather than its position in a list.
 
 The case that decides the palette is an eccentric orbit near periapsis, where the
@@ -223,7 +223,7 @@ one. Three things keep it cheap:
   times the samples for a picture that is a smooth gradient either way.
 - Only the 24 heaviest sources contribute. The field is dominated by them by
   construction, and a scenario with six hundred asteroids would otherwise cost
-  six hundred terms per sample for a contribution below one step of the colour
+  six hundred terms per sample for a contribution below one step of the color
   ramp.
 - It is rebuilt only when the view or the masses have actually moved, and at most
   once per 90 ms.
@@ -275,7 +275,7 @@ still calling itself RK4, so the multi-stage schemes evaluate the direct sum.
 
 What the schemes are for is in
 [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md#selectable-integrators), where
-each one's convergence order and its bounded-versus-secular energy behaviour are
+each one's convergence order and its bounded-versus-secular energy behavior are
 measured on a bound Kepler orbit. The short version is the contrast: over a few
 orbits RK4 is nine orders of magnitude more accurate than the default, and over a
 few thousand it is the only one of the three still getting worse, because nothing
@@ -295,7 +295,7 @@ so would be blamed on the integrator.
 The definitions are deliberately the ones
 [`tools/scenario-stability.mjs`](tools/scenario-stability.mjs) already used
 offline: total kinetic plus full pairwise potential, and angular momentum about
-the instantaneous centre of mass, over every massive body that is not culled.
+the instantaneous center of mass, over every massive body that is not culled.
 A readout that measured something slightly different from the validation harness
 would let one of them pass while the other failed and leave nobody able to say
 which was right.
@@ -318,14 +318,14 @@ taken.
 
 - **The inspector's derived quantities for small bodies** — density, surface
   gravity, escape velocity — are computed from a "rough conversion" of the
-  schematic drawing radius to kilometres. An asteroid is drawn at 2 simulation
-  units, which is 0.02 AU, or three million kilometres. Those rows were fiction
+  schematic drawing radius to kilometers. An asteroid is drawn at 2 simulation
+  units, which is 0.02 AU, or three million kilometers. Those rows were fiction
   before this pass and are differently-scaled fiction after it. The mass row is
   correct and agrees with the slider beside it; the rest wants the radius
   question answered first.
 - **The Settings panel hides the label on `option` rows below about 700px**,
   which affects Simulation Size, Placement and now Integrator equally. It is a
-  pre-existing layout characteristic rather than something this pass introduced,
+  pre-existing layout characteriztic rather than something this pass introduced,
   and fixing it belongs with the settings panel rather than here.
 - **The vector overlay draws for one selected body.** Showing them for every body
   at once would be a different feature and a different performance question.

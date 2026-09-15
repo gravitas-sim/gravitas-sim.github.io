@@ -5,7 +5,7 @@ import {
   metaFor,
   tagsOf,
   PROGRESS,
-  filterCatalogue,
+  filterCatalog,
   fold,
   isFiltered,
   loosening,
@@ -31,7 +31,7 @@ import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 /** Nobody has opened anything. */
 const unread = () => ({ done: 0, total: 10, started: false });
 
-describe('the filters are generated from the catalogue', () => {
+describe('the filters are generated from the catalog', () => {
   test('every subject offered is a subject some lesson declares', () => {
     const declared = new Set(MANIFEST.flatMap(inv => tagsOf(inv)));
     const offered = subjectsOf(MANIFEST);
@@ -64,15 +64,15 @@ describe('the filters are generated from the catalogue', () => {
 
   test('every bucket a menu offers has at least one lesson in it', () => {
     // A menu option that can only ever produce an empty result is worse than
-    // no option: it reads as a promise the catalogue does not keep.
+    // no option: it reads as a promise the catalog does not keep.
     LENGTHS.forEach(value =>
       expect(
-        filterCatalogue(MANIFEST, { length: value }, unread).length
+        filterCatalog(MANIFEST, { length: value }, unread).length
       ).toBeGreaterThan(0)
     );
     CALCULATIONS.forEach(value =>
       expect(
-        filterCatalogue(MANIFEST, { calculation: value }, unread).length
+        filterCatalog(MANIFEST, { calculation: value }, unread).length
       ).toBeGreaterThan(0)
     );
   });
@@ -138,7 +138,7 @@ describe('search', () => {
   });
 
   test('the tags are searchable even though they are not printed on a card', () => {
-    const hits = filterCatalogue(MANIFEST, { query: 'spaceflight' }, unread);
+    const hits = filterCatalog(MANIFEST, { query: 'spaceflight' }, unread);
     expect(hits.map(row => row.entry.id).sort()).toEqual(
       MANIFEST.filter(inv => tagsOf(inv).includes('spaceflight'))
         .map(inv => inv.id)
@@ -148,8 +148,8 @@ describe('search', () => {
 });
 
 describe('filtering', () => {
-  test('an empty filter set is the whole catalogue, in catalogue order', () => {
-    const rows = filterCatalogue(MANIFEST, NO_FILTERS, unread);
+  test('an empty filter set is the whole catalog, in catalog order', () => {
+    const rows = filterCatalog(MANIFEST, NO_FILTERS, unread);
     expect(rows.map(row => row.entry.id)).toEqual(MANIFEST.map(inv => inv.id));
     expect(isFiltered(NO_FILTERS)).toBe(false);
     expect(isFiltered({ ...NO_FILTERS, query: 'x' })).toBe(true);
@@ -157,8 +157,8 @@ describe('filtering', () => {
   });
 
   test('filters compose: each one only narrows', () => {
-    const subject = filterCatalogue(MANIFEST, { subject: 'orbits' }, unread);
-    const both = filterCatalogue(
+    const subject = filterCatalog(MANIFEST, { subject: 'orbits' }, unread);
+    const both = filterCatalog(
       MANIFEST,
       { subject: 'orbits', length: LENGTH.DEMO },
       unread
@@ -186,14 +186,14 @@ describe('filtering', () => {
       id === first
         ? { started: true, done: 5, total: 5 }
         : { started: false, done: 0, total: 5 };
-    const done = filterCatalogue(
+    const done = filterCatalog(
       MANIFEST,
       { progress: PROGRESS.DONE },
       progressOf
     );
     expect(done.map(row => row.entry.id)).toEqual([first]);
     expect(
-      filterCatalogue(MANIFEST, { progress: PROGRESS.NEW }, progressOf).length
+      filterCatalog(MANIFEST, { progress: PROGRESS.NEW }, progressOf).length
     ).toBe(MANIFEST.length - 1);
   });
 
@@ -201,11 +201,11 @@ describe('filtering', () => {
     // No galaxies lesson is short enough for a demonstration, and the empty
     // panel has to say which of the two choices is the obstacle.
     const filters = { subject: 'galaxies', length: LENGTH.DEMO };
-    expect(filterCatalogue(MANIFEST, filters, unread)).toHaveLength(0);
+    expect(filterCatalog(MANIFEST, filters, unread)).toHaveLength(0);
     const relax = loosening(MANIFEST, filters, unread);
     expect(relax.key).toBe('subject');
     expect(relax.count).toBe(
-      filterCatalogue(MANIFEST, { length: LENGTH.DEMO }, unread).length
+      filterCatalog(MANIFEST, { length: LENGTH.DEMO }, unread).length
     );
   });
 
@@ -215,7 +215,7 @@ describe('filtering', () => {
 });
 
 describe('the curated sequences', () => {
-  test('every lesson named exists in the catalogue', () => {
+  test('every lesson named exists in the catalog', () => {
     const ids = new Set(MANIFEST.map(inv => inv.id));
     SEQUENCES.forEach(sequence => {
       expect(sequence.lessons.length).toBeGreaterThan(1);
@@ -261,7 +261,7 @@ describe('the curated sequences', () => {
     });
   });
 
-  test('a lesson dropped from the catalogue shortens a sequence rather than breaking it', () => {
+  test('a lesson dropped from the catalog shortens a sequence rather than breaking it', () => {
     const [sequence] = SEQUENCES;
     const gone = sequence.lessons[0].id;
     const trimmed = MANIFEST.filter(inv => inv.id !== gone);
@@ -272,7 +272,7 @@ describe('the curated sequences', () => {
     steps.forEach(step => expect(step.needs).not.toContain(gone));
   });
 
-  test('the sequences between them reach most of the catalogue', () => {
+  test('the sequences between them reach most of the catalog', () => {
     const covered = new Set(
       SEQUENCES.flatMap(sequence => sequence.lessons.map(step => step.id))
     );

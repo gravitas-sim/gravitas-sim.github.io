@@ -908,7 +908,7 @@ test.describe('the readout', () => {
     await app.boot();
     const status = page.locator('#overlayStatus');
     await expect(status).toHaveAttribute('data-state', 'running');
-    // A colour is not the only signal: the word is there too.
+    // A color is not the only signal: the word is there too.
     await expect(status).toContainText(/running/i);
     // Through the transport bar rather than the Space shortcut: the shortcut
     // needs the page to have focus, and what is being tested here is the
@@ -980,7 +980,7 @@ test.describe('the bottom dock', () => {
         .querySelector('#mainControls')
         ?.getBoundingClientRect();
       return {
-        offCentre: Math.round((b.left + b.right) / 2 - window.innerWidth / 2),
+        offCenter: Math.round((b.left + b.right) / 2 - window.innerWidth / 2),
         barWidth: Math.round(b.width),
         footerInset: Math.round(window.innerWidth - f.right),
         gap: Math.round(f.left - b.right),
@@ -1005,7 +1005,7 @@ test.describe('the bottom dock', () => {
         page,
         app,
       }) => {
-        // The bug this replaces: the transport bar centred itself in the band
+        // The bug this replaces: the transport bar centerd itself in the band
         // left of the rail and the footer sat in the corner, and neither knew
         // about the other. On a wide window the scrubber ran across the
         // copyright line - and Spanish, being longer, made it worse.
@@ -1043,7 +1043,7 @@ test.describe('the bottom dock', () => {
     }
   }
 
-  test('the scrubber is centred on the window when there is room', async ({
+  test('the scrubber is centerd on the window when there is room', async ({
     page,
     app,
   }) => {
@@ -1051,7 +1051,7 @@ test.describe('the bottom dock', () => {
     await app.boot();
     const m = await read(page);
     expect(m.banded).toBe(false);
-    expect(Math.abs(m.offCentre)).toBeLessThanOrEqual(1);
+    expect(Math.abs(m.offCenter)).toBeLessThanOrEqual(1);
     expect(m.barWidth).toBe(680);
   });
 
@@ -1061,12 +1061,12 @@ test.describe('the bottom dock', () => {
   }) => {
     // Between the width where the full bar no longer fits and the width where
     // the slider would be too short to use, the bar gives up width and keeps
-    // the centre. Below that it keeps its width and gives up the centre.
+    // the center. Below that it keeps its width and gives up the center.
     await page.setViewportSize({ width: 1600, height: 900 });
     await app.boot();
     const narrowed = await read(page);
     expect(narrowed.banded).toBe(false);
-    expect(Math.abs(narrowed.offCentre)).toBeLessThanOrEqual(1);
+    expect(Math.abs(narrowed.offCenter)).toBeLessThanOrEqual(1);
     expect(narrowed.barWidth).toBeLessThan(680);
     expect(narrowed.barWidth).toBeGreaterThanOrEqual(420);
 
@@ -1077,7 +1077,7 @@ test.describe('the bottom dock', () => {
       )
       .toBe(true);
     const banded = await read(page);
-    expect(Math.abs(banded.offCentre)).toBeGreaterThan(1);
+    expect(Math.abs(banded.offCenter)).toBeGreaterThan(1);
     expect(banded.gap).toBeGreaterThanOrEqual(12);
   });
 

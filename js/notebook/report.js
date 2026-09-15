@@ -14,8 +14,8 @@
 // somebody is reading the number they produced, so they are printed there,
 // compactly, even though it repeats across entries from the same session.
 //
-// The kind of each number is printed beside it and not encoded in a colour.
-// A grey-scale print, a photocopy and a screen reader all lose colour, and
+// The kind of each number is printed beside it and not encoded in a color.
+// A gray-scale print, a photocopy and a screen reader all lose color, and
 // "revealed" is the one word on the page that changes what a claim is worth.
 // =============================================================================
 
@@ -24,14 +24,14 @@ import { t } from '../i18n/index.js';
 import { KIND } from './entry.js';
 
 /**
- * A translated string, or a fallback when the id is not in the catalogue.
+ * A translated string, or a fallback when the id is not in the catalog.
  *
  * t() returns the id and warns once when a message is missing, which is right
  * for a hard-coded id and wrong for a dynamic one: a notebook restored from a
  * file written by a newer build can carry a flag this build has no name for,
  * and printing `nb.flag.something-new` in a report a student hands in would be
  * worse than printing the raw flag. The generated ids are all covered by the
- * catalogue and asserted by tests/notebook.test.js; this is for the ones that
+ * catalog and asserted by tests/notebook.test.js; this is for the ones that
  * arrive from a file.
  *
  * @param {string} id - Message id

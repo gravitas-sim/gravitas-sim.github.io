@@ -27,7 +27,7 @@ export async function openAssignmentFromUrl() {
       import('./assignmentLink.js'),
       import('../investigations.js'),
       import('../controls.js'),
-      // These strings are not in the start-up catalogue, and every refusal
+      // These strings are not in the start-up catalog, and every refusal
       // below is one of them.
       import('../i18n/deferredMessages.js').then(m =>
         m.ensureDeferredMessages().catch(() => {})

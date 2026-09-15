@@ -11,7 +11,7 @@
 // Two problems recur and are solved the same way throughout:
 //
 //   Scale. Black holes span ten orders of magnitude in mass and radius. A panel
-//   never silently rescales: either the pixels-per-kilometre is held fixed
+//   never silently rescales: either the pixels-per-kilometer is held fixed
 //   across the whole slider range so a change in size is a change you can see,
 //   or the panel says out loud what scale it is drawn at.
 //
@@ -45,7 +45,7 @@ import {
   superscript,
 } from './blackHolePhysics.js';
 
-// This family's labels are in the deferred half of the catalogue. Registered
+// This family's labels are in the deferred half of the catalog. Registered
 // from here as well as from js/widgets.js, because a lesson, a share link, an
 // authoring preview or a test can import this file directly and never go
 // through the registry - and a readout that prints its own message ids because
@@ -316,7 +316,7 @@ const HORIZON = {
       ctx.fillText(`${ref.label}: ${lengthLabel(meters)}`, left, y + 9);
       bar(ctx, left, y + 13, barW, 6, ref.m === null ? HOT : SKY_GRID);
       if (ref.m !== null) {
-        // A grey bar on a dark ground needs an outline to read at all.
+        // A gray bar on a dark ground needs an outline to read at all.
         ctx.strokeStyle = SKY_MUTED;
         ctx.lineWidth = 1;
         ctx.beginPath();

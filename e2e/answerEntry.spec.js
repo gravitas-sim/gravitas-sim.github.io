@@ -115,7 +115,7 @@ test.describe('hints arrive one at a time, and only when asked', () => {
     await page.locator('[data-hint]').click();
     await expect(page.locator('.inv-hint')).toHaveCount(2);
     await expect(page.locator('.inv-hint.is-worked')).toHaveCount(0);
-    // The last press is labelled as what it is.
+    // The last press is labeled as what it is.
     await expect(page.locator('[data-hint]')).toContainText(/how it is done/i);
 
     await page.locator('[data-hint]').click();

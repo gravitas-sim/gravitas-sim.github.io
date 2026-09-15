@@ -22,7 +22,7 @@
 import { t, getLocale, registerMessages } from '../i18n/index.js';
 
 /**
- * Make the activity prose available to the sandbox's catalogue.
+ * Make the activity prose available to the sandbox's catalog.
  *
  * The titles and the format introductions live in the teaching page's own
  * message file, which the sandbox deliberately does not carry: it is instructor
@@ -31,7 +31,7 @@ import { t, getLocale, registerMessages } from '../i18n/index.js';
  * they are registered here - on that path only, after the import that already
  * had to happen.
  *
- * The *activities* catalogue rather than the whole showcase page's. This used
+ * The *activities* catalog rather than the whole showcase page's. This used
  * to import ../i18n/en.teaching.js, which is the entire /teaching/ page: its
  * cycle, its journey, its instrument descriptions, its demonstrations, its
  * access notes and its evaluation template, in both languages, none of which
@@ -69,7 +69,7 @@ export function parseActivityHash(hash) {
 /**
  * Open the activity the address bar names.
  *
- * A request that cannot be honoured says so and sends the reader to the page
+ * A request that cannot be honored says so and sends the reader to the page
  * that lists what does exist. It never opens a different activity and never
  * opens an empty lesson: both are worse than an error, because both look like
  * success.

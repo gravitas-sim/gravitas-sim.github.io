@@ -80,7 +80,7 @@ async function goTo(page, title) {
 /**
  * Is this control the thing a press would land on?
  *
- * elementFromPoint at its centre, walked back up through its own children.
+ * elementFromPoint at its center, walked back up through its own children.
  * Anything else on top means the reader cannot use it, whatever the DOM says.
  */
 const reachable = (page, selector) =>

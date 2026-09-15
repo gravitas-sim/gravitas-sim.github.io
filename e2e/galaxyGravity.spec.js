@@ -57,7 +57,7 @@ test.describe('the three modes in the running application', () => {
     await app.loadScenario('Solar System');
     await app.waitForFrames(10);
 
-    // The request is refused, not silently honoured.
+    // The request is refused, not silently honored.
     expect(await setMode(page, 'mond')).toBe('newtonian');
     expect((await modeOf(page)).mode).toBe('newtonian');
     expect((await modeOf(page)).kpc).toBe(0);

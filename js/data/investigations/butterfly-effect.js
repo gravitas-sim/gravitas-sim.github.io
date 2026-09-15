@@ -57,11 +57,11 @@ const BUTTERFLY_EFFECT = {
   duration: '55-70 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['chaos', 'orbits'],
   summary:
-    'Two runs of the same three stars, started from positions differing by fifteen hundred kilometres in a system a hundred and thirty million kilometres across, end up somewhere completely different. Nothing random happens in between: the simulation is deterministic, and running it twice from exactly the same numbers gives exactly the same answer both times. Along the way you will measure a case that looks like chaos and is not, put a number on how fast prediction fails, and check that the number is a property of the physics rather than of the computer.',
+    'Two runs of the same three stars, started from positions differing by fifteen hundred kilometers in a system a hundred and thirty million kilometers across, end up somewhere completely different. Nothing random happens in between: the simulation is deterministic, and running it twice from exactly the same numbers gives exactly the same answer both times. Along the way you will measure a case that looks like chaos and is not, put a number on how fast prediction fails, and check that the number is a property of the physics rather than of the computer.',
   objectives: [
     'Show that a deterministic system can be unpredictable, and say why those are not the same thing',
     'Distinguish exponential divergence from the linear drift two nearly identical orbits show anyway',
@@ -83,7 +83,7 @@ const BUTTERFLY_EFFECT = {
       },
       body: `On screen are three stars of six solar masses each, sitting at the
              corners of an equilateral triangle and rotating about their common
-             centre like a rigid object. It is not an accident that they fit so
+             center like a rigid object. It is not an accident that they fit so
              neatly: this is an exact solution of the three-body problem, found
              by Lagrange in 1772, and if the numbers are set up precisely the
              triangle turns forever without changing shape.
@@ -151,7 +151,7 @@ const BUTTERFLY_EFFECT = {
              Then you change one thing, record again, and compare.
 
              \n\nOpen the bench now (Tools → A/B Bench), name the experiment
-             something you will recognise, and press <strong>Capture start</strong>.
+             something you will recognize, and press <strong>Capture start</strong>.
              Then tick <strong>Position</strong> and <strong>Total energy</strong>
              so the runs carry what this lesson needs.`,
       tip: 'The bench keeps the two runs on the same simulated-time axis, which is what makes them comparable at all.',
@@ -189,7 +189,7 @@ const BUTTERFLY_EFFECT = {
       ],
       rubric: `The separation should be exactly zero for the whole run, and the
                instrument should say "the two runs are identical". Full credit
-               for reporting zero and recognising what it establishes: the
+               for reporting zero and recognizing what it establishes: the
                engine is deterministic, so any difference seen later in the
                lesson has a cause that can be pointed at. Partial credit for
                reporting zero without connecting it to what follows. If a
@@ -239,7 +239,7 @@ const BUTTERFLY_EFFECT = {
         settings: { sim_speed: 20 },
       },
       body: `Two stars now, not three. This is the <strong>Binary Pair</strong>
-             scenario: two stars circling their common centre of mass on a
+             scenario: two stars circling their common center of mass on a
              closed, repeating orbit. Two-body motion is the one gravitational
              problem that is completely solved — Newton did it — and nothing
              about it is chaotic. It is the control.
@@ -248,9 +248,9 @@ const BUTTERFLY_EFFECT = {
              not matter: move one star sideways by <strong>1,500 km</strong>
              before starting, and leave everything else alone.
 
-             \n\nFifteen hundred kilometres is about the distance from London to
+             \n\nFifteen hundred kilometers is about the distance from London to
              Rome. The two stars here are four astronomical units apart, which
-             is six hundred million kilometres. So the nudge is about one part
+             is six hundred million kilometers. So the nudge is about one part
              in four hundred thousand of the system.
 
              \n\nOne housekeeping note: this pair takes four years to go round
@@ -349,18 +349,18 @@ const BUTTERFLY_EFFECT = {
       body: `Suppose the separation in your binary grew from 1,500 km to about
              100,000 km over four orbits, in proportion to time.`,
       prompt:
-        'On that behaviour, roughly how far apart would the two runs be after forty orbits, in km?',
+        'On that behavior, roughly how far apart would the two runs be after forty orbits, in km?',
       unit: 'km',
       answer: 1000000,
-      // Absolute, in kilometres - `tolerance` in js/answerCheck.js is a
+      // Absolute, in kilometers - `tolerance` in js/answerCheck.js is a
       // distance from the answer, not a fraction of it. This was 0.5, written
-      // as though it meant fifty percent, and it meant half a kilometre: a
+      // as though it meant fifty percent, and it meant half a kilometer: a
       // question that asks "roughly how far apart" demanded a million to within
       // a half. 150,000 is fifteen percent, which accepts a student who carries
       // the initial 1,500 km through the arithmetic and gets 986,500, and still
       // rejects anyone out by a factor of two.
       tolerance: 150000,
-      because: `About a million kilometres — ten times as long gives about ten
+      because: `About a million kilometers — ten times as long gives about ten
                 times the separation, because the growth is proportional to
                 time. Hold on to that number. In the three-body case you are
                 about to run, ten times as long does not give ten times as much;
@@ -407,7 +407,7 @@ const BUTTERFLY_EFFECT = {
       title: 'The same nudge, three bodies',
       body: `The same experiment as the binary: capture, Run A, return, nudge one
              star by 1,500 km, Run B. The triangle here is 0.87 AU on a side —
-             130 million kilometres — so the nudge is about one part in ninety
+             130 million kilometers — so the nudge is about one part in ninety
              thousand.`,
       prompt: 'Compared with the binary, the two runs will come apart…',
       options: [
@@ -609,7 +609,7 @@ const BUTTERFLY_EFFECT = {
              <strong>change the numerics and see whether the answer changes.</strong>
 
              \n\nIf the divergence is physical, then computing it more accurately
-             gives the same rate. If the divergence is an artefact of the
+             gives the same rate. If the divergence is an artifact of the
              timestep, then halving the timestep will change it — usually a lot.
              That test is not optional. Without it, the measurement is a
              property of the software.`,
@@ -664,7 +664,7 @@ const BUTTERFLY_EFFECT = {
              computed by a different scheme.
 
              \n\nEach repeat is filed beside your main result rather than
-             replacing it, labelled with the step it actually took. The section
+             replacing it, labeled with the step it actually took. The section
              then says whether the answers agree — and whether the repeats
              changed the arithmetic at all, which is the thing a control has to
              do before its agreement means anything.`,
@@ -780,7 +780,7 @@ const BUTTERFLY_EFFECT = {
       title: 'Deterministic and unpredictable',
       kind: 'short',
       body: `You have now shown two things that sound contradictory: the
-             simulation is exactly reproducible, and its long-term behaviour
+             simulation is exactly reproducible, and its long-term behavior
              cannot be predicted.`,
       prompt:
         'In two or three sentences, explain how both can be true at once.',
@@ -837,7 +837,7 @@ const BUTTERFLY_EFFECT = {
              because it starts in a state we can specify exactly, so that the
              only difference between two runs is the one we introduced.
 
-             \n\nBut the behaviour is not laboratory-only. It is why weather
+             \n\nBut the behavior is not laboratory-only. It is why weather
              forecasts are useful for about a week and not for a month —
              Lorenz found the same exponential sensitivity in a model of
              convection in 1963, and the phrase "butterfly effect" comes from
@@ -856,7 +856,7 @@ const BUTTERFLY_EFFECT = {
              as a limit over infinite time, averaged over the attractor. Yours is
              a good classroom measurement of how fast <em>this</em> system loses
              track of <em>this</em> perturbation, and the refinement check tells
-             you it is not an artefact. It is not the asymptotic quantity that
+             you it is not an artifact. It is not the asymptotic quantity that
              carries the name, and reporting it as one would be overclaiming.`,
     },
     {

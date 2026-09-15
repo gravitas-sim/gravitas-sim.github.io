@@ -1,5 +1,5 @@
 // =============================================================================
-// The English catalogue: every user-facing string, exactly once
+// The English catalog: every user-facing string, exactly once
 // -----------------------------------------------------------------------------
 // This file is the source of truth. Nothing else in the application may carry a
 // second copy of a string that appears here, and a locale file (js/i18n/es.js)
@@ -191,7 +191,7 @@ export const EN = {
   'rail.referenceFrameSelect.hint':
     'Re-express every position, and every trail, in the frame of the barycenter or of the selected object. Unlike Follow Mode this redraws the paths themselves, so the Solar System seen from Earth shows Mars looping backwards.',
   'rail.toggleRuler.hint':
-    'Lay a ruler across the scene. Drag either end onto whatever you want the distance between; the reading is given in AU and in kilometres, and it is anchored to the world, so panning and zooming move the ruler with the things it is measuring rather than changing what it says.',
+    'Lay a ruler across the scene. Drag either end onto whatever you want the distance between; the reading is given in AU and in kilometers, and it is anchored to the world, so panning and zooming move the ruler with the things it is measuring rather than changing what it says.',
   'rail.toggleProtractor.hint':
     'Measure an angle. Drag the middle handle onto the corner and the two outer handles along the directions you want the angle between - a velocity and a line to the star, say, which on an eccentric orbit is ninety degrees only at periapsis and apoapsis.',
   'rail.toggleStopwatch.hint':
@@ -365,7 +365,7 @@ export const EN = {
   'share.shareSeedRow': 'Seed',
   'share.shareReroll': 'New',
   'share.shareContent.4':
-    'The seed decides every randomised detail of this scenario. Hand out the same seed and everyone gets the same system to measure.',
+    'The seed decides every randomized detail of this scenario. Hand out the same seed and everyone gets the same system to measure.',
 
   // --- tour ------------------------------------------------------------------
   'tour.tutorialClose.hint': 'Close the tour (Esc)',
@@ -570,7 +570,7 @@ export const EN = {
   'inspector.bh.inclination': 'Disk tilt',
   'inspector.bh.explain': 'Explain this view',
   'inspector.bh.scaleNote':
-    'The drawn size is compressed so a black hole is visible beside a planet, and the disk and jets are drawn at a compressed scale too. A real horizon at this mass would be far smaller than the dot on screen, and the jets far longer. The colours are illustrative: no temperature or observing band is modelled.',
+    'The drawn size is compressed so a black hole is visible beside a planet, and the disk and jets are drawn at a compressed scale too. A real horizon at this mass would be far smaller than the dot on screen, and the jets far longer. The colors are illustrative: no temperature or observing band is modeled.',
   'inspector.bh.label.horizon': 'Event horizon',
   'inspector.bh.label.disk': 'Accretion disk',
   'inspector.bh.label.approaching': 'Approaching side',
@@ -623,7 +623,7 @@ export const EN = {
   'settings.label.useBarnesHut': 'Approximate Gravity (Barnes-Hut)',
   'settings.label.barnesHutTheta': 'Barnes-Hut Accuracy (theta)',
   'settings.label.adaptiveDetail': 'Adaptive Detail',
-  'settings.label.trailColourMode': 'Trail Color',
+  'settings.label.trailColorMode': 'Trail Color',
   'settings.label.showObjectLensing': 'Gravitational Lensing',
   'settings.label.lensingQuality': 'Lensing Quality',
   'settings.label.diskDoppler': 'Accretion Disk Doppler Beaming',
@@ -642,7 +642,7 @@ export const EN = {
   // being true when lessons began standing objects on the canvas that a
   // published model places rather than the integrator moves: a star walking an
   // evolutionary track, an inspiralling pair placed from a waveform timeline.
-  // Those are labelled wherever they appear, and the claim here now says the
+  // Those are labeled wherever they appear, and the claim here now says the
   // same thing the instrument readouts do.
   'tutorial.welcome.body':
     "A sandbox for gravity, and a set of instruments for measuring it. The bodies you place and the scenarios you load are integrated from Newton's law of gravitation in real time — nothing there is on rails, pre-animated or scripted, and if two stars merge it is because their orbits actually brought them together. A few lesson screens instead place a body where a published model says it should be, such as a star moving along an evolutionary track; those say so on the screen that shows them.",
@@ -651,7 +651,7 @@ export const EN = {
 
   'tutorial.choose.title': 'Choose what to add',
   'tutorial.choose.body':
-    'This button opens a list of the eight kinds of object you can place: star, rocky planet, gas giant, asteroid, comet, white dwarf, neutron star and black hole. Each has its own mass range and its own behaviour. Choosing one <strong>arms</strong> the canvas — the button lights up and the cursor becomes a crosshair.',
+    'This button opens a list of the eight kinds of object you can place: star, rocky planet, gas giant, asteroid, comet, white dwarf, neutron star and black hole. Each has its own mass range and its own behavior. Choosing one <strong>arms</strong> the canvas — the button lights up and the cursor becomes a crosshair.',
   'tutorial.choose.tip':
     'Nothing is placed until you arm it, which is what stops a misjudged click on empty sky from adding a star you did not want. Press Escape, or the button again, to disarm.',
 
@@ -717,7 +717,7 @@ export const EN = {
 
   'tutorial.units.title': 'Units and themes',
   'tutorial.units.body':
-    'Switch between physical units — astronomical units, solar masses, kilometres per second, years — and the raw simulation units the integrator works in. Four themes are available, including Observatory, which uses red chrome to preserve night vision, and Daylight for bright rooms.',
+    'Switch between physical units — astronomical units, solar masses, kilometers per second, years — and the raw simulation units the integrator works in. Four themes are available, including Observatory, which uses red chrome to preserve night vision, and Daylight for bright rooms.',
   'tutorial.units.tip':
     'Some scenarios are scale models rather than the real thing, and where that matters the panel says which physical scale it is reading through.',
 
@@ -815,7 +815,7 @@ export const EN = {
   'settings.label.showElapsedTime': 'Show Elapsed Time',
   'settings.label.showBhGlow': 'Show BH Glow',
   'settings.label.showAccretionDisk': 'Show Accretion Disk',
-  'settings.label.realisticDiskPhysics': 'Realistic Disk Physics',
+  'settings.label.realizticDiskPhysics': 'Realiztic Disk Physics',
   'settings.label.showBhJets': 'Show BH Jets',
   'settings.label.starDensity': 'Star Field Density',
   'settings.label.showAmbientLighting': 'Ambient Lighting',
@@ -827,7 +827,7 @@ export const EN = {
   'settings.label.showDynamicOverlays': 'Show Overlays',
   'settings.label.recordSimulation': 'Record Simulation',
   'settings.label.showGravitationalWaves': 'Show Gravitational Waves',
-  'settings.label.habitableZoneOptimism': 'Habitable Zone Model',
+  'settings.label.habitableZoneOptimizm': 'Habitable Zone Model',
   'settings.option.simSize.small': 'Small',
   'settings.option.simSize.medium': 'Medium',
   'settings.option.simSize.large': 'Large',
@@ -837,8 +837,8 @@ export const EN = {
   'settings.option.placement.random': 'Random',
   'settings.option.placement.grid': 'Grid',
   'settings.option.placement.empty': 'Empty',
-  'settings.option.trailColourMode.type': 'By type',
-  'settings.option.trailColourMode.speed': 'By speed',
+  'settings.option.trailColorMode.type': 'By type',
+  'settings.option.trailColorMode.speed': 'By speed',
   'settings.option.lensingQuality.off': 'off',
   'settings.option.lensingQuality.low': 'low',
   'settings.option.lensingQuality.medium': 'medium',
@@ -865,30 +865,30 @@ export const EN = {
   'settings.option.followMode.neutronstar': 'NeutronStar',
   'settings.option.followMode.whitedwarf': 'WhiteDwarf',
 
-  // --- Scenario catalogue ----------------------------------------------------
+  // --- Scenario catalog ----------------------------------------------------
   // Titles and summaries for every built-in scenario. They live here rather
-  // than in js/data/scenarioInfo.js so that there is one catalogue and one
+  // than in js/data/scenarioInfo.js so that there is one catalog and one
   // copy of every English string; scenarioInfo.js keeps the structure - tags,
   // thumbnails - and reads its prose back out of this file. The id embeds the
   // scenario key verbatim, which is already the stable primary key, so an id
   // cannot drift away from the scenario it describes.
   'scenario.Solar System.title': 'Solar System',
   'scenario.Solar System.summary':
-    'A simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteristics.',
+    'A simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteriztics.',
   'scenario.Retrograde Mars.title':
     'Retrograde Mars: the loop that needed epicycles',
   'scenario.Retrograde Mars.summary':
     'The Sun, Earth and Mars at their real distances and periods, and nothing else. Watched from outside, both planets go round the Sun the same way and never turn back. Switch the reference frame to Earth, in Tools, and Mars stops circling and starts drawing a loop that doubles back on itself. Nothing about the physics changed; only the frame did. That loop is the observation Ptolemy built epicycles to reproduce and Copernicus explained away, and here you can turn it on and off with one control.',
   'scenario.Earth-Moon System.title': 'Earth-Moon System',
   'scenario.Earth-Moon System.summary':
-    'A detailed simulation of the Earth-Moon system with accurate masses, orbital mechanics, and realistic appearances. Features Earth with its blue oceans and green continents, and the Moon with its characteristic gray surface and craters. Perfect for studying orbital dynamics and tidal effects.',
+    'A detailed simulation of the Earth-Moon system with accurate masses, orbital mechanics, and realiztic appearances. Features Earth with its blue oceans and green continents, and the Moon with its characteriztic gray surface and craters. Perfect for studying orbital dynamics and tidal effects.',
   'scenario.TRAPPIST-1 System.title': 'TRAPPIST-1 System',
   'scenario.TRAPPIST-1 System.summary':
     'A compact planetary system with seven Earth-sized worlds orbiting a cool red dwarf star just 40 light-years away. All planets are packed close to their tiny sun, with several in the habitable zone. Can you keep this delicate system stable?',
   'scenario.Three-Body Sensitivity Lab.title':
     'Three-Body Sensitivity Lab: the same start, twice',
   'scenario.Three-Body Sensitivity Lab.summary':
-    'Three six-solar-mass stars at the corners of an equilateral triangle, rotating rigidly about their common centre. This is an exact solution of the three-body problem, found by Lagrange in 1772, and for three equal masses it is unstable: the triangle holds for a few turns and then comes apart. Built for one experiment - run it twice from starts that differ by fifteen hundred kilometres in a system a hundred and thirty million kilometres across, and watch how long the two runs stay together.',
+    'Three six-solar-mass stars at the corners of an equilateral triangle, rotating rigidly about their common center. This is an exact solution of the three-body problem, found by Lagrange in 1772, and for three equal masses it is unstable: the triangle holds for a few turns and then comes apart. Built for one experiment - run it twice from starts that differ by fifteen hundred kilometers in a system a hundred and thirty million kilometers across, and watch how long the two runs stay together.',
   'scenario.Galilean Resonance.title': 'Galilean Resonance: the Laplace lock',
   'scenario.Galilean Resonance.summary':
     'Io, Europa and Ganymede on the 4:2:1 chain Laplace explained in 1805, with Callisto outside it for contrast. The periods are not exactly 4:2:1 — Europa takes 0.37% longer than two Io years — and that near miss is the point: what holds them is the Laplace argument, which stays near 180 degrees instead of running through every value, so the three are never all in conjunction. Callisto sits within 0.03% of 7:3 with Ganymede and is in no resonance at all. A scale model, 100 times life size.',
@@ -926,7 +926,7 @@ export const EN = {
   'scenario.Exoplanet Characterization Lab.title':
     'Exoplanet Characterization Lab',
   'scenario.Exoplanet Characterization Lab.summary':
-    'HD 209458 again, but with the star free to move. In the Transit Lab it is pinned so the light curve stays centred; here both bodies orbit their common centre of mass, which is what the radial-velocity and astrometry instruments need in order to measure anything. The star circles a point 2.7 millionths of an AU away at 84 metres per second: far too small to see and easily large enough to detect. Open Radial Velocity and watch the wobble that found this planet.',
+    'HD 209458 again, but with the star free to move. In the Transit Lab it is pinned so the light curve stays centerd; here both bodies orbit their common center of mass, which is what the radial-velocity and astrometry instruments need in order to measure anything. The star circles a point 2.7 millionths of an AU away at 84 meters per second: far too small to see and easily large enough to detect. Open Radial Velocity and watch the wobble that found this planet.',
   'scenario.Blended Binary.title': 'Blended Binary: a hidden companion',
   'scenario.Blended Binary.summary':
     'The same star and planet as the Transit Lab, with a second star half a magnitude fainter sitting 300 AU away: far too close on the sky for a survey telescope to separate, and well inside one photometric aperture. Its light fills in part of the dip, so the transit measures shallower and the planet looks smaller than it is. Correcting for exactly this effect is what high-resolution imaging surveys of planet hosts are for.',
@@ -961,7 +961,7 @@ export const EN = {
   'scenario.Habitable Zone Lab.title':
     'Habitable Zone Lab: the inner Solar System, with the zone drawn',
   'scenario.Habitable Zone Lab.summary':
-    'The Sun with Venus, Earth, Mars and Ceres on their real orbits, and the circumstellar habitable zone drawn around the star from a published prescription. Venus sits inside the inner edge and Mars outside the outer one on the conservative definition, and only one of the four has liquid water on its surface today. Switch the Habitable Zone Model setting to see the optimistic band, which reaches out past Mars.',
+    'The Sun with Venus, Earth, Mars and Ceres on their real orbits, and the circumstellar habitable zone drawn around the star from a published prescription. Venus sits inside the inner edge and Mars outside the outer one on the conservative definition, and only one of the four has liquid water on its surface today. Switch the Habitable Zone Model setting to see the optimiztic band, which reaches out past Mars.',
   "scenario.Kepler's 2nd Law.title": "Kepler's 2nd Law - Equal Areas",
   "scenario.Kepler's 2nd Law.summary":
     'A planet in a nearly circular orbit and an eccentric orbiter around a central star. The area sweep visualization starts automatically for the eccentric body - watch how the wedges change shape but maintain equal area, showing why objects move faster at periapsis than at apoapsis.',
@@ -982,7 +982,7 @@ export const EN = {
     'A gravitationally bound collection of main-sequence stars, evolved giants, and stellar remnants with mutual gravitational interactions. Watch stellar encounters, binary formation, and the dynamic evolution of this stellar community over time.',
   'scenario.Kuiper Belt.title': 'Kuiper Belt',
   'scenario.Kuiper Belt.summary':
-    "An accurate simulation of our Solar System's Kuiper Belt featuring real dwarf planets (Pluto, Eris, Haumea, Makemake), large KBOs (Quaoar, Sedna, Orcus, Varuna), and smaller objects (Ixion, Huya, 2002 AW197) with realistic masses and orbital properties.",
+    "An accurate simulation of our Solar System's Kuiper Belt featuring real dwarf planets (Pluto, Eris, Haumea, Makemake), large KBOs (Quaoar, Sedna, Orcus, Varuna), and smaller objects (Ixion, Huya, 2002 AW197) with realiztic masses and orbital properties.",
   'scenario.Sagittarius A*.title': 'Sagittarius A*',
   'scenario.Sagittarius A*.summary':
     "The Milky Way's central supermassive black hole (4000 M☉, scaled down for simulation) with fast-moving S-stars, compact objects, and debris in extreme orbits. Witness the incredible gravitational forces and relativistic effects near our galaxy's supermassive black hole.",
@@ -1145,7 +1145,7 @@ export const EN = {
   'place.keyboard.started':
     'Placing a {type}. Arrow keys aim it, Enter places it, Escape cancels. Hold Shift to aim faster or Alt to aim finely.',
   'place.keyboard.placed': 'Placed a {type} at speed {speed}.',
-  'place.keyboard.cancelled': 'Placement cancelled. Nothing was added.',
+  'place.keyboard.canceled': 'Placement canceled. Nothing was added.',
   'shortcut.snap': 'Snap to a circular orbit',
   'shortcut.lecture': 'Lecture Mode (projection)',
   'shortcut.pauseAtEvent': 'Pause at event',
@@ -1171,7 +1171,7 @@ export const EN = {
   'capture.screenshotFailed': 'The screenshot could not be saved',
   'chart.notReady': 'The chart is not ready yet',
   'chart.exportFailed': 'Could not export the chart',
-  'easter.colorsRandomised': 'Colours randomised - see the settings panel',
+  'easter.colorsRandomized': 'Colors randomized - see the settings panel',
   'placement.place': 'Click or drag to place',
   'placement.cancel': 'Esc to cancel',
   'placement.added': 'Object added: {type}',
@@ -1211,9 +1211,9 @@ export const EN = {
   'observing.session.newUnits':
     'Started a new recording: the gravitational constant changed, so the earlier samples were converted with a different scale and cannot be plotted beside these.',
   'observing.session.newConfig':
-    'Started a new recording: the observing schedule changed. The earlier measurements belong to the previous programme.',
+    'Started a new recording: the observing schedule changed. The earlier measurements belong to the previous program.',
   'observing.session.maneuver':
-    'A manoeuvre changed this body\u2019s orbit, so the measurements taken before it describe a path it is no longer on. Recording has started again.',
+    'A maneuver changed this body\u2019s orbit, so the measurements taken before it describe a path it is no longer on. Recording has started again.',
   'observing.session.rewound':
     'Rewound to day {time}. Discarded {n} samples recorded after that point: they described a future this run has not reached.',
   'observing.session.unnamedStar': 'this star',
@@ -1387,7 +1387,7 @@ export const EN = {
   // --- Lesson panel chrome ---------------------------------------------------
   // Kepler's Laws steps 5 and 10 are their own step types - an ellipse the
   // student reshapes and a set of swept-area wedges - and neither had a badge,
-  // so the first lesson in the catalogue printed the literal text
+  // so the first lesson in the catalog printed the literal text
   // "inv.step.kind.ellipse" where a word should be. They are hands-on screens,
   // so they take the word the other hands-on screens already use rather than
   // introducing two more for a reader to learn.
@@ -1411,7 +1411,7 @@ export const EN = {
 
   // --- Answer feedback -------------------------------------------------------
   // --- The classroom assignment builder ---------------------------------------
-  // Kept in the base catalogue rather than the deferred one: a student opening
+  // Kept in the base catalog rather than the deferred one: a student opening
   // an assignment link meets these strings at boot, before any panel loads.
 
   // These two are on a static button in index.html, translated by the boot
@@ -1421,7 +1421,7 @@ export const EN = {
     'Plan an impulsive burn for this body: set a radial and transverse delta-v, see the orbit it would produce, and apply it only if you mean to.',
   'sound.button.label': 'Sound settings',
   'sound.button.hint': 'Sound settings',
-  'sound.button.labelled': 'Sound settings — {state}',
+  'sound.button.labeled': 'Sound settings — {state}',
   'sound.state.unsupported': 'audio unavailable',
   'sound.state.muted': 'off',
   'sound.state.blocked': 'blocked by the browser',
@@ -1436,12 +1436,12 @@ export const EN = {
   'inspector.star.describedFromMass':
     'A {type}-type star. Everything on this card except the mass was estimated from that mass on the assumption that the star is on the main sequence, because nothing has told the simulation otherwise.',
   'inspector.star.describedFromModel':
-    'A {type}-type {class}. Its temperature and luminosity were supplied by a model or a catalogue rather than guessed from its mass, and its radius follows from the two.',
+    'A {type}-type {class}. Its temperature and luminosity were supplied by a model or a catalog rather than guessed from its mass, and its radius follows from the two.',
   // The luminosity class words. Eager, unlike the phase names beside them in
-  // the deferred catalogue: every star's inspector card names its class, and
+  // the deferred catalog: every star's inspector card names its class, and
   // the first click of a session must not show a message id. A phase name is
-  // only read for a star something has modelled, which cannot happen before
-  // the deferred catalogue has loaded.
+  // only read for a star something has modeled, which cannot happen before
+  // the deferred catalog has loaded.
   'stellar.class.supergiant': 'supergiant',
   'stellar.class.giant': 'giant',
   'stellar.class.subgiant': 'subgiant',

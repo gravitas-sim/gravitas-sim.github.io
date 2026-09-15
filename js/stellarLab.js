@@ -58,7 +58,7 @@ export const MAX_PINNED = 4;
  * Solar System orbital radii, for the one comparison that makes a supergiant
  * mean something.
  *
- * Labelled as a size comparison and not as a prediction: a supergiant of 800
+ * Labeled as a size comparison and not as a prediction: a supergiant of 800
  * solar radii is bigger than the Earth's orbit, and that is a statement about
  * a length rather than about what would happen to the Earth.
  */
@@ -142,7 +142,7 @@ export function createLab({
 /**
  * The two ways the age slider can be paced.
  *
- * TIME is logarithmic in years, so how far the handle has travelled is how far
+ * TIME is logarithmic in years, so how far the handle has traveled is how far
  * through the star's life it is. It is the honest one for "how long did that
  * last", and it is useless for looking at anything after the main sequence: on
  * a solar-mass track the whole red-giant branch is two thousandths of its
@@ -231,7 +231,7 @@ export function resolveStarSpec(spec) {
   if (spec.model) return spec.model;
   if (Number.isFinite(spec.teffK) && Number.isFinite(spec.lumSun)) {
     // `hypothetical` is the word the rest of the system uses for a point
-    // nothing modelled - js/stellar/hr.js stamps it, js/lesson/starState.js
+    // nothing modeled - js/stellar/hr.js stamps it, js/lesson/starState.js
     // reads it. This used to write 'free' in front of the spread and have it
     // immediately overwritten, so the constant was decorative.
     return hypotheticalAt(spec.teffK, spec.lumSun);
@@ -426,7 +426,7 @@ export function nearestTrackForCursor(state) {
  * Identity is carried, not derived. It used to be a `key` built out of the
  * temperature and the luminosity, which made two stars at the same point one
  * star and made a star that moved a different star; and the comparison
- * labelled its columns "Star 1..N" by sort position, so re-ordering the stage
+ * labeled its columns "Star 1..N" by sort position, so re-ordering the stage
  * renamed everything on it. A pin now knows what it is - a role, a name, and
  * where its body stands on the canvas - and re-ordering only re-orders.
  *

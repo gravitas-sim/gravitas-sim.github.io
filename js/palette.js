@@ -2,7 +2,7 @@
 // Palette: perceptual ramps for encoding physical quantities as color
 // -----------------------------------------------------------------------------
 // Speed and energy are continuous scalars, so they get sequential ramps that
-// increase monotonically in lightness. That keeps them readable in greyscale
+// increase monotonically in lightness. That keeps them readable in grayscale
 // and for viewers with color vision deficiency, which a rainbow ramp does not.
 // =============================================================================
 
@@ -16,7 +16,7 @@ const SPEED_STOPS = [
   [253, 231, 37],
 ];
 
-// Diverging: bound (blue) → marginal (grey) → unbound (red).
+// Diverging: bound (blue) → marginal (gray) → unbound (red).
 const ENERGY_STOPS = [
   [49, 104, 178],
   [138, 176, 219],

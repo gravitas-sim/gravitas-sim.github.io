@@ -143,8 +143,8 @@ export function bindingMatches(binding, body, generation) {
  *
  * A lesson author writing `{kind: 'Star'}` means the thing the interface calls
  * a star, so the trailing 'Object' is dropped here rather than left for
- * everyone who writes a matcher to remember. One inconsistency, normalised in
- * one place, and it is a normalisation rather than a guess: nothing is
+ * everyone who writes a matcher to remember. One inconsistency, normalized in
+ * one place, and it is a normalization rather than a guess: nothing is
  * inferred from a name, and 'StarObject' and 'Star' are the same class.
  *
  * @param {?object} body - A body

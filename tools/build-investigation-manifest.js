@@ -31,7 +31,7 @@ import { mergeTranslation } from '../js/data/investigations/i18n.js';
 // From the pure helper rather than from the barrel's re-export: this script has
 // to run when js/data/investigations/manifest.js does not exist yet, and the
 // barrel's own path to gradedSteps must not depend on the file being generated.
-import { gradedSteps } from '../js/data/investigations/catalogue.js';
+import { gradedSteps } from '../js/data/investigations/catalog.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DIR = path.join(HERE, '..', 'js', 'data', 'investigations');
@@ -87,7 +87,7 @@ const entryOf = inv => ({
  * manifest would duplicate it once per locale. And the manifest is in the
  * start-up download, while the filters arrive with the lesson browser, which
  * nobody has opened yet; a subject filter's vocabulary has no business being
- * fetched by a visitor who never opens the catalogue.
+ * fetched by a visitor who never opens the catalog.
  */
 const browseMetaOf = inv => ({
   // Subject tags, so the browser can offer a filter without a second list of
@@ -95,7 +95,7 @@ const browseMetaOf = inv => ({
   tags: [...(inv.tags || [])].sort(),
   // How much arithmetic the lesson asks for, counted rather than judged.
   //
-  // The obvious field to filter on would be difficulty, and this catalogue has
+  // The obvious field to filter on would be difficulty, and this catalog has
   // none to offer: all seventeen lessons are introductory and say so. What does
   // vary is whether a reader is asked to work a number out, and that is
   // countable - so it is counted here instead of somebody deciding which
@@ -112,7 +112,7 @@ const browseMetaOf = inv => ({
  * Data is the invariant that matters anyway - formatting is what
  * `npm run format:check` is for.
  *
- * @returns {Array<Object>} One entry per lesson, in catalogue order
+ * @returns {Array<Object>} One entry per lesson, in catalog order
  */
 export const manifestEntries = (lessons = INVESTIGATIONS) =>
   lessons.map(entryOf);
@@ -120,7 +120,7 @@ export const manifestEntries = (lessons = INVESTIGATIONS) =>
 /**
  * The filter metadata as data, for the same reason as manifestEntries.
  *
- * @param {Array<Object>} lessons - The catalogue
+ * @param {Array<Object>} lessons - The catalog
  * @returns {Object} Keyed by lesson id
  */
 export const browseMeta = (lessons = INVESTIGATIONS) =>
@@ -168,7 +168,7 @@ export const currentBrowseData = () => {
 };
 
 /**
- * The catalogue in one language.
+ * The catalog in one language.
  *
  * Built by laying each translation over its lesson and reading the card fields
  * off the result, so a manifest cannot say something the lesson does not.

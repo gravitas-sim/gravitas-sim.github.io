@@ -515,13 +515,13 @@
               Restart run
             </button>
             <button
-              id="rvAnalyse"
+              id="rvAnalyze"
               class="obs-panel-btn"
-              data-i18n="rv.survey.analyse"
+              data-i18n="rv.survey.analyze"
               title="Open the analysis workspace on these measurements: fit a circular model by hand or search a bounded range of periods"
-              data-i18n-title="rv.survey.analyse.hint"
+              data-i18n-title="rv.survey.analyze.hint"
             >
-              Analyse
+              Analyze
             </button>
           </div>
           <p id="rvSurveyStatus" class="rv-survey-status" role="status"></p>
@@ -1670,7 +1670,7 @@
           This chart shows the total brightness of the system as seen by a
           distant observer. When a planet passes in front of a star along the
           observer's line of sight, it blocks a fraction of the starlight,
-          producing a characteristic dip called a <strong>transit</strong>.
+          producing a characteriztic dip called a <strong>transit</strong>.
         </p>
         <p>
           The dip depth is proportional to
@@ -1880,7 +1880,7 @@
 
     <!-- role="region", not "toolbar". A toolbar promises a single tab stop and
          arrow-key navigation between its controls; this rail has neither, so
-         the role described behaviour that was not implemented. A named region
+         the role described behavior that was not implemented. A named region
          is a landmark, which is also what the skip link above needs it to be. -->
     <div
       id="mainControls"
@@ -2071,7 +2071,7 @@
               id="toggleRuler"
               class="ui-button secondary measure-btn"
               aria-pressed="false"
-              title="Lay a ruler across the scene. Drag either end onto whatever you want the distance between; the reading is given in AU and in kilometres, and it is anchored to the world, so panning and zooming move the ruler with the things it is measuring rather than changing what it says."
+              title="Lay a ruler across the scene. Drag either end onto whatever you want the distance between; the reading is given in AU and in kilometers, and it is anchored to the world, so panning and zooming move the ruler with the things it is measuring rather than changing what it says."
               data-i18n-title="rail.toggleRuler.hint"
               data-i18n="rail.toggleRuler"
             >
@@ -2829,7 +2829,7 @@
           written by js/investigations.js from the manifest: the subjects are
           the tags the lessons declare, and the lengths are bucketed from the
           durations they declare. Nothing about a lesson is spelled out here,
-          so nothing here can disagree with the catalogue.
+          so nothing here can disagree with the catalog.
         -->
         <div class="inv-browser-tools">
           <div class="inv-search">
@@ -2880,7 +2880,7 @@
             listitems, and the scenario grid above carries no role either.
           -->
           <!--
-            Curated orders through the catalogue. The order and the reasons
+            Curated orders through the catalog. The order and the reasons
             come from js/data/investigations/sequences.js; the titles,
             durations and "fits a demonstration" labels are read off the
             manifest, so a lesson that gets longer stops being called short
@@ -3176,7 +3176,7 @@
       <p id="investigationPlotNote" class="inv-plot-note"></p>
       <!-- The plot as numbers. A scatter of points is a picture of a
            relationship, and the position of a dot is not available to a reader
-           using a screen reader, or to one who cannot separate two colours.
+           using a screen reader, or to one who cannot separate two colors.
            Every point the canvas draws is in this table, in the order the
            student recorded them. Kept in step by js/investigations.js. -->
       <div
@@ -3239,7 +3239,7 @@
       ></canvas>
       <p id="investigationToolNote" class="inv-plot-note"></p>
       <!-- A description list rather than rows of divs: every number this
-           instrument computes is a labelled value, and a screen reader should
+           instrument computes is a labeled value, and a screen reader should
            hear which label goes with which number rather than an undifferentiated
            run of text. This is also the canvas's text equivalent, which is why
            the canvas points at it. -->
@@ -3534,7 +3534,7 @@
           </button>
         </div>
         <p class="share-hint" data-i18n="share.shareContent.4">
-          The seed decides every randomised detail of this scenario. Hand out
+          The seed decides every randomized detail of this scenario. Hand out
           the same seed and everyone gets the same system to measure.
         </p>
       </div>
@@ -3930,7 +3930,7 @@
     <script type="module" src="js/astrometry.js"></script>
     <script type="module" src="js/main.js"></script>
     <!--
-      Credit and licence only. The documentation links that used to live here
+      Credit and license only. The documentation links that used to live here
       moved to the rail's Learn group: seven items made this too wide to sit in
       the strip between the transport bar and the rail, so it had been pushed up
       above the scrubber where it read as a floating panel rather than a footer.
@@ -3945,7 +3945,7 @@
          a toolbar promises that the arrow keys move focus between its buttons,
          and in Lecture Mode the arrow keys step the sequence instead. Claiming
          the role would have told a screen-reader user to expect the one
-         behaviour the mode deliberately does not have. -->
+         behavior the mode deliberately does not have. -->
     <div
       id="lectureBar"
       class="lecture-bar"

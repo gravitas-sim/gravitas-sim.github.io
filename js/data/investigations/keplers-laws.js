@@ -57,7 +57,7 @@ const KEPLER = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'solar-system'],
   lock: { placement: true, inspector: true },
@@ -542,7 +542,7 @@ const KEPLER = {
       title: 'Why the speed changes',
       kind: 'short',
       body: `You have just measured a planet speeding up and slowing down on a
-             fixed orbit, with nothing pushing it along and no fuel being burnt.
+             fixed orbit, with nothing pushing it along and no fuel being burned.
              Something is being traded, and something else is being conserved.`,
       prompt:
         'In one or two sentences, explain why the planet speeds up as it approaches the star. What quantity stays constant, and why does gravity not change it?',

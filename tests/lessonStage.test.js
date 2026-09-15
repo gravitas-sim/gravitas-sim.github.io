@@ -42,7 +42,7 @@ import {
   restageStarPair,
   stageIntact,
   stagePresence,
-  stagedBarycentre,
+  stagedBarycenter,
   stagedStars,
   setStageScale,
 } from '../js/lessonStage.js';
@@ -98,7 +98,7 @@ beforeEach(() => {
 });
 
 describe('where the stars go', () => {
-  test('a row is centred on the origin and evenly spaced', () => {
+  test('a row is centerd on the origin and evenly spaced', () => {
     expect(rowLayout(3, { spacing: 100 })).toEqual([
       { x: -100, y: 0 },
       { x: 0, y: 0 },
@@ -110,7 +110,7 @@ describe('where the stars go', () => {
     expect(rowLayout(2, { spacing: 50 }).map(p => p.x)).toEqual([-25, 25]);
   });
 
-  test('a grid wraps and stays centred in both directions', () => {
+  test('a grid wraps and stays centerd in both directions', () => {
     const grid = rowLayout(4, { spacing: 10, perRow: 2 });
     expect(grid).toEqual([
       { x: -5, y: -5 },
@@ -197,7 +197,7 @@ describe('framing the stage', () => {
       }
     );
     expect(inset.pan.x).toBeGreaterThan(plain.pan.x);
-    // Centred in the clear half: 250 pixels right of the window's middle.
+    // Centerd in the clear half: 250 pixels right of the window's middle.
     expect(inset.pan.x).toBeCloseTo(250, 6);
   });
 
@@ -215,7 +215,7 @@ describe('framing the stage', () => {
   });
 });
 
-describe('standing modelled stars on the canvas', () => {
+describe('standing modeled stars on the canvas', () => {
   const THREE = {
     spacing: 100,
     stars: [
@@ -434,7 +434,7 @@ describe('what a hypothetical star may and may not claim', () => {
   test('it weighs something for the engine and reports nothing to the reader', () => {
     applyStage(HYPOTHETICAL, { force: true });
     const [sun, wd] = stars;
-    // The modelled one carries the track's answers.
+    // The modeled one carries the track's answers.
     expect(sun.massInSuns).toBeCloseTo(1, 2);
     expect(Number.isFinite(sun.ageYr)).toBe(true);
 
@@ -653,7 +653,7 @@ describe('two stars the engine is meant to move', () => {
 
   test('the heavier star sits nearer the balance point', () => {
     applyStage({ starPair: { m1: 3, m2: 1, separation: 400 } });
-    const bary = stagedBarycentre();
+    const bary = stagedBarycenter();
     const a = bary.arms.find(x => x.role === 'a');
     const b = bary.arms.find(x => x.role === 'b');
     // Three times the mass, a third of the arm. This is the measurement the
@@ -664,9 +664,9 @@ describe('two stars the engine is meant to move', () => {
 
   test('the balance point stays put while the pair goes round it', () => {
     applyStage({ starPair: { m1: 3, m2: 1, separation: 400 } });
-    const before = stagedBarycentre();
+    const before = stagedBarycenter();
     for (let n = 0; n < 400; n++) updatePhysics(1 / 60);
-    const after = stagedBarycentre();
+    const after = stagedBarycenter();
     // Zero net momentum by construction, so it must not have drifted. A pair
     // that slides off the view makes the whole overlay pointless.
     expect(after.x).toBeCloseTo(before.x, 3);
@@ -685,9 +685,9 @@ describe('two stars the engine is meant to move', () => {
 
   test('changing the mass ratio restands the pair on a closed orbit', () => {
     applyStage({ starPair: { m1: 2, m2: 2, separation: 400 } });
-    expect(stagedBarycentre().arms.map(a => a.r)).toEqual([200, 200]);
+    expect(stagedBarycenter().arms.map(a => a.r)).toEqual([200, 200]);
     expect(restageStarPair({ m1: 3, m2: 1 })).toBe(true);
-    const arms = stagedBarycentre().arms;
+    const arms = stagedBarycenter().arms;
     expect(arms[0].r).toBeCloseTo(100, 6);
     expect(arms[1].r).toBeCloseTo(300, 6);
     // Asking for what is already there is not a rebuild: a step that repaints
@@ -763,9 +763,9 @@ describe('a system with an eccentric planet', () => {
 // -----------------------------------------------------------------------------
 // Five findings, each of which had the same root: a function that knew about
 // `stars` and not about the seven other collections a stage puts bodies into.
-// These assert the behaviour rather than the inventory, because an inventory
+// These assert the behavior rather than the inventory, because an inventory
 // can be right and still be consulted by only one of the three callers.
-describe('a stage is recognised whatever it put on the canvas', () => {
+describe('a stage is recognized whatever it put on the canvas', () => {
   // Every stage kind the module supports, with what it stands up. If a new
   // kind is added and not listed here, the count assertion below fails rather
   // than the new kind quietly going unchecked.
@@ -825,12 +825,12 @@ describe('a stage is recognised whatever it put on the canvas', () => {
     const orbiter = asteroids[0];
     expect(orbiter).toBeTruthy();
     const start = { x: orbiter.pos.x, y: orbiter.pos.y };
-    let travelled = 0;
+    let traveled = 0;
     let previous = { ...start };
     for (let tick = 0; tick < 8; tick++) {
       expect(stagePresence().allGone).toBe(false);
       for (let frame = 0; frame < 15; frame++) updatePhysics(1 / 60);
-      travelled += Math.hypot(
+      traveled += Math.hypot(
         orbiter.pos.x - previous.x,
         orbiter.pos.y - previous.y
       );
@@ -838,7 +838,7 @@ describe('a stage is recognised whatever it put on the canvas', () => {
     }
     // A stage rebuilt on every tick puts its orbiters back where they started,
     // so the path length stays near zero and the body never gets anywhere.
-    expect(travelled).toBeGreaterThan(20);
+    expect(traveled).toBeGreaterThan(20);
     expect(
       Math.hypot(orbiter.pos.x - start.x, orbiter.pos.y - start.y)
     ).toBeGreaterThan(1);
@@ -1022,7 +1022,7 @@ describe('a remnant replaces its star rather than joining it', () => {
 });
 
 describe('visual scale is not physics', () => {
-  test('a stage with no modelled radius is not resized at all', () => {
+  test('a stage with no modeled radius is not resized at all', () => {
     // The Goldilocks case: setStageScale() wrote a stellar display radius onto
     // a planet that has no physicalRadiusSun, taking it from 4.8 to 9 - and
     // 9 is a collision radius.
@@ -1207,8 +1207,8 @@ describe('a stage takes its effects with it', () => {
 // at whatever size lets four orbits fit in a window, which is a choice about
 // the picture and carries no information".
 //
-// The behaviour was right and only the description was wrong, so this pins the
-// behaviour: an orbiter's distance is a multiple of the drawn radius, and it
+// The behavior was right and only the description was wrong, so this pins the
+// behavior: an orbiter's distance is a multiple of the drawn radius, and it
 // is not a multiple of the Schwarzschild radius, which for these masses is
 // smaller by many orders of magnitude.
 describe('a black hole stage measures its orbits in drawn radii', () => {
@@ -1242,7 +1242,7 @@ describe('a black hole stage measures its orbits in drawn radii', () => {
   });
 
   // The claim that used to be in the docstring, checked and found false. A
-  // Schwarzschild radius for a ten-solar-mass hole is about thirty kilometres;
+  // Schwarzschild radius for a ten-solar-mass hole is about thirty kilometers;
   // the drawn radius is a canvas length chosen to make four orbits fit, and
   // the two are not in any fixed ratio - changing the mass changes one of them
   // on a completely different curve from the other.

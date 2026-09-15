@@ -1,5 +1,5 @@
 // =============================================================================
-// Curated orders through the catalogue
+// Curated orders through the catalog
 // -----------------------------------------------------------------------------
 // Seventeen lessons is enough that "which one first?" is a real question, and
 // the browser answers it badly on its own: a grid sorted by nothing in
@@ -12,7 +12,7 @@
 //
 // How long each one takes is DERIVED, never written down here
 // -----------------------------------------------------------------------------
-// The brief for this was explicit that a long lesson must not be labelled as a
+// The brief for this was explicit that a long lesson must not be labeled as a
 // short demonstration, and the way to guarantee that is to not let anybody type
 // the label. `fitFor` reads the duration the lesson itself declares and buckets
 // it. A lesson somebody lengthens moves out of the demonstration bucket the
@@ -63,7 +63,7 @@ export const LENGTHS = [LENGTH.DEMO, LENGTH.PERIOD, LENGTH.LONG];
 /**
  * Which slot a lesson fits, read off the duration it declares.
  *
- * Nobody types this. That is the point: the one way a catalogue ends up
+ * Nobody types this. That is the point: the one way a catalog ends up
  * promising a fifteen-minute demonstration and delivering seventy minutes is
  * by carrying a label somebody wrote once and never revisited.
  *
@@ -81,7 +81,7 @@ export function lengthOf(entry) {
 /**
  * How much arithmetic a lesson asks for.
  *
- * Not difficulty. Every lesson in the catalogue declares the same level -
+ * Not difficulty. Every lesson in the catalog declares the same level -
  * introductory - so a difficulty filter would offer one option and filter
  * nothing. What actually differs between them is whether a reader is asked to
  * work numbers out, and the manifest counts that from the steps themselves.
@@ -103,12 +103,12 @@ export const CALCULATIONS = ['none', 'some', 'lots'];
  *
  * `needs` names lessons earlier in the same sequence whose result this one
  * assumes. It is not a hard gate - a reader may open anything in any order, and
- * the catalogue has no locks - it is what the browser shows so somebody can
+ * the catalog has no locks - it is what the browser shows so somebody can
  * decide for themselves.
  *
  * Message ids rather than prose, because the browser is translated and these
  * lines are read by students. They live with the rest of the inv.* family in
- * the deferred catalogue.
+ * the deferred catalog.
  */
 export const SEQUENCES = [
   {
@@ -221,11 +221,11 @@ export const SEQUENCES = [
  * Resolve a sequence against the manifest.
  *
  * Returns the entries in order with their derived fit, dropping any lesson the
- * catalogue no longer has rather than rendering a dead card. A sequence that
+ * catalog no longer has rather than rendering a dead card. A sequence that
  * loses a lesson is a shorter sequence, not a broken browser.
  *
  * @param {object} sequence - One of SEQUENCES
- * @param {Array<object>} manifest - The card catalogue
+ * @param {Array<object>} manifest - The card catalog
  * @returns {Array<object>} Resolved steps
  */
 export function resolveSequence(sequence, manifest) {

@@ -5,7 +5,7 @@
 // js/welcome.js.
 //
 // Every string here is a message id rather than the words themselves, resolved
-// by js/welcome.js through the catalogue. That keeps this file free of imports
+// by js/welcome.js through the catalog. That keeps this file free of imports
 // - a test can read it without booting the app - while the front door still
 // speaks the reader's language.
 //

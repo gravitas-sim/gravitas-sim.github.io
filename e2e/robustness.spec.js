@@ -83,7 +83,7 @@ test.describe('heavy scenarios stay finite', () => {
     // the central body's keep-out radius with a Math.max, collapsing the inner
     // rings onto one circle - and since it lays twenty objects per ring at
     // repeating angles, object i and object i+20 coincided exactly. Four
-    // scenarios carried twenty superimposed pairs each. Grid centred itself on
+    // scenarios carried twenty superimposed pairs each. Grid centerd itself on
     // the origin, which is precisely where the central body is pinned, so one
     // cell always landed inside it.
     await app.boot();
@@ -199,7 +199,7 @@ test.describe('heavy scenarios stay finite', () => {
     });
     expect(keys.length).toBeGreaterThan(30);
 
-    // The budget grows with the catalogue rather than being a fixed number,
+    // The budget grows with the catalog rather than being a fixed number,
     // because the work does: one build, one round trip and 120 steps per
     // scenario. At a fixed 90 seconds this test passed at 49 scenarios and
     // began timing out intermittently at 53, which is a slow failure to

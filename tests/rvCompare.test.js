@@ -235,7 +235,7 @@ describe('comparing two schedules', () => {
 
   test('it never claims a winner from one draw each', () => {
     const out = compareSchedules(armOf(regular), armOf(irregular), BOUNDS);
-    expect(out.caveats).toContain(CAVEAT.SINGLE_REALISATION);
+    expect(out.caveats).toContain(CAVEAT.SINGLE_REALIZATION);
     expect(out).not.toHaveProperty('better');
     expect(out).not.toHaveProperty('winner');
   });

@@ -323,7 +323,7 @@ describe('the same body draws the same way twice', () => {
     const a = drawAtScreenRadius(rock, 30);
     clearVisualCaches();
     const b = drawAtScreenRadius(rock, 30);
-    // Rebuilt from the seed, not remembered: the cache is an optimisation and
+    // Rebuilt from the seed, not remembered: the cache is an optimization and
     // must not be the source of truth for what the rock looks like.
     expect(shape(b)).toEqual(shape(a));
   });
@@ -419,7 +419,7 @@ describe('the same body draws the same way twice', () => {
   });
 
   test('a giant too small for rings is drawn without them', () => {
-    // Four grey pixels beside three coloured ones is noise, not a ring system.
+    // Four gray pixels beside three colored ones is noise, not a ring system.
     const g = new GasGiant({ x: 300, y: 0 }, { x: 0, y: 0 }, 4);
     g.hasRings = true;
     expect(ringArcCount(drawAtScreenRadius(g, 2))).toBe(0);

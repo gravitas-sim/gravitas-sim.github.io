@@ -3,12 +3,12 @@
 // -----------------------------------------------------------------------------
 // js/i18n/deferredNamespaces.js decides which missing ids are worth reporting
 // at start-up and which are merely early. A list that has drifted fails in the
-// quietest possible way: a namespace added to the deferred catalogue and not to
-// the list brings the false warnings back, and one removed from the catalogue
+// quietest possible way: a namespace added to the deferred catalog and not to
+// the list brings the false warnings back, and one removed from the catalog
 // and left in the list holds a genuinely missing id until something else
 // happens to settle it.
 //
-// So it is regenerated here from the catalogues themselves and compared.
+// So it is regenerated here from the catalogs themselves and compared.
 // =============================================================================
 
 import {
@@ -29,7 +29,7 @@ describe('the deferred namespace list', () => {
     ),
   ].sort();
 
-  test('is exactly what the deferred catalogues use', () => {
+  test('is exactly what the deferred catalogs use', () => {
     expect([...DEFERRED_NAMESPACES].sort()).toEqual(actual);
   });
 
@@ -38,7 +38,7 @@ describe('the deferred namespace list', () => {
     expect(new Set(DEFERRED_NAMESPACES).size).toBe(DEFERRED_NAMESPACES.length);
   });
 
-  test('recognises a real deferred id and refuses an invented one', () => {
+  test('recognizes a real deferred id and refuses an invented one', () => {
     const real = Object.keys(EN_DEFERRED)[0];
     expect(mayBeDeferred(real)).toBe(true);
     expect(mayBeDeferred('definitelyNotANamespace.nope')).toBe(false);

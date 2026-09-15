@@ -5,7 +5,7 @@
 // closed-form answers rather than against the engine. That matters more here
 // than usual: the classifier's job is to *withhold* a verdict when the evidence
 // does not support one, and the only way to check a refusal is to hand it a
-// series whose true behaviour you already know.
+// series whose true behavior you already know.
 //
 // So most of what follows is synthetic. A libration is a sine, a circulation is
 // a ramp, and a slow circulation with a wobble on it - the case that fooled an
@@ -82,13 +82,13 @@ describe('wrapping', () => {
     expect(Number.isNaN(wrap180(Infinity))).toBe(true);
   });
 
-  test('wrapAbout re-centres, which is what a libration about zero needs', () => {
+  test('wrapAbout re-centers, which is what a libration about zero needs', () => {
     // An angle librating about 0 crosses 360 on every swing. Wrapped to
-    // [0, 360) it reads as a sawtooth of amplitude 180; re-centred it reads as
+    // [0, 360) it reads as a sawtooth of amplitude 180; re-centerd it reads as
     // the ten-degree swing it is.
     const raw = [350, 355, 0, 5, 10, 5, 0, 355, 350];
-    const centred = raw.map(a => wrapAbout(a, 0));
-    expect(Math.max(...centred) - Math.min(...centred)).toBeCloseTo(20, 10);
+    const centerd = raw.map(a => wrapAbout(a, 0));
+    expect(Math.max(...centerd) - Math.min(...centerd)).toBeCloseTo(20, 10);
   });
 });
 
@@ -405,7 +405,7 @@ describe('turningPoints', () => {
 
   test('finds one extremum per half cycle', () => {
     const turns = turningPoints(sine(600, 3, 20), 4);
-    // Three cycles starting at the centre: max, min, max, min, max, min.
+    // Three cycles starting at the center: max, min, max, min, max, min.
     expect(turns.length).toBe(6);
     expect(turns.map(p => p.kind)).toEqual([
       'max',
@@ -451,12 +451,12 @@ const series = (n, dt, fn) => {
 };
 
 describe('classifyAngle', () => {
-  test('a clean libration is recognised, with centre, amplitude and period', () => {
+  test('a clean libration is recognized, with center, amplitude and period', () => {
     const P = 400;
     const s = series(600, 1, t => 180 + 25 * Math.sin((2 * Math.PI * t) / P));
     const v = classifyAngle(s, { referencePeriod: 10 });
     expect(v.state).toBe(ANGLE_STATE.LIBRATION);
-    expect(v.centre).toBeCloseTo(180, 0);
+    expect(v.center).toBeCloseTo(180, 0);
     expect(v.amplitude).toBeCloseTo(25, 0);
     expect(v.period).toBeCloseTo(P, -1);
     expect(v.periodResolved).toBe(true);
@@ -469,7 +469,7 @@ describe('classifyAngle', () => {
     expect(v.amplitude).toBeCloseTo(8, 0);
   });
 
-  test('a circulation is recognised, and its period measured', () => {
+  test('a circulation is recognized, and its period measured', () => {
     const s = series(600, 1, t => 1.5 * t);
     const v = classifyAngle(s, { referencePeriod: 10 });
     expect(v.state).toBe(ANGLE_STATE.CIRCULATION);
@@ -491,7 +491,7 @@ describe('classifyAngle', () => {
     );
     expect(v.state).toBe(ANGLE_STATE.LIBRATION);
     expect(v.reason).toBe('stationary');
-    expect(v.centre).toBeCloseTo(60, 6);
+    expect(v.center).toBeCloseTo(60, 6);
     expect(v.amplitude).toBeCloseTo(0, 6);
   });
 });
@@ -555,7 +555,7 @@ describe('classifyAngle refuses when it should', () => {
   test('a slow circulation with a wobble is not a libration', () => {
     // This is Callisto, in closed form: a steady drift of a third of a turn
     // over the record with a 25-degree oscillation on top. The two reversals
-    // are real; the centre moves, and that is what gives it away.
+    // are real; the center moves, and that is what gives it away.
     const s = series(
       1600,
       1,
@@ -564,10 +564,10 @@ describe('classifyAngle refuses when it should', () => {
     const v = classifyAngle(s, { referencePeriod: 10 });
     expect(v.state).toBe(ANGLE_STATE.INCONCLUSIVE);
     expect(v.turns.length).toBeGreaterThanOrEqual(2);
-    expect(['drifting-centre', 'one-reversal']).toContain(v.reason);
+    expect(['drifting-center', 'one-reversal']).toContain(v.reason);
   });
 
-  test('...while the same wobble about a fixed centre is a libration', () => {
+  test('...while the same wobble about a fixed center is a libration', () => {
     // Identical except that the drift is gone. The classifier must separate
     // these two, and nothing but the drift distinguishes them.
     const s = series(
@@ -707,7 +707,7 @@ describe('rotatingFrame', () => {
 
   test('the secondary lands on the positive x axis at unit distance', () => {
     const at = rotatingFrame(secondary.pos, primary, secondary, {
-      normalise: true,
+      normalize: true,
     });
     expect(at.x).toBeCloseTo(1, 6);
     expect(at.y).toBeCloseTo(0, 6);
@@ -722,8 +722,8 @@ describe('rotatingFrame', () => {
       x: primary.pos.x + sep * Math.cos(th),
       y: primary.pos.y + sep * Math.sin(th),
     };
-    const at = rotatingFrame(point, primary, secondary, { normalise: true });
-    // The frame's origin is the barycentre, which for this mass ratio is
+    const at = rotatingFrame(point, primary, secondary, { normalize: true });
+    // The frame's origin is the barycenter, which for this mass ratio is
     // essentially the primary, so the two agree to a part in a thousand.
     expect(at.x).toBeCloseTo(L4.x, 2);
     expect(at.y).toBeCloseTo(L4.y, 2);
@@ -737,13 +737,13 @@ describe('rotatingFrame', () => {
       y: p.x * Math.sin(a) + p.y * Math.cos(a),
     });
     const body = { x: 300, y: 700 };
-    const before = rotatingFrame(body, primary, secondary, { normalise: true });
+    const before = rotatingFrame(body, primary, secondary, { normalize: true });
     for (const angle of [0.3, 1.9, -2.7]) {
       const after = rotatingFrame(
         rotate(body, angle),
         { ...primary, pos: rotate(primary.pos, angle) },
         { ...secondary, pos: rotate(secondary.pos, angle) },
-        { normalise: true }
+        { normalize: true }
       );
       expect(after.x).toBeCloseTo(before.x, 8);
       expect(after.y).toBeCloseTo(before.y, 8);
@@ -983,7 +983,7 @@ describe('the parameter tables', () => {
     expect(ratio).toBeGreaterThan(JUPITER_TROJANS.published.stabilityMassRatio);
   });
 
-  test('balance() zeroes the momentum and centres the system', () => {
+  test('balance() zeroes the momentum and centers the system', () => {
     const bodies = [
       { mass: 10, pos: { x: 5, y: 0 }, vel: { x: 1, y: 0 } },
       { mass: 30, pos: { x: -5, y: 4 }, vel: { x: 0, y: 2 } },
@@ -1001,7 +1001,7 @@ describe('the parameter tables', () => {
   test('the Jovian scale factors are consistent with each other', () => {
     // Newtonian scale invariance: lengths by k means times by k^1.5.
     expect(TIME_SCALE_JOVIAN).toBeCloseTo(Math.pow(SCALE_JOVIAN, 1.5), 8);
-    // And the converters honour it, so a period reported for the moons is in
+    // And the converters honor it, so a period reported for the moons is in
     // real Jovian days rather than in the scenario's own inflated ones.
     const ioPeriodSim = galileanBodies(G).periodIo;
     expect(simSecondsToDays(ioPeriodSim, TIME_SCALE_JOVIAN)).toBeCloseTo(

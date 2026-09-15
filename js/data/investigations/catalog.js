@@ -1,7 +1,7 @@
 // =============================================================================
-// Pure catalogue helpers
+// Pure catalog helpers
 // -----------------------------------------------------------------------------
-// Two functions that are facts about a lesson and about catalogue order, and
+// Two functions that are facts about a lesson and about catalog order, and
 // nothing else. They live apart from both doors into the lessons because both
 // doors want them and neither should have to import the other:
 //
@@ -29,7 +29,7 @@ export const gradedSteps = inv =>
  * Where a lesson sits in its series, if it belongs to one.
  *
  * Derived rather than stored: the three exoplanet lessons are not adjacent in
- * the catalogue, and writing "2 of 3" into the data would go stale the moment a
+ * the catalog, and writing "2 of 3" into the data would go stale the moment a
  * fourth was added or the order changed.
  *
  * Members are matched by id rather than by object identity, so this answers the
@@ -37,7 +37,7 @@ export const gradedSteps = inv =>
  * the former and the open panel holds the latter, and "2 of 3" has to be the
  * same sentence in both.
  *
- * @param {Array<Object>} list - The catalogue, in order
+ * @param {Array<Object>} list - The catalog, in order
  * @param {Object} inv - Investigation or manifest entry
  * @returns {{label: string, index: number, of: number}|null} Position, or null
  */

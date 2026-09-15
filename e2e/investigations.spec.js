@@ -478,7 +478,7 @@ test.describe('the student report', () => {
 /** Lesson modules the page has actually fetched, by filename. */
 // Kept as "which lesson bodies were fetched" rather than "which files in that
 // directory", because the directory also holds the machinery - the registry,
-// the manifests, the catalogue, and the browser's search and filter modules -
+// the manifests, the catalog, and the browser's search and filter modules -
 // and a list of exclusions is a list somebody has to remember to extend. The
 // lesson ids come from the manifest, so this needs no editing when one is
 // added; tests/investigationRegistry.test.js is what guards the directory
@@ -508,7 +508,7 @@ test.describe('lesson loading', () => {
     await app.boot();
     await page.locator('#investigationsBtn').click();
     await expect(page.locator('#investigationBrowser')).toBeVisible();
-    // From the manifest rather than a literal: the catalogue grows, and a test
+    // From the manifest rather than a literal: the catalog grows, and a test
     // that hard-codes its size fails for the one reason nobody needs telling.
     const expected = await page.evaluate(async () => {
       const { MANIFEST } = await import('/js/data/investigations/manifest.js');

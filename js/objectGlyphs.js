@@ -30,7 +30,7 @@
  * constants, they are small, and a template that produced them would be harder
  * to read than the eight pictures it produced. `currentColor` is deliberately
  * absent - each glyph carries its own class hue so the set stays legible on
- * the accent-coloured armed button as well as on a panel.
+ * the accent-colored armed button as well as on a panel.
  */
 const GLYPHS = Object.freeze({
   // A bright core inside a soft corona, which is what StarObject.draw paints.
@@ -82,7 +82,7 @@ const GLYPHS = Object.freeze({
     'stroke-width="0.7" opacity="0.9"/>',
 
   // A point with two beams. Not a lightning bolt: the thing that makes a
-  // neutron star recognisable is the magnetic axis, and it is what the canvas
+  // neutron star recognizable is the magnetic axis, and it is what the canvas
   // draws too.
   NeutronStar:
     '<path d="M8 8L4.4 2.2M8 8l3.6 5.8" stroke="var(--hue-neutron)" ' +

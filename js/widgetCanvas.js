@@ -119,9 +119,9 @@ export const typeAt = (size = TYPE.TICK, weight = '') =>
   `${weight}${Math.max(TYPE.TICK, size)}px ${MONO}`;
 
 /**
- * How many labelled ticks fit along an axis at TYPE.TICK.
+ * How many labeled ticks fit along an axis at TYPE.TICK.
  *
- * Raising the type without thinning the ticks is how an axis turns into a grey
+ * Raising the type without thinning the ticks is how an axis turns into a gray
  * smear. Given the room and the longest label, this says how many to draw; the
  * caller picks a round step from it.
  *

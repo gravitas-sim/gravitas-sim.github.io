@@ -24,7 +24,7 @@ import { checkLesson } from './rules.js';
 import { allWidgets } from '../widgets.js';
 import { SCENARIO_INFO } from '../data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../appState.js';
-import { gradedSteps } from '../data/investigations/catalogue.js';
+import { gradedSteps } from '../data/investigations/catalog.js';
 
 /**
  * What the address bar is asking for.

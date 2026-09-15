@@ -135,7 +135,7 @@ describe('a baseline that cannot support a percentage', () => {
   });
 
   test('a system whose angular momentum cancels gets no percentage for it', () => {
-    // Two equal masses going opposite ways about the centre: each carries a
+    // Two equal masses going opposite ways about the center: each carries a
     // large angular momentum and the total is zero. A percentage of that is an
     // amplified rounding error, not a measurement - and the energy, which does
     // not cancel, keeps its percentage.

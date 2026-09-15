@@ -14,7 +14,7 @@
 // scenario zoom is a fraction of a pixel.
 //
 // These tests are about the drawing only. The physical radius, the mass and the
-// collision behaviour are deliberately asserted to be unchanged: making a comet
+// collision behavior are deliberately asserted to be unchanged: making a comet
 // visible must not make it a bigger object.
 // =============================================================================
 
@@ -102,7 +102,7 @@ beforeEach(() => {
 });
 
 describe('a comet draws where it is', () => {
-  test('every shape it draws is centred on its world position', () => {
+  test('every shape it draws is centerd on its world position', () => {
     const comet = new Comet(POS, { x: 0, y: 0 }, 0.05);
     const ctx = recordingContext();
     comet.draw(ctx);

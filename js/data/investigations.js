@@ -4,7 +4,7 @@
 // The lessons themselves live one per file in ./investigations/, and the
 // application loads them one at a time through ./investigations/registry.js.
 // This module is the other door: it imports all ten statically and hands back
-// the whole catalogue, synchronously.
+// the whole catalog, synchronously.
 //
 // That path exists for the callers that genuinely need every lesson in hand and
 // cannot await anything:
@@ -12,7 +12,7 @@
 //   js/answerKey.js                    reads every question, answer, tolerance
 //                                      and explanation out of the steps
 //   tools/build-instructor-materials.js  renders ten PDFs at build time
-//   tests/                             assert across the whole catalogue
+//   tests/                             assert across the whole catalog
 //
 // Nothing on the start-up path imports this file, and nothing in the running
 // application should: importing it is asking for 225KB of lesson text. The
@@ -70,7 +70,7 @@ import WHAT_IS_A_GRAVITATIONAL_WAVE from './investigations/what-is-a-gravitation
 import LISTENING_TO_SPACETIME from './investigations/listening-to-spacetime.js';
 import A_UNIVERSE_OF_STARS from './investigations/a-universe-of-stars.js';
 import LIVES_OF_STARS from './investigations/lives-of-stars.js';
-import { gradedSteps, positionIn } from './investigations/catalogue.js';
+import { gradedSteps, positionIn } from './investigations/catalog.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
 // lessons form a sequence. Shadows measures a radius, Tug measures a mass and
@@ -84,7 +84,7 @@ import { gradedSteps, positionIn } from './investigations/catalogue.js';
 //
 // This array and MANIFEST in ./investigations/manifest.js are the same order,
 // and a test holds them to it: the browser reads one and the build reads the
-// other, and a catalogue that disagreed with itself would renumber a series in
+// other, and a catalog that disagreed with itself would renumber a series in
 // one place and not the other.
 export const INVESTIGATIONS = [
   KEPLER,
@@ -123,7 +123,7 @@ export const getInvestigation = id => INVESTIGATIONS.find(i => i.id === id);
 /**
  * Where a lesson sits in its series, if it belongs to one.
  *
- * Bound to the full catalogue here, and to the manifest in the registry. Both
+ * Bound to the full catalog here, and to the manifest in the registry. Both
  * are the same list in the same order, and a test holds them to that.
  *
  * @param {Object} inv - Investigation

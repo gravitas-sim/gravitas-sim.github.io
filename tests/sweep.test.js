@@ -6,7 +6,7 @@ import {
   TRIAL_STATUS,
   parameterFor,
   planValues,
-  summarise,
+  summarize,
   sweepableScenarios,
   tally,
   validateSweepSpec,
@@ -279,7 +279,7 @@ describe('reading a finished sweep', () => {
       trial(2, { separation: 20 }),
       trial(3, { separation: 31 }),
     ];
-    const s = summarise(trials, 'separation');
+    const s = summarize(trials, 'separation');
     expect(s.changed).toBe(true);
     expect(s.monotonic).toBe(true);
     expect(s.direction).toBe('increasing');
@@ -292,7 +292,7 @@ describe('reading a finished sweep', () => {
       trial(2, { separation: 10.00001 }),
       trial(3, { separation: 10 }),
     ];
-    const s = summarise(trials, 'separation');
+    const s = summarize(trials, 'separation');
     expect(s.changed).toBe(false);
     expect(s.monotonic).toBe(false);
   });
@@ -303,7 +303,7 @@ describe('reading a finished sweep', () => {
       trial(2, { separation: 30 }),
       trial(3, { separation: 12 }),
     ];
-    expect(summarise(trials, 'separation').monotonic).toBe(false);
+    expect(summarize(trials, 'separation').monotonic).toBe(false);
   });
 
   test('failed trials are excluded from the summary and counted separately', () => {
@@ -312,26 +312,26 @@ describe('reading a finished sweep', () => {
       trial(2, {}, TRIAL_STATUS.LOST_BODY),
       trial(3, { separation: 30 }),
       trial(4, {}, TRIAL_STATUS.BUILD_FAILED),
-      trial(5, {}, TRIAL_STATUS.CANCELLED),
+      trial(5, {}, TRIAL_STATUS.CANCELED),
     ];
-    const s = summarise(trials, 'separation');
+    const s = summarize(trials, 'separation');
     expect(s.n).toBe(2);
 
     const counts = tally(trials);
     expect(counts.total).toBe(5);
     expect(counts.ok).toBe(2);
-    // A cancelled trial did not fail: nobody ran it.
+    // A canceled trial did not fail: nobody ran it.
     expect(counts.failed).toBe(2);
-    expect(counts.cancelled).toBe(1);
+    expect(counts.canceled).toBe(1);
     expect(counts.lostBody).toBe(1);
   });
 
-  test('a sweep with nothing measurable summarises to nothing', () => {
-    expect(summarise([trial(1, {}, TRIAL_STATUS.BUILD_FAILED)], 'x')).toBe(
+  test('a sweep with nothing measurable summarizes to nothing', () => {
+    expect(summarize([trial(1, {}, TRIAL_STATUS.BUILD_FAILED)], 'x')).toBe(
       null
     );
-    expect(summarise([], 'x')).toBe(null);
-    expect(summarise([trial(1, { x: 5 })], 'x')).toBe(null);
+    expect(summarize([], 'x')).toBe(null);
+    expect(summarize([trial(1, { x: 5 })], 'x')).toBe(null);
   });
 
   test('a non-finite measurement is not treated as a value', () => {
@@ -340,6 +340,6 @@ describe('reading a finished sweep', () => {
       trial(2, { separation: NaN }),
       trial(3, { separation: 30 }),
     ];
-    expect(summarise(trials, 'separation').n).toBe(2);
+    expect(summarize(trials, 'separation').n).toBe(2);
   });
 });

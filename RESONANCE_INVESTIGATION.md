@@ -105,10 +105,10 @@ So the verdicts, in descending order of what the evidence supports:
 | evidence | verdict |
 | --- | --- |
 | a completed circuit | **circulation**, with its period |
-| three or more reversals, at consistent levels | **libration**, with centre, amplitude and period |
+| three or more reversals, at consistent levels | **libration**, with center, amplitude and period |
 | two reversals, and the angle ended near where it began | **libration**, period provisional |
 | no motion at all | **libration**, reason `stationary`: a Lagrange point |
-| two reversals, but each swing ends further on than the last | **inconclusive**, reason `drifting-centre` |
+| two reversals, but each swing ends further on than the last | **inconclusive**, reason `drifting-center` |
 | one reversal | **inconclusive**, reason `one-reversal` |
 | no reversal, tightly confined | **inconclusive**, reason `confined`, with the circulation period it rules out |
 | anything else | **inconclusive**, reason `ambiguous-drift` |
@@ -131,7 +131,7 @@ synodic period. `smoothOverTime()` averages over one conjunction cycle before
 the search — the same averaging the analytic treatment does when it drops the
 short-period terms from the disturbing function.
 
-**A moving centre is not libration.** After the averaging, Callisto still shows
+**A moving center is not libration.** After the averaging, Callisto still shows
 two clean reversals over 300 Io orbits and would be reported as a 26° libration.
 It is not librating; it is circulating once every three thousand Io orbits with
 a 26° wobble along the way. The tell is that it drifted 35° while doing it, so
@@ -166,7 +166,7 @@ because Jupiter's oblateness contributes to the real mean motions and Gravitas
 has no J2 term. The resonance is a statement about mean motions — `n_Io −
 3 n_Europa + 2 n_Ganymede = 0` holds in reality to about one part in ten
 million — so those are the quantities preserved. Deriving the axes from the
-published kilometres instead leaves a residual fifty times the real one, which
+published kilometers instead leaves a residual fifty times the real one, which
 is a third of the libration frequency and would put the model near the edge of
 the resonance rather than in it.
 
@@ -174,7 +174,7 @@ the resonance rather than in it.
 
 | quantity | model | published |
 | --- | --- | --- |
-| Laplace libration centre | 179.48° | 180° |
+| Laplace libration center | 179.48° | 180° |
 | Laplace libration period | 2,165 days | 2,071 days |
 | Laplace libration amplitude | 26.4° | 0.064° |
 | energy drift | 1.6 × 10⁻⁸ | — |
@@ -182,7 +182,7 @@ the resonance rather than in it.
 
 The amplitude is the one that does not match, and it is a property of where the
 model was started rather than of the resonance: the real moons sit far closer to
-the exact centre than Keplerian starting conditions put them. A 26° libration is
+the exact center than Keplerian starting conditions put them. A 26° libration is
 also what makes the phenomenon visible in a lesson. The period — the physically
 meaningful quantity — comes out within 5%.
 
@@ -206,7 +206,7 @@ observed 39.482; the 0.2% difference is taken up in the real system by the
 precession of Pluto's perihelion, which enters the argument and which this model
 does not reproduce at the right rate.
 
-The starting argument is 100°, which is 80° short of the libration centre. With
+The starting argument is 100°, which is 80° short of the libration center. With
 the axis at the exact commensurability that is a turning point, so the libration
 amplitude comes out at the observed 80°.
 
@@ -215,7 +215,7 @@ amplitude comes out at the observed 80°.
 | quantity | model | published |
 | --- | --- | --- |
 | period ratio | 1.50030 | 1.5046 (observed), 1.5 (resonant) |
-| libration centre | 179.97° | 180° |
+| libration center | 179.97° | 180° |
 | libration amplitude | 80.19° | ~82° |
 | libration period | 19,560 years | ~19,670 years |
 | Pluto's true anomaly at conjunction | 175.7° ± 38° | 180° = aphelion |
@@ -231,17 +231,17 @@ fact about crossing orbits rather than about the resonance.
 ### Jupiter Trojans
 
 True scale, in the circular restricted three-body frame: the Sun and Jupiter
-both turn about a barycentre at the origin, because the triangular points are
+both turn about a barycenter at the origin, because the triangular points are
 exact equilibria only in that setting. Jupiter's orbit is circularised — its
 real eccentricity is 0.0489 — which is the same idealisation every textbook
 treatment makes and which the lesson states.
 
 Four test bodies of 10⁻⁹ mass units:
 
-| body | placement | behaviour |
+| body | placement | behavior |
 | --- | --- | --- |
 | L4 probe | exactly at L4 | equilibrium: span 1.3 × 10⁻⁶ degrees over 40 Jupiter years |
-| Patroclus | L5 − 28° | tadpole libration, centre 295.7°, amplitude 23.7°, period 12.8 Jupiter years |
+| Patroclus | L5 − 28° | tadpole libration, center 295.7°, amplitude 23.7°, period 12.8 Jupiter years |
 | L3 probe | L3 − 1° | departs: more than 150° within 30 Jupiter years, then a horseshoe |
 | Wide orbit probe | 1.25 × a_Jupiter, circular | circulates, period 3.5 Jupiter years |
 
@@ -300,13 +300,13 @@ accumulates straight into it. Measured over 1,400 Io orbits:
 | Velocity Verlet | 0.5 | 27.3° | 1,225 Io orbits |
 | RK4 | 2 | 27.6° | 1,209 Io orbits |
 
-The first two rows are artefacts, and they are convincing ones — a clean
+The first two rows are artifacts, and they are convincing ones — a clean
 libration with a plausible period, and wrong. The scenario runs Velocity Verlet
 at a substep of 1.0, and the validation suite checks that halving and doubling
 it changes neither the verdict nor the period by more than the published
 comparison allows.
 
-These are the only four scenarios in the catalogue that choose their own
+These are the only four scenarios in the catalog that choose their own
 integrator, and the rule they are an exception to is worth keeping: everything
 else was laid out and timed against symplectic Euler's error, and a scenario
 that quietly switched scheme would change what every other check measures. So

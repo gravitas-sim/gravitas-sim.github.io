@@ -50,7 +50,7 @@ test.describe('the scenario is the problem it claims to be', () => {
     ]);
   });
 
-  test('the bodies sit where the normalisation says they do', async ({
+  test('the bodies sit where the normalization says they do', async ({
     page,
     app,
   }) => {
@@ -63,7 +63,7 @@ test.describe('the scenario is the problem it claims to be', () => {
       const bx = (a.mass * a.pos.x + b.mass * b.pos.x) / M;
       const sep = Math.hypot(b.pos.x - a.pos.x, b.pos.y - a.pos.y);
       const by = (a.mass * a.pos.y + b.mass * b.pos.y) / M;
-      // Distances from the barycentre, not x-coordinates. The pair has been
+      // Distances from the barycenter, not x-coordinates. The pair has been
       // turning since the world was built, so an inertial x-coordinate is
       // mu*cos(theta) and says more about when it was measured than about how
       // the world was constructed.
@@ -73,7 +73,7 @@ test.describe('the scenario is the problem it claims to be', () => {
         secondary: Math.hypot(b.pos.x - bx, b.pos.y - by) / sep,
       };
     });
-    // The heavier body at mu from the barycentre and the lighter at 1-mu. If
+    // The heavier body at mu from the barycenter and the lighter at 1-mu. If
     // the world were built any other way the overlay would be drawn in the
     // wrong place.
     expect(geom.primary).toBeCloseTo(geom.mu, 6);
@@ -331,14 +331,14 @@ test.describe('the claims switch off when they stop being true', () => {
 });
 
 test.describe('what the panel says', () => {
-  test('states the normalisation and the sign convention', async ({
+  test('states the normalization and the sign convention', async ({
     page,
     app,
   }) => {
     await openLab(page, app);
     const text = await page.locator('#cr3bpContainer').innerText();
     // The convention is on screen, not in a comment.
-    expect(text).toMatch(/barycentre|baricentro/i);
+    expect(text).toMatch(/barycenter|baricentro/i);
     expect(text).toMatch(/2Ω|2Ω/);
     expect(text).toMatch(/SLOWER|LARGER/);
   });
@@ -384,7 +384,7 @@ test.describe('what the panel says', () => {
 // a dark-matter halo or MOND actually in force, or bodies close enough that
 // the engine is clamping the force between them. And the drawn L4/L5 did not
 // undo the reflection that a clockwise pair goes through, so on those systems
-// the leading point was drawn and labelled at the trailing one.
+// the leading point was drawn and labeled at the trailing one.
 // =============================================================================
 test.describe('the force law has to be the one on the label', () => {
   test('a halo actually in force disables the overlay and says why', async ({
@@ -539,7 +539,7 @@ test.describe('which way round the pair goes', () => {
       const panel = await import('/js/cr3bpPanel.js');
       const physics = await import('/js/physics.js');
 
-      /** Signed angle from the secondary to a point, about the barycentre. */
+      /** Signed angle from the secondary to a point, about the barycenter. */
       const leadOf = (system, point) => {
         const ang = p =>
           Math.atan2(p.y - system.origin.y, p.x - system.origin.x);
@@ -582,9 +582,9 @@ test.describe('which way round the pair goes', () => {
     });
 
     // Ahead and behind by the same angle, in both directions of travel. The
-    // angle is not exactly sixty degrees as seen from the barycentre - the
+    // angle is not exactly sixty degrees as seen from the barycenter - the
     // equilateral triangle is on the primary-secondary line, and the
-    // barycentre sits at -mu along it - so the expectation is computed rather
+    // barycenter sits at -mu along it - so the expectation is computed rather
     // than assumed, from the same mass ratio the panel reports.
     for (const state of [check.forward, check.reversed]) {
       const expected = Math.atan2(Math.sqrt(3) / 2, 0.5 - state.mu);

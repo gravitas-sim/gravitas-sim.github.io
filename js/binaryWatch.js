@@ -2,7 +2,7 @@
 // Watching a planet in a binary, and writing down what happened
 // -----------------------------------------------------------------------------
 // This module does the recording. js/binaryStability.js does the judging, and
-// keeping the two apart is what lets the judgement be tested against known
+// keeping the two apart is what lets the judgment be tested against known
 // configurations without a simulation attached.
 //
 // Everything is measured on integration steps rather than on frames. A run here

@@ -43,7 +43,7 @@ export {
 
 import { markWelcomeSeen, resetWelcomePreference } from './welcomeGate.js';
 
-// This module's prose lives in the deferred half of the catalogue - see the
+// This module's prose lives in the deferred half of the catalog - see the
 // note in js/i18n/en.deferred.js. Registered from here rather than left to the
 // caller, because nothing in the start-up path can reach this module and a
 // reader who does reach it must not see message ids.
@@ -124,7 +124,7 @@ export function featuredScenarios() {
 /**
  * A few lesson titles for the investigations block.
  *
- * Takes the catalogue rather than importing it: it is loaded lazily, so the
+ * Takes the catalog rather than importing it: it is loaded lazily, so the
  * only caller already has it in hand by the time it asks.
  *
  * Accepts either shape - a manifest entry, which carries a step count, or a
@@ -132,12 +132,12 @@ export function featuredScenarios() {
  * the tests hand it the latter, and three titles and a number read the same off
  * both.
  *
- * @param {Array<Object>} catalogue - MANIFEST or INVESTIGATIONS
+ * @param {Array<Object>} catalog - MANIFEST or INVESTIGATIONS
  * @param {number} [n] - How many
  * @returns {Array<Object>} id, title, subtitle and step count for each
  */
-export function previewInvestigations(catalogue, n = 3) {
-  return catalogue.slice(0, n).map(inv => ({
+export function previewInvestigations(catalog, n = 3) {
+  return catalog.slice(0, n).map(inv => ({
     id: inv.id,
     title: inv.title,
     subtitle: inv.subtitle,

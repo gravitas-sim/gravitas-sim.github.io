@@ -22,8 +22,8 @@
 //
 // Every burn is logged. Time, body, primary, frame, vector, units, and the
 // orbit before and after, because a delta-v on its own does not identify a
-// manoeuvre - the same push at a different point of the orbit is a different
-// manoeuvre with a different result.
+// maneuver - the same push at a different point of the orbit is a different
+// maneuver with a different result.
 // =============================================================================
 
 import {
@@ -186,7 +186,7 @@ function mount() {
   $('maneuverUndo').onclick = () => undoBurn();
   $('maneuverExport').onclick = () => exportLog();
 
-  // The catalogue can arrive after this panel does; see the note on the same
+  // The catalog can arrive after this panel does; see the note on the same
   // subscription in js/binaryRunPanel.js.
   onLocaleChange(() => render());
 }
@@ -407,7 +407,7 @@ function undoBurn() {
 
   restoring = true;
   try {
-    // Restoring re-initialises the world, which resets the timeline and bumps
+    // Restoring re-initializes the world, which resets the timeline and bumps
     // the world generation - so the recordings taken after the burn are
     // discarded by the machinery that already exists for a rebuild.
     host.applyShareState(JSON.parse(JSON.stringify(snapshot.state)));

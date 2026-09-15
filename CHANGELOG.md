@@ -31,7 +31,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
   panel says that "did not cross during this run" is not "can never cross".
   Both activities keep the student's prediction whether or not it was right,
   refuse to overwrite an experiment somebody else recorded, and restore the
-  world and every setting after a cancellation.
+  world and every setting after a cancelation.
 - **Parameter sweeps in two investigations, replacing what was repetitive
   rather than what was instructive.** In _Planets in Binary Stars_, five
   starting radii over the same twenty-period window, each watched by the
@@ -42,7 +42,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
   A/B comparison so the two results sit on screen together, and an optional
   five-value sweep of the impact parameter on the gaining side. Both are built
   on the A/B bench: the world is captured before the first trial and restored
-  after the last, cancellation keeps what it measured, and each trial is read
+  after the last, cancelation keeps what it measured, and each trial is read
   by the same recorder that reads a hand-flown pass, so a mean speed is never
   offered as evidence about an encounter. In each lesson the hand-run examples
   stay and come first, the prediction is a prerequisite of the run, the plots
@@ -62,7 +62,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
   name, so a run is reproducible without touching the world's own random stream
   or its dynamics; measurements are scheduled on the simulation clock, so they
   do not depend on the frame rate. The continuous curve stays available behind
-  them as a labelled teaching overlay. Runs export through **Export data ->
+  them as a labeled teaching overlay. Runs export through **Export data ->
   Radial velocity measurements**: one row per measurement, carrying the
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
@@ -103,7 +103,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
 ### Fixed
 
 - A widget in the radial-velocity lesson that had never drawn: its `draw`
-  shadowed the imported translation function with the colour palette, so the
+  shadowed the imported translation function with the color palette, so the
   first row threw and the canvas stayed blank.
 - Three computed fields in Why Mars Goes Backwards that could only ever be
   empty, because they read a value measured on an earlier step.

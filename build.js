@@ -32,7 +32,7 @@ const STATIC_FILES = [
   'social-card.png',
 ];
 
-// Directories copied whole. Lesson figures are photographs used under licences
+// Directories copied whole. Lesson figures are photographs used under licenses
 // that require them to be redistributed with the page, not hot-linked.
 // vendor/ carries the self-hosted fonts and the two bundled libraries. It is
 // copied rather than processed: css/app.css refers to the fonts by a relative

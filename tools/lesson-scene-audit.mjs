@@ -3,18 +3,18 @@
 // What every lesson step does with the main scene
 // -----------------------------------------------------------------------------
 //   npm run audit:scene              the readable report
-//   npm run audit:scene -- --json    the machine-readable catalogue
-//   npm run audit:scene -- --write   refresh the catalogue and the record
+//   npm run audit:scene -- --json    the machine-readable catalog
+//   npm run audit:scene -- --write   refresh the catalog and the record
 //   npm run audit:scene -- --check   fail if either is stale, or if the
 //                                    hand-written acceptance map disagrees
 //
 // The question this answers is the one nobody could answer before writing it:
 // which of the twenty-one lessons actually connect a student to an object in
 // the simulation, and which put an instrument beside the text and leave the
-// scene as wallpaper. It is deliberately not a judgement about quality. A
+// scene as wallpaper. It is deliberately not a judgment about quality. A
 // standalone panel is the right tool for a step about a relationship nobody
 // can see on a canvas, and several lessons that never touch a body are better
-// for it. What the catalogue is for is knowing which is which, per step, so
+// for it. What the catalog is for is knowing which is which, per step, so
 // that a decision to connect one can be made from the facts.
 //
 // Seven things, and they are not the same thing
@@ -55,7 +55,7 @@
 //                           this list, deliberately - a checkbox records that
 //                           somebody clicked, not that anything was measured.
 //
-// A step with none of the seven is prose, and the catalogue says so rather
+// A step with none of the seven is prose, and the catalog says so rather
 // than reaching for the nearest category.
 //
 // The loop
@@ -72,7 +72,7 @@
 // -----------------------------------------------------------------------------
 // Everything below is read off step data, widget declarations and module
 // source, never inferred from prose. Where the data does not say, the entry
-// says so rather than a plausible guess, because a catalogue that quietly
+// says so rather than a plausible guess, because a catalog that quietly
 // invents is worse than a short one.
 //
 // The one piece of static analysis is the identifier scan: `ctx.*` calls,
@@ -93,7 +93,7 @@ import { allWidgets, whenWidgetsReady } from '../js/widgets.js';
 import { auditBindings, parseCollected } from './acceptance-bindings.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const CATALOGUE = resolve(ROOT, 'docs/lesson-scene-catalogue.json');
+const CATALOG = resolve(ROOT, 'docs/lesson-scene-catalog.json');
 const RECORD = resolve(ROOT, 'docs/lesson-scene-record.md');
 const ACCEPTANCE = resolve(ROOT, 'docs/lesson-acceptance.json');
 const PROVENANCE = resolve(ROOT, 'js/data/investigations/provenance.js');
@@ -149,7 +149,7 @@ const CTX = {
   roleStatus: 'read',
   roleOf: 'read',
   roles: 'read',
-  barycentre: 'read',
+  barycenter: 'read',
   rvNow: 'read',
   conservation: 'read',
   transitGeometry: 'read',
@@ -201,7 +201,7 @@ const CTX = {
  * The distinction the `origin` field carries is the one an introductory
  * student is most often not told: MIST tracks are imported, and they are not
  * observations. They are a published grid of stellar structure calculations.
- * Calling both "real data" in the same catalogue would make the catalogue
+ * Calling both "real data" in the same catalog would make the catalog
  * useless for the one question it exists to answer.
  */
 const DATASETS = {
@@ -458,7 +458,7 @@ function listOf(value) {
  *
  * A live widget is the other half of a step's connection to the scene, and
  * leaving it out was the reason the population and evolution screens looked
- * inert in the catalogue: the step declares `tool`, and every `ctx.role(...)`
+ * inert in the catalog: the step declares `tool`, and every `ctx.role(...)`
  * and `ctx.restagePopulation(...)` that makes the screen work lives in the
  * widget, not in the step.
  */
@@ -499,7 +499,7 @@ function moduleFunctions(text) {
     // Past the parameter list before looking for the body, because a default
     // value is an object literal often enough to matter: `function
     // syncSource(v, ctx, spec = {})` gave up its whole body to the `{}` in
-    // its own signature, and every gravitational-wave screen was catalogued
+    // its own signature, and every gravitational-wave screen was catalogd
     // as touching nothing.
     let cursor = m.index + m[0].length - 1;
     if (m[1]) {
@@ -593,7 +593,7 @@ function stagedCount(step) {
   if (step.stage.population) return step.stage.population.show ?? 0;
   // A binary stage names its two components by kind rather than listing them,
   // so counting `stars` alone recorded the gravitational-wave lessons as
-  // staging nothing - a catalogue that said "no objects" about the two bodies
+  // staging nothing - a catalog that said "no objects" about the two bodies
   // the whole lesson is spent selecting.
   if (step.stage.binary) return step.stage.binary.kinds?.length ?? 2;
   // A star pair names its two members by mass rather than listing them.
@@ -609,7 +609,7 @@ function stagedCount(step) {
  * Carried forward from the last step that named a setup, because that is how
  * the app behaves: `paused: false` starts it and the following steps inherit
  * a running world until something pauses it again. Reading only the step's
- * own setup catalogued "let it run for fifty conjunctions" as a step with
+ * own setup catalogd "let it run for fifty conjunctions" as a step with
  * nothing to do.
  *
  * @returns {boolean|'inherited'} true, false, or inherited from before the lesson
@@ -725,8 +725,8 @@ function actionsFor(step, widget, ctxOf, running, affordances) {
   if (step.lightCurve) out.push('record-a-light-curve');
   if (step.plot) out.push('build-a-plot');
   if (step.showAreaSweep) out.push('watch-the-area-sweep');
-  if (step.showBarycentre) out.push('watch-the-balance-point');
-  if (step.explainView) out.push('read-the-labelled-appearance');
+  if (step.showBarycenter) out.push('watch-the-balance-point');
+  if (step.explainView) out.push('read-the-labeled-appearance');
   if (step.observerAngle !== undefined) out.push('view-from-a-set-angle');
   // Deliberately last, and deliberately not evidence anywhere below: a tick
   // records that somebody clicked a box.
@@ -765,7 +765,7 @@ function kindsFor(step, widget, ctxOf, datasets) {
     step.pauseAt ||
     step.lightCurve ||
     step.showAreaSweep ||
-    step.showBarycentre
+    step.showBarycenter
   ) {
     out.add(KIND.ENGINE);
   }
@@ -881,7 +881,7 @@ function actualRoles(step, kinds, actions, affordances, running) {
  * Four rules, and the one that is deliberately absent: a staged scene whose
  * measurement comes from a prescribed model rather than from the integrator
  * is not a defect. That is what the gravitational-wave and stellar screens
- * are, honestly labelled, and an earlier rule that flagged twenty of them
+ * are, honestly labeled, and an earlier rule that flagged twenty of them
  * would have trained a reader to skip this list.
  */
 function mismatchFor(step, declared, actual) {
@@ -918,7 +918,7 @@ function loopsFor(steps) {
   let active = null;
   const pending = [];
   const close = loop => {
-    // Two different things, and conflating them flattered the catalogue.
+    // Two different things, and conflating them flattered the catalog.
     // `closed` means the prediction was eventually returned to. `complete`
     // means a number came back before it was: predict, do, measure, answer,
     // in that order.
@@ -1083,7 +1083,7 @@ function recoveryFor(step, inv, index, ctxOf, source) {
     // Four ways a probe can answer "there is nothing to read", and they are
     // not equivalent. A named absence tells a reader they have not broken
     // anything; a dash tells them nothing at all. An earlier version of this
-    // scan recognised only the `if (!body) return` form and reported
+    // scan recognized only the `if (!body) return` form and reported
     // forty-nine probes as unguarded when most of them guard with a ternary.
     const spoken =
       /on the canvas|not found|no orbit|no runs|no overlap|unavailable|nothing selected|building the system|waiting for|click (a|the|\w+)|select (a|the|\w+)/i.test(
@@ -1129,7 +1129,7 @@ function recoveryFor(step, inv, index, ctxOf, source) {
   return out;
 }
 
-/** Build the whole catalogue. */
+/** Build the whole catalog. */
 async function audit() {
   const widgets = new Map(allWidgets().map(w => [w.id, w]));
   const families = await widgetFamilies();
@@ -1265,7 +1265,7 @@ async function audit() {
         // The instrument's own shape is recorded once, under `instruments` at
         // the top of the file, because twelve steps naming `stellar-lab`
         // repeated its controls, its reads and its dataset twelve times and
-        // doubled the size of the catalogue for nothing.
+        // doubled the size of the catalog for nothing.
         instrument: step.tool
           ? { id: step.tool.id, capture: Boolean(step.tool.capture) }
           : null,
@@ -1445,7 +1445,7 @@ function report(data) {
         '  js/lesson/binding.js is the exact-match replacement.'
     );
   }
-  lines.push(`\nFull catalogue: ${relative(ROOT, CATALOGUE)}`);
+  lines.push(`\nFull catalog: ${relative(ROOT, CATALOG)}`);
   lines.push(`Acceptance map: ${relative(ROOT, ACCEPTANCE)}\n`);
   return lines.join('\n');
 }
@@ -1580,7 +1580,7 @@ function record(data, acceptance) {
  * refuses - which is why the gathering stays here and only the decision moves.
  *
  * @param {object} acceptance - The parsed acceptance map
- * @param {Array<object>} lessons - The generated catalogue
+ * @param {Array<object>} lessons - The generated catalog
  * @returns {Promise<Array<string>>} Problems
  */
 async function checkAcceptanceBindings(acceptance, lessons) {
@@ -1791,12 +1791,12 @@ async function checkAcceptance(data) {
   return problems;
 }
 
-// Two panels keep their prose in the deferred catalogue, and this tool reads
+// Two panels keep their prose in the deferred catalog, and this tool reads
 // their labels. Without waiting, every run printed eleven message ids where the
 // English and Spanish strings both exist.
 if (!(await whenWidgetsReady())) {
   console.error(
-    'The deferred message catalogue did not load, so widget labels would be ' +
+    'The deferred message catalog did not load, so widget labels would be ' +
       'reported as their own message ids. Refusing to audit against that.'
   );
   process.exit(1);
@@ -1845,7 +1845,7 @@ if (wantJson) {
     .then(JSON.parse)
     .catch(() => null);
   const wanted = `${JSON.stringify(data, null, 1)}\n`;
-  const have = await readFile(CATALOGUE, 'utf8').catch(() => null);
+  const have = await readFile(CATALOG, 'utf8').catch(() => null);
   const wantedRecord = `${record(data, acceptance)}\n`;
   const haveRecord = await readFile(RECORD, 'utf8').catch(() => null);
   const wantedProvenance = provenanceModule(acceptance);
@@ -1856,18 +1856,18 @@ if (wantJson) {
     haveProvenance !== wantedProvenance
   ) {
     console.error(
-      'The scene catalogue is out of date. Run `npm run audit:scene -- --write`.'
+      'The scene catalog is out of date. Run `npm run audit:scene -- --write`.'
     );
     process.exit(1);
   }
   const problems = await checkAcceptance(data);
   if (problems.length) {
-    console.error('The lesson acceptance map disagrees with the catalogue:\n');
+    console.error('The lesson acceptance map disagrees with the catalog:\n');
     for (const p of problems) console.error(`  ${p}`);
     process.exit(1);
   }
   console.log(
-    `Scene catalogue is current: ${data.totals.steps} steps, ` +
+    `Scene catalog is current: ${data.totals.steps} steps, ` +
       `${data.totals.completeLoops} closed prediction loops, ` +
       `${data.lessons.length} accepted experiments.`
   );
@@ -1876,7 +1876,7 @@ if (wantJson) {
     const acceptance = await readFile(ACCEPTANCE, 'utf8')
       .then(JSON.parse)
       .catch(() => null);
-    await writeFile(CATALOGUE, `${JSON.stringify(data, null, 1)}\n`);
+    await writeFile(CATALOG, `${JSON.stringify(data, null, 1)}\n`);
     await writeFile(RECORD, `${record(data, acceptance)}\n`);
     await writeFile(PROVENANCE, provenanceModule(acceptance));
   }

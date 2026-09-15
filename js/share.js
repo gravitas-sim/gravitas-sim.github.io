@@ -400,7 +400,7 @@ export function initShare() {
 
   // Pasting a link into the address bar of an already-open tab changes only
   // the fragment, which is a same-document navigation: nothing reloads and,
-  // without this, nothing at all appears to happen. That is a realistic way to
+  // without this, nothing at all appears to happen. That is a realiztic way to
   // arrive: a student with the sandbox already open pasting an assignment.
   window.addEventListener('hashchange', () => {
     if (hasSharedLink()) applySharedLinkFromUrl();

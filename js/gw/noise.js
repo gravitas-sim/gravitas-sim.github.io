@@ -1,7 +1,7 @@
 // =============================================================================
 // Synthetic detector noise
 // -----------------------------------------------------------------------------
-// Seeded, coloured, and fixed. Two properties matter more than realism:
+// Seeded, colored, and fixed. Two properties matter more than realizm:
 //
 //   the same seed gives the same noise, always. A controlled comparison that
 //   redrew its noise when a mass slider moved would be comparing two things at
@@ -62,10 +62,10 @@ function gaussianPair(rand) {
 }
 
 /**
- * A stretch of coloured Gaussian noise, in strain.
+ * A stretch of colored Gaussian noise, in strain.
  *
  * Drawn in the frequency domain, which is the only way to get a prescribed
- * spectrum exactly rather than approximately. The normalisation is fixed by
+ * spectrum exactly rather than approximately. The normalization is fixed by
  * Parseval: with the inverse transform carrying the 1/n, a bin's complex
  * amplitude has standard deviation sqrt(n fs S(f) / 4) per component, so the
  * variance of the result is the integral of S over the band.
@@ -78,7 +78,7 @@ function gaussianPair(rand) {
  * @param {number} [spec.fLow] - Below this the spectrum is zeroed, Hz
  * @returns {Float32Array} `samples` strain values
  */
-export function colouredNoise({
+export function coloredNoise({
   samples,
   sampleRate,
   seed = 'gw',

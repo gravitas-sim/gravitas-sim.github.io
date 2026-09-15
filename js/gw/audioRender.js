@@ -24,8 +24,8 @@
 //                shifted this way without a transform this application does
 //                not carry, so for real data only 'rate' is offered.
 //
-// Normalisation is the other thing that has to be said out loud. Peak
-// normalisation makes every signal equally loud, which is what you want when
+// Normalization is the other thing that has to be said out loud. Peak
+// normalization makes every signal equally loud, which is what you want when
 // comparing shapes and exactly what you must not do when the question is
 // whether a source twice as far away is quieter. Both are available; the
 // distance step of the lesson pins the fixed one.
@@ -51,7 +51,7 @@ const FADE_SECONDS = 0.02;
  * @param {number} [opts.speed] - Physical seconds played per second of audio
  * @param {'rate'|'pitch'} [opts.mode] - What `speed` does to the pitch
  * @param {number} [opts.shiftHz] - Constant frequency shift; analytic only
- * @param {'peak'|'fixed'} [opts.normalise] - How amplitude becomes loudness
+ * @param {'peak'|'fixed'} [opts.normalize] - How amplitude becomes loudness
  * @param {number} [opts.referenceStrain] - For 'fixed': the strain that maps to
  *   full scale. Holding this constant is what makes a distance comparison audible
  * @param {number} [opts.gain] - Final multiplier, 0 to 1
@@ -66,7 +66,7 @@ export function renderAudio(timeline, opts = {}) {
     speed = 1,
     mode = 'rate',
     shiftHz = 0,
-    normalise = 'peak',
+    normalize = 'peak',
     referenceStrain = null,
     gain = 0.35,
   } = opts;
@@ -132,13 +132,13 @@ export function renderAudio(timeline, opts = {}) {
     }
   }
 
-  // Normalise. Peak is measured on what was actually rendered; fixed divides
+  // Normalize. Peak is measured on what was actually rendered; fixed divides
   // by a strain the caller pins, so two renders at different distances come
   // out at different loudnesses, which is the entire point of that mode.
   let scale = 0;
   let peak = 0;
   for (let i = 0; i < written; i++) peak = Math.max(peak, Math.abs(out[i]));
-  if (normalise === 'fixed' && referenceStrain > 0) {
+  if (normalize === 'fixed' && referenceStrain > 0) {
     scale = 1 / referenceStrain;
   } else if (peak > 0) {
     scale = 1 / peak;
@@ -184,9 +184,9 @@ export function renderAudio(timeline, opts = {}) {
       /** True when playback rate changed the pitch, which the interface says. */
       pitchChanged: usableMode === 'rate' && speed !== 1,
       pitchFactor: usableMode === 'rate' ? speed : 1,
-      normalise:
-        normalise === 'fixed' && referenceStrain > 0 ? 'fixed' : 'peak',
-      referenceStrain: normalise === 'fixed' ? referenceStrain : null,
+      normalize:
+        normalize === 'fixed' && referenceStrain > 0 ? 'fixed' : 'peak',
+      referenceStrain: normalize === 'fixed' ? referenceStrain : null,
       peakStrain: peak,
       gain,
       clippedSamples: clipped,

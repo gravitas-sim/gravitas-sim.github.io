@@ -7,7 +7,7 @@
 // Seven tracks at solar metallicity with no rotation, reduced from about 7,700
 // rows of 77 columns to a few hundred rows of four. MIST computed these; this
 // project reduced them and recorded how. PROVENANCE carries the version, the
-// composition, the source URL and checksum, the citation the modellers ask for,
+// composition, the source URL and checksum, the citation the modelers ask for,
 // and the error the reduction introduced.
 //
 // These are model examples. None of them is a reconstruction of a named star.
@@ -40,7 +40,7 @@ export const PROVENANCE = {
     'Paxton et al. (2011, 2013, 2015), the MESA instrument papers',
   ],
   terms:
-    'MIST asks that the papers above be cited by any publication using the models and states no separate redistribution licence. What is bundled here is a heavily reduced derived subset for teaching, attributed in full, with the exact source and checksum recorded so the originals can be recovered. If MIST would prefer this not be redistributed, the build script reproduces it from their download in one command.',
+    'MIST asks that the papers above be cited by any publication using the models and states no separate redistribution license. What is bundled here is a heavily reduced derived subset for teaching, attributed in full, with the exact source and checksum recorded so the originals can be recovered. If MIST would prefer this not be redistributed, the build script reproduces it from their download in one command.',
   whyV12:
     'v1.2 rather than the newer v2.5 because its two describing papers are published and citable; the v2.5 references are listed as forthcoming.',
   units: {
@@ -62,7 +62,7 @@ export const PROVENANCE = {
     toleranceDex: 0.004,
     note: 'The worst error the thinning introduced is recorded per track.',
   },
-  notModelled: [
+  notModeled: [
     'Rotation, binarity, magnetic fields, and any metallicity but solar.',
     'Core collapse and everything after it: the 10 and 20 solar-mass tracks stop while the star is still a red supergiant.',
     'White-dwarf cooling beyond the first few million years, which is where MIST stops following it.',

@@ -13,7 +13,7 @@
 //
 // So they are translated here instead, by what they say rather than by where
 // they are. The engine passes every string a lesson function produced through
-// lessonText(); if the catalogue has a translation for it, that is used, and if
+// lessonText(); if the catalog has a translation for it, that is used, and if
 // it does not, the English stands. That is why this is keyed on the English:
 // the lesson files stay content-only and import nothing, and a lesson can add a
 // new message without anything breaking - it simply appears untranslated until

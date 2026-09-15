@@ -70,7 +70,7 @@ describe('they are drawings, not characters', () => {
   });
 });
 
-describe('they use the theme, not their own colours', () => {
+describe('they use the theme, not their own colors', () => {
   test.each(PICKER_TYPES)('%s draws from a class hue token', type => {
     // Black holes carry one literal: the horizon, which is black in every
     // theme because that is the whole idea.

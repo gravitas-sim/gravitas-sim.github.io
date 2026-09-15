@@ -184,7 +184,7 @@ describe('the truth stays hidden until it is asked for', () => {
   });
 
   test('the export carries the schedule the recording was taken on', () => {
-    // A fit is only reproducible if the times are. Two analyses of the same
+    // A fit is only reproducible if the times are. Two analyzes of the same
     // star with different checksums were not observed at the same instants,
     // and nothing else in the report says so.
     const r = recording();
@@ -265,10 +265,10 @@ describe('the export', () => {
   });
 
   test('the planned count is the schedule’s, not the number of rows', () => {
-    // A recording that does not declare its programme cannot have one
+    // A recording that does not declare its program cannot have one
     // invented from how many rows it happens to hold: a run stopped early has
     // fewer rows than it planned, and calling that number "planned" describes
-    // a shorter programme than the one that was run.
+    // a shorter program than the one that was run.
     loadRecording(recording({ n: 18 }));
     expect(exportReport().recording.plannedEpochs).toBeNull();
 
@@ -338,7 +338,7 @@ describe('the export', () => {
   });
 });
 
-describe('recordings that are hard to analyse', () => {
+describe('recordings that are hard to analyze', () => {
   test('missed epochs are excluded and reported, not fitted', () => {
     const r = recording({ n: 12 });
     r.points[3] = {

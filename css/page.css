@@ -194,7 +194,7 @@
     font-size: var(--text-2xs);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    /* Muted grey fails contrast at this size in every theme. */
+    /* Muted gray fails contrast at this size in every theme. */
     color: var(--text-secondary);
   }
   .doc-glance .glance-value {
@@ -582,7 +582,7 @@
     align-items: start;
   }
   /* The subtitle is body-size text, so it needs body-text contrast rather than
-     the muted grey used for labels. */
+     the muted gray used for labels. */
   .res-sub {
     color: var(--text-secondary) !important;
   }
@@ -991,7 +991,7 @@
   }
 
   /* White rather than var(--focus-ring): these dots are drawn in the accent
-     and warning colours, so the ring has to be something neither of them is. */
+     and warning colors, so the ring has to be something neither of them is. */
   .val-dot:focus-visible {
     outline: 2px solid var(--text-primary);
     outline-offset: 2px;

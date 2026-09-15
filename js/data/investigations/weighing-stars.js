@@ -55,7 +55,7 @@ const WEIGHING = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['stars', 'gravity', 'orbits'],
   lock: { placement: true, inspector: true, areaSweep: false },
@@ -155,7 +155,7 @@ const WEIGHING = {
         'Select each star in turn and check the two masses really are equal',
       ],
       probe: ctx => {
-        const b = ctx.barycentre();
+        const b = ctx.barycenter();
         if (!b) return [{ label: 'The pair', value: 'not on the canvas yet' }];
         return [
           { label: 'Star A, mass', value: `${b.arms[0]?.massSun ?? '—'} M☉` },
@@ -205,9 +205,9 @@ const WEIGHING = {
              \n\nThe cross is drawn as an instrument, not as an object: there
              is nothing there. It is a place, worked out from where the two
              stars are at this instant.`,
-      showBarycentre: true,
+      showBarycenter: true,
       probe: ctx => {
-        const b = ctx.barycentre();
+        const b = ctx.barycenter();
         if (!b) return [{ label: 'Balance point', value: 'no pair on screen' }];
         return b.arms.map(arm => ({
           label: `${arm.name} to the balance point`,
@@ -272,7 +272,7 @@ const WEIGHING = {
              masses. A star whose mass changed half way round would be on a path
              that no longer closes, and you would be watching a slow spiral
              while this lesson called it a circle.`,
-      showBarycentre: true,
+      showBarycenter: true,
       allowInspector: true,
       tool: {
         id: 'binary',
@@ -295,7 +295,7 @@ const WEIGHING = {
         'Try it the other way round, with Star B the heavy one',
       ],
       probe: ctx => {
-        const b = ctx.barycentre();
+        const b = ctx.barycenter();
         if (!b) return [{ label: 'The pair', value: 'not on the canvas' }];
         const [a, bb] = b.arms;
         const ratio = a && bb && a.r > 0 ? bb.r / a.r : null;
@@ -615,10 +615,10 @@ const WEIGHING = {
              step said: the orbit size <strong>a</strong> is the distance from
              one star <em>across to the other</em>, so it is the two added
              together - which the panel also gives you, so you can check.`,
-      showBarycentre: true,
+      showBarycenter: true,
       allowInspector: false,
       probe: ctx => {
-        const b = ctx.barycentre();
+        const b = ctx.barycenter();
         if (!b) return [{ label: 'The pair', value: 'not on the canvas' }];
         return [
           ...b.arms.map(arm => ({
@@ -657,7 +657,7 @@ const WEIGHING = {
              arm lengths, and your timing, into your notebook - and it marks the
              period as timed by you rather than taken from the model, which is
              the difference between a measurement and a prediction.`,
-      showBarycentre: true,
+      showBarycenter: true,
       tool: {
         id: 'binary',
         mystery: true,
@@ -792,9 +792,9 @@ const WEIGHING = {
              dashed lines the other way: not to add the distances up, but to
              compare them.
              \n\nWhich star stays closer to the balance point?`,
-      showBarycentre: true,
+      showBarycenter: true,
       probe: ctx => {
-        const b = ctx.barycentre();
+        const b = ctx.barycenter();
         if (!b) return [{ label: 'The pair', value: 'not on the canvas' }];
         const [a, bb] = b.arms;
         return [
@@ -1068,14 +1068,14 @@ const WEIGHING = {
       prompt:
         'In two or three sentences, explain how the separation and the period gave you the total mass, and how the two arm lengths then split that total between the stars. Name one thing about this pair that made it easier than a real one.',
       rubric:
-        'Kepler\u2019s third law in Newton\u2019s form, M_A + M_B = a\u00b3/P\u00b2 with a in AU and P in years, turns the orbit size and the period into the total mass. The balance point then divides it: each star\u2019s distance from the barycentre is inversely proportional to its mass, so M_A/M_B = r_B/r_A, and the two relations together give both masses. What made this pair easy: the orbit is seen face-on, so the measured separation is the true one; a real binary is tilted by an unknown angle and the separation you measure is a projection, which is why real work needs either the inclination or a statistical correction. Credit also for noticing the orbit is drawn with the barycentre marked, which is not something a telescope gives you.',
+        'Kepler\u2019s third law in Newton\u2019s form, M_A + M_B = a\u00b3/P\u00b2 with a in AU and P in years, turns the orbit size and the period into the total mass. The balance point then divides it: each star\u2019s distance from the barycenter is inversely proportional to its mass, so M_A/M_B = r_B/r_A, and the two relations together give both masses. What made this pair easy: the orbit is seen face-on, so the measured separation is the true one; a real binary is tilted by an unknown angle and the separation you measure is a projection, which is why real work needs either the inclination or a statistical correction. Credit also for noticing the orbit is drawn with the barycenter marked, which is not something a telescope gives you.',
     },
     {
       sid: 'what-you-can-now-say',
       stage: MYSTERY_PAIR,
       type: 'read',
       title: 'What you can now say',
-      body: `In ordinary words, with nothing memorised:
+      body: `In ordinary words, with nothing memorized:
              \n\n<strong>When two stars orbit each other, both of them move
              around a shared balance point. How big their orbit is and how long
              it takes tell us their combined mass. How far each star sits from

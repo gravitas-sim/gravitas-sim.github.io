@@ -16,7 +16,7 @@
 // are right there in the recording, in every point's `truth` field - and the
 // panel deliberately does not look at them until somebody presses Reveal. A
 // workspace that showed the truth beside the fit would turn the exercise into
-// checking, and the entire skill being practised is deciding whether a fit is
+// checking, and the entire skill being practiced is deciding whether a fit is
 // good without being told.
 //
 // It shows the whole periodogram, not its winner. The chi-square curve is
@@ -45,7 +45,7 @@ import {
 import { formatNumber } from './format.js';
 import { t } from './i18n/index.js';
 
-/** The recording being analysed, and where it came from. */
+/** The recording being analyzed, and where it came from. */
 let source = null;
 /** The parameters the student is currently trying. */
 let trial = { period: 3, K: 50, phase: 0, gamma: 0 };
@@ -117,7 +117,7 @@ export function setTrial(key, value) {
  *
  * Offered as a separate action from the period search because it is a
  * different kind of help: it says "given that you have chosen this period,
- * here is the best amplitude, phase and offset", which leaves the judgement
+ * here is the best amplitude, phase and offset", which leaves the judgment
  * that matters with the student.
  *
  * @returns {?object} The fit
@@ -264,8 +264,8 @@ export function exportReport() {
       // How many the schedule meant to take, which is not how many rows came
       // back. `source.points.length` is the number of rows the recording
       // currently holds: for a run that was stopped early, or one whose
-      // observing was suspended, that is smaller than the programme - and
-      // reporting it as "planned" describes a shorter programme than the one
+      // observing was suspended, that is smaller than the program - and
+      // reporting it as "planned" describes a shorter program than the one
       // that was run. Null when a recording is too old to say.
       plannedEpochs:
         source.plannedEpochs ?? source.config?.scheduleEpochs ?? null,
@@ -344,14 +344,14 @@ let uncertaintyFor = null;
  * When the observations happened, explicitly and in their own units.
  *
  * The acquisition time of a recording, which is not the simulation clock at
- * the moment somebody analysed it. Both used to reach a notebook entry as one
+ * the moment somebody analyzed it. Both used to reach a notebook entry as one
  * number, and it was the second one.
  *
  * What counts as an observation
  * -----------------------------------------------------------------------------
  * A row, not a measurement. A schedule that came due while nobody was
  * observing still writes a row - deliberately, because a file that omits it
- * says the programme was shorter than it was - and that row carries the day
+ * says the program was shorter than it was - and that row carries the day
  * the telescope was SUPPOSED to look and no velocity at all. Counting it as an
  * observation put "twelve observations" on an entry built from eight, and made
  * the span run to an epoch at which nothing was measured.
@@ -377,7 +377,7 @@ function epochSpan(points) {
   if (!attempted) return null;
 
   // Number(null) is 0, which is finite, so a missed row's absent velocity
-  // would read as a measurement of zero metres per second. Nulls are checked
+  // would read as a measurement of zero meters per second. Nulls are checked
   // for before anything is coerced; the coercion itself stays, because an
   // older recording read back from a file may carry its numbers as strings.
   const hasReading = p =>
@@ -445,11 +445,11 @@ let uncertaintyKeyFor = null;
  * @param {number} x - Screen x
  * @param {number} y - Screen y
  * @param {number} half - Half the error bar, in pixels
- * @param {string} colour - Ink
+ * @param {string} color - Ink
  * @returns {void}
  */
-function errorBar(ctx, x, y, half, colour) {
-  ctx.strokeStyle = colour;
+function errorBar(ctx, x, y, half, color) {
+  ctx.strokeStyle = color;
   ctx.lineWidth = 1;
   if (half > 0.5) {
     ctx.beginPath();
@@ -461,7 +461,7 @@ function errorBar(ctx, x, y, half, colour) {
     ctx.lineTo(x + 2.5, y + half);
     ctx.stroke();
   }
-  ctx.fillStyle = colour;
+  ctx.fillStyle = color;
   ctx.beginPath();
   ctx.arc(x, y, 2.6, 0, 2 * Math.PI);
   ctx.fill();
@@ -606,7 +606,7 @@ export function draw(canvas) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Coloured by the structure diagnostic: when the residuals have a shape,
+    // Colored by the structure diagnostic: when the residuals have a shape,
     // saying so on the plot is more useful than a number underneath it.
     const structured = a.structure && a.structure.runsRatio < 0.6;
     for (const f of a.folded) {

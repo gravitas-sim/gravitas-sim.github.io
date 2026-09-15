@@ -121,7 +121,7 @@ const times = r => {
   return `×${r.toFixed(2)}`;
 };
 
-/** A hex string from the shared temperature-to-colour policy. */
+/** A hex string from the shared temperature-to-color policy. */
 function hexForTemperature(teffK) {
   const rgb = starColor(teffK);
   const h = n => n.toString(16).padStart(2, '0');
@@ -237,7 +237,7 @@ function seedPins(state, pins) {
     // A staged star arrives already resolved, with the identity the canvas
     // gave it. A declaration is resolved here, and its identity is the
     // declaration - so two steps that declare the same star pin the same
-    // pinId and a capture taken under one is recognisable under the other.
+    // pinId and a capture taken under one is recognizable under the other.
     const model = want.model ?? resolveStarSpec(want);
     if (!model) continue;
     pinModel(state, model, {
@@ -443,7 +443,7 @@ function drawDiagram(g, r, state, colors, opts = {}) {
   g.rect(plot.x, plot.y, plot.w, plot.h);
   g.clip();
 
-  // Approximate regions, as soft blocks. Never labelled as boundaries.
+  // Approximate regions, as soft blocks. Never labeled as boundaries.
   if (state.regions) {
     for (const region of hrRegions()) {
       g.beginPath();
@@ -517,8 +517,8 @@ function drawDiagram(g, r, state, colors, opts = {}) {
     g.stroke();
   }
 
-  // The selection, in its own colour, with a crosshair so it is findable on a
-  // busy plot and legible without relying on the colour.
+  // The selection, in its own color, with a crosshair so it is findable on a
+  // busy plot and legible without relying on the color.
   const sel = selection(state);
   if (Number.isFinite(sel.teffK)) {
     const x = P.x(sel.teffK);
@@ -701,7 +701,7 @@ let lastPlot = null;
  *
  * @param {CanvasRenderingContext2D} g - The context, already styled
  * @param {string} text - The caption
- * @param {number} x - Left edge, or centre when the context is centred
+ * @param {number} x - Left edge, or center when the context is centerd
  * @param {number} top - Top of the first line
  * @param {number} maxWidth - The width to break to
  * @param {number} lineHeight - Baseline spacing
@@ -758,7 +758,7 @@ function showcase(models, n) {
 /**
  * The selected star, drawn to fill its box, with the exposure stated.
  *
- * The disc is scaled to the box and the colour is the star's own. Its
+ * The disc is scaled to the box and the color is the star's own. Its
  * brightness on screen is a display choice and carries no information: a star
  * a hundred thousand times fainter than the Sun is drawn just as brightly,
  * because otherwise it would be invisible. The caption says so.
@@ -857,10 +857,10 @@ const TRACK_IDS = trackIds();
 // A free-cursor point is a hypothetical star, and js/lesson/starState.js keeps
 // that honest. A temperature and a luminosity fix a radius; they fix nothing
 // about mass, age or remaining lifetime, so none of those is written, and any
-// left over from a modelled selection is taken back rather than left to be
+// left over from a modeled selection is taken back rather than left to be
 // read as though somebody had computed it.
 
-/** The catalogue the nearest-track lookup needs, built once. */
+/** The catalog the nearest-track lookup needs, built once. */
 const TRACK_MASSES = TRACK_IDS.map(id => ({
   id,
   initialMassSun: trackBounds(id)?.initialMassSun ?? NaN,
@@ -919,7 +919,7 @@ function syncBoundStar(state, ctx, spec = {}) {
   // *drawn* size is a fourth number that has to be derived from the radius
   // and the stage's current scale. Writing the fields directly left it alone:
   // a reader dragging the cursor from the Sun to a thirty-thousand-kelvin,
-  // thousand-luminosity star watched the numbers change, watched the colour
+  // thousand-luminosity star watched the numbers change, watched the color
   // change, and watched a disc that stayed exactly the same size - on a
   // screen whose entire subject is that temperature and luminosity fix a
   // radius.
@@ -937,7 +937,7 @@ function syncBoundStar(state, ctx, spec = {}) {
  * reader is looking at it rather than editing it. It fires once per selection,
  * so the controls stay usable afterwards - a reader who selects a star and
  * then drags the age slider is exploring from where that star is, which is the
- * useful behaviour and not a fight with the selection.
+ * useful behavior and not a fight with the selection.
  *
  * @param {object} state - The lab
  * @param {object} ctx - The lesson context
@@ -977,7 +977,7 @@ function followSelectedStar(state, ctx, spec = {}) {
   if (track && Number.isFinite(point.ageYr)) {
     adoptModel(state, { trackId: track, ageYr: point.ageYr });
   }
-  // A star with no age is a point nobody modelled. In model mode there is
+  // A star with no age is a point nobody modeled. In model mode there is
   // nowhere honest to put the cursor for it, so the cursor stays where it is
   // and the mark on the diagram is the whole answer.
   return star;
@@ -1617,7 +1617,7 @@ const STELLAR_COMPARE = {
         !star.isSun && star.pinId === focusId ? colors.good : colors.muted;
       g.textAlign = 'center';
       g.textBaseline = 'top';
-      // A step can ask for the stars to be unlabelled: the opening prediction
+      // A step can ask for the stars to be unlabeled: the opening prediction
       // shows three of them and asks which is hottest before any number is on
       // screen to read it off.
       //
@@ -1865,9 +1865,9 @@ function capturePopulation(state, v, ctx) {
   snap.population = {
     seed: survey.seed,
     requested: survey.requested,
-    modelled: survey.stars.length,
+    modeled: survey.stars.length,
     excludedEvolved: survey.excludedEvolved,
-    excludedUnmodelled: survey.excludedUnmodelled,
+    excludedUnmodeled: survey.excludedUnmodeled,
     distancePc: bright.distancePc,
     thresholdFlux: bright.thresholdFlux,
     selected: bright.kept,
@@ -2101,7 +2101,7 @@ const STELLAR_POPULATION = {
     }
     // Four different populations, named apart. They are routinely conflated
     // and the conflation is the misconception these screens exist to break:
-    // four hundred stars were drawn, fewer were modelled, fewer still pass the
+    // four hundred stars were drawn, fewer were modeled, fewer still pass the
     // cut, and what stands on the canvas is a bounded sample of those. A
     // reader who reads any one of those numbers as another has drawn the
     // wrong conclusion from the right picture.
@@ -2134,7 +2134,7 @@ const STELLAR_POPULATION = {
         value: t('stelW.pop.value.onCanvas', {
           shown: scene.shown,
           subsample: scene.subsample,
-          modelled: population.stars.length,
+          modeled: population.stars.length,
           requested: population.requested,
         }),
         emphasis: true,

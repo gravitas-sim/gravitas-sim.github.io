@@ -130,7 +130,7 @@ describe('the sequence the deploy job runs', () => {
     );
   });
 
-  test('the four artefacts name one commit between them', () => {
+  test('the four artifacts name one commit between them', () => {
     const rev = JSON.parse(
       readFileSync(path.join(result.out, 'deployed-revision.json'), 'utf8')
     );
@@ -163,7 +163,7 @@ describe('and it fails when it should', () => {
   test('an unexpected modification to the tree is refused', () => {
     // The guard, exercised. A file that is not on the allowed list differing
     // from the commit has to stop the publish - this is what a regenerated
-    // instructor bundle or a stray build artefact looks like from here.
+    // instructor bundle or a stray build artifact looks like from here.
     const dir = mkdtempSync(path.join(tmpdir(), 'gravitas-dirty-'));
     try {
       const pristine = path.join(dir, 'pristine');

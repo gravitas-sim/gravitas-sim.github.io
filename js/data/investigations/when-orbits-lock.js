@@ -118,7 +118,7 @@ const WHEN_ORBITS_LOCK = {
   duration: '55-70 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'resonance', 'solar-system'],
   summary:
@@ -127,7 +127,7 @@ const WHEN_ORBITS_LOCK = {
     'Measure orbital periods and period ratios from the orbits themselves, and find the nearest small-integer ratio to each',
     'Explain why a near-rational period ratio is weak evidence, using a case where the closest ratio in the system belongs to a body in no resonance',
     'Build a resonant angle from mean longitudes and longitudes of periapsis, and say why the combination is chosen so the coefficients sum to zero',
-    'Tell libration from circulation, and recognise the records that cannot distinguish them',
+    'Tell libration from circulation, and recognize the records that cannot distinguish them',
     'Use the libration of the Laplace argument and of Pluto’s 3:2 argument to explain what each resonance protects',
     'Distinguish a stable equilibrium from an unstable one at Jupiter’s Lagrange points, working in the rotating frame',
   ],
@@ -320,7 +320,7 @@ const WHEN_ORBITS_LOCK = {
       ],
       answer: 1,
       because: `The second. Callisto's ratio really is 0.03% from 7:3 — that is
-                a real measurement of a real system, not an artefact — and
+                a real measurement of a real system, not an artifact — and
                 Callisto really is not resonant. Any rule that would have
                 declared it resonant is a rule that gives wrong answers.
 
@@ -554,9 +554,9 @@ const WHEN_ORBITS_LOCK = {
         'Start the run and note the first verdict',
         'Note when it changes to "turned back once"',
         'Wait for the libration verdict',
-        'Read the centre, the amplitude and the libration period',
+        'Read the center, the amplitude and the libration period',
       ],
-      rubric: `Expect a libration centred within a degree or two of 180° with an
+      rubric: `Expect a libration centerd within a degree or two of 180° with an
                amplitude near 26°, and a libration period near 1,200 Io orbits —
                about 2,100 days. Full credit requires reporting all three
                <em>and</em> noticing that the instrument declined to give an
@@ -611,8 +611,8 @@ const WHEN_ORBITS_LOCK = {
              about three and a half minutes from the start.`,
       fields: [
         {
-          id: 'centre',
-          label: 'libration centre',
+          id: 'center',
+          label: 'libration center',
           unit: 'degrees',
           hint: '180',
         },
@@ -630,13 +630,13 @@ const WHEN_ORBITS_LOCK = {
         },
       ],
       validate: v => {
-        if (!Number.isFinite(v.centre)) return null;
-        const off = Math.abs(((((v.centre - 180) % 360) + 540) % 360) - 180);
+        if (!Number.isFinite(v.center)) return null;
+        const off = Math.abs(((((v.center - 180) % 360) + 540) % 360) - 180);
         if (off > 20) {
           return {
             level: 'warn',
             message:
-              'The centre should be within a few degrees of 180. A value near 0 usually means the angle was read with a sign reversed.',
+              'The center should be within a few degrees of 180. A value near 0 usually means the angle was read with a sign reversed.',
           };
         }
         if (Number.isFinite(v.amplitude) && v.amplitude > 180) {
@@ -656,7 +656,7 @@ const WHEN_ORBITS_LOCK = {
         return {
           level: 'ok',
           message:
-            'That is what this model gives, and it is worth comparing with the real thing: the observed Laplace libration period is 2,071 days. The amplitude is not comparable — the real one is 0.064°, because the real moons sit far closer to the exact centre of the resonance than these starting conditions do.',
+            'That is what this model gives, and it is worth comparing with the real thing: the observed Laplace libration period is 2,071 days. The amplitude is not comparable — the real one is 0.064°, because the real moons sit far closer to the exact center of the resonance than these starting conditions do.',
         };
       },
     },
@@ -711,7 +711,7 @@ const WHEN_ORBITS_LOCK = {
       prompt: 'The Laplace argument in the changed system will…',
       options: [
         'librate about 180° with a slightly larger amplitude',
-        'librate about a different centre',
+        'librate about a different center',
         'circulate — go all the way round, over and over',
         'be unchanged, because one percent is a small change',
       ],
@@ -773,7 +773,7 @@ const WHEN_ORBITS_LOCK = {
       ],
       answer: 0,
       because: `The first. A single librating angle could in principle be an
-                artefact — of the integrator, of the way the angle was defined,
+                artifact — of the integrator, of the way the angle was defined,
                 of the plotting. The control rules that out: the same
                 instrument, the same integrator, the same angle definition, the
                 same starting geometry, and one number different, and it
@@ -822,7 +822,7 @@ const WHEN_ORBITS_LOCK = {
         'Read the bound it gives on any circulation',
         'Note the amplitude, and whether the instrument calls it a bound',
       ],
-      rubric: `Expect the verdict to move from "confined" through "the centre is
+      rubric: `Expect the verdict to move from "confined" through "the center is
                moving" or "it has turned back once", and never to reach
                LIBRATION. Full credit for reporting the sequence rather than the
                endpoint, and for noticing that the reported amplitude keeps
@@ -856,7 +856,7 @@ const WHEN_ORBITS_LOCK = {
       because: `The second, and the growing amplitude is the specific evidence.
                 A libration returns to the same extremes: its maxima are all at
                 about the same value, run after run. Callisto's each exceeded
-                the last, so the centre was moving, and an angle whose centre
+                the last, so the center was moving, and an angle whose center
                 moves is on its way round.
 
                 \n\nThe fourth option is tempting and slightly wrong. The run
@@ -923,7 +923,7 @@ const WHEN_ORBITS_LOCK = {
              instrument fitted shaded behind it.`,
       checklist: [
         'Run for about ninety seconds',
-        'Read the verdict, the centre and the amplitude',
+        'Read the verdict, the center and the amplitude',
         'Read the libration period in years',
         'Watch the third body — the Unbound Wanderer — on the main view',
       ],
@@ -943,8 +943,8 @@ const WHEN_ORBITS_LOCK = {
       body: `Read these off the instrument.`,
       fields: [
         {
-          id: 'plutoCentre',
-          label: 'libration centre',
+          id: 'plutoCenter',
+          label: 'libration center',
           unit: 'degrees',
           hint: '180',
         },
@@ -962,15 +962,15 @@ const WHEN_ORBITS_LOCK = {
         },
       ],
       validate: v => {
-        if (!Number.isFinite(v.plutoCentre)) return null;
+        if (!Number.isFinite(v.plutoCenter)) return null;
         const off = Math.abs(
-          ((((v.plutoCentre - 180) % 360) + 540) % 360) - 180
+          ((((v.plutoCenter - 180) % 360) + 540) % 360) - 180
         );
         if (off > 15) {
           return {
             level: 'warn',
             message:
-              'The centre should be close to 180°. A centre near 0 would mean conjunctions at Pluto’s perihelion, which is the opposite of what protects it.',
+              'The center should be close to 180°. A center near 0 would mean conjunctions at Pluto’s perihelion, which is the opposite of what protects it.',
           };
         }
         if (
@@ -1141,7 +1141,7 @@ const WHEN_ORBITS_LOCK = {
       checklist: [
         'Identify all four bodies in the rotating frame',
         'Read the verdict for each',
-        'Note the centre and amplitude for Patroclus',
+        'Note the center and amplitude for Patroclus',
         'Note how far the L3 probe travels',
       ],
       rubric: `Expect: the L4 probe reported as an equilibrium with an amplitude
@@ -1168,8 +1168,8 @@ const WHEN_ORBITS_LOCK = {
              mass — which works out at 12.47 Jupiter years.`,
       fields: [
         {
-          id: 'tadpoleCentre',
-          label: 'libration centre, measured from Jupiter',
+          id: 'tadpoleCenter',
+          label: 'libration center, measured from Jupiter',
           unit: 'degrees',
           hint: '296',
         },
@@ -1187,22 +1187,22 @@ const WHEN_ORBITS_LOCK = {
         },
       ],
       validate: v => {
-        if (!Number.isFinite(v.tadpoleCentre)) return null;
-        const c = ((v.tadpoleCentre % 360) + 360) % 360;
+        if (!Number.isFinite(v.tadpoleCenter)) return null;
+        const c = ((v.tadpoleCenter % 360) + 360) % 360;
         const fromL5 = Math.abs(c - 300);
         const fromL4 = Math.abs(c - 60);
         if (fromL4 < 20) {
           return {
             level: 'warn',
             message:
-              'That is L4, the leading point. Patroclus is in the trailing camp, so its centre should be near −60°, which the instrument reports as about 296°.',
+              'That is L4, the leading point. Patroclus is in the trailing camp, so its center should be near −60°, which the instrument reports as about 296°.',
           };
         }
         if (fromL5 > 25) {
           return {
             level: 'warn',
             message:
-              'Expected a centre near 296° — that is 60° behind Jupiter, which is L5.',
+              'Expected a center near 296° — that is 60° behind Jupiter, which is L5.',
           };
         }
         if (

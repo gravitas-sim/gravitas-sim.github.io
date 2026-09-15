@@ -14,7 +14,7 @@ import { test, expect } from './fixtures.js';
 /**
  * The one eccentric pair the crossing tests use.
  *
- * Named bodies from a catalogue scenario, rather than whatever the panel
+ * Named bodies from a catalog scenario, rather than whatever the panel
  * happens to preselect. This file used to ask for a scenario key that does not
  * exist: `preset_scenario` accepted it, the builder fell back to a generated
  * world, and the tests then armed against two random bodies. They passed for

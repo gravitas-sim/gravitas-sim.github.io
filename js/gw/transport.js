@@ -8,7 +8,7 @@
 // chirp and you heard the chirp from the beginning, which is not what the
 // screen was showing and not what the step asked the reader to hear.
 //
-// What synchronisation can honestly mean here
+// What synchronization can honestly mean here
 // -----------------------------------------------------------------------------
 // Not a shared rate. The visual playhead advances at the preset's own
 // playbackSpeed, chosen so a reader can watch an inspiral; the audio compresses

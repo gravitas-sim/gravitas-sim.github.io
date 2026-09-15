@@ -55,10 +55,10 @@ lesson it answers. See [Instructor resources](#instructor-resources).
 **A showcase page for instructors** at
 [/teaching/](https://gravitas-sim.online/teaching/): the predict-test-measure-
 revise-explain cycle the investigations are built on, how a student gets from a
-prediction to a submitted report, what each instrument is for, five realistic
+prediction to a submitted report, what each instrument is for, five realiztic
 course-use patterns, and six demonstrations that open a real reproducible state
 as an embedded figure. Public, indexed, and in English and Spanish; every count
-on it is read from the catalogue and the validation results when it loads.
+on it is read from the catalog and the validation results when it loads.
 
 **A public account of the model** at
 [/model/](https://gravitas-sim.online/model/): what the simulation calculates,
@@ -82,7 +82,7 @@ against their published sources. Every tolerance carries a written reason. See
 [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md).
 
 **Instruments in the sandbox.** A draggable ruler that reads distances in AU and
-kilometres, a protractor, and a stopwatch that runs on simulated time and can be
+kilometers, a protractor, and a stopwatch that runs on simulated time and can be
 latched to a body's periapsis passages so a period is timed from closest approach
 rather than by reaction time. A scale bar and an elapsed-time readout are always
 on the canvas. All of it is painted onto the simulation canvas rather than into
@@ -94,7 +94,7 @@ same three facts in every frame, a visible recording indicator, and a hard stop
 at three minutes or 80 MB so a long take cannot exhaust the tab.
 
 **Force and acceleration arrows.** For the selected body, its velocity, its total
-acceleration, and one arrow per gravitational source acting on it, in colours
+acceleration, and one arrow per gravitational source acting on it, in colors
 that cannot be mistaken for each other — plus an optional gravitational
 potential-well underlay for the whole scene. The arrows come from the
 acceleration the integrator actually used, not from a second calculation of it.
@@ -110,7 +110,7 @@ the evidence exports; the on-screen **Conservation check** that displays them
 is off by default and turned on under Settings → Numerical accuracy, because
 three bare percentages in the corner of a first visit were read as a fault
 report by people who had not asked for one. Each scheme's convergence order and its bounded-versus-secular energy
-behaviour are measured in the validation suite rather than asserted.
+behavior are measured in the validation suite rather than asserted.
 
 **Three observing panels, one observer.** A transit light curve, a radial-velocity
 curve and an astrometric track, each plotted from the simulation as it runs, and
@@ -159,7 +159,7 @@ every body beside the curve the visible mass alone would produce. Switch the hal
 on and a falling curve flattens. See [`DARK_MATTER.md`](DARK_MATTER.md).
 
 **Tides.** Tidal stress computed as the difference between the pull on a body's
-near side and the pull on its centre, with the Roche limit drawn where that
+near side and the pull on its center, with the Roche limit drawn where that
 difference overcomes the body's own gravity — which is what tears a star apart in
 the Tidal Disruption Event scenario.
 
@@ -242,7 +242,7 @@ typed.
 ```bash
 npm run perf                # frame-time profile across representative scenarios
 npm run validate:scenarios  # conservation-law audit of the shipped scenarios
-node tools/small-body-sweep.mjs   # asteroid/comet behaviour across every
+node tools/small-body-sweep.mjs   # asteroid/comet behavior across every
                             #   scenario that has them, before-and-after diffable
 npm run validate:links      # every internal link and anchor resolves
 npm run thumbnails          # regenerate every scenario thumbnail
@@ -462,7 +462,7 @@ part was built:
 | [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md)                   | Every validated claim, its tolerance, and the reason for that tolerance                                                                        |
 | [`SANDBOX_INSTRUMENTS.md`](SANDBOX_INSTRUMENTS.md)                 | Ruler, protractor, stopwatch, the always-on scale bar, screenshots and clip recording                                                          |
 | [`AB_EXPERIMENT_BENCH.md`](AB_EXPERIMENT_BENCH.md)                 | Controlled A/B experiments: the canonical captured state, why runs are sequential, alignment, storage and export                               |
-| [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artefact |
+| [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artifact |
 | [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md)         | The resonance investigation: the resonant angles, the three verdicts and why one of them is a refusal, the four scenarios and their measured values |
 | [`EXOPLANET_OBSERVING.md`](EXOPLANET_OBSERVING.md)                 | The transit, radial-velocity and astrometry panels and the shared observer                                                                     |
 | [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                                                                                |
@@ -475,7 +475,7 @@ part was built:
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the
-application, and are labelled as such at the top:
+application, and are labeled as such at the top:
 [`UI_PERFORMANCE_AUDIT.md`](UI_PERFORMANCE_AUDIT.md),
 [`PERFORMANCE_OPTIMIZATIONS_SUMMARY.md`](PERFORMANCE_OPTIMIZATIONS_SUMMARY.md)
 and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
@@ -513,7 +513,7 @@ GitHub sidebar.
 
 ---
 
-## Acknowledgement
+## Acknowledgment
 
 Gravitas began as a SURE project at Stephen F. Austin State University and was
 funded by the SFA COSM.

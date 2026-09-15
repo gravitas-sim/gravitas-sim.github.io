@@ -141,7 +141,7 @@ async function loadResonanceScenario(page, app, key) {
           out[body.name] = {
             state: v.state,
             reason: v.reason,
-            centre: v.centre,
+            center: v.center,
             amplitude: v.amplitude,
             span: v.span,
             cycles: v.observedCycles,
@@ -186,7 +186,7 @@ async function waitForVerdict(page, states, timeout) {
     return {
       state: v.state,
       reason: v.reason,
-      centre: v.centre,
+      center: v.center,
       amplitude: v.amplitude,
       period: v.period,
       turns: v.turns.length,
@@ -242,7 +242,7 @@ test.describe('the resonance scenarios', () => {
     await app.boot();
     // The Laplace libration amplitude reported by symplectic Euler at a step
     // of 2 is a third of the converged value, so these two settings are the
-    // difference between a measurement and an artefact.
+    // difference between a measurement and an artifact.
     for (const key of [
       'Galilean Resonance',
       'Pluto and Neptune',
@@ -306,7 +306,7 @@ test.describe('the instruments against a live world', () => {
     );
     const tadpole = await waitForVerdict(page, ['libration'], 300_000);
     expect(tadpole.state).toBe('libration');
-    expect(Math.abs(((tadpole.centre - 300 + 540) % 360) - 180)).toBeLessThan(
+    expect(Math.abs(((tadpole.center - 300 + 540) % 360) - 180)).toBeLessThan(
       15
     );
     expect(tadpole.amplitude).toBeGreaterThan(10);
@@ -356,7 +356,7 @@ test.describe('the instruments against a live world', () => {
     expect(v.state).toBe('libration');
     // 180 degrees is the statement that every conjunction happens at Pluto's
     // aphelion, which is the whole protection mechanism.
-    expect(Math.abs(((v.centre - 180 + 540) % 360) - 180)).toBeLessThan(12);
+    expect(Math.abs(((v.center - 180 + 540) % 360) - 180)).toBeLessThan(12);
     expect(v.amplitude).toBeGreaterThan(60);
     expect(v.amplitude).toBeLessThan(100);
 

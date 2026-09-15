@@ -10,12 +10,12 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { fft, isPowerOfTwo, nextPowerOfTwo } from '../js/gw/fft.js';
-import { aligoPsd, aligoAsd, colouredNoise } from '../js/gw/noise.js';
+import { aligoPsd, aligoAsd, coloredNoise } from '../js/gw/noise.js';
 import { similarity, whiten, tukey, sampleOnto } from '../js/gw/match.js';
 import { modelTimeline } from '../js/gw/timeline.js';
 
 describe('the transform', () => {
-  test('recognises the lengths it can handle', () => {
+  test('recognizes the lengths it can handle', () => {
     expect(isPowerOfTwo(1024)).toBe(true);
     expect(isPowerOfTwo(1000)).toBe(false);
     expect(isPowerOfTwo(0)).toBe(false);
@@ -128,7 +128,7 @@ describe('synthetic noise', () => {
 
   test('has the variance the spectrum says it should', () => {
     // Parseval, computed from the PSD by an independent numerical integral.
-    const x = colouredNoise({ samples: n, sampleRate: fs, seed: 'variance' });
+    const x = coloredNoise({ samples: n, sampleRate: fs, seed: 'variance' });
     let sum = 0;
     for (const v of x) sum += v * v;
     const rms = Math.sqrt(sum / n);
@@ -138,12 +138,12 @@ describe('synthetic noise', () => {
   });
 
   test('is real: no residual imaginary part leaking through', () => {
-    const x = colouredNoise({ samples: 1024, sampleRate: 2048, seed: 'real' });
+    const x = coloredNoise({ samples: 1024, sampleRate: 2048, seed: 'real' });
     for (const v of x) expect(Number.isFinite(v)).toBe(true);
   });
 
   test('has zero mean to within the sampling error', () => {
-    const x = colouredNoise({ samples: n, sampleRate: fs, seed: 'mean' });
+    const x = coloredNoise({ samples: n, sampleRate: fs, seed: 'mean' });
     let sum = 0;
     for (const v of x) sum += v;
     let sq = 0;
@@ -153,14 +153,14 @@ describe('synthetic noise', () => {
   });
 
   test('the same seed gives the same realization, every time', () => {
-    const a = colouredNoise({ samples: 2048, sampleRate: fs, seed: 'fixed' });
-    const b = colouredNoise({ samples: 2048, sampleRate: fs, seed: 'fixed' });
+    const a = coloredNoise({ samples: 2048, sampleRate: fs, seed: 'fixed' });
+    const b = coloredNoise({ samples: 2048, sampleRate: fs, seed: 'fixed' });
     expect(Array.from(a)).toEqual(Array.from(b));
   });
 
   test('a different seed gives a different one', () => {
-    const a = colouredNoise({ samples: 2048, sampleRate: fs, seed: 'one' });
-    const b = colouredNoise({ samples: 2048, sampleRate: fs, seed: 'two' });
+    const a = coloredNoise({ samples: 2048, sampleRate: fs, seed: 'one' });
+    const b = coloredNoise({ samples: 2048, sampleRate: fs, seed: 'two' });
     let identical = 0;
     for (let i = 0; i < 2048; i++) if (a[i] === b[i]) identical++;
     expect(identical).toBeLessThan(10);
@@ -170,13 +170,13 @@ describe('synthetic noise', () => {
     // Both round up to the same power of two, so both must be identical over
     // the shorter one. A student who shortens a window must not find that the
     // noise underneath the signal has been redrawn.
-    const short = colouredNoise({ samples: 1000, sampleRate: fs, seed: 'len' });
-    const long = colouredNoise({ samples: 1024, sampleRate: fs, seed: 'len' });
+    const short = coloredNoise({ samples: 1000, sampleRate: fs, seed: 'len' });
+    const long = coloredNoise({ samples: 1024, sampleRate: fs, seed: 'len' });
     for (let i = 0; i < 1000; i++) expect(short[i]).toBeCloseTo(long[i], 30);
   });
 
   test('carries no power below the low-frequency cut', () => {
-    const x = colouredNoise({
+    const x = coloredNoise({
       samples: 4096,
       sampleRate: fs,
       seed: 'cut',
@@ -218,10 +218,10 @@ describe('the taper', () => {
 });
 
 describe('whitening', () => {
-  test('flattens coloured noise towards unit variance per bin', () => {
+  test('flattens colored noise towards unit variance per bin', () => {
     const fs = 2048;
     const n = 4096;
-    const x = colouredNoise({ samples: n, sampleRate: fs, seed: 'white' });
+    const x = coloredNoise({ samples: n, sampleRate: fs, seed: 'white' });
     const w = whiten(x, { sampleRate: fs, fLow: 30, fHigh: 400 });
     // The ratio of power in two bands of equal width must be near one after
     // whitening, where before it differs by more than an order of magnitude.
@@ -309,7 +309,7 @@ describe('similarity is a match, and only a match', () => {
   });
 
   test('is small against noise, but not zero, which is the lesson', () => {
-    const noise = colouredNoise({
+    const noise = coloredNoise({
       samples: 2048,
       sampleRate: fs,
       seed: 'match',
@@ -330,7 +330,7 @@ describe('similarity is a match, and only a match', () => {
   });
 
   test('never exceeds one, whatever it is handed', () => {
-    const noise = colouredNoise({ samples: 2048, sampleRate: fs, seed: 'cap' });
+    const noise = coloredNoise({ samples: 2048, sampleRate: fs, seed: 'cap' });
     for (const other of [
       signal,
       Float64Array.from(noise),

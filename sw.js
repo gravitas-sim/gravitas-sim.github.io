@@ -91,7 +91,7 @@ async function addAllTolerant(cache, urls) {
   let added = 0;
   const failed = [];
   // Batched rather than all at once: 188 parallel requests on a school
-  // connection is how a browser starts cancelling them.
+  // connection is how a browser starts canceling them.
   const BATCH = 12;
   for (let i = 0; i < urls.length; i += BATCH) {
     const slice = urls.slice(i, i + BATCH);

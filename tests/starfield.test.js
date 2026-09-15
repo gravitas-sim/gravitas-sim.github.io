@@ -10,7 +10,7 @@
 // pre-rendered layers instead of ten thousand fills - and is measured by
 // tools/starfield-probe.mjs rather than asserted here. What this file holds is
 // the model: the same seed gives the same sky, the brightness distribution is
-// the shape of a real field rather than a uniform scatter, the colours stay
+// the shape of a real field rather than a uniform scatter, the colors stay
 // restrained, and the count follows the viewport.
 // =============================================================================
 
@@ -69,7 +69,7 @@ describe('the same seed gives the same sky', () => {
         'y',
         'size',
         'alpha',
-        'colour',
+        'color',
         'phase',
         'layer',
       ]) {
@@ -141,7 +141,7 @@ describe('it is distributed like a sky', () => {
   });
 });
 
-describe('the colours stay restrained', () => {
+describe('the colors stay restrained', () => {
   test('the palette is short and physically plausible', () => {
     expect(STAR_PALETTE.length).toBeLessThanOrEqual(8);
     for (const c of STAR_PALETTE) {
@@ -158,14 +158,14 @@ describe('the colours stay restrained', () => {
 
   test('most of the sky is within a few percent of white', () => {
     const stars = allStars(field());
-    const neutral = stars.filter(s => s.colour <= 1).length / stars.length;
+    const neutral = stars.filter(s => s.color <= 1).length / stars.length;
     // Otherwise the background is confetti rather than a sky.
     expect(neutral).toBeGreaterThan(0.7);
   });
 
-  test('the visibly coloured ones are rare but present', () => {
+  test('the visibly colored ones are rare but present', () => {
     const stars = allStars(field());
-    const tinted = stars.filter(s => s.colour >= 2).length / stars.length;
+    const tinted = stars.filter(s => s.color >= 2).length / stars.length;
     expect(tinted).toBeGreaterThan(0.05);
     expect(tinted).toBeLessThan(0.3);
   });
@@ -210,7 +210,7 @@ describe('the count follows the viewport and the tier', () => {
     }
   });
 
-  test('the field honours an explicit count, for tests and for the probe', () => {
+  test('the field honors an explicit count, for tests and for the probe', () => {
     expect(field({ count: 500 }).count).toBe(500);
   });
 });

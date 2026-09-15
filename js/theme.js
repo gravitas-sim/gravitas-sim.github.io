@@ -14,7 +14,7 @@ const STORAGE_KEY = 'gravitas_theme';
  * The themes, in the order the picker lists them.
  *
  * Ids only. The names and the one-line descriptions are user-facing text and
- * live in the message catalogue with the rest of it; themeLabel() and
+ * live in the message catalog with the rest of it; themeLabel() and
  * themeHint() below read them back, so a Spanish reader gets "Luz de día"
  * without this registry knowing that Spanish exists.
  */
@@ -124,7 +124,7 @@ export function initTheme() {
     return;
   }
   // Deliberately not following prefers-color-scheme: this is a dark-first
-  // visualisation and a light chrome around a black starfield reads as broken.
+  // visualization and a light chrome around a black starfield reads as broken.
   // Daylight stays available as an explicit choice for bright rooms.
   setTheme('midnight');
 }

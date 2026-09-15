@@ -533,7 +533,7 @@ function renderControls(exp) {
     row.textContent = t('bench.control.row', {
       label: c.label,
       tau: Number.isFinite(c.tau) ? c.tau.toFixed(1) : '—',
-      behaviour: c.behaviour,
+      behavior: c.behavior,
     });
     wrap.appendChild(row);
   }
@@ -569,7 +569,7 @@ function renderControls(exp) {
 /** Set while the pair or a control is running. */
 let chaosRunning = false;
 /** Asked to stop. */
-let chaosCancelled = false;
+let chaosCanceled = false;
 /** The last pair, as the lesson reports it. */
 let chaosPairResult = null;
 /**
@@ -596,7 +596,7 @@ export const startChaosPair = opts => runChaosPair(opts);
 
 /** Ask a run in progress to stop after the arm it is on. */
 export function cancelChaosPair() {
-  if (chaosRunning) chaosCancelled = true;
+  if (chaosRunning) chaosCanceled = true;
 }
 
 /** @returns {?object} Which configuration this scenario is, if any */
@@ -648,7 +648,7 @@ async function runChaosArm({ label, span, perturb }) {
   }
   await new Promise(resolve => {
     const tick = () => {
-      if (chaosCancelled) return resolve();
+      if (chaosCanceled) return resolve();
       if (getSimClock() - startClock >= span) return resolve();
       requestAnimationFrame(tick);
     };
@@ -706,7 +706,7 @@ async function runChaosPair(opts = {}) {
   const nudge = opts.nudge !== false;
 
   chaosRunning = true;
-  chaosCancelled = false;
+  chaosCanceled = false;
   for (const id of [
     'benchChaosRun',
     'benchChaosSame',
@@ -763,7 +763,7 @@ async function runChaosPair(opts = {}) {
     const a = await runChaosArm({ label: 'A', span, perturb: null });
 
     let b = null;
-    if (!chaosCancelled) {
+    if (!chaosCanceled) {
       if (status) status.textContent = t('bench.chaos.running', { arm: 'B' });
       // The reproducibility control changes nothing at all, which is the one
       // case where "what changed between the runs" should have nothing in it.
@@ -779,7 +779,7 @@ async function runChaosPair(opts = {}) {
       });
     }
 
-    const { separationSeries, analyseDivergence } =
+    const { separationSeries, analyzedivergence } =
       await import('../chaos/divergence.js');
     const shape = run =>
       (run?.samples || [])
@@ -788,7 +788,7 @@ async function runChaosPair(opts = {}) {
     const runs = bench.activeExperiment()?.runs || {};
     const both = shape(runs.A).length && shape(runs.B).length;
     const verdict = both
-      ? analyseDivergence(separationSeries(shape(runs.A), shape(runs.B)).series)
+      ? analyzedivergence(separationSeries(shape(runs.A), shape(runs.B)).series)
       : null;
 
     result = {
@@ -802,13 +802,13 @@ async function runChaosPair(opts = {}) {
       perturbation: bench.activeExperiment()?.perturbation ?? null,
       diff: bench.activeExperiment()?.diff ?? null,
       verdict,
-      cancelled: chaosCancelled,
+      canceled: chaosCanceled,
       ranAt: new Date().toISOString(),
       control: control?.id ?? null,
     };
 
     // A control is filed beside the main result rather than replacing it, and
-    // it is labelled with the step the engine actually took.
+    // it is labeled with the step the engine actually took.
     if (control && verdict && a) {
       const baseline = chaosPairResult?.a ?? null;
       const differs = CHAOS.controlDiffers(baseline, a);
@@ -817,7 +817,7 @@ async function runChaosPair(opts = {}) {
         {
           label: CHAOS.controlLabel(a),
           tau: verdict.tau,
-          behaviour: verdict.behaviour,
+          behavior: verdict.behavior,
           differs: differs.differs,
           stepChange: differs.stepChange,
           schemeChanged: differs.schemeChanged,
@@ -1026,16 +1026,16 @@ function renderChaosPair() {
   // there is not one.
   if (r.verdict) {
     line(
-      r.verdict.behaviour === 'exponential'
+      r.verdict.behavior === 'exponential'
         ? t('bench.chaos.exponential', {
             tau: num(r.verdict.tau, 3),
             r2: num(r.verdict.r2, 3),
             from: num(r.verdict.window?.from),
             to: num(r.verdict.window?.to),
           })
-        : r.verdict.behaviour === 'insufficient'
+        : r.verdict.behavior === 'insufficient'
           ? t(`chaosW.reject.${r.verdict.reason || 'insufficient'}`)
-          : t(`chaosW.verdict.${r.verdict.behaviour}`, {
+          : t(`chaosW.verdict.${r.verdict.behavior}`, {
               tau: num(r.verdict.tau, 3),
               r2: num(r.verdict.r2, 3),
             }),
@@ -1057,7 +1057,7 @@ function renderChaosPair() {
         }),
     report.resolved ? 'experiment-note' : 'experiment-warning'
   );
-  if (r.cancelled) line(t('bench.chaos.cancelled'), 'experiment-warning');
+  if (r.canceled) line(t('bench.chaos.canceled'), 'experiment-warning');
 }
 
 function renderSweepControls() {
@@ -1162,7 +1162,7 @@ function renderSweepResults() {
   // A trial that did not measure is a row in the table, and the fact that some
   // did not is said here too: a summary of the values that ran is not a
   // summary of the range that was asked for.
-  if (sweep.counts.failed || sweep.counts.cancelled) {
+  if (sweep.counts.failed || sweep.counts.canceled) {
     add(t('sweep.partial'), 'experiment-hint');
   }
 
@@ -1220,7 +1220,7 @@ function renderSweepResults() {
       ok: sweep.counts.ok,
       total: sweep.counts.total,
       failed: sweep.counts.failed,
-      cancelled: sweep.counts.cancelled,
+      canceled: sweep.counts.canceled,
       seconds: (sweep.wallMs / 1000).toFixed(1),
     }),
     'experiment-hint'
@@ -1919,7 +1919,7 @@ function wire() {
   //
   // Each of these reads the bench and copies what it read before anything is
   // awaited. The bench's active experiment is mutable module state: recording
-  // a run, restoring the start, sweeping, cancelling a sweep or capturing a
+  // a run, restoring the start, sweeping, canceling a sweep or capturing a
   // new experiment all rewrite it, and any of those can happen between the
   // press and the notebook chunk arriving. Reading it inside the callback -
   // which runs after the load - was reading whatever the bench had become.

@@ -8,7 +8,7 @@
 //
 // What MOND is, and what it is not
 // --------------------------------
-// Milgrom (1983) proposed that below a characteristic acceleration a0 the
+// Milgrom (1983) proposed that below a characteriztic acceleration a0 the
 // relation between gravity and motion departs from Newton's. Where the
 // Newtonian field gN is strong compared with a0, nothing changes. Where it is
 // weak, the true acceleration approaches
@@ -73,7 +73,7 @@ import { G_GALACTIC, galaxyCurveAt } from './darkMatter.js';
  */
 export const A0_SI = 1.2e-10;
 
-/** Metres in a kiloparsec. */
+/** Meters in a kiloparsec. */
 const KPC_M = PARSEC_M * 1e3;
 
 /**
@@ -282,7 +282,7 @@ export function asymptoticSpeed(mass, a0, G = G_GALACTIC) {
  *
  * Takes the same model object the halo decomposition uses, but reads only its
  * visible components. The halo parameters are ignored on purpose: under MOND
- * there is no halo, and quietly adding one to a curve labelled MOND would be
+ * there is no halo, and quietly adding one to a curve labeled MOND would be
  * the single most misleading thing this file could do.
  *
  * @param {number} r - Radius, kpc
@@ -437,7 +437,7 @@ export function mondVector(ax, ay, a0, form = DEFAULT_INTERPOLATION) {
  *
  * Kept here, next to the implementation, so that a change to what the code does
  * and a change to what the project claims about it happen in the same file.
- * Each entry is an i18n key; the text lives in the catalogues.
+ * Each entry is an i18n key; the text lives in the catalogs.
  */
 export const MOND_LIMITATIONS = [
   // Rotation curves are the case MOND was built for and the case it wins. Every

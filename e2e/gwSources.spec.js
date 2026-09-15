@@ -325,7 +325,7 @@ test.describe('the ring, the arms and the amplifier', () => {
       /What an L would read/i.test(r)
     );
     expect(armRow).toBeTruthy();
-    // Both arms, the difference, and what it is in metres on four-kilometre
+    // Both arms, the difference, and what it is in meters on four-kilometer
     // arms - which is the reading a reader who cannot see the inset needs.
     const numbers = armRow.match(/-?\d+\.\d+e[+-]\d+/g) ?? [];
     expect(numbers.length).toBeGreaterThanOrEqual(4);

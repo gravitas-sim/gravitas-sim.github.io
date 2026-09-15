@@ -83,7 +83,7 @@ describe('a stage with no photosphere is not drawn as a star', () => {
     const s = cloud(0.4);
     expect(s.kind).toBe(SCENE.CLOUD);
     expect(s.hideStar).toBe(true);
-    expect(s.modelled).toBe(false);
+    expect(s.modeled).toBe(false);
     expect(s.blobs.length).toBeGreaterThan(5);
     expect(s.glow).toBeTruthy();
     // Sized against the view, not against a star that does not exist yet.
@@ -102,7 +102,7 @@ describe('a stage with no photosphere is not drawn as a star', () => {
   test('a remnant says it is a prescription rather than a track', () => {
     const s = remnant('black-hole', 'expected');
     expect(s.prescribed).toBe(true);
-    expect(s.modelled).toBe(false);
+    expect(s.modeled).toBe(false);
   });
 });
 

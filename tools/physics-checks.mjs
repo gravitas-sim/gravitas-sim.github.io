@@ -119,10 +119,10 @@ const REF = {
   // Williams & Benson (1971) AJ 76, 167. The Trojan figures are the linearised
   // restricted three-body results, Murray & Dermott chapter 3.
   laplacePeriodDays: 2071,
-  laplaceCentreDeg: 180,
+  laplaceCenterDeg: 180,
   plutoLibrationYears: 19670,
   plutoLibrationAmplitudeDeg: 82,
-  plutoCentreDeg: 180,
+  plutoCenterDeg: 180,
   plutoNeptuneMinimumAU: 17.2,
   plutoNeptunePeriodRatio: 1.5046,
   tadpolePeriodJupiterYears: 12.47,
@@ -314,8 +314,8 @@ const momentum = bodies => ({
   y: bodies.reduce((s, b) => s + b.mass * b.vel.y, 0),
 });
 
-/** Centre of mass of a set of bodies. */
-const centreOf = bodies => {
+/** Center of mass of a set of bodies. */
+const centerOf = bodies => {
   let m = 0;
   let x = 0;
   let y = 0;
@@ -1042,7 +1042,7 @@ export async function runChecks() {
   //   Symplectic Euler   first order, symplectic. Energy error bounded and
   //                      oscillating, not accumulating. The default, and the
   //                      scheme every shipped scenario was tuned against.
-  //   Velocity Verlet    second order, symplectic. Same bounded behaviour, with
+  //   Velocity Verlet    second order, symplectic. Same bounded behavior, with
   //                      a bound smaller by a factor of the timestep.
   //   RK4                fourth order, NOT symplectic. Far more accurate over a
   //                      few orbits, and losing energy steadily over many,
@@ -1083,11 +1083,11 @@ export async function runChecks() {
         const r = hypot(p.pos.x - s.pos.x, p.pos.y - s.pos.y);
         return 0.5 * (p.vel.x ** 2 + p.vel.y ** 2) - (G * M) / r;
       };
-      // The pair's angular momentum about its own centre of mass, which is the
+      // The pair's angular momentum about its own center of mass, which is the
       // quantity that is actually conserved. The tracer's angular momentum
       // about the origin is not: it pulls back on the primary hard enough to
-      // move it, and a fixed origin then drifts away from the centre of mass.
-      const angular = () => angularMomentum([s, p], centreOf([s, p]));
+      // move it, and a fixed origin then drifts away from the center of mass.
+      const angular = () => angularMomentum([s, p], centerOf([s, p]));
       const E0 = specific();
       const L0 = angular();
       let worstEnergy = 0;
@@ -1323,7 +1323,7 @@ export async function runChecks() {
       unit: 'relative',
       tolerance: 1e-8,
       toleranceKind: 'absolute',
-      why: 'The contrast that makes the two checks above mean something. RK4 mixes four stages evaluated at four different positions, so its velocity change is not along any one line joining the bodies and the torque does not cancel exactly. The error is tiny - this is a fourth-order scheme - but it is a truncation error that shrinks with the step rather than a cancellation that holds at any step, which is a different kind of claim and worth being able to point at.',
+      why: 'The contrast that makes the two checks above mean something. RK4 mixes four stages evaluated at four different positions, so its velocity change is not along any one line joining the bodies and the torque does not cancel exactly. The error is tiny - this is a fourth-order scheme - but it is a truncation error that shrinks with the step rather than a cancelation that holds at any step, which is a different kind of claim and worth being able to point at.',
     });
 
     lab.reset();
@@ -2298,16 +2298,16 @@ export async function runChecks() {
     add({
       group: 'Habitable zone',
       kind: 'analytic',
-      name: 'The optimistic zone contains the conservative one',
+      name: 'The optimiztic zone contains the conservative one',
       measured: (() => {
         const opt = habitability.habitableZoneBounds(
           { luminositySolar: 1, teffK: habitability.SUN_TEFF_K },
-          'optimistic'
+          'optimiztic'
         );
         return opt.innerAU < sunHz.innerAU && opt.outerAU > sunHz.outerAU;
       })(),
       expected: true,
-      why: 'Recent Venus is hotter than the runaway greenhouse and Early Mars is colder than the maximum greenhouse, so the optimistic edges must bracket the conservative ones. An ordering mistake in the boundary table would show up here and nowhere else.',
+      why: 'Recent Venus is hotter than the runaway greenhouse and Early Mars is colder than the maximum greenhouse, so the optimiztic edges must bracket the conservative ones. An ordering mistake in the boundary table would show up here and nowhere else.',
     });
 
     // TRAPPIST-1, the system the Goldilocks lesson is built on.
@@ -2349,7 +2349,7 @@ export async function runChecks() {
       name: "TRAPPIST-1 is flagged as outside the fit's calibrated range",
       measured: t1.extrapolated,
       expected: true,
-      why: 'The star is at 2566 K and the published fit covers 2600 to 7200 K. Reporting that honestly, rather than quoting an extrapolated quartic as a measurement, is the behaviour under test.',
+      why: 'The star is at 2566 K and the published fit covers 2600 to 7200 K. Reporting that honestly, rather than quoting an extrapolated quartic as a measurement, is the behavior under test.',
     });
 
     add({
@@ -2529,13 +2529,13 @@ export async function runChecks() {
       kind: 'analytic',
       name: 'A point mass gives a Keplerian slope of exactly -1/2',
       measured: (() => {
-        const centre = { x: 0, y: 0 };
+        const center = { x: 0, y: 0 };
         const bodies = [{ pos: { x: 0, y: 0 }, mass: 1000 }];
         const pts = [];
         for (let r = 100; r <= 1000; r += 50) {
           pts.push({
             r,
-            speed: darkMatter.keplerianSpeed(bodies, centre, r, G),
+            speed: darkMatter.keplerianSpeed(bodies, center, r, G),
           });
         }
         return darkMatter.fitPowerLaw(pts).exponent;
@@ -2551,14 +2551,14 @@ export async function runChecks() {
       kind: 'analytic',
       name: 'A dominant halo flattens the fitted slope toward zero',
       measured: (() => {
-        const centre = { x: 0, y: 0 };
+        const center = { x: 0, y: 0 };
         const bodies = [{ pos: { x: 0, y: 0 }, mass: 1 }];
         const halo = { vFlat, coreRadius: 60 };
         const pts = [];
         for (let r = 400; r <= 2000; r += 50) {
           pts.push({
             r,
-            speed: darkMatter.totalCircularSpeed(bodies, centre, r, G, halo),
+            speed: darkMatter.totalCircularSpeed(bodies, center, r, G, halo),
           });
         }
         return darkMatter.fitPowerLaw(pts).exponent;
@@ -2576,14 +2576,14 @@ export async function runChecks() {
       kind: 'analytic',
       name: 'Speeds from separate components add in quadrature',
       measured: (() => {
-        const centre = { x: 0, y: 0 };
+        const center = { x: 0, y: 0 };
         const bodies = [{ pos: { x: 0, y: 0 }, mass: 800 }];
         const halo = { vFlat, coreRadius: rc };
         const r = 500;
-        const vb = darkMatter.keplerianSpeed(bodies, centre, r, G);
+        const vb = darkMatter.keplerianSpeed(bodies, center, r, G);
         const vh = darkMatter.haloCircularSpeed(r, vFlat, rc);
         return (
-          darkMatter.totalCircularSpeed(bodies, centre, r, G, halo) /
+          darkMatter.totalCircularSpeed(bodies, center, r, G, halo) /
           Math.sqrt(vb * vb + vh * vh)
         );
       })(),
@@ -2709,7 +2709,7 @@ export async function runChecks() {
       expected: 1.17,
       unit: 'ratio to the spherical equivalent',
       tolerance: 5e-2,
-      why: 'Not a bug, and the reason the disc is done with Bessel functions rather than an enclosed mass. Material at larger radius than the orbit still pulls inward when it lies in the same plane, so a disc spins about 17% faster near its peak than a sphere holding the same mass inside the same radius. Modelling a disc as a sphere understates it by that much, and in a decomposition the shortfall lands on the halo.',
+      why: 'Not a bug, and the reason the disc is done with Bessel functions rather than an enclosed mass. Material at larger radius than the orbit still pulls inward when it lies in the same plane, so a disc spins about 17% faster near its peak than a sphere holding the same mass inside the same radius. Modeling a disc as a sphere understates it by that much, and in a decomposition the shortfall lands on the halo.',
     });
 
     add({
@@ -2980,10 +2980,10 @@ export async function runChecks() {
         gravitational_constant: 1,
         mutual_gravity: false,
       });
-      const centre = new physics.StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, M);
-      centre.isCentralBody = true;
-      centre.persistent = true;
-      physics.stars.push(centre);
+      const center = new physics.StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, M);
+      center.isCentralBody = true;
+      center.persistent = true;
+      physics.stars.push(center);
       const p = makeTracer(physics, { x: r, y: 0 }, { x: 0, y: vFlatSim });
       physics.planets.push(p);
       lab.commit();
@@ -3276,7 +3276,7 @@ export async function runChecks() {
       const before = {
         mass: hole.mass + prey.mass,
         p: momentum([hole, prey]),
-        com: centreOf([hole, prey]),
+        com: centerOf([hole, prey]),
         L: angularMomentum([hole, prey]),
       };
       const preyState = {
@@ -3302,7 +3302,7 @@ export async function runChecks() {
         after: {
           mass: hole.mass,
           p: momentum(survivors),
-          com: centreOf(survivors),
+          com: centerOf(survivors),
           L: angularMomentum(survivors),
         },
       };
@@ -3343,13 +3343,13 @@ export async function runChecks() {
       unit: 'relative',
       tolerance: 1e-12,
       toleranceKind: 'absolute',
-      why: 'This is the defect the check was written for. Absorption used to add the mass and leave the hole travelling at its old velocity, so every body eaten deposited its mass and threw its momentum away - the dominant term in the momentum drift the scenario probe reported for Star Cluster, Stellar Graveyard and Black Hole Billiards. The hole now takes the mass-weighted mean velocity, which is a perfectly inelastic collision and conserves momentum exactly.',
+      why: 'This is the defect the check was written for. Absorption used to add the mass and leave the hole traveling at its old velocity, so every body eaten deposited its mass and threw its momentum away - the dominant term in the momentum drift the scenario probe reported for Star Cluster, Stellar Graveyard and Black Hole Billiards. The hole now takes the mass-weighted mean velocity, which is a perfectly inelastic collision and conserves momentum exactly.',
     });
 
     add({
       group: 'Absorption',
       kind: 'integration',
-      name: "Absorption leaves the pair's centre of mass where it was",
+      name: "Absorption leaves the pair's center of mass where it was",
       measured: hypot(
         moving.after.com.x - moving.before.com.x,
         moving.after.com.y - moving.before.com.y
@@ -3358,7 +3358,7 @@ export async function runChecks() {
       unit: 'units',
       tolerance: 1e-12,
       toleranceKind: 'absolute',
-      why: "The position update is the mass-weighted mean as well as the velocity update, so the merged hole sits exactly where the pair's centre of mass was. Updating the velocity alone would have conserved momentum and still teleported the centre of mass by the body's share of the separation.",
+      why: "The position update is the mass-weighted mean as well as the velocity update, so the merged hole sits exactly where the pair's center of mass was. Updating the velocity alone would have conserved momentum and still teleported the center of mass by the body's share of the separation.",
     });
 
     {
@@ -3379,7 +3379,7 @@ export async function runChecks() {
         expected: expectedSpin,
         unit: 'mass * area / time',
         tolerance: 1e-9,
-        why: "Total angular momentum splits into the motion of the centre of mass and the pair's motion about it, L = L_com + mu (r_rel x v_rel). Collapsing the pair to one point mass keeps L_com exactly and discards the second term. That term is not physically lost - it is the spin the hole acquires, which is how real holes are spun up - but Gravitas models a hole as a point mass with no spin, so there is nowhere to put it. It is banked instead, and this check is that the amount banked is exactly the amount that went missing.",
+        why: "Total angular momentum splits into the motion of the center of mass and the pair's motion about it, L = L_com + mu (r_rel x v_rel). Collapsing the pair to one point mass keeps L_com exactly and discards the second term. That term is not physically lost - it is the spin the hole acquires, which is how real holes are spun up - but Gravitas models a hole as a point mass with no spin, so there is nowhere to put it. It is banked instead, and this check is that the amount banked is exactly the amount that went missing.",
       });
 
       add({
@@ -3461,7 +3461,7 @@ export async function runChecks() {
         unit: 'units per time',
         tolerance: 1e-15,
         toleranceKind: 'absolute',
-        why: 'One-way gravity makes the small bodies test particles with no dynamical influence, which is the second departure conservationCaveats() reports. Momentum a body never exerted through gravity should not suddenly appear at the moment it is eaten, so the transfer is suppressed there too and the configuration keeps the behaviour it is documented as having.',
+        why: 'One-way gravity makes the small bodies test particles with no dynamical influence, which is the second departure conservationCaveats() reports. Momentum a body never exerted through gravity should not suddenly appear at the moment it is eaten, so the transfer is suppressed there too and the configuration keeps the behavior it is documented as having.',
       });
     }
 
@@ -3670,7 +3670,7 @@ export async function runChecks() {
       const a = runLab({ dt, integrator });
       const b = runLab({ nudge: NUDGE, dt, integrator });
       const { series } = chaos.separationSeries(a.samples, b.samples);
-      return { a, b, series, verdict: chaos.analyseDivergence(series) };
+      return { a, b, series, verdict: chaos.analyzedivergence(series) };
     };
 
     const base = pair({ dt: 0.1, integrator: 'Symplectic Euler' });
@@ -3742,7 +3742,7 @@ export async function runChecks() {
         return samples;
       };
       const { series } = chaos.separationSeries(runBinary(0), runBinary(NUDGE));
-      const verdict = chaos.analyseDivergence(series);
+      const verdict = chaos.analyzedivergence(series);
 
       add({
         group: 'Three-body sensitivity',
@@ -3796,9 +3796,9 @@ export async function runChecks() {
     // 4. Refinement. The conclusion has to survive better numerics.
     {
       const verdict = chaos.refinementVerdict([
-        { tau: base.verdict.tau, behaviour: base.verdict.behaviour },
-        { tau: fine.verdict.tau, behaviour: fine.verdict.behaviour },
-        { tau: verlet.verdict.tau, behaviour: verlet.verdict.behaviour },
+        { tau: base.verdict.tau, behavior: base.verdict.behavior },
+        { tau: fine.verdict.tau, behavior: fine.verdict.behavior },
+        { tau: verlet.verdict.tau, behavior: verlet.verdict.behavior },
       ]);
       add({
         group: 'Three-body sensitivity',
@@ -3823,7 +3823,7 @@ export async function runChecks() {
       unit: 'relative',
       tolerance: 2e-3,
       toleranceKind: 'absolute',
-      why: 'Symplectic Euler at dt = 0.1 over 200 simulated seconds, which is what a student runs. The bound is set by the measured drift of 5e-4 with room for the close passages that appear once the triangle breaks up, and it is two thousand times smaller than the divergence signal the lesson measures - so the conclusion cannot be an artefact of energy leaking out of the integrator.',
+      why: 'Symplectic Euler at dt = 0.1 over 200 simulated seconds, which is what a student runs. The bound is set by the measured drift of 5e-4 with room for the close passages that appear once the triangle breaks up, and it is two thousand times smaller than the divergence signal the lesson measures - so the conclusion cannot be an artifact of energy leaking out of the integrator.',
     });
 
     add({
@@ -3994,7 +3994,7 @@ export async function runChecks() {
       expected: 1,
       unit: 'late rate / early rate',
       tolerance: 5e-2,
-      why: 'A documented departure from general relativity, quantified rather than merely disclaimed. Real gravitational-wave emission gives adot proportional to a^-3, so the fractional decay rate goes as a^-4: across a window in which the separation falls by a third, the late rate would be 3.4 times the early one. Here it is 1, because the model is a constant fractional damping of velocity. This check PASSES when the code matches its own documentation - the model page states that "the characteristic runaway at the end is not reproduced" - and it would FAIL if someone silently swapped in a different decay law without updating that page.',
+      why: 'A documented departure from general relativity, quantified rather than merely disclaimed. Real gravitational-wave emission gives adot proportional to a^-3, so the fractional decay rate goes as a^-4: across a window in which the separation falls by a third, the late rate would be 3.4 times the early one. Here it is 1, because the model is a constant fractional damping of velocity. This check PASSES when the code matches its own documentation - the model page states that "the characteriztic runaway at the end is not reproduced" - and it would FAIL if someone silently swapped in a different decay law without updating that page.',
       source: 'Peters (1964) Phys. Rev. 136, B1224',
     });
 
@@ -4191,7 +4191,7 @@ export async function runChecks() {
   //
   // Three sorts of check:
   //
-  //   the resonance is reproduced   libration centres, amplitudes and periods
+  //   the resonance is reproduced   libration centers, amplitudes and periods
   //                                 against Lieske, Williams & Benson and the
   //                                 linearised tadpole formula
   //   the controls behave           the detuned moons and the non-resonant
@@ -4384,9 +4384,9 @@ export async function runChecks() {
     add({
       group: 'Orbital resonance',
       kind: 'integration',
-      name: 'The Laplace libration is centred on 180 degrees',
-      measured: galilean.verdict.centre,
-      expected: REF.laplaceCentreDeg,
+      name: 'The Laplace libration is centerd on 180 degrees',
+      measured: galilean.verdict.center,
+      expected: REF.laplaceCenterDeg,
       unit: 'degrees',
       tolerance: 3,
       toleranceKind: 'absolute',
@@ -4498,7 +4498,7 @@ export async function runChecks() {
         name: 'Moving Europa one percent out makes the argument circulate',
         measured: broken.verdict.state === resonance.ANGLE_STATE.CIRCULATION,
         expected: true,
-        why: 'The paired control the lesson runs. Without it a librating angle could be an artefact of the instrument; with it, the same instrument on the same system with one number changed reports the opposite. The resonance holds Europa to about a part in a thousand, so one part in a hundred is ten times outside it.',
+        why: 'The paired control the lesson runs. Without it a librating angle could be an artifact of the instrument; with it, the same instrument on the same system with one number changed reports the opposite. The resonance holds Europa to about a part in a thousand, so one part in a hundred is ten times outside it.',
       });
 
       add({
@@ -4594,13 +4594,13 @@ export async function runChecks() {
     add({
       group: 'Orbital resonance',
       kind: 'integration',
-      name: "Pluto's libration is centred on 180 degrees",
-      measured: pluto.verdict.centre,
-      expected: REF.plutoCentreDeg,
+      name: "Pluto's libration is centerd on 180 degrees",
+      measured: pluto.verdict.center,
+      expected: REF.plutoCenterDeg,
       unit: 'degrees',
       tolerance: 2,
       toleranceKind: 'absolute',
-      why: "One line of algebra makes this the whole protection mechanism: at a conjunction the two mean longitudes cancel and the argument becomes the conjunction longitude minus Pluto's perihelion, so a centre of 180 degrees says every conjunction happens at aphelion.",
+      why: "One line of algebra makes this the whole protection mechanism: at a conjunction the two mean longitudes cancel and the argument becomes the conjunction longitude minus Pluto's perihelion, so a center of 180 degrees says every conjunction happens at aphelion.",
       source: 'Williams & Benson (1971) AJ 76, 167',
     });
 
@@ -4612,7 +4612,7 @@ export async function runChecks() {
       expected: REF.plutoLibrationAmplitudeDeg,
       unit: 'degrees',
       tolerance: 0.06,
-      why: 'The amplitude is set by the starting offset, which was chosen as 80 degrees from the centre to reproduce the observed libration; this checks that the planar model then holds it there rather than drifting off it over three full cycles. Six percent is the spread across the timesteps tried.',
+      why: 'The amplitude is set by the starting offset, which was chosen as 80 degrees from the center to reproduce the observed libration; this checks that the planar model then holds it there rather than drifting off it over three full cycles. Six percent is the spread across the timesteps tried.',
       source: 'Williams & Benson (1971) AJ 76, 167',
     });
 
@@ -4624,7 +4624,7 @@ export async function runChecks() {
       expected: REF.plutoLibrationYears,
       unit: 'years',
       tolerance: 0.03,
-      why: "A twenty-thousand-year period recovered from published orbital elements by an engine that knows nothing about the resonance. Three percent covers the planar approximation - the real libration is coupled to Pluto's 17 degree inclination, which this model projects away - and leaves no room for a timestep artefact.",
+      why: "A twenty-thousand-year period recovered from published orbital elements by an engine that knows nothing about the resonance. Three percent covers the planar approximation - the real libration is coupled to Pluto's 17 degree inclination, which this model projects away - and leaves no room for a timestep artifact.",
       source: 'Williams & Benson (1971) AJ 76, 167; Malhotra & Williams (1997)',
     });
 
@@ -4759,12 +4759,12 @@ export async function runChecks() {
       group: 'Orbital resonance',
       kind: 'integration',
       name: 'Patroclus librates about L5 rather than about anything else',
-      measured: resonance.wrap180(trojans.classify('Patroclus').centre + 60),
+      measured: resonance.wrap180(trojans.classify('Patroclus').center + 60),
       expected: 0,
       unit: 'degrees from L5',
       tolerance: 8,
       toleranceKind: 'absolute',
-      why: 'L5 is 60 degrees behind Jupiter, so a libration centre of -60 is the whole claim. It is not exactly -60: a finite-amplitude tadpole is not symmetric about the point it encircles, and the centre of a 24 degree libration sits a few degrees inside it. Eight degrees bounds that asymmetry.',
+      why: 'L5 is 60 degrees behind Jupiter, so a libration center of -60 is the whole claim. It is not exactly -60: a finite-amplitude tadpole is not symmetric about the point it encircles, and the center of a 24 degree libration sits a few degrees inside it. Eight degrees bounds that asymmetry.',
     });
 
     add({

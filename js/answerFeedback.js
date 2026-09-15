@@ -9,7 +9,7 @@
 // explanation. Each stage has to be requested, because a hint that appears
 // unbidden does the thinking before the student has tried to.
 //
-// **Misconceptions are recognised, not inferred.** A wrong number can be wrong
+// **Misconceptions are recognized, not inferred.** A wrong number can be wrong
 // for any number of reasons and almost all of them are unknowable from the
 // number alone. So nothing here guesses: an author writes down the specific
 // mistakes a question invites - a radius where a diameter was asked for, a
@@ -18,7 +18,7 @@
 //
 // Pure and dependency-free for the same reason js/answerCheck.js is: the
 // instructor materials are built in Node and have to describe the same
-// behaviour the site produces.
+// behavior the site produces.
 // =============================================================================
 
 /** The hint stages, in the order they are offered. */
@@ -31,7 +31,7 @@ export const HINT_STAGES = Object.freeze(['concept', 'method']);
  * because that is the only thing a number can evidence. `factor: 2` means "you
  * gave twice the answer", which is what a radius-for-diameter slip looks like
  * from outside. What it is *called* - and therefore what the student is told -
- * is the author's judgement about their own question, not this module's.
+ * is the author's judgment about their own question, not this module's.
  */
 export const STANDARD_MISCONCEPTIONS = Object.freeze({
   // Asked for a radius, gave a diameter. Or the reverse.

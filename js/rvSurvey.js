@@ -6,10 +6,10 @@
 // what a reflex curve looks like and a bad model of how anyone found a planet:
 // nobody has ever had a continuous, noiseless velocity record of a star.
 //
-// A real programme gets a handful of numbers. Each one costs an hour on a
+// A real program gets a handful of numbers. Each one costs an hour on a
 // telescope, arrives when the target is up and the weather holds, and carries
 // an uncertainty. What a survey can conclude is decided long before the data
-// are analysed, by three choices: how often to look, for how long, and how
+// are analyzed, by three choices: how often to look, for how long, and how
 // precisely.
 //
 // This module is that: an opt-in layer over the same simulated star, which
@@ -40,7 +40,7 @@
 // student could mistake for data. Drawing the connecting line between two
 // measurements a month apart is the single most effective way to teach that a
 // survey saw something it did not see, so the survey series is points, and the
-// underlying curve is available separately and labelled as a teaching overlay.
+// underlying curve is available separately and labeled as a teaching overlay.
 // =============================================================================
 
 import { mulberry32, normalizeSeed } from './rng.js';
@@ -70,7 +70,7 @@ const MAX_EPOCHS = 2000;
 /**
  * How much interpolation error a measurement may carry and still be `ok`.
  *
- * In metres per second, because that is the unit the number is in and the unit
+ * In meters per second, because that is the unit the number is in and the unit
  * a reader judges it in: 0.5 m/s is below the precision of every instrument the
  * lesson talks about, so a measurement inside this tolerance is limited by the
  * stated uncertainty rather than by how the simulation was sampled.
@@ -171,7 +171,7 @@ export function normalizeSurveyConfig(cfg = {}) {
     // idempotent.
     //
     // It was not: the returned object dropped `epochs`, `gaps` and the rest,
-    // so normalising an already-normalised config rebuilt a DIFFERENT plan
+    // so normalizing an already-normalized config rebuilt a DIFFERENT plan
     // from the defaults - and epochCount() does exactly that. A gapped
     // sixteen-epoch run reported twelve, the observing loop indexed past the
     // end of its own schedule, and it threw.
@@ -195,10 +195,10 @@ export function normalizeSurveyConfig(cfg = {}) {
  * @returns {number} Count of scheduled epochs
  */
 export function epochCount(cfg) {
-  const normalised = normalizeSurveyConfig(cfg);
+  const normalized = normalizeSurveyConfig(cfg);
   // An explicit plan already knows how many observations survive its gaps.
-  if (normalised.plan) return normalised.plan.planned;
-  const { cadenceDays, baselineDays } = normalised;
+  if (normalized.plan) return normalized.plan.planned;
+  const { cadenceDays, baselineDays } = normalized;
   // A hair of slack, so a baseline a reader entered as 3.52 with a cadence of
   // 0.32 gives the 12 points they counted on rather than 11 because the two
   // numbers do not divide exactly in binary floating point.
@@ -209,7 +209,7 @@ export function epochCount(cfg) {
 /**
  * Scramble a seed and an epoch index into a starting state.
  *
- * A finalizer with good avalanche, so epoch 7 and epoch 8 are not neighbours in
+ * A finalizer with good avalanche, so epoch 7 and epoch 8 are not neighbors in
  * the output. Indexing the noise by epoch rather than drawing it sequentially
  * is what makes a measurement's value a property of *when it was scheduled*
  * rather than of when the browser happened to compute it: rewind the timeline
@@ -263,7 +263,7 @@ export function gaussianAt(seed, index) {
  * One entry in a run, whether or not it holds a value.
  *
  * A missed epoch is still an entry: the schedule wanted a measurement then, and
- * a file that simply omits the row says the programme was shorter than it was.
+ * a file that simply omits the row says the program was shorter than it was.
  *
  * @returns {object} The measurement
  */
@@ -338,7 +338,7 @@ export function createSurvey(config = {}) {
    *
    * The "nobody was watching" test compares the gap between two readings
    * against this. It used to compare against the cadence, which an explicit
-   * list does not have; the largest planned spacing is the generalisation, and
+   * list does not have; the largest planned spacing is the generalization, and
    * for a regular schedule it IS the cadence, so that path is unchanged to the
    * last bit.
    *
@@ -462,7 +462,7 @@ export function createSurvey(config = {}) {
         // Nobody was watching. Either observing was explicitly suspended over
         // this epoch, or the readings either side of it are more than a whole
         // cadence apart, which means the loop was not running - a closed panel,
-        // a backgrounded tab. Both are the same fact and neither is a licence
+        // a backgrounded tab. Both are the same fact and neither is a license
         // to invent a value.
         //
         // Checked before the first-reading case below, because suspend() clears
@@ -629,7 +629,7 @@ export function constantVelocityChiSquare(points) {
  *
  * The statistic that separates the two runs in the lesson. Twelve measurements
  * spread across a cycle constrain its shape; twelve taken one period apart all
- * land on the same phase and constrain nothing, however long the programme ran
+ * land on the same phase and constrain nothing, however long the program ran
  * and however good the error bars were.
  *
  * Reported as the fraction of ten phase bins that hold at least one point:

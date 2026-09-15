@@ -41,7 +41,7 @@ const DISRUPTION = {
  * not check the claim against the two bodies actually on the canvas.
  *
  * This computes it from the live positions and masses - GM/r² at the near
- * side, at the centre and at the far side of the selected body - and reports
+ * side, at the center and at the far side of the selected body - and reports
  * the near and far differences. Those two are what makes two bulges rather
  * than one, and they are the numbers the arrows are a picture of.
  */
@@ -58,15 +58,15 @@ const tideRows = (
   const R = on.radius || 1;
   if (!(r > R)) return [{ label: 'The pair', value: 'too close to separate' }];
   const g = d => (ctx.G * by.mass) / (d * d);
-  const centre = g(r);
-  const pct = d => `${((100 * (g(d) - centre)) / centre).toFixed(2)}%`;
+  const center = g(r);
+  const pct = d => `${((100 * (g(d) - center)) / center).toFixed(2)}%`;
   const rows = [
     {
-      label: `Pull on ${on.name}, at its centre`,
-      value: centre.toExponential(3),
+      label: `Pull on ${on.name}, at its center`,
+      value: center.toExponential(3),
     },
-    { label: 'Near side, compared with the centre', value: pct(r - R) },
-    { label: 'Far side, compared with the centre', value: pct(r + R) },
+    { label: 'Near side, compared with the center', value: pct(r - R) },
+    { label: 'Far side, compared with the center', value: pct(r + R) },
     {
       label: 'Measured across the body as drawn',
       value: `${on.name} is drawn ${((100 * R) / r).toFixed(1)}% of the way to ${by.name}`,
@@ -114,15 +114,15 @@ const TIDES = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['gravity', 'solar-system'],
   lock: { placement: true, inspector: true },
   summary:
-    'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole lesson is built on that one subtraction: take the pull on the centre away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
+    'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole lesson is built on that one subtraction: take the pull on the center away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
   objectives: [
     'Explain why an extended object feels a different gravitational pull at each point in it',
-    'State that a tide is the difference between the local pull and the pull on the centre, and use that to say why there are two ocean bulges rather than one',
+    'State that a tide is the difference between the local pull and the pull on the center, and use that to say why there are two ocean bulges rather than one',
     'Measure how tidal strength changes with separation and with the mass of the companion, and state both relationships',
     'Compare the tide a body raises against that body’s own gravity, and predict whether it holds together',
     'Explain why a Roche limit is different for every pair of objects, and say what it does and does not predict',
@@ -138,11 +138,11 @@ const TIDES = {
              \n\nThat "twice" is the whole puzzle. The Moon is on one side of
              the Earth at a time, and the ocean bulges on <em>both</em> sides at
              once: there is a high tide under the Moon and another high tide on
-             the opposite face of the planet, twelve thousand kilometres away
+             the opposite face of the planet, twelve thousand kilometers away
              from it. Any explanation that amounts to "the Moon pulls the water
              toward it" predicts one bulge and is therefore wrong.
              \n\nOn screen is the real Earth-Moon system: the Earth at the
-             centre and the Moon, <strong>Luna</strong>, on its 27.3 day orbit.
+             center and the Moon, <strong>Luna</strong>, on its 27.3 day orbit.
              The simulation is a straightforward Newtonian one, and that turns
              out to be all you need. Nothing in this lesson requires a force
              that is not already in that picture. What it requires is
@@ -179,11 +179,11 @@ const TIDES = {
         'exactly the same strength at every point in the Earth',
         'stronger on the side facing the Moon than on the far side',
         'stronger on the far side, because it has further to reach',
-        'only felt at the Earth’s centre, where all the mass is treated as being',
+        'only felt at the Earth’s center, where all the mass is treated as being',
       ],
       answer: 1,
       because:
-        'Stronger on the near side. Gravity falls off with distance, and the near side really is closer, so it really is pulled harder. The last option is a genuinely useful half-truth: the Earth’s own gravity can be treated as coming from its centre, and for working out the Earth’s orbit the Moon can be too. But the Earth is being pulled by something outside it, and for that the difference between one part of the Earth and another is the entire story.',
+        'Stronger on the near side. Gravity falls off with distance, and the near side really is closer, so it really is pulled harder. The last option is a genuinely useful half-truth: the Earth’s own gravity can be treated as coming from its center, and for working out the Earth’s orbit the Moon can be too. But the Earth is being pulled by something outside it, and for that the difference between one part of the Earth and another is the entire story.',
     },
 
     {
@@ -196,12 +196,12 @@ const TIDES = {
       probe: ctx =>
         tideRows(ctx, {
           trueRatio:
-            'the real Earth is 1.66% of the way to the Moon, so the near side feels about 3.3% more pull than the centre and the far side about 3.3% less',
+            'the real Earth is 1.66% of the way to the Moon, so the near side feels about 3.3% more pull than the center and the far side about 3.3% less',
         }),
       type: 'read',
       title: 'Three points, three pulls',
       body: `The panel shows the Earth with an arrow leaving three places on it:
-             the <strong>near side</strong>, the <strong>centre</strong>, and
+             the <strong>near side</strong>, the <strong>center</strong>, and
              the <strong>far side</strong>. The companion is off to the right,
              so every arrow points right.
              \n\nEach arrow is drawn in true proportion to the others. Look at
@@ -229,7 +229,7 @@ const TIDES = {
       kind: 'choice',
       body: `Read the three accelerations off the panel on the previous screen,
              or set the distance back to 1.00 here and read them again. The near
-             side is pulled hardest, the far side least, and the centre sits
+             side is pulled hardest, the far side least, and the center sits
              between them.`,
       prompt:
         'At the Moon’s real distance, the pull on the near side is bigger than the pull on the far side by roughly…',
@@ -241,13 +241,13 @@ const TIDES = {
       ],
       answer: 2,
       because:
-        'About seven percent. That is a tiny difference, and it is the entire cause of every ocean tide on Earth. Hold on to how small it is: a seven percent variation in a pull that is itself only about a three-hundred-thousandth of the Earth’s own surface gravity. Tides are a small residue of a small quantity, which is why the seas move a few metres rather than being ripped off the planet.',
+        'About seven percent. That is a tiny difference, and it is the entire cause of every ocean tide on Earth. Hold on to how small it is: a seven percent variation in a pull that is itself only about a three-hundred-thousandth of the Earth’s own surface gravity. Tides are a small residue of a small quantity, which is why the seas move a few meters rather than being ripped off the planet.',
       tool: {
         id: 'tide-vectors',
         values: { dist: 1, mass: 1 },
         hide: ['mass'],
         title: 'Read the three numbers again',
-        note: 'Near side, centre, far side. The last row does the comparison for you.',
+        note: 'Near side, center, far side. The last row does the comparison for you.',
       },
     },
 
@@ -255,10 +255,10 @@ const TIDES = {
       sid: 'so-why-two-bulges',
       bind: EARTH_MOON,
       type: 'predict',
-      reveal: 'take-the-centre-away',
+      reveal: 'take-the-center-away',
       title: 'So why two bulges?',
       body: `Everything you have seen so far points one way: toward the Moon.
-             The near side is pulled toward the Moon, the centre is pulled
+             The near side is pulled toward the Moon, the center is pulled
              toward the Moon, the far side is pulled toward the Moon. Nothing
              anywhere is pulled away from it.
              \n\nAnd yet there is a high tide on the far side of the Earth, at
@@ -277,7 +277,7 @@ const TIDES = {
     },
 
     {
-      sid: 'take-the-centre-away',
+      sid: 'take-the-center-away',
       bind: EARTH_MOON,
       allowInspector: true,
       // The panel draws the arrows; this measures them, on the Earth and
@@ -286,23 +286,23 @@ const TIDES = {
       probe: ctx =>
         tideRows(ctx, {
           trueRatio:
-            'the real Earth is 1.66% of the way to the Moon, so the near side feels about 3.3% more pull than the centre and the far side about 3.3% less',
+            'the real Earth is 1.66% of the way to the Moon, so the near side feels about 3.3% more pull than the center and the far side about 3.3% less',
         }),
       type: 'read',
-      title: 'Take the centre away',
+      title: 'Take the center away',
       body: `Here is the move that makes tides make sense.
              \n\nThe Earth as a whole is in free fall around the Earth-Moon
-             centre of mass. It accelerates at whatever rate the pull on its
-             <em>centre</em> dictates, and it carries everything on it along at
+             center of mass. It accelerates at whatever rate the pull on its
+             <em>center</em> dictates, and it carries everything on it along at
              that rate: you, the seas, the rocks. What you can feel is not the
              pull. It is the difference between the pull where you are and the
              pull the whole planet is being carried along by.
-             \n\nSo subtract the centre’s pull from all three. The panel now
+             \n\nSo subtract the center’s pull from all three. The panel now
              shows both rows: the raw pulls on top, and underneath what is left
              after the subtraction.
              \n\n<strong>Near side:</strong> pulled harder than average, so what
              is left points toward the Moon.
-             \n\n<strong>Centre:</strong> exactly average, so nothing is left. A
+             \n\n<strong>Center:</strong> exactly average, so nothing is left. A
              dot.
              \n\n<strong>Far side:</strong> pulled less than average, so what is
              left points <em>away</em> from the Moon.
@@ -313,7 +313,7 @@ const TIDES = {
         values: { dist: 1, mass: 1 },
         hide: ['mass'],
         residual: true,
-        title: 'The pulls, and what is left after the centre is taken away',
+        title: 'The pulls, and what is left after the center is taken away',
         note: 'The bottom row is drawn far larger than the top row, and the panel says by how much. Drawn to the same scale it would be invisible, which is exactly why the subtraction has to be done rather than looked at.',
       },
       tip: 'Nothing new has been added between the two rows. The bottom row is the top row minus one number.',
@@ -331,13 +331,13 @@ const TIDES = {
       prompt: 'The outward-pointing far-side arrow means that…',
       options: [
         'gravity from the Moon reverses direction on the far side of the Earth',
-        'the far side is still pulled toward the Moon, but less than the Earth’s centre is',
+        'the far side is still pulled toward the Moon, but less than the Earth’s center is',
         'a second force, separate from gravity, acts on the far side',
         'the far side is beyond the Moon’s reach',
       ],
       answer: 1,
       because:
-        'Still pulled toward the Moon, just less than average. Gravity never reverses and never switches off; there is no second force. The outward arrow is a bookkeeping result, not a push: it is what is left over after you subtract the acceleration the whole planet shares. If you insist on describing tides without subtracting the centre, you are stuck with one bulge and a coastline that disagrees with you twice a day.',
+        'Still pulled toward the Moon, just less than average. Gravity never reverses and never switches off; there is no second force. The outward arrow is a bookkeeping result, not a push: it is what is left over after you subtract the acceleration the whole planet shares. If you insist on describing tides without subtracting the center, you are stuck with one bulge and a coastline that disagrees with you twice a day.',
       tool: {
         id: 'tide-vectors',
         values: { dist: 1, mass: 1 },
@@ -353,7 +353,7 @@ const TIDES = {
       bind: EARTH_MOON,
       type: 'read',
       title: 'What a tide actually is',
-      body: `A definition worth memorising, because it is short and it is the
+      body: `A definition worth memorizing, because it is short and it is the
              whole subject:
              \n\n<strong>A tide is the difference in gravitational acceleration
              across an object.</strong>
@@ -537,7 +537,7 @@ const TIDES = {
       type: 'read',
       title: 'The relationship, written down',
       body: `You have measured it, so here it is in symbols. You are not being
-             asked to derive it or to calculate with it, only to recognise the
+             asked to derive it or to calculate with it, only to recognize the
              three things in it.
              \n\nFor a body of radius <em>R</em> sitting a distance <em>d</em>
              from a companion of mass <em>M</em>, the tidal stretch across it is
@@ -788,7 +788,7 @@ const TIDES = {
       prompt:
         'Why does the Earth have a high tide on the side facing away from the Moon? Answer in one or two sentences, and be careful about what is doing what to what.',
       rubric:
-        'The far side is pulled toward the Moon more weakly than the Earth’s centre is, because it is further away. The whole planet is accelerated at the rate its centre feels, so relative to that shared motion the far side lags behind, producing a bulge pointing away from the Moon. Full credit requires the comparison with the centre, or an equivalent statement that a tide is a difference. Common wrong answers to watch for and not credit: that the Moon pushes the far side; that gravity reverses there; that the Earth’s rotation flings the water outward; that the water displaced from the near side has to go somewhere. Partial credit for "the far side is pulled less" without saying less than what.',
+        'The far side is pulled toward the Moon more weakly than the Earth’s center is, because it is further away. The whole planet is accelerated at the rate its center feels, so relative to that shared motion the far side lags behind, producing a bulge pointing away from the Moon. Full credit requires the comparison with the center, or an equivalent statement that a tide is a difference. Common wrong answers to watch for and not credit: that the Moon pushes the far side; that gravity reverses there; that the Earth’s rotation flings the water outward; that the water displaced from the near side has to go somewhere. Partial credit for "the far side is pulled less" without saying less than what.',
     },
 
     {
@@ -866,7 +866,7 @@ const TIDES = {
       answer: 1.5,
       tolerance: 0.2,
       because:
-        'About 1.5 Earth radii from the Earth’s centre, or roughly 9,500 km, which is only about 3,100 km above the ground. That distance has a name: it is the <strong>Roche limit</strong>, after Édouard Roche, who worked it out in 1848. It is not a coincidence that it came out of a comparison you set up yourself: the Roche limit is defined by exactly that balance, and the textbook formula is nothing more than the algebra of setting those two bars equal to each other.',
+        'About 1.5 Earth radii from the Earth’s center, or roughly 9,500 km, which is only about 3,100 km above the ground. That distance has a name: it is the <strong>Roche limit</strong>, after Édouard Roche, who worked it out in 1848. It is not a coincidence that it came out of a comparison you set up yourself: the Roche limit is defined by exactly that balance, and the textbook formula is nothing more than the algebra of setting those two bars equal to each other.',
       tool: {
         id: 'tide-balance',
         values: { dist: 3, density: 3300 },
@@ -890,14 +890,14 @@ const TIDES = {
              more. A body with no strength at all, free to deform, therefore
              comes apart <em>further out</em> than a body that keeps its shape
              does. The outer arc is the no-strength limit; the inner one is the
-             keeps-its-shape limit. Between them is a genuine grey band, not a
+             keeps-its-shape limit. Between them is a genuine gray band, not a
              rounding error.
              \n\nAnd now look at the rings. Saturn’s ring system ends abruptly
              at 136,780 km, and the innermost round moon, Mimas, orbits well
              outside that. Set the density to porous ice, which is what ring
              particles actually are, and compare the outer arc with where the
              rings stop. The rings sit inside the limit; the moons sit outside
-             it. Saturn has a hundred thousand kilometres of debris where a moon
+             it. Saturn has a hundred thousand kilometers of debris where a moon
              cannot assemble, and a moon at the first distance where one can.`,
       tool: {
         id: 'roche-model',
@@ -971,7 +971,7 @@ const TIDES = {
              \n\n<strong>It is about self-gravity, not glue.</strong> The whole
              argument compares the tide against a body’s own gravity. Small
              bodies are held together mostly by material strength instead: a
-             one-metre rock is not going to be pulled apart by Saturn at any
+             one-meter rock is not going to be pulled apart by Saturn at any
              distance, because the forces holding a rock together have nothing
              to do with its gravity. The limit applies to bodies big enough that
              gravity is what is holding them.
@@ -1016,7 +1016,7 @@ const TIDES = {
              parts of the body were at different distances when it came apart.
              That last one is the same subtraction you started the lesson with.
              \n\nThe readout below is that subtraction, on this scene: the pull
-             of the hole at the near side of the doomed star, at its centre and
+             of the hole at the near side of the doomed star, at its center and
              at its far side. Watch the difference grow as the star falls in.
              That difference is what tears it apart, and it is the only part of
              the disruption this simulation actually computes.`,
@@ -1061,7 +1061,7 @@ const TIDES = {
              \n\nSlide the mass up from ten solar masses and watch the two
              circles close on each other. For a stellar-mass hole the star is
              shredded tens of thousands of horizon radii out. For Sagittarius A*
-             at the centre of our galaxy it is still shredded outside, by a
+             at the center of our galaxy it is still shredded outside, by a
              factor of about eleven, and astronomers do see the resulting
              flares. Keep going and the two meet at around 160 million solar
              masses, and beyond that the tidal radius is <em>inside</em> the
@@ -1076,7 +1076,7 @@ const TIDES = {
              self-gravity balance as the rest of the lesson. Real tidal
              disruption events are hydrodynamic: the star is compressed as well
              as stretched, the debris shocks and radiates, and general
-             relativity matters near the horizon. None of that is modelled here
+             relativity matters near the horizon. None of that is modeled here
              or anywhere in Gravitas. What survives the approximation is the
              comparison of two lengths, and that comparison is the reason the
              flares are seen where they are seen.`,
@@ -1100,7 +1100,7 @@ const TIDES = {
       prompt:
         'Explain what causes tides, what makes them stronger, and how they can destroy an object. Three sentences is plenty.',
       rubric:
-        'Expect three components. (1) Tides are caused by gravity being unequal across an extended object: the difference between the pull at a point and the pull on the centre, not the strength of gravity itself. (2) They get stronger with the companion’s mass, in proportion, and far more sharply with decreasing separation, as one over separation cubed. (3) A body is destroyed when the tidal stretch across it exceeds its own surface gravity, which happens inside its Roche limit, and that limit depends on the two bodies involved rather than being one universal distance. Credit any correct statement of the inverse-cube relationship however phrased. Do not require a formula. Deduct for "tides are caused by strong gravity", for the far-side bulge being pushed or flung outward, or for a Roche limit described as a fixed radius around a planet.',
+        'Expect three components. (1) Tides are caused by gravity being unequal across an extended object: the difference between the pull at a point and the pull on the center, not the strength of gravity itself. (2) They get stronger with the companion’s mass, in proportion, and far more sharply with decreasing separation, as one over separation cubed. (3) A body is destroyed when the tidal stretch across it exceeds its own surface gravity, which happens inside its Roche limit, and that limit depends on the two bodies involved rather than being one universal distance. Credit any correct statement of the inverse-cube relationship however phrased. Do not require a formula. Deduct for "tides are caused by strong gravity", for the far-side bulge being pushed or flung outward, or for a Roche limit described as a fixed radius around a planet.',
     },
 
     {
@@ -1109,7 +1109,7 @@ const TIDES = {
       type: 'read',
       title: 'What you worked out',
       body: `<strong>A tide is a difference.</strong> Not a pull. Take the pull
-             on the centre away from the pull where you are, and what is left is
+             on the center away from the pull where you are, and what is left is
              what deforms things. It is the reason there are two bulges and not
              one, and the reason the far side bulges without anything pushing it.
              \n\n<strong>Distance dominates.</strong> One power of mass, three
@@ -1119,7 +1119,7 @@ const TIDES = {
              until they are catastrophic.
              \n\n<strong>Size matters too.</strong> A bigger object has ends
              further apart, so it feels a bigger difference. You feel essentially
-             no tide. The Earth feels a few metres of one.
+             no tide. The Earth feels a few meters of one.
              \n\n<strong>Breaking is a competition.</strong> Stretch against the
              body’s own grip. Inside the Roche limit the stretch wins, and that
              limit is different for every pair of objects, because it depends on

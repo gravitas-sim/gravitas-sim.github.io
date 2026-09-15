@@ -258,7 +258,7 @@ test.describe('comparing two schedules', () => {
     expect(s.report.controls.controlled).toBe(true);
     expect(a.fingerprint).not.toBe(b.fingerprint);
     // The caveat that can never be dropped.
-    expect(s.report.caveats).toContain('singleRealisation');
+    expect(s.report.caveats).toContain('singleRealization');
     expect(s.compareText).toMatch(/not which schedule is better/i);
     // And the range, because a period is the best fit inside one.
     expect(s.compareText).toMatch(/searched over the same range/i);
@@ -326,7 +326,7 @@ test.describe('both arms have one lifecycle', () => {
     // more than one epoch spacing of simulated days - which is a different
     // quantity, and how many days two seconds buys depends on how busy the
     // machine is. Run this file on its own and it passed; run it beside its
-    // eighteen neighbours at six workers and the simulation advanced less than
+    // eighteen neighbors at six workers and the simulation advanced less than
     // one spacing in the two seconds, no epoch fell due, and the test failed
     // for a reason that had nothing to do with what it checks. So it waits for
     // the thing it actually needs.

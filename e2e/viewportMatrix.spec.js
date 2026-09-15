@@ -7,7 +7,7 @@
 // hard - it is impossible - and nothing in the application says so.
 //
 // One screen is checked rather than many, and it is deliberately the most
-// crowded one in the catalogue: a docked instrument with its own canvas and
+// crowded one in the catalog: a docked instrument with its own canvas and
 // readout, a scatter plot with its table of points, eight response fields, the
 // object list, and the main simulation behind all of it. If the layout holds
 // there it holds on a page of prose.
@@ -45,7 +45,7 @@ const VIEWPORTS = [
 ];
 
 /**
- * The most crowded screen in the catalogue: instrument, plot, fields and list.
+ * The most crowded screen in the catalog: instrument, plot, fields and list.
  * Tides step 10 rather than a lesson opener, which is a page of prose and
  * proves nothing about layout.
  */
@@ -77,7 +77,7 @@ async function fillFields(page) {
 }
 
 /**
- * Reachable means scrollable-to and actually on top at its own centre.
+ * Reachable means scrollable-to and actually on top at its own center.
  *
  * `toBeVisible` is not enough: an element can be visible and have a panel
  * painted over it, which is exactly what a layout that has run out of room
@@ -85,7 +85,7 @@ async function fillFields(page) {
  */
 async function reachable(page, selector, { minHeight = 0 } = {}) {
   const el = page.locator(selector).first();
-  // Centred rather than minimally scrolled. `scrollIntoViewIfNeeded` stops the
+  // Centerd rather than minimally scrolled. `scrollIntoViewIfNeeded` stops the
   // moment an element is technically inside its scroll container, which leaves
   // it flush against the edge - and a point sampled at the very edge of a
   // scrolling panel hits the panel, not the control. That is a property of

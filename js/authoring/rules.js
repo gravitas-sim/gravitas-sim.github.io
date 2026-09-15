@@ -4,11 +4,11 @@
 // One rule set, four callers: `npm run author:check` prints it for an author,
 // tests/authoring.test.js fails CI on it, the authoring preview shows an author
 // the findings for the step they are looking at, and the browser walker reads
-// the same catalogue so that what it exercises and what this judges cannot
+// the same catalog so that what it exercises and what this judges cannot
 // diverge.
 //
 // It lives in js/ rather than in tools/ because the preview runs it in a
-// browser. Nothing here touches the filesystem or the DOM: the catalogue and
+// browser. Nothing here touches the filesystem or the DOM: the catalog and
 // everything it is checked against arrive as arguments, gathered by
 // tools/authoring/inputs.mjs in Node and by the panel itself in the browser.
 //
@@ -237,7 +237,7 @@ function emptyProbeContext() {
     becomeRemnant: () => null,
     placeBinary: () => false,
     remnantKindOf: () => null,
-    barycentre: () => null,
+    barycenter: () => null,
     restageStarPair: () => false,
     restageHole: () => false,
     // No star observed, which is the case with no simulation: a probe that
@@ -307,9 +307,9 @@ function hintValues(step) {
  * Run every authoring rule.
  *
  * @param {object} inputs - From loadAuthoringInputs()
- * @returns {Array<object>} Findings, in catalogue order
+ * @returns {Array<object>} Findings, in catalog order
  */
-export function checkCatalogue(inputs, { skip = [] } = {}) {
+export function checkCatalog(inputs, { skip = [] } = {}) {
   const findings = [];
   const {
     investigations,
@@ -1204,7 +1204,7 @@ export function checkCatalogue(inputs, { skip = [] } = {}) {
  * @returns {Array<object>} Findings for this lesson only
  */
 export function checkLesson(inv, refs) {
-  return checkCatalogue(
+  return checkCatalog(
     {
       investigations: [inv],
       manifests: {},

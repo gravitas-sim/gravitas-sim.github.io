@@ -2,7 +2,7 @@
 // Playing a stellar life
 // -----------------------------------------------------------------------------
 // One age, and everything else derived from it. The temperature, the radius,
-// the luminosity, the colour, the current mass and the phase are all read from
+// the luminosity, the color, the current mass and the phase are all read from
 // the same position on the same track, so they cannot disagree about what the
 // star is doing - which is the failure this module exists to make impossible.
 //

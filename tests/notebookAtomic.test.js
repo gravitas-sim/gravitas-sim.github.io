@@ -6,7 +6,7 @@ import { describe, test, expect, jest, beforeEach } from '@jest/globals';
 // The notebook's chunk is fetched on the first save, and everything about the
 // capture boundary's correctness is what happens while that fetch is in
 // flight. So the fetch is held open here: ensureNotebook() awaits the deferred
-// message catalogue before it imports anything, and this mock never resolves
+// message catalog before it imports anything, and this mock never resolves
 // until the test says so.
 let releaseLoad;
 const gate = new Promise(resolve => {

@@ -83,7 +83,7 @@ const BY_STEP = {
 };
 
 const PROSE =
-  'A star is held up by the pressure that the energy released in its core maintains. When core hydrogen ran out the star could contract, heat, and start burning helium, so the support came back. Iron is where that stops working: fusing iron absorbs energy rather than releasing it, so contracting buys no new source and nothing halts the collapse. Mass sets all of it - the 20 solar-mass model lives 8.65 million years against the Sun-like model 9.88 billion. One limitation: these are single stars with no companion, so no mass transfer and no merger is modelled anywhere.';
+  'A star is held up by the pressure that the energy released in its core maintains. When core hydrogen ran out the star could contract, heat, and start burning helium, so the support came back. Iron is where that stops working: fusing iron absorbs energy rather than releasing it, so contracting buys no new source and nothing halts the collapse. Mass sets all of it - the 20 solar-mass model lives 8.65 million years against the Sun-like model 9.88 billion. One limitation: these are single stars with no companion, so no mass transfer and no merger is modeled anywhere.';
 
 /** Answer whatever the current step asks and move on. */
 async function answerAndAdvance(page, step) {
@@ -177,7 +177,7 @@ test.describe('the playback behaves under a student', () => {
     await toStep(page, app, 2);
     const readout = page.locator('#investigationToolReadout');
     await expect(readout).toContainText(/collapsing cloud/i);
-    // Forward one phase reaches the first modelled point.
+    // Forward one phase reaches the first modeled point.
     await page.locator('[data-tool-action="next"]').click();
     await expect(readout).toContainText(/Pre-main-sequence/i);
     // ...and back again, with nothing left over.
@@ -361,7 +361,7 @@ test.describe('the first stellar lesson still works', () => {
     await expect(page.locator('#investigationPanel')).toBeVisible();
     // From the manifest. A literal here goes stale the first time the lesson
     // gains a screen, which is exactly what happened: this said 28 while the
-    // catalogue said 30, and the failure named a step count rather than
+    // catalog said 30, and the failure named a step count rather than
     // anything about whether the lesson works.
     expect(await stepTotal(page)).toBe(
       MANIFEST.find(m => m.id === 'a-universe-of-stars').stepCount

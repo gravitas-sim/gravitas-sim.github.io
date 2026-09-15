@@ -78,10 +78,10 @@
     color: var(--hud-text-strong, var(--text-primary));
   }
 
-  /* Running or paused, as a colour as well as a word. This is the line a
+  /* Running or paused, as a color as well as a word. This is the line a
      lecturer points at from across a room, where a two-letter difference
      between "Running" and "Paused" does not carry and a green or amber dot
-     does. The word is still there, so the colour is not the only signal. */
+     does. The word is still there, so the color is not the only signal. */
   .readout-status-dot {
     width: 8px;
     height: 8px;
@@ -106,7 +106,7 @@
   }
 
   /* The two controls that belong to the panel itself. Icon-sized, because a
-     sound switch and a minimise switch are not worth a labelled row each in
+     sound switch and a minimize switch are not worth a labeled row each in
      the panel whose whole problem was that it had too many rows. */
   .readout-icon-btn {
     display: inline-flex;
@@ -143,7 +143,7 @@
     cursor: default;
   }
 
-  /* The legacy sheet positions the minimise button absolutely in the corner of
+  /* The legacy sheet positions the minimize button absolutely in the corner of
      a padded panel. It is a flex child of the header now.
      
      It carries a word as well as a chevron, so unlike the sound switch it is
@@ -318,7 +318,7 @@
     border-bottom: 0;
   }
 
-  /* Minimised: the header alone, which still says whether the thing is
+  /* Minimized: the header alone, which still says whether the thing is
      running. */
   #overlay.minimized {
     width: auto;
@@ -347,7 +347,7 @@
      2. The bottom dock: transport bar and footer
      --------------------------------------------------------------------------
      Both are fixed along the bottom edge, and until now neither knew about the
-     other: the transport bar centred itself in the band left of the rail and
+     other: the transport bar centerd itself in the band left of the rail and
      the footer sat in the right-hand corner, so whether they collided depended
      on how wide the footer happened to be. It grew - a theme picker, then a
      language picker - and on a wide window the scrubber ran across the
@@ -355,14 +355,14 @@
 
      The fix is to give the transport bar a right-hand boundary it cannot cross:
      the footer's own measured width, published as --attribution-width by
-     js/ui.js. Both ends are then pinned and `margin-inline: auto` centres the
+     js/ui.js. Both ends are then pinned and `margin-inline: auto` centers the
      bar in whatever room is left, so the two can no longer overlap at any
      window size or in any language - and Spanish is the case that matters,
      being reliably longer than English.
      ====================================================================== */
 
   @media (min-width: 1025px) {
-    /* Centred on the window, which is where the eye goes looking for it, and
+    /* Centerd on the window, which is where the eye goes looking for it, and
        narrowed rather than shifted when the footer would be in the way.
        --transport-max is the widest it can be and still stop short of the
        footer; js/bottomDock.js works it out from the footer's measured width. */
@@ -376,8 +376,8 @@
     }
 
     /* Unless narrowing has gone too far. Below a usable slider length the bar
-       stops trying to be centred on the window and centres in the room that is
-       actually free, to the left of the footer. A scrubber slightly off-centre
+       stops trying to be centerd on the window and centers in the room that is
+       actually free, to the left of the footer. A scrubber slightly off-center
        is a smaller cost than one too short to scrub with. */
     body.dock-banded .timeline-bar {
       left: var(--space-4);
@@ -600,7 +600,7 @@
   /* ==========================================================================
      The recording indicator
      --------------------------------------------------------------------------
-     Top centre of the viewport, over the simulation and above every panel.
+     Top center of the viewport, over the simulation and above every panel.
      The one piece of state in the interface that costs something to be wrong
      about - a clip that is still running, or one the user believes is running
      and is not - so it is placed where nothing can cover it and it is the only
@@ -611,7 +611,7 @@
     top: 6px;
     left: 50%;
     transform: translateX(-50%);
-    /* Above the scenario info card, which is also fixed to the top centre and
+    /* Above the scenario info card, which is also fixed to the top center and
        sits at 1000. The card is transient and the badge is the more urgent of
        the two; the badge clears the card's title and covers only the blank
        strip of padding above it. */
@@ -639,11 +639,11 @@
   /* ==========================================================================
      The update badge
      --------------------------------------------------------------------------
-     Bottom left, out of the way of the top-centre recording indicator and of
+     Bottom left, out of the way of the top-center recording indicator and of
      every panel that opens from the right. A new version waiting is not urgent
      - the version already running is complete and will stay that way - so this
      is the quietest thing on screen that is still a control: no motion, no
-     colour that reads as an alert, and it never takes focus.
+     color that reads as an alert, and it never takes focus.
 
      It is reachable by keyboard because it is real buttons in the document, and
      it wraps rather than overflowing so a narrow phone still shows both
@@ -830,7 +830,7 @@
     cursor: pointer;
   }
 
-  /* Selected is a fill *and* a border weight, never colour alone: the chips
+  /* Selected is a fill *and* a border weight, never color alone: the chips
      are the one place a student's selection has to be unambiguous. */
   .experiment-chip[aria-pressed='true'] {
     color: var(--text-primary);
@@ -1187,7 +1187,7 @@
   }
 
   /* Measured, predicted, revealed. Distinguished by weight and letterforms as
-     well as colour: this panel is printed, photocopied and read by screen
+     well as color: this panel is printed, photocopied and read by screen
      readers, and "revealed" is the one word on it that changes what a claim is
      worth. The word itself is always present in the cell. */
   .nb-kind {
@@ -1470,7 +1470,7 @@
   }
   /* Ties a table row to its clump in the histogram above. Never the only cue:
      the row also carries the share and the interval in words and numbers, so a
-     reader who cannot see the colour loses nothing. */
+     reader who cannot see the color loses nothing. */
   .rvfit-mc-swatch {
     display: inline-block;
     width: 8px;
@@ -1695,7 +1695,7 @@
   }
 
   /* Armed. The rail is dark and the button is already the primary one, so the
-     signal is a ring and a brighter face rather than another colour. */
+     signal is a ring and a brighter face rather than another color. */
   #objectTypeBtn.is-armed {
     background: var(--accent);
     color: var(--accent-contrast);
@@ -1731,7 +1731,7 @@
 
      Above the transport bar rather than over it, and pointer-events: none, so
      it can neither cover a control nor swallow the click it is telling you to
-     make. Centred on the canvas, which is where the reader is looking.
+     make. Centerd on the canvas, which is where the reader is looking.
      -------------------------------------------------------------------- */
   .placement-status {
     position: fixed;
@@ -1839,8 +1839,8 @@
   .object-picker-item {
     display: flex;
     align-items: center;
-    /* Explicit, because a <button> centres its content and these are rows in a
-       list: eight centred rows gave the eight names eight different left edges
+    /* Explicit, because a <button> centers its content and these are rows in a
+       list: eight centerd rows gave the eight names eight different left edges
        and nothing to scan down. */
     justify-content: flex-start;
     gap: var(--space-2);
@@ -2036,7 +2036,7 @@
 }
 
 /* The speaker's own glyph carries the state, so the button needs a way to show
-   "permitted but silent" as distinct from "playing". Colour is never the only
+   "permitted but silent" as distinct from "playing". Color is never the only
    difference: the glyph itself changes, and so does the accessible name. */
 .sonification-toggle[data-state='playing'] {
   color: var(--accent);

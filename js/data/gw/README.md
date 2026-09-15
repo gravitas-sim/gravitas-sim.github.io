@@ -1,7 +1,7 @@
 # Bundled gravitational-wave data
 
 One event, eight traces, 23 KB. Everything here was published by somebody else
-and is reproduced under their licence; nothing here was drawn, fitted, adjusted
+and is reproduced under their license; nothing here was drawn, fitted, adjusted
 or invented by this project.
 
 `gw150914.js` is generated. Do not edit it.
@@ -30,7 +30,7 @@ Released by the Gravitational Wave Open Science Center at
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), from
 `https://gwosc.org/GW150914data/P150914/`.
 
-Acknowledgement, reproduced in the application beside the data:
+Acknowledgment, reproduced in the application beside the data:
 
 > This research has made use of data or software obtained from the
 > Gravitational Wave Open Science Center (gwosc.org), a service of the LIGO
@@ -68,7 +68,7 @@ The time axis on every trace is seconds after GPS 1126259462, which is
 
 - No time shift between detectors.
 - No sign inversion.
-- No additional filtering, whitening, normalisation or alignment.
+- No additional filtering, whitening, normalization or alignment.
 
 The relative time shift and sign between Hanford and Livingston are **measured**
 by the build and recorded in `PROVENANCE.findings`, not applied. As published,

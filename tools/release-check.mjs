@@ -39,7 +39,7 @@ import {
   CHECKS,
   GROUPS,
   OUTCOMES,
-  summarise,
+  summarize,
   engineInstalled,
   sourcesCached,
 } from './checks.mjs';
@@ -371,9 +371,9 @@ if (decisions.length) {
 
 // --- What this run actually established --------------------------------------
 // The tally first, then a sentence that can only say "everything" when the
-// tally has nothing in the other four columns. Both come from summarise() in
+// tally has nothing in the other four columns. Both come from summarize() in
 // tools/checks.mjs, which is where the wording is tested.
-const summary = summarise(results);
+const summary = summarize(results);
 const byStatus = status => results.filter(r => r.status === status);
 
 process.stdout.write(`${c(BOLD, 'What ran')}\n`);

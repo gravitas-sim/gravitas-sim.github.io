@@ -43,7 +43,7 @@ import { state } from './appState.js';
 import { getSimClock } from './timeline.js';
 import { timeUnitSeconds } from './units.js';
 // Aliased: `t` is already the chart palette in this module, and a translator
-// called on a colour object is a crash rather than a wrong word.
+// called on a color object is a crash rather than a wrong word.
 import { t as translate } from './i18n/index.js';
 import { stellarStateFor } from './stellar/state.js';
 
@@ -426,7 +426,7 @@ function circleOverlapArea(R, r, d) {
   return R2 * alpha + r2 * beta - 0.5 * Math.sqrt(Math.max(0, sqrtTerm));
 }
 
-// ── Primary transit depth (limb-darkened, realistic k) ──────────────
+// ── Primary transit depth (limb-darkened, realiztic k) ──────────────
 
 function transitDip(k, b, Rs_sim, Rp_sim, sep) {
   // k: physical Rp/Rs  |  b: sep/Rs_sim (visual impact param)
@@ -559,7 +559,7 @@ function calculateBrightness() {
         starName: star.name || null,
         // In front of the star, behind it, or off to one side.
         inFront: losDepth > 0,
-        // Sky-plane separation in stellar radii: 0 is dead centre, 1 is the
+        // Sky-plane separation in stellar radii: 0 is dead center, 1 is the
         // limb, and anything past 1 + k has the planet clear of the disc.
         impact: b,
         radiusRatio: Rp_sim / Rs_sim,
@@ -622,7 +622,7 @@ export function updateLightCurve() {
   sampleCounter++;
   // Often enough that no transit can enter and leave the window uncounted,
   // rarely enough that the sort in the median costs nothing.
-  if (sampleCounter % 15 === 0) analyseCurve();
+  if (sampleCounter % 15 === 0) analyzeCurve();
   if (sampleCounter % CHART_REDRAW_EVERY !== 0) return;
 
   if (chart && brightnessValues.length > 1) {
@@ -672,7 +672,7 @@ function median(values) {
  * still in progress and the other started before the recording did, and
  * reporting either would give a depth and a mid-time from half an event.
  */
-function analyseCurve() {
+function analyzeCurve() {
   const n = brightnessValues.length;
   if (n < 24) return;
 
@@ -767,7 +767,7 @@ const lastGeometry = new WeakMap();
  * The live transit geometry for one body.
  *
  * What "Transit Photometry" needs to tie the dot on the canvas to the dip on
- * the plot: whether the planet is in front, how far from the centre of the
+ * the plot: whether the planet is in front, how far from the center of the
  * disc it is in stellar radii, and which of the four named states it is in.
  * Undefined until a frame has been computed for that body, and stale if the
  * simulation is paused - which is what a reader wants, because a paused frame

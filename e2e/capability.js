@@ -4,7 +4,7 @@
 // Some of what Gravitas offers depends on what the engine can actually do, and
 // the application already branches on that: js/capture.js exposes canRecord(),
 // and the rail hides the Record Clip button when it is false. That is correct
-// behaviour, not a bug, and a test suite that asserted the button was always
+// behavior, not a bug, and a test suite that asserted the button was always
 // there was asserting something the application deliberately does not promise.
 //
 // So the tests ask the application the same question the application asks
@@ -75,7 +75,7 @@ export function whyNoRecording(cap) {
   return (
     `This browser cannot encode video: ${missing} unavailable. ` +
     'Gravitas hides the Record Clip button when capture.canRecord() is false, ' +
-    'which is the behaviour e2e/capture.spec.js asserts instead. This test ' +
+    'which is the behavior e2e/capture.spec.js asserts instead. This test ' +
     'will run automatically once the engine supports recording.'
   );
 }

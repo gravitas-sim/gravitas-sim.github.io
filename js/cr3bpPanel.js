@@ -9,7 +9,7 @@
 // Three things it is careful about, and they are the same three the module it
 // draws from is careful about.
 //
-// It states its conventions. The normalisation and the sign of C are on
+// It states its conventions. The normalization and the sign of C are on
 // screen, not buried: C is larger for a SLOWER tracer, which is backwards from
 // every other energy in the application and is the first thing a reader
 // misreads.
@@ -233,7 +233,7 @@ export function readSystem() {
     tracer,
     eccentricity,
     separation,
-    // The barycentre, which is the origin of the rotating frame.
+    // The barycenter, which is the origin of the rotating frame.
     origin: {
       x:
         (primary.mass * primary.pos.x + secondary.mass * secondary.pos.x) /
@@ -264,7 +264,7 @@ export function readSystem() {
 }
 
 /**
- * The sign of the pair's orbital angular momentum about their barycentre.
+ * The sign of the pair's orbital angular momentum about their barycenter.
  *
  * +1 counter-clockwise, -1 clockwise. Zero angular momentum means a radial
  * plunge with no rotating frame to speak of; +1 is returned so nothing divides
@@ -284,7 +284,7 @@ function pairSpin(primary, secondary) {
 }
 
 /**
- * The tracer's state in the rotating frame, normalised.
+ * The tracer's state in the rotating frame, normalized.
  *
  * @param {object} system - From readSystem
  * @returns {?{x: number, y: number, vx: number, vy: number}} The state
@@ -299,7 +299,7 @@ export function tracerState(system) {
   const y = -dx * sin + dy * cos;
 
   // The mean motion, which is 1 in these units by construction - so a velocity
-  // is normalised by separation * n, and the rotating-frame velocity is the
+  // is normalized by separation * n, and the rotating-frame velocity is the
   // inertial one minus the frame's own motion at that point.
   const mu = system.mu;
   const n = Math.sqrt(
@@ -351,7 +351,7 @@ export function tracerState(system) {
  *
  * @param {object} system - From readSystem()
  * @param {{vx: number, vy: number}} rotating - Wanted rotating-frame velocity,
- *   in the normalised units tracerState() reports
+ *   in the normalized units tracerState() reports
  * @returns {?{x: number, y: number}} The world velocity to assign
  */
 export function inertialVelocityFor(system, rotating) {
@@ -594,7 +594,7 @@ const PAIR_EXPERIMENT = 'Neck pair';
 /** True while either arm is running. */
 let pairRunning = false;
 /** Asked to stop. */
-let pairCancelled = false;
+let pairCanceled = false;
 /** The two arms, once they have run. */
 let pairArms = null;
 /** What they were run at. */
@@ -621,7 +621,7 @@ export const startNeckPair = () => runNeckPair();
 
 /** Ask the run in progress to stop after the arm it is on. */
 export function cancelNeckPair() {
-  if (pairRunning) pairCancelled = true;
+  if (pairRunning) pairCanceled = true;
 }
 
 /**
@@ -690,7 +690,7 @@ async function runArm({ bench, neck, label, direction, span, speed }) {
     // resolve a crossing that lasts a twentieth of the window.
     let frame = 0;
     const tick = () => {
-      if (pairCancelled) return resolve();
+      if (pairCanceled) return resolve();
       if (++frame % 4 === 0) sample();
       const covered = getSimClock() - startedAt;
       if (covered >= span) {
@@ -794,7 +794,7 @@ async function runNeckPair() {
   }
 
   pairRunning = true;
-  pairCancelled = false;
+  pairCanceled = false;
   renderPairVisibility(null);
   const run = $('cr3bpPairRun');
   const cancel = $('cr3bpPairCancel');
@@ -841,7 +841,7 @@ async function runNeckPair() {
       speed,
     });
     let b = null;
-    if (!pairCancelled) {
+    if (!pairCanceled) {
       if (status) status.textContent = t('cr3bp.pair.running', { done: 2 });
       b = await runArm({
         bench,
@@ -885,7 +885,7 @@ async function runNeckPair() {
         simSpeed: savedSpeed,
         watchedAt: SETTINGS.sim_speed,
       },
-      cancelled: pairCancelled,
+      canceled: pairCanceled,
       ranAt: new Date().toISOString(),
     };
   }
@@ -1053,7 +1053,7 @@ function renderPairCaveat() {
       : t(`cr3bp.pair.caveat.${c.region.reason}`)
   );
 
-  if (pairConfig?.cancelled) parts.push(t('cr3bp.pair.caveat.cancelled'));
+  if (pairConfig?.canceled) parts.push(t('cr3bp.pair.caveat.canceled'));
 
   parts.push(
     t(`cr3bp.pair.conclusion.${c.conclusion}`, {
@@ -1097,7 +1097,7 @@ function drawOverlay(ctx) {
  *
  * The whole efficiency story is in this function not running. 2*Omega over
  * 220x220 cells is fifty thousand square roots; it depends on mu and nothing
- * else, because the grid is in the rotating frame's own normalised
+ * else, because the grid is in the rotating frame's own normalized
  * coordinates, so a moving camera and a moving tracer both leave it valid.
  *
  * @param {number} mu - Mass parameter
@@ -1224,7 +1224,7 @@ function paintPoints(ctx, system, C) {
 
 /** Wire the panel up. Called once, when the chunk arrives. @returns {void} */
 export function initCr3bp() {
-  // This panel's strings are not in the start-up catalogue, so it registers
+  // This panel's strings are not in the start-up catalog, so it registers
   // them itself rather than trusting whoever opened it to have done so. The
   // bridge does register them first in the normal path; a lesson, a share link
   // or a test that drives the panel directly does not, and a panel that renders

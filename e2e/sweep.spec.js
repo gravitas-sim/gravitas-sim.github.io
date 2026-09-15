@@ -16,7 +16,7 @@
 //                                    is not a second implementation
 //
 //   nothing leaks between trials     value n+1 must not depend on value n, and
-//                                    cancelling must leave the live simulation
+//                                    canceling must leave the live simulation
 //                                    exactly where it was
 // =============================================================================
 
@@ -210,7 +210,7 @@ test.describe('the trials', () => {
 });
 
 test.describe('stopping it', () => {
-  test('cancelling leaves the live simulation exactly as it was', async ({
+  test('canceling leaves the live simulation exactly as it was', async ({
     page,
     app,
   }, testInfo) => {
@@ -241,14 +241,14 @@ test.describe('stopping it', () => {
       const result = await running;
       return {
         wasRunning,
-        cancelled: result.cancelled,
-        notRun: result.counts.cancelled,
+        canceled: result.canceled,
+        notRun: result.counts.canceled,
         stillSweeping: bench.isSweeping(),
       };
     }, BINARY);
 
     expect(out.wasRunning).toBe(true);
-    expect(out.cancelled).toBe(true);
+    expect(out.canceled).toBe(true);
     // The values that never ran are in the table as such rather than absent.
     expect(out.notRun).toBeGreaterThan(0);
     expect(out.stillSweeping).toBe(false);
@@ -301,7 +301,7 @@ test.describe('what it reports', () => {
       expect(tr.status.length).toBeGreaterThan(0);
     }
     expect(out.counts.total).toBe(4);
-    expect(out.counts.ok + out.counts.failed + out.counts.cancelled).toBe(4);
+    expect(out.counts.ok + out.counts.failed + out.counts.canceled).toBe(4);
   });
 
   test('the CSV carries the initial conditions and the numerical settings', async ({
@@ -453,7 +453,7 @@ test.describe('a trial that does not finish says so', () => {
 
     // The clock is frozen a moment after the sweep starts. Every animation
     // frame still fires; none of them advances the simulation. The old runner
-    // counted them all and returned a trial labelled `ok` that had integrated
+    // counted them all and returned a trial labeled `ok` that had integrated
     // almost nothing.
     const out = await page.evaluate(
       async spec => {
@@ -488,7 +488,7 @@ test.describe('a trial that does not finish says so', () => {
       async ([trials, metric]) => {
         const s = await import('/js/experiments/sweep.js');
         return {
-          summary: s.summarise(trials, metric),
+          summary: s.summarize(trials, metric),
           tally: s.tally(trials),
         };
       },
@@ -503,7 +503,7 @@ test.describe('a trial that does not finish says so', () => {
     }
   });
 
-  test('cancelling mid-sweep leaves the live world where it was', async ({
+  test('canceling mid-sweep leaves the live world where it was', async ({
     page,
     app,
   }, testInfo) => {
@@ -532,7 +532,7 @@ test.describe('a trial that does not finish says so', () => {
       },
       { ...BINARY, count: 6, duration: 20000 }
     );
-    expect(out.cancelled).toBe(true);
+    expect(out.canceled).toBe(true);
 
     const after = await page.evaluate(async () => {
       const { SETTINGS, current_scenario_name } =

@@ -55,7 +55,7 @@ export const STAMPED_PAGES = Object.freeze([
  * Everything the deploy is allowed to change, relative to the commit.
  *
  * Anything else differing is the failure this guards against: a regenerated
- * instructor bundle, a stray build artefact, a file some step rewrote by
+ * instructor bundle, a stray build artifact, a file some step rewrote by
  * accident. The list is short on purpose and every entry is accounted for
  * below.
  */
@@ -234,7 +234,7 @@ export function preparePages(opts = {}) {
       problems.push(`these files went missing: ${diff.removed.join(', ')}`);
     }
 
-    // And the four artefacts have to describe ONE candidate.
+    // And the four artifacts have to describe ONE candidate.
     for (const page of STAMPED_PAGES) {
       const file = path.join(out, page);
       if (!existsSync(file)) continue;

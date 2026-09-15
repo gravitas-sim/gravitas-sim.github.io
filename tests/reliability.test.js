@@ -274,7 +274,7 @@ describe('an under-resolved encounter', () => {
   });
 });
 
-describe('legitimate nonconservative behaviour', () => {
+describe('legitimate nonconservative behavior', () => {
   test('a merging scenario is not judged on its energy', () => {
     const coarse = run({
       step: 0.1,
@@ -559,7 +559,7 @@ describe('early agreement then late divergence does not establish chaos', () => 
   const detunedSinusoids = (n = 2000) =>
     Array.from({ length: n }, (_, i) => {
       // Twenty samples per cycle, so neither series is aliased - sampling near
-      // the period is its own artefact and would prove nothing about either.
+      // the period is its own artifact and would prove nothing about either.
       const t = i * 0.05;
       return {
         t,

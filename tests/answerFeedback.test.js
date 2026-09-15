@@ -77,7 +77,7 @@ describe('only the mistakes an author named are named back', () => {
 
   test('the rule is as forgiving about its value as the question is about the right one', () => {
     // A rule for twice the answer uses twice the tolerance, so a student who is
-    // within tolerance of the doubled value is recognised.
+    // within tolerance of the doubled value is recognized.
     const s = step({ misconceptions: [{ id: 'peakToPeakForSemiAmplitude' }] });
     expect(matchMisconception(s, 20.9, 0.5)?.id).toBe(
       'peakToPeakForSemiAmplitude'

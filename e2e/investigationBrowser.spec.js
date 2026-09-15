@@ -1,7 +1,7 @@
 // =============================================================================
 // The lesson browser: finding one of seventeen
 // -----------------------------------------------------------------------------
-// The catalogue got big enough that a grid is no longer an answer to "which
+// The catalog got big enough that a grid is no longer an answer to "which
 // one?". What is checked here is the machinery that replaced it: a search box,
 // four menus, three curated orders, and the promise that all of it is written
 // from the generated manifest rather than a second list.
@@ -28,7 +28,7 @@ async function openBrowser(page, app) {
   }
   await page.locator('#investigationsBtn').click();
   await expect(page.locator('#investigationBrowser')).toBeVisible();
-  // The filter labels live in the deferred catalogue; without this the first
+  // The filter labels live in the deferred catalog; without this the first
   // assertion can race the fetch that fills the menus.
   await expect(
     page.locator('#investigationFilterSubject option')
@@ -36,10 +36,10 @@ async function openBrowser(page, app) {
 }
 
 /**
- * How many lessons the catalogue has.
+ * How many lessons the catalog has.
  *
  * Read from the manifest rather than written down. This file's thesis is that
- * the browser is the catalogue, and a literal here would make every one of
+ * the browser is the catalog, and a literal here would make every one of
  * these assertions a statement about the number seventeen instead - which is
  * how four of them came to fail on the day an eighteenth lesson was added,
  * having caught nothing.
@@ -51,18 +51,18 @@ const lessonCount = page =>
   });
 
 /**
- * The ids the catalogue itself says belong to a length bucket.
+ * The ids the catalog itself says belong to a length bucket.
  *
  * Derived rather than written down, for the reason the bucket exists: a
  * lesson's slot is read off its declared duration, so any lesson that gets
  * longer or shorter moves between slots. A test that listed the short ones by
- * name would fail the next time one of them grew - which is the catalogue
+ * name would fail the next time one of them grew - which is the catalog
  * working, not the filter breaking.
  *
  * @param {object} page - Playwright page
  * @param {string} want - One of LENGTH
  * @param {?string} subject - A tag to intersect with, or null
- * @returns {Promise<Array<string>>} The ids, in catalogue order
+ * @returns {Promise<Array<string>>} The ids, in catalog order
  */
 const idsOfLength = (page, want, subject = null) =>
   page.evaluate(
@@ -84,7 +84,7 @@ const shownIds = page =>
     .locator('#investigationList [data-investigation]')
     .evaluateAll(nodes => nodes.map(n => n.dataset.investigation));
 
-test.describe('the filters are the catalogue', () => {
+test.describe('the filters are the catalog', () => {
   test('every menu is built from the manifest, not from the markup', async ({
     page,
     app,
@@ -106,7 +106,7 @@ test.describe('the filters are the catalogue', () => {
         menu: menu.sort(),
         // Nothing about a lesson is spelled out in the served markup; if a
         // title or a duration were written there it could disagree with the
-        // catalogue. Fetched rather than read off the DOM, because the DOM is
+        // catalog. Fetched rather than read off the DOM, because the DOM is
         // exactly where the generated cards have just been written.
         markupNamesALesson: await window
           .fetch('/index.html')
@@ -115,7 +115,7 @@ test.describe('the filters are the catalogue', () => {
       };
     });
 
-    // Every lesson the catalogue holds, and more than a handful of them.
+    // Every lesson the catalog holds, and more than a handful of them.
     expect(built.lessons).toBe(await lessonCount(page));
     expect(built.lessons).toBeGreaterThan(10);
     expect(built.menu).toEqual(built.subjects);
@@ -153,7 +153,7 @@ test.describe('the curated orders', () => {
     await expect(sequences).toBeVisible();
     // Counted from js/data/investigations/sequences.js. This said three and
     // the file has held four since the gravitational-wave order was added, so
-    // the assertion had been failing on a catalogue that was correct.
+    // the assertion had been failing on a catalog that was correct.
     await expect(page.locator('.inv-seq')).toHaveCount(SEQUENCES.length);
 
     // A demonstration label is only ever on a lesson that really is short.
@@ -391,7 +391,7 @@ test.describe('everyone can use it', () => {
     await expect(page.locator('#investigationBrowser')).toBeVisible();
 
     // Read while nothing is filtered. The sequences are only on screen in that
-    // state - searching hides them, which is the intended behaviour and is
+    // state - searching hides them, which is the intended behavior and is
     // asserted elsewhere - so asking for a sequence title after a search is a
     // race against the search debounce rather than a check of anything.
     await expect(page.locator('.inv-filter span').first()).toHaveText(
@@ -407,7 +407,7 @@ test.describe('everyone can use it', () => {
       /No da nada por hecho/
     );
 
-    // The Spanish catalogue is what is being searched: "marea" is a word the
+    // The Spanish catalog is what is being searched: "marea" is a word the
     // English manifest does not contain anywhere.
     await page.locator('#investigationSearch').fill('marea');
     await expect.poll(() => shownIds(page)).toEqual(['tides']);

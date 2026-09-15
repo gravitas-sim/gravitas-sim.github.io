@@ -55,7 +55,7 @@ describe('the noise is reproducible and is actually Gaussian', () => {
     expect(gaussianAt('a', 3)).not.toBe(gaussianAt('b', 3));
   });
 
-  test('neighbouring epochs are not neighbouring numbers', () => {
+  test('neighboring epochs are not neighboring numbers', () => {
     // Without a mixing step, seeding a generator on index+1 leaves adjacent
     // epochs visibly correlated and the "noise" walks smoothly across the plot.
     const a = [];
@@ -333,7 +333,7 @@ describe("the lesson's two schedules", () => {
     expect(statsFor(B).n).toBe(12);
   });
 
-  test('the longer programme has the worse phase coverage', () => {
+  test('the longer program has the worse phase coverage', () => {
     const a = statsFor(A);
     const b = statsFor(B);
     expect(b.baselineDays).toBeGreaterThan(a.baselineDays * 10);

@@ -378,9 +378,9 @@ export const SPACE_OBJECT_NAMES = {
     'Orbit Rocket',
   ],
 
-  // Cluster members. Named the way real catalogues name them - a survey
+  // Cluster members. Named the way real catalogs name them - a survey
   // designation and a running number - rather than with the invented-sounding
-  // names the other pools use, because a galaxy in a cluster is a catalogue
+  // names the other pools use, because a galaxy in a cluster is a catalog
   // entry and that is part of what the scenario is showing.
   galaxies: [
     'NGC 4874',

@@ -1,7 +1,7 @@
 // =============================================================================
 // The observing lab
 // -----------------------------------------------------------------------------
-// The lab's state - what is modelled, where the playhead is, which noise
+// The lab's state - what is modeled, where the playhead is, which noise
 // realization is under the signal, what is pinned against what - is separate
 // from the canvas that draws it, so all of it can be checked here without a
 // browser. The drawing itself is exercised through a stub context: a typo in a
@@ -112,12 +112,12 @@ describe('the presets', () => {
     expect(byId.nsbh.iscoHz).toBeLessThan(byId.bns.iscoHz);
   });
 
-  test('every preset is frozen, so a widget cannot edit the catalogue', () => {
+  test('every preset is frozen, so a widget cannot edit the catalog', () => {
     for (const p of PRESETS) expect(Object.isFrozen(p)).toBe(true);
   });
 });
 
-describe('the modelled window is an excerpt, and says so', () => {
+describe('the modeled window is an excerpt, and says so', () => {
   test('a black-hole binary fits whole, and is not marked as excerpted', () => {
     const f = describeLab(PRESETS.find(p => p.id === 'bbh'));
     expect(f.excerpted).toBe(false);
@@ -207,7 +207,7 @@ describe('the playhead', () => {
     state = createLab({ params: PRESETS[0] });
   });
 
-  test('starts at the beginning of the modelled span', () => {
+  test('starts at the beginning of the modeled span', () => {
     expect(state.cursorT).toBeCloseTo(state.timeline.tStart, 9);
     expect(cursorFraction(state)).toBeCloseTo(0, 9);
   });
@@ -540,7 +540,7 @@ describe('the widgets', () => {
     }
   });
 
-  test('the real-data readout always names its source, DOI and licence', () => {
+  test('the real-data readout always names its source, DOI and license', () => {
     const w = real();
     const rows = w.readout(defaults(w), undefined, {});
     const text = rows.map(r => r.value).join(' | ');

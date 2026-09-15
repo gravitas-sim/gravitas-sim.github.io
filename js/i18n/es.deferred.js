@@ -133,7 +133,7 @@ export const ES_DEFERRED = {
   'assist.encounter.notRun': 'no se ejecuto',
   'assist.ab.caveat.incomplete':
     '{n} de los dos pasos no produjo un encuentro completo ({which}), asi que nada de su columna es un antes y un despues.',
-  'assist.ab.caveat.cancelled':
+  'assist.ab.caveat.canceled':
     'Esto se detuvo antes de terminar, asi que los pasos que nunca se ejecutaron aparecen marcados como tales en lugar de omitirse.',
   'assist.ab.caveat.deltaV':
     'Los dos pasos cambiaron la velocidad en la misma cantidad hasta un {percent}%, giraron el mismo angulo hasta un {deflection}% y se acercaron igual hasta un {closest}%. Eso es la imagen especular haciendo lo que debe hacer una imagen especular.',
@@ -208,11 +208,11 @@ export const ES_DEFERRED = {
     'Todavia no resuelto: hacen falta dos repeticiones que calculen la respuesta de otra manera, y hay {n} hasta ahora. Hasta entonces la divergencia es un numero que produjo este integrador.',
   'bench.chaos.unresolved.controlsIneffective':
     'No resuelto: las repeticiones no cambiaron de verdad la aritmetica -el paso medido y el integrador salieron iguales-, asi que coinciden con el original por un motivo que no vale nada.',
-  'bench.chaos.unresolved.behaviour-changed':
+  'bench.chaos.unresolved.behavior-changed':
     'NO RESUELTO: las repeticiones ni siquiera coincidieron en que tipo de crecimiento es este. El informe honesto es que esta medida no esta resuelta numericamente, no un numero menor.',
   'bench.chaos.unresolved.timescale-moved':
     'NO RESUELTO: los tiempos de e-plegado abarcan un {spread}%, mas de lo que el refinamiento deberia mover una respuesta fisica. El informe honesto es que esta medida no esta resuelta numericamente.',
-  'bench.chaos.cancelled':
+  'bench.chaos.canceled':
     'Esto se detuvo antes de terminar, asi que al menos un brazo es mas corto de lo que se le pidio.',
 
   // --- El par controlado de la leccion de Lagrange -------------------------
@@ -259,7 +259,7 @@ export const ES_DEFERRED = {
     'El cuello de L1 no estaba abierto para los dos brazos, asi que \u00abno paso\u00bb es una afirmacion sobre un muro y no sobre un camino.',
   'cr3bp.pair.caveat.exteriorOpen':
     'El cuello de L2 tambien estaba abierto, asi que el trazador no estaba confinado a las regiones de las dos estrellas y \u00abno uso el cuello de L1\u00bb habla de un hueco entre varios.',
-  'cr3bp.pair.caveat.cancelled':
+  'cr3bp.pair.caveat.canceled':
     'Esto se detuvo antes de terminar, asi que al menos un brazo se observo menos de la ventana completa.',
   'cr3bp.pair.caveat.window':
     'Todo esto se refiere a {periods} periodos binarios. Un camino que no uso el cuello en ese tiempo puede usarlo en el siguiente.',
@@ -417,8 +417,7 @@ export const ES_DEFERRED = {
     'Una comprobación de fiabilidad está usando la simulación. Espera a que termine, o cancélala.',
   'reliability.reason.alreadyRunning': 'Ya hay una comprobacion en curso.',
   'reliability.reason.noMetrics': 'Elige al menos una magnitud que medir.',
-  'reliability.reason.cancelled':
-    'Detenida. El mundo ha vuelto a donde estaba.',
+  'reliability.reason.canceled': 'Detenida. El mundo ha vuelto a donde estaba.',
 
   'reliability.conservationIsNotAccuracy':
     'La energia y el momento angular se muestran como evidencia aparte, no como veredicto. Una pasada que conserva bien puede seguir siendo erronea: la energia es un solo numero, y un encuentro cercano puede resolverse con muy poca finura sin alterarla.',
@@ -497,7 +496,7 @@ export const ES_DEFERRED = {
   'bench.perturb.no-such-body': 'Ese cuerpo no está en el inicio capturado.',
   'bench.perturb.bad-axis': 'Eso no es una coordenada.',
   'bench.perturb.bad-delta': 'Escribe una perturbación distinta de cero.',
-  'bench.control.row': '{label}: {behaviour}, crecimiento {tau} s',
+  'bench.control.row': '{label}: {behavior}, crecimiento {tau} s',
   'bench.control.recorded': 'Registrado como control: {label}',
   'bench.control.failed':
     'Graba primero ambas ejecuciones, con las posiciones entre las medidas.',
@@ -577,7 +576,7 @@ export const ES_DEFERRED = {
   'sweep.guided': 'Ejemplo guiado',
   'sweep.progress': 'Prueba {trial} de {total}, {percent}%',
   'sweep.done':
-    '{ok} de {total} pruebas medidas, {failed} fallidas, {cancelled} sin ejecutar. {seconds}s.',
+    '{ok} de {total} pruebas medidas, {failed} fallidas, {canceled} sin ejecutar. {seconds}s.',
   'sweep.range': 'Rango permitido de {min} a {max}',
   'sweep.settings':
     'Las demas condiciones iniciales son las del escenario con la semilla {seed}. {integrator}, {substeps} subpasos por fotograma, paso {step}.',
@@ -596,7 +595,7 @@ export const ES_DEFERRED = {
   'sweep.status.notFinite': 'la medida no resulto ser un numero',
   'sweep.status.lostBody':
     'un cuerpo se destruyo durante esta prueba, asi que las muestras posteriores son de otro sistema',
-  'sweep.status.cancelled': 'sin ejecutar',
+  'sweep.status.canceled': 'sin ejecutar',
   'sweep.status.stalled': 'se detuvo antes',
   'sweep.status.capped': 'alcanzo el limite de muestras',
 
@@ -949,10 +948,10 @@ export const ES_DEFERRED = {
   'tideW.massOfTheCompanion': 'Masa del compañero',
   'tideW.moonSMass': '× la masa de la Luna',
   'tideW.pullOnTheNearSide': 'Atracción sobre el lado cercano',
-  'tideW.pullOnTheCentre': 'Atracción sobre el centro',
+  'tideW.pullOnTheCenter': 'Atracción sobre el centro',
   'tideW.pullOnTheFarSide': 'Atracción sobre el lado lejano',
-  'tideW.nearSideMinusTheCentre': 'Lado cercano, menos el centro',
-  'tideW.farSideMinusTheCentre': 'Lado lejano, menos el centro',
+  'tideW.nearSideMinusTheCenter': 'Lado cercano, menos el centro',
+  'tideW.farSideMinusTheCenter': 'Lado lejano, menos el centro',
   'tideW.nearSideBiggerThanFar': 'El lado cercano supera al lejano en',
   'tideW.towardTheCompanion': 'hacia el compañero',
   'tideW.whatIsLeftOver': 'lo que queda',
@@ -1051,7 +1050,7 @@ export const ES_DEFERRED = {
   'hzW.whereTheEdgesComeFrom': 'De dónde salen los bordes',
   'hzW.definition': 'Definición',
   'hzW.conservative': 'Conservadora',
-  'hzW.optimistic': 'Optimista',
+  'hzW.optimiztic': 'Optimista',
   'hzW.definitionShown': 'Definición mostrada',
   'hzW.innerEdge': 'Borde interior',
   'hzW.outerEdge': 'Borde exterior',
@@ -1096,7 +1095,7 @@ export const ES_DEFERRED = {
     'La grabación, el ajuste o el rango de búsqueda han cambiado desde que se ejecutó este análisis, así que sus intervalos ya no describen lo que hay en pantalla. Vuelve a ejecutarlo.',
   'rvfit.mc.outcome.complete':
     'Todas las pruebas se ejecutaron y dieron ajuste.',
-  'rvfit.mc.outcome.cancelled':
+  'rvfit.mc.outcome.canceled':
     'Detenido por ti tras {done} de {total} pruebas.',
   'rvfit.mc.outcome.partial': '{done} de {total} pruebas dieron ajuste.',
 
@@ -1138,7 +1137,7 @@ export const ES_DEFERRED = {
     'Todas las pruebas devolvieron el mismo período, lo que significa que la rejilla de búsqueda es más gruesa que la incertidumbre que se está midiendo. No se informa ningún intervalo, porque sería un retrato de la rejilla y no de los datos.',
   'rvfit.mc.result.incomplete':
     'Se ejecutaron {done} de {total} pruebas. Los intervalos de abajo salen de esas {done}.',
-  'rvfit.mc.result.cancelled': 'Cancelado tras {done} de {total} pruebas.',
+  'rvfit.mc.result.canceled': 'Cancelado tras {done} de {total} pruebas.',
   'rvfit.mc.result.failures': '{n} pruebas no dieron ajuste: {why}.',
   'rvfit.mc.result.epochs':
     '{n} épocas, línea de base de {baseline} d, {samples} puntos de rejilla por prueba, semilla {seed}.',
@@ -1206,7 +1205,7 @@ export const ES_DEFERRED = {
   'resW.row.ratio': 'P({a}) / P({b})',
   'resW.row.watched': 'Observado durante',
   'resW.row.verdict': 'Veredicto',
-  'resW.row.centre': 'Centro de libración',
+  'resW.row.center': 'Centro de libración',
   'resW.row.amplitude': 'Amplitud',
   'resW.row.libration': 'Periodo de libración',
   'resW.row.circulation': 'Periodo de circulación',
@@ -1235,7 +1234,7 @@ export const ES_DEFERRED = {
     'el ángulo se ha movido {drift}° hasta ahora; eso es una libración de al menos esa anchura o una circulación de {cycles} ciclos de conjunción, y nada aquí las distingue',
   'resW.value.sampling': '{n} muestras, una cada {every} días',
   'resW.value.spread': 'centrado en {mean}°, dispersión ±{spread}°',
-  'resW.value.tadpole': '{kind} en torno a {centre}°, amplitud ±{amp}°',
+  'resW.value.tadpole': '{kind} en torno a {center}°, amplitud ±{amp}°',
   'resW.verdict.none': 'aún no se ha medido nada',
   'resW.verdict.circulation':
     'CIRCULACIÓN: el ángulo recorre todos los valores, así que no hay resonancia',
@@ -1247,7 +1246,7 @@ export const ES_DEFERRED = {
     'LIBRACIÓN: el ángulo se dio la vuelta y regresó a donde empezó; una inversión más confirmará el periodo',
   'resW.inconclusive.one-reversal':
     'NO CONCLUYENTE: se ha dado la vuelta una vez, cosa que también hace un ángulo que circula despacio con una oscilación encima',
-  'resW.inconclusive.drifting-centre':
+  'resW.inconclusive.drifting-center':
     'NO CONCLUYENTE: oscila, pero cada oscilación termina más allá que la anterior, así que el centro se desplaza',
   'resW.inconclusive.confined':
     'NO CONCLUYENTE: confinado hasta ahora, pero aún no se ha dado la vuelta, y una circulación suficientemente lenta se vería igual',
@@ -1287,7 +1286,7 @@ export const ES_DEFERRED = {
   'chaosW.row.start': 'Separación al principio',
   'chaosW.row.end': 'Separación al final',
   'chaosW.row.growth': 'Creció',
-  'chaosW.row.behaviour': 'Comportamiento',
+  'chaosW.row.behavior': 'Comportamiento',
   'chaosW.row.window': 'Ajustado en',
   'chaosW.row.noEstimate': 'Sin tiempo de crecimiento porque',
   'chaosW.row.straightLine': 'Una recta ajusta con',
@@ -1321,7 +1320,7 @@ export const ES_DEFERRED = {
   'chaosW.reject.insufficient': 'no hay datos suficientes',
   'chaosW.unresolved.need-two-estimates':
     'vuelve a grabar la comparación con un paso temporal menor u otro integrador',
-  'chaosW.unresolved.behaviour-changed':
+  'chaosW.unresolved.behavior-changed':
     'NO RESUELTO: el comportamiento mismo cambió con la numérica',
   'chaosW.unresolved.timescale-moved':
     'NO RESUELTO: el tiempo de crecimiento se movió con el paso temporal, así que es una propiedad del integrador',
@@ -1505,7 +1504,7 @@ export const ES_DEFERRED = {
   'nb.flag.multivariable': 'más de una variable difería entre las ejecuciones',
   'nb.flag.bench-warning':
     'el banco emitió una advertencia sobre esta comparación',
-  'nb.flag.cancelled': 'la ejecución se canceló antes de terminar',
+  'nb.flag.canceled': 'la ejecución se canceló antes de terminar',
   'nb.flag.failed-trials': 'algunas pruebas no produjeron resultado',
   'nb.flag.reliability-check': 'esto es una comparación de dos tamaños de paso',
   'nb.flag.verdict-converging':
@@ -1523,11 +1522,11 @@ export const ES_DEFERRED = {
   'nb.rv.mcFamilies': 'Familias de alias en las que se separaron los reajustes',
   'nb.rv.mcTopFamily':
     'la más poblada es {period} d, con el {pct}% de las pruebas; ningún intervalo único es significativo',
-  'nb.flag.uncertainty-analysed':
+  'nb.flag.uncertainty-analyzed':
     'se guardó un análisis de incertidumbre con esta medición',
   'nb.flag.uncertainty-multimodal':
     'los reajustes se separaron en varias familias de alias, así que no se da un intervalo único',
-  'nb.flag.uncertainty-cancelled':
+  'nb.flag.uncertainty-canceled':
     'el análisis de incertidumbre se detuvo antes de terminar',
   'nb.flag.uncertainty-partial':
     'algunas pruebas de incertidumbre no dieron ajuste',
@@ -1594,7 +1593,7 @@ export const ES_DEFERRED = {
     'Se barrió una variable y se mantuvo todo lo demás: nada de aquí dice cómo interactúan los parámetros.',
   'nb.sweep.limit.failed':
     '{n} pruebas no produjeron resultado, así que el rango no está muestreado de forma uniforme.',
-  'nb.sweep.limit.cancelled':
+  'nb.sweep.limit.canceled':
     'El barrido se canceló, así que el rango no se cubrió como estaba previsto.',
 
   'nb.rel.title': 'Comprobación de fiabilidad: {scenario}',
@@ -2162,8 +2161,8 @@ export const ES_DEFERRED = {
   'rv.survey.restart': 'Reiniciar campaña',
   'rv.survey.restart.hint':
     'Descarta las medidas y empieza el calendario de nuevo',
-  'rv.survey.analyse': 'Analizar',
-  'rv.survey.analyse.hint':
+  'rv.survey.analyze': 'Analizar',
+  'rv.survey.analyze.hint':
     'Abre el espacio de análisis sobre estas medidas: ajusta un modelo circular a mano, o busca en un rango acotado de periodos.',
   'rv.survey.idealLabel': 'Señal ideal (capa didáctica, no son datos)',
   'rv.survey.progress': '{taken} de {planned} medidas tomadas.',
@@ -2207,7 +2206,7 @@ export const ES_DEFERRED = {
     '{n} ensayos no completaron la ventana, asi que no establecen nada sobre el planeta en ningun sentido.',
   'binarySweep.caveat.unreliable':
     '{n} ensayos derivaron demasiado en energia como para sacar una conclusion, hiciera lo que hiciera el planeta.',
-  'binarySweep.caveat.cancelled':
+  'binarySweep.caveat.canceled':
     'Este barrido se detuvo antes de terminar, asi que los valores que no alcanzo faltan, no es que no fueran interesantes.',
   'binarySweep.caveat.window':
     'Cada uno de estos son {periods} periodos binarios. La frontera publicada esta ajustada con diez mil, y un planeta puede girar tranquilo durante cientos antes de que su orbita sea expulsada: "seguia ahi" habla de esta ventana, no del futuro.',
@@ -2248,7 +2247,7 @@ export const ES_DEFERRED = {
     'Masas {m1} y {m2}, excentricidad {e}, semilla {seed}: un solo sistema, y el radio inicial es lo unico que cambio.',
   'nb.binarySweep.limit.unusable':
     '{n} ensayos no establecieron nada y estan en la figura como tales, no descartados.',
-  'nb.binarySweep.limit.cancelled':
+  'nb.binarySweep.limit.canceled':
     'El barrido se detuvo antes de tiempo, asi que los radios que no alcanzo faltan, no es que no fueran interesantes.',
   'nb.binarySweep.limit.resolved':
     'El ensayo en {value} se repitio con la mitad del paso y dio el mismo resultado, asi que ese resultado no es un artefacto del tamano del paso.',
@@ -2270,7 +2269,7 @@ export const ES_DEFERRED = {
     'Solo cambio el parametro de impacto: velocidad de aproximacion {vinf}, integrador y paso, semilla {seed}.',
   'nb.assist.limit.incomplete':
     '{n} paso(s) no produjo un encuentro completo; se informan, no se descartan.',
-  'nb.assist.limit.cancelled':
+  'nb.assist.limit.canceled':
     'Se detuvo antes de terminar, asi que no cubre los valores que se le pidieron.',
   'nb.assist.ab.title': 'El mismo sobrevuelo por los dos lados del planeta',
   'nb.assist.ab.gain': 'Cambio de rapidez pasando por detras',
@@ -2341,18 +2340,18 @@ export const ES_DEFERRED = {
   'nb.chaosPair.tauNote':
     'Ajustado entre {from} y {to} segundos simulados, r\u00b2 {r2}. Fuera de ese intervalo la separacion sigue siendo el empujon, o ha dejado de crecer.',
   'nb.chaosPair.growth': 'Factor de crecimiento total',
-  'nb.chaosPair.behaviour': 'Que hizo la separacion',
-  'nb.chaosPair.behaviour.identical':
+  'nb.chaosPair.behavior': 'Que hizo la separacion',
+  'nb.chaosPair.behavior.identical':
     'nada: las dos ejecuciones siguieron identicas',
-  'nb.chaosPair.behaviour.bounded': 'se mantuvo cerca, sin crecer',
-  'nb.chaosPair.behaviour.linear':
+  'nb.chaosPair.behavior.bounded': 'se mantuvo cerca, sin crecer',
+  'nb.chaosPair.behavior.linear':
     'crecio en proporcion al tiempo, ajuste recto r\u00b2 {r2}: deriva, no caos',
-  'nb.chaosPair.behaviour.saturated':
+  'nb.chaosPair.behavior.saturated':
     'crecio y luego paro, al quedarse sin sistema del que separarse mas',
-  'nb.chaosPair.behaviour.exponential': 'crecio exponencialmente',
-  'nb.chaosPair.behaviour.insufficient':
+  'nb.chaosPair.behavior.exponential': 'crecio exponencialmente',
+  'nb.chaosPair.behavior.insufficient':
     'no se pudo clasificar con esta ejecucion',
-  'nb.chaosPair.behaviour.none': 'no se midio',
+  'nb.chaosPair.behavior.none': 'no se midio',
   'nb.chaosPair.controls': 'Controles numericos efectivos',
   'nb.chaosPair.controlsResolved':
     'Sus tiempos de e-plegado abarcan un {spread}%, asi que la respuesta no es una propiedad de la aritmetica.',
@@ -2369,8 +2368,8 @@ export const ES_DEFERRED = {
     'Dos ejecuciones del mismo sistema desde el mismo inicio capturado, sin nada cambiado entre ellas.',
   'nb.chaosPair.evidenceExponential':
     'La separacion crecio exponencialmente con un tiempo de e-plegado de {tau} segundos simulados, a lo largo de unos {efolds} e-plegados.',
-  'nb.chaosPair.evidenceOther': 'La separacion {behaviour}.',
-  'nb.chaosPair.limit.cancelled':
+  'nb.chaosPair.evidenceOther': 'La separacion {behavior}.',
+  'nb.chaosPair.limit.canceled':
     'Se detuvo antes de terminar, asi que al menos una ejecucion es mas corta de lo que se le pidio.',
   'nb.chaosPair.limit.interval':
     'Las dos ejecuciones no cubren el mismo intervalo, asi que el ajuste abarca menos que cualquiera de ellas.',
@@ -2404,7 +2403,7 @@ export const ES_DEFERRED = {
     'El brazo {which} no cruzo el cuello de L1 durante esta ejecucion.',
   'nb.neckPair.limit.notControlled':
     'El control fallo: los dos brazos no tenian la misma region accesible, asi que sus caminos difieren por un motivo que esta actividad debia excluir.',
-  'nb.neckPair.limit.cancelled':
+  'nb.neckPair.limit.canceled':
     'Se detuvo antes de terminar, asi que al menos un brazo se observo menos que la ventana.',
   'nb.neckPair.limit.short':
     'Al menos un brazo se corto antes. Un brazo que paro pronto no es que no cruzara: no se observo lo suficiente para decirlo.',
@@ -2436,7 +2435,7 @@ export const ES_DEFERRED = {
     'h₊ = {plus}, h× = {cross}. Son los dos números con los que se dibuja la imagen: el cambio relativo de longitud en las dos direcciones. Ambos son adimensionales.',
   'gwW.row.arms': 'Qué leería una L',
   'gwW.value.arms':
-    'A lo largo del brazo horizontal la longitud cambia en una fracción {x}; a lo largo del vertical, {y}. El instrumento mide la DIFERENCIA, {diff}, que en los brazos de cuatro kilómetros de LIGO son {metres} metros. Por eso la forma es una L: dos longitudes comparadas entre sí, no una longitud medida en términos absolutos.',
+    'A lo largo del brazo horizontal la longitud cambia en una fracción {x}; a lo largo del vertical, {y}. El instrumento mide la DIFERENCIA, {diff}, que en los brazos de cuatro kilómetros de LIGO son {meters} metros. Por eso la forma es una L: dos longitudes comparadas entre sí, no una longitud medida en términos absolutos.',
   'gwW.row.polarization': 'Polarización',
   'gwW.value.polarization.linear':
     'Lineal. Solo está presente la polarización «más», así que el anillo se estira en una dirección, pasa exactamente por un círculo y se comprime en la otra. Esta es la imagen limpia de estiramiento y compresión.',
@@ -2575,7 +2574,7 @@ export const ES_DEFERRED = {
   'gwW.real.row.residual': 'Lo que queda',
   'gwW.real.value.residual':
     'Ruido. Suena igual de fuerte antes de que llegue la señal que después, y así es como se sabe.',
-  'gwW.real.row.licence': 'Licencia',
+  'gwW.real.row.license': 'Licencia',
   'gwW.action.listen': 'Escuchar',
   'gwW.row.mapping': 'Lo que estás oyendo',
   'gwW.value.mapping.rate':
@@ -3395,7 +3394,7 @@ export const ES_DEFERRED = {
   'stelW.pop.cut': 'por debajo del corte, así que ningún sondeo la incluiría',
   'stelW.pop.row.onCanvas': 'En el lienzo',
   'stelW.pop.value.onCanvas':
-    '{shown} estrellas, de una submuestra acotada de {subsample} tomada de las {modelled} que las trazas pudieron modelar, de {requested} extraídas. Cuatro números distintos: el lienzo no es la muestra y la muestra no es la población.',
+    '{shown} estrellas, de una submuestra acotada de {subsample} tomada de las {modeled} que las trazas pudieron modelar, de {requested} extraídas. Cuatro números distintos: el lienzo no es la muestra y la muestra no es la población.',
   'stelW.pop.row.type': 'Tipo {type}',
   'stelW.pop.value.type':
     '{all} en la muestra ({allPct}%), {bright} en el subconjunto brillante ({brightPct}%)',
@@ -3431,7 +3430,7 @@ export const ES_DEFERRED = {
   'nb.binary.split': 'Masa de {star}',
   'nb.binary.timedNote':
     'Cronometrado por el estudiante contra el reloj de la simulación.',
-  'nb.binary.modelledNote':
+  'nb.binary.modeledNote':
     'Tomado del modelo en vez de cronometrado, así que es una predicción y no una medida.',
   'nb.binary.totalNote':
     'Calculada a partir de la separación y el periodo mediante la forma de Newton de la tercera ley de Kepler. Nadie pesó este par.',

@@ -245,7 +245,7 @@ test.describe('closing does not change things it was not asked to', () => {
     expect(staged, 'the slider really moved').not.toBe(before);
 
     await page.locator('#settingsCancel').click();
-    expect(await speed(), 'cancelling applied nothing').toBe(before);
+    expect(await speed(), 'canceling applied nothing').toBe(before);
 
     // And the abandoned value is gone rather than waiting to be applied by
     // accident the next time somebody presses Apply.
@@ -257,7 +257,7 @@ test.describe('closing does not change things it was not asked to', () => {
     ).toBe(before);
   });
 
-  test('a paused simulation is still paused after opening and cancelling', async ({
+  test('a paused simulation is still paused after opening and canceling', async ({
     page,
     app,
   }) => {

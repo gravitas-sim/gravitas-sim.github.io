@@ -8,7 +8,7 @@
    grids in there would charge that download for a page most visitors never
    open, so this sheet stays separate and this page pays for it alone.
 
-   Nothing here defines a colour. The palette, the radii, the spacing scale and
+   Nothing here defines a color. The palette, the radii, the spacing scale and
    the four themes all come from tokens.css, which means a reader arriving from
    the simulation sees the theme they left with, including the light one.
 
@@ -28,7 +28,7 @@
   }
 
   /* --text-secondary rather than --text-muted. css/page.css already records
-     that muted grey fails contrast at small sizes in every theme, and this is
+     that muted gray fails contrast at small sizes in every theme, and this is
      small type; there is no reason to relearn it here. */
   .teach-fineprint {
     font-size: var(--text-sm);
@@ -395,7 +395,7 @@
   /* --- Classroom activities --------------------------------------------------
      One activity, three formats. The formats differ in kind rather than in
      degree - who runs it, how long it takes, what a student produces - so they
-     are told apart by their headings and their prose, never by colour or an
+     are told apart by their headings and their prose, never by color or an
      icon alone. */
   .teach-activity {
     padding: var(--space-5);
@@ -454,7 +454,7 @@
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius);
   }
-  /* The format a link asked for. A border and a heading, not a colour: the
+  /* The format a link asked for. A border and a heading, not a color: the
      distinction has to survive a monochrome print and a screen reader, and
      aria-current carries it for the second. */
   .teach-activity-format.is-selected {

@@ -108,7 +108,7 @@ export const atVisibilityFloor = (worldRadius, zoom, floorPx) =>
 /**
  * Where each star on a stage goes, in world units.
  *
- * A row, centred on the origin, evenly spaced. Deterministic by construction:
+ * A row, centerd on the origin, evenly spaced. Deterministic by construction:
  * the same list of stars gives the same positions on every machine and every
  * reload, which is what lets a lesson say "the third one from the left" and a
  * screenshot in a worksheet still be right a year later.
@@ -121,7 +121,7 @@ export const atVisibilityFloor = (worldRadius, zoom, floorPx) =>
  *
  * @param {number} count - How many stars
  * @param {object} [opts] - Options
- * @param {number} [opts.spacing] - World units between centres
+ * @param {number} [opts.spacing] - World units between centers
  * @param {number} [opts.y] - Row height
  * @param {number} [opts.perRow] - Wrap to a grid after this many
  * @returns {Array<{x: number, y: number}>} One position per star, in order
@@ -154,7 +154,7 @@ export function rowLayout(count, { spacing = 90, y = 0, perRow = 0 } = {}) {
  * The lesson panel and the instrument sit over the canvas, so fitting to the
  * viewport puts the stage underneath them - which is what happened the first
  * time, and it makes the whole idea of a workspace pointless. `inset` is the
- * region they leave clear, in screen pixels, and the stage is centred in that
+ * region they leave clear, in screen pixels, and the stage is centerd in that
  * rather than in the window.
  *
  * @param {Array<{x: number, y: number, radius: number}>} placed - The stage
@@ -196,16 +196,16 @@ export function fitCamera(
     (clearW * usable) / spanX,
     (clearH * usable) / spanY
   );
-  // The view puts world point p at viewportCentre + p * zoom + pan, so to land
-  // the stage's centre in the middle of the clear region the pan is the offset
-  // between the two centres, less the stage's own centre scaled.
-  const clearCentreX = left + clearW / 2;
-  const clearCentreY = top + clearH / 2;
+  // The view puts world point p at viewportCenter + p * zoom + pan, so to land
+  // the stage's center in the middle of the clear region the pan is the offset
+  // between the two centers, less the stage's own center scaled.
+  const clearCenterX = left + clearW / 2;
+  const clearCenterY = top + clearH / 2;
   return {
     zoom,
     pan: {
-      x: clearCentreX - view.width / 2 - ((minX + maxX) / 2) * zoom,
-      y: clearCentreY - view.height / 2 - ((minY + maxY) / 2) * zoom,
+      x: clearCenterX - view.width / 2 - ((minX + maxX) / 2) * zoom,
+      y: clearCenterY - view.height / 2 - ((minY + maxY) / 2) * zoom,
     },
   };
 }

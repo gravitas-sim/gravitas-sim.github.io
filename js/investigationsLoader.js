@@ -34,7 +34,7 @@ export function ensureInvestigations() {
       }
     }
     onFirstLoad.clear();
-    // The panel's prose is not in the start-up catalogue: js/investigations.js
+    // The panel's prose is not in the start-up catalog: js/investigations.js
     // is the only module that reads it, it is the largest family of strings in
     // the application, and a visitor who never opens a lesson was downloading
     // all of it. Registered here, before initInvestigations() renders anything.
@@ -93,7 +93,7 @@ export const assignmentInUrl = () =>
  *
  * The third case of the same trap. An assignment fragment is not a lesson
  * fragment, so lessonInHash() does not see it, and without this the panel the
- * assignment wants to open into has never been initialised.
+ * assignment wants to open into has never been initialized.
  *
  * @returns {boolean} True for an assignment fragment
  */
@@ -130,7 +130,7 @@ export const activityInHash = () =>
 export function watchForAssignments() {
   // The engine first, then the bridge. Doing it in this order is what lets the
   // bridge import js/investigations.js directly: the panel it opens into has
-  // been initialised by the time it runs, and the two modules do not have to
+  // been initialized by the time it runs, and the two modules do not have to
   // reach for each other.
   const open = () =>
     ensureInvestigations()

@@ -42,7 +42,7 @@ a skipped or failed deploy tears nothing down.
 | Situation                     | What happens                                                                                                                                                                                                                                                                                                             |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | A CI job **failed**           | `needs: [ci]` is not satisfied, so `deploy` is skipped.                                                                                                                                                                                                                                                                  |
-| A run was **cancelled**       | Same path — a cancelled dependency is not a success.                                                                                                                                                                                                                                                                     |
+| A run was **canceled**       | Same path — a canceled dependency is not a success.                                                                                                                                                                                                                                                                     |
 | A job was **skipped**         | Treated as not-success by `needs`. On a push to `main` every aggregated job is unconditional, so this should not arise; it is handled rather than assumed away.                                                                                                                                                          |
 | The commit was **superseded** | Two pushes in quick succession both run to completion, and can finish out of order. Before publishing, the job compares `github.sha` against the current tip of `main`. If they differ it records a notice and stops, without failing — being overtaken is a normal outcome, and the newer commit's own run will deploy. |
 
@@ -122,7 +122,7 @@ stop one from being merged, and the two are worth separating: a red commit on
 
 - Require status checks to pass before merging, and select the **`CI`** check —
   the aggregate job, not the individual ones. It is the job that already knows
-  how to treat skipped and cancelled dependencies.
+  how to treat skipped and canceled dependencies.
 - Do not add `Deploy to Pages` as a required check. It only runs on pushes to
   `main`, so requiring it on pull requests would block every merge for ever.
 
@@ -143,7 +143,7 @@ committing: a bundle built without it is marked `unpublishable` and the deploy
 will refuse it.
 
 > The committed bundle is currently **stale**. It predates the binary-stability,
-> gravity-assist, radial-velocity, reliability, sweep, manoeuvre and
+> gravity-assist, radial-velocity, reliability, sweep, maneuver and
 > restricted-three-body content, so the guides for those lessons are not yet in
 > the published archive. Rebuilding it is the outstanding owner action here.
 
@@ -152,7 +152,7 @@ will refuse it.
 ## Verifying a deployment
 
 1. **The run.** Actions → the run for your commit → the `Deploy to Pages` job.
-   Its summary names the commit and the URL. If the job is grey, read the `CI`
+   Its summary names the commit and the URL. If the job is gray, read the `CI`
    job: something did not pass, and nothing was published.
 2. **The revision.** `curl -s https://gravitas-sim.online/deployed-revision.json`
    and check `commit` is the SHA you expect.
@@ -202,7 +202,7 @@ that disagrees with it is a state nobody can reason about later.
 
 Set _Settings → Pages → Source_ back to **Deploy from a branch → `main` / (root)**.
 The site returns to publishing every push immediately and ungated — which is the
-behaviour this document exists to replace, so treat it as a temporary measure and
+behavior this document exists to replace, so treat it as a temporary measure and
 record why it was needed.
 
 ## What is tested, and where
@@ -218,4 +218,4 @@ that `deploy` needs `ci`, that it carries no `always()`, that every publishing
 step is behind the supersession check, that it uploads the root rather than
 `dist/`, and that it runs no build. Those are properties an ordinary review would
 miss: adding `always()` to a job's `if` is a small, plausible-looking edit that
-would restore exactly the behaviour of the `521e64f` incident.
+would restore exactly the behavior of the `521e64f` incident.

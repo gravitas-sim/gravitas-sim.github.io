@@ -32,7 +32,7 @@
 // Units
 // -----------------------------------------------------------------------------
 // Everything is in units of `room` - the radius the star is being drawn at -
-// and relative to its centre. So the same shapes work at a panel's forty
+// and relative to its center. So the same shapes work at a panel's forty
 // pixels and at the canvas's four hundred without a second set of numbers, and
 // a test can check them without a canvas at all.
 // =============================================================================
@@ -110,7 +110,7 @@ export function sceneFor(frame, opts = {}) {
       // cloud light-years across".
       roomHint: 'scene',
       blobs: cloudBlobs(seed, at),
-      // A brightening centre, which is a contracting core and not a surface.
+      // A brightening center, which is a contracting core and not a surface.
       glow: Object.freeze({
         r: Math.max(0.12, 0.12 * (0.4 + at)),
         alpha: 0.25 + 0.55 * at,
@@ -120,7 +120,7 @@ export function sceneFor(frame, opts = {}) {
       label: 'cloud',
       // Said out loud wherever this is drawn: the tracks begin at a star that
       // already has a photosphere, so everything before that is illustration.
-      modelled: false,
+      modeled: false,
     });
   }
 
@@ -137,7 +137,7 @@ export function sceneFor(frame, opts = {}) {
       blobs: EMPTY,
       glow: null,
       // Ejecta, only where the endpoint prescription says there is an
-      // explosion. Expanding away from the star's own centre, so the picture
+      // explosion. Expanding away from the star's own center, so the picture
       // moves with the protagonist rather than with the camera.
       fronts: end?.supernova === 'expected' ? explosionFronts(seed, at) : EMPTY,
       shells: EMPTY,
@@ -152,7 +152,7 @@ export function sceneFor(frame, opts = {}) {
       label: `remnant.${kind}`,
       // The remnant is a prescription, not a track sample. Every caller has to
       // be able to say which, and this is how.
-      modelled: false,
+      modeled: false,
       prescribed: true,
     });
   }
@@ -172,7 +172,7 @@ export function sceneFor(frame, opts = {}) {
     shells: lost > 0.005 ? lostShells(seed, lost) : EMPTY,
     fronts: EMPTY,
     label: 'track',
-    modelled: true,
+    modeled: true,
   });
 }
 

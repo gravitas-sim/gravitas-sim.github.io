@@ -325,7 +325,7 @@ export const RADIAL_VELOCITY_COLUMNS = [
   'rv_err_ms',
   // How the value was arrived at: ok, degraded, or missed. A row is written for
   // a missed epoch too, with an empty velocity - omitting it would say the
-  // programme was shorter than it was, and the gaps in a schedule are the thing
+  // program was shorter than it was, and the gaps in a schedule are the thing
   // this file exists to preserve.
   'quality',
   'interp_err_ms',
@@ -442,7 +442,7 @@ export function rvFitCsv() {
   comment(`degrees_of_freedom: ${report.fit?.dof ?? ''}`);
   comment(
     `parameters_estimated_from_data: ${report.fit?.estimatedParameters ?? 0}` +
-      (report.fit?.optimised
+      (report.fit?.optimized
         ? ' (fitted)'
         : ' (model as supplied; sliders are not a fit)')
   );
@@ -570,7 +570,7 @@ function writeUncertaintyComments(comment, report) {
     if (n > 0) comment(`uncertainty_failed_${reason}: ${n}`);
   }
   comment(`uncertainty_outcome: ${u.outcome}`);
-  comment(`uncertainty_cancelled: ${u.cancelled}`);
+  comment(`uncertainty_canceled: ${u.canceled}`);
   comment(`uncertainty_complete: ${u.complete}`);
   if (u.gridLimited) {
     comment(

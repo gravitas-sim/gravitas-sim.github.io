@@ -40,7 +40,7 @@
 //                                       collection, a breakpoint. rAF stops
 //                                       entirely in a hidden tab, and counting
 //                                       the resumption as a slow frame would
-//                                       demote a machine for being minimised
+//                                       demote a machine for being minimized
 //   the median is used, not the mean    one 300ms hitch should not outvote a
 //                                       hundred good frames, and on a loaded
 //                                       machine the distribution is skewed
@@ -314,7 +314,7 @@ export function renderOverrides() {
     // Presentation, not population. This was once returned from
     // populationCaps(), which applied its result by writing into the live
     // SETTINGS - so a slow machine permanently rewrote the reader's own
-    // settings, and those rewritten values then travelled out in share links,
+    // settings, and those rewritten values then traveled out in share links,
     // saved states and the A/B bench's canonical hash. It is not read during
     // construction at all, so a read-time override here is both the correct
     // place and the only one that has any effect.

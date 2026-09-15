@@ -10,7 +10,7 @@
 //
 //   A tide is a subtraction, so the subtraction is drawn. The arrow panel shows
 //   the three raw pulls first, which look identical, and only then shows what
-//   is left when the centre's is taken away. A student who is handed the second
+//   is left when the center's is taken away. A student who is handed the second
 //   picture without the first learns a diagram, not a mechanism.
 //
 //   Magnification is always declared. The residual arrows are tiny compared
@@ -24,15 +24,15 @@
 
 import { surface, responsiveHeight, MONO, TYPE } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
-// This family's labels are in the deferred half of the catalogue; see the note
+// This family's labels are in the deferred half of the catalog; see the note
 // in js/widgets.js. Registered from the module that renders them, because a
 // lesson, a share link, an authoring preview or a test can import this file
 // directly and never reach the registry.
-// The strings this panel reads live in the deferred catalogue, and asking for
+// The strings this panel reads live in the deferred catalog, and asking for
 // one before it arrives returns the message id. The load used to be started
 // here and abandoned - `ensureDeferredMessages().catch(() => {})` - which meant
 // two things at once: a synchronous label read in the same tick got a raw id,
-// and a genuine failure to fetch the catalogue was discarded without a word.
+// and a genuine failure to fetch the catalog was discarded without a word.
 //
 // Started here still, because the fetch should be in flight as early as
 // possible, but the promise is kept and the failure is not swallowed.
@@ -71,7 +71,7 @@ import {
 } from './tidalPhysics.js';
 
 // The same fixed dark palette the black hole panels use, and for the same
-// reason: these are pictures of space, and theme-coloured ink over them was
+// reason: these are pictures of space, and theme-colored ink over them was
 // unreadable in the light theme.
 const SKY = '#080b14';
 const INK = '#e9edf7';
@@ -82,7 +82,7 @@ const STRETCH = '#f2748c'; // a residual, i.e. an actual tide
 const GRIP = '#8de08a'; // a body's own gravity, holding it together
 const WARN = '#ffb057';
 const EARTH_BLUE = '#4b7be5';
-const MOON_GREY = '#b9bcc4';
+const MOON_GRAY = '#b9bcc4';
 
 /** Ground the panel in a dark sky, whatever theme the page is wearing. */
 function sky(ctx, w, h) {
@@ -111,7 +111,7 @@ function arrow(ctx, x, y, length, color, width = 2.4) {
   ctx.lineCap = 'round';
   if (len < 1.5) {
     // A residual of zero is a real answer and has to look like one, or the
-    // centre row reads as a drawing mistake.
+    // center row reads as a drawing mistake.
     ctx.beginPath();
     ctx.arc(x, y, 2.6, 0, 2 * Math.PI);
     ctx.fill();
@@ -198,7 +198,7 @@ function fits(ctx, w, ...options) {
 }
 
 // =============================================================================
-// 1. Near side, centre, far side: the subtraction, drawn
+// 1. Near side, center, far side: the subtraction, drawn
 // =============================================================================
 
 // The Earth is the body being stretched throughout the first half of the
@@ -266,9 +266,9 @@ const VECTORS = {
       },
       {
         get label() {
-          return t('tideW.pullOnTheCentre');
+          return t('tideW.pullOnTheCenter');
         },
-        value: accelerationLabel(f.centre),
+        value: accelerationLabel(f.center),
       },
       {
         get label() {
@@ -280,14 +280,14 @@ const VECTORS = {
     if (spec.residual) {
       rows.push({
         get label() {
-          return t('tideW.nearSideMinusTheCentre');
+          return t('tideW.nearSideMinusTheCenter');
         },
         value: `${accelerationLabel(f.nearResidual)} toward`,
         emphasis: true,
       });
       rows.push({
         get label() {
-          return t('tideW.farSideMinusTheCentre');
+          return t('tideW.farSideMinusTheCenter');
         },
         value: `${accelerationLabel(Math.abs(f.farResidual))} away`,
         emphasis: true,
@@ -340,12 +340,12 @@ const VECTORS = {
       cy: rowA,
       r,
       compX,
-      values: [f.near, f.centre, f.far],
+      values: [f.near, f.center, f.far],
       color: PULL,
-      // The centre arrow is given a fixed length and the other two are drawn in
+      // The center arrow is given a fixed length and the other two are drawn in
       // true proportion to it, which is the honest picture: at the Moon's real
       // distance the three are within a few percent and look identical.
-      scale: Math.min(96, w - cx - r - 60) / f.centre,
+      scale: Math.min(96, w - cx - r - 60) / f.center,
       get label() {
         return t('tideW.towardTheCompanion');
       },
@@ -386,7 +386,7 @@ const VECTORS = {
     // The operation itself, written between the two rows.
     mono(ctx, 11, STRETCH);
     ctx.textAlign = 'left';
-    halo(ctx, 'MINUS THE PULL ON THE CENTRE', 14, opLabelY);
+    halo(ctx, 'MINUS THE PULL ON THE CENTER', 14, opLabelY);
 
     // Residuals are four orders of magnitude smaller than the pulls above, so
     // the row is drawn at its own scale and the factor is stated.
@@ -410,7 +410,7 @@ const VECTORS = {
 
     const factor =
       residScale > 0
-        ? residScale / (Math.min(96, w - cx - r - 60) / f.centre)
+        ? residScale / (Math.min(96, w - cx - r - 60) / f.center)
         : 0;
     mono(ctx, 10, MUTED);
     ctx.textAlign = 'center';
@@ -442,7 +442,7 @@ const VECTORS = {
 
 /** The companion, drawn at the right edge with a label. */
 function companion(ctx, x, y, v) {
-  world(ctx, x, y, 9 + 3 * Math.cbrt(v.mass), MOON_GREY);
+  world(ctx, x, y, 9 + 3 * Math.cbrt(v.mass), MOON_GRAY);
   ctx.textAlign = 'right';
   mono(ctx, 10, MUTED);
   halo(ctx, 'companion', x + 6, y + 30);
@@ -464,7 +464,7 @@ function drawRow(ctx, o) {
     // leaves the limb facing the companion and points at it; the far-side
     // arrow leaves the opposite limb and points away. Anchoring them to the
     // sides they actually act on draws the two bulges instead of describing
-    // them, and the centre gets a dot because nothing is left there.
+    // them, and the center gets a dot because nothing is left there.
     arrow(ctx, cx + r + 4, ys[0], values[0] * scale, color, 2.6);
     arrow(ctx, cx, ys[1], 0, color, 2);
     arrow(ctx, cx - r - 4, ys[2], -Math.abs(values[2]) * scale, color, 2.6);
@@ -494,7 +494,7 @@ function drawRow(ctx, o) {
   // the labels move clear of the longest arrow the row can draw.
   const lx = labelX ?? cx - r - 8;
   halo(ctx, 'near', lx, ys[0] + 3);
-  halo(ctx, 'centre', lx, ys[1] + 3);
+  halo(ctx, 'center', lx, ys[1] + 3);
   halo(ctx, 'far', lx, ys[2] + 3);
 
   if (label) {
@@ -1070,7 +1070,7 @@ const BALANCE = {
       deforming: { text: 'STRETCHING, SHEDDING', color: WARN },
       disrupting: { text: 'COMES APART', color: STRETCH },
     }[f.regime];
-    // The verdict is centred in whatever room is left between the bars and the
+    // The verdict is centerd in whatever room is left between the bars and the
     // ruler. Fixed offsets put it on top of the ruler once responsiveHeight
     // handed back a shorter panel on a phone.
     const ry = H - 26;
@@ -1316,7 +1316,7 @@ const ROCHE = {
       ctx.arc(cx, cy, R, -extent, extent);
       ctx.stroke();
       ctx.setLineDash([]);
-      // Labelled at the arc's upper end, which is on the canvas by
+      // Labeled at the arc's upper end, which is on the canvas by
       // construction, instead of at a fixed offset that ran off the top.
       mono(ctx, 9, color);
       ctx.textAlign = 'center';
@@ -1364,13 +1364,13 @@ const ROCHE = {
     const my = cy - 44;
     const baseR = 8;
     if (f.regime === 'safe') {
-      world(ctx, mx, my, baseR, MOON_GREY);
+      world(ctx, mx, my, baseR, MOON_GRAY);
     } else if (f.regime === 'deforming') {
       ctx.save();
       ctx.translate(mx, my);
       ctx.rotate(Math.atan2(my - cy, mx - cx));
       ctx.scale(1.9, 0.7);
-      world(ctx, 0, 0, baseR, MOON_GREY);
+      world(ctx, 0, 0, baseR, MOON_GRAY);
       ctx.restore();
     } else {
       const n = 9;
@@ -1383,7 +1383,7 @@ const ROCHE = {
           mx + Math.cos(ang) * t * spread,
           my + Math.sin(ang) * t * spread,
           Math.max(2, baseR * 0.42 * (1 - 0.4 * Math.abs(t))),
-          MOON_GREY
+          MOON_GRAY
         );
       }
     }
@@ -1476,7 +1476,7 @@ const DISRUPT = {
         return t('tideW.sagittariusA4MillionM');
       },
       values: { logm: 6.63 },
-      note: 'The black hole at the centre of our own galaxy. A star still comes apart outside the horizon here, which is why these flares can be seen at all.',
+      note: 'The black hole at the center of our own galaxy. A star still comes apart outside the horizon here, which is why these flares can be seen at all.',
     },
     {
       get label() {
@@ -1489,7 +1489,7 @@ const DISRUPT = {
   /**
    * The tidal radius and the horizon for the current mass.
    * @param {Object} v - Control values
-   * @returns {Object} Radii in metres, their ratio, and the crossover mass
+   * @returns {Object} Radii in meters, their ratio, and the crossover mass
    */
   compute(v) {
     const massSuns = Math.pow(10, v.logm);
@@ -1549,7 +1549,7 @@ const DISRUPT = {
     const f = DISRUPT.compute(v);
     const cx = w / 2;
     // The four lines of text underneath are fixed; the diagram takes whatever
-    // is left and centres itself in it. Pinning the centre at a constant y put
+    // is left and centers itself in it. Pinning the center at a constant y put
     // the tidal circle straight through the verdict on a phone.
     const textTop = H - 76;
     const cy = 18 + (textTop - 18) / 2;

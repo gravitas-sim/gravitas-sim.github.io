@@ -104,7 +104,7 @@ const COL = { age: 0, mass: 1, logL: 6, logTeff: 11, logR: 13, phase: 76 };
  * `type` is carried through: on a low-mass track it is the start of thermal
  * pulses on the asymptotic giant branch, and on a high-mass one it is the
  * onset of carbon burning. Naming both "TPAGB" would be wrong about half the
- * catalogue.
+ * catalog.
  */
 const EEP_NAMES = [
   'pms',
@@ -561,7 +561,7 @@ async function build({ offline }) {
     ],
     terms:
       'MIST asks that the papers above be cited by any publication using the ' +
-      'models and states no separate redistribution licence. What is bundled ' +
+      'models and states no separate redistribution license. What is bundled ' +
       'here is a heavily reduced derived subset for teaching, attributed in ' +
       'full, with the exact source and checksum recorded so the originals can ' +
       'be recovered. If MIST would prefer this not be redistributed, the build ' +
@@ -595,7 +595,7 @@ async function build({ offline }) {
       toleranceDex: TOLERANCE,
       note: 'The worst error the thinning introduced is recorded per track.',
     },
-    notModelled: [
+    notModeled: [
       'Rotation, binarity, magnetic fields, and any metallicity but solar.',
       'Core collapse and everything after it: the 10 and 20 solar-mass tracks ' +
         'stop while the star is still a red supergiant.',
@@ -613,7 +613,7 @@ async function build({ offline }) {
 // Seven tracks at solar metallicity with no rotation, reduced from about 7,700
 // rows of 77 columns to a few hundred rows of four. MIST computed these; this
 // project reduced them and recorded how. PROVENANCE carries the version, the
-// composition, the source URL and checksum, the citation the modellers ask for,
+// composition, the source URL and checksum, the citation the modelers ask for,
 // and the error the reduction introduced.
 //
 // These are model examples. None of them is a reconstruction of a named star.

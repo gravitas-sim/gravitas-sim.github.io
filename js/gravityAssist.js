@@ -4,7 +4,7 @@
 // A gravity assist is the least intuitive easy thing in orbital mechanics. The
 // spacecraft's speed relative to the planet is exactly the same before and
 // after - the planet does no work on it in the planet's own frame - and yet the
-// spacecraft leaves the encounter travelling faster around the Sun than it
+// spacecraft leaves the encounter traveling faster around the Sun than it
 // arrived. Nothing is gained from nowhere; the planet is slowed by precisely the
 // momentum the spacecraft gained, and it is 10^20 times heavier, so nobody
 // notices. But the whole of that sentence lives in the difference between two
@@ -233,7 +233,7 @@ export const maximumDeltaV = vInf => 2 * Math.abs(vInf);
  *
  * A readout taken at a finite distance is not the speed at infinity, and the
  * difference is not small enough to wave away: at 40 AU from a five-Jupiter
- * planet the spacecraft is still travelling 0.6% faster than its asymptotic
+ * planet the spacecraft is still traveling 0.6% faster than its asymptotic
  * speed, which is ten times the accuracy the rest of this investigation works
  * to. Rather than starting the encounter absurdly far out and integrating
  * empty space for an hour, the readout corrects for the potential it is

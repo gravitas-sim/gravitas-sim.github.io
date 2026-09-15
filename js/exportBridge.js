@@ -1,7 +1,7 @@
 // =============================================================================
 // Loading the export dialog on demand
 // -----------------------------------------------------------------------------
-// Nobody exports anything on a first visit. The dialog, its file catalogue and
+// Nobody exports anything on a first visit. The dialog, its file catalog and
 // every CSV builder behind it - light curves, radial velocity measurements, the
 // analysis fit, transits, the whole of js/dataExport.js - were in the start-up
 // path for the sake of a button in a menu.
@@ -61,7 +61,7 @@ export function initExportBridge() {
 /**
  * Whether the dialog has been loaded.
  *
- * Asked by anything that wants to publish into the export catalogue without
+ * Asked by anything that wants to publish into the export catalog without
  * pulling the chunk in for somebody who has never opened it.
  *
  * @returns {boolean} True once the chunk has been fetched

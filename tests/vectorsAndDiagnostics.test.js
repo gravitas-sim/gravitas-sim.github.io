@@ -248,8 +248,8 @@ describe('the acceleration the overlay draws', () => {
     expect(accelerationBreakdown(null)).toBeNull();
   });
 
-  test('each source keeps its own colour, keyed on identity not position', () => {
-    // A colour that changed every time something merged would make the picture
+  test('each source keeps its own color, keyed on identity not position', () => {
+    // A color that changed every time something merged would make the picture
     // unreadable at exactly the moment it got interesting.
     expect(sourceColor(7)).toBe(sourceColor(7));
     expect(sourceColor(0)).not.toBe(sourceColor(1));
@@ -420,7 +420,7 @@ describe('conservation diagnostics', () => {
   test('says so when the configuration cannot conserve anything', () => {
     // A drift figure that did not say "there is a static black hole in this
     // scene" would be blamed on the integrator.
-    // Message ids rather than sentences: the prose moved to the catalogue when
+    // Message ids rather than sentences: the prose moved to the catalog when
     // the interface was internationalized, and physics.js is the wrong place
     // for a sentence anyway.
     clearWorld();
@@ -483,7 +483,7 @@ describe('the potential-well underlay', () => {
   test('is the Newtonian potential of the masses that are there', () => {
     // The underlay is a claim about the field, so it has to be the field: this
     // is -GM/r written out, and if the picture were built from anything else it
-    // would be a decoration that happens to be centred on the star.
+    // would be a decoration that happens to be centerd on the star.
     const src = [mass(0, 0, 1000)];
     expect(potentialAt(at(0, 200), 1, 1e-6, src)).toBeCloseTo(-1000 / 200, 12);
     expect(potentialAt(at(300, 400), 2, 1e-6, src)).toBeCloseTo(
@@ -531,7 +531,7 @@ describe('the potential-well underlay', () => {
 
   test('samples only the heaviest sources, and the heaviest first', () => {
     // A six-hundred-asteroid scenario would otherwise cost six hundred terms
-    // per grid sample for a contribution below one step of the colour ramp.
+    // per grid sample for a contribution below one step of the color ramp.
     const many = [];
     for (let i = 0; i < 400; i++) many.push(mass(i, 0, 1 + i));
     const chosen = potentialSources(many);
@@ -565,7 +565,7 @@ describe('the vector legend', () => {
     expect(both).toHaveLength(3);
     expect(both[2].label).toBe('from Alpha');
     expect(both[2].dash).toBe(true);
-    // Velocity and acceleration must never be drawn in the same colour: the
+    // Velocity and acceleration must never be drawn in the same color: the
     // whole point of the overlay is that they can be told apart at a glance.
     expect(both[0].color).not.toBe(both[1].color);
   });

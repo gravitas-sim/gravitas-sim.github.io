@@ -137,7 +137,7 @@ test.describe('with every non-local request blocked', () => {
     // No scenario is loaded first, and no module is imported to do it. Against
     // dist/ there is no /js/ui.js to reach for, and the assertion does not need
     // one: Chart.js draws the axes, the grid and the labels of an empty chart,
-    // so a canvas with more than one colour on it is the library having loaded
+    // so a canvas with more than one color on it is the library having loaded
     // and run either way.
     await app.openPanel('toggleLightCurve', 'lightCurveContainer');
     await expect(page.locator('#lightCurveCanvas')).toBeVisible({

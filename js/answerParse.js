@@ -5,13 +5,13 @@
 //
 //   Number(String(value).replace(/[^0-9eE+\-.]/g, ''))
 //
-// which threw away every character it did not recognise and then hoped. What
+// which threw away every character it did not recognize and then hoped. What
 // that actually did, measured against real input:
 //
 //   "1,5"           -> 15          a decimal comma multiplied the answer by ten
 //   "−5"            -> 5           a Unicode minus silently flipped the sign
 //   "1.5 × 10^8"    -> 1.5108      scientific notation became a different number
-//   "5 metres"      -> NaN         the 'e' survived; the answer was marked wrong
+//   "5 meters"      -> NaN         the 'e' survived; the answer was marked wrong
 //   ""              -> 0           a blank answer became a number
 //
 // Three of those are wrong answers presented as right or right answers presented
@@ -86,6 +86,11 @@ export const UNITS = Object.freeze({
   // Base: astronomical units.
   length: {
     m: 1 / AU_METERS,
+    // The British spellings stay. This table reads what a student typed, and
+    // accepting "metre" is not an inconsistency to be tidied away: removing it
+    // means an answer that is right, in the reader's own spelling, stops being
+    // understood. Presentation is American throughout; what we accept as input
+    // is deliberately wider than what we write.
     metre: 1 / AU_METERS,
     metres: 1 / AU_METERS,
     meter: 1 / AU_METERS,
@@ -95,7 +100,7 @@ export const UNITS = Object.freeze({
     r_sun: SOLAR_RADIUS_M / AU_METERS,
     rsun: SOLAR_RADIUS_M / AU_METERS,
   },
-  // Base: kilometres per second.
+  // Base: kilometers per second.
   speed: {
     'm/s': 1e-3,
     'km/s': 1,
@@ -112,7 +117,7 @@ export const UNITS = Object.freeze({
     m_jup: JUPITER_MASS_KG / SOLAR_MASS_KG,
     mjup: JUPITER_MASS_KG / SOLAR_MASS_KG,
   },
-  // Base: grams per cubic centimetre, which is what the lessons quote and what
+  // Base: grams per cubic centimeter, which is what the lessons quote and what
   // makes "about the density of water" a comparison with 1.
   density: {
     'g/cm3': 1,
@@ -233,7 +238,7 @@ export function parseNumber(raw, locale = 'en') {
   const text = String(raw ?? '').trim();
   if (!text) return { ok: false, reason: PARSE_FAILURE.BLANK };
 
-  // Normalise the characters that mean something we understand, and only those.
+  // Normalize the characters that mean something we understand, and only those.
   let s = text.replace(MINUS, '-');
   s = s.replace(/[⁰¹²³⁴-⁹⁺⁻]/g, c => SUPERSCRIPT[c] ?? c);
   // "×10^8", "x10^8", "*10^8", "·10^8" all mean the same exponent.
@@ -342,8 +347,8 @@ function isWellGrouped(digits, sep) {
   return parts.slice(1).every(p => /^\d{3}$/.test(p));
 }
 
-/** Normalise a unit token for lookup: case and spacing, nothing else. */
-const normaliseUnit = u =>
+/** Normalize a unit token for lookup: case and spacing, nothing else. */
+const normalizeUnit = u =>
   String(u || '')
     .trim()
     .toLowerCase()
@@ -357,7 +362,7 @@ const normaliseUnit = u =>
  * @returns {?{dimension: string, factor: number}} The unit, or null
  */
 export function lookupUnit(token) {
-  const key = normaliseUnit(token);
+  const key = normalizeUnit(token);
   if (!key) return null;
   for (const [dimension, table] of Object.entries(UNITS)) {
     if (Object.hasOwn(table, key)) {
@@ -370,9 +375,9 @@ export function lookupUnit(token) {
 /**
  * Read a student's answer, converting units only where the step allows it.
  *
- * A step that declares nothing about units gets the old behaviour made safe: a
+ * A step that declares nothing about units gets the old behavior made safe: a
  * bare number is fine, and so is the step's own display unit written after it,
- * because that is what the box is labelled with. Any *other* unit is refused
+ * because that is what the box is labeled with. Any *other* unit is refused
  * rather than dropped - "5 km" where the answer is in AU is not an answer of
  * five, and silently treating it as one is how a student comes to believe a
  * wrong thing about their own arithmetic.
@@ -399,8 +404,8 @@ export function parseAnswer(raw, step = {}, locale = 'en') {
   if (!expect) {
     // No declared dimension, so nothing can be converted. The step's own label
     // is the one unit that means "the number as asked for".
-    const declared = normaliseUnit(step.unit);
-    if (declared && normaliseUnit(rest) === declared) {
+    const declared = normalizeUnit(step.unit);
+    if (declared && normalizeUnit(rest) === declared) {
       return { ok: true, value: number.value, unit: rest, converted: false };
     }
     const known = lookupUnit(rest);
@@ -433,8 +438,8 @@ export function parseAnswer(raw, step = {}, locale = 'en') {
     };
   }
 
-  const allowed = (expect.accept || []).map(normaliseUnit);
-  if (allowed.length && !allowed.includes(normaliseUnit(rest))) {
+  const allowed = (expect.accept || []).map(normalizeUnit);
+  if (allowed.length && !allowed.includes(normalizeUnit(rest))) {
     return {
       ok: false,
       reason: PARSE_FAILURE.UNIT_NOT_ALLOWED,
@@ -453,7 +458,7 @@ export function parseAnswer(raw, step = {}, locale = 'en') {
     value: (number.value * known.factor) / target.factor,
     unit: rest,
     // Whether the number actually moved, not whether the token was spelled
-    // differently: superscripts are normalised on the way in, so "g/cm³" and
+    // differently: superscripts are normalized on the way in, so "g/cm³" and
     // "g/cm3" are different strings and the same unit.
     converted: known.factor !== target.factor,
   };

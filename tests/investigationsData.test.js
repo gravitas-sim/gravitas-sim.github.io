@@ -30,7 +30,7 @@ const stubContext = () => ({
   // No pair staged, which is the case a probe has to survive: this test runs
   // with no simulation at all, and a probe that assumes a scene is a probe
   // that throws on the first frame of a cold load.
-  barycentre: () => null,
+  barycenter: () => null,
   restageStarPair: () => false,
   restageHole: () => false,
   // No star observed, which is the case with no simulation: a probe that
@@ -188,7 +188,7 @@ describe('every lesson', () => {
         if (!step.figure) continue;
         const f = step.figure;
         // These are other people's photographs. Shipping one without its
-        // author and licence is a licence breach, not a formatting slip.
+        // author and license is a license breach, not a formatting slip.
         expect(f.src).toMatch(/^images\/[\w.-]+$/);
         expect(f.alt.length).toBeGreaterThan(30);
         expect(f.caption).toBeTruthy();

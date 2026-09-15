@@ -52,7 +52,7 @@ export { PROVENANCE as TRACK_PROVENANCE, TRACK_IDS };
  * then diverge, and the divergence is not cosmetic: the same EEP index means
  * "start of thermal pulses on the asymptotic giant branch" for a 2 solar-mass
  * star and "carbon ignition" for a 20 solar-mass one. Naming both the same
- * thing would be wrong about half the catalogue, so they are two lists.
+ * thing would be wrong about half the catalog, so they are two lists.
  */
 const SEGMENTS = {
   'low-mass': [
@@ -215,7 +215,7 @@ function segmentAt(t, index) {
 }
 
 /**
- * The state of a modelled star at an age.
+ * The state of a modeled star at an age.
  *
  * @param {string} id - Track id
  * @param {number} ageYr - Age in years since the start of the track

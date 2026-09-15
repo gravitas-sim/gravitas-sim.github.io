@@ -95,7 +95,7 @@ for (const inv of staged) {
       // Offset by the lesson id, because two lessons can legitimately open on
       // the same source - the beginner and advanced gravitational-wave lessons
       // both start at the same 36+29 pair - and byte-identical cards side by
-      // side in the catalogue read as a bug. The field is acknowledged
+      // side in the catalog read as a bug. The field is acknowledged
       // decoration and carries no claim, so varying it costs nothing and the
       // hash keeps it as reproducible as the fixed pattern was.
       function field(g, c) {
@@ -149,13 +149,13 @@ for (const inv of staged) {
         g.fillRect(0, 0, c.width, c.height);
         field(g, c);
         const cy = c.height / 2;
-        const centres = paired
+        const centers = paired
           ? [
               { x: c.width * 0.28, hole: true },
               { x: c.width * 0.72, hole: false },
             ]
           : [{ x: c.width / 2, hole: true }];
-        for (const { x, hole } of centres) {
+        for (const { x, hole } of centers) {
           const radii = paired ? [78] : [52, 78, 108, 142];
           g.strokeStyle = 'rgba(180,200,255,0.28)';
           g.lineWidth = 1;
@@ -221,17 +221,17 @@ for (const inv of staged) {
         g.lineTo(cx, cy + 7);
         g.stroke();
         [
-          { x: cx - r1, colour: '#ffd97d' },
-          { x: cx + r2, colour: '#8fd4ff' },
-        ].forEach(({ x, colour }) => {
+          { x: cx - r1, color: '#ffd97d' },
+          { x: cx + r2, color: '#8fd4ff' },
+        ].forEach(({ x, color }) => {
           const glow = g.createRadialGradient(x, cy, 0, x, cy, 30);
-          glow.addColorStop(0, `${colour}88`);
-          glow.addColorStop(1, `${colour}00`);
+          glow.addColorStop(0, `${color}88`);
+          glow.addColorStop(1, `${color}00`);
           g.fillStyle = glow;
           g.beginPath();
           g.arc(x, cy, 30, 0, Math.PI * 2);
           g.fill();
-          g.fillStyle = colour;
+          g.fillStyle = color;
           g.beginPath();
           g.arc(x, cy, 11, 0, Math.PI * 2);
           g.fill();

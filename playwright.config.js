@@ -34,7 +34,7 @@
 //
 // Browser coverage, and what each engine is actually for
 // -----------------------------------------------------------------------------
-// Chromium runs everything: the behaviour, the layout, and the scientific
+// Chromium runs everything: the behavior, the layout, and the scientific
 // results - chaos divergence, resonance libration, conservation, the whole
 // suite. It is the engine the project is tested in.
 //
@@ -226,7 +226,7 @@ export default defineConfig({
     // sw.js is registered it answers requests from a cache, so a test that
     // failed would leave the next one wondering whether it saw the application
     // or a copy of it, and a change to a module would be invisible to any test
-    // whose context had already cached it. The offline behaviour deserves tests
+    // whose context had already cached it. The offline behavior deserves tests
     // that mean something; the other 200 deserve to be testing the application.
     serviceWorkers: 'block',
     // The simulation animates constantly, so there is no "network idle" and no

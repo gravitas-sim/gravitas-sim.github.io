@@ -135,7 +135,7 @@ function answerSignature(step) {
  * @param {number} params.stepIndex - Where the reader is
  * @param {?string} params.startedAt - ISO timestamp
  * @param {?string} [params.studentName] - Whatever name was given
- * @returns {object} The backup, ready to be serialised
+ * @returns {object} The backup, ready to be serialized
  */
 export function buildBackup({
   lesson,

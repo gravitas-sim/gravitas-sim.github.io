@@ -326,7 +326,7 @@ test.describe('the backup file', () => {
     const backup = JSON.parse(await readFile(path, 'utf8'));
 
     // The format the reader is trusting: enough to identify the lesson, to
-    // recognise its steps after an edit, and to reconstruct the answers.
+    // recognize its steps after an edit, and to reconstruct the answers.
     expect(backup.kind).toBe('gravitas.investigation.progress');
     expect(backup.version).toBe(2);
     expect(backup.lesson.id).toBe(LESSON);

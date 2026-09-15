@@ -158,7 +158,7 @@ export function resolveScenario(settings) {
  * timeUnitSeconds() seconds - it depends on the gravitational constant, and is
  * about 1.84 days at the default setting. The first version stored the raw
  * clock under `simTimeSeconds` and divided it by 86400 for `simTimeDays`, which
- * mislabelled the unit and made the day figure wrong by a factor of 158810.
+ * mislabeled the unit and made the day figure wrong by a factor of 158810.
  * Everything here goes through the application's own conversion, the raw clock
  * keeps its real name, and the factor is recorded so a reader can redo it.
  *
@@ -200,7 +200,7 @@ export function liveProvenance(extra = {}) {
     integrator,
     timestep: maxTimestep,
     simSpeed,
-    // Mode plus the object it is centred on, because "object" alone does not
+    // Mode plus the object it is centerd on, because "object" alone does not
     // say which object and two readings taken in different object frames are
     // not comparable.
     referenceFrame: frameObject ? `${mode}:${frameObject}` : mode,

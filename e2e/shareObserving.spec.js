@@ -120,7 +120,7 @@ test.describe('an ordinary share link reproduces the viewing context', () => {
       }
     });
 
-    test(`${kind}: a body-centred reference frame and its target`, async ({
+    test(`${kind}: a body-centerd reference frame and its target`, async ({
       page,
       app,
     }) => {

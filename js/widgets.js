@@ -41,7 +41,7 @@ import { GW_WIDGETS } from './gwWidgets.js';
 import { STELLAR_WIDGETS } from './stellarWidgets.js';
 import { STELLAR_EVOLUTION_WIDGETS } from './stellarEvolutionWidgets.js';
 
-// Every widget family's prose lives in the deferred half of the catalogue,
+// Every widget family's prose lives in the deferred half of the catalog,
 // because nothing in the start-up path can reach one: this registry is
 // imported only by the lazy js/investigations.js. That is what keeps eleven
 // kilobytes of instrument labels out of everybody's first download.
@@ -90,7 +90,7 @@ export const allWidgets = () => [...WIDGETS];
  * Wait until every widget in the registry can name itself.
  *
  * Two of them - the tidal panel and the dark-matter panel - keep their prose in
- * the deferred catalogue, and a label read before that catalogue arrives comes
+ * the deferred catalog, and a label read before that catalog arrives comes
  * back as its own message id. Both modules used to start the load and abandon
  * it, so whether a caller saw "Moon on Earth" or "tideP.moonOnEarth" depended
  * on how many microtasks had run since the import. `npm run audit:scene`
@@ -98,7 +98,7 @@ export const allWidgets = () => [...WIDGETS];
  *
  * Awaited by anything that reads a widget's labels: the authoring preview, the
  * scene audit, and the lesson engine when it opens a panel. Resolves to false
- * rather than rejecting when the catalogue could not be fetched, so a caller
+ * rather than rejecting when the catalog could not be fetched, so a caller
  * can say so instead of choosing between a crash and silence -
  * deferredMessagesFailure() carries the reason.
  *

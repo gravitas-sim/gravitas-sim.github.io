@@ -23,7 +23,7 @@
 //
 //   Identity. Bodies are created in a fixed order and their ids come from a
 //   counter that restarts with the world. Lessons match bodies across runs by
-//   id and index, so creating one body earlier or later is a behaviour change
+//   id and index, so creating one body earlier or later is a behavior change
 //   even when the resulting picture is identical. e2e/worldConstruction.spec.js
 //   pins this for all 53 scenarios.
 // =============================================================================
@@ -241,7 +241,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
   // self-gravitating cluster, where an isotropic spread of random velocities is
   // the honest starting condition and a disc would be a fiction.
   //
-  // Three is taken from the catalogue rather than picked out of the air: of the
+  // Three is taken from the catalog rather than picked out of the air: of the
   // scenarios that place randomly, the ones this helps sit at mass ratios of
   // 12, 20, 110, 1900 and upwards, and the cluster-like ones sit at 0.35 and
   // below. Nothing in the library falls in between, so the boundary is not
@@ -293,7 +293,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
       const G = SETTINGS.gravitational_constant;
       // Every object used to go on one ring at exactly 0.7 of the bounds. For
       // a handful that reads as a ring; for the 200 stars of The Pinwheel
-      // Galaxy Core it put neighbours about nine units apart, closer than the
+      // Galaxy Core it put neighbors about nine units apart, closer than the
       // stars are wide, and the whole population merged into a couple of black
       // holes within seconds. A golden-angle spiral fills an annulus evenly at
       // any count, which is also what a galaxy core and a nursery should look
@@ -371,7 +371,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
     case 'Grid': {
       const grid_size = Math.ceil(Math.sqrt(all_objects.length));
       const spacing = (spread * 2) / grid_size;
-      // A quarter-cell nudge, because one cell of a grid centred on the origin
+      // A quarter-cell nudge, because one cell of a grid centerd on the origin
       // lands exactly on it - and the origin is where the central body is
       // pinned. Slingshot Gauntlet shipped with an asteroid at (0, 0) sitting
       // inside its own black hole; the contact test in physics.js skips a pair
@@ -598,7 +598,7 @@ export const buildWorld = ctx => {
   // The first version of this assigned the caps into the live SETTINGS, on the
   // reasoning that the generator reads these keys in many places. It reads them
   // in nineteen, and the write was actively harmful: SETTINGS is the reader's
-  // own document. It is what a share link serialises, what a saved state
+  // own document. It is what a share link serializes, what a saved state
   // restores and what the A/B bench hashes to decide whether two runs differ.
   // Writing a cap into it meant a teacher on a slow laptop silently exported
   // num_asteroids: 40 to a class on faster machines, and meant the bench could
@@ -852,12 +852,12 @@ export const buildWorld = ctx => {
       120,
       ...holes.map(h => Math.hypot(h.pos.x, h.pos.y) + (h.radius || 0))
     );
-    // Enter from beyond the field, aimed across it and offset from dead centre
+    // Enter from beyond the field, aimed across it and offset from dead center
     // so the first hole deflects rather than swallows.
     const entry = field * 1.5;
     const star = stars[0];
     star.pos.x = -entry;
-    // Offset from dead centre so the holes deflect it rather than eat it.
+    // Offset from dead center so the holes deflect it rather than eat it.
     star.pos.y = field * 0.35;
     // Fast enough to cross rather than fall in, slow enough to be turned hard.
     // Measured against the engine over a grid of speeds and impact parameters:
@@ -1036,7 +1036,7 @@ export const buildWorld = ctx => {
     }
   } else if (starting_preset === 'Black Hole Billiards') {
     // Three light holes on staggered circular orbits around the heavy one, so
-    // the scene opens as something recognisably in motion rather than four
+    // the scene opens as something recognizably in motion rather than four
     // holes scattered at random that have merged by the time anyone looks.
     const heavy = bh_list[0];
     if (heavy && bh_list.length >= 2) {
@@ -1098,7 +1098,7 @@ export const buildWorld = ctx => {
         diameter: 4879, // km
         orbital_period: 88, // days
         type: 'terrestrial',
-        color: '#9E9E9E', // Mercury grey/rocky
+        color: '#9E9E9E', // Mercury gray/rocky
         density: 'rocky',
         temperature: 440, // Kelvin (daytime surface temperature)
         gravity: 3.7, // m/s²
@@ -1237,7 +1237,7 @@ export const buildWorld = ctx => {
       // Dwarf planet beyond Neptune
     ];
 
-    // Create planets with realistic properties
+    // Create planets with realiztic properties
     const DEG2RAD = Math.PI / 180;
 
     for (let i = 0; i < solarSystemData.length; i++) {
@@ -2475,13 +2475,13 @@ export const buildWorld = ctx => {
     const total = m1 + m2;
     const mu = m2 / total;
 
-    // The barycentre is the origin, the heavier body sits at -mu and the
+    // The barycenter is the origin, the heavier body sits at -mu and the
     // lighter at 1-mu, in units of the separation. That is the convention
     // js/cr3bp.js states and works in, and building the world any other way
     // would mean the overlay and the simulation disagreed about where the
     // origin is.
     const n = Math.sqrt((G * total) / (separation * separation * separation));
-    const place = (fraction, mass, name, colour, radiusSuns) => {
+    const place = (fraction, mass, name, color, radiusSuns) => {
       const x = fraction * separation;
       const star = new StarObject({ x, y: 0 }, { x: 0, y: n * x }, 0);
       star.mass = mass;
@@ -2492,7 +2492,7 @@ export const buildWorld = ctx => {
       // the whole L4/L5 triangle. Nothing here comes within twenty times the
       // drawn radius, and js/physics.js collides on the drawn radius.
       star.radius = 30 * 0.00465047 * AU * Math.cbrt(radiusSuns);
-      star.baseColor = colour;
+      star.baseColor = color;
       star.persistent = true;
       stars.push(star);
     };
@@ -2908,7 +2908,7 @@ export const buildWorld = ctx => {
   // --- Three-Body Sensitivity Lab: Lagrange's equilateral solution ----------
   //
   // Three equal stars at the corners of an equilateral triangle, rotating
-  // rigidly about their common centre. This is an exact solution of the
+  // rigidly about their common center. This is an exact solution of the
   // three-body problem, found by Lagrange in 1772, and it is here because of
   // what Gascheau proved about it in 1843: the equilateral solution is stable
   // only when 27(m1m2 + m2m3 + m3m1) < (m1 + m2 + m3)^2. For three equal
@@ -3088,7 +3088,7 @@ export const buildWorld = ctx => {
   }
 
   // The Sun, Jupiter and four test bodies on Jupiter's orbit. Built in the
-  // circular restricted frame - both massive bodies turning about a barycentre
+  // circular restricted frame - both massive bodies turning about a barycenter
   // at the origin - because the triangular points are only exact in that frame.
   // Already balanced by construction, so no balance() call.
   if (starting_preset === 'Jupiter Trojans') {

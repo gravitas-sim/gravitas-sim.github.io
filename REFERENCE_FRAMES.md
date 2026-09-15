@@ -112,7 +112,7 @@ it.** A frame that re-expresses positions and says nothing about velocities
 leaves the inspector reporting that Earth moves at 29.8 km/s while the view has
 Earth sitting perfectly still. While a frame is active the inspector gains one
 row, `Speed vs Mars` or `Speed vs barycenter`, and the existing `Velocity` row
-keeps its world-frame meaning unchanged. Silently switching what a labelled
+keeps its world-frame meaning unchanged. Silently switching what a labeled
 number means would be the worse fix. Verified on the running app: Mars in Mars's
 own frame reads `Speed vs Mars = 0 km/s` while `Velocity` still reads
 24.1 km/s, and the extra row disappears in the world frame.

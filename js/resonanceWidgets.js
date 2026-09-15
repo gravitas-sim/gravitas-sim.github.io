@@ -28,7 +28,7 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
-// This family's labels are in the deferred half of the catalogue; see the note
+// This family's labels are in the deferred half of the catalog; see the note
 // in js/widgets.js. Registered from the module that renders them rather than
 // from the registry, because a lesson, a share link, an authoring preview or a
 // test can import this file directly and never go through the registry at all
@@ -328,7 +328,7 @@ function frame(g, box, colors, title) {
   }
 }
 
-/** Centre a message in a box. */
+/** Center a message in a box. */
 function message(g, w, h, colors, text) {
   g.font = `12px ${MONO}`;
   g.fillStyle = colors.muted;
@@ -533,8 +533,8 @@ const ANGLE = {
  *
  * Split out from the widget so it can be tested against every verdict the
  * classifier can produce without having to build a world that produces each
- * one. The classifier does not hand back centre, amplitude and period as a
- * set - a confined angle has the first two and no period, and one whose centre
+ * one. The classifier does not hand back center, amplitude and period as a
+ * set - a confined angle has the first two and no period, and one whose center
  * is drifting has an amplitude and neither of the others - so each is emitted
  * only if it exists. That last case is Callisto, which is the system the lesson
  * spends longest on.
@@ -587,10 +587,10 @@ export function angleRows(m) {
     emphasis: true,
   });
 
-  if (v.centre != null) {
+  if (v.center != null) {
     rows.push({
-      label: t('resW.row.centre'),
-      value: `${v.centre.toFixed(1)}\u00b0`,
+      label: t('resW.row.center'),
+      value: `${v.center.toFixed(1)}\u00b0`,
     });
   }
   if (v.amplitude != null) {
@@ -685,7 +685,7 @@ function wrappedPlot(g, box, m, colors) {
   const py = phi => y + h - 14 - (phi / 360) * (h - 34);
 
   // The 180 line, because that is where two of the three arguments in the
-  // lesson sit and a plot without it makes "about 180 degrees" a judgement.
+  // lesson sit and a plot without it makes "about 180 degrees" a judgment.
   g.strokeStyle = colors.grid;
   g.setLineDash([3, 3]);
   for (const level of [0, 90, 180, 270, 360]) {
@@ -728,21 +728,21 @@ function unwrappedPlot(g, box, m, colors) {
   const px = i => x + 34 + ((m.samples[i].t - t0) / tSpan) * (w - 40);
   const py = v => y + h - 14 - ((v - vLo) / (vHi - vLo)) * (h - 34);
 
-  // The libration band: centre and amplitude, drawn over the data they were
+  // The libration band: center and amplitude, drawn over the data they were
   // fitted to, so the two numbers in the readout are never quoted without the
   // evidence for them.
   const verdict = m.verdict;
   if (verdict.state === ANGLE_STATE.LIBRATION && verdict.amplitude != null) {
-    const centre = wrapAbout(verdict.centre, (lo + hi) / 2);
+    const center = wrapAbout(verdict.center, (lo + hi) / 2);
     g.fillStyle = 'rgba(56, 189, 248, 0.10)';
-    const top = py(centre + verdict.amplitude);
-    const bottom = py(centre - verdict.amplitude);
+    const top = py(center + verdict.amplitude);
+    const bottom = py(center - verdict.amplitude);
     g.fillRect(x + 34, top, w - 40, bottom - top);
     g.strokeStyle = colors.warn;
     g.setLineDash([4, 3]);
     g.beginPath();
-    g.moveTo(x + 34, py(centre));
-    g.lineTo(x + w - 6, py(centre));
+    g.moveTo(x + 34, py(center));
+    g.lineTo(x + w - 6, py(center));
     g.stroke();
     g.setLineDash([]);
   }
@@ -1014,14 +1014,14 @@ export function measureFrame(ctx, spec) {
   const now = new Map(
     others.map(b => [
       b.name,
-      rotatingFrame(b.pos, base.primary, secondary, { normalise: true }),
+      rotatingFrame(b.pos, base.primary, secondary, { normalize: true }),
     ])
   );
 
   // Tracks are rebuilt from the record each frame rather than accumulated,
   // because the rotating frame is defined by where the secondary was at each
   // instant and a stored track would be drawn in the wrong frame the moment it
-  // moved. Primary-centred and normalised by the separation, matching
+  // moved. Primary-centerd and normalized by the separation, matching
   // rotatingFrame(), so the secondary is at (1, 0) and the marks this widget
   // draws for L4 and L5 are exactly (0.5, +/-sqrt(3)/2).
   const tracks = new Map(others.map(b => [b.name, []]));
@@ -1084,7 +1084,7 @@ const FRAME = {
       return;
     }
 
-    // Normalised coordinates: the secondary sits at (1, 0) whatever the real
+    // Normalized coordinates: the secondary sits at (1, 0) whatever the real
     // separation, so L4 and L5 are exactly at (0.5, ±√3/2) and the picture is
     // the textbook one.
     const cx = w / 2;
@@ -1132,10 +1132,10 @@ const FRAME = {
     // Each body's track, then its current position.
     let hue = 0;
     for (const [name, track] of m.tracks) {
-      const colour = `hsl(${(hue * 67) % 360} 70% 65%)`;
+      const color = `hsl(${(hue * 67) % 360} 70% 65%)`;
       hue++;
       if (track.length > 1) {
-        g.strokeStyle = colour;
+        g.strokeStyle = color;
         g.globalAlpha = 0.55;
         g.lineWidth = 1;
         g.beginPath();
@@ -1150,7 +1150,7 @@ const FRAME = {
       }
       const at = m.now.get(name);
       if (at) {
-        g.fillStyle = colour;
+        g.fillStyle = color;
         g.beginPath();
         g.arc(X(at.x), Y(at.y), 3, 0, Math.PI * 2);
         g.fill();
@@ -1197,7 +1197,7 @@ const FRAME = {
                 v.amplitude > 90
                   ? t('resW.kind.horseshoe')
                   : t('resW.kind.tadpole'),
-              centre: v.centre.toFixed(0),
+              center: v.center.toFixed(0),
               amp: v.amplitude.toFixed(0),
             })
           : verdictText(v),

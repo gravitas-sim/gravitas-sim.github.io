@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // =============================================================================
-// Message-catalogue audit
+// Message-catalog audit
 // -----------------------------------------------------------------------------
 // Three questions a translation can only be trusted if somebody answers:
 //
@@ -22,8 +22,8 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-// Merged, because the catalogue is split across two files for code-splitting
-// reasons and is one catalogue as far as coverage is concerned. See
+// Merged, because the catalog is split across two files for code-splitting
+// reasons and is one catalog as far as coverage is concerned. See
 // js/i18n/en.deferred.js for why the split exists.
 const { EN: EN_BASE } = await import(`${ROOT}js/i18n/en.js`);
 const { ES: ES_BASE } = await import(`${ROOT}js/i18n/es.js`);
@@ -53,7 +53,7 @@ for (const f of files) {
   // hasMessage() and the coverage note read ids too.
   for (const m of src.matchAll(/hasMessage\(\s*'([^']+)'/g)) used.add(m[1]);
   // js/lightCurve.js imports the translator as `translate`: `t` is already the
-  // chart palette in that module, and a translator called on a colour object
+  // chart palette in that module, and a translator called on a color object
   // would be a crash rather than a wrong word.
   for (const m of src.matchAll(/\btranslate\(\s*'([^']+)'/g)) used.add(m[1]);
 }
@@ -143,7 +143,7 @@ for (const m of readFileSync(join(ROOT, 'js/theme.js'), 'utf8').matchAll(
 }
 // The coverage notes: the complete-locale one is looked up through t(), and
 // the partial-locale sentence travels on the LOCALES registry so the picker can
-// show it before that locale has been fetched. The catalogue keeps a copy so a
+// show it before that locale has been fetched. The catalog keeps a copy so a
 // translator sees it alongside everything else.
 used.add('locale.coverage.es');
 used.add('locale.coverage.complete');
@@ -185,9 +185,9 @@ const show = (title, list, limit = 40) => {
   if (list.length > limit) console.log(`    … and ${list.length - limit} more`);
 };
 
-console.log(`English catalogue: ${enIds.size} messages`);
+console.log(`English catalog: ${enIds.size} messages`);
 console.log(
-  `Spanish catalogue: ${esIds.size} messages ` +
+  `Spanish catalog: ${esIds.size} messages ` +
     `(${Math.round((esIds.size / enIds.size) * 100)}% of English)`
 );
 console.log(`Ids referenced:    ${used.size}`);

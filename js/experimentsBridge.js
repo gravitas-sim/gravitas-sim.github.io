@@ -36,7 +36,7 @@ export function ensureBench() {
           import('./render.js'),
           import('./timestep.js'),
           import('./physics.js'),
-          // The reliability check's prose is not in the start-up catalogue: the
+          // The reliability check's prose is not in the start-up catalog: the
           // bench is lazy, so its rarest half should be too. Registered before
           // the panel renders anything.
           import('./i18n/deferredMessages.js').then(m =>

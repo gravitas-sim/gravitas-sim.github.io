@@ -34,12 +34,12 @@ import { ES_TEACHING } from '../js/i18n/es.teaching.js';
 const lessonFor = activity =>
   INVESTIGATIONS.find(l => l.id === activity.lesson);
 
-describe('the catalogue is honest about what it offers', () => {
+describe('the catalog is honest about what it offers', () => {
   test('every activity has at least one format and no duplicate ids', () => {
     // This used to pin the number at one, on the reasoning that a card saying
     // "coming soon" is worse than no card. That reasoning is still right and
     // the assertion was the wrong shape for it: a count has to be edited every
-    // time the catalogue grows, which makes it a chore rather than a check.
+    // time the catalog grows, which makes it a chore rather than a check.
     // What actually matters is that nothing here is a stub.
     expect(ACTIVITIES.length).toBeGreaterThan(0);
     const activityIds = new Set();

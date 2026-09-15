@@ -9,7 +9,7 @@
 //
 // This is what the start-up path sees instead: a listener, and an import that
 // happens when a scenario that needs one is actually loaded. The panels keep
-// their own behaviour of appearing with their scenario; all that changes is
+// their own behavior of appearing with their scenario; all that changes is
 // that the code arrives at the same moment rather than half a minute earlier.
 //
 // Deliberately not a rail chip and deliberately not lazy-on-first-click: a
@@ -48,7 +48,7 @@ const loaded = new WeakSet();
  *
  * The panel's own init() wires its DOM and subscribes it to the reset event,
  * so it takes over from here. It is called once per chunk: the panel then
- * handles every subsequent rebuild itself, which is the behaviour it already
+ * handles every subsequent rebuild itself, which is the behavior it already
  * had when it was imported eagerly.
  *
  * @returns {Promise<void>}
@@ -57,7 +57,7 @@ async function loadForScenario() {
   const name = current_scenario_name;
   for (const entry of PANELS) {
     if (!entry.scenarios.includes(name)) continue;
-    // The strings for these panels are not in the start-up catalogue.
+    // The strings for these panels are not in the start-up catalog.
     await ensureDeferredMessages().catch(() => {});
     const mod = await entry.load();
     if (!loaded.has(mod)) {

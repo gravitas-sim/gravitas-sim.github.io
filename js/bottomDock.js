@@ -2,11 +2,11 @@
 // The bottom dock: the transport bar and the footer, sharing one edge
 // -----------------------------------------------------------------------------
 // Both live along the bottom of the window, and neither used to know the other
-// was there. The bar centred itself in the band left of the control rail; the
+// was there. The bar centerd itself in the band left of the control rail; the
 // footer sat in the right-hand corner and was as wide as its contents happened
 // to make it. Whether they collided was a coincidence of window width and
 // footer length - and the footer had been getting longer: a theme picker, then
-// a language picker, on top of the copyright, the licence, the validation link
+// a language picker, on top of the copyright, the license, the validation link
 // and the repository link. On a wide window the scrubber ran straight across
 // the copyright line.
 //
@@ -23,13 +23,13 @@
 //                          onto a row of its own beneath the bar
 //   --rail-footer-inset    how far the footer must sit from the right edge to
 //                          clear the control rail, which is usually not at all
-//   --transport-max        the widest a window-centred bar may be and still
+//   --transport-max        the widest a window-centerd bar may be and still
 //                          stop short of the footer
 //   --transport-reserve    how much of the bottom edge the bar actually
 //                          occupies, for the panels that must stop short of it
 //
 // and the body class `dock-banded`, which says that centring the bar on the
-// window would squeeze it past usefulness and it should centre in the room to
+// window would squeeze it past usefulness and it should center in the room to
 // the left of the footer instead.
 //
 // Measured with a ResizeObserver rather than only on resize: the footer changes
@@ -131,17 +131,17 @@ function publish(footer, rail, bar) {
     ? Math.ceil(window.innerWidth - f.left)
     : 0;
 
-  // A window-centred bar overruns the footer once half of it reaches the
+  // A window-centerd bar overruns the footer once half of it reaches the
   // footer's left edge, so the room it has is symmetric: what it gives up on
   // the right it also gives up on the left.
-  const centredMax = Math.max(
+  const centerdMax = Math.max(
     0,
     Math.floor(window.innerWidth - 2 * (footerLeftFromRight + GAP))
   );
-  set('--transport-max', `${centredMax}px`);
+  set('--transport-max', `${centerdMax}px`);
   set('--footer-reserve', `${footerLeftFromRight + GAP}px`);
 
-  document.body.classList.toggle('dock-banded', centredMax < MIN_BAR);
+  document.body.classList.toggle('dock-banded', centerdMax < MIN_BAR);
 }
 
 /**

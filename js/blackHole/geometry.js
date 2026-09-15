@@ -83,9 +83,9 @@ export function projection(a) {
  * A point on the disk, projected.
  *
  * @param {object} a - An appearance
- * @param {number} radius - Distance from the centre, in screen units
+ * @param {number} radius - Distance from the center, in screen units
  * @param {number} phi - Azimuth in the disk's own plane, radians
- * @returns {{x: number, y: number, depth: number}} Offset from the centre in
+ * @returns {{x: number, y: number, depth: number}} Offset from the center in
  *   screen units, plus how far towards the viewer the point sits: +1 is the
  *   near edge, -1 the far edge, and it is what depth ordering sorts on.
  */
@@ -110,7 +110,7 @@ export function diskPoint(a, radius, phi) {
  * outruns the outer flow. It is not a claim about the absolute speed of
  * anything - see `dopplerWeight` for what is and is not asserted there.
  *
- * @param {number} radius - Distance from the centre
+ * @param {number} radius - Distance from the center
  * @param {number} inner - The inner edge
  * @returns {number} A relative speed, 1 at the inner edge
  */
@@ -183,9 +183,9 @@ export function beamingSpread(a, speed, strength = 0.55) {
  * emission does *not* peak at the inner boundary and does not diverge at the
  * horizon: it rises from zero just outside the inner edge, peaks a little way
  * out, and falls steeply. That shape is what this reproduces. The absolute
- * scale is a display choice and the colours are illustrative.
+ * scale is a display choice and the colors are illustrative.
  *
- * @param {number} radius - Distance from the centre
+ * @param {number} radius - Distance from the center
  * @param {number} inner - The inner edge
  * @param {number} outer - Where the drawing stops
  * @returns {number} 0 to 1
@@ -198,7 +198,7 @@ export function emissivity(radius, inner, outer) {
   const raw = (1 - Math.sqrt(1 / x)) / (x * x * x);
   // Its maximum is at x = (7/6)^2, which is where the peak sits. At that x,
   // sqrt(1/x) is 6/7 exactly - taking a square root of 6/7 here was a second
-  // root of a quantity that was already one, which made the normalisation
+  // root of a quantity that was already one, which made the normalization
   // about half what it should be and clamped the whole inner disk flat.
   const peak = (1 - 6 / 7) / (49 / 36) ** 3;
   const shape = clamp(raw / peak, 0, 1);

@@ -164,7 +164,7 @@ describe('measuring the simulated system', () => {
   });
 
   test('a point mass gives a curve falling as r to the minus a half', () => {
-    // The Solar System's behaviour, and the prediction the flat curve refutes.
+    // The Solar System's behavior, and the prediction the flat curve refutes.
     const bodies = [body(0, 0, 1000)];
     const c = { x: 0, y: 0 };
     const pts = [200, 400, 800, 1600].map(r => ({

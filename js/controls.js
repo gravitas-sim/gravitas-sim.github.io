@@ -502,7 +502,7 @@ function setupShortcuts() {
     run: () => {
       state.zoom = 1.0;
       state.pan = { x: 0, y: 0 };
-      // Deliberate, so Follow mode re-centres instead of reading it as a drag.
+      // Deliberate, so Follow mode re-centers instead of reading it as a drag.
       resetFollowCamera(state);
       toast(t('toast.view.reset'));
     },

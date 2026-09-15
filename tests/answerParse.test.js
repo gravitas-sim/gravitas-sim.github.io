@@ -40,7 +40,7 @@ describe('what the old parser got wrong', () => {
 
   test('a Unicode minus is a minus, not a deleted character', () => {
     // Stripping turned "−5" into "5". The sign is the whole answer in half the
-    // radial-velocity questions in the catalogue.
+    // radial-velocity questions in the catalog.
     expect(value('−5')).toBe(-5);
     expect(value('−0.5')).toBe(-0.5);
     // And the hyphens a word processor substitutes.
@@ -79,9 +79,9 @@ describe('what the old parser got wrong', () => {
   });
 
   test('a unit spelled out does not poison the number', () => {
-    // "5 metres" kept its two e's and became NaN, so the answer was wrong.
-    expect(parseNumber('5 metres').value).toBe(5);
-    expect(parseNumber('5 metres').rest).toBe('metres');
+    // "5 meters" kept its two e's and became NaN, so the answer was wrong.
+    expect(parseNumber('5 meters').value).toBe(5);
+    expect(parseNumber('5 meters').rest).toBe('meters');
   });
 });
 
@@ -233,7 +233,7 @@ describe('units are converted only where a step says they may be', () => {
     expect(out.detail).toMatchObject({ got: 'length', dimension: 'time' });
   });
 
-  test('a unit nobody recognises is refused, and says so', () => {
+  test('a unit nobody recognizes is refused, and says so', () => {
     const out = parseAnswer('5 furlongs', withExpect);
     expect(out.ok).toBe(false);
     expect(out.reason).toBe(PARSE_FAILURE.UNKNOWN_UNIT);

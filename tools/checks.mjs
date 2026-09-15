@@ -113,7 +113,7 @@ const GREEN = new Set([OUTCOMES.PASS]);
  * @param {Array<{status: string, label: string, note?: string}>} results - One per check
  * @returns {{counts: object, green: boolean, complete: boolean, headline: string}} Summary
  */
-export function summarise(results) {
+export function summarize(results) {
   const counts = {};
   for (const key of Object.values(OUTCOMES)) {
     counts[key] = results.filter(r => r.status === key).length;
@@ -424,13 +424,13 @@ export const CHECKS = [
     why: 'added after the workflow was written; runs in seconds',
     group: 'generated',
   },
-  // The scene catalogue and the record beside it are generated from the lesson
+  // The scene catalog and the record beside it are generated from the lesson
   // data, and the hand-written acceptance map is checked against them: a
   // central experiment whose object, control, evidence or test has moved fails
   // here rather than being discovered by a teacher.
   {
     id: 'scene',
-    label: 'the lesson scene catalogue and acceptance map',
+    label: 'the lesson scene catalog and acceptance map',
     command: ['npm', 'run', 'audit:scene:check'],
     tier: 'quick',
     ci: null,
@@ -533,7 +533,7 @@ export const CHECKS = [
 export const CI_SETUP_STEPS = [
   'Report what a visitor downloads',
   'Resolve the Playwright version',
-  // The aggregation job and the deploy job: platform behaviour, covered by
+  // The aggregation job and the deploy job: platform behavior, covered by
   // GitHub rather than by anything runnable here.
   'Report',
   'Check out the exact commit that was validated',

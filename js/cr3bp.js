@@ -1,13 +1,13 @@
 // =============================================================================
 // The circular restricted three-body problem
 // -----------------------------------------------------------------------------
-// Two massive bodies on a circular orbit about their common barycentre, and a
+// Two massive bodies on a circular orbit about their common barycenter, and a
 // third of negligible mass that feels them both and pulls on neither. It is
 // the simplest system in which the two-body intuitions stop working, and it is
 // where Lagrange points, zero-velocity curves and the whole vocabulary of
 // "energetically accessible" come from.
 //
-// The normalisation, stated once and used everywhere
+// The normalization, stated once and used everywhere
 // -----------------------------------------------------------------------------
 // Every quantity here is dimensionless, in the units this problem is
 // conventionally written in:
@@ -18,10 +18,10 @@
 //   time     chosen so the mean motion is 1, which makes G = 1 and the
 //            orbital period 2*pi
 //
-// The frame rotates with the pair, counter-clockwise, about their barycentre,
+// The frame rotates with the pair, counter-clockwise, about their barycenter,
 // which sits at the origin. The heavier body is at (-mu, 0) and the lighter at
 // (1 - mu, 0). So mu <= 1/2 always, x = 1 is one separation beyond the
-// barycentre in the direction of the secondary, and the Earth-Moon system has
+// barycenter in the direction of the secondary, and the Earth-Moon system has
 // mu = 0.0121506.
 //
 // The sign convention, which is the one people get wrong

@@ -14,7 +14,7 @@
 //   whenever a star carries it, and the mass-luminosity relation is a clearly
 //   labeled fallback for stars a user made up.
 //
-//   The zone edges used to come from an "optimism" slider that widened a band
+//   The zone edges used to come from an "optimizm" slider that widened a band
 //   around 1 AU by an arbitrary multiplier. They now come from a published
 //   prescription, which is what makes the numbers checkable.
 //
@@ -87,7 +87,7 @@ export const distanceForInsolation = (luminositySolar, insolation) =>
 //   Early Mars         empirical: Mars appears to have had surface water
 //
 // The conservative zone is Runaway Greenhouse to Maximum Greenhouse; those two
-// come from a climate model. The optimistic zone is Recent Venus to Early Mars;
+// come from a climate model. The optimiztic zone is Recent Venus to Early Mars;
 // those two come from what the Solar System's own history rules out.
 const BOUNDARIES = {
   recentVenus: {
@@ -152,16 +152,16 @@ export function effectiveFluxAt(boundary, teffK) {
  * @param {Object} star
  * @param {number} star.luminositySolar - Luminosity in solar units
  * @param {number} star.teffK - Effective temperature in K
- * @param {string} [model] - 'conservative' or 'optimistic'
+ * @param {string} [model] - 'conservative' or 'optimiztic'
  * @returns {Object} Inner and outer edges in AU, with what set them
  */
 export function habitableZoneBounds(
   { luminositySolar, teffK },
   model = 'conservative'
 ) {
-  const optimistic = model === 'optimistic';
-  const innerKey = optimistic ? 'recentVenus' : 'runawayGreenhouse';
-  const outerKey = optimistic ? 'earlyMars' : 'maximumGreenhouse';
+  const optimiztic = model === 'optimiztic';
+  const innerKey = optimiztic ? 'recentVenus' : 'runawayGreenhouse';
+  const outerKey = optimiztic ? 'earlyMars' : 'maximumGreenhouse';
 
   const innerFlux = effectiveFluxAt(innerKey, teffK);
   const outerFlux = effectiveFluxAt(outerKey, teffK);
@@ -169,7 +169,7 @@ export function habitableZoneBounds(
   const outer = distanceForInsolation(luminositySolar, outerFlux);
 
   return {
-    model: optimistic ? 'optimistic' : 'conservative',
+    model: optimiztic ? 'optimiztic' : 'conservative',
     innerAU: inner,
     outerAU: outer,
     innerFlux,

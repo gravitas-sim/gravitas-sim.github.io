@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // A student can already watch an orbit. What they cannot do is change one on
 // purpose and see the consequence before committing to it, which is the whole
-// content of orbital manoeuvring: a burn is a choice of direction and size, and
+// content of orbital maneuvering: a burn is a choice of direction and size, and
 // the interesting thing is that the same push does different things depending
 // on where in the orbit you make it.
 //
@@ -62,7 +62,7 @@ export function burnFrame(body, primary) {
 
   const radial = { x: rx / r, y: ry / r };
   // Perpendicular to radial, resolved so that it points the way the body is
-  // travelling. The sign of the angular momentum is what says which way round
+  // traveling. The sign of the angular momentum is what says which way round
   // the orbit goes, and getting it wrong would make every prograde burn
   // retrograde on a clockwise orbit.
   const vx = body.vel.x - primary.vel.x;
@@ -147,7 +147,7 @@ export function previewBurn({ body, primary, G, radial = 0, transverse = 0 }) {
  * transfer ellipse where the radial velocity is zero.
  *
  * @param {object} params - r1, r2, mu
- * @returns {?object} The manoeuvre, or null if the radii are unusable
+ * @returns {?object} The maneuver, or null if the radii are unusable
  */
 export function hohmann({ r1, r2, mu }) {
   if (!(r1 > 0) || !(r2 > 0) || !(mu > 0) || r1 === r2) return null;
@@ -189,7 +189,7 @@ export function hohmann({ r1, r2, mu }) {
  * what, in which frame, how big, in what units, and where the body ended up.
  * A log that recorded only the delta-v would not let anybody reproduce the
  * result, because the same burn at a different point of the orbit is a
- * different manoeuvre.
+ * different maneuver.
  *
  * @param {object} params - The burn and its context
  * @returns {object} The record
@@ -227,8 +227,8 @@ export function burnRecord({
       time: 'simulation time units',
       timeToSeconds: units?.timeUnitSeconds ?? null,
     },
-    before: summariseOrbit(preview.before),
-    after: summariseOrbit(preview.after),
+    before: summarizeOrbit(preview.before),
+    after: summarizeOrbit(preview.after),
     becameUnbound: preview.becomesUnbound,
     // Recorded with every burn, because it is a property of the prediction and
     // not a caveat somebody can be assumed to remember from the panel.
@@ -240,7 +240,7 @@ export function burnRecord({
 }
 
 /** The parts of an orbit worth writing down. @param {?object} el - Elements @returns {?object} */
-function summariseOrbit(el) {
+function summarizeOrbit(el) {
   if (!el) return null;
   return {
     semiMajorAxis: el.bound ? el.a : null,

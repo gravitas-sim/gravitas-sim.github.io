@@ -99,10 +99,10 @@ export const CERES_MASS_KG = 9.3835e20;
 export const HALLEY_MASS_KG = 2.2e14;
 
 /**
- * A kilometre-scale rocky fragment, kg.
+ * A kilometer-scale rocky fragment, kg.
  *
- * Debris is collision and tidal ejecta, and there is no catalogued object to
- * anchor it to, so it is built rather than quoted: a sphere one kilometre
+ * Debris is collision and tidal ejecta, and there is no catalogd object to
+ * anchor it to, so it is built rather than quoted: a sphere one kilometer
  * across at 3000 kg/m^3, the bulk density of ordinary stony rock. That is
  * (4/3) * pi * (500 m)^3 * 3000 kg/m^3.
  */

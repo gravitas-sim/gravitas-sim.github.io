@@ -142,7 +142,7 @@ test.describe('the panel', () => {
   test('says that permission is not playback', async ({ page, app }) => {
     await app.boot();
     await speaker(page).click();
-    // The panel's prose is in the deferred catalogue, so it arrives a moment
+    // The panel's prose is in the deferred catalog, so it arrives a moment
     // after the panel does. Polled rather than read once.
     await expect(page.locator('#soundPanelPermission')).toContainText(
       /does not mean something is playing/i

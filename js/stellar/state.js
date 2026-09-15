@@ -4,7 +4,7 @@
 // Four different parts of this application used to work out how hot a star is,
 // and they disagreed. The inspector had a linear fit in mass; the habitable
 // zone had a power law; the light curve had a third relation for the radius;
-// and a star built from a real catalogue carried measured values that only one
+// and a star built from a real catalog carried measured values that only one
 // of the three ever looked at, so TRAPPIST-1 was drawn with a habitable zone
 // from its measured 2566 K and an inspector card claiming 3350 K.
 //
@@ -13,7 +13,7 @@
 // arrived at:
 //
 //   'track'      a MIST evolutionary model, at a stated age
-//   'declared'   values a scenario supplied, usually from a real catalogue
+//   'declared'   values a scenario supplied, usually from a real catalog
 //   'estimated'  a main-sequence relation applied to a mass, because that is
 //                all there was
 //
@@ -179,7 +179,7 @@ export function stellarState({
 /**
  * The stellar state of a simulation body.
  *
- * Reads whatever the body happens to carry - a real catalogue star has a
+ * Reads whatever the body happens to carry - a real catalog star has a
  * measured temperature and luminosity, a generated one has a mass - and returns
  * the same shape either way.
  *

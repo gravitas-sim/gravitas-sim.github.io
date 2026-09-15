@@ -2,7 +2,7 @@
 // The background sky: what is in it, and where
 // -----------------------------------------------------------------------------
 // Generation only. This module decides how many stars there are, where, how
-// bright, what colour and in which parallax layer; js/render.js decides how to
+// bright, what color and in which parallax layer; js/render.js decides how to
 // paint them. Keeping the two apart is what lets the whole model be tested
 // without a canvas, and what lets the painting be rewritten - as it has been,
 // from ten thousand individual fills per repaint to three blits - without
@@ -127,10 +127,10 @@ export function starCountFor(
 }
 
 /**
- * The colours a star may be.
+ * The colors a star may be.
  *
  * Deliberately short and deliberately weighted toward neutral. Real starlight
- * is subtly coloured and a sky of saturated dots is confetti, so the first two
+ * is subtly colored and a sky of saturated dots is confetti, so the first two
  * entries - both within a few percent of white - take four fifths of the
  * field, and the visibly warm and visibly blue entries are rare enough to read
  * as a detail somebody noticed rather than as decoration.
@@ -245,7 +245,7 @@ export function generateStarfield({
         1,
         lerp(band.alpha[0], band.alpha[1], within) * depthGain
       ),
-      colour: paletteIndexFor(rand()),
+      color: paletteIndexFor(rand()),
       phase: rand() * Math.PI * 2,
       band: bandIndex,
       // Recorded on the star rather than looked up later. The renderer needs
@@ -334,8 +334,8 @@ export function indexStarfield(field) {
     /**
      * Every star whose position is within `radius` of (x, y).
      *
-     * @param {number} x - Centre, pixels
-     * @param {number} y - Centre, pixels
+     * @param {number} x - Center, pixels
+     * @param {number} y - Center, pixels
      * @param {number} radius - Pixels
      * @returns {Array<{star: object, layer: string}>} Matches
      */

@@ -2,8 +2,8 @@
 // A radix-2 complex FFT
 // -----------------------------------------------------------------------------
 // Sixty lines, in the repository rather than in a dependency, because the three
-// things that need it - colouring synthetic detector noise, the time-frequency
-// view, and the normalised overlap between two signals - are all small and none
+// things that need it - coloring synthetic detector noise, the time-frequency
+// view, and the normalized overlap between two signals - are all small and none
 // of them justifies a runtime library in a site that vendors everything it
 // serves.
 //

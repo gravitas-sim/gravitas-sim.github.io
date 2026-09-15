@@ -447,7 +447,7 @@ describe('the physical radius is not the drawn one', () => {
     expect(schwarzschildRadiusM(1e6 * SOLAR_MASS_KG) / one).toBeCloseTo(1e6, 6);
   });
 
-  test('and it is about three kilometres for the Sun', () => {
+  test('and it is about three kilometers for the Sun', () => {
     expect(schwarzschildRadiusM(SOLAR_MASS_KG) / 1000).toBeCloseTo(2.95, 2);
   });
 

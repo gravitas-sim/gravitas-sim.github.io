@@ -15,7 +15,7 @@
 //
 // What this module is for
 // -----------------------------------------------------------------------------
-// One open, one close, and the four behaviours that have to come with them:
+// One open, one close, and the four behaviors that have to come with them:
 //
 //   - the closed panel is `hidden` (display: none) and `inert`, so it is in
 //     neither the tab order nor the accessibility tree

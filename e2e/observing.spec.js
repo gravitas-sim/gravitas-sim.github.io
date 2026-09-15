@@ -107,7 +107,7 @@ test.describe('radial velocity', () => {
     app,
   }) => {
     // Transit Lab pins the star, so a reflex velocity would be an artifact. The
-    // panel refusing to report one is a deliberate behaviour worth defending.
+    // panel refusing to report one is a deliberate behavior worth defending.
     await app.boot();
     await app.loadScenario('Transit Lab');
     await app.openPanel('toggleRadialVelocity', 'rvContainer');

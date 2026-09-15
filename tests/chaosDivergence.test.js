@@ -1,6 +1,6 @@
 import { describe, test, expect } from '@jest/globals';
 import {
-  BEHAVIOUR,
+  BEHAVIOR,
   REJECTION,
   CRITERIA,
   configurationDistance,
@@ -8,7 +8,7 @@ import {
   separationSeries,
   logLinearFit,
   chooseWindow,
-  analyseDivergence,
+  analyzedivergence,
   straightLineR2,
   refinementVerdict,
 } from '../js/chaos/divergence.js';
@@ -65,7 +65,7 @@ describe('the distance between two runs', () => {
   test('the phase-space version is dimensionless and includes velocity', () => {
     const a = [body(1, 0, 0, 0, 0)];
     const b = [body(1, 0, 0, 3, 4)];
-    // Positions equal, speeds differ by 5, normalised by a speed scale of 10.
+    // Positions equal, speeds differ by 5, normalized by a speed scale of 10.
     expect(phaseDistance(a, b, { length: 100, speed: 10 }).d).toBeCloseTo(
       0.5,
       9
@@ -155,16 +155,16 @@ describe('choosing the interval to fit', () => {
 
 describe('classifying a divergence', () => {
   test('identical runs are identical, and get no timescale', () => {
-    const v = analyseDivergence(
+    const v = analyzedivergence(
       Array.from({ length: 50 }, (_, i) => ({ t: i, d: 0 }))
     );
-    expect(v.behaviour).toBe(BEHAVIOUR.IDENTICAL);
+    expect(v.behavior).toBe(BEHAVIOR.IDENTICAL);
     expect(v.tau).toBeNull();
   });
 
   test('exponential growth yields the right e-folding time', () => {
-    const v = analyseDivergence(exponential(6.9, 1e-3, 0, 140));
-    expect(v.behaviour).toBe(BEHAVIOUR.EXPONENTIAL);
+    const v = analyzedivergence(exponential(6.9, 1e-3, 0, 140));
+    expect(v.behavior).toBe(BEHAVIOR.EXPONENTIAL);
     expect(v.tau).toBeCloseTo(6.9, 1);
     expect(v.r2).toBeGreaterThan(CRITERIA.minR2);
     expect(v.window.ok).toBe(true);
@@ -172,8 +172,8 @@ describe('classifying a divergence', () => {
 
   test('linear drift is called linear, and gets no e-folding time', () => {
     // This is the two-body control, and the most important test in the file.
-    const v = analyseDivergence(linear(0.5, 1e-3, 200));
-    expect(v.behaviour).toBe(BEHAVIOUR.LINEAR);
+    const v = analyzedivergence(linear(0.5, 1e-3, 200));
+    expect(v.behavior).toBe(BEHAVIOR.LINEAR);
     expect(v.tau).toBeNull();
     expect(v.linearR2).toBeGreaterThan(0.99);
   });
@@ -183,24 +183,24 @@ describe('classifying a divergence', () => {
       t: i,
       d: 1 + 0.2 * Math.sin(i / 5),
     }));
-    const v = analyseDivergence(wobble);
-    expect(v.behaviour).toBe(BEHAVIOUR.BOUNDED);
+    const v = analyzedivergence(wobble);
+    expect(v.behavior).toBe(BEHAVIOR.BOUNDED);
     expect(v.tau).toBeNull();
   });
 
   test('too short a run gives no estimate however clean the growth', () => {
-    const v = analyseDivergence(exponential(7, 1e-3, 0, 12));
+    const v = analyzedivergence(exponential(7, 1e-3, 0, 12));
     expect(v.tau).toBeNull();
-    expect(v.behaviour).not.toBe(BEHAVIOUR.EXPONENTIAL);
+    expect(v.behavior).not.toBe(BEHAVIOR.EXPONENTIAL);
   });
 
   test('the reported growth factor is end over start', () => {
-    const v = analyseDivergence(exponential(10, 1, 0, 100, 5));
+    const v = analyzedivergence(exponential(10, 1, 0, 100, 5));
     expect(v.growth).toBeCloseTo(Math.exp(10), -2);
   });
 
   test('a straight-line comparison is always reported', () => {
-    const v = analyseDivergence(exponential(6.9, 1e-3, 0, 140));
+    const v = analyzedivergence(exponential(6.9, 1e-3, 0, 140));
     // Even when the answer is exponential, the alternative is shown, because
     // that comparison is what the lesson turns on.
     expect(v.linearR2).toBeGreaterThan(0);
@@ -209,7 +209,7 @@ describe('classifying a divergence', () => {
 });
 
 describe('the refinement verdict', () => {
-  const at = (tau, behaviour = BEHAVIOUR.EXPONENTIAL) => ({ tau, behaviour });
+  const at = (tau, behavior = BEHAVIOR.EXPONENTIAL) => ({ tau, behavior });
 
   test('agreeing timescales are resolved', () => {
     const v = refinementVerdict([at(6.9), at(7.0), at(7.2)]);
@@ -223,10 +223,10 @@ describe('the refinement verdict', () => {
     expect(v.reason).toBe('timescale-moved');
   });
 
-  test('a behaviour that changes with the numerics is not', () => {
-    const v = refinementVerdict([at(6.9), at(7.0, BEHAVIOUR.LINEAR)]);
+  test('a behavior that changes with the numerics is not', () => {
+    const v = refinementVerdict([at(6.9), at(7.0, BEHAVIOR.LINEAR)]);
     expect(v.resolved).toBe(false);
-    expect(v.reason).toBe('behaviour-changed');
+    expect(v.reason).toBe('behavior-changed');
   });
 
   test('one estimate is never enough to call something resolved', () => {

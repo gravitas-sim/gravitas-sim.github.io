@@ -53,7 +53,7 @@ merger plays two overlapping bass drops. Fixed in Stage 4.
 
 ## B. The dedicated lab: a scoped, cited waveform model
 
-### B.1 What is modelled
+### B.1 What is modeled
 
 **Leading-order (quadrupole, "Newtonian" / 0PN) quasi-circular inspiral of two
 point masses.** Circular orbits, no spin, no eccentricity, no tides, no
@@ -132,9 +132,9 @@ extrapolating: it shows the published GW150914 numerical-relativity
 reconstruction (section C). There is no code path in which a synthesised
 waveform continues past `f_ISCO`.
 
-Explicitly not modelled, and explicitly said so in the interface:
+Explicitly not modeled, and explicitly said so in the interface:
 
-- Binary-neutron-star post-merger. Not observed for GW170817, not modelled
+- Binary-neutron-star post-merger. Not observed for GW170817, not modeled
   here, and not synthesised by changing an oscillator's pitch.
 - Tidal disruption in a neutron-star / black-hole merger.
 - Neutron-star / black-hole ringdown.
@@ -164,15 +164,15 @@ Explicitly not modelled, and explicitly said so in the interface:
   which is what the amplitude actually constrains. Two configurations with the
   same `D_eff` produce the same detector strain, which is step 16 of the
   lesson.
-- **Strain is dimensionless.** Plots are labelled `h` and drawn in units of
-  `1e-21`. Whitened data is labelled as such, in units of standard deviations,
+- **Strain is dimensionless.** Plots are labeled `h` and drawn in units of
+  `1e-21`. Whitened data is labeled as such, in units of standard deviations,
   and never mixed on an axis with strain.
 
 ### B.5 Presets
 
 Chosen so that the differences between them come out of the masses, not out of
 a switch. None of them is a fit to a real event; the GW150914-like preset uses
-the published parameters as a starting point and is labelled as a model, not as
+the published parameters as a starting point and is labeled as a model, not as
 the observation.
 
 | Preset | m1, m2 (detector frame) | D | Mc | f_ISCO | Band from 20 Hz |
@@ -193,7 +193,7 @@ those. The interface says that where the choice is made.
 
 ### B.6 Synthetic noise
 
-Coloured Gaussian noise from a seeded generator, with a power spectral density
+Colored Gaussian noise from a seeded generator, with a power spectral density
 from a published analytic fit to the Advanced LIGO zero-detuning high-power
 design curve (LIGO-T0900288), in the form given by Ajith (2011),
 arXiv:1107.1267:
@@ -215,14 +215,14 @@ so, and the real-data section is where measured noise appears.
 ### B.7 What the lab does not claim
 
 - It is not a detection pipeline. Template comparison reports **similarity**
-  (a normalised inner product), never a signal-to-noise ratio, a false-alarm
+  (a normalized inner product), never a signal-to-noise ratio, a false-alarm
   rate, or a probability.
 - Listening does not classify a source. Two binaries with the same chirp mass
   and different total masses sound nearly identical for most of the band.
 - The schematic binary drawn beside the signal is a **reconstruction driven by
   the waveform timeline** - separation from the Keplerian relation at the
-  modelled frequency - and is drawn at a compressed scale with an exaggerated
-  body size. It is labelled schematic. It is not the N-body sandbox, and the
+  modeled frequency - and is drawn at a compressed scale with an exaggerated
+  body size. It is labeled schematic. It is not the N-body sandbox, and the
   N-body sandbox does not drive it.
 
 ---
@@ -242,12 +242,12 @@ Summary of what is bundled and what it is:
   already time-shifted by 6.9 ms and inverted, and the lab says so beside it
   rather than doing it silently.
 - **GW150914 numerical-relativity waveform, H1 and L1.** From the same figure.
-  This is the collaboration's reconstruction. It is drawn and labelled
+  This is the collaboration's reconstruction. It is drawn and labeled
   differently from the data, and it is never described as this lab's model.
 - **GW150914 residuals, H1 and L1.** Data minus reconstruction, from the same
   figure. What is left is noise, and being able to see that is the point.
 - **GW150914 Keplerian separation and post-Newtonian velocity.** From Figure 2
-  of the same paper. Published estimates, labelled as such.
+  of the same paper. Published estimates, labeled as such.
 
 Everything is local, deferred, and served from the site's own origin. There is
 no runtime request to gwosc.org.

@@ -36,7 +36,7 @@ export const PHASE_OUTCOME = Object.freeze({
   /** The clock stopped advancing and the tick ceiling ended it. */
   STALLED: 'stalled',
   /** Somebody pressed stop. */
-  CANCELLED: 'cancelled',
+  CANCELED: 'canceled',
   /** Still going. */
   RUNNING: 'running',
 });
@@ -97,12 +97,12 @@ export function createPhaseSampler({ frames, maxSamples, tickCeiling }) {
      * One animation frame has happened. What should the runner do?
      *
      * @param {number} clock - The simulation clock now
-     * @param {boolean} [cancelled] - Whether a stop was asked for
+     * @param {boolean} [canceled] - Whether a stop was asked for
      * @returns {{sample: boolean, done: boolean, outcome: string}} What to do
      */
-    tick(clock, cancelled = false) {
-      if (cancelled) {
-        outcome = PHASE_OUTCOME.CANCELLED;
+    tick(clock, canceled = false) {
+      if (canceled) {
+        outcome = PHASE_OUTCOME.CANCELED;
         return { sample: false, done: true, outcome };
       }
       ticks++;
@@ -155,7 +155,7 @@ export function createPhaseSampler({ frames, maxSamples, tickCeiling }) {
         lastClock,
         sampleCapHit: outcome === PHASE_OUTCOME.SAMPLE_CAPPED,
         stalledOut: outcome === PHASE_OUTCOME.STALLED,
-        cancelled: outcome === PHASE_OUTCOME.CANCELLED,
+        canceled: outcome === PHASE_OUTCOME.CANCELED,
         complete: outcome === PHASE_OUTCOME.COMPLETE,
         /** Fraction of the way through, for a progress readout. */
         fraction: advanced / wanted,

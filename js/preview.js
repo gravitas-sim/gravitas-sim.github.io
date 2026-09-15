@@ -108,7 +108,7 @@ export function getOrbitPreview() {
 
   // Integrate forward using symplectic Euler under many-body gravity
   const dt = 0.02; // sim seconds per step
-  // Extend grey path length by 1.5x for a given insertion speed
+  // Extend gray path length by 1.5x for a given insertion speed
   const steps = Math.floor(160 * 1.5);
   const gravityBoost =
     (typeof SETTINGS !== 'undefined' && SETTINGS.preview_gravity_boost) || 4.0;
@@ -221,7 +221,7 @@ export function getOrbitPreview() {
       const angleOkDirOnly = angErr <= (dirOnlyDeg * Math.PI) / 180;
       // Speed factor band removed in direction-only logic
 
-      // If user hasn't dragged fast enough yet and not within direction-only band, show grey preview
+      // If user hasn't dragged fast enough yet and not within direction-only band, show gray preview
       if (vMag < minSnapSpeed && !angleOkDirOnly) {
         return { points, snapped: false, collision: collisionInfo };
       }

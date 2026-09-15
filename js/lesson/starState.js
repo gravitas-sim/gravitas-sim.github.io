@@ -36,7 +36,7 @@
  * below, the check that decides whether a write is needed, and whatever puts
  * the body back the way it was found.
  */
-export const MODELLED_FIELDS = Object.freeze([
+export const MODELED_FIELDS = Object.freeze([
   'temperature',
   'luminosityInSuns',
   'radiusInSuns',
@@ -58,14 +58,14 @@ export const MODELLED_FIELDS = Object.freeze([
 /** What a body currently shows, as a plain object. @returns {object} */
 export function readStarState(star) {
   const out = {};
-  for (const key of MODELLED_FIELDS) out[key] = star?.[key] ?? null;
+  for (const key of MODELED_FIELDS) out[key] = star?.[key] ?? null;
   return out;
 }
 
 /** Put a body back to a state read earlier. @returns {void} */
 export function writeStarState(star, saved) {
   if (!star || !saved) return;
-  for (const key of MODELLED_FIELDS) star[key] = saved[key] ?? null;
+  for (const key of MODELED_FIELDS) star[key] = saved[key] ?? null;
 }
 
 /**
@@ -94,7 +94,7 @@ export function writeStarState(star, saved) {
  * @param {string} source - From a selection
  * @returns {boolean} Whether a model stands behind it
  */
-const isModelled = source => source === 'model' || source === 'track';
+const isModeled = source => source === 'model' || source === 'track';
 
 export function fieldsFromSelection(selection = {}) {
   const out = {};
@@ -108,7 +108,7 @@ export function fieldsFromSelection(selection = {}) {
   // produces none of them and must not appear to: a point on the diagram is
   // two numbers and the radius they imply, and everything else about it is
   // unknown rather than inherited from whatever the star used to be.
-  if (isModelled(selection.source)) {
+  if (isModeled(selection.source)) {
     put('ageYr', selection.ageYr);
     // A track calls the present-day mass `currentMassSun` and the one it
     // started from `initialMassSun`; the population model calls the first
@@ -123,7 +123,7 @@ export function fieldsFromSelection(selection = {}) {
     put('initialMassInSuns', selection.initialMassSun);
     if (selection.phase) out.stellarPhase = selection.phase;
   }
-  out.modelSource = isModelled(selection.source) ? 'model' : 'free';
+  out.modelSource = isModeled(selection.source) ? 'model' : 'free';
   return out;
 }
 
@@ -142,7 +142,7 @@ export function applySelection(star, selection) {
   if (!star || !selection) return false;
   const wanted = fieldsFromSelection(selection);
   let changed = false;
-  for (const key of MODELLED_FIELDS) {
+  for (const key of MODELED_FIELDS) {
     const next = Object.prototype.hasOwnProperty.call(wanted, key)
       ? wanted[key]
       : null;
@@ -159,7 +159,7 @@ export function applySelection(star, selection) {
  *
  * Used the other way round from the above: a reader selects a star on the
  * canvas and the diagram has to move to it. Null when the star carries no
- * modelled temperature, because the alternative is estimating one from the
+ * modeled temperature, because the alternative is estimating one from the
  * mass and then showing the estimate as though the star had been measured.
  *
  * @param {object} star - A body
@@ -190,7 +190,7 @@ export function pointForStar(star) {
  * leaf that a test can drive with three numbers.
  *
  * @param {number} massSun - The star's birth mass
- * @param {Array<{id: string, initialMassSun: number}>} tracks - The catalogue
+ * @param {Array<{id: string, initialMassSun: number}>} tracks - The catalog
  * @returns {?string} A track id, or null
  */
 export function nearestTrackByMass(massSun, tracks = []) {

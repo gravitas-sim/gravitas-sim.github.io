@@ -15,7 +15,7 @@
 /**
  * The three bodies this lesson is about, bound by exact name.
  *
- * The frame matters here more than in any other lesson in the catalogue: half
+ * The frame matters here more than in any other lesson in the catalog: half
  * of it is watched from outside and half from Earth, and "click Mars" means a
  * different thing depending on which. Binding puts all three in the panel's
  * object list, so a reader who has lost track of which body they are on can
@@ -36,7 +36,7 @@ const RETROGRADE = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'solar-system', 'observing'],
   lock: { placement: true, inspector: false },
@@ -68,7 +68,7 @@ const RETROGRADE = {
              it stops again and resumes its eastward march, having traced a loop
              or a zigzag against the background. Mars does this once every 780
              days, and the reversal lasts about ten weeks.
-             \n\nThis is not a subtle effect visible only to specialists. Anyone
+             \n\nThis is not a subtle effect visible only to specializts. Anyone
              who watches Mars for a few months with the naked eye can see it, and
              every civilization that kept sky records noticed it.`,
       quote: {

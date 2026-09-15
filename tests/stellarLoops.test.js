@@ -134,7 +134,7 @@ describe('the argument at the end is the argument from the start', () => {
     const close = at('the-argument');
     expect(open.type).toBe('predict');
     expect(close.type).toBe('question');
-    // The same three stars, so a reader is revising a judgement about
+    // The same three stars, so a reader is revising a judgment about
     // particular objects rather than answering a general question.
     const names = s => (s.stage?.stars ?? []).map(x => x.name).join('|');
     expect(names(close)).toBe(names(open));

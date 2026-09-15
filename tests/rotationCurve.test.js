@@ -6,7 +6,7 @@ import { describeSlope, formatExponent } from '../js/rotationCurve.js';
 // The panel module reaches into physics.js and the DOM for everything else, so
 // what is unit-testable here is the part that turns a number into a claim.
 // The physics itself is covered by tests/darkMatter.test.js, and the live
-// behaviour of the panel against real scenarios is verified in the browser.
+// behavior of the panel against real scenarios is verified in the browser.
 
 describe('describeSlope', () => {
   test('the Solar System reads as Keplerian', () => {

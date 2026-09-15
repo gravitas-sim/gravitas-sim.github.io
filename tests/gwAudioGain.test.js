@@ -4,11 +4,11 @@
 // tests/gwAudio.test.js already checks renderAudio against arguments handed to
 // it directly, and it passed throughout the bug this file exists for. The bug
 // was not in the renderer: it was in what the widget passed. The lab
-// normalised every playback against the signal's own loudest moment, so
+// normalized every playback against the signal's own loudest moment, so
 // doubling the distance halved the strain, halved the reference with it, and
 // produced an identical sound. Three distances, three plots differing by a
 // factor of four, and one audio amplitude - and the ratio the lesson asks the
-// student to hear was the one quantity the normalisation removed.
+// student to hear was the one quantity the normalization removed.
 //
 // So everything here goes through the widget: press its action, capture the
 // arguments it chose, and render with those.
@@ -157,7 +157,7 @@ describe('a controlled comparison keeps its ratios', () => {
   test('the mapping records the reference it actually used', () => {
     const { timeline, opts } = listenAt(800);
     const out = renderAsPlayed(timeline, opts);
-    expect(out.mapping.normalise).toBe('fixed');
+    expect(out.mapping.normalize).toBe('fixed');
     expect(out.mapping.referenceStrain).toBeCloseTo(
       referenceStrainFor('bbh'),
       30
@@ -185,18 +185,18 @@ describe('a step can pin the reference itself', () => {
   });
 });
 
-describe('peak-normalised listening is a separate, opt-in mode', () => {
+describe('peak-normalized listening is a separate, opt-in mode', () => {
   beforeEach(() => setSignalAudio(null));
 
   test('a step asks for it by name', () => {
-    expect(listenAt(400).opts.normalise).toBe('fixed');
-    expect(listenAt(400, { listen: 'peak' }).opts.normalise).toBe('peak');
+    expect(listenAt(400).opts.normalize).toBe('fixed');
+    expect(listenAt(400, { listen: 'peak' }).opts.normalize).toBe('peak');
   });
 
   test('and in that mode every distance does reach full scale', () => {
     // Which is the right answer to "what does this waveform sound like" and
     // the wrong answer to "which of these is louder". Both modes exist so
-    // that neither question has to borrow the other's normalisation.
+    // that neither question has to borrow the other's normalization.
     const peaks = [400, 1600].map(d => {
       const { timeline, opts } = listenAt(d, { listen: 'peak' });
       return peakSample(renderAsPlayed(timeline, opts));

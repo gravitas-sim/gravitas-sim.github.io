@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // A few hundred model stars, drawn from a stated initial-mass distribution and
 // a stated star-formation history, placed on the bundled MIST tracks. It exists
-// to make one point that a catalogue of famous stars cannot: the stars you can
+// to make one point that a catalog of famous stars cannot: the stars you can
 // see are not the stars there are.
 //
 // This is a sample of a model. It is not a survey, it is not observed, and no
@@ -21,7 +21,7 @@
 //
 // Nothing here is extinguished by dust, nothing is in a binary, and every star
 // has the same composition. All three matter for a real survey and none of them
-// is modelled.
+// is modeled.
 // =============================================================================
 
 import { mulberry32, normalizeSeed } from '../rng.js';
@@ -57,7 +57,7 @@ export const STAR_FORMATION_YEARS = 1e10;
 export const DEFAULT_COUNT = 400;
 
 /**
- * The integral of m^slope from a to b. Used to normalise the two segments.
+ * The integral of m^slope from a to b. Used to normalize the two segments.
  * @param {number} a - Lower mass
  * @param {number} b - Upper mass
  * @param {number} slope - The exponent
@@ -113,7 +113,7 @@ export function synthesisePopulation({
   const rand = mulberry32(normalizeSeed(seed));
   const stars = [];
   let excludedEvolved = 0;
-  let excludedUnmodelled = 0;
+  let excludedUnmodeled = 0;
 
   for (let i = 0; i < count; i++) {
     const massSun = sampleInitialMass(rand);
@@ -121,7 +121,7 @@ export function synthesisePopulation({
     const ageYr = rand() * starFormationYears;
     const zams = mainSequenceAt(massSun, 0);
     if (!zams) {
-      excludedUnmodelled++;
+      excludedUnmodeled++;
       continue;
     }
     if (ageYr > zams.mainSequenceYr) {
@@ -130,7 +130,7 @@ export function synthesisePopulation({
     }
     const state = mainSequenceAt(massSun, ageYr / zams.mainSequenceYr);
     if (!state) {
-      excludedUnmodelled++;
+      excludedUnmodeled++;
       continue;
     }
     stars.push({
@@ -163,11 +163,11 @@ export function synthesisePopulation({
     /** Sampled, then found to have left the main sequence, so not placed. */
     excludedEvolved,
     /** Sampled outside what the bundled tracks cover. Should be zero. */
-    excludedUnmodelled,
+    excludedUnmodeled,
     starFormationYears,
     imf: IMF,
     composition: 'solar, as the bundled tracks',
-    notModelled: Object.freeze([
+    notModeled: Object.freeze([
       'Stars that have left the main sequence, which are counted above',
       'Interstellar extinction',
       'Binaries and multiples',

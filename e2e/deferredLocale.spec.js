@@ -3,8 +3,8 @@
 // -----------------------------------------------------------------------------
 // The bug these cover was silent and complete. ensureDeferredMessages registers
 // BOTH locales, so a reader in English who opened any deferred panel created a
-// Spanish catalogue containing that panel's strings and nothing else -
-// whereupon loadLocale saw a truthy CATALOGUES.es, decided Spanish was already
+// Spanish catalog containing that panel's strings and nothing else -
+// whereupon loadLocale saw a truthy CATALOGS.es, decided Spanish was already
 // in memory, and never fetched es.js. Switching to Spanish then produced an
 // English interface with a dozen Spanish labels in it. No error, no warning,
 // and the Spanish that was present made it look intentional.
@@ -38,7 +38,7 @@ const say = (page, id) =>
   }, id);
 
 test.describe('English first, then Spanish', () => {
-  test('opening a deferred panel does not poison the Spanish catalogue', async ({
+  test('opening a deferred panel does not poison the Spanish catalog', async ({
     page,
     app,
   }) => {
@@ -61,7 +61,7 @@ test.describe('English first, then Spanish', () => {
     expect(await say(page, DEFERRED.id)).toBe(DEFERRED.es);
   });
 
-  test('the panel already on screen is relabelled, not left in English', async ({
+  test('the panel already on screen is relabeled, not left in English', async ({
     page,
     app,
   }) => {
@@ -114,7 +114,7 @@ test.describe('two panels asking at once', () => {
       const shared = a === b && b === c;
       // Whichever resolves first must already see the strings: the old code
       // set its done flag before awaiting, so the second caller returned to a
-      // catalogue that had not arrived.
+      // catalog that had not arrived.
       await Promise.race([a, b, c]);
       const early = i18n.t('bench.action.capture');
       await Promise.all([a, b, c]);

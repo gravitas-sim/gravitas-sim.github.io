@@ -166,7 +166,7 @@ export function currentAstrometricOffset() {
  * a_star the semi-major axis of the star's orbit about the barycenter. Deriving
  * that from a path requires fitting an ellipse and locating its focus, which
  * this panel does not do. So it reports the maximum offset it has actually
- * measured, labelled as that, and leaves alpha to the model widget in the
+ * measured, labeled as that, and leaves alpha to the model widget in the
  * lesson, where the orbital elements are known rather than inferred.
  *
  * @returns {{au: number, arcsec: number}|null} The maximum observed offset

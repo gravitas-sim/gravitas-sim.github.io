@@ -2,7 +2,7 @@
 // How a body is drawn, decided once and shared
 // -----------------------------------------------------------------------------
 // Every body class in js/physics.js used to answer three questions for itself:
-// how much detail is worth drawing at this size, what colour is this thing, and
+// how much detail is worth drawing at this size, what color is this thing, and
 // where is the light coming from. They answered them differently, so a planet
 // faded out at a size where a moon was still drawing surface marks, and a
 // scenario's sunlight came from whichever direction each class had hard-coded.
@@ -40,7 +40,7 @@
 //      merging, Roche limits, the geometric part of a transit, the hit test's
 //      floor. Nothing in this file may change it, and nothing here returns it.
 //
-//   2. The ANALYTIC radius. What a body physically is, in kilometres or solar
+//   2. The ANALYTIC radius. What a body physically is, in kilometers or solar
 //      radii, derived from mass by js/lightCurve.js and js/habitability.js and
 //      reported by the inspector. It has nothing to do with either of the two
 //      below. A transit depth is (Rp/Rs)^2 from *these* numbers, which is why
@@ -107,7 +107,7 @@ export const DISPLAY_FACTOR = Object.freeze({
   // strongly: a white dwarf is about one hundredth of a solar radius.
   WhiteDwarf: 0.28,
   // Below the visibility floor at any ordinary zoom, and meant to be. A
-  // neutron star is twenty kilometres across.
+  // neutron star is twenty kilometers across.
   NeutronStar: 0.3,
   // The small solid bodies share the rocky-planet factor rather than carrying
   // invented ones of their own. All three are far below the floor at any zoom
@@ -285,7 +285,7 @@ export const LOD_POINT_MAX_PX = 3;
  * Up to this radius, one shading pass and no more.
  *
  * Ten pixels is about where a band or a ring is wide enough to be seen as a
- * band or a ring rather than as an artefact.
+ * band or a ring rather than as an artifact.
  */
 export const LOD_SHADED_MAX_PX = 10;
 
@@ -463,10 +463,10 @@ export function dominantLight(pos, sources) {
   return best;
 }
 
-// --- Colour ---------------------------------------------------------------------
+// --- Color ---------------------------------------------------------------------
 
 /**
- * A star's colour from its effective temperature.
+ * A star's color from its effective temperature.
  *
  * A coarse blackbody fit, quantised to 100 K so the cache below has a few dozen
  * entries rather than one per star per frame. Accurate enough that an M dwarf
@@ -476,15 +476,15 @@ export function dominantLight(pos, sources) {
  * @param {number} teffK - Effective temperature in kelvin
  * @returns {{r: number, g: number, b: number}} 0-255 channels
  */
-const starColours = new Map();
+const starColors = new Map();
 export function starColor(teffK) {
   const t = Number.isFinite(teffK) && teffK > 0 ? teffK : 5780;
   const bucket = Math.round(Math.min(40000, Math.max(1500, t)) / 100) * 100;
-  const hit = starColours.get(bucket);
+  const hit = starColors.get(bucket);
   if (hit) return hit;
 
   // Tanner Helland's approximation, clamped. Cheap, and it has the right
-  // qualitative behaviour at both ends of the range Gravitas builds stars in.
+  // qualitative behavior at both ends of the range Gravitas builds stars in.
   const k = bucket / 100;
   const clamp = v => (v < 0 ? 0 : v > 255 ? 255 : Math.round(v));
   let r;
@@ -500,15 +500,15 @@ export function starColor(teffK) {
     b = 255;
   }
   const rgb = { r: clamp(r), g: clamp(g), b: clamp(b) };
-  starColours.set(bucket, rgb);
+  starColors.set(bucket, rgb);
   return rgb;
 }
 
 /**
  * Darken or lighten a channel triple, without leaving the byte range.
- * @param {{r: number, g: number, b: number}} rgb - Colour
+ * @param {{r: number, g: number, b: number}} rgb - Color
  * @param {number} f - Multiplier
- * @returns {{r: number, g: number, b: number}} Scaled colour
+ * @returns {{r: number, g: number, b: number}} Scaled color
  */
 export function scaleRgb(rgb, f) {
   const c = v => (v < 0 ? 0 : v > 255 ? 255 : Math.round(v));
@@ -714,7 +714,7 @@ export function ringGeometryFor(seed, overrides = {}) {
     const t0 = i / bandCount;
     const t1 = (i + 1) / bandCount;
     // A gap at the outer edge of each band, wide enough to see. Narrower gaps
-    // were tried first and the whole system read as one solid grey ellipse at
+    // were tried first and the whole system read as one solid gray ellipse at
     // the size a reader actually looks at a giant.
     const gap = 0.2 + u(50 + i) * 0.2;
     bands.push({
@@ -735,7 +735,7 @@ export function ringGeometryFor(seed, overrides = {}) {
         })()
       : null;
 
-  // Icy grey through to warm tan. Narrow on purpose: rings are dusty water ice
+  // Icy gray through to warm tan. Narrow on purpose: rings are dusty water ice
   // and rock, and a saturated one would look like a decal.
   const warmth = u(52);
   const tint = {
@@ -764,7 +764,7 @@ export function ringGeometryFor(seed, overrides = {}) {
 // --- Sprite cache -----------------------------------------------------------------
 
 /**
- * Pre-rendered radial gradients, one per colour and size bucket.
+ * Pre-rendered radial gradients, one per color and size bucket.
  *
  * A radial gradient built per body per frame is the single most expensive
  * repeated allocation in the draw path: a hundred bodies at sixty frames a
@@ -772,7 +772,7 @@ export function ringGeometryFor(seed, overrides = {}) {
  * rasterises from scratch. A sprite is built once and blitted, and the buckets
  * below mean a scene of a hundred similar planets shares one.
  *
- * Keyed on the colour quantised to 5 bits a channel and the size to a power of
+ * Keyed on the color quantised to 5 bits a channel and the size to a power of
  * two, which is what keeps the cache to a few dozen entries.
  */
 const sprites = new Map();
@@ -788,12 +788,12 @@ const SPRITE_CAP = 96;
  * temperature.
  *
  * A compact bright core rather than a uniformly blazing disc: real stars are
- * brightest at the centre of the visible disc and fall off towards the limb,
+ * brightest at the center of the visible disc and fall off towards the limb,
  * and a flat fill makes every star a sticker.
  *
  * @param {CanvasRenderingContext2D} ctx - Target, with the disc filling it
  * @param {number} size - Width and height of the square, pixels
- * @param {{r: number, g: number, b: number}} rgb - The photosphere's colour
+ * @param {{r: number, g: number, b: number}} rgb - The photosphere's color
  * @returns {void}
  */
 export function paintStarDisc(ctx, size, rgb) {
@@ -823,7 +823,7 @@ export function spriteSize(radiusPx) {
  * A cached sprite, built on first use.
  *
  * @param {string} kind - What the sprite is, for the key
- * @param {{r: number, g: number, b: number}} rgb - Colour
+ * @param {{r: number, g: number, b: number}} rgb - Color
  * @param {number} radiusPx - Radius wanted, in screen pixels
  * @param {Function} paint - (ctx, size, rgb) => void, called once
  * @returns {?object} A canvas to drawImage, or null where there is no DOM

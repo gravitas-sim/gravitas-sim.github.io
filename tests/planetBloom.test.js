@@ -1,14 +1,14 @@
 // =============================================================================
-// A planet blooms once, in its own colour
+// A planet blooms once, in its own color
 // -----------------------------------------------------------------------------
 // Planet.draw() carried two consecutive "Add soft bloom" blocks, both painting
 // the same radial gradient at the same place into the same offscreen layer. The
-// first used the planet's own base colour at low alpha; the second used a fixed
+// first used the planet's own base color at low alpha; the second used a fixed
 // pale blue at more than twice the alpha. Additively composited, the second one
-// won, so every planet - Mars, Venus, a hand-coloured one - wore the same
+// won, so every planet - Mars, Venus, a hand-colored one - wore the same
 // bluish halo, and every planet paid for two full gradients a frame to get it.
 //
-// One pass, the planet's colour, and the intensity the two of them together
+// One pass, the planet's color, and the intensity the two of them together
 // used to produce.
 // =============================================================================
 
@@ -98,9 +98,9 @@ describe('the bloom pass', () => {
     expect(recorder.gradients).toHaveLength(1);
   });
 
-  test('is the planet’s own colour, not a fixed blue', () => {
+  test('is the planet’s own color, not a fixed blue', () => {
     const planet = new Planet({ x: 0, y: 0 }, { x: 0, y: 0 });
-    // A colour nothing else in the palette is near, so a hard-coded value
+    // A color nothing else in the palette is near, so a hard-coded value
     // cannot pass by coincidence.
     planet.baseColor = '#ff2200';
     planet.draw(nullContext());
@@ -126,7 +126,7 @@ describe('the bloom pass', () => {
       const m = stop && stop.color.match(/rgba\([^)]*,\s*([\d.]+)\)/);
       return m ? Number(m[1]) : 0;
     };
-    // 0.15 + 0.35 at the centre, 0.06 + 0.15 at the shoulder.
+    // 0.15 + 0.35 at the center, 0.06 + 0.15 at the shoulder.
     expect(alphaAt(0)).toBeCloseTo(0.5, 6);
     expect(alphaAt(0.6)).toBeCloseTo(0.21, 6);
     expect(stops[stops.length - 1].color).toMatch(/,\s*0\)$/);

@@ -36,7 +36,7 @@ const RV_LAB_PAUSED = { ...RV_LAB, paused: true };
  * Bound by exact name rather than found by substring, so a step is talking
  * about a body it can name and the engine says so when it cannot find one.
  * These are the scenario's own bodies: HD 209458 is a real star and this is a
- * model of it, which is why the catalogue steps later on are labelled as
+ * model of it, which is why the catalog steps later on are labeled as
  * observations and this one is not.
  */
 const SYSTEM = {
@@ -87,7 +87,7 @@ const RADIAL_VELOCITY = {
   duration: '45-55 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true, areaSweep: false },
@@ -415,7 +415,7 @@ const RADIAL_VELOCITY = {
       kind: 'numeric',
       title: 'Weigh HD 209458 b',
       body: `Use the instrument below. Set the true planet mass until the K it
-             reports matches the K you measured from the panel, about 84 metres
+             reports matches the K you measured from the panel, about 84 meters
              per second, with the inclination left at 90 degrees.
              \n\nWhat planet mass gives that?`,
       tool: {
@@ -673,7 +673,7 @@ const RADIAL_VELOCITY = {
       type: 'question',
       kind: 'choice',
       title: 'Different methods, different planets',
-      body: `HD 209458 b gives a large radial-velocity signal, 84 metres per
+      body: `HD 209458 b gives a large radial-velocity signal, 84 meters per
              second, and an astrometric signature under one millionth of an
              arcsecond. The Sun and Jupiter seen from ten parsecs give a much
              smaller RV signal but an astrometric wobble hundreds of times larger.`,
@@ -714,7 +714,7 @@ const RADIAL_VELOCITY = {
              The top two rows are the transit and the radial velocity. The third
              combines them.
              \n\nRead the bulk density for HD 209458 b, and compare it with water at
-             1 gram per cubic centimetre and with Earth at 5.5.`,
+             1 gram per cubic centimeter and with Earth at 5.5.`,
       tool: {
         id: 'planet-characterization',
         values: {
@@ -766,7 +766,7 @@ const RADIAL_VELOCITY = {
                out at about 0.33 g/cm³: a third the density of water and a
                sixteenth of Earth’s. Nothing rocky is that light, so the planet
                has to be mostly gas.`,
-      because: `About 0.33 grams per cubic centimetre: roughly a third the density of
+      because: `About 0.33 grams per cubic centimeter: roughly a third the density of
                 water, and about a sixteenth of Earth’s. A Jupiter-sized planet with
                 two thirds of Jupiter’s mass has to be dominated by gas.`,
     },
@@ -832,7 +832,7 @@ const RADIAL_VELOCITY = {
       ],
       answer: 0,
       because: `Only A satisfies both conditions. B sits in the zone but its density of
-                about 2 grams per cubic centimetre is far too low for rock, so it is
+                about 2 grams per cubic centimeter is far too low for rock, so it is
                 more likely a small world with a thick envelope. C has a rocky density
                 but is thirty times too irradiated. Neither column answers the question
                 on its own.`,

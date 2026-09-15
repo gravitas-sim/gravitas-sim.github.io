@@ -31,7 +31,7 @@ import { fromChaosPair, fromNeckPair } from '../js/notebook/capture.js';
 import { registerMessages } from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 
-// These panels' prose is in the deferred half of the catalogue, which nothing
+// These panels' prose is in the deferred half of the catalog, which nothing
 // loads in a unit test.
 registerMessages('en', EN_DEFERRED);
 
@@ -319,14 +319,14 @@ describe('the chaos pair measures rather than assumes', () => {
     expect(CONTROLS.map(c => c.id)).toEqual(['finerStep', 'altIntegrator']);
   });
 
-  test('a control is labelled with the step it took', () => {
+  test('a control is labeled with the step it took', () => {
     expect(controlLabel({ integrator: 'RK4', mean: 0.0416, steps: 960 })).toBe(
       'RK4, step 0.0416 x960'
     );
   });
 
   test('two agreeing repeats that changed nothing are unresolved', () => {
-    const same = { differs: false, tau: 8.2, behaviour: 'exponential' };
+    const same = { differs: false, tau: 8.2, behavior: 'exponential' };
     const report = refinementReport([
       { ...same, label: 'a' },
       { ...same, label: 'b' },
@@ -339,8 +339,8 @@ describe('the chaos pair measures rather than assumes', () => {
 
   test('two effective repeats that agree are resolved', () => {
     const report = refinementReport([
-      { label: 'a', differs: true, tau: 8.265, behaviour: 'exponential' },
-      { label: 'b', differs: true, tau: 8.262, behaviour: 'exponential' },
+      { label: 'a', differs: true, tau: 8.265, behavior: 'exponential' },
+      { label: 'b', differs: true, tau: 8.262, behavior: 'exponential' },
     ]);
     expect(report.resolved).toBe(true);
     expect(report.unresolved).toBe(false);
@@ -349,24 +349,24 @@ describe('the chaos pair measures rather than assumes', () => {
 
   test('repeats that disagree are UNRESOLVED, not averaged', () => {
     const moved = refinementReport([
-      { label: 'a', differs: true, tau: 8, behaviour: 'exponential' },
-      { label: 'b', differs: true, tau: 24, behaviour: 'exponential' },
+      { label: 'a', differs: true, tau: 8, behavior: 'exponential' },
+      { label: 'b', differs: true, tau: 24, behavior: 'exponential' },
     ]);
     expect(moved.resolved).toBe(false);
     expect(moved.unresolved).toBe(true);
     expect(moved.reason).toBe('timescale-moved');
 
     const changed = refinementReport([
-      { label: 'a', differs: true, tau: 8, behaviour: 'exponential' },
-      { label: 'b', differs: true, tau: 8.1, behaviour: 'linear' },
+      { label: 'a', differs: true, tau: 8, behavior: 'exponential' },
+      { label: 'b', differs: true, tau: 8.1, behavior: 'linear' },
     ]);
     expect(changed.resolved).toBe(false);
-    expect(changed.reason).toBe('behaviour-changed');
+    expect(changed.reason).toBe('behavior-changed');
   });
 
   test('one repeat is not refinement', () => {
     const report = refinementReport([
-      { label: 'a', differs: true, tau: 8, behaviour: 'exponential' },
+      { label: 'a', differs: true, tau: 8, behavior: 'exponential' },
     ]);
     expect(report.resolved).toBe(false);
     expect(report.reason).toBe('need-two-estimates');
@@ -411,7 +411,7 @@ describe('what these two write into the notebook', () => {
     interval: sameInterval(arm(), arm()),
     perturbation: { bodyName: 'Alpha', axis: 'x', km: 1500 },
     verdict: {
-      behaviour: 'exponential',
+      behavior: 'exponential',
       tau: 8.2645,
       r2: 0.991,
       efolds: 3.4,
@@ -446,8 +446,8 @@ describe('what these two write into the notebook', () => {
 
   test('a resolved one is not flagged', () => {
     const resolved = refinementReport([
-      { label: 'a', differs: true, tau: 8.265, behaviour: 'exponential' },
-      { label: 'b', differs: true, tau: 8.262, behaviour: 'exponential' },
+      { label: 'a', differs: true, tau: 8.265, behavior: 'exponential' },
+      { label: 'b', differs: true, tau: 8.262, behavior: 'exponential' },
     ]);
     const entry = fromChaosPair({
       report: { ...chaos, refinement: resolved },
@@ -460,7 +460,7 @@ describe('what these two write into the notebook', () => {
       report: {
         ...chaos,
         configuration: 'binary',
-        verdict: { behaviour: 'linear', linearR2: 0.994 },
+        verdict: { behavior: 'linear', linearR2: 0.994 },
       },
     });
     expect(entry.title).toMatch(/two-body control/i);

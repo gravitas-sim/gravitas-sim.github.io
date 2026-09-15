@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { loadAuthoringInputs } from '../tools/authoring/inputs.mjs';
 import { MANIFEST } from '../js/data/investigations/manifest.js';
 import {
-  checkCatalogue,
+  checkCatalog,
   RULE_INDEX,
   PROBE_CONTEXT_KEYS,
 } from '../js/authoring/rules.js';
@@ -14,7 +14,7 @@ import {
 // -----------------------------------------------------------------------------
 // Two halves, and the second is the one that matters.
 //
-// The first asserts the catalogue is clean, which is what `npm run author:check`
+// The first asserts the catalog is clean, which is what `npm run author:check`
 // tells an author. The second breaks a lesson on purpose, one fault at a time,
 // and asserts the specific rule that should catch it does. A checker nobody has
 // watched fail is a checker that reports zero because it is looking at nothing,
@@ -38,7 +38,7 @@ function clone(value) {
   return value;
 }
 
-/** The catalogue, with one lesson replaced by a mutated copy of itself. */
+/** The catalog, with one lesson replaced by a mutated copy of itself. */
 function mutated(lessonId, mutate) {
   const copy = { ...inputs };
   copy.investigations = inputs.investigations.map(inv => {
@@ -52,14 +52,14 @@ function mutated(lessonId, mutate) {
 
 const rulesFired = findings => new Set(findings.map(f => f.rule));
 
-/** Run the checker over a mutated catalogue and return the rules it raised. */
+/** Run the checker over a mutated catalog and return the rules it raised. */
 function rulesAfter(lessonId, mutate) {
-  return rulesFired(checkCatalogue(mutated(lessonId, mutate)));
+  return rulesFired(checkCatalog(mutated(lessonId, mutate)));
 }
 
-describe('the catalogue as it stands', () => {
+describe('the catalog as it stands', () => {
   test('every lesson and every step passes', () => {
-    const errors = checkCatalogue(inputs).filter(f => f.level === 'error');
+    const errors = checkCatalog(inputs).filter(f => f.level === 'error');
     // Printed rather than counted, so a failure says what is wrong with the
     // lesson instead of that a number changed.
     expect(
@@ -67,9 +67,9 @@ describe('the catalogue as it stands', () => {
     ).toEqual([]);
   });
 
-  test('the whole catalogue is covered', () => {
+  test('the whole catalog is covered', () => {
     // Bounds rather than exact figures: the point is that the checker was
-    // handed every lesson and every step, not that the catalogue is a
+    // handed every lesson and every step, not that the catalog is a
     // particular size, and a lesson added next term should not fail this.
     // The manifest is the authority on the counts, and
     // tests/investigationRegistry.test.js is what holds it to them.
@@ -215,7 +215,7 @@ describe('it catches a reference to something that does not exist', () => {
   test('a setting that is not a setting', () => {
     const rules = rulesAfter('goldilocks-question', l => {
       const s = l.steps.find(s => s.setup?.settings);
-      s.setup.settings.habitable_zone_optimisim = 1;
+      s.setup.settings.habitable_zone_optimizim = 1;
     });
     expect(rules).toContain('ref/setting');
   });
@@ -376,7 +376,7 @@ describe('it catches a translation that has come adrift', () => {
       ...inputs.translations.es[lessonId],
       data: draft,
     };
-    return rulesFired(checkCatalogue(copy));
+    return rulesFired(checkCatalog(copy));
   }
 
   test('a key the English lesson does not have, which is silently dropped', () => {
@@ -414,13 +414,13 @@ describe('it catches missing instructor material', () => {
   test('a lesson with no guidance at all', () => {
     const copy = { ...inputs, instructor: { ...inputs.instructor } };
     delete copy.instructor.tides;
-    expect(rulesFired(checkCatalogue(copy))).toContain('instructor/present');
+    expect(rulesFired(checkCatalog(copy))).toContain('instructor/present');
   });
 
   test('an empty guide section', () => {
     const copy = { ...inputs, instructor: { ...inputs.instructor } };
     copy.instructor.tides = { ...copy.instructor.tides, misconceptions: [] };
-    expect(rulesFired(checkCatalogue(copy))).toContain('instructor/sections');
+    expect(rulesFired(checkCatalog(copy))).toContain('instructor/sections');
   });
 
   test('an expectation pointing past the end of the lesson', () => {
@@ -429,15 +429,13 @@ describe('it catches missing instructor material', () => {
       ...copy.instructor.tides,
       expectations: { ...copy.instructor.tides.expectations, 999: 'stale' },
     };
-    expect(rulesFired(checkCatalogue(copy))).toContain(
-      'instructor/expectations'
-    );
+    expect(rulesFired(checkCatalog(copy))).toContain('instructor/expectations');
   });
 
   test('guidance for a lesson that no longer exists', () => {
     const copy = { ...inputs, instructor: { ...inputs.instructor } };
     copy.instructor['deleted-lesson'] = { topic: 'x' };
-    expect(rulesFired(checkCatalogue(copy))).toContain('agree/instructorIds');
+    expect(rulesFired(checkCatalog(copy))).toContain('agree/instructorIds');
   });
 
   test('an unattributed quotation', () => {
@@ -454,7 +452,7 @@ describe('it catches artifacts that disagree', () => {
     copy.manifests.en = inputs.manifests.en.map(m =>
       m.id === 'tides' ? { ...m, title: 'Tides (old name)' } : m
     );
-    expect(rulesFired(checkCatalogue(copy))).toContain('agree/manifest');
+    expect(rulesFired(checkCatalog(copy))).toContain('agree/manifest');
   });
 
   test('a manifest step count that is out of date', () => {
@@ -462,13 +460,13 @@ describe('it catches artifacts that disagree', () => {
     copy.manifests.en = inputs.manifests.en.map(m =>
       m.id === 'tides' ? { ...m, stepCount: m.stepCount + 1 } : m
     );
-    expect(rulesFired(checkCatalogue(copy))).toContain('agree/counts');
+    expect(rulesFired(checkCatalog(copy))).toContain('agree/counts');
   });
 
   test('a lesson missing from the manifest', () => {
     const copy = { ...inputs, manifests: { ...inputs.manifests } };
     copy.manifests.en = inputs.manifests.en.filter(m => m.id !== 'tides');
-    expect(rulesFired(checkCatalogue(copy))).toContain('agree/manifest');
+    expect(rulesFired(checkCatalog(copy))).toContain('agree/manifest');
   });
 
   test('an answer key that no longer verifies', () => {

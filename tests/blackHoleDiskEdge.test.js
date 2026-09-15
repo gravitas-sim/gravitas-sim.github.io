@@ -82,17 +82,17 @@ function paintRecorder() {
       ops.push({ kind: 'stroke', arcs: arcs.slice(), ...snapshot() }),
     createRadialGradient: (x0, y0, r0, x1, y1, r1) => {
       const g = { type: 'radial', r0, r1, stops: [] };
-      g.addColorStop = (at, colour) => g.stops.push({ at, colour });
+      g.addColorStop = (at, color) => g.stops.push({ at, color });
       return g;
     },
     createLinearGradient: (x0, y0, x1, y1) => {
       const g = { type: 'linear', x0, y0, x1, y1, stops: [] };
-      g.addColorStop = (at, colour) => g.stops.push({ at, colour });
+      g.addColorStop = (at, color) => g.stops.push({ at, color });
       return g;
     },
     createConicGradient: () => {
       const g = { type: 'conic', stops: [] };
-      g.addColorStop = (at, colour) => g.stops.push({ at, colour });
+      g.addColorStop = (at, color) => g.stops.push({ at, color });
       return g;
     },
   };
@@ -125,7 +125,7 @@ function paintRecorder() {
 }
 
 /** The alpha out of an `rgba(r,g,b,a)` string. */
-const alphaOf = colour => Number(/,([\d.]+)\)$/.exec(colour)?.[1] ?? NaN);
+const alphaOf = color => Number(/,([\d.]+)\)$/.exec(color)?.[1] ?? NaN);
 
 /** Every fill whose paint style is a gradient: the disk's light, and only it. */
 const lightFills = ctx =>
@@ -172,7 +172,7 @@ describe('every layer of the disk fades out at the same rim', () => {
             expect(last.at).toBe(1);
             // Times the opacity it is filled at, which is what reaches the
             // canvas. One 255th is the smallest thing a byte can hold.
-            expect(alphaOf(last.colour) * fill.alpha).toBeLessThan(1 / 255);
+            expect(alphaOf(last.color) * fill.alpha).toBeLessThan(1 / 255);
           }
         }
       }
@@ -188,7 +188,7 @@ describe('every layer of the disk fades out at the same rim', () => {
       for (const fill of lightFills(ctx)) {
         const first = fill.fillStyle.stops[0];
         expect(first.at).toBe(0);
-        expect(alphaOf(first.colour) * fill.alpha).toBeLessThan(1 / 255);
+        expect(alphaOf(first.color) * fill.alpha).toBeLessThan(1 / 255);
       }
     }
   });
@@ -239,7 +239,7 @@ describe('what the two layers add up to', () => {
   const steps = DRAWN.stops.full;
 
   /** The opacity a layer asks for at one sampled radius. */
-  const stopAlpha = (fill, i) => alphaOf(fill.fillStyle.stops[i].colour);
+  const stopAlpha = (fill, i) => alphaOf(fill.fillStyle.stops[i].color);
 
   // The two dimmest-level fills - one per half - are painted at full opacity;
   // every wedge is painted at less, which is what tells them apart.
@@ -299,7 +299,7 @@ describe('what the two layers add up to', () => {
       const swing = light.filter(f => f.alpha < 1);
       if (!swing.length) continue;
       const depth = Math.max(
-        ...swing[0].fillStyle.stops.map(s => alphaOf(s.colour))
+        ...swing[0].fillStyle.stops.map(s => alphaOf(s.color))
       );
       const perHalf = swing.length / 2;
       expect(depth / perHalf).toBeLessThanOrEqual(2 / 255 + 1e-9);
@@ -403,7 +403,7 @@ describe('the horizon is not drawn as something that emits', () => {
   });
 });
 
-describe('the boundary the labelled overlay may draw', () => {
+describe('the boundary the labeled overlay may draw', () => {
   test('it is dashed, so it reads as a line on a diagram', () => {
     const ctx = paintRecorder();
     drawHorizonBoundary(ctx, { x: 0, y: 0 }, 40);
@@ -479,7 +479,7 @@ describe('what a rotation or a zoom does to the picture', () => {
       const ctx = paintRecorder();
       drawBlackHole(ctx, spec({ unit, appearance: inclined(62) }));
       for (const fill of lightFills(ctx)) {
-        expect(alphaOf(fill.fillStyle.stops.at(-1).colour)).toBeLessThan(
+        expect(alphaOf(fill.fillStyle.stops.at(-1).color)).toBeLessThan(
           1 / 255
         );
       }
@@ -505,7 +505,7 @@ describe('what a rotation or a zoom does to the picture', () => {
 
 describe('what the drawing keeps between frames', () => {
   test('a scene full of different black holes cannot grow the cache', () => {
-    // The colour strings are kept because building them is the expensive part
+    // The color strings are kept because building them is the expensive part
     // of drawing a small object. Kept without a bound they would be a leak
     // that a reader spinning an inclination slider would find first.
     clearAppearanceCache();

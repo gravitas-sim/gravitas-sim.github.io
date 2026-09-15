@@ -25,7 +25,7 @@
 // It carries no answers, no worked solutions, no hints, and no student
 // responses. It is a lesson id, an ordered list of permanent step ids, a
 // fingerprint per step, and some prose the instructor wrote. Everything a
-// student sees is loaded from the catalogue at open time, which is what makes
+// student sees is loaded from the catalog at open time, which is what makes
 // the link short and what makes it impossible for a link to leak an answer key
 // even if somebody decodes it. There is a test for exactly that.
 //

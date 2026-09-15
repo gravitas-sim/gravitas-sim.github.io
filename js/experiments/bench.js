@@ -273,7 +273,7 @@ export function captureExperiment(name) {
     // the report and the exported manifest can all name it.
     perturbation: null,
     // Repeats of the same comparison under a smaller timestep or a different
-    // integrator, each {label, tau, behaviour}. What turns "these runs
+    // integrator, each {label, tau, behavior}. What turns "these runs
     // diverged" into "these runs diverged for physical reasons".
     numericalControls: [],
     recordBodies: false,
@@ -310,16 +310,16 @@ export function setPerturbedState(payload, applied) {
 }
 
 /**
- * Apply a perturbation to the captured start, in kilometres.
+ * Apply a perturbation to the captured start, in kilometers.
  *
- * The student types a distance in kilometres because that is a distance they
+ * The student types a distance in kilometers because that is a distance they
  * can picture; the conversion to simulation units happens here, once, and the
  * applied change is stored in both.
  *
  * @param {Object} spec
  * @param {number} spec.bodyId - Which body
  * @param {'x'|'y'|'vx'|'vy'} spec.axis - Which coordinate
- * @param {number} spec.km - How much, in kilometres (or km/s for a velocity)
+ * @param {number} spec.km - How much, in kilometers (or km/s for a velocity)
  * @returns {{ok:boolean, reason:string, applied:Object|null}} The outcome
  */
 export function applyPerturbation({ bodyId, axis, km }) {
@@ -347,7 +347,7 @@ export function applyPerturbation({ bodyId, axis, km }) {
  */
 export async function recordNumericalControl() {
   if (!current?.runs?.A || !current?.runs?.B) return { ok: false, label: '' };
-  const { separationSeries, analyseDivergence } =
+  const { separationSeries, analyzedivergence } =
     await import('../chaos/divergence.js');
   const shape = run =>
     (run.samples || [])
@@ -357,20 +357,20 @@ export async function recordNumericalControl() {
   const b = shape(current.runs.B);
   if (!a.length || !b.length) return { ok: false, label: '' };
   const { series } = separationSeries(a, b);
-  const verdict = analyseDivergence(series);
+  const verdict = analyzedivergence(series);
   const settings = host.getSettings();
   const label = `${settings.integrator}, speed ${settings.sim_speed}`;
   addNumericalControl({
     label,
     tau: verdict.tau,
-    behaviour: verdict.behaviour,
+    behavior: verdict.behavior,
   });
   return { ok: true, label };
 }
 
 /**
  * Record the outcome of running the comparison again under different numerics.
- * @param {{label:string, tau:number|null, behaviour:string}} result - The repeat
+ * @param {{label:string, tau:number|null, behavior:string}} result - The repeat
  * @returns {Array} Every control recorded so far
  */
 export function addNumericalControl(result) {
@@ -421,7 +421,7 @@ export function setActiveExperiment(exp) {
 // per loaded module and no constructor for another. Isolation is therefore
 // achieved by restoring rather than by separation, and it is exact in both
 // directions: each phase starts from the captured payload, and when the check
-// finishes - or is cancelled, or throws - the world and every setting it
+// finishes - or is canceled, or throws - the world and every setting it
 // touched are put back to what the student was looking at. Neither phase is
 // written into Run A or Run B.
 // =============================================================================
@@ -460,13 +460,13 @@ export const isCheckingReliability = () => reliabilityAbort !== null;
 /**
  * Ask a running check to stop at the next frame.
  *
- * The check restores the world in a finally block, so a cancelled run leaves
+ * The check restores the world in a finally block, so a canceled run leaves
  * no more trace than a completed one.
  *
  * @returns {void}
  */
 export function cancelReliabilityCheck() {
-  if (reliabilityAbort) reliabilityAbort.cancelled = true;
+  if (reliabilityAbort) reliabilityAbort.canceled = true;
 }
 
 /**
@@ -534,7 +534,7 @@ async function runReliabilityPhase(cfg) {
 
   await new Promise(resolve => {
     const tick = () => {
-      const step = sampler.tick(getSimulationTime(), cfg.abort.cancelled);
+      const step = sampler.tick(getSimulationTime(), cfg.abort.canceled);
       if (step.sample) take();
       if (step.done) return resolve();
       cfg.onProgress?.({
@@ -574,7 +574,7 @@ async function runReliabilityPhase(cfg) {
      * having measured nothing.
      */
     stalledOut: run.stalledOut,
-    /** complete | sampleCapped | stalled | cancelled. */
+    /** complete | sampleCapped | stalled | canceled. */
     outcome: run.outcome,
     /** Whether the phase covered the simulated time it was asked for. */
     complete: run.complete,
@@ -635,7 +635,7 @@ export async function runReliabilityCheck(opts = {}) {
   // Whole frames, and the same number for both phases.
   const frames = Math.max(2, Math.ceil(duration / dtSim));
 
-  const abort = { cancelled: false };
+  const abort = { canceled: false };
   reliabilityAbort = abort;
 
   // Everything the check is about to change, so it can be handed back. The
@@ -646,7 +646,7 @@ export async function runReliabilityCheck(opts = {}) {
   // let the world run on and then ran a check was thrown back to the capture
   // point rather than to where they had been - the check quietly rewound their
   // simulation. Saved with forExperiment so the clock and the open tools come
-  // back too, and restored on every exit including cancellation and a throw.
+  // back too, and restored on every exit including cancelation and a throw.
   const savedWorld = host.captureShareState({
     kind: 'full',
     includeCamera: false,
@@ -664,7 +664,7 @@ export async function runReliabilityCheck(opts = {}) {
       onProgress: opts.onProgress,
       phaseIndex: 0,
     });
-    if (abort.cancelled) return { ok: false, reason: 'cancelled' };
+    if (abort.canceled) return { ok: false, reason: 'canceled' };
 
     const fine = await runReliabilityPhase({
       ...plan.fine,
@@ -673,7 +673,7 @@ export async function runReliabilityCheck(opts = {}) {
       onProgress: opts.onProgress,
       phaseIndex: 1,
     });
-    if (abort.cancelled) return { ok: false, reason: 'cancelled' };
+    if (abort.canceled) return { ok: false, reason: 'canceled' };
 
     const report = buildReliabilityReport({
       coarse,
@@ -819,7 +819,7 @@ export const isSweeping = () => sweepAbort !== null;
 
 /** Ask a running sweep to stop after the trial in progress. @returns {void} */
 export function cancelSweep() {
-  if (sweepAbort) sweepAbort.cancelled = true;
+  if (sweepAbort) sweepAbort.canceled = true;
 }
 
 /**
@@ -984,7 +984,7 @@ async function runSweepTrial(cfg) {
   const stallLimit = 120;
   await new Promise(resolve => {
     const tick = () => {
-      if (cfg.abort.cancelled) return resolve();
+      if (cfg.abort.canceled) return resolve();
       ticks++;
       const clock = getSimulationTime();
       if (clock > lastClock) {
@@ -1049,8 +1049,8 @@ async function runSweepTrial(cfg) {
     : !capped && advanced >= cfg.frames;
   if (cfg.observer) trial.observed = cfg.observer.read?.() ?? null;
 
-  if (cfg.abort.cancelled) {
-    trial.status = SWEEP.TRIAL_STATUS.CANCELLED;
+  if (cfg.abort.canceled) {
+    trial.status = SWEEP.TRIAL_STATUS.CANCELED;
     return trial;
   }
 
@@ -1105,7 +1105,7 @@ async function runSweepTrial(cfg) {
  * @returns {Promise<object>} The completed sweep, or a refusal
  */
 export async function runSweep(spec, opts = {}) {
-  // The bench is normally initialised by its bridge before anything can reach
+  // The bench is normally initialized by its bridge before anything can reach
   // this, but a direct import can get here first and a TypeError is a worse
   // answer than a refusal.
   if (!host) return { ok: false, reason: 'notReady' };
@@ -1122,7 +1122,7 @@ export async function runSweep(spec, opts = {}) {
   const entry = SWEEP.SWEEPABLE[spec.scenario];
   const values = SWEEP.planValues(spec);
   const seed = spec.seed || 'sweep';
-  const abort = { cancelled: false };
+  const abort = { canceled: false };
   sweepAbort = abort;
 
   // Everything the sweep is about to destroy. Each trial rebuilds the world,
@@ -1153,8 +1153,8 @@ export async function runSweep(spec, opts = {}) {
     //
     // Rounded rather than ceiled, and reported afterwards rather than assumed.
     // A frame is 62.5 time units in the binary labs, so the achievable
-    // durations are multiples of that and a request for 40 cannot be honoured
-    // - it becomes 62.5. Silently running longer than asked and labelling the
+    // durations are multiples of that and a request for 40 cannot be honored
+    // - it becomes 62.5. Silently running longer than asked and labeling the
     // result with the request would misdescribe every short trial, so the
     // sweep carries both numbers and the panel shows the one that happened.
     const dtSim = host.frameAdvance(1 / 60, settings.sim_speed);
@@ -1162,13 +1162,13 @@ export async function runSweep(spec, opts = {}) {
     const achievedDuration = frames * dtSim;
 
     for (let i = 0; i < values.length; i++) {
-      if (abort.cancelled) {
-        // The values that never ran are in the results as cancelled, not
+      if (abort.canceled) {
+        // The values that never ran are in the results as canceled, not
         // missing: a table that stopped at nine of twenty should say so.
         trials.push({
           index: i,
           value: values[i],
-          status: SWEEP.TRIAL_STATUS.CANCELLED,
+          status: SWEEP.TRIAL_STATUS.CANCELED,
           results: {},
         });
         continue;
@@ -1189,7 +1189,7 @@ export async function runSweep(spec, opts = {}) {
     }
 
     const summaries = spec.metrics
-      .map(id => SWEEP.summarise(trials, id))
+      .map(id => SWEEP.summarize(trials, id))
       .filter(Boolean);
 
     const result = {
@@ -1206,7 +1206,7 @@ export async function runSweep(spec, opts = {}) {
       trials,
       summaries,
       counts: SWEEP.tally(trials),
-      cancelled: abort.cancelled,
+      canceled: abort.canceled,
       wallMs: performance.now() - startedAt,
       numerics: trials.find(tr => tr.numerics)?.numerics ?? null,
       ranAt: new Date().toISOString(),

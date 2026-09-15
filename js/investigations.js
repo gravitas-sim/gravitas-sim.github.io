@@ -36,14 +36,14 @@ import {
   loadInvestigation,
   gradedSteps,
   seriesPosition,
-  lessonCatalogueReady,
+  lessonCatalogReady,
 } from './data/investigations/registry.js';
 // Search, filters and the curated orders. Both read the same generated
 // manifest the cards do, so there is one list of lessons and not three.
 import {
   NO_FILTERS,
   PROGRESSES,
-  filterCatalogue,
+  filterCatalog,
   isFiltered,
   loosening,
   subjectsOf,
@@ -157,7 +157,7 @@ import {
   SCALE,
   BINARY_SCALE,
   applyStage,
-  centreOnSelected,
+  centerOnSelected,
   clearStage,
   fitStage,
   setStageScale,
@@ -166,7 +166,7 @@ import {
   placeBinary,
   restageHole,
   restageStarPair,
-  stagedBarycentre,
+  stagedBarycenter,
   clearSnapshots,
   pinSnapshot,
   pinnedSnapshots,
@@ -934,7 +934,7 @@ function probeContext() {
      * one relationship "Weighing the Stars" is built on, so it is read rather
      * than told.
      */
-    barycentre: stagedBarycentre,
+    barycenter: stagedBarycenter,
     /**
      * Rebuild the staged pair with different masses, same separation.
      *
@@ -959,7 +959,7 @@ function probeContext() {
      * Kept separate from anything the canvas draws, and the reason is the one
      * this lesson has to keep making: the dark disc on screen is a drawing at
      * a scale chosen so the orbits fit in a window, and the Schwarzschild
-     * radius is a physical length in kilometres. Quoting the second while
+     * radius is a physical length in kilometers. Quoting the second while
      * pointing at the first is the misconception the step exists to prevent,
      * so the readout that uses this says which is which.
      */
@@ -970,14 +970,14 @@ function probeContext() {
      *
      * The two halves of the same fact, which the lesson previously showed in
      * two places that could not be compared: `phaseDeg` is where the star
-     * actually is around the barycentre, measured off the scene, and `velocity`
+     * actually is around the barycenter, measured off the scene, and `velocity`
      * is the line-of-sight component the instrument reports. `towards` is the
      * sign, spelled out, because the whole difficulty of reading these curves
      * is that a negative number means approaching.
      *
      * Null when the scenario pins its star: a pinned star has no reflex motion,
      * and js/radialVelocity.js refuses to report a velocity for one rather than
-     * returning an artefact that looks like a measurement.
+     * returning an artifact that looks like a measurement.
      */
     rvNow: () => {
       const star = observedStar();
@@ -1061,7 +1061,7 @@ function probeContext() {
      * curve, so the label and the curve cannot disagree.
      */
     transitGeometry: body => transitGeometry(body || selected),
-    /** Pin a labelled copy of a staged star as it is right now. */
+    /** Pin a labeled copy of a staged star as it is right now. */
     pinSnapshot,
     /** Every pinned snapshot, oldest first. */
     snapshots: pinnedSnapshots,
@@ -1280,8 +1280,8 @@ function releaseLocks() {
   // The explanation labels and the balance point belong to the lesson that
   // asked for them.
   SETTINGS.bh_explain_view = false;
-  state.barycentreOverlay.active = false;
-  state.barycentreOverlay.ids = [];
+  state.barycenterOverlay.active = false;
+  state.barycenterOverlay.ids = [];
   clearEvolutionScene();
   clearWavefronts();
   setInspectorSuppressed(false);
@@ -1813,7 +1813,7 @@ function drawPlot(step, id) {
   // The same points as numbers, before anything is drawn. A scatter is a
   // picture of a relationship, and the position of a dot is not available to
   // a reader on a screen reader nor to one who cannot tell two plotted
-  // colours apart. Built from `shown` rather than from the raw values, so the
+  // colors apart. Built from `shown` rather than from the raw values, so the
   // table says what the picture says: press "Square P, cube a" and both
   // transform together.
   renderPlotTable(spec, shown, { transform, useLog });
@@ -2022,7 +2022,7 @@ function renderStep() {
   if (step.figure) {
     const f = step.figure;
     // Credit is part of the block rather than a footnote: these are other
-    // people's photographs, used under licences that require naming them.
+    // people's photographs, used under licenses that require naming them.
     const credit = [
       f.author
         ? `<a href="${attr(f.source)}" target="_blank" rel="noopener noreferrer">${escape(f.author)}</a>`
@@ -2612,7 +2612,7 @@ function stopToolLoop() {
  * Let a widget be driven by pointing at its canvas, if it asks to be.
  *
  * Opt-in, and gated on the widget declaring `pick`: every other instrument in
- * the catalogue is a canvas with sliders under it and stays exactly that. The
+ * the catalog is a canvas with sliders under it and stays exactly that. The
  * hook is handed a position in CSS pixels and the size it was measured
  * against, writes whatever it likes into the values, and then goes through
  * paintTool like a slider does - so the sliders move to match, the setting is
@@ -3048,7 +3048,7 @@ function renderObjectList() {
       if (body) selectRole(body.role);
     };
     button.addEventListener('click', choose);
-    // Enter and Space by hand, and stopped from travelling any further.
+    // Enter and Space by hand, and stopped from traveling any further.
     // A button fires click on Enter by itself, but this one is inside a
     // document that binds single keys as shortcuts, and the first handler to
     // see the event decides: pressing Enter here selected nothing and did
@@ -3126,10 +3126,10 @@ function renderProbe() {
   // panel supplies only *which* bodies; js/render.js recomputes the point from
   // them every frame, so what is drawn is where the pair actually is.
   if (els.probe) {
-    const wantBary = Boolean(step?.showBarycentre);
-    state.barycentreOverlay.active = wantBary;
+    const wantBary = Boolean(step?.showBarycenter);
+    state.barycenterOverlay.active = wantBary;
     if (wantBary) {
-      state.barycentreOverlay.ids = (boundRoles() || [])
+      state.barycenterOverlay.ids = (boundRoles() || [])
         .map(r => roleBody(r)?.id)
         .filter(id => Number.isFinite(id));
     }
@@ -3948,12 +3948,12 @@ function browserCardHtml(inv, index, shared) {
  * Module state, deliberately: a student who filters to "in progress", opens a
  * lesson and comes back should find the list as they left it, and that has to
  * survive the panel being closed and reopened. It is not written to storage -
- * a filter is about the next five minutes, and finding the catalogue silently
+ * a filter is about the next five minutes, and finding the catalog silently
  * cut down a week later would be a bug, not a convenience.
  */
 let browserFilters = { ...NO_FILTERS };
 
-/** For tests and for the assignment flow: start from the whole catalogue. */
+/** For tests and for the assignment flow: start from the whole catalog. */
 export function resetBrowserFilters() {
   browserFilters = { ...NO_FILTERS };
 }
@@ -3975,7 +3975,7 @@ function fillSelect(select, values, labelOf, anyLabel, current) {
 }
 
 /**
- * Build the filter menus from the catalogue.
+ * Build the filter menus from the catalog.
  *
  * Called on every render rather than once, because the labels are translated
  * and the subject counts move as lessons are added.
@@ -4072,7 +4072,7 @@ function sequenceStepHtml(step, index) {
     </li>`;
 }
 
-/** All the curated sequences, resolved against the catalogue. */
+/** All the curated sequences, resolved against the catalog. */
 function renderSequences() {
   if (!els.sequenceList) return;
   els.sequenceList.innerHTML = SEQUENCES.map(sequence => {
@@ -4148,14 +4148,14 @@ function renderBrowser() {
   if (!els.list) return;
   const shared = sharedLevel();
   const narrowed = isFiltered(browserFilters);
-  const rows = filterCatalogue(MANIFEST, browserFilters, progressFor);
+  const rows = filterCatalog(MANIFEST, browserFilters, progressFor);
 
   fillFilterMenus();
 
   if (els.count) {
     // While filtering, the count is the answer to what was just typed, and the
     // element is a live region so it is also the announcement. The standing
-    // summary of the whole catalogue would bury that.
+    // summary of the whole catalog would bury that.
     els.count.textContent = narrowed
       ? t('inv.filter.count', { n: rows.length, total: MANIFEST.length })
       : browserSummary();
@@ -4292,21 +4292,21 @@ export function openBrowser() {
   if (!els.browser) return;
   browserLastFocus = document.activeElement;
   renderBrowser();
-  // And again once the catalogue for this language has arrived, if it had not.
+  // And again once the catalog for this language has arrived, if it had not.
   //
   // The panel opens immediately - waiting on a fetch before showing anything
   // would be a worse trade than a grid that fills in - but a reader who chose
   // Spanish before the lesson system was ever loaded would otherwise be left
   // looking at English titles until they touched a filter. Resolved already in
   // the common cases: English, or any second open.
-  lessonCatalogueReady()
+  lessonCatalogReady()
     .then(() => {
       if (els.browser && !els.browser.classList.contains('hidden')) {
         renderBrowser();
       }
     })
     .catch(() => {
-      /* the English catalogue is already on screen; that is the fallback */
+      /* the English catalog is already on screen; that is the fallback */
     });
   els.browser.classList.remove('hidden');
   // Both of them. #investigationBrowserScroll is the list, but the element that
@@ -4675,7 +4675,7 @@ export function initInvestigations() {
     fitStage();
   });
   els.followBtn?.addEventListener('click', () => {
-    if (!centreOnSelected()) toast(t('inv.stage.nothingSelected'));
+    if (!centerOnSelected()) toast(t('inv.stage.nothingSelected'));
   });
   els.scaleBtn?.addEventListener('click', () => {
     const next = stageScale() === SCALE.TRUE ? SCALE.DISPLAY : SCALE.TRUE;

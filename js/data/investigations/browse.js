@@ -1,5 +1,5 @@
 // =============================================================================
-// Browsing the catalogue: search and filters
+// Browsing the catalog: search and filters
 // -----------------------------------------------------------------------------
 // Everything here reads the generated manifest. There is no second list of
 // lessons: the subjects a filter offers are the tags the lessons declare, the
@@ -18,7 +18,7 @@ import { LENGTH, lengthOf, calculationOf } from './sequences.js';
  * The filter metadata for one lesson.
  *
  * Empty rather than undefined for a lesson the generator has not seen, so a
- * catalogue and a stale browseData.js produce a lesson with no subjects rather
+ * catalog and a stale browseData.js produce a lesson with no subjects rather
  * than a crash in the middle of the grid.
  *
  * @param {string} id - Lesson id
@@ -42,7 +42,7 @@ export const PROGRESS = Object.freeze({
 /** The order they are offered in. */
 export const PROGRESSES = [PROGRESS.NEW, PROGRESS.GOING, PROGRESS.DONE];
 
-/** Nothing selected: the whole catalogue, in catalogue order. */
+/** Nothing selected: the whole catalog, in catalog order. */
 export const NO_FILTERS = Object.freeze({
   query: '',
   subject: '',
@@ -63,12 +63,12 @@ export const isFiltered = filters =>
   );
 
 /**
- * The subjects the catalogue actually covers, with how many lessons each has.
+ * The subjects the catalog actually covers, with how many lessons each has.
  *
  * Sorted by name rather than by count, because a filter is a place to look
  * something up and alphabetical is where a reader's eye goes.
  *
- * @param {Array<object>} manifest - The catalogue
+ * @param {Array<object>} manifest - The catalog
  * @returns {Array<{tag:string, count:number}>} Subjects
  */
 export function subjectsOf(manifest = []) {
@@ -84,7 +84,7 @@ export function subjectsOf(manifest = []) {
 /**
  * Fold a string for searching: lower case, accents removed.
  *
- * The Spanish catalogue is full of accented words and a reader typing on a
+ * The Spanish catalog is full of accented words and a reader typing on a
  * phone keyboard will not reach for them. "energia" should find "energía".
  *
  * @param {string} text - Anything
@@ -103,7 +103,7 @@ export const fold = text =>
  * titles are deliberately plain-language - "Getting There From Here", "Where
  * Can It Get To?" - while the ids carry the technical name a reader is most
  * likely to type. Somebody searching "hohmann" or "lagrange" means it, and
- * without the id they would be told the catalogue has nothing.
+ * without the id they would be told the catalog has nothing.
  */
 const haystack = entry =>
   fold(
@@ -146,17 +146,17 @@ export function progressBucket(p) {
 }
 
 /**
- * Apply a filter set to the catalogue.
+ * Apply a filter set to the catalog.
  *
- * Returns the entries that survive, in catalogue order, each with the derived
+ * Returns the entries that survive, in catalog order, each with the derived
  * facts the cards want so nothing has to work them out twice.
  *
- * @param {Array<object>} manifest - The catalogue
+ * @param {Array<object>} manifest - The catalog
  * @param {object} filters - A filter set; missing keys mean "any"
  * @param {(id:string)=>object} progressOf - Reads saved progress
  * @returns {Array<object>} Entries with `length`, `calculation` and `progress`
  */
-export function filterCatalogue(manifest = [], filters = {}, progressOf) {
+export function filterCatalog(manifest = [], filters = {}, progressOf) {
   const wantSubject = filters.subject || '';
   const wantLength = filters.length || '';
   const wantProgress = filters.progress || '';
@@ -191,7 +191,7 @@ export function filterCatalogue(manifest = [], filters = {}, progressOf) {
  * it as a button rather than leaving the reader to guess which of four
  * controls is the problem.
  *
- * @param {Array<object>} manifest - The catalogue
+ * @param {Array<object>} manifest - The catalog
  * @param {object} filters - The filter set that found nothing
  * @param {(id:string)=>object} progressOf - Reads saved progress
  * @returns {?{key:string, count:number}} The filter to drop, or null
@@ -204,7 +204,7 @@ export function loosening(manifest, filters, progressOf) {
   let best = null;
   for (const key of keys) {
     const relaxed = { ...filters, [key]: '' };
-    const count = filterCatalogue(manifest, relaxed, progressOf).length;
+    const count = filterCatalog(manifest, relaxed, progressOf).length;
     if (count > 0 && (!best || count > best.count)) best = { key, count };
   }
   return best;

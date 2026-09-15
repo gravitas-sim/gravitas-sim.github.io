@@ -322,7 +322,7 @@
 
   /* Minimized overlay state.
      
-     Sized and coloured in css/chrome.css now, along with the rest of the
+     Sized and colored in css/chrome.css now, along with the rest of the
      readout. The `!important` that used to be on every declaration here could
      not be overridden from a later layer at all - an important declaration in
      an earlier layer wins - so a 200px box with 8px of padding was still being
@@ -939,7 +939,7 @@
 
   /* A panel heading, on the type scale, in tokens.
      -----------------------------------------------------------------------
-     It was 28px centred accent-coloured text under a 20-pixel glow of
+     It was 28px centerd accent-colored text under a 20-pixel glow of
      hardcoded #00aaff, on a gradient and a border of two more shades of the
      same hardcoded blue - four separate blues, none of them the theme's, on
      the largest piece of text in the interface. In Spanish it wrapped to two

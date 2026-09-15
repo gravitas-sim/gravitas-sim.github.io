@@ -16,7 +16,7 @@
 import { withUnit } from './format.js';
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
-// This family's labels are in the deferred half of the catalogue; see the note
+// This family's labels are in the deferred half of the catalog; see the note
 // in js/widgets.js. Registered from the module that renders them rather than
 // from the registry, because a lesson, a share link, an authoring preview or a
 // test can import this file directly and never go through the registry at all

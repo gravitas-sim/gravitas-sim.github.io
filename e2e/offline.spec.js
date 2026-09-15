@@ -291,7 +291,7 @@ test.describe('the quality tier is chosen from the frame rate', () => {
       const ui = await import('/js/ui.js');
       const body = p.planets[0] || p.stars[0];
       if (!body) return null;
-      // Centre the view on it so the click point is unambiguous.
+      // Center the view on it so the click point is unambiguous.
       ui.state.pan = { x: 0, y: 0 };
       ui.state.zoom = 1;
       const canvas = document.getElementById('simulationCanvas');
@@ -379,7 +379,7 @@ test.describe('the quality tier is chosen from the frame rate', () => {
     // construction golden rather than by anything here. The caps were applied
     // by assigning them into the live SETTINGS, so building a world on a slow
     // machine permanently rewrote num_asteroids and trail_length - and SETTINGS
-    // is the reader's document. It is what a share link serialises, what a
+    // is the reader's document. It is what a share link serializes, what a
     // saved state restores, and what the A/B bench hashes to decide whether two
     // runs differ. A teacher on a 2019 Chromebook would have exported a capped
     // world to a class on faster machines without either side knowing.

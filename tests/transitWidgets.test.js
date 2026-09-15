@@ -17,7 +17,7 @@ const WIDGET_IDS = [
 // The limb-darkening coefficients the module and the live light curve share.
 // A planet on the center of the disk covers light this much brighter than the
 // disk average, which is the whole point of the correction step in the lesson.
-const CENTRE_BOOST = 1 / (1 - 0.4 / 3 - 0.26 / 6);
+const CENTER_BOOST = 1 / (1 - 0.4 / 3 - 0.26 / 6);
 
 describe('blockedFraction', () => {
   test('nothing is blocked once the planet is off the disk', () => {
@@ -29,7 +29,7 @@ describe('blockedFraction', () => {
     // This is the number the lesson asks students to divide out, so getting it
     // wrong would make the worked answer disagree with the simulation.
     const k = 0.12;
-    expect(blockedFraction(0, k) / (k * k)).toBeCloseTo(CENTRE_BOOST, 1);
+    expect(blockedFraction(0, k) / (k * k)).toBeCloseTo(CENTER_BOOST, 1);
   });
 
   test('depth grows as the square of the radius ratio', () => {

@@ -2,10 +2,10 @@
 // The showcase page's translator
 // -----------------------------------------------------------------------------
 // Forty lines rather than js/i18n/index.js, and the reason is weight. That
-// module statically imports the English catalogue - 123KB of application
+// module statically imports the English catalog - 123KB of application
 // strings - and dynamically imports the Spanish one. /teaching/ is a document
 // with about a hundred strings of its own and no simulation behind it; pulling
-// the application's catalogue in to render it would make a page whose whole
+// the application's catalog in to render it would make a page whose whole
 // point is "this is cheap to adopt" the heaviest thing on the site.
 //
 // What it does share is everything a reader can notice: the same
@@ -15,7 +15,7 @@
 // rather than rendering its own id.
 //
 // What it deliberately does NOT have: plurals, number formatting, a locale
-// change event, registration of late-arriving catalogues. None of them has a
+// change event, registration of late-arriving catalogs. None of them has a
 // caller on this page, and a second half-implementation of the real i18n
 // runtime is worse than an honestly small one.
 // =============================================================================
@@ -32,7 +32,7 @@ export const LANGUAGES = Object.freeze([
   { id: 'es', endonym: 'Español', label: 'teach.lang.es' },
 ]);
 
-const CATALOGUES = { en: EN_TEACHING, es: ES_TEACHING };
+const CATALOGS = { en: EN_TEACHING, es: ES_TEACHING };
 const DEFAULT = 'en';
 
 let current = DEFAULT;
@@ -52,13 +52,13 @@ export const language = () => current;
 export function preferred() {
   try {
     const saved = window.localStorage?.getItem(STORAGE_KEY);
-    if (saved && Object.hasOwn(CATALOGUES, saved)) return saved;
+    if (saved && Object.hasOwn(CATALOGS, saved)) return saved;
   } catch {
     /* storage unavailable; the default is correct */
   }
   const nav = (typeof navigator !== 'undefined' && navigator.language) || '';
   const base = String(nav).toLowerCase().split('-')[0];
-  return Object.hasOwn(CATALOGUES, base) ? base : DEFAULT;
+  return Object.hasOwn(CATALOGS, base) ? base : DEFAULT;
 }
 
 /**
@@ -67,7 +67,7 @@ export function preferred() {
  * @returns {string} The language actually in force
  */
 export function setLanguage(id) {
-  current = Object.hasOwn(CATALOGUES, id) ? id : DEFAULT;
+  current = Object.hasOwn(CATALOGS, id) ? id : DEFAULT;
   try {
     window.localStorage?.setItem(STORAGE_KEY, current);
   } catch {
@@ -100,7 +100,7 @@ function interpolate(text, vars) {
  *
  * Named `tr` rather than `t` on purpose: tools/i18n-audit.mjs scans every
  * module under js/ for `t('...')` and checks the id against the application's
- * catalogue. This page's ids are not in that catalogue and should not be, so
+ * catalog. This page's ids are not in that catalog and should not be, so
  * the audit must not see them.
  *
  * @param {string} id - A `teach.` message id
@@ -108,7 +108,7 @@ function interpolate(text, vars) {
  * @returns {string} The message, in this language or in English, or the id
  */
 export function tr(id, vars) {
-  const entry = CATALOGUES[current]?.[id] ?? CATALOGUES[DEFAULT][id];
+  const entry = CATALOGS[current]?.[id] ?? CATALOGS[DEFAULT][id];
   if (entry === undefined) {
     console.warn(`[teaching] no message for "${id}"`);
     return id;
@@ -128,7 +128,7 @@ const ATTRIBUTES = ['title', 'aria-label', 'placeholder'];
 /**
  * Translate everything under a root that asks to be translated.
  *
- * Assigns `textContent`, never `innerHTML`. A catalogue is data, and a
+ * Assigns `textContent`, never `innerHTML`. A catalog is data, and a
  * translator who pastes a stray `<` into a sentence should get a stray `<` on
  * the page rather than a parse.
  *

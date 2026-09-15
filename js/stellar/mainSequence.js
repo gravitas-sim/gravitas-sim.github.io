@@ -14,7 +14,7 @@
 // to a red giant, a protostar or a white dwarf they are not approximations,
 // they are wrong: a red giant is thousands of times more luminous than its mass
 // suggests, and a white dwarf is a hundred thousand times less. Anything that
-// has a modelled temperature, luminosity or radius should use that instead, and
+// has a modeled temperature, luminosity or radius should use that instead, and
 // js/stellar/state.js exists to make that the default rather than the exception.
 // =============================================================================
 
@@ -47,7 +47,7 @@ export function estimateLuminosityFromMass(massSolar) {
 /**
  * Effective temperature from mass, for a main-sequence star.
  *
- * A rough fit, adequate for placing a habitable zone or choosing a colour and
+ * A rough fit, adequate for placing a habitable zone or choosing a color and
  * no more.
  *
  * @param {number} massSolar - Mass in solar masses
@@ -65,7 +65,7 @@ export function estimateTeffFromMass(massSolar) {
  * power law above that is not a single exponent, which is the point - the often
  * quoted t = 10 Gyr x M^-2.5 is a fit to the middle of the range only.
  *
- * This is an estimate. Where a modelled track exists, js/stellar/tracks.js
+ * This is an estimate. Where a modeled track exists, js/stellar/tracks.js
  * reports the lifetime MESA actually integrated, which is a different and
  * better number.
  *

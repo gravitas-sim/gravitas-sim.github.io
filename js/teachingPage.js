@@ -24,7 +24,7 @@
 // file, exactly as it does the instructor portal and the validation page, so
 // none of it reaches a visitor who only opens the simulation. That is why the
 // translator here is js/teaching/i18n.js and not js/i18n/index.js, and why
-// nothing below imports the scenario catalogue, the renderer, or appState.
+// nothing below imports the scenario catalog, the renderer, or appState.
 //
 // Progressive enhancement, honestly bounded: the headings, the standing prose
 // and every link out of the page are in the HTML and work with this file
@@ -59,7 +59,7 @@ import {
 
 const $ = id => document.getElementById(id);
 
-/** The catalogue in the language the page is being read in. */
+/** The catalog in the language the page is being read in. */
 const manifest = () => (language() === 'es' ? MANIFEST_ES : MANIFEST_EN);
 
 /** A manifest entry by id, in the current language. */
@@ -106,10 +106,10 @@ function announce(message) {
 // --- The numbers --------------------------------------------------------------
 
 /**
- * The counts the page prints, from the catalogue as it stands right now.
+ * The counts the page prints, from the catalog as it stands right now.
  * @returns {{lessons: number, steps: number, graded: number}} Totals
  */
-export function catalogueTotals(entries = manifest()) {
+export function catalogTotals(entries = manifest()) {
   return entries.reduce(
     (acc, entry) => ({
       lessons: acc.lessons + 1,
@@ -133,7 +133,7 @@ function glanceCell(key, value) {
 function renderGlance() {
   const list = $('teachGlance');
   if (!list) return;
-  const totals = catalogueTotals();
+  const totals = catalogTotals();
   clear(list);
   list.append(
     glanceCell('teach.glance.investigations', String(totals.lessons)),
@@ -295,7 +295,7 @@ export function demoHref(demo, embedded) {
   return `/${embedded ? '?embed=1' : ''}${fragmentFor(demo)}`;
 }
 
-/** A labelled block inside a demonstration card. */
+/** A labeled block inside a demonstration card. */
 function demoField(labelId, text) {
   return el('div', {
     className: 'teach-demo-field',
@@ -540,7 +540,7 @@ function formatCard(activity, format, active) {
     className: `teach-activity-format${active ? ' is-selected' : ''}`,
     children: [
       el('h4', { text: tr(format.nameId) }),
-      // The duration and the audience are text, not a colour or an icon: this
+      // The duration and the audience are text, not a color or an icon: this
       // is a choice between three things that differ in kind, and it has to
       // survive being read aloud.
       el('p', {
@@ -609,7 +609,7 @@ function activityCard(activity, activeFormat) {
       el('h4', { text: tr('teach.activities.objectives') }),
       objectives,
       formats,
-      // Kept apart from the student buttons above, and labelled, because the
+      // Kept apart from the student buttons above, and labeled, because the
       // difference between the two matters and a row of similar links does not
       // convey it.
       el('div', {
@@ -802,7 +802,7 @@ function renderLanguageSwitch() {
  * Called again, in full, on a language change. Re-rendering everything is
  * cheaper to reason about than a partial update, and it is what guarantees the
  * lesson titles, the durations and the slot lists change language along with
- * the prose: they come out of a different manifest, not out of a catalogue.
+ * the prose: they come out of a different manifest, not out of a catalog.
  *
  * One thing it deliberately does not preserve: an open figure. A reader who
  * switches language while a demonstration is running gets it closed rather

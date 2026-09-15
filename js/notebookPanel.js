@@ -17,7 +17,7 @@
 // Reorder is buttons, not drag. A drag handle is unusable from a keyboard
 // without building a whole parallel interaction, and "move up" is what a
 // student actually wants: they are placing one reading relative to its
-// neighbour, not sorting a table.
+// neighbor, not sorting a table.
 // =============================================================================
 
 import { t, onLocaleChange } from './i18n/index.js';
@@ -233,7 +233,7 @@ function provenanceHtml(p) {
     .join('')}</dl>`;
 }
 
-/** The three prose fields, as labelled textareas. */
+/** The three prose fields, as labeled textareas. */
 function proseHtml(entry) {
   return ['claim', 'evidence', 'limitations']
     .map(field => {

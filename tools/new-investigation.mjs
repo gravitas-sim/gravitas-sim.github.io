@@ -306,7 +306,7 @@ await writeNew(`js/data/investigations/es/${id}.js`, shadow);
 
 await insertOnce(
   'js/data/investigations.js',
-  "\nimport { gradedSteps, positionIn } from './investigations/catalogue.js';",
+  "\nimport { gradedSteps, positionIn } from './investigations/catalog.js';",
   `import ${constName} from './investigations/${id}.js';`
 );
 {
@@ -319,7 +319,7 @@ await insertOnce(
       `${file} (no INVESTIGATIONS array found - add ${constName} by hand)`
     );
   } else if (new RegExp(`^\\s*${constName},`, 'm').test(text)) {
-    skipped.push(`${file} (already in the catalogue)`);
+    skipped.push(`${file} (already in the catalog)`);
   } else {
     const end = text.indexOf('];', at);
     const next = text.slice(0, end) + `  ${constName},\n` + text.slice(end);

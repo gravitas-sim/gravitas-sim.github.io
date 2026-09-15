@@ -16,7 +16,7 @@
 // The English text stays in the markup as the rendered default, so the page is
 // readable with JavaScript disabled and a reviewer can see what an element says
 // without a lookup. On boot, and on every language change, the sweep below
-// overwrites it from the catalogue - which is also what catches an id that has
+// overwrites it from the catalog - which is also what catches an id that has
 // drifted away from the markup, because the element visibly changes to the id.
 // =============================================================================
 
@@ -31,7 +31,7 @@ const ATTRS = [
 ];
 
 /**
- * Apply the catalogue to a subtree.
+ * Apply the catalog to a subtree.
  *
  * Idempotent, and safe to call on markup that has already been translated: the
  * message id is the source, never the current contents, so re-running it in a
@@ -43,7 +43,7 @@ export function applyTranslations(root = document) {
   for (const el of root.querySelectorAll('[data-i18n]')) {
     const id = el.getAttribute('data-i18n');
     if (!id) continue;
-    // textContent, not innerHTML: a catalogue is data, and a translator must
+    // textContent, not innerHTML: a catalog is data, and a translator must
     // not be able to inject markup into the page by writing a tag in a message.
     // The handful of strings that genuinely need emphasis carry it in the
     // markup around a translated span instead.

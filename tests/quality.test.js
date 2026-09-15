@@ -77,7 +77,7 @@ describe('it measures the frame rate rather than guessing at it', () => {
 describe('interruptions are not slow frames', () => {
   test('a backgrounded tab does not demote a fast machine', () => {
     // rAF stops in a hidden tab. The resumption looks like one enormous frame,
-    // and counting it would demote a machine for being minimised.
+    // and counting it would demote a machine for being minimized.
     let t = 1000;
     for (let i = 0; i < 200; i++) {
       t += 1000 / 60;
@@ -228,7 +228,7 @@ describe('what the tier actually changes', () => {
     // Only body counts. star_density and trail_length used to be returned here
     // too, and because the caller applied this object by assigning it into the
     // live SETTINGS, that made a slow machine rewrite the reader's document -
-    // which then travelled out through share links and the A/B bench hash.
+    // which then traveled out through share links and the A/B bench hash.
     // They are presentation, they are read at draw time, and they now live in
     // renderOverrides() where a read-time override actually reaches them.
     for (const key of Object.keys(caps)) {

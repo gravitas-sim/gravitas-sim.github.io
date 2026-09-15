@@ -8,7 +8,7 @@
 // What the dialog is for: an assignment that says "export the data and fit a
 // period in Python" only works if a student can see, before downloading, what
 // is in the file and whether there is enough of it. So each row names the file,
-// says how many rows it holds and over how long, and greys out rather than
+// says how many rows it holds and over how long, and grays out rather than
 // disappearing when there is nothing to write. A download button that produces
 // a two-line CSV without warning is worse than one that says why.
 // =============================================================================
@@ -37,7 +37,7 @@ import {
 import { toast } from './notify.js';
 import { t } from './i18n/index.js';
 
-// This module's prose lives in the deferred half of the catalogue - see the
+// This module's prose lives in the deferred half of the catalog - see the
 // note in js/i18n/en.deferred.js. Registered from here rather than left to the
 // caller, because nothing in the start-up path can reach this module and a
 // reader who does reach it must not see message ids.
@@ -143,7 +143,7 @@ function files() {
       // be exporting the opening guess, which is not an analysis of anything.
       detail: s.rvFit
         ? `The fitted period, amplitude, phase and systemic velocity, the assumptions behind them, every residual, and the recording they came from.`
-        : 'No fit yet. Take a recording, press Analyse on the Radial Velocity panel, and adjust the model or search a range of periods.',
+        : 'No fit yet. Take a recording, press Analyze on the Radial Velocity panel, and adjust the model or search a range of periods.',
       ready: Boolean(s.rvFit),
       build: rvFitCsv,
     },

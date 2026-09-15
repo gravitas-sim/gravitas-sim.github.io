@@ -1022,10 +1022,10 @@
   {
    "group": "Habitable zone",
    "kind": "analytic",
-   "name": "The optimistic zone contains the conservative one",
+   "name": "The optimiztic zone contains the conservative one",
    "measured": true,
    "expected": true,
-   "why": "Recent Venus is hotter than the runaway greenhouse and Early Mars is colder than the maximum greenhouse, so the optimistic edges must bracket the conservative ones. An ordering mistake in the boundary table would show up here and nowhere else.",
+   "why": "Recent Venus is hotter than the runaway greenhouse and Early Mars is colder than the maximum greenhouse, so the optimiztic edges must bracket the conservative ones. An ordering mistake in the boundary table would show up here and nowhere else.",
    "toleranceKind": "exact",
    "error": 0,
    "pass": true
@@ -1064,7 +1064,7 @@
    "name": "TRAPPIST-1 is flagged as outside the fit's calibrated range",
    "measured": true,
    "expected": true,
-   "why": "The star is at 2566 K and the published fit covers 2600 to 7200 K. Reporting that honestly, rather than quoting an extrapolated quartic as a measurement, is the behaviour under test.",
+   "why": "The star is at 2566 K and the published fit covers 2600 to 7200 K. Reporting that honestly, rather than quoting an extrapolated quartic as a measurement, is the behavior under test.",
    "toleranceKind": "exact",
    "error": 0,
    "pass": true
@@ -1328,7 +1328,7 @@
    "expected": 1.17,
    "unit": "ratio to the spherical equivalent",
    "tolerance": 0.05,
-   "why": "Not a bug, and the reason the disc is done with Bessel functions rather than an enclosed mass. Material at larger radius than the orbit still pulls inward when it lies in the same plane, so a disc spins about 17% faster near its peak than a sphere holding the same mass inside the same radius. Modelling a disc as a sphere understates it by that much, and in a decomposition the shortfall lands on the halo.",
+   "why": "Not a bug, and the reason the disc is done with Bessel functions rather than an enclosed mass. Material at larger radius than the orbit still pulls inward when it lies in the same plane, so a disc spins about 17% faster near its peak than a sphere holding the same mass inside the same radius. Modeling a disc as a sphere understates it by that much, and in a decomposition the shortfall lands on the halo.",
    "toleranceKind": "relative",
    "error": 0.020088739713942205,
    "pass": true
@@ -1601,7 +1601,7 @@
    "expected": 1,
    "unit": "late rate / early rate",
    "tolerance": 0.05,
-   "why": "A documented departure from general relativity, quantified rather than merely disclaimed. Real gravitational-wave emission gives adot proportional to a^-3, so the fractional decay rate goes as a^-4: across a window in which the separation falls by a third, the late rate would be 3.4 times the early one. Here it is 1, because the model is a constant fractional damping of velocity. This check PASSES when the code matches its own documentation - the model page states that \"the characteristic runaway at the end is not reproduced\" - and it would FAIL if someone silently swapped in a different decay law without updating that page.",
+   "why": "A documented departure from general relativity, quantified rather than merely disclaimed. Real gravitational-wave emission gives adot proportional to a^-3, so the fractional decay rate goes as a^-4: across a window in which the separation falls by a third, the late rate would be 3.4 times the early one. Here it is 1, because the model is a constant fractional damping of velocity. This check PASSES when the code matches its own documentation - the model page states that \"the characteriztic runaway at the end is not reproduced\" - and it would FAIL if someone silently swapped in a different decay law without updating that page.",
    "source": "Peters (1964) Phys. Rev. 136, B1224",
    "toleranceKind": "relative",
    "error": 0.00555515040635246,

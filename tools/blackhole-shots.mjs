@@ -83,7 +83,7 @@ for (const shot of SHOTS) {
         // The application's own entry point, so the scenario is built exactly
         // as a reader's click would build it.
         ui.loadScenarioByKey(scenario);
-        // Centre on a black hole rather than on the origin: at a close zoom
+        // Center on a black hole rather than on the origin: at a close zoom
         // the origin is often empty sky, and a screenshot of empty sky proves
         // nothing about how a black hole is drawn.
         const sim = await import('/js/physics.js');

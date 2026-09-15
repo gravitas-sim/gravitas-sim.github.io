@@ -9,16 +9,16 @@
 // The idea the whole file is built around is a subtraction. An extended body
 // sitting a distance d from a mass M does not feel one gravitational pull; it
 // feels a different pull at every point in it. The body as a whole accelerates
-// at the rate its centre of mass does, so what is left over - what actually
-// deforms it - is the local acceleration MINUS the centre's:
+// at the rate its center of mass does, so what is left over - what actually
+// deforms it - is the local acceleration MINUS the center's:
 //
-//     tidal acceleration at a point = g(local) - g(centre)
+//     tidal acceleration at a point = g(local) - g(center)
 //
 // On the near side that residual points toward the perturber, because the near
 // side is pulled harder than average. On the far side it points AWAY from the
 // perturber, and this is the point students get wrong: nothing is pushing the
 // far side outward. It is pulled toward the perturber too, just less than
-// average, so relative to the centre it falls behind. Two bulges, one cause.
+// average, so relative to the center it falls behind. Two bulges, one cause.
 //
 // Everything is Newtonian, spherical and non-rotating. Real tides involve
 // oceans with coastlines, bodies with material strength, and - around compact
@@ -40,7 +40,7 @@ import {
 import { scientific, withUnit } from './format.js';
 import { t } from './i18n/index.js';
 
-// This module's prose lives in the deferred half of the catalogue - see the
+// This module's prose lives in the deferred half of the catalog - see the
 // note in js/i18n/en.deferred.js. Registered from here rather than left to the
 // caller, because nothing in the start-up path can reach this module and a
 // reader who does reach it must not see message ids.
@@ -69,7 +69,7 @@ export const IO_DISTANCE_M = 4.217e8;
 export const SATURN_MASS_KG = 5.683e26;
 /** Equatorial radius of Saturn, m. */
 export const SATURN_RADIUS_M = 6.0268e7;
-/** Outer edge of Saturn's A ring, m. Measured from Saturn's centre. */
+/** Outer edge of Saturn's A ring, m. Measured from Saturn's center. */
 export const A_RING_OUTER_M = 1.3678e8;
 /** Semi-major axis of Mimas, the innermost round moon, m. */
 export const MIMAS_DISTANCE_M = 1.8552e8;
@@ -96,7 +96,7 @@ export const ROCHE_FLUID_COEFF = 2.44;
 /**
  * Newtonian gravitational acceleration produced by a point mass.
  * @param {number} massKg - Mass of the attracting body, kg
- * @param {number} distanceM - Distance from its centre, m
+ * @param {number} distanceM - Distance from its center, m
  * @returns {number} Acceleration in m/s², positive toward the mass
  */
 export const gravitationalAcceleration = (massKg, distanceM) =>
@@ -104,28 +104,28 @@ export const gravitationalAcceleration = (massKg, distanceM) =>
 
 /**
  * The three accelerations across an extended body, and what is left after the
- * centre's is subtracted.
+ * center's is subtracted.
  *
  * Signs are measured along the line joining the two bodies, positive toward the
  * perturber. `nearResidual` therefore comes out positive (the near side is
- * pulled harder than the centre) and `farResidual` negative (the far side is
+ * pulled harder than the center) and `farResidual` negative (the far side is
  * pulled less), which is the two-bulge result stated as arithmetic.
  *
  * @param {number} massKg - Mass of the perturbing body, kg
- * @param {number} distanceM - Centre-to-centre separation, m
+ * @param {number} distanceM - Center-to-center separation, m
  * @param {number} radiusM - Radius of the body being stretched, m
- * @returns {Object} near, centre, far, nearResidual, farResidual, approx, stretch
+ * @returns {Object} near, center, far, nearResidual, farResidual, approx, stretch
  */
 export function tidalProfile(massKg, distanceM, radiusM) {
   const near = gravitationalAcceleration(massKg, distanceM - radiusM);
-  const centre = gravitationalAcceleration(massKg, distanceM);
+  const center = gravitationalAcceleration(massKg, distanceM);
   const far = gravitationalAcceleration(massKg, distanceM + radiusM);
   return {
     near,
-    centre,
+    center,
     far,
-    nearResidual: near - centre,
-    farResidual: far - centre,
+    nearResidual: near - center,
+    farResidual: far - center,
     /** The small-body approximation, 2GMR/d³, that the lesson ends up quoting. */
     approx: tidalAcceleration(massKg, distanceM, radiusM),
     /** Total stretch across the body: near residual plus far deficit. */
@@ -144,7 +144,7 @@ export function tidalProfile(massKg, distanceM, radiusM) {
  * be used instead.
  *
  * @param {number} massKg - Mass of the perturbing body, kg
- * @param {number} distanceM - Centre-to-centre separation, m
+ * @param {number} distanceM - Center-to-center separation, m
  * @param {number} radiusM - Radius of the body being stretched, m
  * @returns {number} Acceleration in m/s²
  */
@@ -196,7 +196,7 @@ export const massFromDensity = (densityKgM3, radiusM) =>
  * @param {number} primaryMassKg - Mass of the perturber, kg
  * @param {number} satelliteMassKg - Mass of the satellite, kg
  * @param {number} satelliteRadiusM - Radius of the satellite, m
- * @param {number} distanceM - Centre-to-centre separation, m
+ * @param {number} distanceM - Center-to-center separation, m
  * @returns {number} Dimensionless ratio
  */
 export function tidalToSelfGravity(
@@ -227,7 +227,7 @@ export function tidalToSelfGravity(
  * @param {number} primaryMassKg - Mass of the body being orbited, kg
  * @param {number} satelliteMassKg - Mass of the satellite, kg
  * @param {number} satelliteRadiusM - Radius of the satellite, m
- * @returns {number} Separation in m, measured centre to centre
+ * @returns {number} Separation in m, measured center to center
  */
 export const rocheLimitRigid = (
   primaryMassKg,
@@ -470,7 +470,7 @@ export function systemFacts(system) {
   // displays it rather than when this module loads. Spreading it turned the
   // lazy label into an eager one, and because js/tidalWidgets.js calls this at
   // module scope the read happened during import - before the deferred
-  // catalogue could possibly have arrived. Every run of the scene audit
+  // catalog could possibly have arrived. Every run of the scene audit
   // printed the message ids of strings that exist in both languages.
   const out = Object.defineProperties(
     {},
@@ -501,7 +501,7 @@ export const accelerationLabel = a =>
  */
 export function distanceLabel(m) {
   if (!Number.isFinite(m)) return '—';
-  // Kilometres are kept, with digit grouping, right up to a tenth of an AU.
+  // Kilometers are kept, with digit grouping, right up to a tenth of an AU.
   // A student reads "384,400 km" as a distance and "3.84 × 10⁵ km" as a piece
   // of notation, and the whole lesson is about distances.
   if (m >= 0.1 * AU_METERS) return withUnit((m / AU_METERS).toFixed(2), 'AU');

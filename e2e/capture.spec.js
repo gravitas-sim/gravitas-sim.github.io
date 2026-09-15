@@ -16,7 +16,7 @@ import { captureCapability, whyNoRecording } from './capability.js';
 import { mkdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
-/** Where the artefacts land, so a failure can be looked at rather than guessed
+/** Where the artifacts land, so a failure can be looked at rather than guessed
  *  at. Under test-results/, which is already ignored. */
 const OUT = join(process.cwd(), 'test-results', 'capture');
 
@@ -35,7 +35,7 @@ test.describe('capture', () => {
   // Gravitas hides the Record Clip button when capture.canRecord() is false,
   // which is correct: there is nothing behind it in a browser that cannot
   // encode. The suite used to assert the button was visible unconditionally,
-  // which made a deliberate behaviour look like a WebKit bug and cost that job
+  // which made a deliberate behavior look like a WebKit bug and cost that job
   // two failures and two retries before it timed out.
   //
   // So the assertion is the branch itself, checked against the application's
@@ -95,7 +95,7 @@ test.describe('capture', () => {
   // This removes MediaRecorder before the application loads. That is not a
   // polyfill or a fake; it is the absence of a capability, which is exactly the
   // configuration the Linux runner presents, and it lets the hidden-button
-  // behaviour be verified on a machine where the capability exists.
+  // behavior be verified on a machine where the capability exists.
   test(
     'without MediaRecorder the button is hidden and the still survives',
     { tag: '@cross-browser' },
@@ -268,7 +268,7 @@ test.describe('capture', () => {
     await button.click();
     await expect(page.locator('#recordingBadge')).toBeVisible();
 
-    // A still taken during a take must not switch the burnt-in caption off for
+    // A still taken during a take must not switch the burned-in caption off for
     // the rest of the clip.
     await app.railControl('screenshotBtn');
     const still = page.waitForEvent('download');

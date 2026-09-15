@@ -34,11 +34,11 @@ function publishedBand() {
   return { low: Math.min(...numbers), high: Math.max(...numbers) };
 }
 
-/** Every string in a catalogue, flattened. */
-const strings = catalogue =>
-  Object.entries(catalogue).filter(([, v]) => typeof v === 'string');
+/** Every string in a catalog, flattened. */
+const strings = catalog =>
+  Object.entries(catalog).filter(([, v]) => typeof v === 'string');
 
-const CATALOGUES = [
+const CATALOGS = [
   ['en', EN_DEFERRED],
   ['es', ES_DEFERRED],
 ];
@@ -72,7 +72,7 @@ describe('the provenance record itself', () => {
   });
 });
 
-describe.each(CATALOGUES)('the %s copy agrees with it', (lang, catalogue) => {
+describe.each(CATALOGS)('the %s copy agrees with it', (lang, catalog) => {
   // Found by the shape of the claim rather than by an English phrase: the
   // Spanish copy says "filtro en banda de 35 a 350 Hz", so a search for
   // "band-pass" finds nothing there and a test that only looked for the English
@@ -80,7 +80,7 @@ describe.each(CATALOGUES)('the %s copy agrees with it', (lang, catalogue) => {
   test('quotes the publisher band the provenance records', () => {
     const { low, high } = publishedBand();
     const anyBand = /(\d+)\s*(?:[–-]|a)\s*(\d+)\s*Hz/;
-    const quoting = strings(catalogue).filter(([, v]) => anyBand.test(v));
+    const quoting = strings(catalog).filter(([, v]) => anyBand.test(v));
     expect(quoting.length).toBeGreaterThan(0);
     for (const [key, value] of quoting) {
       const [, a, b] = anyBand.exec(value);
@@ -93,7 +93,7 @@ describe.each(CATALOGUES)('the %s copy agrees with it', (lang, catalogue) => {
   });
 
   test('quotes the GPS epoch the time axis is measured from', () => {
-    const quoting = strings(catalogue).filter(([, v]) => /GPS\s*\d/.test(v));
+    const quoting = strings(catalog).filter(([, v]) => /GPS\s*\d/.test(v));
     expect(quoting.length).toBeGreaterThan(0);
     for (const [key, value] of quoting) {
       expect({ key, epoch: value.match(/GPS\s*(\d+)/)?.[1] }).toEqual({
@@ -107,7 +107,7 @@ describe.each(CATALOGUES)('the %s copy agrees with it', (lang, catalogue) => {
   // processing the pipeline does not do. "The collaboration band-passed it" is
   // fine and true; "we whiten it" would not be.
   test('never claims this application filters or whitens the data', () => {
-    const claimed = strings(catalogue).filter(([, value]) => {
+    const claimed = strings(catalog).filter(([, value]) => {
       const v = value.toLowerCase();
       if (!/whiten|filter|smooth/.test(v)) return false;
       // Anything that attributes the processing to the publisher, or denies it

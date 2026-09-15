@@ -2,7 +2,7 @@
 // The classroom activities' words, in English
 // -----------------------------------------------------------------------------
 // Split out of ./en.teaching.js because two very different readers shared one
-// catalogue. /teaching/ reads all of it; the application reads only these
+// catalog. /teaching/ reads all of it; the application reads only these
 // `teach.activity.*` strings - an activity's title, its objectives and each
 // format's opening - which is what js/activities/activityBridge.js registers
 // when somebody opens an activity link.
@@ -14,7 +14,7 @@
 // render. Fifty-seven kilobytes of a page the simulation never shows.
 //
 // ./en.teaching.js still exports everything by spreading this in, so the showcase
-// page and every test that reads one catalogue are unchanged.
+// page and every test that reads one catalog are unchanged.
 // =============================================================================
 
 export const EN_ACTIVITIES = {
@@ -26,7 +26,7 @@ export const EN_ACTIVITIES = {
   'teach.activity.orbital-speed.title':
     'Orbital motion: why do planets change speed?',
   'teach.activity.orbital-speed.question':
-    'A planet on a fixed elliptical orbit speeds up and slows down, with nothing pushing it and no fuel burnt. What is being traded, and what is conserved?',
+    'A planet on a fixed elliptical orbit speeds up and slows down, with nothing pushing it and no fuel burned. What is being traded, and what is conserved?',
   'teach.activity.orbital-speed.audience':
     'Introductory astronomy or algebra-based physics. Works with a whole class projected, with pairs at machines, or as a lab period.',
   'teach.activity.orbital-speed.prerequisites':
@@ -92,7 +92,7 @@ export const EN_ACTIVITIES = {
   'teach.activity.star-sizes.route.intro':
     'Two stars are standing on the canvas and on the diagram beside it. Commit to a radius ratio, then select each one in turn and read the numbers the comparison card gives you. The numbers come from published evolutionary tracks, not from the simulation, and the card says so.',
   'teach.activity.star-sizes.route.closing':
-    'Luminosity is surface area times what each square metre radiates, so at a fixed temperature the radius goes as the square root of the luminosity. Three hundred times the light is about seventeen times the radius. The full investigation builds the whole H–R diagram this way and then asks what a survey of real stars would and would not have seen.',
+    'Luminosity is surface area times what each square meter radiates, so at a fixed temperature the radius goes as the square root of the luminosity. Three hundred times the light is about seventeen times the radius. The full investigation builds the whole H–R diagram this way and then asks what a survey of real stars would and would not have seen.',
 
   'teach.activity.orbital-speed.guided.for':
     'One student or a pair, at a machine',

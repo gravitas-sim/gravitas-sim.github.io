@@ -17,7 +17,7 @@
 //
 // What it deliberately does NOT do:
 //
-//   - decide which schedule is better. Each arm is one realisation of one
+//   - decide which schedule is better. Each arm is one realization of one
 //     noise draw. A schedule that recovered the period here can miss it on the
 //     next seed, and a comparison of two single runs cannot tell a property of
 //     the schedule from a property of the draw. Saying which arm won this run
@@ -49,7 +49,7 @@ export const CONTROL = Object.freeze({
 /** Things the reader has to be told about any result this produces. */
 export const CAVEAT = Object.freeze({
   /** One draw each. */
-  SINGLE_REALISATION: 'singleRealisation',
+  SINGLE_REALIZATION: 'singleRealization',
   /** The two plans observe at the same instants. */
   IDENTICAL: 'identicalSchedules',
   /** An arm has too few measurements to fit at all. */
@@ -206,7 +206,7 @@ export function describeArm(arm, opts = {}) {
   const fitted = search?.bestPeriod ?? null;
 
   const planned = Number.isFinite(arm?.plan?.planned) ? arm.plan.planned : null;
-  const summarise = w =>
+  const summarize = w =>
     w
       ? {
           worstPeak: w.worstPeak,
@@ -269,8 +269,8 @@ export function describeArm(arm, opts = {}) {
     // a fit there is no period to fold on and the honest answer is that we
     // cannot say.
     coverage: fitted ? phaseCoverageDetail(usedTimes, fitted) : null,
-    window: summarise(window),
-    plannedWindow: summarise(plannedWindow),
+    window: summarize(window),
+    plannedWindow: summarize(plannedWindow),
   };
 }
 
@@ -397,7 +397,7 @@ export function compareSchedules(armA, armB, opts = {}) {
   const periods = comparePeriods(a, b);
   const alias = aliasExplains(periods, a, b);
 
-  const caveats = [CAVEAT.SINGLE_REALISATION];
+  const caveats = [CAVEAT.SINGLE_REALIZATION];
   if (a.fingerprint && a.fingerprint === b.fingerprint)
     caveats.push(CAVEAT.IDENTICAL);
   if (!a.fit || !b.fit) caveats.push(CAVEAT.UNFITTABLE);

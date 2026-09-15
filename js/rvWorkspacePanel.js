@@ -11,7 +11,7 @@
 // button and not a toggle, it is placed at the bottom rather than beside the
 // parameters, and pressing it is recorded in the export. A student who wants
 // the answer can have it. A student who is given it beside their own fit never
-// practises the only skill the exercise teaches.
+// practices the only skill the exercise teaches.
 // =============================================================================
 
 import {
@@ -253,7 +253,7 @@ export const currentReport = () => exportReport();
 
 /** Wire the panel up. Called once, when the chunk loads. */
 export function initRvWorkspacePanel() {
-  // This panel's strings are not in the start-up catalogue, so it registers
+  // This panel's strings are not in the start-up catalog, so it registers
   // them itself rather than trusting whoever opened it to have done so. The
   // bridge does register them first in the normal path; a lesson, a share link
   // or a test that drives the panel directly does not, and a panel that renders
@@ -262,7 +262,7 @@ export function initRvWorkspacePanel() {
     .then(() => render())
     .catch(() => {});
 
-  // The catalogue can arrive after this panel does; see the note on the same
+  // The catalog can arrive after this panel does; see the note on the same
   // subscription in js/binaryRunPanel.js.
   onLocaleChange(() => render());
 
@@ -360,7 +360,7 @@ export function initRvWorkspacePanel() {
 initRvWorkspacePanel();
 
 /** @returns {?object} The recording under analysis, for the export dialog */
-export const analysedRecording = () => currentRecording();
+export const analyzedRecording = () => currentRecording();
 
 // --- The optional uncertainty analysis ----------------------------------------
 // The interface over js/rvUncertainty.js. Everything it prints comes from the
@@ -405,7 +405,7 @@ function frame(ctx, box, p, title) {
  * publish", which is what `mcGeneration` answers.
  *
  * Conflating the two locked the panel permanently. Supersession bumped the
- * generation and cancelled the token but left it here, and the superseded
+ * generation and canceled the token but left it here, and the superseded
  * run's own cleanup was conditional on still being current - which the
  * generation bump had just made impossible. So nothing ever released the
  * token, `runUncertainty()` returned at its first line for the rest of the
@@ -512,7 +512,7 @@ export function clearUncertainty() {
   mcGeneration++;
   mcReport = null;
   if (mcRun) {
-    mcRun.cancelled = true;
+    mcRun.canceled = true;
     mcRun = null;
   }
   renderUncertainty();
@@ -529,9 +529,9 @@ const fig = (v, sig = 5) =>
   v === null || v === undefined ? '—' : formatNumber(v, { sig });
 
 /**
- * Draw one histogram, with the family clumps coloured to match the table.
+ * Draw one histogram, with the family clumps colored to match the table.
  *
- * The bars are coloured by which family the bin falls in rather than by a
+ * The bars are colored by which family the bin falls in rather than by a
  * gradient, because the whole point of the picture is that the clumps are
  * separate things. A bin outside every family - which happens at the edges of
  * a sparse run - is drawn muted rather than assigned to its nearest family.
@@ -561,9 +561,9 @@ function drawHistogram(canvas, hist, families, title, axisLabel) {
   const barW = box.w / hist.counts.length;
   hist.counts.forEach((count, i) => {
     if (!count) return;
-    const centre = hist.lo + (i + 0.5) * hist.width;
+    const center = hist.lo + (i + 0.5) * hist.width;
     const family = families
-      ? families.findIndex(f => centre >= f.range[0] && centre <= f.range[1])
+      ? families.findIndex(f => center >= f.range[0] && center <= f.range[1])
       : -1;
     ctx.fillStyle =
       family >= 0 ? FAMILY_INKS[family % FAMILY_INKS.length] : p.grid;
@@ -668,10 +668,10 @@ function renderUncertainty() {
     )}</p>`
   );
 
-  if (r.cancelled) {
+  if (r.canceled) {
     lines.push(
       `<p class="rvfit-mc-warn">${esc(
-        t('rvfit.mc.result.cancelled', {
+        t('rvfit.mc.result.canceled', {
           done: r.completed,
           total: r.requested,
         })
@@ -728,7 +728,7 @@ function renderUncertainty() {
     );
   }
 
-  // The families, largest first, with anything under one percent summarised
+  // The families, largest first, with anything under one percent summarized
   // rather than listed: a noise draw produces a tail of one-trial families and
   // twenty rows of them would bury the four that matter.
   const shown = r.families.filter(f => f.fraction >= 0.01);
@@ -782,7 +782,7 @@ function renderUncertainty() {
 
   e.mcResult.innerHTML = lines.join('');
 
-  // Ranges the histogram colours bins against, in the same order as the table.
+  // Ranges the histogram colors bins against, in the same order as the table.
   const ranges = shown.map(f => ({ range: [f.period.min, f.period.max] }));
   const kRanges = shown.map(f => ({ range: [f.K.min, f.K.max] }));
   drawHistogram(
@@ -821,7 +821,7 @@ export async function runUncertainty() {
   // This run's identity. A run whose generation is no longer current is
   // superseded and may not write anything back - see clearUncertainty().
   const generation = ++mcGeneration;
-  const token = { cancelled: false, generation };
+  const token = { canceled: false, generation };
   const inputsKey = mcInputsKey();
   mcRun = token;
   mcReport = null;
@@ -856,7 +856,7 @@ export async function runUncertainty() {
           if (!mayPublish() || !e.mcStatus) return;
           e.mcStatus.textContent = t('rvfit.mc.running', { done, total });
         },
-        shouldCancel: () => token.cancelled || generation !== mcGeneration,
+        shouldCancel: () => token.canceled || generation !== mcGeneration,
       }
     );
   } catch (err) {
@@ -885,11 +885,11 @@ export async function runUncertainty() {
 /**
  * Ask a running analysis to stop at the end of the current batch.
  *
- * Distinct from being superseded: a cancelled run still reports, with
- * `outcome: 'cancelled'` and the trials it managed, because the reader asked
+ * Distinct from being superseded: a canceled run still reports, with
+ * `outcome: 'canceled'` and the trials it managed, because the reader asked
  * for it to stop and the partial answer is theirs. A superseded run reports
  * nothing, because nobody asked for it at all.
  */
 export function cancelUncertainty() {
-  if (mcRun) mcRun.cancelled = true;
+  if (mcRun) mcRun.canceled = true;
 }

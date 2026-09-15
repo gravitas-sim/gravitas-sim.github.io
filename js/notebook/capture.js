@@ -81,7 +81,7 @@ function recordedProvenance(rec, report) {
   put('units', rec.units);
 
   // WHEN the observations happened, in their own units, as opposed to what the
-  // simulation clock said when somebody analysed them. Both used to arrive as
+  // simulation clock said when somebody analyzed them. Both used to arrive as
   // one number and it was the second one.
   put('observedEpochs', rec.epochs);
   // The clock is deliberately not carried over from the live world for a
@@ -110,10 +110,10 @@ function recordedProvenance(rec, report) {
   //
   // A recording carries the observer geometry it was taken under - that IS a
   // fact about the measurements. It does not carry the reference frame, which
-  // is a display choice made now: somebody analysing an old recording while
-  // centred on a different body would otherwise have "barycentre:7" written
+  // is a display choice made now: somebody analyzing an old recording while
+  // centerd on a different body would otherwise have "barycenter:7" written
   // into the entry as though the samples had been taken in it. So the live
-  // frame is relabelled as what it is, and the recording's own frame is
+  // frame is relabeled as what it is, and the recording's own frame is
   // recorded as unknown rather than filled in from the present.
   if (rec.referenceFrame !== undefined && rec.referenceFrame !== null) {
     put('referenceFrame', rec.referenceFrame);
@@ -140,7 +140,7 @@ function recordedProvenance(rec, report) {
       failed: mc.failed,
       failures: { ...mc.failures },
       outcome: mc.outcome,
-      cancelled: mc.cancelled,
+      canceled: mc.canceled,
       complete: mc.complete,
       gridLimited: mc.gridLimited,
       multimodal: mc.multimodal,
@@ -193,7 +193,7 @@ function thin(points, max) {
  *
  * The parameters on the sliders are `measured` even when they were placed by
  * the periodogram: they came from the data by way of the student. The revealed
- * truth, when it has been revealed, is `truth` and is labelled as such in
+ * truth, when it has been revealed, is `truth` and is labeled as such in
  * every rendering - a student who reveals and then writes "my fit is correct"
  * should have a report that shows where the second number came from.
  *
@@ -345,7 +345,7 @@ export function fromRvFit({ analysis, report, provenance = {} }) {
   const flags = [];
   if (analysis.revealed) flags.push('truth-revealed');
   if (mc) {
-    flags.push('uncertainty-analysed');
+    flags.push('uncertainty-analyzed');
     if (mc.multimodal) flags.push('uncertainty-multimodal');
     if (mc.outcome !== 'complete') flags.push(`uncertainty-${mc.outcome}`);
     if (mc.gridLimited) flags.push('uncertainty-grid-limited');
@@ -591,7 +591,7 @@ export function fromSweep({ sweep, labelFor = id => id, provenance = {} }) {
 
   const failed = sweep.trials.length - ok.length;
   const flags = [];
-  if (sweep.cancelled) flags.push('cancelled');
+  if (sweep.canceled) flags.push('canceled');
   if (failed) flags.push('failed-trials');
 
   return buildEntry({
@@ -621,7 +621,7 @@ export function fromSweep({ sweep, labelFor = id => id, provenance = {} }) {
       limitations: [
         t('nb.sweep.limit.oneVariable'),
         ...(failed ? [t('nb.sweep.limit.failed', { n: failed })] : []),
-        ...(sweep.cancelled ? [t('nb.sweep.limit.cancelled')] : []),
+        ...(sweep.canceled ? [t('nb.sweep.limit.canceled')] : []),
       ].join('\n'),
     },
   });
@@ -717,7 +717,7 @@ export function fromBinarySweep({ report, prediction = '', provenance = {} }) {
   });
 
   const flags = [];
-  if (report.cancelled) flags.push('cancelled');
+  if (report.canceled) flags.push('canceled');
   if (unusable) flags.push('failed-trials');
 
   const lines = report.trials.map(tr =>
@@ -759,7 +759,7 @@ export function fromBinarySweep({ report, prediction = '', provenance = {} }) {
         ...(unusable
           ? [t('nb.binarySweep.limit.unusable', { n: unusable })]
           : []),
-        ...(report.cancelled ? [t('nb.binarySweep.limit.cancelled')] : []),
+        ...(report.canceled ? [t('nb.binarySweep.limit.canceled')] : []),
         ...(report.recheck
           ? [
               report.recheck.verdict.converged
@@ -842,7 +842,7 @@ export function fromReliability({
 
   // The two statistics that separate a chaotic pair from a badly resolved
   // one. The aligned paths themselves are not kept by the reliability report -
-  // it summarises them and discards the rows - so there is no figure to draw
+  // it summarizes them and discards the rows - so there is no figure to draw
   // here, and inventing one from the summary would be worse than none.
   if (report.series) {
     quantities.push(
@@ -1024,7 +1024,7 @@ export function fromAssistComparison({
   });
 
   const flags = [];
-  if (report.cancelled) flags.push('cancelled');
+  if (report.canceled) flags.push('canceled');
   if (missing.length) flags.push('failed-trials');
 
   return buildEntry({
@@ -1071,7 +1071,7 @@ export function fromAssistComparison({
         ...(missing.length
           ? [t('nb.assist.limit.incomplete', { n: missing.length })]
           : []),
-        ...(report.cancelled ? [t('nb.assist.limit.cancelled')] : []),
+        ...(report.canceled ? [t('nb.assist.limit.canceled')] : []),
         // Only when there are two passes to compare. With one, a ratio would
         // be a number invented out of a missing measurement.
         ...(sides
@@ -1176,7 +1176,7 @@ export function fromAssistSweep({ report, prediction = '', provenance = {} }) {
   });
 
   const flags = [];
-  if (report.cancelled) flags.push('cancelled');
+  if (report.canceled) flags.push('canceled');
   if (missing.length) flags.push('failed-trials');
 
   return buildEntry({
@@ -1212,7 +1212,7 @@ export function fromAssistSweep({ report, prediction = '', provenance = {} }) {
         ...(missing.length
           ? [t('nb.assist.limit.incomplete', { n: missing.length })]
           : []),
-        ...(report.cancelled ? [t('nb.assist.limit.cancelled')] : []),
+        ...(report.canceled ? [t('nb.assist.limit.canceled')] : []),
         t('nb.assist.sweep.limit.oneSide'),
         t('nb.assist.sweep.limit.notALaw'),
         t('nb.assist.limit.gate', { gate: report.gate ?? held.gate ?? 0 }),
@@ -1240,7 +1240,7 @@ export function fromAssistSweep({ report, prediction = '', provenance = {} }) {
 export function fromChaosPair({ report, prediction = '', provenance = {} }) {
   if (!report?.a || !report?.b) return null;
   const v = report.verdict || null;
-  const exponential = v?.behaviour === 'exponential';
+  const exponential = v?.behavior === 'exponential';
 
   const quantities = [
     quantity({
@@ -1292,11 +1292,11 @@ export function fromChaosPair({ report, prediction = '', provenance = {} }) {
     // instrument measured growth and refused to call it exponential.
     quantities.push(
       quantity({
-        label: t('nb.chaosPair.behaviour'),
+        label: t('nb.chaosPair.behavior'),
         value: 0,
         unit: '',
         kind: KIND.MEASURED,
-        note: t(`nb.chaosPair.behaviour.${v.behaviour}`, {
+        note: t(`nb.chaosPair.behavior.${v.behavior}`, {
           r2: Number(v.linearR2 ?? 0).toFixed(3),
         }),
       })
@@ -1335,7 +1335,7 @@ export function fromChaosPair({ report, prediction = '', provenance = {} }) {
   });
 
   const flags = [];
-  if (report.cancelled) flags.push('cancelled');
+  if (report.canceled) flags.push('canceled');
   if (refinement && !refinement.resolved) flags.push('unresolved');
   if (report.interval && !report.interval.ok) flags.push('interval-mismatch');
 
@@ -1368,7 +1368,7 @@ export function fromChaosPair({ report, prediction = '', provenance = {} }) {
               efolds: Number(v.efolds ?? 0).toFixed(1),
             })
           : t('nb.chaosPair.evidenceOther', {
-              behaviour: t(`nb.chaosPair.behaviour.${v?.behaviour || 'none'}`, {
+              behavior: t(`nb.chaosPair.behavior.${v?.behavior || 'none'}`, {
                 r2: Number(v?.linearR2 ?? 0).toFixed(3),
               }),
             }),
@@ -1376,7 +1376,7 @@ export function fromChaosPair({ report, prediction = '', provenance = {} }) {
       limitations: [
         // Ordered so the ones that describe a broken run come first: the
         // field has a length limit and a clipped limitation is unread.
-        ...(report.cancelled ? [t('nb.chaosPair.limit.cancelled')] : []),
+        ...(report.canceled ? [t('nb.chaosPair.limit.canceled')] : []),
         ...(report.interval && !report.interval.ok
           ? [t('nb.chaosPair.limit.interval')]
           : []),
@@ -1476,7 +1476,7 @@ export function fromNeckPair({ report, prediction = '', provenance = {} }) {
   });
 
   const flags = [];
-  if (report.cancelled) flags.push('cancelled');
+  if (report.canceled) flags.push('canceled');
   if (c && !c.region.ok) flags.push('not-controlled');
   if (c && !c.bothComplete) flags.push('window-incomplete');
 
@@ -1512,7 +1512,7 @@ export function fromNeckPair({ report, prediction = '', provenance = {} }) {
       ].join('\n'),
       limitations: [
         ...(c && !c.region.ok ? [t('nb.neckPair.limit.notControlled')] : []),
-        ...(report.cancelled ? [t('nb.neckPair.limit.cancelled')] : []),
+        ...(report.canceled ? [t('nb.neckPair.limit.canceled')] : []),
         ...(c && !c.bothComplete ? [t('nb.neckPair.limit.short')] : []),
         // The one that is always true, and the one the lesson exists to stop
         // a reader losing.
@@ -1527,7 +1527,7 @@ export function fromNeckPair({ report, prediction = '', provenance = {} }) {
  * A reading from the gravitational-wave lab, or from the published data.
  *
  * Two kinds of thing come through here and the entry has to keep them apart.
- * A modelled signal is a *model*, so its numbers are ANALYTIC and its
+ * A modeled signal is a *model*, so its numbers are ANALYTIC and its
  * limitations name the approximation and where it stops. The GW150914 traces
  * are a *measurement*, so theirs are MEASURED and their limitations name the
  * filtering the collaboration applied before publishing. Nothing about the two
@@ -1537,7 +1537,7 @@ export function fromNeckPair({ report, prediction = '', provenance = {} }) {
  * @param {object} spec.snapshot - From js/gwLab.js snapshotOf(), or a data card
  * @param {Array<Array<number>>} [spec.envelope] - [[t, h], ...], already thinned
  * @param {object} [spec.comparison] - From js/gwLab.js comparison()
- * @param {?number} [spec.similarity] - A normalised overlap, never an SNR
+ * @param {?number} [spec.similarity] - A normalized overlap, never an SNR
  * @param {object} [spec.dataProvenance] - PROVENANCE from a bundled dataset
  * @param {string} [spec.prediction] - What the student said before looking
  * @param {object} [spec.provenance] - The live world's provenance
@@ -1704,7 +1704,7 @@ export function fromGwObservation({
     }
     limitations.push(
       t(
-        audioMapping.normalise === 'fixed'
+        audioMapping.normalize === 'fixed'
           ? 'nb.gw.limit.audioFixed'
           : 'nb.gw.limit.audioPeak'
       )
@@ -1857,7 +1857,7 @@ export function fromBinaryOrbit({
     snapshot.periodYr,
     'yr',
     snapshot.timed ? KIND.MEASURED : KIND.ANALYTIC,
-    snapshot.timed ? t('nb.binary.timedNote') : t('nb.binary.modelledNote')
+    snapshot.timed ? t('nb.binary.timedNote') : t('nb.binary.modeledNote')
   );
   add(
     t('nb.binary.total'),
@@ -1915,7 +1915,7 @@ export function fromBinaryOrbit({
  * point somebody chose on a diagram is not a star. A free-cursor reading
  * carries a temperature, a luminosity and the radius they imply, and no mass,
  * no age and no lifetime, because those are not determined - and it says so in
- * its limitations rather than leaving the absence to be noticed. A modelled
+ * its limitations rather than leaving the absence to be noticed. A modeled
  * reading carries all of them and names the track and the grid.
  *
  * @param {object} spec
@@ -1925,8 +1925,8 @@ export function fromBinaryOrbit({
  */
 export function fromStellarObservation({ snapshot, provenance = {} }) {
   if (!snapshot) return null;
-  const modelled = snapshot.source === 'model';
-  const kind = modelled ? KIND.ANALYTIC : KIND.MEASURED;
+  const modeled = snapshot.source === 'model';
+  const kind = modeled ? KIND.ANALYTIC : KIND.MEASURED;
   const quantities = [];
   const add = (label, value, unit, note = '', k = kind) => {
     if (!Number.isFinite(value)) return;
@@ -1942,7 +1942,7 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
     t('nb.stellar.radiusNote'),
     KIND.ANALYTIC
   );
-  if (modelled) {
+  if (modeled) {
     add(t('nb.stellar.mass'), snapshot.massSun, 'M☉');
     add(t('nb.stellar.initialMass'), snapshot.initialMassSun, 'M☉');
     add(t('nb.stellar.age'), snapshot.ageYr, 'yr');
@@ -1966,12 +1966,12 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
 
   const limitations = [];
   // The grid is named whatever the cursor was doing, because a capture that
-  // carries pinned stars carries modelled stars, and an entry that does not
+  // carries pinned stars carries modeled stars, and an entry that does not
   // say which models is a set of numbers with no provenance.
-  if (!modelled && snapshot.pinned.length) {
+  if (!modeled && snapshot.pinned.length) {
     limitations.push(t('nb.stellar.limit.model', { grid: snapshot.grid }));
   }
-  if (modelled) {
+  if (modeled) {
     limitations.push(t('nb.stellar.limit.model', { grid: snapshot.grid }));
     if (snapshot.trackComplete === false) {
       limitations.push(
@@ -2000,7 +2000,7 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
       })
     );
   }
-  // A hypothetical among modelled stars, called out once. Its temperature and
+  // A hypothetical among modeled stars, called out once. Its temperature and
   // luminosity are the reader's; its mass, age and lifetime do not exist, and
   // a table that listed the others' silently would read as a gap in the data
   // rather than as a different kind of object.
@@ -2040,7 +2040,7 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
     // describes the wrong half of the panel.
     title: snapshot.pinned.length
       ? t('nb.stellar.title.comparison', { n: snapshot.pinned.length })
-      : modelled
+      : modeled
         ? t('nb.stellar.title.model')
         : t('nb.stellar.title.point'),
     quantities,
@@ -2055,7 +2055,7 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
       },
       grid: snapshot.grid,
       flags: [
-        modelled ? 'stellar-track' : 'hypothetical-point',
+        modeled ? 'stellar-track' : 'hypothetical-point',
         ...(snapshot.ambiguous ? ['ambiguous'] : []),
         ...(snapshot.stage ? [`stage:${snapshot.stage}`] : []),
         ...(snapshot.pace ? [`paced-by:${snapshot.pace}`] : []),

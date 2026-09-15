@@ -52,7 +52,7 @@ export const EVENT_KINDS = Object.freeze({
  * On a circular orbit the radial rate is zero everywhere, so its sign is
  * decided by integration error and the watch would fire on the first step and
  * every step after it. The threshold is generous - 1e-3 is a hundredth of the
- * roundest orbit in the catalogue - because the failure it prevents is a
+ * roundest orbit in the catalog - because the failure it prevents is a
  * confident answer to a question with no answer, and the honest alternative is
  * to say so.
  */

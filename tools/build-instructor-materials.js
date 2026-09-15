@@ -5,7 +5,7 @@
 // Gravitas is served from GitHub Pages. There is no server, no request handler
 // and nowhere to check a password: anything committed to the repository is
 // readable by anyone who asks for the URL. A JavaScript password check on a
-// static site is theatre, and answer keys sitting in a public folder behind one
+// static site is theater, and answer keys sitting in a public folder behind one
 // are simply published.
 //
 // So the materials are not protected by a check at all. They are encrypted.

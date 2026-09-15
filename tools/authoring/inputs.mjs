@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // Gathered in one place so that the rules themselves are a pure function of
 // their inputs, and so that the CLI, the Jest suite and the browser walker all
-// look at exactly the same catalogue.
+// look at exactly the same catalog.
 //
 // All of this imports in Node. The lessons are content modules with no imports
 // at all, the widget registry is arithmetic and canvas-drawing closures that
@@ -23,7 +23,7 @@ import { INSTRUCTOR_CONTENT } from '../../js/data/instructorContent.js';
 import { SCENARIO_INFO } from '../../js/data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../../js/appState.js';
 import { allWidgets } from '../../js/widgets.js';
-import { gradedSteps } from '../../js/data/investigations/catalogue.js';
+import { gradedSteps } from '../../js/data/investigations/catalog.js';
 
 export const LESSON_DIR = 'js/data/investigations';
 export const LOCALES = ['es'];
@@ -31,7 +31,7 @@ export const LOCALES = ['es'];
 /**
  * Read every input the rules need.
  *
- * @returns {Promise<object>} The catalogue and everything it is checked against
+ * @returns {Promise<object>} The catalog and everything it is checked against
  */
 export async function loadAuthoringInputs() {
   const translations = {};

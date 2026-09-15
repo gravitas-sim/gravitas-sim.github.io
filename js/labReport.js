@@ -22,7 +22,7 @@ import { createDocument } from './pdf.js';
  * Short, stable checksum over the report's contents.
  *
  * FNV-1a over the answer text. Not cryptographic; see the note above.
- * @param {string} text - Canonical serialisation of the responses
+ * @param {string} text - Canonical serialization of the responses
  * @returns {string} Checksum, grouped for reading aloud
  */
 function completionCode(text) {

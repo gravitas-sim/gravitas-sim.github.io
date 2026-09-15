@@ -1,7 +1,7 @@
 // =============================================================================
 // When to look
 // -----------------------------------------------------------------------------
-// A radial-velocity programme is decided by its schedule long before anybody
+// A radial-velocity program is decided by its schedule long before anybody
 // looks at the data. The regular cadence js/rvSurvey.js started with - look
 // every c days for b days - is the simplest schedule and the worst one for the
 // question the lesson asks, because a regular comb has a comb for a sampling
@@ -38,7 +38,7 @@
 // observation TIMES alone. It contains no velocities, so it is a property of
 // the schedule and of nothing else, and it is the thing that tells you which
 // aliases a schedule cannot tell apart. Plotting the periodogram of the data
-// and labelling it a window is the usual mistake and would defeat the point:
+// and labeling it a window is the usual mistake and would defeat the point:
 // that curve mixes the star and the schedule, and a student comparing two
 // schedules needs the half that is only the schedule.
 // =============================================================================
@@ -74,7 +74,7 @@ export const SCHEDULE_LIMITS = Object.freeze({
   minSpacingDays: 1e-4,
   maxBaselineDays: 3650,
   /** How far an irregular schedule may nudge an epoch, as a fraction of the
-   *  regular spacing. Half would let neighbours swap places. */
+   *  regular spacing. Half would let neighbors swap places. */
   maxJitter: 0.45,
   minClusters: 2,
   maxClusters: 12,
@@ -454,7 +454,7 @@ function irregularOffsets(n, baseline, jitter, seed) {
 /**
  * A clustered schedule: a few tight groups, spread over the baseline.
  *
- * The shape a real programme often has - a run of nights, then nothing until
+ * The shape a real program often has - a run of nights, then nothing until
  * the target is up again - and the one with the most interesting window: dense
  * within a group, so it resolves short periods, and blind between groups, so it
  * cannot tell some long ones apart at all.

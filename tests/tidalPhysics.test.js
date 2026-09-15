@@ -46,8 +46,8 @@ import {
 describe('the difference across an extended body', () => {
   test('the pull really is stronger on the near side', () => {
     const p = tidalProfile(MOON_MASS_KG, MOON_DISTANCE_M, EARTH_RADIUS_M);
-    expect(p.near).toBeGreaterThan(p.centre);
-    expect(p.centre).toBeGreaterThan(p.far);
+    expect(p.near).toBeGreaterThan(p.center);
+    expect(p.center).toBeGreaterThan(p.far);
   });
 
   test('the near side beats the far side by the seven percent the lesson quotes', () => {
@@ -59,7 +59,7 @@ describe('the difference across an extended body', () => {
 
   test('the residuals point opposite ways, which is the two-bulge result', () => {
     // The far-side residual being negative is the whole content of step 7: the
-    // far side is pulled toward the Moon, just less than the centre is.
+    // far side is pulled toward the Moon, just less than the center is.
     const p = tidalProfile(MOON_MASS_KG, MOON_DISTANCE_M, EARTH_RADIUS_M);
     expect(p.nearResidual).toBeGreaterThan(0);
     expect(p.farResidual).toBeLessThan(0);
@@ -73,9 +73,9 @@ describe('the difference across an extended body', () => {
     expect(ratio).toBeLessThan(1.11);
   });
 
-  test('the centre residual is exactly zero by construction', () => {
+  test('the center residual is exactly zero by construction', () => {
     const p = tidalProfile(MOON_MASS_KG, MOON_DISTANCE_M, EARTH_RADIUS_M);
-    expect(p.centre - p.centre).toBe(0);
+    expect(p.center - p.center).toBe(0);
     expect(p.stretch).toBeCloseTo(p.nearResidual - p.farResidual, 20);
   });
 
@@ -527,7 +527,7 @@ describe('labels', () => {
     expect(accelerationLabel(Infinity)).toBe('—');
   });
 
-  test('distances stay in kilometres with digit grouping up to a tenth of an AU', () => {
+  test('distances stay in kilometers with digit grouping up to a tenth of an AU', () => {
     expect(distanceLabel(MOON_DISTANCE_M)).toMatch(/384,400/);
     expect(distanceLabel(3e9)).toMatch(/3,000,000/);
     expect(distanceLabel(AU_METERS)).toMatch(/1\.00/);

@@ -10,7 +10,7 @@
 // Keeping them apart is most of the point of this file. A planet that "was
 // ejected" from a run whose energy drifted by twenty per cent was not ejected
 // by the binary; it was ejected by the timestep. Reporting the first without
-// the second teaches students to read numerical artefacts as physics, which is
+// the second teaches students to read numerical artifacts as physics, which is
 // the specific failure this whole investigation is written against.
 //
 // The other thing this file is careful about is the word *stable*. Nothing here

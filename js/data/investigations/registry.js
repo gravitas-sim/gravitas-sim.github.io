@@ -30,7 +30,7 @@
 // =============================================================================
 
 import { MANIFEST as MANIFEST_EN } from './manifest.js';
-import { gradedSteps, positionIn } from './catalogue.js';
+import { gradedSteps, positionIn } from './catalog.js';
 import { mergeTranslation } from './i18n.js';
 // Two hundred bytes that hold one string and import nothing. The registry
 // cannot read the interface's locale - it deliberately imports no i18n - but it
@@ -45,7 +45,7 @@ import {
 export { gradedSteps };
 
 /**
- * The card-level catalogue, in the language lessons are being served in.
+ * The card-level catalog, in the language lessons are being served in.
  *
  * The browser draws ten cards before any lesson is loaded, so the titles on
  * those cards cannot come from the lessons; they come from a manifest, and
@@ -151,7 +151,7 @@ const pending = new Map();
 /**
  * The locale lessons are fetched in.
  *
- * Initialised from what the application has already asked for rather than from
+ * Initialized from what the application has already asked for rather than from
  * a hardcoded 'en'. This module is loaded on demand, so by the time it exists
  * the reader may have chosen a language several seconds ago; starting in
  * English and waiting to be told would serve one lesson in the wrong language
@@ -159,7 +159,7 @@ const pending = new Map();
  */
 let lessonLocale = requestedLessonLocale() || 'en';
 
-/** The in-flight catalogue fetch, if there is one. See lessonCatalogueReady. */
+/** The in-flight catalog fetch, if there is one. See lessonCatalogReady. */
 let manifestLoad = null;
 
 /**
@@ -174,7 +174,7 @@ let manifestLoad = null;
  */
 export function setLessonLocale(locale) {
   lessonLocale = locale || 'en';
-  // The catalogue follows the lessons. Fetched rather than bundled, so a
+  // The catalog follows the lessons. Fetched rather than bundled, so a
   // reader who never switches language never pays for the other one.
   const load = MANIFESTS[lessonLocale] || MANIFESTS.en;
   manifestLoad = load()
@@ -194,9 +194,9 @@ export function setLessonLocale(locale) {
 export const getLessonLocale = () => lessonLocale;
 
 /**
- * Resolves when MANIFEST holds the catalogue for the current language.
+ * Resolves when MANIFEST holds the catalog for the current language.
  *
- * The card-level catalogue is one file per language and is fetched, so there
+ * The card-level catalog is one file per language and is fetched, so there
  * is always a moment after a language change when MANIFEST is still the
  * previous language's. That moment used to fall while nobody was looking: the
  * application told this module the locale at start-up, seconds before anybody
@@ -210,11 +210,11 @@ export const getLessonLocale = () => lessonLocale;
  *
  * @returns {Promise<Array>} The manifest for the current language
  */
-export function lessonCatalogueReady() {
+export function lessonCatalogReady() {
   return manifestLoad || Promise.resolve(MANIFEST);
 }
 
-// And fetch the card-level catalogue for that language, now, without waiting to
+// And fetch the card-level catalog for that language, now, without waiting to
 // be told. The lesson bodies are already correct - `lessonLocale` above decides
 // those - but the browser's cards come from a per-language manifest, and a
 // reader who chose Spanish before this module existed should not see a grid of
@@ -226,7 +226,7 @@ if (lessonLocale !== 'en') setLessonLocale(lessonLocale);
 // module evaluation is not applied to a half-built registry.
 registerLessonLocaleSink(setLessonLocale);
 
-/** @returns {Array<string>} Every lesson id, in catalogue order */
+/** @returns {Array<string>} Every lesson id, in catalog order */
 export const investigationIds = () => MANIFEST.map(m => m.id);
 
 /**
@@ -302,7 +302,7 @@ export function loadInvestigation(id, locale = lessonLocale) {
 }
 
 /**
- * Every lesson, in catalogue order.
+ * Every lesson, in catalog order.
  *
  * The asynchronous counterpart to ../investigations.js, for a browser-side
  * caller that really does need all ten - there is currently none, and that is

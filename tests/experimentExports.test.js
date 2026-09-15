@@ -134,7 +134,7 @@ describe('the JSON manifest', () => {
     expect(m.parameterChange.multivariable).toBe(false);
   });
 
-  test('summarises the runs without carrying their samples', () => {
+  test('summarizes the runs without carrying their samples', () => {
     const text = experimentManifestJson(experiment());
     expect(text).not.toContain('"samples": [');
     const m = JSON.parse(text);
@@ -156,7 +156,7 @@ describe('the JSON manifest', () => {
     expect(a).toBe(b);
   });
 
-  test('a filename stem is safe and recognisable', () => {
+  test('a filename stem is safe and recognizable', () => {
     expect(exportBasename({ name: 'Gravity doubled!' })).toBe(
       'gravitas-gravity-doubled'
     );

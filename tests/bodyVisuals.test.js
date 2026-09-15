@@ -2,7 +2,7 @@
 // The shared drawing policy
 // -----------------------------------------------------------------------------
 // js/bodyVisuals.js is the one place that decides how much detail a body is
-// worth at its size on screen, what colour a star is, where the light is coming
+// worth at its size on screen, what color a star is, where the light is coming
 // from and which way a comet's tails point. It is pure arithmetic, so all of
 // that is testable here rather than through a canvas - which is the point of
 // having pulled it out of the body classes.
@@ -199,7 +199,7 @@ describe('where the light comes from', () => {
   });
 });
 
-describe('star colour', () => {
+describe('star color', () => {
   test('cool stars are red, hot stars are blue', () => {
     const cool = starColor(3000);
     const hot = starColor(20000);
@@ -218,7 +218,7 @@ describe('star colour', () => {
     expect(starColor(5780)).not.toBe(starColor(9000));
   });
 
-  test('a missing or absurd temperature still gives a colour', () => {
+  test('a missing or absurd temperature still gives a color', () => {
     for (const bad of [undefined, null, NaN, -1, 0, 'hot']) {
       const c = starColor(bad);
       expect(c.r).toBeGreaterThanOrEqual(0);
@@ -366,7 +366,7 @@ describe('the sprite cache', () => {
     expect(built).toBe(1);
   });
 
-  test('colours are quantised, so near-identical bodies share a sprite', () => {
+  test('colors are quantised, so near-identical bodies share a sprite', () => {
     const key = rgb => `${rgb.r},${rgb.g},${rgb.b}`;
     expect(key({ r: 200, g: 100, b: 50 })).not.toBe(
       key({ r: 201, g: 100, b: 50 })

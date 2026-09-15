@@ -136,7 +136,7 @@ let surveyProvenance = null;
  *
  * Taken once, when the run starts. A student can record a schedule, load a
  * different scenario, tilt the observer, switch units and only then press
- * Analyse or Export; every fact below would be a different fact by then, and
+ * Analyze or Export; every fact below would be a different fact by then, and
  * a file describing the run has to describe the run.
  *
  * The generating parameters are captured here too, for the same reason and one
@@ -247,7 +247,7 @@ function computeTruth() {
     period: (first.el.period * timeUnitSeconds()) / 86400,
     K: first.k,
     eccentricity: first.el.e,
-    // The observing mode measures against the system barycentre, so there is
+    // The observing mode measures against the system barycenter, so there is
     // no systemic offset to recover.
     gamma: 0,
     note: first.el.e > 1e-3 ? 'eccentricOrbit' : 'circularOrbit',
@@ -283,7 +283,7 @@ function recordingPayload(run) {
       scheduleEpochs: run.config.plan?.planned ?? null,
     },
     // What the workspace and the notebook stamp into a saved result. Two
-    // analyses of "the same star" that carry different fingerprints were not
+    // analyzes of "the same star" that carry different fingerprints were not
     // observed at the same instants, and nothing else in the payload says so.
     scheduleFingerprint: run.config.scheduleId ?? null,
     geometry: {
@@ -485,7 +485,7 @@ function barycenterVelocity() {
 }
 
 /**
- * The star's current radial velocity, in metres per second.
+ * The star's current radial velocity, in meters per second.
  *
  * Positive is receding, negative is approaching.
  *
@@ -574,7 +574,7 @@ function cacheElements() {
     surveySeed: document.getElementById('rvSurveySeed'),
     surveyIdeal: document.getElementById('rvSurveyIdeal'),
     surveyRestart: document.getElementById('rvSurveyRestart'),
-    analyse: document.getElementById('rvAnalyse'),
+    analyze: document.getElementById('rvAnalyze'),
     surveyStatus: document.getElementById('rvSurveyStatus'),
     surveyShape: document.getElementById('rvSurveyShape'),
     surveyEpochs: document.getElementById('rvSurveyEpochs'),
@@ -650,7 +650,7 @@ async function buildChart() {
       datasets: [
         // 0: the continuous recording. On its own it is the measurement; with a
         // survey running it becomes the teaching overlay behind the points, and
-        // is restyled and relabelled in applySurveyStyling() so the two can
+        // is restyled and relabeled in applySurveyStyling() so the two can
         // never be confused for each other.
         {
           label: 'Radial velocity',
@@ -767,7 +767,7 @@ function renderReadout() {
   }
 
   // The spectral line. Its displacement is magnified enormously - a real 84 m/s
-  // shift is under a thousandth of a nanometre - and the panel says so, because
+  // shift is under a thousandth of a nanometer - and the panel says so, because
   // a student who thinks the star visibly changes color has learned the wrong
   // thing from a picture that was meant to help.
   if (e.lineShift && rv !== null) {
@@ -852,7 +852,7 @@ export function updateRadialVelocity() {
     const dropped = before - series.length;
     lastSampleTime = series.length ? series[series.length - 1].x : null;
     // Same reasoning for the schedule: a partially rewound run is not a
-    // programme either. It starts over.
+    // program either. It starts over.
     resetSurvey();
     recordedSession = current;
     if (dropped > 0) {
@@ -976,7 +976,7 @@ function startNewSession(session, reason, star) {
   const discarded = series.length;
   series = [];
   lastSampleTime = null;
-  // A different star, or a different line of sight, is a different programme.
+  // A different star, or a different line of sight, is a different program.
   // Measurements taken before it changed are not measurements of this one.
   resetSurvey();
   recordedSession = session;
@@ -1113,7 +1113,7 @@ function scheduleIsRunnable() {
  * Start a run, or start it again.
  *
  * Always from nothing. A schedule half observed under one cadence and half
- * under another is not a programme anyone ran, and quietly continuing a run
+ * under another is not a program anyone ran, and quietly continuing a run
  * across a change to its own definition would be the same mistake the observing
  * session machinery exists to prevent.
  */
@@ -1210,7 +1210,7 @@ function stopSurvey() {
  * measurements land on the signal is most of the point - but it stops being the
  * measurement, so it is dashed, faded, pushed behind the points and renamed.
  * The legend is turned on for the same reason: two datasets that are different
- * kinds of thing have to be labelled.
+ * kinds of thing have to be labeled.
  */
 function applySurveyStyling() {
   if (!chart) return;
@@ -1432,7 +1432,7 @@ function initSurveyControls() {
 
   e.surveyEnabled.addEventListener('change', () => {
     if (e.surveyFields) e.surveyFields.hidden = !e.surveyEnabled.checked;
-    // The schedule controls' strings are not in the start-up catalogue: this
+    // The schedule controls' strings are not in the start-up catalog: this
     // section is opt-in, and its labels are message ids until it is asked for.
     // Registering them here is the moment they become visible.
     if (e.surveyEnabled.checked) ensureDeferredMessages().catch(() => {});
@@ -1443,7 +1443,7 @@ function initSurveyControls() {
     else stopSurvey();
   });
 
-  // Any change to the schedule is a different programme, so it starts over.
+  // Any change to the schedule is a different program, so it starts over.
   for (const input of [
     e.surveyCadence,
     e.surveyBaseline,
@@ -1490,10 +1490,10 @@ function initSurveyControls() {
   // Registered here, once, as a sibling of every other control.
   //
   // It was nested inside the Restart handler, which had two consequences and
-  // both of them shipped: a first recording could not be analysed at all until
+  // both of them shipped: a first recording could not be analyzed at all until
   // Restart had been pressed, and every press after that added another
   // listener, so the fourth restart opened the workspace four times.
-  e.analyse?.addEventListener('click', openWorkspaceOnCurrentRun);
+  e.analyze?.addEventListener('click', openWorkspaceOnCurrentRun);
 }
 
 /**
@@ -1505,7 +1505,7 @@ function initSurveyControls() {
  *
  * Everything handed over is read from the recording's own frozen provenance
  * rather than from the world as it stands now. A student can record a run,
- * change the scenario, tilt the observer and then press Analyse; the file that
+ * change the scenario, tilt the observer and then press Analyze; the file that
  * comes out has to describe the run that produced the numbers, not whatever is
  * on screen at the moment they asked.
  *

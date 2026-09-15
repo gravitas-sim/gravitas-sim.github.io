@@ -2,10 +2,10 @@
 // A label is a label, not its own message id
 // -----------------------------------------------------------------------------
 // The tidal panel and the dark-matter panel keep their prose in the deferred
-// catalogue. Both modules used to start the fetch and abandon it -
+// catalog. Both modules used to start the fetch and abandon it -
 // `ensureDeferredMessages().catch(() => {})` - so a label read in the same tick
 // came back as "tideP.moonOnEarth", and a genuine failure to fetch the
-// catalogue was discarded without a word. `npm run audit:scene` printed eleven
+// catalog was discarded without a word. `npm run audit:scene` printed eleven
 // of those ids on every run, for strings that exist in both languages.
 //
 // The un-awaited load was only half of it. Two places read a lazy label at
@@ -74,7 +74,7 @@ afterEach(async () => {
 });
 
 describe('the readiness boundary', () => {
-  test('says ready only once the strings are in the catalogues', async () => {
+  test('says ready only once the strings are in the catalogs', async () => {
     const ok = await awaitDeferredMessages();
     expect(ok).toBe(true);
     expect(deferredMessagesReady()).toBe(true);
@@ -190,7 +190,7 @@ describe('switching language leaves nothing behind', () => {
   });
 });
 
-describe('a catalogue that will not load', () => {
+describe('a catalog that will not load', () => {
   test('is reported rather than swallowed, and does not reject', async () => {
     const mod = await import('../js/i18n/deferredMessages.js');
     mod.resetDeferredMessagesForTests();

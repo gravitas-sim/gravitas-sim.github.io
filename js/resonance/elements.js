@@ -45,7 +45,7 @@ export const wrap360 = deg => {
   if (w >= 0) return w;
   // A tiny negative angle plus 360 rounds to exactly 360 in floating point,
   // which is outside the half-open range this function promises and shows up
-  // downstream as a libration centre of "360 degrees" or a conjunction mean of
+  // downstream as a libration center of "360 degrees" or a conjunction mean of
   // 360 rather than 0.
   const shifted = w + 360;
   return shifted >= 360 ? 0 : shifted;
@@ -66,18 +66,18 @@ export const wrap180 = deg => {
 };
 
 /**
- * An angle folded into a 360-degree window centred on `centre`.
+ * An angle folded into a 360-degree window centerd on `center`.
  *
  * A resonant angle librating about 180 crosses neither 0 nor 360, so plotting
  * it wrapped to [0, 360) is already continuous. One librating about 0 crosses
- * 360 on every swing and looks like a sawtooth until it is re-centred, and a
+ * 360 on every swing and looks like a sawtooth until it is re-centerd, and a
  * student reading amplitude off that plot reads 180 degrees instead of two.
  *
  * @param {number} deg - Any angle in degrees
- * @param {number} centre - Centre of the window, in degrees
- * @returns {number} The angle in [centre - 180, centre + 180)
+ * @param {number} center - Center of the window, in degrees
+ * @returns {number} The angle in [center - 180, center + 180)
  */
-export const wrapAbout = (deg, centre) => centre + wrap180(deg - centre);
+export const wrapAbout = (deg, center) => center + wrap180(deg - center);
 
 /**
  * Remove the 360-degree jumps from a sampled angle.
@@ -278,7 +278,7 @@ export function nearestRatio(x, maxDenominator = 10) {
  * How unremarkable a near-rational ratio is.
  *
  * The rationals with denominator at most Q are dense: there are about
- * 3Q^2/pi^2 of them per unit interval, so the mean gap between neighbours is
+ * 3Q^2/pi^2 of them per unit interval, so the mean gap between neighbors is
  * about pi^2 / (3 Q^2) and an arbitrary number is typically within half of that
  * of one. For Q = 10 that is 1.6%. A ratio 0.3% from 3:2 is therefore about
  * five times closer than chance, which sounds impressive until you notice that
@@ -295,7 +295,7 @@ export function ratioSurprise(x, maxDenominator = 10) {
   const near = nearestRatio(x, maxDenominator);
   if (!near) return null;
   const Q = Math.max(1, Math.floor(maxDenominator));
-  // Half the mean gap between Farey neighbours of order Q, expressed as a
+  // Half the mean gap between Farey neighbors of order Q, expressed as a
   // fraction of x so it compares with `fractional`.
   const typical = Math.PI ** 2 / (6 * Q * Q) / x;
   return {
@@ -407,7 +407,7 @@ export const ANGLE_STATE = {
 /**
  * The thresholds every classification below is made against.
  *
- * Each one is a judgement, so each one is written down with the reason rather
+ * Each one is a judgment, so each one is written down with the reason rather
  * than buried in the code that uses it.
  */
 export const ANGLE_CRITERIA = {
@@ -418,7 +418,7 @@ export const ANGLE_CRITERIA = {
    *  turn apart. Above this the series is refused outright. */
   maxStepDeg: 150,
   /** A completed circuit. Slightly under 360 so that a circulation whose last
-   *  sample lands just short is still recognised. */
+   *  sample lands just short is still recognized. */
   circulationDeg: 355,
   /** A turning point has to stand this far clear of the excursion around it,
    *  as a fraction of the total observed range, before it counts as a reversal
@@ -456,7 +456,7 @@ export const ANGLE_CRITERIA = {
   /** With three or more reversals there are two extrema of the same kind to
    *  compare, and a libration must return to the same extreme each time. They
    *  are allowed to differ by this fraction of the amplitude; beyond it the
-   *  centre is moving, which is a drift with a wobble on it and not a lock. */
+   *  center is moving, which is a drift with a wobble on it and not a lock. */
   extremaWander: 0.6,
   /** With only two reversals there is nothing to compare, so the test is
    *  weaker: the angle must have ended up within this multiple of the
@@ -469,7 +469,7 @@ export const ANGLE_CRITERIA = {
 };
 
 /**
- * A centred moving average over a fixed span of time.
+ * A centerd moving average over a fixed span of time.
  *
  * Every resonant argument carries a ripple at the conjunction frequency: the
  * two bodies pull hardest on each other when they line up, and the argument
@@ -479,14 +479,14 @@ export const ANGLE_CRITERIA = {
  * the raw series counts them. Measured on Callisto, whose 7:3 argument with
  * Ganymede is slowly circulating, the raw series reports a tidy libration of
  * amplitude 7 degrees with a period equal to the Ganymede-Callisto synodic
- * period. It is an artefact, and a convincing one.
+ * period. It is an artifact, and a convincing one.
  *
  * Averaging over exactly one conjunction cycle removes it, which is the same
  * averaging the analytic treatment does when it drops the short-period terms
  * from the disturbing function. The window is measured in time rather than in
  * samples so that a decimated record is smoothed over the same physical
  * interval as a dense one, and it is shrunk symmetrically near the ends so the
- * average stays centred rather than becoming lopsided there.
+ * average stays centerd rather than becoming lopsided there.
  *
  * @param {Array<number>} values - The unwrapped angle
  * @param {Array<number>} times - Matching timestamps
@@ -547,7 +547,7 @@ export function smoothOverTime(values, times, span) {
  * an extremum that stands clear of the surrounding excursion counts.
  *
  * @param {Array<number>} values - The unwrapped angle
- * @param {number} prominence - Minimum height above the neighbouring extremum
+ * @param {number} prominence - Minimum height above the neighboring extremum
  * @returns {Array<{index:number, value:number, kind:string}>} Turning points
  */
 export function turningPoints(values, prominence) {
@@ -606,8 +606,8 @@ export function turningPoints(values, prominence) {
  * In descending order of what the evidence supports:
  *
  *   a completed circuit          circulation, and its period is measured
- *   two or more reversals        libration, with centre, amplitude and period
- *   one reversal                 libration, with centre and amplitude; the
+ *   two or more reversals        libration, with center, amplitude and period
+ *   one reversal                 libration, with center and amplitude; the
  *                                period is bounded below, not measured
  *   no reversal, tight bound     inconclusive, reason "confined": the angle has
  *                                not been seen to go round, and the slowest
@@ -649,7 +649,7 @@ export function classifyAngle(samples, options = {}) {
     samples: clean.length,
     window,
     observedCycles: cycles,
-    centre: null,
+    center: null,
     amplitude: null,
     amplitudeIsBound: false,
     period: null,
@@ -726,7 +726,7 @@ export function classifyAngle(samples, options = {}) {
       ...base,
       state: ANGLE_STATE.CIRCULATION,
       reason: 'completed-circuit',
-      centre: null,
+      center: null,
       amplitude: null,
       amplitudeIsBound: false,
       period: window / laps,
@@ -744,7 +744,7 @@ export function classifyAngle(samples, options = {}) {
       ...base,
       state: ANGLE_STATE.LIBRATION,
       reason: 'stationary',
-      centre: wrap360((hi + lo) / 2),
+      center: wrap360((hi + lo) / 2),
       amplitude: span / 2,
       amplitudeIsBound: false,
       period: null,
@@ -772,7 +772,7 @@ export function classifyAngle(samples, options = {}) {
     //
     // With three reversals or more there are two extrema of the same kind, and
     // a libration must come back to the same extreme: if each maximum is higher
-    // than the last, the centre is moving and the angle is on its way round.
+    // than the last, the center is moving and the angle is on its way round.
     // With only two there is nothing to compare, so the weaker test is used
     // instead - the angle must have ended near where it began.
     //
@@ -793,7 +793,7 @@ export function classifyAngle(samples, options = {}) {
         ...base,
         state: ANGLE_STATE.LIBRATION,
         reason: 'reversals',
-        centre: wrap360((top + bottom) / 2),
+        center: wrap360((top + bottom) / 2),
         amplitude,
         amplitudeIsBound: false,
         period,
@@ -805,8 +805,8 @@ export function classifyAngle(samples, options = {}) {
     return {
       ...base,
       state: ANGLE_STATE.INCONCLUSIVE,
-      reason: 'drifting-centre',
-      centre: null,
+      reason: 'drifting-center',
+      center: null,
       amplitude,
       amplitudeIsBound: true,
       period: null,
@@ -824,7 +824,7 @@ export function classifyAngle(samples, options = {}) {
       ...base,
       state: ANGLE_STATE.INCONCLUSIVE,
       reason: 'one-reversal',
-      centre: wrap360((hi + lo) / 2),
+      center: wrap360((hi + lo) / 2),
       amplitude: span / 2,
       amplitudeIsBound: true,
       period: null,
@@ -858,8 +858,8 @@ export function classifyAngle(samples, options = {}) {
     reason: confined ? 'confined' : 'ambiguous-drift',
     // Given because a reader needs somewhere to look, and flagged as a bound
     // because the angle has not been seen to turn: the true amplitude is at
-    // least this, and the true centre could be anywhere inside the span.
-    centre: confined ? wrap360((hi + lo) / 2) : null,
+    // least this, and the true center could be anywhere inside the span.
+    center: confined ? wrap360((hi + lo) / 2) : null,
     amplitude: confined ? span / 2 : null,
     amplitudeIsBound: true,
     period: null,
@@ -967,10 +967,10 @@ export function conjunctionCluster(events) {
  * tadpole draws itself.
  *
  * The frame's origin is the primary, its x axis points from the primary
- * towards the secondary, and distances are unchanged. Optionally normalised so
+ * towards the secondary, and distances are unchanged. Optionally normalized so
  * that the secondary sits at exactly x = 1.
  *
- * Primary-centred rather than barycentric, which is the less usual convention
+ * Primary-centerd rather than barycentric, which is the less usual convention
  * and the right one here. The triangular points are defined by an equilateral
  * triangle with the primary and the secondary, so in these coordinates they sit
  * at exactly (0.5, +/-sqrt(3)/2) whatever the mass ratio; in barycentric
@@ -980,7 +980,7 @@ export function conjunctionCluster(events) {
  * @param {{x:number,y:number}} point - Position to transform
  * @param {Object} primary - {pos, mass}
  * @param {Object} secondary - {pos, mass}
- * @param {{normalise?: boolean}} [opts] - Normalise to the separation
+ * @param {{normalize?: boolean}} [opts] - Normalize to the separation
  * @returns {{x:number, y:number, separation:number, angle:number}|null}
  */
 export function rotatingFrame(point, primary, secondary, opts = {}) {
@@ -1000,7 +1000,7 @@ export function rotatingFrame(point, primary, secondary, opts = {}) {
   // Rotate by -phase, which puts the secondary on the positive x axis.
   let x = dx * cos + dy * sin;
   let y = -dx * sin + dy * cos;
-  if (opts.normalise) {
+  if (opts.normalize) {
     x /= separation;
     y /= separation;
   }
@@ -1012,7 +1012,7 @@ export function rotatingFrame(point, primary, secondary, opts = {}) {
  *
  * Equilateral with the primary and the secondary, which is Lagrange's 1772
  * result and is exact for a circular secondary orbit however the mass is
- * divided between the two. Normalised coordinates, so this is a constant.
+ * divided between the two. Normalized coordinates, so this is a constant.
  *
  * @returns {{L4:{x:number,y:number}, L5:{x:number,y:number}}} The points
  */

@@ -142,7 +142,7 @@ export const MANIFEST = [
     duration: '35-45 min',
     level: 'Introductory astronomy',
     summary:
-      'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole lesson is built on that one subtraction: take the pull on the centre away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
+      'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole lesson is built on that one subtraction: take the pull on the center away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
     thumbnail: 'images/scenarios/earth-moon-system.webp',
     stepCount: 30,
     gradedCount: 16,
@@ -156,7 +156,7 @@ export const MANIFEST = [
     duration: '55-70 min',
     level: 'Introductory astronomy',
     summary:
-      'Two runs of the same three stars, started from positions differing by fifteen hundred kilometres in a system a hundred and thirty million kilometres across, end up somewhere completely different. Nothing random happens in between: the simulation is deterministic, and running it twice from exactly the same numbers gives exactly the same answer both times. Along the way you will measure a case that looks like chaos and is not, put a number on how fast prediction fails, and check that the number is a property of the physics rather than of the computer.',
+      'Two runs of the same three stars, started from positions differing by fifteen hundred kilometers in a system a hundred and thirty million kilometers across, end up somewhere completely different. Nothing random happens in between: the simulation is deterministic, and running it twice from exactly the same numbers gives exactly the same answer both times. Along the way you will measure a case that looks like chaos and is not, put a number on how fast prediction fails, and check that the number is a property of the physics rather than of the computer.',
     thumbnail: 'images/scenarios/three-body-sensitivity-lab.webp',
     stepCount: 28,
     gradedCount: 13,
@@ -226,7 +226,7 @@ export const MANIFEST = [
     duration: '15-20 min',
     level: 'Introductory astronomy',
     summary:
-      'Voyager 2 arrived at Jupiter travelling ten kilometres a second and left travelling twenty-six. Jupiter did not burn any fuel for it. Fly the same manoeuvre yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
+      'Voyager 2 arrived at Jupiter traveling ten kilometers a second and left traveling twenty-six. Jupiter did not burn any fuel for it. Fly the same maneuver yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
     thumbnail: 'images/scenarios/gravity-assist-lab.webp',
     stepCount: 22,
     gradedCount: 13,
@@ -239,7 +239,7 @@ export const MANIFEST = [
     duration: '20-25 min',
     level: 'Introductory astronomy',
     summary:
-      'A spacecraft at 1 AU, a station at 2.5 AU, and no fuel to waste. Work out both burns and the coast between them with a pencil, then fly the manoeuvre and see whether the engine agrees with you. It does — to a part in a thousand — which is what makes the two surprises in it worth trusting: you speed up to go further out, and you have to speed up again on arrival or you fall straight back.',
+      'A spacecraft at 1 AU, a station at 2.5 AU, and no fuel to waste. Work out both burns and the coast between them with a pencil, then fly the maneuver and see whether the engine agrees with you. It does — to a part in a thousand — which is what makes the two surprises in it worth trusting: you speed up to go further out, and you have to speed up again on arrival or you fall straight back.',
     thumbnail: 'images/scenarios/orbital-transfer-lab.webp',
     stepCount: 22,
     gradedCount: 14,
@@ -292,11 +292,11 @@ export const MANIFEST = [
   {
     id: 'a-universe-of-stars',
     title: 'A Universe of Stars',
-    subtitle: 'Size, colour and the H-R diagram, from eight modelled stars',
+    subtitle: 'Size, color and the H-R diagram, from eight modeled stars',
     duration: '70-90 min',
     level: 'Introductory astronomy',
     summary:
-      'Three stars, no labels, and a guess about which is biggest. Over thirty steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organises them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
+      'Three stars, no labels, and a guess about which is biggest. Over thirty steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organizes them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
     thumbnail: 'images/investigations/a-universe-of-stars.webp',
     stepCount: 30,
     gradedCount: 27,

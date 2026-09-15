@@ -10,7 +10,7 @@
 //
 // Why no existing test saw it
 // -----------------------------------------------------------------------------
-// The localization tests all wait for the deferred catalogue before asserting
+// The localization tests all wait for the deferred catalog before asserting
 // anything, which is the right thing for them to do and is exactly why they
 // cannot see this: by the time they look, the ids resolve. The noisy path is
 // the one nobody waits on - the first second of a cold load - so this file does
@@ -69,7 +69,7 @@ test.describe('a cold start does not report messages it has', () => {
     test.slow();
     const seen = watchConsole(page);
 
-    // A clean profile: no cached catalogue, no warmed panel, nothing that has
+    // A clean profile: no cached catalog, no warmed panel, nothing that has
     // already paid for the deferred chunk on this page's behalf.
     await app.boot();
     expect(
@@ -128,7 +128,7 @@ test.describe('a cold start does not report messages it has', () => {
     ).toEqual([]);
 
     // Now prove the check can still fail. An id nobody has ever defined, in a
-    // namespace the deferred catalogue does not use, has to be reported.
+    // namespace the deferred catalog does not use, has to be reported.
     await page.evaluate(async () => {
       const i18n = await import('/js/i18n/index.js');
       i18n.t('definitelyNotANamespace.noSuchMessage');
@@ -141,7 +141,7 @@ test.describe('a cold start does not report messages it has', () => {
     );
 
     // And an invented id inside a REAL deferred namespace, which is the harder
-    // case: it was held at start-up, and once the catalogue has arrived being
+    // case: it was held at start-up, and once the catalog has arrived being
     // absent is a fact rather than a race.
     await page.evaluate(async () => {
       const i18n = await import('/js/i18n/index.js');
@@ -163,13 +163,13 @@ test.describe('a cold start does not report messages it has', () => {
     const seen = watchConsole(page);
     await app.boot();
 
-    // Asked for before any panel has loaded its catalogue. This is the exact
+    // Asked for before any panel has loaded its catalog. This is the exact
     // shape of the forty-odd start-up warnings: a real id, asked too early.
     const early = await page.evaluate(async () => {
       const i18n = await import('/js/i18n/index.js');
       const { EN_DEFERRED } = await import('/js/i18n/en.deferred.js');
-      // Read a real deferred id, but do NOT register the catalogue: importing
-      // the module for its key list does not put it in the catalogues.
+      // Read a real deferred id, but do NOT register the catalog: importing
+      // the module for its key list does not put it in the catalogs.
       const id = Object.keys(EN_DEFERRED)[0];
       return { id, before: i18n.t(id) };
     });
@@ -178,7 +178,7 @@ test.describe('a cold start does not report messages it has', () => {
     // But it is not reported, because it is not missing - it is early.
     expect(
       missingMessages(seen).filter(t => t.includes(early.id)),
-      'a real deferred id asked before its catalogue is not a fault'
+      'a real deferred id asked before its catalog is not a fault'
     ).toEqual([]);
   });
 });

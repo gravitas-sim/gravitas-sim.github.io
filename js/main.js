@@ -39,7 +39,7 @@ let welcomeModule = null;
 async function loadWelcome() {
   if (!welcomeModule) {
     // Both, and in this order. The front door's prose is in the deferred half
-    // of the catalogue, and awaiting it here is what stops the first paint of
+    // of the catalog, and awaiting it here is what stops the first paint of
     // a first visit being a grid of message ids. The module registers it too,
     // for a caller that arrives another way.
     const [mod] = await Promise.all([
@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
         SETTINGS.star_base_color = randomColor();
         const { toast } = await import('./notify.js');
         const { t } = await import('./i18n/index.js');
-        toast(t('easter.colorsRandomised'));
+        toast(t('easter.colorsRandomized'));
       }
       settingsClickCount = 0;
     }, 500);
@@ -304,11 +304,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Double-tap the canvas to reset the view.
   //
-  // What was here recognised nothing: any two touchend events under 500ms
+  // What was here recognized nothing: any two touchend events under 500ms
   // apart reset the zoom and the pan. Ending a pinch fires two of those
   // milliseconds apart, so every pinch snapped the view home - the "the view
   // jumps" report, on a touchscreen. So did a drag then a tap, a placement
-  // then a tap, and two fingers touching at once. The recogniser in
+  // then a tap, and two fingers touching at once. The recognizer in
   // js/gestures.js requires two actual taps: one finger, brief, still, close
   // together in space as well as in time.
   const doubleTap = createDoubleTapRecognizer({
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // this line, at boot or on a language change.
     setRequestedLessonLocale(getLocale());
     onLocaleChange(setRequestedLessonLocale);
-    // Lecture Mode is not initialised here any more. js/lecture.js wires itself
+    // Lecture Mode is not initialized here any more. js/lecture.js wires itself
     // when it loads, and it loads on demand: the V shortcut in js/controls.js
     // has always imported it that way, and the toolbar button now does too.
     // Five kilobytes of sequence handling and spotlight drawing were in the

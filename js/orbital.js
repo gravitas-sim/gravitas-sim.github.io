@@ -6,7 +6,7 @@
 //
 // The object inspector already reports an "Orbital Period", but it computes it
 // against a hard-coded central mass of 1000 simulation units regardless of what
-// the body is actually orbiting. That is fine as flavour text and useless as a
+// the body is actually orbiting. That is fine as flavor text and useless as a
 // measurement: a Kepler's-third-law exercise run against it would produce a
 // slope of 1.5 only by coincidence. These functions solve the real two-body
 // problem for the parent the body is actually bound to.

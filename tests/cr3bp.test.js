@@ -570,7 +570,7 @@ describe('both directions of revolution are handled', () => {
     );
   });
 
-  test('the effective potential is symmetric about the line of centres', () => {
+  test('the effective potential is symmetric about the line of centers', () => {
     // Which is why the reflection is exact rather than an approximation.
     const mu = 0.3;
     for (const [x, y] of [

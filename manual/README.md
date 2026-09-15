@@ -59,7 +59,7 @@ extractable text, and a bookmark outline.
 
 The manual declares its language, embeds ToUnicode maps so its text extracts and
 searches correctly, builds a bookmark outline from its heading structure, uses
-no images (so there is nothing that needs alternative text), and colours its
+no images (so there is nothing that needs alternative text), and colors its
 links dark enough to hold contrast on paper and on screen.
 
 It is **not** a tagged PDF. Tagging needs `\DocumentMetadata`, which needs a

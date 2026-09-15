@@ -2,7 +2,7 @@
 // The project's own description of itself
 // -----------------------------------------------------------------------------
 // CITATION.cff and .zenodo.json say the same things in two different shapes: a
-// title, an abstract, a list of authors, a licence, some keywords. Keeping two
+// title, an abstract, a list of authors, a license, some keywords. Keeping two
 // hand-written copies of that in step is exactly the kind of chore nobody does,
 // and the failure is quiet - Zenodo prefers .zenodo.json when both are present,
 // so a repository whose CFF is right and whose Zenodo file is stale will mint a
@@ -13,7 +13,7 @@
 // `npm run docs:check` fails when they have drifted.
 //
 // The counts in the abstract are not written here. They are interpolated from
-// the live catalogue at render time, so "53 configurable scenarios" cannot be
+// the live catalog at render time, so "53 configurable scenarios" cannot be
 // wrong in the way it was wrong before.
 //
 // Release fields
@@ -83,7 +83,7 @@ export const AUTHORS = [
  * identifier in it is a false claim rather than a tidier one. If an award
  * number is supplied later it belongs here alongside the sentence.
  */
-export const ACKNOWLEDGEMENT =
+export const ACKNOWLEDGMENT =
   'Gravitas began as a SURE project at Stephen F. Austin State University ' +
   'and was funded by the SFA COSM.';
 
@@ -106,7 +106,7 @@ export const KEYWORDS = [
 /**
  * The abstract, as paragraphs, with the counts left as placeholders.
  *
- * `{scenarios}` and `{investigations}` are filled from the live catalogue by
+ * `{scenarios}` and `{investigations}` are filled from the live catalog by
  * the generator. Written as digits in the output so that a reader - and the
  * checker - can see the number.
  *

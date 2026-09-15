@@ -137,7 +137,7 @@ describe('the sample cap', () => {
 });
 
 describe('stopping', () => {
-  test('a cancelled phase is cancelled, not complete and not stalled', () => {
+  test('a canceled phase is canceled, not complete and not stalled', () => {
     const sampler = createPhaseSampler({ frames: 10, maxSamples: 100 });
     sampler.start(0);
     sampler.tick(1, false);
@@ -145,8 +145,8 @@ describe('stopping', () => {
     expect(step.done).toBe(true);
     expect(step.sample).toBe(false);
     const report = sampler.report();
-    expect(report.outcome).toBe(PHASE_OUTCOME.CANCELLED);
-    expect(report.cancelled).toBe(true);
+    expect(report.outcome).toBe(PHASE_OUTCOME.CANCELED);
+    expect(report.canceled).toBe(true);
     expect(report.complete).toBe(false);
     expect(report.sampleCapHit).toBe(false);
   });

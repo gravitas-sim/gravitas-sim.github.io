@@ -14,7 +14,7 @@ import {
   refitTrial,
   resampleAtEpochs,
   runMonteCarlo,
-  summarise,
+  summarize,
   validateSpec,
 } from '../js/rvUncertainty.js';
 import { periodSearch, weightsFor } from '../js/rvFit.js';
@@ -384,7 +384,7 @@ describe('a well-sampled run', () => {
       period: 3.5,
       K: 40,
     }));
-    const out = summarise({
+    const out = summarize({
       trials: same,
       failures: { [TRIAL.NO_SEARCH]: 0, [TRIAL.NOT_FINITE]: 0 },
       spec: {
@@ -546,7 +546,7 @@ describe('reproducibility', () => {
     });
     expect(out.spec.samples).toBeGreaterThan(0);
     expect(out.spec.epochs).toBe(points.length);
-    expect(Number.isFinite(out.spec.seedNormalised)).toBe(true);
+    expect(Number.isFinite(out.spec.seedNormalized)).toBe(true);
     expect(out.spec.fit.period).toBe(fit.period);
 
     // And re-running from the exported block alone reproduces it.
@@ -567,7 +567,7 @@ describe('reproducibility', () => {
   });
 });
 
-describe('progress, cancellation and failures', () => {
+describe('progress, cancelation and failures', () => {
   test('progress is reported and ends at the total', async () => {
     const { points, fit, bounds } = wellSampled();
     const seen = [];
@@ -584,7 +584,7 @@ describe('progress, cancellation and failures', () => {
     }
   });
 
-  test('cancelling stops early and says the result is incomplete', async () => {
+  test('canceling stops early and says the result is incomplete', async () => {
     const { points, fit, bounds } = wellSampled();
     let done = 0;
     const out = await runMonteCarlo(
@@ -597,18 +597,18 @@ describe('progress, cancellation and failures', () => {
         shouldCancel: () => done >= 24,
       }
     );
-    expect(out.cancelled).toBe(true);
+    expect(out.canceled).toBe(true);
     expect(out.complete).toBe(false);
     expect(out.completed).toBeLessThan(400);
     expect(out.completed).toBeGreaterThan(0);
     expect(out.requested).toBe(400);
-    // A partial run is still a real result with a smaller n, summarised by
+    // A partial run is still a real result with a smaller n, summarized by
     // exactly the same code.
     expect(out.families.length).toBeGreaterThan(0);
     expect(out.families.reduce((a, f) => a + f.count, 0)).toBe(out.succeeded);
   });
 
-  test('a cancelled run is the prefix of the full one', async () => {
+  test('a canceled run is the prefix of the full one', async () => {
     // Which is what makes a partial result trustworthy: it is the first n
     // trials of the run that was asked for, not a different run.
     const { points, fit, bounds } = wellSampled();
@@ -625,7 +625,7 @@ describe('progress, cancellation and failures', () => {
         shouldCancel: () => done >= 60,
       }
     );
-    // Cancellation lands on a batch boundary by design, so the count is the
+    // Cancelation lands on a batch boundary by design, so the count is the
     // batch multiple at or after the threshold rather than the threshold.
     expect(cut.completed).toBe(60);
     expect(cut.completed % 12).toBe(0);
@@ -633,7 +633,7 @@ describe('progress, cancellation and failures', () => {
   });
 
   test('failed trials are counted by reason, not swallowed', () => {
-    const out = summarise({
+    const out = summarize({
       trials: [
         { status: TRIAL.OK, period: 3.5, K: 40 },
         { status: TRIAL.NO_SEARCH },
@@ -655,7 +655,7 @@ describe('progress, cancellation and failures', () => {
     expect(out.succeeded).toBe(2);
     expect(out.failed).toBe(2);
     expect(out.failures).toEqual({ noSearch: 1, notFinite: 1 });
-    // Failures make a run incomplete even when none was cancelled.
+    // Failures make a run incomplete even when none was canceled.
     expect(out.complete).toBe(false);
   });
 
@@ -882,7 +882,7 @@ describe('a run is bound to the inputs it started from', () => {
     expect(complete.outcome).toBe(OUTCOME.COMPLETE);
 
     let done = 0;
-    const cancelled = await runMonteCarlo(
+    const canceled = await runMonteCarlo(
       { points, params: fit, ...bounds, trials: 400, seed: 'o' },
       {
         ...NOW,
@@ -892,9 +892,9 @@ describe('a run is bound to the inputs it started from', () => {
         shouldCancel: () => done >= 24,
       }
     );
-    expect(cancelled.outcome).toBe(OUTCOME.CANCELLED);
+    expect(canceled.outcome).toBe(OUTCOME.CANCELED);
 
-    const partial = summarise({
+    const partial = summarize({
       trials: [
         { status: TRIAL.OK, period: 3.5, K: 40 },
         { status: TRIAL.NO_SEARCH },
@@ -911,7 +911,7 @@ describe('a run is bound to the inputs it started from', () => {
       baseline: 14,
     });
     expect(partial.outcome).toBe(OUTCOME.PARTIAL);
-    expect(partial.cancelled).toBe(false);
+    expect(partial.canceled).toBe(false);
   });
 
   test('every outcome has a sentence in both languages', () => {

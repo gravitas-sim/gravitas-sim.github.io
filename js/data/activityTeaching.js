@@ -124,7 +124,7 @@ export const ACTIVITY_TEACHING = Object.freeze({
       Object.freeze({
         at: '0:00',
         what: 'Where the star sits, and what the shape means.',
-        ask: 'Is the star at the centre of the ellipse?',
+        ask: 'Is the star at the center of the ellipse?',
         note: 'It is at a focus. The empty focus has nothing at it, which students find unsatisfying and which is worth sitting with.',
       }),
       Object.freeze({
@@ -143,11 +143,11 @@ export const ACTIVITY_TEACHING = Object.freeze({
         at: '38:00',
         what: 'Explain, then transfer.',
         ask: 'Where does "the planet orbits the star" stop being the right description?',
-        note: 'When the two masses are comparable, both bodies orbit a common centre and neither is stationary. The final step moves to a system where that matters.',
+        note: 'When the two masses are comparable, both bodies orbit a common center and neither is stationary. The final step moves to a system where that matters.',
       }),
     ]),
     expected:
-      'A conclusion that cites the measured ratio, names angular momentum, and states the controlled variable. The transfer answer should recognise that the reasoning assumed one body was effectively fixed.',
+      'A conclusion that cites the measured ratio, names angular momentum, and states the controlled variable. The transfer answer should recognize that the reasoning assumed one body was effectively fixed.',
     rubric: Object.freeze([
       Object.freeze({
         band: 'Secure',

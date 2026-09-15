@@ -42,7 +42,7 @@ export const STORAGE_KEYS = {
  */
 const IGNORED_CONSOLE = [
   // Chrome's autoplay policy: the sonification AudioContext cannot start until
-  // the user gestures, which is correct behaviour and is handled.
+  // the user gestures, which is correct behavior and is handled.
   /AudioContext was not allowed to start/i,
   /The AudioContext was not allowed to start/i,
   // WebGL is unavailable on some CI runners; the spacetime view is optional and
@@ -419,11 +419,11 @@ function makeApp(page) {
 
       if (!picked) throw new Error('No object available to select');
       if (picked.missed) {
-        // The body exists but no click at its own centre would land on it, which
+        // The body exists but no click at its own center would land on it, which
         // means the click target is smaller than the body. Worth failing loudly
         // rather than silently testing nothing.
         throw new Error(
-          `A click at the centre of a ${picked.missed} does not select it`
+          `A click at the center of a ${picked.missed} does not select it`
         );
       }
       return picked;

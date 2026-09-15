@@ -73,7 +73,7 @@ test.describe('the synthetic observing run', () => {
     app,
   }) => {
     await openRv(page, app);
-    // A short schedule so the test does not wait out a whole programme: six
+    // A short schedule so the test does not wait out a whole program: six
     // measurements across most of one orbit.
     await startSurvey(page, {
       cadence: 0.5,
@@ -122,7 +122,7 @@ test.describe('the synthetic observing run', () => {
     await expect(status).not.toContainText(/detect/i);
   });
 
-  test('the ideal signal is drawn behind the data and labelled as not data', async ({
+  test('the ideal signal is drawn behind the data and labeled as not data', async ({
     page,
     app,
   }) => {
@@ -405,7 +405,7 @@ test.describe('the export', () => {
 
 test.describe('a recording belongs to what it recorded', () => {
   // Two things a finished run must not do: gain a point it never observed
-  // because a target changed while the clock was stopped, and be relabelled at
+  // because a target changed while the clock was stopped, and be relabeled at
   // export time with whatever the panel is pointed at now.
 
   test('switching stars while paused clears the curve and adds nothing', async ({

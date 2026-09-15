@@ -305,7 +305,7 @@ export function sweepCsv(sweep) {
     comment(`integration_step: ${n.step}`);
   }
   comment(
-    `trials: ${sweep.counts.ok} measured, ${sweep.counts.failed} failed, ${sweep.counts.cancelled} not run, ${sweep.counts.partial ?? 0} incomplete`
+    `trials: ${sweep.counts.ok} measured, ${sweep.counts.failed} failed, ${sweep.counts.canceled} not run, ${sweep.counts.partial ?? 0} incomplete`
   );
   if (sweep.counts.partial) {
     comment(
@@ -313,7 +313,7 @@ export function sweepCsv(sweep) {
         'duration above; its row is here and it is not in the summary'
     );
   }
-  if (sweep.cancelled) comment('this sweep was stopped before it finished');
+  if (sweep.canceled) comment('this sweep was stopped before it finished');
 
   // Asked and achieved on every row, because a reader comparing two trials of
   // "the same" duration has to be able to see that one of them stopped early.

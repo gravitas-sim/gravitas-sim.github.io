@@ -43,7 +43,7 @@ import { LENGTHS, lengthOf } from '../js/data/investigations/sequences.js';
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(path.join(REPO, 'teaching/index.html'), 'utf8');
 
-describe('the two catalogues are shadows of each other', () => {
+describe('the two catalogs are shadows of each other', () => {
   test('every id in English exists in Spanish, and the other way round', () => {
     expect(Object.keys(ES_TEACHING).sort()).toEqual(
       Object.keys(EN_TEACHING).sort()
@@ -65,9 +65,9 @@ describe('the two catalogues are shadows of each other', () => {
   });
 
   test('the ids are all in the page-specific namespace', () => {
-    // The showcase page has its own catalogue precisely so that its hundred
+    // The showcase page has its own catalog precisely so that its hundred
     // strings never reach the application's start-up download. An id without
-    // the prefix is one somebody meant to put in the other catalogue.
+    // the prefix is one somebody meant to put in the other catalog.
     const stray = Object.keys(EN_TEACHING).filter(
       id => !id.startsWith('teach.')
     );
@@ -131,7 +131,7 @@ describe('the page asks for messages that exist', () => {
     expect(wanted.filter(id => !(id in ES_TEACHING))).toEqual([]);
   });
 
-  test('nothing in either catalogue is unused', () => {
+  test('nothing in either catalog is unused', () => {
     // A dead entry is work a translator wasted, and on this page it is also a
     // sign that a section was removed and its prose left behind.
     const used = new Set([
@@ -221,7 +221,7 @@ describe('the page states nothing it is not entitled to state', () => {
       ([id, text]) =>
         // The demonstration prose says physical things - "one per cent", "the
         // fourth decimal place" - and the placeholders are filled at render
-        // time. What is banned is a digit standing for a size of the catalogue.
+        // time. What is banned is a digit standing for a size of the catalog.
         //
         // A format's own prose carries the same kind of number: "set the
         // eccentricity to 0.7", "move it out to 0.30 separations" are
@@ -239,13 +239,13 @@ describe('the page states nothing it is not entitled to state', () => {
 
 describe('the demonstrations', () => {
   test('there are about six of them', () => {
-    // A gallery is a selection. Twelve cards is a catalogue, and the page
-    // already links to the catalogue.
+    // A gallery is a selection. Twelve cards is a catalog, and the page
+    // already links to the catalog.
     expect(DEMOS.length).toBeGreaterThanOrEqual(5);
     expect(DEMOS.length).toBeLessThanOrEqual(8);
   });
 
-  test('each names a lesson that is in the catalogue, in both languages', () => {
+  test('each names a lesson that is in the catalog, in both languages', () => {
     for (const demo of DEMOS) {
       expect(MANIFEST.some(m => m.id === demo.lesson)).toBe(true);
       expect(MANIFEST_ES.some(m => m.id === demo.lesson)).toBe(true);
@@ -374,7 +374,7 @@ describe('the links out of the page go somewhere', () => {
 
 describe('the activity launch links', () => {
   // The showcase page builds a launch href and js/activities/activityBridge.js
-  // decides whether the application will honour it. Nothing connected the two,
+  // decides whether the application will honor it. Nothing connected the two,
   // and they disagreed: the page percent-encoded the separator and the bridge
   // matches a literal slash, so every Start button on /teaching/ loaded the
   // sandbox and opened nothing. That failure is invisible - the link works, the

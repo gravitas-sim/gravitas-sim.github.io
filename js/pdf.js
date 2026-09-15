@@ -662,7 +662,7 @@ export function createDocument({ title = 'Document', footer = '' } = {}) {
         );
       }
 
-      // Four inks, cycled. Chosen to stay apart when printed in grey, because
+      // Four inks, cycled. Chosen to stay apart when printed in gray, because
       // a marked lab report is usually printed.
       const INKS = [
         '0.13 0.45 0.70',
@@ -1007,7 +1007,7 @@ function assemble(pages, { title, footer }) {
   );
   const catalogId = add(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
 
-  // --- Serialise -------------------------------------------------------------
+  // --- Serialize -------------------------------------------------------------
   const chunks = [];
   let offset = 0;
   const push = text => {

@@ -48,13 +48,13 @@ const commas = n => n.toLocaleString('en-US');
 /**
  * Choose the unit a length is best written in, and say how many of them.
  *
- * The unit is chosen before the rounding, never after. Round a number of metres
- * and then convert and the bar ends up labelled "0.224 AU", which reads as an
+ * The unit is chosen before the rounding, never after. Round a number of meters
+ * and then convert and the bar ends up labeled "0.224 AU", which reads as an
  * accident rather than as a scale.
  *
  * @param {number} meters - The length
  * @returns {{value: number, unit: string, meters: number, text: string}} The
- *   rounded length, its unit, its length in metres, and a label
+ *   rounded length, its unit, its length in meters, and a label
  */
 export function niceScaleLength(meters) {
   const unit =
@@ -71,7 +71,7 @@ export function niceScaleLength(meters) {
 }
 
 /**
- * A labelled scale bar, drawn left to right from (x, y).
+ * A labeled scale bar, drawn left to right from (x, y).
  *
  * Every panel that draws at its own zoom level carries one, because a picture
  * of a black hole with no scale on it is a picture of a circle, and a
@@ -81,7 +81,7 @@ export function niceScaleLength(meters) {
  * @param {number} x - Left end, pixels
  * @param {number} y - Baseline, pixels
  * @param {number} maxPx - The longest the bar may be
- * @param {number} metersPerPx - The scale being labelled
+ * @param {number} metersPerPx - The scale being labeled
  * @param {object} [opts] - color, font, labelBelow
  * @returns {number} The width the bar actually took, in pixels
  */

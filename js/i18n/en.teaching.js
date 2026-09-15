@@ -5,7 +5,7 @@
 // thousand. Merging the two would put this page's prose into the start-up
 // download of every visitor who never opens it, and put the application's into
 // a page that is one HTML file and one small module. So the showcase page
-// carries its own catalogue and its own three-line translator
+// carries its own catalog and its own three-line translator
 // (js/teaching/i18n.js); the id namespace is `teach.` and nothing outside this
 // page reads it.
 //
@@ -61,7 +61,7 @@ export const EN_TEACHING = {
   'teach.glance.cost.value': 'None, none, none',
   'teach.glance.languages': 'Interface languages',
   'teach.glance.note':
-    'Every number on this page is read from the catalogue and the validation results when the page loads. None of them is typed into it.',
+    'Every number on this page is read from the catalog and the validation results when the page loads. None of them is typed into it.',
 
   // --- Contents --------------------------------------------------------------
   'teach.toc': 'On this page',
@@ -144,7 +144,7 @@ export const EN_TEACHING = {
     'Re-run the same measurement with a smaller timestep or a different integrator and see whether the answer moves. A result that changes when the step is halved is a result about the arithmetic, and students are shown how to tell the two apart.',
   'teach.instruments.stellarLab.name': 'The Stellar Lab',
   'teach.instruments.stellarLab.text':
-    'An H-R diagram carrying eight published MIST evolutionary tracks, a comparison stage that draws pinned stars at true relative sizes, and a reproducible synthetic population. It is where “A Universe of Stars” and “Lives of Stars” are taught, and it keeps apart two things students merge: a modelled star, which has a mass and an age, and a point on the diagram, which has a radius and nothing else.',
+    'An H-R diagram carrying eight published MIST evolutionary tracks, a comparison stage that draws pinned stars at true relative sizes, and a reproducible synthetic population. It is where “A Universe of Stars” and “Lives of Stars” are taught, and it keeps apart two things students merge: a modeled star, which has a mass and an age, and a point on the diagram, which has a radius and nothing else.',
   'teach.instruments.uncertainty.name': 'Uncertainty analysis',
   'teach.instruments.uncertainty.text':
     'Measurements come with the spread that produced them, and fits report their parameters with intervals rather than as single numbers. A student is asked what their number is good to, not only what it is.',
@@ -228,17 +228,17 @@ export const EN_TEACHING = {
   'teach.demo.chaos.visible':
     'The separation grows roughly exponentially, and it keeps doing so when the timestep is halved. That second part is the point: the divergence is the physics, not the arithmetic.',
   'teach.demo.rotation.question':
-    'Stars far from the centre of a galaxy must orbit more slowly, the way the outer planets do.',
+    'Stars far from the center of a galaxy must orbit more slowly, the way the outer planets do.',
   'teach.demo.rotation.instructor':
     'Show the disc with velocity vectors on, and measure orbital speed at several radii.',
   'teach.demo.rotation.predict':
-    'Sketch the rotation curve: speed against distance from the centre.',
+    'Sketch the rotation curve: speed against distance from the center.',
   'teach.demo.rotation.visible':
     'The visible mass alone predicts a falling curve. The measured one does not fall. The gap is the observation that dark matter was proposed to explain — and the lesson also runs the modified-gravity alternative.',
   'teach.demo.tides.question':
     'The Moon pulls the ocean towards it, so there is one high tide, on the side facing the Moon.',
   'teach.demo.tides.instructor':
-    'Show the Earth–Moon system, then look at the difference between the Moon’s pull on the near side, the centre and the far side.',
+    'Show the Earth–Moon system, then look at the difference between the Moon’s pull on the near side, the center and the far side.',
   'teach.demo.tides.predict':
     'How many high tides pass a given coastline in a day — one or two?',
   'teach.demo.tides.visible':
@@ -258,7 +258,7 @@ export const EN_TEACHING = {
   'teach.patterns.fits': 'Fits this slot today',
   'teach.patterns.prep': 'Preparation',
   'teach.patterns.handin': 'What is handed in',
-  'teach.patterns.none': 'Nothing in the catalogue currently fits this slot.',
+  'teach.patterns.none': 'Nothing in the catalog currently fits this slot.',
   'teach.pattern.lecture.title': 'Lecture demonstration',
   'teach.pattern.lecture.text':
     'Ten minutes inside a lecture. Ask for a prediction, run the state on the projector, and let the measurement settle it. Lecture mode enlarges the type, borrows the light theme so the projector’s black point does not swallow the chrome, and steps through a prepared list of links with the arrow keys.',
@@ -321,7 +321,7 @@ export const EN_TEACHING = {
     'Every check the physics is held to, with its measured value, its expected value, the tolerance and the reason that tolerance is the right one. The page re-runs the whole suite in your browser on request.',
   'teach.evidence.model.name': 'How Gravitas models the universe',
   'teach.evidence.model.text':
-    'What is simulated from first principles, what is an approximation, what is illustrative, and what is absent. Each claim is labelled, and the illustrative ones are labelled loudest.',
+    'What is simulated from first principles, what is an approximation, what is illustrative, and what is absent. Each claim is labeled, and the illustrative ones are labeled loudest.',
   'teach.evidence.instructors.name': 'The instructor area',
   'teach.evidence.instructors.text':
     'Teaching guides, learning objectives, answer keys, an adopter’s guide and a curriculum map. Behind one shared passphrase, because the answer keys are in it.',
@@ -339,7 +339,7 @@ export const EN_TEACHING = {
   'teach.foot.validation': 'Validation',
   'teach.foot.instructors': 'Instructors',
   'teach.foot.source': 'Source',
-  'teach.foot.licence': 'MIT licensed',
+  'teach.foot.license': 'MIT licensed',
 
   // --- Instructor quick-start -----------------------------------------------
   'teach.section.quickstart': 'Quick start for instructors',
@@ -356,7 +356,7 @@ export const EN_TEACHING = {
     'Any current browser. There is nothing to install, no account, and no server: the whole thing is static files. It is built to work on the kind of low-end school Chromebook that is several years old, at the low quality tier, and it keeps working with the network off once the tab has been opened.',
   'teach.quickstart.accessibility.title': 'If a student cannot use the canvas',
   'teach.quickstart.accessibility.text':
-    'Every instrument prints its numbers as text beside the picture, every plot is also a table, and the simulation itself has a written description that follows what is on screen. The whole activity is operable from the keyboard, and reduced motion and high contrast are honoured. What is not solved: a canvas cannot be explored by touch the way a tactile diagram can, and a student who needs that will need the numbers read to them.',
+    'Every instrument prints its numbers as text beside the picture, every plot is also a table, and the simulation itself has a written description that follows what is on screen. The whole activity is operable from the keyboard, and reduced motion and high contrast are honored. What is not solved: a canvas cannot be explored by touch the way a tactile diagram can, and a student who needs that will need the numbers read to them.',
   'teach.quickstart.evidence.title': 'What students hand in',
   'teach.quickstart.evidence.text':
     'Work is kept in the student\u2019s own browser and never leaves it on its own. They export it themselves — a lab report as a PDF, or the notebook as a file — and hand that in however you already collect work. Nothing is uploaded, and there is no account to create or roster to manage.',
@@ -376,7 +376,7 @@ export const EN_TEACHING = {
     'The same items before and after, with a comparison group doing whatever you would otherwise have done. A pre/post gain with no comparison measures the passage of time as much as the intervention, which is the single most common way results like these are overstated.',
   'teach.evaluate.transfer.title': 'Ask a transfer question',
   'teach.evaluate.transfer.text':
-    'A question about a system the activity never showed. Several investigations end with one — a different star, a comparable-mass pair, a survey that would have missed something — and those make reasonable models. A student who can answer only about the system they were shown has learnt the system.',
+    'A question about a system the activity never showed. Several investigations end with one — a different star, a comparable-mass pair, a survey that would have missed something — and those make reasonable models. A student who can answer only about the system they were shown has learned the system.',
   'teach.evaluate.usability.title': 'Watch, do not survey',
   'teach.evaluate.usability.text':
     'Sit behind three or four students and write down where they stop. Ten minutes of that is worth more than a hundred satisfaction ratings, and it is the only way to find the step whose instruction names a control that is off the bottom of their screen.',

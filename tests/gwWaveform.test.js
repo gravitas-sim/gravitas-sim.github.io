@@ -39,7 +39,7 @@ import {
   strainAmplitude,
   inclinationFactors,
   effectiveDistance,
-  separationMetres,
+  separationMeters,
   separationInSchwarzschildRadii,
   fidelityBand,
 } from '../js/gw/waveform.js';
@@ -51,7 +51,7 @@ describe('constants are the published ones', () => {
     expect(T_SUN).toBeCloseTo(4.925490947e-6, 15);
   });
 
-  test('a solar mass in metres follows from it and c', () => {
+  test('a solar mass in meters follows from it and c', () => {
     expect(L_SUN).toBeCloseTo(1476.625, 3);
   });
 
@@ -180,13 +180,13 @@ describe('the innermost stable circular orbit is where the model stops', () => {
 describe('separation follows Kepler', () => {
   test('the Keplerian separation obeys the third law in the wave frequency', () => {
     // a proportional to f^(-2/3) at fixed mass, independently of the constant.
-    const a1 = separationMetres(50, 20);
-    const a2 = separationMetres(200, 20);
+    const a1 = separationMeters(50, 20);
+    const a2 = separationMeters(200, 20);
     expect(a1 / a2).toBeCloseTo(Math.pow(4, 2 / 3), 9);
   });
 
   test('a is proportional to the cube root of the total mass at fixed frequency', () => {
-    expect(separationMetres(60, 80) / separationMetres(60, 10)).toBeCloseTo(
+    expect(separationMeters(60, 80) / separationMeters(60, 10)).toBeCloseTo(
       2,
       9
     );
@@ -196,7 +196,7 @@ describe('separation follows Kepler', () => {
     const m = 30;
     const f = 45;
     const rs = 2 * m * L_SUN;
-    expect(separationMetres(f, m) / rs).toBeCloseTo(
+    expect(separationMeters(f, m) / rs).toBeCloseTo(
       separationInSchwarzschildRadii(f, m),
       9
     );
@@ -270,7 +270,7 @@ describe('amplitude', () => {
     expect(h).toBeLessThan(5e-21);
   });
 
-  test('is dimensionless: metres over metres', () => {
+  test('is dimensionless: meters over meters', () => {
     // A change of the distance unit alone must leave nothing else moving.
     const inMpc = strainAmplitude(100, 30, 1);
     expect(inMpc * MPC).toBeCloseTo(

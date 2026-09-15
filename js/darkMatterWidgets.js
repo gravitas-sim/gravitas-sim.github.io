@@ -17,7 +17,7 @@
 //
 //   dm-shapes    put mass somewhere, see the curve it makes
 //   dm-enclosed  a curve and its enclosed mass, side by side, with a scrubber
-//   dm-fit       fit a real galaxy's curve with a disc and a halo. The centre
+//   dm-fit       fit a real galaxy's curve with a disc and a halo. The center
 //                of the lesson, and the actual research activity
 //   dm-flyby     fly a star through a halo and switch the halo off mid-orbit
 //   dm-virial    Zwicky's arithmetic, with the classic mistakes reachable
@@ -62,16 +62,16 @@ import {
   A0_GALACTIC,
 } from './mond.js';
 
-// This family's labels are in the deferred half of the catalogue. Registered
+// This family's labels are in the deferred half of the catalog. Registered
 // from here as well as from js/widgets.js, because a lesson, a share link, an
 // authoring preview or a test can import this file directly and never go
 // through the registry - and a readout that prints its own message ids because
 // of who called it is a bug in the widget, not in the caller.
-// The strings this panel reads live in the deferred catalogue, and asking for
+// The strings this panel reads live in the deferred catalog, and asking for
 // one before it arrives returns the message id. The load used to be started
 // here and abandoned - `ensureDeferredMessages().catch(() => {})` - which meant
 // two things at once: a synchronous label read in the same tick got a raw id,
-// and a genuine failure to fetch the catalogue was discarded without a word.
+// and a genuine failure to fetch the catalog was discarded without a word.
 //
 // Started here still, because the fetch should be in flight as early as
 // possible, but the promise is kept and the failure is not swallowed.
@@ -83,14 +83,14 @@ import { awaitDeferredMessages } from './i18n/deferredMessages.js';
 export const messagesReady = awaitDeferredMessages();
 
 // The same fixed dark palette the black hole and tidal panels use, and for the
-// same reason: these are pictures of space and plots over it, and theme-coloured
+// same reason: these are pictures of space and plots over it, and theme-colored
 // ink on them was unreadable in the two light themes.
 const SKY = '#080b14';
 const INK = '#e9edf7';
 const MUTED = '#9aa3b5';
 const GRID = '#232a3a';
 
-// One colour per component, used identically in every panel in this file. A
+// One color per component, used identically in every panel in this file. A
 // student who learns that purple is the halo in one instrument should not have
 // to relearn it in the next.
 const C_BULGE = '#ffd37a';
@@ -264,7 +264,7 @@ function barLabel(ctx, text, x, y, barW, barH, inside = '#0b0f18') {
   }
 }
 
-/** A small colour key entry. */
+/** A small color key entry. */
 function key(ctx, x, y, color, label, dashed = false) {
   ctx.strokeStyle = color;
   ctx.lineWidth = 2.4;
@@ -439,7 +439,7 @@ const SHAPES = {
     const size = v.size;
     const R_MAX = 30;
 
-    // Each distribution is normalised to hold the same mass inside 30 kpc, so
+    // Each distribution is normalized to hold the same mass inside 30 kpc, so
     // the comparison is about arrangement and not about amount.
     let speedAt;
     if (kind === 'point') {
@@ -639,9 +639,9 @@ const SHAPES = {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    const colour =
+    const color =
       f.kind === 'halo' ? C_HALO : f.kind === 'disc' ? C_DISC : C_BULGE;
-    curve(ctx, t, 30, f.speedAt, colour, { width: 2.6 });
+    curve(ctx, t, 30, f.speedAt, color, { width: 2.6 });
 
     ctx.fillStyle = MUTED;
     ctx.textAlign = 'left';
@@ -930,7 +930,7 @@ const ENCLOSED = {
 };
 
 // =============================================================================
-// 3. dm-fit - fit a real galaxy. The centre of the lesson.
+// 3. dm-fit - fit a real galaxy. The center of the lesson.
 // =============================================================================
 //
 // The activity a graduate student doing this for real spends weeks on, reduced
@@ -1743,7 +1743,7 @@ const VIRIAL = {
     const arrowScale = (picR * 0.5) / 1600;
     for (let i = 0; i < 26; i++) {
       const a = rnd() * 2 * Math.PI;
-      // sqrt for an even areal spread rather than a crowded centre.
+      // sqrt for an even areal spread rather than a crowded center.
       const rr = Math.sqrt(rnd()) * picR * 0.92;
       const gx = cx + rr * Math.cos(a);
       const gy = cy + rr * Math.sin(a);
@@ -1760,7 +1760,7 @@ const VIRIAL = {
       ctx.ellipse(gx, gy, 3.2, 2.1, a, 0, 2 * Math.PI);
       ctx.fill();
     }
-    // Left-aligned rather than centred on the cluster: the caption is wider than
+    // Left-aligned rather than centerd on the cluster: the caption is wider than
     // the picture beside it, and centring ran it off the left edge.
     ctx.font = `10px ${MONO}`;
     ctx.fillStyle = MUTED;
@@ -1873,7 +1873,7 @@ const BUDGET = {
     // A getter, not the value. BUDGET_LAYERS[i].label is itself a getter so its
     // translation is fetched when something displays it; reading it here made
     // it eager, and because this array is built at module scope the read
-    // happened during import, before the deferred catalogue could have arrived.
+    // happened during import, before the deferred catalog could have arrived.
     // It also froze the label in whatever language was active at import, so a
     // reader who switched language kept the old words.
     get label() {
@@ -2255,7 +2255,7 @@ const MOND_FIT = {
       width: 1.5,
     });
 
-    // The selected explanation, solid and in its own colour. Only one is drawn:
+    // The selected explanation, solid and in its own color. Only one is drawn:
     // they are alternatives, and two solid curves would invite a reader to add
     // them together.
     if (f.usingMond) {

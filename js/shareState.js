@@ -154,7 +154,7 @@ function trim(value) {
 // --- Settings deltas ---------------------------------------------------------
 
 /**
- * The settings a scenario produces on its own, with nothing customised.
+ * The settings a scenario produces on its own, with nothing customized.
  *
  * applyPreset() resets to defaults and then applies the scenario, so running
  * it against a scratch object reproduces exactly what a fresh load of that
@@ -223,16 +223,16 @@ const BODY_FIELDS = [
   'massInSuns',
   'massInEarths',
   'baseColor',
-  // The modelled stellar properties. Every one is null on a star nobody has
-  // modelled - which is every star the sandbox generates - and packBody drops
+  // The modeled stellar properties. Every one is null on a star nobody has
+  // modeled - which is every star the sandbox generates - and packBody drops
   // nulls, so this costs a generated star nothing and only a star built from a
-  // catalogue or an evolutionary track pays for them.
+  // catalog or an evolutionary track pays for them.
   //
   // Additive and optional, so no version bump: a link made before these
   // existed simply has none of them and restores with nulls, which is the
-  // correct description of a star nobody modelled. A link made after them and
+  // correct description of a star nobody modeled. A link made after them and
   // opened by a build that predates them would have them dropped by that
-  // build's own allowlist, losing the modelling and keeping the star. Neither
+  // build's own allowlist, losing the modeling and keeping the star. Neither
   // direction can produce a wrong number, which is the test for whether a
   // field needs a version.
   //
@@ -266,7 +266,7 @@ const BODY_FIELDS = [
  * - and it is four wasted characters per body in a payload that pays for every
  * one. The A/B bench does need it: a measurement that names "body 7" has to
  * mean the same body after the state is restored, or Run B measures something
- * else and says nothing about it. set_state() honours an incoming id, so
+ * else and says nothing about it. set_state() honors an incoming id, so
  * carrying it here is the whole of identity preservation.
  *
  * @param {Object} s - Result of a body's get_state()

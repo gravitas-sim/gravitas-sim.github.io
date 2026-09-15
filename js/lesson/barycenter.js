@@ -1,7 +1,7 @@
 // =============================================================================
 // The point two stars are both going round
 // -----------------------------------------------------------------------------
-// A binary's barycentre is the one thing "Weighing the Stars" is about, and
+// A binary's barycenter is the one thing "Weighing the Stars" is about, and
 // until now the lesson could only show it in a panel diagram - so a student
 // read about a balance point in one place and watched two stars circle
 // something invisible in another. This is the arithmetic that lets the main
@@ -13,13 +13,13 @@
 //
 // What is and is not asserted here
 // -----------------------------------------------------------------------------
-// `barycentreOf` is a definition, not a model: the mass-weighted mean position
+// `barycenterOf` is a definition, not a model: the mass-weighted mean position
 // of whatever bodies it is handed. It is exact for any number of bodies in any
 // arrangement, and it says nothing about whether they are bound.
 //
 // `circularBinary` is a model, and a restricted one. It returns the initial
 // conditions for two point masses on circular orbits about their common
-// centre, which is the case the lesson teaches and the case Newton's form of
+// center, which is the case the lesson teaches and the case Newton's form of
 // Kepler's third law is quoted for. It is not general: a real binary is
 // eccentric, and the separation an observer measures is a projection of a
 // three-dimensional orbit. The lesson says so where it matters; this file
@@ -32,7 +32,7 @@
  * @param {Array<{mass: number, pos: {x: number, y: number}}>} bodies - Any bodies
  * @returns {?{x: number, y: number, mass: number, count: number}} The point, or null
  */
-export function barycentreOf(bodies) {
+export function barycenterOf(bodies) {
   let mass = 0;
   let x = 0;
   let y = 0;
@@ -53,7 +53,7 @@ export function barycentreOf(bodies) {
 }
 
 /**
- * How far each body is from the barycentre of the set.
+ * How far each body is from the barycenter of the set.
  *
  * The two distances are the measurement the lesson is built on: their ratio is
  * the inverse of the mass ratio, and that is true whatever the masses are and
@@ -62,8 +62,8 @@ export function barycentreOf(bodies) {
  * @param {Array<object>} bodies - Bodies with `mass` and `pos`
  * @returns {Array<{body: object, r: number}>} One entry per body, in order
  */
-export function distancesFromBarycentre(bodies) {
-  const c = barycentreOf(bodies);
+export function distancesFromBarycenter(bodies) {
+  const c = barycenterOf(bodies);
   if (!c) return [];
   return (bodies || [])
     .filter(b => Number.isFinite(b?.pos?.x) && Number.isFinite(b?.pos?.y))
@@ -74,9 +74,9 @@ export function distancesFromBarycentre(bodies) {
 }
 
 /**
- * Initial conditions for two masses on circular orbits about their barycentre.
+ * Initial conditions for two masses on circular orbits about their barycenter.
  *
- * Laid out along x, moving along y, with the heavier one nearer the centre and
+ * Laid out along x, moving along y, with the heavier one nearer the center and
  * the total momentum zero - so the pair circles a point that stays put rather
  * than drifting across the view, which is what makes the balance point
  * watchable at all.
@@ -102,7 +102,7 @@ export function circularBinary({ m1, m2, separation, G }) {
   ) {
     return null;
   }
-  // Each body's distance from the centre is the *other* one's share of the
+  // Each body's distance from the center is the *other* one's share of the
   // total, which is the whole see-saw rule in one line.
   const r1 = separation * (m2 / total);
   const r2 = separation * (m1 / total);
@@ -145,12 +145,12 @@ export function totalMassFromOrbit(separation, period, G) {
 /**
  * Split a total mass by the two arm lengths.
  *
- * The arm nearer the centre belongs to the heavier star, so the shares are
+ * The arm nearer the center belongs to the heavier star, so the shares are
  * crossed over. Returns null rather than guessing when the arms are degenerate.
  *
  * @param {number} total - The total mass
- * @param {number} r1 - First body's distance from the barycentre
- * @param {number} r2 - Second body's distance from the barycentre
+ * @param {number} r1 - First body's distance from the barycenter
+ * @param {number} r2 - Second body's distance from the barycenter
  * @returns {?{m1: number, m2: number}} The two masses
  */
 export function splitByArms(total, r1, r2) {

@@ -281,12 +281,12 @@ fixed. Details, with the numbers, are in `PHYSICS_VALIDATION.md`.
 - **Absorption now conserves momentum.** `check_absorption` merged the mass into
   the hole and left its velocity untouched. It now applies the same perfectly
   inelastic update the black-hole/black-hole merger already used - the hole moves
-  to the pair's centre of mass and takes the mass-weighted mean velocity - so
-  mass, linear momentum and the centre of mass are all conserved exactly. The
-  angular momentum of the pair about its own centre of mass cannot be: a hole is
+  to the pair's center of mass and takes the mass-weighted mean velocity - so
+  mass, linear momentum and the center of mass are all conserved exactly. The
+  angular momentum of the pair about its own center of mass cannot be: a hole is
   a point mass with no spin, so that term is banked in
   `spin_angular_momentum`, bounded by `mu (r_horizon + ABSORB_BUFFER) |v_rel|`,
-  and checked. Static holes and one-way-gravity scenarios keep the old behaviour
+  and checked. Static holes and one-way-gravity scenarios keep the old behavior
   on purpose - the hole is not a dynamical participant in either - and the
   momentum that then goes nowhere is recorded in a discarded total rather than
   vanishing unnoticed. Ten checks in the `Absorption` group.

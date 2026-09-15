@@ -104,7 +104,7 @@ describe('applying a perturbation', () => {
 });
 
 describe('describing it', () => {
-  test('reports the size in kilometres and as a fraction of the system', () => {
+  test('reports the size in kilometers and as a fraction of the system', () => {
     const s = state();
     const { applied } = perturb(s, { bodyId: 0, axis: 'x', delta: 1e-3 });
     const extent = systemExtent(s);

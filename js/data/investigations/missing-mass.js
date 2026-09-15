@@ -79,23 +79,23 @@ const tracerRows = ctx => {
     ];
   }
   const rc = ctx.rotationCurve();
-  const centre = rc?.center;
-  if (!centre) return [{ label: 'Tracer', value: b.name || 'body' }];
-  const r = Math.hypot(b.pos.x - centre.x, b.pos.y - centre.y);
+  const center = rc?.center;
+  if (!center) return [{ label: 'Tracer', value: b.name || 'body' }];
+  const r = Math.hypot(b.pos.x - center.x, b.pos.y - center.y);
   const v = Math.hypot(b.vel.x, b.vel.y);
   // What the visible mass inside this radius would give, which is the dashed
   // line on the plot. Computed from the same enclosed-mass the panel uses.
   const inside = (rc.bodies || []).reduce(
     (m, o) =>
-      Math.hypot(o.pos.x - centre.x, o.pos.y - centre.y) <= r
+      Math.hypot(o.pos.x - center.x, o.pos.y - center.y) <= r
         ? m + (o.mass || 0)
         : m,
-    centre.mass || 0
+    center.mass || 0
   );
   const predicted = r > 0 ? Math.sqrt((ctx.G * inside) / r) : NaN;
   return [
     { label: 'Tracer', value: b.name || 'body' },
-    { label: 'Its distance from the centre', value: ctx.distance(r) },
+    { label: 'Its distance from the center', value: ctx.distance(r) },
     { label: 'Its speed now', value: ctx.speed(v) },
     {
       label: 'Speed the visible mass alone would give',
@@ -149,7 +149,7 @@ const DARK_MATTER = {
   duration: '45-60 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['galaxies', 'gravity'],
   lock: { placement: true, inspector: false, areaSweep: false },
@@ -177,7 +177,7 @@ const DARK_MATTER = {
              how much a system in space weighs, and they are completely
              independent of each other.
              \n\nThe first is to <strong>add up what you can see</strong>. Count
-             the stars, work out the mass of each from its brightness and colour,
+             the stars, work out the mass of each from its brightness and color,
              and add. This is what astronomers mean by the visible mass, or the
              luminous mass.
              \n\nThe second is to <strong>watch how things move</strong>. Gravity

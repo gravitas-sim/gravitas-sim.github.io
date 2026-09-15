@@ -14,7 +14,7 @@
 //
 // Every string is a translation key resolved at render time rather than at
 // module load. The old version called t() while building the array, which ran
-// before the Spanish catalogue had finished arriving - it is a dynamic import -
+// before the Spanish catalog had finished arriving - it is a dynamic import -
 // so a Spanish reader got English titles until they reloaded. The bodies were
 // not translatable at all.
 //
@@ -28,7 +28,7 @@ import { t } from './i18n/index.js';
 /**
  * The tour.
  *
- * `id` keys the three strings in the catalogues: `tutorial.<id>.title`,
+ * `id` keys the three strings in the catalogs: `tutorial.<id>.title`,
  * `.body` and `.tip`. `target` is a selector to spotlight, or null for a step
  * that is about the whole application rather than one control.
  */
@@ -86,7 +86,7 @@ function clearSpotlight() {
  * up on them, and six of the sixteen steps described a control while
  * highlighting nothing at all.
  *
- * Opening the section is also the more useful behaviour: the reader is told
+ * Opening the section is also the more useful behavior: the reader is told
  * where the control lives and then shown it, rather than being shown a heading
  * and left to find it.
  *

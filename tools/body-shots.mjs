@@ -53,7 +53,7 @@ const SCENES = [
     scenario: 'Solar System',
     steps: 400,
     zoom: 6,
-    centreOn: 'comet',
+    centerOn: 'comet',
   },
   {
     // And the warm case. The comet is moved in to just inside one astronomical
@@ -63,7 +63,7 @@ const SCENES = [
     scenario: 'Solar System',
     steps: 400,
     zoom: 6,
-    centreOn: 'comet',
+    centerOn: 'comet',
     cometAtAu: 0.8,
   },
   { id: 'star-cluster', scenario: 'Star Cluster', steps: 150, zoom: 1.0 },
@@ -73,7 +73,7 @@ const SCENES = [
     scenario: 'Solar System',
     steps: 200,
     zoom: 26,
-    centreOn: 'planet',
+    centerOn: 'planet',
   },
   // And one gas giant, for the bands and the rings.
   {
@@ -81,7 +81,7 @@ const SCENES = [
     scenario: 'Solar System',
     steps: 200,
     zoom: 16,
-    centreOn: 'gasgiant',
+    centerOn: 'gasgiant',
   },
   // Saturn, which is the ring system everyone already has a picture of, and
   // the one an authored scenario forces on. Framed close enough to see the
@@ -91,7 +91,7 @@ const SCENES = [
     scenario: 'Solar System',
     steps: 200,
     zoom: 20,
-    centreOnName: 'Saturn',
+    centerOnName: 'Saturn',
   },
   // A transit scene: a hot Jupiter against its star, which is the case where
   // the difference between the drawn marker and the analytic radius ratio
@@ -108,13 +108,13 @@ const SCENES = [
   // seed - which is also what makes this picture reproducible.
   {
     id: 'generated-giants',
-    // Supermassive BH rather than a busy exoplanet catalogue: a crowded field
+    // Supermassive BH rather than a busy exoplanet catalog: a crowded field
     // deliberately drops to the simplified treatment, which is correct and is
     // the wrong picture for judging the detailed one.
     scenario: 'Supermassive BH',
     steps: 150,
     zoom: 22,
-    centreOnRinged: true,
+    centerOnRinged: true,
   },
 ];
 
@@ -198,8 +198,8 @@ async function main() {
           c.vel = { x: -v * 0.6, y: v * 0.8 };
         }
 
-        let centre = { x: 0, y: 0 };
-        if (scene.centreOn === 'comet') {
+        let center = { x: 0, y: 0 };
+        if (scene.centerOn === 'comet') {
           const sun = physics.stars[0];
           let best = null;
           let bestD = Infinity;
@@ -212,28 +212,28 @@ async function main() {
               best = c;
             }
           }
-          if (best) centre = { x: best.pos.x, y: best.pos.y };
-        } else if (scene.centreOn === 'planet') {
+          if (best) center = { x: best.pos.x, y: best.pos.y };
+        } else if (scene.centerOn === 'planet') {
           const p = physics.planets.find(b => b.alive) || physics.planets[0];
-          if (p) centre = { x: p.pos.x, y: p.pos.y };
-        } else if (scene.centreOn === 'gasgiant') {
+          if (p) center = { x: p.pos.x, y: p.pos.y };
+        } else if (scene.centerOn === 'gasgiant') {
           const g =
             physics.gas_giants.find(b => b.alive) || physics.gas_giants[0];
-          if (g) centre = { x: g.pos.x, y: g.pos.y };
-        } else if (scene.centreOnRinged) {
+          if (g) center = { x: g.pos.x, y: g.pos.y };
+        } else if (scene.centerOnRinged) {
           const ringed = physics.gas_giants.find(g => g.hasRings);
-          if (ringed) centre = { x: ringed.pos.x, y: ringed.pos.y };
-        } else if (scene.centreOnName) {
+          if (ringed) center = { x: ringed.pos.x, y: ringed.pos.y };
+        } else if (scene.centerOnName) {
           const named = [
             ...physics.gas_giants,
             ...physics.planets,
             ...physics.stars,
-          ].find(b => b.name === scene.centreOnName);
-          if (named) centre = { x: named.pos.x, y: named.pos.y };
+          ].find(b => b.name === scene.centerOnName);
+          if (named) center = { x: named.pos.x, y: named.pos.y };
         }
 
         ui.state.zoom = scene.zoom;
-        ui.state.pan = { x: -centre.x * scene.zoom, y: centre.y * scene.zoom };
+        ui.state.pan = { x: -center.x * scene.zoom, y: center.y * scene.zoom };
 
         // Several frames, not two.
         //
@@ -260,7 +260,7 @@ async function main() {
             gasGiants: physics.gas_giants.length,
             blackHoles: physics.bh_list.length,
           },
-          centre,
+          center,
         };
       },
       { scene, seed: SEED, tier }

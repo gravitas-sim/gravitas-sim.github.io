@@ -181,8 +181,8 @@ describe('the bundled tracks are the published ones, reduced', () => {
   });
 
   test('the grid says what it does not model', () => {
-    expect(PROVENANCE.notModelled.join(' ')).toMatch(/rotation/i);
-    expect(PROVENANCE.notModelled.join(' ')).toMatch(/core collapse/i);
+    expect(PROVENANCE.notModeled.join(' ')).toMatch(/rotation/i);
+    expect(PROVENANCE.notModeled.join(' ')).toMatch(/core collapse/i);
   });
 
   test('the eight masses are the eight asked for', () => {
@@ -193,7 +193,7 @@ describe('the bundled tracks are the published ones, reduced', () => {
     ]);
   });
 
-  test('the Stefan-Boltzmann check that licences deriving the radius was made', () => {
+  test('the Stefan-Boltzmann check that licenses deriving the radius was made', () => {
     expect(PROVENANCE.stefanBoltzmannCheck.rows).toBeGreaterThan(7000);
     expect(PROVENANCE.stefanBoltzmannCheck.impliedTeffSunSpreadK).toBeLessThan(
       1e-6
@@ -377,12 +377,12 @@ describe('the tracks against independently known numbers', () => {
     // tenth of it, so the model gives about three times the estimate. The
     // estimate is what a star with nothing but a mass gets, and the interface
     // marks those numbers as estimated for exactly this reason.
-    const modelled = trackBounds('m020').segments.find(
+    const modeled = trackBounds('m020').segments.find(
       s => s.key === 'main-sequence'
     ).durationYr;
     const estimated = estimateMainSequenceLifetime(0.2);
-    expect(modelled / estimated).toBeGreaterThan(2);
-    expect(modelled / estimated).toBeLessThan(5);
+    expect(modeled / estimated).toBeGreaterThan(2);
+    expect(modeled / estimated).toBeLessThan(5);
 
     // For a solar-mass star, where the fixed fraction is about right, they
     // agree to within a few tens of percent.
@@ -405,7 +405,7 @@ describe('querying a track', () => {
 
   test('the state at a sample age is exactly that sample, on every track', () => {
     // Every sample whose stored age is its own. The ones that share an age with
-    // a neighbour are skipped and counted below rather than fudged with a loose
+    // a neighbor are skipped and counted below rather than fudged with a loose
     // tolerance: an interval of three hundred years at an age of a billion is
     // not something a stored age can express, and pretending otherwise with a
     // one-percent tolerance would hide it.
@@ -603,7 +603,7 @@ describe('the shared description of a star', () => {
     expect(bySuns.luminositySun).toBeCloseTo(byUnits.luminositySun, 9);
   });
 
-  test('it reads the modelled fields a star carries', () => {
+  test('it reads the modeled fields a star carries', () => {
     const s = stellarStateFor({
       massInSuns: 1,
       temperature: 3070,

@@ -51,7 +51,7 @@ export const TRIAL_STATUS = Object.freeze({
   /** A body was destroyed or merged, so later samples are of another system. */
   LOST_BODY: 'lostBody',
   /** The reader stopped the sweep before this trial ran. */
-  CANCELLED: 'cancelled',
+  CANCELED: 'canceled',
   /**
    * The simulation stopped advancing while the trial was waiting for it.
    *
@@ -64,7 +64,7 @@ export const TRIAL_STATUS = Object.freeze({
    *
    * The evidence it did gather is kept and reported as partial; what it must
    * not do is look like a trial that ran to completion, which is exactly what
-   * a shortened run labelled `ok` looked like.
+   * a shortened run labeled `ok` looked like.
    */
   CAPPED: 'capped',
 });
@@ -165,7 +165,7 @@ export const SWEEPABLE = Object.freeze({
         unitKey: 'sweep.unit.simUnits',
         // Signed: the sign is which side of the planet the probe passes, and
         // it is the whole lesson, so both halves are offered. Zero and its
-        // neighbourhood are excluded because they are a collision.
+        // neighborhood are excluded because they are a collision.
         min: -400,
         max: 400,
         exclude: { from: -8, to: 8 },
@@ -307,7 +307,7 @@ export function validateSweepSpec(spec) {
   if (lo < def.min || hi > def.max) {
     return fail('outOfRange', { min: def.min, max: def.max });
   }
-  // A range is refused if it crosses the excluded neighbourhood at all,
+  // A range is refused if it crosses the excluded neighborhood at all,
   // because dividing it up would put trials inside. An explicit list is
   // checked value by value instead: the caller has named its points, and the
   // gravity-assist comparison names +40 and -40 - two perfectly good flybys
@@ -348,7 +348,7 @@ export function validateSweepSpec(spec) {
  * @param {object} [opts] - `tolerance` for "did not move", as a fraction
  * @returns {?object} The summary, or null with fewer than two usable trials
  */
-export function summarise(trials, metric, opts = {}) {
+export function summarize(trials, metric, opts = {}) {
   // Complete trials only. A trial that stalled or hit the sample cap covered
   // less of the run than the sweep says it did, and averaging it in with the
   // rest produces a curve of a duration that was never swept. Its numbers are
@@ -418,7 +418,7 @@ export function tally(trials) {
     // second counter beside it, which is what made it count twice.
     counts[tr.status] = (counts[tr.status] || 0) + 1;
   }
-  // Derived, so it cannot drift from the statuses it sums. A cancelled trial
+  // Derived, so it cannot drift from the statuses it sums. A canceled trial
   // is not a failure: nobody ran it.
   counts.failed = FAILED_STATUSES.reduce((n, st) => n + counts[st], 0);
   counts.partial = PARTIAL_STATUSES.reduce((n, st) => n + counts[st], 0);

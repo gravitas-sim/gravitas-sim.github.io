@@ -139,8 +139,8 @@ describe('the lesson catalog', () => {
     // `tolerance` in js/answerCheck.js is an absolute distance from the answer,
     // not a fraction of it, and the two look identical in a lesson file. Two
     // steps shipped with a fraction written where an absolute belonged: "on
-    // that behaviour, roughly how far apart would the two runs be, in km?"
-    // answered 1,000,000 with a tolerance of 0.5, which is half a kilometre;
+    // that behavior, roughly how far apart would the two runs be, in km?"
+    // answered 1,000,000 with a tolerance of 0.5, which is half a kilometer;
     // and "using your tau, roughly how long is that?" answered 79 with 0.35,
     // while the lesson's own rubric puts tau anywhere in a band that spans 69
     // to 92. A student following the instructions exactly would fail both.

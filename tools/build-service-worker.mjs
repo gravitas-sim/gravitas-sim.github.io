@@ -48,7 +48,7 @@
  * lesson already open is by definition already fetched - what precaching buys is
  * the teacher who switches lesson *after* the drop, which is exactly the moment
  * a runtime cache has nothing. A tenth of the payload to remove that cliff is
- * worth it, and choosing a favourite subset would be guessing at which lesson a
+ * worth it, and choosing a favorite subset would be guessing at which lesson a
  * class is about to want.
  *
  * The twelve Spanish shadows are not precached: another 439KB that is only ever

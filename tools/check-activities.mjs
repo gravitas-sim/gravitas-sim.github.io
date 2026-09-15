@@ -12,11 +12,11 @@
 // politeness. It should fail a build.
 //
 // So this resolves every format against the real lesson and the real scenario
-// catalogue and checks the things that would otherwise be found by a class:
+// catalog and checks the things that would otherwise be found by a class:
 // that every step id exists, that ids are unique, that a format still has steps
 // after resolution, that the physical claims a format is entitled to make are
 // still true of the scenario it opens, that every message id it names exists in
-// both languages, and that the duration estimates are labelled as estimates.
+// both languages, and that the duration estimates are labeled as estimates.
 // =============================================================================
 
 import { resolve, dirname } from 'node:path';

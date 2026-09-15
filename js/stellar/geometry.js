@@ -22,7 +22,7 @@ import { TEFF_SUN_K } from './mainSequence.js';
 
 export { TEFF_SUN_K };
 
-/** One solar radius, in metres. IAU 2015 nominal. */
+/** One solar radius, in meters. IAU 2015 nominal. */
 export const R_SUN_M = 6.957e8;
 
 /** One solar luminosity, in watts. IAU 2015 nominal. */

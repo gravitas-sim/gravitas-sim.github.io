@@ -21,7 +21,7 @@
 // lesson's claim is sharp: the neck between the stars is open and the exterior
 // is still walled off, so "it could have gone through and did not" is a
 // statement about one specific gap. At the laboratory's mass ratio that band is
-// 0.539 to 0.574 in normalised rotating-frame speed, and 0.565 sits inside it
+// 0.539 to 0.574 in normalized rotating-frame speed, and 0.565 sits inside it
 // with room at both ends for the round trip through the world's own units.
 //
 // The directions were chosen by integrating, not by taste, and they are checked
@@ -47,7 +47,7 @@ export const BASELINE = Object.freeze({
   /** Where the tracer is put, in rotating-frame units of the separation. */
   position: Object.freeze({ x: 0.6, y: 0 }),
   /**
-   * How fast, in the same normalised units.
+   * How fast, in the same normalized units.
    *
    * Between C(L1) and C(L2) at this mass ratio, so the neck between the stars
    * is open and the way out is not. Checked by neckIsOpen() rather than
@@ -83,7 +83,7 @@ export const C_TOLERANCE = 1e-6;
  * A rotating-frame velocity of the given speed and direction.
  *
  * @param {number} deg - Direction, degrees counter-clockwise from +x
- * @param {number} [speed] - Rotating-frame speed, normalised
+ * @param {number} [speed] - Rotating-frame speed, normalized
  * @returns {{vx: number, vy: number}} The velocity
  */
 export function velocityFor(deg, speed = BASELINE.speed) {

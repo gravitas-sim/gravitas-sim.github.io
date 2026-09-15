@@ -104,14 +104,14 @@ const LAGRANGE_POINTS = {
   duration: '25-30 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'gravity', 'spaceflight'],
   lock: { placement: true },
   summary:
     'Two stars on a circular orbit and a speck of dust that feels them both. There is one number you can compute about the speck that tells you where it is forbidden to be — and as you make it go faster, walls open one at a time in a fixed order. Find the five places where the speck could sit still, work out which of them it can reach, and then find out why "can reach" is three different questions wearing the same coat.',
   objectives: [
-    'State the normalisation and sign convention of the Jacobi constant',
+    'State the normalization and sign convention of the Jacobi constant',
     'Predict how the forbidden region changes as the tracer speeds up',
     'Locate the five Lagrange points and say which are stable',
     'Distinguish energetically accessible from actually reachable from stable',
@@ -293,7 +293,7 @@ const LAGRANGE_POINTS = {
       body: `The tracer starts nearly at rest in the rotating frame, so its C is
              high and it is sealed into the big star's region — the panel says
              so.
-             \n\nSelect the tracer and use the manoeuvre planner (the ▲ button
+             \n\nSelect the tracer and use the maneuver planner (the ▲ button
              in the inspector) to give it a transverse push. Watch C fall in the
              three-body panel and watch the shaded region retreat. Keep going
              until the panel reports that the L1 neck is open.`,
@@ -449,7 +449,7 @@ const LAGRANGE_POINTS = {
              \n\nMeanwhile nothing accumulates at L1 or L2. Spacecraft are put
              there anyway, because a saddle point is cheap to hover near even
              though nothing stays by itself: JWST at Sun–Earth L2 spends a few
-             metres per second a year on station-keeping. Left alone it would
+             meters per second a year on station-keeping. Left alone it would
              drift away in months.`,
       tip: 'This system has μ = 0.0291, close to Routh’s 0.0385. Push the small star’s mass past about a thirtieth of the large one and L4 and L5 stop being stable — the panel says which side of the line you are on.',
     },
@@ -472,7 +472,7 @@ const LAGRANGE_POINTS = {
         'Add a third massive body and read what the panel says',
         'Remove it and watch the overlay come back',
       ],
-      tip: 'This is not a limitation being apologised for. A diagram of a system that is not on screen would be worse than no diagram.',
+      tip: 'This is not a limitation being apologized for. A diagram of a system that is not on screen would be worse than no diagram.',
     },
     {
       sid: 'which-assumption',

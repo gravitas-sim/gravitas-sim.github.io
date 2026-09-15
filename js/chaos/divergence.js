@@ -29,7 +29,7 @@
 // weight is a choice of units masquerading as physics; the growth *rate* - the
 // thing this actually reports - is the same either way, because both components
 // grow at the same exponential rate in a chaotic system. `phaseDistance()`
-// below computes the normalised phase-space version for anyone who wants it,
+// below computes the normalized phase-space version for anyone who wants it,
 // and the widget shows both.
 //
 // Everything here is pure. It takes sample arrays and returns numbers, so the
@@ -40,7 +40,7 @@
 import { alignSeries, samplingStats } from '../experiments/align.js';
 
 /** How the separation behaves over the interval that was measured. */
-export const BEHAVIOUR = {
+export const BEHAVIOR = {
   IDENTICAL: 'identical',
   BOUNDED: 'bounded',
   LINEAR: 'linear',
@@ -114,16 +114,16 @@ export function configurationDistance(a, b) {
 }
 
 /**
- * Normalised phase-space separation.
+ * Normalized phase-space separation.
  *
  * Positions are divided by a length scale and velocities by a speed scale, so
  * the two halves are dimensionless before they are added. The scales are the
- * system's own - its extent and a characteristic speed - which is the only
+ * system's own - its extent and a characteriztic speed - which is the only
  * choice that does not smuggle in an arbitrary constant.
  *
  * @param {Array<Object>} a - Run A bodies, {id,x,y,vx,vy}
  * @param {Array<Object>} b - Run B bodies
- * @param {{length:number, speed:number}} scale - Normalising scales
+ * @param {{length:number, speed:number}} scale - Normalizing scales
  * @returns {{d:number, matched:number}} The dimensionless separation
  */
 export function phaseDistance(a, b, scale) {
@@ -311,11 +311,11 @@ function empty(reason, points = []) {
  *
  * @param {Array<{t:number, d:number}>} series - Separation series
  * @param {Object} [opts] - Passed to chooseWindow
- * @returns {{behaviour:string, tau:number|null, rate:number|null, r2:number,
+ * @returns {{behavior:string, tau:number|null, rate:number|null, r2:number,
  *   window:Object, efolds:number, growth:number, reason:string,
  *   linearR2:number}} The verdict
  */
-export function analyseDivergence(series, opts = {}) {
+export function analyzedivergence(series, opts = {}) {
   const s = (series || []).filter(p => Number.isFinite(p.d));
   const base = {
     tau: null,
@@ -331,7 +331,7 @@ export function analyseDivergence(series, opts = {}) {
   if (s.length < 2) {
     return {
       ...base,
-      behaviour: BEHAVIOUR.INSUFFICIENT,
+      behavior: BEHAVIOR.INSUFFICIENT,
       reason: REJECTION.TOO_FEW_POINTS,
     };
   }
@@ -343,7 +343,7 @@ export function analyseDivergence(series, opts = {}) {
   // Two runs that never differ at all are the reproducibility control, and it
   // is worth saying so explicitly rather than calling it "bounded".
   if (s.every(p => p.d <= CRITERIA.noiseFloor)) {
-    return { ...base, behaviour: BEHAVIOUR.IDENTICAL, growth: 1 };
+    return { ...base, behavior: BEHAVIOR.IDENTICAL, growth: 1 };
   }
 
   const window = chooseWindow(s, opts);
@@ -354,15 +354,15 @@ export function analyseDivergence(series, opts = {}) {
   const linearR2 = straightLineR2(s);
 
   if (!window.ok) {
-    const behaviour =
+    const behavior =
       growth < 3
-        ? BEHAVIOUR.BOUNDED
+        ? BEHAVIOR.BOUNDED
         : linearR2 >= CRITERIA.minR2
-          ? BEHAVIOUR.LINEAR
-          : BEHAVIOUR.INSUFFICIENT;
+          ? BEHAVIOR.LINEAR
+          : BEHAVIOR.INSUFFICIENT;
     return {
       ...base,
-      behaviour,
+      behavior,
       growth,
       linearR2,
       window,
@@ -376,7 +376,7 @@ export function analyseDivergence(series, opts = {}) {
   if (!(fit.slope > 0)) {
     return {
       ...base,
-      behaviour: BEHAVIOUR.BOUNDED,
+      behavior: BEHAVIOR.BOUNDED,
       growth,
       linearR2,
       window,
@@ -388,7 +388,7 @@ export function analyseDivergence(series, opts = {}) {
     // so: that is the two-body case, and naming it is the lesson.
     return {
       ...base,
-      behaviour: linearR2 > fit.r2 ? BEHAVIOUR.LINEAR : BEHAVIOUR.INSUFFICIENT,
+      behavior: linearR2 > fit.r2 ? BEHAVIOR.LINEAR : BEHAVIOR.INSUFFICIENT,
       growth,
       r2: fit.r2,
       linearR2,
@@ -399,7 +399,7 @@ export function analyseDivergence(series, opts = {}) {
   if (spanEfolds < CRITERIA.minWindowEfolds) {
     return {
       ...base,
-      behaviour: BEHAVIOUR.INSUFFICIENT,
+      behavior: BEHAVIOR.INSUFFICIENT,
       growth,
       r2: fit.r2,
       linearR2,
@@ -409,7 +409,7 @@ export function analyseDivergence(series, opts = {}) {
   }
 
   return {
-    behaviour: BEHAVIOUR.EXPONENTIAL,
+    behavior: BEHAVIOR.EXPONENTIAL,
     tau: 1 / fit.slope,
     rate: fit.slope,
     r2: fit.r2,
@@ -462,7 +462,7 @@ export function straightLineR2(s) {
  * shifts by more than a fifth, the number is describing the integrator rather
  * than the system, and the lesson has to say so.
  *
- * @param {Array<{label:string, tau:number|null, behaviour:string}>} results
+ * @param {Array<{label:string, tau:number|null, behavior:string}>} results
  * @param {number} [tolerance] - Allowed fractional spread in tau
  * @returns {{resolved:boolean, spread:number|null, reason:string,
  *   agree:boolean}} The verdict
@@ -471,8 +471,8 @@ export function refinementVerdict(results, tolerance = 0.2) {
   const usable = (results || []).filter(
     r => r && Number.isFinite(r.tau) && r.tau > 0
   );
-  const behaviours = new Set((results || []).map(r => r?.behaviour));
-  const agree = behaviours.size === 1;
+  const behaviors = new Set((results || []).map(r => r?.behavior));
+  const agree = behaviors.size === 1;
 
   if (usable.length < 2) {
     return {
@@ -491,7 +491,7 @@ export function refinementVerdict(results, tolerance = 0.2) {
     spread,
     agree,
     reason: !agree
-      ? 'behaviour-changed'
+      ? 'behavior-changed'
       : spread > tolerance
         ? 'timescale-moved'
         : '',

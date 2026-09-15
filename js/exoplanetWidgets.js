@@ -34,7 +34,7 @@ import { formatNumber, withUnit } from './format.js';
 import { chartColors } from './observationChart.js';
 import { surface, responsiveHeight, TYPE } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
-// This family's labels are in the deferred half of the catalogue; see the note
+// This family's labels are in the deferred half of the catalog; see the note
 // in js/widgets.js. Registered from the module that renders them rather than
 // from the registry, because a lesson, a share link, an authoring preview or a
 // test can import this file directly and never go through the registry at all
@@ -995,11 +995,11 @@ const methodComparison = {
     const { ctx, w, h } = surface(canvas, responsiveHeight(230, 150));
     // Named `colors` rather than `t`, which is the translation function this
     // module imports. It used to be called `t`, shadowing the import inside
-    // this one method - so every t('exoW....') below called the colour
+    // this one method - so every t('exoW....') below called the color
     // palette as a function, draw() threw on its first row, and the engine
     // logged a warning and left the canvas blank. The widget had never
     // drawn. Found by the investigation walker, which checks that a canvas
-    // a step names has more than one colour in it.
+    // a step names has more than one color in it.
     const colors = chartColors();
     const c = this.compute(v);
     const rows = [
@@ -1320,7 +1320,7 @@ const planetCharacterization = {
 // 8. What a schedule can and cannot see
 // =============================================================================
 // The instrument "Can You Detect This Planet?" is built around. Everything
-// above draws the signal; this one draws what a programme with a finite number
+// above draws the signal; this one draws what a program with a finite number
 // of nights actually comes home with.
 //
 // It is analytic rather than integrated, for the same reason the other widgets
@@ -1544,8 +1544,8 @@ const surveySchedule = {
     const totalDays = Math.max(c.baseline, c.cadence);
     const xTime = day => left.x + (day / Math.max(totalDays, 1e-6)) * left.w;
 
-    // The truth, dashed and labelled. It is drawn only across the span the
-    // programme actually covered: extending it past the last night would be
+    // The truth, dashed and labeled. It is drawn only across the span the
+    // program actually covered: extending it past the last night would be
     // showing a curve nobody observed.
     ctx.save();
     ctx.strokeStyle = th.label;
@@ -1605,7 +1605,7 @@ const surveySchedule = {
       drawPoint(right, right.x + phase * right.w, p.rv, p.sigma);
     }
 
-    // The overlay has to be labelled wherever it is drawn. A dashed line a
+    // The overlay has to be labeled wherever it is drawn. A dashed line a
     // student takes for data is worse than no line.
     //
     // Each caption is shrunk to fit the panel it belongs to rather than being
@@ -1763,7 +1763,7 @@ const LC_BINS = 60;
 /**
  * The integration the white-noise control is quoted for.
  *
- * One hour, stated rather than implied. The control used to be labelled
+ * One hour, stated rather than implied. The control used to be labeled
  * 'ppm/hr', which reads as a rate and invites the reading that noise grows
  * with time; what is meant is the standard deviation of a point binned to one
  * hour, from which every other integration follows by a square root.
@@ -1792,7 +1792,7 @@ const transitNoise = {
       decimals: 0,
     },
     {
-      // Labelled as an uncertainty for a stated integration, not as 'ppm/hr'.
+      // Labeled as an uncertainty for a stated integration, not as 'ppm/hr'.
       // That unit is ambiguous - it reads as a rate, as though the noise grew
       // with time - when what is meant is the scatter of a point binned to one
       // hour. Naming the integration makes the square root below say something
@@ -1902,7 +1902,7 @@ const transitNoise = {
       // crucially they are a fresh draw on the next night, which is why
       // ground-based photometry of the same planet does improve with more
       // nights. What does not improve is whatever is locked to the observation
-      // itself: a contaminating star in the aperture, a colour-dependent
+      // itself: a contaminating star in the aperture, a color-dependent
       // extinction residual that recurs at the same hour angle.
       values: {
         depth: 5900,
@@ -1923,7 +1923,7 @@ const transitNoise = {
       },
       // Pi Mensae c. Rp = 2.04 +/- 0.05 R_earth (Huang et al. 2018, ApJL 868,
       // L39) about a G0V host of 1.1 R_sun, so (Rp/Rs)^2 = 289 ppm. A later
-      // re-characterisation from 20-second cadence gives 2.14 R_earth and
+      // re-characterization from 20-second cadence gives 2.14 R_earth and
       // therefore 318 ppm; 290 is the discovery value and the difference is a
       // good illustration of how a depth moves as a radius is refined.
       values: {
@@ -2108,10 +2108,10 @@ const transitNoise = {
     // --- Left: the budget, as bars against the depth ---
     drawFrame(ctx, left, { x: t('exoW.ppmAxis'), y: '' }, th);
     const terms = [
-      { key: 'photon', value: c.white, colour: th.accent },
-      { key: 'correlated', value: c.correlated, colour: '#f2a65a' },
-      { key: 'floor', value: c.floor, colour: '#c98ae0' },
-      { key: 'total', value: c.total, colour: th.ink },
+      { key: 'photon', value: c.white, color: th.accent },
+      { key: 'correlated', value: c.correlated, color: '#f2a65a' },
+      { key: 'floor', value: c.floor, color: '#c98ae0' },
+      { key: 'total', value: c.total, color: th.ink },
     ];
     const scaleMax = Math.max(c.depth, ...terms.map(x => x.value)) * 1.15 || 1;
     const rowH = (left.h - 12) / (terms.length + 1);
@@ -2120,7 +2120,7 @@ const transitNoise = {
     terms.forEach((term, i) => {
       const y = left.y + 8 + i * rowH;
       const barW = (term.value / scaleMax) * (left.w - 76);
-      ctx.fillStyle = term.colour;
+      ctx.fillStyle = term.color;
       ctx.fillRect(left.x + 70, y, Math.max(1, barW), rowH * 0.55);
       ctx.fillStyle = th.muted;
       ctx.textAlign = 'right';
@@ -2174,7 +2174,7 @@ const transitNoise = {
     }
 
     // The truth, so a student can see where the box was even when the points
-    // do not show it. Dashed and labelled, exactly like the RV widget's.
+    // do not show it. Dashed and labeled, exactly like the RV widget's.
     ctx.strokeStyle = th.good || '#8de08a';
     ctx.setLineDash([4, 3]);
     ctx.lineWidth = 1.5;

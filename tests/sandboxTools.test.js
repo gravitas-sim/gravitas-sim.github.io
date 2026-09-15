@@ -76,7 +76,7 @@ describe('the ruler', () => {
     expect(rulerLengthUnits()).toBeCloseTo(300, 9);
     const text = rulerReading(rulerLengthUnits());
     expect(text).toContain('3.000 AU');
-    // 3 AU in kilometres, to the precision the readout prints.
+    // 3 AU in kilometers, to the precision the readout prints.
     expect(text).toMatch(/4\.488\s*×\s*10⁸ km/);
   });
 

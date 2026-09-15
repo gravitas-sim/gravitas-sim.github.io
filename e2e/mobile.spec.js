@@ -1,5 +1,5 @@
 // =============================================================================
-// A realistic phone
+// A realiztic phone
 // -----------------------------------------------------------------------------
 // Workflow 16. Runs under the Pixel 7 device profile rather than a narrow
 // desktop window, because the mobile layout branches on touch support and on the
@@ -115,7 +115,7 @@ test.describe('on a phone', () => {
     //
     // There were two causes, found a long way apart. The first was the header's
     // touchstart handler calling preventDefault() unconditionally, which
-    // cancelled the synthesised click outright and made every button in the
+    // canceled the synthesised click outright and made every button in the
     // inspector header dead to touch. Fixing that produced a click, which was
     // then hit-tested somewhere else - and the second cause is why.
     //

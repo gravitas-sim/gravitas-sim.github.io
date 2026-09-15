@@ -18,7 +18,7 @@
 // failure is visible in the residuals rather than absorbed into a parameter,
 // which is the whole pedagogical point.
 //
-// Why there is no optimiser in here
+// Why there is no optimizer in here
 // -----------------------------------------------------------------------------
 // At a FIXED period the model is linear in its other three parameters:
 //
@@ -234,7 +234,7 @@ export function modelCurve(params, days) {
 }
 
 /**
- * Score a model exactly as supplied, optimising nothing.
+ * Score a model exactly as supplied, optimizing nothing.
  *
  * The counterpart to fitAtPeriod, and the distinction is not cosmetic. When a
  * student drags a slider, the number under the plot has to describe the curve
@@ -309,7 +309,7 @@ export function evaluateModel(points, params, opts = {}) {
     estimatedParameters: estimated,
     // So a reader can tell a scored model from a fitted one without guessing
     // from the dof.
-    optimised: false,
+    optimized: false,
   };
 }
 
@@ -359,7 +359,7 @@ export function fitAtPeriod(points, periodDays, opts = {}) {
 
   // K sin(wt + phi) = A cos(wt) + B sin(wt), so K = hypot(A, B) and the phase
   // is the angle that puts A on the cosine. Negative K is the same curve half
-  // a cycle over; normalising keeps the reported amplitude positive so two
+  // a cycle over; normalizing keeps the reported amplitude positive so two
   // students comparing answers are comparing the same number.
   let K = Math.hypot(A, B);
   let phase = Math.atan2(A, B);
@@ -402,7 +402,7 @@ export function fitAtPeriod(points, periodDays, opts = {}) {
     // chosen against them, so four were estimated from the data. See
     // evaluateModel for why the convention is stated rather than assumed.
     estimatedParameters: MODEL_PARAMETERS,
-    optimised: true,
+    optimized: true,
   };
 }
 
@@ -540,7 +540,7 @@ export function foldOnPeriod(points, params) {
  *
  *   runs   how many times the residuals change sign when sorted by phase,
  *          against how many a random sequence of the same signs would average.
- *          Far too few means neighbouring points agree, which is structure.
+ *          Far too few means neighboring points agree, which is structure.
  *
  *   lag1   the correlation between each phase-sorted residual and the next.
  *          Positive means the same thing from a different direction.
@@ -583,7 +583,7 @@ export function residualStructure(folded) {
     n: rows.length,
     runs,
     expectedRuns,
-    // Below one means fewer sign changes than chance: neighbouring residuals
+    // Below one means fewer sign changes than chance: neighboring residuals
     // agree, which is what a systematic looks like.
     runsRatio: expectedRuns > 0 ? runs / expectedRuns : null,
     lag1,

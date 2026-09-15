@@ -52,7 +52,7 @@ top-level `div`s. Everything outside a dialog was outside a landmark. The
 simulation is now `<main>`, and the readout, the scenario card, the transport,
 the pinned cards and the observing panels are named regions.
 
-**Two roles that promised behaviour that did not exist.** The control rail and
+**Two roles that promised behavior that did not exist.** The control rail and
 the lecture bar declared `role="toolbar"`, which tells a screen-reader user to
 expect a single tab stop and arrow-key navigation between the controls. Neither
 implements that, and in lecture mode the arrow keys do something else entirely
@@ -128,14 +128,14 @@ transport bar or the space bar — a real control rather than a media query.
 the rotation curve and the radial-velocity trace are drawn to a canvas. Their
 *numbers* are available as text in the readout and in the investigation
 probes, and the lessons that depend on them ask for typed values rather than
-for a visual judgement — but the shape of a curve is not currently narrated.
+for a visual judgment — but the shape of a curve is not currently narrated.
 Investigation steps state their instructions and their expected measurements as
 text, so a lesson is followable; the aesthetic reading of a curve is not.
 
 **Direct manipulation has no keyboard equivalent.** Placing a body by clicking,
 and dragging to set its velocity, are pointer gestures. The same systems can be
 loaded from the gallery, from a share link, and from a lesson's own setup, and
-every scenario in the catalogue is reachable without the canvas — but building
+every scenario in the catalog is reachable without the canvas — but building
 an arbitrary system by hand is not currently a keyboard task.
 
 **The attribution links in the footer are under 24×24.** They are inline text

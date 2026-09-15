@@ -42,7 +42,7 @@ describe('the site and the answer key grade identically', () => {
     }
   });
 
-  test('every numeric step in the catalogue accepts its own stated answer', () => {
+  test('every numeric step in the catalog accepts its own stated answer', () => {
     for (const lesson of Object.values(INVESTIGATIONS)) {
       for (const step of lesson.steps) {
         if (step.kind !== 'numeric') continue;
@@ -51,7 +51,7 @@ describe('the site and the answer key grade identically', () => {
     }
   });
 
-  test('a blank is never correct anywhere in the catalogue', () => {
+  test('a blank is never correct anywhere in the catalog', () => {
     // It used to parse as zero, so a step whose tolerance spanned zero would
     // have accepted an empty box.
     for (const lesson of Object.values(INVESTIGATIONS)) {
@@ -110,7 +110,7 @@ describe('the radial-velocity questions', () => {
     expect(checkAnswer(density, '330 kg/m3')).toBe(true);
   });
 
-  test("Earth's density from the comparison row is recognised", () => {
+  test("Earth's density from the comparison row is recognized", () => {
     const out = gradeAnswer(density, '5.51');
     expect(out.correct).toBe(false);
     const missed = matchMisconception(
@@ -166,7 +166,7 @@ describe("Kepler's questions", () => {
     expect(checkAnswer(starMass, '1.81e30 kg')).toBe(true);
   });
 
-  test('using the period in days is recognised as that mistake', () => {
+  test('using the period in days is recognized as that mistake', () => {
     const wrong = 0.91 / 365.25 ** 2;
     const missed = matchMisconception(starMass, wrong, toleranceFor(starMass));
     expect(missed.id).toBe('periodInDays');

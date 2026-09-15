@@ -249,7 +249,7 @@ test.describe('the central experiment of each investigation', () => {
     expect(fast.after).not.toEqual(slow.after);
     const fastEnergy = reading(fast.after, /total energy/i);
 
-    // Bound and unbound are not two behaviours that happen to differ; they are
+    // Bound and unbound are not two behaviors that happen to differ; they are
     // the two signs of one number. Below the escape speed the total energy is
     // negative and the cannonball comes back, above it the energy is not and it
     // does not, and the dividing speed is where that changes.
@@ -303,7 +303,7 @@ test.describe('the central experiment of each investigation', () => {
     }
 
     for (const { aArm, bArm, ratio, split } of seen) {
-      // The centre of mass is a lever. The nearer star is the heavier one and
+      // The center of mass is a lever. The nearer star is the heavier one and
       // the mass ratio is exactly the inverse of the arm ratio, which is what
       // turns one total mass into two separate ones.
       expect(aArm).toBeLessThan(bArm);
@@ -510,12 +510,12 @@ test.describe('the central experiment of each investigation', () => {
       const p = await import('/js/physics.js');
       const bodies = [...p.stars, ...p.planets, ...p.bh_list];
       if (bodies.length < 20) return null;
-      const centre = bodies.slice().sort((a, b) => b.mass - a.mass)[0];
+      const center = bodies.slice().sort((a, b) => b.mass - a.mass)[0];
       const points = bodies
-        .filter(b => b !== centre)
+        .filter(b => b !== center)
         .map(b => ({
-          r: Math.hypot(b.pos.x - centre.pos.x, b.pos.y - centre.pos.y),
-          v: Math.hypot(b.vel.x - centre.vel.x, b.vel.y - centre.vel.y),
+          r: Math.hypot(b.pos.x - center.pos.x, b.pos.y - center.pos.y),
+          v: Math.hypot(b.vel.x - center.vel.x, b.vel.y - center.vel.y),
         }))
         .filter(
           pt => Number.isFinite(pt.r) && Number.isFinite(pt.v) && pt.r > 0
@@ -670,14 +670,14 @@ test.describe('the central experiment of each investigation', () => {
     for (const m1 of [18, 36, 60]) {
       const { before, after } = await setControl(page, control, m1);
       if (m1 !== 18) expect(after).not.toEqual(before);
-      const modelled = row(after, /^modelled/i).text;
+      const modeled = row(after, /^modeled/i).text;
       // Two shapes: "813 ms ... the whole inspiral from 20 Hz", and for a light
       // pair whose window starts late, "... the whole thing from 20 Hz would be
       // 1.49 s". Both name the same quantity; only one of them is in seconds.
       const whole =
-        /would be\s+([\d.]+)\s*(ms|s)\b/.exec(modelled) ||
-        /^\s*([\d.]+)\s*(ms|s)\b/.exec(modelled);
-      expect(whole, `"${modelled}" names a time in band`).toBeTruthy();
+        /would be\s+([\d.]+)\s*(ms|s)\b/.exec(modeled) ||
+        /^\s*([\d.]+)\s*(ms|s)\b/.exec(modeled);
+      expect(whole, `"${modeled}" names a time in band`).toBeTruthy();
       band[m1] = {
         seconds: Number(whole[1]) / (whole[2] === 'ms' ? 1000 : 1),
         fIsco: reading(after, /where it stops/i),
@@ -771,7 +771,7 @@ test.describe('the central experiment of each investigation', () => {
     const [tBig, lBig, rBig] = big;
 
     // Same temperature, three hundred times the light. A star's luminosity is
-    // its area times what each square metre emits, and at equal temperature the
+    // its area times what each square meter emits, and at equal temperature the
     // second factor is equal - so all of the difference is size, and the radius
     // ratio is the square root of the luminosity ratio.
     expect(Math.abs(tBig - tSmall) / tSmall).toBeLessThan(0.05);
@@ -781,7 +781,7 @@ test.describe('the central experiment of each investigation', () => {
     const evidence = {
       small: rSmall.toFixed(3),
       large: rBig.toFixed(1),
-      why: 'Same temperature, so every square metre emits the same; the brighter one simply has far more of them.',
+      why: 'Same temperature, so every square meter emits the same; the brighter one simply has far more of them.',
     };
     await recordFields(page, id, measureSid, evidence);
     await expectEvidenceRetained(page, id, measureSid, evidence);
@@ -1173,7 +1173,7 @@ test.describe('the central experiment of each investigation', () => {
 
       // The rotating frame is the application's own: readSystem finds the two
       // primaries and their orientation, tracerState puts the tracer into the
-      // normalised co-rotating coordinates the Jacobi constant is defined in.
+      // normalized co-rotating coordinates the Jacobi constant is defined in.
       // Rolling that transform by hand would test my arithmetic, not the
       // lesson's.
       const now = () => {
@@ -1498,7 +1498,7 @@ test.describe('the central experiment of each investigation', () => {
     expect(libration.mean).toBeLessThan(240);
 
     const evidence = {
-      centre: libration.mean.toFixed(0),
+      center: libration.mean.toFixed(0),
       amplitude: (range / 2).toFixed(0),
       period: Number.isFinite(libration.synodic)
         ? libration.synodic.toFixed(0)
@@ -1604,7 +1604,7 @@ test.describe('the central experiment of each investigation', () => {
     const predict = await walkToSid(page, plan, entry.loop[0]);
     await commitPredictionHeld(page, predict);
 
-    // The declared control is the manoeuvre planner: a transverse burn, then
+    // The declared control is the maneuver planner: a transverse burn, then
     // Apply. The planner's own preview says what the orbit will become, and the
     // engine says what it did become; both are read here.
     await walkToSid(page, plan, entry.loop[1]);

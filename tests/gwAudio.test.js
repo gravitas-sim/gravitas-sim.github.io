@@ -45,12 +45,12 @@ describe('the buffer is independent of any frame rate', () => {
     const tl = modelTimeline(BBH);
     const a = renderAudio(tl, {
       sampleRate: 44100,
-      normalise: 'fixed',
+      normalize: 'fixed',
       referenceStrain: 1e-21,
     });
     const b = renderAudio(tl, {
       sampleRate: 48000,
-      normalise: 'fixed',
+      normalize: 'fixed',
       referenceStrain: 1e-21,
     });
     expect(Math.abs(a.seconds - b.seconds)).toBeLessThan(0.001);
@@ -149,8 +149,8 @@ describe('the speed mapping does what the interface says it does', () => {
   });
 });
 
-describe('normalisation is stated, and fixed gain preserves the physics', () => {
-  test('peak normalisation makes two distances equally loud', () => {
+describe('normalization is stated, and fixed gain preserves the physics', () => {
+  test('peak normalization makes two distances equally loud', () => {
     const near = renderAudio(modelTimeline({ ...BBH, distanceMpc: 400 }), {
       sampleRate: 48000,
     });
@@ -159,35 +159,35 @@ describe('normalisation is stated, and fixed gain preserves the physics', () => 
     });
     const peak = b => b.reduce((m, v) => Math.max(m, Math.abs(v)), 0);
     expect(peak(near.samples)).toBeCloseTo(peak(far.samples), 3);
-    expect(near.mapping.normalise).toBe('peak');
+    expect(near.mapping.normalize).toBe('peak');
   });
 
   test('fixed gain makes twice the distance exactly half as loud', () => {
     const opts = {
       sampleRate: 48000,
-      normalise: 'fixed',
+      normalize: 'fixed',
       referenceStrain: 2e-21,
     };
     const near = renderAudio(modelTimeline({ ...BBH, distanceMpc: 400 }), opts);
     const far = renderAudio(modelTimeline({ ...BBH, distanceMpc: 800 }), opts);
     const peak = b => b.reduce((m, v) => Math.max(m, Math.abs(v)), 0);
     expect(peak(near.samples) / peak(far.samples)).toBeCloseTo(2, 2);
-    expect(near.mapping.normalise).toBe('fixed');
+    expect(near.mapping.normalize).toBe('fixed');
     expect(near.mapping.referenceStrain).toBe(2e-21);
   });
 
   test('falls back to peak when a fixed reference was not supplied', () => {
     const r = renderAudio(modelTimeline(BBH), {
       sampleRate: 48000,
-      normalise: 'fixed',
+      normalize: 'fixed',
     });
-    expect(r.mapping.normalise).toBe('peak');
+    expect(r.mapping.normalize).toBe('peak');
   });
 
   test('never leaves a sample outside the representable range', () => {
     const r = renderAudio(modelTimeline(BBH), {
       sampleRate: 48000,
-      normalise: 'fixed',
+      normalize: 'fixed',
       referenceStrain: 1e-24,
       gain: 1,
     });

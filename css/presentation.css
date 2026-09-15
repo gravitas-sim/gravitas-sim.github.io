@@ -51,7 +51,7 @@
      without a pause button. It loses its floating-panel treatment and sits flat
      against the bottom edge: inside an iframe there is no page around it for a
      floating panel to float above, and the drop shadow reads as a rendering
-     artefact. */
+     artifact. */
   body.presentation-embed .timeline-bar {
     left: 0;
     right: 0;
@@ -245,7 +245,7 @@
     background: color-mix(in srgb, var(--surface-1) 92%, transparent);
     border: 1px solid var(--border-subtle);
     box-shadow: var(--shadow);
-    /* The readout's colour is a hard-coded light grey with a dark text-shadow,
+    /* The readout's color is a hard-coded light gray with a dark text-shadow,
        which is right over its usual dark translucent panel and invisible once
        that panel is the light surface Daylight gives it. Both have to move
        together, so the token comes with the background. */
@@ -254,8 +254,8 @@
   }
 
   /* Every descendant, deliberately. The readout's spans carry four different
-     hard-coded light colours between them - a white label, a pale HUD blue for
-     the stats, a muted grey for the hints - all chosen against a dark panel and
+     hard-coded light colors between them - a white label, a pale HUD blue for
+     the stats, a muted gray for the hints - all chosen against a dark panel and
      all of them somewhere between low-contrast and invisible on a light one.
      Enumerating them here would be a list that goes stale the next time a row
      is added to the readout; the panel is plain text, so one rule covers it and
@@ -268,7 +268,7 @@
 
   /* The scenario card is the title of the slide, and at projection distance it
      is the single most important piece of text on the screen. */
-  /* The card is normally centred in the band between the readout and the rail
+  /* The card is normally centerd in the band between the readout and the rail
      by a transform built from two custom properties. In lecture mode the rail
      is gone and the readout is much wider, and the arithmetic that assumes both
      put the card a third of its width off the left edge of a 1024px screen.
@@ -322,7 +322,7 @@
 
   body.presentation-lecture .lecture-bar {
     position: fixed;
-    /* Centred by auto margins in a full-width containing block, not by
+    /* Centerd by auto margins in a full-width containing block, not by
        left:50% and a translate. A fixed element positioned from the midpoint
        has only the right half of the viewport as its available width, so
        shrink-to-fit capped this bar at 512px on a 1024px projector and wrapped
@@ -384,7 +384,7 @@
   }
 
   /* Disabled is carried by opacity *and* by the cursor and the aria state, not
-     by colour alone: at the end of a sequence the difference between a live and
+     by color alone: at the end of a sequence the difference between a live and
      a dead arrow has to be visible on a washed-out projector. */
   .lecture-btn:disabled {
     opacity: 0.4;
@@ -476,7 +476,7 @@
 
   /* --- The spotlight ------------------------------------------------------- */
 
-  /* One element, pointer-events: none, a radial gradient centred on two custom
+  /* One element, pointer-events: none, a radial gradient centerd on two custom
      properties the pointer handler writes. It cannot receive a click, it is not
      on the canvas, and nothing in the physics reads it: the simulation cannot
      tell whether it is on. */
@@ -497,8 +497,8 @@
   }
 
   /* On Daylight the dimming is a wash of the light surface, which reads as a
-     vignette rather than as a shadow and keeps the simulation's own colours
-     recognisable inside the circle. */
+     vignette rather than as a shadow and keeps the simulation's own colors
+     recognizable inside the circle. */
   [data-theme='daylight'] .lecture-spotlight-layer {
     background: radial-gradient(
       circle var(--spot-r) at var(--spot-x) var(--spot-y),
@@ -743,7 +743,7 @@
     text-overflow: ellipsis;
   }
 
-  /* Selects and colour wells fill the track they are given rather than sizing
+  /* Selects and color wells fill the track they are given rather than sizing
      themselves from their longest option, which on `preset_scenario` is a
      scenario title and far wider than the column. */
   .settings-grid .setting-control > select,
@@ -810,7 +810,7 @@
      the viewport and cannot be tapped. It was already off the screen in
      English; Spanish pushes it eighteen pixels further, because "Validado" is
      longer than "Validated". Letting it wrap is the whole fix, and the
-     separator dots go with it: a wrapped line broken by centred dots reads as
+     separator dots go with it: a wrapped line broken by centerd dots reads as
      two half-sentences rather than as one list.
      =========================================================================== */
 
@@ -839,7 +839,7 @@
      Two rules were disagreeing across a cascade layer. css/styles.css, in the
      `legacy` layer, pins the card with `left: 10px; right: 10px;
      transform: none` below 1025px. css/components.css, in `components`, gives
-     it `left: 50%` and a transform that centres it in the band between the
+     it `left: 50%` and a transform that centers it in the band between the
      readout and the rail. Layer order means the component transform wins while
      the legacy `left` also applies, so the card was translated by half its own
      width away from an edge it was already flush against.

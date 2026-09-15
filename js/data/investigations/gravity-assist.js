@@ -142,12 +142,12 @@ const GRAVITY_ASSIST = {
   duration: '15-20 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['spaceflight', 'orbits'],
   lock: { placement: true },
   summary:
-    'Voyager 2 arrived at Jupiter travelling ten kilometres a second and left travelling twenty-six. Jupiter did not burn any fuel for it. Fly the same manoeuvre yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
+    'Voyager 2 arrived at Jupiter traveling ten kilometers a second and left traveling twenty-six. Jupiter did not burn any fuel for it. Fly the same maneuver yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
   objectives: [
     'Predict whether a flyby gains or loses speed from which side of the planet it passes',
     'State what a gravity assist changes and what it cannot change, in the planet’s frame and in an inertial one',
@@ -165,7 +165,7 @@ const GRAVITY_ASSIST = {
       title: 'Voyager left faster than it arrived',
       setup: ISOLATED,
       body: `In July 1979 Voyager 2 passed Jupiter. It approached at about ten
-             kilometres per second relative to the Sun and departed at about
+             kilometers per second relative to the Sun and departed at about
              twenty-six. Its engines were off.
              \n\nThis is not a curiosity. Every mission to the outer solar system
              has depended on it: Voyager could not have reached Neptune,
@@ -181,9 +181,9 @@ const GRAVITY_ASSIST = {
       bind: ASSIST,
       type: 'read',
       title: 'The simplest possible flyby',
-      body: `On screen is the least cluttered version of that manoeuvre anybody
+      body: `On screen is the least cluttered version of that maneuver anybody
              could build. A planet of five Jupiter masses, drifting through
-             empty space at 2.83 kilometres per second. An Earth-mass spacecraft
+             empty space at 2.83 kilometers per second. An Earth-mass spacecraft
              crossing its path. <strong>Nothing else at all</strong> — no star,
              no other planets, no light.
              \n\nThe missing star is the important part. With nothing else in the
@@ -252,7 +252,7 @@ const GRAVITY_ASSIST = {
       type: 'measure',
       title: 'Both columns',
       body: `With the flyby finished, read four speeds off the panel. They are
-             in kilometres per second.`,
+             in kilometers per second.`,
       fields: [
         {
           id: 'relBefore',
@@ -354,7 +354,7 @@ const GRAVITY_ASSIST = {
              sum is short. Afterwards the second one has been rotated, so they
              partly reinforce, and the sum is long. Same two lengths, different
              angle between them, different total. Nobody pushed anything.`,
-      tip: 'This is why the manoeuvre is sometimes explained as bouncing a tennis ball off a moving train. The ball leaves the train at the speed it arrived, in the train’s frame; in the station’s frame it leaves much faster.',
+      tip: 'This is why the maneuver is sometimes explained as bouncing a tennis ball off a moving train. The ball leaves the train at the speed it arrived, in the train’s frame; in the station’s frame it leaves much faster.',
     },
     {
       sid: 'the-other-side',
@@ -562,7 +562,7 @@ const GRAVITY_ASSIST = {
         return {
           level: 'ok',
           message:
-            'A few millimetres per second, against its own 2.83 km/s — about one part in a million, and exactly the momentum the spacecraft gained.',
+            'A few millimeters per second, against its own 2.83 km/s — about one part in a million, and exactly the momentum the spacecraft gained.',
         };
       },
     },
@@ -573,7 +573,7 @@ const GRAVITY_ASSIST = {
       kind: 'choice',
       title: 'So where did the energy come from?',
       body: `The spacecraft's kinetic energy went up by a factor of three. The
-             planet slowed by about four millimetres per second — one part in a
+             planet slowed by about four millimeters per second — one part in a
              million of its own speed — and the two momentum changes match to
              better than a hundredth of a per cent.`,
       prompt:
@@ -596,7 +596,7 @@ const GRAVITY_ASSIST = {
                 distance, where the two bodies are still very slightly pulling
                 on each other, so the figure is smaller on a machine that can
                 integrate the encounter in finer steps. Yours will not be the
-                same as your neighbour's, and both of them rule out the fourth
+                same as your neighbor's, and both of them rule out the fourth
                 option.`,
     },
 
@@ -611,7 +611,7 @@ const GRAVITY_ASSIST = {
              relative to the planet does not change. But the planet you are
              measuring against is not the same planet before and after — it
              recoiled. The comparison's caveat says by how much: about four
-             millimetres per second, which is exactly one millionth of the
+             millimeters per second, which is exactly one millionth of the
              spacecraft's own velocity change, because the spacecraft is one
              millionth of the planet's mass.
              \n\nSo "the planet's frame" names one inertial frame on the way
@@ -620,7 +620,7 @@ const GRAVITY_ASSIST = {
       options: [
         'An approximation, good to about one part in a million because the spacecraft is light',
         'Exact anyway — the speed of one body relative to another returns to its old value at the same separation, whatever the two masses are',
-        'Wrong, and the panel should be measuring against the barycentre instead',
+        'Wrong, and the panel should be measuring against the barycenter instead',
         'Exact only because the spacecraft is much lighter than the planet',
       ],
       answer: 1,
@@ -722,7 +722,7 @@ const GRAVITY_ASSIST = {
         return {
           level: 'ok',
           message:
-            'Halving the impact parameter from 40 to 20 turned the spacecraft half as far again and bought about a kilometre per second. Whether the next halving would buy as much is the question.',
+            'Halving the impact parameter from 40 to 20 turned the spacecraft half as far again and bought about a kilometer per second. Whether the next halving would buy as much is the question.',
         };
       },
     },
@@ -790,7 +790,7 @@ const GRAVITY_ASSIST = {
                curve with a maximum falls after it, and the geometry says this
                one does); "the closest pass gained most, so closer is always
                better" (true of these five and of nothing beyond them); and
-               treating the turnover as a numerical artefact rather than as
+               treating the turnover as a numerical artifact rather than as
                geometry - halving the timestep would not move it.`,
     },
 
@@ -811,7 +811,7 @@ const GRAVITY_ASSIST = {
              — it is going round a corner — so its frame is no longer inertial,
              and the star pulls on the spacecraft too. The left-hand column will
              no longer be exactly unchanged. Watch how nearly it is.`,
-      tip: 'The real Jupiter slows by about 10⁻²⁵ metres per second per Voyager. Over the age of the solar system, all the spacecraft ever launched have not measurably altered its orbit.',
+      tip: 'The real Jupiter slows by about 10⁻²⁵ meters per second per Voyager. Over the age of the solar system, all the spacecraft ever launched have not measurably altered its orbit.',
     },
     {
       sid: 'fly-it-heliocentric',
@@ -841,7 +841,7 @@ const GRAVITY_ASSIST = {
       title: 'What is the residual telling you?',
       body: `Relative to the star the spacecraft went from about 13.7 to about
              19.8 km/s — a real gain of 45 per cent, and the point of the whole
-             manoeuvre.
+             maneuver.
              \n\nRelative to the planet it went from 8.48 to 8.51 km/s: a change
              of about a third of a per cent, where the isolated version gave
              three parts in a hundred billion. The measured deflection is 34.2

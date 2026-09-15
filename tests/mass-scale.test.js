@@ -180,7 +180,7 @@ describe('a planet and a gas giant reach the same scale', () => {
 // and they were wrong in the crudest possible way: Asteroid and Comet carried a
 // literal 0.1 simulation units and Debris a literal 0.01, none of them derived
 // from any unit constant. 0.1 units is 33 Earth masses, which is heavier than
-// Neptune. The Planet and GasGiant blocks above are what these are modelled on,
+// Neptune. The Planet and GasGiant blocks above are what these are modeled on,
 // because the failure they catch is the same one.
 
 describe('small-body mass units', () => {

@@ -22,7 +22,7 @@
 // =============================================================================
 
 import { loadAuthoringInputs } from './authoring/inputs.mjs';
-import { checkCatalogue, RULE_INDEX } from '../js/authoring/rules.js';
+import { checkCatalog, RULE_INDEX } from '../js/authoring/rules.js';
 
 const argv = process.argv.slice(2);
 const has = flag => argv.includes(flag);
@@ -63,14 +63,14 @@ if (has('--rules')) {
 }
 
 const inputs = await loadAuthoringInputs();
-let findings = checkCatalogue(inputs);
+let findings = checkCatalog(inputs);
 
 const only = value('lesson');
 if (only) {
   const known = new Set(inputs.investigations.map(i => i.id));
   if (!known.has(only)) {
     console.error(
-      `No lesson "${only}". The catalogue holds:\n  ${[...known].join('\n  ')}`
+      `No lesson "${only}". The catalog holds:\n  ${[...known].join('\n  ')}`
     );
     process.exit(2);
   }
@@ -121,7 +121,7 @@ for (const inv of inputs.investigations) {
   }
 }
 
-// Findings whose lesson is not in the catalogue at all - an orphaned manifest
+// Findings whose lesson is not in the catalog at all - an orphaned manifest
 // entry, instructor guidance for a deleted lesson - have nowhere above to go.
 const known = new Set(inputs.investigations.map(i => i.id));
 const orphans = findings.filter(f => !known.has(f.lesson));

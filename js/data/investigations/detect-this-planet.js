@@ -98,7 +98,7 @@ const DETECT_THIS_PLANET = {
   duration: '30-35 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
@@ -479,7 +479,7 @@ const DETECT_THIS_PLANET = {
              tick <strong>Synthetic observing run</strong> at the bottom of the
              panel. Leave the cadence at 0.32 days and the baseline at 3.52 -
              that is Schedule A - and let it run. One orbit takes about thirteen
-             seconds, so the whole programme finishes in about that time.
+             seconds, so the whole program finishes in about that time.
              \n\nThe measurements are dated in simulated days, not in frames, so
              a slow laptop and a fast one record the same twelve numbers. Nothing
              is recorded between them.`,
@@ -488,7 +488,7 @@ const DETECT_THIS_PLANET = {
         'Untick "Show the ideal signal" and look at what a real observer would have',
         'Change the cadence to 3.52 and restart: the same panel now produces Schedule B',
       ],
-      tip: 'The run restarts by itself if you change the schedule, switch stars, or move the observer: measurements taken under different conditions are not one programme, and the panel will not concatenate them.',
+      tip: 'The run restarts by itself if you change the schedule, switch stars, or move the observer: measurements taken under different conditions are not one program, and the panel will not concatenate them.',
     },
     {
       sid: 'take-the-data-with-you',
@@ -515,7 +515,7 @@ const DETECT_THIS_PLANET = {
       type: 'question',
       kind: 'short',
       title: 'The limits of finding nothing',
-      body: `You point the same twelve-night programme at a different star and
+      body: `You point the same twelve-night program at a different star and
              get a flat dataset: χ²/dof near 1, no excess scatter at all, phase
              coverage complete for periods of a few days.`,
       prompt:
@@ -723,7 +723,7 @@ const DETECT_THIS_PLANET = {
              yes, and then eventually no</em>. It helps until the persistent
              term dominates, and the ceiling row in the panel tells you where
              that is before you spend the nights.`,
-      tip: 'This is why space telescopes are worth their cost, and it is not only that the atmosphere is gone. Above it the hours-correlated term is far smaller and the persistent term is far better characterised — and a systematic you can measure is a systematic you can subtract.',
+      tip: 'This is why space telescopes are worth their cost, and it is not only that the atmosphere is gone. Above it the hours-correlated term is far smaller and the persistent term is far better characterized — and a systematic you can measure is a systematic you can subtract.',
     },
     {
       sid: 'assumptions-of-the-model',
@@ -748,7 +748,7 @@ const DETECT_THIS_PLANET = {
              \n\nThat is worth knowing before you trust a number from a panel
              like this one. The model is a caricature chosen to make the two
              limits visible, not a noise budget for any real instrument.`,
-      tip: 'The standard diagnostic is a "beta factor": the ratio of the actual scatter of binned residuals to what pure white noise would predict. Published transit papers routinely quote it, and values of 1.5 to 3 are common — which is to say the truth is usually nearer the optimistic end than the pessimistic one, but never at it.',
+      tip: 'The standard diagnostic is a "beta factor": the ratio of the actual scatter of binned residuals to what pure white noise would predict. Published transit papers routinely quote it, and values of 1.5 to 3 are common — which is to say the truth is usually nearer the optimiztic end than the pessimistic one, but never at it.',
     },
     {
       sid: 'read-two-budgets',
@@ -868,7 +868,7 @@ const DETECT_THIS_PLANET = {
       options: [
         'More transits, until the square root law wins',
         'A longer transit, so each event contributes more data',
-        'A lower persistent floor — a more stable instrument, or a better-characterised systematic',
+        'A lower persistent floor — a more stable instrument, or a better-characterized systematic',
         'Nothing: an 84 ppm transit is below any possible measurement',
       ],
       answer: 2,
@@ -920,7 +920,7 @@ const DETECT_THIS_PLANET = {
              any of the three is a different project from being patient.
              \n\nWhich is the honest summary of both halves. The question
              "can you detect this planet?" is never only about the planet.`,
-      tip: 'Real surveys defend against the radial-velocity failure with deliberately irregular spacing, several longitudes, and checking any candidate period against the cadence that found it. Against the photometric one they defend by going to space, by choosing quiet stars, and by modelling the correlated noise instead of pretending it will average away.',
+      tip: 'Real surveys defend against the radial-velocity failure with deliberately irregular spacing, several longitudes, and checking any candidate period against the cadence that found it. Against the photometric one they defend by going to space, by choosing quiet stars, and by modeling the correlated noise instead of pretending it will average away.',
     },
   ],
 };

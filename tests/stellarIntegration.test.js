@@ -2,8 +2,8 @@
 // The shared stellar model, as the rest of the application meets it
 // -----------------------------------------------------------------------------
 // The model's own arithmetic is checked in tests/stellarModel.test.js. This is
-// the integration: that a star's temperature reaches the colour it is drawn in,
-// that a colour a scenario chose survives, that the three panels which used to
+// the integration: that a star's temperature reaches the color it is drawn in,
+// that a color a scenario chose survives, that the three panels which used to
 // disagree about how big a star is now agree, and that none of it moved
 // anything the physics depends on.
 //
@@ -11,9 +11,9 @@
 //
 //   The constructor filled in baseColor from the mass, so a star that carried
 //   a measured temperature was drawn as though it did not - and there was no
-//   way to tell an authored colour from a generated one.
+//   way to tell an authored color from a generated one.
 //
-//   The colour memo was keyed on mass and colour, so changing a temperature at
+//   The color memo was keyed on mass and color, so changing a temperature at
 //   fixed mass changed nothing on screen.
 //
 //   Three modules each had their own mass-radius or mass-temperature relation,
@@ -58,7 +58,7 @@ function recorder() {
   return new Proxy({ globalAlpha: 1, lineWidth: 1 }, handler);
 }
 
-/** Every fill colour a draw asked for, in order. */
+/** Every fill color a draw asked for, in order. */
 const fills = ctx =>
   ctx.calls.filter(c => c.name === 'set:fillStyle').map(c => c.args[0]);
 
@@ -71,7 +71,7 @@ beforeEach(() => {
   clearVisualCaches();
 });
 
-/** A star at the origin, with whatever modelling the test wants. */
+/** A star at the origin, with whatever modeling the test wants. */
 function star(massInSuns, extra = {}) {
   const s = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, massInSuns);
   Object.assign(s, extra);
@@ -79,19 +79,19 @@ function star(massInSuns, extra = {}) {
   return s;
 }
 
-describe('a generated star has no colour of its own', () => {
+describe('a generated star has no color of its own', () => {
   test('the constructor leaves baseColor null', () => {
     expect(star(1).baseColor).toBe(null);
   });
 
-  test('so an authored colour is distinguishable from a generated one', () => {
+  test('so an authored color is distinguishable from a generated one', () => {
     const plain = star(1);
     const authored = star(1, { baseColor: '#ff00ff' });
     expect(plain.baseColor).toBe(null);
     expect(authored.baseColor).toBe('#ff00ff');
   });
 
-  test('and the modelled fields start empty rather than guessed', () => {
+  test('and the modeled fields start empty rather than guessed', () => {
     const s = star(1);
     for (const key of [
       'temperature',
@@ -108,7 +108,7 @@ describe('a generated star has no colour of its own', () => {
 });
 
 describe('temperature reaches the screen', () => {
-  test('a star with no authored colour is drawn in its temperature colour', () => {
+  test('a star with no authored color is drawn in its temperature color', () => {
     const s = star(1);
     s.draw(recorder());
     expect(s._visual.rgb).toEqual(
@@ -116,8 +116,8 @@ describe('temperature reaches the screen', () => {
     );
   });
 
-  test('and that colour is what reaches the canvas at point size', () => {
-    // Zoomed out far enough to be a dot, where the colour is a fillStyle rather
+  test('and that color is what reaches the canvas at point size', () => {
+    // Zoomed out far enough to be a dot, where the color is a fillStyle rather
     // than a cached sprite - so this checks the path to the pixels and the one
     // above checks the decision.
     view.zoom = 0.05;
@@ -131,9 +131,9 @@ describe('temperature reaches the screen', () => {
     view.zoom = 1;
   });
 
-  test('changing the temperature changes the colour, with the mass untouched', () => {
-    // The defect this replaces: the memo was keyed on mass and colour, so a
-    // star whose temperature changed and whose mass did not kept the colour it
+  test('changing the temperature changes the color, with the mass untouched', () => {
+    // The defect this replaces: the memo was keyed on mass and color, so a
+    // star whose temperature changed and whose mass did not kept the color it
     // was first drawn with - which is every star on an evolutionary track.
     const s = star(1);
     s.draw(recorder());
@@ -161,7 +161,7 @@ describe('temperature reaches the screen', () => {
     );
   });
 
-  test('an authored colour wins over the temperature', () => {
+  test('an authored color wins over the temperature', () => {
     const s = star(1, { baseColor: '#ff00ff', temperature: 20000 });
     s.draw(recorder());
     expect(s._visual.rgb).toEqual({ r: 255, g: 0, b: 255 });
@@ -245,7 +245,7 @@ describe('nothing about the physics moved', () => {
 });
 
 describe('saving and restoring a star', () => {
-  test('the modelled fields survive a state round trip', () => {
+  test('the modeled fields survive a state round trip', () => {
     const s = star(1, {
       temperature: 3070,
       luminosityInSuns: 2386,
@@ -264,14 +264,14 @@ describe('saving and restoring a star', () => {
     expect(stellarStateFor(restored, SOLAR_MASS_UNIT).estimated).toBe(false);
   });
 
-  test('a generated colour does not come back as an authored one', () => {
+  test('a generated color does not come back as an authored one', () => {
     const s = star(1);
     const restored = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
     restored.set_state(s.get_state());
     expect(restored.baseColor).toBe(null);
   });
 
-  test('an authored colour does come back', () => {
+  test('an authored color does come back', () => {
     const s = star(1, { baseColor: '#123456' });
     const restored = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
     restored.set_state(s.get_state());
@@ -299,7 +299,7 @@ describe('saving and restoring a star', () => {
     expect(stellarStateFor(restored, SOLAR_MASS_UNIT).estimated).toBe(true);
   });
 
-  test('a share link carries the modelled fields and drops the empty ones', () => {
+  test('a share link carries the modeled fields and drops the empty ones', () => {
     const measured = packBody(
       star(1, { temperature: 3070, luminosityInSuns: 2386 }).get_state()
     );

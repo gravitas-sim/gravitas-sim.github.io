@@ -1,7 +1,7 @@
 // =============================================================================
 // The gravitational-wave observing lab
 // -----------------------------------------------------------------------------
-// Two instruments. `gw-lab` shows a modelled source: a schematic binary, an
+// Two instruments. `gw-lab` shows a modeled source: a schematic binary, an
 // illustrative wave pattern, the strain a detector would record, and the
 // frequency climbing towards the boundary where the model stops. `gw-real`
 // shows the published GW150914 traces beside each other, unaltered.
@@ -14,7 +14,7 @@
 // What is schematic and what is not
 // -----------------------------------------------------------------------------
 // The strain plot and the frequency plot are the model. The source view is a
-// reconstruction: the separation is Keplerian at the modelled frequency, but
+// reconstruction: the separation is Keplerian at the modeled frequency, but
 // the bodies are drawn far larger than they are and the picture is not to
 // scale. The wave pattern is an illustration of phase and wavelength, drawn
 // from emission history rather than from the source's current phase, with the
@@ -106,7 +106,7 @@ const audioOwnerFor = (state, spec = {}) =>
  * Two listening modes, and they answer different questions. **Comparison**
  * holds one reference amplitude fixed so that changing a parameter changes the
  * loudness in proportion to the strain - that is the mode a distance
- * comparison needs, and it is the default. **Peak-normalised** brings every
+ * comparison needs, and it is the default. **Peak-normalized** brings every
  * signal to full scale, which is the right choice when the question is what a
  * waveform sounds like rather than how loud it is, and a step asks for it
  * explicitly.
@@ -157,7 +157,7 @@ const RINGS_ACROSS_RADIUS = 9;
 // Formatting
 // -----------------------------------------------------------------------------
 
-/** A strain, in the units the axis is labelled in. */
+/** A strain, in the units the axis is labeled in. */
 const strainText = h =>
   Number.isFinite(h) ? `${(h * 1e21).toFixed(2)} ×10⁻²¹` : '—';
 
@@ -295,7 +295,7 @@ function frame(g, r, colors, title) {
 }
 
 /**
- * The strain trace across the whole modelled span, with the playhead.
+ * The strain trace across the whole modeled span, with the playhead.
  *
  * Drawn from the timeline's envelope, which resolves a bucket analytically when
  * a whole cycle falls inside it. That is what lets a 780-cycle excerpt be drawn
@@ -420,7 +420,7 @@ function drawStrainFull(g, r, state, colors, opts = {}) {
  * A short window around the playhead, with individual cycles resolved.
  *
  * This is the view a student counts cycles in, and the only one in which added
- * noise means anything: at full span the noise is a grey band.
+ * noise means anything: at full span the noise is a gray band.
  */
 function drawStrainLocal(g, r, state, colors) {
   const tl = state.timeline;
@@ -523,7 +523,7 @@ function drawFrequency(g, r, state, colors) {
       plot.h;
 
   g.save();
-  // Decade and half-decade gridlines, labelled.
+  // Decade and half-decade gridlines, labeled.
   g.font = typeAt(TYPE.TICK);
   g.textAlign = 'right';
   g.textBaseline = 'middle';
@@ -826,7 +826,7 @@ function drawRingInset(g, r, state, colors) {
   const hp = tl.plusAtTime(state.cursorT);
   const hc = tl.crossAtTime(state.cursorT);
   const peak = tl.meta.peakStrain || 1;
-  // Normalised to the loudest moment of this signal and then exaggerated to
+  // Normalized to the loudest moment of this signal and then exaggerated to
   // something visible. The factor is printed, so the picture is not mistaken
   // for a measurement. A real strain of 1e-21 moves a ring of markers by
   // nothing a screen could show; every picture of one is amplified, and the
@@ -902,7 +902,7 @@ let matchCache = { key: '', value: null };
 /**
  * How much the current signal resembles the pinned one.
  *
- * A normalised, noise-weighted overlap maximised over time and phase - the
+ * A normalized, noise-weighted overlap maximized over time and phase - the
  * inner product a matched filter is built on. It is reported as "similarity"
  * everywhere and it is not a detection statistic: js/gw/match.js says why at
  * length, and the lesson makes a student find out for themselves.
@@ -1270,12 +1270,12 @@ function startListening(state, spec = {}) {
     speed: plan.speed,
     shiftHz: plan.shiftHz,
     // One reference for the whole comparison, and deliberately not this
-    // signal's own peak: normalising against that made every distance sound
+    // signal's own peak: normalizing against that made every distance sound
     // identical, which removed the very ratio the step asks the student to
     // hear. Order of preference - what the step pins, then the preset's
     // reference at its default parameters. Both are independent of the
     // controls, so loudness now tracks strain.
-    normalise: comparisonListening(spec) ? 'fixed' : 'peak',
+    normalize: comparisonListening(spec) ? 'fixed' : 'peak',
     referenceStrain: audioReferenceFor(spec),
     label: 'gw-lab',
     // What this sound describes. The moment it stops being true - a different
@@ -1728,7 +1728,7 @@ const GW_LAB = {
             x: (hp / 2).toExponential(2),
             y: (-hp / 2).toExponential(2),
             diff: hp.toExponential(2),
-            metres: (hp * 4000).toExponential(2),
+            meters: (hp * 4000).toExponential(2),
           }),
         });
       }
@@ -1903,7 +1903,7 @@ const GW_LAB = {
       rows.push({
         label: t('gwW.row.loudness'),
         value: t(
-          map.normalise === 'fixed'
+          map.normalize === 'fixed'
             ? 'gwW.value.loudness.fixed'
             : 'gwW.value.loudness.peak',
           {
@@ -1965,7 +1965,7 @@ function realTimeline(id) {
 
 /** One trace, drawn into a strip with its own label. */
 function drawRealTrace(g, r, tl, colors, opts) {
-  const { label, colour, shiftS = 0, invert = false, window: win, peak } = opts;
+  const { label, color, shiftS = 0, invert = false, window: win, peak } = opts;
   const padL = 34;
   const plot = { x: r.x + padL, y: r.y + 12, w: r.w - padL - 6, h: r.h - 24 };
   const n = Math.max(32, Math.floor(plot.w));
@@ -1973,7 +1973,7 @@ function drawRealTrace(g, r, tl, colors, opts) {
   const toY = h => mid - (h / peak) * (plot.h / 2) * 0.92;
 
   g.save();
-  g.strokeStyle = colour;
+  g.strokeStyle = color;
   g.lineWidth = 1.2;
   g.beginPath();
   let started = false;
@@ -1995,7 +1995,7 @@ function drawRealTrace(g, r, tl, colors, opts) {
   }
   g.stroke();
   g.font = typeAt(TYPE.TICK);
-  g.fillStyle = colour;
+  g.fillStyle = color;
   g.textAlign = 'left';
   g.textBaseline = 'top';
   g.fillText(label, plot.x + 2, r.y + 2);
@@ -2085,13 +2085,13 @@ const GW_REAL = {
     const rows =
       mode === 'reconstruction'
         ? [
-            { id: 'observed-H1', key: 'obsH', colour: colors.accent },
-            { id: 'reconstruction-H1', key: 'recH', colour: colors.good },
-            { id: 'residual-H1', key: 'resH', colour: colors.warn },
+            { id: 'observed-H1', key: 'obsH', color: colors.accent },
+            { id: 'reconstruction-H1', key: 'recH', color: colors.good },
+            { id: 'residual-H1', key: 'resH', color: colors.warn },
           ]
         : [
-            { id: 'observed-H1', key: 'obsH', colour: colors.accent },
-            { id: 'observed-L1', key: 'obsL', colour: colors.warn },
+            { id: 'observed-H1', key: 'obsH', color: colors.accent },
+            { id: 'observed-L1', key: 'obsL', color: colors.warn },
           ];
 
     const rects = stack(
@@ -2103,7 +2103,7 @@ const GW_REAL = {
       const isL = row.id.endsWith('L1');
       drawRealTrace(g, rects[i], realTimeline(row.id), colors, {
         label: t(`gwW.real.trace.${row.key}`),
-        colour: row.colour,
+        color: row.color,
         shiftS: isL ? -(v.shift || 0) / 1000 : 0,
         invert: isL && (v.invert || 0) >= 0.5,
         window: win,
@@ -2168,7 +2168,7 @@ const GW_REAL = {
         value: t('gwW.real.value.residual'),
       });
     }
-    rows.push({ label: t('gwW.real.row.licence'), value: PROVENANCE.license });
+    rows.push({ label: t('gwW.real.row.license'), value: PROVENANCE.license });
     return rows;
   },
 };

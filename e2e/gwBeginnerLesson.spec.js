@@ -65,7 +65,7 @@ const ANSWERS = {
   // apart. Any two different values pass; identical ones are refused.
   wide_dir: 1,
   wide_dir_later: 2,
-  // 13 - a millimetre in ten metres, then the real thing
+  // 13 - a millimeter in ten meters, then the real thing
   toy: 0.0001,
   real: 1e-21,
   // 16 - the factor of two, counted
@@ -154,7 +154,7 @@ test.describe('the beginner lesson is reachable and complete', () => {
   test('its card is not the sequel’s card', async ({ page, app }) => {
     // Both lessons open on the same 36+29 pair, so the generator drew them the
     // same picture until the field was seeded by lesson id. Two adjacent
-    // catalogue entries with one thumbnail between them read as a bug.
+    // catalog entries with one thumbnail between them read as a bug.
     await app.boot();
     await page.locator('#investigationsBtn').click();
     const src = id =>

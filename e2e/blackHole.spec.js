@@ -244,7 +244,7 @@ test.describe('the picture', () => {
     expect(lit).toBeGreaterThan(dark * 1.6);
   });
 
-  test('an accreting hole is not dark, and the centre still is', async ({
+  test('an accreting hole is not dark, and the center still is', async ({
     page,
     app,
   }) => {
@@ -260,9 +260,9 @@ test.describe('the picture', () => {
         4,
         4
       ).data;
-      let centre = 0;
+      let center = 0;
       for (let i = 0; i < mid.length; i += 4) {
-        centre = Math.max(centre, mid[i] + mid[i + 1] + mid[i + 2]);
+        center = Math.max(center, mid[i] + mid[i + 1] + mid[i + 2]);
       }
       // A band out along the disk's major axis, which is where the flow is.
       const band = g.getImageData(
@@ -275,10 +275,10 @@ test.describe('the picture', () => {
       for (let i = 0; i < band.length; i += 4) {
         flow = Math.max(flow, band[i] + band[i + 1] + band[i + 2]);
       }
-      return { centre, flow };
+      return { center, flow };
     });
-    expect(read.centre).toBeLessThan(90);
-    expect(read.flow).toBeGreaterThan(read.centre);
+    expect(read.center).toBeLessThan(90);
+    expect(read.flow).toBeGreaterThan(read.center);
   });
 
   test('the same state at the same time draws the same picture', async ({

@@ -56,7 +56,7 @@ const ensureBlackHoleRenderer = () => {
 };
 import { followCamera, resetFollowCamera } from './followCamera.js';
 // The shared drawing policy: level of detail, deterministic per-object
-// variation, star colour, light direction and comet-tail geometry. Pure
+// variation, star color, light direction and comet-tail geometry. Pure
 // arithmetic, so all of it is tested without a canvas - see
 // tests/bodyVisuals.test.js.
 import {
@@ -192,7 +192,7 @@ export const NOMINAL_RADIUS = Object.freeze({
  * function existed, and nothing read it: the threshold was always the literal
  * above, whatever a scenario asked for. Both scenarios happen to ask for 20,
  * which is why nobody noticed, and which is also why wiring it up changes no
- * present behaviour.
+ * present behavior.
  *
  * @returns {number} The threshold in force
  */
@@ -209,7 +209,7 @@ const GAS_GIANT_TO_STAR_THRESHOLD = 80.0; // Jupiter masses needed to become a s
 // than chosen, because the solar mass is the anchor the whole mass scale hangs
 // from and a second independent number is a second chance to disagree with it.
 // This was 50 for a long time, which is 52.4x too heavy: a gas giant labeled
-// "1.00 M_J" in the inspector pulled on its neighbours with 52 Jupiter masses,
+// "1.00 M_J" in the inspector pulled on its neighbors with 52 Jupiter masses,
 // a twentieth of a star. Nothing in the display was wrong about the mass it was
 // given; the mass it was given was wrong about Jupiter.
 const JUPITER_MASS_UNIT = SOLAR_MASS_UNIT / JUPITER_MASSES_PER_SOLAR_MASS;
@@ -221,7 +221,7 @@ const JUPITER_MASS_UNIT = SOLAR_MASS_UNIT / JUPITER_MASSES_PER_SOLAR_MASS;
 // EARTH_MASS_UNIT both had.
 const MASS_UNIT_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT;
 
-// Simulation mass units per Ceres mass, per Halley mass, and per kilometre-scale
+// Simulation mass units per Ceres mass, per Halley mass, and per kilometer-scale
 // rocky fragment.
 //
 // Asteroid, Comet and Debris were built with hardcoded masses of 0.1, 0.1 and
@@ -358,7 +358,7 @@ let physicsSettings = {
   enable_star_merging: true,
   show_bh_glow: true,
   show_accretion_disk: true,
-  realistic_disk_physics: true,
+  realiztic_disk_physics: true,
   show_bh_jets: false,
   trail_length: 100,
   dynamic_object_properties: true,
@@ -368,7 +368,7 @@ let physicsSettings = {
   orbit_decay_rate: 0.005,
   max_timestep: 0,
   min_interaction_distance: 0,
-  habitable_zone_optimism: 1.0,
+  habitable_zone_optimizm: 1.0,
   star_only_gravity: false,
   disk_doppler: true,
   use_barnes_hut: false,
@@ -398,7 +398,7 @@ let physicsSettings = {
   //
   // `dark_matter_halo` is kept alongside it as a mirror, not as a second source
   // of truth: scenarios, saved games and shared links written before this
-  // existed all set the boolean, and normaliseGalaxyGravity() below keeps the
+  // existed all set the boolean, and normalizeGalaxyGravity() below keeps the
   // two in step whichever one a caller writes.
   galaxy_gravity: 'newtonian',
   dark_matter_halo: false,
@@ -515,13 +515,13 @@ const defaultAppearance = id =>
 //   r_new  = (m_bh r_bh + m_body r_body) / M
 //   v_new  = (m_bh v_bh + m_body v_body) / M
 //
-// Total mass, total linear momentum and the system's centre of mass are then
+// Total mass, total linear momentum and the system's center of mass are then
 // all exactly preserved across the event. Kinetic energy is not, and is not
 // meant to be: an inelastic merger is where the energy goes.
 //
 // What is NOT preserved, and cannot be
 // -----------------------------------------------------------------------------
-// Total angular momentum splits into the motion of the centre of mass and the
+// Total angular momentum splits into the motion of the center of mass and the
 // pair's motion about it:
 //
 //   L_total = L_com + L_spin,     L_spin = mu * (r_rel x v_rel)
@@ -743,7 +743,7 @@ const absorb_into_black_hole = (bh, body) => {
 /**
  * The mass, position and velocity of a perfectly inelastic merger.
  *
- * Total mass, mass-weighted centre of mass, and the velocity that conserves
+ * Total mass, mass-weighted center of mass, and the velocity that conserves
  * linear momentum. Offered rather than imposed: see the note above.
  *
  * @param {object} a - One progenitor
@@ -959,7 +959,7 @@ const conservedQuantities = () => {
   // The size of the terms the totals are made of, accumulated alongside them.
   //
   // A total can be small because nothing is happening or because two large
-  // numbers nearly cancelled, and a percentage cannot tell those apart: a
+  // numbers nearly canceled, and a percentage cannot tell those apart: a
   // marginally bound system has kinetic and potential energies of the same
   // magnitude and opposite sign, so its total is near zero and a relative
   // drift figure divides by nearly nothing. These scales are what let the
@@ -1003,7 +1003,7 @@ const conservedQuantities = () => {
  * Below it, a change of one part in a thousand of the *terms* - which is a
  * perfectly ordinary amount of integration error over a long run - moves the
  * reported percentage by 100% or more, so the figure says more about the
- * cancellation than about the integrator. Above it the amplification is at
+ * cancelation than about the integrator. Above it the amplification is at
  * most a thousandfold and the number still means something.
  *
  * This is deliberately not a list of scenarios. A marginally bound pair, a
@@ -1041,7 +1041,7 @@ const resetConservationBaseline = () => {
   conservationBaseline = {
     energy: now.energy,
     angular: now.angular,
-    // Kept so the drift figure can tell a small total from a cancelled one.
+    // Kept so the drift figure can tell a small total from a canceled one.
     energyScale: now.energyScale,
     angularScale: now.angularScale,
     count: now.count,
@@ -1188,7 +1188,7 @@ const conservationDrift = (fresh = false) => {
     angular: now.angular,
     baselineEnergy: e0,
     baselineAngular: l0,
-    // NaN where a percentage would be an amplified cancellation rather than a
+    // NaN where a percentage would be an amplified cancelation rather than a
     // measurement. The absolute changes below are always available, and are
     // what a caller should show instead of an enormous figure.
     energyDrift: energyOk ? (100 * (now.energy - e0)) / Math.abs(e0) : NaN,
@@ -1215,7 +1215,7 @@ const conservationDrift = (fresh = false) => {
  * which is what gravity uses, and once in the unit the class is built and
  * displayed in - Earth masses, Jupiter masses, solar masses, Ceres masses,
  * Halley masses, fragments. Any code that writes `mass` and leaves the other
- * one behind produces a body that gravitates as one thing and is labelled as
+ * one behind produces a body that gravitates as one thing and is labeled as
  * another, which is the single most repeated bug in this file's history.
  *
  * @param {object} obj - The body
@@ -1557,7 +1557,7 @@ const dominantStarFor = pos => dominantLight(pos, luminousSources());
  * Does the reader want animation held still?
  *
  * Read through matchMedia rather than from a setting, because it is an
- * operating-system preference and the rest of the interface already honours it
+ * operating-system preference and the rest of the interface already honors it
  * that way (see the reduced-motion block in css/tokens.css). Cached: matchMedia
  * is not free and this is asked once per pulsar per frame.
  *
@@ -1597,7 +1597,7 @@ const rgba = (c, a) => `rgba(${c.r},${c.g},${c.b},${a})`;
 
 // Function to update physics settings
 const updatePhysicsSettings = settings => {
-  physicsSettings = normaliseGalaxyGravity(
+  physicsSettings = normalizeGalaxyGravity(
     {
       ...physicsSettings,
       ...settings,
@@ -1628,7 +1628,7 @@ const updatePhysicsSettings = settings => {
  * @param {object} patch - Only the keys this call supplied
  * @returns {object} The merged settings, made self-consistent
  */
-const normaliseGalaxyGravity = (next, patch = {}) => {
+const normalizeGalaxyGravity = (next, patch = {}) => {
   const wroteMode = Object.hasOwn(patch, 'galaxy_gravity');
   const wroteHalo = Object.hasOwn(patch, 'dark_matter_halo');
 
@@ -1642,7 +1642,7 @@ const normaliseGalaxyGravity = (next, patch = {}) => {
   // Resolved toward the positive assertion: `dark_matter_halo: true` is
   // somebody asking for something, where 'newtonian' is usually a baseline with
   // no opinion. The state that comes out is consistent either way; this only
-  // decides which of two contradictory requests is honoured.
+  // decides which of two contradictory requests is honored.
   if (wroteHalo && wroteMode && patch.dark_matter_halo === true) {
     mode = 'halo';
   } else if (wroteHalo && !wroteMode) {
@@ -2362,7 +2362,7 @@ export const getWorldGeneration = () => worldGeneration;
  * How many times a body's state has been changed by hand.
  *
  * Distinct from the world generation, which counts rebuilds. This counts
- * interventions: a manoeuvre burn, a bench perturbation - the same objects,
+ * interventions: a maneuver burn, a bench perturbation - the same objects,
  * moving differently because somebody made them. An observing session cannot
  * see the difference from the target's identity, and it matters to one: a
  * radial-velocity curve recorded before a burn is a recording of an orbit the
@@ -2930,7 +2930,7 @@ const updatePhysics = dt => {
           dy = bh1.pos.y - bh2.pos.y;
         if (dx * dx + dy * dy < (bh1.radius + bh2.radius) ** 2) {
           // Identical arithmetic to what was written out here: total mass,
-          // mass-weighted centre of mass, momentum-conserving velocity.
+          // mass-weighted center of mass, momentum-conserving velocity.
           const m1 = bh1.mass,
             m2 = bh2.mass;
           const {
@@ -3152,7 +3152,7 @@ const updatePhysics = dt => {
   }
   if (state) {
     // What is being followed, as an identity rather than an object: switching
-    // from one black hole to another, or to the centre of mass of a pair, is a
+    // from one black hole to another, or to the center of mass of a pair, is a
     // new camera and must not inherit the previous one's manual offset.
     const followKey = target
       ? `${physicsSettings.follow_mode}:${target.id ?? 'com'}`
@@ -3343,7 +3343,7 @@ class PhysicsObject {
       const dy = this.pos.y - bh.pos.y;
       if (dx * dx + dy * dy < (bh.radius + ABSORB_BUFFER) ** 2) {
         this.alive = false;
-        // Mass, momentum and centre of mass, rather than mass alone. See the
+        // Mass, momentum and center of mass, rather than mass alone. See the
         // note on absorb_into_black_hole for what it conserves, what it cannot,
         // and which configurations opt out.
         absorb_into_black_hole(bh, this);
@@ -3440,7 +3440,7 @@ class Planet extends PhysicsObject {
     }
 
     // A scenario that names a color means it: the Solar System sets Mercury
-    // grey, Venus cream, Mars red, and the Kepler lesson distinguishes its two
+    // gray, Venus cream, Mars red, and the Kepler lesson distinguishes its two
     // orbiters by color in the text. Falling straight through to the density
     // switch ignored all of that and drew every planet the same sky blue,
     // including two side by side that the lesson calls "blue" and "orange".
@@ -3490,12 +3490,12 @@ class Planet extends PhysicsObject {
     // Soft bloom, into the offscreen layer js/render.js composites additively.
     //
     // One pass. There used to be two consecutive blocks here, identical in
-    // geometry and differing only in colour: the first in the planet's own
-    // base colour at 0.15/0.06, the second in a fixed pale blue at 0.35/0.15.
+    // geometry and differing only in color: the first in the planet's own
+    // base color at 0.15/0.06, the second in a fixed pale blue at 0.35/0.15.
     // Added together, the fixed blue was more than twice the weight of the
-    // planet's own colour, so a red planet and a blue one wore the same halo -
+    // planet's own color, so a red planet and a blue one wore the same halo -
     // and every planet paid for two full-size radial gradients a frame to be
-    // told the wrong colour. The alphas below are the two sets summed, so the
+    // told the wrong color. The alphas below are the two sets summed, so the
     // brightness is what it always was; only the hue is now correct.
     //
     // Reading window.bloomCtx is what arms the composite (see the getter in
@@ -3541,7 +3541,7 @@ class Planet extends PhysicsObject {
     // which is the size this decision has always been made on: gating on the
     // drawn size instead would have taken the names off every planet in the
     // Solar System the moment the displayed-size policy shrank them, which is
-    // a labelling change nobody asked for.
+    // a labeling change nobody asked for.
     const screen_radius = r * state.zoom;
     const label_size = this.radius * state.zoom;
 
@@ -3583,11 +3583,11 @@ class Planet extends PhysicsObject {
    * partway rather than needing a separate code path per level.
    *
    * @param {CanvasRenderingContext2D} ctx - Clipped, world-transformed context
-   * @param {{x: number, y: number}} at - Centre, world units
+   * @param {{x: number, y: number}} at - Center, world units
    * @param {number} r - Drawn radius, world units
    * @param {number} z - Zoom
    * @param {string} level - From lodOf
-   * @param {string} baseColor - The planet's own colour
+   * @param {string} baseColor - The planet's own color
    */
   drawSurface(ctx, at, r, z, level, baseColor) {
     // --- one shading pass: which side the light is on ---------------------
@@ -3676,7 +3676,7 @@ class Planet extends PhysicsObject {
     // model radius: a continent sized to a radius the body is no longer drawn
     // at is a continent that covers the planet.
     const r = drawRadius(this, 'Planet');
-    // Draw Earth with realistic appearance - blue oceans with green continents
+    // Draw Earth with realiztic appearance - blue oceans with green continents
     const gradient = ctx.createRadialGradient(
       world_pos.x,
       world_pos.y,
@@ -3768,7 +3768,7 @@ class Planet extends PhysicsObject {
 
   drawMoon(ctx, world_pos) {
     const r = drawRadius(this, 'Planet');
-    // Draw Moon with realistic gray appearance and mock craters
+    // Draw Moon with realiztic gray appearance and mock craters
     const gradient = ctx.createRadialGradient(
       world_pos.x,
       world_pos.y,
@@ -3982,7 +3982,7 @@ class GasGiant extends PhysicsObject {
    * nothing random.
    *
    * @param {CanvasRenderingContext2D} ctx - Target
-   * @param {{x: number, y: number}} at - Planet centre, world coordinates
+   * @param {{x: number, y: number}} at - Planet center, world coordinates
    * @param {number} pr - The planet's displayed radius, world units
    * @param {boolean} near - The half in front of the planet
    * @param {boolean} detailed - Bands and a division, rather than one annulus
@@ -4045,7 +4045,7 @@ class GasGiant extends PhysicsObject {
    * size where it is legible.
    *
    * @param {CanvasRenderingContext2D} ctx - Target
-   * @param {{x: number, y: number}} at - Planet centre, world coordinates
+   * @param {{x: number, y: number}} at - Planet center, world coordinates
    * @param {number} pr - Displayed planetary radius
    * @param {{x: number, y: number}} light - Unit vector toward the light
    */
@@ -4098,8 +4098,8 @@ class GasGiant extends PhysicsObject {
 
     // Rings, when there is room for them to be rings.
     //
-    // A ring system on a body a few pixels across is four grey pixels beside
-    // three coloured ones, which is noise rather than information - so below
+    // A ring system on a body a few pixels across is four gray pixels beside
+    // three colored ones, which is noise rather than information - so below
     // the shaded threshold they are simply not drawn, and in a crowded field
     // they are not drawn at all. Between the two, a single annulus each side;
     // above it, the bands and the division.
@@ -4281,7 +4281,7 @@ class GasGiant extends PhysicsObject {
     // which is the size this decision has always been made on: gating on the
     // drawn size instead would have taken the names off every planet in the
     // Solar System the moment the displayed-size policy shrank them, which is
-    // a labelling change nobody asked for.
+    // a labeling change nobody asked for.
     const screen_radius = gr * state.zoom;
     const label_size = this.radius * state.zoom;
 
@@ -4500,7 +4500,7 @@ class Asteroid extends PhysicsObject {
 
 // Debris class
 /**
- * Collision and tidal ejecta, massed in kilometre-scale rocky fragments.
+ * Collision and tidal ejecta, massed in kilometer-scale rocky fragments.
  *
  * Was a literal 0.01 simulation units, which is three Earth masses of gravel.
  *
@@ -4595,7 +4595,7 @@ class AccretionDiskParticle extends PhysicsObject {
       // correction rather than an oversight. These tracers are decoration: how
       // many exist depends on a rendering setting, so a hole that ate them grew
       // at a rate set by the quality tier. A black hole in the sandbox gains
-      // mass by absorbing a modelled body, through handle_collisions, and by
+      // mass by absorbing a modeled body, through handle_collisions, and by
       // nothing else. See MODEL.md and /model/#black-holes.
 
       // Trigger standard accretion intensity increase
@@ -4869,7 +4869,7 @@ class BlackHole {
     // (js/rng.js withSeed patches it), so a *visual* choice used to consume
     // physics randomness and shift every body placed afterwards.
     //
-    // `jet_orientation` is kept and honoured where a scenario or an old save
+    // `jet_orientation` is kept and honored where a scenario or an old save
     // supplied one: it becomes the disk's position angle, which is the same
     // quantity it always meant on screen, and the jets come out along that
     // disk's normal instead of being an angle of their own.
@@ -5066,7 +5066,7 @@ class BlackHole {
   updateDiskParticles(dt) {
     if (
       !physicsSettings.show_accretion_disk ||
-      !physicsSettings.realistic_disk_physics
+      !physicsSettings.realiztic_disk_physics
     )
       return;
 
@@ -5199,7 +5199,7 @@ class BlackHole {
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
       // The one boundary the picture is allowed to show, and only here: a
-      // dashed line on a labelled diagram, at the silhouette's edge. See
+      // dashed line on a labeled diagram, at the silhouette's edge. See
       // drawHorizonBoundary in js/blackHole/render.js for why it is not drawn
       // the rest of the time.
       renderer.drawHorizonBoundary(
@@ -5335,22 +5335,22 @@ class StarObject extends PhysicsObject {
 
     super(pos, vel, finalMassInSuns * SOLAR_MASS_UNIT, radius, 'StarObject');
     this.massInSuns = finalMassInSuns;
-    // Null, deliberately. A colour here would be indistinguishable from one a
+    // Null, deliberately. A color here would be indistinguishable from one a
     // scenario chose on purpose, and that is exactly the distinction the
-    // drawing has to make: an authored colour must survive, and a generated one
+    // drawing has to make: an authored color must survive, and a generated one
     // must give way to the star's temperature. The constructor used to fill
     // this in from the mass, which meant the temperature branch below was
-    // unreachable and a star built from a real catalogue at 2566 K was drawn
-    // the colour of a 0.09 solar-mass main-sequence star.
+    // unreachable and a star built from a real catalog at 2566 K was drawn
+    // the color of a 0.09 solar-mass main-sequence star.
     //
-    // Every reader falls back: the draw path colours from the temperature, the
+    // Every reader falls back: the draw path colors from the temperature, the
     // trail renderer does the same, and js/view3d.js derives from the mass.
     this.baseColor = null;
     this.intact = true;
     this.name = getRandomName('stars');
-    // The modelled properties. Null means nobody supplied one, which is the
+    // The modeled properties. Null means nobody supplied one, which is the
     // common case: js/stellar/state.js then estimates from the mass and says
-    // that it did. A scenario built from a catalogue fills them in, and a
+    // that it did. A scenario built from a catalog fills them in, and a
     // future evolutionary track will too.
     this.temperature = null;
     this.spectralType = null;
@@ -5376,19 +5376,19 @@ class StarObject extends PhysicsObject {
     const screenR = r * z;
     const level = lodOf(this, 'Star');
 
-    // Colour from the temperature, not from the mass directly.
+    // Color from the temperature, not from the mass directly.
     //
     // The two agree for a main-sequence star, because the temperature is
     // estimated from the mass when a star does not carry one - but a star that
     // DOES carry one, which is every star a scenario builds from real data, was
-    // being coloured from a mass-to-colour table that knew nothing about it.
+    // being colored from a mass-to-color table that knew nothing about it.
     // stellarPropertiesFor is the same function the habitable-zone ring and the
-    // light curve read, so the colour on screen and the physics in the panels
+    // light curve read, so the color on screen and the physics in the panels
     // now come from one number. An explicit baseColor still wins: a scenario
-    // that names a colour means it.
+    // that names a color means it.
     // Memoised on the star, keyed on the mass it was computed from.
     //
-    // The colour only changes when the star does, which is on accretion or a
+    // The color only changes when the star does, which is on accretion or a
     // merger - not sixty times a second. A cluster of five hundred stars was
     // otherwise running stellarPropertiesFor, which allocates, once per star
     // per frame to arrive at the same answer it gave on the previous one.
@@ -5405,7 +5405,7 @@ class StarObject extends PhysicsObject {
         base: this.baseColor,
         // The temperature is part of the key, not just an input. Without it a
         // star whose temperature changed while its mass did not kept the
-        // colour it was memoised with - which is every star in an evolutionary
+        // color it was memoised with - which is every star in an evolutionary
         // track, where the mass barely moves and the temperature moves by a
         // factor of ten.
         teff: this.temperature,
@@ -5427,7 +5427,7 @@ class StarObject extends PhysicsObject {
     } else {
       // A limb-darkened disc from a cached sprite. The sprite is radially
       // symmetric, so the render pass's flipped Y axis does not matter, and it
-      // is keyed on colour and size buckets - a cluster of similar stars shares
+      // is keyed on color and size buckets - a cluster of similar stars shares
       // one rather than building a gradient each, every frame.
       // The painter is in js/bodyVisuals.js so that the Stellar Lab's preview
       // and this draw the same star.
@@ -5493,7 +5493,7 @@ class StarObject extends PhysicsObject {
     // which is the size this decision has always been made on: gating on the
     // drawn size instead would have taken the names off every planet in the
     // Solar System the moment the displayed-size policy shrank them, which is
-    // a labelling change nobody asked for.
+    // a labeling change nobody asked for.
     const screen_radius = r * state.zoom;
     const label_size = this.radius * state.zoom;
 
@@ -5507,7 +5507,7 @@ class StarObject extends PhysicsObject {
       ctx.shadowBlur = 4;
 
       // Show name for Solar System sun, mass for others - unless a lesson has
-      // asked for neither. A step that puts three unlabelled stars up and asks
+      // asked for neither. A step that puts three unlabeled stars up and asks
       // a reader to judge them by eye is undone by a mass printed under each
       // one, and that is the first screen of A Universe of Stars. The flag is
       // set by js/lessonStage.js from the step's own declaration and cleared
@@ -5581,12 +5581,12 @@ class StarObject extends PhysicsObject {
       // Null where nobody chose one. That is the difference between "this star
       // is orange because a scenario said so" and "this star is orange because
       // it is cool", and a saved state that wrote the second as the first
-      // would freeze a derived colour into an authored one.
+      // would freeze a derived color into an authored one.
       baseColor: this.baseColor,
       showHabitableZone: this.showHabitableZone,
-      // The modelled properties, each null unless something supplied it. An
+      // The modeled properties, each null unless something supplied it. An
       // older save has none of these and restores with nulls, which is exactly
-      // what a star that nobody modelled should carry.
+      // what a star that nobody modeled should carry.
       temperature: this.temperature,
       luminosityInSuns: this.luminosityInSuns,
       radiusInSuns: this.radiusInSuns,
@@ -5643,7 +5643,7 @@ class NeutronStar extends PhysicsObject {
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
     // The drawn radius, which everything below is proportioned to. A neutron
-    // star is twenty kilometres across, so this is the marker floor at any
+    // star is twenty kilometers across, so this is the marker floor at any
     // zoom a scenario is actually viewed at.
     const nsR = drawRadius(this, 'NeutronStar');
 
@@ -5727,7 +5727,7 @@ class NeutronStar extends PhysicsObject {
     // which is the size this decision has always been made on: gating on the
     // drawn size instead would have taken the names off every planet in the
     // Solar System the moment the displayed-size policy shrank them, which is
-    // a labelling change nobody asked for.
+    // a labeling change nobody asked for.
     const screen_radius = nsR * state.zoom;
     const label_size = this.radius * state.zoom;
 
@@ -5877,7 +5877,7 @@ class WhiteDwarf extends PhysicsObject {
     // which is the size this decision has always been made on: gating on the
     // drawn size instead would have taken the names off every planet in the
     // Solar System the moment the displayed-size policy shrank them, which is
-    // a labelling change nobody asked for.
+    // a labeling change nobody asked for.
     const screen_radius = wdR * state.zoom;
     const label_size = this.radius * state.zoom;
 
@@ -6373,7 +6373,7 @@ class Comet extends PhysicsObject {
     // Where the light is, which is what a comet's appearance is entirely about.
     // The tails are not exhaust: the ion tail is blown radially outward by the
     // stellar wind and points away from the star whichever way the comet is
-    // travelling, and there is no coma at all until something warms the ice.
+    // traveling, and there is no coma at all until something warms the ice.
     const sun = dominantStarFor(world_pos);
     const activity = sun
       ? tailActivity(
@@ -6463,7 +6463,7 @@ class Comet extends PhysicsObject {
    * A comet has two, they point in different directions, and telling them
    * apart is most of what there is to learn from the picture:
    *
-   *   The ion tail is gas, ionised and swept straight out by the stellar wind.
+   *   The ion tail is gas, ionized and swept straight out by the stellar wind.
    *   It is narrow, blue, and points directly away from the star - which means
    *   that on the way out of the system it leads rather than follows. This is
    *   the part the old drawing had backwards: it pointed the tail opposite the
@@ -6634,7 +6634,7 @@ class Comet extends PhysicsObject {
  * @param {Array} objects_list - Array of physics objects to check for collisions
  */
 const handle_collisions = objects_list => {
-  // Broad phase: only pairs sharing a grid neighbourhood reach the contact
+  // Broad phase: only pairs sharing a grid neighborhood reach the contact
   // test, instead of every pair in the list.
   forEachCandidatePair(objects_list, (obj1, obj2) => {
     {
@@ -7598,7 +7598,7 @@ const handle_star_object_collisions = () => {
 
 // Enhanced rocky planet collision handling
 /**
- * Handle collisions between rocky planets with realistic physics
+ * Handle collisions between rocky planets with realiztic physics
  * @param {Array} objects_list - Array of physics objects to check for collisions
  */
 const ROCKY_TYPES = new Set(['Planet', 'Asteroid', 'Comet']);
@@ -7650,7 +7650,7 @@ const handle_rocky_collisions = objects_list => {
 
           // Both objects lose mass from collision. The reported mass has to
           // follow the simulated one: leaving massInEarths behind is how a body
-          // ends up gravitating as one thing and labelled as another.
+          // ends up gravitating as one thing and labeled as another.
           for (const obj of [obj1, obj2]) {
             obj.mass *= 0.9;
             if (obj.massInEarths != null) obj.massInEarths *= 0.9;
@@ -7692,7 +7692,7 @@ const handle_rocky_collisions = objects_list => {
         obj2.pos.x += move2 * nx;
         obj2.pos.y += move2 * ny;
 
-        // Handle collision response with more realistic coefficient
+        // Handle collision response with more realiztic coefficient
         const vel_normal = rvx * nx + rvy * ny;
         if (vel_normal < 0) {
           const e = 0.3; // Lower restitution for rocky objects
@@ -8161,7 +8161,7 @@ const MAX_ENERGY_HISTORY_POINTS = 5000; // Maximum data points per object to pre
 // energy are directly comparable and their sum is meaningful.
 //
 // The sim fixes two anchors: mass (SOLAR_MASS_UNIT units per solar mass) and
-// length (DISTANCE_UNIT_TO_M metres per unit). The time unit is not free once
+// length (DISTANCE_UNIT_TO_M meters per unit). The time unit is not free once
 // those are chosen - it is pinned by requiring the sim's own G to be the real
 // G expressed in sim units:
 //

@@ -95,7 +95,7 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
   // than the scenario's.
   //
   // quality_tier is a property of the machine, not of the system being
-  // modelled. It lives in DEFAULT_SETTINGS so that it round-trips through save
+  // modeled. It lives in DEFAULT_SETTINGS so that it round-trips through save
   // and share like everything else, and that placement meant this reset threw
   // it away: somebody on a slow laptop who chose the low tier got it silently
   // undone by their next scenario load, and the tier then re-derived itself
@@ -603,7 +603,7 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // only gravitational sources when mutual_gravity is on - with it off the
       // solver builds its source list from stars, black holes and galaxies, and
       // this is the one scenario in the app whose whole subject is two planets
-      // and no star. The Moon travelled in a straight line, drifting from 35
+      // and no star. The Moon traveled in a straight line, drifting from 35
       // units to 36 over a run while its trail drew something close enough to
       // the start of an arc to survive a glance.
       mutual_gravity: true,
@@ -1017,7 +1017,7 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       //                       1,400 Io orbits, symplectic Euler at a step of 2
       //                       reports a libration amplitude of 9 degrees and a
       //                       period of 273 Io orbits; at 4 it reports 54 degrees
-      //                       and 458. Both are artefacts. Velocity Verlet at a
+      //                       and 458. Both are artifacts. Velocity Verlet at a
       //                       step of 2 gives 23 degrees and 1,249, within 3% of
       //                       what RK4 gives.
       //
@@ -1078,7 +1078,7 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // resonant argument takes about 19,700 years to swing back and forth once,
       // and a lesson cannot be twenty thousand years long. At this setting one
       // second of wall clock is about 270 years, so a libration and a half - two
-      // turning points, which is what it takes to measure a centre and an
+      // turning points, which is what it takes to measure a center and an
       // amplitude - passes in under two minutes.
       num_black_holes: 0,
       num_stars: 1,
@@ -1241,7 +1241,7 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       max_timestep: 0.05,
       min_interaction_distance: 1.0,
       // Conservative by default; the lesson switches it to compare.
-      habitable_zone_optimism: 1.0,
+      habitable_zone_optimizm: 1.0,
     });
   } else if (ps === 'Interstellar Visitor') {
     // 1I/'Oumuamua on its real hyperbolic orbit, with Earth in for scale. The
@@ -1345,9 +1345,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // That choice matters and is worth being plain about. The flat speed
       // these scenarios show was picked by hand long before MOND was in the
       // project, so the mass scale was chosen to make the model galaxy a
-      // realistic one rather than an arbitrary toy. MOND then reproduces the
+      // realiztic one rather than an arbitrary toy. MOND then reproduces the
       // flat curve from the visible mass alone - but that agreement is a
-      // property of having built a realistic galaxy, not evidence gathered by
+      // property of having built a realiztic galaxy, not evidence gathered by
       // this simulation. See MOND_LIMITATIONS in js/mond.js and the lesson,
       // both of which say so.
       //
@@ -1451,7 +1451,7 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // Velocity Verlet rather than the catalog default. This is the one
       // scenario family whose entire subject is whether an outcome is real,
       // and symplectic Euler's O(dt) phase error puts a spurious eccentricity
-      // on the planet within a few orbits - which is exactly the artefact a
+      // on the planet within a few orbits - which is exactly the artifact a
       // student would then read as "the binary is perturbing it". Verlet's
       // error is O(dt^2) and bounded, so the drift readout stays near 1e-6 on
       // a quiet run and rises only when something real is unresolved.

@@ -80,7 +80,7 @@ async function goTo(page, title) {
  *
  * Two controls, not one. The speaker icon opens the panel; the toggle inside it
  * is what actually permits sound. Clicking only the icon leaves the application
- * muted, which is correct behaviour and was worth discovering here rather than
+ * muted, which is correct behavior and was worth discovering here rather than
  * in a test that silently proved nothing.
  */
 async function permitSound(page) {

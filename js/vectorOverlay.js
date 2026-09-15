@@ -231,7 +231,7 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
           // Only the strongest few. A cluster scenario can have two hundred
           // sources, and the arrows below the top handful are shorter than
           // their own arrowheads: they would cost a frame's worth of drawing
-          // to produce a smudge at the body's centre.
+          // to produce a smudge at the body's center.
           const shown = parts.sources.slice(0, MAX_SOURCE_ARROWS);
           for (const s of shown) {
             const sm = Math.hypot(s.ax, s.ay);
@@ -441,7 +441,7 @@ export function drawPotentialWell(ctx, canvas, toWorld, G, softening, sources) {
     const img = potentialCtx.createImageData(cols, rows);
     const data = img.data;
     const soft = Math.max(softening, 1e-6);
-    // Sample the world position of each cell centre through the same transform
+    // Sample the world position of each cell center through the same transform
     // the bodies are drawn with, so the well sits exactly under the masses that
     // made it however the view is panned or zoomed.
     let minPhi = Infinity;

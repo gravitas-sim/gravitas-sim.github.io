@@ -47,10 +47,10 @@ export const G = 6.6743e-11;
  */
 export const T_SUN = 4.925490947e-6;
 
-/** One solar mass in metres: G Msun / c^2. */
+/** One solar mass in meters: G Msun / c^2. */
 export const L_SUN = T_SUN * C;
 
-/** One megaparsec in metres. IAU 2015 definition of the parsec. */
+/** One megaparsec in meters. IAU 2015 definition of the parsec. */
 export const MPC = 3.085677581491367e22;
 
 /**
@@ -59,7 +59,7 @@ export const MPC = 3.085677581491367e22;
  * The one combination the leading-order waveform actually depends on: two
  * binaries with the same chirp mass and different mass ratios produce the same
  * inspiral to this order, which is a fact the lesson makes a student measure
- * rather than a limitation to apologise for.
+ * rather than a limitation to apologize for.
  *
  * @param {number} m1 - One component mass
  * @param {number} m2 - The other
@@ -75,7 +75,7 @@ export function chirpMass(m1, m2) {
  *
  * Not used by the leading-order waveform. Reported because it is what says how
  * far from equal the masses are, and because 0.25 exactly is the equal-mass
- * case a student should be able to recognise.
+ * case a student should be able to recognize.
  *
  * @param {number} m1 - One component mass
  * @param {number} m2 - The other
@@ -211,10 +211,10 @@ export function cyclesRemaining(freqHz, chirpMassSun) {
  */
 export function strainAmplitude(freqHz, chirpMassSun, distanceMpc) {
   if (!(freqHz > 0) || !(chirpMassSun > 0) || !(distanceMpc > 0)) return NaN;
-  const mMetres = chirpMassSun * L_SUN;
+  const mMeters = chirpMassSun * L_SUN;
   return (
     (4 / (distanceMpc * MPC)) *
-    Math.pow(mMetres, 5 / 3) *
+    Math.pow(mMeters, 5 / 3) *
     Math.pow((Math.PI * freqHz) / C, 2 / 3)
   );
 }
@@ -263,13 +263,13 @@ export function effectiveDistance(distanceMpc, inclinationRad) {
  *
  * The wave frequency is twice the orbital frequency for the dominant mode, so
  * the orbital angular frequency is pi f. Used only to drive the schematic
- * source view, which is labelled schematic wherever it is drawn.
+ * source view, which is labeled schematic wherever it is drawn.
  *
  * @param {number} freqHz - Gravitational-wave frequency, Hz
  * @param {number} totalMassSun - m1 + m2, solar masses
- * @returns {number} Separation, metres
+ * @returns {number} Separation, meters
  */
-export function separationMetres(freqHz, totalMassSun) {
+export function separationMeters(freqHz, totalMassSun) {
   if (!(freqHz > 0) || !(totalMassSun > 0)) return NaN;
   const tm = totalMassSun * T_SUN;
   return (C * Math.cbrt(tm)) / Math.pow(Math.PI * freqHz, 2 / 3);

@@ -64,9 +64,9 @@ describe('the disk fades, and fades smoothly', () => {
   });
 
   // Smooth means continuous, and continuity is testable without inventing a
-  // threshold: refine the sampling and the largest gap between neighbours has
+  // threshold: refine the sampling and the largest gap between neighbors has
   // to shrink with it. A step discontinuity does not shrink - the jump across
-  // it is the same however finely you sample - so this fails on the artefact it
+  // it is the same however finely you sample - so this fails on the artifact it
   // is looking for and passes on a profile that is merely steep, which this one
   // legitimately is just outside the inner edge.
   test('refining the sampling shrinks the largest jump', () => {
@@ -106,7 +106,7 @@ describe('the disk fades, and fades smoothly', () => {
 describe('what is in front of what', () => {
   // The disk is a circle seen at an angle. Half of it passes behind the hole
   // and half in front, and the drawing has to know which - a near half drawn
-  // behind the dark disc, or a far half drawn over it, is the artefact a
+  // behind the dark disc, or a far half drawn over it, is the artifact a
   // reader reads as a bug in the physics.
   test.each(INCLINATIONS.filter(d => d > 0))(
     'at %s degrees the disk has a near half and a far half',
@@ -244,7 +244,7 @@ describe('the flow is a function of time, not of how often it is asked', () => {
     expect(Math.abs(inner)).toBeGreaterThan(Math.abs(outer));
   });
 
-  // Normalised to 1 at the inner edge, not a fraction of c. The module says so:
+  // Normalized to 1 at the inner edge, not a fraction of c. The module says so:
   // "It is not a claim about the absolute speed of anything."
   test('speed is Keplerian and falls monotonically outwards', () => {
     expect(relativeOrbitalSpeed(INNER, INNER)).toBeCloseTo(1, 12);

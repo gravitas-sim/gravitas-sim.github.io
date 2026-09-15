@@ -119,7 +119,7 @@ describe('renderDetails', () => {
     expect(btn.getAttribute('role')).toBe('switch');
     expect(btn.getAttribute('aria-checked')).toBe('true');
     expect(btn.textContent.trim()).toBe('On');
-    // Labelled by visible text, not only by a hover tooltip.
+    // Labeled by visible text, not only by a hover tooltip.
     expect(root.querySelector('#hzToggleBtnLabel').textContent).toBe(
       'Habitable zone'
     );
@@ -259,7 +259,7 @@ describe('renderEnergy', () => {
     expect(canvas.getAttribute('height')).toBeNull();
   });
 
-  test('the actions are labelled for assistive technology', () => {
+  test('the actions are labeled for assistive technology', () => {
     document.body.innerHTML = renderEnergy();
     for (const id of ['refreshEnergyChart', 'exportEnergyChart']) {
       const btn = document.getElementById(id);

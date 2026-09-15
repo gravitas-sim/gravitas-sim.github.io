@@ -69,17 +69,17 @@ async function canvasPainted(page, selector) {
     if (!c || !c.width || !c.height) return { ok: false, why: 'no canvas' };
     const ctx = c.getContext('2d');
     const { data } = ctx.getImageData(0, 0, c.width, c.height);
-    // Distinct colours rather than "not transparent": a widget that cleared to
+    // Distinct colors rather than "not transparent": a widget that cleared to
     // its background and drew nothing is still fully opaque.
     const seen = new Set();
     for (let i = 0; i < data.length; i += 4 * 37) {
       seen.add(`${data[i]},${data[i + 1]},${data[i + 2]},${data[i + 3]}`);
-      if (seen.size > 3) return { ok: true, colours: seen.size };
+      if (seen.size > 3) return { ok: true, colors: seen.size };
     }
     return {
       ok: false,
-      why: `only ${seen.size} colour(s)`,
-      colours: seen.size,
+      why: `only ${seen.size} color(s)`,
+      colors: seen.size,
     };
   }, selector);
 }

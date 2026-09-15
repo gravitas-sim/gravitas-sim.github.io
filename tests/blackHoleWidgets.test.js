@@ -30,7 +30,7 @@ const widget = id => BLACK_HOLE_WIDGETS.find(w => w.id === id);
 describe('the physics behind the lesson', () => {
   test('one solar mass gives the textbook Schwarzschild radius', () => {
     // 2.95 km is the number quoted in every introductory text, and the lesson
-    // leans on it hard: "about three kilometres per solar mass".
+    // leans on it hard: "about three kilometers per solar mass".
     expect(blackHoleFacts(1).rsKm).toBeCloseTo(2.95, 2);
   });
 
@@ -403,7 +403,7 @@ describe('the black hole lesson', () => {
     // the stage is asked for a radius and enforces its own floor above it.
     const step = inv.steps.find(s => s.stage?.equalMass);
     expect(step.stage.equalMass.massSun).toBeGreaterThan(0);
-    // Both centres carry the same mass: that is what makes it controlled.
+    // Both centers carry the same mass: that is what makes it controlled.
     expect(step.stage.equalMass.gap ?? 900).toBeGreaterThan(0);
   });
 

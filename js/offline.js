@@ -183,7 +183,7 @@ function showUpdateBadge() {
   });
 
   // Dismissing hides the message, not the update. The worker is still waiting
-  // and the badge comes back on the next visit, which is the honest behaviour:
+  // and the badge comes back on the next visit, which is the honest behavior:
   // "not now" is not "never".
   dismiss?.addEventListener('click', () => {
     badge.hidden = true;

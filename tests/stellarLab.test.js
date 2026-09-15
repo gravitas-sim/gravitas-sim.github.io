@@ -219,7 +219,7 @@ describe('a point is not a star', () => {
     expect(seen.size).toBe(h.nearby.length);
   });
 
-  test('an empty neighbourhood says so rather than reaching further', () => {
+  test('an empty neighborhood says so rather than reaching further', () => {
     // Somewhere no bundled track goes: cool and extremely luminous.
     const h = hypotheticalAt(2100, 3e5);
     expect(h.nearby.length).toBe(0);
@@ -536,7 +536,7 @@ describe('the synthetic population', () => {
   test('stars that have left the main sequence are dropped and counted', () => {
     const p = synthesisePopulation();
     expect(p.excludedEvolved).toBeGreaterThan(0);
-    expect(p.stars.length + p.excludedEvolved + p.excludedUnmodelled).toBe(
+    expect(p.stars.length + p.excludedEvolved + p.excludedUnmodeled).toBe(
       p.requested
     );
     for (const s of p.stars)
@@ -545,8 +545,8 @@ describe('the synthetic population', () => {
 
   test('it says what it leaves out', () => {
     const p = synthesisePopulation();
-    expect(p.notModelled.join(' ')).toMatch(/extinction/i);
-    expect(p.notModelled.join(' ')).toMatch(/[Bb]inaries/);
+    expect(p.notModeled.join(' ')).toMatch(/extinction/i);
+    expect(p.notModeled.join(' ')).toMatch(/[Bb]inaries/);
   });
 
   test('the bright subset is the same stars, filtered', () => {
@@ -857,7 +857,7 @@ describe('one lab, across the steps of a lesson', () => {
 });
 
 describe('a snapshot carries the distinction', () => {
-  test('a modelled reading carries a mass and a track', () => {
+  test('a modeled reading carries a mass and a track', () => {
     const lab = createLab();
     const snap = snapshotOf(lab);
     expect(snap.source).toBe('model');

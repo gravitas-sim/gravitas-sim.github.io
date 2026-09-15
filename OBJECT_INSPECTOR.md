@@ -34,7 +34,7 @@ full-width slider, a glowing value badge, and a permanent line of text reading
 off a help affordance.
 
 **Each overlay toggle was its own bordered block** with a paragraph underneath.
-They are gathered into one OVERLAYS section of labelled switches.
+They are gathered into one OVERLAYS section of labeled switches.
 
 **Properties past the ninth** move under a "More" heading rather than extending
 the panel indefinitely, so a black hole and an asteroid open to a similar height.

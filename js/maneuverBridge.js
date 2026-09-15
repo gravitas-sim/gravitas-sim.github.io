@@ -1,5 +1,5 @@
 // =============================================================================
-// Loading the manoeuvre planner on demand
+// Loading the maneuver planner on demand
 // -----------------------------------------------------------------------------
 // Most visitors never plan a burn, and the planner drags in the panel and its
 // prose. This is what the start-up path sees instead: one function, and an
@@ -66,7 +66,7 @@ export async function openManeuverFor(bodyId = null) {
 export function watchForManeuver() {
   window.addEventListener('gravitasManeuverRequested', event => {
     openManeuverFor(event.detail?.bodyId ?? null).catch(err =>
-      console.error('The manoeuvre planner could not be loaded:', err)
+      console.error('The maneuver planner could not be loaded:', err)
     );
   });
 }

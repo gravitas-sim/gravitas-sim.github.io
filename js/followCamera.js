@@ -1,7 +1,7 @@
 // =============================================================================
 // Follow mode's camera, and the reader's own hand on it
 // -----------------------------------------------------------------------------
-// Follow mode centres the view on a body every physics step. It did that by
+// Follow mode centers the view on a body every physics step. It did that by
 // assigning `state.pan` outright:
 //
 //     state.pan.x = -(target.pos.x - off.x) * state.zoom;
@@ -11,7 +11,7 @@
 // tens of times a second, so the picture fought back and then snapped home. The
 // same happened to a wheel zoom, which anchors by adjusting the pan.
 //
-// The behaviour chosen here, of the two the brief allows: Follow mode keeps
+// The behavior chosen here, of the two the brief allows: Follow mode keeps
 // following, and manual camera input becomes an OFFSET from the followed body
 // rather than being discarded. Drag the view while following a black hole and
 // you stay locked to that black hole, looking off to one side; the offset
@@ -52,7 +52,7 @@ export function followCamera({
   const held = offset || { x: 0, y: 0 };
 
   // The first step after Follow is switched on has nothing to compare against,
-  // so it centres exactly and starts the offset at zero. Treating the existing
+  // so it centers exactly and starts the offset at zero. Treating the existing
   // pan as manual input there would preserve whatever the view happened to be
   // showing, which is the opposite of what "follow this" means.
   const drift = lastApplied
@@ -62,7 +62,7 @@ export function followCamera({
   const nextOffset = { x: held.x + drift.x, y: held.y + drift.y };
 
   // Follow moves the camera; a reference frame moves the coordinates. They
-  // compose, so the pan that centres the target is measured in the frame the
+  // compose, so the pan that centers the target is measured in the frame the
   // target is drawn in, not in world coordinates.
   return {
     pan: {

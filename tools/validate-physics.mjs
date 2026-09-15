@@ -32,7 +32,7 @@ const asJson = has('--json');
 const verbose = has('--verbose');
 const groupFilter = valueOf('--group');
 
-// Colour, but only when a human is looking at a terminal that wants it.
+// Color, but only when a human is looking at a terminal that wants it.
 const useColor = process.stdout.isTTY && !process.env.NO_COLOR && !asJson;
 const c = (code, s) => (useColor ? `[${code}m${s}[0m` : s);
 const green = s => c('32', s);

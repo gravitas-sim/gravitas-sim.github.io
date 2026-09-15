@@ -9,7 +9,7 @@
 // -----------------------------------------------------------------------------
 // Two of the lab's readings look alike and are not the same kind of claim:
 //
-//   a modelled star      a point on a published evolutionary track, carrying a
+//   a modeled star      a point on a published evolutionary track, carrying a
 //                        mass, an age, a phase and a remaining lifetime
 //   a chosen point       a temperature and a luminosity the student put
 //                        somewhere, carrying a radius and nothing else
@@ -31,7 +31,7 @@
 // them side by side with what the student now thinks.
 //
 // Every canvas task has its numbers in the readout beneath the canvas, which
-// is what makes the lesson completable without reading the picture. Colour is
+// is what makes the lesson completable without reading the picture. Color is
 // never graded: step 3 asks what changed, not what shade it is.
 // =============================================================================
 
@@ -116,7 +116,7 @@ const EIGHT = [
 // that is also a body on the canvas. `bind` on the tool is what joins them.
 const CURSOR = [{ role: 'cursor', name: 'Your star', teffK: 5772, lumSun: 1 }];
 
-// A red dwarf and a red giant: the same colour, two entirely different objects.
+// A red dwarf and a red giant: the same color, two entirely different objects.
 const REDS = [
   { role: 'dwarf', name: 'Red dwarf', track: 'm020', at: 'ms' },
   { role: 'giant', name: 'Red giant', track: 'm100', at: 0.206 },
@@ -171,7 +171,7 @@ const SURVEY_THRESHOLD_FLUX = 1e-4;
  * The synthetic population, on the canvas.
  *
  * Four hundred stars are generated; the ones the tracks could model stand on
- * the canvas, laid out at a constant stride from the whole modelled set. The
+ * the canvas, laid out at a constant stride from the whole modeled set. The
  * cap is above that set rather than below it on purpose. It used to be a
  * hundred and twenty, and the survivors of the survey's cut were whichever of
  * those hundred and twenty happened to be bright - two of the sixteen - so the
@@ -182,7 +182,7 @@ const SURVEY_THRESHOLD_FLUX = 1e-4;
  * The readout still names all four numbers, because they are still four
  * different things and a subsample presented as a population is precisely the
  * mistake these screens are about; at these settings the canvas happens to
- * hold the whole modelled set, and it says so rather than leaving it implied.
+ * hold the whole modeled set, and it says so rather than leaving it implied.
  */
 const POPULATION = {
   population: {
@@ -246,13 +246,13 @@ const A_UNIVERSE_OF_STARS = {
   // picture of the first screen because it is made out of the first screen.
   thumbnail: 'images/investigations/a-universe-of-stars.webp',
   title: 'A Universe of Stars',
-  subtitle: 'Size, colour and the H-R diagram, from eight modelled stars',
+  subtitle: 'Size, color and the H-R diagram, from eight modeled stars',
   duration: '70-90 min',
   level: 'Introductory astronomy',
   tags: ['stars', 'observing'],
   lock: { placement: true, inspector: false, areaSweep: false },
   summary:
-    'Three stars, no labels, and a guess about which is biggest. Over thirty steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organises them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
+    'Three stars, no labels, and a guess about which is biggest. Over thirty steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organizes them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
   objectives: [
     'Tell mass, radius, temperature, luminosity and apparent brightness apart',
     'Read a position on an H-R diagram, including why temperature runs backwards',
@@ -260,7 +260,7 @@ const A_UNIVERSE_OF_STARS = {
     'Say what the main sequence is, and name two kinds of star that are not on it',
     'Explain why a giant is a stage in a life rather than a heavy star',
     'Explain why a star with more fuel can still run out of it sooner',
-    'Recognise a selection effect in a sample of stars',
+    'Recognize a selection effect in a sample of stars',
   ],
   steps: [
     // -----------------------------------------------------------------------
@@ -293,7 +293,7 @@ const A_UNIVERSE_OF_STARS = {
         pace: 'phase',
         pinStaged: true,
         hide: ['order', 'sun'],
-        note: 'Three modelled stars on one common scale. The numbers are switched off for this step on purpose.',
+        note: 'Three modeled stars on one common scale. The numbers are switched off for this step on purpose.',
       }),
       tip: 'Size on this stage is real. Brightness on screen is not — it is chosen so that every star is visible, and the caption says so.',
     },
@@ -349,10 +349,10 @@ const A_UNIVERSE_OF_STARS = {
       tip: 'The list under the picture is the picture&rsquo;s own data. Every measurement in this lesson can be read from it without interpreting the image.',
     },
     {
-      sid: 'temperature-makes-colour',
+      sid: 'temperature-makes-color',
       stage: shelf(CURSOR, { fit: true }),
       type: 'explore',
-      title: 'What temperature does to colour',
+      title: 'What temperature does to color',
       body: `Switch the lab to a chosen point — the mode button is under the
              diagram — and move the cursor left and right along one horizontal
              line. Left is hotter.
@@ -365,7 +365,7 @@ const A_UNIVERSE_OF_STARS = {
         'Move it to the far right and look again',
         'Come back to about 6,000 K and stop',
         'Watch the temperature in the list underneath as you move',
-        'Read the caption under the star: the colour is the star&rsquo;s, the brightness is not',
+        'Read the caption under the star: the color is the star&rsquo;s, the brightness is not',
       ],
       tool: lab({
         bind: 'cursor',
@@ -381,15 +381,15 @@ const A_UNIVERSE_OF_STARS = {
       type: 'read',
       title: 'Two stars, one temperature',
       body: `Both stars on the stage have a surface near 4,300&nbsp;K. They are
-             the same colour, because colour follows surface temperature and
+             the same color, because color follows surface temperature and
              nothing else.
              \n\nOne of them puts out about three hundred times as much light
              as the other.
-             \n\nThink about what a fixed temperature means. Every square metre
+             \n\nThink about what a fixed temperature means. Every square meter
              of a 4,300&nbsp;K surface radiates the same amount per second,
              whichever star it belongs to — that is what a temperature
              <em>is</em>. So the only way one of these can put out three
-             hundred times the light is to have far more square metres.`,
+             hundred times the light is to have far more square meters.`,
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -522,7 +522,7 @@ const A_UNIVERSE_OF_STARS = {
              no good reason for it — the first versions of this diagram were
              drawn against spectral classes that happened to be ordered that
              way, and everyone since has read it backwards. It catches
-             everybody once. Both ends of the axis are labelled.
+             everybody once. Both ends of the axis are labeled.
              \n\nPut the cursor as near as you can to 10,000&nbsp;K and 100
              solar luminosities, then record where you actually landed.`,
       fields: [
@@ -652,8 +652,8 @@ const A_UNIVERSE_OF_STARS = {
              travel along that line, from the cool right-hand side to the hot
              left-hand side, watching the radius.
              \n\nAt a fixed luminosity, a hotter surface radiates far harder
-             per square metre — as the fourth power of the temperature — so
-             the star needs fewer square metres to put out the same light.`,
+             per square meter — as the fourth power of the temperature — so
+             the star needs fewer square meters to put out the same light.`,
       prompt:
         'Moving left along a line of constant luminosity, from 3,000 K to 30,000 K, the radius…',
       options: [
@@ -664,7 +664,7 @@ const A_UNIVERSE_OF_STARS = {
       ],
       answer: 2,
       because:
-        'It shrinks by about a hundred. Ten times the temperature is ten to the fourth - ten thousand times - the output per square metre, and to hold the total light fixed the area must fall by the same ten thousand, which is a hundred in radius. Check it on the diagram: at 1 L(sun) the cool end is about 3.7 solar radii and the hot end about 0.037. That second number is white-dwarf territory, and step 20 comes back to it.',
+        'It shrinks by about a hundred. Ten times the temperature is ten to the fourth - ten thousand times - the output per square meter, and to hold the total light fixed the area must fall by the same ten thousand, which is a hundred in radius. Check it on the diagram: at 1 L(sun) the cool end is about 3.7 solar radii and the hot end about 0.037. That second number is white-dwarf territory, and step 20 comes back to it.',
       tool: lab({
         bind: 'cursor',
         mode: 'free',
@@ -743,12 +743,12 @@ const A_UNIVERSE_OF_STARS = {
     // 12-16: the main sequence, and what it does not cover
     // -----------------------------------------------------------------------
     {
-      sid: 'switch-to-modelled-stars',
+      sid: 'switch-to-modeled-stars',
       stage: shelf(EIGHT, { spacing: 78, fit: true }),
       type: 'explore',
-      title: 'Stars that are actually modelled',
+      title: 'Stars that are actually modeled',
       body: `So far every point has been one you chose. Switch back to
-             <strong>A modelled star</strong> and the readout changes
+             <strong>A modeled star</strong> and the readout changes
              character: now there is a mass, an age, a phase and a lifetime,
              because a published stellar-evolution calculation put this star
              here and knows how it got there.
@@ -756,8 +756,8 @@ const A_UNIVERSE_OF_STARS = {
              40 solar masses, all with the Sun&rsquo;s composition and no
              rotation. Step through them and watch where each one sits.`,
       checklist: [
-        'Press "Switch mode" until the readout says "A modelled star"',
-        'Move the "Modelled star" slider from 0.2 M☉ up to 40 M☉, one step at a time',
+        'Press "Switch mode" until the readout says "A modeled star"',
+        'Move the "Modeled star" slider from 0.2 M☉ up to 40 M☉, one step at a time',
         'Watch the marker travel up and to the left as the mass rises',
         'Read the mass, the age and the phase in the list at each stop',
         'Notice that the band the markers trace out is the shaded main-sequence region',
@@ -925,7 +925,7 @@ const A_UNIVERSE_OF_STARS = {
       options: ['4', '40', '400', 'nothing — same temperature means same size'],
       answer: 2,
       because:
-        'About four hundred. The little one is 0.24 solar radii, the swollen one is 102. They are the same colour and the same temperature and one would swallow the other two hundred million times over. This is why "red star" is not a useful category on its own, and it is the single clearest demonstration in the lesson that colour tells you about a surface and nothing about a size. The classification that separates them is not colour but luminosity: one is a red dwarf, the other a red giant.',
+        'About four hundred. The little one is 0.24 solar radii, the swollen one is 102. They are the same color and the same temperature and one would swallow the other two hundred million times over. This is why "red star" is not a useful category on its own, and it is the single clearest demonstration in the lesson that color tells you about a surface and nothing about a size. The classification that separates them is not color but luminosity: one is a red dwarf, the other a red giant.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -941,7 +941,7 @@ const A_UNIVERSE_OF_STARS = {
       body: `Read both radii and both luminosities off the list, and work out
              the two ratios.
              \n\nThen save the comparison to your notebook — this one is the
-             centrepiece of the argument you will be asked to write at the end.`,
+             centerpiece of the argument you will be asked to write at the end.`,
       fields: [
         { id: 'rSmall', label: 'Radius of the dwarf', unit: 'R☉' },
         { id: 'rBig', label: 'Radius of the giant', unit: 'R☉' },
@@ -993,7 +993,7 @@ const A_UNIVERSE_OF_STARS = {
         return {
           level: 'ok',
           message:
-            'Around 430 in radius and 175,000 in light, and 430 squared is 185,000. The whole difference between these two stars is how much surface they have. Same temperature, same colour, same spectral class.',
+            'Around 430 in radius and 175,000 in light, and 430 squared is 185,000. The whole difference between these two stars is how much surface they have. Same temperature, same color, same spectral class.',
         };
       },
       tool: stage({
@@ -1064,8 +1064,8 @@ const A_UNIVERSE_OF_STARS = {
              kelvin — more than four times the Sun&rsquo;s surface temperature
              — putting out a hundredth of the Sun&rsquo;s light.
              \n\nYou now have everything you need to say how big it is
-             without being told. Each square metre of a surface at 25,000 K
-             radiates far more than a square metre at 5,772 K; this star still
+             without being told. Each square meter of a surface at 25,000 K
+             radiates far more than a square meter at 5,772 K; this star still
              manages to be a hundred times fainter overall.
              \n\nCommit before you measure.`,
       prompt: 'So how much surface can it have?',
@@ -1077,7 +1077,7 @@ const A_UNIVERSE_OF_STARS = {
       ],
       answer: 0,
       because:
-        'Far less. Luminosity is area times what each unit of area emits, and what each unit of area emits climbs as the fourth power of temperature: at 25,000 K a square metre puts out roughly 350 times what a solar square metre does. To come out a hundred times fainter in total, the area has to be about thirty-five thousand times smaller — a radius around a two-hundredth of the Sun&rsquo;s. That is a body the size of the Earth. The last option is the one worth arguing with: mass is exactly what you do <em>not</em> need here, and reaching for it is the habit this lesson is trying to break.',
+        'Far less. Luminosity is area times what each unit of area emits, and what each unit of area emits climbs as the fourth power of temperature: at 25,000 K a square meter puts out roughly 350 times what a solar square meter does. To come out a hundred times fainter in total, the area has to be about thirty-five thousand times smaller — a radius around a two-hundredth of the Sun&rsquo;s. That is a body the size of the Earth. The last option is the one worth arguing with: mass is exactly what you do <em>not</em> need here, and reaching for it is the habit this lesson is trying to break.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -1156,7 +1156,7 @@ const A_UNIVERSE_OF_STARS = {
       ],
       answer: 1,
       because:
-        'A white dwarf. At 30,000 K each square metre is radiating ferociously, so putting out only a hundredth of a solar luminosity takes a very small surface: the radius works out at about 0.0037 solar radii, well under the size of the Earth. A main-sequence star at 30,000 K would be tens of thousands of solar luminosities, six million times brighter than this. Position on the diagram is enough to classify it, because the two axes fix the radius between them - and that is what the diagram is for.',
+        'A white dwarf. At 30,000 K each square meter is radiating ferociously, so putting out only a hundredth of a solar luminosity takes a very small surface: the radius works out at about 0.0037 solar radii, well under the size of the Earth. A main-sequence star at 30,000 K would be tens of thousands of solar luminosities, six million times brighter than this. Position on the diagram is enough to classify it, because the two axes fix the radius between them - and that is what the diagram is for.',
       tool: lab({ mode: 'free', regions: true, compare: false }),
       tip: 'The regions on the diagram are drawn as soft blocks with dashed edges on purpose. A star is not a giant because it crossed a line; the shading is a summary of where each kind of star ends up.',
     },
@@ -1239,7 +1239,7 @@ const A_UNIVERSE_OF_STARS = {
         };
       },
       tool: lab({ mode: 'model', regions: true, capture: true }),
-      tip: 'Use the age slider paced by time here, not by phase. Paced by time, how far the handle has travelled really is how far through the life it is — which is exactly the question this step is asking.',
+      tip: 'Use the age slider paced by time here, not by phase. Paced by time, how far the handle has traveled really is how far through the life it is — which is exactly the question this step is asking.',
     },
 
     // -----------------------------------------------------------------------
@@ -1302,7 +1302,7 @@ const A_UNIVERSE_OF_STARS = {
       body: `Two thirds of this population are M&nbsp;dwarfs. In a moment you
              will put every one of these stars at the same distance and keep
              only the ones above a brightness cut — the crudest possible model
-             of what a survey actually catalogues.
+             of what a survey actually catalogs.
              \n\nThe stars on the canvas will not change. The cut only
              decides which of them are still standing there afterwards.
              \n\nPredict what the survivors look like.`,
@@ -1318,7 +1318,7 @@ const A_UNIVERSE_OF_STARS = {
       because:
         'Almost none — in fact none at all. This is the answer people find hardest to believe before they see it, which is why you are being asked to commit to it first. A brightness cut selects on luminosity, and luminosity spans a far wider range than the numbers of stars do: an M dwarf puts out a thousandth of the Sun&rsquo;s light, so it drops out of the sample long before anything else does, however many of them there are. The next screen is the same population with the cut applied, and you can count.',
       tool: crowd({ values: { view: 0 } }),
-      tip: 'Note what the readout calls things: four hundred drawn, fewer modelled, fewer again passing the cut, and a bounded sample of them standing on the canvas. They are four different numbers and the whole argument turns on not confusing them.',
+      tip: 'Note what the readout calls things: four hundred drawn, fewer modeled, fewer again passing the cut, and a bounded sample of them standing on the canvas. They are four different numbers and the whole argument turns on not confusing them.',
     },
     {
       sid: 'only-the-bright-ones',
@@ -1369,7 +1369,7 @@ const A_UNIVERSE_OF_STARS = {
       sid: 'what-a-survey-misses',
       stage: POPULATION_BRIGHT,
       type: 'question',
-      title: 'What a catalogue of bright stars is a catalogue of',
+      title: 'What a catalog of bright stars is a catalog of',
       kind: 'short',
       body: `Two counts of one population. Two thirds M dwarfs; none at all
              once you keep only the bright ones.
@@ -1468,7 +1468,7 @@ const A_UNIVERSE_OF_STARS = {
       prompt:
         'Explain how mass, temperature, radius, luminosity and lifetime are related — and where those relationships stop holding. Refer to at least two of your own measurements, and say whether your step 1 answer still stands.',
       rubric:
-        'This is the summative question and should be marked on the connections rather than on coverage. Look for: temperature and luminosity together fix the radius, and the student can use that in either direction; along the main sequence mass largely fixes the other three, steeply, so that a hundredfold in mass is millions-fold in light; that steepness is why the heaviest stars live the shortest lives, fuel over burn rate; and every one of those statements is about the main sequence, with the giant and the white dwarf as the counterexamples the student measured. A strong answer says what a position on the diagram does NOT fix - a mass, an age - and cites the 426-fold radius difference between two stars of the same colour, or the white dwarf at 48,000 K putting out 1.6 solar luminosities. Credit an answer that revises the step 1 prediction and credit one that defends it, provided the defence engages with the measurements. Do NOT require the population material here; it is the subject of its own question at step 28.',
+        'This is the summative question and should be marked on the connections rather than on coverage. Look for: temperature and luminosity together fix the radius, and the student can use that in either direction; along the main sequence mass largely fixes the other three, steeply, so that a hundredfold in mass is millions-fold in light; that steepness is why the heaviest stars live the shortest lives, fuel over burn rate; and every one of those statements is about the main sequence, with the giant and the white dwarf as the counterexamples the student measured. A strong answer says what a position on the diagram does NOT fix - a mass, an age - and cites the 426-fold radius difference between two stars of the same color, or the white dwarf at 48,000 K putting out 1.6 solar luminosities. Credit an answer that revises the step 1 prediction and credit one that defends it, provided the defense engages with the measurements. Do NOT require the population material here; it is the subject of its own question at step 28.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,

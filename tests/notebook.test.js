@@ -117,7 +117,7 @@ const sampleEntry = (over = {}) =>
     ...over,
   });
 
-// The notebook's prose is in the deferred half of the catalogue, registered by
+// The notebook's prose is in the deferred half of the catalog, registered by
 // the bridge at run time. A unit test does not go through the bridge, so it
 // registers them itself; without this, every label below would be its own id.
 registerMessages('en', EN_DEFERRED);
@@ -246,7 +246,7 @@ describe('quantities and their kinds', () => {
   });
 
   test('an unknown kind falls back to measured rather than being stored', () => {
-    // Falling back to the weakest claim: labelling something "revealed" that
+    // Falling back to the weakest claim: labeling something "revealed" that
     // is not would be the dangerous direction, and so would inventing a kind
     // the report has no word for.
     expect(quantity({ label: 'x', value: 1, kind: 'invented' }).kind).toBe(
@@ -744,7 +744,7 @@ describe('every verdict and flag the notebook can record is translated', () => {
 
   test('every flag the capture helpers can raise', () => {
     // Read out of the source rather than listed here, so a new flag added to
-    // capture.js without a name in both catalogues fails this test.
+    // capture.js without a name in both catalogs fails this test.
     const flags = [
       'truth-revealed',
       'degraded-epochs',
@@ -753,7 +753,7 @@ describe('every verdict and flag the notebook can record is translated', () => {
       'structured-residuals',
       'multivariable',
       'bench-warning',
-      'cancelled',
+      'canceled',
       'failed-trials',
       'reliability-check',
     ];
@@ -846,7 +846,7 @@ describe('capturing from the instruments', () => {
     expect([...phases].sort((a, b) => a - b)).toEqual(phases);
   });
 
-  test('revealed truth is labelled as revealed, not as a measurement', async () => {
+  test('revealed truth is labeled as revealed, not as a measurement', async () => {
     const { fromRvFit } = await import('../js/notebook/capture.js');
     const entry = fromRvFit({
       analysis: rvAnalysis({
@@ -962,7 +962,7 @@ describe('capturing from the instruments', () => {
         metrics: ['separation'],
         duration: 120,
         seed: 's1',
-        cancelled: false,
+        canceled: false,
         numerics: { maxStep: 0.02, substeps: 4 },
         trials: [
           { value: 3, status: 'ok', results: { separation: 3.3 } },
@@ -1028,7 +1028,7 @@ describe('capturing from the instruments', () => {
       EN_DEFERRED['nb.rel.limit.verdict.diverged']
     );
     expect(JSON.stringify(entry).toLowerCase()).not.toContain('accurate');
-    // No figure: the report summarises the paths and discards the rows, so
+    // No figure: the report summarizes the paths and discards the rows, so
     // there is nothing honest to draw.
     expect(entry.snapshot.figure).toBe(null);
   });
@@ -1093,7 +1093,7 @@ describe('the report', () => {
     }
   });
 
-  test('the three kinds are named in words, not only in colour', async () => {
+  test('the three kinds are named in words, not only in color', async () => {
     const { buildEvidenceReport } = await import('../js/notebook/report.js');
     const text = asText(
       buildEvidenceReport({ entries: [sampleEntry()], revision: 'x' })
@@ -1153,7 +1153,7 @@ describe('the report', () => {
 });
 
 describe('a capture retains no reference to the live world', () => {
-  // The realistic regression this guards against: bench.js mutates its own
+  // The realiztic regression this guards against: bench.js mutates its own
   // experiment record in place - `current.comparison = ...`, `current
   // .reliability = report` - so a capture helper that stored the experiment
   // rather than reading numbers out of it would have its evidence rewritten
@@ -1436,7 +1436,7 @@ describe('provenance belongs to the recording, not to the world on screen', () =
           failed: 0,
           failures: {},
           outcome: 'complete',
-          cancelled: false,
+          canceled: false,
           complete: true,
           gridLimited: false,
           multimodal: false,
@@ -1459,7 +1459,7 @@ describe('the simulation clock is recorded in the right units', () => {
     // The defect: the raw clock is in simulation time units, and it was stored
     // under `simTimeSeconds` and divided by 86400 for `simTimeDays`. At the
     // default gravitational constant one unit is 158809.7 s, so the day figure
-    // was wrong by that factor and the second figure was mislabelled.
+    // was wrong by that factor and the second figure was mislabeled.
     const unitSeconds = 158809.7;
     const clockUnits = 100;
     const p = provenanceOf({
@@ -1586,7 +1586,7 @@ describe('the uncertainty analysis travels with the evidence', () => {
       failed: 2,
       failures: { noSearch: 2, notFinite: 0 },
       outcome: 'partial',
-      cancelled: false,
+      canceled: false,
       complete: false,
       gridLimited: false,
       multimodal: false,
@@ -1646,7 +1646,7 @@ describe('the uncertainty analysis travels with the evidence', () => {
     ]);
     expect(u.failures).toEqual({ noSearch: 2, notFinite: 0 });
     expect(u.outcome).toBe('partial');
-    expect(u.cancelled).toBe(false);
+    expect(u.canceled).toBe(false);
     expect(u.complete).toBe(false);
     expect(u.period.median).toBe(3.5);
     expect(u.families).toHaveLength(1);
@@ -1756,9 +1756,9 @@ describe('the uncertainty analysis travels with the evidence', () => {
 
   test('every uncertainty flag it can raise is named in both languages', () => {
     const flags = [
-      'uncertainty-analysed',
+      'uncertainty-analyzed',
       'uncertainty-multimodal',
-      'uncertainty-cancelled',
+      'uncertainty-canceled',
       'uncertainty-partial',
       'uncertainty-grid-limited',
       'uncertainty-refused',
@@ -1887,7 +1887,7 @@ describe('provenance survives the chain the application actually uses', () => {
     });
   });
 
-  test('display and analysis metadata stay labelled as such', async () => {
+  test('display and analysis metadata stay labeled as such', async () => {
     const entry = await capture(payload());
     const p = entry.snapshot.provenance;
     // The frame the reader is viewing in is not the frame the samples were
@@ -1914,7 +1914,7 @@ describe('provenance survives the chain the application actually uses', () => {
     expect(p.numerical.integrator).toBe(null);
     expect(p.numerical.maxTimestep).toBe(null);
     // Units are the units of the numbers in the entry, which the workspace
-    // always knows: it computes in metres per second and days. What it must
+    // always knows: it computes in meters per second and days. What it must
     // not do is invent the recording's own conversion factor, which is a fact
     // about the world the samples came from.
     expect(p.units).toEqual({ velocity: 'm/s', time: 'days' });

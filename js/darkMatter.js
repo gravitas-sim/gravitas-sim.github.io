@@ -331,7 +331,7 @@ export function velocityDispersion(bodies) {
  * Use losToMeanSquare for that step, deliberately, and in the open.
  *
  * @param {number} meanSquareSpeed - <v^2> of the members
- * @param {number} radius - Characteristic radius of the system
+ * @param {number} radius - Characteriztic radius of the system
  * @param {number} G - Gravitational constant in simulation units
  * @returns {number} Virial mass in simulation mass units
  */
@@ -402,7 +402,7 @@ export const G_GALACTIC = 4.30091727e-6;
  * Circular speed around a point mass.
  *
  * The bulge of a spiral is not a point, but outside it the field of any
- * spherical distribution is the field of a point at its centre, and outside it
+ * spherical distribution is the field of a point at its center, and outside it
  * is where a rotation curve is measured. This is the falling curve the lesson
  * starts from.
  *
@@ -448,7 +448,7 @@ export function uniformSphereSpeed(r, mass, radius, G = G_GALACTIC) {
 // A disc is not a sphere and the difference is not small. A thin exponential
 // disc's rotation curve peaks at about 2.2 scale lengths and falls more slowly
 // than Keplerian afterwards, because mass at larger radius than the orbit still
-// pulls inward when it is in the same plane. Modelling the disc as a sphere with
+// pulls inward when it is in the same plane. Modeling the disc as a sphere with
 // the same enclosed mass understates its peak speed by roughly 15% and moves the
 // peak inward, which in a fitting exercise gets absorbed into the halo - and the
 // halo is the thing being measured.

@@ -123,7 +123,7 @@ const ENERGY = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'gravity'],
   // The equal-area wedges belong to the lesson this scenario was built for,
@@ -393,7 +393,7 @@ const ENERGY = {
         'bound: it cannot get away, however long you wait',
         'unbound: it will eventually leave',
         'about to fall straight into the planet',
-        'travelling faster than escape speed',
+        'traveling faster than escape speed',
       ],
       answer: 0,
       because:

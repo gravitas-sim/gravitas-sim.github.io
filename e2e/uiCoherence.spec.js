@@ -127,10 +127,7 @@ test.describe('the object types are drawn, not typed', () => {
     expect(new Set(lefts).size).toBe(1);
   });
 
-  test('the glyphs take their colours from the theme', async ({
-    page,
-    app,
-  }) => {
+  test('the glyphs take their colors from the theme', async ({ page, app }) => {
     await app.boot();
     await openRail(page);
     await page.click('#objectTypeBtn');
@@ -147,11 +144,11 @@ test.describe('the object types are drawn, not typed', () => {
       )
     );
     expect(perItem).toHaveLength(8);
-    for (const colours of perItem) {
-      // Every glyph resolves at least one colour that is neither black - the
+    for (const colors of perItem) {
+      // Every glyph resolves at least one color that is neither black - the
       // shadows and the event horizon are deliberately black - nor a literal
       // var() left unresolved because the token does not exist.
-      const lit = colours.filter(
+      const lit = colors.filter(
         c => /^rgba?\(/.test(c) && !/^rgba?\(0,\s*0,\s*0/.test(c)
       );
       expect(lit.length).toBeGreaterThan(0);
@@ -177,7 +174,7 @@ test.describe('arming placement is visible from the canvas', () => {
     await expect(status.locator('svg.object-glyph')).toHaveCount(1);
   });
 
-  test('it goes away when placement is cancelled', async ({ page, app }) => {
+  test('it goes away when placement is canceled', async ({ page, app }) => {
     await app.boot();
     await armType(page, 'Star');
     await expect(page.locator('#placementStatus')).toBeVisible();
@@ -548,7 +545,7 @@ test.describe('at 200% zoom', () => {
   //
   // Not document.style.zoom, which was tried: that scales the fixed-position
   // chrome along with everything else and pushes the control rail off the
-  // right-hand edge - an artefact of the emulation, not of the interface.
+  // right-hand edge - an artifact of the emulation, not of the interface.
   test.use({ viewport: { width: 640, height: 400 } });
 
   test('the page reflows instead of scrolling sideways', async ({
@@ -661,7 +658,7 @@ test.describe('with transparency turned down', () => {
     // Playwright cannot set prefers-reduced-transparency, and a test that
     // called emulateMedia and then checked nothing would pass whether or not
     // the rule existed. Reading the parsed rule proves three things instead -
-    // that the browser recognised the feature (an unknown one makes the whole
+    // that the browser recognized the feature (an unknown one makes the whole
     // block `not all` and it never appears here), that the blur is turned off,
     // and that the surfaces named are the ones that have a blur to turn off.
     await app.boot();

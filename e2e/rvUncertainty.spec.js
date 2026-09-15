@@ -4,7 +4,7 @@
 // tests/rvUncertainty.test.js covers the arithmetic against fixed inputs. This
 // file covers the things a unit test cannot: that the button runs it, that the
 // panel prints an interval when there is one and refuses to print one when
-// there is not, that cancelling works, that the seed shown is the seed used,
+// there is not, that canceling works, that the seed shown is the seed used,
 // and that the export carries the block needed to reproduce the numbers.
 // =============================================================================
 
@@ -17,7 +17,7 @@ import { test, expect } from './fixtures.js';
  * sparse - rather than waiting for a live survey to produce one. Getting a
  * real recording into the workspace is e2e/rvLaunchPath.spec.js's job.
  */
-async function analyse(page, { days, period, K, sigma, bounds, seed = 'd' }) {
+async function analyze(page, { days, period, K, sigma, bounds, seed = 'd' }) {
   await page.evaluate(
     async ([schedule, truth, noise, range, noiseSeed]) => {
       const bridge = await import('/js/rvWorkspaceBridge.js');
@@ -47,7 +47,7 @@ async function analyse(page, { days, period, K, sigma, bounds, seed = 'd' }) {
     [days, { period, K, gamma: -3, phase: 1.1 }, sigma, bounds, seed]
   );
   await expect(page.locator('#rvFitContainer')).toBeVisible();
-  // Opened rather than toggled: a test that analyses a second recording would
+  // Opened rather than toggled: a test that analyzes a second recording would
   // otherwise close the section it opened for the first.
   await page.evaluate(() => {
     document.getElementById('rvMcSection').open = true;
@@ -81,7 +81,7 @@ test.describe('a well-sampled run', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(40, 0.37),
       period: 3.5,
       K: 40,
@@ -123,7 +123,7 @@ test.describe('a well-sampled run', () => {
 
   test('the same seed gives the same interval twice', async ({ page, app }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(30, 0.4),
       period: 3.5,
       K: 40,
@@ -153,7 +153,7 @@ test.describe('a sparse run', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: [0, 1, 2, 3, 4, 12, 13, 14, 15],
       period: 1.31,
       K: 35,
@@ -187,7 +187,7 @@ test.describe('what it refuses', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(20, 0.5),
       period: 3.5,
       K: 40,
@@ -222,13 +222,10 @@ test.describe('what it refuses', () => {
   });
 });
 
-test.describe('cancellation and invalidation', () => {
-  test('cancelling stops it and reports what did run', async ({
-    page,
-    app,
-  }) => {
+test.describe('cancelation and invalidation', () => {
+  test('canceling stops it and reports what did run', async ({ page, app }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(40, 0.37),
       period: 3.5,
       K: 40,
@@ -243,7 +240,7 @@ test.describe('cancellation and invalidation', () => {
     await page.locator('#rvMcCancel').click();
 
     const r = await report(page);
-    expect(r.cancelled).toBe(true);
+    expect(r.canceled).toBe(true);
     expect(r.complete).toBe(false);
     expect(r.completed).toBeLessThan(2000);
     expect(r.completed).toBeGreaterThan(0);
@@ -258,7 +255,7 @@ test.describe('cancellation and invalidation', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(30, 0.4),
       period: 3.5,
       K: 40,
@@ -271,7 +268,7 @@ test.describe('cancellation and invalidation', () => {
 
     // A different observing run. An interval computed from the old points
     // must not survive to be exported beside the new ones.
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(12, 1.0),
       period: 2.2,
       K: 20,
@@ -290,7 +287,7 @@ test.describe('the export', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(30, 0.4),
       period: 3.5,
       K: 40,
@@ -325,7 +322,7 @@ test.describe('the export', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(30, 0.4),
       period: 3.5,
       K: 40,
@@ -354,7 +351,7 @@ test.describe('the export', () => {
       'uncertainty_search_bounds_days: 1 to 10',
       'uncertainty_trials_requested: 80',
       'uncertainty_outcome:',
-      'uncertainty_cancelled:',
+      'uncertainty_canceled:',
       'uncertainty_alias_families:',
       'uncertainty_assumption:',
     ]) {
@@ -375,7 +372,7 @@ test.describe('the export', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(30, 0.4),
       period: 3.5,
       K: 40,
@@ -403,7 +400,7 @@ test.describe('the export', () => {
 
   test('a file with no analysis says none was run', async ({ page, app }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(20, 0.5),
       period: 3.5,
       K: 40,
@@ -422,7 +419,7 @@ test.describe('the export', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(20, 0.5),
       period: 3.5,
       K: 40,
@@ -441,7 +438,7 @@ test.describe('the export', () => {
 test.describe('everyone can use it', () => {
   test('it is translated and keyboard-operable', async ({ page, app }) => {
     await app.boot();
-    await analyse(page, {
+    await analyze(page, {
       days: evenly(24, 0.45),
       period: 3.5,
       K: 40,
@@ -480,7 +477,7 @@ test.describe('everyone can use it', () => {
 // A run that is overtaken - by a new recording, a reset, or another run - must
 // leave no trace AND must leave the panel usable. Those are two different
 // jobs, and the panel used to do only the first: clearUncertainty() bumped the
-// generation and cancelled the token but left it in place, so the superseded
+// generation and canceled the token but left it in place, so the superseded
 // run's own cleanup - which was conditional on still being current - could
 // never release it. The panel was then locked out of running anything ever
 // again, with the Run button disabled and no error anywhere.
@@ -520,13 +517,13 @@ test.describe('a run that is overtaken', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, RECORDING);
+    await analyze(page, RECORDING);
     await page.locator('#rvMcTrials').fill('400');
     expect(await startRun(page)).toBe(true);
 
     // The recording is replaced while it runs, which is what the workspace
-    // does when a student analyses a second recording.
-    await analyse(page, { ...RECORDING, period: 5.1, seed: 'other' });
+    // does when a student analyzes a second recording.
+    await analyze(page, { ...RECORDING, period: 5.1, seed: 'other' });
 
     // The superseded run finishes on its own. Nothing it produces may appear.
     await expect
@@ -550,11 +547,11 @@ test.describe('a run that is overtaken', () => {
     app,
   }) => {
     await app.boot();
-    await analyse(page, RECORDING);
+    await analyze(page, RECORDING);
     await page.locator('#rvMcTrials').fill('400');
     for (let i = 0; i < 3; i++) {
       await startRun(page);
-      await analyse(page, { ...RECORDING, period: 4 + i, seed: `s${i}` });
+      await analyze(page, { ...RECORDING, period: 4 + i, seed: `s${i}` });
     }
     await expect
       .poll(async () => (await state(page)).running, { timeout: 60_000 })
@@ -568,7 +565,7 @@ test.describe('a run that is overtaken', () => {
 
   test('a reset while running frees it too', async ({ page, app }) => {
     await app.boot();
-    await analyse(page, RECORDING);
+    await analyze(page, RECORDING);
     await page.locator('#rvMcTrials').fill('400');
     await startRun(page);
     await page.evaluate(async () => {
@@ -585,22 +582,22 @@ test.describe('a run that is overtaken', () => {
     expect((await report(page)).ok).toBe(true);
   });
 
-  test('the reader cancelling it is not supersession, and still reports', async ({
+  test('the reader canceling it is not supersession, and still reports', async ({
     page,
     app,
   }) => {
-    // The distinction the panel has to keep: a cancelled run reports what it
+    // The distinction the panel has to keep: a canceled run reports what it
     // managed, because the reader asked for it to stop. A superseded one
     // reports nothing, because nobody asked for it at all.
     await app.boot();
-    await analyse(page, RECORDING);
+    await analyze(page, RECORDING);
     await page.locator('#rvMcTrials').fill('400');
     await startRun(page);
     await page.locator('#rvMcCancel').click();
 
     const out = await report(page);
     expect(out).not.toBe(null);
-    expect(out.outcome).toBe('cancelled');
+    expect(out.outcome).toBe('canceled');
     expect((await state(page)).runDisabled).toBe(false);
 
     await page.locator('#rvMcTrials').fill('60');

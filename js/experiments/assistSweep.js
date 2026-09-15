@@ -17,7 +17,7 @@
 //
 // It is deliberately not a general framework. js/experiments/sweep.js and the
 // bench runner already are one, and this reuses both - the validation, the
-// value planning, the world capture and restoration, the cancellation, the
+// value planning, the world capture and restoration, the cancelation, the
 // simulated-progress measurement - and supplies the one thing generic
 // machinery cannot: what the encounter did.
 //
@@ -88,10 +88,10 @@ export const COMPARISON = Object.freeze({
  * All positive: the sweep is about how much the encounter does, not about
  * which way, and mixing the sides would put two different questions on one
  * plot. 40 is in the list because it is the pass the student has already flown
- * twice, so the sweep has an anchor they can recognise.
+ * twice, so the sweep has an anchor they can recognize.
  *
  * The floor is set by the planet, not by taste. Periapsis falls with the
- * impact parameter, and js/physics.js merges bodies whose centres come within
+ * impact parameter, and js/physics.js merges bodies whose centers come within
  * the sum of their drawn radii - 2.4 units here. At 20 the spacecraft passes
  * 7.6 units out, three and a half times that; at 10 it would pass 2.1 units
  * out and be swallowed. A sweep that quietly included a collision would report
@@ -306,7 +306,7 @@ export function isSafeValue(value, over = {}) {
 /**
  * The distance at which the engine stops calling it a flyby.
  *
- * js/physics.js merges two bodies when their centres come within the sum of
+ * js/physics.js merges two bodies when their centers come within the sum of
  * their drawn radii. In this scenario the planet is drawn at 2 units and the
  * spacecraft at 0.4, both stated in js/world/build.js.
  */

@@ -78,7 +78,7 @@ consistently more than drawing the simulation itself. For each of ~300 stars it
 applies parallax, tests against every active ripple, and tests against every
 black hole, neutron star and white dwarf for lensing.
 
-A stale comment in `resizeCanvas`'s neighbourhood said the starfield "is only
+A stale comment in `resizeCanvas`'s neighborhood said the starfield "is only
 redrawn on demand" — an intent that had regressed.
 
 **Change.** It repaints when the view moves, at 30 Hz while something on it is
@@ -131,7 +131,7 @@ including both full-screen canvases, into a filtered composited layer, and makes
 `html` a containing block for fixed-position elements, which is not what any of
 the floating panels expect.
 
-**Change.** Removed, along with the three dead tokens. Theme colour already
+**Change.** Removed, along with the three dead tokens. Theme color already
 lives in `tokens.css`, where each theme redefines the palette directly.
 
 **Honest result:** no measurable frame-time change in this harness. The
@@ -213,17 +213,17 @@ readout wants. No leak, no duplication found.
 **The physics integrator.** Untouched. No scientific calculation, scenario
 outcome or educational result was changed anywhere in this pass.
 
-**Legacy `styles.css`.** Was 3,262 lines with historical hard-coded colours.
+**Legacy `styles.css`.** Was 3,262 lines with historical hard-coded colors.
 The scenario browser's dead `.scenario-list-item` rules were inert (nothing
 rendered that class, and `components` wins on layer order) and this audit left
 them for a deliberate pass of its own. That pass has since happened: 54 rule
 blocks, 444 lines, were removed and the file is now 2,818 lines. The remaining
-hard-coded colours are untouched.
+hard-coded colors are untouched.
 
 **`ui.js`.** Was 8,000 lines at the time of this audit. The scenario browser
 and the front door had already been extracted; the object inspector was named
 here as the obvious next boundary, but it is entangled with the energy chart and
-the drag behaviour and this was not the pass to attempt it. A later pass took
+the drag behavior and this was not the pass to attempt it. A later pass took
 the other candidate instead - world construction, now `js/world/build.js` - on
 the grounds that it closed over only fourteen bindings where the inspector
 closes over most of the module. The inspector remains unextracted.

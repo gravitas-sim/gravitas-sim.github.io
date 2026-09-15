@@ -273,7 +273,7 @@ test.describe('evidence', () => {
     // The panel shows the draft by its title; the numbers and the limitations
     // are in the entry, which is what a report and an export read.
     await expect(page.locator('#evidenceNotebook')).toContainText(
-      /Modelled gravitational-wave signal/i
+      /Modeled gravitational-wave signal/i
     );
     const entry = await page.evaluate(async () => {
       const panel = await import('/js/notebookPanel.js');

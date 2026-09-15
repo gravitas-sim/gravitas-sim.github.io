@@ -53,7 +53,7 @@ let els = null;
 let tickUnsub = null;
 // Whether the reader has dismissed the panel for the scenario they are in.
 // Reset on a scenario change, so closing it once does not hide it for ever,
-// and honoured within a scenario so it does not reappear on every rebuild
+// and honored within a scenario so it does not reappear on every rebuild
 // after being told to go away.
 let dismissed = false;
 /** The previous finished run, kept so a halved-step repeat can be compared. */
@@ -454,7 +454,7 @@ let lastScenario = null;
 // configurations by hand and read the diagnostics off the panel.
 //
 // The machinery underneath is the bench's, borrowed rather than reimplemented -
-// world capture and restoration, cancellation, simulated-progress measurement,
+// world capture and restoration, cancelation, simulated-progress measurement,
 // the trial statuses - with an observer supplying the one thing it cannot know,
 // which is what happened to the planet.
 // =============================================================================
@@ -616,14 +616,14 @@ async function runBinarySweep(opts = {}) {
       held: heldFixed(),
       numerics: result.numerics,
       wallMs: result.wallMs,
-      cancelled: result.cancelled,
+      canceled: result.canceled,
       ranAt: result.ranAt,
     };
   }
   renderSweep();
 }
 
-/** The colour an outcome is drawn and tinted in. */
+/** The color an outcome is drawn and tinted in. */
 const OUTCOME_INK = {
   survived: '#7fe3a0',
   ejected: '#ff9f7f',
@@ -713,7 +713,7 @@ function renderSweep() {
  * Deliberately not a line. Joining these points would draw a boundary through
  * five samples of a system that does not have to be monotone in radius, and
  * the whole lesson is about how much less than that the evidence supports. Each
- * trial is one mark at its own radius, in its outcome's colour.
+ * trial is one mark at its own radius, in its outcome's color.
  */
 function renderSweepPlot() {
   const e = cacheElements();
@@ -796,7 +796,7 @@ function renderSweepCaveat() {
   const bad = sweepTrials.filter(tr => tr.outcome === 'unreliable');
   if (bad.length)
     parts.push(t('binarySweep.caveat.unreliable', { n: bad.length }));
-  if (sweepConfig?.cancelled) parts.push(t('binarySweep.caveat.cancelled'));
+  if (sweepConfig?.canceled) parts.push(t('binarySweep.caveat.canceled'));
 
   // The one that is always true.
   parts.push(
@@ -874,7 +874,7 @@ export const startBinarySweep = opts => runBinarySweep(opts);
 
 /** Wire the panel up. Called once at boot. */
 export function initBinaryRun() {
-  // This panel's strings are not in the start-up catalogue, so it registers
+  // This panel's strings are not in the start-up catalog, so it registers
   // them itself rather than trusting whoever opened it to have done so. The
   // bridge does register them first in the normal path; a lesson, a share link
   // or a test that drives the panel directly does not, and a panel that renders
@@ -883,11 +883,11 @@ export function initBinaryRun() {
     .then(() => render())
     .catch(() => {});
 
-  // The catalogue can arrive after this panel does. These strings are not in
+  // The catalog can arrive after this panel does. These strings are not in
   // the start-up bundle, and although the bridge registers them before it
   // imports this module, anything that drives the panel directly - a lesson, a
   // share link, a test - can render before that await resolves and paint
-  // message ids. Redrawing when the catalogue changes removes the race rather
+  // message ids. Redrawing when the catalog changes removes the race rather
   // than narrowing it, and is the same subscription a language switch needs.
   onLocaleChange(() => render());
 

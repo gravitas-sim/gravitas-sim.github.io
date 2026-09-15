@@ -30,7 +30,7 @@ import { SOLAR_MASS_UNIT, EARTH_MASS_UNIT } from './constants.js';
 // place its settings are written.
 //
 // The initial 1 is what getPhysicsSetting('gravitational_constant') returned
-// before any settings had been applied, so start-up behaviour is unchanged.
+// before any settings had been applied, so start-up behavior is unchanged.
 let simGravitationalConstant = 1;
 
 /**
@@ -124,7 +124,7 @@ export function timeUnitSeconds() {
   );
 }
 
-/** @returns {number} Metres per second represented by one sim velocity unit */
+/** @returns {number} Meters per second represented by one sim velocity unit */
 export function velocityUnitToMs() {
   return DISTANCE_UNIT_TO_M / timeUnitSeconds();
 }

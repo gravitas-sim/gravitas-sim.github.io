@@ -1,7 +1,7 @@
 // =============================================================================
 // The background sky, in a browser
 // -----------------------------------------------------------------------------
-// The model - distribution, colours, counts, the spatial index - is tested
+// The model - distribution, colors, counts, the spatial index - is tested
 // without a canvas in tests/starfield.test.js. What needs a browser is the part
 // the rewrite actually changed: that the sky is pre-rendered and blitted rather
 // than redrawn star by star, and that doing so did not quietly break

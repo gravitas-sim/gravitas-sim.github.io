@@ -105,7 +105,7 @@ async function bundle(target) {
       js:
         `/* ${target.package} ${version} - bundled from node_modules by ` +
         `tools/vendor-deps.mjs. Do not edit.\n` +
-        `   Licence: see ${target.license}. Regenerate with \`npm run vendor\`. */`,
+        `   License: see ${target.license}. Regenerate with \`npm run vendor\`. */`,
     },
   });
   return { text: result.outputFiles[0].text, version };
@@ -137,7 +137,7 @@ for (const target of TARGETS) {
   await mkdir(target.out.replace(/\/[^/]+$/, ''), { recursive: true });
   await writeFile(target.out, text);
 
-  // The licence travels with the code. Both are permissive - three is MIT,
+  // The license travels with the code. Both are permissive - three is MIT,
   // chart.js is MIT - and neither is redistributable without its notice.
   const packageDir = packageDirOf(target.package);
   for (const name of ['LICENSE', 'LICENSE.md', 'LICENCE']) {
@@ -161,7 +161,7 @@ for (const target of TARGETS) {
 //
 // These are the nine faces that request actually asked for, taken from the
 // @fontsource packages - the upstream Google Fonts releases, redistributed
-// under the SIL Open Font Licence, which travels with them into vendor/fonts/.
+// under the SIL Open Font License, which travels with them into vendor/fonts/.
 //
 // Only the `latin` subset. It covers U+0000-00FF, which is every character
 // English and Spanish need including the accents and the inverted marks;
@@ -201,7 +201,7 @@ const HEAD = [
   ' *',
   ' * These replace a runtime request to fonts.googleapis.com. The files are the',
   ' * upstream Google Fonts releases redistributed by @fontsource under the SIL',
-  " * Open Font Licence; each family's licence sits beside the files it covers in",
+  " * Open Font License; each family's license sits beside the files it covers in",
   ' * vendor/fonts/.',
   ' *',
   ' * Regenerate with `npm run vendor`; `npm run vendor:check` fails if this file',
@@ -269,10 +269,10 @@ if (check) {
   for (const { from, to } of fontCopies) await copyFile(from, to);
   for (const font of FONT_FACES) {
     const dir = packageDirOf(font.package);
-    for (const licence of ['LICENSE', 'LICENSE.md', 'LICENCE']) {
+    for (const license of ['LICENSE', 'LICENSE.md', 'LICENCE']) {
       try {
         await copyFile(
-          `${dir}/${licence}`,
+          `${dir}/${license}`,
           `vendor/fonts/${font.file}-LICENSE`
         );
         break;

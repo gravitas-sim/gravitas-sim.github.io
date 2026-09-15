@@ -83,7 +83,7 @@ function hash(x, y) {
  * Correctness note: because cellSize >= 2 * maxRadius, two touching bodies
  * always land in the same or adjacent cells, so scanning the 3x3 neighborhood
  * cannot miss a contact. Each unordered pair is yielded once: for the same
- * cell by index ordering, and for neighbours by only scanning forward.
+ * cell by index ordering, and for neighbors by only scanning forward.
  *
  * @param {Array} objects - Bodies with pos, radius and alive
  * @param {Function} visit - Called as visit(a, b)
@@ -126,7 +126,7 @@ export function forEachCandidatePair(objects, visit) {
         if (!b.alive) continue;
         visit(a, b);
       }
-      // Pairs spanning into forward neighbours
+      // Pairs spanning into forward neighbors
       for (const [dx, dy] of FORWARD) {
         const other = buckets.get(
           hash(a.pos.x + dx * cellSize, a.pos.y + dy * cellSize)

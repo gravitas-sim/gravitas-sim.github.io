@@ -36,7 +36,7 @@ describe('scale bar rounding', () => {
   });
 
   test('the unit is chosen before the rounding, not after', () => {
-    // Rounding metres and then converting is what produces a bar labelled
+    // Rounding meters and then converting is what produces a bar labeled
     // "0.224 AU", which reads as an accident rather than as a scale.
     const wide = niceScaleLength(0.34 * AU_METERS);
     expect(wide.unit).toBe('AU');
@@ -44,14 +44,14 @@ describe('scale bar rounding', () => {
     expect(wide.text).toBe('0.2 AU');
   });
 
-  test('short bars are labelled in kilometres', () => {
+  test('short bars are labeled in kilometers', () => {
     const near = niceScaleLength(4.2e6);
     expect(near.unit).toBe('km');
     expect(near.value).toBe(5000);
     expect(near.text).toBe('5,000 km');
   });
 
-  test('the labelled length really is the length of the bar', () => {
+  test('the labeled length really is the length of the bar', () => {
     // The property that matters: the number printed on the bar and the length
     // the bar is drawn at are the same quantity. A scale bar whose label and
     // geometry disagreed would be worse than no scale bar.

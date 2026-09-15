@@ -14,7 +14,7 @@ describe('the published surface carries nothing it did not mean to', () => {
   // gravitas-sim.online. Eight development harnesses shipped that way: seven
   // test_*.html pages and energy_chart_edge_case_test.js, none of them linked
   // from anything, none in the sitemap, and none caught by robots.txt - whose
-  // Disallow list is headed "Development artefacts that should not be indexed"
+  // Disallow list is headed "Development artifacts that should not be indexed"
   // and lists /coverage/, /tests/ and /dist/ but never these. They were
   // superseded by the jest suite long before anyone noticed.
   const root = new URL('../', import.meta.url);
@@ -118,11 +118,11 @@ describe('the service worker manifest is current', () => {
     expect(paths.filter(p => p.endsWith('.css')).length).toBeGreaterThanOrEqual(
       6
     );
-    // Derived from the catalogue rather than written down. A magic number here
+    // Derived from the catalog rather than written down. A magic number here
     // says only "the count did not change", which is the wrong thing to check
     // and has to be edited every time a scenario is added; against
     // SCENARIO_INFO it says "every scenario's thumbnail is precached", which
-    // also catches one that was added to the catalogue and never captured.
+    // also catches one that was added to the catalog and never captured.
     const { SCENARIO_INFO } = await import('../js/data/scenarioInfo.js');
     expect(
       paths.filter(p => /^images\/scenarios\/.*\.webp$/.test(p))
@@ -130,7 +130,7 @@ describe('the service worker manifest is current', () => {
 
     // Every English lesson body. The reasoning is in the generator's header;
     // what matters here is that the decision cannot rot silently - a lesson
-    // added to the catalogue and left out of the precache would be a lesson
+    // added to the catalog and left out of the precache would be a lesson
     // that could not be opened offline, which is exactly the failure the
     // count guards against. Compared against the manifest rather than a
     // literal, so adding a lesson does not require editing this file.
@@ -141,7 +141,7 @@ describe('the service worker manifest is current', () => {
     // this directory because the lesson engine imports it.
     const bodies = lessons.filter(
       p =>
-        !/\/(manifest|manifest\.es|registry|i18n|catalogue|browse|browseData|sequences|provenance)\.js$/.test(
+        !/\/(manifest|manifest\.es|registry|i18n|catalog|browse|browseData|sequences|provenance)\.js$/.test(
           p
         )
     );
@@ -176,7 +176,7 @@ describe('the service worker manifest is current', () => {
   });
 });
 
-describe('the deploy sequence keeps its artefacts describing one candidate', () => {
+describe('the deploy sequence keeps its artifacts describing one candidate', () => {
   const workflow = () =>
     readFileSync(
       new URL('../.github/workflows/ci.yml', import.meta.url),

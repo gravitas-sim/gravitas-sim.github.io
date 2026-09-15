@@ -38,7 +38,7 @@ describe('the deploy job only runs behind the gate', () => {
     const condition = String(deploy.if || '');
     expect(condition).not.toMatch(/always\s*\(/);
     expect(condition).not.toMatch(/failure\s*\(/);
-    expect(condition).not.toMatch(/cancelled\s*\(/);
+    expect(condition).not.toMatch(/canceled\s*\(/);
     // Nor may any of its steps reintroduce one.
     for (const step of deploy.steps) {
       expect(String(step.if || '')).not.toMatch(/always\s*\(/);
@@ -83,7 +83,7 @@ describe('the deploy job only runs behind the gate', () => {
     // Six shards, so the suite fits inside the job limit it kept exceeding
     // with room to spare rather than by twelve seconds.
     expect(e2e.strategy.matrix.shard).toEqual([1, 2, 3, 4, 5, 6]);
-    // One failing shard must not cancel the others: a cancelled shard says
+    // One failing shard must not cancel the others: a canceled shard says
     // nothing about the tests it never reached.
     expect(e2e.strategy['fail-fast']).toBe(false);
     // Two workers per runner, as before. The parallelism belongs across
@@ -104,7 +104,7 @@ describe('the deploy job only runs behind the gate', () => {
     // Missing blobs fail the upload rather than being shrugged off, and the
     // step runs even when the tests failed - which is when it matters.
     expect(upload.with['if-no-files-found']).toBe('error');
-    expect(String(upload.if)).toContain('!cancelled()');
+    expect(String(upload.if)).toContain('!canceled()');
     // The step running the tests is capped below the job, so an overrunning
     // shard is killed with time left to upload what it has.
     const runStep = e2e.steps.find(st => (st.run || '').includes('--shard='));
@@ -116,7 +116,7 @@ describe('the deploy job only runs behind the gate', () => {
     expect(report.needs).toContain('e2e');
     // It runs whether the shards passed or not, because a report is most
     // wanted when they did not.
-    expect(String(report.if)).toContain('!cancelled()');
+    expect(String(report.if)).toContain('!canceled()');
     const run = report.steps.map(st => st.run || '').join('\n');
     expect(run).toMatch(/merge-reports --reporter html/);
     const download = report.steps.find(st =>
@@ -238,8 +238,8 @@ describe('the four ways it declines to publish', () => {
     }
   });
 
-  test('deployments queue rather than cancelling each other', () => {
-    // A cancelled deploy leaves the live site indeterminate, which is worse
+  test('deployments queue rather than canceling each other', () => {
+    // A canceled deploy leaves the live site indeterminate, which is worse
     // than waiting.
     expect(deploy.concurrency.group).toBe('pages-deploy');
     expect(deploy.concurrency['cancel-in-progress']).toBe(false);

@@ -9,7 +9,7 @@
 //
 // It is deliberately not a general sweep framework. js/experiments/sweep.js and
 // the bench runner already are one, and this reuses both - the validation, the
-// value planning, the world save and restore, the cancellation, the
+// value planning, the world save and restore, the cancelation, the
 // simulated-progress measurement - and adds exactly the thing that generic
 // machinery cannot supply: what happened to the planet.
 //
@@ -204,7 +204,7 @@ export function resolutionVerdict(coarse, fine) {
      * True of every verdict this can return, including the converged one.
      *
      * Two steps agreeing over twenty binary periods says the answer is not an
-     * artefact of the step. It does not say the planet is stable: ten thousand
+     * artifact of the step. It does not say the planet is stable: ten thousand
      * periods is what the published fit is based on, and this is twenty.
      */
     windowOnly: true,

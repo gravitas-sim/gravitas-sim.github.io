@@ -2,7 +2,7 @@
 // Classroom activities
 // -----------------------------------------------------------------------------
 // An instructor with five minutes, twenty minutes or a full period wants three
-// different things out of the same physics, and the catalogue answers only the
+// different things out of the same physics, and the catalog answers only the
 // third: the investigations are complete lessons, and "which twelve of these
 // thirty-seven steps fit before the bell" is work nobody should have to do
 // twice.
@@ -12,13 +12,13 @@
 //
 // What this is NOT
 // -----------------------------------------------------------------------------
-// It is not a second lesson runner, not a copy of the catalogue, and not three
+// It is not a second lesson runner, not a copy of the catalog, and not three
 // forks of one investigation maintained in parallel. A format is a lesson id
 // and an ordered list of that lesson's own permanent step ids, which is exactly
 // what js/assignments/ already carries from an instructor's browser to a
 // student's. Building a format produces an ordinary assignment: the same
 // runner, the same progress store, the same printable page, the same
-// prerequisite resolution, the same behaviour when a lesson is revised
+// prerequisite resolution, the same behavior when a lesson is revised
 // underneath it.
 //
 // That reuse is what makes the properties come free. Progress is namespaced per
@@ -37,7 +37,7 @@
 //
 // Durations
 // -----------------------------------------------------------------------------
-// Every one is an ESTIMATE and is labelled as one wherever it appears. They are
+// Every one is an ESTIMATE and is labeled as one wherever it appears. They are
 // reasoned from the step types - a prediction is a minute, a measurement with
 // two armed events is closer to six - and have not been timed in a classroom.
 // Saying "about 20 minutes" of something never run with students is a guess,
@@ -47,7 +47,7 @@
 /**
  * The activities, in the order they are offered.
  *
- * One, deliberately. A catalogue of one honest activity is worth more than six
+ * One, deliberately. A catalog of one honest activity is worth more than six
  * cards where five say "coming soon", and the structure below is what a second
  * one will slot into rather than something to be rebuilt for it.
  */
@@ -289,7 +289,7 @@ export const ACTIVITIES = Object.freeze([
       frame: 'none',
       sweptArea: false,
       /** The numbers are read off imported MIST tracks, not integrated. */
-      modelled: true,
+      modeled: true,
     }),
 
     formats: Object.freeze([

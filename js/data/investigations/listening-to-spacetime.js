@@ -90,7 +90,7 @@ const LISTENING_TO_SPACETIME = {
   tags: ['compact-objects', 'gravity', 'observing', 'waves'],
   // The second of the pair. What Is a Gravitational Wave? comes first and
   // answers the question this one assumes; neither requires the other to have
-  // been completed, and the catalogue orders them.
+  // been completed, and the catalog orders them.
   series: 'Gravitational waves',
   // The inspector stays available: nothing in this lesson is measured off the
   // sandbox, and a student who clicks a black hole to see what it is should be
@@ -113,7 +113,7 @@ const LISTENING_TO_SPACETIME = {
     // 1-3: an unknown signal, and the three views of it
     // -----------------------------------------------------------------------
     {
-      sid: 'an-unlabelled-signal',
+      sid: 'an-unlabeled-signal',
       stage: BBH,
       type: 'predict',
       reveal: 'three-things-called-a-wave',
@@ -197,7 +197,7 @@ const LISTENING_TO_SPACETIME = {
              light. It is a change in the distances between things. The ring of
              dots on the right is what a circle of free-floating test masses
              would do as the wave went past: stretched one way, squeezed the
-             other, at right angles to the direction the wave is travelling. The
+             other, at right angles to the direction the wave is traveling. The
              real effect is about one part in 10²¹, which is why it is drawn
              enormously exaggerated.`,
       tool: lab({
@@ -283,7 +283,7 @@ const LISTENING_TO_SPACETIME = {
              after leaving the source. The rings further out left earlier, when
              the binary was turning more slowly, so they are further apart. The
              ones near the middle left just now.
-             \n\nThe centre is deliberately blank. The formula that gives these
+             \n\nThe center is deliberately blank. The formula that gives these
              amplitudes is a far-field result: it describes the wave a long way
              from the source and it does not describe the region right next to
              it, which is a region about a wavelength across containing two
@@ -552,7 +552,7 @@ const LISTENING_TO_SPACETIME = {
         'Set the first mass to 18 and the second to 14.4 — half of each',
         'Read the line marked "Against A": it should say one thing changed, or two if you moved both masses',
         'Compare the orange trace (A) with the blue one on the strain plot',
-        'Read "Modelled" and "Where it stops" for the lighter pair',
+        'Read "Modeled" and "Where it stops" for the lighter pair',
         'Now try 60 and 48 and read the same two lines again',
       ],
       tool: lab({
@@ -573,7 +573,7 @@ const LISTENING_TO_SPACETIME = {
       type: 'measure',
       title: 'Time in band, three ways',
       body: `Record the same two numbers for three total masses at the same
-             ratio. Use the readout lines <strong>Modelled</strong> and
+             ratio. Use the readout lines <strong>Modeled</strong> and
              <strong>Where it stops</strong>.
              \n\nFor each pair, set the masses, then read how long the whole
              inspiral from 20 Hz lasts and the frequency at which the model
@@ -900,10 +900,10 @@ const LISTENING_TO_SPACETIME = {
              \n\nEach preset models a window ending where its own model ends, and
              the readout says how long the whole inspiral from 20 Hz would be.`,
       checklist: [
-        'Press "Two black holes" and read Modelled, Where it stops, and Chirp mass',
+        'Press "Two black holes" and read Modeled, Where it stops, and Chirp mass',
         'Press "Two neutron stars" and read the same three lines',
         'Press "Neutron star and black hole" and read them again',
-        'Notice that one of the three says it modelled only the last part, and why',
+        'Notice that one of the three says it modeled only the last part, and why',
         'Look at the frequency plot for each: the same shape over very different ranges',
         'If you have sound: listen to all three and read the mapping line each time',
       ],
@@ -972,9 +972,9 @@ const LISTENING_TO_SPACETIME = {
       title: 'Now put it in a detector',
       body: `Everything so far has been a clean signal. A real detector does not
              produce clean signals; it produces a continuous wobble from
-             seismic motion, thermal vibration and the quantum behaviour of the
+             seismic motion, thermal vibration and the quantum behavior of the
              light in it, and any signal arrives on top of that.
-             \n\nPress <strong>Detector noise</strong>. The grey trace is
+             \n\nPress <strong>Detector noise</strong>. The gray trace is
              simulated noise with the spectrum Advanced LIGO was designed to
              have. It is drawn from a fixed seed and it does <em>not</em> change
              when you change a parameter - if it did, every comparison you made
@@ -1005,7 +1005,7 @@ const LISTENING_TO_SPACETIME = {
       body: `The panel can now compare two signals for you and give a number.
              \n\nPin the current signal as <strong>A</strong>. That is your
              template: a clean model of what you think is there. The similarity
-             it reports is a normalised overlap between the template and what
+             it reports is a normalized overlap between the template and what
              the detector is showing - a number from 0 to 1, and the same inner
              product a real search is built on.
              \n\nMeasure it three times: with the right template, with a
@@ -1070,7 +1070,7 @@ const LISTENING_TO_SPACETIME = {
       type: 'explore',
       title: 'What two detectors actually recorded',
       body: `On 14 September 2015 at 09:50:45 UTC, two instruments three
-             thousand kilometres apart both moved.
+             thousand kilometers apart both moved.
              \n\nWhat is in the panel now is not a model. It is the data the
              LIGO and Virgo collaborations published with the discovery paper,
              reproduced here and not reprocessed. The only thing done to it

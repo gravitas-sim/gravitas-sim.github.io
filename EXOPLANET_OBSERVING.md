@@ -113,7 +113,7 @@ orbit: the barycenter sits at a _focus_, so on an eccentric orbit the largest
 offset is the apoapsis distance a(1 + e). The astrometric signature α = a_star/d
 quoted in the literature uses a_star, and recovering that from a path needs an
 orbit fit the panel does not attempt — the lesson's model widget computes α from
-known elements instead, which is a different kind of claim and is labelled as
+known elements instead, which is a different kind of claim and is labeled as
 one.
 
 Both take one sample every 60 ms rather than every frame, hold bounded arrays, and

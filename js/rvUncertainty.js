@@ -87,7 +87,7 @@ export const OUTCOME = Object.freeze({
   /** Every requested trial ran and every one produced a fit. */
   COMPLETE: 'complete',
   /** The reader stopped it. */
-  CANCELLED: 'cancelled',
+  CANCELED: 'canceled',
   /** It ran to the end but some trials produced no fit. */
   PARTIAL: 'partial',
 });
@@ -342,7 +342,7 @@ export function refitTrial(synthetic, search) {
 }
 
 /**
- * A percentile of an already-sorted array, interpolating between neighbours.
+ * A percentile of an already-sorted array, interpolating between neighbors.
  *
  * @param {Array<number>} sorted - Ascending values
  * @param {number} p - In [0, 1]
@@ -358,7 +358,7 @@ export function percentile(sorted, p) {
   return sorted[lo] + (sorted[hi] - sorted[lo]) * (at - lo);
 }
 
-/** The 16th, 50th and 84th percentiles: a one-sigma span and a centre. */
+/** The 16th, 50th and 84th percentiles: a one-sigma span and a center. */
 function spread(values) {
   const sorted = [...values].sort((a, b) => a - b);
   return {
@@ -478,18 +478,18 @@ export function validateSpec({ points, params, minPeriod, maxPeriod, trials }) {
  * Assemble the report from finished trials.
  *
  * Separate from the runner so it can be tested on fixed trial lists, and so a
- * cancelled run is summarised by exactly the same code as a complete one - a
+ * canceled run is summarized by exactly the same code as a complete one - a
  * partial result is a real result with a smaller n, not a special case.
  *
- * @param {object} input - trials, failures, spec, requested, cancelled
+ * @param {object} input - trials, failures, spec, requested, canceled
  * @returns {object} The report
  */
-export function summarise({
+export function summarize({
   trials,
   failures,
   spec,
   requested,
-  cancelled = false,
+  canceled = false,
   baseline,
 }) {
   const ok = trials.filter(t => t.status === TRIAL.OK);
@@ -514,7 +514,7 @@ export function summarise({
     spec: {
       trials: requested,
       seed: spec.seed,
-      seedNormalised: normalizeSeed(spec.seed),
+      seedNormalized: normalizeSeed(spec.seed),
       minPeriod: spec.minPeriod,
       maxPeriod: spec.maxPeriod,
       samples: spec.samples,
@@ -537,28 +537,28 @@ export function summarise({
     succeeded: ok.length,
     failures: { ...failures },
     failed,
-    cancelled,
+    canceled,
     /**
-     * Whether every requested trial was attempted. A cancelled run and a run
+     * Whether every requested trial was attempted. A canceled run and a run
      * with failed trials are both incomplete, and the panel says which.
      */
-    complete: !cancelled && trials.length === requested && failed === 0,
+    complete: !canceled && trials.length === requested && failed === 0,
     /**
      * The three things that can have happened, as one word.
      *
-     * `complete` and `cancelled` were both booleans and a reader had to infer
+     * `complete` and `canceled` were both booleans and a reader had to infer
      * the third state - ran to the end but lost trials to failed fits - from
-     * their combination. Named, because "partial" and "cancelled" call for
+     * their combination. Named, because "partial" and "canceled" call for
      * different things from whoever reads the interval: one is a smaller
      * sample, the other is a sample the reader chose to stop.
      */
-    outcome: cancelled
-      ? OUTCOME.CANCELLED
+    outcome: canceled
+      ? OUTCOME.CANCELED
       : trials.length === requested && failed === 0
         ? OUTCOME.COMPLETE
         : OUTCOME.PARTIAL,
     /**
-     * The inputs this report describes, so a stale one can be recognised.
+     * The inputs this report describes, so a stale one can be recognized.
      *
      * An interval is about one recording, one fit and one search range. When
      * any of those move the interval is no longer about what is on screen, and
@@ -607,7 +607,7 @@ const defaultYield = () =>
     : Promise.resolve();
 
 /**
- * Run the analysis in cancellable batches.
+ * Run the analysis in cancelable batches.
  *
  * Batches with a yield between them rather than a worker. The arithmetic never
  * touches the simulation or the DOM, so a worker would be defensible - but it
@@ -689,7 +689,7 @@ export async function runMonteCarlo(spec, hooks = {}) {
   const normal = gaussianStream(snapshot.seed);
   const trials = [];
   const failures = { [TRIAL.NO_SEARCH]: 0, [TRIAL.NOT_FINITE]: 0 };
-  let cancelled = false;
+  let canceled = false;
 
   for (let i = 0; i < requested; i++) {
     if (i > 0 && i % batchSize === 0) {
@@ -702,7 +702,7 @@ export async function runMonteCarlo(spec, hooks = {}) {
       // number on screen is current at the moment the run stops.
       onProgress?.({ done: i, total: requested });
       if (shouldCancel()) {
-        cancelled = true;
+        canceled = true;
         break;
       }
     }
@@ -716,7 +716,7 @@ export async function runMonteCarlo(spec, hooks = {}) {
 
   onProgress?.({ done: trials.length, total: requested });
 
-  return summarise({
+  return summarize({
     trials,
     failures,
     spec: {
@@ -728,7 +728,7 @@ export async function runMonteCarlo(spec, hooks = {}) {
       epochs: snapshot.points.length,
     },
     requested,
-    cancelled,
+    canceled,
     baseline,
   });
 }

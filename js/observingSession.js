@@ -49,7 +49,7 @@ export function sessionKey({
     // rebuilt scenario hands the same id to a different star; without this, a
     // recording of one could be silently continued against its replacement.
     worldGeneration: Number.isFinite(worldGeneration) ? worldGeneration : null,
-    // A body whose velocity was changed by hand - a manoeuvre burn, a bench
+    // A body whose velocity was changed by hand - a maneuver burn, a bench
     // perturbation - is on a different orbit from the one the samples so far
     // describe, and no other field here can tell: same star, same geometry,
     // same units, same world. Without this a recording would continue across
@@ -57,7 +57,7 @@ export function sessionKey({
     interventionEpoch: Number.isFinite(interventionEpoch)
       ? interventionEpoch
       : null,
-    // Metres per second in one simulation velocity unit. Samples are converted
+    // Meters per second in one simulation velocity unit. Samples are converted
     // as they are taken, so a change here - the gravitational constant slider
     // moves it - means the numbers already recorded were made with a different
     // ruler and cannot be plotted beside the next one.

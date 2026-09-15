@@ -122,7 +122,7 @@ describe('the acquisition chain survives the world moving on', () => {
     const report = exportReport();
     const rec = report.recording;
 
-    // Planned is the programme, not the rows that came back.
+    // Planned is the program, not the rows that came back.
     expect(rec.plannedEpochs).toBe(survey.plannedCount);
     expect(rec.epochs.attempted).toBe(rows.length);
     // Observations are readings. A missed epoch is not one.

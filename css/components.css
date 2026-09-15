@@ -505,7 +505,7 @@
     /* The rail can outgrow short viewports once every group is present, so it
        scrolls internally rather than running off the bottom of the screen.
        No transport-bar reservation here: at this width the rail is a column at
-       the right edge and the bar is a centred pill that ends well short of it,
+       the right edge and the bar is a centerd pill that ends well short of it,
        so the two never meet. Reserving the space anyway made the rail scroll
        before its own open section fitted, which is the one thing the accordion
        exists to avoid - see the tablet rule further down, where they do meet. */
@@ -613,7 +613,7 @@
        of the screen as its contents grow, and the first thing to leave is the
        toolbar - so the close button becomes unreachable and the panel cannot
        be dismissed at all. The radial velocity panel crossed that line at 900
-       tall in a 900px window when its Analyse action was added: 36px of
+       tall in a 900px window when its Analyze action was added: 36px of
        header, including the X, sat above the viewport.
 
        The collapsed rule below is the same problem solved for one case; this
@@ -1790,7 +1790,7 @@
 
 /* =============================================================================
    Overlay panel: a single card holding the sonification toggle and the HUD
-   readout, instead of two loose blocks with a floating minimise button.
+   readout, instead of two loose blocks with a floating minimize button.
    ========================================================================== */
 
 @layer components {
@@ -1941,7 +1941,7 @@
   }
 
   /* White rather than var(--focus-ring): the skip link's own background is
-     the accent colour, and an accent ring on it would be invisible. */
+     the accent color, and an accent ring on it would be invisible. */
   .skip-link:focus-visible {
     transform: translateY(0);
     outline: 2px solid var(--text-primary);
@@ -3336,7 +3336,7 @@
     min-width: 0;
   }
   .inv-seq-open {
-    /* A link in behaviour, a button in fact: it fetches a lesson rather than
+    /* A link in behavior, a button in fact: it fetches a lesson rather than
        navigating, so it must not claim to be an address. */
     align-self: flex-start;
     padding: 0;
@@ -3461,7 +3461,7 @@
 
   /* The shot fills the card's full height here rather than holding a 16/9 box:
      a landscape card is as tall as its text, and letterboxing the capture would
-     leave two grey bands. The aspect ratio the gallery sets has to be undone. */
+     leave two gray bands. The aspect ratio the gallery sets has to be undone. */
   .inv-card .sc-card-shot {
     position: absolute;
     inset: 0;
@@ -3521,7 +3521,7 @@
 
   /* Always present, even with nothing in it. Only some lessons belong to a
      series, and letting the row collapse on the others started their titles a
-     pill's height above their neighbours' - a ragged top edge across every row
+     pill's height above their neighbors' - a ragged top edge across every row
      of the grid, for the sake of 20px. */
   .inv-card-flags {
     display: flex;
@@ -3673,7 +3673,7 @@
     .inv-filter {
       flex-basis: calc(50% - var(--space-3));
     }
-    /* One card per row has no neighbour to line up with, so the reserved flag
+    /* One card per row has no neighbor to line up with, so the reserved flag
        row is just a gap above the title. */
     .inv-card-flags.is-empty {
       display: none;
@@ -3923,7 +3923,7 @@
   }
 
   /* A committed prediction that has not been marked yet. Deliberately not
-     coloured right or wrong: the point of holding it is that neither is known
+     colored right or wrong: the point of holding it is that neither is known
      until the experiment has run. */
   .inv-option.is-held {
     border-style: dashed;
@@ -4826,7 +4826,7 @@
 
   /* --- Investigations: the plot as a table --------------------------------- */
   /* The accessible equivalent of the scatter above it. Visible rather than
-     hidden from sight: a reader who cannot separate two plotted colours, or who
+     hidden from sight: a reader who cannot separate two plotted colors, or who
      is reading a projected screen from the back of a room, needs the numbers as
      much as a screen-reader user does, and a second copy nobody can see is a
      copy nobody maintains. */
@@ -5042,7 +5042,7 @@
        bottom, which is an estimate of how tall the sheet is - and the sheet is
        not that tall. A step that carries a long body and an object list grows
        past it, and the light curve then covered the list: on a 390-wide phone
-       the element under the first chip's centre was the light curve's own
+       the element under the first chip's center was the light curve's own
        observer controls, so a step telling the reader to select the planet
        could not be done at all. Anchoring to the top needs no estimate of
        anything, because nothing else is up there while a lesson is open. */
@@ -6939,7 +6939,7 @@
     color: var(--text-primary);
   }
 
-  /* The selected law. Marked by weight and a filled ground as well as colour,
+  /* The selected law. Marked by weight and a filled ground as well as color,
      because which model is on the plot is the single most important piece of
      state in this panel. */
   .rc-mode[aria-pressed='true'] {
@@ -7221,8 +7221,8 @@
     display: none !important;
   }
 
-  /* A problem, not a reassurance. Bordered rather than coloured text alone:
-     colour is not the only channel this may be read through. */
+  /* A problem, not a reassurance. Bordered rather than colored text alone:
+     color is not the only channel this may be read through. */
   .inv-save-status[data-state='full'],
   .inv-save-status[data-state='unavailable'] {
     color: var(--text-primary);
@@ -7336,8 +7336,8 @@
     margin: 0;
   }
 
-  /* A border rather than a colour on its own: the warning has to survive a
-     colour-blind reader and a monochrome printout. */
+  /* A border rather than a color on its own: the warning has to survive a
+     color-blind reader and a monochrome printout. */
   .rv-survey-status[data-state='warn'],
   /* --- The binary lesson's sweep ------------------------------------------ */
   /* Almost nothing, deliberately. The section is built out of the panel
@@ -7427,8 +7427,8 @@
    -----------------------------------------------------------------------------
    A form rather than a chart, so it borrows the observing panel's chrome and
    supplies its own field layout. The fields reflow to one column on a phone,
-   and the refusal message is distinguished by a border rather than by colour
-   alone so it survives a colour-blind reader and a printout.
+   and the refusal message is distinguished by a border rather than by color
+   alone so it survives a color-blind reader and a printout.
    ========================================================================== */
 @layer components {
   .pause-event-form {
@@ -7564,8 +7564,8 @@
    -----------------------------------------------------------------------------
    An unreadable answer is not a wrong one, so it is not styled like one: it
    gets the neutral border a note gets rather than the red a wrong answer gets.
-   Distinguished by border and wording as well as colour, so the difference
-   survives a colour-blind reader and a printout.
+   Distinguished by border and wording as well as color, so the difference
+   survives a color-blind reader and a printout.
    ========================================================================== */
 @layer components {
   .inv-feedback.is-unreadable {
@@ -7710,7 +7710,7 @@
   }
 }
 
-/* --- The manoeuvre planner ---------------------------------------------------
+/* --- The maneuver planner ---------------------------------------------------
    A member of the bottom-left instrument stack, so it inherits .obs-panel's
    position, its height cap and its pinned toolbar.
    ---------------------------------------------------------------------------- */
@@ -7801,7 +7801,7 @@
 
 @layer components {
   /* --- Conservation check ------------------------------------------------
-     Grouped and labelled. It used to be three unlabelled rows in the corner of
+     Grouped and labeled. It used to be three unlabeled rows in the corner of
      every first visit; it is now off by default and, when asked for, arrives
      as a named block with its explanation reachable from the keyboard. */
   .readout-conservation {

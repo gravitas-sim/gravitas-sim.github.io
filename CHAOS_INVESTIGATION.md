@@ -22,7 +22,7 @@ from three things it is routinely confused with.
 The brief named the figure eight and the Pythagorean problem as candidates.
 Both were built and measured against this engine before either was rejected.
 
-| Candidate                                                             | Measured behaviour here                                                                                                                     | Verdict                                                                                                                 |
+| Candidate                                                             | Measured behavior here                                                                                                                     | Verdict                                                                                                                 |
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | **Pythagorean (Burrau)** — masses 3, 4, 5 at rest on a right triangle | Merges. Its close approaches pass inside the collision radius under every integrator, and the engine removes a body.                        | **Rejected.** The divergence measure matches bodies by identity; a merger mid-run changes what is being compared.       |
 | **Chenciner–Montgomery figure eight**                                 | Separation grows ×230 over 13.6 orbits and no more, identically under all three integrators.                                                | **Rejected as the subject** — it is not chaotic. Kept as the _counterexample_ in step 22, which is what it is good for. |
@@ -89,7 +89,7 @@ time**:
 
 in simulation length units — configuration space, positions only.
 
-A normalised phase-space version including velocities is implemented
+A normalized phase-space version including velocities is implemented
 (`phaseDistance`) and gives τ = 6.93 against the configuration metric's 6.91, a
 0.3% difference. Positions alone are the default because adding velocities
 requires weighing a length against a speed, and any such weight is a choice of
@@ -104,7 +104,7 @@ call the result divergence.
 
 ---
 
-## Why the result is not a timestep artefact
+## Why the result is not a timestep artifact
 
 The evidence, from `tools/physics-checks.mjs`, run on every `npm test`:
 

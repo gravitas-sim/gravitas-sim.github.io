@@ -50,14 +50,14 @@ import {
 import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS } from './appState.js';
-import { barycentreOf } from './lesson/barycentre.js';
+import { barycenterOf } from './lesson/barycenter.js';
 import { extentOf, sceneFor } from './lesson/evolutionScene.js';
 import { updateCanvasSummary } from './canvasSummary.js';
 
 /**
  * Draw the crests a wave source has emitted.
  *
- * Centred on the source's own screen position, so the pattern travels with it
+ * Centerd on the source's own screen position, so the pattern travels with it
  * rather than with the camera. Bounded by construction: the crest list comes
  * from js/lesson/gwWavefronts.js, which caps it, and each ring is one stroked
  * circle.
@@ -317,23 +317,23 @@ import { isEmbed } from './presentation.js';
 import { t, onLocaleChange } from './i18n/index.js';
 
 /**
- * Translate the legacy "habitable zone optimism" setting into a model name.
+ * Translate the legacy "habitable zone optimizm" setting into a model name.
  *
  * The old slider ran from 0.5 to 2.0 and multiplied the width of an arbitrary
  * band. Shared links and saved settings still carry it, so it keeps working:
- * anything above the midpoint asks for the optimistic prescription, anything
+ * anything above the midpoint asks for the optimiztic prescription, anything
  * below asks for the conservative one. New wording says which is which rather
  * than implying that 1.7 means something physical.
  *
  * @param {Object} settings - Live settings
- * @returns {string} 'conservative' or 'optimistic'
+ * @returns {string} 'conservative' or 'optimiztic'
  */
 export function habitableZoneModelFromSettings(settings) {
-  const legacy = settings?.habitable_zone_optimism;
+  const legacy = settings?.habitable_zone_optimizm;
   // One stored value, so a shared link from before this change still selects a
   // zone and cannot disagree with the settings menu.
   return typeof legacy === 'number' && legacy >= 1.3
-    ? 'optimistic'
+    ? 'optimiztic'
     : 'conservative';
 }
 
@@ -348,7 +348,7 @@ const starCtx = starfieldCanvas.getContext('2d');
 // The sky, and the three canvases it is painted onto once.
 //
 // Nothing about a star changes between repaints - not its position, not its
-// colour, not its brightness - so painting all of them every repaint was
+// color, not its brightness - so painting all of them every repaint was
 // redrawing an unchanging picture twenty-eight times a second. Each parallax
 // layer is now rendered to its own offscreen canvas when something that
 // actually affects it changes, and a repaint is three blits.
@@ -527,7 +527,7 @@ function rebuildStarLayers() {
       // A star that is going to be animated is drawn by the animation, not
       // here, or it would show through underneath its own twinkle.
       if (animate && star.twinkles) continue;
-      ctx.fillStyle = starRgba(star.colour, star.alpha);
+      ctx.fillStyle = starRgba(star.color, star.alpha);
       ctx.fillRect(star.x, star.y, star.size, star.size);
     }
   }
@@ -656,7 +656,7 @@ function distortionRegions() {
       // An annulus, not a disc.
       //
       // A ripple's displacement is a sine under an exp(-|phase|) envelope
-      // centred on the expanding wavefront, so the sky it actually moves is a
+      // centerd on the expanding wavefront, so the sky it actually moves is a
       // band a couple of wavelengths wide around that front. Treating it as a
       // filled disc meant that an old ripple - and they live fifteen seconds,
       // by which time the front is thousands of pixels out - claimed the whole
@@ -689,7 +689,7 @@ function distortionRegions() {
         kind: 'lens',
         strength: 3.0 * qScale,
         blur: 2.5,
-        colour: '#fff',
+        color: '#fff',
       });
     }
     for (const ns of neutron_stars) {
@@ -702,7 +702,7 @@ function distortionRegions() {
         kind: 'lens',
         strength: 1.3,
         blur: 2.8,
-        colour: '#6cf',
+        color: '#6cf',
       });
     }
     for (const wd of white_dwarfs) {
@@ -715,7 +715,7 @@ function distortionRegions() {
         kind: 'lens',
         strength: 0.9,
         blur: 2.0,
-        colour: '#e0f7ff',
+        color: '#e0f7ff',
       });
     }
   }
@@ -734,7 +734,7 @@ function distortionRegions() {
  * @param {object} region - From distortionRegions
  * @param {number} sx - Star position, screen pixels
  * @param {number} sy - Star position, screen pixels
- * @returns {?{dx: number, dy: number, blur: number, colour: string}} Displacement
+ * @returns {?{dx: number, dy: number, blur: number, color: string}} Displacement
  */
 function displacementFrom(region, sx, sy) {
   const dx = sx - region.x;
@@ -753,7 +753,7 @@ function displacementFrom(region, sx, sy) {
       dx: (dx / (dist + 1e-6)) * lens,
       dy: (dy / (dist + 1e-6)) * lens,
       blur: region.blur * edge,
-      colour: region.colour,
+      color: region.color,
     };
   }
 
@@ -790,7 +790,7 @@ function displacementFrom(region, sx, sy) {
     dx: (dx / dist) * factor,
     dy: (dy / dist) * factor,
     blur: 0,
-    colour: '#fff',
+    color: '#fff',
   };
 }
 
@@ -846,7 +846,7 @@ function drawStarfield() {
       const sx = wrap(star.x - off.x, W);
       const sy = wrap(star.y - off.y, H);
       const flicker = Math.sin(time * 2 + star.phase) * 0.12 + 0.88;
-      starCtx.fillStyle = starRgba(star.colour, star.alpha * flicker);
+      starCtx.fillStyle = starRgba(star.color, star.alpha * flicker);
       starCtx.fillRect(sx, sy, star.size, star.size);
     }
   }
@@ -915,7 +915,7 @@ function drawStarfield() {
             const glow = push.blur > 0 ? Math.min(1, push.blur / 2.5) : 0;
             const size = star.size * (1 + glow * 0.9);
             const alpha = Math.min(1, star.alpha * (1 + glow * 0.6));
-            starCtx.fillStyle = starRgba(star.colour, alpha);
+            starCtx.fillStyle = starRgba(star.color, alpha);
             starCtx.fillRect(sx, sy, size, size);
           }
         }
@@ -996,13 +996,13 @@ const framedTrailView = [];
  * @returns {Array} The trail itself in the world frame, or a reused view
  */
 /**
- * A hex colour for a star's trail, from the same temperature its disc uses.
+ * A hex color for a star's trail, from the same temperature its disc uses.
  *
  * Memoised on the star beside the disc's own cache, because this runs for every
  * star on every frame and stellarPropertiesFor allocates.
  *
  * @param {Object} star - A StarObject
- * @returns {?string} A hex colour, or null when the star has no usable state
+ * @returns {?string} A hex color, or null when the star has no usable state
  */
 function trailColorForStar(star) {
   const teff = star._visual?.teff;
@@ -1156,7 +1156,7 @@ const drawScene = () => {
     ].forEach(obj => {
       const trail = framedTrail(obj.trail, shifts, newestTick);
       if (obj.alive && trail.length > 1) {
-        // A star with no authored colour is coloured by its temperature, the
+        // A star with no authored color is colored by its temperature, the
         // same way its disc is. Without this branch the trails of every
         // generated star fell through to the settings default and a field of
         // stars of every temperature trailed one shade of blue.
@@ -1165,10 +1165,10 @@ const drawScene = () => {
           (obj.obj_type === 'StarObject' ? trailColorForStar(obj) : null) ||
           SETTINGS[`${obj.obj_type.toLowerCase()}_base_color`] ||
           '#6495ed';
-        // trail_colour_mode 'speed' maps each trail point's recorded velocity
+        // trail_color_mode 'speed' maps each trail point's recorded velocity
         // onto a perceptual ramp, which makes an eccentric orbit read at a
         // glance: bright and hot at periapsis, cool and dim at apoapsis.
-        const bySpeed = SETTINGS.trail_colour_mode === 'speed';
+        const bySpeed = SETTINGS.trail_color_mode === 'speed';
         const rgb = bySpeed
           ? speedTrailColor(Math.hypot(obj.vel.x, obj.vel.y))
           : hexToRgb(baseColor);
@@ -1322,7 +1322,7 @@ const drawScene = () => {
   // Every number comes from js/habitability.js, which the lesson instruments
   // read too. This block used to carry its own physics: 1 AU = 160 units (the
   // scenarios use 100), luminosity from mass as M^3.5 with a floor of
-  // 0.01 L_sun (TRAPPIST-1 is 0.000553), and an "optimism" slider that widened
+  // 0.01 L_sun (TRAPPIST-1 is 0.000553), and an "optimizm" slider that widened
   // an arbitrary band around 1 AU. The ring was in the wrong place and,
   // for a red dwarf, wrong by a factor of several.
   const hzModel = habitableZoneModelFromSettings(SETTINGS);
@@ -1387,8 +1387,8 @@ const drawScene = () => {
         // and not a measurement. The ring says so for the red dwarfs where
         // it applies, rather than quoting a clamped fit as fact.
         const bandName =
-          hzModel === 'optimistic'
-            ? 'Habitable zone (optimistic)'
+          hzModel === 'optimiztic'
+            ? 'Habitable zone (optimiztic)'
             : 'Habitable zone (conservative)';
         label(
           (innerR + outerR) / 2,
@@ -1658,28 +1658,28 @@ const drawScene = () => {
   // what the lesson expects rather than a measurement of what the engine did.
   //
   // Drawn in screen-space widths so it reads as an instrument laid over the
-  // scene rather than as an object in it - there is nothing at the barycentre
+  // scene rather than as an object in it - there is nothing at the barycenter
   // of a binary, and a filled disc there would teach the opposite.
-  if (state.barycentreOverlay?.active) {
-    const ids = state.barycentreOverlay.ids || [];
+  if (state.barycenterOverlay?.active) {
+    const ids = state.barycenterOverlay.ids || [];
     const members = stars.filter(o => ids.includes(o.id));
-    const centre = members.length >= 2 ? barycentreOf(members) : null;
-    if (centre) {
-      state.barycentreOverlay.x = centre.x;
-      state.barycentreOverlay.y = centre.y;
-      state.barycentreOverlay.arms = members.map(o => ({
+    const center = members.length >= 2 ? barycenterOf(members) : null;
+    if (center) {
+      state.barycenterOverlay.x = center.x;
+      state.barycenterOverlay.y = center.y;
+      state.barycenterOverlay.arms = members.map(o => ({
         id: o.id,
         name: o.name,
-        r: Math.hypot(o.pos.x - centre.x, o.pos.y - centre.y),
+        r: Math.hypot(o.pos.x - center.x, o.pos.y - center.y),
       }));
-      state.barycentreOverlay.separation =
+      state.barycenterOverlay.separation =
         members.length === 2
           ? Math.hypot(
               members[0].pos.x - members[1].pos.x,
               members[0].pos.y - members[1].pos.y
             )
           : 0;
-      const c = world_to_screen(centre);
+      const c = world_to_screen(center);
       ctx.save();
       ctx.lineWidth = 1.25;
       ctx.strokeStyle = 'rgba(255, 235, 150, 0.85)';
@@ -2009,7 +2009,7 @@ const drawScene = () => {
  */
 // The run state lives in the panel's header rather than in its body: it is the
 // one thing here that is a state and not a measurement, it is what a lecturer
-// points at, and a coloured dot reads across a room in a way a word does not.
+// points at, and a colored dot reads across a room in a way a word does not.
 const statusEl = () => document.getElementById('overlayStatus');
 let paintedStatus = null;
 
@@ -2138,7 +2138,7 @@ function readoutHtml(drawn) {
   // had not asked for one - including in the scenarios where a large change is
   // the model working correctly rather than the integrator failing.
   //
-  // So when it is on it arrives as a labelled group with the explanation
+  // So when it is on it arrives as a labeled group with the explanation
   // attached, the reasons this particular scene is not closed listed beside
   // it, the moment the reference was taken, and - where a percentage would be
   // meaningless - an honest gap instead of a large number.
@@ -2168,7 +2168,7 @@ function readoutHtml(drawn) {
       ];
 
       // Energy and angular momentum, each either as a percentage of the
-      // reference or - when the reference was itself the near-cancellation of
+      // reference or - when the reference was itself the near-cancelation of
       // much larger terms - as the change itself, said plainly.
       rows.push(
         drift.energyConditioned
@@ -2353,7 +2353,7 @@ function instrumentationSettings() {
 // The instrumentation is painted on the canvas and the transport bar and
 // tutorial button are HTML on top of it, so the canvas has to be told where
 // they are or the scale bar ends up behind the scrubber. Measured rather than
-// assumed, because both of them move: the transport bar is centred on the
+// assumed, because both of them move: the transport bar is centerd on the
 // window and hidden entirely on a narrow screen.
 //
 // Re-measured a few times a second rather than every frame. A layout read in
@@ -2380,7 +2380,7 @@ function measureChrome() {
     const r = el.getBoundingClientRect();
     // Only chrome that actually sits over the corner the instrumentation uses.
     if (r.width <= 0 || r.height <= 0) continue;
-    // The lecture bar is centred, so it reaches the corner the instrumentation
+    // The lecture bar is centerd, so it reaches the corner the instrumentation
     // uses without starting there; every other piece of chrome measured here
     // is anchored left.
     if (r.left > 520 && id !== 'lectureBar') continue;
@@ -2436,10 +2436,10 @@ function renderAimLine(preview) {
 }
 
 /**
- * Which token carries a type's colour.
+ * Which token carries a type's color.
  *
  * The same eight hues the object glyphs and the canvas labels use, so the
- * marker under the pointer is recognisably the thing the picker showed and the
+ * marker under the pointer is recognizably the thing the picker showed and the
  * thing that will appear when the button is released.
  */
 const PREVIEW_HUE = Object.freeze({
@@ -2459,7 +2459,7 @@ onThemeChange(() => {
   previewHueCache = new Map();
 });
 
-/** The current theme's colour for an object type. */
+/** The current theme's color for an object type. */
 function previewHue(type) {
   const token = PREVIEW_HUE[type] || '--accent';
   if (!previewHueCache.has(token)) {
@@ -2474,7 +2474,7 @@ function previewHue(type) {
  * The preview used to begin at an unmarked point on a dashed line, so the one
  * thing a reader wanted to know before letting go - what am I about to create,
  * and exactly where - was the one thing not shown. This marks the start with a
- * disc the size the body will actually be drawn at, in the type's own colour,
+ * disc the size the body will actually be drawn at, in the type's own color,
  * and follows the same level of detail the renderer would: below a few pixels
  * it is a point, because that is what the body will be.
  *
@@ -2548,8 +2548,8 @@ function drawVelocityArrow(from, to) {
   const back = { x: to.x - ux * head, y: to.y - uy * head };
   const wing = head * 0.55;
 
-  const stroke = (colour, width) => {
-    ctx.strokeStyle = colour;
+  const stroke = (color, width) => {
+    ctx.strokeStyle = color;
     ctx.lineWidth = width;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';

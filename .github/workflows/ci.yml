@@ -95,10 +95,10 @@ on:
 # A second push to the same branch makes the first one irrelevant. Never cancel
 # a run on main, though: those are the ones whose result gets referenced later.
 #
-# Because main runs are not cancelled, two pushes in quick succession both run
+# Because main runs are not canceled, two pushes in quick succession both run
 # to completion and can finish out of order. That is handled where it matters -
 # in the deploy job, which refuses to publish a commit that is no longer the tip
-# of main - rather than by cancelling runs whose results somebody may want.
+# of main - rather than by canceling runs whose results somebody may want.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
@@ -110,7 +110,7 @@ permissions:
 
 env:
   NODE_VERSION: '20'
-  # The suite is noisy about colour codes in a log that has none.
+  # The suite is noisy about color codes in a log that has none.
   NO_COLOR: '1'
 
 jobs:
@@ -291,7 +291,7 @@ jobs:
     # caught, at a third again its expected duration.
     timeout-minutes: 40
     strategy:
-      # One shard failing must not cancel the other five. A cancelled shard
+      # One shard failing must not cancel the other five. A canceled shard
       # tells you nothing about the tests it did not reach, and the whole point
       # of splitting the suite is to find out what is broken in one run rather
       # than six.
@@ -346,7 +346,7 @@ jobs:
         run: npx playwright test --shard=${{ matrix.shard }}/6
 
       - name: Upload this shard's blob report
-        if: ${{ !cancelled() }}
+        if: ${{ !canceled() }}
         uses: actions/upload-artifact@v4
         with:
           # Uniquely named, or the six shards overwrite one another and the
@@ -372,7 +372,7 @@ jobs:
     # they did not. It does not decide anything - see the `ci` job, which
     # requires every shard itself - so a merge that fails cannot turn a red
     # suite green, and this job succeeding says nothing about the tests.
-    if: ${{ !cancelled() }}
+    if: ${{ !canceled() }}
     needs: [e2e]
     timeout-minutes: 10
     steps:
@@ -396,7 +396,7 @@ jobs:
         run: npx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: Upload the combined report
-        if: ${{ !cancelled() }}
+        if: ${{ !canceled() }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-sources
@@ -459,7 +459,7 @@ jobs:
         run: npm run a11y:manual
 
       - name: Upload the report
-        if: ${{ !cancelled() }}
+        if: ${{ !canceled() }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-accessibility
@@ -517,7 +517,7 @@ jobs:
         run: npm run e2e:dist
 
       - name: Upload the report
-        if: ${{ !cancelled() }}
+        if: ${{ !canceled() }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-build
@@ -584,7 +584,7 @@ jobs:
         run: npm run e2e:cross-browser -- --workers=1
 
       - name: Upload the report
-        if: ${{ !cancelled() }}
+        if: ${{ !canceled() }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-${{ matrix.browser }}
@@ -610,7 +610,7 @@ jobs:
           echo "build:         ${{ needs.build.result }}"
           # One result for the whole matrix: GitHub rolls the six source
           # shards up into this, and it is 'success' only when every one of
-          # them succeeded. A shard that failed, was cancelled or never ran
+          # them succeeded. A shard that failed, was canceled or never ran
           # makes it something else, and `require` below refuses all three -
           # so a shard whose report never arrived cannot be mistaken for a
           # shard that passed.
@@ -621,7 +621,7 @@ jobs:
           # A skipped job is not a passing job.
           #
           # This accepted `success|skipped` for every job, so anything that did
-          # not run - a cancelled matrix leg, a job skipped because something it
+          # not run - a canceled matrix leg, a job skipped because something it
           # needed failed, a condition added later - reported the whole of CI
           # green. The deployment gate consults this job, so a skip was a route
           # to publishing something nothing had checked.
@@ -700,7 +700,7 @@ jobs:
   #   CI failed        `needs: [ci]` without `always()`, so a failure skips this
   #                    job. GitHub Pages keeps serving the last successful
   #                    deployment; nothing is torn down.
-  #   CI cancelled     same path. A cancelled dependency is not a success.
+  #   CI canceled     same path. A canceled dependency is not a success.
   #   CI skipped       cannot happen for a push to main - every job it needs is
   #                    unconditional there - but if it ever did, `needs` treats
   #                    a skipped dependency as not-success and this is skipped
@@ -721,8 +721,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    # Queue deployments rather than cancelling them: a half-finished deploy that
-    # is cancelled leaves an indeterminate live site, which is worse than a
+    # Queue deployments rather than canceling them: a half-finished deploy that
+    # is canceled leaves an indeterminate live site, which is worse than a
     # short wait. Ordering between queued deploys is handled by the supersession
     # check below.
     concurrency:

@@ -5,7 +5,7 @@
  *
  * These replace a runtime request to fonts.googleapis.com. The files are the
  * upstream Google Fonts releases redistributed by @fontsource under the SIL
- * Open Font Licence; each family's licence sits beside the files it covers in
+ * Open Font License; each family's license sits beside the files it covers in
  * vendor/fonts/.
  *
  * Regenerate with `npm run vendor`; `npm run vendor:check` fails if this file

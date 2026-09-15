@@ -146,7 +146,7 @@ test.describe('the two runs', () => {
       const ui = await import('/js/ui.js');
       const bench = await import('/js/experiments/bench.js');
       const maxBefore = ui.SETTINGS.max_timestep;
-      // A long check, cancelled almost immediately.
+      // A long check, canceled almost immediately.
       const running = bench.runReliabilityCheck({ duration: 4000 });
       await new Promise(r => setTimeout(r, 400));
       const wasRunning = bench.isCheckingReliability();
@@ -163,7 +163,7 @@ test.describe('the two runs', () => {
 
     expect(out.wasRunning).toBe(true);
     expect(out.ok).toBe(false);
-    expect(out.reason).toBe('cancelled');
+    expect(out.reason).toBe('canceled');
     expect(out.restored).toBe(true);
     expect(out.stillChecking).toBe(false);
   });

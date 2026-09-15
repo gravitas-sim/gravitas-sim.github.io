@@ -70,7 +70,7 @@ test.describe('the application loads everything it asks for', () => {
 
   test('every scenario thumbnail decodes', async ({ page, app }) => {
     // The file existing is checked by npm run thumbnails:check. This checks the
-    // browser can actually decode it, which a truncated or mislabelled .webp
+    // browser can actually decode it, which a truncated or mislabeled .webp
     // fails while still being a file of the right name and a plausible size.
     await app.boot();
     await app.railControl('loadScenarioBtn');

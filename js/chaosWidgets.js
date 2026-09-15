@@ -18,7 +18,7 @@
 // What it will not do
 // -----------------------------------------------------------------------------
 // It will not print a Lyapunov time for every pair of runs it is given. The
-// arithmetic that produces one works on any increasing series; the judgement
+// arithmetic that produces one works on any increasing series; the judgment
 // about whether the number means anything is in js/chaos/divergence.js, and
 // this widget reports the refusal as prominently as it would report a result.
 // A two-body pair gets "your runs drifted apart in proportion to time - that is
@@ -26,7 +26,7 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
-// This family's labels are in the deferred half of the catalogue; see the note
+// This family's labels are in the deferred half of the catalog; see the note
 // in js/widgets.js. Registered from the module that renders them rather than
 // from the registry, because a lesson, a share link, an authoring preview or a
 // test can import this file directly and never go through the registry at all
@@ -37,10 +37,10 @@ ensureDeferredMessages().catch(() => {});
 
 import { surface, responsiveHeight, palette, MONO } from './widgetCanvas.js';
 import {
-  BEHAVIOUR,
+  BEHAVIOR,
   CRITERIA,
   separationSeries,
-  analyseDivergence,
+  analyzedivergence,
   refinementVerdict,
 } from './chaos/divergence.js';
 
@@ -82,7 +82,7 @@ export function measure(ctx) {
     return { ready: false, reason: 'no-runs', verdict: null, series: [] };
   }
   const { series, sampling, unmatched } = separationSeries(runs.a, runs.b);
-  const verdict = analyseDivergence(series);
+  const verdict = analyzedivergence(series);
   return {
     ready: series.length > 1,
     reason: series.length > 1 ? '' : 'no-overlap',
@@ -97,19 +97,19 @@ export function measure(ctx) {
   };
 }
 
-/** A localized one-line verdict. @param {Object} v - From analyseDivergence @returns {string} Text */
+/** A localized one-line verdict. @param {Object} v - From analyzedivergence @returns {string} Text */
 export function verdictText(v) {
   if (!v) return t('chaosW.verdict.none');
-  switch (v.behaviour) {
-    case BEHAVIOUR.IDENTICAL:
+  switch (v.behavior) {
+    case BEHAVIOR.IDENTICAL:
       return t('chaosW.verdict.identical');
-    case BEHAVIOUR.BOUNDED:
+    case BEHAVIOR.BOUNDED:
       return t('chaosW.verdict.bounded');
-    case BEHAVIOUR.LINEAR:
+    case BEHAVIOR.LINEAR:
       return t('chaosW.verdict.linear');
-    case BEHAVIOUR.SATURATED:
+    case BEHAVIOR.SATURATED:
       return t('chaosW.verdict.saturated');
-    case BEHAVIOUR.EXPONENTIAL:
+    case BEHAVIOR.EXPONENTIAL:
       return t('chaosW.verdict.exponential', {
         tau: v.tau.toFixed(1),
         r2: v.r2.toFixed(3),
@@ -186,11 +186,7 @@ function plot(g, box, series, opts) {
   g.stroke();
 
   // On the log plot, the fitted straight line, drawn over the data it fits.
-  if (
-    log &&
-    verdict?.behaviour === BEHAVIOUR.EXPONENTIAL &&
-    verdict.window.ok
-  ) {
+  if (log && verdict?.behavior === BEHAVIOR.EXPONENTIAL && verdict.window.ok) {
     const pointsIn = verdict.window.points;
     const first = pointsIn[0];
     const rate = verdict.rate;
@@ -319,12 +315,12 @@ const DIVERGENCE = {
       value: v.growth === Infinity ? '—' : `×${formatBig(v.growth)}`,
     });
     rows.push({
-      label: t('chaosW.row.behaviour'),
+      label: t('chaosW.row.behavior'),
       value: verdictText(v),
       emphasis: true,
     });
 
-    if (v.behaviour === BEHAVIOUR.EXPONENTIAL) {
+    if (v.behavior === BEHAVIOR.EXPONENTIAL) {
       rows.push({
         label: t('chaosW.row.window'),
         value: t('chaosW.value.window', {
@@ -350,7 +346,7 @@ const DIVERGENCE = {
 
     if (m.controls.length) {
       const verdictOf = refinementVerdict([
-        { tau: v.tau, behaviour: v.behaviour },
+        { tau: v.tau, behavior: v.behavior },
         ...m.controls,
       ]);
       rows.push({
@@ -368,14 +364,14 @@ const DIVERGENCE = {
   },
 };
 
-/** A separation in simulation units and kilometres. @param {number} d - Units @returns {string} Text */
+/** A separation in simulation units and kilometers. @param {number} d - Units @returns {string} Text */
 function units(d) {
   const km = d * 1.495978707e6;
   if (d < 1e-3) return `${d.toExponential(2)} u  (${formatKm(km)})`;
   return `${d.toPrecision(3)} u  (${formatKm(km)})`;
 }
 
-/** @param {number} km - Kilometres @returns {string} A readable distance */
+/** @param {number} km - Kilometers @returns {string} A readable distance */
 function formatKm(km) {
   const a = Math.abs(km);
   if (a >= 1e6) return `${(km / 1e6).toPrecision(3)} million km`;

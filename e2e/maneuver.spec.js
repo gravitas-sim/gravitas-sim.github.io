@@ -1,5 +1,5 @@
 // =============================================================================
-// The manoeuvre planner
+// The maneuver planner
 // -----------------------------------------------------------------------------
 // tests/maneuver.test.js pins the arithmetic against the closed form. What only
 // a browser can show is that the burn the panel previews is the burn the engine
@@ -174,7 +174,7 @@ test.describe('undo', () => {
     expect(undone.a / before.a).toBeCloseTo(1, 5);
     expect(undone.energy / before.energy).toBeCloseTo(1, 5);
     // Both are circular to within a rounding of the saved state; comparing two
-    // near-zero eccentricities for equality would be comparing serialisation
+    // near-zero eccentricities for equality would be comparing serialization
     // noise. What matters is that the burn's eccentricity is gone.
     expect(burned.e).toBeGreaterThan(0.05);
     expect(undone.e).toBeLessThan(0.001);
@@ -233,7 +233,7 @@ test.describe('undo', () => {
         { timeout: 5000, intervals: [50] }
       )
       .toBeLessThan(clockBefore);
-    // Restoring re-initialises the world, so the recorded history - which
+    // Restoring re-initializes the world, so the recorded history - which
     // describes a future that has been discarded - goes with it.
   });
 });
@@ -309,7 +309,7 @@ test.describe('the whole transfer', () => {
     testInfo.setTimeout(240_000);
     await openPlanner(page, app);
 
-    // The whole manoeuvre inside one evaluate, with the world stopped. Not
+    // The whole maneuver inside one evaluate, with the world stopped. Not
     // fastidiousness: this scenario advances five simulation units per frame,
     // so a round trip to the test runner between the burn and the coast lets
     // the spacecraft fly a third of the transfer before the clock starts, and

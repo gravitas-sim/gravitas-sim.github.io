@@ -89,12 +89,12 @@ const HOHMANN_TRANSFER = {
   duration: '20-25 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalogue rather than free text, so a filter can offer
+  // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['spaceflight', 'orbits'],
   lock: { placement: true },
   summary:
-    'A spacecraft at 1 AU, a station at 2.5 AU, and no fuel to waste. Work out both burns and the coast between them with a pencil, then fly the manoeuvre and see whether the engine agrees with you. It does — to a part in a thousand — which is what makes the two surprises in it worth trusting: you speed up to go further out, and you have to speed up again on arrival or you fall straight back.',
+    'A spacecraft at 1 AU, a station at 2.5 AU, and no fuel to waste. Work out both burns and the coast between them with a pencil, then fly the maneuver and see whether the engine agrees with you. It does — to a part in a thousand — which is what makes the two surprises in it worth trusting: you speed up to go further out, and you have to speed up again on arrival or you fall straight back.',
   objectives: [
     'Predict which way a burn moves an orbit, and where the change appears',
     'Distinguish a radial burn from a transverse one by what each conserves',
@@ -113,7 +113,7 @@ const HOHMANN_TRANSFER = {
       setup: LAB,
       body: `A spacecraft is on a circular orbit one astronomical unit from a
              sunlike star, going round once a year at just under thirty
-             kilometres a second. A station sits on another circular orbit two
+             kilometers a second. A station sits on another circular orbit two
              and a half times further out, in the same plane, going round every
              four years.
              \n\nYou have to get from one to the other, and the fuel you have is
@@ -122,7 +122,7 @@ const HOHMANN_TRANSFER = {
              \n\nNothing else is in this system. No other planets, no belt, no
              moon. That is deliberate, and by the end of the lesson you will
              know exactly which of your answers depended on it.`,
-      tip: 'Select the Spacecraft and look at the inspector: the ▲ button beside the pin opens the manoeuvre planner.',
+      tip: 'Select the Spacecraft and look at the inspector: the ▲ button beside the pin opens the maneuver planner.',
     },
     {
       sid: 'predict-point-at-it',
@@ -149,7 +149,7 @@ const HOHMANN_TRANSFER = {
       bind: TRANSFER,
       type: 'explore',
       title: 'Try it',
-      body: `Open the manoeuvre planner on the <strong>Spacecraft</strong> and
+      body: `Open the maneuver planner on the <strong>Spacecraft</strong> and
              put a radial Δv of <strong>0.5</strong> into the box. Do not apply
              it yet — read the preview.
              \n\nThe periapsis falls, the apoapsis rises, and the specific
@@ -179,7 +179,7 @@ const HOHMANN_TRANSFER = {
              where you burn stays on the new orbit: you are still there, still
              at that distance, so that distance is still a point the orbit
              passes through. Everything you gain shows up half an orbit later.
-             \n\nThat is the first thing about orbital manoeuvring that has to
+             \n\nThat is the first thing about orbital maneuvering that has to
              be learned rather than guessed: <strong>you push here and the
              orbit changes over there</strong>.`,
     },
@@ -524,7 +524,7 @@ const HOHMANN_TRANSFER = {
              planner shows the distance no longer growing — apply a transverse
              Δv of <strong>0.690</strong> simulation units.
              \n\nWatch the eccentricity in the planner's preview fall to nearly
-             zero. That is the manoeuvre finished: the orbit is now the
+             zero. That is the maneuver finished: the orbit is now the
              station's orbit.`,
       checklist: [
         'Wait until the spacecraft reaches 2.5 AU',

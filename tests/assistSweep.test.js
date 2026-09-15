@@ -26,7 +26,7 @@ import {
 import { registerMessages } from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 
-// The panel's prose is in the deferred half of the catalogue, which nothing
+// The panel's prose is in the deferred half of the catalog, which nothing
 // loads in a unit test. Registered here so these assertions are about the
 // sentences a reader sees rather than about message ids.
 registerMessages('en', EN_DEFERRED);
@@ -93,7 +93,7 @@ describe('what the experiments vary, and what they hold', () => {
     }
   });
 
-  test('the comparison spans the excluded neighbourhood without entering it', () => {
+  test('the comparison spans the excluded neighborhood without entering it', () => {
     // +40 and -40 are both flybys; everything between -8 and +8 is a
     // collision. A span check would refuse the pair, which is why the
     // validator checks explicit values one at a time.
@@ -104,7 +104,7 @@ describe('what the experiments vary, and what they hold', () => {
     expect(validateSweepSpec(spec).ok).toBe(true);
   });
 
-  test('a value inside the excluded neighbourhood is refused, listed by name', () => {
+  test('a value inside the excluded neighborhood is refused, listed by name', () => {
     const spec = { ...comparisonSpec({ frameRatio: 1 }), values: [40, 0, -40] };
     expect(validateSweepSpec(spec)).toMatchObject({
       ok: false,
@@ -211,7 +211,7 @@ describe('reading an encounter', () => {
   test('a trial that never ran says so rather than reading as empty', () => {
     const enc = describeEncounter({
       value: 40,
-      status: 'cancelled',
+      status: 'canceled',
       observed: null,
     });
     expect(enc.outcome).toBe(ENCOUNTER.NOT_RUN);
@@ -491,11 +491,11 @@ describe('what goes into the notebook', () => {
     expect(entry.prose.limitations).toMatch(/gaining side/i);
   });
 
-  test('a cancelled sweep is flagged as one', () => {
+  test('a canceled sweep is flagged as one', () => {
     const entry = fromAssistSweep({
-      report: { ...sweepReport, cancelled: true },
+      report: { ...sweepReport, canceled: true },
     });
-    expect(entry.snapshot.provenance.flags).toContain('cancelled');
+    expect(entry.snapshot.provenance.flags).toContain('canceled');
     expect(entry.prose.limitations).toMatch(/stopped before it finished/i);
   });
 });

@@ -10,7 +10,7 @@
 // and almost none of it is reachable from a unit test: every branch reads the
 // live settings object and writes into the engine's own body arrays. The only
 // honest way to know that moving it changed nothing is to record what it emits
-// for every scenario in the catalogue and compare.
+// for every scenario in the catalog and compare.
 //
 // What the digest covers, and why each part is here:
 //
@@ -35,7 +35,7 @@
 //   GRAVITAS_UPDATE_WORLD_GOLDEN=1 GRAVITAS_E2E_PORT=4199 \
 //     npx playwright test worldConstruction --project=chromium
 //
-// A diff in this file is a behaviour change in world construction. If that
+// A diff in this file is a behavior change in world construction. If that
 // change was intended, the commit that regenerates the golden should say what
 // moved and why.
 // =============================================================================
@@ -54,7 +54,7 @@ const UPDATING = process.env.GRAVITAS_UPDATE_WORLD_GOLDEN === '1';
 const SEED = 'characterization';
 
 /**
- * Build every scenario in the catalogue and digest the result.
+ * Build every scenario in the catalog and digest the result.
  *
  * Runs entirely inside one page evaluation: 53 builds over 53 round trips is
  * slower than the whole rest of the file, and nothing here needs the harness
@@ -63,7 +63,7 @@ const SEED = 'characterization';
  * @param {import('@playwright/test').Page} page - The page under test
  * @returns {Promise<Record<string, object>>} Digest per scenario key
  */
-async function digestCatalogue(page) {
+async function digestCatalog(page) {
   return page.evaluate(async seed => {
     const ui = await import('/js/ui.js');
     const p = await import('/js/physics.js');
@@ -97,7 +97,7 @@ async function digestCatalogue(page) {
     // the terms that went into it.
     //
     // Not as a number, because there is no number there. These worlds are built
-    // balanced, so the sum is catastrophic cancellation: Hungry Hungry Holes
+    // balanced, so the sum is catastrophic cancelation: Hungry Hungry Holes
     // sums 1.9 million units of |m*v| down to 4e-11, a relative residual of
     // 2e-17 - a tenth of a double's epsilon. Every digit of that is rounding,
     // in whatever order the additions happened to land, and pinning twelve of
@@ -114,7 +114,7 @@ async function digestCatalogue(page) {
     // Below this there is nothing to report. Summing a few hundred terms
     // accumulates rounding of order n * epsilon, which is about 1e-13 here, so
     // the floor is a decade above that. It sits in the middle of an empty gap:
-    // across the whole catalogue the balanced worlds come out at 1e-13 and
+    // across the whole catalog the balanced worlds come out at 1e-13 and
     // below, and the next one up is 1e-9, so no scenario is near enough to the
     // edge for a last-bit difference to move it across.
     const NOISE = 1e-11;
@@ -176,7 +176,7 @@ async function digestCatalogue(page) {
       let totalMass = 0;
       let px = 0;
       let py = 0;
-      // The size of the terms being cancelled, so the residual below can be
+      // The size of the terms being canceled, so the residual below can be
       // stated as a fraction of them rather than in absolute units.
       let pscale = 0;
       for (const list of LISTS) {
@@ -219,7 +219,7 @@ async function digestCatalogue(page) {
         pan: { x: num(ui.state?.pan?.x), y: num(ui.state?.pan?.y) },
         bodies: hash(rows.join('\n')),
         settings: hash(settingsRows.join('\n')),
-        // Kept in the clear so a failure names something a reader recognises
+        // Kept in the clear so a failure names something a reader recognizes
         // instead of only a changed hash.
         head: rows.slice(0, 3),
       };
@@ -234,12 +234,12 @@ test.describe('world construction is reproducible', () => {
     page,
   }, testInfo) => {
     // One build per scenario, all in one evaluation. Budget grows with the
-    // catalogue for the same reason the sweep in robustness.spec.js does.
+    // catalog for the same reason the sweep in robustness.spec.js does.
     const scale = 3_000;
     testInfo.setTimeout(Math.max(120_000, 53 * scale));
 
     await app.boot();
-    const actual = await digestCatalogue(page);
+    const actual = await digestCatalog(page);
 
     expect(Object.keys(actual).length).toBeGreaterThan(30);
 
@@ -266,7 +266,7 @@ test.describe('world construction is reproducible', () => {
     const expected = JSON.parse(fs.readFileSync(GOLDEN, 'utf8'));
 
     // Compared key by key so a failure names the scenario rather than dumping
-    // the whole catalogue as one unreadable object diff.
+    // the whole catalog as one unreadable object diff.
     expect(Object.keys(actual).sort()).toEqual(Object.keys(expected).sort());
     for (const key of Object.keys(expected)) {
       expect(actual[key], `scenario "${key}" builds differently`).toEqual(

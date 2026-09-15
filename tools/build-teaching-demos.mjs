@@ -23,8 +23,8 @@
 //
 // The scenario count rides along for the same reason. /teaching/ derives every
 // other number it prints from something it can read at run time - the lesson
-// manifest, validation/data.json - but the scenario catalogue's one export
-// pulls in the whole English message catalogue to attach titles, which is
+// manifest, validation/data.json - but the scenario catalog's one export
+// pulls in the whole English message catalog to attach titles, which is
 // 123KB a showcase page has no use for. Counting the scenarios here and
 // checking the count in CI keeps the page honest without that weight, and is
 // the same bargain js/data/investigations/manifest.js already makes.
@@ -169,7 +169,7 @@ export async function render(demos = DEMOS) {
 // Showcase-page data - GENERATED, do not edit
 // -----------------------------------------------------------------------------
 // Written by tools/build-teaching-demos.mjs from the \`state\` blocks in
-// ./teaching.js and from the scenario catalogue. Run \`npm run teaching:data\`
+// ./teaching.js and from the scenario catalog. Run \`npm run teaching:data\`
 // after changing either.
 //
 // DEMO_LINKS: each value is the text after the '#' of an ordinary Gravitas
@@ -345,7 +345,7 @@ const runDirectly =
 
 if (runDirectly) await main();
 
-/** The command-line behaviour. */
+/** The command-line behavior. */
 async function main() {
   const check = process.argv.includes('--check');
 

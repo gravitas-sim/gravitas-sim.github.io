@@ -34,7 +34,7 @@
 // =============================================================================
 
 /**
- * The controlled vocabulary, assembled from the message catalogue.
+ * The controlled vocabulary, assembled from the message catalog.
  *
  * The labels and descriptions moved to js/i18n/en.js with the rest of the
  * user-facing strings; the ids and their order stay here, because they are the
@@ -42,7 +42,7 @@
  * `tags` array and in nothing a reader ever sees.
  *
  * As with SCENARIO_INFO, the strings assembled here are English. The gallery
- * reads js/i18n/scenario.js's tagLabelLocalized() instead, which answers in the
+ * reads js/i18n/scenario.js's tagLabelocalized() instead, which answers in the
  * reader's language.
  */
 import { EN } from '../i18n/en.js';

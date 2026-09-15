@@ -1,5 +1,5 @@
 // =============================================================================
-// Recognising a double tap, and refusing to recognise anything else
+// Recognizing a double tap, and refusing to recognize anything else
 // -----------------------------------------------------------------------------
 // The detector this replaces was four lines and one rule: any two `touchend`
 // events less than 500 ms apart reset the zoom and the pan. Lifting two fingers

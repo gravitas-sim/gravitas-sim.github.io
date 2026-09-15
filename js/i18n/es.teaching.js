@@ -318,7 +318,7 @@ export const ES_TEACHING = {
   'teach.foot.validation': 'Validación',
   'teach.foot.instructors': 'Docentes',
   'teach.foot.source': 'Código fuente',
-  'teach.foot.licence': 'Licencia MIT',
+  'teach.foot.license': 'Licencia MIT',
 
   // --- Inicio rápido para docentes ------------------------------------------
   'teach.section.quickstart': 'Inicio rápido para docentes',

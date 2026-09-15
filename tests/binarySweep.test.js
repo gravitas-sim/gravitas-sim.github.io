@@ -13,7 +13,7 @@ import { parameterFor, validateSweepSpec } from '../js/experiments/sweep.js';
 import { registerMessages } from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 
-// The panel's prose is in the deferred half of the catalogue, which nothing
+// The panel's prose is in the deferred half of the catalog, which nothing
 // loads in a unit test. Registered here so these assertions are about the
 // sentences a reader sees rather than about message ids.
 registerMessages('en', EN_DEFERRED);
@@ -226,7 +226,7 @@ describe('what the notebook keeps', () => {
       maxTimestep: 1,
       simSpeed: 750,
     },
-    cancelled: false,
+    canceled: false,
     trials: [
       { value: 0.12, outcome: 'survived', periodsDone: 20, periodsAsked: 20 },
       { value: 0.3, outcome: 'ejected', periodsDone: 5.1, periodsAsked: 20 },
@@ -292,7 +292,7 @@ describe('what the notebook keeps', () => {
       }),
     });
     expect(entry.prose.limitations).toMatch(/0\.22/);
-    expect(entry.prose.limitations).toMatch(/not an artefact/i);
+    expect(entry.prose.limitations).toMatch(/not an artifact/i);
   });
 
   test('an empty sweep produces no entry at all', async () => {

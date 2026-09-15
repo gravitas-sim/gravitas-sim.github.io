@@ -36,7 +36,7 @@ describe('the burn frame', () => {
 
   test('a clockwise orbit gets the opposite transverse direction', () => {
     // Getting this wrong would make every prograde burn a brake on half the
-    // orbits in the catalogue.
+    // orbits in the catalog.
     const { body, primary } = circular(100, 1000, { clockwise: true });
     const f = burnFrame(body, primary);
     expect(f.transverse.y).toBeCloseTo(-1, 12);
@@ -214,7 +214,7 @@ describe('the Hohmann transfer, against the closed form', () => {
   });
 
   test('applying the first burn to a circular orbit produces the transfer ellipse', () => {
-    // The end-to-end check: the analytic manoeuvre, fed through the same
+    // The end-to-end check: the analytic maneuver, fed through the same
     // preview a student would use, gives the ellipse the analysis says it
     // should - apoapsis at the destination radius.
     const { body, primary } = circular(r1, mu / G);

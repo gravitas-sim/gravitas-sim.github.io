@@ -16,9 +16,9 @@
 import { registerMessages } from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 
-// These widgets' prose lives in the deferred catalogue, because everything
+// These widgets' prose lives in the deferred catalog, because everything
 // that reaches them is lazily loaded: js/widgets.js is imported only by
-// js/investigations.js, whose loader registers the catalogue before any step
+// js/investigations.js, whose loader registers the catalog before any step
 // draws. A test that reads a preset's label has to do the same, or every
 // label is the message id it was going to be translated from.
 registerMessages('en', EN_DEFERRED);
@@ -413,7 +413,7 @@ describe('the angle instrument’s verdicts', () => {
       },
       { state: ANGLE_STATE.INCONCLUSIVE, reason: 'confined' },
       { state: ANGLE_STATE.INCONCLUSIVE, reason: 'one-reversal' },
-      { state: ANGLE_STATE.INCONCLUSIVE, reason: 'drifting-centre' },
+      { state: ANGLE_STATE.INCONCLUSIVE, reason: 'drifting-center' },
       { state: ANGLE_STATE.INCONCLUSIVE, reason: 'ambiguous-drift' },
       { state: ANGLE_STATE.INCONCLUSIVE, reason: 'too-short' },
     ]) {
@@ -426,8 +426,8 @@ describe('the angle instrument’s verdicts', () => {
   });
 
   test('the readout survives every verdict, including the partial ones', () => {
-    // The classifier does not hand back centre, amplitude and period as a set.
-    // A confined angle has the first two and no period; one whose centre is
+    // The classifier does not hand back center, amplitude and period as a set.
+    // A confined angle has the first two and no period; one whose center is
     // drifting has an amplitude and neither of the others - and that one is
     // Callisto, the case the lesson spends longest on. An earlier version
     // assumed they arrived together and threw on exactly that system.
@@ -449,7 +449,7 @@ describe('the angle instrument’s verdicts', () => {
       {
         state: ANGLE_STATE.LIBRATION,
         reason: 'reversals',
-        centre: 180,
+        center: 180,
         amplitude: 20,
         amplitudeIsBound: false,
         period: 9_000,
@@ -461,7 +461,7 @@ describe('the angle instrument’s verdicts', () => {
       {
         state: ANGLE_STATE.LIBRATION,
         reason: 'reversals',
-        centre: 180,
+        center: 180,
         amplitude: 20,
         amplitudeIsBound: false,
         period: 9_000,
@@ -473,7 +473,7 @@ describe('the angle instrument’s verdicts', () => {
       {
         state: ANGLE_STATE.LIBRATION,
         reason: 'stationary',
-        centre: 60,
+        center: 60,
         amplitude: 0,
         amplitudeIsBound: false,
         period: null,
@@ -485,7 +485,7 @@ describe('the angle instrument’s verdicts', () => {
       {
         state: ANGLE_STATE.INCONCLUSIVE,
         reason: 'confined',
-        centre: 190,
+        center: 190,
         amplitude: 10,
         amplitudeIsBound: true,
         period: null,
@@ -496,8 +496,8 @@ describe('the angle instrument’s verdicts', () => {
       },
       {
         state: ANGLE_STATE.INCONCLUSIVE,
-        reason: 'drifting-centre',
-        centre: null,
+        reason: 'drifting-center',
+        center: null,
         amplitude: 26,
         amplitudeIsBound: true,
         period: null,
@@ -509,7 +509,7 @@ describe('the angle instrument’s verdicts', () => {
       {
         state: ANGLE_STATE.INCONCLUSIVE,
         reason: 'one-reversal',
-        centre: 300,
+        center: 300,
         amplitude: 40,
         amplitudeIsBound: true,
         period: null,
@@ -521,7 +521,7 @@ describe('the angle instrument’s verdicts', () => {
       {
         state: ANGLE_STATE.INCONCLUSIVE,
         reason: 'ambiguous-drift',
-        centre: null,
+        center: null,
         amplitude: null,
         amplitudeIsBound: false,
         period: null,
@@ -533,7 +533,7 @@ describe('the angle instrument’s verdicts', () => {
       {
         state: ANGLE_STATE.CIRCULATION,
         reason: 'completed-circuit',
-        centre: null,
+        center: null,
         amplitude: null,
         amplitudeIsBound: false,
         period: 12_000,

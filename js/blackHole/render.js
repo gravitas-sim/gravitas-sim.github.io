@@ -4,14 +4,14 @@
 // Every geometric decision comes from js/blackHole/geometry.js, which derives
 // all of it from one configuration, so the disk, the bright side and the jets
 // cannot disagree about which way the object is facing. This module owns pixels and nothing else: it takes a context, a
-// centre, a radius, an appearance and a time, and paints. It reads no
+// center, a radius, an appearance and a time, and paints. It reads no
 // application state, holds no clock, and cannot reach a body.
 //
 // How the disk is built
 // -----------------------------------------------------------------------------
 // The disk is an ellipse squashed by cos i, painted in three passes:
 //
-//   1. the half of it on the far side of the centre,
+//   1. the half of it on the far side of the center,
 //   2. the black horizon,
 //   3. the half on the near side.
 //
@@ -46,7 +46,7 @@
 // one and every join shows as a hairline. Light does not work that way and
 // neither does `lighter`: two coverages that sum to one sum to one. Over the
 // sky and over the black horizon it is arithmetically identical to painting
-// normally - the same premultiplied colour, the same alpha - so this is not
+// normally - the same premultiplied color, the same alpha - so this is not
 // extra glow; it is what removes the joins between the wedges and the seam
 // down the major axis where the two halves of the disk meet.
 //
@@ -58,7 +58,7 @@
 // and it read as light coming off a surface that has none. Finding the object
 // belongs to the hover and selection rings in js/render.js, which are drawn in
 // screen space where UI belongs. `drawHorizonBoundary` is what is left, for the
-// labelled overlay only.
+// labeled overlay only.
 //
 // What is cached, and how much
 // -----------------------------------------------------------------------------
@@ -151,10 +151,10 @@ const WEDGE_STEP = 2 / 255;
 const STREAKS = { low: 0, full: 10 };
 
 /**
- * Colours for the flow, warm inside to dim outside.
+ * Colors for the flow, warm inside to dim outside.
  *
- * **Illustrative.** No temperature or observing band is modelled anywhere in
- * this application, so these are not the colours of anything: a real disk's
+ * **Illustrative.** No temperature or observing band is modeled anywhere in
+ * this application, so these are not the colors of anything: a real disk's
  * appearance depends on its temperature, which depends on the hole's mass, and
  * a stellar-mass disk and a supermassive one are nothing like each other. The
  * model page says this in as many words.
@@ -167,7 +167,7 @@ const FLOW = [
 ];
 
 /**
- * The colour strings for one disk, kept between frames.
+ * The color strings for one disk, kept between frames.
  *
  * Not the picture and not a texture: nineteen `rgba(...)` strings per gradient,
  * which used to be built four times per object per frame - once per gradient
@@ -183,7 +183,7 @@ const stopCache = new Map();
 const STOP_CACHE_MAX = 8;
 
 /** Linear interpolation through the table above. */
-function flowColour(t) {
+function flowColor(t) {
   const x = clamp(t, 0, 1);
   for (let i = 1; i < FLOW.length; i++) {
     if (x > FLOW[i].at) continue;
@@ -202,7 +202,7 @@ function flowColour(t) {
 /**
  * Drop anything cached.
  *
- * One thing is: the colour strings for the two disk gradients, at most eight
+ * One thing is: the color strings for the two disk gradients, at most eight
  * sets of them. There are no offscreen textures, no per-pixel work and no
  * particle arrays, and nothing here grows with the number of frames drawn -
  * but a caller should not have to know that, and a cache should have one place
@@ -235,7 +235,7 @@ function wedgeCount(depth, unit, tier) {
 }
 
 /**
- * The colour stops for one disk's two gradients, and how deep the second goes.
+ * The color stops for one disk's two gradients, and how deep the second goes.
  *
  * Both are sampled from the same emissivity profile, which is zero at the
  * inner edge and zero at the outer edge - that shared envelope is the whole
@@ -269,7 +269,7 @@ function diskStops(a, tier, alpha) {
     const f = i / steps;
     const radius = INNER_EDGE + (OUTER_EDGE - INNER_EDGE) * f;
     const e = emissivity(radius, INNER_EDGE, OUTER_EDGE);
-    const [r, gg, b] = flowColour(
+    const [r, gg, b] = flowColor(
       Math.log(radius / INNER_EDGE) / Math.log(OUTER_EDGE / INNER_EDGE)
     );
     // The mean brightness across the azimuth, which is what the profile
@@ -469,7 +469,7 @@ function drawJet(g, at, unit, a, time, sign, brightness, tier) {
     g.fill();
   }
 
-  // A few knots travelling outwards, at the close level of detail only. Their
+  // A few knots traveling outwards, at the close level of detail only. Their
   // spacing is fixed and their motion comes from the time handed in, so they
   // freeze when the simulation does and repeat exactly on a replay.
   if (tier !== 'full') return;
@@ -497,7 +497,7 @@ function drawJet(g, at, unit, a, time, sign, brightness, tier) {
  *
  * @param {CanvasRenderingContext2D} g - Target, in world coordinates
  * @param {object} spec - What to draw
- * @param {object} spec.at - Centre in world units
+ * @param {object} spec.at - Center in world units
  * @param {number} spec.unit - The displayed radius in world units
  * @param {object} spec.appearance - From createAppearance
  * @param {number} spec.time - Seconds; a paused clock freezes the picture
@@ -561,14 +561,14 @@ export function drawBlackHole(g, spec) {
  * off it. Finding the object is the selection and hover system's job, and that
  * is drawn in screen space where UI belongs.
  *
- * What is left is this, for the labelled overlay only, and it is dashed for
+ * What is left is this, for the labeled overlay only, and it is dashed for
  * the same reason a contour line is dashed: to say that it is drawn on the
  * picture rather than being in it. It marks the drawn silhouette and nothing
  * else - not a photon sphere, not an innermost stable orbit, neither of which
  * this drawing is to scale for.
  *
  * @param {CanvasRenderingContext2D} g - Target, in world coordinates
- * @param {object} at - Centre in world units
+ * @param {object} at - Center in world units
  * @param {number} unit - The displayed radius in world units
  * @param {number} [scale] - World units per screen pixel, so the line keeps a
  *   constant width however far the view is zoomed
@@ -624,5 +624,5 @@ export const DRAWN = Object.freeze({
 /** How many wedges a brightening of a given depth uses. For tests. */
 export const wedgesFor = wedgeCount;
 
-/** How many sets of colour strings are being held. For tests. */
+/** How many sets of color strings are being held. For tests. */
 export const cachedStopSets = () => stopCache.size;

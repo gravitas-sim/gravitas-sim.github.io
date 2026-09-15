@@ -217,7 +217,7 @@ test.describe('stopping it', () => {
     await page.locator('#binarySweepCancel').click();
 
     const report = await sweepReport(page);
-    expect(report.cancelled).toBe(true);
+    expect(report.canceled).toBe(true);
     // The radii it never reached are missing rather than reported as anything.
     const notRun = report.trials.filter(tr => tr.outcome === 'notRun');
     expect(notRun.length + report.trials.length).toBeGreaterThan(0);

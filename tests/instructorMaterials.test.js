@@ -175,7 +175,7 @@ describe('instructor content lines up with the lessons', () => {
         // a guide needs to say about it is what the two orbits do, which is an
         // expectation in every sense.
         const showsSomething = Boolean(
-          step.tool || step.probe || step.stage || step.showBarycentre
+          step.tool || step.probe || step.stage || step.showBarycenter
         );
         const observable =
           step.type === 'measure' ||

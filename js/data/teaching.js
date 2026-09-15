@@ -18,7 +18,7 @@
 //   from the manifest, the browse metadata and validation/data.json, which are
 //   the things that would have to change for the number to change. A count
 //   typed here is a count that goes stale, and a showcase page that overstates
-//   the catalogue is worse than one that stays quiet.
+//   the catalog is worse than one that stays quiet.
 //
 // The demonstrations
 // -----------------------------------------------------------------------------

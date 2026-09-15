@@ -39,7 +39,7 @@ import {
   strainAmplitude,
   inclinationFactors,
   effectiveDistance,
-  separationMetres,
+  separationMeters,
   separationInSchwarzschildRadii,
   velocityParameter,
   fidelityBand,
@@ -226,7 +226,7 @@ export function modelTimeline({
     terminatedAt: 'schwarzschild-isco',
     detectorResponse: 'F+ = 1, Fx = 0 (source overhead, polarization angle 0)',
     strainUnit: 'dimensionless',
-    cyclesModelled:
+    cyclesModeled:
       Math.abs(phaseAt(tauStart, mc) - phaseAt(tauEnd, mc)) / (2 * Math.PI),
     peakStrain: strainAmplitude(isco, mc, distanceMpc) * cPlus,
     vOverCAtEnd: velocityParameter(isco, totalMass),
@@ -238,7 +238,7 @@ export function modelTimeline({
     tStart,
     tEnd,
     duration: tEnd - tStart,
-    /** Wave frequency at the start and the end of the modelled span. */
+    /** Wave frequency at the start and the end of the modeled span. */
     fStart: startF,
     fEnd: isco,
     hasAnalyticPhase: true,
@@ -252,7 +252,7 @@ export function modelTimeline({
     /** Schematic source geometry, driven by the same timeline. */
     separationAtTime: t => {
       const f = frequencyAtTime(t);
-      return Number.isFinite(f) ? separationMetres(f, totalMass) : NaN;
+      return Number.isFinite(f) ? separationMeters(f, totalMass) : NaN;
     },
     separationRsAtTime: t => {
       const f = frequencyAtTime(t);
@@ -355,7 +355,7 @@ export function sampledTimeline({
       let lowest = Infinity;
       let highest = -Infinity;
       // A bucket narrower than one sample still has to draw something: fall
-      // back to the interpolated value at its centre rather than a gap.
+      // back to the interpolated value at its center rather than a gap.
       if (i1 < i0) {
         const v = strainAtTime((a + z) / 2);
         min[i] = v;

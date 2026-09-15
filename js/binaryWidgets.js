@@ -23,7 +23,7 @@ import {
   TYPE,
 } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
-// This family's labels are in the deferred half of the catalogue; see the note
+// This family's labels are in the deferred half of the catalog; see the note
 // in js/widgets.js. Registered from the module that renders them, because a
 // lesson, a share link, an authoring preview or a test can import this file
 // directly and never reach the registry.
@@ -188,7 +188,7 @@ function syncStarPair(v, ctx, spec = {}) {
  * Send the pair on the main scene to the notebook.
  *
  * Everything numeric here is read off the live bodies at the instant of the
- * click - the separation and the two arm lengths from `ctx.barycentre()`,
+ * click - the separation and the two arm lengths from `ctx.barycenter()`,
  * which measures them rather than restating the declaration. The period is the
  * student's stopwatch reading if they took one, and the model's own period if
  * they did not; which of the two it is travels with the entry, because a
@@ -199,7 +199,7 @@ function syncStarPair(v, ctx, spec = {}) {
  * @param {object} spec - The step's tool spec
  */
 function captureOrbit(v, ctx, spec = {}) {
-  const bary = typeof ctx?.barycentre === 'function' ? ctx.barycentre() : null;
+  const bary = typeof ctx?.barycenter === 'function' ? ctx.barycenter() : null;
   if (!bary) return;
   const AU = 100;
   const arms = bary.arms.map(a => ({ name: a.name, rAU: a.r / AU }));

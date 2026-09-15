@@ -88,7 +88,7 @@ test.describe('the chaos lesson’s controlled pair', () => {
     // And the evidence the lesson is built on: exponential divergence with the
     // interval it was fitted over. Not an execution status, and not a
     // reliability score.
-    expect(report.verdict.behaviour).toBe('exponential');
+    expect(report.verdict.behavior).toBe('exponential');
     expect(report.verdict.tau).toBeGreaterThan(7);
     expect(report.verdict.tau).toBeLessThan(10);
     expect(report.verdict.r2).toBeGreaterThan(0.97);
@@ -120,7 +120,7 @@ test.describe('the chaos lesson’s controlled pair', () => {
     expect(report.perturbation).toBeNull();
     expect(report.diff.variables).toEqual([]);
     // Identical input, identical output: the lesson's first act.
-    expect(report.verdict.behaviour).toBe('identical');
+    expect(report.verdict.behavior).toBe('identical');
     await expect(page.locator('#benchChaosReport')).toContainText(
       /Nothing was changed between the runs/i
     );
@@ -142,7 +142,7 @@ test.describe('the chaos lesson’s controlled pair', () => {
     expect(report.perturbation.km).toBe(1500);
     expect(report.interval.ok).toBe(true);
     // The counterexample, kept: growth without exponential growth.
-    expect(report.verdict.behaviour).not.toBe('exponential');
+    expect(report.verdict.behavior).not.toBe('exponential');
     expect(report.verdict.tau).toBeNull();
   });
 
@@ -180,13 +180,13 @@ test.describe('the chaos lesson’s controlled pair', () => {
     expect(out.scheme.controlDiff.schemeChanged).toBe(true);
     expect(out.scheme.controlDiff.stepChanged).toBe(false);
 
-    // Both are filed beside the original rather than replacing it, labelled
+    // Both are filed beside the original rather than replacing it, labeled
     // with the step they took, and both count towards the verdict.
     expect(out.scheme.controls).toHaveLength(2);
     for (const c of out.scheme.controls) {
       expect(c.differs).toBe(true);
       expect(c.label).toMatch(/step /);
-      expect(c.behaviour).toBe('exponential');
+      expect(c.behavior).toBe('exponential');
     }
     expect(out.scheme.verdict.tau).toBeCloseTo(out.base.verdict.tau, 6);
     expect(out.scheme.refinement.resolved).toBe(true);
@@ -360,7 +360,7 @@ test.describe('the Lagrange lesson’s controlled pair', () => {
     // is marked as stopped and its conclusion is not the finding.
     const report = await neckReport(page);
     if (report) {
-      expect(report.cancelled).toBe(true);
+      expect(report.canceled).toBe(true);
       expect(report.comparison?.conclusion).not.toBe(
         'sameRegionDifferentPaths'
       );

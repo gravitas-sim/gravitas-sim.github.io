@@ -79,7 +79,7 @@ describe('the presentation shell', () => {
 });
 
 describe('reading embed=1 out of the URL', () => {
-  test('recognises the parameter wherever it sits in the query', () => {
+  test('recognizes the parameter wherever it sits in the query', () => {
     expect(embedRequested('?embed=1')).toBe(true);
     expect(embedRequested('?a=1&embed=1')).toBe(true);
     expect(embedRequested('?embed=1&a=1')).toBe(true);
@@ -89,7 +89,7 @@ describe('reading embed=1 out of the URL', () => {
     expect(embedRequested('?embed=')).toBe(true);
   });
 
-  test('honours an explicit no, so a template can leave the parameter in', () => {
+  test('honors an explicit no, so a template can leave the parameter in', () => {
     expect(embedRequested('?embed=0')).toBe(false);
     expect(embedRequested('?embed=false')).toBe(false);
     expect(embedRequested('?embed=no')).toBe(false);

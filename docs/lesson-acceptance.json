@@ -239,7 +239,7 @@
     "hohmann-transfer": {
       "centralExperimentId": "ce.hohmann-transfer",
       "object": "spacecraft",
-      "control": "the manoeuvre planner: transverse burn, then Apply",
+      "control": "the maneuver planner: transverse burn, then Apply",
       "quantity": "the top and bottom of the arc after the first burn",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",

@@ -37,7 +37,7 @@
 //      own peak-to-peak range. The error this introduces is recorded.
 //   4. Base64 the little-endian bytes.
 //
-// Nothing is shifted, inverted, filtered, normalised or aligned. The relative
+// Nothing is shifted, inverted, filtered, normalized or aligned. The relative
 // time shift and sign between Hanford and Livingston are *measured* here and
 // recorded as findings, so that the lesson can ask a student to find the same
 // thing rather than telling them the answer and hiding the evidence.
@@ -212,7 +212,7 @@ function parseColumns(text) {
  *
  * The linear trend is removed first, and this matters. The figure-2 separation
  * curve falls monotonically from 4.7 to 1.5 Schwarzschild radii; a periodogram
- * of a ramp is dominated by the step between its two ends, which is an artefact
+ * of a ramp is dominated by the step between its two ends, which is an artifact
  * of treating a finite record as one period of a periodic signal rather than
  * anything the instrument recorded. Measured with the trend left in, that curve
  * appears to carry a quarter of a percent of its power above 2 kHz, and it does
@@ -466,7 +466,7 @@ async function build({ offline }) {
     notApplied: [
       'No time shift between detectors.',
       'No sign inversion.',
-      'No additional filtering, whitening, normalisation or alignment.',
+      'No additional filtering, whitening, normalization or alignment.',
     ],
     priorProcessingByPublisher: [
       'Band-pass 35-350 Hz.',

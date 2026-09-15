@@ -200,7 +200,7 @@ export function sampleFrame({
   return out;
 }
 
-/** One AU in metres, so speeds come out in km/s. */
+/** One AU in meters, so speeds come out in km/s. */
 const UNITS_PER_AU_M = 1.495978707e11;
 
 /**
@@ -276,7 +276,7 @@ export function closestApproach(samples) {
  * Reduce a run to one number per metric, for the results table.
  *
  * A time series has to become a scalar before two runs can be put in a table,
- * and *which* scalar is a judgement per metric rather than a default. The
+ * and *which* scalar is a judgment per metric rather than a default. The
  * final value is right for a drift, which accumulates. The mean is right for a
  * separation, which oscillates and whose last sample is an accident of when
  * the student stopped the run.

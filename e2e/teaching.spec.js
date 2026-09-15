@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The page a prospective adopter reads before deciding anything, so the
 // failures worth catching here are the ones that would embarrass it in front of
-// exactly that reader: a number that does not match the catalogue, a
+// exactly that reader: a number that does not match the catalog, a
 // demonstration that does not open, a language switch that half works, a
 // sideways scrollbar on a phone, a figure that starts moving on its own.
 //
@@ -47,7 +47,7 @@ async function openTeaching(page, { locale } = {}) {
 }
 
 test.describe('the showcase page', () => {
-  test('renders, and every count it prints comes from the catalogue', async ({
+  test('renders, and every count it prints comes from the catalog', async ({
     page,
   }) => {
     await openTeaching(page);
@@ -140,7 +140,7 @@ test.describe('the demonstrations', () => {
     // These numbers come from the full investigation, not from the
     // demonstration. Under the card's title they read as the
     // demonstration's own - a duration this page has no way of knowing and no
-    // business inventing - so they are labelled and sit with the link they
+    // business inventing - so they are labeled and sit with the link they
     // describe.
     await openTeaching(page);
     const card = page.locator('#teachDemos article').first();
@@ -162,7 +162,7 @@ test.describe('the demonstrations', () => {
     expect(order.meta).toBeGreaterThan(order.actions);
   });
 
-  test('and it is labelled in Spanish too', async ({ page }) => {
+  test('and it is labeled in Spanish too', async ({ page }) => {
     await openTeaching(page);
     // Through the page's own switch, which is what a reader uses.
     await page.locator('#teachLang button', { hasText: 'Español' }).click();
@@ -542,7 +542,7 @@ async function openRoute(page, app, activity, format = 'route') {
 }
 
 test.describe('the short routes', () => {
-  test('each one has a card with a launch link the application will honour', async ({
+  test('each one has a card with a launch link the application will honor', async ({
     page,
   }) => {
     await openTeaching(page);

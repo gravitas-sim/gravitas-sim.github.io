@@ -118,7 +118,7 @@ describe('what the overlay refuses', () => {
 
   test('the Lagrange Point Lab’s own numbers stay valid', () => {
     // Two stars eight AU apart at 100 units per AU, and a tracer at 0.6 of the
-    // separation from the barycentre: the closest distance in play is hundreds
+    // separation from the barycenter: the closest distance in play is hundreds
     // of units against a five-unit floor.
     withSettings({ min_interaction_distance: 0.01 });
     const separation = 800;

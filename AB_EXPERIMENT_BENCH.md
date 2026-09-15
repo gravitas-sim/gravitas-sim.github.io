@@ -15,7 +15,7 @@ This is that missing half.
 
 1. **Capture start.** The world as it stands becomes the experiment's origin.
 2. **Name it, and pick what to measure.** Bodies as chips, quantities as
-   checkboxes. A quantity that needs two bodies stays greyed out until two are
+   checkboxes. A quantity that needs two bodies stays grayed out until two are
    chosen, so "separation" is never a column of blanks discovered afterwards.
 3. **Record Run A.** The simulation runs and is sampled on its own clock.
 4. **Return to start.** Exactly — see below.
@@ -153,7 +153,7 @@ declaration.
 ## What counts as an independent variable
 
 The rule: a settings key is a variable **unless** changing it cannot change a
-number the bench measures. Visual toggles (`show_*`), trail styling, colours and
+number the bench measures. Visual toggles (`show_*`), trail styling, colors and
 the starfield density are not variables. Elapsed time, the timeline's buffers,
 the camera, panel layout, theme, locale and units are not variables — a bench
 that counted those would warn on every comparison, and a warning that always

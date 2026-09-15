@@ -7,7 +7,7 @@
 // was downloading all of it at start-up so that four scenarios and one lesson
 // widget could have their labels.
 //
-// They are a separate catalogue rather than part of js/i18n/en.js because a
+// They are a separate catalog rather than part of js/i18n/en.js because a
 // single object cannot be code-split: esbuild follows the static import and
 // the whole thing lands in the entry graph. The bridges that load those panels
 // register these through registerMessages() at the same moment, so a reader
@@ -15,7 +15,7 @@
 //
 // Everything else about them is normal. The audit and the i18n tests merge
 // both halves, so coverage, placeholder and length checks still see one
-// catalogue.
+// catalog.
 // =============================================================================
 
 export const EN_DEFERRED = {
@@ -131,7 +131,7 @@ export const EN_DEFERRED = {
   'assist.encounter.notRun': 'did not run',
   'assist.ab.caveat.incomplete':
     '{n} of the two passes did not produce a complete encounter ({which}), so nothing in its column is a before-and-after.',
-  'assist.ab.caveat.cancelled':
+  'assist.ab.caveat.canceled':
     'This was stopped before it finished, so the passes that never ran are marked as such rather than left out.',
   'assist.ab.caveat.deltaV':
     'The two passes changed the velocity by the same amount to {percent}%, turned by the same angle to {deflection}%, and came equally close to {closest}%. That is the mirror image doing what a mirror image should.',
@@ -206,11 +206,11 @@ export const EN_DEFERRED = {
     'Not resolved yet: this needs two repeats that computed the answer differently, and there {n} so far. Until then the divergence is a number this integrator produced.',
   'bench.chaos.unresolved.controlsIneffective':
     'Not resolved: the repeats did not actually change the arithmetic - the measured step and the integrator came out the same - so they agree with the original for no reason worth having.',
-  'bench.chaos.unresolved.behaviour-changed':
+  'bench.chaos.unresolved.behavior-changed':
     'UNRESOLVED: the repeats did not even agree about what kind of growth this is. The honest report is that this measurement is numerically unresolved, not a smaller number.',
   'bench.chaos.unresolved.timescale-moved':
     'UNRESOLVED: the e-folding times span {spread}%, which is more than refinement should move a physical answer. The honest report is that this measurement is numerically unresolved.',
-  'bench.chaos.cancelled':
+  'bench.chaos.canceled':
     'This was stopped before it finished, so at least one arm is shorter than it was asked to be.',
 
   // --- The Lagrange lesson's controlled pair -------------------------------
@@ -256,7 +256,7 @@ export const EN_DEFERRED = {
     'The L1 neck was not open for both arms, so \u201cit did not go through\u201d is a statement about a wall rather than about a path.',
   'cr3bp.pair.caveat.exteriorOpen':
     'The L2 neck was open too, so the tracer was not confined to the two stars\u2019 regions and \u201cit did not use the L1 neck\u201d is about one gap of several.',
-  'cr3bp.pair.caveat.cancelled':
+  'cr3bp.pair.caveat.canceled':
     'This was stopped before it finished, so at least one arm was watched for less than the window.',
   'cr3bp.pair.caveat.window':
     'Everything here is about {periods} binary periods. A path that did not use the neck in that time may use it in the next.',
@@ -414,7 +414,7 @@ export const EN_DEFERRED = {
     'A reliability check is using the simulation. Wait for it to finish, or cancel it.',
   'reliability.reason.alreadyRunning': 'A check is already running.',
   'reliability.reason.noMetrics': 'Choose at least one quantity to measure.',
-  'reliability.reason.cancelled': 'Stopped. The world is back where it was.',
+  'reliability.reason.canceled': 'Stopped. The world is back where it was.',
 
   'reliability.conservationIsNotAccuracy':
     'Energy and angular momentum are shown as separate evidence, not as the verdict. A well-conserved run can still be wrong: energy is one number, and a close approach can be resolved far too coarsely without disturbing it.',
@@ -437,10 +437,10 @@ export const EN_DEFERRED = {
   'reliability.noValue': 'not measured',
 
   // --- The A/B experiment bench ---------------------------------------------
-  // Moved out of the start-up catalogue. The bench is loaded on first press
+  // Moved out of the start-up catalog. The bench is loaded on first press
   // and most visitors never press it, so its prose has no business being
   // downloaded by everyone; js/experimentsBridge.js registers this before the
-  // panel builds its markup. bench.error.load stays in the base catalogue,
+  // panel builds its markup. bench.error.load stays in the base catalog,
   // because it is what the bridge says when this very import fails.
   'bench.title': 'A/B Experiment',
   'bench.untitled': 'Untitled experiment',
@@ -456,7 +456,7 @@ export const EN_DEFERRED = {
   'bench.section.selection': 'What to measure',
   'bench.section.saved': 'Saved experiments',
   'bench.hint.selection':
-    'Pick the bodies this experiment is about, then the quantities to record. A quantity that needs two bodies stays greyed out until two are chosen.',
+    'Pick the bodies this experiment is about, then the quantities to record. A quantity that needs two bodies stays grayed out until two are chosen.',
   'bench.hint.noBodies': 'Capture a starting state first.',
   'bench.action.capture': 'Capture start',
   'bench.action.restore': 'Return to start',
@@ -493,7 +493,7 @@ export const EN_DEFERRED = {
   'bench.perturb.no-such-body': 'That body is not in the captured start.',
   'bench.perturb.bad-axis': 'That is not a coordinate.',
   'bench.perturb.bad-delta': 'Type a perturbation that is not zero.',
-  'bench.control.row': '{label}: {behaviour}, e-folding {tau} s',
+  'bench.control.row': '{label}: {behavior}, e-folding {tau} s',
   'bench.control.recorded': 'Recorded as a control: {label}',
   'bench.control.failed':
     'Record both runs first, with positions among the measurements.',
@@ -571,7 +571,7 @@ export const EN_DEFERRED = {
   'sweep.guided': 'Guided example',
   'sweep.progress': 'Trial {trial} of {total}, {percent}%',
   'sweep.done':
-    '{ok} of {total} trials measured, {failed} failed, {cancelled} not run. {seconds}s.',
+    '{ok} of {total} trials measured, {failed} failed, {canceled} not run. {seconds}s.',
   'sweep.range': 'Allowed range {min} to {max}',
   'sweep.settings':
     'Every other initial condition is the scenario default at seed {seed}. {integrator}, {substeps} substeps per frame, step {step}.',
@@ -590,7 +590,7 @@ export const EN_DEFERRED = {
   'sweep.status.notFinite': 'the measurement did not come out as a number',
   'sweep.status.lostBody':
     'a body was destroyed during this trial, so the later samples are of a different system',
-  'sweep.status.cancelled': 'not run',
+  'sweep.status.canceled': 'not run',
   'sweep.status.stalled': 'stopped early',
   'sweep.status.capped': 'hit the sample limit',
 
@@ -699,9 +699,9 @@ export const EN_DEFERRED = {
   'assign.notice.missing':
     '{n} step(s) are no longer in the lesson and have been left out.',
 
-  // --- The manoeuvre planner ---------------------------------------------------
-  'burn.title': 'Manoeuvre planner',
-  'burn.close': 'Hide the manoeuvre planner',
+  // --- The maneuver planner ---------------------------------------------------
+  'burn.title': 'Maneuver planner',
+  'burn.close': 'Hide the maneuver planner',
   'burn.body': 'Body',
   'burn.about': 'In orbit about {name}. Delta-v is measured relative to it.',
   'burn.noPrimary':
@@ -738,10 +738,10 @@ export const EN_DEFERRED = {
   // js/investigations.js is the only module that reads these and it is loaded
   // on demand, so a visitor who never opens a lesson was downloading all of
   // them. Registered by ensureInvestigations() before initInvestigations()
-  // runs. The dozen that stay in the base catalogue are on static buttons in
+  // runs. The dozen that stay in the base catalog are on static buttons in
   // index.html, translated by the boot sweep, plus the two the loader itself
   // says when a lesson fails before its chunk arrives.
-  // Moved out of the start-up catalogue: only js/lessonStage.js and the
+  // Moved out of the start-up catalog: only js/lessonStage.js and the
   // lesson engine read these, and both are deferred.
   'inv.stage.scale.display':
     'Compressed scale: every star is visible and the order by size is right, but the ratios on screen are not the ratios in the model.',
@@ -833,7 +833,7 @@ export const EN_DEFERRED = {
   'inv.evidenceFrom.engine':
     'Your evidence here comes from the simulation engine: the numbers are measured off bodies it integrated.',
   'inv.evidenceFrom.model':
-    'Your evidence here comes from a specialised model computed in a panel, not from the simulation engine.',
+    'Your evidence here comes from a specialized model computed in a panel, not from the simulation engine.',
   'inv.evidenceFrom.data':
     'Your evidence here comes from published observations, reduced and shown as their authors released them.',
   'inv.evidenceFrom.illustration':
@@ -870,7 +870,7 @@ export const EN_DEFERRED = {
   // Habitability, binary and tidal widget prose. Same boundary and same
   // reasoning as the resW/chaosW/energyW families above: js/widgets.js is
   // reached only from the lazy js/investigations.js, and each of these three
-  // modules registers this catalogue itself so a direct import cannot render
+  // modules registers this catalog itself so a direct import cannot render
   // raw ids.
   'binW.twoStarsOrbiting': 'Two stars, orbiting',
   'binW.bothStarsAreMovingWatch':
@@ -940,10 +940,10 @@ export const EN_DEFERRED = {
   'tideW.massOfTheCompanion': 'Mass of the companion',
   'tideW.moonSMass': '× Moon’s mass',
   'tideW.pullOnTheNearSide': 'Pull on the near side',
-  'tideW.pullOnTheCentre': 'Pull on the centre',
+  'tideW.pullOnTheCenter': 'Pull on the center',
   'tideW.pullOnTheFarSide': 'Pull on the far side',
-  'tideW.nearSideMinusTheCentre': 'Near side, minus the centre',
-  'tideW.farSideMinusTheCentre': 'Far side, minus the centre',
+  'tideW.nearSideMinusTheCenter': 'Near side, minus the center',
+  'tideW.farSideMinusTheCenter': 'Far side, minus the center',
   'tideW.nearSideBiggerThanFar': 'Near side bigger than far side by',
   'tideW.towardTheCompanion': 'toward the companion',
   'tideW.whatIsLeftOver': 'what is left over',
@@ -965,7 +965,7 @@ export const EN_DEFERRED = {
   'tideW.aDenseMetallicBodyMore':
     'A dense metallic body. More grip for its size, so it can come in closer before the balance tips.',
   'tideW.stretchAgainstGrip': 'Stretch against grip',
-  'tideW.distanceFromTheEarthS': 'Distance from the Earth’s centre',
+  'tideW.distanceFromTheEarthS': 'Distance from the Earth’s center',
   'tideW.earthRadii': 'Earth radii',
   'tideW.densityOfTheBody': 'Density of the body',
   'tideW.itsOwnGravityAtIts': 'Its own gravity, at its surface',
@@ -974,7 +974,7 @@ export const EN_DEFERRED = {
   'tideW.theTwoAreEqualAt': 'The two are equal at',
   'tideW.whatThatMeans': 'What that means',
   'tideW.bringAMoonInToward': 'Bring a moon in toward Saturn',
-  'tideW.distanceFromSaturnSCentre': 'Distance from Saturn’s centre',
+  'tideW.distanceFromSaturnSCentre': 'Distance from Saturn’s center',
   'tideW.saturnRadii': 'Saturn radii',
   'tideW.densityOfTheMoon': 'Density of the moon',
   'tideW.porousIce': 'Porous ice',
@@ -1039,7 +1039,7 @@ export const EN_DEFERRED = {
   'hzW.whereTheEdgesComeFrom': 'Where the edges come from',
   'hzW.definition': 'Definition',
   'hzW.conservative': 'Conservative',
-  'hzW.optimistic': 'Optimistic',
+  'hzW.optimiztic': 'Optimiztic',
   'hzW.definitionShown': 'Definition shown',
   'hzW.innerEdge': 'Inner edge',
   'hzW.outerEdge': 'Outer edge',
@@ -1086,8 +1086,7 @@ export const EN_DEFERRED = {
   'rvfit.mc.stale':
     'The recording, the fit or the search range has changed since this analysis ran, so its intervals no longer describe what is on screen. Run it again.',
   'rvfit.mc.outcome.complete': 'Every trial ran and produced a fit.',
-  'rvfit.mc.outcome.cancelled':
-    'Stopped by you after {done} of {total} trials.',
+  'rvfit.mc.outcome.canceled': 'Stopped by you after {done} of {total} trials.',
   'rvfit.mc.outcome.partial': '{done} of {total} trials produced a fit.',
 
   'rvfit.mc.refused.noFit':
@@ -1111,7 +1110,7 @@ export const EN_DEFERRED = {
   'rvfit.mc.assume.independent':
     'Errors are independent between epochs: no night-to-night systematic, no drift in the instrument.',
   'rvfit.mc.assume.sigmas':
-    'The stated uncertainties are correct. If they are optimistic, so is every interval here.',
+    'The stated uncertainties are correct. If they are optimiztic, so is every interval here.',
   'rvfit.mc.assume.precision':
     'This measures precision, not correctness. A wrong model can produce a very tight interval.',
   'rvfit.mc.assumptions': 'These intervals are conditional on:',
@@ -1127,7 +1126,7 @@ export const EN_DEFERRED = {
     'Every trial returned the same period, which means the search grid is coarser than the uncertainty being measured. No interval is reported, because it would be a picture of the grid rather than of the data.',
   'rvfit.mc.result.incomplete':
     '{done} of {total} trials ran. The intervals below are from those {done}.',
-  'rvfit.mc.result.cancelled': 'Cancelled after {done} of {total} trials.',
+  'rvfit.mc.result.canceled': 'Canceled after {done} of {total} trials.',
   'rvfit.mc.result.failures': '{n} trials produced no fit: {why}.',
   'rvfit.mc.result.epochs':
     '{n} epochs, {baseline} d baseline, {samples} grid points per trial, seed {seed}.',
@@ -1164,7 +1163,7 @@ export const EN_DEFERRED = {
   // --- Widget prose, moved off the start-up path ---------------------------
   // Resonance, chaos and energy widget strings. Nothing outside a lesson can
   // render these: js/widgets.js is reached only from js/investigations.js,
-  // which is lazy and whose loader registers this catalogue before any step
+  // which is lazy and whose loader registers this catalog before any step
   // draws. Same boundary and same reasoning as the exoW.* family above it.
   'resW.periods.title': 'Measured periods and the ratios between them',
   'resW.periods.note':
@@ -1197,7 +1196,7 @@ export const EN_DEFERRED = {
   'resW.row.ratio': 'P({a}) / P({b})',
   'resW.row.watched': 'Watched for',
   'resW.row.verdict': 'Verdict',
-  'resW.row.centre': 'Libration centre',
+  'resW.row.center': 'Libration center',
   'resW.row.amplitude': 'Amplitude',
   'resW.row.libration': 'Libration period',
   'resW.row.circulation': 'Circulation period',
@@ -1225,8 +1224,8 @@ export const EN_DEFERRED = {
   'resW.value.needed':
     'the angle has moved {drift}° so far; that is a libration of at least that width or a circulation taking {cycles} conjunction cycles, and nothing here separates them',
   'resW.value.sampling': '{n} samples, one every {every} days',
-  'resW.value.spread': 'centred on {mean}°, spread ±{spread}°',
-  'resW.value.tadpole': '{kind} about {centre}°, amplitude ±{amp}°',
+  'resW.value.spread': 'centerd on {mean}°, spread ±{spread}°',
+  'resW.value.tadpole': '{kind} about {center}°, amplitude ±{amp}°',
   'resW.verdict.none': 'nothing measured yet',
   'resW.verdict.circulation':
     'CIRCULATION — the angle runs through every value, so there is no resonance',
@@ -1238,8 +1237,8 @@ export const EN_DEFERRED = {
     'LIBRATION — the angle turned back and returned to where it began; one more reversal will confirm the period',
   'resW.inconclusive.one-reversal':
     'INCONCLUSIVE — it has turned back once, which a slowly circulating angle with a wobble on it also does',
-  'resW.inconclusive.drifting-centre':
-    'INCONCLUSIVE — it swings, but each swing ends further on than the last, so the centre is moving',
+  'resW.inconclusive.drifting-center':
+    'INCONCLUSIVE — it swings, but each swing ends further on than the last, so the center is moving',
   'resW.inconclusive.confined':
     'INCONCLUSIVE — confined so far, but it has not turned back yet, and a slow enough circulation would look the same',
   'resW.inconclusive.ambiguous-drift':
@@ -1276,7 +1275,7 @@ export const EN_DEFERRED = {
   'chaosW.row.start': 'Separation at the start',
   'chaosW.row.end': 'Separation at the end',
   'chaosW.row.growth': 'Grew by',
-  'chaosW.row.behaviour': 'Behaviour',
+  'chaosW.row.behavior': 'Behavior',
   'chaosW.row.window': 'Fitted over',
   'chaosW.row.noEstimate': 'No e-folding time because',
   'chaosW.row.straightLine': 'A straight line fits',
@@ -1306,8 +1305,8 @@ export const EN_DEFERRED = {
   'chaosW.reject.insufficient': 'not enough data',
   'chaosW.unresolved.need-two-estimates':
     'record the comparison again with a smaller timestep or another integrator',
-  'chaosW.unresolved.behaviour-changed':
-    'NOT RESOLVED — the behaviour itself changed with the numerics',
+  'chaosW.unresolved.behavior-changed':
+    'NOT RESOLVED — the behavior itself changed with the numerics',
   'chaosW.unresolved.timescale-moved':
     'NOT RESOLVED — the e-folding time moved with the timestep, so it is a property of the integrator',
   'energyW.theMoon': 'the Moon',
@@ -1487,7 +1486,7 @@ export const EN_DEFERRED = {
     'the residuals still have a shape in them, so the model is not sufficient',
   'nb.flag.multivariable': 'more than one variable differed between the runs',
   'nb.flag.bench-warning': 'the bench raised a warning about this comparison',
-  'nb.flag.cancelled': 'the run was cancelled before it finished',
+  'nb.flag.canceled': 'the run was canceled before it finished',
   'nb.flag.failed-trials': 'some trials did not produce a result',
   'nb.flag.reliability-check': 'this is a comparison of two step sizes',
   'nb.flag.verdict-converging': 'halving the step did not move the outcome',
@@ -1505,11 +1504,11 @@ export const EN_DEFERRED = {
   'nb.rv.mcFamilies': 'Alias families the refits split into',
   'nb.rv.mcTopFamily':
     'the most populated is {period} d, winning {pct}% of trials; no single interval is meaningful',
-  'nb.flag.uncertainty-analysed':
+  'nb.flag.uncertainty-analyzed':
     'an uncertainty analysis was kept with this reading',
   'nb.flag.uncertainty-multimodal':
     'the refits split into several alias families, so no single interval is quoted',
-  'nb.flag.uncertainty-cancelled': 'the uncertainty analysis was stopped early',
+  'nb.flag.uncertainty-canceled': 'the uncertainty analysis was stopped early',
   'nb.flag.uncertainty-partial': 'some uncertainty trials produced no fit',
   'nb.flag.uncertainty-grid-limited':
     'the uncertainty interval was withheld as grid-limited',
@@ -1567,13 +1566,13 @@ export const EN_DEFERRED = {
   'nb.sweep.dir.increasing': 'increasing throughout',
   'nb.sweep.dir.decreasing': 'decreasing throughout',
   'nb.sweep.dir.flat': 'without a consistent direction',
-  'nb.sweep.noSummary': 'Too few trials succeeded to summarise a trend.',
+  'nb.sweep.noSummary': 'Too few trials succeeded to summarize a trend.',
   'nb.sweep.limit.oneVariable':
     'One variable was swept and everything else held: nothing here says how the parameters interact.',
   'nb.sweep.limit.failed':
     '{n} trials did not produce a result, so the range is not evenly sampled.',
-  'nb.sweep.limit.cancelled':
-    'The sweep was cancelled, so the range was not covered as planned.',
+  'nb.sweep.limit.canceled':
+    'The sweep was canceled, so the range was not covered as planned.',
 
   'nb.rel.title': 'Reliability check: {scenario}',
   'nb.rel.coarse': '{metric} at the working step',
@@ -1833,7 +1832,7 @@ export const EN_DEFERRED = {
     'That is not a number I can read. Digits, a decimal point and an exponent like 3e5 or 3×10^5 all work.',
   'inv.answer.ambiguous':
     'I cannot tell which separator is the decimal point. Write it with one decimal separator, or use a space between thousands.',
-  'inv.answer.unknownUnit': 'I do not recognise the unit “{unit}”.',
+  'inv.answer.unknownUnit': 'I do not recognize the unit “{unit}”.',
   'inv.answer.wrongDimension':
     '“{unit}” is a unit of {got}, and this answer should be a {want}.',
   'inv.answer.unitNotAllowed':
@@ -1876,7 +1875,7 @@ export const EN_DEFERRED = {
   'cr3bp.title': 'Restricted three-body mode',
   'cr3bp.close': 'Hide the three-body overlay',
   'cr3bp.convention':
-    'Units: the two bodies are one apart, their total mass is one, and the frame turns with them about their barycentre. The heavier sits at \u2212\u03bc, the lighter at 1\u2212\u03bc. C = 2\u03a9 \u2212 v\u00b2 with v measured in the rotating frame, so a LARGER C means a SLOWER tracer and a SMALLER accessible region \u2014 the opposite direction to every other energy here. (This convention omits the \u03bc(1\u2212\u03bc)/2 term some texts add, which puts C\u2084 at 3\u2212\u03bc+\u03bc\u00b2 rather than 3.)',
+    'Units: the two bodies are one apart, their total mass is one, and the frame turns with them about their barycenter. The heavier sits at \u2212\u03bc, the lighter at 1\u2212\u03bc. C = 2\u03a9 \u2212 v\u00b2 with v measured in the rotating frame, so a LARGER C means a SLOWER tracer and a SMALLER accessible region \u2014 the opposite direction to every other energy here. (This convention omits the \u03bc(1\u2212\u03bc)/2 term some texts add, which puts C\u2084 at 3\u2212\u03bc+\u03bc\u00b2 rather than 3.)',
   'cr3bp.valid':
     'Circular restricted three-body problem, \u03bc = {mu}. The shaded region is where this tracer\u2019s energy forbids it to be.',
   'cr3bp.invalid.title': 'The overlay is off:',
@@ -1930,7 +1929,7 @@ export const EN_DEFERRED = {
   // --- The exoplanet lesson widgets ---------------------------------------------
   // js/exoplanetWidgets.js is reached only through js/widgets.js, which is
   // reached only from js/investigations.js - all of it lazy. These were in the
-  // start-up catalogue for a widget nobody sees until they open a lesson.
+  // start-up catalog for a widget nobody sees until they open a lesson.
   'exoW.whoIsActuallyMoving': 'Who is actually moving?',
   'exoW.theStarAndThePlanet':
     'The star and the planet both go round the same point. Turn the magnification up to see the star do it.',
@@ -2123,7 +2122,7 @@ export const EN_DEFERRED = {
     'One noise draw each: this says what these two schedules did on this run, not which schedule is better.',
   // --- The synthetic observing run's own controls ------------------------------
   // Eager until this release. The section is opt-in and hidden until it is
-  // switched on, which is the moment the panel registers this catalogue, so
+  // switched on, which is the moment the panel registers this catalog, so
   // every visitor who never takes a recording was downloading its prose.
   'rv.survey.hint':
     'Keep only the measurements a stated schedule would actually have produced, each with an uncertainty. Nothing is recorded between them.',
@@ -2135,8 +2134,8 @@ export const EN_DEFERRED = {
   'rv.survey.restart': 'Restart run',
   'rv.survey.restart.hint':
     'Discard the measurements and begin the schedule again',
-  'rv.survey.analyse': 'Analyse',
-  'rv.survey.analyse.hint':
+  'rv.survey.analyze': 'Analyze',
+  'rv.survey.analyze.hint':
     'Open the analysis workspace on these measurements: fit a circular model by hand, or search a bounded range of periods.',
   'rv.survey.idealLabel': 'Ideal signal (teaching overlay, not data)',
   'rv.survey.progress': '{taken} of {planned} measurements taken.',
@@ -2179,7 +2178,7 @@ export const EN_DEFERRED = {
     '{n} trials did not finish the window, so they establish nothing about the planet either way.',
   'binarySweep.caveat.unreliable':
     '{n} trials drifted too far in energy to draw a conclusion from, whatever the planet appeared to do.',
-  'binarySweep.caveat.cancelled':
+  'binarySweep.caveat.canceled':
     'This sweep was stopped before it finished, so the values it never reached are missing rather than uninteresting.',
   'binarySweep.caveat.window':
     'Every one of these is {periods} binary periods. The published boundary is fitted to ten thousand, and a planet can circle quietly for hundreds before its orbit is walked out - so "still there" is a statement about this window and not about the future.',
@@ -2220,10 +2219,10 @@ export const EN_DEFERRED = {
     'Masses {m1} and {m2}, eccentricity {e}, seed {seed}: one system, and the starting radius is the only thing that changed.',
   'nb.binarySweep.limit.unusable':
     '{n} trials established nothing and are in the figure as such rather than dropped.',
-  'nb.binarySweep.limit.cancelled':
+  'nb.binarySweep.limit.canceled':
     'The sweep was stopped early, so the radii it never reached are missing rather than uninteresting.',
   'nb.binarySweep.limit.resolved':
-    'The trial at {value} was re-run at half the step and gave the same outcome, so that outcome is not an artefact of the step size.',
+    'The trial at {value} was re-run at half the step and gave the same outcome, so that outcome is not an artifact of the step size.',
   'nb.binarySweep.limit.unresolved':
     'The trial at {value} gave a different outcome at half the step, so neither run has measured it.',
   'nb.binarySweep.limit.noRecheck':
@@ -2242,7 +2241,7 @@ export const EN_DEFERRED = {
     'Only the impact parameter differed: approach speed {vinf}, integrator and step, seed {seed}.',
   'nb.assist.limit.incomplete':
     '{n} pass(es) produced no complete encounter; they are reported, not dropped.',
-  'nb.assist.limit.cancelled':
+  'nb.assist.limit.canceled':
     'Stopped before it finished, so it does not cover the values it was asked for.',
   'nb.assist.ab.title': 'The same flyby on both sides of the planet',
   'nb.assist.ab.gain': 'Speed change, passing behind',
@@ -2309,17 +2308,16 @@ export const EN_DEFERRED = {
   'nb.chaosPair.tauNote':
     'Fitted between {from} and {to} simulated seconds, r\u00b2 {r2}. Outside that interval the separation is still the nudge, or has stopped growing.',
   'nb.chaosPair.growth': 'Total growth factor',
-  'nb.chaosPair.behaviour': 'What the separation did',
-  'nb.chaosPair.behaviour.identical': 'nothing: the two runs stayed identical',
-  'nb.chaosPair.behaviour.bounded': 'stayed close, without growing',
-  'nb.chaosPair.behaviour.linear':
+  'nb.chaosPair.behavior': 'What the separation did',
+  'nb.chaosPair.behavior.identical': 'nothing: the two runs stayed identical',
+  'nb.chaosPair.behavior.bounded': 'stayed close, without growing',
+  'nb.chaosPair.behavior.linear':
     'grew in proportion to time, straight-line fit r\u00b2 {r2} \u2014 drift, not chaos',
-  'nb.chaosPair.behaviour.saturated':
+  'nb.chaosPair.behavior.saturated':
     'grew and then stopped, having run out of system to get further apart in',
-  'nb.chaosPair.behaviour.exponential': 'grew exponentially',
-  'nb.chaosPair.behaviour.insufficient':
-    'could not be classified from this run',
-  'nb.chaosPair.behaviour.none': 'was not measured',
+  'nb.chaosPair.behavior.exponential': 'grew exponentially',
+  'nb.chaosPair.behavior.insufficient': 'could not be classified from this run',
+  'nb.chaosPair.behavior.none': 'was not measured',
   'nb.chaosPair.controls': 'Effective numerical controls',
   'nb.chaosPair.controlsResolved':
     'Their e-folding times span {spread}%, so the answer is not a property of the arithmetic.',
@@ -2336,8 +2334,8 @@ export const EN_DEFERRED = {
     'Two runs of the same system from the same captured start, with nothing changed between them.',
   'nb.chaosPair.evidenceExponential':
     'The separation grew exponentially with an e-folding time of {tau} simulated seconds, over about {efolds} e-folds.',
-  'nb.chaosPair.evidenceOther': 'The separation {behaviour}.',
-  'nb.chaosPair.limit.cancelled':
+  'nb.chaosPair.evidenceOther': 'The separation {behavior}.',
+  'nb.chaosPair.limit.canceled':
     'Stopped before it finished, so at least one run is shorter than it was asked to be.',
   'nb.chaosPair.limit.interval':
     'The two runs do not cover the same interval, so the fit is over less than either of them.',
@@ -2371,7 +2369,7 @@ export const EN_DEFERRED = {
     'Arm {which} did not cross the L1 neck during this run.',
   'nb.neckPair.limit.notControlled':
     'The control failed: the two arms did not have the same accessible region, so their paths differ for a reason this activity was meant to exclude.',
-  'nb.neckPair.limit.cancelled':
+  'nb.neckPair.limit.canceled':
     'Stopped before it finished, so at least one arm was watched for less than the window.',
   'nb.neckPair.limit.short':
     'At least one arm was cut short. An arm that stopped early did not fail to cross; it was not watched long enough to say.',
@@ -2406,7 +2404,7 @@ export const EN_DEFERRED = {
     'h₊ = {plus}, h× = {cross}. Those are the two numbers the picture is drawn from — the fractional change in length along the two directions. Both are dimensionless.',
   'gwW.row.arms': 'What an L would read',
   'gwW.value.arms':
-    'Along the horizontal arm the length changes by a fraction {x}; along the vertical arm, {y}. The instrument measures the DIFFERENCE, {diff} — which on LIGO’s four-kilometre arms is {metres} metres. That is why the shape is an L: two lengths compared against each other, not one length measured absolutely.',
+    'Along the horizontal arm the length changes by a fraction {x}; along the vertical arm, {y}. The instrument measures the DIFFERENCE, {diff} — which on LIGO’s four-kilometer arms is {meters} meters. That is why the shape is an L: two lengths compared against each other, not one length measured absolutely.',
   'gwW.row.polarization': 'Polarisation',
   'gwW.value.polarization.linear':
     'Linear. Only the plus polarisation is present, so the ring stretches one way, passes exactly through a circle, and squeezes the other way. This is the clean stretch-and-squeeze picture.',
@@ -2458,11 +2456,11 @@ export const EN_DEFERRED = {
   'gwW.axis.merger': 'merger',
   'gwW.plot.isco': 'the model stops here',
   'gwW.local.span': '{ms} ms across',
-  'gwW.source.notToScale': 'schematic: separation is modelled, sizes are not',
+  'gwW.source.notToScale': 'schematic: separation is modeled, sizes are not',
   'gwW.overlay.legend':
-    'Each ring is one wave crest, where it would be now after leaving the source. The outer ones left earlier, when the orbit was slower, so they are further apart. Distances compressed, amplitude exaggerated, propagation slowed and rescaled as the frequency climbs. The centre is left out: a far-field formula does not describe it.',
+    'Each ring is one wave crest, where it would be now after leaving the source. The outer ones left earlier, when the orbit was slower, so they are further apart. Distances compressed, amplitude exaggerated, propagation slowed and rescaled as the frequency climbs. The center is left out: a far-field formula does not describe it.',
   'gwW.overlay.legendStill':
-    'Held still. Each ring is one wave crest, where it would be now after leaving the source. The outer ones left earlier, when the orbit was slower, so they are further apart. Distances compressed, amplitude exaggerated. The centre is left out: a far-field formula does not describe it.',
+    'Held still. Each ring is one wave crest, where it would be now after leaving the source. The outer ones left earlier, when the orbit was slower, so they are further apart. Distances compressed, amplitude exaggerated. The center is left out: a far-field formula does not describe it.',
   'gwW.ring.amplified':
     'stretch and squeeze, across the wave’s path. Amplified — the real effect is a part in 10²¹.',
   'gwW.row.chirpMass': 'Chirp mass',
@@ -2481,7 +2479,7 @@ export const EN_DEFERRED = {
   'gwW.fidelity.poor':
     'v/c = {v}. Too fast for this approximation — read the shape, not the numbers.',
   'gwW.fidelity.unknown': 'v/c not defined here.',
-  'gwW.row.window': 'Modelled',
+  'gwW.row.window': 'Modeled',
   'gwW.value.windowWhole':
     '{window}, {cycles} wave cycles — the whole inspiral from 20 Hz.',
   'gwW.value.windowExcerpt':
@@ -2543,7 +2541,7 @@ export const EN_DEFERRED = {
   'gwW.real.row.residual': 'What is left',
   'gwW.real.value.residual':
     'Noise. It is as loud before the signal arrives as after, which is how you can tell.',
-  'gwW.real.row.licence': 'Licence',
+  'gwW.real.row.license': 'License',
   'gwW.action.listen': 'Listen',
   'gwW.row.mapping': 'What you are hearing',
   'gwW.value.mapping.rate':
@@ -2561,7 +2559,7 @@ export const EN_DEFERRED = {
   'gwW.row.notSound': 'What it is not',
   'gwW.value.notSound':
     'This is measurement data turned into sound. Gravitational waves are not sound and there is nothing for sound to travel through between here and the source.',
-  'gwW.audio.playing': 'Playing the modelled signal — {low} to {high}.',
+  'gwW.audio.playing': 'Playing the modeled signal — {low} to {high}.',
   'gwW.audio.stopped': 'Stopped.',
   'gwW.audio.loading': 'Fetching the sound\u2026',
   'gwW.audio.refused.muted':
@@ -2571,7 +2569,7 @@ export const EN_DEFERRED = {
   'gwW.audio.refused.empty': 'There is nothing in this window to play.',
   // ---------------------------------------------------------------------------
   // The sound panel (js/ui.js). The button's own labels are in the eager
-  // catalogue; everything below is only read once the panel is opened.
+  // catalog; everything below is only read once the panel is opened.
   // ---------------------------------------------------------------------------
   'sound.title': 'Sound',
   'sound.state.long.unsupported':
@@ -2597,7 +2595,7 @@ export const EN_DEFERRED = {
   'sound.preview': 'Play an example',
   'sound.stop': 'Stop',
   'sound.preview.note':
-    'The example is a modelled black-hole chirp, shifted up so a laptop speaker can reproduce it. It is not the simulation’s own sound, and it is not a recording of anything.',
+    'The example is a modeled black-hole chirp, shifted up so a laptop speaker can reproduce it. It is not the simulation’s own sound, and it is not a recording of anything.',
   'sound.lesson.link': 'Listening to spacetime: discover a merger',
   'sound.shortcut': 'Mute or unmute sound',
 
@@ -2882,7 +2880,7 @@ export const EN_DEFERRED = {
   'gwW.row.ring': 'The test masses',
   // The gravitational-wave lab's evidence (js/notebook/capture.js)
   'nb.source.gw-observation': 'Gravitational-wave observation',
-  'nb.gw.title.model': 'Modelled gravitational-wave signal',
+  'nb.gw.title.model': 'Modeled gravitational-wave signal',
   'nb.gw.title.data': '{event}, as published',
   'nb.gw.m1': 'First mass',
   'nb.gw.m2': 'Second mass',
@@ -2896,15 +2894,15 @@ export const EN_DEFERRED = {
   'nb.gw.frequency': 'Wave frequency at the cursor',
   'nb.gw.toMerger': 'Time to coalescence at the cursor',
   'nb.gw.strain': 'Strain at the cursor',
-  'nb.gw.peakStrain': 'Peak strain in the modelled window',
+  'nb.gw.peakStrain': 'Peak strain in the modeled window',
   'nb.gw.separation': 'Separation at the cursor',
   'nb.gw.velocity': 'Orbital velocity parameter at the cursor',
   'nb.gw.isco': 'Frequency at the innermost stable circular orbit',
-  'nb.gw.windowSeconds': 'Length of the modelled window',
-  'nb.gw.cycles': 'Wave cycles in the modelled window',
+  'nb.gw.windowSeconds': 'Length of the modeled window',
+  'nb.gw.cycles': 'Wave cycles in the modeled window',
   'nb.gw.similarity': 'Similarity',
   'nb.gw.similarityNote':
-    'a normalised noise-weighted overlap, 0 to 1. Not a signal-to-noise ratio and not a detection significance.',
+    'a normalized noise-weighted overlap, 0 to 1. Not a signal-to-noise ratio and not a detection significance.',
   'nb.gw.evidence.changed':
     'Changed between the two runs: {changed}. Held fixed: {held}.',
   'nb.gw.evidence.identical': 'The two runs were identical.',
@@ -2926,7 +2924,7 @@ export const EN_DEFERRED = {
   'nb.gw.limit.isco':
     'It stops at {isco} Hz, the innermost stable circular orbit. There is no merger and no ringdown in it, and it was not extrapolated past that point.',
   'nb.gw.limit.excerpt':
-    'Only the last {window} s were modelled. The whole inspiral from 20 Hz would be {full} s.',
+    'Only the last {window} s were modeled. The whole inspiral from 20 Hz would be {full} s.',
   'nb.gw.limit.velocity':
     'At the moment recorded, the orbital velocity parameter was {v}. The terms this model drops grow as the square of that, so the numbers here are indicative rather than accurate.',
   'nb.gw.limit.response':
@@ -2943,7 +2941,7 @@ export const EN_DEFERRED = {
     'The collaboration band-passed these traces to 35-350 Hz and notched the instrument lines before publishing them. What is plotted is filtered data, not raw strain.',
   'nb.gw.limit.noise':
     'These are real measurements and they contain noise. Some of what is on screen is the detector, not the source.',
-  'nb.gw.figure.title': 'Strain envelope over the modelled window',
+  'nb.gw.figure.title': 'Strain envelope over the modeled window',
   'nb.gw.figure.x': 'Time to coalescence (s)',
   'nb.gw.figure.y': 'Strain h',
   'nb.gw.figure.model': 'Model',
@@ -2954,7 +2952,7 @@ export const EN_DEFERRED = {
   'gwW.value.similarity.none': 'Pin a signal as A first.',
   'gwW.row.notDetection': 'What that is not',
   'gwW.value.notDetection':
-    'A normalised overlap, and nothing more. It is not a signal-to-noise ratio, a probability, or evidence that anything was detected — establishing that needs a template bank, a background estimate and a trials factor, none of which are here.',
+    'A normalized overlap, and nothing more. It is not a signal-to-noise ratio, a probability, or evidence that anything was detected — establishing that needs a template bank, a background estimate and a trials factor, none of which are here.',
 
   // ---------------------------------------------------------------------------
   // More prose moved out of the start-up download
@@ -2963,7 +2961,7 @@ export const EN_DEFERRED = {
   // dialog and the lesson engine are all loaded on demand, so their strings
   // were downloaded by every visitor in order not to be read. The stellar phase
   // and class names went with them: they are read only when an inspector card
-  // is built for a star, and the inspector primes this catalogue first.
+  // is built for a star, and the inspector primes this catalog first.
   'export.empty': 'There is nothing recorded to export yet.',
   'export.failed': 'Could not build that file.',
   'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
@@ -3035,7 +3033,7 @@ export const EN_DEFERRED = {
   'stellar.phase.white-dwarf': 'White dwarf',
   'stellar.phase.neutron-star': 'Neutron star',
   'stellar.phase.black-hole': 'Black hole',
-  'stellar.phase.unknown': 'Not modelled',
+  'stellar.phase.unknown': 'Not modeled',
   // ---------------------------------------------------------------------------
   // The Stellar Lab (js/stellarWidgets.js, js/stellarLab.js)
   // ---------------------------------------------------------------------------
@@ -3044,7 +3042,7 @@ export const EN_DEFERRED = {
   // ---------------------------------------------------------------------------
   'stelE.title': 'A star, from start to finish',
   'stelE.note':
-    'One published evolutionary track, played through. The age drives everything else — temperature, radius, luminosity, colour, current mass and phase all come from the same point on the same track. The cloud at the start and the remnant at the end are illustrations either side of what the model actually covers, and both say so.',
+    'One published evolutionary track, played through. The age drives everything else — temperature, radius, luminosity, color, current mass and phase all come from the same point on the same track. The cloud at the start and the remnant at the end are illustrations either side of what the model actually covers, and both say so.',
   'stelE.panel.diagram': 'where it has been',
   'stelE.panel.stage': 'the star now',
   'stelE.axis.hotter': '← hotter',
@@ -3084,7 +3082,7 @@ export const EN_DEFERRED = {
   'stelE.value.sizeTrue':
     'One scale for the whole life, set by the largest this star ever gets ({peak}). That is why it is a speck for most of it.',
   'stelE.value.sizeFit':
-    'Each moment enlarged to fill the box, so the colour and the phase stay legible. Sizes are NOT comparable between moments in this mode.',
+    'Each moment enlarged to fill the box, so the color and the phase stay legible. Sizes are NOT comparable between moments in this mode.',
   'stelE.stage.caption':
     'One scale for the whole life: {frac} of the {peak} it reaches at its largest.',
   'stelE.stage.tinyCaption':
@@ -3093,7 +3091,7 @@ export const EN_DEFERRED = {
   'stelE.value.star': 'A {m} M☉ model, followed from before it was a star',
   'stelE.row.stage': 'Stage',
   'stelE.value.cloud':
-    'A collapsing cloud, drawn as an illustration. The bundled tracks begin at an object that already has a photosphere, so nothing before that point is modelled here.',
+    'A collapsing cloud, drawn as an illustration. The bundled tracks begin at an object that already has a photosphere, so nothing before that point is modeled here.',
   'stelE.row.noNumbers': 'Why there are no numbers',
   'stelE.value.noNumbers':
     'Putting a cloud at a precise temperature and luminosity would be inventing them. The quantitative track begins when the model has a photosphere to report, and the readout fills in there.',
@@ -3106,13 +3104,13 @@ export const EN_DEFERRED = {
   'stelE.value.mass': '{now} now, {born} at birth — {lost} lost to its wind',
   'stelE.row.spectral': 'Spectral type',
   'summary.life.cloud':
-    'A lesson is showing this star before it formed: the canvas has a contracting cloud of gas with a brightening centre, and no star, because there is not one yet.',
+    'A lesson is showing this star before it formed: the canvas has a contracting cloud of gas with a brightening center, and no star, because there is not one yet.',
   'summary.life.star':
     'A lesson is running this star through its life; the canvas shows the star at the model age given in the instrument readout.',
   'summary.life.wind':
     'A lesson is running this star through its life. Dashed shells around it stand for material it has shed — about {pct} per cent of the mass it was born with, so far.',
   'summary.life.explosion':
-    'A lesson has run this star to the end. Expanding rings stand for an explosion the endpoint model expects, and what is left at the centre is a {kind}.',
+    'A lesson has run this star to the end. Expanding rings stand for an explosion the endpoint model expects, and what is left at the center is a {kind}.',
   'summary.life.remnant':
     'A lesson has run this star to the end. What is left is a {kind}; there was no explosion in this model.',
   'stelE.row.grid': 'The models behind this',
@@ -3141,7 +3139,7 @@ export const EN_DEFERRED = {
   'stelE.freeze.label': 'Then: {age}',
   'stelE.row.pace': 'The playhead',
   'stelE.value.paceTime':
-    'Paced by time, logarithmically. How far it has travelled is how far through the life it is — so nearly all of it is the main sequence.',
+    'Paced by time, logarithmically. How far it has traveled is how far through the life it is — so nearly all of it is the main sequence.',
   'stelE.value.pacePhase':
     'Paced by the track’s own samples, so every phase is reachable. It is NOT a clock: equal moves are not equal times, and the line below says by how much.',
   'stelE.row.thisPhase': 'This phase',
@@ -3200,7 +3198,7 @@ export const EN_DEFERRED = {
   'stelW.lab.title': 'Stellar Lab',
   'stelW.lab.row.boundStar': 'Star in the scene',
   'stelW.lab.note':
-    'Eight modelled stars on a Hertzsprung–Russell diagram, and a cursor you can put anywhere. Temperature increases to the left — that is a historical accident and it catches everybody once.',
+    'Eight modeled stars on a Hertzsprung–Russell diagram, and a cursor you can put anywhere. Temperature increases to the left — that is a historical accident and it catches everybody once.',
   'stelW.panel.hr': 'temperature and luminosity',
   'stelW.panel.preview': 'this star',
   'stelW.panel.compare': 'pinned stars',
@@ -3209,7 +3207,7 @@ export const EN_DEFERRED = {
   'stelW.axis.hotter': '← hotter',
   'stelW.axis.cooler': 'cooler →',
   'stelW.axis.luminosity': 'luminosity, L☉',
-  'stelW.control.track': 'Modelled star',
+  'stelW.control.track': 'Modeled star',
   'stelW.control.age': 'Age along the track',
   'stelW.control.teff': 'Temperature',
   'stelW.control.lum': 'Luminosity',
@@ -3220,9 +3218,9 @@ export const EN_DEFERRED = {
   'stelW.control.threshold': 'Brightness cut',
   'stelW.preset.mass': '{m} M☉',
   'stelW.preset.note.m020':
-    'A small red dwarf. Modelled to the end of core hydrogen burning, which the model puts at 1.1 trillion years — a prediction about a star far younger than its own lifetime.',
+    'A small red dwarf. Modeled to the end of core hydrogen burning, which the model puts at 1.1 trillion years — a prediction about a star far younger than its own lifetime.',
   'stelW.preset.note.m050':
-    'Half a solar mass. Also modelled only to the end of core hydrogen burning, at 96 billion years.',
+    'Half a solar mass. Also modeled only to the end of core hydrogen burning, at 96 billion years.',
   'stelW.preset.note.m100':
     'A solar-mass star, all the way to a cooling white dwarf. Ten billion years on the main sequence and about a billion and a half after it.',
   'stelW.preset.note.m200':
@@ -3241,7 +3239,7 @@ export const EN_DEFERRED = {
   'stelW.action.clear': 'Clear all',
   'stelW.action.adopt': 'Use the nearest model',
   'stelW.action.capture': 'Save to notebook',
-  'stelW.mode.model': 'A modelled star',
+  'stelW.mode.model': 'A modeled star',
   'stelW.mode.free': 'A point you chose',
   'stelW.row.mode': 'Mode',
   'stelW.row.teff': 'Surface temperature',
@@ -3293,7 +3291,7 @@ export const EN_DEFERRED = {
   'stelW.row.regions': 'Regions',
   'stelW.value.regions':
     'Approximate, and shaded rather than outlined on purpose. A star is not a giant because it crossed a line; the region is a summary of where large stars end up.',
-  'stelW.preview.exposure': 'colour is the star’s; brightness on screen is not',
+  'stelW.preview.exposure': 'color is the star’s; brightness on screen is not',
   'stelW.compare.title': 'Comparing stars',
   'stelW.compare.note':
     'Up to four pinned stars, drawn either on one common scale or each enlarged to fill its own box. The two are not the same picture and the caption says which you are looking at.',
@@ -3355,7 +3353,7 @@ export const EN_DEFERRED = {
   'stelW.pop.cut': 'below the cut, so no survey would list it',
   'stelW.pop.row.onCanvas': 'On the canvas',
   'stelW.pop.value.onCanvas':
-    '{shown} stars, out of a bounded subsample of {subsample} taken from the {modelled} the tracks could model, out of {requested} drawn. Four different numbers: the canvas is not the sample and the sample is not the population.',
+    '{shown} stars, out of a bounded subsample of {subsample} taken from the {modeled} the tracks could model, out of {requested} drawn. Four different numbers: the canvas is not the sample and the sample is not the population.',
   'stelW.pop.row.type': 'Type {type}',
   'stelW.pop.value.type':
     '{all} in the sample ({allPct}%), {bright} in the bright subset ({brightPct}%)',
@@ -3366,7 +3364,7 @@ export const EN_DEFERRED = {
   'nb.source.stellar-lab': 'Stellar Lab',
   'nb.source.binary-orbit': 'Binary orbit',
   'nb.stellar.title.comparison': '{n} stars compared',
-  'nb.stellar.title.model': 'A modelled star',
+  'nb.stellar.title.model': 'A modeled star',
   'nb.stellar.title.point': 'A point on the H–R diagram',
   // --- A binary orbit measured off the main scene ---------------------------
   'nb.source.horizon-trials': 'Horizon trials',
@@ -3390,7 +3388,7 @@ export const EN_DEFERRED = {
   'nb.binary.total': 'Total mass of the pair',
   'nb.binary.split': 'Mass of {star}',
   'nb.binary.timedNote': 'Timed by the student against the simulation clock.',
-  'nb.binary.modelledNote':
+  'nb.binary.modeledNote':
     'Taken from the model rather than timed, so it is a prediction and not a measurement.',
   'nb.binary.totalNote':
     'Computed from the separation and the period by Newton’s form of Kepler’s third law. Nothing weighed this pair.',
@@ -3430,7 +3428,7 @@ export const EN_DEFERRED = {
   'nb.stellar.limit.ambiguous':
     '{n} bundled models pass close to this point and they are not the same object. Nothing in this reading identifies which, if any, it is.',
   'nb.stellar.limit.stage.cloud':
-    'Taken before the track begins. The collapsing cloud is an illustration with no modelled temperature, radius or age.',
+    'Taken before the track begins. The collapsing cloud is an illustration with no modeled temperature, radius or age.',
   'nb.stellar.limit.stage.remnant':
     'Taken after the track ends. What the star became is described below rather than computed here.',
   'nb.stellar.limit.endpointQuoted':
@@ -3439,12 +3437,12 @@ export const EN_DEFERRED = {
     'The comparison was drawn with each star fitted to its own box, so the apparent sizes in it are not comparable.',
 
   // --- Words a lesson computes ----------------------------------------------
-  // Here rather than in the start-up catalogue because js/i18n/lesson.js is
+  // Here rather than in the start-up catalog because js/i18n/lesson.js is
   // the only module that reads them and js/investigations.js is the only
   // module that imports it: a visitor who never opens a lesson was
   // downloading a hundred and thirty-three answer-checking sentences in
   // order to never render one. js/investigationsLoader.js awaits this
-  // catalogue before initInvestigations(), so the lookup cannot outrun it.
+  // catalog before initInvestigations(), so the lookup cannot outrun it.
   //
   // Probe rows and answer-checking messages come out of functions inside the
   // lesson files, which a translation shadow cannot reach. js/i18n/lesson.js

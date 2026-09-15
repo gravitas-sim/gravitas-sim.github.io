@@ -74,7 +74,7 @@ export function comparisonBounds(sets) {
  * Defaults to the number the cadence and baseline would have produced, which
  * is what makes switching shape a controlled change: the reader gets the same
  * number of observations over the same span, placed differently, rather than a
- * different programme.
+ * different program.
  *
  * @param {object} fields - {epochs, cadenceDays, baselineDays}
  * @returns {number} The count

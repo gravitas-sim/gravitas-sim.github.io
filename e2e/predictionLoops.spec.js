@@ -98,7 +98,7 @@ const LOOPS = [
   {
     id: 'hohmann-transfer',
     predict: 'predict-do-nothing',
-    family: 'no widget: the manoeuvre planner',
+    family: 'no widget: the maneuver planner',
   },
   {
     id: 'lagrange-points',

@@ -158,7 +158,7 @@ rather than importing the pieces it calls. That is why world construction is
 reproducible: everything that can change the world it builds arrives through one
 argument list, so a test can hold it fixed. It is also why the quality tier's
 population caps are *read* during construction and never written back —
-`SETTINGS` is the reader's document, and it is what a share link serialises and
+`SETTINGS` is the reader's document, and it is what a share link serializes and
 what the A/B bench hashes.
 
 ### When you need something from a layer above
@@ -179,7 +179,7 @@ Three options, in order of preference:
 
 There are three recorded entries, all of them `-> ui.js`, and all for the same
 reason: `investigations.js`, `share.js` and `experimentsBridge.js` want
-coordinator *behaviour* — load this scenario, rebuild that world — rather than
+coordinator *behavior* — load this scenario, rebuild that world — rather than
 shared data. Removing them needs a command interface that does not exist yet.
 Adding a fourth should feel harder than fixing the third.
 
@@ -189,7 +189,7 @@ Adding a fourth should feel harder than fixing the third.
 
 **CSS is layered.** The order is `tokens, base, legacy, components, overrides`.
 Component rules beat legacy rules on layer order alone, which is why nothing in
-`components.css` needs `!important`. Colour belongs in `tokens.css`; no other
+`components.css` needs `!important`. Color belongs in `tokens.css`; no other
 stylesheet should carry a hex value.
 
 **One source of truth per fact.** A scenario's title, summary, concept tags and
@@ -321,7 +321,7 @@ sharded one lesson per test so contexts are reused and a failure names its lesso
 minutes and runs as part of `npm run e2e`.
 
 It earns its keep: it is what found a widget that had never drawn — its `draw`
-shadowed the imported translation function with the colour palette, so the
+shadowed the imported translation function with the color palette, so the
 first row threw, the engine logged a warning nobody read, and the canvas was
 blank — and three computed fields that could only ever be empty, because they
 read a value measured on an earlier step and a computed field only sees its own
@@ -391,7 +391,7 @@ source quotes. If you need to loosen a tolerance, the reason goes in the table
 next to it.
 
 The default integrator is Symplectic Euler and cannot change without re-tuning
-every scenario, because each one was laid out against its error behaviour.
+every scenario, because each one was laid out against its error behavior.
 
 ---
 
@@ -427,11 +427,11 @@ carried out, mark it as superseded and say where the work landed.
 
 ## Pull requests
 
-- One change per pull request. A rename and a behaviour change in the same
+- One change per pull request. A rename and a behavior change in the same
   branch cannot be reviewed.
 - Say what you measured. "Faster" is not reviewable; "trail pass 12.4 ms →
   6.9 ms on Star Cluster, `npm run perf`" is.
-- New behaviour needs a test. Physics goes in `tests/`, anything a user can see
+- New behavior needs a test. Physics goes in `tests/`, anything a user can see
   goes in `e2e/`.
 - If you changed what a student sees, say which lesson steps it affects.
 
@@ -442,7 +442,7 @@ job.
 
 ---
 
-## Licence
+## License
 
 MIT, same as the project. By contributing you agree your work is released under
 it.

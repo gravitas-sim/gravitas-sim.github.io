@@ -119,7 +119,7 @@ describe('the instruments', () => {
   });
 });
 
-describe('the arrow panel, which is the lesson’s centrepiece', () => {
+describe('the arrow panel, which is the lesson’s centerpiece', () => {
   const w = widget('tide-vectors');
 
   test('it agrees with the physics module rather than recomputing it', () => {
@@ -161,8 +161,8 @@ describe('the arrow panel, which is the lesson’s centrepiece', () => {
     for (let d = 0.2; d <= 2.0001; d += 0.05) {
       for (const mass of [0.25, 1, 4]) {
         const f = w.compute({ dist: d, mass });
-        expect(f.near).toBeGreaterThan(f.centre);
-        expect(f.centre).toBeGreaterThan(f.far);
+        expect(f.near).toBeGreaterThan(f.center);
+        expect(f.center).toBeGreaterThan(f.far);
         expect(f.far).toBeGreaterThan(0);
       }
     }
@@ -527,7 +527,7 @@ describe('the lesson and its instruments agree', () => {
       .join(' ');
     expect(prose).toMatch(/not.{0,40}(hydrodynamic|fluid)/i);
     expect(prose).not.toMatch(
-      /we simulate the fluid|fluid dynamics are modell?ed/i
+      /we simulate the fluid|fluid dynamics are model?ed/i
     );
   });
 

@@ -347,7 +347,7 @@ describe('Doppler shift', () => {
   });
 
   test('the shift is far too small to change a star visible color', () => {
-    // 84 m/s on a 500 nm line is under a thousandth of a nanometre. Worth
+    // 84 m/s on a 500 nm line is under a thousandth of a nanometer. Worth
     // asserting, because the lesson must not draw a star turning blue.
     expect(Math.abs(dopplerShiftNm(84, 500))).toBeLessThan(1e-3);
   });
@@ -378,7 +378,7 @@ describe('the radial-velocity half-range and its coverage test', () => {
     }));
 
   test('a short run through a zero crossing has not bracketed both extremes', () => {
-    // The case the old test got wrong. Three per cent of a cycle centred on the
+    // The case the old test got wrong. Three per cent of a cycle centerd on the
     // ascending node: the samples straddle zero, so "has visited both signs"
     // was satisfied, and the reported K was a twentieth of the truth.
     const run = sine(40, { cycles: 0.03, phase: -0.03 * Math.PI, K: 50 });

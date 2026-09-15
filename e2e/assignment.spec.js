@@ -376,7 +376,7 @@ test.describe('when the lesson has moved on', () => {
 
     // Resolve the same assignment against a lesson that has been revised: one
     // step deleted, one rewritten under its own id. Done through the real
-    // binding function rather than by editing the catalogue on disk, so this
+    // binding function rather than by editing the catalog on disk, so this
     // exercises the code a future revision would go through.
     const out = await page.evaluate(async () => {
       const inv = await import('/js/investigations.js');
@@ -420,7 +420,7 @@ test.describe('when the lesson has moved on', () => {
       };
     });
 
-    // Gone means gone: not matched to a neighbour by position.
+    // Gone means gone: not matched to a neighbor by position.
     expect(out.missing).toBe(1);
     expect(out.stepIds).not.toContain(out.retired);
     // Rewritten means the answer does not carry over.

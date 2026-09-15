@@ -236,8 +236,8 @@ export function minimumPlanetMass({
  * far more digits than any spectrograph delivers: dLambda / lambda = v / c.
  *
  * @param {number} velocityMs - Radial velocity in m/s, positive receding
- * @param {number} restWavelengthNm - Rest wavelength in nanometres
- * @returns {number} Wavelength shift in nanometres, positive to the red
+ * @param {number} restWavelengthNm - Rest wavelength in nanometers
+ * @returns {number} Wavelength shift in nanometers, positive to the red
  */
 export function dopplerShiftNm(velocityMs, restWavelengthNm) {
   const C = 299792458;

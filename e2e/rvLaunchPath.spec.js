@@ -3,13 +3,13 @@
 // -----------------------------------------------------------------------------
 // e2e/rvWorkspace.spec.js hands the workspace a recording object directly. That
 // is a fine way to test the workspace and a useless way to test getting into
-// it, and the gap was not academic: the Analyse button's listener was
-// registered inside the Restart button's listener, so Analyse did nothing at
+// it, and the gap was not academic: the Analyze button's listener was
+// registered inside the Restart button's listener, so Analyze did nothing at
 // all until a student pressed Restart, and pressed Restart n times bound n
 // copies of the handler. Every unit test passed throughout.
 //
 // So this file touches nothing but the controls a student can see. Record with
-// the panel, press Analyse, drag the sliders, open the export dialog, download
+// the panel, press Analyze, drag the sliders, open the export dialog, download
 // the file, and check the numbers in it against the residuals in it.
 // =============================================================================
 
@@ -67,7 +67,7 @@ async function collect(page, app, n, timeout = 60000) {
   await app.waitForFrames(2);
 }
 
-/** Record a short run and return once there is something to analyse. */
+/** Record a short run and return once there is something to analyze. */
 async function record(page, app, opts = {}) {
   const { points = 8, collectTimeout = 60000, ...schedule } = opts;
   await openRv(page, app);
@@ -82,7 +82,7 @@ async function record(page, app, opts = {}) {
 }
 
 test.describe('reaching the workspace', () => {
-  test('Analyse works on the first recording, with no Restart', async ({
+  test('Analyze works on the first recording, with no Restart', async ({
     page,
     app,
   }) => {
@@ -91,7 +91,7 @@ test.describe('reaching the workspace', () => {
     // The regression, in one line. Nothing has been restarted; the button is
     // pressed exactly once, the way somebody who has just taken a recording
     // would press it.
-    await page.locator('#rvAnalyse').click();
+    await page.locator('#rvAnalyze').click();
     await expect(page.locator('#rvFitContainer')).toBeVisible();
 
     // And it opened on the run that was showing, not on a blank workspace.
@@ -102,7 +102,7 @@ test.describe('reaching the workspace', () => {
     expect(used).toBeGreaterThanOrEqual(8);
   });
 
-  test('the Analyse handler is registered exactly once, however many restarts', async ({
+  test('the Analyze handler is registered exactly once, however many restarts', async ({
     page,
     app,
   }) => {
@@ -125,7 +125,7 @@ test.describe('reaching the workspace', () => {
     await record(page, app);
 
     const binds = page =>
-      page.evaluate(() => window.__clickBinds.rvAnalyse || 0);
+      page.evaluate(() => window.__clickBinds.rvAnalyze || 0);
 
     // One, before anything has been restarted. This was zero: the listener
     // lived inside the Restart handler and had never run.
@@ -140,7 +140,7 @@ test.describe('reaching the workspace', () => {
     expect(await binds(page)).toBe(1);
 
     // And it still opens on the run that is showing now.
-    await page.locator('#rvAnalyse').click();
+    await page.locator('#rvAnalyze').click();
     await expect(page.locator('#rvFitContainer')).toBeVisible();
     const used = await page.evaluate(async () => {
       const ws = await import('/js/rvWorkspace.js');
@@ -167,7 +167,7 @@ test.describe('the sliders and the file', () => {
       points: 14,
       collectTimeout: 120000,
     });
-    await page.locator('#rvAnalyse').click();
+    await page.locator('#rvAnalyze').click();
     await expect(page.locator('#rvFitContainer')).toBeVisible();
 
     /** The RMS the panel is currently reporting. */
@@ -331,7 +331,7 @@ test.describe('recordings that are not clean', () => {
     app,
   }) => {
     await record(page, app);
-    await page.locator('#rvAnalyse').click();
+    await page.locator('#rvAnalyze').click();
     await expect(page.locator('#rvFitContainer')).toBeVisible();
 
     const shown = await page.evaluate(async () => {
@@ -357,7 +357,7 @@ test.describe('recordings that are not clean', () => {
     app,
   }) => {
     await record(page, app);
-    await page.locator('#rvAnalyse').click();
+    await page.locator('#rvAnalyze').click();
     await expect(page.locator('#rvFitContainer')).toBeVisible();
 
     // Two points at the same instant: the normal equations are singular and
@@ -396,7 +396,7 @@ test.describe('what a saved fit remembers about the run', () => {
     app,
   }) => {
     // The whole chain, in the order a student walks it: the sampler records,
-    // the workspace analyses, the notebook keeps it. The gap this covers is
+    // the workspace analyzes, the notebook keeps it. The gap this covers is
     // the one where the workspace dropped the acquisition metadata and the
     // notebook filled it back in from whatever world was on screen - so a
     // recording taken at one geometry was written down at another.
@@ -416,7 +416,7 @@ test.describe('what a saved fit remembers about the run', () => {
     });
     expect(taken.integrator).toBeTruthy();
 
-    await page.locator('#rvAnalyse').click();
+    await page.locator('#rvAnalyze').click();
     await expect(page.locator('#rvFitContainer')).toBeVisible();
     await page.locator('#rvFitSearch').click();
 

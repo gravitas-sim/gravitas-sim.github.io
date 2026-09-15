@@ -196,7 +196,7 @@
     "reset"
    ],
    "engineReads": [
-    "barycentre"
+    "barycenter"
    ],
    "mutates": [
     "restageStarPair"
@@ -9159,7 +9159,7 @@
       "readsSelection": false,
       "importsFromSelection": false,
       "engineReads": [
-       "barycentre"
+       "barycenter"
       ],
       "mutates": [],
       "eventWatch": null
@@ -9294,7 +9294,7 @@
       "readsSelection": false,
       "importsFromSelection": false,
       "engineReads": [
-       "barycentre"
+       "barycenter"
       ],
       "mutates": [],
       "eventWatch": null
@@ -9503,7 +9503,7 @@
       "readsSelection": false,
       "importsFromSelection": false,
       "engineReads": [
-       "barycentre"
+       "barycenter"
       ],
       "mutates": [],
       "eventWatch": null
@@ -10447,7 +10447,7 @@
       "readsSelection": false,
       "importsFromSelection": false,
       "engineReads": [
-       "barycentre"
+       "barycenter"
       ],
       "mutates": [],
       "eventWatch": null
@@ -10737,7 +10737,7 @@
       "readsSelection": false,
       "importsFromSelection": false,
       "engineReads": [
-       "barycentre"
+       "barycenter"
       ],
       "mutates": [],
       "eventWatch": null
@@ -11625,7 +11625,7 @@
      "actions": [
       "open-a-body-inspector",
       "move-an-instrument-control",
-      "read-the-labelled-appearance"
+      "read-the-labeled-appearance"
      ],
      "requires": [],
      "reveal": null,
@@ -21555,7 +21555,7 @@
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "take-the-centre-away",
+     "reveal": "take-the-center-away",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -21596,10 +21596,10 @@
      ]
     },
     {
-     "sid": "take-the-centre-away",
+     "sid": "take-the-center-away",
      "index": 6,
      "type": "read",
-     "title": "Take the centre away",
+     "title": "Take the center away",
      "declares": {
       "stage": null,
       "bound": [
@@ -23306,17 +23306,17 @@
     {
      "predict": "so-why-two-bulges",
      "predictCollects": true,
-     "heldUntil": "take-the-centre-away",
+     "heldUntil": "take-the-center-away",
      "experiment": [
-      "take-the-centre-away",
+      "take-the-center-away",
       "what-the-far-side-arrow"
      ],
      "measure": [
-      "take-the-centre-away",
+      "take-the-center-away",
       "what-the-far-side-arrow"
      ],
      "evidence": [],
-     "interpret": "take-the-centre-away",
+     "interpret": "take-the-center-away",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -40127,7 +40127,7 @@
    },
    "steps": [
     {
-     "sid": "an-unlabelled-signal",
+     "sid": "an-unlabeled-signal",
      "index": 1,
      "type": "predict",
      "title": "Something arrived",
@@ -41985,7 +41985,7 @@
    ],
    "loops": [
     {
-     "predict": "an-unlabelled-signal",
+     "predict": "an-unlabeled-signal",
      "predictCollects": true,
      "heldUntil": "three-things-called-a-wave",
      "experiment": [
@@ -42289,10 +42289,10 @@
      ]
     },
     {
-     "sid": "temperature-makes-colour",
+     "sid": "temperature-makes-color",
      "index": 3,
      "type": "explore",
-     "title": "What temperature does to colour",
+     "title": "What temperature does to color",
      "declares": {
       "stage": {
        "objects": 1,
@@ -43004,10 +43004,10 @@
      ]
     },
     {
-     "sid": "switch-to-modelled-stars",
+     "sid": "switch-to-modeled-stars",
      "index": 12,
      "type": "explore",
-     "title": "Stars that are actually modelled",
+     "title": "Stars that are actually modeled",
      "declares": {
       "stage": {
        "objects": 8,
@@ -44315,7 +44315,7 @@
      "sid": "what-a-survey-misses",
      "index": 28,
      "type": "question",
-     "title": "What a catalogue of bright stars is a catalogue of",
+     "title": "What a catalog of bright stars is a catalog of",
      "declares": {
       "stage": {
        "objects": 400,
@@ -44563,12 +44563,12 @@
      "heldUntil": "the-numbers-arrive",
      "experiment": [
       "the-numbers-arrive",
-      "temperature-makes-colour",
+      "temperature-makes-color",
       "same-temperature-different-light"
      ],
      "measure": [
       "the-numbers-arrive",
-      "temperature-makes-colour",
+      "temperature-makes-color",
       "same-temperature-different-light"
      ],
      "evidence": [
@@ -44592,7 +44592,7 @@
       "straight-up-the-diagram",
       "sideways-at-one-luminosity",
       "lines-of-constant-radius",
-      "switch-to-modelled-stars",
+      "switch-to-modeled-stars",
       "three-on-the-main-sequence"
      ],
      "measure": [
@@ -44602,7 +44602,7 @@
       "straight-up-the-diagram",
       "sideways-at-one-luminosity",
       "lines-of-constant-radius",
-      "switch-to-modelled-stars",
+      "switch-to-modeled-stars",
       "three-on-the-main-sequence"
      ],
      "evidence": [

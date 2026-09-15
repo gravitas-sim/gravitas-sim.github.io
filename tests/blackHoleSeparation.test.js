@@ -19,7 +19,7 @@
 //      merging in vacuum produced a flare and a mass gain, both of which came
 //      from the renderer.
 //
-// Real accretion is untouched and has its own test at the bottom: a modelled
+// Real accretion is untouched and has its own test at the bottom: a modeled
 // body falling into a black hole still transfers its mass, through
 // handle_collisions, which is the only path that ever should have.
 // =============================================================================
@@ -57,7 +57,7 @@ describe('a display setting cannot change the world', () => {
         updatePhysicsSettings({
           show_accretion_disk: on,
           show_bh_jets: jets,
-          realistic_disk_physics: on,
+          realiztic_disk_physics: on,
         });
         // Twice each, because the first call of a run can warm a name pool.
         build();
@@ -69,7 +69,7 @@ describe('a display setting cannot change the world', () => {
 
   test('and building one costs at most a name', () => {
     // Thirty to sixty tracers used to be created here, each drawing several
-    // values. One draw is a name; anything in the dozens is the old behaviour
+    // values. One draw is a name; anything in the dozens is the old behavior
     // come back.
     updatePhysicsSettings({ show_accretion_disk: true, show_bh_jets: true });
     new BlackHole({ x: 0, y: 0 }, 10);
@@ -182,7 +182,7 @@ describe('the appearance survives a round trip', () => {
 });
 
 describe('real accretion still works', () => {
-  test('a modelled body falling into a black hole transfers its mass', () => {
+  test('a modeled body falling into a black hole transfers its mass', () => {
     // check_absorption into absorb_into_black_hole: the path that always
     // should have been the only one. Nothing decorative is involved.
     const bh = new BlackHole({ x: 0, y: 0 }, 1000);

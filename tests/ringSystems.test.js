@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // A quarter of generated gas giants are drawn with rings. Everything about a
 // system - whether there is one, its position angle, how far from edge-on it
-// is, its bands, its gaps, its colour - comes from the body's own visual seed,
+// is, its bands, its gaps, its color - comes from the body's own visual seed,
 // which comes from its id. That is what makes the sky the same after a reset, a
 // reload, a share link, a screenshot and an A/B run, and it is the property
 // that the previous implementation, which used Math.random in a constructor,
@@ -109,7 +109,7 @@ describe('the geometry is stable and in range', () => {
     expect(Math.max(...flattens)).toBeGreaterThan(0.45);
   });
 
-  test('the position angle covers the sky, not one favourite tilt', () => {
+  test('the position angle covers the sky, not one favorite tilt', () => {
     const angles = [];
     for (let seed = 0; seed < 500; seed++) {
       angles.push(ringGeometryFor(seed).angle);
@@ -150,14 +150,14 @@ describe('the geometry is stable and in range', () => {
     expect(withDivision).toBeLessThan(300);
   });
 
-  test('the colour is restrained rather than decorative', () => {
+  test('the color is restrained rather than decorative', () => {
     for (let seed = 0; seed < 200; seed++) {
       const { tint } = ringGeometryFor(seed);
       for (const channel of [tint.r, tint.g, tint.b]) {
         expect(channel).toBeGreaterThan(150);
         expect(channel).toBeLessThanOrEqual(255);
       }
-      // Icy grey through warm tan: never a saturated hue.
+      // Icy gray through warm tan: never a saturated hue.
       const spread =
         Math.max(tint.r, tint.g, tint.b) - Math.min(tint.r, tint.g, tint.b);
       expect(spread).toBeLessThan(80);

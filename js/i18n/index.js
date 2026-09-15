@@ -1,8 +1,8 @@
 // =============================================================================
-// Messages: one catalogue, one lookup, one place a language is chosen
+// Messages: one catalog, one lookup, one place a language is chosen
 // -----------------------------------------------------------------------------
 // Small on purpose. The application has about nine hundred user-facing strings,
-// which is enough to need a catalogue and nowhere near enough to need a
+// which is enough to need a catalog and nowhere near enough to need a
 // framework: a flat map per locale, a lookup with a fallback, and a DOM sweep
 // for the static markup covers all of it in a couple of hundred lines.
 //
@@ -16,7 +16,7 @@
 //   half-sentence. The id itself is the last resort, which is loud enough to be
 //   noticed in review and quiet enough not to break a layout.
 //
-//   The investigations are deliberately *absent* from this catalogue rather
+//   The investigations are deliberately *absent* from this catalog rather
 //   than present and untranslated. A lesson is a piece of continuous writing
 //   and a half-translated one is worse than an English one, so the boundary is
 //   structural: a locale's lessons are whole files under
@@ -39,7 +39,7 @@ const STORAGE_KEY = 'gravitas_locale';
  *
  * English is bundled; it is the fallback and every lookup may need it
  * synchronously. Every other locale is fetched the first time somebody chooses
- * it, so an English reader never downloads a catalogue they cannot read - the
+ * it, so an English reader never downloads a catalog they cannot read - the
  * Spanish one is 57KB of source, which is a sixth of the start-up bundle.
  *
  * `coverage` is a plain sentence rather than a message id, because the picker
@@ -65,20 +65,20 @@ export const LOCALES = [
 
 const DEFAULT_LOCALE = 'en';
 
-/** Catalogues that have actually arrived. English is always here. */
-const CATALOGUES = { [DEFAULT_LOCALE]: EN };
+/** Catalogs that have actually arrived. English is always here. */
+const CATALOGS = { [DEFAULT_LOCALE]: EN };
 
 /** In-flight loads, so choosing a language twice fetches it once. */
 const pending = new Map();
 
 /**
- * Locales whose BASE catalogue is in memory.
+ * Locales whose BASE catalog is in memory.
  *
- * Separate from CATALOGUES, and the separation is the point. A deferred panel
+ * Separate from CATALOGS, and the separation is the point. A deferred panel
  * registers its strings for every locale, not only the one on screen - so a
- * reader in English who opens one ends up with a CATALOGUES.es holding that
+ * reader in English who opens one ends up with a CATALOGS.es holding that
  * panel's dozen strings and nothing else. Keying "is this locale loaded?" off
- * the object's existence then made that partial catalogue stand in for the real
+ * the object's existence then made that partial catalog stand in for the real
  * one: loadLocale returned early, es.js was never fetched, and switching to
  * Spanish produced an English interface with a dozen Spanish labels in it. No
  * error, no warning, and the strings that were present made it look deliberate.
@@ -88,9 +88,9 @@ const pending = new Map();
 const baseLoaded = new Set([DEFAULT_LOCALE]);
 
 /**
- * Strings registered at runtime, per locale, kept beside the base catalogues.
+ * Strings registered at runtime, per locale, kept beside the base catalogs.
  *
- * Beside rather than merged into, so that CATALOGUES[id] stays the object the
+ * Beside rather than merged into, so that CATALOGS[id] stays the object the
  * locale's own module exported. Merging a copy over it worked and cost
  * something subtle: two tests delete a key from the exported object to prove
  * the English fallback, and against a copy the deletion is invisible and the
@@ -101,12 +101,12 @@ const baseLoaded = new Set([DEFAULT_LOCALE]);
 const registered = Object.create(null);
 
 /**
- * Make sure a locale's catalogue is in memory.
+ * Make sure a locale's catalog is in memory.
  * @param {string} id - Locale id
- * @returns {Promise<Object>} The catalogue, or English if it cannot be had
+ * @returns {Promise<Object>} The catalog, or English if it cannot be had
  */
 export async function loadLocale(id) {
-  if (baseLoaded.has(id)) return CATALOGUES[id];
+  if (baseLoaded.has(id)) return CATALOGS[id];
   const entry = LOCALES.find(l => l.id === id);
   if (!entry?.load) return EN;
   if (!pending.has(id)) {
@@ -114,10 +114,10 @@ export async function loadLocale(id) {
       id,
       entry
         .load()
-        .then(catalogue => {
-          CATALOGUES[id] = catalogue;
+        .then(catalog => {
+          CATALOGS[id] = catalog;
           baseLoaded.add(id);
-          return catalogue;
+          return catalog;
         })
         .catch(err => {
           // A locale that will not load is not a broken application: every
@@ -133,7 +133,7 @@ export async function loadLocale(id) {
   return pending.get(id);
 }
 
-/** @returns {boolean} True when a locale's catalogue is in memory */
+/** @returns {boolean} True when a locale's catalog is in memory */
 export const isLocaleLoaded = id => baseLoaded.has(id);
 
 /**
@@ -141,7 +141,7 @@ export const isLocaleLoaded = id => baseLoaded.has(id);
  *
  * For strings that belong to a lazily loaded chunk. A single message object
  * cannot be code-split - esbuild follows the static import and the whole
- * catalogue lands in the entry graph - so the strings for panels most visitors
+ * catalog lands in the entry graph - so the strings for panels most visitors
  * never open live in their own module and register themselves when that panel
  * arrives.
  *
@@ -149,7 +149,7 @@ export const isLocaleLoaded = id => baseLoaded.has(id);
  * never removes a key, so a re-registration cannot blank a string that is
  * already on screen.
  *
- * @param {string} locale - Which catalogue to extend
+ * @param {string} locale - Which catalog to extend
  * @param {object} messages - Ids to strings
  * @returns {void}
  */
@@ -163,7 +163,7 @@ export function registerMessages(locale, messages) {
 
   // Tell everything that shows text, exactly as a language change would.
   //
-  // Registering is a change to the catalogue, and whether a panel rendered
+  // Registering is a change to the catalog, and whether a panel rendered
   // before or after its own strings arrived is a race nobody should have to
   // reason about. It is winnable in the normal path - the bridges await this
   // before importing their panel - and losable the moment anything drives a
@@ -182,7 +182,7 @@ let current = DEFAULT_LOCALE;
 const listeners = new Set();
 
 /**
- * Tell everything that shows text that the catalogue it read from has changed.
+ * Tell everything that shows text that the catalog it read from has changed.
  *
  * Called for a language change and for a late registration alike, because to
  * a panel holding rendered strings the two are the same event.
@@ -270,18 +270,18 @@ function selectPlural(forms, n, locale) {
 }
 
 /**
- * Look a message up in a catalogue, without falling back.
- * @param {Object} catalogue - A locale's map
+ * Look a message up in a catalog, without falling back.
+ * @param {Object} catalog - A locale's map
  * @param {string} id - Message id
  * @returns {string|Object|undefined} The raw entry
  */
-const raw = (catalogue, id) =>
-  catalogue && Object.prototype.hasOwnProperty.call(catalogue, id)
-    ? catalogue[id]
+const raw = (catalog, id) =>
+  catalog && Object.prototype.hasOwnProperty.call(catalog, id)
+    ? catalog[id]
     : undefined;
 
 /**
- * Ids that belong to a deferred namespace and are not in the catalogues yet.
+ * Ids that belong to a deferred namespace and are not in the catalogs yet.
  *
  * Held rather than reported. The start-up sweep translates index.html before
  * any panel has been opened, so the forty-odd deferred data-i18n attributes in
@@ -299,9 +299,9 @@ let deferredSettled = false;
  * Three cases, and they are not the same fault:
  *
  *   - an id in no deferred namespace is missing outright, and is reported now
- *   - an id in a deferred namespace, before that catalogue has settled, is
+ *   - an id in a deferred namespace, before that catalog has settled, is
  *     held: it is probably on its way
- *   - the same id after the catalogue has settled really is missing, and gets
+ *   - the same id after the catalog has settled really is missing, and gets
  *     the warning it has earned
  *
  * Nothing is silenced globally. Everything held is either resolved or reported.
@@ -321,7 +321,7 @@ function reportMissing(id) {
 }
 
 /**
- * The deferred catalogues have arrived, or have failed to.
+ * The deferred catalogs have arrived, or have failed to.
  *
  * Called by ./deferredMessages.js either way, because a load that failed
  * answers the question just as well as one that succeeded: whatever is still
@@ -338,7 +338,7 @@ export function settleDeferredMessages() {
     missing.add(id);
     console.warn(
       `[i18n] no message for "${id}" (a deferred namespace, but not in the ` +
-        'deferred catalogue either)'
+        'deferred catalog either)'
     );
   }
   held.clear();
@@ -355,10 +355,10 @@ export function resetMissingForTests() {
 /** Whether an id resolves in the active locale or in English. */
 function resolves(id) {
   let entry = raw(registered[current], id);
-  if (entry === undefined) entry = raw(CATALOGUES[current], id);
+  if (entry === undefined) entry = raw(CATALOGS[current], id);
   if (entry === undefined && current !== DEFAULT_LOCALE) {
     entry = raw(registered[DEFAULT_LOCALE], id);
-    if (entry === undefined) entry = raw(CATALOGUES[DEFAULT_LOCALE], id);
+    if (entry === undefined) entry = raw(CATALOGS[DEFAULT_LOCALE], id);
   }
   return entry !== undefined;
 }
@@ -374,10 +374,10 @@ export function t(id, vars) {
   // Registered strings first, then the locale's own file, then English. A
   // panel's late-arriving prose should win over nothing, and lose to nothing.
   let entry = raw(registered[current], id);
-  if (entry === undefined) entry = raw(CATALOGUES[current], id);
+  if (entry === undefined) entry = raw(CATALOGS[current], id);
   if (entry === undefined && current !== DEFAULT_LOCALE) {
     entry = raw(registered[DEFAULT_LOCALE], id);
-    if (entry === undefined) entry = raw(CATALOGUES[DEFAULT_LOCALE], id);
+    if (entry === undefined) entry = raw(CATALOGS[DEFAULT_LOCALE], id);
   }
   if (entry === undefined) {
     reportMissing(id);
@@ -401,20 +401,20 @@ export function t(id, vars) {
  */
 export const hasMessage = id =>
   raw(registered[current], id) !== undefined ||
-  raw(CATALOGUES[current], id) !== undefined;
+  raw(CATALOGS[current], id) !== undefined;
 
 /**
- * How much of the catalogue a locale actually carries.
+ * How much of the catalog a locale actually carries.
  * @param {string} [id] - Locale id
  * @returns {{translated: number, total: number}} Counts against English
  */
 export function coverageOf(id = current) {
-  const total = Object.keys(CATALOGUES[DEFAULT_LOCALE]).length;
+  const total = Object.keys(CATALOGS[DEFAULT_LOCALE]).length;
   // A locale that has not been fetched reports nothing translated, which is
   // true of what is in memory and is only ever asked after a locale is active.
-  const cat = CATALOGUES[id] || {};
+  const cat = CATALOGS[id] || {};
   let translated = 0;
-  for (const key of Object.keys(CATALOGUES[DEFAULT_LOCALE])) {
+  for (const key of Object.keys(CATALOGS[DEFAULT_LOCALE])) {
     if (Object.prototype.hasOwnProperty.call(cat, key)) translated++;
   }
   return { translated, total };
@@ -451,7 +451,7 @@ export function num(n) {
  * touch the simulation, the scenario, the seed or the share state. Every
  * listener here redraws text; none of them rebuilds a world.
  *
- * The catalogue is fetched first when it is not already in memory, so the
+ * The catalog is fetched first when it is not already in memory, so the
  * interface never repaints into a half-loaded language. Callers that do not
  * await simply see the change land a tick later.
  *
@@ -498,7 +498,7 @@ export function onLocaleChange(fn) {
 /**
  * The locale to open in, before any listener exists.
  *
- * A stored choice wins. Failing that the browser's language is honoured only
+ * A stored choice wins. Failing that the browser's language is honored only
  * when this build actually ships it, which keeps a French or Japanese visitor
  * in English rather than in a language they did not ask for and cannot read
  * any better. Region subtags are ignored: es-MX and es-419 are both `es` here.
@@ -530,7 +530,7 @@ export function preferredLocale() {
  */
 export function initI18n() {
   const wanted = preferredLocale();
-  if (wanted === DEFAULT_LOCALE || CATALOGUES[wanted]) {
+  if (wanted === DEFAULT_LOCALE || CATALOGS[wanted]) {
     return setLocale(wanted, { persist: false });
   }
   document.documentElement.setAttribute('lang', wanted);

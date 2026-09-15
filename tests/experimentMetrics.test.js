@@ -154,12 +154,12 @@ describe('reducing a run to one number per metric', () => {
     { t: 2, separation: 6, energy_drift: 0.5, __separation: 1 },
   ];
 
-  test('an oscillating quantity is summarised by its mean', () => {
+  test('an oscillating quantity is summarized by its mean', () => {
     const out = reduceRun(samples, [METRICS.SEPARATION]);
     expect(out[METRICS.SEPARATION]).toMatchObject({ value: 4, kind: 'mean' });
   });
 
-  test('an accumulating quantity is summarised by its final value', () => {
+  test('an accumulating quantity is summarized by its final value', () => {
     const out = reduceRun(samples, [METRICS.ENERGY_DRIFT]);
     expect(out[METRICS.ENERGY_DRIFT]).toMatchObject({
       value: 0.5,

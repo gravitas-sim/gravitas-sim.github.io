@@ -5,7 +5,7 @@
 //   npm run test:policy
 //
 // The browser suite had eight runtime skips. Three of them were required
-// application behaviour wearing a capability's clothes:
+// application behavior wearing a capability's clothes:
 //
 //   inspector.spec.js       "this build has no energy tab" - so a build that
 //                           lost the energy tab passed this test.
@@ -23,7 +23,7 @@
 // capability named, or it is a failure.
 //
 // What this does not do is guess. It reads the source and reports what it
-// finds; the judgement about which category a skip belongs in is made once,
+// finds; the judgment about which category a skip belongs in is made once,
 // here, by a person.
 // =============================================================================
 
@@ -120,7 +120,7 @@ export async function checkTestPolicy() {
         `${where}: runtime skip is not in the allowlist. If it is a capability ` +
           'the machine may lack, add it to ALLOWED_SKIPS in ' +
           'tools/check-test-policy.mjs with the capability named and why. If ' +
-          'it is application behaviour, assert it instead - a skip there is a ' +
+          'it is application behavior, assert it instead - a skip there is a ' +
           'test that passes when the feature is missing.'
       );
     });

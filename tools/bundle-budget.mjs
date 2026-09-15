@@ -61,17 +61,17 @@ const BUDGETS = [
       'Neither three.js nor Chart.js is in here; both are deferred.\n\n' +
       'The reliability check took it to 831.7 KB, over. Rather than ask for ' +
       'another two kilobytes, the 92 bench.* strings went out to the deferred ' +
-      'catalogue: the bench is loaded on first press and most visitors never ' +
+      'catalog: the bench is loaded on first press and most visitors never ' +
       'press it, so its prose was being downloaded by everyone who loads the ' +
       'site. bench.error.load stays behind, because it is what the bridge says ' +
       'when that import fails. 826.3 KB, and the rule above held.\n\n' +
-      'That instruction was then tested and honoured. The binary, gravity ' +
+      'That instruction was then tested and honored. The binary, gravity ' +
       'assist and RV-analysis work took this to 868 KB, and the answer was ' +
       'four deferrals rather than a bigger number: the two scenario-specific ' +
       'panels now arrive with their scenarios, the export dialog and every CSV ' +
       'builder behind it arrive on the first press of the export button, and ' +
       'the twelve kilobytes of prose those panels needed moved into a second ' +
-      'catalogue that registers itself when they load. 868 KB back to 828 KB, ' +
+      'catalog that registers itself when they load. 868 KB back to 828 KB, ' +
       'against a baseline of 821.8 KB before the work started.\n\n' +
       'NOT raised for /teaching/, which is worth recording because it is a ' +
       'whole public page: 828.6 KB before it, 829.0 KB after. Its share of ' +
@@ -80,7 +80,7 @@ const BUDGETS = [
       'outside the entry graph by construction - js/teachingPage.js is compiled ' +
       'to its own file the way the instructor portal and the validation page ' +
       'are, its hundred-odd strings are in js/i18n/en.teaching.js rather than ' +
-      "in the application's catalogue, and css/teaching.css is built to its " +
+      "in the application's catalog, and css/teaching.css is built to its " +
       'own stylesheet and linked only from that page instead of being ' +
       'concatenated into css/app.css, which is the half of this budget that ' +
       'the page would otherwise have grown. A document page can be as large ' +
@@ -115,7 +115,7 @@ const BUDGETS = [
       'trade the initial budget above asks every new feature to make. Raising ' +
       'this number to absorb something that should have been deferred would ' +
       'be the opposite, and is not what happened.\n\n' +
-      'Raised again from 2550 to 2650 on the same accounting. The manoeuvre ' +
+      'Raised again from 2550 to 2650 on the same accounting. The maneuver ' +
       'planner and the Hohmann lesson are a new instrument and a new lesson, ' +
       'which is what the paragraph above says this budget is loose for; and ' +
       'the 112 inv.* strings that arrived here did so by leaving the start-up ' +
@@ -128,7 +128,7 @@ const BUDGETS = [
       'for, and every byte of them is behind js/notebookBridge.js - a 2 KB ' +
       'eager module that is a rail button and nothing else. The trade the ' +
       'initial budget demands was made in the same change: the resW, chaosW ' +
-      'and energyW widget catalogues moved out of the start-up path, where ' +
+      'and energyW widget catalogs moved out of the start-up path, where ' +
       'nothing could render them - js/widgets.js is reached only from the ' +
       'lazy js/investigations.js - and the initial download went DOWN from ' +
       '829.7 KB to 828.6 KB across a feature that added a panel, a report ' +
@@ -151,12 +151,12 @@ const BUDGETS = [
       'lesson is 17.5 KB and its Spanish shadow 15.3 KB; js/rvCompare.js is ' +
       '4.1 KB and js/rvScheduleControls.js 3.1 KB; the instructor guide entry ' +
       'is about 11 KB inside the portal chunk, and the rvsched.* prose about ' +
-      '4.5 KB across two catalogues. A lesson and an instrument is exactly ' +
+      '4.5 KB across two catalogs. A lesson and an instrument is exactly ' +
       'what the paragraph at the top of this reason says this budget is ' +
       'loose for. The trade the initial budget demands was made in the same ' +
       "change and in the same direction: the schedule fields' prose and the " +
       'rules behind them left the start-up path for js/rvScheduleControls.js ' +
-      'and the deferred catalogue - the synthetic run is opt-in and its ' +
+      'and the deferred catalog - the synthetic run is opt-in and its ' +
       'section is hidden until it is switched on, which is the moment the ' +
       'panel registers them - and the initial download came back from ' +
       '832.9 KB to 829.8 KB. The initial limit was NOT touched.\n\n' +
@@ -166,7 +166,7 @@ const BUDGETS = [
       'lesson chunks went 31.8 to 47.7 and 31.5 to 46.1 - and ' +
       "js/experiments/binarySweep.js with the panel's sweep controls and the " +
       'notebook capture is the rest, with about 6 KB of prose in two ' +
-      'catalogues. A lesson and an instrument is what the paragraph at the ' +
+      'catalogs. A lesson and an instrument is what the paragraph at the ' +
       'top of this reason says this budget is loose for. The initial download ' +
       "did NOT move: its share of this work is the sweep section's styling, " +
       "and the section is built out of the panel system's existing classes " +
@@ -178,7 +178,7 @@ const BUDGETS = [
       '19.8 to 31.8 KB and its Spanish shadow 19.3 to 29.7 - six new screens ' +
       'and three rewritten ones - and the instructor guide entry took ' +
       'instructorPortal.js from 313.0 to 322.0 KB. The two deferred prose ' +
-      'catalogues grew 9.7 and 9.2 KB, and are counted twice because ' +
+      'catalogs grew 9.7 and 9.2 KB, and are counted twice because ' +
       'validationWorker.js bundles both of them as well: that one chunk ' +
       'accounts for 18.9 KB of the total on its own. The rest is ' +
       'js/experiments/assistSweep.js, js/experiments/frameRate.js, the ' +
@@ -200,7 +200,7 @@ const BUDGETS = [
       'steps of prose with a longer explanation of what the numerical control ' +
       'now does and why the old instruction was wrong - and Where Can It Get ' +
       'To? went 16.3 to 20.0 and 17.0 to 20.8 for two new screens. The two ' +
-      'deferred prose catalogues grew 12.3 and 11.6 KB and are counted twice, ' +
+      'deferred prose catalogs grew 12.3 and 11.6 KB and are counted twice, ' +
       'because validationWorker.js bundles both: that chunk alone accounts ' +
       'for 24.2 KB of the total. The rest is js/experiments/neckPair.js, ' +
       "js/experiments/chaosPair.js, the two panels' sections and the notebook " +
@@ -251,7 +251,7 @@ const BUDGETS = [
       'about 22 KB; the bundled GW150914 figure data 23 KB, which is eight ' +
       'published traces at 4096 Hz and is the only reason anything in this ' +
       'feature can be called a measurement; and the prose about 20 KB across ' +
-      'two catalogues. A lesson and an instrument is what the paragraph at ' +
+      'two catalogs. A lesson and an instrument is what the paragraph at ' +
       'the top of this reason says this budget is loose for, and the 24-step ' +
       'lesson itself is still to come, which is what the headroom is for.\n\n' +
       'The trade the initial budget demands was made, and it more than paid ' +
@@ -260,7 +260,7 @@ const BUDGETS = [
       'start-up download from 833.8 to 841.3 KB. Nothing was raised. What ' +
       'paid for it was thirteen kilobytes of instrument labels - the ' +
       'dark-matter, transit and black-hole widget families, 243 strings in ' +
-      'two languages - which were in the start-up catalogue and could not be ' +
+      'two languages - which were in the start-up catalog and could not be ' +
       'rendered from it: all three modules are reachable only through ' +
       'js/widgets.js, which only the lazy lesson engine imports. Each now ' +
       'calls ensureDeferredMessages() itself, the way chaosW and resW already ' +
@@ -289,7 +289,7 @@ const BUDGETS = [
       'dataset rather than code and is the reason the tracks were thinned at ' +
       'all. Twenty-seven is the lab itself, two thirds of it the three ' +
       'widgets. The remaining twenty is a hundred and seventy labels in each ' +
-      'of two languages, in the deferred half of the catalogue where every ' +
+      'of two languages, in the deferred half of the catalog where every ' +
       'other instrument\u2019s prose lives.\n\n' +
       'The initial download went DOWN, from 830.0 to 825.7 KB against a limit ' +
       'that has not moved. The lab itself is reachable only through ' +
@@ -333,16 +333,16 @@ const BUDGETS = [
       'The initial download did NOT move and its limit was NOT touched: ' +
       '825.8 KB either side, against 830.0.' +
       '\n\nRaised from 3650 to 3760 for the beginner gravitational-wave lesson, and this one carries a deferral in the other direction. Measured from a fresh build at 418f142: 3608.4 to 3730.7 KB. Of the 122.3 KB, 37 is the lesson chunk itself and 28 its Spanish shadow - twenty-four screens of prose neither of which a visitor fetches unless they open the lesson - and 17 is the instructor guide inside the portal chunk where every other guide already lives. This is the twenty-second lesson, and a lesson is the first thing the paragraph at the top of this reason says this budget is loose for.' +
-      '\n\nThe remaining 12.6 KB arrived here on purpose, out of the budget above. lessonFn.* is every sentence a lesson computes - 133 probe rows and answer-checking messages, keyed by what they say - and it was in the start-up catalogue where nothing could render it: js/i18n/lesson.js is its only reader, js/investigations.js its only importer, and js/investigationsLoader.js already awaits the deferred catalogue before initInvestigations(). Every visitor was downloading all 133 in order to render none.' +
+      '\n\nThe remaining 12.6 KB arrived here on purpose, out of the budget above. lessonFn.* is every sentence a lesson computes - 133 probe rows and answer-checking messages, keyed by what they say - and it was in the start-up catalog where nothing could render it: js/i18n/lesson.js is its only reader, js/investigations.js its only importer, and js/investigationsLoader.js already awaits the deferred catalog before initInvestigations(). Every visitor was downloading all 133 in order to render none.' +
       '\n\nSo the initial download went DOWN across this lesson, and below where it started: 829.8 KB at 418f142, 832.2 KB with the lesson in and the limit breached by 2.2, and 819.6 KB once lessonFn moved - against a limit that has not moved. A dead-CSS sweep was tried first and found nothing; the previous pass had already taken it.' +
-      '\n\nRaised from 3760 to 3800 for the main-scene pass over five existing lessons - Weighing the Stars, Black Holes by the Numbers, Finding Planets by Their Tug, The Goldilocks Question and Can You Detect This Planet? Measured from the previous entry: 3730.7 to 3768.1 KB. Most of the 37.4 is prose. The five lessons gained scene instructions, model-limit notes and probe readouts in English and again in Spanish; the instructor guides gained expectations for the new screens and a rewritten model-notes section each, inside the portal chunk where every other guide already lives; and the two new notebook entries - a binary orbit measured off the scene, and a run of horizon trials - brought about forty strings in each of two deferred catalogues, which validationWorker.js bundles as well and so counts twice.' +
-      "\n\nRaised from 3800 to 3830 for finishing A Universe of Stars, measured against 0b3a81c: 3781.7 to 3804.5 KB. Two thirds of it is Spanish. The Spanish shadow went 27.7 to 36.6 KB - two new screens, and the star names, which had never been translated: a name is read out on the canvas, in the object list, on the comparison card and in a capture, so twenty-five stage blocks now carry one. The English lesson went 46.8 to 50.9 for the same two screens plus a written explanation on the radius-ratio step. The instrument chunk took 4.0 KB for the shared sample: one resolver both the canvas and the comparison card read, pins that carry an identity, the focus control, and the population panel driving the scene's own brightness cut. The instructor guide took 2.4 KB and the two prose catalogues 2.1, which validationWorker.js bundles as well and so counts again." +
+      '\n\nRaised from 3760 to 3800 for the main-scene pass over five existing lessons - Weighing the Stars, Black Holes by the Numbers, Finding Planets by Their Tug, The Goldilocks Question and Can You Detect This Planet? Measured from the previous entry: 3730.7 to 3768.1 KB. Most of the 37.4 is prose. The five lessons gained scene instructions, model-limit notes and probe readouts in English and again in Spanish; the instructor guides gained expectations for the new screens and a rewritten model-notes section each, inside the portal chunk where every other guide already lives; and the two new notebook entries - a binary orbit measured off the scene, and a run of horizon trials - brought about forty strings in each of two deferred catalogs, which validationWorker.js bundles as well and so counts twice.' +
+      "\n\nRaised from 3800 to 3830 for finishing A Universe of Stars, measured against 0b3a81c: 3781.7 to 3804.5 KB. Two thirds of it is Spanish. The Spanish shadow went 27.7 to 36.6 KB - two new screens, and the star names, which had never been translated: a name is read out on the canvas, in the object list, on the comparison card and in a capture, so twenty-five stage blocks now carry one. The English lesson went 46.8 to 50.9 for the same two screens plus a written explanation on the radius-ratio step. The instrument chunk took 4.0 KB for the shared sample: one resolver both the canvas and the comparison card read, pins that carry an identity, the focus control, and the population panel driving the scene's own brightness cut. The instructor guide took 2.4 KB and the two prose catalogs 2.1, which validationWorker.js bundles as well and so counts again." +
       "\n\nThe initial download did NOT move and its limit was not touched: 821.3 KB before, 821.6 after, against 830.0. Its share of this work is three lines - the control rail counted into the stage fit, the selection-change repaint in the lesson runtime, and the guard that stops a press on the inspector's own header being read as a drag." +
-      '\n\nThe code is the small half. js/lesson/barycentre.js is 4.6 KB of pure arithmetic, and the four new stage kinds in js/lessonStage.js - a star pair, a black hole with orbiters, an equal-mass comparison and a star with elliptical planets - are about 9 KB between them. All of it is behind js/widgets.js and js/investigations.js, which only the lazy lesson engine imports.' +
-      '\n\nRaised from 3830 to 3870 for finishing the two gravitational-wave lessons, measured against the previous entry: 3804.5 to 3846.4 KB. The beginner lesson gained three screens - a static mass, a pulsing sphere and a binary, each one staged rather than described - and split the observatory screen in two; with its Spanish shadow behind it that is about half the total. js/lesson/gwWavefronts.js is 4.4 KB of pure geometry, and the widget half that drives it - the source selector, the amplification control, the L-shaped arms, and the polarisation and component rows - is another 6. The instructor guide took 4.5 KB inside the portal chunk. The rest is prose in two catalogues, which validationWorker.js bundles as well and so counts twice; the source and polarisation rows are long on purpose, because they are where the lesson says what the model did and did not decide.' +
-      "\n\nRaised from 3870 to 3890 for the prediction loops and the legibility pass, measured against the previous entry: 3846.4 to 3874.1 KB. Itemised, because this one is neither a lesson nor an instrument and so is not what the paragraph at the top says this budget is loose for. About twenty-two of it is the loop work: seven new steps across six lessons with their Spanish shadows behind them, the instructor expectations for the two new measurements, and the held-prediction machinery - eighty reveal declarations, the verdict block that shows a reader what they predicted against what happened, and its strings in two catalogues, which validationWorker.js bundles as well and so counts twice. The remaining five are accessibility: every plotted point is now also a row in a table beside the chart, and the object list's role chips are translated - sixty labels in each language, which is the largest single item here and is the price of not showing a Spanish reader an English word beside a Spanish name. Half of what those sixty would have cost was paid back in the same change: the label is derived from the key where derivation is right, and a chip whose label would only repeat the body's own name is not drawn at all.\n\nThe initial download was NOT raised and ended this work inside its untouched limit: 826.7 KB before, 829.4 after, against 830.0. The sixty role labels went to the deferred catalogue rather than the start-up one the moment they pushed it over - only the lesson engine reads them, and it is lazy - which is the trade that budget asks every new feature to make.\n\nAnd then put back to 3870, because the /teaching/ pass found the saving that pays for all of it and more. js/activities/activityBridge.js imported the whole showcase page's catalogue - its cycle, its journey, its instrument descriptions, its demonstrations, its access notes and its evaluation template, in both languages - in order to put a title on an assignment. None of that prose can be rendered by the application. The `teach.activity.*` half is js/i18n/en.activities.js now and the bridge imports only that; ./en.teaching.js spreads it back in, so the page and every test that reads one catalogue are unchanged. 3900.9 KB to 3839.8, which is 30 below the number this was before the raise. The raise above is left on the record rather than deleted: it was real while it stood, and the accounting is worth more than a tidy history." +
-      '\n\nThe initial download stayed inside its untouched limit, and the trade this budget asks for was made in the same change: 826.7 KB of 830.0. Its share of the work is the wavefront painter in js/render.js and one overlay slot in js/appState.js. What pays for them went the other way - the five summary.life.* sentences moved out of the start-up catalogue into the deferred one, because a lesson overlay is the only thing that reads them and a visitor who never opens a lesson was downloading all five in both languages in order to render none.' +
-      '\n\nThe initial download was NOT raised and had room: 819.6 KB before this pass and 821.1 after, against an untouched 830.0. Its share is the barycentre overlay in js/render.js, one state slot, the probe-context accessors, and two options in the event-watch markup - the parts that genuinely have to be there before a lesson opens.',
+      '\n\nThe code is the small half. js/lesson/barycenter.js is 4.6 KB of pure arithmetic, and the four new stage kinds in js/lessonStage.js - a star pair, a black hole with orbiters, an equal-mass comparison and a star with elliptical planets - are about 9 KB between them. All of it is behind js/widgets.js and js/investigations.js, which only the lazy lesson engine imports.' +
+      '\n\nRaised from 3830 to 3870 for finishing the two gravitational-wave lessons, measured against the previous entry: 3804.5 to 3846.4 KB. The beginner lesson gained three screens - a static mass, a pulsing sphere and a binary, each one staged rather than described - and split the observatory screen in two; with its Spanish shadow behind it that is about half the total. js/lesson/gwWavefronts.js is 4.4 KB of pure geometry, and the widget half that drives it - the source selector, the amplification control, the L-shaped arms, and the polarisation and component rows - is another 6. The instructor guide took 4.5 KB inside the portal chunk. The rest is prose in two catalogs, which validationWorker.js bundles as well and so counts twice; the source and polarisation rows are long on purpose, because they are where the lesson says what the model did and did not decide.' +
+      "\n\nRaised from 3870 to 3890 for the prediction loops and the legibility pass, measured against the previous entry: 3846.4 to 3874.1 KB. Itemised, because this one is neither a lesson nor an instrument and so is not what the paragraph at the top says this budget is loose for. About twenty-two of it is the loop work: seven new steps across six lessons with their Spanish shadows behind them, the instructor expectations for the two new measurements, and the held-prediction machinery - eighty reveal declarations, the verdict block that shows a reader what they predicted against what happened, and its strings in two catalogs, which validationWorker.js bundles as well and so counts twice. The remaining five are accessibility: every plotted point is now also a row in a table beside the chart, and the object list's role chips are translated - sixty labels in each language, which is the largest single item here and is the price of not showing a Spanish reader an English word beside a Spanish name. Half of what those sixty would have cost was paid back in the same change: the label is derived from the key where derivation is right, and a chip whose label would only repeat the body's own name is not drawn at all.\n\nThe initial download was NOT raised and ended this work inside its untouched limit: 826.7 KB before, 829.4 after, against 830.0. The sixty role labels went to the deferred catalog rather than the start-up one the moment they pushed it over - only the lesson engine reads them, and it is lazy - which is the trade that budget asks every new feature to make.\n\nAnd then put back to 3870, because the /teaching/ pass found the saving that pays for all of it and more. js/activities/activityBridge.js imported the whole showcase page's catalog - its cycle, its journey, its instrument descriptions, its demonstrations, its access notes and its evaluation template, in both languages - in order to put a title on an assignment. None of that prose can be rendered by the application. The `teach.activity.*` half is js/i18n/en.activities.js now and the bridge imports only that; ./en.teaching.js spreads it back in, so the page and every test that reads one catalog are unchanged. 3900.9 KB to 3839.8, which is 30 below the number this was before the raise. The raise above is left on the record rather than deleted: it was real while it stood, and the accounting is worth more than a tidy history." +
+      '\n\nThe initial download stayed inside its untouched limit, and the trade this budget asks for was made in the same change: 826.7 KB of 830.0. Its share of the work is the wavefront painter in js/render.js and one overlay slot in js/appState.js. What pays for them went the other way - the five summary.life.* sentences moved out of the start-up catalog into the deferred one, because a lesson overlay is the only thing that reads them and a visitor who never opens a lesson was downloading all five in both languages in order to render none.' +
+      '\n\nThe initial download was NOT raised and had room: 819.6 KB before this pass and 821.1 after, against an untouched 830.0. Its share is the barycenter overlay in js/render.js, one state slot, the probe-context accessors, and two options in the event-watch markup - the parts that genuinely have to be there before a lesson opens.',
   },
 ];
 

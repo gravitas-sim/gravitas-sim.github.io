@@ -2,7 +2,7 @@
 // Registering the deferred panels' strings
 // -----------------------------------------------------------------------------
 // One call, made by each bridge that loads a panel whose strings were split
-// out of the main catalogue. Imported from inside those lazy chunks, so the
+// out of the main catalog. Imported from inside those lazy chunks, so the
 // prose travels with the code that uses it.
 // =============================================================================
 
@@ -15,7 +15,7 @@ import { applyTranslations } from './dom.js';
  *
  * A boolean was not enough. `done = true` was set before the awaits, so a
  * second caller arriving while the imports were still in the air returned
- * immediately and rendered against a catalogue that had not arrived - which is
+ * immediately and rendered against a catalog that had not arrived - which is
  * the ordinary case, because a scenario that brings a panel and a lesson that
  * opens a tool ask within a frame of each other. Sharing the promise makes
  * every caller wait for the same work exactly once.
@@ -25,7 +25,7 @@ import { applyTranslations } from './dom.js';
 let loading = null;
 
 /**
- * True once the strings are actually in the catalogues.
+ * True once the strings are actually in the catalogs.
  *
  * Separate from `loading`, because they answer different questions and the
  * exported check used to answer the wrong one: `loading !== null` is true the
@@ -38,7 +38,7 @@ let registered_ = false;
 let lastFailure = null;
 
 /**
- * Add the deferred-panel strings to the catalogues, once.
+ * Add the deferred-panel strings to the catalogs, once.
  *
  * Both locales are registered rather than only the current one: the reader can
  * switch language with the panel open, and fetching a second small module at
@@ -67,7 +67,7 @@ export function ensureDeferredMessages() {
     // registers before it renders - which is true of the panels' own
     // JavaScript and false of their markup. Forty-one of these strings are
     // data-i18n attributes in index.html, and the start-up sweep in ./dom.js
-    // had already walked past them while the catalogue had no such ids: every
+    // had already walked past them while the catalog had no such ids: every
     // slider label, every button and both panel hints were left showing a raw
     // message id.
     //
@@ -108,7 +108,7 @@ export function ensureDeferredMessages() {
     loading = null;
     lastFailure = err;
     // A failure settles the question too: whatever was being held for these
-    // catalogues is not coming, the reader is looking at raw ids, and saying so
+    // catalogs is not coming, the reader is looking at raw ids, and saying so
     // is the whole point of not having silenced it.
     settleDeferredMessages();
     console.warn('[i18n] deferred messages did not load:', err);
@@ -117,7 +117,7 @@ export function ensureDeferredMessages() {
   return loading;
 }
 
-/** @returns {boolean} Whether the deferred strings are in the catalogues */
+/** @returns {boolean} Whether the deferred strings are in the catalogs */
 export const deferredMessagesReady = () => registered_;
 
 /** @returns {?Error} Why the last attempt failed, or null */

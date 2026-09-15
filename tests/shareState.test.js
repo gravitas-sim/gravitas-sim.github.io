@@ -477,7 +477,7 @@ describe('the observing context survives a share link', () => {
     expect(back.distancePc).toBeCloseTo(480.5, 6);
   });
 
-  test('a body-centred reference frame comes back with its target', async () => {
+  test('a body-centerd reference frame comes back with its target', async () => {
     const back = await roundTrip(context);
     expect(back.frame.mode).toBe('body');
     expect(back.frame.objectId).toBe(42);
