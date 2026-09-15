@@ -223,6 +223,14 @@ npm run docs:check        # the counts in the docs still match the source
 npm run manual            # rebuild the user manual PDF from manual/*.tex
 ```
 
+`npm run build` needs the instructor passphrase, because it re-encrypts the
+teaching materials on the way past. Without one it stops and says so, which is
+what a fresh clone or a release archive will see. Build with `npm run build:ci`
+instead: it renders every guide and answer key for real and encrypts them with a
+random throwaway secret, so the site builds and the materials in it cannot be
+opened by anyone — including us. `npm run archive:check` restores the archive
+into a temporary directory and does exactly this, end to end.
+
 `npm run build` writes a self-contained `dist/` that can be published as-is. It
 reports what the browser downloads at start-up separately from what is deferred:
 

@@ -22,6 +22,7 @@
     "social-card": "node tools/make-social-card.js",
     "build:instructors": "node tools/build-instructor-materials.js",
     "instructors:check": "node tools/build-instructor-materials.js --check",
+    "archive:check": "node tools/archive-check.mjs",
     "build:ci": "node tools/make-social-card.js && node tools/build-instructor-materials.js --unpublishable && node tools/build-service-worker.mjs && node build.js",
     "thumbnails": "node tools/generate-scenario-thumbnails.mjs",
     "thumbnails:check": "node tools/generate-scenario-thumbnails.mjs --check",

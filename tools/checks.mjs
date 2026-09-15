@@ -366,6 +366,17 @@ export const CHECKS = [
     group: 'generated',
   },
   {
+    id: 'archive',
+    label: 'the release archive restores and builds',
+    command: ['npm', 'run', 'archive:check'],
+    tier: 'slow',
+    ci: null,
+    why:
+      'restores `git archive` into a temporary directory and runs npm ci ' +
+      'there; a release is judged here rather than on every push',
+    group: 'generated',
+  },
+  {
     id: 'instructors',
     label: 'instructor bundle is built from these sources',
     command: ['npm', 'run', 'instructors:check'],
