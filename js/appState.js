@@ -300,6 +300,38 @@ export const DEFAULT_SETTINGS = {
   preview_gravity_boost: 4.0,
 };
 
+/**
+ * Setting names that have changed, and what they used to be called.
+ *
+ * A key in DEFAULT_SETTINGS is not prose. It is the name a saved world and a
+ * share link store the value under, and both of those outlive the rename.
+ * `trail_colour_mode` became `trail_color_mode` when the source was made
+ * consistently American; a link or a save written before that carries the old
+ * spelling, and assigning it into SETTINGS sets a property nothing reads - so
+ * the trails quietly come back the default colour rather than the one the
+ * sender was demonstrating, with nothing to say a setting was dropped.
+ */
+export const RENAMED_SETTINGS = Object.freeze({
+  trail_colour_mode: 'trail_color_mode',
+});
+
+/**
+ * Rewrite any old setting names in something that was stored earlier.
+ *
+ * @param {object} stored - Settings as a save or a link carried them
+ * @returns {object} The same settings under the names the code reads
+ */
+export function withCurrentSettingNames(stored) {
+  if (!stored || typeof stored !== 'object') return stored;
+  const out = { ...stored };
+  for (const [was, now] of Object.entries(RENAMED_SETTINGS)) {
+    if (!(was in out)) continue;
+    if (!(now in out)) out[now] = out[was];
+    delete out[was];
+  }
+  return out;
+}
+
 /** The view state: zoom, pan, selection, interaction. Mutated in place. */
 export const state = {
   zoom: 1.0,

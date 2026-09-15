@@ -188,6 +188,7 @@ import {
   state,
   SETTINGS,
   DEFAULT_SETTINGS,
+  withCurrentSettingNames,
   setSettings,
   current_scenario_name,
   setScenarioName as setCurrentScenarioName,
@@ -5716,7 +5717,9 @@ const load_simulation_state = () => {
   }
   try {
     const loadedState = JSON.parse(savedJSON);
-    setSettings(loadedState.settings || { ...DEFAULT_SETTINGS });
+    setSettings(
+      withCurrentSettingNames(loadedState.settings) || { ...DEFAULT_SETTINGS }
+    );
     const view = loadedState.view || { zoom: 1.5, pan: { x: 0, y: 0 } };
     state.zoom = view.zoom;
     state.pan = view.pan;
@@ -5874,7 +5877,9 @@ const applyShareState = payload => {
   // Held for build_simulation() to apply. Settings cannot simply be assigned
   // here: apply_preset() runs first inside the build and resets everything to
   // the scenario's own defaults, which would discard them.
-  pendingSettingsOverride = payload.d ? { ...payload.d } : null;
+  pendingSettingsOverride = payload.d
+    ? withCurrentSettingNames(payload.d)
+    : null;
 
   const seed = payloadSeed(payload);
 
@@ -5894,7 +5899,7 @@ const applyShareState = payload => {
   // the same order they happened, so live-applied values like gravity land on
   // an already-generated system rather than shaping the generation itself.
   if (payload.a) {
-    Object.assign(SETTINGS, payload.a);
+    Object.assign(SETTINGS, withCurrentSettingNames(payload.a));
     updatePhysicsSettings(SETTINGS);
   }
 

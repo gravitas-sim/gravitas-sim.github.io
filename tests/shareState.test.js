@@ -552,3 +552,49 @@ describe('body ids travel when the restored context points at a body', () => {
     expect(packBody(state).id).toBeUndefined();
   });
 });
+
+// =============================================================================
+// A renamed setting must not silently drop out of an old link
+// -----------------------------------------------------------------------------
+// `trail_colour_mode` became `trail_color_mode` when the source was made
+// consistently American. A key in DEFAULT_SETTINGS is not prose: it is the name
+// a share link and a browser save store the value under, and links outlive the
+// rename. Assigning an unknown key into SETTINGS sets a property nothing reads,
+// so the trails would come back the default colour with nothing to say a
+// setting had been dropped - which is the failure mode this repository already
+// worries about out loud, in the comment about a link that reopens on a
+// different measurement.
+describe('settings that have been renamed', () => {
+  test('an old name is read as the current one', async () => {
+    const { withCurrentSettingNames } = await import('../js/appState.js');
+    const fromAnOldLink = { trail_colour_mode: 'speed', sim_speed: 2 };
+    expect(withCurrentSettingNames(fromAnOldLink)).toEqual({
+      trail_color_mode: 'speed',
+      sim_speed: 2,
+    });
+  });
+
+  test('a current name is left alone, and wins over an old one', async () => {
+    const { withCurrentSettingNames } = await import('../js/appState.js');
+    expect(withCurrentSettingNames({ trail_color_mode: 'type' })).toEqual({
+      trail_color_mode: 'type',
+    });
+    expect(
+      withCurrentSettingNames({
+        trail_colour_mode: 'speed',
+        trail_color_mode: 'type',
+      })
+    ).toEqual({ trail_color_mode: 'type' });
+  });
+
+  test('every rename points at a setting that exists', async () => {
+    const { RENAMED_SETTINGS, DEFAULT_SETTINGS } =
+      await import('../js/appState.js');
+    const renames = Object.entries(RENAMED_SETTINGS);
+    expect(renames.length).toBeGreaterThan(0);
+    for (const [was, now] of renames) {
+      expect(DEFAULT_SETTINGS).toHaveProperty(now);
+      expect(DEFAULT_SETTINGS).not.toHaveProperty(was);
+    }
+  });
+});
