@@ -416,3 +416,43 @@ describe('the skip policy', () => {
     ]);
   });
 });
+
+// =============================================================================
+// The workflow's own vocabulary is not ours to Americanize
+// -----------------------------------------------------------------------------
+// `cancelled()` is a GitHub Actions status function and the two-l spelling is
+// part of the expression language. A pass that made the source consistently
+// American rewrote six of them to `canceled()`, which is not a function that
+// exists - so the workflow could not be parsed at all. The run failed in zero
+// seconds with no jobs, no logs and no annotation, and Actions displayed the
+// file path where the workflow's name usually goes, which is the only visible
+// sign that it never got as far as reading it.
+//
+// Nothing local catches that: the gate runs the tests, not the workflow. This
+// does, in the file that already ties the two together.
+describe('the workflow uses the expression language as spelled', () => {
+  const BUILT_INS = ['success', 'failure', 'always', 'cancelled'];
+  const MISSPELLINGS = ['canceled', 'suceeded', 'allways'];
+
+  test('every status function is one Actions defines', () => {
+    const text = readFileSync(WORKFLOW, 'utf8');
+    // Only inside ${{ }}. The comments discuss capture.canRecord(), which is
+    // the application's function and nothing to do with the workflow's.
+    const expressions = [...text.matchAll(/\$\{\{([^}]*)\}\}/g)].map(m => m[1]);
+    const called = expressions.flatMap(expr =>
+      [...expr.matchAll(/\b([a-zA-Z_]+)\(\)/g)].map(m => m[1])
+    );
+    expect(called.length).toBeGreaterThan(0);
+    for (const fn of called) {
+      expect(BUILT_INS).toContain(fn);
+    }
+  });
+
+  test('no americanized spelling of a built-in survives', () => {
+    const text = readFileSync(WORKFLOW, 'utf8');
+    for (const wrong of MISSPELLINGS) {
+      expect(text).not.toContain(`${wrong}()`);
+    }
+    expect(text).toContain('cancelled()');
+  });
+});

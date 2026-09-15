@@ -346,7 +346,7 @@ jobs:
         run: npx playwright test --shard=${{ matrix.shard }}/6
 
       - name: Upload this shard's blob report
-        if: ${{ !canceled() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           # Uniquely named, or the six shards overwrite one another and the
@@ -372,7 +372,7 @@ jobs:
     # they did not. It does not decide anything - see the `ci` job, which
     # requires every shard itself - so a merge that fails cannot turn a red
     # suite green, and this job succeeding says nothing about the tests.
-    if: ${{ !canceled() }}
+    if: ${{ !cancelled() }}
     needs: [e2e]
     timeout-minutes: 10
     steps:
@@ -396,7 +396,7 @@ jobs:
         run: npx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: Upload the combined report
-        if: ${{ !canceled() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-sources
@@ -459,7 +459,7 @@ jobs:
         run: npm run a11y:manual
 
       - name: Upload the report
-        if: ${{ !canceled() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-accessibility
@@ -517,7 +517,7 @@ jobs:
         run: npm run e2e:dist
 
       - name: Upload the report
-        if: ${{ !canceled() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-build
@@ -584,7 +584,7 @@ jobs:
         run: npm run e2e:cross-browser -- --workers=1
 
       - name: Upload the report
-        if: ${{ !canceled() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-${{ matrix.browser }}
