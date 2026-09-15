@@ -377,6 +377,17 @@ export const CHECKS = [
     group: 'generated',
   },
   {
+    id: 'validation-data',
+    label: 'the validation page paints from the suite that ran',
+    command: ['npm', 'run', 'validation:check'],
+    tier: 'slow',
+    ci: null,
+    why:
+      'runs the suite to compare against the committed dataset; the physics ' +
+      'check already pays for a run in CI and this is where a release is judged',
+    group: 'generated',
+  },
+  {
     id: 'instructors',
     label: 'instructor bundle is built from these sources',
     command: ['npm', 'run', 'instructors:check'],

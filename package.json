@@ -50,6 +50,7 @@
     "manual:check": "node tools/build-manual.mjs --check",
     "validate:scenarios": "node tools/scenario-stability.mjs",
     "validation:data": "node tools/build-validation-data.mjs",
+    "validation:check": "node tools/build-validation-data.mjs --check",
     "validate:links": "node tools/check-links.mjs",
     "validate:links:dist": "node tools/check-links.mjs --root dist",
     "sw:manifest": "node tools/build-service-worker.mjs",
