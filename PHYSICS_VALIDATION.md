@@ -70,7 +70,7 @@ number-out computation, so a failure names a quantity rather than a screenshot.
 
 A tolerance without a justification is a number chosen to make a test pass. Each
 check therefore carries a written reason, which `--verbose` prints and which a
-failure message includes. There are four kinds of check and they are not
+failure message includes. There are five kinds of check and they are not
 interchangeable.
 
 **analytic** — closed-form arithmetic against the equation the code claims to
@@ -92,6 +92,15 @@ gives two significant figures, the tolerance says so.
 against the equation it says it uses, never against reality, and labeled
 `APPROX` in the table so the two cannot be confused. See
 [Educational approximations](#educational-approximations).
+
+**empirical** — a prediction compared against the sky rather than against the
+code. There is one, and it is the reason the distinction is worth a category of
+its own: MOND predicts a baryonic Tully-Fisher coefficient, and that prediction
+is checked against the observed relation rather than against the equation it
+came from. Its tolerance is wide — 50% — because the observed coefficient is
+itself quoted anywhere between about 30 and 80 solar masses per (km/s)⁴
+depending on the sample and the gas correction. A tight tolerance here would be
+a claim about nature that nobody can make.
 
 ---
 

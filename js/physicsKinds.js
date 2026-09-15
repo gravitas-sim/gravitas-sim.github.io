@@ -1,10 +1,16 @@
 // =============================================================================
 // What kind of check a check is
 // -----------------------------------------------------------------------------
-// Five kinds, and the names for them. Its own module because three files need
+// Five kinds, and the names for them. Its own module because four things need
 // the vocabulary and only one of them wants the three thousand lines of checks
 // that go with it: the validator prints these names, the documentation
-// generator writes them into a table, and physics-checks.mjs assigns them.
+// generator writes them into a table, physics-checks.mjs assigns them, and the
+// published validation page groups by them.
+//
+// In js/ rather than tools/ because the browser is one of those four. The page
+// had its own copy with four entries, so the empirical check was filtered out
+// of the kind summary and off the chart on a page whose heading promised every
+// check by kind.
 //
 // There used to be one copy, in the validator, with four entries. The fifth
 // kind rendered correctly anyway because the lookup falls through to the raw

@@ -5441,7 +5441,7 @@ function k2Percent(k) {
  * @param {Array<object>} results - From runChecks
  * @returns {Array<{group: string, checks: Array<object>}>} Grouped
  */
-export { KIND_LABEL, KIND_SHORT, KIND_ORDER } from './physics-kinds.mjs';
+export { KIND_LABEL, KIND_SHORT, KIND_ORDER } from '../js/physicsKinds.js';
 
 export function groupResults(results) {
   const order = [];

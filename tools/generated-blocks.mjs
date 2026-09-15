@@ -30,7 +30,7 @@ import {
   URLS,
   abstractParagraphs,
 } from './project-metadata.mjs';
-import { describeKinds } from './physics-kinds.mjs';
+import { describeKinds } from '../js/physicsKinds.js';
 
 /** Region markers, the block-level cousin of the inline fact marker. */
 export const BLOCK_MARKER =

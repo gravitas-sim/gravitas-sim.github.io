@@ -482,10 +482,34 @@ function applyToText(path, text, facts, blocks = {}) {
     }
     const wanted = blocks[name];
     if (current !== wanted) {
+      // Name the first line that differs, not just the line counts. A block
+      // whose total is right and whose categories are wrong has the same
+      // number of lines as the one it should be, and "28 line(s), the source
+      // says 28 line(s)" tells a reader only that something, somewhere, moved.
+      const was = current.trim().split('\n');
+      const now = wanted.trim().split('\n');
+      const at = was.findIndex((line, i) => line !== now[i]);
+      const differs = at >= 0 && at < now.length;
+      // Window the excerpt on the difference. Truncating from the start of the
+      // line shows two identical prefixes and hides the one character that
+      // moved, which is worse than printing nothing.
+      const window = line => {
+        if (!differs) return '';
+        const a = was[at];
+        const b = now[at];
+        let i = 0;
+        while (i < a.length && i < b.length && a[i] === b[i]) i++;
+        const from = Math.max(0, i - 24);
+        return (from ? '…' : '') + line.slice(from, from + 72).trim();
+      };
       stale.push({
         key: `block:${name}`,
-        current: `${current.trim().split('\n').length} line(s)`,
-        wanted: `${wanted.trim().split('\n').length} line(s), regenerated`,
+        current: differs
+          ? `line ${at + 1}: ${window(was[at])}`
+          : `${was.length} line(s)`,
+        wanted: differs
+          ? window(now[at])
+          : `${now.length} line(s), regenerated`,
       });
     }
     return `<!--fact-block:${name}-->${wanted}<!--/fact-block-->`;

@@ -39,6 +39,8 @@
 /* global process */
 import { describe, test, expect } from '@jest/globals';
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { KIND_ORDER, KIND_LABEL, KIND_SHORT } from '../js/physicsKinds.js';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -177,4 +179,52 @@ describe('physics validation suite', () => {
       }
     });
   }
+});
+
+// =============================================================================
+// Everything that groups by kind has to know about every kind
+// -----------------------------------------------------------------------------
+// The suite grew a fifth kind and four separate places kept their own list of
+// four. Each failed quietly: the validator's label map fell through to the raw
+// name, so it printed correctly; the published validation page filtered by its
+// own KIND_ORDER, so the empirical check vanished from a page whose heading
+// promises every check by kind; the stylesheet had four hues, so a fifth chip
+// would have rendered with an unset custom property; and the documentation was
+// transcribed from the first of those.
+//
+// The vocabulary has one owner now. These tests are the part a shared import
+// cannot enforce on its own - that the page's prose and the stylesheet's hues
+// keep up with it.
+describe('the kind vocabulary has one owner', () => {
+  const read = rel => readFileSync(path.join(here, '..', rel), 'utf8');
+
+  test('the validation page describes every kind the suite can produce', () => {
+    const page = read('js/validationPage.js');
+    // An empty order would make the loop below pass without checking anything.
+    expect(KIND_ORDER.length).toBeGreaterThan(1);
+    for (const kind of KIND_ORDER) {
+      expect(page).toMatch(new RegExp(`\\b${kind}:\\s*\\{`));
+    }
+  });
+
+  test('the page does not keep a second list of kinds', () => {
+    const page = read('js/validationPage.js');
+    expect(page).toMatch(
+      /import \{[^}]*KIND_ORDER[^}]*\} from '\.\/physicsKinds\.js'/
+    );
+    expect(page).not.toMatch(/const KIND_ORDER\s*=/);
+  });
+
+  test('every kind has a colour, so no chip renders unstyled', () => {
+    const css = read('css/page.css');
+    expect(KIND_ORDER.length).toBeGreaterThan(1);
+    for (const kind of KIND_ORDER) {
+      expect(css).toContain(`[data-kind='${kind}']`);
+    }
+  });
+
+  test('the prose label is spelled out and the terminal one is short', () => {
+    expect(KIND_LABEL.approximation).toBe('approximation');
+    expect(KIND_SHORT.approximation).toBe('APPROX');
+  });
 });

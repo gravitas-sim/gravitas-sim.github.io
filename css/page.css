@@ -914,6 +914,16 @@
     --val-kind: #c084fc;
   }
 
+  /* The fifth kind. Indigo rather than amber, which is reserved above, and
+     rather than a second green or cyan, which --accent already becomes in two
+     themes. It sits near the approximation purple, which is acceptable here
+     because every chip, lane and card carries its label as text: the hue is a
+     shortcut for a reader who has learned it, never the only thing saying
+     which kind this is. */
+  [data-kind='empirical'] {
+    --val-kind: #818cf8;
+  }
+
   /* --- Margin chart -------------------------------------------------------- */
 
   .val-chart-wrap {

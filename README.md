@@ -408,10 +408,11 @@ npm run validate:physics
 
 That is <!--fact:physicsChecks-->243<!--/fact--> deterministic checks, about
 fifteen seconds, printed as a table of measured value, expected value, error and
-tolerance. Four kinds, and the table labels each: closed-form arithmetic,
+tolerance. Five kinds, and the table labels each: closed-form arithmetic,
 quantities measured by running the N-body engine, literature values with their
-sources named, and educational approximations validated against the equation
-they claim to use rather than against reality.
+sources named, educational approximations validated against the equation they
+claim to use rather than against reality, and one empirical check that compares
+a prediction against the observed sky.
 
 Every tolerance has a written justification, because a tolerance without one is a
 number chosen to make a test pass. The integrated tolerances are derived from the

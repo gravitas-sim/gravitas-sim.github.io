@@ -20,7 +20,7 @@
 // =============================================================================
 
 import { runChecks, groupResults } from './physics-checks.mjs';
-import { KIND_SHORT } from './physics-kinds.mjs';
+import { KIND_SHORT } from '../js/physicsKinds.js';
 
 const argv = process.argv.slice(2);
 const has = flag => argv.includes(flag);

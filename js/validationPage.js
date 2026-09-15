@@ -16,6 +16,8 @@
 // live run finishes, everything on the page is replaced by its numbers.
 // =============================================================================
 
+import { KIND_ORDER } from './physicsKinds.js';
+
 /** Where the committed snapshot lives. */
 const DATA_URL = '/validation/data.json';
 
@@ -45,9 +47,12 @@ const KINDS = {
     blurb:
       'An educational model that is not the full physics. Validated against the equation it says it uses and never against reality, and labeled so the two cannot be confused.',
   },
+  empirical: {
+    label: 'Empirical',
+    blurb:
+      'A prediction compared against the sky rather than against the code. Its tolerance is wide because the observed value itself is quoted across a wide range, and a tight one would be a claim about nature nobody can make.',
+  },
 };
-
-const KIND_ORDER = ['analytic', 'integration', 'data', 'approximation'];
 
 const $ = id => document.getElementById(id);
 
