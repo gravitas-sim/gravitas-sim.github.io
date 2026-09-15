@@ -15,12 +15,20 @@
 //
 // Three strategies, and the reason for each
 // -----------------------------------------------------------------------------
-//   navigations        the shell this worker precached, always. Not network
-//                      first: a running worker that fetched the current
-//                      index.html would put a new shell in a cache full of old
-//                      modules, and the page assembled from those two belongs
-//                      to no revision at all. Freshness is the job of the
-//                      worker lifecycle below, not of individual navigations.
+//   navigations        to the application's own route, the shell this worker
+//                      precached. Not network first: a running worker that
+//                      fetched the current index.html would put a new shell in
+//                      a cache full of old modules, and the page assembled from
+//                      those two belongs to no revision at all. Freshness is the
+//                      job of the worker lifecycle below, not of individual
+//                      navigations.
+//
+//                      Every other page goes to the network. This said "always"
+//                      once, and always is wrong on a site with more than one
+//                      page: only index.html is precached, so /validation/ and
+//                      /model/ and /teaching/ were answered with the sandbox -
+//                      the reader asked for the physics write-up and got the
+//                      simulator, with the address bar still saying otherwise.
 //   precached assets   cache first. They are versioned by the cache name, so a
 //                      hit is known-current and there is no reason to ask the
 //                      network. This is what makes the offline case instant
@@ -246,15 +254,36 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       (async () => {
         const cache = await caches.open(VERSION);
-        const shell =
+        const shell = async () =>
           (await cache.match(SHELL)) || (await cache.match('index.html'));
-        if (shell) return shell;
-        // No shell yet: a first visit whose install has not finished. Go to
-        // the network and do not write the answer - install owns this cache.
+
+        // The shell answers for the application's own route and nothing else.
+        // Anything else - the documentation pages, the instructor area - has
+        // its own document, is not in the precache list, and would otherwise
+        // be served a simulator it did not ask for.
+        // The application's own route is the scope itself, and index.html
+        // under it. Not "any path ending in a slash", which is every one of
+        // the pages this is meant to stop answering for.
+        const path = new URL(request.url).pathname;
+        const root = new URL(self.registration.scope).pathname;
+        const isAppRoute = path === root || path === `${root}index.html`;
+        if (isAppRoute) {
+          const cached = await shell();
+          if (cached) return cached;
+        }
+
+        // A page this worker did precache, if there ever is one: serve that
+        // rather than the network, for the same coherence reason.
+        const exact = await cache.match(request, { ignoreSearch: true });
+        if (exact) return exact;
+
         try {
           return await fetch(request);
         } catch {
-          return Response.error();
+          // Offline, and not a page this worker holds. The shell is a working
+          // application rather than a browser error page, which is the better
+          // of the two answers available.
+          return (await shell()) || Response.error();
         }
       })()
     );

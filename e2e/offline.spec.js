@@ -435,3 +435,40 @@ test.describe('the quality tier is chosen from the frame rate', () => {
     expect(result.bodiesLow).toBeLessThan(result.bodiesFull);
   });
 });
+
+// =============================================================================
+// A worker that answers every navigation with the shell answers wrongly
+// -----------------------------------------------------------------------------
+// The navigation strategy was "the shell this worker precached, always", and
+// always is wrong on a site with more than one page. Only index.html is in the
+// precache list, so a reader with the worker installed who opened /validation/
+// or /model/ was handed the simulator instead - correct URL, correct title bar,
+// wrong document - and it shipped, because Playwright blocks service workers by
+// default and every other spec in this suite therefore talks to the network.
+//
+// This is the test that was missing: the worker installed, and a secondary page
+// asked for through it.
+test.describe('a page that is not the application', () => {
+  for (const { path, marker, name } of [
+    {
+      path: '/validation/',
+      marker: '#valKinds',
+      name: 'the validation report',
+    },
+    { path: '/model/', marker: '.doc-feature', name: 'the model write-up' },
+  ]) {
+    test(`${name} is itself, not the sandbox`, async ({ page, app }) => {
+      await app.boot();
+      await waitForPrecache(page);
+
+      await page.goto(path, { waitUntil: 'domcontentloaded' });
+      await expect(page.locator(marker).first()).toBeAttached({
+        timeout: 15_000,
+      });
+      // The sandbox's canvas is the thing that was served in its place, so its
+      // absence is the assertion that matters.
+      await expect(page.locator('#simulationCanvas')).toHaveCount(0);
+      expect(new URL(page.url()).pathname).toBe(path);
+    });
+  }
+});
