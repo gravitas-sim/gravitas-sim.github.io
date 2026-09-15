@@ -119,9 +119,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           # Caches the npm download cache, keyed on package-lock.json.
@@ -226,9 +226,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -259,7 +259,7 @@ jobs:
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload dist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist
@@ -299,9 +299,9 @@ jobs:
       matrix:
         shard: [1, 2, 3, 4, 5, 6]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -318,7 +318,7 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Cache browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: browsers
         with:
           path: ~/.cache/ms-playwright
@@ -347,7 +347,7 @@ jobs:
 
       - name: Upload this shard's blob report
         if: ${{ !canceled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           # Uniquely named, or the six shards overwrite one another and the
           # merge has one sixth of the run to work with.
@@ -358,7 +358,7 @@ jobs:
 
       - name: Upload this shard's traces and screenshots
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-artifacts-sources-${{ matrix.shard }}
           path: test-results
@@ -376,9 +376,9 @@ jobs:
     needs: [e2e]
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -386,7 +386,7 @@ jobs:
       - run: npm ci
 
       - name: Collect every shard's blob report
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: blob-report-sources-*
           path: all-blob-reports
@@ -397,7 +397,7 @@ jobs:
 
       - name: Upload the combined report
         if: ${{ !canceled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report-sources
           path: playwright-report
@@ -414,9 +414,9 @@ jobs:
     # same specs also run inside `npm run e2e`; that is the safety net if this
     # job is ever removed.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -433,7 +433,7 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Cache browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: browsers
         with:
           path: ~/.cache/ms-playwright
@@ -460,7 +460,7 @@ jobs:
 
       - name: Upload the report
         if: ${{ !canceled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report-accessibility
           path: |
@@ -475,9 +475,9 @@ jobs:
     needs: build
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -487,7 +487,7 @@ jobs:
       # The artifact rather than a second build: this job tests exactly the bytes
       # the build job produced, which is the point of separating them.
       - name: Download dist
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
@@ -499,7 +499,7 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Cache browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: browsers
         with:
           path: ~/.cache/ms-playwright
@@ -518,7 +518,7 @@ jobs:
 
       - name: Upload the report
         if: ${{ !canceled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report-build
           path: |
@@ -541,9 +541,9 @@ jobs:
       matrix:
         browser: [firefox, webkit]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -557,7 +557,7 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Cache browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: browsers
         with:
           path: ~/.cache/ms-playwright
@@ -585,7 +585,7 @@ jobs:
 
       - name: Upload the report
         if: ${{ !canceled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report-${{ matrix.browser }}
           path: |
@@ -730,7 +730,7 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Check out the exact commit that was validated
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
 
@@ -795,16 +795,23 @@ jobs:
 
       - name: Package the site
         if: steps.tip.outputs.superseded == 'false'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           # The staging directory, not the checkout: what gets published is
           # the validated commit plus the four files above and nothing else.
           path: _site
+          # v4 of this action stopped putting dotfiles in the artifact. The
+          # site carries .nojekyll, which is inert on this deployment path -
+          # deploy-pages serves the artifact directly and Jekyll never runs -
+          # but "probably inert" is not a reason to change what ships in the
+          # same commit that changes seven action versions. This keeps the
+          # artifact byte-for-byte what v3 produced.
+          include-hidden-files: true
 
       - name: Deploy
         id: deployment
         if: steps.tip.outputs.superseded == 'false'
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       - name: Say what went live
         if: steps.tip.outputs.superseded == 'false'
