@@ -78,6 +78,12 @@ const DOCS = [
   // scenarios long after both numbers had moved.
   'index.html',
   'model/index.html',
+  // The locale catalogues make the same claim the pages do, in two languages,
+  // and were the last place still saying 135 when the suite had reached 243.
+  // A marker cannot go in a translated string - it would be rendered to the
+  // reader - so these are matched by pattern below instead.
+  'js/i18n/en.js',
+  'js/i18n/es.js',
   'validation/index.html',
   'instructors/index.html',
   'CHANGELOG.md',
@@ -117,6 +123,16 @@ const ATTRIBUTE_FACTS = [
     file: 'index.html',
     key: 'physicsChecks',
     pattern: /(has been checked against: )(\d+)( checks with measured error)/,
+  },
+  {
+    file: 'js/i18n/en.js',
+    key: 'physicsChecks',
+    pattern: /(has been checked against: )(\d+)( checks with measured error)/,
+  },
+  {
+    file: 'js/i18n/es.js',
+    key: 'physicsChecks',
+    pattern: /(comprobado el motor físico: )(\d+)( verificaciones)/,
   },
 ];
 
@@ -342,6 +358,16 @@ function buildFacts(report) {
  * with every code change, and failing the fast check on a stale `dist/` would
  * train people to ignore it.
  */
+/**
+ * Blocks only a `--full` run can produce.
+ *
+ * The coverage table is the physics suite's own inventory, and getting it means
+ * running the suite - nearly two minutes. Without this, a cheap `docs:check`
+ * would call the block unknown, which reads as "somebody wrote a marker nobody
+ * generates" rather than "not measured on this run".
+ */
+const DEFERRED_BLOCKS = ['physicsCoverage'];
+
 const DEFERRED_KEYS = [
   'jestTests',
   'jestSuites',
@@ -364,7 +390,7 @@ const DEFERRED_KEYS = [
  *
  * @returns {Promise<Object<string, string>>} Marker name -> replacement text
  */
-export async function gatherBlocks() {
+export async function gatherBlocks({ full = false } = {}) {
   const { MANIFEST } = await import(
     new URL('../js/data/investigations/manifest.js', import.meta.url)
   );
@@ -374,7 +400,42 @@ export async function gatherBlocks() {
   return generatedBlocks({
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,
+    physics: full ? physicsInventory() : null,
   });
+}
+
+/**
+ * The physics suite's own count of itself, by group and by kind.
+ *
+ * Counted from a real run, because that is the only thing that knows. It takes
+ * about two minutes, which is why it is behind `--full` with the other facts
+ * that cost a test run.
+ *
+ * @returns {{total: number, byKind: object, groups: Array}|null} The inventory
+ */
+function physicsInventory() {
+  const out = run('node', ['tools/validate-physics.mjs', '--json']);
+  if (!out) return null;
+  let report;
+  try {
+    report = JSON.parse(out);
+  } catch {
+    return null;
+  }
+  const byKind = {};
+  const groups = [];
+  const index = new Map();
+  for (const check of report.checks || []) {
+    byKind[check.kind] = (byKind[check.kind] || 0) + 1;
+    if (!index.has(check.group)) {
+      index.set(check.group, { group: check.group, checks: 0, kinds: {} });
+      groups.push(index.get(check.group));
+    }
+    const g = index.get(check.group);
+    g.checks++;
+    g.kinds[check.kind] = (g.kinds[check.kind] || 0) + 1;
+  }
+  return { total: (report.checks || []).length, byKind, groups };
 }
 
 /** Everything, according to the flags. */
@@ -415,7 +476,8 @@ function applyToText(path, text, facts, blocks = {}) {
   // that it is out of date, and `npm run docs:sync` is the fix either way.
   next = next.replace(BLOCK_MARKER, (whole, name, current) => {
     if (!(name in blocks)) {
-      unknown.push(`block:${name}`);
+      if (DEFERRED_BLOCKS.includes(name)) skipped.push(`block:${name}`);
+      else unknown.push(`block:${name}`);
       return whole;
     }
     const wanted = blocks[name];
@@ -808,7 +870,7 @@ async function main() {
     return 0;
   }
 
-  const blocks = await gatherBlocks();
+  const blocks = await gatherBlocks({ full: has('--full') });
   const present = DOCS.filter(d => existsSync(join(REPO, d)));
   const results = [];
   for (const doc of present) {

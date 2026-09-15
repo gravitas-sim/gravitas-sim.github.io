@@ -30,6 +30,7 @@ import {
   URLS,
   abstractParagraphs,
 } from './project-metadata.mjs';
+import { describeKinds } from './physics-kinds.mjs';
 
 /** Region markers, the block-level cousin of the inline fact marker. */
 export const BLOCK_MARKER =
@@ -233,8 +234,41 @@ export function investigationModelRows({ manifest, instructor }) {
  * @param {object} deps - {facts, manifest, instructor}
  * @returns {Object<string, string>} Marker name -> replacement text
  */
-export function generatedBlocks({ manifest, instructor }) {
+/**
+ * The physics suite's coverage table, from the suite itself.
+ *
+ * This was a hand-maintained table. It said 162 checks in four categories
+ * while the suite ran 243 in five, and the document contradicted itself forty
+ * lines apart - the sentence above the table carried a generated number and
+ * was right, the table was written by hand and was not. Generating it is the
+ * only version of this that stays true.
+ *
+ * @param {{total: number, groups: Array, byKind: object}} inventory - Counted
+ *   from a `validate-physics --json` run
+ * @returns {string} The markdown table, between its markers
+ */
+function physicsCoverageTable(inventory) {
+  const rows = inventory.groups.map(
+    g => `| ${g.group} | ${g.checks} | ${describeKinds(g.kinds)} |`
+  );
+  const total =
+    `| **Total** | **${inventory.total}** | ` +
+    `${describeKinds(inventory.byKind)} |`;
+  return [
+    '',
+    '| Area | Checks | Kinds |',
+    '| --- | --- | --- |',
+    ...rows,
+    total,
+    '',
+  ].join('\n');
+}
+
+export function generatedBlocks({ manifest, instructor, physics = null }) {
   return {
     investigationModels: `\n${investigationModelRows({ manifest, instructor })}\n          `,
+    // Only a run of the suite can produce this, so a cheap docs check leaves
+    // the block alone rather than claiming nobody generates it.
+    ...(physics ? { physicsCoverage: physicsCoverageTable(physics) } : {}),
   };
 }

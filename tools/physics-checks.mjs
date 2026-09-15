@@ -14,7 +14,7 @@
 // tolerance is what it is. A tolerance with no justification is a number chosen
 // to make a test pass, which is the opposite of the exercise.
 //
-// Four kinds of check, and they are not interchangeable:
+// Five kinds of check, and they are not interchangeable:
 //
 //   analytic       Closed-form arithmetic against the equation it claims to
 //                  implement. Tolerances are at or near machine epsilon,
@@ -5441,6 +5441,8 @@ function k2Percent(k) {
  * @param {Array<object>} results - From runChecks
  * @returns {Array<{group: string, checks: Array<object>}>} Grouped
  */
+export { KIND_LABEL, KIND_SHORT, KIND_ORDER } from './physics-kinds.mjs';
+
 export function groupResults(results) {
   const order = [];
   const map = new Map();

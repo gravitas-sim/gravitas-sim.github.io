@@ -30,6 +30,7 @@ are two front ends onto it.
 
 ## Coverage
 
+<!--fact-block:physicsCoverage-->
 | Area | Checks | Kinds |
 | --- | --- | --- |
 | Unit system | 6 | 6 analytic |
@@ -45,14 +46,20 @@ are two front ends onto it.
 | Radial velocity | 7 | 5 analytic, 2 published |
 | Astrometry | 5 | 3 analytic, 1 integrated, 1 published |
 | Habitable zone | 19 | 12 analytic, 6 published, 1 approximation |
-| Dark matter and rotation curves | 18 | 17 analytic, 1 integrated |
+| Dark matter | 18 | 17 analytic, 1 integrated |
+| MOND | 11 | 9 analytic, 1 integrated, 1 empirical |
 | Compact objects | 12 | 8 analytic, 4 published |
 | Mergers | 3 | 2 integrated, 1 approximation |
-| Absorption by a black hole | 10 | 4 integrated, 6 approximation |
+| Absorption | 10 | 4 integrated, 6 approximation |
 | Tidal disruption | 5 | 5 integrated |
-| Gravitational-wave inspiral | 4 | 4 approximation |
-| Stored parameters for real systems | 11 | 11 published |
-| **Total** | **162** | 75 analytic, 46 integrated, 29 published, 12 approximation |
+| Three-body sensitivity | 10 | 10 integrated |
+| Inspiral (approximation) | 4 | 4 approximation |
+| Real systems | 11 | 11 published |
+| Orbital resonance | 35 | 1 analytic, 33 integrated, 1 published |
+| Planets in binary stars | 15 | 1 analytic, 10 integrated, 4 published |
+| Gravity assist | 10 | 1 analytic, 9 integrated |
+| **Total** | **243** | 87 analytic, 109 integrated, 34 published, 12 approximation, 1 empirical |
+<!--/fact-block-->
 
 Nothing here reads a pixel. Every check is a deterministic number-in,
 number-out computation, so a failure names a quantity rather than a screenshot.

@@ -20,6 +20,7 @@
 // =============================================================================
 
 import { runChecks, groupResults } from './physics-checks.mjs';
+import { KIND_SHORT } from './physics-kinds.mjs';
 
 const argv = process.argv.slice(2);
 const has = flag => argv.includes(flag);
@@ -78,13 +79,6 @@ function fmtTolerance(check) {
   const suffix = check.toleranceKind === 'absolute' ? ' abs' : ' rel';
   return (t === 0 ? '0' : t.toExponential(1)) + suffix;
 }
-
-const KIND_LABEL = {
-  analytic: 'analytic',
-  integration: 'integrated',
-  approximation: 'APPROX',
-  data: 'published',
-};
 
 function pad(s, n) {
   const str = String(s);
@@ -173,7 +167,7 @@ async function main() {
       console.log(
         '  ' +
           pad(check.name.slice(0, W.name - 1), W.name) +
-          pad(KIND_LABEL[check.kind] ?? check.kind, W.kind) +
+          pad(KIND_SHORT[check.kind] ?? check.kind, W.kind) +
           padLeft(fmt(check.measured, W.measured), W.measured) +
           padLeft(fmt(check.expected, W.expected), W.expected) +
           padLeft(fmtError(check), W.err) +
@@ -214,7 +208,7 @@ async function main() {
   console.log(
     dim(
       Object.entries(byKind)
-        .map(([k, n]) => `${n} ${KIND_LABEL[k] ?? k}`)
+        .map(([k, n]) => `${n} ${KIND_SHORT[k] ?? k}`)
         .join('   ')
     )
   );
