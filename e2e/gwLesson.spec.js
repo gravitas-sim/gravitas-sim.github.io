@@ -15,8 +15,17 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
 
 const LESSON = 'listening-to-spacetime';
+
+/**
+ * The lesson's length, read from the manifest rather than written here. It was
+ * 24 in three places in this file and became 25 when the lesson gained a
+ * closing summary; nothing about that change concerned this spec, and it broke
+ * three of its tests.
+ */
+const STEPS = MANIFEST.find(i => i.id === LESSON).stepCount;
 
 /** Open the lesson through the interface, the way a student does. */
 async function openLesson(page, app, { locale, narrow = false } = {}) {
@@ -152,13 +161,13 @@ test.describe('the lesson is reachable and complete', () => {
     const card = page.locator(`[data-investigation="${LESSON}"]`);
     await expect(card).toBeVisible();
     await expect(card).toContainText(/Listening to Spacetime/i);
-    await expect(card).toContainText(/24/);
+    await expect(card).toContainText(new RegExp(String(STEPS)));
   });
 
-  test('it opens on step 1 of 24', async ({ page, app }) => {
+  test('it opens on step 1 of the lesson', async ({ page, app }) => {
     await openLesson(page, app);
     expect(await stepNumber(page)).toBe(1);
-    expect(await stepTotal(page)).toBe(24);
+    expect(await stepTotal(page)).toBe(STEPS);
   });
 
   test('the whole lesson can be walked with the sound off', async ({
@@ -174,7 +183,7 @@ test.describe('the lesson is reachable and complete', () => {
       await answerAndAdvance(page, ANSWERS);
     }
     expect(await stepNumber(page)).toBe(total);
-    expect(total).toBe(24);
+    expect(total).toBe(STEPS);
     // ...and no audio context was ever created.
     const started = await page.evaluate(async () => {
       const m = await import('/js/audio.js');

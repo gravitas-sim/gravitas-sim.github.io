@@ -297,7 +297,11 @@ test.describe('the ring, the arms and the amplifier', () => {
     // true of a linearly polarised wave, and this screen selects an edge-on
     // source to get one. Face-on the same binary never passes through a circle
     // at all, and the lesson used to promise that it did.
-    expect(text).toMatch(/Polarisation Linear/i);
+    // Spelled either way on purpose. The claim under test is that the row is
+    // named and reads Linear - a statement about the wave, not about English.
+    // The shipped catalog says "Polarization"; this assertion said
+    // "Polarisation" and failed a physics test on an orthography change.
+    expect(text).toMatch(/Polari[sz]ation Linear/i);
     const inc = await page.evaluate(
       async () =>
         (await import('/js/gwWidgets.js')).activeLab().params.inclinationDeg

@@ -16,13 +16,20 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
 
 const LESSON = 'what-is-a-gravitational-wave';
-
-/** How many screens each lesson has. Named once: they grow. */
-const STEPS = 27;
-const SEQUEL_STEPS = 24;
 const SEQUEL = 'listening-to-spacetime';
+
+/**
+ * How many screens each lesson has. Named once, and read from the manifest
+ * rather than typed here: they grow. Two closing summaries took these from 27
+ * and 24 to 28 and 25, and the copies written into this file failed six tests
+ * about walking a lesson, none of which had anything to do with the change.
+ */
+const stepsOf = id => MANIFEST.find(i => i.id === id).stepCount;
+const STEPS = stepsOf(LESSON);
+const SEQUEL_STEPS = stepsOf(SEQUEL);
 
 /** Open a lesson through the interface, the way a student does. */
 async function openLesson(page, app, id, { locale, booted = false } = {}) {
