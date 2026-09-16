@@ -47,6 +47,7 @@ import {
   generatedBlocks,
   zenodoJson,
 } from './generated-blocks.mjs';
+import { RELEASE } from './project-metadata.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const rel = p => relative(REPO, p) || '.';
@@ -311,6 +312,14 @@ async function cheapFacts() {
   const bundle = instructorBundle();
 
   const facts = {
+    // The archived identifiers, from the same constant the citation files are
+    // generated from. Written as facts rather than typed into the README
+    // because a DOI quoted in prose is a second copy, and the version DOI
+    // changes at every release while the concept DOI never does - exactly the
+    // pair a reader would never notice going stale.
+    version: RELEASE.version ?? '',
+    doi: RELEASE.doi ?? '',
+    conceptDoi: RELEASE.conceptDoi ?? '',
     scenarios: Object.keys(SCENARIO_INFO).length,
     investigations: MANIFEST.length,
     // From the manifest rather than by walking the lessons: the manifest is

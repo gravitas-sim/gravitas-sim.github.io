@@ -206,16 +206,41 @@ another release.
 Put both into `RELEASE` in `tools/project-metadata.mjs`:
 
 ```js
-doi: '10.5281/zenodo.XXXXXXX',        // the version DOI for 1.0.0
+doi: '10.5281/zenodo.XXXXXXX',        // the version DOI for this release
 conceptDoi: '10.5281/zenodo.YYYYYYY', // the concept DOI for Gravitas
 ```
 
-Run `npm run docs:sync`, and commit. **That commit is not part of the archived
-`v1.0.0`** — see "Which Zenodo workflow" above for why, and say so rather than
-letting a reader discover it.
+Run `npm run docs:sync -- --full`, and commit. The `--full` is required, not a
+nicety: `CITATION.cff` and `.zenodo.json` quote a fact that only a full run
+measures, so a cheap sync neither writes nor judges them and will leave the new
+DOI out of both files while reporting success.
+
+**That commit is not part of the archived `v1.0.0`** — see "Which Zenodo
+workflow" above for why, and say so rather than letting a reader discover it.
 
 Then put the *version* DOI into the papers, not the concept DOI. See the two
 DOIs section for the reason and for the form of the citation.
+
+## What 1.0.0 produced
+
+The first release, as a worked example of the above.
+
+| | |
+| --- | --- |
+| Tag | `v1.0.0`, annotated, on commit `9148f9e4296f6010293056303e7c6b10d87add1f` |
+| GitHub release | <https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v1.0.0>, published 2026-09-16 |
+| Zenodo record | <https://zenodo.org/records/22800610> |
+| Version DOI | <!--fact:doi-->10.5281/zenodo.22800610<!--/fact--> |
+| Concept DOI | <!--fact:conceptDoi-->10.5281/zenodo.22800609<!--/fact--> |
+| Archived file | `gravitas-sim/gravitas-sim.github.io-v1.0.0.zip`, byte-identical to GitHub's zipball for the tag |
+
+Two details worth keeping for next time. GitHub sends Zenodo both a
+`release/released` and a `release/published` webhook for the same release; the
+second returns `409 The release has already been received`, which is Zenodo
+deduplicating rather than a failure — the `202` on the first is the one that
+matters. And the DOIs landed in the repository one commit *after* the tag, so
+the archived `v1.0.0` does not contain them. That is the workflow behaving
+correctly, not an omission.
 
 ## Why the two metadata files are generated
 

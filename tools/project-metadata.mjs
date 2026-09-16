@@ -45,14 +45,19 @@ export const RELEASE = {
   // citation that names the wrong day is a citation nobody can check against
   // the archive.
   dateReleased: '2026-09-16',
-  // Minted by Zenodo when the release is archived. Never written by hand, and
-  // deliberately still null: with the GitHub-Zenodo workflow the identifier
-  // does not exist until the release is published, so the tag cannot contain
-  // it. Recorded in a follow-up commit, which is therefore not part of the
-  // archived v1.0.0 - see RELEASING.md.
-  doi: null,
-  // The concept DOI, which is stable across versions. Same timing.
-  conceptDoi: null,
+  // Minted by Zenodo when the release is archived, and copied from the record
+  // rather than composed by hand. It could not be inside the v1.0.0 tag: with
+  // the GitHub-Zenodo workflow the identifier does not exist until the release
+  // is published, so this was recorded afterwards and the archived v1.0.0 does
+  // not contain it. That is expected - see RELEASING.md.
+  //
+  // This one names the 1.0.0 release specifically. Cite it when the exact
+  // version matters, which for a reproducible result it always does.
+  doi: '10.5281/zenodo.22800610',
+  // The concept DOI, which is stable across versions: it resolves to whichever
+  // release is newest. Right for a badge or a "cite the software" link, wrong
+  // for citing the version somebody actually ran.
+  conceptDoi: '10.5281/zenodo.22800609',
 };
 
 /**
