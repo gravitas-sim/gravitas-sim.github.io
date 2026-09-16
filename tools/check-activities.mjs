@@ -32,6 +32,12 @@ const { INVESTIGATIONS } = await import(`${REPO}/js/data/investigations.js`);
 const { SCENARIO_INFO } = await import(`${REPO}/js/data/scenarioInfo.js`);
 const { EN_TEACHING } = await import(`${REPO}/js/i18n/en.teaching.js`);
 const { ES_TEACHING } = await import(`${REPO}/js/i18n/es.teaching.js`);
+const { activityTeachingFor } = await import(
+  `${REPO}/js/data/activityTeaching.js`
+);
+const { activityLaunchUrl, parseActivityHash } = await import(
+  `${REPO}/js/activities/activityBridge.js`
+);
 
 const problems = [];
 const note = (where, what) => problems.push(`${where}: ${what}`);
@@ -138,6 +144,49 @@ for (const activity of ACTIVITIES) {
     }
     seenAssignmentIds.add(format.assignmentId);
 
+    // Every format needs teaching guidance, and three of the six went without
+    // it. The generated guide does not fail when it is missing - it renders
+    // the format with an empty "Open with" cell, no setup, no beats, no
+    // expected answer and no rubric, which looks like a format nobody had
+    // anything to say about rather than like a gap.
+    const teaching = activityTeachingFor(activity.id, format.id);
+    if (!teaching) {
+      note(
+        fw,
+        `has no entry in js/data/activityTeaching.js. The guide for this
+        format would print with no launch link, no setup, no teaching beats
+        and no rubric.`.replace(/\s+/g, ' ')
+      );
+    } else {
+      for (const field of [
+        'prepare',
+        'setup',
+        'reset',
+        'observe',
+        'expected',
+        'access',
+        'worksheet',
+      ]) {
+        if (typeof teaching[field] !== 'string' || !teaching[field].trim()) {
+          note(fw, `teaching guidance has no ${field}`);
+        }
+      }
+      for (const field of ['beats', 'rubric', 'misconceptions', 'recovery']) {
+        if (!Array.isArray(teaching[field]) || !teaching[field].length) {
+          note(fw, `teaching guidance has no ${field}`);
+        }
+      }
+      // The launch link is derived rather than stored - see the note at the
+      // top of js/data/activityTeaching.js for why it cannot live there - so
+      // what is checked here is that the helper can build one for this format
+      // and that it round-trips through the parser the application uses.
+      const url = activityLaunchUrl(activity.id, format.id);
+      const back = parseActivityHash(url.slice(url.indexOf('#')));
+      if (back?.activity !== activity.id || back?.format !== format.id) {
+        note(fw, `the launch link "${url}" does not parse back to this format`);
+      }
+    }
+
     if (!format.steps.length) note(fw, 'has no steps');
     const dupes = format.steps.filter((s, i) => format.steps.indexOf(s) !== i);
     if (dupes.length) note(fw, `lists ${dupes.join(', ')} more than once`);
@@ -194,8 +243,10 @@ if (problems.length) {
 
 const formats = allFormats();
 console.log(
-  `Classroom activities OK: ${ACTIVITIES.length} activity, ` +
-    `${formats.length} formats, all steps resolve.`
+  `Classroom activities OK: ${ACTIVITIES.length} ` +
+    `${ACTIVITIES.length === 1 ? 'activity' : 'activities'}, ` +
+    `${formats.length} ${formats.length === 1 ? 'format' : 'formats'}, ` +
+    'all steps resolve and every format has teaching guidance.'
 );
 for (const { activity, format } of formats) {
   const lesson = INVESTIGATIONS.find(l => l.id === activity.lesson);

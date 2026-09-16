@@ -19,6 +19,8 @@
 
 import { createDocument } from './pdf.js';
 import { plainText } from './answerKey.js';
+import { plural } from './format.js';
+import { activityLaunchUrl } from './activities/activityBridge.js';
 import { instructorContentFor } from './data/instructorContent.js';
 import { activityTeachingFor, RECOVERY } from './data/activityTeaching.js';
 import { resolvedSteps } from './activities/activities.js';
@@ -59,6 +61,7 @@ export function activityGuide(
 
   const doc = createDocument({
     title: `${title}: Classroom Activity Guide`,
+    subject: `Classroom activity guide for "${title}": every format, with setup, teaching beats, expected reasoning and a rubric.`,
     footer: `Gravitas Classroom Activity  |  ${title}${version ? `  |  ${version}` : ''}`,
   });
 
@@ -72,8 +75,20 @@ export function activityGuide(
     columns: ['', ''],
     widths: [1, 2],
     rows: [
-      ['Cut from', `${plainText(lesson.title)} (${lesson.steps.length} steps)`],
-      ['Scenario', activity.scenario],
+      [
+        'Cut from',
+        `${plainText(lesson.title)} (${plural(lesson.steps.length, 'step')})`,
+      ],
+      [
+        'Scenario',
+        // star-sizes loads no world at all: every step builds or selects its
+        // own stellar model inside the instrument. The cell was blank, which
+        // reads as an omission rather than as the fact it is.
+        activity.scenario ||
+          'No fixed scenario. Each step creates or selects its own stellar ' +
+            'model in the comparison instrument, so there is no world to load ' +
+            'and none to reset.',
+      ],
       ['Audience', say(messages, activity.audienceId)],
       [
         'Formats',
@@ -126,20 +141,49 @@ export function activityGuide(
           'Steps',
           `${resolved.sids.length} of the lesson's ${lesson.steps.length}`,
         ],
-        ['Open with', teaching?.launch || ''],
+        ['Open with', activityLaunchUrl(activity.id, format.id)],
       ],
       size: 9,
     });
 
     doc.paragraph(say(messages, format.introId));
 
+    if (teaching?.prepare) {
+      doc.heading('Instructor preparation', {
+        size: 10.5,
+        spaceBefore: 10,
+        keepWith: 34,
+      });
+      doc.paragraph(teaching.prepare, { size: 9.5 });
+    }
+
     if (teaching?.setup) {
-      doc.heading('Before the class', {
+      doc.heading('Setup', {
         size: 10.5,
         spaceBefore: 10,
         keepWith: 34,
       });
       doc.paragraph(teaching.setup, { size: 9.5 });
+    }
+
+    if (teaching?.reset) {
+      doc.heading('Resetting, without losing written work', {
+        size: 10.5,
+        spaceBefore: 10,
+        keepWith: 34,
+      });
+      doc.paragraph(teaching.reset, { size: 9.5 });
+    }
+
+    // The distinction the guides exist to make: the simulation is the
+    // evidence, not the wallpaper behind the panel.
+    if (teaching?.observe) {
+      doc.heading('What to watch in the live simulation', {
+        size: 10.5,
+        spaceBefore: 12,
+        keepWith: 34,
+      });
+      doc.paragraph(teaching.observe, { size: 9.5 });
     }
 
     if (teaching?.beats?.length) {
@@ -202,6 +246,50 @@ export function activityGuide(
         widths: [1, 4.6],
         rows: teaching.rubric.map(r => [r.band, r.looks]),
       });
+    }
+
+    if (teaching?.misconceptions?.length) {
+      doc.heading('Common misconceptions', {
+        size: 10.5,
+        spaceBefore: 12,
+        keepWith: 40,
+      });
+      doc.table({
+        columns: ['What a student says', 'What to say back'],
+        widths: [1.6, 4],
+        rows: teaching.misconceptions.map(m => [m.claim, m.response]),
+      });
+    }
+
+    if (teaching?.recovery?.length) {
+      doc.heading('If this format goes wrong', {
+        size: 10.5,
+        spaceBefore: 12,
+        keepWith: 40,
+      });
+      doc.table({
+        columns: ['What happened', 'What to do'],
+        widths: [1.6, 4],
+        rows: teaching.recovery.map(r => [r.problem, r.fix]),
+      });
+    }
+
+    if (teaching?.access) {
+      doc.heading('Keyboard, touch and reduced motion', {
+        size: 10.5,
+        spaceBefore: 12,
+        keepWith: 34,
+      });
+      doc.paragraph(teaching.access, { size: 9.5 });
+    }
+
+    if (teaching?.worksheet) {
+      doc.heading('How the worksheet maps to the screens', {
+        size: 10.5,
+        spaceBefore: 12,
+        keepWith: 34,
+      });
+      doc.paragraph(teaching.worksheet, { size: 9.5 });
     }
 
     doc.paragraph(`Closing: ${say(messages, format.closingId)}`, { size: 9.5 });
@@ -307,6 +395,7 @@ export function activityWorksheet(
 
   const doc = createDocument({
     title: `${title}: ${formatName} worksheet`,
+    subject: `Student worksheet for the "${title}" classroom activity, ${formatName} format.`,
     footer: `Gravitas  |  ${title} - ${formatName}${version ? `  |  ${version}` : ''}`,
   });
 
@@ -317,8 +406,9 @@ export function activityWorksheet(
   });
 
   doc.row('Name', '');
+  doc.row('Class', '');
   doc.row('Date', '');
-  doc.row('Open', activityTeachingFor(activity.id, format.id)?.launch || '');
+  doc.row('Open', activityLaunchUrl(activity.id, format.id));
   doc.rule();
 
   doc.paragraph(say(messages, format.introId), { size: 9.5 });
@@ -357,8 +447,7 @@ export function activityWorksheet(
         step.options.map(o => `(  )  ${plainText(o)}`),
         { size: 9.5, gap: 2 }
       );
-      doc.field('Why do you think so?', '');
-      doc.field('', '');
+      doc.writingSpace('Why do you think so?', { lines: 3 });
     } else if (step.type === 'measure') {
       doc.table({
         columns: ['Quantity', 'Value', 'Unit'],
@@ -370,13 +459,18 @@ export function activityWorksheet(
         ]),
       });
     } else {
-      for (let i = 0; i < 3; i++) doc.field('', '');
+      doc.writingSpace('Your measurement, and how you took it', { lines: 4 });
     }
   }
 
   doc.heading('Before you finish', { size: 11, spaceBefore: 16, keepWith: 50 });
   doc.paragraph(say(messages, format.closingId), { size: 9.5 });
-  for (let i = 0; i < 3; i++) doc.field('', '');
+  doc.writingSpace(
+    'Anything you noticed that the questions did not ask about',
+    {
+      lines: 4,
+    }
+  );
 
   return doc.build();
 }

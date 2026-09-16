@@ -28,6 +28,10 @@
 // counts, and pulling in 225KB of lesson text to render a filter and ten cards
 // would be the same mistake the student-facing browser used to make.
 import { MANIFEST as INVESTIGATIONS } from './data/investigations/registry.js';
+import { ACTIVITIES } from './data/activities.js';
+import { activityTeachingFor } from './data/activityTeaching.js';
+import { activityHash } from './activities/activityBridge.js';
+import { EN_TEACHING } from './i18n/en.teaching.js';
 import { INSTRUCTOR_CONTENT } from './data/instructorContent.js';
 
 /** Where the encrypted bundle lives. */
@@ -171,6 +175,7 @@ function download(file) {
   document.body.appendChild(a);
   a.click();
   a.remove();
+  announce(`${file.name} downloaded.`);
 }
 
 // --- Download all, as a ZIP ---------------------------------------------------
@@ -289,6 +294,11 @@ const folderFor = id =>
   );
 
 function downloadAll() {
+  // Building the archive is several seconds of synchronous work on a slow
+  // machine, and a button that does nothing visible for that long reads as
+  // broken. Said out loud as well as shown, because the person most likely to
+  // be unsure is the one who cannot see the cursor change.
+  announce(`Preparing ${manifest.files.length} documents…`);
   const entries = manifest.files.map(f => ({
     path: f.investigation ? `${folderFor(f.investigation)}/${f.name}` : f.name,
     bytes: b64ToBytes(f.bytes),
@@ -301,6 +311,7 @@ function downloadAll() {
   document.body.appendChild(a);
   a.click();
   a.remove();
+  announce(`All ${manifest.files.length} documents downloaded as a ZIP.`);
 }
 
 // --- Dashboard ----------------------------------------------------------------
@@ -325,6 +336,114 @@ function minutesOf(duration) {
 }
 
 let activeFilter = 'all';
+let searchTerm = '';
+
+/** A message for the polite status line, or '' to clear it. */
+function announce(message) {
+  const el = $('downloadStatus');
+  if (el) el.textContent = message;
+}
+
+/**
+ * The eight activity documents, one card per activity and one row per format.
+ *
+ * They were only ever reachable through the 54-document ZIP. An instructor
+ * planning one period wants one guide and one worksheet, and had to download
+ * every answer key in the catalog to get them.
+ */
+function renderActivities() {
+  const list = $('activityResources');
+  if (!list) return;
+  list.innerHTML = '';
+  let documents = 0;
+
+  for (const activity of ACTIVITIES) {
+    const lesson = INVESTIGATIONS.find(i => i.id === activity.lesson);
+    const title = EN_TEACHING[activity.titleId] || activity.id;
+    const guide = byId(`activity-${activity.id}-guide`);
+
+    const card = document.createElement('article');
+    card.className = 'res-card is-investigation';
+
+    const meta = document.createElement('div');
+    meta.innerHTML = `
+      <h3>${title}</h3>
+      <p class="res-sub">${EN_TEACHING[activity.forId] || ''}</p>
+      <p class="res-meta">
+        <span>Classroom activity</span>
+        <span>${activity.formats.length} format${activity.formats.length === 1 ? '' : 's'}</span>
+        <span>Built from ${lesson ? lesson.title : activity.lesson}</span>
+        <span>${activity.scenario || 'No fixed scenario'}</span>
+      </p>`;
+    card.append(meta);
+
+    if (guide) {
+      const actions = document.createElement('div');
+      actions.className = 'res-actions';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ui-button';
+      btn.textContent = `${title}: Activity Guide, all formats (PDF)`;
+      btn.addEventListener('click', () => download(guide));
+      actions.append(btn);
+      card.append(actions);
+      documents++;
+    }
+
+    const formats = document.createElement('ul');
+    formats.className = 'res-formats';
+    for (const format of activity.formats) {
+      const teaching = activityTeachingFor(activity.id, format.id);
+      const sheet = byId(`activity-${activity.id}-${format.id}-worksheet`);
+      const name = EN_TEACHING[format.nameId] || format.id;
+
+      const row = document.createElement('li');
+      row.className = 'res-format';
+      row.innerHTML = `
+        <p class="res-format-name">${name}</p>
+        <p class="res-meta">
+          <span>~${format.minutes} min (estimate)</span>
+          <span>${format.steps.length} step${format.steps.length === 1 ? '' : 's'}</span>
+          <span>${EN_TEACHING[format.forId] || ''}</span>
+        </p>
+        <p class="res-format-purpose">${EN_TEACHING[format.introId] || ''}</p>`;
+
+      const rowActions = document.createElement('div');
+      rowActions.className = 'res-actions';
+      if (sheet) {
+        const w = document.createElement('button');
+        w.type = 'button';
+        w.className = 'ui-button';
+        w.textContent = `${name}: Student Worksheet (PDF)`;
+        w.addEventListener('click', () => download(sheet));
+        rowActions.append(w);
+        documents++;
+      } else {
+        // The demonstration is projected and answered aloud, so it has no
+        // worksheet. Saying so beats an absent button nobody can ask about.
+        const none = document.createElement('p');
+        none.className = 'res-none';
+        none.textContent =
+          'No worksheet: this format is projected and answered aloud.';
+        rowActions.append(none);
+      }
+      const open = document.createElement('a');
+      open.className = 'ui-button is-quiet';
+      open.href = `/${teaching ? activityHash(activity.id, format.id) : ''}`;
+      open.textContent = `Open ${name} in Gravitas`;
+      rowActions.append(open);
+      row.append(rowActions);
+      formats.append(row);
+    }
+    card.append(formats);
+    list.append(card);
+  }
+
+  const el = $('activityCount');
+  if (el) {
+    el.textContent = `${ACTIVITIES.length} activities, ${documents} documents`;
+  }
+}
 
 function renderDashboard() {
   const general = $('generalResources');
@@ -379,8 +498,20 @@ function renderDashboard() {
   zipCard.append(zipBtn);
   general.append(zipCard);
 
+  renderActivities();
   renderInvestigations();
-  $('materialsVersion').textContent = `Materials updated ${manifest.version}`;
+
+  const search = $('resourceSearch');
+  if (search && !search.dataset.wired) {
+    search.dataset.wired = 'yes';
+    search.addEventListener('input', () => {
+      searchTerm = search.value.trim().toLowerCase();
+      renderInvestigations();
+    });
+  }
+  $('materialsVersion').textContent =
+    `Materials updated ${manifest.version} — ${manifest.files.length} documents, ` +
+    `generated ${manifest.generated}`;
 }
 
 function renderInvestigations() {
@@ -401,6 +532,11 @@ function renderInvestigations() {
       c.topic !== activeFilter
     ) {
       continue;
+    }
+    if (searchTerm) {
+      const haystack =
+        `${inv.title} ${inv.subtitle} ${c.topic} ${c.difficulty}`.toLowerCase();
+      if (!haystack.includes(searchTerm)) continue;
     }
     shown++;
 
@@ -445,37 +581,110 @@ function renderInvestigations() {
   }
 
   $('noMatches').hidden = shown > 0;
+  const count = $('investigationCount');
+  if (count) {
+    count.textContent =
+      shown === INVESTIGATIONS.length
+        ? `${INVESTIGATIONS.length} investigations, ${INVESTIGATIONS.length * 2} documents`
+        : `${shown} of ${INVESTIGATIONS.length} shown`;
+  }
 }
 
+/**
+ * Three duration buttons, and a select for the topics.
+ *
+ * Every topic used to be its own pill. There are twenty-two investigations and
+ * very nearly as many distinct topics, so the filter row rendered as
+ * twenty-five buttons - four lines of them above the list on a laptop, and a
+ * wall on a phone. A row of pills is a good control for three or four choices
+ * and a bad one for twenty-two; a select is the same capability in one line,
+ * with the platform's own keyboard handling and its own long-list behavior.
+ */
 function buildFilters() {
   const topics = [
     ...new Set(
       INVESTIGATIONS.map(i => INSTRUCTOR_CONTENT[i.id]?.topic).filter(Boolean)
     ),
-  ];
-  const options = [
+  ].sort((a, b) => a.localeCompare(b));
+
+  const box = $('resourceFilters');
+  box.innerHTML = '';
+
+  /** How many investigations a filter would leave showing. */
+  const countFor = id => {
+    if (id === 'all') return INVESTIGATIONS.length;
+    return INVESTIGATIONS.filter(inv => {
+      const c = INSTRUCTOR_CONTENT[inv.id];
+      if (!c) return false;
+      if (id === 'short') return minutesOf(inv.duration) <= 45;
+      if (id === 'long') return minutesOf(inv.duration) > 45;
+      return c.topic === id;
+    }).length;
+  };
+
+  const buttons = [
     { id: 'all', label: 'All' },
-    ...topics.map(t => ({ id: t, label: t })),
     { id: 'short', label: '45 min or less' },
     { id: 'long', label: 'Over 45 min' },
   ];
-  const box = $('resourceFilters');
-  box.innerHTML = '';
-  for (const o of options) {
+  const paint = () => {
+    box
+      .querySelectorAll('.res-filter')
+      .forEach(el =>
+        el.setAttribute(
+          'aria-pressed',
+          String(el.dataset.filter === activeFilter)
+        )
+      );
+    const sel = $('topicFilter');
+    if (sel)
+      sel.value = buttons.some(b => b.id === activeFilter) ? '' : activeFilter;
+  };
+
+  for (const o of buttons) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'res-filter';
-    b.textContent = o.label;
+    b.dataset.filter = o.id;
+    // The count is part of the label, so a filter that would show nothing says
+    // so before it is pressed rather than after.
+    b.textContent = `${o.label} (${countFor(o.id)})`;
     b.setAttribute('aria-pressed', String(activeFilter === o.id));
     b.addEventListener('click', () => {
       activeFilter = o.id;
-      box
-        .querySelectorAll('.res-filter')
-        .forEach(el => el.setAttribute('aria-pressed', String(el === b)));
+      paint();
       renderInvestigations();
     });
     box.append(b);
   }
+
+  const wrap = document.createElement('div');
+  wrap.className = 'res-topic';
+  const label = document.createElement('label');
+  label.className = 'res-topic-label';
+  label.htmlFor = 'topicFilter';
+  label.textContent = 'Topic';
+  const select = document.createElement('select');
+  select.id = 'topicFilter';
+  select.className = 'res-topic-select';
+  const any = document.createElement('option');
+  any.value = '';
+  any.textContent = `Any topic (${INVESTIGATIONS.length})`;
+  select.append(any);
+  for (const t of topics) {
+    const o = document.createElement('option');
+    o.value = t;
+    o.textContent = `${t} (${countFor(t)})`;
+    select.append(o);
+  }
+  select.addEventListener('change', () => {
+    activeFilter = select.value || 'all';
+    paint();
+    renderInvestigations();
+  });
+  wrap.append(label, select);
+  box.append(wrap);
+  paint();
 }
 
 // --- Screens ------------------------------------------------------------------

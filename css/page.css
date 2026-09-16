@@ -575,7 +575,8 @@
     text-decoration: none;
     text-align: center;
   }
-  .res-card.is-investigation {
+  .res-card.is-investigation,
+  .res-format {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(240px, max-content);
     gap: var(--space-5);
@@ -640,14 +641,149 @@
     border-color: var(--accent);
   }
 
+  /* --- The instructor dashboard ------------------------------------------- */
+
+  /* A document button is a touch target on a phone, and the app-wide .ui-button
+     is 34px high. Raised here rather than globally: the same class draws the
+     simulator's control rail, where 44px rows would cost vertical space the
+     canvas needs.
+
+     These rules are deliberately shared rather than written per element. This
+     file is concatenated into css/app.css, which is the simulation's initial
+     download and the tightest budget in the project - so a dashboard control
+     costs the sandbox bytes even though the sandbox never draws one. Every
+     declaration here is one the sandbox pays for. */
+  .res-card .ui-button,
+  .res-format .ui-button,
+  .res-filter,
+  .res-search-input,
+  .res-topic-select {
+    min-height: 44px;
+  }
+
+  /* The two form controls are the same control in two shapes. */
+  .res-search-input,
+  .res-topic-select {
+    padding: 0 var(--space-3);
+    font: inherit;
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+  }
+  .res-search-input:focus-visible,
+  .res-topic-select:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .res-search-input {
+    background: var(--panel-bg);
+    border-radius: var(--radius-md);
+  }
+  .res-topic-select {
+    /* Grows where there is room and shrinks where there is not; `min-width: 0`
+       is what lets a flex item go below its content size, and without it the
+       label plus an 18rem select push a 320px viewport into a scroll. */
+    flex: 1 1 12rem;
+    min-width: 0;
+    max-width: 18rem;
+    background: var(--button-bg);
+    border-radius: var(--radius-full);
+  }
+
+  /* Labels, the status line and the "no worksheet" note are all secondary text
+     at the body size; only the status line's spacing differs. */
+  .res-search-label,
+  .res-topic-label,
+  .portal-status,
+  .res-format-purpose,
+  .res-none {
+    font-size: var(--text-sm);
+    color: var(--text-secondary) !important;
+  }
+  .portal-status {
+    margin: var(--space-3) 0 0;
+  }
+  /* Empty until something happens, so it takes no room and does not read as a
+     heading with nothing under it. */
+  .portal-status:empty {
+    display: none;
+  }
+  .res-format-purpose {
+    margin-top: var(--space-2) !important;
+  }
+  .res-none {
+    font-style: italic;
+  }
+
+  /* A count beside a heading, so "how much is here" is answerable without
+     scrolling to the end of the list. */
+  .res-count {
+    margin-left: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* The search field stacks; the topic row sits on one line and wraps. */
+  .res-search,
+  .res-topic {
+    display: flex;
+    gap: var(--space-2);
+    max-width: 100%;
+  }
+  .res-search {
+    flex-direction: column;
+    margin: var(--space-4) 0 0;
+    max-width: 30rem;
+  }
+  .res-topic {
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* One row per activity format. The row is the same two-column shape as an
+     investigation card, so it borrows that rule rather than restating it. */
+  .res-formats {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .res-format {
+    padding: var(--space-4);
+    background: var(--panel-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .res-format-name {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-primary) !important;
+  }
+
   @media (max-width: 860px) {
     .portal-login {
       grid-template-columns: 1fr;
       gap: var(--space-5);
     }
-    .res-card.is-investigation {
+    .res-card.is-investigation,
+    .res-format {
       grid-template-columns: 1fr;
       gap: var(--space-4);
+    }
+    /* The count wraps under its heading rather than pushing it out of the
+       viewport at 320px. */
+    .res-count {
+      display: block;
+      margin-left: 0;
+      margin-top: var(--space-1);
+      white-space: normal;
     }
   }
 }

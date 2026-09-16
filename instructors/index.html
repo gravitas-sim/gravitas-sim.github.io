@@ -143,16 +143,59 @@
           <p class="portal-version" id="materialsVersion"></p>
         </div>
 
+        <!-- Download progress, announced rather than only drawn. A download
+             that takes four seconds to build a ZIP looks like a dead button to
+             anyone not watching the cursor. -->
+        <p
+          class="portal-status"
+          id="downloadStatus"
+          role="status"
+          aria-live="polite"
+        ></p>
+
         <h2>General resources</h2>
         <div class="res-grid" id="generalResources"></div>
 
-        <h2>Investigation materials</h2>
+        <h2 id="activitiesHeading">
+          Classroom activities
+          <span class="res-count" id="activityCount"></span>
+        </h2>
+        <p>
+          Shorter than an investigation and built from its steps: a five-minute
+          demonstration, a twenty-minute guided pair task, a full lab. Each
+          format has its own guide, and most have a student worksheet. These
+          are in the ZIP as well, but they are downloadable one at a time here
+          because an instructor planning one period does not want the other
+          fifty-three documents.
+        </p>
+        <div
+          class="res-grid is-stacked"
+          id="activityResources"
+          aria-labelledby="activitiesHeading"
+        ></div>
+
+        <h2 id="investigationsHeading">
+          Investigation materials
+          <span class="res-count" id="investigationCount"></span>
+        </h2>
         <p>
           Each investigation has an instructor guide and a separate answer key.
           Answer keys are generated from the live lesson definitions and checked
           against the same rule the website uses to mark student work, so they
           cannot disagree with what students see.
         </p>
+        <div class="res-search">
+          <label class="res-search-label" for="resourceSearch"
+            >Search investigations</label
+          >
+          <input
+            type="search"
+            id="resourceSearch"
+            class="res-search-input"
+            placeholder="Title, topic or subject"
+            autocomplete="off"
+          />
+        </div>
         <div
           class="res-filters"
           id="resourceFilters"

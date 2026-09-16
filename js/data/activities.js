@@ -3,8 +3,8 @@
 // -----------------------------------------------------------------------------
 // An instructor with five minutes, twenty minutes or a full period wants three
 // different things out of the same physics, and the catalog answers only the
-// third: the investigations are complete lessons, and "which twelve of these
-// thirty-seven steps fit before the bell" is work nobody should have to do
+// third: the investigations are complete lessons, and "which dozen of these
+// three dozen steps fit before the bell" is work nobody should have to do
 // twice.
 //
 // An activity is that work, done once and checked in. It is a teaching format
@@ -47,9 +47,17 @@
 /**
  * The activities, in the order they are offered.
  *
- * One, deliberately. A catalog of one honest activity is worth more than six
- * cards where five say "coming soon", and the structure below is what a second
- * one will slot into rather than something to be rebuilt for it.
+ * Three of them, carrying six format variants between them: orbital-speed has
+ * four (demonstration, route, guided, lab), and binary-planets and star-sizes
+ * have a short route each. It started as one, deliberately - a catalog of one
+ * honest activity being worth more than six cards where five say "coming soon"
+ * - and the structure held, which is why the second and third slotted in
+ * rather than needing it rebuilt.
+ *
+ * Every format needs a matching entry in js/data/activityTeaching.js. Three of
+ * the six went without one for a while, and the generated guide for those
+ * formats simply had no teaching section in it; `npm run activities:check`
+ * fails now if a format has no guidance.
  */
 export const ACTIVITIES = Object.freeze([
   Object.freeze({

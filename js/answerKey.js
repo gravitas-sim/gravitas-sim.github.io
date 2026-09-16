@@ -20,12 +20,78 @@
 import { checkAnswer, toleranceFor } from './answerCheck.js';
 
 /** Strip the small set of inline tags a lesson uses, for plain-text output. */
+/**
+ * The named HTML entities this content actually uses.
+ *
+ * Deliberately a short list rather than a full table: an entity that is not
+ * here survives into the output and the test in tests/instructorMaterials.js
+ * fails naming it, which is a better outcome than a 2,000-entry table that
+ * silently decodes something the browser would not.
+ */
+const ENTITIES = Object.freeze({
+  rsquo: '\u2019',
+  lsquo: '\u2018',
+  ldquo: '\u201c',
+  rdquo: '\u201d',
+  ndash: '\u2013',
+  mdash: '\u2014',
+  hellip: '\u2026',
+  nbsp: ' ',
+  thinsp: ' ',
+  ensp: ' ',
+  emsp: ' ',
+  times: '\u00d7',
+  minus: '\u2212',
+  plusmn: '\u00b1',
+  deg: '\u00b0',
+  sup2: '\u00b2',
+  sup3: '\u00b3',
+  frac12: '\u00bd',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+});
+
+/**
+ * Decode HTML entities, for output that is not HTML.
+ *
+ * A PDF has no markup, so `&rsquo;` in a source string is not a curly quote
+ * there - it is six literal characters, and nineteen of them went out in three
+ * answer keys reading "Kepler&rsquo;s". The browser was always right; only the
+ * PDF path was wrong, which is why this lives behind plainText() and not in
+ * the content.
+ *
+ * `&amp;` is decoded last and separately. Doing it first would turn the source
+ * text `&amp;lt;` - which should read as the literal "&lt;" - into a "<".
+ *
+ * @param {string} text - Text that may carry entities
+ * @returns {string} The same text with entities resolved
+ */
+function decodeEntities(text) {
+  return text
+    .replace(/&([a-zA-Z][a-zA-Z0-9]{1,31});/g, (whole, name) =>
+      Object.hasOwn(ENTITIES, name) ? ENTITIES[name] : whole
+    )
+    .replace(/&#(\d{1,7});/g, (whole, n) => {
+      const code = Number(n);
+      return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : whole;
+    })
+    .replace(/&#[xX]([0-9a-fA-F]{1,6});/g, (whole, hex) => {
+      const code = parseInt(hex, 16);
+      return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : whole;
+    })
+    .replace(/&amp;/g, '&');
+}
+
 export function plainText(html) {
-  return String(html ?? '')
-    .replace(/<sub>(.*?)<\/sub>/g, '_$1')
-    .replace(/<sup>(.*?)<\/sup>/g, '^$1')
-    .replace(/<\/?(strong|em)>/g, '')
-    .replace(/\s*\\n\s*/g, ' ')
+  return decodeEntities(
+    String(html ?? '')
+      .replace(/<sub>(.*?)<\/sub>/g, '_$1')
+      .replace(/<sup>(.*?)<\/sup>/g, '^$1')
+      .replace(/<\/?(strong|em)>/g, '')
+      .replace(/\s*\\n\s*/g, ' ')
+  )
     .replace(/\s+/g, ' ')
     .trim();
 }

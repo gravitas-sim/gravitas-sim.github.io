@@ -292,7 +292,13 @@ const CONTENT_W = PAGE_W - MARGIN * 2;
  * Flows top to bottom and breaks pages by itself, so callers describe what the
  * report says rather than where it lands.
  */
-export function createDocument({ title = 'Document', footer = '' } = {}) {
+export function createDocument({
+  title = 'Document',
+  footer = '',
+  author = 'Carl Ziegler',
+  subject = '',
+  lang = 'en-US',
+} = {}) {
   const pages = [];
   let ops = [];
   let links = [];
@@ -357,6 +363,36 @@ export function createDocument({ title = 'Document', footer = '' } = {}) {
         y -= lead;
       }
       y -= gap;
+      return api;
+    },
+
+    /**
+     * Ruled space for a student to write in.
+     *
+     * Distinct from field() on purpose. field() prints what somebody wrote and
+     * says "(no answer given)" when they wrote nothing, which is right on an
+     * answer key and wrong on a blank worksheet - the student worksheets were
+     * handing out pages that said "(no answer given)" under every question
+     * before the student had seen them.
+     *
+     * @param {string} label - What to write there
+     * @param {object} [options] - `lines` is how many rules to draw
+     * @returns {object} The document, for chaining
+     */
+    writingSpace(label, { lines = 3, gap = 18 } = {}) {
+      need(20 + lines * gap);
+      if (label) {
+        drawText(toWinAnsi(label), 9, true, 0, '0.35 0.35 0.4');
+        y -= 15;
+      }
+      for (let i = 0; i < lines; i++) {
+        y -= gap;
+        ops.push(
+          '0.78 0.78 0.82 RG 0.6 w',
+          `${MARGIN + 10} ${y.toFixed(2)} m ${(MARGIN + CONTENT_W).toFixed(2)} ${y.toFixed(2)} l S`
+        );
+      }
+      y -= 10;
       return api;
     },
 
@@ -882,7 +918,12 @@ export function createDocument({ title = 'Document', footer = '' } = {}) {
 
       need(40 + (hasHeader ? rowHeight(columns) : 0));
       if (hasHeader) paint(columns, true, 0.93);
-      for (const r of rows) drawRow(r, false, null);
+      // Alternating bands, very lightly. Several of these tables run to twenty
+      // rows of two-line cells, and the eye loses which "What students do"
+      // belongs to which step range somewhere around the tenth. 0.975 is faint
+      // enough to survive a grayscale printer without competing with the text
+      // over it, which a heavier stripe does.
+      rows.forEach((r, i) => drawRow(r, false, i % 2 === 1 ? 0.975 : null));
       y -= 10;
       return api;
     },
@@ -930,7 +971,7 @@ export function createDocument({ title = 'Document', footer = '' } = {}) {
      */
     build() {
       startPage();
-      return assemble(pages, { title, footer });
+      return assemble(pages, { title, footer, author, subject, lang });
     },
   };
 
@@ -944,7 +985,7 @@ export function createDocument({ title = 'Document', footer = '' } = {}) {
  * cross-reference table at the end is what a reader uses to find anything at
  * all: an offset that is wrong by one byte makes the whole file unopenable.
  */
-function assemble(pages, { title, footer }) {
+function assemble(pages, { title, footer, author, subject, lang }) {
   const objects = [];
   const add = body => {
     objects.push(body);
@@ -1002,10 +1043,31 @@ function assemble(pages, { title, footer }) {
   objects[pagesId - 1] =
     `<< /Type /Pages /Kids [${pageIds.map(i => `${i} 0 R`).join(' ')}] /Count ${pageIds.length} >>`;
 
+  // Document properties, which is what a reader's "Get Info" panel shows and
+  // what a library catalog reads. Without /Author and /Subject a downloaded
+  // guide is an untitled file by nobody, and /Lang is what tells a screen
+  // reader which language to pronounce it in.
+  //
+  // The creation date is deliberately month-granular. These documents are not
+  // byte-stable over time - versionStamp() already prints the month into every
+  // footer - but a to-the-second timestamp would make every build differ from
+  // the last for no reason anybody wrote, which is the thing the freshness
+  // check in tools/build-instructor-materials.js exists to avoid claiming.
+  const made = new Date();
+  const stamp =
+    `D:${made.getFullYear()}` +
+    String(made.getMonth() + 1).padStart(2, '0') +
+    '01000000Z';
   const infoId = add(
-    `<< /Title (${pdfString(toWinAnsi(title))}) /Producer (Gravitas) /Creator (Gravitas) >>`
+    `<< /Title (${pdfString(toWinAnsi(title))})` +
+      ` /Author (${pdfString(toWinAnsi(author))})` +
+      (subject ? ` /Subject (${pdfString(toWinAnsi(subject))})` : '') +
+      ` /Producer (Gravitas) /Creator (Gravitas)` +
+      ` /CreationDate (${stamp}) /ModDate (${stamp}) >>`
   );
-  const catalogId = add(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+  const catalogId = add(
+    `<< /Type /Catalog /Pages ${pagesId} 0 R /Lang (${pdfString(lang)}) >>`
+  );
 
   // --- Serialize -------------------------------------------------------------
   const chunks = [];

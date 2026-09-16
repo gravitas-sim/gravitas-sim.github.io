@@ -21,6 +21,7 @@
 
 import { createDocument } from './pdf.js';
 import { answerKeyFor, questionCounts, plainText } from './answerKey.js';
+import { plural } from './format.js';
 import { instructorContentFor } from './data/instructorContent.js';
 
 const SITE = 'https://gravitas-sim.online';
@@ -43,6 +44,7 @@ export function instructorGuide(inv, { version = '' } = {}) {
 
   const doc = createDocument({
     title: `${inv.title}: Instructor Guide`,
+    subject: `Instructor guide for the Gravitas investigation "${plainText(inv.title)}": objectives, flow, misconceptions, discussion prompts and model notes.`,
     footer: `Gravitas Instructor Guide  |  ${plainText(inv.title)}${version ? `  |  ${version}` : ''}`,
   });
 
@@ -60,11 +62,13 @@ export function instructorGuide(inv, { version = '' } = {}) {
       ['Student level', inv.level],
       ['Primary topic', c.topic],
       ['Difficulty', c.difficulty],
-      ['Length', `${inv.steps.length} steps`],
+      ['Length', plural(inv.steps.length, 'step')],
       [
         'Student input',
-        `${counts.graded} graded questions, ${counts.predictions} predictions, ` +
-          `${counts.measurements} measurement screens, ${counts.written} written answers`,
+        `${plural(counts.graded, 'graded question')}, ` +
+          `${plural(counts.predictions, 'prediction')}, ` +
+          `${plural(counts.measurements, 'measurement screen')}, ` +
+          `${plural(counts.written, 'written answer')}`,
       ],
       ['Recommended placement', c.placement],
     ],
@@ -198,13 +202,14 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
 
   const doc = createDocument({
     title: `${inv.title}: Answer Key`,
+    subject: `Answer key for the Gravitas investigation "${plainText(inv.title)}", derived from the lesson definitions and verified against the site's own grader.`,
     footer: `Gravitas Answer Key  |  ${plainText(inv.title)}  |  Instructor copy${version ? `  |  ${version}` : ''}`,
   });
 
   doc.titleBlock({
     kicker: 'Gravitas Investigation | Answer Key',
     title: plainText(inv.title),
-    subtitle: `${inv.steps.length} steps  |  ${inv.duration}  |  ${counts.graded} graded questions, ${counts.predictions} predictions`,
+    subtitle: `${plural(inv.steps.length, 'step')}  |  ${inv.duration}  |  ${plural(counts.graded, 'graded question')}, ${plural(counts.predictions, 'prediction')}`,
   });
 
   doc.paragraph(
@@ -335,6 +340,8 @@ const round = v =>
 export function adoptersGuide(investigations, { version = '' } = {}) {
   const doc = createDocument({
     title: 'Teaching with Gravitas: Instructor Adopter’s Guide',
+    subject:
+      'How to adopt Gravitas in an introductory astronomy course: what it is, who it is for, how to assign it, and what is graded automatically.',
     footer: `Gravitas Adopter's Guide${version ? `  |  ${version}` : ''}`,
   });
 
@@ -517,6 +524,8 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
 export function curriculumMap(investigations, { version = '' } = {}) {
   const doc = createDocument({
     title: 'Gravitas Investigation Curriculum Map',
+    subject:
+      'Every Gravitas investigation side by side: topic, timing, difficulty, prerequisites and objectives.',
     footer: `Gravitas Curriculum Map${version ? `  |  ${version}` : ''}`,
   });
 
@@ -558,7 +567,7 @@ export function curriculumMap(investigations, { version = '' } = {}) {
     });
     doc.row('Topic', c.topic);
     doc.row('Time', inv.duration);
-    doc.row('Length', `${inv.steps.length} steps`);
+    doc.row('Length', plural(inv.steps.length, 'step'));
     doc.row('Difficulty', c.difficulty);
     doc.space(6);
     doc.paragraph('Recommended course point', {

@@ -67,6 +67,46 @@ export function parseActivityHash(hash) {
 }
 
 /**
+ * The fragment that opens one activity format.
+ *
+ * The inverse of parseActivityHash, and the reason it exists: the instructor
+ * guides carried their launch links as hand-typed strings, one per format, and
+ * three formats had no guide at all to carry one. A string somebody types is a
+ * string that goes stale the first time an id changes, silently, in a PDF
+ * nobody regenerates. Built here instead, from the same two ids the parser
+ * reads back.
+ *
+ * @param {string} activityId - Activity id
+ * @param {?string} [formatId] - Format id, when one is wanted
+ * @returns {string} `#activity=<activity>` or `#activity=<activity>/<format>`
+ */
+export function activityHash(activityId, formatId = null) {
+  const activity = String(activityId || '').trim();
+  if (!activity) throw new Error('activityHash needs an activity id');
+  const format = formatId ? String(formatId).trim() : '';
+  return `#activity=${activity}${format ? `/${format}` : ''}`;
+}
+
+/**
+ * The full address of one activity format, for print.
+ *
+ * Without a scheme, because it is read off a page and typed into a phone as
+ * often as it is clicked.
+ *
+ * @param {string} activityId - Activity id
+ * @param {?string} [formatId] - Format id
+ * @param {string} [origin] - Host to print, default the published site
+ * @returns {string} e.g. `gravitas-sim.online/#activity=orbital-speed/route`
+ */
+export function activityLaunchUrl(
+  activityId,
+  formatId = null,
+  origin = 'gravitas-sim.online'
+) {
+  return `${origin}/${activityHash(activityId, formatId)}`;
+}
+
+/**
  * Open the activity the address bar names.
  *
  * A request that cannot be honored says so and sends the reader to the page
