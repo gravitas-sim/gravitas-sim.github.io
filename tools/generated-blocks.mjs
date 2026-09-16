@@ -270,8 +270,61 @@ function physicsCoverageTable(inventory) {
   ].join('\n');
 }
 
+/**
+ * The Zenodo badge, and the citation with both identifiers.
+ *
+ * A generated block rather than `<!--fact:-->` markers, and the reason is
+ * worth writing down. A fact marker is an HTML comment, which a markdown
+ * renderer strips from prose - but not from inside a link destination. Put one
+ * in a URL and GitHub percent-encodes it into the href, producing
+ * `https://doi.org/%3C!--fact:doi--%3E10.5281/...` - a dead badge and a dead
+ * link that still look right in the source file. A block wraps whole lines
+ * from outside, so the URLs inside it are ordinary text.
+ *
+ * @returns {string} Markdown, or a note when there is no DOI yet
+ */
+function citationBlock() {
+  if (!RELEASE.doi) {
+    return '\nNot archived yet: there is no release, so there is no DOI. See\n[RELEASING.md](RELEASING.md).\n';
+  }
+  const v = RELEASE.doi;
+  const c = RELEASE.conceptDoi;
+  const lines = [
+    '',
+    `> Ziegler, C. (${(RELEASE.dateReleased || '').slice(0, 4)}). *${TITLE}*`,
+    `> (Version ${RELEASE.version}) [Computer software]. Zenodo.`,
+    `> <https://doi.org/${v}>`,
+    '',
+    '| | |',
+    '| --- | --- |',
+    `| **This version (${RELEASE.version})** | [${v}](https://doi.org/${v}) |`,
+  ];
+  if (c) {
+    lines.push(`| **All versions** | [${c}](https://doi.org/${c}) |`);
+  }
+  lines.push('');
+  return lines.join('\n');
+}
+
+/**
+ * The Zenodo DOI badge. Uses the concept DOI so it follows the newest release;
+ * falls back to the version DOI if there is somehow no concept DOI.
+ *
+ * @returns {string} Markdown, or empty when there is nothing to point at
+ */
+function doiBadgeBlock() {
+  const d = RELEASE.conceptDoi || RELEASE.doi;
+  if (!d) return '\n';
+  // Own lines, both ends. A line that begins with an HTML comment is raw HTML
+  // to a markdown renderer, and the image syntax after it is never parsed -
+  // the badge comes out as literal `[![DOI](` text next to an autolink.
+  return `\n[![DOI](https://zenodo.org/badge/DOI/${d}.svg)](https://doi.org/${d})\n`;
+}
+
 export function generatedBlocks({ manifest, instructor, physics = null }) {
   return {
+    doiBadge: doiBadgeBlock(),
+    citation: citationBlock(),
     investigationModels: `\n${investigationModelRows({ manifest, instructor })}\n          `,
     // Only a run of the suite can produce this, so a cheap docs check leaves
     // the block alone rather than claiming nobody generates it.

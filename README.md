@@ -1,7 +1,9 @@
 # Gravitas
 
 [![CI](https://github.com/gravitas-sim/gravitas-sim.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/gravitas-sim/gravitas-sim.github.io/actions/workflows/ci.yml)
-[![DOI](https://zenodo.org/badge/DOI/<!--fact:conceptDoi-->10.5281/zenodo.22800609<!--/fact-->.svg)](https://doi.org/<!--fact:conceptDoi-->10.5281/zenodo.22800609<!--/fact-->)
+<!--fact-block:doiBadge-->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22800609.svg)](https://doi.org/10.5281/zenodo.22800609)
+<!--/fact-block-->
 
 **An interactive astrophysics sandbox and astronomy teaching tool that runs entirely in the browser.**
 
@@ -541,22 +543,23 @@ plus the browser suite. If the change touches physics, run
 If you use Gravitas in teaching or research, please cite it. Every release is
 archived on Zenodo.
 
-> Ziegler, C. (2026). *Gravitas: an interactive astrophysics sandbox for
-> teaching* (Version <!--fact:version-->1.0.0<!--/fact-->) [Computer software].
-> Zenodo. https://doi.org/<!--fact:doi-->10.5281/zenodo.22800610<!--/fact-->
-
-**Two identifiers, and they are not interchangeable.**
+<!--fact-block:citation-->
+> Ziegler, C. (2026). *Gravitas: an interactive astrophysics sandbox for teaching*
+> (Version 1.0.0) [Computer software]. Zenodo.
+> <https://doi.org/10.5281/zenodo.22800610>
 
 | | |
 | --- | --- |
-| **This version** — <!--fact:doi-->10.5281/zenodo.22800610<!--/fact--> | [doi.org/<!--fact:doi-->10.5281/zenodo.22800610<!--/fact-->](https://doi.org/<!--fact:doi-->10.5281/zenodo.22800610<!--/fact-->) |
-| **All versions** — <!--fact:conceptDoi-->10.5281/zenodo.22800609<!--/fact--> | [doi.org/<!--fact:conceptDoi-->10.5281/zenodo.22800609<!--/fact-->](https://doi.org/<!--fact:conceptDoi-->10.5281/zenodo.22800609<!--/fact-->) |
+| **This version (1.0.0)** | [10.5281/zenodo.22800610](https://doi.org/10.5281/zenodo.22800610) |
+| **All versions** | [10.5281/zenodo.22800609](https://doi.org/10.5281/zenodo.22800609) |
+<!--/fact-block-->
 
-Cite the **version DOI** when a result depends on what the software did — which,
-for anything reproducible, is always. It names v<!--fact:version-->1.0.0<!--/fact-->
-and will never point anywhere else. The **concept DOI** resolves to whichever
-release is newest, which is what the badge above uses and what belongs in a
-"cite the software" link; it is the wrong thing to put in a methods section.
+**The two identifiers are not interchangeable.** Cite the **version DOI** when a
+result depends on what the software did — which, for anything reproducible, is
+always. It names one release and will never point anywhere else. The **concept
+DOI** resolves to whichever release is newest, which is what the badge above
+uses and what belongs in a "cite the software" link; it is the wrong thing to
+put in a methods section.
 
 [`CITATION.cff`](CITATION.cff) carries the same metadata in machine-readable
 form — the "Cite this repository" button in the GitHub sidebar reads it, and so
