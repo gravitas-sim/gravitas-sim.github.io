@@ -32,7 +32,7 @@ export const scenarioSummary = key => t(`scenario.${key}.summary`);
  * @param {string} id - Tag id from SCENARIO_TAGS
  * @returns {string} The label
  */
-export const tagLabelocalized = id => t(`tag.${id}.label`);
+export const tagLabelLocalized = id => t(`tag.${id}.label`);
 
 /**
  * A concept tag's one-line description, translated.

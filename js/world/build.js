@@ -371,7 +371,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
     case 'Grid': {
       const grid_size = Math.ceil(Math.sqrt(all_objects.length));
       const spacing = (spread * 2) / grid_size;
-      // A quarter-cell nudge, because one cell of a grid centerd on the origin
+      // A quarter-cell nudge, because one cell of a grid centered on the origin
       // lands exactly on it - and the origin is where the central body is
       // pinned. Slingshot Gauntlet shipped with an asteroid at (0, 0) sitting
       // inside its own black hole; the contact test in physics.js skips a pair
@@ -1237,7 +1237,7 @@ export const buildWorld = ctx => {
       // Dwarf planet beyond Neptune
     ];
 
-    // Create planets with realiztic properties
+    // Create planets with realistic properties
     const DEG2RAD = Math.PI / 180;
 
     for (let i = 0; i < solarSystemData.length; i++) {

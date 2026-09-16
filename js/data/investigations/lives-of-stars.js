@@ -1322,6 +1322,39 @@ const LIVES_OF_STARS = {
       }),
       tip: 'Your notebook has every measurement with the model it came from, the stage it was taken at, and — where an endpoint was quoted rather than computed — the paper it was quoted from.',
     },
+    {
+      sid: 'what-you-followed',
+      stage: pair(THREE_FUTURES),
+      type: 'read',
+      title: 'What you followed',
+      body: `<strong>Mass sets the luminosity, and the luminosity sets the
+             lifetime.</strong> Lifetime is fuel divided by the rate of spending
+             it, and because the rate climbs so much faster than the supply, the
+             heaviest star you followed lived for a ten-thousandth as long as the
+             lightest. A red dwarf has barely started.
+             \n\n<strong>Leaving the main sequence is core hydrogen running
+             out, not hydrogen running out.</strong> Most of the star's hydrogen
+             is still there when it goes; it is simply not where the fusion is.
+             That is why the next stage begins rather than the star ending.
+             \n\n<strong>What is left behind depends on the mass it
+             started with</strong> - a white dwarf for a Sun-like star, a neutron
+             star higher up, a black hole higher still. The boundaries are not
+             sharp, and at forty solar masses the model's own answer spans a
+             factor of three.
+             \n\n<strong>A black hole has no place on this diagram.</strong> The
+             axes are surface temperature and luminosity, and it has neither.
+             That is not a gap in the plot; it is what the plot is about.
+             \n\n<strong>And these are models.</strong> Single stars, one
+             composition, no rotation, no companion to take mass from or give it
+             to. The tracks stop before core collapse, so every remnant past a
+             white dwarf is a prescription quoted from a paper rather than
+             something this lesson computed. The readouts said so each time, and
+             that is the habit worth keeping.`,
+      // The instrument stays, as it does on the screen before this one; see
+      // the note on the same step in a-universe-of-stars.js.
+      tool: stage({ pace: 'phase', pinStaged: true, capture: true }),
+      tip: 'A track that stops is not a star that stops. It is a model reaching the end of what it was built to say, which is a different thing and worth telling apart.',
+    },
   ],
 };
 

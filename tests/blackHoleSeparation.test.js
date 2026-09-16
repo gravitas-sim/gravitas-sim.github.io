@@ -57,7 +57,7 @@ describe('a display setting cannot change the world', () => {
         updatePhysicsSettings({
           show_accretion_disk: on,
           show_bh_jets: jets,
-          realiztic_disk_physics: on,
+          realistic_disk_physics: on,
         });
         // Twice each, because the first call of a run can warm a name pool.
         build();

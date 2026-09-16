@@ -108,7 +108,7 @@ export const atVisibilityFloor = (worldRadius, zoom, floorPx) =>
 /**
  * Where each star on a stage goes, in world units.
  *
- * A row, centerd on the origin, evenly spaced. Deterministic by construction:
+ * A row, centered on the origin, evenly spaced. Deterministic by construction:
  * the same list of stars gives the same positions on every machine and every
  * reload, which is what lets a lesson say "the third one from the left" and a
  * screenshot in a worksheet still be right a year later.
@@ -154,7 +154,7 @@ export function rowLayout(count, { spacing = 90, y = 0, perRow = 0 } = {}) {
  * The lesson panel and the instrument sit over the canvas, so fitting to the
  * viewport puts the stage underneath them - which is what happened the first
  * time, and it makes the whole idea of a workspace pointless. `inset` is the
- * region they leave clear, in screen pixels, and the stage is centerd in that
+ * region they leave clear, in screen pixels, and the stage is centered in that
  * rather than in the window.
  *
  * @param {Array<{x: number, y: number, radius: number}>} placed - The stage

@@ -8,7 +8,7 @@ simulation cannot offer regardless of effort.
 
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over 14 surfaces × 2 languages × 2 themes — 56 runs |
+| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->15<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages × <!--fact:axeThemes-->2<!--/fact--> themes — <!--fact:axeRuns-->60<!--/fact--> runs |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
 
 Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
@@ -16,10 +16,13 @@ Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
 two candidates for exemption during the pass and neither survived it: each was
 a real defect with a real fix.
 
-The surfaces: the front door, the sandbox, the settings rail, the scenario
-gallery, the object inspector, the investigations browser, an open
-investigation, the share dialog, the A/B bench, the observing panels, lecture
-mode, the model page, the instructor portal and the teaching page.
+The surfaces, named as the spec names them: front door, sandbox, settings rail,
+scenario gallery, object inspector, investigations browser, active
+investigation, lesson measurement screen, share dialog, A/B bench, observing
+panels, lecture mode, model page, instructor portal, teaching page. That list
+and the count above both come from the `SURFACES` array in the spec — the count through `npm run docs:sync`, the names by hand,
+and `tests/accessibilityDocs.test.js` fails if a surface is in the array and
+not in the prose.
 
 Both languages, because a Spanish string is often longer than its English
 original and because `lang` has to follow the interface or a screen reader
@@ -142,17 +145,52 @@ an arbitrary system by hand is not currently a keyboard task.
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
 mean changing a line of running text into a row of buttons.
 
-**Automated checks are a floor, not a ceiling.** 52 clean axe runs mean no
+**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->60<!--/fact--> clean axe runs mean no
 machine-detectable violation on those surfaces in those states. They do not
 mean the application is pleasant to use with a screen reader, and nothing here
 substitutes for testing with one. Nothing in this pass was made to pass by
 hiding a control from assistive technology; where that had already happened, it
 was removed.
 
+## The generated PDFs
+
+The instructor guides, answer keys, activity guides and student worksheets are
+produced by this project's own PDF writer (`js/pdf.js`). What they do and do not
+provide is worth stating plainly, because a document that is merely *readable*
+is often described as accessible and these are not the same claim.
+
+**What they provide.** A document title, an author, a subject and a language
+(`/Lang en-US`) in the file's own properties, so a reader application announces
+them correctly rather than guessing. Selectable, searchable, copyable text —
+nothing is an image of words. Consistent headings, page numbers and a footer
+naming the document on every page. A restrained palette that still separates in
+grayscale, for the copies that come off a departmental printer.
+
+**What they do not provide.** The files are **not tagged**: they carry no
+`/StructTreeRoot`, so there is no semantic structure tree, no reading order
+declared to assistive technology, no table header associations and no alt text.
+They are therefore **not PDF/UA conformant**, and this documentation does not
+claim they are. A screen reader will read them, in the order the text was drawn,
+which for these documents is the order it should be read in — but that is a
+property of how they happen to be laid out rather than a guarantee the file
+makes.
+
+Tagging is a substantial change to the writer rather than a flag to set, and
+adding a half-implemented structure tree would be worse than none: it would make
+the files *claim* a reading order they had not earned. `tests/instructorMaterials.test.js`
+holds this section to what the files actually contain, so the day tagging is
+added the test fails and this text has to be updated with it.
+
+**If a tagged document is needed today**, the same content is on the web in HTML,
+which is tagged by construction: the investigations at
+[gravitas-sim.online](https://gravitas-sim.online), and the public teaching and
+model pages. The PDFs are a convenience for printing and for handing out, not the
+only route to the material.
+
 ## Running the checks
 
 ```bash
 npm run a11y            # both suites
-npm run a11y:axe        # axe only, all 52 combinations
+npm run a11y:axe        # axe only, all 60 combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 ```

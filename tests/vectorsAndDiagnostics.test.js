@@ -483,7 +483,7 @@ describe('the potential-well underlay', () => {
   test('is the Newtonian potential of the masses that are there', () => {
     // The underlay is a claim about the field, so it has to be the field: this
     // is -GM/r written out, and if the picture were built from anything else it
-    // would be a decoration that happens to be centerd on the star.
+    // would be a decoration that happens to be centered on the star.
     const src = [mass(0, 0, 1000)];
     expect(potentialAt(at(0, 200), 1, 1e-6, src)).toBeCloseTo(-1000 / 200, 12);
     expect(potentialAt(at(300, 400), 2, 1e-6, src)).toBeCloseTo(

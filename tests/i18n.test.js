@@ -28,7 +28,7 @@ import { INVESTIGATIONS } from '../js/data/investigations.js';
 import {
   scenarioTitle,
   scenarioSummary,
-  tagLabelocalized,
+  tagLabelLocalized,
 } from '../js/i18n/scenario.js';
 import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
 import { SCENARIO_TAGS, TAG_ORDER } from '../js/data/scenarioTags.js';
@@ -413,10 +413,10 @@ describe('scenario prose', () => {
     await setLocale('es', { persist: false });
     expect(scenarioTitle('Solar System')).toBe('Sistema solar');
     expect(scenarioSummary('Solar System')).toMatch(/sistema solar/i);
-    expect(tagLabelocalized('dark-matter')).toBe('Materia oscura');
+    expect(tagLabelLocalized('dark-matter')).toBe('Materia oscura');
     await setLocale('en', { persist: false });
     expect(scenarioTitle('Solar System')).toBe('Solar System');
-    expect(tagLabelocalized('dark-matter')).toBe('Dark Matter');
+    expect(tagLabelLocalized('dark-matter')).toBe('Dark Matter');
   });
 
   test('every concept tag has a label and a description', async () => {

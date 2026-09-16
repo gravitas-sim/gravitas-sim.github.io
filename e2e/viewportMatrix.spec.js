@@ -85,7 +85,7 @@ async function fillFields(page) {
  */
 async function reachable(page, selector, { minHeight = 0 } = {}) {
   const el = page.locator(selector).first();
-  // Centerd rather than minimally scrolled. `scrollIntoViewIfNeeded` stops the
+  // Centered rather than minimally scrolled. `scrollIntoViewIfNeeded` stops the
   // moment an element is technically inside its scroll container, which leaves
   // it flush against the edge - and a point sampled at the very edge of a
   // scrolling panel hits the panel, not the control. That is a property of

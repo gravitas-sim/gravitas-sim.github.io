@@ -102,7 +102,7 @@ beforeEach(() => {
 });
 
 describe('a comet draws where it is', () => {
-  test('every shape it draws is centerd on its world position', () => {
+  test('every shape it draws is centered on its world position', () => {
     const comet = new Comet(POS, { x: 0, y: 0 }, 0.05);
     const ctx = recordingContext();
     comet.draw(ctx);

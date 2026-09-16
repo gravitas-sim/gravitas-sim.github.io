@@ -1070,7 +1070,7 @@ const BALANCE = {
       deforming: { text: 'STRETCHING, SHEDDING', color: WARN },
       disrupting: { text: 'COMES APART', color: STRETCH },
     }[f.regime];
-    // The verdict is centerd in whatever room is left between the bars and the
+    // The verdict is centered in whatever room is left between the bars and the
     // ruler. Fixed offsets put it on top of the ruler once responsiveHeight
     // handed back a shorter panel on a phone.
     const ry = H - 26;

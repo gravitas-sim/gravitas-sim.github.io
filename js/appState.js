@@ -220,7 +220,7 @@ export const DEFAULT_SETTINGS = {
   bh_disk_inclination: 62,
   show_bh_glow: true,
   show_accretion_disk: true,
-  realiztic_disk_physics: true,
+  realistic_disk_physics: true,
   show_bh_jets: false,
   show_dynamic_overlays: true,
   enable_asteroids: true,
@@ -267,7 +267,7 @@ export const DEFAULT_SETTINGS = {
   preset_zoom: 1.5,
   // 1.0 selects the conservative habitable zone; see
   // habitableZoneModelFromSettings() in render.js, which switches at 1.3.
-  habitable_zone_optimizm: 1.0,
+  habitable_zone_optimism: 1.0,
   // Per-neutron-star masses, the same shape as bh_masses above.
   use_individual_ns_masses: false,
   ns_masses: [],
@@ -308,11 +308,22 @@ export const DEFAULT_SETTINGS = {
  * `trail_colour_mode` became `trail_color_mode` when the source was made
  * consistently American; a link or a save written before that carries the old
  * spelling, and assigning it into SETTINGS sets a property nothing reads - so
- * the trails quietly come back the default colour rather than the one the
+ * the trails quietly come back the default color rather than the one the
  * sender was demonstrating, with nothing to say a setting was dropped.
+ *
+ * The other two entries are not renames anybody intended. That same pass ran
+ * `realis -> realiz` and `optimis -> optimiz` as substring rules, which is
+ * fine on a suffix and wrong in the middle of a word: `realistic_disk_physics`
+ * and `habitable_zone_optimism` came out as `realiztic_disk_physics` and
+ * `habitable_zone_optimizm`, and were deployed under those names. The spelling
+ * is repaired here, so the keys are back to what they always were - but a link
+ * shared from the site during that window is still out there carrying the
+ * misspelling, and it costs two lines to keep it working.
  */
 export const RENAMED_SETTINGS = Object.freeze({
   trail_colour_mode: 'trail_color_mode',
+  realiztic_disk_physics: 'realistic_disk_physics',
+  habitable_zone_optimizm: 'habitable_zone_optimism',
 });
 
 /**

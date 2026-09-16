@@ -378,7 +378,7 @@ describe('the radial-velocity half-range and its coverage test', () => {
     }));
 
   test('a short run through a zero crossing has not bracketed both extremes', () => {
-    // The case the old test got wrong. Three per cent of a cycle centerd on the
+    // The case the old test got wrong. Three per cent of a cycle centered on the
     // ascending node: the samples straddle zero, so "has visited both signs"
     // was satisfied, and the reported K was a twentieth of the truth.
     const run = sine(40, { cycles: 0.03, phase: -0.03 * Math.PI, K: 50 });

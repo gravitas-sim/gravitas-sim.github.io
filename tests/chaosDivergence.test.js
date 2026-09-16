@@ -8,7 +8,7 @@ import {
   separationSeries,
   logLinearFit,
   chooseWindow,
-  analyzedivergence,
+  analyzeDivergence,
   straightLineR2,
   refinementVerdict,
 } from '../js/chaos/divergence.js';
@@ -155,7 +155,7 @@ describe('choosing the interval to fit', () => {
 
 describe('classifying a divergence', () => {
   test('identical runs are identical, and get no timescale', () => {
-    const v = analyzedivergence(
+    const v = analyzeDivergence(
       Array.from({ length: 50 }, (_, i) => ({ t: i, d: 0 }))
     );
     expect(v.behavior).toBe(BEHAVIOR.IDENTICAL);
@@ -163,7 +163,7 @@ describe('classifying a divergence', () => {
   });
 
   test('exponential growth yields the right e-folding time', () => {
-    const v = analyzedivergence(exponential(6.9, 1e-3, 0, 140));
+    const v = analyzeDivergence(exponential(6.9, 1e-3, 0, 140));
     expect(v.behavior).toBe(BEHAVIOR.EXPONENTIAL);
     expect(v.tau).toBeCloseTo(6.9, 1);
     expect(v.r2).toBeGreaterThan(CRITERIA.minR2);
@@ -172,7 +172,7 @@ describe('classifying a divergence', () => {
 
   test('linear drift is called linear, and gets no e-folding time', () => {
     // This is the two-body control, and the most important test in the file.
-    const v = analyzedivergence(linear(0.5, 1e-3, 200));
+    const v = analyzeDivergence(linear(0.5, 1e-3, 200));
     expect(v.behavior).toBe(BEHAVIOR.LINEAR);
     expect(v.tau).toBeNull();
     expect(v.linearR2).toBeGreaterThan(0.99);
@@ -183,24 +183,24 @@ describe('classifying a divergence', () => {
       t: i,
       d: 1 + 0.2 * Math.sin(i / 5),
     }));
-    const v = analyzedivergence(wobble);
+    const v = analyzeDivergence(wobble);
     expect(v.behavior).toBe(BEHAVIOR.BOUNDED);
     expect(v.tau).toBeNull();
   });
 
   test('too short a run gives no estimate however clean the growth', () => {
-    const v = analyzedivergence(exponential(7, 1e-3, 0, 12));
+    const v = analyzeDivergence(exponential(7, 1e-3, 0, 12));
     expect(v.tau).toBeNull();
     expect(v.behavior).not.toBe(BEHAVIOR.EXPONENTIAL);
   });
 
   test('the reported growth factor is end over start', () => {
-    const v = analyzedivergence(exponential(10, 1, 0, 100, 5));
+    const v = analyzeDivergence(exponential(10, 1, 0, 100, 5));
     expect(v.growth).toBeCloseTo(Math.exp(10), -2);
   });
 
   test('a straight-line comparison is always reported', () => {
-    const v = analyzedivergence(exponential(6.9, 1e-3, 0, 140));
+    const v = analyzeDivergence(exponential(6.9, 1e-3, 0, 140));
     // Even when the answer is exponential, the alternative is shown, because
     // that comparison is what the lesson turns on.
     expect(v.linearR2).toBeGreaterThan(0);

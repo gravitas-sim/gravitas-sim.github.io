@@ -491,7 +491,7 @@ function showForCurrentScenario() {
 // The retained comparison, and the optional sweep
 // -----------------------------------------------------------------------------
 // Both run on the bench: the same runner the binary lesson's sweep uses, with
-// the same world capture and restoration, the same cancelation and the same
+// the same world capture and restoration, the same cancellation and the same
 // per-trial statuses. What is local is which values, what is held, and how the
 // result is read - and the reading is done by js/experiments/assistSweep.js
 // against js/assistWatch.js, so the numbers here are the same numbers the

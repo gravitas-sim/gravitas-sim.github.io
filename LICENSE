@@ -18,4 +18,17 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE. 
+SOFTWARE.
+
+-------------------------------------------------------------------------------
+
+The above covers the Gravitas software.
+
+The original educational material in this repository - the investigations, the
+instructor guides, the user manual, the documentation and the original figures -
+is licensed under Creative Commons Attribution 4.0 International instead. See
+LICENSE-CC-BY-4.0.md.
+
+Third-party material keeps its own license; see NOTICE.
+
+LICENSES.md says which of the three applies to which files.

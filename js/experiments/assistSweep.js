@@ -17,7 +17,7 @@
 //
 // It is deliberately not a general framework. js/experiments/sweep.js and the
 // bench runner already are one, and this reuses both - the validation, the
-// value planning, the world capture and restoration, the cancelation, the
+// value planning, the world capture and restoration, the cancellation, the
 // simulated-progress measurement - and supplies the one thing generic
 // machinery cannot: what the encounter did.
 //

@@ -1,0 +1,96 @@
+Gravitas
+Copyright (c) 2025 Carl Ziegler
+
+This product includes software and material developed by third parties.
+LICENSES.md says which files each license covers; this file carries the
+attributions in full.
+
+===============================================================================
+three.js
+-------------------------------------------------------------------------------
+vendor/three/three.module.js
+Copyright (c) 2010-2023 three.js authors
+Licensed under the MIT License. Full text: vendor/three/LICENSE
+https://threejs.org/
+
+===============================================================================
+Chart.js
+-------------------------------------------------------------------------------
+vendor/chartjs/chart.auto.js
+Copyright (c) 2014-2024 Chart.js Contributors
+Licensed under the MIT License. Full text: vendor/chartjs/LICENSE.md
+https://www.chartjs.org/
+
+===============================================================================
+Inter
+-------------------------------------------------------------------------------
+vendor/fonts/inter-latin-*.woff2
+Copyright 2016 The Inter Project Authors
+Licensed under the SIL Open Font License, Version 1.1.
+Full text: vendor/fonts/inter-LICENSE
+https://github.com/rsms/inter
+
+===============================================================================
+Poppins
+-------------------------------------------------------------------------------
+vendor/fonts/poppins-latin-*.woff2
+Copyright 2020 The Poppins Project Authors
+Licensed under the SIL Open Font License, Version 1.1.
+Full text: vendor/fonts/poppins-LICENSE
+https://github.com/itfoundry/Poppins
+
+===============================================================================
+Roboto Mono
+-------------------------------------------------------------------------------
+vendor/fonts/roboto-mono-latin-*.woff2
+Copyright 2015 The Roboto Mono Project Authors
+Licensed under the SIL Open Font License, Version 1.1.
+Full text: vendor/fonts/roboto-mono-LICENSE
+https://github.com/googlefonts/robotomono
+
+===============================================================================
+Transit of Venus photograph
+-------------------------------------------------------------------------------
+images/transit-of-venus-2012.jpg
+"2012 Transit of Venus from SF" by Brocken Inaglory
+Licensed under CC BY 2.5: https://creativecommons.org/licenses/by/2.5/
+Source: https://commons.wikimedia.org/wiki/File:2012_Transit_of_Venus_from_SF.jpg
+Changes: resized.
+The same attribution is shown to the reader beside the figure, in
+js/data/investigations/transit-photometry.js.
+
+===============================================================================
+Gravitational-wave strain data
+-------------------------------------------------------------------------------
+js/data/gw/**
+Derived from data released by the Gravitational Wave Open Science Center,
+licensed CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+
+  This research has made use of data or software obtained from the
+  Gravitational Wave Open Science Center (gwosc.org), a service of the LIGO
+  Scientific Collaboration, the Virgo Collaboration, and KAGRA.
+
+The bundled traces are decimated subsets of the published band-passed strain.
+Every processing step, the source URL and a checksum are recorded in the data
+files themselves, and `npm run gw:provenance` regenerates them from the
+originals and compares byte for byte.
+
+Primary reference: Abbott et al. (2016), Phys. Rev. Lett. 116, 061102,
+doi:10.1103/PhysRevLett.116.061102
+
+===============================================================================
+MIST stellar evolution tracks
+-------------------------------------------------------------------------------
+js/data/stellar/**
+Derived from the MIST v1.2 model grids: https://mist.science/
+
+MIST asks that the following be cited by any publication using the models, and
+states no separate redistribution license. What is bundled here is a heavily
+reduced derived subset for teaching, attributed in full, with the exact source
+and checksum recorded so the originals can be recovered.
+
+  Dotter (2016), ApJS 222, 8
+  Choi et al. (2016), ApJ 823, 102
+  Paxton et al. (2011, 2013, 2015), the MESA instrument papers
+
+`npm run stellar:provenance` reproduces the subset from the MIST download.

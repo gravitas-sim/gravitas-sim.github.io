@@ -493,7 +493,7 @@ const BINARY_STAR_PLANETS = {
       because: `Inclination. The fit is two-dimensional, and a planet forty
                 degrees out of the plane is a different problem — one where the
                 Kozai–Lidov mechanism can trade inclination for eccentricity and
-                destabilise orbits the flat fit calls safe. The other three are
+                destabilize orbits the flat fit calls safe. The other three are
                 all inside its scope or beside the point: an Earth mass is a
                 millionth of the star, μ = 0.4 is well within the fitted range,
                 and how long you watched is not a property of the system.`,
@@ -1194,7 +1194,7 @@ The published boundary for this configuration is 3.61. Predict
              \n\n<strong>It is flat.</strong> Everything here — the simulation
              and the fit both — is two-dimensional. Real orbits are inclined,
              and an inclined orbit in a binary can trade its tilt for
-             eccentricity, which destabilises orbits that are perfectly safe in
+             eccentricity, which destabilizes orbits that are perfectly safe in
              the plane.
              \n\n<strong>The planet is a test particle.</strong> An Earth mass
              against a solar mass. A Jupiter would perturb the stars back, and a

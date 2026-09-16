@@ -48,22 +48,69 @@ const KEEP = has('--keep');
  * same moment.
  */
 const REQUIRED = [
+  // Install and build
   'package.json',
   'package-lock.json',
-  'index.html',
-  'sw.js',
-  'sw-manifest.js',
   'build.js',
-  'README.md',
-  'LICENSE',
-  'CITATION.cff',
-  '.zenodo.json',
-  'instructors/materials.enc.json',
-  'instructors/materials.manifest.json',
   'tools/build-service-worker.mjs',
   'tools/verify-release.mjs',
+  // The application itself
+  'index.html',
   'js/main.js',
   'css/styles.css',
+  'sw.js',
+  'sw-manifest.js',
+  // The document pages the live site links, and the stylesheet they need.
+  // page.css is built on its own rather than folded into app.css, so an
+  // archive that dropped it would serve four unstyled pages.
+  'css/page.css',
+  'model/index.html',
+  'instructors/index.html',
+  'validation/index.html',
+  'teaching/index.html',
+  // Instructor materials: the ciphertext and the record of what built it.
+  'instructors/materials.enc.json',
+  'instructors/materials.manifest.json',
+  // What a reader, a reviewer and a journal open first
+  'README.md',
+  'CHANGELOG.md',
+  'RELEASE.md',
+  'RELEASING.md',
+  'ACCESSIBILITY.md',
+  'Gravitas_User_Manual.pdf',
+  // Citation and deposit metadata
+  'CITATION.cff',
+  '.zenodo.json',
+  // Licensing, in full: the code license, the content license, the map of
+  // which covers what, and the third-party attributions.
+  'LICENSE',
+  'LICENSE-CC-BY-4.0.md',
+  'LICENSES.md',
+  'NOTICE',
+];
+
+/**
+ * Paths that must NOT be in the archive.
+ *
+ * The passphrase and the plaintext documents are the obvious ones. The test
+ * fixture is the less obvious one: it is a bundle of placeholder documents
+ * encrypted with a passphrase printed in the source, and the only thing
+ * keeping it out of a release is that it is gitignored. That is worth
+ * asserting rather than assuming.
+ */
+const FORBIDDEN = [
+  '.git',
+  'node_modules',
+  'dist',
+  '.instructor-password',
+  '.instructor-build',
+  '.instructor-fixture',
+  '.env',
+  'test-results',
+  'playwright-report',
+  'blob-report',
+  'coverage',
+  '.claude',
 ];
 
 const problems = [];
@@ -115,10 +162,27 @@ try {
   } else {
     note(`  every one of the ${REQUIRED.length} required files is present`);
   }
-  for (const stray of ['.git', 'node_modules', '.instructor-password']) {
+  for (const stray of FORBIDDEN) {
     if (existsSync(path.join(dir, stray))) {
       problems.push(`the archive carries ${stray}, which it must not`);
     }
+  }
+
+  // And nothing anywhere in it may be a plaintext instructor document or a
+  // stray credential file, whatever it is called.
+  const strayPdf = execFileSync(
+    'find',
+    [dir, '-name', '*.pdf', '-not', '-path', '*/node_modules/*'],
+    { encoding: 'utf8' }
+  )
+    .split('\n')
+    .filter(Boolean)
+    .map(f => path.relative(dir, f))
+    .filter(f => f !== 'Gravitas_User_Manual.pdf');
+  if (strayPdf.length) {
+    problems.push(
+      `the archive carries PDFs other than the user manual: ${strayPdf.slice(0, 5).join(', ')}`
+    );
   }
 
   // --- install --------------------------------------------------------------
@@ -192,7 +256,7 @@ try {
     // `npm run build` is what the README tells a reader to run, and it cannot
     // work here: it regenerates the instructor materials, which needs the
     // passphrase, and the passphrase is deliberately not in the archive. That is
-    // correct behaviour and a documentation problem, so it is checked both ways -
+    // correct behavior and a documentation problem, so it is checked both ways -
     // the documented command must fail for the stated reason, and the command a
     // restorer can actually run must succeed.
     if (install.ok) {

@@ -309,6 +309,34 @@ function hintValues(step) {
  * @param {object} inputs - From loadAuthoringInputs()
  * @returns {Array<object>} Findings, in catalog order
  */
+/**
+ * The presets a step actually shows, resolved the way the panel resolves them.
+ *
+ * js/investigations.js lets a step suppress presets with `presets: false`, and
+ * lets a widget compute them from the step - the rotation-curve instrument
+ * hides its "published decomposition" button while a student is fitting with
+ * stars alone. A rule that asked the widget for its presets and stopped there
+ * would credit a step with a way back that the step has taken away.
+ *
+ * @param {object} widget - The widget definition
+ * @param {object} spec - The step's `tool` block
+ * @returns {Array<object>} The presets the student can press on this step
+ */
+function presetsFor(widget, spec) {
+  if (spec?.presets === false) return [];
+  try {
+    const declared =
+      typeof widget.presets === 'function'
+        ? widget.presets(spec)
+        : widget.presets;
+    return Array.isArray(declared) ? declared : [];
+  } catch {
+    // A presets() that throws on this spec shows the student nothing, so it
+    // offers no way back either.
+    return [];
+  }
+}
+
 export function checkCatalog(inputs, { skip = [] } = {}) {
   const findings = [];
   const {
@@ -605,10 +633,26 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
                 const offGrid = Math.abs(
                   (v - c.min) / c.step - Math.round((v - c.min) / c.step)
                 );
-                if (offGrid > 1e-6) {
+                // And a preset is the way back. The mass of Sagittarius A* is
+                // log10(4.3e6), which is not on a 0.05 grid and never will be:
+                // a real object does not land on a slider tick. The thing this
+                // rule is actually about is whether a student who drags the
+                // slider can return to what the step staged, and a labelled
+                // preset button that sets that control to that exact number is
+                // precisely that - one click, or a tab and a press.
+                //
+                // Exact equality is the point rather than a nuisance. It makes
+                // the lesson carry the same number the preset carries, so the
+                // button lands where the step started; a lesson that rounds it
+                // by a digit gets the warning back, which is how three staged
+                // values here turned out to be hand-rounded copies.
+                const recoverable = presetsFor(w, step.tool).some(
+                  pr => Number(pr?.values?.[key]) === v
+                );
+                if (offGrid > 1e-6 && !recoverable) {
                   W(
                     'setup/value',
-                    `tool.values.${key} = ${v} is not on the visible control's ${c.step} step, so a student who moves it cannot get back`
+                    `tool.values.${key} = ${v} is not on the visible control's ${c.step} step and no preset of ${w.id} sets ${key} to it, so a student who moves it cannot get back`
                   );
                 }
               }

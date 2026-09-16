@@ -331,5 +331,10 @@ export default {
       },
       tip: 'Nada en una onda gravitacional dice de qué estaban hechos los objetos. Dice cuánto pesaban, cómo se movían y a qué distancia estaban; y la razón por la que creemos que GW170817 fue un par de estrellas de neutrones es que un estallido de rayos gamma se produjo en el mismo sitio dos segundos después y un telescopio encontró la galaxia.',
     },
+    {
+      title: 'Dónde te deja esto',
+      body: '<strong>Dos gráficas, una señal.</strong> La deformación frente al tiempo es una onda que se hace más alta y más rápida; la frecuencia frente al tiempo es lo mismo como una curva que barre hacia arriba. Ese barrido es el chirrido, y la fuente se lee en su forma, no en su altura.\n\n<strong>La frecuencia de la onda es el doble de la orbital</strong>, porque la distribución de masa de un binario se repite dos veces por órbita y no una.\n\n<strong>Lo que fija la espiral es la masa de chirrido</strong>: una combinación concreta de las dos masas, no las dos masas por separado. Una señal que permanece en banda noventa segundos y sube por encima del kilohercio es un par ligero. Con solo esa prueba todavía no es un par de estrellas de neutrones, y la diferencia entre esas dos frases es casi todo lo que esta lección pretendía.\n\n<strong>La amplitud sola no es una distancia.</strong> Una fuente lejana vista de frente y otra más cercana vista de canto escriben la misma deformación. Separarlas exige más de un detector.\n\n<strong>Y un chirrido no es una detección.</strong> El modelo que ejecutaste se detiene antes de la fusión. El ruido que añadiste se coloreó para resultar convincente, no se midió en un instrumento. Una afirmación real es una señal coincidente en detectores separados con una tasa de falsa alarma asociada, y todo lo que hay en esta pantalla es un modelo de una cosa, etiquetado como tal.',
+      tip: 'La distinción que llevas toda la lección haciendo —medida, modelo, ilustración— es la misma que hacen los observatorios en público. Un evento candidato se publica con su tasa de falsa alarma precisamente para que quien lo lea pueda hacerla también.',
+    },
   ],
 };

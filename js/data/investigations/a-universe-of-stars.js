@@ -1474,7 +1474,41 @@ const A_UNIVERSE_OF_STARS = {
         pinStaged: true,
         capture: true,
       }),
-      tip: 'Your notebook has the measurements in it, with the model each one came from. Open it in another tab if you want to quote a number exactly. If you want to see these stars change rather than compare them, "Lives of Stars" follows four of them from a collapsing cloud to what they leave behind.',
+      tip: 'Your notebook has the measurements in it, with the model each one came from. Open it in another tab if you want to quote a number exactly.',
+    },
+    {
+      sid: 'what-the-diagram-is-for',
+      stage: shelf(THREE, { fit: true }),
+      type: 'read',
+      title: 'What the diagram is for',
+      body: `<strong>Five quantities, and they are not each other.</strong> Mass
+             is how much star there is. Radius is how big it is. Temperature is
+             how hot its surface is. Luminosity is how much light leaves it.
+             Apparent brightness is how much of that reaches you, and it depends
+             on where you happen to be standing.
+             \n\n<strong>Temperature and luminosity together fix the
+             radius</strong>, and you used that in both directions - which is how
+             two stars of the same color turned out to differ in size by a factor
+             of several hundred.
+             \n\n<strong>On the main sequence, mass sets the rest</strong>, and
+             steeply: a hundredfold in mass is a millionfold in light. That
+             steepness is the whole answer to how a star with far more fuel runs
+             out of it far sooner.
+             \n\n<strong>A position on the diagram does not fix a mass or an
+             age.</strong> The giant and the white dwarf you measured are both
+             counterexamples, and both were ordinary main-sequence stars once.
+             The relationships above are statements about the main sequence, not
+             about stars.
+             \n\n<strong>And a sample is not a population.</strong> The
+             brightest stars in the sky are not the commonest stars in the
+             galaxy. They are the ones that can be seen from furthest away, which
+             is a fact about the sampling rather than about the stars.`,
+      // The comparison instrument stays on screen through the summary. The
+      // lesson's claim - and e2e/stellarLesson.spec.js's assertion - is that
+      // every screen has an instrument on it, and a closing screen is the one
+      // a reader is most likely to look back at the three stars from.
+      tool: stage({ pace: 'phase', pinStaged: true, capture: true }),
+      tip: 'If you want to see these stars change rather than compare them, "Lives of Stars" follows four of them from a collapsing cloud to what they leave behind.',
     },
   ],
 };

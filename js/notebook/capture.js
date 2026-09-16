@@ -111,7 +111,7 @@ function recordedProvenance(rec, report) {
   // A recording carries the observer geometry it was taken under - that IS a
   // fact about the measurements. It does not carry the reference frame, which
   // is a display choice made now: somebody analyzing an old recording while
-  // centerd on a different body would otherwise have "barycenter:7" written
+  // centered on a different body would otherwise have "barycenter:7" written
   // into the entry as though the samples had been taken in it. So the live
   // frame is relabeled as what it is, and the recording's own frame is
   // recorded as unknown rather than filled in from the present.

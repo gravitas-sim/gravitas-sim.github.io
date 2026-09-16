@@ -283,7 +283,7 @@ only one still getting worse.
 **Angular momentum separates the two symplectic schemes from RK4 in kind, not in
 size.** Verlet's kicks are each along the line joining the bodies, so the torque
 cancels exactly at any step. RK4 mixes four stages evaluated at four different
-positions, so its cancelation is a truncation error that shrinks with the step
+positions, so its cancellation is a truncation error that shrinks with the step
 rather than an identity. The error is tiny either way; the claims are different.
 
 Two things are deliberately outside the selectable schemes. Black holes keep
@@ -552,7 +552,7 @@ integrated here, general relativity would show the rate rising by a factor of
 4.95; Gravitas holds it at 1.00.
 
 That is a PASS, and it is a PASS because the code matches its documentation — the
-model page states that "the characteriztic runaway at the end is not reproduced".
+model page states that "the characteristic runaway at the end is not reproduced".
 It would FAIL if someone swapped in a different decay law without updating that
 page.
 

@@ -779,7 +779,7 @@ async function runChaosPair(opts = {}) {
       });
     }
 
-    const { separationSeries, analyzedivergence } =
+    const { separationSeries, analyzeDivergence } =
       await import('../chaos/divergence.js');
     const shape = run =>
       (run?.samples || [])
@@ -788,7 +788,7 @@ async function runChaosPair(opts = {}) {
     const runs = bench.activeExperiment()?.runs || {};
     const both = shape(runs.A).length && shape(runs.B).length;
     const verdict = both
-      ? analyzedivergence(separationSeries(shape(runs.A), shape(runs.B)).series)
+      ? analyzeDivergence(separationSeries(shape(runs.A), shape(runs.B)).series)
       : null;
 
     result = {

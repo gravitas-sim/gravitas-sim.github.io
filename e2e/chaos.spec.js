@@ -117,7 +117,7 @@ function verdict(page) {
       shape(exp.runs.A),
       shape(exp.runs.B)
     );
-    const v = window.__chaos.analyzedivergence(series);
+    const v = window.__chaos.analyzeDivergence(series);
     return {
       behavior: v.behavior,
       tau: v.tau,

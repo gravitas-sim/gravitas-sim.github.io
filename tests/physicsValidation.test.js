@@ -215,7 +215,7 @@ describe('the kind vocabulary has one owner', () => {
     expect(page).not.toMatch(/const KIND_ORDER\s*=/);
   });
 
-  test('every kind has a colour, so no chip renders unstyled', () => {
+  test('every kind has a color, so no chip renders unstyled', () => {
     const css = read('css/page.css');
     expect(KIND_ORDER.length).toBeGreaterThan(1);
     for (const kind of KIND_ORDER) {

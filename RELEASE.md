@@ -4,6 +4,17 @@ The site is [gravitas-sim.online](https://gravitas-sim.online), served by GitHub
 Pages from this repository. This document is the release path, the settings that
 need an owner to change them, and how to verify and undo a deployment.
 
+## This document, and the other one
+
+- **This file** is the *deployment*: how a commit on `main` becomes the live
+  site, what the gate refuses to publish, how to tell what is live, how to roll
+  back, and how the instructor bundle is rebuilt.
+- **[`RELEASING.md`](RELEASING.md)** is the *release*: version numbers, the
+  changelog, the tag, the GitHub release, Zenodo and the DOI.
+
+A release is a tag on a commit this file has already put live and verified, so
+read this one first.
+
 ## What was wrong
 
 Pages was configured to **deploy from a branch** — `main`, root. GitHub publishes
@@ -83,22 +94,22 @@ The same details go into the run's job summary.
 
 ---
 
-## Owner actions required
+## Owner actions
 
 These cannot be done from the repository contents and need someone with admin
-rights on it. **Until the first one is done, the workflow's deploy job will fail
-at the `deploy-pages` step and the site will continue to be published from the
-branch, ungated.**
+rights on it.
 
-### 1. Change the Pages source to GitHub Actions
+### 1. Change the Pages source to GitHub Actions — **done**
 
 _Settings → Pages → Build and deployment → Source: **GitHub Actions**_
 
-This is the change that makes gating possible at all. It stops GitHub publishing
-`main` automatically and hands publishing to the workflow.
+This was the change that made gating possible at all, and it has been made: the
+workflow's `Deploy to Pages` job runs and succeeds, and
+`https://gravitas-sim.online/deployed-revision.json` names the commit and the
+run that published it. Publishing is the workflow's, not the branch's.
 
-The custom domain and its HTTPS certificate are unaffected — they are properties
-of the Pages site, not of its source.
+Left here rather than deleted because the next person to read this page should
+be able to tell a step that was done from one that was never needed.
 
 ### 2. Confirm the `github-pages` environment
 
@@ -132,20 +143,38 @@ The deploy publishes the committed `instructors/materials.enc.json`. It does not
 rebuild it, so **the committed bundle is what students and instructors get**. To
 publish new instructor content:
 
+The passphrase comes from a gitignored `.instructor-password` file in the
+repository root, which is the way to do it: a secret typed on a command line is
+a secret in your shell history.
+
 ```bash
-GRAVITAS_INSTRUCTOR_PASSPHRASE='…' npm run build:instructors
-git add instructors/materials.enc.json
+# .instructor-password holds the passphrase and is gitignored.
+npm run build:instructors
+git add instructors/materials.enc.json instructors/materials.manifest.json
 git commit -m "Rebuild instructor materials"
 ```
 
-Run this on a machine that has the real passphrase, and check the diff before
-committing: a bundle built without it is marked `unpublishable` and the deploy
-will refuse it.
+The environment variable `GRAVITAS_INSTRUCTOR_PASSWORD` is also read, and takes
+precedence over the file. It is there for a machine that cannot keep a file
+around; prefer the file everywhere else.
 
-> The committed bundle is currently **stale**. It predates the binary-stability,
-> gravity-assist, radial-velocity, reliability, sweep, maneuver and
-> restricted-three-body content, so the guides for those lessons are not yet in
-> the published archive. Rebuilding it is the outstanding owner action here.
+> This document used to name `GRAVITAS_INSTRUCTOR_PASSPHRASE`, which nothing
+> reads. Following that instruction did not build a bundle with the wrong key -
+> it refused to build at all, for the stated reason that no passphrase was
+> found, which is the good failure but a confusing one when the document you
+> are following told you to set it.
+
+Run this on a machine that has the real passphrase, and check the diff before
+committing. Without one the build refuses outright; `--unpublishable`, which
+only CI passes, substitutes a throwaway key and marks the bundle
+`unpublishable` so the deploy will refuse it.
+
+> Whether the committed bundle is current is not a thing to write down here,
+> because a sentence in a document cannot know. `npm run instructors:check`
+> answers it: the bundle carries a manifest recording a digest of the 39 source
+> files it was built from, and the check recomputes that digest and compares.
+> It needs no passphrase, so it runs in CI and in the release gate, and a stale
+> bundle now fails the gate rather than waiting for somebody to notice.
 
 ---
 

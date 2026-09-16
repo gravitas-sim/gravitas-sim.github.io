@@ -107,19 +107,19 @@ describe('the distance scale is the one the rest of Gravitas uses', () => {
 
 describe('habitable zone boundaries', () => {
   test('the Sun comes out where the published prescription says', () => {
-    // Kopparapu et al. (2013): conservative 0.99-1.70 AU, optimiztic 0.75-1.77.
+    // Kopparapu et al. (2013): conservative 0.99-1.70 AU, optimistic 0.75-1.77.
     const c = habitableZoneBounds(SUN, 'conservative');
-    const o = habitableZoneBounds(SUN, 'optimiztic');
+    const o = habitableZoneBounds(SUN, 'optimistic');
     expect(c.innerAU).toBeCloseTo(0.98, 2);
     expect(c.outerAU).toBeCloseTo(1.69, 2);
     expect(o.innerAU).toBeCloseTo(0.75, 2);
     expect(o.outerAU).toBeCloseTo(1.77, 2);
   });
 
-  test('the optimiztic zone contains the conservative one', () => {
+  test('the optimistic zone contains the conservative one', () => {
     for (const star of [SUN, TRAPPIST, { luminositySolar: 5, teffK: 6600 }]) {
       const c = habitableZoneBounds(star, 'conservative');
-      const o = habitableZoneBounds(star, 'optimiztic');
+      const o = habitableZoneBounds(star, 'optimistic');
       expect(o.innerAU).toBeLessThan(c.innerAU);
       expect(o.outerAU).toBeGreaterThan(c.outerAU);
     }
@@ -180,7 +180,7 @@ describe('habitable zone boundaries', () => {
 
   test('the boundaries carry the names the lesson uses', () => {
     const c = habitableZoneBounds(SUN, 'conservative');
-    const o = habitableZoneBounds(SUN, 'optimiztic');
+    const o = habitableZoneBounds(SUN, 'optimistic');
     expect(c.innerLabel).toBe('Runaway Greenhouse');
     expect(c.outerLabel).toBe('Maximum Greenhouse');
     expect(o.innerLabel).toBe('Recent Venus');
@@ -566,7 +566,7 @@ describe('the Goldilocks investigation', () => {
     expect(text).toContain('0.98');
     expect(text).toContain('1.69');
 
-    const sunWide = habitableZoneBounds(SUN, 'optimiztic');
+    const sunWide = habitableZoneBounds(SUN, 'optimistic');
     expect(sunWide.innerAU.toFixed(2)).toBe('0.75');
     expect(sunWide.outerAU.toFixed(2)).toBe('1.77');
     expect(text).toContain('0.75');

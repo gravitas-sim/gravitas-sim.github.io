@@ -1153,7 +1153,7 @@ describe('the report', () => {
 });
 
 describe('a capture retains no reference to the live world', () => {
-  // The realiztic regression this guards against: bench.js mutates its own
+  // The realistic regression this guards against: bench.js mutates its own
   // experiment record in place - `current.comparison = ...`, `current
   // .reliability = report` - so a capture helper that stored the experiment
   // rather than reading numbers out of it would have its evidence rewritten

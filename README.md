@@ -24,7 +24,7 @@ concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
 **<!--fact:investigations-->22<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->631<!--/fact--> steps between
+investigations**, <!--fact:investigationSteps-->636<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -55,7 +55,7 @@ lesson it answers. See [Instructor resources](#instructor-resources).
 **A showcase page for instructors** at
 [/teaching/](https://gravitas-sim.online/teaching/): the predict-test-measure-
 revise-explain cycle the investigations are built on, how a student gets from a
-prediction to a submitted report, what each instrument is for, five realiztic
+prediction to a submitted report, what each instrument is for, five realistic
 course-use patterns, and six demonstrations that open a real reproducible state
 as an embedded figure. Public, indexed, and in English and Spanish; every count
 on it is read from the catalog and the validation results when it loads.
@@ -199,7 +199,9 @@ system; a student can send one back as their answer. Nothing touches a server.
 
 ## Running it locally
 
-Requires Node 18+ (developed on 24).
+Requires Node 20 or newer — the pinned Playwright declares `node: >=20`,
+and it is the only dependency that constrains this. CI runs 20, which is
+the version in `.nvmrc`; development is on 24.
 
 ```bash
 npm install
@@ -212,7 +214,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5093<!--/fact--> tests across <!--fact:jestSuites-->146<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5299<!--/fact--> tests across <!--fact:jestSuites-->149<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -236,10 +238,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->218<!--/fact--> KB                 | 1                                             |
+| CSS                    | <!--fact:buildCss-->199<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->612<!--/fact--> KB           | <!--fact:buildStartupFiles-->50<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->3854<!--/fact--> KB         | <!--fact:buildDeferredChunks-->137<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->830<!--/fact--> KB** |                                               |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->3874<!--/fact--> KB         | <!--fact:buildDeferredChunks-->137<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->811<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -338,8 +340,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1154<!--/fact--> tests
-in <!--fact:e2eFiles-->83<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1177<!--/fact--> tests
+in <!--fact:e2eFiles-->85<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -434,10 +436,18 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-There are <!--fact:investigations-->22<!--/fact--> instructor
-guides, <!--fact:investigations-->22<!--/fact--> answer keys, an adopter's guide
-and a curriculum map — 22 PDFs, generated from the lessons at build time — live
-at [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/).
+All <!--fact:instructorDocuments-->54<!--/fact--> documents are generated from
+the lessons at build time and live at
+[gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
+
+- <!--fact:investigations-->22<!--/fact--> instructor guides
+- <!--fact:investigations-->22<!--/fact--> answer keys
+- <!--fact:activityDocuments-->8<!--/fact--> classroom-activity guides and
+  student worksheets, across <!--fact:activities-->3<!--/fact--> activities
+- an adopter's guide and a curriculum map
+
+Each is downloadable on its own — the activities individually as well as the
+investigations — or all of them together as one archive.
 
 They are behind a passphrase, and the honest description of what that means is on
 the page itself: the site is static, with no server to check a credential
@@ -491,6 +501,17 @@ and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
 
 ---
 
+## Getting help, and getting involved
+
+| | |
+| --- | --- |
+| Something is wrong | [`SUPPORT.md`](SUPPORT.md) — what makes a bug report fixable here |
+| I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), and [/teaching/](https://gravitas-sim.online/teaching/) |
+| I want to change something | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+| I found a security problem | [`SECURITY.md`](SECURITY.md) — please do not open an issue |
+| How people are expected to behave | [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) |
+| I want to cite this | [`CITATION.cff`](CITATION.cff), and below |
+
 ## Contributing
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) has the setup, the conventions and the
@@ -531,7 +552,18 @@ funded by the SFA COSM.
 
 ## License
 
-MIT. See [`LICENSE`](LICENSE).
+Two licenses, because this is two kinds of work.
+
+- **The software is MIT.** See [`LICENSE`](LICENSE).
+- **The original teaching material is CC BY 4.0** — the 22 investigations, the
+  instructor guides, the manual, the documentation and the original figures.
+  See [`LICENSE-CC-BY-4.0.md`](LICENSE-CC-BY-4.0.md). Put an investigation in a
+  course pack, translate it, cut it down: no permission needed, just credit.
+
+[`LICENSES.md`](LICENSES.md) says exactly which files each one covers.
+[`NOTICE`](NOTICE) carries the third-party attributions — three.js, Chart.js,
+three font families, the Transit of Venus photograph, the GWOSC strain data and
+the MIST tracks, each under its own license.
 
 Scenario data uses published values for real systems; sources are noted at
 [/model/](https://gravitas-sim.online/model/).

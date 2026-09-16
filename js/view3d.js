@@ -116,7 +116,7 @@ const OBJECT_BASE_ALTITUDE = 42;
 const OBJECT_ALTITUDE_SPREAD = 26;
 const BLACK_HOLE_ALTITUDE_OFFSET = -18;
 let gridMesh = null;
-// The grid's current width in world units. It stays centerd on the origin, so
+// The grid's current width in world units. It stays centered on the origin, so
 // a vertex's local x/z are also its world x/z and everything that deforms the
 // grid can go on comparing them directly with body positions.
 let gridSize = SPACETIME_SIZE;
@@ -457,7 +457,7 @@ function addEnvironment() {
  * scene's scale.
  *
  * @param {number} size - Width and depth of the grid in world units
- * @returns {THREE.BufferGeometry} Line-segment geometry centerd on the origin
+ * @returns {THREE.BufferGeometry} Line-segment geometry centered on the origin
  */
 function buildGridGeometry(size) {
   const points = [];
@@ -497,7 +497,7 @@ function buildGridGeometry(size) {
  * A grid 3000 units across is right for a binary, and nowhere near the Solar
  * System, whose comets reach 186 AU - 18,600 units - so the sheet the bodies
  * are supposed to be sitting in was a small square near the middle of an
- * otherwise empty view. It stays centerd on the origin, which every scenario
+ * otherwise empty view. It stays centered on the origin, which every scenario
  * is built around, so nothing that reads a vertex position has to learn about
  * an offset.
  *

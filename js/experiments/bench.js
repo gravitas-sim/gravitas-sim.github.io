@@ -347,7 +347,7 @@ export function applyPerturbation({ bodyId, axis, km }) {
  */
 export async function recordNumericalControl() {
   if (!current?.runs?.A || !current?.runs?.B) return { ok: false, label: '' };
-  const { separationSeries, analyzedivergence } =
+  const { separationSeries, analyzeDivergence } =
     await import('../chaos/divergence.js');
   const shape = run =>
     (run.samples || [])
@@ -357,7 +357,7 @@ export async function recordNumericalControl() {
   const b = shape(current.runs.B);
   if (!a.length || !b.length) return { ok: false, label: '' };
   const { series } = separationSeries(a, b);
-  const verdict = analyzedivergence(series);
+  const verdict = analyzeDivergence(series);
   const settings = host.getSettings();
   const label = `${settings.integrator}, speed ${settings.sim_speed}`;
   addNumericalControl({
@@ -646,7 +646,7 @@ export async function runReliabilityCheck(opts = {}) {
   // let the world run on and then ran a check was thrown back to the capture
   // point rather than to where they had been - the check quietly rewound their
   // simulation. Saved with forExperiment so the clock and the open tools come
-  // back too, and restored on every exit including cancelation and a throw.
+  // back too, and restored on every exit including cancellation and a throw.
   const savedWorld = host.captureShareState({
     kind: 'full',
     includeCamera: false,

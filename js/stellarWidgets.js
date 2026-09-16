@@ -701,7 +701,7 @@ let lastPlot = null;
  *
  * @param {CanvasRenderingContext2D} g - The context, already styled
  * @param {string} text - The caption
- * @param {number} x - Left edge, or center when the context is centerd
+ * @param {number} x - Left edge, or center when the context is centered
  * @param {number} top - Top of the first line
  * @param {number} maxWidth - The width to break to
  * @param {number} lineHeight - Baseline spacing

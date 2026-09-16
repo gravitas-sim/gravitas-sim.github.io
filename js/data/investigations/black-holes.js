@@ -448,7 +448,12 @@ const BLACK_HOLES = {
         'Exactly the speed of light. And look at the number: 2.95 kilometers is the Schwarzschild radius of one solar mass, the same number you have been using all lesson. Squeeze any mass down to its own Schwarzschild radius and this calculation says light needs the speed of light to get away, which means it cannot.',
       tool: {
         id: 'bh-escape',
-        values: { logr: 0.4705 },
+        // The control's own minimum, and its "3 km" preset: log10 of the
+        // Schwarzschild radius of one solar mass, 2.953 km. Exact rather than
+        // rounded to 0.4705, because a rounded copy is half a thousandth off
+        // the 0.005 grid and the preset button is then the only way back - and
+        // it would land somewhere the step never staged.
+        values: { logr: 0.4704290965903215 },
         title: 'One solar mass, squeezed to 2.95 km',
         note: 'The gauge has reached the orange line.',
       },
@@ -740,7 +745,10 @@ const BLACK_HOLES = {
         'It decreases, and the rule is as simple as the one for radius, just upside down: T ∝ 1/M. Double the mass and you halve the temperature. The biggest black holes in the universe are the coldest objects in it. A ten solar mass black hole sits at about six billionths of a degree above absolute zero. Sagittarius A*, at the center of our galaxy, is four hundred thousand times colder still. Both are far colder than the empty space around them, which means both are absorbing more energy from the microwave background than they give off, and are very slowly growing rather than shrinking.',
       tool: {
         id: 'bh-thermo',
-        values: { logm: 6.6334 },
+        // The widget's own Sagittarius A* preset, to the digit. See the note
+        // on the bh-escape step above: a rounded copy is not on the grid and
+        // not what the preset restores.
+        values: { logm: Math.log10(4.3e6) },
         title: 'Sagittarius A*, at four million solar masses',
         note: 'Far below the coldest temperature any laboratory has ever reached.',
       },
@@ -818,7 +826,8 @@ const BLACK_HOLES = {
         'Far faster. The rule is lifetime ∝ M³: double the mass and the lifetime goes up by eight times. Triple it and it goes up twenty seven times. That is why a factor of four million in mass becomes a factor of 10²⁰ in lifetime. Two things must be said plainly. First, none of this is happening yet: every known black hole is colder than the space around it, so all of them are currently gaining mass, not losing it, and evaporation cannot even begin until the universe has cooled far below its present temperature. Second, these lifetimes are longer than the age of the universe by so much that the comparison stops meaning anything.',
       tool: {
         id: 'bh-lifetime',
-        values: { logm: 6.6334 },
+        // The Sagittarius A* preset again, exactly.
+        values: { logm: Math.log10(4.3e6) },
         title: 'Sagittarius A*',
         note: 'Compare the length of the orange bar with the age of the universe.',
       },

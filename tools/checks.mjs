@@ -209,9 +209,19 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    // The strict form, and deliberately only here. `author:check` reports
+    // lesson-quality warnings and exits 0, because a checker that fails a
+    // work-in-progress lesson on a missing closing summary is a checker an
+    // author turns off. A release is the other situation: nineteen of these
+    // had accumulated by v1.0 - five lessons ending mid-question, a worked
+    // answer with no hint before it, a numeric question that never said
+    // whether it wanted a unit - and every one of them was a thing a student
+    // would meet. So CI stays permissive and the gate does not, and the
+    // equivalence is recorded in CI_EQUIVALENTS rather than left to be
+    // noticed.
     id: 'author',
-    label: 'investigations validate',
-    command: ['npm', 'run', 'author:check'],
+    label: 'investigations validate, warnings included',
+    command: ['npm', 'run', 'author:strict'],
     tier: 'quick',
     ci: 'checks',
     group: 'correctness',
@@ -593,6 +603,10 @@ export const CI_EQUIVALENTS = {
   // browser suite the gate runs, so `e2e-sources` covers them. Kept as its own
   // CI job because it uploads its own report and can fail independently;
   // recorded here so the equivalence is a decision rather than a gap.
+  // Development CI runs the permissive form and the gate runs `author:strict`.
+  // Same checker over the same lessons; the gate additionally fails on
+  // warnings. See the `author` entry for why the two differ.
+  'npm run author:check': 'author',
   'npm run a11y:axe': 'e2e-sources',
   'npm run a11y:manual': 'e2e-sources',
   // Sharded in CI, whole in the gate.

@@ -40,7 +40,7 @@ import {
   BEHAVIOR,
   CRITERIA,
   separationSeries,
-  analyzedivergence,
+  analyzeDivergence,
   refinementVerdict,
 } from './chaos/divergence.js';
 
@@ -82,7 +82,7 @@ export function measure(ctx) {
     return { ready: false, reason: 'no-runs', verdict: null, series: [] };
   }
   const { series, sampling, unmatched } = separationSeries(runs.a, runs.b);
-  const verdict = analyzedivergence(series);
+  const verdict = analyzeDivergence(series);
   return {
     ready: series.length > 1,
     reason: series.length > 1 ? '' : 'no-overlap',
@@ -97,7 +97,7 @@ export function measure(ctx) {
   };
 }
 
-/** A localized one-line verdict. @param {Object} v - From analyzedivergence @returns {string} Text */
+/** A localized one-line verdict. @param {Object} v - From analyzeDivergence @returns {string} Text */
 export function verdictText(v) {
   if (!v) return t('chaosW.verdict.none');
   switch (v.behavior) {

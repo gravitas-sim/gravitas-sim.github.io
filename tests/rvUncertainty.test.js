@@ -567,7 +567,7 @@ describe('reproducibility', () => {
   });
 });
 
-describe('progress, cancelation and failures', () => {
+describe('progress, cancellation and failures', () => {
   test('progress is reported and ends at the total', async () => {
     const { points, fit, bounds } = wellSampled();
     const seen = [];
@@ -625,7 +625,7 @@ describe('progress, cancelation and failures', () => {
         shouldCancel: () => done >= 60,
       }
     );
-    // Cancelation lands on a batch boundary by design, so the count is the
+    // Cancellation lands on a batch boundary by design, so the count is the
     // batch multiple at or after the threshold rather than the threshold.
     expect(cut.completed).toBe(60);
     expect(cut.completed % 12).toBe(0);

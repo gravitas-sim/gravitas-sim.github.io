@@ -66,11 +66,11 @@ export const wrap180 = deg => {
 };
 
 /**
- * An angle folded into a 360-degree window centerd on `center`.
+ * An angle folded into a 360-degree window centered on `center`.
  *
  * A resonant angle librating about 180 crosses neither 0 nor 360, so plotting
  * it wrapped to [0, 360) is already continuous. One librating about 0 crosses
- * 360 on every swing and looks like a sawtooth until it is re-centerd, and a
+ * 360 on every swing and looks like a sawtooth until it is re-centered, and a
  * student reading amplitude off that plot reads 180 degrees instead of two.
  *
  * @param {number} deg - Any angle in degrees
@@ -469,7 +469,7 @@ export const ANGLE_CRITERIA = {
 };
 
 /**
- * A centerd moving average over a fixed span of time.
+ * A centered moving average over a fixed span of time.
  *
  * Every resonant argument carries a ripple at the conjunction frequency: the
  * two bodies pull hardest on each other when they line up, and the argument
@@ -486,7 +486,7 @@ export const ANGLE_CRITERIA = {
  * from the disturbing function. The window is measured in time rather than in
  * samples so that a decimated record is smoothed over the same physical
  * interval as a dense one, and it is shrunk symmetrically near the ends so the
- * average stays centerd rather than becoming lopsided there.
+ * average stays centered rather than becoming lopsided there.
  *
  * @param {Array<number>} values - The unwrapped angle
  * @param {Array<number>} times - Matching timestamps
@@ -970,7 +970,7 @@ export function conjunctionCluster(events) {
  * towards the secondary, and distances are unchanged. Optionally normalized so
  * that the secondary sits at exactly x = 1.
  *
- * Primary-centerd rather than barycentric, which is the less usual convention
+ * Primary-centered rather than barycentric, which is the less usual convention
  * and the right one here. The triangular points are defined by an equilateral
  * triangle with the primary and the secondary, so in these coordinates they sit
  * at exactly (0.5, +/-sqrt(3)/2) whatever the mass ratio; in barycentric

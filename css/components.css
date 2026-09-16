@@ -505,7 +505,7 @@
     /* The rail can outgrow short viewports once every group is present, so it
        scrolls internally rather than running off the bottom of the screen.
        No transport-bar reservation here: at this width the rail is a column at
-       the right edge and the bar is a centerd pill that ends well short of it,
+       the right edge and the bar is a centered pill that ends well short of it,
        so the two never meet. Reserving the space anyway made the rail scroll
        before its own open section fitted, which is the one thing the accordion
        exists to avoid - see the tablet rule further down, where they do meet. */

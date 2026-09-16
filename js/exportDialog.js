@@ -13,6 +13,7 @@
 // a two-line CSV without warning is worse than one that says why.
 // =============================================================================
 
+import { plural } from './format.js';
 import {
   trajectoryCsv,
   lightCurveCsv,
@@ -68,10 +69,6 @@ function nameMap() {
   }
   return out;
 }
-
-/** A count with its noun, pluralized. */
-const plural = (n, one, many = `${one}s`) =>
-  `${n.toLocaleString('en-US')} ${n === 1 ? one : many}`;
 
 /** The object the export is restricted to, or null for everything. */
 function selectedId() {

@@ -331,7 +331,7 @@ export function velocityDispersion(bodies) {
  * Use losToMeanSquare for that step, deliberately, and in the open.
  *
  * @param {number} meanSquareSpeed - <v^2> of the members
- * @param {number} radius - Characteriztic radius of the system
+ * @param {number} radius - Characteristic radius of the system
  * @param {number} G - Gravitational constant in simulation units
  * @returns {number} Virial mass in simulation mass units
  */

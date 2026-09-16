@@ -138,6 +138,15 @@ describe('the argument at the end is the argument from the start', () => {
     // particular objects rather than answering a general question.
     const names = s => (s.stage?.stars ?? []).map(x => x.name).join('|');
     expect(names(close)).toBe(names(open));
-    expect(close.index).toBe(steps.length - 1);
+    // It is the last thing the lesson ASKS, which is the property that makes
+    // it the summative question. It is no longer the last step: a closing
+    // summary follows it, as it does in every other investigation, and this
+    // assertion said `steps.length - 1` - so adding that summary failed a test
+    // about revisiting a prediction for a reason that had nothing to do with
+    // revisiting a prediction.
+    const graded = ['predict', 'question', 'measure'];
+    const after = steps.slice(close.index + 1);
+    expect(after.filter(s => graded.includes(s.type))).toEqual([]);
+    expect(after.length).toBeLessThanOrEqual(1);
   });
 });

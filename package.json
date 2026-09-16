@@ -13,12 +13,12 @@
     "lint:fix": "eslint js tools e2e build.js sw.js playwright.config.js eslint.config.js --fix",
     "format": "prettier --write \"js/**/*.js\" \"tools/**/*.{js,mjs}\" \"e2e/**/*.js\" \"tests/**/*.js\" sw.js playwright.config.js eslint.config.js build.js",
     "format:check": "prettier --check \"js/**/*.js\" \"tools/**/*.{js,mjs}\" \"e2e/**/*.js\" \"tests/**/*.js\" sw.js playwright.config.js eslint.config.js build.js",
-    "dev": "npx http-server . -p 8003 -o",
+    "dev": "npx http-server . -p 8003 -c-1 -o",
     "deps:audit": "npm audit --audit-level=moderate && npm audit --omit=dev",
-    "serve": "npx http-server . -p 8003",
+    "serve": "npx http-server . -p 8003 -c-1",
     "build": "node tools/make-social-card.js && node tools/build-instructor-materials.js && node tools/build-service-worker.mjs && node build.js",
     "build:watch": "node build.js --watch",
-    "preview": "npm run build && npx http-server dist -p 8004 -o",
+    "preview": "npm run build && npx http-server dist -p 8004 -c-1 -o",
     "social-card": "node tools/make-social-card.js",
     "build:instructors": "node tools/build-instructor-materials.js",
     "instructors:check": "node tools/build-instructor-materials.js --check",
@@ -65,6 +65,7 @@
     "a11y:axe": "playwright test e2e/accessibility.spec.js --project=chromium",
     "a11y:manual": "playwright test e2e/accessibilityManual.spec.js --project=chromium",
     "author:check": "node tools/author-check.mjs",
+    "author:strict": "node tools/author-check.mjs --warnings",
     "author:rules": "node tools/author-check.mjs --rules",
     "author:new": "node tools/new-investigation.mjs",
     "author:walk": "playwright test e2e/authorWalk.spec.js --project=chromium",
@@ -115,7 +116,7 @@
     "prettier": "^3.6.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "chart.js": "4.5.1",

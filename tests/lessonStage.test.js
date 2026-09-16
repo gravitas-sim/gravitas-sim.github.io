@@ -98,7 +98,7 @@ beforeEach(() => {
 });
 
 describe('where the stars go', () => {
-  test('a row is centerd on the origin and evenly spaced', () => {
+  test('a row is centered on the origin and evenly spaced', () => {
     expect(rowLayout(3, { spacing: 100 })).toEqual([
       { x: -100, y: 0 },
       { x: 0, y: 0 },
@@ -110,7 +110,7 @@ describe('where the stars go', () => {
     expect(rowLayout(2, { spacing: 50 }).map(p => p.x)).toEqual([-25, 25]);
   });
 
-  test('a grid wraps and stays centerd in both directions', () => {
+  test('a grid wraps and stays centered in both directions', () => {
     const grid = rowLayout(4, { spacing: 10, perRow: 2 });
     expect(grid).toEqual([
       { x: -5, y: -5 },
@@ -197,7 +197,7 @@ describe('framing the stage', () => {
       }
     );
     expect(inset.pan.x).toBeGreaterThan(plain.pan.x);
-    // Centerd in the clear half: 250 pixels right of the window's middle.
+    // Centered in the clear half: 250 pixels right of the window's middle.
     expect(inset.pan.x).toBeCloseTo(250, 6);
   });
 

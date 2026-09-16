@@ -18,7 +18,7 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { execFile } from 'node:child_process';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
@@ -39,14 +39,56 @@ describe('npm run author:check', () => {
     expect(stdout).not.toMatch(/ReferenceError/);
   }, 120_000);
 
-  test('and it fails loudly rather than silently when a lesson is wrong', async () => {
-    // The command is only worth having if it can still say no. Its exit code
-    // is what the release gate reads.
-    const { stdout } = await run('node', ['tools/author-check.mjs'], {
-      cwd: REPO,
-      maxBuffer: 32 * 1024 * 1024,
-    });
-    expect(stdout).toMatch(/Warnings do not fail this command|error/i);
+  // This asserted that stdout matched /Warnings do not fail this command/,
+  // which is a line the command only prints when it HAS warnings. It passed
+  // for as long as the catalog had nineteen of them and failed the moment they
+  // were fixed - so what it was really testing was that the lessons were not
+  // clean. The exit code, which its own comment called the thing that matters,
+  // was never read.
+  test('a clean catalog exits zero, with and without --warnings', async () => {
+    for (const args of [[], ['--warnings']]) {
+      const { stdout } = await run(
+        'node',
+        ['tools/author-check.mjs', ...args],
+        {
+          cwd: REPO,
+          maxBuffer: 32 * 1024 * 1024,
+        }
+      );
+      // execFile rejects on a non-zero exit, so reaching here is the assertion.
+      expect(stdout).toMatch(/nothing to report|warning/i);
+    }
+  }, 120_000);
+
+  test('and it still says no when a lesson is actually wrong', async () => {
+    // Broken on purpose, in the real tree, because the exit code is what the
+    // release gate reads and nothing else here proves it can be non-zero.
+    const file = path.join(REPO, 'js/data/investigations/tides.js');
+    const original = await readFile(file, 'utf8');
+    const broken = original.replace(
+      /^(\s*)sid: '/m,
+      "$1sid: '' , brokenOnPurpose: '"
+    );
+    expect(broken).not.toBe(original);
+    try {
+      await writeFile(file, broken);
+      let exitCode = 0;
+      let output = '';
+      try {
+        await run('node', ['tools/author-check.mjs', '--lesson=tides'], {
+          cwd: REPO,
+          maxBuffer: 32 * 1024 * 1024,
+        });
+      } catch (err) {
+        exitCode = err.code;
+        output = String(err.stdout || '') + String(err.stderr || '');
+      }
+      expect(exitCode).not.toBe(0);
+      expect(output).toMatch(/error/i);
+    } finally {
+      await writeFile(file, original);
+    }
+    expect(await readFile(file, 'utf8')).toBe(original);
   }, 120_000);
 });
 

@@ -29,7 +29,7 @@ const HZ_RINGS = {
   scenario: 'Habitable Zone Lab',
   seed: 'goldilocks',
   camera: { zoom: 1.35, pan: { x: 0, y: 0 } },
-  settings: { habitable_zone_optimizm: 1.0 },
+  settings: { habitable_zone_optimism: 1.0 },
   paused: false,
 };
 
@@ -37,7 +37,7 @@ const HZ_RINGS = {
 // move on screen while nothing else does.
 const HZ_RINGS_WIDE = {
   ...HZ_RINGS,
-  settings: { habitable_zone_optimizm: 1.7 },
+  settings: { habitable_zone_optimism: 1.7 },
 };
 
 // TRAPPIST-1 is 0.06 AU across, so it needs roughly thirty times the zoom the
@@ -51,7 +51,7 @@ const HZ_TRAPPIST = {
   // Tripling it makes the inner planets visibly race without touching the
   // integrator: accuracy here is set by the scenario's max_timestep of 0.0006,
   // which the substep loop honors whatever the speed.
-  settings: { habitable_zone_optimizm: 1.0, sim_speed: 0.03 },
+  settings: { habitable_zone_optimism: 1.0, sim_speed: 0.03 },
   paused: false,
 };
 
@@ -470,7 +470,12 @@ const GOLDILOCKS = {
              \n\nChange the star and watch the band rather than the planet.`,
       tool: {
         id: 'hz-star',
-        values: { star: 0, distance: 0.05 },
+        // 0.04 rather than 0.05: on the control's 0.02 grid, so a student who
+        // drags the planet can put it back, and a better illustration of the
+        // sentence above it - at 0.04 AU this red dwarf delivers 0.94 times
+        // Earth's insolation, which is the "far closer to receive as much"
+        // being described. 0.05 delivered 0.60 and was on no grid line.
+        values: { star: 0, distance: 0.04 },
         showZone: true,
         title: 'The band appears',
         note: 'The shaded band is a calculated range of orbital distances, not a physical region of space. Nothing is there. The distance scale changes with the star, so read the axis rather than the pixels.',
@@ -626,7 +631,7 @@ const GOLDILOCKS = {
              is not a matter of mood.
              \n\nThe <strong>conservative</strong> zone uses the two limits you
              just met, both of which come out of a climate model. The
-             <strong>optimiztic</strong> zone uses two empirical limits instead,
+             <strong>optimistic</strong> zone uses two empirical limits instead,
              taken from the history of our own Solar System: Venus appears to
              have had no surface water for at least a billion years, and Mars
              appears to have had some early on. Those two facts bracket a wider
@@ -635,16 +640,16 @@ const GOLDILOCKS = {
       tool: {
         id: 'hz-boundaries',
         values: { model: 0 },
-        title: 'Conservative and optimiztic',
+        title: 'Conservative and optimistic',
         note: 'Both bands are drawn. The one you have selected is filled in; the other is left as an outline so you can see exactly what changed.',
       },
       checklist: [
         'Read the inner and outer edges of the conservative zone',
-        'Switch to optimiztic and read them again',
+        'Switch to optimistic and read them again',
         'Note which of the two edges moved more',
         'Notice where Earth sits relative to each inner edge',
       ],
-      tip: 'The optimiztic inner edge is called Recent Venus and the optimiztic outer edge is called Early Mars. The names are literal: those two worlds are the evidence.',
+      tip: 'The optimistic inner edge is called Recent Venus and the optimistic outer edge is called Early Mars. The names are literal: those two worlds are the evidence.',
     },
     {
       sid: 'what-actually-changed',
@@ -653,7 +658,7 @@ const GOLDILOCKS = {
       title: 'What actually changed',
       kind: 'choice',
       body: `You have seen both bands drawn on the same axis.`,
-      prompt: 'Going from the conservative to the optimiztic zone changes…',
+      prompt: 'Going from the conservative to the optimistic zone changes…',
       options: [
         'the star, which is now assumed to be brighter',
         'the assumptions about what atmosphere a planet might have, which moves both edges outward and inward',
@@ -662,14 +667,14 @@ const GOLDILOCKS = {
       ],
       answer: 1,
       because:
-        'The assumptions. The conservative edges come from a climate model asking what a water-rich planet can survive; the optimiztic edges come from asking what our own neighbors rule out. Both are defensible and both are published. Which you use depends on what question you are asking, and a paper that quotes a habitable zone should say which one it means.',
+        'The assumptions. The conservative edges come from a climate model asking what a water-rich planet can survive; the optimistic edges come from asking what our own neighbors rule out. Both are defensible and both are published. Which you use depends on what question you are asking, and a paper that quotes a habitable zone should say which one it means.',
     },
     {
       sid: 'the-wider-definition-on-the',
       type: 'explore',
       title: 'The wider definition, on the real Sun',
       body: `Back to the live Solar System, with one change: the habitable zone
-             is now drawn using the <strong>optimiztic</strong> definition. The
+             is now drawn using the <strong>optimistic</strong> definition. The
              star has not changed. The planets have not changed. Only the
              assumption about what counts as an edge.
              \n\nThe inner edge has jumped from 0.98 AU in towards
@@ -689,7 +694,7 @@ const GOLDILOCKS = {
       probe: zoneRows,
       setup: HZ_RINGS_WIDE,
       bind: SOLAR_WORLDS,
-      tip: 'The optimiztic inner edge is the Recent Venus limit, and it is set by Venus itself: the argument is that Venus has had no surface water for at least a billion years, so wherever Venus is must already be too close. Venus therefore sits just inside its own limit, by about 0.03 AU. The definition is nearly touching the evidence it was built from.',
+      tip: 'The optimistic inner edge is the Recent Venus limit, and it is set by Venus itself: the argument is that Venus has had no surface water for at least a billion years, so wherever Venus is must already be too close. Venus therefore sits just inside its own limit, by about 0.03 AU. The definition is nearly touching the evidence it was built from.',
     },
     {
       sid: 'what-the-wider-band-bought',
@@ -697,7 +702,7 @@ const GOLDILOCKS = {
       type: 'question',
       title: 'What the wider band bought',
       kind: 'choice',
-      body: `Switching to the optimiztic definition moved the inner edge inward
+      body: `Switching to the optimistic definition moved the inner edge inward
              by almost a quarter of an astronomical unit.`,
       prompt:
         'How many additional Solar System worlds did that bring inside the zone?',
@@ -709,7 +714,7 @@ const GOLDILOCKS = {
       ],
       answer: 2,
       because:
-        'None. Venus at 0.72 AU still falls just inside the optimiztic inner edge at 0.75, and Ceres at 2.77 is nowhere near the outer edge at 1.77. Mars was already inside the conservative zone. So the two published definitions, which disagree about the edges by a wide margin, agree completely about our own Solar System: two worlds in the zone, and one of them is Mars.',
+        'None. Venus at 0.72 AU still falls just inside the optimistic inner edge at 0.75, and Ceres at 2.77 is nowhere near the outer edge at 1.77. Mars was already inside the conservative zone. So the two published definitions, which disagree about the edges by a wide margin, agree completely about our own Solar System: two worlds in the zone, and one of them is Mars.',
     },
     {
       sid: 'venus-by-the-rule-you',
@@ -918,7 +923,7 @@ const GOLDILOCKS = {
         'Find planets b and c, closest to the star, and read their starlight',
         'Find e, f and g and read theirs',
         'Read where the zone begins and ends in AU',
-        'Switch the zone definition to optimiztic and see whether anything changes category',
+        'Switch the zone definition to optimistic and see whether anything changes category',
         'Compare the scale with Mercury’s orbit in the lower panel',
       ],
       tip: 'TRAPPIST-1b receives about four times what Earth does, and TRAPPIST-1h about a seventh. The seven planets span that entire range within six hundredths of an astronomical unit.',

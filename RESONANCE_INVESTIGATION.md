@@ -232,7 +232,7 @@ fact about crossing orbits rather than about the resonance.
 
 True scale, in the circular restricted three-body frame: the Sun and Jupiter
 both turn about a barycenter at the origin, because the triangular points are
-exact equilibria only in that setting. Jupiter's orbit is circularised — its
+exact equilibria only in that setting. Jupiter's orbit is circularized — its
 real eccentricity is 0.0489 — which is the same idealisation every textbook
 treatment makes and which the lesson states.
 
@@ -245,14 +245,14 @@ Four test bodies of 10⁻⁹ mass units:
 | L3 probe | L3 − 1° | departs: more than 150° within 30 Jupiter years, then a horseshoe |
 | Wide orbit probe | 1.25 × a_Jupiter, circular | circulates, period 3.5 Jupiter years |
 
-The tadpole period against the linearised prediction
+The tadpole period against the linearized prediction
 `P / √(27μ/4)` = 12.47 Jupiter years is a 2.7% agreement, and the finite 24°
 amplitude accounts for the sign of the discrepancy: a wide libration is slower
 than the linear one. The L4 probe confirms the linear limit separately.
 
 Gascheau (1843) proved the triangular points stable when the primary exceeds
 24.96 times the secondary. The Sun is 1,047 times Jupiter. L3 is an equilibrium
-too and is unstable, with a linearised growth time of about 3.2 Jupiter years —
+too and is unstable, with a linearized growth time of about 3.2 Jupiter years —
 which is why there are ten thousand asteroids at L4 and L5 and none at L3.
 
 **One body per Lagrange point, and that is a constraint rather than a choice.**

@@ -1,5 +1,5 @@
 // =============================================================================
-// A realiztic phone
+// A realistic phone
 // -----------------------------------------------------------------------------
 // Workflow 16. Runs under the Pixel 7 device profile rather than a narrow
 // desktop window, because the mobile layout branches on touch support and on the

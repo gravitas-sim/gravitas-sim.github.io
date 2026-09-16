@@ -1021,7 +1021,7 @@ export function measureFrame(ctx, spec) {
   // Tracks are rebuilt from the record each frame rather than accumulated,
   // because the rotating frame is defined by where the secondary was at each
   // instant and a stored track would be drawn in the wrong frame the moment it
-  // moved. Primary-centerd and normalized by the separation, matching
+  // moved. Primary-centered and normalized by the separation, matching
   // rotatingFrame(), so the secondary is at (1, 0) and the marks this widget
   // draws for L4 and L5 are exactly (0.5, +/-sqrt(3)/2).
   const tracks = new Map(others.map(b => [b.name, []]));

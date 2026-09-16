@@ -347,7 +347,7 @@
      2. The bottom dock: transport bar and footer
      --------------------------------------------------------------------------
      Both are fixed along the bottom edge, and until now neither knew about the
-     other: the transport bar centerd itself in the band left of the rail and
+     other: the transport bar centered itself in the band left of the rail and
      the footer sat in the right-hand corner, so whether they collided depended
      on how wide the footer happened to be. It grew - a theme picker, then a
      language picker - and on a wide window the scrubber ran across the
@@ -362,7 +362,7 @@
      ====================================================================== */
 
   @media (min-width: 1025px) {
-    /* Centerd on the window, which is where the eye goes looking for it, and
+    /* Centered on the window, which is where the eye goes looking for it, and
        narrowed rather than shifted when the footer would be in the way.
        --transport-max is the widest it can be and still stop short of the
        footer; js/bottomDock.js works it out from the footer's measured width. */
@@ -376,7 +376,7 @@
     }
 
     /* Unless narrowing has gone too far. Below a usable slider length the bar
-       stops trying to be centerd on the window and centers in the room that is
+       stops trying to be centered on the window and centers in the room that is
        actually free, to the left of the footer. A scrubber slightly off-center
        is a smaller cost than one too short to scrub with. */
     body.dock-banded .timeline-bar {
@@ -1731,7 +1731,7 @@
 
      Above the transport bar rather than over it, and pointer-events: none, so
      it can neither cover a control nor swallow the click it is telling you to
-     make. Centerd on the canvas, which is where the reader is looking.
+     make. Centered on the canvas, which is where the reader is looking.
      -------------------------------------------------------------------- */
   .placement-status {
     position: fixed;
@@ -1840,7 +1840,7 @@
     display: flex;
     align-items: center;
     /* Explicit, because a <button> centers its content and these are rows in a
-       list: eight centerd rows gave the eight names eight different left edges
+       list: eight centered rows gave the eight names eight different left edges
        and nothing to scan down. */
     justify-content: flex-start;
     gap: var(--space-2);

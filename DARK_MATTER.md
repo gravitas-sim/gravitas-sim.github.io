@@ -184,7 +184,7 @@ exists. The other reading is that gravity is what is missing, and Gravitas
 offers it as a selectable alternative rather than a footnote.
 
 **The law.** Milgrom (1983) observed that rotation curves stop falling at a
-characteriztic *acceleration* rather than at a characteriztic radius or
+characteristic *acceleration* rather than at a characteristic radius or
 brightness, and proposed that below a₀ ≈ 1.2 × 10⁻¹⁰ m/s² the relation between
 gravity and motion departs from Newton's. Gravitas applies it algebraically to
 the summed Newtonian field of the visible matter,
@@ -222,7 +222,7 @@ is 1.4 × 10¹⁰ M☉. The mass scale was chosen so that the model galaxy is a 
 one — that mass with a flat curve near 122 km/s sits on the observed baryonic
 Tully-Fisher relation, and the validation suite checks it does. Under that
 mapping MOND reproduces the scenario's flat curve from the visible mass alone.
-**That agreement is a consequence of having built a realiztic galaxy, not
+**That agreement is a consequence of having built a realistic galaxy, not
 evidence gathered by this simulation**, and the scenario source says so where the
 mapping is declared.
 
@@ -309,7 +309,11 @@ bars, and the outer points of a real curve are the hard-won ones.
 not rest on rotation curves, and the final step of the lesson says so in words
 rather than trying to simulate any of it.
 
-**MOND is named but not implemented.** Modified gravity is a live alternative
-that fits rotation curves well and clusters poorly, and the lesson's rubric gives
-credit for raising it. Building a second force law to compare against would be a
-genuinely interesting addition and is not this change.
+**MOND is implemented, but only where it can be defended.** Modified gravity is
+a live alternative that fits rotation curves well and clusters poorly, and it is
+a selectable force law here — see "The other explanation: MOND" above. What is
+*not* implemented is everything past the galaxy: there is no relativistic
+formulation, no cluster-scale test, and no attempt at the acoustic peaks, which
+are the places MOND is known to struggle and where a toy implementation would
+teach the wrong lesson. The control is disabled outside the three galaxy
+scenarios and says why.

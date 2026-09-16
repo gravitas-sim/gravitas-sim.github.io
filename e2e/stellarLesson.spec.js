@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The lesson's content is checked without a browser by the authoring rules and
 // the instructor-materials suite. What needs a browser is whether a student can
-// get through it: twenty-eight steps, three instruments, a synthetic
+// get through it: every step, three instruments, a synthetic
 // population and an evidence capture, in two languages, from the keyboard, at
 // phone width, and across a save and resume.
 //
@@ -14,9 +14,12 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
 
 const LESSON = 'a-universe-of-stars';
-const STEPS = 30;
+// From the manifest, not typed. This was `30`, and adding a closing summary to
+// the lesson failed three tests here for a reason none of them is about.
+const STEPS = MANIFEST.find(i => i.id === LESSON).stepCount;
 
 /** Open the lesson through the interface, the way a student does. */
 async function openLesson(page, app, { locale, narrow = false } = {}) {
@@ -158,7 +161,7 @@ test.describe('the lesson is reachable and complete', () => {
     await expect(card).toContainText(new RegExp(String(STEPS)));
   });
 
-  test('it opens on step 1 of 30', async ({ page, app }) => {
+  test('it opens on the first step of the lesson', async ({ page, app }) => {
     await openLesson(page, app);
     expect(await stepNumber(page)).toBe(1);
     expect(await stepTotal(page)).toBe(STEPS);

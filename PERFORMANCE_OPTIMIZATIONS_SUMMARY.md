@@ -29,7 +29,7 @@ This document summarizes the performance optimizations implemented in the Gravit
 
 #### DOM Update Optimization
 - **Problem**: `innerHTML` updates every frame causing layout thrashing
-- **Solution**: 
+- **Solution**:
   - **Throttling**: Update overlay text only every 10 frames
   - **Caching**: Only update DOM when text content changes
   - **String Optimization**: Pre-join strings before DOM update
@@ -53,7 +53,7 @@ This document summarizes the performance optimizations implemented in the Gravit
 
 #### Gravitational Acceleration Optimization
 - **Problem**: Redundant `Math.sqrt()` calls and inefficient distance calculations
-- **Solution**: 
+- **Solution**:
   - **Optimized Math**: Use `r_sq` directly where possible
   - **Reduced sqrt calls**: Calculate `r_inv = 1/sqrt(r_sq)` once
   - **Loop Optimization**: Use `for` loop instead of `for...of`
@@ -213,4 +213,4 @@ These optimizations provide significant performance improvements while maintaini
 - **Lower-End Devices**: Better frame rates on mobile and older hardware
 - **Development**: Better debugging with performance monitoring
 
-The optimizations are backward compatible and can be easily disabled for debugging purposes. Performance monitoring provides ongoing visibility into simulation performance characteriztics. 
+The optimizations are backward compatible and can be easily disabled for debugging purposes. Performance monitoring provides ongoing visibility into simulation performance characteristics.

@@ -454,7 +454,7 @@ let lastScenario = null;
 // configurations by hand and read the diagnostics off the panel.
 //
 // The machinery underneath is the bench's, borrowed rather than reimplemented -
-// world capture and restoration, cancelation, simulated-progress measurement,
+// world capture and restoration, cancellation, simulated-progress measurement,
 // the trial statuses - with an observer supplying the one thing it cannot know,
 // which is what happened to the planet.
 // =============================================================================

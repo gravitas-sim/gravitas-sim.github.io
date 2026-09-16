@@ -477,7 +477,7 @@ describe('the observing context survives a share link', () => {
     expect(back.distancePc).toBeCloseTo(480.5, 6);
   });
 
-  test('a body-centerd reference frame comes back with its target', async () => {
+  test('a body-centered reference frame comes back with its target', async () => {
     const back = await roundTrip(context);
     expect(back.frame.mode).toBe('body');
     expect(back.frame.objectId).toBe(42);
@@ -560,7 +560,7 @@ describe('body ids travel when the restored context points at a body', () => {
 // consistently American. A key in DEFAULT_SETTINGS is not prose: it is the name
 // a share link and a browser save store the value under, and links outlive the
 // rename. Assigning an unknown key into SETTINGS sets a property nothing reads,
-// so the trails would come back the default colour with nothing to say a
+// so the trails would come back the default color with nothing to say a
 // setting had been dropped - which is the failure mode this repository already
 // worries about out loud, in the comment about a link that reopens on a
 // different measurement.
@@ -585,6 +585,27 @@ describe('settings that have been renamed', () => {
         trail_color_mode: 'type',
       })
     ).toEqual({ trail_color_mode: 'type' });
+  });
+
+  // The two misspellings were live. A substring rule turned
+  // `realistic_disk_physics` into `realiztic_disk_physics` and
+  // `habitable_zone_optimism` into `habitable_zone_optimizm`, both were
+  // deployed, and the spelling has since been repaired - so the names in these
+  // links exist nowhere in the source any more, which is exactly the condition
+  // under which a link goes quiet instead of failing.
+  test('a link written while the names were misspelled still opens', async () => {
+    const { withCurrentSettingNames } = await import('../js/appState.js');
+    expect(
+      withCurrentSettingNames({
+        realiztic_disk_physics: false,
+        habitable_zone_optimizm: 1.3,
+        sim_speed: 2,
+      })
+    ).toEqual({
+      realistic_disk_physics: false,
+      habitable_zone_optimism: 1.3,
+      sim_speed: 2,
+    });
   });
 
   test('every rename points at a setting that exists', async () => {

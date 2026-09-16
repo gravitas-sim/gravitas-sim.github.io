@@ -229,7 +229,7 @@ test.describe('instrument labels are legible', () => {
         .map(b => `${b.size}px "${b.text.slice(0, 24)}"`);
       expect(small, 'labels below the shared floor').toEqual([]);
 
-      // 2. Nothing drawn off the edge. A pixel of slack, because a centerd
+      // 2. Nothing drawn off the edge. A pixel of slack, because a centered
       // label on the last tick legitimately sits on the boundary.
       const off = boxes
         .filter(b => b.x0 < -1 || b.x1 > width + 1 || b.y1 > height + 1)

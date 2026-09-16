@@ -1241,7 +1241,7 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       max_timestep: 0.05,
       min_interaction_distance: 1.0,
       // Conservative by default; the lesson switches it to compare.
-      habitable_zone_optimizm: 1.0,
+      habitable_zone_optimism: 1.0,
     });
   } else if (ps === 'Interstellar Visitor') {
     // 1I/'Oumuamua on its real hyperbolic orbit, with Earth in for scale. The
@@ -1345,9 +1345,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // That choice matters and is worth being plain about. The flat speed
       // these scenarios show was picked by hand long before MOND was in the
       // project, so the mass scale was chosen to make the model galaxy a
-      // realiztic one rather than an arbitrary toy. MOND then reproduces the
+      // realistic one rather than an arbitrary toy. MOND then reproduces the
       // flat curve from the visible mass alone - but that agreement is a
-      // property of having built a realiztic galaxy, not evidence gathered by
+      // property of having built a realistic galaxy, not evidence gathered by
       // this simulation. See MOND_LIMITATIONS in js/mond.js and the lesson,
       // both of which say so.
       //

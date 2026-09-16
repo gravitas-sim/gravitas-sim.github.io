@@ -1,7 +1,7 @@
 // =============================================================================
 // Synthetic detector noise
 // -----------------------------------------------------------------------------
-// Seeded, colored, and fixed. Two properties matter more than realizm:
+// Seeded, colored, and fixed. Two properties matter more than realism:
 //
 //   the same seed gives the same noise, always. A controlled comparison that
 //   redrew its noise when a mass slider moved would be comparing two things at

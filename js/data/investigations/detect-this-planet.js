@@ -748,7 +748,7 @@ const DETECT_THIS_PLANET = {
              \n\nThat is worth knowing before you trust a number from a panel
              like this one. The model is a caricature chosen to make the two
              limits visible, not a noise budget for any real instrument.`,
-      tip: 'The standard diagnostic is a "beta factor": the ratio of the actual scatter of binned residuals to what pure white noise would predict. Published transit papers routinely quote it, and values of 1.5 to 3 are common — which is to say the truth is usually nearer the optimiztic end than the pessimistic one, but never at it.',
+      tip: 'The standard diagnostic is a "beta factor": the ratio of the actual scatter of binned residuals to what pure white noise would predict. Published transit papers routinely quote it, and values of 1.5 to 3 are common — which is to say the truth is usually nearer the optimistic end than the pessimistic one, but never at it.',
     },
     {
       sid: 'read-two-budgets',

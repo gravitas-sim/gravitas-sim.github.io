@@ -1323,7 +1323,7 @@ export async function runChecks() {
       unit: 'relative',
       tolerance: 1e-8,
       toleranceKind: 'absolute',
-      why: 'The contrast that makes the two checks above mean something. RK4 mixes four stages evaluated at four different positions, so its velocity change is not along any one line joining the bodies and the torque does not cancel exactly. The error is tiny - this is a fourth-order scheme - but it is a truncation error that shrinks with the step rather than a cancelation that holds at any step, which is a different kind of claim and worth being able to point at.',
+      why: 'The contrast that makes the two checks above mean something. RK4 mixes four stages evaluated at four different positions, so its velocity change is not along any one line joining the bodies and the torque does not cancel exactly. The error is tiny - this is a fourth-order scheme - but it is a truncation error that shrinks with the step rather than a cancellation that holds at any step, which is a different kind of claim and worth being able to point at.',
     });
 
     lab.reset();
@@ -2298,16 +2298,16 @@ export async function runChecks() {
     add({
       group: 'Habitable zone',
       kind: 'analytic',
-      name: 'The optimiztic zone contains the conservative one',
+      name: 'The optimistic zone contains the conservative one',
       measured: (() => {
         const opt = habitability.habitableZoneBounds(
           { luminositySolar: 1, teffK: habitability.SUN_TEFF_K },
-          'optimiztic'
+          'optimistic'
         );
         return opt.innerAU < sunHz.innerAU && opt.outerAU > sunHz.outerAU;
       })(),
       expected: true,
-      why: 'Recent Venus is hotter than the runaway greenhouse and Early Mars is colder than the maximum greenhouse, so the optimiztic edges must bracket the conservative ones. An ordering mistake in the boundary table would show up here and nowhere else.',
+      why: 'Recent Venus is hotter than the runaway greenhouse and Early Mars is colder than the maximum greenhouse, so the optimistic edges must bracket the conservative ones. An ordering mistake in the boundary table would show up here and nowhere else.',
     });
 
     // TRAPPIST-1, the system the Goldilocks lesson is built on.
@@ -3670,7 +3670,7 @@ export async function runChecks() {
       const a = runLab({ dt, integrator });
       const b = runLab({ nudge: NUDGE, dt, integrator });
       const { series } = chaos.separationSeries(a.samples, b.samples);
-      return { a, b, series, verdict: chaos.analyzedivergence(series) };
+      return { a, b, series, verdict: chaos.analyzeDivergence(series) };
     };
 
     const base = pair({ dt: 0.1, integrator: 'Symplectic Euler' });
@@ -3742,7 +3742,7 @@ export async function runChecks() {
         return samples;
       };
       const { series } = chaos.separationSeries(runBinary(0), runBinary(NUDGE));
-      const verdict = chaos.analyzedivergence(series);
+      const verdict = chaos.analyzeDivergence(series);
 
       add({
         group: 'Three-body sensitivity',
@@ -3994,7 +3994,7 @@ export async function runChecks() {
       expected: 1,
       unit: 'late rate / early rate',
       tolerance: 5e-2,
-      why: 'A documented departure from general relativity, quantified rather than merely disclaimed. Real gravitational-wave emission gives adot proportional to a^-3, so the fractional decay rate goes as a^-4: across a window in which the separation falls by a third, the late rate would be 3.4 times the early one. Here it is 1, because the model is a constant fractional damping of velocity. This check PASSES when the code matches its own documentation - the model page states that "the characteriztic runaway at the end is not reproduced" - and it would FAIL if someone silently swapped in a different decay law without updating that page.',
+      why: 'A documented departure from general relativity, quantified rather than merely disclaimed. Real gravitational-wave emission gives adot proportional to a^-3, so the fractional decay rate goes as a^-4: across a window in which the separation falls by a third, the late rate would be 3.4 times the early one. Here it is 1, because the model is a constant fractional damping of velocity. This check PASSES when the code matches its own documentation - the model page states that "the characteristic runaway at the end is not reproduced" - and it would FAIL if someone silently swapped in a different decay law without updating that page.',
       source: 'Peters (1964) Phys. Rev. 136, B1224',
     });
 
@@ -4384,7 +4384,7 @@ export async function runChecks() {
     add({
       group: 'Orbital resonance',
       kind: 'integration',
-      name: 'The Laplace libration is centerd on 180 degrees',
+      name: 'The Laplace libration is centered on 180 degrees',
       measured: galilean.verdict.center,
       expected: REF.laplaceCenterDeg,
       unit: 'degrees',
@@ -4594,7 +4594,7 @@ export async function runChecks() {
     add({
       group: 'Orbital resonance',
       kind: 'integration',
-      name: "Pluto's libration is centerd on 180 degrees",
+      name: "Pluto's libration is centered on 180 degrees",
       measured: pluto.verdict.center,
       expected: REF.plutoCenterDeg,
       unit: 'degrees',

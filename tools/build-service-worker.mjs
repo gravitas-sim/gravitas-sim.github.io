@@ -22,10 +22,10 @@
  * the bundle, and the paths below are the paths the browser actually requests.
  *
  * In:
- *   index.html and the six stylesheets   the shell
- *   every js/ module except the Spanish  the application, including all twelve
- *     lesson shadows                     English lesson bodies - see below
- *   the 53 scenario thumbnails           the gallery is unusable without them
+ *   index.html and the stylesheets       the shell
+ *   every js/ module except the Spanish  the application, including every
+ *     lesson shadows                     English lesson body - see below
+ *   the scenario thumbnails              the gallery is unusable without them
  *   the one lesson photograph            a lesson figure, licensed for
  *                                        redistribution and served from here
  *   the two favicons                     small, and their absence is visible
@@ -38,12 +38,16 @@
  *   notebooks/                           downloads
  *   social-card.png                      only ever fetched by a link unfurler
  *
- * On the twelve lessons
+ * On the lessons
  * -----------------------------------------------------------------------------
  * Each lesson is one dynamically imported file, so the question of which to
  * precache is a real one and the honest answer is not "all of them".
  *
- * All twelve English bodies are precached: 553KB, about a tenth of the payload.
+ * Every English body is precached, about a tenth of the payload. The exact
+ * figure moves with the lesson set and is not worth writing down here; the
+ * generated manifest's own header carries the file count and total bytes it
+ * measured, and `npm run sw:check` fails when they have drifted.
+ *
  * The failure this whole exercise is about is wifi dropping mid-lesson, and the
  * lesson already open is by definition already fetched - what precaching buys is
  * the teacher who switches lesson *after* the drop, which is exactly the moment
@@ -51,7 +55,7 @@
  * worth it, and choosing a favorite subset would be guessing at which lesson a
  * class is about to want.
  *
- * The twelve Spanish shadows are not precached: another 439KB that is only ever
+ * The Spanish shadows are not precached: comparable weight again, only ever
  * fetched when the interface is in Spanish, which is a deliberate choice a
  * minority of readers make. They are runtime-cached on first use like anything
  * else, and js/main.js asks the worker to warm them when the language is
@@ -199,8 +203,8 @@ ${paths.map(p => `  './${p}',`).join('\n')}
 ];
 
 // Not precached: fetched on demand, and warmed deliberately when the interface
-// switches to Spanish. See the header of the generator for why these twelve are
-// treated differently from the twelve English bodies.
+// switches to Spanish. See the header of the generator for why these are
+// treated differently from the English bodies.
 self.__GRAVITAS_LOCALE_WARM = {
   es: [
 ${localeWarm.map(p => `    './${p}',`).join('\n')}

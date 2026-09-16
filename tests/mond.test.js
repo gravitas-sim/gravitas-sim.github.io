@@ -352,7 +352,7 @@ describe('the galaxy mapping also fixes the speed scale', () => {
     expect(simSpeedToKmS(SCALE, 0)).toBe(0);
   });
 
-  test('the scale model’s flat curve is a realiztic galactic speed', () => {
+  test('the scale model’s flat curve is a realistic galactic speed', () => {
     const V = simSpeedToKmS(SCALE, 1);
     // 11 simulation units is the flat speed the disc scenario shows.
     expect(11 * V).toBeGreaterThan(110);

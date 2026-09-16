@@ -36,6 +36,7 @@ coverage/
 # Instructor materials: the passphrase and the plaintext PDFs
 .instructor-password
 .instructor-build/
+.instructor-fixture/
 
 # Playwright
 /playwright-report/

@@ -84,11 +84,11 @@ describe('wrapping', () => {
 
   test('wrapAbout re-centers, which is what a libration about zero needs', () => {
     // An angle librating about 0 crosses 360 on every swing. Wrapped to
-    // [0, 360) it reads as a sawtooth of amplitude 180; re-centerd it reads as
+    // [0, 360) it reads as a sawtooth of amplitude 180; re-centered it reads as
     // the ten-degree swing it is.
     const raw = [350, 355, 0, 5, 10, 5, 0, 355, 350];
-    const centerd = raw.map(a => wrapAbout(a, 0));
-    expect(Math.max(...centerd) - Math.min(...centerd)).toBeCloseTo(20, 10);
+    const centered = raw.map(a => wrapAbout(a, 0));
+    expect(Math.max(...centered) - Math.min(...centered)).toBeCloseTo(20, 10);
   });
 });
 

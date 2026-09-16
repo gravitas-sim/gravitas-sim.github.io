@@ -219,7 +219,7 @@
       <p>
         None of those are failures. They are models matched to questions. The
         useful question about any model is not
-        <em>is this perfectly realiztic?</em> but
+        <em>is this perfectly realistic?</em> but
         <em>is this appropriate for what I am asking?</em>
       </p>
       <p>
@@ -490,7 +490,7 @@
             that depends extremely steeply on separation, so a real inspiral is
             almost imperceptible for millions of years and then completes in
             seconds. The decay term here is a constant fractional damping and
-            does not carry that separation dependence, so the characteriztic
+            does not carry that separation dependence, so the characteristic
             runaway at the end is not reproduced with the right steepness.
           </dd>
           <dt>Also absent</dt>
@@ -1044,7 +1044,7 @@
       </p>
       <p>
         Two tools now say when they do not apply. The habitable-zone
-        parameterisation is fitted for main-sequence stars between 2600 and
+        parameterization is fitted for main-sequence stars between 2600 and
         7200&nbsp;K, so it declines for a red giant rather than extrapolating a
         polynomial; and the transit-photometry model declines on a pulsating
         giant, whose radius is not a constant over an observation.
@@ -1412,12 +1412,12 @@
       <h3>When a percentage is not available</h3>
       <p>
         A relative drift is a change divided by a reference, and that division
-        is meaningless when the reference is itself the near-cancelation of
+        is meaningless when the reference is itself the near-cancellation of
         much larger quantities: a marginally bound pair has a total energy near
         zero with large kinetic and potential terms, and a system whose bodies
         circulate in opposite senses can have a total angular momentum near zero
         with large individual contributions. Dividing by those produces an
-        enormous figure that says more about the cancelation than about the
+        enormous figure that says more about the cancellation than about the
         integrator.
       </p>
       <p>
@@ -1741,7 +1741,7 @@
               <td>
                 An alternative to the halo, selectable in its place and never
                 alongside it. Milgrom&nbsp;(1983) proposed that below a
-                characteriztic acceleration
+                characteristic acceleration
                 <em>a</em
                 ><sub>0</sub
                 >&nbsp;=&nbsp;1.2&nbsp;&times;&nbsp;10<sup>&minus;10</sup>&nbsp;m/s&sup2;
@@ -2273,7 +2273,7 @@
             </tr>
             <tr>
               <td>When Orbits Lock</td>
-              <td>Three of the four scenarios are built from published elements in js/resonance/systems.js, which is also what the validation suite reads, so a scenario and its check cannot quote different numbers. Pluto and Neptune and Jupiter Trojans are at true scale: 1 length unit is 0.01 AU and 1000 mass units is a solar mass, as everywhere else in Gravitas. The Galilean scenario is a scale model with distances multiplied by 100 and, by Newtonian scale invariance with masses unchanged, durations multiplied by 1000; the instruments convert back and the scenario summary says so. Two documented departures from reality: Gravitas is two-dimensional, so Pluto’s 17-degree inclination is projected away, which brings the modeled minimum Pluto–Neptune separation down from the observed 17.2 AU to 16.6; and Jupiter’s orbit is circularised in the Trojan scenario, because the triangular points are exact equilibria only for a circular secondary. The Galilean moons are placed from their published periods rather than their published distances, because the resonance is a statement about mean motions and the two published quantities disagree at the 0.1% level in a point-mass model - the difference is Jupiter’s oblateness, which Gravitas does not model. Pluto is placed at the exact 3:2 rather than its observed semi-major axis for the same kind of reason: the 0.2% difference is taken up in reality by the precession of Pluto’s perihelion. All four scenarios use Velocity Verlet with a capped substep, because a resonant angle is a secular quantity accumulated over hundreds of orbits and symplectic Euler at the same step reports a Laplace libration amplitude a third of the converged value. Thirty-two checks in the &quot;Orbital resonance&quot; group of tools/physics-checks.mjs hold every number quoted above to a published value or to a refinement test.</td>
+              <td>Three of the four scenarios are built from published elements in js/resonance/systems.js, which is also what the validation suite reads, so a scenario and its check cannot quote different numbers. Pluto and Neptune and Jupiter Trojans are at true scale: 1 length unit is 0.01 AU and 1000 mass units is a solar mass, as everywhere else in Gravitas. The Galilean scenario is a scale model with distances multiplied by 100 and, by Newtonian scale invariance with masses unchanged, durations multiplied by 1000; the instruments convert back and the scenario summary says so. Two documented departures from reality: Gravitas is two-dimensional, so Pluto’s 17-degree inclination is projected away, which brings the modeled minimum Pluto–Neptune separation down from the observed 17.2 AU to 16.6; and Jupiter’s orbit is circularized in the Trojan scenario, because the triangular points are exact equilibria only for a circular secondary. The Galilean moons are placed from their published periods rather than their published distances, because the resonance is a statement about mean motions and the two published quantities disagree at the 0.1% level in a point-mass model - the difference is Jupiter’s oblateness, which Gravitas does not model. Pluto is placed at the exact 3:2 rather than its observed semi-major axis for the same kind of reason: the 0.2% difference is taken up in reality by the precession of Pluto’s perihelion. All four scenarios use Velocity Verlet with a capped substep, because a resonant angle is a secular quantity accumulated over hundreds of orbits and symplectic Euler at the same step reports a Laplace libration amplitude a third of the converged value. Thirty-two checks in the &quot;Orbital resonance&quot; group of tools/physics-checks.mjs hold every number quoted above to a published value or to a refinement test.</td>
             </tr>
             <tr>
               <td>Can You Detect This Planet?</td>
@@ -2285,7 +2285,7 @@
             </tr>
             <tr>
               <td>Planets in Binary Stars</td>
-              <td>The three bodies are integrated as a Newtonian point-mass system in a plane, with Velocity Verlet rather than the catalog's default symplectic Euler. That choice is part of the lesson's subject matter: symplectic Euler's O(dt) phase error puts a spurious eccentricity on the planet within a few orbits, which a student would then read as the binary perturbing it. Verlet's error is O(dt²) and bounded, so a quiet run holds energy to about a part in a million and the drift readout rises only when something real is unresolved. The two Holman &amp; Wiegert fits are transcribed from the paper - equation (1) with Table 3 for the circumstellar case, equation (3) with Table 7 for the circumbinary one - and are checked in the test suite against values published outside the fit: the familiar 0.27 and 2.4 separations for an equal-mass circular binary, Alpha Centauri A's quoted stable zone of close to 3 AU, and Kepler-16b sitting just outside its critical radius of about 0.65 AU. A transcription error in a coefficient is invisible on a plot, so it is checked against systems rather than against itself. The planet is one Earth mass, three parts in a million of the lighter star. Not zero, because a massless body drops out of the barycenter and out of the energy bookkeeping the diagnostics depend on, and small enough that the test-particle assumption behind the fit is not violated by the thing being measured. A Jupiter-mass planet in this lab would be outside what the fit describes. Everything is coplanar, and both the simulation and the fit are two-dimensional. This is the model's largest simplification and step 13 makes it explicit. A planet inclined out of the binary's plane can exchange inclination for eccentricity through the Kozai-Lidov mechanism, which destabilises orbits that are safe in the plane; no part of this lesson can show that. The stars are drawn ten times their main-sequence radii, because at a 10 AU separation a true solar radius is about a third of a pixel. js/physics.js collides on the drawn radius, so the exaggeration sets the collision threshold at roughly 0.06 AU. This is stated in the lesson's closing screen and in the panel's own wording, and it affects the split between recorded collisions and recorded ejections among the disrupted configurations. It does not affect the split between disrupted and survived: every surviving configuration in this lesson keeps the planet at least 400 simulation units from the perturbing star, about seventy times the threshold. One further limit worth naming to a class that asks. The runs here are 20 and 40 binary periods. That is short enough that the lesson's own results and the published fit disagree in two places, which the lesson uses rather than hides - but it also means every &quot;survived&quot; in this lesson is a much weaker claim than the ones in the paper, and no claim at all about the real systems the paper's readers care about.</td>
+              <td>The three bodies are integrated as a Newtonian point-mass system in a plane, with Velocity Verlet rather than the catalog's default symplectic Euler. That choice is part of the lesson's subject matter: symplectic Euler's O(dt) phase error puts a spurious eccentricity on the planet within a few orbits, which a student would then read as the binary perturbing it. Verlet's error is O(dt²) and bounded, so a quiet run holds energy to about a part in a million and the drift readout rises only when something real is unresolved. The two Holman &amp; Wiegert fits are transcribed from the paper - equation (1) with Table 3 for the circumstellar case, equation (3) with Table 7 for the circumbinary one - and are checked in the test suite against values published outside the fit: the familiar 0.27 and 2.4 separations for an equal-mass circular binary, Alpha Centauri A's quoted stable zone of close to 3 AU, and Kepler-16b sitting just outside its critical radius of about 0.65 AU. A transcription error in a coefficient is invisible on a plot, so it is checked against systems rather than against itself. The planet is one Earth mass, three parts in a million of the lighter star. Not zero, because a massless body drops out of the barycenter and out of the energy bookkeeping the diagnostics depend on, and small enough that the test-particle assumption behind the fit is not violated by the thing being measured. A Jupiter-mass planet in this lab would be outside what the fit describes. Everything is coplanar, and both the simulation and the fit are two-dimensional. This is the model's largest simplification and step 13 makes it explicit. A planet inclined out of the binary's plane can exchange inclination for eccentricity through the Kozai-Lidov mechanism, which destabilizes orbits that are safe in the plane; no part of this lesson can show that. The stars are drawn ten times their main-sequence radii, because at a 10 AU separation a true solar radius is about a third of a pixel. js/physics.js collides on the drawn radius, so the exaggeration sets the collision threshold at roughly 0.06 AU. This is stated in the lesson's closing screen and in the panel's own wording, and it affects the split between recorded collisions and recorded ejections among the disrupted configurations. It does not affect the split between disrupted and survived: every surviving configuration in this lesson keeps the planet at least 400 simulation units from the perturbing star, about seventy times the threshold. One further limit worth naming to a class that asks. The runs here are 20 and 40 binary periods. That is short enough that the lesson's own results and the published fit disagree in two places, which the lesson uses rather than hides - but it also means every &quot;survived&quot; in this lesson is a much weaker claim than the ones in the paper, and no claim at all about the real systems the paper's readers care about.</td>
             </tr>
             <tr>
               <td>Where Does a Gravity Assist Get Its Speed?</td>

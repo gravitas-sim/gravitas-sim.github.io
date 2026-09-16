@@ -127,7 +127,7 @@ where the row it sits in already says what it is.
 
 The panel measures the page's own bottom-left chrome — the transport bar and the
 tutorial button — a few times a second and sits above it, because both of them
-move: the transport bar is centerd on the window and is a different size on a
+move: the transport bar is centered on the window and is a different size on a
 phone. On a narrow canvas the panel drops the longest row and shortens the rest
 rather than running off the edge.
 
@@ -325,7 +325,7 @@ taken.
   question answered first.
 - **The Settings panel hides the label on `option` rows below about 700px**,
   which affects Simulation Size, Placement and now Integrator equally. It is a
-  pre-existing layout characteriztic rather than something this pass introduced,
+  pre-existing layout characteristic rather than something this pass introduced,
   and fixing it belongs with the settings panel rather than here.
 - **The vector overlay draws for one selected body.** Showing them for every body
   at once would be a different feature and a different performance question.

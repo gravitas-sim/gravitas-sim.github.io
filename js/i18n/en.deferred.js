@@ -1039,7 +1039,7 @@ export const EN_DEFERRED = {
   'hzW.whereTheEdgesComeFrom': 'Where the edges come from',
   'hzW.definition': 'Definition',
   'hzW.conservative': 'Conservative',
-  'hzW.optimiztic': 'Optimiztic',
+  'hzW.optimistic': 'Optimistic',
   'hzW.definitionShown': 'Definition shown',
   'hzW.innerEdge': 'Inner edge',
   'hzW.outerEdge': 'Outer edge',
@@ -1110,7 +1110,7 @@ export const EN_DEFERRED = {
   'rvfit.mc.assume.independent':
     'Errors are independent between epochs: no night-to-night systematic, no drift in the instrument.',
   'rvfit.mc.assume.sigmas':
-    'The stated uncertainties are correct. If they are optimiztic, so is every interval here.',
+    'The stated uncertainties are correct. If they are optimistic, so is every interval here.',
   'rvfit.mc.assume.precision':
     'This measures precision, not correctness. A wrong model can produce a very tight interval.',
   'rvfit.mc.assumptions': 'These intervals are conditional on:',
@@ -1224,7 +1224,7 @@ export const EN_DEFERRED = {
   'resW.value.needed':
     'the angle has moved {drift}° so far; that is a libration of at least that width or a circulation taking {cycles} conjunction cycles, and nothing here separates them',
   'resW.value.sampling': '{n} samples, one every {every} days',
-  'resW.value.spread': 'centerd on {mean}°, spread ±{spread}°',
+  'resW.value.spread': 'centered on {mean}°, spread ±{spread}°',
   'resW.value.tadpole': '{kind} about {center}°, amplitude ±{amp}°',
   'resW.verdict.none': 'nothing measured yet',
   'resW.verdict.circulation':
@@ -1641,7 +1641,7 @@ export const EN_DEFERRED = {
   // --- The browser's search and filters ---------------------------------------
   // Every option these describe is generated from the manifest. The subject
   // names below are the tag vocabulary the lessons declare, translated once
-  // here rather than repeated in seventeen lesson files.
+  // here rather than repeated in every lesson file.
   'inv.filter.search.placeholder': 'Search by title, topic or subject',
   'inv.filter.query': 'Search',
   'inv.filter.subject': 'Subject',
@@ -2405,13 +2405,13 @@ export const EN_DEFERRED = {
   'gwW.row.arms': 'What an L would read',
   'gwW.value.arms':
     'Along the horizontal arm the length changes by a fraction {x}; along the vertical arm, {y}. The instrument measures the DIFFERENCE, {diff} — which on LIGO’s four-kilometer arms is {meters} meters. That is why the shape is an L: two lengths compared against each other, not one length measured absolutely.',
-  'gwW.row.polarization': 'Polarisation',
+  'gwW.row.polarization': 'Polarization',
   'gwW.value.polarization.linear':
-    'Linear. Only the plus polarisation is present, so the ring stretches one way, passes exactly through a circle, and squeezes the other way. This is the clean stretch-and-squeeze picture.',
+    'Linear. Only the plus polarization is present, so the ring stretches one way, passes exactly through a circle, and squeezes the other way. This is the clean stretch-and-squeeze picture.',
   'gwW.value.polarization.circular':
-    'Circular. Both polarisations are present and equal, a quarter cycle apart, so the ring is an ellipse of fixed shape that ROTATES. It never passes through a circle — not once. Looking face-on at a circular orbit is what does this.',
+    'Circular. Both polarizations are present and equal, a quarter cycle apart, so the ring is an ellipse of fixed shape that ROTATES. It never passes through a circle — not once. Looking face-on at a circular orbit is what does this.',
   'gwW.value.polarization.elliptical':
-    'Elliptical: both polarisations are present but unequal. The ring wobbles between two ovals without ever quite becoming a circle. Only an edge-on view gives the clean stretch-and-squeeze.',
+    'Elliptical: both polarizations are present but unequal. The ring wobbles between two ovals without ever quite becoming a circle. Only an edge-on view gives the clean stretch-and-squeeze.',
   'gwW.control.source': 'What is emitting',
   'gwW.source.static': 'one mass, sitting still',
   'gwW.source.pulsing': 'a pulsing sphere',
@@ -2999,7 +2999,7 @@ export const EN_DEFERRED = {
     'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
   'welcomeAudience.instructors.title': 'For instructors',
   'welcomeAudience.instructors.text':
-    'Six guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+    '22 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
   'welcomeAudience.curious.title': 'For the curious',
   'welcomeAudience.curious.text':
     'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',

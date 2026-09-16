@@ -1760,7 +1760,7 @@ const VIRIAL = {
       ctx.ellipse(gx, gy, 3.2, 2.1, a, 0, 2 * Math.PI);
       ctx.fill();
     }
-    // Left-aligned rather than centerd on the cluster: the caption is wider than
+    // Left-aligned rather than centered on the cluster: the caption is wider than
     // the picture beside it, and centring ran it off the left edge.
     ctx.font = `10px ${MONO}`;
     ctx.fillStyle = MUTED;

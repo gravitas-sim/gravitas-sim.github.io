@@ -506,5 +506,17 @@ export default {
         'Explica cómo se relacionan masa, temperatura, radio, luminosidad y vida, y dónde dejan de valer esas relaciones. Cita al menos dos de tus propias medidas y di si tu respuesta del paso 1 sigue en pie.',
       tip: 'Tu cuaderno tiene las medidas, con el modelo del que salió cada una. Ábrelo en otra pestaña si quieres citar un número exacto.',
     },
+    {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Para qué sirve el diagrama',
+      body: '<strong>Cinco magnitudes, y no son la misma.</strong> La masa es cuánta estrella hay. El radio es cómo de grande es. La temperatura es cómo de caliente está su superficie. La luminosidad es cuánta luz sale de ella. El brillo aparente es cuánta de esa luz te llega, y depende de dónde estés tú.\n\n<strong>La temperatura y la luminosidad juntas fijan el radio</strong>, y lo usaste en ambos sentidos: así fue como dos estrellas del mismo color resultaron diferir en tamaño en un factor de varios cientos.\n\n<strong>En la secuencia principal, la masa fija lo demás</strong>, y de forma muy pronunciada: un factor cien en masa son millones en luz. Esa pendiente es toda la respuesta a cómo una estrella con mucho más combustible se queda sin él mucho antes.\n\n<strong>Una posición en el diagrama no fija una masa ni una edad.</strong> La gigante y la enana blanca que mediste son contraejemplos de las dos cosas, y las dos fueron estrellas corrientes de secuencia principal en su momento. Las relaciones de arriba son afirmaciones sobre la secuencia principal, no sobre las estrellas.\n\n<strong>Y una muestra no es una población.</strong> Las estrellas más brillantes del cielo no son las más comunes de la galaxia. Son las que se ven desde más lejos, que es un hecho sobre el muestreo y no sobre las estrellas.',
+      tip: 'Si quieres ver cambiar a estas estrellas en vez de compararlas, «Vidas de las estrellas» sigue a cuatro de ellas desde una nube que se colapsa hasta lo que dejan atrás.',
+    },
   ],
 };

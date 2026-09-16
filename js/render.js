@@ -57,7 +57,7 @@ import { updateCanvasSummary } from './canvasSummary.js';
 /**
  * Draw the crests a wave source has emitted.
  *
- * Centerd on the source's own screen position, so the pattern travels with it
+ * Centered on the source's own screen position, so the pattern travels with it
  * rather than with the camera. Bounded by construction: the crest list comes
  * from js/lesson/gwWavefronts.js, which caps it, and each ring is one stroked
  * circle.
@@ -317,23 +317,23 @@ import { isEmbed } from './presentation.js';
 import { t, onLocaleChange } from './i18n/index.js';
 
 /**
- * Translate the legacy "habitable zone optimizm" setting into a model name.
+ * Translate the legacy "habitable zone optimism" setting into a model name.
  *
  * The old slider ran from 0.5 to 2.0 and multiplied the width of an arbitrary
  * band. Shared links and saved settings still carry it, so it keeps working:
- * anything above the midpoint asks for the optimiztic prescription, anything
+ * anything above the midpoint asks for the optimistic prescription, anything
  * below asks for the conservative one. New wording says which is which rather
  * than implying that 1.7 means something physical.
  *
  * @param {Object} settings - Live settings
- * @returns {string} 'conservative' or 'optimiztic'
+ * @returns {string} 'conservative' or 'optimistic'
  */
 export function habitableZoneModelFromSettings(settings) {
-  const legacy = settings?.habitable_zone_optimizm;
+  const legacy = settings?.habitable_zone_optimism;
   // One stored value, so a shared link from before this change still selects a
   // zone and cannot disagree with the settings menu.
   return typeof legacy === 'number' && legacy >= 1.3
-    ? 'optimiztic'
+    ? 'optimistic'
     : 'conservative';
 }
 
@@ -656,7 +656,7 @@ function distortionRegions() {
       // An annulus, not a disc.
       //
       // A ripple's displacement is a sine under an exp(-|phase|) envelope
-      // centerd on the expanding wavefront, so the sky it actually moves is a
+      // centered on the expanding wavefront, so the sky it actually moves is a
       // band a couple of wavelengths wide around that front. Treating it as a
       // filled disc meant that an old ripple - and they live fifteen seconds,
       // by which time the front is thousands of pixels out - claimed the whole
@@ -1322,7 +1322,7 @@ const drawScene = () => {
   // Every number comes from js/habitability.js, which the lesson instruments
   // read too. This block used to carry its own physics: 1 AU = 160 units (the
   // scenarios use 100), luminosity from mass as M^3.5 with a floor of
-  // 0.01 L_sun (TRAPPIST-1 is 0.000553), and an "optimizm" slider that widened
+  // 0.01 L_sun (TRAPPIST-1 is 0.000553), and an "optimism" slider that widened
   // an arbitrary band around 1 AU. The ring was in the wrong place and,
   // for a red dwarf, wrong by a factor of several.
   const hzModel = habitableZoneModelFromSettings(SETTINGS);
@@ -1387,8 +1387,8 @@ const drawScene = () => {
         // and not a measurement. The ring says so for the red dwarfs where
         // it applies, rather than quoting a clamped fit as fact.
         const bandName =
-          hzModel === 'optimiztic'
-            ? 'Habitable zone (optimiztic)'
+          hzModel === 'optimistic'
+            ? 'Habitable zone (optimistic)'
             : 'Habitable zone (conservative)';
         label(
           (innerR + outerR) / 2,
@@ -2168,7 +2168,7 @@ function readoutHtml(drawn) {
       ];
 
       // Energy and angular momentum, each either as a percentage of the
-      // reference or - when the reference was itself the near-cancelation of
+      // reference or - when the reference was itself the near-cancellation of
       // much larger terms - as the change itself, said plainly.
       rows.push(
         drift.energyConditioned
@@ -2353,7 +2353,7 @@ function instrumentationSettings() {
 // The instrumentation is painted on the canvas and the transport bar and
 // tutorial button are HTML on top of it, so the canvas has to be told where
 // they are or the scale bar ends up behind the scrubber. Measured rather than
-// assumed, because both of them move: the transport bar is centerd on the
+// assumed, because both of them move: the transport bar is centered on the
 // window and hidden entirely on a narrow screen.
 //
 // Re-measured a few times a second rather than every frame. A layout read in
@@ -2380,7 +2380,7 @@ function measureChrome() {
     const r = el.getBoundingClientRect();
     // Only chrome that actually sits over the corner the instrumentation uses.
     if (r.width <= 0 || r.height <= 0) continue;
-    // The lecture bar is centerd, so it reaches the corner the instrumentation
+    // The lecture bar is centered, so it reaches the corner the instrumentation
     // uses without starting there; every other piece of chrome measured here
     // is anchored left.
     if (r.left > 520 && id !== 'lectureBar') continue;

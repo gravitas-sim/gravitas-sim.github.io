@@ -4704,8 +4704,8 @@ const setting_items = [
     type: 'bool',
   },
   {
-    labelId: 'settings.label.realizticDiskPhysics',
-    key: 'realiztic_disk_physics',
+    labelId: 'settings.label.realisticDiskPhysics',
+    key: 'realistic_disk_physics',
     type: 'bool',
   },
   { labelId: 'settings.label.showBhJets', key: 'show_bh_jets', type: 'bool' },
@@ -4776,8 +4776,8 @@ const setting_items = [
   },
   { labelId: 'settings.section.educational', type: 'separator' },
   {
-    labelId: 'settings.label.habitableZoneOptimizm',
-    key: 'habitable_zone_optimizm',
+    labelId: 'settings.label.habitableZoneOptimism',
+    key: 'habitable_zone_optimism',
     type: 'float',
     min: 0.5,
     max: 2.0,
@@ -5163,8 +5163,8 @@ const getSettingTooltip = (key, label) => {
       'Controls simulation speed and precision. Smaller steps = more accuracy but slower performance.',
 
     // Educational
-    habitable_zone_optimizm:
-      'Which published habitable-zone definition the ring shows. Below 1.3 draws the conservative zone, bounded by the runaway and maximum greenhouse limits. 1.3 and above draws the optimiztic zone, bounded by the empirical recent-Venus and early-Mars limits. The edges also depend on the star, not just this setting.',
+    habitable_zone_optimism:
+      'Which published habitable-zone definition the ring shows. Below 1.3 draws the conservative zone, bounded by the runaway and maximum greenhouse limits. 1.3 and above draws the optimistic zone, bounded by the empirical recent-Venus and early-Mars limits. The edges also depend on the star, not just this setting.',
   };
 
   return (
@@ -5780,7 +5780,7 @@ const captureShareState = ({
   //
   // These used to be carried only for the A/B bench, on the reasoning that a
   // share link pays for every character. But an inclination of 30 degrees, a
-  // rotating frame centerd on Jupiter and an assumed distance of 480 parsecs
+  // rotating frame centered on Jupiter and an assumed distance of 480 parsecs
   // are not incidental settings - they are what the sender is demonstrating,
   // and a link that drops them reopens on a different measurement while
   // looking like the same one. The codec omits every field still at its

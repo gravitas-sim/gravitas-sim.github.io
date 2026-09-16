@@ -50,8 +50,19 @@ const DOC_PAGES = ['model', 'instructors', 'validation', 'teaching'];
  * on that number is the tightest one this project has. A showcase page's grids
  * have no business in it, so they are built to their own file and linked only
  * from the page that needs them.
+ *
+ * css/page.css joined them for the same reason and after the same argument.
+ * It defines `doc-`, `portal-`, `res-` and `val-` rules for /model/,
+ * /instructors/, /validation/ and /teaching/, and index.html links none of it -
+ * the simulation does not draw a single one of those elements. It was
+ * nonetheless concatenated into app.css, so 28 KB of document-page styling was
+ * part of what a first-time visitor to the sandbox waited for, and a usability
+ * fix to the instructor dashboard was what finally pushed the initial download
+ * past a limit that has never been raised. Deferring the sheet is what that
+ * budget asks for; raising the limit for a stylesheet the sandbox never reads
+ * would have been the wrong half of the trade.
  */
-const PAGE_STYLESHEETS = ['css/teaching.css'];
+const PAGE_STYLESHEETS = ['css/teaching.css', 'css/page.css'];
 
 async function buildCss() {
   // tokens → styles → components → page, matching the cascade-layer order.
@@ -71,7 +82,6 @@ async function buildCss() {
     // component-layer files so it can restate what the older sheets set for
     // the same elements without reaching for !important.
     'css/chrome.css',
-    'css/page.css',
   ]) {
     parts.push(`/* ${f} */`, await readFile(f, 'utf8'));
   }
@@ -275,9 +285,13 @@ async function buildDocPages() {
     let html = await readFile(path.join(dir, 'index.html'), 'utf8');
     // The four dev stylesheets collapse into the one built file, exactly as
     // they do for the app's own page.
+    // The three shared sheets collapse into the built app.css; page.css is
+    // built on its own now and keeps its own link, because it is the document
+    // pages' stylesheet and not the simulation's.
     html = html.replace(
       /\s*<link rel="stylesheet" href="\/css\/tokens\.css" \/>\s*<link rel="stylesheet" href="\/css\/styles\.css" \/>\s*<link rel="stylesheet" href="\/css\/components\.css" \/>\s*<link rel="stylesheet" href="\/css\/page\.css" \/>/,
-      '\n    <link rel="stylesheet" href="/css/app.css" />'
+      '\n    <link rel="stylesheet" href="/css/app.css" />' +
+        '\n    <link rel="stylesheet" href="/css/page.css" />'
     );
     await writeFile(path.join(OUT, dir, 'index.html'), html);
   }

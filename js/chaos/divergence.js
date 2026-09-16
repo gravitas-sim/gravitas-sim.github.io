@@ -118,7 +118,7 @@ export function configurationDistance(a, b) {
  *
  * Positions are divided by a length scale and velocities by a speed scale, so
  * the two halves are dimensionless before they are added. The scales are the
- * system's own - its extent and a characteriztic speed - which is the only
+ * system's own - its extent and a characteristic speed - which is the only
  * choice that does not smuggle in an arbitrary constant.
  *
  * @param {Array<Object>} a - Run A bodies, {id,x,y,vx,vy}
@@ -315,7 +315,7 @@ function empty(reason, points = []) {
  *   window:Object, efolds:number, growth:number, reason:string,
  *   linearR2:number}} The verdict
  */
-export function analyzedivergence(series, opts = {}) {
+export function analyzeDivergence(series, opts = {}) {
   const s = (series || []).filter(p => Number.isFinite(p.d));
   const base = {
     tau: null,

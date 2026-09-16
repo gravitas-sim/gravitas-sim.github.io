@@ -1,5 +1,10 @@
 # Energy Tab Feature
 
+> **Historical record.** This is the note written when the energy tab was added
+> to the object inspector, describing it as it was then. It is not maintained
+> and nothing links to it. The inspector as it stands is documented in
+> [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md).
+
 ## Overview
 The Energy tab is a new feature added to the object inspector that displays the selected object's kinetic, potential, and total energy over time. This provides valuable insights into the energy dynamics of celestial objects in the simulation.
 

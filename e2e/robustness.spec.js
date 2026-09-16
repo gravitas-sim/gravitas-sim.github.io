@@ -83,7 +83,7 @@ test.describe('heavy scenarios stay finite', () => {
     // the central body's keep-out radius with a Math.max, collapsing the inner
     // rings onto one circle - and since it lays twenty objects per ring at
     // repeating angles, object i and object i+20 coincided exactly. Four
-    // scenarios carried twenty superimposed pairs each. Grid centerd itself on
+    // scenarios carried twenty superimposed pairs each. Grid centered itself on
     // the origin, which is precisely where the central body is pinned, so one
     // cell always landed inside it.
     await app.boot();

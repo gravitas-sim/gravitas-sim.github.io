@@ -259,6 +259,11 @@ const LAGRANGE_POINTS = {
              one unit apart in these coordinates.`,
       prompt: 'The distance from L4 to either star, in units of the separation',
       answer: 1,
+      // Deliberately dimensionless: the prompt asks for a length measured in
+      // units of the separation, so the answer is a ratio and there is nothing
+      // for a student to write after the number. Said out loud rather than
+      // left out, because silence here reads as an author who forgot.
+      unit: '',
       tolerance: 0.02,
       hints: [
         'Equilateral means all three sides are the same length.',

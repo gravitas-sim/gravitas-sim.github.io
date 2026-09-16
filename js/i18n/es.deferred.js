@@ -7,7 +7,7 @@
 // was downloading all of it at start-up so that four scenarios and one lesson
 // widget could have their labels.
 //
-// They are a separate catalogue rather than part of js/i18n/es.js because a
+// They are a separate catalog rather than part of js/i18n/es.js because a
 // single object cannot be code-split: esbuild follows the static import and
 // the whole thing lands in the entry graph. The bridges that load those panels
 // register these through registerMessages() at the same moment, so a reader
@@ -15,7 +15,7 @@
 //
 // Everything else about them is normal. The audit and the i18n tests merge
 // both halves, so coverage, placeholder and length checks still see one
-// catalogue.
+// catalog.
 // =============================================================================
 
 export const ES_DEFERRED = {
@@ -440,10 +440,10 @@ export const ES_DEFERRED = {
   'reliability.noValue': 'no medido',
 
   // --- The A/B experiment bench ---------------------------------------------
-  // Moved out of the start-up catalogue. The bench is loaded on first press
+  // Moved out of the start-up catalog. The bench is loaded on first press
   // and most visitors never press it, so its prose has no business being
   // downloaded by everyone; js/experimentsBridge.js registers this before the
-  // panel builds its markup. bench.error.load stays in the base catalogue,
+  // panel builds its markup. bench.error.load stays in the base catalog,
   // because it is what the bridge says when this very import fails.
   'bench.title': 'Experimento A/B',
   'bench.untitled': 'Experimento sin título',
@@ -743,10 +743,10 @@ export const ES_DEFERRED = {
   // js/investigations.js is the only module that reads these and it is loaded
   // on demand, so a visitor who never opens a lesson was downloading all of
   // them. Registered by ensureInvestigations() before initInvestigations()
-  // runs. The dozen that stay in the base catalogue are on static buttons in
+  // runs. The dozen that stay in the base catalog are on static buttons in
   // index.html, translated by the boot sweep, plus the two the loader itself
   // says when a lesson fails before its chunk arrives.
-  // Moved out of the start-up catalogue: only js/lessonStage.js and the
+  // Moved out of the start-up catalog: only js/lessonStage.js and the
   // lesson engine read these, and both are deferred.
   'inv.stage.scale.display':
     'Escala comprimida: todas las estrellas se ven y el orden por tamaño es correcto, pero las proporciones en pantalla no son las del modelo.',
@@ -876,7 +876,7 @@ export const ES_DEFERRED = {
   // Habitability, binary and tidal widget prose. Same boundary and same
   // reasoning as the resW/chaosW/energyW families above: js/widgets.js is
   // reached only from the lazy js/investigations.js, and each of these three
-  // modules registers this catalogue itself so a direct import cannot render
+  // modules registers this catalog itself so a direct import cannot render
   // raw ids.
   'binW.twoStarsOrbiting': 'Dos estrellas, orbitando',
   'binW.bothStarsAreMovingWatch':
@@ -1050,7 +1050,7 @@ export const ES_DEFERRED = {
   'hzW.whereTheEdgesComeFrom': 'De dónde salen los bordes',
   'hzW.definition': 'Definición',
   'hzW.conservative': 'Conservadora',
-  'hzW.optimiztic': 'Optimista',
+  'hzW.optimistic': 'Optimista',
   'hzW.definitionShown': 'Definición mostrada',
   'hzW.innerEdge': 'Borde interior',
   'hzW.outerEdge': 'Borde exterior',
@@ -1171,7 +1171,7 @@ export const ES_DEFERRED = {
   // --- Widget prose, moved off the start-up path ---------------------------
   // Resonance, chaos and energy widget strings. Nothing outside a lesson can
   // render these: js/widgets.js is reached only from js/investigations.js,
-  // which is lazy and whose loader registers this catalogue before any step
+  // which is lazy and whose loader registers this catalog before any step
   // draws. Same boundary and same reasoning as the exoW.* family above it.
   'resW.periods.title': 'Periodos medidos y las razones entre ellos',
   'resW.periods.note':
@@ -1952,7 +1952,7 @@ export const ES_DEFERRED = {
   // --- The exoplanet lesson widgets ---------------------------------------------
   // js/exoplanetWidgets.js is reached only through js/widgets.js, which is
   // reached only from js/investigations.js - all of it lazy. These were in the
-  // start-up catalogue for a widget nobody sees until they open a lesson.
+  // start-up catalog for a widget nobody sees until they open a lesson.
   'exoW.whoIsActuallyMoving': '¿Quién se mueve de verdad?',
   'exoW.theStarAndThePlanet':
     'La estrella y el planeta giran ambos alrededor del mismo punto. Sube el aumento para ver hacerlo a la estrella.',
@@ -2149,7 +2149,7 @@ export const ES_DEFERRED = {
     'Un solo sorteo de ruido en cada brazo: esto dice lo que hicieron estos dos calendarios en esta campana, no que calendario es mejor.',
   // --- The synthetic observing run's own controls ------------------------------
   // Eager until this release. The section is opt-in and hidden until it is
-  // switched on, which is the moment the panel registers this catalogue, so
+  // switched on, which is the moment the panel registers this catalog, so
   // every visitor who never takes a recording was downloading its prose.
   'rv.survey.hint':
     'Conserva solo las medidas que un calendario concreto habría producido realmente, cada una con su incertidumbre. Entre ellas no se registra nada.',
@@ -3032,7 +3032,7 @@ export const ES_DEFERRED = {
     'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
   'welcomeAudience.instructors.title': 'Para el profesorado',
   'welcomeAudience.instructors.text':
-    'Seis investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
+    '22 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
   'welcomeAudience.curious.title': 'Para curiosos',
   'welcomeAudience.curious.text':
     'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',
@@ -3479,12 +3479,12 @@ export const ES_DEFERRED = {
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
 
   // --- Words a lesson computes ----------------------------------------------
-  // Here rather than in the start-up catalogue because js/i18n/lesson.js is
+  // Here rather than in the start-up catalog because js/i18n/lesson.js is
   // the only module that reads them and js/investigations.js is the only
   // module that imports it: a visitor who never opens a lesson was
   // downloading a hundred and thirty-three answer-checking sentences in
   // order to never render one. js/investigationsLoader.js awaits this
-  // catalogue before initInvestigations(), so the lookup cannot outrun it.
+  // catalog before initInvestigations(), so the lookup cannot outrun it.
   //
   // Probe rows and answer-checking messages come out of functions inside the
   // lesson files, which a translation shadow cannot reach. js/i18n/lesson.js

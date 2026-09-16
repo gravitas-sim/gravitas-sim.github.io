@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3870,
+    limit: 3880,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -342,7 +342,30 @@ const BUDGETS = [
       '\n\nRaised from 3830 to 3870 for finishing the two gravitational-wave lessons, measured against the previous entry: 3804.5 to 3846.4 KB. The beginner lesson gained three screens - a static mass, a pulsing sphere and a binary, each one staged rather than described - and split the observatory screen in two; with its Spanish shadow behind it that is about half the total. js/lesson/gwWavefronts.js is 4.4 KB of pure geometry, and the widget half that drives it - the source selector, the amplification control, the L-shaped arms, and the polarisation and component rows - is another 6. The instructor guide took 4.5 KB inside the portal chunk. The rest is prose in two catalogs, which validationWorker.js bundles as well and so counts twice; the source and polarisation rows are long on purpose, because they are where the lesson says what the model did and did not decide.' +
       "\n\nRaised from 3870 to 3890 for the prediction loops and the legibility pass, measured against the previous entry: 3846.4 to 3874.1 KB. Itemised, because this one is neither a lesson nor an instrument and so is not what the paragraph at the top says this budget is loose for. About twenty-two of it is the loop work: seven new steps across six lessons with their Spanish shadows behind them, the instructor expectations for the two new measurements, and the held-prediction machinery - eighty reveal declarations, the verdict block that shows a reader what they predicted against what happened, and its strings in two catalogs, which validationWorker.js bundles as well and so counts twice. The remaining five are accessibility: every plotted point is now also a row in a table beside the chart, and the object list's role chips are translated - sixty labels in each language, which is the largest single item here and is the price of not showing a Spanish reader an English word beside a Spanish name. Half of what those sixty would have cost was paid back in the same change: the label is derived from the key where derivation is right, and a chip whose label would only repeat the body's own name is not drawn at all.\n\nThe initial download was NOT raised and ended this work inside its untouched limit: 826.7 KB before, 829.4 after, against 830.0. The sixty role labels went to the deferred catalog rather than the start-up one the moment they pushed it over - only the lesson engine reads them, and it is lazy - which is the trade that budget asks every new feature to make.\n\nAnd then put back to 3870, because the /teaching/ pass found the saving that pays for all of it and more. js/activities/activityBridge.js imported the whole showcase page's catalog - its cycle, its journey, its instrument descriptions, its demonstrations, its access notes and its evaluation template, in both languages - in order to put a title on an assignment. None of that prose can be rendered by the application. The `teach.activity.*` half is js/i18n/en.activities.js now and the bridge imports only that; ./en.teaching.js spreads it back in, so the page and every test that reads one catalog are unchanged. 3900.9 KB to 3839.8, which is 30 below the number this was before the raise. The raise above is left on the record rather than deleted: it was real while it stood, and the accounting is worth more than a tidy history." +
       '\n\nThe initial download stayed inside its untouched limit, and the trade this budget asks for was made in the same change: 826.7 KB of 830.0. Its share of the work is the wavefront painter in js/render.js and one overlay slot in js/appState.js. What pays for them went the other way - the five summary.life.* sentences moved out of the start-up catalog into the deferred one, because a lesson overlay is the only thing that reads them and a visitor who never opens a lesson was downloading all five in both languages in order to render none.' +
-      '\n\nThe initial download was NOT raised and had room: 819.6 KB before this pass and 821.1 after, against an untouched 830.0. Its share is the barycenter overlay in js/render.js, one state slot, the probe-context accessors, and two options in the event-watch markup - the parts that genuinely have to be there before a lesson opens.',
+      '\n\nThe initial download was NOT raised and had room: 819.6 KB before this pass and 821.1 after, against an untouched 830.0. Its share is the barycenter overlay in js/render.js, one state slot, the probe-context accessors, and two options in the event-watch markup - the parts that genuinely have to be there before a lesson opens.' +
+      '\n\nRaised from 3870 to 3880 for the v1.0.0 instructor pass, measured at ' +
+      '3874.0 KB. Two items, both of them content this budget says it is loose ' +
+      'for. Five investigations gained the closing summary every other lesson ' +
+      'already had - radial-velocity, what-is-a-gravitational-wave, ' +
+      'listening-to-spacetime, a-universe-of-stars and lives-of-stars, each ' +
+      'with its Spanish shadow: 9.7 KB of English and 8.8 KB of Spanish source. ' +
+      'And js/data/activityTeaching.js went from 10.5 KB to 35.3 KB, which is ' +
+      'the larger half: three of the six activity formats had no teaching ' +
+      'entry at all and their generated guides printed with no launch link, no ' +
+      'setup, no beats and no rubric, and all six gained the preparation, ' +
+      'reset, live-simulation, misconception, recovery, accessibility and ' +
+      'worksheet-mapping sections the guides now carry. It reaches this budget ' +
+      'through dist/js/instructorPortal.js, which is a separate bundle the ' +
+      'simulation never loads.\n\n' +
+      'The initial download went DOWN in the same change, from 832.3 KB to ' +
+      '811.0, against a limit that still has not moved. css/page.css - the ' +
+      'stylesheet for /model/, /instructors/, /validation/ and /teaching/, of ' +
+      'which index.html links not one rule - had been concatenated into ' +
+      'css/app.css all along, so 21 KB of document-page styling was part of ' +
+      'what a first-time visitor to the sandbox waited for. It is a page ' +
+      'stylesheet now, like css/teaching.css before it. That is the trade this ' +
+      'budget asks for: a dashboard fix wanted two kilobytes, and what it got ' +
+      'was a sheet deferred rather than a ceiling raised.',
   },
 ];
 

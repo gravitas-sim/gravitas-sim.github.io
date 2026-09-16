@@ -230,7 +230,7 @@ const HOHMANN_TRANSFER = {
              \n\nBurn once, here, to put yourself on an <strong>ellipse</strong>
              whose closest point is your current orbit and whose furthest point
              just touches the station's orbit. Coast to the far end. Burn again
-             to circularise.
+             to circularize.
              \n\nTwo burns, one coast. For orbits that are not too far apart it
              is the cheapest transfer there is, and the reason is that every
              other route spends fuel changing something that did not need
@@ -519,7 +519,7 @@ const HOHMANN_TRANSFER = {
       // The second burn is made at apoapsis, which is where that coast ends.
       requires: ['watch-the-coast'],
       type: 'explore',
-      title: 'Circularise',
+      title: 'Circularize',
       body: `When the spacecraft is at the top of its arc — apoapsis, where the
              planner shows the distance no longer growing — apply a transverse
              Δv of <strong>0.690</strong> simulation units.
@@ -550,6 +550,13 @@ const HOHMANN_TRANSFER = {
         dimension: 'speed',
         unit: 'km/s',
         accept: ['km/s', 'm/s'],
+      },
+      hints: {
+        concept: `The transfer is two burns and nothing else. Between them the
+                  engine is off, so what the whole maneuver costs is what those
+                  two moments cost.`,
+        method: `Add the two speed changes you worked out in the two steps
+                 before this one. Both are already in km/s.`,
       },
       worked: 'Δv = 5.815 + 4.598 = 10.41 km/s.',
     },

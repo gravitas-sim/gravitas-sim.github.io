@@ -815,7 +815,7 @@ export const EN = {
   'settings.label.showElapsedTime': 'Show Elapsed Time',
   'settings.label.showBhGlow': 'Show BH Glow',
   'settings.label.showAccretionDisk': 'Show Accretion Disk',
-  'settings.label.realizticDiskPhysics': 'Realiztic Disk Physics',
+  'settings.label.realisticDiskPhysics': 'Realistic Disk Physics',
   'settings.label.showBhJets': 'Show BH Jets',
   'settings.label.starDensity': 'Star Field Density',
   'settings.label.showAmbientLighting': 'Ambient Lighting',
@@ -827,7 +827,7 @@ export const EN = {
   'settings.label.showDynamicOverlays': 'Show Overlays',
   'settings.label.recordSimulation': 'Record Simulation',
   'settings.label.showGravitationalWaves': 'Show Gravitational Waves',
-  'settings.label.habitableZoneOptimizm': 'Habitable Zone Model',
+  'settings.label.habitableZoneOptimism': 'Habitable Zone Model',
   'settings.option.simSize.small': 'Small',
   'settings.option.simSize.medium': 'Medium',
   'settings.option.simSize.large': 'Large',
@@ -874,14 +874,14 @@ export const EN = {
   // cannot drift away from the scenario it describes.
   'scenario.Solar System.title': 'Solar System',
   'scenario.Solar System.summary':
-    'A simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteriztics.',
+    'A simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteristics.',
   'scenario.Retrograde Mars.title':
     'Retrograde Mars: the loop that needed epicycles',
   'scenario.Retrograde Mars.summary':
     'The Sun, Earth and Mars at their real distances and periods, and nothing else. Watched from outside, both planets go round the Sun the same way and never turn back. Switch the reference frame to Earth, in Tools, and Mars stops circling and starts drawing a loop that doubles back on itself. Nothing about the physics changed; only the frame did. That loop is the observation Ptolemy built epicycles to reproduce and Copernicus explained away, and here you can turn it on and off with one control.',
   'scenario.Earth-Moon System.title': 'Earth-Moon System',
   'scenario.Earth-Moon System.summary':
-    'A detailed simulation of the Earth-Moon system with accurate masses, orbital mechanics, and realiztic appearances. Features Earth with its blue oceans and green continents, and the Moon with its characteriztic gray surface and craters. Perfect for studying orbital dynamics and tidal effects.',
+    'A detailed simulation of the Earth-Moon system with accurate masses, orbital mechanics, and realistic appearances. Features Earth with its blue oceans and green continents, and the Moon with its characteristic gray surface and craters. Perfect for studying orbital dynamics and tidal effects.',
   'scenario.TRAPPIST-1 System.title': 'TRAPPIST-1 System',
   'scenario.TRAPPIST-1 System.summary':
     'A compact planetary system with seven Earth-sized worlds orbiting a cool red dwarf star just 40 light-years away. All planets are packed close to their tiny sun, with several in the habitable zone. Can you keep this delicate system stable?',
@@ -926,7 +926,7 @@ export const EN = {
   'scenario.Exoplanet Characterization Lab.title':
     'Exoplanet Characterization Lab',
   'scenario.Exoplanet Characterization Lab.summary':
-    'HD 209458 again, but with the star free to move. In the Transit Lab it is pinned so the light curve stays centerd; here both bodies orbit their common center of mass, which is what the radial-velocity and astrometry instruments need in order to measure anything. The star circles a point 2.7 millionths of an AU away at 84 meters per second: far too small to see and easily large enough to detect. Open Radial Velocity and watch the wobble that found this planet.',
+    'HD 209458 again, but with the star free to move. In the Transit Lab it is pinned so the light curve stays centered; here both bodies orbit their common center of mass, which is what the radial-velocity and astrometry instruments need in order to measure anything. The star circles a point 2.7 millionths of an AU away at 84 meters per second: far too small to see and easily large enough to detect. Open Radial Velocity and watch the wobble that found this planet.',
   'scenario.Blended Binary.title': 'Blended Binary: a hidden companion',
   'scenario.Blended Binary.summary':
     'The same star and planet as the Transit Lab, with a second star half a magnitude fainter sitting 300 AU away: far too close on the sky for a survey telescope to separate, and well inside one photometric aperture. Its light fills in part of the dip, so the transit measures shallower and the planet looks smaller than it is. Correcting for exactly this effect is what high-resolution imaging surveys of planet hosts are for.',
@@ -961,7 +961,7 @@ export const EN = {
   'scenario.Habitable Zone Lab.title':
     'Habitable Zone Lab: the inner Solar System, with the zone drawn',
   'scenario.Habitable Zone Lab.summary':
-    'The Sun with Venus, Earth, Mars and Ceres on their real orbits, and the circumstellar habitable zone drawn around the star from a published prescription. Venus sits inside the inner edge and Mars outside the outer one on the conservative definition, and only one of the four has liquid water on its surface today. Switch the Habitable Zone Model setting to see the optimiztic band, which reaches out past Mars.',
+    'The Sun with Venus, Earth, Mars and Ceres on their real orbits, and the circumstellar habitable zone drawn around the star from a published prescription. Venus sits inside the inner edge and Mars outside the outer one on the conservative definition, and only one of the four has liquid water on its surface today. Switch the Habitable Zone Model setting to see the optimistic band, which reaches out past Mars.',
   "scenario.Kepler's 2nd Law.title": "Kepler's 2nd Law - Equal Areas",
   "scenario.Kepler's 2nd Law.summary":
     'A planet in a nearly circular orbit and an eccentric orbiter around a central star. The area sweep visualization starts automatically for the eccentric body - watch how the wedges change shape but maintain equal area, showing why objects move faster at periapsis than at apoapsis.',
@@ -982,7 +982,7 @@ export const EN = {
     'A gravitationally bound collection of main-sequence stars, evolved giants, and stellar remnants with mutual gravitational interactions. Watch stellar encounters, binary formation, and the dynamic evolution of this stellar community over time.',
   'scenario.Kuiper Belt.title': 'Kuiper Belt',
   'scenario.Kuiper Belt.summary':
-    "An accurate simulation of our Solar System's Kuiper Belt featuring real dwarf planets (Pluto, Eris, Haumea, Makemake), large KBOs (Quaoar, Sedna, Orcus, Varuna), and smaller objects (Ixion, Huya, 2002 AW197) with realiztic masses and orbital properties.",
+    "An accurate simulation of our Solar System's Kuiper Belt featuring real dwarf planets (Pluto, Eris, Haumea, Makemake), large KBOs (Quaoar, Sedna, Orcus, Varuna), and smaller objects (Ixion, Huya, 2002 AW197) with realistic masses and orbital properties.",
   'scenario.Sagittarius A*.title': 'Sagittarius A*',
   'scenario.Sagittarius A*.summary':
     "The Milky Way's central supermassive black hole (4000 M☉, scaled down for simulation) with fast-moving S-stars, compact objects, and debris in extreme orbits. Witness the incredible gravitational forces and relativistic effects near our galaxy's supermassive black hole.",
@@ -1260,7 +1260,7 @@ export const EN = {
   'pauseEvent.note': 'Your note',
   'pauseEvent.note.placeholder': 'What did you notice?',
   'pauseEvent.hint':
-    'Events are found from the integration steps, so the precision above is the interval the event was localised to. The simulation stops just after the event rather than winding back onto it, which would leave the recordings and the timeline describing a moment that never happened.',
+    'Events are found from the integration steps, so the precision above is the interval the event was localized to. The simulation stops just after the event rather than winding back onto it, which would leave the recordings and the timeline describing a moment that never happened.',
   'pauseEvent.refused.circular':
     'This orbit is circular (e = {e}), so it has no periapsis or apoapsis to stop at — the separation is the same all the way round. Try a crossing of a stated separation instead.',
   'pauseEvent.refused.unbound':

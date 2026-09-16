@@ -2,7 +2,7 @@
 // The classroom activities' words, in Spanish
 // -----------------------------------------------------------------------------
 // Split out of ./es.teaching.js because two very different readers shared one
-// catalogue. /teaching/ reads all of it; the application reads only these
+// catalog. /teaching/ reads all of it; the application reads only these
 // `teach.activity.*` strings - an activity's title, its objectives and each
 // format's opening - which is what js/activities/activityBridge.js registers
 // when somebody opens an activity link.
@@ -14,7 +14,7 @@
 // render. Fifty-seven kilobytes of a page the simulation never shows.
 //
 // ./es.teaching.js still exports everything by spreading this in, so the showcase
-// page and every test that reads one catalogue are unchanged.
+// page and every test that reads one catalog are unchanged.
 // =============================================================================
 
 export const ES_ACTIVITIES = {

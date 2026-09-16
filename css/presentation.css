@@ -268,7 +268,7 @@
 
   /* The scenario card is the title of the slide, and at projection distance it
      is the single most important piece of text on the screen. */
-  /* The card is normally centerd in the band between the readout and the rail
+  /* The card is normally centered in the band between the readout and the rail
      by a transform built from two custom properties. In lecture mode the rail
      is gone and the readout is much wider, and the arithmetic that assumes both
      put the card a third of its width off the left edge of a 1024px screen.
@@ -322,7 +322,7 @@
 
   body.presentation-lecture .lecture-bar {
     position: fixed;
-    /* Centerd by auto margins in a full-width containing block, not by
+    /* Centered by auto margins in a full-width containing block, not by
        left:50% and a translate. A fixed element positioned from the midpoint
        has only the right half of the viewport as its available width, so
        shrink-to-fit capped this bar at 512px on a 1024px projector and wrapped
@@ -476,7 +476,7 @@
 
   /* --- The spotlight ------------------------------------------------------- */
 
-  /* One element, pointer-events: none, a radial gradient centerd on two custom
+  /* One element, pointer-events: none, a radial gradient centered on two custom
      properties the pointer handler writes. It cannot receive a click, it is not
      on the canvas, and nothing in the physics reads it: the simulation cannot
      tell whether it is on. */
@@ -810,7 +810,7 @@
      the viewport and cannot be tapped. It was already off the screen in
      English; Spanish pushes it eighteen pixels further, because "Validado" is
      longer than "Validated". Letting it wrap is the whole fix, and the
-     separator dots go with it: a wrapped line broken by centerd dots reads as
+     separator dots go with it: a wrapped line broken by centered dots reads as
      two half-sentences rather than as one list.
      =========================================================================== */
 

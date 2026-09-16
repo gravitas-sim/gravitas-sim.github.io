@@ -1178,7 +1178,7 @@ const LISTENING_TO_SPACETIME = {
       prompt:
         'Write a short account of what a chirp signal reveals about its source and what it leaves undetermined. Mention at least one thing you measured, and at least one thing this model cannot tell you. Say whether your prediction in step 1 still stands.',
       rubric:
-        'Look for three things. First, at least one measured relationship stated correctly - the wave frequency being twice the orbital frequency, the chirp mass rather than the individual masses governing the inspiral, strain going as one over distance, or lighter pairs staying in band longer. Second, a real limitation, correctly reasoned: the distance-inclination degeneracy (amplitude alone cannot separate a distant face-on source from a nearby edge-on one), the model stopping before the merger, or the chirp mass not determining the two masses separately. Third, an honest revisit of step 1 rather than a claim to have known all along. A student who says the ninety-second signal was a low-mass pair - neutron stars, or something like them - has used the lesson correctly; a student who says it was definitely neutron stars has over-claimed, since the signal constrains the chirp mass and not the composition, and that distinction is worth pointing out in feedback rather than penalising heavily. Do NOT credit "louder means closer" stated without the inclination caveat, or any claim that hearing the sound identifies the source.',
+        'Look for three things. First, at least one measured relationship stated correctly - the wave frequency being twice the orbital frequency, the chirp mass rather than the individual masses governing the inspiral, strain going as one over distance, or lighter pairs staying in band longer. Second, a real limitation, correctly reasoned: the distance-inclination degeneracy (amplitude alone cannot separate a distant face-on source from a nearby edge-on one), the model stopping before the merger, or the chirp mass not determining the two masses separately. Third, an honest revisit of step 1 rather than a claim to have known all along. A student who says the ninety-second signal was a low-mass pair - neutron stars, or something like them - has used the lesson correctly; a student who says it was definitely neutron stars has over-claimed, since the signal constrains the chirp mass and not the composition, and that distinction is worth pointing out in feedback rather than penalizing heavily. Do NOT credit "louder means closer" stated without the inclination caveat, or any claim that hearing the sound identifies the source.',
       tool: lab({
         view: 'signal',
         preset: 'bns',
@@ -1190,6 +1190,35 @@ const LISTENING_TO_SPACETIME = {
         note: 'The new signal, for the question opposite. Two objects of 1.4 solar masses each, which is where the ninety seconds and the kilohertz come from.',
       }),
       tip: 'Nothing in a gravitational wave says what the objects were made of. It says how heavy they were, how they moved, and how far away they were - and the reason we believe GW170817 was a pair of neutron stars is that a gamma-ray burst went off in the same place two seconds later and a telescope found the galaxy.',
+    },
+    {
+      sid: 'where-this-leaves-you',
+      stage: BBH,
+      type: 'read',
+      title: 'Where this leaves you',
+      body: `<strong>Two plots, one signal.</strong> Strain against time is a
+             wave that grows taller and faster; frequency against time is the
+             same thing as a curve sweeping upward. The sweep is the chirp, and
+             you read a source out of its shape rather than out of its height.
+             \n\n<strong>The wave frequency is twice the orbital
+             frequency</strong>, because a binary's mass distribution repeats
+             twice per orbit and not once.
+             \n\n<strong>What the inspiral fixes is the chirp mass</strong> - one
+             particular combination of the two masses, not the two masses
+             separately. A signal that stays in band for ninety seconds and
+             climbs past a kilohertz is a light pair. On that evidence alone it
+             is not yet a pair of neutron stars, and the difference between
+             those two sentences is most of what this lesson was for.
+             \n\n<strong>Amplitude alone is not a distance.</strong> A far
+             source seen face-on and a nearer one seen edge-on write the same
+             strain. Separating them takes more than one detector.
+             \n\n<strong>And a chirp is not a detection.</strong> The model you
+             ran stops before the merger. The noise you added was colored to
+             look convincing rather than measured from an instrument. A real
+             claim is a coincident signal in separated detectors with a
+             false-alarm rate attached to it - and everything on this screen is
+             a model of a thing, labeled as one.`,
+      tip: 'The distinction you have been making all lesson — measurement, model, illustration — is the one the observatories make in public. A candidate event is published with its false-alarm rate precisely so that readers can make it too.',
     },
   ],
 };

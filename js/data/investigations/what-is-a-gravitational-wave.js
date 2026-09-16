@@ -431,7 +431,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       body: `The inset labeled <strong>Ring of markers</strong> shows what a
              ring of freely floating markers does as the wave goes past. This
              screen is looking at the binary <em>edge-on</em>, which is the
-             simplest case: one polarisation only.
+             simplest case: one polarization only.
              \n\nPause, and move the <strong>Where in the signal</strong>
              playhead slowly until the ring is at its widest from
              <strong>left to right</strong>.
@@ -446,14 +446,14 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 1,
       because:
-        'Closer together. That is the characteriztic thing a gravitational wave does, and it is why the ring becomes an oval rather than a bigger circle: it stretches along one direction and squeezes along the direction at right angles, both at once. Nothing has grown overall. And both of those directions are at right angles to the way the wave is traveling, which is why it is called a <em>transverse</em> wave.',
+        'Closer together. That is the characteristic thing a gravitational wave does, and it is why the ring becomes an oval rather than a bigger circle: it stretches along one direction and squeezes along the direction at right angles, both at once. Nothing has grown overall. And both of those directions are at right angles to the way the wave is traveling, which is why it is called a <em>transverse</em> wave.',
       tool: lab({
         view: 'both',
         autoplay: false,
         // Edge-on, and that is not a detail. Seen face-on this source is
-        // circularly polarised: the ring is an ellipse of fixed shape that
+        // circularly polarized: the ring is an ellipse of fixed shape that
         // rotates and never passes through a circle at all. Seen edge-on the
-        // cross polarisation vanishes and the ring does exactly what an
+        // cross polarization vanishes and the ring does exactly what an
         // introduction describes - stretch, circle, squeeze. The readout names
         // which of the two is on screen.
         values: { inclination: 90 },
@@ -497,13 +497,13 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         return {
           level: 'ok',
           message:
-            'They exchange. Stretch and squeeze swap over twice in every wave cycle, and in between there is a moment when the ring really is a circle again and nothing is happening to it at all.\n\nThat last part is true of this source because you are looking at it edge-on, which is a choice this screen has made for you: seen edge-on, only one of the two polarisations reaches you, and the ring stretches, passes through a circle, and squeezes. Turn the same binary face-on and it does something quite different — the oval keeps its shape and rotates instead, and never becomes a circle at all. The readout names which of the two you are looking at.',
+            'They exchange. Stretch and squeeze swap over twice in every wave cycle, and in between there is a moment when the ring really is a circle again and nothing is happening to it at all.\n\nThat last part is true of this source because you are looking at it edge-on, which is a choice this screen has made for you: seen edge-on, only one of the two polarizations reaches you, and the ring stretches, passes through a circle, and squeezes. Turn the same binary face-on and it does something quite different — the oval keeps its shape and rotates instead, and never becomes a circle at all. The readout names which of the two you are looking at.',
         };
       },
       tool: lab({
         view: 'both',
         autoplay: false,
-        // Linearly polarised, so the "perfect circle" the feedback below
+        // Linearly polarized, so the "perfect circle" the feedback below
         // describes is a state this source really passes through.
         values: { inclination: 90 },
       }),
@@ -1048,6 +1048,34 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       rubric:
         'A full answer has the chain: two objects orbiting means an uneven arrangement of mass that keeps changing; that sends a disturbance outwards at the speed of light; the disturbance stretches and squeezes distances at right angles to its travel; an L-shaped instrument measures the difference between two arms and so notices it. Credit an answer that has four of those five links. Look for, and credit, any mention of the effect being tiny or of the difference between a drawing and a measurement - both are the harder half of this lesson. Do not require any technical vocabulary at all; "the gap between things changes" is a complete answer to the third link. The revisit of screen 1 matters more than its correctness: a student who says "I said no, and I was wrong because I was thinking only about light" has understood the lesson.',
       tool: lab({ view: 'both', autoplay: false, capture: true }),
+    },
+    {
+      sid: 'what-you-worked-out',
+      stage: PAIR,
+      type: 'read',
+      title: 'What you worked out',
+      body: `<strong>A gravitational wave is a change in distance, not
+             something arriving.</strong> Nothing lands on you. The separation
+             between things that are not touching gets briefly larger one way
+             and smaller at right angles to it, and then it is over.
+             \n\n<strong>A source has to be changing, and it has to be
+             lopsided.</strong> A mass sitting still radiates nothing. A mass
+             pulsing in and out radiates nothing either, however violently,
+             because it looks the same from every direction. Two objects going
+             round each other are neither still nor symmetric, which is why the
+             binary was the one that worked and the other two did not.
+             \n\n<strong>The stretch and the squeeze are transverse.</strong>
+             Both are at right angles to the way the wave is going, which is why
+             a ring of test masses becomes an oval rather than a bigger circle.
+             Nothing grew.
+             \n\n<strong>A shrinking orbit makes a rising signal</strong>, at
+             twice the orbital frequency - closer and faster means higher and
+             louder, and that is what makes the pattern on screen 1 a chirp
+             rather than a hum.
+             \n\n<strong>An L-shaped instrument measures a difference.</strong>
+             Two arms at right angles respond oppositely to the same wave, so
+             comparing one against the other turns a change in length far
+             smaller than a proton into something that can be recorded.`,
       tip: 'Next: <strong>Listening to Spacetime</strong> takes the same instrument much further — what a signal reveals about the source that made it, how a model is compared against real data, and why a signal that looks right is not yet a detection.',
     },
   ],

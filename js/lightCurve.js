@@ -426,7 +426,7 @@ function circleOverlapArea(R, r, d) {
   return R2 * alpha + r2 * beta - 0.5 * Math.sqrt(Math.max(0, sqrtTerm));
 }
 
-// ── Primary transit depth (limb-darkened, realiztic k) ──────────────
+// ── Primary transit depth (limb-darkened, realistic k) ──────────────
 
 function transitDip(k, b, Rs_sim, Rp_sim, sep) {
   // k: physical Rp/Rs  |  b: sep/Rs_sim (visual impact param)

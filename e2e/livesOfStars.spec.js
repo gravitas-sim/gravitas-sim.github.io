@@ -17,7 +17,8 @@ import { test, expect } from './fixtures.js';
 import { MANIFEST } from '../js/data/investigations/manifest.js';
 
 const LESSON = 'lives-of-stars';
-const STEPS = 34;
+// From the manifest, not typed - see the note in stellarLesson.spec.js.
+const STEPS = MANIFEST.find(i => i.id === LESSON).stepCount;
 
 /** Open the lesson through the interface, the way a student does. */
 async function openLesson(page, app, { locale, narrow = false } = {}) {
@@ -129,7 +130,7 @@ test.describe('the lesson is reachable and complete', () => {
     const card = page.locator(`[data-investigation="${LESSON}"]`);
     await expect(card).toBeVisible();
     await expect(card).toContainText(/Lives of Stars/i);
-    await expect(card).toContainText(/34/);
+    await expect(card).toContainText(String(STEPS));
   });
 
   test('every step draws an instrument and a readout with no placeholders', async ({

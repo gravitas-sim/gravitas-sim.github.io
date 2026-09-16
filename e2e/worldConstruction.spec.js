@@ -97,7 +97,7 @@ async function digestCatalog(page) {
     // the terms that went into it.
     //
     // Not as a number, because there is no number there. These worlds are built
-    // balanced, so the sum is catastrophic cancelation: Hungry Hungry Holes
+    // balanced, so the sum is catastrophic cancellation: Hungry Hungry Holes
     // sums 1.9 million units of |m*v| down to 4e-11, a relative residual of
     // 2e-17 - a tenth of a double's epsilon. Every digit of that is rounding,
     // in whatever order the additions happened to land, and pinning twelve of

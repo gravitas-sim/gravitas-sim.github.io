@@ -2,10 +2,10 @@
 // Spanish
 // -----------------------------------------------------------------------------
 // Overrides against js/i18n/en.js. An id that is absent here falls back to the
-// English catalogue, which is why this file may be partial without producing a
+// English catalog, which is why this file may be partial without producing a
 // blank or a half-sentence anywhere.
 //
-// The investigations are absent from the English catalogue as well, so they are
+// The investigations are absent from the English catalog as well, so they are
 // not a gap here: they are English by design, and locale.coverage.es says so to
 // anybody who selects this language.
 //
@@ -550,7 +550,7 @@ export const ES = {
   'settings.label.showElapsedTime': 'Mostrar el tiempo transcurrido',
   'settings.label.showBhGlow': 'Mostrar el halo del agujero negro',
   'settings.label.showAccretionDisk': 'Mostrar el disco de acreción',
-  'settings.label.realizticDiskPhysics': 'Física realista del disco',
+  'settings.label.realisticDiskPhysics': 'Física realista del disco',
   'settings.label.showBhJets': 'Mostrar los chorros relativistas',
   'settings.label.starDensity': 'Densidad del campo de estrellas',
   'settings.label.showAmbientLighting': 'Iluminación ambiental',
@@ -562,7 +562,7 @@ export const ES = {
   'settings.label.showDynamicOverlays': 'Mostrar las capas de datos',
   'settings.label.recordSimulation': 'Grabar la simulación',
   'settings.label.showGravitationalWaves': 'Mostrar ondas gravitatorias',
-  'settings.label.habitableZoneOptimizm': 'Modelo de zona habitable',
+  'settings.label.habitableZoneOptimism': 'Modelo de zona habitable',
 
   // --- Settings: option values -----------------------------------------------
   // Only the label is translated; the value stored in the settings, and
@@ -882,8 +882,8 @@ export const ES = {
   'tag.dark-matter.description':
     'Las dos medidas que la encontraron: curvas de rotación que se mantienen planas cuando deberían caer, y cúmulos cuyos miembros se mueven demasiado deprisa para la masa que brilla.',
 
-  // --- Scenario catalogue ----------------------------------------------------
-  // Proper names of missions, instruments and catalogued objects are left as
+  // --- Scenario catalog ----------------------------------------------------
+  // Proper names of missions, instruments and cataloged objects are left as
   // they are: TRAPPIST-1, HD 209458 b and GW150914 are the names a student will
   // meet in every paper and every press release in any language.
   'scenario.Solar System.title': 'Sistema solar',

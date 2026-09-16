@@ -222,7 +222,7 @@ test.describe('what it refuses', () => {
   });
 });
 
-test.describe('cancelation and invalidation', () => {
+test.describe('cancellation and invalidation', () => {
   test('canceling stops it and reports what did run', async ({ page, app }) => {
     await app.boot();
     await analyze(page, {

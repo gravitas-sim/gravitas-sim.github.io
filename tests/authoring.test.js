@@ -243,6 +243,40 @@ describe('it catches an impossible setup', () => {
     expect(rules).toContain('setup/value');
   });
 
+  // The off-grid rule is about whether a student who drags a slider can get
+  // back to what the step staged, not about tidy numbers. A preset button that
+  // sets the control to that exact value is the way back, so these three say
+  // what the rule must and must not do - and the first is the one that keeps
+  // the other two from being an excuse.
+  test('an off-grid value with no way back', () => {
+    const rules = rulesAfter('black-holes', l => {
+      const s = l.steps.find(s => s.tool?.id === 'bh-lifetime');
+      // 0.05 grid from a minimum of 0; 4.123 sits between two ticks and no
+      // preset of bh-lifetime carries it.
+      s.tool.values = { ...s.tool.values, logm: 4.123 };
+    });
+    expect(rules).toContain('setup/value');
+  });
+
+  test('an off-grid value a preset restores exactly', () => {
+    const rules = rulesAfter('black-holes', l => {
+      const s = l.steps.find(s => s.tool?.id === 'bh-lifetime');
+      // Sagittarius A*, which the widget offers as a preset and which no
+      // 0.05 grid will ever contain.
+      s.tool.values = { ...s.tool.values, logm: Math.log10(4.3e6) };
+    });
+    expect(rules).not.toContain('setup/value');
+  });
+
+  test('...unless the step has taken the presets away', () => {
+    const rules = rulesAfter('black-holes', l => {
+      const s = l.steps.find(s => s.tool?.id === 'bh-lifetime');
+      s.tool.values = { ...s.tool.values, logm: Math.log10(4.3e6) };
+      s.tool.presets = false;
+    });
+    expect(rules).toContain('setup/value');
+  });
+
   test('a camera that cannot be pointed', () => {
     const rules = rulesAfter('tides', l => {
       l.steps.find(s => s.setup).setup.camera = { zoom: 0 };

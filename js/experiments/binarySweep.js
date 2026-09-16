@@ -9,7 +9,7 @@
 //
 // It is deliberately not a general sweep framework. js/experiments/sweep.js and
 // the bench runner already are one, and this reuses both - the validation, the
-// value planning, the world save and restore, the cancelation, the
+// value planning, the world save and restore, the cancellation, the
 // simulated-progress measurement - and adds exactly the thing that generic
 // machinery cannot supply: what happened to the planet.
 //

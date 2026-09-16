@@ -499,7 +499,7 @@ function moduleFunctions(text) {
     // Past the parameter list before looking for the body, because a default
     // value is an object literal often enough to matter: `function
     // syncSource(v, ctx, spec = {})` gave up its whole body to the `{}` in
-    // its own signature, and every gravitational-wave screen was catalogd
+    // its own signature, and every gravitational-wave screen was cataloged
     // as touching nothing.
     let cursor = m.index + m[0].length - 1;
     if (m[1]) {
@@ -609,7 +609,7 @@ function stagedCount(step) {
  * Carried forward from the last step that named a setup, because that is how
  * the app behaves: `paused: false` starts it and the following steps inherit
  * a running world until something pauses it again. Reading only the step's
- * own setup catalogd "let it run for fifty conjunctions" as a step with
+ * own setup cataloged "let it run for fifty conjunctions" as a step with
  * nothing to do.
  *
  * @returns {boolean|'inherited'} true, false, or inherited from before the lesson

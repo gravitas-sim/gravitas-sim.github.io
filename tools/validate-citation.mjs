@@ -318,9 +318,17 @@ export function validateConsistency(cff, zen) {
     problems.push(`keywords differ between the two files${note}`);
   }
 
-  if (String(cff.license).toLowerCase() !== String(zen.license).toLowerCase()) {
+  // CITATION.cff carries both licenses - MIT for the code, CC BY 4.0 for the
+  // educational text and graphics - because CFF 1.2.0 takes a list. Zenodo's
+  // field takes one identifier and the deposit is a software record, so it
+  // carries the code license. Comparing the list against the scalar would
+  // report drift on a file that is right; comparing the first entry is the
+  // comparison that was always meant.
+  const cffLicenses = Array.isArray(cff.license) ? cff.license : [cff.license];
+  const codeLicense = cffLicenses[0];
+  if (String(codeLicense).toLowerCase() !== String(zen.license).toLowerCase()) {
     problems.push(
-      `license differs: CITATION.cff says ${cff.license}, .zenodo.json says ${zen.license}`
+      `license differs: CITATION.cff says ${codeLicense}, .zenodo.json says ${zen.license}`
     );
   }
 

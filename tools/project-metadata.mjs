@@ -39,12 +39,19 @@ export const URLS = {
  */
 export const RELEASE = {
   // Set by RELEASING.md when a tag is cut. `null` means unreleased.
-  version: null,
-  // ISO date of the GitHub release, not the day the file was edited.
-  dateReleased: null,
-  // Minted by Zenodo when the release is archived. Never written by hand.
+  version: '1.0.0',
+  // ISO date of the GitHub release, not the day the file was edited. If the
+  // tag slips past this date, change this and regenerate before tagging: a
+  // citation that names the wrong day is a citation nobody can check against
+  // the archive.
+  dateReleased: '2026-09-16',
+  // Minted by Zenodo when the release is archived. Never written by hand, and
+  // deliberately still null: with the GitHub-Zenodo workflow the identifier
+  // does not exist until the release is published, so the tag cannot contain
+  // it. Recorded in a follow-up commit, which is therefore not part of the
+  // archived v1.0.0 - see RELEASING.md.
   doi: null,
-  // The concept DOI, which is stable across versions.
+  // The concept DOI, which is stable across versions. Same timing.
   conceptDoi: null,
 };
 
@@ -92,6 +99,42 @@ export const TITLE =
 
 export const LICENSE = 'MIT';
 
+/**
+ * The license on the original educational text and graphics.
+ *
+ * Separate from LICENSE because they are separate works with separate
+ * audiences. MIT is a software license and says nothing useful to an
+ * instructor who wants to put one of the investigations into a course pack;
+ * CC BY 4.0 is the license that answers that question, and is what JOSE
+ * expects of educational material. LICENSES.md says which files each covers.
+ *
+ * Zenodo's `license` field takes one identifier and the deposit is a software
+ * record, so it carries this one's counterpart; CITATION.cff takes a list and
+ * carries both.
+ */
+export const CONTENT_LICENSE = 'CC-BY-4.0';
+
+/**
+ * How the two licenses are explained on the Zenodo record.
+ *
+ * Zenodo's `license` field takes one identifier, and for a software deposit
+ * that is the code license - so the record would otherwise say "MIT" and leave
+ * an instructor to guess whether that covers the investigations. It does not.
+ * The field stays MIT because the field is about the software; the rest is
+ * said in the notes, where a reader looking at the record can see it.
+ */
+export const LICENSE_NOTE =
+  'Licensing: the source code is MIT. The original educational material - the ' +
+  'guided investigations, the instructor guides and answer keys, the user ' +
+  'manual, the documentation and the original figures - is Creative Commons ' +
+  'Attribution 4.0 International (CC BY 4.0). Third-party components keep ' +
+  'their own licenses and attribution: three.js and Chart.js (MIT), the Inter, ' +
+  'Poppins and Roboto Mono families (SIL OFL 1.1), the Transit of Venus ' +
+  'photograph (CC BY 2.5, Brocken Inaglory), gravitational-wave strain from ' +
+  'the Gravitational Wave Open Science Center (CC BY 4.0), and derived MIST ' +
+  'stellar tracks (cited, not relicensed). LICENSES.md in the repository says ' +
+  'which files each one covers.';
+
 export const KEYWORDS = [
   'astronomy education',
   'physics education',
@@ -122,7 +165,26 @@ export function abstractParagraphs(facts) {
       'students predict, measure and plot their own data, instructor ' +
       'materials with answer keys, and a public account of what the ' +
       'underlying model does and does not represent.',
+    `Alongside the investigations are ${facts.activities} classroom ` +
+      'activities — shorter formats built from the same lesson steps, from a ' +
+      'five-minute demonstration to a full lab — and ' +
+      `${facts.instructorDocuments} generated instructor documents: a guide ` +
+      'and an answer key for every investigation, activity guides and student ' +
+      'worksheets, an adopter\u2019s guide and a curriculum map. Answer keys ' +
+      'are derived from the lesson definitions and verified against the same ' +
+      'function that marks student work, so they cannot disagree with what a ' +
+      'student sees.',
     'It runs entirely client-side as a static site, requires no account or ' +
-      'installation, and encodes any simulation state into a shareable URL.',
+      'installation, and encodes any simulation state into a shareable URL. ' +
+      'It works offline after a first visit, targets WCAG 2.2 Level AA with ' +
+      `axe-core run over ${facts.axeSurfaces} surfaces in ` +
+      `${facts.locales} languages and ${facts.axeThemes} themes on every ` +
+      'build, and is published in English and Spanish.',
+    `The physics is checked in public: ${facts.physicsChecks ?? 'every'} ` +
+      'checks of the engine against analytic results, published values and ' +
+      'independent integrations, each with its measured error and the kind of ' +
+      'evidence it rests on, at gravitas-sim.online/validation/. A companion ' +
+      'page states what the model represents and, at equal length, what it ' +
+      'does not.',
   ];
 }

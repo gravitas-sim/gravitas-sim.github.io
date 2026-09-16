@@ -81,7 +81,7 @@ describe('the defaults object itself', () => {
 // Keys that presets write and DEFAULT_SETTINGS does not carry.
 //
 // Empty, and meant to stay that way. It held ten keys when this suite was
-// written - preset_zoom, habitable_zone_optimizm, the neutron-star masses, the
+// written - preset_zoom, habitable_zone_optimism, the neutron-star masses, the
 // Kessler micro-stars, satellites_are_dyson, bh_layout and test_star_slingshot
 // - each a latent version of the halo bug. Nine now have an entry in
 // DEFAULT_SETTINGS, so applyPreset resets them like everything else; the tenth,
@@ -99,7 +99,7 @@ const KNOWN_ORPHANS = new Set([]);
 // scenario that wrote it works without it, and it is gone.
 const FORMER_ORPHANS = [
   'preset_zoom',
-  'habitable_zone_optimizm',
+  'habitable_zone_optimism',
   'use_individual_ns_masses',
   'ns_masses',
   'num_micro_stars',
@@ -263,7 +263,7 @@ describe('scenario settings can all be reset', () => {
     // a default that disagreed with its reader would reset to a value the
     // reader then quietly overrode.
     expect(DEFAULTS.preset_zoom).toBe(1.5); // state.zoom fallback, ui.js
-    expect(DEFAULTS.habitable_zone_optimizm).toBeLessThan(1.3); // conservative
+    expect(DEFAULTS.habitable_zone_optimism).toBeLessThan(1.3); // conservative
     expect(DEFAULTS.use_individual_ns_masses).toBe(false);
     expect(DEFAULTS.ns_masses).toEqual([]);
     expect(DEFAULTS.num_micro_stars).toBe(0);

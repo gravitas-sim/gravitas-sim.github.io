@@ -8,7 +8,7 @@
 //
 // What MOND is, and what it is not
 // --------------------------------
-// Milgrom (1983) proposed that below a characteriztic acceleration a0 the
+// Milgrom (1983) proposed that below a characteristic acceleration a0 the
 // relation between gravity and motion departs from Newton's. Where the
 // Newtonian field gN is strong compared with a0, nothing changes. Where it is
 // weak, the true acceleration approaches

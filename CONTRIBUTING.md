@@ -11,7 +11,8 @@ wanted, open an issue first — it is cheaper than a rejected branch.
 
 ## Getting set up
 
-Node 18 or newer (developed on 24).
+Node 20 or newer. `.nvmrc` pins the major version CI tests against, so
+`nvm use` in the repository root gets you the same one; development is on 24.
 
 ```bash
 npm install
@@ -316,7 +317,7 @@ npm run author:check -- --json            # for an editor
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
 produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->22<!--/fact--> investigations in
-a browser and takes all <!--fact:investigationSteps-->631<!--/fact--> steps,
+a browser and takes all <!--fact:investigationSteps-->636<!--/fact--> steps,
 sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 
@@ -444,5 +445,19 @@ job.
 
 ## License
 
-MIT, same as the project. By contributing you agree your work is released under
-it.
+Two, depending on what you changed, and [`LICENSES.md`](LICENSES.md) says which
+covers which file.
+
+- **Code** — MIT, same as the project.
+- **Teaching material** — an investigation, an instructor guide, a scenario
+  description, a translation, a figure — CC BY 4.0. See
+  [`LICENSE-CC-BY-4.0.md`](LICENSE-CC-BY-4.0.md).
+
+By contributing you agree your work is released under whichever of those applies
+to the files you touched. A pull request that changes both is released under
+both, file by file; there is nothing to sign and no CLA.
+
+Third-party material you did not write cannot be added under either. If a change
+needs something with its own license, it goes in `vendor/` with that license
+beside it and an entry in [`NOTICE`](NOTICE) — `npm run vendor:check` enforces
+the first half of that.

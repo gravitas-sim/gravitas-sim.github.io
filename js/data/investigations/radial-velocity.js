@@ -858,7 +858,7 @@ const RADIAL_VELOCITY = {
                atmospheric loss; and the star's flare activity. Also accept that the
                habitable-zone calculation is a statement about the orbit under
                assumed climate conditions, not a measurement of the planet. One
-               property is enough; do not penalise an answer outside this list whose
+               property is enough; do not penalize an answer outside this list whose
                reasoning connects it to liquid water.`,
       because: `There are several good answers: whether it has an atmosphere at all,
                 what that atmosphere is made of, whether it rotates or keeps one face
@@ -890,6 +890,40 @@ const RADIAL_VELOCITY = {
                 of. A radial velocity without a transit leaves you a lower limit on a
                 mass. Together they give a real planet. That combination, not any one
                 technique, is what characterizing another world actually consists of.`,
+    },
+    {
+      sid: 'what-you-can-now-say',
+      bind: SYSTEM,
+      type: 'read',
+      title: 'What you can now say about a star you cannot resolve',
+      body: `You started with a point of light and no planet. You finish with a
+             world that has a period, a mass, a radius, a density and a place on
+             a diagram - none of which came from seeing it.
+             \n\n<strong>The star moves because the planet does.</strong> Neither
+             orbits the other; both go round the point between them, and the part
+             of the star's motion along your line of sight is a shift in its
+             spectrum. The period of that wiggle is the orbital period, and its
+             semi-amplitude K carries the planet's mass.
+             \n\n<strong>K alone gives a lower limit.</strong> An orbit tilted
+             away from edge-on makes the same wiggle a lighter planet would make
+             edge-on, so what a radial velocity measures is M sin i. You cannot
+             tell those two apart from the curve.
+             \n\n<strong>A transit breaks the tie.</strong> A planet that crosses
+             the disc is close to edge-on by construction, so sin i is near 1 and
+             the lower limit becomes a mass. The transit also gives a radius,
+             which radial velocity never can, and a mass with a radius is a
+             density - the first number in the lesson that says anything about
+             what the planet is made of.
+             \n\n<strong>Astrometry watches the same reflex motion side-on</strong>,
+             and prefers the opposite systems: heavy planets far out around nearby
+             stars, where radial velocity prefers heavy planets close in.
+             \n\n<strong>And the last step is the one to be careful with.</strong>
+             Putting a planet inside a modeled habitable zone says that one
+             climate calculation places liquid water within reach at that
+             distance, given assumptions you did not verify. It says nothing about
+             this planet's atmosphere, its surface, or whether anything lives
+             there.`,
+      tip: 'Every method here has a blind spot and the blind spots do not overlap, which is why surveys are run in combination rather than in competition.',
     },
   ],
 };

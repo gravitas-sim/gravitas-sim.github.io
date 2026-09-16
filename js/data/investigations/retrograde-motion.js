@@ -68,7 +68,7 @@ const RETROGRADE = {
              it stops again and resumes its eastward march, having traced a loop
              or a zigzag against the background. Mars does this once every 780
              days, and the reversal lasts about ten weeks.
-             \n\nThis is not a subtle effect visible only to specializts. Anyone
+             \n\nThis is not a subtle effect visible only to specialists. Anyone
              who watches Mars for a few months with the naked eye can see it, and
              every civilization that kept sky records noticed it.`,
       quote: {

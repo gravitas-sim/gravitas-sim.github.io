@@ -2,7 +2,7 @@
 // The bottom dock: the transport bar and the footer, sharing one edge
 // -----------------------------------------------------------------------------
 // Both live along the bottom of the window, and neither used to know the other
-// was there. The bar centerd itself in the band left of the control rail; the
+// was there. The bar centered itself in the band left of the control rail; the
 // footer sat in the right-hand corner and was as wide as its contents happened
 // to make it. Whether they collided was a coincidence of window width and
 // footer length - and the footer had been getting longer: a theme picker, then
@@ -23,7 +23,7 @@
 //                          onto a row of its own beneath the bar
 //   --rail-footer-inset    how far the footer must sit from the right edge to
 //                          clear the control rail, which is usually not at all
-//   --transport-max        the widest a window-centerd bar may be and still
+//   --transport-max        the widest a window-centered bar may be and still
 //                          stop short of the footer
 //   --transport-reserve    how much of the bottom edge the bar actually
 //                          occupies, for the panels that must stop short of it
@@ -131,17 +131,17 @@ function publish(footer, rail, bar) {
     ? Math.ceil(window.innerWidth - f.left)
     : 0;
 
-  // A window-centerd bar overruns the footer once half of it reaches the
+  // A window-centered bar overruns the footer once half of it reaches the
   // footer's left edge, so the room it has is symmetric: what it gives up on
   // the right it also gives up on the left.
-  const centerdMax = Math.max(
+  const centeredMax = Math.max(
     0,
     Math.floor(window.innerWidth - 2 * (footerLeftFromRight + GAP))
   );
-  set('--transport-max', `${centerdMax}px`);
+  set('--transport-max', `${centeredMax}px`);
   set('--footer-reserve', `${footerLeftFromRight + GAP}px`);
 
-  document.body.classList.toggle('dock-banded', centerdMax < MIN_BAR);
+  document.body.classList.toggle('dock-banded', centeredMax < MIN_BAR);
 }
 
 /**

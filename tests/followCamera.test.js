@@ -44,7 +44,7 @@ describe('following a body', () => {
     expect(view.pan).toEqual({ x: -100, y: -60 });
   });
 
-  test('keeps it centerd as it moves', () => {
+  test('keeps it centered as it moves', () => {
     const view = freshView();
     step(view, { x: 50, y: -30 });
     step(view, { x: 60, y: -20 });

@@ -469,5 +469,13 @@ export default {
         'Explica qué determina cómo vive una estrella y cómo termina, citando al menos dos de tus propias medidas, y nombra una cosa que estos modelos no te dicen.',
       tip: 'Tu cuaderno tiene cada medida con el modelo del que salió, la etapa en la que se tomó y —cuando un final se citó en vez de calcularse— el artículo del que se citó.',
     },
+    {
+      stage: {
+        stars: [{ name: '0,2 M☉' }, { name: '1 M☉' }, { name: '20 M☉' }],
+      },
+      title: 'Lo que has seguido',
+      body: '<strong>La masa fija la luminosidad, y la luminosidad fija la vida.</strong> La vida es combustible dividido por el ritmo al que se gasta, y como el ritmo sube mucho más deprisa que la reserva, la estrella más pesada que seguiste vivió una diezmilésima de lo que vive la más ligera. Una enana roja apenas ha empezado.\n\n<strong>Salir de la secuencia principal es que se acabe el hidrógeno del núcleo, no el hidrógeno.</strong> Cuando ocurre, la mayor parte del hidrógeno de la estrella sigue ahí; simplemente no está donde está la fusión. Por eso empieza la etapa siguiente en lugar de terminar la estrella.\n\n<strong>Lo que queda depende de la masa con la que empezó</strong>: una enana blanca para una estrella como el Sol, una estrella de neutrones más arriba, un agujero negro más arriba todavía. Las fronteras no son nítidas, y a cuarenta masas solares la propia respuesta del modelo abarca un factor tres.\n\n<strong>Un agujero negro no tiene sitio en este diagrama.</strong> Los ejes son temperatura superficial y luminosidad, y no tiene ninguna de las dos. Eso no es un hueco del gráfico: es de lo que trata el gráfico.\n\n<strong>Y esto son modelos.</strong> Estrellas solas, una composición, sin rotación, sin compañera a la que quitar masa o darle masa. Las trazas se detienen antes del colapso del núcleo, así que todo remanente más allá de una enana blanca es una prescripción citada de un artículo y no algo que esta lección haya calculado. Los indicadores lo dijeron cada vez, y esa es la costumbre que merece la pena conservar.',
+      tip: 'Una traza que se detiene no es una estrella que se detiene. Es un modelo que llega al final de lo que fue construido para decir, que es otra cosa y merece distinguirse.',
+    },
   ],
 };

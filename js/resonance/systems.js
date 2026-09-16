@@ -387,7 +387,7 @@ export function plutoBodies(G, opts = {}) {
  * Jupiter, so they are, and L3 - which is also an equilibrium - is not.
  *
  * The five test bodies are the lesson. Two are real Trojans placed with
- * realiztic libration amplitudes, one marks the equilibrium itself, one starts
+ * realistic libration amplitudes, one marks the equilibrium itself, one starts
  * one degree off the unstable equilibrium, and one is on an ordinary orbit ten
  * percent wider and is not co-orbital at all. Their masses are a billionth of a
  * mass unit: enough to exist, far too little to disturb anything.

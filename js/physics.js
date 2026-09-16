@@ -358,7 +358,7 @@ let physicsSettings = {
   enable_star_merging: true,
   show_bh_glow: true,
   show_accretion_disk: true,
-  realiztic_disk_physics: true,
+  realistic_disk_physics: true,
   show_bh_jets: false,
   trail_length: 100,
   dynamic_object_properties: true,
@@ -368,7 +368,7 @@ let physicsSettings = {
   orbit_decay_rate: 0.005,
   max_timestep: 0,
   min_interaction_distance: 0,
-  habitable_zone_optimizm: 1.0,
+  habitable_zone_optimism: 1.0,
   star_only_gravity: false,
   disk_doppler: true,
   use_barnes_hut: false,
@@ -1003,7 +1003,7 @@ const conservedQuantities = () => {
  * Below it, a change of one part in a thousand of the *terms* - which is a
  * perfectly ordinary amount of integration error over a long run - moves the
  * reported percentage by 100% or more, so the figure says more about the
- * cancelation than about the integrator. Above it the amplification is at
+ * cancellation than about the integrator. Above it the amplification is at
  * most a thousandfold and the number still means something.
  *
  * This is deliberately not a list of scenarios. A marginally bound pair, a
@@ -1188,7 +1188,7 @@ const conservationDrift = (fresh = false) => {
     angular: now.angular,
     baselineEnergy: e0,
     baselineAngular: l0,
-    // NaN where a percentage would be an amplified cancelation rather than a
+    // NaN where a percentage would be an amplified cancellation rather than a
     // measurement. The absolute changes below are always available, and are
     // what a caller should show instead of an enormous figure.
     energyDrift: energyOk ? (100 * (now.energy - e0)) / Math.abs(e0) : NaN,
@@ -3676,7 +3676,7 @@ class Planet extends PhysicsObject {
     // model radius: a continent sized to a radius the body is no longer drawn
     // at is a continent that covers the planet.
     const r = drawRadius(this, 'Planet');
-    // Draw Earth with realiztic appearance - blue oceans with green continents
+    // Draw Earth with realistic appearance - blue oceans with green continents
     const gradient = ctx.createRadialGradient(
       world_pos.x,
       world_pos.y,
@@ -3768,7 +3768,7 @@ class Planet extends PhysicsObject {
 
   drawMoon(ctx, world_pos) {
     const r = drawRadius(this, 'Planet');
-    // Draw Moon with realiztic gray appearance and mock craters
+    // Draw Moon with realistic gray appearance and mock craters
     const gradient = ctx.createRadialGradient(
       world_pos.x,
       world_pos.y,
@@ -5066,7 +5066,7 @@ class BlackHole {
   updateDiskParticles(dt) {
     if (
       !physicsSettings.show_accretion_disk ||
-      !physicsSettings.realiztic_disk_physics
+      !physicsSettings.realistic_disk_physics
     )
       return;
 
@@ -7598,7 +7598,7 @@ const handle_star_object_collisions = () => {
 
 // Enhanced rocky planet collision handling
 /**
- * Handle collisions between rocky planets with realiztic physics
+ * Handle collisions between rocky planets with realistic physics
  * @param {Array} objects_list - Array of physics objects to check for collisions
  */
 const ROCKY_TYPES = new Set(['Planet', 'Asteroid', 'Comet']);
@@ -7692,7 +7692,7 @@ const handle_rocky_collisions = objects_list => {
         obj2.pos.x += move2 * nx;
         obj2.pos.y += move2 * ny;
 
-        // Handle collision response with more realiztic coefficient
+        // Handle collision response with more realistic coefficient
         const vel_normal = rvx * nx + rvy * ny;
         if (vel_normal < 0) {
           const e = 0.3; // Lower restitution for rocky objects

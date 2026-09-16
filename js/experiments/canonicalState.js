@@ -198,7 +198,7 @@ export function withExtras(payload, extras = {}) {
   }
   if (extras.frame && extras.frame.mode && extras.frame.mode !== 'world') {
     // Tested against null rather than for truthiness: body ids start at zero,
-    // so `objectId ? ...` dropped the target of a frame centerd on the first
+    // so `objectId ? ...` dropped the target of a frame centered on the first
     // body in the world. It went unnoticed while only the A/B bench carried
     // frames, because the bench's own state names the body separately.
     const target = extras.frame.objectId;

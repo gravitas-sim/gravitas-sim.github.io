@@ -25,6 +25,8 @@ import {
   AUTHORS,
   KEYWORDS,
   LICENSE,
+  CONTENT_LICENSE,
+  LICENSE_NOTE,
   RELEASE,
   TITLE,
   URLS,
@@ -106,7 +108,11 @@ export function citationCff(facts) {
   );
   lines.push('keywords:');
   for (const keyword of KEYWORDS) lines.push(`  - ${keyword}`);
-  lines.push(`license: ${LICENSE}`);
+  // Both, because they cover different files. CFF 1.2.0 allows a list of SPDX
+  // identifiers here, and the code license is first - which is the one
+  // .zenodo.json carries, and what tools/validate-citation.mjs compares.
+  lines.push('license:');
+  for (const id of [LICENSE, CONTENT_LICENSE]) lines.push(`  - ${id}`);
 
   // Release fields, or an explanation of their absence. CFF 1.2.0 makes both
   // optional, and an invented date is worse than a missing one.
@@ -173,7 +179,7 @@ export function zenodoJson(facts) {
     keywords: [...KEYWORDS],
     // Zenodo's own field for exactly this. Prose rather than a structured
     // grant, because there is no award number to put in one.
-    notes: ACKNOWLEDGMENT,
+    notes: `${ACKNOWLEDGMENT}\n\n${LICENSE_NOTE}`,
     related_identifiers: [
       {
         identifier: URLS.site,

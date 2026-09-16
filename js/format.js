@@ -217,3 +217,26 @@ export function parseFormatted(text) {
     .replace(/[\s\u00a0,]/g, '');
   return Number(normalized);
 }
+
+/**
+ * A count with its noun, agreeing in number.
+ *
+ * "1 written answers" appeared sixteen times across the instructor guides,
+ * "1 predictions" four times and "1 graded questions" twice, because every one
+ * of those was a template literal with an "s" typed after it. The grammar is
+ * one line; the problem was that it was one line in one module and nowhere
+ * else, so every other place that counted something wrote it out again.
+ *
+ *   plural(1, 'written answer')          -> '1 written answer'
+ *   plural(4, 'written answer')          -> '4 written answers'
+ *   plural(2, 'analysis', 'analyses')    -> '2 analyses'
+ *
+ * @param {number} n - How many
+ * @param {string} one - The singular noun
+ * @param {string} [many] - The plural, when adding "s" is wrong
+ * @returns {string} The count and the noun, separated by a space
+ */
+export function plural(n, one, many = `${one}s`) {
+  const count = Number.isFinite(n) ? n : 0;
+  return `${count.toLocaleString('en-US')} ${count === 1 ? one : many}`;
+}

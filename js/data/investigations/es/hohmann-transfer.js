@@ -298,6 +298,13 @@ export default {
       title: '¿Cuánto costó?',
       body: `Suma los dos impulsos.`,
       prompt: 'La Δv total de la transferencia, en km/s',
+      hints: {
+        concept: `La transferencia son dos impulsos y nada más. Entre ellos el
+                  motor está apagado, así que lo que cuesta toda la maniobra es
+                  lo que cuestan esos dos momentos.`,
+        method: `Suma los dos cambios de velocidad que calculaste en los dos
+                 pasos anteriores. Los dos están ya en km/s.`,
+      },
       worked: 'Δv = 5,815 + 4,598 = 10,41 km/s.',
     },
     {

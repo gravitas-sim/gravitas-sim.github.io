@@ -78,12 +78,14 @@ const DOCS = [
   // scenarios long after both numbers had moved.
   'index.html',
   'model/index.html',
-  // The locale catalogues make the same claim the pages do, in two languages,
+  // The locale catalogs make the same claim the pages do, in two languages,
   // and were the last place still saying 135 when the suite had reached 243.
   // A marker cannot go in a translated string - it would be rendered to the
   // reader - so these are matched by pattern below instead.
   'js/i18n/en.js',
   'js/i18n/es.js',
+  'js/i18n/en.deferred.js',
+  'js/i18n/es.deferred.js',
   'validation/index.html',
   'instructors/index.html',
   'CHANGELOG.md',
@@ -134,6 +136,20 @@ const ATTRIBUTE_FACTS = [
     key: 'physicsChecks',
     pattern: /(comprobado el motor físico: )(\d+)( verificaciones)/,
   },
+  // The welcome screen's card for instructors. It said "Six guided
+  // investigations" over a manifest of twenty-two, in both languages, for as
+  // long as the lesson set had been growing - the first thing an instructor
+  // reads about the project, understating it by sixteen lessons.
+  {
+    file: 'js/i18n/en.deferred.js',
+    key: 'investigations',
+    pattern: /(')(\d+)( guided investigations for introductory)/,
+  },
+  {
+    file: 'js/i18n/es.deferred.js',
+    key: 'investigations',
+    pattern: /(')(\d+)( investigaciones guiadas para astronomía)/,
+  },
 ];
 
 // --- gathering ---------------------------------------------------------------
@@ -154,6 +170,81 @@ function stabilityScenarioCount() {
   if (start < 0) return 0;
   const body = text.slice(start, text.indexOf('];', start));
   return (body.match(/^\s*'[^']+',/gm) || []).length;
+}
+
+/**
+ * How many documents the instructor bundle carries, and how many are activities.
+ *
+ * Read from instructors/materials.manifest.json, which the build writes, rather
+ * than counted from the catalog: the manifest is what the portal downloads and
+ * what the ZIP contains, so it is the number a reader can check. README said
+ * "22 PDFs" of a bundle that held fifty-four.
+ *
+ * @returns {{documents: number, activityDocuments: number}} The counts
+ */
+function instructorBundle() {
+  const path = join(REPO, 'instructors', 'materials.manifest.json');
+  if (!existsSync(path)) return { documents: 0 };
+  try {
+    const manifest = JSON.parse(readFileSync(path, 'utf8'));
+    return { documents: Number(manifest.documents) || 0 };
+  } catch {
+    return { documents: 0 };
+  }
+}
+
+/**
+ * How many of those documents belong to the classroom activities.
+ *
+ * Counted the way the build counts them - one guide per activity, one
+ * worksheet per format that is not projected - rather than read from the
+ * manifest, which records a total and not a breakdown.
+ *
+ * @param {Array<object>} activities - ACTIVITIES
+ * @returns {number} Guides plus worksheets
+ */
+function activityDocumentCount(activities) {
+  return activities.reduce(
+    (n, a) => n + 1 + a.formats.filter(f => f.context !== 'projection').length,
+    0
+  );
+}
+
+/**
+ * The shape of the axe sweep: surfaces, locales, themes, and their product.
+ *
+ * Read out of e2e/accessibility.spec.js rather than imported, because the spec
+ * pulls in Playwright and the test fixtures and importing it here would start
+ * a browser to answer a question about an array length.
+ *
+ * ACCESSIBILITY.md carried three different answers to this at once - "14
+ * surfaces ... 56 runs" in the table, "52 clean axe runs" in the prose, and
+ * "all 52 combinations" in the commands - over an array of fifteen. None of
+ * the three was right, which is what a hand-copied count does when the array
+ * grows twice and nobody is counting.
+ *
+ * @returns {{surfaces: number, locales: number, themes: number, runs: number}}
+ *   The matrix, or zeroes if the spec cannot be read
+ */
+function axeMatrix() {
+  const path = join(REPO, 'e2e', 'accessibility.spec.js');
+  const empty = { surfaces: 0, locales: 0, themes: 0, runs: 0 };
+  if (!existsSync(path)) return empty;
+  const text = readFileSync(path, 'utf8');
+  /** Entries in a top-level `const NAME = [ ... ];` array of objects. */
+  const lengthOf = (name, key) => {
+    const start = text.indexOf(`const ${name} = [`);
+    if (start < 0) return 0;
+    const end = text.indexOf('\n];', start);
+    if (end < 0) return 0;
+    const body = text.slice(start, end);
+    return (body.match(new RegExp(`^\\s{2,4}\\{?\\s*${key}: `, 'gm')) || [])
+      .length;
+  };
+  const surfaces = lengthOf('SURFACES', 'name');
+  const locales = lengthOf('LOCALES', 'id');
+  const themes = lengthOf('THEMES', 'id');
+  return { surfaces, locales, themes, runs: surfaces * locales * themes };
 }
 
 /**
@@ -211,8 +302,13 @@ async function cheapFacts() {
   const { INVESTIGATIONS } = await import(
     new URL('../js/data/investigations.js', import.meta.url)
   );
+  const { ACTIVITIES } = await import(
+    new URL('../js/data/activities.js', import.meta.url)
+  );
   const lessons = Object.values(INVESTIGATIONS);
   const stepsOf = lesson => (lesson.steps ? lesson.steps.length : 0);
+  const axe = axeMatrix();
+  const bundle = instructorBundle();
 
   const facts = {
     scenarios: Object.keys(SCENARIO_INFO).length,
@@ -245,6 +341,14 @@ async function cheapFacts() {
     // each preset to a fresh settings object, which is what the world builder
     // does, so the number cannot drift from the catalog.
     smallBodyScenarios: await smallBodyScenarioCount(),
+    // The accessibility sweep, counted from the spec's own arrays.
+    // The instructor bundle, from the manifest the build writes.
+    instructorDocuments: bundle.documents,
+    activityDocuments: activityDocumentCount(ACTIVITIES),
+    activities: ACTIVITIES.length,
+    axeSurfaces: axe.surfaces,
+    axeThemes: axe.themes,
+    axeRuns: axe.runs,
   };
 
   // Per-lesson step counts and durations, for the topic documents that name a

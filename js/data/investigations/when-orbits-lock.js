@@ -556,7 +556,7 @@ const WHEN_ORBITS_LOCK = {
         'Wait for the libration verdict',
         'Read the center, the amplitude and the libration period',
       ],
-      rubric: `Expect a libration centerd within a degree or two of 180° with an
+      rubric: `Expect a libration centered within a degree or two of 180° with an
                amplitude near 26°, and a libration period near 1,200 Io orbits —
                about 2,100 days. Full credit requires reporting all three
                <em>and</em> noticing that the instrument declined to give an
@@ -1163,7 +1163,7 @@ const WHEN_ORBITS_LOCK = {
              kind made for it. Read its libration off the frame instrument.
 
              \n\nThe theoretical small-amplitude tadpole period, from the
-             linearised restricted three-body problem, is
+             linearized restricted three-body problem, is
              P<sub>Jupiter</sub> ÷ √(27μ/4) with μ Jupiter's share of the total
              mass — which works out at 12.47 Jupiter years.`,
       fields: [
@@ -1404,7 +1404,7 @@ const WHEN_ORBITS_LOCK = {
 
              \n\n<strong>Io is the most volcanically active body known.</strong>
              The Laplace resonance keeps its orbit slightly eccentric — left
-             alone, tides would have circularised it long ago — and an eccentric
+             alone, tides would have circularized it long ago — and an eccentric
              orbit means Jupiter's tidal squeeze changes over each orbit. That
              flexing is what melts the interior. The volcanoes are powered by the
              resonance.

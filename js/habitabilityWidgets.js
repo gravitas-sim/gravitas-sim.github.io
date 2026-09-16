@@ -809,7 +809,7 @@ const BOUNDARIES_WIDGET = {
   get title() {
     return t('hzW.whereTheEdgesComeFrom');
   },
-  note: 'Two published definitions of the same zone. They differ in what atmospheric conditions they are willing to assume, not in how optimiztic anyone feels.',
+  note: 'Two published definitions of the same zone. They differ in what atmospheric conditions they are willing to assume, not in how optimistic anyone feels.',
   controls: [
     {
       id: 'model',
@@ -820,7 +820,7 @@ const BOUNDARIES_WIDGET = {
       max: 1,
       step: 1,
       value: 0,
-      format: v => (v >= 0.5 ? 'Optimiztic' : 'Conservative'),
+      format: v => (v >= 0.5 ? 'Optimistic' : 'Conservative'),
     },
   ],
   presets: [
@@ -833,21 +833,21 @@ const BOUNDARIES_WIDGET = {
     },
     {
       get label() {
-        return t('hzW.optimiztic');
+        return t('hzW.optimistic');
       },
       values: { model: 1 },
       note: 'From the Solar System’s own history: Venus has had no surface water for about a billion years, and Mars appears to have had some early on. Those two facts bracket a wider zone.',
     },
   ],
   compute(v) {
-    const model = v.model >= 0.5 ? 'optimiztic' : 'conservative';
+    const model = v.model >= 0.5 ? 'optimistic' : 'conservative';
     const sun = { luminositySolar: 1, teffK: 5772 };
     return {
       model,
       bounds: habitableZoneBounds(sun, model),
       other: habitableZoneBounds(
         sun,
-        model === 'optimiztic' ? 'conservative' : 'optimiztic'
+        model === 'optimistic' ? 'conservative' : 'optimistic'
       ),
     };
   },
@@ -858,7 +858,7 @@ const BOUNDARIES_WIDGET = {
         get label() {
           return t('hzW.definitionShown');
         },
-        value: c.model === 'optimiztic' ? 'Optimiztic' : 'Conservative',
+        value: c.model === 'optimistic' ? 'Optimistic' : 'Conservative',
       },
       {
         get label() {
@@ -921,15 +921,15 @@ const BOUNDARIES_WIDGET = {
       halo(ctx, label, (x0 + x1) / 2, y + h / 2);
     };
 
-    const opt = c.model === 'optimiztic' ? c.bounds : c.other;
-    const con = c.model === 'optimiztic' ? c.other : c.bounds;
+    const opt = c.model === 'optimistic' ? c.bounds : c.other;
+    const con = c.model === 'optimistic' ? c.other : c.bounds;
     drawBand(
       opt,
       44,
       26,
       ZONE,
-      c.model === 'optimiztic' ? 0.28 : 0.08,
-      'optimiztic'
+      c.model === 'optimistic' ? 0.28 : 0.08,
+      'optimistic'
     );
     drawBand(
       con,
@@ -1327,11 +1327,11 @@ const TRAPPIST = {
       max: 1,
       step: 1,
       value: 0,
-      format: v => (v >= 0.5 ? 'Optimiztic' : 'Conservative'),
+      format: v => (v >= 0.5 ? 'Optimistic' : 'Conservative'),
     },
   ],
   compute(v, spec = {}) {
-    const model = v.model >= 0.5 ? 'optimiztic' : 'conservative';
+    const model = v.model >= 0.5 ? 'optimistic' : 'conservative';
     const props = {
       luminositySolar: TRAPPIST1_STAR.luminosityInSuns,
       teffK: TRAPPIST1_STAR.temperatureK,

@@ -1005,7 +1005,7 @@ test.describe('the bottom dock', () => {
         page,
         app,
       }) => {
-        // The bug this replaces: the transport bar centerd itself in the band
+        // The bug this replaces: the transport bar centered itself in the band
         // left of the rail and the footer sat in the corner, and neither knew
         // about the other. On a wide window the scrubber ran across the
         // copyright line - and Spanish, being longer, made it worse.
@@ -1043,7 +1043,7 @@ test.describe('the bottom dock', () => {
     }
   }
 
-  test('the scrubber is centerd on the window when there is room', async ({
+  test('the scrubber is centered on the window when there is room', async ({
     page,
     app,
   }) => {

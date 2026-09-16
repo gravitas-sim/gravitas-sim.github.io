@@ -200,7 +200,7 @@ export function liveProvenance(extra = {}) {
     integrator,
     timestep: maxTimestep,
     simSpeed,
-    // Mode plus the object it is centerd on, because "object" alone does not
+    // Mode plus the object it is centered on, because "object" alone does not
     // say which object and two readings taken in different object frames are
     // not comparable.
     referenceFrame: frameObject ? `${mode}:${frameObject}` : mode,
