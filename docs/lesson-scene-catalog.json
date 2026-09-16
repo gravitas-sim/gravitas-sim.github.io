@@ -16142,6 +16142,68 @@
      "recovery": [
       "wrong body: the step binds the object by name, so there is none"
      ]
+    },
+    {
+     "sid": "what-you-can-now-say",
+     "index": 38,
+     "type": "read",
+     "title": "What you can now say about a star you cannot resolve",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
     }
    ],
    "loops": [
@@ -16274,15 +16336,15 @@
     }
    ],
    "totals": {
-    "steps": 37,
-    "declared": 37,
+    "steps": 38,
+    "declared": 38,
     "student": 3,
     "engine": 4,
     "model": 11,
     "data": 5,
     "diagram": 11,
     "evidence": 2,
-    "declaredButInert": 34,
+    "declaredButInert": 35,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 4
@@ -36067,7 +36129,7 @@
      "sid": "apply-the-second-burn",
      "index": 18,
      "type": "explore",
-     "title": "Circularise",
+     "title": "Circularize",
      "declares": {
       "stage": null,
       "bound": [
@@ -39979,6 +40041,71 @@
      "recovery": [
       "wrong body: the object list names what the step staged"
      ]
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 28,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
     }
    ],
    "loops": [
@@ -40103,15 +40230,15 @@
     }
    ],
    "totals": {
-    "steps": 27,
-    "declared": 27,
+    "steps": 28,
+    "declared": 28,
     "student": 26,
     "engine": 0,
     "model": 27,
     "data": 27,
     "diagram": 1,
     "evidence": 7,
-    "declaredButInert": 1,
+    "declaredButInert": 2,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -41981,6 +42108,71 @@
      "recovery": [
       "wrong body: the object list names what the step staged"
      ]
+    },
+    {
+     "sid": "where-this-leaves-you",
+     "index": 25,
+     "type": "read",
+     "title": "Where this leaves you",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
     }
    ],
    "loops": [
@@ -42103,15 +42295,15 @@
     }
    ],
    "totals": {
-    "steps": 24,
-    "declared": 22,
+    "steps": 25,
+    "declared": 23,
     "student": 22,
     "engine": 0,
     "model": 24,
     "data": 24,
     "diagram": 2,
     "evidence": 10,
-    "declaredButInert": 0,
+    "declaredButInert": 1,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -44554,6 +44746,85 @@
      "recovery": [
       "wrong body: the object list names what the step staged"
      ]
+    },
+    {
+     "sid": "what-the-diagram-is-for",
+     "index": 31,
+     "type": "read",
+     "title": "What the diagram is for",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "student-changes-scene",
+      "engine-measurement",
+      "model-result",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "change-a-scene-object",
+      "move-an-instrument-control",
+      "press-an-instrument-button"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "stellar-compare",
+      "capture": true
+     },
+     "evidence": [
+      "instrument-capture"
+     ],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
     }
    ],
    "loops": [
@@ -44718,18 +44989,21 @@
       "only-the-bright-ones",
       "what-a-survey-misses",
       "find-a-counterexample",
-      "the-argument"
+      "the-argument",
+      "what-the-diagram-is-for"
      ],
      "measure": [
       "only-the-bright-ones",
       "what-a-survey-misses",
       "find-a-counterexample",
-      "the-argument"
+      "the-argument",
+      "what-the-diagram-is-for"
      ],
      "evidence": [
       "only-the-bright-ones",
       "find-a-counterexample",
-      "the-argument"
+      "the-argument",
+      "what-the-diagram-is-for"
      ],
      "interpret": "only-the-bright-ones",
      "measuredBeforeAnswering": true,
@@ -44740,14 +45014,14 @@
     }
    ],
    "totals": {
-    "steps": 30,
-    "declared": 30,
-    "student": 30,
-    "engine": 30,
-    "model": 30,
-    "data": 30,
+    "steps": 31,
+    "declared": 31,
+    "student": 31,
+    "engine": 31,
+    "model": 31,
+    "data": 31,
     "diagram": 0,
-    "evidence": 16,
+    "evidence": 17,
     "declaredButInert": 0,
     "prose": 0,
     "mismatched": 0,
@@ -47463,6 +47737,85 @@
      "recovery": [
       "wrong body: the object list names what the step staged"
      ]
+    },
+    {
+     "sid": "what-you-followed",
+     "index": 35,
+     "type": "read",
+     "title": "What you followed",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "light",
+       "sun",
+       "heavy"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "student-changes-scene",
+      "engine-measurement",
+      "model-result",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "change-a-scene-object",
+      "move-an-instrument-control",
+      "press-an-instrument-button"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "stellar-compare",
+      "capture": true
+     },
+     "evidence": [
+      "instrument-capture"
+     ],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
     }
    ],
    "loops": [
@@ -47646,7 +47999,8 @@
       "the-black-hole",
       "read-the-descriptions",
       "design-a-comparison",
-      "the-lifecycle-argument"
+      "the-lifecycle-argument",
+      "what-you-followed"
      ],
      "measure": [
       "the-neutron-star",
@@ -47654,13 +48008,15 @@
       "the-black-hole",
       "read-the-descriptions",
       "design-a-comparison",
-      "the-lifecycle-argument"
+      "the-lifecycle-argument",
+      "what-you-followed"
      ],
      "evidence": [
       "the-neutron-star",
       "the-black-hole",
       "design-a-comparison",
-      "the-lifecycle-argument"
+      "the-lifecycle-argument",
+      "what-you-followed"
      ],
      "interpret": "the-neutron-star",
      "measuredBeforeAnswering": true,
@@ -47671,14 +48027,14 @@
     }
    ],
    "totals": {
-    "steps": 34,
-    "declared": 34,
-    "student": 34,
-    "engine": 34,
-    "model": 34,
-    "data": 34,
+    "steps": 35,
+    "declared": 35,
+    "student": 35,
+    "engine": 35,
+    "model": 35,
+    "data": 35,
     "diagram": 0,
-    "evidence": 16,
+    "evidence": 17,
     "declaredButInert": 0,
     "prose": 0,
     "mismatched": 0,
@@ -47687,15 +48043,15 @@
   }
  ],
  "totals": {
-  "steps": 631,
-  "declared": 602,
-  "student": 155,
-  "engine": 161,
-  "model": 223,
-  "data": 137,
+  "steps": 636,
+  "declared": 607,
+  "student": 157,
+  "engine": 163,
+  "model": 225,
+  "data": 139,
   "diagram": 104,
-  "evidence": 104,
-  "declaredButInert": 447,
+  "evidence": 106,
+  "declaredButInert": 450,
   "prose": 15,
   "mismatched": 0,
   "rebuilds": 67,

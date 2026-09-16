@@ -157,6 +157,17 @@ export const KEYWORDS = [
  * @returns {string[]} Paragraphs, plain text
  */
 export function abstractParagraphs(facts) {
+  // Every count here must be a real measurement. An earlier version defaulted
+  // the physics total to the word "every" when the fact was absent, which is
+  // how a cheap `docs:sync` came to write "every checks of the engine" into
+  // the two files a DOI is minted from. physicsChecks is a deferred fact, so
+  // the caller must have run with --full; refusing is the only safe answer.
+  if (facts.physicsChecks === undefined) {
+    throw new Error(
+      'abstractParagraphs() needs physicsChecks, which only a --full run ' +
+        'gathers. Regenerate the citation metadata with: npm run docs:sync -- --full'
+    );
+  }
   return [
     'Gravitas is a browser-based N-body gravity sandbox and astronomy ' +
       `teaching tool. It ships ${facts.scenarios} configurable scenarios ` +
@@ -180,7 +191,7 @@ export function abstractParagraphs(facts) {
       `axe-core run over ${facts.axeSurfaces} surfaces in ` +
       `${facts.locales} languages and ${facts.axeThemes} themes on every ` +
       'build, and is published in English and Spanish.',
-    `The physics is checked in public: ${facts.physicsChecks ?? 'every'} ` +
+    `The physics is checked in public: ${facts.physicsChecks} ` +
       'checks of the engine against analytic results, published values and ' +
       'independent integrations, each with its measured error and the kind of ' +
       'evidence it rests on, at gravitas-sim.online/validation/. A companion ' +

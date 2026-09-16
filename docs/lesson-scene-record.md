@@ -11,11 +11,11 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 22 investigations and 631 steps: 602 steps
-declare a scene, 155 let a reader change one, 161 read the
-running integration, 223 show a prescribed model result, 137 draw
+Across 22 investigations and 636 steps: 607 steps
+declare a scene, 157 let a reader change one, 163 read the
+running integration, 225 show a prescribed model result, 139 draw
 on a stored dataset, 104 put a self-contained panel beside the text,
-104 keep something, and 15 are prose.
+106 keep something, and 15 are prose.
 Of 81 prediction loops, 81 are returned to,
 81 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
@@ -107,7 +107,7 @@ Of 81 prediction loops, 81 are returned to,
 
 ## Finding Planets by Their Tug (`radial-velocity`)
 
-- **Steps:** 37. Scene declared on 37; a reader can change something on 3; 34 declare a scene nobody on that step can touch.
+- **Steps:** 38. Scene declared on 38; a reader can change something on 3; 35 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 4 live engine, 11 prescribed model, 5 stored dataset, 11 self-contained panel.
 - **What students do:** read, choose-an-option, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, open-a-body-inspector, run-the-simulation, record-values, run-to-an-armed-event, view-from-a-set-angle, answer-in-words.
 - **Objects the steps declare:** star, planet.
@@ -275,9 +275,9 @@ Of 81 prediction loops, 81 are returned to,
 
 ## What Is a Gravitational Wave? (`what-is-a-gravitational-wave`)
 
-- **Steps:** 27. Scene declared on 27; a reader can change something on 26; 1 declare a scene nobody on that step can touch.
+- **Steps:** 28. Scene declared on 28; a reader can change something on 26; 2 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 0 live engine, 27 prescribed model, 27 stored dataset, 1 self-contained panel.
-- **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, tick-a-checklist, choose-an-option, record-values, answer-in-words.
+- **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, tick-a-checklist, choose-an-option, record-values, answer-in-words, read.
 - **Objects the steps declare:** bh, ns.
 - **Instruments:** gw-lab, gw-real.
 - **Stored data:** Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation); GW150914 strain, as published (observation); MIST v1.2 evolutionary tracks (computed-grid).
@@ -289,9 +289,9 @@ Of 81 prediction loops, 81 are returned to,
 
 ## Listening to Spacetime (`listening-to-spacetime`)
 
-- **Steps:** 24. Scene declared on 22; a reader can change something on 22; 0 declare a scene nobody on that step can touch.
+- **Steps:** 25. Scene declared on 23; a reader can change something on 22; 1 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 0 live engine, 24 prescribed model, 24 stored dataset, 2 self-contained panel.
-- **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, tick-a-checklist, record-values, answer-in-words, choose-an-option.
+- **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, tick-a-checklist, record-values, answer-in-words, choose-an-option, read.
 - **Objects the steps declare:** bh.
 - **Instruments:** gw-lab, gw-real.
 - **Stored data:** Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation); GW150914 strain, as published (observation); MIST v1.2 evolutionary tracks (computed-grid).
@@ -303,28 +303,28 @@ Of 81 prediction loops, 81 are returned to,
 
 ## A Universe of Stars (`a-universe-of-stars`)
 
-- **Steps:** 30. Scene declared on 30; a reader can change something on 30; 0 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 30 live engine, 30 prescribed model, 30 stored dataset, 0 self-contained panel.
+- **Steps:** 31. Scene declared on 31; a reader can change something on 31; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 31 live engine, 31 prescribed model, 31 stored dataset, 0 self-contained panel.
 - **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-button, record-values, press-an-instrument-preset, tick-a-checklist, choose-an-option, answer-in-words.
 - **Objects the steps declare:** one, two, three, cursor, dwarf, giant, m020, m050, m100, m200, m500, m1000, m2000, m4000, sun, supergiant, main, wd, light, heavy.
 - **Instruments:** stellar-compare, stellar-lab, stellar-population.
 - **Stored data:** MIST v1.2 evolutionary tracks (computed-grid); Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation); GW150914 strain, as published (observation).
 - **Evidence kept:** notebook-fields, instrument-capture.
-- **Prediction loops:** three-stars-no-labels → the-numbers-arrive, temperature-makes-color, same-temperature-different-light → the-numbers-arrive; predict-which-is-bigger → measure-the-radius-ratio, the-two-axes, where-the-sun-sits, straight-up-the-diagram, sideways-at-one-luminosity, lines-of-constant-radius, switch-to-modeled-stars, three-on-the-main-sequence → measure-the-radius-ratio; predict-mass-and-light → the-whole-sequence, what-the-trend-covers → the-whole-sequence; two-red-stars → measure-the-two-reds, a-supergiant → measure-the-two-reds; predict-hot-and-faint → hot-and-faint, classify-from-position → hot-and-faint; predict-who-lives-longer → measure-the-lifetimes, a-population → measure-the-lifetimes; predict-the-bright-subset → only-the-bright-ones, what-a-survey-misses, find-a-counterexample, the-argument → only-the-bright-ones.
+- **Prediction loops:** three-stars-no-labels → the-numbers-arrive, temperature-makes-color, same-temperature-different-light → the-numbers-arrive; predict-which-is-bigger → measure-the-radius-ratio, the-two-axes, where-the-sun-sits, straight-up-the-diagram, sideways-at-one-luminosity, lines-of-constant-radius, switch-to-modeled-stars, three-on-the-main-sequence → measure-the-radius-ratio; predict-mass-and-light → the-whole-sequence, what-the-trend-covers → the-whole-sequence; two-red-stars → measure-the-two-reds, a-supergiant → measure-the-two-reds; predict-hot-and-faint → hot-and-faint, classify-from-position → hot-and-faint; predict-who-lives-longer → measure-the-lifetimes, a-population → measure-the-lifetimes; predict-the-bright-subset → only-the-bright-ones, what-a-survey-misses, find-a-counterexample, the-argument, what-the-diagram-is-for → only-the-bright-ones.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `two`, control stellar-compare/focus, measures temperature, luminosity and the radius ratio they imply, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Lives of Stars (`lives-of-stars`)
 
-- **Steps:** 34. Scene declared on 34; a reader can change something on 34; 0 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 34 live engine, 34 prescribed model, 34 stored dataset, 0 self-contained panel.
+- **Steps:** 35. Scene declared on 35; a reader can change something on 35; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 35 live engine, 35 prescribed model, 35 stored dataset, 0 self-contained panel.
 - **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-button, press-an-instrument-preset, tick-a-checklist, record-values, choose-an-option, answer-in-words.
 - **Objects the steps declare:** light, sun, heavy, star, young, old, dwarf.
 - **Instruments:** stellar-compare, stellar-evolution, stellar-lab.
 - **Stored data:** MIST v1.2 evolutionary tracks (computed-grid); Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation); GW150914 strain, as published (observation).
 - **Evidence kept:** notebook-fields, instrument-capture.
-- **Prediction loops:** three-futures → the-cloud → the-black-hole; predict-protostar-power → contraction-luminosity, the-pms-track, arriving, the-sun-today, across-the-main-sequence, compare-young-and-old → contraction-luminosity; predict-what-runs-out → the-interior, core-in-envelope-out → the-interior; predict-direction → measure-the-giant, true-size-then-and-now, helium-and-the-loop, the-agb-and-the-wind → measure-the-giant; not-a-supernova → planetary-nebula, white-dwarf-cooling, how-long-was-each-part → planetary-nebula; predict-the-red-dwarf → the-same-age → the-same-age; predict-massive-lifetime → massive-versus-sun, supergiant-and-burning, why-iron-stops-it → massive-versus-sun; predict-core-and-envelope → the-neutron-star, neutron-star-scale, the-black-hole, read-the-descriptions, design-a-comparison, the-lifecycle-argument → the-neutron-star.
+- **Prediction loops:** three-futures → the-cloud → the-black-hole; predict-protostar-power → contraction-luminosity, the-pms-track, arriving, the-sun-today, across-the-main-sequence, compare-young-and-old → contraction-luminosity; predict-what-runs-out → the-interior, core-in-envelope-out → the-interior; predict-direction → measure-the-giant, true-size-then-and-now, helium-and-the-loop, the-agb-and-the-wind → measure-the-giant; not-a-supernova → planetary-nebula, white-dwarf-cooling, how-long-was-each-part → planetary-nebula; predict-the-red-dwarf → the-same-age → the-same-age; predict-massive-lifetime → massive-versus-sun, supergiant-and-burning, why-iron-stops-it → massive-versus-sun; predict-core-and-envelope → the-neutron-star, neutron-star-scale, the-black-hole, read-the-descriptions, design-a-comparison, the-lifecycle-argument, what-you-followed → the-neutron-star.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control stellar-evolution/position, measures radius and luminosity at a stated model age, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.

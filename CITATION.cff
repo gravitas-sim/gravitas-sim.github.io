@@ -23,8 +23,26 @@ abstract: >-
   with answer keys, and a public account of what the underlying model does
   and does not represent.
 
+  Alongside the investigations are 3 classroom activities — shorter
+  formats built from the same lesson steps, from a five-minute
+  demonstration to a full lab — and 54 generated instructor documents: a
+  guide and an answer key for every investigation, activity guides and
+  student worksheets, an adopter’s guide and a curriculum map. Answer keys
+  are derived from the lesson definitions and verified against the same
+  function that marks student work, so they cannot disagree with what a
+  student sees.
+
   It runs entirely client-side as a static site, requires no account or
-  installation, and encodes any simulation state into a shareable URL.
+  installation, and encodes any simulation state into a shareable URL. It
+  works offline after a first visit, targets WCAG 2.2 Level AA with
+  axe-core run over 15 surfaces in 2 languages and 2 themes on every
+  build, and is published in English and Spanish.
+
+  The physics is checked in public: 243 checks of the engine against
+  analytic results, published values and independent integrations, each
+  with its measured error and the kind of evidence it rests on, at
+  gravitas-sim.online/validation/. A companion page states what the model
+  represents and, at equal length, what it does not.
 keywords:
   - astronomy education
   - physics education
@@ -34,8 +52,8 @@ keywords:
   - habitable zone
   - interactive simulation
   - open educational resources
-license: MIT
-
-# No `version` or `date-released`: there is no Git tag and no GitHub
-# release yet, so either field would be invented. See RELEASING.md;
-# both are set in tools/project-metadata.mjs when a release is cut.
+license:
+  - MIT
+  - CC-BY-4.0
+version: "1.0.0"
+date-released: "2026-09-16"

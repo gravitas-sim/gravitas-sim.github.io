@@ -982,7 +982,8 @@ async function main() {
   const argv = process.argv.slice(2);
   const has = flag => argv.includes(flag);
   const mode = has('--sync') ? 'sync' : has('--check') ? 'check' : 'print';
-  const { facts, notes } = await gatherFacts({ full: has('--full') });
+  const full = has('--full');
+  const { facts, notes } = await gatherFacts({ full });
 
   if (has('--json')) {
     process.stdout.write(JSON.stringify(facts, null, 2) + '\n');
@@ -998,7 +999,7 @@ async function main() {
     return 0;
   }
 
-  const blocks = await gatherBlocks({ full: has('--full') });
+  const blocks = await gatherBlocks({ full });
   const present = DOCS.filter(d => existsSync(join(REPO, d)));
   const results = [];
   for (const doc of present) {
@@ -1013,18 +1014,29 @@ async function main() {
   // The citation pair, generated together from tools/project-metadata.mjs so
   // they cannot disagree. Zenodo prefers .zenodo.json when both are present,
   // which is precisely why a stale one is dangerous rather than merely untidy.
-  const generatedFiles = [
-    ['CITATION.cff', citationCff(facts)],
-    ['.zenodo.json', zenodoJson(facts)],
-  ];
+  //
+  // Only `--full` may touch them. Their abstract quotes physicsChecks, which a
+  // cheap run does not measure, so a cheap run cannot tell a correct file from
+  // a stale one and must not rewrite it: doing so replaced the check total
+  // with a placeholder in both files, silently, in the two artifacts a DOI is
+  // minted from. Without --full they are neither written nor judged, and the
+  // skipped note says so.
   const generatedStale = [];
-  for (const [name, wanted] of generatedFiles) {
-    const path = join(REPO, name);
-    const current = existsSync(path) ? readFileSync(path, 'utf8') : '';
-    if (current !== wanted) {
-      generatedStale.push(name);
-      if (mode === 'sync') await writeFile(path, wanted);
+  const generatedSkipped = [];
+  if (full) {
+    for (const [name, wanted] of [
+      ['CITATION.cff', citationCff(facts)],
+      ['.zenodo.json', zenodoJson(facts)],
+    ]) {
+      const path = join(REPO, name);
+      const current = existsSync(path) ? readFileSync(path, 'utf8') : '';
+      if (current !== wanted) {
+        generatedStale.push(name);
+        if (mode === 'sync') await writeFile(path, wanted);
+      }
     }
+  } else {
+    generatedSkipped.push('CITATION.cff', '.zenodo.json');
   }
 
   const texPath = join(REPO, 'manual', 'facts.tex');
@@ -1065,6 +1077,11 @@ async function main() {
         'Every documented count already matches the source.\n'
       );
     }
+    if (generatedSkipped.length) {
+      process.stdout.write(
+        `note: not regenerated without --full: ${generatedSkipped.join(', ')}\n`
+      );
+    }
     for (const u of unknown) {
       process.stderr.write(`${u.doc}: unknown fact "${u.key}"\n`);
     }
@@ -1084,11 +1101,17 @@ async function main() {
   if (texStale) process.stderr.write('manual/facts.tex is out of date\n');
   for (const name of generatedStale) {
     process.stderr.write(
-      `${name} is out of date; it is generated from tools/project-metadata.mjs\n`
+      `${name} is out of date; it is generated from tools/project-metadata.mjs ` +
+        'by `npm run docs:sync -- --full` (a cheap sync will not write it)\n'
     );
   }
   for (const b of broken) process.stderr.write(`${b}\n`);
   for (const note of notes) process.stdout.write(`note: ${note}\n`);
+  if (generatedSkipped.length) {
+    process.stdout.write(
+      `note: not checked without --full: ${generatedSkipped.join(', ')}\n`
+    );
+  }
   const skipped = [...new Set(results.flatMap(r => r.skipped))];
   if (skipped.length) {
     process.stdout.write(
