@@ -1,21 +1,34 @@
-# Owner actions before v1.0.0
+# Owner actions
 
 Everything on this list needs a decision, a credential, or an account only the
 project owner has. None of it can be done by a script or by a contributor, which
 is why it is a separate file from [`RELEASING.md`](RELEASING.md) — that one is
 the procedure, this one is the set of things the procedure waits on.
 
-Nothing here has been done. Nothing in this repository has been tagged,
-released, deposited or announced.
+**v1.0.0 is released.** Tagged, published and archived on 2026-09-16:
+
+| | |
+| --- | --- |
+| Tag | `v1.0.0` → commit `9148f9e4296f6010293056303e7c6b10d87add1f` |
+| Release | <https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v1.0.0> |
+| Zenodo record | <https://zenodo.org/records/22800610> |
+| Version DOI | [10.5281/zenodo.22800610](https://doi.org/10.5281/zenodo.22800610) |
+| Concept DOI | [10.5281/zenodo.22800609](https://doi.org/10.5281/zenodo.22800609) |
+
+What remains below is the work the release did *not* do: the papers, the
+repository settings, and how the instructor passphrase is distributed. A ticked
+box here means the thing is done and verified, not merely decided.
 
 ## Decisions
 
-- [ ] **Confirm the version number is `1.0.0`.** `1.0.0` is a claim that the
-      interfaces are stable enough that breaking them would be a major version.
-      `0.9.0` is honest if you expect to break things. Goes in `RELEASE.version`
-      in `tools/project-metadata.mjs`.
-- [ ] **Choose the release date.** The date the GitHub release is created, not
-      the date the metadata was edited. `RELEASE.dateReleased`, `YYYY-MM-DD`.
+- [x] **Confirm the version number is `1.0.0`.** Confirmed, and it is the claim
+      it looks like: the interfaces are stable enough that breaking them would
+      be a major version. In `RELEASE.version`, and `package.json` agrees —
+      `release:check` verifies that they do.
+- [x] **Choose the release date.** `2026-09-16`, the day the GitHub release was
+      actually published rather than the day the metadata was written. In
+      `RELEASE.dateReleased`, and carried into `CITATION.cff` and
+      `.zenodo.json` by the generators.
 - [x] **Confirm the content license.** CC BY 4.0 for the original educational
       text and graphics, MIT for the software — decided, and implemented in
       [`LICENSES.md`](LICENSES.md), [`NOTICE`](NOTICE) and
@@ -26,44 +39,66 @@ released, deposited or announced.
 
 ## Zenodo
 
-- [ ] **Verify the GitHub–Zenodo integration is live** *before* tagging. Log in
-      to Zenodo, open the GitHub settings page, and confirm the toggle for
-      `gravitas-sim/gravitas-sim.github.io` is on. A tag pushed to a repository
-      Zenodo is not watching archives nothing, and the only fix is another
-      release.
-- [ ] **After the release: record both DOIs.** The version DOI and the concept
-      DOI go into `RELEASE.doi` and `RELEASE.conceptDoi`, then
-      `npm run docs:sync`, then commit. They are different identifiers and they
-      are not interchangeable — see "Two DOIs" in
-      [`RELEASING.md`](RELEASING.md).
-- [ ] **Check the Zenodo record's metadata** after it appears. It is built from
-      `.zenodo.json` in the archive, so it should be right, but the author
-      affiliation and the ORCID are worth looking at once with your own eyes.
+- [x] **Verify the GitHub–Zenodo integration is live.** Confirmed on Zenodo's
+      GitHub settings page before the release was published, and the webhook
+      then delivered: `release/released` returned `202 Accepted` and the record
+      existed four seconds later.
+
+      One correction for next time. This said *before tagging*, and tagging is
+      the wrong deadline — a tag triggers nothing. Only publishing a release
+      does, so the check has to be green before the publish, which is also the
+      last moment it is still free to fix.
+- [x] **After the release: record both DOIs.** In `RELEASE.doi` and
+      `RELEASE.conceptDoi`, with `CITATION.cff`, `manual/facts.tex` and the
+      README badge and citation section regenerated from them. `.zenodo.json`
+      is deliberately unchanged: it is Zenodo's *input*, so a DOI in it would
+      be circular.
+
+      The command is `npm run docs:sync -- --full`. The `--full` is required —
+      a cheap sync neither writes nor judges the citation pair, so it will
+      leave a new DOI out of `CITATION.cff` while reporting success. This file
+      used to say plain `docs:sync`, and it was wrong.
+- [ ] **Check the Zenodo record's metadata with your own eyes.** Machine-checked
+      already, and all of it agrees with `.zenodo.json`: title, version `1.0.0`,
+      publication date `2026-09-16`, resource type Software, license
+      `mit-license`, creator *Ziegler, Carl*, ORCID `0000-0002-0619-7639`, the
+      SFA affiliation string, and one archived file whose checksum matches
+      GitHub's zipball for the tag byte for byte.
+
+      Still worth your own look. A string can be well-formed, present and
+      wrong — the affiliation and the ORCID especially, because nothing
+      downstream will ever contradict them.
 
 ## GitHub repository settings
 
-- [ ] **Description.** Something a person scanning search results can act on.
+- [ ] **Description.** Still empty. Something a person scanning search
+      results can act on.
       Suggested: *An interactive astrophysics sandbox and 22 guided
       investigations for introductory astronomy. Runs in a browser, no install.*
-- [ ] **Homepage.** `https://gravitas-sim.online`
-- [ ] **Topics.** Suggested: `astronomy`, `astronomy-education`,
+- [x] **Homepage.** Set to `https://gravitas-sim.online/`.
+- [ ] **Topics.** Still empty. Suggested: `astronomy`, `astronomy-education`,
       `physics-education`, `science-education`, `simulation`,
       `nbody-simulation`, `orbital-mechanics`, `exoplanets`,
       `open-educational-resources`, `oer`, `javascript`, `webgl`.
 - [ ] **Branch protection on `main`.** Require the CI checks to pass before
       merge. The repository deploys continuously from `main`, so an unprotected
-      default branch means any push is a publication.
+      default branch means any push is a publication. Still unprotected: the
+      API reports `Branch not protected`.
 - [ ] **Enable private vulnerability reporting.** [`SECURITY.md`](SECURITY.md)
       points at it, and the link is inert until it is switched on in
-      Settings → Security.
+      Settings → Security. Still off. Secret scanning and push protection are
+      on; Dependabot security updates are not.
 - [ ] **Decide whether to enable Discussions.** [`SUPPORT.md`](SUPPORT.md) says
       "if discussions are enabled"; either enable them or edit that sentence.
+      They are off, so that sentence currently describes nothing.
 
 ## The release itself
 
-- [ ] **Create the tag and the GitHub release.** The procedure is
-      [`RELEASING.md`](RELEASING.md) §5. Do not do this until the gate is green
-      on the exact tree being tagged.
+- [x] **Create the tag and the GitHub release.** Done for v1.0.0. The annotated
+      tag was cut against the exact commit a clean 35-check gate had passed —
+      `9148f9e`, pinned by full SHA rather than by `HEAD` — and the release was
+      created as a draft, reviewed, then published and marked latest.
+      [`RELEASING.md`](RELEASING.md) records what it produced.
 
 ## The papers
 
@@ -80,9 +115,10 @@ released, deposited or announced.
       from standard citations rather than exported. Re-export each one and
       replace the file. A DOI that resolves to the wrong paper is not the kind
       of error a reader catches.
-- [ ] **Insert the version DOI into the papers** once minted — the version DOI,
-      with the version number, not the concept DOI. The reason is in
-      [`RELEASING.md`](RELEASING.md).
+- [ ] **Insert the version DOI into the papers.** It is minted and waiting:
+      `10.5281/zenodo.22800610`, the *version* DOI, with the version number —
+      not the concept DOI. The reason is in [`RELEASING.md`](RELEASING.md).
+      `paper.md` still carries the `OWNER:` placeholder for it.
 - [ ] **Decide the arXiv/JOSE split.** [`paper.md`](paper.md) is the short JOSE
       paper: need, design, functionality, adoption. The longer arXiv manuscript
       is a separate document and is not in this repository.
@@ -93,6 +129,8 @@ released, deposited or announced.
       [`SUPPORT.md`](SUPPORT.md) says to email you for it. If that does not
       scale, decide what replaces it before the paper is published rather than
       after.
-- [ ] **Rebuild and commit the instructor bundle** whenever instructional
-      content changes. `npm run instructors:check` says whether it is current
-      and needs no passphrase; rebuilding needs the real one.
+Standing, not a box to tick: **rebuild and commit the instructor bundle**
+whenever instructional content changes. `npm run instructors:check` says
+whether it is current and needs no passphrase; rebuilding needs the real one.
+The gate runs that check, so a stale bundle fails the release rather than
+shipping quietly.
