@@ -324,8 +324,11 @@ function citationBlock() {
     // After the software identifiers, not before them: the paper itself asks
     // readers to cite the versioned archive, so leading with the paper here
     // would contradict the thing it points at.
+    // Both, whichever exists. The DOI is what a reference list wants; the
+    // arXiv id is what a reader recognises and searches for, so dropping it
+    // once the DOI arrives would make the line less useful, not more.
     const cite = PAPER.doi
-      ? `<https://doi.org/${PAPER.doi}>`
+      ? `arXiv:${PAPER.arxivId}, <https://doi.org/${PAPER.doi}>`
       : `arXiv:${PAPER.arxivId}, <${PAPER.url}>`;
     lines.push('');
     lines.push(`The paper describing Gravitas is *${PAPER.title}*`);

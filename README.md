@@ -554,7 +554,7 @@ archived on Zenodo.
 | **All versions** | [10.5281/zenodo.22800609](https://doi.org/10.5281/zenodo.22800609) |
 
 The paper describing Gravitas is *Gravitas: A Browser-Based Astrophysics Laboratory for Prediction, Measurement, and Discovery*
-(arXiv:2609.19327, <https://arxiv.org/abs/2609.19327>). Cite the software above for what your students ran,
+(arXiv:2609.19327, <https://doi.org/10.48550/arXiv.2609.19327>). Cite the software above for what your students ran,
 and the paper for the design it describes.
 <!--/fact-block-->
 

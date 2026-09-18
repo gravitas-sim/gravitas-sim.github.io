@@ -34,9 +34,9 @@
       "scheme": "url"
     },
     {
-      "identifier": "arXiv:2609.19327",
+      "identifier": "10.48550/arXiv.2609.19327",
       "relation": "isDescribedBy",
-      "scheme": "arxiv"
+      "scheme": "doi"
     }
   ],
   "version": "1.0.0",

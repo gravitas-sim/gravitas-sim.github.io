@@ -38,14 +38,16 @@ export const URLS = {
  * written once and then goes through a venue's own process. A new version of
  * Gravitas does not produce a new paper.
  *
- * `doi` is null on purpose and is not an oversight. arXiv registers a DataCite
- * DOI (10.48550/arXiv.<id>) for a submission, but not instantly, and at the
- * time of writing https://doi.org/10.48550/arXiv.2609.19327 returns 404 while
- * the abstract page is live. A citation pointing at an identifier that does not
- * resolve is worse than one pointing at a URL that does, so this records the
- * arXiv id and the abstract page until the DOI is real. Check it, then fill it
- * in - the generators will use it in preference to the URL wherever a
- * structured identifier is wanted.
+ * The DOI was not available when the paper was first recorded here: arXiv
+ * registers a DataCite DOI for a submission, but hours later, and for a while
+ * https://doi.org/10.48550/arXiv.2609.19327 returned 404 while the abstract
+ * page was already live. It was left null until it resolved rather than
+ * written ahead of time, because an identifier that looks authoritative and
+ * resolves to nothing is worse than none. It resolved about eleven hours after
+ * submission and DataCite reports it findable, so it is here now.
+ *
+ * The arXiv id stays beside it. The DOI is the identifier to cite; the id is
+ * the one a reader recognises, and the generators print both.
  */
 export const PAPER = {
   arxivId: '2609.19327',
@@ -54,7 +56,7 @@ export const PAPER = {
     'Gravitas: A Browser-Based Astrophysics Laboratory for Prediction, ' +
     'Measurement, and Discovery',
   year: 2026,
-  doi: null,
+  doi: '10.48550/arXiv.2609.19327',
 };
 
 /**
