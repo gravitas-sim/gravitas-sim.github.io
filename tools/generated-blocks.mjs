@@ -31,6 +31,7 @@ import {
   TITLE,
   URLS,
   abstractParagraphs,
+  PAPER,
 } from './project-metadata.mjs';
 import { describeKinds } from '../js/physicsKinds.js';
 
@@ -191,6 +192,23 @@ export function zenodoJson(facts) {
         relation: 'isSupplementTo',
         scheme: 'url',
       },
+      // The paper, as `isDescribedBy`: the deposit is the software and the
+      // paper describes it, which is the direction Zenodo's vocabulary means.
+      // Recorded by arXiv id rather than DOI while the DataCite DOI is not yet
+      // registered - see PAPER in tools/project-metadata.mjs. This reaches a
+      // Zenodo record only on the next deposit; it cannot change one already
+      // archived.
+      ...(PAPER.doi
+        ? [{ identifier: PAPER.doi, relation: 'isDescribedBy', scheme: 'doi' }]
+        : PAPER.arxivId
+          ? [
+              {
+                identifier: `arXiv:${PAPER.arxivId}`,
+                relation: 'isDescribedBy',
+                scheme: 'arxiv',
+              },
+            ]
+          : []),
     ],
   };
 
@@ -301,6 +319,20 @@ function citationBlock() {
   ];
   if (c) {
     lines.push(`| **All versions** | [${c}](https://doi.org/${c}) |`);
+  }
+  if (PAPER.url) {
+    // After the software identifiers, not before them: the paper itself asks
+    // readers to cite the versioned archive, so leading with the paper here
+    // would contradict the thing it points at.
+    const cite = PAPER.doi
+      ? `<https://doi.org/${PAPER.doi}>`
+      : `arXiv:${PAPER.arxivId}, <${PAPER.url}>`;
+    lines.push('');
+    lines.push(`The paper describing Gravitas is *${PAPER.title}*`);
+    lines.push(
+      `(${cite}). Cite the software above for what your students ran,`
+    );
+    lines.push('and the paper for the design it describes.');
   }
   lines.push('');
   return lines.join('\n');

@@ -31,6 +31,33 @@ export const URLS = {
 };
 
 /**
+ * The paper describing this software.
+ *
+ * Separate from RELEASE because it is a different object with a different
+ * lifetime: the software is versioned and archived per release, the paper is
+ * written once and then goes through a venue's own process. A new version of
+ * Gravitas does not produce a new paper.
+ *
+ * `doi` is null on purpose and is not an oversight. arXiv registers a DataCite
+ * DOI (10.48550/arXiv.<id>) for a submission, but not instantly, and at the
+ * time of writing https://doi.org/10.48550/arXiv.2609.19327 returns 404 while
+ * the abstract page is live. A citation pointing at an identifier that does not
+ * resolve is worse than one pointing at a URL that does, so this records the
+ * arXiv id and the abstract page until the DOI is real. Check it, then fill it
+ * in - the generators will use it in preference to the URL wherever a
+ * structured identifier is wanted.
+ */
+export const PAPER = {
+  arxivId: '2609.19327',
+  url: 'https://arxiv.org/abs/2609.19327',
+  title:
+    'Gravitas: A Browser-Based Astrophysics Laboratory for Prediction, ' +
+    'Measurement, and Discovery',
+  year: 2026,
+  doi: null,
+};
+
+/**
  * Release identity.
  *
  * Every field is null until there is something real to point at. The generators

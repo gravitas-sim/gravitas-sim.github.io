@@ -32,6 +32,11 @@
       "identifier": "https://github.com/gravitas-sim/gravitas-sim.github.io",
       "relation": "isSupplementTo",
       "scheme": "url"
+    },
+    {
+      "identifier": "arXiv:2609.19327",
+      "relation": "isDescribedBy",
+      "scheme": "arxiv"
     }
   ],
   "version": "1.0.0",
