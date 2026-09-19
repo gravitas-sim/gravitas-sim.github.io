@@ -227,6 +227,25 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    // The message catalogs, cross-referenced against the source that asks for
+    // them. This existed as tools/i18n-audit.mjs for a long time with no npm
+    // script and no entry here, which is the one hole in a registry whose
+    // whole purpose is that a guard nobody runs is not a guard. It could not
+    // be registered before now because it could not pass: its extractor read
+    // a comment quoting `t('exoW....')` as a real reference, so it reported a
+    // phantom id missing from English on every run. It fails on an id that is
+    // asked for and does not exist, and on an id a translation has that
+    // English does not - a typo, which is silent at runtime because the
+    // message simply never appears. An untranslated id is honest work in
+    // progress and is reported without failing.
+    id: 'i18n',
+    label: 'message catalogs match the source that asks for them',
+    command: ['npm', 'run', 'i18n:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  {
     id: 'links',
     label: 'internal links and anchors (sources)',
     command: ['npm', 'run', 'validate:links'],

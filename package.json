@@ -64,6 +64,7 @@
     "a11y": "playwright test e2e/accessibility.spec.js e2e/accessibilityManual.spec.js --project=chromium",
     "a11y:axe": "playwright test e2e/accessibility.spec.js --project=chromium",
     "a11y:manual": "playwright test e2e/accessibilityManual.spec.js --project=chromium",
+    "i18n:check": "node tools/i18n-audit.mjs",
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",
     "author:rules": "node tools/author-check.mjs --rules",

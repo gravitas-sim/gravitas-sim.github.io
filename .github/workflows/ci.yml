@@ -178,6 +178,14 @@ jobs:
       - name: Investigations validate
         run: npm run author:check
 
+      # The message catalogs against the source that asks for them. Registered
+      # in tools/checks.mjs, which is the single list this job and
+      # `release:check` both read - tests/releaseGate.test.js fails if an entry
+      # claims a CI job it does not appear in, and that is how this step came
+      # to be written.
+      - name: Message catalogs
+        run: npm run i18n:check
+
       # vendor/ carries three.js, Chart.js and the nine self-hosted font faces,
       # generated from the pinned packages and committed because GitHub Pages
       # serves the repository root. This fails if a lockfile bump moved one of
