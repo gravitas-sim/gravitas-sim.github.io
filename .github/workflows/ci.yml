@@ -84,7 +84,13 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    # `v2` is the long-lived integration branch for the next major version. It
+    # is here so the branch gets the full suite on every push rather than only
+    # on a pull request. It does NOT make the branch publishable: the deploy
+    # job below is gated on `github.ref == 'refs/heads/main'` as well as on the
+    # event being a push, so a run on v2 skips it. Remove this entry when v2
+    # merges to main - see BRANCHING.md.
+    branches: [main, v2]
   pull_request:
   schedule:
     # Monday morning, UTC. Catches an engine or dependency change that landed
