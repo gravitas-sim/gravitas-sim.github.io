@@ -372,12 +372,25 @@ let physicsSettings = {
   star_only_gravity: false,
   disk_doppler: true,
   use_barnes_hut: false,
-  // Calibrated against the direct N^2 solver on a 78-body cluster:
-  //   theta 0.3 -> 0.20% mean / 2.6% worst error
-  //   theta 0.4 -> 0.46% mean / 3.4% worst   <- default
-  //   theta 0.7 -> 3.74% mean / 75.5% worst
-  // 0.7 is the textbook default but costs the same here as 0.4 while being an
-  // order of magnitude less accurate, so it is not worth the error budget.
+  // Measured against the direct N^2 solver by the validation suite, on a seeded
+  // Plummer cluster of 20000 bodies - large enough that the tree is actually
+  // approximating something:
+  //   theta 0.2 -> 0.23% mean / 0.97% at the 99th percentile
+  //   theta 0.4 -> 1.00% mean / 4.6%             <- default
+  //   theta 0.7 -> 3.46% mean / 18.6%
+  // These replace a comment that claimed 0.46% mean at theta 0.4, taken once on
+  // a 78-body cluster where almost every cell is a leaf and the tree is barely
+  // approximating anything. It understated the error on a real cluster by about
+  // a factor of three, and nothing in the repository re-ran it. The figures
+  // above are re-measured on every run by the "Barnes-Hut tree solver" group in
+  // tools/physics-checks.mjs, which also records what the mean hides: the worst
+  // single interaction, and the fact that the tree does not conserve momentum.
+  //
+  // 0.7 is the textbook default and costs about the same here as 0.4 while
+  // being three times less accurate, so it is not worth the error budget. It is
+  // also uncomfortably close to 1/sqrt(2) = 0.7071, above which a cell holding
+  // the target can pass the opening test and fold a body's own mass into the
+  // force on it; the guard against that is in js/barnesHut.js and is measured.
   barnes_hut_theta: 0.4,
 
   // A dark-matter halo added to the force law as a smooth background field.
@@ -2548,9 +2561,9 @@ const updatePhysics = dt => {
           workerBuffers.ty = targets.y;
           workerBuffers.tself = targets.self || null;
 
-          const axView = new Float32Array(ax);
-          const ayView = new Float32Array(ay);
-          const phiView = phi ? new Float32Array(phi) : null;
+          const axView = new Float64Array(ax);
+          const ayView = new Float64Array(ay);
+          const phiView = phi ? new Float64Array(phi) : null;
 
           // Apply to stored objects corresponding to this batch
           for (let i = 0; i < workerJobObjects.length; i++) {
@@ -2583,28 +2596,31 @@ const updatePhysics = dt => {
     const nTar = cachedAllPhysicsObjects.length;
 
     // Resize buffers if needed
-    if (!workerBuffers.sx || workerBuffers.sx.byteLength < nSrc * 4) {
-      workerBuffers.sx = new Float32Array(Math.max(nSrc, 1024)).buffer;
-      workerBuffers.sy = new Float32Array(Math.max(nSrc, 1024)).buffer;
-      workerBuffers.sm = new Float32Array(Math.max(nSrc, 1024)).buffer;
+    // Eight bytes an element, not four: the worker runs in double precision
+    // so that its arithmetic noise sits well below the theta error it is
+    // approximating with. See the header of js/physicsWorker.js.
+    if (!workerBuffers.sx || workerBuffers.sx.byteLength < nSrc * 8) {
+      workerBuffers.sx = new Float64Array(Math.max(nSrc, 1024)).buffer;
+      workerBuffers.sy = new Float64Array(Math.max(nSrc, 1024)).buffer;
+      workerBuffers.sm = new Float64Array(Math.max(nSrc, 1024)).buffer;
     }
-    if (!workerBuffers.tx || workerBuffers.tx.byteLength < nTar * 4) {
-      workerBuffers.tx = new Float32Array(Math.max(nTar, 1024)).buffer;
-      workerBuffers.ty = new Float32Array(Math.max(nTar, 1024)).buffer;
+    if (!workerBuffers.tx || workerBuffers.tx.byteLength < nTar * 8) {
+      workerBuffers.tx = new Float64Array(Math.max(nTar, 1024)).buffer;
+      workerBuffers.ty = new Float64Array(Math.max(nTar, 1024)).buffer;
       workerBuffers.tself = new Int32Array(Math.max(nTar, 1024)).buffer;
     }
     if (!workerBuffers.tself) {
       workerBuffers.tself = new Int32Array(
-        Math.max(nTar, workerBuffers.tx.byteLength / 4)
+        Math.max(nTar, workerBuffers.tx.byteLength / 8)
       ).buffer;
     }
 
     // Create views
-    const sx = new Float32Array(workerBuffers.sx, 0, nSrc);
-    const sy = new Float32Array(workerBuffers.sy, 0, nSrc);
-    const sm = new Float32Array(workerBuffers.sm, 0, nSrc);
-    const tx = new Float32Array(workerBuffers.tx, 0, nTar);
-    const ty = new Float32Array(workerBuffers.ty, 0, nTar);
+    const sx = new Float64Array(workerBuffers.sx, 0, nSrc);
+    const sy = new Float64Array(workerBuffers.sy, 0, nSrc);
+    const sm = new Float64Array(workerBuffers.sm, 0, nSrc);
+    const tx = new Float64Array(workerBuffers.tx, 0, nTar);
+    const ty = new Float64Array(workerBuffers.ty, 0, nTar);
     const tself = new Int32Array(workerBuffers.tself, 0, nTar);
 
     // Fill buffers

@@ -2120,7 +2120,7 @@
       </p>
       <p>
         The repository carries an automated validation suite. It runs
-        <!--fact:physicsChecks-->243<!--/fact-->
+        <!--fact:physicsChecks-->269<!--/fact-->
         deterministic checks and prints a table of measured value, expected
         value, error and tolerance:
       </p>
@@ -2187,13 +2187,37 @@
         than the full model does, deliberately, and the audit excludes them
         explicitly rather than passing them quietly.
       </p>
+      <p>
+        The Barnes&ndash;Hut tree solver used to be on the list below. It is an
+        approximation by construction, and for a long time that was recorded as
+        a reason not to measure it; the real reason was that the code lived
+        inside a Web Worker and nothing but a worker could load it. It has been
+        moved out, and the suite now measures its force error against the direct
+        sum on a seeded Plummer cluster at three opening angles and three
+        cluster sizes up to twenty thousand bodies. At the setting the
+        application ships, the mean error is one percent. Three properties are
+        checked rather than assumed: that the error falls as the square of the
+        opening angle, which is what neglecting the quadrupole term predicts;
+        that it grows with the logarithm of the number of bodies rather than
+        with the number itself; and that floating-point round-off sits eleven
+        orders of magnitude below it, so the measurement is of the
+        approximation and not of the arithmetic.
+      </p>
+      <p>
+        It also records two things the tree gets wrong, because an approximation
+        described only by its average is not described. The worst single
+        interaction is far larger than the average &ndash; a known property of
+        the opening criterion rather than of this implementation &ndash; and the
+        tree does not obey Newton's third law, so it does not conserve momentum
+        the way the direct sum does. Both are measured, and both are reasons the
+        direct solver remains the default.
+      </p>
       <div class="doc-note">
         <p>
           <strong>Not validated:</strong> anything drawn rather than computed;
-          the Barnes&ndash;Hut tree solver, which is approximate by construction
-          and calibrated separately; debris and particle bookkeeping; long-term
-          N-body statistics such as cluster relaxation and ejection rates; and
-          all of numerical relativity.
+          debris and particle bookkeeping; long-term N-body statistics such as
+          cluster relaxation and ejection rates; and all of numerical
+          relativity.
         </p>
       </div>
       <p>

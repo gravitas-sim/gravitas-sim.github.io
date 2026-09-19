@@ -106,6 +106,14 @@ const LAYERS = [
       /^js\/binaryOrbits\.js$/,
       /^js\/binaryStability\.js$/,
       /^js\/gravityAssist\.js$/,
+      // The Barnes-Hut quadtree, minus the worker that owns its message port.
+      // Down here for the reason the blurb gives: the validation suite imports
+      // it directly, and could not while it lived inside js/physicsWorker.js -
+      // a module whose first statement is `self.onmessage = ...` cannot be
+      // loaded by anything that is not a worker, which is why the tree shipped
+      // unvalidated. js/physicsWorker.js is the port and is still excluded from
+      // this graph by NOT_IN_GRAPH below.
+      /^js\/barnesHut\.js$/,
       /^js\/maneuver\.js$/,
       /^js\/cr3bp\.js$/,
       /^js\/chaos\//,

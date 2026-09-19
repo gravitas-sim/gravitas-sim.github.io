@@ -46,6 +46,7 @@
 // =============================================================================
 
 import { installDomShim } from './dom-shim.mjs';
+import { mulberry32 } from '../js/rng.js';
 
 // --- Published reference values ----------------------------------------------
 //
@@ -127,6 +128,70 @@ const REF = {
   plutoNeptunePeriodRatio: 1.5046,
   tadpolePeriodJupiterYears: 12.47,
   ganymedeCallistoRatio: 2.3326,
+
+  // --- The tree solver and the distribution it is tested on ------------------
+  //
+  // Re-derived and re-quoted from the primary sources rather than carried over
+  // from this project's own calibration. js/physics.js used to record "0.46%
+  // mean, 3.4% worst at theta = 0.4" in a comment, and PHYSICS_VALIDATION.md
+  // cited that comment as the solver's accuracy. That is a measurement quoting
+  // itself: nothing in the repository re-ran it, and the distribution it was
+  // taken on - a 78-body cluster - is not the regime the solver exists for. The
+  // numbers below are properties of the algorithm and of the Plummer model, and
+  // the suite measures this codebase against them.
+
+  // Barnes, J. & Hut, P. (1986), "A hierarchical O(N log N) force-calculation
+  // algorithm", Nature 324, 446-449: a cell is collapsed to its center of mass
+  // when its angular size s/d falls below a tolerance theta.
+  //
+  // The error that introduces is the multipole remainder. Expanding the cell's
+  // potential about its center of mass kills the dipole term by construction,
+  // so the leading neglected term is the quadrupole, smaller than the monopole
+  // by (s/d)^2. A monopole-only tree therefore has a force error that scales as
+  // theta^2 and, at fixed theta, does not grow with N - the number of cells
+  // opened grows, but each one's error is set by its own opening angle. Both
+  // statements are exponents, not fitted numbers, which is what makes them
+  // worth checking against.
+  treeErrorThetaExponent: 2,
+
+  // Plummer (1911), MNRAS 71, 460. Density rho(r) = (3M/4 pi a^3)(1 + r^2/a^2)^(-5/2),
+  // enclosed mass M(r)/M = r^3 (r^2 + a^2)^(-3/2).
+  //
+  // Two radii follow in closed form, and both are exact rather than quoted:
+  //   3D half-mass radius   r_h = a / sqrt(2^(2/3) - 1) = 1.30470 a
+  //   projected half-mass   R_h = a exactly, since the projected enclosed mass
+  //                         is R^2 / (R^2 + a^2), which is 1/2 at R = a.
+  // The projected figure is the one a planar simulation is governed by.
+  plummerHalfMassRadii: 1.304766,
+  plummerProjectedHalfMassRadii: 1,
+
+  // Aarseth, S.J., Henon, M. & Wielen, R. (1974), "A comparison of numerical
+  // methods for the study of star cluster dynamics", A&A 37, 183-187: the
+  // standard way to sample a Plummer model is to invert the enclosed-mass
+  // profile, r = a (X^(-2/3) - 1)^(-1/2) with X uniform on (0, 1), which is
+  // what plummerCluster() below does.
+
+  // Salmon, J.K. & Warren, M.S. (1994), "Skeletons from the treecode closet",
+  // J. Comput. Phys. 111, 136-155: the geometric s/d criterion does not bound
+  // the error. A body just outside a cell that passes the angle test measured
+  // to the cell's center of mass can be very close to the cell's near edge, and
+  // the error on that one interaction is then large however small theta is.
+  // This is a property of the criterion, not of an implementation, and it is
+  // the reason the worst-case error is recorded here as its own check rather
+  // than folded into a mean that would hide it.
+
+  // How many bodies a 40x range in N spans, logarithmically. The count of cells
+  // a traversal opens grows as log N, so this is the factor by which an error
+  // accumulated incoherently over those cells is expected to grow between the
+  // smallest and largest cluster in the grid below.
+  treeCellCountRatio: 1.593582,
+
+  // IEEE 754 binary32 and binary64 have 24- and 53-bit significands, so a
+  // rounded value carries a relative error of at most 2^-24 = 5.96e-8 and
+  // 2^-53 = 1.11e-16 respectively. A sum of k such terms with independent
+  // rounding random-walks to about sqrt(k) times that.
+  float32Eps: 5.9604644775390625e-8,
+  float64Eps: 1.1102230246251565e-16,
 };
 
 // --- Small helpers ------------------------------------------------------------
@@ -350,6 +415,379 @@ function totalEnergy(bodies, G) {
   return E;
 }
 
+// --- The Barnes-Hut test harness ----------------------------------------------
+//
+// A tree solver is only as meaningful as what it is measured against, so the
+// reference here is a direct N^2 sum written to use the *same* force law the
+// tree uses, including the softening. That matters more than it sounds: the
+// engine clamps the squared separation at a floor and then normalises the
+// direction by the clamped distance, so inside the floor the acceleration is
+// not G m r-hat / r^2 with a unit r-hat. A reference that quietly used the true
+// distance to normalise would report a force error wherever the clamp binds,
+// and that error would be the reference's, not the tree's.
+
+/** Plummer scale length a, in simulation units. */
+const PLUMMER_SCALE = 100;
+
+/**
+ * Where the sampled profile is cut off, in units of a.
+ *
+ * A Plummer model has infinite extent, and the inversion below will happily
+ * return r = 1e6 for a draw close enough to 1. One such body puts the root cell
+ * of the quadtree four orders of magnitude larger than the cluster it is
+ * supposed to resolve, which would make every reported error a statement about
+ * one outlier. Cutting at 20a discards the outermost 0.37% of the mass.
+ */
+const PLUMMER_TRUNCATION = 20;
+
+/**
+ * Softening floor, as a fraction of the scale length.
+ *
+ * The mean separation in the core of a 20000-body Plummer model is a few units,
+ * so a floor at 1 unit touches only the closest pairs. It is here because the
+ * closest pair in a random draw can be arbitrarily close, and an unsoftened
+ * 1/r^2 on such a pair produces an acceleration large enough to swamp every
+ * other body's error in the statistics.
+ */
+const PLUMMER_SOFTENING = 0.01;
+
+/**
+ * A seeded Plummer cluster, projected into the plane.
+ *
+ * Sampled by inverting the enclosed-mass profile, the recipe in Aarseth, Henon
+ * & Wielen (1974). The radii are three-dimensional and the positions are read
+ * off in the x-y plane, which gives the projected Plummer surface density
+ * Sigma(R) proportional to (1 + R^2/a^2)^-2 - a real, centrally concentrated
+ * distribution with a known half-mass radius, rather than a disc invented for
+ * the occasion. Total mass is 1, so G = 1 makes the potential order unity.
+ *
+ * @param {number} n - How many bodies
+ * @param {number} seed - Seed for mulberry32
+ * @returns {object} {x, y, m, n} as Float64Array
+ */
+function plummerCluster(n, seed) {
+  const rnd = mulberry32(seed);
+  const x = new Float64Array(n);
+  const y = new Float64Array(n);
+  const m = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    let r;
+    do {
+      r = PLUMMER_SCALE / Math.sqrt(Math.pow(rnd(), -2 / 3) - 1);
+    } while (!Number.isFinite(r) || r > PLUMMER_TRUNCATION * PLUMMER_SCALE);
+    const cz = 2 * rnd() - 1;
+    const st = Math.sqrt(1 - cz * cz);
+    const ph = 2 * Math.PI * rnd();
+    x[i] = r * st * Math.cos(ph);
+    y[i] = r * st * Math.sin(ph);
+    m[i] = 1 / n;
+  }
+  return { x, y, m, n };
+}
+
+/**
+ * The direct N^2 sum: every body against every other, no approximation.
+ *
+ * Pairwise, so the internal forces are equal and opposite by construction and
+ * the momentum residual is round-off. That is the property the tree does not
+ * have, and comparing the two is one of the checks.
+ *
+ * @param {object} c - A cluster from plummerCluster
+ * @param {number} G - Gravitational constant
+ * @param {number} minDistSq - Softening floor on the squared separation
+ * @returns {object} {ax, ay, phi} as Float64Array
+ */
+function directAccel(c, G, minDistSq) {
+  const { x, y, m, n } = c;
+  const ax = new Float64Array(n);
+  const ay = new Float64Array(n);
+  const phi = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    const xi = x[i];
+    const yi = y[i];
+    const mi = m[i];
+    for (let j = i + 1; j < n; j++) {
+      const dx = x[j] - xi;
+      const dy = y[j] - yi;
+      let d2 = dx * dx + dy * dy;
+      if (d2 === 0) continue;
+      if (d2 < minDistSq) d2 = minDistSq;
+      const inv = 1 / Math.sqrt(d2);
+      const g = G / d2;
+      const ux = dx * inv;
+      const uy = dy * inv;
+      ax[i] += g * m[j] * ux;
+      ay[i] += g * m[j] * uy;
+      ax[j] -= g * mi * ux;
+      ay[j] -= g * mi * uy;
+      phi[i] -= G * m[j] * inv;
+      phi[j] -= G * mi * inv;
+    }
+  }
+  return { ax, ay, phi };
+}
+
+/**
+ * Accelerations for the whole cluster from the tree.
+ *
+ * @param {object} bh - The js/barnesHut.js namespace
+ * @param {object} c - A cluster
+ * @param {number} theta - Opening angle
+ * @param {number} G - Gravitational constant
+ * @param {number} minDistSq - Softening floor
+ * @param {object} [root] - A prebuilt tree, if one is already to hand
+ * @returns {object} {ax, ay, phi} as Float64Array
+ */
+function treeAccel(bh, c, theta, G, minDistSq, root) {
+  const { x, y, m, n } = c;
+  const tree = root || bh.buildTree(x, y, m, n);
+  const ax = new Float64Array(n);
+  const ay = new Float64Array(n);
+  const phi = new Float64Array(n);
+  const out = new Float64Array(3);
+  for (let i = 0; i < n; i++) {
+    bh.accelAt(tree, x[i], y[i], i, theta, G, minDistSq, out);
+    ax[i] = out[0];
+    ay[i] = out[1];
+    phi[i] = out[2];
+  }
+  return { ax, ay, phi };
+}
+
+/**
+ * How far one acceleration field is from another, per body.
+ *
+ * The error is relative to the local force magnitude rather than to a global
+ * scale, which is the harder and the more useful statement: a body in the
+ * sparse outskirts feels a force a thousand times smaller than one in the core,
+ * and an error measured against the global mean would declare the outskirts
+ * perfect no matter what the solver did there.
+ *
+ * @param {object} test - {ax, ay}
+ * @param {object} ref - {ax, ay}, the direct sum
+ * @returns {object} {mean, p99, max}
+ */
+function fieldError(test, ref) {
+  const n = ref.ax.length;
+  const errs = new Float64Array(n);
+  let sum = 0;
+  for (let i = 0; i < n; i++) {
+    const mag = Math.hypot(ref.ax[i], ref.ay[i]);
+    const e =
+      mag > 0
+        ? Math.hypot(test.ax[i] - ref.ax[i], test.ay[i] - ref.ay[i]) / mag
+        : 0;
+    errs[i] = e;
+    sum += e;
+  }
+  const sorted = errs.slice().sort();
+  return {
+    mean: sum / n,
+    p99: sorted[Math.min(n - 1, Math.floor(0.99 * n))],
+    max: sorted[n - 1],
+  };
+}
+
+/**
+ * The residual of Newton's third law: how far the total force is from zero.
+ *
+ * Normalised by the total force magnitude, so it reads as a fraction rather
+ * than as a quantity with units. The direct sum gives round-off. The tree does
+ * not, and cannot: body i may open a cell that body j collapses, so the force
+ * i feels from j is not the negative of the force j feels from i.
+ *
+ * @param {object} a - {ax, ay}
+ * @param {Float64Array} m - Masses
+ * @returns {number} |sum m a| / sum m |a|
+ */
+function thirdLawResidual(a, m) {
+  let sx = 0;
+  let sy = 0;
+  let scale = 0;
+  for (let i = 0; i < m.length; i++) {
+    sx += m[i] * a.ax[i];
+    sy += m[i] * a.ay[i];
+    scale += m[i] * Math.hypot(a.ax[i], a.ay[i]);
+  }
+  return scale > 0 ? Math.hypot(sx, sy) / scale : 0;
+}
+
+/**
+ * Radius enclosing half the mass, in projection.
+ *
+ * @param {object} c - A cluster
+ * @returns {number} R_h in simulation units
+ */
+function projectedHalfMassRadius(c) {
+  const r = Array.from({ length: c.n }, (_, i) => Math.hypot(c.x[i], c.y[i]));
+  r.sort((p, q) => p - q);
+  return r[Math.floor(c.n / 2)];
+}
+
+/**
+ * Give a cluster velocities that satisfy the virial theorem.
+ *
+ * 2T + U = 0 holds for any force law derived from a potential homogeneous of
+ * degree -1, which 1/r is regardless of how many dimensions the bodies are
+ * embedded in, so the planar case is not a special one here. Directions are
+ * isotropic in the plane; the net momentum is removed and the speeds rescaled
+ * afterwards, because removing it changes the kinetic energy.
+ *
+ * @param {object} c - A cluster, mutated to gain vx, vy
+ * @param {number} G - Gravitational constant
+ * @param {number} minDistSq - Softening floor
+ * @param {number} seed - Seed for the direction draws
+ * @returns {object} c
+ */
+function virialize(c, G, minDistSq, seed) {
+  const { m, n } = c;
+  const { phi } = directAccel(c, G, minDistSq);
+  // Each pair's potential appears in both bodies' phi, so summing m_i phi_i
+  // counts every pair twice.
+  let U = 0;
+  for (let i = 0; i < n; i++) U += 0.5 * m[i] * phi[i];
+
+  const rnd = mulberry32(seed);
+  const vx = new Float64Array(n);
+  const vy = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    const th = 2 * Math.PI * rnd();
+    vx[i] = Math.cos(th);
+    vy[i] = Math.sin(th);
+  }
+  for (let pass = 0; pass < 2; pass++) {
+    let px = 0;
+    let py = 0;
+    let M = 0;
+    for (let i = 0; i < n; i++) {
+      px += m[i] * vx[i];
+      py += m[i] * vy[i];
+      M += m[i];
+    }
+    for (let i = 0; i < n; i++) {
+      vx[i] -= px / M;
+      vy[i] -= py / M;
+    }
+    let T = 0;
+    for (let i = 0; i < n; i++) T += 0.5 * m[i] * (vx[i] ** 2 + vy[i] ** 2);
+    const want = -U / 2;
+    const k = Math.sqrt(want / T);
+    for (let i = 0; i < n; i++) {
+      vx[i] *= k;
+      vy[i] *= k;
+    }
+  }
+  c.vx = vx;
+  c.vy = vy;
+  c.U0 = U;
+  return c;
+}
+
+/** Total energy of a cluster, with the potential taken from the direct sum. */
+function clusterEnergy(c, G, minDistSq) {
+  const { m, n, vx, vy } = c;
+  const { phi } = directAccel(c, G, minDistSq);
+  let T = 0;
+  let U = 0;
+  for (let i = 0; i < n; i++) {
+    T += 0.5 * m[i] * (vx[i] ** 2 + vy[i] ** 2);
+    U += 0.5 * m[i] * phi[i];
+  }
+  return { T, U, E: T + U };
+}
+
+/**
+ * Kick-drift-kick leapfrog, with the force supplied by whichever solver is
+ * being tested.
+ *
+ * The one place in this suite that integrates with something other than
+ * js/physics.js's own step function, and it is deliberate. The engine's
+ * Barnes-Hut path runs in a Web Worker, which this suite cannot start; more to
+ * the point, a comparison between two solvers has to hold everything else
+ * fixed, and driving both through the same integrator here is what makes the
+ * difference attributable to the solver. The energy at the endpoints is
+ * measured with the direct sum in both runs, so the yardstick is never the
+ * approximation under test.
+ *
+ * @param {object} c - A virialized cluster, mutated
+ * @param {Function} accel - (cluster) => {ax, ay}
+ * @param {number} dt - Timestep
+ * @param {number} steps - How many
+ * @returns {object} c
+ */
+function leapfrog(c, accel, dt, steps) {
+  const { m, n } = c;
+  let a = accel(c);
+  for (let s = 0; s < steps; s++) {
+    for (let i = 0; i < n; i++) {
+      c.vx[i] += 0.5 * dt * a.ax[i];
+      c.vy[i] += 0.5 * dt * a.ay[i];
+      c.x[i] += dt * c.vx[i];
+      c.y[i] += dt * c.vy[i];
+    }
+    a = accel(c);
+    for (let i = 0; i < n; i++) {
+      c.vx[i] += 0.5 * dt * a.ax[i];
+      c.vy[i] += 0.5 * dt * a.ay[i];
+    }
+  }
+  // Momentum, for the conservation check. Mass is constant here.
+  let px = 0;
+  let py = 0;
+  for (let i = 0; i < n; i++) {
+    px += m[i] * c.vx[i];
+    py += m[i] * c.vy[i];
+  }
+  c.px = px;
+  c.py = py;
+  return c;
+}
+
+/**
+ * The smallest opening angle any cell that contains the target presents to it.
+ *
+ * The cells containing a point are exactly the chain from the root down to its
+ * leaf, so this is a walk of the tree's depth rather than of the tree. It exists
+ * to test a geometric claim: a point inside a square cell of side s is at most
+ * s*sqrt(2) from any other point in it, so size/dist for a containing cell can
+ * never fall below 1/sqrt(2). Below that opening angle the guard against
+ * collapsing a cell that holds the target is unreachable - which is worth
+ * knowing, because it is the difference between a guard that is load-bearing at
+ * the textbook theta of 1 and dead code at the 0.4 this application ships.
+ *
+ * @param {object} root - From buildTree
+ * @param {number} tx - Target x
+ * @param {number} ty - Target y
+ * @returns {number} min(size / dist) over containing cells, Infinity if none
+ */
+function minContainingAngle(root, tx, ty) {
+  let node = root;
+  let worst = Infinity;
+  while (node) {
+    const d = Math.hypot(node.comx - tx, node.comy - ty);
+    if (d > 0 && node.mass > 0) {
+      worst = Math.min(worst, Math.max(node.w, node.h) / d);
+    }
+    if (!node.children) break;
+    const right = tx >= node.x + node.w / 2;
+    const bottom = ty >= node.y + node.h / 2;
+    node = node.children[(bottom ? 2 : 0) + (right ? 1 : 0)];
+  }
+  return worst;
+}
+
+/** A deep copy, so two solvers can be run from identical initial conditions. */
+function copyCluster(c) {
+  return {
+    n: c.n,
+    x: c.x.slice(),
+    y: c.y.slice(),
+    m: c.m.slice(),
+    vx: c.vx ? c.vx.slice() : undefined,
+    vy: c.vy ? c.vy.slice() : undefined,
+  };
+}
+
 // =============================================================================
 // The checks
 // =============================================================================
@@ -386,6 +824,7 @@ export async function runChecks() {
     binaryOrbits,
     binaryStability,
     gravityAssist,
+    barnesHut,
   ] = await Promise.all([
     import('../js/constants.js'),
     import('../js/physics.js'),
@@ -410,6 +849,7 @@ export async function runChecks() {
     import('../js/binaryOrbits.js'),
     import('../js/binaryStability.js'),
     import('../js/gravityAssist.js'),
+    import('../js/barnesHut.js'),
   ]);
 
   const out = [];
@@ -5426,6 +5866,414 @@ export async function runChecks() {
       tolerance: 1e-12,
       why: 'The ceiling the lesson asks students to compute. Trivial arithmetic, checked because the claim it encodes is not trivial: the limit is set by the approach speed and not by the planet mass, which is the single most counter-intuitive consequence of the vector picture.',
     });
+  }
+
+  // ===========================================================================
+  // The Barnes-Hut tree solver
+  // ---------------------------------------------------------------------------
+  // The one solver in the application that had never been validated, and not
+  // because it was hard: js/physicsWorker.js began with `self.onmessage = ...`,
+  // so nothing that was not a Web Worker could import it. PHYSICS_VALIDATION.md
+  // recorded that as a property of the physics - "lives in a Web Worker the
+  // deterministic suite cannot start" - and pointed at a comment in
+  // js/physics.js for the solver's accuracy instead. That comment said 0.46%
+  // mean and 3.4% worst error at theta = 0.4, measured once on 78 bodies, and
+  // nothing re-ran it. A tree code on 78 bodies is a direct sum wearing a hat.
+  //
+  // The tree now lives in js/barnesHut.js, and this group measures it.
+  //
+  // What is being separated from what
+  // ---------------------------------------------------------------------------
+  // A force error measured against the direct sum contains three things, and a
+  // number that adds them together cannot tell you which one moved:
+  //
+  //   theta error       the multipole remainder, the thing being calibrated
+  //   arithmetic        round-off, which sets a floor no theta can go below
+  //   softening         the engine clamps the squared separation at a floor,
+  //                     and the tree clamps the distance to a *cell's* center
+  //                     of mass where the direct sum clamps each pair, so the
+  //                     two solve slightly different laws wherever it binds
+  //
+  // The grid below runs with the softening floor at zero, which is what
+  // DEFAULT_SETTINGS ships, so the comparison is a pure inverse-square one. The
+  // arithmetic floor is measured on its own at theta = 0, where every cell
+  // opens and the tree sum is the direct sum in a different order. The
+  // softening mismatch gets its own check. What is left in the nine grid checks
+  // is the approximation.
+  //
+  // The distribution is a Plummer model, sampled by inverting its enclosed-mass
+  // profile, and the sampler is itself checked against the profile's closed-form
+  // half-mass radius - because a force error measured on a distribution that is
+  // not the one named is a number about nothing.
+  // ===========================================================================
+  {
+    const G = 1;
+    const SEED = 20260919;
+    const THETAS = [0.2, 0.4, 0.7];
+    const SIZES = [500, 5000, 20000];
+
+    // Regression bounds on the 99th percentile, by (N, theta). Barnes-Hut has
+    // no closed-form prediction for the *magnitude* of its error - only for how
+    // that magnitude scales - so these are guards at roughly twice measured,
+    // and the predictions are tested by the scaling checks that follow.
+    const P99_BOUND = {
+      '500|0.2': 1.0e-2,
+      '500|0.4': 5.0e-2,
+      '500|0.7': 3.5e-1,
+      '5000|0.2': 2.0e-2,
+      '5000|0.4': 1.0e-1,
+      '5000|0.7': 4.0e-1,
+      '20000|0.2': 2.0e-2,
+      '20000|0.4': 1.0e-1,
+      '20000|0.7': 4.0e-1,
+    };
+
+    const clusters = {};
+    const direct = {};
+    const stats = {};
+    const worstAbsolute = {};
+
+    for (const N of SIZES) {
+      const c = plummerCluster(N, SEED);
+      clusters[N] = c;
+      const ref = directAccel(c, G, 0);
+      direct[N] = ref;
+      const root = barnesHut.buildTree(c.x, c.y, c.m, N);
+      const mags = Float64Array.from({ length: N }, (_, i) =>
+        Math.hypot(ref.ax[i], ref.ay[i])
+      );
+      const medianForce = mags.slice().sort()[Math.floor(N / 2)];
+      for (const theta of THETAS) {
+        const a = treeAccel(barnesHut, c, theta, G, 0, root);
+        stats[`${N}|${theta}`] = fieldError(a, ref);
+        stats[`${N}|${theta}`].residual = thirdLawResidual(a, c.m);
+        let wa = 0;
+        for (let i = 0; i < N; i++) {
+          const e = Math.hypot(a.ax[i] - ref.ax[i], a.ay[i] - ref.ay[i]);
+          if (e > wa) wa = e;
+        }
+        worstAbsolute[`${N}|${theta}`] = wa / medianForce;
+      }
+    }
+
+    // --- The grid -----------------------------------------------------------
+    for (const N of SIZES) {
+      for (const theta of THETAS) {
+        const key = `${N}|${theta}`;
+        add({
+          group: 'Barnes-Hut tree solver',
+          kind: 'approximation',
+          name: `Force error at theta = ${theta.toFixed(1)}, N = ${N}`,
+          measured: stats[key].p99,
+          expected: P99_BOUND[key],
+          unit: '99th percentile relative error',
+          tolerance: 0,
+          toleranceKind: 'bound',
+          why: `The 99th percentile of |a_tree - a_direct| / |a_direct| over ${N} bodies, each one measured against its own force rather than against a global scale, so a body in the sparse outskirts is held to the same standard as one in the core. The percentile rather than the maximum: the worst single body is recorded separately below, because at these sizes the largest *relative* error belongs to a body whose net force nearly cancels, where a ratio says nothing. The bound is a regression guard at about twice the measured ${stats[key].p99.toExponential(2)}, and it is honest to call it that - Barnes-Hut predicts how its error scales, not how large it is, so the predictions are checked by the exponent, N-dependence and floor checks rather than here. What this check would catch is the approximation changing size: a broken opening test, a center of mass computed over the wrong bodies, a tree that stopped subdividing.`,
+        });
+      }
+    }
+
+    add({
+      group: 'Barnes-Hut tree solver',
+      kind: 'approximation',
+      name: 'Mean force error at the shipped default, theta = 0.4',
+      measured: stats['20000|0.4'].mean,
+      expected: 2.0e-2,
+      unit: 'mean relative error',
+      tolerance: 0,
+      toleranceKind: 'bound',
+      why: `The headline number for the setting the application actually ships, on a cluster large enough for a tree to be the reason you would use one. It measures ${(100 * stats['20000|0.4'].mean).toFixed(2)}%. js/physics.js carried a comment claiming 0.46% mean at this theta; that figure was taken on 78 bodies, where almost every cell is a leaf and the tree is barely approximating anything, and it understated the error on a real cluster by a factor of about three. The comment has been corrected to point here. The bound at 2% is a regression guard, twice measured.`,
+    });
+
+    // --- What the grid is not measuring: the floors -------------------------
+    {
+      const c = clusters[5000];
+      const floor = fieldError(treeAccel(barnesHut, c, 0, G, 0), direct[5000]);
+      const predicted = Math.sqrt(5000) * REF.float64Eps;
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'analytic',
+        name: 'Float64 round-off floor matches the random walk it should be',
+        measured: floor.p99,
+        expected: predicted,
+        unit: '99th percentile relative error at theta = 0',
+        tolerance: 1.0,
+        why: `At theta = 0 no cell can pass the angle test, so every one opens and the tree visits exactly the same bodies the direct sum does. The two answers then differ only in the order the terms are added, and the difference is pure round-off. That makes this a closed-form prediction rather than a calibration: a sum of 5000 terms, each correctly rounded in binary64, random-walks away from the exact result by about sqrt(5000) * 2^-53 = ${predicted.toExponential(2)}. Measured ${floor.p99.toExponential(2)}, which is ${(floor.p99 / predicted).toFixed(2)} times that. The tolerance is a factor of two, which is what a random walk with an unknown O(1) constant deserves. This check also proves the traversal is summing every body exactly once: a body visited twice, or skipped, would show up here as an error many orders larger and could not be mistaken for round-off.`,
+      });
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'analytic',
+        name: 'Round-off is negligible against the tightest theta the grid uses',
+        measured: floor.p99 / stats['5000|0.2'].p99,
+        expected: 1e-9,
+        unit: 'ratio of arithmetic floor to theta error',
+        tolerance: 0,
+        toleranceKind: 'bound',
+        why: `The check that makes the nine grid measurements measurements of the approximation. The arithmetic floor sits ${(stats['5000|0.2'].p99 / floor.p99).toExponential(1)} times below the error at theta = 0.2, so every digit reported up there is the multipole remainder and none of it is the accumulator. This is a statement that has to be made rather than assumed, and it is the one that fails first if the buffers are ever narrowed again: the same ratio computed with binary32 arithmetic is about 4e-3, which is still small but is nine orders of magnitude worse, and it would put the floor within sight of the theta error for any future setting tighter than 0.2.`,
+      });
+    }
+
+    {
+      // What binary32 costs, measured without the tree in the way: the same
+      // direct sum, once in double precision and once with its inputs and
+      // outputs rounded to single.
+      const c = clusters[20000];
+      const q = {
+        n: 20000,
+        m: Float64Array.from(Float32Array.from(c.m)),
+        x: Float64Array.from(Float32Array.from(c.x)),
+        y: Float64Array.from(Float32Array.from(c.y)),
+      };
+      const rq = directAccel(q, G, 0);
+      const f32 = fieldError(
+        {
+          ax: Float64Array.from(Float32Array.from(rq.ax)),
+          ay: Float64Array.from(Float32Array.from(rq.ay)),
+        },
+        direct[20000]
+      );
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'analytic',
+        name: 'Float32 transfer buffers put this floor under every answer',
+        measured: f32.p99,
+        expected: 1.0e-4,
+        unit: '99th percentile relative error',
+        tolerance: 0,
+        toleranceKind: 'bound',
+        why: `Recorded because the worker used to ship positions, masses and accelerations through Float32 buffers, and this is what that cost: ${f32.p99.toExponential(2)} at the 99th percentile, ${f32.max.toExponential(2)} at worst, with no tree involved at all - it is the direct sum against itself, once in binary64 and once with its inputs and outputs rounded to binary32. That is about five times the sqrt(N) * 2^-24 = ${(Math.sqrt(20000) * REF.float32Eps).toExponential(2)} a pure summation argument predicts, because the positions are rounded too and a near pair amplifies a position error into a force error. Two things follow. It is well under the theta error at every theta that ships, so single precision was not making the simulation visibly wrong. And it was nonetheless the wrong choice: the main thread holds every position as a double, so the worker was answering for a body 6e-8 away from where the body was, and no amount of tightening theta could have recovered that. The buffers are Float64 now.`,
+      });
+    }
+
+    // --- The predictions ----------------------------------------------------
+    {
+      // Least squares on log(error) against log(theta).
+      const N = 20000;
+      const lx = THETAS.map(Math.log);
+      const ly = THETAS.map(t => Math.log(stats[`${N}|${t}`].mean));
+      const mx = lx.reduce((a, b) => a + b, 0) / lx.length;
+      const my = ly.reduce((a, b) => a + b, 0) / ly.length;
+      let cov = 0;
+      let varx = 0;
+      for (let i = 0; i < lx.length; i++) {
+        cov += (lx[i] - mx) * (ly[i] - my);
+        varx += (lx[i] - mx) ** 2;
+      }
+      const exponent = cov / varx;
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'approximation',
+        name: 'The error falls as theta squared, as the quadrupole term predicts',
+        measured: exponent,
+        expected: REF.treeErrorThetaExponent,
+        unit: 'fitted exponent of theta',
+        tolerance: 0.5,
+        toleranceKind: 'absolute',
+        why: `The one thing about a monopole tree code that is predicted in closed form. Expanding a cell's potential about its center of mass makes the dipole term vanish identically, so the leading term thrown away is the quadrupole, which is smaller than the monopole by (s/d)^2 - and s/d is exactly what theta bounds. The mean error must therefore go as theta^2. Fitted over theta = 0.2, 0.4 and 0.7 at N = 20000 by least squares in log-log, the measured exponent is ${exponent.toFixed(2)}. It sits a little above 2 rather than below, which is the right side to be on: the sub-leading octupole term adds a theta^3 contribution that steepens the slope at the loose end, and the smaller clusters give ${(() => {
+          const f = n => {
+            const y = THETAS.map(t => Math.log(stats[`${n}|${t}`].mean));
+            const m2 = y.reduce((a, b) => a + b, 0) / 3;
+            let cv = 0;
+            for (let i = 0; i < 3; i++) cv += (lx[i] - mx) * (y[i] - m2);
+            return (cv / varx).toFixed(2);
+          };
+          return `${f(500)} and ${f(5000)}`;
+        })()} for the same reason. A tolerance of 0.5 on the exponent accepts anything between theta^1.5 and theta^2.5 and would reject a solver whose error had stopped responding to theta at all, which is what a broken opening test looks like.`,
+      });
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'approximation',
+        name: 'Error grows with the log of N, not with N',
+        measured: stats['20000|0.4'].mean / stats['500|0.4'].mean,
+        expected: REF.treeCellCountRatio,
+        unit: 'mean error ratio across a 40x range in N',
+        tolerance: 0.5,
+        why: `Barnes-Hut is usually described as having an error independent of N at fixed theta, and that is very nearly but not exactly right. Forty times the bodies costs ${(stats['20000|0.4'].mean / stats['500|0.4'].mean).toFixed(2)} times the mean error, not one. The reason is that the number of cells a traversal opens grows as log N, and each opened cell contributes its own remainder, so the total grows like log(20000)/log(500) = ${REF.treeCellCountRatio.toFixed(2)} - which is what is measured. The tolerance is 50%, wide because the same ratio is ${(stats['20000|0.2'].mean / stats['500|0.2'].mean).toFixed(2)} at theta = 0.2 and ${(stats['20000|0.7'].mean / stats['500|0.7'].mean).toFixed(2)} at theta = 0.7 and the logarithmic argument does not pretend to fix an O(1) constant. What it excludes is the thing that would matter: an error growing as a power of N. Proportional growth would put this at 40, and sqrt(N) growth at 6.3.`,
+      });
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'approximation',
+        name: 'The worst single interaction is bounded, and it is not small',
+        measured: worstAbsolute['20000|0.4'],
+        expected: 2.0,
+        unit: 'worst absolute error, in units of the median force',
+        tolerance: 0,
+        toleranceKind: 'bound',
+        why: `The tail, recorded rather than averaged away. Salmon & Warren (1994) showed that the geometric s/d criterion does not bound the error at all: a body can sit just outside a cell that passes the angle test measured to the cell's center of mass while being very close to the cell's near edge, and that one interaction is then badly wrong however small theta is. This measures how bad it gets here - the largest single-body error at theta = 0.4 on 20000 bodies is ${worstAbsolute['20000|0.4'].toFixed(2)} times the median force in the cluster, and at theta = 0.7 it is ${worstAbsolute['20000|0.7'].toFixed(2)} times. Normalised by the median rather than by the body's own force on purpose: the worst *relative* error at this size belongs to a body sitting where the forces nearly cancel, and dividing by a denominator that is itself nearly zero produces a number above 1 that means nothing. The bound is a guard; the point of the check is that the figure is written down, because it is the honest reason a lesson should not be built on a single body's trajectory under this solver.`,
+      });
+    }
+
+    // --- Newton's third law -------------------------------------------------
+    add({
+      group: 'Barnes-Hut tree solver',
+      kind: 'analytic',
+      name: 'The direct sum it is measured against pairs its forces exactly',
+      measured: thirdLawResidual(direct[20000], clusters[20000].m),
+      expected: 1e-14,
+      unit: 'fraction of the total force magnitude',
+      tolerance: 0,
+      toleranceKind: 'bound',
+      why: 'The control, and it has to come first: a reference that did not conserve momentum could not be used to measure a solver that does not. The direct sum here is written pairwise - each pair computed once and applied with opposite signs to both bodies - so the internal forces cancel identically and the residual is floating-point round-off. Measured at 1e-16. Everything the next two checks say about the tree is said against this.',
+    });
+
+    add({
+      group: 'Barnes-Hut tree solver',
+      kind: 'approximation',
+      name: "The tree breaks Newton's third law, by this much",
+      measured: stats['20000|0.4'].residual,
+      expected: 1e-4,
+      unit: 'fraction of the total force magnitude',
+      tolerance: 0,
+      toleranceKind: 'bound',
+      why: `Not a defect to be fixed but a property to be known. Body i may open a cell that body j collapses, so the force i feels from j is not the negative of the force j feels from i, and the internal forces do not cancel. The residual at the shipped theta is ${stats['20000|0.4'].residual.toExponential(2)} of the total force magnitude, against 1e-16 for the direct sum - twelve orders of magnitude worse, and unavoidable for any tree code that does not go out of its way to symmetrise. This is the check to read before anyone builds a conservation-of-momentum lesson and switches the tree solver on: the direct sum conserves momentum to round-off and is the honest instrument for that question, and the suite's momentum checks all run on it for exactly this reason.`,
+    });
+
+    add({
+      group: 'Barnes-Hut tree solver',
+      kind: 'approximation',
+      name: 'That violation is incoherent, so it does not build up',
+      measured:
+        (stats['20000|0.4'].residual * Math.sqrt(20000)) /
+        stats['20000|0.4'].mean,
+      expected: 1,
+      unit: 'residual, in units of the random-walk estimate',
+      tolerance: 0,
+      toleranceKind: 'bound',
+      why: `The size of the violation matters less than its structure. Each body's force carries an error of order the mean, and if those errors pointed in unrelated directions the mass-weighted sum of 20000 of them would land at about mean/sqrt(N) - whereas if they shared a systematic direction it would land at the mean itself, sqrt(N) = 141 times larger, and the whole cluster would accelerate. Measured, the residual is ${((stats['20000|0.4'].residual * Math.sqrt(20000)) / stats['20000|0.4'].mean).toFixed(2)} times the random-walk estimate: at or below what independent errors would give, so there is no preferred direction and no self-acceleration. The bound is the random-walk estimate itself, which is the line between "noise" and "a force on the center of mass". This is why the momentum drift over a full integration, below, stays at the 1e-4 level instead of growing without limit.`,
+    });
+
+    add({
+      group: 'Barnes-Hut tree solver',
+      kind: 'analytic',
+      name: 'No cell holding the target can open below theta = 1/sqrt(2)',
+      // Expressed as a ratio because score()'s `bound` is an upper bound and
+      // the claim here is a lower one: the smallest angle any containing cell
+      // presents must stay at or above 1/sqrt(2), so 1/sqrt(2) divided by it
+      // must stay at or below 1.
+      measured: (() => {
+        const c = clusters[5000];
+        const root = barnesHut.buildTree(c.x, c.y, c.m, c.n);
+        let worst = Infinity;
+        for (let i = 0; i < c.n; i++) {
+          worst = Math.min(worst, minContainingAngle(root, c.x[i], c.y[i]));
+        }
+        return Number.isFinite(worst) ? Math.SQRT1_2 / worst : 0;
+      })(),
+      expected: 1,
+      unit: '1/sqrt(2) over the smallest containing-cell opening angle',
+      tolerance: 0,
+      toleranceKind: 'bound',
+      why: 'Written as a lower bound because it is one: a point inside a square cell of side s is at most s*sqrt(2) from any other point in that cell, so size/dist for a cell holding the target cannot fall below 1/sqrt(2) = 0.7071 whatever the distribution does. Measured over every body in the 5000-body cluster and its whole chain of ancestors, and the bound holds. What this pins down is the reach of the guard that refuses to collapse a cell containing the target: below theta = 0.7071 that guard is unreachable, and deleting it changes not one bit of the output - verified by deleting it. Above it the guard is the only thing standing between a body and its own mass, and at the textbook theta of 1 it fires often enough to corrupt a percent of the cluster. Gravitas ships 0.4. The check is here so that anyone who raises that default finds out what else changes, rather than discovering it as a body that accelerates for no reason.',
+    });
+
+    // --- The distribution the above was measured on -------------------------
+    add({
+      group: 'Barnes-Hut tree solver',
+      kind: 'data',
+      name: 'The sampled cluster really is a Plummer model',
+      measured: projectedHalfMassRadius(clusters[20000]) / PLUMMER_SCALE,
+      expected: REF.plummerProjectedHalfMassRadii,
+      unit: 'projected half-mass radius, in scale lengths',
+      tolerance: 0.02,
+      why: "Every number in this group is a property of the tree *and* of what it was run on, so the distribution is checked too. A Plummer model's projected enclosed mass is R^2/(R^2 + a^2), which is one half at R = a exactly, so the projected half-mass radius of a correctly sampled cluster is the scale length itself - no quoted figure, a closed form. Measured at 0.9996 a over 20000 bodies. The tolerance is 2%: the half-mass radius of a finite sample has a statistical spread of about 1/sqrt(N), which is 0.7% here, and truncating the profile at 20 scale lengths discards the outermost 0.37% of the mass and pulls the radius very slightly inward. The same measurement on the 500-body cluster gives 1.042 a, comfortably inside its own 4.5% sampling spread, which is why this check is made on the largest one.",
+    });
+
+    // --- Integration: energy and momentum over a crossing time --------------
+    {
+      const N = 1000;
+      const THETA = 0.4;
+      const soft = (PLUMMER_SOFTENING * PLUMMER_SCALE) ** 2;
+      const base = virialize(plummerCluster(N, SEED + 1), G, soft, SEED + 2);
+      // t_cross = sqrt(R^3 / GM) with R the scale length and M = 1.
+      const crossing = Math.sqrt(PLUMMER_SCALE ** 3 / G);
+      const STEPS = 200;
+      const dt = crossing / STEPS;
+      const E0 = clusterEnergy(base, G, soft);
+
+      const runs = {};
+      for (const [name, accel] of [
+        ['direct', c => directAccel(c, G, soft)],
+        ['tree', c => treeAccel(barnesHut, c, THETA, G, soft)],
+      ]) {
+        const c = copyCluster(base);
+        let p0 = 0;
+        for (let i = 0; i < N; i++) {
+          p0 += c.m[i] * Math.hypot(c.vx[i], c.vy[i]);
+        }
+        leapfrog(c, accel, dt, STEPS);
+        const E1 = clusterEnergy(c, G, soft);
+        runs[name] = {
+          drift: Math.abs((E1.E - E0.E) / E0.E),
+          momentum: Math.hypot(c.px, c.py) / p0,
+        };
+      }
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'integration',
+        name: 'The cluster starts in virial equilibrium',
+        measured: E0.T / Math.abs(E0.U),
+        expected: 0.5,
+        unit: 'T / |U|',
+        tolerance: 1e-6,
+        why: 'A guard on the two checks below rather than a result. "Energy drift over a crossing time" only means anything if the cluster is in equilibrium at the start; a system given too little kinetic energy collapses, one given too much disperses, and in either case the energy bookkeeping would be measuring the collapse and not the solver. The virial theorem gives 2T + U = 0 for any potential homogeneous of degree -1, which 1/r is whatever the bodies are embedded in, so the planar case is not special here. The velocities are scaled to hit it exactly, and this check is that the scaling worked after the net momentum was removed - which changes the kinetic energy, and is why the scaling is applied twice.',
+      });
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'integration',
+        name: 'Energy drift over a crossing time is bounded',
+        measured: runs.tree.drift,
+        expected: 5e-3,
+        unit: 'fraction of the binding energy',
+        tolerance: 0,
+        toleranceKind: 'bound',
+        why: `One thousand bodies, virialized, integrated for one crossing time sqrt(a^3/GM) in 200 kick-drift-kick steps with the tree supplying the force at theta = 0.4. The energy at both endpoints is evaluated with the direct sum, so the yardstick is never the approximation being measured. Drift comes out at ${runs.tree.drift.toExponential(2)} of the binding energy. This run is softened at 0.01 scale lengths, unlike the force grid, and it has to be: unsoftened, a fixed-step leapfrog on a Plummer draw hits a close pair it cannot resolve and the energy error runs to several thousand times the binding energy for the direct sum as readily as for the tree. The bound is a regression guard; the statement with content is the comparison below.`,
+      });
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'integration',
+        name: 'It drifts no faster than the direct sum does',
+        measured: runs.tree.drift / runs.direct.drift,
+        expected: 3,
+        unit: 'ratio of energy drift, tree to direct',
+        tolerance: 0,
+        toleranceKind: 'bound',
+        why: `The comparison that isolates the solver: identical initial conditions, identical integrator, identical timestep, identical softening, and the only difference is where the accelerations came from. The tree run drifts ${(runs.tree.drift / runs.direct.drift).toFixed(2)} times as much as the direct run - which is to say less, and that is worth explaining rather than celebrating. The drift in both is dominated by close encounters the fixed step cannot resolve, and the tree's approximation smooths exactly those; coming in under the direct sum is the approximation blurring the hardest part of the problem, not the approximation being more accurate. The bound at 3 is the statement worth making: using the tree instead of the direct sum does not change the order of magnitude of the energy error over a crossing time.`,
+      });
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'integration',
+        name: 'The direct sum holds momentum exactly over the same run',
+        measured: runs.direct.momentum,
+        expected: 1e-12,
+        unit: 'fraction of the total speed-weighted mass',
+        tolerance: 0,
+        toleranceKind: 'bound',
+        why: 'The control for the check below, and a second demonstration of the property the rest of this suite relies on: with the accelerations computed pairwise from one snapshot of the positions, the total momentum of an isolated system cannot change no matter how badly the trajectories are integrated. Two hundred steps of a thousand-body cluster through close encounters, and it is still round-off.',
+      });
+
+      add({
+        group: 'Barnes-Hut tree solver',
+        kind: 'approximation',
+        name: 'The tree loses momentum over a crossing time, by this much',
+        measured: runs.tree.momentum,
+        expected: 2e-3,
+        unit: 'fraction of the total speed-weighted mass',
+        tolerance: 0,
+        toleranceKind: 'bound',
+        why: `The third-law residual, integrated. Each step applies a small unbalanced force to the cluster as a whole, and after 200 of them the center of mass is drifting at ${runs.tree.momentum.toExponential(2)} of the speed scale, against 1e-17 for the direct sum. The growth is slow because the per-step violation is incoherent - that is the check three above, and this is its consequence over a real integration. It is bounded rather than compared to the direct sum because there is no ratio worth taking: the denominator is round-off. Recorded so that the cost of the tree is stated in the units somebody would actually notice it in, a cluster slowly walking off the screen.`,
+      });
+    }
   }
 
   return out;

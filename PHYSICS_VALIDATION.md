@@ -12,7 +12,7 @@ reason for every tolerance.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->243<!--/fact--> checks, about 15 seconds, and a
+That is <!--fact:physicsChecks-->269<!--/fact--> checks, about 15 seconds, and a
 PASS/FAIL table with measured error against stated tolerance. Add `--verbose` to print the rationale for each tolerance,
 `--json` for machine-readable output, or `--group "Conservation"` to run one
 section. Exit status is 0 only if everything passes, so it works in CI unchanged.
@@ -58,7 +58,8 @@ are two front ends onto it.
 | Orbital resonance | 35 | 1 analytic, 33 integrated, 1 published |
 | Planets in binary stars | 15 | 1 analytic, 10 integrated, 4 published |
 | Gravity assist | 10 | 1 analytic, 9 integrated |
-| **Total** | **243** | 87 analytic, 109 integrated, 34 published, 12 approximation, 1 empirical |
+| Barnes-Hut tree solver | 26 | 5 analytic, 4 integrated, 1 published, 16 approximation |
+| **Total** | **269** | 92 analytic, 113 integrated, 35 published, 28 approximation, 1 empirical |
 <!--/fact-block-->
 
 Nothing here reads a pixel. Every check is a deterministic number-in,
@@ -670,6 +671,108 @@ TRAPPIST-1's habitable zone by a factor of four.
 
 ---
 
+## The Barnes–Hut tree solver
+
+This solver was on the "not validated" list for as long as it has existed, and
+the stated reason was wrong. The list said tree gravity "lives in a Web Worker
+the deterministic suite cannot start", and pointed at a comment in
+`js/physics.js` for its accuracy: 0.46% mean and 3.4% worst error at
+`theta = 0.4`, measured once on a 78-body cluster. Nothing re-ran it. A tree code
+on 78 bodies is a direct sum wearing a hat — almost every cell is a leaf, so
+almost nothing is being approximated — and on a cluster large enough to need a
+tree the real figure is about three times that.
+
+The obstacle was never the physics. `js/physicsWorker.js` opened with
+`self.onmessage = …`, so importing it anywhere that was not a worker threw before
+reaching a line of tree code. The tree now lives in `js/barnesHut.js`, the worker
+is the message port and nothing else, and the suite measures the solver directly.
+
+**What is separated from what.** A force error measured against the direct sum
+contains three things, and one number cannot tell you which of them moved:
+
+| | |
+| --- | --- |
+| theta error | the multipole remainder — the thing being calibrated |
+| arithmetic | round-off, a floor no opening angle can go below |
+| softening | the engine clamps the squared separation, and the tree clamps the distance to a *cell's* centre of mass where the direct sum clamps each pair |
+
+The grid runs with softening at zero, which is what `DEFAULT_SETTINGS` ships, so
+the comparison is a pure inverse-square one. The arithmetic floor is measured on
+its own at `theta = 0`, where every cell opens and the tree sum is the direct sum
+in a different order. What is left is the approximation.
+
+**Measured**, on a seeded Plummer cluster, 99th-percentile relative force error:
+
+| N | θ = 0.2 | θ = 0.4 | θ = 0.7 |
+| --- | --- | --- | --- |
+| 500 | 0.45% | 2.4% | 16% |
+| 5 000 | 0.91% | 4.9% | 18% |
+| 20 000 | 0.97% | 4.6% | 19% |
+
+Three of the checks test predictions rather than recording measurements. The
+error falls as θ^2.18, against the θ² that neglecting the quadrupole term
+predicts. It grows by 1.51× across a forty-fold range in N, against the 1.59×
+that a cell count growing as log N predicts — so the textbook claim of
+N-independence is very nearly, but not exactly, right. And the binary64 round-off
+floor comes out at 1.04e-14, against the √N · 2⁻⁵³ = 7.85e-15 a random walk over
+5 000 correctly rounded terms predicts, which also proves the traversal visits
+every body exactly once.
+
+**What the average hides**, recorded because an approximation described only by
+its mean is not described:
+
+- **The worst single interaction** is 0.88 times the median force in the cluster
+  at `theta = 0.4`, and 1.85 times at 0.7. Salmon & Warren (1994) showed the
+  geometric s/d criterion does not bound the error at all — a body can sit just
+  outside a cell that passes the angle test measured to its centre of mass while
+  being very close to that cell's near edge. This is a property of the criterion,
+  not of this implementation.
+- **The tree does not obey Newton's third law.** Body *i* may open a cell that
+  body *j* collapses, so the internal forces do not cancel. The residual is
+  1.6e-5 of the total force magnitude at `theta = 0.4`, against 1e-16 for the
+  direct sum. It is incoherent rather than systematic — measured at 0.22 times
+  the random-walk estimate, where a shared direction would give √N times more —
+  so the cluster does not accelerate, but over a crossing time its centre of mass
+  does drift by 1.5e-4 of the speed scale.
+
+That second point is the one to read before building a lesson about momentum and
+switching the tree on. The direct sum conserves momentum to round-off and is the
+honest instrument for that question, which is why every momentum check in this
+suite runs on it.
+
+**Energy over a crossing time.** One thousand bodies, virialized, integrated for
+`sqrt(a³/GM)` in 200 kick-drift-kick steps, with the energy at both endpoints
+evaluated by the direct sum so the yardstick is never the approximation under
+test. Drift is 6.2e-4 of the binding energy, which is 0.27 times what the direct
+sum does under the identical integrator — lower, and not because the tree is more
+accurate. The drift in both is dominated by close encounters a fixed step cannot
+resolve, and the approximation smooths exactly those.
+
+**A limit that is documented rather than fixed.** Past `MAX_TREE_DEPTH` a node
+becomes a bucket holding several bodies, and its `bodyIndex` names only the first
+of them. The self-exclusion test then fails in both directions: a target that is
+the first occupant has the whole bucket skipped and loses a real neighbour, and a
+target that arrived later has its own mass folded into the force on it, measured
+at 8× too strong. Fixing it means giving bucket nodes a membership list, which
+puts an allocation and a branch into a traversal that has neither. Bucketing
+needs two bodies within (root size)/2⁴⁸ of each other — four parts in 10¹⁵ in a
+cluster one unit across — and Gravitas scenarios span hundreds to thousands of
+units, so the case cannot arise. `tests/barnesHut.test.js` constructs it anyway
+and pins both behaviours, because "unreachable" is a claim and claims get tests.
+
+The same file covers two guards that the validation grid provably cannot reach:
+mutation testing showed that deleting either one changes not a single bit of the
+output across the whole grid. The self-index check is unreachable because a
+target that is also a source sits exactly on its own leaf's centre of mass, so
+the zero-distance branch returns first. The containment check is unreachable
+because a point inside a square cell of side *s* is at most *s*√2 from any point
+in it, so a containing cell never presents an opening angle below 1/√2 = 0.7071.
+Above that it is the only thing keeping a body out of its own force — at the
+textbook `theta = 1` it fires often enough to corrupt a percent of the cluster.
+Gravitas ships 0.4.
+
+---
+
 ## Documented departures: what is *not* conserved, and why
 
 Several Gravitas scenarios deliberately break conservation laws. These are
@@ -837,11 +940,6 @@ Stated plainly, because a coverage claim is only useful with an edge.
 - **Rendering.** Nothing here reads a pixel. Trails, glows, accretion disks,
   jets, the spacetime view and the merger ripple are visual and are described on
   the [model page](model/) as illustrative.
-- **The Barnes–Hut solver.** The suite runs the direct N² path. Tree gravity is
-  approximate by construction and lives in a Web Worker the deterministic suite
-  cannot start; its accuracy was calibrated separately against the direct solver
-  (0.46% mean, 3.4% worst error at `theta = 0.4`) and that calibration is
-  recorded in `js/physics.js` rather than re-measured here.
 - **Tidal disruption, debris generation and particle effects.** Momentum
   bookkeeping across debris creation is not audited.
 - **Collision outcome classification.** Which object type results from a merger
