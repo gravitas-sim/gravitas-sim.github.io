@@ -1,0 +1,217 @@
+{
+  "profile": {
+    "NET": {
+      "offline": false,
+      "downloadThroughput": 524288,
+      "uploadThroughput": 131072,
+      "latency": 80
+    },
+    "CPU_RATE": 4,
+    "VIEWPORT": {
+      "width": 1366,
+      "height": 768
+    },
+    "serviceWorker": "blocked"
+  },
+  "results": {
+    "A": [
+      {
+        "ready": 5970,
+        "fcp": 3376,
+        "requests": 177,
+        "transferred": 1629433,
+        "decoded": 4878694,
+        "wall": 7256
+      },
+      {
+        "ready": 5840.099999904633,
+        "fcp": 3436,
+        "requests": 177,
+        "transferred": 1629433,
+        "decoded": 4878694,
+        "wall": 7006
+      },
+      {
+        "ready": 5828.600000143051,
+        "fcp": 3356,
+        "requests": 177,
+        "transferred": 1629433,
+        "decoded": 4878694,
+        "wall": 7215
+      },
+      {
+        "ready": 5813.700000047684,
+        "fcp": 3168,
+        "requests": 177,
+        "transferred": 1629433,
+        "decoded": 4878694,
+        "wall": 7304
+      },
+      {
+        "ready": 6180.399999856949,
+        "fcp": 3464,
+        "requests": 177,
+        "transferred": 1629433,
+        "decoded": 4878694,
+        "wall": 7571
+      },
+      {
+        "ready": 6013.800000190735,
+        "fcp": 3356,
+        "requests": 177,
+        "transferred": 1629433,
+        "decoded": 4878694,
+        "wall": 7341
+      },
+      {
+        "ready": 5751.799999952316,
+        "fcp": 3220,
+        "requests": 177,
+        "transferred": 1629433,
+        "decoded": 4878694,
+        "wall": 7371
+      }
+    ],
+    "B": [
+      {
+        "ready": 4274.799999952316,
+        "fcp": 2388,
+        "requests": 80,
+        "transferred": 798000,
+        "decoded": 2163550,
+        "wall": 6060
+      },
+      {
+        "ready": 4362.099999904633,
+        "fcp": 2092,
+        "requests": 80,
+        "transferred": 798000,
+        "decoded": 2163550,
+        "wall": 5754
+      },
+      {
+        "ready": 4364.599999904633,
+        "fcp": 2472,
+        "requests": 80,
+        "transferred": 798000,
+        "decoded": 2163550,
+        "wall": 5849
+      },
+      {
+        "ready": 4395.299999952316,
+        "fcp": 2496,
+        "requests": 80,
+        "transferred": 798000,
+        "decoded": 2163550,
+        "wall": 6110
+      },
+      {
+        "ready": 4299.5,
+        "fcp": 2404,
+        "requests": 80,
+        "transferred": 798000,
+        "decoded": 2163550,
+        "wall": 5732
+      },
+      {
+        "ready": 4184.200000047684,
+        "fcp": 2192,
+        "requests": 80,
+        "transferred": 798000,
+        "decoded": 2163550,
+        "wall": 5401
+      },
+      {
+        "ready": 4278.400000095367,
+        "fcp": 2336,
+        "requests": 80,
+        "transferred": 798000,
+        "decoded": 2163550,
+        "wall": 5833
+      }
+    ]
+  },
+  "summary": {
+    "A": {
+      "label": "current deployment (git archive, unbundled)",
+      "ready": {
+        "min": 5751.799999952316,
+        "p25": 5813.700000047684,
+        "median": 5840.099999904633,
+        "p75": 5970,
+        "max": 6180.399999856949
+      },
+      "fcp": {
+        "min": 3168,
+        "p25": 3220,
+        "median": 3356,
+        "p75": 3376,
+        "max": 3464
+      },
+      "requests": {
+        "min": 177,
+        "p25": 177,
+        "median": 177,
+        "p75": 177,
+        "max": 177
+      },
+      "transferredKB": {
+        "min": 1591.2431640625,
+        "p25": 1591.2431640625,
+        "median": 1591.2431640625,
+        "p75": 1591.2431640625,
+        "max": 1591.2431640625
+      },
+      "decodedKB": {
+        "min": 4764.349609375,
+        "p25": 4764.349609375,
+        "median": 4764.349609375,
+        "p75": 4764.349609375,
+        "max": 4764.349609375
+      }
+    },
+    "B": {
+      "label": "built deployment prototype (dist/)",
+      "ready": {
+        "min": 4184.200000047684,
+        "p25": 4274.799999952316,
+        "median": 4299.5,
+        "p75": 4362.099999904633,
+        "max": 4395.299999952316
+      },
+      "fcp": {
+        "min": 2092,
+        "p25": 2192,
+        "median": 2388,
+        "p75": 2404,
+        "max": 2496
+      },
+      "requests": {
+        "min": 80,
+        "p25": 80,
+        "median": 80,
+        "p75": 80,
+        "max": 80
+      },
+      "transferredKB": {
+        "min": 779.296875,
+        "p25": 779.296875,
+        "median": 779.296875,
+        "p75": 779.296875,
+        "max": 779.296875
+      },
+      "decodedKB": {
+        "min": 2112.841796875,
+        "p25": 2112.841796875,
+        "median": 2112.841796875,
+        "p75": 2112.841796875,
+        "max": 2112.841796875
+      }
+    },
+    "delta": {
+      "builtMinusCurrentMs": -1540.5999999046326,
+      "percent": -26.379685278159453,
+      "improvementMs": 1540.5999999046326
+    }
+  }
+}
