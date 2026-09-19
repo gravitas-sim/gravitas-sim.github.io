@@ -191,6 +191,6 @@ only route to the material.
 
 ```bash
 npm run a11y            # both suites
-npm run a11y:axe        # axe only, all 60 combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->60<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 ```

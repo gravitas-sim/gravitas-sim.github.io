@@ -187,13 +187,18 @@ remain open.*
 1. **WebGL Rendering**: Move from Canvas 2D to WebGL for better performance —
    still open for the main simulation. The spacetime view is WebGL, through
    Three.js.
-2. ~~**Web Workers**: Move physics calculations to background thread~~ —
-   **done**: `js/physicsWorker.js` runs Barnes–Hut tree gravity off the main
-   thread, and `js/physics.js` hands work to it when the body count justifies
-   it.
+2. **Web Workers**: Move physics calculations to background thread — _built,
+   not adopted_. `js/physicsWorker.js` runs Barnes–Hut tree gravity off the main
+   thread, but nothing turns it on by itself: `isBarnesHutActive()` requires
+   both `mutual_gravity` and `use_barnes_hut`, the latter is a Settings
+   checkbox that defaults to false, and no shipped scenario sets it. There is
+   no body-count heuristic. This entry used to read "done ... hands work to it
+   when the body count justifies it", which described a behaviour the code has
+   never had.
 3. ~~**Spatial Partitioning**: Implement quadtree for collision detection~~ —
    **done**: `js/spatialHash.js` is a uniform spatial hash used for broad-phase
-   collision detection, and the Barnes–Hut tree covers the gravity side.
+   collision detection. The Barnes–Hut tree covers the gravity side, subject to
+   the opt-in above.
 4. **Level of Detail**: Reduce complexity for distant objects — still open.
 5. **Instanced Rendering**: Batch similar objects in single draw calls — still
    open.
