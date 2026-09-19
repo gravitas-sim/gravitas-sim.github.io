@@ -6158,8 +6158,12 @@ export function beginKeyboardPlacement() {
     return false;
   }
   if (keyboardAim) return true;
-  const rect = canvas.getBoundingClientRect();
-  const at = { x: rect.width / 2, y: rect.height / 2 };
+  // Canvas pixels, not CSS pixels. state.mouse and screen_to_world both work in
+  // the backing store's coordinates, and the two have differed since the low
+  // tier shipped at 0.7 - this placed the keyboard aim off-centre by the same
+  // factor, and a device-pixel ratio above 1 widens the gap rather than
+  // creating it. canvasPoint() converts the same way for pointer events.
+  const at = { x: canvas.width / 2, y: canvas.height / 2 };
   state.add_start_screen = { ...at };
   state.add_start_world = screen_to_world(at);
   state.mouse.x = at.x;
