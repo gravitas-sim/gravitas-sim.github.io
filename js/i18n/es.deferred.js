@@ -2753,6 +2753,7 @@ export const ES_DEFERRED = {
   'dmW.aRealStellarDiscIt':
     'Un disco estelar real. Sube, alcanza un máximo hacia 2,2 longitudes de escala y después cae. Sigue sin ser plano.',
   'dmW.whatGalaxiesDo': 'Lo que hacen las galaxias',
+  'dmW.radiusKpc': 'radio (kpc)',
   'dmW.speedKms': 'velocidad (km/s)',
   'dmW.speedAt30Kpc': 'Velocidad a 30 kpc',
   'dmW.outerSlopeVR': 'Pendiente exterior (v ∝ rⁿ)',

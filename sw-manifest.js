@@ -11,8 +11,8 @@
 // revision the whole arrangement exists to prevent. The 62 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-66ef924960e1';
-self.__GRAVITAS_PRECACHE_BYTES = 10673018;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-41983aa3454d';
+self.__GRAVITAS_PRECACHE_BYTES = 10673087;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',
@@ -713,8 +713,10 @@ self.__GRAVITAS_PRECACHE = [
 ];
 
 // Not precached: fetched on demand, and warmed deliberately when the interface
-// switches to Spanish. See the header of the generator for why these are
-// treated differently from the English bodies.
+// switches to that language. See the header of the generator for why these are
+// treated differently from the English bodies - and note that being absent from
+// both precache lists is what makes a missing translated lesson unable to fail
+// an install.
 self.__GRAVITAS_LOCALE_WARM = {
   es: [
     './js/data/investigations/es/a-universe-of-stars.js',

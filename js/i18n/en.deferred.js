@@ -2727,6 +2727,7 @@ export const EN_DEFERRED = {
   'dmW.aRealStellarDiscIt':
     'A real stellar disc. It rises, peaks at about 2.2 scale lengths, and then falls away. Still not flat.',
   'dmW.whatGalaxiesDo': 'What galaxies do',
+  'dmW.radiusKpc': 'radius (kpc)',
   'dmW.speedKms': 'speed (km/s)',
   'dmW.speedAt30Kpc': 'Speed at 30 kpc',
   'dmW.outerSlopeVR': 'Outer slope (v ∝ rⁿ)',
