@@ -1,0 +1,23 @@
+<!doctype html><meta charset="utf-8"><title>scenario build in a worker</title>
+<style>body{font:13px/1.5 ui-monospace,monospace;margin:16px;background:#0b0f14;color:#cfe}</style>
+<pre id="out">running…</pre>
+<script type="module">
+const run = spec => new Promise(resolve => {
+  const w = new Worker('/spike/lyapunov/scenario.worker.js', { type: 'module' });
+  w.onmessage = ev => { w.terminate(); resolve(ev.data); };
+  w.onerror = ev => { w.terminate(); resolve({ ok:false, scenario: spec.scenario, message: ev.message }); };
+  w.postMessage(spec);
+});
+const info = await import('/js/data/scenarioInfo.js');
+const keys = Object.keys(info.SCENARIO_INFO);
+// Four workers, four different scenarios, all at once. If module-level state
+// were shared these would collide; each reports its own id counter.
+const picks = ['Solar System', keys[3], keys[10], keys[20]].filter(Boolean);
+const out = await Promise.all(picks.map(s => run({ scenario: s, seed: 'characterization', steps: 200 })));
+document.getElementById('out').textContent = out.map(r =>
+  r.ok
+    ? `ok   ${r.scenario}\n       ${r.bodies} bodies, ids used ${r.idCounterAfter}, stepped ${r.stepped} to t=${r.simulationTime.toFixed(3)} in ${r.ms.toFixed(0)}ms\n       ${JSON.stringify(r.counts)}`
+    : `FAIL ${r.scenario} -> ${r.message}\n       ${(r.stack||[]).join('\n       ')}`
+).join('\n');
+window.__scen = out;
+</script>

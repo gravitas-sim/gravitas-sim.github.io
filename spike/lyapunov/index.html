@@ -1,0 +1,124 @@
+<!doctype html><meta charset="utf-8"><title>Lyapunov cloud spike</title>
+<style>body{font:13px/1.5 ui-monospace,monospace;margin:16px;background:#0b0f14;color:#cfe}
+pre{white-space:pre-wrap}canvas{border:1px solid #234;background:#070b10;margin-top:12px}</style>
+<pre id="out">running…</pre>
+<canvas id="c" width="760" height="420"></canvas>
+<script type="module">
+const log = [];
+const say = s => { log.push(s); document.getElementById('out').textContent = log.join('\n'); };
+
+// A canonical payload: the Pythagorean three-body problem, masses 3/4/5 at the
+// vertices of a 3-4-5 triangle, released from rest. Classically chaotic, which
+// is the point - a cloud that does not separate proves nothing.
+const payload = {
+  v: 1,
+  scenario: 'spike:pythagorean',
+  seed: 'lyapunov',
+  bodies: [
+    { type: 'StarObject', massInSuns: 3, pos: [100, 300], vel: [0, 0] },
+    { type: 'StarObject', massInSuns: 4, pos: [-200, -100], vel: [0, 0] },
+    { type: 'StarObject', massInSuns: 5, pos: [100, -100], vel: [0, 0] },
+  ],
+};
+const settings = {
+  gravitational_constant: 2,
+  mutual_gravity: true,
+  star_only_gravity: false,
+  simulation_speed: 1,
+  enable_collisions: false,
+  bh_behavior: 'Static',
+  galaxy_gravity: 'newton',
+};
+
+const MEMBERS = 50;
+const q = new URLSearchParams(location.search);
+const STEPS = Number(q.get('steps')) || 12000;
+const DT = 0.002;          // pinned, not frame-derived
+const SAMPLE = Number(q.get('sample')) || 40;
+const POOL = Math.min(8, navigator.hardwareConcurrency || 4);
+
+const members = Array.from({ length: MEMBERS }, (_, i) => ({
+  index: i,
+  // Member 0 is the reference: unperturbed. The rest are displaced by one part
+  // in a million, spread over the three bodies so the cloud explores more than
+  // one direction in phase space.
+  perturb: i === 0 ? { body: 0, scale: 0 }
+                   : { body: i % 3, scale: 1e-6 * (1 + (i % 7) / 7) },
+}));
+
+const runWorker = chunk => new Promise(resolve => {
+  const w = new Worker('/spike/lyapunov/cloud.worker.js', { type: 'module' });
+  w.onmessage = ev => { w.terminate(); resolve(ev.data); };
+  w.onerror = ev => { w.terminate(); resolve({ ok: false, message: ev.message }); };
+  w.postMessage({ payload, members: chunk, steps: STEPS, dt: DT, sampleEvery: SAMPLE, settings });
+});
+
+const chunks = Array.from({ length: POOL }, () => []);
+members.forEach((m, i) => chunks[i % POOL].push(m));
+
+say(`pool ${POOL} workers · ${MEMBERS} members · ${STEPS} steps @ dt=${DT} · sample every ${SAMPLE}`);
+const t0 = performance.now();
+const replies = await Promise.all(chunks.filter(c => c.length).map(runWorker));
+const wall = performance.now() - t0;
+
+const bad = replies.filter(r => !r.ok);
+if (bad.length) {
+  say('WORKER FAILED: ' + JSON.stringify(bad[0], null, 2));
+  window.__cloud = { ok: false, error: bad[0] };
+} else {
+  const results = replies.flatMap(r => r.results).sort((a, b) => a.member - b.member);
+  const ref = results.find(r => r.member === 0);
+
+  // Separation of each member from the reference, in body 0's position.
+  const sep = results.filter(r => r.member !== 0).map(r => {
+    const n = Math.min(r.track.length, ref.track.length);
+    const d = [];
+    for (let i = 0; i < n; i++) {
+      const a = r.track[i][0], b = ref.track[i][0];
+      d.push(Math.hypot(a[0] - b[0], a[1] - b[1]));
+    }
+    return d;
+  });
+  const at = i => sep.map(d => d[i]).filter(Number.isFinite).sort((x, y) => x - y);
+  const med = arr => arr.length ? arr[Math.floor(arr.length / 2)] : NaN;
+  const first = med(at(1)), mid = med(at(Math.floor(sep[0].length / 2))), last = med(at(sep[0].length - 1));
+
+  say(`wall ${wall.toFixed(0)}ms · worker cpu ${replies.map(r => r.ms.toFixed(0)).join('/')}ms`);
+  say(`id counters after: ${replies.map(r => r.idCounterAfter).join(', ')}  (page copy is independent)`);
+  say(`samples per member: ${ref.samples}`);
+  say(`median separation  early ${first.toExponential(3)}  mid ${mid.toExponential(3)}  late ${last.toExponential(3)}`);
+  say(`growth factor early→late: ${(last / first).toExponential(3)}`);
+
+  // Plot the divergence, not the orbits. In the Pythagorean problem one body
+  // is ejected and its coordinate runs to infinity, so any spatial window that
+  // holds the ejection collapses everything else to a point - which is what the
+  // first attempt at this drew. The Lyapunov signature is the separation
+  // growing exponentially, and on a log axis that is a straight line, which is
+  // both the honest artifact and the readable one.
+  const cv = document.getElementById('c'), g = cv.getContext('2d');
+  const n = sep[0].length;
+  const vals = sep.flat().filter(v => v > 0 && Number.isFinite(v));
+  const lo = Math.log10(Math.min(...vals)), hi = Math.log10(Math.max(...vals));
+  const X = i => 40 + (i / (n - 1)) * 700;
+  const Y = v => 400 - ((Math.log10(Math.max(v, 1e-18)) - lo) / (hi - lo || 1)) * 380;
+
+  g.strokeStyle = '#1b2a3a'; g.lineWidth = 1;
+  for (let d = Math.ceil(lo); d <= Math.floor(hi); d++) {
+    g.beginPath(); g.moveTo(40, Y(10 ** d)); g.lineTo(740, Y(10 ** d)); g.stroke();
+    g.fillStyle = '#456'; g.font = '10px ui-monospace';
+    g.fillText(`1e${d}`, 4, Y(10 ** d) + 3);
+  }
+  sep.forEach((d, k) => {
+    g.strokeStyle = `hsla(${(k * 37) % 360},70%,62%,0.5)`;
+    g.lineWidth = 0.8;
+    g.beginPath();
+    d.forEach((v, i) => (i ? g.lineTo(X(i), Y(v)) : g.moveTo(X(i), Y(v))));
+    g.stroke();
+  });
+  g.fillStyle = '#9ab'; g.font = '11px ui-monospace';
+  g.fillText('separation from the unperturbed member (log) vs sample', 46, 16);
+
+  window.__cloud = { ok: true, members: results.length, wall, first, mid, last, growth: last / first,
+                     idCounters: replies.map(r => r.idCounterAfter) };
+}
+</script>
