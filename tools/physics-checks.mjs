@@ -142,7 +142,7 @@ const relError = (measured, expected) =>
  * @param {object} spec - The check
  * @returns {object} The check with `error` and `pass` filled in
  */
-function score(spec) {
+export function score(spec) {
   const { measured, expected, tolerance, toleranceKind = 'relative' } = spec;
 
   // Anything that is not a number is compared exactly: booleans for claims like
