@@ -2449,6 +2449,84 @@
           aria-labelledby="objectTypeBtn"
           hidden
         ></div>
+        <!--
+          The keyboard path to the same thing. Placing by pointer gives a
+          position and a velocity at once and a mass not at all; this asks for
+          all three as numbers and hands them to the same placeBody().
+        -->
+        <button
+          id="precisePlaceBtn"
+          class="ui-button rail-secondary"
+          type="button"
+          aria-haspopup="dialog"
+          data-i18n="rail.precisePlace"
+          data-i18n-title="rail.precisePlace.hint"
+        >
+          Precise placement
+        </button>
+      </div>
+    </div>
+
+    <!--
+      Precise placement. The fields are built by js/precisePlacement.js from
+      js/place/preciseFields.js, because which fields a type has and what
+      units they are in is a property of the type rather than of this markup -
+      and putting eight variants here would be a second schema to keep in step
+      with the constructors.
+    -->
+    <div
+      id="precisePlaceDialog"
+      class="modal-panel precise-dialog hidden"
+      role="dialog"
+      aria-labelledby="precisePlaceTitle"
+      aria-describedby="precisePlaceIntro"
+      hidden
+    >
+      <h2 id="precisePlaceTitle" data-i18n="place.precise.title">
+        Precise placement
+      </h2>
+      <p
+        id="precisePlaceIntro"
+        class="precise-intro"
+        data-i18n="place.precise.intro"
+      >
+        Enter a position and velocity to add a body without using the canvas.
+      </p>
+      <div class="precise-row">
+        <label for="precisePlaceType" data-i18n="place.precise.field.type"
+          >Object type</label
+        >
+        <select id="precisePlaceType" class="precise-input"></select>
+      </div>
+      <div id="precisePlaceFields"></div>
+      <!--
+        Polite, and written only on a successful placement. The errors are
+        announced through the shared assertive region in js/notify.js and are
+        also attached to their own field, so this one never carries them.
+      -->
+      <p
+        id="precisePlaceStatus"
+        class="precise-status"
+        role="status"
+        aria-live="polite"
+      ></p>
+      <div class="precise-actions">
+        <button
+          id="precisePlaceSubmit"
+          type="button"
+          class="ui-button is-primary"
+          data-i18n="place.precise.submit"
+        >
+          Add body
+        </button>
+        <button
+          id="precisePlaceClose"
+          type="button"
+          class="ui-button"
+          data-i18n="place.precise.close"
+        >
+          Done
+        </button>
       </div>
     </div>
 

@@ -2978,6 +2978,8 @@ export const EN_DEFERRED = {
   'welcome.scenarioGone': 'That scenario is no longer available.',
   'welcome.shownAgain': 'It will be shown again next time',
   'welcome.showAgain': 'Show this again on my next visit',
+  'export.viewTable': 'View as table',
+  'export.hideTable': 'Hide table',
   'export.downloadCsv': 'Download CSV',
   'welcomeCard.sandbox.eyebrow': 'Free exploration',
   'welcomeCard.sandbox.title': 'Sandbox',

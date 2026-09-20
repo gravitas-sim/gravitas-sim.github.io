@@ -235,6 +235,9 @@ export const EN = {
   'rail.slowDown.label': 'Decrease speed',
   'rail.speedUp.label': 'Increase speed',
   'rail.objectType.label': 'Choose an object to add',
+  'rail.precisePlace': 'Precise placement',
+  'rail.precisePlace.hint':
+    'Add a body by typing its position, velocity and mass',
   'rail.railScenario': 'Scenario',
   'rail.loadScenario': 'Load Scenario',
   'rail.investigations': '🎓 Investigations',

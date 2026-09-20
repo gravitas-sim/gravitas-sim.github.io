@@ -20,6 +20,7 @@ import {
   transitTableCsv,
   radialVelocityCsv,
   rvFitCsv,
+  rotationCurveCsv,
   exportSummary,
   downloadCsv,
   csvFilename,
@@ -35,7 +36,7 @@ import {
   neutron_stars,
   white_dwarfs,
 } from './physics.js';
-import { toast } from './notify.js';
+import { toast, announce } from './notify.js';
 import { t } from './i18n/index.js';
 
 // This module's prose lives in the deferred half of the catalog - see the
@@ -145,6 +146,18 @@ function files() {
       build: rvFitCsv,
     },
     {
+      key: 'rotationcurve',
+      name: 'Rotation curve',
+      // The tracers the panel is plotting right now, not a recording: a
+      // rotation curve is a snapshot of a disc rather than a time series, so
+      // there is nothing to accumulate and nothing to wait for.
+      detail: s.rotationPoints
+        ? `${plural(s.rotationPoints, 'tracer')}: radius, orbital speed, tangential component and mass.`
+        : 'No rotation curve. Open the Rotation Curve tool on a scenario with a disc.',
+      ready: s.rotationPoints > 0,
+      build: rotationCurveCsv,
+    },
+    {
       key: 'transits',
       name: 'Transit measurements',
       detail: s.transits
@@ -154,6 +167,70 @@ function files() {
       build: transitTableCsv,
     },
   ];
+}
+
+/**
+ * The series behind a plot, as a table, fetched the first time one is asked for.
+ *
+ * js/seriesTable.js is loaded on demand: a reader who only ever downloads files
+ * should not pay for the renderer, and the deferred bundle has little room to
+ * spare. It renders row.build().csv - the very string the download button
+ * writes - so the table cannot disagree with the file or with the plot they
+ * both come from.
+ *
+ * @param {object} row - An entry from files()
+ * @param {HTMLButtonElement} button - The control, whose aria-expanded follows
+ * @param {HTMLElement} host - Where the table goes
+ */
+let seriesTableModule = null;
+async function toggleTable(row, button, host) {
+  const open = button.getAttribute('aria-expanded') === 'true';
+  if (open) {
+    host.hidden = true;
+    host.textContent = '';
+    button.setAttribute('aria-expanded', 'false');
+    button.textContent = t('export.viewTable');
+    return;
+  }
+
+  seriesTableModule ??= await import('./seriesTable.js');
+  // The column names and the caption live with the placement strings, out of
+  // the deferred catalog and behind this same lazy load. See
+  // ensurePlacementMessages() for why.
+  await seriesTableModule.ensurePlacementMessages().catch(() => {});
+  const { buildSeriesTable, describeTable } = seriesTableModule;
+  let built;
+  try {
+    built = buildSeriesTable(row.build().csv);
+  } catch (error) {
+    console.error('Could not build the table for', row.key, error);
+    return;
+  }
+
+  host.textContent = '';
+  const caption = document.createElement('p');
+  caption.className = 'export-table-caption';
+  caption.textContent = describeTable(row.name, built);
+  host.append(caption);
+
+  if (built.table) {
+    // A labelled, scrollable region: a wide table needs to scroll sideways, and
+    // a scrollable box that cannot be focused cannot be scrolled from a
+    // keyboard. tabindex and a role are what make it reachable.
+    const scroller = document.createElement('div');
+    scroller.className = 'export-table-scroll';
+    scroller.tabIndex = 0;
+    scroller.setAttribute('role', 'region');
+    scroller.setAttribute('aria-label', caption.textContent);
+    built.table.setAttribute('aria-label', caption.textContent);
+    scroller.append(built.table);
+    host.append(scroller);
+  }
+
+  host.hidden = false;
+  button.setAttribute('aria-expanded', 'true');
+  button.textContent = t('export.hideTable');
+  announce(caption.textContent);
 }
 
 /** Write one file out, and say what happened. */
@@ -221,14 +298,36 @@ function render() {
     detail.className = 'export-file-detail';
     detail.textContent = row.detail;
     text.append(title, detail);
+    const actions = document.createElement('div');
+    actions.className = 'export-file-actions';
+    // The table first. For a reader who cannot see the plot this is the way in
+    // to the data, and a download is a file they then have to open in
+    // something else; putting it second is not a detail.
+    const tableBtn = document.createElement('button');
+    tableBtn.type = 'button';
+    tableBtn.className = 'ui-button';
+    tableBtn.textContent = t('export.viewTable');
+    tableBtn.disabled = !row.ready;
+    tableBtn.setAttribute('aria-expanded', 'false');
+    tableBtn.setAttribute('aria-controls', `export-table-${row.key}`);
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'ui-button';
     btn.textContent = t('export.downloadCsv');
     btn.disabled = !row.ready;
     btn.addEventListener('click', () => download(row));
-    div.append(text, btn);
-    els.files.append(div);
+    actions.append(tableBtn, btn);
+
+    // The table lands after the row rather than inside it, so a reader who
+    // opens one does not have to tab back out through the buttons to read it.
+    const host = document.createElement('div');
+    host.id = `export-table-${row.key}`;
+    host.className = 'export-table-host';
+    host.hidden = true;
+    tableBtn.addEventListener('click', () => toggleTable(row, tableBtn, host));
+
+    div.append(text, actions);
+    els.files.append(div, host);
   }
 }
 

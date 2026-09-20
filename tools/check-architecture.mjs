@@ -94,6 +94,11 @@ const LAYERS = [
       // bindings in plain Node. js/lessonScene.js is the half that knows where
       // the bodies are, and it lives in the feature layer where it belongs.
       /^js\/lesson\//,
+      // Which fields a body type needs and whether what was typed is usable.
+      // Values in, verdict out - no DOM, no catalog, no physics - which is
+      // what lets the placement form be tested without a browser and what
+      // keeps the schema in one place instead of once per input.
+      /^js\/place\//,
     ],
   },
   {

@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3880,
+    limit: 3900,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -365,7 +365,33 @@ const BUDGETS = [
       'what a first-time visitor to the sandbox waited for. It is a page ' +
       'stylesheet now, like css/teaching.css before it. That is the trade this ' +
       'budget asks for: a dashboard fix wanted two kilobytes, and what it got ' +
-      'was a sheet deferred rather than a ceiling raised.',
+      'was a sheet deferred rather than a ceiling raised.\n\n' +
+      'Raised from 3880 to 3900 for the accessibility-parity pass, measured at ' +
+      '3891.0 KB against 3874.1 before it. This one is raised rather than paid ' +
+      'for, and the accounting is here because the rule above says to look for ' +
+      'a module to defer first. There was nothing to defer: every byte of this ' +
+      'work is already behind a dynamic import and none of it is in the ' +
+      'start-up path. Itemised, 16.9 KB: js/precisePlacement.js is 6.4 KB, the ' +
+      'form that lets a reader build a system by typing a position, a velocity ' +
+      'and a mass instead of clicking and dragging; its strings are 2.6 KB of ' +
+      'English and 2.7 of Spanish; js/seriesTable.js is 2.1 KB, which renders ' +
+      'the numbers behind the light curve, the radial-velocity trace and the ' +
+      'rotation curve as a table a screen reader can read; and the rest is the ' +
+      'rotation-curve exporter, the one instructional plot that had no CSV.\n\n' +
+      'The strings cost four times that before they were moved. ' +
+      'js/i18n/en.deferred.js is embedded in four separate bundles - the lazy ' +
+      'chunks, the instructor portal, the validation worker - so fifty strings ' +
+      'added there are downloaded four times by the reader who needs them and ' +
+      'three times by readers who cannot reach the feature at all. They are ' +
+      'js/i18n/en.placement.js now, imported by the two lazy modules and ' +
+      'registered for the one locale in use, which is the split ' +
+      'js/i18n/en.activities.js made for the same reason. Four copies to one.\n\n' +
+      'The initial download was NOT raised and did not need to be: 811.0 KB ' +
+      'before, 813.0 after, against an untouched 830.0. Its share is the rail ' +
+      'button, its two strings, and fromCsv() in js/csv.js - which is what lets ' +
+      'a table render the exporter’s own output instead of building rows of ' +
+      'its own, so the table on screen and the file a reader downloads cannot ' +
+      'be two derivations that disagree.',
   },
 ];
 

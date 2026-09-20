@@ -6298,12 +6298,27 @@ registerShortcut({
  * tests/bodyPlacement.test.js: Comet before Planet, and every branch an
  * `else if`.
  *
+ * A mass may be given and usually is not. Every constructor but BlackHole's
+ * takes its own physical unit as a third argument and randomizes when handed
+ * null, which is what the pointer paths do and must keep doing - so `mass`
+ * defaults to null and the behaviour of a click is unchanged to the bit. The
+ * precise-placement dialog is the one caller that passes a number, in the unit
+ * js/place/preciseFields.js names for that type; BlackHole is the exception it
+ * documents, taking simulation units, and the conversion happens at that call
+ * site rather than here.
+ *
  * @param {{x: number, y: number}} at - Where, in world coordinates
  * @param {{x: number, y: number}} vel - Initial velocity, world units
  * @param {string} [type] - One of the eight; defaults to what is armed
+ * @param {?number} [mass] - In the type's own unit; null randomizes as a click does
  * @returns {?object} The body, already in its collection, or null
  */
-export function placeBody(at, vel, type = SETTINGS.input_object_type) {
+export function placeBody(
+  at,
+  vel,
+  type = SETTINGS.input_object_type,
+  mass = null
+) {
   if (
     !Number.isFinite(at?.x) ||
     !Number.isFinite(at?.y) ||
@@ -6314,16 +6329,29 @@ export function placeBody(at, vel, type = SETTINGS.input_object_type) {
     return null;
   }
 
+  // null everywhere it is not given, which is exactly what each constructor's
+  // own default is - so this reads as the same call it was.
+  const m = Number.isFinite(mass) ? mass : null;
+  // Asteroid is the one class whose third argument defaults to 1.0 rather than
+  // null, so passing null would change what a click builds. It keeps its own
+  // default when nobody asked.
   let obj = null;
-  if (type === 'Planet') obj = new Planet(at, vel);
-  else if (type === 'Star') obj = new StarObject(at, vel);
-  else if (type === 'Asteroid') obj = new Asteroid(at, vel);
-  else if (type === 'GasGiant') obj = new GasGiant(at, vel);
-  else if (type === 'NeutronStar') obj = new NeutronStar(at, vel, null, null);
-  else if (type === 'WhiteDwarf') obj = new WhiteDwarf(at, vel);
-  else if (type === 'Comet') obj = new Comet(at, vel);
+  if (type === 'Planet') obj = new Planet(at, vel, m);
+  else if (type === 'Star') obj = new StarObject(at, vel, m);
+  else if (type === 'Asteroid')
+    obj = m === null ? new Asteroid(at, vel) : new Asteroid(at, vel, m);
+  else if (type === 'GasGiant') obj = new GasGiant(at, vel, m);
+  else if (type === 'NeutronStar') obj = new NeutronStar(at, vel, m, null);
+  else if (type === 'WhiteDwarf') obj = new WhiteDwarf(at, vel, m);
+  else if (type === 'Comet') obj = new Comet(at, vel, m);
   else if (type === 'BlackHole') {
-    obj = new BlackHole(at, generateRandomBlackHoleMass(), vel, true);
+    // Simulation units here, not solar masses: the caller converts.
+    obj = new BlackHole(
+      at,
+      m === null ? generateRandomBlackHoleMass() : m,
+      vel,
+      true
+    );
   }
   if (!obj) return null;
 
@@ -7503,6 +7531,25 @@ const positionObjectPicker = () => {
 let addArmed = false;
 
 /** True while the picker is on screen. */
+/**
+ * The precise-placement form, fetched the first time somebody asks for it.
+ *
+ * Deferred for the same reason the dialog machinery is: it is not start-up
+ * code, and the bundle it would otherwise sit in has very little room left.
+ * placeBody is handed down rather than imported by the module, because a
+ * feature module importing this coordinator back is the shape
+ * tools/check-architecture.mjs exists to refuse.
+ */
+let precisePlacementModule = null;
+async function openPrecisePlacementDialog(trigger) {
+  precisePlacementModule ??= await import('./precisePlacement.js');
+  await precisePlacementModule.openPrecisePlacement({ placeBody, trigger });
+}
+
+document.getElementById('precisePlaceBtn')?.addEventListener('click', event => {
+  openPrecisePlacementDialog(event.currentTarget);
+});
+
 const objectPickerOpen = () => Boolean(objectPicker && !objectPicker.hidden);
 
 const closeObjectPicker = () => {

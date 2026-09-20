@@ -187,6 +187,9 @@ export const ES = {
   'rail.slowDown.label': 'Reducir la velocidad',
   'rail.speedUp.label': 'Aumentar la velocidad',
   'rail.objectType.label': 'Elegir un objeto para añadir',
+  'rail.precisePlace': 'Colocaci\u00f3n precisa',
+  'rail.precisePlace.hint':
+    'A\u00f1adir un cuerpo escribiendo su posici\u00f3n, velocidad y masa',
 
   // --- Rail: labels ----------------------------------------------------------
   // The emoji stay: they are part of the button's shape rather than of its

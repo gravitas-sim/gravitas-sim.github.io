@@ -53,3 +53,81 @@ export function num(v, sig = 8) {
  */
 export const toCsv = rows =>
   `${rows.map(r => r.map(csvField).join(',')).join('\r\n')}\r\n`;
+
+/**
+ * Read back what toCsv wrote.
+ *
+ * The exact inverse, and it exists so that a table on screen and the file a
+ * reader downloads cannot be two different derivations of the same data. The
+ * accessible plot tables render whatever the exporter produced rather than
+ * building rows of their own; the alternative is two row-builders that agree
+ * today, which is the arrangement every other part of this project has been
+ * bitten by.
+ *
+ * Handles what csvField emits and nothing more: quoted fields, doubled quotes
+ * inside them, and CRLF or LF between records. A field's leading `=` is
+ * returned as written - the quoting that disarms a spreadsheet is a property
+ * of the file, not of the value, and undoing it here would be the caller's
+ * surprise rather than its convenience.
+ *
+ * @param {string} text - A CSV document
+ * @returns {Array<Array<string>>} Rows of fields, header first, no trailing blank
+ */
+export function fromCsv(text) {
+  if (typeof text !== 'string' || text === '') return [];
+  const rows = [];
+  let row = [];
+  let field = '';
+  let quoted = false;
+  let i = 0;
+  const endField = () => {
+    row.push(field);
+    field = '';
+  };
+  const endRow = () => {
+    endField();
+    rows.push(row);
+    row = [];
+  };
+  while (i < text.length) {
+    const c = text[i];
+    if (quoted) {
+      if (c === '"') {
+        // A doubled quote is one literal quote; a lone one closes the field.
+        if (text[i + 1] === '"') {
+          field += '"';
+          i += 2;
+          continue;
+        }
+        quoted = false;
+        i++;
+        continue;
+      }
+      field += c;
+      i++;
+      continue;
+    }
+    if (c === '"' && field === '') {
+      quoted = true;
+      i++;
+      continue;
+    }
+    if (c === ',') {
+      endField();
+      i++;
+      continue;
+    }
+    if (c === '\r' || c === '\n') {
+      endRow();
+      // CRLF is one terminator, not two empty rows.
+      i += c === '\r' && text[i + 1] === '\n' ? 2 : 1;
+      continue;
+    }
+    field += c;
+    i++;
+  }
+  // toCsv always ends with a terminator, so anything left is a final record
+  // written by something else; keeping it is more useful than dropping it.
+  if (field !== '' || row.length) endRow();
+  return rows;
+}
