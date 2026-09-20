@@ -27,6 +27,19 @@ import { fileURLToPath } from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
 
 import { test, expect } from './fixtures.js';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
+
+/**
+ * How many lessons the portal should be showing.
+ *
+ * Derived rather than written down. These counts were three literal 22s and
+ * a "22 investigations, 44 documents", which is a number that is only right
+ * until somebody adds a lesson - and then fails here, in a file about the
+ * instructor portal, for a reason that has nothing to do with the portal.
+ */
+const LESSONS = MANIFEST.length;
+/** A guide and an answer key each. */
+const DOCUMENTS = LESSONS * 2;
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(REPO, '.instructor-fixture', 'materials.enc.json');
@@ -100,7 +113,7 @@ test.describe('the instructor portal, signed in', () => {
       page,
     }) => {
       const cards = page.locator('#investigationResources .res-card');
-      await expect(cards).toHaveCount(22);
+      await expect(cards).toHaveCount(LESSONS);
       // textContent, not innerText: `.res-count` is text-transform: uppercase,
       // so innerText reports what is painted and textContent what was written.
       // Asserting the painted form would make this test fail the day somebody
@@ -108,7 +121,7 @@ test.describe('the instructor portal, signed in', () => {
       const count = await page
         .locator('#investigationCount')
         .evaluate(el => el.textContent.trim());
-      expect(count).toBe('22 investigations, 44 documents');
+      expect(count).toBe(`${LESSONS} investigations, ${DOCUMENTS} documents`);
       // Two download buttons and one "open" link on each card.
       const first = cards.first();
       await expect(first.locator('button.ui-button')).toHaveCount(2);
@@ -178,12 +191,14 @@ test.describe('the instructor portal, signed in', () => {
       await page.locator('#resourceSearch').fill('kepler');
       await expect
         .poll(() => page.locator('#investigationResources .res-card').count())
-        .toBeLessThan(22);
-      await expect(page.locator('#investigationCount')).toContainText('of 22');
+        .toBeLessThan(LESSONS);
+      await expect(page.locator('#investigationCount')).toContainText(
+        `of ${LESSONS}`
+      );
       await page.locator('#resourceSearch').fill('');
       await expect(
         page.locator('#investigationResources .res-card')
-      ).toHaveCount(22);
+      ).toHaveCount(LESSONS);
     });
 
     test('search that matches nothing says so rather than showing nothing', async ({
