@@ -4572,12 +4572,12 @@ export async function runChecks() {
 
     add({
       group: 'Orbital resonance',
-      kind: 'data',
-      name: 'Neptune and Pluto are placed on the exact 3:2',
+      kind: 'integration',
+      name: 'The integrated periods hold the 3:2',
       measured: pluto.periodP / pluto.periodN,
       expected: 1.5,
       tolerance: 2e-3,
-      why: "Pluto is placed at a_Neptune (3/2)^(2/3) rather than at its observed 39.482 AU, because the 0.2% difference between the two is taken up in the real system by the precession of Pluto's perihelion, which a point-mass model does not reproduce at the right rate. This check is that the placement did what it says; the comparison with the observed 1.5046 belongs to the lesson.",
+      why: "Both periods are the mean osculating period over the whole run, so this is the engine holding Kepler's third law on a commensurability nothing told it about - not a stored ratio. Pluto is placed at a_Neptune (3/2)^(2/3) rather than at its observed 39.482 AU, because the 0.2% difference between the two is taken up in the real system by the precession of Pluto's perihelion, which a point-mass model does not reproduce at the right rate. That the placement itself is exact is a separate claim and is checked to ten decimal places in tests/resonance.test.js; what this measures is that three libration cycles of mutual perturbation at dt = 60 leave the ratio where it started. The residual is 2e-4 and is the Neptune-Pluto interaction plus the osculating-element average rather than the placement; 2e-3 is ten times that, and still an order of magnitude inside the drift a Pluto falling out of the commensurability would show. The comparison with the observed 1.5046 belongs to the lesson.",
       source: 'NASA planetary fact sheets',
     });
 
@@ -4632,12 +4632,19 @@ export async function runChecks() {
       group: 'Orbital resonance',
       kind: 'integration',
       name: 'Every Pluto-Neptune conjunction happens near Pluto’s aphelion',
-      measured: pluto.atConjunction.mean,
+      // conjunctionCluster returns null when the run produced no conjunctions
+      // at all. That is a degenerate result rather than an impossible one - a
+      // Pluto that has left the resonance may never line up with Neptune
+      // inside the window - and reaching through it took the whole 243-check
+      // suite down with a TypeError instead of failing this one row. NaN is
+      // scored as a failure with a note, which is what a missing measurement
+      // is.
+      measured: pluto.atConjunction ? pluto.atConjunction.mean : NaN,
       expected: 180,
       unit: 'degrees of true anomaly',
       tolerance: 10,
       toleranceKind: 'absolute',
-      why: 'The consequence of the libration, measured independently of it: over a hundred and twenty conjunctions, the mean position of Pluto on its own orbit at the moment of line-up. A true anomaly of 180 degrees is aphelion, 49 AU out. The check is deliberately of the conjunctions rather than of the angle, because a student is asked to read this off a different instrument.',
+      why: 'The consequence of the libration, measured independently of it: over a hundred and twenty conjunctions, the mean position of Pluto on its own orbit at the moment of line-up. A true anomaly of 180 degrees is aphelion, 49 AU out. The check is deliberately of the conjunctions rather than of the angle, because a student is asked to read this off a different instrument. No conjunctions at all is a failure of this check rather than of the suite.',
     });
 
     add({
