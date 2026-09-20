@@ -369,6 +369,23 @@ async function buildDocPages() {
   // the teaching and validation pages have theirs: it imports the answer
   // checker and the lesson data, which is most of the application, and none of
   // that may reach the start-up download for a page almost nobody opens.
+  // The classroom evidence kit. Its own entry for the same reason every other
+  // document page has one: it imports the instrument definitions and nothing
+  // from the simulation, and a page most visitors never open may not grow the
+  // start-up download.
+  if (existsSync('js/evaluationKit.js')) {
+    await esbuild.build({
+      entryPoints: ['js/evaluationKit.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'evaluationKit.js'),
+      legalComments: 'none',
+    });
+  }
+
   if (existsSync('js/submissionReview.js')) {
     await esbuild.build({
       entryPoints: ['js/submissionReview.js'],
