@@ -321,4 +321,19 @@ export const MANIFEST = [
     gradedCount: 29,
     objectiveCount: 7,
   },
+  {
+    id: 'twelve-nights',
+    title: 'Doce noches',
+    subtitle:
+      'Tú eliges cuándo mirar, y la mayor parte de la elección ya está hecha',
+    duration: '40-50 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Un comité te concede doce noches sobre una estrella desde un telescopio en Chile. La estrella está por encima del límite de masa de aire cinco horas cada noche y la ventana se abre cuatro minutos antes cada vez, así que tus doce medidas caen sobre un peine cuyo espaciado no elegiste. Planifica la campaña en el planificador de observación, mira la ventana espectral antes de tener una sola velocidad, y luego lleva dos planes al espectrógrafo en vivo y descubre que uno de ellos devuelve un planeta con el periodo equivocado. Termina averiguando qué lo arreglaría de verdad, y por qué más noches no lo harían.',
+    thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
+    series: 'Detección de exoplanetas',
+    stepCount: 13,
+    gradedCount: 8,
+    objectiveCount: 6,
+  },
 ];

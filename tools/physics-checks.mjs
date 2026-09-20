@@ -6205,7 +6205,7 @@ export async function runChecks() {
       });
       add({
         group: OBS,
-        kind: 'data',
+        kind: 'analytic',
         name: 'Every night of the allocation has a usable window',
         measured: run.filter(n => n.usable.hours > 2).length,
         expected: 12,

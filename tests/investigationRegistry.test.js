@@ -129,8 +129,23 @@ describe('the manifest', () => {
       expect(m.objectives).toBeUndefined();
       expect(m.lock).toBeUndefined();
     }
+    // Per entry rather than per manifest. The old bound was a flat 16 KB,
+    // which is not a property of the manifest's design but of how many
+    // lessons happened to exist when it was written: at 22 it sat 86 bytes
+    // under, so the 23rd lesson failed it whatever size that lesson was. A
+    // mean-per-entry bound scales with the catalog and is strictly more
+    // sensitive to the thing this test exists for - a `steps` leak inflates
+    // every entry at once, so it moves the mean by an order of magnitude
+    // while a long summary on one lesson moves it by a few bytes.
     const bytes = JSON.stringify(MANIFEST).length;
-    expect(bytes).toBeLessThan(16 * 1024);
+    const perEntry = bytes / MANIFEST.length;
+    expect(perEntry).toBeLessThan(800);
+    // And a card entry is a card entry: no single one is allowed to become a
+    // lesson in disguise, which the mean alone would let through on a large
+    // catalog.
+    for (const m of MANIFEST) {
+      expect(JSON.stringify(m).length).toBeLessThan(1400);
+    }
   });
 });
 

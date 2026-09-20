@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // js/observerGeometry.js answers "which way am I standing relative to the
 // orbit". This module answers the other half of the same question, and it is
-// the half a real observing programme is actually limited by: the target has to
+// the half a real observing program is actually limited by: the target has to
 // be above the horizon, the Sun has to be below it, and the Moon has to be
 // somewhere else. A schedule that ignores any of the three is a schedule that
 // cannot be executed, and a lesson built on one teaches the wrong thing.
@@ -56,7 +56,7 @@
 //                            real horizon does.
 //
 // Degrees at the boundary, radians inside. Every exported angle is in degrees,
-// because that is what a star catalogue, a site record and a student all use.
+// because that is what a star catalog, a site record and a student all use.
 // =============================================================================
 
 const DEG = Math.PI / 180;
@@ -73,7 +73,7 @@ export const DAYS_PER_CENTURY = 36525;
  *
  * Astronomical twilight is the -18 degree one: the definition is that the Sun
  * no longer contributes measurable illumination to the sky background, which is
- * the threshold a photometric or a precise-velocity programme cares about. The
+ * the threshold a photometric or a precise-velocity program cares about. The
  * other two are here because a student will ask what they are, and because the
  * difference between them is the difference between an hour of usable night and
  * none.
@@ -498,12 +498,12 @@ export function meanObliquity(jd) {
 // -----------------------------------------------------------------------------
 // The low-precision series from the Astronomical Almanac, section C: a mean
 // longitude, a mean anomaly, and the first two terms of the equation of the
-// centre. The Almanac states its own accuracy as 0.01 degrees in longitude over
+// center. The Almanac states its own accuracy as 0.01 degrees in longitude over
 // 1950 to 2050, which is a hundred times finer than anything a twilight time
 // is quoted to, and the checks in tools/physics-checks.mjs hold it to that.
 // =============================================================================
 
-/** Kilometres in an astronomical unit. IAU 2012, exact by definition. */
+/** Kilometers in an astronomical unit. IAU 2012, exact by definition. */
 export const AU_KM = 1.495978707e8;
 
 /**
@@ -517,7 +517,7 @@ export function solarPosition(jd) {
   const n = jd - J2000;
   const meanLongitudeDeg = wrap360(280.46061837 + 0.9856474 * n);
   const g = wrap360(357.528 + 0.9856003 * n);
-  // The equation of the centre, to two terms. The third is under an arcsecond.
+  // The equation of the center, to two terms. The third is under an arcsecond.
   const longitudeDeg = wrap360(
     meanLongitudeDeg + 1.915 * sin(g) + 0.02 * sin(2 * g)
   );
@@ -575,7 +575,7 @@ export function equationOfTimeMinutes(jd) {
  * Periodic terms in the Moon's longitude and distance.
  *
  * Each row is [D, M, M', F, coefficient in millionths of a degree, coefficient
- * in metres]. The arguments are the Delaunay variables; the two coefficients
+ * in meters]. The arguments are the Delaunay variables; the two coefficients
  * belong to the sine series for longitude and the cosine series for distance,
  * which share the same arguments and are therefore tabulated together.
  */
@@ -879,7 +879,7 @@ export const REJECT = Object.freeze({
  * The defaults a planning exercise uses, and why each number is that number.
  */
 export const WINDOW_DEFAULTS = Object.freeze({
-  /** Astronomical twilight. A precise-velocity programme needs a dark sky. */
+  /** Astronomical twilight. A precise-velocity program needs a dark sky. */
   sunAltitudeDeg: TWILIGHT.ASTRONOMICAL,
   /** X < 2 is 30 degrees altitude. The usual floor in a time allocation. */
   airmassLimit: 2,
@@ -952,7 +952,7 @@ export function observability(jd, { site, target, options = {} }) {
   if (!(x <= o.airmassLimit)) reasons.push(REJECT.AIRMASS);
   // A Moon below the horizon cannot shine on the target however close it is on
   // the sky, so the separation cut is only applied while it is up. Without
-  // this a programme would refuse perfectly dark hours for a Moon that has set.
+  // this a program would refuse perfectly dark hours for a Moon that has set.
   if (moonAltitudeDeg > 0 && moonSeparationDeg < o.moonSeparationDeg) {
     reasons.push(REJECT.MOON);
   }
@@ -1084,7 +1084,7 @@ export function transitTime(nearJd, longitudeDeg, raDeg) {
 /**
  * One night, fully described.
  *
- * The span searched is the whole day centred on local midnight, which contains
+ * The span searched is the whole day centered on local midnight, which contains
  * every night at every latitude: a night cannot be longer than a day, and
  * anchoring on midnight rather than on sunset means a polar night reports as
  * one interval clipped at both ends rather than as two halves of nothing.
