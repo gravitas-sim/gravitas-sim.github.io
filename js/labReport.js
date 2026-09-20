@@ -35,6 +35,25 @@ function completionCode(text) {
   return `${base.slice(0, 4)}-${base.slice(4)}`;
 }
 
+/**
+ * Break a token into lines a person can copy without losing their place.
+ *
+ * Grouped in fours inside a line so the eye can track position, and the groups
+ * are separated by spaces because whitespace is the only thing the reader is
+ * allowed to strip.
+ *
+ * @param {string} token - The encoded submission
+ * @returns {string[]} Lines, each short enough for the page
+ */
+function tokenLines(token) {
+  const groups = String(token).match(/.{1,8}/g) || [];
+  const lines = [];
+  for (let i = 0; i < groups.length; i += 8) {
+    lines.push(groups.slice(i, i + 8).join(' '));
+  }
+  return lines;
+}
+
 const dateText = iso => {
   const d = iso ? new Date(iso) : new Date();
   if (Number.isNaN(d.getTime())) return '-';
@@ -93,11 +112,15 @@ export function buildLabReport({
   checkAnswer,
   assignment = null,
   binding = null,
+  submissionToken = '',
 }) {
   const inv = investigation;
   const doc = createDocument({
     title: `${inv.title}: ${name}`,
     footer: `Gravitas - ${plain(inv.title)}`,
+    // The machine-readable copy. See the note beside /Keywords in js/pdf.js
+    // for why the instructor page prefers this to the printed block.
+    keywords: submissionToken || '',
   });
 
   // --- Header ----------------------------------------------------------------
@@ -311,6 +334,40 @@ export function buildLabReport({
       'generated in the browser and is not proof of authorship.',
     { size: 8.5, color: '0.45 0.45 0.52' }
   );
+
+  // --- Submission token ------------------------------------------------------
+  //
+  // Last, and on its own page, because it is the one part of this document not
+  // written for a human. The completion code above says whether the answers
+  // were altered; this says what they were, so an instructor holding thirty
+  // reports can find the question the class got wrong instead of reading
+  // thirty PDFs.
+  //
+  // Printed as well as embedded in /Keywords because the two fail differently.
+  // The embedded copy needs the file; the printed copy survives a student who
+  // photographs the page or pastes it into a text box, which is what actually
+  // happens. Broken into short groups so a reader can see where they are, and
+  // the reader on the other end strips whitespace and nothing else - '-' and
+  // '_' are base64url alphabet, not punctuation.
+  if (submissionToken) {
+    doc.pageBreak();
+    doc.heading('Submission token', { size: 14, spaceBefore: 0 });
+    doc.paragraph(
+      'For the instructor. Drop this PDF on the submission review page, or ' +
+        'copy the block below and paste it there. It carries the answers in ' +
+        'this report and nothing else - no name beyond the one above, and no ' +
+        'proof of authorship, which a browser cannot provide.',
+      { size: 9.5, color: '0.35 0.35 0.42' }
+    );
+    doc.space(4);
+    for (const line of tokenLines(submissionToken)) {
+      // gap 1 so the lines stack as a block rather than as paragraphs, and a
+      // size chosen in tokenLines() so none of them re-wraps - a wrapped line
+      // would put a break where there is no space, and the reader strips only
+      // whitespace.
+      doc.paragraph(line, { size: 8.5, gap: 1 });
+    }
+  }
 
   // --- Links -----------------------------------------------------------------
   if (links.length) {

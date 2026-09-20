@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Submission review | Gravitas</title>
+    <meta
+      name="description"
+      content="Read a pile of Gravitas lab reports at once and see which question the class got wrong."
+    />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page. It is one table and a drop zone, and giving it a
+         stylesheet of its own would be the first step towards it becoming a
+         product. */
+      .sr-wrap {
+        max-width: 60rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .sr-drop {
+        border: 2px dashed rgba(255, 255, 255, 0.25);
+        border-radius: 10px;
+        padding: 1.75rem 1rem;
+        text-align: center;
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+      .sr-drop.sr-over {
+        border-color: #6ea8ff;
+        background: rgba(110, 168, 255, 0.08);
+      }
+      .sr-paste {
+        width: 100%;
+        min-height: 5.5rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.8rem;
+        margin-top: 0.75rem;
+        /* Inherit the page rather than the user agent: a bare textarea renders
+           white-on-dark and is the only blinding thing on the page. */
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.5rem;
+      }
+      .sr-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        font-size: 0.92rem;
+      }
+      .sr-table th,
+      .sr-table td {
+        text-align: left;
+        padding: 0.4rem 0.6rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .sr-table td:nth-child(n + 3) {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .sr-hot td {
+        color: #ffb4a2;
+      }
+      .sr-who,
+      .sr-refused {
+        font-size: 0.88rem;
+        opacity: 0.8;
+      }
+      .sr-empty {
+        opacity: 0.6;
+      }
+      .sr-actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 0.75rem;
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main class="sr-wrap">
+      <h1>Submission review</h1>
+      <p>
+        Drop the lab reports your students handed in and this page will tell you
+        which question the class got wrong. It reads the PDF itself, the JSON
+        progress backup, or a token pasted out of the last page of a report.
+      </p>
+      <p>
+        Nothing leaves your browser and nothing is saved. Close the tab and it
+        is gone &mdash; there is no roster here, no gradebook and no export,
+        because none of those has been designed yet.
+      </p>
+
+      <div id="drop" class="sr-drop">
+        <p><strong>Drop reports, backups or tokens here</strong></p>
+        <p class="sr-empty">.pdf &middot; .json &middot; .txt</p>
+        <input
+          id="picker"
+          type="file"
+          multiple
+          accept=".pdf,.json,.txt,application/pdf,application/json,text/plain"
+        />
+        <label for="paste" class="sr-empty">or paste one token</label>
+        <textarea
+          id="paste"
+          class="sr-paste"
+          spellcheck="false"
+          placeholder="s1z..."
+        ></textarea>
+        <div class="sr-actions">
+          <button id="paste-go" type="button" class="ui-button">
+            Read this token
+          </button>
+          <button id="clear" type="button" class="ui-button">
+            Clear everything
+          </button>
+          <span id="count" class="sr-empty">nothing yet</span>
+        </div>
+      </div>
+
+      <h2>Per-question failure rate</h2>
+      <p class="sr-empty">
+        Hardest first. &ldquo;Marked&rdquo; counts only the answers Gravitas can
+        check itself; written answers are yours to read and are counted under
+        &ldquo;unmarkable&rdquo; rather than as failures.
+      </p>
+      <div id="rates"></div>
+
+      <h2>Read</h2>
+      <div id="who"></div>
+      <div id="refused"></div>
+
+      <hr />
+      <p class="sr-empty">
+        A submission token says what a student answered. It is not proof of who
+        answered: it is computed in a browser, and anything a browser computes,
+        whoever controls the browser can forge. What it saves you is typing.
+      </p>
+    </main>
+    <script type="module" src="/js/submissionReview.js"></script>
+  </body>
+</html>

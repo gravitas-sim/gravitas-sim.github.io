@@ -365,6 +365,27 @@ async function buildDocPages() {
     });
   }
 
+  // The instructor submission review page. Its own entry for the same reason
+  // the teaching and validation pages have theirs: it imports the answer
+  // checker and the lesson data, which is most of the application, and none of
+  // that may reach the start-up download for a page almost nobody opens.
+  if (existsSync('js/submissionReview.js')) {
+    await esbuild.build({
+      entryPoints: ['js/submissionReview.js'],
+      bundle: true,
+      minify: true,
+      // physics.js branches on constructor.name in fifteen places. Without
+      // this, minification renames the classes and every one of those branches
+      // is false in production and true in development.
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'submissionReview.js'),
+      legalComments: 'none',
+      splitting: false,
+    });
+  }
+
   if (existsSync('js/validationPage.js')) {
     await esbuild.build({
       entryPoints: ['js/validationPage.js'],
