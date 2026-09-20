@@ -192,3 +192,94 @@ describe('the readout and the audio cannot drift apart', () => {
     }
   });
 });
+
+describe('ACCESSIBILITY.md tells the truth about the sound', () => {
+  // The same arrangement that holds the PDF section honest in
+  // tests/instructorMaterials.test.js: the document makes claims, and each one
+  // is checked against the thing it describes. A section about what a project
+  // has NOT done is the easiest kind to let quietly rot, because nothing
+  // breaks when it becomes wrong - it just goes on reassuring a reader about a
+  // version of the software that no longer exists.
+  const doc = read('ACCESSIBILITY.md');
+  const audio = read('js/audio.js');
+
+  test('it says the audio is quantized, and it is', () => {
+    expect(doc).toMatch(/quantizes the result onto a five-note scale/);
+    // The day the audible pitch stops being rounded onto a scale, that
+    // sentence is false and the whole section has to be rewritten - including
+    // the part that says the printed version is not a transcription of what
+    // you hear, which would no longer be the interesting claim it is now.
+    const scale = audio.match(/const MUSICAL_SCALE = \[([^\]]*)\]/);
+    expect(scale).not.toBeNull();
+    expect(scale[1].split(',').length).toBe(5);
+    expect(audio).toMatch(/const quantizeMidi = /);
+  });
+
+  test('it says the readout cannot drift, and names how', () => {
+    expect(doc).toMatch(/getVoicedBodies\(\)` in `js\/audio\.js`/);
+    expect(doc).toMatch(/js\/sonify\/voiceReadout\.js/);
+    // Every file the section points at has to exist. A section citing its own
+    // evidence is only worth the citations resolving.
+    for (const file of [
+      'js/audio.js',
+      'js/sonify/voiceReadout.js',
+      'js/ui.js',
+      'tests/voiceReadout.test.js',
+      'e2e/sonifyTextEquivalent.spec.js',
+      'tools/physics-checks.mjs',
+    ]) {
+      expect(() => read(file)).not.toThrow();
+      expect(doc).toContain(file);
+    }
+  });
+
+  test('it says the checks exist, and the named group does', () => {
+    expect(doc).toMatch(/Sonification law/);
+    expect(read('tools/physics-checks.mjs')).toMatch(
+      /group: 'Sonification law'/
+    );
+  });
+
+  test('it says no axe rule is disabled, and none is', () => {
+    expect(doc).toMatch(/no rules disabled/);
+    // The claim in the table is only worth what this is worth. An OFF entry
+    // added later makes the row an overstatement.
+    expect(read('e2e/accessibility.spec.js')).toMatch(/const OFF = \{\};/);
+  });
+
+  test('it states plainly that nobody has tested it', () => {
+    // The sentence this project is most likely to be tempted to soften.
+    expect(doc).toMatch(
+      /never been tested with a screen reader or with a blind\s*\n?\s*or low-vision user/
+    );
+    expect(doc).toMatch(/\bNVDA\b/);
+    expect(doc).toMatch(/\bJAWS\b/);
+    expect(doc).toMatch(/\bVoiceOver\b/);
+  });
+
+  test('nothing anywhere claims the sandbox is accessible to blind students', () => {
+    // A blanket check across the documents a reader or a reviewer actually
+    // reads. This is the overclaim that would cost the honest claims their
+    // credibility, and it is the kind of sentence that gets added to a README
+    // in a hurry.
+    const forbidden =
+      /\b(accessible|usable) (to|for|by) (blind|visually impaired|low.vision|screen.reader)/i;
+    for (const file of [
+      'README.md',
+      'ACCESSIBILITY.md',
+      'paper.md',
+      'index.html',
+    ]) {
+      let text;
+      try {
+        text = read(file);
+      } catch {
+        continue; // paper.md is not present on every branch
+      }
+      expect({ file, claim: forbidden.test(text) }).toEqual({
+        file,
+        claim: false,
+      });
+    }
+  });
+});

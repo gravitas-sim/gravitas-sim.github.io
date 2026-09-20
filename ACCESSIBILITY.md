@@ -111,6 +111,88 @@ a separate polite live region, and only when the reader caused them.
 `e2e/accessibilityManual.spec.js` watches that region for six seconds of
 ordinary running and fails if it is written to more than once.
 
+## The sound
+
+The sandbox makes sound, and it is worth being exact about what kind of thing
+that sound is, because "the simulation is sonified" is routinely read as a
+claim about accessibility and here it is not one.
+
+`js/audio.js` maps a body's orbital frequency to a pitch, compresses it through
+`log2(1 + f * 40)`, and then **quantizes the result onto a five-note scale** so
+that an arbitrary collection of orbits sounds like music rather than like a
+siren. That is the right design for an ambient soundtrack and it disqualifies
+the sound as a measuring instrument: the quantization is not invertible, so two
+orbits several percent apart can arrive at the same note. Nobody can get a
+number back out of it, sighted or not, because the number is no longer in
+there.
+
+**What was added.** The sound panel now prints the quantity the tones are
+computed from. Opening it on the default scenario gives:
+
+> **What the tones stand for**
+>
+> - Highest voice, Black hole. Period 61.4 d. Every interval below is measured
+>   from this one.
+> - Black hole. Period 61.5 d, 1.001× the highest voice, 1.1 cents below it.
+> - Rocky planet. Period 131 d, 2.125× the highest voice, 1304.9 cents below
+>   it.
+
+Those two black holes are 1.1 cents apart. No five-note scale preserves that
+and no listener could hear it, which is the clearest possible statement of why
+the printed version is not a transcription of the audible one. It is not a
+description of the sound; it is the thing the sound is about, delivered
+losslessly.
+
+It cannot drift away from what is playing. `getVoicedBodies()` in `js/audio.js`
+returns the same array the oscillators are following, `js/sonify/voiceReadout.js`
+turns it into periods and intervals, and `js/ui.js` renders that and computes
+nothing of its own. `tests/voiceReadout.test.js` fails if it ever starts to,
+and `e2e/sonifyTextEquivalent.spec.js` compares the printed periods and
+intervals against the live array in the browser.
+
+**It is deliberately not a live region**, for the same reason the canvas
+description is not. The voices are re-chosen several times a second; a polite
+live region over them would interrupt a screen reader without pause and make
+the panel unusable for exactly the reader it exists for. It is plain content
+that holds still while it is read — the panel fills it when it opens and does
+nothing at all while it is closed.
+
+### What none of this establishes
+
+**The sonification has never been tested with a screen reader or with a blind
+or low-vision user.** Not with NVDA, not with JAWS, not with VoiceOver, and not
+with a student. No claim is made anywhere in this project that a blind student
+can use the sandbox, and this section exists so that the absence of such a
+claim is deliberate and visible rather than an oversight a reader has to infer.
+
+What is actually established, and the limit of each:
+
+| claim | evidence | what it does not show |
+| --- | --- | --- |
+| The period-to-pitch encoding preserves the quantity | 5 checks in `tools/physics-checks.mjs`, "Sonification law" | Nothing about the audible sound, which is quantized and lossy |
+| A non-audio path to the same facts exists | `e2e/sonifyTextEquivalent.spec.js` | Nothing about whether it is findable, readable or useful |
+| The panel has no machine-detectable violation | axe-core, no rules disabled | Nothing about whether a screen reader user can operate it |
+
+There is also no automated check that *could* establish the missing thing. axe
+has no rule for sonification and WCAG has no success criterion that says an
+audio encoding of a quantity must be invertible — 1.1.1 and 1.2.1 are about
+alternatives existing, not about how much information an encoding throws away.
+So the gap here is not one more test away; it needs people.
+
+**What would count as evidence**, cheapest first: the author with the monitor
+off and VoiceOver on, for an hour; the three screen readers on the platforms
+they actually run on, which disagree with each other in ways that matter; a
+paid expert assistive-technology user doing a think-aloud walkthrough, which is
+the single highest-value step on this list; and finally task-based sessions
+with students, measuring whether a task was completed rather than whether the
+audio was liked. The instruments for the last of those belong with the rest of
+the evaluation kit in `evaluation/`, not here.
+
+Until that happens, the honest sentence — the one that may be used in a paper,
+a grant or a course description — is this: *sonification is implemented, its
+encoding is verified to be information-preserving, a text equivalent exists and
+is checked against it, and it has not been tested with screen-reader users.*
+
 ## Honest limitations
 
 These are real and are not going to be fixed by more ARIA.
