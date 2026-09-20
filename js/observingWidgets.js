@@ -240,7 +240,14 @@ const PLANNER = {
       placed.push({ nightIndex, jd, offset: jd - origin });
     });
 
-    const window = spectralWindow(epochs, { fMin: 0, fMax: 2, samples: 700 });
+    // Four thousand samples out to two cycles a day is a grid step of
+    // 0.0005 c/d. That is not for the drawing - a few hundred would look the
+    // same - it is so the reported peak can be told apart from one cycle a
+    // day. The sidereal and solar frequencies differ by 0.0027 c/d, and on a
+    // coarser grid the peak lands on whichever side of the truth the grid
+    // happens to fall, which would make the lesson's whole point a rounding
+    // artifact.
+    const window = spectralWindow(epochs, { fMin: 0, fMax: 2, samples: 4000 });
     // The power exactly at the sidereal frequency, which is where the sky puts
     // the alias - not at 1.000 cycles a day, where a reader expects it.
     let atSidereal = 0;

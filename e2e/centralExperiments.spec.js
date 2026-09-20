@@ -1780,39 +1780,38 @@ test.describe('the central experiment of each investigation', () => {
     const center = (await setControl(page, control, 0)).after;
     const ends = (await setControl(page, control, 1)).after;
 
-    const powerCentre = reading(center, /window power at the sidereal day/i);
+    const powerCenter = reading(center, /window power at the sidereal day/i);
     const powerEnds = reading(ends, /window power at the sidereal day/i);
 
     // Observing at the best moment of each night puts every epoch at the same
     // hour angle, so the schedule is a comb and the window peak is essentially
     // one: the alias fits the data as well as the planet does. Spending the
     // width of the window buys a real reduction, and does not buy a small one.
-    expect(powerCentre, 'best-moment plan aliases completely').toBeGreaterThan(
+    expect(powerCenter, 'best-moment plan aliases completely').toBeGreaterThan(
       0.95
     );
     expect(powerEnds, 'using the window lowers the peak').toBeLessThan(0.85);
-    expect(powerCentre - powerEnds).toBeGreaterThan(0.1);
+    expect(powerCenter - powerEnds).toBeGreaterThan(0.1);
 
-    // And the peak is at the SIDEREAL day, not at one cycle a day. The window
-    // is set by the target's hour angle, so the comb is stamped with the
-    // Earth's rotation against the stars rather than against the Sun. This is
-    // the detail the lesson turns on and it is one digit away from invisible.
-    const aliasRow = row(ends, /strongest alias/i);
-    const aliasPeriod = Number(
-      /at ([\d.]+) d/.exec(aliasRow?.value ?? '')?.[1]
-    );
-    expect(
-      Number.isFinite(aliasPeriod),
-      `the alias row names a period (${aliasRow?.value})`
-    ).toBe(true);
-    expect(aliasPeriod, 'the alias is at the sidereal day').toBeCloseTo(
+    // And the comb is spaced by the SIDEREAL day, not the solar one. Read off
+    // the best-moment plan, where the comb is pure and the peak is therefore
+    // unambiguous - the both-ends plan breaks the comb into pairs, which is
+    // the point of it, and broadens the feature so its maximum wanders. Four
+    // decimals in both directions: the two days differ by 0.0027, and a test
+    // that could not separate them would pass on an implementation that had
+    // never heard of sidereal time.
+    const combPeriod = reading(center, /strongest alias/i, 1);
+    expect(combPeriod, 'the comb is spaced by the sidereal day').toBeCloseTo(
       0.9973,
-      2
+      3
     );
-    expect(aliasPeriod, 'and is not at one solar day').not.toBeCloseTo(1, 3);
+    expect(combPeriod, 'and not by the solar day').not.toBeCloseTo(1, 3);
 
-    // Neither plan can be rescued by widening the airmass limit: the window
-    // gets longer, the comb does not go away.
+    // Widening the airmass limit does help, and does not rescue: a longer
+    // window gives the placement more room, so the peak falls further - to
+    // about 0.5 at X < 3 - and it is still a peak of 0.5, bought by observing
+    // through three atmospheres. The comb is not something a limit can spend
+    // its way out of.
     const loose = (await setControl(page, 'airmass', 3)).after;
     expect(
       reading(loose, /window power at the sidereal day/i),
@@ -1823,7 +1822,7 @@ test.describe('the central experiment of each investigation', () => {
 
     await walkToSid(page, plan, measureSid);
     const evidence = {
-      wCentre: powerCentre.toFixed(3),
+      wCenter: powerCenter.toFixed(3),
       wEnds: powerEnds.toFixed(3),
     };
     await recordFields(page, id, measureSid, evidence);

@@ -267,7 +267,7 @@ const TWELVE_NIGHTS = {
              measurement is taken.`,
       fields: [
         {
-          id: 'wCentre',
+          id: 'wCenter',
           label: 'Spread out, best moment (window use 0)',
           hint: '0.998',
         },
@@ -278,16 +278,16 @@ const TWELVE_NIGHTS = {
         },
       ],
       validate: v => {
-        if (!Number.isFinite(v.wCentre) || !Number.isFinite(v.wEnds))
+        if (!Number.isFinite(v.wCenter) || !Number.isFinite(v.wEnds))
           return null;
-        if (v.wCentre < 0.9) {
+        if (v.wCenter < 0.9) {
           return {
             level: 'warn',
             message:
               'The best-moment plan should be very close to 1. Check the window-use slider is at 0 and the span at 20.',
           };
         }
-        if (v.wEnds >= v.wCentre) {
+        if (v.wEnds >= v.wCenter) {
           return {
             level: 'warn',
             message:
@@ -414,7 +414,7 @@ const TWELVE_NIGHTS = {
              story.`,
       fields: [
         {
-          id: 'periodCentre',
+          id: 'periodCenter',
           label: 'Best moment: best period',
           unit: 'd',
           hint: '0.78',
@@ -428,7 +428,7 @@ const TWELVE_NIGHTS = {
       ],
       validate: v => {
         if (
-          !Number.isFinite(v.periodCentre) ||
+          !Number.isFinite(v.periodCenter) ||
           !Number.isFinite(v.periodEnds)
         ) {
           return null;
@@ -436,7 +436,7 @@ const TWELVE_NIGHTS = {
         const alias = p =>
           [0.5808, 0.7773, 1.3908].some(a => Math.abs(p - a) < 0.08);
         const truth = p => Math.abs(p - 3.5247) < 0.15;
-        if (truth(v.periodCentre) && truth(v.periodEnds)) {
+        if (truth(v.periodCenter) && truth(v.periodEnds)) {
           return {
             level: 'ok',
             message:
@@ -450,7 +450,7 @@ const TWELVE_NIGHTS = {
               'The both-ends plan misses about one time in five, so this is a real outcome rather than a mistake — but check the epoch list you pasted came from the window-use-1 preset before you accept it. Then try seed twelve-2.',
           };
         }
-        if (alias(v.periodCentre)) {
+        if (alias(v.periodCenter)) {
           return {
             level: 'ok',
             message:
