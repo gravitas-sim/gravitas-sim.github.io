@@ -41,6 +41,8 @@ import { describe, test, expect } from '@jest/globals';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { KIND_ORDER, KIND_LABEL, KIND_SHORT } from '../js/physicsKinds.js';
+import { score } from '../tools/physics-checks.mjs';
+import { conjunctions, conjunctionCluster } from '../js/resonance/elements.js';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -226,5 +228,97 @@ describe('the kind vocabulary has one owner', () => {
   test('the prose label is spelled out and the terminal one is short', () => {
     expect(KIND_LABEL.approximation).toBe('approximation');
     expect(KIND_SHORT.approximation).toBe('APPROX');
+  });
+});
+
+// =============================================================================
+// A measurement that cannot be taken costs its own row, not the registry
+// -----------------------------------------------------------------------------
+// `conjunctionCluster` returns null when a run produced no conjunctions at all.
+// That is a degenerate result rather than an impossible one - a body that has
+// left its resonance may never line up with its neighbour inside the window the
+// run covers - and the Pluto checks read the cluster to report where Pluto sits
+// on its own orbit at each line-up.
+//
+// Read without a guard, that null threw inside runChecks(), and because every
+// check is built before any of them is reported, the whole registry came back
+// as "the validation suite could not run". Two hundred and forty-three checks
+// disappeared because one of them had nothing to measure, which is the wrong
+// answer twice over: it hides the other checks, and it hides which check went
+// missing.
+//
+// The three tests below cover the path in the order it runs. Between them they
+// fail if the producer stops returning null for an empty run, if the scorer
+// stops recording a missing number as a failure, or if the registry goes back
+// to reaching through the cluster without checking it.
+//
+// What none of them do is run the registry itself against a degenerate world,
+// because there is no way to produce one without changing the physics, and the
+// only honest way to change the physics is to change it for everybody. That
+// case was verified out of band instead, by loading the suite with
+// `conjunctionCluster` forced to return null: the registry completed all 243
+// checks and reported exactly one failure, this one. The commit message and the
+// pull request carry the numbers.
+// =============================================================================
+describe('a missing measurement fails its own row, not the suite', () => {
+  test('a window with no line-up yields no conjunctions and so no cluster', () => {
+    // Two bodies whose relative longitude drifts from 10 to 100 degrees and
+    // never completes a circuit: real motion, no conjunction in the window.
+    // This is the shape of the rows the Pluto check derives its anomalies from.
+    const samples = Array.from({ length: 50 }, (_, i) => ({
+      t: i,
+      outer: i * 3,
+      inner: i * 3 + 10 + (i * 90) / 49,
+    }));
+    const events = conjunctions(samples);
+    expect(events).toEqual([]);
+
+    // The registry maps events to the true anomaly at each one, so no events
+    // means no anomalies, and an empty set has no mean direction to report.
+    const anomalies = events.map(() => ({ longitude: 0 }));
+    expect(conjunctionCluster(anomalies)).toBeNull();
+  });
+
+  test('a measurement that is not a number is scored as a failure, not thrown', () => {
+    // The contract the guard depends on. score() is the registry's own scorer,
+    // imported rather than reimplemented, so this cannot drift from it.
+    const cluster = conjunctionCluster([]);
+    expect(cluster).toBeNull();
+
+    const row = score({
+      group: 'Orbital resonance',
+      kind: 'integration',
+      name: 'a check whose measurement could not be taken',
+      measured: cluster ? cluster.mean : NaN,
+      expected: 180,
+      tolerance: 10,
+      toleranceKind: 'absolute',
+    });
+    expect(row.pass).toBe(false);
+    expect(row.note).toMatch(/not finite/);
+    expect(row.name).toBe('a check whose measurement could not be taken');
+  });
+
+  test('the registry never reaches through a conjunction cluster', () => {
+    // The structural half, and the one that catches the original mistake coming
+    // back. A behavioural test cannot see this without a degenerate world to run
+    // the registry in, so the invariant is asserted on the source: every read of
+    // atConjunction goes through a guard, and a bare `atConjunction.` is the bug.
+    const registry = readFileSync(
+      path.join(here, '..', 'tools', 'physics-checks.mjs'),
+      'utf8'
+    );
+    // Guard against the test silently passing because the name changed.
+    expect(registry).toContain('atConjunction');
+    // Every line that dereferences the cluster has to test it on the same line.
+    // `pluto.atConjunction ? pluto.atConjunction.mean : NaN` satisfies this;
+    // the `pluto.atConjunction.mean` that used to be there does not.
+    const dereferences = registry
+      .split('\n')
+      .filter(line => /atConjunction\s*\./.test(line));
+    expect(dereferences.length).toBeGreaterThan(0);
+    for (const line of dereferences) {
+      expect(line).toMatch(/atConjunction\s*(\?|&&)/);
+    }
   });
 });
