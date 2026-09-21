@@ -26,6 +26,58 @@ npm run workbook:check    fail if either has drifted
 npx jest tests/workbookSpike.test.js
 ```
 
+## Decision
+
+Recorded 2026-09-21, after the gate was reviewed and its result accepted.
+
+| | |
+| --- | --- |
+| **Technical gate** | **B** — the real engine can be driven headlessly and can produce deterministic workbook measurements checked by the lesson's own validation logic. One small missing seam, named below. |
+| **Product-demand gate** | **FAIL** — no named instructor, course, institution, translator or other adopter was found requesting this capability. |
+| **Disposition** | **Preserve the spike as evidence. Do not productize it.** |
+
+The technical result is evidence that a workbook system is *possible*. It is not
+a reason to build one. The two gates are independent and this work clears only
+the first; a passing technical gate behind a failed product gate is a finding,
+not a mandate.
+
+Accordingly, none of the following is to be built on the strength of this spike:
+general workbook infrastructure, a second workbook, generalized headless lesson
+generation, translator tooling, XLIFF, `/lite/`, or RTL. The generator stays
+narrow and single-purpose, and `probeContext()` stays where it is.
+
+**Reconsideration criterion.** Reopen this work only when one of these is true:
+
+- a specific adopter — a named instructor, course, institution or translator —
+  asks for printable or offline workbook material; or
+- another concrete use case independently requires this headless path.
+
+Absent one of those, this is closed. Gravitas has no telemetry by design, so
+adoption cannot be inferred later from analytics: for this class of feature an
+explicit request is the only signal that exists, and there is not one. Stars,
+visits, the general desirability of printable material and general best
+practice are not requests and are not to be read as satisfying the criterion
+above.
+
+## What this established, for whoever needs it next
+
+The five findings worth carrying forward, independently of workbooks. Each is
+documented in full further down.
+
+1. **`applyPreset` + `buildWorld` work headlessly**, in plain node, with no DOM
+   shim — the Worker guards carry it.
+2. **Deterministic scientific stepping must not depend on frame timing.** The
+   browser's step comes from `frameAdvance(realSeconds, ...)`; anything
+   reproducible has to pin the advance and count whole steps.
+3. **`resetSimulationTime` and the rest of the world-reset postlude sit outside
+   `buildWorld`**, in `js/ui.js`. A caller that does not replicate them gets a
+   half-built world, silently.
+4. **`currentTimeDays()` is not a usable headless simulation clock.** It reads
+   the timeline recorder, which returns zero outside a render loop.
+5. **A lesson's own validator can serve as the workbook/site consistency
+   invariant.** It needs no second answer key and it demonstrably rejects a
+   corrupted value.
+
 ## The lesson
 
 **Kepler's Laws** (`js/data/investigations/keplers-laws.js`), chosen over the
@@ -361,15 +413,42 @@ adopter ever appears, the first thing to ask them is which lesson and whether
 they want the numbers at all — the answer changes the design completely, and
 guessing it now would be the expensive mistake.
 
-## After integrated v2 lands
+## Status of the branch
 
-1. **Rebase and re-run.** `npm run workbook:check` is the whole re-test: if the
-   integrated engine has moved a number, the committed table will not match and
-   the diff says which. That is the spike's main ongoing value.
-2. **Consider extracting the `js/ui.js` reset postlude** into a `resetWorld()`
-   both callers use. It is four lines and it removes a real trap, independently
-   of whether workbooks ever happen.
-3. **Do not extract `probeContext`** on this spike's account. Doing it properly
-   means separating the lesson panel from `js/render.js`, which is a real
-   refactor and needs a reason better than one tool.
-4. **Watch the deferred-JS budget**, which is full.
+`feat/workbook-spike-preintegration` is pushed and is **evidence only**. It is
+not to be merged, not to be rebased onto the moving `v2`, and no pull request is
+to be opened for it. It is a record of what was measured, kept where it can be
+read.
+
+If the reconsideration criterion above is ever met, the re-test is
+`npm run workbook:check` against whatever `v2` has become: if the engine has
+moved a number, the committed table will not match and the diff says which.
+That is a check to run at that point, not a reason to keep the branch current
+in the meantime.
+
+## Carried out of here as a separate candidate
+
+One item leaves this spike as its own piece of work, because its value does not
+depend on workbooks:
+
+> **Extract the `js/ui.js` reset postlude into a `resetWorld()` that
+> `js/world/build.js` and any other caller both use.** Four lines
+> (`bumpWorldGeneration`, `resetSimulationTime`, `resetAbsorptionAccounting`,
+> `resetConservationBaseline`), and it removes the only way to build a world
+> that is half-built — a correctness trap for the Worker route, for tests, and
+> for anything else that builds a second world in one process.
+
+It is **not** implemented here, and it must not be: smuggling an unrelated
+architectural change in through a failed product gate is how a "no" becomes a
+partial "yes". Evaluate it on its own merits against the final integrated `v2`.
+
+Two things that are explicitly *not* candidates:
+
+- **Extracting `probeContext`.** Doing it properly means separating the lesson
+  panel from `js/render.js`. That is a real refactor and needs a better reason
+  than one tool that is not being productized.
+- **Anything in the workbook, translation, `/lite/` or RTL family**, per the
+  Decision above.
+
+Unrelated to all of it, and worth knowing: **the deferred-JS budget is full**
+(3879.7 KB of 3880.0). The next lazy chunk anyone adds fails `budget:check`.
