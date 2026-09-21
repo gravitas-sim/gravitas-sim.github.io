@@ -2624,6 +2624,15 @@ export const ES_DEFERRED = {
   'sound.now.nothing': 'Nada',
   'sound.now.sandbox': 'Cuerpos en órbita, como tonos',
   'sound.now.signal': 'Una señal de onda gravitacional, {seconds} s',
+  'sound.voices.title': 'Qué representan los tonos',
+  'sound.voices.reference':
+    'Voz m\u00e1s aguda, {label}. Periodo {period}. Todos los intervalos siguientes se miden desde esta.',
+  'sound.voices.row':
+    '{label}. Periodo {period}, {ratio}\u00d7 el de la voz m\u00e1s aguda, {cents} centavos por debajo.',
+  'sound.voices.none':
+    'No suena ning\u00fan cuerpo. El sonido est\u00e1 apagado o ning\u00fan cuerpo a la vista est\u00e1 en \u00f3rbita.',
+  'sound.voices.note':
+    'Estos son los periodos a partir de los cuales se calculan los tonos, no una descripci\u00f3n de los tonos. El audio redondea cada altura a una escala de cinco notas, de modo que dos de estos cuerpos pueden sonar igual aunque sus periodos no lo sean; los n\u00fameros de aqu\u00ed no se redondean.',
   'sound.preview': 'Reproducir un ejemplo',
   'sound.stop': 'Detener',
   'sound.preview.note':

@@ -1988,6 +1988,33 @@
   min-width: 0;
 }
 
+/*
+  The readout of what the tones stand for. Three selectors, because the list is
+  the only thing here that is not already styled by .sound-panel-note or the
+  panel's own type: a heading that has to read as smaller than the panel title,
+  the list's own reset, and tabular figures so that three periods in a column
+  can be compared digit by digit rather than eyeballed.
+*/
+.sound-panel-voices-title {
+  margin: 0 0 var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sound-panel-voices-list {
+  margin: 0 0 var(--space-2);
+  padding-left: 1.25em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.45;
+}
+
+.sound-panel-voices-list li + li {
+  margin-top: 2px;
+}
+
 .sound-panel-volume {
   display: flex;
   align-items: center;
