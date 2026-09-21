@@ -87,7 +87,10 @@ const REF = {
   // Greenwich mean sidereal time at J2000.0: 18h 41m 50.5482s. The defining
   // value of the IAU 1982 expression.
   gmstAtJ2000Hours: 18 + 41 / 60 + 50.5482 / 3600,
-  // A sidereal day in mean solar days. 23h 56m 04.0905s.
+  // A sidereal day in mean solar days: 23h 56m 04.0905s. The reciprocal of the
+  // rate term in the same IAU 1982 expression the constant above comes from
+  // (Aoki et al. 1982, A&A 105, 359), as tabulated in the Explanatory
+  // Supplement to the Astronomical Almanac.
   siderealDayDays: 0.997269566,
   // Obliquity of the ecliptic at J2000.0, IAU 2006.
   obliquityJ2000Deg: 23.4392911,
@@ -95,14 +98,19 @@ const REF = {
   // RA 18h 45m 07s, Dec -23 deg 01' 55".
   sunRaJ2000Deg: (18 + 45 / 60 + 7 / 3600) * 15,
   sunDecJ2000Deg: -(23 + 1 / 60 + 55 / 3600),
-  // Equation of time extremes. The generally quoted figures; the exact value
-  // drifts by about ten seconds from year to year.
+  // Equation of time extremes, from the Astronomical Almanac's daily equation-
+  // of-time table: about +16m33s in early November and -14m15s in mid-February.
+  // Extremes rather than a dated value on purpose - the exact figure drifts by
+  // about ten seconds from year to year, so a check against one year's number
+  // would be a check against the year.
   eotMaxMinutes: 16.55,
   eotMinMinutes: -14.25,
   // Equinoxes and solstices, UT, from the Astronomical Almanac.
   marchEquinox2026Jd: 2461120.115278, // 2026 March 20, 14:46 UT
   juneSolstice2026Jd: 2461212.850694, // 2026 June 21, 08:25 UT
-  // Lunar phase instants, UT. Published to the minute.
+  // Lunar phase instants, UT, published to the minute. Espenak, Six Millennium
+  // Catalog of Phases of the Moon (NASA GSFC), which is the same reduction the
+  // eclipse canon below comes from.
   newMoon2000Jan6Jd: 2451550.259722, // 2000 January 6, 18:14 UT
   fullMoon2018Jul27Jd: 2458327.347222, // 2018 July 27, 20:20 UT
   // Gamma of two total lunar eclipses, in equatorial Earth radii: the least
@@ -113,8 +121,12 @@ const REF = {
   lunarEclipse2000Gamma: -0.2996,
   lunarEclipse2000Jd: 2451564.697222, // greatest eclipse 04:44 UT
   earthRadiusKm: 6378.137, // WGS 84 equatorial radius
-  // The Moon's orbit. Semi-major axis and eccentricity, and the mean synodic
-  // month, all standard published values.
+  // The Moon's orbit. Semi-major axis and eccentricity as tabulated in the
+  // Explanatory Supplement to the Astronomical Almanac; the mean synodic month
+  // from the ELP lunar theory as Meeus gives it (Astronomical Algorithms, 2nd
+  // ed., ch. 49); the perigee extreme from Meeus, Mathematical Astronomy
+  // Morsels, which is where the extreme perigee and apogee distances are
+  // worked out.
   moonSemiMajorKm: 384399,
   moonEccentricity: 0.0549,
   synodicMonthDays: 29.530589,
@@ -5527,7 +5539,8 @@ export async function runChecks() {
       unit: 'mean solar days',
       tolerance: 1e-8,
       why: 'The rate constant is the reason a nightly observing window walks four minutes earlier each night, which is the central fact of the planning lesson this module was written for. Checking the rate against the published sidereal day is checking that claim at its source rather than in the lesson prose.',
-      source: '23h 56m 04.0905s',
+      source:
+        'IAU 1982 / Aoki et al. (1982), A&A 105, 359; the sidereal day of 23h 56m 04.0905s as tabulated in the Explanatory Supplement to the Astronomical Almanac.',
     });
 
     add({
@@ -5774,7 +5787,8 @@ export async function runChecks() {
         tolerance: 0.5,
         toleranceKind: 'absolute',
         why: 'The equation of time is the difference between the two terms of the solar series read out against the mean Sun, so its extremes are the sharpest test of both at once: an error in either amplitude or in the phase between them moves them. The tolerance is half a minute because the extreme itself varies by about ten seconds from year to year and the quoted figure is a generic one, not a 2026 value - so this bounds the series rather than pinning it.',
-        source: 'Commonly published extremes: +16m33s in early November',
+        source:
+          'Astronomical Almanac, daily equation-of-time table; the November extreme, about +16m33s. Not a dated value: the year-to-year drift is about ten seconds.',
       });
       add({
         group: OBS,
@@ -5786,7 +5800,8 @@ export async function runChecks() {
         tolerance: 0.5,
         toleranceKind: 'absolute',
         why: 'The other extreme, where the obliquity and eccentricity terms combine with the opposite sign. Measured at -14.22 minutes against a quoted -14m15s.',
-        source: 'Commonly published extremes: -14m15s in mid-February',
+        source:
+          'Astronomical Almanac, daily equation-of-time table; the February extreme, about -14m15s. Not a dated value: the year-to-year drift is about ten seconds.',
       });
     }
 
@@ -5827,7 +5842,8 @@ export async function runChecks() {
       tolerance: 3,
       toleranceKind: 'absolute',
       why: 'A phase instant is a statement that two ecliptic longitudes are equal, published to the minute, and it therefore constrains the truncated lunar series far more sharply than any coordinate would. The residual is about one minute and it is late, which is the expected sign: the module uses UT where the series wants TT, and delta-T was 64 seconds in 2000. Three minutes leaves room for that plus the half-minute the published time is rounded to.',
-      source: 'Published lunation: 2000 January 6, 18:14 UT',
+      source:
+        'Espenak, Six Millennium Catalog of Phases of the Moon (NASA GSFC): New Moon 2000 January 6, 18:14 UT.',
     });
 
     add({
@@ -5842,7 +5858,8 @@ export async function runChecks() {
       tolerance: 3,
       toleranceKind: 'absolute',
       why: 'The opposite phase, eighteen years later, so a drift in the mean longitude rate would show here and not in the check above. Same delta-T reasoning; delta-T was 69 seconds in 2018.',
-      source: 'Published lunation: 2018 July 27, 20:20 UT',
+      source:
+        'Espenak, Six Millennium Catalog of Phases of the Moon (NASA GSFC): Full Moon 2018 July 27, 20:20 UT.',
     });
 
     /**
@@ -5892,15 +5909,14 @@ export async function runChecks() {
 
     add({
       group: OBS,
-      kind: 'data',
+      kind: 'approximation',
       name: 'The Moon is fully lit at the middle of a total lunar eclipse',
       measured: sky.lunarPhase(REF.lunarEclipse2018Jd).illuminatedFraction,
       expected: 1,
       unit: 'fraction',
       tolerance: 1e-5,
       toleranceKind: 'absolute',
-      why: 'The illuminated fraction is computed from the phase angle of the Sun-Moon-Earth triangle rather than from the elongation directly, which is the correction that makes the Moon not exactly half lit at quadrature. This check is where that arithmetic has an unambiguous answer: at the middle of a total lunar eclipse the Moon is at full, whatever the Earth is doing to the light.',
-      source: 'Geometry of a central eclipse',
+      why: "The illuminated fraction is computed from the phase angle of the Sun-Moon-Earth triangle rather than from the elongation directly, which is the correction that makes the Moon not exactly half lit at quadrature. This check is where that arithmetic has an unambiguous answer: at the middle of a total lunar eclipse the Moon is at full, whatever the Earth is doing to the light. Not `data`, which its own source string admitted by saying 'Geometry of a central eclipse': the expected value is 1 because a central eclipse happens at full, and nobody published an illuminated fraction for this instant. Not `analytic` either, because the tolerance is not machine epsilon and has something real to absorb - the truncated lunar and solar series, which come back 8.4e-7 short of unity. That is an educational model validated against the geometry it says it implements, which is what `approximation` means here. The published instant it is evaluated at carries its own citation on REF.lunarEclipse2018Jd.",
     });
 
     {
@@ -5921,7 +5937,8 @@ export async function runChecks() {
         tolerance: 5e-4,
         toleranceKind: 'absolute',
         why: 'A hundred and sixty years of lunations divided by their number: the long-baseline test of the mean rates in the series, which no single instant can provide. Residual is 1.5e-4 days, about thirteen seconds a lunation, and is dominated by the beat above rather than by the rates themselves.',
-        source: 'Mean synodic month, 29.530589 d',
+        source:
+          'Mean synodic month, 29.530589 d, from the ELP lunar theory as given in Meeus, Astronomical Algorithms (2nd ed.), ch. 49.',
       });
     }
 
@@ -5948,7 +5965,8 @@ export async function runChecks() {
         unit: 'km',
         tolerance: 5e-4,
         why: 'A check that would fail against the number most people would reach for. The published 384,400 km is the semi-major axis; the time average of the distance over an eccentric orbit is larger than that by a(1 + e^2/2), about 580 km. Comparing the series average to the semi-major axis directly would look like a 0.15% error in the series when it is a 0.15% error in the expectation, and writing this check down is what stops somebody "fixing" the constant term later.',
-        source: 'a = 384,399 km, e = 0.0549',
+        source:
+          'Lunar semi-major axis 384,399 km and eccentricity 0.0549, Explanatory Supplement to the Astronomical Almanac. The expected value is those two elements through the standard time-average <r> = a(1 + e^2/2), not a separately published figure.',
       });
       add({
         group: OBS,
@@ -5959,7 +5977,8 @@ export async function runChecks() {
         unit: 'km',
         tolerance: 2e-3,
         why: 'The amplitude test the mean cannot give: the average above would be right even if every periodic term in the distance series were half its proper size. The extreme perigee is set by the largest of them, so this is the check that says they are the right size. Published closest approaches are a little under 356,500 km.',
-        source: 'Published perigee extreme, about 356,400 km',
+        source:
+          'Meeus, Mathematical Astronomy Morsels: the extreme perigee distance, about 356,400 km.',
       });
     }
 
@@ -6140,18 +6159,17 @@ export async function runChecks() {
 
     add({
       group: OBS,
-      kind: 'data',
+      kind: 'analytic',
       name: 'HD 209458 never rises above 42 degrees from La Silla',
       measured: sky.altAz({
         hourAngleDeg: 0,
         declinationDeg: HD209458.decDeg,
         latitudeDeg: LA_SILLA.latitudeDeg,
       }).altitudeDeg,
-      expected: 41.8595,
+      expected: 90 - Math.abs(LA_SILLA.latitudeDeg - HD209458.decDeg),
       unit: 'degrees',
-      tolerance: 1e-4,
-      why: 'The whole reason the exercise works from this site: a target at declination +18.9 seen from latitude -29.3 is never better than airmass 1.5, so the airmass limit bites for most of every night and the usable window is a few hours rather than the whole of it. From a northern site the same target is overhead and there is no lesson.',
-      source: "HD 209458 at RA 22h 03m, Dec +18 deg 53'; La Silla at -29.2563",
+      tolerance: 1e-12,
+      why: "The whole reason the exercise works from this site: a target at declination +18.9 seen from latitude -29.3 is never better than airmass 1.5, so the airmass limit bites for most of every night and the usable window is a few hours rather than the whole of it. From a northern site the same target is overhead and there is no lesson. This was `data` with an expected value of 41.8595 and a source naming the catalogue entries, which was the Pluto mistake again: nobody published a culmination altitude for this pair, and 41.8595 is 90 - |phi - delta| computed from the two stored elements and written down to four places. It is the same identity as 'Culmination altitude is 90 minus the latitude-declination gap' above, instantiated at the site and target the lesson uses - so it is checked at machine precision against the closed form, and the stored elements are what it pins. The elements' own provenance is on LA_SILLA and HD209458 where they are declared.",
     });
 
     add({
@@ -6201,7 +6219,8 @@ export async function runChecks() {
         tolerance: 1e-6,
         toleranceKind: 'absolute',
         why: 'The fact the planning exercise exists to teach, checked rather than asserted. A student who observes their target at the best moment of each night is sampling on a comb whose spacing is the sidereal day, so their schedule has an alias at 1.00274 cycles per day whatever they do - and the alias is at the sidereal frequency rather than at one per day, which is visible in the spectral window and is the detail that tells them the comb came from the sky rather than from their own habits. Measured spread across twelve nights is under a tenth of a second.',
-        source: 'Sidereal day, 23h 56m 04.0905s',
+        source:
+          'IAU 1982 / Aoki et al. (1982), A&A 105, 359; the sidereal day of 23h 56m 04.0905s as tabulated in the Explanatory Supplement to the Astronomical Almanac.',
       });
       add({
         group: OBS,
