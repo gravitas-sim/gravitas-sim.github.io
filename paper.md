@@ -191,7 +191,7 @@ has never been raised.
 
 Gravitas is tested at three levels. A unit suite covers the modules. A browser
 suite runs in full in Chromium, against both the sources and the production
-build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 243 checks and publishes the
+build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 248 checks and publishes the
 result: each check names what it compares, the kind of evidence it rests on —
 analytic, integrated, published, approximation or empirical — and its measured
 error. The public validation page is generated from the suite that ran, not

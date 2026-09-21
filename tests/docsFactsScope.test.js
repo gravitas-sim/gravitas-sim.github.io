@@ -116,14 +116,21 @@ afterEach(() => {
 });
 
 describe('a fact that only the wider check measures', () => {
-  test('the cheap check passes over it, and says that it did', () => {
+  test('the cheap check has nothing to say about it, and says so', () => {
     // The old CI step, on a tree whose measured test count is impossible. It
-    // has nothing to say, which is the defect: "Documentation matches the
-    // source" is printed by a run that did not look.
+    // has nothing to say, which is the defect.
+    //
+    // Asserted as "does not report it" rather than "exits zero", deliberately.
+    // The exit code also answers for every cheap fact in the repository, so an
+    // earlier version of this test failed during integration whenever the
+    // working tree's docs had not been synced yet - which is a fact about the
+    // tree, not about the thing under test. What this test is about is that
+    // the cheap form cannot see the deferred facts at all: it names them as
+    // unmeasured and never as stale, whatever else is going on around it.
     const cheap = docsFacts(['--check']);
-    expect(cheap.code).toBe(0);
-    expect(cheap.out).toMatch(/Documentation matches the source/);
     expect(cheap.out).toMatch(/needs --groups=tests:.*jestTests/);
+    expect(cheap.out).not.toMatch(/"jestTests" says/);
+    expect(cheap.out).not.toMatch(/"physicsChecks" says/);
   });
 
   test('the check CI runs now does not', () => {

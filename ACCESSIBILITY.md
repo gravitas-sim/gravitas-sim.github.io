@@ -189,9 +189,20 @@ audio was liked. The instruments for the last of those belong with the rest of
 the evaluation kit in `evaluation/`, not here.
 
 Until that happens, the honest sentence — the one that may be used in a paper,
-a grant or a course description — is this: *sonification is implemented, its
-encoding is verified to be information-preserving, a text equivalent exists and
-is checked against it, and it has not been tested with screen-reader users.*
+a grant or a course description — is this: *the sandbox's sonification is
+implemented and is deliberately lossy; a separate period-to-cents law is
+verified to be information-preserving and is not what the speakers play; a text
+equivalent of the underlying periods exists and is checked against the array the
+oscillators are actually following; and none of it has been tested with
+screen-reader users.*
+
+The previous version of that sentence said "its encoding is verified to be
+information-preserving", which is true of `js/sonify/law.js` and false of the
+thing a listener hears. The rest of this section is careful about that
+distinction — the table above says in as many words that the five validation
+checks establish "nothing about the audible sound, which is quantized and
+lossy" — and the one sentence written to be quoted outside the project was the
+one that blurred it.
 
 ## Honest limitations
 
