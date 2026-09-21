@@ -41,7 +41,24 @@ const STATIC_FILES = [
 const STATIC_DIRS = ['images', 'notebooks', 'vendor'];
 
 // Static document pages outside the single-page app.
-const DOC_PAGES = ['model', 'instructors', 'validation', 'teaching'];
+//
+// A page missing from this list is built in development and absent in
+// production: its bundle is emitted by the entries below, its stylesheet is
+// built, and only the HTML that loads them never arrives. /evaluation/ shipped
+// that way - linked from the instructor dashboard and the teaching page,
+// 404 on the deployed site - and /instructors/submissions/ shipped that way
+// too, unnoticed because nothing links to it by href; it is reached by pasting
+// a submission token URL, which is precisely the case a link checker cannot
+// see. So the list is held to the tree by tests/docPages.test.js: every
+// tracked `*/index.html` outside the app's own must appear here.
+const DOC_PAGES = [
+  'model',
+  'instructors',
+  'instructors/submissions',
+  'validation',
+  'teaching',
+  'evaluation',
+];
 
 /**
  * Stylesheets that belong to one document page and to nothing else.
