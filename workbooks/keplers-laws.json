@@ -1,0 +1,632 @@
+{
+  "lesson": "keplers-laws",
+  "seed": "gravitas-workbook-keplers-laws-v1",
+  "stepping": {
+    "Kepler's 2nd Law": {
+      "step": 0.05,
+      "substeps": 1,
+      "from": "max_timestep"
+    },
+    "Solar System": {
+      "step": 0.002,
+      "substeps": 1,
+      "from": "fallback"
+    },
+    "TRAPPIST-1 System": {
+      "step": 0.0006,
+      "substeps": 1,
+      "from": "max_timestep"
+    }
+  },
+  "schedule": [
+    {
+      "id": "kepler-t0",
+      "scenario": "Kepler's 2nd Law",
+      "at": {
+        "day": 0
+      }
+    },
+    {
+      "id": "kepler-periapsis",
+      "scenario": "Kepler's 2nd Law",
+      "at": {
+        "event": {
+          "kind": "periapsis",
+          "body": "Eccentric Orbiter",
+          "primary": "Kepler Star"
+        },
+        "maxDays": 2000
+      }
+    },
+    {
+      "id": "kepler-apoapsis",
+      "scenario": "Kepler's 2nd Law",
+      "at": {
+        "event": {
+          "kind": "apoapsis",
+          "body": "Eccentric Orbiter",
+          "primary": "Kepler Star"
+        },
+        "maxDays": 2000
+      }
+    },
+    {
+      "id": "solar-t0",
+      "scenario": "Solar System",
+      "at": {
+        "day": 0
+      }
+    },
+    {
+      "id": "solar-one-year",
+      "scenario": "Solar System",
+      "at": {
+        "day": 365.25
+      }
+    },
+    {
+      "id": "trappist-t0",
+      "scenario": "TRAPPIST-1 System",
+      "at": {
+        "day": 0
+      }
+    }
+  ],
+  "samples": {
+    "kepler-t0": {
+      "day": 0,
+      "probe": {
+        "Circular Orbiter": [
+          {
+            "label": "Selected",
+            "value": "Circular Orbiter",
+            "emphasis": true
+          },
+          {
+            "label": "Eccentricity e",
+            "value": "0.020"
+          },
+          {
+            "label": "Semi-major axis a",
+            "value": "3.27 AU"
+          },
+          {
+            "label": "Closest (periapsis)",
+            "value": "3.20 AU"
+          },
+          {
+            "label": "Furthest (apoapsis)",
+            "value": "3.33 AU"
+          },
+          {
+            "label": "Current speed",
+            "value": "16.8 km/s"
+          }
+        ],
+        "Eccentric Orbiter": [
+          {
+            "label": "Selected",
+            "value": "Eccentric Orbiter",
+            "emphasis": true
+          },
+          {
+            "label": "Eccentricity e",
+            "value": "0.650"
+          },
+          {
+            "label": "Semi-major axis a",
+            "value": "1.43 AU"
+          },
+          {
+            "label": "Closest (periapsis)",
+            "value": "0.500 AU"
+          },
+          {
+            "label": "Furthest (apoapsis)",
+            "value": "2.36 AU"
+          },
+          {
+            "label": "Current speed",
+            "value": "54.1 km/s"
+          }
+        ]
+      }
+    },
+    "kepler-periapsis": {
+      "day": 623.6590862410335,
+      "event": {
+        "kind": "periapsis",
+        "timeDays": 623.6093362895006,
+        "bracketDays": 0.09190378518144371,
+        "overshootDays": 0.049749951532930936
+      },
+      "distanceAu": 0.49999824576702523,
+      "speedKms": 54.11445341075738,
+      "probe": [
+        {
+          "label": "Distance from star",
+          "value": "0.500 AU",
+          "emphasis": true
+        },
+        {
+          "label": "Speed now",
+          "value": "54.1 km/s",
+          "emphasis": true
+        },
+        {
+          "label": "At an extreme?",
+          "value": "closest: read now"
+        },
+        {
+          "label": "Closest this orbit",
+          "value": "0.500 AU"
+        },
+        {
+          "label": "Furthest this orbit",
+          "value": "2.36 AU"
+        }
+      ]
+    },
+    "kepler-apoapsis": {
+      "day": 935.5805331467632,
+      "event": {
+        "kind": "apoapsis",
+        "timeDays": 935.5553921087835,
+        "bracketDays": 0.09190378518133002,
+        "overshootDays": 0.02514103797966527
+      },
+      "distanceAu": 2.357218214747613,
+      "speedKms": 11.478407699708649,
+      "probe": [
+        {
+          "label": "Distance from star",
+          "value": "2.36 AU",
+          "emphasis": true
+        },
+        {
+          "label": "Speed now",
+          "value": "11.5 km/s",
+          "emphasis": true
+        },
+        {
+          "label": "At an extreme?",
+          "value": "furthest: read now"
+        },
+        {
+          "label": "Closest this orbit",
+          "value": "0.500 AU"
+        },
+        {
+          "label": "Furthest this orbit",
+          "value": "2.36 AU"
+        }
+      ]
+    },
+    "solar-t0": {
+      "day": 0,
+      "steps": 0,
+      "rows": [
+        [
+          "Mercury",
+          "0.387",
+          "0.241"
+        ],
+        [
+          "Venus",
+          "0.723",
+          "0.615"
+        ],
+        [
+          "Earth",
+          "1.000",
+          "1.000"
+        ],
+        [
+          "Mars",
+          "1.524",
+          "1.881"
+        ],
+        [
+          "Jupiter",
+          "5.199",
+          "11.85"
+        ],
+        [
+          "Saturn",
+          "9.580",
+          "29.65"
+        ],
+        [
+          "Uranus",
+          "19.190",
+          "84.05"
+        ],
+        [
+          "Neptune",
+          "30.068",
+          "164.86"
+        ]
+      ]
+    },
+    "solar-one-year": {
+      "day": 365.25137537112505,
+      "steps": 99357,
+      "rows": [
+        [
+          "Mercury",
+          "0.387",
+          "0.241"
+        ],
+        [
+          "Venus",
+          "0.723",
+          "0.615"
+        ],
+        [
+          "Earth",
+          "1.000",
+          "1.000"
+        ],
+        [
+          "Mars",
+          "1.524",
+          "1.881"
+        ],
+        [
+          "Jupiter",
+          "5.199",
+          "11.85"
+        ],
+        [
+          "Saturn",
+          "9.580",
+          "29.65"
+        ],
+        [
+          "Uranus",
+          "19.190",
+          "84.05"
+        ],
+        [
+          "Neptune",
+          "30.068",
+          "164.86"
+        ]
+      ]
+    },
+    "trappist-t0": {
+      "day": 0,
+      "rows": [
+        {
+          "name": "TRAPPIST-1b",
+          "aAu": "0.0115",
+          "periodDays": "1.5028",
+          "probe": [
+            {
+              "label": "Selected",
+              "value": "TRAPPIST-1b",
+              "emphasis": true
+            },
+            {
+              "label": "Semi-major axis a",
+              "value": "0.0115 AU"
+            },
+            {
+              "label": "Period P",
+              "value": "1.50 d"
+            }
+          ]
+        },
+        {
+          "name": "TRAPPIST-1c",
+          "aAu": "0.0158",
+          "periodDays": "2.4202",
+          "probe": [
+            {
+              "label": "Selected",
+              "value": "TRAPPIST-1c",
+              "emphasis": true
+            },
+            {
+              "label": "Semi-major axis a",
+              "value": "0.0158 AU"
+            },
+            {
+              "label": "Period P",
+              "value": "2.42 d"
+            }
+          ]
+        },
+        {
+          "name": "TRAPPIST-1d",
+          "aAu": "0.0223",
+          "periodDays": "4.0584",
+          "probe": [
+            {
+              "label": "Selected",
+              "value": "TRAPPIST-1d",
+              "emphasis": true
+            },
+            {
+              "label": "Semi-major axis a",
+              "value": "0.0223 AU"
+            },
+            {
+              "label": "Period P",
+              "value": "4.06 d"
+            }
+          ]
+        },
+        {
+          "name": "TRAPPIST-1e",
+          "aAu": "0.0292",
+          "periodDays": "6.0808",
+          "probe": [
+            {
+              "label": "Selected",
+              "value": "TRAPPIST-1e",
+              "emphasis": true
+            },
+            {
+              "label": "Semi-major axis a",
+              "value": "0.0292 AU"
+            },
+            {
+              "label": "Period P",
+              "value": "6.08 d"
+            }
+          ]
+        },
+        {
+          "name": "TRAPPIST-1f",
+          "aAu": "0.0385",
+          "periodDays": "9.2059",
+          "probe": [
+            {
+              "label": "Selected",
+              "value": "TRAPPIST-1f",
+              "emphasis": true
+            },
+            {
+              "label": "Semi-major axis a",
+              "value": "0.0385 AU"
+            },
+            {
+              "label": "Period P",
+              "value": "9.21 d"
+            }
+          ]
+        },
+        {
+          "name": "TRAPPIST-1g",
+          "aAu": "0.0469",
+          "periodDays": "12.3773",
+          "probe": [
+            {
+              "label": "Selected",
+              "value": "TRAPPIST-1g",
+              "emphasis": true
+            },
+            {
+              "label": "Semi-major axis a",
+              "value": "0.0469 AU"
+            },
+            {
+              "label": "Period P",
+              "value": "12.4 d"
+            }
+          ]
+        },
+        {
+          "name": "TRAPPIST-1h",
+          "aAu": "0.0619",
+          "periodDays": "18.7686",
+          "probe": [
+            {
+              "label": "Selected",
+              "value": "TRAPPIST-1h",
+              "emphasis": true
+            },
+            {
+              "label": "Semi-major axis a",
+              "value": "0.0619 AU"
+            },
+            {
+              "label": "Period P",
+              "value": "18.8 d"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "agreement": [
+    {
+      "sid": "measure-the-two-orbits",
+      "title": "Measure the two orbits",
+      "subject": null,
+      "level": "ok",
+      "message": "That averages to 1.43 AU, which matches the semi-major axis the simulation reports. The mean of the two extremes is a: that is what \"semi-major axis\" means.",
+      "entered": {
+        "circ_e": "0.020",
+        "ecc_e": "0.650",
+        "ecc_peri": "0.500",
+        "ecc_apo": "2.36",
+        "ecc_a": "1.43"
+      }
+    },
+    {
+      "sid": "fast-and-slow-in-numbers",
+      "title": "Fast and slow, in numbers",
+      "subject": null,
+      "level": "ok",
+      "message": "Your ratio of 4.70 matches (1+e)/(1−e) = 4.71 for this orbit's eccentricity of 0.650. That relation falls straight out of angular momentum being conserved.",
+      "entered": {
+        "v_peri": "54.1",
+        "r_peri": "0.500",
+        "v_apo": "11.5",
+        "r_apo": "2.357",
+        "v_ratio": "4.70"
+      }
+    },
+    {
+      "sid": "measure-four-planets",
+      "title": "Measure four planets",
+      "subject": null,
+      "level": "ok",
+      "message": "All 8 of your P²/a³ values agree to within 0%. That constancy across planets of wildly different sizes is Kepler's third law. Add more planets and watch the fitted line tighten.",
+      "entered": {
+        "p1_name": "Mercury",
+        "p1_a": "0.387",
+        "p1_P": "0.241",
+        "p2_name": "Venus",
+        "p2_a": "0.723",
+        "p2_P": "0.615",
+        "p3_name": "Earth",
+        "p3_a": "1.000",
+        "p3_P": "1.000",
+        "p4_name": "Mars",
+        "p4_a": "1.524",
+        "p4_P": "1.881",
+        "p5_name": "Jupiter",
+        "p5_a": "5.199",
+        "p5_P": "11.85",
+        "p6_name": "Saturn",
+        "p6_a": "9.580",
+        "p6_P": "29.65",
+        "p7_name": "Uranus",
+        "p7_a": "19.190",
+        "p7_P": "84.05",
+        "p8_name": "Neptune",
+        "p8_a": "30.068",
+        "p8_P": "164.86"
+      }
+    },
+    {
+      "sid": "work-the-law-out-step",
+      "title": "Work the law out, step by step",
+      "subject": null,
+      "level": "ok",
+      "message": "P² ÷ a³ = 1.000, which is 1 within your reading error. The star here is exactly one solar mass, and in years and AU that makes the constant exactly 1, so this is the check working, not a coincidence.",
+      "entered": {
+        "k_a": "30.068",
+        "k_P": "164.86",
+        "k_a3": "27184.016",
+        "k_P2": "27178.820",
+        "k_ratio": "1.000"
+      }
+    },
+    {
+      "sid": "weigh-trappist-1-yourself",
+      "title": "Weigh TRAPPIST-1 yourself",
+      "subject": "TRAPPIST-1b",
+      "level": "ok",
+      "message": "0.0898 solar masses. That is TRAPPIST-1: the published value is 0.0898, one of the smallest stars known and barely above the limit for hydrogen fusion. You have weighed a star forty light years away from two numbers read off its planets. Try a different planet and you should get the same answer, because they all orbit the same mass.",
+      "entered": {
+        "w_name": "TRAPPIST-1b",
+        "w_a": "0.0115",
+        "w_Pd": "1.5028",
+        "w_Py": "0.00411",
+        "w_a3": "0.00000152",
+        "w_P2": "0.00001693",
+        "w_M": "0.0898"
+      }
+    },
+    {
+      "sid": "weigh-trappist-1-yourself",
+      "title": "Weigh TRAPPIST-1 yourself",
+      "subject": "TRAPPIST-1c",
+      "level": "ok",
+      "message": "0.0898 solar masses. That is TRAPPIST-1: the published value is 0.0898, one of the smallest stars known and barely above the limit for hydrogen fusion. You have weighed a star forty light years away from two numbers read off its planets. Try a different planet and you should get the same answer, because they all orbit the same mass.",
+      "entered": {
+        "w_name": "TRAPPIST-1c",
+        "w_a": "0.0158",
+        "w_Pd": "2.4202",
+        "w_Py": "0.00663",
+        "w_a3": "0.00000394",
+        "w_P2": "0.00004391",
+        "w_M": "0.0898"
+      }
+    },
+    {
+      "sid": "weigh-trappist-1-yourself",
+      "title": "Weigh TRAPPIST-1 yourself",
+      "subject": "TRAPPIST-1d",
+      "level": "ok",
+      "message": "0.0898 solar masses. That is TRAPPIST-1: the published value is 0.0898, one of the smallest stars known and barely above the limit for hydrogen fusion. You have weighed a star forty light years away from two numbers read off its planets. Try a different planet and you should get the same answer, because they all orbit the same mass.",
+      "entered": {
+        "w_name": "TRAPPIST-1d",
+        "w_a": "0.0223",
+        "w_Pd": "4.0584",
+        "w_Py": "0.01111",
+        "w_a3": "0.00001109",
+        "w_P2": "0.00012346",
+        "w_M": "0.0898"
+      }
+    },
+    {
+      "sid": "weigh-trappist-1-yourself",
+      "title": "Weigh TRAPPIST-1 yourself",
+      "subject": "TRAPPIST-1e",
+      "level": "ok",
+      "message": "0.0898 solar masses. That is TRAPPIST-1: the published value is 0.0898, one of the smallest stars known and barely above the limit for hydrogen fusion. You have weighed a star forty light years away from two numbers read off its planets. Try a different planet and you should get the same answer, because they all orbit the same mass.",
+      "entered": {
+        "w_name": "TRAPPIST-1e",
+        "w_a": "0.0292",
+        "w_Pd": "6.0808",
+        "w_Py": "0.01665",
+        "w_a3": "0.00002490",
+        "w_P2": "0.00027717",
+        "w_M": "0.0898"
+      }
+    },
+    {
+      "sid": "weigh-trappist-1-yourself",
+      "title": "Weigh TRAPPIST-1 yourself",
+      "subject": "TRAPPIST-1f",
+      "level": "ok",
+      "message": "0.0898 solar masses. That is TRAPPIST-1: the published value is 0.0898, one of the smallest stars known and barely above the limit for hydrogen fusion. You have weighed a star forty light years away from two numbers read off its planets. Try a different planet and you should get the same answer, because they all orbit the same mass.",
+      "entered": {
+        "w_name": "TRAPPIST-1f",
+        "w_a": "0.0385",
+        "w_Pd": "9.2059",
+        "w_Py": "0.02520",
+        "w_a3": "0.00005707",
+        "w_P2": "0.00063526",
+        "w_M": "0.0898"
+      }
+    },
+    {
+      "sid": "weigh-trappist-1-yourself",
+      "title": "Weigh TRAPPIST-1 yourself",
+      "subject": "TRAPPIST-1g",
+      "level": "ok",
+      "message": "0.0898 solar masses. That is TRAPPIST-1: the published value is 0.0898, one of the smallest stars known and barely above the limit for hydrogen fusion. You have weighed a star forty light years away from two numbers read off its planets. Try a different planet and you should get the same answer, because they all orbit the same mass.",
+      "entered": {
+        "w_name": "TRAPPIST-1g",
+        "w_a": "0.0469",
+        "w_Pd": "12.3773",
+        "w_Py": "0.03389",
+        "w_a3": "0.00010316",
+        "w_P2": "0.00114834",
+        "w_M": "0.0898"
+      }
+    },
+    {
+      "sid": "weigh-trappist-1-yourself",
+      "title": "Weigh TRAPPIST-1 yourself",
+      "subject": "TRAPPIST-1h",
+      "level": "ok",
+      "message": "0.0898 solar masses. That is TRAPPIST-1: the published value is 0.0898, one of the smallest stars known and barely above the limit for hydrogen fusion. You have weighed a star forty light years away from two numbers read off its planets. Try a different planet and you should get the same answer, because they all orbit the same mass.",
+      "entered": {
+        "w_name": "TRAPPIST-1h",
+        "w_a": "0.0619",
+        "w_Pd": "18.7686",
+        "w_Py": "0.05139",
+        "w_a3": "0.00023718",
+        "w_P2": "0.00264048",
+        "w_M": "0.0898"
+      }
+    }
+  ]
+}

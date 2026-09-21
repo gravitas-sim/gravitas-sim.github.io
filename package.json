@@ -91,7 +91,9 @@
     "e2e:headed": "playwright test --headed --project=chromium",
     "e2e:report": "playwright show-report",
     "e2e:install": "playwright install --with-deps",
-    "evaluation:summary": "node tools/evaluation-summary.mjs"
+    "evaluation:summary": "node tools/evaluation-summary.mjs",
+    "workbook": "node tools/build-workbook.mjs",
+    "workbook:check": "node tools/build-workbook.mjs --check"
   },
   "repository": {
     "type": "git",

@@ -64,3 +64,8 @@ manual/gravitas-user-manual.pdf
 
 # Reports an earlier CI step left for tools/docs-facts.mjs to read back.
 .facts/
+
+# The printable workbook (tools/build-workbook.mjs). The scientific table
+# beside it is committed; the PDF is not, because it stamps the commit it
+# was built from and so can never be current inside that commit.
+workbooks/*.pdf
