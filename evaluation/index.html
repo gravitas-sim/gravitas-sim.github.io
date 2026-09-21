@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Classroom evidence kit | Gravitas</title>
+    <meta
+      name="description"
+      content="Printable pilot instruments for evaluating a Gravitas sequence: a fidelity checklist, a project-developed pre/post assessment, a usability questionnaire, and de-identified export templates."
+    />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local, and print-first. Everything on this page has to come out of a
+         school printer on a machine with JavaScript switched off, because that
+         is the machine a lot of instructors actually have. */
+      .ek-item { margin: 0 0 1.1rem; }
+      .ek-q { margin: 0 0 0.25rem; font-weight: 600; }
+      .ek-hint { margin: 0 0 0.3rem; font-size: 0.85rem; opacity: 0.7; }
+      .ek-opts { margin: 0; font-size: 0.9rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+      .ek-rule { border-bottom: 1px solid rgba(255,255,255,0.25); height: 1.6rem; margin: 0; }
+      .ek-choices { margin: 0.2rem 0 0 1.2rem; padding: 0; }
+      .ek-choices li { margin: 0.1rem 0; }
+      /* No opacity here. Dimming a small uppercase label to 0.6 took it to a
+         contrast axe reports as serious, on nine separate badges. The border
+         and the size already say "this is a tag". */
+      .ek-aud { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+                border: 1px solid currentColor; border-radius: 3px; padding: 0 0.3rem; }
+      .ek-warn { border-left: 3px solid #e0a458; padding: 0.6rem 0 0.6rem 0.9rem; margin: 1.2rem 0; }
+      .ek-tools { border: 1px dashed rgba(255,255,255,0.25); border-radius: 8px; padding: 1rem; margin: 1.5rem 0; }
+      .ek-tools[hidden] { display: none; }
+      .ek-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-top: 0.6rem; }
+      .ek-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.05rem;
+                 background: rgba(255,255,255,0.06); padding: 0.15rem 0.45rem; border-radius: 4px; }
+      @media print {
+        .ek-noprint { display: none !important; }
+        .ek-rule { border-bottom: 1px solid #999; }
+        a[href]::after { content: ""; }
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main class="doc-main is-wide" id="main">
+      <h1>Classroom evidence kit</h1>
+      <p>
+        Everything an instructor needs to run one section on Gravitas, take a
+        defensible pilot measurement, and hand a researcher a de-identified
+        dataset &mdash; without an account, a server, or sending anything
+        anywhere.
+      </p>
+
+      <div class="ek-warn">
+        <p>
+          <strong>These are pilot instruments, developed for this project.</strong>
+          The pre/post assessment below has not been through item analysis,
+          reliability testing, or validation against an existing concept
+          inventory, because none of that has been done. A score on it is a
+          score on these twelve questions. It is not a measure of astronomy
+          learning, and it should not be reported as one.
+        </p>
+        <p>
+          No study has been run on Gravitas. There is no measured learning gain.
+          This page adds the paperwork somebody would need in order to change
+          that; it changes nothing about what is currently known.
+        </p>
+      </div>
+
+      <h2 id="ethics">Before you collect anything</h2>
+      <p>
+        Using these to improve your own teaching is one thing. Collecting data
+        from students with the intention of publishing it is another, and the
+        line between them is drawn by your institution rather than by us.
+      </p>
+      <ul>
+        <li>
+          <strong>Classroom improvement is not automatically research.</strong>
+          Running a pre/post to decide whether to use Gravitas again next term
+          is ordinary teaching practice. Running the same pre/post intending to
+          write it up generally is research.
+        </li>
+        <li>
+          <strong>Institutional review is your responsibility.</strong> Research
+          on students &mdash; including classroom research by their own
+          instructor &mdash; usually needs approval before any data is
+          collected, and consent that is genuinely optional when the person
+          asking also assigns the grade. Retrospective approval is usually not
+          available.
+        </li>
+        <li>
+          <strong>Gravitas transmits nothing.</strong> This page has no
+          analytics, no telemetry and no submission endpoint. What you type
+          stays in your own browser until you export it, and the export lands
+          in your downloads folder. Nobody here receives your students' work or
+          knows you ran this.
+        </li>
+      </ul>
+
+      <h2 id="sequence">The sequence these items are written against</h2>
+      <p>
+        Three introductory investigations, thirty-five to forty-five minutes
+        each, which is two or three class meetings:
+        <strong>Kepler&rsquo;s Laws</strong>, then
+        <strong>Bound, Unbound and Escape</strong>, then
+        <strong>Weighing the Stars</strong>. The assessment items are tied to
+        the objectives those three state on their own cards. Run a different
+        sequence and the items stop matching what was taught, which is the
+        commonest way an instrument like this ends up measuring nothing.
+      </p>
+
+      <h2 id="fidelity">1. Implementation and fidelity checklist</h2>
+      <p>
+        Filled in by the instructor, once, after the sessions. Without it a
+        reader cannot tell a result from a deviation: a class where you worked
+        three answers on the board is a different intervention from one where
+        you did not.
+      </p>
+      <ol class="ek-list">
+<!--FIDELITY-->
+        <li class="ek-item">
+          <p class="ek-q">Which investigations were used, in order</p>
+          <p class="ek-hint">Ids or titles. If you ran only part of one, say which steps.</p>
+          <p class="ek-rule"></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q">Instructional setting</p>
+          <p class="ek-opts"><span>&#9744; lecture</span> <span>&#9744; lab</span> <span>&#9744; recitation</span> <span>&#9744; homework</span> <span>&#9744; mixed</span> <span>&#9744; other</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q">Approximate contact time on Gravitas, in minutes</p>
+          <p class="ek-hint">Total across all sessions. An estimate is fine; leave blank if unsure.</p>
+          <p class="ek-rule"></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q">How students worked</p>
+          <p class="ek-opts"><span>&#9744; alone</span> <span>&#9744; pairs</span> <span>&#9744; small groups</span> <span>&#9744; mixed</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q">Did you demonstrate or work through answers?</p>
+          <p class="ek-hint">This changes what the scores mean. It is not a failing to say yes.</p>
+          <p class="ek-opts"><span>&#9744; no</span> <span>&#9744; demonstrated the interface only</span> <span>&#9744; worked some answers</span> <span>&#9744; worked most answers</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q">Major deviations from the intended procedure</p>
+          <p class="ek-hint">Skipped steps, technical failures, a fire drill, anything that would change how a reader reads the result.</p>
+          <p class="ek-rule"></p>
+        </li>
+      </ol>
+
+      <h2 id="codes">2. Anonymous participant codes</h2>
+      <p>
+        Only needed if you want to compare each student&rsquo;s own before and
+        after. Skip it and you still get per-item before and after across the
+        class.
+      </p>
+      <p>
+        <strong>How it works.</strong> Each student gets a code, writes it on a
+        slip of paper they keep, and writes the same code on both sheets. You
+        never hold a list linking codes to names, so there is nothing to lose.
+      </p>
+      <p><strong>What it costs, said plainly:</strong></p>
+      <ul>
+        <li>
+          A student who loses the slip cannot be paired. Count them as unpaired
+          rather than guessing &mdash; the summary tool does this for you.
+        </li>
+        <li>
+          Two students can pick the same code. The tool reports a collision
+          instead of silently merging them.
+        </li>
+        <li>
+          Do <em>not</em> build codes from personal facts &mdash; initials, birth
+          dates, mother&rsquo;s maiden name. Those recipes are common and they
+          are quasi-identifiers: in a class of twenty they can often be run
+          backwards to a person, which is exactly what the code was for
+          avoiding.
+        </li>
+      </ul>
+
+      <h2 id="concept">3. Pilot pre/post concept assessment</h2>
+      <p>
+        Twelve multiple-choice items, about ten minutes. Administer the same
+        twelve before the sequence and after it. Three items each on orbital
+        reasoning, measurement and inference, reading the model, and telling an
+        illustration from a measurement.
+      </p>
+      <p>
+        The answer key is in
+        <code>js/data/evaluation.js</code> and in the exported JSON template. It
+        is deliberately not printed here, so this page can be handed to a class.
+      </p>
+      <ol class="ek-list">
+        <li class="ek-item" id="q01">
+          <p class="ek-q">A planet moves on a noticeably elliptical orbit around a star. Where is the star?</p>
+          <ol class="ek-choices" type="a">
+            <li>At the centre of the ellipse</li>
+            <li>At one focus of the ellipse, off centre</li>
+            <li>At the point where the planet moves fastest</li>
+            <li>At a point that shifts as the planet moves</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q02">
+          <p class="ek-q">The same planet moves fastest when it is closest to the star. The best reason is that</p>
+          <ol class="ek-choices" type="a">
+            <li>gravity is stronger there, so it is pushed along faster</li>
+            <li>it is falling downhill and gravity has had longer to act</li>
+            <li>the product of its distance and its sideways speed stays the same</li>
+            <li>the star heats it and the extra energy speeds it up</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q03">
+          <p class="ek-q">A probe is launched fast enough to escape a planet and never return. After it escapes,</p>
+          <ol class="ek-choices" type="a">
+            <li>the planet no longer pulls on it</li>
+            <li>the planet still pulls on it, but never enough to bring it back</li>
+            <li>the pull reverses and pushes it away</li>
+            <li>the pull stops once the probe passes the escape distance</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q04">
+          <p class="ek-q">You measure the period and the semi-major axis of four planets around one star and plot log P against log a. A straight line of slope 1.5 tells you</p>
+          <ol class="ek-choices" type="a">
+            <li>the orbits are circles</li>
+            <li>the planets all have the same mass</li>
+            <li>the period squared is proportional to the axis cubed</li>
+            <li>the star is at the centre of each orbit</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q05">
+          <p class="ek-q">To find the total mass of a binary pair from a simulation, the two quantities you most need to measure are</p>
+          <ol class="ek-choices" type="a">
+            <li>the brightness of each star and their colours</li>
+            <li>the size of the orbit and the time to go round once</li>
+            <li>the temperature of each star and their separation</li>
+            <li>the speed of the brighter star and its radius</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q06">
+          <p class="ek-q">In a binary, the heavier star sits closer to the barycenter. If one star is three times further from the barycenter than the other, then</p>
+          <ol class="ek-choices" type="a">
+            <li>the nearer star is three times heavier</li>
+            <li>the further star is three times heavier</li>
+            <li>the two stars have equal mass</li>
+            <li>nothing can be said without knowing the period</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q07">
+          <p class="ek-q">In Gravitas the bodies are drawn much larger than they would be to scale. The main consequence for a measurement is that</p>
+          <ol class="ek-choices" type="a">
+            <li>distances between bodies are also wrong</li>
+            <li>the drawn size cannot be used to judge how big anything is</li>
+            <li>the masses are wrong by the same factor</li>
+            <li>orbital periods come out too short</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q08">
+          <p class="ek-q">The Gravitas engine is two-dimensional. Which conclusion does that make unsafe?</p>
+          <ol class="ek-choices" type="a">
+            <li>that a single planet orbits its star on an ellipse</li>
+            <li>that a heavier star produces a shorter orbital period at fixed distance</li>
+            <li>that two planets whose orbits appear to cross would actually collide</li>
+            <li>that a body below zero total energy is bound</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q09">
+          <p class="ek-q">A body has kinetic energy 5 units and gravitational potential energy -8 units. It is</p>
+          <ol class="ek-choices" type="a">
+            <li>unbound, because the kinetic energy is positive</li>
+            <li>bound, because the total is negative</li>
+            <li>exactly at escape</li>
+            <li>impossible to classify without its mass</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q10">
+          <p class="ek-q">Some things on the Gravitas screen are computed from the physics and some are drawn to illustrate. Which of these is computed?</p>
+          <ol class="ek-choices" type="a">
+            <li>the glow around a star</li>
+            <li>the jet drawn from a black hole</li>
+            <li>the position of an orbiting body at each step</li>
+            <li>the ripple animation after a merger</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q11">
+          <p class="ek-q">The three-dimensional &quot;spacetime&quot; sheet dips beneath a massive body. A student says the depth of the dip is the curvature of spacetime near that body. The best response is</p>
+          <ol class="ek-choices" type="a">
+            <li>correct, that is what the view shows</li>
+            <li>correct, though only for black holes</li>
+            <li>it is a drawing of the Newtonian gravitational potential, not a curvature</li>
+            <li>it is meaningless and should be ignored</li>
+          </ol>
+        </li>
+        <li class="ek-item" id="q12">
+          <p class="ek-q">Which of these numbers would you trust to two significant figures from Gravitas?</p>
+          <ol class="ek-choices" type="a">
+            <li>the depth of the spacetime sheet under a star</li>
+            <li>the width of a drawn accretion disk</li>
+            <li>the orbital period measured with the on-screen timer</li>
+            <li>the apparent size of a planet on screen</li>
+          </ol>
+        </li>
+      </ol>
+
+      <h2 id="usability">4. Usability and adoption questionnaire</h2>
+      <p>
+        Project-developed, like the rest. If you want a System Usability Scale
+        score, administer the actual System Usability Scale &mdash; it is ten
+        specific items with a specific scoring procedure, and a score quoted
+        from anything else is not a SUS score.
+      </p>
+      <ol class="ek-list">
+        <li class="ek-item">
+          <p class="ek-q"><span class="ek-aud">student</span> I could tell what the investigation was asking me to do.</p>
+          <p class="ek-opts"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="ek-aud">student</span> I could find the control or reading each step referred to.</p>
+          <p class="ek-opts"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="ek-aud">student</span> When I got something wrong, the feedback helped me work out why.</p>
+          <p class="ek-opts"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="ek-aud">student</span> The simulation ran smoothly enough on the machine I used.</p>
+          <p class="ek-opts"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="ek-aud">student</span> I would be willing to use this again for another topic.</p>
+          <p class="ek-opts"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="ek-aud">instructor</span> Preparing this for a class took an amount of time I could repeat.</p>
+          <p class="ek-opts"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="ek-aud">instructor</span> The documentation told me what the model does and does not do.</p>
+          <p class="ek-opts"><span>&#9744; 1 strongly disagree</span> <span>&#9744; 2 disagree</span> <span>&#9744; 3 neither</span> <span>&#9744; 4 agree</span> <span>&#9744; 5 strongly agree</span></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="ek-aud">both</span> Where did you get stuck, if anywhere?</p>
+          <p class="ek-rule"></p>
+        </li>
+        <li class="ek-item">
+          <p class="ek-q"><span class="ek-aud">both</span> What would you change first?</p>
+          <p class="ek-rule"></p>
+        </li>
+      </ol>
+
+      <h2 id="export">5. Exports and analysis</h2>
+      <p>
+        The tools below need JavaScript. Everything above does not: print this
+        page and the three instruments come out as paper forms.
+      </p>
+
+      <div class="ek-tools ek-noprint" id="ekTools" hidden>
+        <p><strong>Fill in and export</strong></p>
+        <p class="ek-hint">
+          Nothing is sent anywhere. Responses are held in this browser until you
+          export or clear them.
+        </p>
+        <div class="ek-actions">
+          <label for="ekOccasion">Occasion</label>
+          <select id="ekOccasion">
+            <option value="pre">pre</option>
+            <option value="post">post</option>
+          </select>
+          <label for="ekParticipant">Participant code</label>
+          <input id="ekParticipant" type="text" size="18" autocomplete="off"
+                 spellcheck="false" placeholder="optional" />
+          <button type="button" class="ui-button" id="ekSuggest">Suggest a code</button>
+          <span class="ek-code" id="ekCode"></span>
+        </div>
+        <div class="ek-actions">
+          <button type="button" class="ui-button" id="ekCsv">Export CSV</button>
+          <button type="button" class="ui-button" id="ekJson">Export JSON</button>
+          <button type="button" class="ui-button" id="ekTemplate">Blank CSV template</button>
+          <button type="button" class="ui-button" id="ekClear">Clear this browser</button>
+          <span id="ekSaid" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+
+      <p>
+        Once you have the files, the repository has a reader for them:
+      </p>
+      <p class="doc-eq-block">npm run evaluation:summary -- pre.csv post.csv</p>
+      <p>
+        It prints sample counts, how much is missing, the per-item before and
+        after, and the paired change where codes allow pairing. It prints no
+        p-value and no verdict, because a convenience sample from one section
+        measured with an unvalidated instrument supports a description and
+        nothing else.
+      </p>
+
+      <h2 id="schema">6. What the files look like</h2>
+      <p>
+        Schema version <strong>1</strong>. CSV columns, in order:
+      </p>
+      <p class="doc-eq-block" id="ekColumns">schema, instrument, occasion, participant, q01 &hellip; q12</p>
+      <p>
+        There is no column for a name, an email address, a student number or an
+        institution, and there will not be one: a column that exists gets filled
+        in, and a spreadsheet with a name in it is a spreadsheet that cannot be
+        handed to anybody. Answers are stored as the zero-based index of the
+        chosen option, or blank.
+      </p>
+
+      <hr />
+      <p class="ek-hint">
+        Part of <a href="/teaching/">Teaching with Gravitas</a> and the
+        <a href="/instructors/">instructor resources</a>. The model page states
+        <a href="/model/">what the simulation does and does not represent</a>,
+        which is worth reading before designing an item of your own.
+      </p>
+    </main>
+    <script type="module" src="/js/evaluationKit.js"></script>
+  </body>
+</html>
