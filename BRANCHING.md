@@ -60,7 +60,47 @@ file that no generator would have produced, which is worse than either side.
 | `js/data/teachingGenerated.js` | |
 | `e2e/golden/world-construction.json` | Regenerate only deliberately — a change here means behaviour moved, not that a file went stale. |
 
-On a conflict in any of the above, take either side and rebuild:
+### The files that are NOT on that list, and why it matters
+
+Every file above is rewritten **in full** by a generator, so taking one side is
+safe: whatever you pick is about to be overwritten. That is the whole
+justification for the shortcut below, and it does not extend one inch further.
+
+A file that merely _contains_ generated regions is not on this list and must
+never be resolved with a whole-file choice:
+
+| File | What it also contains |
+| --- | --- |
+| `README.md` | The project's entire hand-written introduction, with about a dozen fact markers inside it |
+| `PHYSICS_VALIDATION.md` | Hand-written methodology around a generated coverage table |
+| `model/index.html` | The public physics-model page, with generated blocks inside it |
+| `ACCESSIBILITY.md`, `paper.md`, `index.html`, `js/i18n/en.js`, `js/i18n/es.js` | Prose and code around generated facts and attributes |
+| `tools/physics-checks.mjs` | Hand-written, and the file two branches will both append a validation group to |
+
+**`git checkout --ours/--theirs <path>` does not mean "take my side of these
+hunks."** It restores the whole file from that stage and discards every
+non-conflicting change the other side made to it.
+
+During the v1.1 integration that cost `README.md` sixteen lines: the
+`/evaluation/` section and the "no evaluation of Gravitas has been run and no
+learning gain has been measured" statement, both added by one branch and both
+silently dropped by the next merge, which conflicted only on a generated count
+elsewhere in the same file. Nothing failed. Every test passed. It was found
+afterwards, by diffing each merged branch's contributions against the integrated
+tree.
+
+For those files, keep the merged working copy and edit only the marked regions,
+or run a real three-way merge and then regenerate:
+
+```bash
+git merge-file <ours> <base> <theirs>
+```
+
+Verify the result by re-measuring what the file describes — the suite total, the
+check count, the rendered page — never by the absence of conflict markers.
+
+On a conflict in one of the fully-generated artifacts above, take either side
+and rebuild:
 
 ```bash
 git checkout --theirs <file> && git add <file>   # either side will do
