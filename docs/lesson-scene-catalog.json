@@ -603,6 +603,19 @@
     }
    ]
   },
+  "observing-planner": {
+   "live": false,
+   "controls": [
+    "span",
+    "spread",
+    "airmass"
+   ],
+   "presets": 3,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
   "planet-characterization": {
    "live": false,
    "controls": [
@@ -48040,26 +48053,997 @@
     "mismatched": 0,
     "rebuilds": 0
    }
+  },
+  {
+   "id": "twelve-nights",
+   "title": "Twelve Nights",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "the-allocation",
+     "index": 1,
+     "type": "read",
+     "title": "Twelve nights",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Exoplanet Characterization Lab\" seed twelve-nights + camera",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "look-at-the-windows",
+     "index": 2,
+     "type": "explore",
+     "title": "What you actually get",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "run-the-simulation",
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "observing-planner",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Exoplanet Characterization Lab\" seed twelve-nights + camera",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "measure-the-window",
+     "index": 3,
+     "type": "measure",
+     "title": "Measure the budget",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "run-the-simulation"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "observing-planner",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "predict-the-comb",
+     "index": 4,
+     "type": "predict",
+     "title": "Before you plan anything",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "the-three-plans",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "the-three-plans",
+     "index": 5,
+     "type": "explore",
+     "title": "Three plans",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "run-the-simulation",
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "observing-planner",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "measure-the-window-power",
+     "index": 6,
+     "type": "measure",
+     "title": "Two plans, two windows",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "run-the-simulation"
+     ],
+     "requires": [
+      "predict-the-comb"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "observing-planner",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "why-not-one-day",
+     "index": 7,
+     "type": "question",
+     "title": "Why 1.00274 and not 1",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "run-the-simulation"
+     ],
+     "requires": [
+      "measure-the-window-power"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "observing-planner",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "predict-which-plan-wins",
+     "index": 8,
+     "type": "predict",
+     "title": "Before you observe",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "read-what-you-got",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "commit-and-observe",
+     "index": 9,
+     "type": "explore",
+     "title": "Commit the schedule",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "run-the-simulation",
+      "tick-a-checklist"
+     ],
+     "requires": [
+      "predict-which-plan-wins"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "observing-planner",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Exoplanet Characterization Lab\" seed twelve-nights + camera",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "read-what-you-got",
+     "index": 10,
+     "type": "measure",
+     "title": "What the two plans returned",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "run-the-simulation"
+     ],
+     "requires": [
+      "predict-which-plan-wins"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "sixty-nights-would-not-help",
+     "index": 11,
+     "type": "question",
+     "title": "Ask the committee for more nights",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [
+      "read-what-you-got"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "what-would-actually-fix-it",
+     "index": 12,
+     "type": "question",
+     "title": "So what would fix it",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "answer-in-words"
+     ],
+     "requires": [
+      "read-what-you-got"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": true,
+      "rubric": true,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "what-the-sky-decided",
+     "index": 13,
+     "type": "read",
+     "title": "What the sky decided",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "predict-the-comb",
+     "predictCollects": true,
+     "heldUntil": "the-three-plans",
+     "experiment": [
+      "the-three-plans",
+      "measure-the-window-power",
+      "why-not-one-day"
+     ],
+     "measure": [
+      "the-three-plans",
+      "measure-the-window-power",
+      "why-not-one-day"
+     ],
+     "evidence": [
+      "measure-the-window-power"
+     ],
+     "interpret": "the-three-plans",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-which-plan-wins",
+     "predictCollects": true,
+     "heldUntil": "read-what-you-got",
+     "experiment": [
+      "commit-and-observe",
+      "read-what-you-got"
+     ],
+     "measure": [
+      "commit-and-observe",
+      "read-what-you-got"
+     ],
+     "evidence": [
+      "read-what-you-got"
+     ],
+     "interpret": "read-what-you-got",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 13,
+    "declared": 13,
+    "student": 0,
+    "engine": 0,
+    "model": 6,
+    "data": 0,
+    "diagram": 6,
+    "evidence": 3,
+    "declaredButInert": 13,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 3
+   }
   }
  ],
  "totals": {
-  "steps": 636,
-  "declared": 607,
+  "steps": 649,
+  "declared": 620,
   "student": 157,
   "engine": 163,
-  "model": 225,
+  "model": 231,
   "data": 139,
-  "diagram": 104,
-  "evidence": 106,
-  "declaredButInert": 450,
+  "diagram": 110,
+  "evidence": 109,
+  "declaredButInert": 463,
   "prose": 15,
   "mismatched": 0,
-  "rebuilds": 67,
-  "lessons": 22,
-  "loops": 81,
-  "closedLoops": 81,
+  "rebuilds": 70,
+  "lessons": 23,
+  "loops": 83,
+  "closedLoops": 83,
   "explainedLoops": 0,
-  "heldLoops": 81,
-  "completeLoops": 81
+  "heldLoops": 83,
+  "completeLoops": 83
  }
 }

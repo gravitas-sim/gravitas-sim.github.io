@@ -2262,7 +2262,7 @@
       </p>
       <p>
         The repository carries an automated validation suite. It runs
-        <!--fact:physicsChecks-->248<!--/fact-->
+        <!--fact:physicsChecks-->286<!--/fact-->
         deterministic checks and prints a table of measured value, expected
         value, error and tolerance:
       </p>
@@ -2355,7 +2355,7 @@
         Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->22<!--/fact-->
+        <!--fact:investigations-->23<!--/fact-->
         lessons and cannot fall behind them. It listed six of the twelve when it
         was maintained by hand.
       </p>
@@ -2456,6 +2456,10 @@
             <tr>
               <td>Lives of Stars</td>
               <td>Eight MIST v1.2 evolutionary tracks at solar composition with no rotation, computed with MESA and published by the MIST project; cite Dotter (2016) and Choi et al. (2016). Gravitas reduced them and did not compute them. Where they stop is the whole of what the endpoint module exists for. 0.2 and 0.5 solar masses stop at the end of core hydrogen burning, at 1.1 trillion and 96 billion years - both far beyond the age of the Universe, so neither is checkable in principle. 1, 2 and 5 run through to a cooling white dwarf, and those remnant masses are the tracks' own last samples. 10 and 20 stop at carbon ignition and 40 stops during helium ignition, so every statement in this lesson about neutron stars and black holes is a published result quoted for the nearest modeled progenitor: Sukhbold, Ertl, Woosley, Brown &amp; Lattimer (2016), ApJ 821, 38, with Ertl et al. (2016) for the explodability criterion. The readout names the source on every quoted endpoint and flags it as not from the track. What is absent: rotation, binarity, magnetic fields, mass transfer, any composition but solar, core collapse itself, supernova hydrodynamics, nebular physics, and white-dwarf cooling beyond the first few million years. The explosion drawn on screen 29 is an illustration of an event and not a calculation of one, and it is kept off the H-R diagram because a supernova's brightness is a transient rather than a photospheric luminosity.</td>
+            </tr>
+            <tr>
+              <td>Twelve Nights</td>
+              <td>The observing geometry is real and the star is not, and the two are computed by different code that shares nothing but a list of times. js/observingWindow.js takes a Julian Date as an argument and never reads a clock, so every student on every machine computes the same windows for the same night; tools/physics-checks.mjs holds it against the Astronomical Almanac's Sun, two published lunations, the gammas of two total lunar eclipses and Kasten &amp; Young's airmass fit, with thirty-eight checks in the &quot;Observing windows&quot; group. What it does not model: atmospheric refraction, lunar parallax, and the difference between UT and TT. The first two are under a degree and the third is about seventy seconds, and none of them moves a window boundary by as much as the two-minute grid the sampler uses. The velocities come from the same Exoplanet Characterization Lab the other radial-velocity lessons use, integrated in the plane with the star free to move. The simulation has no Earth, no rotation and no atmosphere, and the airmass a measurement was taken at does not degrade it - every epoch carries the same 8 m/s whether it was booked at airmass 1.5 or airmass 2. That is a simplification the lesson leans on rather than hides: it is what makes the comparison between the two plans clean, because the only thing that differs between them is the times.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

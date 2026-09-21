@@ -364,7 +364,7 @@ describe('the catalog split', () => {
     // those sentences describe an ordinary sandbox and are read on a first
     // visit with no lesson anywhere near.
     const allowed =
-      /^(lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|stellar\.phase|summary\.life)\./;
+      /^(lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|obsW|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|stellar\.phase|summary\.life)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
 
     // The sandbox sentences the summary reads on a first visit stayed eager.

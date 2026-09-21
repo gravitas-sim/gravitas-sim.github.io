@@ -27,6 +27,32 @@ import { fileURLToPath } from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
 
 import { test, expect } from './fixtures.js';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
+
+/**
+ * How many lessons the portal should be showing.
+ *
+ * Derived rather than written down. These counts were three literal 22s and
+ * a "22 investigations, 44 documents", which is a number that is only right
+ * until somebody adds a lesson - and then fails here, in a file about the
+ * instructor portal, for a reason that has nothing to do with the portal.
+ */
+const LESSONS = MANIFEST.length;
+/** A guide and an answer key each. */
+const DOCUMENTS = LESSONS * 2;
+/**
+ * Everything the bundle holds, which is what the version line counts.
+ *
+ * The lesson half is derived because it is the half that moves: every new
+ * investigation adds two documents and used to leave a literal behind. The
+ * other two terms are the adopters guide and the curriculum map, and the eight
+ * activity documents the test below asserts separately - both stable, both
+ * checked in their own right, and neither of them a reason to hard-code the
+ * total.
+ */
+const GENERAL_DOCUMENTS = 2;
+const ACTIVITY_DOCUMENTS = 8;
+const ALL_DOCUMENTS = GENERAL_DOCUMENTS + ACTIVITY_DOCUMENTS + DOCUMENTS;
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(REPO, '.instructor-fixture', 'materials.enc.json');
@@ -100,7 +126,7 @@ test.describe('the instructor portal, signed in', () => {
       page,
     }) => {
       const cards = page.locator('#investigationResources .res-card');
-      await expect(cards).toHaveCount(22);
+      await expect(cards).toHaveCount(LESSONS);
       // textContent, not innerText: `.res-count` is text-transform: uppercase,
       // so innerText reports what is painted and textContent what was written.
       // Asserting the painted form would make this test fail the day somebody
@@ -108,7 +134,7 @@ test.describe('the instructor portal, signed in', () => {
       const count = await page
         .locator('#investigationCount')
         .evaluate(el => el.textContent.trim());
-      expect(count).toBe('22 investigations, 44 documents');
+      expect(count).toBe(`${LESSONS} investigations, ${DOCUMENTS} documents`);
       // Two download buttons and one "open" link on each card.
       const first = cards.first();
       await expect(first.locator('button.ui-button')).toHaveCount(2);
@@ -178,12 +204,14 @@ test.describe('the instructor portal, signed in', () => {
       await page.locator('#resourceSearch').fill('kepler');
       await expect
         .poll(() => page.locator('#investigationResources .res-card').count())
-        .toBeLessThan(22);
-      await expect(page.locator('#investigationCount')).toContainText('of 22');
+        .toBeLessThan(LESSONS);
+      await expect(page.locator('#investigationCount')).toContainText(
+        `of ${LESSONS}`
+      );
       await page.locator('#resourceSearch').fill('');
       await expect(
         page.locator('#investigationResources .res-card')
-      ).toHaveCount(22);
+      ).toHaveCount(LESSONS);
     });
 
     test('search that matches nothing says so rather than showing nothing', async ({
@@ -237,14 +265,14 @@ test.describe('the instructor portal, signed in', () => {
         .locator('#investigationResources .res-card')
         .count();
       expect(shown).toBeGreaterThan(0);
-      expect(shown).toBeLessThan(22);
+      expect(shown).toBeLessThan(LESSONS);
     });
 
     test('the version line names the catalog it is describing', async ({
       page,
     }) => {
       await expect(page.locator('#materialsVersion')).toContainText(
-        '54 documents'
+        `${ALL_DOCUMENTS} documents`
       );
     });
   });
@@ -352,7 +380,7 @@ test.describe('the dashboard on a small screen and by keyboard', () => {
     // container is a clean run that proves nothing, and an empty container is
     // exactly what a broken render looks like from here.
     await expect(page.locator('#investigationResources .res-card')).toHaveCount(
-      22
+      LESSONS
     );
     await expect(page.locator('#activityResources .res-format')).toHaveCount(6);
     const results = await new AxeBuilder({ page }).withTags(TAGS).analyze();

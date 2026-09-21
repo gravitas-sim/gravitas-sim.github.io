@@ -2838,6 +2838,26 @@ export const ES_DEFERRED = {
     'Materia oscura por cada unidad de materia ordinaria',
   'dmW.darkEnergy2': 'energía oscura',
   'dmW.darkMatter2': 'materia oscura',
+  'obsW.twelveNightsOnOneStar': 'Doce noches sobre una estrella',
+  'obsW.theBarsAreTheNights':
+    'Cada fila es una noche de la asignacion. La barra tenue es la noche astronomica; la parte brillante es cuando el objetivo esta ademas por encima del limite de masa de aire. Las marcas son las doce medidas que tomaria tu plan. Debajo esta la ventana espectral de esos doce instantes: una propiedad solo del calendario, sin dato alguno dentro.',
+  'obsW.spreadTheTwelveOver': 'Repartir las doce en',
+  'obsW.nights': 'noches',
+  'obsW.useThisMuchOfEachWindow': 'Usar esta fraccion de cada ventana',
+  'obsW.airmassLimit': 'Limite de masa de aire',
+  'obsW.twelveNightsInARow': 'Doce noches seguidas',
+  'obsW.spreadOutBestMoment': 'Repartidas, el mejor momento',
+  'obsW.spreadOutBothEnds': 'Repartidas, ambos extremos',
+  'obsW.usableWindowPerNight': 'Ventana utilizable por noche',
+  'obsW.theWindowOpensEarlierBy': 'La ventana se adelanta',
+  'obsW.baseline': 'Linea de base',
+  'obsW.powerAtTheSiderealDay': 'Potencia de la ventana en el dia sideral',
+  'obsW.strongestAlias': 'Alias mas fuerte',
+  'obsW.theEpochList': 'La lista de epocas, para el campo Explicito',
+  'obsW.eachRowIsANight':
+    'noche  |  noche astronomica, objetivo sobre el limite, y tus doce visitas',
+  'obsW.siderealDay': 'dia sideral',
+  'obsW.cyclesPerDay': 'ciclos por dia',
   'transitW.howBigAShadow': '¿Cómo de grande es la sombra?',
   'transitW.theSilhouetteOnTheLeft':
     'La silueta de la izquierda está dibujada a escala. La curva de la derecha es el tránsito que produce.',
@@ -3042,7 +3062,7 @@ export const ES_DEFERRED = {
     'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
   'welcomeAudience.instructors.title': 'Para el profesorado',
   'welcomeAudience.instructors.text':
-    '22 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
+    '23 investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
   'welcomeAudience.curious.title': 'Para curiosos',
   'welcomeAudience.curious.text':
     'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',
