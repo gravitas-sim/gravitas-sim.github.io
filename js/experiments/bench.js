@@ -38,6 +38,13 @@
 // the application is for, and on a scenario that already runs at 22ms a frame
 // that is a worse experiment, not a better one.
 //
+// That question has since been asked properly and answered: see
+// MULTI_WORLD_DECISION.md. The short version is that the refactor described
+// above was rejected and this reasoning stands. A Worker realm gets its own
+// module instance for free, which is the isolation the refactor was for, so
+// the only thing two main-thread engines would still add is the simultaneity
+// the paragraph above argues against.
+//
 // Sequential paired runs cost the student the wall-clock time of two runs and
 // nothing else. Because the restore is exact and the comparison is on
 // simulated time, the result is identical to what two engines would have

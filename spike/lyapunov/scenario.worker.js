@@ -43,12 +43,21 @@ self.onmessage = async e => {
       })
     );
 
+    // Written out rather than imported: a spike must not need an engine API to
+    // exist. Each of these is a live binding exported by js/physics.js.
+    const LISTS = [
+      'bh_list', 'planets', 'stars', 'gas_giants', 'asteroids', 'comets',
+      'debris', 'particles', 'gwaves', 'gravity_ripples', 'neutron_stars',
+      'white_dwarfs', 'galaxies', 'accretion_disk_particles',
+    ];
     const counts = {};
     let bodies = 0;
-    for (const name of P.WORLD_LISTS) {
+    let maxId = -1;
+    for (const name of LISTS) {
       const n = P[name].length;
       if (n) counts[name] = n;
       bodies += n;
+      for (const b of P[name]) if (Number.isFinite(b?.id)) maxId = Math.max(maxId, b.id);
     }
 
     let stepped = 0;
@@ -63,7 +72,8 @@ self.onmessage = async e => {
       scenario,
       bodies,
       counts,
-      idCounterAfter: P.captureWorld().idCounter,
+      // Ids in this realm start from zero: the proof of an isolated instance.
+      idsUsed: maxId + 1,
       simulationTime: P.getSimulationTime(),
       stepped,
       ms: performance.now() - t0,

@@ -84,7 +84,15 @@ if (bad.length) {
   const first = med(at(1)), mid = med(at(Math.floor(sep[0].length / 2))), last = med(at(sep[0].length - 1));
 
   say(`wall ${wall.toFixed(0)}ms · worker cpu ${replies.map(r => r.ms.toFixed(0)).join('/')}ms`);
-  say(`id counters after: ${replies.map(r => r.idCounterAfter).join(', ')}  (page copy is independent)`);
+  // The isolation evidence. Each WORKER starts its id counter at zero; within a
+  // worker the counter keeps going across the members it runs in turn, so the
+  // per-member first ids are 0, 3, 6 ... and the number that matters is the
+  // minimum per worker. If any realm shared state with the page, whose counter
+  // is already in the hundreds, its minimum could not be zero.
+  const perWorkerMin = replies.map(r =>
+    Math.min(...r.results.map(m => (m.ids && m.ids.length ? m.ids[0] : Infinity)))
+  );
+  say(`lowest body id per worker: ${perWorkerMin.join(', ')}  (each realm counts from zero; the page's own copy is untouched)`);
   say(`samples per member: ${ref.samples}`);
   say(`median separation  early ${first.toExponential(3)}  mid ${mid.toExponential(3)}  late ${last.toExponential(3)}`);
   say(`growth factor early→late: ${(last / first).toExponential(3)}`);
@@ -119,6 +127,6 @@ if (bad.length) {
   g.fillText('separation from the unperturbed member (log) vs sample', 46, 16);
 
   window.__cloud = { ok: true, members: results.length, wall, first, mid, last, growth: last / first,
-                     idCounters: replies.map(r => r.idCounterAfter) };
+                     perWorkerMin };
 }
 </script>
