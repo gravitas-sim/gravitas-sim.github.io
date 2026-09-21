@@ -75,7 +75,7 @@ model page sets out the four different radii a body has under _Displayed
 sizes_.
 
 **A validation suite.** `npm run validate:physics` prints a PASS/FAIL table
-of <!--fact:physicsChecks-->243<!--/fact--> checks with measured error against a
+of <!--fact:physicsChecks-->248<!--/fact--> checks with measured error against a
 stated tolerance: orbital periods and Kepler's laws, conservation of momentum,
 angular momentum and energy, the convergence order of each selectable
 integrator, escape velocity, transit depth, radial-velocity semi-amplitude,
@@ -181,7 +181,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->3608<!--/fact--> strings, and
+of <!--fact:uiStrings-->3607<!--/fact--> strings, and
 all <!--fact:investigations-->22<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -217,7 +217,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5424<!--/fact--> tests across <!--fact:jestSuites-->160<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5304<!--/fact--> tests across <!--fact:jestSuites-->149<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -241,10 +241,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->198<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->613<!--/fact--> KB           | <!--fact:buildStartupFiles-->51<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->3878<!--/fact--> KB         | <!--fact:buildDeferredChunks-->139<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->812<!--/fact--> KB** |                                               |
+| CSS                    | <!--fact:buildCss-->199<!--/fact--> KB                 | 1                                             |
+| JavaScript at start-up | <!--fact:buildStartupJs-->612<!--/fact--> KB           | <!--fact:buildStartupFiles-->50<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->3874<!--/fact--> KB         | <!--fact:buildDeferredChunks-->137<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->811<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -343,8 +343,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1179<!--/fact--> tests
-in <!--fact:e2eFiles-->86<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1177<!--/fact--> tests
+in <!--fact:e2eFiles-->85<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -411,7 +411,7 @@ and against what.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->243<!--/fact--> deterministic checks, about
+That is <!--fact:physicsChecks-->248<!--/fact--> deterministic checks, about
 fifteen seconds, printed as a table of measured value, expected value, error and
 tolerance. Five kinds, and the table labels each: closed-form arithmetic,
 quantities measured by running the N-body engine, literature values with their

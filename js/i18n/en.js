@@ -129,7 +129,7 @@ export const EN = {
     'Change the interface color scheme. Observatory uses red chrome to preserve night vision; Daylight suits bright rooms and projectors (T cycles).',
   'footer.attribution.hint': 'Carl Ziegler: author of Gravitas',
   'footer.attribution.hint.2':
-    'What the physics engine has been checked against: 243 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser.',
+    'What the physics engine has been checked against: 248 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser.',
   'footer.attribution.hint.3':
     'Browse or contribute to the source code on GitHub',
   'footer.attribution': 'Validated',
