@@ -302,11 +302,11 @@ export const MANIFEST = [
     duration: '70-90 min',
     level: 'Astronomía introductoria',
     summary:
-      'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. A lo largo de treinta pasos separas las cuatro cosas que siempre se confunden entre sí —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes, supergigantes y enanas blancas en el lugar que ocupan realmente, averiguas por qué las estrellas más pesadas viven menos tiempo y terminas contando dos veces una población sintética para ver por qué las estrellas que puedes ver no son las estrellas que hay.',
+      'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. Separas las cuatro cosas que siempre se confunden —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes y enanas blancas donde de verdad están, averiguas por qué las estrellas más pesadas viven menos y cuentas dos veces una población sintética para ver por qué las estrellas que puedes ver no son las que hay. Todo eso son modelos publicados. Las últimas seis pantallas no: cuatro espectros reales de SDSS, y lo que un color no te puede decir.',
     thumbnail: 'images/investigations/a-universe-of-stars.webp',
-    stepCount: 31,
-    gradedCount: 27,
-    objectiveCount: 7,
+    stepCount: 37,
+    gradedCount: 31,
+    objectiveCount: 9,
   },
   {
     id: 'lives-of-stars',

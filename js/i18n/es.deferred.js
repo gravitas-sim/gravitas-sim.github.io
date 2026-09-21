@@ -3681,4 +3681,60 @@ export const ES_DEFERRED = {
   'lessonFn.whatIsNot11': 'Qué no',
   'lessonFn.fluidFlowPressureRadiation31':
     'Flujo de fluidos, presión, radiación',
+  // -- Cuatro espectros observados (js/stellarSpectraWidgets.js) --------------
+  'specW.compare.title': 'Cuatro espectros',
+  'specW.compare.note':
+    'Cuatro estrellas, observadas por SDSS en 2008 y dibujadas sin ajuste de ningún tipo. Las curvas no se dibujan en los colores de sus estrellas —eso responderá la pregunta que se está haciendo—, así que distingue unas de otras por el trazo, la etiqueta o los números de abajo.',
+  'specW.identify.title': '¿Qué estrella es esta?',
+  'specW.identify.note':
+    'Un espectro, identificado solo por una letra, mostrado en un tramo de longitud de onda demasiado estrecho para ver un color. Todo lo que necesitas está en las depresiones.',
+  'specW.control.window': 'Longitud de onda mostrada',
+  'specW.control.focus': 'Destacar una',
+  'specW.control.named': 'Nombres',
+  'specW.control.star': 'Estrella',
+  'specW.control.reveal': 'Respuesta del archivo',
+  'specW.window.full': 'todo, 3.815–9.170 Å',
+  'specW.window.cak': 'calcio, 3.860–4.010 Å',
+  'specW.window.hbeta': 'hidrógeno β, 4.780–4.950 Å',
+  'specW.window.nad': 'sodio, 5.820–5.965 Å',
+  'specW.window.tio': 'óxido de titanio, 6.950–7.250 Å',
+  'specW.focus.all': 'las cuatro',
+  'specW.focus.one': 'estrella {tag}',
+  'specW.named.on': 'las clases del archivo',
+  'specW.named.off': 'solo letras',
+  'specW.reveal.on': 'mostrada',
+  'specW.reveal.off': 'reservada',
+  'specW.star.nth': 'estrella {tag}',
+  'specW.name.class': '{letter} ({sub})',
+  'specW.name.tag': 'estrella {tag}',
+  'specW.name.idTag': 'estrella {tag}',
+  'specW.feature.cak': 'Ca II K',
+  'specW.feature.hbeta': 'Hβ',
+  'specW.feature.nad': 'Na I D',
+  'specW.feature.tio': 'TiO',
+  'specW.axis.wavelength': 'longitud de onda / Å',
+  'specW.axis.flux': 'flujo, cada uno escalado a su propio máximo aquí',
+  'specW.loading': 'Obteniendo los cuatro espectros…',
+  'specW.failed':
+    'No se pudieron obtener los espectros. Recarga la página; nada más en esta pantalla los necesita.',
+  'specW.row.state': 'Instrumento',
+  'specW.row.kind': 'Qué son estos',
+  'specW.value.kind':
+    'Observaciones. Cuatro estrellas reales, medidas por el espectrógrafo de SDSS: no son modelos, ni ajustes, ni espectros sintéticos.',
+  'specW.row.window': 'Mostrando',
+  'specW.value.window':
+    '{name}. Las longitudes de onda se dan en aire, como en las tablas.',
+  'specW.row.source': 'Esta',
+  'specW.value.source':
+    'SDSS placa {plate}, MJD {mjd}, fibra {fiber}, observada el {date}',
+  'specW.row.classified': 'Clasificada por SDSS como',
+  'specW.value.classified': '{sub} por la tubería, {elodie} por la plantilla',
+  'specW.row.answer': 'Clasificación del archivo',
+  'specW.value.answer': '{sub} por la tubería, {elodie} por la plantilla',
+  'specW.value.held':
+    'Reservada hasta que la actives. Decide primero a partir de las características.',
+  'specW.value.depth': '{depth} de profundidad, centrada cerca de {at} Å',
+  'specW.row.limits': 'Qué son cuatro espectros',
+  'specW.value.limits':
+    'Cuatro ejemplos, uno por letra. No es un atlas, ni un sondeo, ni una muestra representativa de nada: cuatro estrellas que se observaron.',
 };

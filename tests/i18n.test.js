@@ -328,8 +328,14 @@ describe('the catalog split', () => {
     // loaded. The rest of summary.* stayed eager and is checked for below:
     // those sentences describe an ordinary sandbox and are read on a first
     // visit with no lesson anywhere near.
+    // specW.* is the four-spectra family, which is a widget family like the
+    // rest and is behind js/widgets.js, which only the lazy lesson engine
+    // imports. It goes one step further than its neighbours: the thirteen
+    // kilobytes of flux those strings describe are themselves behind a
+    // dynamic import inside the widget module, so a reader who opens some
+    // other lesson downloads neither the prose nor the data.
     const allowed =
-      /^(lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|stellar\.phase|summary\.life)\./;
+      /^(lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|specW|stellar\.phase|summary\.life)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
 
     // The sandbox sentences the summary reads on a first visit stayed eager.

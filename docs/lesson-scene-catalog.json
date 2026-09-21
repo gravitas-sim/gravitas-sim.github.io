@@ -58,6 +58,12 @@
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/physics.js"
+    },
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/physics.js"
     }
    ]
   },
@@ -170,6 +176,12 @@
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -224,6 +236,12 @@
      "name": "MIST v1.2 evolutionary tracks",
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
      "via": "js/widgetRuntime.js"
     }
    ]
@@ -441,6 +459,12 @@
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -456,10 +480,10 @@
    "mutates": [],
    "datasets": [
     {
-     "name": "MIST v1.2 evolutionary tracks",
-     "origin": "computed-grid",
-     "dataset": "js/data/stellar/mistTracks.js",
-     "via": "js/data/stellar/mistTracks.js"
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/data/spectra/sdssSpectra.js"
     },
     {
      "name": "GW150914 strain, as published",
@@ -767,6 +791,46 @@
    "mutates": [],
    "datasets": []
   },
+  "spectra-compare": {
+   "live": false,
+   "controls": [
+    "window",
+    "focus",
+    "named"
+   ],
+   "presets": 0,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": [
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/data/spectra/sdssSpectra.js"
+    }
+   ]
+  },
+  "spectra-identify": {
+   "live": false,
+   "controls": [
+    "star",
+    "window",
+    "reveal"
+   ],
+   "presets": 0,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": [
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/data/spectra/sdssSpectra.js"
+    }
+   ]
+  },
   "spectrum": {
    "live": false,
    "controls": [
@@ -823,6 +887,12 @@
      "origin": "observation",
      "dataset": "js/data/gw/gw150914.js",
      "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -876,6 +946,12 @@
      "origin": "observation",
      "dataset": "js/data/gw/gw150914.js",
      "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -928,6 +1004,12 @@
      "origin": "observation",
      "dataset": "js/data/gw/gw150914.js",
      "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -970,6 +1052,12 @@
      "name": "GW150914 strain, as published",
      "origin": "observation",
      "dataset": "js/data/gw/gw150914.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
      "via": "js/widgetRuntime.js"
     }
    ]
@@ -44667,8 +44755,464 @@
      ]
     },
     {
-     "sid": "the-argument",
+     "sid": "spectra-the-light-itself",
      "index": 30,
+     "type": "read",
+     "title": "The light itself",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectra-compare",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "spectra-color-is-enough-here",
+     "index": 31,
+     "type": "question",
+     "title": "Rank them by color",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectra-compare",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "spectra-two-features",
+     "index": 32,
+     "type": "measure",
+     "title": "Two features, in a window with no color in it",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectra-compare",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "spectra-name-the-star",
+     "index": 33,
+     "type": "question",
+     "title": "Name one",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectra-identify",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "spectra-what-color-cannot-give",
+     "index": 34,
+     "type": "question",
+     "title": "The claim to take apart",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "answer-in-words",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": true,
+      "rubric": true,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectra-compare",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "spectra-four-is-four",
+     "index": 35,
+     "type": "read",
+     "title": "What four spectra are, and are not",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectra-compare",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "the-argument",
+     "index": 36,
      "type": "question",
      "title": "Back to the three stars",
      "declares": {
@@ -44749,7 +45293,7 @@
     },
     {
      "sid": "what-the-diagram-is-for",
-     "index": 31,
+     "index": 37,
      "type": "read",
      "title": "What the diagram is for",
      "declares": {
@@ -44989,6 +45533,12 @@
       "only-the-bright-ones",
       "what-a-survey-misses",
       "find-a-counterexample",
+      "spectra-the-light-itself",
+      "spectra-color-is-enough-here",
+      "spectra-two-features",
+      "spectra-name-the-star",
+      "spectra-what-color-cannot-give",
+      "spectra-four-is-four",
       "the-argument",
       "what-the-diagram-is-for"
      ],
@@ -44996,12 +45546,19 @@
       "only-the-bright-ones",
       "what-a-survey-misses",
       "find-a-counterexample",
+      "spectra-the-light-itself",
+      "spectra-color-is-enough-here",
+      "spectra-two-features",
+      "spectra-name-the-star",
+      "spectra-what-color-cannot-give",
+      "spectra-four-is-four",
       "the-argument",
       "what-the-diagram-is-for"
      ],
      "evidence": [
       "only-the-bright-ones",
       "find-a-counterexample",
+      "spectra-two-features",
       "the-argument",
       "what-the-diagram-is-for"
      ],
@@ -45014,15 +45571,15 @@
     }
    ],
    "totals": {
-    "steps": 31,
-    "declared": 31,
+    "steps": 37,
+    "declared": 37,
     "student": 31,
     "engine": 31,
-    "model": 31,
-    "data": 31,
-    "diagram": 0,
-    "evidence": 17,
-    "declaredButInert": 0,
+    "model": 37,
+    "data": 37,
+    "diagram": 6,
+    "evidence": 18,
+    "declaredButInert": 6,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -48043,15 +48600,15 @@
   }
  ],
  "totals": {
-  "steps": 636,
-  "declared": 607,
+  "steps": 642,
+  "declared": 613,
   "student": 157,
   "engine": 163,
-  "model": 225,
-  "data": 139,
-  "diagram": 104,
-  "evidence": 106,
-  "declaredButInert": 450,
+  "model": 231,
+  "data": 145,
+  "diagram": 110,
+  "evidence": 107,
+  "declaredButInert": 456,
   "prose": 15,
   "mismatched": 0,
   "rebuilds": 67,
