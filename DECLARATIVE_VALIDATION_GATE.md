@@ -493,8 +493,14 @@ validate:
 It is **dynamic member access on a key built by string concatenation**. Three
 things follow:
 
-- A reviewer can no longer read off which fields a validation consumes. Static
-  analysis of "what does this document touch" stops being decidable.
+- A reviewer can no longer read off which fields a validation consumes. The
+  field set is **not directly statically enumerable from the declarative
+  document without evaluating its expression and control flow** — the key is
+  produced by concatenation over a bound loop variable, so recovering the set
+  means running the `map` that builds it. Here that evaluation is cheap and
+  total (a literal eight-element range), so a tool could recover the set; the
+  point is that it must *evaluate* to do so, and nothing in the notation
+  guarantees the next such expression will be as tractable.
 - The interpreter must define what a missing key yields. JavaScript answers
   `undefined`, `Number.isFinite(undefined)` is `false`, and the filter quietly
   drops the row. That silence is the *intended* behaviour here — it is how
@@ -700,8 +706,9 @@ names, the derived expression (`t·d³`, `s/m`, `s·d²`), the threshold (0.35,
 0.25, 0.35) and the prose. E2 is a fourth instance with dynamic field names.
 
 This is the strongest argument in the corpus *for* definition-and-reference —
-and simultaneously the proof that what would be shared is a **parameterised
-function over an expression**, since the differing part is `to:` itself. Sharing
+and simultaneously the clearest evidence that what would be shared is a
+**parameterised function over an expression**, since the differing part is `to:`
+itself. Sharing
 it requires passing an expression as an argument. That is a higher-order
 function.
 
@@ -1469,18 +1476,21 @@ same reviewer reading the current JavaScript.
 | 9 | `recover-the-real-planet` | ✓ | ~ | ✓ | n/a | ✓ | ✓ | same |
 | 10 | `test-distance` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | same |
 
-✓ verifiable · ~ verifiable only with the evaluation rules in hand · ✗ not
-verifiable from the document
+✓ verifiable by reading · ~ verifiable only with the evaluation rules in hand ·
+✗ not verifiable by reading alone: recovering the answer requires evaluating the
+document's expressions or control flow
 
 **Where the declarative version is genuinely better:** nowhere in this corpus.
 
 **Where it is worse:**
 
-- **E2, "what data does this read?"** `v['p' ++ i ++ '_a']` makes the field set
-  uncomputable from the document. The JavaScript has exactly the same problem —
-  but the JavaScript never claimed otherwise, and `author:check`'s `ref/field`
-  rule ("compute and validate read fields the step itself declares") is a
-  *dynamic* check that would have to be rebuilt for the notation.
+- **E2, "what data does this read?"** `v['p' ++ i ++ '_a']` means the field set
+  is not directly statically enumerable from the document; recovering it
+  requires evaluating the expression that builds each key. The JavaScript has
+  exactly the same property — but the JavaScript never claimed otherwise, and
+  `author:check`'s `ref/field` rule ("compute and validate read fields the step
+  itself declares") handles it *dynamically*, which is a check that would have
+  to be rebuilt against the notation.
 - **E1/E3/E9, "what calculations?"** A reviewer must know that clause order is
   semantic and that `let` is not hoisted. In E9 the wrong reading gives the
   wrong error message; in E1 it gives `NaN`/`−Infinity`. The JavaScript makes
@@ -1641,10 +1651,12 @@ namespacing (`runRows` is defined three times). That is a function system with
 ### 10.4 Is it materially easier to review than the JavaScript it replaces?
 
 **No.** On the ten hardest cases it is better on none, the same on six, and
-worse on four. The two things that most defeat review — dynamic field names
-(E2) and order-dependent bindings (E1, E3, E9) — survive translation intact,
-and the third, nested fall-through (E3), gets harder to see because YAML has no
-closing brace.
+worse on four. The two things that most resist review by reading — dynamically
+constructed field names (E2), where the field set is not directly statically
+enumerable without evaluating the expression that builds it, and
+order-dependent bindings (E1, E3, E9) — survive translation intact, and the
+third, nested fall-through (E3), gets harder to see because YAML has no closing
+brace.
 
 ### 10.5 Would implementing it mean Gravitas now owns a programming language?
 
@@ -1708,6 +1720,21 @@ gain proper shadow-file translation. That is a data schema of the kind §8 calls
 The moment that subset is asked to cover family B (interpolation, +7 forms), or
 C (lambdas and collection operators, +11), the ledger reopens and the answer
 returns to C.
+
+### Decision as accepted
+
+Recorded as settled, 2026-09-21:
+
+1. **Full declarative conversion is rejected as scoped.**
+2. **A small declarative subset may someday be useful** as an authoring
+   convenience for simple validations. It is **not a security boundary**, and it
+   is **not part of v1.1**.
+3. **Existing complex validation remains trusted JavaScript.**
+4. **The worker / read-only-`ctx` alternative of §5C is not authorised now.** It
+   is recorded here as the cheaper route to confinement should that goal ever be
+   taken up on its own terms — not as work this gate schedules.
+
+Nothing in this document is a plan of record for implementation.
 
 ### 10.8 Confidence after the v1.1 integration
 
