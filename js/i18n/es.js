@@ -102,7 +102,7 @@ export const ES = {
     'Cambiar la combinación de colores de la interfaz. Observatorio usa tonos rojos para conservar la visión nocturna; Luz de día conviene a salas iluminadas y a proyectores (T alterna).',
   'footer.attribution.hint': 'Carl Ziegler: autor de Gravitas',
   'footer.attribution.hint.2':
-    'Contra qué se ha comprobado el motor físico: 281 verificaciones con error medido, tolerancia declarada y una razón para cada tolerancia. Se ejecuta en directo en el navegador.',
+    'Contra qué se ha comprobado el motor físico: 286 verificaciones con error medido, tolerancia declarada y una razón para cada tolerancia. Se ejecuta en directo en el navegador.',
   'footer.attribution.hint.3':
     'Consultar o contribuir al código fuente en GitHub',
   'footer.attribution': 'Validado',

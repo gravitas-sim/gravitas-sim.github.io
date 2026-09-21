@@ -38,7 +38,7 @@ abstract: >-
   axe-core run over 15 surfaces in 2 languages and 2 themes on every
   build, and is published in English and Spanish.
 
-  The physics is checked in public: 281 checks of the engine against
+  The physics is checked in public: 286 checks of the engine against
   analytic results, published values and independent integrations, each
   with its measured error and the kind of evidence it rests on, at
   gravitas-sim.online/validation/. A companion page states what the model

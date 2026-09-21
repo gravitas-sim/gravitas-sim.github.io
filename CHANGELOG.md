@@ -158,7 +158,7 @@ listed here because this is the release that first carries it.
   the share dialog and the scenario gallery keyboard traps in practice.
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
-  against a suite of <!--fact:physicsChecks-->281<!--/fact-->, and 48 scenarios
+  against a suite of <!--fact:physicsChecks-->286<!--/fact-->, and 48 scenarios
   against a catalog of <!--fact:scenarios-->59<!--/fact-->.
 
 ### Removed
