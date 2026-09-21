@@ -69,6 +69,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/darkMatterWidgets.js',
   './js/data/activities.js',
   './js/data/activityTeaching.js',
+  './js/data/evaluation.js',
   './js/data/exoplanetSystems.js',
   './js/data/gw/gw150914.js',
   './js/data/instructorContent.js',
@@ -105,6 +106,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/data/investigations/weighing-stars.js',
   './js/data/investigations/what-is-a-gravitational-wave.js',
   './js/data/investigations/when-orbits-lock.js',
+  './js/data/irreversible.js',
   './js/data/objectNames.js',
   './js/data/scenarioInfo.js',
   './js/data/scenarioTags.js',
@@ -118,6 +120,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/embed.js',
   './js/energyChartNew.js',
   './js/energyWidgets.js',
+  './js/evaluationKit.js',
   './js/exoplanetObservables.js',
   './js/exoplanetWidgets.js',
   './js/experiments/align.js',
@@ -253,6 +256,8 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/share.js',
   './js/shareState.js',
   './js/shortcuts.js',
+  './js/sonify/law.js',
+  './js/sonify/voiceReadout.js',
   './js/spatialHash.js',
   './js/starfield.js',
   './js/stellar/endpoints.js',
@@ -266,6 +271,8 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/stellarEvolutionWidgets.js',
   './js/stellarLab.js',
   './js/stellarWidgets.js',
+  './js/submission/submissionToken.js',
+  './js/submissionReview.js',
   './js/teaching/i18n.js',
   './js/teachingPage.js',
   './js/theme.js',
@@ -485,6 +492,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/darkMatterWidgets.js',
   './js/data/activities.js',
   './js/data/activityTeaching.js',
+  './js/data/evaluation.js',
   './js/data/exoplanetSystems.js',
   './js/data/gw/gw150914.js',
   './js/data/instructorContent.js',
@@ -521,6 +529,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/data/investigations/weighing-stars.js',
   './js/data/investigations/what-is-a-gravitational-wave.js',
   './js/data/investigations/when-orbits-lock.js',
+  './js/data/irreversible.js',
   './js/data/objectNames.js',
   './js/data/scenarioInfo.js',
   './js/data/scenarioTags.js',
@@ -534,6 +543,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/embed.js',
   './js/energyChartNew.js',
   './js/energyWidgets.js',
+  './js/evaluationKit.js',
   './js/exoplanetObservables.js',
   './js/exoplanetWidgets.js',
   './js/experiments/align.js',
@@ -669,6 +679,8 @@ self.__GRAVITAS_PRECACHE = [
   './js/share.js',
   './js/shareState.js',
   './js/shortcuts.js',
+  './js/sonify/law.js',
+  './js/sonify/voiceReadout.js',
   './js/spatialHash.js',
   './js/starfield.js',
   './js/stellar/endpoints.js',
@@ -682,6 +694,8 @@ self.__GRAVITAS_PRECACHE = [
   './js/stellarEvolutionWidgets.js',
   './js/stellarLab.js',
   './js/stellarWidgets.js',
+  './js/submission/submissionToken.js',
+  './js/submissionReview.js',
   './js/teaching/i18n.js',
   './js/teachingPage.js',
   './js/theme.js',
@@ -719,8 +733,10 @@ self.__GRAVITAS_PRECACHE = [
 ];
 
 // Not precached: fetched on demand, and warmed deliberately when the interface
-// switches to Spanish. See the header of the generator for why these are
-// treated differently from the English bodies.
+// switches to that language. See the header of the generator for why these are
+// treated differently from the English bodies - and note that being absent from
+// both precache lists is what makes a missing translated lesson unable to fail
+// an install.
 self.__GRAVITAS_LOCALE_WARM = {
   es: [
     './js/data/investigations/es/a-universe-of-stars.js',

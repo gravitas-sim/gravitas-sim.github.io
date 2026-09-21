@@ -229,6 +229,15 @@
     }
   }
 
+  /* No object-fit. A canvas whose intrinsic size differs from its CSS box is
+     stretched to fill it by default, which is exactly what is wanted when the
+     backing store is deliberately a different size - at the low tier, or at any
+     device-pixel ratio above 1. `cover` would instead preserve the aspect ratio
+     and CROP, and it would do it silently: the moment the two boxes diverged
+     the edges of the simulation would stop being drawn, with nothing on screen
+     to say so and every coordinate still internally consistent. It never fired
+     only because the backing store was always exactly innerWidth by
+     innerHeight, which is the assumption this change removes. */
   #simulationCanvas {
     display: block;
     position: absolute;
@@ -236,7 +245,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
   }
 
   #starfieldCanvas {
@@ -246,7 +254,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
   }
 
   #overlay {

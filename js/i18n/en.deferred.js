@@ -2592,6 +2592,15 @@ export const EN_DEFERRED = {
   'sound.now.nothing': 'Nothing',
   'sound.now.sandbox': 'Orbiting bodies, as tones',
   'sound.now.signal': 'A gravitational-wave signal, {seconds} s',
+  'sound.voices.title': 'What the tones stand for',
+  'sound.voices.reference':
+    'Highest voice, {label}. Period {period}. Every interval below is measured from this one.',
+  'sound.voices.row':
+    '{label}. Period {period}, {ratio}\u00d7 the highest voice, {cents} cents below it.',
+  'sound.voices.none':
+    'Nothing is being voiced. Sound is off, or no body in view is orbiting.',
+  'sound.voices.note':
+    'These are the periods the tones are computed from, not a description of the tones. The audio rounds each pitch onto a five-note scale, so two of these bodies can sound alike when their periods are not; the numbers here do not round.',
   'sound.preview': 'Play an example',
   'sound.stop': 'Stop',
   'sound.preview.note':
@@ -2727,6 +2736,7 @@ export const EN_DEFERRED = {
   'dmW.aRealStellarDiscIt':
     'A real stellar disc. It rises, peaks at about 2.2 scale lengths, and then falls away. Still not flat.',
   'dmW.whatGalaxiesDo': 'What galaxies do',
+  'dmW.radiusKpc': 'radius (kpc)',
   'dmW.speedKms': 'speed (km/s)',
   'dmW.speedAt30Kpc': 'Speed at 30 kpc',
   'dmW.outerSlopeVR': 'Outer slope (v ∝ rⁿ)',

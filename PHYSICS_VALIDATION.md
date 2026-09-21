@@ -55,7 +55,7 @@ are two front ends onto it.
 | Three-body sensitivity | 10 | 10 integrated |
 | Inspiral (approximation) | 4 | 4 approximation |
 | Real systems | 11 | 11 published |
-| Orbital resonance | 35 | 1 analytic, 33 integrated, 1 published |
+| Orbital resonance | 35 | 1 analytic, 34 integrated |
 | Planets in binary stars | 15 | 1 analytic, 10 integrated, 4 published |
 | Gravity assist | 10 | 1 analytic, 9 integrated |
 | Observing windows | 38 | 17 analytic, 17 published, 4 approximation |

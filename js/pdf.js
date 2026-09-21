@@ -269,6 +269,27 @@ export function toWinAnsi(text) {
 }
 
 /**
+ * Reduce a value to the base64url alphabet, for /Keywords.
+ *
+ * Deliberately not toWinAnsi(). That function ends by collapsing runs of
+ * underscores, because in prose "R__star" is the seam between a subscript
+ * marker and a symbol name and never something a writer meant - and in
+ * base64url "__" is two significant characters. A token carrying a double
+ * underscore came back one character short and decoded to nothing, which at
+ * about one token in two is most of them.
+ *
+ * Stripping rather than transliterating: everything this carries is already
+ * A-Za-z0-9-_, so nothing is lost, and anything else has no business in a
+ * machine-readable field.
+ *
+ * @param {string} text - The token
+ * @returns {string} The same characters, minus anything outside the alphabet
+ */
+function tokenSafe(text) {
+  return String(text ?? '').replace(/[^A-Za-z0-9\-_]/g, '');
+}
+
+/**
  * Short numeric label for an axis tick.
  *
  * Superscripts survive as far as toWinAnsi, which folds a run of them into
@@ -298,6 +319,7 @@ export function createDocument({
   author = 'Carl Ziegler',
   subject = '',
   lang = 'en-US',
+  keywords = '',
 } = {}) {
   const pages = [];
   let ops = [];
@@ -971,7 +993,14 @@ export function createDocument({
      */
     build() {
       startPage();
-      return assemble(pages, { title, footer, author, subject, lang });
+      return assemble(pages, {
+        title,
+        footer,
+        author,
+        subject,
+        lang,
+        keywords,
+      });
     },
   };
 
@@ -985,7 +1014,7 @@ export function createDocument({
  * cross-reference table at the end is what a reader uses to find anything at
  * all: an offset that is wrong by one byte makes the whole file unopenable.
  */
-function assemble(pages, { title, footer, author, subject, lang }) {
+function assemble(pages, { title, footer, author, subject, lang, keywords }) {
   const objects = [];
   const add = body => {
     objects.push(body);
@@ -1058,10 +1087,23 @@ function assemble(pages, { title, footer, author, subject, lang }) {
     `D:${made.getFullYear()}` +
     String(made.getMonth() + 1).padStart(2, '0') +
     '01000000Z';
+  // /Keywords carries the submission token when there is one. A reader shows it
+  // in Get Info and ignores it otherwise; what it is really for is the
+  // instructor page, which reads the PDF's own bytes and pulls the token from
+  // here rather than from the printed block. Text extracted from a page is at
+  // the mercy of whatever did the extracting, and base64url has no character
+  // to spare: '-' and '_' are alphabet, so a reader that inserted a hyphen at a
+  // line break would produce a token that decodes to something else. The bytes
+  // in here cannot be mangled that way.
+  //
+  // Escaping matters and is already handled: pdfString() escapes the three
+  // characters a PDF literal string cannot carry raw, and base64url contains
+  // none of them, so the token goes in unchanged and comes out unchanged.
   const infoId = add(
     `<< /Title (${pdfString(toWinAnsi(title))})` +
       ` /Author (${pdfString(toWinAnsi(author))})` +
       (subject ? ` /Subject (${pdfString(toWinAnsi(subject))})` : '') +
+      (keywords ? ` /Keywords (${pdfString(tokenSafe(keywords))})` : '') +
       ` /Producer (Gravitas) /Creator (Gravitas)` +
       ` /CreationDate (${stamp}) /ModDate (${stamp}) >>`
   );

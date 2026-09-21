@@ -23,7 +23,32 @@ import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 // visitors never open live beside the chunks that use them - and every check
 // below is about the catalog as a whole.
 const EN = { ...EN_BASE, ...EN_DEFERRED };
-const ES = { ...ES_BASE, ...ES_DEFERRED };
+
+// Every registered locale's whole catalog, walked from LOCALES rather than
+// named here. The static imports above stay because two dozen checks below are
+// about the base/deferred SPLIT and need the halves separately; this map is for
+// the checks that are about a catalog as a whole, and it is what makes a third
+// language covered by them on the day it is registered rather than the day
+// somebody remembers this file exists.
+//
+// The convention is the one the directory has always kept: `<id>.js` exports
+// the id upper-cased, `<id>.deferred.js` exports it with `_DEFERRED`.
+async function catalogFor(id) {
+  const upper = id.toUpperCase().replace(/-/g, '_');
+  const [base, deferred] = await Promise.all([
+    import(`../js/i18n/${id}.js`),
+    import(`../js/i18n/${id}.deferred.js`),
+  ]);
+  return { ...base[upper], ...deferred[`${upper}_DEFERRED`] };
+}
+
+/** Locale id -> whole catalog, in registry order. */
+const CATALOGS = new Map(
+  await Promise.all(LOCALES.map(async l => [l.id, await catalogFor(l.id)]))
+);
+/** Every locale that is a translation of English. */
+const TRANSLATIONS = [...CATALOGS].filter(([id]) => id !== 'en');
+const ES = CATALOGS.get('es');
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import {
   scenarioTitle,
@@ -43,22 +68,32 @@ beforeEach(async () => {
 });
 
 describe('the catalog', () => {
+  test('every registered locale has a catalog that loaded', async () => {
+    // The guard on everything below: those checks iterate CATALOGS, so a
+    // locale that failed to load would be silently unchecked rather than
+    // reported. Naming the registry here makes that impossible.
+    expect([...CATALOGS.keys()]).toEqual(LOCALES.map(l => l.id));
+    for (const [id, catalog] of CATALOGS) {
+      expect(`${id}:${Object.keys(catalog).length > 400}`).toBe(`${id}:true`);
+    }
+  });
+
   test('English is complete and Spanish carries the same ids', async () => {
     const en = Object.keys(EN);
-    const es = Object.keys(ES);
     expect(en.length).toBeGreaterThan(400);
-    // Every Spanish id must exist in English. An id that does not is a typo,
+    // Every translated id must exist in English. An id that does not is a typo,
     // and a typo in a locale file is silent: the message simply never shows.
     // toHaveProperty reads dots as a path, and every id here has dots in it.
     const enIds = new Set(en);
-    for (const id of es) expect([id, enIds.has(id)]).toEqual([id, true]);
+    for (const [locale, catalog] of TRANSLATIONS) {
+      for (const id of Object.keys(catalog)) {
+        expect([locale, id, enIds.has(id)]).toEqual([locale, id, true]);
+      }
+    }
   });
 
   test('no message is empty, and none is left as a TODO', async () => {
-    for (const [catalog, name] of [
-      [EN, 'en'],
-      [ES, 'es'],
-    ]) {
+    for (const [name, catalog] of CATALOGS) {
       for (const [id, value] of Object.entries(catalog)) {
         const forms =
           typeof value === 'string' ? [value] : Object.values(value);
@@ -439,10 +474,7 @@ describe('scenario prose', () => {
     ];
     expect(types.length).toBeGreaterThan(4);
     const missing = [];
-    for (const [locale, catalog] of [
-      ['en', EN],
-      ['es', ES],
-    ]) {
+    for (const [locale, catalog] of CATALOGS) {
       for (const type of types) {
         if (!(`inv.step.kind.${type}` in catalog)) {
           missing.push(`${locale}: inv.step.kind.${type}`);
@@ -464,10 +496,7 @@ describe('scenario prose', () => {
     // 506 characters, so every visitor's console carried a validation warning
     // on every load.
     const problems = [];
-    for (const [locale, catalog] of [
-      ['en', EN],
-      ['es', ES],
-    ]) {
+    for (const [locale, catalog] of CATALOGS) {
       for (const [key, value] of Object.entries(catalog)) {
         if (typeof value !== 'string') continue;
         if (/^scenario\..*\.summary$/.test(key) && value.length > 500) {
@@ -498,10 +527,9 @@ describe('scenario prose', () => {
 // settings panel drew "Default BH Mass (M☉)" on every load in English.
 // Spanish had the character itself, which is how the two came to disagree.
 describe('catalog strings are text, not source', () => {
-  const LOCALES = { en: EN, es: ES };
   const ESCAPE = /\\u[0-9a-fA-F]{4}|\\x[0-9a-fA-F]{2}/;
 
-  for (const [locale, catalog] of Object.entries(LOCALES)) {
+  for (const [locale, catalog] of CATALOGS) {
     test(`no ${locale} message carries a literal escape sequence`, () => {
       const offenders = Object.entries(catalog)
         .filter(([, value]) => typeof value === 'string' && ESCAPE.test(value))

@@ -27,8 +27,10 @@ import {
   CI_SETUP_STEPS,
   CI_SETUP_COMMANDS,
   CI_EQUIVALENTS,
+  RELEASE_REF_ONLY,
   summarize,
 } from '../tools/checks.mjs';
+import { ALL_GROUPS, FACT_GROUPS } from '../tools/docs-facts.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WORKFLOW = path.join(REPO, '.github', 'workflows', 'ci.yml');
@@ -48,21 +50,32 @@ function ciCommands() {
   const out = [];
   let job = '(top level)';
   let stepName = '';
+  // The step's own `if:`, which is policy rather than plumbing: it is how a
+  // check that needs a release ref is kept off an integration branch, and a
+  // drift detector that could not see it would call the two arrangements the
+  // same. Reset at a job boundary as well as at a step, so a job-level
+  // condition is never read as the first step's.
+  let stepIf = null;
   let block = null;
   for (const line of lines) {
     const jobMatch = /^ {2}([A-Za-z0-9_-]+):\s*$/.exec(line);
     if (jobMatch) {
       job = jobMatch[1];
+      stepName = '';
+      stepIf = null;
       block = null;
     }
     const nameMatch = /^\s*- name:\s*(.+?)\s*$/.exec(line);
     if (nameMatch) {
       stepName = nameMatch[1];
+      stepIf = null;
       block = null;
     }
+    const ifMatch = /^\s+if:\s*(.+?)\s*$/.exec(line);
+    if (ifMatch && stepName && !block) stepIf = ifMatch[1];
     const runBlock = /^(\s*)run:\s*\|\s*$/.exec(line);
     if (runBlock) {
-      block = { indent: runBlock[1].length, job, stepName };
+      block = { indent: runBlock[1].length, job, stepName, condition: stepIf };
       continue;
     }
     if (block) {
@@ -74,6 +87,7 @@ function ciCommands() {
         out.push({
           job: block.job,
           step: block.stepName,
+          condition: block.condition,
           command: line.trim(),
         });
         continue;
@@ -81,7 +95,12 @@ function ciCommands() {
     }
     const runMatch = /^\s*-?\s*run:\s*(?!\|)(.+?)\s*$/.exec(line);
     if (runMatch) {
-      out.push({ job, step: stepName, command: runMatch[1] });
+      out.push({
+        job,
+        step: stepName,
+        condition: stepIf,
+        command: runMatch[1],
+      });
     }
   }
   return out;
@@ -454,5 +473,253 @@ describe('the workflow uses the expression language as spelled', () => {
       expect(text).not.toContain(`${wrong}()`);
     }
     expect(text).toContain('cancelled()');
+  });
+});
+
+// =============================================================================
+// Which checks a branch is asked for, and which only a release is
+// -----------------------------------------------------------------------------
+// One CI step now carries a condition, and a condition is a policy rather than
+// a convenience, so it is checked as one.
+//
+// The problem it solves: `instructors:check` compares the working tree against
+// the committed production ciphertext, which only the owner's passphrase can
+// produce. On a long-lived integration branch with a dozen parallel lesson
+// branches that is the wrong question - every one of them edits instructional
+// content, so every one of them is red until somebody rebuilds a four-megabyte
+// encrypted file that then conflicts with every other branch doing the same.
+// Three open v1.1 pull requests were red on that and on nothing else.
+//
+// The thing that must not be lost is the release guarantee: a stale bundle
+// must not reach the live site. So the condition is evaluated here against the
+// four contexts that exist, rather than matched as a string, and the deploy
+// path is checked separately - tools/verify-release.mjs asks the same question
+// with no condition at all, in the job that publishes.
+// =============================================================================
+
+/**
+ * Evaluate the subset of the Actions expression language the workflow uses.
+ *
+ * Deliberately small: equality and inequality against a literal, joined by `||`
+ * and `&&`. Anything else throws rather than being guessed at, because a
+ * silently mis-evaluated condition would make this file agree with a policy
+ * nobody has.
+ *
+ * @param {string} expr - The `if:` expression
+ * @param {object} ctx - Context values, e.g. {'github.ref': '...'}
+ * @returns {boolean} What GitHub would decide
+ */
+function evaluateCondition(expr, ctx) {
+  const or = expr.split('||');
+  return or.some(clause =>
+    clause.split('&&').every(term => {
+      const m = /^\s*([A-Za-z0-9_.]+)\s*(==|!=)\s*'([^']*)'\s*$/.exec(term);
+      if (!m) throw new Error(`unsupported expression term: ${term.trim()}`);
+      const [, name, op, literal] = m;
+      if (!(name in ctx)) throw new Error(`unknown context value: ${name}`);
+      return op === '==' ? ctx[name] === literal : ctx[name] !== literal;
+    })
+  );
+}
+
+/** The four things that can trigger this workflow and carry a ref. */
+const CONTEXTS = {
+  'push to main': {
+    'github.event_name': 'push',
+    'github.ref': 'refs/heads/main',
+    'github.base_ref': '',
+  },
+  'push to v2': {
+    'github.event_name': 'push',
+    'github.ref': 'refs/heads/v2',
+    'github.base_ref': '',
+  },
+  'pull request into main': {
+    'github.event_name': 'pull_request',
+    'github.ref': 'refs/pull/42/merge',
+    'github.base_ref': 'main',
+  },
+  'pull request into v2': {
+    'github.event_name': 'pull_request',
+    'github.ref': 'refs/pull/42/merge',
+    'github.base_ref': 'v2',
+  },
+};
+
+describe('the checks a release is asked for and a branch is not', () => {
+  const commands = ciCommands();
+  const find = command => commands.find(c => c.command === command);
+
+  test('the evaluator handles the expression, rather than guessing at it', () => {
+    // Guards the assertions below: an evaluator that threw on everything, or
+    // returned undefined, would make every truth table look like whatever the
+    // first expectation asked for.
+    expect(() =>
+      evaluateCondition("github.ref == 'x'", { 'github.ref': 'x' })
+    ).not.toThrow();
+    expect(evaluateCondition("github.ref == 'x'", { 'github.ref': 'x' })).toBe(
+      true
+    );
+    expect(evaluateCondition("github.ref == 'x'", { 'github.ref': 'y' })).toBe(
+      false
+    );
+    expect(() =>
+      evaluateCondition('startsWith(github.ref, "x")', {})
+    ).toThrow();
+  });
+
+  test('a registry entry that declares a condition carries it in CI', () => {
+    const conditional = CHECKS.filter(c => c.ciCondition);
+    expect(conditional.length).toBeGreaterThan(0);
+    for (const check of conditional) {
+      const step = find(check.command.join(' '));
+      expect({ id: check.id, found: Boolean(step) }).toEqual({
+        id: check.id,
+        found: true,
+      });
+      expect({ id: check.id, condition: step.condition }).toEqual({
+        id: check.id,
+        condition: check.ciCondition,
+      });
+      expect(step.job).toBe(check.ci);
+    }
+  });
+
+  test('a registry entry that declares none runs unconditionally', () => {
+    // The other half, and the one that stops a condition being added to a
+    // check quietly. A step that stopped running on pull requests without the
+    // registry saying so would be a check the project believes it has.
+    const unconditional = [];
+    for (const check of CHECKS.filter(c => c.ci && !c.ciCondition)) {
+      const step = find(check.command.join(' '));
+      if (step && step.condition) {
+        unconditional.push(`${check.id}: ${step.condition}`);
+      }
+    }
+    expect(unconditional).toEqual([]);
+  });
+
+  test('the freshness check is asked on release paths and on no others', () => {
+    const asked = {};
+    for (const [name, ctx] of Object.entries(CONTEXTS)) {
+      asked[name] = evaluateCondition(RELEASE_REF_ONLY, ctx);
+    }
+    expect(asked).toEqual({
+      'push to main': true,
+      'pull request into main': true,
+      'push to v2': false,
+      'pull request into v2': false,
+    });
+  });
+
+  test('an integration branch is still asked the questions it can answer', () => {
+    // Relaxing the freshness check would be a hole if it were the only thing
+    // asked about the instructor materials. It is not: the pipeline itself is
+    // exercised on every branch, with no secret, and the digest that freshness
+    // rests on is checked for completeness at the same time.
+    for (const command of [
+      'npm run instructors:validate',
+      'npm run instructors:audit',
+    ]) {
+      const step = find(command);
+      expect({ command, found: Boolean(step) }).toEqual({
+        command,
+        found: true,
+      });
+      expect({ command, condition: step.condition }).toEqual({
+        command,
+        condition: null,
+      });
+    }
+  });
+
+  test('the deploy job still hangs off the job that asks', () => {
+    const workflow = readFileSync(WORKFLOW, 'utf8');
+    // `needs: [ci]` without always(), so a failed `checks` skips the deploy;
+    // and the freshness step lives in `checks`.
+    expect(workflow).toMatch(
+      /deploy:\n\s+name: Deploy to Pages\n\s+needs: \[ci\]/
+    );
+    expect(workflow).toMatch(
+      /needs: \[checks, build, e2e, accessibility, e2e-build, cross-browser\]/
+    );
+    const step = find('npm run instructors:check');
+    expect(step.job).toBe('checks');
+  });
+});
+
+// =============================================================================
+// The facts CI gathers, against the facts this project knows how to produce
+// -----------------------------------------------------------------------------
+// `npm run docs:check` passes while the counts that cost a test run are stale,
+// because it reports them as not measured and then prints "Documentation
+// matches the source". CI ran that form. README.md claimed 3608 jest tests
+// against 4844 and 579 browser tests against 1061, and three open pull requests
+// were carrying stale counts behind a green tick at the time this was written.
+//
+// The expensive facts are grouped now by what each costs, and CI runs each
+// group in the job that has already paid for it. This is the assertion that
+// makes that arrangement mean something: a fact in no group CI runs is a fact a
+// pull request can leave stale, whichever group somebody put it in.
+// =============================================================================
+describe('the documentation facts CI gathers', () => {
+  const commands = ciCommands();
+
+  /** The fact groups the workflow asks for, from the commands it runs. */
+  function groupsInCi() {
+    const asked = new Set();
+    for (const { command } of commands) {
+      const m = /^npm run docs:check:(\w+)$/.exec(command);
+      if (m && ALL_GROUPS.includes(m[1])) asked.add(m[1]);
+      if (/^npm run docs:check:full$/.test(command)) {
+        for (const g of ALL_GROUPS) asked.add(g);
+      }
+    }
+    return asked;
+  }
+
+  test('CI asks for at least one group, so the check below is not vacuous', () => {
+    expect(groupsInCi().size).toBeGreaterThan(0);
+  });
+
+  test('every deferred fact belongs to a group CI runs', () => {
+    const asked = groupsInCi();
+    const covered = new Set();
+    for (const group of asked) {
+      for (const key of FACT_GROUPS[group].keys) covered.add(key);
+      for (const block of FACT_GROUPS[group].blocks)
+        covered.add(`block:${block}`);
+    }
+    const everything = [];
+    for (const group of ALL_GROUPS) {
+      for (const key of FACT_GROUPS[group].keys) everything.push(key);
+      for (const block of FACT_GROUPS[group].blocks) {
+        everything.push(`block:${block}`);
+      }
+    }
+    expect(everything.filter(k => !covered.has(k))).toEqual([]);
+  });
+
+  test('no fact belongs to two groups, so neither job can be dropped safely', () => {
+    const seen = new Map();
+    const duplicated = [];
+    for (const group of ALL_GROUPS) {
+      for (const key of FACT_GROUPS[group].keys) {
+        if (seen.has(key))
+          duplicated.push(`${key}: ${seen.get(key)}, ${group}`);
+        seen.set(key, group);
+      }
+    }
+    expect(duplicated).toEqual([]);
+  });
+
+  test('the gate still runs the undivided form', () => {
+    const full = CHECKS.find(c => c.id === 'docs-full');
+    expect(full).toBeDefined();
+    expect(full.command).toEqual(['npm', 'run', 'docs:check:full']);
+    // Both halves name it, so removing either from CI is a drift failure
+    // rather than a silent narrowing.
+    expect(CI_EQUIVALENTS['npm run docs:check:tests']).toBe('docs-full');
+    expect(CI_EQUIVALENTS['npm run docs:check:build']).toBe('docs-full');
   });
 });

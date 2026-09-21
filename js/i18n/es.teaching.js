@@ -347,6 +347,11 @@ export const ES_TEACHING = {
   'teach.section.evaluate': 'Si quieres evaluarlo',
   'teach.evaluate.intro':
     'No se ha hecho ningún estudio sobre este software. No hay instrumento validado, ni ganancia de aprendizaje medida, y nada de esta página debe leerse como tal. Lo que sigue es una forma que alguien podría usar para producir evidencia, ofrecida porque su ausencia es más fácil de abordar que de ignorar.',
+  'teach.evaluate.kit.lead':
+    'Los formularios imprimibles de todo esto — una lista de comprobación de fidelidad, una evaluación piloto previa y posterior de doce ítems, un cuestionario de usabilidad, un flujo de códigos de participante anónimos y plantillas CSV y JSON sin identificadores — están en el',
+  'teach.evaluate.kit.link': 'kit de evidencia para el aula',
+  'teach.evaluate.kit.tail':
+    '. Son instrumentos desarrollados por el proyecto y sin validar, y la página lo dice en cada superficie que los muestra.',
   'teach.evaluate.objectives.title':
     'Empieza por los objetivos, no por la herramienta',
   'teach.evaluate.objectives.text':

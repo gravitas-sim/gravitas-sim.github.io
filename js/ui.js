@@ -138,7 +138,12 @@ import {
 import { setBodySelector } from './widgetRuntime.js';
 import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
 import { orbitalElements, dominantPrimary } from './orbital.js';
-import { timeUnitSeconds, formatSpeed, formatDistance } from './units.js';
+import {
+  timeUnitSeconds,
+  formatSpeed,
+  formatDistance,
+  formatTime,
+} from './units.js';
 import { blackHoleFacts, yearsLabel } from './blackHolePhysics.js';
 import {
   buildPayload,
@@ -164,7 +169,9 @@ import {
   getSonificationState,
   setSonificationVolume,
   watchSonification,
+  getVoicedBodies,
 } from './audio.js';
+import { describeVoices } from './sonify/voiceReadout.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import { stellarStateFor, spectralType } from './stellar/state.js';
 import {
@@ -3906,6 +3913,72 @@ const refreshSonificationToggle = () => {
   refreshSoundPanel();
 };
 
+/**
+ * The non-audio path to what the sonification is carrying.
+ *
+ * Every number here comes from getVoicedBodies() - the same array the
+ * oscillators are following - by way of js/sonify/voiceReadout.js. Nothing in
+ * this function recomputes an orbital frequency, and tests/voiceReadout.test.js
+ * fails if it ever starts to, because a second derivation is how a readout
+ * comes to disagree with the thing it is reading out.
+ *
+ * Built as elements rather than as one string of markup: the labels come from
+ * body types and the periods from formatTime(), and both go in through
+ * textContent so that neither can put markup on the page. A translated string
+ * carrying an HTML tag renders as literal angle brackets here, which is the
+ * right failure and has happened before.
+ *
+ * @param {{set: Function, phrase: Function, phraseVars: Function}} io - refreshSoundPanel's local helpers
+ */
+function renderVoiceReadout({ set, phrase, phraseVars }) {
+  const section = document.getElementById('soundPanelVoices');
+  const list = document.getElementById('soundPanelVoicesList');
+  if (!section || !list) return;
+
+  const title = phrase('sound.voices.title');
+  // The deferred catalog may not have landed yet. An untranslated section is
+  // worse than none, so it stays hidden until the strings are real.
+  if (!title) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+  set('soundPanelVoicesTitle', title);
+  set('soundPanelVoicesNote', phrase('sound.voices.note'));
+
+  const { rows } = describeVoices(getVoicedBodies());
+  list.textContent = '';
+
+  if (!rows.length) {
+    const empty = document.createElement('li');
+    empty.textContent = phrase('sound.voices.none');
+    list.append(empty);
+    return;
+  }
+
+  for (const row of rows) {
+    const item = document.createElement('li');
+    item.textContent = row.isReference
+      ? phraseVars('sound.voices.reference', {
+          label: typeName(row.type),
+          period: formatTime(row.period),
+        })
+      : phraseVars('sound.voices.row', {
+          label: typeName(row.type),
+          period: formatTime(row.period),
+          // Four figures on the ratio and one decimal on the cents, which is
+          // finer than it looks like it needs to be and is there for two
+          // reasons. A reader comparing two periods wants the figure the
+          // rounding would otherwise take away; and "1 cents" is what integer
+          // cents produces for a near-unison pair, which is a plural bug in
+          // every language at once. A decimal never reads as singular.
+          ratio: formatNumber(row.ratio, { sig: 4 }),
+          cents: row.cents.toFixed(1),
+        });
+    list.append(item);
+  }
+}
+
 /** Fill the panel from the current state. Cheap; called on every change. */
 function refreshSoundPanel() {
   const panel = document.getElementById('soundPanel');
@@ -3970,6 +4043,8 @@ function refreshSoundPanel() {
         ? phrase('sound.now.sandbox')
         : phrase('sound.now.nothing')
   );
+
+  renderVoiceReadout({ set, phrase, phraseVars });
 
   const toggle = document.getElementById('soundPanelToggle');
   if (toggle) {
@@ -6158,8 +6233,12 @@ export function beginKeyboardPlacement() {
     return false;
   }
   if (keyboardAim) return true;
-  const rect = canvas.getBoundingClientRect();
-  const at = { x: rect.width / 2, y: rect.height / 2 };
+  // Canvas pixels, not CSS pixels. state.mouse and screen_to_world both work in
+  // the backing store's coordinates, and the two have differed since the low
+  // tier shipped at 0.7 - this placed the keyboard aim off-centre by the same
+  // factor, and a device-pixel ratio above 1 widens the gap rather than
+  // creating it. canvasPoint() converts the same way for pointer events.
+  const at = { x: canvas.width / 2, y: canvas.height / 2 };
   state.add_start_screen = { ...at };
   state.add_start_world = screen_to_world(at);
   state.mouse.x = at.x;

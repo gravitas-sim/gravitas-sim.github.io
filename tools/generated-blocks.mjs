@@ -253,6 +253,43 @@ export function investigationModelRows({ manifest, instructor }) {
 }
 
 /**
+ * One model-page row per operation that destroys information.
+ *
+ * Built from js/data/irreversible.js, which is itself scanned out of
+ * js/physics.js, so the table cannot describe a simulation the engine no
+ * longer is. The order is source order: a reader following the table is
+ * reading down the file.
+ *
+ * @param {ReadonlyArray<object>} operations - IRREVERSIBLE
+ * @returns {string} Table rows
+ */
+export function irreversibleRows(operations) {
+  const KIND_LABEL = {
+    cull: 'Deleted when far away',
+    merge: 'Merged',
+    collapse: 'Replaced',
+    damping: 'Damped',
+    fragment: 'Fragmented',
+  };
+  return operations
+    .map(op => {
+      const what = escapeHtml(String(op.detail?.what || ''));
+      const where = `${escapeHtml(IRREVERSIBLE_SOURCE_NAME)}:${op.line}`;
+      return (
+        `            <tr>\n` +
+        `              <td>${escapeHtml(KIND_LABEL[op.kind] || op.kind)}</td>\n` +
+        `              <td>${what}</td>\n` +
+        `              <td><code>${where}</code></td>\n` +
+        `            </tr>`
+      );
+    })
+    .join('\n');
+}
+
+/** Named here so the row builder does not have to import the data module. */
+const IRREVERSIBLE_SOURCE_NAME = 'js/physics.js';
+
+/**
  * Every generated region, by marker name.
  *
  * @param {object} deps - {facts, manifest, instructor}
@@ -356,10 +393,20 @@ function doiBadgeBlock() {
   return `\n[![DOI](https://zenodo.org/badge/DOI/${d}.svg)](https://doi.org/${d})\n`;
 }
 
-export function generatedBlocks({ manifest, instructor, physics = null }) {
+export function generatedBlocks({
+  manifest,
+  instructor,
+  physics = null,
+  irreversible = null,
+}) {
   return {
     doiBadge: doiBadgeBlock(),
     citation: citationBlock(),
+    ...(irreversible
+      ? {
+          irreversibleOperations: `\n${irreversibleRows(irreversible)}\n          `,
+        }
+      : {}),
     investigationModels: `\n${investigationModelRows({ manifest, instructor })}\n          `,
     // Only a run of the suite can produce this, so a cheap docs check leaves
     // the block alone rather than claiming nobody generates it.

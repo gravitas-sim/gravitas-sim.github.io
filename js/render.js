@@ -2930,16 +2930,20 @@ function resizeCanvas() {
   // Never fall to zero: a 0x0 canvas makes every drawing and culling
   // calculation degenerate. Browsers can report 0 for a page that is not
   // being presented yet (background tab, hidden container).
-  // The backing store, which at the low quality tier is deliberately smaller
-  // than the CSS box the compositor stretches it over. The canvas has never
-  // applied devicePixelRatio, so on the machines that tier is for this is the
-  // only pixel budget there is to give back - and at 0.7 it is half of them.
+  // The backing store. renderScale() folds the quality tier, the display's
+  // device-pixel ratio and a per-tier pixel budget into one multiplier on the
+  // CSS box, so this function does not need to know which of the three moved.
+  // At the low tier it is still deliberately smaller than the box the
+  // compositor stretches it over; above it, a HiDPI display now gets the
+  // resolution it has always been able to show.
   //
   // js/ui.js converts pointer events through the same ratio, which is what
   // keeps a click landing on the body underneath it.
-  const scale = renderScale();
-  const W = Math.max(1, Math.round((window.innerWidth || 0) * scale));
-  const H = Math.max(1, Math.round((window.innerHeight || 0) * scale));
+  const cssW = window.innerWidth || 0;
+  const cssH = window.innerHeight || 0;
+  const scale = renderScale(cssW, cssH);
+  const W = Math.max(1, Math.round(cssW * scale));
+  const H = Math.max(1, Math.round(cssH * scale));
   if (canvas.width === W && canvas.height === H) return;
   canvas.width = W;
   canvas.height = H; // sim layer

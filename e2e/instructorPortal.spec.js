@@ -40,6 +40,19 @@ import { MANIFEST } from '../js/data/investigations/manifest.js';
 const LESSONS = MANIFEST.length;
 /** A guide and an answer key each. */
 const DOCUMENTS = LESSONS * 2;
+/**
+ * Everything the bundle holds, which is what the version line counts.
+ *
+ * The lesson half is derived because it is the half that moves: every new
+ * investigation adds two documents and used to leave a literal behind. The
+ * other two terms are the adopters guide and the curriculum map, and the eight
+ * activity documents the test below asserts separately - both stable, both
+ * checked in their own right, and neither of them a reason to hard-code the
+ * total.
+ */
+const GENERAL_DOCUMENTS = 2;
+const ACTIVITY_DOCUMENTS = 8;
+const ALL_DOCUMENTS = GENERAL_DOCUMENTS + ACTIVITY_DOCUMENTS + DOCUMENTS;
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(REPO, '.instructor-fixture', 'materials.enc.json');
@@ -252,14 +265,14 @@ test.describe('the instructor portal, signed in', () => {
         .locator('#investigationResources .res-card')
         .count();
       expect(shown).toBeGreaterThan(0);
-      expect(shown).toBeLessThan(22);
+      expect(shown).toBeLessThan(LESSONS);
     });
 
     test('the version line names the catalog it is describing', async ({
       page,
     }) => {
       await expect(page.locator('#materialsVersion')).toContainText(
-        '54 documents'
+        `${ALL_DOCUMENTS} documents`
       );
     });
   });
@@ -367,7 +380,7 @@ test.describe('the dashboard on a small screen and by keyboard', () => {
     // container is a clean run that proves nothing, and an empty container is
     // exactly what a broken render looks like from here.
     await expect(page.locator('#investigationResources .res-card')).toHaveCount(
-      22
+      LESSONS
     );
     await expect(page.locator('#activityResources .res-format')).toHaveCount(6);
     const results = await new AxeBuilder({ page }).withTags(TAGS).analyze();

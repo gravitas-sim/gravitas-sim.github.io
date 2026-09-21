@@ -251,7 +251,8 @@ const DEBRIS_MASS_UNIT = DEBRIS_FRAGMENT_MASS_KG / MASS_UNIT_KG;
 // the same transform with its origin in the corner instead of the middle -
 // still exact, still invertible - and is_offscreen already guards for it
 // explicitly, so the rest of the module is expecting it.
-const canvas = document.getElementById('simulationCanvas') || {
+const canvas = (typeof document !== 'undefined' &&
+  document.getElementById('simulationCanvas')) || {
   width: 0,
   height: 0,
 };
@@ -2479,7 +2480,21 @@ const updateCachedArrays = () => {
  * @param {number} dt - Delta time for physics update
  */
 const updatePhysics = dt => {
-  if (dt <= 0) return;
+  // Zero and nonsense do nothing; a negative step integrates backwards.
+  //
+  // This read `dt <= 0`, which refused a negative advance and - because NaN
+  // compares false against everything - let NaN through to be added to every
+  // position in the scene. Both halves are fixed here.
+  //
+  // Nothing in the application can ask for a backward step. There is one
+  // caller, js/render.js, and it gets its advance from frameAdvance(), which
+  // multiplies a non-negative frame time by a sim_speed the settings control
+  // bounds at [0, 5]. The reverse direction exists for
+  // tools/reversibility-probe.mjs, which measures how well a forward run can
+  // be undone - and the answer to that question is what the irreversibility
+  // audit is built on. It is a measurement, not a feature: there is no control
+  // anywhere that runs the simulation backwards.
+  if (!Number.isFinite(dt) || dt === 0) return;
   // The clock the elapsed-time readout and the stopwatch both run on. Advanced
   // here rather than in the render loop so that it counts what was actually
   // integrated: a scenario that substeps takes several calls per frame, and a

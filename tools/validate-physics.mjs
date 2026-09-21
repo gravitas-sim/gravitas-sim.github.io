@@ -14,10 +14,16 @@
 //   --group <name>   run only groups whose name contains this string
 //   --verbose        print the reason each tolerance is what it is
 //   --json           machine-readable output
+//   --report <path>  also write that machine-readable form to a file, while
+//                    still printing the table. CI runs this suite anyway and
+//                    tools/docs-facts.mjs needs its report; without this the
+//                    two could only be had by running a two-minute suite twice.
 //
 // Exit status is 0 when every check passes and 1 otherwise, so it is usable in
 // CI without further plumbing.
 // =============================================================================
+
+import { writeFileSync } from 'node:fs';
 
 import { runChecks, groupResults } from './physics-checks.mjs';
 import { KIND_SHORT } from '../js/physicsKinds.js';
@@ -30,6 +36,7 @@ const valueOf = flag => {
 };
 
 const asJson = has('--json');
+const reportPath = valueOf('--report');
 const verbose = has('--verbose');
 const groupFilter = valueOf('--group');
 
@@ -108,19 +115,26 @@ async function main() {
       )
     : results;
 
-  if (asJson) {
-    console.log(
-      JSON.stringify(
-        {
-          passed: filtered.filter(r => r.pass).length,
-          failed: filtered.filter(r => !r.pass).length,
-          elapsedMs: elapsed,
-          checks: filtered,
-        },
-        null,
-        2
-      )
+  const machineReadable = () =>
+    JSON.stringify(
+      {
+        passed: filtered.filter(r => r.pass).length,
+        failed: filtered.filter(r => !r.pass).length,
+        elapsedMs: elapsed,
+        checks: filtered,
+      },
+      null,
+      2
     );
+
+  // The same report, to a file, for whatever runs next. Written before the
+  // table so a suite with a failure in it still leaves the report behind: the
+  // count of checks is a documented fact and it is no less true for one of
+  // them having failed.
+  if (reportPath) writeFileSync(reportPath, machineReadable() + '\n');
+
+  if (asJson) {
+    console.log(machineReadable());
     // exitCode rather than exit(): process.exit() can truncate a large
     // stdout write on a pipe before it flushes, which silently corrupts the
     // JSON output the moment it grows past a buffer.

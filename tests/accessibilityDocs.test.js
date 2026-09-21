@@ -65,12 +65,39 @@ describe('ACCESSIBILITY.md against the axe matrix', () => {
     expect(fact(doc, 'axeRuns')).toBe(names.length * locales * themes);
   });
 
-  // The numbers outside a marker are the ones that went stale before. A plain
-  // "52 combinations" beside the command is invisible to `docs:sync`, so it is
-  // read back out of the document and compared here.
-  test('the unmarked count beside the command agrees too', () => {
-    const m = /npm run a11y:axe\s+# axe only, all (\d+) combinations/.exec(doc);
-    expect(m).not.toBeNull();
-    expect(Number(m[1])).toBe(fact(doc, 'axeRuns'));
+  // The count beside the command is the one that went stale before, because a
+  // plain "52 combinations" in a code fence is invisible to `docs:sync`. It is
+  // generated now, so the assertion is no longer "read the literal back" - it
+  // is that the literal is gone and a marker stands where it was. A future
+  // edit that types the number in by hand fails here rather than going quietly
+  // stale for a release.
+  test('the count beside the command is generated, not typed', () => {
+    const line = /^npm run a11y:axe .*$/m.exec(doc);
+    expect(line).not.toBeNull();
+    expect(line[0]).toMatch(
+      /# axe only, all <!--fact:axeRuns-->\d+<!--\/fact--> combinations/
+    );
+    // With the generated spans removed, the comment beside the command must
+    // carry no digit of its own: one outside a marker is a number nothing
+    // regenerates. Only the comment is examined, because `a11y` is part of the
+    // command itself.
+    const comment = line[0]
+      .slice(line[0].indexOf('#'))
+      .replace(/<!--fact:[^>]*-->.*?<!--\/fact-->/gs, '');
+    expect(comment).not.toMatch(/\d/);
+  });
+
+  // Every place the document states the run count, whether in the table, the
+  // prose or the command, is the same marker and therefore the same number.
+  // `docs:sync` rewrites all of them, so a disagreement means one was hand-
+  // edited out of its markers - exactly the failure the markers were added to
+  // prevent.
+  test('every stated run count is the marked one, and they all agree', () => {
+    const marked = [
+      ...doc.matchAll(/<!--fact:axeRuns-->(.*?)<!--\/fact-->/gs),
+    ].map(m => Number(m[1]));
+    expect(marked.length).toBeGreaterThanOrEqual(3);
+    expect(new Set(marked).size).toBe(1);
+    expect(marked[0]).toBe(fact(doc, 'axeRuns'));
   });
 });
