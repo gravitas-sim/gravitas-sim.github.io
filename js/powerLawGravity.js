@@ -125,7 +125,7 @@ export function accelerationMagnitude(r, mu, n, r0 = REFERENCE_RADIUS_SIM) {
 }
 
 /**
- * The acceleration as a vector at a position, with the centre at the origin.
+ * The acceleration as a vector at a position, with the center at the origin.
  *
  * @param {number} x - Position x
  * @param {number} y - Position y
@@ -277,7 +277,7 @@ export const LESSON_ECCENTRICITY = 0.1;
 // cannot drift that way: everything it reports, it computed.
 
 /**
- * One RK4 step of a two-body problem about a fixed centre.
+ * One RK4 step of a two-body problem about a fixed center.
  * @param {{x:number,y:number,vx:number,vy:number}} s - State, mutated
  * @param {number} dt - Timestep
  * @param {number} mu - G*M
@@ -479,11 +479,58 @@ export function specificEnergy(s, mu, n, r0 = REFERENCE_RADIUS_SIM) {
 }
 
 /**
- * Specific angular momentum about the centre.
+ * Specific angular momentum about the center.
  * @param {{x:number,y:number,vx:number,vy:number}} s - State
  * @returns {number} z component of r x v
  */
 export const specificAngularMomentum = s => s.x * s.vy - s.y * s.vx;
+
+/**
+ * Sample the orbit's path, for drawing.
+ *
+ * The same integration runPrecession uses, reported as points rather than as a
+ * number, so the curve a reader sees and the precession they read off it come
+ * from one calculation. Drawing a separate idealized ellipse beside a measured
+ * angle would be two authors of one number.
+ *
+ * @param {object} opts - Run parameters, as runPrecession
+ * @param {number} opts.n - Exponent
+ * @param {number} [opts.mu] - G*M
+ * @param {number} [opts.r0] - Reference radius
+ * @param {number} [opts.rp] - Launch radius
+ * @param {number} [opts.eccentricity] - Launch eccentricity parameter
+ * @param {number} [opts.dt] - Timestep
+ * @param {number} [opts.revolutions] - How many radial periods to trace
+ * @returns {{points: Array<{x:number,y:number}>, maxR: number}} The path
+ */
+export function orbitPath({
+  n,
+  mu = 1000,
+  r0 = REFERENCE_RADIUS_SIM,
+  rp = REFERENCE_RADIUS_SIM,
+  eccentricity = LESSON_ECCENTRICITY,
+  dt = 0.05,
+  revolutions = 4,
+} = {}) {
+  const s = stateAtPeriapsis(rp, eccentricity, mu, n, r0);
+  const points = [{ x: s.x, y: s.y }];
+  let maxR = Math.hypot(s.x, s.y);
+  let apses = 0;
+  let prevR = maxR;
+  let prevDr = 0;
+  for (let i = 0; i < 400000 && apses <= revolutions; i++) {
+    rk4Step(s, dt, mu, n, r0);
+    const r = Math.hypot(s.x, s.y);
+    if (r > maxR) maxR = r;
+    if (prevDr < 0 && r - prevR >= 0) apses++;
+    prevDr = r - prevR;
+    prevR = r;
+    // One point every few steps: the curve is smooth and a caller drawing it
+    // into a few hundred pixels cannot use forty thousand of them.
+    if (i % 4 === 0) points.push({ x: s.x, y: s.y });
+  }
+  return { points, maxR };
+}
 
 /**
  * Measure the period-radius slope from circular orbits under the active law.

@@ -31,6 +31,7 @@ import {
   REFERENCE_RADIUS_SIM,
   apsidalPrecessionNearCircular,
   expectedKeplerSlope,
+  orbitPath,
   runConservation,
   runKeplerSlope,
   runPrecession,
@@ -82,7 +83,7 @@ const cache = new Map();
  *
  * Cached by exponent. The model is pure, so a second call with the same n must
  * give the same answer, and the cache is an optimisation rather than a
- * behaviour.
+ * behavior.
  *
  * @param {number} n - Force-law exponent
  * @returns {object} Every measured quantity, with nulls where a measurement
@@ -162,6 +163,19 @@ export function refinement(n) {
   Object.freeze(rows);
   cache.set(key, rows);
   return rows;
+}
+
+/**
+ * The traced orbit at one exponent, cached like every other measurement.
+ * @param {number} n - Exponent
+ * @returns {{points: Array<{x:number,y:number}>, maxR: number}} The path
+ */
+export function path(n) {
+  const key = `path:${n}`;
+  if (cache.has(key)) return cache.get(key);
+  const p = orbitPath({ n, mu: MU, eccentricity: LESSON_ECCENTRICITY });
+  cache.set(key, p);
+  return p;
 }
 
 /**

@@ -134,7 +134,7 @@ const BUDGETS = [
       '829.7 KB to 828.6 KB across a feature that added a panel, a report ' +
       'writer and 4.7 KB of CSS. The initial limit was not touched.\n\n' +
       'Raised from 2760 to 2790 for the release-preparation pass, and this ' +
-      'one is bug-fix weight rather than a new instrument, so it is itemised ' +
+      'one is bug-fix weight rather than a new instrument, so it is itemized ' +
       'rather than waved through. Measured against a190265: +5.4 KB deferred, ' +
       'from clamping the Monte Carlo refinement to its search bounds and ' +
       'keeping the grid fit as a floor; the generation token, inputs key and ' +
@@ -146,7 +146,7 @@ const BUDGETS = [
       'budget that governs what a first-time visitor actually downloads. ' +
       'Nothing was deferred to make this number work and nothing was ' +
       'removed to fit under it.\n\n' +
-      'Raised from 2790 to 2860 for the observing-schedule feature, itemised ' +
+      'Raised from 2790 to 2860 for the observing-schedule feature, itemized ' +
       'from a fresh build rather than estimated. The Design the Schedule ' +
       'lesson is 17.5 KB and its Spanish shadow 15.3 KB; js/rvCompare.js is ' +
       '4.1 KB and js/rvScheduleControls.js 3.1 KB; the instructor guide entry ' +
@@ -161,7 +161,7 @@ const BUDGETS = [
       'panel registers them - and the initial download came back from ' +
       '832.9 KB to 829.8 KB. The initial limit was NOT touched.\n\n' +
       "Raised from 2860 to 2900 for the binary lesson's parameter sweep, " +
-      'itemised from a fresh build against 2849.3 KB before it. The six new ' +
+      'itemized from a fresh build against 2849.3 KB before it. The six new ' +
       'lesson steps are 15.9 KB of English and 14.6 KB of Spanish - the ' +
       'lesson chunks went 31.8 to 47.7 and 31.5 to 46.1 - and ' +
       "js/experiments/binarySweep.js with the panel's sweep controls and the " +
@@ -173,7 +173,7 @@ const BUDGETS = [
       'so that share is three merged selectors and nothing else. 829.9 KB ' +
       'before, 830.0 KB after, against an untouched 830.0 limit.\n\n' +
       'Raised from 2900 to 2960 for the gravity-assist lesson\u2019s retained ' +
-      'comparison and its optional sweep, itemised from two fresh builds: ' +
+      'comparison and its optional sweep, itemized from two fresh builds: ' +
       '2886.6 KB before, 2948.8 KB after. The English lesson chunk went ' +
       '19.8 to 31.8 KB and its Spanish shadow 19.3 to 29.7 - six new screens ' +
       'and three rewritten ones - and the instructor guide entry took ' +
@@ -234,7 +234,7 @@ const BUDGETS = [
       'project wants it to. The measured figure is unchanged by the starfield ' +
       'work, which is entirely eager: 3028.6 KB, 51.4 KB of room.\n\n' +
       'Raised from 3080 to 3250 for the gravitational-wave work, and this ' +
-      'one is itemised in two halves because two different things happened.\n\n' +
+      'one is itemized in two halves because two different things happened.\n\n' +
       'The first half is a debt. Three commits went in with the release gate ' +
       'deferred - the teaching-data validation fix, the classroom activities ' +
       'and the conservation-diagnostics pass - and nobody ran this check ' +

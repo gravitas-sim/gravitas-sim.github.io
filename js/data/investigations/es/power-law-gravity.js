@@ -295,6 +295,10 @@ export default {
 
              \n\nAhora aplícala a un exponente que no hayas medido. El
              instrumento llega hasta n = 2,9.`,
+      tool: {
+        title: 'Comprueba aquí tu predicción, después de haberla hecho',
+        note: 'Deduce primero la respuesta a partir del patrón. El instrumento sirve para saber si acertaste, no para encontrar la respuesta.',
+      },
       prompt: 'Pendiente predicha de log P frente a log r con n = 2,9',
       explain: `(2,9 + 1) / 2 = 1,95. Pon el instrumento en n = 2,9 y
                 compruébalo: marca 1,95. Esto es lo que significa que una

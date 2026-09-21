@@ -88,7 +88,7 @@ describe('the law reduces to Newton where it must', () => {
     );
   });
 
-  test('the vector form points at the centre', () => {
+  test('the vector form points at the center', () => {
     const { ax, ay } = acceleration(30, 40, MU, 2.3);
     const r = 50;
     const mag = accelerationMagnitude(r, MU, 2.3);
@@ -345,7 +345,7 @@ describe('what does not break', () => {
   });
 
   test('angular momentum is conserved at every exponent', () => {
-    // Same reasoning: a central force exerts no torque about the centre for any
+    // Same reasoning: a central force exerts no torque about the center for any
     // radial dependence whatsoever, so this is round-off.
     for (const n of SPAN) {
       const { angularDrift } = runConservation({

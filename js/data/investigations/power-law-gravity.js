@@ -108,7 +108,7 @@ const POWER_LAW_GRAVITY = {
              five percent at one astronomical unit — and orbits would change
              for that reason as much as for any other. Worse, <em>how much</em>
              weaker would depend on whether you had chosen to measure distance
-             in kilometres, astronomical units or pixels, which is absurd: the
+             in kilometers, astronomical units or pixels, which is absurd: the
              universe does not care what units you write down.
 
              \n\nSo the law used here is anchored. It is written so that at one
@@ -426,6 +426,12 @@ const POWER_LAW_GRAVITY = {
 
              \n\nNow use it on an exponent you have not measured. The instrument
              will go up to n = 2.9.`,
+      tool: {
+        id: 'power-law-kepler',
+        values: { n: 2.9 },
+        title: 'Check your prediction here, after you have made it',
+        note: 'Work the answer out from the pattern first. The instrument is how you find out whether you were right, not how you find the answer.',
+      },
       prompt: 'Predicted slope of log P against log r at n = 2.9',
       unit: '',
       answer: 1.95,
@@ -535,7 +541,7 @@ const POWER_LAW_GRAVITY = {
                 the total momentum still cannot change. Angular momentum
                 survives for a closely related reason — the force points along
                 the line joining the bodies, so it exerts no twist about the
-                centre, and that is also true for any dependence on r.
+                center, and that is also true for any dependence on r.
 
                 \n\nSo these two are not consequences of the inverse square at
                 all. They are consequences of the force being <em>pairwise</em>
@@ -632,7 +638,7 @@ const POWER_LAW_GRAVITY = {
       ],
       answer: 1,
       because: `Every one of these is a reasonable question, but only one
-                separates a result from an artefact. Precession that shrinks
+                separates a result from an artifact. Precession that shrinks
                 when the timestep shrinks was never physics. Precession that
                 stays put survived the one test that could have killed it, and
                 only then is it worth asking what is causing it. You used

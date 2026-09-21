@@ -2274,7 +2274,7 @@ export const INSTRUCTOR_CONTENT = {
       'The first exoplanet surveys found mostly hot Jupiters. What does that tell us about planetary systems, and what does it tell us only about the surveys?',
       'Radial velocity gives a minimum mass. Is a minimum mass a useful scientific result, or is it a failure? What can you do with a lower limit?',
       'If a planet transits, we know the orbit is nearly edge-on. What fraction of planetary systems would you expect to be oriented that way, and what does that imply about how many planets transit surveys miss?',
-      'Astrometry favours wide orbits and nearby stars; transits favour close-in planets. If each method is biased, how does the field arrive at a picture of what planetary systems are actually like?',
+      'Astrometry favours wide orbits and nearby stars; transits favor close-in planets. If each method is biased, how does the field arrive at a picture of what planetary systems are actually like?',
       'A planet with Earth’s density in the habitable zone of its star: what would you want to measure next, and with what instrument?',
       'HD 209458 b is a hot Jupiter. Nothing about it resembles Earth. Why has so much effort gone into characterizing it?',
     ],
@@ -3359,7 +3359,7 @@ export const INSTRUCTOR_CONTENT = {
       'What depends on the inverse-square form of gravity, and what does not',
     difficulty: 'Introductory',
     placement:
-      'After Kepler’s laws, and ideally after any lesson in which conservation of momentum or angular momentum has been stated. It is the natural follow-up to a treatment that presents Kepler’s laws as facts about the Solar System, because it asks what those facts were consequences of. No calculus is required: the exponent is moved with a slider and every result is read off an instrument. The one piece of mathematics students do themselves is recognising a linear pattern in four numbers and extrapolating it.',
+      'After Kepler’s laws, and ideally after any lesson in which conservation of momentum or angular momentum has been stated. It is the natural follow-up to a treatment that presents Kepler’s laws as facts about the Solar System, because it asks what those facts were consequences of. No calculus is required: the exponent is moved with a slider and every result is read off an instrument. The one piece of mathematics students do themselves is recognizing a linear pattern in four numbers and extrapolating it.',
     overview:
       'One exponent is moved and everything else is held fixed. Students measure three things and sort them into two piles. The closed elliptical orbit and the 3/2 slope of period against radius both move the instant the exponent does, and are therefore properties of the inverse square rather than of gravity in general. Conservation of momentum, angular momentum and energy do not move at all, because they follow from the force being pairwise and central - neither of which was changed. The lesson also rehearses one general method: a simulated result is not believed until the timestep has been refined and it has stayed put.',
     priorKnowledge: [
@@ -3388,7 +3388,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Why the conservation laws survive',
-        body: 'Momentum is conserved because each pair of bodies receives one force magnitude applied in opposite directions - Newton’s third law, which says nothing about distance. Angular momentum is conserved because the force lies along the line joining the bodies, so it exerts no torque about the centre, which is also true for any radial dependence. Energy is conserved because the force depends only on position. None of the three mentions the exponent. Students frequently expect all of mechanics to fail together, and separating what did from what did not is the point of the lesson.',
+        body: 'Momentum is conserved because each pair of bodies receives one force magnitude applied in opposite directions - Newton’s third law, which says nothing about distance. Angular momentum is conserved because the force lies along the line joining the bodies, so it exerts no torque about the center, which is also true for any radial dependence. Energy is conserved because the force depends only on position. None of the three mentions the exponent. Students frequently expect all of mechanics to fail together, and separating what did from what did not is the point of the lesson.',
       },
       {
         heading: 'The potential belongs to the force',
@@ -3424,7 +3424,7 @@ export const INSTRUCTOR_CONTENT = {
     features: [
       {
         name: 'Apsidal precession, measured (steps 4–5)',
-        text: 'Integrates a two-body orbit with a fourth-order scheme and locates each periapsis by fitting a parabola through the three samples around it, so the answer is not quantised by the timestep. Reports degrees per radial period, with the near-circular analytic estimate beside it and labelled as an approximation.',
+        text: 'Integrates a two-body orbit with a fourth-order scheme and locates each periapsis by fitting a parabola through the three samples around it, so the answer is not quantized by the timestep. Reports degrees per radial period, with the near-circular analytic estimate beside it and labeled as an approximation.',
       },
       {
         name: 'Timestep refinement (step 8)',
@@ -3505,11 +3505,11 @@ export const INSTRUCTOR_CONTENT = {
       'Have students derive slope = (n+1)/2 from v^2/r = a(r) and P = 2*pi*r/v. It is three lines of algebra and turns a measured pattern into a prediction.',
       'Ask what the potential energy function is for a general exponent, and have them check by differentiating that it gives back the force. The lesson asserts the result; deriving it is a good exercise for a class with calculus.',
       'Set the exponent to 2.9 and ask students to estimate how many orbits it takes for the ellipse to turn all the way round. Then check.',
-      'Investigate the other closed-orbit case in Bertrand’s theorem by asking what a force proportional to r rather than to 1/r^2 would do - the answer, an ellipse centred on the star rather than focused on it, is a good surprise.',
+      'Investigate the other closed-orbit case in Bertrand’s theorem by asking what a force proportional to r rather than to 1/r^2 would do - the answer, an ellipse centered on the star rather than focused on it, is a good surprise.',
       'For a class that has met Noether’s theorem: which symmetry does each surviving conservation law correspond to, and is anything in this lesson evidence for that correspondence or merely consistent with it?',
     ],
     modelNotes:
-      'The instruments run a contained model in js/powerLawGravity.js. It integrates its own two-body and three-body problems and never touches the main engine, so every ordinary Gravitas scenario remains Newtonian and the Solar System visible during this lesson is not affected by the exponent. The law is a(r) = GM * r0^(n-2) / r^n with r0 = 1 AU, which is exactly Newtonian at n = 2 and exactly Newtonian at r = r0 for every n. The potential used for the energy readout is the one belonging to that force, verified by differentiation in tests/powerLawGravity.test.js rather than transcribed. The near-circular precession relation shown beside the measurement is an approximation valid for small eccentricity; at the eccentricity the lesson runs it agrees with the integrated orbit to about one percent, and it is labelled as an estimate everywhere it appears. This is a controlled experiment, not a theory of gravity, and the lesson says so in its closing step.',
+      'The instruments run a contained model in js/powerLawGravity.js. It integrates its own two-body and three-body problems and never touches the main engine, so every ordinary Gravitas scenario remains Newtonian and the Solar System visible during this lesson is not affected by the exponent. The law is a(r) = GM * r0^(n-2) / r^n with r0 = 1 AU, which is exactly Newtonian at n = 2 and exactly Newtonian at r = r0 for every n. The potential used for the energy readout is the one belonging to that force, verified by differentiation in tests/powerLawGravity.test.js rather than transcribed. The near-circular precession relation shown beside the measurement is an approximation valid for small eccentricity; at the eccentricity the lesson runs it agrees with the integrated orbit to about one percent, and it is labeled as an estimate everywhere it appears. This is a controlled experiment, not a theory of gravity, and the lesson says so in its closing step.',
   },
   'when-orbits-lock': {
     topic: 'Mean-motion resonance, and what counts as evidence for it',
