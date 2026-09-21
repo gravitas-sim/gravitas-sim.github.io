@@ -217,14 +217,39 @@ describe('the entry point', () => {
   });
 });
 
+/** The one refusal an integration branch is expected to be carrying. */
+const FRESHNESS = /instructor bundle is stale/;
+
 describe('the real repository', () => {
-  test('the committed tree is publishable, apart from the deploy marker', async () => {
+  test('the committed tree is structurally publishable', async () => {
     // The check that this script is calibrated against the thing it guards
     // rather than only against fixtures. The marker is written at deploy time,
     // so it is waived here.
+    //
+    // Structurally, and the distinction is the integration branch's whole
+    // shape. `v2` accumulates instructional changes for weeks; the moment one
+    // of them touches js/pdf.js or a teaching catalog the committed production
+    // ciphertext is genuinely out of date, and only the owner's passphrase can
+    // rebuild it. That is the intended state of the branch, not a defect in it
+    // - so this asserts everything except that one refusal, and the refusal
+    // itself is asserted below, where a stale bundle is shown to stop a deploy.
     const out = verifyRelease(process.cwd(), { requireRevision: false });
-    expect(out.problems).toEqual([]);
+    const structural = out.problems.filter(p => !FRESHNESS.test(p));
+    expect(structural).toEqual([]);
     expect(out.checked.precached).toBeGreaterThan(200);
+  });
+
+  test('and freshness is judged rather than skipped', () => {
+    // The teeth. Whatever the verdict, it has to have been reached: a tree
+    // where freshness was never evaluated would pass the test above by
+    // accident, which is exactly the shape of the hole this branch closed.
+    const out = verifyRelease(process.cwd(), { requireRevision: false });
+    expect(['current', 'stale']).toContain(out.checked.freshness);
+    if (out.checked.freshness === 'stale') {
+      // And a stale bundle must still refuse, here, with no condition on it.
+      expect(out.ok).toBe(false);
+      expect(out.problems.some(p => FRESHNESS.test(p))).toBe(true);
+    }
   });
 });
 
