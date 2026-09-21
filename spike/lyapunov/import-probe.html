@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><title>worker import probe</title>
+<pre id="out">running…</pre>
+<script type="module">
+const probeOnce = target => new Promise(resolve => {
+  const w = new Worker('/spike/lyapunov/import-probe.worker.js', { type: 'module' });
+  const done = d => { w.terminate(); resolve(d); };
+  w.onmessage = ev => done(ev.data);
+  w.onerror = ev => done({ ok:false, target, workerError: ev.message });
+  w.postMessage({ target });
+});
+const targets = await (await fetch('/spike/lyapunov/targets.json')).json();
+const results = [];
+for (const t of [...targets, '/js/physics.js']) results.push(await probeOnce(t));
+window.__probe = results;
+document.getElementById('out').textContent =
+  results.map(r => `${r.ok ? 'ok  ' : 'FAIL'} ${r.target}${r.ok ? '' : '  -> ' + (r.message || r.workerError)}`).join('\n');
+</script>

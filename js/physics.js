@@ -251,7 +251,8 @@ const DEBRIS_MASS_UNIT = DEBRIS_FRAGMENT_MASS_KG / MASS_UNIT_KG;
 // the same transform with its origin in the corner instead of the middle -
 // still exact, still invertible - and is_offscreen already guards for it
 // explicitly, so the rest of the module is expecting it.
-const canvas = document.getElementById('simulationCanvas') || {
+const canvas = (typeof document !== 'undefined' &&
+  document.getElementById('simulationCanvas')) || {
   width: 0,
   height: 0,
 };
