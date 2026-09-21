@@ -52,6 +52,14 @@ const NOT_THE_SITE = new Set([
   'bench',
   '_siteA',
   '_siteB',
+  // The worker-realm spike. It has an index.html and it is deliberately not a
+  // page: MULTI_WORLD_DECISION.md records that the multi-instance engine was
+  // not built, and the probe pages exist so the measurement behind that answer
+  // can be re-run. Shipping them would publish a prototype of something the
+  // project decided against. Excluded here rather than added to DOC_PAGES,
+  // which is the distinction this file is about - the rule is "every page the
+  // site has", and a spike is not one.
+  'spike',
 ]);
 
 /** Every directory holding an index.html, repository-relative, at any depth. */

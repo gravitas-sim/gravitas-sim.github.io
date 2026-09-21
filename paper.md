@@ -197,7 +197,7 @@ analytic, integrated, published, approximation or empirical — and its measured
 error. The public validation page is generated from the suite that ran, not
 transcribed from it.
 
-A release gate runs 35 checks covering formatting, linting, module architecture,
+A release gate runs 39 checks covering formatting, linting, module architecture,
 authoring rules including lesson-quality warnings, internal links, dependency
 audits, the unit and browser suites, the physics validation, bundle budget and
 composition, and the currency of every generated artifact. It additionally
