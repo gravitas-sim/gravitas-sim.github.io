@@ -286,8 +286,14 @@ describe('npm run author:new', () => {
     // The line before it is still a complete import. This is the assertion
     // that actually fails on the bug: with the two fused, `lines[at]` IS the
     // previous import and this reads the one above that.
-    expect(lines[at - 1]).toBe(
-      "import LIVES_OF_STARS from './investigations/lives-of-stars.js';"
+    //
+    // Matched by shape rather than by name. It used to name the lesson that
+    // happened to sort just before the scratch one - and the next lesson
+    // anybody added sorted between them and broke a test about the authoring
+    // tool for a reason that had nothing to do with it, which is the same
+    // defect one level up from the one this file exists to catch.
+    expect(lines[at - 1]).toMatch(
+      /^import [A-Z0-9_]+ from '\.\/investigations\/[a-z0-9-]+\.js';$/
     );
     // And the anchor it was inserted ahead of still follows it.
     expect(lines[at + 1]).toBe(
