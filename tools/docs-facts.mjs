@@ -26,12 +26,38 @@
 // Cheap and expensive facts
 // -----------------------------------------------------------------------------
 // Most facts are read straight out of the source modules and cost milliseconds,
-// so `--check` verifies them on every run and in the fast CI job. Four of them -
-// the Jest counts, the browser-suite count, the physics-check count and the
-// build sizes - can only be had by running something that takes minutes. Those
-// are gathered only under `--full`, which CI runs in the job where those
-// commands have already been paid for. A `--check` without `--full` reports the
-// ones it skipped rather than passing silently over them.
+// so `--check` verifies them on every run and in the fast CI job. The rest - the
+// Jest counts, the browser-suite count, the physics-check count and the build
+// sizes - can only be had by running something that takes minutes.
+//
+// That comment used to say those were gathered under `--full`, "which CI runs
+// in the job where those commands have already been paid for". CI never ran it.
+// Its "Documentation counts and links" step ran the cheap check, which reports
+// the expensive facts as *not measured* and then prints "Documentation matches
+// the source" - so a pull request could move the test count and go green over a
+// README that now said something untrue. It did, repeatedly: README.md claimed
+// 3608 jest tests against 4844 and 579 browser tests against 1061, and at the
+// time of writing three open pull requests were each carrying stale counts
+// behind a green tick.
+//
+// The fix is not to run the whole suite twice. It is to notice that the facts
+// differ in WHAT they cost, and that CI has already paid for most of it:
+//
+//   tests   The jest counts, the browser-suite listing and the physics total.
+//           CI's `checks` job already runs jest and the physics suite, so it
+//           writes their reports to a cache directory and this reads them back
+//           instead of running them again. What is left is the playwright
+//           listing, which takes four seconds.
+//
+//   build   The bundle sizes, read from dist/build-summary.json. Only the
+//           `build` job has a dist/, and it has one already - so that job
+//           checks them, rather than `checks` waiting for a build it does not
+//           otherwise need.
+//
+// Between them the two groups cover every deferred fact, and
+// tests/releaseGate.test.js fails if they ever stop doing so. `--full` still
+// means all of them, so `npm run docs:check:full` and the release gate are
+// unchanged and remain the strictest form.
 // =============================================================================
 
 import { readFile, writeFile } from 'node:fs/promises';
@@ -370,6 +396,34 @@ async function cheapFacts() {
   return facts;
 }
 
+/**
+ * A report an earlier CI step already produced, if it left one.
+ *
+ * GRAVITAS_FACTS_CACHE names a directory; a file in it stands in for running
+ * the command that would have produced it. The point is not speed for its own
+ * sake - it is that the `checks` job runs jest and the physics suite anyway,
+ * and asking it to run them a second time so the documentation can be checked
+ * is how "CI runs the full facts check" came to be a comment rather than a
+ * step.
+ *
+ * Only CI sets it, and CI writes the files in the same job, from the same
+ * commands, moments earlier. A cache that were somehow stale would make this
+ * check agree with a run that did not happen, so nothing sets it by default and
+ * the tool says when it used one.
+ *
+ * @param {string} name - File name inside the cache directory
+ * @param {string[]} report - Notes, appended to when a cache is used
+ * @returns {string|null} The file's contents, or null
+ */
+function cached(name, report) {
+  const dir = process.env.GRAVITAS_FACTS_CACHE;
+  if (!dir) return null;
+  const at = join(dir, name);
+  if (!existsSync(at)) return null;
+  report.push(`reused ${rel(at)} rather than running it again`);
+  return readFileSync(at, 'utf8');
+}
+
 /** Run a command and return its stdout, or null if it fails. */
 function run(cmd, args, opts = {}) {
   try {
@@ -387,17 +441,28 @@ function run(cmd, args, opts = {}) {
   }
 }
 
-/** Facts that cost a full run of something. */
-function fullFacts(report) {
+/**
+ * The facts in the `tests` group: what a run of the suites counts.
+ *
+ * @param {string[]} report - Notes about anything that could not be measured
+ * @param {object|null} physics - A physics report, when one has been read already
+ * @returns {object} Facts
+ */
+function testFacts(report, physics) {
   const facts = {};
 
   // Jest, via its own JSON report rather than by parsing a summary line.
-  const out = join(tmpdir(), `gravitas-jest-${process.pid}.json`);
-  run('npx', ['jest', '--json', `--outputFile=${out}`, '--silent'], {
-    env: { ...process.env, NODE_OPTIONS: '--experimental-vm-modules' },
-  });
-  if (existsSync(out)) {
-    const jest = JSON.parse(readFileSync(out, 'utf8'));
+  const fromCache = cached('jest.json', report);
+  let jestJson = fromCache;
+  if (!jestJson) {
+    const out = join(tmpdir(), `gravitas-jest-${process.pid}.json`);
+    run('npx', ['jest', '--json', `--outputFile=${out}`, '--silent'], {
+      env: { ...process.env, NODE_OPTIONS: '--experimental-vm-modules' },
+    });
+    if (existsSync(out)) jestJson = readFileSync(out, 'utf8');
+  }
+  if (jestJson) {
+    const jest = JSON.parse(jestJson);
     facts.jestTests = jest.numTotalTests;
     facts.jestSuites = jest.numTotalTestSuites;
     if (jest.numFailedTests) {
@@ -421,16 +486,16 @@ function fullFacts(report) {
     report.push('could not list the browser suite');
   }
 
-  // The physics validation table prints its own totals.
-  const physics = run('node', ['tools/validate-physics.mjs']);
-  const checks =
-    physics &&
-    physics.match(/(\d+)\s+checks:\s+(\d+)\s+passed,\s+(\d+)\s+failed/);
-  if (checks) {
-    facts.physicsChecks = Number(checks[1]);
-    if (Number(checks[3])) {
-      report.push(`${checks[3]} physics check(s) failing`);
-    }
+  // The physics total, taken from the same JSON report the coverage block is
+  // built from rather than by parsing the human table. It used to be both: one
+  // run of tools/validate-physics.mjs for the total and a second, with --json,
+  // for the inventory. Two runs of a two-minute suite for two views of one
+  // answer, every time, and nobody had reason to notice because nothing ran
+  // this in CI.
+  if (physics) {
+    facts.physicsChecks = (physics.checks || []).length;
+    const failing = (physics.checks || []).filter(c => c.pass === false).length;
+    if (failing) report.push(`${failing} physics check(s) failing`);
   } else {
     report.push('could not read the physics validation totals');
   }
@@ -445,14 +510,20 @@ function fullFacts(report) {
  * numbers in the README are quotations of its output.
  */
 function buildFacts(report) {
+  // From the cache first, for the same reason as the other two: a job that has
+  // already measured this should not be asked to build again. It also makes
+  // tests/docsFactsScope.test.js hermetic - it used to pass on a machine that
+  // happened to have a dist/ lying around and fail in CI's `checks` job, which
+  // has none, which is precisely the kind of check this file exists to stop.
+  const fromCache = cached('build-summary.json', report);
   const summary = join(REPO, 'dist', 'build-summary.json');
-  if (!existsSync(summary)) {
+  if (!fromCache && !existsSync(summary)) {
     report.push(
       'no dist/build-summary.json - run `npm run build` for build sizes'
     );
     return {};
   }
-  const built = JSON.parse(readFileSync(summary, 'utf8'));
+  const built = JSON.parse(fromCache || readFileSync(summary, 'utf8'));
   return {
     buildCss: built.cssKB,
     buildStartupJs: built.startupKB,
@@ -479,21 +550,85 @@ function buildFacts(report) {
  * would call the block unknown, which reads as "somebody wrote a marker nobody
  * generates" rather than "not measured on this run".
  */
-const DEFERRED_BLOCKS = ['physicsCoverage'];
+const DEFERRED_BLOCKS_LEGACY = ['physicsCoverage'];
 
-const DEFERRED_KEYS = [
-  'jestTests',
-  'jestSuites',
-  'e2eTests',
-  'e2eFiles',
-  'physicsChecks',
-  'buildCss',
-  'buildStartupJs',
-  'buildStartupFiles',
-  'buildDeferredJs',
-  'buildDeferredChunks',
-  'buildInitialDownload',
-];
+/**
+ * The facts that cost something, grouped by what they cost.
+ *
+ * A group is the unit CI can afford in one job: everything in `tests` comes
+ * from commands the `checks` job already runs, everything in `build` comes from
+ * the artifact the `build` job already produces. Nothing may be in neither -
+ * tests/releaseGate.test.js checks that the groups CI runs cover every key and
+ * block this tool knows how to produce, which is the property that was missing
+ * when "full" was a single flag nobody ran.
+ */
+export const FACT_GROUPS = Object.freeze({
+  tests: Object.freeze({
+    keys: Object.freeze([
+      'jestTests',
+      'jestSuites',
+      'e2eTests',
+      'e2eFiles',
+      'physicsChecks',
+    ]),
+    blocks: Object.freeze(['physicsCoverage']),
+    // CITATION.cff and .zenodo.json quote physicsChecks in their abstract, so
+    // they can be judged exactly when that group has been gathered and not
+    // before. A cheap run that rewrote them replaced the check total with a
+    // placeholder, silently, in the two artifacts a DOI is minted from.
+    generated: true,
+  }),
+  build: Object.freeze({
+    keys: Object.freeze([
+      'buildCss',
+      'buildStartupJs',
+      'buildStartupFiles',
+      'buildDeferredJs',
+      'buildDeferredChunks',
+      'buildInitialDownload',
+    ]),
+    blocks: Object.freeze([]),
+    generated: false,
+  }),
+});
+
+/** Every group name, which is what `--full` means. */
+export const ALL_GROUPS = Object.freeze(Object.keys(FACT_GROUPS));
+
+const DEFERRED_KEYS = ALL_GROUPS.flatMap(g => [...FACT_GROUPS[g].keys]);
+const DEFERRED_BLOCKS = ALL_GROUPS.flatMap(g => [...FACT_GROUPS[g].blocks]);
+
+// The list this replaced, kept only to fail loudly if a block is ever added to
+// a group and forgotten here. Two lists of the same thing is how this file's
+// predecessor drifted.
+if (DEFERRED_BLOCKS_LEGACY.some(b => !DEFERRED_BLOCKS.includes(b))) {
+  throw new Error('a deferred block belongs to no fact group');
+}
+
+/**
+ * Which groups a run gathers, from its flags.
+ *
+ * @param {string[]} argv - Command-line arguments
+ * @returns {Set<string>} Group names
+ */
+export function groupsFrom(argv) {
+  if (argv.includes('--full')) return new Set(ALL_GROUPS);
+  const flag = argv.find(a => a.startsWith('--groups='));
+  if (!flag) return new Set();
+  const asked = flag
+    .slice('--groups='.length)
+    .split(',')
+    .map(g => g.trim())
+    .filter(Boolean);
+  const unknown = asked.filter(g => !ALL_GROUPS.includes(g));
+  if (unknown.length) {
+    throw new Error(
+      `Unknown fact group(s): ${unknown.join(', ')}. ` +
+        `Known groups: ${ALL_GROUPS.join(', ')}.`
+    );
+  }
+  return new Set(asked);
+}
 
 /**
  * The generated regions, from the same modules the application uses.
@@ -503,7 +638,7 @@ const DEFERRED_KEYS = [
  *
  * @returns {Promise<Object<string, string>>} Marker name -> replacement text
  */
-export async function gatherBlocks({ full = false } = {}) {
+export async function gatherBlocks({ physics = null } = {}) {
   const { MANIFEST } = await import(
     new URL('../js/data/investigations/manifest.js', import.meta.url)
   );
@@ -513,28 +648,43 @@ export async function gatherBlocks({ full = false } = {}) {
   return generatedBlocks({
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,
-    physics: full ? physicsInventory() : null,
+    physics: physics ? physicsInventory(physics) : null,
   });
+}
+
+/**
+ * The physics suite's report, run once or read from what CI already ran.
+ *
+ * @param {string[]} report - Notes, for a run that could not be read
+ * @returns {object|null} The parsed report
+ */
+function physicsReport(report) {
+  const out =
+    cached('physics.json', report) ||
+    run('node', ['tools/validate-physics.mjs', '--json']);
+  if (!out) {
+    report.push('could not run the physics validation suite');
+    return null;
+  }
+  try {
+    return JSON.parse(out);
+  } catch {
+    report.push('the physics validation report was not readable JSON');
+    return null;
+  }
 }
 
 /**
  * The physics suite's own count of itself, by group and by kind.
  *
- * Counted from a real run, because that is the only thing that knows. It takes
- * about two minutes, which is why it is behind `--full` with the other facts
- * that cost a test run.
+ * Takes the report rather than producing one, so the total and the inventory
+ * come from a single run of a two-minute suite instead of two.
  *
+ * @param {object} report - A parsed `validate-physics.mjs --json` report
  * @returns {{total: number, byKind: object, groups: Array}|null} The inventory
  */
-function physicsInventory() {
-  const out = run('node', ['tools/validate-physics.mjs', '--json']);
-  if (!out) return null;
-  let report;
-  try {
-    report = JSON.parse(out);
-  } catch {
-    return null;
-  }
+function physicsInventory(report) {
+  if (!report) return null;
   const byKind = {};
   const groups = [];
   const index = new Map();
@@ -551,14 +701,24 @@ function physicsInventory() {
   return { total: (report.checks || []).length, byKind, groups };
 }
 
-/** Everything, according to the flags. */
-export async function gatherFacts({ full = false } = {}) {
+/**
+ * Everything the asked-for groups can produce.
+ *
+ * Returns the physics report alongside the facts so the caller can build the
+ * coverage block from the same run rather than paying for a second one.
+ *
+ * @param {object} [options] - `groups`, a Set of group names
+ * @returns {Promise<{facts: object, notes: string[], physics: object|null}>} The facts
+ */
+export async function gatherFacts({ groups = new Set() } = {}) {
   const notes = [];
+  const physics = groups.has('tests') ? physicsReport(notes) : null;
   const facts = {
     ...(await cheapFacts()),
-    ...(full ? { ...buildFacts(notes), ...fullFacts(notes) } : {}),
+    ...(groups.has('build') ? buildFacts(notes) : {}),
+    ...(groups.has('tests') ? testFacts(notes, physics) : {}),
   };
-  return { facts, notes };
+  return { facts, notes, physics };
 }
 
 // --- documents ---------------------------------------------------------------
@@ -991,8 +1151,14 @@ async function main() {
   const argv = process.argv.slice(2);
   const has = flag => argv.includes(flag);
   const mode = has('--sync') ? 'sync' : has('--check') ? 'check' : 'print';
-  const full = has('--full');
-  const { facts, notes } = await gatherFacts({ full });
+  let groups;
+  try {
+    groups = groupsFrom(argv);
+  } catch (err) {
+    process.stderr.write(`${err.message}\n`);
+    return 2;
+  }
+  const { facts, notes, physics } = await gatherFacts({ groups });
 
   if (has('--json')) {
     process.stdout.write(JSON.stringify(facts, null, 2) + '\n');
@@ -1008,7 +1174,7 @@ async function main() {
     return 0;
   }
 
-  const blocks = await gatherBlocks({ full });
+  const blocks = await gatherBlocks({ physics });
   const present = DOCS.filter(d => existsSync(join(REPO, d)));
   const results = [];
   for (const doc of present) {
@@ -1032,7 +1198,7 @@ async function main() {
   // skipped note says so.
   const generatedStale = [];
   const generatedSkipped = [];
-  if (full) {
+  if (groups.has('tests')) {
     for (const [name, wanted] of [
       ['CITATION.cff', citationCff(facts)],
       ['.zenodo.json', zenodoJson(facts)],
@@ -1088,7 +1254,7 @@ async function main() {
     }
     if (generatedSkipped.length) {
       process.stdout.write(
-        `note: not regenerated without --full: ${generatedSkipped.join(', ')}\n`
+        `note: not regenerated without --groups=tests: ${generatedSkipped.join(', ')}\n`
       );
     }
     for (const u of unknown) {
@@ -1118,14 +1284,30 @@ async function main() {
   for (const note of notes) process.stdout.write(`note: ${note}\n`);
   if (generatedSkipped.length) {
     process.stdout.write(
-      `note: not checked without --full: ${generatedSkipped.join(', ')}\n`
+      `note: needs --groups=tests or --full: ${generatedSkipped.join(', ')}\n`
     );
   }
   const skipped = [...new Set(results.flatMap(r => r.skipped))];
   if (skipped.length) {
-    process.stdout.write(
-      `note: not checked without --full: ${skipped.join(', ')}\n`
-    );
+    // Name the group that would have measured each one, so a reader of a green
+    // run can see what this run did not establish and what to pass to get it.
+    const byGroup = new Map();
+    for (const key of skipped) {
+      const bare = key.replace(/^block:/, '');
+      const group =
+        ALL_GROUPS.find(
+          g =>
+            FACT_GROUPS[g].keys.includes(bare) ||
+            FACT_GROUPS[g].blocks.includes(bare)
+        ) || 'unknown';
+      if (!byGroup.has(group)) byGroup.set(group, []);
+      byGroup.get(group).push(key);
+    }
+    for (const [group, keys] of [...byGroup].sort()) {
+      process.stdout.write(
+        `note: needs --groups=${group}: ${keys.join(', ')}\n`
+      );
+    }
   }
 
   const bad =
