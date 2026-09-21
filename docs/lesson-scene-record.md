@@ -13,9 +13,9 @@ audit:scene:check` fails if it disagrees with what is generated here.
 
 Across 23 investigations and 657 steps: 607 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 230 show a prescribed model result, 139 draw
-on a stored dataset, 109 put a self-contained panel beside the text,
-110 keep something, and 31 are prose.
+running integration, 231 show a prescribed model result, 139 draw
+on a stored dataset, 110 put a self-contained panel beside the text,
+110 keep something, and 30 are prose.
 Of 85 prediction loops, 85 are returned to,
 85 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
@@ -332,13 +332,13 @@ Of 85 prediction loops, 85 are returned to,
 ## What If Gravity Were Not Inverse Square? (`power-law-gravity`)
 
 - **Steps:** 21. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 5 prescribed model, 0 stored dataset, 5 self-contained panel.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
 - **What students do:** read, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, tick-a-checklist, record-values, choose-an-option, build-a-plot.
 - **Objects the steps declare:** none.
 - **Instruments:** power-law-precession, power-law-refinement, power-law-kepler, power-law-conservation.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** predict-does-small-matter → first-look-at-the-orbit, record-the-precession → first-look-at-the-orbit; predict-is-it-the-computer → refine-the-timestep → refine-the-timestep; predict-period-and-distance → measure-the-slope → measure-the-slope; predict-what-breaks → measure-conservation → measure-conservation.
+- **Prediction loops:** predict-does-small-matter → first-look-at-the-orbit, record-the-precession → first-look-at-the-orbit; predict-is-it-the-computer → refine-the-timestep → refine-the-timestep; predict-period-and-distance → measure-the-slope, predict-the-slope → measure-the-slope; predict-what-breaks → measure-conservation → measure-conservation.
 - **Recovery:** reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; ambiguous result: nothing marks these, they are a record.
 - **Scene rebuilds:** 1 step(s) on arrival (the-exactly).
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:power-law-precession`, control power-law-precession/n, measures apsidal precession in degrees per radial period, at four exponents, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.

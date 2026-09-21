@@ -48720,9 +48720,13 @@
       "bound": [],
       "roles": []
      },
-     "kinds": [],
+     "kinds": [
+      "model-result",
+      "panel-diagram"
+     ],
      "actions": [
-      "read"
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
      ],
      "requires": [],
      "reveal": null,
@@ -48742,6 +48746,8 @@
      "loop": {
       "declared": "interpret",
       "actual": [
+       "experiment",
+       "measure",
        "interpret"
       ],
       "handTranscribed": false,
@@ -48755,9 +48761,14 @@
       "mutates": [],
       "eventWatch": null
      },
-     "instrument": null,
+     "instrument": {
+      "id": "power-law-kepler",
+      "capture": false
+     },
      "evidence": [],
-     "reset": [],
+     "reset": [
+      "stamps instrument values"
+     ],
      "recovery": []
     },
     {
@@ -49276,10 +49287,12 @@
      "predictCollects": true,
      "heldUntil": "measure-the-slope",
      "experiment": [
-      "measure-the-slope"
+      "measure-the-slope",
+      "predict-the-slope"
      ],
      "measure": [
-      "measure-the-slope"
+      "measure-the-slope",
+      "predict-the-slope"
      ],
      "evidence": [
       "measure-the-slope"
@@ -49317,12 +49330,12 @@
     "declared": 0,
     "student": 0,
     "engine": 0,
-    "model": 5,
+    "model": 6,
     "data": 0,
-    "diagram": 5,
+    "diagram": 6,
     "evidence": 4,
     "declaredButInert": 0,
-    "prose": 16,
+    "prose": 15,
     "mismatched": 0,
     "rebuilds": 1
    }
@@ -49333,12 +49346,12 @@
   "declared": 607,
   "student": 157,
   "engine": 163,
-  "model": 230,
+  "model": 231,
   "data": 139,
-  "diagram": 109,
+  "diagram": 110,
   "evidence": 110,
   "declaredButInert": 450,
-  "prose": 31,
+  "prose": 30,
   "mismatched": 0,
   "rebuilds": 68,
   "lessons": 23,
