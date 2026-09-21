@@ -74,6 +74,7 @@ import {
   zenodoJson,
 } from './generated-blocks.mjs';
 import { RELEASE } from './project-metadata.mjs';
+import { CHECKS } from './checks.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const rel = p => relative(REPO, p) || '.';
@@ -119,6 +120,12 @@ const DOCS = [
   'RELEASING.md',
   'ACCESSIBILITY.md',
   'OFFLINE_AND_LOW_END.md',
+  // The paper. Typeset by pandoc, so it carries no `<!--fact:-->` markers - a
+  // comment would either reach the PDF or need another tool to strip it - and
+  // is matched by pattern in ATTRIBUTE_FACTS instead. It was not listed here at
+  // all, so the two suite sizes it quotes were transcribed once and checked by
+  // nobody.
+  'paper.md',
 ];
 
 const MARKER = /<!--fact:([a-zA-Z0-9_:.-]+)-->([\s\S]*?)<!--\/fact-->/g;
@@ -138,6 +145,20 @@ const MARKER = /<!--fact:([a-zA-Z0-9_:.-]+)-->([\s\S]*?)<!--\/fact-->/g;
  * number that was not a count.
  */
 const ATTRIBUTE_FACTS = [
+  // The paper. It is typeset by pandoc, so a `<!--fact:-->` marker would either
+  // reach the PDF or have to be stripped by another tool; a pattern keeps the
+  // source readable and the number generated. Both of these were transcribed by
+  // hand and both describe suites that grow.
+  {
+    file: 'paper.md',
+    key: 'physicsChecks',
+    pattern: /(A physics validation suite runs )(\d+)( checks)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'releaseChecks',
+    pattern: /(A release gate runs )(\d+)( checks)/,
+  },
   {
     file: 'validation/index.html',
     key: 'physicsChecks',
@@ -329,6 +350,9 @@ async function cheapFacts() {
   const { INVESTIGATIONS } = await import(
     new URL('../js/data/investigations.js', import.meta.url)
   );
+  const { TRACK_IDS } = await import(
+    new URL('../js/stellar/tracks.js', import.meta.url)
+  );
   const { ACTIVITIES } = await import(
     new URL('../js/data/activities.js', import.meta.url)
   );
@@ -384,6 +408,16 @@ async function cheapFacts() {
     axeSurfaces: axe.surfaces,
     axeThemes: axe.themes,
     axeRuns: axe.runs,
+    // How many MIST evolutionary tracks are bundled, counted from the grid
+    // itself. /model/ said "Seven tracks are bundled" directly above a list of
+    // eight of them: the 40 solar-mass track was added and the sentence was
+    // not. A count nobody derives is a count that drifts the moment the thing
+    // it counts changes.
+    stellarTracks: TRACK_IDS.length,
+    // How many checks the release gate runs, from the registry that runs them.
+    // paper.md quoted this by hand, which is a number that goes stale the first
+    // time anyone adds a step.
+    releaseChecks: CHECKS.length,
   };
 
   // Per-lesson step counts and durations, for the topic documents that name a
