@@ -3354,6 +3354,163 @@ export const INSTRUCTOR_CONTENT = {
       28: 'At ten solar masses the tidal radius is about 1.9 million km against a 29.5 km horizon, a ratio of 6.4 × 10⁴. At Sagittarius A* the ratio is about 11. The two meet near 1.6 × 10⁸ solar masses, and the billion-solar-mass preset reads SWALLOWED WHOLE.',
     },
   },
+  'power-law-gravity': {
+    topic:
+      'What depends on the inverse-square form of gravity, and what does not',
+    difficulty: 'Introductory',
+    placement:
+      'After Kepler’s laws, and ideally after any lesson in which conservation of momentum or angular momentum has been stated. It is the natural follow-up to a treatment that presents Kepler’s laws as facts about the Solar System, because it asks what those facts were consequences of. No calculus is required: the exponent is moved with a slider and every result is read off an instrument. The one piece of mathematics students do themselves is recognising a linear pattern in four numbers and extrapolating it.',
+    overview:
+      'One exponent is moved and everything else is held fixed. Students measure three things and sort them into two piles. The closed elliptical orbit and the 3/2 slope of period against radius both move the instant the exponent does, and are therefore properties of the inverse square rather than of gravity in general. Conservation of momentum, angular momentum and energy do not move at all, because they follow from the force being pairwise and central - neither of which was changed. The lesson also rehearses one general method: a simulated result is not believed until the timestep has been refined and it has stayed put.',
+    priorKnowledge: [
+      'Newton’s law of gravitation as an inverse-square law, at the level of "the force falls off as one over distance squared"',
+      'Kepler’s first and third laws as statements about orbits, without derivation',
+      'That momentum and angular momentum are conserved quantities',
+      'Comfort reading numbers in scientific notation, since the conservation readouts are around 1e-15',
+      'Helpful but not required: having seen a log-log plot',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Why the law needs a reference radius',
+        body: 'This is the concept most likely to be skipped and it is load-bearing. Written as a = GM/r^n, the exponent is not a physical parameter: the departure from Newton is r^(2-n), which depends on the unit distance is measured in, and most of its effect is that gravity got globally stronger or weaker. That is a change students could produce by altering G instead, so an experiment built on it would not be about the exponent at all. Anchoring the law at r0 = 1 AU, where it is Newtonian for every n, makes the exponent a statement about the shape of the field. Students who understand only this have got the most transferable idea in the lesson.',
+      },
+      {
+        heading: 'Bertrand’s theorem, informally',
+        body: 'Only two central force laws give closed orbits for every bound orbit: the inverse square and the linear spring. Everything else precesses. The lesson does not prove this - it measures it at four exponents and names the theorem - but it is worth stating in class, because it converts "the ellipse turned" from a curiosity into a general result with a date on it (Bertrand, 1873).',
+      },
+      {
+        heading: 'The period-radius slope as a discriminator',
+        body: 'For a central acceleration going as r^-n, circular orbits satisfy P proportional to r^((n+1)/2), so the slope of log P against log r reads the exponent directly. What makes this the lesson’s quantitative centrepiece is that changing G shifts the line without tilting it. Almost everything else measurable about an orbit responds to gravity simply being stronger or weaker; the slope responds only to the exponent, which is exactly the property that makes a measurement evidence about the form of a law.',
+      },
+      {
+        heading: 'Refinement as the test of a simulated result',
+        body: 'Integration error depends on the timestep; physics does not. The lesson has students change the timestep by a factor of eight and find the precession unchanged to five decimal places, with an n = 2 control that reads zero throughout. This is the single most transferable habit in the investigation and it generalises far beyond gravity.',
+      },
+      {
+        heading: 'Why the conservation laws survive',
+        body: 'Momentum is conserved because each pair of bodies receives one force magnitude applied in opposite directions - Newton’s third law, which says nothing about distance. Angular momentum is conserved because the force lies along the line joining the bodies, so it exerts no torque about the centre, which is also true for any radial dependence. Energy is conserved because the force depends only on position. None of the three mentions the exponent. Students frequently expect all of mechanics to fail together, and separating what did from what did not is the point of the lesson.',
+      },
+      {
+        heading: 'The potential belongs to the force',
+        body: 'A genuine trap, and worth the two minutes. The familiar -GMm/r is the potential of the inverse-square law specifically. Used with any other exponent it reports an energy violation that is not there. The instrument computes the potential matching whichever law is active; a student who later writes their own simulation and finds energy drifting should check this before concluding anything.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1–3',
+        text: 'What is being changed, and why it needs an anchor. Step 2 is the conceptual one and should not be rushed; step 3 is a held prediction about whether a 2.5% change in n could matter.',
+      },
+      {
+        steps: '4–6',
+        text: 'The precession experiment. Students step through four exponents and watch the ellipse stop closing, including a shallower-than-Newton case that precesses backwards. Ends on Bertrand’s theorem.',
+      },
+      {
+        steps: '7–9',
+        text: 'Is it real? A prediction, then a four-timestep refinement, then the verdict. The n = 2 control reading zero at every timestep is what stops the refinement result being vacuous.',
+      },
+      {
+        steps: '10–13',
+        text: 'The quantitative half. Four measured slopes, a linear pattern, a numeric prediction at an exponent not measured, and then the question of why the slope in particular is worth measuring rather than anything else.',
+      },
+      {
+        steps: '14–17',
+        text: 'What does not break. A prediction most students get wrong, the conservation readouts at two exponents, the reason the two survive, and the potential-energy trap.',
+      },
+      {
+        steps: '18–21',
+        text: 'Synthesis: the two lists, the n = 3 stability boundary and why the instrument stops short of it, one closing question about method, and an explicit statement of what the model is and is not.',
+      },
+    ],
+    features: [
+      {
+        name: 'Apsidal precession, measured (steps 4–5)',
+        text: 'Integrates a two-body orbit with a fourth-order scheme and locates each periapsis by fitting a parabola through the three samples around it, so the answer is not quantised by the timestep. Reports degrees per radial period, with the near-circular analytic estimate beside it and labelled as an approximation.',
+      },
+      {
+        name: 'Timestep refinement (step 8)',
+        text: 'Runs the same orbit at four timesteps spanning a factor of eight and reports the spread. At n = 2.2 all four agree to about five decimal places; at n = 2 all four read zero.',
+      },
+      {
+        name: 'Period against radius (steps 11–12)',
+        text: 'Six circular orbits spanning a factor of 7.5 in radius, each launched at the correct circular speed for the active law rather than the Newtonian one, with periods timed from the integration and a least-squares fit through the logarithms.',
+      },
+      {
+        name: 'Conservation bench (step 15)',
+        text: 'Three unequal masses, all free to move, with pair forces applied equally and oppositely by construction. Reports momentum, angular-momentum and energy drift, the last computed from the potential belonging to the active law.',
+      },
+      {
+        name: 'Accessible readouts throughout',
+        text: 'Every instrument reports as a list of labels and values. There is no number in this lesson that exists only as a drawing, and the plot in step 11 carries its own data table.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'A small change in the exponent must produce a small change in the orbit.',
+        response:
+          'Step 4. Two and a half percent in n gives nine degrees of precession per orbit, and twenty percent gives forty-three. The response of the orbit is not proportional to the change in the law, and the anchoring at r0 means this cannot be dismissed as gravity simply having got stronger.',
+      },
+      {
+        claim: 'Orbits are ellipses because that is what gravity does.',
+        response:
+          'Steps 4 and 6. Orbits are ellipses because gravity is inverse-square. Under any other exponent the orbit is still bound and still periodic in radius, but the ellipse turns. Bertrand’s theorem says only two laws in the whole family give closed orbits.',
+      },
+      {
+        claim: 'Precession in a simulation means the simulation is inaccurate.',
+        response:
+          'Steps 7–9. This is a reasonable suspicion and the lesson takes it seriously rather than dismissing it. Refinement settles it: the precession is unchanged across a factor of eight in timestep, and the Newtonian control reads zero throughout.',
+      },
+      {
+        claim: 'If you break one law of physics the rest go with it.',
+        response:
+          'Steps 14–16. Kepler’s first and third laws break immediately; momentum and angular momentum do not move at fifteen decimal places. Which laws survive, and why, is the substance of the lesson.',
+      },
+      {
+        claim: 'Energy is not conserved when the force law is changed.',
+        response:
+          'Step 17. Energy is conserved. What fails is the formula -GMm/r, which is the potential of the inverse-square law and of nothing else. This misconception is worth surfacing deliberately because it is a mistake students will make later in their own code.',
+      },
+      {
+        claim:
+          'This is how modified-gravity theories work, or this explains Mercury.',
+        response:
+          'Step 21 addresses both explicitly. The power law with a reference radius is a teaching instrument, not a proposal about the universe; Mercury’s anomalous precession is general relativity, which is not a change to the exponent. The resemblance is a good discussion opening and a bad conclusion.',
+      },
+    ],
+    teachingNotes: [
+      'Step 2 is the one to protect if time is short. A student who leaves without understanding why the reference radius is necessary has done a different and much weaker experiment.',
+      'The n = 1.8 preset, which precesses backwards, is worth dwelling on. Students expect "wrong gravity" to mean "stronger gravity" and a retrograde result breaks that.',
+      'The conservation readouts are around 1e-15. Some students read this as "small but not zero, so it nearly failed". It is the precision of double-precision arithmetic itself, and saying so once prevents the misreading.',
+      'Step 12 asks for a prediction at n = 2.9 and the instrument goes to 2.9, so students can check themselves. Let them.',
+      'The lesson never drives the bodies on the canvas. The instruments are a separate contained model, and the Solar System on screen stays Newtonian throughout. Say so if asked, because a student who thinks the visible planets are precessing has been misled.',
+      'Good pairing: run this immediately after a lesson in which Kepler’s third law was presented as a law, and open by asking what it was a consequence of.',
+      'The n = 3 boundary in step 19 is a genuine stability result and a good extension for a stronger group, but it is not needed for the main argument and can be cut.',
+    ],
+    expectations: {
+      5: 'Precession readings of about -31.42, 0.00, 9.38 and 42.67 degrees per orbit at n = 1.8, 2, 2.05 and 2.2. The n = 2 value is zero to several decimals; a student reading anything above about half a degree there has read the wrong preset, and the field validation warns them. The negative sign at n = 1.8 is a result, not a typo.',
+      8: 'At n = 2.2 the four timesteps all give 42.667 degrees and the spread is around 1e-5 degrees or smaller. At n = 2 every reading is zero. The comparison students should make is between the spread and the effect itself, which differ by six orders of magnitude.',
+      11: 'Slopes of 1.400, 1.500, 1.600 and 1.750 at n = 1.8, 2, 2.2 and 2.5. These are exact to the displayed precision, which surprises students who expect measured numbers to be untidy; the orbits are circular and the fit is over a wide radius range, so the residual is around 1e-14.',
+      12: 'Answer 1.95, from (n+1)/2 at n = 2.9. Tolerance is 0.03, so a student who reads the pattern as "half of one more than n" gets it and one who guesses does not.',
+      15: 'Momentum and angular-momentum drift around 1e-15 at both exponents, with no systematic difference between them. Energy drift is around 1e-5, larger than the other two because that bench uses a first-order scheme; it is bounded rather than growing, which is the point.',
+    },
+    discussion: [
+      'The exponent in Newton’s law is measured to be 2 to about one part in a billion. What would it take to convince you it was 2.000000001 rather than exactly 2, and would the difference matter?',
+      'The slope of log P against log r changes when the exponent changes but not when G changes. What other measurements can you think of that are sensitive to the form of a law but not to its strength?',
+      'Momentum and angular momentum survived a change that broke both of Kepler’s laws. What does that suggest about which of these statements is the more fundamental?',
+      'A student reports that their own orbital simulation loses energy steadily over time. What are the three things you would ask them to check, and in what order?',
+      'Mercury’s orbit precesses by more than Newtonian gravity predicts, and that turned out to be evidence for general relativity rather than for a different exponent. What would have distinguished the two hypotheses observationally?',
+      'The instrument refuses to go to n = 3. Is stopping a student short of a regime where the physics becomes pathological good teaching or an evasion?',
+    ],
+    extensions: [
+      'Have students derive slope = (n+1)/2 from v^2/r = a(r) and P = 2*pi*r/v. It is three lines of algebra and turns a measured pattern into a prediction.',
+      'Ask what the potential energy function is for a general exponent, and have them check by differentiating that it gives back the force. The lesson asserts the result; deriving it is a good exercise for a class with calculus.',
+      'Set the exponent to 2.9 and ask students to estimate how many orbits it takes for the ellipse to turn all the way round. Then check.',
+      'Investigate the other closed-orbit case in Bertrand’s theorem by asking what a force proportional to r rather than to 1/r^2 would do - the answer, an ellipse centred on the star rather than focused on it, is a good surprise.',
+      'For a class that has met Noether’s theorem: which symmetry does each surviving conservation law correspond to, and is anything in this lesson evidence for that correspondence or merely consistent with it?',
+    ],
+    modelNotes:
+      'The instruments run a contained model in js/powerLawGravity.js. It integrates its own two-body and three-body problems and never touches the main engine, so every ordinary Gravitas scenario remains Newtonian and the Solar System visible during this lesson is not affected by the exponent. The law is a(r) = GM * r0^(n-2) / r^n with r0 = 1 AU, which is exactly Newtonian at n = 2 and exactly Newtonian at r = r0 for every n. The potential used for the energy readout is the one belonging to that force, verified by differentiation in tests/powerLawGravity.test.js rather than transcribed. The near-circular precession relation shown beside the measurement is an approximation valid for small eccentricity; at the eccentricity the lesson runs it agrees with the integrated orbit to about one percent, and it is labelled as an estimate everywhere it appears. This is a controlled experiment, not a theory of gravity, and the lesson says so in its closing step.',
+  },
   'when-orbits-lock': {
     topic: 'Mean-motion resonance, and what counts as evidence for it',
     difficulty: 'Introductory',

@@ -129,8 +129,26 @@ describe('the manifest', () => {
       expect(m.objectives).toBeUndefined();
       expect(m.lock).toBeUndefined();
     }
+    // Per entry rather than in total. The old assertion was a flat 16 KiB,
+    // which does not scale with the catalog: at 22 lessons the manifest was
+    // 16,298 bytes against a 16,384 limit, so no 23rd lesson of any size fitted
+    // and the check would next have failed on arithmetic rather than on a
+    // fault.
+    //
+    // A per-entry mean is the quantity this check was written to defend. What
+    // it exists to catch is `steps` or `objectives` leaking into the manifest
+    // and putting the whole 225 KB of lesson prose back on the lesson browser's
+    // start-up path - and one such leak multiplies the mean entry by an order
+    // of magnitude, which a flat total could absorb if the catalog happened to
+    // be small. The mean is 741 bytes across the catalog this was measured on;
+    // 800 is that with room for a longer title and summary, and still far below
+    // anything a leak would produce.
+    //
+    // The explicit per-field assertions above remain the first line of defence.
+    // This is the one that catches a field nobody thought to name.
     const bytes = JSON.stringify(MANIFEST).length;
-    expect(bytes).toBeLessThan(16 * 1024);
+    expect(MANIFEST.length).toBeGreaterThan(0);
+    expect(bytes / MANIFEST.length).toBeLessThan(800);
   });
 });
 

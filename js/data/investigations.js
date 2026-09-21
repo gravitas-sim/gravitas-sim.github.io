@@ -60,6 +60,7 @@ import DARK_MATTER from './investigations/missing-mass.js';
 import TIDES from './investigations/tides.js';
 import BUTTERFLY from './investigations/butterfly-effect.js';
 import RESONANCE from './investigations/when-orbits-lock.js';
+import POWER_LAW from './investigations/power-law-gravity.js';
 import DETECT_THIS_PLANET from './investigations/detect-this-planet.js';
 import DESIGN_THE_SCHEDULE from './investigations/design-the-schedule.js';
 import BINARY_PLANETS from './investigations/binary-star-planets.js';
@@ -111,6 +112,9 @@ export const INVESTIGATIONS = [
   LISTENING_TO_SPACETIME,
   A_UNIVERSE_OF_STARS,
   LIVES_OF_STARS,
+  // The force law itself, after the lessons that assume it. Kepler's laws are
+  // the thing this one takes apart, so it cannot come before them.
+  POWER_LAW,
 ];
 
 /**

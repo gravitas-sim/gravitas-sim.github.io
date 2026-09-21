@@ -315,4 +315,17 @@ export const MANIFEST = [
     gradedCount: 29,
     objectiveCount: 7,
   },
+  {
+    id: 'power-law-gravity',
+    title: 'What If Gravity Were Not Inverse Square?',
+    subtitle: 'Change the exponent, and find out what depended on it',
+    duration: '45-60 min',
+    level: 'Introductory astronomy',
+    summary:
+      'Newton said gravity falls off as one over the distance squared. Not one over the distance, not one over the cube — squared, exactly. This investigation asks what that exactly is doing. You will turn the exponent up and down and measure three things: whether the orbit still closes, how the orbital period depends on distance, and which conservation laws survive. Two of those change immediately. One of them does not change at all, and the reason it does not is the most useful thing in the lesson.',
+    thumbnail: 'images/scenarios/solar-system.webp',
+    stepCount: 21,
+    gradedCount: 14,
+    objectiveCount: 5,
+  },
 ];

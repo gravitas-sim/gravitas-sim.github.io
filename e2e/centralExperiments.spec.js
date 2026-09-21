@@ -117,6 +117,62 @@ test.describe('the central experiment of each investigation', () => {
     await expectVerdictRevealed(page, plan, predict);
   });
 
+  test('power-law-gravity: the ellipse stops closing when the exponent moves @accepts:ce.power-law-gravity', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'power-law-gravity';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, exploreSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // 1. the prediction, committed and held
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // 2. the declared control, on the declared screens
+    await walkToSid(page, plan, exploreSid);
+    expect(step(plan, exploreSid).tool).toBe('power-law-precession');
+    await walkToSid(page, plan, measureSid);
+
+    // 3. the relationship the lesson is about. The exponent is anchored at the
+    //    reference radius, so moving it changes the shape of the field and not
+    //    its strength - and the ellipse stops closing. Newton is the control
+    //    and must read zero; a shallower law turns the other way.
+    const exponents = [1.8, 2, 2.05, 2.2];
+    const at = {};
+    for (const n of exponents) {
+      const { before, after } = await setControl(page, control, n);
+      if (n !== exponents[0]) expect(after).not.toEqual(before);
+      at[n] = reading(after, /measured precession/i);
+    }
+
+    expect(at[2], 'a Newtonian orbit closes').toBeCloseTo(0, 2);
+    expect(at[1.8], 'a shallower law precesses backwards').toBeLessThan(-5);
+    expect(
+      at[2.05],
+      'a slightly steeper law precesses forwards'
+    ).toBeGreaterThan(5);
+    expect(at[2.2], 'and a steeper one much further').toBeGreaterThan(at[2.05]);
+
+    // 4. the evidence, written down and kept
+    const evidence = {
+      p_18: at[1.8].toFixed(2),
+      p_20: at[2].toFixed(2),
+      p_205: at[2.05].toFixed(2),
+      p_22: at[2.2].toFixed(2),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // 5. and only now is the prediction settled
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
   test('tides: the stretch goes as the inverse cube of distance @accepts:ce.tides', async ({
     page,
     app,

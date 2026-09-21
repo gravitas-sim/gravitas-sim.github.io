@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3880,
+    limit: 3950,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -365,7 +365,25 @@ const BUDGETS = [
       'what a first-time visitor to the sandbox waited for. It is a page ' +
       'stylesheet now, like css/teaching.css before it. That is the trade this ' +
       'budget asks for: a dashboard fix wanted two kilobytes, and what it got ' +
-      'was a sheet deferred rather than a ceiling raised.',
+      'was a sheet deferred rather than a ceiling raised.\n\n' +
+      'Raised from 3880 to 3950 for the power-law gravity lesson and its ' +
+      'four instruments: 3874.1 KB before, 3938.5 KB after, both from fresh ' +
+      'builds. The English lesson chunk is 32.8 KB of source and its Spanish ' +
+      'shadow 28.0 - twenty-one screens, of which six carry an instrument - ' +
+      'and the instructor guide entry took js/data/instructorContent.js up by ' +
+      '16.1 KB, which is counted twice because validationWorker.js bundles the ' +
+      'prose catalog as well. The model itself is js/powerLawGravity.js at ' +
+      '26.2 KB, js/powerLawLab.js at 11.7 and js/powerLawWidgets.js at 5.6; ' +
+      'the manifests and browse metadata account for the remaining 1.7. Two ' +
+      'new deferred chunks, 137 to 139. A lesson and an instrument is what ' +
+      'the paragraph at the top of this reason says this budget is loose ' +
+      'for.\n\n' +
+      'The initial download did NOT move and its limit was NOT touched: ' +
+      '811.0 KB before and after, across 50 eager files both times. The ' +
+      'model is reached only from the lesson and from its own tests, so ' +
+      'nothing about it is on the start-up path, and the instruments are ' +
+      "built from the panel system's existing classes - they add no " +
+      'stylesheet rules at all.',
   },
 ];
 
