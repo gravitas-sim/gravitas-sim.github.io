@@ -236,6 +236,28 @@ alongside the lesson catalog is the better of the two available behaviours. The
 same fire-and-forget module-scope import is what `js/widgets.js` already does
 for `ensureDeferredMessages()`, for the same reason.
 
+## The cadence audit, re-checked against a moving `v2`
+
+`v2` advanced from `e967cc0` to `60de44a` while this branch was being written,
+and two of the files the audit in SANDBOX_INSTRUMENTS.md quotes are among what
+moved: `js/timestep.js` and `js/render.js`. The audit was therefore re-checked
+against the newer tree rather than left resting on the base.
+
+It holds unchanged. The `substepPlan` edit on `v2` is about a *backward* step:
+`!(dtSim > cap)` was true for every negative advance, so a reversed run was
+integrated in one uncapped leap. The fix takes the magnitude for the substep
+count and lets the sign ride along. The load-bearing line is byte for byte what
+it was:
+
+```js
+return { substeps, step: dtSim / substeps, capped: wanted > MAX_SUBSTEPS };
+```
+
+`step` is still `dtSim / ceil(|dtSim| / cap)` — bounded by the cap, almost never
+equal to it — and `gameLoop` still reads
+`const dt_seconds = fixedStepSeconds || measured;`. `max_timestep` is a
+numerical-accuracy ceiling on the newer tree too.
+
 ## Notes for whoever picks this up
 
 - **The deferred bundle budget is exceeded by 56.4 KB.** It was not raised, per
@@ -247,6 +269,15 @@ for `ensureDeferredMessages()`, for the same reason.
   steps. It is encrypted with a password this branch was told not to use, so it
   could not be regenerated here. Whoever rebases should run
   `npm run build:instructors` with the real password and commit the result.
+- **Expected rebase conflicts** onto integrated `v2`, from the files that moved
+  between `e967cc0` and `60de44a`: `js/i18n/en.deferred.js` and
+  `js/i18n/es.deferred.js` (both branches add keys to one object — textual, take
+  both); `e2e/README.md` (both add a table row — take both); `README.md`,
+  `CHANGELOG.md` and `manual/facts.tex` (all generated: resolve by re-running
+  `npm run docs:sync -- --full` rather than by hand); `package.json` (scripts).
+  Nothing in `js/data/spectra/`, `js/stellarSpectraWidgets.js`,
+  `js/stellar/spectrumIndex.js` or `tools/build-sdss-spectra.mjs` can conflict —
+  `v2` has no such files.
 - **The scene audit labels these steps `model-result`** as well as
   `imported-data`. That is a pre-existing coarseness — `ownModel` is true for
   any non-live widget with controls, so the GW lesson's observed strain is
