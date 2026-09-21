@@ -5446,10 +5446,17 @@ export async function runChecks() {
   // to encode a quantity.
   //
   // This group checks four things about the law and one thing about its
-  // resolution. The first three are non-circular in the way that matters: 1200,
-  // 701.955 and 884.359 are published cent values for the octave, the just
-  // fifth and the just major sixth, so they test the implementation against
-  // music theory rather than against a rearrangement of its own formula.
+  // resolution. The first three test the implementation against a constant
+  // somebody can look up - 1200, 701.955 and 884.359 are how the octave, the
+  // just fifth and the just major sixth are printed in any tuning table - so a
+  // base-e logarithm or a mangled 1200 fails against a recognisable number
+  // rather than against a rearrangement of the same formula.
+  //
+  // They are `analytic` and not `data`, and the distinction is not pedantry.
+  // Those three values are 1200*log2(r) rounded; nobody measured them. A row
+  // labelled `data` renders as "published" on the validation page, which tells
+  // a reader this project compared itself against the literature - and here it
+  // did not. What it compared itself against is the definition of the cent.
   //
   // What none of this establishes is that a person heard anything. There is no
   // machine check anywhere in this repository that can establish that, and the
@@ -5468,7 +5475,8 @@ export async function runChecks() {
       unit: 'cents',
       tolerance: 0,
       why: 'Checked exactly, with no tolerance at all, because it is exact in IEEE 754 and must stay that way: Math.log2(2) is 1 to the bit, so 1200*log2(2) is 1200 to the bit. A tolerance here would hide the one arithmetic mistake that would be caught for free - a base-e logarithm left in place, or a 1200 that became 1200.0000001 through some algebraic rearrangement. The octave is the anchor every other interval is read against, so it is the one value in the group that is allowed no slack.',
-      source: 'definition of the cent',
+      source:
+        'The cent is 1/1200 of an octave - Ellis, appendix XX to Helmholtz, On the Sensations of Tone (2nd English edition, 1885).',
     });
 
     add({
@@ -5480,8 +5488,9 @@ export async function runChecks() {
       unit: 'cents',
       tolerance: 1e-3,
       toleranceKind: 'absolute',
-      why: 'The published value is quoted to three decimals (701.955), and the implementation returns 701.9550008653874, so the two agree to 9e-7 cents. The tolerance is 0.001 cents - the resolution of the published figure itself, not a bound on the arithmetic - because tightening it further would only be testing how many digits somebody wrote down. A thousandth of a cent is about a ten-thousandth of the smallest interval any listener can hear.',
-      source: 'standard cent values for just intervals',
+      why: 'What 701.955 is, exactly: 1200*log2(3/2) rounded to three decimals, which is how every tuning table prints the just fifth. It is not an independent measurement of anything and this check is not a comparison against the literature - it is the identity, written out to the precision a musician would recognise, so that a base-e logarithm or a 1200 that became something else fails against a number somebody can look up rather than against a rearrangement of the same formula. The implementation returns 701.9550008653874, agreeing to 9e-7 cents; the tolerance is the resolution of the printed figure rather than a bound on the arithmetic, because tightening it would only test how many digits somebody wrote down. A thousandth of a cent is about a ten-thousandth of the smallest interval any listener can hear.',
+      source:
+        'The cent is 1/1200 of an octave - Ellis, appendix XX to Helmholtz, On the Sensations of Tone (2nd English edition, 1885). The interval value is derived from that definition, not measured.',
     });
 
     add({
@@ -5493,8 +5502,9 @@ export async function runChecks() {
       unit: 'cents',
       tolerance: 1e-3,
       toleranceKind: 'absolute',
-      why: 'Same reasoning and the same tolerance as the fifth above, and here for a different purpose: the fifth is close enough to a simple fraction of an octave that a sign error or a factor of two can survive it, and the major sixth is not. Measured at 884.3587129994474 against a published 884.359.',
-      source: 'standard cent values for just intervals',
+      why: 'Same reasoning and the same tolerance as the fifth above, and here for a different purpose: the fifth is close enough to a simple fraction of an octave that a sign error or a factor of two can survive it, and the major sixth is not. 884.359 is 1200*log2(5/3) to three decimals - derived from the definition of the cent, like the fifth, rather than measured. Implementation returns 884.3587129994474.',
+      source:
+        'The cent is 1/1200 of an octave - Ellis, appendix XX to Helmholtz, On the Sensations of Tone (2nd English edition, 1885). The interval value is derived from that definition, not measured.',
     });
 
     // Round-trip across twelve orders of magnitude in period and four choices
