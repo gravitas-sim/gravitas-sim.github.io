@@ -26,8 +26,8 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:investigations-->22<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->636<!--/fact--> steps between
+**<!--fact:investigations-->23<!--/fact--> guided
+investigations**, <!--fact:investigationSteps-->657<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -49,7 +49,7 @@ locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
 **Instructor materials.** A guide and a generated answer key for each of
-the <!--fact:investigations-->22<!--/fact--> investigations — learning
+the <!--fact:investigations-->23<!--/fact--> investigations — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
 from the lessons themselves on every release so a key cannot disagree with the
@@ -182,7 +182,7 @@ through a prepared sequence of links.
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
 of <!--fact:uiStrings-->3607<!--/fact--> strings, and
-all <!--fact:investigations-->22<!--/fact--> investigations are translated. A
+all <!--fact:investigations-->23<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
 change what a lesson measures.
@@ -217,7 +217,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5302<!--/fact--> tests across <!--fact:jestSuites-->149<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5363<!--/fact--> tests across <!--fact:jestSuites-->150<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -242,8 +242,8 @@ reports what the browser downloads at start-up separately from what is deferred:
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->199<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->612<!--/fact--> KB           | <!--fact:buildStartupFiles-->50<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->3874<!--/fact--> KB         | <!--fact:buildDeferredChunks-->137<!--/fact--> |
+| JavaScript at start-up | <!--fact:buildStartupJs-->613<!--/fact--> KB           | <!--fact:buildStartupFiles-->50<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->3938<!--/fact--> KB         | <!--fact:buildDeferredChunks-->139<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->811<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -343,7 +343,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1177<!--/fact--> tests
+The suite is <!--fact:e2eTests-->1179<!--/fact--> tests
 in <!--fact:e2eFiles-->85<!--/fact--> files and takes several minutes in
 Chromium.
 
@@ -439,12 +439,12 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->54<!--/fact--> documents are generated from
+All <!--fact:instructorDocuments-->56<!--/fact--> documents are generated from
 the lessons at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
-- <!--fact:investigations-->22<!--/fact--> instructor guides
-- <!--fact:investigations-->22<!--/fact--> answer keys
+- <!--fact:investigations-->23<!--/fact--> instructor guides
+- <!--fact:investigations-->23<!--/fact--> answer keys
 - <!--fact:activityDocuments-->8<!--/fact--> classroom-activity guides and
   student worksheets, across <!--fact:activities-->3<!--/fact--> activities
 - an adopter's guide and a curriculum map
@@ -493,7 +493,7 @@ part was built:
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
-| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->22<!--/fact--> lessons, and what a 2019 Chromebook actually gets |
+| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->23<!--/fact--> lessons, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the

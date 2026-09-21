@@ -2267,7 +2267,7 @@
         Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->22<!--/fact-->
+        <!--fact:investigations-->23<!--/fact-->
         lessons and cannot fall behind them. It listed six of the twelve when it
         was maintained by hand.
       </p>
@@ -2368,6 +2368,10 @@
             <tr>
               <td>Lives of Stars</td>
               <td>Eight MIST v1.2 evolutionary tracks at solar composition with no rotation, computed with MESA and published by the MIST project; cite Dotter (2016) and Choi et al. (2016). Gravitas reduced them and did not compute them. Where they stop is the whole of what the endpoint module exists for. 0.2 and 0.5 solar masses stop at the end of core hydrogen burning, at 1.1 trillion and 96 billion years - both far beyond the age of the Universe, so neither is checkable in principle. 1, 2 and 5 run through to a cooling white dwarf, and those remnant masses are the tracks' own last samples. 10 and 20 stop at carbon ignition and 40 stops during helium ignition, so every statement in this lesson about neutron stars and black holes is a published result quoted for the nearest modeled progenitor: Sukhbold, Ertl, Woosley, Brown &amp; Lattimer (2016), ApJ 821, 38, with Ertl et al. (2016) for the explodability criterion. The readout names the source on every quoted endpoint and flags it as not from the track. What is absent: rotation, binarity, magnetic fields, mass transfer, any composition but solar, core collapse itself, supernova hydrodynamics, nebular physics, and white-dwarf cooling beyond the first few million years. The explosion drawn on screen 29 is an illustration of an event and not a calculation of one, and it is kept off the H-R diagram because a supernova's brightness is a transient rather than a photospheric luminosity.</td>
+            </tr>
+            <tr>
+              <td>What If Gravity Were Not Inverse Square?</td>
+              <td>The instruments run a contained model in js/powerLawGravity.js. It integrates its own two-body and three-body problems and never touches the main engine, so every ordinary Gravitas scenario remains Newtonian and the Solar System visible during this lesson is not affected by the exponent. The law is a(r) = GM * r0^(n-2) / r^n with r0 = 1 AU, which is exactly Newtonian at n = 2 and exactly Newtonian at r = r0 for every n. The potential used for the energy readout is the one belonging to that force, verified by differentiation in tests/powerLawGravity.test.js rather than transcribed. The near-circular precession relation shown beside the measurement is an approximation valid for small eccentricity; at the eccentricity the lesson runs it agrees with the integrated orbit to about one percent, and it is labeled as an estimate everywhere it appears. This is a controlled experiment, not a theory of gravity, and the lesson says so in its closing step.</td>
             </tr>
           <!--/fact-block-->
           </tbody>
