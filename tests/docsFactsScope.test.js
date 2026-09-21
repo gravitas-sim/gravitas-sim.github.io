@@ -48,6 +48,19 @@ function lyingCache() {
       numFailedTests: 0,
     })
   );
+  // A build summary, so the `build` group has something to read without a
+  // dist/. The numbers are impossible for the same reason as the others.
+  writeFileSync(
+    path.join(dir, 'build-summary.json'),
+    JSON.stringify({
+      cssKB: 1,
+      startupKB: 1,
+      startupFiles: 1,
+      deferredKB: 1,
+      deferredChunks: 1,
+      initialKB: 1,
+    })
+  );
   // One check, so physicsChecks is wrong too, and the coverage block with it.
   writeFileSync(
     path.join(dir, 'physics.json'),
@@ -118,6 +131,17 @@ describe('a fact that only the wider check measures', () => {
     expect(wider.code).toBe(1);
     expect(wider.out).toMatch(/"jestTests" says \d+, the source says 1/);
     expect(wider.out).toMatch(/documentation problem/);
+  });
+
+  test('and the build group catches its own, without a dist/', () => {
+    // The build sizes are the other half. This runs in a job that has never
+    // built anything, so the summary comes from the cache the way the jest and
+    // physics reports do.
+    const build = docsFacts(['--check', '--groups=build']);
+    expect(build.code).toBe(1);
+    expect(build.out).toMatch(
+      /"buildInitialDownload" says \d+, the source says 1/
+    );
   });
 
   test('and so does the undivided form the release gate runs', () => {

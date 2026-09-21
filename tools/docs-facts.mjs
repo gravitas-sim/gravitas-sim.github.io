@@ -510,14 +510,20 @@ function testFacts(report, physics) {
  * numbers in the README are quotations of its output.
  */
 function buildFacts(report) {
+  // From the cache first, for the same reason as the other two: a job that has
+  // already measured this should not be asked to build again. It also makes
+  // tests/docsFactsScope.test.js hermetic - it used to pass on a machine that
+  // happened to have a dist/ lying around and fail in CI's `checks` job, which
+  // has none, which is precisely the kind of check this file exists to stop.
+  const fromCache = cached('build-summary.json', report);
   const summary = join(REPO, 'dist', 'build-summary.json');
-  if (!existsSync(summary)) {
+  if (!fromCache && !existsSync(summary)) {
     report.push(
       'no dist/build-summary.json - run `npm run build` for build sizes'
     );
     return {};
   }
-  const built = JSON.parse(readFileSync(summary, 'utf8'));
+  const built = JSON.parse(fromCache || readFileSync(summary, 'utf8'));
   return {
     buildCss: built.cssKB,
     buildStartupJs: built.startupKB,
