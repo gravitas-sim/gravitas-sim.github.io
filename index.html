@@ -2562,6 +2562,26 @@
           <dd id="soundPanelNow"></dd>
         </div>
       </dl>
+      <!--
+        What the tones stand for, in numbers. The sandbox's audio is lossy by
+        design - orbital frequency is compressed and then quantized onto a
+        pentatonic scale - so this is deliberately not a description of what
+        you hear. It is the quantity the sound is derived from, printed
+        losslessly, for a reader who cannot use the audio at all.
+
+        NOT aria-live, and that is not an oversight. The voices are re-chosen
+        several times a second; a polite live region over them would interrupt
+        a screen reader continuously and make the panel unusable for exactly
+        the person it exists for. js/ui.js fills this in refreshSoundPanel(),
+        which runs when the panel opens and on each state change and returns
+        immediately while the panel is hidden - so the list is a snapshot that
+        holds still while it is being read.
+      -->
+      <section id="soundPanelVoices" class="sound-panel-voices" hidden>
+        <h3 id="soundPanelVoicesTitle" class="sound-panel-voices-title"></h3>
+        <ol id="soundPanelVoicesList" class="sound-panel-voices-list"></ol>
+        <p id="soundPanelVoicesNote" class="sound-panel-note"></p>
+      </section>
       <label class="sound-panel-volume" for="soundPanelVolume">
         <span id="soundPanelVolumeLabel"></span>
         <input
@@ -4230,7 +4250,7 @@
       -->
       <a
         href="/validation/"
-        title="What the physics engine has been checked against: 248 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
+        title="What the physics engine has been checked against: 286 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
         data-i18n-title="footer.attribution.hint.2"
         data-i18n="footer.attribution"
         >Validated</a

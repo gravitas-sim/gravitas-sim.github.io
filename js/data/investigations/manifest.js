@@ -315,4 +315,19 @@ export const MANIFEST = [
     gradedCount: 29,
     objectiveCount: 7,
   },
+  {
+    id: 'twelve-nights',
+    title: 'Twelve Nights',
+    subtitle:
+      'You get to choose when to look, and most of the choice has already been made',
+    duration: '40-50 min',
+    level: 'Introductory astronomy',
+    summary:
+      'A committee gives you twelve nights on one star from one telescope in Chile. The star is above the airmass limit for five hours a night and the window opens four minutes earlier every night, so your twelve measurements land on a comb whose spacing you did not choose. Plan the run in the observing planner, watch the spectral window before you have a single velocity, then commit two plans to the live spectrograph and find that one of them returns a planet with the wrong period. Finish by working out what would actually fix it — and why more nights would not.',
+    thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
+    series: 'Detecting exoplanets',
+    stepCount: 13,
+    gradedCount: 8,
+    objectiveCount: 6,
+  },
 ];

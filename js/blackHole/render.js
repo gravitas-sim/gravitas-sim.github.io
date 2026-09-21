@@ -472,7 +472,8 @@ function drawJet(g, at, unit, a, time, sign, brightness, tier) {
   // A few knots traveling outwards, at the close level of detail only. Their
   // spacing is fixed and their motion comes from the time handed in, so they
   // freeze when the simulation does and repeat exactly on a replay.
-  if (tier !== 'full') return;
+  // Anything but the lean tier: 'ultra' is above full, not outside it.
+  if (tier === 'low') return;
   const knots = 3;
   for (let k = 0; k < knots; k++) {
     const travel = (((time * 0.16 + k / knots) % 1) + 1) % 1;
@@ -532,7 +533,7 @@ export function drawBlackHole(g, spec) {
   if (jets) drawJet(g, at, unit, a, time, -1, beam.far, tier);
   if (disk) {
     inDiskFrame(() => drawDiskHalf(g, unit, a, -1, tier, paint));
-    if (tier === 'full') drawStreaks(g, at, unit, a, time, -1, alpha);
+    if (tier !== 'low') drawStreaks(g, at, unit, a, time, -1, alpha);
   }
 
   // The horizon. Flat black, over everything behind it: this is the object,
@@ -546,7 +547,7 @@ export function drawBlackHole(g, spec) {
 
   if (disk) {
     inDiskFrame(() => drawDiskHalf(g, unit, a, 1, tier, paint));
-    if (tier === 'full') drawStreaks(g, at, unit, a, time, 1, alpha);
+    if (tier !== 'low') drawStreaks(g, at, unit, a, time, 1, alpha);
   }
   if (jets) drawJet(g, at, unit, a, time, 1, beam.near, tier);
 }

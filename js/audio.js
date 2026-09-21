@@ -382,17 +382,24 @@ const setSignalAudioActive = on => {
 const toggleSonification = () => setSonificationMuted(!muted);
 
 const mapOrbitersToVoices = () => {
+  // Tagged by the list it came from rather than by obj_type or
+  // constructor.name. Only some classes pass an obj_type to the base
+  // constructor, a transformed body carries the obj_type of what it became,
+  // and constructor.name is whatever the minifier decided - all three of which
+  // reached the sound panel as "BlackHole" in front of a reader. The array a
+  // body is in is the one answer that cannot be any of those things.
+  const typed = (list, type) => list.map(obj => ({ obj, type }));
   const candidates = [
-    ...bh_list,
-    ...stars,
-    ...planets,
-    ...gas_giants,
-    ...neutron_stars,
-    ...white_dwarfs,
-  ].filter(obj => obj && obj.alive && obj.pos && obj.vel);
+    ...typed(bh_list, 'BlackHole'),
+    ...typed(stars, 'Star'),
+    ...typed(planets, 'Planet'),
+    ...typed(gas_giants, 'GasGiant'),
+    ...typed(neutron_stars, 'NeutronStar'),
+    ...typed(white_dwarfs, 'WhiteDwarf'),
+  ].filter(c => c.obj && c.obj.alive && c.obj.pos && c.obj.vel);
 
   const scored = candidates
-    .map(obj => {
+    .map(({ obj, type }) => {
       const speed = Math.hypot(obj.vel.x || 0, obj.vel.y || 0);
       const radius = Math.max(5, Math.hypot(obj.pos.x || 0, obj.pos.y || 0));
       const orbitalFrequency = speed / (2 * Math.PI * radius);
@@ -410,7 +417,7 @@ const mapOrbitersToVoices = () => {
         score,
         orbitalFrequency,
         intensity,
-        label: obj.obj_type || obj.constructor?.name || 'Object',
+        type,
         pitchShift: massProfile.pitchShift,
         loudness: massProfile.loudness,
         massFactor: massProfile.logMass,
@@ -636,6 +643,30 @@ const processGravityRipples = () => {
   lastRippleSeen = newest;
 };
 
+/**
+ * Exactly what the oscillators are following, for the readers who cannot hear it.
+ *
+ * This returns cachedVoiceTargets itself rather than recomputing anything, and
+ * that is the point: js/sonify/voiceReadout.js turns these into the periods the
+ * sound panel prints, so the printed number and the played pitch cannot drift
+ * apart - there is only one derivation of the frequency and this is it.
+ *
+ * Copies of the entries, so a caller cannot reach in and retune a live voice.
+ * Empty while muted or while the gravitational-wave lab has the bus, both of
+ * which are states in which nothing is being voiced and an empty list is the
+ * honest answer.
+ *
+ * @returns {Array<{type: string, orbitalFrequency: number, intensity: number}>} A snapshot
+ */
+const getVoicedBodies = () =>
+  signalActive || muted
+    ? []
+    : cachedVoiceTargets.map(t => ({
+        type: t.type,
+        orbitalFrequency: t.orbitalFrequency,
+        intensity: t.intensity,
+      }));
+
 const updateSonification = (timestamp = getNow()) => {
   if (!audioCtx || !voices.length) {
     return;
@@ -669,6 +700,7 @@ if (typeof window !== 'undefined') {
 
 export {
   updateSonification,
+  getVoicedBodies,
   toggleSonification,
   setSonificationMuted,
   setSonificationVolume,

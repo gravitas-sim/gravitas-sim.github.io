@@ -466,11 +466,16 @@ describe('the simulated clock', () => {
     for (let i = 0; i < 10; i++) updatePhysics(0.25);
     expect(getSimulationTime()).toBeCloseTo(2.5, 12);
     // A substepping scenario takes several calls per frame and must count all
-    // of them, and a zero or negative step must count for nothing.
+    // of them, and a zero step counts for nothing.
     for (let i = 0; i < 4; i++) updatePhysics(0.125);
     updatePhysics(0);
-    updatePhysics(-3);
     expect(getSimulationTime()).toBeCloseTo(3, 12);
+    // A negative step counts backwards, which is what "counts what was
+    // integrated" means once the engine will integrate backwards at all. The
+    // clock is a readout of the integrator, not a stopwatch beside it, so if
+    // the probe undoes three units of a run the clock has to say so.
+    updatePhysics(-3);
+    expect(getSimulationTime()).toBeCloseTo(0, 12);
     resetSimulationTime();
     expect(getSimulationTime()).toBe(0);
   });

@@ -367,7 +367,8 @@ function stateFrom(t, { ageYr, logL, logTeff, massSun, seg }) {
  * its mass. Nothing else here interpolates between tracks.
  *
  * Returns null outside the grid rather than extrapolating. The grid runs from
- * 0.2 to 20 solar masses.
+ * 0.2 to 40 solar masses - see TRACK_IDS, which is what the documentation
+ * counts through the stellarTracks fact.
  *
  * @param {number} massSun - Initial mass, solar masses
  * @param {number} [fraction] - 0 at zero-age main sequence, 1 at terminal-age

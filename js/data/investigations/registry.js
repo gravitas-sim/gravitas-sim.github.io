@@ -96,6 +96,7 @@ const LOADERS = {
   'listening-to-spacetime': () => import('./listening-to-spacetime.js'),
   'a-universe-of-stars': () => import('./a-universe-of-stars.js'),
   'lives-of-stars': () => import('./lives-of-stars.js'),
+  'twelve-nights': () => import('./twelve-nights.js'),
 };
 
 /**
@@ -133,6 +134,7 @@ const TRANSLATIONS = {
     'listening-to-spacetime': () => import('./es/listening-to-spacetime.js'),
     'a-universe-of-stars': () => import('./es/a-universe-of-stars.js'),
     'lives-of-stars': () => import('./es/lives-of-stars.js'),
+    'twelve-nights': () => import('./es/twelve-nights.js'),
   },
 };
 

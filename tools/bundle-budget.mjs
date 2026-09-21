@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3900,
+    limit: 3950,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -365,8 +365,25 @@ const BUDGETS = [
       'what a first-time visitor to the sandbox waited for. It is a page ' +
       'stylesheet now, like css/teaching.css before it. That is the trade this ' +
       'budget asks for: a dashboard fix wanted two kilobytes, and what it got ' +
-      'was a sheet deferred rather than a ceiling raised.\n\n' +
-      'Raised from 3880 to 3900 for the accessibility-parity pass, measured at ' +
+      'was a sheet deferred rather than a ceiling raised.' +
+      '\n\nRaised from 3880 to 3950 for the spherical-astronomy module and ' +
+      'the one lesson built on it, measured at 3930.3 KB. Four items, three ' +
+      'of them the content this budget says it is loose for. ' +
+      'js/observingWindow.js is 43.9 KB of source, and more than half of ' +
+      'that is the header and the JSDoc rather than code: the truncated ' +
+      'lunar series is a hundred lines of coefficients and the rest is the ' +
+      'argument for why time is an argument there and never a reading. Its ' +
+      'widget is 15.5 KB, the lesson 28.7 with a 17.0 KB Spanish shadow ' +
+      'behind it, and the instructor guide 12.0 inside the portal chunk, ' +
+      'which the simulation never loads.\n\nNone of it is reachable from ' +
+      'the entry graph, and the chain is short enough to check by hand: the ' +
+      'module is imported by the widget, the widget by js/widgets.js, and ' +
+      'js/widgets.js by js/investigations.js, which only the lazy lesson ' +
+      'engine imports.\n\nThe initial download did NOT move and its limit ' +
+      'was not touched: 811.0 KB against 830.0, exactly where it stood ' +
+      'before this work. That is the whole of what deferring it was for - a ' +
+      'visitor who never opens a lesson downloads none of the above.' +
+      '\n\nRaised from 3880 to 3900 for the accessibility-parity pass, measured at ' +
       '3891.0 KB against 3874.1 before it. This one is raised rather than paid ' +
       'for, and the accounting is here because the rule above says to look for ' +
       'a module to defer first. There was nothing to defer: every byte of this ' +

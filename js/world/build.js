@@ -657,7 +657,20 @@ export const buildWorld = ctx => {
   clearAllEnergyHistory();
 
   // Recorded history and the undo stack belong to the old simulation.
-  window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+  //
+  // Guarded the way js/physics.js guards its own dispatches, and for a reason
+  // that is no longer hypothetical: this is the only line in the builder that
+  // touches the DOM, and without the guard it is the only thing stopping
+  // buildWorld() from running in a Worker - which spike/lyapunov/ shows is
+  // otherwise possible today. There is nothing listening in a Worker, so
+  // announcing to nobody is the correct no-op rather than a lost event.
+  if (
+    typeof window !== 'undefined' &&
+    typeof window.dispatchEvent === 'function' &&
+    typeof CustomEvent === 'function'
+  ) {
+    window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+  }
 
   // Add central stars for specific presets
   if (

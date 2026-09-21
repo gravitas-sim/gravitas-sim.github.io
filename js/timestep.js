@@ -50,10 +50,21 @@ export const MAX_SUBSTEPS = 64;
  */
 export function substepPlan(dtSim, maxStep) {
   const cap = maxStep > 0 ? maxStep : 0;
-  if (!(cap > 0) || !(dtSim > cap)) {
+  // The magnitude decides how many substeps, the sign rides along.
+  //
+  // This compared dtSim to the cap directly, which is the right question only
+  // for a forward step. A negative advance is never greater than a positive
+  // cap, so `!(dtSim > cap)` was true for every backward step and the plan came
+  // back as one uncapped leap - the scenarios that cap their step precisely to
+  // keep symplectic Euler from wrecking a packed system would have been
+  // integrated backwards at the full frame step, which is the one case the cap
+  // exists for. Nothing ran backwards when this was written, so nothing caught
+  // it; tools/reversibility-probe.mjs does now.
+  const size = Math.abs(dtSim);
+  if (!(cap > 0) || !(size > cap)) {
     return { substeps: 1, step: dtSim, capped: false };
   }
-  const wanted = Math.ceil(dtSim / cap);
+  const wanted = Math.ceil(size / cap);
   const substeps = Math.min(MAX_SUBSTEPS, wanted);
   return { substeps, step: dtSim / substeps, capped: wanted > MAX_SUBSTEPS };
 }

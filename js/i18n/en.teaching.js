@@ -368,6 +368,11 @@ export const EN_TEACHING = {
   'teach.section.evaluate': 'If you want to evaluate it',
   'teach.evaluate.intro':
     'No study has been run on this software. There is no validated assessment, no measured learning gain, and nothing on this page should be read as one. What follows is a shape somebody could use to produce evidence, offered because the absence of it is easier to act on than to ignore.',
+  'teach.evaluate.kit.lead':
+    'The printable forms for all of this — a fidelity checklist, a twelve-item pilot pre/post assessment, a usability questionnaire, an anonymous participant-code workflow, and de-identified CSV and JSON templates — are in the',
+  'teach.evaluate.kit.link': 'classroom evidence kit',
+  'teach.evaluate.kit.tail':
+    '. They are project-developed and unvalidated, and the page says so on every surface that shows them.',
   'teach.evaluate.objectives.title': 'Start from the objectives, not the tool',
   'teach.evaluate.objectives.text':
     'Each investigation states two or three observable objectives on its card, phrased as things a student does rather than things they appreciate. Decide which of those you actually care about before deciding what to measure; an evaluation of "engagement" answers a question nobody asked.',
