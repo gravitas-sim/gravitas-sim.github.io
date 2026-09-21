@@ -205,20 +205,97 @@ describe('the reader can overrule the measurement', () => {
   });
 });
 
+/**
+ * Pin devicePixelRatio for one assertion.
+ *
+ * jsdom reports 1 and the property is configurable, so this is the only way to
+ * exercise the display-scaling half of renderScale() at all.
+ *
+ * @param {number} value - The ratio to report
+ * @returns {{restore: () => void}} Undo
+ */
+function withDpr(value) {
+  const had = Object.prototype.hasOwnProperty.call(
+    globalThis,
+    'devicePixelRatio'
+  );
+  const previous = globalThis.devicePixelRatio;
+  Object.defineProperty(globalThis, 'devicePixelRatio', {
+    value,
+    configurable: true,
+    writable: true,
+  });
+  return {
+    restore() {
+      if (had) {
+        Object.defineProperty(globalThis, 'devicePixelRatio', {
+          value: previous,
+          configurable: true,
+          writable: true,
+        });
+      } else {
+        delete globalThis.devicePixelRatio;
+      }
+    },
+  };
+}
+
 describe('what the tier actually changes', () => {
-  test('the full tier changes nothing', () => {
+  test('the full tier changes nothing at a ratio of one', () => {
     setTier('full');
-    expect(renderScale()).toBe(1);
+    expect(renderScale(1440, 900)).toBe(1);
     expect(populationCaps()).toBeNull();
     expect(renderOverrides()).toBeNull();
   });
 
   test('the low tier draws fewer pixels', () => {
     setTier('low');
-    expect(renderScale()).toBeLessThan(1);
+    expect(renderScale(1440, 900)).toBeLessThan(1);
     // Worth stating as pixels rather than as a scale: 0.7 is about half.
-    expect(renderScale() ** 2).toBeLessThan(0.55);
-    expect(renderScale() ** 2).toBeGreaterThan(0.4);
+    expect(renderScale(1440, 900) ** 2).toBeLessThan(0.55);
+    expect(renderScale(1440, 900) ** 2).toBeGreaterThan(0.4);
+  });
+
+  test('a high-density display sharpens above the low tier', () => {
+    const dpr = withDpr(2);
+    try {
+      setTier('full');
+      // 1440x900 at a ratio of 2 wants 2.0 and the 4.2 Mpx budget allows 1.80,
+      // so the budget binds - which is the whole reason it exists.
+      expect(renderScale(1440, 900)).toBeCloseTo(1.8, 2);
+      setTier('ultra');
+      // The same window under a 9.0 Mpx budget is not capped at all.
+      expect(renderScale(1440, 900)).toBeCloseTo(2, 5);
+    } finally {
+      dpr.restore();
+    }
+  });
+
+  test('the low tier does not take the device-pixel dividend', () => {
+    const dpr = withDpr(3);
+    try {
+      setTier('low');
+      // The tier is chosen by measuring a machine that cannot keep up. Spending
+      // a windfall of pixels there is backwards, so a HiDPI Chromebook gets
+      // exactly the pixel count a standard-density one does.
+      expect(renderScale(1440, 900)).toBe(0.7);
+    } finally {
+      dpr.restore();
+    }
+  });
+
+  test('the budget can only take back what the display added', () => {
+    const dpr = withDpr(1);
+    try {
+      // A 4K window is already past the full-tier budget at a ratio of one.
+      // Honouring the cap there would make the change a regression on exactly
+      // the machines it is supposed to leave alone, so the tier's own share is
+      // a floor.
+      setTier('full');
+      expect(renderScale(3840, 2160)).toBe(1);
+    } finally {
+      dpr.restore();
+    }
   });
 
   test('the low tier caps the generic populations only', () => {
