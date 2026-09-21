@@ -61,3 +61,6 @@ manual/gravitas-user-manual.pdf
 # Cached MIST downloads for tools/build-stellar-tracks.mjs. The reduced result
 # is committed; the 100 MB source grid is not.
 .mist-cache/
+
+# Reports an earlier CI step left for tools/docs-facts.mjs to read back.
+.facts/

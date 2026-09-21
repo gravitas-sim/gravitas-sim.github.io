@@ -36,15 +36,15 @@
 
 import { webcrypto as crypto, createHash } from 'node:crypto';
 import { TextEncoder } from 'node:util';
-import {
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-  existsSync,
-  readdirSync,
-} from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+import {
+  checkFreshnessAt,
+  sourceDigestFor,
+  sourcePathsFor,
+} from './instructor-freshness.mjs';
 
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { verifyKey } from '../js/answerKey.js';
@@ -92,50 +92,34 @@ const MANIFEST_FILE = join(OUT_DIR, 'materials.manifest.json');
 // every footer, so their bytes change on the first of each month with no change
 // to anything anybody wrote. A content digest would call the bundle stale
 // twelve times a year and be ignored by the second time.
-const SOURCE_FILES = [
-  'tools/build-instructor-materials.js',
-  'js/pdf.js',
-  'js/instructorDocs.js',
-  'js/activityDocs.js',
-  'js/answerKey.js',
-  'js/data/activities.js',
-  'js/data/investigations.js',
-  'js/i18n/en.teaching.js',
-];
-/** Every lesson module, which is where the answers themselves live. */
-const SOURCE_DIRS = ['js/data/investigations'];
+//
+// Which inputs, and why nobody lists them by hand any more
+// -----------------------------------------------------------------------------
+// This was a list of eight files and one directory - thirty-nine paths - and it
+// was wrong by fifteen. The build evaluates forty-odd modules, and among the
+// ones the list did not name were `js/data/instructorContent.js`, which holds
+// the prose of every instructor guide, `js/data/activityTeaching.js`, which
+// holds the teaching notes on every activity, and `js/authoring/
+// instructorSchema.js`, which decides what a guide is allowed to contain.
+// Rewriting any of them changed every document in the bundle and left the
+// recorded digest byte-identical, so `instructors:check` reported a stale
+// bundle as current - which is the one thing it exists not to do.
+//
+// A hand-written list beside a machine-maintained import graph drifts, and the
+// drift is silent by construction: nothing fails when a new import is added,
+// and it only surfaces as a release that shipped last month's answer keys. So
+// the list is derived from the graph instead, in tools/instructor-freshness.mjs
+// - which is also where the deploy gate reads it, so the question "is this
+// bundle current?" has one answer rather than two.
 
-const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-
-/** Every input, as repository-relative paths, sorted. @returns {string[]} */
-function sourcePaths() {
-  const fromDirs = SOURCE_DIRS.flatMap(dir =>
-    readdirSync(join(ROOT, dir))
-      .filter(name => name.endsWith('.js'))
-      .map(name => `${dir}/${name}`)
-  );
-  return [...SOURCE_FILES, ...fromDirs].sort();
+/** @returns {string[]} Every input, as repository-relative paths, sorted */
+export function sourcePaths() {
+  return sourcePathsFor(ROOT);
 }
 
-/**
- * One digest over every input that decides what the materials say.
- *
- * The path is hashed with the bytes, so moving a lesson to a new file is a
- * change even when its text is identical.
- *
- * @returns {{digest: string, files: number}} The digest and how many files it covers
- */
-function sourceDigest() {
-  const paths = sourcePaths();
-  const lines = paths.map(rel => {
-    const full = join(ROOT, rel);
-    if (!existsSync(full)) {
-      console.error(`Instructor source is missing: ${rel}`);
-      process.exit(1);
-    }
-    return `${rel}:${sha256(readFileSync(full))}`;
-  });
-  return { digest: sha256(lines.join('\n')), files: paths.length };
+/** @returns {{digest: string, files: number, sources: object}} The record */
+export function sourceDigest() {
+  return sourceDigestFor(ROOT);
 }
 
 /**
@@ -143,37 +127,27 @@ function sourceDigest() {
  *
  * Needs no passphrase and renders nothing, so the release gate can afford it.
  *
+ * This is the RELEASE question. It compares the working tree against the
+ * production ciphertext that only Carl's passphrase can produce, so a branch
+ * that edits a lesson fails it until the bundle is rebuilt - which is correct
+ * for a release and wrong for a pull request. `--validate` is the question a
+ * pull request should be asked; see main().
+ *
  * @returns {void} Exits non-zero when the bundle is stale
  */
 function checkFreshness() {
-  const { digest, files } = sourceDigest();
-  if (!existsSync(MANIFEST_FILE)) {
-    console.error(
-      'No instructors/materials.manifest.json. Run `npm run build:instructors` ' +
-        'to build the bundle and write the record of what it was built from.'
-    );
-    process.exit(1);
-  }
-  const recorded = JSON.parse(readFileSync(MANIFEST_FILE, 'utf8'));
-  if (recorded.sourceDigest !== digest) {
-    console.error(
-      [
-        'The instructor bundle is stale.',
-        `  recorded: ${recorded.sourceDigest}`,
-        `  on disk:  ${digest}  (${files} source files)`,
-        '',
-        'Instructional content changed after the bundle was built. Rebuild it',
-        'with `npm run build:instructors` - which needs the real passphrase -',
-        'and commit the bundle and the manifest together.',
-      ].join('\n')
-    );
+  const verdict = checkFreshnessAt(ROOT);
+  if (!verdict.ok) {
+    for (const problem of verdict.problems) console.error(problem);
     process.exit(1);
   }
   console.log(
-    `Instructor bundle is current: ${files} source files, digest ${digest.slice(0, 12)}, ` +
-      `bundle built ${recorded.generated}.`
+    `Instructor bundle is current: ${verdict.files} source files, digest ` +
+      `${verdict.digest.slice(0, 12)}, bundle built ${verdict.recorded.generated}.`
   );
 }
+
+const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 
 /** PBKDF2 work factor. OWASP's floor for SHA-256; about a second on a phone. */
 const ITERATIONS = 600000;
@@ -344,75 +318,22 @@ function stubPdf(label) {
   return doc.build();
 }
 
-async function main() {
-  // Asking whether the bundle is current needs neither the passphrase nor a
-  // single rendered page, so it happens before anything else and costs
-  // milliseconds. This is the mode the release gate runs.
-  if (process.argv.includes('--check')) {
-    requireCanonicalContent();
-    checkFreshness();
-    return;
-  }
-
-  requireCanonicalContent();
-
-  // CI cannot be handed the real passphrase, so it asks for a build it is not
-  // allowed to publish. Everything else about the run is identical.
-  // A fixture is the same inventory with placeholder pages, encrypted with a
-  // published test passphrase, written somewhere else. It exists so the portal
-  // can be driven end to end without the production secret, and it is built by
-  // this tool rather than by a second one so its ids and names cannot drift
-  // from the ones the portal looks up.
-  const fixtureAt = process.argv.indexOf('--fixture');
-  const isFixture = fixtureAt >= 0;
-  const fixtureOut =
-    isFixture &&
-    process.argv[fixtureAt + 1] &&
-    !process.argv[fixtureAt + 1].startsWith('--')
-      ? resolve(process.argv[fixtureAt + 1])
-      : FIXTURE_DEFAULT;
-  if (isFixture && resolve(fixtureOut) === resolve(OUT_FILE)) {
-    console.error(
-      '\n  --fixture refuses to write the production bundle.\n' +
-        `  ${OUT_FILE} is the published artifact; a fixture is a placeholder\n` +
-        '  set encrypted with a passphrase that is printed in the source.\n'
-    );
-    process.exit(1);
-  }
-
-  const unpublishable = process.argv.includes('--unpublishable');
-  const secret = isFixture ? FIXTURE_PASSPHRASE : passphrase(unpublishable);
-  const usedThrowaway = unpublishable && !hasRealSecret();
-  const version = versionStamp();
-  const keepPlain = process.argv.includes('--keep-plaintext');
-
-  if (usedThrowaway) {
-    console.log(
-      [
-        '',
-        '  UNPUBLISHABLE BUILD',
-        '  No passphrase was available, so a random throwaway secret was used.',
-        '  The materials below are real but the ciphertext cannot be opened by',
-        '  anyone. This mode exists so CI can prove the pipeline still runs.',
-        '  Do not publish the output.',
-        '',
-      ].join('\n')
-    );
-  }
-
-  // A key that disagrees with the site is worse than no key, so nothing is
-  // built until every derived answer has been re-checked against the site's
-  // own grading function.
-  const problems = INVESTIGATIONS.flatMap(verifyKey);
-  if (problems.length) {
-    console.error('Answer keys do not agree with the lessons:');
-    for (const p of problems) console.error('  ' + p);
-    process.exit(1);
-  }
-
+/**
+ * Every document the bundle contains, rendered.
+ *
+ * Pulled out of main() because three callers want it: the build, the fixture,
+ * and `--restamp`, which re-renders in order to prove the plaintext has not
+ * moved. Rendering needs no passphrase - only encrypting does - which is what
+ * makes that proof available without the secret.
+ *
+ * @param {string} version - The stamp printed in every footer
+ * @param {object} [options] - `stub` to substitute placeholder pages
+ * @returns {Array<object>} One entry per document, with base64 bytes
+ */
+function renderDocuments(version, { stub = false } = {}) {
   const files = [];
   const add = (id, name, kind, investigation, bytes) => {
-    if (isFixture) bytes = stubPdf(name.replace(/\.pdf$/, ''));
+    if (stub) bytes = stubPdf(name.replace(/\.pdf$/, ''));
     files.push({
       id,
       name,
@@ -489,6 +410,224 @@ async function main() {
     );
   }
 
+  return files;
+}
+
+/**
+ * A hash of the rendered set, independent of how it was encrypted.
+ *
+ * Not a freshness signal - it moves with the month, because `versionStamp()`
+ * prints the month into every footer and js/pdf.js stamps it into every
+ * document's creation date. It is an identity: two renders with the same
+ * version stamp agree here if and only if they produced the same documents.
+ *
+ * @param {Array<object>} files - From renderDocuments()
+ * @returns {string} The digest recorded in the manifest
+ */
+function contentDigestOf(files) {
+  return sha256(
+    files
+      .map(f => `${f.id}|${f.kind}|${f.investigation}:${sha256(f.bytes)}`)
+      .sort()
+      .join('|')
+  );
+}
+
+/**
+ * Build, check or render a fixture, according to the flags.
+ *
+ * Takes its arguments rather than reading `process.argv` directly so that
+ * tools/instructor-digest-audit.mjs can drive a real build in-process and watch
+ * which modules Node loads to do it. Nothing else passes them.
+ *
+ * @param {string[]} [args] - Flags, defaulting to this process's own
+ * @returns {Promise<void>} Resolves when the run is finished
+ */
+export async function main(args) {
+  const argv = args ?? process.argv.slice(2);
+  // Asking whether the bundle is current needs neither the passphrase nor a
+  // single rendered page, so it happens before anything else and costs
+  // milliseconds. This is the mode the release gate runs.
+  if (argv.includes('--check')) {
+    requireCanonicalContent();
+    checkFreshness();
+    return;
+  }
+
+  // Re-state the freshness record without re-encrypting anything.
+  //
+  // The digest's covered set can change without a single document changing -
+  // it did when the set stopped being a hand-written list - and so can the
+  // builder's own bytes, which are an input because this file decides which
+  // documents exist. Either marks the bundle stale, and the only remedy used
+  // to be a rebuild with the real passphrase: a secret one person holds, a
+  // fresh salt and IV, four megabytes of new ciphertext, and a merge conflict
+  // with every other branch that did the same.
+  //
+  // None of that is necessary when the plaintext has not moved, and whether it
+  // has moved is a question anybody can answer. Rendering needs no passphrase;
+  // only encrypting does. So this re-renders every document at the version the
+  // manifest records and compares the result against the contentDigest the
+  // manifest already carries. Equal means the committed ciphertext holds
+  // exactly these documents, and the record may be re-stated for the inputs
+  // that actually produced it.
+  //
+  // It refuses otherwise, and the refusal is the safety property: nothing here
+  // can make a stale bundle look current, because a stale bundle is precisely
+  // one whose documents differ, which is what is being compared.
+  //
+  // The one thing it cannot see through: js/pdf.js stamps a month-granular
+  // creation date, so re-rendering in a later month produces different bytes
+  // for identical content and the comparison fails honestly rather than
+  // silently. Outside the month of the build, a rebuild is the only route.
+  if (argv.includes('--restamp')) {
+    requireCanonicalContent();
+    if (!existsSync(MANIFEST_FILE)) {
+      console.error(
+        `No ${rel(MANIFEST_FILE)} to re-state. Run \`npm run build:instructors\`.`
+      );
+      process.exit(1);
+    }
+    const recorded = JSON.parse(readFileSync(MANIFEST_FILE, 'utf8'));
+    const rendered = renderDocuments(recorded.version);
+    const contentDigest = contentDigestOf(rendered);
+    if (contentDigest !== recorded.contentDigest) {
+      console.error(
+        [
+          'The documents have changed, so the record cannot be re-stated.',
+          `  recorded content digest: ${recorded.contentDigest}`,
+          `  rendered now:            ${contentDigest}`,
+          '',
+          'Either instructional content really did move since the bundle was',
+          `built, or this is a different month from ${recorded.version} and the`,
+          'month-granular creation date in js/pdf.js has shifted every file.',
+          'Both need `npm run build:instructors` and the real passphrase.',
+        ].join('\n')
+      );
+      process.exit(1);
+    }
+    const { digest, files: sourceCount, sources } = sourceDigest();
+    if (digest === recorded.sourceDigest) {
+      console.log('The record already matches these inputs. Nothing to do.');
+      return;
+    }
+    writeFileSync(
+      MANIFEST_FILE,
+      JSON.stringify(
+        {
+          ...recorded,
+          sourceFiles: sourceCount,
+          sourceDigest: digest,
+          sources,
+        },
+        null,
+        2
+      ) + '\n'
+    );
+    console.log(
+      [
+        `Re-stated ${rel(MANIFEST_FILE)} for ${sourceCount} inputs.`,
+        `  content digest unchanged: ${contentDigest.slice(0, 12)}`,
+        `  source digest  ${recorded.sourceDigest.slice(0, 12)} -> ${digest.slice(0, 12)}`,
+        '',
+        `${rel(OUT_FILE)} was not touched: the ${rendered.length} documents it`,
+        'holds are the documents these sources render, which is what the',
+        'content digest above establishes.',
+      ].join('\n')
+    );
+    return;
+  }
+
+  // The other question, and the one a pull request should be asked.
+  //
+  // `--check` compares the tree against the production ciphertext, which only
+  // the real passphrase can produce. On a long-lived integration branch with a
+  // dozen parallel lesson branches that is the wrong question: every one of
+  // them edits instructional content, every one of them therefore goes red,
+  // and the only way to green is for one person to rebuild an encrypted file
+  // that then conflicts with every other branch doing the same. Three of the
+  // open v1.1 pull requests were red on exactly this and on nothing else.
+  //
+  // What a pull request needs established is that the pipeline still works:
+  // that the content matches its schema, that every derived answer still agrees
+  // with the site's own grading function, and that all fifty-four documents
+  // render. That is this mode. It builds everything, with a throwaway key, and
+  // writes nothing at all - so it can run on any branch, in any fork, with no
+  // secret and no encrypted file to conflict over.
+  //
+  // It is not a substitute for `--check`, and nothing here lets it become one:
+  // the release path runs both, and tests/releaseGate.test.js fails if the two
+  // ever collapse into one.
+  const validate = argv.includes('--validate');
+
+  requireCanonicalContent();
+
+  // CI cannot be handed the real passphrase, so it asks for a build it is not
+  // allowed to publish. Everything else about the run is identical.
+  // A fixture is the same inventory with placeholder pages, encrypted with a
+  // published test passphrase, written somewhere else. It exists so the portal
+  // can be driven end to end without the production secret, and it is built by
+  // this tool rather than by a second one so its ids and names cannot drift
+  // from the ones the portal looks up.
+  const fixtureAt = argv.indexOf('--fixture');
+  const isFixture = fixtureAt >= 0;
+  const fixtureOut =
+    isFixture && argv[fixtureAt + 1] && !argv[fixtureAt + 1].startsWith('--')
+      ? resolve(argv[fixtureAt + 1])
+      : FIXTURE_DEFAULT;
+  if (isFixture && resolve(fixtureOut) === resolve(OUT_FILE)) {
+    console.error(
+      '\n  --fixture refuses to write the production bundle.\n' +
+        `  ${OUT_FILE} is the published artifact; a fixture is a placeholder\n` +
+        '  set encrypted with a passphrase that is printed in the source.\n'
+    );
+    process.exit(1);
+  }
+
+  const unpublishable = validate || argv.includes('--unpublishable');
+  const secret = isFixture ? FIXTURE_PASSPHRASE : passphrase(unpublishable);
+  const usedThrowaway = unpublishable && !hasRealSecret();
+  const version = versionStamp();
+  const keepPlain = argv.includes('--keep-plaintext');
+
+  if (validate) {
+    console.log(
+      [
+        '',
+        '  VALIDATION BUILD',
+        '  Every document is rendered and every answer key re-checked against',
+        '  the grading function, with a throwaway key and no file written.',
+        '  Nothing here says whether the committed bundle is current; that is',
+        '  `--check`, and it is a release question.',
+        '',
+      ].join('\n')
+    );
+  } else if (usedThrowaway) {
+    console.log(
+      [
+        '',
+        '  UNPUBLISHABLE BUILD',
+        '  No passphrase was available, so a random throwaway secret was used.',
+        '  The materials below are real but the ciphertext cannot be opened by',
+        '  anyone. This mode exists so CI can prove the pipeline still runs.',
+        '  Do not publish the output.',
+        '',
+      ].join('\n')
+    );
+  }
+
+  // A key that disagrees with the site is worse than no key, so nothing is
+  // built until every derived answer has been re-checked against the site's
+  // own grading function.
+  const problems = INVESTIGATIONS.flatMap(verifyKey);
+  if (problems.length) {
+    console.error('Answer keys do not agree with the lessons:');
+    for (const p of problems) console.error('  ' + p);
+    process.exit(1);
+  }
+
+  const files = renderDocuments(version, { stub: isFixture });
+
   const manifest = {
     version,
     generated: new Date().toISOString().slice(0, 10),
@@ -506,6 +645,15 @@ async function main() {
       `\nTest fixture: ${files.length} placeholder documents -> ${rel(fixtureOut)}\n` +
         '  Encrypted with the published fixture passphrase. Not publishable,\n' +
         '  not tracked, and never a replacement for the real bundle.'
+    );
+    return;
+  }
+
+  if (validate) {
+    const total = files.reduce((t, f) => t + f.size, 0);
+    console.log(
+      `Rendered ${files.length} documents (${Math.round(total / 1024)} KB of ` +
+        'PDF) and encrypted them. Nothing was written.'
     );
     return;
   }
@@ -533,7 +681,7 @@ async function main() {
   // ciphertext is undecryptable, so letting it stamp a manifest would file a
   // freshness record for an artifact nobody can open.
   if (!usedThrowaway) {
-    const { digest, files: sourceCount } = sourceDigest();
+    const { digest, files: sourceCount, sources } = sourceDigest();
     writeFileSync(
       MANIFEST_FILE,
       JSON.stringify(
@@ -543,18 +691,16 @@ async function main() {
           documents: files.length,
           sourceFiles: sourceCount,
           sourceDigest: digest,
+          // Every input by name, with its own hash. The digest above is what
+          // the check compares; this is what lets it say which file moved, and
+          // what makes the covered set reviewable in a diff rather than only by
+          // reading tools/source-closure.mjs.
+          sources,
           // A hash of the rendered set, for anyone holding the passphrase who
           // wants to confirm the ciphertext matches this record. Not a
           // freshness signal: it moves with the month, which is why the check
           // above reads sourceDigest instead.
-          contentDigest: sha256(
-            files
-              .map(
-                f => `${f.id}|${f.kind}|${f.investigation}:${sha256(f.bytes)}`
-              )
-              .sort()
-              .join('|')
-          ),
+          contentDigest: contentDigestOf(files),
         },
         null,
         2
@@ -586,7 +732,12 @@ async function main() {
   }
 }
 
-main().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+// Run only when this file is the program, so a test or the digest audit can
+// import it without setting a build going. The same guard tools/docs-facts.mjs
+// uses.
+if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
+  main().catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
+}

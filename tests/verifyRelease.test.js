@@ -10,6 +10,10 @@ import {
   precachedPaths,
   verifyRelease,
 } from '../tools/verify-release.mjs';
+import {
+  MANIFEST_PATH,
+  sourceDigestFor,
+} from '../tools/instructor-freshness.mjs';
 
 // =============================================================================
 // The gate between a validated commit and the live site
@@ -221,5 +225,108 @@ describe('the real repository', () => {
     const out = verifyRelease(process.cwd(), { requireRevision: false });
     expect(out.problems).toEqual([]);
     expect(out.checked.precached).toBeGreaterThan(200);
+  });
+});
+
+// =============================================================================
+// A real bundle that is out of date
+// -----------------------------------------------------------------------------
+// The throwaway-key refusal above catches a bundle nobody can open. It says
+// nothing about one that opens perfectly and describes a lesson that changed six
+// weeks ago, which is the failure that actually reaches a classroom: an answer
+// key for a question the lesson no longer asks.
+//
+// Nothing between a commit and the live site used to ask. `instructors:check`
+// ran in the `checks` job, and that job now asks it only on a release ref -
+// because a pull request into the integration branch must not need the owner's
+// passphrase - so the deploy would have been resting on a condition. It asks
+// here instead, in the job that publishes, unconditionally.
+// =============================================================================
+
+/** Add just enough of a source tree that freshness can be judged. */
+function withSources(dir, builder = 'export const answer = 42;\n') {
+  mkdirSync(path.join(dir, 'tools'), { recursive: true });
+  writeFileSync(
+    path.join(dir, 'tools', 'build-instructor-materials.js'),
+    builder
+  );
+  const { digest, files, sources } = sourceDigestFor(dir);
+  writeFileSync(
+    path.join(dir, MANIFEST_PATH),
+    JSON.stringify(
+      {
+        version: 'September 2026',
+        generated: '2026-09-16',
+        documents: 54,
+        sourceFiles: files,
+        sourceDigest: digest,
+        contentDigest: 'unused-here',
+        sources,
+      },
+      null,
+      2
+    ) + '\n'
+  );
+}
+
+describe('an instructor bundle that is real but stale', () => {
+  test('a tree whose record matches its sources is publishable', () => {
+    withSources(root);
+    const out = verifyRelease(root);
+    expect(out.problems).toEqual([]);
+    expect(out.ok).toBe(true);
+    expect(out.checked.freshness).toBe('current');
+  });
+
+  test('an input edited after the bundle was built refuses the deploy', () => {
+    withSources(root);
+    // The edit the digest exists to notice. Nothing about the ciphertext
+    // changes: it is still real, still decryptable, and now describes
+    // something else.
+    writeFileSync(
+      path.join(root, 'tools', 'build-instructor-materials.js'),
+      'export const answer = 43;\n'
+    );
+    const out = verifyRelease(root);
+    expect(out.ok).toBe(false);
+    expect(out.checked.freshness).toBe('stale');
+    expect(out.problems.join('\n')).toMatch(/instructor bundle is stale/);
+  });
+
+  test('and it names the file, rather than printing two hashes', () => {
+    withSources(root);
+    writeFileSync(
+      path.join(root, 'tools', 'build-instructor-materials.js'),
+      'export const answer = 43;\n'
+    );
+    const out = verifyRelease(root);
+    expect(out.problems.join('\n')).toMatch(
+      /changed\s+tools\/build-instructor-materials\.js/
+    );
+  });
+
+  test('a new input nothing hashed before is named as one', () => {
+    withSources(root);
+    // The shape of the defect this whole mechanism was repaired for: a file
+    // the build reads that the record never covered.
+    writeFileSync(
+      path.join(root, 'tools', 'extra.js'),
+      'export const more = 1;\n'
+    );
+    writeFileSync(
+      path.join(root, 'tools', 'build-instructor-materials.js'),
+      "import './extra.js';\nexport const answer = 42;\n"
+    );
+    const out = verifyRelease(root);
+    expect(out.ok).toBe(false);
+    expect(out.problems.join('\n')).toMatch(/new input\s+tools\/extra\.js/);
+  });
+
+  test('a tree with no sources in it says so rather than guessing', () => {
+    // verifyRelease is also pointed at assembled artifacts, which have no
+    // tools/ directory. Absent sources is "not checked here", not "stale".
+    const out = verifyRelease(root);
+    expect(out.checked.freshness).toBe('not a source tree');
+    expect(out.problems.join('\n')).not.toMatch(/stale/);
   });
 });
