@@ -534,6 +534,19 @@ export const CHECKS = [
     why: 'added after the workflow was written; runs in seconds',
     group: 'generated',
   },
+  // The list of engine operations that destroy information is scanned out of
+  // js/physics.js, not remembered. This is the check that makes that worth
+  // anything: add a cull or a new merge path and the committed list is stale
+  // here, rather than on the model page in front of a class.
+  {
+    id: 'irreversible',
+    label: 'the audit of operations that destroy information',
+    command: ['npm', 'run', 'audit:irreversible:check'],
+    tier: 'quick',
+    ci: null,
+    why: 'added after the workflow was written; runs in seconds',
+    group: 'generated',
+  },
   // The counts that cost a test run to measure: how many jest tests there are,
   // how many browser tests, what a visitor downloads. The comment in
   // docs-facts.mjs said CI paid for these in the job where the commands had

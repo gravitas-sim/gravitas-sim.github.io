@@ -63,23 +63,6 @@ course-use patterns, and six demonstrations that open a real reproducible state
 as an embedded figure. Public, indexed, and in English and Spanish; every count
 on it is read from the catalog and the validation results when it loads.
 
-**Tools for evaluating a section** at
-[/evaluation/](https://gravitas-sim.online/evaluation/): an implementation and
-fidelity checklist, a twelve-item pilot pre/post concept assessment written
-against a three-investigation introductory sequence, a usability questionnaire,
-an anonymous participant-code workflow for paired data, and de-identified CSV
-and JSON templates with a versioned schema. `npm run evaluation:summary` reads
-the exports back and prints counts, missing-data accounting, per-item before and
-after, and paired change.
-
-These are tools, and that is all they are. **No evaluation of Gravitas has been
-run and no learning gain has been measured.** The assessment is
-project-developed and has not been through item analysis, reliability testing or
-validation against an existing concept inventory; a score on it is a score on
-those twelve questions. The page collects no names, no email addresses and no
-institution, transmits nothing anywhere, and says on its own surface that
-institutional review is the instructor's responsibility rather than ours.
-
 **A public account of the model** at
 [/model/](https://gravitas-sim.online/model/): what the simulation calculates,
 what it approximates, and what is only drawn. Worth reading before assigning
@@ -234,7 +217,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5381<!--/fact--> tests across <!--fact:jestSuites-->155<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5316<!--/fact--> tests across <!--fact:jestSuites-->150<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -259,8 +242,8 @@ reports what the browser downloads at start-up separately from what is deferred:
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->199<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->613<!--/fact--> KB           | <!--fact:buildStartupFiles-->51<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->3878<!--/fact--> KB         | <!--fact:buildDeferredChunks-->139<!--/fact--> |
+| JavaScript at start-up | <!--fact:buildStartupJs-->613<!--/fact--> KB           | <!--fact:buildStartupFiles-->50<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->3874<!--/fact--> KB         | <!--fact:buildDeferredChunks-->137<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->811<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -311,7 +294,6 @@ js/
 model/              the public physics-model page
 teaching/           the public showcase page for instructors
 instructors/        the instructor area
-evaluation/         printable pilot instruments for evaluating a section
 manual/             LaTeX source for the user manual PDF
 notebooks/          the Colab notebook that reads an exported CSV
 tools/              build and development tooling

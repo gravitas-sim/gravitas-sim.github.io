@@ -645,10 +645,16 @@ export async function gatherBlocks({ physics = null } = {}) {
   const { INSTRUCTOR_CONTENT } = await import(
     new URL('../js/data/instructorContent.js', import.meta.url)
   );
+  const { IRREVERSIBLE } = await import(
+    new URL('../js/data/irreversible.js', import.meta.url)
+  );
   return generatedBlocks({
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,
     physics: physics ? physicsInventory(physics) : null,
+    // Cheap: reading a generated data module, not running anything. The audit
+    // it comes from is itself checked by `npm run audit:irreversible -- --check`.
+    irreversible: IRREVERSIBLE,
   });
 }
 
