@@ -276,8 +276,7 @@ export const CHECKS = [
     label: 'browser-suite skip policy',
     command: ['npm', 'run', 'test:policy'],
     tier: 'quick',
-    ci: null,
-    why: 'added with the policy itself; runs in a fraction of a second',
+    ci: 'checks',
     group: 'correctness',
   },
   {
