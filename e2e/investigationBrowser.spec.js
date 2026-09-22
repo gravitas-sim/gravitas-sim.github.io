@@ -13,6 +13,24 @@
 
 import { test, expect } from './fixtures.js';
 import { SEQUENCES } from '../js/data/investigations/sequences.js';
+import { BROWSE_META } from '../js/data/investigations/browseData.js';
+
+/**
+ * The lessons a subject filter should show, from the data the filter reads.
+ *
+ * Derived rather than counted. This was a literal 9, which was a fact about
+ * the catalog on the day it was written and not about the filter: adding a
+ * lesson tagged `orbits` failed it here, in a file about the browser, for a
+ * reason that had nothing to do with the browser.
+ *
+ * @param {string} tag - Subject tag
+ * @returns {string[]} Lesson ids carrying it, sorted
+ */
+const taggedWith = tag =>
+  Object.entries(BROWSE_META)
+    .filter(([, meta]) => meta.tags.includes(tag))
+    .map(([id]) => id)
+    .sort();
 
 /** Get to the browser, with the deferred strings loaded. */
 async function openBrowser(page, app) {
@@ -241,7 +259,11 @@ test.describe('filtering', () => {
   }) => {
     await openBrowser(page, app);
     await page.locator('#investigationFilterSubject').selectOption('orbits');
-    await expect.poll(() => shownIds(page)).toHaveLength(9);
+    // The set, not just its size: a count alone passes when the filter shows
+    // the right number of the wrong lessons.
+    await expect
+      .poll(async () => (await shownIds(page)).slice().sort())
+      .toEqual(taggedWith('orbits'));
 
     // Each menu only narrows: adding one never brings a lesson back.
     const shortOrbits = await idsOfLength(page, 'demo', 'orbits');
