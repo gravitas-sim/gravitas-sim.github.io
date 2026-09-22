@@ -165,9 +165,14 @@ Tests tagged `@cross-browser`, chosen because each exercises a **browser API or
 layout behavior that genuinely differs between engines**: booting and asset
 loading, canvas animation, the scenario gallery, pause/resume/reset, downloads,
 `MediaRecorder` availability, history and share-link restoration, a lesson
-advancing, the deferred chart chunk, the inspector, the A/B bench recording,
-WebGL, embed mode, language switching and Spanish layout, and the document
-pages.
+advancing, a lesson walked at phone width, the deferred chart chunk, the
+inspector, the A/B bench recording, WebGL, embed mode, language switching and
+Spanish layout, and the document pages.
+
+The phone-width walk is there for iPhones, where every browser is WebKit. It
+presses Next where Next is drawn rather than letting Playwright scroll it into
+reach, because `locator.click()` will scroll a container a finger cannot. That
+is how a lesson sheet with Next cut off below its edge passed in Chromium.
 
 It also carries one short chaos test that opens the Three-Body Sensitivity Lab,
 starts the bench, and collects eight samples over two simulated seconds. That

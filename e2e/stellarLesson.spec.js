@@ -49,6 +49,12 @@ async function openLesson(page, app, { locale, narrow = false } = {}) {
 // it never goes down when a student walks backwards. The step heading is the
 // one that does. Both are pulled positionally rather than by the word between
 // the numbers, so the Spanish walk does not silently read zero.
+//
+// innerText rather than textContent, on purpose. WebKit gives '' for anything
+// inside a scroller that has no room left to show it, so in Safari a zero here
+// means the step is not on screen at all. That is how the phone-width walk
+// found the lesson sheet squeezing the step to nothing, which Chromium's
+// innerText does not notice.
 const counterNumbers = async page => {
   const text = await page
     .locator('#investigationBody .inv-step-count')
@@ -114,8 +120,32 @@ const BY_STEP = {
 const PROSE =
   'The main sequence is the long stretch during which a star fuses hydrogen in its core, and while it lasts the mass largely fixes the temperature and the luminosity, which is why those stars fall in a narrow band. The giant is the same star later: it is no longer supported that way, so a relation fitted to core hydrogen burning has no reason to hold for it. My two red stars at 3,350 K differed by 426 in radius, and the white dwarf was 47,600 K at 1.6 solar luminosities.';
 
-/** Answer whatever the current step asks and move on. */
-async function answerAndAdvance(page, step) {
+/**
+ * The centre of a control, if a press there would land on it. Nothing is
+ * scrolled first.
+ *
+ * `locator.click()` scrolls its target into view before pressing, and it will
+ * scroll a container that has `overflow: hidden`, which no reader can do. That
+ * is how the phone-width walk passed in Chromium while Next sat below the
+ * lesson sheet's clipped edge. This asks the document what is drawn on top at
+ * that point instead. Off screen, covered and clipped all come back null.
+ */
+const pressPoint = (page, selector) =>
+  page.evaluate(sel => {
+    const r = document.querySelector(sel)?.getBoundingClientRect();
+    if (!r || r.width < 4 || r.height < 4) return null;
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    return document.elementFromPoint(x, y)?.closest(sel) ? { x, y } : null;
+  }, selector);
+
+/**
+ * Answer whatever the current step asks and move on.
+ *
+ * `byHand` presses Next where it is drawn rather than letting Playwright
+ * scroll it into reach. See pressPoint.
+ */
+async function answerAndAdvance(page, step, { byHand = false } = {}) {
   const options = page.locator('#investigationBody .inv-option');
   if (await options.count()) await options.first().click();
 
@@ -142,7 +172,16 @@ async function answerAndAdvance(page, step) {
   }
 
   const before = await stepNumber(page);
-  await page.locator('#investigationNext').click();
+  if (byHand) {
+    const at = await pressPoint(page, '#investigationNext');
+    expect(
+      at,
+      `Next can be pressed where it is drawn, at step ${step}`
+    ).not.toBeNull();
+    await page.mouse.click(at.x, at.y);
+  } else {
+    await page.locator('#investigationNext').click();
+  }
   await expect
     .poll(() => stepNumber(page), { timeout: 20_000 })
     .toBeGreaterThan(before);
@@ -282,22 +321,49 @@ test.describe('the lesson survives the things a student does to it', () => {
     expect(readout).not.toMatch(/stelW\.|NaN|undefined/);
   });
 
-  test('it is usable at phone width', async ({ page, app }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await openLesson(page, app, { narrow: true });
-    for (let i = 1; i <= 3; i++) await answerAndAdvance(page, i);
-    const canvas = page.locator('#investigationToolCanvas');
-    await expect(canvas).toBeVisible();
-    const box = await canvas.boundingBox();
-    expect(box.width).toBeLessThanOrEqual(390);
-    // The panel must not push the page sideways.
-    const overflow = await page.evaluate(
-      () =>
-        document.documentElement.scrollWidth -
-        document.documentElement.clientWidth
-    );
-    expect(overflow).toBeLessThanOrEqual(1);
-  });
+  // In the engine profile because a student's phone may well be an iPhone, and
+  // every browser on an iPhone is WebKit. The layout bug this walk found was
+  // the same in all three engines, but only WebKit's innerText noticed it.
+  test(
+    'it is usable at phone width',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await openLesson(page, app, { narrow: true });
+      const sheet = page.locator('#investigationPanel');
+      for (let i = 1; i <= 3; i++) {
+        // What the step is about has to be on screen when it opens. At 390px
+        // the sheet once gave the step body no height at all, and the heading,
+        // the question and the answer boxes were all behind its edge.
+        await expect
+          .poll(() => pressPoint(page, '#investigationBody .inv-step-title'), {
+            message: `step ${i} opens with its heading on screen`,
+          })
+          .not.toBeNull();
+        // Whatever does not fit has to be somewhere a reader can scroll to.
+        const fit = await sheet.evaluate(p => ({
+          overflows: p.scrollHeight - p.clientHeight > 1,
+          scrolls: /auto|scroll/.test(getComputedStyle(p).overflowY),
+        }));
+        expect(
+          !fit.overflows || fit.scrolls,
+          `the sheet scrolls when its contents do not fit, at step ${i}`
+        ).toBe(true);
+        await answerAndAdvance(page, i, { byHand: true });
+      }
+      const canvas = page.locator('#investigationToolCanvas');
+      await expect(canvas).toBeVisible();
+      const box = await canvas.boundingBox();
+      expect(box.width).toBeLessThanOrEqual(390);
+      // The panel must not push the page sideways.
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth
+      );
+      expect(overflow).toBeLessThanOrEqual(1);
+    }
+  );
 
   test('a capture reaches the notebook with its model named', async ({
     page,
