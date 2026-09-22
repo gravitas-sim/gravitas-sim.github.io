@@ -62,5 +62,9 @@ manual/gravitas-user-manual.pdf
 # is committed; the 100 MB source grid is not.
 .mist-cache/
 
+# Cached SDSS spectrum CSVs. `npm run spectra:data` refills this; the
+# committed js/data/spectra/sdssSpectra.js is what ships.
+.sdss-cache/
+
 # Reports an earlier CI step left for tools/docs-facts.mjs to read back.
 .facts/

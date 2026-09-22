@@ -1,9 +1,11 @@
 // =============================================================================
 // A universe of stars: size, color, and the H-R diagram
 // -----------------------------------------------------------------------------
-// Twenty-eight steps on the Stellar Lab (js/stellarWidgets.js, js/stellarLab.js)
-// and the eight bundled MIST tracks behind it. No calculus, and no arithmetic
-// the readout does not already do.
+// Thirty-seven steps. Thirty-one of them are the Stellar Lab
+// (js/stellarWidgets.js, js/stellarLab.js) over the eight bundled MIST tracks;
+// the other six are four observed spectra (js/stellarSpectraWidgets.js) and
+// are the only part of the lesson that is a measurement of a real star. No
+// calculus, and no arithmetic the readout does not already do.
 //
 // The line this lesson has to hold
 // -----------------------------------------------------------------------------
@@ -27,8 +29,10 @@
 // comparisons on the pinned stage, two passes over the same synthetic
 // population, an open challenge and a written conclusion that is asked to
 // disagree with step 1 if the evidence says so. The opening predictions are
-// stored under their own step ids and never overwritten, so step 28 can put
-// them side by side with what the student now thinks.
+// stored under their own step ids and never overwritten, so the summative
+// question - `the-argument`, which the coda is deliberately placed BEFORE so
+// that it stays the last thing the lesson asks - can put them side by side
+// with what the student now thinks.
 //
 // Every canvas task has its numbers in the readout beneath the canvas, which
 // is what makes the lesson completable without reading the picture. Color is
@@ -252,7 +256,7 @@ const A_UNIVERSE_OF_STARS = {
   tags: ['stars', 'observing'],
   lock: { placement: true, inspector: false, areaSweep: false },
   summary:
-    'Three stars, no labels, and a guess about which is biggest. Over thirty steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organizes them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
+    'Three stars, no labels, and a guess about which is biggest. You separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organizes them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and count a synthetic population twice to see why the stars you can see are not the stars there are. Everything to that point is built on published models. The last stretch is not: four real spectra, observed by SDSS, and what a color turns out not to be able to tell you.',
   objectives: [
     'Tell mass, radius, temperature, luminosity and apparent brightness apart',
     'Read a position on an H-R diagram, including why temperature runs backwards',
@@ -261,6 +265,8 @@ const A_UNIVERSE_OF_STARS = {
     'Explain why a giant is a stage in a life rather than a heavy star',
     'Explain why a star with more fuel can still run out of it sooner',
     'Recognize a selection effect in a sample of stars',
+    'Tell an observation apart from a model, and say which a given number is',
+    'Read an absorption feature off a real spectrum, and say what it establishes that a color cannot',
   ],
   steps: [
     // -----------------------------------------------------------------------
@@ -1450,6 +1456,267 @@ const A_UNIVERSE_OF_STARS = {
         capture: true,
       }),
       tip: 'Both statements are true of main-sequence stars, which is why they sound right. Neither is true of stars in general, and roughly one star in a thousand near the Sun is a counterexample to the second.',
+    },
+    // -----------------------------------------------------------------------
+    // 29-34: what a color cannot tell you
+    // -----------------------------------------------------------------------
+    // A coda, and the only part of this lesson built on observations rather
+    // than on models. Everything before it came from eight MIST tracks: a
+    // published grid of stellar structure calculations, which is imported data
+    // and is not a measurement of any star. These six screens are four real
+    // spectra - photons that left four stars, were dispersed by a grating at
+    // Apache Point in 2008 and counted by a CCD. Every readout on them says
+    // which of the two it is looking at, because the lesson now has both.
+    //
+    // The argument the six screens make, and the order they make it in:
+    //
+    //   30  a color works. Ranked by the slope of the continuum alone the four
+    //       come out in temperature order, and that slope is the whole of what
+    //       starColor() knows. This screen is meant to be easy.
+    //   31  two features, measured. Inside a 170 Angstrom window the continuum
+    //       slope of the three hottest differs by two per cent - there is no
+    //       color to read - and hydrogen still separates them eightfold.
+    //       Calcium then does something hydrogen does not: it rises and falls.
+    //   32  and so a star can be classified with no color available at all.
+    //   33  the general statement, in the student's own words. A quantity that
+    //       rises and falls cannot be recovered from a temperature, so the two
+    //       measurements are not two readings of one thing.
+    //
+    // What is on the canvas behind these six, and why it is the three stars
+    // -----------------------------------------------------------------------
+    // The obvious move is no stage at all: these four stars are not in the
+    // simulation and could not be, and standing four bodies on the canvas
+    // beside their spectra would say Gravitas has a model of them, which it
+    // has nothing of the kind of.
+    //
+    // But a step with no stage does not clear the canvas - it inherits
+    // whatever the previous step left, which here is the shelf of three
+    // modeled stars. So "no stage" does not avoid the juxtaposition; it makes
+    // it accidental and unlabeled, with four real spectra apparently belonging
+    // to three modeled stars that they have nothing to do with.
+    //
+    // The three stars are therefore staged deliberately and named as what they
+    // are on the opening screen of the block: the modeled half of the lesson,
+    // still on the canvas, beside the observed half in the panel. The
+    // distinction the whole coda is about becomes something a reader can see
+    // rather than something the prose asserts. It also keeps the `star-sizes`
+    // activity's `scenario: null` honest, which is only legal while every step
+    // in this lesson stands up its own scene.
+    {
+      sid: 'spectra-the-light-itself',
+      stage: shelf(THREE, { fit: true }),
+      type: 'read',
+      title: 'The light itself',
+      body: `Everything you have done so far ran on two numbers per star &mdash;
+             a temperature and a luminosity &mdash; and those came from eight
+             published evolutionary tracks. Tracks are calculations. No star
+             was measured to make them.
+             \n\nThese four are measurements. Each one is the light of a real
+             star, split by wavelength by the SDSS spectrograph at Apache Point
+             and counted, one night each, in 2008. The dips are wavelengths
+             where something in the star&rsquo;s own atmosphere absorbed its
+             light on the way out.
+             \n\nThe four are shown without their names. The curves are
+             deliberately <em>not</em> drawn in the colors of their stars: that
+             would give away the question the next five screens ask.
+             \n\n<strong>The three stars on the canvas are not these four.</strong>
+             They are the lesson&rsquo;s modeled stars, still where they have
+             been since step 1, and nobody has ever observed them &mdash; they
+             are points on a published track. Keep the two halves of the screen
+             apart: the canvas is the model, the panel is the measurement.`,
+      tool: {
+        id: 'spectra-compare',
+        values: { window: 0, focus: 0, named: 0 },
+      },
+      tip: 'Every number under the canvas is measured from the committed data on the spot. The readout also names the plate, the fiber and the night, so any of these four can be looked up in the archive.',
+    },
+    {
+      sid: 'spectra-color-is-enough-here',
+      stage: shelf(THREE, { fit: true }),
+      type: 'question',
+      title: 'Rank them by color',
+      kind: 'choice',
+      body: `Ignore the dips entirely. Look only at the overall tilt of each
+             curve &mdash; whether it falls from blue to red, or climbs.
+             \n\nOne of the four sends out about three times as much light at
+             4,100&nbsp;&#8491; as at 8,100&nbsp;&#8491;. Another sends out
+             about a tenth as much. That is a thirty-fold spread in slope across
+             the four, and it is the same information the simulation already
+             uses to decide what color to paint a star.`,
+      prompt:
+        'Ranked hottest first by the tilt of the continuum alone, the four are&hellip;',
+      options: [
+        'W, X, Y, Z',
+        'Z, Y, X, W',
+        'X, W, Z, Y',
+        'the tilt cannot be used to rank them',
+      ],
+      answer: 0,
+      because:
+        'W, X, Y, Z — and you did it without looking at a single absorption line. This screen is meant to be easy. The continuum slope really is a thermometer, it really does order these four correctly, and nothing in the next four screens takes that back. The question the rest of this section asks is not whether a color works. It is whether a color is all there is.',
+      tool: {
+        id: 'spectra-compare',
+        values: { window: 0, focus: 0, named: 0 },
+      },
+      tip: 'The tilt is what a hot surface does: the hotter it is, the larger the fraction of its light that comes out at short wavelengths. It is why a star has a color at all.',
+    },
+    {
+      sid: 'spectra-two-features',
+      stage: shelf(THREE, { fit: true }),
+      type: 'measure',
+      title: 'Two features, in a window with no color in it',
+      body: `Set the wavelength control to <strong>hydrogen &beta;</strong>. The
+             plot is now 170&nbsp;&#8491; wide instead of five thousand, and
+             across that stretch the continua of W, X and Y differ in tilt by
+             about two per cent. There is no color to read here. Whatever you
+             can still tell these stars apart by is not their color.
+             \n\nThe shaded band is where the number is measured: the dip,
+             against the level of the two clear stretches either side of it.
+             With the focus control on <em>all four</em>, the readout carries
+             every feature for every star at once, so you can record both
+             columns without losing the picture &mdash; but do step the control
+             over to <strong>calcium</strong> and look, because the second
+             column does not behave like the first.`,
+      fields: [
+        { id: 'hw', label: 'Hβ depth, star W', unit: '%' },
+        { id: 'hx', label: 'Hβ, star X', unit: '%' },
+        { id: 'hy', label: 'Hβ, star Y', unit: '%' },
+        { id: 'hz', label: 'Hβ, star Z', unit: '%' },
+        { id: 'cw', label: 'Ca II K depth, star W', unit: '%' },
+        { id: 'cx', label: 'Ca II K, star X', unit: '%' },
+        { id: 'cy', label: 'Ca II K, star Y', unit: '%' },
+        { id: 'cz', label: 'Ca II K, star Z', unit: '%' },
+      ],
+      validate: v => {
+        const h = [v.hw, v.hx, v.hy, v.hz];
+        const c = [v.cw, v.cx, v.cy, v.cz];
+        if ([...h, ...c].some(n => !Number.isFinite(n))) {
+          return {
+            level: 'warn',
+            message:
+              'Eight percentages: the hydrogen column and the calcium column, four stars each. With the focus control on "all four" the readout lists every one of them.',
+          };
+        }
+        if (!(h[0] > h[1] && h[1] > h[2] && h[2] > h[3])) {
+          return {
+            level: 'error',
+            message:
+              'The hydrogen figures should fall from W to Z. Check which figure came from which star — the readout labels each row.',
+          };
+        }
+        if (Math.abs(h[0] - 36.6) > 4) {
+          return {
+            level: 'warn',
+            message:
+              'The hydrogen order is right, but star W reads about 36.6%. Make sure you are reading the Hβ figure and not the calcium one.',
+          };
+        }
+        if (!(c[1] > c[0] && c[1] > c[3])) {
+          return {
+            level: 'error',
+            message:
+              'Check the calcium column. The deepest calcium here is in neither the hottest star nor the coolest — that is the point of the column.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Hydrogen: about 37%, 14%, 9% and 5%. Star W absorbs eight times as much of its own light at hydrogen β as star Z does, and you measured that in a window where the four are the same color. Calcium: about 3%, 56%, 53% and 22% — nearly absent in the hottest star, enormous in the next two, back down by the coolest. The hydrogen column falls all the way. The calcium column goes up and then comes down, and that is a different kind of fact: a quantity that rises and falls cannot be recovered from a temperature, because two different temperatures give the same answer.',
+        };
+      },
+      tool: {
+        id: 'spectra-compare',
+        values: { window: 2, focus: 0, named: 0 },
+      },
+      tip: 'Hydrogen is far and away the commonest element in all four of these stars. Its line is weak in star Z not because the hydrogen is missing but because the star is too cool to put much of it into the state that absorbs this wavelength. Strength of a line is not abundance.',
+    },
+    {
+      sid: 'spectra-name-the-star',
+      stage: shelf(THREE, { fit: true }),
+      type: 'question',
+      title: 'Name one',
+      kind: 'choice',
+      body: `A different instrument, and a different star: <strong>star
+             S</strong>, shown only in narrow windows. There is no setting on
+             this one that shows you the whole spectrum, so there is no color
+             available to you at all.
+             \n\nStep the wavelength control across all four settings and read
+             the four depths under the canvas. Each option below names a class
+             <em>and</em> the evidence for it. Only one is a true statement
+             about this spectrum.`,
+      prompt: 'Star S is&hellip;',
+      options: [
+        'an A star — its hydrogen line is the deepest feature in the spectrum',
+        'a G star — its calcium is very deep, its hydrogen moderate, and it has no titanium oxide band',
+        'a K star — its sodium is deep, at around a quarter of the continuum',
+        'an M star — the titanium oxide band is there at around a seventh',
+      ],
+      answer: 1,
+      because:
+        'A G star. The other three each name a real feature and get its value wrong, which is why the readout settles it: the hydrogen depth is about 14%, not the 37% an A star gives; the sodium is about 9%, not the 23% of a K star; and the titanium oxide reads about 2%, which is no band at all — the M star in the comparison gives 13%. Four numbers, no color, and the class follows. Notice which ones did the work. Calcium and hydrogen together separate this star from a K star, and nothing about its overall brightness or its tilt was needed, or was even on the screen.',
+      tool: {
+        id: 'spectra-identify',
+        values: { star: 4, window: 1, reveal: 0 },
+      },
+      tip: 'The archive’s own answer is on the last control, and it stays off until you set it. Commit first.',
+    },
+    {
+      sid: 'spectra-what-color-cannot-give',
+      stage: shelf(THREE, { fit: true }),
+      type: 'question',
+      title: 'The claim to take apart',
+      kind: 'short',
+      body: `A colleague puts it like this:
+             \n\n<em>&ldquo;A star&rsquo;s color tells you its temperature, and
+             its temperature tells you what its spectrum looks like. So the
+             spectrum adds nothing you did not already have.&rdquo;</em>
+             \n\nThe first half is close to right, and you demonstrated it
+             yourself two screens ago. The second half is what your calcium
+             column is about.`,
+      prompt:
+        'Using a number you measured, say what is wrong with the second half of that claim. Be specific about which feature and which values.',
+      rubric:
+        'Mark this on whether the student cites a measurement rather than asserting that spectra are richer. The strongest answer is the calcium: about 3% in the A star, 56% in the G, 53% in the K and 22% in the M. It rises and falls, so a temperature does not determine it — two different temperatures give the same calcium strength, and no colorimeter could ever recover which star it was looking at. An answer built on the hydrogen column (37 / 14 / 9 / 5%) is also correct and deserves full credit if the student says why a quantity that falls monotonically is still not available from a continuum measured across 170 A, where the four stars differ in slope by two per cent. Credit an answer that concedes the first half of the claim. Do NOT credit an answer whose only evidence is that one curve is bluer or redder than another: that is the half nobody is disputing, and an answer resting on it has not used the spectra at all. This is the step to look at when deciding whether these four spectra earned their place.',
+      tool: {
+        id: 'spectra-compare',
+        values: { window: 1, focus: 0, named: 0 },
+      },
+      tip: 'Your notebook has both columns you recorded. The question asks you to use one of them, not to remember the shape of a picture.',
+    },
+    {
+      sid: 'spectra-four-is-four',
+      stage: shelf(THREE, { fit: true }),
+      type: 'read',
+      title: 'What four spectra are, and are not',
+      body: `<strong>The names are on now.</strong> Star W is classified A0 by
+             the SDSS pipeline and A1V by an independent template match; X is G2
+             and G5; Y is K3 and K3V; Z is M1 and M2Vvar. Two classifications,
+             agreeing on the letter in all four cases &mdash; which is why this
+             lesson is willing to call them A, G, K and M. Not one of those
+             letters was read off a color.
+             \n\n<strong>A color is a good thermometer.</strong> It ordered
+             these four correctly, at a glance, and it is what the simulation
+             has always used. Nothing here argues against it.
+             \n\n<strong>A spectrum is not a hotter or cooler version of one
+             picture.</strong> Hydrogen falls from W to Z; calcium climbs and
+             then drops. Two features, two different shapes, and the second one
+             cannot be obtained from a temperature by any means at all, because
+             it is not a one-to-one function of one.
+             \n\n<strong>And this is four stars.</strong> One per letter. It is
+             not an atlas, not a survey, and not a representative sample of
+             anything: another A star would give different numbers, the three
+             letters hotter than A are not here at all, and each of these was
+             picked for having the cleanest signal in the archive rather than
+             for being typical. Nothing on these six screens establishes what A
+             stars in general do. What four examples can do is settle an
+             existence question &mdash; whether a spectrum carries anything a
+             color does not &mdash; and that is what they were brought here
+             for.`,
+      tool: {
+        id: 'spectra-compare',
+        values: { window: 0, focus: 0, named: 1 },
+      },
+      tip: 'If you want the four in the archive rather than here: the readout gives each one’s plate, MJD and fiber, which is its permanent address in SDSS. The pipeline’s own surface gravity for star W suggests it is not a main-sequence dwarf, which is why this lesson never calls it one.',
     },
     {
       sid: 'the-argument',
