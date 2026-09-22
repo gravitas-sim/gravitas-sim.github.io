@@ -236,6 +236,12 @@ export const EN = {
   'rail.speedUp.label': 'Increase speed',
   'rail.objectType.label': 'Choose an object to add',
   'rail.precisePlace': 'Precise placement',
+  'place.precise.title': 'Precise placement',
+  'place.precise.intro':
+    'Add a body by entering its state. This is the same placement the canvas performs; a body added here is identical to one placed by clicking, and the undo button removes it the same way.',
+  'place.precise.field.type': 'Object type',
+  'place.precise.submit': 'Add body',
+  'place.precise.close': 'Done',
   'rail.precisePlace.hint':
     'Add a body by typing its position, velocity and mass',
   'rail.railScenario': 'Scenario',

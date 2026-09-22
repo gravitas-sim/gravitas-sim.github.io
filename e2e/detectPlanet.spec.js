@@ -348,7 +348,7 @@ test.describe('the export', () => {
     await expect(row).toContainText(/4 measurements/);
 
     const download = page.waitForEvent('download');
-    await row.locator('button').click();
+    await row.locator('[data-action="download"]').click();
     const file = await download;
     const path = join(OUT, 'rv.csv');
     await file.saveAs(path);
@@ -399,7 +399,7 @@ test.describe('the export', () => {
     await page.locator('#exportDataBtn').click();
     const row = page.locator('#dataExport [data-export="radialvelocity"]');
     await expect(row).toContainText(/No observing run/i);
-    await expect(row.locator('button')).toBeDisabled();
+    await expect(row.locator('[data-action="download"]')).toBeDisabled();
   });
 });
 
@@ -510,7 +510,7 @@ test.describe('a recording belongs to what it recorded', () => {
     await expect(row).toContainText(/4 measurements/);
 
     const download = page.waitForEvent('download');
-    await row.locator('button').click();
+    await row.locator('[data-action="download"]').click();
     const path = join(OUT, 'closed-panel.csv');
     await (await download).saveAs(path);
 

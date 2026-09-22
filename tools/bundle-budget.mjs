@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3950,
+    limit: 3960,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -408,7 +408,33 @@ const BUDGETS = [
       'button, its two strings, and fromCsv() in js/csv.js - which is what lets ' +
       'a table render the exporter’s own output instead of building rows of ' +
       'its own, so the table on screen and the file a reader downloads cannot ' +
-      'be two derivations that disagree.',
+      'be two derivations that disagree.' +
+      '\n\nRaised from 3950 to 3960 at integration, and this one is not a ' +
+      'feature asking for room - it is arithmetic. The two paragraphs above ' +
+      'were each measured on their own branch against a 3874.1 KB baseline, ' +
+      'and each fits the ceiling it asked for: the spherical-astronomy work ' +
+      'measures 3935.9 of the 3950 it justified, the accessibility-parity work ' +
+      '3891.0 of its 3900. Together on the integrated tree they measure ' +
+      '3952.4, which is 2.4 KB over the higher of the two. Nothing unexplained ' +
+      'grew; the sum of two approved costs is simply larger than either.\n\n' +
+      'The laziness audit that the rule above asks for was done before raising ' +
+      'this rather than after. Every module either feature added is behind a ' +
+      'dynamic import - js/precisePlacement.js, js/seriesTable.js, ' +
+      'js/place/preciseFields.js, both placement catalogs, js/observingWindow.js ' +
+      'and its widget - and the static import closure from js/main.js reaches ' +
+      'none of them. No module became eager: the initial download moved 813.7 ' +
+      'to 816.4 KB, which is the rail button, its two strings and fromCsv(), ' +
+      'against an untouched 830.0 limit. There was no duplication to recover: ' +
+      'the accessibility pass had already removed the largest one it found, ' +
+      'moving fifty strings out of js/i18n/en.deferred.js, which four separate ' +
+      'bundles embed, into a catalog loaded once.\n\n' +
+      'So the honest description of this raise is that v1.1 ships two accepted ' +
+      'features whose costs were each accounted for separately, and 3960 is ' +
+      'where their sum lands with seven kilobytes to spare. The power-law ' +
+      'gravity lesson is deferred to v1.2 for exactly this reason: adding it ' +
+      'as well measures about 4005 KB, which is a third feature asking for a ' +
+      'third raise, and that is the point at which the rule above says to look ' +
+      'for something to defer instead.',
   },
 ];
 

@@ -15,10 +15,6 @@
 // =============================================================================
 
 export const ES_PLACEMENT = {
-  'place.precise.title': 'Colocaci\u00f3n precisa',
-  'place.precise.intro':
-    'A\u00f1ade un cuerpo introduciendo su estado. Es la misma colocaci\u00f3n que realiza el lienzo; un cuerpo a\u00f1adido aqu\u00ed es id\u00e9ntico a uno colocado con un clic, y el bot\u00f3n de deshacer lo elimina igual.',
-  'place.precise.field.type': 'Tipo de objeto',
   'place.precise.field.x': 'Posici\u00f3n X ({unit})',
   'place.precise.field.y': 'Posici\u00f3n Y ({unit})',
   'place.precise.field.vx': 'Velocidad X ({unit})',
@@ -37,8 +33,6 @@ export const ES_PLACEMENT = {
     'Entre {min} y {max}. D\u00e9jalo en blanco y se elige una por ti, como al colocar con un clic. Un valor t\u00edpico es {placeholder}.',
   'place.precise.auHint':
     'Esa posici\u00f3n es {x} UA, {y} UA desde el origen.',
-  'place.precise.submit': 'A\u00f1adir cuerpo',
-  'place.precise.close': 'Listo',
   'place.precise.error.number': 'Introduce un n\u00famero.',
   'place.precise.error.range': 'Debe estar entre \u2212{limit} y {limit}.',
   'place.precise.error.massRange': 'Debe estar entre {min} y {max}.',

@@ -198,6 +198,13 @@ async function toggleTable(row, button, host) {
   // the deferred catalog and behind this same lazy load. See
   // ensurePlacementMessages() for why.
   await seriesTableModule.ensurePlacementMessages().catch(() => {});
+
+  // Opening a table needs a dynamic import and a catalog fetch, and a
+  // simulation reset during either of those re-renders the dialog - which
+  // replaces this `host` with a fresh one. Writing the table into the old node
+  // would put it nowhere, so stop instead: a row the reader can press again
+  // beats a silent no-op against a node that left the document.
+  if (!host.isConnected) return;
   const { buildSeriesTable, describeTable } = seriesTableModule;
   let built;
   try {
@@ -306,6 +313,12 @@ function render() {
     const tableBtn = document.createElement('button');
     tableBtn.type = 'button';
     tableBtn.className = 'ui-button';
+    // Named, because there are two buttons in this row now and both of them
+    // are `.ui-button` with translated labels. A test that reaches for "the
+    // button in the radial-velocity row" was unambiguous until the table
+    // arrived beside the download, and a label-based locator would pass in
+    // English and fail in Spanish.
+    tableBtn.dataset.action = 'table';
     tableBtn.textContent = t('export.viewTable');
     tableBtn.disabled = !row.ready;
     tableBtn.setAttribute('aria-expanded', 'false');
@@ -313,6 +326,7 @@ function render() {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'ui-button';
+    btn.dataset.action = 'download';
     btn.textContent = t('export.downloadCsv');
     btn.disabled = !row.ready;
     btn.addEventListener('click', () => download(row));

@@ -15,10 +15,6 @@
 // =============================================================================
 
 export const EN_PLACEMENT = {
-  'place.precise.title': 'Precise placement',
-  'place.precise.intro':
-    'Add a body by entering its state. This is the same placement the canvas performs; a body added here is identical to one placed by clicking, and the undo button removes it the same way.',
-  'place.precise.field.type': 'Object type',
   'place.precise.field.x': 'X position ({unit})',
   'place.precise.field.y': 'Y position ({unit})',
   'place.precise.field.vx': 'X velocity ({unit})',
@@ -36,8 +32,6 @@ export const EN_PLACEMENT = {
   'place.precise.massHint':
     'Between {min} and {max}. Leave blank and one is chosen for you, as it is when you place by clicking. A typical value is {placeholder}.',
   'place.precise.auHint': 'That position is {x} AU, {y} AU from the origin.',
-  'place.precise.submit': 'Add body',
-  'place.precise.close': 'Done',
   'place.precise.error.number': 'Enter a number.',
   'place.precise.error.range': 'Must be between \u2212{limit} and {limit}.',
   'place.precise.error.massRange': 'Must be between {min} and {max}.',

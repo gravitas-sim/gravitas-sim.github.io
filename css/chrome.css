@@ -1717,6 +1717,43 @@
     gap: var(--space-2);
   }
 
+  /* The typed path to the same thing, beside the button that opens the picker
+     rather than below it.
+
+     Below it cost 38 pixels of rail, and the rail had none: with Tools open at
+     the desktop viewport it measured 863 of 863 pixels before this feature
+     arrived, so a second full-width button put it 31 over and
+     e2e/presentation.spec.js caught it. The button cannot simply be made
+     shorter - .ui-button pins min-height to 34px, which is the touch target
+     and not negotiable - so the row gets narrower instead of the control
+     getting smaller.
+
+     Two labelled columns are not the answer either; the picker's own note
+     below records why half a rail leaves every name ellipsised to "Add ...".
+     An icon with an accessible name is the convention this codebase already
+     uses for a secondary action beside a primary one - see .readout-icon-btn
+     and .inspector-icon-btn - and it ellipsises nothing. */
+  .object-add {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .object-add #objectTypeBtn {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .ui-container .object-add .rail-icon-btn {
+    flex: 0 0 auto;
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+    font-size: var(--text-2xs);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
   #objectTypeBtn.is-armed .object-glyph {
     filter: brightness(0.35) saturate(1.4);
   }

@@ -260,7 +260,10 @@ test.describe('the numbers behind a plot are readable without the canvas', () =>
       await expect(row).toHaveCount(1);
       // The table first. For a reader who cannot see the plot this is the way
       // in; a download is a file they then have to open in something else.
-      await expect(row.locator('button').first()).toHaveText(/table/i);
+      await expect(row.locator('button').first()).toHaveAttribute(
+        'data-action',
+        'table'
+      );
     }
   });
 
@@ -358,15 +361,36 @@ test.describe('the numbers behind a plot are readable without the canvas', () =>
   }) => {
     test.skip(DIST, 'needs the module registry to read the plotted arrays');
     await app.boot();
+    // Frozen before anything is read. Unlike the light curve above - a
+    // recording, which stops changing once it is taken - the rotation curve is
+    // recomputed from where the bodies are right now. On a running Binary BH
+    // the table is a snapshot at the moment it was built and
+    // rotationCurveState() is a snapshot from some later frame, so comparing
+    // them compares two different instants of a moving system and the radii
+    // will not line up however correct the exporter is. Paused, the two have
+    // to agree exactly, which is the claim being made.
+    await app.setPaused(true);
     await app.railControl('exportDataBtn');
     await page.locator('#exportDataBtn').click();
     await page.waitForSelector('[data-export="rotationcurve"]');
     const button = page.locator('[data-export="rotationcurve"] button').first();
-    test.skip(
-      await button.isDisabled(),
-      'the opening scenario has no rotation curve to export'
-    );
+    // Asserted, not skipped over. This was `test.skip(await
+    // button.isDisabled())`, which reads as caution and behaves as a blind
+    // spot: the opening scenario is a Binary BH with 44 bodies and always has
+    // a curve to export, so the only way that button is disabled is that the
+    // export stopped being offered - the one regression this test exists to
+    // catch, silently turned into a pass. toBeEnabled() retries, so a slow
+    // boot still waits rather than failing.
+    await expect(button).toBeEnabled();
     await button.click();
+    // The same barrier the light-curve test above uses, and for the same
+    // reason: click() resolves when the event is dispatched, and opening a
+    // table is asynchronous behind it - a dynamic import and a catalog fetch.
+    // page.evaluate does not retry, so reading the rows without waiting for
+    // one of them reads an empty <tbody> that is about to be filled.
+    await expect(
+      page.locator('#export-table-rotationcurve tbody tr')
+    ).not.toHaveCount(0);
 
     const { points, shown } = await page.evaluate(async () => {
       const { rotationCurveState } = await import('/js/rotationCurve.js');
