@@ -22,19 +22,30 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-// Merged, because the catalog is split across two files for code-splitting
+// Merged, because the catalog is split across several files for code-splitting
 // reasons and is one catalog as far as coverage is concerned. See
 // js/i18n/en.deferred.js for why the split exists.
 const { LOCALES } = await import(`${ROOT}js/i18n/index.js`);
+const I18N_DIR = join(ROOT, 'js/i18n');
 
 /**
- * One locale's whole catalog, base plus deferred.
+ * One locale's whole catalog: the base file and every split off it.
  *
  * Driven by the LOCALES registry rather than by naming Spanish, so a third
  * language is audited the day it is registered instead of the day somebody
  * remembers this file exists. The file and export names follow the one
  * convention the directory has kept: `<id>.js` exports the id in upper case,
- * `<id>.deferred.js` exports it with `_DEFERRED`.
+ * and `<id>.<part>.js` exports it with `_<PART>`.
+ *
+ * The parts are read off the directory rather than listed here, and that is
+ * the whole point. This function named `<id>.js` and `<id>.deferred.js`
+ * explicitly, so the three catalogs split out since - activities, teaching and
+ * placement - were audited as though they did not exist. Ids that live in them
+ * were reported MISSING when something referenced one, and never reported
+ * untranslated, because a catalog this file cannot see looks exactly like a
+ * catalog with nothing in it. Splitting a catalog is a bundling decision and
+ * should not be a coverage decision, so the next split is picked up by being
+ * made rather than by being remembered here.
  *
  * @param {string} id - Locale id
  * @returns {Promise<Object<string,string>>} The merged catalog
@@ -42,8 +53,30 @@ const { LOCALES } = await import(`${ROOT}js/i18n/index.js`);
 async function catalogFor(id) {
   const upper = id.toUpperCase().replace(/-/g, '_');
   const base = await import(`${ROOT}js/i18n/${id}.js`);
-  const deferred = await import(`${ROOT}js/i18n/${id}.deferred.js`);
-  return { ...base[upper], ...deferred[`${upper}_DEFERRED`] };
+  const parts = readdirSync(I18N_DIR)
+    .filter(f => f.startsWith(`${id}.`) && f.endsWith('.js'))
+    .filter(f => f !== `${id}.js`)
+    .sort();
+  const merged = { ...base[upper] };
+  for (const file of parts) {
+    const part = file
+      .slice(id.length + 1, -3)
+      .toUpperCase()
+      .replace(/-/g, '_');
+    const mod = await import(`${ROOT}js/i18n/${file}`);
+    const table = mod[`${upper}_${part}`];
+    if (!table) {
+      console.error(
+        `${file} does not export ${upper}_${part}. Either the export is ` +
+          'misnamed or this is not a catalog; a catalog file that cannot be ' +
+          'read is a catalog that is not audited.'
+      );
+      process.exitCode = 1;
+      continue;
+    }
+    Object.assign(merged, table);
+  }
+  return merged;
 }
 
 const EN = await catalogFor('en');

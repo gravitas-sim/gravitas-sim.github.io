@@ -220,19 +220,36 @@ the content, not decoration; a planetarium that will not move is a picture.
 Every decorative animation stops, and the simulation can be paused from the
 transport bar or the space bar — a real control rather than a media query.
 
-**Some measurements are only available by reading a chart.** The light curve,
-the rotation curve and the radial-velocity trace are drawn to a canvas. Their
-*numbers* are available as text in the readout and in the investigation
-probes, and the lessons that depend on them ask for typed values rather than
-for a visual judgment — but the shape of a curve is not currently narrated.
-Investigation steps state their instructions and their expected measurements as
-text, so a lesson is followable; the aesthetic reading of a curve is not.
+**The shape of a curve is not narrated.** The light curve, the rotation curve
+and the radial-velocity trace are drawn to a canvas. Their numbers are no
+longer only available by reading it: the export dialog offers each series as a
+table — proper column headings with units, the independent variable as a row
+header, reachable and scrollable from a keyboard — beside the CSV download that
+was already there. Every table is rendered from the bytes the exporter writes,
+so the table, the file and the plot cannot be three derivations that disagree,
+and a long series is evenly sampled with the sampling stated in the caption
+rather than silently truncated. What is still missing is *narration*: nothing
+says "the curve is flat out to 8 AU and then falls". That is a judgment about a
+shape, this project will not have a heuristic guess at it, and the tables are
+what a reader has instead.
 
-**Direct manipulation has no keyboard equivalent.** Placing a body by clicking,
-and dragging to set its velocity, are pointer gestures. The same systems can be
-loaded from the gallery, from a share link, and from a lesson's own setup, and
-every scenario in the catalog is reachable without the canvas — but building
-an arbitrary system by hand is not currently a keyboard task.
+**Direct manipulation has a keyboard equivalent, but not a pointer's.** Two
+different things were wrong here and only one has been fixed. Placing a body
+from the keyboard has worked for some time — `A` arms it, the arrow keys aim,
+Enter commits — but it is an *aiming* interface: the aim is in canvas pixels,
+so where the body lands depends on the zoom and the pan, and there was no way
+to set a mass at all. Operable without a pointer is not the same as usable
+without sight. **Precise placement**, beside Add object, is the other half: a
+form that takes a type, a position, a velocity and a mass as numbers, with the
+unit named on every field and each error attached to the field it is about. It
+calls the same `placeBody()` the canvas does, so a typed body is
+indistinguishable from a clicked one — same list, same share link, same undo
+button — and `e2e/accessibilityParity.spec.js` asserts that by comparing the
+two share payloads.
+
+What remains is the gesture itself. Dragging to *feel* how fast a throw is,
+and seeing the velocity arrow grow as you drag, has no keyboard equivalent and
+will not get one; the form gives you the number instead of the feel.
 
 **The attribution links in the footer are under 24×24.** They are inline text
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would

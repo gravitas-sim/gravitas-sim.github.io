@@ -250,7 +250,7 @@ test.describe('the sliders and the file', () => {
     await expect(row).toBeVisible();
 
     const download = page.waitForEvent('download');
-    await row.locator('button').click();
+    await row.locator('[data-action="download"]').click();
     const path = join(OUT, 'fit.csv');
     await (await download).saveAs(path);
 

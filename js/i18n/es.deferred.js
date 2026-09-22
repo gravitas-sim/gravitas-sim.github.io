@@ -3041,6 +3041,8 @@ export const ES_DEFERRED = {
   'welcome.scenarioGone': 'Ese escenario ya no está disponible.',
   'welcome.shownAgain': 'Se volverá a mostrar la próxima vez',
   'welcome.showAgain': 'Mostrar esto de nuevo en mi próxima visita',
+  'export.viewTable': 'Ver como tabla',
+  'export.hideTable': 'Ocultar tabla',
   'export.downloadCsv': 'Descargar CSV',
   'welcomeCard.sandbox.eyebrow': 'Exploración libre',
   'welcomeCard.sandbox.title': 'Laboratorio',
