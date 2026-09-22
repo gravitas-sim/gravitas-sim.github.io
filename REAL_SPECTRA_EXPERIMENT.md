@@ -269,8 +269,8 @@ numerical-accuracy ceiling on the newer tree too.
 ## Notes the experiment left, and what became of them
 
 - **Deferred budget.** The experiment measured +58 KB against a 3880 ceiling.
-  On the v1.1 baseline the figure is +51.7 KB against 4030 after one cleanup,
-  and it is the decision this integration stops at - see **Budget** below.
+  On the v1.1 baseline the figure is +51.7 KB after one cleanup; the ceiling
+  was raised from 4030 to 4080 with the owner's approval - see **Budget** below.
 - **Manifest headroom.** Obsolete: #17 replaced the flat 16 KB limit with a
   per-entry rule, and the lesson summary is back to its natural wording.
 - **Instructor bundle.** `instructors/materials.enc.json` is encrypted with a
@@ -392,7 +392,7 @@ Re-checked on `3b8ce8f`. Nothing in `js/timestep.js`, `js/render.js` or
 exactly. `max_timestep` is still a numerical-accuracy ceiling, not an instrument
 clock; `SANDBOX_INSTRUMENTS.md` stands as written.
 
-### Budget - the owner decision this integration stops at
+### Budget - raised to 4080, with the owner's approval
 
 ```
 baseline v2 (3b8ce8f)          4021.3 KB   ceiling 4030.0
@@ -410,4 +410,11 @@ small, could have met it. The irreducible part is the lesson content itself
 (20.9 KB across two languages), the widget (9.2) and its strings (6.6); the data
 is 15.5 KB of it, thinned no further than the science allows. The smallest
 sensible ceiling that would carry it is **4080 KB**: 7.0 KB of headroom, the
-same margin the 4030 figure was chosen for. It has not been raised.
+same margin the 4030 figure was chosen for.
+
+The integration stopped here rather than raising the ceiling on its own
+authority, because the measured figure exceeded the 4020 it had been
+authorised for. The owner approved **4080 KB** on 2026-09-22, and the raise is
+recorded, with this arithmetic and the audit behind it, in the `deferred`
+entry of `tools/bundle-budget.mjs`. The initial-download ceiling of 830 KB was
+not touched.
