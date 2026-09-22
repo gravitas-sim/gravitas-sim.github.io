@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 23 investigations and 657 steps: 607 steps
+Across 24 investigations and 670 steps: 620 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 231 show a prescribed model result, 139 draw
-on a stored dataset, 110 put a self-contained panel beside the text,
-110 keep something, and 30 are prose.
-Of 85 prediction loops, 85 are returned to,
-85 produce a measurement before they are answered, and
+running integration, 237 show a prescribed model result, 139 draw
+on a stored dataset, 116 put a self-contained panel beside the text,
+113 keep something, and 30 are prose.
+Of 87 prediction loops, 87 are returned to,
+87 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-85 hold their marking until the experiment settles them.
+87 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -328,6 +328,20 @@ Of 85 prediction loops, 85 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control stellar-evolution/position, measures radius and luminosity at a stated model age, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
+
+## Twelve Nights (`twelve-nights`)
+
+- **Steps:** 13. Scene declared on 13; a reader can change something on 0; 13 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** read, move-an-instrument-control, press-an-instrument-preset, run-the-simulation, tick-a-checklist, record-values, commit-a-prediction, choose-an-option, answer-in-words.
+- **Objects the steps declare:** star, planet.
+- **Instruments:** observing-planner.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-comb → the-three-plans, measure-the-window-power, why-not-one-day → the-three-plans; predict-which-plan-wins → commit-and-observe, read-what-you-got → read-what-you-got.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
+- **Scene rebuilds:** 3 step(s) on arrival (the-allocation, look-at-the-windows, commit-and-observe).
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:observing-planner`, control observing-planner/spread, measures the spectral window power at the sidereal day, for two placements of the same twelve nights, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## What If Gravity Were Not Inverse Square? (`power-law-gravity`)
 

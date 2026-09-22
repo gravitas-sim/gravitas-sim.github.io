@@ -2449,6 +2449,86 @@
           aria-labelledby="objectTypeBtn"
           hidden
         ></div>
+        <!--
+          The keyboard path to the same thing. Placing by pointer gives a
+          position and a velocity at once and a mass not at all; this asks for
+          all three as numbers and hands them to the same placeBody().
+        -->
+        <button
+          id="precisePlaceBtn"
+          class="ui-button rail-icon-btn"
+          type="button"
+          aria-haspopup="dialog"
+          data-i18n-aria-label="rail.precisePlace"
+          data-i18n-title="rail.precisePlace.hint"
+          aria-label="Precise placement"
+          title="Type a position, a velocity and a mass instead of clicking"
+        >
+          <span aria-hidden="true">123</span>
+        </button>
+      </div>
+    </div>
+
+    <!--
+      Precise placement. The fields are built by js/precisePlacement.js from
+      js/place/preciseFields.js, because which fields a type has and what
+      units they are in is a property of the type rather than of this markup -
+      and putting eight variants here would be a second schema to keep in step
+      with the constructors.
+    -->
+    <div
+      id="precisePlaceDialog"
+      class="modal-panel precise-dialog hidden"
+      role="dialog"
+      aria-labelledby="precisePlaceTitle"
+      aria-describedby="precisePlaceIntro"
+      hidden
+    >
+      <h2 id="precisePlaceTitle" data-i18n="place.precise.title">
+        Precise placement
+      </h2>
+      <p
+        id="precisePlaceIntro"
+        class="precise-intro"
+        data-i18n="place.precise.intro"
+      >
+        Enter a position and velocity to add a body without using the canvas.
+      </p>
+      <div class="precise-row">
+        <label for="precisePlaceType" data-i18n="place.precise.field.type"
+          >Object type</label
+        >
+        <select id="precisePlaceType" class="precise-input"></select>
+      </div>
+      <div id="precisePlaceFields"></div>
+      <!--
+        Polite, and written only on a successful placement. The errors are
+        announced through the shared assertive region in js/notify.js and are
+        also attached to their own field, so this one never carries them.
+      -->
+      <p
+        id="precisePlaceStatus"
+        class="precise-status"
+        role="status"
+        aria-live="polite"
+      ></p>
+      <div class="precise-actions">
+        <button
+          id="precisePlaceSubmit"
+          type="button"
+          class="ui-button is-primary"
+          data-i18n="place.precise.submit"
+        >
+          Add body
+        </button>
+        <button
+          id="precisePlaceClose"
+          type="button"
+          class="ui-button"
+          data-i18n="place.precise.close"
+        >
+          Done
+        </button>
       </div>
     </div>
 
@@ -2484,6 +2564,26 @@
           <dd id="soundPanelNow"></dd>
         </div>
       </dl>
+      <!--
+        What the tones stand for, in numbers. The sandbox's audio is lossy by
+        design - orbital frequency is compressed and then quantized onto a
+        pentatonic scale - so this is deliberately not a description of what
+        you hear. It is the quantity the sound is derived from, printed
+        losslessly, for a reader who cannot use the audio at all.
+
+        NOT aria-live, and that is not an oversight. The voices are re-chosen
+        several times a second; a polite live region over them would interrupt
+        a screen reader continuously and make the panel unusable for exactly
+        the person it exists for. js/ui.js fills this in refreshSoundPanel(),
+        which runs when the panel opens and on each state change and returns
+        immediately while the panel is hidden - so the list is a snapshot that
+        holds still while it is being read.
+      -->
+      <section id="soundPanelVoices" class="sound-panel-voices" hidden>
+        <h3 id="soundPanelVoicesTitle" class="sound-panel-voices-title"></h3>
+        <ol id="soundPanelVoicesList" class="sound-panel-voices-list"></ol>
+        <p id="soundPanelVoicesNote" class="sound-panel-note"></p>
+      </section>
       <label class="sound-panel-volume" for="soundPanelVolume">
         <span id="soundPanelVolumeLabel"></span>
         <input
@@ -4152,7 +4252,7 @@
       -->
       <a
         href="/validation/"
-        title="What the physics engine has been checked against: 243 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
+        title="What the physics engine has been checked against: 286 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
         data-i18n-title="footer.attribution.hint.2"
         data-i18n="footer.attribution"
         >Validated</a

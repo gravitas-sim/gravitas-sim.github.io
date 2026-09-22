@@ -26,8 +26,8 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:investigations-->23<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->657<!--/fact--> steps between
+**<!--fact:investigations-->24<!--/fact--> guided
+investigations**, <!--fact:investigationSteps-->670<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -49,7 +49,7 @@ locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
 **Instructor materials.** A guide and a generated answer key for each of
-the <!--fact:investigations-->23<!--/fact--> investigations — learning
+the <!--fact:investigations-->24<!--/fact--> investigations — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
 from the lessons themselves on every release so a key cannot disagree with the
@@ -63,6 +63,23 @@ course-use patterns, and six demonstrations that open a real reproducible state
 as an embedded figure. Public, indexed, and in English and Spanish; every count
 on it is read from the catalog and the validation results when it loads.
 
+**Tools for evaluating a section** at
+[/evaluation/](https://gravitas-sim.online/evaluation/): an implementation and
+fidelity checklist, a twelve-item pilot pre/post concept assessment written
+against a three-investigation introductory sequence, a usability questionnaire,
+an anonymous participant-code workflow for paired data, and de-identified CSV
+and JSON templates with a versioned schema. `npm run evaluation:summary` reads
+the exports back and prints counts, missing-data accounting, per-item before and
+after, and paired change.
+
+These are tools, and that is all they are. **No evaluation of Gravitas has been
+run and no learning gain has been measured.** The assessment is
+project-developed and has not been through item analysis, reliability testing or
+validation against an existing concept inventory; a score on it is a score on
+those twelve questions. The page collects no names, no email addresses and no
+institution, transmits nothing anywhere, and says on its own surface that
+institutional review is the instructor's responsibility rather than ours.
+
 **A public account of the model** at
 [/model/](https://gravitas-sim.online/model/): what the simulation calculates,
 what it approximates, and what is only drawn. Worth reading before assigning
@@ -75,7 +92,7 @@ model page sets out the four different radii a body has under _Displayed
 sizes_.
 
 **A validation suite.** `npm run validate:physics` prints a PASS/FAIL table
-of <!--fact:physicsChecks-->243<!--/fact--> checks with measured error against a
+of <!--fact:physicsChecks-->286<!--/fact--> checks with measured error against a
 stated tolerance: orbital periods and Kepler's laws, conservation of momentum,
 angular momentum and energy, the convergence order of each selectable
 integrator, escape velocity, transit depth, radial-velocity semi-amplitude,
@@ -181,8 +198,8 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->3607<!--/fact--> strings, and
-all <!--fact:investigations-->23<!--/fact--> investigations are translated. A
+of <!--fact:uiStrings-->3640<!--/fact--> strings, and
+all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
 change what a lesson measures.
@@ -217,7 +234,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5363<!--/fact--> tests across <!--fact:jestSuites-->150<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5665<!--/fact--> tests across <!--fact:jestSuites-->164<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -241,10 +258,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->199<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->613<!--/fact--> KB           | <!--fact:buildStartupFiles-->50<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->3938<!--/fact--> KB         | <!--fact:buildDeferredChunks-->139<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->811<!--/fact--> KB** |                                               |
+| CSS                    | <!--fact:buildCss-->200<!--/fact--> KB                 | 1                                             |
+| JavaScript at start-up | <!--fact:buildStartupJs-->616<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4021<!--/fact--> KB         | <!--fact:buildDeferredChunks-->148<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->817<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -294,6 +311,7 @@ js/
 model/              the public physics-model page
 teaching/           the public showcase page for instructors
 instructors/        the instructor area
+evaluation/         printable pilot instruments for evaluating a section
 manual/             LaTeX source for the user manual PDF
 notebooks/          the Colab notebook that reads an exported CSV
 tools/              build and development tooling
@@ -343,8 +361,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1179<!--/fact--> tests
-in <!--fact:e2eFiles-->85<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1200<!--/fact--> tests
+in <!--fact:e2eFiles-->88<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -411,7 +429,7 @@ and against what.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->243<!--/fact--> deterministic checks, about
+That is <!--fact:physicsChecks-->286<!--/fact--> deterministic checks, about
 fifteen seconds, printed as a table of measured value, expected value, error and
 tolerance. Five kinds, and the table labels each: closed-form arithmetic,
 quantities measured by running the N-body engine, literature values with their
@@ -439,12 +457,12 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-All <!--fact:instructorDocuments-->56<!--/fact--> documents are generated from
+All <!--fact:instructorDocuments-->54<!--/fact--> documents are generated from
 the lessons at build time and live at
 [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/):
 
-- <!--fact:investigations-->23<!--/fact--> instructor guides
-- <!--fact:investigations-->23<!--/fact--> answer keys
+- <!--fact:investigations-->24<!--/fact--> instructor guides
+- <!--fact:investigations-->24<!--/fact--> answer keys
 - <!--fact:activityDocuments-->8<!--/fact--> classroom-activity guides and
   student worksheets, across <!--fact:activities-->3<!--/fact--> activities
 - an adopter's guide and a curriculum map
@@ -493,7 +511,7 @@ part was built:
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
-| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->23<!--/fact--> lessons, and what a 2019 Chromebook actually gets |
+| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->24<!--/fact--> lessons, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the

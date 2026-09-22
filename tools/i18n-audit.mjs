@@ -22,15 +22,73 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-// Merged, because the catalog is split across two files for code-splitting
+// Merged, because the catalog is split across several files for code-splitting
 // reasons and is one catalog as far as coverage is concerned. See
 // js/i18n/en.deferred.js for why the split exists.
-const { EN: EN_BASE } = await import(`${ROOT}js/i18n/en.js`);
-const { ES: ES_BASE } = await import(`${ROOT}js/i18n/es.js`);
-const { EN_DEFERRED } = await import(`${ROOT}js/i18n/en.deferred.js`);
-const { ES_DEFERRED } = await import(`${ROOT}js/i18n/es.deferred.js`);
-const EN = { ...EN_BASE, ...EN_DEFERRED };
-const ES = { ...ES_BASE, ...ES_DEFERRED };
+const { LOCALES } = await import(`${ROOT}js/i18n/index.js`);
+const I18N_DIR = join(ROOT, 'js/i18n');
+
+/**
+ * One locale's whole catalog: the base file and every split off it.
+ *
+ * Driven by the LOCALES registry rather than by naming Spanish, so a third
+ * language is audited the day it is registered instead of the day somebody
+ * remembers this file exists. The file and export names follow the one
+ * convention the directory has kept: `<id>.js` exports the id in upper case,
+ * and `<id>.<part>.js` exports it with `_<PART>`.
+ *
+ * The parts are read off the directory rather than listed here, and that is
+ * the whole point. This function named `<id>.js` and `<id>.deferred.js`
+ * explicitly, so the three catalogs split out since - activities, teaching and
+ * placement - were audited as though they did not exist. Ids that live in them
+ * were reported MISSING when something referenced one, and never reported
+ * untranslated, because a catalog this file cannot see looks exactly like a
+ * catalog with nothing in it. Splitting a catalog is a bundling decision and
+ * should not be a coverage decision, so the next split is picked up by being
+ * made rather than by being remembered here.
+ *
+ * @param {string} id - Locale id
+ * @returns {Promise<Object<string,string>>} The merged catalog
+ */
+async function catalogFor(id) {
+  const upper = id.toUpperCase().replace(/-/g, '_');
+  const base = await import(`${ROOT}js/i18n/${id}.js`);
+  const parts = readdirSync(I18N_DIR)
+    .filter(f => f.startsWith(`${id}.`) && f.endsWith('.js'))
+    .filter(f => f !== `${id}.js`)
+    .sort();
+  const merged = { ...base[upper] };
+  for (const file of parts) {
+    const part = file
+      .slice(id.length + 1, -3)
+      .toUpperCase()
+      .replace(/-/g, '_');
+    const mod = await import(`${ROOT}js/i18n/${file}`);
+    const table = mod[`${upper}_${part}`];
+    if (!table) {
+      console.error(
+        `${file} does not export ${upper}_${part}. Either the export is ` +
+          'misnamed or this is not a catalog; a catalog file that cannot be ' +
+          'read is a catalog that is not audited.'
+      );
+      process.exitCode = 1;
+      continue;
+    }
+    Object.assign(merged, table);
+  }
+  return merged;
+}
+
+const EN = await catalogFor('en');
+/** Every non-English locale, in registry order. */
+const TRANSLATIONS = new Map(
+  await Promise.all(
+    LOCALES.filter(l => l.id !== 'en').map(async l => [
+      l.id,
+      await catalogFor(l.id),
+    ])
+  )
+);
 const { SCENARIO_INFO } = await import(`${ROOT}js/data/scenarioInfo.js`);
 const { TAG_ORDER } = await import(`${ROOT}js/data/scenarioTags.js`);
 
@@ -46,6 +104,31 @@ function sources(dir, out = []) {
 
 const used = new Set();
 const files = sources(join(ROOT, 'js'));
+/**
+ * Whether a captured string could be a message id at all.
+ *
+ * The extractor below scans raw source with regexes, so it reads comments as
+ * well as code, and a comment that quotes a call reads as a reference. One in
+ * js/exoplanetWidgets.js narrating a past bug - `every t('exoW....') below` -
+ * produced two phantom ids, and because a phantom can never be in the catalog
+ * it reported as missing from English forever. That is why this tool has never
+ * exited zero, and why it was never wired into CI.
+ *
+ * The test is deliberately only that no segment is empty. A first attempt
+ * required word characters throughout and silently discarded 114 real ids -
+ * every `scenario.Solar System.title`, whose middle segment is a scenario name
+ * with spaces and colons in it. Ids here are built by joining catalog keys, so
+ * a segment can contain almost anything; what it can never be is nothing.
+ * Stripping comments first would be the tidier fix and the more dangerous one,
+ * since a regex removing `//` to end of line also truncates every `https://`
+ * inside a string literal.
+ *
+ * @param {string} id - Captured string
+ * @returns {boolean} Whether it could be a message id
+ */
+const looksLikeId = id =>
+  id.length > 0 && id.split('.').every(part => part.length > 0);
+
 for (const f of files) {
   const src = readFileSync(f, 'utf8');
   for (const m of src.matchAll(/\bt\(\s*'((?:[^'\\]|\\.)*)'/g)) used.add(m[1]);
@@ -161,8 +244,11 @@ for (const m of readFileSync(join(ROOT, 'js/ui.js'), 'utf8').matchAll(
   }
 }
 
+// Phantoms from comments are dropped here rather than at each capture site,
+// so every extractor above stays a one-liner.
+for (const id of [...used]) if (!looksLikeId(id)) used.delete(id);
+
 const enIds = new Set(Object.keys(EN));
-const esIds = new Set(Object.keys(ES));
 
 // The lessonFn.* namespace is deliberately outside this accounting. Those ids
 // are computed from what a lesson function says, at the moment it says it, and
@@ -176,8 +262,16 @@ const missingInEn = [...used].filter(id => !enIds.has(id)).sort();
 const unused = [...enIds]
   .filter(id => !used.has(id) && !LOOKED_UP.test(id))
   .sort();
-const orphanEs = [...esIds].filter(id => !enIds.has(id)).sort();
-const untranslated = [...enIds].filter(id => !esIds.has(id)).sort();
+/** Per locale: ids it has that English does not, and English ids it lacks. */
+const perLocale = [...TRANSLATIONS.entries()].map(([id, catalog]) => {
+  const ids = new Set(Object.keys(catalog));
+  return {
+    id,
+    size: ids.size,
+    orphaned: [...ids].filter(k => !enIds.has(k)).sort(),
+    untranslated: [...enIds].filter(k => !ids.has(k)).sort(),
+  };
+});
 
 const show = (title, list, limit = 40) => {
   console.log(`\n${title}: ${list.length}`);
@@ -185,19 +279,30 @@ const show = (title, list, limit = 40) => {
   if (list.length > limit) console.log(`    … and ${list.length - limit} more`);
 };
 
+const labelFor = id => LOCALES.find(l => l.id === id)?.label || id;
+
 console.log(`English catalog: ${enIds.size} messages`);
-console.log(
-  `Spanish catalog: ${esIds.size} messages ` +
-    `(${Math.round((esIds.size / enIds.size) * 100)}% of English)`
-);
+for (const { id, size } of perLocale) {
+  console.log(
+    `${labelFor(id)} catalog: ${size} messages ` +
+      `(${Math.round((size / enIds.size) * 100)}% of English)`
+  );
+}
 console.log(`Ids referenced:    ${used.size}`);
 
 if (missingInEn.length)
   show('MISSING from English (renders as the id)', missingInEn);
-if (orphanEs.length)
-  show('ORPHANED in Spanish (no English id: a typo)', orphanEs);
+for (const { id, orphaned } of perLocale) {
+  if (orphaned.length)
+    show(`ORPHANED in ${labelFor(id)} (no English id: a typo)`, orphaned);
+}
 if (unused.length) show('Unused English entries', unused, 20);
-show('Not yet translated into Spanish', untranslated, 15);
+for (const { id, untranslated } of perLocale) {
+  show(`Not yet translated into ${labelFor(id)}`, untranslated, 15);
+}
 
 void relative;
-process.exit(missingInEn.length || orphanEs.length ? 1 : 0);
+// An orphan is a typo and fails; an untranslated id is honest work in progress
+// and does not. That asymmetry is the same one the Spanish-only version had.
+const orphanTotal = perLocale.reduce((n, l) => n + l.orphaned.length, 0);
+process.exit(missingInEn.length || orphanTotal ? 1 : 0);

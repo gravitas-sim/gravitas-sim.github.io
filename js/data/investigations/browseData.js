@@ -100,6 +100,10 @@ export const BROWSE_META = {
     tags: ['stars', 'stellar-evolution'],
     numericCount: 0,
   },
+  'twelve-nights': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 0,
+  },
   'power-law-gravity': {
     tags: ['gravity', 'orbits'],
     numericCount: 1,

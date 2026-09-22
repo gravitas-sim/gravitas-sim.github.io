@@ -132,5 +132,14 @@ box here means the thing is done and verified, not merely decided.
 Standing, not a box to tick: **rebuild and commit the instructor bundle**
 whenever instructional content changes. `npm run instructors:check` says
 whether it is current and needs no passphrase; rebuilding needs the real one.
-The gate runs that check, so a stale bundle fails the release rather than
-shipping quietly.
+The gate runs that check, `tools/verify-release.mjs` runs it again on the tree
+about to be published, and CI runs it on a release ref - so a stale bundle
+fails the release rather than shipping quietly.
+
+Not on a pull request into `v2`, though, and that is deliberate: see
+[`RELEASE.md`](RELEASE.md). Asking it of every parallel lesson branch would
+make each of them red until you rebuilt, and each rebuild conflicts with the
+last. If the check says stale after a change that moved no instructional
+content, `npm run instructors:restamp` re-states the record without the
+passphrase and without touching the ciphertext - it proves the documents are
+unchanged first, and refuses if they are not.

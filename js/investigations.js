@@ -4451,10 +4451,54 @@ async function generateReport() {
     }
     stepIndex = here;
 
+    // The return channel. Both modules are dynamic imports for the same reason
+    // the backup one is: a reader who never downloads a report never pays for
+    // the encoder, and the lesson engine is already the heaviest thing here.
+    //
+    // The roster id comes off the assignment link's query string rather than
+    // from any roster the application keeps, because it keeps none - an
+    // instructor who wants the class sorted puts ?roster=<whatever> on the
+    // link they hand out and it rides home in the token.
+    let submissionToken = '';
+    try {
+      const backupMod = await import('./investigations/progressBackup.js');
+      const tokenMod = await import('./submission/submissionToken.js');
+      const encoded = await tokenMod.encodeSubmission(
+        tokenMod.buildSubmission({
+          backup: backupMod.buildBackup({
+            lesson: active,
+            responses,
+            attempts,
+            visited,
+            stepSid: active.steps[stepIndex]?.sid ?? null,
+            startedAt,
+            studentName: name,
+          }),
+          assignmentId: assignment?.i ?? null,
+          rosterId: new URLSearchParams(location.search).get('roster') || null,
+          fallbackLocale: getLocale(),
+        })
+      );
+      submissionToken = encoded.token;
+      if (!encoded.comfortable) {
+        // Say so rather than hand over something that will be truncated at the
+        // far end, where the student cannot fix it.
+        console.warn(
+          `[gravitas] submission token is ${encoded.length} characters, over ` +
+            `the ${encoded.limit} this project treats as safely pasteable.`
+        );
+      }
+    } catch (err) {
+      // A report without a token is still a report. The completion code and
+      // every answer are on the page either way.
+      console.warn('[gravitas] could not build a submission token:', err);
+    }
+
     const bytes = buildLabReport({
       investigation: active,
       plot,
       name,
+      submissionToken,
       responses,
       attempts,
       visited,

@@ -102,7 +102,7 @@ export const ES = {
     'Cambiar la combinación de colores de la interfaz. Observatorio usa tonos rojos para conservar la visión nocturna; Luz de día conviene a salas iluminadas y a proyectores (T alterna).',
   'footer.attribution.hint': 'Carl Ziegler: autor de Gravitas',
   'footer.attribution.hint.2':
-    'Contra qué se ha comprobado el motor físico: 243 verificaciones con error medido, tolerancia declarada y una razón para cada tolerancia. Se ejecuta en directo en el navegador.',
+    'Contra qué se ha comprobado el motor físico: 286 verificaciones con error medido, tolerancia declarada y una razón para cada tolerancia. Se ejecuta en directo en el navegador.',
   'footer.attribution.hint.3':
     'Consultar o contribuir al código fuente en GitHub',
   'footer.attribution': 'Validado',
@@ -187,6 +187,15 @@ export const ES = {
   'rail.slowDown.label': 'Reducir la velocidad',
   'rail.speedUp.label': 'Aumentar la velocidad',
   'rail.objectType.label': 'Elegir un objeto para añadir',
+  'rail.precisePlace': 'Colocaci\u00f3n precisa',
+  'place.precise.title': 'Colocaci\u00f3n precisa',
+  'place.precise.intro':
+    'A\u00f1ade un cuerpo introduciendo su estado. Es la misma colocaci\u00f3n que realiza el lienzo; un cuerpo a\u00f1adido aqu\u00ed es id\u00e9ntico a uno colocado con un clic, y el bot\u00f3n de deshacer lo elimina igual.',
+  'place.precise.field.type': 'Tipo de objeto',
+  'place.precise.submit': 'A\u00f1adir cuerpo',
+  'place.precise.close': 'Listo',
+  'rail.precisePlace.hint':
+    'A\u00f1adir un cuerpo escribiendo su posici\u00f3n, velocidad y masa',
 
   // --- Rail: labels ----------------------------------------------------------
   // The emoji stay: they are part of the button's shape rather than of its

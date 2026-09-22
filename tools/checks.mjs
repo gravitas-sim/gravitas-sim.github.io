@@ -173,6 +173,24 @@ export function summarize(results) {
  * @property {string} [why] - Why it is gate-only, when ci is null
  */
 
+/**
+ * The `if:` a CI step carries when it may only run on a release ref.
+ *
+ * One string, in one place, because it encodes a policy rather than a
+ * convenience: some checks compare the tree against artifacts that only the
+ * owner's passphrase can produce, and asking a pull request into the
+ * integration branch for those makes every parallel content branch red for a
+ * reason that has nothing to do with the branch.
+ *
+ * A push to main and a pull request into main are release paths and are asked.
+ * A push to v2 and a pull request into v2 are integration paths and are not.
+ * tests/releaseGate.test.js evaluates this expression against all four contexts
+ * rather than matching it as a string, so the policy is checked and not merely
+ * spelled consistently.
+ */
+export const RELEASE_REF_ONLY =
+  "github.ref == 'refs/heads/main' || github.base_ref == 'main'";
+
 /** The heading each group prints under. */
 export const GROUPS = {
   correctness: 'Correctness',
@@ -222,6 +240,25 @@ export const CHECKS = [
     id: 'author',
     label: 'investigations validate, warnings included',
     command: ['npm', 'run', 'author:strict'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  {
+    // The message catalogs, cross-referenced against the source that asks for
+    // them. This existed as tools/i18n-audit.mjs for a long time with no npm
+    // script and no entry here, which is the one hole in a registry whose
+    // whole purpose is that a guard nobody runs is not a guard. It could not
+    // be registered before now because it could not pass: its extractor read
+    // a comment quoting `t('exoW....')` as a real reference, so it reported a
+    // phantom id missing from English on every run. It fails on an id that is
+    // asked for and does not exist, and on an id a translation has that
+    // English does not - a typo, which is silent at runtime because the
+    // message simply never appears. An untranslated id is honest work in
+    // progress and is reported without failing.
+    id: 'i18n',
+    label: 'message catalogs match the source that asks for them',
+    command: ['npm', 'run', 'i18n:check'],
     tier: 'quick',
     ci: 'checks',
     group: 'correctness',
@@ -372,7 +409,11 @@ export const CHECKS = [
     label: 'documentation facts, CITATION.cff, .zenodo.json',
     command: ['npm', 'run', 'docs:check'],
     tier: 'quick',
-    ci: 'checks',
+    ci: null,
+    why:
+      'the cheap subset. CI runs the wider `docs:check:tests` in the same job ' +
+      'and `docs:check:build` in the one that has a dist/; the gate runs ' +
+      '--full. Kept because it fails in two seconds when a cheap fact moved',
     group: 'generated',
   },
   {
@@ -397,12 +438,55 @@ export const CHECKS = [
       'check already pays for a run in CI and this is where a release is judged',
     group: 'generated',
   },
+  // Three questions about the instructor materials, and conflating them is
+  // what made every instructional pull request red.
+  //
+  //   validate   Does the pipeline still work? Renders all fifty-four
+  //              documents with a throwaway key, re-checks every derived
+  //              answer against the site's own grading function, writes
+  //              nothing. Needs no secret, so it runs on every branch and in
+  //              every fork - which is the question a pull request should be
+  //              asked.
+  //   digest     Does the freshness digest cover everything the build reads?
+  //              Runs the build under a module-load hook and compares. This is
+  //              what makes the third question mean anything.
+  //   check      Was the committed production ciphertext built from these
+  //              sources? A release question. It compares against a file only
+  //              the real passphrase can produce, so on a long-lived
+  //              integration branch it is red on every branch that edits a
+  //              lesson and green only after one person rebuilds an encrypted
+  //              file that then conflicts with every other branch doing the
+  //              same. Three open v1.1 pull requests were red on this and on
+  //              nothing else.
+  //
+  // So `check` runs in CI only on a release ref, and unconditionally in the
+  // gate and in tools/verify-release.mjs, which is the last thing between a
+  // commit and the live site. Nothing about release safety moves: a stale
+  // bundle still cannot deploy, and it is now refused in the job that
+  // publishes rather than only in a job that runs earlier.
+  {
+    id: 'instructors-validate',
+    label: 'every instructor document renders and every answer key agrees',
+    command: ['npm', 'run', 'instructors:validate'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'generated',
+  },
+  {
+    id: 'instructors-digest',
+    label: 'the freshness digest covers every input the build reads',
+    command: ['npm', 'run', 'instructors:audit'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'generated',
+  },
   {
     id: 'instructors',
     label: 'instructor bundle is built from these sources',
     command: ['npm', 'run', 'instructors:check'],
     tier: 'quick',
     ci: 'checks',
+    ciCondition: RELEASE_REF_ONLY,
     why: 'hashes the inputs; needs no passphrase and renders nothing',
     group: 'generated',
   },
@@ -469,18 +553,46 @@ export const CHECKS = [
     why: 'added after the workflow was written; runs in seconds',
     group: 'generated',
   },
+  // The list of engine operations that destroy information is scanned out of
+  // js/physics.js, not remembered. This is the check that makes that worth
+  // anything: add a cull or a new merge path and the committed list is stale
+  // here, rather than on the model page in front of a class.
+  {
+    id: 'irreversible',
+    label: 'the audit of operations that destroy information',
+    command: ['npm', 'run', 'audit:irreversible:check'],
+    tier: 'quick',
+    ci: null,
+    why: 'added after the workflow was written; runs in seconds',
+    group: 'generated',
+  },
   // The counts that cost a test run to measure: how many jest tests there are,
   // how many browser tests, what a visitor downloads. The comment in
   // docs-facts.mjs said CI paid for these in the job where the commands had
   // already run. CI never did, and by the time anyone looked README.md was
   // claiming 3608 jest tests against 4844 and 579 browser tests against 1061.
+  // The counts that cost a test run to measure: how many jest tests there are,
+  // how many browser tests, what a visitor downloads.
+  //
+  // The comment here used to say CI paid for these in the job where the
+  // commands had already run. CI never did - its documentation step ran the
+  // cheap check, which reports these as not measured and then prints
+  // "Documentation matches the source" - and by the time anyone looked README.md
+  // was claiming 3608 jest tests against 4844 and 579 browser tests against
+  // 1061.
+  //
+  // It does now, and without running anything twice. The `checks` job writes
+  // the jest and physics reports it produces anyway into .facts/ and
+  // `docs:check:tests` reads them back; the `build` job checks the bundle sizes
+  // against the dist/ it just made. The two groups partition this check's
+  // facts, and tests/releaseGate.test.js fails if they ever stop covering all
+  // of them. This entry stays as the whole thing, which is what the gate runs.
   {
     id: 'docs-full',
     label: 'documentation counts that cost a test run',
     command: ['npm', 'run', 'docs:check:full'],
     tier: 'slow',
-    ci: null,
-    why: 'needs a jest run and a build; the gate has both already',
+    ci: 'checks',
     group: 'generated',
   },
 
@@ -581,6 +693,10 @@ export const CI_SETUP_STEPS = [
 /** And the commands that are setup wherever they appear. */
 export const CI_SETUP_COMMANDS = [
   'npm ci',
+  // Creating the directory the reports are written into. The reports
+  // themselves are produced by checks that are in the registry; this is the
+  // mkdir in front of them.
+  'mkdir -p .facts',
   'npx playwright install',
   'npx playwright install-deps',
   'npx playwright merge-reports',
@@ -593,6 +709,11 @@ export const CI_EQUIVALENTS = {
   // repository secret; the gate has the passphrase and builds the real thing.
   'npm run build:ci': 'build',
   'npm run budget': 'budget',
+  // The two halves of the full documentation check, split by what each CI job
+  // has already paid for rather than by how important the facts are. Between
+  // them they cover every deferred fact; the gate runs the undivided form.
+  'npm run docs:check:tests': 'docs-full',
+  'npm run docs:check:build': 'docs-full',
   'node tools/check-links.mjs --root dist': 'links-dist',
   'node tools/validate-citation.mjs': 'citation',
   // One npm script in the gate, two lines of a shell block in CI. Same two

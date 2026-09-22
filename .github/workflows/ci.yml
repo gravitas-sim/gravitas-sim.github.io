@@ -84,7 +84,13 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    # `v2` is the long-lived integration branch for the next major version. It
+    # is here so the branch gets the full suite on every push rather than only
+    # on a pull request. It does NOT make the branch publishable: the deploy
+    # job below is gated on `github.ref == 'refs/heads/main'` as well as on the
+    # event being a push, so a run on v2 skips it. Remove this entry when v2
+    # merges to main - see BRANCHING.md.
+    branches: [main, v2]
   pull_request:
   schedule:
     # Monday morning, UTC. Catches an engine or dependency change that landed
@@ -131,17 +137,32 @@ jobs:
 
       # Ordered cheapest-first so a formatting mistake does not wait behind a
       # two-minute test run to be reported.
+      # Where the steps below leave reports for "Documentation counts and links"
+      # to read back rather than re-running a jest suite and a two-minute
+      # physics suite for numbers this job has already computed.
+      - name: A place for the reports the later steps reuse
+        run: mkdir -p .facts
+
       - name: Formatting
         run: npm run format:check
 
       - name: Lint
         run: npm run lint
 
+      # `--json --outputFile` writes the report to .facts/ and leaves the console
+      # reporter alone, so the log is unchanged and "Documentation counts" a few
+      # steps down can read the test count out of the run that just happened
+      # instead of paying for a second one. See tools/docs-facts.mjs.
       - name: Unit and integration tests
-        run: npm test
+        run: npm test -- --json --outputFile=.facts/jest.json
 
+      # Same arrangement, and it saves more: the physics suite takes about two
+      # minutes, and tools/docs-facts.mjs used to run it twice on its own - once
+      # for the total and once, with --json, for the coverage table. `--report`
+      # leaves the machine-readable form behind from the run that prints the
+      # table, so this job runs it once and the documentation step reads it.
       - name: Physics validation
-        run: npm run validate:physics
+        run: npm run validate:physics -- --report .facts/physics.json
 
       - name: Internal links and anchors
         run: npm run validate:links
@@ -178,6 +199,14 @@ jobs:
       - name: Investigations validate
         run: npm run author:check
 
+      # The message catalogs against the source that asks for them. Registered
+      # in tools/checks.mjs, which is the single list this job and
+      # `release:check` both read - tests/releaseGate.test.js fails if an entry
+      # claims a CI job it does not appear in, and that is how this step came
+      # to be written.
+      - name: Message catalogs
+        run: npm run i18n:check
+
       # vendor/ carries three.js, Chart.js and the nine self-hosted font faces,
       # generated from the pinned packages and committed because GitHub Pages
       # serves the repository root. This fails if a lockfile bump moved one of
@@ -186,13 +215,44 @@ jobs:
       - name: Vendored libraries and fonts are current
         run: npm run vendor:check
 
-      # The instructor bundle is ciphertext, so a diff cannot say whether it is
-      # current: every build derives a new salt and IV and changes every byte.
-      # This compares a digest of the inputs against the record committed
-      # beside the bundle, which needs no passphrase and renders nothing - so a
-      # pull request that edits a lesson without rebuilding the materials fails
-      # here rather than shipping answer keys that disagree with the lessons.
+      # Three questions about the instructor materials, asked of different
+      # things. See the `instructors` entries in tools/checks.mjs.
+      #
+      # This one is the pipeline: all fifty-four documents rendered, every
+      # derived answer re-checked against the site's own grading function, a
+      # throwaway key, nothing written. No secret, so it runs on every branch
+      # and in every fork.
+      - name: Instructor materials render and their answer keys agree
+        run: npm run instructors:validate
+
+      # And that the freshness digest below covers everything that build read.
+      # It is derived from the import graph rather than listed by hand, and this
+      # runs the build under a module-load hook to check the derivation against
+      # what Node actually loaded. Without it the digest is a claim about the
+      # program rather than an observation of it - which is how fifteen inputs,
+      # including the prose of every instructor guide, came to be outside it.
+      - name: The freshness digest covers what the build reads
+        run: npm run instructors:audit
+
+      # The release question, and only on a release path.
+      #
+      # It compares the tree against the committed production ciphertext, which
+      # only the real passphrase can produce. On a pull request into the v1.1
+      # integration branch that is the wrong question: every instructional
+      # branch edits a lesson, so every one of them is red until one person
+      # rebuilds a four-megabyte encrypted file that then conflicts with every
+      # other branch doing the same. Three open pull requests were red on this
+      # and on nothing else.
+      #
+      # Nothing about release safety moves. A push to main and a pull request
+      # into main are still asked; the gate asks unconditionally; and
+      # tools/verify-release.mjs asks again, with no condition at all, in the
+      # job that actually publishes - so a stale bundle cannot deploy even if
+      # this condition were widened by accident. The expression is owned by
+      # RELEASE_REF_ONLY in tools/checks.mjs and tests/releaseGate.test.js
+      # evaluates it against all four contexts.
       - name: Instructor bundle was built from these sources
+        if: github.ref == 'refs/heads/main' || github.base_ref == 'main'
         run: npm run instructors:check
 
       # CITATION.cff and .zenodo.json are generated from one source and must
@@ -214,8 +274,22 @@ jobs:
       # lesson manifest or the test output. This is the job that notices when
       # one of them has drifted - a README that says 43 scenarios over a catalog
       # of 48 is the kind of error a reader catches and an author never does.
+      #
+      # `docs:check:tests` rather than `docs:check`, and the difference is the
+      # whole point. The cheap form reports the jest, browser-suite and physics
+      # counts as *not measured* and then says "Documentation matches the
+      # source", so a branch could move the test count and stay green over a
+      # README that no longer told the truth. It did: 3608 jest tests claimed
+      # against 4844, 579 browser tests against 1061.
+      #
+      # It costs about four seconds more than the cheap form, not five minutes,
+      # because GRAVITAS_FACTS_CACHE points it at the reports the two steps
+      # above already wrote. The bundle sizes are the other half and are checked
+      # in the `build` job, which has a dist/ already.
       - name: Documentation counts and links
-        run: npm run docs:check
+        env:
+          GRAVITAS_FACTS_CACHE: .facts
+        run: npm run docs:check:tests
 
       # And the shipped PDF, which carries the same counts in its metadata.
       - name: User manual matches the application
@@ -248,6 +322,14 @@ jobs:
 
       - name: Check the built site's internal links
         run: node tools/check-links.mjs --root dist
+
+      # The other half of the documentation facts: the bundle sizes README.md
+      # quotes, read from the dist/build-summary.json this job just produced.
+      # Here rather than in `checks` because this is the job that has a dist/,
+      # and making `checks` wait for one would serialise two jobs that exist to
+      # run in parallel.
+      - name: Documentation counts that come from the build
+        run: npm run docs:check:build
 
       - name: Report what a visitor downloads
         run: |

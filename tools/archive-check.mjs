@@ -208,6 +208,7 @@ try {
       'docs:check',
       'sw:check',
       'audit:scene:check',
+      'audit:irreversible:check',
       'instructors:check',
       'vendor:check',
       'author:check',

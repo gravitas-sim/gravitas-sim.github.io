@@ -9,7 +9,16 @@
 //   npm run perf -- "Star Cluster"   one or more scenarios by name
 //   npm run perf -- --seconds 8      longer sample
 //   npm run perf -- --tier low       pin the quality tier
+//   npm run perf -- --dpr 2          emulate a HiDPI display
+//   npm run perf -- --cpu 4          throttle the CPU by that factor
 //   npm run perf -- --json out.json  also write the numbers, for a comparison
+//
+// --dpr and --cpu exist because a resolution change cannot be judged on the
+// machine that is comfortable already. The question a backing-store change has
+// to answer is what it costs on the slowest machine the low tier exists for,
+// at the pixel density that machine might have; --cpu 4 with --tier low is the
+// closest this instrument gets to a 2019 Chromebook, and --dpr is the only way
+// to see a device-pixel budget bind at all, since headless Chromium reports 1.
 //
 // The tier flag matters for a rendering change. Left to itself the tier is a
 // measurement of the machine, so a before-and-after pair taken on 'auto' can
@@ -60,8 +69,15 @@ async function main() {
   }
   const ji = args.indexOf('--json');
   const jsonPath = ji >= 0 ? String(args[ji + 1]) : null;
+  const di = args.indexOf('--dpr');
+  const dpr = di >= 0 ? Number(args[di + 1]) : 1;
+  if (!(dpr > 0)) throw new Error(`--dpr ${args[di + 1]} is not a number > 0`);
+  const ci = args.indexOf('--cpu');
+  const cpu = ci >= 0 ? Number(args[ci + 1]) : 1;
+  if (!(cpu >= 1))
+    throw new Error(`--cpu ${args[ci + 1]} is not a number >= 1`);
   const valueIndexes = new Set(
-    [si, ti, ji].filter(i => i >= 0).map(i => i + 1)
+    [si, ti, ji, di, ci].filter(i => i >= 0).map(i => i + 1)
   );
   const wanted = args.filter(
     (a, i) => !a.startsWith('--') && !valueIndexes.has(i)
@@ -87,8 +103,20 @@ async function main() {
   });
   const page = await browser.newPage({
     viewport: { width: 1440, height: 900 },
+    deviceScaleFactor: dpr,
   });
   page.on('pageerror', e => console.warn(`  ! ${e.message}`));
+
+  // CPU throttling is a CDP-only control; Playwright has no wrapper for it.
+  // Applied before the first navigation so page construction is throttled too,
+  // which is where a slow machine actually hurts.
+  if (cpu > 1) {
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpu });
+  }
+  console.log(
+    `profile: viewport 1440x900, dpr ${dpr}, cpu x${cpu}, tier ${tier}`
+  );
 
   await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'load' });
   await page.evaluate(() => {

@@ -32,6 +32,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'retrograde-motion': 'engine',
   tides: 'model',
   'transit-photometry': 'engine',
+  'twelve-nights': 'model',
   'weighing-stars': 'engine',
   'what-is-a-gravitational-wave': 'model',
   'when-orbits-lock': 'engine',

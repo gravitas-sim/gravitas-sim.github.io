@@ -94,7 +94,7 @@ const PROMOTE_FPS = 48;
 const PROMOTE_DWELL_MS = 8000;
 
 /** The tiers, in order. */
-export const TIERS = ['low', 'full'];
+export const TIERS = ['low', 'full', 'ultra'];
 
 const intervals = [];
 let seen = 0;
@@ -160,7 +160,7 @@ function announce() {
 /**
  * Force a tier, or hand the decision back to the measurement.
  *
- * @param {string} next - 'auto', 'full' or 'low'
+ * @param {string} next - 'auto', or one of TIERS
  */
 export function setTier(next) {
   if (next === 'auto') {
@@ -231,7 +231,7 @@ export function sampleFrame(timestamp) {
   const fps = measuredFps();
   if (fps === null) return;
 
-  if (tier === 'full' && fps < DEMOTE_FPS) {
+  if (tier !== 'low' && fps < DEMOTE_FPS) {
     tier = 'low';
     aboveSince = 0;
     announce();
@@ -257,19 +257,74 @@ export function sampleFrame(timestamp) {
 // --- What the tier actually does ----------------------------------------------
 
 /**
- * The fraction of native resolution to render at.
+ * The backing-store pixels a tier is willing to spend, whatever the display.
  *
- * The simulation canvas has never applied devicePixelRatio - its backing store
- * is innerWidth by innerHeight - so on the machines this tier is for it is
- * already at 1:1 and there is nothing to give back except native resolution
- * itself. 0.7 is 49% of the pixels, which is the single largest saving
- * available on a fill-rate-bound integrated GPU, and at the distance a
- * projected or laptop screen is viewed the softness is visible but not
- * confusing: the bodies are discs and the trails are wide.
+ * A ceiling, not a target. Without one, a device-pixel ratio of 2 on a large
+ * window asks for four times the fill of the same window at 1, and the tier
+ * that is supposed to represent "this machine is comfortable" would quietly
+ * mean something different on every display.
  *
+ * The low tier is absent on purpose: see renderScale().
+ */
+const PIXEL_BUDGET = { full: 4.2e6, ultra: 9.0e6 };
+
+/** The share of CSS resolution a tier draws at before any display scaling. */
+const tierScale = t => (t === 'low' ? 0.7 : 1);
+
+/**
+ * The single governor of how many pixels the simulation canvas gets.
+ *
+ * Returns a multiplier on CSS pixels, so the backing store is the CSS box
+ * times this. Three things are folded into the one number, which is the point
+ * of it being one number - js/render.js resizeCanvas() is the only caller, and
+ * js/ui.js converts pointer events by reading canvas.width against the
+ * element's own rect, so hit-testing follows whatever this returns without
+ * knowing why.
+ *
+ * The display scaling. The canvas had never applied devicePixelRatio, so on
+ * every HiDPI laptop and every classroom projector the most-viewed surface in
+ * the application rendered at roughly half linear resolution and was upscaled
+ * by the compositor - while js/view3d.js called setPixelRatio for a 420x320
+ * corner panel and js/widgetCanvas.js clamped it to 2 for thumbnails. The
+ * largest and least sharp surface was the only one not asking.
+ *
+ * The tier. Unchanged: 0.7 at the low tier, which is 49% of the pixels.
+ *
+ * The budget, which is what keeps the first two from multiplying. A cap of
+ * PIXEL_BUDGET device pixels means a 4K window does not quadruple its fill
+ * cost merely because the panel reports a ratio of 2.
+ *
+ * Two properties are deliberate and worth stating, because a reader checking
+ * this will want to know they were chosen rather than fallen into.
+ *
+ * The budget can only take back what the display scaling added; it never
+ * returns less than the tier alone would have. A large window at a ratio of 1
+ * therefore renders exactly as it did before any of this existed.
+ *
+ * And the low tier does not take the dividend at all. That tier exists because
+ * the machine is fill-rate-bound - it is chosen by measuring frames below 32
+ * per second - so spending a windfall of pixels there is precisely backwards.
+ * A HiDPI Chromebook gets the same pixel count as a standard-density one, and
+ * the sharpening is a thing that happens on machines with the budget for it.
+ *
+ * @param {number} [cssW] - CSS width of the canvas box
+ * @param {number} [cssH] - CSS height of the canvas box
  * @returns {number} A scale factor for the canvas backing store
  */
-export const renderScale = () => (tier === 'low' ? 0.7 : 1);
+export function renderScale(cssW, cssH) {
+  const base = tierScale(tier);
+  if (tier === 'low') return base;
+
+  const w =
+    cssW ?? (typeof window !== 'undefined' ? window.innerWidth || 0 : 0);
+  const h =
+    cssH ?? (typeof window !== 'undefined' ? window.innerHeight || 0 : 0);
+  const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+
+  const area = Math.max(1, w * h);
+  const cap = Math.sqrt((PIXEL_BUDGET[tier] ?? PIXEL_BUDGET.full) / area);
+  return Math.max(base, Math.min(base * dpr, cap));
+}
 
 /**
  * Caps applied to the generic population settings when a world is built.

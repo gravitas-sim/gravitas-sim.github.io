@@ -87,6 +87,21 @@ async function writeNew(file, contents) {
  *
  * Anchored on text rather than a line number so that it keeps working as the
  * files around it change, and a no-op when the line is already present.
+ *
+ * The insertion is line-oriented, and that is the whole of the care here. An
+ * anchor is often written with a leading newline to make it unambiguous -
+ * "\nimport { gradedSteps, ... }" matches that import and not a substring of
+ * some other one - but that newline is the END of the line before the one the
+ * anchor names. Splicing at the raw index therefore appended the new import to
+ * the previous line:
+ *
+ *   import LIVES_OF_STARS from './investigations/lives-of-stars.js';import SCRATCH from './investigations/scratch.js';
+ *
+ * which is valid JavaScript and fails `npm run format:check` and `npm run
+ * lint` immediately, in a file the author never opened. So the anchor's own
+ * leading newlines are stepped over before deciding which line is meant, the
+ * insertion point is snapped to a line boundary, and the text inserted is
+ * guaranteed to end in one.
  */
 async function insertOnce(file, anchor, line, { before = true } = {}) {
   const text = await readFile(file, 'utf8');
@@ -101,8 +116,26 @@ async function insertOnce(file, anchor, line, { before = true } = {}) {
     );
     return;
   }
-  const insertion = before ? at : at + anchor.length;
-  const next = text.slice(0, insertion) + line + text.slice(insertion);
+
+  // Where the anchor's own text starts, past any newlines it carries.
+  let content = at;
+  while (text[content] === '\n' || text[content] === '\r') content += 1;
+
+  let insertion;
+  if (before) {
+    // The first character of the line the anchor sits on.
+    insertion = text.lastIndexOf('\n', content) + 1;
+  } else {
+    // The first character of the line after the one the anchor ends on.
+    const end = text.indexOf('\n', at + anchor.length);
+    insertion = end < 0 ? text.length : end + 1;
+  }
+
+  const entry = line.endsWith('\n') ? line : `${line}\n`;
+  // Only reachable when appending after an anchor on an unterminated last
+  // line; without it the new line would be glued to that one instead.
+  const lead = insertion > 0 && text[insertion - 1] !== '\n' ? '\n' : '';
+  const next = text.slice(0, insertion) + lead + entry + text.slice(insertion);
   if (!dryRun) await writeFile(file, next);
   done.push(`${file} (registered)`);
 }

@@ -111,6 +111,99 @@ a separate polite live region, and only when the reader caused them.
 `e2e/accessibilityManual.spec.js` watches that region for six seconds of
 ordinary running and fails if it is written to more than once.
 
+## The sound
+
+The sandbox makes sound, and it is worth being exact about what kind of thing
+that sound is, because "the simulation is sonified" is routinely read as a
+claim about accessibility and here it is not one.
+
+`js/audio.js` maps a body's orbital frequency to a pitch, compresses it through
+`log2(1 + f * 40)`, and then **quantizes the result onto a five-note scale** so
+that an arbitrary collection of orbits sounds like music rather than like a
+siren. That is the right design for an ambient soundtrack and it disqualifies
+the sound as a measuring instrument: the quantization is not invertible, so two
+orbits several percent apart can arrive at the same note. Nobody can get a
+number back out of it, sighted or not, because the number is no longer in
+there.
+
+**What was added.** The sound panel now prints the quantity the tones are
+computed from. Opening it on the default scenario gives:
+
+> **What the tones stand for**
+>
+> - Highest voice, Black hole. Period 61.4 d. Every interval below is measured
+>   from this one.
+> - Black hole. Period 61.5 d, 1.001× the highest voice, 1.1 cents below it.
+> - Rocky planet. Period 131 d, 2.125× the highest voice, 1304.9 cents below
+>   it.
+
+Those two black holes are 1.1 cents apart. No five-note scale preserves that
+and no listener could hear it, which is the clearest possible statement of why
+the printed version is not a transcription of the audible one. It is not a
+description of the sound; it is the thing the sound is about, delivered
+losslessly.
+
+It cannot drift away from what is playing. `getVoicedBodies()` in `js/audio.js`
+returns the same array the oscillators are following, `js/sonify/voiceReadout.js`
+turns it into periods and intervals, and `js/ui.js` renders that and computes
+nothing of its own. `tests/voiceReadout.test.js` fails if it ever starts to,
+and `e2e/sonifyTextEquivalent.spec.js` compares the printed periods and
+intervals against the live array in the browser.
+
+**It is deliberately not a live region**, for the same reason the canvas
+description is not. The voices are re-chosen several times a second; a polite
+live region over them would interrupt a screen reader without pause and make
+the panel unusable for exactly the reader it exists for. It is plain content
+that holds still while it is read — the panel fills it when it opens and does
+nothing at all while it is closed.
+
+### What none of this establishes
+
+**The sonification has never been tested with a screen reader or with a blind
+or low-vision user.** Not with NVDA, not with JAWS, not with VoiceOver, and not
+with a student. No claim is made anywhere in this project that a blind student
+can use the sandbox, and this section exists so that the absence of such a
+claim is deliberate and visible rather than an oversight a reader has to infer.
+
+What is actually established, and the limit of each:
+
+| claim | evidence | what it does not show |
+| --- | --- | --- |
+| The period-to-pitch encoding preserves the quantity | 5 checks in `tools/physics-checks.mjs`, "Sonification law" | Nothing about the audible sound, which is quantized and lossy |
+| A non-audio path to the same facts exists | `e2e/sonifyTextEquivalent.spec.js` | Nothing about whether it is findable, readable or useful |
+| The panel has no machine-detectable violation | axe-core, no rules disabled | Nothing about whether a screen reader user can operate it |
+
+There is also no automated check that *could* establish the missing thing. axe
+has no rule for sonification and WCAG has no success criterion that says an
+audio encoding of a quantity must be invertible — 1.1.1 and 1.2.1 are about
+alternatives existing, not about how much information an encoding throws away.
+So the gap here is not one more test away; it needs people.
+
+**What would count as evidence**, cheapest first: the author with the monitor
+off and VoiceOver on, for an hour; the three screen readers on the platforms
+they actually run on, which disagree with each other in ways that matter; a
+paid expert assistive-technology user doing a think-aloud walkthrough, which is
+the single highest-value step on this list; and finally task-based sessions
+with students, measuring whether a task was completed rather than whether the
+audio was liked. The instruments for the last of those belong with the rest of
+the evaluation kit in `evaluation/`, not here.
+
+Until that happens, the honest sentence — the one that may be used in a paper,
+a grant or a course description — is this: *the sandbox's sonification is
+implemented and is deliberately lossy; a separate period-to-cents law is
+verified to be information-preserving and is not what the speakers play; a text
+equivalent of the underlying periods exists and is checked against the array the
+oscillators are actually following; and none of it has been tested with
+screen-reader users.*
+
+The previous version of that sentence said "its encoding is verified to be
+information-preserving", which is true of `js/sonify/law.js` and false of the
+thing a listener hears. The rest of this section is careful about that
+distinction — the table above says in as many words that the five validation
+checks establish "nothing about the audible sound, which is quantized and
+lossy" — and the one sentence written to be quoted outside the project was the
+one that blurred it.
+
 ## Honest limitations
 
 These are real and are not going to be fixed by more ARIA.
@@ -127,19 +220,36 @@ the content, not decoration; a planetarium that will not move is a picture.
 Every decorative animation stops, and the simulation can be paused from the
 transport bar or the space bar — a real control rather than a media query.
 
-**Some measurements are only available by reading a chart.** The light curve,
-the rotation curve and the radial-velocity trace are drawn to a canvas. Their
-*numbers* are available as text in the readout and in the investigation
-probes, and the lessons that depend on them ask for typed values rather than
-for a visual judgment — but the shape of a curve is not currently narrated.
-Investigation steps state their instructions and their expected measurements as
-text, so a lesson is followable; the aesthetic reading of a curve is not.
+**The shape of a curve is not narrated.** The light curve, the rotation curve
+and the radial-velocity trace are drawn to a canvas. Their numbers are no
+longer only available by reading it: the export dialog offers each series as a
+table — proper column headings with units, the independent variable as a row
+header, reachable and scrollable from a keyboard — beside the CSV download that
+was already there. Every table is rendered from the bytes the exporter writes,
+so the table, the file and the plot cannot be three derivations that disagree,
+and a long series is evenly sampled with the sampling stated in the caption
+rather than silently truncated. What is still missing is *narration*: nothing
+says "the curve is flat out to 8 AU and then falls". That is a judgment about a
+shape, this project will not have a heuristic guess at it, and the tables are
+what a reader has instead.
 
-**Direct manipulation has no keyboard equivalent.** Placing a body by clicking,
-and dragging to set its velocity, are pointer gestures. The same systems can be
-loaded from the gallery, from a share link, and from a lesson's own setup, and
-every scenario in the catalog is reachable without the canvas — but building
-an arbitrary system by hand is not currently a keyboard task.
+**Direct manipulation has a keyboard equivalent, but not a pointer's.** Two
+different things were wrong here and only one has been fixed. Placing a body
+from the keyboard has worked for some time — `A` arms it, the arrow keys aim,
+Enter commits — but it is an *aiming* interface: the aim is in canvas pixels,
+so where the body lands depends on the zoom and the pan, and there was no way
+to set a mass at all. Operable without a pointer is not the same as usable
+without sight. **Precise placement**, beside Add object, is the other half: a
+form that takes a type, a position, a velocity and a mass as numbers, with the
+unit named on every field and each error attached to the field it is about. It
+calls the same `placeBody()` the canvas does, so a typed body is
+indistinguishable from a clicked one — same list, same share link, same undo
+button — and `e2e/accessibilityParity.spec.js` asserts that by comparing the
+two share payloads.
+
+What remains is the gesture itself. Dragging to *feel* how fast a throw is,
+and seeing the velocity arrow grow as you drag, has no keyboard equivalent and
+will not get one; the form gives you the number instead of the feel.
 
 **The attribution links in the footer are under 24×24.** They are inline text
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
@@ -191,6 +301,6 @@ only route to the material.
 
 ```bash
 npm run a11y            # both suites
-npm run a11y:axe        # axe only, all 60 combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->60<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 ```

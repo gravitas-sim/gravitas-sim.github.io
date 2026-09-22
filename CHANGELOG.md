@@ -25,7 +25,7 @@ listed here because this is the release that first carries it.
 - **An instructor portal that explains itself.** `/instructors/` states what is
   behind the passphrase before asking for it, says plainly what client-side
   encryption on a static host can and cannot promise, and presents the
-  <!--fact:instructorDocuments-->56<!--/fact--> documents grouped by investigation
+  <!--fact:instructorDocuments-->54<!--/fact--> documents grouped by investigation
   with their kind and size. A wrong passphrase and a missing bundle now report
   as the different problems they are.
 - **Dual licensing.** The code is MIT; the original educational material is
@@ -92,7 +92,7 @@ listed here because this is the release that first carries it.
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
   <!--fact:scenarios-->59<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->23<!--/fact--> English lessons, so a class keeps
+  <!--fact:investigations-->24<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -101,7 +101,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->657<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->670<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of
@@ -158,7 +158,7 @@ listed here because this is the release that first carries it.
   the share dialog and the scenario gallery keyboard traps in practice.
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
-  against a suite of <!--fact:physicsChecks-->243<!--/fact-->, and 48 scenarios
+  against a suite of <!--fact:physicsChecks-->286<!--/fact-->, and 48 scenarios
   against a catalog of <!--fact:scenarios-->59<!--/fact-->.
 
 ### Removed

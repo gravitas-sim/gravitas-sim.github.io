@@ -2592,6 +2592,15 @@ export const EN_DEFERRED = {
   'sound.now.nothing': 'Nothing',
   'sound.now.sandbox': 'Orbiting bodies, as tones',
   'sound.now.signal': 'A gravitational-wave signal, {seconds} s',
+  'sound.voices.title': 'What the tones stand for',
+  'sound.voices.reference':
+    'Highest voice, {label}. Period {period}. Every interval below is measured from this one.',
+  'sound.voices.row':
+    '{label}. Period {period}, {ratio}\u00d7 the highest voice, {cents} cents below it.',
+  'sound.voices.none':
+    'Nothing is being voiced. Sound is off, or no body in view is orbiting.',
+  'sound.voices.note':
+    'These are the periods the tones are computed from, not a description of the tones. The audio rounds each pitch onto a five-note scale, so two of these bodies can sound alike when their periods are not; the numbers here do not round.',
   'sound.preview': 'Play an example',
   'sound.stop': 'Stop',
   'sound.preview.note':
@@ -2727,6 +2736,7 @@ export const EN_DEFERRED = {
   'dmW.aRealStellarDiscIt':
     'A real stellar disc. It rises, peaks at about 2.2 scale lengths, and then falls away. Still not flat.',
   'dmW.whatGalaxiesDo': 'What galaxies do',
+  'dmW.radiusKpc': 'radius (kpc)',
   'dmW.speedKms': 'speed (km/s)',
   'dmW.speedAt30Kpc': 'Speed at 30 kpc',
   'dmW.outerSlopeVR': 'Outer slope (v ∝ rⁿ)',
@@ -2800,6 +2810,26 @@ export const EN_DEFERRED = {
   'dmW.darkMatterForEveryUnit': 'Dark matter for every unit of ordinary matter',
   'dmW.darkEnergy2': 'dark energy',
   'dmW.darkMatter2': 'dark matter',
+  'obsW.twelveNightsOnOneStar': 'Twelve nights on one star',
+  'obsW.theBarsAreTheNights':
+    'Each row is one night of the allocation. The dim bar is astronomical night; the bright part is when the target is also above the airmass limit. The ticks are the twelve measurements your plan would take. Underneath is the spectral window of those twelve times - a property of the schedule alone, with no data in it.',
+  'obsW.spreadTheTwelveOver': 'Spread the twelve over',
+  'obsW.nights': 'nights',
+  'obsW.useThisMuchOfEachWindow': 'Use this much of each window',
+  'obsW.airmassLimit': 'Airmass limit',
+  'obsW.twelveNightsInARow': 'Twelve nights in a row',
+  'obsW.spreadOutBestMoment': 'Spread out, best moment',
+  'obsW.spreadOutBothEnds': 'Spread out, both ends',
+  'obsW.usableWindowPerNight': 'Usable window per night',
+  'obsW.theWindowOpensEarlierBy': 'The window opens earlier by',
+  'obsW.baseline': 'Baseline',
+  'obsW.powerAtTheSiderealDay': 'Window power at the sidereal day',
+  'obsW.strongestAlias': 'Strongest alias',
+  'obsW.theEpochList': 'The epoch list, for the Explicit field',
+  'obsW.eachRowIsANight':
+    'night  |  astronomical night, target above the limit, and your twelve visits',
+  'obsW.siderealDay': 'sidereal day',
+  'obsW.cyclesPerDay': 'cycles per day',
   'transitW.howBigAShadow': 'How big a shadow?',
   'transitW.theSilhouetteOnTheLeft':
     'The silhouette on the left is drawn to scale. The curve on the right is the transit it produces.',
@@ -2978,6 +3008,8 @@ export const EN_DEFERRED = {
   'welcome.scenarioGone': 'That scenario is no longer available.',
   'welcome.shownAgain': 'It will be shown again next time',
   'welcome.showAgain': 'Show this again on my next visit',
+  'export.viewTable': 'View as table',
+  'export.hideTable': 'Hide table',
   'export.downloadCsv': 'Download CSV',
   'welcomeCard.sandbox.eyebrow': 'Free exploration',
   'welcomeCard.sandbox.title': 'Sandbox',
@@ -2999,7 +3031,7 @@ export const EN_DEFERRED = {
     'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
   'welcomeAudience.instructors.title': 'For instructors',
   'welcomeAudience.instructors.text':
-    '23 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+    '24 guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
   'welcomeAudience.curious.title': 'For the curious',
   'welcomeAudience.curious.text':
     'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',

@@ -40,6 +40,7 @@ import { RESONANCE_WIDGETS } from './resonanceWidgets.js';
 import { GW_WIDGETS } from './gwWidgets.js';
 import { STELLAR_WIDGETS } from './stellarWidgets.js';
 import { STELLAR_EVOLUTION_WIDGETS } from './stellarEvolutionWidgets.js';
+import { OBSERVING_WIDGETS } from './observingWidgets.js';
 import { POWER_LAW_WIDGETS } from './powerLawWidgets.js';
 
 // Every widget family's prose lives in the deferred half of the catalog,
@@ -75,6 +76,7 @@ const WIDGETS = [
   ...GW_WIDGETS,
   ...STELLAR_WIDGETS,
   ...STELLAR_EVOLUTION_WIDGETS,
+  ...OBSERVING_WIDGETS,
   ...POWER_LAW_WIDGETS,
 ];
 

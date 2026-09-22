@@ -310,6 +310,21 @@
       "loop": ["predict-direction", "measure-the-giant", "why-iron-stops-it"],
       "evidenceFrom": "data"
     },
+    "twelve-nights": {
+      "centralExperimentId": "ce.twelve-nights",
+      "object": "panel:observing-planner",
+      "control": "observing-planner/spread",
+      "quantity": "the spectral window power at the sidereal day, for two placements of the same twelve nights",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-the-comb",
+        "the-three-plans",
+        "measure-the-window-power",
+        "why-not-one-day"
+      ],
+      "evidenceFrom": "model"
+    },
     "power-law-gravity": {
       "centralExperimentId": "ce.power-law-gravity",
       "object": "panel:power-law-precession",

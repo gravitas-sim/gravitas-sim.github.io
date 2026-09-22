@@ -81,12 +81,24 @@ const LAYERS = [
       // lesson registry so that a deferred registry can read the language the
       // application already chose. Imports nothing itself.
       /^js\/lessonLocale\.js$/,
+      // The period-to-pitch law. Arithmetic over two numbers handed in - no
+      // AudioContext, no oscillator, no state and no clock - which is what
+      // makes it checkable from tools/physics-checks.mjs in plain Node. The
+      // existing sound, js/audio.js, is a feature-layer module that owns an
+      // AudioContext and reads the body lists; this is deliberately not that,
+      // and keeping the law down here is what stops it acquiring either.
+      /^js\/sonify\//,
       // Which object a lesson means, and what it borrowed. Identity rules over
       // values handed in - no object lists, no DOM, no clock - which is what
       // lets the authoring tools and the tests reason about a lesson's
       // bindings in plain Node. js/lessonScene.js is the half that knows where
       // the bodies are, and it lives in the feature layer where it belongs.
       /^js\/lesson\//,
+      // Which fields a body type needs and whether what was typed is usable.
+      // Values in, verdict out - no DOM, no catalog, no physics - which is
+      // what lets the placement form be tested without a browser and what
+      // keeps the schema in one place instead of once per input.
+      /^js\/place\//,
     ],
   },
   {

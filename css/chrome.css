@@ -1717,6 +1717,43 @@
     gap: var(--space-2);
   }
 
+  /* The typed path to the same thing, beside the button that opens the picker
+     rather than below it.
+
+     Below it cost 38 pixels of rail, and the rail had none: with Tools open at
+     the desktop viewport it measured 863 of 863 pixels before this feature
+     arrived, so a second full-width button put it 31 over and
+     e2e/presentation.spec.js caught it. The button cannot simply be made
+     shorter - .ui-button pins min-height to 34px, which is the touch target
+     and not negotiable - so the row gets narrower instead of the control
+     getting smaller.
+
+     Two labelled columns are not the answer either; the picker's own note
+     below records why half a rail leaves every name ellipsised to "Add ...".
+     An icon with an accessible name is the convention this codebase already
+     uses for a secondary action beside a primary one - see .readout-icon-btn
+     and .inspector-icon-btn - and it ellipsises nothing. */
+  .object-add {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .object-add #objectTypeBtn {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .ui-container .object-add .rail-icon-btn {
+    flex: 0 0 auto;
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+    font-size: var(--text-2xs);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
   #objectTypeBtn.is-armed .object-glyph {
     filter: brightness(0.35) saturate(1.4);
   }
@@ -1988,6 +2025,33 @@
   min-width: 0;
 }
 
+/*
+  The readout of what the tones stand for. Three selectors, because the list is
+  the only thing here that is not already styled by .sound-panel-note or the
+  panel's own type: a heading that has to read as smaller than the panel title,
+  the list's own reset, and tabular figures so that three periods in a column
+  can be compared digit by digit rather than eyeballed.
+*/
+.sound-panel-voices-title {
+  margin: 0 0 var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sound-panel-voices-list {
+  margin: 0 0 var(--space-2);
+  padding-left: 1.25em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.45;
+}
+
+.sound-panel-voices-list li + li {
+  margin-top: 2px;
+}
+
 .sound-panel-volume {
   display: flex;
   align-items: center;
@@ -2044,4 +2108,114 @@
 
 .sonification-toggle[data-state='blocked'] {
   color: var(--warn, #f2a65a);
+}
+
+/*
+  Precise placement. Five selectors: the dialog's own width, a row, the inputs,
+  the two kinds of small print under a field, and the button row. Everything
+  else - the panel chrome, the heading, the buttons - is already styled by
+  .modal-panel and .ui-button, which is why there is no .precise-dialog h2 here.
+*/
+.precise-dialog {
+  max-width: 34rem;
+}
+
+.precise-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: var(--space-2);
+}
+
+.precise-input {
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+  min-width: 0;
+}
+
+/* The hint is quiet; the error is not, and carries a color that survives a
+   grayscale print and a red-green deficiency because it is also the only line
+   under the field that is bold. */
+.precise-hint,
+.precise-intro,
+.precise-status {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.precise-error {
+  margin: 2px 0 0;
+  color: var(--danger, #e2555a);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.precise-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/*
+  The numbers behind a plot. Four selectors: the row of buttons, the box the
+  table lives in, the scroller that makes a wide table reachable, and the table
+  itself. The caption reuses .precise-hint's size and color through the
+  variables rather than a fifth rule.
+*/
+.export-file-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.export-table-host {
+  margin: 0 0 var(--space-3);
+}
+
+.export-table-caption {
+  margin: 0 0 var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+/* Horizontal scroll on its own container, never on the page. Focusable, so the
+   scrolling is reachable from a keyboard; max-height so a 200-row table does
+   not push the download buttons off the bottom of the dialog. */
+.export-table-scroll {
+  overflow: auto;
+  max-height: 22rem;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border-radius: 4px;
+}
+
+.series-table {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xs);
+  width: 100%;
+}
+
+.series-table th,
+.series-table td {
+  padding: 2px 8px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* The header row stays put while the body scrolls: a reader who has scrolled
+   to row 90 still needs to know which column is which. */
+.series-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-2, #1b1f27);
+  text-align: right;
+  font-weight: 600;
+}
+
+.series-table tbody th {
+  font-weight: 400;
 }

@@ -59,20 +59,43 @@ describe('updatePhysics', () => {
     mockState.frame_count = 0;
   });
 
-  test('should handle zero or negative time step', () => {
+  // This test used to assert that a negative step did nothing, alongside zero.
+  // That was the guard's actual behaviour and it was wrong for a reason nobody
+  // had needed yet: refusing a negative dt is refusing to integrate backwards,
+  // and tools/reversibility-probe.mjs has to integrate backwards to measure
+  // how well a forward run can be undone. The half of this test that was
+  // protecting something real - garbage dt must not reach the scene - is kept
+  // and extended, because the old condition `dt <= 0` let NaN straight through
+  // (NaN compares false against everything) and into every position.
+  test('a zero or non-finite step does nothing at all', () => {
     const planet = new Planet({ x: 0, y: 0 }, { x: 1, y: 1 });
     planets.push(planet);
 
     const initial_pos = { ...planet.pos };
     const initial_vel = { ...planet.vel };
 
-    updatePhysics(0);
-    expect(planet.pos).toEqual(initial_pos);
-    expect(planet.vel).toEqual(initial_vel);
+    for (const bad of [0, NaN, Infinity, -Infinity]) {
+      updatePhysics(bad);
+      expect(planet.pos).toEqual(initial_pos);
+      expect(planet.vel).toEqual(initial_vel);
+    }
+  });
+
+  test('a negative step integrates backwards', () => {
+    const planet = new Planet({ x: 0, y: 0 }, { x: 1, y: 1 });
+    planets.push(planet);
+
+    const initial_pos = { ...planet.pos };
+    updatePhysics(0.1);
+    const advanced = { ...planet.pos };
+    expect(advanced).not.toEqual(initial_pos);
 
     updatePhysics(-0.1);
-    expect(planet.pos).toEqual(initial_pos);
-    expect(planet.vel).toEqual(initial_vel);
+    // Not asserted to return exactly: with a single body and no forces it
+    // would, but what this pins is the direction. How closely a real scene
+    // comes back is the probe's question, not this one's.
+    expect(planet.pos.x).toBeLessThan(advanced.x);
+    expect(planet.pos.y).toBeLessThan(advanced.y);
   });
 
   test('should increment frame count', () => {

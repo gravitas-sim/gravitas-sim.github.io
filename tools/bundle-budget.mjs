@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3950,
+    limit: 3960,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -365,25 +365,76 @@ const BUDGETS = [
       'what a first-time visitor to the sandbox waited for. It is a page ' +
       'stylesheet now, like css/teaching.css before it. That is the trade this ' +
       'budget asks for: a dashboard fix wanted two kilobytes, and what it got ' +
-      'was a sheet deferred rather than a ceiling raised.\n\n' +
-      'Raised from 3880 to 3950 for the power-law gravity lesson and its ' +
-      'four instruments: 3874.1 KB before, 3938.5 KB after, both from fresh ' +
-      'builds. The English lesson chunk is 32.8 KB of source and its Spanish ' +
-      'shadow 28.0 - twenty-one screens, of which six carry an instrument - ' +
-      'and the instructor guide entry took js/data/instructorContent.js up by ' +
-      '16.1 KB, which is counted twice because validationWorker.js bundles the ' +
-      'prose catalog as well. The model itself is js/powerLawGravity.js at ' +
-      '26.2 KB, js/powerLawLab.js at 11.7 and js/powerLawWidgets.js at 5.6; ' +
-      'the manifests and browse metadata account for the remaining 1.7. Two ' +
-      'new deferred chunks, 137 to 139. A lesson and an instrument is what ' +
-      'the paragraph at the top of this reason says this budget is loose ' +
-      'for.\n\n' +
-      'The initial download did NOT move and its limit was NOT touched: ' +
-      '811.0 KB before and after, across 50 eager files both times. The ' +
-      'model is reached only from the lesson and from its own tests, so ' +
-      'nothing about it is on the start-up path, and the instruments are ' +
-      "built from the panel system's existing classes - they add no " +
-      'stylesheet rules at all.',
+      'was a sheet deferred rather than a ceiling raised.' +
+      '\n\nRaised from 3880 to 3950 for the spherical-astronomy module and ' +
+      'the one lesson built on it, measured at 3930.3 KB. Four items, three ' +
+      'of them the content this budget says it is loose for. ' +
+      'js/observingWindow.js is 43.9 KB of source, and more than half of ' +
+      'that is the header and the JSDoc rather than code: the truncated ' +
+      'lunar series is a hundred lines of coefficients and the rest is the ' +
+      'argument for why time is an argument there and never a reading. Its ' +
+      'widget is 15.5 KB, the lesson 28.7 with a 17.0 KB Spanish shadow ' +
+      'behind it, and the instructor guide 12.0 inside the portal chunk, ' +
+      'which the simulation never loads.\n\nNone of it is reachable from ' +
+      'the entry graph, and the chain is short enough to check by hand: the ' +
+      'module is imported by the widget, the widget by js/widgets.js, and ' +
+      'js/widgets.js by js/investigations.js, which only the lazy lesson ' +
+      'engine imports.\n\nThe initial download did NOT move and its limit ' +
+      'was not touched: 811.0 KB against 830.0, exactly where it stood ' +
+      'before this work. That is the whole of what deferring it was for - a ' +
+      'visitor who never opens a lesson downloads none of the above.' +
+      '\n\nRaised from 3880 to 3900 for the accessibility-parity pass, measured at ' +
+      '3891.0 KB against 3874.1 before it. This one is raised rather than paid ' +
+      'for, and the accounting is here because the rule above says to look for ' +
+      'a module to defer first. There was nothing to defer: every byte of this ' +
+      'work is already behind a dynamic import and none of it is in the ' +
+      'start-up path. Itemised, 16.9 KB: js/precisePlacement.js is 6.4 KB, the ' +
+      'form that lets a reader build a system by typing a position, a velocity ' +
+      'and a mass instead of clicking and dragging; its strings are 2.6 KB of ' +
+      'English and 2.7 of Spanish; js/seriesTable.js is 2.1 KB, which renders ' +
+      'the numbers behind the light curve, the radial-velocity trace and the ' +
+      'rotation curve as a table a screen reader can read; and the rest is the ' +
+      'rotation-curve exporter, the one instructional plot that had no CSV.\n\n' +
+      'The strings cost four times that before they were moved. ' +
+      'js/i18n/en.deferred.js is embedded in four separate bundles - the lazy ' +
+      'chunks, the instructor portal, the validation worker - so fifty strings ' +
+      'added there are downloaded four times by the reader who needs them and ' +
+      'three times by readers who cannot reach the feature at all. They are ' +
+      'js/i18n/en.placement.js now, imported by the two lazy modules and ' +
+      'registered for the one locale in use, which is the split ' +
+      'js/i18n/en.activities.js made for the same reason. Four copies to one.\n\n' +
+      'The initial download was NOT raised and did not need to be: 811.0 KB ' +
+      'before, 813.0 after, against an untouched 830.0. Its share is the rail ' +
+      'button, its two strings, and fromCsv() in js/csv.js - which is what lets ' +
+      'a table render the exporter’s own output instead of building rows of ' +
+      'its own, so the table on screen and the file a reader downloads cannot ' +
+      'be two derivations that disagree.' +
+      '\n\nRaised from 3950 to 3960 at integration, and this one is not a ' +
+      'feature asking for room - it is arithmetic. The two paragraphs above ' +
+      'were each measured on their own branch against a 3874.1 KB baseline, ' +
+      'and each fits the ceiling it asked for: the spherical-astronomy work ' +
+      'measures 3935.9 of the 3950 it justified, the accessibility-parity work ' +
+      '3891.0 of its 3900. Together on the integrated tree they measure ' +
+      '3952.4, which is 2.4 KB over the higher of the two. Nothing unexplained ' +
+      'grew; the sum of two approved costs is simply larger than either.\n\n' +
+      'The laziness audit that the rule above asks for was done before raising ' +
+      'this rather than after. Every module either feature added is behind a ' +
+      'dynamic import - js/precisePlacement.js, js/seriesTable.js, ' +
+      'js/place/preciseFields.js, both placement catalogs, js/observingWindow.js ' +
+      'and its widget - and the static import closure from js/main.js reaches ' +
+      'none of them. No module became eager: the initial download moved 813.7 ' +
+      'to 816.4 KB, which is the rail button, its two strings and fromCsv(), ' +
+      'against an untouched 830.0 limit. There was no duplication to recover: ' +
+      'the accessibility pass had already removed the largest one it found, ' +
+      'moving fifty strings out of js/i18n/en.deferred.js, which four separate ' +
+      'bundles embed, into a catalog loaded once.\n\n' +
+      'So the honest description of this raise is that v1.1 ships two accepted ' +
+      'features whose costs were each accounted for separately, and 3960 is ' +
+      'where their sum lands with seven kilobytes to spare. The power-law ' +
+      'gravity lesson is deferred to v1.2 for exactly this reason: adding it ' +
+      'as well measures about 4005 KB, which is a third feature asking for a ' +
+      'third raise, and that is the point at which the rule above says to look ' +
+      'for something to defer instead.',
   },
 ];
 

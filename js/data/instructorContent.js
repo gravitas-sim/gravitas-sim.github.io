@@ -16,6 +16,160 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'twelve-nights': {
+    topic:
+      'Observability, the sidereal day, and why a once-a-night schedule aliases',
+    difficulty: 'Introductory, one arithmetic step, no calculus',
+    placement:
+      'Forty to fifty minutes, after "Can You Detect This Planet?" and ideally after "Design the Schedule". That lesson establishes that the placement of observations decides the result; this one shows that most of the placement is decided by the site and the target before the student gets a say. It is the only lesson in the catalog that computes anything about the real sky.',
+    overview: `Students are given twelve nights on HD 209458 from La Silla and told to plan the
+      run. The target is at declination +18.9 and the site at latitude -29.3, so it culminates at
+      41.9 degrees, never gets below airmass 1.5, and is above the airmass 2 limit for 4.96 hours
+      a night. One window a night, and the window opens 3.9 minutes earlier each time because it
+      is anchored to the target's hour angle rather than to the clock.
+      \n\nThe consequence is a comb with a spacing of one sidereal day and a spectral window
+      peak at 1.00274 cycles a day. Under that comb the 3.5247-day planet has aliases at 1.391 d
+      and 0.777 d, and the run comes back with one of them. The student then discovers that the
+      one decision genuinely theirs - where inside the five-hour window to observe - moves the
+      recovery rate from 1 in 16 to 13 in 16 on exactly the same twelve nights.
+      \n\nThe lesson closes on the thing that is usually left out: the peak never falls below
+      about 0.7 however many nights are added, so the fix is a second longitude and not more
+      time. The four-row table in step 11 was measured rather than argued, and the header comment
+      of the lesson file records how.`,
+    priorKnowledge: [
+      'What right ascension and declination are, at the level of "coordinates on the sky"',
+      'That a radial-velocity curve is sampled rather than continuous',
+      'Helpful but not required: having met a periodogram or a spectral window in "Design the Schedule"',
+      'No trigonometry is asked for. The altitude relation is described and computed by the planner, never derived',
+    ],
+    keyConcepts: [
+      {
+        heading:
+          'Observability is three constraints, and only one is about the target',
+        body: 'The sky has to be dark, the target has to be high enough, and the Moon has to be somewhere else. Students reliably think of the second only. The planner draws all three and the lesson asks which is binding, because the answer changes through the season: in September the target sets the limit, and by December the Sun does.',
+      },
+      {
+        heading: 'A sidereal day is not a rounding error',
+        body: 'The four minutes is the whole reason the alias sits at 1.00274 rather than 1.000, and it is the cleanest evidence a student will ever get that the comb was imposed by the Earth rather than by their own choices. Step 7 is built entirely on it and is worth not rushing.',
+      },
+      {
+        heading: 'The spectral window contains no data',
+        body: 'It is computable before the telescope opens, which is exactly the situation a time allocation puts an observer in. The planner deliberately never shows a period or a velocity, so everything the student learns while planning is something they could have known in advance.',
+      },
+      {
+        heading:
+          'An alias is a property of the sampling, so more sampling of the same pattern does not remove it',
+        body: 'This is the step that does not survive intuition. Sixty epochs at the center of the window do no better than twelve at its edges. The window power at the sidereal day is 0.70 at twelve epochs and 0.81 at sixty - it goes up, not down. The remedy is a different longitude, which changes the pattern.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-3',
+        text: 'The allocation, and measuring what it actually buys: five hours a night, walking 3.9 minutes earlier each time. The drift is the number everything later depends on.',
+      },
+      {
+        steps: '4-6',
+        text: 'Predict the comb, then see it in the spectral window, and measure how far the peak falls when the full width of the window is used instead of its middle.',
+      },
+      {
+        steps: '7',
+        text: 'Why the peak sits at the sidereal day and not at one cycle a day. Worth not rushing: it is the evidence that the comb was imposed rather than chosen.',
+      },
+      {
+        steps: '8-10',
+        text: 'Commit both plans to the live spectrograph, in sequence with one seed, and read an alias off one of them.',
+      },
+      {
+        steps: '11-13',
+        text: 'What nine more weeks would have bought, what would actually fix it, and what a period has to be quoted with before anybody else can check it.',
+      },
+    ],
+    features: [
+      {
+        name: 'The observing planner',
+        text: 'A lesson widget that computes real windows for a real site from js/observingWindow.js, and draws the spectral window of the twelve epochs it places. It deliberately never shows a period or a velocity.',
+      },
+      {
+        name: 'The Radial Velocity panel',
+        text: 'In synthetic-observing-run mode with an explicit epoch list, which is how the plan written in the planner is committed to the simulation.',
+      },
+      {
+        name: 'The spectral window',
+        text: 'js/rvSchedule.js computes it from the observation times alone. It carries no data, so everything the student learns while planning is something they could have known before the telescope opened.',
+      },
+      {
+        name: 'The evidence notebook',
+        text: 'The two measure steps write their fields to it, so the window powers and the two recovered periods can be read back and marked.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'The simulation is modeling the Earth turning',
+        response:
+          'It is not, and step 1 says so. The windows are computed separately against published ephemerides for real dates in September 2026; the velocities are simulated. The only thing that crosses the seam is a list of numbers. Worth restating if a student asks why the planet is on screen while the planner is open.',
+      },
+      {
+        claim: 'An alias means the fit failed',
+        response:
+          'The fit did not fail. The alias is the best-fitting period, and it fits as well as the truth does because the schedule cannot tell them apart. Students who treat 0.777 d as a bug go looking for a mistake in the run rather than in the plan.',
+      },
+      {
+        claim: 'More data always helps',
+        response:
+          'Step 11 exists for this. Sixty epochs at the center of the window do no better than twelve at its edges, and the window power at the sidereal day goes up rather than down. It is the single most useful thing in the lesson for a student who will go on to write an observing proposal.',
+      },
+      {
+        claim: 'You should always observe at the best airmass',
+        response:
+          'Correct for photometric precision on one night, and wrong for the program. The lesson makes them pay a real cost in airmass to buy a better window, which is a trade real programs make and rarely explain.',
+      },
+      {
+        claim: 'The four-minute drift is the Sun moving',
+        response:
+          'It is the most common wrong answer to step 7 and it is option D there. Twilight does move through the season, but what opens the window is the target reaching the airmass limit, and that is kept by the stars.',
+      },
+    ],
+    teachingNotes: [
+      'Step 3 is worth doing as a class. Ask where the four minutes comes from before revealing it; the guess is almost always "the Sun moves".',
+      'If the class is short of time, steps 1-7 stand alone and deliver the central point without the spectrograph run. Steps 8-10 are what make it stick.',
+      'A student whose both-ends run also returns an alias has not made a mistake: that plan misses about one time in five, and the validator says so. Have them change the seed rather than re-plan.',
+      'The recovery rates quoted in step 11 come from sixteen noise draws per row and are reproducible; the method is in the header comment of js/data/investigations/twelve-nights.js.',
+      'Step 11 is a reading-comprehension trap as much as a physics one: students who pick option A have read the recovered column and not the window-power column beside it. Ask what the four window-power numbers do before asking what the recovered ones do.',
+      'The answer wanted at step 12 is a second longitude, or anything that removes the once-a-night constraint rather than sampling it more often - a space telescope and a circumpolar target both earn full credit. Watch for "more nights", which step 11 has just ruled out, and for "a bigger telescope", which addresses the noise and not the window.',
+    ],
+    discussion: [
+      'The plan that gets the right answer takes every measurement at worse airmass than it could have. What is being traded for what?',
+      'The committee gave twelve nights. If you could exchange them for six nights on two telescopes eight hours apart in longitude, would you?',
+      'Step 13 says a period should be quoted with its window peak. What else do we routinely quote without the thing that would let somebody check it?',
+    ],
+    extensions: [
+      'Work out the aliases of a 1.03-day planet under the same comb, and say why a hot Jupiter near one day is the hardest case for a single-site program',
+      'Take the airmass limit to 3 and see how much window width it buys, then decide whether the extra hour is worth observing through three atmospheres',
+      'Run "Design the Schedule" afterwards and say which of its two arms corresponds to which plan here',
+    ],
+    modelNotes: `The observing geometry is real and the star is not, and the two are computed by
+      different code that shares nothing but a list of times. js/observingWindow.js takes a
+      Julian Date as an argument and never reads a clock, so every student on every machine
+      computes the same windows for the same night; tools/physics-checks.mjs holds it against the
+      Astronomical Almanac's Sun, two published lunations, the gammas of two total lunar eclipses
+      and Kasten & Young's airmass fit, with thirty-eight checks in the "Observing windows" group.
+      \n\nWhat it does not model: atmospheric refraction, lunar parallax, and the difference
+      between UT and TT. The first two are under a degree and the third is about seventy seconds,
+      and none of them moves a window boundary by as much as the two-minute grid the sampler uses.
+      \n\nThe velocities come from the same Exoplanet Characterization Lab the other
+      radial-velocity lessons use, integrated in the plane with the star free to move. The
+      simulation has no Earth, no rotation and no atmosphere, and the airmass a measurement was
+      taken at does not degrade it - every epoch carries the same 8 m/s whether it was booked at
+      airmass 1.5 or airmass 2. That is a simplification the lesson leans on rather than hides:
+      it is what makes the comparison between the two plans clean, because the only thing that
+      differs between them is the times.`,
+    expectations: {
+      3: 'The window reads 4.96 h and the drift 3.9 min per night. A student reading 8-9 hours has read the astronomical-night row rather than the usable one; a student reading about 2 hours has left the airmass slider low.',
+      6: 'About 0.998 for the best-moment plan and about 0.701 for both-ends. The second figure is the one to dwell on: it is a large improvement and it is still a peak of 0.7.',
+      7: 'Option B. Expect "the Sun moves" as the common wrong answer - it is option D, and it is wrong because twilight is not what opens the window.',
+      10: 'The best-moment run should return 0.58, 0.78 or 1.39 days. About one class in five will see it return 3.52 anyway, which is the correct behavior at a window power of 1 and is what the validator says; a second seed settles it. The both-ends run returns about 3.52 roughly four times in five.',
+    },
+  },
   'lagrange-points': {
     topic:
       'The circular restricted three-body problem: Jacobi constant, zero-velocity curves and Lagrange points',

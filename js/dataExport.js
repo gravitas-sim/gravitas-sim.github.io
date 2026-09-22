@@ -23,6 +23,7 @@
 import { forEachRecordedFrame, recordedExtent } from './timeline.js';
 import { lightCurveSeries, transitAnalysis } from './lightCurve.js';
 import { radialVelocitySurvey } from './radialVelocity.js';
+import { rotationCurveState } from './rotationCurve.js';
 import { timeUnitSeconds } from './units.js';
 import { SOLAR_MASS_UNIT } from './physics.js';
 import { G_SI, SOLAR_MASS_KG, AU_M } from './blackHolePhysics.js';
@@ -696,6 +697,49 @@ export function radialVelocityCsv() {
  * How much data is available right now, for the export dialog to describe.
  * @returns {Object} Counts for each of the three files
  */
+export const ROTATION_CURVE_COLUMNS = [
+  'r_au',
+  // What the plot draws: the full orbital speed. The tangential component is
+  // beside it because the difference between them is how radial a tracer's
+  // motion is, which is the thing that makes a scattered point scattered.
+  'v_kms',
+  'v_tangential_kms',
+  'mass_solar',
+  'name',
+];
+
+/**
+ * The rotation curve, as CSV.
+ *
+ * The one instructional plot that had no export at all. Every value comes from
+ * rotationCurveState(), which is the same call js/rotationCurve.js makes to
+ * draw it - including which bodies count as tracers and which single body it
+ * drops as the central mass, decisions it would be wrong to make again here
+ * and get differently.
+ *
+ * `v_kms` is `point.speed`, which is the quantity the plot puts on the vertical
+ * axis; reading that off the source rather than assuming it is the tangential
+ * component is the difference between a file that matches the picture and one
+ * that quietly does not.
+ *
+ * @returns {{csv:string, rows:number, mode:string}} The document and what went into it
+ */
+export function rotationCurveCsv() {
+  const snap = rotationCurveState();
+  const toKms = v => (v * UNIT_M) / timeUnitSeconds() / 1000;
+  const rows = [ROTATION_CURVE_COLUMNS.slice()];
+  for (const p of snap.points || []) {
+    rows.push([
+      num(p.r / 100),
+      num(toKms(p.speed)),
+      num(toKms(p.tangential)),
+      num(p.mass / SOLAR_MASS_UNIT),
+      csvField(p.body?.name ?? ''),
+    ]);
+  }
+  return { csv: toCsv(rows), rows: rows.length - 1, mode: snap.mode };
+}
+
 export function exportSummary() {
   const extent = recordedExtent();
   const curve = lightCurveSeries();
@@ -718,7 +762,28 @@ export function exportSummary() {
     rvDegraded: run.measurements.filter(m => m.quality === 'degraded').length,
     rvPlanned: run.planned,
     rvRunning: run.running,
+    // How many tracers the rotation curve has to offer. Counted through the
+    // same rotationCurveState() the plot and the exporter use, so a scenario
+    // with no disc reports none and the row grays out rather than offering a
+    // file with a header and nothing under it.
+    rotationPoints: rotationCurvePoints(),
   };
+}
+
+/**
+ * How many tracers the rotation curve currently has.
+ *
+ * Wrapped because rotationCurveState() walks the body lists and a summary that
+ * threw on an empty world would take the whole export dialog with it.
+ *
+ * @returns {number} Tracer count, 0 when there is no curve
+ */
+function rotationCurvePoints() {
+  try {
+    return rotationCurveState().points?.length ?? 0;
+  } catch {
+    return 0;
+  }
 }
 
 /**

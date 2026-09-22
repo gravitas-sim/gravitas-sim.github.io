@@ -120,9 +120,14 @@ any of these.
 
 # Functionality and the instructor adoption path
 
-The sandbox integrates gravitational N-body motion with a velocity-Verlet
-integrator and an optional fourth-order Runge–Kutta scheme, and supports point
-masses, stars, planets, small bodies, black holes and compact-object binaries.
+The sandbox integrates gravitational N-body motion with a choice of three
+schemes — symplectic Euler by default, velocity Verlet, and fourth-order
+Runge–Kutta — and supports point masses, stars, planets, small bodies, black
+holes and compact-object binaries. The default is first-order and symplectic
+rather than higher-order and not: every scenario is tuned against it, and the
+validation suite measures each scheme's convergence order and shows that the
+two symplectic schemes hold their energy error bounded over sixty orbits while
+Runge–Kutta accumulates.
 Instruments include an object inspector, an energy and angular-momentum
 conservation readout, a reference-frame selector, a tidal-field visualizer, a
 rotation-curve fitter, a radial-velocity and transit workspace, a
@@ -185,14 +190,14 @@ has never been raised.
 # Testing and validation
 
 Gravitas is tested at three levels. A unit suite covers the modules. A browser
-suite runs in Chromium, Firefox and WebKit, against both the sources and the
-production build. A physics validation suite runs 243 checks and publishes the
+suite runs in full in Chromium, against both the sources and the production
+build; a tagged cross-engine subset of it runs in Firefox and WebKit. A physics validation suite runs 286 checks and publishes the
 result: each check names what it compares, the kind of evidence it rests on —
 analytic, integrated, published, approximation or empirical — and its measured
 error. The public validation page is generated from the suite that ran, not
 transcribed from it.
 
-A release gate runs 35 checks covering formatting, linting, module architecture,
+A release gate runs 39 checks covering formatting, linting, module architecture,
 authoring rules including lesson-quality warnings, internal links, dependency
 audits, the unit and browser suites, the physics validation, bundle budget and
 composition, and the currency of every generated artifact. It additionally

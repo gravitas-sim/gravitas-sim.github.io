@@ -62,6 +62,11 @@ export default [
         CanvasRenderingContext2D: 'readonly',
         EventTarget: 'readonly',
         WeakRef: 'readonly',
+        // Used inside page.evaluate() by e2e/workerRealm.spec.js, which builds
+        // a module Worker from a Blob to prove the engine runs in its own realm.
+        Blob: 'readonly',
+        Worker: 'readonly',
+        location: 'readonly',
       },
     },
     plugins: { prettier },

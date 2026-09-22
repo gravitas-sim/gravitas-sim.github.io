@@ -71,6 +71,7 @@ import WHAT_IS_A_GRAVITATIONAL_WAVE from './investigations/what-is-a-gravitation
 import LISTENING_TO_SPACETIME from './investigations/listening-to-spacetime.js';
 import A_UNIVERSE_OF_STARS from './investigations/a-universe-of-stars.js';
 import LIVES_OF_STARS from './investigations/lives-of-stars.js';
+import TWELVE_NIGHTS from './investigations/twelve-nights.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
@@ -112,6 +113,7 @@ export const INVESTIGATIONS = [
   LISTENING_TO_SPACETIME,
   A_UNIVERSE_OF_STARS,
   LIVES_OF_STARS,
+  TWELVE_NIGHTS,
   // The force law itself, after the lessons that assume it. Kepler's laws are
   // the thing this one takes apart, so it cannot come before them.
   POWER_LAW,
