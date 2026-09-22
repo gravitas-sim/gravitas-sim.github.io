@@ -336,4 +336,17 @@ export const MANIFEST = [
     gradedCount: 8,
     objectiveCount: 6,
   },
+  {
+    id: 'power-law-gravity',
+    title: '¿Y si la gravedad no fuera inversa al cuadrado?',
+    subtitle: 'Cambia el exponente y descubre qué dependía de él',
+    duration: '45-60 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Newton dijo que la gravedad decae como uno partido por la distancia al cuadrado. No a la primera, no al cubo: al cuadrado, exactamente. Esta investigación pregunta qué está haciendo ese «exactamente». Subirás y bajarás el exponente y medirás tres cosas: si la órbita sigue cerrándose, cómo depende el periodo orbital de la distancia y qué leyes de conservación sobreviven. Dos de ellas cambian de inmediato. Una no cambia en absoluto, y la razón de que no lo haga es lo más útil de la lección.',
+    thumbnail: 'images/scenarios/solar-system.webp',
+    stepCount: 21,
+    gradedCount: 14,
+    objectiveCount: 5,
+  },
 ];

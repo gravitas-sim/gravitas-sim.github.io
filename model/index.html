@@ -1794,6 +1794,60 @@
               </td>
             </tr>
             <tr>
+              <td>Normalized power-law gravity</td>
+              <td>
+                A controlled experiment, used only by the four instruments in
+                "What If Gravity Were Not Inverse Square?" and never by the
+                simulation. The radial dependence of gravity is replaced by
+                <em>a</em>(<em>r</em>)&nbsp;=&nbsp;<em>GM</em>&nbsp;<em>r</em
+                ><sub>0</sub><sup><em>n</em>&minus;2</sup>/<em>r</em><sup
+                  ><em>n</em></sup
+                >, which is Newton's law at <em>n</em>&nbsp;=&nbsp;2 and, at the
+                reference radius <em>r</em><sub>0</sub>&nbsp;=&nbsp;1&nbsp;AU,
+                Newtonian for every <em>n</em>. The reference radius is not
+                decoration: without it the departure from Newton is
+                <em>r</em><sup>2&minus;<em>n</em></sup
+                >, which depends on the unit distance is expressed in, and most
+                of its effect on an orbit is a change of strength that could be
+                reproduced by altering <em>G</em>. Anchored, <em>n</em> changes
+                the shape of the field and not its magnitude. Energy is computed
+                from the potential belonging to that force,
+                &Phi;(<em>r</em>)&nbsp;=&nbsp;&minus;<em>GM</em>&nbsp;<em>r</em
+                ><sub>0</sub><sup><em>n</em>&minus;2</sup>/((<em>n</em
+                >&minus;1)<em>r</em><sup><em>n</em>&minus;1</sup>), and not from
+                &minus;<em>GM</em>/<em>r</em>, which is the potential of the
+                inverse square alone.
+              </td>
+              <td>
+                Not a theory of gravity, not a modified-gravity phenomenology
+                and not MOND, which is keyed on an acceleration scale rather
+                than a radius and is a separate model above. Not relativity: the
+                anomalous precession of Mercury is general relativity and is not
+                what this reproduces. Nothing in the simulation uses it &mdash;
+                every ordinary scenario stays Newtonian, and the lesson drives
+                no body on the canvas &mdash; so it cannot leak into a scenario
+                the way a global setting could. The exponent is limited to
+                1.5&nbsp;&le;&nbsp;<em>n</em>&nbsp;&le;&nbsp;2.9 because
+                circular orbits are stable only for <em>n</em>&nbsp;&lt;&nbsp;3,
+                where the apsidal angle diverges; the lesson names that boundary
+                rather than stranding a reader inside it. Two exact results are
+                shown: the period&ndash;radius slope
+                (<em>n</em>&nbsp;+&nbsp;1)/2 for circular orbits, and the
+                vanishing of precession at <em>n</em>&nbsp;=&nbsp;2
+                (Bertrand&nbsp;1873). The precession curve drawn beside the
+                measurement,
+                &Delta;&piv;&nbsp;=&nbsp;2&pi;(1/&radic;(3&minus;<em>n</em>)&nbsp;&minus;&nbsp;1),
+                is a near-circular approximation and is labeled as one: against
+                integrated orbits it holds to 0.04% at eccentricity 0.02 and
+                about 1% at 0.1, which is where the lesson runs. Momentum and
+                angular momentum are conserved for every <em>n</em> &mdash;
+                pair forces are equal and opposite and act along the line
+                joining the bodies, neither of which mentions distance &mdash;
+                and that is the result the lesson is built around rather than an
+                incidental property.
+              </td>
+            </tr>
+            <tr>
               <td>Rotation-curve decomposition</td>
               <td>
                 A separate model, used only by the fitting instrument in "The
@@ -2355,7 +2409,7 @@
         Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->23<!--/fact-->
+        <!--fact:investigations-->24<!--/fact-->
         lessons and cannot fall behind them. It listed six of the twelve when it
         was maintained by hand.
       </p>
@@ -2460,6 +2514,10 @@
             <tr>
               <td>Twelve Nights</td>
               <td>The observing geometry is real and the star is not, and the two are computed by different code that shares nothing but a list of times. js/observingWindow.js takes a Julian Date as an argument and never reads a clock, so every student on every machine computes the same windows for the same night; tools/physics-checks.mjs holds it against the Astronomical Almanac's Sun, two published lunations, the gammas of two total lunar eclipses and Kasten &amp; Young's airmass fit, with thirty-eight checks in the &quot;Observing windows&quot; group. What it does not model: atmospheric refraction, lunar parallax, and the difference between UT and TT. The first two are under a degree and the third is about seventy seconds, and none of them moves a window boundary by as much as the two-minute grid the sampler uses. The velocities come from the same Exoplanet Characterization Lab the other radial-velocity lessons use, integrated in the plane with the star free to move. The simulation has no Earth, no rotation and no atmosphere, and the airmass a measurement was taken at does not degrade it - every epoch carries the same 8 m/s whether it was booked at airmass 1.5 or airmass 2. That is a simplification the lesson leans on rather than hides: it is what makes the comparison between the two plans clean, because the only thing that differs between them is the times.</td>
+            </tr>
+            <tr>
+              <td>What If Gravity Were Not Inverse Square?</td>
+              <td>The instruments run a contained model in js/powerLawGravity.js. It integrates its own two-body and three-body problems and never touches the main engine, so every ordinary Gravitas scenario remains Newtonian and the Solar System visible during this lesson is not affected by the exponent. The law is a(r) = GM * r0^(n-2) / r^n with r0 = 1 AU, which is exactly Newtonian at n = 2 and exactly Newtonian at r = r0 for every n. The potential used for the energy readout is the one belonging to that force, verified by differentiation in tests/powerLawGravity.test.js rather than transcribed. The near-circular precession relation shown beside the measurement is an approximation valid for small eccentricity; at the eccentricity the lesson runs it agrees with the integrated orbit to about one percent, and it is labeled as an estimate everywhere it appears. This is a controlled experiment, not a theory of gravity, and the lesson says so in its closing step.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

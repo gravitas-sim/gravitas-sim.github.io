@@ -27,6 +27,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'lives-of-stars': 'data',
   'missing-mass': 'engine',
   'orbital-energy': 'model',
+  'power-law-gravity': 'model',
   'radial-velocity': 'model',
   'retrograde-motion': 'engine',
   tides: 'model',

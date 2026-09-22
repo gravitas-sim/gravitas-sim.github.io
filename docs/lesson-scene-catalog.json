@@ -631,6 +631,50 @@
    "mutates": [],
    "datasets": []
   },
+  "power-law-conservation": {
+   "live": false,
+   "controls": [
+    "n"
+   ],
+   "presets": 5,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
+  "power-law-kepler": {
+   "live": false,
+   "controls": [
+    "n"
+   ],
+   "presets": 5,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
+  "power-law-precession": {
+   "live": false,
+   "controls": [
+    "n"
+   ],
+   "presets": 5,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
+  "power-law-refinement": {
+   "live": false,
+   "controls": [
+    "n"
+   ],
+   "presets": 5,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": []
+  },
   "reflex-motion": {
    "live": false,
    "controls": [
@@ -49024,26 +49068,1281 @@
     "mismatched": 0,
     "rebuilds": 3
    }
+  },
+  {
+   "id": "power-law-gravity",
+   "title": "What If Gravity Were Not Inverse Square?",
+   "lock": null,
+   "steps": [
+    {
+     "sid": "the-exactly",
+     "index": 1,
+     "type": "read",
+     "title": "The word \"exactly\"",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Solar System\""
+     ],
+     "recovery": [
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "why-there-is-a-reference-distance",
+     "index": 2,
+     "type": "read",
+     "title": "Why the experiment needs an anchor",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "predict-does-small-matter",
+     "index": 3,
+     "type": "predict",
+     "title": "Does a small change matter?",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "first-look-at-the-orbit",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "first-look-at-the-orbit",
+     "index": 4,
+     "type": "explore",
+     "title": "Does the ellipse close?",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "power-law-precession",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "record-the-precession",
+     "index": 5,
+     "type": "measure",
+     "title": "Record what the axis does",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "power-law-precession",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values"
+     ],
+     "recovery": [
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "what-closes-an-orbit",
+     "index": 6,
+     "type": "question",
+     "title": "What closes an orbit",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "predict-is-it-the-computer",
+     "index": 7,
+     "type": "predict",
+     "title": "Or is it the computer?",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "refine-the-timestep",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "refine-the-timestep",
+     "index": 8,
+     "type": "measure",
+     "title": "Refine the timestep",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "power-law-refinement",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values"
+     ],
+     "recovery": [
+      "ambiguous result: nothing marks these, they are a record"
+     ]
+    },
+    {
+     "sid": "the-refinement-verdict",
+     "index": 9,
+     "type": "question",
+     "title": "What refinement proves",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "predict-period-and-distance",
+     "index": 10,
+     "type": "predict",
+     "title": "Period against distance",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "measure-the-slope",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "measure-the-slope",
+     "index": 11,
+     "type": "measure",
+     "title": "Measure the slope",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "build-a-plot"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "power-law-kepler",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields",
+      "plot"
+     ],
+     "reset": [
+      "stamps instrument values"
+     ],
+     "recovery": [
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "predict-the-slope",
+     "index": 12,
+     "type": "question",
+     "title": "Use the pattern",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "model-result",
+      "panel-diagram"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": true,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "power-law-kepler",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "why-the-slope-and-not-something-else",
+     "index": 13,
+     "type": "question",
+     "title": "Why this measurement in particular",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "predict-what-breaks",
+     "index": 14,
+     "type": "predict",
+     "title": "What else breaks?",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "measure-conservation",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "measure-conservation",
+     "index": 15,
+     "type": "measure",
+     "title": "Check the conservation laws",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "power-law-conservation",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values"
+     ],
+     "recovery": [
+      "ambiguous result: nothing marks these, they are a record"
+     ]
+    },
+    {
+     "sid": "why-they-survive",
+     "index": 16,
+     "type": "question",
+     "title": "Why those two survived",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "and-energy",
+     "index": 17,
+     "type": "read",
+     "title": "And energy, with one catch",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "two-lists",
+     "index": 18,
+     "type": "read",
+     "title": "Two lists",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "near-three",
+     "index": 19,
+     "type": "read",
+     "title": "Where the instrument stops",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "closing-question",
+     "index": 20,
+     "type": "question",
+     "title": "One last sort",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "the-honest-caveat",
+     "index": 21,
+     "type": "read",
+     "title": "What this was and was not",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    }
+   ],
+   "loops": [
+    {
+     "predict": "predict-does-small-matter",
+     "predictCollects": true,
+     "heldUntil": "first-look-at-the-orbit",
+     "experiment": [
+      "first-look-at-the-orbit",
+      "record-the-precession"
+     ],
+     "measure": [
+      "first-look-at-the-orbit",
+      "record-the-precession"
+     ],
+     "evidence": [
+      "record-the-precession"
+     ],
+     "interpret": "first-look-at-the-orbit",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-is-it-the-computer",
+     "predictCollects": true,
+     "heldUntil": "refine-the-timestep",
+     "experiment": [
+      "refine-the-timestep"
+     ],
+     "measure": [
+      "refine-the-timestep"
+     ],
+     "evidence": [
+      "refine-the-timestep"
+     ],
+     "interpret": "refine-the-timestep",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-period-and-distance",
+     "predictCollects": true,
+     "heldUntil": "measure-the-slope",
+     "experiment": [
+      "measure-the-slope",
+      "predict-the-slope"
+     ],
+     "measure": [
+      "measure-the-slope",
+      "predict-the-slope"
+     ],
+     "evidence": [
+      "measure-the-slope"
+     ],
+     "interpret": "measure-the-slope",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-what-breaks",
+     "predictCollects": true,
+     "heldUntil": "measure-conservation",
+     "experiment": [
+      "measure-conservation"
+     ],
+     "measure": [
+      "measure-conservation"
+     ],
+     "evidence": [
+      "measure-conservation"
+     ],
+     "interpret": "measure-conservation",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 21,
+    "declared": 0,
+    "student": 0,
+    "engine": 0,
+    "model": 6,
+    "data": 0,
+    "diagram": 6,
+    "evidence": 4,
+    "declaredButInert": 0,
+    "prose": 15,
+    "mismatched": 0,
+    "rebuilds": 1
+   }
   }
  ],
  "totals": {
-  "steps": 649,
+  "steps": 670,
   "declared": 620,
   "student": 157,
   "engine": 163,
-  "model": 231,
+  "model": 237,
   "data": 139,
-  "diagram": 110,
-  "evidence": 109,
+  "diagram": 116,
+  "evidence": 113,
   "declaredButInert": 463,
-  "prose": 15,
+  "prose": 30,
   "mismatched": 0,
-  "rebuilds": 70,
-  "lessons": 23,
-  "loops": 83,
-  "closedLoops": 83,
+  "rebuilds": 71,
+  "lessons": 24,
+  "loops": 87,
+  "closedLoops": 87,
   "explainedLoops": 0,
-  "heldLoops": 83,
-  "completeLoops": 83
+  "heldLoops": 87,
+  "completeLoops": 87
  }
 }

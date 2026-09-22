@@ -26,11 +26,7 @@
       "quantity": "the dates and elongations of one retrograde loop",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "before-you-look",
-        "catch-the-reversal",
-        "say-it-in-your-own"
-      ],
+      "loop": ["before-you-look", "catch-the-reversal", "say-it-in-your-own"],
       "evidenceFrom": "engine"
     },
     "transit-photometry": {
@@ -272,11 +268,7 @@
       "quantity": "whether each of three sources emits, and the ring's change in length",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "a-sphere-that-breathes",
-        "change-the-shape",
-        "the-chirp"
-      ],
+      "loop": ["a-sphere-that-breathes", "change-the-shape", "the-chirp"],
       "evidenceFrom": "model"
     },
     "listening-to-spacetime": {
@@ -315,11 +307,7 @@
       "quantity": "radius and luminosity at a stated model age",
       "evidence": "instrument-capture",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "predict-direction",
-        "measure-the-giant",
-        "why-iron-stops-it"
-      ],
+      "loop": ["predict-direction", "measure-the-giant", "why-iron-stops-it"],
       "evidenceFrom": "data"
     },
     "twelve-nights": {
@@ -334,6 +322,20 @@
         "the-three-plans",
         "measure-the-window-power",
         "why-not-one-day"
+      ],
+      "evidenceFrom": "model"
+    },
+    "power-law-gravity": {
+      "centralExperimentId": "ce.power-law-gravity",
+      "object": "panel:power-law-precession",
+      "control": "power-law-precession/n",
+      "quantity": "apsidal precession in degrees per radial period, at four exponents",
+      "evidence": "notebook-fields",
+      "test": "e2e/centralExperiments.spec.js",
+      "loop": [
+        "predict-does-small-matter",
+        "first-look-at-the-orbit",
+        "record-the-precession"
       ],
       "evidenceFrom": "model"
     }

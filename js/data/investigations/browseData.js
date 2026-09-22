@@ -104,4 +104,8 @@ export const BROWSE_META = {
     tags: ['exoplanets', 'observing'],
     numericCount: 0,
   },
+  'power-law-gravity': {
+    tags: ['gravity', 'orbits'],
+    numericCount: 1,
+  },
 };

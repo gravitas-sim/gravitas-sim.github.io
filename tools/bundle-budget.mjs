@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3960,
+    limit: 4030,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -134,7 +134,7 @@ const BUDGETS = [
       '829.7 KB to 828.6 KB across a feature that added a panel, a report ' +
       'writer and 4.7 KB of CSS. The initial limit was not touched.\n\n' +
       'Raised from 2760 to 2790 for the release-preparation pass, and this ' +
-      'one is bug-fix weight rather than a new instrument, so it is itemised ' +
+      'one is bug-fix weight rather than a new instrument, so it is itemized ' +
       'rather than waved through. Measured against a190265: +5.4 KB deferred, ' +
       'from clamping the Monte Carlo refinement to its search bounds and ' +
       'keeping the grid fit as a floor; the generation token, inputs key and ' +
@@ -146,7 +146,7 @@ const BUDGETS = [
       'budget that governs what a first-time visitor actually downloads. ' +
       'Nothing was deferred to make this number work and nothing was ' +
       'removed to fit under it.\n\n' +
-      'Raised from 2790 to 2860 for the observing-schedule feature, itemised ' +
+      'Raised from 2790 to 2860 for the observing-schedule feature, itemized ' +
       'from a fresh build rather than estimated. The Design the Schedule ' +
       'lesson is 17.5 KB and its Spanish shadow 15.3 KB; js/rvCompare.js is ' +
       '4.1 KB and js/rvScheduleControls.js 3.1 KB; the instructor guide entry ' +
@@ -161,7 +161,7 @@ const BUDGETS = [
       'panel registers them - and the initial download came back from ' +
       '832.9 KB to 829.8 KB. The initial limit was NOT touched.\n\n' +
       "Raised from 2860 to 2900 for the binary lesson's parameter sweep, " +
-      'itemised from a fresh build against 2849.3 KB before it. The six new ' +
+      'itemized from a fresh build against 2849.3 KB before it. The six new ' +
       'lesson steps are 15.9 KB of English and 14.6 KB of Spanish - the ' +
       'lesson chunks went 31.8 to 47.7 and 31.5 to 46.1 - and ' +
       "js/experiments/binarySweep.js with the panel's sweep controls and the " +
@@ -173,7 +173,7 @@ const BUDGETS = [
       'so that share is three merged selectors and nothing else. 829.9 KB ' +
       'before, 830.0 KB after, against an untouched 830.0 limit.\n\n' +
       'Raised from 2900 to 2960 for the gravity-assist lesson\u2019s retained ' +
-      'comparison and its optional sweep, itemised from two fresh builds: ' +
+      'comparison and its optional sweep, itemized from two fresh builds: ' +
       '2886.6 KB before, 2948.8 KB after. The English lesson chunk went ' +
       '19.8 to 31.8 KB and its Spanish shadow 19.3 to 29.7 - six new screens ' +
       'and three rewritten ones - and the instructor guide entry took ' +
@@ -234,7 +234,7 @@ const BUDGETS = [
       'project wants it to. The measured figure is unchanged by the starfield ' +
       'work, which is entirely eager: 3028.6 KB, 51.4 KB of room.\n\n' +
       'Raised from 3080 to 3250 for the gravitational-wave work, and this ' +
-      'one is itemised in two halves because two different things happened.\n\n' +
+      'one is itemized in two halves because two different things happened.\n\n' +
       'The first half is a debt. Three commits went in with the release gate ' +
       'deferred - the teaching-data validation fix, the classroom activities ' +
       'and the conservation-diagnostics pass - and nobody ran this check ' +
@@ -395,6 +395,36 @@ const BUDGETS = [
       'the numbers behind the light curve, the radial-velocity trace and the ' +
       'rotation curve as a table a screen reader can read; and the rest is the ' +
       'rotation-curve exporter, the one instructional plot that had no CSV.\n\n' +
+      'Raised from 3960 to 4030 at integration, for the power-law gravity ' +
+      'lesson, which is an accepted v1.1 teaching feature rather than ' +
+      'unexplained growth. The arithmetic, all of it from fresh builds of the ' +
+      'combined tree: #16 and #17 together measure 3952.4 KB, the power-law ' +
+      'work adds 68.9, and the total is 4021.3. 4030 is the next round number ' +
+      'above that, and it leaves 8.7 KB rather than the 1.3 that a ceiling of ' +
+      '4022 would leave on a figure that generated artifacts alone can move.' +
+      '\n\nItemised against the source: js/powerLawGravity.js is 27.8 KB - ' +
+      'the model, its potential, the RK4 integrator the lesson measures with, ' +
+      'and a header that argues for the reference radius at more length than ' +
+      'it implements it - js/powerLawLab.js 12.1 and js/powerLawWidgets.js ' +
+      '13.1. The lesson is 33.1 KB of English with a 28.2 KB Spanish shadow, ' +
+      'twenty-one screens of which six carry an instrument, and the instructor ' +
+      'guide is 158 lines inside the portal chunk, which the simulation never ' +
+      'loads. The prose catalogs are counted twice, because validationWorker.js ' +
+      'bundles them as well.' +
+      '\n\nThe laziness and duplication audit the rule above asks for was done ' +
+      'before this was raised and found nothing to reclaim. No power-law ' +
+      'module is eager: the chain is js/widgets.js to powerLawWidgets.js to ' +
+      'powerLawLab.js to powerLawGravity.js, and js/widgets.js is reached only ' +
+      'from the lazy js/investigations.js. The model is bundled exactly once - ' +
+      'checked by probing the built chunks for apsidalPrecessionNearCircular ' +
+      'and expectedKeplerSlope, which appear in the lesson chunk and nowhere ' +
+      'else, so it is not in validationWorker.js the way the prose is. All ' +
+      'three modules are reachable and used, so there is no dead file to drop. ' +
+      'The one string this lesson adds to js/i18n/en.deferred.js, which four ' +
+      'bundles embed, is a lesson count that project-metadata.mjs derives.' +
+      '\n\nThe initial download is constrained separately and was not raised: ' +
+      '816.5 KB against an untouched 830.0, up 0.1 KB from the tree before ' +
+      'this lesson. A visitor who never opens it downloads none of the above.\n\n' +
       'The strings cost four times that before they were moved. ' +
       'js/i18n/en.deferred.js is embedded in four separate bundles - the lazy ' +
       'chunks, the instructor portal, the validation worker - so fifty strings ' +

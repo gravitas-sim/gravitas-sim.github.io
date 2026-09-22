@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 23 investigations and 649 steps: 620 steps
+Across 24 investigations and 670 steps: 620 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 231 show a prescribed model result, 139 draw
-on a stored dataset, 110 put a self-contained panel beside the text,
-109 keep something, and 15 are prose.
-Of 83 prediction loops, 83 are returned to,
-83 produce a measurement before they are answered, and
+running integration, 237 show a prescribed model result, 139 draw
+on a stored dataset, 116 put a self-contained panel beside the text,
+113 keep something, and 30 are prose.
+Of 87 prediction loops, 87 are returned to,
+87 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-83 hold their marking until the experiment settles them.
+87 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -342,4 +342,18 @@ Of 83 prediction loops, 83 are returned to,
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
 - **Scene rebuilds:** 3 step(s) on arrival (the-allocation, look-at-the-windows, commit-and-observe).
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:observing-planner`, control observing-planner/spread, measures the spectral window power at the sidereal day, for two placements of the same twelve nights, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## What If Gravity Were Not Inverse Square? (`power-law-gravity`)
+
+- **Steps:** 21. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **What students do:** read, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, tick-a-checklist, record-values, choose-an-option, build-a-plot.
+- **Objects the steps declare:** none.
+- **Instruments:** power-law-precession, power-law-refinement, power-law-kepler, power-law-conservation.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields, plot.
+- **Prediction loops:** predict-does-small-matter → first-look-at-the-orbit, record-the-precession → first-look-at-the-orbit; predict-is-it-the-computer → refine-the-timestep → refine-the-timestep; predict-period-and-distance → measure-the-slope, predict-the-slope → measure-the-slope; predict-what-breaks → measure-conservation → measure-conservation.
+- **Recovery:** reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; ambiguous result: nothing marks these, they are a record.
+- **Scene rebuilds:** 1 step(s) on arrival (the-exactly).
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:power-law-precession`, control power-law-precession/n, measures apsidal precession in degrees per radial period, at four exponents, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
