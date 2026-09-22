@@ -36,6 +36,11 @@ async function listenPaused(page, app) {
   // The panel's prose is in the deferred catalog; the section stays hidden
   // until that lands rather than showing message ids.
   await expect(page.locator('#soundPanelVoices')).toBeVisible();
+  // The voices, though, are filled by the sonification loop and not by
+  // opening the panel, so the section can be visible a tick before they
+  // arrive, still showing the muted placeholder. Read then, every test below
+  // is looking at "nothing is being voiced". Wait for the reference row.
+  await expect(items(page).first()).toContainText(/measured from this one/i);
 }
 
 test.describe('what the tones stand for is available as text', () => {
@@ -85,10 +90,11 @@ test.describe('what the tones stand for is available as text', () => {
     const measured = rows
       .map(r => r.match(/([\d.]+)\u00d7 the highest voice, ([\d.]+) cents/))
       .filter(Boolean);
-    test.skip(
-      measured.length === 0,
-      'only one body is being voiced, so there is no interval to check'
-    );
+    // Asserted, not skipped over. This was a skip on `measured.length === 0`,
+    // "only one body is being voiced" - but the opening Binary BH voices
+    // three, and what emptied the list was reading it before the first voice
+    // refresh. The skip turned that race into a pass with nothing checked.
+    expect(measured.length).toBeGreaterThan(0);
     for (const [, ratioText, cents] of measured) {
       const ratio = Number(ratioText);
       const expected = 1200 * Math.log2(ratio);
