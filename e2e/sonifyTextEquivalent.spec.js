@@ -10,9 +10,13 @@
 // This spec checks the printed version against the audio itself, not against a
 // fixture. The strongest form of that check needs the module registry, which
 // only exists on the source target - against dist/ esbuild has bundled
-// js/audio.js into a hashed chunk and there is nothing to import. So the
-// module-level comparison is skipped there and the DOM-only checks, which are
-// the ones a reader actually depends on, run everywhere.
+// js/audio.js into a hashed chunk and there is nothing to import - so that
+// describe block carries `test.skip(SOURCE_ONLY, …)`. The guard is dormant:
+// this spec runs against the sources only. playwright.config.js matches nothing
+// but production.spec.js and selfContained.spec.js on the dist/ target, and the
+// checks above the guard are not DOM-only either. listenPaused() goes through
+// app.setPaused(), which imports /js/ui.js, so put on dist/, every one of them
+// but the muted-sandbox test fails on an import that cannot resolve.
 //
 // The simulation is paused before the panel is opened. The panel is a snapshot
 // and the bodies move; comparing a snapshot taken at one moment against a fresh
