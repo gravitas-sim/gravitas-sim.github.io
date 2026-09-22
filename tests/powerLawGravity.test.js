@@ -271,6 +271,48 @@ describe('precession is physical, not numerical', () => {
     expect((r.precession * 180) / Math.PI).toBeGreaterThan(40);
   });
 
+  test('the orbit turns the other way below n = 2 than above it', () => {
+    // The sign, not the size, and it is the whole point of the lesson: the
+    // apsides walk backwards for a force that falls off more slowly than
+    // inverse square and forwards for one that falls off faster. Every other
+    // precession test here runs at n = 2.2, so all of them would still pass if
+    // the model had the magnitude right and the direction wrong on the half of
+    // EXPONENT_RANGE that lies below 2 - which the lesson's own slider reaches,
+    // since the range starts at 1.5.
+    //
+    // Measured and analytic are both asserted, because agreeing with each other
+    // is not the same as being right: a sign error in the integrator and a
+    // matching one in the closed form would cancel.
+    for (const n of [1.6, 1.8]) {
+      const measured = runPrecession({
+        n,
+        mu: MU,
+        dt: 0.01,
+        eccentricity: LESSON_ECCENTRICITY,
+        revolutions: 10,
+      }).precession;
+      expect(measured).not.toBeNull();
+      expect(measured).toBeLessThan(0);
+      expect(apsidalPrecessionNearCircular(n)).toBeLessThan(0);
+      // Far enough from zero that it cannot be the numerical floor, which the
+      // control above puts at 1e-6 degrees.
+      expect(Math.abs((measured * 180) / Math.PI)).toBeGreaterThan(10);
+    }
+    for (const n of [2.2, 2.5]) {
+      const measured = runPrecession({
+        n,
+        mu: MU,
+        dt: 0.01,
+        eccentricity: LESSON_ECCENTRICITY,
+        revolutions: 10,
+      }).precession;
+      expect(measured).not.toBeNull();
+      expect(measured).toBeGreaterThan(0);
+      expect(apsidalPrecessionNearCircular(n)).toBeGreaterThan(0);
+      expect(Math.abs((measured * 180) / Math.PI)).toBeGreaterThan(10);
+    }
+  });
+
   test('the precession does not move when the timestep does', () => {
     // The separation a student is asked to make, as a test. Integration error
     // scales with dt; a physical precession does not. Across a factor of eight
