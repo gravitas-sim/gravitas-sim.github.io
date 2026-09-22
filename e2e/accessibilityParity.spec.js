@@ -11,10 +11,18 @@
 // cannot click can reach it. The tab order and the submit are done with real
 // key presses for that reason.
 //
-// The plot half checks the table against the module's own arrays, in the page.
-// That is only possible on the source target - against dist/ there is no
-// /js/dataExport.js to import - so those assertions are skipped there, and the
-// DOM-only ones, which are what a reader actually depends on, run everywhere.
+// The plot half checks the table against the module's own arrays, in the page,
+// and the typed-versus-placed test compares share payloads the same way. Those
+// three carry `test.skip(DIST, …)`, and the guard is dormant: this spec runs
+// against the sources only. playwright.config.js matches nothing but
+// production.spec.js and selfContained.spec.js on the dist/ target, and this
+// file cannot simply join them, because the tests that are not skipped reach
+// into the page too - app.setPaused() imports /js/ui.js, bodies() imports
+// /js/physics.js and withLightCurve() imports /js/lightCurve.js. esbuild has
+// bundled all three into hashed chunks, and put on dist/, every unskipped test
+// here fails on an import that cannot resolve. Checking these claims against
+// the bundle a reader actually gets means making those helpers DOM-only first;
+// the guards are what would then keep the module comparisons out.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
