@@ -9,9 +9,10 @@
 // What is left needs a page. Three claims, each about what the network or the
 // keyboard did:
 //
-//   the strain is a chunk of its own, fetched once and only by the lesson
-//   engine, and nothing ever asks gwosc.org for anything - the archive is a
-//   build-time source, never a runtime one;
+//   the strain is a chunk of its own, fetched once and only when the screen
+//   that uses it opens - the instrument is loaded on demand (js/widgets.js,
+//   LAZY_FAMILIES) and its data with it - and nothing ever asks gwosc.org for
+//   anything: the archive is a build-time source, never a runtime one;
 //
 //   the readout is a complete text equivalent of the map, under the four
 //   headings that keep observed, measured, catalog and model apart, with the
@@ -43,7 +44,7 @@ async function openAt(page, app, step) {
 }
 
 test.describe('the strain arrives from this site, once, and only when needed', () => {
-  test('the sandbox fetches none of it; the lesson engine fetches the data and never the provenance', async ({
+  test('nothing fetches it until the screen that uses it, which fetches the data once and never the provenance', async ({
     page,
     app,
   }) => {
@@ -59,15 +60,17 @@ test.describe('the strain arrives from this site, once, and only when needed', (
     await expect(page.locator('#investigationsBtn')).toBeVisible();
     expect(events).toEqual([]);
 
+    // Neither the lesson browser nor the lesson's first screen brings it:
+    // the instrument, and so its strain, is fetched when a step names it.
     await page.locator('#investigationsBtn').click();
     await expect(page.locator('#investigationBrowser')).toBeVisible();
-    await expect
-      .poll(() => events.length, { timeout: 15_000 })
-      .toBeGreaterThan(0);
-
     await page.locator(`[data-investigation="${LESSON}"]`).click();
     await expect(page.locator('#investigationPanel')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    expect(events).toEqual([]);
 
+    // The first screen that names it is what fetches it, and only the data.
+    await openAt(page, app, FIRST);
     expect(events.filter(u => /Provenance/.test(u))).toEqual([]);
     expect(events).toHaveLength(1);
     // The archive is where the build got the strain. A page that asked it for
