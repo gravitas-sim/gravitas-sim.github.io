@@ -24,7 +24,6 @@
 // =============================================================================
 
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
-import { TRANSIT_WIDGETS } from './transitWidgets.js';
 import { ENERGY_WIDGETS } from './energyWidgets.js';
 import { BINARY_WIDGETS } from './binaryWidgets.js';
 import { BLACK_HOLE_WIDGETS } from './blackHoleWidgets.js';
@@ -41,7 +40,6 @@ import { GW_WIDGETS } from './gwWidgets.js';
 import { STELLAR_WIDGETS } from './stellarWidgets.js';
 import { STELLAR_EVOLUTION_WIDGETS } from './stellarEvolutionWidgets.js';
 import { OBSERVING_WIDGETS } from './observingWidgets.js';
-import { POWER_LAW_WIDGETS } from './powerLawWidgets.js';
 import { SPECTRA_WIDGETS, spectraReady } from './stellarSpectraWidgets.js';
 
 // Every widget family's prose lives in the deferred half of the catalog,
@@ -64,7 +62,6 @@ import { SPECTRA_WIDGETS, spectraReady } from './stellarSpectraWidgets.js';
 ensureDeferredMessages().catch(() => {});
 
 const WIDGETS = [
-  ...TRANSIT_WIDGETS,
   ...ENERGY_WIDGETS,
   ...BINARY_WIDGETS,
   ...BLACK_HOLE_WIDGETS,
@@ -78,9 +75,92 @@ const WIDGETS = [
   ...STELLAR_WIDGETS,
   ...STELLAR_EVOLUTION_WIDGETS,
   ...OBSERVING_WIDGETS,
-  ...POWER_LAW_WIDGETS,
   ...SPECTRA_WIDGETS,
 ];
+
+// -----------------------------------------------------------------------------
+// SPIKE (spike/lazy-capabilities-gate): two families loaded on demand.
+//
+// The manifest is the small synchronous half - which ids a family owns and how
+// to fetch it. The implementation is a dynamic import, so esbuild gives each
+// family a chunk of its own and a lesson that never names one of its ids never
+// downloads it. tests/lazyWidgets.test.js holds the id lists to the modules.
+// -----------------------------------------------------------------------------
+export const LAZY_FAMILIES = Object.freeze({
+  transit: {
+    ids: ['depth-size', 'geometry', 'spectrum', 'dilution', 'resolve'],
+    load: () => import('./transitWidgets.js').then(m => m.TRANSIT_WIDGETS),
+  },
+  powerLaw: {
+    ids: [
+      'power-law-precession',
+      'power-law-refinement',
+      'power-law-kepler',
+      'power-law-conservation',
+    ],
+    load: () => import('./powerLawWidgets.js').then(m => m.POWER_LAW_WIDGETS),
+  },
+});
+
+/** The family that owns an id, if it is a lazy one. */
+const lazyFamilyOf = id =>
+  Object.keys(LAZY_FAMILIES).find(f => LAZY_FAMILIES[f].ids.includes(id)) ||
+  null;
+const loadedFamilies = new Set();
+const inFlight = new Map();
+
+/** A family that could not be fetched, named so a reader can be told which. */
+export class WidgetLoadError extends Error {
+  constructor(family, cause) {
+    super(`The ${family} instruments could not be loaded.`);
+    this.name = 'WidgetLoadError';
+    this.family = family;
+    this.cause = cause;
+  }
+}
+
+/**
+ * Fetch one lazy family, once. Concurrent callers share the same import; a
+ * failed one is forgotten, so the next call retries rather than replaying the
+ * failure.
+ * @param {string} family - A LAZY_FAMILIES key
+ * @returns {Promise<void>}
+ */
+function loadFamily(family) {
+  if (loadedFamilies.has(family)) return Promise.resolve();
+  if (!inFlight.has(family)) {
+    const pending = LAZY_FAMILIES[family]
+      .load()
+      .then(widgets => {
+        for (const w of widgets) if (!getWidget(w.id)) WIDGETS.push(w);
+        loadedFamilies.add(family);
+        inFlight.delete(family);
+      })
+      .catch(err => {
+        inFlight.delete(family);
+        throw new WidgetLoadError(family, err);
+      });
+    inFlight.set(family, pending);
+  }
+  return inFlight.get(family);
+}
+
+/** Whether an id names a widget that has to be fetched before it can be drawn. */
+export const needsLoading = id => {
+  const family = lazyFamilyOf(id);
+  return Boolean(family) && !loadedFamilies.has(family);
+};
+
+/**
+ * The widget, loading its family first if it has to.
+ * @param {string} id - Widget id from a lesson step
+ * @returns {Promise<Object|null>} The widget, or null for an unknown id
+ */
+export async function ensureWidget(id) {
+  const family = lazyFamilyOf(id);
+  if (family) await loadFamily(family);
+  return getWidget(id);
+}
 
 /**
  * Look up a widget by id.
@@ -118,6 +198,9 @@ export async function whenWidgetsReady() {
   // tests do, because a spectrum widget that cannot reach its data draws a
   // waiting state and reports no measurements, and an audit that accepted
   // that would be auditing the waiting state.
+  // SPIKE: every consumer that reads the whole catalog already awaits this,
+  // so it is where the lazy families are fetched for them.
+  await Promise.all(Object.keys(LAZY_FAMILIES).map(loadFamily));
   const results = await Promise.all([
     tidalReady,
     darkMatterReady,

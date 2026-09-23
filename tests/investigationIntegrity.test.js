@@ -23,7 +23,16 @@
 import { describe, test, expect } from '@jest/globals';
 import { INVESTIGATIONS, getInvestigation } from '../js/data/investigations.js';
 import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
-import { allWidgets, getWidget, widgetDefaults } from '../js/widgets.js';
+import {
+  allWidgets,
+  getWidget,
+  whenWidgetsReady,
+  widgetDefaults,
+} from '../js/widgets.js';
+
+// SPIKE: two instrument families are fetched on demand, so the whole catalog
+// is awaited before any lookup. Every assertion below is unchanged.
+await whenWidgetsReady();
 
 /** Every (lesson, step number, step) triple, for tests that want them all. */
 const EVERY_STEP = INVESTIGATIONS.flatMap(inv =>

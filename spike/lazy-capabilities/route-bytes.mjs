@@ -31,6 +31,9 @@ const ROOT = path.resolve(
 process.chdir(ROOT);
 
 const { metafile } = await esbuild.build({
+  // Explicit: esbuild resolves entry points against the directory the process
+  // started in, not the one it chdir'd to, and measured the wrong tree without it.
+  absWorkingDir: ROOT,
   entryPoints: [{ in: 'js/main.js', out: 'app' }],
   bundle: true,
   minify: true,
@@ -108,6 +111,15 @@ const lessons = MANIFEST.map(l => {
 
 const kb = n => Math.round(n / 102.4) / 10;
 const report = {
+  startupFiles: [...startup].map(f => ({
+    file: path.basename(f),
+    kb: kb(bytes(f)),
+    inputs: Object.keys(outputs[f].inputs).length,
+    top: Object.entries(outputs[f].inputs)
+      .sort((a, b) => b[1].bytesInOutput - a[1].bytesInOutput)
+      .slice(0, 2)
+      .map(([k]) => k),
+  })),
   startup: { files: startup.size, kb: kb(sum(startup)) },
   engine: { files: engine.size, kb: kb(sum(engine)) },
   familiesKb: kb(families.reduce((n, f) => n + f.bytes, 0)),

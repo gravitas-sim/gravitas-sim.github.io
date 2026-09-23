@@ -103,7 +103,13 @@ import {
   timeUnitSeconds,
   SIM_UNITS_PER_AU,
 } from './units.js';
-import { getWidget, widgetDefaults } from './widgets.js';
+import {
+  ensureWidget,
+  getWidget,
+  needsLoading,
+  whenWidgetsReady,
+  widgetDefaults,
+} from './widgets.js';
 import {
   indexOfSid,
   readProgress,
@@ -2430,6 +2436,38 @@ function syncToolPanel(step) {
   const spec = step?.tool;
   const widget = spec ? getWidget(spec.id) : null;
   stopToolLoop();
+  // SPIKE: an instrument whose family is fetched on demand. The panel says it
+  // is loading, in the note - which is made a status region for as long as it
+  // is saying so, because it is not one otherwise - fetches the family, and
+  // redraws only if the reader is still on this step. A failed fetch says so
+  // in the same region and offers a retry, which takes focus.
+  els.toolNote.removeAttribute('role');
+  if (spec && !widget && needsLoading(spec.id)) {
+    els.toolNote.setAttribute('role', 'status');
+    els.toolPanel.hidden = false;
+    els.toolTitle.textContent = spec.title || '';
+    els.toolNote.textContent = t('inv.tool.loading');
+    els.toolNote.hidden = false;
+    els.toolControls.innerHTML = '';
+    els.toolControls.hidden = true;
+    ensureWidget(spec.id)
+      .then(() => {
+        if (currentStep() === step) syncToolPanel(step);
+      })
+      .catch(() => {
+        if (currentStep() !== step) return;
+        els.toolNote.textContent = t('inv.tool.failed');
+        const retry = document.createElement('button');
+        retry.type = 'button';
+        retry.className = 'ui-button';
+        retry.textContent = t('inv.tool.retry');
+        retry.addEventListener('click', () => syncToolPanel(step));
+        els.toolControls.replaceChildren(retry);
+        els.toolControls.hidden = false;
+        retry.focus();
+      });
+    return;
+  }
   els.toolPanel.hidden = !widget;
   if (!widget) return;
 
@@ -4846,8 +4884,9 @@ export function initInvestigations() {
   }
 
   if (/[?&#]author=/.test(window.location.href)) {
-    import('./authoring/preview.js')
-      .then(preview => {
+    // SPIKE: the preview's findings read the whole widget catalog.
+    Promise.all([import('./authoring/preview.js'), whenWidgetsReady()])
+      .then(([preview]) => {
         const request = preview.authoringRequest();
         if (!request) return;
         if (!hasInvestigation(request.lesson)) {

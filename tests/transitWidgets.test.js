@@ -4,7 +4,11 @@ import {
   separationAt,
   halfDuration,
 } from '../js/transitWidgets.js';
-import { getWidget, widgetDefaults } from '../js/widgets.js';
+import { getWidget, whenWidgetsReady, widgetDefaults } from '../js/widgets.js';
+
+// SPIKE: the transit family is fetched on demand, so the whole catalog is
+// awaited before any lookup. Every assertion below is unchanged.
+await whenWidgetsReady();
 
 const WIDGET_IDS = [
   'depth-size',
