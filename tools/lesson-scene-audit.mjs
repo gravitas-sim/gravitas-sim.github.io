@@ -91,6 +91,7 @@ import { fileURLToPath } from 'node:url';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { allWidgets, whenWidgetsReady } from '../js/widgets.js';
 import { auditBindings, parseCollected } from './acceptance-bindings.mjs';
+import { inOwnTransformCache } from './playwright-cache.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const CATALOG = resolve(ROOT, 'docs/lesson-scene-catalog.json');
@@ -1905,17 +1906,29 @@ async function checkAcceptanceBindings(acceptance, lessons) {
     if (text !== null) sources.set(`e2e/${name}`, text);
   }
 
+  // The bindings are judged by line, so the listing gets a transform cache of
+  // its own: in the shared one, another listing of this checkout can leave it
+  // reporting compiled line numbers. See tools/playwright-cache.mjs.
   let listing = null;
   try {
-    listing = execFileSync(
-      'npx',
-      ['playwright', 'test', '--list', '--project=chromium', '--reporter=list'],
-      {
-        cwd: ROOT,
-        encoding: 'utf8',
-        maxBuffer: 128 * 1024 * 1024,
-        stdio: ['ignore', 'pipe', 'ignore'],
-      }
+    listing = inOwnTransformCache(cacheEnv =>
+      execFileSync(
+        'npx',
+        [
+          'playwright',
+          'test',
+          '--list',
+          '--project=chromium',
+          '--reporter=list',
+        ],
+        {
+          cwd: ROOT,
+          encoding: 'utf8',
+          maxBuffer: 128 * 1024 * 1024,
+          stdio: ['ignore', 'pipe', 'ignore'],
+          env: { ...process.env, ...cacheEnv },
+        }
+      )
     );
   } catch {
     listing = null;

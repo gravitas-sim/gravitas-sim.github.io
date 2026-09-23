@@ -101,3 +101,109 @@ and checksum recorded so the originals can be recovered.
   Paxton et al. (2011, 2013, 2015), the MESA instrument papers
 
 `npm run stellar:provenance` reproduces the subset from the MIST download.
+
+===============================================================================
+SDSS stellar spectra
+-------------------------------------------------------------------------------
+js/data/spectra/**
+Derived from four observed spectra served by Data Release 18 of the Sloan
+Digital Sky Survey: https://www.sdss.org/dr18/
+
+SDSS states that all data released in its public data releases are considered
+in the public domain (https://www.sdss.org/collaboration/image-use-policy/),
+so no license comes with these spectra and Gravitas adds none. The CC BY 4.0
+stated on the same page covers SDSS images, not its data.
+
+What SDSS asks for is an acknowledgment for the release used and for each
+phase of the survey the data came from
+(https://www.sdss.org/collaboration/citing-sdss/). One of these spectra was
+observed by SEGUE (SDSS-II) and three by SEGUE-2 (SDSS-III), and all four
+were retrieved from DR18, the first SDSS-V release, so three apply. Each is
+quoted as SDSS publishes it.
+
+SDSS-V, for Data Release 18:
+
+  Funding for the Sloan Digital Sky Survey V has been provided by the Alfred P.
+  Sloan Foundation, the Heising-Simons Foundation, the National Science
+  Foundation, and the Participating Institutions. SDSS acknowledges support and
+  resources from the Center for High-Performance Computing at the University of
+  Utah. SDSS telescopes are located at Apache Point Observatory, funded by the
+  Astrophysical Research Consortium and operated by New Mexico State
+  University, and at Las Campanas Observatory, operated by the Carnegie
+  Institution for Science. The SDSS web site is www.sdss.org.
+
+  SDSS is managed by the Astrophysical Research Consortium for the
+  Participating Institutions of the SDSS Collaboration, including the Carnegie
+  Institution for Science, Chilean National Time Allocation Committee (CNTAC)
+  ratified researchers, Caltech, the Gotham Participation Group, Harvard
+  University, Heidelberg University, The Flatiron Institute, The Johns Hopkins
+  University, L’Ecole polytechnique fédérale de Lausanne (EPFL),
+  Leibniz-Institut für Astrophysik Potsdam (AIP), Max-Planck-Institut für
+  Astronomie (MPIA Heidelberg), Max-Planck-Institut für Extraterrestrische
+  Physik (MPE), Nanjing University, National Astronomical Observatories of
+  China (NAOC), New Mexico State University, The Ohio State University,
+  Pennsylvania State University, Smithsonian Astrophysical Observatory, Space
+  Telescope Science Institute (STScI), the Stellar Astrophysics Participation
+  Group, Universidad Nacional Autónoma de México (UNAM), University of Arizona,
+  University of Colorado Boulder, University of Illinois at Urbana-Champaign,
+  University of Toronto, University of Utah, University of Virginia, Yale
+  University, and Yunnan University.
+
+SDSS-III, for SEGUE-2 (https://www.sdss3.org/collaboration/boiler-plate.php):
+
+  Funding for SDSS-III has been provided by the Alfred P. Sloan Foundation, the
+  Participating Institutions, the National Science Foundation, and the U.S.
+  Department of Energy Office of Science. The SDSS-III web site is
+  http://www.sdss3.org/.
+
+  SDSS-III is managed by the Astrophysical Research Consortium for the
+  Participating Institutions of the SDSS-III Collaboration including the
+  University of Arizona, the Brazilian Participation Group, Brookhaven National
+  Laboratory, Carnegie Mellon University, University of Florida, the French
+  Participation Group, the German Participation Group, Harvard University, the
+  Instituto de Astrofisica de Canarias, the Michigan State/Notre Dame/JINA
+  Participation Group, Johns Hopkins University, Lawrence Berkeley National
+  Laboratory, Max Planck Institute for Astrophysics, Max Planck Institute for
+  Extraterrestrial Physics, New Mexico State University, New York University,
+  Ohio State University, Pennsylvania State University, University of
+  Portsmouth, Princeton University, the Spanish Participation Group, University
+  of Tokyo, University of Utah, Vanderbilt University, University of Virginia,
+  University of Washington, and Yale University.
+
+SDSS-I/II, for SEGUE (https://classic.sdss.org/collaboration/credits.php):
+
+  Funding for the SDSS and SDSS-II has been provided by the Alfred P. Sloan
+  Foundation, the Participating Institutions, the National Science Foundation,
+  the U.S. Department of Energy, the National Aeronautics and Space
+  Administration, the Japanese Monbukagakusho, the Max Planck Society, and the
+  Higher Education Funding Council for England. The SDSS Web Site is
+  http://www.sdss.org/.
+
+  The SDSS is managed by the Astrophysical Research Consortium for the
+  Participating Institutions. The Participating Institutions are the American
+  Museum of Natural History, Astrophysical Institute Potsdam, University of
+  Basel, University of Cambridge, Case Western Reserve University, University
+  of Chicago, Drexel University, Fermilab, the Institute for Advanced Study,
+  the Japan Participation Group, Johns Hopkins University, the Joint Institute
+  for Nuclear Astrophysics, the Kavli Institute for Particle Astrophysics and
+  Cosmology, the Korean Scientist Group, the Chinese Academy of Sciences
+  (LAMOST), Los Alamos National Laboratory, the Max-Planck-Institute for
+  Astronomy (MPIA), the Max-Planck-Institute for Astrophysics (MPA), New Mexico
+  State University, Ohio State University, University of Pittsburgh, University
+  of Portsmouth, Princeton University, the United States Naval Observatory, and
+  the University of Washington.
+
+That archived SDSS-I/II page also asks that commercial use of data from the
+SDSS public archive be approved by the Astrophysical Research Consortium. The
+current SDSS pages cited above do not repeat that condition.
+
+The bundled spectra are trimmed to the wavelength range all four share,
+averaged three adjacent samples into one and stored as 16-bit integers. There
+is no smoothing, normalization, resampling or shift to rest wavelength. Every
+processing step, each archive URL, and SHA-256 checksums of both the CSV the
+archive served and the flux as committed are recorded beside the data in
+js/data/spectra/sdssSpectraProvenance.js. `npm run spectra:provenance`
+regenerates both files from the archive CSVs and compares byte for byte.
+
+Primary reference: Almeida et al. (2023), ApJS 267, 44,
+doi:10.3847/1538-4365/acda98

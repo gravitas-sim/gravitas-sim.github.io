@@ -39,7 +39,7 @@ commercially, provided you give credit.
 
 | | |
 | --- | --- |
-| `js/data/investigations/**` | the 22 investigations, English and Spanish, and their manifests |
+| `js/data/investigations/**` | every investigation, English and Spanish, and their manifests |
 | `js/data/instructorContent.js` | instructor guides, expectations, rubrics and answer keys |
 | `js/data/teaching.js`, `js/data/activities.js`, `js/data/activityTeaching.js` | the teaching page and the classroom activities |
 | `js/data/welcome.js`, `js/data/scenarioInfo.js`, `js/data/scenarioTags.js`, `js/data/objectNames.js` | scenario descriptions and catalog prose |
@@ -72,6 +72,7 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `images/transit-of-venus-2012.jpg` | photograph by Brocken Inaglory | CC BY 2.5 |
 | `js/data/gw/**` | derived from GWOSC released data | CC BY 4.0 |
 | `js/data/stellar/**` | derived from the MIST model grids | cite the papers; see NOTICE |
+| `js/data/spectra/**` | derived from SDSS DR18 observed spectra | public domain; acknowledge SDSS, see NOTICE |
 
 ## Why the split
 
