@@ -73,8 +73,10 @@ box here means the thing is done and verified, not merely decided.
 
 - [ ] **Description.** Still empty. Something a person scanning search
       results can act on.
-      Suggested: *An interactive astrophysics sandbox and 22 guided
+      Suggested: *An interactive astrophysics sandbox with guided
       investigations for introductory astronomy. Runs in a browser, no install.*
+      (No count: a number pasted into a repository setting is one nothing can
+      regenerate.)
 - [x] **Homepage.** Set to `https://gravitas-sim.online/`.
 - [ ] **Topics.** Still empty. Suggested: `astronomy`, `astronomy-education`,
       `physics-education`, `science-education`, `simulation`,

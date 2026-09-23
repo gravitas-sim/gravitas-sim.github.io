@@ -13,7 +13,261 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
-Nothing yet.
+### Added
+
+- **A new investigation, _Twelve Nights_.** A 40-to-50-minute lesson in which
+  students write a radial-velocity schedule themselves, under the constraint a
+  real time allocation imposes: twelve nights on HD 209458 from La Silla, one
+  measurement a night, for a target that culminates at 41.9° and is above
+  airmass 2 for only part of each night. The window is tied to the target's
+  hour angle, so it opens about four minutes earlier every night and the epochs
+  fall on a comb spaced by one sidereal day whatever the student does; of the
+  two plans they commit to the spectrograph, one returns the planet at an alias
+  period. The observing planner shows the windows and the spectral window and
+  never a period or a velocity. The first screen says that the sky is real and
+  the star is simulated, and that only the list of times crosses between them;
+  the last works out why a second site at another longitude removes the alias
+  and more nights from the same site do not. In English and Spanish.
+- **Observing windows computed from the sky, and checked against published
+  values.** `js/observingWindow.js` gives altitude and airmass, astronomical
+  twilight, lunar phase and separation, and the intervals in which all three
+  allow a measurement. Time is always an argument and never read from a clock,
+  so the same night computed on two machines on two different days is the same
+  window. A new _Observing windows_ group on `/validation/` checks it against
+  published sidereal time, solar positions, equinox and solstice, airmass fits,
+  new and full moons and two total lunar eclipses; the largest residual, from
+  using UT where TT is meant, is written into the check rather than absorbed
+  into its tolerance.
+- **A new investigation, _What If Gravity Were Not Inverse Square?_** A
+  45-to-60-minute lesson in which students move the exponent of gravity between
+  1.5 and 2.9 and measure what depended on it: whether an orbit closes, how the
+  period scales with distance, and which conservation laws survive. The law is
+  anchored at a reference radius of 1 AU, where the pull is Newtonian for every
+  exponent, so moving the exponent changes the shape of the field rather than
+  its strength — which a change to G alone cannot imitate. Every number is
+  measured by running the model when the step opens: an ellipse that turns
+  backwards below 2 and forwards above it, a precession that holds still when
+  the timestep is refined, the slope of period against radius, and energy
+  conserved only with the potential that belongs to the force. The instruments
+  integrate their own orbits in `js/powerLawGravity.js` and never touch the
+  engine, so the scenario on screen stays Newtonian; `/model/` says so, and says
+  this is a controlled experiment rather than a theory of gravity. In Spanish
+  the lesson text is translated but the instruments' own labels are still
+  English.
+- **Four real stellar spectra in _A Universe of Stars_.** New screens near the
+  end of the lesson, before its closing question, put four spectra observed by
+  SDSS (DR18) — one star each of type A, G, K and M — behind two instruments: a
+  comparison of all four, and one unlabeled spectrum to identify from its
+  absorption features. The curves are deliberately not drawn in the colors of
+  their stars, every readout opens by saying these are observations and not
+  models, and each measured feature depth is given as text with the windows it
+  was measured in and the archive record it came from. The lesson says that
+  four stars are four examples and not a sample; the selection rule, and why
+  the archive's highest-signal M dwarf is not among them, are recorded with the
+  data. The flux is not part of the initial download. `npm run spectra:check`
+  verifies the committed data offline, and `npm run spectra:provenance`
+  regenerates it byte for byte from the archive CSVs once they are cached. No
+  class has used these screens yet. In English and Spanish.
+- **A body can be placed by typing it.** _Precise placement_, beside Add
+  object, takes a type, a position, a velocity and a mass as numbers, with the
+  unit named on every field, each error attached to the field it is about and
+  focus moved to the first one. It calls the same `placeBody()` a click does, so
+  a typed body lands in the same list, is undone by the same button and
+  serializes into the same share link. Leave the mass blank and one is chosen as
+  a click would choose it; a white dwarf above 1.44 solar masses is refused.
+  Building an arbitrary system no longer needs a pointer or aiming at the
+  canvas; dragging to feel how fast a throw is still has no keyboard
+  equivalent.
+- **Every exported series can be read as a table.** Each series in the export
+  dialog offers **View as table** before **Download CSV**. The table is rendered
+  from the bytes the CSV exporter writes, so the table, the file and the plot
+  cannot be three derivations that disagree, and a long series is evenly
+  sampled with the sampling stated in the caption. The rotation curve, which had
+  no export at all, now has one. The shape of a curve is still not narrated.
+- **The sound panel prints what the tones stand for.** It lists each voiced
+  body with its orbital period, and its ratio and interval in cents to the
+  highest voice. This is not a description of the sound, which is compressed
+  and quantized onto a five-note scale and cannot be inverted, but of the
+  quantity the sound is computed from, read from the same array the oscillators
+  follow so the two cannot drift apart. It is plain content rather than a live
+  region, so a screen reader is not interrupted as the voices change. A separate
+  period-to-cents law, `js/sonify/law.js`, is checked on `/validation/` against
+  the cent values of the octave, the just fifth and the just major sixth, and
+  for exact invertibility; it is not what the speakers play. None of the
+  sonification, and none of the accessibility work above, has been tested with
+  a screen reader or a blind user, and [ACCESSIBILITY.md](ACCESSIBILITY.md)
+  says so.
+- **A lab report an instructor can read back.** The PDF lab report now carries
+  a submission token — the student's answers, attempt counts, step fingerprints
+  and whatever name they typed, with the assignment and an optional roster id
+  taken from `?roster=` on the assignment link — printed on its last page and
+  embedded in the PDF's metadata, because the two survive different mishandling.
+  `/instructors/submissions/` takes a pile of those PDFs, JSON progress backups
+  or pasted tokens and returns one table of per-question failure rates, hardest
+  first. Each answer is graded under the language it was typed in, and written
+  answers are counted as unmarkable rather than wrong. There is no roster,
+  gradebook or export, nothing survives a reload, and nothing leaves the
+  browser. It verifies answers, not identity: a token computed in a browser can
+  be forged. The page needs no passphrase, is in English only, and is reached
+  by its address; nothing links to it yet.
+- **A classroom evidence kit at `/evaluation/`.** Printable instruments for an
+  instructor who wants to evaluate a section: an implementation and fidelity
+  checklist, a pilot pre/post concept assessment written against _Kepler's
+  Laws_, _Bound, Unbound and Escape_ and _Weighing the Stars_, a usability
+  questionnaire, participant codes drawn from a word list so sheets can be
+  paired without names, and de-identified CSV and JSON templates with a
+  versioned schema. Every item is in the static HTML, so the forms print with
+  scripts blocked. `npm run evaluation:summary` reads the exports back and
+  prints counts, missing data, per-item before and after, and paired change,
+  with a bootstrap interval labeled as describing this sample only — and no
+  p-value, no verdict and no "gain". The page asks for no name, email address
+  or institution and transmits nothing, and a test searches the built bundle for
+  network calls. The assessment is project-developed and unvalidated, and no
+  evaluation of Gravitas has been run. The teaching page and the instructor
+  portal link to it; it is in English only.
+- **A public account of what the simulation cannot undo.** A new section of
+  `/model/`, _What cannot be undone_, separates two reasons a run does not come
+  back. The default integrator, symplectic Euler, is not time-symmetric, while
+  velocity Verlet returns to the floating-point floor. And some operations
+  delete information whatever the integrator: mergers, collapse to a black
+  hole, bodies culled after leaving the view, damping, and collision fragments
+  scattered by an unseeded random draw. That table is generated by scanning
+  `js/physics.js` (`npm run audit:irreversible`) and the release gate refuses it
+  when it falls behind the engine. A third reason, chaos using up double
+  precision, is stated with them. `npm run probe:reversibility` is the
+  measurement, and taking it meant fixing two latent engine bugs that no
+  control could reach: a negative step is now substepped like a positive one,
+  and a non-finite step is refused instead of being added to every position in
+  the scene. No control in the application runs the simulation backwards.
+- **The engine and the world builder load in a Web Worker.** Two unguarded DOM
+  accesses stopped `js/physics.js` and `js/world/build.js` from evaluating
+  without a document; both are guarded, and a browser test builds and
+  integrates a scenario inside a real module Worker.
+  [MULTI_WORLD_DECISION.md](MULTI_WORLD_DECISION.md) records the decision this
+  enables: a second, isolated world is a Worker realm, not a refactor of the
+  engine into instances, and the synchronous world-swapping prototype built to
+  test the idea was removed rather than kept without a consumer. Nothing in the
+  application uses a Worker world yet, and the probe pages under
+  `spike/lyapunov/` are not part of the build.
+
+### Changed
+
+- **The simulation canvas draws at the display's pixel density.** It had never
+  consulted `devicePixelRatio`, so on HiDPI laptops and projectors the
+  most-viewed surface rendered at about half linear resolution while smaller
+  panels were sharp. The backing store now follows the display, under a pixel
+  budget per quality tier so that a large HiDPI window cannot multiply its fill
+  cost without limit. The low tier, which is chosen because a machine is already
+  struggling, takes none of the extra pixels and renders exactly as before, and
+  so does any display at a ratio of 1. `npm run perf -- --dpr 2` emulates a
+  HiDPI display for measuring it.
+- **Adding a language can no longer break offline install for every reader.**
+  Translated lesson bodies are kept out of the offline precache by the shape of
+  their directory rather than by a pattern naming Spanish, and the build refuses
+  a locale directory that is not registered or a registered locale that has
+  none. Before, a third language's lessons would have been precached as core
+  files, and one of them failing to download would have stopped the new service
+  worker installing for everyone. `npm run i18n:check`, which checks the message
+  catalogs against the source that asks for them, now passes and runs in CI.
+- **The deferred-download ceiling is raised; the initial-download ceiling is
+  not.** The new investigations, the spectra, precise placement and the data
+  tables are all loaded on demand, and the deferred ceiling in
+  `tools/bundle-budget.mjs` rises from 3880 KB to 4080 KB, with every raise
+  itemized in its `reason`. What a first visit downloads is still held to
+  830 KB. The lesson-manifest size test is now a bound per entry rather than a
+  flat total, which no further lesson could have fitted under.
+- **Only a release asks whether the instructor bundle is current.** Every
+  branch and fork runs `npm run instructors:validate`, which renders every
+  document and re-checks every answer key against the grading function under a
+  throwaway key and writes nothing, and `npm run instructors:audit`, which
+  confirms the freshness digest covers every module the build actually loads.
+  `npm run instructors:check`, which asks whether the committed ciphertext was
+  built from these sources, runs on pushes to `main` and pull requests into it,
+  so a branch that edits lesson content no longer goes red elsewhere until the
+  passphrase holder rebuilds; `tools/verify-release.mjs` now asks it again, with
+  no condition, on the tree about to be published. `npm run instructors:restamp`
+  re-states the record without the passphrase when the covered files changed
+  but the documents did not, and refuses when they did.
+- **CI measures what it used to report as unmeasured.** The documentation check
+  compares the documented test counts with the suites the `checks` job has just
+  run (`npm run docs:check:tests`) and the build facts with the build it has
+  just made (`npm run docs:check:build`); before, it passed while listing those
+  counts as not measured. The physics suite writes one report that both the
+  table and the documentation check read, instead of running twice. The
+  browser-suite skip policy, `npm run test:policy`, runs on every push and pull
+  request and tells a skip conditioned on the build target from one conditioned
+  on what the page happened to render, and the registry drift test now also
+  fails when a check marked gate-only is in fact run by CI.
+- **The accessibility and sonification claims are checked against the
+  production build.** The keyboard-placement, data-table and printed-voices
+  tests now work only through what a reader can see and press, and run against
+  `dist/` as well as the sources. The tests that compare against internal
+  state, such as exact typed coordinates, the plotted arrays and the live voice
+  list, stay on the sources, and their headers say why.
+
+### Fixed
+
+- At 900 px wide and below, a lesson with an instrument docked showed no
+  question, no answer boxes and no Next button: the bottom sheet was capped in
+  height with `overflow: hidden`, and the step body was the only part allowed to
+  shrink. The whole sheet now scrolls, Back and Next stay pinned to its bottom
+  edge, and each step opens at its heading. The two layout specs that should
+  have caught it scrolled boxes no reader can scroll; they now scroll only what
+  a finger or a wheel could, and name the box that clips a control. The
+  phone-width lesson walk runs in Firefox and WebKit as well.
+- The MOND fit in _The Missing Mass_ labeled its horizontal axis with its own
+  translation id, `dmW.radiusKpc`, in both languages, because the string was in
+  neither catalog.
+- Keyboard placement began its aim off the center of the view at the low
+  quality tier, because it used a CSS-pixel half-width as a canvas coordinate.
+- The Pluto–Neptune 3:2 check on `/validation/` was labeled a published value
+  while measuring periods the integrator produced. It is an integration check
+  now, renamed to say what it measures, with its value and tolerance unchanged.
+  A run that produced no conjunctions would have made the whole suite report
+  that it could not run; that case now costs one failed row.
+- `npm run instructors:check` could report a stale instructor bundle as current.
+  Its digest named a fixed list of files and missed several the build reads,
+  including the prose of every instructor guide, the activity teaching notes and
+  the instructor schema, so rewriting any of them left the recorded digest
+  unchanged. The covered set is now derived from the builder's import graph,
+  and the manifest records each input's own hash, so a failure names the file.
+- `npm run author:new` appended the new lesson's import to the end of the
+  previous line of `js/data/investigations.js`, so a freshly scaffolded lesson
+  failed `format:check` and `lint` in a file its author never opened.
+- Four statements in the public documentation that the code contradicted.
+  `paper.md` named velocity Verlet as the integrator where symplectic Euler is
+  the default, and said the whole browser suite runs in Firefox and WebKit where
+  only a tagged subset does; `PERFORMANCE_OPTIMIZATIONS_SUMMARY.md` said physics
+  is handed to the Barnes–Hut worker when the body count justifies it, where
+  only an opt-in setting turns it on; and `/model/` said seven stellar tracks
+  above a list of eight. The track count is now generated, and
+  `tests/truthSurface.test.js` holds the prose claims to the code.
+- The published size of the message catalog counted two of its five
+  fragments per language. `README.md` and the manual said the interface ships
+  from a catalog of 3691 strings when it held 4017: the activities, teaching and
+  placement strings split off for download size were invisible to the count,
+  and two tests that sweep the catalogs had each missed a different file. Every
+  reader of the catalog now finds its fragments by one rule, and a fragment
+  added for one language only, an id defined in two fragments, or a translation
+  filed in a different fragment from its original fails `npm run i18n:check`.
+- The browser test of the signed-in instructor portal reused the first fixture
+  a checkout ever built, so after a lesson was added it went on testing an
+  inventory the sources no longer described. The fixture now carries a stamp of
+  every input that decides what it says and is rebuilt when any of them moves;
+  the real instructor bundle and its release check are unchanged.
+- Counts the documentation had stopped keeping true. `README.md` and
+  `LICENSES.md` said "the 22 investigations" over a catalog of 24, and the
+  summary of `paper.md` said 22 investigations, 636 steps and 243 physics
+  checks. The license lines now cover every investigation without a count; the
+  paper's counts are generated and held to the source by `npm run docs:check`;
+  and a test sweeps the documents that describe the current software for any
+  investigation count that disagrees with the catalog.
+- `EXOPLANET_OBSERVING.md` still warned that the Jupiter mass unit was wrong by
+  a factor of 52.4 across the application. It had already been fixed, derived
+  from the solar mass and checked on `/validation/`; the note now says so.
+- The contributor instructions told a contributor to run `npm run build`, which
+  needs the instructor passphrase and stops without it. They now name
+  `npm run build:ci`, the same build with a throwaway key and the one CI runs.
 
 ## [1.0.0] - 2026-09-16
 
