@@ -12,21 +12,83 @@
 // experiment "=A1+1" produces a file that executes when opened. Escaping it is
 // two lines and forgetting it is a vulnerability in a file format nobody
 // thinks of as code.
+//
+// Quoting is not escaping. This used to wrap such a field in double quotes and
+// call it defused, but the quotes are CSV syntax: the reader strips them and
+// the cell is `=A1+1` again, and Excel evaluates it. What a spreadsheet does
+// not evaluate is a cell that begins with an apostrophe, so that is what a
+// risky field now gets, inside the quotes. And "begins with" is measured after
+// any leading whitespace or control characters, and counts the full-width
+// forms of the four characters, because more than one spreadsheet trims the
+// first and folds the second before it decides.
 // =============================================================================
 
+/** The characters that make a spreadsheet start a formula, and their full-width forms. */
+const FORMULA_CHARS = new Set([
+  '=',
+  '+',
+  '-',
+  '@',
+  '\uff1d',
+  '\uff0b',
+  '\uff0d',
+  '\uff20',
+]);
+
 /**
- * Quote a CSV field only when it needs it.
+ * The first character a spreadsheet will look at, once it has skipped what it
+ * skips: spaces and other whitespace, control characters, a no-break space, a
+ * zero-width space and a byte-order mark.
+ * @param {string} s - Field text
+ * @returns {string} That character, or ''
+ */
+function firstSignificant(s) {
+  let i = 0;
+  while (i < s.length) {
+    const c = s.charCodeAt(i);
+    const skipped =
+      c <= 0x20 || c === 0x7f || c === 0xa0 || c === 0x200b || c === 0xfeff;
+    if (!skipped) break;
+    i++;
+  }
+  return s.charAt(i);
+}
+
+/**
+ * Quote a CSV field only when it needs it, and disarm one that a spreadsheet
+ * would run.
+ *
+ * A plain finite number - `-3.5`, `+2`, `1e-9` - is a number and is left
+ * alone, so a column of values stays a column of values.
+ *
  * @param {*} v - Field value
  * @returns {string} A safe CSV field
  */
+/**
+ * Whether a value has to be disarmed before a spreadsheet sees it.
+ *
+ * A value that starts with an apostrophe followed by something that would need
+ * disarming is disarmed too, so that the apostrophe this adds is always the
+ * one fromCsv() takes off: `'=x` written as a value comes back as `'=x`, not
+ * as `=x`. Without that, the reader could not tell a prefix it added from one
+ * the value already had.
+ *
+ * @param {string} s - Field text
+ * @returns {boolean} Whether it needs the apostrophe
+ */
+function needsDisarming(s) {
+  if (s.trim() !== '' && Number.isFinite(Number(s))) return false;
+  if (FORMULA_CHARS.has(firstSignificant(s)) || /^[\t\r]/.test(s)) return true;
+  return s.startsWith("'") && needsDisarming(s.slice(1));
+}
+
 export function csvField(v) {
   if (v === null || v === undefined) return '';
   const s = String(v);
-  // A leading =, +, - or @ makes a spreadsheet treat text as a formula, which
-  // is a real hazard for a file named after whatever a student typed.
-  const risky = /^[=+\-@\t\r]/.test(s) && Number.isNaN(Number(s));
-  const needsQuote = risky || /[",\n\r]/.test(s);
-  return needsQuote ? `"${s.replace(/"/g, '""')}"` : s;
+  const risky = needsDisarming(s);
+  const text = risky ? `'${s}` : s;
+  const needsQuote = risky || /[",\n\r]/.test(text);
+  return needsQuote ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
 /**
@@ -65,10 +127,11 @@ export const toCsv = rows =>
  * bitten by.
  *
  * Handles what csvField emits and nothing more: quoted fields, doubled quotes
- * inside them, and CRLF or LF between records. A field's leading `=` is
- * returned as written - the quoting that disarms a spreadsheet is a property
- * of the file, not of the value, and undoing it here would be the caller's
- * surprise rather than its convenience.
+ * inside them, and CRLF or LF between records - and the apostrophe csvField
+ * puts in front of a value a spreadsheet would run, which is part of the file,
+ * not of the value. That one is removed exactly: csvField also disarms a value
+ * that already begins with an apostrophe before something risky, so a
+ * leading apostrophe that was in the data survives the round trip.
  *
  * @param {string} text - A CSV document
  * @returns {Array<Array<string>>} Rows of fields, header first, no trailing blank
@@ -79,10 +142,17 @@ export function fromCsv(text) {
   let row = [];
   let field = '';
   let quoted = false;
+  let wasQuoted = false;
   let i = 0;
   const endField = () => {
-    row.push(field);
+    // The apostrophe csvField puts in front of a disarmed value, taken back
+    // off. It only ever writes one inside quotes, and only in front of a value
+    // that needs it, so that is the only case undone here.
+    const disarmed =
+      wasQuoted && field.startsWith("'") && needsDisarming(field.slice(1));
+    row.push(disarmed ? field.slice(1) : field);
     field = '';
+    wasQuoted = false;
   };
   const endRow = () => {
     endField();
@@ -109,6 +179,7 @@ export function fromCsv(text) {
     }
     if (c === '"' && field === '') {
       quoted = true;
+      wasQuoted = true;
       i++;
       continue;
     }

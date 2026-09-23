@@ -128,7 +128,11 @@ slice was meant to move, and is reported, not replaced.
 
 `tools/route-budgets.json` holds each route to what was measured here plus 0.5%
 of its bytes and one request. Every lesson route's ceiling is below what it
-loaded before, so loading the two families eagerly again fails the check.
+loaded before, so loading the two families eagerly again fails the check. The
+evaluation page's ceiling is the one exception to "measured here": it was
+measured again after merging v2 at `489e4d2`, where #36 made the page write
+its CSV through the shared `js/csv.js` and its spreadsheet-formula guard (30.5
+KB in 3 requests from the sources, 11.6 KB from the build).
 
 ## What is left to move
 

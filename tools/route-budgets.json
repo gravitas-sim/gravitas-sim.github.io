@@ -1,5 +1,5 @@
 {
-  "note": "Ceilings for tools/route-budget.mjs: what a fresh visitor downloads per route, service worker blocked, in the published sources and a build. Each is the value measured at measuredAt plus 0.5% of its bytes and one request. Tight on purpose: every lesson route's ceiling is below what that route loaded before the transit and power-law families were made lazy, so a change that loads them eagerly again fails. Raised only by hand, in a commit that says why.",
+  "note": "Ceilings for tools/route-budget.mjs: what a fresh visitor downloads per route, service worker blocked, in the published sources and a build. Each is the value measured at measuredAt plus 0.5% of its bytes and one request. Tight on purpose: every lesson route's ceiling is below what that route loaded before the transit and power-law families were made lazy, so a change that loads them eagerly again fails. Raised only by hand, in a commit that says why. The evaluation page's ceilings are measured after merging v2 at 489e4d2, where #36 made js/evaluationKit.js write through the shared js/csv.js (the spreadsheet-formula guard, 7.1 KB as served): 30.5 KB in 3 requests from the sources, 11.6 KB in 1 from the build.",
   "measuredAt": "500c548",
   "routes": {
     "sources": {
@@ -36,8 +36,8 @@
         "requests": 17
       },
       "evaluation": {
-        "kb": 23.4,
-        "requests": 3
+        "kb": 30.7,
+        "requests": 4
       },
       "instructors": {
         "kb": 766.1,
@@ -78,7 +78,7 @@
         "requests": 2
       },
       "evaluation": {
-        "kb": 11.2,
+        "kb": 11.7,
         "requests": 2
       },
       "instructors": {
