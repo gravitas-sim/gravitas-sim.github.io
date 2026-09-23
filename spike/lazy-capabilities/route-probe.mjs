@@ -83,7 +83,12 @@ const median = xs => {
 const browser = await chromium.launch();
 const results = [];
 try {
-  for (const route of ROUTES) {
+  // --only=a,b: just these routes by name, for an interleaved timing run.
+  const only = process.argv.find(a => a.startsWith('--only='));
+  const chosen = only
+    ? ROUTES.filter(r => only.slice(7).split(',').includes(r.name))
+    : ROUTES;
+  for (const route of chosen) {
     const runs = [];
     for (let i = 0; i < LOADS; i++) {
       const context = await browser.newContext({
