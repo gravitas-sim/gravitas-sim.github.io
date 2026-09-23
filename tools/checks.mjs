@@ -11,7 +11,7 @@
 // changed.
 //
 // So this is the list, and both sides read it. release-check.mjs runs it.
-// tests/checkRegistry.test.js reads .github/workflows/ci.yml and fails when a
+// tests/releaseGate.test.js reads .github/workflows/ci.yml and fails when a
 // step there is missing here, or an entry here claims a CI job it is not in.
 // The workflow is still hand-written YAML - GitHub needs it that way - but it
 // can no longer quietly disagree with the gate.
@@ -276,8 +276,7 @@ export const CHECKS = [
     label: 'browser-suite skip policy',
     command: ['npm', 'run', 'test:policy'],
     tier: 'quick',
-    ci: null,
-    why: 'added with the policy itself; runs in a fraction of a second',
+    ci: 'checks',
     group: 'correctness',
   },
   {
@@ -567,16 +566,11 @@ export const CHECKS = [
     group: 'generated',
   },
   // The counts that cost a test run to measure: how many jest tests there are,
-  // how many browser tests, what a visitor downloads. The comment in
-  // docs-facts.mjs said CI paid for these in the job where the commands had
-  // already run. CI never did, and by the time anyone looked README.md was
-  // claiming 3608 jest tests against 4844 and 579 browser tests against 1061.
-  // The counts that cost a test run to measure: how many jest tests there are,
   // how many browser tests, what a visitor downloads.
   //
-  // The comment here used to say CI paid for these in the job where the
-  // commands had already run. CI never did - its documentation step ran the
-  // cheap check, which reports these as not measured and then prints
+  // The comment in docs-facts.mjs used to say CI paid for these in the job
+  // where the commands had already run. CI never did - its documentation step
+  // ran the cheap check, which reports these as not measured and then prints
   // "Documentation matches the source" - and by the time anyone looked README.md
   // was claiming 3608 jest tests against 4844 and 579 browser tests against
   // 1061.
