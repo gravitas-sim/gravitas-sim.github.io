@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 4080,
+    limit: 4180,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -501,7 +501,27 @@ const BUDGETS = [
       'four to one would cost 2.0, a third of that contrast. The initial ' +
       'download is untouched: 816.5 KB of 830.0 before this feature and after ' +
       'it, and a visitor who never opens the lesson browser downloads none of ' +
-      'the above.',
+      'the above.' +
+      '\n\nRaised from 4080 to 4180 for five real mergers in Listening to ' +
+      'Spacetime, approved by the owner after the itemisation below. From ' +
+      'fresh builds: 4076.4 KB with the lazy-instrument slice, 4174.2 with ' +
+      'this lab, 97.8 more. By esbuild metafile attribution: 54.1 KB is the ' +
+      'strain - thirty-two seconds from one detector for each of five events, ' +
+      'whitened, decimated to 1024 Hz and quantised to 16 bits under a guard ' +
+      "that moves the lesson's slice table by under 1%, in a chunk of its own " +
+      'behind a dynamic import; 25.8 is seven new screens, 13.5 of English and ' +
+      '12.3 of Spanish; 7.5 is the instrument and its constant-Q map ' +
+      '(js/gwEventWidgets.js, js/gw/qscan.js); 8.3 is its strings in the two ' +
+      'deferred catalogs; the rest is chunk overhead. The 19 KB provenance ' +
+      'record is imported by nothing in js/ and is not counted.' +
+      '\n\nDeclined: cutting GW170817 from 6.5 s to 3 s. It saves about 7 KB, ' +
+      'costs the screen that contrasts its faint track with a brighter noise ' +
+      'patch four seconds away, and would still need a raise. The instrument ' +
+      'is lazy, and so is the older gravitational-wave family it shares ' +
+      'helpers with, so a visitor who opens any other lesson loads less than ' +
+      'before this lab, not more (tools/route-budgets.json). The initial ' +
+      'download is untouched: 816.6 KB of 830.0 before and after. 4180 leaves ' +
+      '5.8 KB.',
   },
 ];
 

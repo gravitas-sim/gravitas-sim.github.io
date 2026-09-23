@@ -1,5 +1,5 @@
 {
-  "note": "Ceilings for tools/route-budget.mjs: what a fresh visitor downloads per route, service worker blocked, in the published sources and a build. Each is the value measured at measuredAt plus 0.5% of its bytes and one request. Tight on purpose: every lesson route's ceiling is below what that route loaded before the transit and power-law families were made lazy, so a change that loads them eagerly again fails. Raised only by hand, in a commit that says why.",
+  "note": "Ceilings for tools/route-budget.mjs: what a fresh visitor downloads per route, service worker blocked, in the published sources and a build. Each is the value measured at measuredAt plus 0.5% of its bytes and one request. Tight on purpose: every lesson route's ceiling is below what that route loaded before the transit and power-law families were made lazy, so a change that loads them eagerly again fails. Raised only by hand, in a commit that says why. The instructor-portal ceilings were re-pinned the same way when the GWOSC lab added 5.2 KB of instructor guidance to that page (767.4 KB sources, 646.6 KB build), approved by the owner; no other route moved.",
   "measuredAt": "500c548",
   "routes": {
     "sources": {
@@ -40,7 +40,7 @@
         "requests": 3
       },
       "instructors": {
-        "kb": 766.1,
+        "kb": 771.3,
         "requests": 16
       }
     },
@@ -82,7 +82,7 @@
         "requests": 2
       },
       "instructors": {
-        "kb": 644.8,
+        "kb": 649.9,
         "requests": 2
       }
     }
