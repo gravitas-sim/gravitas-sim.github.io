@@ -27,6 +27,8 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
+import { completeCatalogs } from '../tools/i18n-catalog.mjs';
+
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
@@ -185,20 +187,16 @@ describe('American spellings in English a reader sees', () => {
   });
 
   test('the English message catalogs', async () => {
-    const mods = await Promise.all([
-      import('../js/i18n/en.js'),
-      import('../js/i18n/en.deferred.js'),
-      import('../js/i18n/en.teaching.js'),
-      import('../js/i18n/en.activities.js'),
-    ]);
+    // Every fragment, from the directory. This listed four files and so never
+    // read en.placement.js; tools/i18n-catalog.mjs is the one reader that
+    // cannot miss a split.
+    const { catalogs } = await completeCatalogs();
+    const { merged, homeOf } = catalogs.get('en');
+    expect(Object.keys(merged).length).toBeGreaterThan(0);
     const found = [];
-    for (const mod of mods) {
-      for (const [name, table] of Object.entries(mod)) {
-        // The value is what renders. The key is an identifier nobody reads.
-        for (const [key, value] of Object.entries(table)) {
-          found.push(...offences(`${name}.${key}`, value));
-        }
-      }
+    // The value is what renders. The key is an identifier nobody reads.
+    for (const [key, value] of Object.entries(merged)) {
+      found.push(...offences(`${homeOf.get(key)} ${key}`, value));
     }
     expect(found).toEqual([]);
   });
