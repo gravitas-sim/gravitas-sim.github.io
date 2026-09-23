@@ -14,6 +14,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { scrollLikeAReader } from './reach.js';
 
 const LESSON = 'a-universe-of-stars';
 
@@ -68,9 +69,22 @@ async function cardReady(page, atLeast = 2) {
     .toBeGreaterThanOrEqual(atLeast);
 }
 
+/**
+ * Walk forward to the step with this title, pressing Next only where a reader
+ * could.
+ *
+ * `locator.click()` scrolls its target into view first, through any box, so on
+ * its own it would press a Next button clipped off the bottom of the sheet.
+ * Checking it is reachable before every press is what makes the walk fail at
+ * the first step a student could not leave.
+ */
 async function goTo(page, title) {
   for (let n = 0; n < 40; n++) {
     if ((await page.locator('.inv-step-title').innerText()) === title) return;
+    const next = await reachable(page, '#investigationNext');
+    if (next !== 'ok') {
+      throw new Error(`Next, on the way to "${title}": ${next}`);
+    }
     await page.locator('#investigationNext').click();
     await page.waitForTimeout(110);
   }
@@ -83,15 +97,21 @@ async function goTo(page, title) {
  * elementFromPoint at its center, walked back up through its own children.
  * Anything else on top means the reader cannot use it, whatever the DOM says.
  */
-const reachable = (page, selector) =>
-  page.evaluate(sel => {
+const reachable = async (page, selector) => {
+  // Scrolled to first, because the lesson panel scrolls and a reader
+  // scrolls it. What is being asked is "can they get to it", not "is it
+  // above the fold" - the failure this catches is a control that is on
+  // screen and underneath something else.
+  //
+  // But scrolled only the way a reader can. `scrollIntoView` also scrolls a
+  // box that is `overflow: hidden`, which no finger can, and it once carried
+  // this check past a Next button clipped off the sheet at 390px. See
+  // e2e/reach.js.
+  const scrolled = await page.evaluate(scrollLikeAReader, selector);
+  if (scrolled !== 'ok') return scrolled;
+  return page.evaluate(sel => {
     const el = document.querySelector(sel);
     if (!el) return 'missing';
-    // Scrolled to first, because the lesson panel scrolls and a reader
-    // scrolls it. What is being asked is "can they get to it", not "is it
-    // above the fold" - the failure this catches is a control that is on
-    // screen and underneath something else.
-    el.scrollIntoView({ block: 'center', inline: 'nearest' });
     const r = el.getBoundingClientRect();
     if (r.width < 4 || r.height < 4) return 'collapsed';
     if (r.bottom < 0 || r.top > window.innerHeight) return 'offscreen';
@@ -104,6 +124,7 @@ const reachable = (page, selector) =>
       ? 'ok'
       : `covered by ${hit.tagName.toLowerCase()}.${hit.className || '(none)'}`;
   }, selector);
+};
 
 for (const size of SIZES) {
   test.describe(`at ${size.name} (${size.width}px)`, () => {

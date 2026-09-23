@@ -32,6 +32,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { scrollLikeAReader } from './reach.js';
 
 /** The sizes, named for what they are rather than for their numbers. */
 const VIEWPORTS = [
@@ -85,13 +86,21 @@ async function fillFields(page) {
  */
 async function reachable(page, selector, { minHeight = 0 } = {}) {
   const el = page.locator(selector).first();
+  // Scrolled only where a reader can scroll, which `scrollIntoView` is not: it
+  // scrolls an `overflow: hidden` box as readily as any other, and that is how
+  // a Next button clipped off the lesson sheet at 390px passed here. See
+  // e2e/reach.js.
+  //
   // Centered rather than minimally scrolled. `scrollIntoViewIfNeeded` stops the
   // moment an element is technically inside its scroll container, which leaves
   // it flush against the edge - and a point sampled at the very edge of a
   // scrolling panel hits the panel, not the control. That is a property of
   // this test, not of the layout, and it failed six of fourteen sizes before
   // it was pinned down.
-  await el.evaluate(node => node.scrollIntoView({ block: 'center' }));
+  expect(
+    await page.evaluate(scrollLikeAReader, selector),
+    `${selector} can be scrolled to`
+  ).toBe('ok');
   await page.waitForTimeout(120);
   await expect(el, `${selector} is visible`).toBeVisible();
   const box = await el.boundingBox();
