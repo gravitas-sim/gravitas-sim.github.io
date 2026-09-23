@@ -27,7 +27,11 @@ const ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '../..'
 );
-const [distDir, portArg, loadsArg] = process.argv.slice(2);
+const positional = process.argv.slice(2).filter(a => !a.startsWith('--'));
+const [distDir, portArg, loadsArg] = positional;
+// --no-sw: block the service worker, so what is counted is what the page
+// itself asks for on the way to usable, not a background precache.
+const NO_SW = process.argv.includes('--no-sw');
 const PORT = Number(portArg || 4399);
 const LOADS = Number(loadsArg || 7);
 const BASE = `http://127.0.0.1:${PORT}`;
@@ -82,7 +86,9 @@ try {
   for (const route of ROUTES) {
     const runs = [];
     for (let i = 0; i < LOADS; i++) {
-      const context = await browser.newContext();
+      const context = await browser.newContext({
+        serviceWorkers: NO_SW ? 'block' : 'allow',
+      });
       // A returning visitor's front-door dialog would change what loads.
       await context.addInitScript(() => {
         try {

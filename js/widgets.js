@@ -89,7 +89,11 @@ const WIDGETS = [
 export const LAZY_FAMILIES = Object.freeze({
   transit: {
     ids: ['depth-size', 'geometry', 'spectrum', 'dilution', 'resolve'],
-    load: () => import('./transitWidgets.js').then(m => m.TRANSIT_WIDGETS),
+    // The literal import is what a bundler can see and chunk; a retry goes
+    // through retryImport() below.
+    load: () => import('./transitWidgets.js'),
+    path: './transitWidgets.js',
+    pick: m => m.TRANSIT_WIDGETS,
   },
   powerLaw: {
     ids: [
@@ -98,7 +102,9 @@ export const LAZY_FAMILIES = Object.freeze({
       'power-law-kepler',
       'power-law-conservation',
     ],
-    load: () => import('./powerLawWidgets.js').then(m => m.POWER_LAW_WIDGETS),
+    load: () => import('./powerLawWidgets.js'),
+    path: './powerLawWidgets.js',
+    pick: m => m.POWER_LAW_WIDGETS,
   },
 });
 
@@ -108,6 +114,21 @@ const lazyFamilyOf = id =>
   null;
 const loadedFamilies = new Set();
 const inFlight = new Map();
+const attempts = new Map();
+
+/**
+ * A second try at a module whose first fetch failed.
+ *
+ * A browser caches a failed module fetch for the life of the page, so
+ * importing the same URL again rejects at once without touching the network -
+ * measured in Chromium, and it is what the HTML module map specifies. A new
+ * query string is a new URL. This rescues a family module that failed; it
+ * cannot rescue one whose own import failed, because that URL is cached too,
+ * and it only works where the module is served at its source path - a bundled
+ * build's chunk names are fixed at build time. Both are recorded in the gate.
+ */
+const retryImport = (path, n) =>
+  import(new URL(`${path}?retry=${n}`, import.meta.url).href);
 
 /** A family that could not be fetched, named so a reader can be told which. */
 export class WidgetLoadError extends Error {
@@ -129,8 +150,11 @@ export class WidgetLoadError extends Error {
 function loadFamily(family) {
   if (loadedFamilies.has(family)) return Promise.resolve();
   if (!inFlight.has(family)) {
-    const pending = LAZY_FAMILIES[family]
-      .load()
+    const spec = LAZY_FAMILIES[family];
+    const n = attempts.get(family) || 0;
+    attempts.set(family, n + 1);
+    const pending = (n === 0 ? spec.load() : retryImport(spec.path, n))
+      .then(spec.pick)
       .then(widgets => {
         for (const w of widgets) if (!getWidget(w.id)) WIDGETS.push(w);
         loadedFamilies.add(family);

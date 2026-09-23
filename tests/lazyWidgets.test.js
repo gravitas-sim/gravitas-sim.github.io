@@ -21,7 +21,7 @@ import {
 describe('the lazy widget manifest', () => {
   test('each family lists exactly the ids its module exports', async () => {
     for (const [name, family] of Object.entries(LAZY_FAMILIES)) {
-      const widgets = await family.load();
+      const widgets = family.pick(await family.load());
       expect({ name, ids: [...family.ids].sort() }).toEqual({
         name,
         ids: widgets.map(w => w.id).sort(),
