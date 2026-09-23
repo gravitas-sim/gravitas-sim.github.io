@@ -1,12 +1,14 @@
 # Lazy instrument capabilities: architecture gate
 
-**Status: UNRESOLVED - needs Carl's decision.** The pre-registered verdict rule,
-applied literally to the measurement method fixed with it, gives **C**; the same
-prototype, measured the way the site is actually published, meets every
-criterion, which would make it at least **B**. The gap is explained below and is
-not something this gate should settle for itself. Recommendation: **B**, with
-the first slice defined under *If B*. Thresholds were fixed and committed
-(`6f3c89a`) before the prototype was measured against them, and are unchanged.
+**Status: decided - B (staged migration).** Decided by Carl on 2026-09-23: the
+gate is judged on the configuration the site is published in - the unbundled
+sources GitHub Pages serves - not on the bundled build the thresholds named, and
+the first slice must remove the start-up request the bundled build gained rather
+than accept it. Before that decision the verdict was open: the pre-registered
+rule, applied literally to the bundled build, gives C; the published sources
+meet every criterion. Both readings, and the evidence for each, are kept below.
+Thresholds were fixed and committed (`6f3c89a`) before the prototype was
+measured against them, and are unchanged.
 
 **Question.** Can Gravitas scale to many more investigations without every
 lesson loading the entire instrument catalog? `js/widgets.js` statically imports
@@ -158,7 +160,8 @@ ceiling - under it, by 3.7 KB.
 
 ## Verdict
 
-**Unresolved; recommended B.**
+**B - staged migration** (decided; see *Status*). The reasoning that was put to
+the decision follows unchanged.
 
 Read literally, the rule fixed before measuring says C, because M4 was to be
 measured on the production build and fails there by one 1.9 KB request. That
@@ -179,9 +182,10 @@ what Pages serves. Nothing downstream (Prompt 06) should start until it is made.
 1. The manifest, resolver, loading and error states, and `whenWidgetsReady()`
    change as prototyped; the scene audit's family scan; `author:check` and
    preview awaiting the catalog.
-2. The start-up request the bundle gained, removed rather than accepted: the
+2. The start-up request the bundle gained, removed - decided, not optional: the
    lazy families take `units.js` through a module already in the engine chunk,
-   or the build check below is amended by an explicit decision.
+   so the bundled build's start-up stays at its base file count. Start-up bytes
+   and requests must not grow in either configuration.
 3. Retry: the query-string retry for the family module, and for any other
    failure a stated "reload to try again" with the reader's progress kept - no
    retry control that cannot work.
