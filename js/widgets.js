@@ -41,7 +41,6 @@ import { STELLAR_WIDGETS } from './stellarWidgets.js';
 import { STELLAR_EVOLUTION_WIDGETS } from './stellarEvolutionWidgets.js';
 import { OBSERVING_WIDGETS } from './observingWidgets.js';
 import { SPECTRA_WIDGETS, spectraReady } from './stellarSpectraWidgets.js';
-import { GW_EVENT_WIDGETS, eventsReady } from './gwEventWidgets.js';
 
 // Every widget family's prose lives in the deferred half of the catalog,
 // because nothing in the start-up path can reach one: this registry is
@@ -77,7 +76,6 @@ const WIDGETS = [
   ...STELLAR_EVOLUTION_WIDGETS,
   ...OBSERVING_WIDGETS,
   ...SPECTRA_WIDGETS,
-  ...GW_EVENT_WIDGETS,
 ];
 
 // -----------------------------------------------------------------------------
@@ -113,6 +111,17 @@ export const LAZY_FAMILIES = Object.freeze({
     path: './powerLawWidgets.js',
     pick: m => m.POWER_LAW_WIDGETS,
   },
+  // Lazy from the start: a new family goes here rather than into the static
+  // imports above, or every lesson pays for it (tools/route-budgets.json).
+  gwEvents: {
+    ids: ['gw-events'],
+    load: () => import('./gwEventWidgets.js'),
+    path: './gwEventWidgets.js',
+    pick: m => m.GW_EVENT_WIDGETS,
+    // Its strain arrives behind a second import, like the spectra's flux, and
+    // whenWidgetsReady() waits for it the same way.
+    ready: m => m.eventsReady,
+  },
 });
 
 /** The family that owns an id, if it is a lazy one. */
@@ -122,6 +131,8 @@ const lazyFamilyOf = id =>
 const loadedFamilies = new Set();
 const inFlight = new Map();
 const attempts = new Map();
+/** A loaded family's own readiness, for a family that declares one. */
+const familyReady = new Map();
 
 /**
  * A second try at a module whose first fetch failed.
@@ -173,7 +184,10 @@ function loadFamily(family) {
     const n = attempts.get(family) || 0;
     attempts.set(family, n + 1);
     const pending = (n === 0 ? spec.load() : retryImport(spec.path, n))
-      .then(spec.pick)
+      .then(m => {
+        if (spec.ready) familyReady.set(family, spec.ready(m));
+        return spec.pick(m);
+      })
       .then(widgets => {
         for (const w of widgets) if (!getWidget(w.id)) WIDGETS.push(w);
         loadedFamilies.add(family);
@@ -248,7 +262,7 @@ export async function whenWidgetsReady() {
     tidalReady,
     darkMatterReady,
     spectraReady,
-    eventsReady,
+    ...familyReady.values(),
   ]);
   return results.every(Boolean);
 }
