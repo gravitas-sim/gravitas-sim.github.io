@@ -1,0 +1,90 @@
+{
+  "note": "Ceilings for tools/route-budget.mjs: what a fresh visitor downloads per route, service worker blocked, in the published sources and a build. Each is the value measured at measuredAt plus 0.5% of its bytes and one request. Tight on purpose: every lesson route's ceiling is below what that route loaded before the transit and power-law families were made lazy, so a change that loads them eagerly again fails. Raised only by hand, in a commit that says why. The evaluation page's ceilings are measured after merging v2 at 489e4d2, where #36 made js/evaluationKit.js write through the shared js/csv.js (the spreadsheet-formula guard, 7.1 KB as served): 30.5 KB in 3 requests from the sources, 11.6 KB in 1 from the build.",
+  "measuredAt": "500c548",
+  "routes": {
+    "sources": {
+      "front-door": {
+        "kb": 2103.3,
+        "requests": 102
+      },
+      "sandbox": {
+        "kb": 2103.3,
+        "requests": 102
+      },
+      "kepler": {
+        "kb": 4245.7,
+        "requests": 170
+      },
+      "transit": {
+        "kb": 4257.1,
+        "requests": 170,
+        "toolKb": 4498.3,
+        "toolRequests": 172
+      },
+      "power-law": {
+        "kb": 4223.7,
+        "requests": 170,
+        "toolKb": 4277.1,
+        "toolRequests": 173
+      },
+      "largest-lesson": {
+        "kb": 4282.6,
+        "requests": 170
+      },
+      "teaching": {
+        "kb": 246.4,
+        "requests": 17
+      },
+      "evaluation": {
+        "kb": 30.7,
+        "requests": 4
+      },
+      "instructors": {
+        "kb": 766.1,
+        "requests": 16
+      }
+    },
+    "build": {
+      "front-door": {
+        "kb": 628.4,
+        "requests": 55
+      },
+      "sandbox": {
+        "kb": 628.4,
+        "requests": 55
+      },
+      "kepler": {
+        "kb": 1684.2,
+        "requests": 74
+      },
+      "transit": {
+        "kb": 1697.5,
+        "requests": 74,
+        "toolKb": 1930.7,
+        "toolRequests": 78
+      },
+      "power-law": {
+        "kb": 1669.3,
+        "requests": 74,
+        "toolKb": 1687.3,
+        "toolRequests": 77
+      },
+      "largest-lesson": {
+        "kb": 1707.7,
+        "requests": 74
+      },
+      "teaching": {
+        "kb": 140.2,
+        "requests": 2
+      },
+      "evaluation": {
+        "kb": 11.7,
+        "requests": 2
+      },
+      "instructors": {
+        "kb": 644.8,
+        "requests": 2
+      }
+    }
+  }
+}

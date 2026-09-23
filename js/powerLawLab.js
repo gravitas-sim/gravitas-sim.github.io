@@ -36,7 +36,8 @@ import {
   runKeplerSlope,
   runPrecession,
 } from './powerLawGravity.js';
-import { simToAu } from './units.js';
+// From constants.js, not units.js: see the note there on lazy chunks.
+import { simToAu } from './constants.js';
 
 /** One solar mass at the integrator's G of 1. */
 const MU = 1000;

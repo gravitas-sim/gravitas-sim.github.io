@@ -128,3 +128,28 @@ export const SOLAR_MASS_UNIT = 1000;
 
 /** Simulation mass units in one Earth mass. */
 export const EARTH_MASS_UNIT = SOLAR_MASS_UNIT / EARTH_MASSES_PER_SOLAR_MASS;
+
+/**
+ * Simulation length units in one astronomical unit.
+ *
+ * This is the anchor the whole distance scale hangs from, and it belongs in
+ * exactly one place. The habitable-zone renderer used to carry its own private
+ * copy of this number, set to 160, from a time when the Solar System scenario
+ * placed Earth at 160 units. The scenario was rebuilt at 100 and the renderer
+ * was not, so the ring was drawn sixty percent too far out for a long time.
+ */
+export const SIM_UNITS_PER_AU = 100;
+
+/**
+ * Convert astronomical units to simulation distance units.
+ * @param {number} au - Distance in AU
+ * @returns {number} Distance in simulation units
+ */
+export const auToSim = au => au * SIM_UNITS_PER_AU;
+
+/**
+ * Convert simulation distance units to astronomical units.
+ * @param {number} units - Distance in simulation units
+ * @returns {number} Distance in AU
+ */
+export const simToAu = units => units / SIM_UNITS_PER_AU;
