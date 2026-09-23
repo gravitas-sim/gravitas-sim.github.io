@@ -94,7 +94,10 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  *
  * e2e/accessibilityParity.spec.js and e2e/sonifyTextEquivalent.spec.js check
  * claims ACCESSIBILITY.md makes to a reader - the keyboard placement form, the
- * data tables, the printed voices - and a reader gets the bundle. Their
+ * data tables, the printed voices - and those claims have to hold in both
+ * builds. (What is published is the sources: the deploy job uploads the
+ * committed tree, and GitHub Pages serves it unbundled. dist/ is the build the
+ * bundle budgets measure.) Their
  * DOM-only tests run here; the ones that compare against a module's own arrays
  * carry a GRAVITAS_E2E_TARGET skip and stay on the sources.
  *
