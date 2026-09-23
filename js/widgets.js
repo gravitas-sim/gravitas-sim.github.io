@@ -24,6 +24,7 @@
 // =============================================================================
 
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { currentTier, prefersReducedMotion } from './quality.js';
 import { ENERGY_WIDGETS } from './energyWidgets.js';
 import { BINARY_WIDGETS } from './binaryWidgets.js';
 import { BLACK_HOLE_WIDGETS } from './blackHoleWidgets.js';
@@ -36,7 +37,6 @@ import {
 } from './darkMatterWidgets.js';
 import { CHAOS_WIDGETS } from './chaosWidgets.js';
 import { RESONANCE_WIDGETS } from './resonanceWidgets.js';
-import { GW_WIDGETS } from './gwWidgets.js';
 import { STELLAR_WIDGETS } from './stellarWidgets.js';
 import { STELLAR_EVOLUTION_WIDGETS } from './stellarEvolutionWidgets.js';
 import { OBSERVING_WIDGETS } from './observingWidgets.js';
@@ -71,7 +71,6 @@ const WIDGETS = [
   ...DARK_MATTER_WIDGETS,
   ...CHAOS_WIDGETS,
   ...RESONANCE_WIDGETS,
-  ...GW_WIDGETS,
   ...STELLAR_WIDGETS,
   ...STELLAR_EVOLUTION_WIDGETS,
   ...OBSERVING_WIDGETS,
@@ -110,6 +109,12 @@ export const LAZY_FAMILIES = Object.freeze({
     load: () => import('./powerLawWidgets.js'),
     path: './powerLawWidgets.js',
     pick: m => m.POWER_LAW_WIDGETS,
+  },
+  gw: {
+    ids: ['gw-lab', 'gw-real'],
+    load: () => import('./gwWidgets.js'),
+    path: './gwWidgets.js',
+    pick: m => m.GW_WIDGETS,
   },
   // Lazy from the start: a new family goes here rather than into the static
   // imports above, or every lesson pays for it (tools/route-budgets.json).
@@ -185,6 +190,11 @@ function loadFamily(family) {
     attempts.set(family, n + 1);
     const pending = (n === 0 ? spec.load() : retryImport(spec.path, n))
       .then(m => {
+        // A family that needs engine state is handed it here rather than
+        // importing it: a lazily loaded family that reaches a module start-up
+        // shares makes the bundler split that module out, adding a request
+        // to every page (js/quality.js would be one; LAZY_CAPABILITIES.md).
+        m.bindServices?.({ currentTier, prefersReducedMotion });
         if (spec.ready) familyReady.set(family, spec.ready(m));
         return spec.pick(m);
       })

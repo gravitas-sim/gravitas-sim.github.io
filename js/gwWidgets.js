@@ -39,7 +39,15 @@ import {
   TYPE,
   typeAt,
 } from './widgetCanvas.js';
-import { prefersReducedMotion, currentTier } from './quality.js';
+// Supplied by js/widgets.js when this family is loaded. Importing js/quality.js
+// here would make the bundler split it out of the start-up chunk it shares,
+// adding a request to every page (LAZY_CAPABILITIES.md); until bound, the
+// defaults are what js/quality.js reports before it has measured anything.
+let quality = { currentTier: () => 'full', prefersReducedMotion: () => false };
+/** @param {{currentTier: Function, prefersReducedMotion: Function}} services */
+export function bindServices(services) {
+  quality = { ...quality, ...services };
+}
 import {
   PRESETS,
   LIMITS,
@@ -718,7 +726,8 @@ function drawWaveOverlay(g, geom, state, colors) {
 
   // Detail, not signal: a low tier draws fewer wavefronts. Nothing about the
   // strain, the frequency or the audio depends on this number.
-  const rings = currentTier() === 'low' ? Math.round(MAX_RINGS / 2) : MAX_RINGS;
+  const rings =
+    quality.currentTier() === 'low' ? Math.round(MAX_RINGS / 2) : MAX_RINGS;
   const crests = [];
   for (let k = 0; k < rings; k++) {
     // Crests are where the phase passes a multiple of 2 pi, going backwards
@@ -846,7 +855,8 @@ function drawRingInset(g, r, state, colors) {
   g.globalAlpha = 1;
 
   g.fillStyle = colors.accent;
-  const count = currentTier() === 'low' ? RING_PARTICLES / 2 : RING_PARTICLES;
+  const count =
+    quality.currentTier() === 'low' ? RING_PARTICLES / 2 : RING_PARTICLES;
   for (let i = 0; i < count; i++) {
     const a = (i / count) * Math.PI * 2;
     const x0 = Math.cos(a) * rad;
@@ -1546,7 +1556,7 @@ const GW_LAB = {
     state.playing =
       autorun &&
       spec.autoplay !== false &&
-      !prefersReducedMotion() &&
+      !quality.prefersReducedMotion() &&
       (v.cursor ?? 0) < 0.999;
     if (spec.noise !== undefined) state.noiseOn = Boolean(spec.noise);
   },
@@ -1625,7 +1635,7 @@ const GW_LAB = {
     const { ctx: g, w } = surface(canvas, H);
     const colors = palette();
     const area = { x: 2, y: 2, w: w - 4, h: H - 4 };
-    const reduced = prefersReducedMotion();
+    const reduced = quality.prefersReducedMotion();
 
     if (view === 'source') {
       const [top, bottom] = stack(area, [2.3, 1]);
@@ -1815,7 +1825,7 @@ const GW_LAB = {
       rows.push({
         label: t('gwW.row.overlay'),
         value: t(
-          prefersReducedMotion()
+          quality.prefersReducedMotion()
             ? 'gwW.overlay.legendStill'
             : 'gwW.overlay.legend'
         ),

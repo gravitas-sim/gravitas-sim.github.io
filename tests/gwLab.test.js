@@ -47,8 +47,12 @@ import {
   defaultSpeedFor,
 } from '../js/gwLab.js';
 import { GW_WIDGETS } from '../js/gwWidgets.js';
-import { getWidget } from '../js/widgets.js';
+import { getWidget, whenWidgetsReady } from '../js/widgets.js';
 import { iscoFrequency, chirpMass } from '../js/gw/waveform.js';
+
+// The gravitational-wave family is fetched on demand (js/widgets.js,
+// LAZY_FAMILIES), so the whole catalog is awaited before any lookup.
+await whenWidgetsReady();
 
 /** A canvas whose every 2D method exists and does nothing. */
 function stubCanvas() {

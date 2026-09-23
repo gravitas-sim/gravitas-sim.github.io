@@ -20,11 +20,15 @@
 // =============================================================================
 
 import { describe, test, expect, beforeEach } from '@jest/globals';
-import { getWidget, widgetDefaults } from '../js/widgets.js';
+import { getWidget, whenWidgetsReady, widgetDefaults } from '../js/widgets.js';
 import { setSignalAudio } from '../js/widgetRuntime.js';
 import { renderAudio } from '../js/gw/audioRender.js';
 import { DEFAULT_GAIN } from '../js/gwAudio.js';
 import { referenceStrainFor, PRESETS } from '../js/gwLab.js';
+
+// The gravitational-wave family is fetched on demand (js/widgets.js,
+// LAZY_FAMILIES), so the whole catalog is awaited before any lookup.
+await whenWidgetsReady();
 
 /**
  * Render exactly as js/gwAudio.js would.
