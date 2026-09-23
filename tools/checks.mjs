@@ -39,6 +39,7 @@ const CACHES = {
   gw: path.join(REPO, '.gw-cache'),
   stellar: path.join(REPO, '.mist-cache'),
   spectra: path.join(REPO, '.sdss-cache'),
+  gwosc: path.join(REPO, '.gwosc-cache'),
 };
 
 /**
@@ -59,7 +60,7 @@ export const SOURCE_KEYS = Object.freeze(Object.keys(CACHES));
  * run was able to establish, and a release summary that calls it a pass is
  * lying about which.
  *
- * @param {'gw'|'stellar'|'spectra'} which - The dataset
+ * @param {'gw'|'stellar'|'spectra'|'gwosc'} which - The dataset
  * @returns {boolean} True when the cache has something in it
  */
 export function sourcesCached(which) {
@@ -636,6 +637,15 @@ export const CHECKS = [
     group: 'science',
   },
   {
+    id: 'gwosc-structure',
+    label: 'the five GWOSC events are complete and self-consistent',
+    command: ['npm', 'run', 'gwosc:check'],
+    tier: 'quick',
+    ci: null,
+    why: 'added after the workflow was written; runs in seconds',
+    group: 'science',
+  },
+  {
     id: 'gw-provenance',
     sources: 'gw',
     label: 'GW150914 regenerates from the published traces',
@@ -656,6 +666,16 @@ export const CHECKS = [
     group: 'science',
   },
 
+  {
+    id: 'gwosc-provenance',
+    sources: 'gwosc',
+    label: 'the five GWOSC events regenerate from the cached strain',
+    command: ['npm', 'run', 'gwosc:provenance'],
+    tier: 'provenance',
+    ci: null,
+    why: 'needs the GWOSC strain cached; see --provenance',
+    group: 'science',
+  },
   {
     id: 'spectra-provenance',
     sources: 'spectra',

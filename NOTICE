@@ -70,13 +70,20 @@ licensed CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
   Gravitational Wave Open Science Center (gwosc.org), a service of the LIGO
   Scientific Collaboration, the Virgo Collaboration, and KAGRA.
 
-The bundled traces are decimated subsets of the published band-passed strain.
-Every processing step, the source URL and a checksum are recorded in the data
-files themselves, and `npm run gw:provenance` regenerates them from the
-originals and compares byte for byte.
+Two datasets. gw150914.js holds decimated subsets of the published
+band-passed figure strain. gwoscEvents.js holds 32-second excerpts of the
+released 4096 Hz strain for five events, whitened, windowed, decimated and
+quantized by this project, beside catalog values copied from GWTC-1 and
+GWTC-2.1. Every processing step, the source URLs and their checksums are
+recorded with the data, and `npm run gw:provenance` and
+`npm run gwosc:provenance` regenerate them from the originals and compare byte
+for byte.
 
-Primary reference: Abbott et al. (2016), Phys. Rev. Lett. 116, 061102,
-doi:10.1103/PhysRevLett.116.061102
+Primary references: Abbott et al. (2016), Phys. Rev. Lett. 116, 061102,
+doi:10.1103/PhysRevLett.116.061102; the GWTC-1 and GWTC-2.1 data releases,
+doi:10.7935/82H3-HH23 and doi:10.7935/qf3a-3z67; and the open-data papers,
+Abbott et al. (2021), SoftwareX 13, 100658, and Abbott et al. (2023),
+ApJS 267, 29.
 
 ===============================================================================
 MIST stellar evolution tracks

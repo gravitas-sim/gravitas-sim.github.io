@@ -43,6 +43,7 @@ import { STELLAR_EVOLUTION_WIDGETS } from './stellarEvolutionWidgets.js';
 import { OBSERVING_WIDGETS } from './observingWidgets.js';
 import { POWER_LAW_WIDGETS } from './powerLawWidgets.js';
 import { SPECTRA_WIDGETS, spectraReady } from './stellarSpectraWidgets.js';
+import { GW_EVENT_WIDGETS, eventsReady } from './gwEventWidgets.js';
 
 // Every widget family's prose lives in the deferred half of the catalog,
 // because nothing in the start-up path can reach one: this registry is
@@ -80,6 +81,7 @@ const WIDGETS = [
   ...OBSERVING_WIDGETS,
   ...POWER_LAW_WIDGETS,
   ...SPECTRA_WIDGETS,
+  ...GW_EVENT_WIDGETS,
 ];
 
 /**
@@ -122,6 +124,7 @@ export async function whenWidgetsReady() {
     tidalReady,
     darkMatterReady,
     spectraReady,
+    eventsReady,
   ]);
   return results.every(Boolean);
 }

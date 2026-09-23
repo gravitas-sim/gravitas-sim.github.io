@@ -48,21 +48,9 @@
      "via": "js/physics.js"
     },
     {
-     "name": "GW150914 strain, as published",
-     "origin": "observation",
-     "dataset": "js/data/gw/gw150914.js",
-     "via": "js/physics.js"
-    },
-    {
      "name": "MIST v1.2 evolutionary tracks",
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
-     "via": "js/physics.js"
-    },
-    {
-     "name": "Four observed stellar spectra, SDSS DR18",
-     "origin": "observation",
-     "dataset": "js/data/spectra/sdssSpectra.js",
      "via": "js/physics.js"
     }
    ]
@@ -166,21 +154,9 @@
      "via": "js/widgetRuntime.js"
     },
     {
-     "name": "GW150914 strain, as published",
-     "origin": "observation",
-     "dataset": "js/data/gw/gw150914.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
      "name": "MIST v1.2 evolutionary tracks",
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "Four observed stellar spectra, SDSS DR18",
-     "origin": "observation",
-     "dataset": "js/data/spectra/sdssSpectra.js",
      "via": "js/widgetRuntime.js"
     }
    ]
@@ -227,21 +203,9 @@
      "via": "js/widgetRuntime.js"
     },
     {
-     "name": "GW150914 strain, as published",
-     "origin": "observation",
-     "dataset": "js/data/gw/gw150914.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
      "name": "MIST v1.2 evolutionary tracks",
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "Four observed stellar spectra, SDSS DR18",
-     "origin": "observation",
-     "dataset": "js/data/spectra/sdssSpectra.js",
      "via": "js/widgetRuntime.js"
     }
    ]
@@ -408,6 +372,26 @@
    "mutates": [],
    "datasets": []
   },
+  "gw-events": {
+   "live": false,
+   "controls": [
+    "event",
+    "catalog",
+    "model"
+   ],
+   "presets": 0,
+   "buttons": [],
+   "engineReads": [],
+   "mutates": [],
+   "datasets": [
+    {
+     "name": "Five GWOSC events, whitened strain",
+     "origin": "observation",
+     "dataset": "js/data/gw/gwoscEvents.js",
+     "via": "js/data/gw/gwoscEvents.js"
+    }
+   ]
+  },
   "gw-lab": {
    "live": true,
    "controls": [
@@ -449,21 +433,9 @@
      "via": "js/widgetRuntime.js"
     },
     {
-     "name": "GW150914 strain, as published",
-     "origin": "observation",
-     "dataset": "js/data/gw/gw150914.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
      "name": "MIST v1.2 evolutionary tracks",
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "Four observed stellar spectra, SDSS DR18",
-     "origin": "observation",
-     "dataset": "js/data/spectra/sdssSpectra.js",
      "via": "js/widgetRuntime.js"
     }
    ]
@@ -938,18 +910,6 @@
      "origin": "observation",
      "dataset": "js/data/trappist1.js",
      "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "GW150914 strain, as published",
-     "origin": "observation",
-     "dataset": "js/data/gw/gw150914.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "Four observed stellar spectra, SDSS DR18",
-     "origin": "observation",
-     "dataset": "js/data/spectra/sdssSpectra.js",
-     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -997,18 +957,6 @@
      "origin": "observation",
      "dataset": "js/data/trappist1.js",
      "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "GW150914 strain, as published",
-     "origin": "observation",
-     "dataset": "js/data/gw/gw150914.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "Four observed stellar spectra, SDSS DR18",
-     "origin": "observation",
-     "dataset": "js/data/spectra/sdssSpectra.js",
-     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -1055,18 +1003,6 @@
      "origin": "observation",
      "dataset": "js/data/trappist1.js",
      "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "GW150914 strain, as published",
-     "origin": "observation",
-     "dataset": "js/data/gw/gw150914.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "Four observed stellar spectra, SDSS DR18",
-     "origin": "observation",
-     "dataset": "js/data/spectra/sdssSpectra.js",
-     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -1103,18 +1039,6 @@
      "name": "TRAPPIST-1 system parameters",
      "origin": "observation",
      "dataset": "js/data/trappist1.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "GW150914 strain, as published",
-     "origin": "observation",
-     "dataset": "js/data/gw/gw150914.js",
-     "via": "js/widgetRuntime.js"
-    },
-    {
-     "name": "Four observed stellar spectra, SDSS DR18",
-     "origin": "observation",
-     "dataset": "js/data/spectra/sdssSpectra.js",
      "via": "js/widgetRuntime.js"
     }
    ]
@@ -42096,8 +42020,534 @@
      "recovery": []
     },
     {
-     "sid": "your-own-experiment",
+     "sid": "five-recordings",
      "index": 23,
+     "type": "explore",
+     "title": "Five more mergers, from the archive",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "gw-events",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "the-same-moment",
+     "index": 24,
+     "type": "measure",
+     "title": "The same moment before the end",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "gw-events",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "rank-before-the-catalog",
+     "index": 25,
+     "type": "predict",
+     "title": "Which was heaviest?",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": "what-the-catalog-says",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "gw-events",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-the-catalog-says",
+     "index": 26,
+     "type": "explore",
+     "title": "What the catalog says",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "gw-events",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "the-one-you-cannot-measure",
+     "index": 27,
+     "type": "explore",
+     "title": "The loudest one, and the one Gravitas cannot measure",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "gw-events",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "the-model-on-five",
+     "index": 28,
+     "type": "explore",
+     "title": "The lab’s model, laid over the recordings",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "gw-events",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "measured-or-supplied",
+     "index": 29,
+     "type": "question",
+     "title": "What came from where",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "answer-in-words",
+      "move-an-instrument-control"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": true,
+      "rubric": true,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "gw-events",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "your-own-experiment",
+     "index": 30,
      "type": "explore",
      "title": "Make it harder to see",
      "declares": {
@@ -42176,7 +42626,7 @@
     },
     {
      "sid": "what-the-signal-tells-you",
-     "index": 24,
+     "index": 31,
      "type": "question",
      "title": "What the signal tells you, and what it does not",
      "declares": {
@@ -42256,7 +42706,7 @@
     },
     {
      "sid": "where-this-leaves-you",
-     "index": 25,
+     "index": 32,
      "type": "read",
      "title": "Where this leaves you",
      "declares": {
@@ -42409,8 +42859,8 @@
       "looks-like-is-not-enough",
       "what-they-actually-recorded",
       "model-against-measurement",
-      "your-own-experiment",
-      "what-the-signal-tells-you"
+      "five-recordings",
+      "the-same-moment"
      ],
      "measure": [
       "test-distance",
@@ -42421,17 +42871,47 @@
       "looks-like-is-not-enough",
       "what-they-actually-recorded",
       "model-against-measurement",
-      "your-own-experiment",
-      "what-the-signal-tells-you"
+      "five-recordings",
+      "the-same-moment"
      ],
      "evidence": [
       "test-distance",
       "edge-on",
       "looks-like-is-not-enough",
+      "the-same-moment"
+     ],
+     "interpret": "test-distance",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "rank-before-the-catalog",
+     "predictCollects": true,
+     "heldUntil": "what-the-catalog-says",
+     "experiment": [
+      "what-the-catalog-says",
+      "the-one-you-cannot-measure",
+      "the-model-on-five",
+      "measured-or-supplied",
       "your-own-experiment",
       "what-the-signal-tells-you"
      ],
-     "interpret": "test-distance",
+     "measure": [
+      "what-the-catalog-says",
+      "the-one-you-cannot-measure",
+      "the-model-on-five",
+      "measured-or-supplied",
+      "your-own-experiment",
+      "what-the-signal-tells-you"
+     ],
+     "evidence": [
+      "your-own-experiment",
+      "what-the-signal-tells-you"
+     ],
+     "interpret": "what-the-catalog-says",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -42440,15 +42920,15 @@
     }
    ],
    "totals": {
-    "steps": 25,
-    "declared": 23,
+    "steps": 32,
+    "declared": 30,
     "student": 22,
     "engine": 0,
-    "model": 24,
-    "data": 24,
-    "diagram": 2,
-    "evidence": 10,
-    "declaredButInert": 1,
+    "model": 31,
+    "data": 31,
+    "diagram": 9,
+    "evidence": 11,
+    "declaredButInert": 8,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -50883,23 +51363,23 @@
   }
  ],
  "totals": {
-  "steps": 676,
-  "declared": 626,
+  "steps": 683,
+  "declared": 633,
   "student": 157,
   "engine": 163,
-  "model": 243,
-  "data": 145,
-  "diagram": 122,
-  "evidence": 114,
-  "declaredButInert": 469,
+  "model": 250,
+  "data": 152,
+  "diagram": 129,
+  "evidence": 115,
+  "declaredButInert": 476,
   "prose": 30,
   "mismatched": 0,
   "rebuilds": 71,
   "lessons": 24,
-  "loops": 87,
-  "closedLoops": 87,
+  "loops": 88,
+  "closedLoops": 88,
   "explainedLoops": 0,
-  "heldLoops": 87,
-  "completeLoops": 87
+  "heldLoops": 88,
+  "completeLoops": 88
  }
 }

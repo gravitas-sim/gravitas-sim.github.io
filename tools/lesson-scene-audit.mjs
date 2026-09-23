@@ -225,6 +225,10 @@ const DATASETS = {
     name: 'Four observed stellar spectra, SDSS DR18',
     origin: 'observation',
   },
+  'js/data/gw/gwoscEvents.js': {
+    name: 'Five GWOSC events, whitened strain',
+    origin: 'observation',
+  },
 };
 
 /**
@@ -363,6 +367,14 @@ async function datasetNames(familyModules) {
   const reaches = async (rel, seen = new Set()) => {
     if (reach.has(rel)) return reach.get(rel);
     if (seen.has(rel)) return new Set();
+    // The registry is where every family meets, and nearly everything reaches
+    // it: js/widgetRuntime.js does, through the audio module, the engine, the
+    // interface and the lesson loader. A walk that went through it credited
+    // every dataset to any widget that used a runtime helper - GW150914 strain
+    // to the stellar widgets, and five GWOSC events to Weighing the Stars.
+    // Arriving at data by way of the registry says nothing about which data a
+    // name carries, so the walk stops there.
+    if (rel === 'js/widgets.js') return new Set();
     seen.add(rel);
     const out = new Set();
     if (DATASETS[rel]) out.add(rel);
@@ -382,6 +394,9 @@ async function datasetNames(familyModules) {
       const cur = queue.pop();
       if (graph.has(cur)) continue;
       graph.add(cur);
+      // Not through the registry either, for the reason reaches() gives: the
+      // gravitational-wave family reached the spectra that way.
+      if (cur === 'js/widgets.js') continue;
       for (const dep of await importsOf(cur)) queue.push(dep);
     }
     for (const mod of graph) {
