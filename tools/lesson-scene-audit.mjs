@@ -314,15 +314,15 @@ async function fileText(rel) {
 }
 
 /**
- * Every project file a module can reach.
+ * Every project file a module can reach, for finding the registry's cycle.
  *
  * Every relative `.js` string literal counts, which picks up dynamic imports
  * as well as static ones. Over-inclusive on purpose: a module that mentions a
- * path in a comment gets counted, and the cost of that is a dataset
- * attribution that names one module too many, which the `via` field makes
- * visible. The opposite mistake - missing the lazily imported track grid, as
- * an earlier `from`-anchored pattern did - is the one that produces a wrong
- * answer instead of a wordy one.
+ * path in a comment gets counted, and the cost of that is a cycle one module
+ * too large - a module whose data is then not followed, which loses a credit
+ * and cannot invent one. The opposite mistake, an edge missed, shrinks the
+ * cycle and lets the data walk through a hub again, which is how every widget
+ * that used a runtime helper came to be credited with every dataset.
  */
 async function importsOf(rel) {
   const text = await fileText(rel);
@@ -353,62 +353,353 @@ async function exportsOf(rel) {
 }
 
 /**
- * identifier -> {dataset, via} for every name that carries stored data.
+ * The registry's import cycle: every module js/widgets.js reaches that also
+ * reaches it back.
  *
- * Built by walking out from each widget family and asking which modules can
- * reach a dataset at all; every name those modules export is then a name that
- * may be carrying the data. Scanning a widget's own functions for those names
- * is what attributes a dataset to a widget rather than to a whole family -
- * the difference between "the habitability widgets can see TRAPPIST-1" and
- * "hz-trappist draws it".
+ * Most families are on it. A family imports js/widgetRuntime.js for
+ * `captureToNotebook`, the runtime reaches the audio module, the audio module
+ * the engine, the engine the interface and the lesson loader, and those the
+ * registry, which imports every family. From anywhere on that loop every
+ * dataset in the application is reachable, so "this module can reach
+ * TRAPPIST-1" is true of all of them and says nothing about any. Walking
+ * through it credited exoplanet, TRAPPIST-1 and MIST data to the
+ * gravitational-wave lab by way of the runtime's audio-ownership helpers, and
+ * GW150914 strain to the stellar widgets by way of `captureToNotebook`.
+ *
+ * Found rather than listed. A list of hubs - physics.js, ui.js,
+ * widgetRuntime.js, investigations.js - is right until somebody adds an
+ * import, and it goes wrong without a sound. The cycle is the registry's
+ * strongly connected component, which is two walks: out from the registry,
+ * then back along the same edges.
  */
-async function datasetNames(familyModules) {
-  const reach = new Map();
-  const reaches = async (rel, seen = new Set()) => {
-    if (reach.has(rel)) return reach.get(rel);
-    if (seen.has(rel)) return new Set();
-    // The registry is where every family meets, and nearly everything reaches
-    // it: js/widgetRuntime.js does, through the audio module, the engine, the
-    // interface and the lesson loader. A walk that went through it credited
-    // every dataset to any widget that used a runtime helper - GW150914 strain
-    // to the stellar widgets, and five GWOSC events to Weighing the Stars.
-    // Arriving at data by way of the registry says nothing about which data a
-    // name carries, so the walk stops there.
-    if (rel === 'js/widgets.js') return new Set();
-    seen.add(rel);
-    const out = new Set();
-    if (DATASETS[rel]) out.add(rel);
-    for (const dep of await importsOf(rel)) {
-      for (const d of await reaches(dep, seen)) out.add(d);
+async function registryCycle() {
+  const REGISTRY = 'js/widgets.js';
+  const forward = new Map();
+  const queue = [REGISTRY];
+  while (queue.length) {
+    const cur = queue.pop();
+    if (forward.has(cur)) continue;
+    forward.set(cur, await importsOf(cur));
+    queue.push(...forward.get(cur));
+  }
+  const back = new Map();
+  for (const [from, deps] of forward) {
+    for (const dep of deps) {
+      if (!back.has(dep)) back.set(dep, []);
+      back.get(dep).push(from);
     }
-    reach.set(rel, out);
-    return out;
-  };
-  const byFamily = new Map();
-  for (const fam of familyModules) {
-    const names = new Map();
-    byFamily.set(fam, names);
-    const graph = new Set();
-    const queue = [fam];
-    while (queue.length) {
-      const cur = queue.pop();
-      if (graph.has(cur)) continue;
-      graph.add(cur);
-      // Not through the registry either, for the reason reaches() gives: the
-      // gravitational-wave family reached the spectra that way.
-      if (cur === 'js/widgets.js') continue;
-      for (const dep of await importsOf(cur)) queue.push(dep);
+  }
+  const cycle = new Set();
+  const up = [REGISTRY];
+  while (up.length) {
+    const cur = up.pop();
+    if (cycle.has(cur)) continue;
+    cycle.add(cur);
+    up.push(...(back.get(cur) ?? []));
+  }
+  return cycle;
+}
+
+/**
+ * The names a module binds to other project modules, and the module each
+ * one is bound to.
+ *
+ * A static import gives a local name - `TRACES`, `trackSamples`, or a
+ * namespace - and a use of that name is a use of that export. A dynamic
+ * import gives a module object the family keeps under a name of its own
+ * choosing (`data = mod` in both lazily loaded families), so there the use is
+ * a property access of one of the module's exports, `data.decodeEvent`, and
+ * the binding is marked `members`.
+ */
+async function importBindings(rel) {
+  const text = await fileText(rel);
+  const target = spec =>
+    relative(ROOT, resolve(dirname(resolve(ROOT, rel)), spec));
+  const out = [];
+  const statics =
+    /\bimport(?=[\s{*])\s*([\w$\s,{}*]+?)\s*from\s*'(\.\.?\/[^']*\.js)'/g;
+  for (const m of text.matchAll(statics)) {
+    const module = target(m[2]);
+    let clause = m[1];
+    const named = clause.match(/\{([^}]*)\}/);
+    if (named) {
+      for (const part of named[1].split(',')) {
+        const [imported, local = imported] = part
+          .trim()
+          .split(/\s+as\s+/)
+          .map(s => s.trim());
+        if (imported) out.push({ imported, local, module });
+      }
+      clause = clause.replace(named[0], '');
     }
-    for (const mod of graph) {
-      if (mod === fam) continue;
-      const hits = await reaches(mod);
-      if (!hits.size) continue;
-      for (const name of await exportsOf(mod)) {
-        if (!names.has(name)) {
-          names.set(name, { datasets: [...hits], via: mod });
+    const namespace = clause.match(/\*\s*as\s+([\w$]+)/);
+    if (namespace) {
+      out.push({ imported: '*', local: namespace[1], module });
+      clause = clause.replace(namespace[0], '');
+    }
+    const fallback = clause.match(/[\w$]+/);
+    if (fallback) out.push({ imported: 'default', local: fallback[0], module });
+  }
+  for (const m of text.matchAll(/\bimport\(\s*'(\.\.?\/[^']*\.js)'\s*\)/g)) {
+    out.push({ imported: '*', module: target(m[1]), members: true });
+  }
+  return out;
+}
+
+/**
+ * Source without its comments or quoted strings, so a helper that names a
+ * binding in prose, or a label that spells one - `'TRAPPIST-1'` - is not
+ * taken to use it.
+ *
+ * Not a tokenizer. `//` counts only at a line's start or after whitespace,
+ * which leaves the `https://` in a citation string alone; a quote pairs only
+ * on its own line; and template literals are kept whole, because their
+ * `${...}` is code. Each shortcut can cost a mention - an apostrophe inside
+ * a template can blank the code between it and the next quote on that line -
+ * and none can invent one, because what is removed leaves its boundary.
+ */
+function codeOnly(text) {
+  return text
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/(^|\s)\/\/.*$/gm, '$1')
+    .replace(/'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"/g, "''");
+}
+
+/**
+ * A module's top-level declarations, and what it exports under which name.
+ *
+ * Cut at column 0, which prettier guarantees is where every top-level
+ * statement starts and where nothing nested does, apart from the closing
+ * brackets of the statement above and the lines of a template literal. A
+ * template line that starts with a letter ends its declaration early, which
+ * can lose a use and cannot invent one.
+ *
+ * @returns {{decls: Map<string, string>, exported: Map<string, string>,
+ *   forwarded: object[]}} local name -> body; exported name -> local name;
+ *   and `export ... from` re-exports
+ */
+function topLevel(text, rel) {
+  const target = spec =>
+    relative(ROOT, resolve(dirname(resolve(ROOT, rel)), spec));
+  const head =
+    /^(?:export\s+)?(?:default\s+)?(?:async\s+)?(?:function\*?\s*|class\s+|const\s+|let\s+|var\s+)([\w$]+)/;
+  const decls = new Map();
+  let current = null;
+  for (const line of text.split('\n')) {
+    if (/^[\w$@/]/.test(line)) {
+      current = line.match(head)?.[1] ?? null;
+      if (current) decls.set(current, '');
+    }
+    if (current) decls.set(current, `${decls.get(current)}${line}\n`);
+  }
+  for (const [name, body] of decls) decls.set(name, codeOnly(body));
+
+  const exported = new Map();
+  const forwarded = [];
+  const declared =
+    /^export\s+(?:async\s+)?(?:function\*?\s*|class\s+|const\s+|let\s+|var\s+)([\w$]+)/gm;
+  for (const m of text.matchAll(declared)) exported.set(m[1], m[1]);
+  const byDefault = text.match(
+    /^export\s+default\s+(?:async\s+)?(?:function\*?\s*|class\s+)?([\w$]+)/m
+  );
+  if (byDefault) exported.set('default', byDefault[1]);
+  const lists = /^export\s*\{([^}]*)\}\s*(?:from\s*'(\.\.?\/[^']*\.js)')?/gm;
+  for (const m of text.matchAll(lists)) {
+    for (const part of m[1].split(',')) {
+      const [imported, as = imported] = part
+        .trim()
+        .split(/\s+as\s+/)
+        .map(s => s.trim());
+      if (!imported) continue;
+      if (m[2]) forwarded.push({ module: target(m[2]), imported, as });
+      else exported.set(as, imported);
+    }
+  }
+  for (const m of text.matchAll(
+    /^export\s*\*\s*from\s*'(\.\.?\/[^']*\.js)'/gm
+  )) {
+    forwarded.push({ module: target(m[1]), all: true });
+  }
+  return { decls, exported, forwarded };
+}
+
+const escapeName = name => name.replace(/\$/g, '\\$');
+/** A use of a local name, not a property of something else spelled the same. */
+const bareUse = name => new RegExp(`(?<![\\w$.])${escapeName(name)}(?![\\w$])`);
+
+/**
+ * The data-carrying names a module's imports give it.
+ *
+ * @param {object[]} bindings - From importBindings()
+ * @param {Map<string, Map<string, Set<string>>>} carry - module -> export ->
+ *   the datasets that export carries
+ */
+function tokensFor(bindings, carry) {
+  const out = [];
+  for (const b of bindings) {
+    const exports = carry.get(b.module);
+    if (!exports) continue;
+    if (b.imported !== '*') {
+      const sets = exports.get(b.imported);
+      if (sets?.size) {
+        out.push({
+          binding: b.local,
+          use: bareUse(b.local),
+          datasets: [...sets],
+          via: b.module,
+        });
+      }
+      continue;
+    }
+    for (const [name, sets] of exports) {
+      if (!sets.size) continue;
+      const property = `\\.\\s*${escapeName(name)}(?![\\w$])`;
+      out.push({
+        binding: b.members ? `.${name}` : `${b.local}.${name}`,
+        use: b.members
+          ? new RegExp(property)
+          : new RegExp(`(?<![\\w$.])${escapeName(b.local)}\\s*\\??${property}`),
+        datasets: [...sets],
+        via: b.module,
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * Which of a module's own declarations carry data: those that use a
+ * data-carrying import, and those that use one of those, to a fixed point.
+ */
+function carriedLocally(decls, tokens) {
+  const carried = new Map();
+  const uses = new Map([...decls.keys()].map(n => [n, bareUse(n)]));
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const [name, body] of decls) {
+      const set = carried.get(name) ?? new Set();
+      const before = set.size;
+      for (const t of tokens) {
+        if (t.use.test(body)) for (const d of t.datasets) set.add(d);
+      }
+      for (const [other, sets] of carried) {
+        if (other !== name && uses.get(other).test(body)) {
+          for (const d of sets) set.add(d);
         }
       }
+      if (set.size > before) {
+        carried.set(name, set);
+        changed = true;
+      }
     }
+  }
+  return carried;
+}
+
+/**
+ * Per family, every name in scope that carries stored data.
+ *
+ * Decided per export, not per module. js/stellar/hr.js imports the MIST
+ * track accessors, and its `regions()` really is drawn from them - the
+ * main-sequence band is the tracks' zero-age and terminal points - but its
+ * `AXES` and `xForTemperature` are plotting geometry. Crediting every name a
+ * module exports because the module reaches a dataset recorded the stellar
+ * screens' MIST tracks as arriving by way of an axis range. So an export
+ * carries a dataset when its own top-level declaration uses a name that does,
+ * followed through module-local helpers and across modules to a fixed point;
+ * every export of a dataset module carries that dataset.
+ *
+ * A name imported into a family is matched in a widget's source by the
+ * binding the family actually made, not by any identifier spelled the same.
+ * The earlier bare-name scan credited MIST tracks to the GW150914 screen
+ * because both data modules export `PROVENANCE`, the engine's star list to
+ * the balance widget because it has a local called `stars`, and the stellar
+ * lab to a black-hole widget for the word `comparison` - in families that
+ * import none of those modules. A family's own top-level declarations that
+ * carry data are names too, so a table built from a dataset once at load time
+ * counts wherever a widget reads it.
+ *
+ * Imports onto the registry's cycle are followed only out of a family module
+ * itself: what a family takes from js/widgetRuntime.js is looked at, and what
+ * the runtime imports from the rest of the cycle is not.
+ *
+ * @param {string[]} familyModules - The widget family modules
+ * @returns {Promise<Map<string, object[]>>} family -> data-carrying names
+ */
+async function datasetNames(familyModules) {
+  const cycle = await registryCycle();
+  const families = new Set(familyModules);
+  const parsed = new Map();
+  const queue = [...familyModules];
+  while (queue.length) {
+    const rel = queue.pop();
+    if (parsed.has(rel)) continue;
+    if (DATASETS[rel]) {
+      parsed.set(rel, null);
+      continue;
+    }
+    const allowed = dep => families.has(rel) || !cycle.has(dep);
+    const top = topLevel(await fileText(rel), rel);
+    const mod = {
+      ...top,
+      bindings: (await importBindings(rel)).filter(b => allowed(b.module)),
+      forwarded: top.forwarded.filter(f => allowed(f.module)),
+    };
+    parsed.set(rel, mod);
+    for (const b of mod.bindings) queue.push(b.module);
+    for (const f of mod.forwarded) queue.push(f.module);
+  }
+
+  const carry = new Map([...parsed.keys()].map(rel => [rel, new Map()]));
+  for (const rel of parsed.keys()) {
+    if (!DATASETS[rel]) continue;
+    for (const name of await exportsOf(rel)) {
+      carry.get(rel).set(name, new Set([rel]));
+    }
+  }
+  const local = new Map();
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const [rel, mod] of parsed) {
+      if (!mod) continue;
+      const carried = carriedLocally(mod.decls, tokensFor(mod.bindings, carry));
+      local.set(rel, carried);
+      const exports = carry.get(rel);
+      const add = (name, sets) => {
+        if (!sets?.size) return;
+        if (!exports.has(name)) exports.set(name, new Set());
+        for (const d of sets) {
+          if (exports.get(name).has(d)) continue;
+          exports.get(name).add(d);
+          changed = true;
+        }
+      };
+      for (const [name, localName] of mod.exported) {
+        add(name, carried.get(localName));
+      }
+      for (const f of mod.forwarded) {
+        const from = carry.get(f.module);
+        if (!from) continue;
+        if (f.all) for (const [name, sets] of from) add(name, sets);
+        else add(f.as, from.get(f.imported));
+      }
+    }
+  }
+
+  const byFamily = new Map();
+  for (const fam of familyModules) {
+    const names = tokensFor(parsed.get(fam).bindings, carry);
+    for (const [name, sets] of local.get(fam)) {
+      names.push({
+        binding: name,
+        use: bareUse(name),
+        datasets: [...sets],
+        via: fam,
+      });
+    }
+    byFamily.set(fam, names);
   }
   return byFamily;
 }
@@ -834,12 +1125,18 @@ function evidenceFor(step, ctxOf) {
 /** Which datasets this step's instrument actually draws on. */
 function datasetsFor(widget, source, names) {
   if (!widget) return [];
+  const code = codeOnly(source);
   const out = new Map();
-  for (const [name, hit] of names) {
-    if (!new RegExp(`\\b${name}\\b`).test(source)) continue;
+  for (const hit of names) {
+    if (!hit.use.test(code)) continue;
     for (const key of hit.datasets) {
       if (!out.has(key)) {
-        out.set(key, { ...DATASETS[key], dataset: key, via: hit.via });
+        out.set(key, {
+          ...DATASETS[key],
+          dataset: key,
+          via: hit.via,
+          binding: hit.binding,
+        });
       }
     }
   }
@@ -1202,7 +1499,7 @@ async function audit() {
       const datasets = datasetsFor(
         widget,
         wSource,
-        names.get(families.get(widget?.id)) ?? new Map()
+        names.get(families.get(widget?.id)) ?? []
       );
       const running = runningAt(inv, index);
       const affordances = affordancesFor(step, inv);
@@ -1334,11 +1631,7 @@ async function audit() {
       buttons: listOf(widget.actions).map(a => a.id),
       engineReads: roles.read,
       mutates: roles.mutate,
-      datasets: datasetsFor(
-        widget,
-        wSource,
-        names.get(families.get(id)) ?? new Map()
-      ),
+      datasets: datasetsFor(widget, wSource, names.get(families.get(id)) ?? []),
     };
   }
 

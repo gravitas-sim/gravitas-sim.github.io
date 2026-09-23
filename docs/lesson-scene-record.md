@@ -13,7 +13,7 @@ audit:scene:check` fails if it disagrees with what is generated here.
 
 Across 24 investigations and 683 steps: 633 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 250 show a prescribed model result, 152 draw
+running integration, 250 show a prescribed model result, 94 draw
 on a stored dataset, 129 put a self-contained panel beside the text,
 115 keep something, and 30 are prose.
 Of 88 prediction loops, 88 are returned to,
@@ -80,11 +80,11 @@ Of 88 prediction loops, 88 are returned to,
 ## Weighing the Stars (`weighing-stars`)
 
 - **Steps:** 36. Scene declared on 35; a reader can change something on 4; 31 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 7 live engine, 7 prescribed model, 5 stored dataset, 4 self-contained panel.
+- **Where the numbers come from:** 7 live engine, 7 prescribed model, 0 stored dataset, 4 self-contained panel.
 - **What students do:** read, choose-an-option, commit-a-prediction, open-a-body-inspector, tick-a-checklist, watch-the-balance-point, change-a-scene-object, move-an-instrument-control, press-an-instrument-button, press-an-instrument-preset, record-values, answer-in-words.
 - **Objects the steps declare:** a, b.
 - **Instruments:** binary, balance, binary-compare, visual-binary.
-- **Stored data:** Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation); MIST v1.2 evolutionary tracks (computed-grid).
+- **Stored data:** none.
 - **Evidence kept:** notebook-fields, instrument-capture.
 - **Prediction loops:** two-stars-side-by-side → watch-them, what-are-they-going-round → watch-them; make-one-of-them-heavier → try-it, put-them-on-a-see → try-it; which-pair-is-quicker → run-them-together, a-practice-run, measurement-one-how-big-is, measurement-two-how-long-does, weigh-the-pair, back-to-the-balance-point, now-weigh-each-one, somebody-really-did-this, and-stars-are-not-the, one-on-your-own → run-them-together.
 - **Recovery:** wrong body: the object list names what the step staged; null result: the probe names what is missing; null result: guarded, but the fallback is not spelled out; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
@@ -94,11 +94,11 @@ Of 88 prediction loops, 88 are returned to,
 ## Black Holes by the Numbers (`black-holes`)
 
 - **Steps:** 30. Scene declared on 30; a reader can change something on 0; 30 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 19 prescribed model, 5 stored dataset, 19 self-contained panel.
+- **Where the numbers come from:** 4 live engine, 19 prescribed model, 0 stored dataset, 19 self-contained panel.
 - **What students do:** read, choose-an-option, open-a-body-inspector, move-an-instrument-control, read-the-labeled-appearance, commit-a-prediction, press-an-instrument-button, tick-a-checklist, press-an-instrument-preset, answer-in-words.
 - **Objects the steps declare:** none.
 - **Instruments:** bh-horizon, bh-scaling, bh-escape, bh-density, bh-blocks, bh-thermo, bh-lifetime, bh-lineup.
-- **Stored data:** Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation); MIST v1.2 evolutionary tracks (computed-grid).
+- **Stored data:** none.
 - **Evidence kept:** instrument-capture.
 - **Prediction loops:** now-make-it-heavier → three-measurements, what-did-doubling-do, read-the-graph → three-measurements; squeezing-and-getting-away → squeeze-the-sun, the-last-squeeze, the-right-answer-for-the → squeeze-the-sun; which-one-is-denser → mass-divided-by-volume, which-way-did-it-go, where-the-room-comes-from → mass-divided-by-volume; which-one-is-hotter → the-thermometer, colder-not-hotter → the-thermometer; then-what-happens-to-it → a-timeline-that-will-not, longer-and-then-much-longer, from-city-sized-to-solar, sorting-them-out, a-mystery-black-hole-size, a-mystery-black-hole-temperature, it-has-a-name → a-timeline-that-will-not.
 - **Recovery:** wrong body: the object list names what the step staged; null result: the probe names what is missing; null result: guarded, but the fallback is not spelled out.
@@ -276,11 +276,11 @@ Of 88 prediction loops, 88 are returned to,
 ## What Is a Gravitational Wave? (`what-is-a-gravitational-wave`)
 
 - **Steps:** 28. Scene declared on 28; a reader can change something on 26; 2 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 27 prescribed model, 27 stored dataset, 1 self-contained panel.
+- **Where the numbers come from:** 0 live engine, 27 prescribed model, 1 stored dataset, 1 self-contained panel.
 - **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, tick-a-checklist, choose-an-option, record-values, answer-in-words, read.
 - **Objects the steps declare:** bh, ns.
 - **Instruments:** gw-lab, gw-real.
-- **Stored data:** Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation); MIST v1.2 evolutionary tracks (computed-grid); GW150914 strain, as published (observation).
+- **Stored data:** GW150914 strain, as published (observation).
 - **Evidence kept:** notebook-fields, instrument-capture.
 - **Prediction loops:** travel-without-shining → meet-the-two-objects, gravity-is-already-here → meet-the-two-objects; a-sphere-that-breathes → change-the-shape → change-the-shape; what-has-to-change → watch-the-pair, the-pattern-repeats, follow-a-disturbance-outward, freely-floating-markers, stretch-one-way, now-swap, markers-not-carried-away, why-drawn-so-large, measure-a-change-in-length, can-space-carry-a-sound → watch-the-pair; slower-pair-faster-pair → count-the-rhythm, why-an-orbit-shrinks, the-chirp, where-the-calculation-stops, different-compact-pairs, the-same-source-farther-away, an-observatory-measures-a-difference, what-two-observatories-recorded, design-one-small-experiment, tell-the-story → count-the-rhythm.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
@@ -290,11 +290,11 @@ Of 88 prediction loops, 88 are returned to,
 ## Listening to Spacetime (`listening-to-spacetime`)
 
 - **Steps:** 32. Scene declared on 30; a reader can change something on 22; 8 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 31 prescribed model, 31 stored dataset, 9 self-contained panel.
+- **Where the numbers come from:** 0 live engine, 31 prescribed model, 9 stored dataset, 9 self-contained panel.
 - **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, tick-a-checklist, record-values, answer-in-words, choose-an-option, read.
 - **Objects the steps declare:** bh.
 - **Instruments:** gw-lab, gw-real, gw-events.
-- **Stored data:** Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation); MIST v1.2 evolutionary tracks (computed-grid); GW150914 strain, as published (observation); Five GWOSC events, whitened strain (observation).
+- **Stored data:** GW150914 strain, as published (observation); Five GWOSC events, whitened strain (observation).
 - **Evidence kept:** notebook-fields, instrument-capture.
 - **Prediction loops:** an-unlabeled-signal → three-things-called-a-wave, find-your-way-around → three-things-called-a-wave; predict-as-it-tightens → watch-the-waves, two-crests-per-orbit, frequency-early-and-late, stop-at-a-milestone, explain-the-chirp → watch-the-waves; predict-heavier → change-one-thing, measure-time-in-band, the-one-mass-that-matters → change-one-thing; predict-twice-as-far → test-distance, edge-on, three-sources, where-the-model-stops, add-the-noise, looks-like-is-not-enough, what-they-actually-recorded, model-against-measurement, five-recordings, the-same-moment → test-distance; rank-before-the-catalog → what-the-catalog-says, the-one-you-cannot-measure, the-model-on-five, measured-or-supplied, your-own-experiment, what-the-signal-tells-you → what-the-catalog-says.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
@@ -308,7 +308,7 @@ Of 88 prediction loops, 88 are returned to,
 - **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-button, record-values, press-an-instrument-preset, tick-a-checklist, choose-an-option, answer-in-words.
 - **Objects the steps declare:** one, two, three, cursor, dwarf, giant, m020, m050, m100, m200, m500, m1000, m2000, m4000, sun, supergiant, main, wd, light, heavy.
 - **Instruments:** stellar-compare, stellar-lab, stellar-population, spectra-compare, spectra-identify.
-- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid); Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation); Four observed stellar spectra, SDSS DR18 (observation).
+- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid); Four observed stellar spectra, SDSS DR18 (observation).
 - **Evidence kept:** notebook-fields, instrument-capture.
 - **Prediction loops:** three-stars-no-labels → the-numbers-arrive, temperature-makes-color, same-temperature-different-light → the-numbers-arrive; predict-which-is-bigger → measure-the-radius-ratio, the-two-axes, where-the-sun-sits, straight-up-the-diagram, sideways-at-one-luminosity, lines-of-constant-radius, switch-to-modeled-stars, three-on-the-main-sequence → measure-the-radius-ratio; predict-mass-and-light → the-whole-sequence, what-the-trend-covers → the-whole-sequence; two-red-stars → measure-the-two-reds, a-supergiant → measure-the-two-reds; predict-hot-and-faint → hot-and-faint, classify-from-position → hot-and-faint; predict-who-lives-longer → measure-the-lifetimes, a-population → measure-the-lifetimes; predict-the-bright-subset → only-the-bright-ones, what-a-survey-misses, find-a-counterexample, spectra-the-light-itself, spectra-color-is-enough-here, spectra-two-features, spectra-name-the-star, spectra-what-color-cannot-give, spectra-four-is-four, the-argument, what-the-diagram-is-for → only-the-bright-ones.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
@@ -322,7 +322,7 @@ Of 88 prediction loops, 88 are returned to,
 - **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-button, press-an-instrument-preset, tick-a-checklist, record-values, choose-an-option, answer-in-words.
 - **Objects the steps declare:** light, sun, heavy, star, young, old, dwarf.
 - **Instruments:** stellar-compare, stellar-evolution, stellar-lab.
-- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid); Published exoplanet system parameters (observation); TRAPPIST-1 system parameters (observation).
+- **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
 - **Evidence kept:** notebook-fields, instrument-capture.
 - **Prediction loops:** three-futures → the-cloud → the-black-hole; predict-protostar-power → contraction-luminosity, the-pms-track, arriving, the-sun-today, across-the-main-sequence, compare-young-and-old → contraction-luminosity; predict-what-runs-out → the-interior, core-in-envelope-out → the-interior; predict-direction → measure-the-giant, true-size-then-and-now, helium-and-the-loop, the-agb-and-the-wind → measure-the-giant; not-a-supernova → planetary-nebula, white-dwarf-cooling, how-long-was-each-part → planetary-nebula; predict-the-red-dwarf → the-same-age → the-same-age; predict-massive-lifetime → massive-versus-sun, supergiant-and-burning, why-iron-stops-it → massive-versus-sun; predict-core-and-envelope → the-neutron-star, neutron-star-scale, the-black-hole, read-the-descriptions, design-a-comparison, the-lifecycle-argument, what-you-followed → the-neutron-star.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
