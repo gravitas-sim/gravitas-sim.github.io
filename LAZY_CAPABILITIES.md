@@ -70,6 +70,21 @@ not reach a module that start-up shares with other start-up modules**, or the
 bundler splits that module out; `node tools/route-budget.mjs --report` and the
 bundle budget show it immediately.
 
+When the family needs that module's live state, moving it is not an option.
+The gravitational-wave family reads the rendering tier and the reduced-motion
+preference from `js/quality.js`, which start-up shares; importing it from a
+lazy chunk split `quality.js` out of start-up, one more request on every page.
+So the registry hands it those two functions when it loads the family: a family
+module may export `bindServices(services)`, and `loadFamily()` calls it before
+registering the family's widgets. Start-up stayed at 52 files.
+
+A shared module between two families is the same problem one level down. The
+GWOSC event family, added lazily, shares `js/gw/fft.js` and `js/gw/waveform.js`
+with the older gravitational-wave family; while that one was still eager, the
+bundler split both helpers out of the registry, and every lesson in the build
+fetched two more files. Moving the older family too put them in a chunk only
+the gravitational-wave lessons fetch.
+
 ## Measurements
 
 Before: `v2` at `c3dcc4d`. After: this branch. Both with
@@ -133,12 +148,14 @@ loaded before, so loading the two families eagerly again fails the check.
 ## What is left to move
 
 Thirteen of the sixteen families are used by exactly one lesson and three by
-two. After the two moved here:
+two. After the two moved here, the GWOSC lab moved the gravitational-wave
+family as well, and its own event family was lazy from the start (seventeen
+families, four lazy):
 
 | Slice    | Families                                                                                                               | Lessons whose tests move with them |
 | -------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | next     | binary, black holes, chaos, dark matter, energy, habitability, observing, resonance, stellar evolution, spectra, tidal | one each                           |
-| then     | exoplanet, gravitational waves, stellar                                                                                | two each                           |
+| then     | exoplanet, stellar                                                                                                     | two each                           |
 | decision | whether the service-worker precache stops fetching every family on a first visit                                       | -                                  |
 
 Each slice is its own pull request with the first slice's acceptance: no
