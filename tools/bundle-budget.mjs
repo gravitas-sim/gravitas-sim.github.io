@@ -504,7 +504,7 @@ const BUDGETS = [
       'the above.' +
       '\n\nRaised from 4080 to 4180 for five real mergers in Listening to ' +
       'Spacetime, approved by the owner after the itemisation below. From ' +
-      'fresh builds: 4076.4 KB with the lazy-instrument slice, 4174.2 with ' +
+      'fresh builds: 4076.8 KB with the lazy-instrument slice, 4174.6 with ' +
       'this lab, 97.8 more. By esbuild metafile attribution: 54.1 KB is the ' +
       'strain - thirty-two seconds from one detector for each of five events, ' +
       'whitened, decimated to 1024 Hz and quantised to 16 bits under a guard ' +
@@ -521,7 +521,7 @@ const BUDGETS = [
       'helpers with, so a visitor who opens any other lesson loads less than ' +
       'before this lab, not more (tools/route-budgets.json). The initial ' +
       'download is untouched: 816.6 KB of 830.0 before and after. 4180 leaves ' +
-      '5.8 KB.',
+      '5.4 KB.',
   },
 ];
 
