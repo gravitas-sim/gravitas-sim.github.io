@@ -4063,6 +4063,13 @@ export const INSTRUCTOR_CONTENT = {
       spend twenty-seven screens taking the guess apart. The instrument is the Stellar Lab and the
       stars are eight published MIST evolutionary tracks, so every number a student reads is a
       model output rather than a textbook value the lesson made up.
+      \n\nSix screens near the end are different in kind and it is worth saying so to the class.
+      Screens 29 to 34 are four real stellar spectra from SDSS - measurements of four particular
+      stars, made on four nights in 2008 - and they are the only numbers in the lesson that are
+      not model output. They exist to make one point the model half cannot: a color is a good
+      thermometer, and a spectrum still carries something a temperature does not determine. Four
+      spectra are four spectra, and the closing screen of that block says so at length; nothing
+      there is a claim about A stars in general.
       \n\nThe stars are on the main canvas, not only in the panel. Every screen stands the
       objects it is about in the sandbox itself, where they can be clicked, inspected and
       compared, and the instrument beside the text is a second view of the same objects rather
@@ -4146,12 +4153,16 @@ export const INSTRUCTOR_CONTENT = {
         text: "Why the big ones go first — Screen 22 is a prediction most students get wrong for a good reason, and the discussion is better if they commit first. Screen 23 carries the lesson's one genuinely unverifiable number and says so: no 0.2 solar-mass star has ever finished its main sequence anywhere.",
       },
       {
-        steps: '25-28',
-        text: 'A population, counted twice — One population, one histogram and one canvas across all three screens; only the cut changes, and it now moves the canvas as well as the plot. Screen 26 is the prediction and it is worth a show of hands - "almost none" is the answer nearly nobody offers before seeing it. The written answer on screen 28 is the one worth collecting; see the rubric, and in particular the wrong answer it rejects.',
+        steps: '25-29',
+        text: 'A population, counted twice, and a challenge — One population, one histogram and one canvas across screens 25 to 28; only the cut changes, and it now moves the canvas as well as the plot. Screen 26 is the prediction and it is worth a show of hands - "almost none" is the answer nearly nobody offers before seeing it. The written answer on screen 28 is the one worth collecting; see the rubric, and in particular the wrong answer it rejects. Screen 29 is open and accepts either counterexample; the validation recognizes both and nudges a student whose two stars break neither rule.',
       },
       {
-        steps: '29-31',
-        text: 'The challenge and the argument — Screen 29 is open and accepts either counterexample; the validation recognizes both and nudges a student whose two stars break neither rule. Screen 30 puts the step 1 prediction back on screen and is the summative piece. The last screen is a closing summary: the five quantities, what the main sequence fixes, and what a position on the diagram does not.',
+        steps: '30-35',
+        text: "What a color cannot tell you — The only part of this lesson built on observations. Four real SDSS spectra, and an argument in four moves: screen 31 shows that a color works, screen 32 removes the color and shows that a feature still separates the four, screen 33 asks for a classification with no color on the screen at all, and screen 34 asks for the general statement in the student's own words. The one to hold the room on is the calcium column on screen 32: it rises from the A star to the G star and falls again to the M star, and a quantity that rises and falls cannot be recovered from a temperature. That is the whole argument, and it is not an argument about instruments being nicer. Screen 33 is the one to watch students do rather than collect - see the classroom check below. Say once, out loud, that these four are measurements and that the eight tracks behind the first twenty-nine screens are not.",
+      },
+      {
+        steps: '36-37',
+        text: 'The argument, and the summary — Screen 36 puts the step 1 prediction back on screen and is the summative piece. The last screen is a closing summary: the five quantities, what the main sequence fixes, what a position on the diagram does not, and the one point the spectra added that no model in this lesson could.',
       },
     ],
     features: [
@@ -4189,6 +4200,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     expectations: {
+      32: 'Hydrogen beta, about 36.6, 14.4, 9.0 and 4.8 per cent for W, X, Y and Z. Calcium II K, about 3.4, 56.1, 52.6 and 21.9 per cent for the same four. The hydrogen column falls the whole way; the calcium column rises and then falls, which is the point of the screen and the thing to draw on the board. Accept anything within a point or two - the figures move slightly with which window is on screen because the shaded band is the same but the plot is not. A student who reports the calcium column in falling order has read the rows in stage order rather than by name; the validation catches it.',
       2: 'Near 3,373 K, 4,298 K and 16,596 K. The order on the stage is by radius, so the temperatures are deliberately not in stage order - students who read them off in the order shown will get them out of sequence, which is the intended stumble.',
       3: 'Deep red at the cool end through white to blue-white at the hot end. Do not grade the color words; the observation that matters is that only one control moved.',
       4: 'Both stars near 4,300 K; luminosities of about 0.18 and 62 solar, a ratio near 345.',

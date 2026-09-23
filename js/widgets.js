@@ -42,6 +42,7 @@ import { STELLAR_WIDGETS } from './stellarWidgets.js';
 import { STELLAR_EVOLUTION_WIDGETS } from './stellarEvolutionWidgets.js';
 import { OBSERVING_WIDGETS } from './observingWidgets.js';
 import { POWER_LAW_WIDGETS } from './powerLawWidgets.js';
+import { SPECTRA_WIDGETS, spectraReady } from './stellarSpectraWidgets.js';
 
 // Every widget family's prose lives in the deferred half of the catalog,
 // because nothing in the start-up path can reach one: this registry is
@@ -78,6 +79,7 @@ const WIDGETS = [
   ...STELLAR_EVOLUTION_WIDGETS,
   ...OBSERVING_WIDGETS,
   ...POWER_LAW_WIDGETS,
+  ...SPECTRA_WIDGETS,
 ];
 
 /**
@@ -109,7 +111,18 @@ export const allWidgets = () => [...WIDGETS];
  * @returns {Promise<boolean>} True when every widget's strings are usable
  */
 export async function whenWidgetsReady() {
-  const results = await Promise.all([tidalReady, darkMatterReady]);
+  // spectraReady is here for the same reason as the other two and with one
+  // difference worth stating: it is not a catalog of words but thirteen
+  // kilobytes of flux behind a dynamic import. The lesson engine does not
+  // await this function, so no lesson waits for it; the scene audit and the
+  // tests do, because a spectrum widget that cannot reach its data draws a
+  // waiting state and reports no measurements, and an audit that accepted
+  // that would be auditing the waiting state.
+  const results = await Promise.all([
+    tidalReady,
+    darkMatterReady,
+    spectraReady,
+  ]);
   return results.every(Boolean);
 }
 
