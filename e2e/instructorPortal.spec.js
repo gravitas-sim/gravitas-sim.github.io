@@ -20,14 +20,11 @@
 // always does and Playwright answers.
 // =============================================================================
 
-import { readFileSync, existsSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
 
 import { test, expect } from './fixtures.js';
 import { MANIFEST } from '../js/data/investigations/manifest.js';
+import { ensureFixture } from '../tools/instructor-fixture.mjs';
 
 /**
  * How many lessons the portal should be showing.
@@ -54,21 +51,20 @@ const GENERAL_DOCUMENTS = 2;
 const ACTIVITY_DOCUMENTS = 8;
 const ALL_DOCUMENTS = GENERAL_DOCUMENTS + ACTIVITY_DOCUMENTS + DOCUMENTS;
 
-const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const FIXTURE = path.join(REPO, '.instructor-fixture', 'materials.enc.json');
 const PASSPHRASE = 'gravitas-fixture-not-a-secret';
 
-/** The fixture bundle, built on demand the first time a worker needs it. */
-function fixtureBundle() {
-  if (!existsSync(FIXTURE)) {
-    execFileSync(
-      'node',
-      ['tools/build-instructor-materials.js', '--fixture', FIXTURE],
-      { cwd: REPO, stdio: 'ignore' }
-    );
-  }
-  return readFileSync(FIXTURE, 'utf8');
-}
+/**
+ * The fixture bundle, rebuilt first unless it is the one these sources build.
+ *
+ * This used to rebuild only when the file was missing, so a checkout kept the
+ * first fixture it ever built: one on the development machine was serving an
+ * inventory from before two of the current lessons existed. The fixture now
+ * carries a stamp of every input that decides what it says, and a missing,
+ * stale, unstamped or corrupt one is rebuilt before a page sees it - see
+ * tools/instructor-fixture.mjs. The bytes returned are the ones that were
+ * judged, not a second read of a file another worker may be replacing.
+ */
+const fixtureBundle = () => ensureFixture().bytes;
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 

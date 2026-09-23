@@ -17,6 +17,8 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
+import { completeCatalogs } from '../tools/i18n-catalog.mjs';
+
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const WORDS = {
@@ -109,21 +111,13 @@ describe('the public investigation count', () => {
 
   test('every claim in the message catalogs equals the manifest', async () => {
     const { MANIFEST } = await import('../js/data/investigations/manifest.js');
-    const mods = await Promise.all([
-      import('../js/i18n/en.js'),
-      import('../js/i18n/en.deferred.js'),
-      import('../js/i18n/en.teaching.js'),
-      import('../js/i18n/en.activities.js'),
-      import('../js/i18n/es.js'),
-      import('../js/i18n/es.deferred.js'),
-      import('../js/i18n/es.teaching.js'),
-      import('../js/i18n/es.activities.js'),
-    ]);
+    // Every fragment of every locale, from the directory rather than a list
+    // of eight files that had already missed both placement catalogs.
+    const { catalogs } = await completeCatalogs();
     const found = [];
-    for (const mod of mods)
-      for (const [name, table] of Object.entries(mod))
-        for (const [key, value] of Object.entries(table))
-          found.push(...claims(`${name}.${key}`, value));
+    for (const { merged, homeOf } of catalogs.values())
+      for (const [key, value] of Object.entries(merged))
+        found.push(...claims(`${homeOf.get(key)} ${key}`, value));
     // At least one, or this test would pass over a catalog that never
     // mentions the number and prove nothing.
     expect(found.length).toBeGreaterThan(0);

@@ -21,73 +21,32 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
+import { completeCatalogs } from './i18n-catalog.mjs';
+
 const ROOT = new URL('..', import.meta.url).pathname;
-// Merged, because the catalog is split across several files for code-splitting
-// reasons and is one catalog as far as coverage is concerned. See
-// js/i18n/en.deferred.js for why the split exists.
 const { LOCALES } = await import(`${ROOT}js/i18n/index.js`);
-const I18N_DIR = join(ROOT, 'js/i18n');
 
-/**
- * One locale's whole catalog: the base file and every split off it.
- *
- * Driven by the LOCALES registry rather than by naming Spanish, so a third
- * language is audited the day it is registered instead of the day somebody
- * remembers this file exists. The file and export names follow the one
- * convention the directory has kept: `<id>.js` exports the id in upper case,
- * and `<id>.<part>.js` exports it with `_<PART>`.
- *
- * The parts are read off the directory rather than listed here, and that is
- * the whole point. This function named `<id>.js` and `<id>.deferred.js`
- * explicitly, so the three catalogs split out since - activities, teaching and
- * placement - were audited as though they did not exist. Ids that live in them
- * were reported MISSING when something referenced one, and never reported
- * untranslated, because a catalog this file cannot see looks exactly like a
- * catalog with nothing in it. Splitting a catalog is a bundling decision and
- * should not be a coverage decision, so the next split is picked up by being
- * made rather than by being remembered here.
- *
- * @param {string} id - Locale id
- * @returns {Promise<Object<string,string>>} The merged catalog
- */
-async function catalogFor(id) {
-  const upper = id.toUpperCase().replace(/-/g, '_');
-  const base = await import(`${ROOT}js/i18n/${id}.js`);
-  const parts = readdirSync(I18N_DIR)
-    .filter(f => f.startsWith(`${id}.`) && f.endsWith('.js'))
-    .filter(f => f !== `${id}.js`)
-    .sort();
-  const merged = { ...base[upper] };
-  for (const file of parts) {
-    const part = file
-      .slice(id.length + 1, -3)
-      .toUpperCase()
-      .replace(/-/g, '_');
-    const mod = await import(`${ROOT}js/i18n/${file}`);
-    const table = mod[`${upper}_${part}`];
-    if (!table) {
-      console.error(
-        `${file} does not export ${upper}_${part}. Either the export is ` +
-          'misnamed or this is not a catalog; a catalog file that cannot be ' +
-          'read is a catalog that is not audited.'
-      );
-      process.exitCode = 1;
-      continue;
-    }
-    Object.assign(merged, table);
-  }
-  return merged;
-}
-
-const EN = await catalogFor('en');
+// Every locale's whole catalog: the base file and every fragment split off it,
+// merged, because the catalog is split for code-splitting reasons and is one
+// catalog as far as coverage is concerned.
+//
+// This used to be a function of its own that named `<id>.js` and
+// `<id>.deferred.js`, so the activities, teaching and placement fragments were
+// audited as though they did not exist. It was then taught to read the
+// directory - and tools/docs-facts.mjs, which had its own list, went on
+// counting two files. The rule now lives in one place, tools/i18n-catalog.mjs,
+// driven by the LOCALES registry, and a layout that breaks it (a fragment in
+// one language only, an id with two homes, a misnamed export) fails this audit
+// rather than being audited around.
+const {
+  catalogs,
+  problems: layoutProblems,
+  layout,
+} = await completeCatalogs({ locales: LOCALES.map(l => l.id) });
+const EN = catalogs.get('en').merged;
 /** Every non-English locale, in registry order. */
 const TRANSLATIONS = new Map(
-  await Promise.all(
-    LOCALES.filter(l => l.id !== 'en').map(async l => [
-      l.id,
-      await catalogFor(l.id),
-    ])
-  )
+  LOCALES.filter(l => l.id !== 'en').map(l => [l.id, catalogs.get(l.id).merged])
 );
 const { SCENARIO_INFO } = await import(`${ROOT}js/data/scenarioInfo.js`);
 const { TAG_ORDER } = await import(`${ROOT}js/data/scenarioTags.js`);
@@ -281,6 +240,10 @@ const show = (title, list, limit = 40) => {
 
 const labelFor = id => LOCALES.find(l => l.id === id)?.label || id;
 
+console.log(
+  `Catalog files:     ${layout.files.length} ` +
+    `(${layout.parts.length} fragments per locale besides the base)`
+);
 console.log(`English catalog: ${enIds.size} messages`);
 for (const { id, size } of perLocale) {
   console.log(
@@ -290,6 +253,9 @@ for (const { id, size } of perLocale) {
 }
 console.log(`Ids referenced:    ${used.size}`);
 
+// First, because every list after it is only as good as the catalog it read.
+if (layoutProblems.length)
+  show('CATALOG LAYOUT (the catalog is not one catalog)', layoutProblems);
 if (missingInEn.length)
   show('MISSING from English (renders as the id)', missingInEn);
 for (const { id, orphaned } of perLocale) {
@@ -304,5 +270,9 @@ for (const { id, untranslated } of perLocale) {
 void relative;
 // An orphan is a typo and fails; an untranslated id is honest work in progress
 // and does not. That asymmetry is the same one the Spanish-only version had.
+// A broken layout fails too: a fragment one loader never registers is not
+// work in progress, it is strings a reader can never see.
 const orphanTotal = perLocale.reduce((n, l) => n + l.orphaned.length, 0);
-process.exit(missingInEn.length || orphanTotal ? 1 : 0);
+process.exit(
+  layoutProblems.length || missingInEn.length || orphanTotal ? 1 : 0
+);
