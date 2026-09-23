@@ -8,7 +8,11 @@ import {
   seriesPosition,
 } from '../js/data/investigations.js';
 import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
-import { getWidget } from '../js/widgets.js';
+import { getWidget, whenWidgetsReady } from '../js/widgets.js';
+
+// SPIKE: two instrument families are fetched on demand, so the whole catalog
+// is awaited before any lookup. Every assertion below is unchanged.
+await whenWidgetsReady();
 
 const repoFile = rel => fileURLToPath(new URL(`../${rel}`, import.meta.url));
 
