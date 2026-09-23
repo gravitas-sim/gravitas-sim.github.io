@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 4030,
+    limit: 4080,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -464,7 +464,44 @@ const BUDGETS = [
       'gravity lesson is deferred to v1.2 for exactly this reason: adding it ' +
       'as well measures about 4005 KB, which is a third feature asking for a ' +
       'third raise, and that is the point at which the rule above says to look ' +
-      'for something to defer instead.',
+      'for something to defer instead.\n\n' +
+      'Raised from 4030 to 4080 for four observed stellar spectra, approved by ' +
+      'the owner at integration after the audit below. The arithmetic, from ' +
+      'fresh builds: the v1.1 tree measures 4021.3 KB, the spectra as first ' +
+      'written add 57.8, one cleanup takes back 6.3, and the total is 4073.0. ' +
+      '4080 is the next round number above it and leaves 7.0 KB, the same ' +
+      'margin 4030 was chosen for. It is a raise and not a fit: the 4020 this ' +
+      'feature was first authorised against predates the power-law lesson, and ' +
+      'the v1.1 baseline alone was already over it.' +
+      '\n\nItemised by esbuild metafile attribution rather than by probing ' +
+      'built files for strings - a probe for a widget id had counted the ' +
+      'lesson steps, which name it, as duplicated widget code. The data is ' +
+      '15.5 KB in a chunk of its own, reached only by a dynamic import in ' +
+      'js/stellarSpectraWidgets.js; the widget and js/stellar/spectrumIndex.js ' +
+      'are 9.2 KB, in the widget-registry chunk and nowhere else; the six ' +
+      'lesson screens are 12.0 KB of English and 8.9 of Spanish; and the ' +
+      'specW strings are 6.6 across the two deferred catalogs. The lesson ' +
+      'steps are also in submissionReview.js and the strings in ' +
+      'validationWorker.js, for the reasons they always are, and neither of ' +
+      'those bundles is counted here.' +
+      '\n\nThe audit took one thing back and declined one. Taken: the ' +
+      'spectra provenance record - archive, selection, transformations, ' +
+      'checksums, 8.4 KB - was inside the lazy data chunk and nothing in the ' +
+      'browser read it, so it is js/data/spectra/sdssSpectraProvenance.js now, ' +
+      'generated and verified with the data and imported by nothing in js/, ' +
+      'which a test enforces. The chunk went from 23.8 KB to 15.8. Declined: ' +
+      'moving the specW strings into a feature catalog, as the placement work ' +
+      'did. It would save nothing here - the only copy it removes is the one ' +
+      'in validationWorker.js - and a lesson widget, unlike a dialog, cannot ' +
+      'await its own catalog before it is drawn, so a screen reader could ' +
+      'announce a message id as a control label on a resumed lesson.' +
+      '\n\nThe data is not thinned to fit. Three samples to one costs at most ' +
+      '1.32 percentage points of band depth in the features the lesson uses, ' +
+      'against a smallest contrast it asks a reader to see of about six; ' +
+      'four to one would cost 2.0, a third of that contrast. The initial ' +
+      'download is untouched: 816.5 KB of 830.0 before this feature and after ' +
+      'it, and a visitor who never opens the lesson browser downloads none of ' +
+      'the above.',
   },
 ];
 

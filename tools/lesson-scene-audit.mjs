@@ -221,6 +221,10 @@ const DATASETS = {
     name: 'MIST v1.2 evolutionary tracks',
     origin: 'computed-grid',
   },
+  'js/data/spectra/sdssSpectra.js': {
+    name: 'Four observed stellar spectra, SDSS DR18',
+    origin: 'observation',
+  },
 };
 
 /**

@@ -24,6 +24,7 @@ import {
   CHECKS,
   GROUPS,
   OUTCOMES,
+  SOURCE_KEYS,
   CI_SETUP_STEPS,
   CI_SETUP_COMMANDS,
   CI_EQUIVALENTS,
@@ -144,10 +145,20 @@ describe('the check registry', () => {
     }
   });
 
-  test('provenance checks name the source they need', () => {
-    for (const check of CHECKS.filter(c => c.tier === 'provenance')) {
-      expect(['gw', 'stellar']).toContain(check.sources);
+  // Asked of the registry, not of a list kept here: the question is whether a
+  // provenance check names a cache the gate knows how to probe, and whether
+  // every such cache has a check that uses it. A hard-coded pair answered
+  // neither, and failed when a third dataset arrived.
+  test('provenance checks name a source the gate can probe', () => {
+    const provenance = CHECKS.filter(c => c.tier === 'provenance');
+    expect(provenance.length).toBeGreaterThan(0);
+    for (const check of provenance) {
+      expect(SOURCE_KEYS).toContain(check.sources);
     }
+    // And no pinned source is left without a check that would notice it drift.
+    expect([...new Set(provenance.map(c => c.sources))].sort()).toEqual(
+      [...SOURCE_KEYS].sort()
+    );
   });
 
   // `npm run build` rewrites sw-manifest.js. Any check that asks whether the
@@ -346,18 +357,19 @@ describe('the summary cannot overstate a run', () => {
   // provenance rows are unavailable and the run is not green, even though
   // every structural check passed.
   test('structural success cannot cover for unavailable provenance', () => {
-    const structural = CHECKS.filter(c =>
-      ['gw-structure', 'stellar-structure'].includes(c.id)
-    );
     const provenance = CHECKS.filter(c => c.tier === 'provenance');
-    expect(structural).toHaveLength(2);
-    expect(provenance).toHaveLength(2);
+    const structural = CHECKS.filter(
+      c => c.group === 'science' && c.tier !== 'provenance'
+    );
+    // Every dataset has both halves, which is the split this test is about.
+    expect(provenance.length).toBe(SOURCE_KEYS.length);
+    expect(structural.length).toBe(provenance.length);
     const s = summarize([
       ...structural.map(c => row(OUTCOMES.PASS, c.label)),
       ...provenance.map(c => row(OUTCOMES.UNAVAILABLE, c.label)),
     ]);
     expect(s.green).toBe(false);
-    expect(s.counts[OUTCOMES.UNAVAILABLE]).toBe(2);
+    expect(s.counts[OUTCOMES.UNAVAILABLE]).toBe(provenance.length);
     expect(s.headline).toMatch(/did not run/);
   });
 
@@ -433,6 +445,138 @@ describe('the skip policy', () => {
       'MediaRecorder',
       'WebGL',
     ]);
+  });
+});
+
+// A build-target skip is allowed by what its condition is, so these feed the
+// checker a spec's source rather than pointing it at e2e/: the question is
+// whether it tells the category apart from application behavior, and a
+// synthetic file can hold both side by side.
+describe('the skip policy knows a build target from application behavior', () => {
+  const HEAD = [
+    "import { test, expect } from './fixtures.js';",
+    '',
+    "const DIST = process.env.GRAVITAS_E2E_TARGET === 'dist';",
+    '',
+  ];
+
+  /** Audit a spec made of HEAD and these lines. */
+  async function audit(...body) {
+    const { checkSpecSource } = await import('../tools/check-test-policy.mjs');
+    const src = [...HEAD, ...body].join('\n');
+    /** The first line containing this text, `shift` lines on, as reported. */
+    const at = (text, shift = 0) =>
+      `e2e/example.spec.js:${src.split('\n').findIndex(l => l.includes(text)) + 1 + shift}`;
+    return { ...checkSpecSource('e2e/example.spec.js', src), at };
+  }
+
+  test('a skip on the build target alone is recorded, not reported', async () => {
+    const { problems, buildTarget, at } = await audit(
+      "test('what the table shows is what the plot drew', async () => {",
+      "  test.skip(DIST, 'needs the module registry to read the plotted arrays');",
+      '});'
+    );
+    expect(problems).toEqual([]);
+    expect(buildTarget).toEqual([at('test.skip(DIST')]);
+  });
+
+  test('the condition may sit on its own line, as prettier puts it', async () => {
+    const { problems, buildTarget, at } = await audit(
+      "const SOURCE_ONLY = process.env.GRAVITAS_E2E_TARGET === 'dist';",
+      "test.describe('the text and the audio are the same numbers', () => {",
+      '  test.skip(',
+      '    SOURCE_ONLY,',
+      "    'needs the module registry; dist/ has bundled js/audio.js'",
+      '  );',
+      '});'
+    );
+    expect(problems).toEqual([]);
+    expect(buildTarget).toEqual([at('test.skip(')]);
+  });
+
+  test('the comparison may be written inline, either way round', async () => {
+    const { problems, buildTarget } = await audit(
+      "test.skip(process.env.GRAVITAS_E2E_TARGET === 'dist', 'sources only');",
+      'test.skip(process.env.GRAVITAS_E2E_TARGET !== "dist", "bundle only");'
+    );
+    expect(problems).toEqual([]);
+    expect(buildTarget).toHaveLength(2);
+  });
+
+  test('a skip on what the page shows still fails, beside a build-target one', async () => {
+    // e2e/sonifyTextEquivalent.spec.js had both kinds in one file. The second
+    // read a list that had not been filled yet, and so skipped its assertions
+    // on the runs where the race went the wrong way.
+    const { problems, buildTarget, at } = await audit(
+      "test('the three numbers in a row agree', async ({ page }) => {",
+      "  test.skip(DIST, 'needs the module registry');",
+      "  const rows = await page.locator('li').allTextContents();",
+      '  test.skip(',
+      '    rows.length === 0,',
+      "    'only one body is being voiced, so there is no interval to check'",
+      '  );',
+      '});'
+    );
+    expect(buildTarget).toEqual([at('test.skip(DIST')]);
+    expect(problems).toHaveLength(1);
+    // Reported where the call opens, the line above its condition.
+    expect(problems[0].startsWith(`${at('rows.length === 0', -1)}:`)).toBe(
+      true
+    );
+  });
+
+  test('a build target in front of application state is application state', async () => {
+    const { problems, buildTarget } = await audit(
+      "test('exports the speed it plots', async ({ page }) => {",
+      "  const button = page.locator('[data-export] button');",
+      "  test.skip(DIST || (await button.isDisabled()), 'nothing to export');",
+      '});'
+    );
+    expect(buildTarget).toEqual([]);
+    expect(problems).toHaveLength(1);
+  });
+
+  test('a name is not enough: it has to be bound to the build target', async () => {
+    const { checkSpecSource } = await import('../tools/check-test-policy.mjs');
+    // Named like a build target, bound to something else.
+    const ci = checkSpecSource(
+      'e2e/example.spec.js',
+      [
+        "const SOURCE_ONLY = process.env.CI === 'true';",
+        "test.skip(SOURCE_ONLY, 'needs the module registry');",
+      ].join('\n')
+    );
+    expect(ci.buildTarget).toEqual([]);
+    expect(ci.problems).toHaveLength(1);
+
+    // Bound to the build target, then shadowed by something read off the page.
+    const shadowed = await audit(
+      "test('has an energy tab', async ({ page }) => {",
+      "  const { DIST } = await page.evaluate(() => ({ DIST: !document.querySelector('#energy') }));",
+      "  test.skip(DIST, 'this build has no energy tab');",
+      '});'
+    );
+    expect(shadowed.buildTarget).toEqual([]);
+    expect(shadowed.problems).toHaveLength(1);
+  });
+
+  test('an unconditional skip is not a build target', async () => {
+    const { problems, buildTarget } = await audit(
+      "test.skip('the whole test, on every build', async () => {});",
+      'test.skip();'
+    );
+    expect(buildTarget).toEqual([]);
+    expect(problems).toHaveLength(2);
+  });
+
+  test('the variable is the one playwright.config.js picks the target by', async () => {
+    const { BUILD_TARGET } = await import('../tools/check-test-policy.mjs');
+    const config = readFileSync(
+      path.join(REPO, 'playwright.config.js'),
+      'utf8'
+    );
+    expect(config).toContain(`process.env.${BUILD_TARGET.variable} === 'dist'`);
+    expect(BUILD_TARGET.why.length).toBeGreaterThan(40);
   });
 });
 
