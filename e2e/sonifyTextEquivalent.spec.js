@@ -11,17 +11,15 @@
 // fixture. The strongest form of that check needs the module registry, which
 // only exists on the source target - against dist/ esbuild has bundled
 // js/audio.js into a hashed chunk and there is nothing to import - so that
-// describe block carries `test.skip(SOURCE_ONLY, …)`. The guard is dormant:
-// this spec runs against the sources only. playwright.config.js matches nothing
-// but production.spec.js and selfContained.spec.js on the dist/ target, and the
-// checks above the guard are not DOM-only either. listenPaused() goes through
-// app.setPaused(), which imports /js/ui.js, so put on dist/, every one of them
-// but the muted-sandbox test fails on an import that cannot resolve.
+// describe block carries `test.skip(SOURCE_ONLY, …)`. Everything above the
+// guard is DOM-only and runs against dist/ as well, since the bundle is what a
+// reader using the printed voices actually has.
 //
-// The simulation is paused before the panel is opened. The panel is a snapshot
-// and the bodies move; comparing a snapshot taken at one moment against a fresh
-// reading taken at another is a race that would fail a few percent of the time
-// and be blamed on the wrong thing.
+// The simulation is paused before the panel is opened, with the transport
+// bar's own button. The panel is a snapshot and the bodies move; comparing a
+// snapshot taken at one moment against a fresh reading taken at another is a
+// race that would fail a few percent of the time and be blamed on the wrong
+// thing.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -34,7 +32,7 @@ const items = page => page.locator('#soundPanelVoicesList li');
 /** Open the sound panel with the sound actually on, on a still world. */
 async function listenPaused(page, app) {
   await app.boot();
-  await app.setPaused(true);
+  await app.pressPause();
   await speaker(page).click();
   await page.locator('#soundPanelToggle').click();
   // The panel's prose is in the deferred catalog; the section stays hidden

@@ -24,7 +24,10 @@
 #   e2e-build    The same browser, against the artifact `build` produced. A
 #                narrower, DOM-only spec that defends what the source suite
 #                structurally cannot reach: chunk splitting, deferred imports,
-#                assets the build forgot to copy.
+#                assets the build forgot to copy. Beside it, the specs that
+#                run on both targets (BOTH_TARGETS in playwright.config.js),
+#                so the self-containment and accessibility claims are checked
+#                against the bytes a reader gets.
 #
 #   cross-browser  Firefox and WebKit, running the @cross-browser profile and
 #                  not the full suite. Not on pull requests: they roughly triple
@@ -595,7 +598,10 @@ jobs:
         if: steps.browsers.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - name: Run the production spec
+      # 39 s here before the accessibility and sonify specs joined; locally, at
+      # the same two workers, the run went from 44 s to 85 s when they did.
+      # The 20-minute ceiling is there for a hang, not for this.
+      - name: Run the production and both-target specs
         run: npm run e2e:dist
 
       - name: Upload the report

@@ -11,18 +11,16 @@
 // cannot click can reach it. The tab order and the submit are done with real
 // key presses for that reason.
 //
-// The plot half checks the table against the module's own arrays, in the page,
-// and the typed-versus-placed test compares share payloads the same way. Those
-// three carry `test.skip(DIST, …)`, and the guard is dormant: this spec runs
-// against the sources only. playwright.config.js matches nothing but
-// production.spec.js and selfContained.spec.js on the dist/ target, and this
-// file cannot simply join them, because the tests that are not skipped reach
-// into the page too - app.setPaused() imports /js/ui.js, bodies() imports
-// /js/physics.js and withLightCurve() imports /js/lightCurve.js. esbuild has
-// bundled all three into hashed chunks, and put on dist/, every unskipped test
-// here fails on an import that cannot resolve. Checking these claims against
-// the bundle a reader actually gets means making those helpers DOM-only first;
-// the guards are what would then keep the module comparisons out.
+// It runs against the sources and against dist/, because the reader these
+// claims are made to gets the bundle. Most of it is DOM-only for that reason:
+// the world is paused with the transport bar's own button, the light curve is
+// opened from its rail button, and bodies are counted from the readout by
+// census(). Four tests carry `test.skip(DIST, …)` and stay on the sources,
+// because no DOM surface holds what they compare. Two of them check the export
+// tables against the plot modules' own arrays, one compares share payloads
+// built from inside the page, and the typed two-body test asserts that a
+// body's state is exactly what was typed. The readout only counts, so it
+// cannot say that.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -43,6 +41,62 @@ async function tabTo(page, id, limit = 40) {
   );
 }
 
+/**
+ * What the readout says the world holds, by kind: `{ Stars: 1 }`, or `{}` for
+ * a world that is empty. DOM-only, so it reads the same on dist/ as on the
+ * sources.
+ *
+ * The readout is rewritten from the live body lists by the render loop, not by
+ * the placement, so a read straight after a submit can be describing the frame
+ * before it. That is harmless for a count that has to appear, and fatal for one
+ * that has to stay at zero: a stale "nothing yet" would pass for "nothing was
+ * created". So the read waits for the frame after one that began at least
+ * 250 ms into the call. js/render.js redraws even a paused, untouched world
+ * every 100 ms (IDLE_REDRAW_MS), so by then a redraw that began after the call
+ * has finished writing the readout.
+ *
+ * An empty readout is not an empty world. It is what the panel shows with the
+ * overlays turned off, so a read that finds neither a count nor the "nothing
+ * yet" line fails rather than returning `{}`.
+ */
+async function census(page) {
+  const counts = await page.evaluate(
+    () =>
+      new Promise(resolve => {
+        const from = performance.now();
+        const read = () => {
+          const host = document.getElementById('overlayStats');
+          const rows = [...(host?.querySelectorAll('.readout-count') ?? [])];
+          if (!rows.length && !host?.querySelector('.readout-empty')) {
+            return null;
+          }
+          return Object.fromEntries(
+            rows.map(li => [
+              li.querySelector('span').textContent.trim(),
+              Number(li.querySelector('b').textContent),
+            ])
+          );
+        };
+        const wait = now =>
+          now - from >= 250
+            ? window.requestAnimationFrame(() => resolve(read()))
+            : window.requestAnimationFrame(wait);
+        window.requestAnimationFrame(wait);
+      })
+  );
+  if (!counts) throw new Error('the readout is not showing the body counts');
+  return counts;
+}
+
+/**
+ * Every star's and planet's exact state, from the module.
+ *
+ * Sources only. census() above is what the DOM offers, and it counts: no
+ * surface prints a typed position or velocity at the precision it was typed.
+ * The inspector shows neither, the trajectory table converts to SI at eight
+ * significant figures and has no rows until the clock has run, and a share
+ * link rounds to seven.
+ */
 const bodies = page =>
   page.evaluate(async () => {
     const P = await import('/js/physics.js');
@@ -68,13 +122,19 @@ const bodies = page =>
 async function emptyAndOpen(page, app) {
   await app.boot();
   await page.locator('#cleanSimBtn').click();
-  await app.setPaused(true);
+  await app.pressPause();
   await page.locator('#precisePlaceBtn').click();
   await expect(page.locator('#precisePlaceDialog')).toBeVisible();
 }
 
 test.describe('a system can be built without a pointer', () => {
   test('a two-body system, typed', async ({ page, app }) => {
+    // Every other test in this block runs on both targets. This one asserts
+    // that the state is exactly what was typed, which only bodies() can read.
+    test.skip(
+      DIST,
+      'needs the module registry to read the typed state exactly'
+    );
     await emptyAndOpen(page, app);
 
     // A one-solar-mass star at the origin, at rest.
@@ -114,7 +174,7 @@ test.describe('a system can be built without a pointer', () => {
   }) => {
     await app.boot();
     await page.locator('#cleanSimBtn').click();
-    await app.setPaused(true);
+    await app.pressPause();
 
     // Focus the rail button by keyboard and open with Enter, rather than
     // clicking it - the claim is about a reader who has no pointer.
@@ -142,7 +202,7 @@ test.describe('a system can be built without a pointer', () => {
     // the button.
     await page.keyboard.type('1');
     await page.keyboard.press('Enter');
-    expect((await bodies(page)).stars).toHaveLength(1);
+    expect((await census(page)).Stars).toBe(1);
 
     // And the buttons are the next two stops after the last field.
     await tabTo(page, 'precisePlaceSubmit', 6);
@@ -160,7 +220,7 @@ test.describe('a system can be built without a pointer', () => {
     await page.locator('#precisePlaceSubmit').click();
 
     // Nothing was created.
-    expect((await bodies(page)).stars).toHaveLength(0);
+    expect(await census(page)).toEqual({});
 
     // Each message is attached to its own input, so a reader who tabs into a
     // broken field hears what is wrong with THAT field.
@@ -192,7 +252,7 @@ test.describe('a system can be built without a pointer', () => {
     await emptyAndOpen(page, app);
     await expect(page.locator('#undoBtn')).toBeDisabled();
     await page.locator('#precisePlaceSubmit').click();
-    expect((await bodies(page)).stars.length).toBeGreaterThan(0);
+    expect((await census(page)).Stars).toBeGreaterThan(0);
     // The requirement is that the form joins the existing history rather than
     // having a history of its own: placeBody fires the same event the pointer
     // path does, and the undo stack is listening for it.
@@ -200,7 +260,7 @@ test.describe('a system can be built without a pointer', () => {
     await app.railControl('undoBtn');
     await expect(page.locator('#undoBtn')).toBeEnabled();
     await page.locator('#undoBtn').click();
-    expect((await bodies(page)).stars).toHaveLength(0);
+    expect(await census(page)).toEqual({});
   });
 
   test('a typed system is indistinguishable from a placed one', async ({
@@ -243,9 +303,13 @@ test.describe('the numbers behind a plot are readable without the canvas', () =>
   /** Run the light curve for long enough to have samples. */
   async function withLightCurve(page, app) {
     await app.boot();
-    await page.evaluate(async () =>
-      (await import('/js/lightCurve.js')).setLightCurveEnabled(true)
-    );
+    // Opened from its own rail button, which goes through the same
+    // setEnabled() that setLightCurveEnabled() does.
+    await app.railControl('toggleLightCurve');
+    const toggle = page.locator('#toggleLightCurve');
+    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    await toggle.click();
+    await expect(toggle).toHaveAttribute('aria-pressed', 'true');
     await page.waitForTimeout(2500);
     await app.railControl('exportDataBtn');
     await page.locator('#exportDataBtn').click();
