@@ -757,6 +757,13 @@ export const ES_DEFERRED = {
   'inv.objects.many':
     '{count} objetos en el lienzo. Haz clic en uno para seleccionarlo; la lista vuelve cuando un paso nombra unos pocos.',
   'inv.objects.empty': 'Nada en esta actividad nombra un objeto.',
+  'inv.tool.loading': 'Cargando este instrumento…',
+  'inv.tool.failed':
+    'No se pudo cargar este instrumento. Compruebe la conexión e inténtelo de nuevo.',
+  'inv.tool.retry': 'Intentar de nuevo',
+  'inv.tool.reloadNeeded':
+    'Este instrumento sigue sin poder cargarse. Vuelva a cargar la página para intentarlo de nuevo; sus respuestas se conservan.',
+  'inv.tool.reload': 'Volver a cargar la página',
   'inv.tool.pickable':
     'Un diagrama al que puedes apuntar. Haz clic o arrastra para mover el cursor; las flechas también lo mueven, y los deslizadores de abajo hacen lo mismo con números.',
   'inv.error.scenario': 'No se pudo cargar el escenario de este paso.',

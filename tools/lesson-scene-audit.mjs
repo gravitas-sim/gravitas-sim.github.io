@@ -402,7 +402,11 @@ async function datasetNames(familyModules) {
 async function widgetFamilies() {
   const text = await fileText('js/widgets.js');
   const out = new Map();
-  for (const m of text.matchAll(/from\s*'\.\/(\w+Widgets\.js)'/g)) {
+  // A lazily loaded family is named as `import('./xWidgets.js')`, an eager one
+  // as `from './xWidgets.js'`; both are families.
+  for (const m of text.matchAll(
+    /(?:from\s*|import\(\s*)'\.\/(\w+Widgets\.js)'/g
+  )) {
     const rel = `js/${m[1]}`;
     const mod = await import(`../${rel}`);
     for (const value of Object.values(mod)) {

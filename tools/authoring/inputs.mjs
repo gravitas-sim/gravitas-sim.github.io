@@ -22,7 +22,7 @@ import { MANIFEST as MANIFEST_ES } from '../../js/data/investigations/manifest.e
 import { INSTRUCTOR_CONTENT } from '../../js/data/instructorContent.js';
 import { SCENARIO_INFO } from '../../js/data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../../js/appState.js';
-import { allWidgets } from '../../js/widgets.js';
+import { allWidgets, whenWidgetsReady } from '../../js/widgets.js';
 import { gradedSteps } from '../../js/data/investigations/catalog.js';
 
 export const LESSON_DIR = 'js/data/investigations';
@@ -62,6 +62,9 @@ export async function loadAuthoringInputs() {
     }
   }
 
+  // allWidgets() lists only the families fetched so far; the rules check
+  // every tool id against the whole catalog, lazily loaded families included.
+  await whenWidgetsReady();
   return {
     investigations: INVESTIGATIONS,
     manifests: { en: MANIFEST_EN, es: MANIFEST_ES },

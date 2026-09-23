@@ -103,7 +103,13 @@ import {
   timeUnitSeconds,
   SIM_UNITS_PER_AU,
 } from './units.js';
-import { getWidget, widgetDefaults } from './widgets.js';
+import {
+  ensureWidget,
+  getWidget,
+  needsLoading,
+  whenWidgetsReady,
+  widgetDefaults,
+} from './widgets.js';
 import {
   indexOfSid,
   readProgress,
@@ -2430,6 +2436,47 @@ function syncToolPanel(step) {
   const spec = step?.tool;
   const widget = spec ? getWidget(spec.id) : null;
   stopToolLoop();
+  // An instrument whose family is fetched on demand. The panel says it is
+  // loading, in the note - made a status region for as long as it is saying
+  // so, because it is not one otherwise - fetches the family, and redraws only
+  // if the reader is still on this step. A failed fetch says so in the same
+  // region. If asking again can help, it offers a retry, which takes focus; if
+  // it cannot (see WidgetLoadError), it offers a reload, which keeps the
+  // reader's answers because they are already saved.
+  els.toolNote.removeAttribute('role');
+  if (spec && !widget && needsLoading(spec.id)) {
+    els.toolNote.setAttribute('role', 'status');
+    els.toolPanel.hidden = false;
+    els.toolTitle.textContent = spec.title || '';
+    els.toolNote.textContent = t('inv.tool.loading');
+    els.toolNote.hidden = false;
+    els.toolControls.innerHTML = '';
+    els.toolControls.hidden = true;
+    ensureWidget(spec.id)
+      .then(() => {
+        if (currentStep() === step) syncToolPanel(step);
+      })
+      .catch(err => {
+        if (currentStep() !== step) return;
+        const retryable = err?.retryable !== false;
+        els.toolNote.textContent = t(
+          retryable ? 'inv.tool.failed' : 'inv.tool.reloadNeeded'
+        );
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ui-button';
+        button.textContent = t(
+          retryable ? 'inv.tool.retry' : 'inv.tool.reload'
+        );
+        button.addEventListener('click', () =>
+          retryable ? syncToolPanel(step) : window.location.reload()
+        );
+        els.toolControls.replaceChildren(button);
+        els.toolControls.hidden = false;
+        button.focus();
+      });
+    return;
+  }
   els.toolPanel.hidden = !widget;
   if (!widget) return;
 
@@ -4846,8 +4893,9 @@ export function initInvestigations() {
   }
 
   if (/[?&#]author=/.test(window.location.href)) {
-    import('./authoring/preview.js')
-      .then(preview => {
+    // The preview's findings read the whole widget catalog, lazy families too.
+    Promise.all([import('./authoring/preview.js'), whenWidgetsReady()])
+      .then(([preview]) => {
         const request = preview.authoringRequest();
         if (!request) return;
         if (!hasInvestigation(request.lesson)) {
