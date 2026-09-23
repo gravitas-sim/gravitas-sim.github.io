@@ -8,7 +8,11 @@ import {
   seriesPosition,
 } from '../js/data/investigations.js';
 import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
-import { getWidget } from '../js/widgets.js';
+import { getWidget, whenWidgetsReady } from '../js/widgets.js';
+
+// Some instrument families are fetched on demand (js/widgets.js,
+// LAZY_FAMILIES), so the whole catalog is awaited before any lookup.
+await whenWidgetsReady();
 
 const repoFile = rel => fileURLToPath(new URL(`../${rel}`, import.meta.url));
 

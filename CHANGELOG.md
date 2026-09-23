@@ -204,6 +204,19 @@ the release rather than in the tag.
   `dist/` as well as the sources. The tests that compare against internal
   state, such as exact typed coordinates, the plotted arrays and the live voice
   list, stay on the sources, and their headers say why.
+- **A lesson no longer downloads the transit and power-law instruments unless
+  a step names one.** Every lesson loaded all sixteen instrument families
+  before its first screen; these two are now fetched when a step reaches them,
+  which takes 85 KB and four requests off every lesson's first screen as the
+  site is published, and 33 KB off it in the build. While a family is on its way the
+  tool panel says so to a screen reader; if it cannot be fetched the panel says
+  that too and offers **Try again**, or **Reload the page** when a retry cannot
+  work, and the reader's answers are kept. Offline, a lesson opened once still
+  draws them. Start-up requests do not change in either configuration.
+  `npm run budget:routes` measures what a fresh visitor downloads for nine
+  routes, sources and build, against ceilings every lesson route's old download
+  exceeds. Fourteen families are still loaded with every lesson;
+  `LAZY_CAPABILITIES.md` lists them and the order they move in.
 
 ### Fixed
 
