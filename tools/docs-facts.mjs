@@ -180,6 +180,44 @@ const ATTRIBUTE_FACTS = [
     key: 'releaseChecks',
     pattern: /(A release gate runs )(\d+)( checks)/,
   },
+  // The Summary's opening sentence, which is what a reviewer reads first. It
+  // was transcribed at 22 investigations and 636 steps and still said so two
+  // lessons later; the scenario count beside them happened to be right.
+  {
+    file: 'paper.md',
+    key: 'scenarios',
+    pattern: /(It ships )(\d+)(\s+configurable scenarios)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'investigations',
+    pattern:
+      /(real and idealized systems, and )(\d+)(\s+investigations totalling)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'investigationSteps',
+    pattern: /(investigations totalling )(\d+)( steps)/,
+  },
+  // The same suite size a second time, in the Summary, where it had stayed at
+  // 243 while the generated copy further down moved to 286.
+  {
+    file: 'paper.md',
+    key: 'physicsChecks',
+    pattern: /(public validation page reports )(\d+)( checks of the physics)/,
+  },
+  // The accessibility sweep's size. Right when this was written, and typed by
+  // hand beside counts that were not.
+  {
+    file: 'paper.md',
+    key: 'axeSurfaces',
+    pattern: /(axe-core sweep runs over\s+)(\d+)(\s+surfaces)/,
+  },
+  {
+    file: 'paper.md',
+    key: 'axeRuns',
+    pattern: /(two themes — )(\d+)( runs)/,
+  },
   {
     file: 'validation/index.html',
     key: 'physicsChecks',
