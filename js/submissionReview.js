@@ -1,59 +1,60 @@
 // =============================================================================
 // Submission review
 // -----------------------------------------------------------------------------
-// The other end of the return channel, and deliberately the smallest thing that
-// closes it.
+// The other end of the return channel.
 //
 // An instructor drops a pile of lab reports, backups or pasted tokens on this
 // page and gets one table: which question the class got wrong, and how often.
-// That is the whole feature. There is no roster, no gradebook, no export, and
-// nothing survives a reload - every one of those is a product decision nobody
-// has made yet, and building them here would be deciding by accident.
+// The same pile can be downloaded - a summary row per report, a row per
+// question, or everything as JSON - so the reading does not have to be done
+// twice to reach a spreadsheet. All three, and the table, are projections of
+// one graded record per report, built in js/submission/results.js; this file is
+// only the page around it.
+//
+// Still no roster, no gradebook and nothing that survives a reload. The export
+// was decided on; those have not been, and building them here would be deciding
+// by accident. Nothing leaves the browser.
 //
 // It is a separate esbuild entry so that none of it reaches the application's
-// start-up download. What it imports is the answer checker and the lesson data,
-// which is what grading requires and is loaded per lesson on demand.
+// start-up download. What it imports is the answer checker, the lesson data,
+// which is loaded per lesson on demand, and its own small catalog.
 //
 // On what it can and cannot tell you: it verifies answers, not identity. A
 // token is computed in a browser and whoever controls the browser can forge
 // one. What it removes is transcription, not dishonesty.
 // =============================================================================
 
-import { checkAnswer } from './answerCheck.js';
 import {
-  answersOf,
   isSubmissionToken,
   readSubmissionToken,
 } from './submission/submissionToken.js';
+import {
+  annotate,
+  gradeSubmission,
+  questionCsv,
+  resultsJson,
+  summaryCsv,
+} from './submission/results.js';
+import {
+  LANGUAGES,
+  applyTranslations,
+  has,
+  language,
+  preferred,
+  setLanguage,
+  t,
+} from './submission/i18n.js';
 import { validateBackup } from './investigations/progressBackup.js';
 import { MANIFEST } from './data/investigations/manifest.js';
 
 const $ = id => document.getElementById(id);
 
-/** Submissions accepted this session. Not persisted, on purpose. */
-const accepted = [];
-/** Anything refused, with the reason, so a pile of thirty can be reconciled. */
+/** Graded records, in the order accepted. Not persisted, on purpose. */
+const graded = [];
+/** Anything refused, with the reason code, so a pile of thirty reconciles. */
 const refused = [];
 /** Lesson bodies, loaded once each. */
 const lessons = new Map();
-
-const REASONS = {
-  empty: 'nothing to read',
-  wrongKind: 'not a Gravitas submission token',
-  newerVersion: 'made by a newer version of Gravitas',
-  corrupt: 'truncated or altered in transit',
-  mangled:
-    'characters were changed in transit - a rich-text box turns "--" into a ' +
-    'dash. Paste into a plain-text field, or drop the PDF instead.',
-  notAnObject: 'not a submission',
-  noVersion: 'no schema version',
-  noBackup: 'no answers inside',
-  noLesson: 'does not say which investigation',
-  noResponses: 'no answers inside',
-  noSteps: 'no step list to check against',
-  notABackup: 'not a Gravitas progress backup',
-  unknownLesson: 'names an investigation this build does not have',
-};
 
 /**
  * Load a lesson body by id, once.
@@ -78,89 +79,40 @@ async function lessonById(id) {
 }
 
 /**
- * Grade one submission against the lesson it names.
- *
- * Every answer is checked under the locale it was typed in, which the backup
- * carries per answer. Grading a whole submission under one locale is how a
- * Spanish decimal comma becomes a wrong answer.
- *
- * @param {object} submission - A validated payload
- * @returns {Promise<?object>} A graded record, or null if the lesson is unknown
+ * Record a refusal. The reason is a code, translated when it is shown, so
+ * switching language re-renders the list rather than leaving it in English.
+ * @param {string} label - What was handed in
+ * @param {string} reason - A `sub.reason.*` suffix
  */
-async function grade(submission) {
-  const lessonId = submission.b.lesson.id;
-  const lesson = await lessonById(lessonId);
-  if (!lesson) return null;
-  const byId = new Map((lesson.steps || []).map(s => [s.sid, s]));
-  const results = [];
-  for (const { sid, value, locale } of answersOf(submission)) {
-    const step = byId.get(sid);
-    // A step the lesson no longer has: the submission is older than this build.
-    // Counted as stale rather than wrong, because it is not the student's fault.
-    if (!step) {
-      results.push({ sid, title: sid, verdict: 'stale', locale });
-      continue;
-    }
-    let ok = null;
-    try {
-      ok = checkAnswer(step, value, { locale });
-    } catch {
-      ok = null;
-    }
-    results.push({
-      sid,
-      title: step.title || sid,
-      // checkAnswer returns null for anything it cannot judge, which is most
-      // written answers. Those are the instructor's to read, and counting them
-      // as failures would put the written half of every lesson at 100% wrong.
-      verdict: ok === true ? 'right' : ok === false ? 'wrong' : 'unmarked',
-      locale,
-      attempts: submission.b.progress.attempts?.[sid] ?? null,
-    });
-  }
-  return {
-    student: submission.b.student || '(no name)',
-    lessonId,
-    lessonTitle: lesson.title || lessonId,
-    assignment: submission.a,
-    roster: submission.r,
-    savedAt: submission.b.savedAt,
-    results,
-  };
+function refuse(label, reason) {
+  refused.push({ label, reason });
+  render();
 }
 
 /**
  * Take one thing a person handed over, whatever it is.
  * @param {string} label - What to call it if it fails
  * @param {object|string} thing - A parsed backup, or text to read as a token
+ * @param {'token'|'pdf'|'backup'} kind - What it was
  * @returns {Promise<void>}
  */
-async function accept(label, thing) {
+async function accept(label, thing, kind) {
   let submission = null;
   if (typeof thing === 'string') {
     const read = await readSubmissionToken(thing);
-    if (!read.ok) {
-      refused.push({ label, reason: REASONS[read.reason] || read.reason });
-      return render();
-    }
+    if (!read.ok) return refuse(label, read.reason);
     submission = read.submission;
   } else {
     // A bare backup file: the same answers without the assignment, roster or
     // fallback locale a token carries. Wrapped so everything downstream sees
     // one shape.
     const check = validateBackup(thing);
-    if (!check.ok) {
-      refused.push({ label, reason: REASONS[check.reason] || check.reason });
-      return render();
-    }
+    if (!check.ok) return refuse(label, check.reason);
     submission = { v: 1, a: null, r: null, fl: 'en', b: thing };
   }
-  const graded = await grade(submission);
-  if (!graded) {
-    refused.push({ label, reason: REASONS.unknownLesson });
-    return render();
-  }
-  accepted.push(graded);
+  const lesson = await lessonById(submission.b.lesson.id);
+  if (!lesson) return refuse(label, 'unknownLesson');
+  graded.push(gradeSubmission(submission, lesson, { kind, label }));
   render();
 }
 
@@ -172,45 +124,52 @@ async function takeFile(file) {
     // reading the bytes cannot be mangled the way copying text off a page can.
     const text = new TextDecoder('latin1').decode(await file.arrayBuffer());
     const match = /\/Keywords\s*\(([^)]*)\)/.exec(text);
-    if (!match) {
-      refused.push({ label: name, reason: 'no token in this PDF' });
-      return render();
-    }
-    return accept(name, match[1]);
+    if (!match) return refuse(name, 'noTokenInPdf');
+    return accept(name, match[1], 'pdf');
   }
   const text = await file.text();
-  if (isSubmissionToken(text.trim())) return accept(name, text.trim());
+  if (isSubmissionToken(text.trim())) return accept(name, text.trim(), 'token');
+  let parsed;
   try {
-    return accept(name, JSON.parse(text));
+    parsed = JSON.parse(text);
   } catch {
-    refused.push({ label: name, reason: 'not JSON and not a token' });
-    render();
+    return refuse(name, 'notJson');
   }
+  return accept(name, parsed, 'backup');
 }
 
 /**
- * Per-question failure rate across everything accepted.
+ * Per-question failure rate across everything accepted, each report once.
+ *
+ * An exact duplicate is left out here - dropping the same report twice should
+ * not make its wrong answers count double - but it stays in every export,
+ * marked. Repeated attempts are different answers and both count.
+ *
+ * @param {Array<object>} records - Annotated records
  * @returns {Array<object>} One row per question, hardest first
  */
-function failureRates() {
+function failureRates(records) {
   const rows = new Map();
-  for (const sub of accepted) {
-    for (const r of sub.results) {
+  for (const sub of records) {
+    if (sub.duplicateOf !== null) continue;
+    for (const q of sub.questions) {
+      if (q.verdict === 'incomplete') continue;
       // A pair, stringified: two lessons can use the same sid and a naive
       // join would merge their rows.
-      const key = JSON.stringify([sub.lessonId, r.sid]);
+      const key = JSON.stringify([sub.lessonId, q.sid]);
       if (!rows.has(key)) {
         rows.set(key, {
           lesson: sub.lessonTitle,
-          sid: r.sid,
-          title: r.title,
-          right: 0,
+          title: q.title,
           wrong: 0,
+          right: 0,
           unmarked: 0,
-          stale: 0,
         });
       }
-      rows.get(key)[r.verdict]++;
+      const row = rows.get(key);
+      if (q.verdict === 'correct') row.right++;
+      else if (q.verdict === 'incorrect') row.wrong++;
+      else row.unmarked++;
     }
   }
   return (
@@ -227,23 +186,48 @@ function failureRates() {
 }
 
 const pct = v => (v === null ? '-' : `${Math.round(v * 100)}%`);
-const esc = t =>
-  String(t).replace(
+const esc = s =>
+  String(s).replace(
     /[&<>"]/g,
     c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]
   );
 
-function render() {
-  const rates = failureRates();
-  $('count').textContent = accepted.length
-    ? `${accepted.length} submission${accepted.length === 1 ? '' : 's'}`
-    : 'nothing yet';
+/** Announce something to a screen reader and show it. */
+function say(message) {
+  const status = $('exportStatus');
+  if (status) status.textContent = message;
+}
 
+/**
+ * A refusal in words. A reason code with no message of its own still says what
+ * it is rather than rendering a bare id.
+ * @param {string} code - The reason code
+ * @returns {string} The sentence
+ */
+const reasonText = code =>
+  has(`sub.reason.${code}`)
+    ? t(`sub.reason.${code}`)
+    : t('sub.reason.other', { code });
+
+function render() {
+  const records = annotate(graded);
+  const n = records.length;
+  $('count').textContent =
+    n === 0
+      ? t('sub.count.none')
+      : n === 1
+        ? t('sub.count.one')
+        : t('sub.count.many', { n });
+
+  const rates = failureRates(records);
   $('rates').innerHTML = rates.length
     ? `<table class="sr-table"><thead><tr>
-         <th scope="col">Question</th><th scope="col">Investigation</th>
-         <th scope="col">Wrong</th><th scope="col">Marked</th>
-         <th scope="col">Failure rate</th><th scope="col">Unmarkable</th>
+         <th scope="col">${esc(t('sub.col.question'))}</th>
+         <th scope="col">${esc(t('sub.col.lesson'))}</th>
+         <th scope="col">${esc(t('sub.col.wrong'))}</th>
+         <th scope="col">${esc(t('sub.col.marked'))}</th>
+         <th scope="col">${esc(t('sub.col.rate'))}</th>
+         <th scope="col">${esc(t('sub.col.unmarkable'))}</th>
        </tr></thead><tbody>${rates
          .map(
            r => `<tr${r.rate !== null && r.rate >= 0.5 ? ' class="sr-hot"' : ''}>
@@ -252,24 +236,140 @@ function render() {
              <td>${pct(r.rate)}</td><td>${r.unmarked}</td></tr>`
          )
          .join('')}</tbody></table>`
-    : '<p class="sr-empty">Drop reports, backups or tokens above.</p>';
+    : `<p class="sr-empty">${esc(t('sub.rates.empty'))}</p>`;
 
-  $('who').innerHTML = accepted.length
-    ? `<ul class="sr-who">${accepted
-        .map(
-          s =>
-            `<li>${esc(s.student)} &mdash; ${esc(s.lessonTitle)}${
-              s.roster ? ` &mdash; ${esc(s.roster)}` : ''
-            }${s.assignment ? ` &mdash; ${esc(s.assignment)}` : ''}</li>`
-        )
-        .join('')}</ul>`
+  $('who').innerHTML = n
+    ? `<ol class="sr-who">${records
+        .map(s => {
+          const notes = [
+            s.rosterId,
+            s.assignmentId,
+            s.duplicateOf !== null
+              ? t('sub.read.duplicate', { n: s.duplicateOf })
+              : null,
+            s.attemptNumber !== null
+              ? t('sub.read.attempt', {
+                  n: s.attemptNumber,
+                  of: s.attemptsInGroup,
+                })
+              : null,
+          ].filter(Boolean);
+          return `<li>${esc(s.nameAsTyped || t('sub.read.noName'))} &mdash; ${esc(
+            s.lessonTitle
+          )}${notes.map(x => ` &mdash; ${esc(x)}`).join('')}</li>`;
+        })
+        .join('')}</ol>`
     : '';
 
   $('refused').innerHTML = refused.length
-    ? `<h2>Not read</h2><ul class="sr-refused">${refused
-        .map(r => `<li>${esc(r.label)}: ${esc(r.reason)}</li>`)
+    ? `<h2>${esc(t('sub.refused.title'))}</h2><ul class="sr-refused">${refused
+        .map(r => `<li>${esc(r.label)}: ${esc(reasonText(r.reason))}</li>`)
         .join('')}</ul>`
     : '';
+
+  // The downloads exist only when there is something to download, and say why
+  // when there is not rather than producing a file of headers.
+  for (const id of ['exportSummary', 'exportQuestions', 'exportJson']) {
+    const button = $(id);
+    if (button) button.disabled = n === 0;
+  }
+  const empty = $('exportEmpty');
+  if (empty) empty.hidden = n > 0;
+}
+
+/**
+ * Hand the browser a file to save.
+ * @param {string} text - Contents
+ * @param {string} filename - Suggested name
+ * @param {string} type - MIME type
+ */
+function download(text, filename, type) {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+/** Today's date for a file name, in the reader's own time zone. */
+function stamp(now = new Date()) {
+  const pad = v => String(v).padStart(2, '0');
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+}
+
+/**
+ * Build one export and save it.
+ * @param {'summary'|'questions'|'json'} which - Which file
+ */
+function exportResults(which) {
+  const records = annotate(graded);
+  if (!records.length) return say(t('sub.export.empty'));
+  const includeWritten = Boolean($('includeWritten')?.checked);
+  const day = stamp();
+  try {
+    let file;
+    if (which === 'summary') {
+      file = `gravitas-results-summary-${day}.csv`;
+      download(summaryCsv(records), file, 'text/csv;charset=utf-8');
+    } else if (which === 'questions') {
+      file = `gravitas-results-questions-${day}.csv`;
+      download(
+        questionCsv(records, { includeWritten }),
+        file,
+        'text/csv;charset=utf-8'
+      );
+    } else {
+      file = `gravitas-results-${day}.json`;
+      download(
+        resultsJson(records, {
+          includeWritten,
+          refused: refused.map(r => ({
+            label: r.label,
+            reason: r.reason,
+          })),
+        }),
+        file,
+        'application/json'
+      );
+    }
+    say(t('sub.export.done', { file }));
+  } catch (err) {
+    say(t('sub.export.failed', { reason: err?.message || String(err) }));
+  }
+}
+
+/** Build the language switch and put every string in the chosen language. */
+function applyLanguage() {
+  document.title = t('sub.doc.title');
+  applyTranslations();
+  for (const button of document.querySelectorAll('[data-lang]')) {
+    button.setAttribute(
+      'aria-pressed',
+      String(button.dataset.lang === language())
+    );
+  }
+  render();
+}
+
+function wireLanguage() {
+  const host = $('langSwitch');
+  if (!host) return;
+  for (const lang of LANGUAGES) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'ui-button';
+    button.dataset.lang = lang.id;
+    button.lang = lang.id;
+    button.textContent = lang.endonym;
+    button.addEventListener('click', () => {
+      setLanguage(lang.id);
+      applyLanguage();
+    });
+    host.append(button);
+  }
 }
 
 function wire() {
@@ -300,15 +400,24 @@ function wire() {
   $('paste-go').addEventListener('click', async () => {
     const text = $('paste').value;
     if (!text.trim()) return;
-    await accept('pasted token', text);
+    await accept(t('sub.paste.source'), text, 'token');
     $('paste').value = '';
   });
   $('clear').addEventListener('click', () => {
-    accepted.length = 0;
+    graded.length = 0;
     refused.length = 0;
+    say('');
     render();
   });
-  render();
+  $('exportSummary')?.addEventListener('click', () => exportResults('summary'));
+  $('exportQuestions')?.addEventListener('click', () =>
+    exportResults('questions')
+  );
+  $('exportJson')?.addEventListener('click', () => exportResults('json'));
+
+  wireLanguage();
+  setLanguage(preferred());
+  applyLanguage();
 }
 
 if (document.readyState === 'loading') {
