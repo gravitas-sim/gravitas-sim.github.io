@@ -314,6 +314,96 @@ taken.
 
 ---
 
+## What `max_timestep` is, and what it is not
+
+Audited 2026-09-21, from the code rather than from the comments around it,
+because a proposal for a scientific instrument rested on the opposite claim.
+
+**The claim that was current:** *"`onPhysicsStep` makes instrument cadence
+machine-independent — set `max_timestep` and every machine takes the same
+sequence of integration steps, so a sampler hung off it samples at the same
+simulated times everywhere."*
+
+**That is false**, and the three lines that make it false are these.
+
+[`gameLoop`](js/render.js) takes its frame duration from the clock:
+
+```js
+const measured = (timestamp - state.last_time) / 1000.0;
+const dt_seconds = fixedStepSeconds || measured;
+const dt_sim = frameAdvance(dt_seconds, SETTINGS.sim_speed, DT);
+```
+
+[`frameAdvance`](js/timestep.js) is linear in that duration below its own
+0.05 s stall guard, so `dt_sim` inherits the frame rate and its jitter. And
+[`substepPlan`](js/timestep.js) subdivides `dt_sim` rather than stepping at the
+cap:
+
+```js
+const wanted = Math.ceil(dtSim / cap);
+const substeps = Math.min(MAX_SUBSTEPS, wanted);
+return { substeps, step: dtSim / substeps, capped: wanted > MAX_SUBSTEPS };
+```
+
+`step` is therefore `dtSim / ceil(dtSim / cap)`. It is bounded above by `cap`
+and it is almost never equal to it.
+
+Measured over twelve frames at `sim_speed` 5, `DT` 0.016 and `max_timestep`
+0.05 — Kepler's 2nd Law's own settings:
+
+| machine | integration steps | distinct step sizes | step range |
+| --- | --- | --- | --- |
+| 60 fps, held exactly | 24 | 1 | 0.033333 |
+| 144 fps, held exactly | 12 | 1 | 0.027778 |
+| a real tab, with jitter and one dropped frame | 25 | 10 | 0.031800 – 0.044133 |
+
+Three machines, three different numbers of steps at three different sizes,
+covering three different amounts of simulated time. At 144 fps the cap does not
+engage at all: `dt_sim` is 0.0278, already under 0.05, so `substeps` is 1 and
+the step is simply the frame advance. The cap is doing exactly what its own
+docstring says it does — bounding the local truncation error of a symplectic
+Euler step — and nothing else.
+
+**So the rule is:**
+
+> `max_timestep` is a numerical-accuracy ceiling, not an instrument clock.
+> `onPhysicsStep` fires once per integration step, and the number, the size and
+> the simulated times of those steps are all machine-dependent.
+
+The repository already knew this, which is the strongest evidence for it:
+[`setFixedStep()`](js/render.js) exists, its comment says two runs of the same
+world otherwise "get different sequences of frame times, so they take different
+sequences of steps, so they are not the same calculation", and the Experiment
+Bench turns it on before it records anything.
+
+### What a sampler would actually have to do
+
+Not built, and not to be built until something needs it. Three candidates, in
+the order they should be considered:
+
+1. **Schedule against simulated time, and evaluate at the target.** The
+   ingredients are already here: `onPhysicsStep(fn)` hands its listener
+   `(dt, simulationTime)`, and `simulationTime` is advanced by exactly the `dt`
+   that was integrated. A sampler that holds a list of target simulated times,
+   watches for the step that brackets each one, and interpolates between the
+   two states produces the same sample times on every machine without touching
+   the loop. This is the one to reach for: it costs one comparison per step and
+   it does not change what anybody sees.
+2. **Run the experiment in fixed-step mode.** `setFixedStep(1/60)` already makes
+   the whole sequence reproducible, which is why the bench uses it. It is the
+   right answer when the experiment owns the session — a recording, a
+   convergence study — and the wrong one for an instrument a reader is expected
+   to use while the sandbox runs at its own pace, because it decouples
+   simulated time from wall-clock time.
+3. **A fixed-step accumulator in the loop itself.** The conventional fix, and
+   the most invasive: it changes the integration every scenario gets, and the
+   whole substep-plan design exists to avoid doing that.
+
+Nothing above should be read as a plan. It is a note saying which of the three
+is cheap, so that the next proposal starts from the right one.
+
+---
+
 ## What is not done
 
 - **The inspector's derived quantities for small bodies** — density, surface

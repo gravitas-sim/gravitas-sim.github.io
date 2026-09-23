@@ -326,6 +326,25 @@ function makeApp(page) {
       }, paused);
     },
 
+    /**
+     * Pause a running simulation with the transport bar's own button.
+     *
+     * setPaused() writes ui.state, so it needs /js/ui.js and works against the
+     * sources only. This goes the way a reader does, through #timelinePlay,
+     * and takes its answer from the readout's status rather than from the
+     * module, so it works against dist/ too.
+     *
+     * The button toggles. Pressed on a world that was already paused it would
+     * start it, so the premise is asserted before the press rather than
+     * assumed.
+     */
+    async pressPause() {
+      const status = page.locator('#overlayStatus');
+      await expect(status).toHaveAttribute('data-state', 'running');
+      await this.press(page.locator('#timelinePlay'));
+      await expect(status).toHaveAttribute('data-state', 'paused');
+    },
+
     /** Whether the simulation is paused. */
     isPaused() {
       return page.evaluate(async () => {
