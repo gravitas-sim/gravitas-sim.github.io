@@ -193,12 +193,14 @@ above, re-measured at the slice's own base; the tool-step latency reported;
 source and dist Playwright coverage of loading, failure and retry; an offline
 test for a lesson whose family was fetched lazily.
 
-**Follow-up slices**, each its own PR with the same acceptance: the six families
-used by exactly one lesson (chaos, observing, resonance, habitability, dark
-matter, black holes); then the families shared across lessons (exoplanet,
-gravitational waves, stellar, stellar evolution, spectra, energy, binary, tidal),
-each with its lessons' tests; then a decision on whether the service-worker
-precache should stop fetching every family on first visit.
+**Follow-up slices**, each its own PR with the same acceptance. Thirteen of
+the sixteen families are used by exactly one lesson; after the two above, the
+other eleven (binary, black holes, chaos, dark matter, energy, habitability,
+observing, resonance, stellar evolution, spectra, tidal) move with their one
+lesson's tests. Then the three each shared by two lessons (exoplanet,
+gravitational waves, stellar), with both lessons' tests. Then a decision on
+whether the service-worker precache should stop fetching every family on a
+first visit.
 
 ### If C: the alternative
 
