@@ -97,9 +97,13 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * data tables, the printed voices - and a reader gets the bundle. Their
  * DOM-only tests run here; the ones that compare against a module's own arrays
  * carry a GRAVITAS_E2E_TARGET skip and stay on the sources.
+ *
+ * e2e/lazyInstruments.spec.js holds the lazily loaded instrument families to
+ * what a reader sees in both builds, because they differ: under the sources a
+ * retry can re-import a family under a new URL, and a bundle cannot.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js/;
 
 /**
  * Which engines to run.

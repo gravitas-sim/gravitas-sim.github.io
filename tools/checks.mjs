@@ -379,6 +379,17 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    id: 'routes',
+    label: 'what a fresh visitor downloads, route by route',
+    command: ['npm', 'run', 'budget:routes'],
+    tier: 'slow',
+    ci: null,
+    why:
+      'loads nine routes in a browser, against the sources and against the ' +
+      'build the gate has just made; no CI job has both',
+    group: 'correctness',
+  },
+  {
     id: 'links-dist',
     label: 'internal links and anchors (built site)',
     command: ['npm', 'run', 'validate:links:dist'],
