@@ -1,5 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { execFileSync } from 'node:child_process';
+import { readdirSync } from 'node:fs';
+import { inOwnTransformCache } from '../tools/playwright-cache.mjs';
 
 // =============================================================================
 // The shards add up to the suite
@@ -17,14 +19,14 @@ import { execFileSync } from 'node:child_process';
 const SHARDS = 6;
 
 /** Every test id Playwright would run, for a given shard or for all of them. */
-function inventory(shard) {
+function inventory(shard, cacheEnv) {
   const args = ['playwright', 'test', '--list', '--reporter=list'];
   if (shard) args.push(`--shard=${shard}/${SHARDS}`);
   // Playwright refuses to run inside Jest, and rightly - but this is listing,
   // in a child process, and the markers Jest leaves in the environment are
   // what it detects. Removed rather than worked around: the child is not
   // running under Jest in any sense that matters.
-  const env = { ...process.env, CI: '1' };
+  const env = { ...process.env, CI: '1', ...cacheEnv };
   delete env.JEST_WORKER_ID;
   delete env.NODE_OPTIONS;
   const out = execFileSync('npx', args, {
@@ -41,8 +43,26 @@ function inventory(shard) {
 }
 
 describe('the shards cover the suite exactly once', () => {
-  const whole = inventory(null);
-  const shards = Array.from({ length: SHARDS }, (_, i) => inventory(i + 1));
+  // The seven listings share a transform cache that is theirs alone. They run
+  // one after another, so they cannot race each other; what they must not do
+  // is share the machine's with a listing on another Jest worker, which once
+  // made the whole inventory report e2e/spacetime.spec.js at its compiled line
+  // numbers while every shard had the real ones. tools/playwright-cache.mjs
+  // has the mechanism.
+  const { whole, shards, compiled } = inOwnTransformCache(cacheEnv => ({
+    whole: inventory(null, cacheEnv),
+    shards: Array.from({ length: SHARDS }, (_, i) =>
+      inventory(i + 1, cacheEnv)
+    ),
+    compiled: readdirSync(cacheEnv.PWTEST_CACHE_DIR).length,
+  }));
+
+  test('the listings compiled into their own cache, not the shared one', () => {
+    // PWTEST_CACHE_DIR is Playwright's own variable rather than a documented
+    // option. An upgrade that stopped reading it would put these listings
+    // back in the shared cache without a word, and this is where it shows.
+    expect(compiled).toBeGreaterThan(0);
+  });
 
   test('the unsharded inventory is not empty, which would pass everything else', () => {
     expect(whole.length).toBeGreaterThan(400);
