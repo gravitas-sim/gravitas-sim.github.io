@@ -31,7 +31,7 @@ account and no installation, works offline after a first visit, and encodes any
 simulation state into a shareable URL.
 
 The distinguishing commitment is that the software says what it is doing. A
-public validation page reports 243 checks of the physics engine against
+public validation page reports 286 checks of the physics engine against
 analytic results, published values and independent integrations, each with its
 measured error and each labelled by the kind of evidence it rests on; a public
 model page states what the simulation represents and, at equal length, what it

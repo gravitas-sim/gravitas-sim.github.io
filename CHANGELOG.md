@@ -242,6 +242,19 @@ the release rather than in the tag.
   only an opt-in setting turns it on; and `/model/` said seven stellar tracks
   above a list of eight. The track count is now generated, and
   `tests/truthSurface.test.js` holds the prose claims to the code.
+- The published size of the message catalog counted two of its five
+  fragments per language. `README.md` and the manual said the interface ships
+  from a catalog of 3691 strings when it held 4017: the activities, teaching and
+  placement strings split off for download size were invisible to the count,
+  and two tests that sweep the catalogs had each missed a different file. Every
+  reader of the catalog now finds its fragments by one rule, and a fragment
+  added for one language only, an id defined in two fragments, or a translation
+  filed in a different fragment from its original fails `npm run i18n:check`.
+- The browser test of the signed-in instructor portal reused the first fixture
+  a checkout ever built, so after a lesson was added it went on testing an
+  inventory the sources no longer described. The fixture now carries a stamp of
+  every input that decides what it says and is rebuilt when any of them moves;
+  the real instructor bundle and its release check are unchanged.
 - Counts the documentation had stopped keeping true. `README.md` and
   `LICENSES.md` said "the 22 investigations" over a catalog of 24, and the
   summary of `paper.md` said 22 investigations, 636 steps and 243 physics
