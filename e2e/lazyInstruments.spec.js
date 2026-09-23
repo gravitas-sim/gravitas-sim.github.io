@@ -55,36 +55,51 @@ async function expectDrawn(page) {
   );
 }
 
-/** Every same-origin script the page has loaded, with its text. */
-async function loadedScripts(page) {
-  return page.evaluate(async () => {
-    const urls = [
-      ...new Set(
-        performance
-          .getEntriesByType('resource')
-          .map(e => e.name)
-          .filter(u => u.startsWith(location.origin) && /\.m?js(\?|$)/.test(u))
-      ),
-    ];
-    return Promise.all(
-      urls.map(async url => ({
-        url,
-        text: await (await window.fetch(url)).text(),
-      }))
-    );
+/**
+ * Record every script the page fetches, with its text, from before it opens.
+ *
+ * Read from the network, not from the resource-timing buffer. That buffer
+ * holds 250 entries and then drops new ones in silence; a lesson under the
+ * sources fetches about 180 resources before its first screen, and a first
+ * look that fetched every script again to read it filled the buffer, so the
+ * second look could not see the family it was looking for. The same fault
+ * would make "never fetches one" pass for a page that had fetched it.
+ */
+function recordScripts(page) {
+  const texts = [];
+  // A response arrives before its body does; count a body only once read.
+  const reading = new Set();
+  page.on('response', res => {
+    if (res.request().resourceType() !== 'script') return;
+    const read = res
+      .text()
+      .then(
+        text => texts.push(text),
+        () => {
+          /* navigated away mid-body */
+        }
+      )
+      .finally(() => reading.delete(read));
+    reading.add(read);
   });
+  return async () => {
+    await page.waitForLoadState('networkidle');
+    while (reading.size) await Promise.allSettled([...reading]);
+    return [...texts];
+  };
 }
-const contains = (scripts, mark) => scripts.some(s => s.text.includes(mark));
+const contains = (texts, mark) => texts.some(t => t.includes(mark));
 
 test.describe('instrument families fetched on demand', () => {
   test('a lesson that names neither family never fetches one', async ({
     page,
   }) => {
+    const scriptsSoFar = recordScripts(page);
     await openLesson(page, 'keplers-laws');
     await next(page, 3);
-    await page.waitForLoadState('networkidle');
-    const scripts = await loadedScripts(page);
-    expect(scripts.length).toBeGreaterThan(0);
+    const scripts = await scriptsSoFar();
+    // Not vacuous: the lesson engine itself is among what was read.
+    expect(contains(scripts, 'investigationNext')).toBe(true);
     expect(contains(scripts, TRANSIT_MARK)).toBe(false);
     expect(contains(scripts, POWER_LAW_MARK)).toBe(false);
   });
@@ -92,13 +107,13 @@ test.describe('instrument families fetched on demand', () => {
   test('a lesson fetches the family its step names, and only that one', async ({
     page,
   }) => {
+    const scriptsSoFar = recordScripts(page);
     await openLesson(page, 'transit-photometry');
     // Before the instrument step, the family has not been fetched.
-    await page.waitForLoadState('networkidle');
-    expect(contains(await loadedScripts(page), TRANSIT_MARK)).toBe(false);
+    expect(contains(await scriptsSoFar(), TRANSIT_MARK)).toBe(false);
     await next(page, 5);
     await expectDrawn(page);
-    const after = await loadedScripts(page);
+    const after = await scriptsSoFar();
     expect(contains(after, TRANSIT_MARK)).toBe(true);
     expect(contains(after, POWER_LAW_MARK)).toBe(false);
   });
@@ -130,10 +145,18 @@ test.describe('instrument families fetched on demand', () => {
   }) => {
     await openLesson(page, 'transit-photometry');
     await page.waitForLoadState('networkidle');
+    // Fail only what carries the family's code, found by its content because a
+    // bundle's chunk names are not known in advance. Failing every script would
+    // also fail imports the page makes on its own schedule - in dist/ a
+    // settings chunk arrives late and its import is not this test's subject.
     let blocked = true;
-    await page.route(/\.m?js(\?|$)/, route =>
-      blocked ? route.abort('failed') : route.continue()
-    );
+    await page.route(/\.m?js(\?|$)/, async route => {
+      if (!blocked) return route.continue();
+      const response = await route.fetch();
+      const body = await response.text();
+      if (body.includes(TRANSIT_MARK)) return route.abort('failed');
+      return route.fulfill({ response, body });
+    });
     await next(page, 5);
     const note = page.locator('#investigationToolNote');
     await expect(note).toHaveText(/could not be loaded/);
