@@ -59,6 +59,7 @@ const {
   LIGHT_CURVE_COLUMNS,
   RADIAL_VELOCITY_COLUMNS,
 } = await import('../js/dataExport.js');
+const { fromCsv, toCsv } = await import('../js/csv.js');
 const { timeUnitSeconds } = await import('../js/units.js');
 const { G_SI, SOLAR_MASS_KG, AU_M } = await import('../js/blackHolePhysics.js');
 
@@ -131,13 +132,62 @@ describe('CSV field writing', () => {
   });
 
   test('defuses a name a spreadsheet would run as a formula', () => {
-    // Object names come from a text field a student can type into.
+    // Object names come from a text field a student can type into. Quoting
+    // alone is not enough - the reader strips the quotes and evaluates what is
+    // left - so the cell is prefixed with an apostrophe, which a spreadsheet
+    // reads as "this is text".
     expect(csvField('=HYPERLINK("http://x")')).toBe(
-      '"=HYPERLINK(""http://x"")"'
+      '"\'=HYPERLINK(""http://x"")"'
     );
-    expect(csvField('@SUM(A1)')).toBe('"@SUM(A1)"');
+    expect(csvField('@SUM(A1)')).toBe('"\'@SUM(A1)"');
+    expect(csvField('+1+1')).toBe('"\'+1+1"');
+    expect(csvField('-2+3')).toBe('"\'-2+3"');
     // A negative number is not a formula and must stay a number.
     expect(csvField('-3.5')).toBe('-3.5');
+    expect(csvField('+2')).toBe('+2');
+    expect(csvField('1e-9')).toBe('1e-9');
+    expect(csvField(-3.5)).toBe('-3.5');
+  });
+
+  test('finds the formula behind whitespace, controls and look-alikes', () => {
+    // Spreadsheets skip leading whitespace before deciding, so the check does.
+    expect(csvField('  =1+1')).toBe('"\'  =1+1"');
+    expect(csvField(' =1+1')).toBe('"\' =1+1"');
+    expect(csvField('﻿@x')).toBe('"\'﻿@x"');
+    expect(csvField('\u0000=1')).toBe('"\'\u0000=1"');
+    // A leading tab or carriage return is itself a trigger.
+    expect(csvField('\tplain')).toBe('"\'\tplain"');
+    // Full-width forms, which some spreadsheets fold to the ASCII ones.
+    expect(csvField('＝SUM(A1)')).toBe('"\'＝SUM(A1)"');
+    // Not a number and not a formula: left alone.
+    expect(csvField('Infinity')).toBe('Infinity');
+    // Not finite, and a leading minus makes it a formula to Excel.
+    expect(csvField('-Infinity')).toBe('"\'-Infinity"');
+    // Whitespace alone is not a formula.
+    expect(csvField('   ')).toBe('   ');
+  });
+
+  test('what toCsv disarms, fromCsv gives back exactly', () => {
+    // The accessible tables render the CSV bytes, so the round trip has to be
+    // exact - including a value that already began with an apostrophe.
+    const values = [
+      '=1+1',
+      '  =2',
+      '@x',
+      '-3.5',
+      '+2',
+      "'=x",
+      "'=x,y",
+      "''=z",
+      "'plain",
+      '\t=cmd',
+      'a,"b"\nc',
+      '-Infinity',
+    ];
+    expect(fromCsv(toCsv([values]))).toEqual([values]);
+    // A leading apostrophe that was data is doubled, so a spreadsheet shows it.
+    expect(csvField("'=x")).toBe(`"''=x"`);
+    expect(csvField("'plain")).toBe("'plain");
   });
 
   test('numbers keep their precision without gaining noise', () => {

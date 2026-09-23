@@ -24,6 +24,7 @@ import {
   FIDELITY_ITEMS,
   USABILITY_ITEMS,
 } from './data/evaluation.js';
+import { csvField } from './csv.js';
 
 const STORE_KEY = 'gravitas_evaluation_draft_v1';
 const $ = id => document.getElementById(id);
@@ -196,10 +197,10 @@ function enhance() {
   return draft;
 }
 
-const csvCell = v => {
-  const s = String(v ?? '');
-  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-};
+// The shared field writer, not a local one. This had its own quoting and no
+// defence at all against a cell a spreadsheet would run, and the participant
+// field is typed by a person.
+const csvCell = csvField;
 
 /** One concept row, in CONCEPT_COLUMNS order. */
 function conceptRow(draft) {

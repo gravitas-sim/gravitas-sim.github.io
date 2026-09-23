@@ -6,7 +6,7 @@
     <title>Submission review | Gravitas</title>
     <meta
       name="description"
-      content="Read a pile of Gravitas lab reports at once and see which question the class got wrong."
+      content="Read a pile of Gravitas lab reports at once, see which question the class got wrong, and download the results."
     />
     <meta name="robots" content="noindex" />
     <meta name="theme-color" content="#07080f" />
@@ -76,6 +76,17 @@
       .sr-empty {
         opacity: 0.6;
       }
+      .sr-export {
+        margin-top: 2rem;
+      }
+      .ui-button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .ui-button[aria-pressed='true'] {
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
+      }
       .sr-actions {
         display: flex;
         gap: 0.75rem;
@@ -87,28 +98,42 @@
   </head>
   <body class="doc-page">
     <main class="sr-wrap">
-      <h1>Submission review</h1>
-      <p>
+      <div
+        id="langSwitch"
+        class="sr-actions"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="sub.lang.label"
+      ></div>
+      <h1 data-i18n="sub.title">Submission review</h1>
+      <p data-i18n="sub.intro">
         Drop the lab reports your students handed in and this page will tell you
         which question the class got wrong. It reads the PDF itself, the JSON
         progress backup, or a token pasted out of the last page of a report.
       </p>
-      <p>
+      <p data-i18n="sub.privacy">
         Nothing leaves your browser and nothing is saved. Close the tab and it
-        is gone &mdash; there is no roster here, no gradebook and no export,
-        because none of those has been designed yet.
+        is gone. What you read here can be downloaded as a spreadsheet or as
+        JSON; there is no roster and no gradebook.
       </p>
-
       <div id="drop" class="sr-drop">
-        <p><strong>Drop reports, backups or tokens here</strong></p>
+        <p>
+          <strong data-i18n="sub.drop.title"
+            >Drop reports, backups or tokens here</strong
+          >
+        </p>
         <p class="sr-empty">.pdf &middot; .json &middot; .txt</p>
         <input
           id="picker"
           type="file"
           multiple
           accept=".pdf,.json,.txt,application/pdf,application/json,text/plain"
+          aria-label="Choose reports, backups or token files"
+          data-i18n-aria-label="sub.drop.picker"
         />
-        <label for="paste" class="sr-empty">or paste one token</label>
+        <label for="paste" class="sr-empty" data-i18n="sub.paste.label"
+          >or paste one token</label
+        >
         <textarea
           id="paste"
           class="sr-paste"
@@ -116,30 +141,106 @@
           placeholder="s1z..."
         ></textarea>
         <div class="sr-actions">
-          <button id="paste-go" type="button" class="ui-button">
+          <button
+            id="paste-go"
+            type="button"
+            class="ui-button"
+            data-i18n="sub.paste.go"
+          >
             Read this token
           </button>
-          <button id="clear" type="button" class="ui-button">
+          <button
+            id="clear"
+            type="button"
+            class="ui-button"
+            data-i18n="sub.clear"
+          >
             Clear everything
           </button>
-          <span id="count" class="sr-empty">nothing yet</span>
+          <span id="count" class="sr-empty" role="status">nothing yet</span>
         </div>
       </div>
-
-      <h2>Per-question failure rate</h2>
-      <p class="sr-empty">
+      <h2 data-i18n="sub.rates.title">Per-question failure rate</h2>
+      <p class="sr-empty" data-i18n="sub.rates.note">
         Hardest first. &ldquo;Marked&rdquo; counts only the answers Gravitas can
         check itself; written answers are yours to read and are counted under
-        &ldquo;unmarkable&rdquo; rather than as failures.
+        &ldquo;unmarkable&rdquo; rather than as failures. An exact duplicate is
+        counted once.
       </p>
       <div id="rates"></div>
-
-      <h2>Read</h2>
+      <h2 data-i18n="sub.read.title">Read</h2>
       <div id="who"></div>
       <div id="refused"></div>
-
+      <section class="sr-export" aria-labelledby="exportTitle">
+        <h2 id="exportTitle" data-i18n="sub.export.title">
+          Download the results
+        </h2>
+        <p class="sr-empty" data-i18n="sub.export.note">
+          The summary has one row per report; the question file has one row per
+          question per report. Exact duplicates and repeated attempts are kept
+          and marked, never merged or chosen between. Reports are grouped as
+          attempts only by roster id: a typed name is not an identity, so
+          without one nothing is grouped.
+        </p>
+        <p>
+          <input
+            id="includeWritten"
+            type="checkbox"
+            aria-describedby="includeWrittenNote"
+          />
+          <label for="includeWritten" data-i18n="sub.export.written"
+            >Include written answers (the students&rsquo; own words)</label
+          >
+        </p>
+        <p
+          id="includeWrittenNote"
+          class="sr-empty"
+          data-i18n="sub.export.writtenNote"
+        >
+          Off by default. Numbers and chosen options are always included,
+          because they are what each verdict was reached from.
+        </p>
+        <div class="sr-actions">
+          <button
+            id="exportSummary"
+            type="button"
+            class="ui-button"
+            disabled
+            data-i18n="sub.export.summaryCsv"
+          >
+            Summary (CSV)
+          </button>
+          <button
+            id="exportQuestions"
+            type="button"
+            class="ui-button"
+            disabled
+            data-i18n="sub.export.questionsCsv"
+          >
+            Question by question (CSV)
+          </button>
+          <button
+            id="exportJson"
+            type="button"
+            class="ui-button"
+            disabled
+            data-i18n="sub.export.json"
+          >
+            Everything (JSON)
+          </button>
+        </div>
+        <p id="exportEmpty" class="sr-empty" data-i18n="sub.export.empty">
+          Read at least one report to download results.
+        </p>
+        <p
+          id="exportStatus"
+          class="sr-empty"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </section>
       <hr />
-      <p class="sr-empty">
+      <p class="sr-empty" data-i18n="sub.notice">
         A submission token says what a student answered. It is not proof of who
         answered: it is computed in a browser, and anything a browser computes,
         whoever controls the browser can forge. What it saves you is typing.

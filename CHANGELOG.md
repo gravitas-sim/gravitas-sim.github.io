@@ -119,11 +119,22 @@ the release rather than in the tag.
   `/instructors/submissions/` takes a pile of those PDFs, JSON progress backups
   or pasted tokens and returns one table of per-question failure rates, hardest
   first. Each answer is graded under the language it was typed in, and written
-  answers are counted as unmarkable rather than wrong. There is no roster,
-  gradebook or export, nothing survives a reload, and nothing leaves the
-  browser. It verifies answers, not identity: a token computed in a browser can
-  be forged. The page needs no passphrase, is in English only, and is reached
-  by its address; nothing links to it yet.
+  answers are counted as unmarkable rather than wrong. What it reads can be
+  downloaded (below); there is no roster or gradebook, nothing survives a
+  reload, and nothing leaves the browser. It verifies answers, not identity: a
+  token computed in a browser can be forged. The page needs no passphrase, is in
+  English and Spanish, and is reached by its address; nothing links to it yet.
+- **The submission page's reading can be downloaded.** A summary CSV with one
+  row per report - roster and assignment ids when the link supplied them, the
+  name exactly as the student typed it, the lesson and its version, completion,
+  and counts of correct, incorrect, unmarked, incomplete and stale answers - a
+  question-level CSV with one row per graded step, and a versioned JSON document
+  with everything, including what was refused and why. All three and the
+  on-screen table come from one graded record per report. Nothing is merged or
+  chosen: an exact duplicate is kept and marked, repeated attempts are grouped
+  only by roster id and numbered by when they were saved, and without a roster
+  id nothing is grouped at all. Students' written answers are left out of both
+  exports unless the instructor ticks a labeled box.
 - **A classroom evidence kit at `/evaluation/`.** Printable instruments for an
   instructor who wants to evaluate a section: an implementation and fidelity
   checklist, a pilot pre/post concept assessment written against _Kepler's
@@ -235,6 +246,12 @@ the release rather than in the tag.
 
 ### Fixed
 
+- A CSV cell that starts like a spreadsheet formula was wrapped in quotes and
+  treated as safe, but a spreadsheet strips the quotes and runs what is inside.
+  Every export now prefixes such a cell with an apostrophe, so it opens as text,
+  and looks for the formula behind leading spaces, control characters and
+  full-width look-alikes; plain numbers are unchanged. The classroom evidence
+  kit, which had its own writer with no protection at all, uses the shared one.
 - At 900 px wide and below, a lesson with an instrument docked showed no
   question, no answer boxes and no Next button: the bottom sheet was capped in
   height with `overflow: hidden`, and the step body was the only part allowed to
