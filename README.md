@@ -375,10 +375,12 @@ obvious:
 - **So the built site gets its own spec.** `e2e/production.spec.js` touches
   nothing but the DOM and runs against `dist/`, defending what the source suite
   structurally cannot reach: chunk splitting, deferred imports, and assets the
-  build forgot to copy.
+  build forgot to copy. The self-containment, accessibility-parity and
+  sonification-text specs run there too, minus the tests that compare against
+  a module's own arrays.
 
   ```bash
-  npm run build && npm run e2e:dist   # the production spec against dist/
+  npm run build && npm run e2e:dist   # the dist/ specs against dist/
   npm run e2e:all                     # both targets
   ```
 

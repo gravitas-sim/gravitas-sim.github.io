@@ -78,8 +78,9 @@ const SHARDED = process.argv.some(arg => arg.startsWith('--shard'));
 const target = process.env.GRAVITAS_E2E_TARGET === 'dist' ? 'dist' : 'src';
 const serveRoot = target === 'dist' ? 'dist' : '.';
 
-// The production spec is DOM-only and is the only thing that can run against a
-// bundle; everything else needs module access and can only run against sources.
+// The production spec is DOM-only and runs against the bundle alone. Apart from
+// BOTH_TARGETS below, everything else needs module access and can only run
+// against sources.
 const PRODUCTION_SPEC = /production\.spec\.js/;
 
 /**
@@ -90,8 +91,15 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * resolve three.js, Chart.js and the fonts by the same relative paths, and the
  * whole point is that neither can quietly differ. Written DOM-only for the same
  * reason production.spec.js is - there is no /js/ui.js to import in dist/.
+ *
+ * e2e/accessibilityParity.spec.js and e2e/sonifyTextEquivalent.spec.js check
+ * claims ACCESSIBILITY.md makes to a reader - the keyboard placement form, the
+ * data tables, the printed voices - and a reader gets the bundle. Their
+ * DOM-only tests run here; the ones that compare against a module's own arrays
+ * carry a GRAVITAS_E2E_TARGET skip and stay on the sources.
  */
-const BOTH_TARGETS = /selfContained\.spec\.js/;
+const BOTH_TARGETS =
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js/;
 
 /**
  * Which engines to run.
