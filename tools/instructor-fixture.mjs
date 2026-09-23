@@ -61,6 +61,7 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
+  realpathSync,
   renameSync,
   rmSync,
   writeFileSync,
@@ -218,6 +219,26 @@ export function fixtureState({ root = REPO, fixture = FIXTURE_PATH } = {}) {
 }
 
 /**
+ * A path with every symlink in it resolved, including for a file or directory
+ * that does not exist yet: the nearest existing ancestor is resolved and the
+ * rest appended.
+ *
+ * @param {string} p - Any path
+ * @returns {string} Its real, absolute form
+ */
+function resolvedPath(p) {
+  let head = path.resolve(p);
+  const tail = [];
+  while (!existsSync(head)) {
+    const up = path.dirname(head);
+    if (up === head) break;
+    tail.unshift(path.basename(head));
+    head = up;
+  }
+  return path.join(existsSync(head) ? realpathSync(head) : head, ...tail);
+}
+
+/**
  * Write a file by writing a sibling and renaming it over, so a reader sees
  * the old file or the new one and never half of either.
  *
@@ -252,8 +273,12 @@ export function ensureFixture({ fixture = FIXTURE_PATH } = {}) {
   // The builder refuses a --fixture path that IS the production bundle, but it
   // is handed a temporary sibling here, and the rename afterwards is this
   // file's own. So the boundary is enforced here too, for the whole directory.
-  const target = path.resolve(fixture);
-  if (target === PUBLISHED || target.startsWith(PUBLISHED + path.sep)) {
+  // Compared as real paths, because a path through a symlink - macOS's /var
+  // is one, and so is any link a person makes - names the same directory with
+  // a different string, and a string comparison would let it through.
+  const target = resolvedPath(fixture);
+  const guarded = resolvedPath(PUBLISHED);
+  if (target === guarded || target.startsWith(guarded + path.sep)) {
     throw new Error(
       `Refusing to write a fixture into ${path.relative(REPO, PUBLISHED)}/: ` +
         'that directory holds the published, really-encrypted bundle and its ' +
@@ -268,24 +293,46 @@ export function ensureFixture({ fixture = FIXTURE_PATH } = {}) {
   mkdirSync(path.dirname(fixture), { recursive: true });
   const built = `${fixture}.${process.pid}.build.json`;
   try {
-    execFileSync(process.execPath, [BUILDER, '--fixture', built], {
-      cwd: REPO,
-      stdio: ['ignore', 'ignore', 'pipe'],
-    });
-    const bytes = readFileSync(built, 'utf8');
-    const shape = payloadProblem(bytes);
-    if (shape) throw new Error(`The builder wrote a fixture that ${shape}.`);
-    const stamp = {
-      note:
-        'Freshness record for the disposable instructor fixture beside it. ' +
-        'Written by tools/instructor-fixture.mjs; not a secret, not tracked.',
-      ...expectedStamp(),
-      fixtureSha256: sha256(bytes),
-    };
+    // The stamp has to describe the sources the builder actually read, so it
+    // is taken before and after the build and the two must agree. A file that
+    // changed underneath the build - an editor saving, another tool rewriting
+    // one - would otherwise be recorded as the input of output it never
+    // produced. Rebuilt once if they disagree; refused if they still do.
+    let stamp = null;
+    let bytes = null;
+    for (let attempt = 0; attempt < 2 && !stamp; attempt++) {
+      const before = expectedStamp();
+      execFileSync(process.execPath, [BUILDER, '--fixture', built], {
+        cwd: REPO,
+        stdio: ['ignore', 'ignore', 'pipe'],
+      });
+      bytes = readFileSync(built, 'utf8');
+      const shape = payloadProblem(bytes);
+      if (shape) throw new Error(`The builder wrote a fixture that ${shape}.`);
+      const after = expectedStamp();
+      if (before.sourceDigest === after.sourceDigest) stamp = after;
+    }
+    if (!stamp) {
+      throw new Error(
+        'The instructor sources changed while the fixture was being built, ' +
+          'twice. Nothing was stamped; run it again once they are settled.'
+      );
+    }
     renameSync(built, fixture);
     writeAtomically(
       stampPathFor(fixture),
-      JSON.stringify(stamp, null, 2) + '\n'
+      JSON.stringify(
+        {
+          note:
+            'Freshness record for the disposable instructor fixture beside ' +
+            'it. Written by tools/instructor-fixture.mjs; not a secret, not ' +
+            'tracked.',
+          ...stamp,
+          fixtureSha256: sha256(bytes),
+        },
+        null,
+        2
+      ) + '\n'
     );
     return { ...found, rebuilt: true, bytes };
   } finally {

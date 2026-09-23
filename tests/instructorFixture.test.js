@@ -21,18 +21,14 @@ import {
   mkdtempSync,
   readFileSync,
   rmSync,
+  symlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import {
-  ensureFixture,
-  expectedStamp,
-  fixtureState,
-  stampPathFor,
-} from '../tools/instructor-fixture.mjs';
+import * as real from '../tools/instructor-fixture.mjs';
 import { sourcePathsFor } from '../tools/instructor-freshness.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -45,6 +41,37 @@ function tempDir() {
   scratch.push(dir);
   return dir;
 }
+
+/**
+ * A copy of just the files the builder's closure covers, at a new root, plus
+ * what it takes to run them there: this module and package.json, which is
+ * what makes a `.js` file an ES module.
+ */
+function copyOfClosure() {
+  const root = tempDir();
+  const files = [
+    ...sourcePathsFor(REPO),
+    'tools/instructor-fixture.mjs',
+    'package.json',
+  ];
+  for (const file of files) {
+    mkdirSync(path.dirname(path.join(root, file)), { recursive: true });
+    copyFileSync(path.join(REPO, file), path.join(root, file));
+  }
+  return root;
+}
+
+// Every build and every verdict below happens in a private copy of the
+// builder's sources, through a copy of this module that resolves its paths
+// there. The real tree is shared with every other suite in the run, and two of
+// those rewrite a lesson file for a moment to test a failure; a verdict taken
+// against the real tree in that window is "stale", correctly, and a test that
+// asked for "fresh" fails for a reason that has nothing to do with this code.
+const SANDBOX = copyOfClosure();
+const { ensureFixture, expectedStamp, fixtureState, stampPathFor } =
+  await import(
+    pathToFileURL(path.join(SANDBOX, 'tools', 'instructor-fixture.mjs')).href
+  );
 
 /** A fixture path in its own directory, not yet built. */
 const freshPath = () => path.join(tempDir(), 'materials.enc.json');
@@ -61,16 +88,6 @@ function editStamp(fixture, change) {
   const at = stampPathFor(fixture);
   const stamp = JSON.parse(readFileSync(at, 'utf8'));
   writeFileSync(at, JSON.stringify({ ...stamp, ...change(stamp) }));
-}
-
-/** A copy of just the files the builder's closure covers, at a new root. */
-function copyOfClosure() {
-  const root = tempDir();
-  for (const file of sourcePathsFor(REPO)) {
-    mkdirSync(path.dirname(path.join(root, file)), { recursive: true });
-    copyFileSync(path.join(REPO, file), path.join(root, file));
-  }
-  return root;
 }
 
 afterAll(() => {
@@ -165,15 +182,17 @@ describe('the digest the stamp records', () => {
   test('covers exactly the closure the release digest covers', () => {
     // tests/instructorDigest.test.js proves that closure equals what Node
     // loads during a --fixture build, so equality here is completeness.
-    expect(Object.keys(expectedStamp().sources).sort()).toEqual(
+    expect(Object.keys(real.expectedStamp().sources).sort()).toEqual(
       sourcePathsFor(REPO)
     );
+    // And the private copy every other test builds in is that closure.
+    expect(sourcePathsFor(SANDBOX)).toEqual(sourcePathsFor(REPO));
   });
 
   test('is stable: the same tree gives the same stamp from anywhere', () => {
     const a = expectedStamp();
     const b = expectedStamp();
-    const copy = expectedStamp(copyOfClosure());
+    const copy = real.expectedStamp(copyOfClosure());
     expect(b).toEqual(a);
     expect(copy.sourceDigest).toBe(a.sourceDigest);
     expect(copy.sources).toEqual(a.sources);
@@ -213,12 +232,32 @@ describe('the boundary with the real bundle', () => {
   });
 
   test('a fixture path inside instructors/ is refused before anything is built', () => {
+    // The real module, against the real directory: it refuses before it
+    // builds, so nothing here can write there.
     const before = sha(published);
-    expect(() => ensureFixture({ fixture: published })).toThrow(/Refusing/);
+    expect(() => real.ensureFixture({ fixture: published })).toThrow(
+      /Refusing/
+    );
     expect(() =>
-      ensureFixture({ fixture: path.join(REPO, 'instructors', 'x', 'f.json') })
+      real.ensureFixture({
+        fixture: path.join(REPO, 'instructors', 'x', 'f.json'),
+      })
     ).toThrow(/Refusing/);
     expect(sha(published)).toBe(before);
+    // And the copy guards its own instructors/ the same way.
+    const own = path.join(SANDBOX, 'instructors', 'materials.enc.json');
+    expect(() => ensureFixture({ fixture: own })).toThrow(/Refusing/);
+    expect(existsSync(own)).toBe(false);
+  });
+
+  test('a path through a symlink does not get round the refusal', () => {
+    // The guard compares real paths. A link to the copy's root names its
+    // instructors/ with a different string, and must still be refused.
+    const link = path.join(tempDir(), 'link');
+    symlinkSync(SANDBOX, link, 'dir');
+    const via = path.join(link, 'instructors', 'materials.enc.json');
+    expect(() => ensureFixture({ fixture: via })).toThrow(/Refusing/);
+    expect(existsSync(path.join(SANDBOX, 'instructors'))).toBe(false);
   });
 
   test('the stamp names no secret: only digests and paths', () => {
