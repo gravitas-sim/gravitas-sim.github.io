@@ -108,15 +108,27 @@ async function measure(browser, base, route) {
   });
   const page = await context.newPage();
   const js = [];
-  page.on('response', async res => {
+  // Every body read still in flight. The response event fires before the body
+  // has arrived, so a total taken the moment the network goes quiet would
+  // leave out whatever was still being read - which is how a first version of
+  // this reported the same page 40 KB apart on two runs.
+  const reading = new Set();
+  page.on('response', res => {
     const url = res.url();
     if (!url.startsWith(base) || !/\.m?js(\?|$)/.test(url)) return;
-    try {
-      js.push((await res.body()).length);
-    } catch {
-      /* navigated away mid-body; not counted */
-    }
+    const read = res
+      .body()
+      .then(body => js.push(body.length))
+      .catch(() => {
+        /* navigated away mid-body; not counted */
+      })
+      .finally(() => reading.delete(read));
+    reading.add(read);
   });
+  const settled = async () => {
+    await page.waitForLoadState('networkidle').catch(() => {});
+    while (reading.size) await Promise.allSettled([...reading]);
+  };
   await page.goto(base + route.url, { waitUntil: 'domcontentloaded' });
   if (route.lesson) {
     await page.waitForFunction(
@@ -135,7 +147,7 @@ async function measure(browser, base, route) {
       timeout: 60_000,
     });
   }
-  await page.waitForLoadState('networkidle').catch(() => {});
+  await settled();
   const sum = xs => xs.reduce((a, b) => a + b, 0);
   const atUsable = [...js];
   let tool = null;
@@ -154,7 +166,7 @@ async function measure(browser, base, route) {
       null,
       { timeout: 60_000 }
     );
-    await page.waitForLoadState('networkidle').catch(() => {});
+    await settled();
     tool = [...js];
   }
   await context.close();
@@ -172,7 +184,16 @@ async function main() {
   const argv = process.argv.slice(2);
   const report = argv.includes('--report');
   const only = argv.find(a => a.startsWith('--config='))?.slice(9);
-  const budgets = JSON.parse(readFileSync(BUDGETS_FILE, 'utf8'));
+  // A report needs no ceilings - it is how the first ones are measured.
+  const budgets = existsSync(BUDGETS_FILE)
+    ? JSON.parse(readFileSync(BUDGETS_FILE, 'utf8'))
+    : { routes: {} };
+  if (!report && !existsSync(BUDGETS_FILE)) {
+    console.error(
+      `No ${path.relative(REPO, BUDGETS_FILE)}; nothing to check against.`
+    );
+    return 1;
+  }
   const configs = Object.keys(CONFIGS).filter(c => !only || c === only);
   const problems = [];
   const browser = await chromium.launch();
