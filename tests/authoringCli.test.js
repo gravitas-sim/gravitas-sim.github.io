@@ -20,9 +20,11 @@ import { afterEach, describe, test, expect } from '@jest/globals';
 import { execFile } from 'node:child_process';
 import {
   copyFile,
+  cp,
   mkdir,
   mkdtemp,
   readFile,
+  realpath,
   rm,
   writeFile,
 } from 'node:fs/promises';
@@ -68,23 +70,54 @@ describe('npm run author:check', () => {
     }
   }, 120_000);
 
-  test('and it still says no when a lesson is actually wrong', async () => {
-    // Broken on purpose, in the real tree, because the exit code is what the
-    // release gate reads and nothing else here proves it can be non-zero.
-    const file = path.join(REPO, 'js/data/investigations/tides.js');
-    const original = await readFile(file, 'utf8');
-    const broken = original.replace(
-      /^(\s*)sid: '/m,
-      "$1sid: '' , brokenOnPurpose: '"
+  /**
+   * A throwaway tree the CLI can run in: real copies of it and of js/.
+   *
+   * The CLI finds the catalog through its own static imports and reads the
+   * lesson sources relative to its cwd, so the two have to move together. All
+   * of js/ rather than the files it happens to import today, because a
+   * hand-kept list would be the next thing here to go stale.
+   */
+  async function copyOfCli() {
+    // realpath because macOS hands out /var/..., a symlink to /private/var/...,
+    // and a script whose argv disagrees with its import.meta.url can decide it
+    // was not run directly and exit 0 having done nothing.
+    const dir = await realpath(
+      await mkdtemp(path.join(tmpdir(), 'gravitas-author-check-'))
     );
-    expect(broken).not.toBe(original);
+    for (const rel of [
+      'package.json',
+      'js',
+      'tools/author-check.mjs',
+      'tools/authoring',
+    ]) {
+      await cp(path.join(REPO, rel), path.join(dir, rel), { recursive: true });
+    }
+    return dir;
+  }
+
+  test('and it still says no when a lesson is actually wrong', async () => {
+    // Broken on purpose, because the exit code is what the release gate reads
+    // and nothing else here proves it can be non-zero - but broken in a copy.
+    // It used to be the real tides.js, restored afterwards, and Jest runs
+    // suites in parallel: for as long as the command took, every other worker
+    // reading js/ saw a broken lesson, and buildIntegrity's two service-worker
+    // manifests could hash two different trees.
+    const dir = await copyOfCli();
     try {
+      const file = path.join(dir, 'js/data/investigations/tides.js');
+      const original = await readFile(file, 'utf8');
+      const broken = original.replace(
+        /^(\s*)sid: '/m,
+        "$1sid: '' , brokenOnPurpose: '"
+      );
+      expect(broken).not.toBe(original);
       await writeFile(file, broken);
       let exitCode = 0;
       let output = '';
       try {
         await run('node', ['tools/author-check.mjs', '--lesson=tides'], {
-          cwd: REPO,
+          cwd: dir,
           maxBuffer: 32 * 1024 * 1024,
         });
       } catch (err) {
@@ -93,10 +126,14 @@ describe('npm run author:check', () => {
       }
       expect(exitCode).not.toBe(0);
       expect(output).toMatch(/error/i);
+      // The finding itself, not only a failure: a copy missing a module the
+      // CLI imports also exits 1 with "Error" in its output, and would pass
+      // the two lines above without the lesson ever being read.
+      expect(output).toMatch(/sid "" is not usable as a key/);
+      expect(output).toMatch(/preview: \/\?author=tides&step=1/);
     } finally {
-      await writeFile(file, original);
+      await rm(dir, { recursive: true, force: true });
     }
-    expect(await readFile(file, 'utf8')).toBe(original);
   }, 120_000);
 });
 
