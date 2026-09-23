@@ -3467,6 +3467,10 @@ function goToStep(index, { rebuild = false } = {}) {
   save();
   renderStep();
   els.body.scrollTop = 0;
+  // On a narrow screen it is the whole sheet that scrolls, not the body, and
+  // Next sits at the bottom of it: without this the next step would open
+  // scrolled to wherever the reader had to go to press it.
+  els.panel.scrollTop = 0;
 }
 
 function next() {

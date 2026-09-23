@@ -112,6 +112,28 @@ const isSetupOrReporting = (step, command) =>
   CI_SETUP_STEPS.includes(step) ||
   CI_SETUP_COMMANDS.some(prefix => command.startsWith(prefix));
 
+/**
+ * Whether a CI command runs a registry entry: the entry's own command, the
+ * same with CI's trailing `-- --flags`, or a named equivalence for it.
+ *
+ * One definition for both directions of the job check, so "claims a job and is
+ * not in it" and "claims no job and is in one" cannot come to disagree about
+ * what being in a job means.
+ *
+ * @param {object} check A registry entry
+ * @returns {(command: string) => boolean} True for a command that runs it
+ */
+function runsCheck(check) {
+  const joined = check.command.join(' ');
+  const equivalent = Object.entries(CI_EQUIVALENTS)
+    .filter(([, id]) => id === check.id)
+    .map(([command]) => command);
+  return command =>
+    command === joined ||
+    command.replace(/\s+--\s+.*$/, '') === joined ||
+    equivalent.includes(command);
+}
+
 describe('the check registry', () => {
   test('every entry is well formed', () => {
     const ids = new Set();
@@ -237,19 +259,38 @@ describe('drift between CI and the release gate', () => {
     const missing = [];
     for (const check of CHECKS.filter(c => c.ci)) {
       const inJob = byJob.get(check.ci) || [];
-      const joined = check.command.join(' ');
-      const equivalent = Object.entries(CI_EQUIVALENTS)
-        .filter(([, id]) => id === check.id)
-        .map(([command]) => command);
-      const found = inJob.some(
-        command =>
-          command === joined ||
-          command.replace(/\s+--\s+.*$/, '') === joined ||
-          equivalent.includes(command)
-      );
-      if (!found) missing.push(`${check.id} claims job "${check.ci}"`);
+      if (!inJob.some(runsCheck(check))) {
+        missing.push(`${check.id} claims job "${check.ci}"`);
+      }
     }
     expect(missing).toEqual([]);
+  });
+
+  // The other direction. The test above visits only entries that name a job,
+  // and the orphan test asks only whether a CI command is registered, not what
+  // its entry claims - so an entry could say `ci: null`, give a `why` for being
+  // gate-only, run in CI regardless, and every test here passed. That is how a
+  // `why` goes stale: the check moves into CI and the registry goes on saying
+  // it cannot.
+  //
+  // `docs` is the case that looks like one and is not. CI runs
+  // docs:check:tests and docs:check:build, which are the two halves of
+  // `docs-full`, and never `npm run docs:check` itself.
+  test('a registry entry claiming no CI job appears in none', () => {
+    const gateOnly = CHECKS.filter(c => c.ci === null);
+    // Not vacuous: there are gate-only checks for this to visit.
+    expect(gateOnly.length).toBeGreaterThan(0);
+    const inCi = [];
+    for (const check of gateOnly) {
+      const runs = runsCheck(check);
+      const jobs = new Set(
+        commands.filter(({ command }) => runs(command)).map(({ job }) => job)
+      );
+      for (const job of jobs) {
+        inCi.push(`${check.id} is ci: null but runs in job "${job}"`);
+      }
+    }
+    expect(inCi).toEqual([]);
   });
 
   // The accessibility job is the deliberate case: CI runs two specs as their

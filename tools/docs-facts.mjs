@@ -75,10 +75,31 @@ import {
 } from './generated-blocks.mjs';
 import { RELEASE } from './project-metadata.mjs';
 import { CHECKS } from './checks.mjs';
+import {
+  catalogLayout,
+  completeCatalogs,
+  registeredLocales,
+} from './i18n-catalog.mjs';
 import { inOwnTransformCache } from './playwright-cache.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const rel = p => relative(REPO, p) || '.';
+
+/**
+ * Every message-catalog file, by the one rule tools/i18n-catalog.mjs applies.
+ *
+ * Both of this tool's catalog readers used to list files by hand: the document
+ * list named four of the ten, and `uiStrings` counted two, so README.md
+ * published 3691 strings over a catalog of 4017 - every id in the activities,
+ * teaching and placement fragments was missing from the count.
+ */
+const CATALOG_FILES = catalogLayout({
+  locales: await registeredLocales(),
+}).files.map(f => `js/i18n/${f.file}`);
+
+/** The merged catalogs, loaded once however many facts and checks ask. */
+let catalogs;
+const loadCatalogs = () => (catalogs ??= completeCatalogs());
 
 // The documents this tool is responsible for. A file not listed here can still
 // carry markers; it just will not be found by --sync or --check.
@@ -110,11 +131,10 @@ const DOCS = [
   // The locale catalogs make the same claim the pages do, in two languages,
   // and were the last place still saying 135 when the suite had reached 243.
   // A marker cannot go in a translated string - it would be rendered to the
-  // reader - so these are matched by pattern below instead.
-  'js/i18n/en.js',
-  'js/i18n/es.js',
-  'js/i18n/en.deferred.js',
-  'js/i18n/es.deferred.js',
+  // reader - so these are matched by pattern below instead. Every fragment,
+  // not the four that were listed here, so a claim written into the teaching
+  // or placement catalog is held to the source like any other.
+  ...CATALOG_FILES,
   'validation/index.html',
   'instructors/index.html',
   'CHANGELOG.md',
@@ -341,13 +361,11 @@ async function cheapFacts() {
   const { LOCALES } = await import(
     new URL('../js/i18n/index.js', import.meta.url)
   );
-  const { EN } = await import(new URL('../js/i18n/en.js', import.meta.url));
-  // The other half of the same catalog. Imported here rather than at the top
-  // of the file so that a failure to read it is a failure of this fact and not
-  // of the whole tool.
-  const { EN_DEFERRED } = await import(
-    new URL('../js/i18n/en.deferred.js', import.meta.url)
-  );
+  // The whole catalog of the source locale, every fragment merged. Read here
+  // rather than at the top of the file so that a failure to read it is a
+  // failure of this fact and not of the whole tool.
+  const { catalogs: byLocale } = await loadCatalogs();
+  const sourceCatalog = byLocale.get(LOCALES[0].id).merged;
   const { INVESTIGATIONS } = await import(
     new URL('../js/data/investigations.js', import.meta.url)
   );
@@ -381,16 +399,19 @@ async function cheapFacts() {
     objectives: MANIFEST.reduce((sum, l) => sum + l.objectiveCount, 0),
     locales: LOCALES.length,
     localeNames: LOCALES.map(l => l.endonym).join(', '),
-    // Base plus deferred, de-duplicated.
+    // Every fragment of the source locale's catalog, each id counted once.
     //
     // This counted the base catalog alone, so every string moved out of the
     // start-up path to keep the download budget silently left the total: the
     // widget and panel families that went deferred took the reported figure
-    // from 1620 down to 1295 while the application gained strings. The two
-    // halves are one catalog as far as a reader is concerned, and
-    // tests/i18n.test.js already guarantees no id is in both, so a union is
-    // the right count and the Set is a guard rather than a fix.
-    uiStrings: new Set([...Object.keys(EN), ...Object.keys(EN_DEFERRED)]).size,
+    // from 1620 down to 1295 while the application gained strings. The fix
+    // then named the deferred half, and the same thing happened again three
+    // splits later: activities, teaching and placement were 326 strings the
+    // count could not see. The fragments now come from the directory, an id
+    // that a fragment only passes on (teaching re-exports activities) is
+    // counted where it is defined, and an id defined twice is a failure of
+    // checkCatalogs() below rather than something a Set quietly absorbs.
+    uiStrings: Object.keys(sourceCatalog).length,
     // How many scenarios the stability audit actually covers. Read out of the
     // tool's own list rather than assumed to be all of them: /model/ claimed
     // the audit ran over "all 48 shipped scenarios" when it runs over twelve
@@ -1097,6 +1118,23 @@ async function checkModelNoteClaims() {
   return problems;
 }
 
+/**
+ * Whether the catalog `uiStrings` counts is one catalog at all.
+ *
+ * A fragment in one language only, an id defined in two fragments or a
+ * fragment that exports under the wrong name each make the count describe
+ * something other than what a reader can load, so a count taken over a broken
+ * layout is a failure here rather than a number written into README.md.
+ * tools/i18n-audit.mjs reports the same problems; this is the half that stops
+ * `docs:sync` from publishing over them.
+ *
+ * @returns {Promise<string[]>} Problems, prefixed with where they are
+ */
+async function checkCatalogs() {
+  const { problems } = await loadCatalogs();
+  return problems.map(p => `js/i18n: ${p}`);
+}
+
 async function checkSpecIndex() {
   const readme = join(REPO, 'e2e', 'README.md');
   if (!existsSync(readme)) return [];
@@ -1276,6 +1314,7 @@ async function main() {
     ...(await checkSpecIndex()),
     ...(await checkCitationMetadata(facts)),
     ...(await checkModelNoteClaims()),
+    ...(await checkCatalogs()),
   ];
   const stale = results.flatMap(r => r.stale.map(s => ({ ...s, doc: r.path })));
   const unknown = results.flatMap(r =>
