@@ -662,6 +662,38 @@
           which is a real calculation but not a measurement of anything.
         </p>
       </div>
+      <div class="doc-feature">
+        <h3>Five events from the open archive</h3>
+        <p>
+          <span class="doc-badge is-measured">Measured</span> Thirty-two seconds
+          of 4096 Hz strain from each of GW150914, GW170817, GW190412, GW190521
+          and GW190814, as the
+          <a href="https://gwosc.org">Gravitational Wave Open Science Center</a>
+          releases it under CC BY 4.0, one LIGO detector per event. Retrieved at
+          build time against pinned checksums and committed; the browser never
+          contacts the archive.
+        </p>
+        <p>
+          Unlike the figure data above, this is processed here, and every step
+          is recorded with the data. Each detector's noise is estimated from the
+          same thirty-two seconds by a median Welch average &mdash; the four
+          black-hole events leave out the three seconds around the merger, and
+          the neutron-star event cannot, because it is in band throughout. The
+          strain is whitened by that estimate between 20 and 400 Hz, not by the
+          design curve the lab's synthetic noise uses, and a constant-Q map is
+          computed from it. What Gravitas measures from the map is stated with
+          the threshold it uses: the last instant anything clears the noise,
+          and the loudest frequency at fixed times before it.
+        </p>
+        <p>
+          The masses, distances, redshifts and signal-to-noise ratios beside the
+          map are catalog values from GWTC-1 and GWTC-2.1, copied and labeled as
+          not measured here. No chirp mass is measured from the strain: an
+          estimate was built, was unstable across the five events, and was left
+          out. The dashed track over the map is the lab's leading-order chirp
+          for the catalog chirp mass, and it is labeled as a model.
+        </p>
+      </div>
       <div class="doc-note">
         <p>
           <strong>Good for:</strong> the chirp and why it rises, the chirp mass
@@ -670,7 +702,7 @@
           difference between a measurement, a model and an illustration.
           <br />
           <strong>Not for:</strong> merger or ringdown waveforms, parameter
-          estimation, detection statistics, neutron-star post-merger physics, or
+          estimation, detection statistics, measuring a mass from real strain, neutron-star post-merger physics, or
           anything that depends on spin, tides or eccentricity.
         </p>
       </div>
@@ -2501,7 +2533,7 @@
             </tr>
             <tr>
               <td>Listening to Spacetime</td>
-              <td>The lab computes a leading-order quadrupole inspiral of two point masses on circular orbits - Peters (1964) for the radiation reaction, Maggiore chapter 4 for the closed forms - with no spin, no eccentricity, no tides and no higher post-Newtonian terms. Masses are detector-frame throughout and no cosmology is assumed anywhere. It is terminated at the Schwarzschild innermost stable circular orbit of the total mass, 4397 Hz divided by the total mass in solar masses, and is never extrapolated past it. The interface reports the orbital velocity parameter with a three-band verdict, because the terms the model drops enter at the square of that number and there is no frequency at which the approximation simply stops being valid. The detector response places the source directly overhead with polarization angle zero, so the plotted strain is the plus polarization alone and the distance-inclination degeneracy appears in its simplest form. Synthetic noise is colored to a published analytic fit to the Advanced LIGO zero-detuning high-power design curve and seeded, so it is reproducible and does not change under a parameter sweep. The GW150914 traces are the figure data published with Abbott et al. (2016), Phys. Rev. Lett. 116, 061102, doi:10.1103/PhysRevLett.116.061102, released by the Gravitational Wave Open Science Center under CC BY 4.0. They were decimated from 16384 Hz and quantized to 16 bits; nothing was shifted, inverted, filtered or aligned. The Hanford-Livingston lag and sign are measured by the build and recorded, not applied. None of this is the ordinary sandbox. Its inspirals run on a damping constant and its sounds are quantized onto a musical scale, and the lesson says so on screen 2. The full specification, including what is deliberately absent, is at https://gravitas-sim.online/model/#gravitational-waves.</td>
+              <td>The lab computes a leading-order quadrupole inspiral of two point masses on circular orbits - Peters (1964) for the radiation reaction, Maggiore chapter 4 for the closed forms - with no spin, no eccentricity, no tides and no higher post-Newtonian terms. Masses are detector-frame throughout and no cosmology is assumed anywhere. It is terminated at the Schwarzschild innermost stable circular orbit of the total mass, 4397 Hz divided by the total mass in solar masses, and is never extrapolated past it. The interface reports the orbital velocity parameter with a three-band verdict, because the terms the model drops enter at the square of that number and there is no frequency at which the approximation simply stops being valid. The detector response places the source directly overhead with polarization angle zero, so the plotted strain is the plus polarization alone and the distance-inclination degeneracy appears in its simplest form. Synthetic noise is colored to a published analytic fit to the Advanced LIGO zero-detuning high-power design curve and seeded, so it is reproducible and does not change under a parameter sweep. The GW150914 traces are the figure data published with Abbott et al. (2016), Phys. Rev. Lett. 116, 061102, doi:10.1103/PhysRevLett.116.061102, released by the Gravitational Wave Open Science Center under CC BY 4.0. They were decimated from 16384 Hz and quantized to 16 bits; nothing was shifted, inverted, filtered or aligned. The Hanford-Livingston lag and sign are measured by the build and recorded, not applied. Screens 23-29 use a second instrument over a second dataset: thirty-two seconds of 4096 Hz strain for each of five events, retrieved from the GWOSC event API at build time with pinned checksums and committed as one detector per event. Gravitas whitens each by a median Welch estimate of that detector's own noise in the same thirty-two seconds - not the design curve the lab's synthetic noise uses - and computes a constant-Q map from it. What it measures is stated on screen: the last instant anything clears a noise threshold derived from the number of pixels searched, and the loudest frequency at fixed times before it. It does not measure a chirp mass; one was built, was unstable across the five events, and was left out. The masses, distances, redshifts and signal-to-noise ratios are copied from GWTC-1 and GWTC-2.1, shown under a heading that says so, and held until the student turns them on. The model track on screen 28 is the lab's leading-order chirp for the catalog chirp mass times one plus the catalog redshift, which is the one place this lesson uses a cosmological quantity, and it is a catalog value rather than an assumption. None of this is the ordinary sandbox. Its inspirals run on a damping constant and its sounds are quantized onto a musical scale, and the lesson says so on screen 2. The full specification, including what is deliberately absent, is at https://gravitas-sim.online/model/#gravitational-waves.</td>
             </tr>
             <tr>
               <td>A Universe of Stars</td>

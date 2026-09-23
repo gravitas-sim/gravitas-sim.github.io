@@ -4573,7 +4573,11 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The real data. Students find the seven-millisecond shift and the sign flip themselves before the readout confirms them, then see the residual. Do not shortcut the finding.',
       },
       {
-        steps: '23-25',
+        steps: '23-29',
+        text: 'Five more mergers, read from open strain. The measurement screen and the ranking prediction are the core: students rank four pairs by chirp mass from a frequency they read themselves, before any catalog value is on the screen, and the catalog confirms it. Budget twenty minutes. Screen 27 is where the class learns why the highest signal-to-noise event is the one with nothing measurable on its map, and screen 29 asks the question the whole block is for: what was measured here, and what was supplied.',
+      },
+      {
+        steps: '30-32',
         text: 'The open challenge and the written conclusion. Budget fifteen minutes: the challenge is the only screen with no right answer and it is where the experimental-control habit either shows up or does not. The last screen is a closing summary: what the chirp fixes, what it leaves open, and why a chirp is not a detection.',
       },
     ],
@@ -4663,6 +4667,12 @@ export const INSTRUCTOR_CONTENT = {
         response:
           'Screen 20 is built to break this. A wrong-mass template still scores well, and a correct template scores well against a signal buried in noise. The number is a similarity and the lesson never calls it anything else; a detection claim needs a background estimate the lab does not have.',
       },
+      {
+        claim:
+          'Gravitas found nothing in the GW170817 recording, so the detectors did not really see it.',
+        response:
+          'Two different questions. The map asks whether one pixel - one frequency, one instant - is louder than the noise could make it, and for a light pair spread over nearly a minute of cycles no single pixel is. The catalog signal-to-noise ratio of 33 comes from a matched filter that adds every cycle together against a template before asking the same question of the total. Screen 27 is built around this contrast; the readout says Gravitas does not run that search. A student who concludes that the instrument on this screen is weaker than the search, rather than that the event is doubtful, has it right.',
+      },
     ],
     teachingNotes: [
       'The whole lesson can be completed with the sound off, and this is tested rather than asserted. Say so at the start: students on a shared machine or with hearing loss should not be wondering whether they are missing the point of the exercise. The frequency plot carries the same information as the pitch.',
@@ -4702,7 +4712,13 @@ export const INSTRUCTOR_CONTENT = {
       20: 'The correct template near 0.9 or above, the wrong-mass template somewhere around 0.3 to 0.6, and the distant case still scoring high because the overlap is blind to amplitude. That last one is the finding: similarity does not fall with distance, which is precisely why it cannot be a detection statistic.',
       21: 'A shift near 7 ms with the sign flipped, at which the two traces visibly line up. The readout reports -7.3 ms and a correlation of -0.76 as measured from the published files.',
       22: 'The measurement and the reconstruction agreeing closely through the last cycles, and a residual that is as loud before the signal arrives as after it. The rapid die-away at the end is the ringdown and this lesson’s own model does not produce it.',
-      23: 'Any controlled comparison with one variable and a saved capture. Distance and viewing angle change amplitude alone; mass changes the shape as well, so a mass change is two effects and a good answer says so.',
+      23: 'Five maps, four with a visible curve that climbs and stops, and an "End of the chirp" line for each of those four. For GW170817 the line says nothing clears the noise, and no end is measured. Expect some students to say they can see a faint track on its map anyway; that is worth keeping for screen 27.',
+      24: 'About 58, 69, 55 and 104 Hz for GW150914, GW190412, GW190521 and GW190814, read from the line for a twentieth of a second before the end. The validator accepts anything within twelve per cent and names the event that is off. GW170817 has no reading and is not asked for.',
+      26: 'Where the ranking prediction on screen 25 is marked, and the answer is GW190521: the lowest frequency at the same moment before the end, and no reading at a tenth of a second, both point the same way. The common wrong answer is GW190814, from "higher frequency, more energy"; the marking is held until this screen so the catalog settles it rather than the answer key. Chirp masses of about 63, 28, 13 and 6 solar masses for GW190521, GW150914, GW190412 and GW190814, in the order the ranking predicted, and GW170817 at 1.186. The distance of GW190521 is about seven times that of GW150914, and its redshift of 0.56 is why its detector-frame chirp mass is near 99.',
+      27: 'No measured end for GW170817, a catalog signal-to-noise ratio of 33 - the highest of the five - and a six-and-a-half-second map against three for the others. Students may report a faint track in the last two seconds, climbing from about 110 to 190 Hz, and they are right that it is where the model puts the signal. Its loudest pixel there reaches about 18, where the threshold for a search of the whole six-and-a-half-second map is about 26 - noise alone would put a couple of dozen pixels above 14 somewhere in a map that size. Expect some students to point instead at the brightest patch, near 37 Hz about four seconds before the catalog time. It is not on the track, and at about 25 it is still below that threshold. The track is real and not measurable here; the brighter patch is measurable-looking and not real. That contrast is the screen in miniature.',
+      28: 'For GW150914 the model gives about 42 and 55 Hz against a measured 43 and 58. For GW190814 it gives about 112 and 145 Hz against 90 and 104. For GW190521 the model line appears only in the last few hundredths of a second, because the leading-order chirp for about 99 detector-frame solar masses is below 30 Hz until then. For GW170817 it gives about 55 seconds in band from 30 Hz.',
+      29: 'A sort into two lists, with the model track correctly placed in neither. The strongest answers name the ranking as the conclusion that needed both kinds: a measured frequency order that predicted a catalog mass order.',
+      30: 'Any controlled comparison with one variable and a saved capture. Distance and viewing angle change amplitude alone; mass changes the shape as well, so a mass change is two effects and a good answer says so.',
     },
     modelNotes: `The lab computes a leading-order quadrupole inspiral of two point masses on
       circular orbits - Peters (1964) for the radiation reaction, Maggiore chapter 4 for the
@@ -4723,6 +4739,19 @@ export const INSTRUCTOR_CONTENT = {
       Open Science Center under CC BY 4.0. They were decimated from 16384 Hz and quantized to
       16 bits; nothing was shifted, inverted, filtered or aligned. The Hanford-Livingston lag and
       sign are measured by the build and recorded, not applied.
+      \n\nScreens 23-29 use a second instrument over a second dataset: thirty-two seconds of
+      4096 Hz strain for each of five events, retrieved from the GWOSC event API at build time with
+      pinned checksums and committed as one detector per event. Gravitas whitens each by a median
+      Welch estimate of that detector's own noise in the same thirty-two seconds - not the design
+      curve the lab's synthetic noise uses - and computes a constant-Q map from it. What it
+      measures is stated on screen: the last instant anything clears a noise threshold derived
+      from the number of pixels searched, and the loudest frequency at fixed times before it.
+      It does not measure a chirp mass; one was built, was unstable across the five events, and
+      was left out. The masses, distances, redshifts and signal-to-noise ratios are copied from
+      GWTC-1 and GWTC-2.1, shown under a heading that says so, and held until the student
+      turns them on. The model track on screen 28 is the lab's leading-order chirp for the
+      catalog chirp mass times one plus the catalog redshift, which is the one place this lesson
+      uses a cosmological quantity, and it is a catalog value rather than an assumption.
       \n\nNone of this is the ordinary sandbox. Its inspirals run on a damping constant and its
       sounds are quantized onto a musical scale, and the lesson says so on screen 2. The full
       specification, including what is deliberately absent, is at ${MODEL_PAGE}#gravitational-waves.`,

@@ -15,10 +15,10 @@ export default {
   title: 'Escuchar el espacio-tiempo',
   series: 'Ondas gravitacionales',
   subtitle: 'Averigua qué produjo una señal y compárala luego con la cosa real',
-  duration: '60-75 min',
+  duration: '75-90 min',
   level: 'Astronomía introductoria',
   summary:
-    'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. A lo largo de veinticuatro pasos averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, y terminas comparando tu respuesta con lo que dos detectores en Luisiana y Washington registraron de verdad en septiembre de 2015. Puedes hacerlo todo con el sonido apagado.',
+    'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. Averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, comparas tu respuesta con lo que registraron dos detectores en septiembre de 2015, y luego mides tú mismo cinco fusiones más del archivo abierto. Puedes hacerlo todo con el sonido apagado.',
   objectives: [
     'Leer una gráfica de deformación frente al tiempo y otra de frecuencia frente al tiempo de la misma señal',
     'Explicar por qué la frecuencia de la onda es el doble de la frecuencia orbital',
@@ -28,6 +28,7 @@ export default {
     'Decir dónde deja de ser fiable un modelo de espiral a orden principal, y por qué',
     'Distinguir una medida, un modelo y una ilustración en la misma imagen',
     'Explicar por qué una señal que parece y suena como un chirrido todavía no es una detección',
+    'Decir qué números sobre un evento real se midieron a partir de su deformación y cuáles aportó un catálogo',
   ],
   steps: [
     {
@@ -304,6 +305,86 @@ export default {
         'Lee la línea «Lo que queda» en la lectura',
       ],
       tip: 'El decaimiento rápido del final es el timbre: un único agujero negro recién formado asentándose. Nada en el modelo propio de esta lección lo produce, y nada en esta lección fingió lo contrario.',
+    },
+    {
+      title: 'Cinco fusiones más, del archivo',
+      body: 'Los pasos 21 y 22 eran un solo evento, tal como lo publicó el artículo del descubrimiento. Estos son cinco, tal como los registraron los detectores: treinta y dos segundos de deformación de cada uno, descargados del Gravitational Wave Open Science Center, y un detector dibujado por evento.\n\nEl mapa es esa grabación, blanqueada por Gravitas con el ruido que tenía el mismo detector en los mismos treinta y dos segundos, y desplegada en tiempo y frecuencia. Una mancha brillante es energía más intensa que el propio ruido de ese detector, a esa frecuencia, en ese instante. Un chirrido es una curva en el mapa que sube y luego se detiene.\n\nLa lectura mantiene separadas cuatro clases de número, bajo cuatro encabezados: lo que se <strong>observó</strong>, lo que Gravitas <strong>midió</strong> a partir de ello, lo que dice el <strong>catálogo GWOSC</strong> y lo que predice el <strong>modelo</strong>. Por ahora el catálogo está reservado y el modelo desactivado.\n\n<strong>La pareja del lienzo no es ninguno de estos cinco.</strong> Es la binaria modelo del laboratorio de antes, todavía donde estaba. Nada del panel la mueve.',
+      checklist: [
+        'Recorre las cinco grabaciones con el control de evento',
+        'En cada mapa, busca la curva que sube y luego se detiene',
+        'Lee la línea «Final del chirrido» de cada una: el último instante en que Gravitas encontró algo más intenso que el ruido',
+        'Encuentra la única grabación para la que Gravitas no mide ningún final',
+        'Fíjate en qué curvas siguen visibles más tiempo antes de su final',
+      ],
+      tip: 'Cada hora del catálogo se publica con una décima de segundo, lo cual es demasiado grueso para situar una fusión con unas milésimas. Por eso Gravitas encuentra el final de cada chirrido en los datos, y todo «antes del final» en estas pantallas se cuenta hacia atrás desde ahí.',
+    },
+    {
+      title: 'El mismo momento antes del final',
+      body: 'En el laboratorio, una pareja más ligera estaba a una frecuencia más alta que una más pesada al mismo tiempo antes de su fusión, y se quedaba más tiempo en banda. Esa era la predicción del modelo. Estas grabaciones son una ocasión de ver si las binarias reales lo hacen.\n\nLas dos líneas marcadas <strong>Los cinco</strong> dan la frecuencia más intensa que Gravitas encontró en el mismo momento antes del final de cada chirrido: una décima de segundo y una vigésima. Un guion no es cero. Significa que nada en ese instante era más intenso de lo que el ruido del detector podría haber producido por azar.\n\nAnota las cuatro que tienen lectura una vigésima de segundo antes del final.',
+      fields: [
+        { label: 'GW150914, 0,05 s antes del final' },
+        { label: 'GW190412' },
+        { label: 'GW190521' },
+        { label: 'GW190814' },
+      ],
+      tip: 'Mira también la línea de la décima de segundo. GW190521 tiene un guion ahí pero una lectura a la vigésima: fuera lo que fuese, solo se hizo visible en las últimas centésimas de segundo.',
+    },
+    {
+      title: '¿Cuál era la más pesada?',
+      body: 'Antes de que haya ninguna masa en pantalla: a partir de tus cuatro lecturas, y de lo que te enseñó el laboratorio, ¿cuál de estas parejas tenía la mayor masa de chirrido?\n\nUsa también la línea de la décima de segundo, además de la que anotaste. Cuánto tiempo sigue visible un chirrido también es evidencia.',
+      prompt: 'De las cuatro con lectura, la mayor masa de chirrido es la de…',
+      options: [
+        'GW190814: llegó a la frecuencia más alta, y una pareja más pesada tiene más energía que radiar',
+        'GW190521: era la más baja en el mismo momento antes del final, y la que estuvo visible menos tiempo',
+        'GW150914: su curva es la más brillante de su mapa',
+        'ninguna puede ordenarse hasta conocer las distancias',
+      ],
+      because:
+        'GW190521. En el laboratorio, una pareja más pesada estaba a una frecuencia más baja al mismo tiempo antes de su fusión y pasaba menos tiempo en banda, y GW190521 hace las dos cosas: 55 Hz una vigésima de segundo antes de su final, y nada medible una décima antes, porque una pareja tan pesada aún estaba por debajo de la banda. La primera respuesta es la trampa: una frecuencia más alta en el mismo momento significa una pareja más ligera, no más pesada. La tercera y la cuarta hablan del brillo, que sí depende de la distancia y de cómo está inclinada la órbita respecto a nosotros. La frecuencia no, salvo por un efecto de la distancia que la pantalla siguiente corrige.',
+    },
+    {
+      title: 'Lo que dice el catálogo',
+      body: 'Pon el control del catálogo en <strong>visibles</strong> y recorre otra vez los cinco. Estos números son de GWOSC, no de Gravitas: masas, distancia y relación señal-ruido, cada uno con el intervalo que publicaron las colaboraciones. Salen de ajustar modelos completos de forma de onda a los datos de todos los detectores a la vez, un cálculo mucho mayor que nada de lo que hay en esta pantalla, y están bajo un encabezado que dice que <em>no se midieron aquí</em>.\n\nOrdena las cuatro que clasificaste por masa de chirrido y compáralo con tu clasificación.\n\nLuego mira las distancias. GW190521 está unas siete veces más lejos que GW150914, y el espacio se expandió mientras su onda venía hacia aquí, estirándola. Un chirrido estirado se parece exactamente al chirrido de una pareja más pesada. Lo que mide un detector es la masa de chirrido multiplicada por uno más el corrimiento al rojo: para GW150914 eso es un diez por ciento más, y para GW190521, más de la mitad otra vez.',
+      checklist: [
+        'Pon el control del catálogo en «visibles»',
+        'Lee la masa de chirrido de cada uno de los cinco',
+        'Ordena las cuatro que clasificaste por masa de chirrido y compáralo con tu predicción',
+        'Busca la distancia de GW190521 y compárala con la de GW150914',
+        'Comprueba bajo qué encabezado está cada número que has usado hasta ahora',
+        'Busca la masa de chirrido de GW170817 y el tamaño de su intervalo',
+      ],
+      tip: 'El catálogo da masas en el sistema de la fuente: lo que pesaría la pareja si estuviera al lado. El corrimiento al rojo que las convierte también es un valor del catálogo, y el modelo de una pantalla posterior usa el producto de los dos.',
+    },
+    {
+      title: 'La más intensa, y la que Gravitas no puede medir',
+      body: 'GW170817 es la pareja de estrellas de neutrones cuya colisión también se vio como un estallido de rayos gamma, y luego como una fuente nueva de luz en una galaxia a unos cuarenta megapársecs. Su relación señal-ruido en el catálogo es 33, la más alta de las cinco. Y en su grabación, Gravitas no encuentra nada más intenso que el ruido.\n\nLas dos cosas son ciertas. La diferencia está en cómo se obtuvieron los dos números. El mapa pregunta si un píxel (una frecuencia, un instante) es más intenso de lo que el ruido podría hacerlo. Una pareja de estrellas de neutrones es ligera, así que su chirrido es débil en cada momento y muy largo: el modelo del laboratorio dice que pasa casi un minuto en la banda, miles de ciclos. El número del catálogo sale de un filtro adaptado que suma todos esos ciclos contra una plantilla antes de preguntar si el total es más intenso que el ruido. Gravitas no ejecuta esa búsqueda, y la lectura lo dice.\n\nLa última décima de segundo, donde terminan los chirridos de las parejas más pesadas, tampoco ayuda: una pareja tan ligera ya pasa de 300 Hz entonces y sigue subiendo por encima del borde superior del mapa cuando se fusiona.',
+      checklist: [
+        'Selecciona GW170817 y lee la línea «Final del chirrido»',
+        'Mira con atención los dos últimos segundos de su mapa y decide si ves una traza',
+        'Compara su relación señal-ruido con la de los otros cuatro',
+        'Fíjate en el eje de tiempo: este mapa cubre seis segundos y medio, los otros tres',
+      ],
+      tip: 'Para este evento se dibuja Hanford y no Livingston porque Livingston registró una fuerte perturbación instrumental alrededor de un segundo antes de la fusión, documentada en la página del evento en GWOSC. Las colaboraciones la eliminaron antes de su análisis; Gravitas usa el detector que no necesitaba reparación.',
+    },
+    {
+      title: 'El modelo del laboratorio, sobre las grabaciones',
+      body: 'Activa ahora la traza del modelo. La línea discontinua es el mismo chirrido de orden más bajo que calculó el laboratorio, dibujado para la masa de chirrido en el sistema del detector de cada evento y terminando donde Gravitas midió el final del chirrido. Nada de ella se ajusta al mapa. Necesita la masa de chirrido del catálogo, así que sigue desactivada mientras el catálogo esté reservado.\n\nPara GW150914 el modelo y la medida coinciden con unos pocos hercios, lo que es un buen resultado para el evento alrededor del cual se construyó el laboratorio. Recorre los otros y encuentra dónde deja de haber acuerdo.\n\nDonde no coinciden lo bastante, el desacuerdo está en la grabación y no en el mapa. Un chirrido de orden más bajo puro, sumado a ruido y leído exactamente con el mismo procedimiento, vuelve con un error de menos de una sexta parte de la frecuencia que se puso, tan a menudo por encima como por debajo. Una vigésima de segundo antes de su final, GW190814 está más de una cuarta parte por debajo del modelo: más de lo que el mapa llega a equivocarse nunca con un chirrido puro. Tan cerca del final, la señal real no es un chirrido de orden más bajo.',
+      checklist: [
+        'En GW150914, compara las frecuencias del modelo con las medidas en la lectura',
+        'En GW190521, busca la línea del modelo, y fíjate en lo poco de ella que cae en el mapa',
+        'En GW190814, compara la frecuencia del modelo una vigésima de segundo antes del final con la medida',
+        'En GW170817, lee el tiempo en banda del modelo y compáralo con lo que viste',
+      ],
+      tip: 'La línea del modelo de GW190521 solo aparece en las últimas centésimas de segundo, porque con casi cien masas solares en el sistema del detector el chirrido de orden más bajo está por debajo de 30 Hz hasta entonces. Lo que el mapa muestra para ella es sobre todo la fusión y el timbre posterior, que el modelo deja fuera. Cuanto más pesada es la pareja, menos de lo que ves es espiral.',
+    },
+    {
+      title: 'Qué vino de dónde',
+      body: 'Cada número de estas siete pantallas estaba bajo uno de cuatro encabezados. Algunos se leyeron de la deformación en tu navegador. Otros se copiaron del catálogo, que los obtuvo de un análisis que este instrumento no intenta. Una línea era un modelo, dibujado a partir de un valor del catálogo.\n\nLa conclusión a la que llegaste sobre qué pareja era la más pesada usó más de una clase.',
+      prompt:
+        '¿Qué mediste a partir de la deformación, y qué aportó GWOSC? Nombra al menos dos de cada, y di qué conclusión de estas pantallas necesitó las dos cosas.',
+      rubric:
+        'Busca una clasificación correcta. Medido a partir de la deformación: el final de cada chirrido, la frecuencia más intensa a un tiempo fijo antes de él, el ruido del detector a 100 Hz, y el hallazgo de que nada en la grabación de GW170817 supera el ruido. Aportado por GWOSC: las masas, la masa de chirrido, la distancia, el corrimiento al rojo, la relación señal-ruido y las horas del catálogo. La traza del modelo no es ninguna de las dos cosas, y un estudiante que dice que se calculó a partir de un valor del catálogo la ha entendido. Para la conclusión que necesitó las dos, las mejores respuestas nombran la clasificación: las frecuencias predijeron un orden de masas de chirrido y el catálogo lo confirmó, con el corrimiento al rojo explicando por qué las masas en el sistema del detector son las que fijan la frecuencia. El contraste de GW170817 también es una respuesta fuerte: una medida de ningún píxel detectable frente a una relación señal-ruido de catálogo de 33, reconciliadas por el filtro adaptado. NO des crédito a una respuesta que diga que la masa de chirrido se midió aquí: este instrumento no midió ninguna, y la lectura lo dice. Tampoco a una que llame a la relación señal-ruido una medida de Gravitas.',
+      tip: 'Si no sabes de dónde salió un número, búscalo en la lectura y lee el encabezado que tiene encima. Ese encabezado es la respuesta.',
     },
     {
       title: 'Haz que sea más difícil de ver',

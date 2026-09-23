@@ -22,6 +22,8 @@ const DIST = process.env.GRAVITAS_E2E_TARGET === 'dist';
 const TRANSIT_MARK = 'blockedFraction';
 /** And one only the power-law family's does. */
 const POWER_LAW_MARK = 'stabilityBoundary';
+/** And the GWOSC event family's, which is in it and its strain data only. */
+const GW_EVENTS_MARK = 'strainVersion';
 
 async function openLesson(page, id) {
   await page.addInitScript(() => {
@@ -102,6 +104,7 @@ test.describe('instrument families fetched on demand', () => {
     expect(contains(scripts, 'investigationNext')).toBe(true);
     expect(contains(scripts, TRANSIT_MARK)).toBe(false);
     expect(contains(scripts, POWER_LAW_MARK)).toBe(false);
+    expect(contains(scripts, GW_EVENTS_MARK)).toBe(false);
   });
 
   test('a lesson fetches the family its step names, and only that one', async ({
@@ -116,6 +119,7 @@ test.describe('instrument families fetched on demand', () => {
     const after = await scriptsSoFar();
     expect(contains(after, TRANSIT_MARK)).toBe(true);
     expect(contains(after, POWER_LAW_MARK)).toBe(false);
+    expect(contains(after, GW_EVENTS_MARK)).toBe(false);
   });
 
   test('while the family is on its way, the panel says so to a screen reader', async ({

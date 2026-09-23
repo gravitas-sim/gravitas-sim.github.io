@@ -3399,6 +3399,69 @@ export const EN_DEFERRED = {
   'stelW.pop.row.limits': 'What it leaves out',
   'stelW.pop.value.limits':
     'Stars that have left the main sequence, interstellar dust, binaries, and any composition but solar. All four matter for a real survey and none of them is here.',
+  // -- Five real mergers, compared (js/gwEventWidgets.js) --------------------
+  'gwE.title': 'Five mergers, compared',
+  'gwE.note':
+    'Real strain from one LIGO detector per event, whitened by that detector’s own noise and drawn as frequency against time. Brighter means more energy than the noise. Every number is in the readout, and each is labeled with what kind of number it is.',
+  'gwE.loading': 'Fetching the five events…',
+  'gwE.failed':
+    'The events could not be fetched. Reload the page; nothing else on this screen needs them.',
+  'gwE.missing': 'not published',
+  'gwE.axis.time': 'seconds from the catalog time',
+  'gwE.axis.freq': 'frequency / Hz',
+  'gwE.control.event': 'Event',
+  'gwE.control.catalog': 'Catalog values',
+  'gwE.control.model': 'Model track',
+  'gwE.shown': 'shown',
+  'gwE.held': 'held',
+  'gwE.on': 'on',
+  'gwE.off': 'off',
+  'gwE.row.state': 'Instrument',
+  'gwE.head.observed': 'Observed strain',
+  'gwE.row.event': 'Event',
+  'gwE.value.event':
+    '{id}, {det} detector, catalog time GPS {gps} (published to 0.1 s)',
+  'gwE.row.drawn': 'What is drawn',
+  'gwE.value.drawn':
+    '{det}’s strain, whitened by Gravitas with the noise that detector had in the same 32 seconds, 20 to 400 Hz',
+  'gwE.head.measured': 'Measured by Gravitas from the strain',
+  'gwE.row.end': 'End of the chirp',
+  'gwE.value.end': '{s} from the catalog time',
+  'gwE.value.noEnd':
+    'nothing clears the noise within 0.1 s of the catalog time, so there is no end to measure from',
+  'gwE.row.slices':
+    'Loudest frequency before the end (— is nothing louder than noise)',
+  'gwE.row.noise': 'Detector noise at 100 Hz',
+  'gwE.value.noise':
+    '{asd} strain per root hertz, estimated from this detector’s own data',
+  'gwE.row.compare': 'All five, {tau} s before the end',
+  'gwE.head.catalog': 'GWOSC catalog values (not measured here)',
+  'gwE.row.version': 'From',
+  'gwE.value.version': 'values from {values}; strain from {strain}',
+  'gwE.row.chirp': 'Chirp mass, source frame',
+  'gwE.row.masses': 'Component masses, source frame',
+  'gwE.row.distance': 'Luminosity distance',
+  'gwE.row.snr': 'Network signal-to-noise ratio',
+  'gwE.value.snr':
+    '{snr}, from the catalog’s matched filter, which this instrument does not run',
+  'gwE.row.held': 'Held',
+  'gwE.value.held':
+    'The catalog values are held until you turn them on. Decide what the measurement tells you first.',
+  'gwE.head.model': 'Model',
+  'gwE.row.model': 'Leading-order track (dashed)',
+  'gwE.value.modelHeld':
+    'The model needs the catalog chirp mass. Turn the catalog values on to draw it.',
+  'gwE.value.model':
+    'for a detector-frame chirp mass of {mc} M☉ (catalog chirp mass × (1 + catalog redshift)), ending {at}: {f1} at 0.1 s and {f2} at 0.05 s. Not fitted to the data, and it ignores the merger.',
+  'gwE.anchor.end': 'at the measured end',
+  'gwE.anchor.catalog': 'at the catalog time, since no end was measured',
+  'gwE.row.inBand': 'Model: time in band from 30 Hz',
+  'gwE.value.inBand': '{s} s',
+  'gwE.row.source': 'Source',
+  'gwE.row.limits': 'What five events are',
+  'gwE.value.limits':
+    'Five events, chosen because their chirps are visible. Not a sample of the catalog, and nothing here is a detection, a significance or a parameter estimate.',
+
   // -- Four observed spectra (js/stellarSpectraWidgets.js) --------------------
   // Two instruments over four real SDSS spectra. Every label here is careful
   // about one thing: these are observations, and the lesson runs them beside
@@ -3742,5 +3805,17 @@ export const EN_DEFERRED = {
   'lessonFn.newtonianGravityBetweenPointMasses38':
     'Newtonian gravity between point masses',
   'lessonFn.whatIsNot11': 'What is not',
+  'lessonFn.fourFrequenciesFromTheLineMarked126':
+    'Four frequencies, from the line marked "All five, 0.05 s before the end". GW170817 has a dash there, so it is not one of them.',
+  'lessonFn.checkGw150914ItReadsAbout5890':
+    'Check GW150914: it reads about 58 Hz on the line marked "All five, 0.05 s before the end".',
+  'lessonFn.checkGw190412ItReadsAbout6990':
+    'Check GW190412: it reads about 69 Hz on the line marked "All five, 0.05 s before the end".',
+  'lessonFn.checkGw190521ItReadsAbout5590':
+    'Check GW190521: it reads about 55 Hz on the line marked "All five, 0.05 s before the end".',
+  'lessonFn.checkGw190814ItReadsAbout10491':
+    'Check GW190814: it reads about 104 Hz on the line marked "All five, 0.05 s before the end".',
+  'lessonFn.about586955And104257':
+    'About 58, 69, 55 and 104 Hz. Four pairs, caught at the same moment before the ends of their chirps, and not at the same frequency: the highest is nearly twice the lowest. All four came off the strain by the same procedure, and no mass went into any of them.',
   'lessonFn.fluidFlowPressureRadiation31': 'Fluid flow, pressure, radiation',
 };

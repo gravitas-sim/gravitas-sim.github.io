@@ -1,15 +1,18 @@
 // =============================================================================
 // Listening to spacetime: discover a merger
 // -----------------------------------------------------------------------------
-// Twenty-four steps built on one instrument and one dataset. The instrument is
-// the gravitational-wave lab (js/gwWidgets.js, js/gwLab.js), which computes a
-// leading-order inspiral and says out loud where it stops; the dataset is the
+// Thirty-two steps. The first twenty-two are built on one instrument and one
+// dataset: the gravitational-wave lab (js/gwWidgets.js, js/gwLab.js), which
+// computes a leading-order inspiral and says out loud where it stops, and the
 // published GW150914 figure data (js/data/gw/gw150914.js), reproduced and not
-// reprocessed.
+// reprocessed. Steps 23-29 add a second instrument over a second dataset:
+// thirty-two seconds of GWOSC strain from each of five mergers
+// (js/gwEventWidgets.js, js/data/gw/gwoscEvents.js), from which Gravitas
+// measures something itself.
 //
 // The line this lesson has to hold
 // -----------------------------------------------------------------------------
-// Three different things in this application would answer to the phrase
+// Four different things in this application would answer to the phrase
 // "gravitational wave", and a student who leaves not knowing which was which
 // has learned something false:
 //
@@ -17,18 +20,23 @@
 //                                   merges while somebody is watching
 //   the lab in the panel            a computed waveform, valid over a stated
 //                                   range and terminated at a stated boundary
-//   the GW150914 traces             a measurement
+//   the GW150914 traces             a measurement, as its authors published it
+//   the five GWOSC recordings       a measurement, read here - beside catalog
+//                                   values that were not, under headings that
+//                                   say which is which
 //
-// Step 2 names all three, and no later step lets them blur. Where the model
+// Step 2 names the first three and step 23 the fourth, and no later step lets
+// them blur. Where the model
 // cannot answer a question the lesson stops asking it rather than extrapolating:
 // the merger, the ringdown, and everything a neutron star does after it touches
 // are absent here and said to be absent.
 //
 // What the student does rather than reads
 // -----------------------------------------------------------------------------
-// Six predictions committed before the reveal, seven measurements, two
+// Seven predictions committed before the reveal, eight measurements, two
 // controlled comparisons with one variable each, a real-data alignment they
-// find themselves, an open sandbox challenge and a written conclusion. The
+// find themselves, a five-event comparison read off open strain, an open
+// sandbox challenge and a written conclusion. The
 // audio is offered at four points and required at none: every task can be
 // completed from the plots and the readout, which is checked by
 // e2e/gwLesson.spec.js running the whole lesson with the sound off.
@@ -85,7 +93,7 @@ const LISTENING_TO_SPACETIME = {
   thumbnail: 'images/investigations/listening-to-spacetime.webp',
   title: 'Listening to Spacetime',
   subtitle: 'Work out what made a signal, then check it against the real thing',
-  duration: '60-75 min',
+  duration: '75-90 min',
   level: 'Introductory astronomy',
   tags: ['compact-objects', 'gravity', 'observing', 'waves'],
   // The second of the pair. What Is a Gravitational Wave? comes first and
@@ -94,10 +102,10 @@ const LISTENING_TO_SPACETIME = {
   series: 'Gravitational waves',
   // The inspector stays available: nothing in this lesson is measured off the
   // sandbox, and a student who clicks a black hole to see what it is should be
-  // allowed to. Placement is locked until the open challenge at step 23.
+  // allowed to. Placement is locked until the open challenge at step 30.
   lock: { placement: true, inspector: false, areaSweep: false },
   summary:
-    'A pattern arrives with no label on it: a wiggle that gets faster and louder and then stops. Over twenty-four steps you work out what could produce it, measure the two relationships that give it away, find out which questions the model can answer and which it cannot, and finish by comparing your answer with what two detectors in Louisiana and Washington actually recorded in September 2015. You can do all of it with the sound off.',
+    'A pattern arrives with no label on it: a wiggle that gets faster and louder and then stops. You work out what could produce it, measure the two relationships that give it away, find out which questions the model can answer and which it cannot, compare your answer with what two detectors recorded in September 2015, and then measure five more mergers from the open archive yourself. You can do all of it with the sound off.',
   objectives: [
     'Read a strain-against-time plot and a frequency-against-time plot of the same signal',
     'Explain why the wave frequency is twice the orbital frequency',
@@ -107,6 +115,7 @@ const LISTENING_TO_SPACETIME = {
     'Say where a leading-order inspiral model stops being trustworthy, and why',
     'Distinguish a measurement, a model and an illustration in the same picture',
     'Explain why a signal that looks and sounds like a chirp is not yet a detection',
+    'Say which numbers about a real event were measured from its strain and which were supplied by a catalog',
   ],
   steps: [
     // -----------------------------------------------------------------------
@@ -1118,7 +1127,286 @@ const LISTENING_TO_SPACETIME = {
     },
 
     // -----------------------------------------------------------------------
-    // 23-24: your own experiment, and the conclusion
+    // 23-29: five more mergers, from the open archive
+    // -----------------------------------------------------------------------
+    // A coda to the real-data pair above, and the one stretch of this lesson
+    // where Gravitas measures something from a recording rather than showing
+    // a figure somebody else made. Steps 21-22 are the discovery paper's own
+    // processed traces; these are thirty-two seconds of raw strain per event
+    // from GWOSC, whitened here by each detector's own noise and read here,
+    // one instant at a time (js/gwEventWidgets.js).
+    //
+    // The instrument keeps four kinds of number under four headings, and the
+    // argument is about the boundaries between them:
+    //
+    //   23  five recordings, looked at. The catalog is held and the model off.
+    //   24  one quantity, the same for all five: the loudest frequency a
+    //       twentieth of a second before each chirp ends. Measured.
+    //   25  a ranking by chirp mass, committed before any mass is on screen.
+    //       The event control lists the five in the order they were recorded
+    //       and not by mass, so the ranking is the student's to make.
+    //   26  the catalog, revealed, with the redshift that turns its
+    //       source-frame masses into what a detector sees.
+    //   27  GW170817: the highest signal-to-noise ratio of the five, and the
+    //       one recording in which nothing clears the noise. Why both are true
+    //       is the difference between a pixel and a matched filter.
+    //   28  the lab's model laid over all five: right for GW150914, below the
+    //       map for GW190521, ahead of the data for the light pairs. The
+    //       disagreement is in the recording, not the map - see
+    //       tests/gwoscEvents.test.js, which injects a leading-order chirp and
+    //       reads it back through the same procedure.
+    //   29  the question: what was measured from the strain, and what did
+    //       GWOSC supply?
+    //
+    // What is on the canvas behind these seven
+    // -----------------------------------------------------------------------
+    // The lab's model pair, staged deliberately and named as that on the
+    // first screen. None of the five events can stand on the canvas - the
+    // sandbox has no model of any of them - and a step with no stage would
+    // keep the same pair anyway, unlabelled, beside five recordings it has
+    // nothing to do with. 23 says what it is.
+    {
+      sid: 'five-recordings',
+      stage: BBH,
+      type: 'explore',
+      title: 'Five more mergers, from the archive',
+      body: `Steps 21 and 22 were one event, as the discovery paper published
+             it. These are five, as the detectors recorded them: thirty-two
+             seconds of strain from each, downloaded from the Gravitational Wave
+             Open Science Center, and one detector drawn per event.
+             \n\nThe map is that recording, whitened by Gravitas with the noise
+             the same detector had in the same thirty-two seconds, and spread
+             out in time and frequency. A bright patch is energy louder than
+             that detector's own noise, at that frequency, at that instant. A
+             chirp is a curve on the map that climbs and then stops.
+             \n\nThe readout keeps four kinds of number apart, under four
+             headings: what was <strong>observed</strong>, what Gravitas
+             <strong>measured</strong> from it, what the <strong>GWOSC
+             catalog</strong> says, and what the <strong>model</strong>
+             predicts. The catalog is held for now and the model is off.
+             \n\n<strong>The pair on the canvas is not any of these
+             five.</strong> It is the lab's model binary from earlier, still
+             where it was. Nothing in the panel drives it.`,
+      checklist: [
+        'Step the event control through all five recordings',
+        'On each map, find the curve that climbs and then stops',
+        'Read the "End of the chirp" line for each: the last instant Gravitas found anything louder than the noise',
+        'Find the one recording for which Gravitas measures no end at all',
+        'Notice which curves stay visible longest before their end',
+      ],
+      tool: { id: 'gw-events', values: { event: 0, catalog: 0, model: 0 } },
+      tip: 'Each catalog time is published to a tenth of a second, which is too coarse to place a merger within a few thousandths. So Gravitas finds the end of each chirp in the data, and every "before the end" on these screens counts back from there.',
+    },
+    {
+      sid: 'the-same-moment',
+      stage: BBH,
+      type: 'measure',
+      title: 'The same moment before the end',
+      body: `In the lab, a lighter pair was at a higher frequency than a
+             heavier one at the same time before its merger, and stayed in band
+             for longer. That was the model's prediction. These recordings are
+             a chance to see whether real binaries do it.
+             \n\nThe two lines marked <strong>All five</strong> give the
+             loudest frequency Gravitas found at the same moment before each
+             chirp's end: a tenth of a second, and a twentieth. A dash is not
+             zero. It means nothing at that instant was louder than the
+             detector's noise could have made it by chance.
+             \n\nRecord the four that have a reading a twentieth of a second
+             before the end.`,
+      fields: [
+        {
+          id: 'f_150914',
+          label: 'GW150914, 0.05 s before the end',
+          unit: 'Hz',
+        },
+        { id: 'f_190412', label: 'GW190412', unit: 'Hz' },
+        { id: 'f_190521', label: 'GW190521', unit: 'Hz' },
+        { id: 'f_190814', label: 'GW190814', unit: 'Hz' },
+      ],
+      validate: v => {
+        // One literal per event rather than one sentence with the event
+        // interpolated: a computed message is translated by its content, and
+        // an interpolated one would have a different key for every event.
+        const read = [
+          [
+            v.f_150914,
+            58,
+            'Check GW150914: it reads about 58 Hz on the line marked "All five, 0.05 s before the end".',
+          ],
+          [
+            v.f_190412,
+            69,
+            'Check GW190412: it reads about 69 Hz on the line marked "All five, 0.05 s before the end".',
+          ],
+          [
+            v.f_190521,
+            55,
+            'Check GW190521: it reads about 55 Hz on the line marked "All five, 0.05 s before the end".',
+          ],
+          [
+            v.f_190814,
+            104,
+            'Check GW190814: it reads about 104 Hz on the line marked "All five, 0.05 s before the end".',
+          ],
+        ];
+        if (read.some(([n]) => !Number.isFinite(n))) {
+          return {
+            level: 'warn',
+            message:
+              'Four frequencies, from the line marked "All five, 0.05 s before the end". GW170817 has a dash there, so it is not one of them.',
+          };
+        }
+        const off = read.find(([n, want]) => Math.abs(n - want) > 0.12 * want);
+        if (off) return { level: 'error', message: off[2] };
+        return {
+          level: 'ok',
+          message:
+            'About 58, 69, 55 and 104 Hz. Four pairs, caught at the same moment before the ends of their chirps, and not at the same frequency: the highest is nearly twice the lowest. All four came off the strain by the same procedure, and no mass went into any of them.',
+        };
+      },
+      tool: { id: 'gw-events', values: { event: 0, catalog: 0, model: 0 } },
+      tip: 'Look at the tenth-of-a-second line too. GW190521 has a dash there but a reading at a twentieth: whatever it was, it only became visible in the last few hundredths of a second.',
+    },
+    {
+      sid: 'rank-before-the-catalog',
+      stage: BBH,
+      type: 'predict',
+      reveal: 'what-the-catalog-says',
+      title: 'Which was heaviest?',
+      body: `Before any mass is on the screen: from your four readings, and
+             from what the lab showed you, which of these pairs had the largest
+             chirp mass?
+             \n\nUse the tenth-of-a-second line as well as the one you recorded.
+             How long a chirp stays visible is evidence too.`,
+      prompt: 'Of the four with a reading, the largest chirp mass belongs to…',
+      options: [
+        'GW190814 - it reached the highest frequency, and a heavier pair has more energy to radiate',
+        'GW190521 - it was lowest at the same moment before the end, and visible for the shortest time',
+        'GW150914 - its curve is the brightest on its map',
+        'none of them can be ranked until the distances are known',
+      ],
+      answer: 1,
+      because:
+        'GW190521. In the lab a heavier pair was at a lower frequency at the same time before its merger and spent less time in band, and GW190521 does both: 55 Hz a twentieth of a second before its end, and nothing measurable a tenth of a second before, because a pair that heavy was still below the band. The first answer is the trap: a higher frequency at the same moment means a lighter pair, not a heavier one. The third and fourth are about brightness, which does depend on distance and on how the orbit is tilted towards us. The frequency does not, apart from one effect of distance that the next screen puts right.',
+      tool: { id: 'gw-events', values: { event: 0, catalog: 0, model: 0 } },
+    },
+    {
+      sid: 'what-the-catalog-says',
+      stage: BBH,
+      type: 'explore',
+      title: 'What the catalog says',
+      body: `Set the catalog control to <strong>shown</strong> and step through
+             the five again. These numbers are GWOSC's, not Gravitas's: masses,
+             distance and signal-to-noise ratio, each with the interval the
+             collaborations published. They come from fitting complete
+             waveform models to the data from every detector at once, a far
+             bigger calculation than anything on this screen, and they sit
+             under a heading that says they were <em>not measured here</em>.
+             \n\nPut the four you ranked in order of chirp mass and compare
+             with your ranking.
+             \n\nThen look at the distances. GW190521 is about seven times
+             further away than GW150914, and space expanded while its wave was
+             on its way here, stretching it. A stretched chirp looks exactly
+             like the chirp of a heavier pair. What a detector measures is the
+             chirp mass multiplied by one plus the redshift: for GW150914 that
+             is ten per cent more, and for GW190521 more than half as much
+             again.`,
+      checklist: [
+        'Set the catalog control to "shown"',
+        'Read the chirp mass for each of the five',
+        'Put the four you ranked in order of chirp mass, and compare with your prediction',
+        'Find the distance for GW190521, and compare it with GW150914’s',
+        'Check which heading every number you have used so far sits under',
+        'Find GW170817’s chirp mass, and the size of its interval',
+      ],
+      tool: { id: 'gw-events', values: { event: 3, catalog: 1, model: 0 } },
+      tip: 'The catalog lists source-frame masses: what the pair would weigh if it were next door. The redshift that converts them is a catalog value too, and the model on a later screen uses the product of the two.',
+    },
+    {
+      sid: 'the-one-you-cannot-measure',
+      stage: BBH,
+      type: 'explore',
+      title: 'The loudest one, and the one Gravitas cannot measure',
+      body: `GW170817 is the pair of neutron stars whose collision was also
+             seen as a burst of gamma rays, and then as a new source of light
+             in a galaxy about forty megaparsecs away. Its signal-to-noise
+             ratio in the catalog is 33, the highest of the five. And in its
+             recording, Gravitas finds nothing louder than the noise.
+             \n\nBoth are true. The difference is in how the two numbers were
+             made. The map asks whether one pixel - one frequency, one instant
+             - is louder than noise could make it. A pair of neutron stars is
+             light, so its chirp is weak at any one moment and very long: the
+             lab's model says it spends nearly a minute in the band, thousands
+             of cycles. The catalog's number comes from a matched filter that
+             adds all of those cycles up against a template before asking
+             whether the total is louder than noise. Gravitas does not run that
+             search, and the readout says so.
+             \n\nThe last tenth of a second, where the heavier pairs' chirps
+             end, is no help either: a pair this light is past 300 Hz by then
+             and still climbing off the top of the map when it merges.`,
+      checklist: [
+        'Select GW170817 and read the "End of the chirp" line',
+        'Look closely at the last two seconds of its map, and decide whether you can see a track',
+        'Compare its signal-to-noise ratio with the other four',
+        'Notice the time axis: this map covers six and a half seconds, the others three',
+      ],
+      tool: { id: 'gw-events', values: { event: 1, catalog: 1, model: 0 } },
+      tip: 'Hanford is drawn for this event rather than Livingston because Livingston recorded a loud instrumental glitch about a second before the merger, documented on the event’s GWOSC page. The collaborations removed it before their analysis; Gravitas uses the detector that did not need repairing.',
+    },
+    {
+      sid: 'the-model-on-five',
+      stage: BBH,
+      type: 'explore',
+      title: 'The lab’s model, laid over the recordings',
+      body: `Now turn the model track on. The dashed line is the same
+             leading-order chirp the lab computed, drawn for each event's
+             detector-frame chirp mass and ending where Gravitas measured the
+             chirp's end. Nothing about it is fitted to the map. It needs the
+             catalog's chirp mass, so it stays off while the catalog is held.
+             \n\nFor GW150914 the model and the measurement agree to within a
+             few hertz, which is a good result for the event the lab was built
+             around. Step through the others and find where the agreement
+             stops.
+             \n\nWhere they disagree by enough, the disagreement is in the
+             recording and not in the map. A pure leading-order chirp, added to
+             noise and read back by exactly the same procedure, comes back
+             within a sixth of the frequency that was put in, as often above as
+             below. A twentieth of a second before its end, GW190814 is more
+             than a quarter below the model - further than the map ever
+             misreads a pure chirp. That close to the end, the real signal is
+             not a leading-order chirp.`,
+      checklist: [
+        'On GW150914, compare the model’s frequencies with the measured ones in the readout',
+        'On GW190521, find the model line - and notice how little of it is on the map',
+        'On GW190814, compare the model’s frequency a twentieth of a second before the end with the measured one',
+        'On GW170817, read the model’s time in band and compare it with what you saw',
+      ],
+      tool: { id: 'gw-events', values: { event: 0, catalog: 1, model: 1 } },
+      tip: 'GW190521’s model line only appears in the last few hundredths of a second, because at almost a hundred detector-frame solar masses the leading-order chirp is below 30 Hz until then. What the map shows for it is mostly the merger and the ringing afterwards, which the model leaves out. The heavier the pair, the less of what you see is inspiral.',
+    },
+    {
+      sid: 'measured-or-supplied',
+      stage: BBH,
+      type: 'question',
+      title: 'What came from where',
+      kind: 'short',
+      body: `Every number on these seven screens sat under one of four
+             headings. Some were read off the strain in your browser. Some were
+             copied from the catalog, which got them from an analysis this
+             instrument does not attempt. One line was a model, drawn from a
+             catalog value.
+             \n\nThe conclusion you reached about which pair was heaviest used
+             more than one kind.`,
+      prompt:
+        'What did you measure from the strain, and what did GWOSC supply? Name at least two of each, and say which conclusion on these screens needed both.',
+      rubric:
+        'Look for a correct sort. Measured from the strain: the end of each chirp, the loudest frequency at a fixed time before it, the detector noise at 100 Hz, and the finding that nothing in the GW170817 recording clears the noise. Supplied by GWOSC: the masses, the chirp mass, the distance, the redshift, the signal-to-noise ratio and the catalog times. The model track is neither, and a student who says it was computed from a catalog value has understood it. For the conclusion that needed both, the best answers name the ranking: the frequencies predicted an order of chirp masses, and the catalog confirmed it, with the redshift explaining why the detector-frame masses are the ones that set the frequency. The GW170817 contrast is also a strong answer - a measurement of no detectable pixel against a catalog signal-to-noise of 33, reconciled by the matched filter. Do NOT credit an answer that calls the chirp mass measured here: this instrument did not measure one, and the readout says so. Do not credit calling the signal-to-noise ratio a Gravitas measurement either.',
+      tool: { id: 'gw-events', values: { event: 0, catalog: 1, model: 1 } },
+      tip: 'If you are unsure where a number came from, find it in the readout and read the heading above it. That heading is the answer.',
+    },
+
+    // -----------------------------------------------------------------------
+    // 30-32: your own experiment, and the conclusion
     // -----------------------------------------------------------------------
     {
       sid: 'your-own-experiment',

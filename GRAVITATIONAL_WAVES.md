@@ -3,9 +3,22 @@
 What the application computes, what it only illustrates, and where the line
 between the two is drawn. Written before the code, and kept beside it.
 
-There are two entirely separate things in this repository with "gravitational
-wave" in their description. Conflating them would be the single most damaging
-thing this feature could do, so they are separated here first.
+There are two entirely separate things in this repository that compute or draw
+a gravitational wave, and beside them two kinds of real data. Conflating any of
+them would be the single most damaging thing this feature could do, so they
+are separated here first, and every number the application shows about a
+gravitational wave falls under exactly one of four labels:
+
+| Label                  | What it means                                                                                                   | Where it appears                                                                                                                   |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **SIMULATED**          | Computed from stated equations, by Gravitas or by the collaborations, and not a measurement of anything         | The lab's leading-order inspiral and synthetic noise (section B); the model track over the five events; the GW150914 NR waveform   |
+| **ANALYZED REAL DATA** | Strain the LIGO detectors recorded, published by GWOSC, and read by Gravitas with a stated procedure            | The GW150914 figure traces, reproduced as published (C.1); the five GWOSC events, whitened and measured here (C.2)                 |
+| **CATALOG VALUE**      | A number the collaborations published about an event - a mass, a distance, a signal-to-noise ratio - copied here | Beside the five events, under a heading that says it was not measured here, and held until the reader asks for it (C.2)             |
+| **ILLUSTRATION**       | Drawn to be legible, not computed to be right                                                                   | The sandbox's inspiral, ripples and sound (section A); the lab's schematic binary (B.7)                                            |
+
+The N-body engine generates none of the observed waveforms, and nothing here
+says or implies that it does. The sandbox's binaries are the one place the
+engine is involved, and their inspiral is an illustration.
 
 ---
 
@@ -229,28 +242,78 @@ so, and the real-data section is where measured noise appears.
 
 ## C. Real data
 
+Two datasets, and they are real data in two different senses. The first is
+published figure data, reproduced and not reprocessed; the second is strain as
+the detectors recorded it, which Gravitas processes and measures itself.
+Neither is fetched at run time: both are committed, deferred, and served from
+the site's own origin. There is no runtime request to gwosc.org.
+
+### C.1 GW150914, as the discovery paper published it
+
 See `js/data/gw/README.md` for the per-file provenance block: event, detector,
 source URL, DOI, time window, sample rate, units, every filtering step,
 attribution, license, and input and output checksums. `tools/build-gw-data.mjs`
 regenerates the bundled files from the originals and `--check` verifies them.
 
-Summary of what is bundled and what it is:
-
-- **GW150914 observed strain, H1 and L1.** The data behind Figure 1 of Abbott
-  et al. (2016), Phys. Rev. Lett. 116, 061102. Band-passed 35-350 Hz and
-  notched by the collaboration before publication; the L1 trace as published is
-  already time-shifted by 6.9 ms and inverted, and the lab says so beside it
-  rather than doing it silently.
-- **GW150914 numerical-relativity waveform, H1 and L1.** From the same figure.
-  This is the collaboration's reconstruction. It is drawn and labeled
-  differently from the data, and it is never described as this lab's model.
+- **GW150914 observed strain, H1 and L1.** ANALYZED REAL DATA, in the narrow
+  sense that the only thing Gravitas computes from it is the lag and sign
+  between the detectors. The data behind Figure 1 of Abbott et al. (2016),
+  Phys. Rev. Lett. 116, 061102. Band-passed 35-350 Hz and notched by the
+  collaboration before publication; the L1 trace as published is already
+  time-shifted by 6.9 ms and inverted, and the lab says so beside it rather
+  than doing it silently.
+- **GW150914 numerical-relativity waveform, H1 and L1.** SIMULATED, by the
+  collaboration. From the same figure. It is drawn and labeled differently from
+  the data, and it is never described as this lab's model.
 - **GW150914 residuals, H1 and L1.** Data minus reconstruction, from the same
   figure. What is left is noise, and being able to see that is the point.
 - **GW150914 Keplerian separation and post-Newtonian velocity.** From Figure 2
   of the same paper. Published estimates, labeled as such.
 
-Everything is local, deferred, and served from the site's own origin. There is
-no runtime request to gwosc.org.
+### C.2 Five events from the open archive
+
+`js/data/gw/gwoscEvents.js`, generated by `tools/build-gwosc-events.mjs`, with
+its provenance record in `js/data/gw/gwoscEventsProvenance.js`, which nothing
+in the application imports. The events, the versions, the detectors, the
+windows and every processing step are in `js/data/gw/README.md`.
+
+- **The strain.** ANALYZED REAL DATA. Thirty-two seconds of 4096 Hz strain for
+  each of GW150914, GW170817, GW190412, GW190521 and GW190814, one LIGO
+  detector per event, retrieved from the GWOSC event API at build time against
+  pinned SHA-256 checksums.
+- **The noise estimate.** Measured here, from each detector's own thirty-two
+  seconds: a median Welch average of 4-second Hann segments, bias-corrected
+  (`js/gw/psd.js`). The design curve in `js/gw/noise.js` is never applied to a
+  real recording; whitening 2015 or 2019 strain by a design curve would claim a
+  detector state nobody measured. The four black-hole events leave out the
+  three seconds around the merger; GW170817 is in band for the whole file and
+  cannot, which the record says.
+- **The time-frequency map and what is read off it.** Measured here, in the
+  browser (`js/gw/qscan.js`): a constant-Q map of the whitened strain, the last
+  instant anything in it clears a noise threshold derived from the number of
+  pixels searched, and the loudest frequency at fixed times before that
+  instant. For GW170817 nothing clears it, and the readout says so rather than
+  lowering the threshold.
+- **Masses, distance, redshift, signal-to-noise ratio.** CATALOG VALUE, from
+  GWTC-2.1 (GWTC-1 for GW170817), at the precision GWOSC published them.
+  Held until the reader turns them on, so that a prediction can be made from
+  the measurement first.
+- **The dashed track.** SIMULATED: the lab's leading-order chirp for the
+  catalog chirp mass times one plus the catalog redshift. Drawn only with the
+  catalog shown, and never fitted.
+
+What is not done, and why: no chirp mass is measured from the strain - an
+estimate from pairs of points on the map was built, failed on two of the five
+events and ran 16 per cent high on the one where it was stable, and was
+rejected. No template, matched filter, parameter estimate or detection
+statistic is computed anywhere. No glitch is gated or subtracted: GW170817's
+Livingston recording has a documented one, so Hanford is drawn instead.
+
+Where the map and the model disagree, `tests/gwoscEvents.test.js` decides which
+is responsible by injecting a leading-order chirp into noise and reading it
+back through the same procedure. The map recovers it within a sixth of the
+injected frequency; GW190814, a twentieth of a second before its end, is more
+than a quarter below the model. That disagreement is a property of the signal.
 
 ---
 
@@ -265,3 +328,14 @@ Placed in the lesson, not only here.
 - Abbott et al. (2017), *GW170817: Observation of Gravitational Waves from a
   Binary Neutron Star Inspiral*, PRL 119, 161101,
   <https://arxiv.org/abs/1710.05832>
+- Abbott et al. (2020), *GW190521: A Binary Black Hole Merger with a Total Mass
+  of 150 M☉*, PRL 125, 101102, <https://arxiv.org/abs/2009.01075>
+- Abbott et al. (2020), *GW190814: Gravitational Waves from the Coalescence of a
+  23 Solar Mass Black Hole with a 2.6 Solar Mass Compact Object*, ApJL 896,
+  L44, <https://arxiv.org/abs/2006.12611>
+- Abbott et al. (2020), *GW190412: Observation of a Binary-Black-Hole
+  Coalescence with Asymmetric Masses*, PRD 102, 043015,
+  <https://arxiv.org/abs/2004.08342>
+- The catalogs the values come from: GWTC-1, PRX 9, 031040 (2019),
+  <https://arxiv.org/abs/1811.12907>, and GWTC-2.1, PRD 109, 022001 (2024),
+  <https://arxiv.org/abs/2108.01045>

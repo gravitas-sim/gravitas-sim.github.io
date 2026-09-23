@@ -68,6 +68,20 @@ the release rather than in the tag.
   verifies the committed data offline, and `npm run spectra:provenance`
   regenerates it byte for byte from the archive CSVs once they are cached. No
   class has used these screens yet. In English and Spanish.
+- **Five real mergers in _Listening to Spacetime_.** Seven new screens, after
+  the published GW150914 traces, put thirty-two seconds of GWOSC strain from
+  one LIGO detector each for GW150914, GW170817, GW190412, GW190521 and
+  GW190814 behind one instrument: a constant-Q map whitened by each detector's
+  own noise, the last instant anything clears a threshold set by the number of
+  pixels searched, and the loudest frequency at fixed times before it. The
+  readout keeps what the detector recorded, what Gravitas measured from it,
+  GWOSC's catalog values and the model under four separate headings; catalog
+  values are held back until asked for, so a student ranks the events by chirp
+  mass from a measured frequency before any mass is on screen. No chirp mass is
+  measured - one was built and rejected as unstable - and nothing is a
+  template, fit or detection statistic. The strain is fetched only when the
+  lesson reaches it, and `npm run gwosc:provenance` regenerates it byte for byte
+  from the archive once it is cached. In English and Spanish.
 - **A body can be placed by typing it.** _Precise placement_, beside Add
   object, takes a type, a position, a velocity and a mass as numbers, with the
   unit named on every field, each error attached to the field it is about and
@@ -215,19 +229,20 @@ the release rather than in the tag.
   `dist/` as well as the sources. The tests that compare against internal
   state, such as exact typed coordinates, the plotted arrays and the live voice
   list, stay on the sources, and their headers say why.
-- **A lesson no longer downloads the transit and power-law instruments unless
-  a step names one.** Every lesson loaded all sixteen instrument families
-  before its first screen; these two are now fetched when a step reaches them,
-  which takes 85 KB and four requests off every lesson's first screen as the
-  site is published, and 33 KB off it in the build. While a family is on its way the
-  tool panel says so to a screen reader; if it cannot be fetched the panel says
-  that too and offers **Try again**, or **Reload the page** when a retry cannot
-  work, and the reader's answers are kept. Offline, a lesson opened once still
-  draws them. Start-up requests do not change in either configuration.
-  `npm run budget:routes` measures what a fresh visitor downloads for nine
-  routes, sources and build, against ceilings every lesson route's old download
-  exceeds. Fourteen families are still loaded with every lesson;
-  `LAZY_CAPABILITIES.md` lists them and the order they move in.
+- **A lesson no longer downloads instruments it does not use.** Every lesson
+  loaded all sixteen instrument families before its first screen. The transit,
+  power-law and both gravitational-wave families are now fetched when a step
+  reaches them, which takes 242 KB and fourteen requests off every lesson's
+  first screen as the site is published, and 85 KB and two requests in the
+  build. While a family is on its way the tool panel says so to a screen
+  reader; if it cannot be fetched the panel says that too and offers **Try
+  again**, or **Reload the page** when a retry cannot work, and the reader's
+  answers are kept. Offline, a lesson opened once still draws them. Start-up
+  requests do not change in either configuration. `npm run budget:routes`
+  measures what a fresh visitor downloads for nine routes, sources and build,
+  against ceilings every lesson route's old download exceeds. Thirteen families
+  are still loaded with every lesson; `LAZY_CAPABILITIES.md` lists them and the
+  order they move in.
 
 ### Fixed
 
@@ -385,7 +400,7 @@ listed here because this is the release that first carries it.
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->676<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->683<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

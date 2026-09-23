@@ -66,5 +66,9 @@ manual/gravitas-user-manual.pdf
 # committed js/data/spectra/sdssSpectra.js is what ships.
 .sdss-cache/
 
+# Cached GWOSC 32-second strain files. `npm run gwosc:data` refills this; the
+# committed js/data/gw/gwoscEvents.js is what ships.
+.gwosc-cache/
+
 # Reports an earlier CI step left for tools/docs-facts.mjs to read back.
 .facts/

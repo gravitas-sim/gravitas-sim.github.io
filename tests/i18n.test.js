@@ -370,7 +370,7 @@ describe('the catalog split', () => {
     // dynamic import inside the widget module, so a reader who opens some
     // other lesson downloads neither the prose nor the data.
     const allowed =
-      /^(lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|obsW|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|specW|stellar\.phase|summary\.life)\./;
+      /^(lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|gwE|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|obsW|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|specW|stellar\.phase|summary\.life)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
 
     // The sandbox sentences the summary reads on a first visit stayed eager.

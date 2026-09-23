@@ -3718,8 +3718,84 @@ export const ES_DEFERRED = {
   'lessonFn.newtonianGravityBetweenPointMasses38':
     'Gravedad newtoniana entre masas puntuales',
   'lessonFn.whatIsNot11': 'Qué no',
+  'lessonFn.fourFrequenciesFromTheLineMarked126':
+    'Cuatro frecuencias, de la línea marcada «Los cinco, 0.05 s antes del final». GW170817 tiene un guion ahí, así que no es una de ellas.',
+  'lessonFn.checkGw150914ItReadsAbout5890':
+    'Comprueba GW150914: marca unos 58 Hz en la línea «Los cinco, 0.05 s antes del final».',
+  'lessonFn.checkGw190412ItReadsAbout6990':
+    'Comprueba GW190412: marca unos 69 Hz en la línea «Los cinco, 0.05 s antes del final».',
+  'lessonFn.checkGw190521ItReadsAbout5590':
+    'Comprueba GW190521: marca unos 55 Hz en la línea «Los cinco, 0.05 s antes del final».',
+  'lessonFn.checkGw190814ItReadsAbout10491':
+    'Comprueba GW190814: marca unos 104 Hz en la línea «Los cinco, 0.05 s antes del final».',
+  'lessonFn.about586955And104257':
+    'Unos 58, 69, 55 y 104 Hz. Cuatro parejas, sorprendidas en el mismo momento antes del final de sus chirridos, y no a la misma frecuencia: la más alta casi dobla a la más baja. Las cuatro salieron de la deformación con el mismo procedimiento, y ninguna masa entró en ninguna de ellas.',
   'lessonFn.fluidFlowPressureRadiation31':
     'Flujo de fluidos, presión, radiación',
+  // -- Cinco fusiones, comparadas (js/gwEventWidgets.js) ---------------------
+  'gwE.title': 'Cinco fusiones, comparadas',
+  'gwE.note':
+    'Deformación real de un detector LIGO por evento, blanqueada con el ruido propio de ese detector y dibujada como frecuencia frente al tiempo. Más brillo significa más energía que el ruido. Todos los números están en la lectura, y cada uno dice qué clase de número es.',
+  'gwE.loading': 'Obteniendo los cinco eventos…',
+  'gwE.failed':
+    'No se pudieron obtener los eventos. Recarga la página; nada más en esta pantalla los necesita.',
+  'gwE.missing': 'no publicado',
+  'gwE.axis.time': 'segundos desde el tiempo del catálogo',
+  'gwE.axis.freq': 'frecuencia / Hz',
+  'gwE.control.event': 'Evento',
+  'gwE.control.catalog': 'Valores del catálogo',
+  'gwE.control.model': 'Traza del modelo',
+  'gwE.shown': 'visibles',
+  'gwE.held': 'reservados',
+  'gwE.on': 'activada',
+  'gwE.off': 'desactivada',
+  'gwE.row.state': 'Instrumento',
+  'gwE.head.observed': 'Deformación observada',
+  'gwE.row.event': 'Evento',
+  'gwE.value.event':
+    '{id}, detector {det}, tiempo del catálogo GPS {gps} (publicado con 0,1 s)',
+  'gwE.row.drawn': 'Qué se dibuja',
+  'gwE.value.drawn':
+    'la deformación de {det}, blanqueada por Gravitas con el ruido que tenía ese detector en los mismos 32 segundos, de 20 a 400 Hz',
+  'gwE.head.measured': 'Medido por Gravitas a partir de la deformación',
+  'gwE.row.end': 'Final del chirrido',
+  'gwE.value.end': '{s} desde el tiempo del catálogo',
+  'gwE.value.noEnd':
+    'nada supera el ruido a menos de 0,1 s del tiempo del catálogo, así que no hay un final desde el que medir',
+  'gwE.row.slices':
+    'Frecuencia más intensa antes del final (— es nada más intenso que el ruido)',
+  'gwE.row.noise': 'Ruido del detector a 100 Hz',
+  'gwE.value.noise':
+    '{asd} de deformación por raíz de hercio, estimado con los datos del propio detector',
+  'gwE.row.compare': 'Los cinco, {tau} s antes del final',
+  'gwE.head.catalog': 'Valores del catálogo GWOSC (no medidos aquí)',
+  'gwE.row.version': 'Procedencia',
+  'gwE.value.version': 'valores de {values}; deformación de {strain}',
+  'gwE.row.chirp': 'Masa de chirrido, sistema de la fuente',
+  'gwE.row.masses': 'Masas de las componentes, sistema de la fuente',
+  'gwE.row.distance': 'Distancia de luminosidad',
+  'gwE.row.snr': 'Relación señal-ruido de la red',
+  'gwE.value.snr':
+    '{snr}, del filtro adaptado del catálogo, que este instrumento no ejecuta',
+  'gwE.row.held': 'Reservados',
+  'gwE.value.held':
+    'Los valores del catálogo están reservados hasta que los actives. Decide primero qué te dice la medida.',
+  'gwE.head.model': 'Modelo',
+  'gwE.row.model': 'Traza de orden más bajo (discontinua)',
+  'gwE.value.modelHeld':
+    'El modelo necesita la masa de chirrido del catálogo. Activa los valores del catálogo para dibujarlo.',
+  'gwE.value.model':
+    'para una masa de chirrido en el sistema del detector de {mc} M☉ (masa de chirrido del catálogo × (1 + corrimiento al rojo del catálogo)), terminando {at}: {f1} a 0,1 s y {f2} a 0,05 s. No está ajustada a los datos e ignora la fusión.',
+  'gwE.anchor.end': 'en el final medido',
+  'gwE.anchor.catalog':
+    'en el tiempo del catálogo, porque no se midió ningún final',
+  'gwE.row.inBand': 'Modelo: tiempo en banda desde 30 Hz',
+  'gwE.value.inBand': '{s} s',
+  'gwE.row.source': 'Fuente',
+  'gwE.row.limits': 'Qué son cinco eventos',
+  'gwE.value.limits':
+    'Cinco eventos, elegidos porque sus chirridos son visibles. No son una muestra del catálogo, y nada de esto es una detección, una significación ni una estimación de parámetros.',
+
   // -- Cuatro espectros observados (js/stellarSpectraWidgets.js) --------------
   'specW.compare.title': 'Cuatro espectros',
   'specW.compare.note':

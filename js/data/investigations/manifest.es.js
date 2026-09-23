@@ -284,15 +284,15 @@ export const MANIFEST = [
     title: 'Escuchar el espacio-tiempo',
     subtitle:
       'Averigua qué produjo una señal y compárala luego con la cosa real',
-    duration: '60-75 min',
+    duration: '75-90 min',
     level: 'Astronomía introductoria',
     summary:
-      'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. A lo largo de veinticuatro pasos averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, y terminas comparando tu respuesta con lo que dos detectores en Luisiana y Washington registraron de verdad en septiembre de 2015. Puedes hacerlo todo con el sonido apagado.',
+      'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. Averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, comparas tu respuesta con lo que registraron dos detectores en septiembre de 2015, y luego mides tú mismo cinco fusiones más del archivo abierto. Puedes hacerlo todo con el sonido apagado.',
     thumbnail: 'images/investigations/listening-to-spacetime.webp',
     series: 'Ondas gravitacionales',
-    stepCount: 25,
-    gradedCount: 15,
-    objectiveCount: 8,
+    stepCount: 32,
+    gradedCount: 18,
+    objectiveCount: 9,
   },
   {
     id: 'a-universe-of-stars',

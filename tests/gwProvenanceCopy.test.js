@@ -20,6 +20,7 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { PROVENANCE, TRACES } from '../js/data/gw/gw150914.js';
+import { RECORDS as GWOSC_RECORDS } from '../js/data/gw/gwoscEventsProvenance.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 
@@ -80,7 +81,34 @@ describe.each(CATALOGS)('the %s copy agrees with it', (lang, catalog) => {
   test('quotes the publisher band the provenance records', () => {
     const { low, high } = publishedBand();
     const anyBand = /(\d+)\s*(?:[–-]|a)\s*(\d+)\s*Hz/;
-    const quoting = strings(catalog).filter(([, v]) => anyBand.test(v));
+    // Not the five-event instrument's copy: it describes a different dataset,
+    // whitened here rather than band-passed by its publisher, and quotes that
+    // dataset's band. The test below holds it to its own record.
+    const quoting = strings(catalog).filter(
+      ([k, v]) => !k.startsWith('gwE.') && anyBand.test(v)
+    );
+    expect(quoting.length).toBeGreaterThan(0);
+    for (const [key, value] of quoting) {
+      const [, a, b] = anyBand.exec(value);
+      expect({ key, low: Number(a), high: Number(b) }).toEqual({
+        key,
+        low,
+        high,
+      });
+    }
+  });
+
+  test('the five-event copy quotes the band its own record whitened to', () => {
+    const bands = new Set(
+      Object.values(GWOSC_RECORDS).map(r => r.whitening.band.join('-'))
+    );
+    expect(bands.size).toBe(1);
+    const [low, high] = [...bands][0].split('-').map(Number);
+    // "20 to 400 Hz" in English, "20 a 400 Hz" in Spanish.
+    const anyBand = /(\d+)\s*(?:[–-]|to|a)\s*(\d+)\s*Hz/;
+    const quoting = strings(catalog).filter(
+      ([k, v]) => k.startsWith('gwE.') && anyBand.test(v)
+    );
     expect(quoting.length).toBeGreaterThan(0);
     for (const [key, value] of quoting) {
       const [, a, b] = anyBand.exec(value);
