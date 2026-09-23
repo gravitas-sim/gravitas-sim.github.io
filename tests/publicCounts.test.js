@@ -151,4 +151,36 @@ describe('the public investigation count', () => {
         .map(c => `${c.where}: "${c.text}"`)
     ).toEqual([]);
   });
+
+  test('every claim in the documents that describe the current software equals the manifest', async () => {
+    // README.md and LICENSES.md both said "the 22 investigations" two lessons
+    // after it stopped being true, and the paper's Summary said 22 while the
+    // app had 24. Those are now a generated fact or no count at all; this is
+    // what notices the next one typed by hand. A fact marker is expanded to
+    // its value, so a generated count is held to the manifest too.
+    //
+    // Only documents that describe the software as it is. The changelog's
+    // released sections and the "Historical record" reports are right to
+    // quote the counts of their day, and are deliberately not swept.
+    const { MANIFEST } = await import('../js/data/investigations/manifest.js');
+    const found = [];
+    for (const doc of [
+      'README.md',
+      'LICENSES.md',
+      'CONTRIBUTING.md',
+      'paper.md',
+    ]) {
+      const text = readFileSync(path.join(REPO, doc), 'utf8').replace(
+        /<!--fact:[^>]*-->([\s\S]*?)<!--\/fact-->/g,
+        '$1'
+      );
+      found.push(...claims(doc, text));
+    }
+    expect(found.length).toBeGreaterThan(0);
+    expect(
+      found
+        .filter(c => c.said !== MANIFEST.length)
+        .map(c => `${c.where}: "${c.text}"`)
+    ).toEqual([]);
+  });
 });
