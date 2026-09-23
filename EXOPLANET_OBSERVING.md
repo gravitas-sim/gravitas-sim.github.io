@@ -229,8 +229,13 @@ page as absent.
 sub-microarcsecond signature. It does not claim any telescope could measure it,
 and does not name missions.
 
-**`JUPITER_MASS_UNIT` was left alone.** It is inconsistent with `SOLAR_MASS_UNIT`
-by a factor of 52.4, so gas-giant masses displayed in Jupiter units are wrong
-across the app. It is a pre-existing bug whose fix could change tuned scenarios,
-so it wants its own change with a scenario sweep behind it. The new scenario and
-data module sidestep it by converting through the solar mass.
+**`JUPITER_MASS_UNIT` was left alone here, and has since been fixed.** When this
+work was done it was a literal 50, inconsistent with `SOLAR_MASS_UNIT` by a
+factor of 52.4, so gas-giant masses displayed in Jupiter units were wrong across
+the app; the fix could change tuned scenarios, so it was left for its own change,
+and the new scenario and data module sidestepped it by converting through the
+solar mass. That change has been made. `JUPITER_MASS_UNIT` is now derived rather
+than chosen - `SOLAR_MASS_UNIT / JUPITER_MASSES_PER_SOLAR_MASS` in
+`js/physics.js`, from the ratio in `js/constants.js` - and the physics validation
+suite checks that it reproduces the solar-mass anchor. [MASS_UNITS.md](MASS_UNITS.md)
+records it, along with the Earth unit that had the same kind of error.

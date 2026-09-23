@@ -4476,6 +4476,17 @@
       bottom: var(--transport-reserve, 76px);
       width: auto;
       max-height: min(52vh, 420px);
+      /* The sheet scrolls as a whole, and only the footer stays put.
+         On the wide panel the step body is the one part that gives way, and
+         everything else keeps its height. A sheet capped at 300px cannot
+         afford that: the header, the progress bar, the object list, the
+         backup buttons and the footer came to 420px at 390px wide, so the
+         step body got nothing at all - no question, no answer boxes - and
+         Next was cut off below the sheet's own edge. `overflow: hidden`
+         meant no finger could scroll to it, and only a test that scrolled
+         the sheet from script ever reached it. */
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
     .inv-footer,
     .inv-progress,
@@ -4484,7 +4495,14 @@
       padding-right: var(--space-3);
     }
     .inv-body {
+      flex: none;
+      overflow-y: visible;
       padding: var(--space-3);
+    }
+    .inv-footer {
+      position: sticky;
+      bottom: 0;
+      background: var(--panel-bg);
     }
   }
   @media (max-width: 900px) {
