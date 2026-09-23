@@ -198,7 +198,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->3691<!--/fact--> strings, and
+of <!--fact:uiStrings-->4017<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -234,13 +234,13 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5732<!--/fact--> tests across <!--fact:jestSuites-->165<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5763<!--/fact--> tests across <!--fact:jestSuites-->167<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
 npm run format:check      # prettier
 npm run build             # bundle + minify into dist/
-npm run preview           # build, then serve dist/ at :8004
+npm run preview           # build, then serve dist/ at :8004 (needs the passphrase)
 npm run docs:check        # the counts in the docs still match the source
 npm run manual            # rebuild the user manual PDF from manual/*.tex
 ```
@@ -551,8 +551,9 @@ particularly:
   every scenario is a data entry in `js/data/scenarioInfo.js` plus its settings.
 
 Before opening a PR: `npm test`, `npm run lint`, `npm run format:check`,
-`npm run docs:check` and `npm run build` should all pass, and CI runs all of them
-plus the browser suite. If the change touches physics, run
+`npm run docs:check` and `npm run build:ci` should all pass, and CI runs all of
+them plus the browser suite. (`npm run build` is the same build with the real
+instructor passphrase, which only a release needs.) If the change touches physics, run
 `npm run validate:physics` and say what moved. If it touches the interface, run
 `npm run e2e`.
 
@@ -603,7 +604,7 @@ funded by the SFA COSM.
 Two licenses, because this is two kinds of work.
 
 - **The software is MIT.** See [`LICENSE`](LICENSE).
-- **The original teaching material is CC BY 4.0** — the 22 investigations, the
+- **The original teaching material is CC BY 4.0** — every investigation, the
   instructor guides, the manual, the documentation and the original figures.
   See [`LICENSE-CC-BY-4.0.md`](LICENSE-CC-BY-4.0.md). Put an investigation in a
   course pack, translate it, cut it down: no permission needed, just credit.
