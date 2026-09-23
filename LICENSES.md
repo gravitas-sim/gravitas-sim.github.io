@@ -72,6 +72,7 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `images/transit-of-venus-2012.jpg` | photograph by Brocken Inaglory | CC BY 2.5 |
 | `js/data/gw/**` | derived from GWOSC released data | CC BY 4.0 |
 | `js/data/stellar/**` | derived from the MIST model grids | cite the papers; see NOTICE |
+| `js/data/spectra/**` | derived from SDSS DR18 observed spectra | public domain; acknowledge SDSS, see NOTICE |
 
 ## Why the split
 
