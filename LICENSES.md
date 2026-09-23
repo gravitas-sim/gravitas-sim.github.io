@@ -39,7 +39,7 @@ commercially, provided you give credit.
 
 | | |
 | --- | --- |
-| `js/data/investigations/**` | the 22 investigations, English and Spanish, and their manifests |
+| `js/data/investigations/**` | every investigation, English and Spanish, and their manifests |
 | `js/data/instructorContent.js` | instructor guides, expectations, rubrics and answer keys |
 | `js/data/teaching.js`, `js/data/activities.js`, `js/data/activityTeaching.js` | the teaching page and the classroom activities |
 | `js/data/welcome.js`, `js/data/scenarioInfo.js`, `js/data/scenarioTags.js`, `js/data/objectNames.js` | scenario descriptions and catalog prose |
