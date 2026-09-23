@@ -3392,6 +3392,73 @@ export const EN_DEFERRED = {
   'stelW.pop.row.limits': 'What it leaves out',
   'stelW.pop.value.limits':
     'Stars that have left the main sequence, interstellar dust, binaries, and any composition but solar. All four matter for a real survey and none of them is here.',
+  // -- Four observed spectra (js/stellarSpectraWidgets.js) --------------------
+  // Two instruments over four real SDSS spectra. Every label here is careful
+  // about one thing: these are observations, and the lesson runs them beside
+  // an instrument that draws models.
+  'specW.compare.title': 'Four spectra',
+  'specW.compare.note':
+    'Four stars, observed by SDSS in 2008 and drawn without a fit of any kind. The curves are not drawn in their stars’ colors — that would answer the question being asked — so tell them apart by the dash pattern, the label, or the numbers underneath.',
+  'specW.identify.title': 'Which star is this?',
+  'specW.identify.note':
+    'One spectrum, named only by a letter, shown over a stretch of wavelength too narrow to see a color in. Everything you need is in the dips.',
+  'specW.control.window': 'Wavelength shown',
+  'specW.control.focus': 'Pick one out',
+  'specW.control.named': 'Names',
+  'specW.control.star': 'Star',
+  'specW.control.reveal': 'Archive’s answer',
+  'specW.window.full': 'all of it, 3,815–9,170 Å',
+  'specW.window.cak': 'calcium, 3,860–4,010 Å',
+  'specW.window.hbeta': 'hydrogen β, 4,780–4,950 Å',
+  'specW.window.nad': 'sodium, 5,820–5,965 Å',
+  'specW.window.tio': 'titanium oxide, 6,950–7,250 Å',
+  'specW.focus.all': 'all four',
+  'specW.focus.one': 'star {tag}',
+  'specW.named.on': 'the archive’s classes',
+  'specW.named.off': 'letters only',
+  'specW.reveal.on': 'shown',
+  'specW.reveal.off': 'held',
+  'specW.star.nth': 'star {tag}',
+  'specW.name.class': '{letter} ({sub})',
+  'specW.name.tag': 'star {tag}',
+  'specW.name.idTag': 'star {tag}',
+  'specW.feature.cak': 'Ca II K',
+  'specW.feature.hbeta': 'Hβ',
+  'specW.feature.nad': 'Na I D',
+  'specW.feature.tio': 'TiO',
+  'specW.axis.wavelength': 'wavelength / Å',
+  'specW.axis.flux': 'flux, each scaled to its own peak here',
+  'specW.loading': 'Fetching the four spectra…',
+  'specW.failed':
+    'The spectra could not be fetched. Reload the page; nothing else on this screen needs them.',
+  'specW.row.state': 'Instrument',
+  'specW.row.kind': 'What these are',
+  'specW.value.kind':
+    'Observations. Four real stars, measured by the SDSS spectrograph — not models, not fits, not synthetic spectra.',
+  'specW.row.window': 'Showing',
+  'specW.value.window':
+    '{name}. Wavelengths are quoted in air, as a table quotes them.',
+  'specW.row.source': 'This one',
+  'specW.value.source':
+    'SDSS plate {plate}, MJD {mjd}, fiber {fiber}, observed {date}',
+  'specW.row.classified': 'Classified by SDSS as',
+  'specW.value.classified':
+    '{sub} by the pipeline, {elodie} by the template match',
+  'specW.row.answer': 'Archive’s classification',
+  'specW.value.answer': '{sub} by the pipeline, {elodie} by the template match',
+  'specW.value.held':
+    'Held until you turn it on. Decide from the features first.',
+  'specW.value.depth': '{depth} deep, centered near {at} Å',
+  'specW.row.cite': 'Source',
+  'specW.row.measured': 'How the {feature} number is measured',
+  'specW.value.region':
+    'measured over {line} Å, against the mean of {blue} and {red} Å (in air)',
+  'specW.value.regionHead':
+    'measured over {line} Å, against {ref} Å just before the band head (in air)',
+  'specW.row.limits': 'What four spectra are',
+  'specW.value.limits':
+    'Four examples, one per letter. Not an atlas, not a survey, and not a representative sample of anything — four stars that happened to be observed.',
+
   // The Stellar Lab's evidence
   'nb.source.stellar-lab': 'Stellar Lab',
   'nb.source.binary-orbit': 'Binary orbit',

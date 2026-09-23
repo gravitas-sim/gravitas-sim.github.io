@@ -296,11 +296,11 @@ export const MANIFEST = [
     duration: '70-90 min',
     level: 'Introductory astronomy',
     summary:
-      'Three stars, no labels, and a guess about which is biggest. Over thirty steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organizes them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
+      'Three stars, no labels, and a guess about which is biggest. You separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organizes them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and count a synthetic population twice to see why the stars you can see are not the stars there are. Everything to that point is built on published models. The last stretch is not: four real spectra, observed by SDSS, and what a color turns out not to be able to tell you.',
     thumbnail: 'images/investigations/a-universe-of-stars.webp',
-    stepCount: 31,
-    gradedCount: 27,
-    objectiveCount: 7,
+    stepCount: 37,
+    gradedCount: 31,
+    objectiveCount: 9,
   },
   {
     id: 'lives-of-stars',

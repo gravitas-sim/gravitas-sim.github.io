@@ -27,7 +27,7 @@ concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
 **<!--fact:investigations-->24<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->670<!--/fact--> steps between
+investigations**, <!--fact:investigationSteps-->676<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -198,7 +198,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->3640<!--/fact--> strings, and
+of <!--fact:uiStrings-->3691<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -234,7 +234,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5675<!--/fact--> tests across <!--fact:jestSuites-->164<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5733<!--/fact--> tests across <!--fact:jestSuites-->165<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -260,7 +260,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->200<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->616<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->4021<!--/fact--> KB         | <!--fact:buildDeferredChunks-->148<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4073<!--/fact--> KB         | <!--fact:buildDeferredChunks-->149<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->817<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -361,8 +361,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1200<!--/fact--> tests
-in <!--fact:e2eFiles-->88<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1203<!--/fact--> tests
+in <!--fact:e2eFiles-->89<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -375,10 +375,12 @@ obvious:
 - **So the built site gets its own spec.** `e2e/production.spec.js` touches
   nothing but the DOM and runs against `dist/`, defending what the source suite
   structurally cannot reach: chunk splitting, deferred imports, and assets the
-  build forgot to copy.
+  build forgot to copy. The self-containment, accessibility-parity and
+  sonification-text specs run there too, minus the tests that compare against
+  a module's own arrays.
 
   ```bash
-  npm run build && npm run e2e:dist   # the production spec against dist/
+  npm run build && npm run e2e:dist   # the dist/ specs against dist/
   npm run e2e:all                     # both targets
   ```
 

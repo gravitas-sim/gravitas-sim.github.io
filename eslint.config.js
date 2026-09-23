@@ -21,6 +21,10 @@ export default [
         // Node's own since 18. tools/build-gw-data.mjs downloads the published
         // GWOSC figure data with it rather than shelling out to curl.
         fetch: 'readonly',
+        // Also Node's own. A fetch against an archive needs a deadline: SDSS's
+        // spectrum service once held a connection for 122 s before a 502, and
+        // without one tools/build-sdss-spectra.mjs waited it out per spectrum.
+        AbortSignal: 'readonly',
         window: 'readonly',
         document: 'readonly',
         localStorage: 'readonly',

@@ -24,6 +24,7 @@ import {
   CHECKS,
   GROUPS,
   OUTCOMES,
+  SOURCE_KEYS,
   CI_SETUP_STEPS,
   CI_SETUP_COMMANDS,
   CI_EQUIVALENTS,
@@ -166,10 +167,20 @@ describe('the check registry', () => {
     }
   });
 
-  test('provenance checks name the source they need', () => {
-    for (const check of CHECKS.filter(c => c.tier === 'provenance')) {
-      expect(['gw', 'stellar']).toContain(check.sources);
+  // Asked of the registry, not of a list kept here: the question is whether a
+  // provenance check names a cache the gate knows how to probe, and whether
+  // every such cache has a check that uses it. A hard-coded pair answered
+  // neither, and failed when a third dataset arrived.
+  test('provenance checks name a source the gate can probe', () => {
+    const provenance = CHECKS.filter(c => c.tier === 'provenance');
+    expect(provenance.length).toBeGreaterThan(0);
+    for (const check of provenance) {
+      expect(SOURCE_KEYS).toContain(check.sources);
     }
+    // And no pinned source is left without a check that would notice it drift.
+    expect([...new Set(provenance.map(c => c.sources))].sort()).toEqual(
+      [...SOURCE_KEYS].sort()
+    );
   });
 
   // `npm run build` rewrites sw-manifest.js. Any check that asks whether the
@@ -387,18 +398,19 @@ describe('the summary cannot overstate a run', () => {
   // provenance rows are unavailable and the run is not green, even though
   // every structural check passed.
   test('structural success cannot cover for unavailable provenance', () => {
-    const structural = CHECKS.filter(c =>
-      ['gw-structure', 'stellar-structure'].includes(c.id)
-    );
     const provenance = CHECKS.filter(c => c.tier === 'provenance');
-    expect(structural).toHaveLength(2);
-    expect(provenance).toHaveLength(2);
+    const structural = CHECKS.filter(
+      c => c.group === 'science' && c.tier !== 'provenance'
+    );
+    // Every dataset has both halves, which is the split this test is about.
+    expect(provenance.length).toBe(SOURCE_KEYS.length);
+    expect(structural.length).toBe(provenance.length);
     const s = summarize([
       ...structural.map(c => row(OUTCOMES.PASS, c.label)),
       ...provenance.map(c => row(OUTCOMES.UNAVAILABLE, c.label)),
     ]);
     expect(s.green).toBe(false);
-    expect(s.counts[OUTCOMES.UNAVAILABLE]).toBe(2);
+    expect(s.counts[OUTCOMES.UNAVAILABLE]).toBe(provenance.length);
     expect(s.headline).toMatch(/did not run/);
   });
 

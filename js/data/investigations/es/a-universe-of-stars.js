@@ -17,7 +17,7 @@ export default {
   duration: '70-90 min',
   level: 'Astronomía introductoria',
   summary:
-    'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. A lo largo de treinta pasos separas las cuatro cosas que siempre se confunden entre sí —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes, supergigantes y enanas blancas en el lugar que ocupan realmente, averiguas por qué las estrellas más pesadas viven menos tiempo y terminas contando dos veces una población sintética para ver por qué las estrellas que puedes ver no son las estrellas que hay.',
+    'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. Separas las cuatro cosas que siempre se confunden entre sí —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes, supergigantes y enanas blancas en el lugar que ocupan realmente, averiguas por qué las estrellas más pesadas viven menos tiempo y cuentas dos veces una población sintética para ver por qué las estrellas que puedes ver no son las estrellas que hay. Todo eso se apoya en modelos publicados. El último tramo no: cuatro espectros reales, observados por SDSS, y lo que resulta que un color no te puede decir.',
   objectives: [
     'Distinguir masa, radio, temperatura, luminosidad y brillo aparente',
     'Leer una posición en un diagrama H-R, y saber por qué la temperatura va al revés',
@@ -26,6 +26,8 @@ export default {
     'Explicar por qué una gigante es una etapa de una vida y no una estrella pesada',
     'Explicar por qué una estrella con más combustible puede agotarlo antes',
     'Reconocer un efecto de selección en una muestra de estrellas',
+    'Distinguir una observación de un modelo, y decir cuál de los dos es un número dado',
+    'Leer un rasgo de absorción en un espectro real y decir qué establece que un color no puede establecer',
   ],
   steps: [
     {
@@ -489,6 +491,109 @@ export default {
         { label: 'Luminosidad de la estrella B' },
       ],
       tip: 'Las dos afirmaciones son ciertas para las estrellas de la secuencia principal, y por eso suenan bien. Ninguna es cierta para las estrellas en general, y aproximadamente una de cada mil estrellas cercanas al Sol es un contraejemplo de la segunda.',
+    },
+    {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'La luz misma',
+      body: 'Todo lo que has hecho hasta aquí se apoyaba en dos números por estrella —una temperatura y una luminosidad—, y esos venían de ocho trazas evolutivas publicadas. Una traza es un cálculo. No se midió ninguna estrella para construirlas.\n\nEstas cuatro son medidas. Cada una es la luz de una estrella real, separada por longitud de onda por el espectrógrafo de SDSS en Apache Point y contada, una noche cada una, en 2008. Las depresiones son longitudes de onda en las que algo de la propia atmósfera de la estrella absorbió su luz al salir.\n\nLas cuatro se muestran sin sus nombres. Las curvas <em>no</em> están dibujadas en los colores de sus estrellas, y eso es deliberado: estarían regalando la pregunta que hacen las cinco pantallas siguientes.\n\n<strong>Las tres estrellas del lienzo no son estas cuatro.</strong> Son las estrellas modeladas de la lección, donde han estado desde el paso 1, y nadie las ha observado nunca: son puntos de una traza publicada. Mantén separadas las dos mitades de la pantalla: el lienzo es el modelo, el panel es la medida.',
+      tip: 'Cada número bajo el lienzo se mide sobre la marcha a partir de los datos incluidos. El panel también da la placa, la fibra y la noche, así que cualquiera de estas cuatro se puede buscar en el archivo.',
+    },
+    {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Ordénalas por color',
+      body: 'Ignora las depresiones por completo. Fíjate solo en la inclinación general de cada curva: si cae del azul al rojo o si sube.\n\nUna de las cuatro emite unas tres veces más luz a 4.100&nbsp;&#8491; que a 8.100&nbsp;&#8491;. Otra emite alrededor de una décima parte. Eso es un factor treinta de diferencia en la pendiente entre las cuatro, y es la misma información que la simulación ya usa para decidir de qué color pintar una estrella.',
+      prompt:
+        'Ordenadas de más caliente a menos usando solo la inclinación del continuo, las cuatro son&hellip;',
+      options: [
+        'W, X, Y, Z',
+        'Z, Y, X, W',
+        'X, W, Z, Y',
+        'la inclinación no sirve para ordenarlas',
+      ],
+      because:
+        'W, X, Y, Z, y lo has hecho sin mirar una sola línea de absorción. Esta pantalla está pensada para ser fácil. La pendiente del continuo es realmente un termómetro, realmente ordena bien a estas cuatro, y nada de las cuatro pantallas siguientes se desdice de eso. La pregunta que hace el resto de esta sección no es si el color funciona, sino si el color es todo lo que hay.',
+      tip: 'La inclinación es lo que hace una superficie caliente: cuanto más caliente está, mayor es la fracción de su luz que sale a longitudes de onda cortas. Por eso una estrella tiene color.',
+    },
+    {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Dos rasgos, en una ventana sin color',
+      body: 'Pon el control de longitud de onda en <strong>hidrógeno &beta;</strong>. Ahora el gráfico tiene 170&nbsp;&#8491; de ancho en lugar de cinco mil, y a lo largo de ese tramo los continuos de W, X e Y difieren en inclinación un dos por ciento. Aquí no hay color que leer. Aquello por lo que aún puedas distinguir estas estrellas no es su color.\n\nLa banda sombreada es donde se mide el número: la depresión, frente al nivel de los dos tramos despejados a cada lado. Con el control de foco en <em>las cuatro</em>, el panel lleva todos los rasgos de todas las estrellas a la vez, así que puedes anotar las dos columnas sin perder la imagen; pero pasa el control a <strong>calcio</strong> y mira, porque la segunda columna no se comporta como la primera.',
+      fields: [
+        { label: 'Profundidad de Hβ, estrella W' },
+        { label: 'Hβ, estrella X' },
+        { label: 'Hβ, estrella Y' },
+        { label: 'Hβ, estrella Z' },
+        { label: 'Profundidad de Ca II K, estrella W' },
+        { label: 'Ca II K, estrella X' },
+        { label: 'Ca II K, estrella Y' },
+        { label: 'Ca II K, estrella Z' },
+      ],
+      tip: 'El hidrógeno es con diferencia el elemento más abundante en las cuatro. Su línea es débil en la estrella Z no porque falte hidrógeno, sino porque la estrella está demasiado fría para poner mucho de él en el estado que absorbe esta longitud de onda. La intensidad de una línea no es una abundancia.',
+    },
+    {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Nombra una',
+      body: 'Otro instrumento y otra estrella: la <strong>estrella S</strong>, mostrada solo en ventanas estrechas. Este instrumento no tiene ningún ajuste que enseñe el espectro entero, así que no dispones de ningún color.\n\nRecorre las cuatro posiciones del control de longitud de onda y lee las cuatro profundidades bajo el lienzo. Cada opción de abajo nombra una clase <em>y</em> la prueba que la apoya. Solo una es una afirmación verdadera sobre este espectro.',
+      prompt: 'La estrella S es&hellip;',
+      options: [
+        'una estrella A: su línea de hidrógeno es el rasgo más profundo del espectro',
+        'una estrella G: su calcio es muy profundo, su hidrógeno moderado, y no tiene banda de óxido de titanio',
+        'una estrella K: su sodio es profundo, en torno a una cuarta parte del continuo',
+        'una estrella M: la banda de óxido de titanio está ahí, en torno a una séptima parte',
+      ],
+      because:
+        'Una estrella G. Las otras tres nombran un rasgo real y se equivocan en su valor, y por eso el panel lo zanja: la profundidad del hidrógeno es de un 14%, no del 37% que da una estrella A; el sodio está en torno al 9%, no en el 23% de una estrella K; y el óxido de titanio marca un 2%, que no es banda ninguna: la estrella M de la comparación da un 13%. Cuatro números, sin color, y la clase se sigue de ellos. Fíjate en cuáles hicieron el trabajo. El calcio y el hidrógeno juntos separan esta estrella de una K, y no hizo falta nada sobre su brillo general ni su inclinación; ni siquiera estaban en pantalla.',
+      tip: 'La respuesta del propio archivo está en el último control, y sigue apagada hasta que la enciendas. Comprométete primero.',
+    },
+    {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'La afirmación que hay que desmontar',
+      body: 'Un colega lo plantea así:\n\n<em>«El color de una estrella te dice su temperatura, y su temperatura te dice qué aspecto tiene su espectro. Así que el espectro no añade nada que no tuvieras ya.»</em>\n\nLa primera mitad se acerca bastante a la verdad, y tú mismo lo demostraste dos pantallas atrás. La segunda mitad es de lo que trata tu columna de calcio.',
+      prompt:
+        'Usando un número que hayas medido, di qué falla en la segunda mitad de esa afirmación. Sé concreto sobre qué rasgo y qué valores.',
+      tip: 'Tu cuaderno tiene las dos columnas que anotaste. La pregunta te pide usar una de ellas, no recordar la forma de una imagen.',
+    },
+    {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Qué son cuatro espectros, y qué no son',
+      body: '<strong>Los nombres ya están puestos.</strong> La estrella W está clasificada como A0 por la tubería de SDSS y como A1V por una plantilla independiente; X es G2 y G5; Y es K3 y K3V; Z es M1 y M2Vvar. Dos clasificaciones que coinciden en la letra en los cuatro casos, y por eso esta lección se permite llamarlas A, G, K y M. Ninguna de esas letras se leyó de un color.\n\n<strong>Un color es un buen termómetro.</strong> Ordenó bien a estas cuatro de un vistazo, y es lo que la simulación ha usado siempre. Aquí no se argumenta nada en su contra.\n\n<strong>Un espectro no es una versión más caliente o más fría de una misma imagen.</strong> El hidrógeno cae de W a Z; el calcio sube y luego baja. Dos rasgos, dos formas distintas, y el segundo no se puede obtener de una temperatura por ningún medio, porque no es una función uno a uno de ella.\n\n<strong>Y esto son cuatro estrellas.</strong> Una por letra. No es un atlas, ni un sondeo, ni una muestra representativa de nada: otra estrella A daría otros números, las tres letras más calientes que A no están aquí, y cada una de estas se eligió por tener la señal más limpia del archivo, no por ser típica. Nada de estas seis pantallas establece qué hacen las estrellas A en general. Lo que sí pueden hacer cuatro ejemplos es zanjar una cuestión de existencia —si un espectro lleva algo que un color no lleva—, y para eso se han traído.',
+      tip: 'Si quieres estas cuatro en el archivo y no aquí: el panel da la placa, el MJD y la fibra de cada una, que es su dirección permanente en SDSS. La gravedad superficial que la propia tubería asigna a la estrella W sugiere que no es una enana de secuencia principal, y por eso esta lección no la llama así en ningún momento.',
     },
     {
       rubric:

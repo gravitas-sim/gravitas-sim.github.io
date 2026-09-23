@@ -11,7 +11,7 @@
 // changed.
 //
 // So this is the list, and both sides read it. release-check.mjs runs it.
-// tests/checkRegistry.test.js reads .github/workflows/ci.yml and fails when a
+// tests/releaseGate.test.js reads .github/workflows/ci.yml and fails when a
 // step there is missing here, or an entry here claims a CI job it is not in.
 // The workflow is still hand-written YAML - GitHub needs it that way - but it
 // can no longer quietly disagree with the gate.
@@ -38,7 +38,17 @@ const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CACHES = {
   gw: path.join(REPO, '.gw-cache'),
   stellar: path.join(REPO, '.mist-cache'),
+  spectra: path.join(REPO, '.sdss-cache'),
 };
+
+/**
+ * The datasets that have a pinned source on disk.
+ *
+ * Exported so that tests/releaseGate.test.js can ask the registry which
+ * datasets exist rather than carry its own list of them. It carried one, and a
+ * third dataset failed two assertions that were not about the third dataset.
+ */
+export const SOURCE_KEYS = Object.freeze(Object.keys(CACHES));
 
 /**
  * Whether a pinned scientific source is on this machine.
@@ -49,7 +59,7 @@ const CACHES = {
  * run was able to establish, and a release summary that calls it a pass is
  * lying about which.
  *
- * @param {'gw'|'stellar'} which - The dataset
+ * @param {'gw'|'stellar'|'spectra'} which - The dataset
  * @returns {boolean} True when the cache has something in it
  */
 export function sourcesCached(which) {
@@ -276,8 +286,7 @@ export const CHECKS = [
     label: 'browser-suite skip policy',
     command: ['npm', 'run', 'test:policy'],
     tier: 'quick',
-    ci: null,
-    why: 'added with the policy itself; runs in a fraction of a second',
+    ci: 'checks',
     group: 'correctness',
   },
   {
@@ -567,16 +576,11 @@ export const CHECKS = [
     group: 'generated',
   },
   // The counts that cost a test run to measure: how many jest tests there are,
-  // how many browser tests, what a visitor downloads. The comment in
-  // docs-facts.mjs said CI paid for these in the job where the commands had
-  // already run. CI never did, and by the time anyone looked README.md was
-  // claiming 3608 jest tests against 4844 and 579 browser tests against 1061.
-  // The counts that cost a test run to measure: how many jest tests there are,
   // how many browser tests, what a visitor downloads.
   //
-  // The comment here used to say CI paid for these in the job where the
-  // commands had already run. CI never did - its documentation step ran the
-  // cheap check, which reports these as not measured and then prints
+  // The comment in docs-facts.mjs used to say CI paid for these in the job
+  // where the commands had already run. CI never did - its documentation step
+  // ran the cheap check, which reports these as not measured and then prints
   // "Documentation matches the source" - and by the time anyone looked README.md
   // was claiming 3608 jest tests against 4844 and 579 browser tests against
   // 1061.
@@ -623,6 +627,15 @@ export const CHECKS = [
     group: 'science',
   },
   {
+    id: 'spectra-structure',
+    label: 'the four SDSS spectra are complete and self-consistent',
+    command: ['npm', 'run', 'spectra:check'],
+    tier: 'quick',
+    ci: null,
+    why: 'added after the workflow was written; runs in seconds',
+    group: 'science',
+  },
+  {
     id: 'gw-provenance',
     sources: 'gw',
     label: 'GW150914 regenerates from the published traces',
@@ -640,6 +653,17 @@ export const CHECKS = [
     tier: 'provenance',
     ci: null,
     why: 'needs the 100 MB MIST grid cached; see --provenance',
+    group: 'science',
+  },
+
+  {
+    id: 'spectra-provenance',
+    sources: 'spectra',
+    label: 'the four SDSS spectra regenerate from the archive CSVs',
+    command: ['npm', 'run', 'spectra:provenance'],
+    tier: 'provenance',
+    ci: null,
+    why: 'needs the SDSS CSVs cached; see --provenance',
     group: 'science',
   },
 
