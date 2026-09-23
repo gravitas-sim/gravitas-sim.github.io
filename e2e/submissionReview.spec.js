@@ -152,8 +152,14 @@ test.describe('the submission review page', () => {
     ]);
     expect(rows[4][col('duplicate_of')]).toBe('3');
     expect(rows[3][col('roster_id')]).toBe('S-3');
-    // The typed name that looks like a formula arrives as text.
-    expect(rows[2][col('name_as_typed')].startsWith("'=")).toBe(true);
+    // The typed name that looks like a formula reaches a spreadsheet as text -
+    // behind an apostrophe in the file - and reads back as it was typed.
+    expect(summary.text).toContain(
+      '"\'=HYPERLINK(""http://example.invalid"",""x"")"'
+    );
+    expect(rows[2][col('name_as_typed')]).toBe(
+      '=HYPERLINK("http://example.invalid","x")'
+    );
     await expect(page.locator('#exportStatus')).toHaveText(
       `Downloaded ${summary.name}.`
     );

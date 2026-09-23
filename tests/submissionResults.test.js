@@ -331,26 +331,53 @@ describe('the CSV exports', () => {
       summaryCsv(hostile),
       questionCsv(hostile, { includeWritten: true }),
     ];
+    // What a spreadsheet sees: the fields with CSV's quoting removed and
+    // nothing else - in particular not the apostrophe that disarms a cell,
+    // which fromCsv() takes back off and a spreadsheet does not.
+    const asSeen = csv => {
+      const cells = [];
+      let field = '';
+      let quoted = false;
+      for (let i = 0; i < csv.length; i++) {
+        const c = csv[i];
+        if (quoted) {
+          if (c === '"' && csv[i + 1] === '"') {
+            field += '"';
+            i++;
+          } else if (c === '"') quoted = false;
+          else field += c;
+        } else if (c === '"' && field === '') quoted = true;
+        else if (c === ',' || c === '\r' || c === '\n') {
+          if (c !== '\n' || csv[i - 1] !== '\r') cells.push(field);
+          field = '';
+        } else field += c;
+      }
+      return cells;
+    };
     for (const csv of files) {
-      for (const row of fromCsv(csv).slice(1)) {
-        for (const cell of row) {
-          const lead = cell.replace(/^[\s\u0000-\u001f ﻿]+/, '');
-          if (/^[=+\-@]/.test(lead)) {
-            // The only way a formula character may lead is behind the
-            // apostrophe that makes it text, or as a plain number.
-            expect(cell.startsWith("'") || Number.isFinite(Number(cell))).toBe(
-              true
-            );
-          }
+      for (const cell of asSeen(csv)) {
+        const lead = cell.replace(/^[\s\u0000-\u001f\u00a0\ufeff]+/, '');
+        if (/^[=+\-@]/.test(lead)) {
+          // A formula character may lead only behind the apostrophe that makes
+          // the cell text, or as a plain number.
+          expect({
+            cell,
+            safe: cell.startsWith("'") || Number.isFinite(Number(cell)),
+          }).toEqual({ cell, safe: true });
         }
       }
     }
+    // And reading the file back returns exactly what was handed in.
     const summary = fromCsv(files[0]);
     expect(summary[1][SUMMARY_COLUMNS.indexOf('name_as_typed')]).toBe(
-      '\'=HYPERLINK("http://example.invalid","click")'
+      '=HYPERLINK("http://example.invalid","click")'
     );
     expect(summary[1][SUMMARY_COLUMNS.indexOf('source_label')]).toBe(
-      "'=file.pdf"
+      '=file.pdf'
+    );
+    expect(summary[1][SUMMARY_COLUMNS.indexOf('roster_id')]).toBe(' @SUM(A1)');
+    expect(asSeen(files[0])).toContain(
+      '\'=HYPERLINK("http://example.invalid","click")'
     );
   });
 });

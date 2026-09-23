@@ -20,7 +20,10 @@ npm run dev          # serves the repository root at http://localhost:8003
 ```
 
 The unbundled ES modules run straight from disk, so there is no build step in
-the development loop. `npm run build` exists for publishing, not for working.
+the development loop. `npm run build` exists for publishing, not for working,
+and it needs the instructor passphrase, which a contributor does not have and
+does not need: `npm run build:ci` is the same build with a throwaway key, and it
+is the one CI runs.
 
 ---
 
@@ -36,7 +39,7 @@ npm run docs:check        # the counts in the docs still match the source
 npm run check:architecture  # no import cycles, no low-level module importing up
 npm run vendor:check      # vendor/ matches the pinned three.js, Chart.js and fonts
 npm run a11y              # axe over every surface, plus the keyboard checks
-npm run build             # a production bundle must still build
+npm run build:ci          # a production bundle must still build (no passphrase)
 ```
 
 Depending on what you touched:

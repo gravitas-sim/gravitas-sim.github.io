@@ -59,6 +59,7 @@ const {
   LIGHT_CURVE_COLUMNS,
   RADIAL_VELOCITY_COLUMNS,
 } = await import('../js/dataExport.js');
+const { fromCsv, toCsv } = await import('../js/csv.js');
 const { timeUnitSeconds } = await import('../js/units.js');
 const { G_SI, SOLAR_MASS_KG, AU_M } = await import('../js/blackHolePhysics.js');
 
@@ -164,6 +165,29 @@ describe('CSV field writing', () => {
     expect(csvField('-Infinity')).toBe('"\'-Infinity"');
     // Whitespace alone is not a formula.
     expect(csvField('   ')).toBe('   ');
+  });
+
+  test('what toCsv disarms, fromCsv gives back exactly', () => {
+    // The accessible tables render the CSV bytes, so the round trip has to be
+    // exact - including a value that already began with an apostrophe.
+    const values = [
+      '=1+1',
+      '  =2',
+      '@x',
+      '-3.5',
+      '+2',
+      "'=x",
+      "'=x,y",
+      "''=z",
+      "'plain",
+      '\t=cmd',
+      'a,"b"\nc',
+      '-Infinity',
+    ];
+    expect(fromCsv(toCsv([values]))).toEqual([values]);
+    // A leading apostrophe that was data is doubled, so a spreadsheet shows it.
+    expect(csvField("'=x")).toBe(`"''=x"`);
+    expect(csvField("'plain")).toBe("'plain");
   });
 
   test('numbers keep their precision without gaining noise', () => {
