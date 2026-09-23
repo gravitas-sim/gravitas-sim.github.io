@@ -75,6 +75,7 @@ import {
 } from './generated-blocks.mjs';
 import { RELEASE } from './project-metadata.mjs';
 import { CHECKS } from './checks.mjs';
+import { inOwnTransformCache } from './playwright-cache.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const rel = p => relative(REPO, p) || '.';
@@ -507,10 +508,15 @@ function testFacts(report, physics) {
   }
 
   // The browser suite, listed rather than run: the count is what the docs
-  // quote, and listing takes a second where running takes minutes.
-  const list = run('npx', ['playwright', 'test', '--list', '--reporter=list'], {
-    env: { ...process.env, GRAVITAS_E2E_PORT: '4399' },
-  });
+  // quote, and listing takes a second where running takes minutes. In a
+  // transform cache of its own, because under Jest this runs beside
+  // tests/shardInventory.test.js's listings and a shared one lets either of
+  // them delete a source map the other is about to read.
+  const list = inOwnTransformCache(cacheEnv =>
+    run('npx', ['playwright', 'test', '--list', '--reporter=list'], {
+      env: { ...process.env, GRAVITAS_E2E_PORT: '4399', ...cacheEnv },
+    })
+  );
   const listed =
     list && list.match(/Total:\s+(\d+)\s+tests?\s+in\s+(\d+)\s+file/);
   if (listed) {
