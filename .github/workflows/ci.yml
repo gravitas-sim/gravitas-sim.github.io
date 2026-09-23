@@ -152,6 +152,15 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # Every skip in the browser suite is a platform capability on the
+      # allowlist or a condition on the build target, and no spec carries
+      # test.only, test.fixme or describe.skip. A skip is how an assertion stops
+      # running without anything turning red, so the policy has to be the thing
+      # that does. It was gate-only when it was written, and sat red on v2
+      # across three features because nothing a pull request runs asked it.
+      - name: Browser-suite skip policy
+        run: npm run test:policy
+
       # `--json --outputFile` writes the report to .facts/ and leaves the console
       # reporter alone, so the log is unchanged and "Documentation counts" a few
       # steps down can read the test count out of the run that just happened
