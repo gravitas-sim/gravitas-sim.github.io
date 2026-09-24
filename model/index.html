@@ -1249,29 +1249,63 @@
       </div>
 
       <h2 id="spacetime">The spacetime view</h2>
-      <p><span class="doc-badge is-illustrative">Illustrative</span></p>
+      <p><span class="doc-badge is-analytic">Analytic field</span></p>
       <p>
-        The three-dimensional grid view shows a mesh that dips beneath each
-        massive object. It is an educational visualization of the idea that mass
-        shapes the geometry objects move through. It is not a numerical solution
-        of anything.
+        The three-dimensional grid shows a mesh that dips beneath each massive
+        object. The shape of that dip is the Newtonian gravitational potential,
+        &Phi;(<em>x</em>) = &minus;&sum; <em>Gm<sub>i</sub></em> /
+        <em>r<sub>i</sub></em>, evaluated at every one of the sheet's 20,400
+        vertices from the same bodies and the same constant the simulation
+        itself uses. It is the same function, in the same file, that the 2-D
+        potential underlay paints as a colour wash, so a well on the sheet is
+        the well in the wash and both are the well the bodies are moving in.
       </p>
       <p>
-        Specifically: the depth of the well beneath an object is a smooth
-        falloff function scaled by the logarithm of its mass, with a sharper
-        profile for black holes so the singularity reads visually. It is not the
-        Newtonian potential, and it is not an embedding diagram of the
-        Schwarzschild metric. The shape was chosen to look right and to keep
-        every object legible across the enormous mass range Gravitas allows.
+        This was not true until recently, and the previous version is worth
+        recording because it is the kind of thing a reader is entitled to be
+        told. The sheet used to be deformed by an invented function: per-type
+        strength and falloff tables, an amplitude proportional to
+        log<sub>10</sub>(1 + <em>m</em>), a Gaussian profile, and a separate
+        power-law branch for black holes. Under it a one-solar-mass star and a
+        one-solar-mass black hole made visibly different wells, and because a
+        Gaussian has no tail the well simply stopped a few hundred units out
+        where the real potential falls as 1/<em>r</em> forever. It was also
+        slower than the real thing, by a factor of two.
       </p>
       <p>
-        The familiar rubber-sheet picture is a metaphor even when drawn
-        rigorously, since it depicts curved space using a surface embedded in a
-        flat space, and it says nothing about the curvature of <em>time</em>,
-        which is what actually produces the fall of a dropped object. Gravitas's
-        version is a metaphor drawn for clarity. It is genuinely useful for
+        Two things about the drawing are still choices rather than physics, and
+        the view says both on its own caption. <strong>Depth is
+        logarithmic</strong>: it counts factors of ten below the shallowest
+        point on the grid rather than being proportional to &Phi;, because the
+        field spans many decades between a black hole's rim and the edge of a
+        scene and a proportional sheet would be a single spike on a flat plane.
+        <strong>The well flattens at the bottom</strong>, and it is worth
+        knowing which bottom. The force law is softened at five length units by
+        default, so the potential is finite everywhere and the sheet levels off
+        at the softening radius &mdash; which is honest, because that is where
+        the force levels off too, and a body that never feels a singular force
+        should not be drawn sitting in one. Below that there is a second, harder
+        clamp 6.7 decades under the rim, for scenarios that soften less. In the
+        default configuration you are seeing the first, not the second.
+      </p>
+      <p>
+        Bodies are drawn at the depth of the sheet beneath them, computed from
+        every other source but not from themselves, plus a fixed clearance so a
+        sphere rests on the surface instead of through it. Until this pass they
+        were drawn at 42 + log<sub>10</sub>(<em>m</em>) &times; 10.4, which read
+        as a third spatial coordinate and was not one: a heavier body floated
+        higher, in a view whose entire subject is that mass makes things fall.
+      </p>
+      <p>
+        None of this is general relativity. The familiar rubber-sheet picture is
+        a metaphor even when drawn rigorously, since it depicts curved space
+        using a surface embedded in a flat space, and it says nothing about the
+        curvature of <em>time</em>, which is what actually produces the fall of
+        a dropped object. What has changed is that the metaphor is now drawn
+        from the quantity it claims to depict. It is genuinely useful for
         talking about why mass matters and why a deeper well is harder to climb
-        out of, and it should not be read as a calculation.
+        out of; it is not an embedding diagram of the Schwarzschild metric, and
+        no number should be read off the surface.
       </p>
 
       <h2 id="visual">Visual effects</h2>
@@ -2091,14 +2125,47 @@
               <td>Anything quantitative</td>
             </tr>
             <tr>
-              <td>Spacetime grid</td>
+              <td>Spacetime sheet &mdash; the field</td>
+              <td>
+                <span class="doc-badge is-analytic">Analytic</span>
+              </td>
+              <td>
+                Seeing the real Newtonian potential the bodies are moving in.
+                The sheet and the 2-D potential underlay evaluate the same
+                function over the same bodies, so a well in one is the well in
+                the other. It was not always so: until this was unified the
+                sheet was deformed by per-type strength and falloff tables with
+                a Gaussian profile, under which two bodies of the same mass
+                made different wells and the well stopped a few hundred units
+                out instead of falling as 1/r.
+              </td>
+              <td>
+                General relativity. This is a Newtonian potential drawn as a
+                height, which is the rubber-sheet analogy and not a metric;
+                nothing here is curvature.
+              </td>
+            </tr>
+            <tr>
+              <td>Spacetime sheet &mdash; the depth scale</td>
               <td>
                 <span class="doc-badge is-illustrative">Illustrative</span>
               </td>
               <td>
-                Talking about mass shaping the geometry objects move through
+                Comparing wells within one scene. Depth counts factors of ten
+                below the shallowest point on the grid rather than being
+                proportional to the potential, because the field spans many
+                decades between a black hole and the edge of a scene and a
+                proportional sheet is one spike on a flat plane. The view says
+                so on its own caption.
               </td>
-              <td>Reading curvature values off the surface</td>
+              <td>
+                Reading a depth off the surface as a number. The sheet
+                levels off at the force law's own softening radius, five length
+                units by default, with a harder clamp 6.7 decades below the rim
+                behind it for scenarios that soften less. The flat disc at the
+                bottom of a deep well is one of those two floors, not a feature
+                of the field.
+              </td>
             </tr>
           </tbody>
         </table>

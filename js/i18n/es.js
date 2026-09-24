@@ -1321,6 +1321,10 @@ export const ES = {
   'summary.announce.scenario': '{name} cargado.',
   'summary.announce.selected': '{name} seleccionado.',
   'view3d.close.label': 'Cerrar la vista del espacio-tiempo',
+  'view3d.sheetDisclosure':
+    'Potencial newtoniano · profundidad logarítmica · plano dentro del radio de suavizado',
+  'view3d.sheetDisclosure.detail':
+    'La malla se deforma con el mismo potencial newtoniano que usa la simulación, a partir de los mismos cuerpos, así que un pozo aquí es un pozo por el que los cuerpos se mueven de verdad. La profundidad es una decisión de dibujo: es proporcional al logaritmo del potencial y no al potencial mismo, porque el campo abarca muchos factores de diez entre un agujero negro y el borde de la escena y una malla proporcional sería un pico sobre un plano liso. El pozo se aplana en el fondo porque la ley de fuerzas también lo hace, en el radio de suavizado — cinco unidades de longitud salvo que un escenario diga otra cosa — y un cuerpo que nunca siente una fuerza singular no debería dibujarse dentro de una. Un segundo suelo, más duro, está {decades} factores de diez por debajo del borde para escenarios con menos suavizado.',
   'view3d.loadFailed':
     'No se pudo cargar la vista del espacio-tiempo. Comprueba tu conexión.',
   'tutorial.welcome': 'Bienvenido a Gravitas',

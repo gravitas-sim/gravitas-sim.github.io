@@ -106,6 +106,11 @@ const LAYERS = [
       /^js\/binaryOrbits\.js$/,
       /^js\/binaryStability\.js$/,
       /^js\/gravityAssist\.js$/,
+      // The drawn gravitational potential, shared by the 2-D underlay and the
+      // 3-D sheet. Down here because it is the one definition of a field two
+      // feature modules both render, and because putting it in either of them
+      // is how they came to disagree in the first place.
+      /^js\/potential\.js$/,
       /^js\/maneuver\.js$/,
       /^js\/cr3bp\.js$/,
       /^js\/chaos\//,

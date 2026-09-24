@@ -1340,6 +1340,12 @@ export const EN = {
   'summary.announce.scenario': 'Loaded {name}.',
   'summary.announce.selected': 'Selected {name}.',
   'view3d.close.label': 'Close the spacetime view',
+  // What the sheet is, and the two things about it that looking cannot tell
+  // you. The 2-D canvas carries the equivalent line beside its scale bar.
+  'view3d.sheetDisclosure':
+    'Newtonian potential · depth logarithmic · flat inside the softening radius',
+  'view3d.sheetDisclosure.detail':
+    'The sheet is deformed by the same Newtonian potential the simulation uses, from the same bodies, so a well here is a well the bodies are actually moving in. Depth is a drawing choice: it is proportional to the logarithm of the potential rather than to the potential itself, because the field spans many factors of ten between a black hole and the edge of a scene and a proportional sheet would be one spike on a flat plane. The well levels off at the bottom because the force law does, at the softening radius — five length units unless a scenario says otherwise — and a body that never feels a singular force should not be drawn sitting in one. A second, harder floor sits {decades} factors of ten below the rim for scenarios that soften less than that.',
   'view3d.loadFailed':
     'The spacetime view could not be loaded. Check your connection.',
   'tutorial.welcome': 'Welcome to Gravitas',

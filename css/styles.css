@@ -2377,6 +2377,31 @@
     display: block;
   }
 
+  /* The line of provenance, on the view rather than under it.
+     Inside the stage, not in .three-view-hint below it, because the hint is
+     about how to drive the camera and this is about what the picture means -
+     and because a caption that sits on the view travels with a screenshot of
+     it, which is the whole reason the 2-D canvas draws its size disclosure
+     into the bitmap instead of beside it.
+     pointer-events: none so it never eats a drag meant for OrbitControls. */
+  .three-view-disclosure {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    color: rgba(200, 214, 235, 0.62);
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .three-view-hint {
     font-size: 11px;
     text-align: center;

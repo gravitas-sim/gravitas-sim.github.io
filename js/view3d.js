@@ -13,11 +13,19 @@ import {
   gas_giants,
   asteroids,
   comets,
+  galaxies,
   gravity_ripples,
   debris,
   neutron_stars,
   white_dwarfs,
+  minInteractionDistance,
 } from './physics.js';
+import { SETTINGS } from './appState.js';
+import { t } from './i18n/index.js';
+// The sheet is deformed by the same field the 2-D underlay paints. It used to
+// be deformed by an invented one; see the header of js/potential.js for what
+// that was and what it cost.
+import { potentialAt, potentialSources, sheetDepth } from './potential.js';
 import { starColor } from './bodyVisuals.js';
 import { estimateTeffFromMass } from './stellar/mainSequence.js';
 
@@ -51,6 +59,12 @@ let controls = null;
 let rootGroup = null;
 let toggleBtn = null;
 let statusLabel = null;
+let sheetCaption = null;
+// The field, resolved once per frame. syncMeshes() needs it to seat each body
+// on the sheet and updateSpacetimeSurface() needs it to deform the sheet, and
+// rebuilding it per body meant re-filtering and re-sorting the source list
+// forty-four times a frame for an answer that cannot change within one.
+let frameField = { sources: [], G: 1, soft: 0, reference: 0 };
 let resizeObserver = null;
 let viewEnabled = false;
 let needsFocusReset = false;
@@ -93,28 +107,45 @@ const SPACE_BG_COLOR = 0x010102;
 const SPACETIME_SIZE = 3000;
 const SPACETIME_MAX_SIZE = 80000;
 const GRID_SEGMENTS = 50; // Denser grid for better detail
-const SPACETIME_MAX_WELL = 2000; // Deep enough to look like a singularity
-const WELL_STRENGTH = {
-  BlackHole: 80,
-  StarObject: 25,
-  GasGiant: 8,
-  Planet: 5,
-  NeutronStar: 35,
-  WhiteDwarf: 20,
-  default: 5,
-};
-const WELL_FALLOFF = {
-  BlackHole: 45,
-  StarObject: 90,
-  GasGiant: 60,
-  Planet: 50,
-  NeutronStar: 55,
-  WhiteDwarf: 70,
-  default: 80,
-};
-const OBJECT_BASE_ALTITUDE = 42;
-const OBJECT_ALTITUDE_SPREAD = 26;
-const BLACK_HOLE_ALTITUDE_OFFSET = -18;
+// How far the sheet falls, in world units, for each factor of ten the potential
+// deepens below the shallowest point on the grid.
+//
+// Depth is logarithmic rather than proportional to phi, for the reason the 2-D
+// underlay gives: the potential spans many decades between a black hole's rim
+// and the far edge of a scene, and anything linear in phi is a black disc
+// surrounded by a flat plane. That is a display choice and the view says so on
+// its own surface. What it is not is a per-body choice - depth is a function of
+// phi and of nothing else, so two bodies of the same mass make the same well.
+const SHEET_DEPTH_PER_DECADE = 300;
+
+// Where the sheet stops, and in normal use it never gets there.
+//
+// The engine softens the force law at 5 length units by default -
+// js/physics.js sets min_interaction_distance to 0 in DEFAULT_SETTINGS, and
+// zero there means "no scenario has an opinion, use MIN_INTERACTION_DISTANCE",
+// not "no floor". So phi is finite everywhere and the well flattens at the
+// softening radius, one to two decades down, which is exactly the behaviour
+// the force law has and therefore the right thing to draw.
+//
+// This clamp is for the scenarios that soften less, and so that a vertex
+// sitting on top of a body has a number to be handed. At 300 units per decade
+// it sits 6.7 decades below the rim.
+const SPACETIME_MAX_WELL = 2000;
+const SHEET_FLOOR_DECADES = SPACETIME_MAX_WELL / SHEET_DEPTH_PER_DECADE;
+
+// Bodies are drawn this far above the sheet, and this is the whole of it: one
+// constant, the same for every body, so that a sphere rests on the surface
+// instead of being buried halfway through it.
+//
+// It used to be 42 + log10(mass) * 10.4, with a further -18 for black holes.
+// That reads as a third spatial coordinate and is not one - a heavier body was
+// drawn higher for no reason anyone could state, in a view whose entire subject
+// is that mass makes things fall. The height a body sits at is now the depth of
+// the sheet underneath it, which is a coordinate, and it is computed from every
+// other source but not from the body itself: a body does not sit in its own
+// well, and inside the softening radius its own well is flat and meaningless.
+const SHEET_CLEARANCE = 8;
+
 let gridMesh = null;
 // The grid's current width in world units. It stays centered on the origin, so
 // a vertex's local x/z are also its world x/z and everything that deforms the
@@ -296,6 +327,7 @@ function update3DScene(timestamp = performance.now()) {
   if (timestamp - lastRender < MIN_RENDER_INTERVAL) return;
 
   lastRender = timestamp;
+  refreshFrameField();
   const activeObjects = syncMeshes();
   updateSpacetimeSurface();
 
@@ -379,6 +411,7 @@ function ensureScene() {
     'Interactive 3D spatial view of the current simulation'
   );
   canvasHost.appendChild(renderer.domElement);
+  ensureSheetCaption();
 
   scene = new THREE.Scene();
   scene.background = new THREE.Color(SPACE_BG_COLOR);
@@ -445,7 +478,9 @@ function addEnvironment() {
   });
 
   gridMesh = new THREE.LineSegments(buildGridGeometry(gridSize), gridMaterial);
-  gridMesh.position.y = -OBJECT_BASE_ALTITUDE * 0.45;
+  // Zero, now that a body's height is the sheet's depth beneath it rather
+  // than a constant the grid had to be pushed clear of.
+  gridMesh.position.y = 0;
   rootGroup.add(gridMesh);
 }
 
@@ -518,9 +553,27 @@ function ensureGridCovers(radius) {
   gridMesh.geometry = buildGridGeometry(gridSize);
 }
 
-function updateSpacetimeSurface() {
-  // Update grid directly
+/**
+ * Resolve the potential field for this frame.
+ *
+ * Called once from update3DScene before anything reads it.
+ *
+ * @returns {void}
+ */
+function refreshFrameField() {
   const sources = getSpacetimeSources();
+  const G = SETTINGS.gravitational_constant;
+  const soft = minInteractionDistance();
+  frameField = {
+    sources,
+    G,
+    soft,
+    reference: sheetReference(sources, G, soft),
+  };
+}
+
+function updateSpacetimeSurface() {
+  const { sources } = frameField;
   if (!sources.length && !gravity_ripples.length) return;
 
   updateGridCurvature(sources);
@@ -532,6 +585,13 @@ function updateGridCurvature(sources) {
   const position = gridMesh.geometry.attributes.position;
   const vertexCount = position.count;
   const now = performance.now();
+
+  // The same two numbers the 2-D underlay is handed by js/render.js, so the
+  // sheet and the wash are the same field and not merely similar ones.
+  const { G, soft, reference } = frameField;
+  // Reused across all 20,400 vertices: potentialAt takes a point, and building
+  // one object per vertex would allocate twenty thousand of them a frame.
+  const at = { x: 0, y: 0 };
 
   // Precompute active ripples and their properties to optimize vertex loop
   const activeRipples = [];
@@ -593,12 +653,16 @@ function updateGridCurvature(sources) {
   for (let i = 0; i < vertexCount; i++) {
     const vx = position.getX(i);
     const vz = position.getZ(i);
-    let targetHeight = 0;
 
-    // Calculate gravitational well depth from massive objects
-    for (let j = 0; j < sources.length; j++) {
-      targetHeight += computeWellDepth(sources[j], vx, vz);
-    }
+    // The sheet's own z runs the other way from the simulation's y.
+    at.x = vx;
+    at.y = -vz;
+    let targetHeight = sheetDepth(
+      potentialAt(at, G, soft, sources),
+      reference,
+      SHEET_DEPTH_PER_DECADE,
+      SPACETIME_MAX_WELL
+    );
 
     // Add gravitational wave ripples
     for (let j = 0; j < activeRipples.length; j++) {
@@ -669,6 +733,35 @@ function updateGridCurvature(sources) {
   }
 
   position.needsUpdate = true;
+}
+
+/**
+ * The line of provenance on the view itself.
+ *
+ * The same job the scale bar's size disclosure does on the 2-D canvas, and for
+ * the same reason: the sheet is now the real Newtonian potential, which is
+ * worth saying, but it is drawn on a logarithmic depth scale and it stops at a
+ * floor, and neither of those is visible by looking. A reader who screenshots
+ * this view gets the caption with it.
+ *
+ * @returns {void}
+ */
+function ensureSheetCaption() {
+  if (!canvasHost) return;
+  if (sheetCaption && sheetCaption.isConnected) return;
+  sheetCaption = document.createElement('p');
+  sheetCaption.id = 'threeViewDisclosure';
+  sheetCaption.className = 'three-view-disclosure';
+  const decades = SHEET_FLOOR_DECADES.toFixed(1);
+  sheetCaption.textContent = t('view3d.sheetDisclosure', { decades });
+  // One line is all the caption has room for. A reader who cannot see the
+  // sheet gets the whole of it, the same way the 2-D canvas puts its size
+  // disclosure's detail into the description assistive technology reads.
+  sheetCaption.setAttribute(
+    'aria-label',
+    t('view3d.sheetDisclosure.detail', { decades })
+  );
+  canvasHost.appendChild(sheetCaption);
 }
 
 function handleWindowResize() {
@@ -901,67 +994,94 @@ function updateMeshAppearance(mesh, obj) {
     style.roughness ?? TYPE_STYLES.default.roughness ?? 0.55;
 }
 
+/**
+ * The masses that deform the sheet.
+ *
+ * The same list js/render.js hands the 2-D underlay, in the same order, through
+ * the same cap. Sharing the equation is not enough on its own: two views that
+ * summed different bodies would still disagree, and this one used to leave the
+ * galaxies out.
+ *
+ * @returns {Array} At most POTENTIAL_SOURCE_CAP sources, heaviest first
+ */
 function getSpacetimeSources() {
-  return [
-    ...bh_list,
-    ...stars,
-    ...gas_giants,
-    ...planets,
-    ...neutron_stars,
-    ...white_dwarfs,
-  ].filter(obj => obj && obj.alive && obj.pos);
+  return potentialSources(
+    [
+      ...bh_list,
+      ...stars,
+      ...neutron_stars,
+      ...white_dwarfs,
+      ...galaxies,
+      ...gas_giants,
+      ...planets,
+    ].filter(obj => obj && obj.alive && obj.pos)
+  );
 }
 
-function computeWellDepth(obj, vx, vz) {
-  if (!obj || !obj.pos) return 0;
-  const objX = obj.pos.x || 0;
-  const objZ = -(obj.pos.y || 0);
-  const dx = vx - objX;
-  const dz = vz - objZ;
-  const distSq = dx * dx + dz * dz;
-  const distance = Math.sqrt(distSq) + 0.1; // Avoid division by zero
-
-  const baseStrength = WELL_STRENGTH[obj.obj_type] ?? WELL_STRENGTH.default;
-  const falloff = WELL_FALLOFF[obj.obj_type] ?? WELL_FALLOFF.default;
-  const mass = Math.max(getObjectMassApprox(obj), 1);
-
-  // Special handling for Black Holes to create a "singularity" punch-through effect
-  if (obj.obj_type === 'BlackHole') {
-    // Sharper falloff for BH
-    const sharpness = 3.5;
-    // The well should be extremely deep near the center
-    const deepWell =
-      (baseStrength * mass * 5.0) / (Math.pow(distance / 6, sharpness) + 0.05);
-    return -Math.min(SPACETIME_MAX_WELL, deepWell);
+/**
+ * The shallowest potential anywhere on the sheet, used as the zero of depth.
+ *
+ * Sampled at the four corners, which is where the field is weakest on a grid
+ * that ensureGridCovers() keeps wider than the scene. Measuring depth against
+ * the rim rather than against zero is what makes the picture readable when the
+ * whole grid sits deep inside one large body's well.
+ *
+ * @param {Array} sources - From getSpacetimeSources
+ * @param {number} G - The gravitational constant in force
+ * @param {number} soft - The softening floor
+ * @returns {number} |phi| at the shallowest corner
+ */
+function sheetReference(sources, G, soft) {
+  const h = gridSize / 2;
+  const at = { x: 0, y: 0 };
+  let shallowest = Infinity;
+  for (const [cx, cy] of [
+    [-h, -h],
+    [h, -h],
+    [-h, h],
+    [h, h],
+  ]) {
+    at.x = cx;
+    at.y = cy;
+    const mag = Math.abs(potentialAt(at, G, soft, sources));
+    if (mag < shallowest) shallowest = mag;
   }
-
-  // Standard gravity well for other objects
-  const magnitude = Math.log10(1 + mass) * baseStrength;
-  // Gaussian-like falloff for smoother but tight curvature
-  const normalized = Math.exp(-(distance * distance) / (2 * falloff * falloff));
-
-  const depth = -magnitude * normalized * 10; // Multiplier to give visual depth
-  return Math.max(-SPACETIME_MAX_WELL * 0.5, depth);
+  return Number.isFinite(shallowest) ? shallowest : 0;
 }
 
-function getObjectMassApprox(obj) {
-  if (!obj) return 1;
-  if (typeof obj.mass === 'number') return obj.mass;
-  if (typeof obj.massInSuns === 'number') return obj.massInSuns * 1000;
-  if (typeof obj.massInEarths === 'number') return obj.massInEarths;
-  return 1;
-}
-
+/**
+ * Where a body is drawn, vertically.
+ *
+ * The depth of the sheet underneath it, plus a fixed clearance. The sheet's
+ * depth there is computed from every source except this body, because a body
+ * does not sit in its own well - and inside the softening radius its own well
+ * is flat, so including it would drop every body by the same meaningless
+ * amount.
+ *
+ * A body with nothing else near it therefore sits at the rim, which is correct:
+ * there is nothing pulling it down.
+ *
+ * @param {object} obj - The body
+ * @returns {number} World-space height for its mesh
+ */
 function getObjectAltitude(obj) {
-  const base = OBJECT_BASE_ALTITUDE;
-  const altVariance =
-    (Math.log10(Math.max(getObjectMassApprox(obj), 1)) || 0) *
-    (OBJECT_ALTITUDE_SPREAD * 0.4);
-  let altitude = base + altVariance;
-  if (obj?.obj_type === 'BlackHole') {
-    altitude += BLACK_HOLE_ALTITUDE_OFFSET;
+  const { sources, G, soft, reference } = frameField;
+  if (!sources.length) return SHEET_CLEARANCE;
+  let phi = 0;
+  const x = obj?.pos?.x || 0;
+  const y = obj?.pos?.y || 0;
+  for (let i = 0; i < sources.length; i++) {
+    const s = sources[i];
+    // Everything but this body. A body does not sit in its own well.
+    if (s === obj || (obj?.id !== undefined && s.id === obj.id)) continue;
+    if (!Number.isFinite(s.mass)) continue;
+    const r = Math.max(soft || 1e-6, Math.hypot(x - s.pos.x, y - s.pos.y));
+    phi -= (G * s.mass) / r;
   }
-  return altitude;
+  return (
+    sheetDepth(phi, reference, SHEET_DEPTH_PER_DECADE, SPACETIME_MAX_WELL) +
+    SHEET_CLEARANCE
+  );
 }
 
 function gatherObjects() {

@@ -34,6 +34,8 @@
 // =============================================================================
 
 import { accelerationBreakdown, gravitySourcesFor } from './physics.js';
+// One field, shared with the 3-D sheet. See the header of js/potential.js.
+import { potentialAt, potentialSources } from './potential.js';
 import { t } from './i18n/index.js';
 
 // --- Palette ------------------------------------------------------------------
@@ -322,60 +324,17 @@ export function vectorLegendRows(drawn) {
 //                       browser's own smoothing. A full-resolution field would
 //                       be 900x more samples for a picture that is a smooth
 //                       gradient either way.
-//   POTENTIAL_SOURCE_CAP only the heaviest sources contribute. The field is
-//                       dominated by them by construction - potential falls as
-//                       1/r and scales with mass - and a scenario with six
-//                       hundred asteroids would otherwise cost six hundred
-//                       terms per sample for a contribution below the width of
-//                       one color step.
+//   the source cap      only the heaviest sources contribute, capped in
+//                       js/potential.js so that this underlay and the 3-D
+//                       sheet are built from the same bodies as well as the
+//                       same equation.
 //   the cache           recomputed only when the view or the sources have
 //                       actually changed, so a paused or slowly drifting scene
 //                       repaints the same bitmap.
 
 const POTENTIAL_CELL = 12;
-const POTENTIAL_SOURCE_CAP = 24;
 /** Redraw at most this often, in ms, when the scene is moving. */
 const POTENTIAL_MIN_INTERVAL = 90;
-
-/**
- * The Newtonian potential at a point, from a set of point masses.
- *
- * Phi(x) = -sum G m_i / max(r_i, softening). The softening is the same floor
- * the force law uses, so the well drawn here is the well the bodies are
- * actually moving in rather than an idealization of it: a body that never
- * feels a singular force should not be drawn sitting in one.
- *
- * @param {{x: number, y: number}} at - Where to evaluate
- * @param {number} G - The gravitational constant in force
- * @param {number} softening - The softening floor, world units
- * @param {Array<{mass: number, pos: object}>} sources - The masses
- * @returns {number} The potential, simulation units, always negative
- */
-export function potentialAt(at, G, softening, sources) {
-  const soft = Math.max(softening, 1e-6);
-  let phi = 0;
-  for (let i = 0; i < sources.length; i++) {
-    const s = sources[i];
-    if (!s || !Number.isFinite(s.mass)) continue;
-    const r = Math.max(soft, Math.hypot(at.x - s.pos.x, at.y - s.pos.y));
-    phi -= (G * s.mass) / r;
-  }
-  return phi;
-}
-
-/**
- * The sources the underlay is built from: the heaviest few, alive, positive.
- * @param {Array} sources - Every candidate
- * @returns {Array} At most POTENTIAL_SOURCE_CAP of them, heaviest first
- */
-export function potentialSources(sources) {
-  return sources
-    .filter(
-      s => s && s.alive !== false && Number.isFinite(s.mass) && s.mass > 0
-    )
-    .sort((a, b) => b.mass - a.mass)
-    .slice(0, POTENTIAL_SOURCE_CAP);
-}
 
 let potentialCanvas = null;
 let potentialCtx = null;
@@ -542,3 +501,8 @@ export function resetPotentialCache() {
 
 /** Re-exported so the renderer does not need to know where sources come from. */
 export { gravitySourcesFor };
+
+// Re-exported from js/potential.js, where they now live so that the 3-D sheet
+// reads the same field this underlay does. Callers and tests that reached for
+// them here still work.
+export { potentialAt, potentialSources };
