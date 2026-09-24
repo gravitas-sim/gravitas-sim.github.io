@@ -380,12 +380,13 @@ obvious:
   a module's own arrays.
 
   ```bash
-  npm run build && npm run e2e:dist   # the dist/ specs against dist/
+  npm run build:ci && npm run e2e:dist   # the dist/ specs against dist/
   npm run e2e:all                     # both targets
   ```
 
-Chromium runs on every change. Firefox and WebKit are run by CI on pushes to
-`main` and weekly, and can be run locally:
+Chromium runs on every change. Firefox and WebKit are run by CI on every push
+to `main` and `v2`, weekly, and when the workflow is started by hand - not on a
+pull request - and can be run locally:
 
 ```bash
 npx playwright install firefox webkit
@@ -403,8 +404,9 @@ nobody could act on.
 Every pull request runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
 formatting, lint, the jest suite, the physics validation table, the link checker
 and the thumbnail manifest; a production build; and the browser suite against
-both the sources and the built artifact. Firefox and WebKit are added on pushes
-to `main` and on a weekly schedule.
+both the sources and the built artifact. Firefox and WebKit are added on every
+push to `main` and `v2`, on the weekly schedule and on a manual run, but not on
+a pull request.
 
 Two things worth knowing if you are working on CI itself:
 
