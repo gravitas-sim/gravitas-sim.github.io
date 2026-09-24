@@ -410,6 +410,14 @@ export async function whenWidgetsReady() {
   // the scene audit and the tests do, because a spectrum widget that cannot
   // reach its data draws a waiting state and reports no measurements, and an
   // audit that accepted that would be auditing the waiting state.
+  //
+  // The start-up module list that seven families import is linked first, on
+  // its own. Fetched by all seven at once, it failed under jest, whose module
+  // linker (the tests run the sources through node:vm) loses a module that
+  // several concurrent dynamic imports ask for together - "request for
+  // './bodyVisuals.js' is not in cache" - where a browser does not. It costs a
+  // reader of the whole catalog nothing: every one of them fetches it anyway.
+  await import('./instrumentStartup.js');
   await Promise.all(Object.keys(LAZY_FAMILIES).map(loadFamily));
   const results = await Promise.all([...familyReady.values()]);
   return results.every(Boolean);
