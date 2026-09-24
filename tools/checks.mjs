@@ -366,6 +366,18 @@ export const CHECKS = [
     ci: 'checks',
     group: 'correctness',
   },
+  // The Extension SDK's own examples, validated and tested as an author's
+  // would be (sdk/README.md). The contract suite in jest covers the SDK
+  // itself; this is the command an extension's `validation` names.
+  {
+    id: 'sdk-extensions',
+    label: 'the SDK example extensions validate and pass their tests',
+    command: ['npm', 'run', 'sdk:check'],
+    tier: 'quick',
+    ci: null,
+    why: 'added after the workflow was written; runs in seconds',
+    group: 'correctness',
+  },
   {
     id: 'build',
     label: 'production build',

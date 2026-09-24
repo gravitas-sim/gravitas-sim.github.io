@@ -41,6 +41,28 @@ export default [
     },
   },
   {
+    // The Extension SDK (sdk/README.md): a Node command line and its library.
+    // Its examples are an extension author's files: a transformation script,
+    // run under Node, and an instrument module that uses only the canvas it
+    // is handed, so no browser global either.
+    files: ['sdk/**/*.mjs', 'sdk/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        URL: 'readonly',
+      },
+    },
+    plugins: { prettier },
+    rules: {
+      ...prettierConfig.rules,
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'prettier/prettier': 'error',
+    },
+  },
+  {
     // The Playwright suite and its config. Node code that also contains browser
     // code: every page.evaluate() callback is serialized and runs inside the
     // browser, so these files legitimately need both sets of globals - the same

@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/capability-package-1.schema.json",
+  "title": "gravitas.capability-package/1",
+  "description": "A Gravitas capability package: the manifest at the root of every extension (gravitas-extension.json). The structure only; js/platform/manifest.js validateManifest() is the authority, and also enforces the declarative boundary and the cross-field rules a schema cannot express. sdk/README.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "version",
+    "kind",
+    "gravitas",
+    "title",
+    "provides",
+    "citations",
+    "licenses",
+    "offline"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.capability-package"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9]+(-[a-z0-9]+)*)+$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "kind": {
+      "enum": [
+        "built-in",
+        "declarative"
+      ]
+    },
+    "gravitas": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      },
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "requires": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "uses": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "scenarios": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "widgets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dataPacks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "provides": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "path"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "widgetFamilies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "scenarios": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "investigations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "translations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "locale"
+            ],
+            "properties": {
+              "locale": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "dataPacks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "courses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "role",
+          "offline"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "code",
+              "data",
+              "provenance",
+              "translation",
+              "image"
+            ]
+          },
+          "offline": {
+            "enum": [
+              "core",
+              "optional",
+              "locale",
+              "none"
+            ]
+          }
+        }
+      }
+    },
+    "citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "doi": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "licenses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "scope",
+          "license"
+        ],
+        "properties": {
+          "scope": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "offline": {
+      "type": "object",
+      "required": [
+        "policy"
+      ],
+      "properties": {
+        "policy": {
+          "enum": [
+            "precache",
+            "on-demand",
+            "online-only"
+          ]
+        }
+      }
+    },
+    "authoring": {
+      "type": "object"
+    },
+    "validation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "check"
+        ],
+        "properties": {
+          "check": {
+            "type": "string",
+            "pattern": "^(registry|jest|e2e):[\\w./-]+$"
+          }
+        }
+      }
+    },
+    "migrations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "from",
+          "to"
+        ]
+      }
+    }
+  }
+}

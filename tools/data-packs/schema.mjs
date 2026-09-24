@@ -86,9 +86,12 @@ const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 /**
  * Every problem with one manifest, each naming the field it is about.
  * @param {unknown} m - A parsed manifest
+ * @param {{derivedUnder?: string}} [opts] - Where the derived file must be:
+ *   js/data/ for a pack built into Gravitas; '' for an extension, whose
+ *   derived file is a path inside its own directory (sdk/README.md)
  * @returns {Array<{path: string, message: string}>} Empty when it is a pack
  */
-export function validateDataPack(m) {
+export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
   const out = [];
   const need = (ok, path, message) => ok || out.push({ path, message });
   const text = (v, path) =>
@@ -183,10 +186,15 @@ export function validateDataPack(m) {
     }
   });
   text(m.derived?.file, 'derived.file');
+  const file = m.derived?.file || '';
   need(
-    /^js\/data\//.test(m.derived?.file || ''),
+    derivedUnder
+      ? file.startsWith(derivedUnder)
+      : !/^[a-z]+:|^\/|(^|\/)\.\.(\/|$)/i.test(file),
     'derived.file',
-    'must be under js/data/'
+    derivedUnder
+      ? `must be under ${derivedUnder}`
+      : 'a path inside the extension, never a URL or ..'
   );
   need(
     Number.isInteger(m.derived?.bytes) && m.derived.bytes > 0,
