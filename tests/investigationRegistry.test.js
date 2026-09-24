@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals';
-import { readdirSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { INVESTIGATIONS, getInvestigation } from '../js/data/investigations.js';
 import {
@@ -246,7 +246,10 @@ describe('the split itself', () => {
     for (const inv of INVESTIGATIONS) {
       const src = readFileSync(path.join(DIR, `${inv.id}.js`), 'utf8');
       expect(src).not.toMatch(/^\s*import\s/m);
-      expect(src).toMatch(/\nexport default [A-Z_]+;\n$/);
+      // [A-Z0-9_]+ rather than [A-Z_]+: a screaming-snake name may carry a
+      // digit, and the first lesson named after an object with a number in it
+      // (REPLICATING_51_PEG) failed this for its name rather than its shape.
+      expect(src).toMatch(/\nexport default [A-Z0-9_]+;\n$/);
     }
   });
 
@@ -461,5 +464,37 @@ describe('lesson translations', () => {
     const inv = await loadInvestigation('tides');
     expect(inv).toBe(getInvestigation('tides'));
     setLessonLocale('en');
+  });
+});
+
+describe('the translation registry', () => {
+  // This guard is here because its absence let a lesson ship half-registered.
+  // registry.js holds two maps - LOADERS and TRANSLATIONS - and adding a lesson
+  // means adding it to both. Miss the second and nothing breaks loudly: the
+  // Spanish catalog loads, the lesson opens, the manifest is right, and a
+  // reader with the interface in Spanish is silently served English. There is
+  // no error anywhere to notice, which is why this is asserted against the
+  // source text rather than against behavior.
+  const source = readFileSync(path.join(DIR, 'registry.js'), 'utf8');
+  const idsIn = pattern =>
+    [...source.matchAll(pattern)].map(m => m[1]).sort();
+
+  test('every lesson loader has a Spanish counterpart', () => {
+    const loaders = idsIn(/'([\w-]+)': \(\) => import\('\.\/([\w-]+)\.js'\)/g);
+    const translations = idsIn(
+      /'([\w-]+)': \(\) => import\('\.\/es\/([\w-]+)\.js'\)/g
+    );
+    expect(translations).toEqual(loaders);
+  });
+
+  test('every lesson in the catalog has a shadow on disk', () => {
+    const onDisk = new Set(
+      readdirSync(path.join(DIR, 'es'))
+        .filter(f => f.endsWith('.js'))
+        .map(f => f.replace(/\.js$/, ''))
+    );
+    expect(INVESTIGATIONS.filter(i => !onDisk.has(i.id)).map(i => i.id)).toEqual(
+      []
+    );
   });
 });

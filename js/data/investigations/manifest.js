@@ -315,4 +315,18 @@ export const MANIFEST = [
     gradedCount: 29,
     objectiveCount: 7,
   },
+  {
+    id: 'replicating-51-peg',
+    title: "Somebody Else's Star",
+    subtitle:
+      'Forty-three real velocities, and whether you get the same answer',
+    duration: '35-45 min',
+    level: 'Introductory astronomy',
+    summary:
+      'Forty-three real velocities of 51 Pegasi, measured at Keck a decade after the discovery and reproduced here unaltered. Fit them with the same instrument you would use on simulated data. The period comes out right to three parts in a hundred thousand — and your confidence interval will not contain the published value. Why both are true is the lesson.',
+    thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
+    stepCount: 18,
+    gradedCount: 10,
+    objectiveCount: 6,
+  },
 ];

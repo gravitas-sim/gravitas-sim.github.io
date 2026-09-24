@@ -246,10 +246,12 @@
   .doc-badge.is-absent {
     color: var(--text-secondary);
   }
-  /* The only badge on this page that means "somebody else measured this".
-     There is exactly one thing in the application it applies to - the
-     published GW150914 traces - and it is worth being visibly different from
-     the four kinds of thing Gravitas computes for itself. */
+  /* The only badge on this page that means "somebody else measured this", and
+     the only one that is not a point on the five-level scale: it answers who
+     produced a number rather than how. Two things carry it now - the published
+     GW150914 traces and the 51 Pegasi radial velocities - which is why the
+     legend gives it its own block rather than a sixth row. It is worth being
+     visibly different from the kinds of thing Gravitas computes for itself. */
   .doc-badge.is-measured {
     color: var(--badge-measured);
   }

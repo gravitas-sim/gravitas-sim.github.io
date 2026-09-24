@@ -321,4 +321,18 @@ export const MANIFEST = [
     gradedCount: 29,
     objectiveCount: 7,
   },
+  {
+    id: 'replicating-51-peg',
+    title: 'La estrella de otra persona',
+    subtitle:
+      'Cuarenta y tres velocidades reales, y si obtienes la misma respuesta',
+    duration: '35-45 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Cuarenta y tres velocidades reales de 51 Pegasi, medidas en Keck una década después del descubrimiento y reproducidas aquí sin alterar. Ajústalas con el mismo instrumento que usarías con datos simulados. El periodo sale bien con tres partes en cien mil, y tu intervalo de confianza no contendrá el valor publicado. Por qué ambas cosas son ciertas es la lección.',
+    thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
+    stepCount: 18,
+    gradedCount: 10,
+    objectiveCount: 6,
+  },
 ];

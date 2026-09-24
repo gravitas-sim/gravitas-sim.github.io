@@ -165,9 +165,10 @@ export const LICENSE_NOTE =
   'their own licenses and attribution: three.js and Chart.js (MIT), the Inter, ' +
   'Poppins and Roboto Mono families (SIL OFL 1.1), the Transit of Venus ' +
   'photograph (CC BY 2.5, Brocken Inaglory), gravitational-wave strain from ' +
-  'the Gravitational Wave Open Science Center (CC BY 4.0), and derived MIST ' +
-  'stellar tracks (cited, not relicensed). LICENSES.md in the repository says ' +
-  'which files each one covers.';
+  'the Gravitational Wave Open Science Center (CC BY 4.0), radial velocities ' +
+  'of 51 Pegasi from Butler et al. (2017) retrieved via VizieR (cited, not ' +
+  'relicensed), and derived MIST stellar tracks (cited, not relicensed). ' +
+  'LICENSES.md in the repository says which files each one covers.';
 
 export const KEYWORDS = [
   'astronomy education',

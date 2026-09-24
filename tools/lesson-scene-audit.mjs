@@ -221,6 +221,28 @@ const DATASETS = {
     name: 'MIST v1.2 evolutionary tracks',
     origin: 'computed-grid',
   },
+  'js/data/rv/51peg.js': {
+    name: '51 Pegasi radial velocities, as published',
+    origin: 'observation',
+  },
+};
+
+/**
+ * Datasets a step names outright, rather than reaching through an instrument.
+ *
+ * `observed: {dataset}` is the lesson saying in data which published
+ * measurements a screen is about, and the workspace it opens is an application
+ * panel rather than a lesson widget. Every other route to a dataset in this
+ * file is found by scanning a widget's source, which finds nothing for a step
+ * that has no widget - so without this the one lesson built entirely on
+ * committed observations was catalogued as using no stored data at all.
+ *
+ * Mirrors OBSERVED_DATASETS in js/investigations.js. Two lists, because this
+ * tool must not import the lesson engine, and tests/replication51Peg.test.js
+ * asserts the lesson names a key that exists.
+ */
+const OBSERVED_BY_STEP = {
+  '51peg': 'js/data/rv/51peg.js',
 };
 
 /**
@@ -813,9 +835,15 @@ function evidenceFor(step, ctxOf) {
 }
 
 /** Which datasets this step's instrument actually draws on. */
-function datasetsFor(widget, source, names) {
-  if (!widget) return [];
+function datasetsFor(widget, source, names, step) {
   const out = new Map();
+  // A step that names its dataset outright. Added before the widget scan, and
+  // reached whether or not there is a widget at all.
+  const named = OBSERVED_BY_STEP[step?.observed?.dataset];
+  if (named && DATASETS[named]) {
+    out.set(named, { ...DATASETS[named], dataset: named, via: null });
+  }
+  if (!widget) return [...out.values()];
   for (const [name, hit] of names) {
     if (!new RegExp(`\\b${name}\\b`).test(source)) continue;
     for (const key of hit.datasets) {
@@ -1183,7 +1211,8 @@ async function audit() {
       const datasets = datasetsFor(
         widget,
         wSource,
-        names.get(families.get(widget?.id)) ?? new Map()
+        names.get(families.get(widget?.id)) ?? new Map(),
+        step
       );
       const running = runningAt(inv, index);
       const affordances = affordancesFor(step, inv);

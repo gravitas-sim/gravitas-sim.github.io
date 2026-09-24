@@ -4404,6 +4404,140 @@ export const INSTRUCTOR_CONTENT = {
       sounds are quantized onto a musical scale, and the lesson says so on screen 2. The full
       specification, including what is deliberately absent, is at ${MODEL_PAGE}#gravitational-waves.`,
   },
+  // ---------------------------------------------------------------------------
+  // The replication lesson. The only one in the catalog whose data is a
+  // measurement rather than a model, which changes what the instructor is
+  // fielding: not "is the simulation right" but "are these error bars".
+  // ---------------------------------------------------------------------------
+  'replicating-51-peg': {
+    topic:
+      'Replication: fitting published radial velocities and comparing your answer with theirs',
+    difficulty:
+      'Introductory, with one subtraction and a lot of interpretation',
+    placement:
+      'Thirty-five to forty-five minutes, and it must come after "The Star That Wobbles". That lesson teaches the Doppler method on a simulated system where the answer is known; this one assumes a student already knows what a radial-velocity curve is and asks a different question entirely. It is the natural last lesson of an exoplanet unit, and it is the only one in the catalog that can honestly be described as a laboratory exercise in the sense a working astronomer would mean.',
+    overview:
+      'Students fit forty-three real velocities of 51 Pegasi, taken with HIRES on Keck and published by Butler et al. (2017), using the same chi-square period grid and seeded Monte Carlo the application uses for its own simulated recordings. The fit succeeds: the period comes out at 4.23090 days against a published 4.23077, an agreement of three parts in a hundred thousand. Then the lesson turns on itself. The reduced chi-square is 6.6, not 1, and the Monte Carlo interval — three seconds wide — does not contain the published value. Both of those follow from the same fact: the quoted uncertainties are internal errors of about 1.1 m/s and the points miss the curve by 2.8 m/s, because the star has surface activity that no spectrograph error bar describes. The lesson ends by asking students to decide, in writing, whether this counts as a replication.',
+    priorKnowledge: [
+      'What a radial-velocity curve is and why a star wobbles',
+      'Period, semi-amplitude and what each one is measured from',
+      'Chi-square as a sum of squared residuals divided by squared uncertainties',
+      'That an error bar is a claim about a measurement, not a decoration',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Replication is not verification',
+        body: 'Fitting the discovery data and recovering the discovery answer checks arithmetic. These velocities come from a different instrument, a different team and a different decade than Mayor and Queloz, which is what makes the agreement evidence about the planet rather than about the pipeline.',
+      },
+      {
+        heading: 'Internal error and true scatter',
+        body: 'The sigma column describes photon noise and the wavelength solution. Stellar jitter — convection and magnetic activity shifting the lines by a few m/s — is real, is not in the column, and is the entire gap between a reduced chi-square of 1 and one of 6.6.',
+      },
+      {
+        heading: 'A confidence interval inherits its inputs',
+        body: 'The Monte Carlo resamples at the quoted sigmas. If those understate the scatter by a factor of 2.5, every synthetic dataset is too clean, every refit is too well determined, and the interval is too narrow by roughly the same factor. More trials cannot fix a wrong distribution.',
+      },
+      {
+        heading: 'The window function',
+        body: 'Forty-three points over 2,749 days with a 408-day hole is a severe sampling pattern that puts alias peaks in the periodogram. Here the planet is strong enough that the true peak wins by a large margin, which is worth seeing: a bad window does not always produce an ambiguous answer.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-3',
+        text: 'The 1995 claim, where these particular numbers came from, and a held prediction about how close the fit will land. Step 2 draws the measured/modeled line and is the one screen not to rush.',
+      },
+      {
+        steps: '4-6',
+        text: 'Looking at the data before fitting it. Students record the baseline and the largest gap, then reason about what a gap does to a period search.',
+      },
+      {
+        steps: '7-9',
+        text: 'The search, the fit, and the comparison with the published period expressed in seconds. The held prediction from step 3 resolves at step 8.',
+      },
+      {
+        steps: '10-12',
+        text: 'The reduced chi-square, what a value of 6.6 means, and the explanation. This is the pivot of the lesson.',
+      },
+      {
+        steps: '13-18',
+        text: 'The seeded Monte Carlo, the interval, the discovery that it excludes the published value, what a paper does about that, a written conclusion and a closing summary.',
+      },
+    ],
+    features: [
+      {
+        name: 'The radial-velocity workspace',
+        text: 'Opens automatically on the committed velocities. The same panel reachable from the observation panel button, with the same chi-square grid and the same Monte Carlo.',
+      },
+      {
+        name: 'Seeded uncertainty analysis',
+        text: 'Four hundred trials, each refitted from scratch through the same code path as the student fit. The seed is recorded in the notebook so an interval can be reproduced exactly.',
+      },
+      {
+        name: 'Committed provenance',
+        text: 'The archive, catalog, query and SHA-256 of the source file travel with every export and notebook entry made from this lesson.',
+      },
+      {
+        name: 'Nothing to reveal',
+        text: 'The workspace reveal control reports that these velocities carry no generating parameters, because nobody knows the true period of 51 Pegasi b. Worth pointing at explicitly.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A reduced chi-square far from 1 means the fit is wrong',
+        response:
+          'It means the model and the uncertainties together are inconsistent with the data. Here the model is right — the period agrees with two independent published values — and the uncertainties are what is wrong. Students reliably reach for the model first.',
+      },
+      {
+        claim:
+          'If the published value is outside my interval, one of us made a mistake',
+        response:
+          'Neither did. The published interval includes a jitter term and this one does not, so they are intervals on different assumptions. Disagreement between two correctly computed numbers usually means they answer different questions.',
+      },
+      {
+        claim: 'More Monte Carlo trials would widen the interval',
+        response:
+          'Trials measure the width of a distribution; they do not change it. Four hundred is already far more than needed for percentiles this coarse. The distribution itself is drawn from the wrong sigmas.',
+      },
+      {
+        claim: 'Real data is just simulated data with more noise in it',
+        response:
+          'The difference is not the amount of noise but whether the reported uncertainty describes it. In a simulation the generator writes the sigma, so it is correct by construction. That guarantee is exactly what a real measurement does not have, and this lesson exists to make that concrete.',
+      },
+      {
+        claim: 'The 408-day gap means the data are bad',
+        response:
+          'It means the star is behind the Sun for part of every year and the telescope is oversubscribed for the rest. Every ground-based time series has this structure. The question is never whether there are gaps but whether they alias your signal.',
+      },
+    ],
+    teachingNotes: [
+      'Step 2 is the load-bearing screen. There is a simulated planetary system stopped on the canvas behind the panel, and if nobody says out loud that it has nothing to do with the numbers, some students will assume the fit is being made against it.',
+      'The pivot at steps 10 and 11 is where this lesson either lands or does not. Consider stopping the class there and taking the reduced chi-square as a whole-group discussion before letting anybody read the explanation on screen.',
+      'Students who have only ever fitted simulated recordings will often assume they have done something wrong when the chi-square comes out at 6.6. Pre-empt it: tell them before they start that the fit is going to be good and the chi-square is going to be terrible, and that both are correct.',
+      'The written answer at step 17 is the assessment. There is no marked answer and it would be a worse lesson with one — the honest responses range from "yes, comfortably" to "not to the precision claimed", and both can be argued well.',
+      'Step 9 asks for the difference between two periods in seconds. The reliable failure is converting to seconds before subtracting, which produces a number in the hundreds of thousands; if you see one, the arithmetic is fine and the order is not.',
+      'If the room is short on time, steps 4 to 6 can be assigned as reading. Steps 10 to 15 cannot be cut; they are the lesson.',
+    ],
+    discussion: [
+      'Two groups measure the same star and publish intervals that do not overlap. What should happen next, and who is obliged to do it?',
+      'The workspace refuses to fit a jitter term because it cannot test the assumptions one requires. Is that the right call, or is a slightly wrong interval better than an honestly too-narrow one?',
+      'If you had to choose between a measurement with a small interval and one with an interval you trusted, which would you publish?',
+      'What would it take to convince you that a fourth signal in a periodogram is a planet rather than the window function?',
+    ],
+    extensions: [
+      'Bin the seven pairs of consecutive exposures into single points, refit, and see whether the reduced chi-square moves. It should barely move, which tells you the excess scatter is not a short-timescale instrumental effect.',
+      'Plot the residuals against the Ca II S-index carried with each epoch. If stellar activity were tracking the residuals on this run, that is where it would show, and on these forty-three points it does not.',
+      'Look up the Tal-Or et al. (2019) correction to these HIRES velocities, apply it by hand to a few epochs, and estimate how much it could shift the answer.',
+      'Compare the amplitude you measured with the 59 m/s of the discovery paper. The difference is larger than either quoted uncertainty, and asking why is a good route into how radial-velocity zero points are defined.',
+    ],
+    expectations: {
+      5: 'A baseline of about 2,750 days and a largest gap of about 408 days. Students who report a gap of 250 or 270 days have found a real gap but not the largest one; there are several.',
+      8: 'P = 4.23090 days and K = 56.70 m/s from the deepest trough over 1.5-100 days. A period near 1.31 days means they took an alias; send them back to the periodogram rather than telling them the answer.',
+      10: 'The panel shows a reduced chi-square of 5.98 and a residual RMS of 2.79 m/s, against a mean quoted uncertainty of 1.13 m/s. The panel divides by the number of points, because it is scoring the curve on the sliders; the period search divides by 43 minus 4 and would say 6.60. Either reading makes the point and the step accepts both. If it comes out near 1, the trial parameters have not been snapped to the fit.',
+      14: 'A half-width of about 1.55 and an offset of about 13, both in units of 10⁻⁵ days, giving roughly 8 sigma. The numbers come from the notebook entry, not the panel: the panel rounds the period to four decimals and this interval is narrower than that, so on screen both ends of it read 4.2309. That is worth pointing at rather than working around. The published value lying outside the interval is the intended result and must not be treated as a mistake.',
+    },
+    modelNotes: `Nothing in this investigation is simulated. The forty-three velocities are published measurements of a real star, retrieved from VizieR catalog J/AJ/153/208 (Butler et al. 2017), checksummed on the way in and reproduced without binning, clipping, detrending or re-weighting. The fitting is the application's own: the chi-square period grid in js/rvFit.js and the seeded resampling Monte Carlo in js/rvUncertainty.js, which refits every trial through that same grid rather than through a second implementation. The Keplerian model fitted is circular — four parameters, no eccentricity — which for this planet is an excellent approximation and is stated as an assumption rather than a result. No stellar-jitter term is fitted, so the reported interval propagates the catalog's internal uncertainties and nothing else; the lesson treats the resulting inconsistency with the published value as its subject rather than as a defect. The planetary system visible on the canvas is a simulation and is unrelated to any number in the panel.`,
+  },
 };
 
 /** @returns {Object|null} The instructor content for an investigation id */

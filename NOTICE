@@ -79,6 +79,30 @@ Primary reference: Abbott et al. (2016), Phys. Rev. Lett. 116, 061102,
 doi:10.1103/PhysRevLett.116.061102
 
 ===============================================================================
+Radial velocities of 51 Pegasi
+-------------------------------------------------------------------------------
+js/data/rv/**
+Forty-three precision radial velocities of 51 Pegasi (HD 217014) measured with
+HIRES on Keck I, from the Lick-Carnegie Exoplanet Survey, retrieved from VizieR
+catalog J/AJ/153/208.
+
+  Butler et al. (2017), Astronomical Journal 153, 208,
+  doi:10.3847/1538-3881/aa66ca
+  VizieR catalog J/AJ/153/208, doi:10.26093/cds/vizier.51530208
+
+  This research has made use of the VizieR catalogue access tool, CDS,
+  Strasbourg Astronomical Observatory, France (DOI: 10.26093/cds/vizier).
+
+The bundled table is the published rows for one star at the published
+precision, with nothing binned, clipped, detrended or re-weighted. The query
+that produced it, the byte count and a SHA-256 of the response are recorded in
+js/data/rv/51peg.js, so the file can be checked against the archive.
+
+The velocities are uncorrected. Tal-Or et al. (2019), MNRAS 484, L8 publish a
+correction for systematics in the HIRES velocities; it is not applied here, and
+js/data/rv/51peg.js says so.
+
+===============================================================================
 MIST stellar evolution tracks
 -------------------------------------------------------------------------------
 js/data/stellar/**

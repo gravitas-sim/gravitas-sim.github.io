@@ -40,10 +40,15 @@ const DIR = path.join(HERE, '..', 'js', 'data', 'investigations');
  */
 function wordsOf(v, key = '') {
   if (typeof v === 'function') return undefined;
-  if (typeof v === 'string') {
-    if (STRUCTURAL.has(key)) return undefined;
-    return v;
-  }
+  // Structural keys prune the whole subtree, whatever its type. This used to
+  // be tested only for strings, which agreed with mergeTranslation() for a
+  // structural string and disagreed with it for a structural OBJECT: `expect`
+  // is machinery, mergeTranslation skips it entirely, and this walked into it
+  // and emitted `dimension` and `accept` for somebody to translate. Translated,
+  // they name no dimension and no units, and a correct numeric answer comes
+  // back unreadable. The merger's rule is the right one; this now uses it.
+  if (STRUCTURAL.has(key)) return undefined;
+  if (typeof v === 'string') return v;
   if (Array.isArray(v)) {
     const out = v.map(x => wordsOf(x, key));
     return out.some(x => x !== undefined) ? out.map(x => x ?? null) : undefined;

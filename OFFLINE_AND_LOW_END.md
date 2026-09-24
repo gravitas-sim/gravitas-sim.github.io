@@ -69,11 +69,11 @@ class is *protected*, not time before the application is usable.
 `model/`, `instructors/` and `validation/` pages (runtime-cached), and
 `social-card.png` (only ever fetched by a link unfurler).
 
-### Which of the <!--fact:investigations-->22<!--/fact--> lessons
+### Which of the <!--fact:investigations-->23<!--/fact--> lessons
 
 Each lesson is one dynamically imported file, so this is a real decision.
 
-**All <!--fact:investigations-->22<!--/fact--> English bodies are precached** — 553 KB, about a tenth of the
+**All <!--fact:investigations-->23<!--/fact--> English bodies are precached** — 553 KB, about a tenth of the
 payload. The reasoning: the lesson a class is already in when the wifi dies is
 by definition already fetched, so precaching buys nothing there. What it buys is
 the teacher who *switches lesson after the drop*, which is exactly the moment a

@@ -58,6 +58,12 @@
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/physics.js"
+    },
+    {
+     "name": "51 Pegasi radial velocities, as published",
+     "origin": "observation",
+     "dataset": "js/data/rv/51peg.js",
+     "via": "js/physics.js"
     }
    ]
   },
@@ -170,6 +176,12 @@
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "51 Pegasi radial velocities, as published",
+     "origin": "observation",
+     "dataset": "js/data/rv/51peg.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -224,6 +236,12 @@
      "name": "MIST v1.2 evolutionary tracks",
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "51 Pegasi radial velocities, as published",
+     "origin": "observation",
+     "dataset": "js/data/rv/51peg.js",
      "via": "js/widgetRuntime.js"
     }
    ]
@@ -440,6 +458,12 @@
      "name": "MIST v1.2 evolutionary tracks",
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "51 Pegasi radial velocities, as published",
+     "origin": "observation",
+     "dataset": "js/data/rv/51peg.js",
      "via": "js/widgetRuntime.js"
     }
    ]
@@ -823,6 +847,12 @@
      "origin": "observation",
      "dataset": "js/data/gw/gw150914.js",
      "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "51 Pegasi radial velocities, as published",
+     "origin": "observation",
+     "dataset": "js/data/rv/51peg.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -876,6 +906,12 @@
      "origin": "observation",
      "dataset": "js/data/gw/gw150914.js",
      "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "51 Pegasi radial velocities, as published",
+     "origin": "observation",
+     "dataset": "js/data/rv/51peg.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -928,6 +964,12 @@
      "origin": "observation",
      "dataset": "js/data/gw/gw150914.js",
      "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "51 Pegasi radial velocities, as published",
+     "origin": "observation",
+     "dataset": "js/data/rv/51peg.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -970,6 +1012,12 @@
      "name": "GW150914 strain, as published",
      "origin": "observation",
      "dataset": "js/data/gw/gw150914.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "51 Pegasi radial velocities, as published",
+     "origin": "observation",
+     "dataset": "js/data/rv/51peg.js",
      "via": "js/widgetRuntime.js"
     }
    ]
@@ -48040,26 +48088,1030 @@
     "mismatched": 0,
     "rebuilds": 0
    }
+  },
+  {
+   "id": "replicating-51-peg",
+   "title": "Somebody Else's Star",
+   "lock": null,
+   "steps": [
+    {
+     "sid": "the-claim",
+     "index": 1,
+     "type": "read",
+     "title": "A claim from 1995",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Exoplanet Characterization Lab\" seed replication + camera"
+     ],
+     "recovery": [
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
+     "sid": "where-these-numbers-came-from",
+     "index": 2,
+     "type": "read",
+     "title": "Where these numbers came from",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "before-you-look",
+     "index": 3,
+     "type": "predict",
+     "title": "Commit first",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "write-down-the-fit",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "open-the-velocities",
+     "index": 4,
+     "type": "explore",
+     "title": "Look at them before you fit them",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "imported-data"
+     ],
+     "actions": [
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": "typed explore, but nothing in the step, its instrument, its setup or its lesson lock offers anything to change, run or record - if there is an affordance it is in the app's own panels and the step never names it"
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "the-shape-of-the-run",
+     "index": 5,
+     "type": "measure",
+     "title": "The shape of the run",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [
+      "open-the-velocities"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "what-a-gap-does",
+     "index": 6,
+     "type": "question",
+     "title": "What does a hole like that do?",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "the-period-search",
+     "index": 7,
+     "type": "explore",
+     "title": "Search",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "imported-data"
+     ],
+     "actions": [
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": "typed explore, but nothing in the step, its instrument, its setup or its lesson lock offers anything to change, run or record - if there is an affordance it is in the app's own panels and the step never names it"
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "write-down-the-fit",
+     "index": 8,
+     "type": "measure",
+     "title": "Your answer",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [
+      "the-period-search"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "how-close",
+     "index": 9,
+     "type": "question",
+     "title": "How close, exactly?",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": true,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "the-fit-is-good-but",
+     "index": 10,
+     "type": "measure",
+     "title": "Now look at how good the fit actually is",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [
+      "write-down-the-fit"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "what-six-point-six-means",
+     "index": 11,
+     "type": "question",
+     "title": "What does a 6 mean?",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "internal-errors",
+     "index": 12,
+     "type": "read",
+     "title": "The error bar and the error",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "run-the-monte-carlo",
+     "index": 13,
+     "type": "explore",
+     "title": "How well do you know the period?",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "imported-data"
+     ],
+     "actions": [
+      "tick-a-checklist"
+     ],
+     "requires": [
+      "the-fit-is-good-but"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": "typed explore, but nothing in the step, its instrument, its setup or its lesson lock offers anything to change, run or record - if there is an affordance it is in the app's own panels and the step never names it"
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "write-down-the-interval",
+     "index": 14,
+     "type": "measure",
+     "title": "Your interval",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [
+      "run-the-monte-carlo"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [],
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "the-published-value-is-outside",
+     "index": 15,
+     "type": "question",
+     "title": "The published value is outside your interval",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "what-would-fix-it",
+     "index": 16,
+     "type": "read",
+     "title": "What a paper does about this",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "did-you-replicate-it",
+     "index": 17,
+     "type": "question",
+     "title": "So — did you replicate it?",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "answer-in-words"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": true,
+      "rubric": true,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "what-you-did",
+     "index": 18,
+     "type": "read",
+     "title": "What you just did",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    }
+   ],
+   "loops": [
+    {
+     "predict": "before-you-look",
+     "predictCollects": true,
+     "heldUntil": "write-down-the-fit",
+     "experiment": [],
+     "measure": [
+      "the-shape-of-the-run",
+      "write-down-the-fit",
+      "the-fit-is-good-but",
+      "write-down-the-interval"
+     ],
+     "evidence": [
+      "the-shape-of-the-run",
+      "write-down-the-fit",
+      "the-fit-is-good-but",
+      "write-down-the-interval"
+     ],
+     "interpret": "what-a-gap-does",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": false,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 18,
+    "declared": 0,
+    "student": 0,
+    "engine": 0,
+    "model": 0,
+    "data": 7,
+    "diagram": 0,
+    "evidence": 4,
+    "declaredButInert": 0,
+    "prose": 11,
+    "mismatched": 3,
+    "rebuilds": 1
+   }
   }
  ],
  "totals": {
-  "steps": 636,
+  "steps": 654,
   "declared": 607,
   "student": 157,
   "engine": 163,
   "model": 225,
-  "data": 139,
+  "data": 146,
   "diagram": 104,
-  "evidence": 106,
+  "evidence": 110,
   "declaredButInert": 450,
-  "prose": 15,
-  "mismatched": 0,
-  "rebuilds": 67,
-  "lessons": 22,
-  "loops": 81,
-  "closedLoops": 81,
+  "prose": 26,
+  "mismatched": 3,
+  "rebuilds": 68,
+  "lessons": 23,
+  "loops": 82,
+  "closedLoops": 82,
   "explainedLoops": 0,
   "heldLoops": 81,
-  "completeLoops": 81
+  "completeLoops": 82
  }
 }

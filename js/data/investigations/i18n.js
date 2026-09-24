@@ -99,8 +99,15 @@ export function translationCoverage(base, overlay, skip = STRUCTURAL) {
 
   const walk = (b, o, path, key) => {
     if (typeof b === 'function') return;
+    // Prune the whole subtree, whatever its type. Tested only for strings
+    // before, which agreed with mergeTranslation() for a structural string and
+    // disagreed with it for a structural OBJECT: `expect` is machinery, the
+    // merger skips it entirely, and this walked in and counted `dimension` and
+    // `accept` as four strings nobody had translated. They are not translatable
+    // and never will be, so every lesson with a unit-checked numeric answer had
+    // a coverage figure that could not reach 100%.
+    if (skip.has(key)) return;
     if (typeof b === 'string') {
-      if (skip.has(key)) return;
       total++;
       if (typeof o === 'string' && o.length) translated++;
       else missing.push(path);
@@ -142,6 +149,21 @@ export const STRUCTURAL = new Set([
   // The sid of the step where a held prediction is marked. A translated one
   // would point at nothing, and the prediction would stay unmarked forever.
   'reveal',
+  // The sids of steps that must be visited before this one. Same argument as
+  // `reveal` and the same failure: a translated sid names no step, so the
+  // requirement can never be satisfied and the step stays locked forever.
+  // Nothing had put one in a shadow yet only because no translated lesson used
+  // `requires`; the skeleton generator emits them, so the next one would have.
+  'requires',
+  // What a numeric answer is allowed to be written in: a dimension name and a
+  // list of unit ids that js/answerParse.js looks up. Translating 'days' to
+  // 'dias' does not make the parser accept Spanish units, it makes it accept
+  // nothing, and a correct answer is then refused as unreadable.
+  'expect',
+  // Which committed observational dataset a step opens. It is a key of
+  // OBSERVED_DATASETS in js/investigations.js, so a translated one would open
+  // nothing and the step would silently lose its data.
+  'dataset',
   'type',
   'kind',
   'scenario',

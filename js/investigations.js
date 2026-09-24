@@ -2292,11 +2292,75 @@ function renderStep() {
   syncToolPanel(step);
   syncLightCurve(step);
   syncEventWatch(step);
+  syncObservedData(step);
   renderProbe();
   renderFooter();
   bindStepInputs();
   refreshMeasurements();
 }
+
+/**
+ * Open the radial-velocity workspace on a committed observational dataset.
+ *
+ * A step declares `observed: {dataset: '51peg'}` and the real workspace opens
+ * on it - the same panel, the same chi-square grid and the same Monte Carlo a
+ * student reaches from the observation panel's own button. Not a lesson-sized
+ * copy of it: the whole point of a replication lesson is that the instrument
+ * doing the replicating is the instrument the application ships.
+ *
+ * Two differences from syncEventWatch, which this otherwise mirrors.
+ *
+ * It does NOT close the panel on the way out. An armed event watch must not
+ * fire into the next step, so that one releases unconditionally; a workspace
+ * holding a half-finished fit is the opposite case. This lesson spends eleven
+ * steps in it, and a panel that vanished on every Next would be unusable.
+ *
+ * And it loads the recording ONCE. openRvWorkspace() calls loadRecording(),
+ * which resets the trial parameters, drops the completed period search and
+ * clears any interval computed from it - correct when a student opens a new
+ * observing run, catastrophic here, because advancing a step would silently
+ * throw away the fit the next step is about to ask them a question about. So
+ * the dataset is checked first and only a genuinely different one is loaded.
+ *
+ * @param {Object} step - Step definition
+ */
+function syncObservedData(step) {
+  const spec = step?.observed;
+  if (!spec?.dataset) return;
+
+  Promise.all([
+    import('./rvWorkspaceBridge.js'),
+    import('./rvWorkspace.js'),
+    OBSERVED_DATASETS[spec.dataset]?.(),
+  ])
+    .then(([bridge, workspace, mod]) => {
+      if (!mod) return;
+      // Already on these velocities: show the panel and leave the student's
+      // work where it is. See the note above - this guard is the difference
+      // between a lesson and a lesson that deletes your fit every screen.
+      const held = workspace.currentRecording();
+      if (held?.targetId === mod.PROVENANCE.designation) {
+        return import('./rvWorkspacePanel.js').then(panel =>
+          panel.setRvWorkspaceEnabled(true)
+        );
+      }
+      return bridge.openRvWorkspace(mod.recording());
+    })
+    .catch(err => {
+      console.warn('That observational dataset could not be opened:', err);
+    });
+}
+
+/**
+ * The datasets a lesson may name, and nothing else.
+ *
+ * A map rather than a path built from the step, so a lesson cannot reach an
+ * arbitrary module through a string, and so the set of things this application
+ * claims to have observed is visible in one place.
+ */
+const OBSERVED_DATASETS = {
+  '51peg': () => import('./data/rv/51peg.js'),
+};
 
 /**
  * Open the pause-at-event tool for a step that asks a student to catch a moment.

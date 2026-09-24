@@ -100,4 +100,8 @@ export const BROWSE_META = {
     tags: ['stars', 'stellar-evolution'],
     numericCount: 0,
   },
+  'replicating-51-peg': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 1,
+  },
 };
