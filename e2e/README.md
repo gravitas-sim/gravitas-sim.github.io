@@ -59,7 +59,7 @@ DOM and runs against `dist/`, covering what the source suite structurally cannot
 reach — chunk splitting, deferred imports, assets the build did not copy:
 
 ```bash
-npm run build && npm run e2e:dist
+npm run build:ci && npm run e2e:dist
 npm run e2e:all                    # both targets, one after the other
 ```
 
