@@ -15,6 +15,20 @@ the release rather than in the tag.
 
 ### Added
 
+- **Observation data packs, and the first one: TESS's light curve of HD 209458.**
+  A pack is observed data with its record of where it came from and what was
+  done to it (DATA_PACKS.md). The record covers the archive and its citation,
+  the rights, a pinned checksum of the raw product, every transformation step
+  with the tool's version, units, the time system, the quality mask and the
+  scientific check the data passed. The first pack is TESS sector 56, with
+  18,791 good cadences in 1,882 twenty-minute bins. Folding it on the
+  published period finds the transit at its published depth. It loads through
+  its capability package, decodes with one shared decoder, and is precached
+  for offline use. No lesson uses it yet. `npm run packs:check` verifies it
+  without the raw file, and `npm run packs:provenance` rebuilds it byte for
+  byte. Start-up is unchanged, and the deferred build grows by 9.0 KB with no
+  ceiling raised.
+
 - **An interactive figure builder, and a contract for embedding.** `/figure/`
   turns a Gravitas state - brought from Share with a new "Build a figure" link,
   or a scenario and a seed - into a figure for a course page: whether it opens

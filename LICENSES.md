@@ -73,6 +73,7 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `js/data/gw/**` | derived from GWOSC released data | CC BY 4.0 |
 | `js/data/stellar/**` | derived from the MIST model grids | cite the papers; see NOTICE |
 | `js/data/spectra/**` | derived from SDSS DR18 observed spectra | public domain; acknowledge SDSS, see NOTICE |
+| `js/data/observations/**` | derived from TESS light curves served by MAST | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
 
 ## Why the split
 

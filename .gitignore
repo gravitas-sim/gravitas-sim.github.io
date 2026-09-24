@@ -69,6 +69,9 @@ manual/gravitas-user-manual.pdf
 # Cached GWOSC 32-second strain files. `npm run gwosc:data` refills this; the
 # committed js/data/gw/gwoscEvents.js is what ships.
 .gwosc-cache/
+# Cached raw products for tools/build-data-packs.mjs (a 2 MB TESS light curve
+# today). `npm run packs:data` refills it; the packs are committed, these are not.
+.packs-cache/
 
 # Reports an earlier CI step left for tools/docs-facts.mjs to read back.
 .facts/

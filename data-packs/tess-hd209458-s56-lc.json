@@ -1,0 +1,162 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "tess-hd209458-s56-lc",
+  "version": "1.0.0",
+  "title": "HD 209458: TESS sector 56 light curve",
+  "object": {
+    "name": "HD 209458",
+    "identifiers": [
+      "TIC 420814525"
+    ],
+    "ra": 330.794887332661,
+    "dec": 18.8843189579296,
+    "frame": "ICRS, epoch J2000",
+    "tessMagnitude": 7.12739992
+  },
+  "facility": {
+    "observatory": "TESS",
+    "instrument": "camera 1, CCD 2, 2-minute cadence",
+    "pipeline": "SPOC spoc-5.0.96-20230729"
+  },
+  "dataType": "light-curve",
+  "origin": "observed",
+  "credit": "TESS, sector 56 (NASA; SPOC light curve from MAST)",
+  "license": {
+    "status": "public-domain",
+    "statement": "NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive."
+  },
+  "retrieved": "2026-09-24",
+  "time": {
+    "scale": "TDB",
+    "reference": "BTJD = BJD - 2457000",
+    "unit": "d"
+  },
+  "columns": [
+    {
+      "name": "time",
+      "unit": "d",
+      "description": "bin centre: t0 + (index + 0.5) x binDays, in BTJD"
+    },
+    {
+      "name": "flux",
+      "unit": "",
+      "description": "PDCSAP flux over its median"
+    },
+    {
+      "name": "flux error",
+      "unit": "",
+      "uncertaintyOf": "flux",
+      "description": "propagated PDCSAP error over the median, one sigma, per bin"
+    }
+  ],
+  "masks": [
+    {
+      "column": "QUALITY",
+      "rule": "any nonzero flag drops the cadence",
+      "dropped": 1288
+    },
+    {
+      "column": "TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR",
+      "rule": "a cadence without a finite value in all three is dropped",
+      "dropped": 0
+    },
+    {
+      "column": "bin",
+      "rule": "a bin with fewer than 3 kept cadences is dropped",
+      "dropped": 3
+    }
+  ],
+  "source": {
+    "archive": "MAST (Barbara A. Mikulski Archive for Space Telescopes)",
+    "urls": [
+      "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2022244194134-s0056-0000000420814525-0243-s_lc.fits"
+    ],
+    "citations": [
+      {
+        "text": "TESS Light Curves - All Sectors, STScI/MAST",
+        "doi": "10.17909/t9-nmc8-f686"
+      },
+      {
+        "text": "Ricker et al. 2015, JATIS 1, 014003 (TESS)",
+        "doi": "10.1117/1.JATIS.1.1.014003"
+      },
+      {
+        "text": "Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC)",
+        "doi": "10.1117/12.2233418"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "tess2022244194134-s0056-0000000420814525-0243-s_lc.fits",
+      "url": "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2022244194134-s0056-0000000420814525-0243-s_lc.fits",
+      "bytes": 2039040,
+      "sha256": "1b76b4a4b73e24954fa6e29a7e28a174685113ecdbad1bf10ef0e7b766ce99e9"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/tess-light-curve.mjs",
+    "version": "1.0.0",
+    "options": {
+      "binMinutes": 20,
+      "minPerBin": 3,
+      "errStepPpm": 5
+    },
+    "steps": [
+      "Read TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR and QUALITY from the LIGHTCURVE binary table.",
+      "Keep cadences with QUALITY 0 and a finite time, flux and error.",
+      "Divide flux and error by the median kept flux.",
+      "Average into 20-minute bins from t0, keeping bins with at least 3 cadences; the bin error is the quadrature sum over the count.",
+      "Encode as binned-relative-flux/1: runs of bin indices, little-endian int16 ppm flux, uint8 error in 5 ppm steps."
+    ],
+    "record": {
+      "cadences": 20079,
+      "flagged": 1288,
+      "notFinite": 0,
+      "kept": 18791,
+      "binsDropped": 3,
+      "bins": 1882,
+      "medianFlux": 225077.4375,
+      "fluxUnit": "e-/s"
+    }
+  },
+  "assumptions": [
+    "PDCSAP flux has had instrumental systematics and crowding removed by SPOC; that correction is used as published.",
+    "Times are barycentric dynamical time for the target, as SPOC corrects them."
+  ],
+  "reductions": [
+    "20-minute bins average 10 two-minute cadences each, which rounds ingress and egress to a bin.",
+    "Flux is kept to 1 ppm and its error to 5 ppm."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/tessHd209458S56.js",
+    "bytes": 10535,
+    "sha256": "5e707ff0b9bbc0cad25b641405d25995013f311432b1620a3e258149cb17e870"
+  },
+  "validation": {
+    "check": "folding on the published period finds a transit of the published depth, within 0.003",
+    "against": [
+      {
+        "quantity": "period",
+        "value": 3.52474859,
+        "unit": "d",
+        "ref": "Knutson et al. 2007, ApJ 655, 564"
+      },
+      {
+        "quantity": "(Rp/Rs)^2",
+        "value": 0.0146,
+        "unit": "",
+        "ref": "Torres et al. 2008, ApJ 677, 1324 (Rp/Rs = 0.12086)"
+      }
+    ],
+    "result": {
+      "foldedDepth": 0.01592
+    }
+  }
+}
