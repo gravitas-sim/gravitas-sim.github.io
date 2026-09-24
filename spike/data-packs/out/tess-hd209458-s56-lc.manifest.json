@@ -1,0 +1,134 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "tess-hd209458-s56-lc",
+  "version": "0.1.0",
+  "title": "HD 209458: TESS sector 56 light curve",
+  "object": {
+    "name": "HD 209458",
+    "tic": 420814525,
+    "ra": 330.794887332661,
+    "dec": 18.8843189579296,
+    "frame": "ICRS",
+    "tessmag": 7.12739992
+  },
+  "facility": {
+    "observatory": "TESS",
+    "instrument": "camera 1, CCD 2",
+    "pipeline": "SPOC spoc-5.0.96-20230729"
+  },
+  "dataType": "light-curve",
+  "origin": "observed",
+  "source": {
+    "urls": [
+      "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2022244194134-s0056-0000000420814525-0243-s_lc.fits"
+    ],
+    "archive": "MAST (Mikulski Archive for Space Telescopes)",
+    "citations": [
+      {
+        "text": "Ricker et al. 2015, JATIS 1, 014003 (TESS)",
+        "doi": "10.1117/1.JATIS.1.1.014003"
+      },
+      {
+        "text": "Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC)",
+        "doi": "10.1117/12.2233418"
+      }
+    ],
+    "retrieved": "2026-09-24"
+  },
+  "license": {
+    "status": "public-domain",
+    "statement": "NASA mission data, released by MAST without restriction on reuse; MAST asks that publications acknowledge the mission and the archive."
+  },
+  "raw": [
+    {
+      "file": "tess2022244194134-s0056-0000000420814525-0243-s_lc.fits",
+      "bytes": 2039040,
+      "sha256": "1b76b4a4b73e24954fa6e29a7e28a174685113ecdbad1bf10ef0e7b766ce99e9",
+      "pinned": true
+    }
+  ],
+  "derived": {
+    "file": "spike/data-packs/out/tess-hd209458-s56.json",
+    "bytes": 15246,
+    "sha256": "f6fad6274b3219fbd2de8d0c6e0bac67cf220cf875cd44330a6f43cafcdfbf9f"
+  },
+  "transformation": {
+    "script": "spike/data-packs/build-tess-pack.mjs",
+    "version": "0.1.0",
+    "steps": [
+      "Read the LIGHTCURVE binary table: TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR, QUALITY.",
+      "Keep cadences with QUALITY 0 and finite time, flux and error.",
+      "Divide flux and error by the median flux.",
+      "Average into 10-minute bins from t0, keeping bins with at least 3 cadences; the error is the quadrature mean.",
+      "Store the bins as runs of consecutive indices, flux as int16 ppm about 1, error as uint8 in 5 ppm steps."
+    ]
+  },
+  "time": {
+    "scale": "TDB",
+    "reference": "BJD 2457000 (BTJD)",
+    "unit": "d"
+  },
+  "columns": [
+    {
+      "name": "t",
+      "unit": "d",
+      "description": "bin centre, t0 + (index + 0.5) * binDays, in BTJD"
+    },
+    {
+      "name": "flux",
+      "unit": "",
+      "description": "PDCSAP flux over its median"
+    },
+    {
+      "name": "err",
+      "unit": "",
+      "uncertaintyOf": "flux",
+      "description": "propagated PDCSAP error over the median, per bin"
+    }
+  ],
+  "masks": [
+    {
+      "column": "QUALITY",
+      "rule": "nonzero dropped",
+      "dropped": 1288
+    }
+  ],
+  "assumptions": [
+    "PDCSAP has had systematics and crowding removed by SPOC; that correction is trusted as published.",
+    "Times are barycentric (TDB) for the target, as SPOC corrects them."
+  ],
+  "reductions": [
+    "10-minute bins: the 2-minute cadences are averaged, which rounds ingress and egress by up to 10 minutes.",
+    "Flux is quantised to 1 ppm, errors to 5 ppm."
+  ],
+  "validation": {
+    "check": "folding on the published period finds a transit of the published depth within 0.003",
+    "against": [
+      {
+        "quantity": "period",
+        "value": 3.52474859,
+        "unit": "d",
+        "ref": "Knutson et al. 2007"
+      },
+      {
+        "quantity": "depth",
+        "value": 0.0146,
+        "unit": "",
+        "ref": "Torres et al. 2008, (Rp/Rs)^2"
+      }
+    ],
+    "result": {
+      "depth": 0.01599
+    }
+  },
+  "compatible": {
+    "widgets": [
+      "transit-noise (a measured-series mode; not built)"
+    ],
+    "investigations": [
+      "detect-this-planet"
+    ]
+  },
+  "offline": "optional"
+}

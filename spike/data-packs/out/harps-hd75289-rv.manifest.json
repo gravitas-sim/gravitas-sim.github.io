@@ -1,0 +1,124 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "harps-hd75289-rv",
+  "version": "0.1.0",
+  "title": "HD 75289: HARPS radial velocities",
+  "object": {
+    "name": "HD 75289",
+    "frame": "ICRS",
+    "note": "coordinates as in the HARPS RV bank; not stored here"
+  },
+  "facility": {
+    "observatory": "ESO La Silla 3.6 m",
+    "instrument": "HARPS",
+    "pipeline": "SERVAL, nightly zero points corrected"
+  },
+  "dataType": "radial-velocity",
+  "origin": "observed",
+  "source": {
+    "urls": [
+      "https://vizier.cds.unistra.fr/viz-bin/asu-tsv?-source=J/A%2BA/636/A74/rvbank&-out=Name,BJD,DRVmlcnzp,e_DRVmlcnzp,Flag&Name=HD75289&-out.max=unlimited"
+    ],
+    "archive": "CDS VizieR, catalogue J/A+A/636/A74/rvbank",
+    "citations": [
+      {
+        "text": "Trifonov et al. 2020, A&A 636, A74",
+        "bibcode": "2020A&A...636A..74T",
+        "doi": "10.1051/0004-6361/201936686"
+      },
+      {
+        "text": "Mayor et al. 2003, The Messenger 114, 20 (HARPS)"
+      }
+    ],
+    "retrieved": "2026-09-24"
+  },
+  "license": {
+    "status": "attribution-requested",
+    "statement": "The catalogue states no licence. The velocities are derived by Trifonov et al. from ESO archive spectra, public under the ESO archive data policy.",
+    "basis": "Redistributed as a published scientific table with its citation. ESO asks that use of archive data acknowledge ESO and the programme IDs of the observations, which this pack does not yet list - a condition of production."
+  },
+  "raw": [
+    {
+      "file": "harps-hd75289.tsv",
+      "bytes": 3545,
+      "sha256": "c69d13360214405276a5929526f761cb1a4dbae7b3634bc808fd6911b822f849",
+      "pinned": true,
+      "canonical": "the lines not starting with #, in order, joined by \\n (the header dates the request)",
+      "canonicalSha256": "cf5359e717188703a7fb360f43950543aef3ee04c0cd420cc9fd83c16515a155"
+    }
+  ],
+  "derived": {
+    "file": "spike/data-packs/out/harps-hd75289.json",
+    "bytes": 457,
+    "sha256": "1b91d4e8f799ea6454675518ec5b0de7581d7d9d4fbc5207c64a6905c83fc482"
+  },
+  "transformation": {
+    "script": "spike/data-packs/build-rv-pack.mjs",
+    "version": "0.1.0",
+    "steps": [
+      "Keep rows with Flag 0 (reliable spectra) and a non-null velocity and error.",
+      "Subtract the integer BJD of the first row from every time.",
+      "Round times to 1e-5 d (0.9 s) and velocities and errors to 0.01 m/s."
+    ]
+  },
+  "time": {
+    "scale": "BJD, UTC or TDB not stated by the catalogue (they differ by 69 s)",
+    "reference": "JD 2453001",
+    "unit": "d"
+  },
+  "columns": [
+    {
+      "name": "t",
+      "unit": "d",
+      "description": "barycentric Julian date minus t0"
+    },
+    {
+      "name": "rv",
+      "unit": "m/s",
+      "description": "differential RV, relative to the star’s own mean template"
+    },
+    {
+      "name": "err",
+      "unit": "m/s",
+      "uncertaintyOf": "rv",
+      "description": "SERVAL formal error; no stellar jitter"
+    }
+  ],
+  "masks": [
+    {
+      "column": "Flag",
+      "rule": "bitwise; only 0 kept",
+      "dropped": 2
+    }
+  ],
+  "assumptions": [
+    "Velocities are differential: the zero point is arbitrary, so only changes are meaningful.",
+    "Formal errors omit stellar jitter; the scatter about an orbit is larger than they say."
+  ],
+  "reductions": [
+    "None beyond rounding: every reliable measurement in the bank is kept."
+  ],
+  "validation": {
+    "check": "circular orbit at the published period recovers K within 6 m/s",
+    "against": [
+      {
+        "quantity": "K",
+        "value": 54.9,
+        "unit": "m/s",
+        "ref": "Butler et al. 2006, ApJ 646, 505"
+      }
+    ],
+    "result": {
+      "K": 52.5,
+      "rms": 2.9
+    }
+  },
+  "compatible": {
+    "widgets": [
+      "rv-curve (a measured-series mode; not built)"
+    ],
+    "investigations": []
+  },
+  "offline": "optional"
+}
