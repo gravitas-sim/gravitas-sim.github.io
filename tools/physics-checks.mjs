@@ -6182,6 +6182,8 @@ export async function runChecks() {
       expected: REF.plummerProjectedHalfMassRadii,
       unit: 'projected half-mass radius, in scale lengths',
       tolerance: 0.02,
+      source:
+        'Plummer (1911), MNRAS 71, 460; sampled by the recipe in Aarseth, Henon & Wielen (1974), A&A 37, 183',
       why: "Every number in this group is a property of the tree *and* of what it was run on, so the distribution is checked too. A Plummer model's projected enclosed mass is R^2/(R^2 + a^2), which is one half at R = a exactly, so the projected half-mass radius of a correctly sampled cluster is the scale length itself - no quoted figure, a closed form. Measured at 0.9996 a over 20000 bodies. The tolerance is 2%: the half-mass radius of a finite sample has a statistical spread of about 1/sqrt(N), which is 0.7% here, and truncating the profile at 20 scale lengths discards the outermost 0.37% of the mass and pulls the radius very slightly inward. The same measurement on the 500-body cluster gives 1.042 a, comfortably inside its own 4.5% sampling spread, which is why this check is made on the largest one.",
     });
 
