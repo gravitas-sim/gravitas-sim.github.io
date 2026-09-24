@@ -38,8 +38,9 @@ import {
   seriesPosition,
   lessonCatalogReady,
 } from './data/investigations/registry.js';
-// Lessons provided by capability packages load through the platform resolver.
-import './platform/lessons.js';
+// Lessons provided by capability packages load through the platform resolver,
+// which installs their loaders in the registry when it is imported.
+import { migrateSavedProgress } from './platform/resolver.js';
 // Search, filters and the curated orders. Both read the same generated
 // manifest the cards do, so there is one list of lessons and not three.
 import {
@@ -630,6 +631,9 @@ function load(id, lesson = null) {
 
   const isLegacy = !Number.isFinite(Number(data?.schema));
   const progress = readProgress(data, lesson);
+  // A lesson from a capability package may have renamed a control since the
+  // answers were saved; its manifest says how, and this applies it.
+  progress.responses = migrateSavedProgress(id, progress.responses);
 
   // Keep the original. A positional migration is right whenever the lesson has
   // not been reordered since the save and there is no way to tell from the

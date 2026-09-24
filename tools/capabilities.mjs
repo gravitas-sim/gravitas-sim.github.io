@@ -25,6 +25,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { PLATFORM_API, validatePackages } from '../js/platform/manifest.js';
 import { BUILTIN_SOURCES } from '../js/platform/builtins.js';
+import { precacheLists } from './build-service-worker.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = path.join(REPO, 'capabilities');
@@ -56,21 +57,30 @@ export function runtimeCatalog(manifests) {
   const families = {};
   const lessons = {};
   const data = {};
+  const migrations = {};
+  const owners = {};
   for (const m of manifests) {
+    if (m.migrations?.length) migrations[m.id] = m.migrations;
     packages[m.id] = [m.version, m.gravitas, m.requires || {}];
     for (const f of m.provides?.widgetFamilies || []) {
       families[f.id] = [f.entry, f.pick, f.widgets];
+      owners[`widgetFamilies:${f.id}`] = m.id;
+      for (const w of f.widgets) owners[`widgets:${w}`] = m.id;
     }
     for (const inv of m.provides?.investigations || []) {
       const translations = {};
       for (const t of m.provides?.translations || []) {
         if (t.investigation === inv.id) translations[t.locale] = t.entry;
       }
-      lessons[inv.id] = [inv.entry, translations];
+      lessons[inv.id] = [inv.entry, translations, m.id];
+      owners[`investigations:${inv.id}`] = m.id;
     }
-    for (const d of m.provides?.dataPacks || []) data[d.id] = d.entry;
+    for (const d of m.provides?.dataPacks || []) {
+      data[d.id] = d.entry;
+      owners[`dataPacks:${d.id}`] = m.id;
+    }
   }
-  return { packages, families, lessons, data };
+  return { packages, families, lessons, data, migrations, owners };
 }
 
 /** The catalog module, formatted as the repository formats it. */
@@ -84,6 +94,8 @@ export async function catalogSource(packages) {
     `export const FAMILIES = ${JSON.stringify(c.families)};`,
     `export const LESSONS = ${JSON.stringify(c.lessons)};`,
     `export const DATA = ${JSON.stringify(c.data)};`,
+    `export const MIGRATIONS = ${JSON.stringify(c.migrations)};`,
+    `export const OWNERS = ${JSON.stringify(c.owners)};`,
     '',
   ].join('\n');
   // Loaded here rather than at the top: under Jest the prettier package does
@@ -99,7 +111,19 @@ export async function checkRepository(packages) {
   const manifests = packages.map(p => p.manifest);
   for (const e of validatePackages(manifests))
     problems.push(`${e.package} ${e.path}: ${e.message}`);
-  const sw = readFileSync(path.join(REPO, 'sw-manifest.js'), 'utf8');
+  // Compared with the lists the generator produces, not by searching the file:
+  // a path appears in the core list, the optional list or a locale's warm list,
+  // and only the right one will do.
+  const lists = await precacheLists();
+  const warm = new Set([...lists.localeWarm.values()].flat());
+  const listOf = p =>
+    lists.core.includes(p)
+      ? 'core'
+      : lists.optional.includes(p)
+        ? 'optional'
+        : warm.has(p)
+          ? 'locale'
+          : 'none';
   const { CHECKS } = await import('./checks.mjs');
   const registry = new Set(CHECKS.map(c => c.id));
   const licenses = readFileSync(path.join(REPO, 'LICENSES.md'), 'utf8');
@@ -128,13 +152,10 @@ export async function checkRepository(packages) {
     for (const a of m.assets || []) {
       if (!existsSync(path.join(REPO, a.path)))
         problems.push(`${m.id}: asset ${a.path} does not exist`);
-      if (
-        m.offline?.policy === 'precache' &&
-        a.offline !== 'none' &&
-        !sw.includes(`'./${a.path}'`)
-      ) {
+      const where = listOf(a.path);
+      if (where !== a.offline) {
         problems.push(
-          `${m.id}: ${a.path} is offline "${a.offline}" but not in the service-worker precache`
+          `${m.id}: ${a.path} is declared offline "${a.offline}" but the precache has it as "${where}"`
         );
       }
     }
@@ -171,7 +192,7 @@ export async function checkRepository(packages) {
   const same =
     shipped &&
     shipped.PLATFORM_API === PLATFORM_API &&
-    ['packages', 'families', 'lessons', 'data'].every(
+    ['packages', 'families', 'lessons', 'data', 'migrations', 'owners'].every(
       k => JSON.stringify(shipped[k.toUpperCase()]) === JSON.stringify(want[k])
     );
   if (!same) {

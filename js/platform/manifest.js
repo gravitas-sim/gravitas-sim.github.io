@@ -66,7 +66,8 @@ export const USES = ['scenarios', 'widgets', 'dataPacks', 'models'];
 /** Fields that name code, allowed only in a built-in package. */
 const CODE_FIELDS = new Set(['entry', 'pick', 'ready', 'services']);
 const ASSET_ROLES = ['code', 'data', 'provenance', 'translation', 'image'];
-const OFFLINE = ['core', 'optional', 'none'];
+/** A file's offline class: needed, worth having, warmed per locale, never. */
+const OFFLINE = ['core', 'optional', 'locale', 'none'];
 const POLICIES = ['precache', 'on-demand', 'online-only'];
 const CHECK_REF = /^(registry|jest|e2e):[\w./-]+$/;
 
@@ -449,38 +450,51 @@ export function dependencyOrder(packages, rootId) {
   return order;
 }
 
+// The rename itself lives with the runtime, which applies it to saved work.
+export { migrateSaved } from './migrate.js';
+
 /**
- * Rename saved public identifiers across a version change, as the package's
- * declared migrations say. Declarative, so it needs no code of the package's
- * own, and reversible, so a round trip is checkable.
+ * One package checked against what is already installed, for a package the
+ * build did not see: its own shape and safety, the platform API it needs, and
+ * that every requirement is installed at a version in range.
  *
- * @param {Record<string, unknown>} saved - Keys such as `${sid}:tool:${control}`
- * @param {object[]} migrations - The package's `migrations`
- * @param {string} fromVersion - The version the saved state was made with
- * @param {{reverse?: boolean}} [options]
- * @returns {Record<string, unknown>}
+ * @param {object} m - A parsed manifest
+ * @param {Record<string, [string, string, object]>} installed - id to
+ *   [version, platform range, requires], as the runtime catalog holds them
+ * @param {{api?: string}} [options]
+ * @returns {Array<{path: string, message: string}>}
  */
-export function migrateSaved(
-  saved,
-  migrations,
-  fromVersion,
-  { reverse = false } = {}
+export function checkAgainstInstalled(
+  m,
+  installed,
+  { api = PLATFORM_API } = {}
 ) {
-  let out = { ...saved };
-  const steps = (migrations || []).filter(g =>
-    reverse ? true : satisfies(fromVersion, g.from)
-  );
-  for (const g of reverse ? [...steps].reverse() : steps) {
-    const controls = g.renames?.controls || {};
-    const map = reverse
-      ? Object.fromEntries(Object.entries(controls).map(([a, b]) => [b, a]))
-      : controls;
-    const next = {};
-    for (const [key, value] of Object.entries(out)) {
-      const m = /^(.*):tool:([^:]+)$/.exec(key);
-      next[m && map[m[2]] ? `${m[1]}:tool:${map[m[2]]}` : key] = value;
-    }
-    out = next;
+  const errors = validateManifest(m);
+  if (m?.id && installed[m.id]) {
+    errors.push({
+      path: 'id',
+      message: 'a package with this id is already installed',
+    });
   }
-  return out;
+  if (parseRange(m?.gravitas) && !satisfies(api, m.gravitas)) {
+    errors.push({
+      path: 'gravitas',
+      message: `needs platform API ${m.gravitas}; this build is ${api}`,
+    });
+  }
+  for (const [dep, range] of Object.entries(m?.requires || {})) {
+    const have = installed[dep];
+    if (!have) {
+      errors.push({
+        path: `requires.${dep}`,
+        message: 'requires a package that is not installed',
+      });
+    } else if (!satisfies(have[0], range)) {
+      errors.push({
+        path: `requires.${dep}`,
+        message: `needs ${range}; ${have[0]} is installed`,
+      });
+    }
+  }
+  return errors;
 }

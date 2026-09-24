@@ -13,7 +13,9 @@
     "gravitas.power-law-instruments": "^1.0.0"
   },
   "uses": {
-    "scenarios": ["Solar System"],
+    "scenarios": [
+      "Solar System"
+    ],
     "widgets": [
       "power-law-precession",
       "power-law-refinement",
@@ -50,7 +52,7 @@
     {
       "path": "js/data/investigations/es/power-law-gravity.js",
       "role": "translation",
-      "offline": "core"
+      "offline": "locale"
     }
   ],
   "citations": [],
@@ -64,7 +66,9 @@
     "policy": "precache"
   },
   "authoring": {
-    "checks": ["registry:author"]
+    "checks": [
+      "registry:author"
+    ]
   },
   "validation": [
     {

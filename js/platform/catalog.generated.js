@@ -26,8 +26,19 @@ export const LESSONS = {
   'power-law-gravity': [
     'builtin:investigation/power-law-gravity',
     { es: 'builtin:investigation/es/power-law-gravity' },
+    'gravitas.lesson.power-law-gravity',
   ],
 };
 export const DATA = {
   'sdss-dr18-stellar-spectra': 'builtin:data/sdss-spectra',
+};
+export const MIGRATIONS = {};
+export const OWNERS = {
+  'investigations:power-law-gravity': 'gravitas.lesson.power-law-gravity',
+  'widgetFamilies:power-law': 'gravitas.power-law-instruments',
+  'widgets:power-law-precession': 'gravitas.power-law-instruments',
+  'widgets:power-law-refinement': 'gravitas.power-law-instruments',
+  'widgets:power-law-kepler': 'gravitas.power-law-instruments',
+  'widgets:power-law-conservation': 'gravitas.power-law-instruments',
+  'dataPacks:sdss-dr18-stellar-spectra': 'gravitas.sdss-dr18-spectra',
 };
