@@ -188,6 +188,14 @@ jobs:
       - name: Service worker manifest is current
         run: npm run sw:check
 
+      # Each capability package's manifest against the repository: the code it
+      # names is in the reviewed builtin registry, its files exist and are
+      # precached as it declares, its validation checks exist, its licenses and
+      # citations are recorded, and the runtime catalog and the listing are
+      # current. See tools/capabilities.mjs.
+      - name: Capability packages are valid and true
+        run: npm run capabilities:check
+
       # The showcase page's six demonstration links, which are share payloads
       # generated from the spec in js/data/teaching.js. Stale ones would open
       # the wrong scenario, or a scenario that no longer exists, from a page
