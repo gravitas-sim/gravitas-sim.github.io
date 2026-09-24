@@ -60,6 +60,13 @@ saved or linked to changes.
   package (`core`, `optional`, `locale` for a translation warmed per language,
   `none`) and refuses a declaration it cannot honor; the platform's own modules
   are core entries.
+- **Audits** - the scene audit (`tools/lesson-scene-audit.mjs`) says which
+  readouts are observations by following imports, so it follows a
+  `loadBuiltin('builtin:<id>')` through `js/platform/builtins.js` as it would
+  the literal `import()` it replaced, and stops on an id it does not know. A
+  slice that reaches data some other way has to teach it that way too:
+  `audit:scene:check` is where the loss shows, and it runs in the release gate,
+  not in CI.
 - **The core** - an instrument family, lesson or dataset without a package is
   found where it always was. Moving one is a manifest, a builtin entry and a
   registry line; nothing about the others changes.

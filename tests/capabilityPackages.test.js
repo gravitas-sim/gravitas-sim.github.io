@@ -219,6 +219,24 @@ describe('T6-T8: what the manifests claim is true of the repository', () => {
     expect(notice).toMatch(/SDSS/);
   });
 
+  test('a packaged dataset is still credited to the instruments that draw it', () => {
+    // The scene audit follows imports to say which readouts are observations.
+    // A dataset reached by builtin id has to stay visible to it, or six steps
+    // of A Universe of Stars read as models; audit:scene:check ties this
+    // committed catalog to the source.
+    const catalog = JSON.parse(
+      readFileSync('docs/lesson-scene-catalog.json', 'utf8')
+    );
+    for (const id of ['spectra-compare', 'spectra-identify']) {
+      expect(catalog.instruments[id].datasets).toEqual([
+        expect.objectContaining({
+          origin: 'observation',
+          dataset: 'js/data/spectra/sdssSpectra.js',
+        }),
+      ]);
+    }
+  });
+
   test('the family the manifest declares is the family the module exports', async () => {
     const { POWER_LAW_WIDGETS } = await import('../js/powerLawWidgets.js');
     const family = byId(INSTRUMENTS).provides.widgetFamilies[0];
