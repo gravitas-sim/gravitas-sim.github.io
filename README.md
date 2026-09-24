@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/gravitas-sim/gravitas-sim.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/gravitas-sim/gravitas-sim.github.io/actions/workflows/ci.yml)
 <!--fact-block:doiBadge-->
-
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22800609.svg)](https://doi.org/10.5281/zenodo.22800609)
 <!--/fact-block-->
 
@@ -156,7 +155,7 @@ closer to a small ratio than Pluto's is to 3:2, and Callisto is in no resonance
 at all. The instrument measures the quantity that does settle it — a resonant
 angle that either librates or circulates — across the Galilean 4:2:1 chain,
 Pluto's 3:2 with Neptune and Jupiter's Trojans, each paired with a control that
-fails the test. It reports libration, circulation, or _inconclusive_, and it
+fails the test. It reports libration, circulation, or *inconclusive*, and it
 will stay inconclusive rather than guess. See
 [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md).
 
@@ -197,13 +196,14 @@ and carrying its own scale bar. The figure builder at `/figure/` makes one
 without editing a URL: how it opens and looks, a title and caption, a live
 preview and markup to copy. A page can play, pause, reset or load a figure
 through a small versioned message contract that obeys only the origin it was
-told to ([EMBEDDING.md](EMBEDDING.md)). Lecture mode fills the screen for projection:
+told to ([EMBEDDING.md](EMBEDDING.md)). Lecture mode fills the screen for
+projection:
 larger type, the Daylight theme, a spotlight pointer, and arrow keys that step
 through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->4140<!--/fact--> strings, and
+of <!--fact:uiStrings-->4208<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -239,7 +239,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5949<!--/fact--> tests across <!--fact:jestSuites-->178<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5970<!--/fact--> tests across <!--fact:jestSuites-->179<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -261,12 +261,12 @@ into a temporary directory and does exactly this, end to end.
 `npm run build` writes a self-contained `dist/` that can be published as-is. It
 reports what the browser downloads at start-up separately from what is deferred:
 
-| What                   | Size                                                   | Files / chunks                                 |
-| ---------------------- | ------------------------------------------------------ | ---------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->200<!--/fact--> KB                 | 1                                              |
-| JavaScript at start-up | <!--fact:buildStartupJs-->616<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->    |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->4153<!--/fact--> KB         | <!--fact:buildDeferredChunks-->173<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->817<!--/fact--> KB** |                                                |
+| What                   | Size                                                   | Files / chunks                                |
+| ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
+| CSS                    | <!--fact:buildCss-->200<!--/fact--> KB                 | 1                                             |
+| JavaScript at start-up | <!--fact:buildStartupJs-->618<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4159<!--/fact--> KB         | <!--fact:buildDeferredChunks-->176<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->818<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -366,8 +366,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1251<!--/fact--> tests
-in <!--fact:e2eFiles-->93<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1268<!--/fact--> tests
+in <!--fact:e2eFiles-->95<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -506,22 +506,22 @@ its counts come from the same source as this page's.
 Topic documents, each about one part of the application and written when that
 part was built:
 
-| Document                                                           | What it covers                                                                                                                                                                   |
-| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md)                   | Every validated claim, its tolerance, and the reason for that tolerance                                                                                                          |
-| [`SANDBOX_INSTRUMENTS.md`](SANDBOX_INSTRUMENTS.md)                 | Ruler, protractor, stopwatch, the always-on scale bar, screenshots and clip recording                                                                                            |
-| [`AB_EXPERIMENT_BENCH.md`](AB_EXPERIMENT_BENCH.md)                 | Controlled A/B experiments: the canonical captured state, why runs are sequential, alignment, storage and export                                                                 |
-| [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artifact                                   |
-| [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md)         | The resonance investigation: the resonant angles, the three verdicts and why one of them is a refusal, the four scenarios and their measured values                              |
-| [`EXOPLANET_OBSERVING.md`](EXOPLANET_OBSERVING.md)                 | The transit, radial-velocity and astrometry panels and the shared observer                                                                                                       |
-| [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                                                                                                                  |
-| [`DARK_MATTER.md`](DARK_MATTER.md)                                 | The halo, the rotation-curve panel and the lesson built on them                                                                                                                  |
-| [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md)                       | The per-body readout and its orbital elements                                                                                                                                    |
-| [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                                                   |
-| [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                                                               |
-| [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                                                                 |
+| Document                                                           | What it covers                                                                                                                                 |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md)                   | Every validated claim, its tolerance, and the reason for that tolerance                                                                        |
+| [`SANDBOX_INSTRUMENTS.md`](SANDBOX_INSTRUMENTS.md)                 | Ruler, protractor, stopwatch, the always-on scale bar, screenshots and clip recording                                                          |
+| [`AB_EXPERIMENT_BENCH.md`](AB_EXPERIMENT_BENCH.md)                 | Controlled A/B experiments: the canonical captured state, why runs are sequential, alignment, storage and export                               |
+| [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artifact |
+| [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md)         | The resonance investigation: the resonant angles, the three verdicts and why one of them is a refusal, the four scenarios and their measured values |
+| [`EXOPLANET_OBSERVING.md`](EXOPLANET_OBSERVING.md)                 | The transit, radial-velocity and astrometry panels and the shared observer                                                                     |
+| [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                                                                                |
+| [`DARK_MATTER.md`](DARK_MATTER.md)                                 | The halo, the rotation-curve panel and the lesson built on them                                                                                |
+| [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md)                       | The per-body readout and its orbital elements                                                                                                  |
+| [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
+| [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
+| [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
 | [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->24<!--/fact--> lessons, and what a 2019 Chromebook actually gets |
-| [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                                                          |
+| [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the
 application, and are labeled as such at the top:
@@ -533,14 +533,14 @@ and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
 
 ## Getting help, and getting involved
 
-|                                   |                                                                                     |
-| --------------------------------- | ----------------------------------------------------------------------------------- |
-| Something is wrong                | [`SUPPORT.md`](SUPPORT.md) — what makes a bug report fixable here                   |
-| I want to use this in a class     | [`SUPPORT.md`](SUPPORT.md), and [/teaching/](https://gravitas-sim.online/teaching/) |
-| I want to change something        | [`CONTRIBUTING.md`](CONTRIBUTING.md)                                                |
-| I found a security problem        | [`SECURITY.md`](SECURITY.md) — please do not open an issue                          |
-| How people are expected to behave | [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)                                          |
-| I want to cite this               | [`CITATION.cff`](CITATION.cff), and below                                           |
+| | |
+| --- | --- |
+| Something is wrong | [`SUPPORT.md`](SUPPORT.md) — what makes a bug report fixable here |
+| I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), and [/teaching/](https://gravitas-sim.online/teaching/) |
+| I want to change something | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+| I found a security problem | [`SECURITY.md`](SECURITY.md) — please do not open an issue |
+| How people are expected to behave | [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) |
+| I want to cite this | [`CITATION.cff`](CITATION.cff), and below |
 
 ## Contributing
 
@@ -572,17 +572,16 @@ If you use Gravitas in teaching or research, please cite it. Every release is
 archived on Zenodo.
 
 <!--fact-block:citation-->
-
-> Ziegler, C. (2026). _Gravitas: an interactive astrophysics sandbox for teaching_
+> Ziegler, C. (2026). *Gravitas: an interactive astrophysics sandbox for teaching*
 > (Version 1.0.0) [Computer software]. Zenodo.
 > <https://doi.org/10.5281/zenodo.22800610>
 
-|                          |                                                                    |
-| ------------------------ | ------------------------------------------------------------------ |
+| | |
+| --- | --- |
 | **This version (1.0.0)** | [10.5281/zenodo.22800610](https://doi.org/10.5281/zenodo.22800610) |
-| **All versions**         | [10.5281/zenodo.22800609](https://doi.org/10.5281/zenodo.22800609) |
+| **All versions** | [10.5281/zenodo.22800609](https://doi.org/10.5281/zenodo.22800609) |
 
-The paper describing Gravitas is _Gravitas: A Browser-Based Astrophysics Laboratory for Prediction, Measurement, and Discovery_
+The paper describing Gravitas is *Gravitas: A Browser-Based Astrophysics Laboratory for Prediction, Measurement, and Discovery*
 (arXiv:2609.19327, <https://doi.org/10.48550/arXiv.2609.19327>). Cite the software above for what your students ran,
 and the paper for the design it describes.
 <!--/fact-block-->
