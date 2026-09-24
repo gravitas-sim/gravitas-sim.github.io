@@ -13,8 +13,11 @@
 //                        capability still built into the core
 //   migrateSavedProgress a packaged lesson's saved answers carried across its
 //                        package's declared renames
-//   validatePackage(m)   a package the build did not see, checked against what
-//                        is installed - the validator is fetched only then
+//
+// It accepts only the packages the build validated and compiled into the
+// catalog. A package the build never saw is checked by checkAgainstInstalled()
+// in ./manifest.js; that arrives in the browser with package import, not
+// before, because the validator costs 8.2 KB of a deferred budget with 2 to spare.
 //
 // Importing this also installs the packaged lessons' loaders into the lesson
 // registry, which does not import the platform itself.
@@ -170,16 +173,6 @@ export function migrateSavedProgress(
     }
   }
   return out;
-}
-
-/**
- * A package the build did not see, checked against what is installed. The
- * validator is fetched only when this is called, so no route pays for it.
- * @returns {Promise<Array<{path: string, message: string}>>} Empty when valid
- */
-export async function validatePackage(manifest) {
-  const { checkAgainstInstalled } = await import('./manifest.js');
-  return checkAgainstInstalled(manifest, PACKAGES, { api: PLATFORM_API });
 }
 
 // The packaged lessons, into the registry the lesson engine reads.

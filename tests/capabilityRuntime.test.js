@@ -6,10 +6,14 @@ import {
   migrateSavedProgress,
   providerOf,
   resolve,
-  validatePackage,
 } from '../js/platform/resolver.js';
+import { checkAgainstInstalled } from '../js/platform/manifest.js';
+import { PACKAGES } from '../js/platform/catalog.generated.js';
 import { BUILTINS } from '../js/platform/builtins.js';
 import { loadInvestigation } from '../js/data/investigations/registry.js';
+
+/** What package import will run in the browser; the build runs it today. */
+const validatePackage = async m => checkAgainstInstalled(m, PACKAGES);
 
 // =============================================================================
 // The capability runtime's contract
