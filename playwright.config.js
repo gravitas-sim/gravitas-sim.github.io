@@ -112,7 +112,7 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * retry can re-import a family under a new URL, and a bundle cannot.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js/;
 
 /**
  * Which engines to run.

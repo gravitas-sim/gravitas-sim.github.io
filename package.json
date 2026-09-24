@@ -69,6 +69,8 @@
     "validate:links:dist": "node tools/check-links.mjs --root dist",
     "sw:manifest": "node tools/build-service-worker.mjs",
     "sw:check": "node tools/build-service-worker.mjs --check",
+    "capabilities": "node tools/capabilities.mjs generate",
+    "capabilities:check": "node tools/capabilities.mjs check",
     "vendor": "node tools/vendor-deps.mjs",
     "vendor:check": "node tools/vendor-deps.mjs --check",
     "budget": "node tools/bundle-budget.mjs",

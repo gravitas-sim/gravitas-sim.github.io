@@ -175,6 +175,22 @@ the release rather than in the tag.
   application uses a Worker world yet, and the probe pages under
   `spike/lyapunov/` are not part of the build.
 
+- **Capabilities described by versioned packages, starting with three.** The
+  power-law gravity instruments, the four SDSS spectra and the lesson that uses
+  the instruments are each described by a `gravitas.capability-package/1`
+  manifest in `capabilities/`, and reach the application through one runtime
+  (`js/platform/`): dependencies resolved in order with the platform version
+  checked, each module loaded once and fetched again after a failure, and a
+  package's renames of its own identifiers applied to saved answers as they are
+  read. Code is named only through a reviewed registry; a package that is
+  content alone may name none, and hashed build chunks never appear in a
+  manifest, a link or saved work. `npm run capabilities:check` holds every
+  manifest to the repository in CI, and the service-worker precache takes each
+  file's offline class from its package. Nothing a reader sees changes, and
+  every identifier, link and saved answer is what it was. The other
+  capabilities stay built in until each is moved in its own step;
+  `CAPABILITY_RUNTIME.md` lists the order.
+
 ### Changed
 
 - **The simulation canvas draws at the display's pixel density.** It had never

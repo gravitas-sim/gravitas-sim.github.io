@@ -354,6 +354,17 @@ export const CHECKS = [
     ci: 'checks',
     group: 'correctness',
   },
+  // Every capability package valid, and true of the repository: its builtin
+  // references, assets and offline classes, validation checks, licenses and
+  // citations, the runtime catalog and the generated listing.
+  {
+    id: 'capabilities',
+    label: 'capability packages',
+    command: ['npm', 'run', 'capabilities:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
   {
     id: 'build',
     label: 'production build',

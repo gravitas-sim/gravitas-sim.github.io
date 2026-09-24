@@ -64,6 +64,7 @@
  */
 
 import { readFile, writeFile, readdir } from 'node:fs/promises';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 
@@ -161,6 +162,81 @@ async function walk(dir, ext) {
 }
 
 /**
+ * The offline class each capability package declares for its assets.
+ *
+ * A package says, per file, whether a reader needs it offline to use the
+ * capability at all (`core`), whether it is worth having (`optional`), whether
+ * it is a translation warmed for readers of that locale (`locale`), or whether
+ * it is never cached (`none`). The directory walk above gives every file a
+ * default; a declaration overrides it, and one the precache cannot honor - a
+ * core file the walk excludes, a `locale` file that is not a lesson shadow -
+ * refuses the build rather than shipping a precache that disagrees with the
+ * package.
+ *
+ * @returns {Map<string, string>} Repo-relative path -> offline class
+ */
+export function capabilityOffline(dir = 'capabilities') {
+  const declared = new Map();
+  if (!existsSync(dir)) return declared;
+  for (const name of readdirSync(dir)
+    .filter(f => f.endsWith('.json'))
+    .sort()) {
+    const m = JSON.parse(readFileSync(path.posix.join(dir, name), 'utf8'));
+    for (const a of m.assets || []) declared.set(a.path, a.offline);
+  }
+  return declared;
+}
+
+function applyCapabilityOffline(entries) {
+  const declared = capabilityOffline();
+  const byPath = new Map(entries.map(e => [e.path, e]));
+  const problems = [];
+  for (const [p, offline] of declared) {
+    const shadow = isLocaleShadow(p);
+    if (offline === 'locale') {
+      if (!shadow)
+        problems.push(`${p} is declared locale but is not a lesson shadow`);
+      continue;
+    }
+    if (shadow && offline !== 'none') {
+      problems.push(
+        `${p} is a lesson shadow, warmed per locale; declare it locale`
+      );
+      continue;
+    }
+    if (offline === 'none') {
+      byPath.delete(p);
+    } else if (byPath.has(p)) {
+      byPath.get(p).core = offline === 'core';
+    } else if (existsSync(p)) {
+      byPath.set(p, { path: p, core: offline === 'core' });
+    } else {
+      problems.push(`${p} is declared ${offline} but does not exist`);
+    }
+  }
+  if (problems.length) {
+    throw new Error(
+      'Capability packages declare offline classes the precache cannot honor:\n  ' +
+        problems.join('\n  ')
+    );
+  }
+  return [...byPath.values()];
+}
+
+/**
+ * The three lists a reader's browser caches, as the worker will receive them.
+ * @returns {Promise<{core: string[], optional: string[], localeWarm: Map<string, string[]>}>}
+ */
+export async function precacheLists() {
+  const { core, optional } = await buildManifest();
+  const onDisk = await shadowsOnDisk();
+  const localeWarm = new Map(
+    SHADOW_LOCALES.map(id => [id, onDisk.get(id) || []])
+  );
+  return { core, optional, localeWarm };
+}
+
+/**
  * The precache list and the version its contents imply.
  *
  * @returns {Promise<{paths: string[], version: string, bytes: number}>} Manifest
@@ -172,9 +248,9 @@ export async function buildManifest() {
       collected.push({ path: path_, core });
   }
 
-  const kept = collected
-    .filter(f => !EXCLUDE.some(re => re.test(f.path)))
-    .sort((a, b) => a.path.localeCompare(b.path));
+  const kept = applyCapabilityOffline(
+    collected.filter(f => !EXCLUDE.some(re => re.test(f.path)))
+  ).sort((a, b) => a.path.localeCompare(b.path));
   const paths = kept.map(f => f.path);
   const core = kept.filter(f => f.core).map(f => f.path);
   const optional = kept.filter(f => !f.core).map(f => f.path);

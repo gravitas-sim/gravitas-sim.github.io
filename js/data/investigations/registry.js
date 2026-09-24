@@ -244,6 +244,25 @@ export const investigationMeta = id => MANIFEST.find(m => m.id === id);
 export const hasInvestigation = id => Object.hasOwn(LOADERS, id);
 
 /**
+ * Loaders a capability package supplies for a lesson.
+ *
+ * Installed by the platform (js/platform/lessons.js) rather than imported here:
+ * a content registry does not depend on the layer that loads packages, so the
+ * package route arrives through this door and everything below - memoizing,
+ * the translation merge, the retry after a failed fetch - is unchanged.
+ *
+ * @param {string} id - Investigation id
+ * @param {{lesson: Function, translations?: Record<string, Function>}} loaders
+ */
+export function provideLessonLoaders(id, { lesson, translations = {} }) {
+  LOADERS[id] = lesson;
+  for (const [locale, load] of Object.entries(translations)) {
+    TRANSLATIONS[locale] = TRANSLATIONS[locale] || {};
+    TRANSLATIONS[locale][id] = load;
+  }
+}
+
+/**
  * A lesson already in memory, or undefined.
  *
  * For the places that want to use a lesson if it happens to be loaded and do

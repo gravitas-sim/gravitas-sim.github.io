@@ -90,6 +90,7 @@ import { resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { allWidgets, whenWidgetsReady } from '../js/widgets.js';
+import { BUILTIN_SOURCES } from '../js/platform/builtins.js';
 import { auditBindings, parseCollected } from './acceptance-bindings.mjs';
 import { inOwnTransformCache } from './playwright-cache.mjs';
 
@@ -443,6 +444,18 @@ async function importBindings(rel) {
   }
   for (const m of text.matchAll(/\bimport\(\s*'(\.\.?\/[^']*\.js)'\s*\)/g)) {
     out.push({ imported: '*', module: target(m[1]), members: true });
+  }
+  // A packaged capability's module, asked for by its builtin id: the same
+  // dynamic import, written once in js/platform/builtins.js rather than here.
+  // An id the registry does not know stops the audit, because dropping it
+  // would lose the dataset without a sound - which is what happened to the
+  // SDSS spectra when their import first moved behind loadBuiltin().
+  for (const m of text.matchAll(/\bloadBuiltin\(\s*'builtin:([^']+)'\s*\)/g)) {
+    const source = BUILTIN_SOURCES[m[1]];
+    if (!source) {
+      throw new Error(`${rel} loads builtin:${m[1]}, which is not a builtin`);
+    }
+    out.push({ imported: '*', module: source, members: true });
   }
   return out;
 }
