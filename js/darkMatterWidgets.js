@@ -17,8 +17,8 @@
 //
 //   dm-shapes    put mass somewhere, see the curve it makes
 //   dm-enclosed  a curve and its enclosed mass, side by side, with a scrubber
-//   dm-fit       fit a real galaxy's curve with a disc and a halo. The center
-//                of the lesson, and the actual research activity
+//   dm-fit       fit NGC 3198's curve with a disc and a halo. The center of
+//                the lesson, and the actual research activity
 //   dm-flyby     fly a star through a halo and switch the halo off mid-orbit
 //   dm-virial    Zwicky's arithmetic, with the classic mistakes reachable
 //   dm-budget    where the mass of the universe is, to scale
@@ -30,13 +30,15 @@
 //
 // On the "observed" curve in dm-fit
 // -----------------------------------------------------------------------------
-// It is synthetic, and the panel says so. It is built from NGC 3198's published
+// It is synthetic, and both panels that plot it (dm-fit and dm-mond) say so on
+// the canvas, through syntheticLabel(). It is built from NGC 3198's published
 // structural parameters - a 2.6 kpc disc scale length and a 150 km/s asymptotic
 // speed, measured out to about 30 kpc - rather than transcribed from anyone's
 // data table, with a fixed scatter of a few km/s so it reads as measurement. The
 // consequence is that the exercise has an exact right answer, which is what makes
 // it a fitting game rather than a shrug, and no number is attributed to a paper
-// that did not publish it.
+// that did not publish it. The words around it must not call it measured either:
+// the lesson and the panel note say what it was built from.
 // =============================================================================
 
 // Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
@@ -985,6 +987,28 @@ const NGC3198_OBSERVED = [
 }));
 
 /**
+ * Say on the canvas that the points are synthetic.
+ *
+ * Every panel that plots NGC3198_OBSERVED calls this, in the top left of its
+ * plot box, so no screenshot of the points can pass for a measurement. It is a
+ * function rather than a line in each draw() because the fitting panel names
+ * its plot transform `t`, which shadows the translator there.
+ *
+ * @param {CanvasRenderingContext2D} ctx - Target
+ * @param {Object} box - The plot box, {x, y, w, h} in CSS pixels
+ * @returns {number} The label's width, so a caller can keep clear of it
+ */
+function syntheticLabel(ctx, box) {
+  const text = t('dmW.syntheticCurve');
+  ctx.font = `10px ${MONO}`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = MUTED;
+  ctx.fillText(text, box.x + 4, box.y + 4);
+  return ctx.measureText(text).width;
+}
+
+/**
  * The fitting instrument's presets.
  *
  * Held outside the widget so a step can be offered a subset. `needsHalo` marks
@@ -1027,7 +1051,7 @@ const FIT = {
   get title() {
     return t('dmW.fitARealGalaxy');
   },
-  note: 'The pink points with error bars are the measured rotation curve of a spiral galaxy. Your job is to reproduce them. The disc is what you can see; the halo is what you cannot. Try the disc on its own first.',
+  note: 'The pink points with error bars are a rotation curve built from the published parameters of NGC 3198, with a fixed scatter added so the fit has a right answer. Your job is to reproduce them. The disc is what you can see; the halo is what you cannot. Try the disc on its own first.',
   controls: [
     {
       id: 'discMass',
@@ -1240,12 +1264,16 @@ const FIT = {
       ctx.fill();
     }
 
+    // What the points are, in the words and the place dm-mond uses. The key
+    // calls them synthetic too: nothing on this canvas may say measured.
+    const labelW = syntheticLabel(ctx, box);
+
     // A shaded band showing where the model misses, which turns "the fit is bad"
     // into "the fit is bad here, by this much".
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     let kx = box.x + 4;
-    kx += key(ctx, kx, 12, C_DATA, 'measured');
+    kx += key(ctx, kx, 12, C_DATA, 'synthetic');
     kx += key(ctx, kx, 12, C_DISC, 'disc', true);
     if (f.model.haloVFlat > 0) kx += key(ctx, kx, 12, C_HALO, 'halo', true);
     key(ctx, kx, 12, C_TOTAL, 'your model');
@@ -1254,7 +1282,12 @@ const FIT = {
       ctx.fillStyle = C_TOTAL;
       ctx.font = `bold 11px ${MONO}`;
       ctx.textAlign = 'right';
-      halo(ctx, 'FITTED', box.x + box.w - 6, box.y + 6);
+      // On a phone the marker would sit on the synthetic label, so there it
+      // drops below it instead.
+      const right = box.x + box.w - 6;
+      const clear =
+        right - ctx.measureText('FITTED').width > box.x + 4 + labelW + 8;
+      halo(ctx, 'FITTED', right, box.y + (clear ? 6 : 22));
     }
   },
 };
@@ -2292,11 +2325,7 @@ const MOND_FIT = {
       ctx.fill();
     }
 
-    ctx.font = `10px ${MONO}`;
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillStyle = MUTED;
-    ctx.fillText(t('dmW.mondSynthetic'), box.x + 4, box.y + 4);
+    syntheticLabel(ctx, box);
   },
 };
 
