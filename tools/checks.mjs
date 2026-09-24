@@ -785,8 +785,13 @@ export const CI_EQUIVALENTS = {
   'npm run author:check': 'author',
   'npm run a11y:axe': 'e2e-sources',
   'npm run a11y:manual': 'e2e-sources',
-  // Sharded in CI, whole in the gate.
-  'npx playwright test --shard=${{ matrix.shard }}/6': 'e2e-sources',
+  // Sharded in CI, whole in the gate. Each shard plans its part of the suite
+  // and runs it (tools/e2e-shards.mjs), and the coverage job checks the parts
+  // add up to the whole - which the gate has by running the whole.
+  'node tools/e2e-shards.mjs plan --of ${{ strategy.job-total }} --shard ${{ matrix.shard }} --out shard-tests.txt':
+    'e2e-sources',
+  'npx playwright test --test-list shard-tests.txt': 'e2e-sources',
+  'node tools/e2e-shards.mjs verify --report e2e-results.json': 'e2e-sources',
   'npm run e2e:dist': 'e2e-dist',
   // One matrix job per engine in CI; one registry entry per engine here, and
   // the engine comes from GRAVITAS_E2E_BROWSERS in both.

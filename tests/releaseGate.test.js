@@ -17,6 +17,7 @@
 // =============================================================================
 
 import { readFileSync } from 'node:fs';
+import yaml from 'js-yaml';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -825,9 +826,18 @@ describe('the checks a release is asked for and a branch is not', () => {
     expect(workflow).toMatch(
       /deploy:\n\s+name: Deploy to Pages\n\s+needs: \[ci\]/
     );
-    expect(workflow).toMatch(
-      /needs: \[checks, build, e2e, accessibility, e2e-build, cross-browser\]/
-    );
+    // What the gate waits for, as a set rather than as the line prettier
+    // happens to wrap it onto: the coverage job is what makes the shards
+    // together mean the suite passed.
+    expect([...yaml.load(workflow).jobs.ci.needs].sort()).toEqual([
+      'accessibility',
+      'build',
+      'checks',
+      'cross-browser',
+      'e2e',
+      'e2e-build',
+      'e2e-coverage',
+    ]);
     const step = find('npm run instructors:check');
     expect(step.job).toBe('checks');
   });

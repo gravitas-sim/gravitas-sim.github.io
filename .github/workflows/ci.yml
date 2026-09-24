@@ -362,36 +362,41 @@ jobs:
           if-no-files-found: error
 
   e2e:
-    name: Browser smoke tests (sources) ${{ matrix.shard }}/6
+    name: Browser smoke tests (sources) ${{ matrix.shard }}/${{ strategy.job-total }}
     runs-on: ubuntu-latest
-    # Measured rather than guessed, twice, because the first two guesses were
-    # wrong in both directions.
+    # Twelve shards of equal DURATION, planned by tools/e2e-shards.mjs.
     #
-    # The unsharded job kept exceeding 25 minutes. A four-way split fitted but
-    # only just - 19.8 minutes against a 20-minute step cap - and the six-way
-    # one then produced a shard that went over it, because sharding divides by
-    # TEST COUNT and
-    # says nothing about duration. What actually sets the floor is one file:
-    # tests inside a spec run serially, and chaos.spec.js alone is about twelve
-    # minutes locally, so whichever shard holds most of it cannot finish faster
-    # than that however many shards there are.
+    # Playwright's own `--shard=k/n` gives each shard an equal number of tests
+    # in listing order. The listing is alphabetical and the heavy files sort
+    # first, so with six shards the first took 24 to 29 minutes and the last
+    # 15, and the run waited for the first: 24 to 30 minutes over twelve runs,
+    # every one of them on this job. Balancing six by duration would only have
+    # reached about 19 - the suite is 210 to 245 minutes of test time - so the
+    # count went up as well, to what twelve runs' timings say fits in about
+    # nine: tools/e2e-timings.json, the median passing duration of each test.
     #
-    # Measured: the whole suite is 54 minutes locally at two workers, the
-    # slowest six-way shard is 14.9 of them, and CI runs this workload about
-    # 1.4 times slower than that - so the worst shard is around 21 minutes
-    # there. The caps are set above that with room rather than at a round
-    # number the work has to fit into: 32 for the step, 40 for the job. Neither
-    # the per-test timeout nor any assertion changes; a hung shard is still
-    # caught, at a third again its expected duration.
-    timeout-minutes: 40
+    # Each shard plans the whole split for itself, from `--list` and the timings
+    # file, so the twelve agree without a job handing a plan to the others. The
+    # listing decides what runs and the timings only where: a test the file has
+    # never seen is still planned, at its file's median. The plan step refuses
+    # to run a list Playwright does not read back as exactly the planned tests,
+    # and the coverage job below fails unless the merged results contain every
+    # listed test exactly once.
+    #
+    # Two workers per runner, as before - the tests drive a live simulation
+    # and share a runner's four cores - and a file that configures
+    # `mode: 'serial'` still runs one test at a time on any runner it lands on.
+    # The caps: about ten minutes expected, one retry of the longest test adds
+    # at most eight, so the step stops at 24 and the job at 30. Neither the
+    # per-test timeout nor any assertion changes.
+    timeout-minutes: 30
     strategy:
-      # One shard failing must not cancel the other five. A canceled shard
-      # tells you nothing about the tests it did not reach, and the whole point
-      # of splitting the suite is to find out what is broken in one run rather
-      # than six.
+      # One shard failing must not cancel the others. A canceled shard tells
+      # you nothing about the tests it did not reach, and the whole point of
+      # splitting the suite is to find out what is broken in one run.
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     steps:
       - uses: actions/checkout@v7
 
@@ -428,23 +433,27 @@ jobs:
         if: steps.browsers.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - name: Run shard ${{ matrix.shard }} of 6
+      - name: Plan this shard
+        run: node tools/e2e-shards.mjs plan --of ${{ strategy.job-total }} --shard ${{ matrix.shard }} --out shard-tests.txt
+
+      - name: Run shard ${{ matrix.shard }} of ${{ strategy.job-total }}
         # Shorter than the job, so a shard that overruns is killed by this step
         # and the upload below still happens. A shard whose report never
         # arrived is not a shard that passed, and the aggregate treats it that
         # way.
-        timeout-minutes: 32
-        # Two workers, the same as the unsharded job had. The suite drives a
-        # live simulation in every test and more workers on one runner make
-        # every one of them slower; the parallelism belongs across runners.
-        run: npx playwright test --shard=${{ matrix.shard }}/6
+        timeout-minutes: 24
+        # Named for its shard: the report job downloads every shard's blob into
+        # one directory, and two blobs with one name would be one blob.
+        env:
+          PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ matrix.shard }}.zip
+        run: npx playwright test --test-list shard-tests.txt
 
       - name: Upload this shard's blob report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
-          # Uniquely named, or the six shards overwrite one another and the
-          # merge has one sixth of the run to work with.
+          # Uniquely named, or the shards overwrite one another and the merge
+          # has one of them to work with.
           name: blob-report-sources-${{ matrix.shard }}
           path: blob-report
           retention-days: 7
@@ -496,6 +505,51 @@ jobs:
           name: playwright-report-sources
           path: playwright-report
           retention-days: 7
+          if-no-files-found: error
+
+  e2e-coverage:
+    name: Browser smoke tests (sources) coverage
+    runs-on: ubuntu-latest
+    # What makes twelve green shards mean the suite passed: the merged results
+    # have to contain every test `--list` names, exactly once. A shard that
+    # crashed before uploading, a plan two shards computed differently, a list
+    # line Playwright matched to nothing - each leaves a test missing or
+    # doubled, and each fails here. Required by the ci job, unlike the report.
+    if: ${{ !cancelled() }}
+    needs: [e2e]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Collect every shard's blob report
+        uses: actions/download-artifact@v8
+        with:
+          pattern: blob-report-sources-*
+          path: all-blob-reports
+          merge-multiple: true
+
+      - name: Merge them into one JSON report
+        run: npx playwright merge-reports --reporter json ./all-blob-reports > e2e-results.json
+
+      - name: Check every listed test ran exactly once
+        run: node tools/e2e-shards.mjs verify --report e2e-results.json
+
+      # The input to the next `node tools/e2e-shards.mjs record`, which is how
+      # tools/e2e-timings.json is refreshed. See e2e/README.md.
+      - name: Upload the merged results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-results-sources
+          path: e2e-results.json
+          retention-days: 14
           if-no-files-found: error
 
   accessibility:
@@ -699,7 +753,16 @@ jobs:
     name: CI
     if: ${{ always() }}
     runs-on: ubuntu-latest
-    needs: [checks, build, e2e, accessibility, e2e-build, cross-browser]
+    needs:
+      [
+        checks,
+        build,
+        e2e,
+        e2e-coverage,
+        accessibility,
+        e2e-build,
+        cross-browser,
+      ]
     steps:
       - name: Report
         run: |
@@ -711,7 +774,8 @@ jobs:
           # makes it something else, and `require` below refuses all three -
           # so a shard whose report never arrived cannot be mistaken for a
           # shard that passed.
-          echo "e2e (6 shards): ${{ needs.e2e.result }}"
+          echo "e2e (shards):  ${{ needs.e2e.result }}"
+          echo "e2e-coverage:  ${{ needs.e2e-coverage.result }}"
           echo "accessibility: ${{ needs.accessibility.result }}"
           echo "e2e-build:     ${{ needs.e2e-build.result }}"
           echo "cross-browser: ${{ needs.cross-browser.result }}"
@@ -754,7 +818,8 @@ jobs:
 
           require checks        "${{ needs.checks.result }}"
           require build         "${{ needs.build.result }}"
-          require e2e           "${{ needs.e2e.result }}"   # all six shards
+          require e2e           "${{ needs.e2e.result }}"   # every shard
+          require e2e-coverage  "${{ needs.e2e-coverage.result }}"
           require accessibility "${{ needs.accessibility.result }}"
           require e2e-build     "${{ needs.e2e-build.result }}"
 
