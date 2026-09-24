@@ -29,29 +29,39 @@ async function openLab(page, app, scenario = 'Gravity Assist Lab') {
   });
 }
 
-/** Wait for whichever experiment is running, and hand back its report. */
+/**
+ * Wait for whichever experiment is running, and hand back its report.
+ *
+ * The click claims the run before the panel awaits anything, so once it has
+ * returned, "not running" means finished - with a report, or with a refusal
+ * that says why there is none. This used to wait for the report alone, which
+ * cannot tell a refused run from one that has not started yet: a refusal was
+ * waited out for the whole timeout, eight minutes to say "no report".
+ */
 async function reportFrom(page, which, timeout = 360_000) {
   await expect
     .poll(
       () =>
-        page.evaluate(async key => {
+        page.evaluate(async () => {
           const p = await import('/js/assistPanel.js');
-          if (p.isAssistExperimentRunning()) return null;
-          const report =
-            key === 'comparison'
-              ? p.assistComparisonReport()
-              : p.assistSweepReport();
-          return Boolean(report);
-        }, which),
+          return p.isAssistExperimentRunning();
+        }),
       { timeout, intervals: [500] }
     )
-    .toBe(true);
-  return page.evaluate(async key => {
+    .toBe(false);
+  const { report, refusal } = await page.evaluate(async key => {
     const p = await import('/js/assistPanel.js');
-    return key === 'comparison'
-      ? p.assistComparisonReport()
-      : p.assistSweepReport();
+    return {
+      report:
+        key === 'comparison'
+          ? p.assistComparisonReport()
+          : p.assistSweepReport(),
+      refusal: p.assistExperimentRefusal(),
+    };
   }, which);
+  expect(refusal, `the ${which} was refused rather than run`).toBeNull();
+  expect(report, `the ${which} finished without a report`).toBeTruthy();
+  return report;
 }
 
 // Each test here runs the simulation for real - a pass is about half a minute
