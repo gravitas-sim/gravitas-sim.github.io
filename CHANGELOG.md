@@ -193,6 +193,22 @@ the release rather than in the tag.
 
 ### Changed
 
+- **A lesson loads only the instruments its current step needs.** Thirteen of
+  the seventeen instrument families were still part of the lesson engine, so
+  every lesson downloaded and ran all of them before its first step. Every
+  family is now fetched when a step first names one of its instruments: before
+  its first step a lesson loads 738 to 811 KB less JavaScript from the published
+  site and makes 23 to 25 fewer requests, and 269 to 293 KB less in a bundled
+  build, and is usable about 40 ms sooner from the published site. Start-up,
+  the front door and the document pages are unchanged. A family that is on its
+  way or could not be fetched says so in the instrument panel, including when
+  it is the lesson's first screen, and a lesson whose files are cached still
+  draws its instruments offline. The service worker still
+  precaches every family on a first visit, so the total a first visit downloads
+  is not smaller for this (LAZY_CAPABILITIES.md).
+- **Charts load 32 KB less.** The vendored Chart.js registers only the line and
+  scatter charts, axes and plugins Gravitas draws with, instead of the whole
+  library.
 - **The simulation canvas draws at the display's pixel density.** It had never
   consulted `devicePixelRatio`, so on HiDPI laptops and projectors the
   most-viewed surface rendered at about half linear resolution while smaller
