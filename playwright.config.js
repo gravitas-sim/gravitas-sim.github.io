@@ -71,8 +71,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const isCI = Boolean(process.env.CI);
-/** Whether this run is one shard of several. See `reporter` below. */
-const SHARDED = process.argv.some(arg => arg.startsWith('--shard'));
+/**
+ * Whether this run is one shard of several: CI's shards are `--test-list`
+ * runs planned by tools/e2e-shards.mjs, and `--shard` is Playwright's own
+ * split. See `reporter` below.
+ */
+const SHARDED = process.argv.some(
+  arg => arg.startsWith('--shard') || arg.startsWith('--test-list')
+);
 
 /** 'src' (default) or 'dist'. */
 const target = process.env.GRAVITAS_E2E_TARGET === 'dist' ? 'dist' : 'src';
@@ -198,8 +204,11 @@ export default defineConfig({
   timeout: 90_000,
   expect: { timeout: 10_000 },
 
-  // Serial inside a file, parallel across files. The specs share nothing but a
-  // server, and each one starts from a fresh browser context.
+  // Every test is its own unit of work, so the tests of one file spread over
+  // every worker - except in a file that configures `mode: 'serial'` (chaos
+  // and resonance), whose long simulations would otherwise compete for the
+  // same cores. The specs share nothing but a server, and each test starts
+  // from a fresh browser context.
   fullyParallel: true,
   workers: isCI ? 2 : undefined,
 
@@ -212,8 +221,9 @@ export default defineConfig({
   forbidOnly: isCI,
 
   // A sharded run reports in `blob`, which is the only format that can be
-  // merged: four runners each produce a fragment and one job stitches them
-  // into a single HTML report with everybody's traces and screenshots in it.
+  // merged: every runner produces a fragment and one job stitches them into a
+  // single HTML report with everybody's traces and screenshots in it, while
+  // another checks that between them they ran every listed test once.
   // An unsharded run - which is what `npm run e2e` still is locally - keeps
   // the HTML report it always had, so nothing about running this by hand
   // changes.

@@ -244,6 +244,18 @@ the release rather than in the tag.
   are still loaded with every lesson; `LAZY_CAPABILITIES.md` lists them and the
   order they move in.
 
+- **The pull-request check takes about twelve minutes, not twenty-five to
+  thirty.** The source browser suite ran as six shards of equal test count, and
+  because the heavy spec files sort first, the first shard took 24 to 29
+  minutes while the last took 15; every run waited for the first. It now runs as
+  twelve shards of equal duration, planned by `tools/e2e-shards.mjs` from
+  Playwright's own listing and each test's median CI duration in
+  `tools/e2e-timings.json`. Every test still runs, at the same two workers per
+  runner, with the same retries and timeouts; a new required job fails the
+  check unless the merged results contain every listed test exactly once. The
+  first run on the change finished in 12.1 minutes. Running twelve shards
+  means two overlapping runs can briefly wait for runners.
+
 ### Fixed
 
 - A CSV cell that starts like a spreadsheet formula was wrapped in quotes and
@@ -311,8 +323,16 @@ the release rather than in the tag.
   a factor of 52.4 across the application. It had already been fixed, derived
   from the solar mass and checked on `/validation/`; the note now says so.
 - The contributor instructions told a contributor to run `npm run build`, which
-  needs the instructor passphrase and stops without it. They now name
-  `npm run build:ci`, the same build with a throwaway key and the one CI runs.
+  needs the instructor passphrase and stops without it - including in the
+  command for running the browser suite against the build, in `README.md` and
+  `e2e/README.md`. They now name `npm run build:ci`, the same build with a
+  throwaway key and the one CI runs. The README also said Firefox and WebKit
+  run only on pushes to `main` and weekly; they run on every push to `main` and
+  `v2`, weekly and on a manual run, and never on a pull request.
+- `npm run archive:check` printed only the last few lines of a failing step, so
+  the instructor bundle's list of stale inputs came out as its last three
+  entries and read as the whole list. Every input that moved is now printed;
+  the tail of any other failure is unchanged.
 - The gravity-assist comparison could refuse to start, saying only
   "duration", if the world was paused in the moment after _Run_ was pressed.
   The runner first watches ten frames to see how fast the world really
