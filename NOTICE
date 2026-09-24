@@ -16,7 +16,7 @@ https://threejs.org/
 ===============================================================================
 Chart.js
 -------------------------------------------------------------------------------
-vendor/chartjs/chart.auto.js
+vendor/chartjs/chart.js
 Copyright (c) 2014-2024 Chart.js Contributors
 Licensed under the MIT License. Full text: vendor/chartjs/LICENSE.md
 https://www.chartjs.org/

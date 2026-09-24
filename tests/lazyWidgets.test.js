@@ -1,13 +1,14 @@
 // =============================================================================
 // The lazy widget manifest says what the modules say
 // -----------------------------------------------------------------------------
-// The manifest in js/widgets.js lists which
-// widget ids each lazily loaded family owns, so the engine can tell "not
+// The manifest in js/widgets.js lists which widget ids each family owns -
+// every family, since none is eager any more - so the engine can tell "not
 // fetched yet" from "no such instrument" without importing the family. A list
 // beside the module drifts; this holds it to the module.
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
+import { readdirSync } from 'node:fs';
 
 import {
   LAZY_FAMILIES,
@@ -27,6 +28,21 @@ describe('the lazy widget manifest', () => {
         ids: widgets.map(w => w.id).sort(),
       });
     }
+  });
+
+  test('every family module has an entry, so none can be imported eagerly instead', () => {
+    // An instrument family is a js/*Widgets.js module. One without an entry
+    // here is either unreachable or imported some other way - which is what
+    // tests/onDemandFamilies.test.js holds start-up and the engine to not do.
+    const onDisk = readdirSync('js')
+      .filter(f => /^[A-Za-z]+Widgets\.js$/.test(f))
+      .map(f => `./${f}`)
+      .sort();
+    expect(
+      Object.values(LAZY_FAMILIES)
+        .map(f => f.path)
+        .sort()
+    ).toEqual(onDisk);
   });
 
   test('no id is claimed by two families or by an eager one', async () => {

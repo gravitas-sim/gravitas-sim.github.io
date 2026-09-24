@@ -11,7 +11,12 @@ import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 registerMessages('en', EN_DEFERRED);
 
 import { escapeSpeed, circularSpeed, launchPath } from '../js/energyWidgets.js';
-import { getWidget, widgetDefaults } from '../js/widgets.js';
+import { getWidget, widgetDefaults, whenWidgetsReady } from '../js/widgets.js';
+
+// Every instrument family is fetched on demand (js/widgets.js), the way a
+// lesson fetches one when a step names it; this suite reads the catalog, so
+// it waits for it first, as every reader of the whole catalog does.
+await whenWidgetsReady();
 
 const EARTH = { mass: 5.972e24, radius: 6.371e6 };
 const TOWER = EARTH.radius * 1.05; // where the lesson's cannon sits

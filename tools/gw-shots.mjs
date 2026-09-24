@@ -90,13 +90,15 @@ for (const shot of SHOTS) {
     host.appendChild(rows);
     document.body.appendChild(host);
 
-    const [{ getWidget, widgetDefaults }, { ensureDeferredMessages }] =
+    const [{ ensureWidget, widgetDefaults }, { ensureDeferredMessages }] =
       await Promise.all([
         import('/js/widgets.js'),
         import('/js/i18n/deferredMessages.js'),
       ]);
     await ensureDeferredMessages();
-    const w = getWidget(spec.widget || 'gw-lab');
+    // The family is fetched on demand, the way a lesson step fetches it; a
+    // synchronous lookup finds nothing until it has been.
+    const w = await ensureWidget(spec.widget || 'gw-lab');
     const values = widgetDefaults(w, {});
     if (spec.widget === 'gw-real') {
       Object.assign(values, spec.values || {});

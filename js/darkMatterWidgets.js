@@ -39,6 +39,8 @@
 // that did not publish it.
 // =============================================================================
 
+// Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
+import './instrumentStartup.js';
 import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
 import { scientific, decimal, withUnit } from './format.js';
 import { t } from './i18n/index.js';

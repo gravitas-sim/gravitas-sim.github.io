@@ -122,8 +122,11 @@ The published sources pay per module: every lesson route fetches the five platfo
 
 ## Migration inventory
 
-Packaged: 3 capabilities. Still in the core: 13 static instrument families and
-3 lazy ones, 23 lessons, the GWOSC, GW150914 and MIST datasets, 59 scenarios.
+Packaged: 3 capabilities. Still in the core: 16 instrument families, 23
+lessons, the GWOSC, GW150914 and MIST datasets, 59 scenarios. Every family,
+packaged or not, has since been fetched on demand
+([LAZY_CAPABILITIES.md](LAZY_CAPABILITIES.md)), so what is left here is
+ownership, not loading.
 
 The next families to migrate, in order, each its own slice with this one's
 acceptance:
@@ -138,8 +141,8 @@ acceptance:
 3. **The MIST tracks, with _A Universe of Stars_ and _Lives of Stars_** - the
    dataset start-up shares (`js/lessonStage.js`), so it needs the start-up
    question settled first.
-4. **The static families**, one lesson group at a time, each moved behind
-   `LAZY_FAMILIES` as it is packaged.
+4. **The other families**, one lesson group at a time. Each is already a
+   `LAZY_FAMILIES` entry; packaging one reads that entry from the catalog.
 5. **Instructor guidance** split per lesson into each lesson's package.
 6. **Scenarios last** - their id is the display name stored in share links, so
    they need a stable id and an alias map before a package can own one.
@@ -149,3 +152,9 @@ family behind a lazy import saves bytes on every route but its own, not on the
 total - Prompt 06 measured the total growing a little as families became chunks
 of their own - so the next slice needs either savings found elsewhere or a
 budget decision made on its own merits, not to fit it.
+
+Savings were found: vendoring only the Chart.js Gravitas draws paid for moving
+the last thirteen families on demand and left the deferred total at 4152.6 of
+4180 KB (LAZY_CAPABILITIES.md). A family that is already lazy is expected to
+cost its catalog entries and its builtin line when it is packaged, not another
+chunk; that is to be measured when one is.

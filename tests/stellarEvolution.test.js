@@ -43,13 +43,18 @@ import {
 import { trackIds, trackSamples, trackBounds } from '../js/stellar/tracks.js';
 import { radiusFromLuminosityAndTemperature } from '../js/stellar/geometry.js';
 import { readFileSync } from 'node:fs';
-import { getWidget } from '../js/widgets.js';
+import { getWidget, whenWidgetsReady } from '../js/widgets.js';
 import { fromStellarObservation } from '../js/notebook/capture.js';
 import {
   STELLAR_EVOLUTION_WIDGETS,
   activePlayback,
   resetPlaybackForTests,
 } from '../js/stellarEvolutionWidgets.js';
+
+// Every instrument family is fetched on demand (js/widgets.js), the way a
+// lesson fetches one when a step names it; this suite reads the catalog, so
+// it waits for it first, as every reader of the whole catalog does.
+await whenWidgetsReady();
 
 /** A canvas whose every 2D method exists and does nothing. */
 function stubCanvas(width = 460) {

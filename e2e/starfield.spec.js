@@ -111,14 +111,18 @@ test('the same seed paints the same sky', async ({ page, app }) => {
   // covered without a canvas in tests/starfield.test.js.
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await app.boot();
-  await sky(page, app, { seed: 'alpha' });
+  // At one tier throughout. Left on auto, the tier follows the measured frame
+  // rate, and on a busy CI runner it stepped down between the first and third
+  // capture - a sparser sky for the same seed, and a failure that said nothing
+  // about the seed. The tiers' own skies are compared below.
+  await sky(page, app, { seed: 'alpha', tier: 'full' });
   const first = await skySignature(page);
 
   // A different world in between, so this is a rebuild rather than a no-op.
-  await sky(page, app, { seed: 'beta' });
+  await sky(page, app, { seed: 'beta', tier: 'full' });
   const other = await skySignature(page);
 
-  await sky(page, app, { seed: 'alpha' });
+  await sky(page, app, { seed: 'alpha', tier: 'full' });
   const again = await skySignature(page);
 
   expect(again.hash).toBe(first.hash);

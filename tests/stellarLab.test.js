@@ -61,10 +61,15 @@ import {
   activeLab,
   resetLabForTests,
 } from '../js/stellarWidgets.js';
-import { getWidget } from '../js/widgets.js';
+import { getWidget, whenWidgetsReady } from '../js/widgets.js';
 import { mulberry32 } from '../js/rng.js';
 import { trackIds } from '../js/stellar/tracks.js';
 import { radiusFromLuminosityAndTemperature } from '../js/stellar/geometry.js';
+
+// Every instrument family is fetched on demand (js/widgets.js), the way a
+// lesson fetches one when a step names it; this suite reads the catalog, so
+// it waits for it first, as every reader of the whole catalog does.
+await whenWidgetsReady();
 
 /** A canvas whose every 2D method exists and does nothing. */
 function stubCanvas() {

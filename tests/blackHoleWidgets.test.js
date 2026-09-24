@@ -22,8 +22,13 @@ import {
   recordedTrials,
   clearTrials,
 } from '../js/blackHoleWidgets.js';
-import { getWidget, widgetDefaults } from '../js/widgets.js';
+import { getWidget, widgetDefaults, whenWidgetsReady } from '../js/widgets.js';
 import { getInvestigation } from '../js/data/investigations.js';
+
+// Every instrument family is fetched on demand (js/widgets.js), the way a
+// lesson fetches one when a step names it; this suite reads the catalog, so
+// it waits for it first, as every reader of the whole catalog does.
+await whenWidgetsReady();
 
 const widget = id => BLACK_HOLE_WIDGETS.find(w => w.id === id);
 
