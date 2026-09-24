@@ -281,6 +281,23 @@ const services = () => {
 };
 
 const flush = () => new Promise(r => setTimeout(r, 0));
+
+/**
+ * Wait until the bridge has answered a request. Decoding a state is real work
+ * (a DecompressionStream), so a fixed number of ticks is enough alone and not
+ * beside the rest of the suite; the answer is what says it has finished.
+ */
+async function answered(f, id) {
+  for (let i = 0; i < 400; i++) {
+    const found = f.sent.find(
+      m =>
+        m.data.id === id && (m.data.type === 'ack' || m.data.type === 'error')
+    );
+    if (found) return found.data;
+    await new Promise(r => setTimeout(r, 5));
+  }
+  throw new Error(`no answer to ${id}`);
+}
 const req = (type, extra = {}) => ({
   protocol: PROTOCOL,
   version: 1,
@@ -355,8 +372,8 @@ describe('the bridge', () => {
     });
     f.deliver({ ...req('play'), id: 'x1', extra: true });
     f.deliver(req('load', { id: 'l1', state: '1zNotAPayload' }));
-    await flush();
-    await flush();
+    await answered(f, 'x1');
+    await answered(f, 'l1');
     expect(s.setPlaying).not.toHaveBeenCalled();
     expect(s.applySharePayload).not.toHaveBeenCalled();
     expect(f.sent.slice(-2).map(m => m.data)).toEqual([
@@ -376,8 +393,7 @@ describe('the bridge', () => {
     });
     const state = await encodePayload({ v: 1, s: 'Binary Pair', seed: 'abc' });
     f.deliver(req('load', { id: 'l2', state }));
-    await flush();
-    await flush();
+    expect(await answered(f, 'l2')).toEqual(message('ack', { id: 'l2' }));
     expect(s.applySharePayload).toHaveBeenCalledWith(
       expect.objectContaining({ s: 'Binary Pair' })
     );
