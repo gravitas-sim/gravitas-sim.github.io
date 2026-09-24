@@ -76,47 +76,80 @@ a reader gets the bundle.
 
 ## How CI runs them
 
-The source suite is **split across six runners**, two workers each:
+The source suite is **split across twelve runners of about equal duration**,
+two workers each, by `tools/e2e-shards.mjs`:
 
 ```bash
-npx playwright test --shard=1/6      # what one CI runner does
+node tools/e2e-shards.mjs preview --of 12            # the predicted split
+node tools/e2e-shards.mjs plan --of 12 --shard 3 --out shard-tests.txt
+npx playwright test --test-list shard-tests.txt      # what one CI runner does
 ```
 
-It stopped fitting in a single job: at two workers the whole suite is about an
-hour of runner time against a 25-minute limit, and the job was canceled
-part-way through with nothing useful to show for it.
+Playwright's own `--shard=k/n` divides the suite by **test count**, in listing
+order. The listing is alphabetical and the heavy files happen to sort first, so
+with six shards the first took 24 to 29 minutes and the last 15, and every run
+waited for the first. The suite is 210 to 245 minutes of test time, so
+balancing six shards by duration would only have reached about 19; twelve
+are planned at about nine and a half, and measured at 9.2 to 11.6 on their first
+run, the spread being each test's own run-to-run variation.
 
-Sharding divides the suite by **test count**, which says nothing about how long
-those tests take, and the floor is set by a single file: tests inside one spec
-run serially, and `chaos.spec.js` alone is about twelve minutes locally. No
-number of shards gets below that.
+Every shard plans the whole split for itself from two inputs, so no job hands a
+plan to the others:
 
-Measured, twice. A four-way split on CI: 16.3, 15.5, 11.1, 19.8 minutes - the
-last against a 20-minute step cap, which is luck rather than headroom. The
-six-way split, which is what runs now: one of them went over that cap. Locally the six-way split is 14.9 minutes at its
-worst and CI runs this workload about 1.4 times slower, so the real figure is
-around 21.
+- **the listing**, `npx playwright test --list`, which decides WHAT runs;
+- **the timings**, `tools/e2e-timings.json` - each test's median passing
+  duration over recent CI runs - which only decide WHERE.
 
-So the caps are set above what was measured rather than at a round number the
-work has to fit into: 32 minutes for the test step, 40 for the job. The
-per-test timeout (90s) and every assertion are untouched - a hung shard is
-still caught, at a third again its expected duration.
+A test the timings have never seen is still planned, at its file's median, so a
+new test can make a shard slower than predicted but never make itself
+disappear. The plan puts the slowest test first into whichever shard's
+simulated wall time grows least; the simulation is of Playwright itself - two
+workers, tests handed out in listing order, and a file that configures
+`mode: 'serial'` run one test at a time.
+
+Tests inside one file **do** run in parallel - `fullyParallel` is on - except
+in the two files that ask not to: `chaos.spec.js` and `resonance.spec.js`,
+whose long simulations would otherwise compete for the same cores. A shard that
+holds several of their tests still runs those one at a time. The single
+slowest test (`binary-star-planets`, about seven minutes) is now the floor.
+
+Three things stand between the plan and a test nobody ran:
+
+- the plan step asks Playwright which tests its list selects and refuses to run
+  unless that is exactly the tests it planned;
+- the **coverage job** merges every shard's results and fails unless each
+  listed test appears in them exactly once - the deploy gate requires it;
+- `tests/shardInventory.test.js` plans the split as CI does and holds it to the
+  listing, mobile project included.
 
 Two workers per runner, deliberately, and not more. Every test here drives a
 live simulation, so workers on the same machine compete for the same CPU and
-each one gets slower; the parallelism that helps is across machines.
+each one gets slower; the parallelism that helps is across machines. The caps
+are set above what was measured: about ten minutes expected, one retry of the
+longest test adds at most eight, so 24 for the test step and 30 for the job.
+The per-test timeout (90s) and every assertion are untouched.
 
 Each shard writes a **blob report** and uploads it under its own name. A
-separate job merges the six into one HTML report with every trace and
-screenshot in it, and runs whether the shards passed or not — a report is most
-wanted when they did not. That job decides nothing: the deployment gate requires
-the shard matrix itself, so a shard that failed, was canceled, or never
-produced a report blocks the deploy regardless of what the report job did.
+separate job merges them into one HTML report with every trace and screenshot
+in it, and runs whether the shards passed or not — a report is most wanted when
+they did not. That job decides nothing; the shards and the coverage job do.
+
+### Keeping the timings current
+
+A stale timings file cannot drop a test, only unbalance the shards. When a
+shard's predicted time (printed by its plan step) drifts well away from what it
+took, refresh the file from a recent green run's merged results:
+
+```bash
+gh run download <run-id> -n e2e-results-sources
+node tools/e2e-shards.mjs record e2e-results.json [more runs' results ...]
+```
+
+`record` keeps each test's median passing duration - a retried test counts only
+the attempt that passed - so several runs give a steadier file than one.
 
 Locally, `npm run e2e` is unchanged: no shards, no blob reports, the same HTML
-report it always wrote. `tests/shardInventory.test.js` asks Playwright for both
-inventories and fails if the shards do not cover the unsharded suite exactly
-once, mobile included.
+report it always wrote.
 
 ## Other browsers
 

@@ -244,6 +244,18 @@ the release rather than in the tag.
   are still loaded with every lesson; `LAZY_CAPABILITIES.md` lists them and the
   order they move in.
 
+- **The pull-request check takes about twelve minutes, not twenty-five to
+  thirty.** The source browser suite ran as six shards of equal test count, and
+  because the heavy spec files sort first, the first shard took 24 to 29
+  minutes while the last took 15; every run waited for the first. It now runs as
+  twelve shards of equal duration, planned by `tools/e2e-shards.mjs` from
+  Playwright's own listing and each test's median CI duration in
+  `tools/e2e-timings.json`. Every test still runs, at the same two workers per
+  runner, with the same retries and timeouts; a new required job fails the
+  check unless the merged results contain every listed test exactly once. The
+  first run on the change finished in 12.1 minutes. Running twelve shards
+  means two overlapping runs can briefly wait for runners.
+
 ### Fixed
 
 - A CSV cell that starts like a spreadsheet formula was wrapped in quotes and
