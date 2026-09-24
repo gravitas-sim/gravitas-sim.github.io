@@ -44,6 +44,8 @@ export const EN = {
   // --- Presentation: embed ---------------------------------------------------
   'embed.figure.title': 'Gravitas simulation: {scenario}',
   'embed.figure.titleGeneric': 'Gravitas interactive simulation',
+  'embed.action.reset': 'Reset the figure',
+  'embed.action.reset.hint': 'Reset the figure',
   'embed.action.openFull': 'Open in Gravitas',
   'embed.action.openFull.hint':
     'Open this simulation full size in a new tab, with the full set of controls',

@@ -40,6 +40,8 @@ export const themeLabel = id => t(`theme.${id}.label`);
 export const themeHint = id => t(`theme.${id}.hint`);
 
 let current = 'midnight';
+/** A theme an embed has fixed for this page, or null. */
+let fixed = null;
 const listeners = new Set();
 
 /** @returns {string} The active theme id */
@@ -50,6 +52,7 @@ export const getTheme = () => current;
  * @param {string} id - Theme id from THEMES
  */
 export function setTheme(id) {
+  if (fixed) id = fixed;
   const known = THEMES.some(t => t.id === id);
   current = known ? id : 'midnight';
 
@@ -65,7 +68,7 @@ export function setTheme(id) {
   if (meta) meta.setAttribute('content', readToken('--surface-0') || '#07080f');
 
   try {
-    window.localStorage?.setItem(STORAGE_KEY, current);
+    if (!fixed) window.localStorage?.setItem(STORAGE_KEY, current);
   } catch {
     /* storage unavailable */
   }
@@ -80,6 +83,23 @@ export function setTheme(id) {
   window.dispatchEvent(
     new CustomEvent('gravitasThemeChanged', { detail: { theme: current } })
   );
+}
+
+/**
+ * Hold this page to one theme, and never write it to storage.
+ *
+ * For an embed that names its theme (js/embedOptions.js): the figure is in
+ * someone else's page, and neither that page nor the reader's own choice in
+ * Gravitas should move it - nor should it move theirs. The builder's preview
+ * is on Gravitas's own origin, so a theme remembered here would have become
+ * the author's.
+ *
+ * @param {string} id - Theme id from THEMES; anything else is ignored
+ */
+export function fixTheme(id) {
+  if (!THEMES.some(t => t.id === id)) return;
+  fixed = id;
+  setTheme(id);
 }
 
 /** Advance to the next theme in the list. @returns {string} New theme id */
@@ -113,6 +133,10 @@ export function onThemeChange(fn) {
 
 /** Restore the saved theme, or follow the OS preference on first visit. */
 export function initTheme() {
+  if (fixed) {
+    setTheme(fixed);
+    return;
+  }
   let saved = null;
   try {
     saved = window.localStorage?.getItem(STORAGE_KEY);

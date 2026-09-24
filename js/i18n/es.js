@@ -36,6 +36,8 @@ export const ES = {
   // --- Presentation: embed ---------------------------------------------------
   'embed.figure.title': 'Simulación de Gravitas: {scenario}',
   'embed.figure.titleGeneric': 'Simulación interactiva de Gravitas',
+  'embed.action.reset': 'Restablecer la figura',
+  'embed.action.reset.hint': 'Restablecer la figura',
   'embed.action.openFull': 'Abrir en Gravitas',
   'embed.action.openFull.hint':
     'Abrir esta simulación a tamaño completo en una pestaña nueva, con todos los controles',

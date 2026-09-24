@@ -390,6 +390,20 @@ export function renderOverrides() {
 /** The media query, made once. Null where matchMedia is not available. */
 let motionQuery;
 
+/** Set by an embed that asks for reduced motion (js/embedOptions.js). */
+let motionReduced = false;
+
+/**
+ * Reduce motion on this page, whatever the reader's own setting.
+ *
+ * An embed can ask for it because its author knows the page it sits in: a
+ * figure beside text a reader is studying should not pull at the eye. It only
+ * ever adds reduction; a reader who asked for reduced motion keeps it.
+ */
+export function reduceMotion() {
+  motionReduced = true;
+}
+
 /**
  * Whether the reader has asked for less motion.
  *
@@ -401,6 +415,7 @@ let motionQuery;
  * @returns {boolean} True when prefers-reduced-motion is set to reduce
  */
 export function prefersReducedMotion() {
+  if (motionReduced) return true;
   if (motionQuery === undefined) {
     motionQuery =
       typeof window !== 'undefined' && typeof window.matchMedia === 'function'
