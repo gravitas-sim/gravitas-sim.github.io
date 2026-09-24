@@ -1,0 +1,53 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "gravitas.tess-hd209458-s56",
+  "version": "1.0.0",
+  "kind": "built-in",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "HD 209458 observed by TESS (sector 56 light curve)",
+    "es": "HD 209458 observada por TESS (curva de luz del sector 56)"
+  },
+  "provides": {
+    "dataPacks": [
+      {
+        "id": "tess-hd209458-s56-lc",
+        "entry": "builtin:data/tess-hd209458-s56",
+        "provenance": "data-packs/tess-hd209458-s56-lc.json"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "js/data/observations/tessHd209458S56.js",
+      "role": "data",
+      "offline": "optional"
+    },
+    {
+      "path": "data-packs/tess-hd209458-s56-lc.json",
+      "role": "provenance",
+      "offline": "none"
+    }
+  ],
+  "citations": [
+    {
+      "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+      "url": "https://doi.org/10.17909/t9-nmc8-f686"
+    }
+  ],
+  "licenses": [
+    {
+      "scope": "js/data/observations/**",
+      "license": "public domain (NASA mission data); acknowledge TESS and MAST, see NOTICE"
+    }
+  ],
+  "offline": { "policy": "precache" },
+  "validation": [
+    { "check": "registry:packs-structure" },
+    { "check": "registry:packs-provenance" },
+    { "check": "jest:tests/dataPacks.test.js" },
+    { "check": "e2e:e2e/dataPacks.spec.js" }
+  ],
+  "migrations": []
+}

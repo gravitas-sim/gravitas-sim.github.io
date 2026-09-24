@@ -33,12 +33,14 @@ const byId = id => clone(manifests.find(m => m.id === id));
 const LESSON = 'gravitas.lesson.power-law-gravity';
 const INSTRUMENTS = 'gravitas.power-law-instruments';
 const DATA = 'gravitas.sdss-dr18-spectra';
+// The first observation data pack, after the gate's three (DATA_PACKS.md).
+const TESS = 'gravitas.tess-hd209458-s56';
 const messages = errors => errors.map(e => `${e.path}: ${e.message}`);
 
 describe('T1: one format describes three unlike capabilities', () => {
   test('the three are an instrument, an authentic dataset and a lesson', () => {
     expect(manifests.map(m => m.id).sort()).toEqual(
-      [INSTRUMENTS, LESSON, DATA].sort()
+      [INSTRUMENTS, LESSON, DATA, TESS].sort()
     );
     expect(byId(INSTRUMENTS).provides.widgetFamilies).toHaveLength(1);
     expect(byId(DATA).provides.dataPacks).toHaveLength(1);

@@ -207,3 +207,34 @@ regenerates both files from the archive CSVs and compares byte for byte.
 
 Primary reference: Almeida et al. (2023), ApJS 267, 44,
 doi:10.3847/1538-4365/acda98
+
+===============================================================================
+TESS light curves
+-------------------------------------------------------------------------------
+js/data/observations/**
+Derived from light curves observed by NASA's Transiting Exoplanet Survey
+Satellite (TESS) and served by the Mikulski Archive for Space Telescopes
+(MAST) at the Space Telescope Science Institute: https://archive.stsci.edu/
+
+NASA mission data are released without restriction on reuse, so no license
+comes with these light curves and Gravitas adds none. What is asked for is an
+acknowledgment of the mission and the archive, in the words the mission
+suggests, and a citation of the data:
+
+  This work includes data collected by the TESS mission, which are publicly
+  available from the Mikulski Archive for Space Telescopes (MAST). Funding
+  for the TESS mission is provided by NASA's Science Mission Directorate.
+
+  TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
+
+  Ricker et al. (2015), JATIS 1, 014003, doi:10.1117/1.JATIS.1.1.014003 - the
+  mission. Jenkins et al. (2016), Proc. SPIE 9913, 99133E,
+  doi:10.1117/12.2233418 - the SPOC pipeline that made the light curves.
+
+The bundled light curve of HD 209458 (TIC 420814525, sector 56) keeps the
+cadences SPOC flagged as good, divides by the median flux and averages into
+20-minute bins, stored as 16-bit integers in parts per million. Each step,
+the archive URL and SHA-256 checksums of the file MAST served and of the
+module as committed are recorded in data-packs/tess-hd209458-s56-lc.json.
+`npm run packs:provenance` rebuilds the module from the cached file and
+compares byte for byte.

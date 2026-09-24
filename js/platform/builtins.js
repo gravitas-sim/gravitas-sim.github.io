@@ -14,6 +14,8 @@
 export const BUILTINS = {
   'widgets/power-law': () => import('../powerLawWidgets.js'),
   'data/sdss-spectra': () => import('../data/spectra/sdssSpectra.js'),
+  'data/tess-hd209458-s56': () =>
+    import('../data/observations/tessHd209458S56.js'),
   'investigation/power-law-gravity': () =>
     import('../data/investigations/power-law-gravity.js'),
   'investigation/es/power-law-gravity': () =>
@@ -24,6 +26,7 @@ export const BUILTINS = {
 export const BUILTIN_SOURCES = {
   'widgets/power-law': 'js/powerLawWidgets.js',
   'data/sdss-spectra': 'js/data/spectra/sdssSpectra.js',
+  'data/tess-hd209458-s56': 'js/data/observations/tessHd209458S56.js',
   'investigation/power-law-gravity':
     'js/data/investigations/power-law-gravity.js',
   'investigation/es/power-law-gravity':

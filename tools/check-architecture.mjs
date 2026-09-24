@@ -133,6 +133,9 @@ const LAYERS = [
       // js/habitability.js and the inspector both have to agree with.
       /^js\/stellar\//,
       /^js\/data\//,
+      // A measured series and its one decoder: numbers in, numbers out, for
+      // every data pack in js/data/observations/ (DATA_PACKS.md).
+      /^js\/observation\.js$/,
     ],
   },
   {
