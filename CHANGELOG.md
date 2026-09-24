@@ -333,6 +333,18 @@ the release rather than in the tag.
   the instructor bundle's list of stale inputs came out as its last three
   entries and read as the whole list. Every input that moved is now printed;
   the tail of any other failure is unchanged.
+- The gravity-assist comparison could refuse to start, saying only
+  "duration", if the world was paused in the moment after _Run_ was pressed.
+  The runner first watches ten frames to see how fast the world really
+  advances, and it averaged over all ten, so a world paused after one of them
+  read as running at a tenth of its speed; the comparison was then sized ten
+  times too long and refused for exceeding the sweep's limit. The rate is now
+  taken over the frames that actually advanced, which is also what the
+  runner's budget counts. The binary laboratories' sweeps share the
+  measurement and were exposed the same way. The browser test that freezes the
+  world under the comparison hit this intermittently, and then waited eight
+  minutes for a report that could not come; a refused run now fails it at
+  once, with the reason and the duration it was sized at.
 
 ## [1.0.0] - 2026-09-16
 

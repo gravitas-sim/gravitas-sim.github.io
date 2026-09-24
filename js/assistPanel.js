@@ -505,6 +505,8 @@ function showForCurrentScenario() {
 
 /** True while either experiment is running; both share the one bench. */
 let experimentRunning = false;
+/** Why the last run left nothing to report, or null if it did not. */
+let experimentRefusal = null;
 /** The two passes, as the lesson reports them. */
 let comparison = null;
 /** The five, likewise. */
@@ -546,41 +548,54 @@ async function runAssistExperiment(which) {
   const e = cacheElements();
   if (activeMode() !== 'isolated' || experimentRunning) return;
 
-  // The bench has to be wired to the application before it can run anything,
-  // and its bridge is what does that. Same call the experiment panel makes, so
-  // a student who reaches this from the lesson without ever having opened the
-  // bench gets a working one.
-  const [{ bench }, assist, frameRate] = await Promise.all([
-    import('./experimentsBridge.js').then(m => m.ensureBench()),
-    import('./experiments/assistSweep.js'),
-    import('./experiments/frameRate.js'),
-  ]);
-
-  const savedVInf = SETTINGS.assist_v_infinity;
-  SETTINGS.assist_v_infinity = assist.BASELINE.vInfinity;
-
-  const over = {
-    gate: SETTINGS.assist_gate,
-    vInf: assist.BASELINE.vInfinity,
-    frameRatio: await frameRate.measureFrameRatio({
-      settings: SETTINGS,
-      state,
-    }),
-  };
-  const spec =
-    which === 'comparison'
-      ? assist.comparisonSpec(over)
-      : assist.sweepSpec(over);
-
+  // Claimed before anything is awaited. Between the click and the runner
+  // starting there are modules to load and ten frames to measure, and while
+  // the panel only said it was running once all of that was done, it spent
+  // that stretch neither running nor finished: a second click could start a
+  // second run over the first, and anything waiting on the result could not
+  // tell a run that had not started yet from one that had been refused and
+  // never would - so it waited out its whole timeout to find out.
   experimentRunning = true;
+  experimentRefusal = null;
   const buttons = [e.compareRun, e.sweepRun, e.compareKeep, e.sweepKeep];
   for (const b of buttons) if (b) b.disabled = true;
   const cancel = which === 'comparison' ? e.compareCancel : e.sweepCancel;
-  if (cancel) cancel.hidden = false;
   const status = which === 'comparison' ? e.compareStatus : e.sweepStatus;
 
+  const savedVInf = SETTINGS.assist_v_infinity;
+  let assist = null;
+  let spec = null;
   let result = null;
   try {
+    // The bench has to be wired to the application before it can run
+    // anything, and its bridge is what does that. Same call the experiment
+    // panel makes, so a student who reaches this from the lesson without ever
+    // having opened the bench gets a working one.
+    const [{ bench }, assistModule, frameRate] = await Promise.all([
+      import('./experimentsBridge.js').then(m => m.ensureBench()),
+      import('./experiments/assistSweep.js'),
+      import('./experiments/frameRate.js'),
+    ]);
+    assist = assistModule;
+
+    SETTINGS.assist_v_infinity = assist.BASELINE.vInfinity;
+
+    const over = {
+      gate: SETTINGS.assist_gate,
+      vInf: assist.BASELINE.vInfinity,
+      frameRatio: await frameRate.measureFrameRatio({
+        settings: SETTINGS,
+        state,
+      }),
+    };
+    spec =
+      which === 'comparison'
+        ? assist.comparisonSpec(over)
+        : assist.sweepSpec(over);
+
+    // Offered only now. Until the runner has started there is nothing for it
+    // to stop, and a cancel that was pressed early would be silently ignored.
+    if (cancel) cancel.hidden = false;
     result = await bench.runSweep(spec, {
       observer: assist.assistObserver({ armRun: armAssistRun }),
       onProgress: ({ trial, total }) => {
@@ -607,9 +622,17 @@ async function runAssistExperiment(which) {
   }
 
   if (!result?.ok) {
+    // Kept as well as shown, with what the run was sized at: 'duration' on
+    // its own does not say whether the limit or the measurement was wrong.
+    experimentRefusal = {
+      which,
+      reason: result?.reason ?? 'unknown',
+      detail: result?.detail ?? null,
+      duration: spec?.duration ?? null,
+    };
     if (status) {
       status.textContent = t('assist.exp.refused', {
-        reason: result?.reason ?? 'unknown',
+        reason: experimentRefusal.reason,
       });
     }
     return;
@@ -1073,6 +1096,19 @@ export function assistSweepReport() {
 
 /** @returns {boolean} Whether either experiment is running */
 export const isAssistExperimentRunning = () => experimentRunning;
+
+/**
+ * Why the last run left nothing to report, or null if it did not.
+ *
+ * The status line says so to the reader. This is the same fact for a lesson
+ * or a test waiting on a report, so that a refused run is known to be over,
+ * and why, rather than waited out as one that has not finished yet.
+ *
+ * @returns {?{which: string, reason: string, detail: ?object,
+ *   duration: ?number}} The refusal
+ */
+export const assistExperimentRefusal = () =>
+  experimentRefusal ? { ...experimentRefusal } : null;
 
 /** For the lesson and the tests: run either experiment as the button does. */
 export const startAssistComparison = () => runAssistExperiment('comparison');
