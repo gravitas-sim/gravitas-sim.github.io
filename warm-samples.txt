@@ -1,0 +1,7 @@
+run 1: warm trial 1: ready 4037 ms  fcp 1428  177 req  0 KB xfer
+run 2: warm trial 1: ready 3949 ms  fcp 1488  177 req  0 KB xfer
+run 3: warm trial 1: ready 3930 ms  fcp 1436  177 req  0 KB xfer
+run 4: warm trial 1: ready 4022 ms  fcp 2944  177 req  0 KB xfer
+run 5: warm trial 1: ready 3850 ms  fcp 1352  177 req  0 KB xfer
+run 6: warm trial 1: ready 3794 ms  fcp 1264  177 req  0 KB xfer
+run 7: warm trial 1: ready 3958 ms  fcp 1352  177 req  0 KB xfer

@@ -1,0 +1,17 @@
+precache after install: {"keys":["gravitas-ec73595d5e3d"],"entries":345,"controlled":true}
+warm trial 1: ready 4088 ms  fcp 1808  177 req  0 KB xfer
+warm trial 2: ready 3785 ms  fcp 1108  177 req  0 KB xfer
+warm trial 3: ready 3737 ms  fcp 1184  177 req  0 KB xfer
+warm trial 4: ready 3745 ms  fcp 1424  177 req  0 KB xfer
+warm trial 5: ready 3733 ms  fcp 1396  177 req  0 KB xfer
+warm trial 6: ready 3782 ms  fcp 1304  177 req  0 KB xfer
+node:internal/modules/run_main:105
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Target page, context or browser has been closed
+    at /Users/carl/Desktop/gravitas-perf/bench/bench-warm.mjs:91:14 {
+  log: []
+}
+
+Node.js v24.4.0

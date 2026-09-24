@@ -1,0 +1,103 @@
+chromium 151.0.7922.34
+profile: 4 Mbit/s down, 80 ms RTT, CPU x4, 1366x768, service worker BLOCKED
+
+A warm-up 1 done
+A trial 1: ready 5970 ms  fcp 3376  177 req  1591 KB xfer
+A trial 2: ready 5840 ms  fcp 3436  177 req  1591 KB xfer
+A trial 3: ready 5829 ms  fcp 3356  177 req  1591 KB xfer
+A trial 4: ready 5814 ms  fcp 3168  177 req  1591 KB xfer
+A trial 5: ready 6180 ms  fcp 3464  177 req  1591 KB xfer
+A trial 6: ready 6014 ms  fcp 3356  177 req  1591 KB xfer
+A trial 7: ready 5752 ms  fcp 3220  177 req  1591 KB xfer
+B warm-up 1 done
+B trial 1: ready 4275 ms  fcp 2388  80 req  779 KB xfer
+B trial 2: ready 4362 ms  fcp 2092  80 req  779 KB xfer
+B trial 3: ready 4365 ms  fcp 2472  80 req  779 KB xfer
+B trial 4: ready 4395 ms  fcp 2496  80 req  779 KB xfer
+B trial 5: ready 4300 ms  fcp 2404  80 req  779 KB xfer
+B trial 6: ready 4184 ms  fcp 2192  80 req  779 KB xfer
+B trial 7: ready 4278 ms  fcp 2336  80 req  779 KB xfer
+
+{
+  "A": {
+    "label": "current deployment (git archive, unbundled)",
+    "ready": {
+      "min": 5751.799999952316,
+      "p25": 5813.700000047684,
+      "median": 5840.099999904633,
+      "p75": 5970,
+      "max": 6180.399999856949
+    },
+    "fcp": {
+      "min": 3168,
+      "p25": 3220,
+      "median": 3356,
+      "p75": 3376,
+      "max": 3464
+    },
+    "requests": {
+      "min": 177,
+      "p25": 177,
+      "median": 177,
+      "p75": 177,
+      "max": 177
+    },
+    "transferredKB": {
+      "min": 1591.2431640625,
+      "p25": 1591.2431640625,
+      "median": 1591.2431640625,
+      "p75": 1591.2431640625,
+      "max": 1591.2431640625
+    },
+    "decodedKB": {
+      "min": 4764.349609375,
+      "p25": 4764.349609375,
+      "median": 4764.349609375,
+      "p75": 4764.349609375,
+      "max": 4764.349609375
+    }
+  },
+  "B": {
+    "label": "built deployment prototype (dist/)",
+    "ready": {
+      "min": 4184.200000047684,
+      "p25": 4274.799999952316,
+      "median": 4299.5,
+      "p75": 4362.099999904633,
+      "max": 4395.299999952316
+    },
+    "fcp": {
+      "min": 2092,
+      "p25": 2192,
+      "median": 2388,
+      "p75": 2404,
+      "max": 2496
+    },
+    "requests": {
+      "min": 80,
+      "p25": 80,
+      "median": 80,
+      "p75": 80,
+      "max": 80
+    },
+    "transferredKB": {
+      "min": 779.296875,
+      "p25": 779.296875,
+      "median": 779.296875,
+      "p75": 779.296875,
+      "max": 779.296875
+    },
+    "decodedKB": {
+      "min": 2112.841796875,
+      "p25": 2112.841796875,
+      "median": 2112.841796875,
+      "p75": 2112.841796875,
+      "max": 2112.841796875
+    }
+  },
+  "delta": {
+    "builtMinusCurrentMs": -1540.5999999046326,
+    "percent": -26.379685278159453,
+    "improvementMs": 1540.5999999046326
+  }
+}
