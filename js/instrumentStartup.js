@@ -14,14 +14,16 @@
 // chunks became ten - seven more requests before the front door draws, for
 // every visitor, in exchange for nothing.
 //
-// So a family that reaches any of them imports this, and so does the
-// registry: whatever reaches one reaches all thirteen, as it did before, and
-// the chunks stay as start-up had them. They are already loaded by the time
-// any family is, so this costs a family nothing but its own few bytes.
+// So a family that reaches any of them imports this, and the registry imports
+// the same thirteen itself: whatever reaches one reaches all of them, as it did
+// before, and the chunks stay as start-up had them. They are already loaded by
+// the time any family is, so this costs such a family one small request - the
+// registry does not import this module, because then every lesson would pay it.
 //
-// tests/lazyWidgets.test.js builds the application with the families lazy
-// and with them eager and holds start-up to the same number of files, and
-// names the family that has to import this when it does not.
+// tests/onDemandFamilies.test.js builds the application with the families
+// lazy and with them eager and holds start-up to the same number of files,
+// names the family that has to import this when it does not, and holds the
+// registry's list to this one.
 // =============================================================================
 
 import './bodyVisuals.js';

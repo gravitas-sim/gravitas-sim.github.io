@@ -25,10 +25,25 @@
 
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import { currentTier, prefersReducedMotion } from './quality.js';
-// For the bundle's sake, not for anything it exports: what reaches this
-// registry reaches the start-up modules the families share, as it did when the
-// families were imported here (js/instrumentStartup.js).
-import './instrumentStartup.js';
+// For the bundle's sake, not for anything they export: what reaches this
+// registry reaches all thirteen start-up modules the families share, as it did
+// when the families were imported here (js/instrumentStartup.js says why). The
+// same list as that module's, imported here directly rather than through it: a
+// module with no code of its own is still a file of its own, and every lesson
+// would fetch it. tests/onDemandFamilies.test.js holds the two lists equal.
+import './bodyVisuals.js';
+import './darkMatter.js';
+import './mond.js';
+import './data/exoplanetSystems.js';
+import './data/trappist1.js';
+import './habitability.js';
+import './instruments.js';
+import './lesson/evolutionScene.js';
+import './quality.js';
+import './resonance/systems.js';
+import './stellar/geometry.js';
+import './stellar/mainSequence.js';
+import './stellar/state.js';
 import { loadBuiltin } from './platform/resolver.js';
 import { FAMILIES } from './platform/catalog.generated.js';
 

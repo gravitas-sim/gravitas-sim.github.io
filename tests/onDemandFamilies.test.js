@@ -107,6 +107,14 @@ describe('the start-up modules the families share', () => {
     expect(SHARED.filter(f => !startup.has(f))).toEqual([]);
   });
 
+  test('are imported by the registry too, the same list, directly', () => {
+    // Not through js/instrumentStartup.js: that module has no code, and a
+    // module with none is still a file every lesson would fetch.
+    const registry = graph.get(js('widgets.js'));
+    expect(registry.has(js('instrumentStartup.js'))).toBe(false);
+    expect(SHARED.filter(s => !registry.has(s))).toEqual([]);
+  });
+
   test('are imported as one by every family that reaches any of them', () => {
     const missing = FAMILIES.filter(f => {
       const reached = closure(f);
