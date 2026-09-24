@@ -27,6 +27,8 @@
 // and is in no resonance at all.
 // =============================================================================
 
+// Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
+import './instrumentStartup.js';
 import { t } from './i18n/index.js';
 // This family's labels are in the deferred half of the catalog; see the note
 // in js/widgets.js. Registered from the module that renders them rather than

@@ -25,10 +25,15 @@ import {
   candidatePlanets,
   comparisonStars,
 } from '../js/habitabilityWidgets.js';
-import { getWidget, widgetDefaults } from '../js/widgets.js';
+import { getWidget, widgetDefaults, whenWidgetsReady } from '../js/widgets.js';
 import { INVESTIGATIONS, getInvestigation } from '../js/data/investigations.js';
 import { SIM_UNITS_PER_AU, auToSim, simToAu } from '../js/units.js';
 import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
+
+// Every instrument family is fetched on demand (js/widgets.js), the way a
+// lesson fetches one when a step names it; this suite reads the catalog, so
+// it waits for it first, as every reader of the whole catalog does.
+await whenWidgetsReady();
 
 const SUN = { luminositySolar: 1, teffK: 5772 };
 const TRAPPIST = {
