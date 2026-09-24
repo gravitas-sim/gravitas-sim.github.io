@@ -66,7 +66,7 @@ async function advanceTo(page, target) {
 }
 
 test.describe('the spectra arrive only when something needs them', () => {
-  test('the sandbox boots without fetching them; the lesson engine fetches them once', async ({
+  test('nothing fetches them until the first spectra screen, which fetches them once', async ({
     page,
     app,
   }) => {
@@ -80,24 +80,27 @@ test.describe('the spectra arrive only when something needs them', () => {
     // A first visit to the sandbox reaches nothing in js/data/spectra/.
     expect(hits).toEqual([]);
 
-    // The lesson engine is what reaches them, and opening the browser is what
-    // loads the lesson engine. Asserted where it actually happens rather than
-    // where it would be nicer: a test claiming the card click did this would
-    // be describing an architecture this branch does not have.
+    // Nor does the lesson engine, or the lesson that uses them, until a step
+    // names the spectra instrument: the family is fetched on demand
+    // (js/widgets.js), and the data is fetched when the family is. This used
+    // to say the lesson browser fetched them, which was true while every
+    // family was part of the engine.
     await page.locator('#investigationsBtn').click();
     await expect(page.locator('#investigationBrowser')).toBeVisible();
-    await expect
-      .poll(() => hits.length, { timeout: 15_000 })
-      .toBeGreaterThan(0);
-
     await page.locator(`[data-investigation="${LESSON}"]`).click();
     await expect(page.locator('#investigationPanel')).toBeVisible();
     await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+    await page.waitForLoadState('networkidle');
+    expect(hits).toEqual([]);
 
-    // Once, in total: not once per widget, not once per step, and not again
-    // when the lesson that uses it opens. And only the data: the provenance
-    // record beside it is imported by nothing in the application, which is
-    // the reason it is a separate file.
+    await advanceTo(page, FIRST_SPECTRA_STEP);
+    await expect(page.locator('#investigationToolReadout')).toContainText(
+      /Observations/i
+    );
+
+    // Once, in total: not once per widget, not once per step. And only the
+    // data: the provenance record beside it is imported by nothing in the
+    // application, which is the reason it is a separate file.
     expect(hits.filter(u => /sdssSpectraProvenance/.test(u))).toEqual([]);
     expect(hits).toHaveLength(1);
   });

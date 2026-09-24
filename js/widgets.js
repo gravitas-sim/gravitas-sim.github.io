@@ -326,8 +326,19 @@ function loadFamily(family) {
         // shares makes the bundler split that module out, adding a request
         // to every page (js/quality.js would be one; LAZY_CAPABILITIES.md).
         m.bindServices?.({ currentTier, prefersReducedMotion });
-        if (spec.ready) familyReady.set(family, spec.ready(m));
-        return spec.pick(m);
+        // A family whose instruments need more than their module - the
+        // spectra's flux, the GWOSC strain, the prose two families keep in
+        // the deferred catalog - is not ready to draw until that has settled
+        // too, so the panel's loading state lasts until it has. Drawn before,
+        // an instrument showed its own waiting state and nothing repainted it
+        // when the data came; while the families were part of the engine the
+        // data had always long arrived. A readiness that fails still settles
+        // (false), and the instrument then says it could not load its data.
+        const ready = spec.ready ? spec.ready(m) : null;
+        if (ready) familyReady.set(family, ready);
+        return Promise.resolve(ready)
+          .catch(() => false)
+          .then(() => spec.pick(m));
       })
       .then(widgets => {
         loaded.set(family, widgets);

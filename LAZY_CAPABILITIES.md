@@ -37,8 +37,10 @@ moved together. None is part of the engine now:
   waits for each one's own readiness. `author:check`'s inputs, the authoring
   preview, the scene audit and the test suites that read the catalog await it;
   the two screenshot tools fetch the family they draw with `ensureWidget()`.
-- **The reader's view.** While a family is on its way, the tool panel's note
-  says so and is a `status` region for as long as it does - also when the
+- **The reader's view.** While a family is on its way - and, for a family whose
+  instruments need data behind a second import, until that has arrived too -
+  the tool panel's note says so and is a `status` region for as long as it
+  does - also when the
   instrument is the lesson's first screen, where the lesson's text and its Next
   button are usable meanwhile. A failed fetch is a named `WidgetLoadError` and
   says so in the same region. If asking again can help, the panel offers
