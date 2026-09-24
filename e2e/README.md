@@ -90,7 +90,8 @@ order. The listing is alphabetical and the heavy files happen to sort first, so
 with six shards the first took 24 to 29 minutes and the last 15, and every run
 waited for the first. The suite is 210 to 245 minutes of test time, so
 balancing six shards by duration would only have reached about 19; twelve
-reach about nine.
+are planned at about nine and a half, and measured at 9.2 to 11.6 on their first
+run, the spread being each test's own run-to-run variation.
 
 Every shard plans the whole split for itself from two inputs, so no job hands a
 plan to the others:

@@ -135,7 +135,11 @@ export function shardSpan(tests, serial, workers = WORKERS) {
 
 const median = xs => {
   const s = [...xs].sort((a, b) => a - b);
-  return s.length ? s[Math.floor((s.length - 1) / 2)] : undefined;
+  if (!s.length) return undefined;
+  const mid = s.length >> 1;
+  // An even count takes the mean of the middle two, not the lower one, which
+  // would bias every recorded timing short.
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
 };
 
 /**

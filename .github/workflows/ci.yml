@@ -372,8 +372,8 @@ jobs:
     # 15, and the run waited for the first: 24 to 30 minutes over twelve runs,
     # every one of them on this job. Balancing six by duration would only have
     # reached about 19 - the suite is 210 to 245 minutes of test time - so the
-    # count went up as well, to what twelve runs' timings say fits in about
-    # nine: tools/e2e-timings.json, the median passing duration of each test.
+    # count went up as well, to what four runs' timings say fits in about nine
+    # and a half: tools/e2e-timings.json, each test's median passing duration.
     #
     # Each shard plans the whole split for itself, from `--list` and the timings
     # file, so the twelve agree without a job handing a plan to the others. The
