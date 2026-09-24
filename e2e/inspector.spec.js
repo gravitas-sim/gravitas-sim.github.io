@@ -74,6 +74,21 @@ test.describe('the object inspector', () => {
 
     await energyTab.click();
     await expect(page.locator('#energyTab')).toBeVisible();
+    // Its chart is made: a line chart on a linear time axis, from the Chart.js
+    // build that registers only what Gravitas draws (tools/vendor-deps.mjs).
+    // A type that build does not register throws when the chart is made, and
+    // there would be no chart here to find.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(
+            () =>
+              window.Chart?.getChart?.(document.getElementById('energyChart'))
+                ?.config.type ?? null
+          ),
+        { timeout: 30_000, message: 'the energy chart was never made' }
+      )
+      .toBe('line');
 
     await detailsTab.click();
     await expect(page.locator('#detailsTab')).toBeVisible();

@@ -7,7 +7,7 @@
 // It used to be a <script> tag injected at that moment, pointing at jsdelivr.
 // That made a third-party request during ordinary use, could not be pinned by
 // the lockfile, and could not be served offline. It is now a dynamic import of
-// vendor/chartjs/chart.auto.js, bundled from the pinned package by
+// vendor/chartjs/chart.js, bundled from the pinned package by
 // tools/vendor-deps.mjs - so esbuild puts it in its own deferred chunk and the
 // service worker can precache it.
 //
@@ -29,7 +29,7 @@ export function ensureChartJs() {
   if (window.Chart) return Promise.resolve(window.Chart);
 
   if (!loading) {
-    loading = import('../vendor/chartjs/chart.auto.js')
+    loading = import('../vendor/chartjs/chart.js')
       .then(mod => {
         const Chart = mod.Chart ?? mod.default ?? null;
         if (Chart) window.Chart = Chart;
