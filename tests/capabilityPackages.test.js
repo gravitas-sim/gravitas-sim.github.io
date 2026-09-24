@@ -228,6 +228,32 @@ describe('T6-T8: what the manifests claim is true of the repository', () => {
   });
 });
 
+describe('T7: authoring sees the same lesson through its package', () => {
+  test('the rules give the same findings for the packaged lesson', async () => {
+    const { loadAuthoringInputs } =
+      await import('../tools/authoring/inputs.mjs');
+    const { checkCatalog } = await import('../js/authoring/rules.js');
+    const { loadBuiltin } = await import('../js/platform/resolver.js');
+    const { LESSONS } = await import('../js/platform/catalog.generated.js');
+    const inputs = await loadAuthoringInputs();
+    const packaged = (await loadBuiltin(LESSONS['power-law-gravity'][0]))
+      .default;
+    expect(inputs.investigations.some(i => i.id === 'power-law-gravity')).toBe(
+      true
+    );
+    const swapped = {
+      ...inputs,
+      investigations: inputs.investigations.map(inv =>
+        inv.id === 'power-law-gravity' ? packaged : inv
+      ),
+    };
+    const key = f => JSON.stringify(f);
+    expect(checkCatalog(swapped).map(key)).toEqual(
+      checkCatalog(inputs).map(key)
+    );
+  });
+});
+
 describe('T10: public identifiers migrate, and old saved work still opens', () => {
   const v2 = {
     from: '^1.0.0',

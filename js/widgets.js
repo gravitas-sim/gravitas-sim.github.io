@@ -25,7 +25,8 @@
 
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import { currentTier, prefersReducedMotion } from './quality.js';
-import { loadBuiltin, widgetFamily } from './platform/resolver.js';
+import { loadBuiltin } from './platform/resolver.js';
+import { FAMILIES } from './platform/catalog.generated.js';
 import { ENERGY_WIDGETS } from './energyWidgets.js';
 import { BINARY_WIDGETS } from './binaryWidgets.js';
 import { BLACK_HOLE_WIDGETS } from './blackHoleWidgets.js';
@@ -93,14 +94,8 @@ const WIDGETS = [
 // -----------------------------------------------------------------------------
 /** A LAZY_FAMILIES entry read from the family's capability package. */
 function fromPackage(familyId, path) {
-  const f = widgetFamily(familyId);
-  if (!f) throw new Error(`no capability package provides "${familyId}"`);
-  return {
-    ids: f.ids,
-    load: () => loadBuiltin(f.entry),
-    path,
-    pick: m => m[f.pick],
-  };
+  const [entry, pick, ids] = FAMILIES[familyId];
+  return { ids, load: () => loadBuiltin(entry), path, pick: m => m[pick] };
 }
 
 export const LAZY_FAMILIES = Object.freeze({

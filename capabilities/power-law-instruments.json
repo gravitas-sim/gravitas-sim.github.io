@@ -12,8 +12,7 @@
   "provides": {
     "models": [
       {
-        "id": "power-law-gravity-model",
-        "entry": "builtin:model/power-law-gravity"
+        "id": "power-law-gravity-model"
       }
     ],
     "widgetFamilies": [
@@ -31,18 +30,45 @@
     ]
   },
   "assets": [
-    { "path": "js/powerLawWidgets.js", "role": "code", "offline": "core" },
-    { "path": "js/powerLawLab.js", "role": "code", "offline": "core" },
-    { "path": "js/powerLawGravity.js", "role": "code", "offline": "core" }
+    {
+      "path": "js/powerLawWidgets.js",
+      "role": "code",
+      "offline": "core"
+    },
+    {
+      "path": "js/powerLawLab.js",
+      "role": "code",
+      "offline": "core"
+    },
+    {
+      "path": "js/powerLawGravity.js",
+      "role": "code",
+      "offline": "core"
+    }
   ],
   "citations": [],
-  "licenses": [{ "scope": "js/powerLaw*.js", "license": "MIT" }],
-  "offline": { "policy": "precache" },
-  "authoring": { "checks": ["registry:author"] },
+  "licenses": [
+    {
+      "scope": "js/powerLaw*.js",
+      "license": "MIT"
+    }
+  ],
+  "offline": {
+    "policy": "precache"
+  },
+  "authoring": {
+    "checks": ["registry:author"]
+  },
   "validation": [
-    { "check": "jest:tests/powerLawGravity.test.js" },
-    { "check": "jest:tests/lazyWidgets.test.js" },
-    { "check": "e2e:e2e/lazyInstruments.spec.js" }
+    {
+      "check": "jest:tests/powerLawGravity.test.js"
+    },
+    {
+      "check": "jest:tests/lazyWidgets.test.js"
+    },
+    {
+      "check": "e2e:e2e/lazyInstruments.spec.js"
+    }
   ],
   "migrations": []
 }

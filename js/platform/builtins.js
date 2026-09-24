@@ -12,7 +12,6 @@
 // =============================================================================
 
 export const BUILTINS = {
-  'model/power-law-gravity': () => import('../powerLawGravity.js'),
   'widgets/power-law': () => import('../powerLawWidgets.js'),
   'data/sdss-spectra': () => import('../data/spectra/sdssSpectra.js'),
   'investigation/power-law-gravity': () =>
@@ -23,7 +22,6 @@ export const BUILTINS = {
 
 /** Where each id lives, for the tools that check it; never used to load. */
 export const BUILTIN_SOURCES = {
-  'model/power-law-gravity': 'js/powerLawGravity.js',
   'widgets/power-law': 'js/powerLawWidgets.js',
   'data/sdss-spectra': 'js/data/spectra/sdssSpectra.js',
   'investigation/power-law-gravity':
