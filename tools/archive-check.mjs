@@ -28,6 +28,7 @@ import { existsSync, mkdtempSync, rmSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { excerpt } from './output-excerpt.mjs';
 
 const REPO = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -131,11 +132,7 @@ function run(cmd, args, cwd, { allowFailure = false } = {}) {
     if (!allowFailure) {
       problems.push(
         `\`${cmd} ${args.join(' ')}\` failed in the restored archive:\n` +
-          String(err.stderr || err.stdout || err.message)
-            .split('\n')
-            .slice(-8)
-            .map(l => `    ${l}`)
-            .join('\n')
+          excerpt(err.stderr || err.stdout || err.message, 8)
       );
     }
     return {
@@ -217,13 +214,7 @@ try {
       note(`  ${script}: ${res.ok ? 'ok' : 'FAILED'}`);
       if (!res.ok) {
         problems.push(
-          `${script} fails in the restored archive:\n` +
-            res.out
-              .split('\n')
-              .filter(Boolean)
-              .slice(-6)
-              .map(l => `    ${l}`)
-              .join('\n')
+          `${script} fails in the restored archive:\n` + excerpt(res.out, 6)
         );
       }
     }
@@ -241,12 +232,7 @@ try {
     if (!shipped.ok) {
       problems.push(
         'verify-release refuses the archive as committed:\n' +
-          shipped.out
-            .split('\n')
-            .filter(Boolean)
-            .slice(-6)
-            .map(l => `    ${l}`)
-            .join('\n')
+          excerpt(shipped.out, 6)
       );
     } else {
       note('  verify-release accepts the archive as committed');
@@ -277,11 +263,7 @@ try {
         problems.push(
           '`npm run build` failed in the archive for a reason other than the ' +
             'missing passphrase:\n' +
-            documented.out
-              .split('\n')
-              .slice(-8)
-              .map(l => `    ${l}`)
-              .join('\n')
+            excerpt(documented.out, 8)
         );
       } else {
         note('    refused for the stated reason, as it should');
