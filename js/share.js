@@ -23,7 +23,6 @@ import {
 import { getWorldSeed, formatSeed, parseSeed } from './rng.js';
 import { toast, announce } from './notify.js';
 import { trapFocus } from './focusTrap.js';
-import { embedSnippet } from './embed.js';
 import {
   activityInHash,
   assignmentInHash,
@@ -69,13 +68,7 @@ export async function applySharedLinkFromUrl() {
   if (!hasSharedLink()) return false;
   try {
     const payload = await decodePayload(location.hash);
-    applyingLink = true;
-    let result;
-    try {
-      result = applyShareState(payload);
-    } finally {
-      applyingLink = false;
-    }
+    const result = applySharePayload(payload);
 
     // The scenario card explains what the student is looking at, and someone
     // arriving from a link has had none of the context of choosing it.
@@ -106,6 +99,26 @@ export async function applySharedLinkFromUrl() {
     console.warn('Could not open shared link:', err);
     toast(err.message || t('share.link.failed'));
     return false;
+  }
+}
+
+/**
+ * Build the world a decoded payload describes, as arriving on its link does.
+ *
+ * Also what an embed's Reset and its page's `load` message use
+ * (js/embedBridge.js): the rebuild is a link being applied, not the world
+ * moving away from one, so the fragment in the frame's address stays and a
+ * reload still opens the figure its author made.
+ *
+ * @param {Object} payload - From decodePayload
+ * @returns {{scenario: string, bodies: number}} What was built
+ */
+export function applySharePayload(payload) {
+  applyingLink = true;
+  try {
+    return applyShareState(payload);
+  } finally {
+    applyingLink = false;
   }
 }
 
@@ -191,6 +204,9 @@ async function refresh() {
   const fragment = await encodePayload(payload);
   lastUrl = shareUrl(fragment);
   lastScenario = payload.s || '';
+  // The figure builder opens on the state the dialog is showing.
+  if (els.figure)
+    els.figure.href = new URL(`figure/#${fragment}`, location.href).href;
   els.url.value = lastUrl;
   // Show the front of the link. Setting .value leaves the caret at the end, so
   // the field opens on a meaningless tail of base64 rather than the domain: // which makes a correct link look like a corrupted one.
@@ -248,6 +264,14 @@ async function copyLink() {
 }
 
 /**
+ * The embed markup module, fetched when the dialog opens: by the time Copy
+ * embed code is pressed it has arrived, so the copy still happens inside the
+ * press, which the clipboard fallback below needs.
+ */
+let markupModule = null;
+const markup = () => (markupModule ||= import('./embedMarkup.js'));
+
+/**
  * Put an iframe for the current state on the clipboard.
  *
  * The snippet is built from `lastUrl` - the very link the dialog is showing -
@@ -259,6 +283,7 @@ async function copyLink() {
  */
 async function copyEmbed() {
   if (!lastUrl) return;
+  const { embedSnippet } = await markup();
   const snippet = embedSnippet({ url: lastUrl, scenario: lastScenario });
   try {
     await navigator.clipboard.writeText(snippet);
@@ -323,6 +348,9 @@ export function openShareDialog() {
     returnFocusTo: document.getElementById('shareBtn'),
   });
   refresh().then(() => els.url?.focus());
+  markup().catch(() => {
+    markupModule = null; // fetched again on the press, which says if it fails
+  });
 }
 
 /** Hide the dialog. */
@@ -359,6 +387,7 @@ export function initShare() {
     seedRow: document.getElementById('shareSeedRow'),
     reroll: document.getElementById('shareRerollBtn'),
     embed: document.getElementById('shareEmbedBtn'),
+    figure: document.getElementById('shareFigureLink'),
     close: document.getElementById('shareCloseBtn'),
     chip: document.getElementById('shareCloseChip'),
   };

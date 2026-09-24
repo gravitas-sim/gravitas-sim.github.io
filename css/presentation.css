@@ -68,6 +68,12 @@
     gap: var(--space-2);
   }
 
+  /* A gravitas-embed/1 figure whose author asked for no transport
+     (js/embedOptions.js): a picture that moves, controlled from its page. */
+  body.presentation-embed.embed-no-transport .timeline-bar {
+    display: none;
+  }
+
   /* The way out to the sandbox: small, in the corner, and the only thing embed
      mode adds rather than removes. */
   .embed-open-full {

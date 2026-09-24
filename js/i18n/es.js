@@ -36,11 +36,16 @@ export const ES = {
   // --- Presentation: embed ---------------------------------------------------
   'embed.figure.title': 'Simulación de Gravitas: {scenario}',
   'embed.figure.titleGeneric': 'Simulación interactiva de Gravitas',
+  'embed.action.reset': 'Restablecer la figura',
+  'embed.action.reset.hint': 'Restablecer la figura',
   'embed.action.openFull': 'Abrir en Gravitas',
   'embed.action.openFull.hint':
     'Abrir esta simulación a tamaño completo en una pestaña nueva, con todos los controles',
 
   // --- Presentation: the share dialog's embed half ---------------------------
+  'share.action.buildFigure': 'Crear una figura',
+  'share.action.buildFigure.hint':
+    'Elige cómo se abre y cómo se ve la figura, y cópiala',
   'share.action.copyEmbed': 'Copiar código de inserción',
   'share.action.copyEmbed.hint':
     'Copiar un iframe que muestra exactamente esta simulación, listo para pegar en una página de Canvas, Blackboard o Moodle',
@@ -301,6 +306,8 @@ export const ES = {
     'Arrastrar para retroceder por el historial grabado. La simulación se detiene en el fotograma elegido hasta volver al directo.',
   'transport.timelineLive.hint': 'Volver al directo (L)',
   'transport.timelineBar.label': 'Reproducción y línea de tiempo',
+  'transport.timelinePlay.playLabel': 'Reanudar la simulación',
+  'transport.timelinePlay.playHint': 'Reanudar (espacio)',
   'transport.timelinePlay.label': 'Pausar la simulación',
   'transport.timelineStepBack.label': 'Retroceder un fotograma',
   'transport.timelineStepFwd.label': 'Avanzar un fotograma',

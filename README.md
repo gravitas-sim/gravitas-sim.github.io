@@ -192,13 +192,18 @@ dipping around each mass, framed to whatever scenario is loaded.
 
 **Embed mode and lecture mode.** `?embed=1` on any share link gives a chrome-free
 figure that drops into a course page or an LMS in an iframe, sized to its frame
-and carrying its own scale bar. Lecture mode fills the screen for projection:
+and carrying its own scale bar. The figure builder at `/figure/` makes one
+without editing a URL: how it opens and looks, a title and caption, a live
+preview and markup to copy. A page can play, pause, reset or load a figure
+through a small versioned message contract that obeys only the origin it was
+told to ([EMBEDDING.md](EMBEDDING.md)). Lecture mode fills the screen for
+projection:
 larger type, the Daylight theme, a spotlight pointer, and arrow keys that step
 through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->4140<!--/fact--> strings, and
+of <!--fact:uiStrings-->4208<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -234,7 +239,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5949<!--/fact--> tests across <!--fact:jestSuites-->178<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5970<!--/fact--> tests across <!--fact:jestSuites-->179<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -259,9 +264,9 @@ reports what the browser downloads at start-up separately from what is deferred:
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->200<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->616<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->4153<!--/fact--> KB         | <!--fact:buildDeferredChunks-->173<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->817<!--/fact--> KB** |                                               |
+| JavaScript at start-up | <!--fact:buildStartupJs-->618<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4159<!--/fact--> KB         | <!--fact:buildDeferredChunks-->176<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->818<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -361,8 +366,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1251<!--/fact--> tests
-in <!--fact:e2eFiles-->93<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1268<!--/fact--> tests
+in <!--fact:e2eFiles-->95<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not

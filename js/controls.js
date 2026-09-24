@@ -156,15 +156,10 @@ function setupTransport() {
     scrubTo(offset);
   });
 
-  playBtn?.addEventListener('click', () => {
-    if (isScrubbing()) {
-      resumeLive();
-      state.paused = false;
-    } else {
-      state.paused = !state.paused;
-    }
-    refreshTransport();
-  });
+  // Scrubbing through history always resumes, as it always has.
+  playBtn?.addEventListener('click', () =>
+    setPlaying(isScrubbing() || state.paused)
+  );
 
   liveBtn?.addEventListener('click', () => {
     resumeLive();
@@ -206,11 +201,21 @@ function refreshTransport() {
   const paused = state.paused;
   const showPlayIcon = scrubbingNow || paused;
   playBtn.textContent = showPlayIcon ? '▶' : '❚❚';
+  // In the reader's language: these were English literals, so a paused figure
+  // told a Spanish screen reader "Play simulation" over a Spanish interface.
   playBtn.setAttribute(
     'aria-label',
-    showPlayIcon ? 'Play simulation' : 'Pause simulation'
+    t(
+      showPlayIcon
+        ? 'transport.timelinePlay.playLabel'
+        : 'transport.timelinePlay.label'
+    )
   );
-  playBtn.title = showPlayIcon ? 'Play (Space)' : 'Pause (Space)';
+  playBtn.title = t(
+    showPlayIcon
+      ? 'transport.timelinePlay.playHint'
+      : 'transport.timelinePlay.hint'
+  );
 }
 
 // --- Theme dock ---------------------------------------------------------------
@@ -781,6 +786,20 @@ function setupRangeFills() {
 }
 
 /** Initialize every control surface this module owns. */
+/**
+ * Run or pause the simulation, as the transport's play button does.
+ *
+ * Also what an embedding page's play and pause messages reach
+ * (js/embedBridge.js), so that the figure and its page cannot disagree about
+ * what pressing play means - scrubbing back through history included.
+ * @param {boolean} playing - True to run
+ */
+export function setPlaying(playing) {
+  if (playing && isScrubbing()) resumeLive();
+  state.paused = !playing;
+  refreshTransport();
+}
+
 export function initControls() {
   setupRangeFills();
   initTheme();

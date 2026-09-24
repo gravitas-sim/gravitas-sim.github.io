@@ -2686,6 +2686,19 @@
       >
         ⏭
       </button>
+      <!-- Only in a gravitas-embed/1 figure (js/embed.js): back to what the
+           figure's author made, or to its scenario, as its URL says. -->
+      <button
+        id="embedReset"
+        class="timeline-btn"
+        hidden
+        aria-label="Reset the figure"
+        title="Reset the figure"
+        data-i18n-title="embed.action.reset.hint"
+        data-i18n-aria-label="embed.action.reset"
+      >
+        ↺
+      </button>
 
       <!-- The scrubber and anything drawn over its track share a positioning
            context, so a marker placed at a percentage lands on the right part
@@ -3591,6 +3604,19 @@
           >
             <span data-i18n="share.action.copyEmbed">Copy embed code</span>
           </button>
+          <!-- The same state, handed to the figure builder: /figure/ reads the
+               fragment this link carries. -->
+          <a
+            id="shareFigureLink"
+            class="ui-button secondary"
+            href="figure/"
+            target="_blank"
+            rel="noopener"
+            data-i18n-title="share.action.buildFigure.hint"
+            title="Choose how the figure opens and looks, then copy it"
+          >
+            <span data-i18n="share.action.buildFigure">Build a figure</span>
+          </a>
           <p class="share-embed-note" data-i18n="share.embed.note">
             Paste into the HTML editor of a course page. The figure stays
             interactive.

@@ -110,9 +110,13 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * e2e/lazyInstruments.spec.js holds the lazily loaded instrument families to
  * what a reader sees in both builds, because they differ: under the sources a
  * retry can re-import a family under a new URL, and a bundle cannot.
+ *
+ * e2e/embedContract.spec.js and e2e/figureBuilder.spec.js hold the public
+ * embed contract and the page that writes it (EMBEDDING.md) in both, because
+ * a course page will frame whichever one is published.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js/;
 
 /**
  * Which engines to run.

@@ -44,11 +44,16 @@ export const EN = {
   // --- Presentation: embed ---------------------------------------------------
   'embed.figure.title': 'Gravitas simulation: {scenario}',
   'embed.figure.titleGeneric': 'Gravitas interactive simulation',
+  'embed.action.reset': 'Reset the figure',
+  'embed.action.reset.hint': 'Reset the figure',
   'embed.action.openFull': 'Open in Gravitas',
   'embed.action.openFull.hint':
     'Open this simulation full size in a new tab, with the full set of controls',
 
   // --- Presentation: the share dialog's embed half ---------------------------
+  'share.action.buildFigure': 'Build a figure',
+  'share.action.buildFigure.hint':
+    'Choose how the figure opens and looks, then copy it',
   'share.action.copyEmbed': 'Copy embed code',
   'share.action.copyEmbed.hint':
     'Copy an iframe that shows exactly this simulation, ready to paste into a Canvas, Blackboard or Moodle page',
@@ -394,6 +399,8 @@ export const EN = {
     'Drag to rewind through recorded history. The simulation holds on the frame you land on until you return to live.',
   'transport.timelineLive.hint': 'Return to live (L)',
   'transport.timelineBar.label': 'Playback and timeline',
+  'transport.timelinePlay.playLabel': 'Play simulation',
+  'transport.timelinePlay.playHint': 'Play (Space)',
   'transport.timelinePlay.label': 'Pause simulation',
   'transport.timelineStepBack.label': 'Step back one frame',
   'transport.timelineStepFwd.label': 'Step forward one frame',

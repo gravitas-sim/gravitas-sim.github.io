@@ -2,6 +2,8 @@
 import { resizeCanvas, gameLoop, generateStarfield } from './render.js';
 import {
   initialize_simulation,
+  loadScenarioByKey,
+  SETTINGS,
   state,
   updateSpeedDisplay,
   updateObjectTypeButton,
@@ -16,9 +18,14 @@ import { initAstrometry } from './astrometry.js';
 import { initPauseAtEvent } from './pauseAtEventPanel.js';
 import { initScenarioPanels } from './scenarioPanelBridge.js';
 import { initObservationLayout } from './observationLayout.js';
-import { initControls } from './controls.js';
+import { initControls, setPlaying } from './controls.js';
 import { initTutorial } from './tutorial.js';
-import { initShare, hasSharedLink, applySharedLinkFromUrl } from './share.js';
+import {
+  initShare,
+  hasSharedLink,
+  applySharedLinkFromUrl,
+  applySharePayload,
+} from './share.js';
 import {
   assignmentInHash,
   watchForAssignments,
@@ -54,14 +61,24 @@ async function loadWelcome() {
   return welcomeModule;
 }
 import { initScenarioBrowser } from './scenarioBrowser.js';
-import { initI18n, getLocale, onLocaleChange } from './i18n/index.js';
+import {
+  initI18n,
+  getLocale,
+  onLocaleChange,
+  setLocale,
+} from './i18n/index.js';
 import { initI18nDom } from './i18n/dom.js';
 import { createDoubleTapRecognizer } from './gestures.js';
 import { setRequestedLessonLocale } from './lessonLocale.js';
 import { resetFollowCamera } from './followCamera.js';
 import { initLocalePicker } from './i18n/picker.js';
 import { initBottomDock } from './bottomDock.js';
-import { initEmbedMode, initEmbedChrome } from './embed.js';
+import {
+  initEmbedMode,
+  initEmbedChrome,
+  embedRequest,
+  embedWorldBuilt,
+} from './embed.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
@@ -74,6 +91,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Embed mode has to be entered here rather than after the splash: a rail that
   // appears for one frame and then vanishes reads as a bug in the host page.
   const embedded = initEmbedMode();
+  // A gravitas-embed/1 figure may name its language and quality tier
+  // (js/embedOptions.js). Its options arrive behind the splash; neither is
+  // remembered - the locale is not persisted, and SETTINGS is saved only when
+  // a reader saves it.
+  embedRequest().then(({ version, options }) => {
+    if (!version) return;
+    if (options.lang) setLocale(options.lang, { persist: false });
+    if (options.quality) SETTINGS.quality_tier = options.quality;
+  });
+  // The state a figure was made from, kept before anything can rebuild the
+  // world and drop the fragment: its Reset and its page's messages return to
+  // it (js/embedBridge.js).
+  const authored = embedded && hasSharedLink() ? location.hash : null;
 
   const canvas = document.getElementById('simulationCanvas');
   const starfieldCanvas = document.getElementById('starfieldCanvas');
@@ -426,7 +456,18 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { once: true }
     );
-    initEmbedChrome();
+    initEmbedChrome({
+      authored,
+      // What a gravitas-embed/1 figure's Reset and its page's messages act
+      // on, handed down from here (js/embedBridge.js says why).
+      services: {
+        setPlaying,
+        applySharePayload,
+        loadScenarioByKey,
+        isPaused: () => state.paused,
+        scenario: () => SETTINGS.preset_scenario,
+      },
+    });
     // Not initInvestigations(): the lesson system is half the bundle and is
     // loaded the first time somebody asks for it. See investigationsLoader.js.
     watchForInvestigations();
@@ -463,6 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (assignmentInHash()) {
       initialize_simulation();
+      embedWorldBuilt();
     } else if (hasSharedLink()) {
       // A link names its own scenario, so building the default one first would
       // be work thrown away — and on a heavy scenario that is a visible stall.
@@ -470,9 +512,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // empty world for a frame or two, behind the splash.
       applySharedLinkFromUrl().then(applied => {
         if (!applied) initialize_simulation();
+        embedWorldBuilt();
       });
     } else {
       initialize_simulation();
+      embedWorldBuilt();
     }
     requestAnimationFrame(gameLoop);
 

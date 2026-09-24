@@ -15,6 +15,18 @@ the release rather than in the tag.
 
 ### Added
 
+- **An interactive figure builder, and a contract for embedding.** `/figure/`
+  turns a Gravitas state - brought from Share with a new "Build a figure" link,
+  or a scenario and a seed - into a figure for a course page: whether it opens
+  running or paused, its language, theme and shape, its play controls, reduced
+  motion, low-cost rendering, what Reset returns to, a title, a caption and a
+  link to the figure, with a live preview and markup to copy. Nothing typed can
+  become markup. Behind it is gravitas-embed/1 (EMBEDDING.md): `?embed=1&ev=1`
+  and a closed list of options, and a small, versioned message contract - ping,
+  play, pause, reset, load - that a figure obeys only from the one parent
+  origin its URL names, answering nobody else. Plain `?embed=1` links behave as
+  they always did. In English and Spanish.
+
 - **A new investigation, _Twelve Nights_.** A 40-to-50-minute lesson in which
   students write a radial-velocity schedule themselves, under the constraint a
   real time allocation imposes: twelve nights on HD 209458 from La Silla, one
@@ -289,6 +301,13 @@ the release rather than in the tag.
   means two overlapping runs can briefly wait for runners.
 
 ### Fixed
+
+- **The play button speaks the reader's language.** Once the simulation had
+  been paused or resumed, its label and tooltip were set to English literals,
+  so a Spanish screen reader heard "Play simulation" over a Spanish interface.
+- **A corrupt share link no longer leaves an uncaught error.** Decoding one
+  failed correctly, but the decompressor's write was never awaited, and its
+  rejection surfaced as an unhandled "invalid block type" beside the message.
 
 - A CSV cell that starts like a spreadsheet formula was wrapped in quotes and
   treated as safe, but a spreadsheet strips the quotes and runs what is inside.

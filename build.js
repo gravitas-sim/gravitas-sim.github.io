@@ -58,6 +58,7 @@ const DOC_PAGES = [
   'validation',
   'teaching',
   'evaluation',
+  'figure',
 ];
 
 /**
@@ -399,6 +400,24 @@ async function buildDocPages() {
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'evaluationKit.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The figure builder. Its own entry for the reason the other document pages
+  // have theirs: it reads the scenario catalog and the share encoder, and a
+  // page only an author opens may not grow anybody's start-up download.
+  if (existsSync('js/figureBuilder.js')) {
+    await esbuild.build({
+      entryPoints: ['js/figureBuilder.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'figure-[hash]',
       legalComments: 'none',
     });
   }
