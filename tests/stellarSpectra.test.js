@@ -486,12 +486,17 @@ describe('the data is loaded only when it is needed', () => {
   });
 
   test('the widget reaches the data through a dynamic import only', () => {
+    // Through its capability package now (the platform gate's prototype): the
+    // widget names the package's data, and the one import of the module is the
+    // literal dynamic one in the built-in registry.
     const text = source('js/stellarSpectraWidgets.js');
-    expect(text).toMatch(
-      /import\(\s*'\.\/data\/spectra\/sdssSpectra\.js'\s*\)/
-    );
-    // No static form of the same specifier anywhere in the file.
+    expect(text).toMatch(/loadBuiltin\('builtin:data\/sdss-spectra'\)/);
     expect(text).not.toMatch(/import\s[^(]*from\s*'\.\/data\/spectra/);
+    const registry = source('js/platform/builtins.js');
+    expect(registry).toMatch(
+      /import\(\s*'\.\.\/data\/spectra\/sdssSpectra\.js'\s*\)/
+    );
+    expect(registry).not.toMatch(/import\s[^(]*from\s*'\.\.\/data\/spectra/);
   });
 
   test('no other module in the application imports the spectra', () => {

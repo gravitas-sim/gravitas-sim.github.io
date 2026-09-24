@@ -1,0 +1,53 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "gravitas.sdss-dr18-spectra",
+  "version": "1.0.0",
+  "kind": "built-in",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "Four observed stellar spectra (SDSS DR18)",
+    "es": "Cuatro espectros estelares observados (SDSS DR18)"
+  },
+  "provides": {
+    "dataPacks": [
+      {
+        "id": "sdss-dr18-stellar-spectra",
+        "entry": "builtin:data/sdss-spectra",
+        "provenance": "js/data/spectra/sdssSpectraProvenance.js"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "js/data/spectra/sdssSpectra.js",
+      "role": "data",
+      "offline": "core"
+    },
+    {
+      "path": "js/data/spectra/sdssSpectraProvenance.js",
+      "role": "provenance",
+      "offline": "core"
+    }
+  ],
+  "citations": [
+    {
+      "text": "SDSS DR18 (Almeida et al. 2023, ApJS 267, 44)",
+      "url": "https://www.sdss.org/dr18/"
+    }
+  ],
+  "licenses": [
+    {
+      "scope": "js/data/spectra/**",
+      "license": "public domain; acknowledge SDSS, see NOTICE"
+    }
+  ],
+  "offline": { "policy": "precache" },
+  "validation": [
+    { "check": "registry:spectra-structure" },
+    { "check": "registry:spectra-provenance" },
+    { "check": "jest:tests/stellarSpectra.test.js" },
+    { "check": "e2e:e2e/stellarSpectra.spec.js" }
+  ],
+  "migrations": []
+}

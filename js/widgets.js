@@ -25,6 +25,8 @@
 
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import { currentTier, prefersReducedMotion } from './quality.js';
+import { loadBuiltin } from './platform/resolver.js';
+import { FAMILIES } from './platform/catalog.generated.js';
 import { ENERGY_WIDGETS } from './energyWidgets.js';
 import { BINARY_WIDGETS } from './binaryWidgets.js';
 import { BLACK_HOLE_WIDGETS } from './blackHoleWidgets.js';
@@ -90,6 +92,12 @@ const WIDGETS = [
 // ids. tests/lazyWidgets.test.js holds the id lists to the modules, and
 // LAZY_CAPABILITIES.md lists the families still to move.
 // -----------------------------------------------------------------------------
+/** A LAZY_FAMILIES entry read from the family's capability package. */
+function fromPackage(familyId, path) {
+  const [entry, pick, ids] = FAMILIES[familyId];
+  return { ids, load: () => loadBuiltin(entry), path, pick: m => m[pick] };
+}
+
 export const LAZY_FAMILIES = Object.freeze({
   transit: {
     ids: ['depth-size', 'geometry', 'spectrum', 'dilution', 'resolve'],
@@ -99,17 +107,9 @@ export const LAZY_FAMILIES = Object.freeze({
     path: './transitWidgets.js',
     pick: m => m.TRANSIT_WIDGETS,
   },
-  powerLaw: {
-    ids: [
-      'power-law-precession',
-      'power-law-refinement',
-      'power-law-kepler',
-      'power-law-conservation',
-    ],
-    load: () => import('./powerLawWidgets.js'),
-    path: './powerLawWidgets.js',
-    pick: m => m.POWER_LAW_WIDGETS,
-  },
+  // Declared by its capability package (capabilities/power-law-instruments.json)
+  // and loaded through the resolver - the platform package gate's prototype.
+  powerLaw: fromPackage('power-law', './powerLawWidgets.js'),
   gw: {
     ids: ['gw-lab', 'gw-real'],
     load: () => import('./gwWidgets.js'),
