@@ -40,6 +40,7 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
+import { loadBuiltin } from './platform/resolver.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
 ensureDeferredMessages().catch(() => {});
@@ -70,7 +71,7 @@ let data = null;
  * fetched. Never rejects: a widget that cannot draw has to be able to say so,
  * and a rejected promise nobody awaited is a console error and a blank canvas.
  */
-export const spectraReady = import('./data/spectra/sdssSpectra.js')
+export const spectraReady = loadBuiltin('builtin:data/sdss-spectra')
   .then(mod => {
     data = mod;
     return true;

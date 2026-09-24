@@ -1,0 +1,81 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "gravitas.lesson.power-law-gravity",
+  "version": "1.0.0",
+  "kind": "built-in",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "What If Gravity Were Not Inverse Square?",
+    "es": "¿Y si la gravedad no fuera inversa del cuadrado?"
+  },
+  "requires": {
+    "gravitas.power-law-instruments": "^1.0.0"
+  },
+  "uses": {
+    "scenarios": ["Solar System"],
+    "widgets": [
+      "power-law-precession",
+      "power-law-refinement",
+      "power-law-kepler",
+      "power-law-conservation"
+    ]
+  },
+  "provides": {
+    "routes": [
+      {
+        "path": "#investigation=power-law-gravity"
+      }
+    ],
+    "investigations": [
+      {
+        "id": "power-law-gravity",
+        "entry": "builtin:investigation/power-law-gravity"
+      }
+    ],
+    "translations": [
+      {
+        "locale": "es",
+        "investigation": "power-law-gravity",
+        "entry": "builtin:investigation/es/power-law-gravity"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "js/data/investigations/power-law-gravity.js",
+      "role": "code",
+      "offline": "core"
+    },
+    {
+      "path": "js/data/investigations/es/power-law-gravity.js",
+      "role": "translation",
+      "offline": "core"
+    }
+  ],
+  "citations": [],
+  "licenses": [
+    {
+      "scope": "js/data/investigations/**",
+      "license": "CC-BY-4.0"
+    }
+  ],
+  "offline": {
+    "policy": "precache"
+  },
+  "authoring": {
+    "checks": ["registry:author"]
+  },
+  "validation": [
+    {
+      "check": "registry:author"
+    },
+    {
+      "check": "jest:tests/investigationIntegrity.test.js"
+    },
+    {
+      "check": "e2e:e2e/centralExperiments.spec.js"
+    }
+  ],
+  "migrations": []
+}

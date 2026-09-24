@@ -38,6 +38,8 @@ import {
   seriesPosition,
   lessonCatalogReady,
 } from './data/investigations/registry.js';
+// Lessons provided by capability packages load through the platform resolver.
+import './platform/lessons.js';
 // Search, filters and the curated orders. Both read the same generated
 // manifest the cards do, so there is one list of lessons and not three.
 import {
