@@ -311,8 +311,16 @@ the release rather than in the tag.
   a factor of 52.4 across the application. It had already been fixed, derived
   from the solar mass and checked on `/validation/`; the note now says so.
 - The contributor instructions told a contributor to run `npm run build`, which
-  needs the instructor passphrase and stops without it. They now name
-  `npm run build:ci`, the same build with a throwaway key and the one CI runs.
+  needs the instructor passphrase and stops without it - including in the
+  command for running the browser suite against the build, in `README.md` and
+  `e2e/README.md`. They now name `npm run build:ci`, the same build with a
+  throwaway key and the one CI runs. The README also said Firefox and WebKit
+  run only on pushes to `main` and weekly; they run on every push to `main` and
+  `v2`, weekly and on a manual run, and never on a pull request.
+- `npm run archive:check` printed only the last few lines of a failing step, so
+  the instructor bundle's list of stale inputs came out as its last three
+  entries and read as the whole list. Every input that moved is now printed;
+  the tail of any other failure is unchanged.
 
 ## [1.0.0] - 2026-09-16
 
