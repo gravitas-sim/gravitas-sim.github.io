@@ -316,6 +316,21 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **The Experiments bench's energy and angular momentum drift were not drifts.**
+  Since the bench shipped in 1.0.0, both were the system's total energy and
+  angular momentum times a hundred, labeled "%". On Binary Planet Lab that was
+  −25001.44 "%" for a real drift of 0.00017%. `sampleFrame()` read the
+  engine's `energy` and `angular` fields as fractions, and those fields are
+  the totals. It now reads the percentages the engine computes, and a baseline
+  too close to zero stays a gap rather than becoming a perfect 0. The
+  reliability check no longer judges a drift as a conclusion, because halving
+  the step is meant to move it. The old rows said "unchanged" only because
+  both runs had recorded the same total. Saved experiments (schema 3) open
+  with the old drift values removed, and say so. They cannot be converted,
+  because the record does not hold the baseline they would be measured from,
+  but the captured start is kept, so recording the runs again measures them.
+  CSV files and manifests exported before this fix carry the wrong figures in
+  their `energy_drift_pct` and `angular_drift_pct` columns and drift results.
 - **The play button speaks the reader's language.** Once the simulation had
   been paused or resumed, its label and tooltip were set to English literals,
   so a Spanish screen reader heard "Play simulation" over a Spanish interface.

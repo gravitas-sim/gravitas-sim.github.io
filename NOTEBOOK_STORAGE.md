@@ -133,7 +133,7 @@ traces it back here.
 
 It carries its own `setBackend`, the same `FAILURE` vocabulary, a multi-key
 layout (`gravitas_experiment_<id>` plus an index) and a `migrate()` at
-`SCHEMA_VERSION: 2`. One production importer, `js/experiments/bench.js`.
+`SCHEMA_VERSION: 3`. One production importer, `js/experiments/bench.js`.
 
 Migrating one store and not the other leaves two patterns in a codebase whose
 comments say, in this exact place, that the answers are "deliberately the same

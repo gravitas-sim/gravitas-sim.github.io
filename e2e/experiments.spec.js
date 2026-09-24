@@ -346,6 +346,69 @@ test.describe('the A/B experiment bench', () => {
     expect(afterDelete).not.toContain(ids.first);
   });
 
+  test('an experiment saved with the old drift opens without it, and says why', async ({
+    page,
+    app,
+  }) => {
+    await app.loadScenario('Binary BH');
+    await app.waitForFrames(5);
+    await openBench(page, app);
+
+    await page.locator('#benchName').fill('Saved before the fix');
+    await page.locator('#benchCapture').click();
+    await page.locator('#benchSave').click();
+
+    // Rewritten in storage as version 2 wrote it: a run whose "drift" is the
+    // total energy times a hundred.
+    await page.evaluate(async () => {
+      const bench = await import('/js/experiments/bench.js');
+      const key = `gravitas_experiment_${bench.activeExperiment().id}`;
+      const record = JSON.parse(localStorage.getItem(key));
+      record.v = 2;
+      record.runs = {
+        A: {
+          samples: [
+            { t: 0, total_energy: -250.0149, energy_drift: -25001.49 },
+            { t: 1, total_energy: -250.0144, energy_drift: -25001.44 },
+          ],
+          recordedAt: 1,
+          results: { energy_drift: { value: -25001.44, kind: 'final' } },
+        },
+      };
+      localStorage.setItem(key, JSON.stringify(record));
+    });
+
+    const saved = page.locator('details.experiment-section', {
+      has: page.locator('#benchSaved'),
+    });
+    await saved.locator('summary').click();
+    await saved
+      .locator('.experiment-saved-open', { hasText: 'Saved before the fix' })
+      .click();
+    await expect(page.locator('#gravitasToast')).toContainText(
+      'Record the runs again to measure the drift'
+    );
+
+    const opened = await page.evaluate(async () => {
+      const bench = await import('/js/experiments/bench.js');
+      const run = bench.activeExperiment().runs.A;
+      return {
+        samples: run.samples,
+        results: run.results,
+        withdrawn: run.driftWithdrawn,
+        metrics: bench.activeExperiment().metrics,
+      };
+    });
+    expect(opened.samples).toEqual([
+      { t: 0, total_energy: -250.0149 },
+      { t: 1, total_energy: -250.0144 },
+    ]);
+    expect(opened.results).toEqual({});
+    expect(opened.withdrawn).toBe(true);
+    // Still selected, so the next recording measures it.
+    expect(opened.metrics).toContain('energy_drift');
+  });
+
   test('a share link reproduces the setup and the A/B difference', async ({
     page,
     app,

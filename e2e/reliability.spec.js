@@ -190,6 +190,11 @@ test.describe('three systems, three answers', () => {
     const moved = report.metrics.filter(m => m.agrees === false);
     expect(moved).toEqual([]);
 
+    // The drifts are in the table but are not conclusions: halving the step
+    // is meant to move them.
+    const drifts = report.metrics.filter(m => m.metric.endsWith('_drift'));
+    expect(drifts.map(m => m.agrees)).toEqual([null, null]);
+
     // And the headline still refuses to call it accurate.
     expect(report.explanation.notes).toContain('reliability.stillNotProof');
     expect(report.explanation.notes).toContain(
@@ -289,6 +294,21 @@ test.describe('what it reports', () => {
     // conservation diagnostic.
     expect(report.outcomeMetric).not.toBe('energy_drift');
     expect(report.outcomeMetric).not.toBe('angular_drift');
+
+    // The drift in the table is the drift in the evidence: one percentage,
+    // sampled through sampleFrame on one side and read from the engine on the
+    // other. Compared as values, not as coarse against fine - both runs once
+    // recorded their total energy times a hundred, and those agreed.
+    const row = report.metrics.find(m => m.metric === 'energy_drift');
+    const { energy } = report.conservation;
+    expect(Math.abs(row.coarse)).toBeCloseTo(energy.coarse, 12);
+    expect(Math.abs(row.fine)).toBeCloseTo(energy.fine, 12);
+    // This orbit loses about a twentieth of a percent at the working step.
+    // The bug recorded 0.77 here - the total is -0.0077 - which looks like a
+    // percentage too, so the identity above is the real guard and this bound
+    // only the second one.
+    expect(Math.abs(row.coarse)).toBeLessThan(0.5);
+    expect(Math.abs(row.fine)).toBeLessThan(0.5);
   });
 
   test('the cost of running it is reported', async ({
