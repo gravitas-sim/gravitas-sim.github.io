@@ -204,6 +204,9 @@ async function refresh() {
   const fragment = await encodePayload(payload);
   lastUrl = shareUrl(fragment);
   lastScenario = payload.s || '';
+  // The figure builder opens on the state the dialog is showing.
+  if (els.figure)
+    els.figure.href = new URL(`figure/#${fragment}`, location.href).href;
   els.url.value = lastUrl;
   // Show the front of the link. Setting .value leaves the caret at the end, so
   // the field opens on a meaningless tail of base64 rather than the domain: // which makes a correct link look like a corrupted one.
@@ -384,6 +387,7 @@ export function initShare() {
     seedRow: document.getElementById('shareSeedRow'),
     reroll: document.getElementById('shareRerollBtn'),
     embed: document.getElementById('shareEmbedBtn'),
+    figure: document.getElementById('shareFigureLink'),
     close: document.getElementById('shareCloseBtn'),
     chip: document.getElementById('shareCloseChip'),
   };

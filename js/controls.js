@@ -201,11 +201,21 @@ function refreshTransport() {
   const paused = state.paused;
   const showPlayIcon = scrubbingNow || paused;
   playBtn.textContent = showPlayIcon ? '▶' : '❚❚';
+  // In the reader's language: these were English literals, so a paused figure
+  // told a Spanish screen reader "Play simulation" over a Spanish interface.
   playBtn.setAttribute(
     'aria-label',
-    showPlayIcon ? 'Play simulation' : 'Pause simulation'
+    t(
+      showPlayIcon
+        ? 'transport.timelinePlay.playLabel'
+        : 'transport.timelinePlay.label'
+    )
   );
-  playBtn.title = showPlayIcon ? 'Play (Space)' : 'Pause (Space)';
+  playBtn.title = t(
+    showPlayIcon
+      ? 'transport.timelinePlay.playHint'
+      : 'transport.timelinePlay.hint'
+  );
 }
 
 // --- Theme dock ---------------------------------------------------------------

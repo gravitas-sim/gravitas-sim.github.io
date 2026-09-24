@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Figure builder | Gravitas</title>
+    <meta
+      name="description"
+      content="Turn a Gravitas simulation into an interactive figure for a course page or an article: choose what it shows and how, preview it, and copy safe iframe markup."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: a form, a preview and two boxes to copy from. */
+      .fb-wrap {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .fb-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 60rem) {
+        .fb-grid {
+          grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+          align-items: start;
+        }
+        .fb-side {
+          position: sticky;
+          top: 1rem;
+        }
+      }
+      .fb-wrap fieldset {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.9rem 1rem 1rem;
+        margin: 0 0 1.25rem;
+      }
+      .fb-wrap legend {
+        font-weight: 600;
+        padding: 0 0.35rem;
+      }
+      .fb-field {
+        display: grid;
+        gap: 0.3rem;
+        margin: 0.7rem 0 0;
+      }
+      .fb-check {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin: 0.7rem 0 0;
+      }
+      .fb-wrap input[type='text'],
+      .fb-wrap input[type='url'],
+      .fb-wrap select,
+      .fb-wrap textarea {
+        width: 100%;
+        box-sizing: border-box;
+        font: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.45rem 0.55rem;
+      }
+      .fb-wrap textarea {
+        min-height: 4.5rem;
+        resize: vertical;
+      }
+      .fb-code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.78rem;
+      }
+      .fb-hint {
+        margin: 0;
+        font-size: 0.85rem;
+        opacity: 0.75;
+      }
+      .fb-status {
+        margin: 0.4rem 0 0;
+        font-size: 0.88rem;
+        min-height: 1.2em;
+      }
+      .fb-status.is-error {
+        color: #ffb4a2;
+      }
+      .fb-or {
+        margin: 0.9rem 0 0;
+        font-size: 0.85rem;
+        opacity: 0.75;
+      }
+      .fb-row {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      }
+      .fb-radios {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin: 0.3rem 0 0;
+      }
+      .fb-preview {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        overflow: hidden;
+        background: #05060d;
+      }
+      .fb-actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+      }
+      .fb-out {
+        margin-top: 1.5rem;
+      }
+      .fb-empty {
+        opacity: 0.7;
+        padding: 2rem 1rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main class="fb-wrap">
+      <div
+        id="langSwitch"
+        class="fb-actions"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="fig.lang.label"
+      ></div>
+      <h1 data-i18n="fig.title">Make an interactive figure</h1>
+      <p data-i18n="fig.intro">
+        Turn a Gravitas simulation into a figure for a course page or an
+        article: choose what it shows and how, check it in the preview, and copy
+        the markup. Nothing you type here is sent anywhere; the figure is the
+        link.
+      </p>
+      <p><a href="/" data-i18n="fig.back">Back to Gravitas</a></p>
+
+      <div class="fb-grid">
+        <form id="figureForm" autocomplete="off" novalidate>
+          <fieldset>
+            <legend data-i18n="fig.what.title">What it shows</legend>
+            <label class="fb-field">
+              <span data-i18n="fig.what.link.label">A Gravitas link</span>
+              <input
+                id="fbLink"
+                type="url"
+                inputmode="url"
+                spellcheck="false"
+                aria-describedby="fbLinkHint fbLinkStatus"
+              />
+            </label>
+            <p id="fbLinkHint" class="fb-hint" data-i18n="fig.what.link.hint">
+              In Gravitas, set the simulation up, open Share and choose “Build a
+              figure”, or copy the link and paste it here.
+            </p>
+            <p class="fb-or" data-i18n="fig.what.or">
+              or start from a scenario
+            </p>
+            <div class="fb-row">
+              <label class="fb-field">
+                <span data-i18n="fig.what.scenario.label">Scenario</span>
+                <select id="fbScenario"></select>
+              </label>
+              <label class="fb-field">
+                <span data-i18n="fig.what.seed.label">Seed</span>
+                <input
+                  id="fbSeed"
+                  type="text"
+                  spellcheck="false"
+                  maxlength="24"
+                  aria-describedby="fbSeedHint"
+                />
+              </label>
+            </div>
+            <p id="fbSeedHint" class="fb-hint" data-i18n="fig.what.seed.hint">
+              The same seed builds the same world every time.
+            </p>
+            <p
+              id="fbLinkStatus"
+              class="fb-status"
+              role="status"
+              aria-live="polite"
+            ></p>
+            <div
+              class="fb-field"
+              role="radiogroup"
+              aria-labelledby="fbStartLabel"
+            >
+              <span id="fbStartLabel" data-i18n="fig.what.start.label"
+                >When the figure opens</span
+              >
+              <div class="fb-radios">
+                <label
+                  ><input type="radio" name="fbStart" value="running" checked />
+                  <span data-i18n="fig.what.start.running">running</span></label
+                >
+                <label
+                  ><input type="radio" name="fbStart" value="paused" />
+                  <span data-i18n="fig.what.start.paused">paused</span></label
+                >
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend data-i18n="fig.look.title">How it looks</legend>
+            <label class="fb-field">
+              <span data-i18n="fig.look.lang.label"
+                >Language of the figure</span
+              >
+              <select id="fbLang"></select>
+            </label>
+            <label class="fb-field">
+              <span data-i18n="fig.look.theme.label">Theme</span>
+              <select id="fbTheme"></select>
+            </label>
+            <label class="fb-field">
+              <span data-i18n="fig.look.aspect.label">Shape</span>
+              <select id="fbAspect">
+                <option value="16:10">16:10</option>
+                <option value="16:9">16:9</option>
+                <option value="4:3">4:3</option>
+                <option value="1:1">1:1</option>
+              </select>
+            </label>
+            <label class="fb-field">
+              <span data-i18n="fig.look.reset.label">Reset returns to</span>
+              <select id="fbReset"></select>
+            </label>
+            <label class="fb-check">
+              <input id="fbControls" type="checkbox" checked />
+              <span data-i18n="fig.look.controls.label"
+                >Show the play controls</span
+              >
+            </label>
+            <label class="fb-check">
+              <input id="fbMotion" type="checkbox" />
+              <span data-i18n="fig.look.motion.label">Reduce motion</span>
+            </label>
+            <label class="fb-check">
+              <input id="fbQuality" type="checkbox" />
+              <span data-i18n="fig.look.quality.label"
+                >Low-cost rendering, for older machines</span
+              >
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend data-i18n="fig.words.title">Words around it</legend>
+            <label class="fb-field">
+              <span data-i18n="fig.words.name.label">Title</span>
+              <input
+                id="fbTitle"
+                type="text"
+                maxlength="160"
+                aria-describedby="fbTitleHint"
+              />
+            </label>
+            <p id="fbTitleHint" class="fb-hint" data-i18n="fig.words.name.hint">
+              What a screen reader announces for the figure.
+            </p>
+            <label class="fb-field">
+              <span data-i18n="fig.words.caption.label">Caption</span>
+              <textarea id="fbCaption" maxlength="600"></textarea>
+            </label>
+            <label class="fb-check">
+              <input id="fbFallback" type="checkbox" checked />
+              <span data-i18n="fig.words.fallback.label"
+                >Add a link to the figure under it</span
+              >
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend data-i18n="fig.page.title">
+              Controlling it from your page
+            </legend>
+            <p class="fb-hint" data-i18n="fig.page.intro">
+              Optional. If your page will send the figure play, pause, reset or
+              load messages, give its origin.
+            </p>
+            <label class="fb-field">
+              <span data-i18n="fig.page.origin.label">Your page’s origin</span>
+              <input
+                id="fbOrigin"
+                type="url"
+                inputmode="url"
+                spellcheck="false"
+                data-i18n-placeholder="fig.page.origin.placeholder"
+                aria-describedby="fbOriginStatus"
+              />
+            </label>
+            <p
+              id="fbOriginStatus"
+              class="fb-status"
+              role="status"
+              aria-live="polite"
+            ></p>
+            <p class="fb-hint">
+              <a
+                href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/EMBEDDING.md"
+                data-i18n="fig.page.docs"
+                >How the messages work</a
+              >
+            </p>
+          </fieldset>
+        </form>
+
+        <div class="fb-side">
+          <h2 data-i18n="fig.preview.title">Preview</h2>
+          <div id="fbPreviewBox" class="fb-preview"></div>
+
+          <section class="fb-out" aria-labelledby="fbOutTitle">
+            <h2 id="fbOutTitle" data-i18n="fig.out.title">Copy it</h2>
+            <label class="fb-field">
+              <span data-i18n="fig.out.markup.label">Markup for your page</span>
+              <textarea
+                id="fbMarkup"
+                class="fb-code"
+                readonly
+                rows="9"
+                spellcheck="false"
+              ></textarea>
+            </label>
+            <div class="fb-actions">
+              <button
+                id="fbCopyMarkup"
+                type="button"
+                class="ui-button"
+                data-i18n="fig.out.copy.markup"
+              >
+                Copy markup
+              </button>
+            </div>
+            <label class="fb-field">
+              <span data-i18n="fig.out.link.label">Plain link</span>
+              <input id="fbUrl" type="text" class="fb-code" readonly />
+            </label>
+            <div class="fb-actions">
+              <button
+                id="fbCopyLink"
+                type="button"
+                class="ui-button"
+                data-i18n="fig.out.copy.link"
+              >
+                Copy link
+              </button>
+              <span
+                id="fbCopyStatus"
+                class="fb-status"
+                role="status"
+                aria-live="polite"
+              ></span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <script type="module" src="/js/figureBuilder.js"></script>
+  </body>
+</html>

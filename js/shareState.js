@@ -114,7 +114,7 @@ async function inflate(bytes) {
     const writer = ds.writable.getWriter();
     // Errors surface on the read side, so a rejection here is the stream
     // already having failed; the read below reports it properly.
-    writer.write(bytes);
+    writer.write(bytes).catch(() => {});
     writer.close().catch(() => {});
     return await drain(ds.readable);
   } catch {

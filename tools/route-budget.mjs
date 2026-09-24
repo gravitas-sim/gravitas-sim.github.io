@@ -79,6 +79,7 @@ export const ROUTES = [
   { id: 'teaching', url: '/teaching/', page: true },
   { id: 'evaluation', url: '/evaluation/', page: true },
   { id: 'instructors', url: '/instructors/', page: true },
+  { id: 'figure', url: '/figure/', page: true },
 ];
 
 const CONFIGS = {

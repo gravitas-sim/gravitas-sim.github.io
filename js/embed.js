@@ -35,7 +35,7 @@ import {
   embedRequested,
   withEmbedParam,
 } from './presentation.js';
-import { fixTheme } from './theme.js';
+import { fixTheme, forgetThemes } from './theme.js';
 import { reduceMotion } from './quality.js';
 
 /**
@@ -51,6 +51,9 @@ export function initEmbedMode() {
   if (!embedRequested()) return false;
   setPresentationMode('embed');
   document.documentElement.classList.add('is-embed');
+  // A gravitas-embed/1 figure remembers nothing, from the first moment: see
+  // embedRequest() for the rest of what it asked for.
+  if (new URLSearchParams(location.search).get('ev')) forgetThemes();
   return true;
 }
 

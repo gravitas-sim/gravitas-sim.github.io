@@ -64,13 +64,21 @@ const STATUS_MS = 400;
 export async function resetFigure({ reset, authored, services }) {
   if (reset === 'authored' && authored) {
     services.applySharePayload(await decodePayload(authored));
-    return;
+  } else {
+    const scenario = authored
+      ? (await decodePayload(authored)).s
+      : services.scenario();
+    services.loadScenarioByKey(scenario);
   }
-  const scenario = authored
-    ? (await decodePayload(authored)).s
-    : services.scenario();
-  services.loadScenarioByKey(scenario);
+  settle(services);
 }
+
+/**
+ * Bring the transport into line with a world just built. Building one sets
+ * whether it is paused - a state may say it opens paused - without telling the
+ * play button, which went on saying "pause" over a paused figure.
+ */
+const settle = services => services.setPlaying(!services.isPaused());
 
 /**
  * Start answering the embedding page.
@@ -128,6 +136,7 @@ export function startEmbedBridge({
           throw new Error('bad-state');
         }
         services.applySharePayload(payload);
+        settle(services);
         return;
       }
     }
