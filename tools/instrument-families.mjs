@@ -60,3 +60,80 @@ export function familiesInScript(url, { config, root }) {
   }
   return maps.get(file);
 }
+
+/**
+ * How many files start-up downloads with the families fetched on demand, and
+ * how many it would with every family imported by the registry as before.
+ *
+ * esbuild puts a module in the chunk shared by exactly the entry points that
+ * reach it, and every family fetched on demand is an entry point. A family
+ * that reaches some of a start-up chunk's modules and not the others splits
+ * that chunk, and start-up downloads one more file on every page - which is
+ * what js/instrumentStartup.js exists to prevent. The two builds here are the
+ * application as build.js bundles it, in memory, with the registry's family
+ * imports left as they are and with each one made a static import; loading
+ * families lazily must cost start-up no file the eager registry did not.
+ *
+ * @returns {Promise<{lazy: number, eager: number}>} Start-up file counts
+ */
+export async function startupFileCounts() {
+  const { build } = await import('esbuild');
+  const { readFile } = await import('node:fs/promises');
+  const root = path.resolve(
+    path.dirname(new URL(import.meta.url).pathname),
+    '..'
+  );
+  const count = async plugins => {
+    const result = await build({
+      absWorkingDir: root,
+      entryPoints: [{ in: 'js/main.js', out: 'app' }],
+      bundle: true,
+      format: 'esm',
+      target: ['es2022'],
+      keepNames: true,
+      splitting: true,
+      chunkNames: 'chunk-[hash]',
+      outdir: path.join(root, 'dist', 'js'),
+      metafile: true,
+      write: false,
+      logLevel: 'silent',
+      plugins,
+    });
+    const outputs = result.metafile.outputs;
+    const entry = Object.keys(outputs).find(f => f.endsWith('/app.js'));
+    const eager = new Set();
+    const walk = f => {
+      if (eager.has(f) || !outputs[f]) return;
+      eager.add(f);
+      for (const i of outputs[f].imports || []) {
+        if (i.kind === 'import-statement') walk(i.path);
+      }
+    };
+    walk(entry);
+    return [...eager].filter(f => f.endsWith('.js')).length;
+  };
+  const allEager = {
+    name: 'families-eager',
+    setup(b) {
+      b.onLoad({ filter: /[\\/]js[\\/]widgets\.js$/ }, async args => {
+        // Each import('./xWidgets.js') becomes the namespace of a static
+        // import. Adding the static import alone is not enough: a module that
+        // is also import()ed is still an entry point of its own, and the two
+        // builds would split start-up the same way.
+        const specs = [];
+        const source = (await readFile(args.path, 'utf8')).replace(
+          /import\(\s*'(\.\/[A-Za-z]+Widgets\.js)'\s*\)/g,
+          (_, spec) => {
+            specs.push(spec);
+            return `Promise.resolve(family${specs.length - 1})`;
+          }
+        );
+        const statics = specs.map(
+          (spec, i) => `import * as family${i} from '${spec}';`
+        );
+        return { contents: `${statics.join('\n')}\n${source}`, loader: 'js' };
+      });
+    },
+  };
+  return { lazy: await count([]), eager: await count([allEager]) };
+}
