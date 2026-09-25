@@ -1,0 +1,247 @@
+// =============================================================================
+// /observatory/ in English
+// -----------------------------------------------------------------------------
+// The observation workspace's own catalog, read only by js/observatory/i18n.js.
+// Messages the workspace's modules write - a reason a change cannot be made,
+// a problem with an imported file - are in English in those modules and are
+// shown marked as English; everything the page itself says is here.
+// =============================================================================
+
+export const EN_OBSERVATORY = {
+  'obs.doc.title': 'Observatory | Gravitas',
+  'obs.main.label': 'Observatory',
+  'obs.lang.label': 'Language',
+  'obs.title': 'Observatory',
+  'obs.intro':
+    'Real observations, and your own files, as a plot, a table and an image at once. Select in one and it is selected in all of them; mask, annotate, fold, bin and convert; undo any of it; and save exactly what you did.',
+  'obs.back': 'Back to Gravitas',
+
+  'obs.open.title': 'Open an observation',
+  'obs.open.fixture': 'A real observation',
+  'obs.open.button': 'Open',
+  'obs.opening': 'Opening…',
+  'obs.opened': 'Opened {title}.',
+  'obs.openFailed': 'It could not be opened: {why}',
+  'obs.kind.time-series': 'Time series',
+  'obs.kind.spectrum': 'Spectra',
+  'obs.kind.table': 'Catalog',
+  'obs.kind.image': 'Image',
+  'obs.fixture.tess-light-curve': 'HD 209458: TESS light curve, sector 56',
+  'obs.fixture.sdss-a': 'SDSS DR18: an A star',
+  'obs.fixture.sdss-g': 'SDSS DR18: a G star',
+  'obs.fixture.sdss-k': 'SDSS DR18: a K star',
+  'obs.fixture.sdss-m': 'SDSS DR18: an M star',
+  'obs.fixture.gwosc-events': 'Five gravitational-wave events (GWOSC)',
+  'obs.fixture.tess-aperture': 'HD 209458: the TESS aperture mask',
+
+  'obs.import.file': 'Or import your own file',
+  'obs.import.hint':
+    'CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and 200,000 rows. It stays on this device.',
+  'obs.import.title': 'Check what you are importing',
+  'obs.import.summary':
+    '{rows} rows and {columns} columns, {delimiter}, {header}.',
+  'obs.import.delimiter.comma': 'separated by commas',
+  'obs.import.delimiter.tab': 'separated by tabs',
+  'obs.import.delimiter.semicolon': 'separated by semicolons',
+  'obs.import.delimiter.json': 'read as JSON',
+  'obs.import.withHeader': 'with a header row',
+  'obs.import.noHeader': 'with no header row, so the columns are numbered',
+  'obs.import.previewCaption': 'The first {n} rows, as the file has them',
+  'obs.import.kind': 'What kind of data this is',
+  'obs.import.chooseKind': 'Choose…',
+  'obs.import.choose': 'Choose…',
+  'obs.import.titleLabel': 'Title',
+  'obs.import.decimalComma': 'Numbers use a decimal comma',
+  'obs.import.timeTitle': 'The time axis',
+  'obs.import.timeFormat': 'How it counts',
+  'obs.import.timeScale': 'Time scale',
+  'obs.import.spectralTitle': 'The spectral axis',
+  'obs.import.medium': 'Wavelengths measured in',
+  'obs.import.frame': 'Frame',
+  'obs.import.framePlaceholder': 'observed',
+  'obs.import.columnsTitle': 'Columns',
+  'obs.import.unitRule':
+    'Every column of numbers needs a unit. Nothing is assumed: choose one, choose "no unit" for a ratio, or say it is not stated.',
+  'obs.import.stats':
+    '{numbers} numbers from {min} to {max}; {missing} missing, written as {tokens}.',
+  'obs.import.statsText': 'Text: {numbers} of {n} values are numbers.',
+  'obs.import.blank': 'blank',
+  'obs.import.use': 'What “{column}” is',
+  'obs.import.unit': 'The unit of “{column}”',
+  'obs.import.of': 'The uncertainty of',
+  'obs.import.chooseUnit': 'Choose a unit…',
+  'obs.import.useSuggestion': 'Use {unit}, from the header',
+  'obs.import.suggestionUsed':
+    'The unit of {column} is now the one its header names. Check it.',
+  'obs.import.go': 'Import',
+  'obs.import.cancel': 'Cancel',
+  'obs.import.notYet': 'Not imported yet: {n} things to settle, listed above.',
+  'obs.import.readBackDiffers':
+    'A file this page saved. Its {n} changes, made again here, do not give the observation it holds: the numbers shown are this build’s.',
+  'obs.import.onLine': 'Line {line}: {message}',
+  'obs.import.readBack':
+    'A file this page saved, read back whole: its {n} changes made again, and undoable.',
+  'obs.use.ignore': 'Leave out',
+  'obs.use.x': 'Along the axis',
+  'obs.use.value': 'A value',
+  'obs.use.uncertainty': 'An uncertainty (one sigma)',
+  'obs.use.label': 'Text',
+  'obs.timeFormat.JD': 'Julian date (JD)',
+  'obs.timeFormat.MJD': 'Modified Julian date (MJD)',
+  'obs.timeFormat.BJD': 'Barycentric Julian date (BJD)',
+  'obs.timeFormat.BTJD': 'TESS barycentric date (BTJD = BJD − 2457000)',
+  'obs.timeFormat.relative': 'Time since the first row',
+  'obs.scale.unknown': 'Unknown',
+  'obs.medium.vacuum': 'vacuum',
+  'obs.medium.air': 'air',
+  'obs.medium.unknown': 'unknown',
+  'obs.frame.rest': 'the rest frame',
+  'obs.unit.none': 'No unit (a ratio)',
+  'obs.unit.notStated': 'unit not stated',
+  'obs.dim.ratio': 'Ratios',
+  'obs.dim.time': 'Time',
+  'obs.dim.length': 'Length and wavelength',
+  'obs.dim.frequency': 'Frequency',
+  'obs.dim.flux-per-wavelength': 'Flux per wavelength',
+  'obs.dim.flux-per-frequency': 'Flux per frequency',
+  'obs.dim.magnitude': 'Magnitude',
+  'obs.dim.mass': 'Mass',
+  'obs.dim.angle': 'Angle',
+  'obs.dim.velocity': 'Velocity',
+  'obs.dim.temperature': 'Temperature',
+  'obs.dim.count-rate': 'Count rate',
+  'obs.dim.count': 'Counts',
+  'obs.dim.pixel': 'Pixels',
+
+  'obs.source.origin': 'What it is',
+  'obs.source.credit': 'Credit',
+  'obs.source.object': 'Object',
+  'obs.source.position': 'RA {ra}°, Dec {dec}° ({frame})',
+  'obs.source.facility': 'Observed with',
+  'obs.source.license': 'License',
+  'obs.source.retrieved': 'Retrieved',
+  'obs.source.citations': 'Cite',
+  'obs.source.file': 'File',
+  'obs.source.fileValue': '{name}, {kb} KB',
+  'obs.origin.observed': 'An observation',
+  'obs.origin.model': 'A model',
+  'obs.origin.compilation': 'Published values, compiled',
+  'obs.origin.imported': 'Your file',
+
+  'obs.seeing.title': 'What you are seeing',
+  'obs.seeing.imported':
+    'This is your file. Gravitas has not checked where its numbers came from.',
+  'obs.seeing.drawnAll': 'Every one of the {n} rows with numbers is drawn.',
+  'obs.seeing.drawnSome':
+    '{drawn} of {n} points are drawn: the lowest and highest in each pixel column, which keeps every peak and dip. The table and both saves hold all {n}.',
+  'obs.seeing.notPlotted':
+    '{n} rows have a missing value on one of the two axes and are not drawn.',
+  'obs.seeing.masked':
+    '{n} rows are masked: drawn hollow, left out of what is computed, kept in the saves.',
+  'obs.seeing.missing': '{column}: {n} values missing.',
+  'obs.seeing.sigma':
+    '{column}: the bars are one standard deviation, from the data.',
+  'obs.seeing.interval':
+    '{column}: the bars are the {level}% interval, from the data.',
+  'obs.seeing.noUncertainty':
+    '{column}: no uncertainty is recorded for these values, so there are no bars. That is not a claim that they are exact.',
+  'obs.seeing.time': 'Time counts as {format}, on the {scale} time scale.',
+  'obs.seeing.timeUnknown':
+    'Time counts as {format}; the time scale is unknown.',
+  'obs.seeing.spectral': 'Wavelengths in {medium}, in {frame}.',
+
+  'obs.note.crop':
+    'Cropped by {column}, from {min} to {max}: {kept} of {of} rows kept. Notes outside the range: {droppedAnnotations} removed.',
+  'obs.note.mask':
+    'You masked {rows} rows. Masked rows are drawn hollow, left out of what is computed, and kept in every save.',
+  'obs.note.normalize':
+    'Divided {column}, and its uncertainty, by the median, {median} {unit}: the values are now relative.',
+  'obs.note.fold':
+    'Folded on a period of {period} {unit} from an epoch of {epoch}: the axis is now phase, from −0.5 to 0.5.',
+  'obs.note.bin':
+    'Averaged {rows} rows into {bins} bins, {width} {unit} wide. Each bin’s uncertainty is its points’ combined; {masked} masked rows were left out.',
+  'obs.note.binScatter':
+    'Averaged {rows} rows into {bins} bins, {width} {unit} wide. The rows have no uncertainty, so each bin’s is the standard error of its points’ scatter, and a bin of one point has none.',
+  'obs.note.restFrame':
+    'Shifted to the rest frame by z = {z}: every wavelength divided by 1 + z.',
+
+  'obs.axes.x': 'Across',
+  'obs.axes.y': 'Up',
+  'obs.keys':
+    'Drag across the plot or the image, or click the table, to select. With the keyboard: the arrow keys move, Shift with an arrow selects, Space adds or removes one, Escape clears. Ctrl+Z undoes a change.',
+  'obs.plot.role': 'plot',
+  'obs.plot.label': '{y} against {x}, {n} points',
+  'obs.image.role': 'pixel grid',
+  'obs.image.label':
+    'The image, {w} by {h} pixels, the lowest row at the bottom',
+  'obs.legend.entry': '{value}, {n} pixels: {meanings}',
+  'obs.legend.source': 'What the bits mean: {source}',
+  'obs.describe.row': 'Row {row} of {n}{masked}: {values}.',
+  'obs.describe.masked': ', masked',
+  'obs.describe.pixel':
+    'Column {x}, row {y}{masked}: {value}, {meaning}. Right ascension {ra}°, declination {dec}°.',
+
+  'obs.selection.count': '{n} selected',
+  'obs.selection.clear': 'Clear selection',
+  'obs.selectionCleared':
+    'The rows are numbered differently now, so the selection was cleared.',
+  'obs.mask.label': 'Why these are left out (optional)',
+  'obs.mask.go': 'Mask the selection',
+  'obs.mask.reader': 'You masked {n} rows: {label}',
+  'obs.mask.source': '{n} rows came masked: {label}',
+  'obs.mask.unlabelled': 'no reason given',
+  'obs.mask.remove': 'Unmask',
+  'obs.note.label': 'A note on the selection',
+  'obs.note.go': 'Add the note',
+  'obs.note.show': 'Rows {first} to {last}',
+  'obs.note.remove': 'Remove',
+  'obs.marks.title': 'Masks and notes',
+  'obs.undo': 'Undo',
+  'obs.redo': 'Redo',
+  'obs.undid': 'Undid: {change}.',
+  'obs.redid': 'Redid: {change}.',
+  'obs.applied': 'Done: {change}.',
+  'obs.refused': 'That change cannot be made: {why}.',
+  'obs.replayFailed':
+    'A saved change could not be made to this observation ({why}), so it was left off.',
+  'obs.op.crop': 'crop',
+  'obs.op.mask': 'mask',
+  'obs.op.unmask': 'unmask',
+  'obs.op.convert': 'unit change',
+  'obs.op.timeFormat': 'time format change',
+  'obs.op.normalize': 'division by the median',
+  'obs.op.fold': 'fold',
+  'obs.op.bin': 'binning',
+  'obs.op.restFrame': 'shift to the rest frame',
+  'obs.op.annotate': 'note',
+  'obs.op.unannotate': 'note removed',
+
+  'obs.changes.title': 'Change what you are looking at',
+  'obs.changes.hint':
+    'Every change can be undone, and the saved file lists them all.',
+  'obs.crop.min': 'Keep from',
+  'obs.crop.max': 'to',
+  'obs.crop.go': 'Crop',
+  'obs.normalize.go': 'Divide by the median',
+  'obs.fold.period': 'Period',
+  'obs.fold.epoch': 'Epoch (a time of mid-transit)',
+  'obs.fold.go': 'Fold',
+  'obs.bin.width': 'Bin width',
+  'obs.bin.go': 'Bin',
+  'obs.rest.z': 'Redshift z',
+  'obs.rest.go': 'Shift to the rest frame',
+  'obs.convert.column': 'Convert',
+  'obs.convert.to': 'to',
+  'obs.convert.go': 'Convert',
+  'obs.time.to': 'Count time as',
+  'obs.time.go': 'Change',
+
+  'obs.table.rows': 'Rows {first} to {last} of {n}.',
+  'obs.table.row': 'Row',
+  'obs.table.masked': '(masked)',
+  'obs.table.missing': 'missing',
+  'obs.table.prev': 'Previous rows',
+  'obs.table.next': 'Next rows',
+  'obs.export.json': 'Save as JSON (everything, with your changes)',
+  'obs.export.csv': 'Save the rows as CSV',
+};

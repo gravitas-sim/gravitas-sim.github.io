@@ -38,7 +38,7 @@ import { BUILTINS } from '../../js/platform/builtins.js';
 import { parseRange, satisfies } from '../../js/platform/semver.js';
 import {
   agreesWithPackage,
-  runtimeMeta,
+  runtimeDisagreement,
   validateDataPack,
 } from '../../tools/data-packs/schema.mjs';
 import { foldedDepth } from '../../tools/data-packs/tess-light-curve.mjs';
@@ -416,11 +416,16 @@ async function validateDataPackExtension(ext, m, report, ids) {
     );
   }
   const series = parseJson(ext, entry.file, report);
-  if (
-    series &&
-    JSON.stringify(series.PACK) !== JSON.stringify(runtimeMeta(pack))
-  ) {
-    report.error(entry.file, 'PACK', `is not the runtime fields of ${P}`);
+  if (series) {
+    const { errors, warnings } = runtimeDisagreement(series.PACK, pack);
+    if (errors.length) {
+      report.error(
+        entry.file,
+        'PACK',
+        `is not the runtime fields of ${P}: ${errors.join('; ')}`
+      );
+    }
+    for (const w of warnings) report.warn(entry.file, 'PACK', w);
   }
   // The transformation script is code, so it is never an asset of a
   // declarative extension; it belongs to the pull request, not the archive.

@@ -42,13 +42,13 @@ this build doesn't know is refused, not guessed at.
 | Series | 1,882 twenty-minute bins in 5 runs (3 bins with fewer than 3 cadences dropped); flux as int16 ppm, error in 5 ppm steps |
 | Time | BTJD (BJD − 2457000), TDB |
 | Check | folding on 3.52474859 d (Knutson et al. 2007) gives a central depth of 0.01592, against (Rp/Rs)² = 0.0146 (Torres et al. 2008), within the 0.003 limb darkening allows |
-| Module | 10,535 bytes as committed; 9.1 KB minified |
+| Module | 10,710 bytes as committed (it carries its `reductions` since SDK 1.1.0); 9.1 KB minified |
 | Rights | public domain (NASA mission data); acknowledge TESS and MAST and cite doi:10.17909/t9-nmc8-f686. See NOTICE |
 | Offline | `optional`: precached at install, and a failed fetch does not fail the install |
-| Used by | nothing yet |
+| Used by | the observatory (`/observatory/`), as its time series |
 
-No lesson uses the pack yet. It is the foundation the observation workspace
-(Prompt 15) and the Exoplanet Observatory (Prompt 24) build on. It reaches the
+No lesson uses the pack yet; the observatory opens it (OBSERVATORY_WORKSPACE_DESIGN.md).
+It is the foundation the Exoplanet Observatory (Prompt 24) builds on. It reaches the
 page only through `builtin:data/tess-hd209458-s56`, so opening a lesson or the
 front door never downloads it; a test holds that. The bins are 20 minutes, as
 the gate recommended:
@@ -71,6 +71,40 @@ and pays for the bytes when it does.
 
 The next pack will find 12.3 KB of deferred room. That is roughly one more
 pack of this size, not two.
+
+## The TESS HD 209458 aperture pack
+
+The same light curve file's third extension: the 11 × 13 pixels read out
+around the star, and which of them the light curve summed. It is the
+observatory's image, and the answer to where the light in the light curve came
+from.
+
+| | |
+|---|---|
+| Pack | `tess-hd209458-s56-aperture`, version 1.0.0, `dataType: image` |
+| Raw product | the light-curve pack's file, the same pin |
+| Pixels | 143, as the archive has them: 85 edge (value 257), 35 background (261), 23 optimal aperture (267) |
+| Bits | TESS Science Data Products Description Document (NASA/TM-2018-220036), table 15: 1 collected, 2 optimal aperture, 4 background, 8 flux-weighted centroid, 16 PRF centroid, 32 to 256 CCD outputs A to D |
+| World coordinates | the extension's TAN projection (CRPIX, CRVAL, CDELT, PC), 19.4 arcseconds a pixel |
+| Encoding | `image-uint16/1`: little-endian 16-bit pixels, row by row from the lowest (the FITS order); `js/observation.js` decodes it |
+| Check | the optimal aperture holds the 23 pixels the header's `NPIXSAP` counts; all 143 were collected; the flux-weighted-centroid pixels, projected through the WCS, centre 7.13 arcseconds from the target, against a pixel of about 19 |
+| Module | 4,131 bytes as committed |
+| Rights, offline | as the light-curve pack; a second pack in the same capability package (`gravitas.tess-hd209458-s56` 1.1.0) |
+
+The file carries no description of its own bits, so the meanings are the data
+products document's, recorded with their table number in the manifest and the
+runtime copy (`image.bitsSource`). Two of the meanings are also checked
+against the file itself: every pixel has bit 1, as `NPIXMISS = 0` says, and
+bit 2 is on exactly the `NPIXSAP` pixels.
+
+### Budget, with the aperture pack
+
+- **Start-up** is unchanged: 818.3 of 830 KB.
+- **Deferred** grows by 2.7 KB, 4169.1 to 4171.8 of 4180 KB, with no ceiling
+  raised: the aperture module is a lazy chunk the builtin registry names, and
+  the light-curve module carries its reductions (175 bytes). No page loads
+  either until it is asked for.
+- The next pack will find 8.2 KB of deferred room.
 
 ## Commands
 
@@ -126,6 +160,14 @@ The rules are in `tools/data-packs/schema.mjs`; the tests are
   different version from the tool's.
 - **Time series state their time system:** scale, reference and unit.
   **Coordinates state their frame.**
+- **An image states its shape** (`image.width`, `image.height`), and an image
+  of bit fields says what each bit means and where that is documented
+  (`image.bits`, `image.bitsSource`).
+- **The runtime copy is the manifest's runtime fields.** `reductions` and
+  `image` are optional runtime fields since SDK 1.1.0: a copy that carries one
+  must match the manifest, and one that leaves out `reductions` is warned
+  about, not refused (sdk/README.md, the deprecation policy). An image must
+  carry `image`.
 - **Derived files live under `js/data/`**, so the service worker, the
   architecture check and the budgets all see them.
 - **Encodings refuse what they can't hold.** A flux outside int16 ppm, or an
@@ -178,8 +220,8 @@ exactly what each dataset still lacks.
 
 | What | Why |
 |---|---|
-| FITS in the browser | The reader (`tools/data-packs/fits.mjs`) is a developer tool. A browser reader would need to refuse every form it doesn't read, and to be tested on files it hasn't seen. Prompt 15 may add it, for light curves only. |
-| FITS images, tile compression, variable-length arrays, ASCII tables, repeated columns | The reader lists these in `unread` and refuses a request for one. It reads headers and the scalar binary-table columns of types L, B, I, J, K, E and D, with `TSCAL`/`TZERO` applied. |
+| FITS in the browser | The reader (`tools/data-packs/fits.mjs`) is a developer tool, and the observatory does not import FITS (OBSERVATORY_WORKSPACE_DESIGN.md says why). A browser reader would need to refuse every form it doesn't read, and to be tested on files it hasn't seen. |
+| FITS images of more than two axes, tile compression, variable-length arrays, ASCII tables, repeated columns | The reader lists these in `unread` and refuses a request for one. It reads headers, the scalar binary-table columns of types L, B, I, J, K, E and D with `TSCAL`/`TZERO` applied, and two-dimensional images of every BITPIX with `BSCALE`/`BZERO` applied. |
 | A radial-velocity pack | The gate gave the HARPS HD 75289 series a B. It still needs ESO programme IDs in its credit and a confirmed time scale. It is not the TESS star, so it can't pair with this pack. It waits for a lesson that needs it. |
-| Student files | CSV/JSON import into the same observation shape is Prompt 15's. The gate's prototype is on `spike/observation-data-packs`. |
+| Student files as packs | A reader's CSV or JSON opens in the observatory, through a preview and a mapping in which every unit is chosen, as `origin: imported`. It is not a pack, and nothing turns one into one. |
 | Live archive queries | No lesson depends on an archive being up. Raw products are fetched only by `npm run packs:data`. |

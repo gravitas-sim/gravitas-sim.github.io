@@ -110,6 +110,12 @@ const TREES = [
 /** Individually named files. */
 const FILES = [
   { path: 'index.html', core: true },
+  // The one document page that is meant to work offline: the observatory
+  // opens observations the reader has already been given, and its modules are
+  // all under js/, precached with the rest. Optional, so a page that fails to
+  // fetch costs this page offline and nothing else. sw.js serves it for its
+  // directory URL.
+  { path: 'observatory/index.html', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },

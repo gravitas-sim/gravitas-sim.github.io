@@ -80,6 +80,10 @@ export const PACK = {
       dropped: 3,
     },
   ],
+  reductions: [
+    '20-minute bins average 10 two-minute cadences each, which rounds ingress and egress to a bin.',
+    'Flux is kept to 1 ppm and its error to 5 ppm.',
+  ],
 };
 
 /** The series, encoded as SERIES.encoding says; see js/observation.js. */

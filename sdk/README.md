@@ -241,7 +241,7 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.0.0` |
+| `SDK_VERSION` | this SDK, `1.1.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with its version |
 | `EXTENSION_TYPES`, `LOCALES` | the three types and their kinds; the interface languages (`en`, `es`) |
@@ -280,6 +280,19 @@ anything else.
 | SDK | Platform API | capability-package | observation-data-pack | course-pack | extension-archive |
 |---|---|---|---|---|---|
 | 1.0.0 | 1.0.0 | 1 (with `provides.courses`) | 1 | 1 | 1 |
+| 1.1.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with `image` packs and the optional runtime fields `reductions` and `image` | 1 | 1 |
+
+SDK 1.1.0 adds, and removes nothing:
+
+- **Image packs.** `dataType: "image"`, with an `image` block: width, height,
+  a TAN world coordinate system and, for an image of bit fields, what each bit
+  means and where that is documented. The first is the TESS light curve's
+  aperture mask (`data-packs/tess-hd209458-s56-aperture.json`).
+- **Two optional runtime fields.** A runtime copy may carry the manifest's
+  `reductions`, so an interface can say what was reduced before the data
+  arrived, and an image's `image` block, which an image must. A copy written
+  for 1.0.0, without `reductions`, still validates: `validate` warns that an
+  interface cannot show them.
 
 **Deprecation policy**
 

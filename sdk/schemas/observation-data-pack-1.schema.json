@@ -82,7 +82,8 @@
         "strain",
         "model-grid",
         "system-parameters",
-        "rotation-curve"
+        "rotation-curve",
+        "image"
       ]
     },
     "origin": {
@@ -231,6 +232,49 @@
           "type": "string"
         },
         "unit": {
+          "type": "string"
+        }
+      }
+    },
+    "image": {
+      "description": "For dataType image: its shape in pixels, its world coordinates (a FITS TAN projection) and, for an image of bit fields, what each bit means and where that meaning is documented.",
+      "type": "object",
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "wcs": {
+          "type": "object"
+        },
+        "bits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "value",
+              "meaning"
+            ],
+            "properties": {
+              "value": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "meaning": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "bitsSource": {
           "type": "string"
         }
       }

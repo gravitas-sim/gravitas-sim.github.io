@@ -36,6 +36,40 @@ the release rather than in the tag.
     `courses`.
   - **Not yet:** Gravitas does not install extensions at run time. The guide
     lists what still stands in an outside author's way.
+- **An observatory, `/observatory/`: real observations and a reader's own
+  files, as a plot, a table and an image at once** (OBSERVATORY_WORKSPACE_DESIGN.md).
+  - **What it opens:** four kinds, each an authentic dataset Gravitas already
+    ships. They are HD 209458's TESS light curve (a time series); four SDSS
+    DR18 stellar spectra; five GWOSC events' catalog values with their 90%
+    intervals (a table); and the same TESS light curve's aperture mask (an
+    image), a new data pack. It also opens a reader's CSV or JSON, through a
+    preview and a mapping in which every unit is chosen and none is guessed.
+  - **One shape for all of them,** `gravitas.observation/1`: units from a
+    registry that converts only within a dimension, one-sigma and interval
+    uncertainties, missing values kept as missing, masks, bit-field flags,
+    time formats and scales, spectral media and frames, and the source's
+    provenance.
+  - **Linked views:** a selection made by dragging or with the keyboard in the
+    plot, the image or the table is the selection in all three, and the
+    focused row or pixel is described in words. The table is an accessible
+    grid of every row, a page at a time.
+  - **Changes, all undoable:** crop, mask, note, convert a unit, change a time
+    format, divide by the median, fold, bin, and shift a spectrum to its rest
+    frame. Each is refused, with the reason, where it cannot apply.
+  - **Honest about what it shows:** "What you are seeing" lists what was done
+    to the data before it arrived, every change made here, how many points
+    the plot drew of how many, masked and missing rows, and whether there is
+    an uncertainty at all.
+  - **Saves:** JSON that reads back as the whole session (the observation as
+    opened, and the changes made again), the same bytes every time; and CSV
+    with units in the header and text disarmed.
+  - Works offline once Gravitas has been opened, in English and Spanish, and
+    within budgets for a desktop and a throttled phone (`npm run
+    bench:observatory`).
+- **An image data pack** (`tess-hd209458-s56-aperture`), and the FITS tool
+  reads two-dimensional images. Image packs are a new `dataType`, and SDK
+  1.1.0 adds two optional runtime fields (`reductions`, `image`) without
+  refusing a pack written for 1.0.0.
 - **An experiment runner, `/experiments/`.** It is the bench's parameter
   sweep, stated completely enough to run in the background and to run again.
   - **What it runs:** a `gravitas.experiment/1` manifest (EXPERIMENTS.md).

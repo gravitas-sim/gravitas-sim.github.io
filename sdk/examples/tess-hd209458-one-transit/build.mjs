@@ -114,6 +114,12 @@ export async function build() {
         dropped: o.x.values.length - count,
       },
     ],
+    // Carried in the runtime copy too, so an interface can say what was
+    // reduced (SDK 1.1.0; optional, and warned about when left out).
+    reductions: [
+      ...record.reductions,
+      'One transit of the seven in the sector.',
+    ],
   };
   const series = `${JSON.stringify({ PACK: meta, SERIES }, null, 2)}\n`;
   const pack = {
@@ -145,10 +151,6 @@ export async function build() {
       ],
     },
     assumptions: record.assumptions,
-    reductions: [
-      ...record.reductions,
-      'One transit of the seven in the sector.',
-    ],
     validation: {
       check:
         'folding on the published period finds a transit of the published depth, within 0.003',

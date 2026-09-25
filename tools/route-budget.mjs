@@ -83,6 +83,7 @@ export const ROUTES = [
   // The experiment runner prices an experiment as it opens, by building one
   // trial in a Worker, so its route carries the engine the Worker loads.
   { id: 'experiments', url: '/experiments/', page: true },
+  { id: 'observatory', url: '/observatory/', page: true },
 ];
 
 const CONFIGS = {

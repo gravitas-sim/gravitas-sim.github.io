@@ -9,7 +9,7 @@ export const PACKAGES = {
   ],
   'gravitas.power-law-instruments': ['1.0.0', '^1.0.0', {}],
   'gravitas.sdss-dr18-spectra': ['1.0.0', '^1.0.0', {}],
-  'gravitas.tess-hd209458-s56': ['1.0.0', '^1.0.0', {}],
+  'gravitas.tess-hd209458-s56': ['1.1.0', '^1.0.0', {}],
 };
 export const FAMILIES = {
   'power-law': [
@@ -33,6 +33,7 @@ export const LESSONS = {
 export const DATA = {
   'sdss-dr18-stellar-spectra': 'builtin:data/sdss-spectra',
   'tess-hd209458-s56-lc': 'builtin:data/tess-hd209458-s56',
+  'tess-hd209458-s56-aperture': 'builtin:data/tess-hd209458-s56-aperture',
 };
 export const MIGRATIONS = {};
 export const OWNERS = {
@@ -44,4 +45,5 @@ export const OWNERS = {
   'widgets:power-law-conservation': 'gravitas.power-law-instruments',
   'dataPacks:sdss-dr18-stellar-spectra': 'gravitas.sdss-dr18-spectra',
   'dataPacks:tess-hd209458-s56-lc': 'gravitas.tess-hd209458-s56',
+  'dataPacks:tess-hd209458-s56-aperture': 'gravitas.tess-hd209458-s56',
 };
