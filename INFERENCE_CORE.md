@@ -418,26 +418,66 @@ slowest fit rate, and it sets the "most" figure. The low-end device is
 modeled as a quarter of this machine, as the experiments are, because
 Chromium will not slow a Worker down.
 
+### In the browser's Workers
+
+`npm run bench:inference`: the same cases through the realm the page uses
+(`js/inference/inferenceWorker.js`), the way `js/inference/run.js` runs
+them. One disposable Worker does the fit, then one per profile, five at once
+for the desktop and two for the low-end. It ran in Chromium 151 on the same
+machine, in a quiet hour, at a load average of 7 to 13 over 12 threads.
+
+The low-end rows are this machine's two realms, with times multiplied by
+four. **Priced** is `estimate()` with the profiles as shipped below, which
+were set from this run and the CPU-time run together.
+
+| Case | Profile | Set-up | Fit | Priced fit | All profiles | Priced profiles | Share | Longest frame gap |
+|---|---|---|---|---|---|---|---|---|
+| hd209458 | desktop | 22 ms | 0.58 s | 0.97 s | 6.1 s | 14.2 s | 0.74 | 18 ms |
+| hd209458 | low-end (modeled) | 62 ms | 2.35 s | 3.89 s | 41.8 s | 66.7 s | 0.99 | 18 ms |
+| shallow | desktop | 14 ms | 1.00 s | 0.97 s | 8.6 s | 14.2 s | 0.74 | 25 ms |
+| shallow | low-end (modeled) | 36 ms | 3.76 s | 3.89 s | 70.0 s | 66.7 s | 1.01 | 26 ms |
+| grazing | desktop | 12 ms | 7.55 s | 0.97 s | 9.5 s | 14.2 s | 0.75 | 18 ms |
+| grazing | low-end (modeled) | 94 ms | 35.27 s | 3.89 s | 55.5 s | 66.7 s | 1.01 | 18 ms |
+| noisy | desktop | 18 ms | 1.33 s | 0.97 s | 7.6 s | 14.2 s | 0.73 | 18 ms |
+| noisy | low-end (modeled) | 40 ms | 5.21 s | 3.89 s | 53.4 s | 66.7 s | 0.98 | 18 ms |
+| long | desktop | 11 ms | 0.87 s | 2.60 s | 2.5 s | 14.2 s | 0.69 | 18 ms |
+| long | low-end (modeled) | 52 ms | 3.46 s | 10.42 s | 17.9 s | 66.7 s | 1.00 | 18 ms |
+| rv-circular | desktop | 11 ms | 0.21 s | 0.23 s | 0.2 s | 0.2 s | 0.67 | 18 ms |
+| rv-circular | low-end (modeled) | 72 ms | 0.81 s | 0.94 s | 1.0 s | 0.8 s | 1.08 | 18 ms |
+| rv-eccentric | desktop | 10 ms | 0.12 s | 0.23 s | 0.1 s | 0.2 s | 0.54 | 18 ms |
+| rv-eccentric | low-end (modeled) | 67 ms | 0.48 s | 0.94 s | 0.6 s | 0.8 s | 1.04 | 20 ms |
+| rv-sparse | desktop | 10 ms | 0.07 s | 0.14 s | 0.1 s | 0.1 s | 0.50 | 18 ms |
+| rv-sparse | low-end (modeled) | 43 ms | 0.27 s | 0.56 s | 0.5 s | 0.5 s | 1.24 | 18 ms |
+| tess-hd209458 | desktop | 12 ms | 1.03 s | 0.96 s | 6.3 s | 13.9 s | 0.72 | 29 ms |
+| tess-hd209458 | low-end (modeled) | 82 ms | 4.13 s | 3.83 s | 41.9 s | 65.5 s | 1.00 | 18 ms |
+
+- **The rates agree:** the median case's is 5,985 row-passes/ms here and
+  5,825 in CPU time. Each shipped rate is the lower of the two measurements.
+- **Set-up is small:** 10 to 22 ms from starting a realm to the answer, less
+  the fit, where the experiment bench's realms, which import the engine,
+  take 60 to 95.
+- **Five realms each keep 0.72 of a lone realm's speed; two keep all of
+  it.** The typical price is conservative, most for the profiles: it said
+  14 s for HD 209458 b's, which took 6.1 s, because its evaluation count is
+  an upper estimate.
+- **The page stays responsive:** the longest time it went without a frame,
+  over every run, was 29 ms. None of the work is on it.
+
 ### What each request costs
 
 | Request | Desktop, typical / most | Low-end, typical / most | Refused |
 |---|---|---|---|
-| TESS light curve, all 7 fitted, profiles | 15 / 36 s | 69 / 164 s | — |
-| the same, no profiles | 1.0 / 6.9 s | 3.8 / 28 s | — |
-| the same, b fixed, no profiles | 0.4 / 2.8 s | 1.8 / 11 s | — |
-| 40 velocities, profiles | 0.4 / 1.4 s | 1.8 / 6.0 s | — |
-| a 45,000-row light curve, profiles | 351 / 847 s | 1639 / 3898 s | low-end: tooSlow |
-| the TESS curve, P from 0.5 to 20 d | 68 / 544 s | 273 / 2206 s | low-end: tooSlow |
+| TESS light curve, all 7 fitted, profiles | 11 / 34 s | 59 / 182 s | — |
+| the same, no profiles | 0.9 / 7.5 s | 3.5 / 30 s | — |
+| the same, b fixed, no profiles | 0.4 / 3.0 s | 1.5 / 12 s | — |
+| 40 velocities, profiles | 0.2 / 1.3 s | 1.1 / 5.9 s | — |
+| a 45,000-row light curve, profiles | 250 / 809 s | 1405 / 4355 s | low-end: tooSlow |
+| the TESS curve, P from 0.5 to 20 d | 68 / 593 s | 273 / 2407 s | low-end: tooSlow |
 
 - The typical figures include a realm's set-up for each stage.
-- Profiles run at the device's realms, at the parallel share the experiment
-  benchmark measured for CPU-bound Workers on this machine: 0.5 at five
-  realms and 0.85 at two (EXPERIMENTS.md).
-- **Not yet measured:** the browser benchmark (`npm run bench:inference`,
-  real Workers, wall time and the page's frame gaps) refuses to record on a
-  loaded machine, and this one never became quiet enough while this work was
-  done. It is the check to run next on a quiet machine. The CPU-time rates
-  stand in until then.
+- The "most" figures use the slowest fit rate (the grazing transit's) and
+  the slowest profile rate measured. The scheduler's per-task timeout is
+  there for anything slower still.
 
 ## Tests
 
@@ -497,9 +537,10 @@ Made under Carl's standing instruction, for review.
    BTJD, and a duration comes back in the unit the data is counted in. Only
    the period search's hour-long trial durations are converted.
 8. **Priced in row-passes, from a measured rate.** `estimate()` counts the
-   work the way the core does it. The benchmark measures this machine's rate,
-   and a low-end device is modeled at a quarter of it, as the experiments
-   are, because Chromium does not throttle a Worker.
+   work the way the core does it. The benchmark measures this machine's rate
+   twice, in CPU time and in the browser's Workers, and each shipped rate is
+   the lower. A low-end device is modeled at a quarter of it, as the
+   experiments are, because Chromium does not throttle a Worker.
 9. **A diagnostic panel on `/observatory/`, not a new page.** The data is
    already there in its canonical shape, and the panel loads only when it is
    opened. Its strings are a catalog fragment of their own

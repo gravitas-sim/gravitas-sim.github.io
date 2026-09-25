@@ -35,27 +35,27 @@ export const ALGORITHM = Object.freeze({ id: 'grid-lm', version: '1.0.0' });
 
 /** What a device may be asked to do: the same classes as the experiments. */
 export const PROFILES = Object.freeze({
-  // Row-passes a millisecond in one realm (see estimate()), from
-  // `npm run bench:inference -- --cpu` on the machine in INFERENCE_CORE.md:
-  // `rate` is the median case's, and `slowFitRate` and `slowProfileRate` the
-  // slowest fit's and profile's, which price the most a request may take.
-  // The low-end figures are the desktop's divided by four, because Chromium
-  // does not slow a Worker down to measure one. `parallelShare` and
-  // `setupMs` are the experiment bench's, for CPU-bound Workers on the same
-  // machine (EXPERIMENTS.md), until the inference bench records its own on a
-  // quiet one; the set-up is the larger of its measurements, for a Worker
-  // bundle three times this one's size.
+  // Row-passes a millisecond in one realm (see estimate()), measured twice
+  // on the machine in INFERENCE_CORE.md: in CPU time
+  // (`npm run bench:inference -- --cpu`) and in the browser's own Workers
+  // (`npm run bench:inference`), which agreed within 3% on the median. Each
+  // rate is the lower of the two: `rate` the median case's, `slowFitRate`
+  // and `slowProfileRate` the slowest fit's and profile's, which price the
+  // most a request may take. `setupMs` and `parallelShare` are the browser
+  // run's: a realm's start-up, and how much of a lone realm's speed each
+  // keeps beside the others. The low-end figures model a device a quarter as
+  // fast, because Chromium does not slow a Worker down to measure one.
   'low-end': {
     maxConcurrency: 2,
     maxWallMs: 3 * 60_000,
     trialTimeoutMs: 120_000,
     maxRows: 50_000,
     maxEvaluations: 400_000,
-    setupMs: 400,
+    setupMs: 90,
     rate: 1_455,
-    slowFitRate: 180,
-    slowProfileRate: 700,
-    parallelShare: 0.85,
+    slowFitRate: 165,
+    slowProfileRate: 530,
+    parallelShare: 1,
   },
   desktop: {
     maxConcurrency: 8,
@@ -63,11 +63,11 @@ export const PROFILES = Object.freeze({
     trialTimeoutMs: 300_000,
     maxRows: 200_000,
     maxEvaluations: 4_000_000,
-    setupMs: 100,
+    setupMs: 30,
     rate: 5_825,
-    slowFitRate: 730,
-    slowProfileRate: 2_815,
-    parallelShare: 0.5,
+    slowFitRate: 670,
+    slowProfileRate: 2_120,
+    parallelShare: 0.72,
   },
 });
 
