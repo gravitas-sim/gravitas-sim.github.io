@@ -35,7 +35,7 @@
 // that hang, answer garbage or die, and the page hands it the real thing.
 // =============================================================================
 
-import { STATUS, isTrialResult } from './experimentManifest.js';
+import { STATUS, isTrialResult } from './status.js';
 
 /** Statuses a checkpoint may keep: outcomes of the physics, not of scheduling. */
 export const RESUMABLE = Object.freeze([
@@ -80,6 +80,11 @@ function stub(trial, status, extra = {}) {
  * @param {Function} [opts.now] - A clock in milliseconds
  * @param {Function} [opts.setTimer] - setTimeout, injectable for tests
  * @param {Function} [opts.clearTimer] - clearTimeout
+ * @param {(result: object, trial: object) => boolean} [opts.accept] - Whether
+ *   an answer is this trial's result; an experiment's trial by default. The
+ *   inference core (js/inference/) schedules its own tasks with its own.
+ * @param {(trial: object) => object} [opts.message] - What a realm is sent;
+ *   `{ type: 'run', manifest, trial }` by default
  */
 export function createScheduler(opts) {
   const {
@@ -94,16 +99,15 @@ export function createScheduler(opts) {
     clearTimer = id => clearTimeout(id),
   } = opts;
   const limits = manifest.limits;
-  const metrics = manifest.observables.metrics;
+  const metrics = manifest.observables?.metrics || [];
+  const accept =
+    opts.accept || ((r, trial) => isTrialResult(r, trial, metrics));
+  const message = opts.message || (trial => ({ type: 'run', manifest, trial }));
   const results = new Map();
   const resumed = new Set();
   for (const r of opts.completed || []) {
     const trial = trials[r?.index];
-    if (
-      trial &&
-      RESUMABLE.includes(r.status) &&
-      isTrialResult(r, trial, metrics)
-    ) {
+    if (trial && RESUMABLE.includes(r.status) && accept(r, trial)) {
       results.set(r.index, r);
       resumed.add(r.index);
     }
@@ -208,7 +212,7 @@ export function createScheduler(opts) {
       } else if (msg?.type === 'result') {
         settle(
           trial,
-          isTrialResult(msg.result, trial, metrics)
+          accept(msg.result, trial)
             ? msg.result
             : stub(trial, STATUS.CORRUPT, {
                 error:
@@ -247,7 +251,7 @@ export function createScheduler(opts) {
           error: 'the realm’s answer could not be read',
         })
       );
-    worker.postMessage({ type: 'run', manifest, trial });
+    worker.postMessage(message(trial));
   }
 
   function pump() {

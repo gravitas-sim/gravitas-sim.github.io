@@ -137,6 +137,7 @@ export default [
       'js/chartWorker.js',
       'js/validationWorker.js',
       'js/experiments/experimentWorker.js',
+      'js/inference/inferenceWorker.js',
     ],
     languageOptions: {
       ecmaVersion: 2021,

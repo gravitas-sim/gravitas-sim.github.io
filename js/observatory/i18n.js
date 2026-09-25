@@ -22,7 +22,18 @@ export const LANGUAGES = Object.freeze([
   { id: 'es', endonym: 'Español' },
 ]);
 
-const CATALOGS = { en: EN_OBSERVATORY, es: ES_OBSERVATORY };
+const CATALOGS = { en: { ...EN_OBSERVATORY }, es: { ...ES_OBSERVATORY } };
+
+/**
+ * Add a lazily loaded part of the catalog: a panel's strings, registered by
+ * the panel when it loads, so the page does not carry them at start-up.
+ * @param {Record<string, Record<string, string>>} parts - By language id
+ */
+export function registerMessages(parts) {
+  for (const [id, table] of Object.entries(parts)) {
+    if (Object.hasOwn(CATALOGS, id)) Object.assign(CATALOGS[id], table);
+  }
+}
 const DEFAULT = 'en';
 let current = DEFAULT;
 
