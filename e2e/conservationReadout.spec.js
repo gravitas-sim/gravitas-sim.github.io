@@ -156,7 +156,7 @@ test.describe('when it is asked for', () => {
 test.describe('what the scene does to its own conservation', () => {
   test('a closed system says so', async ({ page, app }) => {
     await app.boot();
-    await scenario(page, 'Kepler’s 2nd Law', {
+    await scenario(page, "Kepler's 2nd Law", {
       show_conservation_diagnostics: true,
       mutual_gravity: true,
       enable_star_merging: false,
