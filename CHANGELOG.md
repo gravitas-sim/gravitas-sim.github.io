@@ -15,6 +15,28 @@ the release rather than in the tag.
 
 ### Added
 
+- **An Extension SDK for contributors** (sdk/README.md).
+  - **Commands:** `npm run sdk -- init`, `validate`, `test`, `pack` and
+    `inspect`, for the three kinds of extension. An observation data pack
+    and a course pack are declarative; an instrument family is executable,
+    so it is reviewed and vendored rather than installed.
+  - **Checks:** the format, the declarative boundary, platform and package
+    compatibility, public-id collisions, licences and provenance,
+    localization, offline classes and validation references. Every
+    finding is reported by file, line and field.
+  - **Archives:** a pack is one deterministic `.gxp` archive, and the same
+    files always give the same bytes.
+  - **Examples:** one of each kind: a single TESS transit of HD 209458 cut
+    from the built-in pack, a five-lesson exoplanet course in English and
+    Spanish, and a Kepler's-third-law instrument.
+  - **Also:** JSON Schemas, TypeScript declarations, fixtures, a contract
+    suite that goes through the public API only, a compatibility matrix and
+    a deprecation policy.
+  - **Platform change:** `gravitas.capability-package/1` can now provide
+    `courses`.
+  - **Not yet:** Gravitas does not install extensions at run time. The guide
+    lists what still stands in an outside author's way.
+
 - **Observation data packs, and the first one: TESS's light curve of HD 209458.**
   A pack is observed data with its record of where it came from and what was
   done to it (DATA_PACKS.md). The record covers the archive and its citation,

@@ -1,0 +1,120 @@
+{
+  "assets": {
+    "type": "course-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "assets[0].offline",
+        "line": 24,
+        "column": 18,
+        "message": "a declarative extension is never core: a failed fetch would break the install for everybody; use optional"
+      },
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "assets[1].path",
+        "line": 27,
+        "column": 15,
+        "message": "no entry in licenses covers notes.json"
+      }
+    ]
+  },
+  "course-content": {
+    "type": "course-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "course.json",
+        "path": "units[0].title.es",
+        "line": 21,
+        "column": 16,
+        "message": "is missing: every string needs every declared locale"
+      },
+      {
+        "severity": "error",
+        "file": "course.json",
+        "path": "units[0].lessons[2].lesson",
+        "line": 40,
+        "column": 21,
+        "message": "Gravitas has no lesson \"no-such-lesson\""
+      }
+    ]
+  },
+  "declarative-names-code": {
+    "type": "course-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "provides.courses[0].entry",
+        "line": 17,
+        "column": 18,
+        "message": "a declarative package names no code"
+      },
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "assets[1].path",
+        "line": 28,
+        "column": 15,
+        "message": "a declarative package names no script"
+      },
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "assets",
+        "line": 21,
+        "column": 13,
+        "message": "a declarative package ships no code"
+      }
+    ]
+  },
+  "id-taken": {
+    "type": "capability",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "provides.widgetFamilies[0].widgets[0]",
+        "line": 17,
+        "column": 11,
+        "message": "\"launch\" is an instrument Gravitas already has"
+      },
+      {
+        "severity": "warning",
+        "file": "gravitas-extension.json",
+        "path": "provides.widgetFamilies[0].entry",
+        "line": 19,
+        "column": 18,
+        "message": "builtin:widgets/kepler-third-law is not in js/platform/builtins.js yet: that line is added when a maintainer vendors the family (sdk/README.md, \"Vendoring\")"
+      }
+    ]
+  },
+  "not-json": {
+    "type": null,
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "",
+        "line": 6,
+        "column": 25,
+        "message": "is not valid JSON here"
+      }
+    ]
+  },
+  "wrong-platform": {
+    "type": "course-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "gravitas-extension.json",
+        "path": "gravitas",
+        "line": 7,
+        "column": 15,
+        "message": "accepts ^2.0.0; this Gravitas implements platform 1.0.0"
+      }
+    ]
+  }
+}
