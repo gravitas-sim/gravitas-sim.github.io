@@ -12,8 +12,9 @@
 // -----------------------------------------------------------------------------
 // Ten thousand stars, uniformly distributed, uniformly white, all the same
 // brightness range, all twinkling, regenerated from Math.random on every
-// resize, and repainted in full twenty-eight times a second. Measured at
-// 1440x900: 4.1ms a repaint for an empty scene, 19.6ms for a crowded one. See
+// resize, and repainted in full: twenty times a second on an empty sky, and
+// twenty-eight once anything on it lensed. Measured at 1440x900: 4.1ms a
+// repaint for an empty scene, 19.6ms for a crowded one. See
 // tools/starfield-probe.mjs.
 //
 // Four things follow from that and shape everything below.

@@ -27,6 +27,7 @@ import {
   gravity_ripples,
   neutron_stars,
   white_dwarfs,
+  galaxies,
   accretion_disk_particles,
   resetPhysicsObjectCounter,
   resetTrailTick,
@@ -8527,6 +8528,7 @@ document.addEventListener('DOMContentLoaded', () => {
       comets.length = 0;
       neutron_stars.length = 0;
       white_dwarfs.length = 0;
+      galaxies.length = 0;
       debris.length = 0;
       particles.length = 0;
       gravity_ripples.length = 0;

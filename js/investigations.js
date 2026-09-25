@@ -2458,6 +2458,7 @@ function syncToolPanel(step) {
     els.toolNote.hidden = false;
     els.toolControls.innerHTML = '';
     els.toolControls.hidden = true;
+    clearToolInstrument();
     ensureWidget(spec.id)
       .then(() => {
         if (currentStep() === step) syncToolPanel(step);
@@ -2659,6 +2660,39 @@ function stopToolLoop() {
   toolActionsShown = [];
   toolPointer?.abort();
   toolPointer = null;
+}
+
+/**
+ * Take the last step's instrument off the panel while this step's is fetched.
+ *
+ * The title and the note are this step's by then, so whatever else is left up
+ * is the old instrument passed off as this one. Lives of Stars read its size
+ * comparison out on the first evolution step for as long as the fetch took,
+ * and the canvas told a screen reader those were the measured values of the
+ * instrument on screen; its buttons still drove the old widget. The readout
+ * is emptied and forgotten, so the paint after the fetch writes it even if the
+ * rows match. The picture is blanked rather than hidden, so the panel keeps its
+ * height, and loses the name and role a pickable instrument gave it: the note
+ * is what says what is happening, and the paint gives the canvas its name back.
+ */
+function clearToolInstrument() {
+  els.toolReadout.innerHTML = '';
+  els.toolReadout.hidden = true;
+  lastToolHtml = '';
+  els.toolActions.innerHTML = '';
+  els.toolActions.hidden = true;
+  toolActionsShown = [];
+  els.toolPresets.innerHTML = '';
+  els.toolPresets.hidden = true;
+  els.toolPresetNote.textContent = '';
+  const canvas = els.toolCanvas;
+  if (!canvas) return;
+  canvas.removeAttribute('aria-label');
+  canvas.removeAttribute('role');
+  canvas.removeAttribute('tabindex');
+  const g = canvas.getContext('2d');
+  g?.setTransform(1, 0, 0, 1, 0, 0);
+  g?.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 /**
