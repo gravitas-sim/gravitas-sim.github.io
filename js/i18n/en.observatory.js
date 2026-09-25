@@ -244,4 +244,5 @@ export const EN_OBSERVATORY = {
   'obs.table.next': 'Next rows',
   'obs.export.json': 'Save as JSON (everything, with your changes)',
   'obs.export.csv': 'Save the rows as CSV',
+  'obs.fit.title': 'Fit a model (diagnostic)',
 };

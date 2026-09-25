@@ -121,9 +121,12 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  *
  * e2e/observatory.spec.js opens every observation in both, because each one
  * is a chunk of the observatory's bundle in dist/, fetched when opened.
+ *
+ * e2e/inference.spec.js runs a fit in both, because in dist/ the fit panel is
+ * a lazy chunk and its Worker a bundle of its own, found from the page.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js/;
 
 /**
  * Which engines to run.
