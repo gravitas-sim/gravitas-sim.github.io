@@ -207,7 +207,10 @@ export function formatUnit(unit, notStated = 'unit not stated') {
   const symbol = UNITS[unit.id].symbol;
   if (unit.scale === 1) return symbol;
   const exp = Math.round(Math.log10(unit.scale));
-  const power = 10 ** exp === unit.scale ? `10^${exp}` : String(unit.scale);
+  // Parsed, not raised: `10 ** -17` is not 1e-17 on every engine (pow is not
+  // correctly rounded everywhere), and the literal always is.
+  const power =
+    Number(`1e${exp}`) === unit.scale ? `10^${exp}` : String(unit.scale);
   return symbol ? `${power} ${symbol}` : power;
 }
 

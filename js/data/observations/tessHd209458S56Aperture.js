@@ -53,7 +53,7 @@ export const PACK = {
     width: 11,
     height: 13,
     pixels:
-      'row by row from the lowest; x along a row and y up, 1 at the centre of the first pixel, as in FITS',
+      'row by row from the lowest; x along a row and y up, 1 at the center of the first pixel, as in FITS',
     wcs: {
       ctype: ['RA---TAN', 'DEC--TAN'],
       crpix: [6.254819344476573, 6.530449812067786],

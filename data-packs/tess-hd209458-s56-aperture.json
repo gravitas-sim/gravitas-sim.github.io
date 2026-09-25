@@ -39,7 +39,7 @@
   "image": {
     "width": 11,
     "height": 13,
-    "pixels": "row by row from the lowest; x along a row and y up, 1 at the centre of the first pixel, as in FITS",
+    "pixels": "row by row from the lowest; x along a row and y up, 1 at the center of the first pixel, as in FITS",
     "wcs": {
       "ctype": [
         "RA---TAN",
@@ -190,10 +190,10 @@
   "derived": {
     "file": "js/data/observations/tessHd209458S56Aperture.js",
     "bytes": 4131,
-    "sha256": "315fd556ed088ffa8abec635bce23301e1aaa5df6075c44f74305fae67d82f26"
+    "sha256": "7e1ab91b524d9a39bc0c1082ed3b74edd27b1bb359d54c4b66cb36e8992d1f5d"
   },
   "validation": {
-    "check": "the optimal aperture holds the NPIXSAP pixels the header counts, every pixel was collected, and the flux-weighted-centroid pixels centre within one pixel (about 19 arcseconds) of the target",
+    "check": "the optimal aperture holds the NPIXSAP pixels the header counts, every pixel was collected, and the flux-weighted-centroid pixels center within one pixel (about 19 arcseconds) of the target",
     "against": [
       {
         "quantity": "optimal-aperture pixels",

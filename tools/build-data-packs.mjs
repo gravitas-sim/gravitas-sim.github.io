@@ -141,7 +141,7 @@ const TESS_HD209458_S56 = {
         {
           name: 'time',
           unit: 'd',
-          description: 'bin center: t0 + (index + 0.5) x binDays, in BTJD',
+          description: 'bin centre: t0 + (index + 0.5) x binDays, in BTJD',
         },
         { name: 'flux', unit: '', description: 'PDCSAP flux over its median' },
         {
