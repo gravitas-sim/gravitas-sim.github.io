@@ -233,6 +233,41 @@ function bodyById(id) {
 }
 
 /**
+ * The conserved totals and their drift for one sample, measured once, now.
+ *
+ * conservationDrift() on its own reads the totals from a cache the engine
+ * refreshes at most every 100 ms, which suits a readout repainted sixty times
+ * a second and does not suit a recorded series. At 60 fps the drift column
+ * was a staircase, one value for about six samples and then a jump, beside a
+ * total_energy measured every sample: most rows carried an energy and a drift
+ * of two different instants, and a run's final drift could be several frames
+ * older than the sample it was read from.
+ *
+ * Asked for fresh, the drift measures the totals itself and returns them as
+ * its `energy` and `angular`, so they are handed on as the sample's totals
+ * too. That is one O(N^2) sum per sample, which the bench was already paying
+ * for the totals, rather than a second one for the drift - and none at all
+ * when no conserved metric was asked for.
+ *
+ * @param {Array<string>} metrics - The metric ids being sampled
+ * @returns {{conserved: ?Object, drift: ?Object}} For sampleFrame
+ */
+function conservedSample(metrics) {
+  const wantsDrift =
+    metrics.includes(METRICS.ENERGY_DRIFT) ||
+    metrics.includes(METRICS.ANGULAR_DRIFT);
+  const wantsTotals =
+    metrics.includes(METRICS.TOTAL_ENERGY) ||
+    metrics.includes(METRICS.ANGULAR_MOMENTUM);
+  if (wantsDrift) {
+    // Null only before a baseline exists, when the totals can still be read.
+    const drift = conservationDrift(true);
+    if (drift) return { conserved: drift, drift };
+  }
+  return { conserved: wantsTotals ? conservedQuantities() : null, drift: null };
+}
+
+/**
  * Start a new experiment from the world as it stands.
  *
  * @param {string} name - What the student called it
@@ -521,8 +556,7 @@ async function runReliabilityPhase(cfg) {
         t: getSimulationTime(),
         bodies,
         primary,
-        conserved: conservedQuantities(),
-        drift: conservationDrift(),
+        ...conservedSample(current.metrics),
         secondsPerUnit: timeUnitSeconds(),
         metrics: current.metrics,
       })
@@ -558,7 +592,10 @@ async function runReliabilityPhase(cfg) {
   host.setFixedStep?.(0);
   if (state) state.paused = true;
 
-  const drift = conservationDrift();
+  // Fresh, like the samples: conservationTrend() compares this drift across
+  // the two phases, and from the cache each phase's could be up to 100 ms of
+  // frames older than the instant the phase ended.
+  const drift = conservationDrift(true);
   const secondsPerDay = 86400 / timeUnitSeconds();
   return {
     step: cfg.step,
@@ -956,8 +993,7 @@ async function runSweepTrial(cfg) {
         t: getSimulationTime(),
         bodies: found.bodies,
         primary: found.primary,
-        conserved: conservedQuantities(),
-        drift: conservationDrift(),
+        ...conservedSample(spec.metrics),
         secondsPerUnit: timeUnitSeconds(),
         metrics: spec.metrics,
       })
@@ -1326,20 +1362,12 @@ function takeSample() {
 
   const bodies = (current.objects || []).map(bodyById).filter(Boolean);
   const primary = current.primary !== null ? bodyById(current.primary) : null;
-  const needsConserved = current.metrics.some(
-    m =>
-      m === METRICS.TOTAL_ENERGY ||
-      m === METRICS.ANGULAR_MOMENTUM ||
-      m === METRICS.ENERGY_DRIFT ||
-      m === METRICS.ANGULAR_DRIFT
-  );
 
   const sample = sampleFrame({
     t: clock,
     bodies,
     primary,
-    conserved: needsConserved ? conservedQuantities() : null,
-    drift: needsConserved ? conservationDrift() : null,
+    ...conservedSample(current.metrics),
     secondsPerUnit: timeUnitSeconds(),
     metrics: current.metrics,
   });

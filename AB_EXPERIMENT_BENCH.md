@@ -146,6 +146,17 @@ passages, found from three consecutive radius samples), closest approach
 (minimum over the run), total energy, angular momentum, and the numerical drift
 in both.
 
+The totals and the drift in a sample are one measurement, taken at that
+sample. `conservationDrift()` normally reads the totals from a cache that the
+engine refreshes at most every 100 ms, for the on-screen readout. The bench
+asks for them fresh (`conservationDrift(true)`) and records the totals that
+call measured, so a sample's `energy_drift` is exactly
+`100 × (total_energy − E₀) / |E₀|` for that sample's own `total_energy`. It
+costs no extra O(N²) sum: the bench already measured the totals for every
+sample, and it now skips them when no conserved quantity is selected. Before
+this, a series recorded at 60 fps was a staircase of about six equal drift
+values per step, and a run's final drift could be several frames old.
+
 Each metric declares its arity and its unit once, in `js/experiments/metrics.js`,
 and the panel, the chart, the results table and the CSV all read that
 declaration.
