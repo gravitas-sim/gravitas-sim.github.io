@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The field this replaces was ten thousand uniformly white, uniformly bright
 // stars from Math.random, the same count on a phone and a lecture projector,
-// regenerated on every resize and repainted in full twenty-eight times a
+// regenerated on every resize and repainted in full twenty or more times a
 // second. Every property below is one of the things that was wrong with it.
 //
 // The performance work that goes with this lives in js/render.js - three
