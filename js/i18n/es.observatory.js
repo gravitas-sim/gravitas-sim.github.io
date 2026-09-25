@@ -247,4 +247,5 @@ export const ES_OBSERVATORY = {
   'obs.table.next': 'Filas siguientes',
   'obs.export.json': 'Guardar como JSON (todo, con tus cambios)',
   'obs.export.csv': 'Guardar las filas como CSV',
+  'obs.fit.title': 'Ajustar un modelo (diagnóstico)',
 };

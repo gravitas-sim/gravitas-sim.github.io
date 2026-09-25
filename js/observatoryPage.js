@@ -21,6 +21,7 @@ import {
   LANGUAGES,
   language,
   preferred,
+  registerMessages,
   setLanguage,
   t,
   translatePage,
@@ -237,6 +238,46 @@ function rebuild({ announceChange = null } = {}) {
   if (announceChange) status(announceChange);
 }
 
+/**
+ * The fit panel, for an observation a model suits: loaded the first time a
+ * reader opens it, so the page itself carries none of the inference core.
+ */
+const fit = { panel: null, loading: null, suits: false };
+function mountFit(m) {
+  fit.module = m;
+  fit.panel?.destroy();
+  fit.panel = m.mountFitPanel($('obsFitBody'), {
+    t,
+    number,
+    observation: state.view,
+    registerMessages,
+    createPlot,
+    createSelection,
+    dimensionOfText: text => dimensionOf(parseUnit(text).unit),
+  });
+  return fit.panel;
+}
+async function fitPanel() {
+  if (fit.panel) return fit.panel;
+  fit.loading ??= import('./observatory/fitPanel.js').then(mountFit);
+  return fit.loading;
+}
+$('obsFitPanel').addEventListener('toggle', async () => {
+  if (!$('obsFitPanel').open || !state.view) return;
+  (await fitPanel()).update(state.view);
+});
+function renderFit(o) {
+  // Whether a model suits it is known without loading one: a time series of
+  // a ratio or a velocity.
+  const y = o.columns.find(c => c.id === o.axes.y);
+  const dim = dimensionOf(parseUnit(y?.unit).unit);
+  fit.suits =
+    o.kind === 'time-series' &&
+    (dim === 'ratio' || dim === 'velocity' || dim === null);
+  $('obsFitPanel').hidden = !fit.suits;
+  if (fit.suits && fit.panel && $('obsFitPanel').open) fit.panel.update(o);
+}
+
 function renderAll() {
   const o = state.view;
   $('obsWork').hidden = false;
@@ -269,6 +310,7 @@ function renderAll() {
   renderSeeing(o, drawn);
   renderMarks(o);
   renderChanges(o);
+  renderFit(o);
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();
   $('obsRedo').disabled = !state.history.canRedo();
@@ -1165,6 +1207,9 @@ function translateAll() {
     renderPreview(state.table);
     renderMapping(state.table);
   }
+  // Built in the old language; built again in the new one, and a fit still
+  // running in the old one is canceled rather than left writing to nothing.
+  if (fit.module) mountFit(fit.module);
   if (state.view) renderAll();
 }
 
