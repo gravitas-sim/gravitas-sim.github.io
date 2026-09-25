@@ -553,6 +553,8 @@ export const EN_DEFERRED = {
   'bench.error.unavailable':
     'This browser has no local storage available, so experiments cannot be kept between visits. Export to a file instead.',
   'bench.error.open': 'That experiment could not be opened ({reason}).',
+  'bench.driftWithdrawn':
+    'An earlier version recorded the energy and angular momentum drift in this experiment wrongly, as the totals times a hundred. Those values have been removed. Record the runs again to measure the drift.',
   'bench.error.import': 'That file could not be read ({reason}).',
 
   // --- The parameter sweep ----------------------------------------------------

@@ -718,6 +718,15 @@ export function buildReliabilityReport(input) {
   const tolerance = input.tolerance ?? DEFAULT_TOLERANCE;
   const ids = current?.metrics || [];
 
+  // The two drifts are reported here and judged nowhere. Halving the step is
+  // meant to move a drift - a second-order scheme quarters it - so "moved" is
+  // the check working rather than a conclusion failing, and
+  // conservationTrend() already says whether it fell. They were once judged,
+  // as conclusions and as the path below, and always agreed, because until
+  // sampleFrame read the right fields both runs recorded their totals.
+  const isDrift = id =>
+    id === METRICS.ENERGY_DRIFT || id === METRICS.ANGULAR_DRIFT;
+
   // Every tracked quantity, judged separately. A single verdict for a run is
   // not what a reader needs: some conclusions survive refinement and others do
   // not, and which is which is the useful output.
@@ -731,7 +740,7 @@ export function buildReliabilityReport(input) {
       coarse: a,
       fine: b,
       change,
-      agrees: change === null ? null : change <= tolerance,
+      agrees: change === null || isDrift(id) ? null : change <= tolerance,
       kind: coarse.results?.[id]?.kind ?? null,
     };
   });
@@ -739,7 +748,7 @@ export function buildReliabilityReport(input) {
   // A path to compare early against late, which is what separates a chaotic
   // pair from a badly resolved one. The first tracked quantity that varies
   // sample by sample; the reductions above cannot show when two runs parted.
-  const pathId = ids.find(id => !SCALAR_METRICS.has(id));
+  const pathId = ids.find(id => !SCALAR_METRICS.has(id) && !isDrift(id));
   let aligned = null;
   if (pathId) {
     const sa = series(coarse.samples, pathId);
@@ -1631,7 +1640,12 @@ export function open(id) {
   const { ok, record, reason } = loadExperiment(id);
   if (!ok) return { ok: false, message: t('bench.error.open', { reason }) };
   current = record;
-  return { ok: true, message: '' };
+  // Said on every open until the runs are recorded again, which is the only
+  // thing that puts real drift figures back. See store.js:migrate().
+  const withdrawn = Object.values(record.runs || {}).some(
+    run => run?.driftWithdrawn
+  );
+  return { ok: true, message: withdrawn ? t('bench.driftWithdrawn') : '' };
 }
 
 /**
