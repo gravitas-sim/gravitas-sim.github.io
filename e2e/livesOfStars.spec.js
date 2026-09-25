@@ -57,6 +57,45 @@ const counterNumbers = async page => {
 const stepNumber = async page => (await counterNumbers(page))[0] ?? 0;
 const stepTotal = async page => (await counterNumbers(page))[1] ?? 0;
 
+// The readout is written when a step's instrument draws, which is not always
+// when the step opens. The first step to name an instrument family fetches it,
+// and draws only once the fetch lands: until then the counter already shows
+// the new step while the readout holds the last step's rows, or nothing at all
+// on the first screen. Here that is step 1 (the stellar family) and step 2
+// (the evolution family), and a loaded gate read step 1's sizes on step 2. So
+// nothing below reads the readout until something proves it is this step's,
+// and a negative is only checked against a reading that has passed a positive:
+// checked any earlier, it passes on the old rows.
+
+/**
+ * The readout's text, once it says every one of `expected`.
+ *
+ * The negatives go against this one reading rather than a retrying `not`,
+ * which would wait for a wrong row to go away and then pass. The positives are
+ * checked again on the same reading, so it is the one the wait proved fresh.
+ */
+async function readoutSaying(page, ...expected) {
+  const readout = page.locator('#investigationToolReadout');
+  for (const pattern of expected) {
+    await expect(readout).toContainText(pattern, { useInnerText: true });
+  }
+  const text = await readout.innerText();
+  for (const pattern of expected) expect(text).toMatch(pattern);
+  return text;
+}
+
+/**
+ * Wait for the step on screen to have drawn its own instrument, for a read
+ * that has no positive to wait on. The note is a status region only while it
+ * says the instrument is loading or could not be (syncToolPanel), and the task
+ * that takes the role off is the one that paints the readout.
+ */
+const instrumentDrawn = page =>
+  expect(page.locator('#investigationToolNote')).not.toHaveAttribute(
+    'role',
+    'status'
+  );
+
 /**
  * What the models actually give, by step and field id.
  *
@@ -145,6 +184,7 @@ test.describe('the lesson is reachable and complete', () => {
 
     for (let step = 1; step <= STEPS; step++) {
       await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+      await instrumentDrawn(page);
       const canvas = page.locator('#investigationToolCanvas');
       await expect(canvas).toBeVisible();
       expect(await canvas.evaluate(c => c.width)).toBeGreaterThan(10);
@@ -191,8 +231,7 @@ test.describe('the playback behaves under a student', () => {
     app,
   }) => {
     await toStep(page, app, 2);
-    const text = await page.locator('#investigationToolReadout').innerText();
-    expect(text).toMatch(/inventing them|does not describe/i);
+    const text = await readoutSaying(page, /inventing them|does not describe/i);
     expect(text).not.toMatch(/Surface temperature/);
   });
 
@@ -204,9 +243,7 @@ test.describe('the playback behaves under a student', () => {
     // Screen 22 switches to the 0.2 solar-mass model, which has no remnant at
     // all. A playhead carried over from the white dwarf would put it in one.
     await toStep(page, app, 22);
-    const text = await page.locator('#investigationToolReadout').innerText();
-    expect(text).toMatch(/0\.2 M/);
-    expect(text).toMatch(/Main sequence/i);
+    const text = await readoutSaying(page, /0\.2 M/, /Main sequence/i);
     expect(text).not.toMatch(/white dwarf|neutron star|black hole/i);
   });
 
@@ -228,8 +265,7 @@ test.describe('the playback behaves under a student', () => {
       if (!(await next.isEnabled())) break;
       await next.click();
     }
-    const again = await readout.innerText();
-    expect(again).toContain('Ends as');
+    const again = await readoutSaying(page, 'Ends as');
     // One endpoint section, not two.
     expect((again.match(/Ends as/g) || []).length).toBe(1);
     expect(again.includes('white dwarf')).toBe(atEnd.includes('white dwarf'));
@@ -241,10 +277,7 @@ test.describe('the playback behaves under a student', () => {
   }) => {
     test.slow();
     await toStep(page, app, 31);
-    const text = await page.locator('#investigationToolReadout').innerText();
-    expect(text).toMatch(/black hole/i);
-    expect(text).toMatch(/no photosphere/i);
-    expect(text).toMatch(/Sukhbold/);
+    await readoutSaying(page, /black hole/i, /no photosphere/i, /Sukhbold/);
   });
 });
 
@@ -281,6 +314,7 @@ test.describe('the lesson survives the things a student does to it', () => {
     const body = await page.locator('#investigationBody').innerText();
     expect(body).toMatch(/estrella|diagrama|secuencia/i);
     expect(body).not.toMatch(/Which way across the diagram/i);
+    await instrumentDrawn(page);
     const readout = await page.locator('#investigationToolReadout').innerText();
     expect(readout).not.toMatch(/stelE\.|NaN|undefined/);
   });
