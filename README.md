@@ -203,7 +203,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->4209<!--/fact--> strings, and
+of <!--fact:uiStrings-->4318<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -239,7 +239,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->6046<!--/fact--> tests across <!--fact:jestSuites-->182<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->6089<!--/fact--> tests across <!--fact:jestSuites-->185<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -366,8 +366,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1271<!--/fact--> tests
-in <!--fact:e2eFiles-->96<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1280<!--/fact--> tests
+in <!--fact:e2eFiles-->97<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not

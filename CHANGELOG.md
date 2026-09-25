@@ -36,6 +36,28 @@ the release rather than in the tag.
     `courses`.
   - **Not yet:** Gravitas does not install extensions at run time. The guide
     lists what still stands in an outside author's way.
+- **An experiment runner, `/experiments/`.** It is the bench's parameter
+  sweep, stated completely enough to run in the background and to run again.
+  - **What it runs:** a `gravitas.experiment/1` manifest (EXPERIMENTS.md).
+    That is a laboratory scenario; one or two of its variables, as values, a
+    range or a seeded uniform draw; a seed set; the bench's metrics; a stop
+    duration and events; fixed numerics; and limits.
+  - **Where it runs:** every trial runs in its own disposable Worker. The
+    engine is evaluated fresh there, so no trial inherits another's state.
+    Several run at once, and results are reported in planned order.
+  - **Before a run:** one trial is built, and its Worker times its own
+    start-up and a short burst of the world, so the experiment is priced on
+    this device rather than from a figure per class of device. An experiment
+    likely to freeze or exhaust it is refused with the reason, and so is one
+    whose trials would all stop at the sample limit and be averaged into
+    nothing.
+  - **During a run:** cancel, per-trial and total time limits, a result-size
+    cap, and reports of corrupt answers and failed Workers. Resume re-runs
+    only what did not finish.
+  - **The result:** a summary table, the trials and a plot. It downloads as
+    JSON with an engine fingerprint, and a saved result can be checked for
+    whether it still reproduces here and, if not, why.
+  - In English and Spanish.
 
 - **Observation data packs, and the first one: TESS's light curve of HD 209458.**
   A pack is observed data with its record of where it came from and what was
@@ -353,6 +375,11 @@ the release rather than in the tag.
   but the captured start is kept, so recording the runs again measures them.
   CSV files and manifests exported before this fix carry the wrong figures in
   their `energy_drift_pct` and `angular_drift_pct` columns and drift results.
+- **Links on the figure builder were the browser's default blue on a
+  near-black page, 2.2:1 against the 4.5:1 required.** They now use the
+  document pages' accent colour, and the page's own landmark is labelled
+  apart from the one in its preview frame.
+
 - **The play button speaks the reader's language.** Once the simulation had
   been paused or resumed, its label and tooltip were set to English literals,
   so a Spanish screen reader heard "Play simulation" over a Spanish interface.

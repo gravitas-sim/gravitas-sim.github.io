@@ -136,6 +136,7 @@ export default [
       'js/physicsWorker.js',
       'js/chartWorker.js',
       'js/validationWorker.js',
+      'js/experiments/experimentWorker.js',
     ],
     languageOptions: {
       ecmaVersion: 2021,
