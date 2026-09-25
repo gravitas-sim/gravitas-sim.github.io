@@ -118,9 +118,12 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * e2e/experimentRunner.spec.js runs real experiment Workers in both, because
  * the Worker is its own bundle in dist/ and a source-only test would never
  * know whether that bundle starts.
+ *
+ * e2e/observatory.spec.js opens every observation in both, because each one
+ * is a chunk of the observatory's bundle in dist/, fetched when opened.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js/;
 
 /**
  * Which engines to run.

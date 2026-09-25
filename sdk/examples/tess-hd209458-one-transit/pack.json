@@ -72,6 +72,11 @@
       "dropped": 1853
     }
   ],
+  "reductions": [
+    "20-minute bins average 10 two-minute cadences each, which rounds ingress and egress to a bin.",
+    "Flux is kept to 1 ppm and its error to 5 ppm.",
+    "One transit of the seven in the sector."
+  ],
   "source": {
     "archive": "MAST (Barbara A. Mikulski Archive for Space Telescopes)",
     "urls": [
@@ -96,14 +101,14 @@
     {
       "file": "js/data/observations/tessHd209458S56.js",
       "url": "https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/js/data/observations/tessHd209458S56.js",
-      "bytes": 10535,
-      "sha256": "5e707ff0b9bbc0cad25b641405d25995013f311432b1620a3e258149cb17e870"
+      "bytes": 10710,
+      "sha256": "ac140763382bcefe3db3e6ee9a1c10ff769cf8a4cd2ae13a6da436c552dd0ac8"
     }
   ],
   "derived": {
     "file": "series.json",
-    "bytes": 2408,
-    "sha256": "9dc7ae0032e3cc1bb878f8841178bc7e122705fb29bad0dd3bea572332f5630f"
+    "bytes": 2641,
+    "sha256": "3469bc3c125bebcdbe53d67f6f88aeb4ca353124c498ae66ecd304beebd4ce04"
   },
   "transformation": {
     "script": "build.mjs",
@@ -118,11 +123,6 @@
   "assumptions": [
     "PDCSAP flux has had instrumental systematics and crowding removed by SPOC; that correction is used as published.",
     "Times are barycentric dynamical time for the target, as SPOC corrects them."
-  ],
-  "reductions": [
-    "20-minute bins average 10 two-minute cadences each, which rounds ingress and egress to a bin.",
-    "Flux is kept to 1 ppm and its error to 5 ppm.",
-    "One transit of the seven in the sector."
   ],
   "validation": {
     "check": "folding on the published period finds a transit of the published depth, within 0.003",

@@ -70,6 +70,11 @@
         "rule": "outside 0.2 d of the chosen mid-transit",
         "dropped": 1853
       }
+    ],
+    "reductions": [
+      "20-minute bins average 10 two-minute cadences each, which rounds ingress and egress to a bin.",
+      "Flux is kept to 1 ppm and its error to 5 ppm.",
+      "One transit of the seven in the sector."
     ]
   },
   "SERIES": {

@@ -12,4 +12,4 @@ manifest. Everything else is still built into the core; see
 | `gravitas.lesson.power-law-gravity` | 1.0.0 | built-in | 1 routes, 1 investigations, 1 translations | CC-BY-4.0 (`js/data/investigations/**`) | - |
 | `gravitas.power-law-instruments` | 1.0.0 | built-in | 1 models, 1 widgetFamilies | MIT (`js/powerLaw*.js`) | - |
 | `gravitas.sdss-dr18-spectra` | 1.0.0 | built-in | 1 dataPacks | public domain; acknowledge SDSS, see NOTICE (`js/data/spectra/**`) | SDSS DR18 (Almeida et al. 2023, ApJS 267, 44) |
-| `gravitas.tess-hd209458-s56` | 1.0.0 | built-in | 1 dataPacks | public domain (NASA mission data); acknowledge TESS and MAST, see NOTICE (`js/data/observations/**`) | TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003) |
+| `gravitas.tess-hd209458-s56` | 1.1.0 | built-in | 2 dataPacks | public domain (NASA mission data); acknowledge TESS and MAST, see NOTICE (`js/data/observations/**`) | TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003); TESS Science Data Products Description Document, NASA/TM-2018-220036 (aperture mask bits) |

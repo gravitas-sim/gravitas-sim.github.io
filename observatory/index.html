@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Observatory | Gravitas</title>
+    <meta
+      name="description"
+      content="Open a real observation - a light curve, a spectrum, a catalog or an image - or your own file, and look at it as a plot, a table and an image at once: select, mask, annotate, fold, bin and convert, undo any of it, and save exactly what you did."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: a plot, an image, a grid and some forms. */
+      .ow-wrap {
+        max-width: 76rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      /* The document pages' link color (.doc-main a in css/page.css), which
+         this page's own wrapper does not inherit. */
+      .ow-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .ow-wrap fieldset,
+      .ow-panel {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.9rem 1rem 1rem;
+        margin: 0 0 1.25rem;
+      }
+      .ow-wrap legend {
+        font-weight: 600;
+        padding: 0 0.35rem;
+      }
+      .ow-grid {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+        align-items: end;
+      }
+      .ow-field {
+        display: grid;
+        gap: 0.3rem;
+      }
+      .ow-wrap input:not([type='checkbox']),
+      .ow-wrap select {
+        width: 100%;
+        box-sizing: border-box;
+        font: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.45rem 0.55rem;
+      }
+      .ow-wrap select option,
+      .ow-wrap select optgroup {
+        background: #11131d;
+      }
+      .ow-hint {
+        margin: 0.4rem 0 0;
+        font-size: 0.85rem;
+        opacity: 0.8;
+      }
+      .ow-actions {
+        display: flex;
+        gap: 0.6rem;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 0.6rem;
+      }
+      .ow-small {
+        padding: 0.25rem 0.6rem;
+        font-size: 0.85rem;
+      }
+      .ow-problems {
+        color: #ffb4a2;
+      }
+      .ow-meta {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 0.3rem 1rem;
+        margin: 0 0 1rem;
+      }
+      .ow-meta dt {
+        font-weight: 600;
+      }
+      .ow-meta dd {
+        margin: 0;
+      }
+      .ow-meta ul {
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+      .ow-views {
+        display: grid;
+        gap: 1rem;
+      }
+      .ow-wrap figure {
+        margin: 0;
+      }
+      .ow-plot {
+        width: 100%;
+        height: auto;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 8px;
+        touch-action: none;
+        user-select: none;
+      }
+      .ow-plot:focus-visible,
+      #obsImage:focus-visible,
+      #obsTable tr:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .ow-axes line {
+        stroke: rgba(255, 255, 255, 0.5);
+      }
+      .ow-tick,
+      .ow-label {
+        fill: currentColor;
+        font-size: 12px;
+      }
+      .ow-label {
+        font-size: 13px;
+      }
+      .ow-bars line {
+        stroke: rgba(143, 211, 255, 0.45);
+        stroke-width: 1;
+      }
+      .ow-pt {
+        fill: #8fd3ff;
+      }
+      .ow-pt.is-selected {
+        fill: #ffd27a;
+      }
+      .ow-pt.is-masked {
+        fill: none;
+        stroke: #9aa0a6;
+        stroke-width: 1;
+      }
+      .ow-focus {
+        fill: none;
+        stroke: #ffffff;
+        stroke-width: 2;
+      }
+      .ow-brush {
+        fill: rgba(255, 210, 122, 0.15);
+        stroke: #ffd27a;
+      }
+      #obsImage {
+        max-width: 100%;
+        height: auto;
+        image-rendering: pixelated;
+        touch-action: none;
+        border-radius: 4px;
+      }
+      .ow-legend {
+        list-style: none;
+        padding: 0;
+        margin: 0.6rem 0 0;
+        display: grid;
+        gap: 0.35rem;
+      }
+      .ow-legend li {
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-start;
+      }
+      .ow-swatch {
+        flex: 0 0 1rem;
+        height: 1rem;
+        border-radius: 3px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        margin-top: 0.15rem;
+      }
+      .ow-table-wrap {
+        overflow-x: auto;
+        margin: 0.8rem 0;
+      }
+      .ow-wrap table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.86rem;
+      }
+      .ow-wrap caption {
+        text-align: left;
+        font-weight: 600;
+        padding: 0 0 0.4rem;
+      }
+      .ow-wrap th,
+      .ow-wrap td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.28rem 0.5rem;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .ow-wrap thead th {
+        text-align: left;
+      }
+      #obsTable tr[aria-selected='true'] td {
+        background: rgba(255, 210, 122, 0.16);
+      }
+      #obsTable tr.is-masked td {
+        color: #b8bec6;
+        font-style: italic;
+      }
+      .is-missing {
+        color: #b8bec6;
+      }
+      .ow-map-row {
+        display: grid;
+        gap: 0.4rem;
+        grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+        align-items: end;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .ow-map-name {
+        margin: 0;
+        font-weight: 600;
+      }
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      @media (min-width: 60rem) {
+        .ow-views {
+          grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        }
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main
+      class="ow-wrap"
+      aria-label="Observatory"
+      data-i18n-aria-label="obs.main.label"
+    >
+      <div
+        id="langSwitch"
+        class="ow-actions"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="obs.lang.label"
+      ></div>
+      <h1 data-i18n="obs.title">Observatory</h1>
+      <p data-i18n="obs.intro">
+        Real observations, and your own files, as a plot, a table and an
+        image at once.
+      </p>
+      <p><a href="/" data-i18n="obs.back">Back to Gravitas</a></p>
+
+      <section class="ow-panel" aria-labelledby="obsOpenTitle">
+        <h2 id="obsOpenTitle" data-i18n="obs.open.title">
+          Open an observation
+        </h2>
+        <div class="ow-grid">
+          <label class="ow-field">
+            <span data-i18n="obs.open.fixture">A real observation</span>
+            <select id="obsFixture"></select>
+          </label>
+          <div>
+            <button
+              id="obsOpen"
+              class="ui-button"
+              type="button"
+              data-i18n="obs.open.button"
+            >
+              Open
+            </button>
+          </div>
+        </div>
+        <label class="ow-field" style="margin-top: 1rem">
+          <span data-i18n="obs.import.file">Or import your own file</span>
+          <input
+            id="obsFile"
+            type="file"
+            accept=".csv,.tsv,.txt,.json,text/csv,text/tab-separated-values,application/json"
+            aria-describedby="obsImportHint"
+          />
+        </label>
+        <p id="obsImportHint" class="ow-hint" data-i18n="obs.import.hint">
+          CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and
+          200,000 rows. It stays on this device.
+        </p>
+      </section>
+
+      <section
+        id="obsImport"
+        class="ow-panel"
+        hidden
+        aria-labelledby="obsImportTitle"
+      >
+        <h2 id="obsImportTitle" tabindex="-1" data-i18n="obs.import.title">
+          Check what you are importing
+        </h2>
+        <ul id="obsImportProblems" class="ow-problems" role="alert" hidden></ul>
+        <div id="obsImportForm">
+          <p id="obsImportSummary"></p>
+          <ul id="obsImportComments" class="ow-hint" hidden></ul>
+          <div class="ow-table-wrap"><table id="obsPreview"></table></div>
+          <div class="ow-grid">
+            <label class="ow-field">
+              <span data-i18n="obs.import.kind">What kind of data this is</span>
+              <select id="obsImportKind"></select>
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.import.titleLabel">Title</span>
+              <input id="obsImportTitleIn" type="text" maxlength="120" />
+            </label>
+            <label class="ow-field">
+              <span>
+                <input id="obsDecimalComma" type="checkbox" />
+                <span data-i18n="obs.import.decimalComma"
+                  >Numbers use a decimal comma</span
+                >
+              </span>
+            </label>
+          </div>
+          <fieldset id="obsTimeFields" hidden>
+            <legend data-i18n="obs.import.timeTitle">The time axis</legend>
+            <div class="ow-grid">
+              <label class="ow-field">
+                <span data-i18n="obs.import.timeFormat">How it counts</span>
+                <select id="obsTimeFormat"></select>
+              </label>
+              <label class="ow-field">
+                <span data-i18n="obs.import.timeScale">Time scale</span>
+                <select id="obsTimeScale"></select>
+              </label>
+            </div>
+          </fieldset>
+          <fieldset id="obsSpectralFields" hidden>
+            <legend data-i18n="obs.import.spectralTitle">The spectral axis</legend>
+            <div class="ow-grid">
+              <label class="ow-field">
+                <span data-i18n="obs.import.medium">Wavelengths measured in</span>
+                <select id="obsMedium"></select>
+              </label>
+              <label class="ow-field">
+                <span data-i18n="obs.import.frame">Frame</span>
+                <input
+                  id="obsFrame"
+                  type="text"
+                  maxlength="60"
+                  placeholder="observed"
+                  data-i18n-placeholder="obs.import.framePlaceholder"
+                />
+              </label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend data-i18n="obs.import.columnsTitle">Columns</legend>
+            <p class="ow-hint" data-i18n="obs.import.unitRule">
+              Every column of numbers needs a unit. Nothing is assumed: choose
+              one, choose "no unit" for a ratio, or say it is not stated.
+            </p>
+            <div id="obsMapping"></div>
+          </fieldset>
+          <div class="ow-actions">
+            <button
+              id="obsImportGo"
+              class="ui-button"
+              type="button"
+              data-i18n="obs.import.go"
+            >
+              Import
+            </button>
+            <button
+              id="obsImportCancel"
+              class="ui-button"
+              type="button"
+              data-i18n="obs.import.cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="obsWork" hidden aria-labelledby="obsTitle">
+        <h2 id="obsTitle" tabindex="-1"></h2>
+        <dl id="obsSource" class="ow-meta"></dl>
+        <details class="ow-panel" open>
+          <summary data-i18n="obs.seeing.title">What you are seeing</summary>
+          <ul id="obsSeeing"></ul>
+        </details>
+
+        <div id="obsAxes" class="ow-grid">
+          <label class="ow-field">
+            <span data-i18n="obs.axes.x">Across</span>
+            <select id="obsAxisX"></select>
+          </label>
+          <label class="ow-field">
+            <span data-i18n="obs.axes.y">Up</span>
+            <select id="obsAxisY"></select>
+          </label>
+        </div>
+
+        <p id="obsKeys" class="ow-hint" data-i18n="obs.keys">
+          Drag across the plot or the image, or click the table, to select.
+          With the keyboard: arrow keys move, Shift with an arrow selects,
+          Space adds or removes one, Escape clears.
+        </p>
+        <div class="ow-views">
+          <div>
+            <figure id="obsPlotBox">
+              <svg
+                id="obsPlot"
+                class="ow-plot"
+                tabindex="0"
+                role="group"
+                aria-roledescription="plot"
+                data-i18n-aria-roledescription="obs.plot.role"
+                aria-describedby="obsKeys"
+              ></svg>
+            </figure>
+            <figure id="obsImageBox" hidden>
+              <canvas
+                id="obsImage"
+                tabindex="0"
+                role="group"
+                aria-roledescription="pixel grid"
+                data-i18n-aria-roledescription="obs.image.role"
+                aria-describedby="obsKeys"
+              ></canvas>
+              <ul id="obsLegend" class="ow-legend"></ul>
+            </figure>
+            <p id="obsReadout" class="ow-hint"></p>
+          </div>
+          <div>
+            <div class="ow-actions">
+              <span id="obsSelected"></span>
+              <button id="obsClear" class="ui-button ow-small" type="button" data-i18n="obs.selection.clear">
+                Clear selection
+              </button>
+            </div>
+            <div class="ow-grid">
+              <label class="ow-field">
+                <span data-i18n="obs.mask.label">Why these are left out (optional)</span>
+                <input id="obsMaskLabel" type="text" maxlength="80" />
+              </label>
+              <div>
+                <button id="obsMask" class="ui-button" type="button" data-i18n="obs.mask.go">
+                  Mask the selection
+                </button>
+              </div>
+              <label class="ow-field">
+                <span data-i18n="obs.note.label">A note on the selection</span>
+                <input id="obsNoteText" type="text" maxlength="500" />
+              </label>
+              <div>
+                <button id="obsNoteGo" class="ui-button" type="button" data-i18n="obs.note.go">
+                  Add the note
+                </button>
+              </div>
+            </div>
+            <div class="ow-actions">
+              <button id="obsUndo" class="ui-button" type="button" data-i18n="obs.undo" aria-keyshortcuts="Control+Z Meta+Z">
+                Undo
+              </button>
+              <button id="obsRedo" class="ui-button" type="button" data-i18n="obs.redo" aria-keyshortcuts="Control+Shift+Z Meta+Shift+Z Control+Y">
+                Redo
+              </button>
+            </div>
+            <div id="obsMarks" hidden>
+              <h3 data-i18n="obs.marks.title">Masks and notes</h3>
+              <ul id="obsMaskList"></ul>
+              <ul id="obsNoteList"></ul>
+            </div>
+          </div>
+        </div>
+
+        <details class="ow-panel">
+          <summary data-i18n="obs.changes.title">Change what you are looking at</summary>
+          <p class="ow-hint" data-i18n="obs.changes.hint">
+            Every change can be undone, and the saved file lists them all.
+          </p>
+          <div id="obsCropBox" class="ow-grid">
+            <label class="ow-field">
+              <span data-i18n="obs.crop.min">Keep from</span>
+              <input id="obsCropMin" type="number" step="any" />
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.crop.max">to</span>
+              <input id="obsCropMax" type="number" step="any" />
+            </label>
+            <div>
+              <span id="obsCropUnit" class="ow-hint"></span>
+              <button id="obsCropGo" class="ui-button" type="button" data-i18n="obs.crop.go">
+                Crop
+              </button>
+            </div>
+          </div>
+          <div id="obsNormBox" class="ow-actions">
+            <button id="obsNormGo" class="ui-button" type="button" data-i18n="obs.normalize.go">
+              Divide by the median
+            </button>
+          </div>
+          <div id="obsFoldBox" class="ow-grid">
+            <label class="ow-field">
+              <span data-i18n="obs.fold.period">Period</span>
+              <input id="obsFoldPeriod" type="number" step="any" min="0" />
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.fold.epoch">Epoch (a time of mid-transit)</span>
+              <input id="obsFoldEpoch" type="number" step="any" />
+            </label>
+            <div>
+              <button id="obsFoldGo" class="ui-button" type="button" data-i18n="obs.fold.go">
+                Fold
+              </button>
+            </div>
+          </div>
+          <div id="obsBinBox" class="ow-grid">
+            <label class="ow-field">
+              <span data-i18n="obs.bin.width">Bin width</span>
+              <input id="obsBinWidth" type="number" step="any" min="0" />
+            </label>
+            <div>
+              <span id="obsBinUnit" class="ow-hint"></span>
+              <button id="obsBinGo" class="ui-button" type="button" data-i18n="obs.bin.go">
+                Bin
+              </button>
+            </div>
+          </div>
+          <div id="obsRestBox" class="ow-grid">
+            <label class="ow-field">
+              <span data-i18n="obs.rest.z">Redshift z</span>
+              <input id="obsRestZ" type="number" step="any" />
+            </label>
+            <div>
+              <button id="obsRestGo" class="ui-button" type="button" data-i18n="obs.rest.go">
+                Shift to the rest frame
+              </button>
+            </div>
+          </div>
+          <div id="obsConvertBox" class="ow-grid">
+            <label class="ow-field">
+              <span data-i18n="obs.convert.column">Convert</span>
+              <select id="obsConvertColumn"></select>
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.convert.to">to</span>
+              <select id="obsConvertTo"></select>
+            </label>
+            <div>
+              <button id="obsConvertGo" class="ui-button" type="button" data-i18n="obs.convert.go">
+                Convert
+              </button>
+            </div>
+          </div>
+          <div id="obsTimeBox" class="ow-grid">
+            <label class="ow-field">
+              <span data-i18n="obs.time.to">Count time as</span>
+              <select id="obsTimeTo"></select>
+            </label>
+            <div>
+              <button id="obsTimeGo" class="ui-button" type="button" data-i18n="obs.time.go">
+                Change
+              </button>
+            </div>
+          </div>
+          <p id="obsChangeStatus" class="ow-problems"></p>
+        </details>
+
+        <div class="ow-table-wrap">
+          <table id="obsTable" aria-describedby="obsKeys"></table>
+        </div>
+        <div class="ow-actions">
+          <button id="obsPrevPage" class="ui-button ow-small" type="button" data-i18n="obs.table.prev">
+            Previous rows
+          </button>
+          <button id="obsNextPage" class="ui-button ow-small" type="button" data-i18n="obs.table.next">
+            Next rows
+          </button>
+        </div>
+
+        <div class="ow-actions">
+          <button id="obsExportJson" class="ui-button" type="button" data-i18n="obs.export.json">
+            Save as JSON (everything, with your changes)
+          </button>
+          <button id="obsExportCsv" class="ui-button" type="button" data-i18n="obs.export.csv">
+            Save the rows as CSV
+          </button>
+        </div>
+      </section>
+      <p id="obsStatus" class="visually-hidden" role="status" aria-live="polite"></p>
+    </main>
+    <script type="module" src="/js/observatoryPage.js"></script>
+  </body>
+</html>

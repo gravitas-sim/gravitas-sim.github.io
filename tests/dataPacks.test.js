@@ -162,8 +162,9 @@ describe('the manifest format', () => {
       expect(validateDataPack(m)).toEqual([]);
       expect(m.id).toBe(pack.id);
       expect(m.raw).toEqual(pack.raw);
-      expect(m.transformation.version).toBe(TRANSFORM_VERSION);
+      expect(m.transformation.version).toBe(pack.transformVersion);
     }
+    expect(TESS.transformVersion).toBe(TRANSFORM_VERSION);
   });
 
   test('synthetic data is refused however complete its manifest is', () => {
@@ -313,6 +314,8 @@ function copyForCheck() {
     'tools/build-data-packs.mjs',
     'tools/data-packs',
     'js/observation.js',
+    // The aperture pack's check projects pixels through its world coordinates.
+    'js/observatory/wcs.js',
     'js/data/observations',
     'data-packs',
     'capabilities',

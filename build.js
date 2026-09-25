@@ -60,6 +60,7 @@ const DOC_PAGES = [
   'evaluation',
   'figure',
   'experiments',
+  'observatory',
 ];
 
 /**
@@ -444,6 +445,24 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'experiments-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The observatory. Its own entry, as the experiment runner is: nothing in
+  // the simulation imports it, and each observation it opens is a chunk of
+  // its own, fetched when opened.
+  if (existsSync('js/observatoryPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/observatoryPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'observatory-[hash]',
       legalComments: 'none',
     });
   }

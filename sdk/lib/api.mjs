@@ -25,7 +25,7 @@ export { PLATFORM_API };
 export { observationOf, checkObservation } from '../../js/observation.js';
 
 /** This SDK. A major version changes only with a breaking change to this file. */
-export const SDK_VERSION = '1.0.0';
+export const SDK_VERSION = '1.1.0';
 
 /** The formats this SDK reads and writes, and the version of each. */
 export const FORMATS = Object.freeze({

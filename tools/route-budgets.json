@@ -1,5 +1,5 @@
 {
-  "note": "Ceilings for tools/route-budget.mjs: what a fresh visitor downloads per route, service worker blocked, in the published sources and a build. Each is the value measured at measuredAt plus 0.5% of its bytes and one request. Tight on purpose. The four lesson routes were lowered again when every remaining instrument family was made lazy, measured at the commit that did it (the lessonsMeasuredAt field): in the published sources, where each family is its own module with its own imports, importing any one family eagerly again puts every lesson over its ceiling. A bundle can absorb a small family inside the slack, which is why e2e/lazyInstruments.spec.js, not these numbers, is what holds every lesson to the families its steps name. The other routes did not move and kept the ceilings measured at measuredAt. Raised only by hand, in a commit that says why. The instructor-portal ceilings were re-pinned the same way when the GWOSC lab added 5.2 KB of instructor guidance to that page (767.4 KB sources, 646.6 KB build), approved by the owner; no other route moved. The evaluation page's ceilings are measured after merging v2 at 489e4d2, where #36 made js/evaluationKit.js write through the shared js/csv.js (the spreadsheet-formula guard, 7.1 KB as served): 30.5 KB in 3 requests from the sources, 11.6 KB in 1 from the build. The figure builder's ceilings (/figure/) were added with the page, measured on the commit that added it; they include its live preview, which is the embed application itself, so most of the page's weight is the figure it shows. The experiment runner's ceilings (/experiments/) were added with the page, measured on the commit that added it (1103.5 KB in 46 requests from the sources, 323.6 KB in 2 from the build): the page prices an experiment as it opens by building one trial in a Worker and timing a short burst of it there, so the route carries the engine that Worker imports - in the build that is the Worker's own bundle, one file. The 46th request is js/csv.js, the shared writer the trials CSV goes through for its formula guard (7.4 KB as served).",
+  "note": "Ceilings for tools/route-budget.mjs: what a fresh visitor downloads per route, service worker blocked, in the published sources and a build. Each is the value measured at measuredAt plus 0.5% of its bytes and one request. Tight on purpose. The four lesson routes were lowered again when every remaining instrument family was made lazy, measured at the commit that did it (the lessonsMeasuredAt field): in the published sources, where each family is its own module with its own imports, importing any one family eagerly again puts every lesson over its ceiling. A bundle can absorb a small family inside the slack, which is why e2e/lazyInstruments.spec.js, not these numbers, is what holds every lesson to the families its steps name. The other routes did not move and kept the ceilings measured at measuredAt. Raised only by hand, in a commit that says why. The instructor-portal ceilings were re-pinned the same way when the GWOSC lab added 5.2 KB of instructor guidance to that page (767.4 KB sources, 646.6 KB build), approved by the owner; no other route moved. The evaluation page's ceilings are measured after merging v2 at 489e4d2, where #36 made js/evaluationKit.js write through the shared js/csv.js (the spreadsheet-formula guard, 7.1 KB as served): 30.5 KB in 3 requests from the sources, 11.6 KB in 1 from the build. The figure builder's ceilings (/figure/) were added with the page, measured on the commit that added it; they include its live preview, which is the embed application itself, so most of the page's weight is the figure it shows. The experiment runner's ceilings (/experiments/) were added with the page, measured on the commit that added it (1103.5 KB in 46 requests from the sources, 323.6 KB in 2 from the build): the page prices an experiment as it opens by building one trial in a Worker and timing a short burst of it there, so the route carries the engine that Worker imports - in the build that is the Worker's own bundle, one file. The 46th request is js/csv.js, the shared writer the trials CSV goes through for its formula guard (7.4 KB as served). The observatory's ceilings (/observatory/) were added with the page, measured on the commit that added it (252.3 KB in 28 requests from the sources, 119.4 KB in 2 from the build): the page before any observation is opened. Each observation is fetched only when opened, and tools/observatory-budgets.json holds what each adds.",
   "measuredAt": "500c548",
   "routes": {
     "sources": {
@@ -50,6 +50,10 @@
       "experiments": {
         "kb": 1109.0,
         "requests": 47
+      },
+      "observatory": {
+        "kb": 253.6,
+        "requests": 29
       }
     },
     "build": {
@@ -99,6 +103,10 @@
       },
       "experiments": {
         "kb": 325.2,
+        "requests": 3
+      },
+      "observatory": {
+        "kb": 120.0,
         "requests": 3
       }
     }
