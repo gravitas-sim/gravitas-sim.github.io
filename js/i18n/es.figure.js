@@ -8,6 +8,7 @@
 
 export const ES_FIGURE = {
   'fig.doc.title': 'Constructor de figuras | Gravitas',
+  'fig.main.label': 'Constructor de figuras',
   'fig.title': 'Crea una figura interactiva',
   'fig.lang.label': 'Idioma',
   'fig.intro':

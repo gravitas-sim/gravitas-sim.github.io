@@ -114,9 +114,13 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * e2e/embedContract.spec.js and e2e/figureBuilder.spec.js hold the public
  * embed contract and the page that writes it (EMBEDDING.md) in both, because
  * a course page will frame whichever one is published.
+ *
+ * e2e/experimentRunner.spec.js runs real experiment Workers in both, because
+ * the Worker is its own bundle in dist/ and a source-only test would never
+ * know whether that bundle starts.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js/;
 
 /**
  * Which engines to run.

@@ -80,6 +80,9 @@ export const ROUTES = [
   { id: 'evaluation', url: '/evaluation/', page: true },
   { id: 'instructors', url: '/instructors/', page: true },
   { id: 'figure', url: '/figure/', page: true },
+  // The experiment runner prices an experiment as it opens, by building one
+  // trial in a Worker, so its route carries the engine the Worker loads.
+  { id: 'experiments', url: '/experiments/', page: true },
 ];
 
 const CONFIGS = {

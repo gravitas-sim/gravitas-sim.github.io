@@ -59,6 +59,7 @@ const DOC_PAGES = [
   'teaching',
   'evaluation',
   'figure',
+  'experiments',
 ];
 
 /**
@@ -164,7 +165,14 @@ async function buildJs() {
   // The physics worker is instantiated with `new Worker(new URL(...))`, so it
   // needs its own bundle rather than being inlined into the main graph.
   await esbuild.build({
-    entryPoints: ['js/physicsWorker.js', 'js/chartWorker.js'],
+    // The experiment runner's realm (js/experiments/experimentWorker.js) is
+    // the same kind of thing: started with `new Worker(new URL(...))` from its
+    // page, and carrying its own copy of the engine.
+    entryPoints: [
+      'js/physicsWorker.js',
+      'js/chartWorker.js',
+      'js/experiments/experimentWorker.js',
+    ],
     bundle: true,
     minify: true,
     // physics.js branches on constructor.name in fifteen places. Without
@@ -418,6 +426,24 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'figure-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The experiment runner. Its own entry, as the figure builder is: nothing
+  // in the simulation imports it, and it never loads the engine itself - its
+  // Workers do, from their own bundle above.
+  if (existsSync('js/experimentsPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/experimentsPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'experiments-[hash]',
       legalComments: 'none',
     });
   }

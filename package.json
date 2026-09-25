@@ -30,6 +30,7 @@
     "thumbnails": "node tools/generate-scenario-thumbnails.mjs",
     "thumbnails:check": "node tools/generate-scenario-thumbnails.mjs --check",
     "perf": "node tools/perf-probe.mjs",
+    "bench:experiments": "node tools/experiment-bench.mjs",
     "validate:physics": "node tools/validate-physics.mjs",
     "manifest": "node tools/build-investigation-manifest.js",
     "teaching:data": "node tools/build-teaching-demos.mjs",

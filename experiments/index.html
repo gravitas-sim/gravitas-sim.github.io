@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Experiment runner | Gravitas</title>
+    <meta
+      name="description"
+      content="Vary a laboratory setting across a range, run every value with several seeds in background workers, and read what changed, with a record precise enough to run it again."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: a form, a progress bar, two tables and a plot. */
+      .xp-wrap {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      /* The document pages' link colour (.doc-main a in css/page.css), which
+         this page's own wrapper does not inherit: the browser's default blue
+         is 2.2:1 on this background. */
+      .xp-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .xp-wrap fieldset {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.9rem 1rem 1rem;
+        margin: 0 0 1.25rem;
+      }
+      .xp-wrap legend {
+        font-weight: 600;
+        padding: 0 0.35rem;
+      }
+      .xp-grid {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+      }
+      .xp-field {
+        display: grid;
+        gap: 0.3rem;
+      }
+      .xp-wrap input,
+      .xp-wrap select,
+      .xp-wrap textarea {
+        width: 100%;
+        box-sizing: border-box;
+        font: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.45rem 0.55rem;
+      }
+      .xp-wrap textarea {
+        min-height: 6rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.8rem;
+      }
+      .xp-hint {
+        margin: 0.5rem 0 0;
+        font-size: 0.85rem;
+        opacity: 0.75;
+      }
+      .xp-status {
+        margin: 0.5rem 0 0;
+        min-height: 1.2em;
+      }
+      .xp-refusals {
+        color: #ffb4a2;
+        margin: 0.5rem 0 0;
+      }
+      .xp-actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 0.75rem;
+      }
+      .xp-wrap progress {
+        width: 100%;
+        height: 0.9rem;
+      }
+      .xp-table-wrap {
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+      .xp-wrap table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.88rem;
+      }
+      .xp-wrap caption {
+        text-align: left;
+        font-weight: 600;
+        padding: 0 0 0.4rem;
+      }
+      .xp-wrap th,
+      .xp-wrap td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.3rem 0.5rem;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .xp-wrap thead th,
+      .xp-wrap tbody th {
+        text-align: left;
+      }
+      .xp-bad {
+        color: #ffb4a2;
+      }
+      .xp-plot {
+        width: 100%;
+        max-width: 42rem;
+        height: auto;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 8px;
+      }
+      .xp-axis {
+        stroke: rgba(255, 255, 255, 0.45);
+      }
+      .xp-tick,
+      .xp-label {
+        fill: currentColor;
+        font-size: 12px;
+        opacity: 0.8;
+      }
+      .xp-point {
+        fill: #8fd3ff;
+      }
+      .xp-mean {
+        fill: none;
+        stroke: #ffd27a;
+        stroke-width: 2;
+      }
+      .xp-fail {
+        fill: #ffb4a2;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main class="xp-wrap">
+      <div
+        id="langSwitch"
+        class="xp-actions"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="exp.lang.label"
+      ></div>
+      <h1 data-i18n="exp.title">Run an experiment</h1>
+      <p data-i18n="exp.intro">
+        Vary one laboratory setting across a range, run every value with
+        several seeds, and read what changed.
+      </p>
+      <p><a href="/" data-i18n="exp.back">Back to Gravitas</a></p>
+
+      <form id="xpForm" autocomplete="off" novalidate>
+        <fieldset>
+          <legend data-i18n="exp.what.title">What to run</legend>
+          <div class="xp-grid">
+            <label class="xp-field">
+              <span data-i18n="exp.what.scenario">Scenario</span>
+              <select id="xpScenario"></select>
+            </label>
+            <label class="xp-field">
+              <span data-i18n="exp.what.param">Setting to vary</span>
+              <select id="xpParam"></select>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend data-i18n="exp.values.title">Values</legend>
+          <div class="xp-grid">
+            <label class="xp-field">
+              <span data-i18n="exp.values.from">From</span>
+              <input
+                id="xpFrom"
+                type="number"
+                step="any"
+                aria-describedby="xpRangeHint"
+              />
+            </label>
+            <label class="xp-field">
+              <span data-i18n="exp.values.to">To</span>
+              <input
+                id="xpTo"
+                type="number"
+                step="any"
+                aria-describedby="xpRangeHint"
+              />
+            </label>
+            <label class="xp-field">
+              <span data-i18n="exp.values.count">How many values</span>
+              <input id="xpCount" type="number" min="3" max="20" value="8" />
+            </label>
+          </div>
+          <p id="xpRangeHint" class="xp-hint"></p>
+        </fieldset>
+
+        <fieldset>
+          <legend data-i18n="exp.runs.title">Seeds and length</legend>
+          <div class="xp-grid">
+            <label class="xp-field">
+              <span data-i18n="exp.runs.seeds">Seeds per value</span>
+              <input
+                id="xpSeeds"
+                type="number"
+                min="1"
+                max="20"
+                value="2"
+                aria-describedby="xpSeedHint"
+              />
+            </label>
+            <label class="xp-field">
+              <span data-i18n="exp.runs.seedBase">Seed name</span>
+              <input
+                id="xpSeedBase"
+                type="text"
+                value="run"
+                maxlength="24"
+                spellcheck="false"
+              />
+            </label>
+            <label class="xp-field">
+              <span data-i18n="exp.runs.duration">Simulated time per trial</span>
+              <input
+                id="xpDuration"
+                type="number"
+                min="1"
+                max="200000"
+                step="any"
+                value="10000"
+              />
+            </label>
+          </div>
+          <p id="xpSeedHint" class="xp-hint" data-i18n="exp.runs.seedHint">
+            Every value runs once per seed.
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend data-i18n="exp.measure.title">What to measure</legend>
+          <label class="xp-field">
+            <span data-i18n="exp.measure.metric">Measurement</span>
+            <select id="xpMetric"></select>
+          </label>
+        </fieldset>
+
+        <p id="xpDevice" class="xp-hint"></p>
+        <p id="xpEstimate" class="xp-status" role="status" aria-live="polite"></p>
+        <ul id="xpRefusals" class="xp-refusals" hidden></ul>
+        <div class="xp-actions">
+          <button id="xpRun" class="ui-button" type="submit" disabled data-i18n="exp.run">
+            Run
+          </button>
+          <button id="xpCancel" class="ui-button" type="button" hidden data-i18n="exp.cancel">
+            Cancel
+          </button>
+          <button id="xpResume" class="ui-button" type="button" hidden></button>
+        </div>
+      </form>
+
+      <section id="xpProgressBox" hidden>
+        <label class="xp-field">
+          <span data-i18n="exp.progress.label">Progress</span>
+          <progress id="xpProgress" max="1000" value="0"></progress>
+        </label>
+        <p id="xpStatus" class="xp-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section id="xpResults" hidden aria-labelledby="xpResultsTitle">
+        <h2 id="xpResultsTitle" data-i18n="exp.results.title">Results</h2>
+        <figure>
+          <svg id="xpPlot" class="xp-plot" role="img"></svg>
+          <figcaption class="xp-hint" data-i18n="exp.plot.caption">
+            Each dot is one trial; the line joins the mean at each value.
+          </figcaption>
+        </figure>
+        <div class="xp-table-wrap">
+          <table>
+            <caption id="xpSummaryCaption"></caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="exp.summary.value">Value</th>
+                <th scope="col" data-i18n="exp.summary.mean">Mean</th>
+                <th scope="col" data-i18n="exp.summary.min">Lowest</th>
+                <th scope="col" data-i18n="exp.summary.max">Highest</th>
+                <th scope="col" data-i18n="exp.summary.spread">Spread (s.d.)</th>
+                <th scope="col" data-i18n="exp.summary.n">Trials used</th>
+                <th scope="col" data-i18n="exp.summary.left">Left out</th>
+              </tr>
+            </thead>
+            <tbody id="xpSummaryBody"></tbody>
+          </table>
+        </div>
+        <div class="xp-actions">
+          <button id="xpDownloadJson" class="ui-button" type="button" data-i18n="exp.download.json">
+            Download the result (JSON)
+          </button>
+          <button id="xpDownloadCsv" class="ui-button" type="button" data-i18n="exp.download.csv">
+            Download the trials (CSV)
+          </button>
+        </div>
+        <div class="xp-table-wrap">
+          <table>
+            <caption data-i18n="exp.trials.caption">
+              Every trial, in the order it was planned
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="exp.trials.index">Trial</th>
+                <th scope="col" data-i18n="exp.trials.value">Value</th>
+                <th scope="col" data-i18n="exp.trials.seed">Seed</th>
+                <th scope="col" data-i18n="exp.trials.status">Outcome</th>
+                <th scope="col" data-i18n="exp.trials.result">Measurement</th>
+                <th scope="col" data-i18n="exp.trials.steps">Steps</th>
+                <th scope="col" data-i18n="exp.trials.wall">Time (ms)</th>
+              </tr>
+            </thead>
+            <tbody id="xpTrialsBody"></tbody>
+          </table>
+        </div>
+        <details>
+          <summary data-i18n="exp.manifest.title">The experiment as a file</summary>
+          <pre id="xpManifest" class="xp-hint"></pre>
+        </details>
+      </section>
+
+      <section aria-labelledby="xpCheckTitle">
+        <h2 id="xpCheckTitle" data-i18n="exp.check.title">Check a saved result</h2>
+        <p id="xpCheckHint" class="xp-hint" data-i18n="exp.check.hint">
+          Paste a result file this page saved, or an experiment file.
+        </p>
+        <label class="xp-field">
+          <span data-i18n="exp.check.input">Result or experiment (JSON)</span>
+          <textarea id="xpCheckInput" spellcheck="false" aria-describedby="xpCheckHint"></textarea>
+        </label>
+        <div class="xp-actions">
+          <button id="xpCheckBtn" class="ui-button" type="button" data-i18n="exp.check.run">
+            Check
+          </button>
+        </div>
+        <p id="xpCheckOut" class="xp-status" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+    <script type="module" src="/js/experimentsPage.js"></script>
+  </body>
+</html>
