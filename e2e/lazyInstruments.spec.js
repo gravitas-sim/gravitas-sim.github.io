@@ -3,8 +3,9 @@
 // -----------------------------------------------------------------------------
 // No instrument family is part of the lesson engine: js/widgets.js fetches one
 // when a step first names one of its instruments. These tests hold what a
-// reader can see of that - a loading state that is announced, an instrument
-// that arrives, a failure that says so and a retry or reload that recovers,
+// reader can see of that - a loading state that is announced and shows nothing
+// of the last step's instrument, an instrument that arrives, a failure that
+// says so and a retry or reload that recovers,
 // an instrument that still draws offline - and, for every lesson, that it
 // fetches only the families its steps have named so far.
 //
@@ -407,6 +408,152 @@ test.describe('a family the first step needs', () => {
       });
       await expectDrawn(page);
     }
+    errors.consoleErrors.splice(
+      0,
+      errors.consoleErrors.length,
+      ...errors.consoleErrors.filter(
+        e => !/Failed to load resource|dynamically imported module/.test(e)
+      )
+    );
+  });
+});
+
+test.describe('a family a later step needs', () => {
+  // Lives of Stars opens on the stellar family's size comparison and first
+  // names the evolution family at its second step. From the moment that step
+  // opens the panel belongs to it, so for as long as the fetch takes nothing of
+  // the size comparison may be left up: not its rows, not its Clear button, and
+  // not its picture, whose name told a screen reader those rows were the
+  // measured values of whatever the panel now said it was.
+  const EVOLUTION = 'stellarEvolutionWidgets';
+  const isEvolution = url => familiesInScript(url, SERVED).includes(EVOLUTION);
+
+  /**
+   * What the instrument panel is showing, read in one task.
+   *
+   * One reading rather than a retrying `not`, which would pass the moment a
+   * stale row went away; each test takes it only once the page is provably in
+   * the state it is asserting about.
+   */
+  const panel = page =>
+    page.evaluate(() => {
+      const $ = id => document.getElementById(id);
+      const canvas = $('investigationToolCanvas');
+      const pixels =
+        canvas.width && canvas.height
+          ? canvas
+              .getContext('2d')
+              .getImageData(0, 0, canvas.width, canvas.height).data
+          : [];
+      const readout = $('investigationToolReadout');
+      return {
+        rows: [...readout.querySelectorAll('dt')].map(dt =>
+          dt.textContent.trim()
+        ),
+        readout: readout.textContent.trim(),
+        actions: [
+          ...$('investigationToolActions').querySelectorAll(
+            '[data-tool-action]'
+          ),
+        ].map(b => b.dataset.toolAction),
+        presets: $('investigationToolPresets').children.length,
+        label: canvas.getAttribute('aria-label') ?? '',
+        painted: pixels.some(v => v !== 0),
+      };
+    });
+
+  /** The first step's instrument, drawn, and not vacuously so. */
+  async function sizeComparison(page) {
+    await openLesson(page, 'lives-of-stars');
+    await expectInstrument(page);
+    const shown = await panel(page);
+    expect(shown.rows.length).toBeGreaterThan(0);
+    expect(shown.actions).toContain('clear');
+    expect(shown.label).toMatch(/measured values/);
+    expect(shown.painted).toBe(true);
+    return shown;
+  }
+
+  /** Nothing in `now` is left over from `before`. */
+  function nothingOf(before, now) {
+    for (const row of before.rows) expect(now.readout).not.toContain(row);
+    expect(now.rows).toEqual([]);
+    expect(now.actions).toEqual([]);
+    expect(now.presets).toBe(0);
+    expect(now.label).not.toMatch(/measured values/);
+    expect(now.painted).toBe(false);
+  }
+
+  test('shows nothing of the last instrument while it is on its way', async ({
+    page,
+  }) => {
+    let release;
+    const held = new Promise(r => (release = r));
+    await page.route(/\.m?js(\?|$)/, async route => {
+      if (isEvolution(route.request().url())) await held;
+      await route.continue();
+    });
+    const before = await sizeComparison(page);
+    await advanceTo(page, 2);
+    const note = page.locator('#investigationToolNote');
+    await expect(note).toHaveAttribute('role', 'status');
+    await expect(note).toHaveText('Loading this instrument…');
+    // The family is held, so this is the loading state and nothing has
+    // replaced it yet.
+    nothingOf(before, await panel(page));
+
+    release();
+    await expectInstrument(page);
+    const after = await panel(page);
+    expect(after.rows.length).toBeGreaterThan(0);
+    expect(after.rows).not.toEqual(before.rows);
+    expect(after.label).toMatch(/measured values/);
+    expect(after.painted).toBe(true);
+  });
+
+  test('says so when it cannot be fetched, with nothing of the last one under it', async ({
+    page,
+    errors,
+  }) => {
+    let blocked = true;
+    await page.route(/\.m?js(\?|$)/, route =>
+      blocked && isEvolution(route.request().url())
+        ? route.abort('failed')
+        : route.continue()
+    );
+    const before = await sizeComparison(page);
+    await advanceTo(page, 2);
+    const note = page.locator('#investigationToolNote');
+    await expect(note).toHaveText(/could not be loaded/);
+    await expect(note).toHaveAttribute('role', 'status');
+    const retry = page.locator('#investigationToolControls button');
+    await expect(retry).toHaveText('Try again');
+    await expect(retry).toBeFocused();
+    nothingOf(before, await panel(page));
+
+    if (!DIST) {
+      blocked = false;
+      await page.keyboard.press('Enter');
+    } else {
+      // The retry cannot name a new chunk, so it fails too, and still leaves
+      // nothing of the last instrument behind.
+      await page.keyboard.press('Enter');
+      await expect(note).toHaveText(/Reload the page to try again/);
+      nothingOf(before, await panel(page));
+      blocked = false;
+      await page.locator('#investigationToolControls button').click();
+      await expect(page.locator('#investigationPanel')).toBeVisible({
+        timeout: 60_000,
+      });
+      // The first step has an instrument too, so only the step says which
+      // one arrived.
+      if ((await stepOnScreen(page)) < 2) await advanceTo(page, 2);
+    }
+    expect(await stepOnScreen(page)).toBe(2);
+    await expectInstrument(page);
+    const { rows } = await panel(page);
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows).not.toEqual(before.rows);
     errors.consoleErrors.splice(
       0,
       errors.consoleErrors.length,
