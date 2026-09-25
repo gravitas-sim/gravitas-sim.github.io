@@ -25,7 +25,16 @@
 // =============================================================================
 
 /** Bumped when the record shape changes. See migrate(). */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
+
+/**
+ * The metrics every record before version 3 recorded wrongly.
+ *
+ * The bench read physics.js:conservationDrift()'s `energy` and `angular` as
+ * fractional drifts, and they are the current totals, so every value stored
+ * under these two ids is a total times a hundred.
+ */
+const MISRECORDED = ['energy_drift', 'angular_drift'];
 
 /** One key per experiment, so a large one cannot slow down reading a small one. */
 export const KEY_PREFIX = 'gravitas_experiment_';
@@ -125,7 +134,8 @@ export function usedBytes() {
  * Version 1 stored the two runs as `runA`/`runB` with bare sample arrays and
  * no units block. Version 2 names them `runs` keyed by label and records the
  * unit each metric was sampled in, because a file that does not say its units
- * is a file that will be misread.
+ * is a file that will be misread. Version 3 withdraws the two drifts earlier
+ * versions recorded wrongly; see withdrawMisrecordedDrift().
  *
  * A record from the future is refused rather than guessed at: better to tell a
  * student their experiment needs a newer Gravitas than to open it wrongly.
@@ -153,7 +163,66 @@ export function migrate(record) {
       units: out.units || {},
     };
   }
+  if (v < 3) out = withdrawMisrecordedDrift(out);
   return { ok: true, record: { ...out, v: SCHEMA_VERSION }, reason: '' };
+}
+
+/**
+ * Take the wrongly recorded drifts out of an older record.
+ *
+ * Withdrawn rather than converted. Turning a total back into a drift needs the
+ * baseline it would be measured from, which the record does not hold, and a
+ * run's first sample is not always that baseline: Run A starts wherever the
+ * capture left the world. The captured start is in the record, so recording
+ * the runs again measures the drift properly. A run that lost values is
+ * marked, and recording it again replaces the run and the mark with it.
+ *
+ * The saved comparison and reliability check lose their drift rows too, and a
+ * reliability check whose path was a drift is dropped entirely: its verdict
+ * was a comparison of two totals.
+ *
+ * @param {Object} record - A record from before version 3
+ * @returns {Object} A copy without them
+ */
+function withdrawMisrecordedDrift(record) {
+  const wrong = id => MISRECORDED.includes(id);
+  const without = obj =>
+    Object.fromEntries(Object.entries(obj || {}).filter(([k]) => !wrong(k)));
+
+  const runs = {};
+  for (const [label, run] of Object.entries(record.runs || {})) {
+    const samples = Array.isArray(run?.samples) ? run.samples : [];
+    const had =
+      samples.some(s => MISRECORDED.some(id => id in (s || {}))) ||
+      MISRECORDED.some(id => id in (run?.results || {}));
+    runs[label] = had
+      ? {
+          ...run,
+          samples: samples.map(without),
+          ...(run.results ? { results: without(run.results) } : {}),
+          driftWithdrawn: true,
+        }
+      : run;
+  }
+
+  const out = { ...record, runs };
+  if (Array.isArray(out.comparison?.rows)) {
+    out.comparison = {
+      ...out.comparison,
+      rows: out.comparison.rows.filter(r => !wrong(r?.metric)),
+    };
+  }
+  if (out.reliability) {
+    out.reliability = wrong(out.reliability.pathMetric)
+      ? null
+      : {
+          ...out.reliability,
+          metrics: (out.reliability.metrics || []).filter(
+            m => !wrong(m?.metric)
+          ),
+        };
+  }
+  return out;
 }
 
 function normalizeRun(run) {
