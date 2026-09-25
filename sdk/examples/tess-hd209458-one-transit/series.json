@@ -1,0 +1,95 @@
+{
+  "PACK": {
+    "id": "tess-hd209458-one-transit",
+    "version": "1.0.0",
+    "title": "HD 209458: one TESS transit (sector 56)",
+    "object": {
+      "name": "HD 209458",
+      "identifiers": [
+        "TIC 420814525"
+      ],
+      "ra": 330.794887332661,
+      "dec": 18.8843189579296,
+      "frame": "ICRS, epoch J2000",
+      "tessMagnitude": 7.12739992
+    },
+    "facility": {
+      "observatory": "TESS",
+      "instrument": "camera 1, CCD 2, 2-minute cadence",
+      "pipeline": "SPOC spoc-5.0.96-20230729"
+    },
+    "dataType": "light-curve",
+    "origin": "observed",
+    "credit": "TESS, sector 56 (NASA; SPOC light curve from MAST)",
+    "license": {
+      "status": "public-domain",
+      "statement": "NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive."
+    },
+    "retrieved": "2026-09-24",
+    "time": {
+      "scale": "TDB",
+      "reference": "BTJD = BJD - 2457000",
+      "unit": "d"
+    },
+    "columns": [
+      {
+        "name": "time",
+        "unit": "d",
+        "description": "bin centre: t0 + (index + 0.5) x binDays, in BTJD"
+      },
+      {
+        "name": "flux",
+        "unit": "",
+        "description": "PDCSAP flux over its median"
+      },
+      {
+        "name": "flux error",
+        "unit": "",
+        "uncertaintyOf": "flux",
+        "description": "propagated PDCSAP error over the median, one sigma, per bin"
+      }
+    ],
+    "masks": [
+      {
+        "column": "QUALITY",
+        "rule": "any nonzero flag drops the cadence",
+        "dropped": 1288
+      },
+      {
+        "column": "TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR",
+        "rule": "a cadence without a finite value in all three is dropped",
+        "dropped": 0
+      },
+      {
+        "column": "bin",
+        "rule": "a bin with fewer than 3 kept cadences is dropped",
+        "dropped": 3
+      },
+      {
+        "column": "bin",
+        "rule": "outside 0.2 d of the chosen mid-transit",
+        "dropped": 1853
+      }
+    ],
+    "reductions": [
+      "20-minute bins average 10 two-minute cadences each, which rounds ingress and egress to a bin.",
+      "Flux is kept to 1 ppm and its error to 5 ppm.",
+      "One transit of the seven in the sector."
+    ]
+  },
+  "SERIES": {
+    "encoding": "binned-relative-flux/1",
+    "t0": 2825.25,
+    "binDays": 0.013888888888888888,
+    "n": 29,
+    "runs": [
+      [
+        96,
+        29
+      ]
+    ],
+    "flux": "DAB1/0v/Zv+hAAH/NwDt/ij/ev5E4IfHy8JiwenANMILxXfOrPOp/8n/9v9GALr/5P+z/yMAXgD7/w==",
+    "errStepPpm": 5,
+    "err": "Dw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8="
+  }
+}

@@ -59,8 +59,10 @@ If `physics.js` ever grows a real instance API, the change is confined to
 ### The force law is not duplicated
 
 Total energy and angular momentum come from `physics.js:conservedQuantities()`;
-drift comes from `conservationDrift()`. Nothing in `js/experiments/` re-derives
-them. A bench that recomputed the physics could report a system as conserving
+drift comes from `conservationDrift()`, as the `energyDrift` and `angularDrift`
+percentages it computes. The `energy` and `angular` beside them in that object
+are the totals, and reading those as the drift is the bug that shipped with the
+bench in 1.0.0. Nothing in `js/experiments/` re-derives them. A bench that recomputed the physics could report a system as conserving
 beautifully while the engine that actually moved the bodies did something else.
 
 ### One canonical state, not a second serializer

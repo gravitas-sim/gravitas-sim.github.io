@@ -36,7 +36,15 @@ import {
   foldedDepth,
   TRANSFORM_VERSION,
 } from './data-packs/tess-light-curve.mjs';
+import {
+  APERTURE_BITS,
+  APERTURE_VERSION,
+  BITS_SOURCE,
+  encodeAperture,
+  readAperture,
+} from './data-packs/tess-aperture.mjs';
 import { checkObservation, observationOf } from '../js/observation.js';
+import { separation, skyOf } from '../js/observatory/wcs.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CACHE =
@@ -59,6 +67,7 @@ const TESS_HD209458_S56 = {
   capability: 'capabilities/tess-hd209458-s56.json',
   module: 'js/data/observations/tessHd209458S56.js',
   exportName: 'tessHd209458S56',
+  transformVersion: TRANSFORM_VERSION,
   raw: [
     {
       file: 'tess2022244194134-s0056-0000000420814525-0243-s_lc.fits',
@@ -224,7 +233,173 @@ const TESS_HD209458_S56 = {
   },
 };
 
-export const PACKS = [TESS_HD209458_S56];
+/**
+ * The same light curve's aperture mask: the 11 x 13 pixels read out around
+ * HD 209458, and which of them the light curve summed. An image, and a small
+ * one, copied as published. It is the image the observation workspace opens,
+ * and the answer to where the light in the light curve came from.
+ */
+const TESS_HD209458_S56_APERTURE = {
+  id: 'tess-hd209458-s56-aperture',
+  manifest: 'data-packs/tess-hd209458-s56-aperture.json',
+  capability: 'capabilities/tess-hd209458-s56.json',
+  module: 'js/data/observations/tessHd209458S56Aperture.js',
+  exportName: 'tessHd209458S56Aperture',
+  transformVersion: APERTURE_VERSION,
+  raw: TESS_HD209458_S56.raw,
+  // The header's own count, and the target's catalog position as the header
+  // gives it: the check holds the pixels to both.
+  npixsap: { value: 23, ref: 'NPIXSAP in the APERTURE header' },
+  target: {
+    ra: 330.7950845247853,
+    dec: 18.8843189579296,
+    ref: 'TIC 420814525, RA_OBJ and DEC_OBJ in the APERTURE header (ICRS)',
+  },
+
+  /** @param {Uint8Array[]} raw */
+  build(raw) {
+    const units = readFits(raw[0]);
+    const P = units[0].cards;
+    if (P.OBJECT !== 'TIC 420814525' || P.SECTOR !== 56) {
+      throw new Error(
+        `the raw file is ${P.OBJECT} sector ${P.SECTOR}, not this pack`
+      );
+    }
+    const a = readAperture(units);
+    const meta = {
+      id: this.id,
+      version: '1.0.0',
+      title: 'HD 209458: TESS sector 56 aperture mask',
+      object: {
+        name: 'HD 209458',
+        identifiers: [P.OBJECT],
+        ra: P.RA_OBJ,
+        dec: P.DEC_OBJ,
+        frame: 'ICRS, epoch J2000',
+        tessMagnitude: P.TESSMAG,
+      },
+      facility: {
+        observatory: 'TESS',
+        instrument: `camera ${P.CAMERA}, CCD ${P.CCD}, 2-minute cadence`,
+        pipeline: `SPOC ${P.PROCVER}`,
+      },
+      dataType: 'image',
+      origin: 'observed',
+      credit: 'TESS, sector 56 (NASA; SPOC light-curve aperture from MAST)',
+      license: {
+        status: 'public-domain',
+        statement:
+          'NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.',
+      },
+      retrieved: '2026-09-24',
+      columns: [
+        {
+          name: 'aperture flags',
+          unit: '',
+          description:
+            'each pixel is the bit-wise OR of the bits in image.bits, as the archive has it',
+        },
+      ],
+      masks: [],
+      reductions: [],
+      image: {
+        width: a.width,
+        height: a.height,
+        pixels:
+          'row by row from the lowest; x along a row and y up, 1 at the center of the first pixel, as in FITS',
+        wcs: a.wcs,
+        bits: APERTURE_BITS,
+        bitsSource: BITS_SOURCE,
+        ccdCorner: a.record.ccdCorner,
+      },
+    };
+    const manifestRest = {
+      source: {
+        archive: 'MAST (Barbara A. Mikulski Archive for Space Telescopes)',
+        urls: this.raw.map(r => r.url),
+        citations: [
+          {
+            text: 'TESS Light Curves - All Sectors, STScI/MAST',
+            doi: '10.17909/t9-nmc8-f686',
+          },
+          {
+            text: 'Ricker et al. 2015, JATIS 1, 014003 (TESS)',
+            doi: '10.1117/1.JATIS.1.1.014003',
+          },
+          {
+            text: 'Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC)',
+            doi: '10.1117/12.2233418',
+          },
+          {
+            text: BITS_SOURCE,
+            url: 'https://ntrs.nasa.gov/citations/20180007935',
+          },
+        ],
+      },
+      raw: this.raw,
+      transformation: {
+        script: 'tools/data-packs/tess-aperture.mjs',
+        version: APERTURE_VERSION,
+        options: {},
+        steps: [
+          'Read the APERTURE image extension of the light curve: NAXIS1 x NAXIS2 32-bit integers.',
+          'Refuse any pixel that is not a combination of the documented bits.',
+          'Copy the TAN world coordinates (CRPIX, CRVAL, CDELT, PC) from the same header.',
+          'Encode as image-uint16/1: little-endian 16-bit pixels, row by row from the lowest.',
+        ],
+        record: a.record,
+      },
+      assumptions: [
+        'The bit meanings are the SPOC data products document’s; the file carries no description of its own bits.',
+        'The world coordinates are the extension’s as published; they are not refitted.',
+      ],
+      reductions: [],
+      compatible: { widgets: [], investigations: [] },
+      offline: 'optional',
+    };
+    return { meta, manifestRest, series: encodeAperture(a) };
+  },
+
+  /** The scientific check, on a decoded image. */
+  validate(o) {
+    const { width, height, values, wcs } = o.image;
+    let optimal = 0;
+    let collected = 0;
+    let sx = 0;
+    let sy = 0;
+    let n = 0;
+    values.forEach((v, i) => {
+      if (v & 1) collected++;
+      if (v & 2) optimal++;
+      if (v & 8) {
+        sx += (i % width) + 1;
+        sy += Math.floor(i / width) + 1;
+        n++;
+      }
+    });
+    const center = n ? skyOf(wcs, sx / n, sy / n) : null;
+    const offset = center ? separation(center, this.target) * 3600 : Infinity;
+    return {
+      check:
+        'the optimal aperture holds the NPIXSAP pixels the header counts, every pixel was collected, and the flux-weighted-centroid pixels center within one pixel (about 19 arcseconds) of the target',
+      against: [
+        { quantity: 'optimal-aperture pixels', ...this.npixsap },
+        { quantity: 'target position (deg)', ...this.target },
+      ],
+      result: {
+        optimalPixels: optimal,
+        collectedPixels: collected,
+        centroidOffsetArcsec: Number(offset.toFixed(2)),
+      },
+      ok:
+        optimal === this.npixsap.value &&
+        collected === width * height &&
+        offset < 19,
+    };
+  },
+};
+
+export const PACKS = [TESS_HD209458_S56, TESS_HD209458_S56_APERTURE];
 
 // --- Writing -------------------------------------------------------------------
 
@@ -323,9 +498,9 @@ export async function checkPacks({ root = REPO } = {}) {
     if (manifest.id !== pack.id) say(`the manifest is for ${manifest.id}`);
     if (JSON.stringify(manifest.raw) !== JSON.stringify(pack.raw))
       say('the manifest pins different raw products from the tool');
-    if (manifest.transformation?.version !== TRANSFORM_VERSION) {
+    if (manifest.transformation?.version !== pack.transformVersion) {
       say(
-        `made by transformation ${manifest.transformation?.version}; the tool is ${TRANSFORM_VERSION}`
+        `made by transformation ${manifest.transformation?.version}; the tool is ${pack.transformVersion}`
       );
     }
 
@@ -441,7 +616,7 @@ async function main(argv) {
     writeFileSync(path.join(REPO, pack.module), built.moduleText);
     writeFileSync(path.join(REPO, pack.manifest), built.manifestText);
     console.log(
-      `${pack.id}: ${built.manifest.derived.bytes} bytes, depth ${built.manifest.validation.result.foldedDepth}`
+      `${pack.id}: ${built.manifest.derived.bytes} bytes, ${JSON.stringify(built.manifest.validation.result)}`
     );
   }
 }

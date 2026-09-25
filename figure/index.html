@@ -36,6 +36,13 @@
           top: 1rem;
         }
       }
+      /* The document pages' link colour (.doc-main a in css/page.css), which
+         this page's own wrapper does not inherit: the browser's default blue
+         is 2.2:1 on this background. */
+      .fb-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
       .fb-wrap fieldset {
         border: 1px solid rgba(255, 255, 255, 0.14);
         border-radius: 8px;
@@ -131,7 +138,11 @@
     </style>
   </head>
   <body class="doc-page">
-    <main class="fb-wrap">
+    <main
+      class="fb-wrap"
+      aria-label="Figure builder"
+      data-i18n-aria-label="fig.main.label"
+    >
       <div
         id="langSwitch"
         class="fb-actions"

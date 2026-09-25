@@ -14,6 +14,14 @@
 //     source: { kind: 'pack', id, version, credit },
 //   }
 //
+// or, for a pack whose data is an image,
+//
+//   {
+//     quantity: 'aperture-flags' | ...,
+//     image: { width, height, values, unit, wcs, bits },
+//     source: { kind: 'pack', id, version, credit },
+//   }
+//
 // A pack module is content only - PACK, the metadata it is labelled and
 // credited with, and SERIES, the encoded numbers - and this is the one decoder
 // for it. The four datasets that came before packs each carry their own
@@ -65,7 +73,29 @@ function binnedRelativeFlux(series) {
   return { quantity: 'relative-flux', x, y, err: e };
 }
 
-const ENCODINGS = { 'binned-relative-flux/1': binnedRelativeFlux };
+/**
+ * `image-uint16/1`: little-endian 16-bit pixels, a row at a time from the
+ * lowest, which is the FITS order.
+ */
+function imageUint16(series) {
+  const { width, height } = series;
+  const bytes = bytesOf(series.data);
+  if (!(width > 0 && height > 0) || bytes.length !== 2 * width * height) {
+    throw new Error(
+      `the image promises ${width} x ${height} pixels and holds ${bytes.length / 2}`
+    );
+  }
+  const view = new DataView(bytes.buffer);
+  const values = new Uint16Array(width * height);
+  for (let i = 0; i < values.length; i++)
+    values[i] = view.getUint16(2 * i, true);
+  return { quantity: series.quantity, image: { width, height, values } };
+}
+
+const ENCODINGS = {
+  'binned-relative-flux/1': binnedRelativeFlux,
+  'image-uint16/1': imageUint16,
+};
 
 /**
  * The observation a pack module holds.
@@ -80,7 +110,26 @@ export function observationOf(pack) {
       `not a data pack this build can read (${SERIES?.encoding ?? 'no encoding'})`
     );
   }
-  const { quantity, x, y, err } = decode(SERIES);
+  const source = {
+    kind: 'pack',
+    id: PACK.id,
+    version: PACK.version,
+    credit: PACK.credit,
+  };
+  const decoded = decode(SERIES);
+  if (decoded.image) {
+    return {
+      quantity: decoded.quantity,
+      image: {
+        ...decoded.image,
+        unit: PACK.columns[0].unit,
+        wcs: PACK.image?.wcs ?? null,
+        bits: PACK.image?.bits ?? null,
+      },
+      source,
+    };
+  }
+  const { quantity, x, y, err } = decoded;
   const [xCol, yCol] = PACK.columns;
   return {
     quantity,
@@ -93,21 +142,27 @@ export function observationOf(pack) {
     },
     y: { name: yCol.name, unit: yCol.unit, values: y },
     err,
-    source: {
-      kind: 'pack',
-      id: PACK.id,
-      version: PACK.version,
-      credit: PACK.credit,
-    },
+    source,
   };
 }
 
 /**
  * Whether an observation can be drawn and fitted: equal lengths, finite
- * values, positive errors, x never decreasing.
+ * values, positive errors, x never decreasing; for an image, every pixel
+ * there and a number.
  * @returns {string[]} Problems, empty when there are none
  */
 export function checkObservation(o) {
+  if (o?.image) {
+    const { width, height, values } = o.image;
+    if (!(values?.length > 0) || values.length !== width * height)
+      return ['the image does not hold width x height pixels'];
+    for (let i = 0; i < values.length; i++) {
+      if (!Number.isFinite(values[i]))
+        return [`pixel ${i + 1} is not a number`];
+    }
+    return [];
+  }
   const out = [];
   const n = o?.x?.values?.length ?? 0;
   if (!n) return ['it has no rows'];

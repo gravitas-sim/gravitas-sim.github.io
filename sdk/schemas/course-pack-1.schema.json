@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/course-pack-1.schema.json",
+  "title": "gravitas.course-pack/1",
+  "description": "A sequence of lessons Gravitas already has, by public id, with text in every declared locale. Content only. sdk/lib/course.mjs validateCoursePack() is the authority (it also checks that every lesson exists and every string is in every locale). sdk/README.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "version",
+    "locales",
+    "title",
+    "units"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.course-pack"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "locales": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "en",
+          "es"
+        ]
+      }
+    },
+    "title": {
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      },
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      },
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "lessons"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "title": {
+            "type": "object",
+            "required": [
+              "en"
+            ],
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {
+              "en": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "lessons": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "lesson"
+              ],
+              "properties": {
+                "lesson": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+                },
+                "teacherNote": {
+                  "type": "object",
+                  "required": [
+                    "en"
+                  ],
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "properties": {
+                    "en": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "studentNote": {
+                  "type": "object",
+                  "required": [
+                    "en"
+                  ],
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "properties": {
+                    "en": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -79,11 +79,23 @@ async function starPoints(page) {
 }
 
 /**
- * Build a world at a chosen seed, paused, and settle.
+ * Build a world at a chosen seed, paused, and wait until the sky shows it.
  *
  * With no scenario named the world is empty, so nothing in it lenses the sky
  * and what is read back is the sky alone. The lensing case is 'Binary BH',
  * asked for by name in its own test below.
+ *
+ * The rebuild paints the new seed's sky itself, but at the zoom the world was
+ * built at, and the view is reset afterwards. Anything that lenses the sky
+ * moves with the zoom, so where there is a black hole that is a second picture
+ * of the same seed, and the render loop is what paints it. While paused, the
+ * loop repaints at 10Hz. Two frames used to stand in for that repaint, and a
+ * capture that fell inside the same tenth of a second as the rebuild read the
+ * first picture: one seed, two skies.
+ *
+ * So the wait is for the loop's own count of starfield repaints to move. It is
+ * read after the last change, so any repaint counted after it drew this seed
+ * at this view.
  */
 async function sky(page, app, { scenario, seed = 'sky', tier } = {}) {
   if (tier) {
@@ -109,12 +121,18 @@ async function sky(page, app, { scenario, seed = 'sky', tier } = {}) {
   } else {
     await app.emptyWorld(seed, { run: false });
   }
-  await page.evaluate(
-    () =>
-      new Promise(r =>
-        window.requestAnimationFrame(() => window.requestAnimationFrame(r))
-      )
-  );
+  const repainted = await page.evaluate(async () => {
+    const render = await import('/js/render.js');
+    render.perf.enabled = true;
+    const before = render.perf.starPaints;
+    const giveUp = performance.now() + 10_000;
+    while (render.perf.starPaints === before) {
+      if (performance.now() > giveUp) return false;
+      await new Promise(r => window.requestAnimationFrame(r));
+    }
+    return true;
+  });
+  expect(repainted, 'the render loop never repainted the sky').toBe(true);
 }
 
 test('the same seed paints the same sky', async ({ page, app }) => {

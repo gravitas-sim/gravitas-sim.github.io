@@ -364,6 +364,16 @@ which is what happens when a step is inserted above it.
 
 ---
 
+## Adding a data pack, a course or an instrument as an extension
+
+The Extension SDK ([sdk/README.md](sdk/README.md)) scaffolds, validates, tests
+and packs the three kinds of extension: an observation data pack, a course
+(a sequence of existing lessons), and an instrument family. Its checks tell
+you what is wrong by file, line and field, without your having to read the
+code underneath. Start with `npm run sdk -- init <type> <id>`. An accepted
+extension is reviewed and vendored into the application; nothing is
+installed into a running copy.
+
 ## Adding a language
 
 The interface is fully extracted, so a new language is:

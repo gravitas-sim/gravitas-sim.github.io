@@ -29,6 +29,7 @@ export const DATA_TYPES = [
   'model-grid',
   'system-parameters',
   'rotation-curve',
+  'image',
 ];
 /** Types whose independent variable is a time, and so need a time system. */
 export const TIME_SERIES = new Set([
@@ -77,6 +78,17 @@ export const RUNTIME_FIELDS = [
   'masks',
 ];
 
+/**
+ * Fields a runtime copy may also carry, added in SDK 1.1.0: what was reduced
+ * before the data arrived, so an interface can say so, and for an image its
+ * shape, world coordinates and what its values mean. Optional, so a pack
+ * written before them still validates: a runtime copy that leaves out its
+ * reductions is warned about, not refused (sdk/README.md, the deprecation
+ * policy). Gravitas's own packs carry them. An image pack must carry `image`,
+ * because there was no image pack before it.
+ */
+export const RUNTIME_OPTIONAL = ['reductions', 'image'];
+
 const PUBLIC_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/; // as js/platform/manifest.js
 const SEMVER = /^\d+\.\d+\.\d+$/;
 const SHA256 = /^[0-9a-f]{64}$/;
@@ -86,9 +98,12 @@ const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 /**
  * Every problem with one manifest, each naming the field it is about.
  * @param {unknown} m - A parsed manifest
+ * @param {{derivedUnder?: string}} [opts] - Where the derived file must be:
+ *   js/data/ for a pack built into Gravitas; '' for an extension, whose
+ *   derived file is a path inside its own directory (sdk/README.md)
  * @returns {Array<{path: string, message: string}>} Empty when it is a pack
  */
-export function validateDataPack(m) {
+export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
   const out = [];
   const need = (ok, path, message) => ok || out.push({ path, message });
   const text = (v, path) =>
@@ -183,10 +198,15 @@ export function validateDataPack(m) {
     }
   });
   text(m.derived?.file, 'derived.file');
+  const file = m.derived?.file || '';
   need(
-    /^js\/data\//.test(m.derived?.file || ''),
+    derivedUnder
+      ? file.startsWith(derivedUnder)
+      : !/^[a-z]+:|^\/|(^|\/)\.\.(\/|$)/i.test(file),
     'derived.file',
-    'must be under js/data/'
+    derivedUnder
+      ? `must be under ${derivedUnder}`
+      : 'a path inside the extension, never a URL or ..'
   );
   need(
     Number.isInteger(m.derived?.bytes) && m.derived.bytes > 0,
@@ -229,6 +249,31 @@ export function validateDataPack(m) {
     text(m.time?.reference, 'time.reference');
     text(m.time?.unit, 'time.unit');
   }
+  if (m.dataType === 'image') {
+    const im = m.image;
+    need(
+      Number.isInteger(im?.width) &&
+        im.width > 0 &&
+        Number.isInteger(im?.height) &&
+        im.height > 0,
+      'image',
+      'gives a width and height in pixels'
+    );
+    if (im?.bits !== undefined) {
+      need(
+        Array.isArray(im.bits) &&
+          im.bits.every(
+            b =>
+              Number.isInteger(b.value) &&
+              b.value > 0 &&
+              typeof b.meaning === 'string'
+          ),
+        'image.bits',
+        'says what each bit means'
+      );
+      text(im.bitsSource, 'image.bitsSource');
+    }
+  }
   list(m.masks, 'masks', 0);
   (m.masks || []).forEach((k, i) => {
     text(k?.column, `masks[${i}].column`);
@@ -248,11 +293,59 @@ export function validateDataPack(m) {
   return out;
 }
 
-/** The runtime metadata a manifest implies: RUNTIME_FIELDS, nothing else. */
+/**
+ * The runtime metadata a manifest implies: RUNTIME_FIELDS, then those of
+ * RUNTIME_OPTIONAL it has, and nothing else.
+ */
 export function runtimeMeta(m) {
   return Object.fromEntries(
-    RUNTIME_FIELDS.filter(k => m[k] !== undefined).map(k => [k, m[k]])
+    [...RUNTIME_FIELDS, ...RUNTIME_OPTIONAL]
+      .filter(k => m[k] !== undefined)
+      .map(k => [k, m[k]])
   );
+}
+
+/**
+ * Where a runtime copy and its manifest disagree.
+ *
+ * Every field of RUNTIME_FIELDS must match, and nothing may be there that is
+ * not a runtime field. A field of RUNTIME_OPTIONAL that is there must match;
+ * one the manifest has and the copy leaves out is a warning, except `image`
+ * on an image, which is required.
+ *
+ * @param {object} PACK - The runtime copy
+ * @param {object} m - Its manifest
+ * @returns {{errors: string[], warnings: string[]}} Field-level messages
+ */
+export function runtimeDisagreement(PACK, m) {
+  const errors = [];
+  const warnings = [];
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  if (!PACK || typeof PACK !== 'object') {
+    return { errors: ['is not an object'], warnings };
+  }
+  for (const k of RUNTIME_FIELDS) {
+    if (!same(PACK[k], m[k])) errors.push(`${k} is not the manifest's`);
+  }
+  for (const k of RUNTIME_OPTIONAL) {
+    if (PACK[k] === undefined) {
+      if (m[k] === undefined) continue;
+      if (k === 'image' && m.dataType === 'image') {
+        errors.push('image is required in the runtime copy of an image');
+      } else {
+        warnings.push(
+          `${k} is in the manifest and not the runtime copy, so an interface cannot show it`
+        );
+      }
+    } else if (!same(PACK[k], m[k])) {
+      errors.push(`${k} is not the manifest's`);
+    }
+  }
+  const known = new Set([...RUNTIME_FIELDS, ...RUNTIME_OPTIONAL]);
+  for (const k of Object.keys(PACK)) {
+    if (!known.has(k)) errors.push(`${k} is not a runtime field`);
+  }
+  return { errors, warnings };
 }
 
 /**

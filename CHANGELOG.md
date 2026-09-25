@@ -15,6 +15,84 @@ the release rather than in the tag.
 
 ### Added
 
+- **An Extension SDK for contributors** (sdk/README.md).
+  - **Commands:** `npm run sdk -- init`, `validate`, `test`, `pack` and
+    `inspect`, for the three kinds of extension. An observation data pack
+    and a course pack are declarative; an instrument family is executable,
+    so it is reviewed and vendored rather than installed.
+  - **Checks:** the format, the declarative boundary, platform and package
+    compatibility, public-id collisions, licences and provenance,
+    localization, offline classes and validation references. Every
+    finding is reported by file, line and field.
+  - **Archives:** a pack is one deterministic `.gxp` archive, and the same
+    files always give the same bytes.
+  - **Examples:** one of each kind: a single TESS transit of HD 209458 cut
+    from the built-in pack, a five-lesson exoplanet course in English and
+    Spanish, and a Kepler's-third-law instrument.
+  - **Also:** JSON Schemas, TypeScript declarations, fixtures, a contract
+    suite that goes through the public API only, a compatibility matrix and
+    a deprecation policy.
+  - **Platform change:** `gravitas.capability-package/1` can now provide
+    `courses`.
+  - **Not yet:** Gravitas does not install extensions at run time. The guide
+    lists what still stands in an outside author's way.
+- **An observatory, `/observatory/`: real observations and a reader's own
+  files, as a plot, a table and an image at once** (OBSERVATORY_WORKSPACE_DESIGN.md).
+  - **What it opens:** four kinds, each an authentic dataset Gravitas already
+    ships. They are HD 209458's TESS light curve (a time series); four SDSS
+    DR18 stellar spectra; five GWOSC events' catalog values with their 90%
+    intervals (a table); and the same TESS light curve's aperture mask (an
+    image), a new data pack. It also opens a reader's CSV or JSON, through a
+    preview and a mapping in which every unit is chosen and none is guessed.
+  - **One shape for all of them,** `gravitas.observation/1`: units from a
+    registry that converts only within a dimension, one-sigma and interval
+    uncertainties, missing values kept as missing, masks, bit-field flags,
+    time formats and scales, spectral media and frames, and the source's
+    provenance.
+  - **Linked views:** a selection made by dragging or with the keyboard in the
+    plot, the image or the table is the selection in all three, and the
+    focused row or pixel is described in words. The table is an accessible
+    grid of every row, a page at a time.
+  - **Changes, all undoable:** crop, mask, note, convert a unit, change a time
+    format, divide by the median, fold, bin, and shift a spectrum to its rest
+    frame. Each is refused, with the reason, where it cannot apply.
+  - **Honest about what it shows:** "What you are seeing" lists what was done
+    to the data before it arrived, every change made here, how many points
+    the plot drew of how many, masked and missing rows, and whether there is
+    an uncertainty at all.
+  - **Saves:** JSON that reads back as the whole session (the observation as
+    opened, and the changes made again), the same bytes every time; and CSV
+    with units in the header and text disarmed.
+  - Works offline once Gravitas has been opened, in English and Spanish, and
+    within budgets for a desktop and a throttled phone (`npm run
+    bench:observatory`).
+- **An image data pack** (`tess-hd209458-s56-aperture`), and the FITS tool
+  reads two-dimensional images. Image packs are a new `dataType`, and SDK
+  1.1.0 adds two optional runtime fields (`reductions`, `image`) without
+  refusing a pack written for 1.0.0.
+- **An experiment runner, `/experiments/`.** It is the bench's parameter
+  sweep, stated completely enough to run in the background and to run again.
+  - **What it runs:** a `gravitas.experiment/1` manifest (EXPERIMENTS.md).
+    That is a laboratory scenario; one or two of its variables, as values, a
+    range or a seeded uniform draw; a seed set; the bench's metrics; a stop
+    duration and events; fixed numerics; and limits.
+  - **Where it runs:** every trial runs in its own disposable Worker. The
+    engine is evaluated fresh there, so no trial inherits another's state.
+    Several run at once, and results are reported in planned order.
+  - **Before a run:** one trial is built, and its Worker times its own
+    start-up and a short burst of the world, so the experiment is priced on
+    this device rather than from a figure per class of device. An experiment
+    likely to freeze or exhaust it is refused with the reason, and so is one
+    whose trials would all stop at the sample limit and be averaged into
+    nothing.
+  - **During a run:** cancel, per-trial and total time limits, a result-size
+    cap, and reports of corrupt answers and failed Workers. Resume re-runs
+    only what did not finish.
+  - **The result:** a summary table, the trials and a plot. It downloads as
+    JSON with an engine fingerprint, and a saved result can be checked for
+    whether it still reproduces here and, if not, why.
+  - In English and Spanish.
+
 - **Observation data packs, and the first one: TESS's light curve of HD 209458.**
   A pack is observed data with its record of where it came from and what was
   done to it (DATA_PACKS.md). The record covers the archive and its citation,
@@ -315,6 +393,26 @@ the release rather than in the tag.
   means two overlapping runs can briefly wait for runners.
 
 ### Fixed
+
+- **The Experiments bench's energy and angular momentum drift were not drifts.**
+  Since the bench shipped in 1.0.0, both were the system's total energy and
+  angular momentum times a hundred, labeled "%". On Binary Planet Lab that was
+  −25001.44 "%" for a real drift of 0.00017%. `sampleFrame()` read the
+  engine's `energy` and `angular` fields as fractions, and those fields are
+  the totals. It now reads the percentages the engine computes, and a baseline
+  too close to zero stays a gap rather than becoming a perfect 0. The
+  reliability check no longer judges a drift as a conclusion, because halving
+  the step is meant to move it. The old rows said "unchanged" only because
+  both runs had recorded the same total. Saved experiments (schema 3) open
+  with the old drift values removed, and say so. They cannot be converted,
+  because the record does not hold the baseline they would be measured from,
+  but the captured start is kept, so recording the runs again measures them.
+  CSV files and manifests exported before this fix carry the wrong figures in
+  their `energy_drift_pct` and `angular_drift_pct` columns and drift results.
+- **Links on the figure builder were the browser's default blue on a
+  near-black page, 2.2:1 against the 4.5:1 required.** They now use the
+  document pages' accent colour, and the page's own landmark is labelled
+  apart from the one in its preview frame.
 
 - **The play button speaks the reader's language.** Once the simulation had
   been paused or resumed, its label and tooltip were set to English literals,

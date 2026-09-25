@@ -558,6 +558,8 @@ export const ES_DEFERRED = {
   'bench.error.unavailable':
     'Este navegador no tiene almacenamiento local disponible, así que los experimentos no se pueden conservar entre visitas. Exporta a un archivo.',
   'bench.error.open': 'No se pudo abrir ese experimento ({reason}).',
+  'bench.driftWithdrawn':
+    'Una versión anterior grabó mal la deriva de energía y de momento angular de este experimento, como los totales multiplicados por cien. Esos valores se han quitado. Vuelve a grabar las ejecuciones para medir la deriva.',
   'bench.error.import': 'No se pudo leer ese archivo ({reason}).',
 
   // --- El barrido de parametros -----------------------------------------------

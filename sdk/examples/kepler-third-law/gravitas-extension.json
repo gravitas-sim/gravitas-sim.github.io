@@ -1,0 +1,27 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "example.kepler-third-law",
+  "version": "1.0.0",
+  "kind": "built-in",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "Kepler's third law, as one instrument",
+    "es": "La tercera ley de Kepler, como un instrumento"
+  },
+  "provides": {
+    "widgetFamilies": [
+      {
+        "id": "kepler-third-law",
+        "widgets": ["third-law-period"],
+        "entry": "builtin:widgets/kepler-third-law"
+      }
+    ]
+  },
+  "assets": [{ "path": "keplerThirdLawWidgets.js", "role": "code", "offline": "core" }],
+  "citations": [],
+  "licenses": [{ "scope": "*.js", "license": "MIT" }],
+  "offline": { "policy": "precache" },
+  "validation": [{ "check": "jest:tests/sdkContract.test.js" }],
+  "migrations": []
+}
