@@ -78,12 +78,28 @@ async function starPoints(page) {
   });
 }
 
-/** Load a scenario at a chosen seed and settle. */
+/**
+ * Load a scenario at a chosen seed, and wait until the sky shows it.
+ *
+ * The rebuild paints the new seed's sky itself, but at the zoom the world was
+ * built at, and the view is reset here afterwards. Anything that lenses the
+ * sky moves with the zoom - 'Empty' is not a scenario key, so this is the
+ * fallback world, and it has a black hole in it - so that is a second picture
+ * of the same seed, and the render loop is what paints it. While paused, the
+ * loop repaints at 10Hz. Two frames used to stand in for that repaint, and a
+ * capture that fell inside the same tenth of a second as the rebuild read the
+ * first picture: one seed, two skies.
+ *
+ * So the wait is for the loop's own count of starfield repaints to move. It is
+ * read in the same task as the last change, so any repaint counted after it
+ * drew this seed at this view.
+ */
 async function sky(page, app, { scenario = 'Empty', seed = 'sky', tier } = {}) {
-  await page.evaluate(
+  const repainted = await page.evaluate(
     async ({ scenario: key, seed: s, tier: t }) => {
       const ui = await import('/js/ui.js');
       const quality = await import('/js/quality.js');
+      const render = await import('/js/render.js');
       if (t) {
         ui.SETTINGS.quality_tier = t;
         quality.setTier(t);
@@ -93,15 +109,18 @@ async function sky(page, app, { scenario = 'Empty', seed = 'sky', tier } = {}) {
       ui.state.paused = true;
       ui.state.pan = { x: 0, y: 0 };
       ui.state.zoom = 1;
+      render.perf.enabled = true;
+      const before = render.perf.starPaints;
+      const giveUp = performance.now() + 10_000;
+      while (render.perf.starPaints === before) {
+        if (performance.now() > giveUp) return false;
+        await new Promise(r => window.requestAnimationFrame(r));
+      }
+      return true;
     },
     { scenario, seed, tier }
   );
-  await page.evaluate(
-    () =>
-      new Promise(r =>
-        window.requestAnimationFrame(() => window.requestAnimationFrame(r))
-      )
-  );
+  expect(repainted, 'the render loop never repainted the sky').toBe(true);
 }
 
 test('the same seed paints the same sky', async ({ page, app }) => {
