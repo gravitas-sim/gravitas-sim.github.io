@@ -54,6 +54,7 @@ import {
   Debris,
   NeutronStar,
   WhiteDwarf,
+  Galaxy,
   updatePhysicsSettings,
   particlePool,
   findObjectAtPosition,
@@ -5679,8 +5680,16 @@ const hideBHMassesModal = () => {
 };
 // Save/Load functions
 
-/** Every body currently in the simulation, in a stable order. */
+/**
+ * Every body currently in the simulation, in a stable order.
+ *
+ * Galaxies first. Coma Cluster, the one scenario that has them, builds them
+ * before anything else exists, and a share link that carries no ids mints new
+ * ones in this order. Listed first, each member gets its old id back, and with
+ * it the angle the drawing was turned to.
+ */
 const allBodies = () => [
+  ...galaxies,
   ...bh_list,
   ...planets,
   ...stars,
@@ -5702,6 +5711,7 @@ const clearWorld = () => {
   comets.length = 0;
   neutron_stars.length = 0;
   white_dwarfs.length = 0;
+  galaxies.length = 0;
   debris.length = 0;
   particles.length = 0;
   gravity_ripples.length = 0;
@@ -5749,6 +5759,10 @@ const rebuildWorldFromStates = objectStates => {
     else if (type === 'WhiteDwarf') new_obj = new WhiteDwarf(pos, v);
     else if (type === 'Debris') new_obj = new Debris(pos, v);
     else if (type === 'BlackHole') new_obj = new BlackHole(pos, mass, v, true);
+    // A galaxy's constructor has no mass of its own to fall back on, and a
+    // member without one would put NaN into every force in the cluster.
+    else if (type === 'Galaxy' && Number.isFinite(mass))
+      new_obj = new Galaxy(pos, v, mass);
     if (!new_obj) continue;
 
     new_obj.set_state(obj_state);
@@ -5761,6 +5775,7 @@ const rebuildWorldFromStates = objectStates => {
     else if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
     else if (new_obj instanceof Debris) debris.push(new_obj);
     else if (new_obj instanceof BlackHole) bh_list.push(new_obj);
+    else if (new_obj instanceof Galaxy) galaxies.push(new_obj);
     maxId = Math.max(maxId, new_obj.id ?? 0);
     restored++;
   }
