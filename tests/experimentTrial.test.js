@@ -213,16 +213,69 @@ describe('timing a planned world on this device', () => {
     expect(c.stepsPerMs).toBe(null);
   });
 
-  test('in a realm, the real engine is timed at a believable rate', () => {
-    const c = inRealm(`
-      const plan = R.planTrial(m, manifest, trial(0.1));
-      out(R.calibrate(m, plan, 2, { now: () => performance.now(), budgetMs: 80 }));
+  test('in a realm, what is timed is the real engine stepping the planned world', () => {
+    // The real clock, read as calibrate() reads it, with the engine's own
+    // clock noted at every reading. updatePhysics advances that one by each
+    // step it integrates (js/physics.js), so between two readings it says what
+    // was done, and a calibration that timed a stand-in, another step or the
+    // discarded world cannot agree with it.
+    //
+    // No rate is asserted. A realm on a busy machine is given a few of the
+    // burst's eighty milliseconds, and its true rate is then a fraction of a
+    // quiet one's: 1.8 steps/ms against a median of 34 in thirty bursts at a
+    // load of 95, and seven of the thirty had no second half at all. Seeing
+    // that is what calibrate() is for; a floor under it made this test fail
+    // on a loaded machine while the code was right.
+    const { c, substeps, step, ticks, moved } = inRealm(`
+      // Far longer than any burst, so that on a fast machine too it runs to
+      // its budget rather than finishing and being timed whole.
+      const long = { ...manifest, stop: { duration: 1e7, events: [] } };
+      const plan = R.planTrial(m, long, trial(0.1));
+      const planet = () => R.resolveRoles(m.physics, manifest.observables.roles).bodies[0];
+      const body = planet();
+      const from = { ...body.pos };
+      const ticks = [];
+      const now = () => {
+        const t = performance.now();
+        ticks.push([t, m.physics.getSimulationTime()]);
+        return t;
+      };
+      const c = R.calibrate(m, plan, 2, { now, budgetMs: 80 });
+      const moved = planet() === body && body.pos.x !== from.x && body.pos.y !== from.y;
+      out({ c, substeps: plan.substeps, step: plan.step, ticks, moved });
     `);
-    // Tens of thousands of steps a second at the very least, on any machine
-    // that runs the suite; far fewer would mean it timed something else.
-    expect(c.stepsPerMs).toBeGreaterThan(5);
-    expect(c.steps).toBeGreaterThan(0);
-    expect(c.warmupMs).toBeGreaterThanOrEqual(0);
+    const last = ticks.length - 1;
+    const ms = (i, j) => ticks[j][0] - ticks[i][0];
+
+    // One frame of the planned step between each reading and the next: every
+    // step counted was integrated, and nothing else moved the engine while the
+    // clock ran. And it was the planned world that moved.
+    const frames = ticks.slice(1).map(([, sim], i) => sim - ticks[i][1]);
+    expect(
+      Math.max(...frames.map(a => Math.abs(a - substeps * step)))
+    ).toBeLessThan(1e-6);
+    expect(c.steps).toBe(last * substeps);
+    expect(moved).toBe(true);
+
+    // Over the time the clock says the burst took, which reached the budget.
+    expect(c.complete).toBe(false);
+    expect(c.ms).toBe(ms(0, last));
     expect(c.ms).toBeGreaterThanOrEqual(80);
+
+    // The rate is the engine's steps in the second half over the clock's time
+    // for that half. A reading late enough to pass both the half and the
+    // budget - the realm descheduled across them - leaves no second half, and
+    // calibrate() says so rather than guess: the page then prices from its
+    // profile (experimentManifest.js estimate()).
+    const half = ticks.findIndex(([t]) => t - ticks[0][0] >= 40);
+    expect(c.stepsPerMs === null).toBe(half === last);
+    expect((c.stepsPerMs ?? 0) * ms(half, last)).toBeCloseTo(
+      (last - half) * substeps,
+      6
+    );
+    // The warm-up is the first half's excess over that rate: never more than
+    // the first half took.
+    expect(c.warmupMs).toBeGreaterThanOrEqual(0);
+    expect(c.warmupMs).toBeLessThanOrEqual(ms(0, half));
   });
 });
