@@ -78,24 +78,37 @@ async function starPoints(page) {
   });
 }
 
-/** Load a scenario at a chosen seed and settle. */
-async function sky(page, app, { scenario = 'Empty', seed = 'sky', tier } = {}) {
-  await page.evaluate(
-    async ({ scenario: key, seed: s, tier: t }) => {
+/**
+ * Build a world at a chosen seed, paused, and settle.
+ *
+ * With no scenario named the world is empty, so nothing in it lenses the sky
+ * and what is read back is the sky alone. The lensing case is 'Binary BH',
+ * asked for by name in its own test below.
+ */
+async function sky(page, app, { scenario, seed = 'sky', tier } = {}) {
+  if (tier) {
+    await page.evaluate(async t => {
       const ui = await import('/js/ui.js');
       const quality = await import('/js/quality.js');
-      if (t) {
-        ui.SETTINGS.quality_tier = t;
-        quality.setTier(t);
-      }
-      ui.SETTINGS.preset_scenario = key;
-      ui.initialize_simulation({ seed: s });
-      ui.state.paused = true;
-      ui.state.pan = { x: 0, y: 0 };
-      ui.state.zoom = 1;
-    },
-    { scenario, seed, tier }
-  );
+      ui.SETTINGS.quality_tier = t;
+      quality.setTier(t);
+    }, tier);
+  }
+  if (scenario) {
+    await page.evaluate(
+      async ({ scenario: key, seed: s }) => {
+        const ui = await import('/js/ui.js');
+        ui.SETTINGS.preset_scenario = key;
+        ui.initialize_simulation({ seed: s });
+        ui.state.paused = true;
+        ui.state.pan = { x: 0, y: 0 };
+        ui.state.zoom = 1;
+      },
+      { scenario, seed }
+    );
+  } else {
+    await app.emptyWorld(seed, { run: false });
+  }
   await page.evaluate(
     () =>
       new Promise(r =>
@@ -115,6 +128,11 @@ test('the same seed paints the same sky', async ({ page, app }) => {
   // rate, and on a busy CI runner it stepped down between the first and third
   // capture - a sparser sky for the same seed, and a failure that said nothing
   // about the seed. The tiers' own skies are compared below.
+  //
+  // In an empty world, so this is the sky's own determinism. A black hole's
+  // lensing is drawn where the hole is on screen, which makes that sky a
+  // function of the zoom as well as the seed; that a hole bends the sky at all
+  // is 'a black hole still bends the sky around it', below.
   await sky(page, app, { seed: 'alpha', tier: 'full' });
   const first = await skySignature(page);
 

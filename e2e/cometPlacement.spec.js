@@ -67,15 +67,8 @@ const cometCount = page =>
  * Empty the world and stop it, so the canvas is a known blank and nothing
  * drifts between the two brightness readings.
  */
-async function emptyPausedWorld(page) {
-  await page.evaluate(async () => {
-    const ui = await import('/js/ui.js');
-    ui.SETTINGS.preset_scenario = 'Empty';
-    ui.initialize_simulation({ seed: 'comet-e2e' });
-    ui.state.paused = true;
-    ui.state.zoom = 1;
-    ui.state.pan = { x: 0, y: 0 };
-  });
+async function emptyPausedWorld(app) {
+  await app.emptyWorld('comet-e2e', { run: false });
 }
 
 /** Choose a type from the real picker, the way a reader does. */
@@ -227,7 +220,7 @@ for (const tier of ['full', 'low']) {
     app,
   }) => {
     await app.boot({ qualityTier: tier });
-    await emptyPausedWorld(page);
+    await emptyPausedWorld(app);
     await armFromPicker(page, 'Comet');
 
     const box = await page.locator('#simulationCanvas').boundingBox();
@@ -268,7 +261,7 @@ test('the comet is drawn where it was placed, not somewhere else', async ({
   // "is anything lit near it" and "is anything lit far from it" separate the
   // two answers completely.
   await app.boot();
-  await emptyPausedWorld(page);
+  await emptyPausedWorld(app);
   await armFromPicker(page, 'Comet');
 
   const box = await page.locator('#simulationCanvas').boundingBox();
@@ -292,7 +285,7 @@ test('a comet is big enough on screen to select by clicking it', async ({
   app,
 }) => {
   await app.boot();
-  await emptyPausedWorld(page);
+  await emptyPausedWorld(app);
   await armFromPicker(page, 'Comet');
 
   const box = await page.locator('#simulationCanvas').boundingBox();
@@ -324,7 +317,7 @@ for (const tier of ['full', 'low']) {
     app,
   }) => {
     await app.boot({ qualityTier: tier });
-    await emptyPausedWorld(page);
+    await emptyPausedWorld(app);
     await armFromPicker(page, 'Comet');
 
     const box = await page.locator('#simulationCanvas').boundingBox();
@@ -459,7 +452,7 @@ for (const tier of ['full', 'low']) {
     // the backing store is 0.7 of the CSS box, a six-pixel nudge became a
     // several-hundred-unit throw.
     await app.boot({ qualityTier: tier });
-    await emptyPausedWorld(page);
+    await emptyPausedWorld(app);
     await armFromPicker(page, 'Comet');
 
     const box = await page.locator('#simulationCanvas').boundingBox();
@@ -492,7 +485,7 @@ test('a touch over the transport bar does not place anything', async ({
   // being handed canvas pixels, so at the low tier it asked about a different
   // place on the screen than the finger was.
   await app.boot({ qualityTier: 'low' });
-  await emptyPausedWorld(page);
+  await emptyPausedWorld(app);
   await armFromPicker(page, 'Comet');
 
   const bar = await page.locator('#timelineBar').boundingBox();
