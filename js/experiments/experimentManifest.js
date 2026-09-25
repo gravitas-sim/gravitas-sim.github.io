@@ -36,10 +36,16 @@ import {
   MIN_DURATION,
   PARTIAL_STATUSES,
   SWEEPABLE,
-  TRIAL_STATUS,
   parameterFor,
   planValues,
 } from './sweep.js';
+import { STATUS } from './status.js';
+
+// A trial's statuses and the check on a realm's answer live in ./status.js,
+// which imports nothing but ./sweep.js, so the scheduler can take them without
+// bringing this module - and js/csv.js behind it - to every page that runs
+// tasks through it.
+export { STATUS, isTrialResult } from './status.js';
 
 export const FORMAT = 'gravitas.experiment';
 export const FORMAT_VERSION = 1;
@@ -48,20 +54,6 @@ export const RESULT_VERSION = 1;
 /** The platform API these manifests are written against (js/platform). */
 export const PLATFORM_RANGE = '^1.0.0';
 
-/**
- * How a trial ended: the sweep's statuses, and what only a scheduler can see.
- */
-export const STATUS = Object.freeze({
-  ...TRIAL_STATUS,
-  /** It ran past its time limit and its realm was terminated. */
-  TIMEOUT: 'timeout',
-  /** Its realm answered with something that is not a trial result. */
-  CORRUPT: 'corrupt',
-  /** Its realm failed to start, or died without answering. */
-  WORKER_FAILED: 'workerFailed',
-  /** Its result was larger than the experiment allows, and was not kept. */
-  RESOURCE_LIMIT: 'resourceLimit',
-});
 /** Statuses with no usable measurement. */
 export const NO_RESULT = Object.freeze([
   ...FAILED_STATUSES,
@@ -731,21 +723,6 @@ export function migrateExperiment(input) {
 }
 
 // --- Results -------------------------------------------------------------------
-
-/** Is this what a realm should have sent back for this trial? */
-export function isTrialResult(r, trial, metrics) {
-  if (!isObject(r) || r.index !== trial.index || r.seed !== trial.seed)
-    return false;
-  if (typeof r.status !== 'string' || !Object.values(STATUS).includes(r.status))
-    return false;
-  if (!isObject(r.results) || !isObject(r.series)) return false;
-  for (const id of metrics) {
-    const v = r.results[id];
-    if (!(v === null || Number.isFinite(v))) return false;
-    if (!Array.isArray(r.series[id])) return false;
-  }
-  return Number.isInteger(r.steps) && r.steps >= 0;
-}
 
 /**
  * A result's trials as CSV, one row a trial in planned order.

@@ -9,8 +9,8 @@
 //   table         five GWOSC events, their catalog values and intervals
 //   image         the same TESS light curve's aperture mask, a data pack
 //
-// Each loads only when it is opened, through the same route the rest of the
-// site uses (js/platform/resolver.js for the packs and the SDSS bundle; a
+// Each loads only when it is opened, by the same reviewed import the rest of
+// the site uses (js/platform/builtins.js for the packs and the SDSS bundle; a
 // dynamic import of the GWOSC module), and becomes a gravitas.observation/1
 // (./schema.js). Nothing is resampled on the way; what was reduced before the
 // data reached Gravitas is carried in `reductions`, and what this adds - an
@@ -19,11 +19,11 @@
 // A few numbers here are copied from the SDSS and GWOSC provenance records,
 // which the browser never loads (a test keeps them out of js/, because they
 // are several kilobytes nothing on screen needs): each star's position and
-// redshift, and the catalog citations. tests/observatoryFixtures.test.js
+// redshift, and the catalog citations. tests/observatory.test.js
 // holds every copied value to its record.
 // =============================================================================
 
-import { loadBuiltin } from '../platform/resolver.js';
+import { BUILTINS } from '../platform/builtins.js';
 import { observationOf } from '../observation.js';
 import { FORMAT, FORMAT_VERSION } from './schema.js';
 import { skyOf } from './wcs.js';
@@ -68,8 +68,15 @@ const GWOSC_PARAMETERS = [
 ];
 const GWOSC_UNITS = { M_sun: 'Msun', Mpc: 'Mpc', '': '' };
 
+// A pack's module by its builtin id: js/platform/resolver.js loadBuiltin()
+// without the resolver, whose import installs every packaged lesson's
+// loaders and brings the investigations manifest with them - 22 KB of this
+// page's start-up that it never used. A failed import is retried by the
+// module system on the next open, as loadBuiltin() would.
+const loadPack = id => BUILTINS[id]();
+
 async function tessLightCurve() {
-  const mod = await loadBuiltin('data/tess-hd209458-s56');
+  const mod = await loadPack('data/tess-hd209458-s56');
   const P = mod.PACK;
   const o = observationOf(mod);
   if (!/^BTJD = BJD - 2457000$/.test(P.time.reference)) {
@@ -124,7 +131,7 @@ async function tessLightCurve() {
 }
 
 async function sdssSpectrum(id) {
-  const mod = await loadBuiltin('data/sdss-spectra');
+  const mod = await loadPack('data/sdss-spectra');
   const s = mod.decodeSpectrum(id);
   const star = SDSS_STARS[id];
   const name = `SDSS ${s.plate}-${s.mjd}-${s.fiberID}`;
@@ -251,7 +258,7 @@ async function gwoscCatalog() {
 }
 
 async function tessAperture() {
-  const mod = await loadBuiltin('data/tess-hd209458-s56-aperture');
+  const mod = await loadPack('data/tess-hd209458-s56-aperture');
   const P = mod.PACK;
   const o = observationOf(mod);
   const { width, height, values, wcs, bits } = o.image;

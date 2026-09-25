@@ -168,11 +168,14 @@ async function buildJs() {
   await esbuild.build({
     // The experiment runner's realm (js/experiments/experimentWorker.js) is
     // the same kind of thing: started with `new Worker(new URL(...))` from its
-    // page, and carrying its own copy of the engine.
+    // page, and carrying its own copy of the engine. So is the inference
+    // core's (js/inference/inferenceWorker.js), which carries no engine at
+    // all, only the models it fits.
     entryPoints: [
       'js/physicsWorker.js',
       'js/chartWorker.js',
       'js/experiments/experimentWorker.js',
+      'js/inference/inferenceWorker.js',
     ],
     bundle: true,
     minify: true,
