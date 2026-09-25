@@ -194,22 +194,10 @@ test.describe('a baseline a percentage cannot be taken against', () => {
     app,
   }) => {
     await app.boot();
-    await scenario(page, 'Empty', { show_conservation_diagnostics: true });
-    // The scenario may not exist under that name; fall back to clearing it.
+    // Built empty, so the baseline is taken over the empty world itself.
+    await app.emptyWorld('conservation');
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
-      const physics = await import('/js/physics.js');
-      for (const list of [
-        physics.planets,
-        physics.stars,
-        physics.bh_list,
-        physics.asteroids,
-        physics.comets,
-        physics.gas_giants,
-      ]) {
-        list.length = 0;
-      }
-      physics.resetConservationBaseline();
       ui.SETTINGS.show_conservation_diagnostics = true;
     });
     await page.waitForTimeout(900);
