@@ -89,10 +89,24 @@ test('every choice reaches the embed URL, and nothing typed becomes markup', asy
     .locator('#fbCaption')
     .fill('Two stars & a planet <img src=x onerror=alert(1)>');
 
+  // The markup is rewritten 120 ms after each change, so under load a figure
+  // of only some of these choices can land between two fills. Wait for one
+  // with the last thing typed, the caption, and with the origin, which
+  // update() reads before it awaits the encoding (an update begun before the
+  // origin was typed can still land after the caption); then hold that one
+  // reading to everything below.
+  let html = '';
   await expect
-    .poll(async () => srcOf(await markup(page)))
-    .toContain('parent=https%3A%2F%2Fcourse.example.edu');
-  const html = await markup(page);
+    .poll(async () => {
+      html = await markup(page);
+      return {
+        caption: html.includes('Two stars'),
+        parent: srcOf(html)?.includes(
+          'parent=https%3A%2F%2Fcourse.example.edu'
+        ),
+      };
+    })
+    .toEqual({ caption: true, parent: true });
   const url = new URL(srcOf(html));
   expect([...url.searchParams]).toEqual([
     ['embed', '1'],
@@ -137,9 +151,19 @@ test('a bad link, seed or origin says so, and writes nothing from it', async ({
   await page.locator('#fbSeed').fill('lab-7');
   await expect(page.locator('#fbMarkup')).not.toHaveValue('');
 
+  // A good origin first, so the bad one has something to take away: the
+  // origin's status is written before update() awaits the encoding and the
+  // markup after it, so a markup read once the status shows could be the
+  // one from before the bad origin was typed, and would prove nothing.
+  await page.locator('#fbOrigin').fill('https://course.example.edu');
+  await expect
+    .poll(async () => srcOf(await markup(page)))
+    .toContain('parent=https%3A%2F%2Fcourse.example.edu');
   await page.locator('#fbOrigin').fill('http://course.example.edu/page');
   await expect(page.locator('#fbOriginStatus')).toContainText('An origin is');
-  expect(srcOf(await markup(page))).not.toContain('parent=');
+  await expect
+    .poll(async () => srcOf(await markup(page)))
+    .not.toContain('parent=');
 });
 
 test('works from the keyboard alone, and copies what it made', async ({
@@ -160,6 +184,16 @@ test('works from the keyboard alone, and copies what it made', async ({
     page.locator('input[name="fbStart"][value="paused"]')
   ).toBeChecked();
   await expect(page.locator('#fbLinkStatus')).toContainText('kbd1');
+  // The status is written before update() awaits the encoding, so it can
+  // come from the seed alone while the start choice is still on its way to
+  // the markup. Copy only once the markup has the last key pressed; update()
+  // reads the seed in the same turn as the start choice, so it is there too.
+  await expect
+    .poll(
+      async () =>
+        (await decodePayload(new URL(srcOf(await markup(page))).hash)).p
+    )
+    .toBe(1);
 
   await page.locator('#fbCopyMarkup').focus();
   await page.keyboard.press('Enter');
