@@ -349,7 +349,7 @@ const starCtx = starfieldCanvas.getContext('2d');
 //
 // Nothing about a star changes between repaints - not its position, not its
 // color, not its brightness - so painting all of them every repaint was
-// redrawing an unchanging picture twenty-eight times a second. Each parallax
+// redrawing an unchanging picture twenty or more times a second. Each parallax
 // layer is now rendered to its own offscreen canvas when something that
 // actually affects it changes, and a repaint is three blits.
 //

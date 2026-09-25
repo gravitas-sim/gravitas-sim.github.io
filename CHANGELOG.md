@@ -409,6 +409,18 @@ the release rather than in the tag.
   but the captured start is kept, so recording the runs again measures them.
   CSV files and manifests exported before this fix carry the wrong figures in
   their `energy_drift_pct` and `angular_drift_pct` columns and drift results.
+- **A recorded drift is measured at the sample it sits in.** The bench read
+  its drift from the engine's readout cache, which refreshes at most every
+  100 ms, while it measured the total energy fresh in every sample. At 60 fps
+  about five samples in six carried a drift from an earlier frame than their
+  own energy. Measured in Chromium on a 60 fps clock, Binary Planet Lab
+  repeated its energy drift on 199 of 240 samples, and Kepler's 2nd Law on 200
+  of 240. Kepler's final drift was 0.01524% where the world at that instant
+  gave 0.01504%. Recorded runs, sweeps and the reliability check now measure
+  the totals once per sample and derive the drift from them, so each sample's
+  drift is exactly its own total's. This adds no work, and a sweep or check
+  that selects no conserved quantity no longer computes the O(N²) totals at
+  all.
 - **Links on the figure builder were the browser's default blue on a
   near-black page, 2.2:1 against the 4.5:1 required.** They now use the
   document pages' accent colour, and the page's own landmark is labelled
