@@ -100,7 +100,7 @@
         "path": "",
         "line": 6,
         "column": 25,
-        "message": "not valid JSON: Expected double-quoted property name in JSON at position 151 (line 6 column 25)"
+        "message": "is not valid JSON here"
       }
     ]
   },

@@ -161,7 +161,9 @@ function parseJson(ext, file, report) {
       path: '',
       line: before.length,
       column: before.at(-1).length + 1,
-      message: `not valid JSON: ${err.message}`,
+      // Our own words: the parser's message differs between Node versions
+      // (and browsers), and the line and column above are the useful part.
+      message: 'is not valid JSON here',
     });
     return null;
   }

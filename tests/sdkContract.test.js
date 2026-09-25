@@ -258,7 +258,7 @@ describe('what is wrong, where', () => {
     expect(messages).toMatch(/never core/); // offline assets
     expect(messages).toMatch(/no entry in licenses covers/); // licences
     expect(messages).toMatch(/already has/); // public ids
-    expect(messages).toMatch(/not valid JSON/);
+    expect(messages).toMatch(/is not valid JSON here/);
   });
 });
 
