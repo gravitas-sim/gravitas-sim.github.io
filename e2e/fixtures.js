@@ -25,6 +25,7 @@
 // =============================================================================
 
 import { test as base, expect } from '@playwright/test';
+import { buildEmptyWorld } from '../tools/empty-world.mjs';
 
 /** localStorage keys that decide what a "clean browser" sees. */
 export const STORAGE_KEYS = {
@@ -224,6 +225,21 @@ function makeApp(page) {
       );
       if (!ok) throw new Error(`Could not load scenario "${key}"`);
       await this.waitForBodies();
+    },
+
+    /**
+     * Build a world with nothing in it, at a fixed seed.
+     *
+     * Not a scenario: the catalog has no empty one, and asking for 'Empty'
+     * builds the default population instead. See tools/empty-world.mjs.
+     *
+     * @param {string} [seed] - A fixed seed, which also fixes the sky
+     * @param {object} [options]
+     * @param {boolean} [options.run] - Leave the simulation running
+     */
+    async emptyWorld(seed = 'e2e', { run = true } = {}) {
+      const left = await page.evaluate(buildEmptyWorld, { seed, run });
+      expect(left, 'bodies left in the empty world').toEqual({});
     },
 
     /** Wait until the world actually contains something. */

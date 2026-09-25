@@ -230,12 +230,7 @@ test('two unrelated touches do not reset the view', async ({ page, app }) => {
   // On a saturated runner that was enough to lose the gesture, which made this
   // a report on the machine rather than on the wiring. The thresholds
   // themselves are covered against an injected clock in tests/doubleTap.test.js.
-  await page.evaluate(async () => {
-    const ui = await import('/js/ui.js');
-    ui.SETTINGS.preset_scenario = 'Empty';
-    ui.initialize_simulation({ seed: 'tap' });
-    ui.state.paused = true;
-  });
+  await app.emptyWorld('tap', { run: false });
   const { box } = await canvasPoints(page);
 
   await page.evaluate(async () => {
@@ -285,12 +280,7 @@ test('two real taps in the same place still reset the view', async ({
   // On a saturated runner that was enough to lose the gesture, which made this
   // a report on the machine rather than on the wiring. The thresholds
   // themselves are covered against an injected clock in tests/doubleTap.test.js.
-  await page.evaluate(async () => {
-    const ui = await import('/js/ui.js');
-    ui.SETTINGS.preset_scenario = 'Empty';
-    ui.initialize_simulation({ seed: 'tap' });
-    ui.state.paused = true;
-  });
+  await app.emptyWorld('tap', { run: false });
   const { cx, cy } = await canvasPoints(page);
 
   await page.evaluate(async () => {

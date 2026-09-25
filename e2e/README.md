@@ -369,9 +369,9 @@ test('something', async ({ page, app }) => {
 
 Every test gets two fixtures automatically:
 
-- **`app`** — `boot`, `loadScenario`, `waitForBodies`, `waitForFrames`,
-  `bodySnapshot`, `selectFirstObject`, `openPanel`, `setObserver` and the rest.
-  Read the file; it is short.
+- **`app`** — `boot`, `loadScenario`, `emptyWorld`, `waitForBodies`,
+  `waitForFrames`, `bodySnapshot`, `selectFirstObject`, `openPanel`,
+  `setObserver` and the rest. Read the file; it is short.
 - **an error trap** — uncaught exceptions and `console.error` output fail the
   test that was on screen when they happened. This is the highest-value check in
   the suite: most ways of breaking a canvas application do not change the DOM at
@@ -394,6 +394,13 @@ two worlds body for body.
 not on the constructor name `StarObject`, and the mapping lives in
 `findObjectAtPosition`. `app.selectFirstObject()` goes through that function
 rather than duplicating the map, and anything else you add should do the same.
+
+**There is no empty scenario.** `'Empty'` is a placement value, not a scenario
+key, and `SETTINGS.preset_scenario` takes an unknown key without complaint: it
+builds the default world - a black hole, fifteen planets, two gas giants and ten
+asteroids. For a world with nothing in it, use `app.emptyWorld(seed)`, which
+checks that it is empty. Any other key should be one of the keys of
+`SCENARIO_INFO` in `js/data/scenarioInfo.js`.
 
 **No whole-application screenshots.** The output is a moving simulation. A
 snapshot of it would fail on every commit for reasons nobody could act on.
