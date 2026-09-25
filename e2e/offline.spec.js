@@ -16,7 +16,7 @@
 // only these tests want it.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 /* global fetch */
 
@@ -327,8 +327,9 @@ test.describe('the quality tier is chosen from the frame rate', () => {
     // three moons removed is not a cheaper version of the lesson.
     await app.boot();
 
-    const count = async (scenario, tier) =>
-      page.evaluate(
+    const count = async (scenario, tier) => {
+      await requireScenarioKey(page, scenario);
+      return page.evaluate(
         async ([k, t]) => {
           const q = await import('/js/quality.js');
           const ui = await import('/js/ui.js');
@@ -352,6 +353,7 @@ test.describe('the quality tier is chosen from the frame rate', () => {
         },
         [scenario, tier]
       );
+    };
 
     for (const scenario of [
       'Galilean Resonance',

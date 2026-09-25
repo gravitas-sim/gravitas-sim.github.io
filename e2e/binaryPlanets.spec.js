@@ -18,7 +18,7 @@
 // lesson is now teaching something false, and both are worth a failing test.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 /**
  * Load a lab, set the experiment, and integrate it to completion.
@@ -33,8 +33,9 @@ import { test, expect } from './fixtures.js';
  * @param {object} spec - scenario, planetA, timestep, periods
  * @returns {Promise<object>} The finished run and its verdict
  */
-const runToCompletion = (page, spec) =>
-  page.evaluate(async s => {
+const runToCompletion = async (page, spec) => {
+  await requireScenarioKey(page, spec.scenario);
+  return page.evaluate(async s => {
     const ui = await import('/js/ui.js');
     const physics = await import('/js/physics.js');
     const { SETTINGS } = await import('/js/appState.js');
@@ -70,6 +71,7 @@ const runToCompletion = (page, spec) =>
       appliedStep: SETTINGS.max_timestep,
     };
   }, spec);
+};
 
 test.describe('the controlled binary', () => {
   test('is built from the stated numbers, not from the world generator', async ({

@@ -56,6 +56,52 @@ const IGNORED_CONSOLE = [
 const isIgnorable = text => IGNORED_CONSOLE.some(re => re.test(text));
 
 /**
+ * Refuse a name that is not a scenario key, before it reaches the application.
+ *
+ * `SETTINGS.preset_scenario` takes any string. For one it does not know,
+ * applyPreset resets every setting to DEFAULT_SETTINGS, finds no block, and the
+ * builder makes the default population - a black hole, fifteen planets, two gas
+ * giants and ten asteroids - with the previous scenario's card still on screen.
+ * Bodies exist, frames advance and the readout fills in, so a spec that asked
+ * for the wrong name runs on the wrong world and usually passes. "a closed
+ * system says so" asked for 'Kepler’s 2nd Law', with a curly apostrophe, and
+ * ran that way from the day it was written.
+ *
+ * Checked in the page against the catalog the gallery is built from, so the
+ * list cannot drift from the application's. Every helper that hands a caller's
+ * name to `preset_scenario` goes through here; a helper that iterates the
+ * catalog itself does not need to.
+ *
+ * @param {import('@playwright/test').Page} page - The page under test
+ * @param {string} key - A scenario key from js/data/scenarioInfo.js
+ * @returns {Promise<void>}
+ */
+export async function requireScenarioKey(page, key) {
+  const { known, near } = await page.evaluate(async k => {
+    const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
+    const keys = Object.keys(SCENARIO_INFO);
+    // Typographic quotes and case, the two ways a correct-looking name misses.
+    const fold = s =>
+      String(s)
+        .normalize('NFKC')
+        .replace(/[‘’]/g, "'")
+        .replace(/[“”]/g, '"')
+        .toLowerCase();
+    return {
+      known: keys.includes(k),
+      near: keys.find(x => fold(x) === fold(k)) ?? null,
+    };
+  }, key);
+  if (known) return;
+  throw new Error(
+    `${JSON.stringify(key)} is not a scenario key in js/data/scenarioInfo.js` +
+      (near ? ` - did you mean ${JSON.stringify(near)}?` : '.') +
+      ' The application would build its default population for it without' +
+      ' complaint, and the test would run on that world instead.'
+  );
+}
+
+/**
  * Everything a spec needs to drive the application.
  *
  * @param {import('@playwright/test').Page} page - The page under test
@@ -205,10 +251,12 @@ function makeApp(page) {
      * going through the module keeps those specs from breaking when a button
      * moves.
      *
-     * @param {string} key - A scenario key from js/data/scenarioInfo.js
+     * @param {string} key - A scenario key from js/data/scenarioInfo.js; any
+     *   other name throws rather than building the default population
      * @param {string} [seed] - A fixed seed, so a run is reproducible
      */
     async loadScenario(key, seed = 'e2e', { run = true } = {}) {
+      await requireScenarioKey(page, key);
       const ok = await page.evaluate(
         async ({ key, seed, run }) => {
           const ui = await import('/js/ui.js');
@@ -230,8 +278,9 @@ function makeApp(page) {
     /**
      * Build a world with nothing in it, at a fixed seed.
      *
-     * Not a scenario: the catalog has no empty one, and asking for 'Empty'
-     * builds the default population instead. See tools/empty-world.mjs.
+     * Not a scenario: the catalog has no empty one, and the application
+     * builds its default population for 'Empty', which is why loadScenario
+     * refuses it. See tools/empty-world.mjs.
      *
      * @param {string} [seed] - A fixed seed, which also fixes the sky
      * @param {object} [options]

@@ -9,7 +9,7 @@
 // still have it.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 const block = page => page.locator('.readout-conservation');
 
@@ -32,6 +32,7 @@ const help = page => page.locator('.readout-conservation-help');
  * afterwards.
  */
 async function scenario(page, name, settings = {}) {
+  await requireScenarioKey(page, name);
   await page.evaluate(
     async ({ name: key, settings: s }) => {
       const ui = await import('/js/ui.js');

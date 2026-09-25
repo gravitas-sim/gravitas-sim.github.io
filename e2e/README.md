@@ -399,8 +399,10 @@ rather than duplicating the map, and anything else you add should do the same.
 key, and `SETTINGS.preset_scenario` takes an unknown key without complaint: it
 builds the default world - a black hole, fifteen planets, two gas giants and ten
 asteroids. For a world with nothing in it, use `app.emptyWorld(seed)`, which
-checks that it is empty. Any other key should be one of the keys of
-`SCENARIO_INFO` in `js/data/scenarioInfo.js`.
+checks that it is empty. Any other key must be one of the keys of
+`SCENARIO_INFO` in `js/data/scenarioInfo.js`: `app.loadScenario` throws on
+anything else, and a spec's own helper that sets `preset_scenario` from a name
+it was given calls `requireScenarioKey(page, key)` from `fixtures.js` first.
 
 **No whole-application screenshots.** The output is a moving simulation. A
 snapshot of it would fail on every commit for reasons nobody could act on.
