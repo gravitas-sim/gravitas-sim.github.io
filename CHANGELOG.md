@@ -15,6 +15,38 @@ the release rather than in the tag.
 
 ### Added
 
+- **An inference core: transit and radial-velocity fits in the browser,
+  shown to be honest before they are used** (INFERENCE_CORE.md).
+  - **What it fits:** a quadratic limb-darkened transit (`transit-quadratic`
+    1.0.0) and a Keplerian orbit with a zero point per instrument and a
+    jitter (`rv-keplerian` 1.0.0), each a small named parameter set with
+    physical bounds. Every parameter is fitted, fixed or derived, and a
+    result never mixes them up.
+  - **How:** weighted least squares, a bounded grid and then bounded
+    Levenberg–Marquardt, with linear parameters solved exactly. No MCMC and
+    no black-box optimizer. Deterministic, cancellable, with progress.
+  - **Uncertainty, kept apart:** the covariance's sigma, sigma scaled by the
+    reduced chi-square, a correlated-noise sigma, a Δχ² = 1 profile interval
+    and a slice. None is called a confidence region; how often each holds
+    the truth is measured over 100 seeded injections per case.
+  - **What it tracks and what it does not claim:** time format and scale,
+    exposure smearing, the baseline, RV zero points and jitter, missing
+    error bars, a fixed dilution, and the star's radius uncertainty. No mass
+    or density from a transit: no radial-velocity data for HD 209458 ships
+    with Gravitas, so the real-data fit is transit-only.
+  - **Where it runs:** disposable Workers through the experiment runner's
+    scheduler, with no world, no network and nothing on the page. A request
+    too large for the device is refused before it starts, with the reason.
+  - **A manifest,** `gravitas.inference/1`: the data pack and its version,
+    the model and its version, the parameters, the bounds, the algorithm,
+    the engine's fingerprint and the results.
+  - **A diagnostic panel** on `/observatory/`, loaded only when opened, and
+    `npm run validate:inference` and `npm run bench:inference`.
+- **The observatory starts smaller:** 97.9 KB of JavaScript in the build
+  where it was 119.4. It loaded its data packs through the capability
+  resolver, which installs every packaged lesson's loaders on import and
+  brought the investigations manifest with it; it now loads them from the
+  reviewed builtin list directly.
 - **An Extension SDK for contributors** (sdk/README.md).
   - **Commands:** `npm run sdk -- init`, `validate`, `test`, `pack` and
     `inspect`, for the three kinds of extension. An observation data pack

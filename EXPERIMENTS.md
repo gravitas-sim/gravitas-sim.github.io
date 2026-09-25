@@ -363,7 +363,10 @@ The classes these amount to:
     million in the step;
   - the calibration: its warm rate and warm-up on a clock that is slow at
     first, a short trial timed whole, a clock too coarse to time anything,
-    and the real engine at a believable rate.
+    and, in a realm, the real engine's own clock accounting for every step
+    it counts, in the planned world, over the time the real clock gives it.
+    No rate is asserted, because a loaded machine's true rate can be a
+    fiftieth of a quiet one's.
 - `e2e/experimentRunner.spec.js` (9 tests), against the sources and `dist/`:
   - every trial in its own Worker, all closed, in order;
   - the same numbers twice;
