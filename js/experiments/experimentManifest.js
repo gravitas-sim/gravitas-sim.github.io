@@ -26,7 +26,8 @@
 // =============================================================================
 
 import { canonicalJson } from './canonicalState.js';
-import { METRICS, METRIC_ARITY } from './metrics.js';
+import { METRICS, METRIC_ARITY, METRIC_UNITS } from './metrics.js';
+import { toCsv } from '../csv.js';
 import { mulberry32, normalizeSeed } from '../rng.js';
 import {
   FAILED_STATUSES,
@@ -744,6 +745,44 @@ export function isTrialResult(r, trial, metrics) {
     if (!Array.isArray(r.series[id])) return false;
   }
   return Number.isInteger(r.steps) && r.steps >= 0;
+}
+
+/**
+ * A result's trials as CSV, one row a trial in planned order.
+ *
+ * Written through js/csv.js like every other export, because a seed is text
+ * the reader types or pastes: a seed that begins like a formula would
+ * otherwise reach a spreadsheet as one and run.
+ *
+ * @param {object} result - A gravitas.experiment-result/1
+ * @returns {string} The document, CRLF line endings
+ */
+export function resultCsv(result) {
+  const m = result.manifest;
+  const keys = m.vary.map(v => v.parameter);
+  const metrics = m.observables.metrics;
+  return toCsv([
+    [
+      'trial',
+      ...keys,
+      'seed',
+      'status',
+      ...metrics.map(id => `${id} (${METRIC_UNITS[id]})`),
+      'steps',
+      'wall_ms',
+      'error',
+    ],
+    ...result.trials.map(tr => [
+      tr.index + 1,
+      ...keys.map(k => tr.params[k]),
+      tr.seed,
+      tr.status,
+      ...metrics.map(id => tr.results?.[id] ?? ''),
+      tr.steps,
+      tr.wallMs,
+      tr.error || '',
+    ]),
+  ]);
 }
 
 /**

@@ -333,13 +333,14 @@ The classes these amount to:
 
 ## Tests
 
-- `tests/experimentManifest.test.js` (20 tests):
+- `tests/experimentManifest.test.js` (21 tests):
   - the rules, bounds and excluded ranges;
   - trial order for one and two parameters;
   - seeded distributions and manifest identity;
   - profiles; pricing from a timed plan and from the fallback; refusal,
     including trials that would all be capped and memory;
   - result shape, summaries and reproducibility;
+  - the CSV, whose seeds are disarmed the way every other export's text is;
   - migration from a bench sweep, and refusal of a newer format.
 - `tests/experimentScheduler.test.js` (12 tests), with fake Workers and a
   fake clock:

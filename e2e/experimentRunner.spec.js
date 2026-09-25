@@ -172,7 +172,11 @@ test.describe('the experiment runner', () => {
   test('prices on this device, and refuses trials that would all stop at the sample cap', async ({
     page,
   }) => {
-    await openRunner(page);
+    // A desktop, whatever runs the test: the cap, and so the length that
+    // fits, is the profile's. A four-core CI runner is a low-end device, where
+    // the cap is 4,000 samples and the length 999 units.
+    await openRunner(page, { cores: 8 });
+    await expect(page.locator('#xpDevice')).toContainText('desktop');
     // Timed in the planning realm, not guessed from a figure per device.
     await expect(page.locator('#xpEstimate')).toContainText(
       'timed on this device'

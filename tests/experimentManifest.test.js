@@ -1,5 +1,6 @@
 import { describe, test, expect } from '@jest/globals';
 
+import { fromCsv } from '../js/csv.js';
 import {
   FORMAT,
   PROFILES,
@@ -14,6 +15,7 @@ import {
   fromSweepSpec,
   isTrialResult,
   migrateExperiment,
+  resultCsv,
   planTrials,
   refusals,
   reproducibility,
@@ -473,5 +475,34 @@ describe('migration', () => {
     ).toMatch(/not a version that was ever published/);
     expect(migrateExperiment({ hello: 1 }).error).toMatch(/neither/);
     expect(migrateExperiment(base()).manifest).toEqual(base());
+  });
+});
+
+describe('the trials as CSV', () => {
+  test('a seed that begins like a formula reaches a spreadsheet as text', () => {
+    const m = base();
+    const result = {
+      manifest: m,
+      trials: [
+        {
+          index: 0,
+          params: { [m.vary[0].parameter]: 0.1 },
+          seed: '=HYPERLINK("https://example.invalid","x")',
+          status: 'ok',
+          results: { distance_to_primary: 1.25 },
+          steps: 10,
+          wallMs: 3,
+        },
+      ],
+    };
+    const text = resultCsv(result);
+    expect(text.endsWith('\r\n')).toBe(true);
+    const [head, row] = fromCsv(text);
+    expect(head[0]).toBe('trial');
+    // Written with the apostrophe a spreadsheet shows as text, and read back
+    // exactly: the seed is data, not an instruction.
+    expect(text).toContain(`"'=HYPERLINK(`);
+    expect(row[head.indexOf('seed')]).toBe(result.trials[0].seed);
+    expect(row[head.indexOf('distance_to_primary (AU)')]).toBe('1.25');
   });
 });

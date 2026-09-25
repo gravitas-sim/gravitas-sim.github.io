@@ -42,6 +42,7 @@ import {
   planTrials,
   refusals,
   reproducibility,
+  resultCsv,
   summarizeExperiment,
   validateExperiment,
 } from './experiments/experimentManifest.js';
@@ -606,35 +607,6 @@ function download(name, text, type) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function csv(result) {
-  const m = result.manifest;
-  const keys = m.vary.map(v => v.parameter);
-  const metrics = m.observables.metrics;
-  const head = [
-    'trial',
-    ...keys,
-    'seed',
-    'status',
-    ...metrics.map(id => `${id} (${METRIC_UNITS[id]})`),
-    'steps',
-    'wall_ms',
-    'error',
-  ];
-  const q = v =>
-    /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v);
-  const rows = result.trials.map(tr => [
-    tr.index + 1,
-    ...keys.map(k => tr.params[k]),
-    tr.seed,
-    tr.status,
-    ...metrics.map(id => tr.results?.[id] ?? ''),
-    tr.steps,
-    tr.wallMs,
-    tr.error || '',
-  ]);
-  return [head, ...rows].map(r => r.map(q).join(',')).join('\n') + '\n';
-}
-
 // --- A saved result, checked against this build ---------------------------------
 
 async function checkSaved() {
@@ -774,7 +746,11 @@ function start() {
     'click',
     () =>
       lastResult &&
-      download(`experiment-${lastResult.hash}.csv`, csv(lastResult), 'text/csv')
+      download(
+        `experiment-${lastResult.hash}.csv`,
+        resultCsv(lastResult),
+        'text/csv'
+      )
   );
   $('xpCheckBtn').addEventListener('click', checkSaved);
   refresh();
