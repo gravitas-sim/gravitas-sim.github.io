@@ -668,8 +668,10 @@ describe('pinning the package a lesson comes from', () => {
   });
 
   test('says when the package has moved on, and when a link predates pinning', async () => {
-    const { packageBinding, PINNING, validateAssignment } =
+    const { validateAssignment } =
       await import('../js/assignments/assignment.js');
+    const { packageBinding, PINNING } =
+      await import('../js/assignments/pinning.js');
     const pkg = { id: 'gravitas.lesson.power-law-gravity', version: '1.0.0' };
     const made = p => ({ p: [p.id, p.version] });
     expect(packageBinding({}, null).status).toBe(PINNING.NONE);
