@@ -8,8 +8,8 @@ and the condition that would reverse it.
 
 | Workload | A WebAssembly kernel | Optimized JavaScript in place of the production loop | A Worker |
 |---|---|---|---|
-| **GLS period search** (compute-heavy) | **C**. 1.0× to 1.8× faster than the same algorithm in JavaScript, where 2.0× was the bar; 11× slower in Playwright's Firefox | **Not as written.** It is 11× to 13× faster on the low-end profile, but 1.5 × 10⁻¹⁰ from the direct formula where the bar was 10⁻¹², and the direct formula itself, reordered, differs from itself by 3.5 × 10⁻¹⁰. **Carl's call:** a tolerance that the formula can meet | **No** |
-| **BLS transit search** (data-heavy) | **C**. From 0.58× (slower) to 1.5× the JavaScript, depending on the engine and the CPU | **Yes.** 3.1× to 3.6× faster on the low-end profile, bit for bit the same in every engine | **No** |
+| **GLS period search** (compute-heavy) | **C**. 1.0× to 2.0× the speed of the same algorithm in JavaScript, where 2.0× in every profile was the bar; 11× slower in Playwright's Firefox | **Not as written.** It is 11× to 13× faster on the low-end profile, but 1.5 × 10⁻¹⁰ from the direct formula where the bar was 10⁻¹², and the direct formula itself, reordered, differs from itself by 3.5 × 10⁻¹⁰. **Carl's call:** a tolerance that the formula can meet | **No** |
+| **BLS transit search** (data-heavy) | **C**. From 0.58× (slower) to 1.9× the JavaScript, depending on the engine and the processor | **Yes.** 3.1× to 3.6× faster on the low-end profile, bit for bit the same in every engine | **No** |
 | **A vetted WASM component** (Pyodide with astropy) | **C**. 16.8 MiB for the two algorithms, where the bar was 256 KiB | n/a | n/a |
 
 **No workload merits production WebAssembly.** Prompt 22 does not run. Prompt
@@ -228,7 +228,7 @@ What the speedups say:
   no faster than the same JavaScript, or 16% faster.
 - **The algorithm is.** Computing cos and sin by rotation, instead of two
   trigonometric calls a point, makes GLS 11× to 21× faster. The WebAssembly
-  adds 1.0× to 1.8× on top of that.
+  adds 1.0× to 2.0× on top of that, and the 2.0× is release Firefox's.
 - **BLS in WebAssembly can be slower.** It is 0.58× in Chromium on the Zen 5
   runner. The kernel is hand-scheduled stack code; a compiler might schedule
   it better. This gate measures what exists.
