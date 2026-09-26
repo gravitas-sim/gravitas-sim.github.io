@@ -366,7 +366,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1297<!--/fact--> tests
+The suite is <!--fact:e2eTests-->1298<!--/fact--> tests
 in <!--fact:e2eFiles-->101<!--/fact--> files and takes several minutes in
 Chromium.
 

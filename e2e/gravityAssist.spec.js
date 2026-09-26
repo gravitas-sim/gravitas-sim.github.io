@@ -13,7 +13,7 @@
 // teaching something false and this should be what says so.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 /**
  * Load a scenario, set the impact parameter, and fly the encounter to the gate.
@@ -27,8 +27,9 @@ import { test, expect } from './fixtures.js';
  * @param {object} spec - scenario and impact parameter
  * @returns {Promise<object>} The finished encounter
  */
-const fly = (page, spec) =>
-  page.evaluate(async s => {
+const fly = async (page, spec) => {
+  await requireScenarioKey(page, spec.scenario);
+  return page.evaluate(async s => {
     const ui = await import('/js/ui.js');
     const physics = await import('/js/physics.js');
     const { SETTINGS } = await import('/js/appState.js');
@@ -57,6 +58,7 @@ const fly = (page, spec) =>
           : null,
     };
   }, spec);
+};
 
 test.describe('the controlled encounter', () => {
   test('is two bodies and nothing else, placed from its elements', async ({

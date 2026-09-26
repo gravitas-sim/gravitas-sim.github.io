@@ -335,3 +335,30 @@ test.describe('Three-Body Sensitivity Lab scenario contract', () => {
     for (const [, exists] of known) expect(exists).toBe(true);
   });
 });
+
+test.describe('a scenario is asked for by its key', () => {
+  // The application builds its default population for a name it does not
+  // know, and says nothing, so the harness is what has to refuse one. See
+  // requireScenarioKey in e2e/fixtures.js.
+  test('a name that is not a key is refused before anything is built', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    const current = () =>
+      page.evaluate(
+        async () => (await import('/js/ui.js')).current_scenario_name
+      );
+    const before = await current();
+    // One character from the key - the curly apostrophe "a closed system says
+    // so" asked for - and named back as the key it missed.
+    await expect(app.loadScenario('Kepler’s 2nd Law')).rejects.toThrow(
+      'did you mean "Kepler\'s 2nd Law"?'
+    );
+    // A placement value, and nothing like a key.
+    await expect(app.loadScenario('Empty')).rejects.toThrow(
+      '"Empty" is not a scenario key in js/data/scenarioInfo.js.'
+    );
+    expect(await current()).toBe(before);
+  });
+});

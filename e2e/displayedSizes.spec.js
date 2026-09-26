@@ -8,10 +8,11 @@
 // legible at the sizes people use.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 /** Load a scenario, pause it, and frame it. */
 async function scene(page, scenario, { zoom, seed = 'sizes' } = {}) {
+  await requireScenarioKey(page, scenario);
   await page.evaluate(
     async ({ scenario: key, zoom: z, seed: s }) => {
       const ui = await import('/js/ui.js');
