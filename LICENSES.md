@@ -74,6 +74,8 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `js/data/stellar/**` | derived from the MIST model grids | cite the papers; see NOTICE |
 | `js/data/spectra/**` | derived from SDSS DR18 observed spectra | public domain; acknowledge SDSS, see NOTICE |
 | `js/data/observations/**` | derived from TESS light curves served by MAST | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
+| `tests/fixtures/archive/gaia-epphot-su-dra.vot` | one Gaia DR3 epoch-photometry answer from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO; credit ESA/Gaia/DPAC, see NOTICE |
+| `tests/fixtures/archive/sesame-su-dra.xml` | one CDS Sesame answer, kept for tests | a position and names from SIMBAD; acknowledge CDS, see NOTICE |
 
 ## Extensions and the catalog
 

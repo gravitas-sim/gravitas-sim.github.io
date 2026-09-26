@@ -255,6 +255,11 @@ export default [
         Int8Array: 'readonly',
         Float64Array: 'readonly',
         PointerEvent: 'readonly',
+        // The Observatory's archive import (js/archive/): a bounded,
+        // cancellable request, a VOTable parsed as XML, and a cache.
+        AbortController: 'readonly',
+        DOMParser: 'readonly',
+        indexedDB: 'readonly',
       },
     },
     plugins: {

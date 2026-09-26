@@ -238,3 +238,32 @@ the archive URL and SHA-256 checksums of the file MAST served and of the
 module as committed are recorded in data-packs/tess-hd209458-s56-lc.json.
 `npm run packs:provenance` rebuilds the module from the cached file and
 compares byte for byte.
+
+===============================================================================
+Gaia DR3 epoch photometry
+-------------------------------------------------------------------------------
+tests/fixtures/archive/gaia-epphot-su-dra.vot
+One answer from CDS VizieR (table I/355/epphot), kept so the archive import's
+tests need no network: the Gaia DR3 epoch photometry of SU Dra (Gaia DR3
+1058066262817534336), retrieved 2026-09-26.
+
+Gaia data are licensed CC BY-NC 3.0 IGO: https://www.cosmos.esa.int/web/gaia-users/license
+This work has made use of data from the European Space Agency (ESA) mission
+Gaia (https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing
+and Analysis Consortium (DPAC,
+https://www.cosmos.esa.int/web/gaia/dpac/consortium). Funding for the DPAC has
+been provided by national institutions, in particular the institutions
+participating in the Gaia Multilateral Agreement.
+
+  Gaia Collaboration, Vallenari et al. (2023), A&A 674, A1,
+  doi:10.1051/0004-6361/202243940
+
+This research has made use of the VizieR catalogue access tool and the Sesame
+name resolver, CDS, Strasbourg Astronomical Observatory, France
+(doi:10.26093/cds/vizier). The original description of the VizieR service was
+published in Ochsenbein et al. (2000), A&AS 143, 23.
+
+The Observatory's archive import (js/archive/) fetches the same kind of data
+live, in the reader's own browser, and never through Gravitas. What it imports
+carries this license and credit with it.
+
