@@ -15,6 +15,35 @@ the release rather than in the tag.
 
 ### Added
 
+- **The Observatory can import a star's Gaia DR3 epoch photometry live, from
+  CDS, by name** (ARCHIVE_IMPORT.md).
+  - **What it is:** the slice VO_ARCHIVE_GATE.md accepted, and nothing more.
+    It uses CDS Sesame for the name, and CDS VizieR TAP for the Gaia DR3 cone
+    and the epochs. It is opt-in and loaded only when opened, and it never
+    touches a lesson.
+  - **Before anything is used,** the reader reviews every field and its unit
+    or "not stated", the rows, the service's status, both checksums, the
+    license and what the conversion will do. Then the observation opens in the
+    workspace like any other.
+  - **Converted honestly:** a curated descriptor supplies what VizieR does not
+    say. Times are barycentric TCB, converted to TDB by IAU 2006 B3; the flux
+    is in e⁻/s, which gives the G errors. A unit the service states that the
+    descriptor does not expect stops the conversion. The id is the content's
+    digest, the query and both checksums travel with it, and so does its
+    license, CC BY-NC 3.0 IGO.
+  - **Bounded:** two origins, held by a meta Content-Security-Policy as well
+    as the code. There is no cookie and no referrer. Limits are 64 KB and
+    512 KB counted as they stream, 20 s per request, and a row limit on every
+    query.
+  - **Named failures:** each failure is named in English and Spanish:
+    blocked, timeout, rate-limited, unavailable, too large, not a table, a
+    service error, a wrong unit, canceled.
+  - **Offline:** answers are kept on the device, so a star imported before
+    opens offline, marked stale with its age once it is a week old.
+  - **Checks:** `npm run archive:live` checks, on demand, that CDS still
+    answers this way.
+- **Magnitude axes are drawn brighter-up** in the Observatory's plot.
+
 - **A curated catalog, `/catalog/`: data, courses and instruments, each
   reviewed before it is listed, and installable for offline use**
   (CATALOG.md).

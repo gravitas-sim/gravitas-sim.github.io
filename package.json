@@ -77,6 +77,7 @@
     "validate:links": "node tools/check-links.mjs",
     "validate:links:dist": "node tools/check-links.mjs --root dist",
     "catalog": "node tools/catalog.mjs generate",
+    "archive:live": "node tools/archive-live-check.mjs",
     "catalog:check": "node tools/catalog.mjs check",
     "sw:manifest": "node tools/build-service-worker.mjs",
     "sw:check": "node tools/build-service-worker.mjs --check",
