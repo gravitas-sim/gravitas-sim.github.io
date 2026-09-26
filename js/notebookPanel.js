@@ -226,7 +226,15 @@ function provenanceHtml(p) {
         .join('; '),
     ]);
   }
-  return `<dl class="nb-prov">${rows
+  return rowsHtml(rows);
+}
+
+/**
+ * Label/value rows as the conditions list: a simulation's conditions, or a
+ * measurement on real data's own rows (js/notebook/observed.js).
+ */
+function rowsHtml(rows) {
+  return `<dl class="nb-prov">${(rows || [])
     .map(
       ([label, value]) => `<dt>${esc(label)}</dt><dd>${esc(String(value))}</dd>`
     )
@@ -319,8 +327,8 @@ function entryHtml(entry, index, total) {
       }
       ${proseHtml(entry)}
       <details class="nb-details">
-        <summary>${esc(t('nb.entry.conditions'))}</summary>
-        ${provenanceHtml(snap.provenance)}
+        <summary>${esc(t(snap.observed ? 'nb.entry.data' : 'nb.entry.conditions'))}</summary>
+        ${snap.observed ? rowsHtml(snap.observed.rows) : provenanceHtml(snap.provenance)}
       </details>
     </li>`;
 }

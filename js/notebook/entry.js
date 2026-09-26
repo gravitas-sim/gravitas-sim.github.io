@@ -63,6 +63,10 @@ export const SOURCE = Object.freeze({
   STELLAR_LAB: 'stellar-lab',
   BINARY_ORBIT: 'binary-orbit',
   HORIZON_TRIALS: 'horizon-trials',
+  // A measurement on real data in the Observatory (js/measure/). Its snapshot
+  // carries an `observed` group instead of a simulation's conditions: see
+  // js/notebook/observed.js.
+  OBSERVATORY: 'observatory',
 });
 
 /** The sources this build can capture from. */
@@ -75,6 +79,7 @@ export const SOURCES = [
   SOURCE.STELLAR_LAB,
   SOURCE.BINARY_ORBIT,
   SOURCE.HORIZON_TRIALS,
+  SOURCE.OBSERVATORY,
 ];
 
 /** How long a student's prose may be, per field. */
@@ -445,6 +450,9 @@ export function snapshotFingerprint(snapshot) {
  * @param {Array<object>} [spec.quantities] - From quantity()
  * @param {?object} [spec.figure] - From figure()
  * @param {object} [spec.provenance] - From provenanceOf()
+ * @param {?object} [spec.observed] - For a measurement on real data, what
+ *   the data were and what was done to them (js/notebook/observed.js); a
+ *   simulation's entry has none
  * @param {object} [spec.prose] - claim, evidence, limitations
  * @param {number} [spec.capturedAt] - Epoch ms; defaults to now
  * @param {string} [spec.id] - Reuse an id, for restore
@@ -456,6 +464,7 @@ export function buildEntry({
   quantities = [],
   figure: fig = null,
   provenance = null,
+  observed = null,
   prose: written = null,
   capturedAt = Date.now(),
   id = null,
@@ -469,6 +478,9 @@ export function buildEntry({
       .map(q => ({ ...q })),
     figure: fig ? { ...fig } : null,
     provenance: provenance || provenanceOf(),
+    // Only present when there is one, so every simulation entry's snapshot,
+    // and so its fingerprint, is exactly what it was.
+    ...(observed ? { observed: JSON.parse(JSON.stringify(observed)) } : {}),
   });
   return {
     id: id || newEntryId(),

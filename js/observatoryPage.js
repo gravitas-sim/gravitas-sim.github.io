@@ -41,7 +41,7 @@ import {
 import { OPS, replay, whyNot } from './observatory/transforms.js';
 import { createHistory } from './observatory/history.js';
 import { createSelection } from './observatory/selection.js';
-import { build, read } from './observatory/import.js';
+import { pixelScale, skyOf } from './observatory/wcs.js';
 import {
   exportName,
   observationCsv,
@@ -77,6 +77,8 @@ const state = {
   x: null,
   y: null,
   imported: null,
+  // Fits the reader ran, as the fit panel exports them, for the pipeline.
+  fits: [],
 };
 
 // --- Words and numbers -------------------------------------------------------------
@@ -256,6 +258,7 @@ function mountFit(m) {
     ...lent,
     observation: state.view,
     dimensionOfText: text => dimensionOf(parseUnit(text).unit),
+    record: m => state.fits.push(m),
   });
   return fit.panel;
 }
@@ -269,6 +272,18 @@ let archive = null;
 $('obsArchivePanel').addEventListener('toggle', () => {
   archive ??= import('./observatory/archivePanel.js').then(m =>
     m.mountArchivePanel($('obsArchivePanel'), { ...lent, open, status })
+  );
+});
+
+// The measurement pipeline (MEASUREMENT_PIPELINE.md): loaded when first opened.
+let measure = null;
+$('obsMeasurePanel').addEventListener('toggle', () => {
+  measure ??= import('./observatory/measurePanel.js').then(m =>
+    m.mountMeasurePanel($('obsMeasurePanel'), {
+      ...lent,
+      ...{ open, status, apply, state, replay, observationJson, importer },
+      ...{ skyOf, pixelScale },
+    })
   );
 });
 
@@ -321,6 +336,7 @@ function renderAll() {
   renderMarks(o);
   renderChanges(o);
   renderFit(o);
+  measure?.then(p => p.update());
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();
   $('obsRedo').disabled = !state.history.canRedo();
@@ -872,6 +888,11 @@ const USES = ['ignore', 'x', 'value', 'uncertainty', 'label'];
 const CHOOSE = '__choose';
 const NOT_STATED = '__null';
 
+// The file reader, loaded with the first file a reader chooses: most
+// visitors never choose one, and it is a tenth of the page.
+let importing = null;
+const importer = () => (importing ??= import('./observatory/import.js'));
+
 $('obsFile').addEventListener('change', async e => {
   const file = e.target.files?.[0];
   if (!file) return;
@@ -881,9 +902,10 @@ $('obsFile').addEventListener('change', async e => {
 });
 $('obsDecimalComma').addEventListener('change', readImport);
 
-function readImport() {
+async function readImport() {
   const f = state.imported;
   if (!f) return;
+  const { read } = await importer();
   const r = read(f.text, {
     name: f.name,
     bytes: f.bytes,
@@ -1117,7 +1139,7 @@ function fillImportChoices() {
   );
 }
 
-$('obsImportGo').addEventListener('click', () => {
+$('obsImportGo').addEventListener('click', async () => {
   const tbl = state.table;
   if (!tbl) return;
   const pick = v => (v === CHOOSE ? undefined : v);
@@ -1142,7 +1164,7 @@ $('obsImportGo').addEventListener('click', () => {
       frame: $('obsFrame').value,
     },
   };
-  const r = build(tbl, mapping);
+  const r = (await importer()).build(tbl, mapping);
   if (!r.ok) {
     showProblems(r.problems);
     status(t('obs.import.notYet', { n: r.problems.length }));
@@ -1221,6 +1243,7 @@ function translateAll() {
   // running in the old one is canceled rather than left writing to nothing.
   if (fit.module) mountFit(fit.module);
   archive?.then(p => p.rebuild());
+  measure?.then(p => p.rebuild());
   if (state.view) renderAll();
 }
 

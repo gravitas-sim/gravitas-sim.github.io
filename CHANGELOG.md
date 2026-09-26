@@ -15,6 +15,43 @@ the release rather than in the tag.
 
 ### Added
 
+- **A measurement pipeline in the Observatory** (MEASUREMENT_PIPELINE.md).
+  - **What it is:** a versioned, inspectable record of what was done to an
+    observation and what it gave. Its nodes are the source, every change, each
+    measurement and each fit, in the order they happened.
+  - **The tools, each bounded to teaching size:**
+    - a period search (generalized Lomb-Scargle, with a Baluev false-alarm
+      probability);
+    - a transit search (box least squares);
+    - a spectral line (continuum, equivalent width, center, velocity);
+    - an aperture on an image (flux and centroid, or a flag's pixels and
+      their sky position);
+    - filtering table rows;
+    - a cross-match with a second table.
+  - **What every result records:** each number is measured, derived or
+    assumed, and each uncertainty too. A node keeps its tool's version, its
+    parameters and a checksum of the data it saw. Undo what it depended on and
+    it says it is stale.
+  - **Working with results:** a result can become a change (fold at its
+    period, mask what a filter failed). There is undo and redo for the
+    measurements, a methods summary with a citation for every method, and CSV
+    of the results and the periodogram.
+  - **Saving and reading back:** the pipeline saves as JSON and reads back,
+    replayed and recomputed, node by node, to the numbers it saved. An older
+    Observatory save opens as a pipeline too.
+  - **The notebook:** a result goes into the evidence notebook and its PDF
+    report with where its data came from, instead of a simulation's
+    conditions, and a period search brings its periodogram as the figure.
+  - **Validated two ways (`npm run measure:validate`):**
+    - on seeded synthetic truth, where every stated error is the spread of
+      its answers;
+    - against cited values on the shipped data: SU Dra's period from Gaia
+      within 0.5 sigma of Monson et al. 2017, HD 209458 b's from TESS within
+      50 s of Knutson et al. 2007, SDSS Balmer velocities within 0.2 sigma of
+      SDSS's own redshifts, and the TESS aperture's 23 pixels.
+- **The Observatory loads its file reader when a file is first chosen,** not
+  on every visit: 10 KB off the page's opening download.
+
 - **The Observatory can import a star's Gaia DR3 epoch photometry live, from
   CDS, by name** (ARCHIVE_IMPORT.md).
   - **What it is:** the slice VO_ARCHIVE_GATE.md accepted, and nothing more.
