@@ -24,8 +24,24 @@ import { parseRange, satisfies } from '../../js/platform/semver.js';
 export { PLATFORM_API };
 export { observationOf, checkObservation } from '../../js/observation.js';
 
+/**
+ * A FITS file's header-data units, as the data-pack pipeline reads them: each
+ * with its header `cards` and, for a binary table, its `columns`. Added in
+ * 1.2.0, because the first extension commissioned from outside the core, a
+ * TESS light curve of SU Draconis, had no public way to read its source.
+ */
+export { readFits } from '../../tools/data-packs/fits.mjs';
+
+/**
+ * A TESS SPOC light curve, masked, normalized, binned and encoded exactly as
+ * the built-in packs are (DATA_PACKS.md). With `fluxStepPpm` it writes
+ * `binned-relative-flux/2`, for a star that varies by more than the 3.3% that
+ * /1 holds. Added in 1.2.0, for the same extension.
+ */
+export { binLightCurve as binTessLightCurve } from '../../tools/data-packs/tess-light-curve.mjs';
+
 /** This SDK. A major version changes only with a breaking change to this file. */
-export const SDK_VERSION = '1.1.0';
+export const SDK_VERSION = '1.2.0';
 
 /** The formats this SDK reads and writes, and the version of each. */
 export const FORMATS = Object.freeze({

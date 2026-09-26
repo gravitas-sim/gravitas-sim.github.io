@@ -41,7 +41,10 @@ import {
   runtimeDisagreement,
   validateDataPack,
 } from '../../tools/data-packs/schema.mjs';
-import { foldedDepth } from '../../tools/data-packs/tess-light-curve.mjs';
+import {
+  foldedDepth,
+  harmonicPeriod,
+} from '../../tools/data-packs/tess-light-curve.mjs';
 import { validateCoursePack } from './course.mjs';
 import { positions, locate } from './locate.mjs';
 import { MANIFEST_ENTRY, read as readArchive } from './archive.mjs';
@@ -565,6 +568,18 @@ export async function testExtension(ext, { type, manifest: m }) {
       check(
         Math.abs(depth - rule.expected) <= rule.tolerance,
         `folded on ${rule.periodDays} d, the depth is ${depth.toFixed(5)}; expected ${rule.expected} within ${rule.tolerance}`
+      );
+    } else if (rule?.kind === 'harmonic-period') {
+      // A pulsating star's check (SDK 1.2.0): its period, from a Fourier
+      // series, against the published one.
+      const got = harmonicPeriod(o, {
+        centerDays: rule.periodDays,
+        windowDays: rule.windowDays,
+        harmonics: rule.harmonics,
+      });
+      check(
+        Math.abs(got.periodDays - rule.periodDays) <= rule.tolerance,
+        `a ${rule.harmonics ?? 8}-harmonic series fits best at ${got.periodDays.toFixed(6)} d; expected ${rule.periodDays} within ${rule.tolerance}`
       );
     } else if (rule) {
       check(

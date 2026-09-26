@@ -51,8 +51,11 @@ export const ASSIGNMENT_KIND = 'gravitas.assignment';
  * The payload version.
  *
  * 1: lesson id, ordered sids, per-step fingerprint hashes, title and intro.
+ * 2: and, when the lesson comes from a capability package, that package and
+ *    its version (`p`), so a link made today can say what it was made with
+ *    when the package moves on (./pinning.js). A 1 still opens.
  */
-export const ASSIGNMENT_SCHEMA = 1;
+export const ASSIGNMENT_SCHEMA = 2;
 
 /** The tag that marks an assignment fragment, so a world link is never one. */
 export const ASSIGNMENT_TAG = 'a';
@@ -243,6 +246,7 @@ export function buildAssignment({
   id = null,
   now = new Date(),
   fingerprint,
+  provider = null,
 }) {
   const resolved = resolveSelection(lesson, chosen);
   const byId = new Map((lesson.steps || []).map(s => [s.sid, s]));
@@ -262,6 +266,9 @@ export function buildAssignment({
     // reconstructing what changed.
     f: resolved.sids.map(sid => shortHash(fingerprint(byId.get(sid)))),
     c: now.toISOString().slice(0, 10),
+    // The package the lesson came from, and its version, when it came from
+    // one: two short strings, and the link can then say what changed.
+    ...(provider ? { p: [provider.id, provider.version] } : {}),
   };
 }
 
@@ -341,6 +348,14 @@ export function validateAssignment(data) {
     return fail('badText');
   if (data.n !== undefined && typeof data.n !== 'string')
     return fail('badText');
+  if (data.p !== undefined) {
+    const ok =
+      Array.isArray(data.p) &&
+      data.p.length === 2 &&
+      /^[a-z0-9]+(\.[a-z0-9-]+)+$/.test(data.p[0]) &&
+      /^\d+\.\d+\.\d+$/.test(data.p[1]);
+    if (!ok) return fail('badPackage');
+  }
   if ((data.t || '').length > MAX_TITLE) return fail('titleTooLong');
   if ((data.n || '').length > MAX_INTRO) return fail('introTooLong');
 

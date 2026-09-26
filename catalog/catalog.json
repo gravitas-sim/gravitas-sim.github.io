@@ -1,0 +1,409 @@
+{
+  "format": "gravitas.catalog",
+  "formatVersion": 1,
+  "catalogVersion": "1.0.0",
+  "platform": "1.0.0",
+  "locales": [
+    "en",
+    "es"
+  ],
+  "lessons": {
+    "a-universe-of-stars": {
+      "en": "A Universe of Stars",
+      "es": "Un universo de estrellas"
+    },
+    "binary-star-planets": {
+      "en": "Planets in Binary Stars",
+      "es": "Planetas en estrellas binarias"
+    },
+    "black-holes": {
+      "en": "Black Holes by the Numbers",
+      "es": "Agujeros negros en números"
+    },
+    "butterfly-effect": {
+      "en": "The Butterfly Effect in Space",
+      "es": "El efecto mariposa en el espacio"
+    },
+    "design-the-schedule": {
+      "en": "Design the Schedule",
+      "es": "Diseña el calendario"
+    },
+    "detect-this-planet": {
+      "en": "Can You Detect This Planet?",
+      "es": "¿Puedes detectar este planeta?"
+    },
+    "goldilocks-question": {
+      "en": "The Goldilocks Question",
+      "es": "La cuestión de Ricitos de Oro"
+    },
+    "gravity-assist": {
+      "en": "Where Does a Gravity Assist Get Its Speed?",
+      "es": "¿De dónde saca su velocidad una asistencia gravitatoria?"
+    },
+    "hohmann-transfer": {
+      "en": "Getting There From Here",
+      "es": "Llegar hasta allí desde aquí"
+    },
+    "keplers-laws": {
+      "en": "Kepler's Laws",
+      "es": "Las leyes de Kepler"
+    },
+    "lagrange-points": {
+      "en": "Where Can It Get To?",
+      "es": "¿Hasta dónde puede llegar?"
+    },
+    "listening-to-spacetime": {
+      "en": "Listening to Spacetime",
+      "es": "Escuchar el espacio-tiempo"
+    },
+    "lives-of-stars": {
+      "en": "Lives of Stars",
+      "es": "Vidas de las estrellas"
+    },
+    "missing-mass": {
+      "en": "The Missing Mass",
+      "es": "La masa que falta"
+    },
+    "orbital-energy": {
+      "en": "Bound, Unbound and Escape",
+      "es": "Ligado, no ligado y escape"
+    },
+    "power-law-gravity": {
+      "en": "What If Gravity Were Not Inverse Square?",
+      "es": "¿Y si la gravedad no fuera inversa al cuadrado?"
+    },
+    "radial-velocity": {
+      "en": "Finding Planets by Their Tug",
+      "es": "Encontrar planetas por su tirón"
+    },
+    "retrograde-motion": {
+      "en": "Why Mars Goes Backwards",
+      "es": "Por qué Marte va hacia atrás"
+    },
+    "tides": {
+      "en": "Tides",
+      "es": "Mareas"
+    },
+    "transit-photometry": {
+      "en": "Finding Planets by Their Shadows",
+      "es": "Encontrar planetas por sus sombras"
+    },
+    "twelve-nights": {
+      "en": "Twelve Nights",
+      "es": "Doce noches"
+    },
+    "weighing-stars": {
+      "en": "Weighing the Stars",
+      "es": "Pesar las estrellas"
+    },
+    "what-is-a-gravitational-wave": {
+      "en": "What Is a Gravitational Wave?",
+      "es": "¿Qué es una onda gravitacional?"
+    },
+    "when-orbits-lock": {
+      "en": "When Orbits Lock",
+      "es": "Cuando las órbitas se enganchan"
+    }
+  },
+  "entries": [
+    {
+      "id": "community.pulsating-stars",
+      "version": "1.0.0",
+      "kind": "declarative",
+      "type": "course-pack",
+      "delivery": "archive",
+      "title": {
+        "en": "Pulsating stars: a course",
+        "es": "Estrellas pulsantes: un curso"
+      },
+      "summary": {
+        "en": "Three lessons on reading a star's light, and a real light curve to finish: SU Draconis, an RR Lyrae star that nearly doubles in brightness and fades again every sixteen hours.",
+        "es": "Tres lecciones sobre cómo leer la luz de una estrella y, para terminar, una curva de luz real: SU Draconis, una estrella RR Lyrae que casi duplica su brillo y vuelve a apagarse cada dieciséis horas."
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "courses": [
+          {
+            "id": "pulsating-stars",
+            "file": "course.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "course.json",
+          "license": "CC-BY-4.0"
+        }
+      ],
+      "citations": [],
+      "offline": "precache",
+      "archiveFile": "packages/community.pulsating-stars-1.0.0.gxp",
+      "bytes": 2193,
+      "sha256": "1cc0aa2a15343014cf15132ccb2630f6e6979a545204ad340de13c4acf241b71",
+      "files": [
+        {
+          "path": "gravitas-extension.json",
+          "bytes": 760,
+          "sha256": "abd188a4cad93ed6f42d2d1feede681eac72065798dd11f573ce3eca7b3196f4"
+        },
+        {
+          "path": "README.md",
+          "bytes": 594,
+          "sha256": "35b140e48428eaf09fc6d4677ee46354876c27d0e1c11d48ed118ecaa7341fae"
+        },
+        {
+          "path": "course.json",
+          "bytes": 3306,
+          "sha256": "d4a0d15b292258eb389aa97439b86149d77f24a49e3dcd71d09228ec100a0a69"
+        }
+      ],
+      "unpackedBytes": 4660,
+      "review": {
+        "date": "2026-09-25",
+        "checks": [
+          "sdk validate",
+          "sdk test",
+          "catalog check"
+        ],
+        "notes": "Three existing lessons in both languages; every lesson id resolves and every note is translated."
+      },
+      "source": "extensions/pulsating-stars",
+      "history": []
+    },
+    {
+      "id": "community.su-dra-tess-s15",
+      "version": "1.0.0",
+      "kind": "declarative",
+      "type": "data-pack",
+      "delivery": "archive",
+      "title": {
+        "en": "SU Draconis, an RR Lyrae star, observed by TESS",
+        "es": "SU Draconis, una estrella RR Lyrae, observada por TESS"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "su-dra-tess-s15",
+            "provenance": "pack.json",
+            "file": "series.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "*.json",
+          "license": "public domain (NASA mission data); acknowledge TESS and MAST"
+        }
+      ],
+      "citations": [
+        {
+          "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+          "url": "https://doi.org/10.17909/t9-nmc8-f686"
+        },
+        {
+          "text": "Monson et al. 2017, AJ 153, 96 (the period the pack is checked against)",
+          "url": "https://arxiv.org/abs/1703.01520"
+        }
+      ],
+      "object": "SU Dra",
+      "facility": "TESS",
+      "offline": "precache",
+      "archiveFile": "packages/community.su-dra-tess-s15-1.0.0.gxp",
+      "bytes": 12738,
+      "sha256": "17902100ca862811778233cd4c27212590b1ed8a6e2e8acef269563109b38988",
+      "files": [
+        {
+          "path": "gravitas-extension.json",
+          "bytes": 1283,
+          "sha256": "d9c9e43d43b006179b68e77b3806b85e51eaff84fb39709b8a925694d292e1fb"
+        },
+        {
+          "path": "README.md",
+          "bytes": 969,
+          "sha256": "e8480e2f1a03e9070e27293ba714036114f83191deeb11b33fd60f5c26b2d20b"
+        },
+        {
+          "path": "pack.json",
+          "bytes": 4915,
+          "sha256": "61124a808c342b40c1f8ae540c28605fdba55508626a3a256f7c2dca0bfadff4"
+        },
+        {
+          "path": "series.json",
+          "bytes": 17367,
+          "sha256": "50c85b136cb0cccc9b559707227f51b76f70dc6465c4012a29858332ad580302"
+        }
+      ],
+      "unpackedBytes": 24534,
+      "review": {
+        "date": "2026-09-25",
+        "checks": [
+          "sdk validate",
+          "sdk test",
+          "catalog check",
+          "rebuilt from the pinned MAST file"
+        ],
+        "notes": "Period within 1.2e-5 d of Monson et al. 2017; CROWDSAP 0.985; the pack records why RR Lyrae itself was not used."
+      },
+      "source": "extensions/su-dra-tess-s15",
+      "history": []
+    },
+    {
+      "id": "gravitas.lesson.power-law-gravity",
+      "version": "1.0.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "What If Gravity Were Not Inverse Square?",
+        "es": "¿Y si la gravedad no fuera inversa del cuadrado?"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "routes": [
+          {
+            "path": "#investigation=power-law-gravity"
+          }
+        ],
+        "investigations": [
+          {
+            "id": "power-law-gravity",
+            "entry": "builtin:investigation/power-law-gravity"
+          }
+        ],
+        "translations": [
+          {
+            "locale": "es",
+            "investigation": "power-law-gravity",
+            "entry": "builtin:investigation/es/power-law-gravity"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/data/investigations/**",
+          "license": "CC-BY-4.0"
+        }
+      ],
+      "citations": [],
+      "offline": "precache",
+      "bytes": 62881
+    },
+    {
+      "id": "gravitas.power-law-instruments",
+      "version": "1.0.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "Power-law gravity instruments",
+        "es": "Instrumentos de gravedad en ley de potencias"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "models": [
+          {
+            "id": "power-law-gravity-model"
+          }
+        ],
+        "widgetFamilies": [
+          {
+            "id": "power-law",
+            "entry": "builtin:widgets/power-law",
+            "pick": "POWER_LAW_WIDGETS",
+            "widgets": [
+              "power-law-precession",
+              "power-law-refinement",
+              "power-law-kepler",
+              "power-law-conservation"
+            ]
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/powerLaw*.js",
+          "license": "MIT"
+        }
+      ],
+      "citations": [],
+      "offline": "precache",
+      "bytes": 54496
+    },
+    {
+      "id": "gravitas.sdss-dr18-spectra",
+      "version": "1.0.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "Four observed stellar spectra (SDSS DR18)",
+        "es": "Cuatro espectros estelares observados (SDSS DR18)"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "sdss-dr18-stellar-spectra",
+            "entry": "builtin:data/sdss-spectra",
+            "provenance": "js/data/spectra/sdssSpectraProvenance.js"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/data/spectra/**",
+          "license": "public domain; acknowledge SDSS, see NOTICE"
+        }
+      ],
+      "citations": [
+        {
+          "text": "SDSS DR18 (Almeida et al. 2023, ApJS 267, 44)",
+          "url": "https://www.sdss.org/dr18/"
+        }
+      ],
+      "offline": "precache",
+      "bytes": 19009
+    },
+    {
+      "id": "gravitas.tess-hd209458-s56",
+      "version": "1.1.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "HD 209458 observed by TESS (sector 56 light curve and aperture mask)",
+        "es": "HD 209458 observada por TESS (curva de luz y máscara de apertura del sector 56)"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "tess-hd209458-s56-lc",
+            "entry": "builtin:data/tess-hd209458-s56",
+            "provenance": "data-packs/tess-hd209458-s56-lc.json"
+          },
+          {
+            "id": "tess-hd209458-s56-aperture",
+            "entry": "builtin:data/tess-hd209458-s56-aperture",
+            "provenance": "data-packs/tess-hd209458-s56-aperture.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/data/observations/**",
+          "license": "public domain (NASA mission data); acknowledge TESS and MAST, see NOTICE"
+        }
+      ],
+      "citations": [
+        {
+          "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+          "url": "https://doi.org/10.17909/t9-nmc8-f686"
+        },
+        {
+          "text": "TESS Science Data Products Description Document, NASA/TM-2018-220036 (aperture mask bits)",
+          "url": "https://ntrs.nasa.gov/citations/20180007935"
+        }
+      ],
+      "offline": "precache",
+      "bytes": 14841
+    }
+  ]
+}

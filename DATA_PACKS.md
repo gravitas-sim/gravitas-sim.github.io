@@ -106,6 +106,32 @@ bit 2 is on exactly the `NPIXSAP` pixels.
   either until it is asked for.
 - The next pack will find 8.2 KB of deferred room.
 
+## Series encodings
+
+`js/observation.js` decodes every pack's series, in the browser and in Node
+alike, and refuses an encoding it does not know rather than guessing.
+
+| Encoding | What it holds | Range | Since |
+|---|---|---|---|
+| `binned-relative-flux/1` | equal time bins as runs of bin indices; flux as little-endian int16 ppm about 1; error as one byte in steps of `errStepPpm` | ±3.3%: a transit | the first pack |
+| `binned-relative-flux/2` | the same, with the flux in steps of `fluxStepPpm` (a whole number, 1 to 1,000) | ±3.3% × the step: ±65% at 20 ppm | SDK 1.2.0, for a pulsating star |
+| `image-uint16/1` | little-endian 16-bit pixels, row by row from the lowest | 0 to 65,535 | SDK 1.1.0 |
+
+`/2` is a new version rather than an optional field on `/1`: a reader of `/1`
+would take a stepped flux for parts per million, and misread it by the step.
+The pipeline refuses to clip a value that does not fit, so a star that varies
+too much for `/1` fails to build rather than building wrong
+(`tools/data-packs/tess-light-curve.mjs`).
+
+## Packs from outside the core
+
+A data pack need not be built in. `extensions/su-dra-tess-s15/` is one built
+with the SDK alone, from a raw MAST product, and served by the curated catalog
+for a reader to install (CATALOG.md): SU Draconis, an RR Lyrae star, whose
+light swings from 0.77 to 1.46 of its median every 0.66 days. It is the first
+`/2` pack. Its build script pins the raw file as the built-in packs do, and
+`npm run catalog:check` holds the committed archive to it.
+
 ## Commands
 
 ```bash

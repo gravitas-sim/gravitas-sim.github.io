@@ -26,7 +26,11 @@ import {
   t,
   translatePage,
 } from './observatory/i18n.js';
-import { FIXTURES, openFixture } from './observatory/fixtures.js';
+import {
+  FIXTURES,
+  lightCurveObservation,
+  openFixture,
+} from './observatory/fixtures.js';
 import {
   columnOf,
   maskedRows,
@@ -1216,3 +1220,14 @@ function translateAll() {
 setLanguage(preferred());
 translateAll();
 document.documentElement.dataset.ready = 'true';
+// Opened from the catalog with ?installed=<package id>: js/catalog/installed.js
+// opens the pack, so a visitor who installs nothing never loads it.
+const installedId = new URLSearchParams(location.search).get('installed');
+if (installedId)
+  import('./catalog/installed.js').then(m =>
+    m.openInstalled(
+      installedId,
+      { open, status, t, registerMessages },
+      lightCurveObservation
+    )
+  );

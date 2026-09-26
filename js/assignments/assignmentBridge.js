@@ -60,5 +60,22 @@ export async function openAssignmentFromUrl() {
     toast(t('assign.notice.missing', { n: binding.missing }));
   if (binding?.changed)
     toast(t('assign.notice.changed', { n: binding.changed }));
+  // And the package the lesson comes from, when it has moved on since the
+  // link was made, or when the link predates pinning (./assignment.js).
+  const [{ packageBinding }, { lessonProvider }] = await Promise.all([
+    import('./pinning.js'),
+    import('./provider.js'),
+  ]);
+  const pin = packageBinding(
+    read.assignment,
+    lessonProvider(read.assignment.l)
+  );
+  if (['unpinned', 'major', 'moved'].includes(pin.status))
+    toast(
+      t(`assign.notice.${pin.status}`, {
+        pinned: pin.pinned ? `${pin.pinned.id} ${pin.pinned.version}` : '',
+        current: pin.current ? `${pin.current.id} ${pin.current.version}` : '',
+      })
+    );
   return true;
 }

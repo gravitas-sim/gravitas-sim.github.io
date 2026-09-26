@@ -366,6 +366,16 @@ export const CHECKS = [
     ci: 'checks',
     group: 'correctness',
   },
+  // The curated catalog (CATALOG.md): its archives, the extensions they come
+  // from, their licenses and catalog.json itself, against the repository.
+  {
+    id: 'catalog',
+    label: 'the curated catalog is true of the repository',
+    command: ['npm', 'run', 'catalog:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
   // The Extension SDK's own examples, validated and tested as an author's
   // would be (sdk/README.md). The contract suite in jest covers the SDK
   // itself; this is the command an extension's `validation` names.

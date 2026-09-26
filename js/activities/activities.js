@@ -48,7 +48,14 @@ export const LAUNCH = Object.freeze({
  * @returns {{ok: boolean, reason?: string, assignment?: object,
  *   added?: Array<object>, unknown?: Array<string>}} The payload, or why not
  */
-export function assignmentForFormat(lesson, activity, format, title, intro) {
+export function assignmentForFormat(
+  lesson,
+  activity,
+  format,
+  title,
+  intro,
+  provider = null
+) {
   if (!activity) return { ok: false, reason: LAUNCH.NO_ACTIVITY };
   if (!format) return { ok: false, reason: LAUNCH.NO_FORMAT };
   if (!lesson || !Array.isArray(lesson.steps) || !lesson.steps.length) {
@@ -66,6 +73,11 @@ export function assignmentForFormat(lesson, activity, format, title, intro) {
     // Fixed, so a student keeps their work across terms. See the header.
     id: format.assignmentId,
     fingerprint: stepFingerprint,
+    // The package the lesson comes from, if the caller looked it up
+    // (js/assignments/provider.js). Handed in rather than imported, so the
+    // teaching page, which lists formats and builds nothing, does not load
+    // the package catalog to do it.
+    provider,
   });
 
   return {

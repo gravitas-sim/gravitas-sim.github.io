@@ -700,6 +700,13 @@ export const EN_DEFERRED = {
     '{n} step(s) have been rewritten since this was set. Those start blank rather than showing an answer to a question that is no longer being asked.',
   'assign.notice.missing':
     '{n} step(s) are no longer in the lesson and have been left out.',
+  'assign.notice.unpinned':
+    'This assignment was made before lessons came in versioned packages. It opens with {current}, and any step rewritten since is shown blank.',
+  'assign.notice.major':
+    'This assignment was made with {pinned}; this Gravitas has {current}, a new major version. Its steps may have been rewritten, and any that were are shown blank.',
+  'assign.notice.moved':
+    'This assignment was made with {pinned}, which this Gravitas no longer provides the lesson from. It opens with the lesson as it is now.',
+  'assign.error.badPackage': 'That assignment link names its package wrongly.',
 
   // --- The maneuver planner ---------------------------------------------------
   'burn.title': 'Maneuver planner',

@@ -75,6 +75,20 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `js/data/spectra/**` | derived from SDSS DR18 observed spectra | public domain; acknowledge SDSS, see NOTICE |
 | `js/data/observations/**` | derived from TESS light curves served by MAST | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
 
+## Extensions and the catalog
+
+`extensions/**` holds extensions built with the SDK outside the core, and
+`catalog/packages/**` the archives the catalog serves from them. Each
+extension states its own licenses in its `gravitas-extension.json`, and
+`npm run catalog:check` accepts only those CATALOG.md lists.
+
+| | | |
+| --- | --- | --- |
+| `extensions/*/build.mjs` | transformation scripts | MIT |
+| `extensions/*/course.json`, `README.md` | course text | CC BY 4.0 |
+| `extensions/su-dra-tess-s15/*.json` | derived from a TESS light curve served by MAST | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
+| `catalog/**` | the catalog and its archives | as the extension each came from |
+
 ## Why the split
 
 MIT is a software license. It is the right license for an integrator and the

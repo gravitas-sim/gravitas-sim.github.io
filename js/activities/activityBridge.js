@@ -161,12 +161,14 @@ export async function openActivityFromUrl() {
   // The merged lesson in the reader's language, from the same loader the panel
   // uses - so the assignment is built against exactly what will be shown.
   const lesson = await registry.loadInvestigation(activity.lesson);
+  const { lessonProvider } = await import('../assignments/provider.js');
   const built = logic.assignmentForFormat(
     lesson,
     activity,
     format,
     t(activity.titleId),
-    t(format.introId)
+    t(format.introId),
+    lessonProvider(activity.lesson)
   );
   if (!built.ok) {
     toast(t('activity.error.notUsable'));
