@@ -12,7 +12,7 @@
 // is a question about layout. All three are checked at real sizes.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 /** Sizes an embedded figure actually meets in a course page. */
 const LMS_SIZES = [
@@ -25,6 +25,7 @@ const LMS_SIZES = [
 
 /** Build a real share link through the codec the application itself uses. */
 async function shareLinkFor(page, scenario, seed = 'e2e-presentation') {
+  await requireScenarioKey(page, scenario);
   return page.evaluate(
     async ({ scenario, seed }) => {
       const ui = await import('/js/ui.js');

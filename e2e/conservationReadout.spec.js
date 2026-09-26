@@ -9,7 +9,7 @@
 // still have it.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 const block = page => page.locator('.readout-conservation');
 
@@ -32,6 +32,7 @@ const help = page => page.locator('.readout-conservation-help');
  * afterwards.
  */
 async function scenario(page, name, settings = {}) {
+  await requireScenarioKey(page, name);
   await page.evaluate(
     async ({ name: key, settings: s }) => {
       const ui = await import('/js/ui.js');
@@ -156,7 +157,7 @@ test.describe('when it is asked for', () => {
 test.describe('what the scene does to its own conservation', () => {
   test('a closed system says so', async ({ page, app }) => {
     await app.boot();
-    await scenario(page, 'Kepler’s 2nd Law', {
+    await scenario(page, "Kepler's 2nd Law", {
       show_conservation_diagnostics: true,
       mutual_gravity: true,
       enable_star_merging: false,
