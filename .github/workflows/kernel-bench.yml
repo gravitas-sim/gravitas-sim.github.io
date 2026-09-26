@@ -1,0 +1,78 @@
+# =============================================================================
+# SPIKE (Prompt 21): the scientific-kernel bench, on a clean machine
+# -----------------------------------------------------------------------------
+# Lives only on spike/scientific-kernel-wasm-gate and is never merged. The
+# machine the prototype was written on runs other work, and a timing taken
+# under load is not one; a GitHub-hosted runner is quiet, the same for anyone
+# who re-runs it, and citable by its run id.
+#
+#   bench    spike/kernel/bench.mjs: Chromium, Chromium with the CPU throttled
+#            4x, Firefox and WebKit, as Playwright ships them. Three rounds.
+#   direct   spike/kernel/direct.mjs: the runner's own release Firefox,
+#            launched with no automation protocol attached. Playwright's
+#            Firefox is a Nightly build, and its WebAssembly tiering differs.
+#   verdict  spike/kernel/verdict.mjs: spike/kernel/THRESHOLDS.md, committed
+#            before this file, applied to the numbers.
+# =============================================================================
+name: Kernel bench (spike)
+
+on:
+  push:
+    branches: [spike/scientific-kernel-wasm-gate]
+    paths: ['spike/kernel/**', '.github/workflows/kernel-bench.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: The machine
+        run: |
+          nproc
+          grep -m1 'model name' /proc/cpuinfo
+          free -m
+          firefox --version || true
+
+      - name: Correctness, in Node
+        run: node spike/kernel/check.mjs
+
+      # Let the install's load average decay before the first timing.
+      - name: Settle
+        run: sleep 60
+
+      - name: Bench, as Playwright ships the engines
+        run: node spike/kernel/bench.mjs --rounds 3 --repeats 5 --json kernel-bench.json
+
+      - name: Bench, release Firefox with nothing attached
+        run: |
+          for r in 1 2 3; do
+            node spike/kernel/direct.mjs "$(command -v firefox)" --repeats 5 --json "kernel-direct-firefox-$r.json"
+          done
+
+      - name: Verdict
+        run: node spike/kernel/verdict.mjs kernel-bench.json | tee kernel-verdict.txt
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: kernel-bench
+          path: |
+            kernel-bench.json
+            kernel-direct-firefox-*.json
+            kernel-verdict.txt
