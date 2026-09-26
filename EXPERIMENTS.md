@@ -203,9 +203,14 @@ realm, which builds trial 0 anyway, also records:
 
 A trial then costs start-up, build and warm-up, plus its steps at the timed
 rate, divided by the profile's `parallelShare` when realms run together. A
-plan without timing (a clock too coarse to time the burst) falls back to the
-profile's `setupMs` and `rate`, measured on the slowest laboratory, so that a
-guess errs towards refusing.
+plan without timing falls back to the profile's `setupMs` and `rate`,
+measured on the slowest laboratory, so that a guess errs towards refusing.
+There are two ways to be without timing. One is a clock too coarse to see
+the burst. The other is a busy device: if the planning realm is descheduled
+across the middle of the burst, the first frame to end past the half also
+ends past the budget, and the second half holds no frames to take a rate
+from. In Node on the bench machine at a load of about 95, 7 of 30 bursts
+of 80 ms came back untimed this way (`tests/experimentTrial.test.js`).
 
 ### Profiles
 
