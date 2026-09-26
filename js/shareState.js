@@ -256,6 +256,10 @@ const BODY_FIELDS = [
   // the link had one, which is the documented path for older links.
   'appearance',
   'jet_orientation',
+  // Whether a galaxy is spiral or elliptical: what the inspector reports and
+  // how it is drawn. Only a galaxy has it. A link made before galaxies
+  // travelled at all has none of them to restore.
+  'galaxyType',
 ];
 
 /**

@@ -152,7 +152,7 @@ export const IRREVERSIBLE = Object.freeze([
   Object.freeze({
     id: 'fragment:rocky-collision',
     kind: 'fragment',
-    line: 7621,
+    line: 7641,
     detail: Object.freeze({
       draws: 7,
       what: 'a rocky collision destroys both bodies and scatters debris whose directions, speeds and offsets come from 7 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed',
