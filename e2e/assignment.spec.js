@@ -109,8 +109,10 @@ test.describe('building one', () => {
     // the payload is what a student can actually read.
     const payload = await page.evaluate(async link => {
       const { decodeTagged } = await import('/js/shareState.js');
+      const { ASSIGNMENT_SCHEMA } =
+        await import('/js/assignments/assignment.js');
       const hash = link.slice(link.indexOf('#') + 1);
-      const { payload } = await decodeTagged('a', hash, 1);
+      const { payload } = await decodeTagged('a', hash, ASSIGNMENT_SCHEMA);
       return payload;
     }, url);
 
@@ -178,10 +180,12 @@ test.describe('doing one', () => {
 
     const chosen = await page.evaluate(async link => {
       const { decodeTagged } = await import('/js/shareState.js');
+      const { ASSIGNMENT_SCHEMA } =
+        await import('/js/assignments/assignment.js');
       const { payload } = await decodeTagged(
         'a',
         link.slice(link.indexOf('#') + 1),
-        1
+        ASSIGNMENT_SCHEMA
       );
       return payload.s;
     }, url);
