@@ -1,11 +1,11 @@
 // =============================================================================
 // The first sketch
 // -----------------------------------------------------------------------------
-// A quiet link at the end of /model/ opens the original Gravitas - the single
-// index.html of commit a5d08fc, kept byte for byte - at /history/original/.
-// This walks it the way a reader would: find the link at the end of the
-// documentation, follow it from the keyboard, watch the old simulation start,
-// and come back with Back.
+// One unexplained word at the end of /model/'s footer, "origin", opens the
+// original Gravitas - the single index.html of commit a5d08fc, kept byte for
+// byte - at /history/original/. This walks it the way a reader would: find
+// the link, follow it from the keyboard, watch the old simulation start, and
+// come back with Back.
 //
 // Runs against both targets (BOTH_TARGETS in playwright.config.js). The
 // sources are what GitHub Pages publishes; dist/ is the production build,
@@ -83,7 +83,7 @@ function sampleCanvas(page) {
 
 test.describe('the first sketch', () => {
   test(
-    'the link at the end of /model/ opens the original, and Back returns',
+    'the last link on /model/ opens the original, and Back returns',
     { tag: '@cross-browser' },
     async ({ page, browserName }) => {
       const seen = await watchRequests(page);
@@ -92,53 +92,56 @@ test.describe('the first sketch', () => {
       // The documentation page does not fetch it, prefetch it or preload it.
       expect(seen.local.filter(p => p.startsWith('/history/'))).toEqual([]);
 
-      // One link, in the document's text: after its last heading and outside
-      // the table of contents, the footer and anything styled as a callout.
-      const link = page.getByRole('link', { name: 'The first sketch' });
+      // One word, the last item of the footer row, explained nowhere: not in
+      // the document's text, the header's navigation or anything styled as a
+      // callout.
+      const link = page.getByRole('link', { name: 'origin', exact: true });
       await expect(link).toHaveCount(1);
       await expect(link).toHaveAttribute('href', HREF);
       const where = await link.evaluate(a => ({
-        inMain: Boolean(a.closest('main')),
-        inChrome: Boolean(a.closest('nav, header, footer, aside, .doc-toc')),
-        afterLastHeading: Boolean(
-          [...document.querySelectorAll('main h2')]
-            .at(-1)
-            .compareDocumentPosition(a) &
-          window.Node.DOCUMENT_POSITION_FOLLOWING
-        ),
-        tag: a.parentElement.tagName,
+        inFooter: Boolean(a.closest('footer.doc-foot')),
+        inText: Boolean(a.closest('main, nav, header, aside')),
+        last: a === [...document.querySelectorAll('a[href]')].at(-1),
+        className: a.className,
       }));
       expect(where).toEqual({
-        inMain: true,
-        inChrome: false,
-        afterLastHeading: true,
-        tag: 'P',
+        inFooter: true,
+        inText: false,
+        last: true,
+        className: '',
       });
 
-      // Readable: it has a box and the text color is not the background's.
+      // Readable, and no louder than its neighbors: drawn exactly like the
+      // footer link before it, which the axe pass holds to contrast.
       await link.scrollIntoViewIfNeeded();
       await expect(link).toBeVisible();
-      const ink = await link.evaluate(a => {
-        const s = getComputedStyle(a);
-        return { color: s.color, opacity: s.opacity, size: s.fontSize };
-      });
-      expect(ink.opacity).toBe('1');
-      expect(parseFloat(ink.size)).toBeGreaterThanOrEqual(14);
-      expect(ink.color).not.toBe(
+      const ink = el =>
+        el.evaluate(a => {
+          const s = getComputedStyle(a);
+          return {
+            color: s.color,
+            size: s.fontSize,
+            weight: s.fontWeight,
+            decoration: s.textDecorationLine,
+            opacity: s.opacity,
+          };
+        });
+      const mine = await ink(link);
+      expect(mine).toEqual(await ink(page.locator('footer a').nth(-2)));
+      expect(mine.opacity).toBe('1');
+      expect(mine.color).not.toBe(
         await page.evaluate(
           () => getComputedStyle(document.body).backgroundColor
         )
       );
 
-      // Reached from the keyboard: it is the last stop in the document before
-      // the footer, so one Shift+Tab from the footer's first link lands on it,
-      // and Enter follows it. WebKit, like Safari, moves between links with
-      // Tab only while Option is held (or with "Press Tab to highlight each
-      // item" turned on), so that is the keyboard route it is given here.
-      await page.locator('footer a').first().focus();
-      await page.keyboard.press(
-        browserName === 'webkit' ? 'Alt+Shift+Tab' : 'Shift+Tab'
-      );
+      // Reached from the keyboard: it is the page's last stop, so one Tab
+      // from the footer link before it lands on it, and Enter follows it.
+      // WebKit, like Safari, moves between links with Tab only while Option
+      // is held (or with "Press Tab to highlight each item" turned on), so
+      // that is the keyboard route it is given here.
+      await page.locator('footer a').nth(-2).focus();
+      await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
       await expect(link).toBeFocused();
       await Promise.all([
         page.waitForURL(`**${HREF}`),
@@ -173,7 +176,7 @@ test.describe('the first sketch', () => {
       await page.goBack();
       await expect(page).toHaveURL(/\/model\/$/);
       await expect(
-        page.getByRole('link', { name: 'The first sketch' })
+        page.getByRole('link', { name: 'origin', exact: true })
       ).toHaveCount(1);
     }
   );

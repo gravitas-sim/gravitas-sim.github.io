@@ -3,7 +3,8 @@
 // -----------------------------------------------------------------------------
 // history/original/index.html is the first Gravitas: the single file that
 // commit a5d08fc put online in July 2025. It is served at /history/original/
-// as a working page, and the one way in is a quiet link at the end of /model/.
+// as a working page, and the one way in is a single unexplained word, "origin",
+// at the end of /model/'s footer.
 //
 // It is an archive, not a page to maintain. Its old bugs, its Google Fonts
 // import and its styling are the point, so nothing may modernize it - not a
@@ -110,33 +111,40 @@ describe('the first sketch is fetched only by following its link', () => {
   });
 });
 
-describe('one quiet link reaches it, at the end of /model/', () => {
+describe('one quiet link reaches it, the last word of /model/', () => {
   const html = read('model/index.html');
-  const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
+  const footer = html.slice(
+    html.indexOf('<footer class="doc-foot">'),
+    html.indexOf('</footer>')
+  );
 
-  test('the model page links it once, from its closing paragraph', () => {
+  test('the model page links it once, at the end of its footer', () => {
     const at = html.indexOf(`href="${HREF}"`);
     expect(at).toBeGreaterThan(-1);
     expect(html.indexOf(`href="${HREF}"`, at + 1)).toBe(-1);
 
-    // Inside the document's last section and after its last heading, rather
-    // than in the footer's navigation or the table of contents.
-    expect(main).toContain(`href="${HREF}"`);
-    const tail = main.slice(main.lastIndexOf('<h2'));
-    expect(tail).toContain(`href="${HREF}"`);
-    expect(tail.slice(tail.indexOf(`href="${HREF}"`))).not.toMatch(/<p\b/);
+    // Not in the document's text, where a sentence would have to explain it,
+    // and not in the header's navigation: the last item of the footer row,
+    // after the license, with nothing following it.
+    const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
+    expect(main).not.toContain(HREF);
+    expect(footer).toContain(`href="${HREF}"`);
+    expect(footer.slice(footer.indexOf(`href="${HREF}"`))).not.toMatch(
+      /<a\b|<span\b/
+    );
   });
 
-  test('it is an ordinary link: named, focusable and unstyled', () => {
-    const tag = main.match(/<a\b[^>]*href="\/history\/original\/"[^>]*>/)[0];
+  test('it is an ordinary link: one word, focusable and unstyled', () => {
+    const tag = footer.match(/<a\b[^>]*href="\/history\/original\/"[^>]*>/)[0];
     // No class, tabindex, target or aria override: it reads, focuses and
-    // behaves like every other link in the document's text.
+    // behaves like the footer links beside it, and says nothing about where
+    // it goes.
     expect(tag).toBe(`<a href="${HREF}">`);
-    const name = main
-      .slice(main.indexOf(tag) + tag.length)
+    const name = footer
+      .slice(footer.indexOf(tag) + tag.length)
       .match(/^([^<]*)<\/a>/)[1]
       .trim();
-    expect(name).toBe('The first sketch');
+    expect(name).toBe('origin');
   });
 
   test('no other page links it', () => {

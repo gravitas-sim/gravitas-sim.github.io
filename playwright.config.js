@@ -137,7 +137,7 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * panel is a lazy chunk of the observatory's bundle, as the file reader it
  * reads saved pipelines with now is too.
  *
- * e2e/historyOriginal.spec.js follows the quiet link at the end of /model/ to
+ * e2e/historyOriginal.spec.js follows the quiet link in /model/'s footer to
  * the first Gravitas in both, because dist/ gets that page from build.js's
  * ARCHIVAL_PAGES rather than DOC_PAGES, and must serve it byte for byte.
  */
