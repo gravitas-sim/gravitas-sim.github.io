@@ -5947,6 +5947,9 @@ class WhiteDwarf extends PhysicsObject {
 // an object nobody can see the shape of might as well not have one.
 const GALAXY_RADIUS = 150;
 
+/** How far a galaxy's drawing is turned: one of eight angles, by id. */
+const galaxyTilt = id => (id % 8) * (Math.PI / 8);
+
 /**
  * A galaxy, as a member of a cluster.
  *
@@ -5980,7 +5983,24 @@ class Galaxy extends PhysicsObject {
     // dispersion the lesson is measuring.
     this.persistent = true;
     // Fixed at construction so the drawing does not spin from frame to frame.
-    this.tilt = (this.id % 8) * (Math.PI / 8);
+    this.tilt = galaxyTilt(this.id);
+  }
+
+  // The kind travels with the rest of the state: the inspector reports it and
+  // the drawing depends on it.
+  get_state() {
+    return { ...super.get_state(), galaxyType: this.galaxyType };
+  }
+
+  set_state(s) {
+    super.set_state(s);
+    // A link can be edited by hand. The drawing and the inspector test for
+    // different values, so anything else would be drawn as one kind and
+    // reported as the other.
+    if (this.galaxyType !== 'elliptical') this.galaxyType = 'spiral';
+    // set_state may have replaced the id the constructor minted with the saved
+    // one, and the tilt follows the id.
+    this.tilt = galaxyTilt(this.id);
   }
 
   draw(ctx) {
