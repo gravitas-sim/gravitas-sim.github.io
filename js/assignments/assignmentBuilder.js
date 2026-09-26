@@ -25,6 +25,7 @@ import {
   resolveSelection,
   validateSelection,
 } from './assignment.js';
+import { lessonProvider } from './provider.js';
 import { assignmentLink } from './assignmentLink.js';
 
 let root = null;
@@ -245,6 +246,7 @@ async function build() {
     title: $('assignName').value,
     intro: $('assignIntro').value,
     fingerprint: stepFingerprint,
+    provider: lessonProvider(lesson.id),
   });
 
   const link = await assignmentLink(built);

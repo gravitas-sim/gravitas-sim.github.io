@@ -9,7 +9,7 @@ export default [
     // thumbnail generator's page.evaluate() callbacks are serialized and run
     // inside headless Chromium, so this file legitimately contains both halves
     // and needs both sets of globals.
-    files: ['build.js', 'tools/*.js', 'tools/*.mjs'],
+    files: ['build.js', 'tools/*.js', 'tools/*.mjs', 'extensions/**/*.mjs'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',

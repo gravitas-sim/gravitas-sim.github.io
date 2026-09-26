@@ -1,0 +1,58 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "community.su-dra-tess-s15",
+  "version": "1.0.0",
+  "kind": "declarative",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "SU Draconis, an RR Lyrae star, observed by TESS",
+    "es": "SU Draconis, una estrella RR Lyrae, observada por TESS"
+  },
+  "provides": {
+    "dataPacks": [
+      {
+        "id": "su-dra-tess-s15",
+        "provenance": "pack.json",
+        "file": "series.json"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "series.json",
+      "role": "data",
+      "offline": "optional"
+    },
+    {
+      "path": "pack.json",
+      "role": "provenance",
+      "offline": "none"
+    }
+  ],
+  "citations": [
+    {
+      "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+      "url": "https://doi.org/10.17909/t9-nmc8-f686"
+    },
+    {
+      "text": "Monson et al. 2017, AJ 153, 96 (the period the pack is checked against)",
+      "url": "https://arxiv.org/abs/1703.01520"
+    }
+  ],
+  "licenses": [
+    {
+      "scope": "*.json",
+      "license": "public domain (NASA mission data); acknowledge TESS and MAST"
+    }
+  ],
+  "offline": {
+    "policy": "precache"
+  },
+  "validation": [
+    {
+      "check": "registry:sdk-extensions"
+    }
+  ],
+  "migrations": []
+}

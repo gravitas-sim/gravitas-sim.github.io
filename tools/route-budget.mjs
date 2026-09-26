@@ -84,6 +84,7 @@ export const ROUTES = [
   // trial in a Worker, so its route carries the engine the Worker loads.
   { id: 'experiments', url: '/experiments/', page: true },
   { id: 'observatory', url: '/observatory/', page: true },
+  { id: 'catalog', url: '/catalog/', page: true },
 ];
 
 const CONFIGS = {

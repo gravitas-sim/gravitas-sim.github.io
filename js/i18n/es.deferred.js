@@ -704,6 +704,13 @@ export const ES_DEFERRED = {
     'Se han reescrito {n} paso(s) desde que se asigno esto. Esos empiezan en blanco en lugar de mostrar una respuesta a una pregunta que ya no se hace.',
   'assign.notice.missing':
     'Ya no hay {n} paso(s) en la leccion y se han dejado fuera.',
+  'assign.notice.unpinned':
+    'Esta tarea se creó antes de que las lecciones vinieran en paquetes con versión. Se abre con {current}, y cualquier paso reescrito desde entonces aparece en blanco.',
+  'assign.notice.major':
+    'Esta tarea se creó con {pinned}; este Gravitas tiene {current}, una nueva versión principal. Sus pasos pueden haberse reescrito, y los que lo fueron aparecen en blanco.',
+  'assign.notice.moved':
+    'Esta tarea se creó con {pinned}, del que este Gravitas ya no toma la lección. Se abre con la lección tal como es ahora.',
+  'assign.error.badPackage': 'Ese enlace de tarea nombra mal su paquete.',
 
   // --- El planificador de maniobras --------------------------------------------
   'burn.title': 'Planificador de maniobras',

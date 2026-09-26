@@ -15,6 +15,7 @@ export const ES_OBSERVATORY = {
   'obs.intro':
     'Observaciones reales, y tus propios archivos, como gráfica, tabla e imagen a la vez. Lo que seleccionas en una queda seleccionado en todas; enmascara, anota, pliega, agrupa y convierte; deshaz cualquier cosa; y guarda exactamente lo que hiciste.',
   'obs.back': 'Volver a Gravitas',
+  'obs.catalog': 'Instalar más datos desde el catálogo',
 
   'obs.open.title': 'Abrir una observación',
   'obs.open.fixture': 'Una observación real',

@@ -124,9 +124,13 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  *
  * e2e/inference.spec.js runs a fit in both, because in dist/ the fit panel is
  * a lazy chunk and its Worker a bundle of its own, found from the page.
+ *
+ * e2e/catalog.spec.js installs from the catalog in both, because in dist/ the
+ * page is a bundle, the archives are copied files, and the observatory opens
+ * an installed pack through a lazy chunk.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js/;
 
 /**
  * Which engines to run.

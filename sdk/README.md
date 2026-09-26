@@ -102,8 +102,9 @@ npm run sdk -- test sdk/examples/kepler-third-law
 The tests run the extension against the public API, as Gravitas will use it:
 
 - **Data pack:** the series decodes with `observationOf()` and is clean. Its
-  record's `validation.rule` is re-run (today `folded-depth`, a transit's
-  depth at the published period).
+  record's `validation.rule` is re-run: `folded-depth`, a transit's depth at
+  the published period, or `harmonic-period`, a pulsating star's period from
+  a Fourier series near the published one.
 - **Course pack:** every lesson opens in every declared language.
 - **Capability:** the module exports the widgets it declares, and each one
   meets the instrument contract. That means an id, a title and a note;
@@ -241,7 +242,7 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.1.0` |
+| `SDK_VERSION` | this SDK, `1.2.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with its version |
 | `EXTENSION_TYPES`, `LOCALES` | the three types and their kinds; the interface languages (`en`, `es`) |
@@ -249,6 +250,8 @@ declares all of it, and the contract suite fails if the two differ.
 | `acceptsPlatform(range)` | whether a `gravitas` range accepts this platform |
 | `installedDataPack(id)` | an installed pack's record, runtime module and decoded observation |
 | `observationOf(pack)`, `checkObservation(o)` | the decoder every pack shares, and the check that a series is clean |
+| `readFits(bytes)` | a FITS file's header-data units: header cards, and a binary table's columns (1.2.0) |
+| `binTessLightCurve(units, opts)` | a TESS SPOC light curve masked, normalized, binned and encoded as every built-in pack is; with `fluxStepPpm`, as `binned-relative-flux/2` (1.2.0) |
 
 The JSON formats have JSON Schemas (draft 2020-12) in [`schemas/`](schemas/)
 for editors. The schemas describe structure. The validators are the
@@ -281,6 +284,18 @@ anything else.
 |---|---|---|---|---|---|
 | 1.0.0 | 1.0.0 | 1 (with `provides.courses`) | 1 | 1 | 1 |
 | 1.1.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with `image` packs and the optional runtime fields `reductions` and `image` | 1 | 1 |
+| 1.2.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `binned-relative-flux/2` encoding and the `harmonic-period` check | 1 | 1 |
+
+SDK 1.2.0 adds, and removes nothing, what the first extension built outside
+the core needed (CATALOG.md, "What the SDK lacked"):
+
+- **`readFits()` and `binTessLightCurve()`** in the public API. The SU
+  Draconis pack's build script had no other way to read its MAST product, or
+  to bin it as the built-in packs are binned, than to import `tools/`.
+- **The `binned-relative-flux/2` encoding** (DATA_PACKS.md), for a star that
+  varies by more than the 3.3% `/1` holds.
+- **The `harmonic-period` check**, a pulsating star's period from a Fourier
+  series near the published one, beside a transit's `folded-depth`.
 
 SDK 1.1.0 adds, and removes nothing:
 
@@ -316,9 +331,10 @@ SDK 1.1.0 adds, and removes nothing:
 These are the private APIs and missing pieces that stop someone outside the
 repository from shipping an extension end to end:
 
-1. **Nothing installs a declarative extension at run time.** Gravitas runs only
-   the catalog its build compiled. A data pack or a course pack reaches readers
-   only after a maintainer vendors it, and package import is later work.
+1. **A declarative extension reaches readers only through the curated
+   catalog.** Once a maintainer accepts it into `catalog/curation.json`, a
+   reader installs it at `/catalog/` (CATALOG.md). There is still no way to
+   import an archive nobody has reviewed, and that is on purpose.
 2. **An instrument cannot be translated through a public API.** `t()` and the
    catalogs in `js/i18n/` are private, so an extension instrument's strings are
    English.
@@ -337,3 +353,9 @@ repository from shipping an extension end to end:
    widget registry and the authoring inputs. `lib/api.mjs` is the seam: it can
    keep its promises while those change under it, but only if they are updated
    together, in this repository.
+8. **A course cannot name a data pack.** `gravitas.course-pack/1` sequences
+   lessons, so the pulsating-stars course names the SU Draconis pack in a
+   note's words, and nothing checks that the pack exists.
+9. **A data pack cannot bring its own check.** The SDK runs `folded-depth` and
+   `harmonic-period`; a pack of another kind of variable needs another check
+   added to the SDK, which is a core change.

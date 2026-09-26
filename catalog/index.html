@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Catalog | Gravitas</title>
+    <meta
+      name="description"
+      content="Data, courses and instruments for Gravitas, each reviewed before it was listed. Install a data pack or a course to use it offline; none of it runs code."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: a filter form, a list of entries and a course. */
+      .cw-wrap {
+        max-width: 60rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .cw-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .cw-panel {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.9rem 1rem 1rem;
+        margin: 0 0 1.25rem;
+      }
+      .cw-grid {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        align-items: end;
+      }
+      .cw-field {
+        display: grid;
+        gap: 0.3rem;
+      }
+      .cw-wrap input,
+      .cw-wrap select {
+        width: 100%;
+        box-sizing: border-box;
+        font: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.45rem 0.55rem;
+      }
+      .cw-wrap select option {
+        background: #0d1020;
+        color: #e8ebff;
+      }
+      .cw-hint {
+        opacity: 0.8;
+        font-size: 0.92em;
+      }
+      .cw-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 1rem;
+      }
+      .cw-entry h2 {
+        margin: 0 0 0.35rem;
+        font-size: 1.2rem;
+      }
+      .cw-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin: 0 0 0.5rem;
+        font-size: 0.85em;
+      }
+      .cw-badge {
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 999px;
+        padding: 0.1rem 0.55rem;
+      }
+      .cw-meta {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 0.25rem 0.9rem;
+        margin: 0.6rem 0;
+      }
+      .cw-meta dt {
+        opacity: 0.8;
+      }
+      .cw-meta dd {
+        margin: 0;
+      }
+      .cw-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.6rem;
+      }
+      .cw-error {
+        border-left: 3px solid #ff8a8a;
+        padding: 0.35rem 0.7rem;
+        margin: 0.6rem 0 0;
+      }
+      .cw-course h3 {
+        margin: 1rem 0 0.4rem;
+        font-size: 1.05rem;
+      }
+      .cw-course ol {
+        margin: 0;
+        padding-left: 1.3rem;
+      }
+      .cw-course li {
+        margin: 0 0 0.6rem;
+      }
+      .cw-note {
+        margin: 0.2rem 0 0;
+      }
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main
+      class="cw-wrap"
+      aria-label="Catalog"
+      data-i18n-aria-label="cat.main.label"
+    >
+      <div
+        id="langSwitch"
+        class="cw-actions"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="cat.lang.label"
+      ></div>
+      <h1 data-i18n="cat.title">Catalog</h1>
+      <p data-i18n="cat.intro">
+        Data, courses and instruments for Gravitas, each reviewed before it
+        was listed.
+      </p>
+      <p>
+        <a href="/" data-i18n="cat.back">Back to Gravitas</a> ·
+        <a href="../observatory/" data-i18n="cat.observatory">Observatory</a>
+      </p>
+      <p id="catStorage" class="cw-hint"></p>
+
+      <section class="cw-panel" aria-labelledby="catFindTitle">
+        <h2 id="catFindTitle" data-i18n="cat.filter.title">Find</h2>
+        <div class="cw-grid">
+          <label class="cw-field">
+            <span data-i18n="cat.filter.search">Search</span>
+            <input
+              id="catSearch"
+              type="search"
+              autocomplete="off"
+              data-i18n-placeholder="cat.filter.searchHint"
+            />
+          </label>
+          <label class="cw-field">
+            <span data-i18n="cat.filter.type">Show</span>
+            <select id="catType"></select>
+          </label>
+        </div>
+      </section>
+
+      <p id="catCount" class="cw-hint" aria-live="polite"></p>
+      <div id="catLoad"></div>
+      <ul id="catList" class="cw-list"></ul>
+      <section
+        id="catCourse"
+        class="cw-panel cw-course"
+        tabindex="-1"
+        hidden
+      ></section>
+      <p
+        id="catStatus"
+        class="visually-hidden"
+        role="status"
+        aria-live="polite"
+      ></p>
+    </main>
+    <script type="module" src="/js/catalogPage.js"></script>
+  </body>
+</html>

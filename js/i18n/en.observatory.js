@@ -15,6 +15,7 @@ export const EN_OBSERVATORY = {
   'obs.intro':
     'Real observations, and your own files, as a plot, a table and an image at once. Select in one and it is selected in all of them; mask, annotate, fold, bin and convert; undo any of it; and save exactly what you did.',
   'obs.back': 'Back to Gravitas',
+  'obs.catalog': 'Install more data from the catalog',
 
   'obs.open.title': 'Open an observation',
   'obs.open.fixture': 'A real observation',
