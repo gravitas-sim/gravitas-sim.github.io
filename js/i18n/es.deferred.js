@@ -2661,7 +2661,7 @@ export const ES_DEFERRED = {
   // ---------------------------------------------------------------------------
   'dmW.mondTitle': 'La misma curva, dos explicaciones',
   'dmW.mondNote':
-    'El ajuste con halo y MOND, evaluados con las mismas medidas. Cambia entre ellos y ajusta el disco hasta que cada uno coincida. Fijate en lo que hubo que decirle a cada uno.',
+    'El ajuste con halo y MOND, evaluados con los mismos puntos. Cambia entre ellos y ajusta el disco hasta que cada uno coincida. Fíjate en lo que hubo que decirle a cada uno.',
   'dmW.mondModel': 'Explicacion',
   'dmW.mondHaloOption': 'Halo de materia oscura',
   'dmW.mondMondOption': 'MOND',
@@ -2682,10 +2682,10 @@ export const ES_DEFERRED = {
   'dmW.mondClose': 'cerca',
   'dmW.mondOff': 'lejos',
   'dmW.mondBothFit':
-    'Esta explicacion reproduce las medidas. La otra tambien lo hace, con su propia masa de disco y con un numero distinto de parametros ajustados. La curva por si sola no decide entre ellas.',
+    'Esta explicación reproduce los puntos. La otra también lo hace, con su propia masa de disco y con un número distinto de parámetros ajustados. La curva por sí sola no decide entre ellas.',
   'dmW.mondKeepAdjusting':
     'Todavia no coincide. Ajusta el disco hasta que esta explicacion reproduzca los puntos, y luego prueba la otra.',
-  'dmW.mondSynthetic': 'curva sintetica, parametros de NGC 3198',
+  'dmW.syntheticCurve': 'curva sintética, parámetros de NGC 3198',
   'bhW.acrossTheEventHorizon': 'de lado a lado del horizonte de sucesos',
   'bhW.aMarathon': 'un maratón',
   'bhW.manhattanEndToEnd': 'Manhattan, de punta a punta',
