@@ -136,9 +136,13 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * e2e/measure.spec.js measures in both, because in dist/ the measurement
  * panel is a lazy chunk of the observatory's bundle, as the file reader it
  * reads saved pipelines with now is too.
+ *
+ * e2e/historyOriginal.spec.js follows the quiet link at the end of /model/ to
+ * the first Gravitas in both, because dist/ gets that page from build.js's
+ * ARCHIVAL_PAGES rather than DOC_PAGES, and must serve it byte for byte.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js/;
 
 /**
  * Which engines to run.

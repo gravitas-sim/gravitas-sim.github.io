@@ -27,15 +27,18 @@ import { fileURLToPath } from 'node:url';
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * DOC_PAGES, read out of build.js rather than imported.
+ * A page list, read out of build.js rather than imported.
  *
  * build.js runs a production build on import - it has no exports and its last
  * statement is `await run()` - so the list is parsed, the same way
  * tests/accessibilityDocs.test.js parses the SURFACES array out of its spec.
+ *
+ * @param {string} name - DOC_PAGES or ARCHIVAL_PAGES
+ * @returns {string[]} The directories it names
  */
-function docPages() {
+function pageList(name) {
   const text = readFileSync(path.join(REPO, 'build.js'), 'utf8');
-  const start = text.indexOf('const DOC_PAGES = [');
+  const start = text.indexOf(`const ${name} = [`);
   expect(start).toBeGreaterThan(-1);
   const body = text.slice(start, text.indexOf('];', start));
   return [...body.matchAll(/'([^']+)'/g)].map(m => m[1]);
@@ -79,24 +82,36 @@ function pageDirs(dir = '', found = []) {
 }
 
 describe('the production build copies every static page', () => {
-  const listed = docPages();
+  const docs = pageList('DOC_PAGES');
+  // Copied byte for byte instead of processed: the first Gravitas, kept as it
+  // was. Either list gets a page into dist/.
+  const archival = pageList('ARCHIVAL_PAGES');
+  const listed = [...docs, ...archival];
 
-  test('the list parses', () => {
+  test('the lists parse', () => {
     // Guards the parser: an empty list would make the assertion below
     // vacuously true and hide the very gap it exists to catch.
-    expect(listed.length).toBeGreaterThan(3);
-    expect(listed).toContain('instructors');
+    expect(docs.length).toBeGreaterThan(3);
+    expect(docs).toContain('instructors');
+    expect(archival).toContain('history/original');
   });
 
-  test('every page directory in the tree is in DOC_PAGES', () => {
+  test('every page directory in the tree is in DOC_PAGES or ARCHIVAL_PAGES', () => {
     const missing = pageDirs().filter(d => !listed.includes(d));
     expect(missing).toEqual([]);
   });
 
-  test('every entry in DOC_PAGES is a page that exists', () => {
+  test('every entry in either list is a page that exists', () => {
     const gone = listed.filter(
       d => !existsSync(path.join(REPO, d, 'index.html'))
     );
     expect(gone).toEqual([]);
+  });
+
+  test('no page is in both lists', () => {
+    // A DOC_PAGES entry has its stylesheet links rewritten, and a page in both
+    // would be written twice - processed first and then overwritten, or the
+    // other way round, depending on the order build.js happens to run them in.
+    expect(docs.filter(d => archival.includes(d))).toEqual([]);
   });
 });
