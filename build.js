@@ -72,10 +72,12 @@ const DOC_PAGES = [
 //
 // history/original/ is the first Gravitas, the single index.html that commit
 // a5d08fc put online in July 2025, and one unexplained word at the end of
-// /model/'s footer is the only way in. It is kept as it was, quirks included, so it gets none of
-// what DOC_PAGES get - no stylesheet collapse, no revision stamp, no formatter
-// - and tests/historyOriginal.test.js pins it to that commit's blob. A page
-// listed here satisfies tests/docPages.test.js in place of DOC_PAGES.
+// /model/'s footer is the only way in. It is kept as it was, quirks included,
+// except that Save State and Load State are unwired. So it gets none of what
+// DOC_PAGES get - no stylesheet collapse, no revision stamp, no formatter -
+// and tests/historyOriginal.test.js holds it to that commit's blob, less the
+// two lines that wired those buttons. A page listed here satisfies
+// tests/docPages.test.js in place of DOC_PAGES.
 //
 // Nothing else fetches it. tools/build-service-worker.mjs precaches only the
 // directories it names, so the page is downloaded when somebody follows the

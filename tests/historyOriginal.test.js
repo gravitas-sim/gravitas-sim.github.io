@@ -8,9 +8,16 @@
 //
 // It is an archive, not a page to maintain. Its old bugs, its Google Fonts
 // import and its styling are the point, so nothing may modernize it - not a
-// formatter sweep, not a find-and-replace across *.html, not a build step. The
-// first test pins it to the blob that commit recorded; a change of one byte
-// fails it, and the right response to that failure is to restore the file,
+// formatter sweep, not a find-and-replace across *.html, not a build step.
+//
+// One change was made on purpose, and only one: the two lines that wired Save
+// State and Load State to their handlers are gone. The page is here to show
+// what Gravitas looked like, not to keep saves, and those two handlers wrote
+// to the same localStorage key today's application reads its own save from.
+// The buttons are still drawn and do nothing. The first test proves that is
+// the whole difference - put the two lines back and the result is the blob
+// a5d08fc recorded - and pins the file as served, so a change of one more
+// byte fails it. The right response to that failure is to restore the file,
 // not to update the hash.
 //
 // The rest keep it out of the way. The deploy stamps no revision into it, the
@@ -32,6 +39,15 @@ const HREF = '/history/original/';
 /** The commit that added the original, and the blob it recorded. */
 const SOURCE_COMMIT = 'a5d08fc72cae60762765977f419225fb40e6c400';
 const SOURCE_BLOB = 'fe77fdc0afc47d0d3f24e93a690043bb4dee950e';
+
+/** The file as served: the original without the two lines below. */
+const SERVED_BLOB = '959822c4e570db8317f00072b26121c4f2568d46';
+const UNWIRED = [
+  "    document.getElementById('saveBtn').onclick = save_simulation_state;\n",
+  "    document.getElementById('loadBtn').onclick = load_simulation_state;\n",
+].join('');
+/** The line they followed, and still follow in a5d08fc. */
+const BEFORE_UNWIRED = "    document.getElementById('resetAllBtn').onclick";
 
 const read = f => readFileSync(path.join(REPO, f), 'utf8');
 
@@ -60,10 +76,37 @@ function buildList(name) {
 }
 
 describe('the first sketch is kept as it was', () => {
-  test(`it is byte for byte the index.html of ${SOURCE_COMMIT.slice(0, 7)}`, () => {
+  test(`it is the index.html of ${SOURCE_COMMIT.slice(0, 7)} without its Save and Load wiring, and nothing else`, () => {
     const bytes = readFileSync(path.join(REPO, PAGE));
-    expect(bytes.length).toBe(67328);
-    expect(blobId(bytes)).toBe(SOURCE_BLOB);
+    expect(bytes.length).toBe(67184);
+    expect(blobId(bytes)).toBe(SERVED_BLOB);
+
+    // The two lines go back after the line they followed, and what comes out
+    // is the original, byte for byte.
+    const text = bytes.toString('latin1');
+    expect(text).not.toContain(UNWIRED);
+    const at = text.indexOf(BEFORE_UNWIRED);
+    expect(at).toBeGreaterThan(-1);
+    const after = text.indexOf('\n', at) + 1;
+    const restored = Buffer.from(
+      text.slice(0, after) + UNWIRED + text.slice(after),
+      'latin1'
+    );
+    expect(restored.length).toBe(67328);
+    expect(blobId(restored)).toBe(SOURCE_BLOB);
+
+    // Which leaves two buttons with nothing behind them: still drawn, never
+    // wired, and the only code that touches storage unreachable.
+    expect(text).toContain(
+      '<button id="saveBtn" class="ui-button">Save State</button>'
+    );
+    expect(text).toContain(
+      '<button id="loadBtn" class="ui-button">Load State</button>'
+    );
+    expect(text.match(/getElementById\('(save|load)Btn'\)/g)).toBeNull();
+    for (const handler of ['save_simulation_state', 'load_simulation_state']) {
+      expect(text.split(handler).length - 1).toBe(1);
+    }
   });
 
   test('the build copies it rather than processing it', () => {

@@ -2,10 +2,11 @@
 // The first sketch
 // -----------------------------------------------------------------------------
 // One unexplained word at the end of /model/'s footer, "origin", opens the
-// original Gravitas - the single index.html of commit a5d08fc, kept byte for
-// byte - at /history/original/. This walks it the way a reader would: find
-// the link, follow it from the keyboard, watch the old simulation start, and
-// come back with Back.
+// original Gravitas - the single index.html of commit a5d08fc, kept as it was
+// but for Save State and Load State, which are drawn and do nothing - at
+// /history/original/. This walks it the way a reader would: find the link,
+// follow it from the keyboard, watch the old simulation start, press the two
+// buttons that no longer work, and come back with Back.
 //
 // Runs against both targets (BOTH_TARGETS in playwright.config.js). The
 // sources are what GitHub Pages publishes; dist/ is the production build,
@@ -172,6 +173,28 @@ test.describe('the first sketch', () => {
       for (const url of seen.foreign) {
         expect(new URL(url).hostname).toBe('fonts.googleapis.com');
       }
+
+      // Save State and Load State are buttons with nothing behind them. The
+      // original's handlers wrote to the key today's application keeps its
+      // own save under and answered with an alert; pressing both now leaves
+      // that key alone, raises no dialog and the simulation runs on.
+      const dialogs = [];
+      page.on('dialog', d => {
+        dialogs.push(d.message());
+        return d.dismiss();
+      });
+      const KEY = 'gravitas_simulation_save';
+      await page.evaluate(k => window.localStorage.setItem(k, 'today'), KEY);
+      for (const name of ['Save State', 'Load State']) {
+        const button = page.getByRole('button', { name, exact: true });
+        await expect(button).toBeVisible();
+        await button.click();
+      }
+      expect(
+        await page.evaluate(k => window.localStorage.getItem(k), KEY)
+      ).toBe('today');
+      expect(dialogs).toEqual([]);
+      await expect(page.locator('#overlay')).toContainText('Status: Running');
 
       await page.goBack();
       await expect(page).toHaveURL(/\/model\/$/);
