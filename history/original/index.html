@@ -1382,8 +1382,6 @@
     document.getElementById('settingsBtn').onclick = () => { buildSettingsMenu(); settingsPanel.classList.remove('hidden'); state.paused = true; };
     document.getElementById('refreshScenarioBtn').onclick = () => { initialize_simulation(); state.paused = false; };
     document.getElementById('resetAllBtn').onclick = () => { SETTINGS = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); initialize_simulation(); state.paused = false; };
-    document.getElementById('saveBtn').onclick = save_simulation_state;
-    document.getElementById('loadBtn').onclick = load_simulation_state;
     document.getElementById('settingsApply').onclick = () => { SETTINGS = JSON.parse(JSON.stringify(localSettings)); settingsPanel.classList.add('hidden'); initialize_simulation(); state.paused = false; };
     document.getElementById('settingsReset').onclick = () => { localSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); buildSettingsMenu(); };
     document.getElementById('settingsCancel').onclick = () => { settingsPanel.classList.add('hidden'); state.paused = false; };
