@@ -85,7 +85,7 @@ test.describe('the first sketch', () => {
   test(
     'the link at the end of /model/ opens the original, and Back returns',
     { tag: '@cross-browser' },
-    async ({ page }) => {
+    async ({ page, browserName }) => {
       const seen = await watchRequests(page);
 
       await page.goto('/model/', { waitUntil: 'load' });
@@ -132,9 +132,13 @@ test.describe('the first sketch', () => {
 
       // Reached from the keyboard: it is the last stop in the document before
       // the footer, so one Shift+Tab from the footer's first link lands on it,
-      // and Enter follows it.
+      // and Enter follows it. WebKit, like Safari, moves between links with
+      // Tab only while Option is held (or with "Press Tab to highlight each
+      // item" turned on), so that is the keyboard route it is given here.
       await page.locator('footer a').first().focus();
-      await page.keyboard.press('Shift+Tab');
+      await page.keyboard.press(
+        browserName === 'webkit' ? 'Alt+Shift+Tab' : 'Shift+Tab'
+      );
       await expect(link).toBeFocused();
       await Promise.all([
         page.waitForURL(`**${HREF}`),
@@ -219,6 +223,12 @@ test.describe('the first sketch with the service worker installed', () => {
     ).toBe(true);
 
     await page.goto(HREF, { waitUntil: 'load' });
+    // Asked for through the worker, which controls this page too.
+    expect(
+      await page.evaluate(() =>
+        Boolean(window.navigator.serviceWorker.controller)
+      )
+    ).toBe(true);
     await expect(page).toHaveTitle('Gravitas - Web Black Hole Sandbox');
     await expect(page.locator('#overlay')).toContainText('Status: Running');
     // The sandbox's own chrome, which is what the shell would have brought.
