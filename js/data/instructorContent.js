@@ -2666,10 +2666,11 @@ export const INSTRUCTOR_CONTENT = {
       enclosed mass side by side, and record four points that fall on a straight line through the
       origin. They read the Solar System's Keplerian exponent of -0.5, predict the same shape for a
       galaxy, and meet the flat curve telescopes actually find.
-      \n\nThe center of the lesson is a fitting exercise. Students are handed a measured rotation
-      curve and a model with a stellar disc and a dark halo, and asked to reproduce the data. They try
-      the disc alone first, with both of its parameters free, and cannot do it: the best possible
-      stars-only fit misses by about 15 km/s against measurement errors of 5, and it misses worst at
+      \n\nThe center of the lesson is a fitting exercise. Students are handed a rotation curve built
+      from NGC 3198's published parameters, labeled as synthetic on the panel, and a model with a
+      stellar disc and a dark halo, and asked to reproduce the points. They try the disc alone first,
+      with both of its parameters free, and cannot do it: the best possible stars-only fit misses by
+      about 15 km/s against error bars of about 5, and it misses worst at
       the outer edge. A choice step draws out why - the shortfall is the wrong shape, not merely the
       wrong size - and then the halo goes in and the fit closes. Students read off how much dark mass
       per unit of visible mass their own fit implies.
@@ -2790,7 +2791,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Fit a real galaxy (steps 13-19)',
-        text: 'The centerpiece. A measured rotation curve with error bars, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean measurement error alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first.',
+        text: 'The centerpiece. A synthetic rotation curve with error bars, built from NGC 3198’s published parameters and labeled as synthetic on the canvas, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean error bar alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first.',
       },
       {
         name: 'What the halo is holding (step 20)',

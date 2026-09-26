@@ -154,12 +154,12 @@ const DARK_MATTER = {
   tags: ['galaxies', 'gravity'],
   lock: { placement: true, inspector: false, areaSweep: false },
   summary:
-    'There are two ways to weigh a system in space: add up the light, or watch how things move. For the Solar System the two agree. For a galaxy they do not, and for a cluster of galaxies they are out by more than a factor of ten. Students arrange mass and watch the rotation curve it makes, turn a measured speed into an enclosed mass, then take a real galaxy’s curve and try to fit it with stars alone — and fail, in the specific way the field failed for a decade, before adding a halo and getting it right. It closes on Zwicky’s cluster and the mass budget of the universe. It is how dark matter was found, and it is a measurement rather than a theory.',
+    'There are two ways to weigh a system in space: add up the light, or watch how things move. For the Solar System the two agree. For a galaxy they do not, and for a cluster of galaxies they are out by more than a factor of ten. Students arrange mass and watch the rotation curve it makes, turn a measured speed into an enclosed mass, then take a rotation curve built from a real galaxy’s published parameters and try to fit it with stars alone — and fail, in the specific way the field failed for a decade, before adding a halo and getting it right. It closes on Zwicky’s cluster and the mass budget of the universe. It is how dark matter was found, and it is a measurement rather than a theory.',
   objectives: [
     'Explain why orbital speed falls as the inverse square root of radius when the mass is concentrated in the middle',
     'Read a rotation curve and describe what its slope says about where the mass is',
     'Convert a measured orbital speed into an enclosed mass, and state what a flat curve implies about how that mass grows with radius',
-    'Decompose a measured rotation curve into a stellar disc and a dark halo, and judge a fit against the measurement errors',
+    'Decompose a rotation curve built from NGC 3198’s published parameters into a stellar disc and a dark halo, and judge a fit against its error bars',
     'Argue from the shape of the residual, not just its size, that no arrangement of visible matter reproduces a flat curve',
     'Apply the virial theorem to a cluster of galaxies to estimate its mass from the motion of its members, including the conversion from a line-of-sight dispersion',
     'Compare a dynamical mass with a visible mass and quantify the discrepancy',
@@ -546,9 +546,11 @@ const DARK_MATTER = {
              distribution could possibly produce it — and showing that no
              arrangement of the visible matter will do.
              \n\nThat is a fitting problem, and it is what this instrument is.
-             The pink points with error bars are a measured rotation curve. The
-             sliders are a model of the galaxy: a disc of stars, and a halo of
-             something else. Your job is to reproduce the points.
+             The pink points with error bars are a rotation curve built from
+             NGC 3198's published parameters, with a fixed scatter added. They
+             are not a measurement, and that is what gives the fit a right
+             answer. The sliders are a model of the galaxy: a disc of stars,
+             and a halo of something else. Your job is to reproduce the points.
              \n\nThe rules are the ones a real astronomer works under. You may
              choose how much mass the disc has and how spread out it is, because
              neither is known precisely from the light alone. You may not move the
@@ -609,7 +611,7 @@ const DARK_MATTER = {
           kind: 'text',
         },
       ],
-      tip: 'The best possible stars-only fit leaves an average miss of about 15 km/s, three times the measurement error, and it is worst at the outer edge. If you got close to that, you found the real answer.',
+      tip: 'The best possible stars-only fit leaves an average miss of about 15 km/s, three times the size of the error bars, and it is worst at the outer edge. If you got close to that, you found the real answer.',
     },
     {
       sid: 'why-a-heavier-disc-cannot',
@@ -640,9 +642,10 @@ const DARK_MATTER = {
                 that is <em>negligible in the middle and dominant at the edge</em>,
                 which is the opposite of how light is distributed in every spiral
                 ever photographed. A disc can be made heavier; it cannot be made
-                to have that shape. The outer points are, if anything, measured
-                more reliably than the inner ones, because they come from cold
-                hydrogen gas that extends well beyond the stars.`,
+                to have that shape. In a real galaxy the outer points are, if
+                anything, measured more reliably than the inner ones, because
+                they come from cold hydrogen gas that extends well beyond the
+                stars.`,
     },
     {
       sid: 'now-add-the-halo',
@@ -928,15 +931,15 @@ const DARK_MATTER = {
              \n\n<strong>v⁴ = G M a₀</strong>
              \n\nwith M the mass you can see. Not fitted. Predicted, from one
              constant that is meant to be the same for every galaxy.`,
-      tip: 'The instrument is showing the halo fit you just built. The switch at the top puts MOND on the same measurements.',
+      tip: 'The instrument is showing the halo fit you just built. The switch at the top puts MOND on the same points.',
     },
     {
       sid: 'fit-it-both-ways',
       type: 'explore',
       title: 'Fit it both ways',
       tool: { id: 'dm-mond' },
-      body: `Both explanations, the same twelve measurements, scored the same
-             way. Try each of them, and use the two presets when you want to see
+      body: `Both explanations, the same twelve points, scored the same way.
+             Try each of them, and use the two presets when you want to see
              where each one ends up.
              \n\nPay attention to what each explanation had to be told. The halo
              needs three numbers chosen to match this galaxy: how heavy the disc
@@ -1076,7 +1079,7 @@ const DARK_MATTER = {
              has been repeated in a dozen independent ways. The explanation is a
              name for something we have not identified. Those are different kinds
              of statement and it is worth keeping them apart.`,
-      tip: 'You fitted a real galaxy and weighed a real cluster. That part is not in doubt, and you did not have to take anyone’s word for it.',
+      tip: 'You fitted a curve built from a real galaxy’s published parameters and weighed a real cluster. The numbers came from the literature; the conclusion you reached yourself, without taking anyone’s word for it.',
     },
   ],
 };
