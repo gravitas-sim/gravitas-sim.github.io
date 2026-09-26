@@ -115,8 +115,9 @@ export async function gaiaSourceAt({ ra, dec }, opts) {
 }
 
 /**
- * What VizieR's I/355/epphot does not say, from Gaia's own data model
- * (DR3 documentation, 20.4.1 epoch_photometry), for each band.
+ * What VizieR's I/355/epphot does not say, from Gaia's own data model,
+ * gaiadr3.epoch_photometry: https://gea.esac.esa.int/archive/documentation/
+ * GDR3/Gaia_archive/chap_datamodel/sec_dm_photometry/ssec_dm_epoch_photometry.html
  */
 export const DESCRIPTOR = Object.freeze({
   table: 'I/355/epphot',
