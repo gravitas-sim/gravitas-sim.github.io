@@ -15,6 +15,71 @@ the release rather than in the tag.
 
 ### Added
 
+- **The Observatory can import a star's Gaia DR3 epoch photometry live, from
+  CDS, by name** (ARCHIVE_IMPORT.md).
+  - **What it is:** the slice VO_ARCHIVE_GATE.md accepted, and nothing more.
+    It uses CDS Sesame for the name, and CDS VizieR TAP for the Gaia DR3 cone
+    and the epochs. It is opt-in and loaded only when opened, and it never
+    touches a lesson.
+  - **Before anything is used,** the reader reviews every field and its unit
+    or "not stated", the rows, the service's status, both checksums, the
+    license and what the conversion will do. Then the observation opens in the
+    workspace like any other.
+  - **Converted honestly:** a curated descriptor supplies what VizieR does not
+    say. Times are barycentric TCB, converted to TDB by IAU 2006 B3; the flux
+    is in e⁻/s, which gives the G errors. A unit the service states that the
+    descriptor does not expect stops the conversion. The id is the content's
+    digest, the query and both checksums travel with it, and so does its
+    license, CC BY-NC 3.0 IGO.
+  - **Bounded:** two origins, held by a meta Content-Security-Policy as well
+    as the code. There is no cookie and no referrer. Limits are 64 KB and
+    512 KB counted as they stream, 20 s per request, and a row limit on every
+    query.
+  - **Named failures:** each failure is named in English and Spanish:
+    blocked, timeout, rate-limited, unavailable, too large, not a table, a
+    service error, a wrong unit, canceled.
+  - **Offline:** answers are kept on the device, so a star imported before
+    opens offline, marked stale with its age once it is a week old.
+  - **Checks:** `npm run archive:live` checks, on demand, that CDS still
+    answers this way.
+- **Magnitude axes are drawn brighter-up** in the Observatory's plot.
+
+- **A curated catalog, `/catalog/`: data, courses and instruments, each
+  reviewed before it is listed, and installable for offline use**
+  (CATALOG.md).
+  - **What it lists:** `catalog/catalog.json` (`gravitas.catalog/1`),
+    generated at release time and checked on every change (`npm run
+    catalog:check`, in CI). It lists the four built-in capability packages
+    and two extensions built outside the core with only the SDK.
+  - **What each entry shows:** what it is and provides, its download and
+    installed size, which Gravitas it works with, its license and citations,
+    and its review.
+  - **Installing** a data pack or a course fetches its archive from this site
+    and checks the catalog's checksum before decompressing a byte. The reader
+    refuses every archive the SDK would not write: traversal, links,
+    duplicates, a gzip bomb, a bad checksum. The content must pass the
+    platform's own checks, and only then is the pack stored, in one write, in
+    IndexedDB. Each failure is named beside its entry, in English or Spanish,
+    with a retry.
+  - **Using it:** an installed data pack opens in the observatory, and an
+    installed course opens as its units with a link into each lesson.
+    Updates, downgrades and new major versions are told apart.
+  - **Assignments pin their package:** a link made from a lesson a package
+    provides carries that package and its version (assignment schema 2).
+    Opening one made with another major version, or before pinning, says so.
+  - **Rules for accepting an entry,** and what the SDK lacked: CATALOG.md.
+- **SU Draconis, an RR Lyrae star, from TESS** (`extensions/su-dra-tess-s15`):
+  26 days of its light, installable from the catalog. A 20-harmonic series
+  gives its period as 0.660408 d, against 0.66042001 d published. RR Lyrae
+  itself was the first choice; its TESS light curve is unusable, because the
+  input catalog lists the star nine magnitudes too faint. The pack's record
+  says so.
+- **A pulsating-stars course** (`extensions/pulsating-stars`): three lessons,
+  in English and Spanish, ending on that light curve.
+- **SDK 1.2.0:** `readFits()` and `binTessLightCurve()` in the public API; the
+  `binned-relative-flux/2` encoding, for a star that varies by more than 3.3%;
+  and the `harmonic-period` check.
+
 - **An inference core: transit and radial-velocity fits in the browser,
   shown to be honest before they are used** (INFERENCE_CORE.md).
   - **What it fits:** a quadratic limb-darkened transit (`transit-quadratic`
@@ -329,6 +394,9 @@ the release rather than in the tag.
 
 ### Changed
 
+- **The observatory starts lighter again:** the pack decoder arrives with the
+  first observation opened. That is 188.7 KB from the sources, where it was
+  193.7, and the ceilings are lowered to keep it.
 - **A lesson loads only the instruments its current step needs.** Thirteen of
   the seventeen instrument families were still part of the lesson engine, so
   every lesson downloaded and ran all of them before its first step. Every

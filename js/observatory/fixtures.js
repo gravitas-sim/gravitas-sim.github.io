@@ -24,7 +24,10 @@
 // =============================================================================
 
 import { BUILTINS } from '../platform/builtins.js';
-import { observationOf } from '../observation.js';
+// The pack decoder arrives with the first observation opened, not with the
+// page: nothing on screen needs it before then.
+const decode = async mod =>
+  (await import('../observation.js')).observationOf(mod);
 import { FORMAT, FORMAT_VERSION } from './schema.js';
 import { skyOf } from './wcs.js';
 
@@ -76,16 +79,33 @@ const GWOSC_UNITS = { M_sun: 'Msun', Mpc: 'Mpc', '': '' };
 const loadPack = id => BUILTINS[id]();
 
 async function tessLightCurve() {
-  const mod = await loadPack('data/tess-hd209458-s56');
+  return lightCurveObservation(await loadPack('data/tess-hd209458-s56'), {
+    citations: [
+      {
+        text: 'TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)',
+        url: 'https://doi.org/10.17909/t9-nmc8-f686',
+      },
+    ],
+  });
+}
+
+/**
+ * A TESS light-curve pack module as a gravitas.observation/1: this one, and
+ * one installed from the catalog (js/catalog/installed.js, prefix `installed`).
+ */
+export async function lightCurveObservation(
+  mod,
+  { citations, idPrefix = 'pack' }
+) {
   const P = mod.PACK;
-  const o = observationOf(mod);
+  const o = await decode(mod);
   if (!/^BTJD = BJD - 2457000$/.test(P.time.reference)) {
     throw new Error(`the pack counts time as ${P.time.reference}, not BTJD`);
   }
   return {
     ...base,
     kind: 'time-series',
-    id: `pack:${P.id}@${P.version}`,
+    id: `${idPrefix}:${P.id}@${P.version}`,
     title: P.title,
     object: {
       name: P.object.name,
@@ -103,12 +123,7 @@ async function tessLightCurve() {
     credit: P.credit,
     license: P.license,
     retrieved: P.retrieved,
-    citations: [
-      {
-        text: 'TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)',
-        url: 'https://doi.org/10.17909/t9-nmc8-f686',
-      },
-    ],
+    citations,
     reductions: [
       ...P.masks.map(m => `${m.column}: ${m.rule} (${m.dropped} dropped)`),
       ...(P.reductions || []),
@@ -260,7 +275,7 @@ async function gwoscCatalog() {
 async function tessAperture() {
   const mod = await loadPack('data/tess-hd209458-s56-aperture');
   const P = mod.PACK;
-  const o = observationOf(mod);
+  const o = await decode(mod);
   const { width, height, values, wcs, bits } = o.image;
   const n = width * height;
   const x = new Float64Array(n);

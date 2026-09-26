@@ -15,6 +15,7 @@ export const EN_OBSERVATORY = {
   'obs.intro':
     'Real observations, and your own files, as a plot, a table and an image at once. Select in one and it is selected in all of them; mask, annotate, fold, bin and convert; undo any of it; and save exactly what you did.',
   'obs.back': 'Back to Gravitas',
+  'obs.catalog': 'Install more data from the catalog',
 
   'obs.open.title': 'Open an observation',
   'obs.open.fixture': 'A real observation',
@@ -245,4 +246,5 @@ export const EN_OBSERVATORY = {
   'obs.export.json': 'Save as JSON (everything, with your changes)',
   'obs.export.csv': 'Save the rows as CSV',
   'obs.fit.title': 'Fit a model (diagnostic)',
+  'obs.arc.title': "Or find a star's Gaia epochs at CDS (live, opt-in)",
 };

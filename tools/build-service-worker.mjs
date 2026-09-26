@@ -116,6 +116,12 @@ const FILES = [
   // fetch costs this page offline and nothing else. sw.js serves it for its
   // directory URL.
   { path: 'observatory/index.html', core: false },
+  // The catalog: the page and its index, so a reader offline can still see and
+  // remove what they installed. The archives are not precached: installing one
+  // keeps it in IndexedDB, which is what makes it work offline
+  // (js/catalog/store.js), and one not installed is not wanted offline.
+  { path: 'catalog/index.html', core: false },
+  { path: 'catalog/catalog.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },

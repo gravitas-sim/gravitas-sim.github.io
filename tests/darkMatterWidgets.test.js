@@ -435,6 +435,95 @@ describe('dm-fit: the fitting exercise', () => {
   });
 });
 
+/**
+ * stubCanvas(), keeping every piece of text drawn on it.
+ *
+ * measureText answers in proportion to the text rather than with a constant, so
+ * two labels that would collide on a real canvas collide here too.
+ *
+ * @param {number} [clientWidth] - CSS width of the canvas
+ * @returns {{canvas: Object, drawn: Array}} The canvas, and what was written
+ */
+function recordingCanvas(clientWidth = 460) {
+  const canvas = stubCanvas();
+  canvas.clientWidth = clientWidth;
+  const ctx = canvas.getContext('2d');
+  const drawn = [];
+  ctx.measureText = text => ({ width: String(text).length * 6.5 });
+  ctx.fillText = (text, x, y) =>
+    drawn.push({
+      text: String(text),
+      x,
+      y,
+      align: ctx.textAlign,
+      baseline: ctx.textBaseline,
+    });
+  return { canvas, drawn };
+}
+
+/** Whether two recorded labels would sit on top of each other. */
+function collide(a, b) {
+  const across = d => {
+    const w = d.text.length * 6.5;
+    const x0 =
+      d.align === 'right' ? d.x - w : d.align === 'center' ? d.x - w / 2 : d.x;
+    return [x0, x0 + w];
+  };
+  const down = d =>
+    d.baseline === 'middle'
+      ? [d.y - 6, d.y + 6]
+      : d.baseline === 'top'
+        ? [d.y, d.y + 12]
+        : [d.y - 12, d.y];
+  const overlap = ([a0, a1], [b0, b1]) => a0 < b1 && b0 < a1;
+  return overlap(across(a), across(b)) && overlap(down(a), down(b));
+}
+
+describe('the NGC 3198 points say what they are', () => {
+  // The curve is a model plus fixed offsets (see the file header of
+  // js/darkMatterWidgets.js). An unlabeled plot of it, under a note calling it
+  // measured, was a scientific-honesty fault found by the observation data-pack
+  // audit: this is the check that it stays fixed.
+  const LABEL = 'synthetic curve, NGC 3198 parameters';
+
+  test('both panels that plot them label them synthetic on the canvas', () => {
+    for (const id of ['dm-fit', 'dm-mond']) {
+      const w = widget(id);
+      for (const p of [{ values: {} }, ...presetsOf(w)]) {
+        const { canvas, drawn } = recordingCanvas();
+        w.draw(canvas, { ...widgetDefaults(w), ...p.values }, undefined, {});
+        const texts = drawn.map(d => d.text);
+        expect(texts).toContain(LABEL);
+        expect(texts.join(' | ')).not.toMatch(/measured/i);
+      }
+    }
+  });
+
+  test('the FITTED marker keeps clear of the label, down to a phone', () => {
+    const w = widget('dm-fit');
+    const preset = presetsOf(w).find(p => /published/i.test(p.label));
+    for (const width of [300, 340, 380, 460, 720]) {
+      const { canvas, drawn } = recordingCanvas(width);
+      w.draw(canvas, { ...widgetDefaults(w), ...preset.values }, undefined, {});
+      const label = drawn.find(d => d.text === LABEL);
+      const fitted = drawn.filter(d => d.text === 'FITTED');
+      expect(label).toBeTruthy();
+      expect(fitted.length).toBeGreaterThan(0);
+      for (const f of fitted) expect(collide(label, f)).toBe(false);
+    }
+  });
+
+  test('the notes and the step that hands the points over do not call them measured', () => {
+    expect(widget('dm-fit').note).toMatch(/NGC 3198/);
+    expect(widget('dm-fit').note).not.toMatch(/measured/i);
+    expect(widget('dm-mond').note).not.toMatch(/measure/i);
+    const lesson = getInvestigation('missing-mass');
+    const first = lesson.steps.find(s => s.tool?.id === 'dm-fit');
+    expect(first.body).toMatch(/NGC 3198/);
+    expect(first.body).not.toMatch(/measured rotation curve/i);
+  });
+});
+
 describe('dm-flyby: what the halo is holding', () => {
   const w = widget('dm-flyby');
 

@@ -704,6 +704,13 @@ export const ES_DEFERRED = {
     'Se han reescrito {n} paso(s) desde que se asigno esto. Esos empiezan en blanco en lugar de mostrar una respuesta a una pregunta que ya no se hace.',
   'assign.notice.missing':
     'Ya no hay {n} paso(s) en la leccion y se han dejado fuera.',
+  'assign.notice.unpinned':
+    'Esta tarea se creó antes de que las lecciones vinieran en paquetes con versión. Se abre con {current}, y cualquier paso reescrito desde entonces aparece en blanco.',
+  'assign.notice.major':
+    'Esta tarea se creó con {pinned}; este Gravitas tiene {current}, una nueva versión principal. Sus pasos pueden haberse reescrito, y los que lo fueron aparecen en blanco.',
+  'assign.notice.moved':
+    'Esta tarea se creó con {pinned}, del que este Gravitas ya no toma la lección. Se abre con la lección tal como es ahora.',
+  'assign.error.badPackage': 'Ese enlace de tarea nombra mal su paquete.',
 
   // --- El planificador de maniobras --------------------------------------------
   'burn.title': 'Planificador de maniobras',
@@ -2654,7 +2661,7 @@ export const ES_DEFERRED = {
   // ---------------------------------------------------------------------------
   'dmW.mondTitle': 'La misma curva, dos explicaciones',
   'dmW.mondNote':
-    'El ajuste con halo y MOND, evaluados con las mismas medidas. Cambia entre ellos y ajusta el disco hasta que cada uno coincida. Fijate en lo que hubo que decirle a cada uno.',
+    'El ajuste con halo y MOND, evaluados con los mismos puntos. Cambia entre ellos y ajusta el disco hasta que cada uno coincida. Fíjate en lo que hubo que decirle a cada uno.',
   'dmW.mondModel': 'Explicacion',
   'dmW.mondHaloOption': 'Halo de materia oscura',
   'dmW.mondMondOption': 'MOND',
@@ -2675,10 +2682,10 @@ export const ES_DEFERRED = {
   'dmW.mondClose': 'cerca',
   'dmW.mondOff': 'lejos',
   'dmW.mondBothFit':
-    'Esta explicacion reproduce las medidas. La otra tambien lo hace, con su propia masa de disco y con un numero distinto de parametros ajustados. La curva por si sola no decide entre ellas.',
+    'Esta explicación reproduce los puntos. La otra también lo hace, con su propia masa de disco y con un número distinto de parámetros ajustados. La curva por sí sola no decide entre ellas.',
   'dmW.mondKeepAdjusting':
     'Todavia no coincide. Ajusta el disco hasta que esta explicacion reproduzca los puntos, y luego prueba la otra.',
-  'dmW.mondSynthetic': 'curva sintetica, parametros de NGC 3198',
+  'dmW.syntheticCurve': 'curva sintética, parámetros de NGC 3198',
   'bhW.acrossTheEventHorizon': 'de lado a lado del horizonte de sucesos',
   'bhW.aMarathon': 'un maratón',
   'bhW.manhattanEndToEnd': 'Manhattan, de punta a punta',

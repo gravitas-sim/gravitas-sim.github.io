@@ -656,3 +656,53 @@ describe('a subset of a real lesson brings what it needs', () => {
     }
   });
 });
+
+describe('pinning the package a lesson comes from', () => {
+  test('a packaged lesson pins its package and version, a core lesson pins nothing', async () => {
+    const { lessonProvider } = await import('../js/assignments/provider.js');
+    expect(lessonProvider('power-law-gravity')).toEqual({
+      id: 'gravitas.lesson.power-law-gravity',
+      version: expect.stringMatching(/^\d+\.\d+\.\d+$/),
+    });
+    expect(lessonProvider('keplers-laws')).toBe(null);
+  });
+
+  test('says when the package has moved on, and when a link predates pinning', async () => {
+    const { validateAssignment } =
+      await import('../js/assignments/assignment.js');
+    const { packageBinding, PINNING } =
+      await import('../js/assignments/pinning.js');
+    const pkg = { id: 'gravitas.lesson.power-law-gravity', version: '1.0.0' };
+    const made = p => ({ p: [p.id, p.version] });
+    expect(packageBinding({}, null).status).toBe(PINNING.NONE);
+    expect(packageBinding({}, pkg).status).toBe(PINNING.UNPINNED);
+    expect(packageBinding(made(pkg), pkg).status).toBe(PINNING.SAME);
+    expect(packageBinding(made(pkg), { ...pkg, version: '1.3.0' }).status).toBe(
+      PINNING.COMPATIBLE
+    );
+    expect(packageBinding(made(pkg), { ...pkg, version: '2.0.0' }).status).toBe(
+      PINNING.MAJOR
+    );
+    expect(packageBinding(made(pkg), null).status).toBe(PINNING.MOVED);
+    expect(
+      packageBinding(made(pkg), { id: 'gravitas.other', version: '1.0.0' })
+        .status
+    ).toBe(PINNING.MOVED);
+    // A malformed pin is refused like any other malformed field.
+    const base = {
+      k: 'gravitas.assignment',
+      v: 2,
+      l: 'power-law-gravity',
+      i: 'abc123',
+      s: ['a'],
+    };
+    expect(validateAssignment({ ...base, p: ['x', '1'] }).reason).toBe(
+      'badPackage'
+    );
+    expect(validateAssignment({ ...base, p: [pkg.id, pkg.version] }).ok).toBe(
+      true
+    );
+    // A schema-1 link still opens.
+    expect(validateAssignment({ ...base, v: 1 }).ok).toBe(true);
+  });
+});

@@ -85,10 +85,13 @@ export function createPlot(svg, hooks) {
   const sx = x =>
     PAD.left +
     ((x - state.x0) / (state.x1 - state.x0 || 1)) * (W - PAD.left - PAD.right);
-  const sy = y =>
-    H -
-    PAD.bottom -
-    ((y - state.y0) / (state.y1 - state.y0 || 1)) * (H - PAD.top - PAD.bottom);
+  // Magnitudes are drawn brighter-up.
+  const sy = y => {
+    const f =
+      ((y - state.y0) / (state.y1 - state.y0 || 1)) *
+      (H - PAD.top - PAD.bottom);
+    return state.flip ? PAD.top + f : H - PAD.bottom - f;
+  };
   const toX = px =>
     state.x0 +
     ((px - PAD.left) / (W - PAD.left - PAD.right)) * (state.x1 - state.x0);
@@ -259,6 +262,9 @@ export function createPlot(svg, hooks) {
       x1: x1 + padX,
       y0: y0 - padY,
       y1: y1 + padY,
+      // A column's unit is a canonical id (./schema.js), so this is every
+      // magnitude.
+      flip: yc.unit === 'mag',
     };
     const columns = W - PAD.left - PAD.right;
     const drawn = decimate(order, xs, ys, state.x0, state.x1, columns);

@@ -60,9 +60,9 @@ export const PROVIDES = {
   investigations: 'id',
   translations: 'locale',
   dataPacks: 'id',
-  // A sequence of existing lessons (gravitas.course-pack/1, sdk/lib/course.mjs).
-  // Declarative, and not installed by the runtime yet: the SDK validates and
-  // archives it, and the course-pack builder is where it will be read.
+  // A sequence of existing lessons (gravitas.course-pack/1, ./course.js).
+  // Declarative: the SDK validates and archives it, and the catalog installs
+  // a curated one and shows its units (CATALOG.md).
   courses: 'id',
 };
 /** What a package may use from elsewhere. */

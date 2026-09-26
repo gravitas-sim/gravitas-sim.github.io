@@ -196,6 +196,14 @@ jobs:
       - name: Capability packages are valid and true
         run: npm run capabilities:check
 
+      # The curated catalog against the repository: each archive is the one
+      # catalog.json names and holds what its extension packs to today, each
+      # extension validates and passes its tests, its licenses are accepted
+      # ones, and catalog.json is what `npm run catalog` writes. See
+      # tools/catalog.mjs and CATALOG.md.
+      - name: The curated catalog is true
+        run: npm run catalog:check
+
       # The showcase page's six demonstration links, which are share payloads
       # generated from the spec in js/data/teaching.js. Stale ones would open
       # the wrong scenario, or a scenario that no longer exists, from a page

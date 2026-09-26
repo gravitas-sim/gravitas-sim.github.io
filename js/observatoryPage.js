@@ -26,7 +26,11 @@ import {
   t,
   translatePage,
 } from './observatory/i18n.js';
-import { FIXTURES, openFixture } from './observatory/fixtures.js';
+import {
+  FIXTURES,
+  lightCurveObservation,
+  openFixture,
+} from './observatory/fixtures.js';
 import {
   columnOf,
   maskedRows,
@@ -242,17 +246,15 @@ function rebuild({ announceChange = null } = {}) {
  * The fit panel, for an observation a model suits: loaded the first time a
  * reader opens it, so the page itself carries none of the inference core.
  */
+// What the page lends its lazily loaded panels (see js/observatory/fitPanel.js).
+const lent = { t, number, registerMessages, createPlot, createSelection };
 const fit = { panel: null, loading: null, suits: false };
 function mountFit(m) {
   fit.module = m;
   fit.panel?.destroy();
   fit.panel = m.mountFitPanel($('obsFitBody'), {
-    t,
-    number,
+    ...lent,
     observation: state.view,
-    registerMessages,
-    createPlot,
-    createSelection,
     dimensionOfText: text => dimensionOf(parseUnit(text).unit),
   });
   return fit.panel;
@@ -262,6 +264,14 @@ async function fitPanel() {
   fit.loading ??= import('./observatory/fitPanel.js').then(mountFit);
   return fit.loading;
 }
+// The archive import (ARCHIVE_IMPORT.md): loaded when first opened.
+let archive = null;
+$('obsArchivePanel').addEventListener('toggle', () => {
+  archive ??= import('./observatory/archivePanel.js').then(m =>
+    m.mountArchivePanel($('obsArchivePanel'), { ...lent, open, status })
+  );
+});
+
 $('obsFitPanel').addEventListener('toggle', async () => {
   if (!$('obsFitPanel').open || !state.view) return;
   (await fitPanel()).update(state.view);
@@ -1210,9 +1220,21 @@ function translateAll() {
   // Built in the old language; built again in the new one, and a fit still
   // running in the old one is canceled rather than left writing to nothing.
   if (fit.module) mountFit(fit.module);
+  archive?.then(p => p.rebuild());
   if (state.view) renderAll();
 }
 
 setLanguage(preferred());
 translateAll();
 document.documentElement.dataset.ready = 'true';
+// Opened from the catalog with ?installed=<package id>: js/catalog/installed.js
+// opens the pack, so a visitor who installs nothing never loads it.
+const installedId = new URLSearchParams(location.search).get('installed');
+if (installedId)
+  import('./catalog/installed.js').then(m =>
+    m.openInstalled(
+      installedId,
+      { open, status, t, registerMessages },
+      lightCurveObservation
+    )
+  );

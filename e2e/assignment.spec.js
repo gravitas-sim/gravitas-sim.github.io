@@ -109,8 +109,10 @@ test.describe('building one', () => {
     // the payload is what a student can actually read.
     const payload = await page.evaluate(async link => {
       const { decodeTagged } = await import('/js/shareState.js');
+      const { ASSIGNMENT_SCHEMA } =
+        await import('/js/assignments/assignment.js');
       const hash = link.slice(link.indexOf('#') + 1);
-      const { payload } = await decodeTagged('a', hash, 1);
+      const { payload } = await decodeTagged('a', hash, ASSIGNMENT_SCHEMA);
       return payload;
     }, url);
 
@@ -178,10 +180,12 @@ test.describe('doing one', () => {
 
     const chosen = await page.evaluate(async link => {
       const { decodeTagged } = await import('/js/shareState.js');
+      const { ASSIGNMENT_SCHEMA } =
+        await import('/js/assignments/assignment.js');
       const { payload } = await decodeTagged(
         'a',
         link.slice(link.indexOf('#') + 1),
-        1
+        ASSIGNMENT_SCHEMA
       );
       return payload.s;
     }, url);
@@ -715,5 +719,54 @@ test.describe('a calculation brings the measurements it copies', () => {
     // must not be able to change which steps an assignment contains.
     const why = await page.locator('.assignment-why').first().innerText();
     expect(why).not.toMatch(/assign\.[a-z]/i);
+  });
+});
+
+test.describe('an assignment and the package its lesson comes from', () => {
+  test('a link that predates pinning, or names an older major version, opens with a message saying so', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    const links = await page.evaluate(async () => {
+      const A = await import('/js/assignments/assignment.js');
+      const L = await import('/js/assignments/assignmentLink.js');
+      const P = await import('/js/assignments/provider.js');
+      const reg = await import('/js/data/investigations/registry.js');
+      const { stepFingerprint } =
+        await import('/js/investigations/progressBackup.js');
+      const lesson = await reg.loadInvestigation('power-law-gravity');
+      const pinned = A.buildAssignment({
+        lesson,
+        chosen: [lesson.steps[1].sid],
+        title: 'pinned',
+        fingerprint: stepFingerprint,
+        provider: P.lessonProvider(lesson.id),
+      });
+      const old = { ...pinned, v: 1, t: 'old' };
+      delete old.p;
+      const major = { ...pinned, p: [pinned.p[0], '0.9.0'], t: 'major' };
+      const url = async a => (await L.assignmentLink(a)).url;
+      return {
+        p: pinned.p,
+        pinned: await url(pinned),
+        old: await url(old),
+        major: await url(major),
+      };
+    });
+    expect(links.p[0]).toBe('gravitas.lesson.power-law-gravity');
+    const toast = page.locator('#gravitasToast');
+    await page.goto(links.old);
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(toast).toContainText(
+      'made before lessons came in versioned packages'
+    );
+    await page.goto(links.major);
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(toast).toContainText('a new major version');
   });
 });

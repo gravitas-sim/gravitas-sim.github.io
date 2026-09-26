@@ -79,7 +79,9 @@ export interface ObservationDataPack {
   validation: {
     check: string;
     against: object[];
-    rule?: { kind: 'folded-depth'; periodDays: number; expected: number; tolerance: number };
+    rule?:
+      | { kind: 'folded-depth'; periodDays: number; expected: number; tolerance: number }
+      | { kind: 'harmonic-period'; periodDays: number; windowDays: number; harmonics?: number; tolerance: number };
   };
   [field: string]: unknown;
 }
@@ -123,3 +125,15 @@ export function acceptsPlatform(range: string): boolean;
 export function installedDataPack(id: string): Promise<{ record: ObservationDataPack; file: string; module: object; observation: Observation }>;
 export function observationOf(pack: { PACK: object; SERIES: object }): Observation;
 export function checkObservation(o: Observation): string[];
+export interface FitsUnit {
+  cards: Record<string, string | number | boolean | null>;
+  columns?: Record<string, { unit: string | null; values: ArrayLike<number> }>;
+}
+export function readFits(bytes: Uint8Array): FitsUnit[];
+export function binTessLightCurve(
+  units: FitsUnit[],
+  opts: { binMinutes: number; minPerBin: number; errStepPpm: number; fluxStepPpm?: number }
+): {
+  series: { encoding: 'binned-relative-flux/1' | 'binned-relative-flux/2'; t0: number; binDays: number; n: number; runs: Array<[number, number]>; flux: string; fluxStepPpm?: number; errStepPpm: number; err: string };
+  record: { cadences: number; flagged: number; notFinite: number; kept: number; binsDropped: number; bins: number; medianFlux: number; fluxUnit: string | null };
+};

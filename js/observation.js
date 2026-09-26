@@ -46,6 +46,24 @@ function bytesOf(b64) {
  * one byte in steps of `errStepPpm`.
  */
 function binnedRelativeFlux(series) {
+  return binned(series, 1);
+}
+
+/**
+ * `binned-relative-flux/2`: the same, with the flux in steps of `fluxStepPpm`
+ * about 1 rather than of one part per million. /1's int16 holds only +-3.3%,
+ * which is a transit; a pulsating star swinging by tens of percent needs a
+ * coarser step, and a reader of /1 would misread one, so it is a new version.
+ */
+function binnedRelativeFluxStepped(series) {
+  const step = series.fluxStepPpm;
+  if (!(Number.isInteger(step) && step >= 1 && step <= 1000)) {
+    throw new Error('fluxStepPpm is a whole number of ppm, 1 to 1000');
+  }
+  return binned(series, step);
+}
+
+function binned(series, fluxStepPpm) {
   const n = series.n;
   const fluxBytes = bytesOf(series.flux);
   const err = bytesOf(series.err);
@@ -63,7 +81,7 @@ function binnedRelativeFlux(series) {
     if (i + count > n) break;
     for (let k = start; k < start + count; k++, i++) {
       x[i] = series.t0 + (k + 0.5) * series.binDays;
-      y[i] = 1 + flux.getInt16(2 * i, true) / 1e6;
+      y[i] = 1 + (flux.getInt16(2 * i, true) * fluxStepPpm) / 1e6;
       e[i] = (err[i] * series.errStepPpm) / 1e6;
     }
   }
@@ -94,6 +112,7 @@ function imageUint16(series) {
 
 const ENCODINGS = {
   'binned-relative-flux/1': binnedRelativeFlux,
+  'binned-relative-flux/2': binnedRelativeFluxStepped,
   'image-uint16/1': imageUint16,
 };
 

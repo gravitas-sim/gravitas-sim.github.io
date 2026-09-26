@@ -2,6 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="connect-src 'self' https://cds.unistra.fr https://tapvizier.cds.unistra.fr"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Observatory | Gravitas</title>
     <meta
@@ -260,7 +264,12 @@
         Real observations, and your own files, as a plot, a table and an
         image at once.
       </p>
-      <p><a href="/" data-i18n="obs.back">Back to Gravitas</a></p>
+      <p>
+        <a href="/" data-i18n="obs.back">Back to Gravitas</a> ·
+        <a href="../catalog/" data-i18n="obs.catalog"
+          >Install more data from the catalog</a
+        >
+      </p>
 
       <section class="ow-panel" aria-labelledby="obsOpenTitle">
         <h2 id="obsOpenTitle" data-i18n="obs.open.title">
@@ -295,6 +304,11 @@
           CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and
           200,000 rows. It stays on this device.
         </p>
+        <details id="obsArchivePanel" style="margin-top: 1rem">
+          <summary data-i18n="obs.arc.title">
+            Or find a star's Gaia epochs at CDS (live, opt-in)
+          </summary>
+        </details>
       </section>
 
       <section

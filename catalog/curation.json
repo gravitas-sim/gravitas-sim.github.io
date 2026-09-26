@@ -1,0 +1,23 @@
+{
+  "format": "gravitas.catalog-curation",
+  "formatVersion": 1,
+  "catalogVersion": "1.0.0",
+  "extensions": [
+    {
+      "path": "extensions/pulsating-stars",
+      "review": {
+        "date": "2026-09-25",
+        "checks": ["sdk validate", "sdk test", "catalog check"],
+        "notes": "Three existing lessons in both languages; every lesson id resolves and every note is translated."
+      }
+    },
+    {
+      "path": "extensions/su-dra-tess-s15",
+      "review": {
+        "date": "2026-09-25",
+        "checks": ["sdk validate", "sdk test", "catalog check", "rebuilt from the pinned MAST file"],
+        "notes": "Period within 1.2e-5 d of Monson et al. 2017; CROWDSAP 0.985; the pack records why RR Lyrae itself was not used."
+      }
+    }
+  ]
+}

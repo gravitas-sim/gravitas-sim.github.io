@@ -30,6 +30,8 @@ const STATIC_FILES = [
   'robots.txt',
   'sitemap.xml',
   'social-card.png',
+  // The curated catalog's index; its archives are in catalog/packages below.
+  'catalog/catalog.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses
@@ -38,7 +40,9 @@ const STATIC_FILES = [
 // copied rather than processed: css/app.css refers to the fonts by a relative
 // ../vendor/fonts/ path, which resolves the same in dist/ as it does in the
 // repository, and the library bundles are already built.
-const STATIC_DIRS = ['images', 'notebooks', 'vendor'];
+// catalog/packages: the curated archives the catalog page installs from
+// (CATALOG.md). The page itself is a document page, built below.
+const STATIC_DIRS = ['images', 'notebooks', 'vendor', 'catalog/packages'];
 
 // Static document pages outside the single-page app.
 //
@@ -61,6 +65,7 @@ const DOC_PAGES = [
   'figure',
   'experiments',
   'observatory',
+  'catalog',
 ];
 
 /**
@@ -466,6 +471,23 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'observatory-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The catalog: its own entry, like the observatory. Nothing in the
+  // simulation imports it.
+  if (existsSync('js/catalogPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/catalogPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'catalog-[hash]',
       legalComments: 'none',
     });
   }
