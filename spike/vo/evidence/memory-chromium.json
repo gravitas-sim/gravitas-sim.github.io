@@ -1,0 +1,103 @@
+{
+  "at": "2026-09-26T04:58:09.871Z",
+  "loadavg": [
+    2.38,
+    3.22,
+    3.23
+  ],
+  "cpuThrottle": 4,
+  "results": [
+    {
+      "name": "VOTable of 2 MB: fetch, parse, convert",
+      "bytes": 1999761,
+      "rows": 9407,
+      "fetchMs": 47,
+      "parseMs": 692,
+      "convertMs": 72,
+      "heldMB": 0.39,
+      "beforeCollectMB": 5.56
+    },
+    {
+      "name": "VOTable of 2 MB: fetch, parse, convert",
+      "bytes": 1999761,
+      "rows": 9407,
+      "fetchMs": 36,
+      "parseMs": 650,
+      "convertMs": 77,
+      "heldMB": 0.01,
+      "beforeCollectMB": 5.02
+    },
+    {
+      "name": "VOTable of 2 MB: fetch, parse, convert",
+      "bytes": 1999761,
+      "rows": 9407,
+      "fetchMs": 36,
+      "parseMs": 667,
+      "convertMs": 70,
+      "heldMB": 0.02,
+      "beforeCollectMB": 3.46
+    },
+    {
+      "name": "VOTable of 512 KB: fetch, parse, convert",
+      "bytes": 511697,
+      "rows": 2395,
+      "fetchMs": 12,
+      "parseMs": 163,
+      "convertMs": 23,
+      "heldMB": -0.18,
+      "beforeCollectMB": 1.67
+    },
+    {
+      "name": "VOTable of 512 KB: fetch, parse, convert",
+      "bytes": 511697,
+      "rows": 2395,
+      "fetchMs": 8,
+      "parseMs": 158,
+      "convertMs": 19,
+      "heldMB": 0.01,
+      "beforeCollectMB": 0.62
+    },
+    {
+      "name": "VOTable of 512 KB: fetch, parse, convert",
+      "bytes": 511697,
+      "rows": 2395,
+      "fetchMs": 12,
+      "parseMs": 162,
+      "convertMs": 18,
+      "heldMB": 0,
+      "beforeCollectMB": 0.65
+    },
+    {
+      "name": "TESS SPOC light curve (1.9 MB): fetch, bounded read",
+      "bytes": 1906560,
+      "rows": 18757,
+      "fetchMs": 36,
+      "parseMs": 45,
+      "heldMB": 0.28,
+      "beforeCollectMB": 3.93
+    },
+    {
+      "name": "TESS SPOC light curve (1.9 MB): fetch, bounded read",
+      "bytes": 1906560,
+      "rows": 18757,
+      "fetchMs": 36,
+      "parseMs": 38,
+      "heldMB": 0.02,
+      "beforeCollectMB": 3.86
+    },
+    {
+      "name": "TESS SPOC light curve (1.9 MB): fetch, bounded read",
+      "bytes": 1906560,
+      "rows": 18757,
+      "fetchMs": 33,
+      "parseMs": 49,
+      "heldMB": 0.02,
+      "beforeCollectMB": 3.88
+    },
+    {
+      "name": "DOM Document of a 2 MB VOTable (renderer RSS, 5 held)",
+      "perDocumentMB": 25,
+      "rendererBaseMB": 98
+    }
+  ]
+}

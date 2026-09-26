@@ -1,0 +1,86 @@
+{
+  "at": "2026-09-26T04:57:36.771Z",
+  "results": [
+    {
+      "engine": "chromium",
+      "case": "laughs",
+      "ms": 14,
+      "parsererror": true,
+      "tdLength": 0,
+      "passwd": false,
+      "requested": false
+    },
+    {
+      "engine": "chromium",
+      "case": "file",
+      "ms": 0,
+      "parsererror": false,
+      "tdLength": 0,
+      "passwd": false,
+      "requested": false
+    },
+    {
+      "engine": "chromium",
+      "case": "network",
+      "ms": 0,
+      "parsererror": false,
+      "tdLength": 0,
+      "passwd": false,
+      "requested": false
+    },
+    {
+      "engine": "firefox",
+      "case": "laughs",
+      "ms": 67,
+      "parsererror": true,
+      "tdLength": 0,
+      "passwd": false,
+      "requested": false
+    },
+    {
+      "engine": "firefox",
+      "case": "file",
+      "ms": 0,
+      "parsererror": false,
+      "tdLength": 0,
+      "passwd": false,
+      "requested": false
+    },
+    {
+      "engine": "firefox",
+      "case": "network",
+      "ms": 0,
+      "parsererror": false,
+      "tdLength": 0,
+      "passwd": false,
+      "requested": false
+    },
+    {
+      "engine": "webkit",
+      "case": "laughs",
+      "ms": 4,
+      "parsererror": true,
+      "tdLength": 0,
+      "passwd": false,
+      "requested": false
+    },
+    {
+      "engine": "webkit",
+      "case": "file",
+      "ms": 1,
+      "parsererror": false,
+      "tdLength": 0,
+      "passwd": false,
+      "requested": false
+    },
+    {
+      "engine": "webkit",
+      "case": "network",
+      "ms": 0,
+      "parsererror": false,
+      "tdLength": 0,
+      "passwd": false,
+      "requested": false
+    }
+  ]
+}

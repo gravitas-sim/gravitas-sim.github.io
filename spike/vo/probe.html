@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>VO CORS probe</title>
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <h1>Which archives answer a page on another origin?</h1>
+    <p>
+      One small, public GET to each service, with no credentials, from this
+      page's origin. A TypeError is the browser refusing the answer (or no
+      network: a page cannot tell which). Results go to window.probe.
+    </p>
+    <button id="go">Probe</button>
+    <pre id="out"></pre>
+    <script type="module">
+      const tap = (base, q) =>
+        `${base}?${new URLSearchParams({ REQUEST: 'doQuery', LANG: 'ADQL', FORMAT: 'votable', MAXREC: '1', QUERY: q })}`;
+      const ENDPOINTS = [
+        ['CDS Sesame', 'https://cds.unistra.fr/cgi-bin/nph-sesame/-oxp/SNV?SU%20Dra'],
+        ['CDS VizieR TAP', tap('https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync', 'SELECT TOP 1 Source FROM "I/355/gaiadr3"')],
+        ['CDS SIMBAD TAP', tap('https://simbad.cds.unistra.fr/simbad/sim-tap/sync', 'SELECT TOP 1 main_id FROM basic')],
+        ['CDS HiPS (Aladin tiles)', 'https://alasky.cds.unistra.fr/DSS/DSSColor/properties'],
+        ['MAST TAP (CAOM)', tap('https://mast.stsci.edu/vo-tap/api/v0.1/caom/sync', 'SELECT TOP 1 obs_id FROM dbo.ObsCore')],
+        ['MAST Download API', 'https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019226182529-s0015-0000000142848794-0151-s_lc.fits'],
+        ['MAST public S3 (TESS)', 'https://stpubdata.s3.amazonaws.com/tess/public/tid/s0015/0000/0001/4284/8794/tess2019226182529-s0015-0000000142848794-0151-s_lc.fits'],
+        ['NASA Exoplanet Archive TAP', tap('https://exoplanetarchive.ipac.caltech.edu/TAP/sync', 'SELECT TOP 1 pl_name FROM ps')],
+        ['ESA Gaia archive TAP', tap('https://gea.esac.esa.int/tap-server/tap/sync', 'SELECT TOP 1 source_id FROM gaiadr3.gaia_source')],
+        ['IRSA TAP', tap('https://irsa.ipac.caltech.edu/TAP/sync', 'SELECT TOP 1 designation FROM fp_psc')],
+        ['HEASARC TAP', tap('https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync', 'SELECT TOP 1 name FROM rosmaster')],
+      ];
+      async function probe([name, url]) {
+        const t0 = performance.now();
+        try {
+          // A Range header would make the S3 FITS small, but it also makes the
+          // request "non-simple" and adds a preflight; HEAD is simple.
+          const method = /\.fits$/.test(url) || url.includes('Download/file') ? 'HEAD' : 'GET';
+          const res = await fetch(url, { method, credentials: 'omit', referrerPolicy: 'no-referrer' });
+          return {
+            name,
+            method,
+            ok: res.ok,
+            status: res.status,
+            type: res.headers.get('content-type'),
+            length: res.headers.get('content-length'),
+            redirected: res.redirected,
+            finalOrigin: res.url ? new URL(res.url).origin : null,
+            ms: Math.round(performance.now() - t0),
+          };
+        } catch (e) {
+          return { name, method: 'GET', blocked: true, error: `${e.name}: ${e.message}`, ms: Math.round(performance.now() - t0) };
+        }
+      }
+      document.getElementById('go').addEventListener('click', async () => {
+        const results = [];
+        for (const ep of ENDPOINTS) results.push(await probe(ep));
+        window.probe = { origin: location.origin, at: new Date().toISOString(), ua: navigator.userAgent, results };
+        document.getElementById('out').textContent = JSON.stringify(window.probe, null, 2);
+      });
+    </script>
+  </body>
+</html>

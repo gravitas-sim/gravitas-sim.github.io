@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VO gateway spike</title>
+    <meta name="robots" content="noindex" />
+    <style>
+      body {
+        font: 16px/1.45 system-ui, sans-serif;
+        max-width: 56rem;
+        margin: 0 auto;
+        padding: 1rem;
+        background: #07080f;
+        color: #e8ebff;
+      }
+      a {
+        color: #9ecbff;
+      }
+      fieldset {
+        border: 1px solid #ffffff30;
+        border-radius: 8px;
+        margin: 0 0 1rem;
+      }
+      input,
+      select,
+      button {
+        font: inherit;
+        padding: 0.3rem 0.5rem;
+      }
+      table {
+        border-collapse: collapse;
+        font-size: 0.9em;
+      }
+      td,
+      th {
+        border: 1px solid #ffffff25;
+        padding: 0.2rem 0.4rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      .note {
+        opacity: 0.8;
+      }
+      [role='alert'] {
+        border-left: 3px solid #ff8a8a;
+        padding: 0.3rem 0.6rem;
+      }
+      svg {
+        background: #0d1020;
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Archive import: a spike</h1>
+    <p class="note">
+      Disposable prototype for VO_ARCHIVE_GATE.md. Nothing is sent anywhere
+      until you press Find. Then the name you typed goes to CDS in Strasbourg
+      (Sesame), and the position it returns goes to CDS's VizieR. No other
+      service is reachable from this page, and no cookie or referrer is sent.
+    </p>
+    <form id="find">
+      <fieldset>
+        <legend>1. Name or position</legend>
+        <label>Object <input id="name" value="SU Dra" autocomplete="off" /></label>
+        <button>Find</button>
+      </fieldset>
+    </form>
+    <div id="out" aria-live="polite"></div>
+    <div id="err" role="alert" hidden></div>
+    <script type="module" src="./demo.js"></script>
+  </body>
+</html>

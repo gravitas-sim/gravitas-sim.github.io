@@ -1,0 +1,23 @@
+== https://mast.stsci.edu/vo-tap/api/v0.1/caom/sync
+HTTP/2 400 
+== https://mast.stsci.edu/api/v0.1/Download/file
+HTTP/2 302 
+location: https://stpubdata.s3.us-east-1.amazonaws.com/tess/public/tid/s0015/0000/0001/4284/8794/tess2019226182529-s0015-0000000142848794-0151-s_lc.fits
+== https://exoplanetarchive.ipac.caltech.edu/TAP/sync
+HTTP/2 200 
+== https://gea.esac.esa.int/tap-server/tap/sync
+HTTP/1.1 200 200
+== https://irsa.ipac.caltech.edu/TAP/sync
+HTTP/2 200 
+== https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync
+HTTP/1.1 200 OK
+== https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync
+HTTP/2 200 
+access-control-allow-origin: *
+== MAST TAP, ivoa.obscore
+HTTP/2 200 
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Produced with MAST VOTable encoder version 1.0 -->
+<VOTABLE version="1.4" xmlns="http://www.ivoa.net/xml/VOTable/v1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ivoa.net/xml/VOTable/v1.3 http://www.ivoa.net/xml/VO
+== OPTIONS preflight, MAST TAP
+HTTP/2 405 

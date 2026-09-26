@@ -1,0 +1,89 @@
+{
+  "at": "2026-09-26T05:02:39.625Z",
+  "out": [
+    {
+      "engine": "chromium",
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+      "results": [
+        {
+          "name": "on the list: CDS Sesame",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "name": "on the list: VizieR TAP",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "name": "off the list, CORS-open: SIMBAD TAP",
+          "refused": "TypeError: Failed to fetch"
+        },
+        {
+          "name": "off the list, CORS-open: MAST S3",
+          "refused": "TypeError: Failed to fetch"
+        }
+      ],
+      "violations": [
+        "connect-src",
+        "connect-src"
+      ]
+    },
+    {
+      "engine": "firefox",
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "results": [
+        {
+          "name": "on the list: CDS Sesame",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "name": "on the list: VizieR TAP",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "name": "off the list, CORS-open: SIMBAD TAP",
+          "refused": "TypeError: NetworkError when attempting to fetch resource."
+        },
+        {
+          "name": "off the list, CORS-open: MAST S3",
+          "refused": "TypeError: NetworkError when attempting to fetch resource."
+        }
+      ],
+      "violations": [
+        "connect-src",
+        "connect-src"
+      ]
+    },
+    {
+      "engine": "webkit",
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+      "results": [
+        {
+          "name": "on the list: CDS Sesame",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "name": "on the list: VizieR TAP",
+          "ok": true,
+          "status": 200
+        },
+        {
+          "name": "off the list, CORS-open: SIMBAD TAP",
+          "refused": "TypeError: Load failed"
+        },
+        {
+          "name": "off the list, CORS-open: MAST S3",
+          "refused": "TypeError: Load failed"
+        }
+      ],
+      "violations": [
+        "connect-src",
+        "connect-src"
+      ]
+    }
+  ]
+}

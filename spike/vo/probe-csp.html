@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- GitHub Pages sets no headers, but a meta CSP's connect-src is honoured:
+         the browser itself then refuses any service not on the list, whatever
+         the page's own code does. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'self' https://cds.unistra.fr https://tapvizier.cds.unistra.fr"
+    />
+    <title>VO CSP probe</title>
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <h1>Does a meta CSP hold the list?</h1>
+    <button id="go">Probe</button>
+    <pre id="out"></pre>
+    <script type="module" src="./probe-csp.js"></script>
+  </body>
+</html>
