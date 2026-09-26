@@ -1,0 +1,4 @@
+peak power 0.9719 min power 3.29e-8
+direct, 2pi(f t) vs 2pi f t        max rel 2.60e-10 at power 3.29e-8 | 99th pct rel 6.57e-12 | median 4.56e-13 | max abs / peak 1.83e-14
+direct, (2pi t) f vs 2pi f t       max rel 3.45e-10 at power 3.29e-8 | 99th pct rel 6.61e-12 | median 4.71e-13 | max abs / peak 3.53e-14
+recurrence (RESEED 512) vs direct  max rel 1.41e-10 at power 2.47e-7 | 99th pct rel 8.83e-12 | median 5.86e-13 | max abs / peak 2.68e-14

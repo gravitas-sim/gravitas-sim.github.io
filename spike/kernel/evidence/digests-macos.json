@@ -1,0 +1,67 @@
+{
+  "note": "Digests only, from a run on the machine the prototype was written on (macOS, Intel i5-10500), under other work: its timings are not evidence and are not kept. A digest does not depend on load.",
+  "at": "2026-09-26T11:37:42.861Z",
+  "cpu": "Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz",
+  "runs": [
+    {
+      "profile": "chromium",
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+      "gls": {
+        "baseline": "d23693d559727cf8",
+        "js": "66212a4df3e50a9f",
+        "wasm": "66212a4df3e50a9f"
+      },
+      "bls": {
+        "baseline": "530fe7a650f06eb0",
+        "js": "530fe7a650f06eb0",
+        "wasm": "530fe7a650f06eb0"
+      },
+      "glsJsVsBaseline": 1.536941032801806e-10
+    },
+    {
+      "profile": "chromium-4x",
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+      "gls": {
+        "baseline": "d23693d559727cf8",
+        "js": "66212a4df3e50a9f",
+        "wasm": "66212a4df3e50a9f"
+      },
+      "bls": {
+        "baseline": "530fe7a650f06eb0",
+        "js": "530fe7a650f06eb0",
+        "wasm": "530fe7a650f06eb0"
+      },
+      "glsJsVsBaseline": 1.536941032801806e-10
+    },
+    {
+      "profile": "firefox",
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "gls": {
+        "baseline": "2eacd72e7ba75a0c",
+        "js": "5619e4faf4a49fcf",
+        "wasm": "5619e4faf4a49fcf"
+      },
+      "bls": {
+        "baseline": "530fe7a650f06eb0",
+        "js": "530fe7a650f06eb0",
+        "wasm": "530fe7a650f06eb0"
+      },
+      "glsJsVsBaseline": 1.4892623667951406e-10
+    },
+    {
+      "profile": "webkit",
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+      "gls": {
+        "baseline": "55015a0d6d32c966",
+        "js": "41196b5da8aaaadb",
+        "wasm": "41196b5da8aaaadb"
+      },
+      "bls": {
+        "baseline": "530fe7a650f06eb0",
+        "js": "530fe7a650f06eb0",
+        "wasm": "530fe7a650f06eb0"
+      },
+      "glsJsVsBaseline": 1.3965876298345169e-10
+    }
+  ]
+}

@@ -50,7 +50,9 @@ jobs:
           firefox --version || true
 
       - name: Correctness, in Node
-        run: node spike/kernel/check.mjs
+        run: |
+          node spike/kernel/check.mjs
+          node spike/kernel/conditioning.mjs | tee kernel-conditioning.txt
 
       # Let the install's load average decay before the first timing.
       - name: Settle
@@ -65,6 +67,16 @@ jobs:
             node spike/kernel/direct.mjs "$(command -v firefox)" --repeats 5 --json "kernel-direct-firefox-$r.json"
           done
 
+      # The same Nightly build Playwright drives, launched the same way as the
+      # release Firefox above: separates the build's WebAssembly from Juggler.
+      - name: Bench, Playwright's Firefox with nothing attached
+        run: |
+          FF=$(ls -d "$HOME"/.cache/ms-playwright/firefox-*/firefox/firefox | head -1)
+          "$FF" --version || true
+          for r in 1 2 3; do
+            node spike/kernel/direct.mjs "$FF" --repeats 5 --json "kernel-direct-pwfirefox-$r.json"
+          done
+
       - name: Verdict
         run: node spike/kernel/verdict.mjs kernel-bench.json | tee kernel-verdict.txt
 
@@ -75,4 +87,6 @@ jobs:
           path: |
             kernel-bench.json
             kernel-direct-firefox-*.json
+            kernel-direct-pwfirefox-*.json
             kernel-verdict.txt
+            kernel-conditioning.txt
