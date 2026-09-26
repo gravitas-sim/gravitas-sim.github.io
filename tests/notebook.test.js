@@ -1942,3 +1942,124 @@ describe('provenance survives the chain the application actually uses', () => {
     expect(second.snapshot.provenance.seed).toBe('rec-2');
   });
 });
+
+describe('a measurement on real data (js/notebook/observed.js)', () => {
+  const asText = bytes => String.fromCharCode(...bytes);
+  const node = {
+    id: 'm1',
+    tool: 'line',
+    version: '1.0.0',
+    params: { line: [6540, 6580], rest: 6564.61 },
+    at: 1,
+    input: { observation: 'builtin:sdss-dr18-a', digest: 'd'.repeat(64) },
+    quantities: [
+      {
+        id: 'ew',
+        value: 7.01,
+        unit: 'Angstrom',
+        kind: 'measured',
+        error: 0.16,
+        errorKind: 'assumed',
+      },
+      {
+        id: 'rest',
+        value: 6564.61,
+        unit: 'Angstrom',
+        kind: 'assumed',
+        cite: 'NIST ASD',
+      },
+      {
+        id: 'velocity',
+        value: -241,
+        unit: 'km/s',
+        kind: 'derived',
+        error: 9.5,
+        errorKind: 'derived',
+      },
+    ],
+    warnings: [{ code: 'errorsFromScatter' }],
+  };
+  const source = {
+    id: 'builtin:sdss-dr18-a',
+    title: 'SDSS 3138-54740-433: an A0 star',
+    source: { kind: 'builtin', id: 'sdss-dr18-spectra', version: null },
+    license: { status: 'public-domain' },
+    credit: 'SDSS DR18',
+  };
+  const rows = [
+    ['Observation', 'SDSS 3138-54740-433 (builtin:sdss-dr18-a)'],
+    ['Changes before it', 'Crop (wavelength 6400-6700)'],
+  ];
+  const make = async (extra = {}) => {
+    const { observedEntry } = await import('../js/notebook/observed.js');
+    return observedEntry({
+      node,
+      source,
+      digest: node.input.digest,
+      changes: [{ op: 'crop' }, { op: 'normalize' }],
+      title: 'A line on an A star',
+      labels: {
+        quantity: q => q.id,
+        note: q => q.kind,
+        rows: extra.rows ?? rows,
+      },
+      capturedAt: 1_800_000_000_000,
+    });
+  };
+
+  test('is an Observatory entry whose quantities are all measured, and whose assumptions are not quantities', async () => {
+    const e = await make();
+    expect(e.source).toBe(SOURCES.find(s => s === 'observatory'));
+    expect(e.snapshot.quantities.map(q => [q.label, q.kind])).toEqual([
+      ['ew', 'measured'],
+      ['velocity', 'measured'],
+    ]);
+    // How each was derived stays with it, in its note.
+    expect(e.snapshot.quantities[1].note).toBe('derived');
+    expect(e.snapshot.observed).toMatchObject({
+      format: 'gravitas.observed',
+      formatVersion: 1,
+      observation: { id: source.id, digest: node.input.digest },
+      tool: { id: 'line', version: '1.0.0', at: 1 },
+      // Only the changes the measurement saw.
+      changes: ['crop'],
+      assumptions: [
+        { id: 'rest', value: 6564.61, unit: 'Angstrom', cite: 'NIST ASD' },
+      ],
+    });
+    expect(Object.isFrozen(e.snapshot.observed)).toBe(true);
+  });
+
+  test("its fingerprint covers what the data were, and a simulation entry's does not move", async () => {
+    const a = await make();
+    const b = await make({
+      rows: [...rows.slice(0, 1), ['Changes before it', 'none']],
+    });
+    expect(a.fingerprint).not.toBe(b.fingerprint);
+    const sim = buildEntry({
+      source: SOURCE.RV_FIT,
+      title: 'x',
+      quantities: [],
+      capturedAt: 1,
+    });
+    expect('observed' in sim.snapshot).toBe(false);
+    expect(validateEntry(JSON.parse(JSON.stringify(a))).ok).toBe(true);
+    const back = reviveEntry(JSON.parse(JSON.stringify(a)));
+    expect(back.tampered).toBeUndefined();
+    expect(back.snapshot.observed).toEqual(a.snapshot.observed);
+  });
+
+  test('the report says where the data came from, instead of a simulation’s conditions', async () => {
+    const { buildEvidenceReport } = await import('../js/notebook/report.js');
+    const text = asText(
+      buildEvidenceReport({ entries: [await make()], revision: 'x' })
+    );
+    expect(text).toContain(EN_DEFERRED['nb.report.data']);
+    // A PDF string escapes its parentheses, so the row's two halves are
+    // looked for apart.
+    expect(text).toContain('SDSS 3138-54740-433');
+    expect(text).toContain('builtin:sdss-dr18-a');
+    expect(text).not.toContain(EN_DEFERRED['nb.report.conditions']);
+    expect(text).toContain(EN_DEFERRED['nb.source.observatory']);
+  });
+});

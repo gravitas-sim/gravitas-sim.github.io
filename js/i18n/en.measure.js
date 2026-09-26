@@ -1,0 +1,237 @@
+// =============================================================================
+// The observatory's measurement pipeline in English
+// -----------------------------------------------------------------------------
+// js/observatory/measurePanel.js registers these when a reader first opens
+// the panel, so the page does not carry them at start-up. Only the panel's
+// title, which the page shows closed, stays in ./en.observatory.js.
+// =============================================================================
+
+export const EN_MEASURE = {
+  'obs.ms.intro':
+    'Measure the observation in view. Each result records the tool and its version, its parameters, where in your changes it was taken and a checksum of the data it saw; change the data behind it and it says it is stale.',
+  'obs.ms.tool': 'Tool',
+  'obs.ms.tool.period': 'Period search (Lomb-Scargle)',
+  'obs.ms.tool.box': 'Transit search (box least squares)',
+  'obs.ms.tool.line': 'Spectral line: continuum, equivalent width, center',
+  'obs.ms.tool.aperture': 'Aperture on the image',
+  'obs.ms.tool.filter': 'Filter the rows',
+  'obs.ms.tool.match': 'Match with a second table',
+  'obs.ms.none': 'No tool here measures this kind of observation.',
+  'obs.ms.run': 'Measure',
+  'obs.ms.recomputeWith': 'Recompute {id} with these parameters',
+  'obs.ms.cancel': 'Cancel',
+  'obs.ms.progress': 'Progress',
+  'obs.ms.running': 'Running {tool}…',
+  'obs.ms.canceled': 'Canceled.',
+  'obs.ms.ran': '{id}: {tool} done.',
+  'obs.ms.failed': '{id}: {tool} could not measure this: {why}',
+  'obs.ms.p.minPeriod': 'Shortest period ({unit})',
+  'obs.ms.p.maxPeriod': 'Longest period ({unit})',
+  'obs.ms.p.oversample': 'Oversampling',
+  'obs.ms.p.durations': 'Trial durations ({unit}), separated by commas',
+  'obs.ms.p.preset': 'Line',
+  'obs.ms.p.custom': 'Another line: enter the windows',
+  'obs.ms.p.rest': 'Rest wavelength ({unit}) for a velocity, if you want one',
+  'obs.ms.p.lineLo': 'Line window from ({unit})',
+  'obs.ms.p.lineHi': 'Line window to ({unit})',
+  'obs.ms.p.blueLo': 'Blue continuum from ({unit})',
+  'obs.ms.p.blueHi': 'Blue continuum to ({unit})',
+  'obs.ms.p.redLo': 'Red continuum from ({unit})',
+  'obs.ms.p.redHi': 'Red continuum to ({unit})',
+  'obs.ms.p.mode': 'Measure',
+  'obs.ms.p.mode.flux': 'Flux in a circle, background from an annulus',
+  'obs.ms.p.mode.bits': 'Pixels with a flag set',
+  'obs.ms.p.bit': 'Flag',
+  'obs.ms.p.circle': 'Only inside a circle',
+  'obs.ms.p.x': 'Center x (FITS pixel)',
+  'obs.ms.p.y': 'Center y (FITS pixel)',
+  'obs.ms.p.r': 'Radius (pixels)',
+  'obs.ms.p.rIn': 'Annulus from (pixels)',
+  'obs.ms.p.rOut': 'Annulus to (pixels)',
+  'obs.ms.p.gain': 'Gain (electrons per unit), if known',
+  'obs.ms.p.column': 'Column',
+  'obs.ms.p.op': 'Test',
+  'obs.ms.p.value': 'Value',
+  'obs.ms.p.inUnit': 'in {unit}',
+  'obs.ms.p.join': 'Keep a row that passes',
+  'obs.ms.p.join.all': 'every test',
+  'obs.ms.p.join.any': 'any test',
+  'obs.ms.p.second': 'Second table (CSV, TSV or JSON)',
+  'obs.ms.p.secondRead': 'Second table: {rows} rows, {columns} columns.',
+  'obs.ms.p.secondFailed': 'The second table could not be read: {why}',
+  'obs.ms.p.by': 'Match by',
+  'obs.ms.p.by.value': 'a value',
+  'obs.ms.p.by.sky': 'position on the sky',
+  'obs.ms.p.aColumn': 'In this table',
+  'obs.ms.p.bColumn': 'In the second table',
+  'obs.ms.p.aRa': 'Right ascension in this table',
+  'obs.ms.p.aDec': 'Declination in this table',
+  'obs.ms.p.bRa': 'Right ascension in the second',
+  'obs.ms.p.bDec': 'Declination in the second',
+  'obs.ms.p.tolerance': 'Within',
+  'obs.ms.p.radius': 'Within (arcseconds)',
+  'obs.ms.p.bad': 'Check {field}: it needs a number.',
+  'obs.ms.nodes': 'Measurements',
+  'obs.ms.nodesNone': 'Nothing measured yet.',
+  'obs.ms.node': '{id} · {tool}, version {version}',
+  'obs.ms.status.current': 'current',
+  'obs.ms.status.stale': 'stale: the data it measured have changed since',
+  'obs.ms.status.failed': 'could not measure',
+  'obs.ms.recompute': 'Recompute',
+  'obs.ms.edit': 'Change its parameters',
+  'obs.ms.remove': 'Remove',
+  'obs.ms.fold': 'Fold at this period',
+  'obs.ms.maskFailed': 'Mask the rows that fail',
+  'obs.ms.notebook': 'Add to the notebook',
+  'obs.ms.periodogram': 'Periodogram',
+  'obs.ms.periodogramLabel':
+    'Power against trial period: {n} trial periods, the highest at {period}.',
+  'obs.ms.col.quantity': 'Quantity',
+  'obs.ms.col.value': 'Value',
+  'obs.ms.col.kind': 'Kind',
+  'obs.ms.kind.measured': 'measured',
+  'obs.ms.kind.derived': 'derived',
+  'obs.ms.kind.assumed': 'assumed',
+  'obs.ms.errorKind': 'error {kind}',
+  'obs.ms.q.period': 'Period',
+  'obs.ms.q.power': 'Power',
+  'obs.ms.q.falseAlarm': 'False-alarm probability',
+  'obs.ms.q.amplitude': 'Amplitude',
+  'obs.ms.q.points': 'Points used',
+  'obs.ms.q.epoch': 'Epoch (mid-transit)',
+  'obs.ms.q.duration': 'Duration',
+  'obs.ms.q.depth': 'Depth',
+  'obs.ms.q.sde': 'Signal detection efficiency',
+  'obs.ms.q.ew': 'Equivalent width',
+  'obs.ms.q.center': 'Line center',
+  'obs.ms.q.rest': 'Rest wavelength',
+  'obs.ms.q.velocity': 'Velocity',
+  'obs.ms.q.count': 'Pixels',
+  'obs.ms.q.centroidX': 'Centroid x',
+  'obs.ms.q.centroidY': 'Centroid y',
+  'obs.ms.q.ra': 'Right ascension',
+  'obs.ms.q.dec': 'Declination',
+  'obs.ms.q.skyArea': 'Area on the sky',
+  'obs.ms.q.sum': 'Sum in the circle',
+  'obs.ms.q.area': 'Area of the circle',
+  'obs.ms.q.background': 'Background per pixel',
+  'obs.ms.q.net': 'Net flux',
+  'obs.ms.q.kept': 'Rows kept',
+  'obs.ms.q.dropped': 'Rows left out',
+  'obs.ms.q.pairs': 'Pairs',
+  'obs.ms.q.unmatched': 'Rows without a partner',
+  'obs.ms.q.ambiguous': 'Rows with more than one candidate',
+  'obs.ms.w.unweighted': 'No uncertainties: every point weighs the same.',
+  'obs.ms.w.notSignificant':
+    'Not significant: the false-alarm probability is {falseAlarm}.',
+  'obs.ms.w.atEdge':
+    'The highest peak is at the edge of the range searched: widen it.',
+  'obs.ms.w.fewCycles': 'Fewer than two cycles of this period are in the data.',
+  'obs.ms.w.errorAssumesSinusoid':
+    "The period's error assumes a sinusoid in white noise (Montgomery & O'Donoghue 1999); a signal of another shape, or noise that is not white, makes it too small.",
+  'obs.ms.w.weakDetection':
+    'A weak detection: signal detection efficiency {sde}.',
+  'obs.ms.w.noPeriodError':
+    'The box search gives no uncertainty on the period. Fit a transit model to get one.',
+  'obs.ms.w.maskedLeftOut': '{n} masked rows were left out.',
+  'obs.ms.w.noErrorLeftOut': '{n} rows without an uncertainty were left out.',
+  'obs.ms.w.errorsFromScatter':
+    "The spectrum has no uncertainties, so each point's is taken as the continuum's scatter, assumed the same inside the line.",
+  'obs.ms.w.continuumPoorFit':
+    'The continuum is a poor fit: reduced chi-square {reducedChi2}.',
+  'obs.ms.w.noAbsorption': 'There is no absorption in the line window.',
+  'obs.ms.w.emission':
+    'The line is in emission, so its equivalent width is negative.',
+  'obs.ms.w.noiseModelAssumed':
+    "The error assumes the background's noise only, plus the source's own if a gain is given.",
+  'obs.ms.w.apertureCut': 'The circle runs off the edge of the image.',
+  'obs.ms.w.noSource': 'Nothing in the circle is above the background.',
+  'obs.ms.w.noPixels': 'No pixel has that flag.',
+  'obs.ms.w.missingValues':
+    '{n} rows have no value for {column}, and pass no test on it.',
+  'obs.ms.w.ambiguous':
+    '{n} rows had more than one candidate; each took the nearest.',
+  'obs.ms.pipeline': 'The pipeline',
+  'obs.ms.pipe.source': 'Opened: {title} ({id}). Content SHA-256 {digest}.',
+  'obs.ms.pipe.change': '{op}: a {stage}; uncertainty {treatment}.',
+  'obs.ms.pipe.measure': '{id}: {tool}, {status}.',
+  'obs.ms.pipe.fit': 'Fit: {model}, {algorithm} {version}.',
+  'obs.ms.stage.selection': 'selection',
+  'obs.ms.stage.calibration': 'calibration',
+  'obs.ms.stage.transformation': 'transformation',
+  'obs.ms.stage.annotation': 'note',
+  'obs.ms.treat.kept': 'kept as it was',
+  'obs.ms.treat.scaled': 'scaled with the values',
+  'obs.ms.treat.scaledAssumed':
+    'divided by the same number, whose own uncertainty is not included',
+  'obs.ms.treat.propagated':
+    'propagated, or from the scatter where there was none',
+  'obs.ms.undo': 'Undo',
+  'obs.ms.redo': 'Redo',
+  'obs.ms.save': 'Save the pipeline (JSON)',
+  'obs.ms.csv': 'Save the results (CSV)',
+  'obs.ms.gridCsv': 'Save the periodogram (CSV)',
+  'obs.ms.open': 'Open a saved pipeline',
+  'obs.ms.methods': 'Methods',
+  'obs.ms.readBack.same':
+    'Read back: every measurement gives the number it saved.',
+  'obs.ms.readBack.differs':
+    'Read back: {n} measurements do not give the number they saved.',
+  'obs.ms.readBack.migrated':
+    'Opened an Observatory save as a pipeline, with no measurements yet.',
+  'obs.ms.nodeSame': 'gives the number it saved',
+  'obs.ms.nodeDiffers': 'does not give the number it saved',
+  'obs.ms.nodeVersion': 'saved by version {version} of its tool',
+  'obs.ms.open.notJson': 'That file is not JSON.',
+  'obs.ms.open.notPipeline':
+    'That file is not a pipeline or an Observatory save.',
+  'obs.ms.open.newer':
+    'That pipeline is format version {version}, newer than this Gravitas reads.',
+  'obs.ms.open.unknownVersion':
+    'That pipeline is format version {version}, which this Gravitas does not know.',
+  'obs.ms.open.incomplete':
+    'That pipeline has no workspace or no measurements list.',
+  'obs.ms.open.unknownTool':
+    'That pipeline uses a tool this Gravitas does not have: {tool}.',
+  'obs.ms.open.badNode':
+    'A measurement in that pipeline has no position in the changes.',
+  'obs.ms.open.workspace':
+    "That pipeline's observation could not be read: {why}",
+  'obs.ms.notebook.added':
+    'Added to your notebook. It is in the notebook panel, and in its report, in Gravitas.',
+  'obs.ms.notebook.failed': 'Not added to the notebook: {why}',
+  'obs.ms.nb.title': '{tool} on {observation}',
+  'obs.ms.nb.observation': 'Observation',
+  'obs.ms.nb.source': 'Source',
+  'obs.ms.nb.digest': 'Content SHA-256',
+  'obs.ms.nb.license': 'License',
+  'obs.ms.nb.tool': 'Tool',
+  'obs.ms.nb.params': 'Parameters',
+  'obs.ms.nb.changes': 'Changes before it',
+  'obs.ms.nb.noChanges': 'none',
+  'obs.ms.nb.assumed': 'Assumed',
+  'obs.ms.nb.warnings': 'Warnings',
+  'obs.ms.m.source':
+    'The data: {title} ({id}), {source}; content SHA-256 {digest}.',
+  'obs.ms.m.change': 'Change {n}: {op} ({params}); uncertainty {treatment}.',
+  'obs.ms.m.period':
+    '{id}: a generalized Lomb-Scargle periodogram (Zechmeister & Kürster 2009) from {min} to {max} {unit}, oversampled {over} times, after {at} changes. The period error assumes a sinusoid in white noise (Montgomery & O’Donoghue 1999); the false-alarm probability is Baluev’s (2008).',
+  'obs.ms.m.box':
+    '{id}: box least squares (Kovacs, Zucker & Mazeh 2002) from {min} to {max} {unit}, trial durations {durations} {unit}, after {at} changes; its significance is the signal detection efficiency.',
+  'obs.ms.m.line':
+    '{id}: a straight continuum fitted from {blueLo} to {blueHi} and from {redLo} to {redHi} {unit}; the equivalent width and the depth-weighted center from {lineLo} to {lineHi} {unit}, uncertainties propagated linearly, after {at} changes.',
+  'obs.ms.m.rest':
+    'The velocity is against a rest wavelength of {rest} {unit}, assumed.',
+  'obs.ms.m.flux':
+    '{id}: the flux in a circle of radius {r} pixels at ({x}, {y}), less the median of an annulus from {rIn} to {rOut} pixels; its error assumes background-limited noise. After {at} changes.',
+  'obs.ms.m.bits':
+    "{id}: the pixels with flag {bit} set, their count and centroid, and the centroid's sky position from the image's coordinates. After {at} changes.",
+  'obs.ms.m.filter':
+    '{id}: the rows kept where {conditions}, after {at} changes.',
+  'obs.ms.m.match':
+    '{id}: each row paired, one to one and nearest first, with a row of the second table within {tolerance}, after {at} changes.',
+  'obs.ms.m.fit':
+    'A model fit: {model}, {algorithm} {version}. Its own export has the full record.',
+  'obs.ms.and': ' and ',
+  'obs.ms.or': ' or ',
+};

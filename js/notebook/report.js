@@ -284,9 +284,19 @@ export function buildEvidenceReport({
       );
     }
 
-    doc.heading(t('nb.report.conditions'), { size: 10, spaceBefore: 8 });
-    for (const [label, value] of provenanceRows(snap.provenance)) {
-      doc.row(label, value);
+    // A measurement on real data says what the data were and what was done
+    // to them (js/notebook/observed.js); a simulation's conditions do not
+    // describe it.
+    if (snap.observed) {
+      doc.heading(t('nb.report.data'), { size: 10, spaceBefore: 8 });
+      for (const [label, value] of snap.observed.rows || []) {
+        doc.row(String(label), String(value));
+      }
+    } else {
+      doc.heading(t('nb.report.conditions'), { size: 10, spaceBefore: 8 });
+      for (const [label, value] of provenanceRows(snap.provenance)) {
+        doc.row(label, value);
+      }
     }
   });
 

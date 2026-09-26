@@ -1424,6 +1424,7 @@ export const EN_DEFERRED = {
 
   'nb.entry.results': 'What was recorded',
   'nb.entry.conditions': 'Conditions it was taken under',
+  'nb.entry.data': 'The data and what was done to them',
   'nb.entry.checksum': 'checksum {code}',
   'nb.entry.figure': {
     one: 'Figure: {title} ({n} series, drawn in the report)',
@@ -1645,6 +1646,7 @@ export const EN_DEFERRED = {
   'nb.report.entryTampered':
     'This entry does not match its own checksum: its numbers were changed outside Gravitas.',
   'nb.report.results': 'What was recorded',
+  'nb.report.data': 'The data and what was done to them',
   'nb.report.colQuantity': 'Quantity',
   'nb.report.colValue': 'Value',
   'nb.report.colKind': 'Kind',
@@ -3542,6 +3544,7 @@ export const EN_DEFERRED = {
   // The Stellar Lab's evidence
   'nb.source.stellar-lab': 'Stellar Lab',
   'nb.source.binary-orbit': 'Binary orbit',
+  'nb.source.observatory': 'Observatory measurement',
   'nb.stellar.title.comparison': '{n} stars compared',
   'nb.stellar.title.model': 'A modeled star',
   'nb.stellar.title.point': 'A point on the H–R diagram',
