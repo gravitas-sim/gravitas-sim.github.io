@@ -247,4 +247,5 @@ export const EN_OBSERVATORY = {
   'obs.export.csv': 'Save the rows as CSV',
   'obs.fit.title': 'Fit a model (diagnostic)',
   'obs.arc.title': "Or find a star's Gaia epochs at CDS (live, opt-in)",
+  'obs.ms.title': 'Measure, and the pipeline',
 };

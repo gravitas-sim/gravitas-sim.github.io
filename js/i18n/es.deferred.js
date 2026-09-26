@@ -1436,6 +1436,7 @@ export const ES_DEFERRED = {
 
   'nb.entry.results': 'Lo que se registró',
   'nb.entry.conditions': 'Condiciones en que se tomó',
+  'nb.entry.data': 'Los datos y lo que se hizo con ellos',
   'nb.entry.checksum': 'suma de control {code}',
   'nb.entry.figure': {
     one: 'Figura: {title} ({n} serie, dibujada en el informe)',
@@ -1667,6 +1668,7 @@ export const ES_DEFERRED = {
   'nb.report.entryTampered':
     'Esta entrada no coincide con su propia suma de control: sus números se cambiaron fuera de Gravitas.',
   'nb.report.results': 'Lo que se registró',
+  'nb.report.data': 'Los datos y lo que se hizo con ellos',
   'nb.report.colQuantity': 'Magnitud',
   'nb.report.colValue': 'Valor',
   'nb.report.colKind': 'Tipo',
@@ -3452,6 +3454,7 @@ export const ES_DEFERRED = {
   // La evidencia del Laboratorio Estelar
   'nb.source.stellar-lab': 'Laboratorio estelar',
   'nb.source.binary-orbit': 'Órbita binaria',
+  'nb.source.observatory': 'Medida en el Observatorio',
   'nb.stellar.title.comparison': '{n} estrellas comparadas',
   'nb.stellar.title.model': 'Una estrella modelada',
   'nb.stellar.title.point': 'Un punto del diagrama H-R',

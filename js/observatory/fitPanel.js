@@ -419,17 +419,19 @@ export function mountFitPanel(root, ctx) {
       status.textContent = t('obs.fit.done', { seconds });
       render(out, d);
       exportBtn.hidden = false;
+      // The measurement pipeline lists a fit the reader ran, as exported.
+      ctx.record?.(exported());
     });
   });
 
   cancel.addEventListener('click', () => job?.cancel(t('obs.fit.canceled')));
 
-  exportBtn.addEventListener('click', () => {
-    if (!last) return;
+  /** The last fit as a gravitas.inference/1 document. */
+  function exported() {
     const { manifest: m, out } = last;
     // The residuals are as long as the data and the model curve is for the
     // plot; the export keeps what reproduces and states the result.
-    const doc = {
+    return {
       ...m,
       results: {
         fit: {
@@ -439,6 +441,11 @@ export function mountFitPanel(root, ctx) {
         profiles: out.profiles.map(p => omit(p, ['index', 'task', 'wallMs'])),
       },
     };
+  }
+
+  exportBtn.addEventListener('click', () => {
+    if (!last) return;
+    const doc = exported();
     const url = URL.createObjectURL(
       new Blob([`${JSON.stringify(doc, null, 2)}\n`], {
         type: 'application/json',
@@ -446,7 +453,7 @@ export function mountFitPanel(root, ctx) {
     );
     const a = el('a', {
       href: url,
-      download: `${String(o.id).replace(/[^A-Za-z0-9._-]+/g, '-')}-${m.model.id}.json`,
+      download: `${String(o.id).replace(/[^A-Za-z0-9._-]+/g, '-')}-${doc.model.id}.json`,
     });
     document.body.append(a);
     a.click();

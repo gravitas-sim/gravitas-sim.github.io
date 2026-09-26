@@ -132,9 +132,13 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * e2e/archive.spec.js imports from CDS (played by fixtures) in both, because
  * in dist/ the archive panel is a lazy chunk of the observatory's bundle, and
  * the page's Content-Security-Policy has to hold in the page that is served.
+ *
+ * e2e/measure.spec.js measures in both, because in dist/ the measurement
+ * panel is a lazy chunk of the observatory's bundle, as the file reader it
+ * reads saved pipelines with now is too.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js/;
 
 /**
  * Which engines to run.

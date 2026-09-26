@@ -251,4 +251,5 @@ export const ES_OBSERVATORY = {
   'obs.fit.title': 'Ajustar un modelo (diagnóstico)',
   'obs.arc.title':
     'O busca las épocas de Gaia de una estrella en el CDS (en vivo, opcional)',
+  'obs.ms.title': 'Medir, y el flujo',
 };
