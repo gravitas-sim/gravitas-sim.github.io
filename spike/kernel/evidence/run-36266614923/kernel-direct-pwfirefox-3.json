@@ -1,0 +1,60 @@
+{
+  "binary": "/home/runner/.cache/ms-playwright/firefox-1538/firefox/firefox",
+  "loadBefore": 1.16,
+  "loadAfter": 1.09,
+  "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
+  "repeats": 5,
+  "wasm": {
+    "bytes": 1120,
+    "compileMs": 3,
+    "instantiateMs": 0,
+    "memoryPages": 1,
+    "memoryBytesAfter": 131072
+  },
+  "gls": {
+    "n": 1882,
+    "m": 20000,
+    "baselineMs": 1515,
+    "jsMs": 174,
+    "wasmMs": 1817,
+    "wasmChunkMs": 47,
+    "worker": {
+      "total": 223,
+      "compute": 201,
+      "bytes": 160000
+    },
+    "jsVsBaseline": 1.4892623667951406e-10,
+    "wasmVsJs": 0,
+    "sha": {
+      "baseline": "2eacd72e7ba75a0c",
+      "js": "5619e4faf4a49fcf",
+      "wasm": "5619e4faf4a49fcf"
+    }
+  },
+  "bls": {
+    "n": 1882,
+    "periods": 12000,
+    "baselineMs": 384,
+    "wasmChunkMs": 3,
+    "jsChunkMs": 1,
+    "jsMs": 270,
+    "wasmMs": 1576,
+    "worker": {
+      "total": 292,
+      "compute": 275,
+      "bytes": 96000
+    },
+    "wasmVsJs": 0,
+    "jsVsBaseline": 0,
+    "argmax": {
+      "baseline": 3360,
+      "js": 3360,
+      "wasm": 3360
+    },
+    "sha": {
+      "baseline": "530fe7a650f06eb0",
+      "js": "530fe7a650f06eb0",
+      "wasm": "530fe7a650f06eb0"
+    }
+  }
+}

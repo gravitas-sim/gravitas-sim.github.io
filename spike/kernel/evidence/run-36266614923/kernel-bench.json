@@ -1,0 +1,763 @@
+{
+  "at": "2026-09-26T19:47:13.565Z",
+  "cpus": 4,
+  "cpu": "AMD EPYC 7763 64-Core Processor",
+  "runs": [
+    {
+      "round": 1,
+      "profile": "chromium",
+      "throttle": 1,
+      "loadBefore": 0.24,
+      "loadAfter": 0.53,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 0.5,
+        "instantiateMs": 0.09999999997671694,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 1949.7999999999884,
+        "jsMs": 151.89999999999418,
+        "wasmMs": 93.40000000002328,
+        "wasmChunkMs": 2.5,
+        "worker": {
+          "total": 177.10000000000582,
+          "compute": 160,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.536941032801806e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "d23693d559727cf8",
+          "js": "66212a4df3e50a9f",
+          "wasm": "66212a4df3e50a9f"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 733.1000000000058,
+        "wasmChunkMs": 0.39999999999417923,
+        "jsChunkMs": 0.6999999999825377,
+        "jsMs": 240.79999999998836,
+        "wasmMs": 222.29999999998836,
+        "worker": {
+          "total": 318.3999999999942,
+          "compute": 304.8999999999942,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 1,
+      "profile": "chromium-4x",
+      "throttle": 4,
+      "loadBefore": 0.53,
+      "loadAfter": 0.9,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 1.7999999999883585,
+        "instantiateMs": 0.10000000000582077,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 8240.900000000023,
+        "jsMs": 719.7999999999884,
+        "wasmMs": 383.30000000004657,
+        "wasmChunkMs": 12.399999999965075,
+        "worker": {
+          "total": 189.59999999997672,
+          "compute": 173.90000000002328,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.536941032801806e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "d23693d559727cf8",
+          "js": "66212a4df3e50a9f",
+          "wasm": "66212a4df3e50a9f"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 3187.4000000000233,
+        "wasmChunkMs": 1.099999999976717,
+        "jsChunkMs": 2.7000000000116415,
+        "jsMs": 1033.4000000000233,
+        "wasmMs": 929.5999999999767,
+        "worker": {
+          "total": 334.70000000001164,
+          "compute": 315.80000000004657,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 1,
+      "profile": "firefox",
+      "throttle": 1,
+      "loadBefore": 0.9,
+      "loadAfter": 0.94,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 0,
+        "instantiateMs": 1,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 1548,
+        "jsMs": 170,
+        "wasmMs": 1813,
+        "wasmChunkMs": 46,
+        "worker": {
+          "total": 215,
+          "compute": 197,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.4892623667951406e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "2eacd72e7ba75a0c",
+          "js": "5619e4faf4a49fcf",
+          "wasm": "5619e4faf4a49fcf"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 383,
+        "wasmChunkMs": 3,
+        "jsChunkMs": 1,
+        "jsMs": 275,
+        "wasmMs": 1576,
+        "worker": {
+          "total": 291,
+          "compute": 273,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 1,
+      "profile": "webkit",
+      "throttle": 1,
+      "loadBefore": 0.95,
+      "loadAfter": 1.52,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 1,
+        "instantiateMs": 0,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 1364,
+        "jsMs": 87,
+        "wasmMs": 75,
+        "wasmChunkMs": 2,
+        "worker": {
+          "total": 200,
+          "compute": 188,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.3456105890986711e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "5e70116192193834",
+          "js": "5f60b93aacc3fee0",
+          "wasm": "5f60b93aacc3fee0"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 453,
+        "wasmChunkMs": 0,
+        "jsChunkMs": 0,
+        "jsMs": 156,
+        "wasmMs": 104,
+        "worker": {
+          "total": 233,
+          "compute": 224,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 2,
+      "profile": "chromium",
+      "throttle": 1,
+      "loadBefore": 1.56,
+      "loadAfter": 1.4,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 0.30000000004656613,
+        "instantiateMs": 0.09999999997671694,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 1934.2999999999884,
+        "jsMs": 150.60000000003492,
+        "wasmMs": 86.79999999998836,
+        "wasmChunkMs": 2.5,
+        "worker": {
+          "total": 173.79999999998836,
+          "compute": 162.5,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.536941032801806e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "d23693d559727cf8",
+          "js": "66212a4df3e50a9f",
+          "wasm": "66212a4df3e50a9f"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 738.5999999999767,
+        "wasmChunkMs": 0.3999999999650754,
+        "jsChunkMs": 0.7000000000116415,
+        "jsMs": 260.5999999999767,
+        "wasmMs": 222.69999999995343,
+        "worker": {
+          "total": 314.3999999999651,
+          "compute": 303.29999999998836,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 2,
+      "profile": "chromium-4x",
+      "throttle": 4,
+      "loadBefore": 1.4,
+      "loadAfter": 1.09,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 2.3999999999650754,
+        "instantiateMs": 0,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 8212.899999999965,
+        "jsMs": 726,
+        "wasmMs": 399.69999999995343,
+        "wasmChunkMs": 10.299999999988358,
+        "worker": {
+          "total": 184.89999999996508,
+          "compute": 170.29999999998836,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.536941032801806e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "d23693d559727cf8",
+          "js": "66212a4df3e50a9f",
+          "wasm": "66212a4df3e50a9f"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 3208,
+        "wasmChunkMs": 1.099999999976717,
+        "jsChunkMs": 2.7999999999883585,
+        "jsMs": 1038.2999999999884,
+        "wasmMs": 902.3999999999651,
+        "worker": {
+          "total": 329.0999999999767,
+          "compute": 311.5,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 2,
+      "profile": "firefox",
+      "throttle": 1,
+      "loadBefore": 1.09,
+      "loadAfter": 1.05,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 1,
+        "instantiateMs": 0,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 1563,
+        "jsMs": 170,
+        "wasmMs": 1813,
+        "wasmChunkMs": 46,
+        "worker": {
+          "total": 220,
+          "compute": 202,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.4892623667951406e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "2eacd72e7ba75a0c",
+          "js": "5619e4faf4a49fcf",
+          "wasm": "5619e4faf4a49fcf"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 382,
+        "wasmChunkMs": 2,
+        "jsChunkMs": 1,
+        "jsMs": 269,
+        "wasmMs": 1577,
+        "worker": {
+          "total": 293,
+          "compute": 274,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 2,
+      "profile": "webkit",
+      "throttle": 1,
+      "loadBefore": 1.05,
+      "loadAfter": 1.04,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 1,
+        "instantiateMs": 0,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 1362,
+        "jsMs": 86,
+        "wasmMs": 75,
+        "wasmChunkMs": 2,
+        "worker": {
+          "total": 194,
+          "compute": 184,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.3456105890986711e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "5e70116192193834",
+          "js": "5f60b93aacc3fee0",
+          "wasm": "5f60b93aacc3fee0"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 451,
+        "wasmChunkMs": 0,
+        "jsChunkMs": 0,
+        "jsMs": 158,
+        "wasmMs": 106,
+        "worker": {
+          "total": 231,
+          "compute": 220,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 3,
+      "profile": "chromium",
+      "throttle": 1,
+      "loadBefore": 1.04,
+      "loadAfter": 1.02,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 0.40000000002328306,
+        "instantiateMs": 0.09999999997671694,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 1936.5,
+        "jsMs": 154.89999999990687,
+        "wasmMs": 87,
+        "wasmChunkMs": 2.5,
+        "worker": {
+          "total": 170.59999999997672,
+          "compute": 159.09999999997672,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.536941032801806e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "d23693d559727cf8",
+          "js": "66212a4df3e50a9f",
+          "wasm": "66212a4df3e50a9f"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 737.2000000000698,
+        "wasmChunkMs": 0.40000000002328306,
+        "jsChunkMs": 0.6999999999534339,
+        "jsMs": 240.80000000004657,
+        "wasmMs": 222,
+        "worker": {
+          "total": 315.10000000009313,
+          "compute": 303.69999999995343,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 3,
+      "profile": "chromium-4x",
+      "throttle": 4,
+      "loadBefore": 1.02,
+      "loadAfter": 1,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 1.8000000000465661,
+        "instantiateMs": 0,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 8263.20000000007,
+        "jsMs": 736.7999999999302,
+        "wasmMs": 394.10000000009313,
+        "wasmChunkMs": 10.599999999976717,
+        "worker": {
+          "total": 177.30000000004657,
+          "compute": 161.90000000002328,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.536941032801806e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "d23693d559727cf8",
+          "js": "66212a4df3e50a9f",
+          "wasm": "66212a4df3e50a9f"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 3163.5,
+        "wasmChunkMs": 1.2000000000698492,
+        "jsChunkMs": 3,
+        "jsMs": 1007.5,
+        "wasmMs": 472.29999999993015,
+        "worker": {
+          "total": 329.4000000000233,
+          "compute": 313.5999999999767,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 3,
+      "profile": "firefox",
+      "throttle": 1,
+      "loadBefore": 1,
+      "loadAfter": 1,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 1,
+        "instantiateMs": 1,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 1560,
+        "jsMs": 170,
+        "wasmMs": 1819,
+        "wasmChunkMs": 46,
+        "worker": {
+          "total": 219,
+          "compute": 197,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.4892623667951406e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "2eacd72e7ba75a0c",
+          "js": "5619e4faf4a49fcf",
+          "wasm": "5619e4faf4a49fcf"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 383,
+        "wasmChunkMs": 3,
+        "jsChunkMs": 1,
+        "jsMs": 278,
+        "wasmMs": 1575,
+        "worker": {
+          "total": 291,
+          "compute": 272,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    },
+    {
+      "round": 3,
+      "profile": "webkit",
+      "throttle": 1,
+      "loadBefore": 1,
+      "loadAfter": 1.07,
+      "loaded": false,
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+      "repeats": 5,
+      "wasm": {
+        "bytes": 1120,
+        "compileMs": 1,
+        "instantiateMs": 0,
+        "memoryPages": 1,
+        "memoryBytesAfter": 131072
+      },
+      "gls": {
+        "n": 1882,
+        "m": 20000,
+        "baselineMs": 1364,
+        "jsMs": 87,
+        "wasmMs": 76,
+        "wasmChunkMs": 2,
+        "worker": {
+          "total": 192,
+          "compute": 181,
+          "bytes": 160000
+        },
+        "jsVsBaseline": 1.3456105890986711e-10,
+        "wasmVsJs": 0,
+        "sha": {
+          "baseline": "5e70116192193834",
+          "js": "5f60b93aacc3fee0",
+          "wasm": "5f60b93aacc3fee0"
+        }
+      },
+      "bls": {
+        "n": 1882,
+        "periods": 12000,
+        "baselineMs": 453,
+        "wasmChunkMs": 0,
+        "jsChunkMs": 1,
+        "jsMs": 159,
+        "wasmMs": 108,
+        "worker": {
+          "total": 231,
+          "compute": 221,
+          "bytes": 96000
+        },
+        "wasmVsJs": 0,
+        "jsVsBaseline": 0,
+        "argmax": {
+          "baseline": 3360,
+          "js": 3360,
+          "wasm": 3360
+        },
+        "sha": {
+          "baseline": "530fe7a650f06eb0",
+          "js": "530fe7a650f06eb0",
+          "wasm": "530fe7a650f06eb0"
+        }
+      }
+    }
+  ]
+}

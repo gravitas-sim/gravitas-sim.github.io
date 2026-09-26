@@ -1,0 +1,60 @@
+{
+  "binary": "/usr/bin/firefox",
+  "loadBefore": 1.46,
+  "loadAfter": 1.58,
+  "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:156.0) Gecko/20100101 Firefox/156.0",
+  "repeats": 5,
+  "wasm": {
+    "bytes": 1120,
+    "compileMs": 6,
+    "instantiateMs": 0,
+    "memoryPages": 1,
+    "memoryBytesAfter": 131072
+  },
+  "gls": {
+    "n": 1882,
+    "m": 20000,
+    "baselineMs": 1554,
+    "jsMs": 157,
+    "wasmMs": 80,
+    "wasmChunkMs": 2,
+    "worker": {
+      "total": 185,
+      "compute": 167,
+      "bytes": 160000
+    },
+    "jsVsBaseline": 1.4892623667951406e-10,
+    "wasmVsJs": 0,
+    "sha": {
+      "baseline": "2eacd72e7ba75a0c",
+      "js": "5619e4faf4a49fcf",
+      "wasm": "5619e4faf4a49fcf"
+    }
+  },
+  "bls": {
+    "n": 1882,
+    "periods": 12000,
+    "baselineMs": 275,
+    "wasmChunkMs": 0,
+    "jsChunkMs": 1,
+    "jsMs": 190,
+    "wasmMs": 103,
+    "worker": {
+      "total": 213,
+      "compute": 199,
+      "bytes": 96000
+    },
+    "wasmVsJs": 0,
+    "jsVsBaseline": 0,
+    "argmax": {
+      "baseline": 3360,
+      "js": 3360,
+      "wasm": 3360
+    },
+    "sha": {
+      "baseline": "530fe7a650f06eb0",
+      "js": "530fe7a650f06eb0",
+      "wasm": "530fe7a650f06eb0"
+    }
+  }
+}

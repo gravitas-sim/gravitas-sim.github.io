@@ -1,0 +1,35 @@
+| Profile | rounds | GLS baseline | GLS optimized JS | GLS WASM | WASM / JS | JS / baseline | BLS baseline | BLS optimized JS | BLS WASM | WASM / JS | JS / baseline |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| chromium | 3 | 1937 ms | 152 ms | 87.0 ms | 1.75x | 12.75x | 737 ms | 241 ms | 222 ms | 1.08x | 3.06x |
+| chromium-4x | 3 | 8241 ms | 726 ms | 394 ms | 1.84x | 11.35x | 3187 ms | 1033 ms | 902 ms | 1.15x | 3.08x |
+| firefox | 3 | 1560 ms | 170 ms | 1813 ms | 0.09x | 9.18x | 383 ms | 275 ms | 1576 ms | 0.17x | 1.39x |
+| webkit | 3 | 1364 ms | 87.0 ms | 75.0 ms | 1.16x | 15.68x | 453 ms | 158 ms | 106 ms | 1.49x | 2.87x |
+
+Cold load (low-end): 1120 bytes; 1.80 ms compile + instantiate
+  chromium: compile 0.40 ms, instantiate 0.10 ms, memory after 131072 bytes
+  chromium-4x: compile 1.80 ms, instantiate 0.00 ms, memory after 131072 bytes
+  firefox: compile 1.00 ms, instantiate 1.00 ms, memory after 131072 bytes
+  webkit: compile 1.00 ms, instantiate 0.00 ms, memory after 131072 bytes
+
+Correctness (worst over every quiet round):
+  GLS optimized JS vs the direct formula, max relative: 1.54e-10
+  GLS WASM vs optimized JS, max relative: 0
+  BLS WASM vs optimized JS, max relative: 0
+  BLS optimized JS vs the production loop, max relative: 0.00e+0
+  GLS digests by profile: {"chromium":["{\"baseline\":\"d23693d559727cf8\",\"js\":\"66212a4df3e50a9f\",\"wasm\":\"66212a4df3e50a9f\"}"],"chromium-4x":["{\"baseline\":\"d23693d559727cf8\",\"js\":\"66212a4df3e50a9f\",\"wasm\":\"66212a4df3e50a9f\"}"],"firefox":["{\"baseline\":\"2eacd72e7ba75a0c\",\"js\":\"5619e4faf4a49fcf\",\"wasm\":\"5619e4faf4a49fcf\"}"],"webkit":["{\"baseline\":\"5e70116192193834\",\"js\":\"5f60b93aacc3fee0\",\"wasm\":\"5f60b93aacc3fee0\"}"]}
+  BLS digests by profile: {"chromium":["{\"baseline\":\"530fe7a650f06eb0\",\"js\":\"530fe7a650f06eb0\",\"wasm\":\"530fe7a650f06eb0\"}"],"chromium-4x":["{\"baseline\":\"530fe7a650f06eb0\",\"js\":\"530fe7a650f06eb0\",\"wasm\":\"530fe7a650f06eb0\"}"],"firefox":["{\"baseline\":\"530fe7a650f06eb0\",\"js\":\"530fe7a650f06eb0\",\"wasm\":\"530fe7a650f06eb0\"}"],"webkit":["{\"baseline\":\"530fe7a650f06eb0\",\"js\":\"530fe7a650f06eb0\",\"wasm\":\"530fe7a650f06eb0\"}"]}
+  BLS best trial by profile: {"chromium":{"baseline":3360,"js":3360,"wasm":3360},"chromium-4x":{"baseline":3360,"js":3360,"wasm":3360},"firefox":{"baseline":3360,"js":3360,"wasm":3360},"webkit":{"baseline":3360,"js":3360,"wasm":3360}}
+
+One call on the low-end profile: GLS 10.60 ms (512 frequencies); BLS 1.10 ms (16 periods; JS 2.80 ms)
+
+Worker (optimized JS), low-end:
+  gls: total 184.9 ms, compute 170.3 ms, overhead 14.6 ms = 8.6% of compute; main-thread optimized JS 726.0 ms
+  bls: total 329.4 ms, compute 313.6 ms, overhead 15.8 ms = 5.0% of compute; main-thread optimized JS 1033.4 ms
+
+Verdicts:
+  gls: speed 1.75 / 1.84 / 0.09 / 1.16 (min 0.09, needs 2.0) FAIL; cold pass; correct FAIL; call 10.60 ms pass; engines pass; toolchain pass (hand-encoded) -> C
+  bls: speed 1.08 / 1.15 / 0.17 / 1.49 (min 0.17, needs 2.0) FAIL; cold pass; correct pass; call 1.10 ms pass; engines pass; toolchain pass (hand-encoded) -> C
+  gls optimized JS replaces the baseline: 11.35x on low-end (needs 1.5) pass; tolerance FAIL -> NO
+  bls optimized JS replaces the baseline: 3.08x on low-end (needs 1.5) pass; tolerance pass -> YES
+  gls moves to a Worker: blocks 726 ms on low-end (over 100?) yes; overhead 8.6% (10% at most?) yes -> YES
+  bls moves to a Worker: blocks 1033 ms on low-end (over 100?) yes; overhead 5.0% (10% at most?) yes -> YES
