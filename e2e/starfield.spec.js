@@ -11,7 +11,7 @@
 // page, so nothing in the simulation on top can make a test pass or fail.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, requireScenarioKey } from './fixtures.js';
 
 /**
  * A cheap, stable fingerprint of what is on the starfield canvas.
@@ -107,6 +107,7 @@ async function sky(page, app, { scenario, seed = 'sky', tier } = {}) {
     }, tier);
   }
   if (scenario) {
+    await requireScenarioKey(page, scenario);
     await page.evaluate(
       async ({ scenario: key, seed: s }) => {
         const ui = await import('/js/ui.js');
