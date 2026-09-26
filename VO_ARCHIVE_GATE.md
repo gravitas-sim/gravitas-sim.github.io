@@ -11,7 +11,7 @@ names the evidence it rests on and the condition that would reverse it.
 | **Direct download** of archive products | **C**: no path from a discovery service a page can reach to a product it can fetch; curated packs stay the route |
 | **FITS** from the network | **C**, because direct download is C. Local-file import stays where [OBSERVATION_DATA_PACK_GATE.md](OBSERVATION_DATA_PACK_GATE.md) left it, with three new preconditions |
 | **VOTable** | **B**: TABLEDATA only, strict, on the main thread, answers capped at 512 KB |
-| **Sky view** (Aladin Lite) | **C**: 2,335 KiB against 2.9 KiB of deferred room, and third-party code; link out instead |
+| **Sky view** (Aladin Lite) | **C**: 2,335 KiB, a license that is not settled, and live tiles on every pan; link out instead |
 
 Nothing here stops a lane that has no other route. Prompt 19 runs for the two
 B pieces only, discovery and VOTable, as the slice specified below. Prompt 20
@@ -226,18 +226,34 @@ es2022), in the KiB that `tools/bundle-budget.mjs` counts:
 | all of it | 14.69 KiB | 6.41 KiB |
 | Aladin Lite 3.8.2 (`dist/aladin.min.js`, WASM embedded as base64) | **2,335 KiB** | 821 KiB |
 
-On `bb72842` the budgets stand at **818.4 of 830.0 KB initial** and **4,177.1
-of 4,180.0 KB deferred**, so **2.9 KiB** of deferred room is left.
+The accepted slice (discovery, VOTable, cache) is about 10.3 KiB before its
+interface and its strings. With them, estimate 15 KiB. Which ceiling that
+lands in depends on where the code lives, and there are three:
 
-- The accepted slice (discovery, VOTable, cache) is about 10.3 KiB before
-  its interface and its strings. With them, estimate 15 KiB.
-- **So Prompt 19 does not fit the budget as it stands.** The contract forbids
-  raising a budget under delegation, and the Prompt 19 slice below makes
-  finding the room its first acceptance criterion.
-- Nothing is added to the initial download. The import is reached only by a
-  reader who asks for it.
+| Ceiling | What it counts | On `bb72842` | The slice, in the Observatory behind a click |
+|---|---|---|---|
+| The application's deferred JavaScript (`tools/bundle-budget.mjs`) | lazy chunks reachable from `js/main.js` only | 4,177.1 of 4,180.0 KB | **nothing**: the Observatory is its own esbuild entry (`build.js`) |
+| The `/observatory/` route (`tools/route-budgets.json`) | what a fresh visit downloads | ceilings 97.2 KB (build) and 189.6 KB (sources) | **the button and its strings only**: the panel is a dynamic import |
+| The service-worker precache (`sw-manifest.js`) | every file under `js/`, as core | 446 files, 11,637 KB; no ceiling | about 15 KiB, 0.13% |
 
-Aladin Lite alone would add 56% to the entire deferred budget.
+So the slice fits, on one condition: none of it may leak into the
+application's graph or into the Observatory's opening download.
+
+- If the application's deferred total moves, the code leaked into
+  `js/main.js`'s graph.
+- If the Observatory route moves by more than its button, the panel is not
+  lazy, or its strings were put in the catalog the page opens with.
+
+The Prompt 19 slice below makes both of these acceptance criteria. Nothing is
+added to the initial download.
+
+The first draft of this section put the slice in the 4,180 KB ceiling with
+2.9 KiB to spare, and concluded it did not fit. That was wrong: that ceiling
+does not count the Observatory.
+
+Aladin Lite, lazily loaded the same way, would count against neither route.
+It would still be 2.3 MB in every reader's offline install, a fifth more than
+today, unless a capability package declared it `none`.
 
 ## Low-end memory and time
 
@@ -315,11 +331,11 @@ IndexedDB.
 engines with every failure named. B, not A, because:
 
 - only one data center is reachable;
-- each table needs a curated descriptor to be converted honestly;
-- the deferred budget has no room for it yet.
+- each table needs a curated descriptor to be converted honestly.
 
 It would become **C** if CDS stops sending CORS headers, if the live contract
-test in Prompt 19 fails, or if Prompt 19 cannot find the budget room. It
+test in Prompt 19 fails, or if the import cannot be kept out of the
+Observatory's opening download. It
 would move toward **A** if MAST's TAP or the ESA Gaia archive opens CORS.
 Re-run `probe.html` to check.
 
@@ -352,7 +368,8 @@ justify first.
 **Sky view: C.** Aladin Lite is the established component, maintained by
 CDS. But:
 
-- it is 2,335 KiB against 2.9 KiB of room;
+- it is 2,335 KiB, 821 gzipped. It is lazy-loadable, but it would be a fifth
+  more on every reader's offline install unless it were kept out of it;
 - its license is not settled. The 3.8.2 package's `LICENSE` file is the
   LGPL-3.0, while its `package.json` declares `GPL-3`. Bundling it would
   mean settling which one applies first;
@@ -365,9 +382,9 @@ coordinates, for example
 `https://aladin.cds.unistra.fr/AladinLite/?target=174.48586%20%2B67.32974&fov=0.2`.
 It costs zero bytes and runs no third-party code, and the reader chooses to go.
 
-This reverses only if a lesson needs a sky view inside Gravitas and Carl
-decides to pay for it in the budget. Writing a sky atlas is out of scope,
-as the prompt says.
+This reverses only if a lesson needs a sky view inside Gravitas, the
+license is settled, and Carl decides the weight and the tile traffic are
+worth it. Writing a sky atlas is out of scope, as the prompt says.
 
 ## What Prompt 19 builds from this
 
@@ -383,10 +400,11 @@ photometry, I/355/gaiadr3 for the cone and I/355/epphot for the epochs. Nothing
 else: no SIMBAD, no other VizieR table, no FITS from the network, no products,
 no sky view.
 
-First acceptance criterion, before any feature code: find deferred-budget
-savings for the whole slice (estimate 15 KiB against 2.9 KiB of room on
-bb72842), inside the existing ceilings. If the room cannot be found, STOP and
-report the measurement; do not raise a budget under delegation.
+Budget, as acceptance criteria: the import code and its strings load only
+when the reader asks for the import (an e2e test counts the requests before
+and after the click); the application's deferred total does not move; the
+/observatory/ route ceilings hold, with the button as the only addition. No
+ceiling is raised. If any of these fails, STOP and report the measurement.
 
 Where: an "Import from an archive" action in the Observatory, lazy-loaded
 behind the reader's click, never on a lesson route. It opens to a disclosure
