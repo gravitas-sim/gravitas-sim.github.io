@@ -145,6 +145,27 @@ function makeApp(page) {
         }
       );
 
+      // And the interface itself, which comes after the signal. revealApp()
+      // sets the flag and then reveals the control rail on a 200 ms timer
+      // (js/main.js), and until then the rail is visibility: hidden
+      // (css/styles.css). A click waits for its control to become visible;
+      // focus() does not, and on a hidden control it leaves focus on <body>.
+      // So a keyboard test that focused a rail control inside that gap pressed
+      // its keys on the page: uiCoherence's picker test failed on v2 that way,
+      // attempt and retry, after passing on the same tree in the pull request.
+      // A first visit holds the interface back behind the front door on
+      // purpose, so it is the one boot that does not wait for it.
+      if (!firstVisit) {
+        await page.waitForFunction(
+          () =>
+            document
+              .querySelector('.ui-container')
+              ?.classList.contains('showUI') === true,
+          null,
+          { timeout: 30_000 }
+        );
+      }
+
       // Pin the quality tier, because on 'auto' it is a measurement of the
       // machine running the test rather than a property of the application.
       //
