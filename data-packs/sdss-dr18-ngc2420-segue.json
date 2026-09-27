@@ -123,7 +123,7 @@
     }
   ],
   "reductions": [
-    "Every spectrum within 30 arcmin of the adopted center: the region SEGUE targeted around the cluster (Lee et al. 2008b). SEGUE chose its targets by color and magnitude, and two fibers could not be placed within 55 arcsec of each other, so this is not every star there.",
+    "Every spectrum within 30 arcmin of the adopted center: the region SEGUE targeted around the cluster (Lee et al. 2008b). SEGUE chose its targets by color and magnitude, and on any one plate two fibers could not be placed within 55 arcsec of each other, so this is not every star there.",
     "Positions are rounded to 0.00002 degree (0.07 arcsec), velocities to 0.01 km/s, Teff to 1 K, log g and [Fe/H] to 0.001 dex.",
     "The spectrum ids are left out; the query in the pack's manifest returns them."
   ],
@@ -345,8 +345,8 @@
   "offline": "optional",
   "derived": {
     "file": "js/data/observations/sdssNgc2420Segue.js",
-    "bytes": 23894,
-    "sha256": "b337e281c0e729488ca8a02887c7aa4890466bccbc94b8ee71f20ec1d25f03eb"
+    "bytes": 23911,
+    "sha256": "dda89bc2fc31361fcaa9c4b12dd97521252e7d67a77d478d13b0f9fc565899e0"
   },
   "validation": {
     "check": "the median radial velocity within 10 arcmin of the center is within 5 km/s of the cluster's",

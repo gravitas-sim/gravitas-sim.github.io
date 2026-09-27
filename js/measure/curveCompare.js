@@ -44,9 +44,12 @@ export class CurveError extends Error {
 export const LIMITS = Object.freeze({
   points: 20000,
   models: 40,
-  shifts: 20000,
+  shifts: 100000,
   // Grid cells of the distance field, per model.
   cells: 2e6,
+  // Lookups in all: points times shifts times models. What the comparison
+  // costs is this, not any one of them.
+  work: 4e8,
 });
 
 const INF = 1e20;
@@ -184,6 +187,13 @@ export async function compareCurves(points, models, o) {
       'shifts',
       `${dms.length * Es.length} shifts; the limit is ${LIMITS.shifts}`
     );
+  const work = px.length * dms.length * Es.length * models.length;
+  if (work > LIMITS.work)
+    throw new CurveError(
+      'work',
+      `${px.length} points at ${dms.length * Es.length} shifts of ${models.length} models is ${work.toPrecision(3)} comparisons; the limit is ${LIMITS.work}: fewer points, a coarser step or a narrower range`,
+      { work }
+    );
 
   // The grid, in scaled units: wide enough for every model shifted every way,
   // and a cell of a tenth of a scaled unit.
@@ -253,6 +263,9 @@ export async function compareCurves(points, models, o) {
   const top = results[order[0]];
   const alike = results.filter(r => r.stat <= top.stat * (1 + tolerance));
   const warnings = [];
+  // The best model first or last of the family: one beyond it might be better.
+  if (order[0] === 0 || order[0] === models.length - 1)
+    if (models.length > 1) warnings.push({ code: 'modelAtEdge' });
   if (top.dm === dms[0] || top.dm === dms.at(-1))
     warnings.push({ code: 'dmAtEdge' });
   if (top.E === Es[0] || top.E === Es.at(-1))

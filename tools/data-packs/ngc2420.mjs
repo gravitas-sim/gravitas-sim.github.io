@@ -481,7 +481,7 @@ export const NGC2420_SEGUE = {
         },
       ],
       reductions: [
-        'Every spectrum within 30 arcmin of the adopted center: the region SEGUE targeted around the cluster (Lee et al. 2008b). SEGUE chose its targets by color and magnitude, and two fibers could not be placed within 55 arcsec of each other, so this is not every star there.',
+        'Every spectrum within 30 arcmin of the adopted center: the region SEGUE targeted around the cluster (Lee et al. 2008b). SEGUE chose its targets by color and magnitude, and on any one plate two fibers could not be placed within 55 arcsec of each other, so this is not every star there.',
         'Positions are rounded to 0.00002 degree (0.07 arcsec), velocities to 0.01 km/s, Teff to 1 K, log g and [Fe/H] to 0.001 dex.',
         "The spectrum ids are left out; the query in the pack's manifest returns them.",
       ],

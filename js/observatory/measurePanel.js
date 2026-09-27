@@ -35,6 +35,7 @@ import {
 import { OPERATORS } from '../measure/tableOps.js';
 import { LIMITS } from '../measure/periodogram.js';
 import { BAND_PRESETS } from '../measure/bandIndex.js';
+import { LINES, presetWindows } from '../measure/spectrumLine.js';
 import { observedEntry } from '../notebook/observed.js';
 import { figure, figureSeries } from '../notebook/entry.js';
 import {
@@ -74,36 +75,8 @@ const el = (tag, attrs = {}, ...children) => {
   return node;
 };
 
-/** Balmer lines, vacuum and air, from the NIST Atomic Spectra Database. */
-export const LINES = Object.freeze([
-  {
-    id: 'ha',
-    name: 'H-alpha',
-    vacuum: 6564.61,
-    air: 6562.8,
-    half: 20,
-    gap: 25,
-    side: 40,
-  },
-  {
-    id: 'hb',
-    name: 'H-beta',
-    vacuum: 4862.68,
-    air: 4861.35,
-    half: 15,
-    gap: 20,
-    side: 30,
-  },
-  {
-    id: 'hg',
-    name: 'H-gamma',
-    vacuum: 4341.69,
-    air: 4340.47,
-    half: 12,
-    gap: 15,
-    side: 25,
-  },
-]);
+// The Balmer lines' presets are the line tool's (js/measure/spectrumLine.js).
+export { LINES };
 
 /**
  * @param {HTMLElement} root - The panel's <details>, whose summary stays
@@ -206,6 +179,12 @@ export function mountMeasurePanel(root, ctx) {
         reddening: t('obs.ms.q.reddening'),
         statistic: t('obs.ms.q.statistic'),
         R: t('obs.ms.q.R'),
+        n: t('obs.ms.q.n'),
+        median: t('obs.ms.q.median'),
+        mean: t('obs.ms.q.mean'),
+        sd: t('obs.ms.q.sd'),
+        min: t('obs.ms.q.min'),
+        max: t('obs.ms.q.max'),
       };
       return map[q.id] ?? q.id;
     };
@@ -219,6 +198,7 @@ export function mountMeasurePanel(root, ctx) {
         match: t('obs.ms.tool.match'),
         band: t('obs.ms.tool.band'),
         curve: t('obs.ms.tool.curve'),
+        describe: t('obs.ms.tool.describe'),
       })[id] ?? id;
     const value = q => {
       const unit = q.unit ? ` ${q.unit}` : '';
@@ -269,6 +249,8 @@ export function mountMeasurePanel(root, ctx) {
           return t('obs.ms.w.noPixels');
         case 'missingValues':
           return t('obs.ms.w.missingValues', { n: v.n, column: v.column });
+        case 'missingLeftOut':
+          return t('obs.ms.w.missingLeftOut', { n: v.n, column: v.column });
         case 'ambiguous':
           return t('obs.ms.w.ambiguous', { n: v.n });
         case 'referenceNotPositive':
@@ -279,6 +261,8 @@ export function mountMeasurePanel(root, ctx) {
           return t('obs.ms.w.dmAtEdge');
         case 'reddeningAtEdge':
           return t('obs.ms.w.reddeningAtEdge');
+        case 'modelAtEdge':
+          return t('obs.ms.w.modelAtEdge');
         case 'notUnique':
           return t('obs.ms.w.notUnique', { n: v.n });
         default:
@@ -433,6 +417,16 @@ export function mountMeasurePanel(root, ctx) {
             at: n.at,
           })
         );
+      else if (n.tool === 'describe')
+        out.push(
+          t('obs.ms.m.describe', {
+            id: n.id,
+            column:
+              ctx.state.view?.columns.find(c => c.id === p.column)?.name ??
+              p.column,
+            at: n.at,
+          })
+        );
       else if (n.tool === 'band')
         out.push(
           t('obs.ms.m.band', {
@@ -527,6 +521,10 @@ export function mountMeasurePanel(root, ctx) {
     }
     if (toolId === 'band') {
       return { medium: o.spectral?.medium ?? 'vacuum' };
+    }
+    if (toolId === 'describe') {
+      // The column plotted up, which is what the reader is looking at.
+      return { column: ctx.state.y ?? o.axes.y };
     }
     if (toolId === 'curve') {
       // A cluster's defaults: a distance modulus of 8 to 16, a reddening up to
@@ -631,17 +629,8 @@ export function mountMeasurePanel(root, ctx) {
       const grid = el('div', { class: 'ow-grid' });
       const fill = id => {
         const L = LINES.find(x => x.id === id);
-        const rest = L ? L[d.medium === 'air' ? 'air' : 'vacuum'] : null;
-        const c = rest ? rest * (1 + d.z) : null;
-        const v =
-          p ??
-          (c && {
-            line: [c - L.half, c + L.half],
-            blue: [c - L.gap - L.side, c - L.gap],
-            red: [c + L.gap, c + L.gap + L.side],
-            rest,
-          });
-        const r = x => (Number.isFinite(x) ? +x.toFixed(2) : '');
+        const v = p ?? (L ? presetWindows(L, d.medium, d.z) : null);
+        const r = x => (Number.isFinite(x) ? x : '');
         grid.replaceChildren(
           field(
             'msBlueLo',
@@ -800,6 +789,16 @@ export function mountMeasurePanel(root, ctx) {
         .addEventListener('change', e => fill(e.target.value));
       box.append(modeSel, grid);
       fill(p?.mode ?? d.mode);
+    } else if (toolId === 'describe') {
+      const cols = o.columns.filter(c => c.role !== 'label');
+      box.append(
+        select(
+          'msDescribeCol',
+          t('obs.ms.p.column'),
+          cols.map(c => [c.id, c.name]),
+          p?.column ?? d.column
+        )
+      );
     } else if (toolId === 'filter') {
       const cols = o.columns.filter(c => c.role !== 'uncertainty');
       const grid = el('div', { id: 'msConditions' });
@@ -1105,6 +1104,7 @@ export function mountMeasurePanel(root, ctx) {
         gain: val('msGain') === '' ? null : num('msGain', label('msGain')),
       };
     }
+    if (toolId === 'describe') return { column: val('msDescribeCol') };
     if (toolId === 'filter') {
       const o = ctx.state.view;
       const conditions = [];

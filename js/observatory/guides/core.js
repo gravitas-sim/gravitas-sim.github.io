@@ -69,7 +69,12 @@ export function fitValue(doc, name) {
  *   fitted    a fit of the target, with each setting (a dotted path into the
  *             fit's settings) in range, gives a parameter or derived value in
  *             range
+ *   changed   the target is open with a change of the kind asked for: a
+ *             derived column made of the columns named, a derived distance
+ *             on the sky, or a crop of the column named whose ends are each
+ *             in range
  *
+ * A measured check's `params` name dotted paths too (`model.where.feh`).
  * @param {object} check - The step's check
  * @param {{source?: object, changes?: object[], nodes?: object[],
  *   fits?: object[]}} w - The workspace
@@ -99,7 +104,7 @@ export function evaluateCheck(check, w, targets) {
         n.status === 'current' &&
         n.input?.observation === id &&
         Object.entries(check.params || {}).every(
-          ([k, v]) => n.params?.[k] === v
+          ([k, v]) => at(n.params || {}, k) === v
         )
     );
     if (!mine.length) return { ok: false, why: 'noMeasurement' };
@@ -128,7 +133,43 @@ export function evaluateCheck(check, w, targets) {
       ? { ok: true, evidence: d, value: v }
       : { ok: false, why: 'outside', vars: { value: v } };
   }
+  if (check.kind === 'changed') {
+    if (w.source?.id !== id) return { ok: false, why: 'notOpened' };
+    const found = [...(w.changes || [])]
+      .reverse()
+      .find(c => c.op === check.op && changeMatches(c, check));
+    if (!found) return { ok: false, why: 'noChange' };
+    return { ok: true, evidence: found, value: null };
+  }
   return { ok: false, why: 'unknown' };
+}
+
+/**
+ * Whether a change is the one a check describes: a derived sum of exactly the
+ * columns and factors named (in any order), a derived distance on the sky, or
+ * a crop of the column named with each end in its range.
+ */
+function changeMatches(c, check) {
+  if (c.op === 'derive' && check.terms) {
+    if (!c.terms || c.terms.length !== check.terms.length) return false;
+    const key = ts =>
+      ts
+        .map(t => `${t.column}:${t.factor}`)
+        .sort()
+        .join(',');
+    return (
+      key(c.terms) ===
+      key(check.terms.map(([column, factor]) => ({ column, factor })))
+    );
+  }
+  if (c.op === 'derive' && check.separation) return Boolean(c.separation);
+  if (c.op === 'crop')
+    return (
+      c.column === check.column &&
+      within(c.min, check.min) &&
+      within(c.max, check.max)
+    );
+  return false;
 }
 
 /**
@@ -165,8 +206,9 @@ export function seriesOf(view, { x: xId, y: yId } = {}) {
  * The answer context a suite's ANSWERS and CORRECT functions read:
  *
  *   c.quantity(stepId, name)  a quantity of the measurement or fit that
- *                             passed that step's check, or null
- *   c.evidence(stepId)        that measurement node or fit document
+ *                             passed that step's check, or a number of the
+ *                             change that did (a crop's `min`), or null
+ *   c.evidence(stepId)        that measurement node, fit document or change
  *   c.observation(target)     the target's observation, if it has been read
  *   c.pack(target)            its pack record (masks, crowding)
  *   c.series(target)          its light curve or spectrum, as seriesOf reads
@@ -195,6 +237,7 @@ export function answerContext(source) {
         const v = e.quantities.find(q => q.id === name)?.value;
         return Number.isFinite(v) ? v : null;
       }
+      if (e.op) return Number.isFinite(e[name]) ? e[name] : null;
       return fitValue(e, name);
     },
   };

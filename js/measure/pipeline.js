@@ -36,6 +36,7 @@ import {
 import { measureLine, VERSION as LINE_VERSION } from './spectrumLine.js';
 import { measureBand, VERSION as BAND_VERSION } from './bandIndex.js';
 import { compareCurves, VERSION as CURVE_VERSION } from './curveCompare.js';
+import { describeColumn, VERSION as DESCRIBE_VERSION } from './describe.js';
 import {
   measureFlux,
   measureBits,
@@ -399,6 +400,35 @@ export const TOOLS = Object.freeze({
           { code: 'noUncertainty' },
           ...r.warnings,
           ...(d.masked ? [{ code: 'maskedLeftOut', n: d.masked }] : []),
+        ],
+      };
+    },
+  },
+  /** A column's count, median, mean, spread and extremes (./describe.js). */
+  describe: {
+    kinds: ['table', 'time-series', 'spectrum'],
+    version: DESCRIBE_VERSION,
+    async run(o, p) {
+      const c = col(o, p.column);
+      if (!c || c.role === 'label')
+        throw new PipelineError('columns', `no number column ${p.column}`);
+      const r = describeColumn(c.values, { skip: masked(o) });
+      const unit = c.unit ?? '';
+      return {
+        raw: r,
+        quantities: [
+          q('n', r.n, '', KIND.MEASURED),
+          q('median', r.median, unit, KIND.MEASURED),
+          q('mean', r.mean, unit, KIND.MEASURED),
+          q('sd', r.sd, unit, KIND.MEASURED),
+          q('min', r.min, unit, KIND.MEASURED),
+          q('max', r.max, unit, KIND.MEASURED),
+        ],
+        warnings: [
+          ...(r.skipped ? [{ code: 'maskedLeftOut', n: r.skipped }] : []),
+          ...(r.missing
+            ? [{ code: 'missingLeftOut', n: r.missing, column: c.name }]
+            : []),
         ],
       };
     },

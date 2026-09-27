@@ -53,6 +53,8 @@ export const ES_GUIDES = {
   'gd.check.outside':
     'El resultado es {value}, no lo que pide este paso: revisa los ajustes que usaste.',
   'gd.check.noFit': 'Todavía no hay un ajuste de esta observación.',
+  'gd.check.noChange':
+    'El espacio de trabajo todavía no tiene ese cambio: el paso dice qué hacer.',
   'gd.check.fitSettings':
     'Hay un ajuste, pero no con los ajustes que pide este paso.',
   'gd.check.unknown': 'Este paso no se puede comprobar.',

@@ -55,6 +55,8 @@ export const EN_GUIDES = {
   'gd.check.outside':
     'The result is {value}, not what this step asks for: look at the settings you used.',
   'gd.check.noFit': 'There is no fit of this observation yet.',
+  'gd.check.noChange':
+    'The workspace does not hold that change yet: the step says what to make.',
   'gd.check.fitSettings':
     'There is a fit, but not with the settings this step asks for.',
   'gd.check.unknown': 'This step cannot be checked.',

@@ -314,6 +314,8 @@ function copyForCheck() {
     'tools/build-data-packs.mjs',
     'tools/data-packs',
     'js/observation.js',
+    // A catalog pack's table is read by its own decoder.
+    'js/tableObservation.js',
     // The aperture pack's check projects pixels through its world coordinates.
     'js/observatory/wcs.js',
     'js/data/observations',
@@ -566,11 +568,19 @@ describe('what a pack owes, and where it goes', () => {
     for (const pack of PACKS) {
       const m = json(pack.manifest);
       for (const c of m.source.citations.filter(c => c.doi))
-        expect(notice).toContain(c.doi);
-      const pkg = json(pack.capability);
-      for (const l of pkg.licenses) {
-        expect(licenses).toContain(`\`${l.scope}\``);
-        expect(pack.module.startsWith(l.scope.replace('**', ''))).toBe(true);
+        expect({
+          pack: pack.id,
+          doi: c.doi,
+          inNotice: notice.includes(c.doi),
+        }).toEqual({ pack: pack.id, doi: c.doi, inNotice: true });
+      // A pack without a capability package names its module in LICENSES.md
+      // itself; one with a package names the package's scope.
+      const scopes = pack.capability
+        ? json(pack.capability).licenses.map(l => l.scope)
+        : [pack.module];
+      for (const scope of scopes) {
+        expect(licenses).toContain(`\`${scope}\``);
+        expect(pack.module.startsWith(scope.replace('**', ''))).toBe(true);
       }
       expect(m.license.status).not.toBe('restricted');
     }
@@ -585,7 +595,17 @@ describe('what a pack owes, and where it goes', () => {
       const naming = files.filter(
         f => f !== pack.module && read(f).toString('utf8').includes(name)
       );
-      expect(naming).toEqual(['js/platform/builtins.js']);
+      // A pack no capability package ships is the Observatory's alone, and
+      // only its fixtures open it: main.js, which reaches the registry, never
+      // reaches it.
+      expect({ pack: pack.id, naming }).toEqual({
+        pack: pack.id,
+        naming: [
+          pack.capability === null
+            ? 'js/observatory/fixtures.js'
+            : 'js/platform/builtins.js',
+        ],
+      });
     }
   });
 

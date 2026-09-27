@@ -49,9 +49,10 @@ const DOCUMENTS = LESSONS * 2;
  */
 const GENERAL_DOCUMENTS = 2;
 const ACTIVITY_DOCUMENTS = 8;
-// The Exoplanet Observatory's guide and answer key (EXOPLANET_OBSERVATORY.md):
-// its investigations live in /observatory/, not in the lesson manifest.
-const OBSERVATORY_DOCUMENTS = 2;
+// The Observatory suites' guides and answer keys (EXOPLANET_OBSERVATORY.md,
+// STELLAR_POPULATIONS.md): their investigations live in /observatory/, not in
+// the lesson manifest.
+const OBSERVATORY_DOCUMENTS = 4;
 const ALL_DOCUMENTS =
   GENERAL_DOCUMENTS + OBSERVATORY_DOCUMENTS + ACTIVITY_DOCUMENTS + DOCUMENTS;
 

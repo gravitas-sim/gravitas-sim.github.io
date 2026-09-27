@@ -116,12 +116,54 @@ alike, and refuses an encoding it does not know rather than guessing.
 | `binned-relative-flux/1` | equal time bins as runs of bin indices; flux as little-endian int16 ppm about 1; error as one byte in steps of `errStepPpm` | ±3.3%: a transit | the first pack |
 | `binned-relative-flux/2` | the same, with the flux in steps of `fluxStepPpm` (a whole number, 1 to 1,000) | ±3.3% × the step: ±65% at 20 ppm | SDK 1.2.0, for a pulsating star |
 | `image-uint16/1` | little-endian 16-bit pixels, row by row from the lowest | 0 to 65,535 | SDK 1.1.0 |
+| `table-columns/1` | a table of sources, one entry per column: `offset + step × k` for the little-endian int16 or int32 `k`, the type's most negative value for a missing one | the column's range in steps: 65,535 or 4.3 × 10⁹ | SDK 1.4.0, for a catalog |
+
+`table-columns/1` is decoded by its own module, `js/tableObservation.js`, not
+by `js/observation.js`: that one loads with the catalog page, whose every byte
+is budgeted, and no catalog pack is a table. Each column's step is the
+rounding the pack's definition states it can stand (a magnitude to the
+millimag, a position to 0.04 arcsec), and the manifest records, per column,
+the type chosen and the largest rounding the encoding made
+(`tools/data-packs/table-columns.mjs`).
 
 `/2` is a new version rather than an optional field on `/1`: a reader of `/1`
 would take a stepped flux for parts per million, and misread it by the step.
 The pipeline refuses to clip a value that does not fit, so a star that varies
 too much for `/1` fails to build rather than building wrong
 (`tools/data-packs/tess-light-curve.mjs`).
+
+## Catalog packs: NGC 2420 and MIST's isochrones
+
+The stellar-populations suite (STELLAR_POPULATIONS.md) needed tables, a data
+type the format did not have: `dataType: "catalog"`, encoded as
+`table-columns/1`. Three packs use it, built by `tools/build-data-packs.mjs`
+from `tools/data-packs/ngc2420.mjs`.
+
+| Pack | What it holds | Raw products | Check |
+|---|---|---|---|
+| `sdss-dr18-ngc2420-photometry` | the 2301 stars SDSS DR18 measured cleanly within 14.14 arcmin of NGC 2420, with g, r and their errors | three SkyServer answers: the table, its counts by flag, and every detection near the core | stars brighter than g = 20 are more than 1.2 times as dense 3 to 8 arcmin out as 10 to 14.14 arcmin out (1.335) |
+| `sdss-dr18-ngc2420-segue` | the 517 SEGUE spectra within 30 arcmin, with SSPP's velocity, temperature, gravity and [Fe/H] and their errors, and g and r | two SkyServer answers: the table and its counts | the median velocity within 10 arcmin is within 5 km/s of 74.0 (74.79) |
+| `mist-sdss-isochrones` | MIST v1.2 isochrones in SDSS g and r at [Fe/H] −0.5, −0.25 and 0, log age 9.0 to 9.6: 1410 points | `MIST_v1.2_vvcrit0.0_SDSSugriz.txz`, 79,889,196 bytes | a 1 M☉ star on the solar-metallicity main sequence at log age 9.6 is within 0.1 dex of log L = 0 and 0.01 dex of the Sun's log Teff |
+
+What they prove about the format:
+
+- **SkyServer dates its answers,** so the SDSS pins are in the canonical form
+  `data-lines` (the answer without its comment lines), as the VizieR pins
+  are; the first packs to use a canonical pin.
+- **A selection a survey made is a reduction, stated.** The photometry's
+  reductions say that SDSS's standard photometry has almost nothing at the
+  cluster's crowded center (3 detections within 2 arcmin in PhotoObjAll) and
+  that its brightest giants are saturated; the SEGUE pack's, that its targets
+  were chosen by color and magnitude and that one plate could not place two
+  fibers within 55 arcsec. The checks were chosen not to depend on the
+  missing core.
+- **A model is a pack too,** with `origin: "model"`: the isochrones say what
+  they are wherever the Observatory shows them. MIST states no license;
+  `no-license-stated` carries the basis for shipping a thinned subset.
+- **No capability package ships them** (`capability: null`). They are the
+  Observatory's alone, opened by its fixtures, so main.js, which reaches the
+  builtin registry, never reaches them; the service worker precaches them as
+  optional, like the page that opens them (`tools/build-service-worker.mjs`).
 
 ## Packs from outside the core
 

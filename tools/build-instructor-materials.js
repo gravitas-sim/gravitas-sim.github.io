@@ -66,6 +66,11 @@ import {
   exoplanetInstructorGuide,
 } from '../js/exoplanetGuideDocs.js';
 import { EXOPLANET_KEY } from '../js/data/exoplanetAnswerKey.js';
+import {
+  populationsAnswerKey,
+  populationsInstructorGuide,
+} from '../js/populationsGuideDocs.js';
+import { POPULATIONS_KEY } from '../js/data/populationsAnswerKey.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** A path as the repository sees it, for a message. */
@@ -381,6 +386,22 @@ function renderDocuments(version, { stub = false } = {}) {
     'key',
     null,
     exoplanetAnswerKey(EXOPLANET_KEY, { version })
+  );
+  // And the stellar-populations suite's (STELLAR_POPULATIONS.md), whose key
+  // tools/populations-reference.mjs writes the same way.
+  add(
+    'populations-observatory-guide',
+    'Stars and Their Populations - Instructor Guide.pdf',
+    'guide',
+    null,
+    populationsInstructorGuide({ version })
+  );
+  add(
+    'populations-observatory-key',
+    'Stars and Their Populations - Answer Key.pdf',
+    'key',
+    null,
+    populationsAnswerKey(POPULATIONS_KEY, { version })
   );
 
   // Classroom activities. One guide per activity covering all three formats,

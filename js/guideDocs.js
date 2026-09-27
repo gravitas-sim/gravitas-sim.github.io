@@ -41,7 +41,10 @@ const TOOL_NAMES = {
   filter: 'filter',
   match: 'cross-match',
   curve: 'model comparison',
+  describe: 'column summary',
 };
+/** And each change a check looks for. */
+const CHANGE_NAMES = { derive: 'new column', crop: 'crop' };
 
 /**
  * @typedef {object} SuiteDocs
@@ -74,6 +77,11 @@ function usesOf(g, say) {
       tools.add(TOOL_NAMES[s.check.tool] ?? s.check.tool);
     if (s.check?.kind === 'fitted') tools.add('model fit');
     if (s.check?.kind === 'folded') tools.add('fold');
+    if (s.check?.kind === 'changed')
+      tools.add(CHANGE_NAMES[s.check.op] ?? s.check.op);
+    // A tool a step sends the reader to without checking its node: its
+    // answer is checked instead.
+    for (const u of s.uses || []) tools.add(TOOL_NAMES[u] ?? u);
     if (s.show) tools.add('computed panels');
   }
   return { targets: [...targets], tools: [...tools] };

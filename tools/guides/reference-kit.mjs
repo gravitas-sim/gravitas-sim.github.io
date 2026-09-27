@@ -9,6 +9,7 @@
 //   openTargets   every target, opened as the page opens it: a fixture, or a
 //                 catalog pack read from extensions/ as an install delivers it
 //   measure       a measurement-pipeline tool run on an observation, as a node
+//   periodDefaults  the period search's default range
 //   boxDefaults   the box search's default range (js/observatory/
 //                 measurePanel.js defaults())
 //   fitDocument   a transit fit with the fit panel's default bounds
@@ -55,9 +56,17 @@ export async function openTargets(targets) {
   return out;
 }
 
-/** The measurement a reader makes, as a pipeline node. */
-export async function measure(o, tool, params) {
-  const out = await TOOLS[tool].run(o, params, { skyOf, pixelScale });
+/**
+ * The measurement a reader makes, as a pipeline node. `hooks` are what the
+ * page lends a tool beyond the image's coordinates: the model table a curve
+ * comparison reads, say.
+ */
+export async function measure(o, tool, params, hooks = {}) {
+  const out = await TOOLS[tool].run(o, params, {
+    skyOf,
+    pixelScale,
+    ...hooks,
+  });
   return {
     tool,
     status: 'current',

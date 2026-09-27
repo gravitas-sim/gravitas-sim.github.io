@@ -201,7 +201,7 @@ export function mountGuidePanel(root, ctx) {
       run.record[step.id] = {
         passed: true,
         value: r.value,
-        ...(r.evidence?.quantities || r.evidence?.results
+        ...(r.evidence?.quantities || r.evidence?.results || r.evidence?.op
           ? { values: valuesOf(r.evidence) }
           : {}),
       };
@@ -224,6 +224,10 @@ export function mountGuidePanel(root, ctx) {
   function valuesOf(e) {
     if (e.quantities)
       return Object.fromEntries(e.quantities.map(q => [q.id, q.value]));
+    if (e.op)
+      return Object.fromEntries(
+        Object.entries(e).filter(([, v]) => Number.isFinite(v))
+      );
     const fit = e.results?.fit;
     return Object.fromEntries(
       [...(fit?.parameters || []), ...(fit?.derived || [])].map(p => [

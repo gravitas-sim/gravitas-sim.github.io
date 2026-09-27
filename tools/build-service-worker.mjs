@@ -128,6 +128,19 @@ const FILES = [
 ];
 
 /**
+ * Data only the Observatory opens: the packs tools/build-data-packs.mjs builds
+ * with no capability package (`capability: null`), so no package declares
+ * their offline class. Optional, like the page that opens them, rather than
+ * core as the walk of js/ would make them. Named rather than inferred;
+ * tests/dataPacks.test.js fails for a pack left off.
+ */
+const OBSERVATORY_ONLY = new Set([
+  'js/data/observations/sdssNgc2420Photometry.js',
+  'js/data/observations/sdssNgc2420Segue.js',
+  'js/data/observations/mistSdssIsochrones.js',
+]);
+
+/**
  * Paths kept out of the precache. Matched against the repo-relative path.
  *
  * The translated lesson shadows are the deliberate exclusion; see the header.
@@ -257,7 +270,10 @@ export async function buildManifest() {
   const collected = FILES.map(f => ({ path: f.path, core: f.core }));
   for (const { dir, ext, core } of TREES) {
     for (const path_ of await walk(dir, ext))
-      collected.push({ path: path_, core });
+      collected.push({
+        path: path_,
+        core: core && !OBSERVATORY_ONLY.has(path_),
+      });
   }
 
   const kept = applyCapabilityOffline(

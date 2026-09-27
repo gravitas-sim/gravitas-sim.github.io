@@ -149,6 +149,8 @@ export const EN_MEASURE = {
   'obs.ms.w.noPixels': 'No pixel has that flag.',
   'obs.ms.w.missingValues':
     '{n} rows have no value for {column}, and pass no test on it.',
+  'obs.ms.w.missingLeftOut':
+    '{n} rows have no value for {column} and were left out.',
   'obs.ms.w.ambiguous':
     '{n} rows had more than one candidate; each took the nearest.',
   'obs.ms.pipeline': 'The pipeline',
@@ -236,6 +238,7 @@ export const EN_MEASURE = {
   'obs.ms.or': ' or ',
   'obs.ms.tool.band': 'Band index on a spectrum (TiO5 and others)',
   'obs.ms.tool.curve': 'Compare with model curves (isochrones)',
+  'obs.ms.tool.describe': 'Describe a column: count, median, mean, spread',
   'obs.ms.q.index': 'index',
   'obs.ms.q.definition': 'definition',
   'obs.ms.q.logAge': 'log age',
@@ -247,6 +250,12 @@ export const EN_MEASURE = {
   'obs.ms.q.reddening': 'reddening',
   'obs.ms.q.statistic': 'distance statistic',
   'obs.ms.q.R': 'extinction per unit reddening',
+  'obs.ms.q.n': 'values',
+  'obs.ms.q.median': 'median',
+  'obs.ms.q.mean': 'mean',
+  'obs.ms.q.sd': 'standard deviation',
+  'obs.ms.q.min': 'smallest',
+  'obs.ms.q.max': 'largest',
   'obs.ms.w.referenceNotPositive':
     'The reference windows’ flux is not above zero, so the index means nothing.',
   'obs.ms.w.noUncertainty':
@@ -255,6 +264,8 @@ export const EN_MEASURE = {
     'The best distance modulus is at the edge of the range searched: widen it.',
   'obs.ms.w.reddeningAtEdge':
     'The best reddening is at the edge of the range searched.',
+  'obs.ms.w.modelAtEdge':
+    'The best model is the first or the last of the family: one beyond it, which the model table does not hold, might fit better.',
   'obs.ms.w.notUnique':
     '{n} models fit these points about as well as the best: the data cannot tell them apart.',
   'obs.ms.p.band.tio5': 'TiO5',
@@ -284,6 +295,8 @@ export const EN_MEASURE = {
   'obs.ms.overlay': '{id}, {tool}: the best model (log age {key}), shifted',
   'obs.ms.m.band':
     '{id}: band index, the mean flux in {band} Å over the mean in {reference} Å, the windows in {medium} ({cite}); each window’s mean weighted by how much of each sample’s bin it covers; measured {at} changes in.',
+  'obs.ms.m.describe':
+    '{id}: the values of {column} in rows that are not masked, their count, median, mean, standard deviation (n − 1), smallest and largest; measured {at} changes in.',
   'obs.ms.m.curve':
     '{id}: model-curve comparison with MIST isochrones at [Fe/H] {feh}: distance modulus over {dm}, reddening over {E} (first, last, step), extinction {R} per unit reddening; distances in units of {scale} mag, capped at {cap}; models within {tolerance} of the best reported alike; measured {at} changes in.',
 };
