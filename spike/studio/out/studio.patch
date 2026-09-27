@@ -1,0 +1,253 @@
+--- a/js/data/investigations/twelve-nights.js
++++ b/js/data/investigations/twelve-nights.js
+@@ -99,29 +99,11 @@
+       sid: 'the-allocation',
+       bind: TARGET,
+       type: 'read',
+-      title: 'Twelve nights',
++      title: 'Twelve nights, and a catch',
+       setup: RV_LAB,
+-      body: `A time allocation committee has given you <strong>twelve
+-             nights</strong> on one star: HD&nbsp;209458, from
+-             <strong>La&nbsp;Silla</strong> in Chile, spread anywhere you like
+-             across a twenty-night run in September. One measurement a night,
+-             8&nbsp;m/s each. You may choose the nights and you may choose the
+-             hour.
+-             \n\nThere is a catch, and it is not a small one. HD&nbsp;209458
+-             sits at declination <strong>+18.9&deg;</strong> and La&nbsp;Silla
+-             at latitude <strong>&minus;29.3&deg;</strong>. The target never
+-             rises higher than <strong>41.9&deg;</strong> above the horizon, so
+-             it is never seen through less than one and a half atmospheres, and
+-             it is above the usual <strong>airmass&nbsp;2</strong> limit for
+-             only part of each night.
+-             \n\nOne thing to be clear about before you start, because the rest
+-             of the lesson depends on it. <strong>The sky here is real and the
+-             star is not.</strong> The observing windows are computed for the
+-             real site, the real target and real dates in September 2026,
+-             against published ephemerides. The velocities you will collect
+-             come from the simulation on screen. The only thing that crosses
+-             between the two is the list of times &mdash; which is exactly what
+-             crosses between a planning tool and a telescope.`,
++      body: `A committee has given you <strong>twelve nights</strong> on HD 209458 from La Silla.
++
++The target never rises high: plan around that.`,
+       tip: 'Gravitas does not model the Earth’s rotation. js/observingWindow.js computes it separately, from the same spherical trigonometry an observatory uses, and hands the schedule over as a list of numbers.',
+     },
+     {
+@@ -160,7 +142,7 @@
+           id: 'windowHours',
+           label: 'Usable window per night',
+           unit: 'h',
+-          hint: '4.96',
++          hint: '5.0',
+         },
+         {
+           id: 'driftMinutes',
+@@ -220,7 +202,7 @@
+       options: [
+         'no particular frequency: the times are yours to choose, so the window is whatever you make it',
+         'one cycle per day, because there is one window per night and everything you book is inside one',
+-        'one cycle per twenty days, the length of the run',
++        'A comb whose teeth drift by four minutes a night',
+         'the planet’s own frequency, because that is what the schedule is being used to find',
+       ],
+       answer: 1,
+@@ -233,6 +215,12 @@
+                 what it is pointed at, not of how careful you are.`,
+     },
+     {
++      sid: 'studio-inserted-read',
++      type: 'read',
++      title: 'A step the Studio inserted',
++      body: 'Read this before you plan: the <strong>window</strong> moves every night.',
++    },
++    {
+       sid: 'the-three-plans',
+       bind: TARGET,
+       type: 'explore',
+@@ -368,6 +356,22 @@
+                 about removing a problem.`,
+     },
+     {
++      sid: 'studio-inserted-question',
++      type: 'question',
++      kind: 'choice',
++      title: 'A question the Studio inserted',
++      body: 'The window opens earlier each night.',
++      prompt: 'By about how much does it open earlier each night?',
++      options: [
++        'About one minute',
++        'About four minutes',
++        'About an hour',
++        'It does not move',
++      ],
++      answer: 1,
++      because: 'The window follows the sidereal day, which is about four minutes shorter than the solar day.',
++    },
++    {
+       sid: 'commit-and-observe',
+       bind: TARGET,
+       type: 'explore',
+@@ -467,47 +471,6 @@
+ 
+     // --- Part 4: what would fix it ----------------------------------------
+     {
+-      sid: 'sixty-nights-would-not-help',
+-      bind: TARGET,
+-      type: 'question',
+-      kind: 'choice',
+-      title: 'Ask the committee for more nights',
+-      requires: ['read-what-you-got'],
+-      body: `The obvious response to a marginal result is to ask for more
+-             time. Suppose the committee comes back with <strong>sixty
+-             nights</strong> over twelve weeks instead of twelve nights over
+-             three, on the same star from the same telescope.
+-             \n\nThe table below was measured, not guessed: sixteen noise draws
+-             per row, the same planet and the same 8 m/s each time.
+-             \n\n<strong>12 epochs, window center:</strong> window power 1.000,
+-             recovered 1/16.
+-             \n<strong>60 epochs, window center:</strong> window power 0.971,
+-             recovered 13/16.
+-             \n<strong>12 epochs, both ends:</strong> window power 0.696,
+-             recovered 13/16.
+-             \n<strong>60 epochs, both ends:</strong> window power 0.810,
+-             recovered 16/16.`,
+-      prompt:
+-        'What do the four rows say about what the extra nine weeks bought?',
+-      options: [
+-        'Sixty nights is decisively better: more data is more data',
+-        'Almost nothing that the placement did not already buy — twelve well-placed epochs match sixty badly-placed ones, and the sidereal peak never falls below 0.7 in any row',
+-        'Nothing at all: the number of epochs has no effect on anything',
+-        'The extra nights hurt, because the window power went up',
+-      ],
+-      answer: 1,
+-      because: `Twelve epochs using the full width of the window do as well as
+-                sixty taken at the best moment of each night &mdash; 13 out of
+-                16 either way. The decision that mattered was made in an
+-                afternoon, and it was about where inside a five-hour window to
+-                point the telescope.
+-                \n\nAnd look at the window power down the column: 1.000, 0.971,
+-                0.696, 0.810. It never goes below about 0.7, whatever you do.
+-                More nights from one site add epochs to the same comb; they
+-                cannot take the comb away. That is not a statement about this
+-                star or this telescope. It is arithmetic about one longitude.`,
+-    },
+-    {
+       sid: 'what-would-actually-fix-it',
+       bind: TARGET,
+       type: 'question',
+--- a/js/data/investigations/es/twelve-nights.js
++++ b/js/data/investigations/es/twelve-nights.js
+@@ -67,6 +67,7 @@
+       because:
+         'Una visita por noche significa que los tiempos son un peine con un espaciado de aproximadamente un día, y un peine tiene un peine por ventana espectral: un pico en cada múltiplo de un ciclo al día. Puedes mover cada época unas horas dentro de su ventana y puedes saltarte noches, pero no puedes poner una medida a media tarde. El pico es una propiedad de dónde está el telescopio y hacia dónde apunta, no de lo cuidadoso que seas.',
+     },
++    null,
+     {
+       title: 'Tres planes',
+       body: 'Ahora el panel inferior. Es la ventana espectral de las doce épocas que el planificador ha colocado, hasta dos ciclos por día, con la frecuencia del día sideral marcada.\n\nPrueba los tres ajustes predefinidos en orden y mira el número etiquetado <strong>potencia de la ventana en el día sideral</strong>. Después coge el deslizador <em>Usar esta fracción de cada ventana</em> y muévelo despacio de 0 a 1 con el reparto en 20 noches.',
+@@ -114,6 +115,7 @@
+       because:
+         'Una potencia de ventana de casi exactamente 1 significa que el alias ajusta los datos igual de bien que la verdad, así que cuál de los dos sale más bajo lo decide el ruido y no el planeta. En 0,7 la verdad suele ganar. Fíjate en el «suele»: el pico es más pequeño, no ha desaparecido, y esta es una lección sobre mejorar tus probabilidades, no sobre eliminar un problema.',
+     },
++    null,
+     {
+       title: 'Confirma el calendario',
+       body: 'Abre <strong>Velocidad Radial</strong> en la lista de Herramientas y marca <strong>Campaña de observación sintética</strong>. Pon <strong>Incertidumbre 8 m/s</strong>, <strong>Semilla de ruido twelve-1</strong> y <strong>Calendario: Tiempos explícitos</strong>.\n\nAhora vuelve al planificador, ponlo en <em>Repartidas, el mejor momento</em>, y copia la lista de épocas de la última fila de la lectura al campo <strong>Lista de épocas</strong> del calendario. Déjalo correr y apunta el mejor periodo.\n\nDespués cambia el planificador a <em>Repartidas, ambos extremos</em>, copia la nueva lista en el mismo campo y ejecútalo otra vez. Deja todo lo demás exactamente como estaba.\n\nEl ruido va indexado por el <em>número</em> de época, así que la primera medida de la segunda campaña recibe el mismo sorteo que la primera medida de la primera. Las dos campañas se diferencian en los doce tiempos y en nada más.',
+@@ -128,20 +130,6 @@
+       ],
+     },
+     {
+-      title: 'Pídele más noches al comité',
+-      body: 'La respuesta obvia a un resultado dudoso es pedir más tiempo. Supón que el comité vuelve con <strong>sesenta noches</strong> en doce semanas en vez de doce noches en tres, sobre la misma estrella y desde el mismo telescopio.\n\nLa tabla de abajo está medida, no supuesta: dieciséis sorteos de ruido por fila, el mismo planeta y los mismos 8 m/s cada vez.\n\n<strong>12 épocas, centro de la ventana:</strong> potencia de ventana 1,000, recuperado 1/16.\n<strong>60 épocas, centro de la ventana:</strong> potencia de ventana 0,971, recuperado 13/16.\n<strong>12 épocas, ambos extremos:</strong> potencia de ventana 0,696, recuperado 13/16.\n<strong>60 épocas, ambos extremos:</strong> potencia de ventana 0,810, recuperado 16/16.',
+-      prompt:
+-        '¿Qué dicen las cuatro filas sobre lo que compraron las nueve semanas de más?',
+-      options: [
+-        'Sesenta noches es decisivamente mejor: más datos son más datos',
+-        'Casi nada que la colocación no comprara ya: doce épocas bien colocadas igualan a sesenta mal colocadas, y el pico sideral no baja de 0,7 en ninguna fila',
+-        'Nada en absoluto: el número de épocas no influye en nada',
+-        'Las noches de más perjudican, porque la potencia de la ventana subió',
+-      ],
+-      because:
+-        'Doce épocas que usan todo el ancho de la ventana rinden tanto como sesenta tomadas en el mejor momento de cada noche: 13 de 16 en ambos casos. La decisión que importaba se tomó en una tarde, y trataba de en qué punto de una ventana de cinco horas apuntar el telescopio.\n\nY mira la potencia de la ventana en esa columna: 1,000, 0,971, 0,696, 0,810. Nunca baja de 0,7, hagas lo que hagas. Más noches desde un solo sitio añaden épocas al mismo peine; no pueden quitar el peine. Eso no es una afirmación sobre esta estrella ni sobre este telescopio. Es aritmética sobre una sola longitud.',
+-    },
+-    {
+       title: 'Entonces, ¿qué lo arreglaría?',
+       body: 'Tienes un calendario con un pico en 1,00274 ciclos al día que no consigues bajar de 0,7, y un periodo que podría ser de 3,52 días o podría ser de 0,78.',
+       prompt:
+--- a/js/data/instructorContent.js
++++ b/js/data/instructorContent.js
+@@ -68,15 +68,15 @@
+         text: 'The allocation, and measuring what it actually buys: five hours a night, walking 3.9 minutes earlier each time. The drift is the number everything later depends on.',
+       },
+       {
+-        steps: '4-6',
++        steps: '4-7',
+         text: 'Predict the comb, then see it in the spectral window, and measure how far the peak falls when the full width of the window is used instead of its middle.',
+       },
+       {
+-        steps: '7',
++        steps: '8',
+         text: 'Why the peak sits at the sidereal day and not at one cycle a day. Worth not rushing: it is the evidence that the comb was imposed rather than chosen.',
+       },
+       {
+-        steps: '8-10',
++        steps: '9-12',
+         text: 'Commit both plans to the live spectrograph, in sequence with one seed, and read an alias off one of them.',
+       },
+       {
+@@ -165,9 +165,9 @@
+       differs between them is the times.`,
+     expectations: {
+       3: 'The window reads 4.96 h and the drift 3.9 min per night. A student reading 8-9 hours has read the astronomical-night row rather than the usable one; a student reading about 2 hours has left the airmass slider low.',
+-      6: 'About 0.998 for the best-moment plan and about 0.701 for both-ends. The second figure is the one to dwell on: it is a large improvement and it is still a peak of 0.7.',
+-      7: 'Option B. Expect "the Sun moves" as the common wrong answer - it is option D, and it is wrong because twilight is not what opens the window.',
+-      10: 'The best-moment run should return 0.58, 0.78 or 1.39 days. About one class in five will see it return 3.52 anyway, which is the correct behavior at a window power of 1 and is what the validator says; a second seed settles it. The both-ends run returns about 3.52 roughly four times in five.',
++      7: 'About 0.998 for the best-moment plan and about 0.701 for both-ends. The second figure is the one to dwell on: it is a large improvement and it is still a peak of 0.7.',
++      8: 'Option B. Expect "the Sun moves" as the common wrong answer - it is option D, and it is wrong because twilight is not what opens the window.',
++      12: 'The best-moment run should return 0.58, 0.78 or 1.39 days. About one class in five will see it return 3.52 anyway, which is the correct behavior at a window power of 1 and is what the validator says; a second seed settles it. The both-ends run returns about 3.52 roughly four times in five.',
+     },
+   },
+   'lagrange-points': {
+--- a/js/scenarios.js
++++ b/js/scenarios.js
+@@ -757,7 +757,7 @@
+     Object.assign(SETTINGS, {
+       num_black_holes: 1,
+       bh_mass: 1,
+-      num_stars: 100,
++      num_stars: 150,
+       placement: 'Circular',
+       sim_size: 'Medium',
+       init_velocity: 30,
+@@ -766,7 +766,7 @@
+       show_bh_glow: true,
+       sim_speed: 0.9,
+       show_trails: true,
+-      trail_length: 18,
++      trail_length: 24,
+       enable_star_merging: false,
+       preset_zoom: 1.5,
+     });
+--- a/js/data/scenarioInfo.js
++++ b/js/data/scenarioInfo.js
+@@ -241,7 +241,7 @@
+     thumbnail: 'images/scenarios/kessler-cascade.webp',
+   },
+   'Alien Dyson Swarm Collapse': {
+-    tags: ['chaos', 'compact-objects'],
++    tags: ['chaos', 'orbits-kepler'],
+     thumbnail: 'images/scenarios/alien-dyson-swarm-collapse.webp',
+   },
+   'Tidal Arm Tango': {
+--- a/js/i18n/en.js
++++ b/js/i18n/en.js
+@@ -1062,7 +1062,7 @@
+   'scenario.Kessler Cascade.title': 'Kessler Cascade',
+   'scenario.Kessler Cascade.summary':
+     'Hundreds of micro‑stars orbiting chaotically, colliding and ejecting like a debris cloud.',
+-  'scenario.Alien Dyson Swarm Collapse.title': 'Alien Dyson Swarm Collapse',
++  'scenario.Alien Dyson Swarm Collapse.title': 'Alien Dyson Swarm Collapse, Revisited',
+   'scenario.Alien Dyson Swarm Collapse.summary':
+     'A hypothetical Dyson swarm of artificial satellites falls into a black hole after a catastrophic orbital failure.',
+   'scenario.Tidal Arm Tango.title': 'Tidal Arm Tango',

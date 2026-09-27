@@ -1,0 +1,125 @@
+[
+  {
+    "file": "js/data/investigations/twelve-nights.js",
+    "sid": "the-allocation",
+    "field": "title",
+    "from": "Twelve nights",
+    "to": "Twelve nights, and a catch"
+  },
+  {
+    "file": "js/data/investigations/twelve-nights.js",
+    "sid": "the-allocation",
+    "field": "body",
+    "from": "A time allocation committee has given you <strong>twelve\n             nights</strong> on one star: HD&nbsp;209458, from\n             <strong>La&nbsp;Silla</strong> in Chile, spread anywhere you like\n             across a twenty-night run in September. One measurement a night,\n             8&nbsp;m/s each. You may choose the nights and you may choose the\n             hour.\n             \n\nThere is a catch, and it is not a small one. HD&nbsp;209458\n             sits at declination <strong>+18.9&deg;</strong> and La&nbsp;Silla\n             at latitude <strong>&minus;29.3&deg;</strong>. The target never\n             rises higher than <strong>41.9&deg;</strong> above the horizon, so\n             it is never seen through less than one and a half atmospheres, and\n             it is above the usual <strong>airmass&nbsp;2</strong> limit for\n             only part of each night.\n             \n\nOne thing to be clear about before you start, because the rest\n             of the lesson depends on it. <strong>The sky here is real and the\n             star is not.</strong> The observing windows are computed for the\n             real site, the real target and real dates in September 2026,\n             against published ephemerides. The velocities you will collect\n             come from the simulation on screen. The only thing that crosses\n             between the two is the list of times &mdash; which is exactly what\n             crosses between a planning tool and a telescope.",
+    "to": "A committee has given you <strong>twelve nights</strong> on HD 209458 from La Silla.\n\nThe target never rises high: plan around that."
+  },
+  {
+    "file": "js/data/investigations/twelve-nights.js",
+    "sid": "measure-the-window",
+    "field": "fields.0.hint",
+    "from": "4.96",
+    "to": "5.0"
+  },
+  {
+    "file": "js/data/investigations/twelve-nights.js",
+    "sid": "predict-the-comb",
+    "field": "options.2",
+    "from": "one cycle per twenty days, the length of the run",
+    "to": "A comb whose teeth drift by four minutes a night"
+  },
+  {
+    "file": "js/data/investigations/twelve-nights.js",
+    "sid": "sixty-nights-would-not-help",
+    "change": "deleted"
+  },
+  {
+    "file": "js/data/investigations/twelve-nights.js",
+    "sid": "studio-inserted-read",
+    "change": "inserted",
+    "at": 5
+  },
+  {
+    "file": "js/data/investigations/twelve-nights.js",
+    "sid": "studio-inserted-question",
+    "change": "inserted",
+    "at": 10
+  },
+  {
+    "file": "js/data/investigations/es/twelve-nights.js",
+    "op": "insert",
+    "path": "steps",
+    "to": null
+  },
+  {
+    "file": "js/data/investigations/es/twelve-nights.js",
+    "op": "insert",
+    "path": "steps",
+    "to": null
+  },
+  {
+    "file": "js/data/investigations/es/twelve-nights.js",
+    "op": "remove",
+    "path": "steps",
+    "to": null
+  },
+  {
+    "file": "js/scenarios.js",
+    "op": "set",
+    "path": "num_stars",
+    "to": 150
+  },
+  {
+    "file": "js/scenarios.js",
+    "op": "set",
+    "path": "trail_length",
+    "to": 24
+  },
+  {
+    "file": "js/i18n/en.js",
+    "op": "set",
+    "path": "",
+    "to": "Alien Dyson Swarm Collapse, Revisited"
+  },
+  {
+    "file": "js/data/scenarioInfo.js",
+    "op": "set",
+    "path": "tags.1",
+    "to": "orbits-kepler"
+  },
+  {
+    "file": "js/data/instructorContent.js",
+    "op": "rekey",
+    "path": "expectations.10",
+    "to": "12"
+  },
+  {
+    "file": "js/data/instructorContent.js",
+    "op": "rekey",
+    "path": "expectations.7",
+    "to": "8"
+  },
+  {
+    "file": "js/data/instructorContent.js",
+    "op": "rekey",
+    "path": "expectations.6",
+    "to": "7"
+  },
+  {
+    "file": "js/data/instructorContent.js",
+    "op": "set",
+    "path": "flow.1.steps",
+    "to": "4-7"
+  },
+  {
+    "file": "js/data/instructorContent.js",
+    "op": "set",
+    "path": "flow.2.steps",
+    "to": "8"
+  },
+  {
+    "file": "js/data/instructorContent.js",
+    "op": "set",
+    "path": "flow.3.steps",
+    "to": "9-12"
+  }
+]

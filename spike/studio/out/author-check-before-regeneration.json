@@ -1,0 +1,22 @@
+{
+  "lessons": 24,
+  "steps": 684,
+  "errors": 2,
+  "warnings": 0,
+  "findings": [
+    {
+      "level": "error",
+      "rule": "agree/counts",
+      "lesson": "twelve-nights",
+      "step": null,
+      "message": "the en manifest says stepCount 13, the lesson has 14"
+    },
+    {
+      "level": "error",
+      "rule": "agree/counts",
+      "lesson": "twelve-nights",
+      "step": null,
+      "message": "the es manifest says stepCount 13, the lesson has 14"
+    }
+  ]
+}

@@ -1,0 +1,674 @@
+{
+  "base": "7044167c85d859b35af324ad90f42be808f36d01",
+  "T1": {
+    "pass": true,
+    "files": {
+      "js/data/investigations/twelve-nights.js": true,
+      "js/data/investigations/es/twelve-nights.js": true,
+      "js/data/instructorContent.js": true,
+      "js/scenarios.js": true,
+      "js/data/scenarioInfo.js": true,
+      "js/i18n/en.js": true,
+      "js/i18n/es.js": true
+    },
+    "importAccepted": {
+      "js/data/investigations/twelve-nights.js": true,
+      "js/data/investigations/es/twelve-nights.js": true,
+      "js/data/instructorContent.js": true,
+      "js/scenarios.js": true,
+      "js/data/scenarioInfo.js": true,
+      "js/i18n/en.js": true,
+      "js/i18n/es.js": true
+    }
+  },
+  "T2": {
+    "pass": true,
+    "perFile": {
+      "js/data/investigations/twelve-nights.js": {
+        "outside": true,
+        "code": true,
+        "comments": true,
+        "shape": true,
+        "insertsData": true,
+        "edits": 7,
+        "bytes": [
+          29346,
+          26401
+        ]
+      },
+      "js/data/investigations/es/twelve-nights.js": {
+        "outside": true,
+        "code": true,
+        "comments": true,
+        "shape": true,
+        "insertsData": true,
+        "edits": 3,
+        "bytes": [
+          17127,
+          15220
+        ]
+      },
+      "js/data/instructorContent.js": {
+        "outside": true,
+        "code": true,
+        "comments": true,
+        "shape": true,
+        "insertsData": true,
+        "edits": 6,
+        "bytes": [
+          485623,
+          485623
+        ]
+      },
+      "js/scenarios.js": {
+        "outside": true,
+        "code": true,
+        "comments": true,
+        "shape": true,
+        "insertsData": true,
+        "edits": 2,
+        "bytes": [
+          71180,
+          71180
+        ]
+      },
+      "js/data/scenarioInfo.js": {
+        "outside": true,
+        "code": true,
+        "comments": true,
+        "shape": true,
+        "insertsData": true,
+        "edits": 1,
+        "bytes": [
+          10540,
+          10538
+        ]
+      },
+      "js/i18n/en.js": {
+        "outside": true,
+        "code": true,
+        "comments": true,
+        "shape": true,
+        "insertsData": true,
+        "edits": 1,
+        "bytes": [
+          101709,
+          101720
+        ]
+      },
+      "js/i18n/es.js": {
+        "outside": true,
+        "code": true,
+        "comments": true,
+        "shape": true,
+        "insertsData": true,
+        "edits": 0,
+        "bytes": [
+          105453,
+          105453
+        ]
+      }
+    },
+    "notApplicable": "edit 3b: Twelve Nights has no numeric answer with a tolerance"
+  },
+  "T3": {
+    "pass": true,
+    "patchBytes": 15345,
+    "gitApply": "clean",
+    "appliedEqualsStudioOutput": true,
+    "regenerated": {
+      "manifest": "ok",
+      "audit:scene": "ok",
+      "teaching:data": "ok",
+      "docs:sync": "ok"
+    },
+    "prettierReformatted": "Checking formatting...",
+    "checksAfterRegeneration": {
+      "manifest:check": "pass",
+      "audit:scene:check": "pass",
+      "docs:check": "pass",
+      "teaching:check": "pass",
+      "instructors:check": "fail: ",
+      "author:check": "pass"
+    },
+    "filesChangedInRepo": [
+      "M CHANGELOG.md",
+      " M CONTRIBUTING.md",
+      " M README.md",
+      " M docs/lesson-scene-catalog.json",
+      " M docs/lesson-scene-record.md",
+      " M e2e/README.md",
+      " M js/data/instructorContent.js",
+      " M js/data/investigations/es/twelve-nights.js",
+      " M js/data/investigations/manifest.es.js",
+      " M js/data/investigations/manifest.js",
+      " M js/data/investigations/twelve-nights.js",
+      " M js/data/scenarioInfo.js",
+      " M js/i18n/en.js",
+      " M js/scenarios.js",
+      " M manual/facts.tex",
+      " M paper.md",
+      "?? node_modules"
+    ],
+    "note": "build:instructors needs the passphrase: a maintainer step, never the Studio"
+  },
+  "T4node": {
+    "beforeRegeneration": {
+      "lessons": 24,
+      "steps": 684,
+      "errors": 2,
+      "warnings": 0,
+      "findings": [
+        {
+          "level": "error",
+          "rule": "agree/counts",
+          "lesson": "twelve-nights",
+          "step": null,
+          "message": "the en manifest says stepCount 13, the lesson has 14"
+        },
+        {
+          "level": "error",
+          "rule": "agree/counts",
+          "lesson": "twelve-nights",
+          "step": null,
+          "message": "the es manifest says stepCount 13, the lesson has 14"
+        }
+      ]
+    },
+    "afterRegeneration": {
+      "lessons": 24,
+      "steps": 684,
+      "errors": 0,
+      "warnings": 0,
+      "findings": []
+    }
+  },
+  "T6": {
+    "pass": true,
+    "validators": 3,
+    "byteIdentical": true,
+    "editingAValidator": "code",
+    "checksPerStep": [
+      {
+        "sid": "the-allocation",
+        "check": "none"
+      },
+      {
+        "sid": "look-at-the-windows",
+        "check": "none"
+      },
+      {
+        "sid": "measure-the-window",
+        "check": "validate (read-only code)"
+      },
+      {
+        "sid": "predict-the-comb",
+        "check": "choice index"
+      },
+      {
+        "sid": "studio-inserted-read",
+        "check": "none"
+      },
+      {
+        "sid": "the-three-plans",
+        "check": "none"
+      },
+      {
+        "sid": "measure-the-window-power",
+        "check": "validate (read-only code)"
+      },
+      {
+        "sid": "why-not-one-day",
+        "check": "choice index"
+      },
+      {
+        "sid": "predict-which-plan-wins",
+        "check": "choice index"
+      },
+      {
+        "sid": "studio-inserted-question",
+        "check": "choice index"
+      },
+      {
+        "sid": "commit-and-observe",
+        "check": "none"
+      },
+      {
+        "sid": "read-what-you-got",
+        "check": "validate (read-only code)"
+      },
+      {
+        "sid": "what-would-actually-fix-it",
+        "check": "rubric"
+      },
+      {
+        "sid": "what-the-sky-decided",
+        "check": "none"
+      }
+    ],
+    "ops": [
+      "set",
+      "insert",
+      "remove",
+      "rekey"
+    ]
+  },
+  "T7": {
+    "pass": true,
+    "actual": {
+      "the-allocation": "same",
+      "look-at-the-windows": "same",
+      "measure-the-window": "same",
+      "predict-the-comb": "same",
+      "the-three-plans": "same",
+      "measure-the-window-power": "same",
+      "why-not-one-day": "same",
+      "predict-which-plan-wins": "same",
+      "commit-and-observe": "same",
+      "read-what-you-got": "same",
+      "sixty-nights-would-not-help": "deleted",
+      "what-would-actually-fix-it": "same",
+      "what-the-sky-decided": "same",
+      "studio-inserted-read": "new",
+      "studio-inserted-question": "new"
+    },
+    "predicted": {
+      "the-allocation": "same",
+      "look-at-the-windows": "same",
+      "measure-the-window": "same",
+      "predict-the-comb": "same",
+      "the-three-plans": "same",
+      "measure-the-window-power": "same",
+      "why-not-one-day": "same",
+      "predict-which-plan-wins": "same",
+      "commit-and-observe": "same",
+      "read-what-you-got": "same",
+      "sixty-nights-would-not-help": "deleted",
+      "what-would-actually-fix-it": "same",
+      "what-the-sky-decided": "same",
+      "studio-inserted-read": "new",
+      "studio-inserted-question": "new"
+    },
+    "sidsKept": 12,
+    "newSidsValid": true,
+    "unique": true,
+    "note": "reworded text and option wording are NOT fingerprinted: saved answers and assignment links keep them silently"
+  },
+  "T8": {
+    "pass": true,
+    "misaligned": [],
+    "stale": [
+      {
+        "sid": "the-allocation",
+        "field": "title",
+        "spanish": "Doce noches"
+      },
+      {
+        "sid": "the-allocation",
+        "field": "body",
+        "spanish": "Un comité de asignación de tiempo te ha dado <strong>doce no"
+      },
+      {
+        "sid": "predict-the-comb",
+        "field": "options.2",
+        "spanish": "un ciclo por veinte días, la duración de la campaña"
+      }
+    ],
+    "titleOfEditedStepInSpanish": "Doce noches",
+    "withoutShadowEdits": {
+      "misalignedSteps": 8,
+      "of": 14
+    }
+  },
+  "T9": {
+    "pass": true,
+    "expectationsFollowTheirSteps": true,
+    "renumbered": [
+      "expectations.10 -> 12",
+      "expectations.7 -> 8",
+      "expectations.6 -> 7",
+      "flow.1.steps -> 4-7",
+      "flow.2.steps -> 8",
+      "flow.3.steps -> 9-12"
+    ],
+    "forReview": [
+      {
+        "where": "flow.4",
+        "why": "a deleted step in 11-13"
+      },
+      {
+        "where": "overview",
+        "why": "prose names \"step 11\""
+      },
+      {
+        "where": "keyConcepts.1.body",
+        "why": "prose names \"Step 7\""
+      },
+      {
+        "where": "misconceptions.0.response",
+        "why": "prose names \"step 1\""
+      },
+      {
+        "where": "misconceptions.2.response",
+        "why": "prose names \"Step 11\""
+      },
+      {
+        "where": "misconceptions.4.response",
+        "why": "prose names \"step 7\""
+      },
+      {
+        "where": "teachingNotes.0",
+        "why": "prose names \"Step 3\""
+      },
+      {
+        "where": "teachingNotes.1",
+        "why": "prose names \"steps 1-7\""
+      },
+      {
+        "where": "teachingNotes.1",
+        "why": "prose names \"Steps 8-10\""
+      },
+      {
+        "where": "teachingNotes.3",
+        "why": "prose names \"step 11\""
+      },
+      {
+        "where": "teachingNotes.4",
+        "why": "prose names \"Step 11\""
+      },
+      {
+        "where": "teachingNotes.5",
+        "why": "prose names \"step 12\""
+      },
+      {
+        "where": "teachingNotes.5",
+        "why": "prose names \"step 11\""
+      },
+      {
+        "where": "discussion.2",
+        "why": "prose names \"Step 13\""
+      }
+    ],
+    "lessonProseNamingSteps": [
+      {
+        "sid": "why-not-one-day",
+        "field": "because",
+        "text": "step 3"
+      }
+    ],
+    "instructorFilesInExport": []
+  },
+  "T10": {
+    "pass": true,
+    "cases": [
+      {
+        "name": "a function as an edit value",
+        "refused": true,
+        "code": "type",
+        "reason": "a function is not data: code is never edited in the Studio"
+      },
+      {
+        "name": "markup that prose never carries",
+        "refused": true,
+        "code": "markup",
+        "reason": "markup that prose never carries: <img src=x onerror=alert(1)>"
+      },
+      {
+        "name": "a script tag",
+        "refused": true,
+        "code": "markup",
+        "reason": "markup that prose never carries: </script>"
+      },
+      {
+        "name": "a javascript: URL",
+        "refused": true,
+        "code": "url",
+        "reason": "a script or data URL"
+      },
+      {
+        "name": "a __proto__ key in an inserted step",
+        "refused": true,
+        "code": "key",
+        "reason": "the key __proto__"
+      },
+      {
+        "name": "a constructor key",
+        "refused": true,
+        "code": "key",
+        "reason": "the key constructor"
+      },
+      {
+        "name": "a getter",
+        "refused": true,
+        "code": "getter",
+        "reason": "a getter on title"
+      },
+      {
+        "name": "a non-finite number",
+        "refused": true,
+        "code": "number",
+        "reason": "a number must be finite"
+      },
+      {
+        "name": "an oversize string",
+        "refused": true,
+        "code": "size",
+        "reason": "a string of 20001 characters"
+      },
+      {
+        "name": "editing a validator",
+        "refused": true,
+        "code": "code",
+        "reason": "steps.2.validate is ArrowFunctionExpression, not a literal: read-only"
+      },
+      {
+        "name": "an oversize file",
+        "refused": true,
+        "code": "size",
+        "reason": "the file is larger than 512 KB"
+      },
+      {
+        "name": "an added import",
+        "refused": true,
+        "code": "import",
+        "reason": "the file imports what the repository’s does not"
+      },
+      {
+        "name": "a call in a literal position",
+        "refused": true,
+        "code": "data",
+        "reason": "the file is not the repository’s with only its data changed"
+      },
+      {
+        "name": "a template with an expression",
+        "refused": true,
+        "code": "data",
+        "reason": "the file is not the repository’s with only its data changed"
+      },
+      {
+        "name": "a getter in the lesson",
+        "refused": true,
+        "code": "code",
+        "reason": "the file’s code is not the repository’s: only its literals may differ"
+      },
+      {
+        "name": "a changed validator",
+        "refused": true,
+        "code": "code",
+        "reason": "the file’s code is not the repository’s: only its literals may differ"
+      },
+      {
+        "name": "a file not shaped like a lesson",
+        "refused": true,
+        "code": "shape",
+        "reason": "the file has no default export"
+      },
+      {
+        "name": "markup in an imported lesson",
+        "refused": true,
+        "code": "markup",
+        "reason": "markup that prose never carries: <iframe src=x>"
+      },
+      {
+        "name": "an edit log for other sources",
+        "refused": true,
+        "code": "base"
+      }
+    ],
+    "templateEscapeHolds": true,
+    "evaluated": "only the repository’s module, patched by literal edits and re-verified (T2), for preview"
+  },
+  "T11": {
+    "pass": true,
+    "undoAllIdentity": true,
+    "undoRedoAtEveryEdit": true,
+    "serializedReplayIdentity": true,
+    "foreignLogRefused": true,
+    "logBytes": 3419
+  },
+  "T12": {
+    "pass": true,
+    "migratedV0EqualsV1": true,
+    "newerRefused": "version",
+    "format": "gravitas.studio-changes/1"
+  },
+  "T13": {
+    "pass": true,
+    "semanticChanges": 20,
+    "textDiffChangedLines": 128,
+    "everySemanticChangeFromAnEdit": true,
+    "everyEditInTheSemanticDiff": true,
+    "sample": [
+      {
+        "file": "js/data/investigations/twelve-nights.js",
+        "sid": "the-allocation",
+        "field": "title",
+        "from": "Twelve nights",
+        "to": "Twelve nights, and a catch"
+      },
+      {
+        "file": "js/data/investigations/twelve-nights.js",
+        "sid": "the-allocation",
+        "field": "body",
+        "from": "A time allocation committee has given you <strong>twelve\n             nights</strong> on one star: HD&nbsp;209458, from\n             <strong>La&nbsp;Silla</strong> in Chile, spread anywhere you like\n             across a twenty-night run in September. One measurement a night,\n             8&nbsp;m/s each. You may choose the nights and you may choose the\n             hour.\n             \n\nThere is a catch, and it is not a small one. HD&nbsp;209458\n             sits at declination <strong>+18.9&deg;</strong> and La&nbsp;Silla\n             at latitude <strong>&minus;29.3&deg;</strong>. The target never\n             rises higher than <strong>41.9&deg;</strong> above the horizon, so\n             it is never seen through less than one and a half atmospheres, and\n             it is above the usual <strong>airmass&nbsp;2</strong> limit for\n             only part of each night.\n             \n\nOne thing to be clear about before you start, because the rest\n             of the lesson depends on it. <strong>The sky here is real and the\n             star is not.</strong> The observing windows are computed for the\n             real site, the real target and real dates in September 2026,\n             against published ephemerides. The velocities you will collect\n             come from the simulation on screen. The only thing that crosses\n             between the two is the list of times &mdash; which is exactly what\n             crosses between a planning tool and a telescope.",
+        "to": "A committee has given you <strong>twelve nights</strong> on HD 209458 from La Silla.\n\nThe target never rises high: plan around that."
+      },
+      {
+        "file": "js/data/investigations/twelve-nights.js",
+        "sid": "measure-the-window",
+        "field": "fields.0.hint",
+        "from": "4.96",
+        "to": "5.0"
+      },
+      {
+        "file": "js/data/investigations/twelve-nights.js",
+        "sid": "predict-the-comb",
+        "field": "options.2",
+        "from": "one cycle per twenty days, the length of the run",
+        "to": "A comb whose teeth drift by four minutes a night"
+      },
+      {
+        "file": "js/data/investigations/twelve-nights.js",
+        "sid": "sixty-nights-would-not-help",
+        "change": "deleted"
+      },
+      {
+        "file": "js/data/investigations/twelve-nights.js",
+        "sid": "studio-inserted-read",
+        "change": "inserted",
+        "at": 5
+      }
+    ]
+  },
+  "T4": {
+    "pass": true,
+    "studioFindings": [
+      {
+        "level": "error",
+        "rule": "agree/counts",
+        "lesson": "twelve-nights",
+        "step": null,
+        "message": "the en manifest says stepCount 13, the lesson has 14"
+      },
+      {
+        "level": "error",
+        "rule": "agree/counts",
+        "lesson": "twelve-nights",
+        "step": null,
+        "message": "the es manifest says stepCount 13, the lesson has 14"
+      }
+    ],
+    "authorCheckFindings": [
+      {
+        "level": "error",
+        "rule": "agree/counts",
+        "lesson": "twelve-nights",
+        "step": null,
+        "message": "the en manifest says stepCount 13, the lesson has 14"
+      },
+      {
+        "level": "error",
+        "rule": "agree/counts",
+        "lesson": "twelve-nights",
+        "step": null,
+        "message": "the es manifest says stepCount 13, the lesson has 14"
+      }
+    ],
+    "replayInPageMs": 71,
+    "rulesInPageMs": 30.2,
+    "bytesEqualNode": {
+      "js/data/investigations/twelve-nights.js": true,
+      "js/data/investigations/es/twelve-nights.js": true,
+      "js/data/instructorContent.js": true,
+      "js/scenarios.js": true,
+      "js/data/scenarioInfo.js": true,
+      "js/i18n/en.js": true,
+      "js/i18n/es.js": true
+    }
+  },
+  "T5": {
+    "pass": true,
+    "lesson": {
+      "firstTitle": "Twelve nights, and a catch",
+      "progress": "1 of 14 steps",
+      "fifthTitle": "A step the Studio inserted"
+    },
+    "scenario": {
+      "scenario": "Alien Dyson Swarm Collapse",
+      "bodies": 178,
+      "num_stars": 150,
+      "trail_length": 24,
+      "goldenBodies": 128
+    },
+    "pageErrors": [],
+    "howTheLesson": "provideLessonLoaders(id, {lesson, translations}) with blob-URL modules, before first open; the registry memoizes, so a second preview needs its cache cleared (a production task)",
+    "howTheScenario": "a share payload whose settings delta is the edit: the path a lesson step’s setup takes; no code evaluated"
+  },
+  "T14": {
+    "pass": true,
+    "minifiedKB": 129.2,
+    "gzipKB": 37.5,
+    "appRoutesTouched": "none: the spike adds no import to any shipped module"
+  },
+  "supplement": {
+    "toleranceEdit": {
+      "lesson": "keplers-laws",
+      "sid": "use-the-law",
+      "tolerance": [
+        0.4,
+        0.8
+      ],
+      "fingerprintChanged": true,
+      "otherStepsUnchanged": true,
+      "shapeSame": true,
+      "codeSame": true
+    },
+    "artifactsTheScenarioEditReaches": {
+      "sw-manifest.js": "sw:check detects; npm run sw:manifest regenerates",
+      "e2e/golden/world-construction.json": "e2e/worldConstruction.spec.js detects (count 128 -> 178); GRAVITAS_UPDATE_WORLD_GOLDEN=1 regenerates; the spec then passes",
+      "manual (scenarios.tex, investigations.tex, PDF)": "manual:check detects (steps 683 -> 684); npm run manual regenerates; the check then passes",
+      "images/scenarios/alien-dyson-swarm-collapse.webp": "NOT detected: thumbnails:check checks presence only; npm run thumbnails regenerates",
+      "instructors/materials.enc.json": "instructors:check detects; only a maintainer with the passphrase regenerates"
+    }
+  }
+}

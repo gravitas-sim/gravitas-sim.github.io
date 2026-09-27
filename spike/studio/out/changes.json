@@ -1,0 +1,218 @@
+{
+  "format": "gravitas.studio-changes",
+  "version": 1,
+  "bases": {
+    "js/data/investigations/twelve-nights.js": "7d2cfacb33f23a6694719a0c5a285dc6a0e1112e7fab7d54982daec2679310b6",
+    "js/data/investigations/es/twelve-nights.js": "3d7514700ccb38206d391dda25e1a5ea6f248de330d4444e3f0e10c6916db28a",
+    "js/data/instructorContent.js": "2be22dbd322329c11c5619ecf7b6972dda2fa41446ed60f6816e352135f03570",
+    "js/scenarios.js": "9f894924609ee0af026238211b9f0ec84884b2b952121d409bbc3d3c40c4800d",
+    "js/data/scenarioInfo.js": "8ca96066016f7483c9c6896e38a7183f32a1b95d8db3dbd8b419747a26f514d6",
+    "js/i18n/en.js": "af7af33eb89cdc50aeb657a9c0a8adcd7cc13ab6f12cf75815c4d7e4ac1ed840",
+    "js/i18n/es.js": "04f08ff23d6fe7a442ca6fa86b4a0cbc8ed0cb4ec8515fd1ea470145c3a09ca4"
+  },
+  "edits": [
+    {
+      "file": "js/data/investigations/twelve-nights.js",
+      "op": "set",
+      "path": [
+        "steps",
+        0,
+        "title"
+      ],
+      "value": "Twelve nights, and a catch"
+    },
+    {
+      "file": "js/data/investigations/twelve-nights.js",
+      "op": "set",
+      "path": [
+        "steps",
+        0,
+        "body"
+      ],
+      "value": "A committee has given you <strong>twelve nights</strong> on HD 209458 from La Silla.\n\nThe target never rises high: plan around that."
+    },
+    {
+      "file": "js/data/investigations/twelve-nights.js",
+      "op": "set",
+      "path": [
+        "steps",
+        3,
+        "options",
+        2
+      ],
+      "value": "A comb whose teeth drift by four minutes a night"
+    },
+    {
+      "file": "js/data/investigations/twelve-nights.js",
+      "op": "set",
+      "path": [
+        "steps",
+        2,
+        "fields",
+        0,
+        "hint"
+      ],
+      "value": "5.0"
+    },
+    {
+      "file": "js/data/investigations/twelve-nights.js",
+      "op": "insert",
+      "path": [
+        "steps"
+      ],
+      "index": 4,
+      "value": {
+        "sid": "studio-inserted-read",
+        "type": "read",
+        "title": "A step the Studio inserted",
+        "body": "Read this before you plan: the <strong>window</strong> moves every night."
+      }
+    },
+    {
+      "file": "js/data/investigations/es/twelve-nights.js",
+      "op": "insert",
+      "path": [
+        "steps"
+      ],
+      "index": 4,
+      "value": null
+    },
+    {
+      "file": "js/data/investigations/twelve-nights.js",
+      "op": "insert",
+      "path": [
+        "steps"
+      ],
+      "index": 9,
+      "value": {
+        "sid": "studio-inserted-question",
+        "type": "question",
+        "kind": "choice",
+        "title": "A question the Studio inserted",
+        "body": "The window opens earlier each night.",
+        "prompt": "By about how much does it open earlier each night?",
+        "options": [
+          "About one minute",
+          "About four minutes",
+          "About an hour",
+          "It does not move"
+        ],
+        "answer": 1,
+        "because": "The window follows the sidereal day, which is about four minutes shorter than the solar day."
+      }
+    },
+    {
+      "file": "js/data/investigations/es/twelve-nights.js",
+      "op": "insert",
+      "path": [
+        "steps"
+      ],
+      "index": 9,
+      "value": null
+    },
+    {
+      "file": "js/data/investigations/twelve-nights.js",
+      "op": "remove",
+      "path": [
+        "steps"
+      ],
+      "index": 12
+    },
+    {
+      "file": "js/data/investigations/es/twelve-nights.js",
+      "op": "remove",
+      "path": [
+        "steps"
+      ],
+      "index": 12
+    },
+    {
+      "file": "js/scenarios.js",
+      "op": "set",
+      "path": [
+        "num_stars"
+      ],
+      "value": 150
+    },
+    {
+      "file": "js/scenarios.js",
+      "op": "set",
+      "path": [
+        "trail_length"
+      ],
+      "value": 24
+    },
+    {
+      "file": "js/i18n/en.js",
+      "op": "set",
+      "path": [],
+      "value": "Alien Dyson Swarm Collapse, Revisited"
+    },
+    {
+      "file": "js/data/scenarioInfo.js",
+      "op": "set",
+      "path": [
+        "tags",
+        1
+      ],
+      "value": "orbits-kepler"
+    },
+    {
+      "file": "js/data/instructorContent.js",
+      "op": "rekey",
+      "path": [
+        "expectations",
+        "10"
+      ],
+      "key": "12"
+    },
+    {
+      "file": "js/data/instructorContent.js",
+      "op": "rekey",
+      "path": [
+        "expectations",
+        "7"
+      ],
+      "key": "8"
+    },
+    {
+      "file": "js/data/instructorContent.js",
+      "op": "rekey",
+      "path": [
+        "expectations",
+        "6"
+      ],
+      "key": "7"
+    },
+    {
+      "file": "js/data/instructorContent.js",
+      "op": "set",
+      "path": [
+        "flow",
+        1,
+        "steps"
+      ],
+      "value": "4-7"
+    },
+    {
+      "file": "js/data/instructorContent.js",
+      "op": "set",
+      "path": [
+        "flow",
+        2,
+        "steps"
+      ],
+      "value": "8"
+    },
+    {
+      "file": "js/data/instructorContent.js",
+      "op": "set",
+      "path": [
+        "flow",
+        3,
+        "steps"
+      ],
+      "value": "9-12"
+    }
+  ]
+}
