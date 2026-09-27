@@ -28,13 +28,19 @@ passed. The index also carries the lesson ids a course may name, with their
 titles, so the page can check and show a course without loading the lesson
 manifest.
 
-Today it lists six: the four built-in packages, and two extensions built
+Today it lists eight: the four built-in packages, and four extensions built
 outside the core with the SDK alone.
 
 - **`community.su-dra-tess-s15`:** SU Draconis, an RR Lyrae star, from its
   TESS sector 15 light curve.
 - **`community.pulsating-stars`:** a three-lesson course that ends on that
   light curve.
+- **`community.kepler-13-tess-s14-sap`** and
+  **`community.kepler-13-tess-s14-pdcsap`:** Kepler-13's TESS sector 14 light
+  curve, as collected and as corrected, with the pipeline's crowding estimate
+  (catalog version 1.1.0, accepted 2026-09-26). The Exoplanet Observatory's
+  guides install them the first time a step opens one
+  (EXOPLANET_OBSERVATORY.md).
 
 ## What installing does, and refuses
 
@@ -195,7 +201,8 @@ the check is robust, and the light curve's sharp rise needs many terms.
   19), and 96.7 KB in the build (was 97.9). The pack decoder now arrives with
   the first observation opened. The ceilings were lowered to keep the saving.
 - **The archives:** 12.4 KB for SU Draconis (24.0 KB installed) and 2.1 KB
-  for the course (4.6 KB installed).
+  for the course (4.6 KB installed); 8.5 and 8.7 KB for Kepler-13's SAP and
+  PDCSAP light curves.
 
 ## Tests
 

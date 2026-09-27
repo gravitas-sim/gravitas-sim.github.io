@@ -61,6 +61,11 @@ import { plainText as plainTextOf } from '../js/answerKey.js';
 import { INSTRUCTOR_CONTENT } from '../js/data/instructorContent.js';
 import { checkInstructorCatalog } from '../js/authoring/instructorSchema.js';
 import { createDocument } from '../js/pdf.js';
+import {
+  exoplanetAnswerKey,
+  exoplanetInstructorGuide,
+} from '../js/exoplanetGuideDocs.js';
+import { EXOPLANET_KEY } from '../js/data/exoplanetAnswerKey.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** A path as the repository sees it, for a message. */
@@ -357,6 +362,25 @@ function renderDocuments(version, { stub = false } = {}) {
     'general',
     null,
     curriculumMap(INVESTIGATIONS, { version })
+  );
+
+  // The Exoplanet Observatory's guided investigations (EXOPLANET_OBSERVATORY.md)
+  // live in /observatory/, not in the lesson registry, so they have documents
+  // of their own. Their key is the committed js/data/exoplanetAnswerKey.js,
+  // which tools/exoplanet-reference.mjs writes from a reference run.
+  add(
+    'exoplanet-observatory-guide',
+    'The Exoplanet Observatory - Instructor Guide.pdf',
+    'guide',
+    null,
+    exoplanetInstructorGuide({ version })
+  );
+  add(
+    'exoplanet-observatory-key',
+    'The Exoplanet Observatory - Answer Key.pdf',
+    'key',
+    null,
+    exoplanetAnswerKey(EXOPLANET_KEY, { version })
   );
 
   // Classroom activities. One guide per activity covering all three formats,

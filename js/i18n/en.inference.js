@@ -17,6 +17,9 @@ export const EN_INFERENCE = {
   'obs.fit.model.rv-keplerian': 'A radial-velocity orbit (Keplerian)',
   'obs.fit.exposure': 'Exposure of each point ({unit})',
   'obs.fit.dilution': "Other stars' share of the light, 0 to 1",
+  'obs.fit.stellarRadius':
+    "The star's radius, in solar radii (adopted, for the planet's)",
+  'obs.fit.stellarRadiusSigma': 'Its uncertainty, in solar radii',
   'obs.fit.supersample': 'Samples across each exposure',
   'obs.fit.profiles': 'Profile every fitted parameter (slower)',
   'obs.fit.device': 'This device counts as {profile}: up to {realms} workers.',

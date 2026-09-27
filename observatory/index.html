@@ -239,6 +239,68 @@
         clip: rect(0 0 0 0);
         white-space: nowrap;
       }
+      /* The guided investigations (js/observatory/guidePanel.js). */
+      .ow-guide-step {
+        border-top: 1px solid rgba(255, 255, 255, 0.14);
+        margin-top: 1rem;
+        padding-top: 0.5rem;
+      }
+      .ow-guide-step h3:focus {
+        outline: none;
+      }
+      .ow-guide-tag {
+        display: inline-block;
+        margin: 0;
+        padding: 0.05rem 0.5rem;
+        border: 1px solid var(--accent);
+        border-radius: 999px;
+        font-size: 0.8rem;
+      }
+      .ow-guide-option {
+        display: flex;
+        gap: 0.5rem;
+        align-items: baseline;
+        margin: 0.35rem 0;
+      }
+      .ow-guide-answer {
+        max-width: 16rem;
+        margin-top: 0.6rem;
+      }
+      .ow-guide-feedback[data-ok='true'] {
+        color: #b9f6ca;
+      }
+      .ow-guide-feedback[data-ok='false'] {
+        color: #ffb4a2;
+      }
+      .ow-guide-progress {
+        margin: 1rem 0 0;
+        padding-left: 1.4rem;
+      }
+      .ow-guide-jump {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: 0;
+        padding: 0.15rem 0;
+        text-align: left;
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .ow-guide-jump[aria-current='step'] {
+        font-weight: 600;
+      }
+      .ow-guide-return {
+        position: fixed;
+        right: 1rem;
+        bottom: 1rem;
+        z-index: 5;
+        padding: 0.5rem 0.9rem;
+        border-radius: 999px;
+        background: #11131d;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+      }
       @media (min-width: 60rem) {
         .ow-views {
           grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
@@ -310,6 +372,12 @@
           </summary>
         </details>
       </section>
+
+      <details id="obsGuidePanel" class="ow-panel">
+        <summary data-i18n="obs.gd.title">
+          Guided investigations: from photons to a planet
+        </summary>
+      </details>
 
       <section
         id="obsImport"

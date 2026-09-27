@@ -327,6 +327,16 @@ const GENERAL = [
     name: 'Curriculum Map',
     text: 'Every investigation side by side: topic, timing, difficulty, where it fits in a course, prerequisites and objectives.',
   },
+  {
+    id: 'exoplanet-observatory-guide',
+    name: 'Exoplanet Observatory Guide',
+    text: 'The five guided investigations with real TESS light curves in /observatory/: curriculum map, data and licenses, teaching notes and assignment sheets.',
+  },
+  {
+    id: 'exoplanet-observatory-key',
+    name: 'Exoplanet Observatory Answer Key',
+    text: 'Every step of the five investigations, answered from a reference run on the same data.',
+  },
 ];
 
 /** Approximate minutes, for the duration filter. */

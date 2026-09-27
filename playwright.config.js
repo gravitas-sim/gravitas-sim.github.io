@@ -147,7 +147,7 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * ARCHIVAL_PAGES rather than DOC_PAGES, and must serve it as committed.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js|exoplanetGuides\.spec\.js/;
 
 /**
  * Which engines to run.
