@@ -52,8 +52,25 @@ const TARGETS = [
     package: 'three',
     out: 'vendor/three/three.module.js',
     license: 'vendor/three/LICENSE',
+    // Only what js/view3d.js builds its scene from. `export *` re-exported
+    // the whole library - every loader, material, geometry, helper and
+    // animation class - and esbuild kept 529 KB of it in the 3-D view's
+    // chunk, because a pre-bundled file has lost the package's
+    // side-effect-free hint and nothing in it can be proven unused. Naming
+    // the seventeen classes and constants the view uses lets esbuild drop
+    // the rest while it still knows which modules are pure.
+    //
+    // A 3-D feature that needs something else adds it here.
+    // tests/vendoredThree.test.js reads every `THREE.X` the application
+    // writes and holds each to this file's exports, because a missing one
+    // is `undefined` in a reader's browser and nothing here would notice.
     entry: [
-      "export * from 'three';",
+      'export {',
+      '  AmbientLight, BufferGeometry, Color, DirectionalLight, Group,',
+      '  HemisphereLight, LineBasicMaterial, LineSegments, MathUtils, Mesh,',
+      '  MeshStandardMaterial, PerspectiveCamera, SRGBColorSpace, Scene,',
+      '  SphereGeometry, Vector3, WebGLRenderer,',
+      "} from 'three';",
       "export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';",
     ].join('\n'),
   },
