@@ -531,6 +531,27 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A FITS header can no longer make the data-pack reader allocate or loop**
+  (VO_ARCHIVE_GATE.md, finding 4).
+  - **What it did:** `readFits()` in `tools/data-packs/fits.mjs` (and in the
+    SDK) used header numbers before it checked them against the file. From a
+    2,880-byte file, `NAXIS = 50000000` took 32 s and 421 MB, and
+    `NAXIS = 2000000000` ran out of heap. A negative `PCOUNT` stepped the walk
+    back onto the same header, and the reader never returned.
+  - **What it does now:** it walks every header first. It refuses the file,
+    naming the card and its value, when `NAXIS` is outside 0 to 999, an axis
+    length or `PCOUNT` is not a whole number, `BITPIX` is not one of the six
+    FITS defines, `TFIELDS` is outside 0 to 999, a `BINTABLE` does not have
+    two axes, or the product of the axes passes the file's length. It also
+    refuses a data unit that runs past the end, a header that goes 100 blocks
+    without an `END`, and more units than `maxUnits` (16). Only then does it
+    decode anything.
+  - **Real files are unaffected.** The three TESS light curves in the pack
+    cache read exactly as before, and every pack rebuilds byte for byte. The
+    tests run on the real headers of the two light curves the packs use,
+    kept in `tests/fixtures/fits/`.
+  - This was harmless while the reader saw only pinned maintainer downloads.
+    It had to be fixed before any browser reads FITS.
 - **The Experiments bench's energy and angular momentum drift were not drifts.**
   Since the bench shipped in 1.0.0, both were the system's total energy and
   angular momentum times a hundred, labeled "%". On Binary Planet Lab that was

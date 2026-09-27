@@ -212,6 +212,7 @@ doi:10.3847/1538-4365/acda98
 TESS light curves
 -------------------------------------------------------------------------------
 js/data/observations/**
+tests/fixtures/fits/*.headers.txt
 Derived from light curves observed by NASA's Transiting Exoplanet Survey
 Satellite (TESS) and served by the Mikulski Archive for Space Telescopes
 (MAST) at the Space Telescope Science Institute: https://archive.stsci.edu/
@@ -238,6 +239,10 @@ the archive URL and SHA-256 checksums of the file MAST served and of the
 module as committed are recorded in data-packs/tess-hd209458-s56-lc.json.
 `npm run packs:provenance` rebuilds the module from the cached file and
 compares byte for byte.
+
+tests/fixtures/fits/ keeps the header cards, and nothing else, of that file
+and of SU Dra's sector 15 light curve (TIC 142848794), so the FITS reader's
+tests can run on real headers without the files.
 
 ===============================================================================
 Gaia DR3 epoch photometry

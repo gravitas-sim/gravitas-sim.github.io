@@ -129,7 +129,8 @@ export interface FitsUnit {
   cards: Record<string, string | number | boolean | null>;
   columns?: Record<string, { unit: string | null; values: ArrayLike<number> }>;
 }
-export function readFits(bytes: Uint8Array): FitsUnit[];
+/** Every header is checked against the file before any data is read; more than `maxUnits` (16) units is an error. */
+export function readFits(bytes: Uint8Array, opts?: { maxUnits?: number }): FitsUnit[];
 export function binTessLightCurve(
   units: FitsUnit[],
   opts: { binMinutes: number; minPerBin: number; errStepPpm: number; fluxStepPpm?: number }

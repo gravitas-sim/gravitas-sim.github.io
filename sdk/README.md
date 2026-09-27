@@ -250,7 +250,7 @@ declares all of it, and the contract suite fails if the two differ.
 | `acceptsPlatform(range)` | whether a `gravitas` range accepts this platform |
 | `installedDataPack(id)` | an installed pack's record, runtime module and decoded observation |
 | `observationOf(pack)`, `checkObservation(o)` | the decoder every pack shares, and the check that a series is clean |
-| `readFits(bytes)` | a FITS file's header-data units: header cards, and a binary table's columns (1.2.0) |
+| `readFits(bytes, opts)` | a FITS file's header-data units: header cards, and a binary table's columns. It checks every header against the file before it reads any data, and refuses more than `opts.maxUnits` units (16) (1.2.0) |
 | `binTessLightCurve(units, opts)` | a TESS SPOC light curve masked, normalized, binned and encoded as every built-in pack is; with `fluxStepPpm`, as `binned-relative-flux/2` (1.2.0) |
 
 The JSON formats have JSON Schemas (draft 2020-12) in [`schemas/`](schemas/)
