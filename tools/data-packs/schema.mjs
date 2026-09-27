@@ -30,6 +30,9 @@ export const DATA_TYPES = [
   'system-parameters',
   'rotation-curve',
   'image',
+  // A table of sources: a cluster's photometry, a survey's parameters
+  // (js/tableObservation.js).
+  'catalog',
 ];
 /** Types whose independent variable is a time, and so need a time system. */
 export const TIME_SERIES = new Set([

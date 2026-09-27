@@ -1,0 +1,366 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "sdss-dr18-ngc2420-segue",
+  "version": "1.0.0",
+  "title": "NGC 2420: SEGUE stellar parameters",
+  "object": {
+    "name": "NGC 2420",
+    "identifiers": [
+      "NGC 2420"
+    ],
+    "ra": 114.602,
+    "dec": 21.575,
+    "frame": "ICRS, epoch J2000"
+  },
+  "facility": {
+    "observatory": "SDSS",
+    "instrument": "2.5 m Sloan Foundation Telescope, Apache Point Observatory, SDSS spectrographs (R ~ 1800)",
+    "pipeline": "SEGUE Stellar Parameter Pipeline, DR18 (sppParams)"
+  },
+  "dataType": "catalog",
+  "origin": "observed",
+  "credit": "SDSS DR18 SEGUE spectroscopy and SSPP parameters (Almeida et al. 2023; Lee et al. 2008a)",
+  "license": {
+    "status": "public-domain",
+    "statement": "SDSS data are in the public domain. SDSS asks that work using them acknowledge the survey and cite the data release (NOTICE)."
+  },
+  "retrieved": "2026-09-27",
+  "columns": [
+    {
+      "id": "ra",
+      "name": "ra",
+      "unit": "deg",
+      "description": "right ascension of the fiber, ICRS"
+    },
+    {
+      "id": "dec",
+      "name": "dec",
+      "unit": "deg",
+      "description": "declination of the fiber, ICRS"
+    },
+    {
+      "id": "g",
+      "name": "g",
+      "unit": "mag",
+      "description": "the star's SDSS g PSF magnitude (psfMag_g of its best photometric object), not corrected for extinction"
+    },
+    {
+      "id": "r",
+      "name": "r",
+      "unit": "mag",
+      "description": "its SDSS r PSF magnitude, the same way"
+    },
+    {
+      "id": "rv",
+      "name": "radial velocity",
+      "unit": "km/s",
+      "description": "heliocentric radial velocity (ELODIERVFINAL, SSPP)"
+    },
+    {
+      "id": "rv_err",
+      "name": "radial velocity error",
+      "unit": "km/s",
+      "uncertaintyOf": "radial velocity",
+      "description": "its error (ELODIERVFINALERR)"
+    },
+    {
+      "id": "teff",
+      "name": "Teff",
+      "unit": "K",
+      "description": "adopted effective temperature (TEFFADOP, SSPP)"
+    },
+    {
+      "id": "teff_err",
+      "name": "Teff error",
+      "unit": "K",
+      "uncertaintyOf": "Teff",
+      "description": "its uncertainty (TEFFADOPUNC)"
+    },
+    {
+      "id": "logg",
+      "name": "log g",
+      "unit": "dex",
+      "description": "adopted surface gravity, log of cm/s^2 (LOGGADOP, SSPP)"
+    },
+    {
+      "id": "logg_err",
+      "name": "log g error",
+      "unit": "dex",
+      "uncertaintyOf": "log g",
+      "description": "its uncertainty (LOGGADOPUNC)"
+    },
+    {
+      "id": "feh",
+      "name": "[Fe/H]",
+      "unit": "dex",
+      "description": "adopted iron abundance relative to the Sun (FEHADOP, SSPP)"
+    },
+    {
+      "id": "feh_err",
+      "name": "[Fe/H] error",
+      "unit": "dex",
+      "uncertaintyOf": "[Fe/H]",
+      "description": "its uncertainty (FEHADOPUNC)"
+    },
+    {
+      "id": "snr",
+      "name": "S/N",
+      "unit": "",
+      "description": "the spectrum’s mean signal-to-noise per pixel (SNR, SSPP)"
+    }
+  ],
+  "masks": [
+    {
+      "column": "seguePrimary",
+      "rule": "a second spectrum of a star already in the table is dropped",
+      "dropped": 0
+    },
+    {
+      "column": "teffadop",
+      "rule": "a spectrum for which SSPP adopted no parameters is dropped",
+      "dropped": 65
+    }
+  ],
+  "reductions": [
+    "Every spectrum within 30 arcmin of the adopted center: the region SEGUE targeted around the cluster (Lee et al. 2008b). SEGUE chose its targets by color and magnitude, and two fibers could not be placed within 55 arcsec of each other, so this is not every star there.",
+    "Positions are rounded to 0.00002 degree (0.07 arcsec), velocities to 0.01 km/s, Teff to 1 K, log g and [Fe/H] to 0.001 dex.",
+    "The spectrum ids are left out; the query in the pack's manifest returns them."
+  ],
+  "source": {
+    "archive": "SDSS SkyServer, Data Release 18",
+    "urls": [
+      "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+s.ra%2C+s.dec%2C+ph.psfMag_g%2C+ph.psfMag_r%2C+p.elodiervfinal%2C+p.elodiervfinalerr%2C+p.teffadop%2C+p.teffadopunc%2C+p.loggadop%2C+p.loggadopunc%2C+p.fehadop%2C+p.fehadopunc%2C+p.snr+FROM+dbo.fGetNearbySpecObjEq%28114.602%2C21.575%2C30%29+AS+nb+JOIN+sppParams+AS+p+ON+p.specobjid+%3D+nb.specObjID+JOIN+SpecObj+AS+s+ON+s.specobjid+%3D+p.specobjid+LEFT+JOIN+PhotoObj+AS+ph+ON+ph.objid+%3D+p.bestobjid+WHERE+p.teffadop+%3E+0+AND+p.seguePrimary+%3D+1+ORDER+BY+p.specobjid&format=csv",
+      "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+COUNT%28*%29+AS+spectra%2C+SUM%28CASE+WHEN+p.seguePrimary+%3D+1+THEN+1+ELSE+0+END%29+AS+primaryOnes%2C+SUM%28CASE+WHEN+p.seguePrimary+%3D+1+AND+p.teffadop+%3E+0+THEN+1+ELSE+0+END%29+AS+kept+FROM+dbo.fGetNearbySpecObjEq%28114.602%2C21.575%2C30%29+AS+nb+JOIN+sppParams+AS+p+ON+p.specobjid+%3D+nb.specObjID&format=csv"
+    ],
+    "queries": [
+      "SELECT s.ra, s.dec, ph.psfMag_g, ph.psfMag_r, p.elodiervfinal, p.elodiervfinalerr, p.teffadop, p.teffadopunc, p.loggadop, p.loggadopunc, p.fehadop, p.fehadopunc, p.snr FROM dbo.fGetNearbySpecObjEq(114.602,21.575,30) AS nb JOIN sppParams AS p ON p.specobjid = nb.specObjID JOIN SpecObj AS s ON s.specobjid = p.specobjid LEFT JOIN PhotoObj AS ph ON ph.objid = p.bestobjid WHERE p.teffadop > 0 AND p.seguePrimary = 1 ORDER BY p.specobjid",
+      "SELECT COUNT(*) AS spectra, SUM(CASE WHEN p.seguePrimary = 1 THEN 1 ELSE 0 END) AS primaryOnes, SUM(CASE WHEN p.seguePrimary = 1 AND p.teffadop > 0 THEN 1 ELSE 0 END) AS kept FROM dbo.fGetNearbySpecObjEq(114.602,21.575,30) AS nb JOIN sppParams AS p ON p.specobjid = nb.specObjID"
+    ],
+    "citations": [
+      {
+        "text": "Almeida et al. 2023, ApJS 267, 44 (SDSS DR18)",
+        "doi": "10.3847/1538-4365/acda98"
+      },
+      {
+        "text": "York et al. 2000, AJ 120, 1579 (the Sloan Digital Sky Survey)",
+        "doi": "10.1086/301513"
+      },
+      {
+        "text": "Lee et al. 2008a, AJ 136, 2022 (the SEGUE Stellar Parameter Pipeline)",
+        "doi": "10.1088/0004-6256/136/5/2022"
+      },
+      {
+        "text": "Lee et al. 2008b, AJ 136, 2050 (its validation on globular and open clusters, NGC 2420 among them)",
+        "doi": "10.1088/0004-6256/136/5/2050"
+      },
+      {
+        "text": "Yanny et al. 2009, AJ 137, 4377 (SEGUE)",
+        "doi": "10.1088/0004-6256/137/5/4377"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "sdss-dr18-ngc2420-segue.csv",
+      "url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+s.ra%2C+s.dec%2C+ph.psfMag_g%2C+ph.psfMag_r%2C+p.elodiervfinal%2C+p.elodiervfinalerr%2C+p.teffadop%2C+p.teffadopunc%2C+p.loggadop%2C+p.loggadopunc%2C+p.fehadop%2C+p.fehadopunc%2C+p.snr+FROM+dbo.fGetNearbySpecObjEq%28114.602%2C21.575%2C30%29+AS+nb+JOIN+sppParams+AS+p+ON+p.specobjid+%3D+nb.specObjID+JOIN+SpecObj+AS+s+ON+s.specobjid+%3D+p.specobjid+LEFT+JOIN+PhotoObj+AS+ph+ON+ph.objid+%3D+p.bestobjid+WHERE+p.teffadop+%3E+0+AND+p.seguePrimary+%3D+1+ORDER+BY+p.specobjid&format=csv",
+      "canonical": "data-lines",
+      "sha256": "ce9828dac31e88170b251b376d5b146a7a5fd336d83050fb86d073cadba9ca29"
+    },
+    {
+      "file": "sdss-dr18-ngc2420-segue-counts.csv",
+      "url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+COUNT%28*%29+AS+spectra%2C+SUM%28CASE+WHEN+p.seguePrimary+%3D+1+THEN+1+ELSE+0+END%29+AS+primaryOnes%2C+SUM%28CASE+WHEN+p.seguePrimary+%3D+1+AND+p.teffadop+%3E+0+THEN+1+ELSE+0+END%29+AS+kept+FROM+dbo.fGetNearbySpecObjEq%28114.602%2C21.575%2C30%29+AS+nb+JOIN+sppParams+AS+p+ON+p.specobjid+%3D+nb.specObjID&format=csv",
+      "canonical": "data-lines",
+      "sha256": "a2aca23af48f4dce12cb8fed57b107e2f3e1a65a79cd5409604a44243a840443"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/ngc2420.mjs",
+    "version": "1.0.0",
+    "options": {
+      "columns": [
+        {
+          "id": "ra",
+          "step": 0.00002
+        },
+        {
+          "id": "dec",
+          "step": 0.00002
+        },
+        {
+          "id": "g",
+          "step": 0.001
+        },
+        {
+          "id": "r",
+          "step": 0.001
+        },
+        {
+          "id": "rv",
+          "step": 0.01
+        },
+        {
+          "id": "rv_err",
+          "step": 0.01
+        },
+        {
+          "id": "teff",
+          "step": 1
+        },
+        {
+          "id": "teff_err",
+          "step": 1
+        },
+        {
+          "id": "logg",
+          "step": 0.001
+        },
+        {
+          "id": "logg_err",
+          "step": 0.001
+        },
+        {
+          "id": "feh",
+          "step": 0.001
+        },
+        {
+          "id": "feh_err",
+          "step": 0.001
+        },
+        {
+          "id": "snr",
+          "step": 0.01
+        }
+      ]
+    },
+    "steps": [
+      "Query SSPP's parameters for every SEGUE spectrum within 30 arcmin of the adopted center, one spectrum per star (seguePrimary) and only those with adopted parameters, with the fiber's position and the star's PSF magnitudes, ordered by spectrum id.",
+      "Count, in a second query over the same circle, every spectrum, the primary ones and those kept, for the masks.",
+      "Encode as table-columns/1: each column a whole number of its step from an offset, int16 where the range fits."
+    ],
+    "record": {
+      "rows": 517,
+      "columns": [
+        {
+          "id": "ra",
+          "type": "int16",
+          "step": 0.00002,
+          "missing": 0,
+          "maxRounding": 0.00001
+        },
+        {
+          "id": "dec",
+          "type": "int16",
+          "step": 0.00002,
+          "missing": 0,
+          "maxRounding": 0.00001
+        },
+        {
+          "id": "g",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 32,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "r",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 32,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "rv",
+          "type": "int16",
+          "step": 0.01,
+          "missing": 0,
+          "maxRounding": 0.00495
+        },
+        {
+          "id": "rv_err",
+          "type": "int16",
+          "step": 0.01,
+          "missing": 0,
+          "maxRounding": 0.005
+        },
+        {
+          "id": "teff",
+          "type": "int16",
+          "step": 1,
+          "missing": 0,
+          "maxRounding": 0.5
+        },
+        {
+          "id": "teff_err",
+          "type": "int16",
+          "step": 1,
+          "missing": 0,
+          "maxRounding": 0.495
+        },
+        {
+          "id": "logg",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.000499
+        },
+        {
+          "id": "logg_err",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.000497
+        },
+        {
+          "id": "feh",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "feh_err",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "snr",
+          "type": "int16",
+          "step": 0.01,
+          "missing": 0,
+          "maxRounding": 0.005
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "SSPP's adopted parameters, as published. Lee et al. 2008b found SSPP's [Fe/H] low by about 0.3 dex for stars of near-solar metallicity; that is not corrected here."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/sdssNgc2420Segue.js",
+    "bytes": 23894,
+    "sha256": "b337e281c0e729488ca8a02887c7aa4890466bccbc94b8ee71f20ec1d25f03eb"
+  },
+  "validation": {
+    "check": "the median radial velocity within 10 arcmin of the center is within 5 km/s of the cluster's",
+    "against": [
+      {
+        "quantity": "radial velocity",
+        "value": 74,
+        "unit": "km/s",
+        "ref": "Lee et al. 2008b, AJ 136, 2050"
+      }
+    ],
+    "result": {
+      "median": 74.79,
+      "spectra": 159
+    }
+  }
+}
