@@ -9,10 +9,13 @@
 // ids. Static text carries `data-i18n`, `data-i18n-placeholder` and
 // `data-i18n-aria-label` and `data-i18n-aria-roledescription`; translatePage()
 // fills them.
+//
+// English is the page's own; another language's catalog loads when a reader
+// arrives with it or chooses it (loadLanguage), so an English reader never
+// downloads Spanish. Until it has loaded, t() falls back to English.
 // =============================================================================
 
 import { EN_OBSERVATORY } from '../i18n/en.observatory.js';
-import { ES_OBSERVATORY } from '../i18n/es.observatory.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
@@ -22,7 +25,23 @@ export const LANGUAGES = Object.freeze([
   { id: 'es', endonym: 'Español' },
 ]);
 
-const CATALOGS = { en: { ...EN_OBSERVATORY }, es: { ...ES_OBSERVATORY } };
+const CATALOGS = { en: { ...EN_OBSERVATORY }, es: {} };
+const LOADERS = {
+  es: () => import('../i18n/es.observatory.js').then(m => m.ES_OBSERVATORY),
+};
+const loaded = new Set(['en']);
+
+/**
+ * Load a language's catalog, if it is not loaded yet. The strings panels
+ * registered for it meanwhile are kept.
+ * @param {string} id - A language id
+ */
+export async function loadLanguage(id) {
+  if (loaded.has(id) || !LOADERS[id]) return;
+  const table = await LOADERS[id]();
+  CATALOGS[id] = { ...table, ...CATALOGS[id] };
+  loaded.add(id);
+}
 
 /**
  * Add a lazily loaded part of the catalog: a panel's strings, registered by

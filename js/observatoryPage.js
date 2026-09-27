@@ -21,6 +21,7 @@ import {
   LANGUAGES,
   language,
   preferred,
+  loadLanguage,
   registerMessages,
   setLanguage,
   t,
@@ -1339,10 +1340,16 @@ function renderLanguages() {
       b.lang = l.id;
       b.textContent = l.endonym;
       b.setAttribute('aria-pressed', String(language() === l.id));
-      b.addEventListener('click', () => {
-        setLanguage(l.id);
-        translateAll();
-      });
+      // A catalog that cannot be fetched leaves the page as it was.
+      b.addEventListener('click', () =>
+        loadLanguage(l.id).then(
+          () => {
+            setLanguage(l.id);
+            translateAll();
+          },
+          () => {}
+        )
+      );
       return b;
     })
   );
@@ -1366,21 +1373,32 @@ function translateAll() {
   if (state.view) renderAll();
 }
 
-setLanguage(preferred());
-translateAll();
-document.documentElement.dataset.ready = 'true';
-// Opened from the catalog with ?installed=<package id>: js/catalog/installed.js
-// opens the pack, so a visitor who installs nothing never loads it.
-const installedId = new URLSearchParams(location.search).get('installed');
-if (new URLSearchParams(location.search).has('guide')) {
-  $('obsGuidePanel').open = true;
-  guidePanel();
+// A reader who arrives in another language waits for its catalog, and one it
+// cannot be fetched for opens in English; a reader in English waits for
+// nothing.
+const opening = preferred();
+loadLanguage(opening).then(
+  () => begin(opening),
+  () => begin('en')
+);
+
+function begin(lang) {
+  setLanguage(lang);
+  translateAll();
+  document.documentElement.dataset.ready = 'true';
+  // Opened from the catalog with ?installed=<package id>: js/catalog/installed.js
+  // opens the pack, so a visitor who installs nothing never loads it.
+  const installedId = new URLSearchParams(location.search).get('installed');
+  if (new URLSearchParams(location.search).has('guide')) {
+    $('obsGuidePanel').open = true;
+    guidePanel();
+  }
+  if (installedId)
+    import('./catalog/installed.js').then(m =>
+      m.openInstalled(
+        installedId,
+        { open, status, t, registerMessages },
+        lightCurveObservation
+      )
+    );
 }
-if (installedId)
-  import('./catalog/installed.js').then(m =>
-    m.openInstalled(
-      installedId,
-      { open, status, t, registerMessages },
-      lightCurveObservation
-    )
-  );
