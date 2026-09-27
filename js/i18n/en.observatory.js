@@ -248,5 +248,5 @@ export const EN_OBSERVATORY = {
   'obs.fit.title': 'Fit a model (diagnostic)',
   'obs.arc.title': "Or find a star's Gaia epochs at CDS (live, opt-in)",
   'obs.ms.title': 'Measure, and the pipeline',
-  'obs.gd.title': 'Guided investigations: from photons to a planet',
+  'obs.gd.title': 'Guided investigations',
 };

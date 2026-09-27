@@ -211,31 +211,6 @@ export function bestEpoch(s, { period, duration }) {
   return best ? best.e : null;
 }
 
-/**
- * The light curve a workspace view shows: its x column, its value column and
- * that column's uncertainty, where it has one, with rows that are not all
- * finite left out.
- * @param {object} view - A gravitas.observation/1 after its changes
- */
-export function seriesOf(view) {
-  const col = id => view.columns.find(c => c.id === id);
-  const x = col(view.axes.x);
-  const y = col(view.axes.y);
-  const e = view.columns.find(c => c.role === 'uncertainty' && c.of === y?.id);
-  const masked = new Set();
-  for (const m of view.masks || []) for (const r of m.rows) masked.add(r);
-  const t = [];
-  const f = [];
-  const dy = e ? [] : null;
-  for (let i = 0; i < (x?.values.length ?? 0); i++) {
-    if (masked.has(i)) continue;
-    const a = x.values[i];
-    const b = y.values[i];
-    const c = e ? e.values[i] : 1;
-    if (!Number.isFinite(a) || !Number.isFinite(b) || !(c > 0)) continue;
-    t.push(a);
-    f.push(b);
-    if (dy) dy.push(c);
-  }
-  return { t, y: f, dy };
-}
+// The series a view shows is the platform's (./core.js); re-exported for
+// the callers that read it from here.
+export { seriesOf } from './core.js';

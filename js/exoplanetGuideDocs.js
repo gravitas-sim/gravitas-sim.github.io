@@ -1,58 +1,16 @@
 // =============================================================================
 // The Exoplanet Observatory's instructor documents
 // -----------------------------------------------------------------------------
-// Two PDFs for the encrypted instructor bundle (tools/build-instructor-
-// materials.js), rendered in Node and never loaded by a page:
-//
-//   the instructor guide   the curriculum map, the data and their licenses,
-//                          each investigation's steps, teaching notes and an
-//                          assignment sheet, and what remains an
-//                          approximation
-//   the answer key         every step's answer on each path, worked out by
-//                          tools/exoplanet-reference.mjs from a reference run
-//                          with each panel's default settings
-//
-// The step words come from js/i18n/en.guides.js, so the documents and the
-// page cannot say different things; only the teaching notes are written here.
+// Its instructor guide and answer key, laid out by js/guideDocs.js as every
+// suite's are: what this module adds is only what no data structure holds,
+// the teaching notes, the data inventory, the approximations and the
+// introduction. tools/build-instructor-materials.js renders both.
 // =============================================================================
 
-import { createDocument } from './pdf.js';
-import {
-  ADOPTED,
-  GUIDES,
-  TARGETS,
-  stepsOn,
-} from './observatory/guides/exoplanet.js';
+import { suiteAnswerKey, suiteInstructorGuide } from './guideDocs.js';
+import { ADOPTED, SUITE } from './observatory/guides/exoplanet.js';
 import { EN_GUIDES } from './i18n/en.guides.js';
-
-const say = id => EN_GUIDES[id] ?? id;
-const stepText = (g, s, part) => say(`gd.${g.id}.${s.id}.${part}`);
-const KIND = {
-  read: 'Read',
-  do: 'Do, and checked',
-  answer: 'Answer, checked',
-  choose: 'Choose',
-};
-const kindOf = s =>
-  s.kind === 'choose' && s.correct === null
-    ? 'Predict (recorded)'
-    : KIND[s.kind];
-
-/** What each investigation reads, and with which tools. */
-function usesOf(g) {
-  const targets = new Set();
-  const tools = new Set();
-  for (const s of g.steps) {
-    const t = s.check?.target ?? s.go?.open ?? s.target;
-    if (t) targets.add(say(`gd.target.${t}`));
-    if (s.check?.kind === 'measured')
-      tools.add(s.check.tool === 'box' ? 'box search' : 'aperture tool');
-    if (s.check?.kind === 'fitted') tools.add('transit fit');
-    if (s.check?.kind === 'folded') tools.add('fold');
-    if (s.show) tools.add('computed panels');
-  }
-  return { targets: [...targets], tools: [...tools] };
-}
+import { EN_EXOPLANET } from './i18n/en.exoplanet.js';
 
 // What an instructor should know before a class runs each investigation.
 const NOTES = {
@@ -133,177 +91,27 @@ export const DATASETS = [
   },
 ];
 
-const footer = (what, version) =>
-  `Gravitas Exoplanet Observatory  |  ${what}  |  Instructor copy${version ? `  |  ${version}` : ''}`;
+/** Everything js/guideDocs.js lays out for this suite. */
+export const DOCS = {
+  messages: { ...EN_GUIDES, ...EN_EXOPLANET },
+  name: 'Exoplanet Observatory',
+  title: 'The Exoplanet Observatory: from photons to a planet',
+  subtitle: `${SUITE.GUIDES.length} guided investigations  |  real TESS light curves  |  introductory and advanced paths`,
+  intro: [
+    'Five investigations, done in the Observatory (/observatory/) with real TESS light curves and the page’s own tools: the aperture tool, the box search, the fold and the transit fit. Each step is checked against the student’s own workspace or against a number computed from the data on screen; the few values taken from the literature are named as adopted, with their sources. They are meant to be done in order, and each takes one class period on the introductory path.',
+  ],
+  dataNote:
+    'The Kepler-13 light curves are not built in: the first step that opens one installs it from the Gravitas catalog into the browser (about 9 KB each), where it stays for offline use. Everything else, the Observatory and the guides included, is precached by the service worker, so a class that has opened the guides once can work offline.',
+  notes: NOTES,
+  datasets: DATASETS,
+  approximations: APPROXIMATIONS,
+  keyTool: 'tools/exoplanet-reference.mjs',
+};
 
 /** The instructor guide, with the curriculum map and assignment sheets. */
-export function exoplanetInstructorGuide({ version = '' } = {}) {
-  const doc = createDocument({
-    title: 'The Exoplanet Observatory: Instructor Guide',
-    subject:
-      'Instructor guide for the Exoplanet Observatory: five guided investigations with real TESS light curves, a curriculum map, the data and their licenses, teaching notes, assignment sheets and the approximations that remain.',
-    footer: footer('Instructor Guide', version),
-  });
-  doc.titleBlock({
-    kicker: 'Gravitas Observatory | Instructor Guide',
-    title: 'The Exoplanet Observatory: from photons to a planet',
-    subtitle: `${GUIDES.length} guided investigations  |  real TESS light curves  |  introductory and advanced paths`,
-  });
-  doc.paragraph(
-    'Five investigations, done in the Observatory (/observatory/) with real TESS light curves and the page’s own tools: the aperture tool, the box search, the fold and the transit fit. Each step is checked against the student’s own workspace or against a number computed from the data on screen; the few values taken from the literature are named as adopted, with their sources. They are meant to be done in order, and each takes one class period on the introductory path.'
-  );
-  doc.paragraph(
-    'The advanced path is the introductory one with steps added: the same data, the same checks and the same answers, and more of them. A student can move on without passing a step, and after a wrong answer can ask to see the right one; the progress list, and the notebook entry, say which steps were passed and which were shown.'
-  );
+export const exoplanetInstructorGuide = ({ version = '' } = {}) =>
+  suiteInstructorGuide(SUITE, DOCS, { version });
 
-  doc.heading('The curriculum map', { size: 13 });
-  doc.table({
-    columns: [
-      'Investigation',
-      'Question',
-      'Data and tools',
-      'Intro',
-      'Advanced',
-    ],
-    widths: [1.3, 2, 2.2, 0.8, 0.9],
-    rows: GUIDES.map(g => {
-      const u = usesOf(g);
-      return [
-        say(`gd.${g.id}.title`),
-        say(`gd.${g.id}.summary`),
-        `${u.targets.join('; ')}. Tools: ${u.tools.join(', ') || 'none'}.`,
-        `${stepsOn(g, 'intro').length} steps, ~${g.minutes.intro} min`,
-        `${stepsOn(g, 'advanced').length} steps, ~${g.minutes.advanced} min`,
-      ];
-    }),
-    size: 8,
-  });
-  doc.paragraph(
-    'Every duration is an estimate reasoned from what each step asks; none has yet been timed with a class.',
-    { size: 9, color: '0.35 0.35 0.4' }
-  );
-
-  doc.heading('The data, and on what terms', { size: 13 });
-  doc.table({
-    columns: ['Data', 'Where it comes from', 'Terms'],
-    widths: [2, 2.4, 1.3],
-    rows: DATASETS.map(d => [d.name, d.source, d.license]),
-    size: 8,
-  });
-  doc.paragraph(
-    'The Kepler-13 light curves are not built in: the first step that opens one installs it from the Gravitas catalog into the browser (about 9 KB each), where it stays for offline use. Everything else, the Observatory and the guides included, is precached by the service worker, so a class that has opened the guides once can work offline.'
-  );
-
-  for (const g of GUIDES) {
-    doc.pageBreak();
-    doc.heading(say(`gd.${g.id}.title`), { size: 13 });
-    doc.paragraph(say(`gd.${g.id}.summary`));
-    doc.table({
-      columns: ['#', 'Step', 'Kind', 'Path'],
-      widths: [0.3, 3.2, 1.3, 0.8],
-      rows: stepsOn(g, 'advanced').map((s, n) => [
-        String(n + 1),
-        stepText(g, s, 'title'),
-        kindOf(s),
-        s.path === 'advanced' ? 'Advanced' : 'Both',
-      ]),
-      size: 8.5,
-    });
-    doc.heading('Teaching notes', { size: 11 });
-    doc.bullets(NOTES[g.id]);
-    doc.heading('Assignment sheet', { size: 11 });
-    doc.paragraph(
-      `Open /observatory/?guide=${g.id} for the introductory path, or /observatory/?guide=${g.id}&path=advanced for the advanced one. Hand in:`
-    );
-    doc.bullets(
-      stepsOn(g, 'advanced')
-        .filter(s => s.kind === 'answer' || s.kind === 'choose')
-        .map(
-          s =>
-            `${stepText(g, s, 'title')}${s.path === 'advanced' ? ' (advanced)' : ''}: ${
-              s.kind === 'answer'
-                ? 'the number, and how you found it'
-                : 'your choice, and why'
-            }.`
-        )
-    );
-    doc.paragraph(
-      'At the last step, “Add my answers to the notebook” records the answers as an Observatory entry, with which were checked and which were shown; the notebook’s report can then be handed in with them.',
-      { size: 9 }
-    );
-  }
-
-  doc.pageBreak();
-  doc.heading('What remains an approximation', { size: 13 });
-  doc.bullets(APPROXIMATIONS);
-  return doc.build();
-}
-
-/**
- * The answer key, from tools/exoplanet-reference.mjs answerKey().
- * @param {Array<object>} rows - Its rows
- */
-export function exoplanetAnswerKey(rows, { version = '' } = {}) {
-  const doc = createDocument({
-    title: 'The Exoplanet Observatory: Answer Key',
-    subject:
-      'Answer key for the Exoplanet Observatory’s guided investigations, worked out from a reference run on the same data with each panel’s default settings.',
-    footer: footer('Answer Key', version),
-  });
-  doc.titleBlock({
-    kicker: 'Gravitas Observatory | Answer Key',
-    title: 'The Exoplanet Observatory: Answer Key',
-    subtitle:
-      'Every step, on the advanced path, which includes the introductory one',
-  });
-  doc.paragraph(
-    'Instructor copy. These answers were worked out by tools/exoplanet-reference.mjs, which does what a student does with each panel’s default settings and then applies the guides’ own answer functions to the results. The page checks each student against their own measurement and fit, not against this key: a student who searched a different range or fitted with other bounds is checked against what they found. Predictions are recorded and never marked.',
-    { size: 9, color: '0.35 0.35 0.42' }
-  );
-  const fmt = v =>
-    typeof v === 'number' ? String(Number(v.toPrecision(6))) : String(v);
-  for (const g of GUIDES) {
-    doc.heading(say(`gd.${g.id}.title`), { size: 12, spaceBefore: 16 });
-    const mine = rows.filter(r => r.guide === g.id && r.path === 'advanced');
-    doc.table({
-      columns: ['Step', 'Kind', 'Answer', 'Why'],
-      widths: [1.6, 1, 1.2, 3.4],
-      rows: mine
-        .filter(r => r.kind !== 'read')
-        .map(r => {
-          const s = g.steps.find(x => x.id === r.step);
-          const answer =
-            r.kind === 'choose'
-              ? r.expected === null
-                ? 'Any (a prediction)'
-                : stepText(g, s, `opt.${r.expected}`)
-              : r.expected === null
-                ? r.kind === 'do'
-                  ? 'Done'
-                  : 'Not computed'
-                : `${fmt(r.expected)}${r.tolerance !== undefined ? ` (+/- ${r.tolerance})` : ''}`;
-          const why =
-            r.kind === 'choose' && r.expected === null
-              ? 'Answered by a later step.'
-              : stepText(g, s, 'ok').replace(
-                  /\{value\}/g,
-                  r.expected === null ? '' : fmt(r.expected)
-                );
-          return [
-            `${stepText(g, s, 'title')}${s.path === 'advanced' ? ' (advanced)' : ''}`,
-            kindOf(s),
-            answer,
-            why,
-          ];
-        }),
-      size: 8,
-    });
-  }
-  doc.paragraph(
-    `Targets: ${Object.keys(TARGETS)
-      .map(t => say(`gd.target.${t}`))
-      .join('; ')}.`,
-    { size: 8.5 }
-  );
-  return doc.build();
-}
+/** The answer key, from js/data/exoplanetAnswerKey.js. */
+export const exoplanetAnswerKey = (rows, { version = '' } = {}) =>
+  suiteAnswerKey(SUITE, rows, DOCS, { version });

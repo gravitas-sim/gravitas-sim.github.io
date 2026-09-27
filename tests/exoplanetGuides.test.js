@@ -32,10 +32,17 @@ const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const S = await import('../js/observatory/guides/science.js');
 const G = await import('../js/observatory/guides/exoplanet.js');
 const P = await import('../js/observatory/guidePanel.js');
-const { EN_GUIDES } = await import('../js/i18n/en.guides.js');
-const { ES_GUIDES } = await import('../js/i18n/es.guides.js');
+const C = await import('../js/observatory/guides/core.js');
+const { EN_GUIDES: EN_RUNNER } = await import('../js/i18n/en.guides.js');
+const { ES_GUIDES: ES_RUNNER } = await import('../js/i18n/es.guides.js');
+const { EN_EXOPLANET } = await import('../js/i18n/en.exoplanet.js');
+const { ES_EXOPLANET } = await import('../js/i18n/es.exoplanet.js');
+const EN_GUIDES = { ...EN_RUNNER, ...EN_EXOPLANET };
+const ES_GUIDES = { ...ES_RUNNER, ...ES_EXOPLANET };
 const { HD209458 } = await import('../js/data/exoplanetSystems.js');
 const R = await import('../tools/exoplanet-reference.mjs');
+// A check against the exoplanet suite's targets.
+const evaluate = (check, w) => C.evaluateCheck(check, w, G.TARGETS);
 const { EXOPLANET_KEY } = await import('../js/data/exoplanetAnswerKey.js');
 
 const KINDS = ['read', 'do', 'answer', 'choose'];
@@ -188,14 +195,23 @@ describe('the guides as data', () => {
     );
   });
 
-  test('every message id the runner writes out is in the catalog', () => {
-    const src = readFileSync(
-      path.join(REPO, 'js/observatory/guidePanel.js'),
-      'utf8'
-    );
-    const ids = [...src.matchAll(/\bt\(\s*'(gd\.[\w.-]+)'/g)].map(m => m[1]);
-    expect(ids.length).toBeGreaterThan(20);
-    expect(ids.filter(id => !(id in EN_GUIDES))).toEqual([]);
+  test('every message id the runner and the suite write out is in its catalog', () => {
+    const ids = file =>
+      [
+        ...readFileSync(path.join(REPO, file), 'utf8').matchAll(
+          /\bt\(\s*'(gd\.[\w.-]+)'/g
+        ),
+      ].map(m => m[1]);
+    const runner = ids('js/observatory/guidePanel.js');
+    expect(runner.length).toBeGreaterThan(20);
+    expect(runner.filter(id => !(id in EN_RUNNER))).toEqual([]);
+    // The suite's panels are drawn with the runner's translator, `h.t`.
+    const suite = ids('js/observatory/guides/exoplanet.js');
+    expect(suite.length).toBeGreaterThan(20);
+    expect(suite.filter(id => !(id in EN_GUIDES))).toEqual([]);
+    // Every suite has a title in the runner's own catalog, for the chooser.
+    for (const s of ['exoplanet', 'populations'])
+      expect(EN_RUNNER).toHaveProperty([`gd.suite.${s}`]);
     for (const why of [
       'notOpened',
       'noFold',
@@ -375,7 +391,7 @@ describe('the reference run against the literature', () => {
       )
     );
     key = out.key;
-    run = { ...out.run, observations: await R.openTargets() };
+    run = { ...out.run, observations: await R.openTargets(G.TARGETS) };
   }, 120_000);
 
   test('the committed answer key is what the reference run gives', () => {
@@ -383,7 +399,7 @@ describe('the reference run against the literature', () => {
     // engine's floating point, and the key is printed to six.
     expect(EXOPLANET_KEY).toHaveLength(key.length);
     key.forEach((row, i) => {
-      const { expected, ...rest } = R.rounded(row);
+      const { expected, ...rest } = C.rounded(row);
       const { expected: committed, ...kept } = EXOPLANET_KEY[i];
       expect(kept).toEqual(JSON.parse(JSON.stringify(rest)));
       if (typeof expected === 'number')
@@ -508,22 +524,18 @@ describe('the runner', () => {
   const hd = { id: G.TARGETS.hd209458.observation };
   test('opened and folded', () => {
     const opened = { kind: 'opened', target: 'hd209458' };
-    expect(P.evaluateCheck(opened, { source: hd }).ok).toBe(true);
-    expect(P.evaluateCheck(opened, { source: { id: 'other' } }).why).toBe(
-      'notOpened'
-    );
+    expect(evaluate(opened, { source: hd }).ok).toBe(true);
+    expect(evaluate(opened, { source: { id: 'other' } }).why).toBe('notOpened');
     const folded = { kind: 'folded', target: 'hd209458', period: [3.51, 3.54] };
-    expect(P.evaluateCheck(folded, { source: hd, changes: [] }).why).toBe(
-      'noFold'
-    );
+    expect(evaluate(folded, { source: hd, changes: [] }).why).toBe('noFold');
     expect(
-      P.evaluateCheck(folded, {
+      evaluate(folded, {
         source: hd,
         changes: [{ op: 'fold', period: 1.76 }],
       }).why
     ).toBe('foldPeriod');
     expect(
-      P.evaluateCheck(folded, {
+      evaluate(folded, {
         source: hd,
         changes: [{ op: 'fold', period: 3.524 }],
       }).ok
@@ -540,17 +552,17 @@ describe('the runner', () => {
       quantities: [{ id: 'count', value: 23 }],
       ...over,
     });
-    expect(P.evaluateCheck(check, { nodes: [node()] }).ok).toBe(true);
+    expect(evaluate(check, { nodes: [node()] }).ok).toBe(true);
     expect(
-      P.evaluateCheck(check, {
+      evaluate(check, {
         nodes: [node({ params: { mode: 'bits', bit: 4 } })],
       }).why
     ).toBe('noMeasurement');
+    expect(evaluate(check, { nodes: [node({ status: 'stale' })] }).why).toBe(
+      'noMeasurement'
+    );
     expect(
-      P.evaluateCheck(check, { nodes: [node({ status: 'stale' })] }).why
-    ).toBe('noMeasurement');
-    expect(
-      P.evaluateCheck(check, {
+      evaluate(check, {
         nodes: [node({ quantities: [{ id: 'count', value: 35 }] })],
       }).why
     ).toBe('outside');
@@ -565,19 +577,19 @@ describe('the runner', () => {
         fit: { parameters: [], derived: [{ name: 'Rp', value: 1.38 }] },
       },
     });
-    expect(P.evaluateCheck(check, { fits: [] }).why).toBe('noFit');
-    expect(P.evaluateCheck(check, { fits: [doc({ dilution: 0 })] }).why).toBe(
+    expect(evaluate(check, { fits: [] }).why).toBe('noFit');
+    expect(evaluate(check, { fits: [doc({ dilution: 0 })] }).why).toBe(
       'fitSettings'
     );
     expect(
-      P.evaluateCheck(check, {
+      evaluate(check, {
         fits: [
           doc({ dilution: 0, stellarRadius: { value: 1.19, sigma: 0.02 } }),
         ],
       }).ok
     ).toBe(true);
     expect(
-      P.evaluateCheck(check, {
+      evaluate(check, {
         fits: [
           doc({ dilution: 0, stellarRadius: { value: 1.155, sigma: 0.02 } }),
         ],
@@ -592,7 +604,7 @@ describe('the runner', () => {
     main.append(root);
     globalThis.document.body.append(main);
     const messages = {};
-    const run = { observations: await R.openTargets() };
+    const run = { observations: await R.openTargets(G.TARGETS) };
     const said = [];
     const panel = P.mountGuidePanel(root, {
       t: (id, vars) =>
@@ -613,6 +625,8 @@ describe('the runner', () => {
       nodes: async () => [],
       showPanel: async () => true,
     });
+    await panel.ready;
+    expect(root.querySelector('#gdSuite').value).toBe('exoplanet');
     root.querySelector('#gdGuide').value = 'exo-star';
     root.querySelector('#gdPath').value = 'intro';
     root.querySelector('#gdStart').click();
