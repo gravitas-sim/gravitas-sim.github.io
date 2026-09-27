@@ -17,10 +17,27 @@
 // the caller asks for by name that is not readable is an error. The observation data-pack gate measured it at 1.5 KB and 11 ms on a
 // 2 MB SPOC light curve; OBSERVATION_DATA_PACK_GATE.md has the numbers, and
 // why FITS stays a developer-tool format until a browser reader has earned it.
+//
+// A header is the file's own account of itself, so nothing in it is used
+// before it is checked against the file. The reader walks every header first
+// and refuses the file, naming the card, when NAXIS is outside the 0 to 999
+// FITS allows, an axis length or PCOUNT is not a whole number, BITPIX is not
+// one of the six FITS defines, TFIELDS is outside 0 to 999, a BINTABLE does
+// not have two axes, the product of the axes passes the file's length, a data
+// unit runs past the end of the file, a header runs to 100 blocks without an
+// END, or there are more units than `maxUnits`. Only then does it decode
+// anything. Before, NAXIS became an array
+// length unchecked (VO_ARCHIVE_GATE.md, finding 4: NAXIS = 5e7 in a 2880-byte
+// file took 32 s and 421 MB), and a negative PCOUNT stepped the walk back onto
+// the header it had just read, forever.
 // =============================================================================
 
 const BLOCK = 2880;
 const CARD = 80;
+/** A header this long with no END is refused rather than read on. */
+const MAX_HEADER_BLOCKS = 100;
+/** The pixel types FITS defines: unsigned 8-bit, signed integers, floats. */
+const BITPIX = new Set([8, 16, 32, 64, -32, -64]);
 
 /** Read one header starting at `offset`. */
 function readHeader(bytes, offset) {
@@ -29,6 +46,11 @@ function readHeader(bytes, offset) {
   for (;;) {
     if (at + CARD > bytes.length) {
       throw new Error(`FITS header at byte ${offset} has no END card`);
+    }
+    if (at - offset === MAX_HEADER_BLOCKS * BLOCK) {
+      throw new Error(
+        `FITS header at byte ${offset} has no END card in its first ${MAX_HEADER_BLOCKS} blocks`
+      );
     }
     const card = String.fromCharCode(...bytes.subarray(at, at + CARD));
     at += CARD;
@@ -58,6 +80,76 @@ function readHeader(bytes, offset) {
     cards[key] = value;
   }
   return { cards, dataStart: Math.ceil(at / BLOCK) * BLOCK };
+}
+
+/** A card's value as an error quotes it: a string in quotes, as it was read. */
+const shown = v => (typeof v === 'string' ? `"${v}"` : String(v));
+
+/**
+ * A card that must hold a whole number from 0 to `max`: its value, or an
+ * error that names the card, what it holds and the header it is in.
+ */
+function count(cards, key, offset, max = Infinity) {
+  const v = cards[key];
+  if (v === undefined) {
+    throw new Error(`FITS header at byte ${offset} has no ${key} card`);
+  }
+  if (!Number.isSafeInteger(v) || v < 0 || v > max) {
+    const allowed =
+      max === Infinity ? 'a whole number, 0 or more' : `0 to ${max}`;
+    throw new Error(
+      `${key} = ${shown(v)} in the FITS header at byte ${offset}: FITS allows ${allowed}`
+    );
+  }
+  return v;
+}
+
+/**
+ * One header, checked against the file before anything is read from its
+ * data: its axes, and the bytes of the data unit that follows it. NAXIS is
+ * bounded before it becomes a loop, each NAXISn before it joins the product,
+ * and the product against the file's length at every step, so it can neither
+ * lose precision nor ask for bytes the file does not have.
+ */
+function checkHeader(bytes, cards, offset, dataStart) {
+  if (!BITPIX.has(cards.BITPIX)) {
+    throw new Error(
+      cards.BITPIX === undefined
+        ? `FITS header at byte ${offset} has no BITPIX card`
+        : `BITPIX = ${shown(cards.BITPIX)} in the FITS header at byte ${offset} is not a FITS pixel type`
+    );
+  }
+  const naxis = count(cards, 'NAXIS', offset, 999);
+  const axes = [];
+  for (let i = 1; i <= naxis; i++) axes.push(count(cards, `NAXIS${i}`, offset));
+  const pcount =
+    cards.PCOUNT === undefined ? 0 : count(cards, 'PCOUNT', offset);
+  if (cards.TFIELDS !== undefined) count(cards, 'TFIELDS', offset, 999);
+  if (cards.XTENSION === 'BINTABLE' && naxis !== 2) {
+    throw new Error(
+      `NAXIS = ${naxis} in the FITS header at byte ${offset}: a BINTABLE has 2 axes`
+    );
+  }
+  let dataBytes = 0;
+  if (naxis > 0) {
+    // An axis of length 0 empties the data unit, however long the others are.
+    let size = axes.includes(0) ? 0 : Math.abs(cards.BITPIX) / 8;
+    for (let i = 0; size > 0 && i < naxis; i++) {
+      size *= axes[i];
+      if (size > bytes.length) {
+        throw new Error(
+          `NAXIS${i + 1} = ${axes[i]} in the FITS header at byte ${offset} makes its data unit larger than the ${bytes.length}-byte file`
+        );
+      }
+    }
+    dataBytes = size + pcount;
+  }
+  if (dataStart + dataBytes > bytes.length) {
+    throw new Error(
+      `the data unit of the FITS header at byte ${offset} runs past the end of the file: ${dataBytes} bytes from byte ${dataStart} of ${bytes.length}`
+    );
+  }
+  return { axes, dataBytes };
 }
 
 /** Bytes per element and a big-endian reader, by TFORM letter. */
@@ -153,7 +245,7 @@ function readImage(bytes, cards, dataStart) {
   const kind = PIXEL[cards.BITPIX];
   const width = cards.NAXIS1;
   const height = cards.NAXIS2;
-  if (!kind) throw new Error(`BITPIX ${cards.BITPIX} is not a FITS pixel type`);
+  if (!kind) throw new Error(`BITPIX ${cards.BITPIX} images are not read`);
   const n = width * height;
   if (dataStart + n * kind.bytes > bytes.length) {
     throw new Error(
@@ -177,27 +269,33 @@ function readImage(bytes, cards, dataStart) {
 }
 
 /**
- * Every header-and-data unit in the file, with binary tables decoded.
+ * Every header-and-data unit in the file, with binary tables decoded. Every
+ * header is read and checked against the file before any unit is decoded.
  * @param {Uint8Array} bytes - The whole file
+ * @param {{maxUnits?: number}} [opts] - More units than `maxUnits` (16; a
+ *   light curve has 3) is an error
  * @returns {Array<{cards: object, columns?: object, image?: object,
  *   unread?: object[]}>}
  */
-export function readFits(bytes) {
+export function readFits(bytes, { maxUnits = 16 } = {}) {
   if (String.fromCharCode(...bytes.subarray(0, 9)) !== 'SIMPLE  =') {
     throw new Error('not a FITS file: it does not start with SIMPLE');
   }
-  const units = [];
+  const headers = [];
   let offset = 0;
   while (offset < bytes.length) {
+    if (headers.length >= maxUnits) {
+      throw new Error(
+        `the file has more than ${maxUnits} header-and-data units; readFits(bytes, { maxUnits }) reads more`
+      );
+    }
     const { cards, dataStart } = readHeader(bytes, offset);
-    const axes = Array.from(
-      { length: cards.NAXIS || 0 },
-      (_, i) => cards[`NAXIS${i + 1}`]
-    );
-    const bits = Math.abs(cards.BITPIX || 8);
-    const dataBytes = axes.length
-      ? (axes.reduce((a, b) => a * b, 1) * bits) / 8 + (cards.PCOUNT || 0)
-      : 0;
+    const { axes, dataBytes } = checkHeader(bytes, cards, offset, dataStart);
+    headers.push({ cards, dataStart, axes });
+    // Always forward: dataStart is past the header, and dataBytes is not negative.
+    offset = dataStart + Math.ceil(dataBytes / BLOCK) * BLOCK;
+  }
+  return headers.map(({ cards, dataStart, axes }) => {
     const unit = { cards };
     if (cards.XTENSION === 'BINTABLE') {
       if (cards.ZIMAGE || cards.ZTABLE)
@@ -208,10 +306,8 @@ export function readFits(bytes) {
     } else if (axes.length > 2) {
       unit.unread = [{ name: '(image)', form: `${axes.length} axes` }];
     }
-    units.push(unit);
-    offset = dataStart + Math.ceil(dataBytes / BLOCK) * BLOCK;
-  }
-  return units;
+    return unit;
+  });
 }
 
 /**

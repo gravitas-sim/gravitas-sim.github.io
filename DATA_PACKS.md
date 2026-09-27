@@ -246,8 +246,8 @@ exactly what each dataset still lacks.
 
 | What | Why |
 |---|---|
-| FITS in the browser | The reader (`tools/data-packs/fits.mjs`) is a developer tool, and the observatory does not import FITS (OBSERVATORY_WORKSPACE_DESIGN.md says why). A browser reader would need to refuse every form it doesn't read, and to be tested on files it hasn't seen. |
-| FITS images of more than two axes, tile compression, variable-length arrays, ASCII tables, repeated columns | The reader lists these in `unread` and refuses a request for one. It reads headers, the scalar binary-table columns of types L, B, I, J, K, E and D with `TSCAL`/`TZERO` applied, and two-dimensional images of every BITPIX with `BSCALE`/`BZERO` applied. |
+| FITS in the browser | The reader (`tools/data-packs/fits.mjs`) is a developer tool, and the observatory does not import FITS (OBSERVATORY_WORKSPACE_DESIGN.md says why). A browser reader would need to refuse every form it doesn't read, and to be tested on files it hasn't seen. One precondition is met: the reader checks every header against the file before it allocates anything (VO_ARCHIVE_GATE.md, finding 4; `tests/fitsHeaderBounds.test.js`). |
+| FITS images of more than two axes, tile compression, variable-length arrays, ASCII tables, repeated columns | The reader lists these in `unread` and refuses a request for one. It reads headers, the scalar binary-table columns of types L, B, I, J, K, E and D with `TSCAL`/`TZERO` applied, and two-dimensional images of every BITPIX but 64 with `BSCALE`/`BZERO` applied. |
 | A radial-velocity pack | The gate gave the HARPS HD 75289 series a B. It still needs ESO programme IDs in its credit and a confirmed time scale. It is not the TESS star, so it can't pair with this pack. It waits for a lesson that needs it. |
 | Student files as packs | A reader's CSV or JSON opens in the observatory, through a preview and a mapping in which every unit is chosen, as `origin: imported`. It is not a pack, and nothing turns one into one. |
 | Live archive queries | No lesson depends on an archive being up. Raw products are fetched only by `npm run packs:data`. |
