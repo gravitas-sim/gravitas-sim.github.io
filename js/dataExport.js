@@ -60,6 +60,7 @@ const KIND_LABELS = {
   Comet: 'comet',
   NeutronStar: 'neutron star',
   WhiteDwarf: 'white dwarf',
+  Galaxy: 'galaxy',
 };
 
 // The CSV primitives live in js/csv.js, a leaf module with no imports, so the

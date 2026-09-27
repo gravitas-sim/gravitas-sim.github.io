@@ -19,6 +19,7 @@ import {
   comets,
   neutron_stars,
   white_dwarfs,
+  galaxies,
   Planet,
   GasGiant,
   Asteroid,
@@ -27,6 +28,7 @@ import {
   BlackHole,
   NeutronStar,
   WhiteDwarf,
+  Galaxy,
   setPhysicsObjectCounter,
   syncReportedMass,
 } from './physics.js';
@@ -55,6 +57,7 @@ const KINDS = [
   'Comet',
   'NeutronStar',
   'WhiteDwarf',
+  'Galaxy',
 ];
 
 const ALL_LISTS = () => [
@@ -66,7 +69,15 @@ const ALL_LISTS = () => [
   ['Comet', comets],
   ['NeutronStar', neutron_stars],
   ['WhiteDwarf', white_dwarfs],
+  ['Galaxy', galaxies],
 ];
+
+// A row holds numbers only, and a galaxy's kind and name are not numbers. A
+// galaxy rebuilt from a row - after Blank Simulation, which does not reset the
+// recording - would otherwise come back a spiral with a new name, and Coma
+// Cluster would lose the six ellipticals it puts at its center. Kept by id for
+// as long as the recording is.
+const galaxyIdentity = new Map();
 
 // --- Capture budget -----------------------------------------------------------
 // Roughly 24 MB of Float64 at the ceiling. Dense scenarios record fewer frames
@@ -96,6 +107,7 @@ let ui = null;
 export function resetTimeline() {
   frames.length = 0;
   frameTimes.length = 0;
+  galaxyIdentity.clear();
   writeIndex = 0;
   frameCount = 0;
   simClock = 0;
@@ -153,6 +165,9 @@ function capture() {
       row[b + F_MASS] = o.mass;
       row[b + F_RADIUS] = o.radius;
       row[b + F_ALIVE] = o.alive === false ? 0 : 1;
+      if (kind === 'Galaxy') {
+        galaxyIdentity.set(o.id, { galaxyType: o.galaxyType, name: o.name });
+      }
       i++;
     }
   }
@@ -198,6 +213,8 @@ function construct(kind, row, base) {
       return new NeutronStar(pos, vel, null, null);
     case 'WhiteDwarf':
       return new WhiteDwarf(pos, vel);
+    case 'Galaxy':
+      return new Galaxy(pos, vel, mass);
     default:
       return null;
   }
@@ -233,7 +250,10 @@ function restore(offset) {
     if (!obj) {
       obj = construct(kind, row, b);
       if (!obj) continue;
-      obj.id = id;
+      // set_state, not a bare id: a galaxy's drawing is turned by its id, and
+      // this also gives back the kind and name the row could not hold.
+      if (kind === 'Galaxy') obj.set_state({ id, ...galaxyIdentity.get(id) });
+      else obj.id = id;
     }
 
     obj.pos.x = row[b + F_X];
