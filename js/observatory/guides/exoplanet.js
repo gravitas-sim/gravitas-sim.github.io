@@ -470,8 +470,8 @@ export const GUIDES = [
           parameter: 'Rp',
           within: [1.2, 1.6],
           settings: {
-            stellarRadius: [1.19, 1.19],
-            stellarRadiusSigma: [0.02, 0.02],
+            'stellarRadius.value': [1.19, 1.19],
+            'stellarRadius.sigma': [0.02, 0.02],
           },
         },
       },
@@ -641,9 +641,181 @@ export const GUIDES = [
   },
 ];
 
-export const PATHS = ['intro', 'advanced'];
+export { PATHS, stepsOn } from './core.js';
 
-/** A guide's steps on one path. */
-export function stepsOn(guide, path) {
-  return guide.steps.filter(s => s.path === 'both' || s.path === path);
-}
+/** The targets each answer reads, beyond the step's own. */
+export const NEEDS = {
+  qualityDropped: ['hd209458'],
+  crowdsap: ['kepler13-sap'],
+  dilution: ['kepler13-sap'],
+  radiusRatioIfB: ['kepler13-sap'],
+  depthRatio: ['kepler13-sap', 'kepler13-pdcsap'],
+};
+
+/**
+ * The panels of numbers a step shows (`show`), each computed from the data or
+ * adopted and named: `needs` are the targets it reads (or a function of the
+ * step), `rows` its label and value pairs, `links` any links under it. `h` is
+ * the runner's: its translator `t`, number formats `fmt` and `ppm`, and
+ * `target`, a target's name.
+ */
+export const SHOWS = {
+  crowding: {
+    needs: ['kepler13-sap'],
+    rows: (c, step, h) => [
+      [h.t('gd.show.crowdHd'), h.fmt(ADOPTED.hd209458.crowdsap.value)],
+      [
+        h.t('gd.show.crowdK13'),
+        h.fmt(c.pack('kepler13-sap')?.crowding?.crowdsap),
+      ],
+      [h.t('gd.show.shareA'), h.fmt(ANSWERS.targetShare(c))],
+    ],
+  },
+  stellarRadius: {
+    rows: (c, step, h) => {
+      const r = ADOPTED.hd209458.stellarRadius;
+      return [
+        [
+          h.t('gd.show.adoptedRadius'),
+          `${h.fmt(r.value)} ± ${h.fmt(r.sigma)} R☉ (${r.ref})`,
+        ],
+      ];
+    },
+  },
+  depths: {
+    needs: ['kepler13-sap', 'kepler13-pdcsap'],
+    rows: (c, step, h) => {
+      const P = periodOf('kepler13');
+      return [
+        ...['kepler13-sap', 'kepler13-pdcsap'].map(target => {
+          const d = transitOf(c, target, P)?.depth;
+          return [
+            h.t('gd.show.depthOf', { target: h.target(target) }),
+            d
+              ? h.t('gd.show.ppm', {
+                  value: h.ppm(d.depth),
+                  error: h.ppm(d.error),
+                })
+              : h.t('gd.show.notOpened'),
+          ];
+        }),
+        [
+          h.t('gd.show.period'),
+          `${h.fmt(P)} d (${ADOPTED.kepler13.period.ref})`,
+        ],
+      ];
+    },
+  },
+  published: {
+    rows: (c, step, h) =>
+      ADOPTED.kepler13.published.map(p => [
+        p.ref,
+        h.t('gd.show.published', {
+          k: h.fmt(p.radiusRatio),
+          rs: h.fmt(p.stellarRadius),
+          rp: h.fmt(p.planetRadius),
+        }),
+      ]),
+  },
+  oddEven: {
+    needs: step => [step.target],
+    rows: (c, step, h) => {
+      const r = transitOf(c, step.target, periodOf(step.target));
+      if (!r?.oddEven)
+        return [
+          [
+            h.t('gd.show.depthOf', { target: h.target(step.target) }),
+            h.t('gd.show.notOpened'),
+          ],
+        ];
+      const oe = r.oddEven;
+      const ppm = d =>
+        h.t('gd.show.ppm', { value: h.ppm(d.depth), error: h.ppm(d.error) });
+      return [
+        [h.t('gd.show.odd'), ppm(oe.odd)],
+        [h.t('gd.show.even'), ppm(oe.even)],
+        [
+          h.t('gd.show.apart'),
+          h.t('gd.show.sigmas', {
+            value: h.fmt(oe.sigmas),
+            limit: SIGNIFICANT,
+          }),
+        ],
+        [h.t('gd.show.epoch'), `${h.fmt(r.epoch)} (BTJD)`],
+      ];
+    },
+  },
+  secondary: {
+    needs: step => [step.target],
+    rows: (c, step, h) => {
+      const r = transitOf(c, step.target, periodOf(step.target));
+      if (!r?.secondary)
+        return [
+          [
+            h.t('gd.show.depthOf', { target: h.target(step.target) }),
+            h.t('gd.show.notOpened'),
+          ],
+        ];
+      const ppm = d =>
+        h.t('gd.show.ppm', { value: h.ppm(d.depth), error: h.ppm(d.error) });
+      return [
+        [h.t('gd.show.primary'), ppm(r.depth)],
+        [h.t('gd.show.secondary'), ppm(r.secondary)],
+        [
+          h.t('gd.show.significance'),
+          h.t('gd.show.sigmas', {
+            value: h.fmt(r.secondary.depth / r.secondary.error),
+            limit: SIGNIFICANT,
+          }),
+        ],
+        [h.t('gd.show.epoch'), `${h.fmt(r.epoch)} (BTJD)`],
+      ];
+    },
+  },
+  count: {
+    needs: ['hd209458'],
+    rows: (c, step, h) => {
+      const r = transitOf(c, 'hd209458', periodOf('hd209458'));
+      return [
+        [
+          h.t('gd.show.count'),
+          r ? String(r.depth.cycles) : h.t('gd.show.notOpened'),
+        ],
+      ];
+    },
+  },
+  simulation: {
+    rows: (c, step, h) => [
+      [h.t('gd.show.simStar'), `${h.fmt(ADOPTED.simulation.stellarRadius)} R☉`],
+      [
+        h.t('gd.show.simPlanet'),
+        `${h.fmt(ADOPTED.simulation.planetRadius)} RJ`,
+      ],
+      [h.t('gd.show.rsunRjup'), h.fmt(RSUN_PER_RJUP)],
+    ],
+    links: (step, h) => [
+      {
+        href: `../#investigation=${encodeURIComponent(ADOPTED.simulation.lesson)}`,
+        text: h.t('gd.show.simLink'),
+      },
+    ],
+  },
+};
+
+/** The suite, as js/observatory/guides/suites.js loads it. */
+export const SUITE = {
+  id: 'exoplanet',
+  GUIDES,
+  TARGETS,
+  ANSWERS,
+  CORRECT,
+  NEEDS,
+  SHOWS,
+  messages: async () => {
+    const [en, es] = await Promise.all([
+      import('../../i18n/en.exoplanet.js'),
+      import('../../i18n/es.exoplanet.js'),
+    ]);
+    return { en: en.EN_EXOPLANET, es: es.ES_EXOPLANET };
+  },
+};

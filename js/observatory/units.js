@@ -67,6 +67,8 @@ export const UNITS = Object.freeze({
   Jy: { dim: 'flux-per-frequency', factor: 1, symbol: 'Jy' },
   mJy: { dim: 'flux-per-frequency', factor: 1e-3, symbol: 'mJy' },
   mag: { dim: 'magnitude', factor: null, symbol: 'mag' },
+  // A logarithm, as [Fe/H], log g and log age are written: not convertible.
+  dex: { dim: 'logarithm', factor: null, symbol: 'dex' },
 
   kg: { dim: 'mass', factor: 1, symbol: 'kg' },
   // The IAU 2015 nominal solar mass parameter over CODATA 2018 G.

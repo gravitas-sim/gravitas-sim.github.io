@@ -613,7 +613,7 @@ describe('the pipeline: digests, staleness, the document, reading it back', () =
       at: 0,
     });
     expect(bad).toMatchObject({ status: 'failed', error: { code: 'range' } });
-    expect(pipe.toolsFor(o)).toEqual(['period', 'box']);
+    expect(pipe.toolsFor(o)).toEqual(['period', 'box', 'describe']);
   });
 
   test('saved, read back and recomputed, every node gives the number it saved', async () => {

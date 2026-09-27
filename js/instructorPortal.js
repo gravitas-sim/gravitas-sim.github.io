@@ -337,6 +337,16 @@ const GENERAL = [
     name: 'Exoplanet Observatory Answer Key',
     text: 'Every step of the five investigations, answered from a reference run on the same data.',
   },
+  {
+    id: 'populations-observatory-guide',
+    name: 'Stellar Populations Guide',
+    text: 'The five guided investigations with real SDSS, SEGUE and TESS data and MIST models in /observatory/: curriculum map, data and licenses, teaching notes and assignment sheets.',
+  },
+  {
+    id: 'populations-observatory-key',
+    name: 'Stellar Populations Answer Key',
+    text: 'Every step of the five investigations, answered from a reference run on the same data.',
+  },
 ];
 
 /** Approximate minutes, for the duration filter. */

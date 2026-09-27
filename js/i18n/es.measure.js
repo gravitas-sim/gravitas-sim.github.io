@@ -153,6 +153,8 @@ export const ES_MEASURE = {
   'obs.ms.w.noPixels': 'Ningún píxel tiene esa marca.',
   'obs.ms.w.missingValues':
     '{n} filas no tienen valor en {column} y no pasan ninguna prueba sobre ella.',
+  'obs.ms.w.missingLeftOut':
+    '{n} filas no tienen valor en {column} y se dejaron fuera.',
   'obs.ms.w.ambiguous':
     '{n} filas tenían más de un candidato; cada una tomó el más cercano.',
   'obs.ms.pipeline': 'El flujo',
@@ -237,4 +239,70 @@ export const ES_MEASURE = {
     'Un ajuste de modelo: {model}, {algorithm} {version}. Su propia exportación tiene el registro completo.',
   'obs.ms.and': ' y ',
   'obs.ms.or': ' o ',
+  'obs.ms.tool.band': 'Índice de banda en un espectro (TiO5 y otros)',
+  'obs.ms.tool.curve': 'Comparar con curvas de modelo (isócronas)',
+  'obs.ms.tool.describe':
+    'Describir una columna: cuántos, mediana, media, dispersión',
+  'obs.ms.q.index': 'índice',
+  'obs.ms.q.definition': 'definición',
+  'obs.ms.q.logAge': 'log de la edad',
+  'obs.ms.q.age': 'edad',
+  'obs.ms.q.ageLow': 'edad más joven igual de buena',
+  'obs.ms.q.ageHigh': 'edad más vieja igual de buena',
+  'obs.ms.q.dm': 'módulo de distancia',
+  'obs.ms.q.distance': 'distancia',
+  'obs.ms.q.reddening': 'enrojecimiento',
+  'obs.ms.q.statistic': 'estadístico de distancia',
+  'obs.ms.q.R': 'extinción por unidad de enrojecimiento',
+  'obs.ms.q.n': 'valores',
+  'obs.ms.q.median': 'mediana',
+  'obs.ms.q.mean': 'media',
+  'obs.ms.q.sd': 'desviación típica',
+  'obs.ms.q.min': 'el menor',
+  'obs.ms.q.max': 'el mayor',
+  'obs.ms.w.referenceNotPositive':
+    'El flujo de las ventanas de referencia no es positivo, así que el índice no significa nada.',
+  'obs.ms.w.noUncertainty':
+    'Una comparación, no un ajuste: encuentra el modelo y el desplazamiento más cercanos, y no da errores típicos.',
+  'obs.ms.w.dmAtEdge':
+    'El mejor módulo de distancia está en el borde del intervalo buscado: amplíalo.',
+  'obs.ms.w.reddeningAtEdge':
+    'El mejor enrojecimiento está en el borde del intervalo buscado.',
+  'obs.ms.w.modelAtEdge':
+    'El mejor modelo es el primero o el último de la familia: uno más allá, que la tabla de modelos no contiene, podría ajustarse mejor.',
+  'obs.ms.w.notUnique':
+    '{n} modelos se ajustan a estos puntos casi tan bien como el mejor: los datos no pueden distinguirlos.',
+  'obs.ms.p.band.tio5': 'TiO5',
+  'obs.ms.p.band.cah2': 'CaH2',
+  'obs.ms.p.bandLo': 'Banda desde (Å)',
+  'obs.ms.p.bandHi': 'Banda hasta (Å)',
+  'obs.ms.p.refLo': 'Referencia desde (Å)',
+  'obs.ms.p.refHi': 'Referencia hasta (Å)',
+  'obs.ms.p.windowMedium': 'Las ventanas se dan en',
+  'obs.ms.p.air': 'aire',
+  'obs.ms.p.vacuum': 'vacío',
+  'obs.ms.p.feh': 'Metalicidad del modelo [Fe/H]',
+  'obs.ms.p.curveModel':
+    'La x de la vista se toma como un color (g − r) y su y como una magnitud (g), y se comparan con las isócronas de MIST, una por edad, desplazadas por un módulo de distancia y un enrojecimiento.',
+  'obs.ms.p.dmLo': 'Módulo de distancia desde',
+  'obs.ms.p.dmHi': 'hasta',
+  'obs.ms.p.dmStep': 'en pasos de',
+  'obs.ms.p.eLo': 'Enrojecimiento E(g − r) desde',
+  'obs.ms.p.eHi': 'hasta',
+  'obs.ms.p.eStep': 'en pasos de',
+  'obs.ms.p.R': 'Extinción A_g por unidad de E(g − r) ({cite})',
+  'obs.ms.p.scaleColor': 'Una unidad de distancia en color (mag)',
+  'obs.ms.p.scaleMag': 'Una unidad de distancia en magnitud (mag)',
+  'obs.ms.p.cap':
+    'Distancia a partir de la cual una estrella cuenta como lejana (unidades)',
+  'obs.ms.p.curveTolerance':
+    'Los modelos dentro de esta fracción del mejor cuentan como igual de buenos',
+  'obs.ms.overlay':
+    '{id}, {tool}: el mejor modelo (log de la edad {key}), desplazado',
+  'obs.ms.m.band':
+    '{id}: índice de banda, el flujo medio en {band} Å entre el medio en {reference} Å, con las ventanas en {medium} ({cite}); la media de cada ventana ponderada por cuánto cubre del intervalo de cada muestra; medido tras {at} cambios.',
+  'obs.ms.m.describe':
+    '{id}: los valores de {column} en las filas que no están enmascaradas, cuántos son, su mediana, media, desviación típica (n − 1), el menor y el mayor; medido tras {at} cambios.',
+  'obs.ms.m.curve':
+    '{id}: comparación con las isócronas de MIST a [Fe/H] {feh}: módulo de distancia en {dm}, enrojecimiento en {E} (primero, último, paso), extinción {R} por unidad de enrojecimiento; distancias en unidades de {scale} mag, limitadas a {cap}; los modelos dentro de {tolerance} del mejor se dan como iguales; medido tras {at} cambios.',
 };

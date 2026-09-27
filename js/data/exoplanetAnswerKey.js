@@ -1,11 +1,11 @@
 // =============================================================================
 // The Exoplanet Observatory's answer key (generated)
 // -----------------------------------------------------------------------------
-// Written by `npm run guides:key -- --write` (tools/exoplanet-reference.mjs)
+// Written by `npm run guides:key -- --write`
 // from a reference run on the committed data with each panel's default
 // settings: every step of every guide on each path, with the answer that
-// passes it. Do not edit by hand; tests/exoplanetGuides.test.js fails when it
-// is not what the run gives. The instructors' answer key is rendered from it.
+// passes it. Do not edit by hand; the suite's test fails when it is not what
+// the run gives. The instructors' answer key is rendered from it.
 // =============================================================================
 
 export const EXOPLANET_KEY = [

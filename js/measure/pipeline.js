@@ -34,6 +34,9 @@ import {
   VERSION as PERIOD_VERSION,
 } from './periodogram.js';
 import { measureLine, VERSION as LINE_VERSION } from './spectrumLine.js';
+import { measureBand, VERSION as BAND_VERSION } from './bandIndex.js';
+import { compareCurves, VERSION as CURVE_VERSION } from './curveCompare.js';
+import { describeColumn, VERSION as DESCRIBE_VERSION } from './describe.js';
 import {
   measureFlux,
   measureBits,
@@ -67,6 +70,7 @@ export const CHANGE_CLASS = Object.freeze({
   fold: { stage: 'transformation', uncertainty: 'kept' },
   bin: { stage: 'transformation', uncertainty: 'propagated' },
   restFrame: { stage: 'transformation', uncertainty: 'kept' },
+  derive: { stage: 'transformation', uncertainty: 'propagated' },
   annotate: { stage: 'annotation', uncertainty: 'kept' },
   unannotate: { stage: 'annotation', uncertainty: 'kept' },
 });
@@ -262,6 +266,171 @@ export const TOOLS = Object.freeze({
         );
       }
       return { raw: r, quantities, warnings: r.warnings };
+    },
+  },
+  /** A band index on a spectrum: TiO5, or windows of the reader's own. */
+  band: {
+    kinds: ['spectrum'],
+    version: BAND_VERSION,
+    async run(o, p) {
+      const d = series(o, o.axes.x, o.axes.y);
+      const r = measureBand(
+        { x: d.t, y: d.y, dy: d.dy },
+        {
+          band: p.band,
+          reference: p.reference,
+          medium: p.medium ?? 'vacuum',
+          spectrumMedium: o.spectral?.medium ?? 'vacuum',
+        }
+      );
+      return {
+        raw: r,
+        quantities: [
+          q('index', r.index, '', KIND.MEASURED, {
+            error: r.error,
+            errorKind: d.dy ? KIND.DERIVED : KIND.ASSUMED,
+          }),
+          q('depth', r.depth, '', KIND.MEASURED),
+          ...(p.cite
+            ? [q('definition', null, '', KIND.ASSUMED, { cite: p.cite })]
+            : []),
+        ],
+        warnings: r.warnings,
+      };
+    },
+  },
+  /**
+   * A table's points against a family of model curves (./curveCompare.js):
+   * the view's x as a color and y as a magnitude, against a model table's
+   * curves - an isochrone per age, say - shifted by a distance modulus and a
+   * reddening. The model is a table the page opens (hooks.model), named in
+   * the parameters with the columns that make its color and magnitude.
+   */
+  curve: {
+    kinds: ['table'],
+    version: CURVE_VERSION,
+    expensive: true,
+    async run(o, p, hooks = {}) {
+      // The columns plotted, which the parameters name: a reader's choice of
+      // axes is not a change to the data, so it is recorded here instead.
+      const xId = p.x ?? o.axes.x;
+      const yId = p.y ?? o.axes.y;
+      const d = series(o, xId, yId);
+      if (!hooks.model)
+        throw new PipelineError('model', 'there is no model to compare with');
+      const m = await hooks.model(p.model.id);
+      const mc = id => col(m, id)?.values;
+      const [ca, cb] = p.model.color.map(mc);
+      const mag = mc(p.model.magnitude);
+      const by = mc(p.model.by);
+      const seg = p.model.segments ? mc(p.model.segments) : null;
+      const where = Object.entries(p.model.where || {}).map(([k, v]) => [
+        mc(k),
+        v,
+      ]);
+      if (!ca || !cb || !mag || !by || where.some(([c]) => !c))
+        throw new PipelineError('model', 'the model has no such columns');
+      // The model's curves: one per value of `by`, broken where `segments`
+      // changes, from the rows that match `where`.
+      const groups = new Map();
+      for (let i = 0; i < mag.length; i++) {
+        if (!where.every(([c, v]) => Math.abs(c[i] - v) < 1e-6)) continue;
+        const key = by[i];
+        if (!groups.has(key)) groups.set(key, new Map());
+        const s = seg ? seg[i] : 0;
+        const g = groups.get(key);
+        if (!g.has(s)) g.set(s, []);
+        g.get(s).push([ca[i] - cb[i], mag[i]]);
+      }
+      if (!groups.size)
+        throw new PipelineError('model', 'no model curve matches the choice');
+      const models = [...groups.entries()]
+        .sort((a, b) => a[0] - b[0])
+        .map(([key, g]) => ({ key, segments: [...g.values()] }));
+      const r = await compareCurves({ x: d.t, y: d.y }, models, {
+        dm: p.dm,
+        E: p.E,
+        R: p.R,
+        scale: p.scale,
+        cap: p.cap,
+        tolerance: p.tolerance,
+        signal: hooks.signal,
+        onProgress: hooks.onProgress,
+      });
+      const best = r.best;
+      const toAge = logAge => 10 ** (logAge - 9);
+      const ages = r.alike.map(a => a.key);
+      // The best curve, shifted onto the view's own axes, to draw over it.
+      const bestCurve = models.find(mm => mm.key === best.key);
+      const points = [];
+      for (const s of bestCurve.segments) {
+        for (const [x, y] of s)
+          points.push([x + best.E, y + best.dm + p.R * best.E]);
+        points.push([NaN, NaN]);
+      }
+      return {
+        raw: {
+          models: r.models.map(mm => ({
+            key: mm.key,
+            stat: mm.stat,
+            dm: mm.dm,
+            E: mm.E,
+          })),
+          settings: r.settings,
+        },
+        overlay: {
+          x: xId,
+          y: yId,
+          points,
+          key: best.key,
+        },
+        quantities: [
+          q(p.model.by, best.key, '', KIND.MEASURED),
+          q('age', toAge(best.key), 'Gyr', KIND.DERIVED),
+          q('ageLow', toAge(Math.min(...ages)), 'Gyr', KIND.DERIVED),
+          q('ageHigh', toAge(Math.max(...ages)), 'Gyr', KIND.DERIVED),
+          q('dm', best.dm, 'mag', KIND.MEASURED),
+          q('distance', 10 ** (best.dm / 5 + 1), 'pc', KIND.DERIVED),
+          q('reddening', best.E, 'mag', KIND.MEASURED),
+          q('statistic', best.stat, '', KIND.MEASURED),
+          q('points', r.points, '', KIND.MEASURED),
+          q('R', p.R, '', KIND.ASSUMED, { cite: p.RCite ?? null }),
+        ],
+        warnings: [
+          { code: 'noUncertainty' },
+          ...r.warnings,
+          ...(d.masked ? [{ code: 'maskedLeftOut', n: d.masked }] : []),
+        ],
+      };
+    },
+  },
+  /** A column's count, median, mean, spread and extremes (./describe.js). */
+  describe: {
+    kinds: ['table', 'time-series', 'spectrum'],
+    version: DESCRIBE_VERSION,
+    async run(o, p) {
+      const c = col(o, p.column);
+      if (!c || c.role === 'label')
+        throw new PipelineError('columns', `no number column ${p.column}`);
+      const r = describeColumn(c.values, { skip: masked(o) });
+      const unit = c.unit ?? '';
+      return {
+        raw: r,
+        quantities: [
+          q('n', r.n, '', KIND.MEASURED),
+          q('median', r.median, unit, KIND.MEASURED),
+          q('mean', r.mean, unit, KIND.MEASURED),
+          q('sd', r.sd, unit, KIND.MEASURED),
+          q('min', r.min, unit, KIND.MEASURED),
+          q('max', r.max, unit, KIND.MEASURED),
+        ],
+        warnings: [
+          ...(r.skipped ? [{ code: 'maskedLeftOut', n: r.skipped }] : []),
+          ...(r.missing
+            ? [{ code: 'missingLeftOut', n: r.missing, column: c.name }]
+            : []),
+        ],
+      };
     },
   },
   aperture: {
@@ -481,6 +650,7 @@ export async function runNode(view, spec, hooks = {}) {
       result: out.raw,
       grid: out.grid ?? null,
       suggest: out.suggest ?? null,
+      overlay: out.overlay ?? null,
     };
   } catch (err) {
     if (err?.code === 'canceled') throw err;

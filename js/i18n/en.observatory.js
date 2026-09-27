@@ -35,6 +35,12 @@ export const EN_OBSERVATORY = {
   'obs.fixture.gwosc-events': 'Five gravitational-wave events (GWOSC)',
   'obs.fixture.tess-aperture': 'HD 209458: the TESS aperture mask',
 
+  'obs.fixture.ngc2420-photometry':
+    'NGC 2420: SDSS photometry (a cluster and its field)',
+  'obs.fixture.ngc2420-segue':
+    'NGC 2420: SEGUE stellar parameters (radial velocity, Teff, log g, [Fe/H])',
+  'obs.fixture.mist-isochrones':
+    'MIST isochrones in the SDSS bands (a model, not an observation)',
   'obs.import.file': 'Or import your own file',
   'obs.import.hint':
     'CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and 200,000 rows. It stays on this device.',
@@ -163,6 +169,12 @@ export const EN_OBSERVATORY = {
     'Averaged {rows} rows into {bins} bins, {width} {unit} wide. Each bin’s uncertainty is its points’ combined; {masked} masked rows were left out.',
   'obs.note.binScatter':
     'Averaged {rows} rows into {bins} bins, {width} {unit} wide. The rows have no uncertainty, so each bin’s is the standard error of its points’ scatter, and a bin of one point has none.',
+  'obs.note.deriveSum':
+    'A new column, {name} = {formula}: computed here from the columns in it, not measured.',
+  'obs.note.deriveSumError':
+    'A new column, {name} = {formula}, and its uncertainty, from theirs in quadrature: computed here from the columns in it, not measured.',
+  'obs.note.deriveSeparation':
+    'A new column, {name}: each row’s distance on the sky from RA {ra}, Dec {dec}, in arcminutes, computed here.',
   'obs.note.restFrame':
     'Shifted to the rest frame by z = {z}: every wavelength divided by 1 + z.',
 
@@ -171,6 +183,7 @@ export const EN_OBSERVATORY = {
   'obs.keys':
     'Drag across the plot or the image, or click the table, to select. With the keyboard: the arrow keys move, Shift with an arrow selects, Space adds or removes one, Escape clears. Ctrl+Z undoes a change.',
   'obs.plot.role': 'plot',
+  'obs.plot.overlays': 'Drawn over the points, from a measurement: {curves}.',
   'obs.plot.label': '{y} against {x}, {n} points',
   'obs.image.role': 'pixel grid',
   'obs.image.label':
@@ -214,6 +227,20 @@ export const EN_OBSERVATORY = {
   'obs.op.fold': 'fold',
   'obs.op.bin': 'binning',
   'obs.op.restFrame': 'shift to the rest frame',
+  'obs.op.derive': 'new column',
+  'obs.derive.name': 'New column',
+  'obs.derive.from': 'From',
+  'obs.derive.sign': 'then',
+  'obs.derive.minus': 'minus',
+  'obs.derive.plus': 'plus',
+  'obs.derive.none': 'no second column',
+  'obs.derive.second': 'the column',
+  'obs.derive.constant': 'and add the constant',
+  'obs.derive.go': 'Add the column',
+  'obs.derive.sepName': 'New column: distance from a position',
+  'obs.derive.ra': 'RA of the position (deg)',
+  'obs.derive.dec': 'Dec of the position (deg)',
+  'obs.derive.sepGo': 'Add the distance',
   'obs.op.annotate': 'note',
   'obs.op.unannotate': 'note removed',
 
@@ -248,5 +275,5 @@ export const EN_OBSERVATORY = {
   'obs.fit.title': 'Fit a model (diagnostic)',
   'obs.arc.title': "Or find a star's Gaia epochs at CDS (live, opt-in)",
   'obs.ms.title': 'Measure, and the pipeline',
-  'obs.gd.title': 'Guided investigations: from photons to a planet',
+  'obs.gd.title': 'Guided investigations',
 };

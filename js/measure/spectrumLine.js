@@ -24,6 +24,58 @@
 export const VERSION = '1.0.0';
 const C_KM_S = 299792.458;
 
+/** Balmer lines, vacuum and air, from the NIST Atomic Spectra Database. */
+export const LINES = Object.freeze([
+  {
+    id: 'ha',
+    name: 'H-alpha',
+    vacuum: 6564.61,
+    air: 6562.8,
+    half: 20,
+    gap: 25,
+    side: 40,
+  },
+  {
+    id: 'hb',
+    name: 'H-beta',
+    vacuum: 4862.68,
+    air: 4861.35,
+    half: 15,
+    gap: 20,
+    side: 30,
+  },
+  {
+    id: 'hg',
+    name: 'H-gamma',
+    vacuum: 4341.69,
+    air: 4340.47,
+    half: 12,
+    gap: 15,
+    side: 25,
+  },
+]);
+
+/**
+ * A Balmer line's windows as the measurement panel first offers them: about
+ * the line's rest wavelength in the spectrum's medium, moved to its redshift,
+ * each end to a hundredth of the unit.
+ * @param {object} L - One of LINES
+ * @param {'air'|'vacuum'} medium - The spectrum's
+ * @param {number} z - Its redshift
+ * @returns {{line: number[], blue: number[], red: number[], rest: number}}
+ */
+export function presetWindows(L, medium, z) {
+  const rest = L[medium === 'air' ? 'air' : 'vacuum'];
+  const c = rest * (1 + z);
+  const r = x => +x.toFixed(2);
+  return {
+    line: [r(c - L.half), r(c + L.half)],
+    blue: [r(c - L.gap - L.side), r(c - L.gap)],
+    red: [r(c + L.gap), r(c + L.gap + L.side)],
+    rest,
+  };
+}
+
 export class LineError extends Error {
   constructor(code, message, detail = {}) {
     super(message);

@@ -242,7 +242,7 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.3.0` |
+| `SDK_VERSION` | this SDK, `1.4.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with its version |
 | `EXTENSION_TYPES`, `LOCALES` | the three types and their kinds; the interface languages (`en`, `es`) |
@@ -287,6 +287,17 @@ anything else.
 | 1.1.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with `image` packs and the optional runtime fields `reductions` and `image` | 1 | 1 |
 | 1.2.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `binned-relative-flux/2` encoding and the `harmonic-period` check | 1 | 1 |
 | 1.3.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the optional runtime field `crowding` | 1 | 1 |
+| 1.4.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `catalog` data type | 1 | 1 |
+
+SDK 1.4.0 adds, and removes nothing, the data type the stellar-populations
+suite's packs are (STELLAR_POPULATIONS.md): `dataType: "catalog"`, a table of
+sources such as a cluster's photometry, encoded as `table-columns/1`
+(DATA_PACKS.md). The manifest schema accepts it, so `validate` checks a
+catalog pack's manifest as it checks any other. It is not yet an extension's
+to ship: the built-in NGC 2420 packs are opened by the Observatory alone,
+whose table decoder is its own module, and `sdk test` has no check for a
+table yet, so an extension offering one fails there, with a message, rather
+than half working.
 
 SDK 1.3.0 adds, and removes nothing, what the Kepler-13 packs needed: a star
 whose transit a companion dilutes, observed as collected and as corrected.

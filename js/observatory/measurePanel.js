@@ -34,6 +34,8 @@ import {
 } from '../measure/pipeline.js';
 import { OPERATORS } from '../measure/tableOps.js';
 import { LIMITS } from '../measure/periodogram.js';
+import { BAND_PRESETS } from '../measure/bandIndex.js';
+import { LINES, presetWindows } from '../measure/spectrumLine.js';
 import { observedEntry } from '../notebook/observed.js';
 import { figure, figureSeries } from '../notebook/entry.js';
 import {
@@ -42,6 +44,25 @@ import {
 } from '../notebook/store.js';
 import { EN_MEASURE } from '../i18n/en.measure.js';
 import { ES_MEASURE } from '../i18n/es.measure.js';
+
+/**
+ * The model the curve tool compares a color-magnitude diagram with: MIST's
+ * isochrones in the SDSS bands (js/observatory/fixtures.js mist-isochrones),
+ * one curve per age, broken between evolutionary phases.
+ */
+const CURVE_MODEL = Object.freeze({
+  id: 'mist-isochrones',
+  color: ['g', 'r'],
+  magnitude: 'g',
+  by: 'logAge',
+  segments: 'phase',
+});
+// A_g / E(g - r) for SDSS g and r: 3.303 / (3.303 - 2.285), the coefficients
+// of Schlafly & Finkbeiner 2011 (R_V = 3.1). An adopted value, and said to be.
+const CURVE_R = Object.freeze({
+  value: 3.245,
+  cite: 'Schlafly & Finkbeiner 2011, ApJ 737, 103, Table 6',
+});
 
 const el = (tag, attrs = {}, ...children) => {
   const node = document.createElement(tag);
@@ -54,36 +75,8 @@ const el = (tag, attrs = {}, ...children) => {
   return node;
 };
 
-/** Balmer lines, vacuum and air, from the NIST Atomic Spectra Database. */
-export const LINES = Object.freeze([
-  {
-    id: 'ha',
-    name: 'H-alpha',
-    vacuum: 6564.61,
-    air: 6562.8,
-    half: 20,
-    gap: 25,
-    side: 40,
-  },
-  {
-    id: 'hb',
-    name: 'H-beta',
-    vacuum: 4862.68,
-    air: 4861.35,
-    half: 15,
-    gap: 20,
-    side: 30,
-  },
-  {
-    id: 'hg',
-    name: 'H-gamma',
-    vacuum: 4341.69,
-    air: 4340.47,
-    half: 12,
-    gap: 15,
-    side: 25,
-  },
-]);
+// The Balmer lines' presets are the line tool's (js/measure/spectrumLine.js).
+export { LINES };
 
 /**
  * @param {HTMLElement} root - The panel's <details>, whose summary stays
@@ -175,6 +168,23 @@ export function mountMeasurePanel(root, ctx) {
         pairs: t('obs.ms.q.pairs'),
         unmatched: t('obs.ms.q.unmatched'),
         ambiguous: t('obs.ms.q.ambiguous'),
+        index: t('obs.ms.q.index'),
+        definition: t('obs.ms.q.definition'),
+        logAge: t('obs.ms.q.logAge'),
+        age: t('obs.ms.q.age'),
+        ageLow: t('obs.ms.q.ageLow'),
+        ageHigh: t('obs.ms.q.ageHigh'),
+        dm: t('obs.ms.q.dm'),
+        distance: t('obs.ms.q.distance'),
+        reddening: t('obs.ms.q.reddening'),
+        statistic: t('obs.ms.q.statistic'),
+        R: t('obs.ms.q.R'),
+        n: t('obs.ms.q.n'),
+        median: t('obs.ms.q.median'),
+        mean: t('obs.ms.q.mean'),
+        sd: t('obs.ms.q.sd'),
+        min: t('obs.ms.q.min'),
+        max: t('obs.ms.q.max'),
       };
       return map[q.id] ?? q.id;
     };
@@ -186,6 +196,9 @@ export function mountMeasurePanel(root, ctx) {
         aperture: t('obs.ms.tool.aperture'),
         filter: t('obs.ms.tool.filter'),
         match: t('obs.ms.tool.match'),
+        band: t('obs.ms.tool.band'),
+        curve: t('obs.ms.tool.curve'),
+        describe: t('obs.ms.tool.describe'),
       })[id] ?? id;
     const value = q => {
       const unit = q.unit ? ` ${q.unit}` : '';
@@ -236,8 +249,22 @@ export function mountMeasurePanel(root, ctx) {
           return t('obs.ms.w.noPixels');
         case 'missingValues':
           return t('obs.ms.w.missingValues', { n: v.n, column: v.column });
+        case 'missingLeftOut':
+          return t('obs.ms.w.missingLeftOut', { n: v.n, column: v.column });
         case 'ambiguous':
           return t('obs.ms.w.ambiguous', { n: v.n });
+        case 'referenceNotPositive':
+          return t('obs.ms.w.referenceNotPositive');
+        case 'noUncertainty':
+          return t('obs.ms.w.noUncertainty');
+        case 'dmAtEdge':
+          return t('obs.ms.w.dmAtEdge');
+        case 'reddeningAtEdge':
+          return t('obs.ms.w.reddeningAtEdge');
+        case 'modelAtEdge':
+          return t('obs.ms.w.modelAtEdge');
+        case 'notUnique':
+          return t('obs.ms.w.notUnique', { n: v.n });
         default:
           return w.code;
       }
@@ -390,6 +417,41 @@ export function mountMeasurePanel(root, ctx) {
             at: n.at,
           })
         );
+      else if (n.tool === 'describe')
+        out.push(
+          t('obs.ms.m.describe', {
+            id: n.id,
+            column:
+              ctx.state.view?.columns.find(c => c.id === p.column)?.name ??
+              p.column,
+            at: n.at,
+          })
+        );
+      else if (n.tool === 'band')
+        out.push(
+          t('obs.ms.m.band', {
+            id: n.id,
+            band: p.band.map(w.num).join('–'),
+            reference: p.reference.map(r => r.map(w.num).join('–')).join(', '),
+            medium: p.medium,
+            cite: p.cite || t('obs.ms.p.custom'),
+            at: n.at,
+          })
+        );
+      else if (n.tool === 'curve')
+        out.push(
+          t('obs.ms.m.curve', {
+            id: n.id,
+            feh: w.num(p.model.where.feh),
+            dm: p.dm.map(w.num).join(', '),
+            E: p.E.map(w.num).join(', '),
+            R: w.num(p.R),
+            scale: p.scale.map(w.num).join(', '),
+            cap: w.num(p.cap),
+            tolerance: w.num(p.tolerance),
+            at: n.at,
+          })
+        );
     }
     for (const f of fitsHere())
       out.push(
@@ -455,6 +517,25 @@ export function mountMeasurePanel(root, ctx) {
         medium: o.spectral?.medium ?? 'vacuum',
         z: o.spectral?.redshift ?? 0,
         presets: xc.unit === 'Angstrom',
+      };
+    }
+    if (toolId === 'band') {
+      return { medium: o.spectral?.medium ?? 'vacuum' };
+    }
+    if (toolId === 'describe') {
+      // The column plotted up, which is what the reader is looking at.
+      return { column: ctx.state.y ?? o.axes.y };
+    }
+    if (toolId === 'curve') {
+      // A cluster's defaults: a distance modulus of 8 to 16, a reddening up to
+      // 0.3 mag, and A_g / E(g - r) for SDSS (Schlafly & Finkbeiner 2011).
+      return {
+        dm: [8, 16, 0.02],
+        E: [0, 0.3, 0.005],
+        R: CURVE_R.value,
+        scale: [0.03, 0.15],
+        cap: 3,
+        tolerance: 0.02,
       };
     }
     if (toolId === 'aperture') {
@@ -548,17 +629,8 @@ export function mountMeasurePanel(root, ctx) {
       const grid = el('div', { class: 'ow-grid' });
       const fill = id => {
         const L = LINES.find(x => x.id === id);
-        const rest = L ? L[d.medium === 'air' ? 'air' : 'vacuum'] : null;
-        const c = rest ? rest * (1 + d.z) : null;
-        const v =
-          p ??
-          (c && {
-            line: [c - L.half, c + L.half],
-            blue: [c - L.gap - L.side, c - L.gap],
-            red: [c + L.gap, c + L.gap + L.side],
-            rest,
-          });
-        const r = x => (Number.isFinite(x) ? +x.toFixed(2) : '');
+        const v = p ?? (L ? presetWindows(L, d.medium, d.z) : null);
+        const r = x => (Number.isFinite(x) ? x : '');
         grid.replaceChildren(
           field(
             'msBlueLo',
@@ -591,6 +663,77 @@ export function mountMeasurePanel(root, ctx) {
       box.append(presetSel, grid);
       fill(p ? 'custom' : options[0][0]);
       box.dataset.medium = d.medium;
+    } else if (toolId === 'band') {
+      const presetSel = select(
+        'msBandPreset',
+        t('obs.ms.p.preset'),
+        [
+          ...Object.entries(BAND_PRESETS).map(([id, b]) => [
+            id,
+            `${t(`obs.ms.p.band.${id}`)} (${b.cite})`,
+          ]),
+          ['custom', t('obs.ms.p.custom')],
+        ],
+        p ? 'custom' : 'tio5'
+      );
+      const grid = el('div', { class: 'ow-grid' });
+      const fill = id => {
+        const b = p ?? BAND_PRESETS[id] ?? BAND_PRESETS.tio5;
+        grid.replaceChildren(
+          field('msBandLo', t('obs.ms.p.bandLo'), b.band[0]),
+          field('msBandHi', t('obs.ms.p.bandHi'), b.band[1]),
+          field('msRefLo', t('obs.ms.p.refLo'), b.reference[0][0]),
+          field('msRefHi', t('obs.ms.p.refHi'), b.reference[0][1]),
+          select(
+            'msBandMedium',
+            t('obs.ms.p.windowMedium'),
+            [
+              ['air', t('obs.ms.p.air')],
+              ['vacuum', t('obs.ms.p.vacuum')],
+            ],
+            b.medium ?? 'air'
+          )
+        );
+        box.dataset.cite = BAND_PRESETS[id]?.cite ?? '';
+      };
+      presetSel
+        .querySelector('select')
+        .addEventListener('change', e => fill(e.target.value));
+      box.append(presetSel, grid);
+      fill(p ? 'custom' : 'tio5');
+    } else if (toolId === 'curve') {
+      const v = p ?? d;
+      const fehSel = select('msCurveFeh', t('obs.ms.p.feh'), [], '');
+      box.append(
+        el('p', { class: 'ow-hint', text: t('obs.ms.p.curveModel') }),
+        fehSel,
+        field('msDmLo', t('obs.ms.p.dmLo'), v.dm[0]),
+        field('msDmHi', t('obs.ms.p.dmHi'), v.dm[1]),
+        field('msDmStep', t('obs.ms.p.dmStep'), v.dm[2]),
+        field('msELo', t('obs.ms.p.eLo'), v.E[0]),
+        field('msEHi', t('obs.ms.p.eHi'), v.E[1]),
+        field('msEStep', t('obs.ms.p.eStep'), v.E[2]),
+        field('msR', t('obs.ms.p.R', { cite: CURVE_R.cite }), v.R),
+        field('msScaleC', t('obs.ms.p.scaleColor'), v.scale[0]),
+        field('msScaleM', t('obs.ms.p.scaleMag'), v.scale[1]),
+        field('msCap', t('obs.ms.p.cap'), v.cap),
+        field('msCurveTol', t('obs.ms.p.curveTolerance'), v.tolerance)
+      );
+      // The model's metallicities, from the model itself.
+      ctx
+        .model(CURVE_MODEL.id)
+        .then(m => {
+          const feh = m.columns.find(c => c.id === 'feh').values;
+          const values = [...new Set(Array.from(feh))].sort((a, b) => a - b);
+          const s = fehSel.querySelector('select');
+          s.replaceChildren(
+            ...values.map(f =>
+              el('option', { value: String(f), text: ctx.number(f) })
+            )
+          );
+          s.value = String(p?.model.where.feh ?? values.at(-2) ?? values[0]);
+        })
+        .catch(err => (ui.problem.textContent = err.message));
     } else if (toolId === 'aperture') {
       const modeSel = select(
         'msMode',
@@ -646,6 +789,16 @@ export function mountMeasurePanel(root, ctx) {
         .addEventListener('change', e => fill(e.target.value));
       box.append(modeSel, grid);
       fill(p?.mode ?? d.mode);
+    } else if (toolId === 'describe') {
+      const cols = o.columns.filter(c => c.role !== 'label');
+      box.append(
+        select(
+          'msDescribeCol',
+          t('obs.ms.p.column'),
+          cols.map(c => [c.id, c.name]),
+          p?.column ?? d.column
+        )
+      );
     } else if (toolId === 'filter') {
       const cols = o.columns.filter(c => c.role !== 'uncertainty');
       const grid = el('div', { id: 'msConditions' });
@@ -884,6 +1037,47 @@ export function mountMeasurePanel(root, ctx) {
         restMedium: rest ? box.dataset.medium : null,
       };
     }
+    if (toolId === 'band') {
+      return {
+        band: [
+          num('msBandLo', label('msBandLo')),
+          num('msBandHi', label('msBandHi')),
+        ],
+        reference: [
+          [num('msRefLo', label('msRefLo')), num('msRefHi', label('msRefHi'))],
+        ],
+        medium: val('msBandMedium') || 'air',
+        cite: box.dataset.cite || null,
+      };
+    }
+    if (toolId === 'curve') {
+      const feh = Number(val('msCurveFeh'));
+      if (!Number.isFinite(feh) || val('msCurveFeh') === '')
+        throw new Error(t('obs.ms.p.bad', { field: label('msCurveFeh') }));
+      return {
+        model: { ...CURVE_MODEL, where: { feh } },
+        x: ctx.state.x,
+        y: ctx.state.y,
+        dm: [
+          num('msDmLo', label('msDmLo')),
+          num('msDmHi', label('msDmHi')),
+          num('msDmStep', label('msDmStep')),
+        ],
+        E: [
+          num('msELo', label('msELo')),
+          num('msEHi', label('msEHi')),
+          num('msEStep', label('msEStep')),
+        ],
+        R: num('msR', label('msR')),
+        RCite: CURVE_R.cite,
+        scale: [
+          num('msScaleC', label('msScaleC')),
+          num('msScaleM', label('msScaleM')),
+        ],
+        cap: num('msCap', label('msCap')),
+        tolerance: num('msCurveTol', label('msCurveTol')),
+      };
+    }
     if (toolId === 'aperture') {
       const mode = val('msMode');
       if (mode === 'bits') {
@@ -910,6 +1104,7 @@ export function mountMeasurePanel(root, ctx) {
         gain: val('msGain') === '' ? null : num('msGain', label('msGain')),
       };
     }
+    if (toolId === 'describe') return { column: val('msDescribeCol') };
     if (toolId === 'filter') {
       const o = ctx.state.view;
       const conditions = [];
@@ -959,6 +1154,7 @@ export function mountMeasurePanel(root, ctx) {
   const hooks = extra => ({
     skyOf: ctx.skyOf,
     pixelScale: ctx.pixelScale,
+    model: id => ctx.model(id),
     ...extra,
   });
 
@@ -1824,6 +2020,31 @@ export function mountMeasurePanel(root, ctx) {
     ui.csv.disabled = !nodes().length;
     renderPipeline();
     ui.methods.replaceChildren(...methods().map(m => el('li', { text: m })));
+    publishOverlays();
+  }
+
+  // The curves current measurements draw over the plot, told to the page only
+  // when they change: the page redraws, and a redraw updates this panel.
+  let published = '';
+  function publishOverlays() {
+    const { t } = ctx;
+    const list = nodes()
+      .filter(n => n.overlay && model.status.get(n.id) !== 'stale')
+      .map(n => ({
+        observation: n.input.observation,
+        x: n.overlay.x,
+        y: n.overlay.y,
+        points: n.overlay.points,
+        label: t('obs.ms.overlay', {
+          id: n.id,
+          tool: words().toolName(n.tool),
+          key: ctx.number(n.overlay.key),
+        }),
+      }));
+    const key = JSON.stringify(list.map(o => [o.label, o.x, o.y]));
+    if (key === published) return;
+    published = key;
+    ctx.overlay?.(list);
   }
 
   /** The page changed: a new observation, or a change made or undone. */

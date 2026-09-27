@@ -44,6 +44,12 @@ import {
   readAperture,
 } from './data-packs/tess-aperture.mjs';
 import { checkObservation, observationOf } from '../js/observation.js';
+import { checkTable, tableOf } from '../js/tableObservation.js';
+import {
+  MIST_ISOCHRONES,
+  NGC2420_PHOTOMETRY,
+  NGC2420_SEGUE,
+} from './data-packs/ngc2420.mjs';
 import { separation, skyOf } from '../js/observatory/wcs.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -399,7 +405,20 @@ const TESS_HD209458_S56_APERTURE = {
   },
 };
 
-export const PACKS = [TESS_HD209458_S56, TESS_HD209458_S56_APERTURE];
+export const PACKS = [
+  TESS_HD209458_S56,
+  TESS_HD209458_S56_APERTURE,
+  NGC2420_PHOTOMETRY,
+  NGC2420_SEGUE,
+  MIST_ISOCHRONES,
+];
+
+// A table pack (js/tableObservation.js) is decoded and checked as a table;
+// every other pack, as a series or an image (js/observation.js).
+const decodeOf = pack => (pack.table ? tableOf : observationOf);
+const checkOf = pack => (pack.table ? checkTable : checkObservation);
+const decoderOf = pack =>
+  pack.table ? 'js/tableObservation.js' : 'js/observation.js';
 
 // --- Writing -------------------------------------------------------------------
 
@@ -423,13 +442,13 @@ async function moduleText(pack, meta, series) {
 // THIS IS AN OBSERVATION. The full record - sources, checksums, every step of
 // the transformation and the check it passed - is ${pack.manifest}.
 // This module carries only what an instrument shows: PACK, to label and credit
-// the data, and SERIES, the numbers, which js/observation.js decodes.
+// the data, and SERIES, the numbers, which ${decoderOf(pack)} decodes.
 // =============================================================================
 
 /** What the data is and who to credit, as an interface shows it. */
 export const PACK = ${JSON.stringify(meta, null, 2)};
 
-/** The series, encoded as SERIES.encoding says; see js/observation.js. */
+/** The series, encoded as SERIES.encoding says; see ${decoderOf(pack)}. */
 export const SERIES = ${JSON.stringify(series, null, 2)};
 `;
   return formatJs(body, pack.module);
@@ -450,8 +469,8 @@ export async function buildPack(pack, raw) {
   // The runtime metadata is cut from the manifest, never written separately,
   // so the two cannot say different things.
   const PACK = runtimeMeta(core);
-  const observation = observationOf({ PACK, SERIES: series });
-  const problems = checkObservation(observation);
+  const observation = decodeOf(pack)({ PACK, SERIES: series });
+  const problems = checkOf(pack)(observation);
   if (problems.length) throw new Error(`${pack.id}: ${problems[0]}`);
   const { ok, ...validation } = pack.validate(observation);
   if (!ok)
@@ -523,12 +542,12 @@ export async function checkPacks({ root = REPO } = {}) {
     }
     let observation;
     try {
-      observation = observationOf(mod);
+      observation = decodeOf(pack)(mod);
     } catch (err) {
       say(`will not decode: ${err.message}`);
       continue;
     }
-    for (const p of checkObservation(observation)) say(p);
+    for (const p of checkOf(pack)(observation)) say(p);
     const { ok, result } = pack.validate(observation);
     if (!ok) say(`fails its check: ${JSON.stringify(result)}`);
     if (
@@ -539,6 +558,9 @@ export async function checkPacks({ root = REPO } = {}) {
       );
     }
 
+    // A pack only the Observatory opens is no capability package: its loader
+    // would land in js/platform/builtins.js, which the application reaches.
+    if (pack.capability === null) continue;
     if (!existsSync(at(pack.capability))) {
       say(`${pack.capability} is missing`);
       continue;

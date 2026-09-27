@@ -1,0 +1,247 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "sdss-dr18-ngc2420-photometry",
+  "version": "1.0.0",
+  "title": "NGC 2420: SDSS DR18 photometry",
+  "object": {
+    "name": "NGC 2420",
+    "identifiers": [
+      "NGC 2420"
+    ],
+    "ra": 114.602,
+    "dec": 21.575,
+    "frame": "ICRS, epoch J2000"
+  },
+  "facility": {
+    "observatory": "SDSS",
+    "instrument": "2.5 m Sloan Foundation Telescope, Apache Point Observatory",
+    "pipeline": "SDSS DR18 imaging (the Star view, PSF magnitudes)"
+  },
+  "dataType": "catalog",
+  "origin": "observed",
+  "credit": "SDSS DR18 imaging (Almeida et al. 2023)",
+  "license": {
+    "status": "public-domain",
+    "statement": "SDSS data are in the public domain. SDSS asks that work using them acknowledge the survey and cite the data release (NOTICE)."
+  },
+  "retrieved": "2026-09-27",
+  "columns": [
+    {
+      "id": "ra",
+      "name": "ra",
+      "unit": "deg",
+      "description": "right ascension, ICRS"
+    },
+    {
+      "id": "dec",
+      "name": "dec",
+      "unit": "deg",
+      "description": "declination, ICRS"
+    },
+    {
+      "id": "g",
+      "name": "g",
+      "unit": "mag",
+      "description": "SDSS g PSF magnitude (psfMag_g), not corrected for extinction"
+    },
+    {
+      "id": "g_err",
+      "name": "g error",
+      "unit": "mag",
+      "uncertaintyOf": "g",
+      "description": "its one-sigma error (psfMagErr_g)"
+    },
+    {
+      "id": "r",
+      "name": "r",
+      "unit": "mag",
+      "description": "SDSS r PSF magnitude (psfMag_r), not corrected for extinction"
+    },
+    {
+      "id": "r_err",
+      "name": "r error",
+      "unit": "mag",
+      "uncertaintyOf": "r",
+      "description": "its one-sigma error (psfMagErr_r)"
+    }
+  ],
+  "masks": [
+    {
+      "column": "clean",
+      "rule": "SDSS's clean-photometry flag: a star that is saturated, near an edge or deblended badly is dropped",
+      "dropped": 224
+    },
+    {
+      "column": "psfMag_g",
+      "rule": "a star fainter than g = 22.5, where SDSS photometry becomes incomplete, is dropped",
+      "dropped": 2206
+    }
+  ],
+  "reductions": [
+    "Every star within 14.14 arcmin of the adopted center (RA 114.602, Dec +21.575; Cantat-Gaudin et al. 2020, A&A 640, A1 (VizieR J/A+A/640/A1)): a circle of 10 arcmin and an annulus of the same area around it, so the cluster and a field of equal size can be compared.",
+    "Of the stars dropped as not clean, 38 are brighter than g = 14.5, where SDSS saturates: the cluster's brightest giants are not in this table.",
+    "SDSS's standard photometry has almost nothing at the cluster's center: 3 detections of any kind within 2 arcmin and 15 within 3 (DR18 PhotoObjAll), because its pipeline does not separate stars in so crowded a field (An et al. 2008 remeasured such fields for that reason). The core is missing from this table, not from the sky.",
+    "Positions are rounded to 0.00001 degree (0.04 arcsec), magnitudes to 1 mmag and their errors to 0.5 mmag.",
+    "The SDSS object ids are left out; the query in the pack's manifest returns them."
+  ],
+  "source": {
+    "archive": "SDSS SkyServer, Data Release 18",
+    "urls": [
+      "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+s.ra%2C+s.dec%2C+s.psfMag_g%2C+s.psfMagErr_g%2C+s.psfMag_r%2C+s.psfMagErr_r+FROM+dbo.fGetNearbyObjEq%28114.602%2C21.575%2C14.1421%29+AS+nb+JOIN+Star+AS+s+ON+s.objID+%3D+nb.objID+WHERE+s.clean+%3D+1+AND+s.psfMag_g+%3C+22.5+ORDER+BY+s.objID&format=csv",
+      "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+SUM%28CASE+WHEN+s.clean+%3D+1+AND+s.psfMag_g+%3C+22.5+THEN+1+ELSE+0+END%29+AS+kept%2C+SUM%28CASE+WHEN+s.clean+%3D+0+AND+s.psfMag_g+%3C+22.5+THEN+1+ELSE+0+END%29+AS+unclean%2C+SUM%28CASE+WHEN+s.clean+%3D+0+AND+s.psfMag_g+%3C+14.5+THEN+1+ELSE+0+END%29+AS+uncleanBright%2C+SUM%28CASE+WHEN+s.psfMag_g+%3E%3D+22.5+THEN+1+ELSE+0+END%29+AS+faint+FROM+dbo.fGetNearbyObjEq%28114.602%2C21.575%2C14.1421%29+AS+nb+JOIN+Star+AS+s+ON+s.objID+%3D+nb.objID&format=csv",
+      "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+SUM%28CASE+WHEN+nb.distance+%3C+2+THEN+1+ELSE+0+END%29+AS+within2%2C+COUNT%28*%29+AS+within3+FROM+dbo.fGetNearbyObjEq%28114.602%2C21.575%2C3%29+AS+nb+JOIN+PhotoObjAll+AS+s+ON+s.objID+%3D+nb.objID&format=csv"
+    ],
+    "queries": [
+      "SELECT s.ra, s.dec, s.psfMag_g, s.psfMagErr_g, s.psfMag_r, s.psfMagErr_r FROM dbo.fGetNearbyObjEq(114.602,21.575,14.1421) AS nb JOIN Star AS s ON s.objID = nb.objID WHERE s.clean = 1 AND s.psfMag_g < 22.5 ORDER BY s.objID",
+      "SELECT SUM(CASE WHEN s.clean = 1 AND s.psfMag_g < 22.5 THEN 1 ELSE 0 END) AS kept, SUM(CASE WHEN s.clean = 0 AND s.psfMag_g < 22.5 THEN 1 ELSE 0 END) AS unclean, SUM(CASE WHEN s.clean = 0 AND s.psfMag_g < 14.5 THEN 1 ELSE 0 END) AS uncleanBright, SUM(CASE WHEN s.psfMag_g >= 22.5 THEN 1 ELSE 0 END) AS faint FROM dbo.fGetNearbyObjEq(114.602,21.575,14.1421) AS nb JOIN Star AS s ON s.objID = nb.objID",
+      "SELECT SUM(CASE WHEN nb.distance < 2 THEN 1 ELSE 0 END) AS within2, COUNT(*) AS within3 FROM dbo.fGetNearbyObjEq(114.602,21.575,3) AS nb JOIN PhotoObjAll AS s ON s.objID = nb.objID"
+    ],
+    "citations": [
+      {
+        "text": "Almeida et al. 2023, ApJS 267, 44 (SDSS DR18)",
+        "doi": "10.3847/1538-4365/acda98"
+      },
+      {
+        "text": "York et al. 2000, AJ 120, 1579 (the Sloan Digital Sky Survey)",
+        "doi": "10.1086/301513"
+      },
+      {
+        "text": "An et al. 2008, ApJS 179, 326 (SDSS photometry of crowded cluster fields)",
+        "doi": "10.1086/592090"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "sdss-dr18-ngc2420-photometry.csv",
+      "url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+s.ra%2C+s.dec%2C+s.psfMag_g%2C+s.psfMagErr_g%2C+s.psfMag_r%2C+s.psfMagErr_r+FROM+dbo.fGetNearbyObjEq%28114.602%2C21.575%2C14.1421%29+AS+nb+JOIN+Star+AS+s+ON+s.objID+%3D+nb.objID+WHERE+s.clean+%3D+1+AND+s.psfMag_g+%3C+22.5+ORDER+BY+s.objID&format=csv",
+      "canonical": "data-lines",
+      "sha256": "060b80173201014eb09651b41f25834c27f84313dfa3fe48b7f8098346340652"
+    },
+    {
+      "file": "sdss-dr18-ngc2420-photometry-counts.csv",
+      "url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+SUM%28CASE+WHEN+s.clean+%3D+1+AND+s.psfMag_g+%3C+22.5+THEN+1+ELSE+0+END%29+AS+kept%2C+SUM%28CASE+WHEN+s.clean+%3D+0+AND+s.psfMag_g+%3C+22.5+THEN+1+ELSE+0+END%29+AS+unclean%2C+SUM%28CASE+WHEN+s.clean+%3D+0+AND+s.psfMag_g+%3C+14.5+THEN+1+ELSE+0+END%29+AS+uncleanBright%2C+SUM%28CASE+WHEN+s.psfMag_g+%3E%3D+22.5+THEN+1+ELSE+0+END%29+AS+faint+FROM+dbo.fGetNearbyObjEq%28114.602%2C21.575%2C14.1421%29+AS+nb+JOIN+Star+AS+s+ON+s.objID+%3D+nb.objID&format=csv",
+      "canonical": "data-lines",
+      "sha256": "a560d138ef176f7965585a2fede2edbd3f7c5fdef1b1d166967781b1545ac67d"
+    },
+    {
+      "file": "sdss-dr18-ngc2420-core-counts.csv",
+      "url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+SUM%28CASE+WHEN+nb.distance+%3C+2+THEN+1+ELSE+0+END%29+AS+within2%2C+COUNT%28*%29+AS+within3+FROM+dbo.fGetNearbyObjEq%28114.602%2C21.575%2C3%29+AS+nb+JOIN+PhotoObjAll+AS+s+ON+s.objID+%3D+nb.objID&format=csv",
+      "canonical": "data-lines",
+      "sha256": "ab75ade6cbae53090510440d5070f19c6e912b6e397f54e486ebaac4d2b84566"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/ngc2420.mjs",
+    "version": "1.0.0",
+    "options": {
+      "columns": [
+        {
+          "id": "ra",
+          "step": 0.00001
+        },
+        {
+          "id": "dec",
+          "step": 0.00001
+        },
+        {
+          "id": "g",
+          "step": 0.001
+        },
+        {
+          "id": "g_err",
+          "step": 0.0005
+        },
+        {
+          "id": "r",
+          "step": 0.001
+        },
+        {
+          "id": "r_err",
+          "step": 0.0005
+        }
+      ]
+    },
+    "steps": [
+      "Query the SDSS DR18 Star view for every star within 14.1421 arcmin of the adopted center with clean photometry and g < 22.5, ordered by object id.",
+      "Count, in a second query over the same circle, the stars that are not clean or fainter, for the masks.",
+      "Encode as table-columns/1: each column a whole number of its step from an offset, int16 where the range fits."
+    ],
+    "record": {
+      "rows": 2301,
+      "columns": [
+        {
+          "id": "ra",
+          "type": "int16",
+          "step": 0.00001,
+          "missing": 0,
+          "maxRounding": 0.000005
+        },
+        {
+          "id": "dec",
+          "type": "int16",
+          "step": 0.00001,
+          "missing": 0,
+          "maxRounding": 0.000005
+        },
+        {
+          "id": "g",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "g_err",
+          "type": "int16",
+          "step": 0.0005,
+          "missing": 0,
+          "maxRounding": 0.00025
+        },
+        {
+          "id": "r",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "r_err",
+          "type": "int16",
+          "step": 0.0005,
+          "missing": 0,
+          "maxRounding": 0.00025
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "PSF magnitudes, as the SDSS pipeline measures them; not corrected for extinction, which a reader applies with a reddening they choose."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/sdssNgc2420Photometry.js",
+    "bytes": 41510,
+    "sha256": "de519ab977820de5b92ce91b1bc3281b358d8c18a9a135c6f47ed5c7663a69c0"
+  },
+  "validation": {
+    "check": "stars brighter than g = 20 are more than 1.2 times as dense between 3 and 8 arcmin of the center as between 10 and 14.14 arcmin",
+    "against": [
+      {
+        "quantity": "center",
+        "value": "114.602, 21.575",
+        "ref": "Cantat-Gaudin et al. 2020, A&A 640, A1 (VizieR J/A+A/640/A1)"
+      }
+    ],
+    "result": {
+      "contrast": 1.335,
+      "inner": 412,
+      "outer": 561
+    }
+  }
+}

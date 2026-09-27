@@ -26,6 +26,7 @@ import {
   cannotConvertTime,
   conversionFactor,
   parseUnit,
+  dimensionOf,
   timeOffset,
   unitId,
 } from './units.js';
@@ -403,6 +404,147 @@ export const OPS = {
             masked: masked.size,
             droppedAnnotations: dropped,
           },
+        },
+      };
+    },
+  },
+
+  /**
+   * A new column, from others, by a formula the change states and the column
+   * keeps (`derived`), so it is never mistaken for data:
+   *
+   *   terms      a sum of columns times factors, plus a constant, in the
+   *              first column's unit: a color index g - r, an absolute
+   *              magnitude g - 12.06. Every term must share its dimension.
+   *   separation the angle on the sky between each row's position (two
+   *              columns in degrees) and a fixed one, in arcminutes: a
+   *              radius from a cluster's center
+   *
+   * Where every column a sum uses has an uncertainty, the new one's is their
+   * quadrature sum, times the factors; a separation gets none.
+   */
+  derive: {
+    kinds: ['time-series', 'spectrum', 'table'],
+    check(o, { id, name, terms, separation }) {
+      if (typeof id !== 'string' || !/^[A-Za-z][\w-]*$/.test(id))
+        return 'the new column needs an id of letters, digits, _ and -';
+      if (o.columns.some(c => c.id === id))
+        return `there is already a column ${id}`;
+      if (typeof name !== 'string' || !name.trim())
+        return 'the new column needs a name';
+      if (separation) {
+        const { ra, dec, center } = separation;
+        for (const cid of [ra, dec]) {
+          const c = columnOf(o, cid);
+          if (!c) return `there is no column ${cid}`;
+          if (unitOf(c)?.id !== 'deg') return `${c.name} is not in degrees`;
+        }
+        if (
+          !Array.isArray(center) ||
+          !isNum(center[0]) ||
+          !isNum(center[1]) ||
+          Math.abs(center[1]) > 90
+        )
+          return 'the position is a right ascension and a declination in degrees';
+        return null;
+      }
+      if (!Array.isArray(terms) || !terms.length || terms.length > 4)
+        return 'a sum takes one to four columns';
+      let dim;
+      for (const term of terms) {
+        const c = columnOf(o, term?.column);
+        if (!c) return `there is no column ${term?.column}`;
+        if (c.role === 'label' || c.role === 'flag')
+          return `${c.name} is not a number`;
+        if (!isNum(term.factor) || term.factor === 0)
+          return 'each column needs a factor other than zero';
+        const d = dimensionOf(unitOf(c));
+        if (dim !== undefined && d !== dim)
+          return 'every column in a sum must be the same kind of quantity';
+        dim = d;
+      }
+      return null;
+    },
+    apply(o, { id, name, terms, constant = 0, separation }) {
+      const next = copy(o);
+      const n = rowCount(o);
+      if (separation) {
+        const ra = columnOf(o, separation.ra).values;
+        const dec = columnOf(o, separation.dec).values;
+        const [ra0, dec0] = separation.center.map(v => (v * Math.PI) / 180);
+        const r = Math.PI / 180;
+        const values = Float64Array.from({ length: n }, (_, i) => {
+          const a = ra[i] * r;
+          const d = dec[i] * r;
+          const s =
+            Math.sin((d - dec0) / 2) ** 2 +
+            Math.cos(d) * Math.cos(dec0) * Math.sin((a - ra0) / 2) ** 2;
+          return ((2 * Math.asin(Math.min(1, Math.sqrt(s)))) / r) * 60;
+        });
+        next.columns.push({
+          id,
+          name,
+          unit: 'arcmin',
+          role: 'value',
+          derived: { separation },
+          values,
+        });
+        return {
+          o: next,
+          note: {
+            key: 'deriveSeparation',
+            vars: { name, ra: separation.center[0], dec: separation.center[1] },
+          },
+        };
+      }
+      const cols = terms.map(t => columnOf(o, t.column));
+      const values = Float64Array.from({ length: n }, (_, i) =>
+        terms.reduce((s, t, k) => s + t.factor * cols[k].values[i], constant)
+      );
+      next.columns.push({
+        id,
+        name,
+        unit: cols[0].unit,
+        role: 'value',
+        derived: { terms, constant },
+        values,
+      });
+      const errs = cols.map(c => uncertaintyOf(o, c.id).sigma);
+      if (errs.every(Boolean)) {
+        next.columns.push({
+          id: `${id}-err`,
+          name: `${name} error`,
+          unit: cols[0].unit,
+          role: 'uncertainty',
+          of: id,
+          derived: { quadrature: errs.map(e => e.id) },
+          values: Float64Array.from({ length: n }, (_, i) =>
+            Math.sqrt(
+              errs.reduce(
+                (s, e, k) => s + (terms[k].factor * e.values[i]) ** 2,
+                0
+              )
+            )
+          ),
+        });
+      }
+      // The formula, in the columns' own names: g - r, g - 12.06.
+      const formula = terms
+        .map((t, k) => {
+          const sign = t.factor < 0 ? '−' : '+';
+          const size =
+            Math.abs(t.factor) === 1 ? '' : `${Math.abs(t.factor)} × `;
+          return `${k || t.factor < 0 ? `${sign} ` : ''}${size}${cols[k].name}`;
+        })
+        .concat(
+          constant ? [`${constant < 0 ? '−' : '+'} ${Math.abs(constant)}`] : []
+        )
+        .join(' ');
+      return {
+        o: next,
+        note: {
+          key: errs.every(Boolean) ? 'deriveSumError' : 'deriveSum',
+          vars: { name, formula },
         },
       };
     },

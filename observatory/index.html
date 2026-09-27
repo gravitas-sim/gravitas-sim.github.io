@@ -149,6 +149,21 @@
         stroke: #9aa0a6;
         stroke-width: 1;
       }
+      /* Curves a measurement draws over the points: a model, say. */
+      .ow-overlay {
+        fill: none;
+        stroke-width: 2;
+        stroke-linejoin: round;
+      }
+      .ow-overlay-0 {
+        stroke: #ffb86b;
+      }
+      .ow-overlay-1 {
+        stroke: #c3a6ff;
+      }
+      .ow-overlay-2 {
+        stroke: #7ee0a1;
+      }
       .ow-focus {
         fill: none;
         stroke: #ffffff;
@@ -374,9 +389,7 @@
       </section>
 
       <details id="obsGuidePanel" class="ow-panel">
-        <summary data-i18n="obs.gd.title">
-          Guided investigations: from photons to a planet
-        </summary>
+        <summary data-i18n="obs.gd.title">Guided investigations</summary>
       </details>
 
       <section
@@ -508,6 +521,7 @@
                 data-i18n-aria-roledescription="obs.plot.role"
                 aria-describedby="obsKeys"
               ></svg>
+              <figcaption id="obsOverlayNote" class="ow-hint" hidden></figcaption>
             </figure>
             <figure id="obsImageBox" hidden>
               <canvas
@@ -652,6 +666,56 @@
             <div>
               <button id="obsTimeGo" class="ui-button" type="button" data-i18n="obs.time.go">
                 Change
+              </button>
+            </div>
+          </div>
+          <div id="obsDeriveBox" class="ow-grid">
+            <label class="ow-field">
+              <span data-i18n="obs.derive.name">New column</span>
+              <input id="obsDeriveName" type="text" autocomplete="off" />
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.derive.from">From</span>
+              <select id="obsDeriveA"></select>
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.derive.sign">then</span>
+              <select id="obsDeriveSign">
+                <option value="-1" data-i18n="obs.derive.minus">minus</option>
+                <option value="1" data-i18n="obs.derive.plus">plus</option>
+                <option value="0" data-i18n="obs.derive.none">no second column</option>
+              </select>
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.derive.second">the column</span>
+              <select id="obsDeriveB"></select>
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.derive.constant">and add the constant</span>
+              <input id="obsDeriveK" type="number" step="any" value="0" />
+            </label>
+            <div>
+              <button id="obsDeriveGo" class="ui-button" type="button" data-i18n="obs.derive.go">
+                Add the column
+              </button>
+            </div>
+          </div>
+          <div id="obsSepBox" class="ow-grid">
+            <label class="ow-field">
+              <span data-i18n="obs.derive.sepName">New column: distance from a position</span>
+              <input id="obsSepName" type="text" autocomplete="off" />
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.derive.ra">RA of the position (deg)</span>
+              <input id="obsSepRa" type="number" step="any" />
+            </label>
+            <label class="ow-field">
+              <span data-i18n="obs.derive.dec">Dec of the position (deg)</span>
+              <input id="obsSepDec" type="number" step="any" />
+            </label>
+            <div>
+              <button id="obsSepGo" class="ui-button" type="button" data-i18n="obs.derive.sepGo">
+                Add the distance
               </button>
             </div>
           </div>

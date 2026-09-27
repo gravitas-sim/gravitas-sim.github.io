@@ -15,6 +15,33 @@ the release rather than in the tag.
 
 ### Added
 
+- **Stars and their populations: spectra, clusters and variables**
+  (STELLAR_POPULATIONS.md). A second suite of five guides in `/observatory/`,
+  on introductory and advanced paths, run by the same runner as the
+  Exoplanet Observatory.
+  - **What they cover:** what a spectrum says, from H-alpha and TiO5 to an
+    A-type star whose gravity says it is no dwarf; NGC 2420's
+    color–magnitude diagram and what SDSS left out of it (the crowded core,
+    the saturated giants, the field); membership by SEGUE's velocities, and
+    three published metallicities that disagree; ages from MIST's isochrones,
+    and how metallicity and reddening trade against age and distance; and SU
+    Draconis's period, light curve and distance as a standard candle, with a
+    period search a transit fools.
+  - **Three new data packs:** NGC 2420's SDSS DR18 photometry and SEGUE
+    parameters, and MIST v1.2's SDSS isochrones, as the new `catalog` data
+    type in the `table-columns/1` encoding, pinned and rebuilt byte for byte
+    by `npm run packs:provenance`.
+  - **New measurement tools, for any observation:** a band index (TiO5,
+    CaH2), a comparison with model curves that draws its best curve over the
+    points, a column summary (count, median, mean, spread), and derived
+    columns: a sum of columns with its errors in quadrature, and the distance
+    on the sky from a position.
+  - **The guide runner is a platform:** suites are registered and load when
+    chosen; the checks, the answer key and the instructor documents are
+    shared, and the exoplanet suite shrank by 206 lines moving onto them.
+  - **For instructors:** a guide and an answer key in the portal
+    (`npm run guides:populations-key`); English and Spanish; offline.
+  - **SDK 1.4.0:** the `catalog` data type in the manifest schema.
 - **The Exoplanet Observatory: from photons to a planet**
   (EXOPLANET_OBSERVATORY.md). Five guides in `/observatory/` that take a
   reader through real TESS light curves, each on an introductory and an

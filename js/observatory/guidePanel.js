@@ -1,12 +1,14 @@
 // =============================================================================
-// The Exoplanet Observatory's guided investigations: the runner
+// Guided investigations in the Observatory: the runner
 // -----------------------------------------------------------------------------
 // Loaded when a reader first opens "Guided investigations", or with
 // ?guide=<id>[&path=advanced], so the page carries none of it at start-up.
-// The investigations themselves are data (./guides/exoplanet.js); this draws
-// one step at a time and checks it against the workspace:
+// The investigations are data, in suites (js/observatory/guides/suites.js),
+// each loaded only when chosen; what every suite shares is
+// js/observatory/guides/core.js. This draws one step at a time and checks it
+// against the workspace:
 //
-//   read     text, and sometimes a panel of numbers computed from the data
+//   read     text, and sometimes a panel of numbers the suite computes
 //   do       something to do in the workspace, with a button that starts it
 //            (open an observation, open a panel) and a check that looks for
 //            the result: an observation open, a measurement, a fold, a fit
@@ -24,20 +26,16 @@
 // does the fit and measurement panels (js/observatory/fitPanel.js says why).
 // =============================================================================
 
+import { SUITES, suiteOf } from './guides/suites.js';
 import {
-  ADOPTED,
-  ANSWERS,
-  CORRECT,
-  GUIDES,
   PATHS,
-  RSUN_PER_RJUP,
-  SIGNIFICANT,
-  TARGETS,
-  periodOf,
+  answerContext,
+  answerMatches,
+  correctOption,
+  evaluateCheck,
+  parseAnswer,
   stepsOn,
-  transitOf,
-} from './guides/exoplanet.js';
-import { seriesOf } from './guides/science.js';
+} from './guides/core.js';
 import { installedPack } from '../catalog/installed.js';
 import { install } from '../catalog/install.js';
 import { openStore } from '../catalog/store.js';
@@ -50,6 +48,14 @@ import { EN_GUIDES } from '../i18n/en.guides.js';
 import { ES_GUIDES } from '../i18n/es.guides.js';
 import { EN_CATALOG } from '../i18n/en.catalog.js';
 import { ES_CATALOG } from '../i18n/es.catalog.js';
+
+// The core's pure parts, for the callers that read them from here.
+export {
+  answerMatches,
+  evaluateCheck,
+  fitValue,
+  parseAnswer,
+} from './guides/core.js';
 
 export const GUIDE_VERSION = '1.0.0';
 const STORAGE_KEY = 'gravitas_guides';
@@ -65,101 +71,6 @@ const el = (tag, attrs = {}, ...children) => {
   return node;
 };
 
-/** A typed number, with a decimal comma as well as a point. */
-export function parseAnswer(text) {
-  const s = String(text ?? '')
-    .trim()
-    .replace(/\s+/g, '')
-    .replace(',', '.');
-  if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(s)) return null;
-  return Number(s);
-}
-
-/** Whether a typed answer is the expected one, to its tolerance. */
-export function answerMatches(typed, expected, tolerance) {
-  return (
-    Number.isFinite(typed) &&
-    Number.isFinite(expected) &&
-    Math.abs(typed - expected) <= tolerance + 1e-9 * Math.abs(expected)
-  );
-}
-
-const within = (v, [lo, hi]) =>
-  Number.isFinite(v) && v >= lo - 1e-12 && v <= hi + 1e-12;
-
-/** A fit document's value of a fitted or derived quantity. */
-export function fitValue(doc, name) {
-  const fit = doc?.results?.fit;
-  const p =
-    fit?.parameters?.find(q => q.name === name) ??
-    fit?.derived?.find(q => q.name === name);
-  return p && Number.isFinite(p.value) ? p.value : null;
-}
-
-/**
- * Does the workspace hold what a `do` step asks for? Pure, on plain data:
- * {source, changes, nodes, fits}. Returns {ok, evidence, value} or
- * {ok: false, why, vars}.
- */
-export function evaluateCheck(check, w) {
-  const id = TARGETS[check.target]?.observation;
-  if (check.kind === 'opened') {
-    return w.source?.id === id
-      ? { ok: true, evidence: null, value: null }
-      : { ok: false, why: 'notOpened' };
-  }
-  if (check.kind === 'folded') {
-    if (w.source?.id !== id) return { ok: false, why: 'notOpened' };
-    const fold = [...(w.changes || [])].reverse().find(c => c.op === 'fold');
-    if (!fold) return { ok: false, why: 'noFold' };
-    return within(fold.period, check.period)
-      ? { ok: true, evidence: fold, value: fold.period }
-      : { ok: false, why: 'foldPeriod', vars: { value: fold.period } };
-  }
-  if (check.kind === 'measured') {
-    const mine = (w.nodes || []).filter(
-      n =>
-        n.tool === check.tool &&
-        n.status === 'current' &&
-        n.input?.observation === id &&
-        Object.entries(check.params || {}).every(
-          ([k, v]) => n.params?.[k] === v
-        )
-    );
-    if (!mine.length) return { ok: false, why: 'noMeasurement' };
-    const n = mine.at(-1);
-    const v = n.quantities.find(q => q.id === check.quantity)?.value;
-    return within(v, check.within)
-      ? { ok: true, evidence: n, value: v }
-      : { ok: false, why: 'outside', vars: { value: v } };
-  }
-  if (check.kind === 'fitted') {
-    const mine = (w.fits || []).filter(d => d.data?.observation === id);
-    if (!mine.length) return { ok: false, why: 'noFit' };
-    const settled = mine.filter(d =>
-      Object.entries(check.settings || {}).every(([k, range]) => {
-        const s = d.settings || {};
-        const v =
-          k === 'dilution'
-            ? (s.dilution ?? 0)
-            : k === 'stellarRadius'
-              ? s.stellarRadius?.value
-              : k === 'stellarRadiusSigma'
-                ? s.stellarRadius?.sigma
-                : s[k];
-        return within(v, range);
-      })
-    );
-    if (!settled.length) return { ok: false, why: 'fitSettings' };
-    const d = settled.at(-1);
-    const v = fitValue(d, check.parameter);
-    return within(v, check.within)
-      ? { ok: true, evidence: d, value: v }
-      : { ok: false, why: 'outside', vars: { value: v } };
-  }
-  return { ok: false, why: 'unknown' };
-}
-
 /**
  * @param {HTMLDetailsElement} root - The page's #obsGuidePanel
  * @param {object} ctx - What the page lends: t, number, registerMessages,
@@ -174,6 +85,7 @@ export function mountGuidePanel(root, ctx) {
   const { t } = ctx;
   const saved = readSaved();
   const run = {
+    suite: null,
     guide: null,
     path: 'intro',
     at: 0,
@@ -183,8 +95,11 @@ export function mountGuidePanel(root, ctx) {
     evidence: {},
     feedback: null,
   };
-  // Observations the guide has read, by target: {o, pack, series}.
+  // Suites loaded, by id, with their words registered.
+  const suites = new Map();
+  // Observations the guides have read, by suite and target.
   const seen = new Map();
+  const seenKey = target => `${run.suite?.id}/${target}`;
 
   const words = {
     guide: g => t(`gd.${g.id}.title`),
@@ -192,34 +107,28 @@ export function mountGuidePanel(root, ctx) {
     target: id => t(`gd.target.${id}`),
   };
 
+  async function loadSuite(id) {
+    if (suites.has(id)) return suites.get(id);
+    const entry = SUITES.find(s => s.id === id) ?? SUITES[0];
+    const suite = await entry.load();
+    ctx.registerMessages(await suite.messages());
+    suites.set(entry.id, suite);
+    return suite;
+  }
+
   // --- What the answers are computed from -----------------------------------------
 
-  function remember(target, o) {
-    seen.set(target, {
-      o,
-      pack: o.pack ?? null,
-      series: o.kind === 'time-series' ? seriesOf(o) : null,
-    });
-  }
-  const context = {
-    pack: target => seen.get(target)?.pack ?? null,
-    series: target => seen.get(target)?.series ?? null,
-    evidence: stepId => run.evidence[stepId] ?? null,
-    quantity: (stepId, name) => {
-      const e = run.evidence[stepId];
-      if (!e) return run.record[stepId]?.values?.[name] ?? null;
-      if (e.quantities) {
-        const v = e.quantities.find(q => q.id === name)?.value;
-        return Number.isFinite(v) ? v : null;
-      }
-      return fitValue(e, name);
-    },
-  };
+  const context = answerContext({
+    evidence: id => run.evidence[id],
+    observation: target => seen.get(seenKey(target)),
+    values: id => run.record[id]?.values,
+  });
 
   /** The observation for a target, without opening it; null if it is not here. */
   async function load(target, { installing = false } = {}) {
-    if (seen.has(target)) return seen.get(target).o;
-    const T = TARGETS[target];
+    const key = seenKey(target);
+    if (seen.has(key)) return seen.get(key);
+    const T = run.suite.TARGETS[target];
     let o;
     if (T.fixture) o = await ctx.openFixture(T.fixture);
     else {
@@ -234,7 +143,7 @@ export function mountGuidePanel(root, ctx) {
         idPrefix: 'installed',
       });
     }
-    remember(target, o);
+    seen.set(key, o);
     return o;
   }
 
@@ -260,19 +169,13 @@ export function mountGuidePanel(root, ctx) {
 
   /** Read every target a step's answer or panel needs, quietly. */
   async function prepare(step) {
-    const targets = new Set();
-    if (step.target) targets.add(step.target);
-    if (step.show === 'depths' || step.expect?.answer === 'depthRatio') {
-      targets.add('kepler13-sap');
-      targets.add('kepler13-pdcsap');
-    }
-    if (
-      ['crowdsap', 'dilution', 'radiusRatioIfB'].includes(step.expect?.answer)
-    )
-      targets.add('kepler13-sap');
-    if (step.show === 'crowding') targets.add('kepler13-sap');
-    if (step.expect?.answer === 'qualityDropped' || step.show === 'count')
-      targets.add('hd209458');
+    const { NEEDS = {}, SHOWS = {} } = run.suite;
+    const show = SHOWS[step.show]?.needs;
+    const targets = new Set([
+      ...(step.target ? [step.target] : []),
+      ...(NEEDS[step.expect?.answer] ?? []),
+      ...((typeof show === 'function' ? show(step) : show) ?? []),
+    ]);
     for (const target of targets) {
       try {
         await load(target);
@@ -292,13 +195,13 @@ export function mountGuidePanel(root, ctx) {
   });
 
   async function checkDo(step, { quiet = false } = {}) {
-    const r = evaluateCheck(step.check, await workspace());
+    const r = evaluateCheck(step.check, await workspace(), run.suite.TARGETS);
     if (r.ok) {
       run.evidence[step.id] = r.evidence;
       run.record[step.id] = {
         passed: true,
         value: r.value,
-        ...(r.evidence?.quantities || r.evidence?.results
+        ...(r.evidence?.quantities || r.evidence?.results || r.evidence?.op
           ? { values: valuesOf(r.evidence) }
           : {}),
       };
@@ -321,6 +224,10 @@ export function mountGuidePanel(root, ctx) {
   function valuesOf(e) {
     if (e.quantities)
       return Object.fromEntries(e.quantities.map(q => [q.id, q.value]));
+    if (e.op)
+      return Object.fromEntries(
+        Object.entries(e).filter(([, v]) => Number.isFinite(v))
+      );
     const fit = e.results?.fit;
     return Object.fromEntries(
       [...(fit?.parameters || []), ...(fit?.derived || [])].map(p => [
@@ -331,15 +238,9 @@ export function mountGuidePanel(root, ctx) {
   }
 
   function expected(step) {
-    const f = ANSWERS[step.expect.answer];
+    const f = run.suite.ANSWERS[step.expect.answer];
     const v = f ? f(context, step) : null;
     return Number.isFinite(v) ? v : null;
-  }
-
-  function correctOption(step) {
-    if (step.correct === null) return null;
-    if (typeof step.correct === 'string') return step.correct;
-    return CORRECT[step.correct.answer]?.(context, step) ?? undefined;
   }
 
   async function checkAnswer(step, text) {
@@ -358,7 +259,7 @@ export function mountGuidePanel(root, ctx) {
   async function checkChoice(step, choice) {
     if (!choice) return say(false, t('gd.check.choose'));
     await prepare(step);
-    const want = correctOption(step);
+    const want = correctOption(run.suite, context, step);
     if (want === null) {
       run.record[step.id] = { choice, ok: null };
       save();
@@ -380,21 +281,19 @@ export function mountGuidePanel(root, ctx) {
       save();
       say(
         null,
-        t('gd.revealed', { value: fmt(want) }) + ' ' + words.step(step, 'ok'),
-        {
-          value: fmt(want),
-        }
+        `${t('gd.revealed', { value: fmt(want) })} ${words.step(step, 'ok')}`,
+        { value: fmt(want) }
       );
     } else {
-      const want = correctOption(step);
+      const want = correctOption(run.suite, context, step);
       if (!want) return say(false, t('gd.check.notYet'));
       run.record[step.id] = { ...(run.record[step.id] || {}), shown: true };
       save();
       say(
         null,
-        t('gd.revealedChoice', { option: words.step(step, `opt.${want}`) }) +
-          ' ' +
-          words.step(step, 'ok')
+        `${t('gd.revealedChoice', {
+          option: words.step(step, `opt.${want}`),
+        })} ${words.step(step, 'ok')}`
       );
     }
   }
@@ -405,8 +304,8 @@ export function mountGuidePanel(root, ctx) {
     const g = step.go;
     try {
       if (g.open) {
-        const current = ctx.state.source?.id === TARGETS[g.open].observation;
-        if (!current) {
+        const T = run.suite.TARGETS[g.open];
+        if (ctx.state.source?.id !== T.observation) {
           const o = await load(g.open, { installing: true });
           if (!o) throw new Error(t('gd.go.missing'));
           ctx.open(o);
@@ -428,6 +327,8 @@ export function mountGuidePanel(root, ctx) {
     return Number.isFinite(v) ? ctx.number(Number(v.toPrecision(6))) : '—';
   }
   const ppm = v => (Number.isFinite(v) ? Math.round(v * 1e6) : '—');
+  // What a suite's panels are drawn with.
+  const helpers = { t, fmt, ppm, target: id => words.target(id) };
 
   /** The step's message, with its numbers, where the reader will hear it. */
   function say(ok, text, vars = {}, { reveal: canReveal = false } = {}) {
@@ -468,7 +369,8 @@ export function mountGuidePanel(root, ctx) {
   }
 
   function start(id, path) {
-    const g = GUIDES.find(x => x.id === id) ?? GUIDES[0];
+    const g = run.suite.GUIDES.find(x => x.id === id) ?? run.suite.GUIDES[0];
+    if (!g) return;
     const kept = saved[g.id];
     run.guide = g;
     run.path = PATHS.includes(path) ? path : (kept?.path ?? 'intro');
@@ -496,14 +398,14 @@ export function mountGuidePanel(root, ctx) {
 
   function toNotebook() {
     const g = run.guide;
-    const main = [...seen.values()].at(-1)?.o ?? ctx.state.source;
+    const main = [...seen.values()].at(-1) ?? ctx.state.source;
     const answered = steps().filter(
       s => s.kind === 'answer' && Number.isFinite(run.record[s.id]?.value)
     );
     const quantities = answered.map(s => ({
       id: s.id,
       value: run.record[s.id].value,
-      unit: '',
+      unit: s.expect.unit ?? '',
       kind: 'measured',
     }));
     const rows = steps()
@@ -553,9 +455,10 @@ export function mountGuidePanel(root, ctx) {
   let ui = null;
   function build() {
     const intro = el('p', { class: 'ow-hint', text: t('gd.intro') });
+    const suite = el('select', { id: 'gdSuite' });
+    for (const s of SUITES)
+      suite.append(el('option', { value: s.id, text: t(`gd.suite.${s.id}`) }));
     const pick = el('select', { id: 'gdGuide' });
-    for (const g of GUIDES)
-      pick.append(el('option', { value: g.id, text: words.guide(g) }));
     const path = el('select', { id: 'gdPath' });
     for (const p of PATHS)
       path.append(el('option', { value: p, text: t(`gd.path.${p}`) }));
@@ -566,31 +469,54 @@ export function mountGuidePanel(root, ctx) {
       text: t('gd.start'),
     });
     startBtn.addEventListener('click', () => start(pick.value, path.value));
+    const suiteIntro = el('p', { id: 'gdSuiteIntro', class: 'ow-hint' });
     const summary = el('p', { id: 'gdSummary', class: 'ow-hint' });
-    const update = () => {
-      const g = GUIDES.find(x => x.id === pick.value);
-      summary.textContent = `${t(`gd.${g.id}.summary`)} ${t('gd.meta', {
-        steps: stepsOn(g, path.value).length,
-        minutes: g.minutes[path.value],
-      })}`;
+    const fillGuides = () => {
+      const keep = pick.value;
+      pick.replaceChildren(
+        ...(run.suite?.GUIDES ?? []).map(g =>
+          el('option', { value: g.id, text: words.guide(g) })
+        )
+      );
+      if (run.suite?.GUIDES.some(g => g.id === keep)) pick.value = keep;
     };
+    const update = () => {
+      if (!run.suite) {
+        suiteIntro.textContent = t('gd.loading');
+        summary.textContent = '';
+        return;
+      }
+      suiteIntro.textContent = t(`gd.suite.${run.suite.id}.intro`);
+      const g = run.suite.GUIDES.find(x => x.id === pick.value);
+      summary.textContent = g
+        ? `${t(`gd.${g.id}.summary`)} ${t('gd.meta', {
+            steps: stepsOn(g, path.value).length,
+            minutes: g.minutes[path.value],
+          })}`
+        : '';
+    };
+    suite.addEventListener('change', async () => {
+      startBtn.disabled = true;
+      run.suite = await loadSuite(suite.value);
+      fillGuides();
+      update();
+      startBtn.disabled = false;
+    });
     pick.addEventListener('change', update);
     path.addEventListener('change', update);
+    const field = (label, control) =>
+      el(
+        'label',
+        { class: 'ow-field' },
+        el('span', { text: t(label) }),
+        control
+      );
     const chooser = el(
       'div',
       { class: 'ow-grid' },
-      el(
-        'label',
-        { class: 'ow-field' },
-        el('span', { text: t('gd.pick') }),
-        pick
-      ),
-      el(
-        'label',
-        { class: 'ow-field' },
-        el('span', { text: t('gd.path') }),
-        path
-      ),
+      field('gd.suite', suite),
+      field('gd.pick', pick),
+      field('gd.path', path),
       el('div', {}, startBtn)
     );
     const card = el('section', {
@@ -620,6 +546,7 @@ export function mountGuidePanel(root, ctx) {
       { id: 'gdBody' },
       intro,
       chooser,
+      suiteIntro,
       summary,
       card,
       progress
@@ -639,12 +566,14 @@ export function mountGuidePanel(root, ctx) {
     observer?.observe(card);
     return {
       body,
+      suite,
       pick,
       path,
       summary,
       card,
       progress,
       back,
+      fillGuides,
       update,
       observer,
       get visible() {
@@ -655,6 +584,8 @@ export function mountGuidePanel(root, ctx) {
 
   function render() {
     if (!ui) return;
+    if (run.suite) ui.suite.value = run.suite.id;
+    ui.fillGuides();
     if (run.guide) {
       ui.pick.value = run.guide.id;
       ui.path.value = run.path;
@@ -827,12 +758,12 @@ export function mountGuidePanel(root, ctx) {
 
   function goText(g) {
     if (g.open) {
-      const T = TARGETS[g.open];
+      const T = run.suite.TARGETS[g.open];
       return t(
-        T.install && !seen.has(g.open) ? 'gd.go.install' : 'gd.go.open',
-        {
-          target: words.target(g.open),
-        }
+        T.install && !seen.has(seenKey(g.open))
+          ? 'gd.go.install'
+          : 'gd.go.open',
+        { target: words.target(g.open) }
       );
     }
     return t(`gd.go.panel.${g.panel}`);
@@ -901,122 +832,14 @@ export function mountGuidePanel(root, ctx) {
 
   async function drawShow(step, box) {
     await prepare(step);
-    const rows = [];
-    const add = (label, value) => rows.push([label, value]);
-    const k13 = ADOPTED.kepler13;
-    if (step.show === 'crowding') {
-      add(t('gd.show.crowdHd'), fmt(ADOPTED.hd209458.crowdsap.value));
-      add(
-        t('gd.show.crowdK13'),
-        fmt(context.pack('kepler13-sap')?.crowding?.crowdsap)
-      );
-      add(t('gd.show.shareA'), fmt(ANSWERS.targetShare(context)));
-    } else if (step.show === 'stellarRadius') {
-      const r = ADOPTED.hd209458.stellarRadius;
-      add(
-        t('gd.show.adoptedRadius'),
-        `${fmt(r.value)} ± ${fmt(r.sigma)} R☉ (${r.ref})`
-      );
-    } else if (step.show === 'depths') {
-      const P = periodOf('kepler13');
-      for (const target of ['kepler13-sap', 'kepler13-pdcsap']) {
-        const d = transitOf(context, target, P)?.depth;
-        add(
-          t('gd.show.depthOf', { target: words.target(target) }),
-          d
-            ? t('gd.show.ppm', { value: ppm(d.depth), error: ppm(d.error) })
-            : t('gd.show.notOpened')
-        );
-      }
-      add(t('gd.show.period'), `${fmt(P)} d (${k13.period.ref})`);
-    } else if (step.show === 'published') {
-      for (const p of k13.published)
-        add(
-          p.ref,
-          t('gd.show.published', {
-            k: fmt(p.radiusRatio),
-            rs: fmt(p.stellarRadius),
-            rp: fmt(p.planetRadius),
-          })
-        );
-    } else if (step.show === 'oddEven' || step.show === 'secondary') {
-      const r = transitOf(context, step.target, periodOf(step.target));
-      if (!r)
-        add(
-          t('gd.show.depthOf', { target: words.target(step.target) }),
-          t('gd.show.notOpened')
-        );
-      else if (step.show === 'oddEven' && r.oddEven) {
-        const oe = r.oddEven;
-        add(
-          t('gd.show.odd'),
-          t('gd.show.ppm', {
-            value: ppm(oe.odd.depth),
-            error: ppm(oe.odd.error),
-          })
-        );
-        add(
-          t('gd.show.even'),
-          t('gd.show.ppm', {
-            value: ppm(oe.even.depth),
-            error: ppm(oe.even.error),
-          })
-        );
-        add(
-          t('gd.show.apart'),
-          t('gd.show.sigmas', { value: fmt(oe.sigmas), limit: SIGNIFICANT })
-        );
-      } else if (r.secondary) {
-        add(
-          t('gd.show.primary'),
-          t('gd.show.ppm', {
-            value: ppm(r.depth.depth),
-            error: ppm(r.depth.error),
-          })
-        );
-        add(
-          t('gd.show.secondary'),
-          t('gd.show.ppm', {
-            value: ppm(r.secondary.depth),
-            error: ppm(r.secondary.error),
-          })
-        );
-        add(
-          t('gd.show.significance'),
-          t('gd.show.sigmas', {
-            value: fmt(r.secondary.depth / r.secondary.error),
-            limit: SIGNIFICANT,
-          })
-        );
-      }
-      if (r) add(t('gd.show.epoch'), `${fmt(r.epoch)} (BTJD)`);
-    } else if (step.show === 'count') {
-      const r = transitOf(context, 'hd209458', periodOf('hd209458'));
-      add(
-        t('gd.show.count'),
-        r ? String(r.depth.cycles) : t('gd.show.notOpened')
-      );
-    } else if (step.show === 'simulation') {
-      const s = ADOPTED.simulation;
-      add(t('gd.show.simStar'), `${fmt(s.stellarRadius)} R☉`);
-      add(t('gd.show.simPlanet'), `${fmt(s.planetRadius)} RJ`);
-      add(t('gd.show.rsunRjup'), fmt(RSUN_PER_RJUP));
-    }
+    const shown = run.suite.SHOWS?.[step.show];
+    if (!shown) return;
     const dl = el('dl', { class: 'ow-meta' });
-    for (const [a, b] of rows)
+    for (const [a, b] of shown.rows(context, step, helpers))
       dl.append(el('dt', { text: a }), el('dd', { text: b }));
     const parts = [dl];
-    if (step.show === 'simulation')
-      parts.push(
-        el(
-          'p',
-          {},
-          el('a', {
-            href: `../#investigation=${encodeURIComponent(ADOPTED.simulation.lesson)}`,
-            text: t('gd.show.simLink'),
-          })
-        )
-      );
+    for (const link of shown.links?.(step, helpers) ?? [])
+      parts.push(el('p', {}, el('a', { href: link.href, text: link.text })));
     parts.push(
       el('p', { class: 'ow-hint', text: t(`gd.show.how.${step.show}`) })
     );
@@ -1028,21 +851,29 @@ export function mountGuidePanel(root, ctx) {
   ui = build();
   const params = new URLSearchParams(location.search);
   const asked = params.get('guide');
-  if (asked && GUIDES.some(g => g.id === asked))
-    start(asked, params.get('path'));
-  else render();
+  const first = suiteOf(asked) ?? SUITES[0];
+  const ready = loadSuite(first.id).then(suite => {
+    run.suite = suite;
+    if (asked && suite.GUIDES.some(g => g.id === asked))
+      start(asked, params.get('path'));
+    else render();
+  });
   root.addEventListener('toggle', () => {
     ui.back.hidden = ui.visible || !run.guide || !root.open;
   });
 
   return {
+    /** Resolves when the first suite is loaded and drawn. */
+    ready,
     /** The workspace changed: remember what is open, and look at the step. */
     async update() {
+      if (!run.suite) return;
       const o = ctx.state.source;
-      const target = Object.keys(TARGETS).find(
-        k => TARGETS[k].observation === o?.id
+      const targets = run.suite.TARGETS;
+      const target = Object.keys(targets).find(
+        k => targets[k].observation === o?.id
       );
-      if (target && seen.get(target)?.o !== o) remember(target, o);
+      if (target) seen.set(seenKey(target), o);
       if (!run.guide) return;
       const step = steps()[run.at];
       if (step.kind === 'do' && stateOf(step) !== 'done')
@@ -1057,6 +888,7 @@ export function mountGuidePanel(root, ctx) {
     },
     /** The runner's state, for a test: never changed. */
     snapshot: () => ({
+      suite: run.suite?.id ?? null,
       guide: run.guide?.id ?? null,
       path: run.path,
       at: run.at,

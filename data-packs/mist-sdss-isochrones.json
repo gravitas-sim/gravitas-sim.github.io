@@ -1,0 +1,342 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "mist-sdss-isochrones",
+  "version": "1.0.0",
+  "title": "MIST v1.2 isochrones in the SDSS bands (a model)",
+  "object": {
+    "name": "MIST isochrones",
+    "identifiers": [
+      "MIST_v1.2_vvcrit0.0_SDSSugriz"
+    ],
+    "frame": "absolute magnitudes"
+  },
+  "facility": {
+    "observatory": "MIST (MESA Isochrones and Stellar Tracks)",
+    "instrument": "MESA r7503, non-rotating (v/vcrit = 0), [a/Fe] = 0",
+    "pipeline": "MIST v1.2 synthetic photometry, SDSS ugriz (AB)"
+  },
+  "dataType": "model-grid",
+  "origin": "model",
+  "credit": "MIST v1.2 (Dotter 2016; Choi et al. 2016), built on MESA (Paxton et al. 2011, 2013, 2015)",
+  "license": {
+    "status": "no-license-stated",
+    "statement": "MIST asks that Dotter 2016, Choi et al. 2016 and the MESA instrument papers be cited by any publication using the models, and states no separate redistribution license.",
+    "basis": "A heavily reduced derived subset for teaching, attributed in full, with the exact source and checksum recorded so the originals can be recovered, as for the MIST tracks Gravitas already ships (NOTICE)."
+  },
+  "retrieved": "2026-09-27",
+  "columns": [
+    {
+      "id": "feh",
+      "name": "[Fe/H]",
+      "unit": "dex",
+      "description": "the isochrone's initial iron abundance"
+    },
+    {
+      "id": "logAge",
+      "name": "log age",
+      "unit": "dex",
+      "description": "log10 of its age in years"
+    },
+    {
+      "id": "phase",
+      "name": "phase",
+      "unit": "",
+      "description": "MIST's phase: 0 main sequence, 2 subgiant and red-giant branches, 3 core helium burning"
+    },
+    {
+      "id": "mass",
+      "name": "initial mass",
+      "unit": "Msun",
+      "description": "the star's initial mass, in solar masses"
+    },
+    {
+      "id": "g",
+      "name": "g",
+      "unit": "mag",
+      "description": "absolute SDSS g magnitude (AB), with no extinction"
+    },
+    {
+      "id": "r",
+      "name": "r",
+      "unit": "mag",
+      "description": "absolute SDSS r magnitude (AB), with no extinction"
+    },
+    {
+      "id": "logTeff",
+      "name": "log Teff",
+      "unit": "dex",
+      "description": "log10 of the effective temperature in K"
+    },
+    {
+      "id": "logL",
+      "name": "log L",
+      "unit": "dex",
+      "description": "log10 of the luminosity in solar luminosities"
+    }
+  ],
+  "masks": [],
+  "reductions": [
+    "Three metallicities ([Fe/H] = -0.50, -0.25, +0.00) and seven ages (log age 9 to 9.6, 1 to 4 Gyr) of MIST's 15 and 107.",
+    "Only the main sequence, the subgiant and red-giant branches and core helium burning, and only stars brighter than absolute g = 11.",
+    "Each phase of each isochrone thinned (Ramer-Douglas-Peucker) to within 0.005 mag of MIST's in g and g - r.",
+    "Absolute magnitudes with no extinction: a comparison with a cluster adds its distance modulus and its extinction."
+  ],
+  "source": {
+    "archive": "MIST, mist.science",
+    "urls": [
+      "https://mist.science/data/tarballs_v1.2/MIST_v1.2_vvcrit0.0_SDSSugriz.txz"
+    ],
+    "citations": [
+      {
+        "text": "Dotter 2016, ApJS 222, 8 (MIST 0)",
+        "doi": "10.3847/0067-0049/222/1/8"
+      },
+      {
+        "text": "Choi et al. 2016, ApJ 823, 102 (MIST I)",
+        "doi": "10.3847/0004-637X/823/2/102"
+      },
+      {
+        "text": "Paxton et al. 2011, ApJS 192, 3 (MESA)",
+        "doi": "10.1088/0067-0049/192/1/3"
+      },
+      {
+        "text": "Paxton et al. 2013, ApJS 208, 4 (MESA)",
+        "doi": "10.1088/0067-0049/208/1/4"
+      },
+      {
+        "text": "Paxton et al. 2015, ApJS 220, 15 (MESA)",
+        "doi": "10.1088/0067-0049/220/1/15"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "MIST_v1.2_vvcrit0.0_SDSSugriz.txz",
+      "url": "https://mist.science/data/tarballs_v1.2/MIST_v1.2_vvcrit0.0_SDSSugriz.txz",
+      "bytes": 79889196,
+      "sha256": "374ce58c2a0fd4d8bdaadfebbcdcb8568bcedb139e3dede595d00f3cbd37d404"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/ngc2420.mjs",
+    "version": "1.0.0",
+    "options": {
+      "feh": [
+        "m0.50",
+        "m0.25",
+        "p0.00"
+      ],
+      "ages": [
+        9,
+        9.1,
+        9.2,
+        9.3,
+        9.4,
+        9.5,
+        9.6
+      ],
+      "phases": [
+        0,
+        2,
+        3
+      ],
+      "faintest": 11,
+      "tolerance": 0.005,
+      "columns": [
+        {
+          "id": "feh",
+          "step": 0.01
+        },
+        {
+          "id": "logAge",
+          "step": 0.001
+        },
+        {
+          "id": "phase",
+          "step": 1
+        },
+        {
+          "id": "mass",
+          "step": 0.0001
+        },
+        {
+          "id": "g",
+          "step": 0.001
+        },
+        {
+          "id": "r",
+          "step": 0.001
+        },
+        {
+          "id": "logTeff",
+          "step": 0.0001
+        },
+        {
+          "id": "logL",
+          "step": 0.0001
+        }
+      ]
+    },
+    "steps": [
+      "Read the 3 metallicities' .iso.cmd files from the MIST tarball.",
+      "Keep the chosen ages, and the rows of the main-sequence, giant-branch and core-helium-burning phases brighter than the faintest kept.",
+      "Thin each phase of each isochrone in the (g - r, g) plane to the tolerance.",
+      "Encode as table-columns/1."
+    ],
+    "record": {
+      "rows": 1410,
+      "kept": {
+        "m0.50 9 0": "20 of 206",
+        "m0.50 9 2": "21 of 151",
+        "m0.50 9 3": "18 of 102",
+        "m0.50 9.1 0": "24 of 201",
+        "m0.50 9.1 2": "26 of 151",
+        "m0.50 9.1 3": "20 of 102",
+        "m0.50 9.2 0": "22 of 195",
+        "m0.50 9.2 2": "23 of 151",
+        "m0.50 9.2 3": "23 of 102",
+        "m0.50 9.3 0": "19 of 189",
+        "m0.50 9.3 2": "22 of 151",
+        "m0.50 9.3 3": "24 of 102",
+        "m0.50 9.4 0": "17 of 183",
+        "m0.50 9.4 2": "25 of 151",
+        "m0.50 9.4 3": "25 of 102",
+        "m0.50 9.5 0": "16 of 178",
+        "m0.50 9.5 2": "26 of 151",
+        "m0.50 9.5 3": "26 of 102",
+        "m0.50 9.6 0": "15 of 172",
+        "m0.50 9.6 2": "26 of 151",
+        "m0.50 9.6 3": "26 of 102",
+        "m0.25 9 0": "26 of 205",
+        "m0.25 9 2": "18 of 151",
+        "m0.25 9 3": "11 of 102",
+        "m0.25 9.1 0": "25 of 199",
+        "m0.25 9.1 2": "23 of 151",
+        "m0.25 9.1 3": "13 of 102",
+        "m0.25 9.2 0": "23 of 193",
+        "m0.25 9.2 2": "25 of 151",
+        "m0.25 9.2 3": "21 of 102",
+        "m0.25 9.3 0": "22 of 187",
+        "m0.25 9.3 2": "25 of 151",
+        "m0.25 9.3 3": "24 of 102",
+        "m0.25 9.4 0": "18 of 182",
+        "m0.25 9.4 2": "27 of 151",
+        "m0.25 9.4 3": "24 of 102",
+        "m0.25 9.5 0": "18 of 176",
+        "m0.25 9.5 2": "28 of 151",
+        "m0.25 9.5 3": "28 of 102",
+        "m0.25 9.6 0": "16 of 170",
+        "m0.25 9.6 2": "26 of 151",
+        "m0.25 9.6 3": "28 of 102",
+        "p0.00 9 0": "27 of 211",
+        "p0.00 9 2": "16 of 151",
+        "p0.00 9 3": "11 of 102",
+        "p0.00 9.1 0": "24 of 210",
+        "p0.00 9.1 2": "22 of 151",
+        "p0.00 9.1 3": "15 of 102",
+        "p0.00 9.2 0": "22 of 205",
+        "p0.00 9.2 2": "25 of 151",
+        "p0.00 9.2 3": "20 of 102",
+        "p0.00 9.3 0": "21 of 200",
+        "p0.00 9.3 2": "25 of 151",
+        "p0.00 9.3 3": "27 of 102",
+        "p0.00 9.4 0": "21 of 194",
+        "p0.00 9.4 2": "24 of 151",
+        "p0.00 9.4 3": "30 of 102",
+        "p0.00 9.5 0": "20 of 188",
+        "p0.00 9.5 2": "23 of 151",
+        "p0.00 9.5 3": "29 of 102",
+        "p0.00 9.6 0": "16 of 180",
+        "p0.00 9.6 2": "28 of 151",
+        "p0.00 9.6 3": "31 of 102"
+      },
+      "columns": [
+        {
+          "id": "feh",
+          "type": "int16",
+          "step": 0.01,
+          "missing": 0,
+          "maxRounding": 0
+        },
+        {
+          "id": "logAge",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 1.78e-15
+        },
+        {
+          "id": "phase",
+          "type": "int16",
+          "step": 1,
+          "missing": 0,
+          "maxRounding": 0
+        },
+        {
+          "id": "mass",
+          "type": "int16",
+          "step": 0.0001,
+          "missing": 0,
+          "maxRounding": 0.00005
+        },
+        {
+          "id": "g",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.000499
+        },
+        {
+          "id": "r",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "logTeff",
+          "type": "int16",
+          "step": 0.0001,
+          "missing": 0,
+          "maxRounding": 0.00005
+        },
+        {
+          "id": "logL",
+          "type": "int16",
+          "step": 0.0001,
+          "missing": 0,
+          "maxRounding": 0.0000499
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    "A model, not an observation: MIST at scaled-solar abundances, without rotation, binaries or extinction. A cluster compared with it is compared with these assumptions too."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/observations/mistSdssIsochrones.js",
+    "bytes": 34731,
+    "sha256": "1a550816d14dfec4e3f2348ca42fc7a14114c724aaa70289bfaa4f46eff287e3"
+  },
+  "validation": {
+    "check": "on the solar-metallicity main sequence at log age 9.6, a 1 Msun star (interpolated in mass) is within 0.1 dex of log L = 0 and 0.01 dex of the Sun's log Teff",
+    "against": [
+      {
+        "quantity": "solar Teff",
+        "value": 5772,
+        "unit": "K",
+        "ref": "IAU 2015 Resolution B3 (Prsa et al. 2016)"
+      }
+    ],
+    "result": {
+      "logL": 0.0206,
+      "logTeff": 3.7657
+    }
+  }
+}
