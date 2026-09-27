@@ -79,6 +79,9 @@ const state = {
   imported: null,
   // Fits the reader ran, as the fit panel exports them, for the pipeline.
   fits: [],
+  // Curves a measurement draws over the plot: {observation, x, y, label,
+  // points}. Set by the measurement panel; drawn only on their own axes.
+  overlays: [],
 };
 
 // --- Words and numbers -------------------------------------------------------------
@@ -278,6 +281,14 @@ $('obsArchivePanel').addEventListener('toggle', () => {
   );
 });
 
+// A model a measurement compares with - MIST's isochrones, say - opened once,
+// as a fixture, and kept.
+const models = new Map();
+const modelOf = id => {
+  if (!models.has(id)) models.set(id, openFixture(id));
+  return models.get(id);
+};
+
 // The measurement pipeline (MEASUREMENT_PIPELINE.md): loaded when first opened.
 let measure = null;
 const measurePanel = () =>
@@ -287,6 +298,11 @@ const measurePanel = () =>
       ...{ open, status, apply, state, replay, observationJson, importer },
       ...{ skyOf, pixelScale },
       measured: () => guide?.then(p => p.update()),
+      model: modelOf,
+      overlay: list => {
+        state.overlays = list;
+        if (state.view) renderAll();
+      },
     })
   ));
 $('obsMeasurePanel').addEventListener('toggle', measurePanel);
@@ -347,11 +363,22 @@ function renderAll() {
     const { legend } = image.draw(o, { selection: state.selection });
     renderLegend(legend);
   } else {
+    // Curves a measurement drew, where the axes are the ones it drew them on.
+    const overlays = state.overlays.filter(
+      v => v.x === state.x && v.y === state.y && v.observation === o.id
+    );
     drawn = plot.draw(o, {
       xColumn: state.x,
       yColumn: state.y,
       selection: state.selection,
+      overlays,
     });
+    $('obsOverlayNote').hidden = !overlays.length;
+    $('obsOverlayNote').textContent = overlays.length
+      ? t('obs.plot.overlays', {
+          curves: overlays.map(v => v.label).join('; '),
+        })
+      : '';
     $('obsPlot').setAttribute(
       'aria-label',
       t('obs.plot.label', {
@@ -679,8 +706,24 @@ function renderChanges(o) {
     ['restFrame', 'obsRestBox'],
     ['convert', 'obsConvertBox'],
     ['timeFormat', 'obsTimeBox'],
+    ['derive', 'obsDeriveBox'],
   ]) {
     $(box).hidden = !OPS[op].kinds.includes(kind);
+  }
+  // A new column is made from number columns; a distance, from degrees.
+  const numbers = o.columns.filter(c => c.role === 'value' || c.role === 'x');
+  for (const id of ['obsDeriveA', 'obsDeriveB']) {
+    const sel = $(id);
+    const keep = sel.value;
+    sel.replaceChildren(...numbers.map(c => option(c.id, c.name)));
+    if (numbers.some(c => c.id === keep)) sel.value = keep;
+  }
+  const degrees = numbers.filter(c => parseUnit(c.unit).unit?.id === 'deg');
+  $('obsSepBox').hidden = kind === 'image' || degrees.length < 2;
+  if (o.object?.ra !== undefined && $('obsSepRa').dataset.for !== o.id) {
+    $('obsSepRa').value = String(o.object.ra);
+    $('obsSepDec').value = String(o.object.dec);
+    $('obsSepRa').dataset.for = o.id;
   }
   const x = columnOf(o, state.x);
   if (x && kind !== 'image') {
@@ -807,6 +850,50 @@ $('obsConvertGo').addEventListener('click', () =>
 $('obsTimeGo').addEventListener('click', () =>
   apply({ op: 'timeFormat', to: $('obsTimeTo').value })
 );
+// A column id from its name: the name as typed, the id something a formula
+// can name and a save can hold.
+const newId = name =>
+  `${name.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'c'}-${++state.seq}`.replace(
+    /^(\d)/,
+    'c$1'
+  );
+$('obsDeriveGo').addEventListener('click', () => {
+  const name = $('obsDeriveName').value.trim();
+  const sign = Number($('obsDeriveSign').value);
+  const terms = [{ column: $('obsDeriveA').value, factor: 1 }];
+  if (sign) terms.push({ column: $('obsDeriveB').value, factor: sign });
+  if (
+    apply({
+      op: 'derive',
+      id: newId(name),
+      name,
+      terms,
+      constant: numberIn('obsDeriveK') || 0,
+    })
+  )
+    $('obsDeriveName').value = '';
+});
+$('obsSepGo').addEventListener('click', () => {
+  const name = $('obsSepName').value.trim();
+  const degrees = state.view.columns.filter(
+    c =>
+      (c.role === 'value' || c.role === 'x') &&
+      parseUnit(c.unit).unit?.id === 'deg'
+  );
+  if (
+    apply({
+      op: 'derive',
+      id: newId(name),
+      name,
+      separation: {
+        ra: (degrees.find(c => c.id === 'ra') ?? degrees[0])?.id,
+        dec: (degrees.find(c => c.id === 'dec') ?? degrees[1])?.id,
+        center: [numberIn('obsSepRa'), numberIn('obsSepDec')],
+      },
+    })
+  )
+    $('obsSepName').value = '';
+});
 
 $('obsMask').addEventListener('click', () => {
   const rows = [...state.selection.rows()];

@@ -234,4 +234,56 @@ export const EN_MEASURE = {
     'A model fit: {model}, {algorithm} {version}. Its own export has the full record.',
   'obs.ms.and': ' and ',
   'obs.ms.or': ' or ',
+  'obs.ms.tool.band': 'Band index on a spectrum (TiO5 and others)',
+  'obs.ms.tool.curve': 'Compare with model curves (isochrones)',
+  'obs.ms.q.index': 'index',
+  'obs.ms.q.definition': 'definition',
+  'obs.ms.q.logAge': 'log age',
+  'obs.ms.q.age': 'age',
+  'obs.ms.q.ageLow': 'youngest age as good',
+  'obs.ms.q.ageHigh': 'oldest age as good',
+  'obs.ms.q.dm': 'distance modulus',
+  'obs.ms.q.distance': 'distance',
+  'obs.ms.q.reddening': 'reddening',
+  'obs.ms.q.statistic': 'distance statistic',
+  'obs.ms.q.R': 'extinction per unit reddening',
+  'obs.ms.w.referenceNotPositive':
+    'The reference windows’ flux is not above zero, so the index means nothing.',
+  'obs.ms.w.noUncertainty':
+    'A comparison, not a fit: it finds the closest model and shift, and gives no standard errors.',
+  'obs.ms.w.dmAtEdge':
+    'The best distance modulus is at the edge of the range searched: widen it.',
+  'obs.ms.w.reddeningAtEdge':
+    'The best reddening is at the edge of the range searched.',
+  'obs.ms.w.notUnique':
+    '{n} models fit these points about as well as the best: the data cannot tell them apart.',
+  'obs.ms.p.band.tio5': 'TiO5',
+  'obs.ms.p.band.cah2': 'CaH2',
+  'obs.ms.p.bandLo': 'Band from (Å)',
+  'obs.ms.p.bandHi': 'Band to (Å)',
+  'obs.ms.p.refLo': 'Reference from (Å)',
+  'obs.ms.p.refHi': 'Reference to (Å)',
+  'obs.ms.p.windowMedium': 'The windows are quoted in',
+  'obs.ms.p.air': 'air',
+  'obs.ms.p.vacuum': 'vacuum',
+  'obs.ms.p.feh': 'Model metallicity [Fe/H]',
+  'obs.ms.p.curveModel':
+    'The view’s x is taken as a color (g − r) and its y as a magnitude (g), and compared with MIST’s isochrones, one per age, shifted by a distance modulus and a reddening.',
+  'obs.ms.p.dmLo': 'Distance modulus from',
+  'obs.ms.p.dmHi': 'to',
+  'obs.ms.p.dmStep': 'in steps of',
+  'obs.ms.p.eLo': 'Reddening E(g − r) from',
+  'obs.ms.p.eHi': 'to',
+  'obs.ms.p.eStep': 'in steps of',
+  'obs.ms.p.R': 'Extinction A_g per unit E(g − r) ({cite})',
+  'obs.ms.p.scaleColor': 'A unit of distance in color (mag)',
+  'obs.ms.p.scaleMag': 'A unit of distance in magnitude (mag)',
+  'obs.ms.p.cap': 'Distance at which a star counts as far (units)',
+  'obs.ms.p.curveTolerance':
+    'Models within this fraction of the best count as as good',
+  'obs.ms.overlay': '{id}, {tool}: the best model (log age {key}), shifted',
+  'obs.ms.m.band':
+    '{id}: band index, the mean flux in {band} Å over the mean in {reference} Å, the windows in {medium} ({cite}); each window’s mean weighted by how much of each sample’s bin it covers; measured {at} changes in.',
+  'obs.ms.m.curve':
+    '{id}: model-curve comparison with MIST isochrones at [Fe/H] {feh}: distance modulus over {dm}, reddening over {E} (first, last, step), extinction {R} per unit reddening; distances in units of {scale} mag, capped at {cap}; models within {tolerance} of the best reported alike; measured {at} changes in.',
 };

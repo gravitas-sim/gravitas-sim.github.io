@@ -280,6 +280,98 @@ async function gwoscCatalog() {
   };
 }
 
+/**
+ * A table pack (js/tableObservation.js) as a gravitas.observation/1 table: its
+ * columns, their uncertainties marked as such, and what was done to it. The
+ * decoder and the pack both arrive only when it is opened.
+ */
+async function tablePack(load, { axes, citations }) {
+  const [mod, { tableOf }] = await Promise.all([
+    load(),
+    import('../tableObservation.js'),
+  ]);
+  const P = mod.PACK;
+  const table = tableOf(mod);
+  return {
+    ...base,
+    kind: 'table',
+    id: `pack:${P.id}@${P.version}`,
+    title: P.title,
+    object:
+      P.object?.ra === undefined
+        ? null
+        : {
+            name: P.object.name,
+            ra: P.object.ra,
+            dec: P.object.dec,
+            frame: P.object.frame,
+          },
+    facility: [
+      P.facility.observatory,
+      P.facility.instrument,
+      P.facility.pipeline,
+    ]
+      .filter(Boolean)
+      .join(', '),
+    origin: P.origin,
+    source: { kind: 'pack', id: P.id, version: P.version },
+    credit: P.credit,
+    license: P.license,
+    retrieved: P.retrieved,
+    citations,
+    reductions: [
+      ...P.masks.map(m => `${m.column}: ${m.rule} (${m.dropped} dropped)`),
+      ...(P.reductions || []),
+    ],
+    pack: { masks: P.masks },
+    columns: table.columns.map(c => ({
+      id: c.id,
+      name: c.name,
+      unit: c.unit || '',
+      role: c.uncertaintyOf ? 'uncertainty' : 'value',
+      ...(c.uncertaintyOf ? { of: c.uncertaintyOf } : {}),
+      values: c.values,
+    })),
+    axes,
+  };
+}
+
+const SDSS_CITATIONS = [
+  {
+    text: 'SDSS DR18 (Almeida et al. 2023, ApJS 267, 44)',
+    url: 'https://doi.org/10.3847/1538-4365/acda98',
+  },
+];
+
+// Observatory-only packs: imported here, never through js/platform/builtins.js,
+// which the application reaches (DATA_PACKS.md).
+const ngc2420Photometry = () =>
+  tablePack(() => import('../data/observations/sdssNgc2420Photometry.js'), {
+    axes: { x: 'ra', y: 'dec' },
+    citations: SDSS_CITATIONS,
+  });
+const ngc2420Segue = () =>
+  tablePack(() => import('../data/observations/sdssNgc2420Segue.js'), {
+    axes: { x: 'rv', y: 'feh' },
+    citations: [
+      ...SDSS_CITATIONS,
+      {
+        text: 'The SEGUE Stellar Parameter Pipeline (Lee et al. 2008a, AJ 136, 2022)',
+        url: 'https://doi.org/10.1088/0004-6256/136/5/2022',
+      },
+    ],
+  });
+const mistIsochrones = () =>
+  tablePack(() => import('../data/observations/mistSdssIsochrones.js'), {
+    axes: { x: 'logTeff', y: 'logL' },
+    citations: [
+      {
+        text: 'MIST (Dotter 2016, ApJS 222, 8; Choi et al. 2016, ApJ 823, 102)',
+        url: 'https://mist.science/',
+      },
+    ],
+  });
+
 async function tessAperture() {
   const mod = await loadPack('data/tess-hd209458-s56-aperture');
   const P = mod.PACK;
@@ -380,6 +472,9 @@ export const FIXTURES = Object.freeze([
   { id: 'sdss-m', kind: 'spectrum', load: () => sdssSpectrum('m') },
   { id: 'gwosc-events', kind: 'table', load: gwoscCatalog },
   { id: 'tess-aperture', kind: 'image', load: tessAperture },
+  { id: 'ngc2420-photometry', kind: 'table', load: ngc2420Photometry },
+  { id: 'ngc2420-segue', kind: 'table', load: ngc2420Segue },
+  { id: 'mist-isochrones', kind: 'table', load: mistIsochrones },
 ]);
 
 /** Open a fixture by id. */

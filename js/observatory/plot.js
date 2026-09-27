@@ -72,12 +72,38 @@ export function decimate(order, xs, ys, x0, x1, columns) {
 }
 
 /**
+ * Which rows of a scatter plot to draw: all of them, or one in each small
+ * cell of the plot when there are more than it can show. A table's points are
+ * a cloud, not a curve: thinned by pixel column, as a series is, a
+ * color-magnitude diagram would keep only its top and bottom edges.
+ * @returns {number[]} Row indices, in x order
+ */
+export function decimateGrid(order, xs, ys, x0, x1, y0, y1, columns, rows) {
+  if (order.length <= columns * rows) return order;
+  const seen = new Set();
+  const out = [];
+  const sx = (x1 - x0) / columns || 1;
+  const sy = (y1 - y0) / rows || 1;
+  for (const i of order) {
+    const key = `${Math.floor((xs[i] - x0) / sx)},${Math.floor((ys[i] - y0) / sy)}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(i);
+  }
+  return out;
+}
+
+/**
  * @param {SVGSVGElement} svg
  * @param {{announce: Function, describe: Function, labels: object}} hooks -
  *   announce(text) speaks; describe(row) is what a focused row is called;
  *   labels holds the translated words the plot draws
  */
+// Each plot's clip region needs an id of its own: two plots, one page.
+let plots = 0;
+
 export function createPlot(svg, hooks) {
+  const clipId = `owPlotClip${++plots}`;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   let state = null;
   let brush = null;
@@ -204,9 +230,13 @@ export function createPlot(svg, hooks) {
   /**
    * Draw an observation.
    * @param {object} o - After the changes
-   * @param {{xColumn: string, yColumn: string, selection: object}} view
+   * @param {{xColumn: string, yColumn: string, selection: object,
+   *   overlays?: Array<{label: string, points: Array<[number, number]>}>}} view
+   *   - overlays are curves drawn over the points in the axes' own units: a
+   *   model to compare with, say. A break in a curve is a point that is not
+   *   finite.
    */
-  function draw(o, { xColumn, yColumn, selection }) {
+  function draw(o, { xColumn, yColumn, selection, overlays = [] }) {
     const xc = columnOf(o, xColumn);
     const yc = columnOf(o, yColumn);
     const xs = xc.values;
@@ -223,12 +253,15 @@ export function createPlot(svg, hooks) {
     let x1 = -Infinity;
     let y0 = Infinity;
     let y1 = -Infinity;
+    // A table's range is its values': one faint star's error bar of several
+    // magnitudes would otherwise stretch a whole color-magnitude diagram.
+    const withBars = o.kind !== 'table';
     for (const i of order) {
       x0 = Math.min(x0, xs[i]);
       x1 = Math.max(x1, xs[i]);
-      const e = sigma ? sigma.values[i] : 0;
-      const lo = lower ? lower.values[i] : 0;
-      const up = upper ? upper.values[i] : 0;
+      const e = sigma && withBars ? sigma.values[i] : 0;
+      const lo = lower && withBars ? lower.values[i] : 0;
+      const up = upper && withBars ? upper.values[i] : 0;
       y0 = Math.min(
         y0,
         ys[i] -
@@ -267,7 +300,20 @@ export function createPlot(svg, hooks) {
       flip: yc.unit === 'mag',
     };
     const columns = W - PAD.left - PAD.right;
-    const drawn = decimate(order, xs, ys, state.x0, state.x1, columns);
+    const drawn =
+      o.kind === 'table'
+        ? decimateGrid(
+            order,
+            xs,
+            ys,
+            state.x0,
+            state.x1,
+            state.y0,
+            state.y1,
+            columns / 2,
+            (H - PAD.top - PAD.bottom) / 2
+          )
+        : decimate(order, xs, ys, state.x0, state.x1, columns);
     state.drawn = drawn.length;
 
     svg.replaceChildren();
@@ -340,10 +386,25 @@ export function createPlot(svg, hooks) {
       );
     g.append(xl, yl);
     svg.append(g);
+    // The frame: bars that reach past a table's range, and curves, stop at it.
+    const clip = el('clipPath', { id: clipId });
+    clip.append(
+      el('rect', {
+        x: PAD.left,
+        y: PAD.top,
+        width: W - PAD.left - PAD.right,
+        height: H - PAD.top - PAD.bottom,
+      })
+    );
+    svg.append(clip);
 
     // Uncertainty bars, where they are few enough to read.
     if ((sigma || (lower && upper)) && drawn.length <= 2000) {
-      const bars = el('g', { class: 'ow-bars', 'aria-hidden': 'true' });
+      const bars = el('g', {
+        class: 'ow-bars',
+        'aria-hidden': 'true',
+        'clip-path': `url(#${clipId})`,
+      });
       for (const i of drawn) {
         let a;
         let b;
@@ -383,7 +444,36 @@ export function createPlot(svg, hooks) {
         })
       );
     }
-    svg.append(pts, el('g', { class: 'ow-selected', 'aria-hidden': 'true' }));
+    svg.append(pts);
+    // Curves to compare with, over the points and clipped to the frame.
+    if (overlays.length) {
+      const lines = el('g', {
+        class: 'ow-overlays',
+        'aria-hidden': 'true',
+        'clip-path': `url(#${clipId})`,
+      });
+      overlays.forEach((ov, k) => {
+        let run = [];
+        const flush = () => {
+          if (run.length > 1)
+            lines.append(
+              el('polyline', {
+                points: run.join(' '),
+                class: `ow-overlay ow-overlay-${k % 3}`,
+              })
+            );
+          run = [];
+        };
+        for (const [x, y] of ov.points) {
+          if (Number.isFinite(x) && Number.isFinite(y))
+            run.push(`${sx(x).toFixed(1)},${sy(y).toFixed(1)}`);
+          else flush();
+        }
+        flush();
+      });
+      svg.append(lines);
+    }
+    svg.append(el('g', { class: 'ow-selected', 'aria-hidden': 'true' }));
     drawSelected();
     drawFocus();
     return { drawn: drawn.length, plotted: order.length };

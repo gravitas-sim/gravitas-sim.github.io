@@ -68,6 +68,9 @@ test.describe('the observatory', () => {
       'sdss-k',
       'sdss-m',
       'gwosc-events',
+      'ngc2420-photometry',
+      'ngc2420-segue',
+      'mist-isochrones',
       'tess-aperture',
     ]);
     const expected = {
@@ -75,6 +78,10 @@ test.describe('the observatory', () => {
       'sdss-g': { rows: 1271, seeing: /no uncertainty here/ },
       'gwosc-events': { rows: 5, seeing: /90% interval/ },
       'tess-aperture': { rows: 143, seeing: /as the archive has them/ },
+      // The tables say what was left out, and the model says it is one.
+      'ngc2420-photometry': { rows: 2301, seeing: /not from the sky/ },
+      'ngc2420-segue': { rows: 517, seeing: /55 arcsec/ },
+      'mist-isochrones': { rows: 1410, seeing: /Ramer-Douglas-Peucker/ },
     };
     for (const id of ids) {
       await openFixture(page, id);

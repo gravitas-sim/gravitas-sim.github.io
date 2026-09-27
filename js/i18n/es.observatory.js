@@ -35,6 +35,12 @@ export const ES_OBSERVATORY = {
   'obs.fixture.gwosc-events': 'Cinco eventos de ondas gravitacionales (GWOSC)',
   'obs.fixture.tess-aperture': 'HD 209458: la máscara de apertura de TESS',
 
+  'obs.fixture.ngc2420-photometry':
+    'NGC 2420: fotometría de SDSS (un cúmulo y su campo)',
+  'obs.fixture.ngc2420-segue':
+    'NGC 2420: parámetros estelares de SEGUE (velocidad radial, Teff, log g, [Fe/H])',
+  'obs.fixture.mist-isochrones':
+    'Isócronas de MIST en las bandas de SDSS (un modelo, no una observación)',
   'obs.import.file': 'O importa tu propio archivo',
   'obs.import.hint':
     'CSV, texto separado por tabuladores o por punto y coma, o JSON, hasta 5 MB y 200.000 filas. No sale de este dispositivo.',
@@ -166,6 +172,12 @@ export const ES_OBSERVATORY = {
     'Se promediaron {rows} filas en {bins} intervalos de {width} {unit}. La incertidumbre de cada intervalo combina la de sus puntos; se dejaron fuera {masked} filas enmascaradas.',
   'obs.note.binScatter':
     'Se promediaron {rows} filas en {bins} intervalos de {width} {unit}. Las filas no tienen incertidumbre, así que la de cada intervalo es el error típico de la dispersión de sus puntos, y un intervalo de un solo punto no tiene.',
+  'obs.note.deriveSum':
+    'Una columna nueva, {name} = {formula}: calculada aquí a partir de sus columnas, no medida.',
+  'obs.note.deriveSumError':
+    'Una columna nueva, {name} = {formula}, y su incertidumbre, a partir de las suyas en cuadratura: calculada aquí a partir de sus columnas, no medida.',
+  'obs.note.deriveSeparation':
+    'Una columna nueva, {name}: la distancia de cada fila en el cielo a AR {ra}, Dec {dec}, en minutos de arco, calculada aquí.',
   'obs.note.restFrame':
     'Llevado al sistema en reposo con z = {z}: cada longitud de onda dividida por 1 + z.',
 
@@ -174,6 +186,8 @@ export const ES_OBSERVATORY = {
   'obs.keys':
     'Arrastra sobre la gráfica o la imagen, o haz clic en la tabla, para seleccionar. Con el teclado: las flechas mueven, Mayús con una flecha selecciona, Espacio añade o quita una, Escape borra la selección. Ctrl+Z deshace un cambio.',
   'obs.plot.role': 'gráfica',
+  'obs.plot.overlays':
+    'Dibujado sobre los puntos, a partir de una medida: {curves}.',
   'obs.plot.label': '{y} frente a {x}, {n} puntos',
   'obs.image.role': 'cuadrícula de píxeles',
   'obs.image.label':
@@ -217,6 +231,20 @@ export const ES_OBSERVATORY = {
   'obs.op.fold': 'plegado',
   'obs.op.bin': 'agrupación',
   'obs.op.restFrame': 'paso al sistema en reposo',
+  'obs.op.derive': 'columna nueva',
+  'obs.derive.name': 'Columna nueva',
+  'obs.derive.from': 'A partir de',
+  'obs.derive.sign': 'y luego',
+  'obs.derive.minus': 'menos',
+  'obs.derive.plus': 'más',
+  'obs.derive.none': 'sin segunda columna',
+  'obs.derive.second': 'la columna',
+  'obs.derive.constant': 'y sumar la constante',
+  'obs.derive.go': 'Añadir la columna',
+  'obs.derive.sepName': 'Columna nueva: distancia a una posición',
+  'obs.derive.ra': 'AR de la posición (grados)',
+  'obs.derive.dec': 'Dec de la posición (grados)',
+  'obs.derive.sepGo': 'Añadir la distancia',
   'obs.op.annotate': 'nota',
   'obs.op.unannotate': 'nota quitada',
 
