@@ -119,4 +119,79 @@ export const ES_INFERENCE = {
   'obs.fit.param.Rp': 'Radio del planeta',
   'obs.fit.param.e': 'Excentricidad',
   'obs.fit.param.omega': 'Argumento del periastro',
+
+  // Comparar ajustes (js/analysis/modelCompare.js), y las correlaciones.
+  'obs.fit.cmp.title': 'Comparar los ajustes',
+  'obs.fit.cmp.intro':
+    'Aquí aparece cada ajuste hecho. Elige dos o más de las mismas filas y se comparan con ellos, además, una constante (sin señal). Las cifras dicen qué modelo prefieren los datos y por cuánto; ninguna es la probabilidad de que un modelo sea cierto.',
+  'obs.fit.cmp.label': 'Ajuste {n}: {model}, todos los parámetros libres',
+  'obs.fit.cmp.labelFixed': 'Ajuste {n}: {model}, con {fixed}',
+  'obs.fit.cmp.run': 'Comparar los ajustes elegidos',
+  'obs.fit.cmp.constant': 'Una constante (sin señal)',
+  'obs.fit.cmp.caption':
+    'Los ajustes a {n} filas, según los criterios de información de Akaike y bayesiano. Menor es mejor; el peso es el apoyo relativo solo entre estos modelos.',
+  'obs.fit.cmp.nestedCaption':
+    'Cada modelo que es otro con parámetros fijados: el estadístico de razón de verosimilitudes, sus grados de libertad y la probabilidad de un estadístico así de grande si el modelo más sencillo fuera el correcto.',
+  'obs.fit.cmp.residualCaption':
+    'Lo que deja cada modelo: la dispersión en unidades de las incertidumbres (1 para un modelo que ajusta), la parte más allá de tres, un test de rachas de los signos (más allá de ±2 hay estructura) y la correlación con desfase uno.',
+  'obs.fit.cmp.pBoundary': '{p}, conservador',
+  'obs.fit.cmp.col.model': 'Modelo',
+  'obs.fit.cmp.col.k': 'Números ajustados k',
+  'obs.fit.cmp.col.chi2': 'χ²',
+  'obs.fit.cmp.col.m2lnL': '−2 ln L',
+  'obs.fit.cmp.col.aic': 'AIC',
+  'obs.fit.cmp.col.daic': 'ΔAIC',
+  'obs.fit.cmp.col.weight': 'Peso de Akaike',
+  'obs.fit.cmp.col.bic': 'BIC',
+  'obs.fit.cmp.col.dbic': 'ΔBIC',
+  'obs.fit.cmp.col.simpler': 'Más sencillo',
+  'obs.fit.cmp.col.fuller': 'Más completo',
+  'obs.fit.cmp.col.delta': 'Δ(−2 ln L)',
+  'obs.fit.cmp.col.df': 'Grados de libertad',
+  'obs.fit.cmp.col.p': 'p',
+  'obs.fit.cmp.col.rms': 'Dispersión / incertidumbre',
+  'obs.fit.cmp.col.beyond3': 'Más allá de 3',
+  'obs.fit.cmp.col.runsZ': 'z del test de rachas',
+  'obs.fit.cmp.col.lag1': 'Correlación con desfase uno',
+  'obs.fit.cmp.col.beta': 'β de ruido rojo',
+  'obs.fit.cmp.preferred.none':
+    'Los datos no eligen: {aic} tiene el AIC más bajo, pero otro modelo está a menos de 2, y ambos tienen un apoyo considerable.',
+  'obs.fit.cmp.preferred.weak':
+    'Se prefiere {aic}, débilmente: el siguiente modelo está de 2 a 4 por encima en AIC.',
+  'obs.fit.cmp.preferred.positive':
+    'Se prefiere {aic}: el siguiente modelo está de 4 a 10 por encima en AIC, con bastante menos apoyo.',
+  'obs.fit.cmp.preferred.strong':
+    'Se prefiere claramente {aic}: todos los demás modelos están más de 10 por encima en AIC.',
+  'obs.fit.cmp.refused.otherData':
+    '{label} se ajustó a otras filas (otra máscara u otra observación), así que su verosimilitud es de otros datos y se deja fuera.',
+  'obs.fit.cmp.refused.notFitted': '{label} no terminó y se deja fuera.',
+  'obs.fit.cmp.warn.criteriaDisagree':
+    'El AIC prefiere {aic} y el BIC prefiere {bic}. El BIC penaliza más cada número ajustado cuando hay muchos datos; si discrepan, los parámetros adicionales solo mejoran algo el ajuste.',
+  'obs.fit.cmp.warn.scaledErrors':
+    'Un ajuste reescaló sus incertidumbres para que χ² igualara sus grados de libertad. Los criterios usan las incertidumbres declaradas, que entonces son demasiado pequeñas, y favorecen el modelo con más parámetros.',
+  'obs.fit.cmp.warn.unweighted':
+    'Los datos no tienen incertidumbres, así que el nivel de ruido es un número ajustado más en cada modelo, estimado a partir de sus propios residuos.',
+  'obs.fit.cmp.warn.poorBest':
+    'Incluso el modelo preferido, {label}, deja un χ² reducido de {reducedChi2}: el mejor de estos modelos no describe los datos dentro de sus incertidumbres.',
+  'obs.fit.cmp.warn.structuredResiduals':
+    'Los residuos del modelo preferido tienen estructura (z del test de rachas = {z}): hay algo en los datos que no está en ninguno de estos modelos.',
+  'obs.fit.cmp.warn.degenerate':
+    '{label} tiene dos parámetros que los datos solo fijan juntos (mira sus correlaciones): sus mejores valores no son identificables uno a uno.',
+  'obs.fit.cmp.warn.atBound':
+    '{label} terminó con un parámetro en el borde de su intervalo: su verosimilitud puede ser mayor fuera de él.',
+  'obs.fit.cmp.warn.boundary':
+    'Cuando un modelo más sencillo fija un parámetro en el borde del intervalo del modelo más completo (una profundidad o semiamplitud nula), el valor p de chi-cuadrado es conservador: el verdadero es menor, más o menos la mitad (Self y Liang 1987).',
+  'obs.fit.cmp.warn.tooManyModels':
+    'Solo se comparan los primeros {max} ajustes.',
+  'obs.fit.cmp.warnTitle': 'Léelo con cuidado',
+  'obs.fit.cmp.noWarnings': 'Nada en esta comparación pide cautela.',
+  'obs.fit.cmp.methods':
+    'Comparación {tool} {version}. −2 ln L se calcula a partir de los residuos de cada ajuste y las incertidumbres de los datos, con el jitter del ajuste sumado en cuadratura cuando lo tiene; k es el número de valores que eligió el ajuste (sus filas menos sus grados de libertad). AIC = −2 ln L + 2k (Akaike 1974), AICc su corrección para muestras pequeñas (Hurvich y Tsai 1989), BIC = −2 ln L + k ln n (Schwarz 1978); los pesos de Akaike y la fuerza de la preferencia siguen a Burnham y Anderson (2002). Los modelos anidados se contrastan con la razón de verosimilitudes frente a chi-cuadrado (Wilks 1938). Solo se comparan ajustes a las mismas filas con las mismas incertidumbres.',
+  'obs.fit.cmp.export': 'Guardar la comparación (JSON)',
+  'obs.fit.corr.title': 'Qué parámetros separan los datos',
+  'obs.fit.corr.caption':
+    'Las correlaciones de las estimaciones de los parámetros ajustados, en el mejor ajuste.',
+  'obs.fit.corr.strong': '(fuerte)',
+  'obs.fit.corr.legend':
+    'Una correlación cercana a +1 o −1 significa que los datos fijan una combinación de los dos, no cada uno: subir uno y cambiar el otro ajusta casi igual de bien. Sus incertidumbres por separado son entonces mayores de lo que parecen, y lo que los separa son más datos de otro tipo.',
 };

@@ -8,10 +8,17 @@
 // own catalog pair. The function is `t`, so `npm run i18n:check` audits its
 // ids. Static text carries `data-i18n`, `data-i18n-placeholder` and
 // `data-i18n-aria-label`; translatePage() fills them.
+//
+// English is in the page; Spanish is fetched when it is chosen (setLanguage
+// is async), so a reader in one language does not download the other.
 // =============================================================================
 
 import { EN_EXPERIMENTS } from '../i18n/en.experiments.js';
-import { ES_EXPERIMENTS } from '../i18n/es.experiments.js';
+
+const LOAD = {
+  es: () => import('../i18n/es.experiments.js').then(m => m.ES_EXPERIMENTS),
+};
+const loaded = new Set(['en']);
 
 const STORAGE_KEY = 'gravitas_locale';
 
@@ -21,7 +28,8 @@ export const LANGUAGES = Object.freeze([
   { id: 'es', endonym: 'Español' },
 ]);
 
-const CATALOGS = { en: EN_EXPERIMENTS, es: ES_EXPERIMENTS };
+const CATALOGS = { en: EN_EXPERIMENTS };
+const known = id => LANGUAGES.some(l => l.id === id);
 const DEFAULT = 'en';
 let current = DEFAULT;
 
@@ -35,22 +43,34 @@ export const language = () => current;
 export function preferred() {
   try {
     const saved = window.localStorage?.getItem(STORAGE_KEY);
-    if (saved && Object.hasOwn(CATALOGS, saved)) return saved;
+    if (saved && known(saved)) return saved;
   } catch {
     /* storage unavailable; the default is correct */
   }
   const nav = (typeof navigator !== 'undefined' && navigator.language) || '';
   const base = String(nav).toLowerCase().split('-')[0];
-  return Object.hasOwn(CATALOGS, base) ? base : DEFAULT;
+  return known(base) ? base : DEFAULT;
 }
 
 /**
- * Change the language, and remember it for the application too.
+ * Change the language, and remember it for the application too. A catalog
+ * the page does not hold yet is fetched first; one that cannot be fetched
+ * leaves the page in English.
  * @param {string} id - A language id
- * @returns {string} The language actually in force
+ * @returns {Promise<string>} The language actually in force
  */
-export function setLanguage(id) {
-  current = Object.hasOwn(CATALOGS, id) ? id : DEFAULT;
+export async function setLanguage(id) {
+  let want = known(id) ? id : DEFAULT;
+  if (!loaded.has(want)) {
+    try {
+      // Strings a lazy panel added first stay, on top of the catalog.
+      CATALOGS[want] = { ...(await LOAD[want]()), ...CATALOGS[want] };
+      loaded.add(want);
+    } catch {
+      want = DEFAULT;
+    }
+  }
+  current = want;
   try {
     window.localStorage?.setItem(STORAGE_KEY, current);
   } catch {
@@ -58,6 +78,16 @@ export function setLanguage(id) {
   }
   document.documentElement.setAttribute('lang', current);
   return current;
+}
+
+/**
+ * Add a lazy panel's strings to the catalogs (js/experiments/analysisPanel.js
+ * brings its own when it is opened, so the page does not carry them).
+ * @param {{en: Object, es: Object}} more
+ */
+export function addMessages(more) {
+  for (const [id, entries] of Object.entries(more))
+    if (known(id)) CATALOGS[id] = { ...CATALOGS[id], ...entries };
 }
 
 /**

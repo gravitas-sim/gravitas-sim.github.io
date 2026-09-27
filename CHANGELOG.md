@@ -15,6 +15,37 @@ the release rather than in the tag.
 
 ### Added
 
+- **An analysis laboratory for experiments and fits** (ANALYSIS_LAB.md).
+  - **Analyze, on the experiment runner:** for a result, run here or saved,
+    each setting's numbers with 95% intervals; local slopes, elasticities, a
+    trend and a rank correlation; the share of the scatter that is the
+    setting, with a permutation test; the distribution, as a histogram with its
+    counts; and warnings of what the result cannot tell, such as a measurement
+    that cannot be read back to one setting, or a stretch where the setting is
+    not identifiable.
+  - **Honest about deterministic scenarios:** the laboratory scenarios ignore
+    their seed, so identical repeats get no interval and no test. The same
+    experiment run at another integration step gives the numerical
+    uncertainty instead, and the slopes are judged against it.
+  - **A plot and a table of every trial, linked:** a drag or the keyboard
+    selects trials in either, and a summary of the selection follows.
+  - **The experiment form:** a second setting (a grid), settings drawn at
+    random (a seeded sample), and a choice of integration step.
+  - **Compare the fits, in the Observatory:** AIC, AICc, BIC and Akaike
+    weights for fits of named models and a constant; likelihood-ratio tests
+    between nested ones, flagged on a boundary; residual diagnostics; each
+    fit's parameter correlations. Fits to other rows are refused by name.
+  - **Priced, refusable and cancelable:** the work is forecast for the device
+    and refused past its limit.
+  - **Saved whole:** a `gravitas.analysis/1` holding the experiment's manifest
+    or every fit's inference document.
+  - **Validated over many seeds** (`npm run analysis:validate`), with the
+    failure cases recorded: a skewed sample's t interval, understated
+    uncertainties, a period range that excludes the truth, and a step too
+    coarse next to an instability.
+  - **Cost:** the experiment runner now fetches Spanish only when it is
+    chosen, which more than pays for the form. Its route is 4.9 KB lighter than
+    before on the build.
 - **A measurement pipeline in the Observatory** (MEASUREMENT_PIPELINE.md).
   - **What it is:** a versioned, inspectable record of what was done to an
     observation and what it gave. Its nodes are the source, every change, each

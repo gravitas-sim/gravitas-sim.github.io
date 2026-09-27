@@ -31,6 +31,11 @@ import {
 } from '../inference/manifest.js';
 import { EN_INFERENCE } from '../i18n/en.inference.js';
 import { ES_INFERENCE } from '../i18n/es.inference.js';
+import {
+  MODEL_COMPARISON,
+  compareModels,
+  dataKey,
+} from '../analysis/modelCompare.js';
 
 // Nothing from the page's own modules - its plot, selection, units and
 // translator - is imported here: they arrive in `ctx`. esbuild puts a module
@@ -102,6 +107,12 @@ export function mountFitPanel(root, ctx) {
   let o = ctx.observation;
   let job = null;
   let last = null;
+  /**
+   * Every fit this panel made, for comparing: its request, the rows it saw
+   * and its document. A fit to other rows stays listed, and the comparison
+   * refuses it by name.
+   */
+  const history = [];
   const device = deviceProfile(
     typeof navigator !== 'undefined' ? navigator : {}
   );
@@ -363,6 +374,8 @@ export function mountFitPanel(root, ctx) {
     const { m, reasons } = price();
     if (reasons.length) return;
     const d = data();
+    // What was asked, as it was when Run was pressed.
+    const req = request();
     run.disabled = true;
     cancel.hidden = false;
     progress.hidden = false;
@@ -380,7 +393,7 @@ export function mountFitPanel(root, ctx) {
       );
     const started = performance.now();
     job = runInference({
-      request: request(),
+      request: req,
       data: {
         x: d.x,
         y: d.y,
@@ -420,11 +433,256 @@ export function mountFitPanel(root, ctx) {
       render(out, d);
       exportBtn.hidden = false;
       // The measurement pipeline lists a fit the reader ran, as exported.
-      ctx.record?.(exported());
+      const doc = exported();
+      ctx.record?.(doc);
+      history.push({
+        label: fitLabel(req, history.length + 1),
+        fit: out.fit,
+        request: req,
+        data: d,
+        document: doc,
+      });
+      renderCompare();
     });
   });
 
   cancel.addEventListener('click', () => job?.cancel(t('obs.fit.canceled')));
+
+  // --- Comparing the fits ------------------------------------------------------------
+  const compare = el('section', {
+    id: 'fitCompare',
+    'aria-labelledby': 'fitCompareTitle',
+  });
+  compare.hidden = true;
+  root.append(compare);
+  let compared = null;
+
+  /** A fit's name: its model, and which parameters it held fixed. */
+  function fitLabel(req, n) {
+    const fixed = Object.entries(req?.parameters || {})
+      .filter(([, p]) => p.mode === 'fixed')
+      .map(([name, p]) => `${nameOf({ name })} = ${number(p.value)}`);
+    return t(fixed.length ? 'obs.fit.cmp.labelFixed' : 'obs.fit.cmp.label', {
+      n,
+      model: t(`obs.fit.model.${req?.model?.id}`),
+      fixed: fixed.join(', '),
+    });
+  }
+
+  function renderCompare() {
+    if (!history.length) {
+      compare.hidden = true;
+      return;
+    }
+    compare.hidden = false;
+    const key = dataKey(data());
+    const boxes = history.map((h, i) => {
+      const box = el('input', { type: 'checkbox', id: `fitCmp-${i}` });
+      box.checked = dataKey(h.data) === key;
+      return el('li', {}, el('label', {}, box, ` ${h.label}`));
+    });
+    const go = el('button', {
+      id: 'fitCompareRun',
+      class: 'ui-button',
+      type: 'button',
+      text: t('obs.fit.cmp.run'),
+    });
+    const out = el('div', { id: 'fitCompareOut' });
+    go.addEventListener('click', () => {
+      const chosen = history.filter(
+        (_, i) => document.getElementById(`fitCmp-${i}`).checked
+      );
+      compared = { chosen, result: compareModels(chosen, { models: MODELS }) };
+      out.replaceChildren(...compareView(compared.result, chosen));
+    });
+    compare.replaceChildren(
+      el('h3', { id: 'fitCompareTitle', text: t('obs.fit.cmp.title') }),
+      el('p', { class: 'ow-hint', text: t('obs.fit.cmp.intro') }),
+      el('ul', { id: 'fitCompareList', class: 'ow-plain' }, ...boxes),
+      el('div', { class: 'ow-actions' }, go),
+      out
+    );
+  }
+
+  function compareView(c, chosen) {
+    const f = v =>
+      v === null || v === undefined || !Number.isFinite(v)
+        ? '—'
+        : number(Number(v.toPrecision(5)));
+    const name = r => (r.builtIn ? t('obs.fit.cmp.constant') : r.label);
+    const table = (id, caption, head, rows) =>
+      el(
+        'div',
+        {
+          class: 'ow-table-wrap',
+          tabindex: '0',
+          role: 'region',
+          'aria-label': caption,
+        },
+        el(
+          'table',
+          { id },
+          el('caption', { text: caption }),
+          el(
+            'thead',
+            {},
+            el(
+              'tr',
+              {},
+              ...head.map(h =>
+                el('th', { scope: 'col', text: t(`obs.fit.cmp.col.${h}`) })
+              )
+            )
+          ),
+          el(
+            'tbody',
+            {},
+            ...rows.map(cells =>
+              el(
+                'tr',
+                {},
+                ...cells.map((v, i) =>
+                  i
+                    ? el('td', { text: v })
+                    : el('th', { scope: 'row', text: v })
+                )
+              )
+            )
+          )
+        )
+      );
+    const kids = [];
+    if (c.preferred)
+      kids.push(
+        el('p', {
+          id: 'fitComparePreferred',
+          text: t(`obs.fit.cmp.preferred.${c.preferred.strength}`, {
+            aic: name(c.models.find(r => r.label === c.preferred.byAic)),
+            bic: name(c.models.find(r => r.label === c.preferred.byBic)),
+          }),
+        })
+      );
+    kids.push(
+      table(
+        'fitCompareTable',
+        t('obs.fit.cmp.caption', { n: c.data?.rows ?? 0 }),
+        ['model', 'k', 'chi2', 'm2lnL', 'aic', 'daic', 'weight', 'bic', 'dbic'],
+        c.models.map(r => [
+          name(r),
+          String(r.k),
+          f(r.chi2),
+          f(r.m2lnL),
+          f(r.aic),
+          f(r.dAic),
+          f(r.weight),
+          f(r.bic),
+          f(r.dBic),
+        ])
+      )
+    );
+    if (c.nested.length)
+      kids.push(
+        table(
+          'fitCompareNested',
+          t('obs.fit.cmp.nestedCaption'),
+          ['simpler', 'fuller', 'delta', 'df', 'p'],
+          c.nested.map(x => [
+            name(c.models.find(r => r.label === x.simpler)),
+            name(c.models.find(r => r.label === x.fuller)),
+            f(x.delta),
+            String(x.df),
+            x.boundary ? t('obs.fit.cmp.pBoundary', { p: f(x.p) }) : f(x.p),
+          ])
+        )
+      );
+    kids.push(
+      table(
+        'fitCompareResiduals',
+        t('obs.fit.cmp.residualCaption'),
+        ['model', 'rms', 'beyond3', 'runsZ', 'lag1', 'beta'],
+        c.models.map(r => [
+          name(r),
+          f(r.residuals.rms),
+          r.residuals.beyond3 === null
+            ? '—'
+            : `${f(100 * r.residuals.beyond3)}%`,
+          f(r.residuals.runsZ),
+          f(r.residuals.lag1),
+          f(r.residuals.beta),
+        ])
+      )
+    );
+    const warn = [
+      ...c.refused.map(r =>
+        t(`obs.fit.cmp.refused.${r.reason}`, { label: r.label })
+      ),
+      ...c.warnings.map(w =>
+        t(`obs.fit.cmp.warn.${w.code}`, {
+          ...w.detail,
+          reducedChi2: f(w.detail.reducedChi2),
+          z: f(w.detail.z),
+        })
+      ),
+    ];
+    kids.push(
+      el('h4', { text: t('obs.fit.cmp.warnTitle') }),
+      warn.length
+        ? el(
+            'ul',
+            { id: 'fitCompareWarnings', class: 'ow-problems' },
+            ...warn.map(w => el('li', { text: w }))
+          )
+        : el('p', {
+            id: 'fitCompareWarnings',
+            text: t('obs.fit.cmp.noWarnings'),
+          })
+    );
+    const methods = t('obs.fit.cmp.methods', {
+      tool: MODEL_COMPARISON.id,
+      version: MODEL_COMPARISON.version,
+    });
+    const save = el('button', {
+      id: 'fitCompareExport',
+      class: 'ui-button',
+      type: 'button',
+      text: t('obs.fit.cmp.export'),
+    });
+    save.addEventListener('click', () => {
+      const doc = {
+        format: 'gravitas.analysis',
+        formatVersion: 1,
+        kind: 'models',
+        tool: MODEL_COMPARISON,
+        observation: {
+          id: o.id ?? null,
+          rows: c.data?.rows ?? 0,
+          key: c.data?.key ?? null,
+        },
+        comparison: c,
+        methods,
+        // Each fit whole, as the inference core wrote it: how to rerun it.
+        sources: chosen.map(h => ({ label: h.label, document: h.document })),
+      };
+      const url = URL.createObjectURL(
+        new Blob([`${JSON.stringify(doc, null, 2)}\n`], {
+          type: 'application/json',
+        })
+      );
+      const a = el('a', {
+        href: url,
+        download: `${String(o.id).replace(/[^A-Za-z0-9._-]+/g, '-')}-models.json`,
+      });
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+    kids.push(
+      el('p', { id: 'fitCompareMethods', class: 'ow-hint', text: methods }),
+      el('div', { class: 'ow-actions' }, save)
+    );
+    return kids;
+  }
 
   /** The last fit as a gravitas.inference/1 document. */
   function exported() {
@@ -559,6 +817,57 @@ export function mountFitPanel(root, ctx) {
         })
       )
     );
+    // Which parameters the data constrain only together: the correlation of
+    // the free parameters' estimates, from the covariance at the best fit.
+    const corr = fit.correlation;
+    const correlations =
+      corr && fit.free.length > 1
+        ? el(
+            'div',
+            {
+              class: 'ow-table-wrap',
+              tabindex: '0',
+              role: 'region',
+              'aria-label': t('obs.fit.corr.caption'),
+            },
+            el(
+              'table',
+              { id: 'fitCorrelation' },
+              el('caption', { text: t('obs.fit.corr.caption') }),
+              el(
+                'thead',
+                {},
+                el(
+                  'tr',
+                  {},
+                  el('th', { scope: 'col', text: t('obs.fit.res.parameter') }),
+                  ...fit.free.map(n =>
+                    el('th', { scope: 'col', text: nameOf({ name: n }) })
+                  )
+                )
+              ),
+              el(
+                'tbody',
+                {},
+                ...fit.free.map((n, i) =>
+                  el(
+                    'tr',
+                    {},
+                    el('th', { scope: 'row', text: nameOf({ name: n }) }),
+                    ...fit.free.map((_, j) => {
+                      const v = corr[i]?.[j];
+                      const strong = i !== j && Math.abs(v) > 0.95;
+                      return el('td', {
+                        text: `${fmt(v)}${strong ? ` ${t('obs.fit.corr.strong')}` : ''}`,
+                        ...(strong ? { class: 'is-strong' } : {}),
+                      });
+                    })
+                  )
+                )
+              )
+            )
+          )
+        : null;
     const notClaimed = el(
       'ul',
       { lang: 'en' },
@@ -628,6 +937,13 @@ export function mountFitPanel(root, ctx) {
       ),
       el('p', { class: 'ow-hint', text: t('obs.fit.res.legend') }),
       stats,
+      ...(correlations
+        ? [
+            el('h3', { text: t('obs.fit.corr.title') }),
+            correlations,
+            el('p', { class: 'ow-hint', text: t('obs.fit.corr.legend') }),
+          ]
+        : []),
       el('h3', { text: t('obs.fit.warnTitle') }),
       warnings,
       el('h3', { text: t('obs.fit.notClaimed') }),
@@ -654,6 +970,7 @@ export function mountFitPanel(root, ctx) {
         exportBtn.hidden = true;
       }
       o = next;
+      renderCompare();
       const ids = modelsFor(o, dimensionOfText);
       const keep = modelSelect.value;
       modelSelect.replaceChildren(

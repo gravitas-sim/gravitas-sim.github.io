@@ -144,6 +144,73 @@
         fill: #ffb4a2;
         font-size: 14px;
       }
+      /* The analysis laboratory (js/experiments/analysisPanel.js): its plot
+         and table are the Observatory's (js/observatory/plot.js, table.js),
+         so they carry its class names. */
+      .xp-lab {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        margin: 1.5rem 0;
+      }
+      .xp-lab > summary {
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+      .xp-lab h3 {
+        margin: 1.4rem 0 0.4rem;
+        font-size: 1rem;
+      }
+      .xp-bar {
+        fill: #8fd3ff;
+      }
+      .ow-plot:focus-visible,
+      #labTrials tr:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .ow-axes line {
+        stroke: rgba(255, 255, 255, 0.5);
+      }
+      .ow-tick,
+      .ow-label {
+        fill: currentColor;
+        font-size: 12px;
+      }
+      .ow-bars line {
+        stroke: rgba(143, 211, 255, 0.45);
+      }
+      .ow-pt {
+        fill: #8fd3ff;
+      }
+      .ow-pt.is-selected {
+        fill: #ffd27a;
+      }
+      .ow-pt.is-masked {
+        fill: none;
+        stroke: #9aa0a6;
+      }
+      .ow-focus {
+        fill: none;
+        stroke: #ffffff;
+        stroke-width: 2;
+      }
+      .ow-brush {
+        fill: rgba(255, 210, 122, 0.15);
+        stroke: #ffd27a;
+      }
+      .ow-table-wrap {
+        overflow-x: auto;
+        max-height: 24rem;
+        margin: 0.8rem 0;
+      }
+      #labTrials tr[aria-selected='true'] td {
+        background: rgba(255, 210, 122, 0.16);
+      }
+      .is-missing {
+        color: #b8bec6;
+      }
     </style>
   </head>
   <body class="doc-page">
@@ -202,8 +269,38 @@
               <span data-i18n="exp.values.count">How many values</span>
               <input id="xpCount" type="number" min="3" max="20" value="8" />
             </label>
+            <label class="xp-field">
+              <span data-i18n="exp.values.spacing">Spacing</span>
+              <select id="xpSpacing">
+                <option value="even" data-i18n="exp.values.even">Evenly</option>
+                <option value="random" data-i18n="exp.values.random">At random</option>
+              </select>
+            </label>
           </div>
           <p id="xpRangeHint" class="xp-hint"></p>
+        </fieldset>
+        <fieldset id="xpSecond" hidden>
+          <legend data-i18n="exp.second.title">A second setting</legend>
+          <div class="xp-grid">
+            <label class="xp-field">
+              <span data-i18n="exp.second.param">Also vary</span>
+              <select id="xpParam2"></select>
+            </label>
+          </div>
+          <div id="xpSecondRange" class="xp-grid" hidden>
+            <label class="xp-field">
+              <span data-i18n="exp.values.from">From</span>
+              <input id="xpFrom2" type="number" step="any" />
+            </label>
+            <label class="xp-field">
+              <span data-i18n="exp.values.to">To</span>
+              <input id="xpTo2" type="number" step="any" />
+            </label>
+            <label class="xp-field">
+              <span data-i18n="exp.values.count">How many values</span>
+              <input id="xpCount2" type="number" min="3" max="20" value="3" />
+            </label>
+          </div>
         </fieldset>
 
         <fieldset>
@@ -240,6 +337,14 @@
                 step="any"
                 value="10000"
               />
+            </label>
+            <label class="xp-field">
+              <span data-i18n="exp.runs.step">Integration step</span>
+              <select id="xpStep">
+                <option value="120">1/120 s</option>
+                <option value="60" selected>1/60 s</option>
+                <option value="30">1/30 s</option>
+              </select>
             </label>
           </div>
           <p id="xpSeedHint" class="xp-hint" data-i18n="exp.runs.seedHint">
@@ -334,6 +439,13 @@
           <pre id="xpManifest" class="xp-hint"></pre>
         </details>
       </section>
+
+      <details id="xpAnalysis" class="xp-lab">
+        <summary data-i18n="exp.analysis.title">
+          Analyze: uncertainty, sensitivity, distribution
+        </summary>
+        <div id="xpAnalysisBody"></div>
+      </details>
 
       <section aria-labelledby="xpCheckTitle">
         <h2 id="xpCheckTitle" data-i18n="exp.check.title">Check a saved result</h2>
