@@ -153,6 +153,10 @@ imports it, and the page never loads the engine itself; only its Workers do.
   timeout, or run trials that would all stop at the sample cap. The page lists
   the reasons, and Run stays off. The plan is cached per manifest, so an
   unchanged form is not priced twice.
+- **The form.** A scenario and a setting to vary, from one value to another,
+  evenly or at random (a seeded `distribution`); for a laboratory with two
+  settings, a second one, making a grid; seeds; the simulated time; the
+  integration step (1/120, 1/60 or 1/30 s); the measurement.
 - **Running.** Run, Cancel, and Resume, which appears when a checkpoint
   exists.
 - **Reporting.** A progress bar and a status line, which a screen reader
@@ -167,8 +171,14 @@ imports it, and the page never loads the engine itself; only its Workers do.
 - **Saving and checking.** The result downloads as JSON, and the trials as
   CSV. "Check a saved result" reports whether a pasted result reproduces
   here, or reads a pasted manifest or bench sweep.
+- **Analyzing.** "Analyze" opens the analysis laboratory
+  ([ANALYSIS_LAB.md](ANALYSIS_LAB.md)), a lazy chunk: intervals where the
+  seeds scatter, slopes and shares, the distribution, the numerical
+  uncertainty from the same experiment at another step, and what the result
+  cannot tell.
 - **Language.** English and Spanish, with its own catalogue pair
-  (`js/i18n/{en,es}.experiments.js`).
+  (`js/i18n/{en,es}.experiments.js`). English is in the page; Spanish is
+  fetched when it is chosen, so a reader downloads one language, not two.
 
 ## Device profiles, and what each may run
 

@@ -122,4 +122,78 @@ export const EN_INFERENCE = {
   'obs.fit.param.Rp': 'Planet radius',
   'obs.fit.param.e': 'Eccentricity',
   'obs.fit.param.omega': 'Argument of periastron',
+
+  // Comparing fits (js/analysis/modelCompare.js), and the correlations.
+  'obs.fit.cmp.title': 'Compare the fits',
+  'obs.fit.cmp.intro':
+    'Every fit made here is listed. Choose two or more of the same rows, and a constant (no signal) is compared with them. The numbers say which model the data prefer and by how much; none of them is the probability that a model is true.',
+  'obs.fit.cmp.label': 'Fit {n}: {model}, every parameter free',
+  'obs.fit.cmp.labelFixed': 'Fit {n}: {model}, with {fixed}',
+  'obs.fit.cmp.run': 'Compare the chosen fits',
+  'obs.fit.cmp.constant': 'A constant (no signal)',
+  'obs.fit.cmp.caption':
+    'The fits to {n} rows, by the Akaike and Bayesian information criteria. Lower is better; the weight is the relative support among these models only.',
+  'obs.fit.cmp.nestedCaption':
+    'Each model that is another with parameters fixed: the likelihood-ratio statistic, its degrees of freedom, and the chance of a statistic this large if the simpler model were right.',
+  'obs.fit.cmp.residualCaption':
+    'What is left over by each model: the scatter in units of the uncertainties (1 for a model that fits), the share beyond three, a runs test of the signs (beyond ±2 is structure), and the lag-one correlation.',
+  'obs.fit.cmp.pBoundary': '{p}, conservative',
+  'obs.fit.cmp.col.model': 'Model',
+  'obs.fit.cmp.col.k': 'Fitted numbers k',
+  'obs.fit.cmp.col.chi2': 'χ²',
+  'obs.fit.cmp.col.m2lnL': '−2 ln L',
+  'obs.fit.cmp.col.aic': 'AIC',
+  'obs.fit.cmp.col.daic': 'ΔAIC',
+  'obs.fit.cmp.col.weight': 'Akaike weight',
+  'obs.fit.cmp.col.bic': 'BIC',
+  'obs.fit.cmp.col.dbic': 'ΔBIC',
+  'obs.fit.cmp.col.simpler': 'Simpler',
+  'obs.fit.cmp.col.fuller': 'Fuller',
+  'obs.fit.cmp.col.delta': 'Δ(−2 ln L)',
+  'obs.fit.cmp.col.df': 'Degrees of freedom',
+  'obs.fit.cmp.col.p': 'p',
+  'obs.fit.cmp.col.rms': 'Scatter / uncertainty',
+  'obs.fit.cmp.col.beyond3': 'Beyond 3',
+  'obs.fit.cmp.col.runsZ': 'Runs test z',
+  'obs.fit.cmp.col.lag1': 'Lag-one correlation',
+  'obs.fit.cmp.col.beta': 'Red-noise β',
+  'obs.fit.cmp.preferred.none':
+    'The data do not choose: {aic} has the lowest AIC, but another model is within 2, and both have substantial support.',
+  'obs.fit.cmp.preferred.weak':
+    '{aic} is preferred, weakly: the next model is 2 to 4 above it in AIC.',
+  'obs.fit.cmp.preferred.positive':
+    '{aic} is preferred: the next model is 4 to 10 above it in AIC, with considerably less support.',
+  'obs.fit.cmp.preferred.strong':
+    '{aic} is strongly preferred: every other model is more than 10 above it in AIC.',
+  'obs.fit.cmp.refused.otherData':
+    '{label} was fitted to other rows (another mask or observation), so its likelihood is of other data and it is left out.',
+  'obs.fit.cmp.refused.notFitted': '{label} did not finish, and is left out.',
+  'obs.fit.cmp.warn.criteriaDisagree':
+    'AIC prefers {aic} and BIC prefers {bic}. BIC penalizes each fitted number more for a large data set; when they disagree the extra parameters buy only a modest improvement.',
+  'obs.fit.cmp.warn.scaledErrors':
+    'A fit rescaled its uncertainties to make χ² match its degrees of freedom. The criteria use the stated uncertainties, which are then too small, and favor a model with more parameters.',
+  'obs.fit.cmp.warn.unweighted':
+    'The data have no uncertainties, so the noise level is one more fitted number for every model, estimated from its own residuals.',
+  'obs.fit.cmp.warn.poorBest':
+    'Even the preferred model, {label}, leaves a reduced χ² of {reducedChi2}: the best of these models does not describe the data to within their uncertainties.',
+  'obs.fit.cmp.warn.structuredResiduals':
+    'The preferred model’s residuals have structure (runs test z = {z}): something in the data is not in any of these models.',
+  'obs.fit.cmp.warn.degenerate':
+    '{label} has two parameters the data constrain only together (see its correlations): its best values are not identifiable one by one.',
+  'obs.fit.cmp.warn.atBound':
+    '{label} ended with a parameter at the edge of its range: its likelihood may be higher outside it.',
+  'obs.fit.cmp.warn.boundary':
+    'Where a simpler model fixes a parameter at the edge of the fuller model’s range (a depth or semi-amplitude of zero), the chi-square p-value is conservative: the true one is smaller, about half (Self and Liang 1987).',
+  'obs.fit.cmp.warn.tooManyModels': 'Only the first {max} fits are compared.',
+  'obs.fit.cmp.warnTitle': 'Read with care',
+  'obs.fit.cmp.noWarnings': 'Nothing in this comparison calls for caution.',
+  'obs.fit.cmp.methods':
+    'Comparison {tool} {version}. −2 ln L is computed from each fit’s residuals and the data’s uncertainties, with the fit’s jitter added in quadrature where it has one; k is the number of values the fit chose (its rows less its degrees of freedom). AIC = −2 ln L + 2k (Akaike 1974), AICc its small-sample correction (Hurvich and Tsai 1989), BIC = −2 ln L + k ln n (Schwarz 1978); Akaike weights and the strength of preference follow Burnham and Anderson (2002). Nested models are tested by the likelihood ratio against chi-square (Wilks 1938). Fits are compared only on the same rows with the same uncertainties.',
+  'obs.fit.cmp.export': 'Save the comparison (JSON)',
+  'obs.fit.corr.title': 'Which parameters the data separate',
+  'obs.fit.corr.caption':
+    'The correlations of the fitted parameters’ estimates, at the best fit.',
+  'obs.fit.corr.strong': '(strong)',
+  'obs.fit.corr.legend':
+    'A correlation near +1 or −1 means the data constrain a combination of the two, not each: raising one and changing the other fits almost as well. Their separate uncertainties are then larger than they look, and more data of a different kind is what separates them.',
 };

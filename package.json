@@ -60,6 +60,7 @@
     "gwosc:check": "node tools/build-gwosc-events.mjs --check --offline",
     "packs:data": "node tools/build-data-packs.mjs",
     "packs:provenance": "node tools/build-data-packs.mjs --check --require-sources && node tools/catalog.mjs provenance",
+    "analysis:validate": "node tools/analysis-validate.mjs",
     "measure:validate": "node tools/measure-validate.mjs",
     "packs:check": "node tools/build-data-packs.mjs --check",
     "sdk": "node sdk/cli.mjs",

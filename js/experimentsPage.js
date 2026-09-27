@@ -48,6 +48,8 @@ import {
 } from './experiments/experimentManifest.js';
 import { RESUMABLE, createScheduler } from './experiments/scheduler.js';
 import { METRIC_UNITS } from './experiments/metrics.js';
+import { toCsv } from './csv.js';
+import { addMessages } from './experiments/i18n.js';
 
 const $ = id => document.getElementById(id);
 const CHECKPOINT = 'gravitas_experiment_checkpoint_';
@@ -106,6 +108,28 @@ function fillParameters() {
     })
   );
   if (lab.parameters.some(p => p.key === keep)) select.value = keep;
+  fillSecond();
+}
+
+/** A second setting, for a lab that has more than one: a grid of both. */
+function fillSecond() {
+  const lab = SWEEPABLE[$('xpScenario').value];
+  const select = $('xpParam2');
+  const keep = select.value;
+  const others = lab.parameters.filter(p => p.key !== $('xpParam').value);
+  const option = (value, text) => {
+    const o = document.createElement('option');
+    o.value = value;
+    o.textContent = text;
+    return o;
+  };
+  select.replaceChildren(
+    option('', t('exp.second.none')),
+    ...others.map(p => option(p.key, t(`exp.param.${p.key}`)))
+  );
+  select.value = others.some(p => p.key === keep) ? keep : '';
+  $('xpSecond').hidden = !others.length || $('xpSpacing').value === 'random';
+  $('xpSecondRange').hidden = !select.value;
 }
 
 function fillMetrics() {
@@ -123,15 +147,20 @@ function fillMetrics() {
 }
 
 /** Sensible bounds for the chosen parameter, inside its validated range. */
-function resetRange() {
+function resetRange(suffix = '') {
+  const key = $(`xpParam${suffix}`).value;
   const p = SWEEPABLE[$('xpScenario').value].parameters.find(
-    x => x.key === $('xpParam').value
+    x => x.key === key
   );
+  if (!p) return;
   const lo = p.exclude && p.min < 0 ? p.exclude.to : p.min;
-  $('xpFrom').value = String(lo);
-  $('xpTo').value = String(p.max);
-  $('xpFrom').min = $('xpTo').min = String(p.min);
-  $('xpFrom').max = $('xpTo').max = String(p.max);
+  const from = $(`xpFrom${suffix}`);
+  const to = $(`xpTo${suffix}`);
+  from.value = String(lo);
+  to.value = String(p.max);
+  from.min = to.min = String(p.min);
+  from.max = to.max = String(p.max);
+  if (suffix) return;
   $('xpRangeHint').textContent = t('exp.values.range', {
     min: p.min,
     max: p.max,
@@ -156,23 +185,50 @@ function manifestFromForm() {
     seeds: Array.from({ length: seeds }, (_, i) =>
       seeds === 1 ? base : `${base}-${i + 1}`
     ),
-    vary: [
-      {
-        parameter: $('xpParam').value,
-        from: Number($('xpFrom').value),
-        to: Number($('xpTo').value),
-        count: Math.round(Number($('xpCount').value)),
-      },
-    ],
+    vary: vary(base),
     observables: {
       metrics: [$('xpMetric').value],
       roles: SWEEPABLE[scenario].roles,
     },
     stop: { duration: Number($('xpDuration').value), events: [] },
-    numerics: { frameSeconds: 1 / 60, sampleEvery: 1 },
+    numerics: { frameSeconds: 1 / Number($('xpStep').value), sampleEvery: 1 },
     limits: defaultLimits(profile, nav),
     summaries: ['mean', 'min', 'max', 'spread', 'status-counts'],
   };
+}
+
+/**
+ * The settings the form varies: an even division of one, the same drawn at
+ * random (a seeded uniform sample, EXPERIMENTS.md), or a grid of two.
+ */
+function vary(base) {
+  const count = Math.round(Number($('xpCount').value));
+  const from = Number($('xpFrom').value);
+  const to = Number($('xpTo').value);
+  const first =
+    $('xpSpacing').value === 'random'
+      ? {
+          parameter: $('xpParam').value,
+          distribution: {
+            kind: 'uniform',
+            samples: count,
+            min: from,
+            max: to,
+            seed: base,
+          },
+        }
+      : { parameter: $('xpParam').value, from, to, count };
+  const second = $('xpSecond').hidden ? '' : $('xpParam2').value;
+  if (!second) return [first];
+  return [
+    first,
+    {
+      parameter: second,
+      from: Number($('xpFrom2').value),
+      to: Number($('xpTo2').value),
+      count: Math.round(Number($('xpCount2').value)),
+    },
+  ];
 }
 
 // --- Planning: one trial built in a realm, then the whole priced -----------
@@ -394,20 +450,27 @@ function setRunning(on) {
   $('xpCancel').hidden = !on;
   $('xpResume').hidden = true;
   $('xpProgressBox').hidden = false;
-  for (const id of [
-    'xpScenario',
-    'xpParam',
-    'xpFrom',
-    'xpTo',
-    'xpCount',
-    'xpSeeds',
-    'xpSeedBase',
-    'xpDuration',
-    'xpMetric',
-  ]) {
-    $(id).disabled = on;
-  }
+  for (const id of FORM) $(id).disabled = on;
 }
+
+/** Every control of the form: disabled while it runs, re-priced on input. */
+const FORM = [
+  'xpScenario',
+  'xpParam',
+  'xpFrom',
+  'xpTo',
+  'xpCount',
+  'xpSpacing',
+  'xpParam2',
+  'xpFrom2',
+  'xpTo2',
+  'xpCount2',
+  'xpSeeds',
+  'xpSeedBase',
+  'xpDuration',
+  'xpStep',
+  'xpMetric',
+];
 
 // --- Reading the result --------------------------------------------------------
 
@@ -420,6 +483,7 @@ function renderResult(result) {
   const m = result.manifest;
   const metric = m.observables.metrics[0];
   const key = m.vary[0].parameter;
+  const key2 = m.vary[1]?.parameter;
   $('xpResults').hidden = false;
   const unit = METRIC_UNITS[metric];
   const groups = result.summary.metrics[metric];
@@ -443,7 +507,12 @@ function renderResult(result) {
       ].entries()) {
         const cell = document.createElement(i === 0 ? 'th' : 'td');
         if (i === 0) cell.scope = 'row';
-        cell.textContent = i >= 5 ? String(v) : fmt(v);
+        cell.textContent =
+          i >= 5
+            ? String(v)
+            : i || !key2
+              ? fmt(v)
+              : `${fmt(v)}, ${fmt(g.params[key2])}`;
         tr.append(cell);
       }
       return tr;
@@ -455,7 +524,9 @@ function renderResult(result) {
       const row = document.createElement('tr');
       const cells = [
         String(tr.index + 1),
-        fmt(tr.params[key]),
+        key2
+          ? `${fmt(tr.params[key])}, ${fmt(tr.params[key2])}`
+          : fmt(tr.params[key]),
         tr.seed,
         t(`exp.status.${tr.status}`),
         fmt(tr.results?.[metric]),
@@ -475,6 +546,7 @@ function renderResult(result) {
   );
   drawPlot(result, metric, key);
   $('xpManifest').textContent = JSON.stringify(m, null, 2);
+  analysis?.then(p => p.update());
 }
 
 /**
@@ -607,6 +679,25 @@ function download(name, text, type) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+// --- The analysis laboratory: its own chunk, loaded when it is opened -----------
+
+let analysis = null;
+function openAnalysis() {
+  if (!$('xpAnalysis').open) return;
+  analysis ??= import('./experiments/analysisPanel.js').then(m =>
+    m.mountAnalysis($('xpAnalysisBody'), {
+      t,
+      language,
+      addMessages,
+      result: () => lastResult,
+      profile,
+      metricUnits: METRIC_UNITS,
+      toCsv,
+      download,
+    })
+  );
+}
+
 // --- A saved result, checked against this build ---------------------------------
 
 async function checkSaved() {
@@ -658,8 +749,8 @@ function renderLanguageSwitch() {
       b.lang = id;
       b.textContent = endonym;
       b.setAttribute('aria-pressed', String(id === language()));
-      b.addEventListener('click', () => {
-        setLanguage(id);
+      b.addEventListener('click', async () => {
+        await setLanguage(id);
         translateAll();
       });
       return b;
@@ -679,11 +770,12 @@ function translateAll() {
     minutes: PROFILES[profile].maxWallMs / 60_000,
   });
   if (lastResult) renderResult(lastResult);
+  analysis?.then(p => p.rebuild());
   refresh();
 }
 
-function start() {
-  setLanguage(preferred());
+async function start() {
+  await setLanguage(preferred());
   translatePage();
   renderLanguageSwitch();
   fillScenarios();
@@ -711,19 +803,20 @@ function start() {
   });
   $('xpParam').addEventListener('change', () => {
     resetRange();
+    fillSecond();
     later();
   });
-  for (const id of [
-    'xpFrom',
-    'xpTo',
-    'xpCount',
-    'xpSeeds',
-    'xpSeedBase',
-    'xpDuration',
-    'xpMetric',
-  ]) {
-    $(id).addEventListener('input', later);
-  }
+  $('xpParam2').addEventListener('change', () => {
+    resetRange('2');
+    fillSecond();
+    later();
+  });
+  $('xpSpacing').addEventListener('change', () => {
+    fillSecond();
+    later();
+  });
+  for (const id of FORM) $(id).addEventListener('input', later);
+  $('xpAnalysis').addEventListener('toggle', openAnalysis);
   $('xpForm').addEventListener('submit', e => {
     e.preventDefault();
     run();
