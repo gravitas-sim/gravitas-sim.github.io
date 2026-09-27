@@ -1,7 +1,7 @@
 {
   "format": "gravitas.catalog-curation",
   "formatVersion": 1,
-  "catalogVersion": "1.0.0",
+  "catalogVersion": "1.1.0",
   "extensions": [
     {
       "path": "extensions/pulsating-stars",
@@ -17,6 +17,22 @@
         "date": "2026-09-25",
         "checks": ["sdk validate", "sdk test", "catalog check", "rebuilt from the pinned MAST file"],
         "notes": "Period within 1.2e-5 d of Monson et al. 2017; CROWDSAP 0.985; the pack records why RR Lyrae itself was not used."
+      }
+    },
+    {
+      "path": "extensions/kepler-13-tess-s14-pdcsap",
+      "review": {
+        "date": "2026-09-26",
+        "checks": ["sdk validate", "sdk test", "catalog check", "rebuilt from the pinned MAST file"],
+        "notes": "PDCSAP depth 0.00812 folded on Esteves et al. 2015's period, against their (Rp/R*)^2 0.00763 within 0.0015; CROWDSAP 0.549 and FLFRCSAP 0.921 recorded; the pack says the correction assumes the planet orbits A."
+      }
+    },
+    {
+      "path": "extensions/kepler-13-tess-s14-sap",
+      "review": {
+        "date": "2026-09-26",
+        "checks": ["sdk validate", "sdk test", "catalog check", "rebuilt from the pinned MAST file"],
+        "notes": "SAP depth 0.00475, the corrected depth times CROWDSAP (0.00446) within 0.001; the same pinned MAST file as the corrected pack; the pack says which star is the host is not in these data."
       }
     }
   ]

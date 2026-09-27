@@ -37,11 +37,21 @@ export { readFits } from '../../tools/data-packs/fits.mjs';
  * the built-in packs are (DATA_PACKS.md). With `fluxStepPpm` it writes
  * `binned-relative-flux/2`, for a star that varies by more than the 3.3% that
  * /1 holds. Added in 1.2.0, for the same extension.
+ *
+ * Since 1.3.0, `flux: 'SAP'` bins SAP_FLUX (the aperture's light before
+ * SPOC's corrections) instead of PDCSAP_FLUX, and `crowding: true` records
+ * the header's CROWDSAP and FLFRCSAP. Kepler-13, whose companion dilutes its
+ * transit, needed both; without them the output is what 1.2.0 wrote.
  */
-export { binLightCurve as binTessLightCurve } from '../../tools/data-packs/tess-light-curve.mjs';
+export {
+  binLightCurve as binTessLightCurve,
+  foldedDepth,
+} from '../../tools/data-packs/tess-light-curve.mjs';
+// foldedDepth(observation, periodDays): the depth of the deepest phase slot,
+// the check a transit pack states (added in 1.3.0; `sdk test` runs the same).
 
 /** This SDK. A major version changes only with a breaking change to this file. */
-export const SDK_VERSION = '1.2.0';
+export const SDK_VERSION = '1.3.0';
 
 /** The formats this SDK reads and writes, and the version of each. */
 export const FORMATS = Object.freeze({

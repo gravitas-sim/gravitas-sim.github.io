@@ -258,7 +258,10 @@ function mountFit(m) {
     ...lent,
     observation: state.view,
     dimensionOfText: text => dimensionOf(parseUnit(text).unit),
-    record: m => state.fits.push(m),
+    record: m => {
+      state.fits.push(m);
+      guide?.then(p => p.update());
+    },
   });
   return fit.panel;
 }
@@ -277,14 +280,41 @@ $('obsArchivePanel').addEventListener('toggle', () => {
 
 // The measurement pipeline (MEASUREMENT_PIPELINE.md): loaded when first opened.
 let measure = null;
-$('obsMeasurePanel').addEventListener('toggle', () => {
-  measure ??= import('./observatory/measurePanel.js').then(m =>
+const measurePanel = () =>
+  (measure ??= import('./observatory/measurePanel.js').then(m =>
     m.mountMeasurePanel($('obsMeasurePanel'), {
       ...lent,
       ...{ open, status, apply, state, replay, observationJson, importer },
       ...{ skyOf, pixelScale },
+      measured: () => guide?.then(p => p.update()),
     })
-  );
+  ));
+$('obsMeasurePanel').addEventListener('toggle', measurePanel);
+
+/** Open the fit or measurement panel and bring it into view, for a guide. */
+async function showPanel(name) {
+  const box = $(name === 'fit' ? 'obsFitPanel' : 'obsMeasurePanel');
+  if (box.hidden) return false;
+  box.open = true;
+  await (name === 'fit' ? fitPanel() : measurePanel());
+  box.scrollIntoView({ block: 'start' });
+  box.querySelector('summary')?.focus();
+  return true;
+}
+
+// The guided investigations (EXOPLANET_OBSERVATORY.md): loaded when first
+// opened, or with ?guide=<id>.
+let guide = null;
+const guidePanel = () =>
+  (guide ??= import('./observatory/guidePanel.js').then(m =>
+    m.mountGuidePanel($('obsGuidePanel'), {
+      ...lent,
+      ...{ open, status, state, openFixture, lightCurveObservation, showPanel },
+      nodes: async () => (measure ? (await measure).nodes() : []),
+    })
+  ));
+$('obsGuidePanel').addEventListener('toggle', () => {
+  if ($('obsGuidePanel').open) guidePanel();
 });
 
 $('obsFitPanel').addEventListener('toggle', async () => {
@@ -337,6 +367,7 @@ function renderAll() {
   renderChanges(o);
   renderFit(o);
   measure?.then(p => p.update());
+  guide?.then(p => p.update());
   renderSelectionBar();
   $('obsUndo').disabled = !state.history.canUndo();
   $('obsRedo').disabled = !state.history.canRedo();
@@ -1244,6 +1275,7 @@ function translateAll() {
   if (fit.module) mountFit(fit.module);
   archive?.then(p => p.rebuild());
   measure?.then(p => p.rebuild());
+  guide?.then(p => p.rebuild());
   if (state.view) renderAll();
 }
 
@@ -1253,6 +1285,10 @@ document.documentElement.dataset.ready = 'true';
 // Opened from the catalog with ?installed=<package id>: js/catalog/installed.js
 // opens the pack, so a visitor who installs nothing never loads it.
 const installedId = new URLSearchParams(location.search).get('installed');
+if (new URLSearchParams(location.search).has('guide')) {
+  $('obsGuidePanel').open = true;
+  guidePanel();
+}
 if (installedId)
   import('./catalog/installed.js').then(m =>
     m.openInstalled(

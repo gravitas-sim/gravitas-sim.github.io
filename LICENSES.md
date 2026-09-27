@@ -90,6 +90,7 @@ extension states its own licenses in its `gravitas-extension.json`, and
 | `extensions/*/build.mjs` | transformation scripts | MIT |
 | `extensions/*/course.json`, `README.md` | course text | CC BY 4.0 |
 | `extensions/su-dra-tess-s15/*.json` | derived from a TESS light curve served by MAST | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
+| `extensions/kepler-13-tess-s14-*/*.json` | derived from a TESS light curve served by MAST | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
 | `catalog/**` | the catalog and its archives | as the extension each came from |
 
 ## Why the split

@@ -83,6 +83,8 @@ export interface ObservationDataPack {
       | { kind: 'folded-depth'; periodDays: number; expected: number; tolerance: number }
       | { kind: 'harmonic-period'; periodDays: number; windowDays: number; harmonics?: number; tolerance: number };
   };
+  /** A TESS light curve's CROWDSAP and FLFRCSAP, as its header records them (1.3.0). */
+  crowding?: { crowdsap: number; flfrcsap: number };
   [field: string]: unknown;
 }
 
@@ -131,10 +133,13 @@ export interface FitsUnit {
 }
 /** Every header is checked against the file before any data is read; more than `maxUnits` (16) units is an error. */
 export function readFits(bytes: Uint8Array, opts?: { maxUnits?: number }): FitsUnit[];
+/** `flux` and `crowding` since 1.3.0; without them the output is 1.2.0's. */
 export function binTessLightCurve(
   units: FitsUnit[],
-  opts: { binMinutes: number; minPerBin: number; errStepPpm: number; fluxStepPpm?: number }
+  opts: { binMinutes: number; minPerBin: number; errStepPpm: number; fluxStepPpm?: number; flux?: 'PDCSAP' | 'SAP'; crowding?: boolean }
 ): {
   series: { encoding: 'binned-relative-flux/1' | 'binned-relative-flux/2'; t0: number; binDays: number; n: number; runs: Array<[number, number]>; flux: string; fluxStepPpm?: number; errStepPpm: number; err: string };
-  record: { cadences: number; flagged: number; notFinite: number; kept: number; binsDropped: number; bins: number; medianFlux: number; fluxUnit: string | null };
+  record: { cadences: number; flagged: number; notFinite: number; kept: number; binsDropped: number; bins: number; medianFlux: number; fluxUnit: string | null; fluxColumn?: 'SAP_FLUX'; crowding?: { crowdsap: number | null; flfrcsap: number | null } };
 };
+/** The depth of the deepest phase slot, folded on a period in days (1.3.0). */
+export function foldedDepth(o: Observation, periodDays: number): number;

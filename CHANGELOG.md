@@ -15,6 +15,32 @@ the release rather than in the tag.
 
 ### Added
 
+- **The Exoplanet Observatory: from photons to a planet**
+  (EXOPLANET_OBSERVATORY.md). Five guides in `/observatory/` that take a
+  reader through real TESS light curves, each on an introductory and an
+  advanced path.
+  - **What they cover:** whose light a light curve holds (quality flags, the
+    aperture, crowding); finding a transit with the box search and folding
+    it; fitting it, what the data cannot separate, and the planet's radius
+    from an adopted star's; Kepler-13, where a companion's light hides much
+    of the transit and the light curve cannot say which star is the host;
+    and whether the dip is a planet at all, ending on what a transit cannot
+    weigh.
+  - **Every checked number from the data:** a step is checked against the
+    reader's own measurement or fit, against a number computed from the light
+    curve on screen by a stated method, or against a cited value named as
+    adopted.
+  - **Kepler-13 from the catalog:** two new catalog packs, its collected (SAP)
+    and corrected (PDCSAP) light curves with the pipeline's crowding estimate,
+    installed the first time a step opens one.
+  - **Evidence and teaching:** progress kept in the browser; the answers go to
+    the notebook; an instructor guide with the curriculum map, teaching notes
+    and assignment sheets, and an answer key from a reference run
+    (`npm run guides:key`); English and Spanish; offline.
+  - **The fit panel** takes an adopted stellar radius and its uncertainty, and
+    derives the planet's radius with both.
+  - **SDK 1.3.0:** `binTessLightCurve` reads SAP flux and records CROWDSAP and
+    FLFRCSAP when asked; `foldedDepth` is exported.
 - **An analysis laboratory for experiments and fits** (ANALYSIS_LAB.md).
   - **Analyze, on the experiment runner:** for a result, run here or saved,
     each setting's numbers with 95% intervals; local slopes, elasticities, a

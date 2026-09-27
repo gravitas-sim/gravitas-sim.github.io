@@ -132,6 +132,31 @@ light swings from 0.77 to 1.46 of its median every 0.66 days. It is the first
 `/2` pack. Its build script pins the raw file as the built-in packs do, and
 `npm run catalog:check` holds the committed archive to it.
 
+`extensions/kepler-13-tess-s14-sap/` and `-pdcsap/` are two more, for the
+Exoplanet Observatory's guides (EXOPLANET_OBSERVATORY.md): Kepler-13, a pair of
+nearly equal stars 1.2 arcseconds apart in one TESS aperture, one of which a
+planet transits every 1.76 days. They are one raw file
+(`tess2019198215352-s0014-0000000158324245-0150-s_lc.fits`, sector 14) read two
+ways, and the first packs to use two options SDK 1.3.0 added to
+`binTessLightCurve`:
+
+- **`flux: 'SAP'`** reads SAP_FLUX and SAP_FLUX_ERR instead of PDCSAP's: the
+  light in the aperture as collected, every star's in it, before SPOC removes
+  systematics and the other stars' share. The record names the column
+  (`fluxColumn`).
+- **`crowding: true`** records the LIGHTCURVE header's CROWDSAP (the share of
+  the aperture's light SPOC gives the target: 0.5492385 here) and FLFRCSAP
+  (the share of the target's light the aperture holds: 0.92097801), and the
+  runtime record carries them as `crowding`. The Observatory lists them among
+  the reductions.
+
+Without either option a pack is written exactly as before, so
+`TRANSFORM_VERSION` did not move and every built-in pack still rebuilds byte
+for byte. Each states a folded-depth check (`foldedDepth`, now exported by the
+SDK): the PDCSAP pack's depth at 1.763588 days (Esteves et al. 2015), and the
+SAP pack's against that depth times CROWDSAP, which is what a corrected and an
+uncorrected light curve of a crowded star should differ by.
+
 ## Commands
 
 ```bash

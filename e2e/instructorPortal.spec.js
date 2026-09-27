@@ -49,7 +49,11 @@ const DOCUMENTS = LESSONS * 2;
  */
 const GENERAL_DOCUMENTS = 2;
 const ACTIVITY_DOCUMENTS = 8;
-const ALL_DOCUMENTS = GENERAL_DOCUMENTS + ACTIVITY_DOCUMENTS + DOCUMENTS;
+// The Exoplanet Observatory's guide and answer key (EXOPLANET_OBSERVATORY.md):
+// its investigations live in /observatory/, not in the lesson manifest.
+const OBSERVATORY_DOCUMENTS = 2;
+const ALL_DOCUMENTS =
+  GENERAL_DOCUMENTS + OBSERVATORY_DOCUMENTS + ACTIVITY_DOCUMENTS + DOCUMENTS;
 
 const PASSPHRASE = 'gravitas-fixture-not-a-secret';
 

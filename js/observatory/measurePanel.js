@@ -1015,6 +1015,8 @@ export function mountMeasurePanel(root, ctx) {
       model.editing = null;
       model.readBack.delete(id);
       model.status.set(id, 'current');
+      // A guide waiting on this measurement looks again.
+      ctx.measured?.();
       ctx.status(
         node.status === 'failed'
           ? t('obs.ms.failed', {
@@ -1854,6 +1856,8 @@ export function mountMeasurePanel(root, ctx) {
   update();
   return {
     update,
+    /** The measurements as they stand, for a guide to read; never changed. */
+    nodes: () => nodes().map(n => ({ ...n })),
     rebuild() {
       ui.body.remove();
       ui = build();

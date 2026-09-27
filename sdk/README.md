@@ -242,7 +242,7 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.2.0` |
+| `SDK_VERSION` | this SDK, `1.3.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with its version |
 | `EXTENSION_TYPES`, `LOCALES` | the three types and their kinds; the interface languages (`en`, `es`) |
@@ -251,7 +251,8 @@ declares all of it, and the contract suite fails if the two differ.
 | `installedDataPack(id)` | an installed pack's record, runtime module and decoded observation |
 | `observationOf(pack)`, `checkObservation(o)` | the decoder every pack shares, and the check that a series is clean |
 | `readFits(bytes, opts)` | a FITS file's header-data units: header cards, and a binary table's columns. It checks every header against the file before it reads any data, and refuses more than `opts.maxUnits` units (16) (1.2.0) |
-| `binTessLightCurve(units, opts)` | a TESS SPOC light curve masked, normalized, binned and encoded as every built-in pack is; with `fluxStepPpm`, as `binned-relative-flux/2` (1.2.0) |
+| `binTessLightCurve(units, opts)` | a TESS SPOC light curve masked, normalized, binned and encoded as every built-in pack is; with `fluxStepPpm`, as `binned-relative-flux/2` (1.2.0); with `flux: 'SAP'`, the aperture's light before SPOC's corrections, and with `crowding: true`, the header's CROWDSAP and FLFRCSAP recorded (1.3.0) |
+| `foldedDepth(o, periodDays)` | the depth of the deepest phase slot when an observation is folded on a period: the transit check `sdk test` runs (1.3.0) |
 
 The JSON formats have JSON Schemas (draft 2020-12) in [`schemas/`](schemas/)
 for editors. The schemas describe structure. The validators are the
@@ -285,6 +286,19 @@ anything else.
 | 1.0.0 | 1.0.0 | 1 (with `provides.courses`) | 1 | 1 | 1 |
 | 1.1.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with `image` packs and the optional runtime fields `reductions` and `image` | 1 | 1 |
 | 1.2.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `binned-relative-flux/2` encoding and the `harmonic-period` check | 1 | 1 |
+| 1.3.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the optional runtime field `crowding` | 1 | 1 |
+
+SDK 1.3.0 adds, and removes nothing, what the Kepler-13 packs needed: a star
+whose transit a companion dilutes, observed as collected and as corrected.
+
+- **`binTessLightCurve()` reads SAP** with `flux: 'SAP'`, and records the
+  header's CROWDSAP and FLFRCSAP with `crowding: true`. Without either option
+  it writes what 1.2.0 wrote.
+- **The optional runtime field `crowding`,** `{crowdsap, flfrcsap}`, each a
+  fraction of the light above 0 and at most 1, so an interface can say how
+  diluted a transit is.
+- **`foldedDepth()`** in the public API, the transit check `sdk test` already
+  ran.
 
 SDK 1.2.0 adds, and removes nothing, what the first extension built outside
 the core needed (CATALOG.md, "What the SDK lacked"):

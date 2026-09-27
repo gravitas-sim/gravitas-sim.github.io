@@ -87,7 +87,11 @@ export const RUNTIME_FIELDS = [
  * policy). Gravitas's own packs carry them. An image pack must carry `image`,
  * because there was no image pack before it.
  */
-export const RUNTIME_OPTIONAL = ['reductions', 'image'];
+export const RUNTIME_OPTIONAL = ['reductions', 'image', 'crowding'];
+// `crowding`, added in SDK 1.3.0: what a TESS light curve's pipeline says of
+// the light in its aperture, CROWDSAP (the fraction that is the target's) and
+// FLFRCSAP (the fraction of the target's light the aperture holds), as its
+// header records them. An interface shows it where a transit is diluted.
 
 const PUBLIC_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/; // as js/platform/manifest.js
 const SEMVER = /^\d+\.\d+\.\d+$/;
@@ -279,6 +283,16 @@ export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
     text(k?.column, `masks[${i}].column`);
     text(k?.rule, `masks[${i}].rule`);
   });
+  if (m.crowding !== undefined) {
+    for (const k of ['crowdsap', 'flfrcsap'])
+      need(
+        typeof m.crowding?.[k] === 'number' &&
+          m.crowding[k] > 0 &&
+          m.crowding[k] <= 1,
+        `crowding.${k}`,
+        'a fraction of the light, above 0 and at most 1'
+      );
+  }
   list(m.assumptions, 'assumptions');
   list(m.reductions, 'reductions', 0);
   text(m.validation?.check, 'validation.check');

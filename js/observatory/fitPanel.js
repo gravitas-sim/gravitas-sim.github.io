@@ -133,6 +133,21 @@ export function mountFitPanel(root, ctx) {
     max: '0.99',
     value: '0',
   });
+  // The star's radius, to turn Rp/R* into a planet's radius: adopted from
+  // the literature and named as such (INFERENCE_CORE.md), its uncertainty
+  // added in quadrature to the fit's.
+  const stellarRadius = el('input', {
+    id: 'fitStellarRadius',
+    type: 'number',
+    step: 'any',
+    min: '0',
+  });
+  const stellarRadiusSigma = el('input', {
+    id: 'fitStellarRadiusSigma',
+    type: 'number',
+    step: 'any',
+    min: '0',
+  });
   const supersample = el('input', {
     id: 'fitSupersample',
     type: 'number',
@@ -198,6 +213,8 @@ export function mountFitPanel(root, ctx) {
       label('', exposure),
       label(t('obs.fit.supersample'), supersample),
       label(t('obs.fit.dilution'), dilution),
+      label(t('obs.fit.stellarRadius'), stellarRadius),
+      label(t('obs.fit.stellarRadiusSigma'), stellarRadiusSigma),
       el(
         'label',
         { class: 'ow-field' },
@@ -279,7 +296,13 @@ export function mountFitPanel(root, ctx) {
     exposure.previousElementSibling.textContent = t('obs.fit.exposure', {
       unit: d.units.x || '—',
     });
-    for (const c of [exposure, supersample, dilution])
+    for (const c of [
+      exposure,
+      supersample,
+      dilution,
+      stellarRadius,
+      stellarRadiusSigma,
+    ])
       c.closest('label').hidden = id !== 'transit-quadratic';
     price();
   }
@@ -311,6 +334,17 @@ export function mountFitPanel(root, ctx) {
             supersample: Math.round(Number(supersample.value)) || 5,
             annuli: 32,
             dilution: Number(dilution.value) || 0,
+            ...(Number(stellarRadius.value) > 0
+              ? {
+                  stellarRadius: {
+                    value: Number(stellarRadius.value),
+                    ...(Number(stellarRadiusSigma.value) >= 0 &&
+                    stellarRadiusSigma.value !== ''
+                      ? { sigma: Number(stellarRadiusSigma.value) }
+                      : {}),
+                  },
+                }
+              : {}),
           }
         : {};
     return {

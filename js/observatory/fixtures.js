@@ -127,7 +127,15 @@ export async function lightCurveObservation(
     reductions: [
       ...P.masks.map(m => `${m.column}: ${m.rule} (${m.dropped} dropped)`),
       ...(P.reductions || []),
+      ...(P.crowding
+        ? [
+            `crowding: the pipeline gives ${(100 * P.crowding.crowdsap).toFixed(1)}% of the aperture's light to this star (CROWDSAP ${P.crowding.crowdsap}), and the aperture holds ${(100 * P.crowding.flfrcsap).toFixed(1)}% of the star's light (FLFRCSAP ${P.crowding.flfrcsap})`,
+          ]
+        : []),
     ],
+    // The pack's own record, structured, for a guide to read (not exported:
+    // gravitas.observation/1 keeps only the fields it knows).
+    pack: { masks: P.masks, crowding: P.crowding ?? null },
     columns: [
       { id: 'time', name: 'time', unit: 'd', role: 'x', values: o.x.values },
       { id: 'flux', name: 'flux', unit: '', role: 'value', values: o.y.values },

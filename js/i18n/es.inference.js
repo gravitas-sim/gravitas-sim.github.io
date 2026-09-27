@@ -13,6 +13,9 @@ export const ES_INFERENCE = {
   'obs.fit.model.rv-keplerian': 'Una órbita de velocidad radial (kepleriana)',
   'obs.fit.exposure': 'Exposición de cada punto ({unit})',
   'obs.fit.dilution': 'Parte de la luz que viene de otras estrellas, de 0 a 1',
+  'obs.fit.stellarRadius':
+    'El radio de la estrella, en radios solares (adoptado, para el del planeta)',
+  'obs.fit.stellarRadiusSigma': 'Su incertidumbre, en radios solares',
   'obs.fit.supersample': 'Muestras a lo largo de cada exposición',
   'obs.fit.profiles': 'Perfilar cada parámetro ajustado (más lento)',
   'obs.fit.device':

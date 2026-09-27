@@ -21,10 +21,19 @@
 //      of that many ppm: /1 holds +-3.3%, a transit, and a pulsating star
 //      swings by tens of percent.
 //
+// Two more options, each off unless asked for:
+//   - `flux: 'SAP'` reads SAP_FLUX and SAP_FLUX_ERR instead of PDCSAP's: the
+//     light in the aperture before SPOC removes systematics and the light of
+//     other stars (crowding), which is what a lesson on dilution compares;
+//   - `crowding: true` records the LIGHTCURVE header's CROWDSAP (the fraction
+//     of the aperture's light SPOC attributes to the target) and FLFRCSAP (the
+//     fraction of the target's light the aperture holds).
+//
 // TRANSFORM_VERSION changes with any change to what this writes; the manifest
 // records it, and `npm run packs:provenance` rebuilds from the pinned raw
 // file and compares byte for byte. A /1 series is written exactly as before
-// the /2 option existed, which is why the version did not move.
+// the /2 option existed, and without `flux` or `crowding` exactly as before
+// they existed, which is why the version did not move.
 // =============================================================================
 
 import { Buffer } from 'node:buffer';
@@ -51,28 +60,42 @@ function int16le(values) {
 /**
  * @param {Array<object>} units - readFits() of a SPOC light-curve file
  * @param {{binMinutes: number, minPerBin: number, errStepPpm: number,
- *   fluxStepPpm?: number}} opts - fluxStepPpm writes binned-relative-flux/2
+ *   fluxStepPpm?: number, flux?: 'PDCSAP'|'SAP', crowding?: boolean}} opts -
+ *   fluxStepPpm writes binned-relative-flux/2; flux picks the column; crowding
+ *   records CROWDSAP and FLFRCSAP
  * @returns {{series: object, record: object}}
  */
 export function binLightCurve(
   units,
-  { binMinutes, minPerBin, errStepPpm, fluxStepPpm }
+  {
+    binMinutes,
+    minPerBin,
+    errStepPpm,
+    fluxStepPpm,
+    flux = 'PDCSAP',
+    crowding = false,
+  }
 ) {
   const lc = units.find(u => u.cards.EXTNAME === 'LIGHTCURVE');
   if (!lc) throw new Error('no LIGHTCURVE extension');
-  const { TIME, PDCSAP_FLUX, PDCSAP_FLUX_ERR, QUALITY } = requireColumns(lc, [
+  if (flux !== 'PDCSAP' && flux !== 'SAP')
+    throw new Error(`flux is PDCSAP or SAP, not ${flux}`);
+  const columns = requireColumns(lc, [
     'TIME',
-    'PDCSAP_FLUX',
-    'PDCSAP_FLUX_ERR',
+    `${flux}_FLUX`,
+    `${flux}_FLUX_ERR`,
     'QUALITY',
   ]);
+  const { TIME, QUALITY } = columns;
+  const FLUX = columns[`${flux}_FLUX`];
+  const FLUX_ERR = columns[`${flux}_FLUX_ERR`];
   const kept = [];
   let flagged = 0;
   let notFinite = 0;
   for (let i = 0; i < TIME.values.length; i++) {
     const t = TIME.values[i];
-    const f = PDCSAP_FLUX.values[i];
-    const e = PDCSAP_FLUX_ERR.values[i];
+    const f = FLUX.values[i];
+    const e = FLUX_ERR.values[i];
     if (QUALITY.values[i] !== 0) flagged++;
     else if (!Number.isFinite(t) || !Number.isFinite(f) || !Number.isFinite(e))
       notFinite++;
@@ -134,7 +157,16 @@ export function binLightCurve(
       binsDropped: bins.size - rows.length,
       bins: rows.length,
       medianFlux: norm,
-      fluxUnit: PDCSAP_FLUX.unit,
+      fluxUnit: FLUX.unit,
+      ...(flux === 'PDCSAP' ? {} : { fluxColumn: `${flux}_FLUX` }),
+      ...(crowding
+        ? {
+            crowding: {
+              crowdsap: lc.cards.CROWDSAP ?? null,
+              flfrcsap: lc.cards.FLFRCSAP ?? null,
+            },
+          }
+        : {}),
     },
   };
 }

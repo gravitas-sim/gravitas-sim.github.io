@@ -253,7 +253,11 @@ describe('and refuses what the SDK would not write', () => {
 
 // --- Installing ------------------------------------------------------------------
 
-const suDra = archiveEntries.find(e => e.type === 'data-pack');
+// By id: the catalog holds more than one data-pack archive since Kepler-13's.
+const suDra = archiveEntries.find(e => e.id === 'community.su-dra-tess-s15');
+const kepler13 = archiveEntries.find(
+  e => e.id === 'community.kepler-13-tess-s14-sap'
+);
 const course = archiveEntries.find(e => e.type === 'course-pack');
 const fromDisk = async url =>
   new Uint8Array(
@@ -287,6 +291,18 @@ describe('installing', () => {
     expect(Math.max(...o.y.values)).toBeGreaterThan(1.4);
     await store.remove(suDra.id);
     expect(await store.list()).toEqual([]);
+  });
+
+  test('a diluted light curve installs with the crowding its pipeline recorded', async () => {
+    const store = createMemoryStore();
+    const record = await install(kepler13, ctx(store));
+    const o = installedObservation(record);
+    expect(o.x.values.length).toBe(1865);
+    const pack = JSON.parse(record.files['series.json']).PACK;
+    expect(pack.crowding).toEqual({
+      crowdsap: 0.5492385,
+      flfrcsap: 0.92097801,
+    });
   });
 
   test('a course installs, and one naming a lesson Gravitas lacks does not', async () => {

@@ -1,0 +1,62 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "community.kepler-13-tess-s14-pdcsap",
+  "version": "1.0.0",
+  "kind": "declarative",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "Kepler-13A and its hot Jupiter, observed by TESS: the light as corrected (PDCSAP)",
+    "es": "Kepler-13A y su júpiter caliente, observados por TESS: la luz tal como se corrigió (PDCSAP)"
+  },
+  "provides": {
+    "dataPacks": [
+      {
+        "id": "kepler-13-tess-s14-pdcsap",
+        "provenance": "pack.json",
+        "file": "series.json"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "series.json",
+      "role": "data",
+      "offline": "optional"
+    },
+    {
+      "path": "pack.json",
+      "role": "provenance",
+      "offline": "none"
+    }
+  ],
+  "citations": [
+    {
+      "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+      "url": "https://doi.org/10.17909/t9-nmc8-f686"
+    },
+    {
+      "text": "Esteves et al. 2015, ApJ 804, 150 (the period and radius ratio the packs are checked against)",
+      "url": "https://ui.adsabs.harvard.edu/abs/2015ApJ...804..150E"
+    },
+    {
+      "text": "Shporer et al. 2014, ApJ 788, 92 (the planet orbits Kepler-13A)",
+      "url": "https://ui.adsabs.harvard.edu/abs/2014ApJ...788...92S"
+    }
+  ],
+  "licenses": [
+    {
+      "scope": "*.json",
+      "license": "public domain (NASA mission data); acknowledge TESS and MAST"
+    }
+  ],
+  "offline": {
+    "policy": "precache"
+  },
+  "validation": [
+    {
+      "check": "registry:sdk-extensions"
+    }
+  ],
+  "migrations": []
+}

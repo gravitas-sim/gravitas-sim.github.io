@@ -1,7 +1,7 @@
 {
   "format": "gravitas.catalog",
   "formatVersion": 1,
-  "catalogVersion": "1.0.0",
+  "catalogVersion": "1.1.0",
   "platform": "1.0.0",
   "locales": [
     "en",
@@ -106,6 +106,170 @@
     }
   },
   "entries": [
+    {
+      "id": "community.kepler-13-tess-s14-pdcsap",
+      "version": "1.0.0",
+      "kind": "declarative",
+      "type": "data-pack",
+      "delivery": "archive",
+      "title": {
+        "en": "Kepler-13A and its hot Jupiter, observed by TESS: the light as corrected (PDCSAP)",
+        "es": "Kepler-13A y su júpiter caliente, observados por TESS: la luz tal como se corrigió (PDCSAP)"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "kepler-13-tess-s14-pdcsap",
+            "provenance": "pack.json",
+            "file": "series.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "*.json",
+          "license": "public domain (NASA mission data); acknowledge TESS and MAST"
+        }
+      ],
+      "citations": [
+        {
+          "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+          "url": "https://doi.org/10.17909/t9-nmc8-f686"
+        },
+        {
+          "text": "Esteves et al. 2015, ApJ 804, 150 (the period and radius ratio the packs are checked against)",
+          "url": "https://ui.adsabs.harvard.edu/abs/2015ApJ...804..150E"
+        },
+        {
+          "text": "Shporer et al. 2014, ApJ 788, 92 (the planet orbits Kepler-13A)",
+          "url": "https://ui.adsabs.harvard.edu/abs/2014ApJ...788...92S"
+        }
+      ],
+      "object": "Kepler-13",
+      "facility": "TESS",
+      "offline": "precache",
+      "archiveFile": "packages/community.kepler-13-tess-s14-pdcsap-1.0.0.gxp",
+      "bytes": 8690,
+      "sha256": "2f534b5f7dbf316647989fe325319aa83ac80ed1f0ef0170b521d23deeab2de7",
+      "files": [
+        {
+          "path": "gravitas-extension.json",
+          "bytes": 1582,
+          "sha256": "5936d3a1127db91532606090d648a1ce697761e7470a918bf9202d303f7d1be0"
+        },
+        {
+          "path": "README.md",
+          "bytes": 1853,
+          "sha256": "deb243e9a62871e5e8ccc7c4aa5e29b43655f402834c3489e4ea720e732a8902"
+        },
+        {
+          "path": "pack.json",
+          "bytes": 5780,
+          "sha256": "156b8613ab31b42815c5fa463705f41b7e6484ff8afd38c83567c77b9807b27c"
+        },
+        {
+          "path": "series.json",
+          "bytes": 10058,
+          "sha256": "7c04cc49d813ef7ac9dfa2cad6fe3da1de48e14e756d2c9a11c6404dd9a8b258"
+        }
+      ],
+      "unpackedBytes": 19273,
+      "review": {
+        "date": "2026-09-26",
+        "checks": [
+          "sdk validate",
+          "sdk test",
+          "catalog check",
+          "rebuilt from the pinned MAST file"
+        ],
+        "notes": "PDCSAP depth 0.00812 folded on Esteves et al. 2015's period, against their (Rp/R*)^2 0.00763 within 0.0015; CROWDSAP 0.549 and FLFRCSAP 0.921 recorded; the pack says the correction assumes the planet orbits A."
+      },
+      "source": "extensions/kepler-13-tess-s14-pdcsap",
+      "history": []
+    },
+    {
+      "id": "community.kepler-13-tess-s14-sap",
+      "version": "1.0.0",
+      "kind": "declarative",
+      "type": "data-pack",
+      "delivery": "archive",
+      "title": {
+        "en": "Kepler-13A and its hot Jupiter, observed by TESS: the light as collected (SAP)",
+        "es": "Kepler-13A y su júpiter caliente, observados por TESS: la luz tal como se recogió (SAP)"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "dataPacks": [
+          {
+            "id": "kepler-13-tess-s14-sap",
+            "provenance": "pack.json",
+            "file": "series.json"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "*.json",
+          "license": "public domain (NASA mission data); acknowledge TESS and MAST"
+        }
+      ],
+      "citations": [
+        {
+          "text": "TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)",
+          "url": "https://doi.org/10.17909/t9-nmc8-f686"
+        },
+        {
+          "text": "Esteves et al. 2015, ApJ 804, 150 (the period and radius ratio the packs are checked against)",
+          "url": "https://ui.adsabs.harvard.edu/abs/2015ApJ...804..150E"
+        },
+        {
+          "text": "Shporer et al. 2014, ApJ 788, 92 (the planet orbits Kepler-13A)",
+          "url": "https://ui.adsabs.harvard.edu/abs/2014ApJ...788...92S"
+        }
+      ],
+      "object": "Kepler-13",
+      "facility": "TESS",
+      "offline": "precache",
+      "archiveFile": "packages/community.kepler-13-tess-s14-sap-1.0.0.gxp",
+      "bytes": 8531,
+      "sha256": "ee16c3f2c08e154a9826f7f46177c6ea20f04cca61bace758ea9af72e62e6a94",
+      "files": [
+        {
+          "path": "gravitas-extension.json",
+          "bytes": 1569,
+          "sha256": "f1ff27f433fe1d48a5805c563b4d84af707f9e567db7895db05237fece374c5c"
+        },
+        {
+          "path": "README.md",
+          "bytes": 1841,
+          "sha256": "0d8f45ecc3dbbc37ed1869a78228ed79d94a3a8d520db44cc9c34982ca84810e"
+        },
+        {
+          "path": "pack.json",
+          "bytes": 5744,
+          "sha256": "526679f55a72071680bacfb12f19a93bfcad26f76366a7fabab2483e7023135e"
+        },
+        {
+          "path": "series.json",
+          "bytes": 10075,
+          "sha256": "56bf5f7880d66b6b2c4403a9e3bbd1da8dcc0a0ad465bbfacb44193cec9e785d"
+        }
+      ],
+      "unpackedBytes": 19229,
+      "review": {
+        "date": "2026-09-26",
+        "checks": [
+          "sdk validate",
+          "sdk test",
+          "catalog check",
+          "rebuilt from the pinned MAST file"
+        ],
+        "notes": "SAP depth 0.00475, the corrected depth times CROWDSAP (0.00446) within 0.001; the same pinned MAST file as the corrected pack; the pack says which star is the host is not in these data."
+      },
+      "source": "extensions/kepler-13-tess-s14-sap",
+      "history": []
+    },
     {
       "id": "community.pulsating-stars",
       "version": "1.0.0",
