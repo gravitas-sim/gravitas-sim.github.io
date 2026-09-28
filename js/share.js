@@ -91,6 +91,13 @@ export async function applySharedLinkFromUrl() {
       }
     }
 
+    // The instruments a scenario pack starts with (js/startingPanels.js).
+    if (payload.x?.open || payload.x?.tools) {
+      import('./startingPanels.js')
+        .then(m => m.openStartingPanels(payload.x))
+        .catch(() => {});
+    }
+
     announce(
       t('share.link.opened', { scenario: result.scenario, n: result.bodies })
     );

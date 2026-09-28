@@ -66,6 +66,7 @@ const DOC_PAGES = [
   'experiments',
   'observatory',
   'catalog',
+  'studio',
 ];
 
 // Archival pages: copied byte for byte, and never processed.
@@ -433,6 +434,25 @@ async function buildDocPages() {
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'evaluationKit.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The Scenario Studio. Its own entry for the same reason as the figure
+  // builder below: it reads the engine, the scenario catalog and both base
+  // catalogs of strings, and a page only an author opens may not grow
+  // anybody's start-up download or the application's deferred bundle.
+  if (existsSync('js/studioPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/studioPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'studio-[hash]',
       legalComments: 'none',
     });
   }

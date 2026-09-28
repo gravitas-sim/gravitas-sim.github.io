@@ -155,7 +155,13 @@ test.describe('the Orbital System Builder', () => {
     await openBuilder(page, app);
     await useTemplate(page, 'starPlanet');
     const e = field(page, 2, 'e');
+    const rows = page.locator('#systemBuilderTableBody tr');
+    // The form refreshes 120 ms after a keystroke, and an unbound orbit takes
+    // the preview and the table away: Build moves about 545 px up the dialog.
+    // Pressed before that refresh, the click lands where Build used to be. So
+    // each edit is waited for, by the table it changes, before Build is.
     await e.fill('1');
+    await expect(rows).toHaveCount(0);
     await page.locator('#systemBuilderBuild').click();
 
     await expect(e).toBeFocused();
@@ -166,6 +172,7 @@ test.describe('the Orbital System Builder', () => {
     await expect(page.locator('#systemBuilderDialog')).toBeVisible();
 
     await e.fill('0.2');
+    await expect(rows).toHaveCount(1);
     await build(page);
   });
 

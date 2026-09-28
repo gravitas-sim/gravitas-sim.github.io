@@ -534,7 +534,15 @@ const BUDGETS = [
       "in the 3-D view's chunk became 481.4 (-47.7), and the view draws what " +
       'it drew. That leaves 0.4 KB here. The initial download went 819.4 to ' +
       "820.1 KB against an untouched 830.0: the button, the coordinator's kit " +
-      'for the builder and two share-link fixes.',
+      'for the builder and two share-link fixes.' +
+      '\n\nThen 13.6 KB back, measured from fresh builds against 4351077: ' +
+      '4179.6 KB to 4166.0. The English catalog carried 139 lessonFn.* ' +
+      'entries - the sentences a lesson computes - and every one of them was ' +
+      'keyed on its own text, so js/i18n/lesson.js, which returns a ' +
+      'sentence unchanged when the locale has no entry, rendered exactly the ' +
+      'same English without them. They are gone; the Spanish translations ' +
+      'keep the same ids. Every lesson route is 13.6 KB lighter with them, ' +
+      'because the lesson engine awaits this catalog before its first step.',
   },
 ];
 

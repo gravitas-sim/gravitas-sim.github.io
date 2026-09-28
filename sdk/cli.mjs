@@ -2,7 +2,8 @@
 // =============================================================================
 // The Gravitas Extension SDK
 // -----------------------------------------------------------------------------
-//   npm run sdk -- init <data-pack|course-pack|capability> <id> [--dir <path>]
+//   npm run sdk -- init <data-pack|course-pack|scenario-pack|capability> <id>
+//     [--dir <path>] [--from <studio-export.json>]
 //   npm run sdk -- validate <extension-dir|archive.gxp>... | --all [--json]
 //   npm run sdk -- test <extension-dir|archive.gxp>... | --all
 //   npm run sdk -- pack <extension-dir> [--out <dir>]
@@ -16,6 +17,7 @@ import {
   existsSync,
   mkdirSync,
   readdirSync,
+  readFileSync,
   statSync,
   writeFileSync,
 } from 'node:fs';
@@ -37,7 +39,7 @@ import { SDK_VERSION } from './lib/api.mjs';
 
 const USAGE = `Gravitas Extension SDK ${SDK_VERSION}
 
-  init <${Object.keys(TEMPLATES).join('|')}> <id> [--dir <path>]
+  init <${Object.keys(TEMPLATES).join('|')}> <id> [--dir <path>] [--from <file>]
   validate <extension-dir|archive.gxp>... | --all [--json]
   test <extension-dir|archive.gxp>... | --all
   pack <extension-dir> [--out <dir>]
@@ -59,7 +61,8 @@ const option = (argv, name) =>
   argv.includes(name) ? argv[argv.indexOf(name) + 1] : undefined;
 const positional = argv =>
   argv.filter(
-    (a, i) => !a.startsWith('--') && !['--dir', '--out'].includes(argv[i - 1])
+    (a, i) =>
+      !a.startsWith('--') && !['--dir', '--out', '--from'].includes(argv[i - 1])
   );
 
 async function validateAll(sources, { json = false, log = console.log } = {}) {
@@ -103,7 +106,23 @@ export async function run(argv, { log = console.log } = {}) {
       log(`${dir} already exists; init writes only into a new directory`);
       return 2;
     }
-    const files = scaffold(type, id);
+    let from;
+    const fromFile = option(rest, '--from');
+    if (fromFile) {
+      if (type !== 'scenario-pack') {
+        log(
+          '--from is for a scenario-pack: the file the Scenario Studio exported'
+        );
+        return 2;
+      }
+      try {
+        from = JSON.parse(readFileSync(fromFile, 'utf8'));
+      } catch (err) {
+        log(`${fromFile}: not a JSON file (${err.message})`);
+        return 2;
+      }
+    }
+    const files = scaffold(type, id, { from });
     for (const [name, body] of Object.entries(files)) {
       mkdirSync(path.dirname(path.join(dir, name)), { recursive: true });
       writeFileSync(path.join(dir, name), body);

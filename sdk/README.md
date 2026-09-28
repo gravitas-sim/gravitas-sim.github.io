@@ -1,10 +1,11 @@
 # The Gravitas Extension SDK
 
-A command line, a small library and three formats for contributors who want to
+A command line, a small library and four formats for contributors who want to
 add to Gravitas without learning its internals first:
 
 - **observation data packs:** measured data with its record;
 - **course packs:** sequences of lessons Gravitas already has;
+- **scenario packs:** a scenario as data, which the Scenario Studio writes;
 - **capability packages:** new instruments.
 
 The SDK scaffolds an extension, checks it the way a reviewer would, tests it
@@ -17,18 +18,20 @@ declarative: data and text, never script. That is the security boundary the
 platform draws ([PLATFORM_PACKAGE_RFC.md](../PLATFORM_PACKAGE_RFC.md)), and
 the SDK enforces it rather than working around it.
 
-## The three types
+## The four types
 
 | Type | Kind | What it holds | What Gravitas does with it today |
 |---|---|---|---|
 | `data-pack` | declarative | one observation: a `gravitas.observation-data-pack/1` record (`pack.json`) and its encoded series (`series.json`) | validated, tested and archived by the SDK. A maintainer turns an accepted one into a built-in pack ([DATA_PACKS.md](../DATA_PACKS.md)) |
 | `course-pack` | declarative | a `gravitas.course-pack/1` sequence (`course.json`): units of existing lessons, by id, with notes, in every declared language | validated, tested and archived. Gravitas does not read course packs at run time yet; the course-pack builder will |
+| `scenario-pack` | declarative | a `gravitas.scenario-pack/1` scenario (`scenario.json`): settings Gravitas understands, a seed, the instruments it opens with, and bodies as an orbital system or typed states, in every declared language | validated, tested and archived. Gravitas opens one as a link: the Scenario Studio (`/studio/`) compiles it into the share link the application already reads |
 | `capability` | built-in | an instrument family: one JavaScript module and its manifest | validated and contract-tested by the SDK, then reviewed and vendored by a maintainer |
 
 Every extension is a directory with `gravitas-extension.json` at its root. That
 file is a `gravitas.capability-package/1` manifest, the same format as the
 packages in [`capabilities/`](../capabilities/). The type is what it
-`provides`: `dataPacks`, `courses` or `widgetFamilies`, exactly one.
+`provides`: `dataPacks`, `courses`, `scenarios` or `widgetFamilies`, exactly
+one.
 
 ## The workflow, from nothing to a pull request
 
@@ -40,8 +43,8 @@ The examples in [`examples/`](examples/) went through exactly these steps.
 npm run sdk -- init course-pack my-course
 ```
 
-This writes `extensions/my-course/` (or `--dir <path>`). A course pack and a
-capability start valid. A data pack starts as a record with every field present
+This writes `extensions/my-course/` (or `--dir <path>`). A course pack, a
+scenario pack and a capability start valid. A data pack starts as a record with every field present
 and empty, because the SDK will not invent data; the next step lists what to
 fill in.
 
@@ -90,6 +93,8 @@ What the preview shows depends on the type:
 - **Data pack:** the series' range and a sparkline of it.
 - **Capability:** each instrument's readout at its default controls.
 - **Course pack:** the units, with each lesson's title as Gravitas shows it.
+- **Scenario pack:** its title, its body count under its seed, the settings it
+  sets and the instruments it opens.
 
 A capability draws in the browser only once it is vendored; see below.
 
@@ -106,6 +111,9 @@ The tests run the extension against the public API, as Gravitas will use it:
   the published period, or `harmonic-period`, a pulsating star's period from
   a Fourier series near the published one.
 - **Course pack:** every lesson opens in every declared language.
+- **Scenario pack:** its world builds under its seed, as the application
+  builds it from the pack's link; after six simulated time units every body is
+  still finite; and building it again gives the same world, body for body.
 - **Capability:** the module exports the widgets it declares, and each one
   meets the instrument contract. That means an id, a title and a note;
   controls with a range and a default inside it; `draw`; and `readout` and
@@ -179,6 +187,35 @@ Gravitas lesson id (`publicIds().lessons`).
 
 The example is [`finding-exoplanets`](examples/finding-exoplanets/).
 
+**A scenario pack**
+
+A scenario pack is `scenario.json`: `locales`, a `title` and a `summary`, up to
+four `tags`, a `seed`, and any of these:
+
+- **`settings`:** the keys in `SETTING_RULES` (`js/platform/scenario.js`), each
+  of the type its default has and inside the bounds listed there. The option
+  lists are the Settings panel's.
+- **`system`:** an orbital system in the Orbital System Builder's form
+  (ORBITAL_SYSTEM_BUILDER.md).
+- **`bodies`:** typed bodies, `{ type, mass, x, y, vx, vy, radius?, name? }`,
+  in simulation units and each type's mass unit.
+- **`open` and `tools`:** the instruments the scenario opens with, by the
+  rail's ids.
+- **`camera`, `observer` and `paused`.**
+
+A pack generates its population from its settings under its seed, or brings
+its own bodies; not both, because opening a world with its own bodies replaces
+the generated ones. Text is plain: no markup and no URLs.
+
+The Scenario Studio writes the file. To wrap an export as an extension:
+
+```bash
+npm run sdk -- init scenario-pack figure-eight --from figure-eight.json
+```
+
+The example is [`figure-eight`](examples/figure-eight/), the three-body
+choreography Chenciner and Montgomery proved exists.
+
 **A capability**
 
 A capability is one module exporting an array of instruments, declared as a
@@ -201,9 +238,10 @@ The example is [`kepler-third-law`](examples/kepler-third-law/).
 | Declarative boundary | a declarative extension that names code, a `builtin:` reference, a script path, a `data:` or `javascript:` URL, or a fetchable URL outside `url`/`doi` |
 | Type | provides no type, or more than one; the wrong `kind` for its type |
 | API compatibility | a `gravitas` range this platform does not satisfy; a `requires` package that is not installed or not in range; a `uses` id Gravitas does not have |
-| Public ids | a package id, data-pack id, course id or instrument id Gravitas already has |
+| Public ids | a package id, data-pack id, course id, scenario name or instrument id Gravitas already has |
 | Licences and provenance | an asset no licence covers; a data pack's record failing its validator, or not matching its series file byte for byte |
-| Localization | a course string missing a declared locale; a locale Gravitas has no interface in. A title without Spanish is a warning |
+| Localization | a course or scenario string missing a declared locale; a locale Gravitas has no interface in. A title without Spanish is a warning |
+| Scenario content | a setting a pack cannot set, or one of the wrong type or outside its bounds; an instrument the rail does not have; a body of a type a pack cannot hold; a population generated alongside the pack's own bodies |
 | Offline | an asset that is not there; a declarative asset marked `core` (a failed fetch must never break the install for everybody); `locale` on anything but a translation |
 | Validation references | a `validation` check that names no release-gate step and no existing test |
 
@@ -245,7 +283,7 @@ declares all of it, and the contract suite fails if the two differ.
 | `SDK_VERSION` | this SDK, `1.4.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with its version |
-| `EXTENSION_TYPES`, `LOCALES` | the three types and their kinds; the interface languages (`en`, `es`) |
+| `EXTENSION_TYPES`, `LOCALES` | the four types and their kinds; the interface languages (`en`, `es`) |
 | `publicIds()` | every lesson, instrument, scenario, data pack, course and package id, and each lesson's title in each language |
 | `acceptsPlatform(range)` | whether a `gravitas` range accepts this platform |
 | `installedDataPack(id)` | an installed pack's record, runtime module and decoded observation |
@@ -278,16 +316,30 @@ anything else.
   6. Run `npm run capabilities`.
 - **A course pack** waits for the course-pack builder, which will read the
   format as it is. Until then it is reviewed and archived.
+- **A scenario pack** needs no vendoring to be used: its link opens it. Making
+  one a built-in scenario, listed in the gallery with a thumbnail, is a
+  maintainer's edit: a preset branch in `js/scenarios.js`, its tags and
+  thumbnail in `js/data/scenarioInfo.js`, its title and summary in both
+  catalogs, and the regeneration the Scenario Studio's documentation lists
+  (STUDIO.md).
 
 ## Compatibility
 
-| SDK | Platform API | capability-package | observation-data-pack | course-pack | extension-archive |
-|---|---|---|---|---|---|
-| 1.0.0 | 1.0.0 | 1 (with `provides.courses`) | 1 | 1 | 1 |
-| 1.1.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with `image` packs and the optional runtime fields `reductions` and `image` | 1 | 1 |
-| 1.2.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `binned-relative-flux/2` encoding and the `harmonic-period` check | 1 | 1 |
-| 1.3.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the optional runtime field `crowding` | 1 | 1 |
-| 1.4.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `catalog` data type | 1 | 1 |
+| SDK | Platform API | capability-package | observation-data-pack | course-pack | scenario-pack | extension-archive |
+|---|---|---|---|---|---|---|
+| 1.0.0 | 1.0.0 | 1 (with `provides.courses`) | 1 | 1 | - | 1 |
+| 1.1.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with `image` packs and the optional runtime fields `reductions` and `image` | 1 | - | 1 |
+| 1.2.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `binned-relative-flux/2` encoding and the `harmonic-period` check | 1 | - | 1 |
+| 1.3.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the optional runtime field `crowding` | 1 | - | 1 |
+| 1.4.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `catalog` data type | 1 | - | 1 |
+| 1.5.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with the `catalog` data type | 1 | 1 | 1 |
+
+SDK 1.5.0 adds, and removes nothing, the `scenario-pack` type: the
+`gravitas.scenario-pack/1` format (`sdk/schemas/scenario-pack-1.schema.json`),
+its validator and test, `init scenario-pack` and `init --from`, and the
+[`figure-eight`](examples/figure-eight/) example. A manifest's
+`provides.scenarios` entry may name its `file`; nothing an older extension
+wrote changes meaning.
 
 SDK 1.4.0 adds, and removes nothing, the data type the stellar-populations
 suite's packs are (STELLAR_POPULATIONS.md): `dataType: "catalog"`, a table of

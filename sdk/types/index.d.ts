@@ -35,7 +35,7 @@ export interface CapabilityPackage {
     widgetFamilies?: Array<{ id: string; widgets: string[]; entry: string }>;
     routes?: Array<{ path: string }>;
     models?: Array<{ id: string }>;
-    scenarios?: Array<{ id: string }>;
+    scenarios?: Array<{ id: string; file?: string }>;
     investigations?: Array<{ id: string; entry?: string }>;
     translations?: Array<{ locale: string; investigation?: string; entry?: string }>;
   };
@@ -60,6 +60,49 @@ export interface CoursePack {
     id: string;
     title: Localized;
     lessons: Array<{ lesson: string; teacherNote?: Localized; studentNote?: Localized }>;
+  }>;
+}
+
+/** gravitas.scenario-pack/1 (sdk/schemas/scenario-pack-1.schema.json). */
+export interface ScenarioPack {
+  format: 'gravitas.scenario-pack';
+  formatVersion: 1;
+  id: string;
+  version: string;
+  locales: string[];
+  title: Localized;
+  summary: Localized;
+  tags?: string[];
+  seed: number;
+  settings?: Record<string, number | boolean | string | null | number[]>;
+  camera?: { zoom: number; pan?: { x: number; y: number } };
+  paused?: boolean;
+  observer?: { inclination?: number; positionAngle?: number };
+  open?: Array<'lightCurve' | 'radialVelocity' | 'rotationCurve' | 'astrometry' | 'pauseAtEvent' | 'view3d'>;
+  tools?: Array<'ruler' | 'protractor' | 'stopwatch'>;
+  system?: {
+    bodies: Array<{
+      name?: string;
+      type: 'Star' | 'WhiteDwarf' | 'NeutronStar' | 'BlackHole' | 'GasGiant' | 'Planet';
+      mass: number;
+      radius?: number;
+      primary?: number;
+      a?: number;
+      e?: number;
+      omega?: number;
+      phase?: number;
+      retrograde?: boolean;
+    }>;
+  };
+  bodies?: Array<{
+    name?: string;
+    type: 'Star' | 'WhiteDwarf' | 'NeutronStar' | 'BlackHole' | 'GasGiant' | 'Planet';
+    mass: number;
+    radius?: number;
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
   }>;
 }
 
@@ -111,7 +154,7 @@ export interface Instrument<V = Record<string, number>> {
 export const SDK_VERSION: string;
 export const PLATFORM_API: string;
 export const FORMATS: Readonly<Record<string, number>>;
-export const EXTENSION_TYPES: Readonly<Record<'data-pack' | 'course-pack' | 'capability', { kind: 'declarative' | 'built-in'; code: boolean }>>;
+export const EXTENSION_TYPES: Readonly<Record<'data-pack' | 'course-pack' | 'scenario-pack' | 'capability', { kind: 'declarative' | 'built-in'; code: boolean }>>;
 export const LOCALES: readonly string[];
 
 export function publicIds(): Promise<{

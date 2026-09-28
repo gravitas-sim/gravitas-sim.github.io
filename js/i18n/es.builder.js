@@ -128,6 +128,9 @@ export const ES_BUILDER = {
   'builder.build': 'Construir este sistema',
   'builder.export': 'Guardar como archivo',
   'builder.import': 'Abrir un archivo',
+  'builder.studio.note':
+    'Para conservar este sistema como un escenario, con sus ajustes, su semilla y los instrumentos con los que se abre, guárdalo como archivo y abre el archivo en el Estudio de escenarios.',
+  'builder.studio.link': 'Abrir el Estudio de escenarios',
   'builder.close': 'Cerrar',
   'builder.built':
     'Se construyeron {count} cuerpos. El sistema está en marcha; Recargar escenario lo vuelve a construir desde el principio.',
