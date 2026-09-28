@@ -1,8 +1,9 @@
 // =============================================================================
 // What `sdk init` writes
 // -----------------------------------------------------------------------------
-// A course pack and a capability start valid: a course needs only lessons
-// Gravitas already has, and an instrument can start as one working readout.
+// A course pack, a scenario pack and a capability start valid: a course needs
+// only lessons Gravitas already has, a scenario only settings it already
+// understands, and an instrument can start as one working readout.
 // A data pack cannot, because its whole point is data the author brings: it
 // starts as a record with every field present and empty, and `sdk validate`
 // lists what to fill in, by file and line. Nothing here invents a number.
@@ -110,6 +111,46 @@ throw new Error('write the transformation for ${id}');
     'README.md': `# ${title(id)}\n\nA course-pack extension: an ordering of lessons Gravitas already has.\n`,
   }),
 
+  // `from` is a pack the Scenario Studio exported (/studio/), written as it is:
+  // the Studio's file is the scenario, and the manifest is the wrapper.
+  'scenario-pack': (id, { from } = {}) => ({
+    'gravitas-extension.json': json({
+      ...base(id, 'declarative'),
+      title: from?.title
+        ? { en: from.title.en, es: from.title.es ?? '' }
+        : { en: title(id), es: '' },
+      provides: { scenarios: [{ id, file: 'scenario.json' }] },
+      assets: [{ path: 'scenario.json', role: 'data', offline: 'optional' }],
+      citations: [],
+      licenses: [{ scope: 'scenario.json', license: 'CC-BY-4.0' }],
+      offline: { policy: 'precache' },
+      validation: [{ check: 'registry:sdk-extensions' }],
+      migrations: [],
+    }),
+    'scenario.json': from
+      ? json(from)
+      : json({
+          format: 'gravitas.scenario-pack',
+          formatVersion: 1,
+          id,
+          version: '0.1.0',
+          locales: ['en'],
+          title: { en: title(id) },
+          summary: { en: 'Five planets on circular orbits round a star.' },
+          seed: 1,
+          settings: {
+            num_black_holes: 0,
+            num_stars: 1,
+            num_planets: 5,
+            num_gas_giants: 0,
+            enable_asteroids: false,
+            num_asteroids: 0,
+            placement: 'Circular',
+          },
+        }),
+    'README.md': `# ${title(id)}\n\nA scenario-pack extension: settings, a seed and bodies, as data. The Scenario Studio (/studio/) writes \`scenario.json\`; \`npm run sdk -- init scenario-pack ${id} --from <export.json>\` wraps one.\n`,
+  }),
+
   capability: id => ({
     'gravitas-extension.json': json({
       ...base(id, 'built-in'),
@@ -163,9 +204,10 @@ export const ${constant(id)}_WIDGETS = [READOUT];
  * The files for a new extension.
  * @param {keyof typeof TEMPLATES} type
  * @param {string} id - A kebab-case public id
+ * @param {{from?: object}} [opts] - A scenario-pack's exported scenario
  */
-export function scaffold(type, id) {
+export function scaffold(type, id, opts = {}) {
   if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id))
     throw new Error(`"${id}" is not a kebab-case id`);
-  return TEMPLATES[type](id);
+  return TEMPLATES[type](id, opts);
 }

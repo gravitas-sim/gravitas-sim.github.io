@@ -15,6 +15,38 @@ the release rather than in the tag.
 
 ### Added
 
+- **The Scenario Studio** (STUDIO.md). A page at `/studio/` makes a scenario
+  as data rather than code, and writes a `gravitas.scenario-pack/1` file or a
+  link the application opens.
+  - **What it holds:** any of 47 settings, a seed, bodies as an orbital
+    system (as the Orbital System Builder takes it) or as typed positions and
+    velocities (as precise placement takes them), the panels and tools it
+    opens with, and a title and summary in English and Spanish. Units are on
+    every field, and nothing is converted.
+  - **Checks:** every problem is shown on its own field and blocks saving.
+    Cautions never block: the builder's checks, an overlap, a step longer
+    than the system needs, and a typed body faster than the escape speed from
+    the rest, said as the two-body estimate it is.
+  - **Editing:** undo and redo from the buttons or the keys, a draft saved in
+    the browser after every edit, a raw JSON view that refuses what does not
+    parse, an import that asks before replacing a different draft, and the
+    fields changed since it was opened or saved.
+  - **Like a built-in:** a pack made from any of the 22 built-ins whose world
+    is generated from their settings builds that world body for body under
+    the same seed. Its link opens with the panels and tools it names already
+    out, and Refresh Scenario builds it again.
+  - Start from a built-in or from an Orbital System Builder file, preview it
+    as the embedded application, and read it in English or Spanish.
+- **SDK 1.5.0: the `scenario-pack` extension type.** `init scenario-pack`,
+  `init --from <file>` for a file the Studio saved, `validate` with the
+  Studio's checks and cautions, a `test` that builds the world under its
+  seed, steps it and builds it again, and `sdk/schemas/scenario-pack-1.schema.json`.
+  The figure-eight choreography (Chenciner and Montgomery 2000) is the
+  example.
+- **A link can name the instruments it opens with.** A scenario pack's link
+  carries its panels and tools, and opening it presses each on the rail, as
+  a reader's click would.
+
 - **The Orbital System Builder** (ORBITAL_SYSTEM_BUILDER.md). A form in the
   Scenario section, beside Blank Simulation, builds a two-dimensional
   hierarchical system from orbital elements, with no conversion to positions
@@ -538,6 +570,14 @@ the release rather than in the tag.
 
 ### Changed
 
+- **The English catalog no longer repeats the sentences lessons compute.**
+  Each of its 139 `lessonFn.*` entries was keyed on its own text, and
+  `js/i18n/lesson.js` already returns the sentence when a locale has no
+  entry, so English reads exactly as before. Dropping them took 13.6 KB off
+  the deferred bundle and every lesson's download; the Spanish translations
+  keep their ids.
+- **The Orbital System Builder points to the Scenario Studio,** which opens
+  the file it saves.
 - **The vendored three.js is 475 KB instead of 660.** It now holds only
   what the 3-D view uses, which takes 47.7 KB off the 3-D view's download
   and the deferred bundle. `tests/vendoredThree.test.js` holds the view to
@@ -680,6 +720,9 @@ the release rather than in the tag.
   - **Not yet in the published bundle:** the encrypted instructor materials
     still hold the old PDFs until they are rebuilt with the passphrase
     (`npm run build:instructors`).
+- **Refresh Scenario emptied a world a link had brought its own bodies to.**
+  A link with bodies and no scenario, such as a shared Blank Simulation
+  world, now rebuilds those bodies, as it already did for a built system.
 - **Lesson prose showed its HTML entities as text** (STUDIO_ROUNDTRIP_GATE.md,
   bugs the audit found).
   - **What it did:** `prose()` escaped every `&` before it let its four tags

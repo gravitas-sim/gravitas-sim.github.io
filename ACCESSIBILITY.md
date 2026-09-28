@@ -77,6 +77,17 @@ implementation; it is now `js/focusTrap.js` and all four use it. It cycles Tab
 within the dialog, marks the rest of the page `inert`, and restores focus to
 whatever opened it.
 
+**Two ways out of Settings and the System Builder.** Both are opened by
+`js/dialog.js`, which listens for Escape and Tab on the panel itself. A click on
+the panel's text put focus on `<body>` in every browser, and so did a click on
+any of its buttons in Safari, which does not focus a clicked button. From there
+Escape did nothing and Shift+Tab walked into the page behind. The panel now
+takes focus itself. Separately, Safari's default Tab leaves a dialog for the
+toolbar after the last field it stops on, and its next Tab comes back in at the
+first text field on the page. Over a lesson that was the lesson's answer boxes,
+behind the modal. Until 2026-09-28 nothing stopped it; that return now goes to
+the start of the dialog.
+
 **Target size.** Sliders presented a 7-pixel-tall target across their whole
 width; the inspector's help affordances were 16px and checkboxes 15px. All are
 at least 24×24 now. The sliders keep their thin visual track — the element grew
