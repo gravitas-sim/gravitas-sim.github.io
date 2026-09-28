@@ -143,3 +143,58 @@ describe('what the trap leaves alone', () => {
     expect(document.activeElement).toBe($('after'));
   });
 });
+
+describe("Safari's route through the toolbar", () => {
+  // After the last field Safari stops on, its Tab leaves the page for the
+  // browser's toolbar, and nothing in the page has focus. Its next Tab brings
+  // focus back in at the first text field on the page, which over a lesson is
+  // behind Settings and the builder. No focusin marks the trip out, so the
+  // Tab's timer is what has to notice it.
+  const toToolbar = async () => {
+    $('mass').focus();
+    tab();
+    $('mass').blur();
+    await nextTask();
+  };
+
+  test('focus coming back into the page is sent to the first control', async () => {
+    await toToolbar();
+    $('before').focus();
+    expect(document.activeElement).toBe($('type'));
+  });
+
+  test('a click after the trip is left alone', async () => {
+    await toToolbar();
+    $('before').dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }));
+    $('before').focus();
+    expect(document.activeElement).toBe($('before'));
+  });
+});
+
+describe('a click inside the panel', () => {
+  // A click on anything that does not take focus itself puts focus on its
+  // nearest focusable ancestor, and Safari does not focus a clicked button at
+  // all. That ancestor used to be <body>, where the panel's keydown listener
+  // could not hear Escape. Now it is the panel.
+  test('leaves focus on the panel, so Escape still closes it', () => {
+    expect(panel.getAttribute('tabindex')).toBe('-1');
+    panel.focus();
+    expect(document.activeElement).toBe(panel);
+    panel.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(panel.hasAttribute('inert')).toBe(true);
+    expect(document.activeElement).toBe($('before'));
+  });
+
+  test('and Shift+Tab from the panel wraps to the last control', () => {
+    panel.focus();
+    expect(document.activeElement).toBe(panel);
+    expect(tab({ shift: true }).defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe($('done'));
+  });
+});
