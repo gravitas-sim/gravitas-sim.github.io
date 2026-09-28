@@ -62,7 +62,7 @@ export function entryFor(step, index) {
     step: index + 1,
     type: step.type,
     kind: step.kind ?? null,
-    title: step.title,
+    title: plainText(step.title),
     category: categoryOf(step),
     prompt: step.prompt ? plainText(step.prompt) : null,
     explanation: step.because ? plainText(step.because) : null,
@@ -107,7 +107,7 @@ export function entryFor(step, index) {
       label: plainText(f.label),
       unit: f.unit ?? null,
       derived: Boolean(f.compute),
-      hint: f.hint ?? null,
+      hint: plainText(f.hint) || null,
     }));
     entry.hasValidator = typeof step.validate === 'function';
     entry.importable = Boolean(step.importFromSelection);
@@ -130,10 +130,10 @@ export function entryFor(step, index) {
 export function answerKeyFor(inv) {
   return {
     id: inv.id,
-    title: inv.title,
-    subtitle: inv.subtitle,
-    duration: inv.duration,
-    level: inv.level,
+    title: plainText(inv.title),
+    subtitle: plainText(inv.subtitle),
+    duration: plainText(inv.duration),
+    level: plainText(inv.level),
     stepCount: inv.steps.length,
     objectives: (inv.objectives || []).map(plainText),
     entries: inv.steps.map(entryFor),
