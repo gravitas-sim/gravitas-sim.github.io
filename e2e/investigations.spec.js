@@ -787,3 +787,107 @@ test.describe('lesson prose reads as characters, not entity names', () => {
     expect(await verdict.innerText()).not.toMatch(ENTITY);
   });
 });
+
+test.describe('a screen reader hears every answer, not only the first', () => {
+  // announce() in js/notify.js returned early when a message was the one it
+  // had last written, and nothing reset it between steps. Two right answers in
+  // a row both announce "Correct.", so the second was never written to
+  // #srStatus: a student using a screen reader was told the first was right
+  // and heard nothing about the next. These two black-holes steps are adjacent
+  // ordinary graded choices on the same stage, so nothing else is announced
+  // between them.
+  const ID = 'black-holes';
+  const FIRST = 'what-did-doubling-do';
+  const SECOND = 'read-the-graph';
+
+  test('two right answers in a row are each announced', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    // Resumed at the first of the two, the way a returning student is, rather
+    // than walked to: the panel's own progress record, naming the step.
+    const facts = await page.evaluate(
+      async ([id, first]) => {
+        const reg = await import('/js/data/investigations/registry.js');
+        const { writeProgress } =
+          await import('/js/investigations/progressSchema.js');
+        const lesson = await reg.loadInvestigation(id);
+        const at = lesson.steps.findIndex(s => s.sid === first);
+        localStorage.setItem(
+          `gravitas_investigation_${id}`,
+          JSON.stringify(
+            writeProgress({
+              lesson,
+              responses: {},
+              attempts: {},
+              visited: [],
+              stepSid: first,
+              startedAt: null,
+            })
+          )
+        );
+        return {
+          steps: lesson.steps.slice(at, at + 2).map(s => ({
+            sid: s.sid,
+            title: s.title,
+            kind: s.kind,
+            answer: s.answer,
+            reveal: s.reveal ?? null,
+          })),
+        };
+      },
+      [ID, FIRST]
+    );
+    // If either gains a `reveal`, or they stop being neighbors, this is no
+    // longer the case being tested.
+    expect(facts.steps.map(s => s.sid)).toEqual([FIRST, SECOND]);
+    for (const step of facts.steps) {
+      expect(step.kind).toBe('choice');
+      expect(step.reveal).toBeNull();
+      expect(Number.isInteger(step.answer)).toBe(true);
+    }
+
+    await page.locator('#investigationsBtn').click();
+    await page.locator(`[data-investigation="${ID}"]`).click();
+    const title = page.locator('.inv-step-title');
+    await expect(title).toHaveText(facts.steps[0].title);
+    // Read now: the panel's strings arrive with the panel.
+    const correct = await page.evaluate(async () =>
+      (await import('/js/i18n/index.js')).t('inv.answer.correct')
+    );
+    expect(correct).not.toBe('inv.answer.correct');
+
+    // Every state the live region is left in from here on, starting with the
+    // one it is in now. A write that leaves it as it was is not heard.
+    await page.evaluate(() => {
+      const el = document.getElementById('srStatus');
+      window.__srStates = [el.textContent];
+      new window.MutationObserver(() =>
+        window.__srStates.push(el.textContent)
+      ).observe(el, { childList: true, characterData: true, subtree: true });
+    });
+    const heard = () =>
+      page.evaluate(() => {
+        const states = window.__srStates;
+        return states.filter((s, i) => i > 0 && s !== states[i - 1]);
+      });
+    const saidCorrect = async () =>
+      (await heard()).filter(s => s.trim() === correct).length;
+
+    const options = page.locator('#investigationBody .inv-option');
+    await options.nth(facts.steps[0].answer).click();
+    await expect(options.nth(facts.steps[0].answer)).toHaveClass(/is-correct/);
+    await expect.poll(saidCorrect).toBe(1);
+
+    await page.locator('#investigationNext').click();
+    await expect(title).toHaveText(facts.steps[1].title);
+    await options.nth(facts.steps[1].answer).click();
+    await expect(options.nth(facts.steps[1].answer)).toHaveClass(/is-correct/);
+    await expect
+      .poll(saidCorrect, {
+        message: 'the second "Correct." changed the live region',
+      })
+      .toBe(2);
+  });
+});
