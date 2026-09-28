@@ -3254,16 +3254,22 @@ function bindStepInputs() {
       save();
       renderStep();
       const step = currentStep();
-      const right = checkAnswer(step, choice);
+      // A held prediction has no verdict yet, on screen or off it. This used to
+      // be graded here regardless, so a screen reader heard "Correct.", or the
+      // whole explanation, before the experiment meant to settle it, while the
+      // screen said only that the answer was recorded. The note renderStep()
+      // has just drawn under the options is what it hears now: the same words,
+      // by construction, and nothing the screen is keeping back.
       announce(
-        right
-          ? t('inv.answer.correct')
-          : `${t('inv.answer.recorded')} ${decodeEntities(
-              String(step.because ?? '').replace(
-                /<\/?(strong|em|sub|sup)>/g,
-                ''
-              )
-            )}`
+        els.body.querySelector('.inv-held')?.textContent ||
+          (checkAnswer(step, choice)
+            ? t('inv.answer.correct')
+            : `${t('inv.answer.recorded')} ${decodeEntities(
+                String(step.because ?? '').replace(
+                  /<\/?(strong|em|sub|sup)>/g,
+                  ''
+                )
+              )}`)
       );
     });
   });
