@@ -121,6 +121,8 @@ export const RULE_INDEX = {
   'interaction/validate': "A validator accepts the author's own hint values",
   'interaction/compute': 'A computed field survives the hint values',
   'interaction/checklist': 'A checklist asks for things',
+  'interaction/when':
+    'A remediation step follows an earlier graded step every student reaches',
   'interaction/animated': 'An animated widget can be rewound',
   'i18n/shape': 'A translation matches the shape of its lesson',
   'i18n/machinery': 'A translation never replaces machinery',
@@ -897,6 +899,51 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               E('interaction/checklist', `checklist item ${n + 1} is empty`);
             }
           });
+        }
+      }
+
+      // A remediation step is shown only when an earlier graded step was
+      // answered wrongly (or rightly): js/investigations.js stepApplies(). One
+      // level deep, so every student still walks a straight line to the end:
+      // the step it names is graded and one every student reaches, and it is
+      // neither the last step nor where a prediction is marked.
+      if (step.when !== undefined) {
+        const w = step.when;
+        const at = isPlainObject(w)
+          ? steps.findIndex(x => x.sid === w.sid)
+          : -1;
+        const named = steps[at];
+        const gradedKind =
+          named &&
+          (named.type === 'predict' ||
+            (named.type === 'question' &&
+              (named.kind === 'choice' || named.kind === 'numeric')));
+        if (!isPlainObject(w) || !['incorrect', 'correct'].includes(w.is)) {
+          E('interaction/when', 'when is {sid, is: "incorrect" | "correct"}');
+        } else if (at < 0 || at >= i) {
+          E(
+            'interaction/when',
+            `when names "${w.sid}", which is not an earlier step`
+          );
+        } else if (!gradedKind) {
+          E(
+            'interaction/when',
+            `when names "${w.sid}", which is not a graded step`
+          );
+        } else if (named.when !== undefined) {
+          E(
+            'interaction/when',
+            `when names "${w.sid}", which is itself remediation`
+          );
+        }
+        if (i === steps.length - 1) {
+          E('interaction/when', 'the last step is one every student reaches');
+        }
+        if (steps.some(x => x.reveal === step.sid)) {
+          E(
+            'interaction/when',
+            'a held prediction is marked here, but not every student reaches it'
+          );
         }
       }
 

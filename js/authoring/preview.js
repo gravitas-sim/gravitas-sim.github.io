@@ -21,6 +21,7 @@
 // =============================================================================
 
 import { checkLesson } from './rules.js';
+import { provideLessonLoaders } from '../data/investigations/registry.js';
 import { allWidgets } from '../widgets.js';
 import { SCENARIO_INFO } from '../data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../appState.js';
@@ -33,18 +34,24 @@ import { gradedSteps } from '../data/investigations/catalog.js';
  * lesson links in the checker's output are query strings, and a hash survives
  * being edited in place without reloading the page.
  *
- * @returns {?{lesson: string, step: ?number}} The request, or null
+ * `view=student` asks for the lesson as a student meets it: no bar, no
+ * findings, and still nothing read from or written to saved progress.
+ *
+ * @returns {?{lesson: string, step: ?number, view: 'author'|'student'}} The
+ *   request, or null
  */
 export function authoringRequest() {
   const fromQuery = new URLSearchParams(window.location.search);
   let lesson = fromQuery.get('author');
   let step = fromQuery.get('step');
+  let view = fromQuery.get('view');
 
   if (!lesson) {
     const hash = window.location.hash.replace(/^#/, '');
     const fromHash = new URLSearchParams(hash);
     lesson = fromHash.get('author');
     step = step ?? fromHash.get('step');
+    view = view ?? fromHash.get('view');
   }
   if (!lesson) return null;
 
@@ -54,7 +61,42 @@ export function authoringRequest() {
     // 1-based in the URL, because that is the number the panel shows, the
     // number the instructor guide prints and the number the checker reports.
     step: Number.isInteger(n) && n >= 1 ? n : null,
+    view: view === 'student' ? 'student' : 'author',
   };
+}
+
+/** Where the Studio's composer (/studio/lesson/) leaves the lesson it previews. */
+export const DRAFT_KEY = 'gravitas_composer_preview';
+
+/**
+ * Install the composer's draft, when that is what the address bar names.
+ *
+ * `?author=draft-<id>` is a lesson compiled from an investigation pack in this
+ * browser (js/composer/compile.js), not one in the registry. The composer
+ * leaves it, English and Spanish, under DRAFT_KEY; it is data only - the pack
+ * format holds no code - and it arrives through the same door a packaged
+ * lesson does, so everything the engine does with a lesson it does with this.
+ * The `draft-` prefix keeps it apart from every real lesson and its progress.
+ *
+ * @param {{lesson: string}} request - authoringRequest()
+ * @returns {boolean} Whether a draft was installed
+ */
+export function installDraft(request) {
+  if (!/^draft-[a-z0-9]+(-[a-z0-9]+)*$/.test(request.lesson)) return false;
+  let stored = null;
+  try {
+    stored = JSON.parse(window.localStorage.getItem(DRAFT_KEY));
+  } catch {
+    return false;
+  }
+  if (stored?.lesson?.id !== request.lesson) return false;
+  provideLessonLoaders(request.lesson, {
+    lesson: () => Promise.resolve({ default: stored.lesson }),
+    translations: stored.shadow
+      ? { es: () => Promise.resolve({ default: stored.shadow }) }
+      : {},
+  });
+  return true;
 }
 
 const els = {};
