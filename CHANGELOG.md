@@ -725,6 +725,35 @@ the release rather than in the tag.
     a measure field. Each step is reopened from storage in a fresh page, and
     must hold the whole string, with no attribute added and nothing run when
     it is focused.
+- **Fifteen expected observations reached no document.**
+  - **What it did:** the answer key leaves out a step that only asks students
+    to read or watch, and it left that step's expectation out with it. The
+    authoring rule `instructor/expectations` accepts an expectation on any
+    step, and its comment said the key printed one against every entry; for a
+    reading step it did not, and the instructor guide prints no expectations,
+    so 15 of the 238 were in neither. They were the balance point in Weighing
+    the Stars, both horizon screens of Black Holes by the Numbers, five
+    screens of Tides, three of What Is a Gravitational Wave?, and one each in
+    The Goldilocks Question, Can You Detect This Planet?, Listening to
+    Spacetime and A Universe of Stars.
+  - **What it does now:** a reading step with an expectation is printed in
+    the key like any other entry: its heading, "Reading", and the expected
+    observation. A reading step without one is still left out, and the key's
+    opening note says which. The expectations were kept rather than refused or
+    moved, because each describes its own screen (the numbers on its readout,
+    what to say aloud about it) and five of the steps beside them have one of
+    their own. The rule's comment now says what the key does, and its summary
+    no longer says an expectation must point at a step that grades.
+  - **Tests:** `tests/instructorMaterials.test.js` finds every expectation's
+    opening words under its own step's heading in its lesson's key, so one
+    printed against the wrong step fails as well as a missing one. Before
+    this change it failed the eight lessons above, and an expectation looked
+    up one step off fails all 24. "Reading-only steps are left out of the
+    key" now checks both halves on Black Holes by the Numbers, which has
+    both kinds.
+  - **Cost:** nothing in the browser; the keys are built in Node. The
+    published keys change when the encrypted instructor bundle is next
+    rebuilt, which needs the passphrase.
 - **A screen reader heard a repeated announcement once, and then never.**
   - **What it did:** `announce()` in `js/notify.js` returned early when a
     message was the one it had last written to `#srStatus`, and nothing
