@@ -1,0 +1,36 @@
+{
+ "R5": {
+  "leapfrog": {
+   "scheme": "leapfrog",
+   "k": 16000,
+   "returnError": 3.5885941845007157e-7,
+   "outOfPlane": 1.2878587085651816e-14,
+   "pass": true,
+   "evals": 32000
+  },
+  "yoshida4": {
+   "scheme": "yoshida4",
+   "k": 1000,
+   "returnError": 1.292306603472484e-7,
+   "outOfPlane": 1.2601031329495527e-14,
+   "pass": true,
+   "evals": 6000
+  },
+  "rk4": {
+   "scheme": "rk4",
+   "k": 500,
+   "returnError": 9.897238209946912e-8,
+   "outOfPlane": 4.860687979906962e-16,
+   "pass": true,
+   "evals": 2000
+  },
+  "dopri5": {
+   "scheme": "dopri5",
+   "tol": 1e-8,
+   "returnError": 2.5172283439822914e-7,
+   "outOfPlane": 1.87827901692416e-15,
+   "pass": true,
+   "evals": 954
+  }
+ }
+}

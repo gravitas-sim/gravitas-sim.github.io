@@ -1,0 +1,338 @@
+{
+ "R3": {
+  "leapfrog": {
+   "scheme": "leapfrog",
+   "k": 32000,
+   "aborted": true,
+   "evals": 60001280,
+   "history": [
+    {
+     "scheme": "leapfrog",
+     "k": 125,
+     "momentum": 3.860690314802295e-14,
+     "energy": 0.00010681587203794037,
+     "angularMomentum": 2.3455765362920752e-14,
+     "pass": false,
+     "evals": 250000,
+     "evalsPerOrbit": 250
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 250,
+     "momentum": 9.7425854765469e-14,
+     "energy": 0.00002718020613656578,
+     "angularMomentum": 3.0496828540877437e-14,
+     "pass": false,
+     "evals": 500000,
+     "evalsPerOrbit": 500
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 500,
+     "momentum": 6.46483758561694e-14,
+     "energy": 0.0000068530208161011565,
+     "angularMomentum": 1.4125120820628347e-14,
+     "pass": false,
+     "evals": 1000000,
+     "evalsPerOrbit": 1000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 1000,
+     "momentum": 1.7070987085828117e-13,
+     "energy": 0.0000017162294083774492,
+     "angularMomentum": 9.376343760328918e-14,
+     "pass": false,
+     "evals": 2000000,
+     "evalsPerOrbit": 2000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 2000,
+     "momentum": 2.592897380125549e-13,
+     "energy": 4.2926572635687143e-7,
+     "angularMomentum": 1.3534142713612448e-13,
+     "pass": false,
+     "evals": 4000000,
+     "evalsPerOrbit": 4000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 4000,
+     "momentum": 1.5933386687168263e-13,
+     "energy": 1.0732444065477092e-7,
+     "angularMomentum": 1.1083745192969587e-13,
+     "pass": false,
+     "evals": 8000000,
+     "evalsPerOrbit": 8000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 8000,
+     "momentum": 2.6908084103859867e-13,
+     "energy": 2.6831282021788104e-8,
+     "angularMomentum": 1.095337436663982e-13,
+     "pass": false,
+     "evals": 16000000,
+     "evalsPerOrbit": 16000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 16000,
+     "momentum": 7.711945435970804e-13,
+     "energy": 6.70847363886392e-9,
+     "angularMomentum": 1.335787029697398e-13,
+     "pass": false,
+     "evals": 32000000,
+     "evalsPerOrbit": 32000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 32000,
+     "aborted": true,
+     "evals": 60001280
+    }
+   ]
+  },
+  "yoshida4": {
+   "scheme": "yoshida4",
+   "k": 16000,
+   "aborted": true,
+   "evals": 60003840,
+   "history": [
+    {
+     "scheme": "yoshida4",
+     "k": 125,
+     "momentum": 8.486224893140256e-14,
+     "energy": 5.792266533781812e-7,
+     "angularMomentum": 1.0539672612297711e-13,
+     "pass": false,
+     "evals": 750000,
+     "evalsPerOrbit": 750
+    },
+    {
+     "scheme": "yoshida4",
+     "k": 250,
+     "momentum": 4.7071582977452886e-14,
+     "energy": 3.618304057503888e-8,
+     "angularMomentum": 3.457119722506547e-14,
+     "pass": false,
+     "evals": 1500000,
+     "evalsPerOrbit": 1500
+    },
+    {
+     "scheme": "yoshida4",
+     "k": 500,
+     "momentum": 1.3600045670485673e-13,
+     "energy": 2.261453946243757e-9,
+     "angularMomentum": 3.760851946058792e-14,
+     "pass": false,
+     "evals": 3000000,
+     "evalsPerOrbit": 3000
+    },
+    {
+     "scheme": "yoshida4",
+     "k": 1000,
+     "momentum": 3.785347713054701e-13,
+     "energy": 1.4128509419779554e-10,
+     "angularMomentum": 2.967723089089003e-14,
+     "pass": false,
+     "evals": 6000000,
+     "evalsPerOrbit": 6000
+    },
+    {
+     "scheme": "yoshida4",
+     "k": 2000,
+     "momentum": 2.542073198120805e-13,
+     "energy": 9.11341350430701e-12,
+     "angularMomentum": 2.0908681039330295e-13,
+     "pass": false,
+     "evals": 12000000,
+     "evalsPerOrbit": 12000
+    },
+    {
+     "scheme": "yoshida4",
+     "k": 4000,
+     "momentum": 5.881683989937123e-13,
+     "energy": 8.947398039266619e-13,
+     "angularMomentum": 2.5338996672070143e-14,
+     "pass": false,
+     "evals": 24000000,
+     "evalsPerOrbit": 24000
+    },
+    {
+     "scheme": "yoshida4",
+     "k": 8000,
+     "momentum": 4.043018797029344e-13,
+     "energy": 7.405912357308789e-13,
+     "angularMomentum": 4.550718283786471e-14,
+     "pass": false,
+     "evals": 48000000,
+     "evalsPerOrbit": 48000
+    },
+    {
+     "scheme": "yoshida4",
+     "k": 16000,
+     "aborted": true,
+     "evals": 60003840
+    }
+   ]
+  },
+  "rk4": {
+   "scheme": "rk4",
+   "k": 16000,
+   "aborted": true,
+   "evals": 60001280,
+   "history": [
+    {
+     "scheme": "rk4",
+     "k": 125,
+     "momentum": 2.2327809936999928e-14,
+     "energy": 0.0000531378946313205,
+     "angularMomentum": 0.000021302006698009047,
+     "pass": false,
+     "evals": 500000,
+     "evalsPerOrbit": 500
+    },
+    {
+     "scheme": "rk4",
+     "k": 250,
+     "momentum": 5.3020442422066125e-14,
+     "energy": 0.0000016599756233708486,
+     "angularMomentum": 6.652922302659306e-7,
+     "pass": false,
+     "evals": 1000000,
+     "evalsPerOrbit": 1000
+    },
+    {
+     "scheme": "rk4",
+     "k": 500,
+     "momentum": 9.666525385963918e-14,
+     "energy": 5.189905332310554e-8,
+     "angularMomentum": 2.078850670453642e-8,
+     "pass": false,
+     "evals": 2000000,
+     "evalsPerOrbit": 2000
+    },
+    {
+     "scheme": "rk4",
+     "k": 1000,
+     "momentum": 5.955392710963207e-14,
+     "energy": 1.6236122368419216e-9,
+     "angularMomentum": 6.496039729961547e-10,
+     "pass": false,
+     "evals": 4000000,
+     "evalsPerOrbit": 4000
+    },
+    {
+     "scheme": "rk4",
+     "k": 2000,
+     "momentum": 6.699781633493636e-14,
+     "energy": 5.0963357225444616e-11,
+     "angularMomentum": 2.0356301010421476e-11,
+     "pass": false,
+     "evals": 8000000,
+     "evalsPerOrbit": 8000
+    },
+    {
+     "scheme": "rk4",
+     "k": 4000,
+     "momentum": 1.6518589006821677e-13,
+     "energy": 1.6136557892985108e-12,
+     "angularMomentum": 6.305667517006911e-13,
+     "pass": false,
+     "evals": 16000000,
+     "evalsPerOrbit": 16000
+    },
+    {
+     "scheme": "rk4",
+     "k": 8000,
+     "momentum": 2.271423425903923e-13,
+     "energy": 5.456350732837378e-13,
+     "angularMomentum": 2.0756580219300292e-13,
+     "pass": false,
+     "evals": 32000000,
+     "evalsPerOrbit": 32000
+    },
+    {
+     "scheme": "rk4",
+     "k": 16000,
+     "aborted": true,
+     "evals": 60001280
+    }
+   ]
+  },
+  "dopri5": {
+   "scheme": "dopri5",
+   "tol": 1e-13,
+   "momentum": 1.0928791228033814e-13,
+   "energy": 1.4177442205645944e-10,
+   "angularMomentum": 5.952693133298391e-11,
+   "pass": false,
+   "evals": 4664112,
+   "evalsPerOrbit": 4664.112,
+   "history": [
+    {
+     "scheme": "dopri5",
+     "tol": 1e-8,
+     "momentum": 5.651752131022553e-14,
+     "energy": 0.000007170980329492696,
+     "angularMomentum": 0.0000029523516101745747,
+     "pass": false,
+     "evals": 828012,
+     "evalsPerOrbit": 828.012
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-9,
+     "momentum": 8.172097387936173e-14,
+     "energy": 0.0000011397399547774646,
+     "angularMomentum": 4.7649053967807804e-7,
+     "pass": false,
+     "evals": 1035648,
+     "evalsPerOrbit": 1035.648
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-10,
+     "momentum": 6.51894639322157e-14,
+     "energy": 1.2599330387957976e-7,
+     "angularMomentum": 5.28580789651938e-8,
+     "pass": false,
+     "evals": 1426182,
+     "evalsPerOrbit": 1426.182
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-11,
+     "momentum": 1.5138942074540946e-13,
+     "energy": 1.3161313128807748e-8,
+     "angularMomentum": 5.518846371694731e-9,
+     "pass": false,
+     "evals": 2048802,
+     "evalsPerOrbit": 2048.802
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-12,
+     "momentum": 1.6150425066311183e-13,
+     "energy": 1.3807822274355944e-9,
+     "angularMomentum": 5.782289566705353e-10,
+     "pass": false,
+     "evals": 3037806,
+     "evalsPerOrbit": 3037.806
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-13,
+     "momentum": 1.0928791228033814e-13,
+     "energy": 1.4177442205645944e-10,
+     "angularMomentum": 5.952693133298391e-11,
+     "pass": false,
+     "evals": 4664112,
+     "evalsPerOrbit": 4664.112
+    }
+   ]
+  }
+ }
+}

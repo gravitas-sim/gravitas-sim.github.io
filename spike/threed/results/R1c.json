@@ -1,0 +1,110 @@
+{
+ "R1": {
+  "yoshida4c": {
+   "scheme": "yoshida4c",
+   "k": 8000,
+   "position100": 7.198378749871237e-8,
+   "energy1000": 3.8189937323629505e-11,
+   "growth": 1.00001703413072,
+   "angularMomentum": 6.813464792992279e-16,
+   "inclinationDrift": 3.3306690738754696e-16,
+   "nodeDrift": 1.1102230246251565e-16,
+   "pass": true,
+   "evals": 48000000,
+   "evalsPerOrbit": 48000,
+   "history": [
+    {
+     "scheme": "yoshida4c",
+     "k": 125,
+     "position100": 0.9186007963024967,
+     "energy1000": 0.0005999157934664515,
+     "growth": 1.000000000011205,
+     "angularMomentum": 5.929772707086844e-15,
+     "inclinationDrift": 1.2212453270876722e-15,
+     "nodeDrift": 4.107825191113079e-15,
+     "pass": false,
+     "evals": 750000,
+     "evalsPerOrbit": 750
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 250,
+     "position100": 0.07424256007610869,
+     "energy1000": 0.000039433176127852164,
+     "growth": 1.0000001846322435,
+     "angularMomentum": 2.62662259196937e-15,
+     "inclinationDrift": 2.1094237467877974e-15,
+     "nodeDrift": 1.1102230246251565e-15,
+     "pass": false,
+     "evals": 1500000,
+     "evalsPerOrbit": 1500
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 500,
+     "position100": 0.004700468089881149,
+     "energy1000": 0.000002493318157622763,
+     "growth": 1.0000000962742694,
+     "angularMomentum": 1.3146230771966557e-15,
+     "inclinationDrift": 0,
+     "nodeDrift": 9.992007221626409e-16,
+     "pass": false,
+     "evals": 3000000,
+     "evalsPerOrbit": 3000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 1000,
+     "position100": 0.00029459695644626447,
+     "energy1000": 1.5627512890518986e-7,
+     "growth": 1.000000049952005,
+     "angularMomentum": 1.0611832135702707e-15,
+     "inclinationDrift": 2.220446049250313e-16,
+     "nodeDrift": 5.551115123125783e-16,
+     "pass": false,
+     "evals": 6000000,
+     "evalsPerOrbit": 6000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 2000,
+     "position100": 0.000018424995317107953,
+     "energy1000": 9.774088656489013e-9,
+     "growth": 1,
+     "angularMomentum": 2.022564277992083e-15,
+     "inclinationDrift": 8.881784197001252e-16,
+     "nodeDrift": 9.992007221626409e-16,
+     "pass": false,
+     "evals": 12000000,
+     "evalsPerOrbit": 12000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 4000,
+     "position100": 0.0000011517575752221446,
+     "energy1000": 6.109932438463932e-10,
+     "growth": 1.0000056784042832,
+     "angularMomentum": 6.913914409374588e-16,
+     "inclinationDrift": 6.661338147750939e-16,
+     "nodeDrift": 1.1102230246251565e-16,
+     "pass": false,
+     "evals": 24000000,
+     "evalsPerOrbit": 24000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 8000,
+     "position100": 7.198378749871237e-8,
+     "energy1000": 3.8189937323629505e-11,
+     "growth": 1.00001703413072,
+     "angularMomentum": 6.813464792992279e-16,
+     "inclinationDrift": 3.3306690738754696e-16,
+     "nodeDrift": 1.1102230246251565e-16,
+     "pass": true,
+     "evals": 48000000,
+     "evalsPerOrbit": 48000
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,36 @@
+{
+ "R2": {
+  "leapfrog": {
+   "scheme": "leapfrog",
+   "k": 125,
+   "barycenter": 3.060928271164984e-15,
+   "relativeOrbit": 1.775845174940208e-12,
+   "pass": true,
+   "evals": 250
+  },
+  "yoshida4": {
+   "scheme": "yoshida4",
+   "k": 125,
+   "barycenter": 4.3412275519282e-15,
+   "relativeOrbit": 1.6396148910025611e-12,
+   "pass": true,
+   "evals": 750
+  },
+  "rk4": {
+   "scheme": "rk4",
+   "k": 125,
+   "barycenter": 3.0760635564492695e-15,
+   "relativeOrbit": 3.410605131648481e-13,
+   "pass": true,
+   "evals": 500
+  },
+  "dopri5": {
+   "scheme": "dopri5",
+   "tol": 1e-13,
+   "barycenter": 2.0418410935602317e-14,
+   "relativeOrbit": 1.9847546026841482e-8,
+   "pass": false,
+   "evals": 397896
+  }
+ }
+}

@@ -1,0 +1,287 @@
+{
+ "R4": {
+  "leapfrog": {
+   "scheme": "leapfrog",
+   "k": 32000,
+   "maxFromL4": 0.040582422679337746,
+   "jacobi": 4.988651712950896e-10,
+   "l1Distance": 0.06313135361278598,
+   "l1MaxDistance": 0.12606056125114123,
+   "pass": false,
+   "evals": 6400000,
+   "evalsPerOrbit": 64000,
+   "history": [
+    {
+     "scheme": "leapfrog",
+     "k": 125,
+     "maxFromL4": 0.521306441789633,
+     "jacobi": 0.0003832405940209633,
+     "l1Distance": 1.5907159476847992,
+     "l1MaxDistance": 2.7758245309897434,
+     "pass": false,
+     "evals": 26000,
+     "evalsPerOrbit": 260
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 250,
+     "maxFromL4": 0.17086734528912792,
+     "jacobi": 0.00002462013729264634,
+     "l1Distance": 0.7618681913413118,
+     "l1MaxDistance": 2.6935093411865343,
+     "pass": false,
+     "evals": 50000,
+     "evalsPerOrbit": 500
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 500,
+     "maxFromL4": 0.07193179626078795,
+     "jacobi": 0.0000029857347826175046,
+     "l1Distance": 1.4379883593283855,
+     "l1MaxDistance": 1.8262419708351305,
+     "pass": false,
+     "evals": 100000,
+     "evalsPerOrbit": 1000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 1000,
+     "maxFromL4": 0.04715920899409214,
+     "jacobi": 5.700855681959471e-7,
+     "l1Distance": 1.1297415755113376,
+     "l1MaxDistance": 1.8226026054575006,
+     "pass": false,
+     "evals": 200000,
+     "evalsPerOrbit": 2000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 2000,
+     "maxFromL4": 0.041022984888523704,
+     "jacobi": 1.3180089418879794e-7,
+     "l1Distance": 1.717644472926666,
+     "l1MaxDistance": 1.717644472926666,
+     "pass": false,
+     "evals": 400000,
+     "evalsPerOrbit": 4000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 4000,
+     "maxFromL4": 0.04035236126787922,
+     "jacobi": 3.228461524702192e-8,
+     "l1Distance": 0.041694472476283134,
+     "l1MaxDistance": 0.1258595251572508,
+     "pass": false,
+     "evals": 800000,
+     "evalsPerOrbit": 8000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 8000,
+     "maxFromL4": 0.0405276466867934,
+     "jacobi": 8.029514868792265e-9,
+     "l1Distance": 0.1153705171120167,
+     "l1MaxDistance": 0.12288836632949073,
+     "pass": false,
+     "evals": 1600000,
+     "evalsPerOrbit": 16000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 16000,
+     "maxFromL4": 0.0405714701506718,
+     "jacobi": 2.0045083156954213e-9,
+     "l1Distance": 0.1230233017171327,
+     "l1MaxDistance": 0.12537069785940244,
+     "pass": false,
+     "evals": 3200000,
+     "evalsPerOrbit": 32000
+    },
+    {
+     "scheme": "leapfrog",
+     "k": 32000,
+     "maxFromL4": 0.040582422679337746,
+     "jacobi": 4.988651712950896e-10,
+     "l1Distance": 0.06313135361278598,
+     "l1MaxDistance": 0.12606056125114123,
+     "pass": false,
+     "evals": 6400000,
+     "evalsPerOrbit": 64000
+    }
+   ]
+  },
+  "yoshida4": {
+   "scheme": "yoshida4",
+   "k": 500,
+   "maxFromL4": 0.040592643436428134,
+   "jacobi": 9.002336092444779e-10,
+   "l1Distance": 1.6101275484659663,
+   "l1MaxDistance": 1.8115631433887636,
+   "pass": true,
+   "evals": 300000,
+   "evalsPerOrbit": 3000,
+   "history": [
+    {
+     "scheme": "yoshida4",
+     "k": 125,
+     "maxFromL4": 0.0428339802418865,
+     "jacobi": 1.8875903488650804e-7,
+     "l1Distance": 85.06051444999262,
+     "l1MaxDistance": 85.06051444999262,
+     "pass": false,
+     "evals": 78000,
+     "evalsPerOrbit": 780
+    },
+    {
+     "scheme": "yoshida4",
+     "k": 250,
+     "maxFromL4": 0.04069118510679727,
+     "jacobi": 1.436305110137793e-8,
+     "l1Distance": 1.7396337527573142,
+     "l1MaxDistance": 2.325539053326957,
+     "pass": false,
+     "evals": 150000,
+     "evalsPerOrbit": 1500
+    },
+    {
+     "scheme": "yoshida4",
+     "k": 500,
+     "maxFromL4": 0.040592643436428134,
+     "jacobi": 9.002336092444779e-10,
+     "l1Distance": 1.6101275484659663,
+     "l1MaxDistance": 1.8115631433887636,
+     "pass": true,
+     "evals": 300000,
+     "evalsPerOrbit": 3000
+    }
+   ]
+  },
+  "rk4": {
+   "scheme": "rk4",
+   "k": 500,
+   "maxFromL4": 0.04058676833052544,
+   "jacobi": 1.8233329944891834e-10,
+   "l1Distance": 57.957147067506185,
+   "l1MaxDistance": 57.957147067506185,
+   "pass": true,
+   "evals": 200000,
+   "evalsPerOrbit": 2000,
+   "history": [
+    {
+     "scheme": "rk4",
+     "k": 125,
+     "maxFromL4": 0.04182604459206794,
+     "jacobi": 1.3544565810226132e-7,
+     "l1Distance": 1.8517007569504178,
+     "l1MaxDistance": 2.138357640122848,
+     "pass": false,
+     "evals": 52000,
+     "evalsPerOrbit": 520
+    },
+    {
+     "scheme": "rk4",
+     "k": 250,
+     "maxFromL4": 0.04060566976724864,
+     "jacobi": 5.471912164911979e-9,
+     "l1Distance": 0.46581163348116594,
+     "l1MaxDistance": 1.862034004147639,
+     "pass": false,
+     "evals": 100000,
+     "evalsPerOrbit": 1000
+    },
+    {
+     "scheme": "rk4",
+     "k": 500,
+     "maxFromL4": 0.04058676833052544,
+     "jacobi": 1.8233329944891834e-10,
+     "l1Distance": 57.957147067506185,
+     "l1MaxDistance": 57.957147067506185,
+     "pass": true,
+     "evals": 200000,
+     "evalsPerOrbit": 2000
+    }
+   ]
+  },
+  "dopri5": {
+   "scheme": "dopri5",
+   "tol": 1e-13,
+   "maxFromL4": 0.04058607179620805,
+   "jacobi": 9.30824965919531e-13,
+   "l1Distance": 0.06056432265888479,
+   "l1MaxDistance": 0.12587559359486608,
+   "pass": false,
+   "evals": 389334,
+   "evalsPerOrbit": 3893.34,
+   "history": [
+    {
+     "scheme": "dopri5",
+     "tol": 1e-8,
+     "maxFromL4": 0.04039327839035843,
+     "jacobi": 5.992514424002519e-8,
+     "l1Distance": 0.08515213372743681,
+     "l1MaxDistance": 0.12585642745951844,
+     "pass": false,
+     "evals": 51600,
+     "evalsPerOrbit": 516
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-9,
+     "maxFromL4": 0.04056134123545069,
+     "jacobi": 7.53603074242822e-9,
+     "l1Distance": 0.0972827129490102,
+     "l1MaxDistance": 0.12587504609195901,
+     "pass": false,
+     "evals": 72000,
+     "evalsPerOrbit": 720
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-10,
+     "maxFromL4": 0.04058328598060192,
+     "jacobi": 8.453075323022673e-10,
+     "l1Distance": 0.043146354986869376,
+     "l1MaxDistance": 0.12587562962547844,
+     "pass": false,
+     "evals": 105600,
+     "evalsPerOrbit": 1056
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-11,
+     "maxFromL4": 0.04058577609060542,
+     "jacobi": 9.037664794380682e-11,
+     "l1Distance": 0.04992196330747253,
+     "l1MaxDistance": 0.12587560110844057,
+     "pass": false,
+     "evals": 159600,
+     "evalsPerOrbit": 1596
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-12,
+     "maxFromL4": 0.04058604434683061,
+     "jacobi": 9.225029227943835e-12,
+     "l1Distance": 0.05942858226593205,
+     "l1MaxDistance": 0.12587559445939844,
+     "pass": false,
+     "evals": 248748,
+     "evalsPerOrbit": 2487.48
+    },
+    {
+     "scheme": "dopri5",
+     "tol": 1e-13,
+     "maxFromL4": 0.04058607179620805,
+     "jacobi": 9.30824965919531e-13,
+     "l1Distance": 0.06056432265888479,
+     "l1MaxDistance": 0.12587559359486608,
+     "pass": false,
+     "evals": 389334,
+     "evalsPerOrbit": 3893.34
+    }
+   ]
+  }
+ }
+}

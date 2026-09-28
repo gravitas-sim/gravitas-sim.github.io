@@ -1,0 +1,7 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>3-D kernel bench (spike)</title></head><body>
+<p id="out">Running.</p>
+<script type="module">
+const w = new Worker('worker.js', { type: 'module' });
+w.onmessage = e => { window.__bench = e.data; document.getElementById('out').textContent = JSON.stringify(e.data); };
+fetch('initial.json').then(r => r.json()).then(initial => w.postMessage({ initial, speed: new URLSearchParams(location.search).has('speed') }));
+</script></body></html>

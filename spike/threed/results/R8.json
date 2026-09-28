@@ -1,0 +1,20 @@
+{
+ "R8": {
+  "headOn": {
+   "steps": 16569,
+   "merged": 1,
+   "mass": 0,
+   "momentum": 0,
+   "keLost": 4.80400436934472,
+   "pass": true
+  },
+  "grazing": {
+   "steps": 16615,
+   "merged": 1,
+   "mass": 0,
+   "momentum": 0,
+   "keLost": 4.813911990592953,
+   "pass": true
+  }
+ }
+}

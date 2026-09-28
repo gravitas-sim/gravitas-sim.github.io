@@ -1,0 +1,56 @@
+{
+ "R3": {
+  "yoshida4c": {
+   "scheme": "yoshida4c",
+   "k": 1000,
+   "momentum": 1.8613855965504746e-15,
+   "energy": 1.413355890547772e-10,
+   "angularMomentum": 4.066965649294698e-16,
+   "pass": true,
+   "evals": 6000000,
+   "evalsPerOrbit": 6000,
+   "history": [
+    {
+     "scheme": "yoshida4c",
+     "k": 125,
+     "momentum": 2.9579206026335447e-15,
+     "energy": 5.79226880665583e-7,
+     "angularMomentum": 6.969921727852494e-16,
+     "pass": false,
+     "evals": 750000,
+     "evalsPerOrbit": 750
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 250,
+     "momentum": 1.815138433308715e-15,
+     "energy": 3.618311201860152e-8,
+     "angularMomentum": 6.616228069282326e-17,
+     "pass": false,
+     "evals": 1500000,
+     "evalsPerOrbit": 1500
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 500,
+     "momentum": 2.1776989013410526e-15,
+     "energy": 2.2613689405132985e-9,
+     "angularMomentum": 1.4902696924305624e-15,
+     "pass": false,
+     "evals": 3000000,
+     "evalsPerOrbit": 3000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 1000,
+     "momentum": 1.8613855965504746e-15,
+     "energy": 1.413355890547772e-10,
+     "angularMomentum": 4.066965649294698e-16,
+     "pass": true,
+     "evals": 6000000,
+     "evalsPerOrbit": 6000
+    }
+   ]
+  }
+ }
+}

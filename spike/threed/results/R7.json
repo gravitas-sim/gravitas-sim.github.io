@@ -1,0 +1,40 @@
+{
+ "R7": {
+  "leapfrog": {
+   "scheme": "leapfrog",
+   "k": 32000,
+   "deflectionError": 0.01301099641649762,
+   "energy": 8.749606927871415e-9,
+   "deflection": 3.0003183741572066,
+   "pass": false,
+   "evals": 6400000
+  },
+  "yoshida4": {
+   "scheme": "yoshida4",
+   "k": 32000,
+   "deflectionError": 0.0035721092642014124,
+   "energy": 7.525436496180763e-9,
+   "deflection": 3.0003183741572066,
+   "pass": false,
+   "evals": 19200000
+  },
+  "rk4": {
+   "scheme": "rk4",
+   "k": 32000,
+   "deflectionError": 0.001282269218276782,
+   "energy": 0.032181112949571725,
+   "deflection": 3.0003183741572066,
+   "pass": false,
+   "evals": 12800000
+  },
+  "dopri5": {
+   "scheme": "dopri5",
+   "tol": 1e-10,
+   "deflectionError": 2.1073424255447017e-8,
+   "energy": 5.096812749627591e-9,
+   "deflection": 3.0003183741572066,
+   "pass": true,
+   "evals": 3852
+  }
+ }
+}

@@ -1,0 +1,208 @@
+{
+ "R2": {
+  "yoshida4c": {
+   "scheme": "yoshida4c",
+   "k": 125,
+   "barycenter": 3.2519905146394213e-15,
+   "relativeOrbit": 9.094947017729282e-13,
+   "pass": true,
+   "evals": 750,
+   "history": [
+    {
+     "scheme": "yoshida4c",
+     "k": 125,
+     "barycenter": 3.2519905146394213e-15,
+     "relativeOrbit": 9.094947017729282e-13,
+     "pass": true,
+     "evals": 750
+    }
+   ]
+  }
+ },
+ "R4": {
+  "yoshida4c": {
+   "scheme": "yoshida4c",
+   "k": 500,
+   "maxFromL4": 0.04059264344109921,
+   "jacobi": 9.002342015607146e-10,
+   "l1Distance": 1.6101270525176299,
+   "l1MaxDistance": 1.8115631455338268,
+   "pass": true,
+   "evals": 300000,
+   "evalsPerOrbit": 3000,
+   "history": [
+    {
+     "scheme": "yoshida4c",
+     "k": 125,
+     "maxFromL4": 0.042833980236554985,
+     "jacobi": 1.887590342941918e-7,
+     "l1Distance": 85.06051448127039,
+     "l1MaxDistance": 85.06051448127039,
+     "pass": false,
+     "evals": 78000,
+     "evalsPerOrbit": 780
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 250,
+     "maxFromL4": 0.040691185111266626,
+     "jacobi": 1.43630530264057e-8,
+     "l1Distance": 1.7396548909633225,
+     "l1MaxDistance": 2.3255381734165788,
+     "pass": false,
+     "evals": 150000,
+     "evalsPerOrbit": 1500
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 500,
+     "maxFromL4": 0.04059264344109921,
+     "jacobi": 9.002342015607146e-10,
+     "l1Distance": 1.6101270525176299,
+     "l1MaxDistance": 1.8115631455338268,
+     "pass": true,
+     "evals": 300000,
+     "evalsPerOrbit": 3000
+    }
+   ]
+  }
+ },
+ "R5": {
+  "yoshida4c": {
+   "scheme": "yoshida4c",
+   "k": 1000,
+   "returnError": 1.2923068786989027e-7,
+   "outOfPlane": 1.1102230246251565e-16,
+   "pass": true,
+   "evals": 6000,
+   "history": [
+    {
+     "scheme": "yoshida4c",
+     "k": 125,
+     "returnError": 0.0006879710087959836,
+     "outOfPlane": 1.6653345369377348e-16,
+     "pass": false,
+     "evals": 750
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 250,
+     "returnError": 0.00004333633667662607,
+     "outOfPlane": 2.7755575615628914e-16,
+     "pass": false,
+     "evals": 1500
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 500,
+     "returnError": 0.000002679095289396033,
+     "outOfPlane": 5.551115123125783e-17,
+     "pass": false,
+     "evals": 3000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 1000,
+     "returnError": 1.2923068786989027e-7,
+     "outOfPlane": 1.1102230246251565e-16,
+     "pass": true,
+     "evals": 6000
+    }
+   ]
+  }
+ },
+ "R7": {
+  "yoshida4c": {
+   "scheme": "yoshida4c",
+   "k": 32000,
+   "deflectionError": 0.003572109262647393,
+   "energy": 7.525728706880844e-9,
+   "deflection": 3.0003183741572066,
+   "pass": false,
+   "evals": 19200000,
+   "history": [
+    {
+     "scheme": "yoshida4c",
+     "k": 125,
+     "deflectionError": 2.863540063086685,
+     "energy": 1760.0924373928463,
+     "deflection": 3.0003183741572066,
+     "pass": false,
+     "evals": 75000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 250,
+     "deflectionError": 2.362771242225088,
+     "energy": 6263.6903420211165,
+     "deflection": 3.0003183741572066,
+     "pass": false,
+     "evals": 150000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 500,
+     "deflectionError": 1.6822888568088745,
+     "energy": 9879.551506447742,
+     "deflection": 3.0003183741572066,
+     "pass": false,
+     "evals": 300000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 1000,
+     "deflectionError": 1.123046991237568,
+     "energy": 4905.875547998674,
+     "deflection": 3.0003183741572066,
+     "pass": false,
+     "evals": 600000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 2000,
+     "deflectionError": 0.8632267392338945,
+     "energy": 1387.6542248311468,
+     "deflection": 3.0003183741572066,
+     "pass": false,
+     "evals": 1200000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 4000,
+     "deflectionError": 0.5634620421182781,
+     "energy": 105.20298561883251,
+     "deflection": 3.0003183741572066,
+     "pass": false,
+     "evals": 2400000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 8000,
+     "deflectionError": 0.00601865532543739,
+     "energy": 2.0909070402328136,
+     "deflection": 3.0003183741572066,
+     "pass": false,
+     "evals": 4800000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 16000,
+     "deflectionError": 0.035349737038949045,
+     "energy": 0.008507228029567718,
+     "deflection": 3.0003183741572066,
+     "pass": false,
+     "evals": 9600000
+    },
+    {
+     "scheme": "yoshida4c",
+     "k": 32000,
+     "deflectionError": 0.003572109262647393,
+     "energy": 7.525728706880844e-9,
+     "deflection": 3.0003183741572066,
+     "pass": false,
+     "evals": 19200000
+    }
+   ]
+  }
+ }
+}
