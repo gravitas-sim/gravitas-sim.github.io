@@ -331,3 +331,87 @@ test.describe('the keyboard path works where a reader needs it', () => {
     expect(said.length).toBeGreaterThan(0);
   });
 });
+
+test.describe('the keyboard aim reaches the whole canvas', () => {
+  // A HiDPI display. The aim is in the canvas's backing-store pixels, and at a
+  // device-pixel ratio of 2 the backing store is larger than the box the canvas
+  // fills on the page: 2592x1620 against 1440x900 in the desktop window. The
+  // aim was clamped to the box, so from the centre it stopped six steps to the
+  // right and under four down, and in a smaller window it could not move right
+  // or down at all.
+  test.use({ deviceScaleFactor: 2 });
+
+  /**
+   * Aim `steps` right and `steps` down from the centre, and place.
+   *
+   * @returns {Promise<{aim: {x: number, y: number}, body: object}>} Where the
+   *   aim was when Enter was pressed, and what it placed
+   */
+  async function throwDiagonally(page, steps) {
+    await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      ui.beginKeyboardPlacement();
+    });
+    for (let i = 0; i < steps; i++) {
+      await page.keyboard.press('ArrowRight');
+      await page.keyboard.press('ArrowDown');
+    }
+    const aim = await page.evaluate(async () => {
+      const { state } = await import('/js/ui.js');
+      return { x: state.mouse.x, y: state.mouse.y };
+    });
+    await page.keyboard.press('Enter');
+    return { aim, body: await newest(page, 'asteroids') };
+  }
+
+  test('ten steps right and down throw ten times as hard as one', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    // Pinned: on a loaded test machine the measured frame rate demotes the page
+    // to the low tier, which draws at 0.7 of CSS resolution on any display, and
+    // this would then be testing the opposite case.
+    await page.evaluate(async () => {
+      (await import('/js/quality.js')).setTier('full');
+    });
+    const sizes = () =>
+      page.evaluate(() => {
+        const canvas = document.getElementById('simulationCanvas');
+        const box = canvas.getBoundingClientRect();
+        return {
+          canvas: { w: canvas.width, h: canvas.height },
+          box: { w: box.width, h: box.height },
+        };
+      });
+    // A tier change resizes the canvas on the next frame, not at once.
+    await expect
+      .poll(async () => {
+        const s = await sizes();
+        return s.canvas.w > s.box.w && s.canvas.h > s.box.h;
+      }, 'the backing store is larger than the box')
+      .toBe(true);
+    const { canvas, box } = await sizes();
+    await app.emptyWorld('placement', { run: false });
+    await armType(page, 'Asteroid');
+
+    const STEPS = 10;
+    const centre = { x: canvas.w / 2, y: canvas.h / 2 };
+    const near = await throwDiagonally(page, 1);
+    const step = { x: near.aim.x - centre.x, y: near.aim.y - centre.y };
+    expect(step.x, 'one step moves the aim right').toBeGreaterThan(0);
+    expect(step.y, 'one step moves the aim down').toBeGreaterThan(0);
+    // The premise: ten steps cross the box's edge in both directions, where the
+    // old clamp stopped the aim, and stay inside the canvas.
+    expect(centre.x + STEPS * step.x).toBeGreaterThan(box.w);
+    expect(centre.y + STEPS * step.y).toBeGreaterThan(box.h);
+    expect(centre.x + STEPS * step.x).toBeLessThanOrEqual(canvas.w);
+    expect(centre.y + STEPS * step.y).toBeLessThanOrEqual(canvas.h);
+
+    const far = await throwDiagonally(page, STEPS);
+    expect(far.aim.x).toBeCloseTo(centre.x + STEPS * step.x, 6);
+    expect(far.aim.y).toBeCloseTo(centre.y + STEPS * step.y, 6);
+    expect(far.body.vx).toBeCloseTo(STEPS * near.body.vx, 6);
+    expect(far.body.vy).toBeCloseTo(STEPS * near.body.vy, 6);
+  });
+});
