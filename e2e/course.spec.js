@@ -238,10 +238,6 @@ test.describe('the course home', () => {
 test.describe('the course home offline', () => {
   test.use({ serviceWorkers: 'allow' });
   test.skip(DIST, 'the service worker is the sources’; dist/ has its own');
-  test.skip(
-    ({ browserName }) => browserName === 'webkit',
-    'Playwright’s WebKit refuses a navigation with the network off before the service worker can answer it (page.goto: “internal error”); the catalog’s offline test fails there the same way'
-  );
 
   test('a course opens with no network once Gravitas has been opened', async ({
     page,
