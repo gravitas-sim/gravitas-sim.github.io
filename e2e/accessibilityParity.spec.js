@@ -28,12 +28,28 @@ import { scrollLikeAReader } from './reach.js';
 
 const DIST = process.env.GRAVITAS_E2E_TARGET === 'dist';
 
-/** Press Tab until the focused element has this id, or give up loudly. */
-async function tabTo(page, id, limit = 40) {
+/**
+ * The key a reader presses to step to the next control of any kind.
+ *
+ * Tab in Chromium and Firefox. WebKit on macOS keeps Safari's default: Tab
+ * moves only between text fields and pop-up menus, and Option+Tab reaches
+ * buttons and links as well. From #objectTypeBtn a plain Tab went straight to
+ * <body>, because the rail is all buttons. Firefox ignores Alt+Tab
+ * altogether, so it cannot be one key for every engine. WebKit on Linux, where
+ * CI runs it, moves to every control with either key (e2e/historyOriginal.spec.js
+ * relies on Alt+Tab there).
+ *
+ * @param {string} browserName - Playwright's engine name
+ * @returns {string} The key to press
+ */
+const stepKey = browserName => (browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
+
+/** Press a key (Tab unless told) until the focused element has this id, or give up loudly. */
+async function tabTo(page, id, limit = 40, key = 'Tab') {
   for (let i = 0; i < limit; i++) {
     const at = await page.evaluate(() => document.activeElement?.id || '');
     if (at === id) return i;
-    await page.keyboard.press('Tab');
+    await page.keyboard.press(key);
   }
   throw new Error(
     `never reached #${id} in ${limit} tabs; last was ${await page.evaluate(
@@ -172,7 +188,11 @@ test.describe('a system can be built without a pointer', () => {
   test('the form is reachable and operable from the keyboard alone', async ({
     page,
     app,
+    browserName,
   }) => {
+    // Every step is taken with the key that reaches buttons on this platform.
+    // Safari's default Tab, which skips them, is the next test's subject.
+    const next = stepKey(browserName);
     await app.boot();
     await page.locator('#cleanSimBtn').click();
     await app.pressPause();
@@ -180,7 +200,7 @@ test.describe('a system can be built without a pointer', () => {
     // Focus the rail button by keyboard and open with Enter, rather than
     // clicking it - the claim is about a reader who has no pointer.
     await page.locator('#objectTypeBtn').focus();
-    await tabTo(page, 'precisePlaceBtn', 6);
+    await tabTo(page, 'precisePlaceBtn', 6, next);
     await page.keyboard.press('Enter');
     await expect(page.locator('#precisePlaceDialog')).toBeVisible();
 
@@ -195,7 +215,7 @@ test.describe('a system can be built without a pointer', () => {
       'precisePlace-vy',
       'precisePlace-mass',
     ]) {
-      await page.keyboard.press('Tab');
+      await page.keyboard.press(next);
       await expect(page.locator(`#${id}`)).toBeFocused();
     }
 
@@ -206,9 +226,62 @@ test.describe('a system can be built without a pointer', () => {
     expect((await census(page)).Stars).toBe(1);
 
     // And the buttons are the next two stops after the last field.
-    await tabTo(page, 'precisePlaceSubmit', 6);
-    await page.keyboard.press('Tab');
+    await tabTo(page, 'precisePlaceSubmit', 6, next);
+    await page.keyboard.press(next);
     await expect(page.locator('#precisePlaceClose')).toBeFocused();
+  });
+
+  // Safari's default Tab visits text fields and pop-up menus and nothing else,
+  // so it never reached Add body or Done. The trap in js/dialog.js used to
+  // wrap only from Done, so from the mass field a Safari reader's Tab went
+  // straight to the page behind the form - over a lesson, into its answer
+  // boxes. So this presses plain Tab in every engine. In Chromium and Firefox
+  // it walks the buttons and wraps from Done; in WebKit on macOS it is
+  // Safari's route and has to be sent back by the guard. On Linux WebKit,
+  // which is what CI runs, Tab visits every control, so only a Mac run
+  // exercises the guard; tests/dialog.test.js pins it for every run.
+  //
+  // <body> is allowed as a stop. It is focus leaving the page for the
+  // browser's own toolbar, where a modal may let it go. A control behind the
+  // form is not allowed.
+  test('Tab cannot carry focus out of the form into the page behind', async ({
+    page,
+    app,
+  }) => {
+    await app.boot({ url: '/?author=tides&step=10' });
+    // Polled, because on dist/ the lesson's family arrives as a lazy chunk
+    // after boot returns, and a count taken at once reads zero.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(
+            () =>
+              [
+                ...document.querySelectorAll(
+                  'input[type="text"], select, textarea'
+                ),
+              ].filter(el => el.offsetParent !== null).length
+          ),
+        { message: 'the lesson puts text fields behind the form' }
+      )
+      .toBeGreaterThan(0);
+
+    await page.locator('#precisePlaceBtn').click();
+    await expect(page.locator('#precisePlaceType')).toBeFocused();
+    await page.locator('#precisePlace-mass').focus();
+    for (let press = 1; press <= 4; press++) {
+      await page.keyboard.press('Tab');
+      const at = await page.evaluate(() => {
+        const a = document.activeElement;
+        if (!a || a === document.body) return 'not behind';
+        return document.getElementById('precisePlaceDialog').contains(a)
+          ? 'not behind'
+          : a.id || a.name || a.tagName;
+      });
+      expect(at, `where Tab ${press} from the mass field put focus`).toBe(
+        'not behind'
+      );
+    }
   });
 
   test('a bad value is explained on the field it is about', async ({
