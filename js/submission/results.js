@@ -49,7 +49,7 @@ import { checkAnswer } from '../answerCheck.js';
 import { toCsv } from '../csv.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
-import { answersOf } from './submissionToken.js';
+import { answersOf, attemptsOf } from './submissionToken.js';
 
 /** What the JSON export says it is. */
 export const RESULTS_KIND = 'gravitas.submission-results';
@@ -216,8 +216,11 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
   const steps = lesson.steps || [];
   const graded = gradedSteps(lesson);
   const gradedIds = new Set(graded.map(s => s.sid));
-  const answers = new Map(answersOf(submission).map(a => [a.sid, a]));
-  const attempts = backup.progress?.attempts || {};
+  // By sid. The engine stores both under `<lesson>:<sid>`, with sub-keys
+  // beside them that are not answers; answersOf() and attemptsOf() are where
+  // that is undone, so nothing here reads a stored key directly.
+  const answers = new Map(answersOf(submission, lesson).map(a => [a.sid, a]));
+  const attempts = attemptsOf(submission);
 
   // Which steps have been rewritten under their own id since the report was
   // saved. The backup keeps each step's fingerprint for exactly this.
@@ -261,13 +264,15 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
       type: step.type,
       title: step.title || step.sid,
       verdict,
-      attempts: attempts[step.sid] ?? null,
+      attempts: attempts.get(step.sid) ?? null,
       locale: has ? answer.locale : null,
       changed: changed.has(step.sid),
       response: has ? String(answer.value) : null,
     });
   }
-  // Answers the lesson has no step for, after every step it does.
+  // Answers the lesson has no step for, after every step it does. Only a value
+  // under a removed step's own key is recognizable as one: which of its
+  // sub-keys were measure fields, nothing in the lesson now says.
   for (const [sid, answer] of answers) {
     if (gradedIds.has(sid) || steps.some(s => s.sid === sid)) continue;
     questions.push({
@@ -276,7 +281,7 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
       type: null,
       title: sid,
       verdict: 'stale',
-      attempts: attempts[sid] ?? null,
+      attempts: attempts.get(sid) ?? null,
       locale: answer.locale,
       changed: false,
       response: String(answer.value ?? ''),

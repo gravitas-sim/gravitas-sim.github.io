@@ -266,19 +266,20 @@ Angular momentum held to a few parts in 10¹³ in all five.
 **It is deferred.** The panel, its arithmetic and its strings are loaded the
 first time the button is pressed. Its styles arrive with it.
 
-**Measured from fresh builds against v2 at 039a4a7. No ceiling was raised.**
+**Measured from fresh builds against v2 at c626aa3. No ceiling was raised.**
 
-- **Deferred JavaScript, 4178.3 of 4180 KB.** The builder costs 48.3 KB,
-  itemized by esbuild metafile:
+- **Deferred JavaScript, 4179.6 of 4180 KB** (4178.8 before). The builder
+  costs 48.5 KB, itemized by esbuild metafile:
   - `js/systemBuilder.js` 18.5 KB, including its stylesheet;
   - `js/systemSpec.js` 10.2 KB;
-  - its strings, 8.6 KB of English and 9.6 KB of Spanish;
+  - its strings, 8.7 KB of English and 9.7 KB of Spanish;
   - the button's two strings in the Spanish base catalog, 0.2 KB;
   - chunk overhead, 1.3 KB.
 
   It is paid for by vendoring only the three.js the 3-D view uses (−47.7 KB),
-  so the total moved 4177.8 to 4178.3 KB.
-- **The initial download, 819.6 of 830 KB, +0.7 KB:**
+  so the total moved 0.8 KB. That leaves 0.4 KB: the next deferred feature
+  has to find its own room first.
+- **The initial download, 820.1 of 830 KB** (819.4 before, so +0.7 KB):
   - the button;
   - the coordinator's three-function kit;
   - the share-link fixes.

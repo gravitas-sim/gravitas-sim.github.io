@@ -7,13 +7,21 @@
 // download the summary, the question-level CSV and the JSON and read what came
 // out. The submissions are built by the application's own modules, so a
 // report here is a report a student's browser would have produced.
+//
+// Built, and also taken from the lesson itself. These fixtures once stored
+// answers by bare sid, which the lesson engine never does, and every test here
+// passed while the page graded every real report as unanswered. So the answers
+// are now stored under stepKey(), and one test answers a lesson in the
+// application and hands the page the backup the application wrote.
 // =============================================================================
 
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 
 import { test, expect } from './fixtures.js';
 import { buildBackup } from '../js/investigations/progressBackup.js';
+import { stepKey } from '../js/investigations/progressSchema.js';
 import {
   buildSubmission,
   encodeSubmission,
@@ -29,11 +37,13 @@ const kepler = await import('../js/data/investigations/keplers-laws.js').then(
   m => m.default || Object.values(m)[0]
 );
 
-/** A backup a student's browser would save. */
+/** A backup a student's browser would save, from answers given by sid. */
 function backup({ name, responses }) {
   return buildBackup({
     lesson: kepler,
-    responses,
+    responses: Object.fromEntries(
+      Object.entries(responses).map(([sid, v]) => [stepKey(kepler.id, sid), v])
+    ),
     attempts: {},
     visited: kepler.steps.slice(0, 6).map(s => s.sid),
     stepSid: kepler.steps[5].sid,
@@ -233,6 +243,86 @@ test.describe('the submission review page', () => {
     expect(
       await page.evaluate(() => window.localStorage.getItem('gravitas_locale'))
     ).toBe('es');
+  });
+
+  test('grades the answers a lesson in the application saved', async ({
+    page,
+    app,
+  }) => {
+    // Kepler's first seven steps: two readings, a prediction, a reading, the
+    // ellipse, a choice and a measurement. Between them the engine stores an
+    // option index twice, where the ellipse slider was left, and a key per
+    // measure field, the derived one included.
+    await app.boot();
+    await page.locator('#investigationsBtn').click();
+    await page.locator(`[data-investigation="${kepler.id}"]`).click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    const body = page.locator('#investigationBody');
+    const progress = page.locator('#investigationProgressText');
+    const typed = {
+      circ_e: '0',
+      ecc_e: '0.6',
+      ecc_peri: '0.4',
+      ecc_apo: '1.6',
+    };
+    const walk = kepler.steps.slice(0, 7);
+    for (const [i, step] of walk.entries()) {
+      await expect(progress).toHaveText(new RegExp(`(^|\\D)${i + 1}\\s+of`));
+      if (step.type === 'predict' || step.kind === 'choice') {
+        await body.locator(`[data-option="${step.answer}"]`).click();
+      }
+      if (step.type === 'measure') {
+        for (const [id, value] of Object.entries(typed)) {
+          await body
+            .locator(`[data-field="${stepKey(kepler.id, step.sid)}:${id}"]`)
+            .fill(value);
+        }
+        // Worked out as the others are typed, and stored like them.
+        await expect(
+          body.locator(`[data-field="${stepKey(kepler.id, step.sid)}:ecc_a"]`)
+        ).toHaveValue(/^1(\.0+)?$/);
+      }
+      if (i < walk.length - 1) await page.locator('#investigationNext').click();
+    }
+
+    const download = page.waitForEvent('download');
+    await page.locator('#investigationBackupDownload').click();
+    const saved = join(test.info().outputDir, 'engine-backup.json');
+    await (await download).saveAs(saved);
+    const keys = Object.keys(
+      JSON.parse(readFileSync(saved, 'utf8')).progress.responses
+    );
+    // What this test is for: keys the engine wrote, sub-keys and all.
+    expect(keys.every(k => k.startsWith(`${kepler.id}:`))).toBe(true);
+    expect(keys).toContain(`${kepler.id}:change-the-shape:e`);
+    expect(keys).toContain(`${kepler.id}:measure-the-two-orbits:ecc_a`);
+
+    await open(page);
+    await page.locator('#includeWritten').check();
+    await page.locator('#picker').setInputFiles(saved);
+    await expect(page.locator('#count')).toHaveText('1 submission');
+    const doc = JSON.parse((await take(page, 'exportJson')).text);
+    const [sub] = doc.submissions;
+    expect(sub.counts).toEqual({
+      scorable: 13,
+      correct: 2,
+      incorrect: 0,
+      unmarked: 1,
+      incomplete: 10,
+      stale: 0,
+    });
+    expect(sub.warnings).toEqual(['noRosterId']);
+    const q = sid => sub.questions.find(x => x.stepId === sid);
+    expect(q('where-is-the-star')).toMatchObject({
+      verdict: 'correct',
+      attempts: 1,
+      response: '1',
+    });
+    expect(q('what-sits-at-the-other').verdict).toBe('correct');
+    expect(q('measure-the-two-orbits')).toMatchObject({ verdict: 'unmarked' });
+    expect(q('measure-the-two-orbits').response).toMatch(
+      /^circ_e=0; ecc_e=0\.6; ecc_peri=0\.4; ecc_apo=1\.6; ecc_a=1(\.0+)?$/
+    );
   });
 
   test('passes axe with results on it', async ({ page }) => {
