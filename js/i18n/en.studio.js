@@ -188,7 +188,7 @@ export const EN_STUDIO = {
   'studio.error.option': 'One of: {options}.',
   'studio.error.int': 'A whole number.',
   'studio.error.number': 'A number.',
-  'studio.error.range': 'From {min} to {max}.',
+  'studio.error.range': 'Outside the range {min} to {max}.',
   'studio.error.zoom': 'A zoom greater than 0 and at most 1000.',
   'studio.error.pan': 'A pan of x and y in pixels.',
   'studio.error.observer': 'An inclination and a position angle.',

@@ -192,7 +192,7 @@ export const ES_STUDIO = {
   'studio.error.option': 'Uno de estos: {options}.',
   'studio.error.int': 'Un número entero.',
   'studio.error.number': 'Un número.',
-  'studio.error.range': 'De {min} a {max}.',
+  'studio.error.range': 'Fuera del intervalo de {min} a {max}.',
   'studio.error.zoom': 'Un zoom mayor que 0 y de como mucho 1000.',
   'studio.error.pan': 'Un desplazamiento de x e y en píxeles.',
   'studio.error.observer': 'Una inclinación y un ángulo de posición.',

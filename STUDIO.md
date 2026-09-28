@@ -149,9 +149,10 @@ The evidence is in `tests/scenarioPack.test.js`:
 - **The SDK round trip:** a pack goes through `init --from`, `validate`, `test`
   and `pack`, and the file read back from the archive is byte for byte the one
   exported.
-- **Deterministic state:** the same pack builds the same world, compared
-  through the experiment bench's canonical state hash. A different seed builds
-  a different world.
+- **Deterministic state:** the same pack compiles to the same link, and the
+  experiment bench's canonical hash of the two is equal. It builds the same
+  world, body for body, and a different seed builds a different one. The
+  SDK's `test` builds the world twice and compares the two.
 
 `e2e/studio.spec.js` opens a pack's link in the application, against the
 sources and against the build. A pack made from Star Cluster shows the

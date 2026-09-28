@@ -995,11 +995,11 @@ function renderDiff(d) {
   const list = $('st-diff');
   list.textContent = '';
   const changes = semanticDiff(baseline, d);
-  // A value is shown whole up to a line's length; a longer one (a whole
-  // system, say) is cut, and the raw view has all of it.
+  // Each value as JSON, so an empty text reads "" rather than as nothing, and
+  // whole up to a line's length; a longer one (a whole system, say) is cut,
+  // and the raw view has all of it.
   const show = v => {
-    const s =
-      v === undefined ? '-' : typeof v === 'string' ? v : JSON.stringify(v);
+    const s = v === undefined ? '-' : JSON.stringify(v);
     return s.length > 80 ? `${s.slice(0, 79)}…` : s;
   };
   for (const c of changes.slice(0, 200)) {

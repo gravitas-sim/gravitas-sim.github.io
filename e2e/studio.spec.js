@@ -178,6 +178,9 @@ test.describe('the Scenario Studio', () => {
     await expect(page.locator('#st-diff-summary')).toHaveText(
       '2 change(s) since it was opened or saved.'
     );
+    await expect(page.locator('#st-diff li').first()).toHaveText(
+      'title.es changed: "" → "Cúmulo estelar (una copia)"'
+    );
   });
 
   test('a bad value is explained on its field, and undo and redo walk the history', async ({
@@ -189,14 +192,16 @@ test.describe('the Scenario Studio', () => {
     await enter(page, 'st-setting-num_planets', 5000);
     await expect(planets).toHaveAttribute('aria-invalid', 'true');
     await expect(page.locator('#st-setting-num_planets-error')).toHaveText(
-      'From 0 to 500.'
+      'Outside the range 0 to 500.'
     );
     await expect(planets).toHaveAttribute(
       'aria-describedby',
       /st-setting-num_planets-error/
     );
     await expect(page.locator('#st-save')).toBeDisabled();
-    await expect(page.locator('#st-checks')).toContainText('From 0 to 500.');
+    await expect(page.locator('#st-checks')).toContainText(
+      'Outside the range 0 to 500.'
+    );
 
     await page.locator('#st-undo').click();
     await expect(page.locator('#st-status')).toHaveText('Undone.');
@@ -321,7 +326,7 @@ test.describe('the Scenario Studio', () => {
     );
     await expect(page.locator('#st-seed')).toHaveValue('99');
     await expect(page.locator('#st-setting-num_comets-error')).toHaveText(
-      'From 0 to 200.'
+      'Outside the range 0 to 200.'
     );
     await enter(page, 'st-setting-num_comets', 4);
     await expect(page.locator('#st-checks-summary')).toHaveText(
@@ -343,6 +348,8 @@ test.describe('the Scenario Studio', () => {
 
     await openFile(page, 'star-cluster.scenario.json', theirs);
     await expect(dialog).toBeVisible();
+    // The choice that loses nothing is the one a stray Enter makes.
+    await expect(page.locator('#st-conflict-cancel')).toBeFocused();
     await expect(page.locator('#st-conflict-text')).toHaveText(
       'Your draft star-cluster is different from the file. These fields differ:'
     );
@@ -571,7 +578,7 @@ test.describe('the Scenario Studio', () => {
     );
     await enter(page, 'st-setting-num_planets', 5000);
     await expect(page.locator('#st-setting-num_planets-error')).toHaveText(
-      'De 0 a 500.'
+      'Fuera del intervalo de 0 a 500.'
     );
     await page.reload({ waitUntil: 'domcontentloaded' });
     await expect(page.locator('body')).toHaveAttribute('data-ready', 'true');
