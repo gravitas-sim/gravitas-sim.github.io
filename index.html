@@ -1963,6 +1963,18 @@
           >
             Blank Simulation
           </button>
+          <!-- js/systemBuilder.js mounts its own dialog. -->
+          <button
+            id="systemBuilderBtn"
+            class="ui-button"
+            type="button"
+            aria-haspopup="dialog"
+            title="Build a whole system from orbital elements, with its center of mass at rest"
+            data-i18n-title="rail.systemBuilder.hint"
+            data-i18n="rail.systemBuilder"
+          >
+            Orbital System Builder
+          </button>
         </div>
       </div>
 
@@ -2465,19 +2477,6 @@
           title="Type a position, a velocity and a mass instead of clicking"
         >
           <span aria-hidden="true">123</span>
-        </button>
-        <!-- js/systemBuilder.js mounts its own dialog. -->
-        <button
-          id="systemBuilderBtn"
-          class="ui-button rail-icon-btn"
-          type="button"
-          aria-haspopup="dialog"
-          data-i18n-aria-label="rail.systemBuilder"
-          data-i18n-title="rail.systemBuilder.hint"
-          aria-label="Orbital System Builder"
-          title="Build a whole system from orbital elements, with its center of mass at rest"
-        >
-          <span aria-hidden="true">&#9678;</span>
         </button>
       </div>
     </div>

@@ -2,8 +2,9 @@
 
 A form that builds a physically coherent two-dimensional hierarchical system
 from orbital elements, so a student or an instructor never has to turn
-elements into positions and velocities by hand. It opens from the ◎ button
-beside Precise placement, under Add object.
+elements into positions and velocities by hand. It opens from the Scenario
+section of the rail, beside Blank Simulation: like a scenario, it replaces the
+world.
 
 ## What you enter
 

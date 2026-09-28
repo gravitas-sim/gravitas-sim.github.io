@@ -15,9 +15,10 @@ the release rather than in the tag.
 
 ### Added
 
-- **The Orbital System Builder** (ORBITAL_SYSTEM_BUILDER.md). A form beside
-  Precise placement builds a two-dimensional hierarchical system from orbital
-  elements, with no conversion to positions and velocities by hand.
+- **The Orbital System Builder** (ORBITAL_SYSTEM_BUILDER.md). A form in the
+  Scenario section, beside Blank Simulation, builds a two-dimensional
+  hierarchical system from orbital elements, with no conversion to positions
+  and velocities by hand.
   - **What you enter:** for each companion, what it orbits, its type, mass
     and contact radius, and its semi-major axis, eccentricity, argument of
     periapsis, starting mean anomaly and direction.
