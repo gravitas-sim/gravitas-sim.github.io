@@ -3554,7 +3554,10 @@ function goToStep(index, { rebuild = false } = {}) {
  * investigation pack: js/platform/investigation.js) is shown only when the
  * graded step it names has an answer that is wrong - or right - now. One not
  * yet answered, or answered the other way, is passed over by Next and
- * Previous; every other step always applies.
+ * Previous; every other step always applies. A held prediction counts as not
+ * yet answered until its reveal step is reached, as renderStep() holds its
+ * verdict: the compiler refuses remediation before the reveal, and a lesson
+ * compiled before it did must not give the answer away by skipping one.
  */
 function stepApplies(index) {
   const w = active.steps[index]?.when;
@@ -3563,6 +3566,7 @@ function stepApplies(index) {
   const key = stepKey(active.id, w.sid);
   const value = responses[key];
   if (!target || value === undefined || value === '') return false;
+  if (target.reveal && !visited.has(target.reveal)) return false;
   const right = checkAnswer(target, value, {
     locale: localeOfAnswer(responses, key, getLocale()),
   });

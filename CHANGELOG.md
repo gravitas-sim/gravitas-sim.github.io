@@ -708,6 +708,30 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A remediation step could tell a student whether a held prediction was
+  right** before the experiment did (COMPOSER.md).
+  - **What it did:** a pack could put a remediation step (`when`) on a held
+    prediction (`reveal`) before the step where the prediction is marked.
+    The lesson panel held the verdict on screen, but Next showed that step
+    to students who predicted one way and passed over it for the rest. Where Next went was the verdict, so the answer key, not
+    the experiment, settled the prediction.
+  - **What it does now:** the composer refuses such a step as `whenHeld`, on
+    its "Shown to" field, in English and Spanish, and that list no longer
+    offers a prediction before it is marked. `js/authoring/rules.js` refuses
+    the same thing as `interaction/when` in any lesson. The engine also
+    treats a held prediction as unanswered until its reveal step is reached,
+    as the panel already did. So a preview staged by an older composer passes
+    over the step for every student, and shows it on the way back once the
+    prediction is marked.
+  - **Tests:** `tests/investigationPack.test.js` refuses remediation before
+    the reveal, answered either way or with the reveal moved past it, and
+    accepts it after. `tests/composer.test.js` does the same through the
+    lesson checker and the whole verdict. `e2e/composer.spec.js` checks the
+    list and the refusal on the page. It also stages the old shape in the
+    preview and presses Next after a right and after a wrong prediction:
+    both land on the same step.
+  - **Cost:** deferred JavaScript is 178 bytes larger, inside its 4180 KB.
+    No route or request ceiling moved.
 - **Refresh Scenario emptied a world a link had brought its own bodies to.**
   A link with bodies and no scenario, such as a shared Blank Simulation
   world, now rebuilds those bodies, as it already did for a built system.

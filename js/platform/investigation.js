@@ -732,7 +732,8 @@ function checkSetup(setup, path, { need, api }) {
  * Remediation, bounded: a step shown only when an earlier graded step was
  * answered a certain way. One level deep - the step it names is one every
  * student reaches - so a lesson's path is the straight line with optional
- * detours, never a maze, and every student can still reach its end.
+ * detours, never a maze, and every student can still reach its end. On a held
+ * prediction it comes no earlier than the step where the prediction is marked.
  */
 function checkWhen(s, path, index, { need, steps, sidAt }) {
   const w = s.when;
@@ -767,6 +768,20 @@ function checkWhen(s, path, index, { need, steps, sidAt }) {
     `${at}.sid`,
     'whenNested',
     'a step every student reaches: remediation is one level deep'
+  );
+  // A held prediction has no verdict until the step it is marked at. Shown or
+  // passed over before then, a step that follows it would be the verdict, and
+  // the answer key, not the experiment, would settle the prediction.
+  const marked =
+    isObject(target) && typeof target.reveal === 'string'
+      ? sidAt.get(target.reveal)
+      : undefined;
+  need(
+    marked === undefined || index >= marked,
+    `${at}.sid`,
+    'whenHeld',
+    `a prediction already marked: this one is marked at step ${marked + 1}, so remediation on it comes after that`,
+    { n: marked + 1 }
   );
   need(
     index !== steps.length - 1,
