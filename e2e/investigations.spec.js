@@ -722,3 +722,68 @@ test.describe('a lesson that locks placement says so', () => {
     await expect(page.locator('#objectTypePicker')).toBeHidden();
   });
 });
+
+test.describe('lesson prose reads as characters, not entity names', () => {
+  // prose() escaped the & of every entity before letting its four tags back
+  // in, so these lessons showed "HD&nbsp;209458" and "The star&rsquo;s
+  // gravity" as written, on the public site. tests/lessonMarkup.test.js
+  // renders prose() in jsdom; this reads what Chromium actually shows.
+  const ENTITY = /&(?:[a-z][a-z\d]{1,31}|#\d{1,7}|#x[\da-f]{1,6});/i;
+
+  test('Twelve Nights opens on HD 209458 at La Silla', async ({
+    page,
+    app,
+  }) => {
+    await app.boot({ url: '/#investigation=twelve-nights' });
+    const body = page.locator('#investigationBody .inv-step-body').first();
+    await expect(body).toContainText('209458');
+    // textContent for the exact characters: a no-break space, not a space.
+    expect(await body.evaluate(el => el.textContent)).toContain(
+      'one star: HD\u00a0209458, from La\u00a0Silla'
+    );
+    expect(await body.innerText()).not.toMatch(ENTITY);
+  });
+
+  test('a held prediction: its options, its name, what is announced and its verdict', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await app.boot({ url: '/#investigation=lives-of-stars' });
+    await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+    const wanted = 'What exactly runs out?';
+    for (let guard = 0; guard < 12; guard++) {
+      if ((await page.locator('.inv-step-title').innerText()) === wanted) break;
+      await answerAndAdvance(page);
+    }
+    await expect(page.locator('.inv-step-title')).toHaveText(wanted);
+
+    // The option written "The star&rsquo;s gravity", after its letter.
+    const options = page.locator('#investigationBody .inv-option');
+    await expect(options.nth(2)).toContainText('The star\u2019s gravity');
+    expect(await options.nth(2).innerText()).not.toMatch(ENTITY);
+    // The group is named by the prompt on screen, not by a copy of it in an
+    // attribute, where an entity would be read out as its letters.
+    await expect(
+      page.locator('#investigationBody [role="radiogroup"]')
+    ).toHaveAccessibleName(
+      'When a star leaves the main sequence, what has run out?'
+    );
+
+    await options.nth(2).click();
+    const status = page.locator('#srStatus');
+    await expect.poll(() => status.textContent()).not.toBe('');
+    expect(await status.textContent()).not.toMatch(ENTITY);
+
+    // The reveal is the next step, and it carries the verdict.
+    await page.locator('#investigationNext').click();
+    const verdict = page.locator('#investigationBody .inv-verdict');
+    await expect(verdict.locator('.inv-verdict-head')).toHaveText(
+      'You predicted: The star\u2019s gravity'
+    );
+    await expect(verdict.locator('.inv-because')).toContainText(
+      'Only the core\u2019s hydrogen'
+    );
+    expect(await verdict.innerText()).not.toMatch(ENTITY);
+  });
+});

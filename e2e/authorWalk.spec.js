@@ -20,6 +20,7 @@
 //   interaction  choices are answered, response fields filled, boxes ticked
 //   grading      the answer the lesson itself declares is submitted, and the
 //                site marks it correct - the same rule the answer key uses
+//   text         no entity reaches the screen as its name ("&rsquo;")
 //   advance      Next actually moved, within a bounded wait
 //
 // and at the end of each lesson, that the report opens.
@@ -354,6 +355,22 @@ for (const inv of lessons) {
         for (let b = 0; b < boxCount; b++) {
           const box = boxes.nth(b);
           if (!(await box.isChecked())) await box.check().catch(() => {});
+        }
+
+        // --- Its words are characters -------------------------------------
+        // prose() once escaped the & of every entity, so lessons showed
+        // "HD&nbsp;209458" and "Sun&rsquo;s". Read once the step is answered,
+        // so its explanation, feedback and any verdict are on screen too.
+        const entities = await page.evaluate(
+          () =>
+            document
+              .getElementById('investigationBody')
+              ?.innerText.match(
+                /&(?:[a-z][a-z\d]{1,31}|#\d{1,7}|#x[\da-f]{1,6});/gi
+              ) || []
+        );
+        if (entities.length) {
+          note(i, `shows ${[...new Set(entities)].join(' ')} as text`);
         }
 
         // --- Advance -------------------------------------------------------
