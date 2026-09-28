@@ -196,13 +196,18 @@ describe('the curve comparison', () => {
   });
 
   test('a best shift or model at the edge of what was searched is flagged', async () => {
-    const r = await K.compareCurves(cluster({ dm: 12.4 }), family(), grid);
+    // Three comparisons, so a coarser grid than the others': at theirs this one
+    // ran past Jest's 5 s on a loaded machine. It still holds the true shift,
+    // (10.5, 0.1), and 12.4 is still beyond it.
+    const coarse = { ...grid, dm: [9, 12, 0.1], E: [0, 0.3, 0.02] };
+    const r = await K.compareCurves(cluster({ dm: 12.4 }), family(), coarse);
     expect(r.warnings).toContainEqual({ code: 'dmAtEdge' });
-    const e = await K.compareCurves(cluster({ key: 3 }), family(), grid);
+    const e = await K.compareCurves(cluster({ key: 3 }), family(), coarse);
     expect(e.best.key).toBe(3);
     expect(e.warnings).toContainEqual({ code: 'modelAtEdge' });
-    const mid = await K.compareCurves(cluster({ key: 2 }), family(), grid);
+    const mid = await K.compareCurves(cluster({ key: 2 }), family(), coarse);
     expect(mid.warnings).not.toContainEqual({ code: 'modelAtEdge' });
+    expect(mid.warnings).not.toContainEqual({ code: 'dmAtEdge' });
   });
 
   test('refuses too few points, too many shifts and too much work, with a code', async () => {
