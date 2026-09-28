@@ -31,6 +31,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { focusStop, strayStops } from './keyboard.js';
 
 const PANEL = '#settingsPanel';
 const TRIGGER = '#settingsBtn';
@@ -171,22 +172,77 @@ test.describe('the settings dialog, open', () => {
   test('keeps focus inside itself', async ({ page, app }) => {
     await app.boot();
     await open(page);
-    // Forwards far enough to have escaped a panel that did not trap.
-    for (let i = 0; i < 60; i++) {
+    // Forwards far enough to have escaped a panel that did not trap, and then
+    // backwards, which is the direction that wraps off the first control.
+    // Plain Tab, which in WebKit on macOS is Safari's route: pop-up menus and
+    // text fields only, then the toolbar, which reads as <body> and is allowed
+    // (e2e/keyboard.js). A control behind the panel is not.
+    const stops = [];
+    for (const [key, presses] of [
+      ['Tab', 60],
+      ['Shift+Tab', 10],
+    ]) {
+      for (let i = 0; i < presses; i++) {
+        await page.keyboard.press(key);
+        stops.push(await page.evaluate(focusStop, PANEL));
+      }
+    }
+    expect(strayStops(stops), `stops: ${stops.join(', ')}`).toEqual([]);
+  });
+
+  // Safari's route out of the panel is the toolbar, and its route back in is
+  // the first text field on the page. On a bare page that is the panel's own
+  // filter box, which is why the test above never saw anything else. Over a
+  // lesson it was the lesson's answer boxes, behind the modal, from Tab 12
+  // onwards. Only a Mac's WebKit takes this route; tests/dialog.test.js pins
+  // the guard for every run.
+  test('comes back from the toolbar into itself, not into the lesson behind', async ({
+    page,
+    app,
+  }) => {
+    await app.boot({ url: '/?author=tides&step=10' });
+    // Polled, because on dist/ the lesson's family arrives as a lazy chunk.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(
+            () =>
+              [
+                ...document.querySelectorAll(
+                  'input[type="text"], select, textarea'
+                ),
+              ].filter(el => el.offsetParent !== null).length
+          ),
+        { message: 'the lesson puts text fields behind the panel' }
+      )
+      .toBeGreaterThan(0);
+    await open(page);
+    const stops = [];
+    for (let i = 0; i < 30; i++) {
       await page.keyboard.press('Tab');
-      const inside = await page.evaluate(
-        () => !!document.activeElement?.closest('#settingsPanel')
-      );
-      expect(inside, `Tab ${i + 1} stayed in the dialog`).toBe(true);
+      stops.push(await page.evaluate(focusStop, PANEL));
     }
-    // And backwards, which is the direction that wraps off the first control.
-    for (let i = 0; i < 10; i++) {
-      await page.keyboard.press('Shift+Tab');
-      const inside = await page.evaluate(
-        () => !!document.activeElement?.closest('#settingsPanel')
-      );
-      expect(inside, `Shift+Tab ${i + 1} stayed in the dialog`).toBe(true);
-    }
+    expect(strayStops(stops), `stops: ${stops.join(', ')}`).toEqual([]);
+  });
+
+  // A click on the panel's text put focus on <body> in every engine, and so
+  // did a click on any of its buttons in Safari, which does not focus a
+  // clicked button. The panel's keydown listener never heard Escape again, and
+  // Shift+Tab went into the page behind.
+  test('a click on its heading leaves Escape and Shift+Tab working', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await open(page);
+    await page.locator('#settingsPanelHeading').click();
+    await page.keyboard.press('Shift+Tab');
+    expect(await page.evaluate(focusStop, PANEL)).toBe('inside');
+
+    await page.locator('#settingsPanelHeading').click();
+    await page.keyboard.press('Escape');
+    await expect(page.locator(PANEL)).toBeHidden();
+    await expect(page.locator(TRIGGER)).toBeFocused();
   });
 
   for (const [name, close] of [
