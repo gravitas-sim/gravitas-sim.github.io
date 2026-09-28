@@ -130,6 +130,13 @@ describe('toWinAnsi', () => {
       expect(toWinAnsi(`a${dash}b`)).toBe('a-b');
     }
   });
+
+  test('prints the angstrom sign as the letter it normalizes to', () => {
+    // &#8491; decodes to U+212B, which WinAnsi has no code for, so a
+    // wavelength in angstroms printed as "6563 ?". U+00C5 is the same letter.
+    expect(toWinAnsi('6563 \u212b')).toBe('6563 \u00c5');
+    expect('\u212b'.normalize('NFC')).toBe('\u00c5');
+  });
 });
 
 describe('createDocument', () => {

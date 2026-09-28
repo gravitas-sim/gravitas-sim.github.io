@@ -642,6 +642,44 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **An instructor guide printed lesson markup as text.**
+  - **What it did:** `js/instructorDocs.js` put the prose in
+    `js/data/instructorContent.js` on the page as written, and Listening to
+    Spacetime's guide said `the black holes' <em>motion</em>` and
+    `<em>inspiral</em>` in two of its misconceptions. Its expected observation
+    for step 2 has the same tags, but the answer key leaves out reading steps,
+    so it never printed. Lesson titles, durations and levels, and each PDF's
+    `/Title`, were not flattened either, though none holds markup today. The
+    same prose is written in template literals, so its lines also broke
+    wherever the source line wrapped, and 70 of its 86 paragraph breaks
+    printed as two blank lines rather than one.
+  - **What it does now:** each document converts a lesson's instructor
+    content whole, so a field added later is covered too. Every string goes
+    through `plainText()`, one paragraph at a time: tags come out, entities
+    are decoded by the table in `js/lessonMarkup.js`, a wrapped source line
+    folds into a space, and a blank line stays one paragraph break. The
+    answer key's step titles, its lesson title, subtitle, duration and
+    level, and the activity guides' prior knowledge go through
+    `plainText()` too.
+  - **The angstrom sign:** `&#8491;` decodes to U+212B, which WinAnsi has no
+    code for, so `js/pdf.js` would have printed "?". It now prints Å
+    (U+00C5), the letter it normalizes to. Only step bodies in A Universe of
+    Stars use it, and no PDF prints a step body, so no document had shown it
+    yet.
+  - **Tests:** `tests/instructorMaterials.test.js` now fails any inline tag
+    (`<em>`, `<strong>`, `<sub>`, `<sup>`) as well as any entity, in the text
+    and the `/Title` and `/Subject` of every lesson's guide and key, and in
+    the adopter guide and curriculum map. A new test per lesson checks that
+    the overview prints the paragraphs it was written in, and that no line
+    is broken while it has room for the next word. `tests/pdf.test.js`
+    checks the angstrom sign. On v2 these fail 21 times: the tags in one
+    lesson, the source line breaks in 19 overviews, and the "?".
+  - **Cost:** 32 bytes of deferred JavaScript, which is 14 in the lab
+    report's chunk and 18 in the authoring chunk. On each lesson route that
+    is 14 bytes in the build and 176 in the sources. No ceiling moved.
+  - **Not yet in the published bundle:** the encrypted instructor materials
+    still hold the old PDFs until they are rebuilt with the passphrase
+    (`npm run build:instructors`).
 - **Lesson prose showed its HTML entities as text** (STUDIO_ROUNDTRIP_GATE.md,
   bugs the audit found).
   - **What it did:** `prose()` escaped every `&` before it let its four tags
