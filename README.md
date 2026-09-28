@@ -208,6 +208,14 @@ field is checked where it is typed, with undo, drafts kept in the browser and a
 raw JSON view, and the result is a file the SDK validates and packages or a
 link Gravitas opens ([STUDIO.md](STUDIO.md)).
 
+**An investigation composer.** `/studio/lesson/` composes a guided investigation
+as data: predictions marked at a later step, explorations, measurements,
+questions written in place or drawn from a versioned bank with scored,
+controlled variants, and remediation shown only after a wrong answer, every
+word in English and Spanish side by side. It is judged by the same checker as
+every lesson Gravitas ships and previews in the real lesson engine
+([COMPOSER.md](COMPOSER.md)).
+
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
 of <!--fact:uiStrings-->5964<!--/fact--> strings, and
@@ -528,6 +536,7 @@ part was built:
 | [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md)                       | The per-body readout and its orbital elements                                                                                                  |
 | [`ORBITAL_SYSTEM_BUILDER.md`](ORBITAL_SYSTEM_BUILDER.md)           | Building a hierarchical system from orbital elements: the construction, its checks, and the file it saves                                      |
 | [`STUDIO.md`](STUDIO.md)                                           | The Scenario Studio: what a scenario file holds, its checks and cautions, how it opens, and what still needs the source                        |
+| [`COMPOSER.md`](COMPOSER.md)                                       | The Investigation Composer: the pack and bank formats, variants from vetted relations, remediation, translation, and what it does not do     |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
