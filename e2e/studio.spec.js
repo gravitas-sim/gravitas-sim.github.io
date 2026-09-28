@@ -22,6 +22,7 @@
 //     tools it names already out, and the preview is that same link;
 //   - a scenario with its own bodies opens with them, and Refresh Scenario
 //     builds them again;
+//   - the Orbital System Builder points to it;
 //   - it reads in Spanish, passes axe in both languages, and fits a phone.
 //
 // DOM-only, for dist/: nothing here imports an application module into the
@@ -531,6 +532,23 @@ test.describe('the Scenario Studio', () => {
     // its bodies, rather than the empty world its settings alone describe.
     await page.locator('#refreshScenarioBtn').click();
     expect(await census(page)).toEqual({ Stars: 3 });
+  });
+
+  test('the Orbital System Builder points to it, and the link opens it', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await app.railControl('systemBuilderBtn');
+    await page.locator('#systemBuilderBtn').click();
+    const link = page.locator('#systemBuilderStudio');
+    await expect(link).toHaveText('Open the Scenario Studio');
+    await expect(page.locator('#systemBuilderStudioNote')).toContainText(
+      'save it as a file and open the file in the Scenario Studio'
+    );
+    const href = await link.evaluate(a => a.href);
+    expect(href).toBe(`${new URL(page.url()).origin}/studio/`);
+    await openStudio(page);
   });
 
   test('reads in Spanish, and the choice survives a reload', async ({
