@@ -296,7 +296,8 @@ describe('grading at the edge of a tolerance', () => {
 describe('plain text for a medium with no markup', () => {
   // A PDF has no markup, so an entity in a source string is not a character
   // there - it is the six letters "&rsquo;", and nineteen of those went out in
-  // three answer keys. The browser was always right; only this path was wrong.
+  // three answer keys. The lesson panel had the same bug for longer; both now
+  // read one table, in js/lessonMarkup.js.
   test.each([
     ['Kepler&rsquo;s law', 'Kepler\u2019s law'],
     ['a&nbsp;b', 'a b'],
@@ -305,8 +306,8 @@ describe('plain text for a medium with no markup', () => {
     ['A &amp; B', 'A & B'],
     ['&#8217;s', '\u2019s'],
     ['&#x2014;', '\u2014'],
-    // &amp; is decoded last, so text that should read as a literal "&lt;"
-    // stays one rather than becoming a "<".
+    // Each reference is decoded once, so text that should read as a literal
+    // "&lt;" stays one rather than becoming a "<".
     ['&amp;lt; stays literal', '&lt; stays literal'],
     // An entity nobody listed survives, visibly, rather than being guessed at.
     ['&unknownthing; survives', '&unknownthing; survives'],
