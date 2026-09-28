@@ -642,6 +642,42 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **Lesson prose showed its HTML entities as text** (STUDIO_ROUNDTRIP_GATE.md,
+  bugs the audit found).
+  - **What it did:** `prose()` escaped every `&` before it let its four tags
+    back in, so an entity reached the screen as its name. Twelve Nights
+    opened on "HD&nbsp;209458, from La&nbsp;Silla", and six lessons on the
+    public site, and their Spanish, showed `&rsquo;`, `&deg;`, `&mdash;`,
+    `&lt;` and `&amp;` the same way. It also reached the verdict on a held
+    prediction ("You predicted: The star&rsquo;s gravity"), the screen-reader
+    announcement after a choice, and the choice group's accessible name. The
+    student lab report had its own `plain()`, which decoded nothing, so a
+    student who chose such an option handed in a PDF that said so.
+  - **What it does now:** `js/lessonMarkup.js` holds `prose()` and one entity
+    table, read by the lesson panel, the lab report and the answer keys, so
+    screen and paper cannot disagree. `prose()` decodes after it escapes and
+    escapes what it decodes, so `&lt;` is only ever text. The table lists the
+    15 names lessons use (it gained `&beta;`), as the characters HTML gives
+    them: `&nbsp;` is a no-break space on screen, and the PDFs still fold it
+    to a space. The choice group is now named by the prompt on screen
+    (`aria-labelledby`), which also ends names cut short at a `"`. What a
+    student wrote is printed as typed, because the completion code is
+    computed over it.
+  - **Tests:** `tests/lessonMarkup.test.js` renders through the real
+    `prose()` into a DOM, checks each table entry against jsdom's HTML
+    parser, fails any lesson, English or Spanish, that uses an unlisted
+    entity, and prints a lab report for every lesson. The lesson walk
+    (`e2e/authorWalk.spec.js`) now fails a step that shows an entity by name,
+    and `e2e/investigations.spec.js` reads Twelve Nights and a held
+    prediction in Chromium.
+  - **Cost:** on each lesson route, 726 bytes and no request in the build,
+    and 3,088 bytes and one request in the sources. The module shares the
+    chunk `js/answerCheck.js` is in, and the lab report is handed the decoder
+    as it is handed `checkAnswer`, so it stays there. #79 to #81 had used the
+    lesson routes' room first, so their four ceilings in
+    `tools/route-budgets.json` rise by exactly that, 0.8 KB and 3.1 KB. No
+    request ceiling moved, and deferred JavaScript is 81 bytes larger, inside
+    its 4180 KB.
 - **A full link, or a saved state, measured drift against the wrong world.**
   The conservation baseline was taken over the world the restore then
   replaced.
