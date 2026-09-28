@@ -1528,7 +1528,13 @@ function showOnField(node, message) {
     );
 }
 
+/** The document the last check was asked for, so a redraw alone is not re-checked. */
+let checkedFor = null;
+
 function scheduleCheck() {
+  const text = serialize(doc());
+  if (text === checkedFor) return;
+  checkedFor = text;
   clearTimeout(checkTimer);
   const seq = ++checkSeq;
   $('cp-checks-summary').textContent = t('composer.checks.running');
@@ -1984,6 +1990,7 @@ function start(pack, message) {
   baseline = clone(pack);
   saveDraft(pack);
   verdict = null;
+  checkedFor = null;
   render();
   if (message) setStatus(message);
 }
