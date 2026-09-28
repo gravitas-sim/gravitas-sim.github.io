@@ -25,6 +25,8 @@ import {
 import {
   packFromOrbitalSystem,
   packBodies,
+  packCautions,
+  describeCaution,
   scenarioApi,
 } from '../js/scenarioPack.js';
 import { hashState } from '../js/experiments/canonicalState.js';
@@ -416,6 +418,79 @@ describe('compiling a pack into a link', () => {
     expect(a).toMatchObject({ type: 'StarObject', mass: 2000, massInSuns: 2 });
     expect(a.pos).toEqual({ x: -50, y: 0 });
     expect(b).toMatchObject({ type: 'Planet', massInEarths: 5, radius: 2 });
+  });
+});
+
+describe('cautions about the bodies', () => {
+  // A star of one solar mass (1000 in simulation units) at the origin and a
+  // planet 100 units (1 AU) out, under the default G of 2: the circular speed
+  // is sqrt(2 * 1000 / 100) = 4.47 and the escape speed sqrt(2) times that.
+  const pair = vy => {
+    const p = goodPack();
+    p.settings = zeroPopulation();
+    p.bodies = [
+      { name: 'Star', type: 'Star', mass: 1, x: 0, y: 0, vx: 0, vy: 0 },
+      { type: 'Planet', mass: 1, x: 100, y: 0, vx: 0, vy },
+    ];
+    expect(checkPack(p)).toEqual([]);
+    return p;
+  };
+
+  test('a bound pair earns none, and an unbound one names the body that leaves', () => {
+    expect(packCautions(pair(4.47))).toEqual([]);
+    expect(packCautions(pair(6.3))).toEqual([]);
+    const fast = pair(6.4);
+    const [c, ...rest] = packCautions(fast);
+    expect(rest).toEqual([]);
+    expect(c).toMatchObject({ key: 'studio.caution.unbound', bodies: [1] });
+    expect(c.vars.speed).toBe(6.4);
+    // sqrt(2 G (M + m) / r), to the three figures a caution says.
+    const m = packBodies(fast).bodies[1].mass;
+    expect(c.vars.escape).toBe(
+      Number(Math.sqrt((2 * 2 * (1000 + m)) / 100).toPrecision(3))
+    );
+    expect(describeCaution(fast, c)).toMatch(
+      /^body 2 moves at 6\.4 against the rest, more than the 6\.3\d? /
+    );
+  });
+
+  test('two typed bodies that start inside each other are named', () => {
+    const p = pair(4.47);
+    p.bodies[1].x = 0.5;
+    const overlap = packCautions(p).filter(
+      c => c.key === 'builder.check.overlap'
+    );
+    expect(overlap).toEqual([expect.objectContaining({ bodies: [0, 1] })]);
+  });
+
+  test('a typed body inside a system body is named, by the builder’s rule', () => {
+    const r = packFromOrbitalSystem({
+      format: 'gravitas.orbital-system',
+      version: 1,
+      bodies: [
+        { name: 'Sun', type: 'Star', mass: 1 },
+        { name: 'Jupiter', type: 'GasGiant', mass: 1, primary: 0, a: 5.2 },
+      ],
+    });
+    const p = {
+      ...r.pack,
+      title: goodPack().title,
+      summary: goodPack().summary,
+    };
+    p.bodies = [{ type: 'Planet', mass: 1, x: 0.2, y: 0, vx: 0, vy: 0 }];
+    expect(checkPack(p)).toEqual([]);
+    const [c] = packCautions(p).filter(x => x.key === 'builder.check.overlap');
+    expect(c.bodies).toEqual([0, 2]);
+    expect(describeCaution(p, c)).toMatch(
+      /^Sun and body 3 overlap at the start/
+    );
+  });
+
+  test('the SDK example earns none', () => {
+    const pack = JSON.parse(
+      readFileSync('sdk/examples/figure-eight/scenario.json', 'utf8')
+    );
+    expect(packCautions(pack)).toEqual([]);
   });
 });
 

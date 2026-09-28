@@ -20,7 +20,7 @@
 // =============================================================================
 
 import { DEFAULT_SETTINGS } from './appState.js';
-import { INTEGRATORS, GasGiant } from './physics.js';
+import { INTEGRATORS, GasGiant, ABSORB_BUFFER } from './physics.js';
 import { TAG_ORDER } from './data/scenarioTags.js';
 import { pristineSettingsFor, settingsDelta } from './shareState.js';
 import { formatSeed } from './rng.js';
@@ -37,6 +37,8 @@ import {
 import { LIMITS } from './place/preciseFields.js';
 import { EN_BUILDER } from './i18n/en.builder.js';
 import { EN_PLACEMENT } from './i18n/en.placement.js';
+import { EN_STUDIO } from './i18n/en.studio.js';
+import { SIM_UNITS_PER_AU } from './constants.js';
 import {
   FORMAT,
   FORMAT_VERSION,
@@ -126,7 +128,7 @@ export function scenarioApi() {
  * The Studio says the same keys in its reader's language.
  */
 function explain(key, vars = {}) {
-  const text = EN_BUILDER[key] ?? EN_PLACEMENT[key] ?? key;
+  const text = EN_BUILDER[key] ?? EN_PLACEMENT[key] ?? EN_STUDIO[key] ?? key;
   return text.replace(/\{(\w+)\}/g, (m, k) =>
     k in vars ? String(vars[k]) : m
   );
@@ -206,6 +208,108 @@ export function packBodies(pack) {
     );
   }
   return { bodies, built };
+}
+
+/** Three significant figures, for a number said in a caution. */
+const said = v => (typeof v === 'number' ? Number(v.toPrecision(3)) : v);
+
+/**
+ * The cautions a pack's bodies earn. Heuristics, said as cautions and never
+ * as errors, because none of them proves what a system will do:
+ *
+ *   - the Orbital System Builder's own checks on the system: overlap,
+ *     contact at periapsis, Hill spheres, crossing orbits and the stability
+ *     criteria (ORBITAL_SYSTEM_BUILDER.md);
+ *   - an integration step longer than the system's shortest orbit wants;
+ *   - two bodies that start inside each other, by the builder's own rule,
+ *     where one of them is a typed body (the builder has checked the
+ *     system's pairs);
+ *   - a typed body moving faster than the escape speed from everything
+ *     else, taken as one mass at its barycenter. A two-body estimate: a body
+ *     it names may still be captured, and one it passes may still be thrown
+ *     out by a close encounter. The energy of a pair is the same seen from
+ *     either side, so only a body no heavier than the rest together is
+ *     named: a planet leaves its star, not the star the planet.
+ *
+ * @param {object} pack - A valid pack
+ * @returns {Array<{key: string, vars: object, bodies: number[]}>} `bodies`
+ *   index packBodies(pack).bodies, the system's first; numbers in `vars`
+ *   are rounded to three significant figures
+ */
+export function packCautions(pack) {
+  const out = [];
+  const say = (key, vars, bodies) => {
+    const v = {};
+    for (const [k, x] of Object.entries(vars)) v[k] = said(x);
+    out.push({ key, vars: v, bodies });
+  };
+  const { bodies, built } = packBodies(pack);
+  if (built) {
+    for (const c of built.checks) say(c.key, c.vars, [...c.bodies]);
+    const step = pack.settings?.max_timestep ?? DEFAULT_SETTINGS.max_timestep;
+    if (!(step > 0) || step > built.settings.max_timestep * 1.01) {
+      say('studio.caution.step', { step: built.settings.max_timestep }, []);
+    }
+  }
+  const first = bodies.length - (pack.bodies?.length ?? 0);
+  const bh = b => b.type === 'BlackHole';
+  for (let i = 0; i < bodies.length; i++) {
+    for (let j = Math.max(i + 1, first); j < bodies.length; j++) {
+      const [a, b] = [bodies[i], bodies[j]];
+      const d = Math.hypot(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
+      const contact =
+        a.radius + b.radius + (bh(a) || bh(b) ? ABSORB_BUFFER : 0);
+      if (d < contact) {
+        say(
+          'builder.check.overlap',
+          {
+            distance: d / SIM_UNITS_PER_AU,
+            contact: contact / SIM_UNITS_PER_AU,
+          },
+          [i, j]
+        );
+      }
+    }
+  }
+  const G =
+    pack.settings?.gravitational_constant ??
+    DEFAULT_SETTINGS.gravitational_constant;
+  for (let i = first; i < bodies.length && bodies.length > 1; i++) {
+    const b = bodies[i];
+    let [M, x, y, vx, vy] = [0, 0, 0, 0, 0];
+    for (const [k, o] of bodies.entries()) {
+      if (k === i) continue;
+      M += o.mass;
+      x += o.mass * o.pos.x;
+      y += o.mass * o.pos.y;
+      vx += o.mass * o.vel.x;
+      vy += o.mass * o.vel.y;
+    }
+    const r = Math.hypot(b.pos.x - x / M, b.pos.y - y / M);
+    if (!(M > 0) || !(r > 0)) continue;
+    const speed = Math.hypot(b.vel.x - vx / M, b.vel.y - vy / M);
+    const escape = Math.sqrt((2 * G * (M + b.mass)) / r);
+    if (speed > escape && b.mass <= M) {
+      say('studio.caution.unbound', { speed, escape }, [i]);
+    }
+  }
+  return out;
+}
+
+/**
+ * A caution in English, for the SDK: bodies by their names, or by their
+ * place in the pack's list when they have none.
+ *
+ * @param {object} pack - The pack the caution is about
+ * @param {{key: string, vars: object, bodies: number[]}} c - From packCautions
+ * @returns {string}
+ */
+export function describeCaution(pack, c) {
+  const names = packBodies(pack).bodies.map(
+    (b, i) => b.name || `body ${i + 1}`
+  );
+  const [one, two] = c.bodies.map(i => names[i]);
+  return explain(c.key, { ...c.vars, first: one, second: two, name: one });
 }
 
 /**

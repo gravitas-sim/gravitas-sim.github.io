@@ -48,6 +48,8 @@ import {
 import { validateCoursePack } from './course.mjs';
 import {
   checkPack,
+  packCautions,
+  describeCaution,
   buildPackWorld,
   stepPackWorld,
   worldSnapshot,
@@ -510,7 +512,15 @@ async function validateScenarioExtension(ext, m, report, ids) {
     return report.error(M, 'provides.scenarios[0].file', 'the scenario file');
   const pack = parseJson(ext, entry.file, report);
   if (!pack) return [];
-  for (const e of checkPack(pack)) report.error(entry.file, e.path, e.message);
+  const errors = checkPack(pack);
+  for (const e of errors) report.error(entry.file, e.path, e.message);
+  // Heuristics about the bodies (js/scenarioPack.js packCautions): said as
+  // warnings, because none of them proves what the system will do.
+  if (!errors.length) {
+    for (const c of packCautions(pack)) {
+      report.warn(entry.file, 'bodies', describeCaution(pack, c));
+    }
+  }
   if (pack.id !== entry.id)
     report.error(
       entry.file,

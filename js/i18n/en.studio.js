@@ -105,6 +105,8 @@ export const EN_STUDIO = {
   'studio.checks.caution': 'Caution: {text}',
   'studio.caution.handBuilt':
     '{scenario} places its bodies by code, so only its settings were copied. This scenario builds the world those settings generate, which is not the same one.',
+  'studio.caution.unbound':
+    '{name} moves at {speed} against the rest, more than the {escape} that is enough to escape them (simulation units per time unit), so it will probably leave. This treats everything else as one mass at its barycenter: an estimate, not a proof.',
   'studio.caution.step':
     'The integration step is longer than this system needs. A step of at most {step} time units gives its shortest orbit five hundred steps.',
   'studio.diff.heading': 'Changes',

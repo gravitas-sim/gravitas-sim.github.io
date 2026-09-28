@@ -107,6 +107,8 @@ export const ES_STUDIO = {
   'studio.checks.caution': 'Atención: {text}',
   'studio.caution.handBuilt':
     '{scenario} coloca sus cuerpos por código, así que solo se copiaron sus ajustes. Este escenario construye el mundo que esos ajustes generan, que no es el mismo.',
+  'studio.caution.unbound':
+    '{name} se mueve a {speed} respecto al resto, más que los {escape} que bastan para escapar de ellos (unidades de simulación por unidad de tiempo), así que probablemente se irá. Trata todo lo demás como una sola masa en su baricentro: una estimación, no una prueba.',
   'studio.caution.step':
     'El paso de integración es más largo de lo que este sistema necesita. Un paso de como mucho {step} unidades de tiempo da a su órbita más corta quinientos pasos.',
   'studio.diff.heading': 'Cambios',

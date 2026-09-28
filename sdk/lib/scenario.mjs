@@ -14,6 +14,8 @@ export {
 } from '../../js/platform/scenario.js';
 export {
   checkPack,
+  packCautions,
+  describeCaution,
   compileScenarioPack,
   scenarioApi,
   packFromOrbitalSystem,

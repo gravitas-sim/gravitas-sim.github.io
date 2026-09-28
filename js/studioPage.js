@@ -55,6 +55,7 @@ import {
   settingsFromScenario,
   packFromOrbitalSystem,
   packBodies,
+  packCautions,
   GENERATED_SCENARIOS,
   BUILDER_TYPES,
   SYSTEM_TYPES,
@@ -944,29 +945,17 @@ function cautions(d) {
     );
   }
   try {
-    const { built } = packBodies(d);
-    if (built) {
-      const names = built.bodies.map(b => b.name);
-      for (const c of built.checks) {
-        const vars = {
-          ...c.vars,
-          first: names[c.bodies[0]],
-          second: names[c.bodies[1]],
-        };
-        for (const [k, v] of Object.entries(vars)) {
-          if (typeof v === 'number') vars[k] = Number(v.toPrecision(3));
-        }
-        out.push(t(c.key, vars));
-      }
-      const step = d.settings?.max_timestep ?? DEFAULT_SETTINGS.max_timestep;
-      if (!(step > 0) || step > built.settings.max_timestep * 1.01) {
-        out.push(
-          t('studio.caution.step', { step: built.settings.max_timestep })
-        );
-      }
+    const { bodies } = packBodies(d);
+    const first = bodies.length - (d.bodies?.length ?? 0);
+    const names = bodies.map(
+      (b, i) => b.name || t('studio.typed.body', { n: i - first + 1 })
+    );
+    for (const c of packCautions(d)) {
+      const [one, two] = c.bodies.map(i => names[i]);
+      out.push(t(c.key, { ...c.vars, first: one, second: two, name: one }));
     }
   } catch {
-    /* an invalid system is reported by the validator */
+    /* an invalid system or body is reported by the validator */
   }
   return out;
 }

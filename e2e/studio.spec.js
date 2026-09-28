@@ -8,6 +8,8 @@
 //     about, and a built-in becomes a valid scenario by keyboard;
 //   - a bad value is explained on its field and blocks saving, and undo and
 //     redo walk the history, from the buttons and from the keys;
+//   - typed bodies that overlap or escape are named as cautions, which never
+//     block saving;
 //   - a draft survives a reload;
 //   - the raw view refuses what does not parse and changes nothing, and
 //     applies what does as one undo step;
@@ -18,6 +20,8 @@
 //     opens again without a conflict;
 //   - the link opens in Gravitas as the built-in world, with the panels and
 //     tools it names already out, and the preview is that same link;
+//   - a scenario with its own bodies opens with them, and Refresh Scenario
+//     builds them again;
 //   - it reads in Spanish, passes axe in both languages, and fits a phone.
 //
 // DOM-only, for dist/: nothing here imports an application module into the
@@ -217,6 +221,41 @@ test.describe('the Scenario Studio', () => {
     await expect(page.locator('#st-tag-chaos')).toBeChecked({
       checked: !was,
     });
+  });
+
+  test('typed bodies that overlap or escape are named as cautions, which never block saving', async ({
+    page,
+  }) => {
+    await openStudio(page);
+    for (const [id, text] of [
+      ['st-title-en', 'Two bodies'],
+      ['st-title-es', 'Dos cuerpos'],
+      ['st-summary-en', 'A star and a planet.'],
+      ['st-summary-es', 'Una estrella y un planeta.'],
+    ]) {
+      await enter(page, id, text);
+    }
+    await page.locator('#st-body-add').click();
+    await page.locator('#st-body-add').click();
+    const checks = page.locator('#st-checks');
+    // Both start at the origin.
+    await expect(checks).toContainText(
+      'Caution: Body 1 and Body 2 overlap at the start'
+    );
+    await page.locator('#st-body-1-type').selectOption('Planet');
+    await enter(page, 'st-body-1-x', 100);
+    await enter(page, 'st-body-1-vy', 7);
+    await expect(checks).toContainText(
+      'Caution: Body 2 moves at 7 against the rest'
+    );
+    await expect(checks).not.toContainText('overlap');
+    await expect(page.locator('#st-checks-summary')).toHaveText(
+      'The scenario is valid.'
+    );
+    await expect(page.locator('#st-save')).toBeEnabled();
+    // The circular speed, sqrt(2 x 1000 / 100): bound, and nothing to say.
+    await enter(page, 'st-body-1-vy', 4.47);
+    await expect(checks.locator('li')).toHaveText(['Nothing to fix.']);
   });
 
   test('a draft is kept in this browser and is back after a reload', async ({
