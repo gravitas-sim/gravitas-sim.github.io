@@ -247,6 +247,13 @@ indistinguishable from a clicked one — same list, same share link, same undo
 button — and `e2e/accessibilityParity.spec.js` asserts that by comparing the
 two share payloads.
 
+The **Orbital System Builder**, beside it, takes a whole system the same way:
+each companion's primary, mass and orbit as labeled fields, with every error
+on its own field and a table of the orbits as the text equivalent of its
+preview drawing. `e2e/systemBuilder.spec.js` runs axe over it, checks that
+Escape returns focus to its button and that it fits a 375-pixel screen, and
+reads its labels in Spanish.
+
 What remains is the gesture itself. Dragging to *feel* how fast a throw is,
 and seeing the velocity arrow grow as you drag, has no keyboard equivalent and
 will not get one; the form gives you the number instead of the feel.

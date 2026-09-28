@@ -249,6 +249,9 @@ export const EN = {
   'place.precise.close': 'Done',
   'rail.precisePlace.hint':
     'Add a body by typing its position, velocity and mass',
+  'rail.systemBuilder': 'Orbital System Builder',
+  'rail.systemBuilder.hint':
+    'Build a whole system from orbital elements, with its center of mass at rest',
   'rail.railScenario': 'Scenario',
   'rail.loadScenario': 'Load Scenario',
   'rail.investigations': '🎓 Investigations',

@@ -201,6 +201,9 @@ export const ES = {
   'place.precise.close': 'Listo',
   'rail.precisePlace.hint':
     'A\u00f1adir un cuerpo escribiendo su posici\u00f3n, velocidad y masa',
+  'rail.systemBuilder': 'Constructor de sistemas orbitales',
+  'rail.systemBuilder.hint':
+    'Construir un sistema completo a partir de elementos orbitales, con su centro de masas en reposo',
 
   // --- Rail: labels ----------------------------------------------------------
   // The emoji stay: they are part of the button's shape rather than of its

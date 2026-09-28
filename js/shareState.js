@@ -260,6 +260,10 @@ const BODY_FIELDS = [
   // how it is drawn. Only a galaxy has it. A link made before galaxies
   // travelled at all has none of them to restore.
   'galaxyType',
+  // GasGiant.set_state copies both, so without them a restored gas giant had
+  // no massInJupiters and no giant type. Additive, like the fields above.
+  'massInJupiters',
+  'giantType',
 ];
 
 /**
@@ -283,6 +287,8 @@ export function packBody(s, { withId = false } = {}) {
   for (const f of BODY_FIELDS) {
     if (s[f] !== undefined && s[f] !== null) out[f] = trim(s[f]);
   }
+  // Only when set: a body marked permanent survives the distance cull.
+  if (s.persistent === true) out.persistent = true;
   if (withId && Number.isFinite(s.id)) out.id = s.id;
   return out;
 }
