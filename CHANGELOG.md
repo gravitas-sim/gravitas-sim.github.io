@@ -15,6 +15,32 @@ the release rather than in the tag.
 
 ### Added
 
+- **The Investigation Composer** (COMPOSER.md). A page at `/studio/lesson/`
+  composes a guided investigation as data, `gravitas.investigation-pack/1`,
+  judged by the same lesson checker as every built-in lesson.
+  - **Steps:** read, predict (marked at a later step), explore, measure and
+    question, each binding a scenario, a seed word and an instrument, as
+    collapsible cards.
+  - **Remediation:** a step shown only to students whose answer to an
+    earlier graded step is wrong (or right), one level deep. The engine's
+    Next and Previous honor it and `js/authoring/rules.js` checks it.
+  - **A question bank** (`gravitas.question-bank/1`): versioned questions
+    with explicit points and attempt rules, accessibility metadata, and
+    variants, either shuffled options or inputs from a vetted relation
+    Gravitas computes (Kepler's third law, orbital and escape speed,
+    inverse square, transit depth). A recorded seed picks the variant, so
+    the same seed builds the same investigation.
+  - **Translation:** English and Spanish side by side, each text marked
+    translated, missing or out of date from a digest of the English it was
+    written from.
+  - **Around it:** an estimate of the work fitted to the built-in lessons, an
+    answer key, a sample lab report as a PDF, a preview in the real lesson
+    engine as a student or with the author bar, drafts, undo, a raw JSON
+    view, import conflicts, bank merging, and the lesson files a maintainer
+    vendors.
+  - A hostile file is refused before any rule reads it: no prototype keys,
+    functions, markup, links, or files larger or deeper than any pack.
+
 - **The Scenario Studio** (STUDIO.md). A page at `/studio/` makes a scenario
   as data rather than code, and writes a `gravitas.scenario-pack/1` file or a
   link the application opens.
