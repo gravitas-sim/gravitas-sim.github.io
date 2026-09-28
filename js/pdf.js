@@ -218,6 +218,9 @@ const TRANSLITERATE = new Map(
     // Reduced Planck constant, which the black hole lesson names in passing.
     '\u210f': 'hbar',
     ħ: 'hbar',
+    // The angstrom sign, which &#8491; decodes to. WinAnsi has no code for it
+    // (it printed as '?'), but has one for the letter it normalizes to.
+    '\u212b': '\u00c5',
     ν: 'nu',
     τ: 'tau',
     ε: 'epsilon',
