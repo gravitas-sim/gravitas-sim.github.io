@@ -19,6 +19,8 @@
 //     file merges its new questions and refuses a clash, and the lesson
 //     files export;
 //   - a file with the id of a different draft asks first;
+//   - a step id that would end an attribute is refused by the Composer, and a
+//     preview staged with one before that is refused by the lesson panel;
 //   - it reads in Spanish, passes axe in both languages, and fits a phone.
 // =============================================================================
 
@@ -334,6 +336,99 @@ test.describe('the Investigation Composer', () => {
     ]);
     await page.locator('#cp-conflict-both').click();
     await expect(page.locator('#cp-id')).toHaveValue('reading-an-orbit-2');
+  });
+
+  test.describe('a step id is text from a file', () => {
+    // The lesson panel writes `<lesson>:<sid>` into attributes, and a pack's
+    // sid is whatever the file says. This one closes data-field="..." on the
+    // measure step's input, and the `//` comments out the `:<field>` the key
+    // carries after it, so the handler is one that would really run.
+    const INJECTED = 'x" autofocus onfocus="window.__injected=1;//';
+    const MEASURE = EXAMPLE_INVESTIGATION.steps.findIndex(
+      s => s.sid === 'time-it'
+    );
+
+    test('the Composer refuses one that would end an attribute, and stages nothing', async ({
+      page,
+    }) => {
+      await openComposer(page);
+      const pack = JSON.parse(JSON.stringify(EXAMPLE_INVESTIGATION));
+      pack.id = 'crafted-sid';
+      pack.steps[MEASURE].sid = INJECTED;
+      await openFile(page, 'crafted-sid.investigation.json', pack);
+      await expect(page.locator('#cp-id')).toHaveValue('crafted-sid');
+      await expect(page.locator('#cp-checks')).toContainText(
+        'Up to 80 lowercase letters, digits and single hyphens, and not only digits.'
+      );
+      await expect(page.locator('#cp-preview-go')).toBeDisabled();
+      await expect(page.locator('#cp-preview-author')).toBeHidden();
+      expect(
+        await page.evaluate(() =>
+          localStorage.getItem('gravitas_composer_preview')
+        )
+      ).toBeNull();
+    });
+
+    test('a preview staged with one before that is refused by the lesson panel', async ({
+      page,
+      app,
+    }) => {
+      // Stage the example, then give it the sid an earlier Composer compiled
+      // verbatim: that draft is still in storage after an upgrade.
+      await openComposer(page);
+      await page.locator('#cp-preview-go').click();
+      await expect(page.locator('#cp-preview')).toHaveAttribute(
+        'src',
+        /draft-reading-an-orbit/
+      );
+      await page.evaluate(sid => {
+        const stored = JSON.parse(
+          localStorage.getItem('gravitas_composer_preview')
+        );
+        stored.lesson.steps.find(s => s.sid === 'time-it').sid = sid;
+        localStorage.setItem(
+          'gravitas_composer_preview',
+          JSON.stringify(stored)
+        );
+      }, INJECTED);
+
+      await app.boot({
+        url: `/?author=draft-reading-an-orbit&view=student&step=${MEASURE + 1}`,
+      });
+      // The open has run to the end, whichever way it went.
+      await expect
+        .poll(
+          () =>
+            page.evaluate(
+              () =>
+                document.getElementById('gravitasToast')?.textContent ||
+                document.querySelector('#investigationBody h3')?.textContent ||
+                null
+            ),
+          { timeout: 30_000 }
+        )
+        .not.toBeNull();
+      const added = await page.evaluate(() =>
+        [...document.querySelectorAll('#investigationPanel *')].flatMap(el =>
+          el
+            .getAttributeNames()
+            .filter(name => name === 'autofocus' || name.startsWith('on'))
+        )
+      );
+      expect(added).toEqual([]);
+      await page.evaluate(() => {
+        for (const input of document.querySelectorAll(
+          '#investigationBody input'
+        ))
+          input.focus();
+      });
+      expect(await page.evaluate(() => window.__injected)).toBeUndefined();
+      // Refused rather than drawn, and said so.
+      await expect(page.locator('#gravitasToast')).toHaveText(
+        'That lesson could not be loaded. Try again.'
+      );
+      await expect(page.locator('#investigationPanel')).toBeHidden();
+    });
   });
 
   test('the raw view refuses what does not parse and changes nothing', async ({

@@ -256,7 +256,7 @@ export const ES_COMPOSER = {
     'El último paso cierra la investigación: que sea un paso de leer o de explorar.',
   'composer.error.stepType': 'Uno de estos: {options}.',
   'composer.error.sid':
-    'Hasta 80 caracteres, sin dos puntos, y no solo dígitos.',
+    'Hasta 80 letras minúsculas, dígitos y guiones sueltos, y no solo dígitos.',
   'composer.error.firstSetup': 'El primer paso abre un escenario.',
   'composer.error.widget': 'Elige un instrumento que Gravitas tenga.',
   'composer.error.earlier': 'Elige un paso anterior.',

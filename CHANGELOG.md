@@ -711,6 +711,33 @@ the release rather than in the tag.
 - **Refresh Scenario emptied a world a link had brought its own bodies to.**
   A link with bodies and no scenario, such as a shared Blank Simulation
   world, now rebuilds those bodies, as it already did for a built system.
+- **A Composer pack's step id could add attributes to the lesson panel.**
+  - **What it did:** a step's `sid` only had to be 1 to 80 characters, with
+    no colon and not only digits, in the pack format
+    (`js/platform/investigation.js`) and in the lesson checker
+    (`js/investigations/progressSchema.js`). The panel writes
+    `<lesson>:<sid>` into attributes without escaping it, and since the
+    Investigation Composer (#98) opens a pack from a file, a sid is text
+    someone else may have written. A quote in one ended `data-field="…"` on a
+    measure step's input, and the rest of the sid became attributes of it: a
+    preview of such a pack gave the field an `autofocus` and an `onfocus`
+    handler, and focusing it ran the handler on the lesson page.
+  - **What it does now:** a sid is lowercase letters, digits and single
+    hyphens, like every other public id in a pack, and still not only digits.
+    Both copies of the rule say so, and so does the Composer's message on the
+    field. Every sid in the built-in lessons, their Spanish and the capability
+    packages already had that form. The lesson panel refuses to open a lesson
+    with any other sid, which covers a preview an earlier Composer staged, and
+    it escapes the step key with `attr()` in the checklist, written-answer,
+    model-answer and numeric Check attributes, and with `CSS.escape()` in the
+    measure-field lookup.
+  - **Tests:** `tests/investigationPack.test.js` and
+    `tests/authoring.test.js` refuse a sid with a quote in a pack and in a
+    lesson, and `tests/progressIdentity.test.js` holds both copies of the rule
+    to one table. `e2e/composer.spec.js` opens a crafted pack file, which the
+    Composer now marks and will not preview, and a crafted preview left in
+    storage, which the panel now refuses, with no attribute added and nothing
+    run.
 - **Lesson prose showed its HTML entities as text** (STUDIO_ROUNDTRIP_GATE.md,
   bugs the audit found).
   - **What it did:** `prose()` escaped every `&` before it let its four tags

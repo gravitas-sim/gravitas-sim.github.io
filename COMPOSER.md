@@ -154,6 +154,8 @@ Checks run in two stages:
 
    Prose may use lesson prose's four tags (strong, em, sub, sup) and the
    entities lessons use. It may not use other markup, links or script URLs.
+   A step id is lowercase letters, digits and single hyphens, like the pack's
+   other ids, because the lesson panel writes it into attributes.
 2. **The lesson checker** (`js/authoring/rules.js`), once the file is sound,
    over the compiled lesson and its Spanish shadow. Every rule a lesson in the
    repository passes applies, except the ones that need what a pack does not

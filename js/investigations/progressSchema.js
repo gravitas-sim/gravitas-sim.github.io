@@ -64,14 +64,20 @@ export const stepKey = (lessonId, sid) => `${lessonId}:${sid}`;
  * confused for one another, and anything containing a colon so the sub-key
  * scheme above stays unambiguous.
  *
+ * And anything but lowercase letters, digits and single hyphens. The key is
+ * written into the lesson panel's attributes and selectors (js/investigations.js
+ * renderStep), and since the Investigation Composer a sid can come from a pack
+ * file someone else wrote: a quote in one ended the attribute it was written
+ * into, and the rest of the sid became attributes of the input. Every sid
+ * tools/add-step-ids.mjs mints is already of this form.
+ *
  * @param {*} sid - Candidate
  * @returns {boolean} Whether it is well formed
  */
 export const isValidSid = sid =>
   typeof sid === 'string' &&
-  sid.length > 0 &&
   sid.length <= 80 &&
-  !sid.includes(':') &&
+  /^[a-z0-9]+(-[a-z0-9]+)*$/.test(sid) &&
   !/^\d+$/.test(sid);
 
 /** @param {object} lesson - A merged lesson @returns {Array<string>} Its sids, in order */

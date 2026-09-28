@@ -286,6 +286,27 @@ describe('a hostile file', () => {
     );
   });
 
+  test('cannot end an attribute with a step id', () => {
+    // The lesson panel writes `<lesson>:<sid>` into attributes. Before sids
+    // were held to a public id, this one closed data-field="..." on the measure
+    // step's input and gave it an autofocus and a handler that ran.
+    const p = good();
+    step(p, 'time-it').sid = 'x" autofocus onfocus="window.__injected=1';
+    expect(codesAt(p)).toContain('steps[3].sid sid');
+    for (const sid of [
+      'a<b',
+      'a&amp;b',
+      'two words',
+      'Time-it',
+      'a--b',
+      '-a',
+    ]) {
+      const q = good();
+      step(q, 'time-it').sid = sid;
+      expect(codesAt(q)).toContain('steps[3].sid sid');
+    }
+  });
+
   test('cannot name another format’s file as its own', () => {
     expect(codesAt({ ...good(), format: 'gravitas.scenario-pack' })).toContain(
       'format format'
