@@ -2111,13 +2111,57 @@
 }
 
 /*
-  Precise placement. Five selectors: the dialog's own width, a row, the inputs,
-  the two kinds of small print under a field, and the button row. Everything
-  else - the panel chrome, the heading, the buttons - is already styled by
-  .modal-panel and .ui-button, which is why there is no .precise-dialog h2 here.
+  Precise placement. The panel, its closed state and its heading; then the
+  dialog's own width, a row, the inputs, the two kinds of small print under a
+  field, and the button row. The buttons are .ui-button's.
+
+  This comment used to say the panel chrome was "already styled by
+  .modal-panel". It was not: no rule named the class, so the dialog rendered
+  static and transparent after the last element in <body> - below the fold,
+  where body's overflow: hidden meant nobody could scroll to it. Focus moved
+  into a form a sighted reader never saw, and the e2e spec passed because
+  Playwright's click scrolls boxes a reader cannot.
+
+  The panel is a single element with no backdrop around it, so it centers
+  itself: a fixed box with inset 0 and auto margins sits in the middle of the
+  viewport once it has a definite size, and fit-content gives it one up to
+  max-height, past which it scrolls. There is no scrim on purpose. The form
+  stays open while a system is built, one body at a time, and the reader is
+  watching each one appear in the world behind it.
+
+  The closed state is only an opacity, and it is there for js/dialog.js:
+  closeDialog() sets `hidden` on the transition's end, and a panel with no
+  transition waits out a 600 ms fallback, visible and inert, instead.
 */
+.modal-panel {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  height: fit-content;
+  max-height: calc(100% - 2 * var(--space-4));
+  margin: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-5);
+  background: var(--panel-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  transition: opacity var(--duration) var(--ease);
+}
+
+.modal-panel.hidden {
+  opacity: 0;
+}
+
+.modal-panel h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-lg);
+}
+
 .precise-dialog {
-  max-width: 34rem;
+  width: min(34rem, calc(100% - 2 * var(--space-4)));
 }
 
 .precise-row {
