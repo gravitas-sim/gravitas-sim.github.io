@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-5eWq2bIq+eAqiktSZLw4BymAO5cKlifq+qdYuLRNP10=' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; connect-src https://cdn.jsdelivr.net; base-uri 'none'; form-action 'none'">
+<title>Notebook runner</title></head><body>
+<script type="module">// The notebook runner (spike). Loaded in <iframe sandbox="allow-scripts">
+// with no allow-same-origin, so its origin is opaque: it has no storage, no
+// cookies and no reach into the page that holds it. It speaks one protocol
+// over a MessagePort the host transfers, and runs the cells it is sent in
+// Pyodide from a pinned release on the CDN.
+const PYODIDE = 'https://cdn.jsdelivr.net/pyodide/v314.0.7/full/';
+const PROTOCOL = 'gravitas-notebook';
+const MAX_INPUT = 2_000_000;
+const MAX_CELL = 20_000;
+const MAX_CELLS = 40;
+const MAX_OUTPUT = 4_000_000;
+const PACKAGES = new Set(['numpy', 'matplotlib', 'scipy', 'pandas', 'astropy']);
+let py = null;
+let port = null;
+
+/** What this frame may reach, asked of the frame itself. */
+async function probes() {
+  const r = {};
+  const sync = (k, fn) => {
+    try {
+      fn();
+      r[k] = 'allowed';
+    } catch (e) {
+      r[k] = `refused (${e.name})`;
+    }
+  };
+  sync('localStorage', () => window.localStorage.length);
+  sync('sessionStorage', () => window.sessionStorage.length);
+  sync('cookie', () => document.cookie);
+  sync('parent.document', () => window.parent.document.title);
+  sync('top.location.href', () => window.top.location.href);
+  r.origin = self.origin;
+  try {
+    await new Promise((ok, bad) => {
+      const q = indexedDB.open('probe');
+      q.onsuccess = ok;
+      q.onerror = () => bad(q.error);
+    });
+    r.indexedDB = 'allowed';
+  } catch (e) {
+    r.indexedDB = `refused (${e?.name || e})`;
+  }
+  try {
+    await caches.keys();
+    r.caches = 'allowed';
+  } catch (e) {
+    r.caches = `refused (${e?.name || e})`;
+  }
+  return r;
+}
+
+const valid = m =>
+  m &&
+  m.protocol === PROTOCOL &&
+  m.v === 1 &&
+  m.type === 'run' &&
+  typeof m.id === 'string' &&
+  m.id.length <= 64 &&
+  typeof m.input === 'string' &&
+  m.input.length <= MAX_INPUT &&
+  Array.isArray(m.cells) &&
+  m.cells.length <= MAX_CELLS &&
+  m.cells.every(c => typeof c === 'string' && c.length <= MAX_CELL) &&
+  Array.isArray(m.packages) &&
+  m.packages.every(p => PACKAGES.has(p));
+
+async function run(m) {
+  const marks = { start: performance.now() };
+  if (!py) {
+    const { loadPyodide } = await import(`${PYODIDE}pyodide.mjs`);
+    py = await loadPyodide({ indexURL: PYODIDE });
+    marks.runtime = performance.now();
+  }
+  await py.loadPackage(m.packages, { checkIntegrity: true });
+  marks.packages = performance.now();
+  const stdout = [];
+  py.setStdout({ batched: s => stdout.length < 200 && stdout.push(s) });
+  py.setStderr({ batched: s => stdout.length < 200 && stdout.push(s) });
+  py.globals.set('gravitas_input', m.input);
+  for (const cell of m.cells) await py.runPythonAsync(cell);
+  marks.cells = performance.now();
+  const output = py.runPython(
+    'import json as _j; _j.dumps(gravitas_output, allow_nan=False)'
+  );
+  const versions = Object.fromEntries(
+    Object.entries(py.loadedPackages).map(([k]) => [
+      k,
+      py.runPython(
+        `import importlib.metadata as _m\ntry:\n  _v=_m.version(${JSON.stringify(k)})\nexcept Exception:\n  _v=None\n_v`
+      ),
+    ])
+  );
+  return {
+    output,
+    stdout: stdout.join('\n').slice(0, 64_000),
+    runtime: {
+      name: 'pyodide',
+      version: py.version,
+      python: py.runPython('import sys; sys.version.split()[0]'),
+      packages: versions,
+      lock: `${PYODIDE}pyodide-lock.json`,
+    },
+    heapBytes: py._module.HEAP8.length,
+    marks,
+  };
+}
+
+window.addEventListener('message', async e => {
+  // Only the host's first message, which carries the port.
+  if (port || e.source !== window.parent || !e.ports?.[0]) return;
+  port = e.ports[0];
+  port.onmessage = async ({ data }) => {
+    if (!valid(data)) {
+      port.postMessage({ protocol: PROTOCOL, v: 1, type: 'error', id: data?.id ?? null, error: 'invalid request' });
+      return;
+    }
+    try {
+      const r = await run(data);
+      if (r.output.length > MAX_OUTPUT) throw new Error('output too large');
+      port.postMessage({ protocol: PROTOCOL, v: 1, type: 'result', id: data.id, ...r });
+    } catch (err) {
+      port.postMessage({ protocol: PROTOCOL, v: 1, type: 'error', id: data.id, error: String(err?.message || err).slice(0, 2000) });
+    }
+  };
+  port.postMessage({ protocol: PROTOCOL, v: 1, type: 'ready', probes: await probes() });
+});
+</script>
+</body></html>
