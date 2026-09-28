@@ -670,10 +670,14 @@ the release rather than in the tag.
     (`e2e/authorWalk.spec.js`) now fails a step that shows an entity by name,
     and `e2e/investigations.spec.js` reads Twelve Nights and a held
     prediction in Chromium.
-  - **Cost:** 0.8 KB and no request on each lesson route in the build. The
-    module shares the chunk `js/answerCheck.js` is in, and the lab report is
-    handed the decoder as it is handed `checkAnswer`, so it stays there.
-    Every route is within its ceiling.
+  - **Cost:** on each lesson route, 726 bytes and no request in the build,
+    and 3,088 bytes and one request in the sources. The module shares the
+    chunk `js/answerCheck.js` is in, and the lab report is handed the decoder
+    as it is handed `checkAnswer`, so it stays there. #79 to #81 had used the
+    lesson routes' room first, so their four ceilings in
+    `tools/route-budgets.json` rise by exactly that, 0.8 KB and 3.1 KB. No
+    request ceiling moved, and deferred JavaScript is 81 bytes larger, inside
+    its 4180 KB.
 - **A full link, or a saved state, measured drift against the wrong world.**
   The conservation baseline was taken over the world the restore then
   replaced.
