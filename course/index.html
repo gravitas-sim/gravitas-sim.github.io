@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Course | Gravitas</title>
+    <meta
+      name="description"
+      content="A Gravitas course: its units, lessons, assignments, simulations, data and readings in order, with objectives, time and a printable syllabus."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: a course, read top to bottom, and its syllabus
+         when printed. */
+      .ch-wrap {
+        max-width: 52rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .ch-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .ch-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        align-items: center;
+        margin: 0.75rem 0 1.5rem;
+      }
+      .ch-bar select {
+        min-width: 0;
+        max-width: 100%;
+        font: inherit;
+        color: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.3rem 0.4rem;
+      }
+      .ch-wrap h1 {
+        margin: 0 0 0.5rem;
+      }
+      .ch-wrap h2 {
+        font-size: 1.2rem;
+        margin: 1.75rem 0 0.5rem;
+      }
+      .ch-muted {
+        color: #b7bfcf;
+        font-size: 0.9rem;
+      }
+      .ch-warn {
+        color: #ffd180;
+        font-weight: 600;
+      }
+      .ch-time {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 1.5rem;
+      }
+      .ch-items {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .ch-item {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin: 0 0 0.75rem;
+      }
+      .ch-item[data-path='intro'],
+      .ch-item[data-path='advanced'] {
+        border-style: dashed;
+      }
+      .ch-item-head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 0.75rem;
+        align-items: baseline;
+      }
+      .ch-item-head h3 {
+        font-size: 1rem;
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      .ch-kind {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #b7bfcf;
+      }
+      .ch-badge {
+        font-size: 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 999px;
+        padding: 0 0.5rem;
+      }
+      .ch-item p {
+        margin: 0.4rem 0 0;
+        overflow-wrap: anywhere;
+      }
+      .ch-teacher {
+        border-left: 3px solid var(--accent);
+        padding-left: 0.6rem;
+      }
+      .ch-print-only {
+        display: none;
+      }
+      @media print {
+        body.doc-page {
+          background: #fff;
+          color: #000;
+        }
+        .ch-wrap {
+          max-width: none;
+          padding: 0;
+        }
+        .ch-wrap a {
+          color: #000;
+        }
+        .ch-bar,
+        #langSwitch,
+        .ch-nav,
+        .ch-actions a:not([data-print]) {
+          display: none !important;
+        }
+        .ch-actions a[data-print] {
+          background: none;
+          border: 0;
+          padding: 0;
+          color: #000;
+        }
+        .ch-actions a[data-print]::after {
+          content: ' ' attr(data-print);
+          font-size: 0.8rem;
+        }
+        .ch-print-only {
+          display: block;
+        }
+        .ch-muted {
+          color: #333;
+        }
+        .ch-item {
+          border-color: #999;
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main
+      class="ch-wrap"
+      aria-label="Course home"
+      data-i18n-aria-label="courseHome.label"
+    >
+      <div
+        id="langSwitch"
+        class="ch-bar"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="courseHome.lang"
+      ></div>
+      <p class="ch-nav"><a href="/" data-i18n="courseHome.back">Gravitas</a></p>
+
+      <div
+        class="ch-bar"
+        role="group"
+        aria-label="What to show"
+        data-i18n-aria-label="courseHome.controls"
+      >
+        <label for="ch-path" data-i18n="courseHome.show">Show</label>
+        <select id="ch-path">
+          <option value="all" data-i18n="courseHome.show.all">Every item</option>
+          <option value="core" data-i18n="courseHome.show.core">The core only</option>
+          <option value="intro" data-i18n="courseHome.show.intro">The core and the introductions</option>
+          <option value="advanced" data-i18n="courseHome.show.advanced">The core and the advanced items</option>
+        </select>
+        <label>
+          <input id="ch-teacher" type="checkbox" />
+          <span data-i18n="courseHome.teacherToggle">Notes for instructors</span>
+        </label>
+        <button id="ch-print" type="button" class="ui-button" data-i18n="courseHome.print">Print the syllabus</button>
+        <button id="ch-open" type="button" class="ui-button" data-i18n="courseHome.openFile">Open a course file</button>
+        <input id="ch-file" type="file" accept="application/json,.json" hidden />
+      </div>
+
+      <p class="ch-print-only ch-muted" data-i18n="courseHome.printNote"></p>
+
+      <article id="ch-course" aria-labelledby="ch-title" hidden></article>
+
+      <section id="ch-empty" aria-labelledby="ch-empty-h" hidden>
+        <h1 id="ch-empty-h" data-i18n="courseHome.empty.heading">No course is open</h1>
+        <p data-i18n="courseHome.empty.text"></p>
+        <p><a href="?course=intro-astronomy" data-i18n="courseHome.empty.example"></a></p>
+        <p>
+          <button id="ch-open-empty" type="button" class="ui-button" data-i18n="courseHome.openFile">Open a course file</button>
+        </p>
+        <p><a href="/studio/course/" data-i18n="courseHome.empty.builder"></a></p>
+      </section>
+
+      <section id="ch-refused" aria-labelledby="ch-refused-h" role="alert" hidden>
+        <h1 id="ch-refused-h" data-i18n="courseHome.refused.heading">This course cannot be opened</h1>
+        <p data-i18n="courseHome.refused.text"></p>
+        <p id="ch-refused-why" class="ch-muted"></p>
+      </section>
+    </main>
+    <script type="module" src="/js/courseHome.js"></script>
+  </body>
+</html>
