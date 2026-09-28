@@ -26,6 +26,7 @@ import { evidenceFrom } from './data/investigations/provenance.js';
 import { isWrittenAnswer } from './investigations/writtenAnswer.js';
 import { getLocale, t, onLocaleChange } from './i18n/index.js';
 import { lessonText } from './i18n/lesson.js';
+import { decodeEntities, escapeHtml as escape, prose } from './lessonMarkup.js';
 // The registry, not the barrel. ../data/investigations.js pulls all ten lessons
 // in statically, which is right for a build script and wrong here: the browser
 // draws ten cards from the manifest, and opening one lesson fetches that one.
@@ -1977,29 +1978,8 @@ function drawPlot(step, id) {
 
 // --- Panel rendering ----------------------------------------------------------
 
-const escape = text =>
-  String(text ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-
 /** Escape for use inside a double-quoted attribute. */
 const attr = text => escape(text).replace(/"/g, '&quot;');
-
-/** Lesson prose carries a little inline markup, but never arbitrary HTML. */
-const prose = text =>
-  escape(text)
-    // [\s\S] rather than . : lesson prose is written in template literals that
-    // wrap across lines, and a tag spanning a newline was left as raw markup on
-    // screen.
-    .replace(/&lt;strong&gt;([\s\S]*?)&lt;\/strong&gt;/g, '<strong>$1</strong>')
-    .replace(/&lt;em&gt;([\s\S]*?)&lt;\/em&gt;/g, '<em>$1</em>')
-    // Real subscripts and superscripts: R<sub>p</sub> rather than R_p, which a
-    // student then has to translate back into the algebra they were taught.
-    .replace(/&lt;sub&gt;([\s\S]*?)&lt;\/sub&gt;/g, '<sub>$1</sub>')
-    .replace(/&lt;sup&gt;([\s\S]*?)&lt;\/sup&gt;/g, '<sup>$1</sup>')
-    .replace(/\n\s*\n/g, '</p><p>')
-    .replace(/\s+/g, ' ');
 
 function renderStep() {
   const step = currentStep();
@@ -2093,9 +2073,13 @@ function renderStep() {
     // arrives, and that step shows them how it turned out.
     const held = locked && Boolean(step.reveal) && !visited.has(step.reveal);
     const marked = locked && !held;
-    parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
+    // Named by the prompt on screen rather than a copy of it in an attribute,
+    // where its entities and markup would be read out as written.
     parts.push(
-      `<div class="inv-options" role="radiogroup" aria-label="${escape(step.prompt)}">${step.options
+      `<p class="inv-prompt" id="invChoicePrompt">${prose(step.prompt)}</p>`
+    );
+    parts.push(
+      `<div class="inv-options" role="radiogroup" aria-labelledby="invChoicePrompt">${step.options
         .map((opt, i) => {
           const chosen = Number(saved) === i;
           const correct = marked && i === step.answer;
@@ -2136,10 +2120,10 @@ function renderStep() {
   if (predicted) {
     parts.push(
       `<div class="inv-verdict ${predicted.right ? 'is-right' : 'is-wrong'}">
-         <p class="inv-verdict-head">${escape(
+         <p class="inv-verdict-head">${prose(
            t('inv.predict.youSaid', { choice: predicted.chose })
          )}</p>
-         <p class="inv-verdict-mark">${escape(
+         <p class="inv-verdict-mark">${prose(
            predicted.right
              ? t('inv.predict.right')
              : t('inv.predict.wrong', { answer: predicted.answer })
@@ -3274,7 +3258,12 @@ function bindStepInputs() {
       announce(
         right
           ? t('inv.answer.correct')
-          : `${t('inv.answer.recorded')} ${step.because ? step.because : ''}`
+          : `${t('inv.answer.recorded')} ${decodeEntities(
+              String(step.because ?? '').replace(
+                /<\/?(strong|em|sub|sup)>/g,
+                ''
+              )
+            )}`
       );
     });
   });
@@ -4606,6 +4595,7 @@ async function generateReport() {
         checkAnswer(step, value, {
           locale: localeOfAnswer(responses, key, getLocale()),
         }),
+      decodeEntities,
     });
 
     const slug = `${name
