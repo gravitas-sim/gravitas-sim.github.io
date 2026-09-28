@@ -45,6 +45,33 @@ export function elementsProblem({ a, e, i, Omega, omega, M }, mu) {
 }
 
 /**
+ * Kepler's equation E - e sin E = M, for 0 <= e < 1. Newton's method from
+ * Danby's starting value, kept inside the bracket [M - e, M + e] that always
+ * holds the root, with a bisection whenever a step would leave it: started
+ * at pi, plain Newton wanders at high eccentricity (e = 0.95, M = -1.74
+ * never converged).
+ */
+export function solveKepler(M, e) {
+  const wrapped = M - 2 * Math.PI * Math.round(M / (2 * Math.PI));
+  let lo = wrapped - e;
+  let hi = wrapped + e;
+  let E = wrapped + 0.85 * e * Math.sign(Math.sin(wrapped) || 1);
+  for (let k = 0; k < 200; k++) {
+    const f = E - e * Math.sin(E) - wrapped;
+    if (f > 0) hi = E;
+    else lo = E;
+    let next = E - f / (1 - e * Math.cos(E));
+    if (!(next > lo && next < hi)) next = (lo + hi) / 2;
+    if (Math.abs(next - E) <= 1e-16 * (1 + Math.abs(E))) {
+      E = next;
+      break;
+    }
+    E = next;
+  }
+  return E + (M - wrapped);
+}
+
+/**
  * Position and velocity of a body relative to its primary, for
  * mu = G (m_primary + m_body).
  * @returns {{x: number[], v: number[]}}
@@ -56,12 +83,7 @@ export function fromElements(el, mu) {
   let r;
   let vp;
   if (e < 1) {
-    let E = e < 0.8 ? M : Math.PI;
-    for (let k = 0; k < 100; k++) {
-      const d = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-      E -= d;
-      if (Math.abs(d) < 1e-16) break;
-    }
+    const E = solveKepler(M, e);
     const cosE = Math.cos(E);
     const sinE = Math.sin(E);
     const b = a * Math.sqrt(1 - e * e);

@@ -1,0 +1,100 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "gravitas.lab3d",
+  "version": "1.0.0",
+  "kind": "built-in",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "The 3-D small-N dynamics kernel",
+    "es": "El núcleo de dinámica de pocos cuerpos en 3-D"
+  },
+  "provides": {
+    "routes": [
+      {
+        "path": "/lab3d/"
+      }
+    ],
+    "models": [
+      {
+        "id": "lab3d-small-n"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "js/lab3d/kernel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/elements.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/state.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/engine.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/worker.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/api.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/experiment.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/references.js",
+      "role": "code",
+      "offline": "optional"
+    }
+  ],
+  "citations": [
+    {
+      "text": "Yoshida, H. 1990, Phys. Lett. A 150, 262 (fourth-order symplectic composition)",
+      "url": "https://doi.org/10.1016/0375-9601(90)90092-3"
+    },
+    {
+      "text": "Dormand, J. R. and Prince, P. J. 1980, J. Comput. Appl. Math. 6, 19 (the 5(4) pair)",
+      "url": "https://doi.org/10.1016/0771-050X(80)90013-3"
+    },
+    {
+      "text": "Chenciner, A. and Montgomery, R. 2000, Ann. Math. 152, 881 (the figure-eight solution)",
+      "url": "https://doi.org/10.2307/2661357"
+    }
+  ],
+  "licenses": [
+    {
+      "scope": "js/lab3d/**",
+      "license": "MIT"
+    }
+  ],
+  "offline": {
+    "policy": "on-demand"
+  },
+  "validation": [
+    {
+      "check": "registry:lab3d"
+    },
+    {
+      "check": "jest:tests/lab3d.test.js"
+    },
+    {
+      "check": "e2e:e2e/lab3d.spec.js"
+    }
+  ]
+}

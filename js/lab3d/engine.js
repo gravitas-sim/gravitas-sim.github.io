@@ -163,9 +163,9 @@ export function createRun(system, options) {
   };
   const warned = new Set();
   const warn = (code, vars = {}) => {
-    const key = code + JSON.stringify(vars);
-    if (warned.has(key)) return;
-    warned.add(key);
+    // One warning of each kind: the first pair is the one named.
+    if (warned.has(code)) return;
+    warned.add(code);
     out.warnings.push({ code, ...vars });
   };
   const event = e => {
@@ -193,9 +193,40 @@ export function createRun(system, options) {
   };
   for (const p of pairs) p[2] = radialRate(p[0], p[1]).rate;
 
+  /**
+   * Whether a fixed step moved some pair by more than a tenth of their
+   * separation: the encounter is not resolved (the gate's R7). Squared
+   * lengths, and only while no warning has been given, so it costs a
+   * fraction of one force evaluation.
+   */
+  const fixedStep = it.scheme !== 'dopri5';
+  const checkResolution = h => {
+    for (let i = 0; i < s.n; i++) {
+      if (!s.alive[i]) continue;
+      for (let j = i + 1; j < s.n; j++) {
+        if (!s.alive[j] || (s.m[i] === 0 && s.m[j] === 0)) continue;
+        let d2 = 0;
+        let u2 = 0;
+        for (let k = 0; k < 3; k++) {
+          const d = s.x[3 * j + k] - s.x[3 * i + k];
+          const u = s.v[3 * j + k] - s.v[3 * i + k];
+          d2 += d * d;
+          u2 += u * u;
+        }
+        if (u2 * h * h * 100 > d2) {
+          warn('unresolvedEncounter', {
+            bodies: [system.bodies[i].id, system.bodies[j].id],
+          });
+          return;
+        }
+      }
+    }
+  };
+
   /** After every step: mergers, close approaches, crossings, and whether to go on. */
   const afterStep = h => {
     out.stats.steps++;
+    if (fixedStep && !warned.has('unresolvedEncounter')) checkResolution(h);
     for (const m of mergeContacts(s))
       event({
         kind: 'merger',
@@ -217,18 +248,6 @@ export function createRun(system, options) {
           bodies: [system.bodies[i].id, system.bodies[j].id],
           distance: d,
         });
-        // A fixed step that moves the pair by more than a tenth of their
-        // separation per step has not resolved the encounter (R7).
-        if (it.scheme !== 'dopri5') {
-          const ux = s.v[3 * j] - s.v[3 * i];
-          const uy = s.v[3 * j + 1] - s.v[3 * i + 1];
-          const uz = s.v[3 * j + 2] - s.v[3 * i + 2];
-          const dv = Math.sqrt(ux * ux + uy * uy + uz * uz);
-          if (dv * h > 0.1 * d)
-            warn('unresolvedEncounter', {
-              bodies: [system.bodies[i].id, system.bodies[j].id],
-            });
-        }
       }
       p[2] = rate;
     }

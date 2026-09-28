@@ -316,6 +316,14 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    id: 'lab3d',
+    label: '3-D kernel validation',
+    command: ['npm', 'run', 'validate:lab3d'],
+    tier: 'slow',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  {
     id: 'scenarios',
     label: 'scenario stability',
     command: ['npm', 'run', 'validate:scenarios'],
