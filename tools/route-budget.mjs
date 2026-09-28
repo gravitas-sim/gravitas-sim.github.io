@@ -85,6 +85,7 @@ export const ROUTES = [
   { id: 'experiments', url: '/experiments/', page: true },
   { id: 'observatory', url: '/observatory/', page: true },
   { id: 'catalog', url: '/catalog/', page: true },
+  { id: 'studio', url: '/studio/', page: true },
 ];
 
 const CONFIGS = {

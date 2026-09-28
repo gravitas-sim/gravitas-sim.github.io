@@ -420,8 +420,8 @@ export const CHECKS = [
     tier: 'slow',
     ci: null,
     why:
-      'loads nine routes in a browser, against the sources and against the ' +
-      'build the gate has just made; no CI job has both',
+      'loads every page route in a browser, against the sources and against ' +
+      'the build the gate has just made; no CI job has both',
     group: 'correctness',
   },
   {

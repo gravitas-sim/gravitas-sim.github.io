@@ -104,6 +104,83 @@
       }
     ]
   },
+  "scenario-content": {
+    "type": "scenario-pack",
+    "findings": [
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "title.en",
+        "line": 8,
+        "column": 11,
+        "message": "contains markup or a URL; a pack is plain text"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "summary.es",
+        "line": 11,
+        "column": 14,
+        "message": "is missing: every declared locale needs it"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.binary_lab_planet_a",
+        "line": 16,
+        "column": 28,
+        "message": "\"binary_lab_planet_a\" is not a setting a scenario pack can set"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "bodies[1].type",
+        "line": 22,
+        "column": 15,
+        "message": "a body: Choose a type."
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.num_black_holes",
+        "line": 15,
+        "column": 15,
+        "message": "num_black_holes is 1 by default; a scenario with its own bodies sets it to 0"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.num_planets",
+        "line": 17,
+        "column": 20,
+        "message": "must be 0: a scenario with its own bodies does not also generate them"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.num_gas_giants",
+        "line": 15,
+        "column": 15,
+        "message": "num_gas_giants is 2 by default; a scenario with its own bodies sets it to 0"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "settings.num_asteroids",
+        "line": 15,
+        "column": 15,
+        "message": "num_asteroids is 10 by default; a scenario with its own bodies sets it to 0"
+      },
+      {
+        "severity": "error",
+        "file": "scenario.json",
+        "path": "id",
+        "line": 4,
+        "column": 9,
+        "message": "is \"another-scenario\"; the extension provides \"scenario-content\""
+      }
+    ]
+  },
   "wrong-platform": {
     "type": "course-pack",
     "findings": [
