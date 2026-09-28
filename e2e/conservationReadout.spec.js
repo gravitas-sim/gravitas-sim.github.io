@@ -30,15 +30,23 @@ const help = page => page.locator('.readout-conservation-help');
  * by the time the world exists - which is exactly how a scenario that wants
  * the readout gets it back, and exactly why a test asking for it has to ask
  * afterwards.
+ *
+ * And they are pushed into the engine as well. The renderer reads ui.SETTINGS,
+ * but physics.js reads its own copy, which the build synced before these were
+ * written: without the second step a physics setting reaches the settings
+ * dialog and never the force law or conservationCaveats(). It is the order a
+ * share link uses for the settings its author changed after the build.
  */
 async function scenario(page, name, settings = {}) {
   await requireScenarioKey(page, name);
   await page.evaluate(
     async ({ name: key, settings: s }) => {
       const ui = await import('/js/ui.js');
+      const physics = await import('/js/physics.js');
       ui.SETTINGS.preset_scenario = key;
       ui.initialize_simulation({ seed: 'conservation' });
       Object.assign(ui.SETTINGS, s);
+      physics.updatePhysicsSettings(ui.SETTINGS);
     },
     { name, settings }
   );
@@ -157,17 +165,31 @@ test.describe('when it is asked for', () => {
 test.describe('what the scene does to its own conservation', () => {
   test('a closed system says so', async ({ page, app }) => {
     await app.boot();
-    await scenario(page, "Kepler's 2nd Law", {
+    // Two bodies under mutual gravity and nothing else, closed as built. This
+    // used to load Kepler's 2nd Law, which is star-only gravity on purpose, so
+    // it passed on the list of reasons and never once saw the closed line.
+    await scenario(page, 'Earth-Moon System', {
       show_conservation_diagnostics: true,
-      mutual_gravity: true,
-      enable_star_merging: false,
     });
-    // Either the closed-system line or a list of reasons, never neither: a
-    // drift figure with nothing said about the scene is the thing this whole
-    // change exists to stop.
-    const caveats = await block(page).locator('.readout-caveats li').count();
-    const closed = await block(page).locator('.readout-caveat').count();
-    expect(caveats + closed).toBeGreaterThan(0);
+    // The premise, from the engine, so that a scenario which gains a reason
+    // fails here as a changed scene rather than as a broken readout.
+    const reasons = await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      return physics.conservationCaveats();
+    });
+    expect(reasons, 'Earth-Moon System is no longer closed').toEqual([]);
+
+    // The closed line itself, found by its words: the ill-conditioned note is
+    // a .readout-caveat too, so counting the class would pass on either. And
+    // no list of reasons beside it.
+    const closedLine = await page.evaluate(async () => {
+      const i18n = await import('/js/i18n/index.js');
+      return i18n.t('readout.conservation.closed');
+    });
+    await expect(block(page).locator('.readout-caveats')).toHaveCount(0);
+    await expect(
+      block(page).locator('.readout-caveat').filter({ hasText: closedLine })
+    ).toHaveCount(1);
   });
 
   test('a scene with a static hole names it rather than blaming the method', async ({
