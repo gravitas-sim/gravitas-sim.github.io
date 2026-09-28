@@ -4247,8 +4247,9 @@ window.addEventListener('gravitasSignalAudio', event => {
   refreshSonificationToggle();
 });
 
-// The system js/systemBuilder.js last built. Its scenario is 'None', which
-// Refresh would rebuild as an empty world; any other build forgets it.
+// What Refresh rebuilds under 'None', which it would otherwise rebuild as an
+// empty world: the system js/systemBuilder.js last built, or {link} for a
+// link that brought its own bodies (a scenario pack). Any other build forgets it.
 let builtSystem = null;
 
 /**
@@ -6017,6 +6018,7 @@ const applyShareState = payload => {
     // The baseline was taken over the world these bodies just replaced.
     resetConservationBaseline();
     markWorldTouched();
+    if (scenario === 'None') builtSystem = { link: payload };
   } else {
     initialize_simulation({ seed });
   }
@@ -7698,7 +7700,10 @@ const worldKit = {
 let systemBuilderModule = null;
 const rebuildBuiltSystem = () =>
   Boolean(builtSystem && current_scenario_name === 'None') &&
-  (systemBuilderModule.installSystem(builtSystem, worldKit), true);
+  (builtSystem.link
+    ? applyShareState(builtSystem.link)
+    : systemBuilderModule.installSystem(builtSystem, worldKit),
+  true);
 
 document
   .getElementById('systemBuilderBtn')
