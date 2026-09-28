@@ -15,6 +15,29 @@ the release rather than in the tag.
 
 ### Added
 
+- **The Orbital System Builder** (ORBITAL_SYSTEM_BUILDER.md). A form in the
+  Scenario section, beside Blank Simulation, builds a two-dimensional
+  hierarchical system from orbital elements, with no conversion to positions
+  and velocities by hand.
+  - **What you enter:** for each companion, what it orbits, its type, mass
+    and contact radius, and its semi-major axis, eccentricity, argument of
+    periapsis, starting mean anomaly and direction.
+  - **How it is built:** companions are added innermost first, each around
+    the barycenter of everything inside its orbit. The finished system has
+    its barycenter at rest at the origin by construction. Every orbit reads
+    back from the starting state to a part in 10¹².
+  - **What it shows:** a preview, Keplerian periods, barycenter offsets, and
+    checks for overlap, contact at periapsis, the Hill sphere, crossing
+    orbits, Holman–Wiegert, Mardling–Aarseth and Gladman spacing. It says
+    plainly that the elements are osculating and that no check proves
+    stability.
+  - **Like any other world:** a built system can be selected, edited,
+    shared, rebuilt by Refresh Scenario and restored by the experiment bench.
+    It saves as a versioned `gravitas.orbital-system` JSON file,
+    independently of URL length.
+  - **Six templates:** a star and a planet; the Sun, Earth and Moon; the
+    Sun, Jupiter and Saturn; Kepler-16; Alpha Centauri; and a hierarchical
+    triple star.
 - **Stars and their populations: spectra, clusters and variables**
   (STELLAR_POPULATIONS.md). A second suite of five guides in `/observatory/`,
   on introductory and advanced paths, run by the same runner as the
@@ -515,6 +538,10 @@ the release rather than in the tag.
 
 ### Changed
 
+- **The vendored three.js is 475 KB instead of 660.** It now holds only
+  what the 3-D view uses, which takes 47.7 KB off the 3-D view's download
+  and the deferred bundle. `tests/vendoredThree.test.js` holds the view to
+  the names the file exports.
 - **The observatory starts lighter again:** the pack decoder arrives with the
   first observation opened. That is 188.7 KB from the sources, where it was
   193.7, and the ceilings are lowered to keep it.
@@ -615,6 +642,19 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A full link, or a saved state, measured drift against the wrong world.**
+  The conservation baseline was taken over the world the restore then
+  replaced.
+- **A link made from a world with no scenario behind it opened differently
+  in different tabs.** Such a world comes from Blank Simulation or the
+  builder. The link rebuilt on top of whatever scenario the reader's tab had
+  open; it now rebuilds from the defaults its settings were measured
+  against.
+- **A gas giant restored from a link had no mass in Jupiter masses and no
+  giant type.** Share links now carry both, and carry `persistent`, so a
+  wide system keeps its outer bodies when someone zooms in.
+- **Blank Simulation left the energy history of the bodies it deleted.** It
+  now clears the world with `clearWorld()`, not a hand-written copy of it.
 - **A FITS header can no longer make the data-pack reader allocate or loop**
   (VO_ARCHIVE_GATE.md, finding 4).
   - **What it did:** `readFits()` in `tools/data-packs/fits.mjs` (and in the

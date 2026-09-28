@@ -521,7 +521,20 @@ const BUDGETS = [
       'helpers with, so a visitor who opens any other lesson loads less than ' +
       'before this lab, not more (tools/route-budgets.json). The initial ' +
       'download is untouched: 816.6 KB of 830.0 before and after. 4180 leaves ' +
-      '5.4 KB.',
+      '5.4 KB.' +
+      '\n\nNOT raised for the Orbital System Builder (Prompt 28), measured ' +
+      'from fresh builds against c626aa3: 4178.8 KB before, 4179.6 after. By ' +
+      'esbuild metafile the builder is 48.5 KB - the panel 18.5 with its own ' +
+      'stylesheet, its arithmetic 10.2, its strings 8.7 of English and 9.7 of ' +
+      "Spanish, and 1.5 of chunk overhead and the button's Spanish - and it " +
+      'is paid for by vendoring only the three.js the 3-D view uses. ' +
+      'tools/vendor-deps.mjs re-exported the whole library, and the ' +
+      'pre-bundled file had lost the side-effect-free hint that would have ' +
+      'let esbuild drop what the view never touches: 529.1 KB of three.js ' +
+      "in the 3-D view's chunk became 481.4 (-47.7), and the view draws what " +
+      'it drew. That leaves 0.4 KB here. The initial download went 819.4 to ' +
+      "820.1 KB against an untouched 830.0: the button, the coordinator's kit " +
+      'for the builder and two share-link fixes.',
   },
 ];
 

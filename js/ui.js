@@ -4247,6 +4247,10 @@ window.addEventListener('gravitasSignalAudio', event => {
   refreshSonificationToggle();
 });
 
+// The system js/systemBuilder.js last built. Its scenario is 'None', which
+// Refresh would rebuild as an empty world; any other build forgets it.
+let builtSystem = null;
+
 /**
  * Build the world, then hand it a fresh identity.
  *
@@ -4284,6 +4288,7 @@ const initialize_simulation = (options = {}) => {
     SETTINGS.preset_scenario = current_scenario_name;
   }
 
+  builtSystem = null;
   const seed = getWorldSeed();
   withSeed(seed, () => build_simulation());
   // The object lists have just been repopulated; the physics caches hold the
@@ -5827,6 +5832,8 @@ const load_simulation_state = () => {
     state.pan = view.pan;
     updatePhysicsSettings(SETTINGS);
     rebuildWorldFromStates(loadedState.objects);
+    builtSystem = null;
+    resetConservationBaseline();
     // A restored save is a hand-made world by definition: no seed regenerates
     // it, so sharing it has to carry the bodies themselves.
     markWorldTouched();
@@ -5937,9 +5944,14 @@ const captureShareState = ({
             // them: the bench always, and an ordinary link only when its
             // restored context points at a particular body.
             .map(o =>
-              packBody(o.get_state(), {
-                withId: forExperiment || referencesABody,
-              })
+              packBody(
+                // Not in get_state(); without it a wide system loses its
+                // outer bodies to the distance cull.
+                o.persistent === true
+                  ? { ...o.get_state(), persistent: true }
+                  : o.get_state(),
+                { withId: forExperiment || referencesABody }
+              )
             )
         : null,
     paused: state.paused,
@@ -5974,6 +5986,16 @@ const activeToolIds = () =>
  */
 const applyShareState = payload => {
   const scenario = payload.s;
+  if (scenario === 'None') {
+    // Blank Simulation, or a built system. Its delta was taken against the
+    // defaults, so it is rebuilt from them; otherwise initialize_simulation()
+    // puts back whatever scenario this tab had open, under the link's delta.
+    setSettings({
+      ...JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+      quality_tier: SETTINGS.quality_tier ?? DEFAULT_SETTINGS.quality_tier,
+    });
+    setCurrentScenarioName('None');
+  }
   SETTINGS.preset_scenario = scenario;
 
   // Held for build_simulation() to apply. Settings cannot simply be assigned
@@ -5992,6 +6014,8 @@ const applyShareState = payload => {
     initialize_simulation({ seed });
     rebuildWorldFromStates(payload.b);
     updatePhysicsSettings(SETTINGS);
+    // The baseline was taken over the world these bodies just replaced.
+    resetConservationBaseline();
     markWorldTouched();
   } else {
     initialize_simulation({ seed });
@@ -6424,6 +6448,24 @@ export function placeBody(
     return null;
   }
 
+  const obj = constructBody(at, vel, type, mass);
+  if (!obj) return null;
+
+  // Announced rather than called directly: controls.js already imports ui.js,
+  // and a direct call back would close an import cycle. The undo stack and the
+  // double-tap guard both listen.
+  window.dispatchEvent(
+    new CustomEvent('gravitasObjectPlaced', { detail: { object: obj } })
+  );
+  return obj;
+}
+
+/**
+ * placeBody() without the announcement, for the system builder: a toast and
+ * an undo entry per body would describe placements nobody made.
+ * @returns {?object} The body, already in its collection, or null
+ */
+function constructBody(at, vel, type, mass) {
   // null everywhere it is not given, which is exactly what each constructor's
   // own default is - so this reads as the same call it was.
   const m = Number.isFinite(mass) ? mass : null;
@@ -6459,13 +6501,6 @@ export function placeBody(
   else if (obj instanceof NeutronStar) neutron_stars.push(obj);
   else if (obj instanceof WhiteDwarf) white_dwarfs.push(obj);
   else if (obj instanceof BlackHole) bh_list.push(obj);
-
-  // Announced rather than called directly: controls.js already imports ui.js,
-  // and a direct call back would close an import cycle. The undo stack and the
-  // double-tap guard both listen.
-  window.dispatchEvent(
-    new CustomEvent('gravitasObjectPlaced', { detail: { object: obj } })
-  );
   return obj;
 }
 
@@ -7053,6 +7088,7 @@ document.getElementById('settingsBtn').onclick = openSettings;
 // starting over rather than teleporting it mid-flight - has to be able to say
 // so without acquiring an edge back up to this module.
 window.addEventListener('gravitasRequestRebuild', () => {
+  if (rebuildBuiltSystem()) return;
   SETTINGS.preset_scenario = current_scenario_name || SETTINGS.preset_scenario;
   initialize_simulation();
   state.paused = false;
@@ -7061,6 +7097,7 @@ window.addEventListener('gravitasRequestRebuild', () => {
 });
 
 document.getElementById('refreshScenarioBtn').onclick = () => {
+  if (rebuildBuiltSystem()) return;
   // Preserve current scenario name and restart it
   const currentScenario = current_scenario_name || 'Binary BH';
   SETTINGS.preset_scenario = currentScenario;
@@ -7644,6 +7681,32 @@ async function openPrecisePlacementDialog(trigger) {
 document.getElementById('precisePlaceBtn')?.addEventListener('click', event => {
   openPrecisePlacementDialog(event.currentTarget);
 });
+
+// What js/systemBuilder.js needs from the coordinator to build a world (the
+// rest it imports itself), handed down so that it never imports this module.
+const worldKit = {
+  rebuild: seed => initialize_simulation({ seed }),
+  constructBody,
+  finish: system => {
+    builtSystem = system;
+    resetPotentialCache();
+    hideObjectInspector();
+    markWorldTouched();
+    updateSpeedDisplay();
+  },
+};
+let systemBuilderModule = null;
+const rebuildBuiltSystem = () =>
+  Boolean(builtSystem && current_scenario_name === 'None') &&
+  (systemBuilderModule.installSystem(builtSystem, worldKit), true);
+
+document
+  .getElementById('systemBuilderBtn')
+  ?.addEventListener('click', async event => {
+    const trigger = event.currentTarget;
+    systemBuilderModule ??= await import('./systemBuilder.js');
+    systemBuilderModule.openSystemBuilder({ kit: worldKit, trigger });
+  });
 
 const objectPickerOpen = () => Boolean(objectPicker && !objectPicker.hidden);
 
@@ -8534,24 +8597,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const cleanSimBtn = document.getElementById('cleanSimBtn');
   if (cleanSimBtn) {
     cleanSimBtn.onclick = () => {
-      // Clear all simulation objects and arrays
-      bh_list.length = 0;
-      planets.length = 0;
-      stars.length = 0;
-      gas_giants.length = 0;
-      asteroids.length = 0;
-      comets.length = 0;
-      neutron_stars.length = 0;
-      white_dwarfs.length = 0;
-      galaxies.length = 0;
-      debris.length = 0;
-      particles.length = 0;
-      gravity_ripples.length = 0;
-      accretion_disk_particles.length = 0;
-      particlePool.clear && particlePool.clear();
-      resetPhysicsObjectCounter && resetPhysicsObjectCounter();
-      resetFrame();
-      resetTrailTick();
+      // Was a hand-written copy of clearWorld() that also left the energy
+      // history of every deleted body behind.
+      clearWorld();
 
       // Reset view to default
       state.zoom = 1.0;
@@ -8566,6 +8614,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Set scenario to 'None' and update settings
       SETTINGS.preset_scenario = 'None';
       setCurrentScenarioName('None');
+      builtSystem = null;
 
       // Unpause simulation and set normal speed
       state.paused = false;
