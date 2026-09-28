@@ -85,9 +85,15 @@ describe('the catalog', () => {
     // and a typo in a locale file is silent: the message simply never shows.
     // toHaveProperty reads dots as a path, and every id here has dots in it.
     const enIds = new Set(en);
+    // Except a computed sentence's translation. English has no lessonFn.*
+    // entries by design - lessonText() returns the sentence itself - so its
+    // translation has no twin to match, and is held instead to the shape
+    // lessonKey() gives an id: a typo there is still caught.
+    const computed = /^lessonFn\.[A-Za-z0-9]+\d+$/;
     for (const [locale, catalog] of TRANSLATIONS) {
       for (const id of Object.keys(catalog)) {
-        expect([locale, id, enIds.has(id)]).toEqual([locale, id, true]);
+        const known = enIds.has(id) || computed.test(id);
+        expect([locale, id, known]).toEqual([locale, id, true]);
       }
     }
   });
@@ -302,8 +308,14 @@ describe('the catalog split', () => {
     // The split exists so a panel most visitors never open does not cost them
     // its prose at start-up. It is only safe while the two halves stay in
     // step, and nothing else in this suite would notice a key added to one.
+    // Spanish alone carries lessonFn.*, the computed sentences English
+    // renders as they are (see the catalog test above).
+    const translatedHere = k => !k.startsWith('lessonFn.');
     expect(Object.keys(EN_DEFERRED).sort()).toEqual(
-      Object.keys(ES_DEFERRED).sort()
+      Object.keys(ES_DEFERRED).filter(translatedHere).sort()
+    );
+    expect(Object.keys(EN_DEFERRED).filter(k => !translatedHere(k))).toEqual(
+      []
     );
     expect(Object.keys(EN_DEFERRED).length).toBeGreaterThan(50);
   });

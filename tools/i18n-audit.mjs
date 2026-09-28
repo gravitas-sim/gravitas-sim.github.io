@@ -212,9 +212,11 @@ const enIds = new Set(Object.keys(EN));
 // The lessonFn.* namespace is deliberately outside this accounting. Those ids
 // are computed from what a lesson function says, at the moment it says it, and
 // an id with no entry simply renders the English - see js/i18n/lesson.js. So a
-// missing one is not a defect and an unused one is not dead weight; what
-// matters for them is only that English and Spanish agree, which the last two
-// lists check for every id regardless of namespace.
+// missing one is not a defect and an unused one is not dead weight. English
+// has none at all: an English entry could only repeat the sentence it is keyed
+// on, which lessonText() already returns, so all 139 were removed. A
+// translation's id therefore has no English twin by design, and is not an
+// orphan.
 const LOOKED_UP = /^lessonFn\./;
 
 const missingInEn = [...used].filter(id => !enIds.has(id)).sort();
@@ -227,7 +229,7 @@ const perLocale = [...TRANSLATIONS.entries()].map(([id, catalog]) => {
   return {
     id,
     size: ids.size,
-    orphaned: [...ids].filter(k => !enIds.has(k)).sort(),
+    orphaned: [...ids].filter(k => !enIds.has(k) && !LOOKED_UP.test(k)).sort(),
     untranslated: [...enIds].filter(k => !ids.has(k)).sort(),
   };
 });

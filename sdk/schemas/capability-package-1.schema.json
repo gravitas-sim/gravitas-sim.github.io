@@ -150,6 +150,10 @@
             "properties": {
               "id": {
                 "type": "string"
+              },
+              "file": {
+                "type": "string",
+                "description": "For a scenario-pack extension: the gravitas.scenario-pack/1 file (sdk/schemas/scenario-pack-1.schema.json)."
               }
             }
           }

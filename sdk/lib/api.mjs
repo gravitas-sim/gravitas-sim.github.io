@@ -51,20 +51,22 @@ export {
 // the check a transit pack states (added in 1.3.0; `sdk test` runs the same).
 
 /** This SDK. A major version changes only with a breaking change to this file. */
-export const SDK_VERSION = '1.4.0';
+export const SDK_VERSION = '1.5.0';
 
 /** The formats this SDK reads and writes, and the version of each. */
 export const FORMATS = Object.freeze({
   'gravitas.capability-package': 1,
   'gravitas.observation-data-pack': 1,
   'gravitas.course-pack': 1,
+  'gravitas.scenario-pack': 1,
   'gravitas.extension-archive': 1,
 });
 
-/** The three kinds of extension, and whether each may carry code. */
+/** The four kinds of extension, and whether each may carry code. */
 export const EXTENSION_TYPES = Object.freeze({
   'data-pack': { kind: 'declarative', code: false },
   'course-pack': { kind: 'declarative', code: false },
+  'scenario-pack': { kind: 'declarative', code: false },
   capability: { kind: 'built-in', code: true },
 });
 

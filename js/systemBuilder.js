@@ -1050,6 +1050,19 @@ function mount() {
     fileInput
   );
 
+  // A system kept as a scenario: the Studio opens the file saved here.
+  const studioNote = el('p', { className: 'precise-hint' });
+  studioNote.append(
+    el('span', { id: 'systemBuilderStudioNote' }),
+    ' ',
+    el('a', {
+      id: 'systemBuilderStudio',
+      href: 'studio/',
+      target: '_blank',
+      rel: 'noopener',
+    })
+  );
+
   panel.append(
     el('h2', { id: 'systemBuilderTitle' }),
     el('p', { id: 'systemBuilderIntro', className: 'precise-intro' }),
@@ -1072,6 +1085,7 @@ function mount() {
     el('p', { id: 'systemBuilderOsculating', className: 'precise-hint' }),
     el('p', { id: 'systemBuilderProof', className: 'precise-hint' }),
     el('p', { id: 'systemBuilderSettingsNote', className: 'precise-hint' }),
+    studioNote,
     el('p', {
       id: 'systemBuilderStatus',
       className: 'precise-status',
@@ -1152,6 +1166,8 @@ function localize() {
     systemBuilderSave: 'builder.export',
     systemBuilderOpen: 'builder.import',
     systemBuilderClose: 'builder.close',
+    systemBuilderStudioNote: 'builder.studio.note',
+    systemBuilderStudio: 'builder.studio.link',
   };
   for (const [id, key] of Object.entries(text)) {
     const node = $(id);
