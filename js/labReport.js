@@ -87,7 +87,9 @@ const plain = text =>
  * @param {string} opts.name - Student's name
  * @param {Object} opts.responses - Answers, keyed by step id
  * @param {Object} opts.attempts - Attempt counts, keyed by step id
- * @param {Set} opts.visited - Indices of steps reached
+ * @param {Set<string>} opts.visited - Sids of the steps reached, as the engine
+ *   keeps them. It held indices before steps had sids, and a Set of sids never
+ *   contains a number, so a check by index was silently false for every step.
  * @param {string} opts.startedAt - ISO timestamp
  * @param {Array} opts.links - [{step, title, url}] states used by the lesson
  * @param {Object} [opts.plot] - {points, xLabel, yLabel, slope} to draw
@@ -179,7 +181,7 @@ export function buildLabReport({
 
   inv.steps.forEach((step, index) => {
     const id = stepIdFor(index);
-    const reached = visited.has(index);
+    const reached = visited.has(step.sid);
 
     // Reading steps ask for nothing, so listing them here leaves a heading with
     // no content under it. That they were worked through is already carried by
@@ -217,6 +219,16 @@ export function buildLabReport({
         `${done} of ${step.checklist.length} completed`
       );
       canonical.push(`${id}:explore=${done}`);
+      return;
+    }
+
+    // The same goes for every other step that asks for nothing - an explore
+    // step without a checklist, the ellipse, the wedges. What they keep is
+    // where a slider was left, which is not an answer.
+    if (
+      step.type !== 'predict' &&
+      !/^(choice|numeric|short)$/.test(step.kind)
+    ) {
       return;
     }
 
