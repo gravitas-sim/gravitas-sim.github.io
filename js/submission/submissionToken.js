@@ -208,26 +208,146 @@ export function validateSubmission(payload) {
 }
 
 /**
- * The answers in a submission, paired with the locale each was typed under.
+ * Which step a stored key belongs to, and what hangs off it.
  *
- * The `:locale` sub-keys are storage, not answers, so they are filtered out
- * here rather than at every call site - an instructor page that graded them
- * would report a failure rate over twice as many questions as the lesson has.
+ * The lesson engine keeps a step's answer under `<lesson>:<sid>` - stepKey() in
+ * js/investigations/progressSchema.js - and everything else about the step one
+ * colon further on: `:locale`, `:first`, `:shown`, `:help`, `:e`, `:tool:<id>`,
+ * `:check:<n>`, and a measure step's fields as `:<fieldId>`. A sid may not
+ * contain a colon, so the first one after the lesson's prefix is where a
+ * sub-key starts. Attempts are keyed the same way, with nothing hanging off.
+ *
+ * A key without the prefix is read as a bare sid. The engine has never written
+ * one, but test fixtures and hand-made files have, and where both spellings are
+ * present the engine's wins.
+ *
+ * Nothing exports the reverse of stepKey(), so this is written out, as it is in
+ * readProgress() and restoreProgress(). The tests build their responses with
+ * stepKey() itself, so the two cannot drift apart unnoticed.
+ *
+ * @param {string} key - A response or attempt key
+ * @param {string} lessonId - The lesson the submission names
+ * @returns {{sid: string, sub: string, bare: boolean}} The step's sid, the
+ *   sub-key ('' for the step's own key), and whether the prefix was missing
+ */
+function splitResponseKey(key, lessonId) {
+  const prefix = `${lessonId}:`;
+  const bare = !key.startsWith(prefix);
+  const rest = bare ? key : key.slice(prefix.length);
+  const cut = rest.indexOf(':');
+  return cut === -1
+    ? { sid: rest, sub: '', bare }
+    : { sid: rest.slice(0, cut), sub: rest.slice(cut + 1), bare };
+}
+
+/**
+ * Everything stored under each step, by sid.
+ *
+ * @param {object} table - Responses or attempts, as the engine keys them
+ * @param {string} lessonId - The lesson the submission names
+ * @returns {Map<string, {key: ?string, value: *, sub: Object<string, *>}>} Per
+ *   step: the key its own value was found under, that value, and its sub-keys
+ */
+function byStep(table, lessonId) {
+  const parsed = Object.entries(table || {}).map(([key, value]) => ({
+    key,
+    value,
+    ...splitResponseKey(key, lessonId),
+  }));
+  // Bare keys first, so the engine's spelling overwrites them wherever both
+  // are present. The sort is stable, so the order is otherwise the stored one.
+  parsed.sort((a, b) => Number(!a.bare) - Number(!b.bare));
+  const steps = new Map();
+  for (const { key, value, sid, sub } of parsed) {
+    let entry = steps.get(sid);
+    if (!entry) {
+      entry = { key: null, value: undefined, sub: {} };
+      steps.set(sid, entry);
+    }
+    if (sub === '') {
+      entry.key = key;
+      entry.value = value;
+    } else {
+      entry.sub[sub] = value;
+    }
+  }
+  return steps;
+}
+
+/** @param {*} v - A stored value @returns {boolean} Whether it says anything */
+const filled = v => v !== undefined && v !== null && String(v).trim() !== '';
+
+/**
+ * The answers in a submission, one per answered step, each paired with the
+ * locale it was typed under.
+ *
+ * Most of what the engine stores is not an answer - the locale, the first
+ * number tried, whether the model answer was shown, which hints were taken,
+ * where a slider was left - and none of it is reported as one: a page that
+ * graded the sub-keys would count several questions for every one the lesson
+ * asks. Two things are answers. A step's own key holds a chosen option, a
+ * number or a sentence. A measure step has no key of its own; its answer is its
+ * fields, reported together as `id=value` pairs in the lesson's order.
+ *
+ * Which sub-keys are fields only the lesson can say, which is why it is passed
+ * in. They are picked by the ids the step declares rather than by leaving out
+ * the names known to mean something else, because a field can be called
+ * anything: goldilocks-question has one called `e`, which is also where the
+ * ellipse step keeps its slider.
  *
  * @param {object} submission - A validated payload
- * @returns {Array<{sid: string, value: string, locale: string}>} One per answer
+ * @param {?object} [lesson] - The lesson it names. Without it a measure step's
+ *   fields are not recognized, and only answers under a step's own key are
+ *   returned.
+ * @returns {Array<{sid: string, value: *, locale: string}>} One per answer
  */
-export function answersOf(submission) {
+export function answersOf(submission, lesson = null) {
   const responses = submission?.b?.progress?.responses || {};
   const fallback = submission?.fl || 'en';
+  const fieldsOf = new Map(
+    (Array.isArray(lesson?.steps) ? lesson.steps : [])
+      .filter(s => s?.type === 'measure' && Array.isArray(s.fields))
+      .map(s => [s.sid, s.fields.map(f => f?.id).filter(Boolean)])
+  );
   const out = [];
-  for (const [key, value] of Object.entries(responses)) {
-    if (key.endsWith(LOCALE_SUFFIX)) continue;
-    out.push({
-      sid: key,
-      value,
-      locale: responses[`${key}${LOCALE_SUFFIX}`] || fallback,
-    });
+  for (const [sid, entry] of byStep(responses, submission?.b?.lesson?.id)) {
+    const ids = fieldsOf.get(sid);
+    const typed = ids ? ids.filter(id => filled(entry.sub[id])) : [];
+    if (typed.length) {
+      out.push({
+        sid,
+        value: typed
+          .map(id => `${id}=${String(entry.sub[id]).trim()}`)
+          .join('; '),
+        // Fields carry no locale of their own; only a checked number does.
+        locale: fallback,
+      });
+    } else if (entry.key !== null) {
+      out.push({
+        sid,
+        value: entry.value,
+        locale: responses[`${entry.key}${LOCALE_SUFFIX}`] || fallback,
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * How many times each step was answered, by sid: a choice clicked or a number
+ * checked.
+ *
+ * @param {object} submission - A validated payload
+ * @returns {Map<string, number>} Attempt counts
+ */
+export function attemptsOf(submission) {
+  const steps = byStep(
+    submission?.b?.progress?.attempts,
+    submission?.b?.lesson?.id
+  );
+  const out = new Map();
+  for (const [sid, entry] of steps) {
+    if (entry.key !== null) out.set(sid, entry.value);
   }
   return out;
 }
