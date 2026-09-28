@@ -24,6 +24,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { scrollLikeAReader } from './reach.js';
 
 const DIST = process.env.GRAVITAS_E2E_TARGET === 'dist';
 
@@ -297,6 +298,90 @@ test.describe('a system can be built without a pointer', () => {
     delete placed.name;
     expect(typed).toEqual(placed);
   });
+});
+
+/**
+ * Every test above passed while the form was off the screen. No rule
+ * positioned the dialog, so it laid out static after the last element in
+ * <body> - at top 768 in a 768px window - and body's overflow: hidden meant no
+ * reader could scroll down to it. Focus went in and the key presses worked, so
+ * the keyboard claims held; a sighted reader who opened it saw nothing. The
+ * clicks passed too, because Playwright scrolls a box that a wheel cannot
+ * (e2e/reach.js).
+ *
+ * So these ask the layout, straight after the open and before anything inside
+ * the form is touched: the whole panel is inside the window and painted, and
+ * Done - the last control, under every field - can be scrolled to the way a
+ * reader scrolls and is what the pointer lands on there. DOM-only, so it runs
+ * on dist/ as well. Both sizes are at or below the rail's 1024px breakpoint,
+ * where the opener is behind the menu; asking whether it is visible, rather
+ * than assuming, keeps the test right if that breakpoint moves.
+ */
+test.describe('the form opens where it can be seen', () => {
+  for (const [name, width, height] of [
+    ['laptop', 1024, 768],
+    ['phone', 375, 812],
+  ]) {
+    test(`inside a ${width}x${height} ${name} window`, async ({
+      page,
+      app,
+    }) => {
+      await page.setViewportSize({ width, height });
+      await app.boot();
+      const opener = page.locator('#precisePlaceBtn');
+      if (!(await opener.isVisible())) {
+        await page.locator('#mobileMenuToggle').click();
+      }
+      await opener.click();
+      await expect(page.locator('#precisePlaceType')).toBeFocused();
+
+      const panel = await page.evaluate(() => {
+        const el = document.getElementById('precisePlaceDialog');
+        const { top, left, bottom, right } = el.getBoundingClientRect();
+        return {
+          box: { top, left, bottom, right },
+          window: { width: window.innerWidth, height: window.innerHeight },
+          background: window.getComputedStyle(el).backgroundColor,
+        };
+      });
+      const where = JSON.stringify(panel);
+      expect(
+        panel.box.top,
+        `top edge on screen: ${where}`
+      ).toBeGreaterThanOrEqual(0);
+      expect(
+        panel.box.left,
+        `left edge on screen: ${where}`
+      ).toBeGreaterThanOrEqual(0);
+      expect(
+        panel.box.bottom,
+        `bottom edge on screen: ${where}`
+      ).toBeLessThanOrEqual(panel.window.height);
+      expect(
+        panel.box.right,
+        `right edge on screen: ${where}`
+      ).toBeLessThanOrEqual(panel.window.width);
+      expect(panel.background, 'the panel has a surface').not.toBe(
+        'rgba(0, 0, 0, 0)'
+      );
+
+      expect(
+        await page.evaluate(scrollLikeAReader, '#precisePlaceClose'),
+        'Done can be scrolled to'
+      ).toBe('ok');
+      const done = await page.locator('#precisePlaceClose').boundingBox();
+      const hit = await page.evaluate(
+        ([x, y]) => {
+          const at = document.elementFromPoint(x, y);
+          return at?.closest('#precisePlaceClose')
+            ? 'Done'
+            : at?.id || at?.tagName;
+        },
+        [done.x + done.width / 2, done.y + done.height / 2]
+      );
+      expect(hit, 'what the pointer lands on at Done').toBe('Done');
+    });
+  }
 });
 
 test.describe('the numbers behind a plot are readable without the canvas', () => {
