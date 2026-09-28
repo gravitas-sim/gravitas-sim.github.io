@@ -23,7 +23,7 @@ import {
   curriculumMap,
 } from '../js/instructorDocs.js';
 import { checkInstructorCatalog } from '../js/authoring/instructorSchema.js';
-import { toWinAnsi } from '../js/pdf.js';
+import { textWidth, toWinAnsi } from '../js/pdf.js';
 import { plural } from '../js/format.js';
 import { ACTIVITIES } from '../js/data/activities.js';
 import { activityWorksheet } from '../js/activityDocs.js';
@@ -557,6 +557,14 @@ describe('the generated documents', () => {
     [...decode(pdf).matchAll(/\(((?:\\.|[^()\\])*)\)\s*Tj/g)].map(m =>
       m[1].replace(/\\([()\\])/g, '$1')
     );
+  /** The properties a reader shows in its title bar and file list. */
+  const properties = pdf =>
+    [...decode(pdf).matchAll(/\/(?:Title|Subject) \(((?:\\.|[^()\\])*)\)/g)]
+      .map(m => m[1])
+      .join(' ');
+  /** An entity or an inline tag: lesson markup, in a medium that has none. */
+  const MARKUP =
+    /&(?:[a-zA-Z][a-zA-Z0-9]{1,31}|#[0-9]{1,7}|#[xX][0-9a-fA-F]{1,6});|<\/?(?:em|strong|sub|sup)>/g;
 
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: the instructor guide builds a valid PDF',
@@ -680,22 +688,56 @@ describe('the generated documents', () => {
 
   // An entity is markup that reached a medium with no markup in it. The PDF
   // says "don&rsquo;t" where the browser says "don’t".
+  // A tag is the same mistake: Listening to Spacetime's guide printed "the
+  // black holes' <em>motion</em>", because instructor prose went to the page
+  // as written.
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
-    '%s: no HTML entity survives into the PDF',
+    '%s: no HTML entity or inline tag survives into the PDF',
     (id, inv) => {
       for (const [what, pdf] of [
         ['guide', instructorGuide(inv, { version: 'Test 2026' })],
         ['key', answerKeyDocument(inv, { version: 'Test 2026' })],
       ]) {
         const found = [
-          ...new Set(
-            flat(pdf).match(
-              /&(?:[a-zA-Z][a-zA-Z0-9]{1,31}|#[0-9]{1,7}|#[xX][0-9a-fA-F]{1,6});/g
-            ) || []
-          ),
+          ...new Set(`${flat(pdf)} ${properties(pdf)}`.match(MARKUP) || []),
         ];
         expect({ id, what, found }).toEqual({ id, what, found: [] });
       }
+    }
+  );
+
+  // Instructor prose is written in template literals: a newline is where the
+  // source line wrapped, and a blank line is a paragraph break. Printed as
+  // written, a line broke wherever the source line had. Flattened whole, the
+  // way lesson prose is, an overview would run its paragraphs together.
+  test.each(INVESTIGATIONS.map(i => [i.id, i]))(
+    '%s: the overview prints its paragraphs, wrapped to the page',
+    (id, inv) => {
+      const lines = drawn(instructorGuide(inv, { version: 'Test 2026' }));
+      const body = lines
+        .slice(
+          lines.indexOf('1. Overview') + 1,
+          lines.indexOf('2. Learning objectives')
+        )
+        .filter(l => !/^Gravitas Instructor Guide|^Page \d+ of \d+$/.test(l));
+      const paragraphs = text =>
+        text
+          .split(/\n\s*\n/)
+          .map(p => ascii(plainText(p)).trim())
+          .filter(Boolean);
+      expect({ id, printed: paragraphs(body.join('\n')) }).toEqual({
+        id,
+        printed: paragraphs(instructorContentFor(id).overview),
+      });
+
+      // Overviews print at 10 pt. A line with room for the next word, measured
+      // against the widest line the page holds, was broken by the source.
+      const widest = Math.max(...body.map(l => textWidth(l, 10)));
+      const early = body.filter((l, i) => {
+        const next = body[i + 1]?.split(' ')[0];
+        return l && next && textWidth(`${l} ${next}`, 10) <= widest;
+      });
+      expect({ id, early }).toEqual({ id, early: [] });
     }
   );
 
@@ -829,6 +871,7 @@ describe('the generated documents', () => {
       for (const inv of INVESTIGATIONS) {
         expect(text).toContain(letters(plainText(inv.title)));
       }
+      expect(`${flat(pdf)} ${properties(pdf)}`.match(MARKUP)).toBeNull();
     }
   });
 
