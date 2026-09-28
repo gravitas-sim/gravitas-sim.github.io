@@ -4,8 +4,9 @@
 // The parsing and the grading are proved in unit tests. What only a browser can
 // show is the part the student actually meets: that an unreadable answer looks
 // different from a wrong one and says why, that hints arrive one at a time and
-// only when asked for, that the worked answer needs its own press, and that the
-// first thing they committed to survives being revised.
+// only when asked for, that the worked answer needs its own press, that the
+// first thing they committed to survives being revised, and that an answer
+// comes back from storage exactly as it was written.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -207,6 +208,135 @@ test.describe('hints arrive one at a time, and only when asked', () => {
     // moment from the one being assessed.
     expect(stored.first).toBe('64');
     expect(stored.current).toBe('8');
+  });
+});
+
+test.describe('a saved answer comes back exactly as it was written', () => {
+  // A saved answer is written back into its box's value="..." when the step is
+  // drawn, and it was escaped for element text, which leaves a double quote
+  // alone. So a " ended the attribute: the box came back holding only what was
+  // before it, and the rest was read as more attributes. Saved answers also
+  // arrive from backup files, which anyone can edit, and this onfocus ran on
+  // the lesson page.
+  const INJECTED = '8" autofocus onfocus="window.__injected=1';
+  const LESSON = 'keplers-laws';
+  const STORAGE = `gravitas_investigation_${LESSON}`;
+
+  /** Open the lesson as a student, so what it reads and writes is real. */
+  async function openAsStudent(page) {
+    await page.locator('#investigationsBtn').click();
+    await page.locator(`[data-investigation="${LESSON}"]`).click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+  }
+
+  /** Attributes a stored answer could only have added by escaping its box. */
+  const injected = input =>
+    input.evaluate(el =>
+      el
+        .getAttributeNames()
+        .filter(name => name === 'autofocus' || name.startsWith('on'))
+    );
+
+  /** The box holds the whole answer, and focusing it runs nothing. */
+  async function expectIntact(page, input) {
+    await expect(input).toHaveValue(INJECTED);
+    expect(await injected(input)).toEqual([]);
+    await input.focus();
+    expect(await page.evaluate(() => window.__injected)).toBeUndefined();
+  }
+
+  test('a quote typed into the numeric box is kept, and adds nothing to it', async ({
+    page,
+    app,
+  }) => {
+    // Resume on the numeric step, saved in the panel's own format, rather
+    // than walking fifteen steps to reach it.
+    await app.boot();
+    await page.evaluate(async lesson => {
+      const reg = await import('/js/data/investigations/registry.js');
+      const { writeProgress } =
+        await import('/js/investigations/progressSchema.js');
+      const inv = await reg.loadInvestigation(lesson);
+      localStorage.setItem(
+        `gravitas_investigation_${lesson}`,
+        JSON.stringify(
+          writeProgress({
+            lesson: inv,
+            responses: {},
+            attempts: {},
+            visited: [],
+            stepSid: 'use-the-law',
+            startedAt: new Date().toISOString(),
+          })
+        )
+      );
+    }, LESSON);
+    await openAsStudent(page);
+    await expect(answer(page)).toBeVisible();
+
+    await answer(page).fill(INJECTED);
+    await check(page).click();
+    // Checking draws the step again from what was saved; the verdict is the
+    // proof that it has, since the typed text was in the box before it.
+    await expect(feedback(page)).toBeVisible();
+    await expectIntact(page, answer(page));
+
+    const stored = await page.evaluate(
+      key => JSON.parse(localStorage.getItem(key)).responses,
+      STORAGE
+    );
+    expect(stored[`${LESSON}:use-the-law`]).toBe(INJECTED);
+
+    // And from storage alone, in a fresh page.
+    await app.boot();
+    await openAsStudent(page);
+    await expectIntact(page, answer(page));
+  });
+
+  test('a restored backup cannot add attributes to a measure field', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await openAsStudent(page);
+
+    // A real backup of this lesson with one value edited, which is all a
+    // crafted file needs to be: it passes every check the restore makes.
+    const backup = await page.evaluate(
+      async ([lesson, value]) => {
+        const reg = await import('/js/data/investigations/registry.js');
+        const { buildBackup } =
+          await import('/js/investigations/progressBackup.js');
+        const inv = await reg.loadInvestigation(lesson);
+        return buildBackup({
+          lesson: inv,
+          responses: { [`${lesson}:measure-four-planets:p1_name`]: value },
+          attempts: {},
+          visited: [],
+          stepSid: 'measure-four-planets',
+          startedAt: new Date().toISOString(),
+        });
+      },
+      [LESSON, INJECTED]
+    );
+    page.on('dialog', d => d.accept());
+    await page.locator('#investigationBackupFile').setInputFiles({
+      name: `${LESSON}.json`,
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(backup)),
+    });
+
+    // The restore goes to the step it names and draws it.
+    const field = page.locator(
+      `[data-field="${LESSON}:measure-four-planets:p1_name"]`
+    );
+    await expect(field).toBeVisible();
+    await expectIntact(page, field);
+
+    // And again from what the restore saved, in a fresh page.
+    await app.boot();
+    await openAsStudent(page);
+    await expectIntact(page, field);
   });
 });
 
