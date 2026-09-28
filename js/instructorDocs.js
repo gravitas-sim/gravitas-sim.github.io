@@ -26,6 +26,45 @@ import { instructorContentFor } from './data/instructorContent.js';
 
 const SITE = 'https://gravitas-sim.online';
 
+/**
+ * Instructor prose as plain text, paragraph by paragraph.
+ *
+ * The longer prose in instructorContent.js is written in template literals, so
+ * a newline is only where the source line wrapped and a blank line is a
+ * paragraph break - what prose() makes of it on screen. js/pdf.js breaks the
+ * printed line at every newline it is given, and plainText() folds every one
+ * into a space, so each paragraph is flattened on its own and one blank line
+ * is kept between them.
+ *
+ * @param {string} text - Instructor prose
+ * @returns {string} Plain text, paragraphs separated by a blank line
+ */
+const plainProse = text =>
+  String(text ?? '')
+    .split(/\n\s*\n/)
+    .map(plainText)
+    .filter(Boolean)
+    .join('\n\n');
+
+/**
+ * A lesson's instructor content with every string in it through plainProse().
+ * Converted whole rather than field by field, so a field added later cannot
+ * reach the page as markup: one lesson's guide and key printed "<em>motion</em>".
+ *
+ * @param {*} value - instructorContentFor(), or any part of it
+ * @returns {*} The same shape, holding plain text
+ */
+const plainContent = value => {
+  if (typeof value === 'string') return plainProse(value);
+  if (Array.isArray(value)) return value.map(plainContent);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, plainContent(v)])
+    );
+  }
+  return value;
+};
+
 /** Numbered section heading, so a guide's sections can be referred to aloud. */
 const section = (doc, n, title) =>
   doc.heading(`${n}. ${title}`, { size: 12.5, spaceBefore: 20, keepWith: 46 });
@@ -37,13 +76,13 @@ const section = (doc, n, title) =>
  * @returns {Uint8Array} PDF bytes
  */
 export function instructorGuide(inv, { version = '' } = {}) {
-  const c = instructorContentFor(inv.id);
+  const c = plainContent(instructorContentFor(inv.id));
   if (!c) throw new Error(`No instructor content for ${inv.id}`);
   const key = answerKeyFor(inv);
   const counts = questionCounts(inv);
 
   const doc = createDocument({
-    title: `${inv.title}: Instructor Guide`,
+    title: `${plainText(inv.title)}: Instructor Guide`,
     subject: `Instructor guide for the Gravitas investigation "${plainText(inv.title)}": objectives, flow, misconceptions, discussion prompts and model notes.`,
     footer: `Gravitas Instructor Guide  |  ${plainText(inv.title)}${version ? `  |  ${version}` : ''}`,
   });
@@ -58,8 +97,8 @@ export function instructorGuide(inv, { version = '' } = {}) {
     columns: ['', ''],
     widths: [1, 2],
     rows: [
-      ['Estimated time', inv.duration],
-      ['Student level', inv.level],
+      ['Estimated time', plainText(inv.duration)],
+      ['Student level', plainText(inv.level)],
       ['Primary topic', c.topic],
       ['Difficulty', c.difficulty],
       ['Length', plural(inv.steps.length, 'step')],
@@ -197,12 +236,12 @@ const CATEGORY_LABEL = {
  * @returns {Uint8Array} PDF bytes
  */
 export function answerKeyDocument(inv, { version = '' } = {}) {
-  const c = instructorContentFor(inv.id);
+  const c = plainContent(instructorContentFor(inv.id));
   const key = answerKeyFor(inv);
   const counts = questionCounts(inv);
 
   const doc = createDocument({
-    title: `${inv.title}: Answer Key`,
+    title: `${plainText(inv.title)}: Answer Key`,
     subject: `Answer key for the Gravitas investigation "${plainText(inv.title)}", derived from the lesson definitions and verified against the site's own grader.`,
     footer: `Gravitas Answer Key  |  ${plainText(inv.title)}  |  Instructor copy${version ? `  |  ${version}` : ''}`,
   });
@@ -210,7 +249,7 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
   doc.titleBlock({
     kicker: 'Gravitas Investigation | Answer Key',
     title: plainText(inv.title),
-    subtitle: `${plural(inv.steps.length, 'step')}  |  ${inv.duration}  |  ${plural(counts.graded, 'graded question')}, ${plural(counts.predictions, 'prediction')}`,
+    subtitle: `${plural(inv.steps.length, 'step')}  |  ${plainText(inv.duration)}  |  ${plural(counts.graded, 'graded question')}, ${plural(counts.predictions, 'prediction')}`,
   });
 
   doc.paragraph(
@@ -388,8 +427,8 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
     widths: [2.6, 1.9, 1.1, 0.7],
     rows: investigations.map(inv => [
       plainText(inv.title),
-      instructorContentFor(inv.id)?.topic ?? '',
-      inv.duration,
+      plainProse(instructorContentFor(inv.id)?.topic),
+      plainText(inv.duration),
       String(inv.steps.length),
     ]),
   });
@@ -547,11 +586,11 @@ export function curriculumMap(investigations, { version = '' } = {}) {
     columns: ['Investigation', 'Topic', 'Time', 'Steps', 'Difficulty'],
     widths: [2.4, 1.7, 0.95, 0.6, 1.5],
     rows: investigations.map(inv => {
-      const c = instructorContentFor(inv.id);
+      const c = plainContent(instructorContentFor(inv.id));
       return [
         plainText(inv.title),
         c.topic,
-        inv.duration,
+        plainText(inv.duration),
         String(inv.steps.length),
         c.difficulty,
       ];
@@ -560,7 +599,7 @@ export function curriculumMap(investigations, { version = '' } = {}) {
   });
 
   for (const inv of investigations) {
-    const c = instructorContentFor(inv.id);
+    const c = plainContent(instructorContentFor(inv.id));
     const key = answerKeyFor(inv);
     doc.heading(plainText(inv.title), {
       size: 12,
@@ -573,7 +612,7 @@ export function curriculumMap(investigations, { version = '' } = {}) {
       color: '0.35 0.35 0.42',
     });
     doc.row('Topic', c.topic);
-    doc.row('Time', inv.duration);
+    doc.row('Time', plainText(inv.duration));
     doc.row('Length', plural(inv.steps.length, 'step'));
     doc.row('Difficulty', c.difficulty);
     doc.space(6);
