@@ -13,7 +13,8 @@
 // lesson from every widget family plus the three that have no widget at all:
 //
 //   1. reach the prediction and commit to the WRONG answer on purpose
-//   2. assert nothing on that screen says whether it was right
+//   2. assert nothing on that screen, or in what a screen reader is told,
+//      says whether it was right
 //   3. walk to the step the prediction named
 //   4. assert the verdict is there, marked wrong, with the explanation
 //   5. go back, and assert the prediction is now marked too
@@ -139,6 +140,11 @@ async function loopFacts(page, id, predictSid) {
       const at = lesson.steps.findIndex(s => s.sid === sid);
       const step = lesson.steps[at];
       const revealAt = lesson.steps.findIndex(s => s.sid === step.reveal);
+      // The explanation as it would be heard: its markup gone and its
+      // entities decoded, which is what the old announcement did to it.
+      const plain = document.createElement('div');
+      plain.innerHTML = step.because ?? '';
+      const because = plain.textContent.trim();
       return {
         predictIndex: at,
         predictTitle: step.title,
@@ -147,6 +153,10 @@ async function loopFacts(page, id, predictSid) {
         reveal: step.reveal ?? null,
         revealIndex: revealAt,
         revealTitle: lesson.steps[revealAt]?.title ?? null,
+        because,
+        becauseSentences: because
+          .split(/(?<=[.!?:;])\s+/)
+          .filter(s => s.length >= 12),
       };
     },
     [id, predictSid]
@@ -154,6 +164,53 @@ async function loopFacts(page, id, predictSid) {
 }
 
 const title = page => page.locator('.inv-step-title').innerText();
+
+/**
+ * What the screen-reader status region currently says.
+ *
+ * textContent, not innerText: #srStatus is visually hidden, and innerText of a
+ * hidden element is the empty string, which would pass every "does not
+ * contain" below by measuring nothing.
+ */
+const srSaid = page =>
+  page.locator('#srStatus').evaluate(el => el.textContent.trim());
+
+/** The panel's own words for a marked answer, in the page's locale. */
+const markWords = page =>
+  page.evaluate(async () => {
+    const i18n = await import('/js/i18n/index.js');
+    return {
+      correct: i18n.t('inv.answer.correct'),
+      recorded: i18n.t('inv.answer.recorded'),
+    };
+  });
+
+/**
+ * A committed prediction that is held was announced as held, and as nothing
+ * more.
+ *
+ * The same words as the note on screen, and neither the verdict nor any
+ * sentence of the explanation the screen is keeping back. This used to hand a
+ * screen reader both at the moment of commitment - "Correct." for a right
+ * answer, the whole of `because` for a wrong one - while a sighted reader was
+ * told only that the answer had been recorded.
+ */
+async function expectHeldAnnouncement(page, facts) {
+  expect(
+    facts.becauseSentences.length,
+    'the prediction has an explanation to keep back'
+  ).toBeGreaterThan(0);
+  const note = (
+    await page.locator('#investigationBody .inv-held').textContent()
+  ).trim();
+  await expect.poll(() => srSaid(page)).toBe(note);
+  const said = await srSaid(page);
+  expect(said).toContain(facts.revealTitle);
+  expect(said).not.toContain((await markWords(page)).correct);
+  for (const sentence of facts.becauseSentences) {
+    expect(said).not.toContain(sentence);
+  }
+}
 
 const visited = async page =>
   Number(
@@ -261,6 +318,8 @@ test.describe('a prediction is settled by the experiment, not by the answer key'
       const held = page.locator('#investigationBody .inv-held');
       await expect(held).toBeVisible();
       await expect(held).toContainText(facts.revealTitle);
+      // A screen reader is told the same, and not the explanation.
+      await expectHeldAnnouncement(page, facts);
 
       // Do the experiment.
       await walkTo(page, facts.revealTitle);
@@ -284,6 +343,67 @@ test.describe('a prediction is settled by the experiment, not by the answer key'
       await expect(
         page.locator('#investigationBody .inv-because')
       ).toBeVisible();
+      await expect(page.locator('#investigationBody .inv-held')).toHaveCount(0);
+    });
+  }
+});
+
+test.describe('what a screen reader is told when an answer is committed', () => {
+  // The loops above commit the wrong answer, which is what would have leaked
+  // the explanation. A right answer leaked something else, "Correct.", so it
+  // gets its own test; and the graded choices beside them, which have no
+  // experiment to wait for, must go on saying at once how the answer did.
+
+  test('a held prediction answered correctly is not called correct', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await open(page, app, 'keplers-laws');
+    const facts = await loopFacts(page, 'keplers-laws', 'where-is-the-star');
+    expect(facts.reveal, 'where-is-the-star declares a reveal').toBeTruthy();
+
+    await walkTo(page, facts.predictTitle);
+    await page
+      .locator('#investigationBody .inv-option')
+      .nth(facts.answer)
+      .click();
+
+    await expect(
+      page.locator('#investigationBody .inv-option.is-held')
+    ).toHaveCount(1);
+    await expectHeldAnnouncement(page, facts);
+  });
+
+  for (const right of [true, false]) {
+    test(`an ordinary graded choice still announces ${
+      right ? 'that it was right' : 'the explanation when it was wrong'
+    }`, async ({ page, app }) => {
+      test.slow();
+      await open(page, app, 'black-holes');
+      const facts = await loopFacts(
+        page,
+        'black-holes',
+        'what-could-size-even-mean'
+      );
+      // A choice that waits for nothing: if it ever gains a `reveal`, this is
+      // no longer the case being tested.
+      expect(facts.reveal).toBeNull();
+      expect(typeof facts.answer).toBe('number');
+
+      await walkTo(page, facts.predictTitle);
+      const pick = right ? facts.answer : facts.answer === 0 ? 1 : 0;
+      await page.locator('#investigationBody .inv-option').nth(pick).click();
+
+      const words = await markWords(page);
+      await expect
+        .poll(() => srSaid(page))
+        .toBe(right ? words.correct : `${words.recorded} ${facts.because}`);
+      await expect(
+        page.locator(
+          `#investigationBody .inv-option.${right ? 'is-correct' : 'is-wrong'}`
+        )
+      ).toHaveCount(1);
       await expect(page.locator('#investigationBody .inv-held')).toHaveCount(0);
     });
   }
