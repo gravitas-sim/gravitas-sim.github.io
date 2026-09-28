@@ -142,6 +142,9 @@ export const STRUCTURAL = new Set([
   // The sid of the step where a held prediction is marked. A translated one
   // would point at nothing, and the prediction would stay unmarked forever.
   'reveal',
+  // A remediation step's condition: the sid of the graded step it follows and
+  // whether it is for a wrong or a right answer. Machinery, never words.
+  'when',
   'type',
   'kind',
   'scenario',
