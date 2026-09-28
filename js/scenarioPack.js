@@ -35,6 +35,8 @@ import {
   systemSeed,
 } from './systemSpec.js';
 import { LIMITS } from './place/preciseFields.js';
+import { EN_BUILDER } from './i18n/en.builder.js';
+import { EN_PLACEMENT } from './i18n/en.placement.js';
 import {
   FORMAT,
   FORMAT_VERSION,
@@ -115,7 +117,19 @@ export function scenarioApi() {
     integrators: [...INTEGRATORS],
     validateSystem,
     validateBody,
+    explain,
   };
+}
+
+/**
+ * A builder or placement message key, in English, for the SDK and the tests.
+ * The Studio says the same keys in its reader's language.
+ */
+function explain(key, vars = {}) {
+  const text = EN_BUILDER[key] ?? EN_PLACEMENT[key] ?? key;
+  return text.replace(/\{(\w+)\}/g, (m, k) =>
+    k in vars ? String(vars[k]) : m
+  );
 }
 
 /** Every problem with a pack, against this build. */

@@ -206,6 +206,7 @@ const FIELDS = new Set([
  * @param {string[]} api.integrators - The integrator names
  * @param {Function} [api.validateSystem] - js/systemSpec.js's, for `system`
  * @param {Function} [api.validateBody] - For one entry of `bodies`
+ * @param {Function} [api.explain] - A message key and its values, in English
  * @returns {Array<{path: string, code: string, vars: object, message: string}>}
  */
 export function validateScenarioPack(s, api) {
@@ -487,7 +488,13 @@ export function validateScenarioPack(s, api) {
           e.index >= 0
             ? `system.bodies[${e.index}].${e.field}`
             : 'system.bodies';
-        need(false, at, e.key, `the orbital system: ${e.key}`, e.vars);
+        need(
+          false,
+          at,
+          e.key,
+          `the orbital system: ${api.explain?.(e.key, e.vars) ?? e.key}`,
+          e.vars
+        );
       }
     }
   }
@@ -517,7 +524,7 @@ export function validateScenarioPack(s, api) {
             false,
             `bodies[${i}].${e.field}`,
             e.key,
-            `a body: ${e.key}`,
+            `a body: ${api.explain?.(e.key, e.vars) ?? e.key}`,
             e.vars
           );
         }
@@ -526,13 +533,16 @@ export function validateScenarioPack(s, api) {
   }
   if (hasSystem || hasBodies) {
     for (const key of POPULATION_COUNTS) {
-      const n = settings[key] ?? api.defaults[key];
+      const set = key in settings;
+      const n = set ? settings[key] : api.defaults[key];
       need(
         !(n > 0),
         `settings.${key}`,
         'populationWithBodies',
-        'must be 0: a scenario with its own bodies does not also generate them',
-        { key }
+        set
+          ? 'must be 0: a scenario with its own bodies does not also generate them'
+          : `${key} is ${n} by default; a scenario with its own bodies sets it to 0`,
+        { key, n }
       );
     }
   }

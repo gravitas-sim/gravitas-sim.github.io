@@ -46,6 +46,12 @@ import {
   harmonicPeriod,
 } from '../../tools/data-packs/tess-light-curve.mjs';
 import { validateCoursePack } from './course.mjs';
+import {
+  checkPack,
+  buildPackWorld,
+  stepPackWorld,
+  worldSnapshot,
+} from './scenario.mjs';
 import { positions, locate } from './locate.mjs';
 import { MANIFEST_ENTRY, read as readArchive } from './archive.mjs';
 import {
@@ -184,12 +190,13 @@ function covers(scope, file) {
   return re.test(file);
 }
 
-/** Which of the three an extension is, from what it provides. */
+/** Which of the four an extension is, from what it provides. */
 export function extensionType(m) {
   const p = m?.provides || {};
   const kinds = [];
   if (p.dataPacks?.length) kinds.push('data-pack');
   if (p.courses?.length) kinds.push('course-pack');
+  if (p.scenarios?.length) kinds.push('scenario-pack');
   if (p.widgetFamilies?.length) kinds.push('capability');
   return kinds;
 }
@@ -222,7 +229,7 @@ export async function validateExtension(ext) {
       'provides',
       types.length
         ? `provides ${types.join(' and ')}; an extension is exactly one type`
-        : 'provides no dataPacks, courses or widgetFamilies, so it is no extension type'
+        : 'provides no dataPacks, courses, scenarios or widgetFamilies, so it is no extension type'
     );
     return { type: null, manifest: m, findings: report.list };
   }
@@ -337,6 +344,7 @@ export async function validateExtension(ext) {
   const checkType = {
     'data-pack': validateDataPackExtension,
     'course-pack': validateCourseExtension,
+    'scenario-pack': validateScenarioExtension,
     capability: validateCapabilityExtension,
   }[type];
   const extra = (await checkType(ext, m, report, ids)) || [];
@@ -476,6 +484,48 @@ async function validateCourseExtension(ext, m, report, ids) {
   return [];
 }
 
+async function validateScenarioExtension(ext, m, report, ids) {
+  const M = MANIFEST_ENTRY;
+  const entries = m.provides.scenarios;
+  if (entries.length !== 1)
+    report.error(
+      M,
+      'provides.scenarios',
+      'a scenario-pack extension provides exactly one scenario'
+    );
+  const entry = entries[0] || {};
+  if (ids.scenarios.has(entry.id))
+    report.error(
+      M,
+      'provides.scenarios[0].id',
+      `"${entry.id}" is a scenario Gravitas already has`
+    );
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(entry.id || ''))
+    report.error(
+      M,
+      'provides.scenarios[0].id',
+      'a kebab-case public id: only a built-in scenario is named by its title'
+    );
+  if (typeof entry.file !== 'string')
+    return report.error(M, 'provides.scenarios[0].file', 'the scenario file');
+  const pack = parseJson(ext, entry.file, report);
+  if (!pack) return [];
+  for (const e of checkPack(pack)) report.error(entry.file, e.path, e.message);
+  if (pack.id !== entry.id)
+    report.error(
+      entry.file,
+      'id',
+      `is "${pack.id}"; the extension provides "${entry.id}"`
+    );
+  if (!(m.assets || []).some(a => a?.path === entry.file))
+    report.error(
+      M,
+      'assets',
+      `${entry.file} is provided but not declared as an asset`
+    );
+  return [];
+}
+
 async function validateCapabilityExtension(ext, m, report, ids) {
   const M = MANIFEST_ENTRY;
   m.provides.widgetFamilies.forEach((f, i) => {
@@ -600,6 +650,23 @@ export async function testExtension(ext, { type, manifest: m }) {
           );
       }
     }
+  } else if (type === 'scenario-pack') {
+    // Opened the way the application opens the pack's link: built under its
+    // seed, run for a few seconds of simulated time, and built again.
+    const pack = json(m.provides.scenarios[0].file);
+    const first = buildPackWorld(pack);
+    check(
+      first.bodies > 0,
+      `the world builds, with ${first.bodies} bod${first.bodies === 1 ? 'y' : 'ies'}`
+    );
+    const snap = JSON.stringify(worldSnapshot());
+    const ran = stepPackWorld(300, 0.02);
+    check(ran.finite, 'six simulated time units later every body is finite');
+    buildPackWorld(pack);
+    check(
+      JSON.stringify(worldSnapshot()) === snap,
+      'the same pack builds the same world again'
+    );
   } else if (type === 'capability') {
     const dir = ext.archive ? materialize(ext) : ext.source;
     for (const family of m.provides.widgetFamilies) {
@@ -758,6 +825,16 @@ export async function describeExtension(
             `               ${lesson}: ${ids.lessonTitles.get(lesson)?.en ?? '?'}`
           );
       }
+    } else if (type === 'scenario-pack') {
+      const pack = json(m.provides.scenarios[0].file);
+      const built = buildPackWorld(pack);
+      say(
+        `  scenario   ${pack.title.en}: ${built.bodies} bodies, seed ${pack.seed}`
+      );
+      const set = Object.keys(pack.settings || {});
+      if (set.length) say(`  settings   ${set.join(', ')}`);
+      const open = [...(pack.open || []), ...(pack.tools || [])];
+      if (open.length) say(`  opens      ${open.join(', ')}`);
     } else if (type === 'capability') {
       const dir = ext.archive ? materialize(ext) : ext.source;
       const asset = m.assets.find(a => a.role === 'code');

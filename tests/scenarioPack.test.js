@@ -438,3 +438,74 @@ describe('the instruments', () => {
     }
   });
 });
+
+describe('a round trip through the SDK', () => {
+  test('a Studio export, wrapped, validated, tested and packed, comes back byte for byte', async () => {
+    const { run } = await import('../sdk/cli.mjs');
+    const { read } = await import('../sdk/lib/archive.mjs');
+    const { mkdtempSync, writeFileSync, readdirSync, realpathSync } =
+      await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const path = (await import('node:path')).default;
+    const dir = realpathSync(
+      mkdtempSync(path.join(tmpdir(), 'gravitas-pack-'))
+    );
+    const lines = [];
+    const sdk = (...argv) => run(argv, { log: s => lines.push(String(s)) });
+
+    const pack = goodPack();
+    pack.id = 'round-trip';
+    pack.open = ['lightCurve'];
+    // The Studio writes a pack as two-space JSON with a final newline.
+    const exported = `${JSON.stringify(pack, null, 2)}\n`;
+    const file = path.join(dir, 'round-trip.scenario.json');
+    writeFileSync(file, exported);
+
+    const ext = path.join(dir, 'ext');
+    expect(
+      await sdk(
+        'init',
+        'scenario-pack',
+        'round-trip',
+        '--dir',
+        ext,
+        '--from',
+        file
+      )
+    ).toBe(0);
+    expect(await sdk('validate', ext)).toBe(0);
+    expect(await sdk('test', ext)).toBe(0);
+    const out = path.join(dir, 'out');
+    expect(await sdk('pack', ext, '--out', out)).toBe(0);
+    const archive = readdirSync(out).find(f => f.endsWith('.gxp'));
+    const files = read(readFileSync(path.join(out, archive))).files;
+    expect(files.get('scenario.json').toString('utf8')).toBe(exported);
+    expect(migrateScenarioPack(JSON.parse(exported)).pack).toEqual(pack);
+
+    // --from is for a scenario pack only.
+    expect(
+      await sdk(
+        'init',
+        'course-pack',
+        'nope',
+        '--dir',
+        path.join(dir, 'x'),
+        '--from',
+        file
+      )
+    ).toBe(2);
+  });
+});
+
+describe('the JSON Schema', () => {
+  test('names exactly the settings a pack may set', () => {
+    const schema = JSON.parse(
+      readFileSync('sdk/schemas/scenario-pack-1.schema.json', 'utf8')
+    );
+    expect(Object.keys(schema.properties.settings.properties).sort()).toEqual(
+      Object.keys(SETTING_RULES).sort()
+    );
+    expect(schema.properties.open.items.enum).toEqual([...STARTING_PANELS]);
+    expect(schema.properties.tools.items.enum).toEqual([...STARTING_TOOLS]);
+  });
+});
