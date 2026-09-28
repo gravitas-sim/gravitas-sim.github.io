@@ -216,6 +216,15 @@ word in English and Spanish side by side. It is judged by the same checker as
 every lesson Gravitas ships and previews in the real lesson engine
 ([COMPOSER.md](COMPOSER.md)).
 
+**Course packs.** `/studio/course/` assembles a course from what Gravitas has:
+lessons, assignments cut from them, simulations, data and readings, in units,
+with objectives, prerequisites, time and optional introductory and advanced
+paths, in English and Spanish. It pins every lesson so an archived course can
+say what it was made with, reviews what has changed since, and makes the
+course's links, embeds, manifest and printable syllabus. `/course/` is what
+students open, and it works offline. Gravitas ships an introductory astronomy
+course made this way ([COURSE_PACKS.md](COURSE_PACKS.md)).
+
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
 of <!--fact:uiStrings-->6213<!--/fact--> strings, and
@@ -537,6 +546,7 @@ part was built:
 | [`ORBITAL_SYSTEM_BUILDER.md`](ORBITAL_SYSTEM_BUILDER.md)           | Building a hierarchical system from orbital elements: the construction, its checks, and the file it saves                                      |
 | [`STUDIO.md`](STUDIO.md)                                           | The Scenario Studio: what a scenario file holds, its checks and cautions, how it opens, and what still needs the source                        |
 | [`COMPOSER.md`](COMPOSER.md)                                       | The Investigation Composer: the pack and bank formats, variants from vetted relations, remediation, translation, and what it does not do     |
+| [`COURSE_PACKS.md`](COURSE_PACKS.md)                               | Course packs: the format, pins and the reviewed upgrade, the checks, links, the course home, the manifest and the course Gravitas ships      |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |

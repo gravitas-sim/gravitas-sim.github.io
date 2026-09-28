@@ -15,6 +15,28 @@ the release rather than in the tag.
 
 ### Added
 
+- **Course packs** (COURSE_PACKS.md). `gravitas.course-pack/2` orders a
+  course's lessons, assignments cut from them, scenarios, datasets and
+  readings in units, with objectives, prerequisites, time, optional
+  introductory and advanced paths, and notes in English and Spanish.
+  - **The builder,** at `/studio/course/`, picks content from this build and
+    the catalog. It checks what the course depends on, its licenses and its
+    translations, configures assignments, and makes the course's links,
+    embeds, a machine-readable manifest and a printable syllabus.
+  - **Pins:** every lesson is pinned to a digest of its steps and its
+    package. A course is exact (an archive: any change waits for review) or
+    compatible (only what can break waits). The reviewed upgrade re-pins
+    what an instructor has looked at, re-issues an assignment whose steps
+    moved, and raises the course's version.
+  - **The course home,** at `/course/`, is what students open: from a link, a
+    file, or a course Gravitas ships. It filters by path, prints as a
+    syllabus, reads in English or Spanish, and opens offline once Gravitas
+    has been opened.
+  - **Introductory astronomy,** a four-unit course from existing content, is
+    the first course Gravitas ships.
+  - A /1 course migrates. The Observatory opens a built-in observation by
+    `?open=<id>`.
+
 - **The Investigation Composer** (COMPOSER.md). A page at `/studio/lesson/`
   composes a guided investigation as data, `gravitas.investigation-pack/1`,
   judged by the same lesson checker as every built-in lesson.
