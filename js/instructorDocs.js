@@ -187,6 +187,7 @@ const CATEGORY_LABEL = {
   measurement: 'Measurement',
   activity: 'Activity',
   written: 'Written answer',
+  reading: 'Reading',
 };
 
 /**
@@ -215,7 +216,8 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
   doc.paragraph(
     'Instructor copy. Every answer below is generated from the live lesson definition and ' +
       'verified against the same rule the website uses to mark it, so this key and the site ' +
-      'cannot disagree. Steps that only ask students to read or watch are omitted.',
+      'cannot disagree. Steps that only ask students to read or watch are omitted, ' +
+      'unless there is an observation to expect on them.',
     { size: 9, color: '0.35 0.35 0.42' }
   );
   doc.paragraph(
@@ -227,7 +229,13 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
   doc.rule({ gap: 8, shade: 0.85 });
 
   for (const e of key.entries) {
-    if (e.category === 'reading') continue;
+    // A reading step asks for nothing, so there is no answer to print. Some
+    // put an instrument or a readout in front of the class, though, and what
+    // they should see there is the expectation. Skipping every reading step
+    // dropped those from the key, and the guide prints no expectations, so
+    // they reached no document at all.
+    const expected = c?.expectations?.[e.step];
+    if (e.category === 'reading' && !expected) continue;
 
     doc.heading(`Step ${e.step}: ${e.title}`, {
       size: 11,
@@ -309,7 +317,6 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
       doc.bullets(e.checklist, { size: 9, gap: 1 });
     }
 
-    const expected = c?.expectations?.[e.step];
     if (expected) {
       doc.paragraph('Expected observation:', {
         size: 9,

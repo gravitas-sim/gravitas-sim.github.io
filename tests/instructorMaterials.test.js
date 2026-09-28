@@ -650,6 +650,37 @@ describe('the generated documents', () => {
     }
   );
 
+  // The key skipped every reading step, and fifteen expectations went with
+  // them: the authoring rule accepted them, the guide prints none, so they
+  // reached no document at all. Looked for under the step's own heading,
+  // because an expectation printed against the wrong step is the other way
+  // this goes wrong.
+  test.each(INVESTIGATIONS.map(i => [i.id, i]))(
+    '%s: the answer key prints every expectation under its step',
+    (id, inv) => {
+      const text = flat(answerKeyDocument(inv, { version: 'Test 2026' }));
+      // Whole headings, not "Step n:": a measurement's own fields can be
+      // labeled "Step 1: a^3", and that is not where step 1 starts.
+      const headings = answerKeyFor(inv)
+        .entries.map(e => ({
+          n: String(e.step),
+          at: text.indexOf(ascii(`Step ${e.step}: ${e.title}`)),
+        }))
+        .filter(h => h.at >= 0);
+      for (const [n, expectation] of Object.entries(
+        instructorContentFor(id).expectations || {}
+      )) {
+        const i = headings.findIndex(h => h.n === n);
+        const under =
+          i < 0 ? '' : text.slice(headings[i].at, headings[i + 1]?.at);
+        expect({
+          step: n,
+          printed: under.includes(opening(expectation)),
+        }).toEqual({ step: n, printed: true });
+      }
+    }
+  );
+
   // `bullets()` iterates its argument, so a string reaches it as a sequence of
   // characters: one guide went out at 27 pages with 590 bullets reading "T",
   // "w", "o". A run of one-character draws is the signature.
@@ -800,20 +831,29 @@ describe('the generated documents', () => {
     }
   );
 
-  test('reading-only steps are left out of the key', () => {
+  // A reading step asks for nothing, so the key leaves it out - unless there
+  // is an observation to expect on it, and then it is printed for the sake of
+  // that. Black Holes by the Numbers has both kinds.
+  test('reading-only steps are left out of the key, unless they carry an expectation', () => {
     const inv = getInvestigation('black-holes');
-    const text = [
-      ...new TextDecoder('latin1')
-        .decode(answerKeyDocument(inv))
-        .matchAll(/\(((?:\\.|[^()\\])*)\)\s*Tj/g),
-    ]
-      .map(m => m[1])
-      .join(' ');
+    const text = flat(answerKeyDocument(inv));
+    const { expectations } = instructorContentFor(inv.id);
     const reading = answerKeyFor(inv).entries.filter(
       e => e.category === 'reading'
     );
-    expect(reading.length).toBeGreaterThan(0);
-    for (const e of reading) expect(text).not.toContain(`Step ${e.step}:`);
+    const bare = reading.filter(e => !expectations[e.step]);
+    const noted = reading.filter(e => expectations[e.step]);
+    expect(bare.length).toBeGreaterThan(0);
+    expect(noted.length).toBeGreaterThan(0);
+    for (const e of bare) expect(text).not.toContain(`Step ${e.step}:`);
+    for (const e of noted) {
+      expect(text).toContain(
+        ascii(
+          `Step ${e.step}: ${e.title} Reading Expected observation: ` +
+            opening(expectations[e.step])
+        )
+      );
+    }
   });
 
   test('the adopter guide and curriculum map build and name every lesson', () => {
