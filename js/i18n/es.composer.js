@@ -312,5 +312,6 @@ export const ES_COMPOSER = {
   'composer.error.inputUnknown': '«{input}» no es un dato de esta relación.',
   'composer.error.inputNumber': 'Un número.',
   'composer.error.inputRange': 'De {min} a {max} {unit}.',
+  'composer.error.values': 'Cada variante da sus datos como números.',
   'composer.error.answer': 'Estos datos no dan una respuesta utilizable.',
 };

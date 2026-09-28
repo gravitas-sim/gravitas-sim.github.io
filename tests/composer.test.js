@@ -31,6 +31,7 @@ import { checkLesson } from '../js/authoring/rules.js';
 import { DEFAULT_SETTINGS } from '../js/appState.js';
 import { gradedSteps } from '../js/data/investigations/catalog.js';
 import { DRAFT_KEY } from '../js/authoring/preview.js';
+import { parse } from 'acorn';
 
 // =============================================================================
 // The composer's compiler: a pack becomes a lesson like any other
@@ -367,5 +368,123 @@ describe('judge()', () => {
       gradedSteps,
     });
     expect(findings).toEqual([]);
+  });
+});
+
+// --- The words ----------------------------------------------------------------
+
+describe('the composer’s words', () => {
+  const read = async () => {
+    const [
+      { EN },
+      { ES },
+      { EN_STUDIO },
+      { ES_STUDIO },
+      { EN_COMPOSER },
+      { ES_COMPOSER },
+    ] = await Promise.all([
+      import('../js/i18n/en.js'),
+      import('../js/i18n/es.js'),
+      import('../js/i18n/en.studio.js'),
+      import('../js/i18n/es.studio.js'),
+      import('../js/i18n/en.composer.js'),
+      import('../js/i18n/es.composer.js'),
+    ]);
+    return {
+      en: { ...EN, ...EN_STUDIO, ...EN_COMPOSER },
+      es: { ...ES, ...ES_STUDIO, ...ES_COMPOSER },
+      EN_COMPOSER,
+      ES_COMPOSER,
+      EN,
+    };
+  };
+  const literalKeys = source => [
+    ...new Set(
+      [...source.matchAll(/\bt\(\s*'([a-zA-Z0-9_.]+)'/g)].map(m => m[1])
+    ),
+  ];
+  const missing = (tables, keys) => ({
+    en: keys.filter(k => !(k in tables.en)),
+    es: keys.filter(k => !(k in tables.es)),
+  });
+
+  test('every key js/composerPage.js names is in both languages', async () => {
+    const tables = await read();
+    const keys = literalKeys(readFileSync('js/composerPage.js', 'utf8'));
+    expect(keys.length).toBeGreaterThan(120);
+    expect(missing(tables, keys)).toEqual({ en: [], es: [] });
+  });
+
+  test('the keys it builds exist in both languages', async () => {
+    const tables = await read();
+    const { STEP_TYPES } = await import('../js/platform/investigation.js');
+    const { ITEM_KINDS, ATTEMPT_RULES } =
+      await import('../js/platform/questionBank.js');
+    const { RELATION_IDS } = await import('../js/platform/relations.js');
+    const built = [
+      ...STEP_TYPES.map(k => `composer.type.${k}`),
+      ...ITEM_KINDS.map(k => `composer.kind.${k}`),
+      ...ATTEMPT_RULES.map(k => `composer.attempts.${k}`),
+      ...RELATION_IDS.map(k => `composer.relation.${k}`),
+      ...['done', 'missing', 'stale'].map(k => `composer.state.${k}`),
+      ...['added', 'removed', 'changed'].map(k => `studio.diff.${k}`),
+    ];
+    expect(missing(tables, built)).toEqual({ en: [], es: [] });
+  });
+
+  test('every complaint the formats make has words in both languages', async () => {
+    const tables = await read();
+    const codes = new Set();
+    const visit = node => {
+      if (!node || typeof node.type !== 'string') return;
+      if (node.type === 'CallExpression' && node.callee.type === 'Identifier') {
+        // need(ok, path, code, ...) and fail(path, code, ...)
+        const at = { need: 2, fail: 1 }[node.callee.name];
+        const a = at === undefined ? null : node.arguments[at];
+        if (a?.type === 'Literal' && typeof a.value === 'string')
+          codes.add(a.value);
+      }
+      if (
+        node.type === 'Property' &&
+        node.key?.name === 'code' &&
+        node.value?.type === 'Literal'
+      )
+        codes.add(node.value.value);
+      for (const v of Object.values(node)) {
+        if (Array.isArray(v)) v.forEach(visit);
+        else if (v && typeof v === 'object') visit(v);
+      }
+    };
+    for (const file of [
+      'js/platform/investigation.js',
+      'js/platform/questionBank.js',
+      'js/platform/relations.js',
+    ])
+      visit(
+        parse(readFileSync(file, 'utf8'), {
+          ecmaVersion: 'latest',
+          sourceType: 'module',
+        })
+      );
+    expect(codes.size).toBeGreaterThan(40);
+    const unsaid = locale =>
+      [...codes].filter(
+        c =>
+          ![
+            `composer.error.${c}`,
+            `studio.error.${c}`,
+            `composer.file.${c}`,
+            `studio.file.${c}`,
+          ].some(k => k in tables[locale])
+      );
+    expect({ en: unsaid('en'), es: unsaid('es') }).toEqual({ en: [], es: [] });
+  });
+
+  test('the two fragments have the same keys, and none repeats the base catalog', async () => {
+    const { EN_COMPOSER, ES_COMPOSER, EN } = await read();
+    expect(Object.keys(ES_COMPOSER).sort()).toEqual(
+      Object.keys(EN_COMPOSER).sort()
+    );
+    expect(Object.keys(EN_COMPOSER).filter(k => k in EN)).toEqual([]);
   });
 });

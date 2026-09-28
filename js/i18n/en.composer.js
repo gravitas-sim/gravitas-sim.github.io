@@ -307,5 +307,6 @@ export const EN_COMPOSER = {
   'composer.error.inputUnknown': '“{input}” is not an input of this relation.',
   'composer.error.inputNumber': 'A number.',
   'composer.error.inputRange': 'From {min} to {max} {unit}.',
+  'composer.error.values': 'Each variant gives its inputs as numbers.',
   'composer.error.answer': 'These inputs give no usable answer.',
 };
