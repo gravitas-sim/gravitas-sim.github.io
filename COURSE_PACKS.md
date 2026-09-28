@@ -183,8 +183,8 @@ same file always makes the same links.
 | The course | `/course/#c2z…`: the whole pack, compressed, in the fragment, and an embed of the course home |
 
 A course link is checked against the 8,000 characters some mail programs and
-learning platforms keep (`COMFORTABLE_URL_LENGTH`). The example course is
-5,400. A course too long for a link is given to students as the file, and the
+learning platforms keep (`COMFORTABLE_URL_LENGTH`). The example course's is
+about 5,500. A course too long for a link is given to students as the file, and the
 course home opens it.
 
 ## The course home
