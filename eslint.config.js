@@ -138,6 +138,7 @@ export default [
       'js/validationWorker.js',
       'js/experiments/experimentWorker.js',
       'js/inference/inferenceWorker.js',
+      'js/lab3d/worker.js',
     ],
     languageOptions: {
       ecmaVersion: 2021,
