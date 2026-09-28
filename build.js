@@ -67,6 +67,7 @@ const DOC_PAGES = [
   'observatory',
   'catalog',
   'studio',
+  'studio/lesson',
 ];
 
 // Archival pages: copied byte for byte, and never processed.
@@ -453,6 +454,25 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'studio-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The Investigation Composer (/studio/lesson/), the Studio's second page:
+  // its own entry, for the same reason. It reads the lesson checker, the
+  // answer parser and, on request, the lab report; none of that may reach
+  // anybody's start-up download.
+  if (existsSync('js/composerPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/composerPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'composer-[hash]',
       legalComments: 'none',
     });
   }

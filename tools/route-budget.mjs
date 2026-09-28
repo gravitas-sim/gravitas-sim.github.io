@@ -86,6 +86,7 @@ export const ROUTES = [
   { id: 'observatory', url: '/observatory/', page: true },
   { id: 'catalog', url: '/catalog/', page: true },
   { id: 'studio', url: '/studio/', page: true },
+  { id: 'composer', url: '/studio/lesson/', page: true },
 ];
 
 const CONFIGS = {

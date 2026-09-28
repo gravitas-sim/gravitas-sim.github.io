@@ -76,9 +76,18 @@ const LAST_KEY = 'gravitas_studio_last';
 
 /**
  * Drafts kept in a Storage (localStorage in the page, a stand-in in tests).
+ * The Scenario Studio and the investigation composer each keep their own, by
+ * key prefix, so one's drafts never list in the other.
+ *
  * @param {Storage} store
+ * @param {object} [keys]
+ * @param {string} [keys.prefix] - Before each draft's id
+ * @param {string} [keys.last] - Where the id saved last is kept
  */
-export function createDrafts(store) {
+export function createDrafts(
+  store,
+  { prefix = DRAFT_PREFIX, last = LAST_KEY } = {}
+) {
   const safe = fn => {
     try {
       return { ok: true, value: fn() };
@@ -90,21 +99,18 @@ export function createDrafts(store) {
     /** @returns {{ok: boolean}} Whether the browser kept it */
     save(doc, savedAt = Date.now()) {
       const r = safe(() => {
-        store.setItem(
-          `${DRAFT_PREFIX}${doc.id}`,
-          JSON.stringify({ savedAt, doc })
-        );
-        store.setItem(LAST_KEY, doc.id);
+        store.setItem(`${prefix}${doc.id}`, JSON.stringify({ savedAt, doc }));
+        store.setItem(last, doc.id);
       });
       return { ok: r.ok };
     },
     /** @returns {?{savedAt: number, doc: object}} */
     load(id) {
-      const r = safe(() => JSON.parse(store.getItem(`${DRAFT_PREFIX}${id}`)));
+      const r = safe(() => JSON.parse(store.getItem(`${prefix}${id}`)));
       return r.ok && r.value?.doc ? r.value : null;
     },
     remove(id) {
-      safe(() => store.removeItem(`${DRAFT_PREFIX}${id}`));
+      safe(() => store.removeItem(`${prefix}${id}`));
     },
     /** Every draft, newest first. One that cannot be read is left out. */
     list() {
@@ -116,7 +122,7 @@ export function createDrafts(store) {
       if (!keys.ok) return [];
       const out = [];
       for (const key of keys.value) {
-        if (!key?.startsWith(DRAFT_PREFIX)) continue;
+        if (!key?.startsWith(prefix)) continue;
         const d = safe(() => JSON.parse(store.getItem(key))).value;
         if (d?.doc)
           out.push({ id: d.doc.id, savedAt: d.savedAt, title: d.doc.title });
@@ -125,7 +131,7 @@ export function createDrafts(store) {
     },
     /** The id of the draft saved last, or null. */
     last() {
-      const r = safe(() => store.getItem(LAST_KEY));
+      const r = safe(() => store.getItem(last));
       return r.ok ? r.value : null;
     },
   };
