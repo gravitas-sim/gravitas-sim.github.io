@@ -62,8 +62,10 @@ export const EN_BUILDER = {
   'builder.field.phase': 'Starting mean anomaly (degrees)',
   'builder.field.phaseHint': '0 starts at periapsis, 180 at apoapsis.',
   'builder.field.direction': 'Direction',
-  'builder.direction.prograde': 'Prograde (counter-clockwise)',
-  'builder.direction.retrograde': 'Retrograde (clockwise)',
+  'builder.direction.prograde': 'Prograde',
+  'builder.direction.retrograde': 'Retrograde',
+  'builder.field.directionHint':
+    'Prograde turns counter-clockwise on the canvas, retrograde clockwise.',
   'builder.mass.suns': 'solar masses',
   'builder.mass.earths': 'Earth masses',
   'builder.mass.jupiters': 'Jupiter masses',

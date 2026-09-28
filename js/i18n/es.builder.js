@@ -57,8 +57,10 @@ export const ES_BUILDER = {
   'builder.field.phase': 'Anomalía media inicial (grados)',
   'builder.field.phaseHint': '0 empieza en el periastro, 180 en el apoastro.',
   'builder.field.direction': 'Sentido',
-  'builder.direction.prograde': 'Prógrado (antihorario)',
-  'builder.direction.retrograde': 'Retrógrado (horario)',
+  'builder.direction.prograde': 'Prógrado',
+  'builder.direction.retrograde': 'Retrógrado',
+  'builder.field.directionHint':
+    'Prógrado gira en sentido antihorario en el lienzo; retrógrado, en sentido horario.',
   'builder.mass.suns': 'masas solares',
   'builder.mass.earths': 'masas terrestres',
   'builder.mass.jupiters': 'masas de Júpiter',

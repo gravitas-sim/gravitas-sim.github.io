@@ -479,7 +479,7 @@ function bodyFieldset(row, index) {
           ],
           row.retrograde ? 'retrograde' : 'prograde'
         ),
-        null
+        t('builder.field.directionHint')
       )
     );
 
