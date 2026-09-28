@@ -284,7 +284,11 @@ function render() {
               rel: 'noopener',
               hidden: true,
               text: t(`courseHome.open.${item.kind}`),
-              'aria-label': t('courseHome.openNamed', { title: titleOf(item) }),
+              // The visible words first, so a spoken command finds it.
+              'aria-label': t('courseHome.openNamed', {
+                action: t(`courseHome.open.${item.kind}`),
+                title: titleOf(item),
+              }),
             });
             if (!missing) pending.push({ item, open });
             const path = item.path || 'core';

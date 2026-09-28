@@ -54,7 +54,7 @@ export const EN_COURSEHOME = {
   'courseHome.open.scenario': 'Open the simulation',
   'courseHome.open.dataset': 'Open the data',
   'courseHome.open.reading': 'Open the reading',
-  'courseHome.openNamed': 'Open {title}',
+  'courseHome.openNamed': '{action}: {title}',
   'courseHome.after': 'After: {list}',
   'courseHome.missing':
     'This version of Gravitas does not have this lesson. Ask your instructor what to do instead.',
