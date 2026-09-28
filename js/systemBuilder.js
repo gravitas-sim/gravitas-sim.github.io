@@ -923,6 +923,10 @@ export function installSystem(system, kit) {
   });
   setScenarioName('None');
   kit.rebuild(system.seed);
+  // The card naming the scenario that was open. A rebuild under 'None' has no
+  // card of its own to replace it with, so without this the previous
+  // scenario's description sat over the new system for up to eighteen seconds.
+  $('scenarioInfoBox')?.classList.remove('showUI');
   $('scenarioInfoDisplay')?.classList.remove('visible');
 
   let count = 0;
