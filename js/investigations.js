@@ -3549,12 +3549,40 @@ function goToStep(index, { rebuild = false } = {}) {
   els.panel.scrollTop = 0;
 }
 
+/**
+ * Whether a step is for this student. A remediation step (`when`, from an
+ * investigation pack: js/platform/investigation.js) is shown only when the
+ * graded step it names has an answer that is wrong - or right - now. One not
+ * yet answered, or answered the other way, is passed over by Next and
+ * Previous; every other step always applies.
+ */
+function stepApplies(index) {
+  const w = active.steps[index]?.when;
+  if (!w) return true;
+  const target = active.steps.find(x => x.sid === w.sid);
+  const key = stepKey(active.id, w.sid);
+  const value = responses[key];
+  if (!target || value === undefined || value === '') return false;
+  const right = checkAnswer(target, value, {
+    locale: localeOfAnswer(responses, key, getLocale()),
+  });
+  if (right === null) return false;
+  return w.is === 'correct' ? right : !right;
+}
+
+/** The nearest step that applies, one way from `from`; the ends always do. */
+function applyingFrom(from, dir) {
+  let i = from + dir;
+  while (i > 0 && i < active.steps.length - 1 && !stepApplies(i)) i += dir;
+  return i;
+}
+
 function next() {
   if (stepIndex === active.steps.length - 1) {
     openFinish();
     return;
   }
-  goToStep(stepIndex + 1);
+  goToStep(applyingFrom(stepIndex, 1));
 }
 
 // --- Opening and closing ------------------------------------------------------
@@ -4789,7 +4817,9 @@ export function initInvestigations() {
     if (e.target === els.browser) closeBrowser();
   });
 
-  els.prev?.addEventListener('click', () => goToStep(stepIndex - 1));
+  els.prev?.addEventListener('click', () =>
+    goToStep(applyingFrom(stepIndex, -1))
+  );
   els.next?.addEventListener('click', next);
   els.close?.addEventListener('click', closeInvestigation);
   // The stage's camera and scale. Both cameras act once, on the press: a view
@@ -4928,15 +4958,19 @@ export function initInvestigations() {
       .then(([preview]) => {
         const request = preview.authoringRequest();
         if (!request) return;
+        preview.installDraft(request);
         if (!hasInvestigation(request.lesson)) {
           toast(t('inv.link.unknown'));
           return;
         }
+        const student = request.view === 'student';
         authoring = {
           step: request.step,
-          render: (inv, index) => preview.renderAuthorBar(inv, index),
+          render: student
+            ? null
+            : (inv, index) => preview.renderAuthorBar(inv, index),
         };
-        preview.mountAuthorBar(index => goToStep(index));
+        if (!student) preview.mountAuthorBar(index => goToStep(index));
         openInvestigation(request.lesson).catch(() =>
           toast(t('inv.load.failed'))
         );
@@ -4971,7 +5005,7 @@ export function initInvestigations() {
       next();
     } else if (e.key === 'ArrowLeft' && e.shiftKey) {
       e.preventDefault();
-      goToStep(stepIndex - 1);
+      goToStep(applyingFrom(stepIndex, -1));
     }
   });
 }

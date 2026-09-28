@@ -1,0 +1,352 @@
+// =============================================================================
+// The example investigation: "Reading an orbit"
+// -----------------------------------------------------------------------------
+// A short investigation of Kepler’s third law, written to show every part
+// of the format once: a scenario and a seed, a held prediction marked at a
+// later step, a checklist, a measurement, a question drawn from the bank with
+// its inputs taken from a vetted relation, a remediation step for a wrong
+// answer, an inline choice and a short written answer, English and Spanish
+// throughout. The composer (/studio/lesson/) offers it as a starting point,
+// and the tests build it (tests/composer.test.js).
+// =============================================================================
+
+export const EXAMPLE_INVESTIGATION = {
+  format: 'gravitas.investigation-pack',
+  formatVersion: 1,
+  id: 'reading-an-orbit',
+  version: '1.0.0',
+  locales: ['en', 'es'],
+  title: {
+    en: 'Reading an orbit',
+    es: 'Leer una órbita',
+    esOf: '0800f80e',
+  },
+  subtitle: {
+    en: 'How far a planet is tells you how long its year is',
+    es: 'Lo lejos que está un planeta dice cuánto dura su año',
+    esOf: 'f6b512db',
+  },
+  summary: {
+    en: 'Watch the planets, time one, and find the rule Kepler found: the square of the year goes as the cube of the distance.',
+    es: 'Observa los planetas, cronometra uno y encuentra la regla que encontró Kepler: el cuadrado del año va como el cubo de la distancia.',
+    esOf: 'bcf24ceb',
+  },
+  level: {
+    en: 'Introductory astronomy',
+    es: 'Astronomía introductoria',
+    esOf: 'bc7d642d',
+  },
+  duration: '15-20 min',
+  objectives: [
+    {
+      en: 'Relate a planet’s distance to its orbital period',
+      es: 'Relacionar la distancia de un planeta con su periodo orbital',
+      esOf: 'ca7d64cd',
+    },
+    {
+      en: 'Use Kepler’s third law to predict a period',
+      es: 'Usar la tercera ley de Kepler para predecir un periodo',
+      esOf: 'e0d006fa',
+    },
+  ],
+  prerequisites: [
+    {
+      lesson: 'keplers-laws',
+    },
+  ],
+  seed: 20260928,
+  bank: {
+    items: [
+      {
+        id: 'kepler-period',
+        version: 1,
+        kind: 'numeric',
+        prompt: {
+          en: 'A planet orbits a star of {M} solar masses at {a} AU. How long is its year?',
+          es: 'Un planeta orbita una estrella de {M} masas solares a {a} UA. ¿Cuánto dura su año?',
+          esOf: '452a34cd',
+        },
+        because: {
+          en: 'Kepler’s third law in solar units: P<sup>2</sup> = a<sup>3</sup> / M.',
+          es: 'La tercera ley de Kepler en unidades solares: P<sup>2</sup> = a<sup>3</sup> / M.',
+          esOf: 'f04dce1b',
+        },
+        unit: 'yr',
+        expect: {
+          dimension: 'time',
+          unit: 'yr',
+          accept: ['yr', 'years', 'd', 'days'],
+        },
+        hints: {
+          concept: {
+            en: 'The year depends on the distance cubed, and on the mass.',
+            es: 'El año depende del cubo de la distancia, y de la masa.',
+            esOf: '2d85482f',
+          },
+          method: {
+            en: 'Cube the distance, divide by the mass, take the square root.',
+            es: 'Eleva la distancia al cubo, divide por la masa y saca la raíz cuadrada.',
+            esOf: 'e038177e',
+          },
+        },
+        scoring: {
+          points: 2,
+          attempts: 'first',
+        },
+        a11y: {
+          textOnly: true,
+        },
+        variants: {
+          relation: 'kepler3',
+          values: [
+            {
+              a: 4,
+              M: 1,
+            },
+            {
+              a: 9,
+              M: 1,
+            },
+            {
+              a: 2,
+              M: 2,
+            },
+          ],
+          tolerancePct: 5,
+        },
+      },
+    ],
+  },
+  steps: [
+    {
+      sid: 'look',
+      type: 'read',
+      title: {
+        en: 'Eight planets, one rule',
+        es: 'Ocho planetas, una regla',
+        esOf: '6ab38ef1',
+      },
+      body: {
+        en: 'The inner planets race round; the outer ones crawl. How fast a planet goes round is set by how far out it is.',
+        es: 'Los planetas interiores dan vueltas deprisa; los exteriores se arrastran. Lo rápido que gira un planeta lo fija lo lejos que está.',
+        esOf: 'fd66b991',
+      },
+      setup: {
+        scenario: 'Solar System',
+        seed: 'orbit-1',
+      },
+    },
+    {
+      sid: 'guess',
+      type: 'predict',
+      title: {
+        en: 'Four times as far',
+        es: 'Cuatro veces más lejos',
+        esOf: 'b46ef5dc',
+      },
+      body: {
+        en: 'Before you measure anything, guess.',
+        es: 'Antes de medir nada, adivina.',
+        esOf: 'b0121240',
+      },
+      prompt: {
+        en: 'A planet four times farther from the Sun than Earth has a year that is:',
+        es: 'Un planeta cuatro veces más lejos del Sol que la Tierra tiene un año que dura:',
+        esOf: '9d2a3609',
+      },
+      options: [
+        {
+          en: '4 times as long',
+          es: '4 veces más',
+          esOf: 'd1f7fcb3',
+        },
+        {
+          en: '8 times as long',
+          es: '8 veces más',
+          esOf: '4576d6cf',
+        },
+        {
+          en: '16 times as long',
+          es: '16 veces más',
+          esOf: '86005566',
+        },
+      ],
+      answer: 1,
+      because: {
+        en: 'The square of the year goes as the cube of the distance: 4<sup>3</sup> = 64 = 8<sup>2</sup>.',
+        es: 'El cuadrado del año va como el cubo de la distancia: 4<sup>3</sup> = 64 = 8<sup>2</sup>.',
+        esOf: 'a9f4d124',
+      },
+      reveal: 'period',
+    },
+    {
+      sid: 'watch',
+      type: 'explore',
+      title: {
+        en: 'Watch them go round',
+        es: 'Míralos girar',
+        esOf: 'a8fb7cf4',
+      },
+      body: {
+        en: 'Let the simulation run and compare the planets.',
+        es: 'Deja correr la simulación y compara los planetas.',
+        esOf: '4b7132f7',
+      },
+      checklist: [
+        {
+          en: 'Find the fastest planet',
+          es: 'Encuentra el planeta más rápido',
+          esOf: 'c599dc77',
+        },
+        {
+          en: 'Find the slowest',
+          es: 'Encuentra el más lento',
+          esOf: 'adfb51ce',
+        },
+      ],
+    },
+    {
+      sid: 'time-it',
+      type: 'measure',
+      title: {
+        en: 'Time the Earth',
+        es: 'Cronometra la Tierra',
+        esOf: '674ad09f',
+      },
+      body: {
+        en: 'Use the stopwatch to time one full orbit of the Earth.',
+        es: 'Usa el cronómetro para medir una órbita completa de la Tierra.',
+        esOf: 'e9939a13',
+      },
+      fields: [
+        {
+          id: 'period',
+          label: {
+            en: 'Earth’s orbit',
+            es: 'Órbita de la Tierra',
+            esOf: 'dd3ec593',
+          },
+          unit: 'days',
+        },
+      ],
+    },
+    {
+      sid: 'period',
+      type: 'question',
+      title: {
+        en: 'Another star',
+        es: 'Otra estrella',
+        esOf: 'e4778404',
+      },
+      body: {
+        en: 'Now use the rule.',
+        es: 'Ahora usa la regla.',
+        esOf: 'b601af5f',
+      },
+      from: 'kepler-period',
+    },
+    {
+      sid: 'again',
+      type: 'read',
+      title: {
+        en: 'Cube, then root',
+        es: 'Al cubo y luego la raíz',
+        esOf: 'cb356ac1',
+      },
+      body: {
+        en: 'The rule is P<sup>2</sup> = a<sup>3</sup>/M: cube the distance first, then take the square root.',
+        es: 'La regla es P<sup>2</sup> = a<sup>3</sup>/M: primero eleva la distancia al cubo y luego saca la raíz cuadrada.',
+        esOf: '7172b840',
+      },
+      when: {
+        sid: 'period',
+        is: 'incorrect',
+      },
+    },
+    {
+      sid: 'which',
+      type: 'question',
+      kind: 'choice',
+      title: {
+        en: 'Which is slower?',
+        es: '¿Cuál es más lento?',
+        esOf: 'b7d7ae19',
+      },
+      body: {
+        en: 'Two planets, one star.',
+        es: 'Dos planetas, una estrella.',
+        esOf: '44d690ac',
+      },
+      prompt: {
+        en: 'Which planet has the longer year?',
+        es: '¿Qué planeta tiene el año más largo?',
+        esOf: '3baa7e62',
+      },
+      options: [
+        {
+          en: 'The one at 1 AU',
+          es: 'El que está a 1 UA',
+          esOf: 'b2545d30',
+        },
+        {
+          en: 'The one at 5 AU',
+          es: 'El que está a 5 UA',
+          esOf: '9ff66864',
+        },
+      ],
+      answer: 1,
+      because: {
+        en: 'Farther out means a longer year.',
+        es: 'Más lejos significa un año más largo.',
+        esOf: 'ae8cb7cc',
+      },
+      scoring: {
+        points: 1,
+        attempts: 'best',
+      },
+    },
+    {
+      sid: 'explain',
+      type: 'question',
+      kind: 'short',
+      title: {
+        en: 'In your words',
+        es: 'Con tus palabras',
+        esOf: '432f7760',
+      },
+      body: {
+        en: 'Say why.',
+        es: 'Di por qué.',
+        esOf: 'c1019e7c',
+      },
+      prompt: {
+        en: 'Why does a farther planet take longer to go round?',
+        es: '¿Por qué tarda más en dar la vuelta un planeta más lejano?',
+        esOf: '4130569f',
+      },
+      rubric: {
+        en: 'Names both effects: a longer path and a weaker pull, so a slower speed.',
+        es: 'Nombra los dos efectos: un camino más largo y una atracción más débil, así que una velocidad menor.',
+        esOf: 'f5cf2aa9',
+      },
+      scoring: {
+        points: 2,
+        attempts: 'best',
+      },
+    },
+    {
+      sid: 'close',
+      type: 'read',
+      title: {
+        en: 'What you found',
+        es: 'Lo que encontraste',
+        esOf: 'beeaf2e0',
+      },
+      body: {
+        en: 'Distance sets the year, and the rule that says how is Kepler’s third law.',
+        es: 'La distancia fija el año, y la regla que dice cómo es la tercera ley de Kepler.',
+        esOf: '97a5f8dc',
+      },
+    },
+  ],
+};
