@@ -708,6 +708,39 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A screen reader heard a repeated announcement once, and then never.**
+  - **What it did:** `announce()` in `js/notify.js` returned early when a
+    message was the one it had last written to `#srStatus`, and nothing
+    reset that. The lesson panel announces nothing between steps, so a
+    student who answered two graded choices right in a row heard "Correct."
+    for the first and silence for the second (Black Holes by the Numbers,
+    "What did doubling do?" then "Read the graph"). With held predictions
+    announcing their note, the two in a row in Lagrange Points that name the
+    same reveal step would have said it once. A toast repeated for a second
+    click was silent too.
+  - **What it does now:** a repeat is announced again. Writing the words the
+    region already holds is not a change a screen reader reads, so a repeat
+    gains or drops a trailing no-break space, which is not heard. The dedupe
+    had one real use, and it stays there: every world build announces
+    "Scenario loaded", and a parameter sweep builds the same world once per
+    trial, and a lesson stage whose scene was replaced rebuilds it from a
+    timer. That caller passes `again` false and says a scenario once until
+    something else is said. No other caller of `announce()` or `toast()`
+    fires on a timer or per frame.
+  - **Tests:** `tests/notify.test.js` announces a message, waits a frame and
+    announces it again, and checks the region changed each time and reads
+    the same words; `again` false says a repeat once. In
+    `e2e/investigations.spec.js`, a student resumed at "What did doubling
+    do?" answers it and the next step right, and a MutationObserver on
+    `#srStatus` must see "Correct." twice. `e2e/accessibilityManual.spec.js`
+    builds Solar System five times and allows one "Scenario loaded" at most.
+    The first two fail on v2, and the last fails without the caller's
+    `again` false.
+  - **Cost:** 29 bytes of start-up JavaScript and none deferred, and no
+    request. `js/notify.js` loads on every route, so in the sources, where
+    comments count, it is 321 bytes on the front door, the sandbox, every
+    lesson and the figure page. The front door and the sandbox have 109
+    bytes of their sources ceiling left. No ceiling moved.
 - **A screen reader was told how a held prediction did before the
   experiment.**
   - **What it did:** a prediction that names `reveal` shows no verdict and no
