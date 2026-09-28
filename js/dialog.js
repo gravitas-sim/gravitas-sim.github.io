@@ -108,7 +108,10 @@ export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
       const first = items[0];
       const last = items[items.length - 1];
       const active = document.activeElement;
-      if (event.shiftKey && (active === first || !panel.contains(active))) {
+      if (
+        event.shiftKey &&
+        (active === first || active === panel || !panel.contains(active))
+      ) {
         event.preventDefault();
         last.focus();
       } else if (!event.shiftKey && active === last) {
@@ -127,14 +130,20 @@ export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
         // stops; it just cannot choose one outside.
         wrapTo = event.shiftKey ? last : first;
         setTimeout(() => {
-          wrapTo = null;
+          // Unless the Tab took focus out of the page altogether, to the
+          // browser's toolbar: that is where Safari goes after the last field
+          // it stops on. The next focus to arrive is then the browser bringing
+          // it back in at the top of the page, which over a lesson is the
+          // lesson's answer boxes, behind Settings and the builder.
+          if (document.activeElement !== document.body) wrapTo = null;
         });
       }
     };
     // Only a Tab from inside the panel is sent back. A click on the page is
     // left alone - the precise-placement form has no scrim on purpose, so the
     // world stays in reach behind it - and so is focus leaving for the
-    // browser's own toolbar, which a modal is allowed to let go to. A panel on
+    // browser's own toolbar, which a modal is allowed to let go to. Where it
+    // comes back to is sent back, by the timer above. A panel on
     // its way out is still `isOpen` until its transition ends, but it is inert
     // from the moment closeDialog runs, and focus is not sent back into it.
     const focusin = event => {
@@ -148,16 +157,22 @@ export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
     };
     panel.addEventListener('keydown', keydown);
     document.addEventListener('focusin', focusin, true);
+    // A click is never the Tab's, not even one after a trip to the toolbar.
+    document.addEventListener('pointerdown', () => (wrapTo = null), true);
     wired.set(panel, { ...wired.get(panel), keydown });
   }
+
+  // Focusable itself, so that a click inside it leaves focus inside it. A
+  // click on its text, in any browser, or on one of its buttons in Safari,
+  // which does not focus a clicked button, used to put focus on <body>. From
+  // there Escape never reached the keydown listener above, and Shift+Tab
+  // walked out into the page behind.
+  if (!panel.hasAttribute('tabindex')) panel.setAttribute('tabindex', '-1');
 
   // Focus the first thing worth acting on. Named by the caller when the
   // sensible first control is not simply the first one in the markup.
   const wanted = initialFocus && panel.querySelector(initialFocus);
   const target = wanted || focusable(panel)[0] || panel;
-  if (target === panel && !panel.hasAttribute('tabindex')) {
-    panel.setAttribute('tabindex', '-1');
-  }
   target.focus({ preventScroll: true });
 }
 
