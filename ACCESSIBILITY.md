@@ -247,6 +247,14 @@ indistinguishable from a clicked one — same list, same share link, same undo
 button — and `e2e/accessibilityParity.spec.js` asserts that by comparing the
 two share payloads.
 
+In Safari, Tab moves only between text fields and menus unless "Press Tab to
+highlight each item" is turned on, so the rail's buttons, Precise placement
+among them, are reached with Option+Tab. Inside the form, Enter in any of the
+number fields adds the body and Escape closes it, so plain Tab is enough there.
+Until 2026-09-28 Tab from the last field in Safari left the form for the page
+behind it, and over a lesson that meant its answer boxes; `js/dialog.js` now
+sends that move back to the start of the form.
+
 The **Orbital System Builder**, in the Scenario section, takes a whole system the same way:
 each companion's primary, mass and orbit as labeled fields, with every error
 on its own field and a table of the orbits as the text equivalent of its

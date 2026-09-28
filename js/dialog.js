@@ -84,11 +84,22 @@ export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
 
   // The class is the animation; `hidden` above is the semantics. Removed on the
   // next frame so the browser has a chance to lay the panel out first and the
-  // transition actually runs from its closed state.
+  // transition actually runs from its closed state. Unless it has been closed
+  // before that frame came - under load an Escape can beat it - because the
+  // close has already put the class back, and taking it off again now would
+  // leave the panel on screen and inert, with finish() below reading the
+  // missing class as a reopen and never hiding it.
   if (reducedMotion()) panel.classList.remove('hidden');
-  else requestAnimationFrame(() => panel.classList.remove('hidden'));
+  else
+    requestAnimationFrame(
+      () => panel.hasAttribute('inert') || panel.classList.remove('hidden')
+    );
 
   if (!wired.get(panel).keydown) {
+    // Where a Tab pressed inside the panel wraps to if the browser takes it
+    // outside, from the keydown until the browser has acted on it. See the
+    // last branch of keydown below.
+    let wrapTo = null;
     const keydown = event => {
       if (!isOpen(panel)) return;
       if (event.key === 'Escape') {
@@ -110,9 +121,40 @@ export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
       } else if (!event.shiftKey && active === last) {
         event.preventDefault();
         first.focus();
+      } else {
+        // Not an edge by this list, so the browser moves focus by its own -
+        // and its list can be shorter. Safari's default, and WebKit's on
+        // macOS, is to Tab only between text fields and pop-up menus, skipping
+        // buttons and links unless Option is held. The precise-placement form
+        // ends in two buttons, so a Safari reader never reached `last`, the
+        // branch above never ran, and Tab from the mass field went straight
+        // into the page behind: over a lesson, into its answer boxes. So note
+        // the end this Tab would wrap to, and let focusin below send a move
+        // that leaves the panel there instead. The browser still chooses the
+        // stops; it just cannot choose one outside.
+        wrapTo = event.shiftKey ? last : first;
+        setTimeout(() => {
+          wrapTo = null;
+        });
       }
     };
+    // Only a Tab from inside the panel is sent back. A click on the page is
+    // left alone - the precise-placement form has no scrim on purpose, so the
+    // world stays in reach behind it - and so is focus leaving for the
+    // browser's own toolbar, which a modal is allowed to let go to. A panel on
+    // its way out is still `isOpen` until its transition ends, but it is inert
+    // from the moment closeDialog runs, and focus is not sent back into it.
+    const focusin = event => {
+      const to = wrapTo;
+      // The first move after the keydown is the Tab's own, wherever it went.
+      // Disarmed here as well as by the timer, because under load a click can
+      // arrive before the timer runs, and it is not the Tab's to send back.
+      wrapTo = null;
+      if (!to || !isOpen(panel) || panel.hasAttribute('inert')) return;
+      if (!panel.contains(event.target)) to.focus();
+    };
     panel.addEventListener('keydown', keydown);
+    document.addEventListener('focusin', focusin, true);
     wired.set(panel, { ...wired.get(panel), keydown });
   }
 
