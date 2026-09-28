@@ -6343,9 +6343,15 @@ export function commitKeyboardPlacement() {
 function moveKeyboardAim(dx, dy, { coarse = false, fine = false } = {}) {
   if (!keyboardAim) return;
   const step = AIM_STEP * (coarse ? AIM_COARSE : fine ? AIM_FINE : 1);
-  const rect = canvas.getBoundingClientRect();
-  state.mouse.x = Math.max(0, Math.min(rect.width, state.mouse.x + dx * step));
-  state.mouse.y = Math.max(0, Math.min(rect.height, state.mouse.y + dy * step));
+  // Clamped to the backing store, which is what state.mouse is measured in (see
+  // beginKeyboardPlacement). This clamped to getBoundingClientRect(), which is
+  // CSS pixels: with a device-pixel ratio above 1 the aim could not leave the
+  // top-left part of the canvas, and a small enough HiDPI window put the centre
+  // on the edge, so ArrowRight and ArrowDown did nothing. At the low tier the
+  // clamp was instead looser than the canvas.
+  const { width, height } = canvas;
+  state.mouse.x = Math.max(0, Math.min(width, state.mouse.x + dx * step));
+  state.mouse.y = Math.max(0, Math.min(height, state.mouse.y + dy * step));
 }
 
 // Its own listener, in the capture phase and before the general shortcut
