@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scenario Studio | Gravitas</title>
+    <meta
+      name="description"
+      content="Make a Gravitas scenario as data: its settings, its bodies, its seed and the instruments it opens with, in English and Spanish. Save it as a file the SDK checks, or open it in Gravitas as a link."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: a toolbar, an editor, and a column of checks,
+         changes and the preview. */
+      .st-wrap {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .st-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .st-layout {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 64rem) {
+        .st-layout {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+          align-items: start;
+        }
+        .st-side {
+          position: sticky;
+          top: 1rem;
+        }
+      }
+      .st-toolbar,
+      .st-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        margin: 0.75rem 0;
+      }
+      .st-section,
+      .st-side section,
+      .st-wrap fieldset {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.9rem 1rem 1rem;
+        margin: 0 0 1.25rem;
+      }
+      .st-wrap h2 {
+        font-size: 1.15rem;
+        margin: 0 0 0.5rem;
+      }
+      .st-wrap h3 {
+        font-size: 1rem;
+        margin: 0.75rem 0 0.5rem;
+      }
+      .st-wrap legend {
+        font-weight: 600;
+        padding: 0 0.35rem;
+      }
+      .st-grid {
+        display: grid;
+        gap: 0.25rem 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+      }
+      .st-grid-3 {
+        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      }
+      .st-grid-4 {
+        grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+      }
+      .st-field {
+        display: grid;
+        gap: 0.25rem;
+        align-content: start;
+        margin: 0.5rem 0 0;
+      }
+      .st-check {
+        display: inline-flex;
+        gap: 0.4rem;
+        align-items: center;
+        margin: 0.3rem 1rem 0.3rem 0;
+      }
+      .st-checks {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .st-wrap input[type='text'],
+      .st-wrap select,
+      .st-wrap textarea {
+        width: 100%;
+        box-sizing: border-box;
+        font: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.4rem 0.5rem;
+      }
+      .st-wrap [aria-invalid='true'] {
+        border-color: #ff8a80;
+      }
+      .st-wrap input::placeholder {
+        color: #9aa3b5;
+      }
+      .st-hint {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .st-error {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #ff8a80;
+      }
+      .st-group > summary {
+        cursor: pointer;
+        font-weight: 600;
+        margin: 0.5rem 0;
+      }
+      .st-body {
+        margin: 0.5rem 0 0.75rem;
+      }
+      .st-list {
+        margin: 0.5rem 0 0;
+        padding-left: 1.2rem;
+      }
+      .st-list li {
+        margin: 0.25rem 0;
+        overflow-wrap: anywhere;
+      }
+      .st-list li[data-level='error'] {
+        color: #ff8a80;
+      }
+      .st-link {
+        background: none;
+        border: 0;
+        padding: 0;
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .st-status {
+        min-height: 1.3em;
+        margin: 0.25rem 0 0;
+      }
+      .st-preview {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        background: #07080f;
+      }
+      #st-raw-text {
+        min-height: 18rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.8rem;
+      }
+      .st-wrap dialog {
+        max-width: 36rem;
+        color: inherit;
+        background: #11131e;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+      }
+      .st-wrap dialog::backdrop {
+        background: rgba(0, 0, 0, 0.6);
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main
+      class="st-wrap"
+      aria-label="Scenario Studio"
+      data-i18n-aria-label="studio.title"
+    >
+      <div
+        id="langSwitch"
+        class="st-actions"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="studio.lang.label"
+      ></div>
+      <h1 data-i18n="studio.title">Scenario Studio</h1>
+      <p data-i18n="studio.intro"></p>
+      <p><a href="/" data-i18n="studio.back">Back to Gravitas</a></p>
+
+      <div
+        class="st-toolbar"
+        role="group"
+        aria-label="Scenario file"
+        data-i18n-aria-label="studio.toolbar.label"
+      >
+        <button id="st-new" type="button" class="ui-button" data-i18n="studio.action.new"></button>
+        <button id="st-open" type="button" class="ui-button" data-i18n="studio.action.open"></button>
+        <input id="st-file" type="file" accept="application/json,.json" hidden />
+        <button id="st-save" type="button" class="ui-button is-primary" data-i18n="studio.action.save"></button>
+        <button id="st-copy" type="button" class="ui-button" data-i18n="studio.action.copy"></button>
+        <a id="st-open-app" class="ui-button" target="_blank" rel="noopener" data-i18n="studio.action.openApp" hidden></a>
+        <button id="st-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
+        <button id="st-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+      </div>
+      <div class="st-toolbar">
+        <label for="st-from" data-i18n="studio.action.fromLabel"></label>
+        <select id="st-from"></select>
+        <button id="st-from-go" type="button" class="ui-button" data-i18n="studio.action.from"></button>
+      </div>
+      <div class="st-toolbar">
+        <label for="st-drafts" data-i18n="studio.drafts.label"></label>
+        <select id="st-drafts"></select>
+        <button id="st-drafts-open" type="button" class="ui-button" data-i18n="studio.drafts.open"></button>
+        <button id="st-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
+      </div>
+      <p id="st-storage" class="st-error" data-i18n="studio.storage.failed" hidden></p>
+      <p id="st-status" class="st-status" role="status" aria-live="polite"></p>
+
+      <div class="st-layout">
+        <div>
+          <div id="st-editor"></div>
+          <details id="st-raw" class="st-section">
+            <summary data-i18n="studio.raw.heading"></summary>
+            <label for="st-raw-text" data-i18n="studio.raw.label"></label>
+            <textarea id="st-raw-text" spellcheck="false" aria-describedby="st-raw-error"></textarea>
+            <p id="st-raw-error" class="st-error" role="alert" hidden></p>
+            <div class="st-actions">
+              <button id="st-raw-apply" type="button" class="ui-button" data-i18n="studio.raw.apply"></button>
+              <button id="st-raw-revert" type="button" class="ui-button" data-i18n="studio.raw.revert"></button>
+            </div>
+          </details>
+        </div>
+        <div class="st-side">
+          <section aria-labelledby="st-checks-h">
+            <h2 id="st-checks-h" data-i18n="studio.checks.heading"></h2>
+            <p id="st-checks-summary" class="st-hint"></p>
+            <ul id="st-checks" class="st-list"></ul>
+          </section>
+          <section aria-labelledby="st-preview-h">
+            <h2 id="st-preview-h" data-i18n="studio.preview.heading"></h2>
+            <button id="st-preview-go" type="button" class="ui-button" data-i18n="studio.action.preview"></button>
+            <iframe
+              id="st-preview"
+              class="st-preview"
+              title="Gravitas, running this scenario"
+              data-i18n-aria-label="studio.preview.frame"
+            ></iframe>
+          </section>
+          <section aria-labelledby="st-diff-h">
+            <h2 id="st-diff-h" data-i18n="studio.diff.heading"></h2>
+            <p id="st-diff-summary" class="st-hint"></p>
+            <ul id="st-diff" class="st-list"></ul>
+          </section>
+        </div>
+      </div>
+
+      <dialog id="st-conflict" aria-labelledby="st-conflict-h">
+        <h2 id="st-conflict-h" data-i18n="studio.conflict.heading"></h2>
+        <p id="st-conflict-text"></p>
+        <ul id="st-conflict-diff" class="st-list"></ul>
+        <div class="st-actions">
+          <button id="st-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
+          <button id="st-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>
+          <button id="st-conflict-cancel" type="button" class="ui-button" data-i18n="studio.conflict.cancel"></button>
+        </div>
+      </dialog>
+    </main>
+    <script type="module" src="/js/studioPage.js"></script>
+  </body>
+</html>
