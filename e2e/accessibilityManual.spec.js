@@ -12,6 +12,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { stepKey, focusStop, strayStops, TOOLBAR } from './keyboard.js';
 
 /** The modal surfaces, and how each one is opened and dismissed. */
 const DIALOGS = [
@@ -101,10 +102,12 @@ test.describe('keyboard operation', () => {
   test('the skip link is the first stop and goes somewhere real', async ({
     page,
     app,
+    browserName,
   }) => {
-    // 2.4.1 Bypass Blocks.
+    // 2.4.1 Bypass Blocks. Pressed with the key that reaches links: Safari's
+    // plain Tab skips them, and in WebKit on macOS it went to <body> every time.
     await app.boot();
-    await page.keyboard.press('Tab');
+    await page.keyboard.press(stepKey(browserName));
     const first = await page.evaluate(() => {
       const el = document.activeElement;
       return {
@@ -132,8 +135,14 @@ test.describe('dialogs', () => {
       await app.boot();
       if (d.rail) await app.railControl(d.rail);
 
+      // Opened from the keyboard, because that is the reader in question. A
+      // click is a different thing in each engine: Safari does not focus a
+      // clicked button, so in WebKit the click moved focus from the opener to
+      // the rail region around it, and the gallery and the investigations
+      // browser gave it back there - where Safari had put it, but not what
+      // this is testing.
       await page.locator(d.opener).focus();
-      await page.locator(d.opener).click();
+      await page.keyboard.press('Enter');
       await expect(page.locator(d.dialog)).toBeVisible({ timeout: 20_000 });
 
       await page.keyboard.press('Escape');
@@ -164,28 +173,24 @@ test.describe('dialogs', () => {
       expect(modal, `${d.modal} does not declare aria-modal`).toBe('true');
 
       // Twenty stops is more than any of these dialogs contains, so if focus
-      // can escape it will have done so by then.
-      const escaped = [];
+      // can escape it will have done so by then. Plain Tab in every engine:
+      // in WebKit on macOS it is Safari's route, which stops only on text
+      // fields and pop-up menus and leaves for the toolbar after the last one.
+      // That stop reads as <body>, and it is allowed (e2e/keyboard.js). A
+      // control behind the dialog is not.
+      const stops = [];
       for (let i = 0; i < 20; i++) {
         await page.keyboard.press('Tab');
-        const inside = await page.evaluate(sel => {
-          const dialog = document.querySelector(sel);
-          return dialog?.contains(document.activeElement) ?? false;
-        }, d.modal);
-        if (!inside) {
-          escaped.push(
-            await page.evaluate(
-              () =>
-                document.activeElement?.id || document.activeElement?.tagName
-            )
-          );
-          break;
-        }
+        stops.push(await page.evaluate(focusStop, d.modal));
       }
       expect(
-        escaped,
-        `focus left ${d.name} onto: ${escaped.join(', ')}`
+        strayStops(stops),
+        `focus left ${d.name} for the page behind: ${stops.join(', ')}`
       ).toEqual([]);
+      expect(
+        stops.filter(stop => stop !== TOOLBAR),
+        'and Tab ever brought it back into the dialog'
+      ).not.toEqual([]);
     });
   }
 });
