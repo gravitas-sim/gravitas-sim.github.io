@@ -116,6 +116,7 @@
         display: none;
       }
       @media print {
+        html,
         body.doc-page {
           background: #fff;
           color: #000;
@@ -134,10 +135,12 @@
           display: none !important;
         }
         .ch-actions a[data-print] {
-          background: none;
-          border: 0;
-          padding: 0;
-          color: #000;
+          background: none !important;
+          border: 0 !important;
+          box-shadow: none !important;
+          padding: 0 !important;
+          color: #000 !important;
+          transition: none !important;
         }
         .ch-actions a[data-print]::after {
           content: ' ' attr(data-print);
