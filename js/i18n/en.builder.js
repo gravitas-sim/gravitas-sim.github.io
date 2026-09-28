@@ -132,6 +132,9 @@ export const EN_BUILDER = {
   'builder.build': 'Build this system',
   'builder.export': 'Save as a file',
   'builder.import': 'Open a file',
+  'builder.studio.note':
+    'To keep this system as a scenario, with its settings, its seed and the instruments it opens with, save it as a file and open the file in the Scenario Studio.',
+  'builder.studio.link': 'Open the Scenario Studio',
   'builder.close': 'Close',
   'builder.built':
     'Built {count} bodies. The system is running; Refresh Scenario builds it again from the start.',

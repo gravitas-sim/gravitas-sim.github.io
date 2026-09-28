@@ -30,11 +30,13 @@ import * as api from '../sdk/lib/api.mjs';
 const EXAMPLES = [
   'tess-hd209458-one-transit',
   'finding-exoplanets',
+  'figure-eight',
   'kepler-third-law',
 ];
 const TYPES = {
   'tess-hd209458-one-transit': 'data-pack',
   'finding-exoplanets': 'course-pack',
+  'figure-eight': 'scenario-pack',
   'kepler-third-law': 'capability',
 };
 const example = name => path.join('sdk', 'examples', name);
@@ -93,11 +95,13 @@ describe('the public surface', () => {
       'gravitas.capability-package': 1,
       'gravitas.observation-data-pack': 1,
       'gravitas.course-pack': 1,
+      'gravitas.scenario-pack': 1,
     });
     expect(Object.keys(api.EXTENSION_TYPES).sort()).toEqual([
       'capability',
       'course-pack',
       'data-pack',
+      'scenario-pack',
     ]);
     expect(api.acceptsPlatform('^1.0.0')).toBe(true);
     expect(api.acceptsPlatform('^2.0.0')).toBe(false);
@@ -263,9 +267,9 @@ describe('what is wrong, where', () => {
 });
 
 describe('init', () => {
-  test('a course pack and a capability start valid; a data pack starts as a list of what to fill in', async () => {
+  test('a course pack, a scenario pack and a capability start valid; a data pack starts as a list of what to fill in', async () => {
     const root = tmp();
-    for (const type of ['course-pack', 'capability']) {
+    for (const type of ['course-pack', 'scenario-pack', 'capability']) {
       const dir = path.join(root, type);
       expect((await sdk('init', type, `my-${type}`, '--dir', dir)).code).toBe(
         0
@@ -464,6 +468,17 @@ describe('the JSON Schemas describe what the validators accept', () => {
         )
       )
     ).toBe(true);
+    expect(
+      valid(
+        schema('scenario-pack-1'),
+        JSON.parse(
+          readFileSync(
+            path.join(example('figure-eight'), 'scenario.json'),
+            'utf8'
+          )
+        )
+      )
+    ).toBe(true);
     const pack = schema('observation-data-pack-1');
     expect(
       valid(
@@ -511,6 +526,7 @@ describe('the JSON Schemas describe what the validators accept', () => {
       ['capability-package-1', 'gravitas.capability-package/1'],
       ['observation-data-pack-1', 'gravitas.observation-data-pack/1'],
       ['course-pack-1', 'gravitas.course-pack/1'],
+      ['scenario-pack-1', 'gravitas.scenario-pack/1'],
     ]) {
       const s = schema(file);
       expect(s.$schema).toBe('https://json-schema.org/draft/2020-12/schema');
@@ -526,7 +542,9 @@ describe('the command line', () => {
   test('says how to use it, and exits 2 on a command it does not know', async () => {
     const { code, out } = await sdk('frobnicate');
     expect(code).toBe(2);
-    expect(out).toMatch(/init <data-pack\|course-pack\|capability> <id>/);
+    expect(out).toMatch(
+      /init <data-pack\|course-pack\|scenario-pack\|capability> <id>/
+    );
     expect((await sdk()).code).toBe(0);
   });
 });
