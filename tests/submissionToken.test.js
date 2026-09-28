@@ -21,6 +21,7 @@ import {
   COMFORTABLE_TOKEN_LENGTH,
   SUBMISSION_SCHEMA,
   answersOf,
+  attemptsOf,
   buildSubmission,
   encodeSubmission,
   isSubmissionToken,
@@ -29,6 +30,7 @@ import {
   validateSubmission,
 } from '../js/submission/submissionToken.js';
 import { buildBackup } from '../js/investigations/progressBackup.js';
+import { stepKey } from '../js/investigations/progressSchema.js';
 import { toWinAnsi } from '../js/pdf.js';
 
 const lesson = {
@@ -36,17 +38,35 @@ const lesson = {
   title: "Kepler's Laws",
   steps: [
     { sid: 'one', type: 'predict', title: 'A prediction' },
-    { sid: 'two', type: 'measure', title: 'A measurement', unit: 'days' },
+    {
+      sid: 'two',
+      type: 'measure',
+      title: 'A measurement',
+      unit: 'days',
+      fields: [{ id: 'days' }, { id: 'ratio' }],
+    },
     { sid: 'three', type: 'read', title: 'Just reading' },
   ],
 };
+
+/**
+ * Keys written relative to the lesson - `one`, `one:locale` - stored the way
+ * the lesson engine stores them, under stepKey().
+ */
+const stored = (table, id = lesson.id) =>
+  Object.fromEntries(
+    Object.entries(table).map(([key, value]) => {
+      const [sid, ...sub] = key.split(':');
+      return [[stepKey(id, sid), ...sub].join(':'), value];
+    })
+  );
 
 const sample = (responses = {}) =>
   buildSubmission({
     backup: buildBackup({
       lesson,
-      responses,
-      attempts: { one: 2, two: 1 },
+      responses: stored(responses),
+      attempts: stored({ one: 2, two: 1 }),
       visited: ['one', 'two', 'three'],
       stepSid: 'three',
       startedAt: '2026-09-01T10:00:00.000Z',
@@ -78,7 +98,9 @@ describe('a token goes out and comes back', () => {
       .join('');
     const back = await readSubmissionToken(printed);
     expect(back.ok).toBe(true);
-    expect(back.submission.b.progress.responses.one).toBe('because');
+    expect(
+      back.submission.b.progress.responses[stepKey(lesson.id, 'one')]
+    ).toBe('because');
   });
 
   test('strips whitespace and nothing else', () => {
@@ -174,6 +196,49 @@ describe('the answers it hands the instructor page', () => {
     });
     expect(answersOf(s)).toHaveLength(2);
   });
+
+  test('names each answer by its sid, not by the key it was stored under', () => {
+    const s = sample({ one: '2', 'one:shown': true, 'one:help': 'concept' });
+    expect(Object.keys(s.b.progress.responses)).toContain('keplers-laws:one');
+    expect(answersOf(s)).toEqual([{ sid: 'one', value: '2', locale: 'es' }]);
+    expect(attemptsOf(s)).toEqual(
+      new Map([
+        ['one', 2],
+        ['two', 1],
+      ])
+    );
+  });
+
+  test('a measure step is answered by its fields, which only the lesson can name', () => {
+    const s = sample({
+      'two:days': ' 3.5 ',
+      'two:ratio': '',
+      'two:tool:speed': '2',
+      'three:e': '0.4',
+    });
+    // Without the lesson a field is a sub-key like any other.
+    expect(answersOf(s)).toEqual([]);
+    expect(answersOf(s, lesson)).toEqual([
+      { sid: 'two', value: 'days=3.5', locale: 'es' },
+    ]);
+  });
+
+  test('still reads a bare sid, and prefers the engine key where both exist', () => {
+    const s = sample();
+    s.b.progress.responses = {
+      one: '0',
+      'keplers-laws:one': '1',
+      two: '1,5',
+      'two:locale': 'en',
+      'three:shown': true,
+    };
+    s.b.progress.attempts = { one: 4, 'keplers-laws:one': 3 };
+    expect(answersOf(s)).toEqual([
+      { sid: 'one', value: '1', locale: 'es' },
+      { sid: 'two', value: '1,5', locale: 'en' },
+    ]);
+    expect(attemptsOf(s).get('one')).toBe(3);
+  });
 });
 
 describe('size, because it is pasted into things with limits', () => {
@@ -188,9 +253,9 @@ describe('size, because it is pasted into things with limits', () => {
     const responses = {};
     for (const s of steps) {
       if (s.type === 'read') continue;
-      responses[s.sid] =
+      responses[stepKey('big', s.sid)] =
         'The orbital period should increase because the semi-major axis is larger.';
-      responses[`${s.sid}:locale`] = 'en';
+      responses[`${stepKey('big', s.sid)}:locale`] = 'en';
     }
     const { length, comfortable, limit } = await encodeSubmission(
       buildSubmission({
@@ -209,9 +274,10 @@ describe('size, because it is pasted into things with limits', () => {
     );
     expect(comfortable).toBe(true);
     expect(limit).toBe(COMFORTABLE_TOKEN_LENGTH);
-    // Measured at about 1.6 KB. The bound is generous; what it catches is the
-    // payload growing by an order of magnitude, which is what would happen if
-    // step text or lesson prose ever started travelling in here.
+    // Measured at about 1,050 characters. The bound is generous; what it
+    // catches is the payload growing by an order of magnitude, which is what
+    // would happen if step text or lesson prose ever started travelling in
+    // here.
     expect(length).toBeLessThan(4000);
   });
 });

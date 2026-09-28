@@ -28,7 +28,8 @@ import {
   readSubmissionToken,
 } from '../js/submission/submissionToken.js';
 import { buildBackup } from '../js/investigations/progressBackup.js';
-import { LOCALE_SUFFIX } from '../js/answerParse.js';
+import { stepKey } from '../js/investigations/progressSchema.js';
+import { LOCALE_SUFFIX, recordAnswer } from '../js/answerParse.js';
 import { fromCsv } from '../js/csv.js';
 
 const kepler = await import('../js/data/investigations/keplers-laws.js').then(
@@ -37,6 +38,10 @@ const kepler = await import('../js/data/investigations/keplers-laws.js').then(
 const tides = await import('../js/data/investigations/tides.js').then(
   m => m.default || Object.values(m)[0]
 );
+const goldilocks =
+  await import('../js/data/investigations/goldilocks-question.js').then(
+    m => m.default || Object.values(m)[0]
+  );
 
 /** The answers a careful student gives. */
 const RIGHT = {
@@ -49,11 +54,19 @@ const RIGHT = {
 
 /**
  * A submission as a student's browser would make it.
+ *
+ * Answers are given here by sid, to be readable, and stored the way the lesson
+ * engine stores them: under stepKey(), with a measure step's fields and an
+ * answer's locale hanging off it. These fixtures once stored them by bare sid,
+ * which is the one spelling the engine never writes, and every test here passed
+ * while the review page graded every real report as unanswered.
+ *
  * @returns {object} A validated submission payload
  */
 function submission({
   lesson = kepler,
   responses = RIGHT,
+  fields = {},
   locales = {},
   visited = lesson.steps.slice(0, 5).map(s => s.sid),
   name = 'Ada',
@@ -62,14 +75,25 @@ function submission({
   savedAt = null,
   attempts = {},
 } = {}) {
-  const withLocales = { ...responses };
+  const key = sid => stepKey(lesson.id, sid);
+  const stored = {};
+  for (const [sid, value] of Object.entries(responses)) {
+    stored[key(sid)] = value;
+  }
+  for (const [sid, values] of Object.entries(fields)) {
+    for (const [id, value] of Object.entries(values)) {
+      stored[`${key(sid)}:${id}`] = value;
+    }
+  }
   for (const [sid, loc] of Object.entries(locales)) {
-    withLocales[`${sid}${LOCALE_SUFFIX}`] = loc;
+    stored[`${key(sid)}${LOCALE_SUFFIX}`] = loc;
   }
   const backup = buildBackup({
     lesson,
-    responses: withLocales,
-    attempts,
+    responses: stored,
+    attempts: Object.fromEntries(
+      Object.entries(attempts).map(([sid, n]) => [key(sid), n])
+    ),
     visited,
     stepSid: visited.at(-1),
     startedAt: '2026-09-01T10:00:00.000Z',
@@ -94,8 +118,8 @@ describe('grading one submission', () => {
           ...RIGHT,
           'use-the-law': '5',
           'why-the-speed-changes': 'Because it is closer to the star.',
-          'measure-the-two-orbits': '0.5',
         },
+        fields: { 'measure-the-two-orbits': { circ_e: '0', ecc_e: '0.5' } },
       })
     );
     // Thirteen steps ask for input; nine were answered.
@@ -172,6 +196,179 @@ describe('grading one submission', () => {
       gradeSubmission(submission(), kepler, { kind: 'backup', label: 'b.json' })
         .submissionSchema
     ).toBeNull();
+  });
+});
+
+describe('what the lesson engine actually stores', () => {
+  /**
+   * A token made the way js/investigations.js makes one.
+   *
+   * Every write below is one the engine makes, spelled the way it spells it:
+   * the option index a click stores, recordAnswer() for a checked number, the
+   * first number tried, the hints taken, the model answer shown, the ellipse
+   * slider, the checklist ticks and one sub-key per measure field, the derived
+   * one included. The token is then built by the three calls the report
+   * download makes, and read back the way the review page reads a pasted one.
+   *
+   * @returns {Promise<object>} The submission the review page would grade
+   */
+  async function engineSubmission() {
+    const active = kepler;
+    const id = sid => stepKey(active.id, sid);
+    const responses = {};
+    const attempts = {};
+    const choose = (sid, option) => {
+      responses[id(sid)] = option;
+      attempts[id(sid)] = (attempts[id(sid)] || 0) + 1;
+    };
+
+    choose('where-is-the-star', 1);
+    responses[`${id('change-the-shape')}:e`] = '0.6';
+    choose('what-sits-at-the-other', 2);
+    const orbit = id('measure-the-two-orbits');
+    responses[`${orbit}:circ_e`] = '0';
+    responses[`${orbit}:ecc_e`] = '0.6';
+    responses[`${orbit}:ecc_peri`] = '0.4';
+    responses[`${orbit}:ecc_apo`] = '1.6';
+    responses[`${orbit}:ecc_a`] = '1.00';
+    for (let i = 0; i < 4; i++) {
+      responses[`${id('watch-it-happen')}:check:${i}`] = true;
+    }
+    responses[id('why-the-speed-changes')] = 'Closer to the star, so faster.';
+    responses[`${id('why-the-speed-changes')}:shown`] = true;
+    responses[`${id('use-the-law')}:help`] = 'concept,method';
+    responses[`${id('use-the-law')}:first`] = '7';
+    recordAnswer(responses, id('use-the-law'), '7', 'en');
+    attempts[id('use-the-law')] = 1;
+    recordAnswer(responses, id('use-the-law'), '8', 'en');
+    attempts[id('use-the-law')] += 1;
+    recordAnswer(responses, id('weighing-another-star'), '0,91', 'es');
+    attempts[id('weighing-another-star')] = 1;
+    choose('where-kepler-s-version-breaks', 0);
+
+    const visited = new Set(active.steps.map(s => s.sid));
+    const stepIndex = active.steps.length - 1;
+    const encoded = await encodeSubmission(
+      buildSubmission({
+        backup: buildBackup({
+          lesson: active,
+          responses,
+          attempts,
+          visited,
+          stepSid: active.steps[stepIndex]?.sid ?? null,
+          startedAt: '2026-09-01T10:00:00.000Z',
+          studentName: 'Ada',
+        }),
+        assignmentId: 'week-3',
+        rosterId: 'S-1',
+        fallbackLocale: 'en',
+      })
+    );
+    const read = await readSubmissionToken(encoded.token);
+    expect(read.ok).toBe(true);
+    return read.submission;
+  }
+
+  test('a real report is graded, not marked unanswered', async () => {
+    const sub = await engineSubmission();
+    // The regression itself: every stored key starts with the lesson id.
+    expect(
+      Object.keys(sub.b.progress.responses).every(k =>
+        k.startsWith(`${kepler.id}:`)
+      )
+    ).toBe(true);
+
+    const r = grade(sub);
+    expect(r).toMatchObject({
+      scorable: 13,
+      correct: 4,
+      incorrect: 1,
+      unmarked: 2,
+      incomplete: 6,
+      stale: 0,
+    });
+    // One row per question the lesson asks. Not one per thing stored.
+    expect(r.questions).toHaveLength(13);
+    expect(r.questions.every(q => !q.sid.includes(':'))).toBe(true);
+
+    const q = sid => r.questions.find(x => x.sid === sid);
+    expect(q('where-is-the-star')).toMatchObject({
+      verdict: 'correct',
+      attempts: 1,
+      response: '1',
+    });
+    expect(q('where-kepler-s-version-breaks').verdict).toBe('incorrect');
+    // The answer, not the first number tried, and every try counted.
+    expect(q('use-the-law')).toMatchObject({
+      verdict: 'correct',
+      attempts: 2,
+      response: '8',
+      locale: 'en',
+    });
+    expect(q('weighing-another-star')).toMatchObject({
+      verdict: 'correct',
+      locale: 'es',
+    });
+    expect(q('measure-the-two-orbits')).toMatchObject({
+      verdict: 'unmarked',
+      response: 'circ_e=0; ecc_e=0.6; ecc_peri=0.4; ecc_apo=1.6; ecc_a=1.00',
+    });
+    expect(q('why-the-speed-changes').verdict).toBe('unmarked');
+    expect(annotate([r])[0].warnings).toEqual([]);
+  });
+
+  test('a measure step is answered by the fields it declares, whatever they are called', () => {
+    // goldilocks-question has a field called `e`, which is also the sub-key
+    // the ellipse step keeps its slider in, and a tool whose control is
+    // stored beside the fields on the same step.
+    const sid = 'take-the-readings-yourself';
+    const id = stepKey(goldilocks.id, sid);
+    const r = grade(
+      buildSubmission({
+        backup: buildBackup({
+          lesson: goldilocks,
+          responses: {
+            [`${id}:tool:model`]: '1',
+            [`${id}:e`]: '0.029',
+            [`${id}:inner`]: '0.024',
+            [`${id}:outer`]: '',
+          },
+          attempts: {},
+          visited: [sid],
+          stepSid: sid,
+          startedAt: null,
+        }),
+      }),
+      goldilocks
+    );
+    expect(r.questions.find(q => q.sid === sid)).toMatchObject({
+      verdict: 'unmarked',
+      response: 'e=0.029; inner=0.024',
+    });
+    expect(r.stale).toBe(0);
+  });
+
+  test('what hangs off a step is not an answer to it', () => {
+    const r = grade(
+      submission({
+        responses: {},
+        fields: {
+          'why-the-speed-changes': { shown: true, help: 'concept' },
+          'use-the-law': { first: '7', locale: 'en' },
+          'a-removed-step': { shown: true },
+        },
+      })
+    );
+    expect(
+      r.questions.find(q => q.sid === 'why-the-speed-changes').verdict
+    ).toBe('incomplete');
+    expect(r.questions.find(q => q.sid === 'use-the-law').verdict).toBe(
+      'incomplete'
+    );
+    // Nor is it a stale answer when the step has gone: which sub-keys were
+    // answers, the lesson no longer says.
+    expect(r.stale).toBe(0);
+    expect(r.questions).toHaveLength(13);
   });
 });
 
