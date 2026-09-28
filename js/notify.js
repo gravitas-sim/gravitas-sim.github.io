@@ -13,17 +13,20 @@
 // --- Screen-reader announcements ---------------------------------------------
 // The canvas is opaque to assistive technology, so anything that only shows up
 // visually gets mirrored into a polite live region.
-let lastAnnouncement = '';
 
 /**
  * Announce a state change to screen readers.
+ *
+ * The same words again are not read, so a repeat gains or drops a trailing
+ * no-break space. A caller that can fire unprompted passes `again` false.
+ *
  * @param {string} message - Text to announce
+ * @param {boolean} [again=true] - Say it even if it is what was said last
  */
-export function announce(message) {
-  if (message === lastAnnouncement) return;
-  lastAnnouncement = message;
+export function announce(message, again = true) {
   const el = document.getElementById('srStatus');
-  if (el) el.textContent = message;
+  if (!el || (!again && el.textContent.trim() === message)) return;
+  el.textContent = el.textContent === message ? `${message}\u00a0` : message;
 }
 
 // --- Toasts -------------------------------------------------------------------

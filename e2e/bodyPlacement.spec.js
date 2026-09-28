@@ -41,15 +41,21 @@ const TYPES = [
 const srSaid = page =>
   page.locator('#srStatus').evaluate(el => el.textContent.trim());
 
-/** An empty sky, so anything counted afterwards is something this test made. */
-async function emptySky(page) {
-  await page.evaluate(async () => {
-    const ui = await import('/js/ui.js');
-    ui.SETTINGS.preset_scenario = 'None';
-    ui.initialize_simulation({ seed: 'placement' });
-    ui.state.paused = true;
-  });
-}
+/**
+ * An empty sky, so anything counted afterwards is something this test made.
+ *
+ * app.emptyWorld, which fails if anything is left. This used to set
+ * preset_scenario to 'None' and rebuild, which is not an empty world:
+ * initialize_simulation reads the sentinel as "rebuild what is loaded" and
+ * restores the scenario's name, so every test here placed its body among the
+ * black holes, planets and asteroids of the Binary BH the page boots with. The
+ * counts still came out one higher, but a press could land on one of them and
+ * open the inspector instead, and a release near the tangent of a black hole
+ * takes the snapped orbital speed rather than the drag's.
+ *
+ * Paused, so nothing moves or merges between one count and the next.
+ */
+const emptySky = app => app.emptyWorld('placement', { run: false });
 
 /**
  * Arm the given type through the rail's own picker.
@@ -127,7 +133,7 @@ test.describe('placing a body with a pointer', () => {
   for (const [type, list] of TYPES) {
     test(`a ${type} is created, in ${list}`, async ({ page, app }) => {
       await app.boot();
-      await emptySky(page);
+      await emptySky(app);
       await armType(page, type);
       const before = await census(page);
 
@@ -165,7 +171,7 @@ test.describe('placing a body from the keyboard', () => {
   for (const [type, list] of TYPES) {
     test(`a ${type} is created, in ${list}`, async ({ page, app }) => {
       await app.boot();
-      await emptySky(page);
+      await emptySky(app);
       await armType(page, type);
       const before = await census(page);
 
@@ -185,7 +191,7 @@ test.describe('placing a body from the keyboard', () => {
 
   test('Escape cancels without creating anything', async ({ page, app }) => {
     await app.boot();
-    await emptySky(page);
+    await emptySky(app);
     await armType(page, 'Comet');
     const before = await census(page);
     await placeByKeyboard(page, { commit: false });
@@ -201,7 +207,7 @@ test.describe('placing a body from the keyboard', () => {
     app,
   }) => {
     await app.boot();
-    await emptySky(page);
+    await emptySky(app);
     await armType(page, 'Comet');
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
@@ -217,7 +223,7 @@ test.describe('placing a body from the keyboard', () => {
 
   test('a farther aim throws harder', async ({ page, app }) => {
     await app.boot();
-    await emptySky(page);
+    await emptySky(app);
     await armType(page, 'Asteroid');
     await placeByKeyboard(page, { arrows: 2 });
     const near = await newest(page, 'asteroids');
@@ -228,7 +234,7 @@ test.describe('placing a body from the keyboard', () => {
 
   test('nothing is placed when no type is armed', async ({ page, app }) => {
     await app.boot();
-    await emptySky(page);
+    await emptySky(app);
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       ui.SETTINGS.interactive_add = false;
@@ -252,7 +258,7 @@ test.describe('the keyboard path works where a reader needs it', () => {
     test(`a comet can be placed on ${name}`, async ({ page, app }) => {
       await page.setViewportSize(viewport);
       await app.boot();
-      await emptySky(page);
+      await emptySky(app);
       await armType(page, 'Comet');
       const before = await census(page);
       await page.evaluate(async () => {
@@ -270,7 +276,7 @@ test.describe('the keyboard path works where a reader needs it', () => {
     await page.evaluate(() => {
       document.documentElement.style.fontSize = '32px';
     });
-    await emptySky(page);
+    await emptySky(app);
     await armType(page, 'Comet');
     const before = await census(page);
     await page.evaluate(async () => {
@@ -288,7 +294,7 @@ test.describe('the keyboard path works where a reader needs it', () => {
   }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await app.boot();
-    await emptySky(page);
+    await emptySky(app);
     await armType(page, 'Comet');
     const before = await census(page);
     await page.evaluate(async () => {
@@ -309,7 +315,7 @@ test.describe('the keyboard path works where a reader needs it', () => {
       const i18n = await import('/js/i18n/index.js');
       await i18n.setLocale('es', { persist: false });
     });
-    await emptySky(page);
+    await emptySky(app);
     await armType(page, 'Comet');
     const before = await census(page);
     await page.evaluate(async () => {

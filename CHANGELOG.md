@@ -15,6 +15,32 @@ the release rather than in the tag.
 
 ### Added
 
+- **The Investigation Composer** (COMPOSER.md). A page at `/studio/lesson/`
+  composes a guided investigation as data, `gravitas.investigation-pack/1`,
+  judged by the same lesson checker as every built-in lesson.
+  - **Steps:** read, predict (marked at a later step), explore, measure and
+    question, each binding a scenario, a seed word and an instrument, as
+    collapsible cards.
+  - **Remediation:** a step shown only to students whose answer to an
+    earlier graded step is wrong (or right), one level deep. The engine's
+    Next and Previous honor it and `js/authoring/rules.js` checks it.
+  - **A question bank** (`gravitas.question-bank/1`): versioned questions
+    with explicit points and attempt rules, accessibility metadata, and
+    variants, either shuffled options or inputs from a vetted relation
+    Gravitas computes (Kepler's third law, orbital and escape speed,
+    inverse square, transit depth). A recorded seed picks the variant, so
+    the same seed builds the same investigation.
+  - **Translation:** English and Spanish side by side, each text marked
+    translated, missing or out of date from a digest of the English it was
+    written from.
+  - **Around it:** an estimate of the work fitted to the built-in lessons, an
+    answer key, a sample lab report as a PDF, a preview in the real lesson
+    engine as a student or with the author bar, drafts, undo, a raw JSON
+    view, import conflicts, bank merging, and the lesson files a maintainer
+    vendors.
+  - A hostile file is refused before any rule reads it: no prototype keys,
+    functions, markup, links, or files larger or deeper than any pack.
+
 - **The Scenario Studio** (STUDIO.md). A page at `/studio/` makes a scenario
   as data rather than code, and writes a `gravitas.scenario-pack/1` file or a
   link the application opens.
@@ -682,6 +708,128 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **Fifteen expected observations reached no document.**
+  - **What it did:** the answer key leaves out a step that only asks students
+    to read or watch, and it left that step's expectation out with it. The
+    authoring rule `instructor/expectations` accepts an expectation on any
+    step, and its comment said the key printed one against every entry; for a
+    reading step it did not, and the instructor guide prints no expectations,
+    so 15 of the 238 were in neither. They were the balance point in Weighing
+    the Stars, both horizon screens of Black Holes by the Numbers, five
+    screens of Tides, three of What Is a Gravitational Wave?, and one each in
+    The Goldilocks Question, Can You Detect This Planet?, Listening to
+    Spacetime and A Universe of Stars.
+  - **What it does now:** a reading step with an expectation is printed in
+    the key like any other entry: its heading, "Reading", and the expected
+    observation. A reading step without one is still left out, and the key's
+    opening note says which. The expectations were kept rather than refused or
+    moved, because each describes its own screen (the numbers on its readout,
+    what to say aloud about it) and five of the steps beside them have one of
+    their own. The rule's comment now says what the key does, and its summary
+    no longer says an expectation must point at a step that grades.
+  - **Tests:** `tests/instructorMaterials.test.js` finds every expectation's
+    opening words under its own step's heading in its lesson's key, so one
+    printed against the wrong step fails as well as a missing one. Before
+    this change it failed the eight lessons above, and an expectation looked
+    up one step off fails all 24. "Reading-only steps are left out of the
+    key" now checks both halves on Black Holes by the Numbers, which has
+    both kinds.
+  - **Cost:** nothing in the browser; the keys are built in Node. The
+    published keys change when the encrypted instructor bundle is next
+    rebuilt, which needs the passphrase.
+- **A screen reader heard a repeated announcement once, and then never.**
+  - **What it did:** `announce()` in `js/notify.js` returned early when a
+    message was the one it had last written to `#srStatus`, and nothing
+    reset that. The lesson panel announces nothing between steps, so a
+    student who answered two graded choices right in a row heard "Correct."
+    for the first and silence for the second (Black Holes by the Numbers,
+    "What did doubling do?" then "Read the graph"). With held predictions
+    announcing their note, the two in a row in Lagrange Points that name the
+    same reveal step would have said it once. A toast repeated for a second
+    click was silent too.
+  - **What it does now:** a repeat is announced again. Writing the words the
+    region already holds is not a change a screen reader reads, so a repeat
+    gains or drops a trailing no-break space, which is not heard. The dedupe
+    had one real use, and it stays there: every world build announces
+    "Scenario loaded", and a parameter sweep builds the same world once per
+    trial, and a lesson stage whose scene was replaced rebuilds it from a
+    timer. That caller passes `again` false and says a scenario once until
+    something else is said. No other caller of `announce()` or `toast()`
+    fires on a timer or per frame.
+  - **Tests:** `tests/notify.test.js` announces a message, waits a frame and
+    announces it again, and checks the region changed each time and reads
+    the same words; `again` false says a repeat once. In
+    `e2e/investigations.spec.js`, a student resumed at "What did doubling
+    do?" answers it and the next step right, and a MutationObserver on
+    `#srStatus` must see "Correct." twice. `e2e/accessibilityManual.spec.js`
+    builds Solar System five times and allows one "Scenario loaded" at most.
+    The first two fail on v2, and the last fails without the caller's
+    `again` false.
+  - **Cost:** 29 bytes of start-up JavaScript and none deferred, and no
+    request. `js/notify.js` loads on every route, so in the sources, where
+    comments count, it is 321 bytes on the front door, the sandbox, every
+    lesson and the figure page. The front door and the sandbox have 109
+    bytes of their sources ceiling left. No ceiling moved.
+- **A screen reader was told how a held prediction did before the
+  experiment.**
+  - **What it did:** a prediction that names `reveal` shows no verdict and no
+    explanation until the student reaches that step, only the note that the
+    answer is recorded. The choice handler graded it anyway and announced the
+    result in `#srStatus`: "Correct." for a right answer, and "Recorded."
+    followed by the whole `because` for a wrong one. A screen-reader user
+    heard the answer key at the moment of commitment, in every lesson, while
+    a sighted student was told nothing.
+  - **What it does now:** a held prediction announces the note under its
+    options, read from the page, so it names the step that will settle it in
+    the same words, English or Spanish. A graded choice, and a prediction
+    whose reveal step has already been reached, still announce the verdict
+    at once.
+  - **Tests:** `e2e/predictionLoops.spec.js` now checks the announcement in
+    each of its sixteen loops, which commit a wrong answer: it must equal the
+    note and contain no sentence of the explanation. A new test commits a
+    right answer and checks "Correct." is not announced. Two more check that
+    a graded choice still announces "Correct." or "Recorded." with its
+    explanation. The held tests fail on v2.
+  - **Cost:** 46 bytes of deferred JavaScript, which is on every lesson
+    route, and no request.
+- **An instructor guide printed lesson markup as text.**
+  - **What it did:** `js/instructorDocs.js` put the prose in
+    `js/data/instructorContent.js` on the page as written, and Listening to
+    Spacetime's guide said `the black holes' <em>motion</em>` and
+    `<em>inspiral</em>` in two of its misconceptions. Its expected observation
+    for step 2 has the same tags, but the answer key leaves out reading steps,
+    so it never printed. Lesson titles, durations and levels, and each PDF's
+    `/Title`, were not flattened either, though none holds markup today. The
+    same prose is written in template literals, so its lines also broke
+    wherever the source line wrapped, and 70 of its 86 paragraph breaks
+    printed as two blank lines rather than one.
+  - **What it does now:** each document converts a lesson's instructor
+    content whole, so a field added later is covered too. Every string goes
+    through `plainText()`, one paragraph at a time: tags come out, entities
+    are decoded by the table in `js/lessonMarkup.js`, a wrapped source line
+    folds into a space, and a blank line stays one paragraph break. The
+    answer key's step titles, its lesson title, subtitle, duration and
+    level, and the activity guides' prior knowledge go through
+    `plainText()` too.
+  - **The angstrom sign:** `&#8491;` decodes to U+212B, which WinAnsi has no
+    code for, so `js/pdf.js` would have printed "?". It now prints Å
+    (U+00C5), the letter it normalizes to. Only step bodies in A Universe of
+    Stars use it, and no PDF prints a step body, so no document had shown it
+    yet.
+  - **Tests:** `tests/instructorMaterials.test.js` now fails any inline tag
+    (`<em>`, `<strong>`, `<sub>`, `<sup>`) as well as any entity, in the text
+    and the `/Title` and `/Subject` of every lesson's guide and key, and in
+    the adopter guide and curriculum map. A new test per lesson checks that
+    the overview prints the paragraphs it was written in, and that no line
+    is broken while it has room for the next word. `tests/pdf.test.js`
+    checks the angstrom sign. On v2 these fail 21 times: the tags in one
+    lesson, the source line breaks in 19 overviews, and the "?".
+  - **Cost:** 32 bytes of deferred JavaScript, which is 14 in the lab
+    report's chunk and 18 in the authoring chunk. On each lesson route that
+    is 14 bytes in the build and 176 in the sources. No ceiling moved.
+  - **Not yet in the published bundle:** the encrypted instructor materials
+    still hold the old PDFs until they are rebuilt with the passphrase
+    (`npm run build:instructors`).
 - **Refresh Scenario emptied a world a link had brought its own bodies to.**
   A link with bodies and no scenario, such as a shared Blank Simulation
   world, now rebuilds those bodies, as it already did for a built system.

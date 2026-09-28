@@ -155,9 +155,14 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * dist/ the Scenario Studio is a page of its own with its own bundle
  * (build.js), and the link it makes has to open the same world, with the same
  * instruments out, in the application that is served.
+ *
+ * e2e/composer.spec.js composes and previews an investigation in both,
+ * because in dist/ the composer is a page with its own bundle and its preview
+ * is the served lesson engine opening the compiled draft, whose remediation
+ * steps the bundle's navigation has to honor.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js|exoplanetGuides\.spec\.js|populationsGuides\.spec\.js|systemBuilder\.spec\.js|studio\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js|exoplanetGuides\.spec\.js|populationsGuides\.spec\.js|systemBuilder\.spec\.js|studio\.spec\.js|composer\.spec\.js/;
 
 /**
  * Which engines to run.

@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Investigation Composer | Gravitas</title>
+    <meta
+      name="description"
+      content="Compose a Gravitas guided investigation as data: predictions, explorations, measurements, questions from a bank and remediation, in English and Spanish. Checked by the same rules as every lesson Gravitas ships."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page, and the same as the Scenario Studio's (studio/):
+         a toolbar, an editor, and a column of checks and previews. */
+      .st-wrap {
+        max-width: 84rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .st-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .st-layout {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 64rem) {
+        .st-layout {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+          align-items: start;
+        }
+        .st-side {
+          position: sticky;
+          top: 1rem;
+          max-height: calc(100vh - 2rem);
+          overflow-y: auto;
+        }
+      }
+      .st-toolbar,
+      .st-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        margin: 0.75rem 0;
+      }
+      .st-section,
+      .st-side section,
+      .st-wrap fieldset {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.9rem 1rem 1rem;
+        margin: 0 0 1.25rem;
+        min-width: 0;
+      }
+      .st-wrap h2 {
+        font-size: 1.15rem;
+        margin: 0 0 0.5rem;
+      }
+      .st-wrap h3 {
+        font-size: 1rem;
+        margin: 0.75rem 0 0.5rem;
+      }
+      .cp-card {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        margin: 0 0 0.75rem;
+      }
+      .cp-card[open] {
+        padding-bottom: 1rem;
+      }
+      .cp-card > summary {
+        cursor: pointer;
+        font-weight: 600;
+        padding: 0.25rem 0;
+        overflow-wrap: anywhere;
+      }
+      .st-wrap legend {
+        font-weight: 600;
+        padding: 0 0.35rem;
+      }
+      .st-grid {
+        display: grid;
+        gap: 0.25rem 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      }
+      .st-pair {
+        display: grid;
+        gap: 0.25rem 1rem;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 40rem) {
+        .st-pair {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+      }
+      .st-field {
+        display: grid;
+        gap: 0.25rem;
+        align-content: start;
+        margin: 0.5rem 0 0;
+        min-width: 0;
+      }
+      .st-check {
+        display: inline-flex;
+        gap: 0.4rem;
+        align-items: center;
+        margin: 0.3rem 1rem 0.3rem 0;
+      }
+      .st-wrap input[type='text'],
+      .st-wrap select,
+      .st-wrap textarea {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        font: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.4rem 0.5rem;
+      }
+      .st-wrap [aria-invalid='true'] {
+        border-color: #ff8a80;
+      }
+      .st-hint {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .st-error {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #ff8a80;
+      }
+      .st-state {
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .st-state[data-state='missing'] {
+        color: #ffd180;
+      }
+      .st-state[data-state='stale'] {
+        color: #ff8a80;
+      }
+      .st-state[data-state='done'] {
+        color: #9be7a0;
+      }
+      .st-list {
+        margin: 0.5rem 0 0;
+        padding-left: 1.2rem;
+      }
+      .st-list li {
+        margin: 0.25rem 0;
+        overflow-wrap: anywhere;
+      }
+      .st-list li[data-level='error'] {
+        color: #ff8a80;
+      }
+      .st-list li[data-level='warn'] {
+        color: #ffd180;
+      }
+      .st-link {
+        background: none;
+        border: 0;
+        padding: 0;
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .st-status {
+        min-height: 1.3em;
+        margin: 0.25rem 0 0;
+      }
+      .st-preview {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        background: #07080f;
+      }
+      .st-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+      }
+      .st-table th,
+      .st-table td {
+        text-align: left;
+        vertical-align: top;
+        padding: 0.3rem 0.4rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        overflow-wrap: anywhere;
+      }
+      .st-scroll {
+        overflow-x: auto;
+      }
+      #st-raw-text {
+        min-height: 18rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.8rem;
+      }
+      .st-wrap dialog {
+        max-width: 36rem;
+        color: inherit;
+        background: #11131e;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+      }
+      .st-wrap dialog::backdrop {
+        background: rgba(0, 0, 0, 0.6);
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main
+      class="st-wrap"
+      aria-label="Investigation Composer"
+      data-i18n-aria-label="composer.title"
+    >
+      <div
+        id="langSwitch"
+        class="st-actions"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="studio.lang.label"
+      ></div>
+      <h1 data-i18n="composer.title">Investigation Composer</h1>
+      <p data-i18n="composer.intro"></p>
+      <p>
+        <a href="/" data-i18n="studio.back">Back to Gravitas</a> ·
+        <a href="/studio/" data-i18n="composer.toStudio">The Scenario Studio</a>
+      </p>
+
+      <div
+        class="st-toolbar"
+        role="group"
+        aria-label="Investigation file"
+        data-i18n-aria-label="composer.toolbar.label"
+      >
+        <button id="cp-new" type="button" class="ui-button" data-i18n="composer.action.new"></button>
+        <button id="cp-open" type="button" class="ui-button" data-i18n="studio.action.open"></button>
+        <input id="cp-file" type="file" accept="application/json,.json" hidden />
+        <button id="cp-save" type="button" class="ui-button is-primary" data-i18n="studio.action.save"></button>
+        <button id="cp-save-bank" type="button" class="ui-button" data-i18n="composer.action.saveBank"></button>
+        <button id="cp-export" type="button" class="ui-button" data-i18n="composer.action.export"></button>
+        <button id="cp-export-es" type="button" class="ui-button" data-i18n="composer.action.exportEs"></button>
+        <button id="cp-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
+        <button id="cp-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+      </div>
+      <div class="st-toolbar">
+        <label for="cp-drafts" data-i18n="studio.drafts.label"></label>
+        <select id="cp-drafts"></select>
+        <button id="cp-drafts-open" type="button" class="ui-button" data-i18n="studio.drafts.open"></button>
+        <button id="cp-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
+      </div>
+      <p id="cp-storage" class="st-error" data-i18n="studio.storage.failed" hidden></p>
+      <p id="cp-status" class="st-status" role="status" aria-live="polite"></p>
+
+      <div class="st-layout">
+        <div>
+          <div id="cp-editor"></div>
+          <details id="cp-raw" class="st-section">
+            <summary data-i18n="studio.raw.heading"></summary>
+            <label for="st-raw-text" data-i18n="composer.raw.label"></label>
+            <textarea id="st-raw-text" spellcheck="false" aria-describedby="cp-raw-error"></textarea>
+            <p id="cp-raw-error" class="st-error" role="alert" hidden></p>
+            <div class="st-actions">
+              <button id="cp-raw-apply" type="button" class="ui-button" data-i18n="studio.raw.apply"></button>
+              <button id="cp-raw-revert" type="button" class="ui-button" data-i18n="studio.raw.revert"></button>
+            </div>
+          </details>
+        </div>
+        <div class="st-side">
+          <section aria-labelledby="cp-checks-h">
+            <h2 id="cp-checks-h" data-i18n="studio.checks.heading"></h2>
+            <p id="cp-checks-summary" class="st-hint"></p>
+            <ul id="cp-checks" class="st-list"></ul>
+          </section>
+          <section aria-labelledby="cp-estimate-h">
+            <h2 id="cp-estimate-h" data-i18n="composer.estimate.heading"></h2>
+            <ul id="cp-estimate" class="st-list"></ul>
+          </section>
+          <section aria-labelledby="cp-translation-h">
+            <h2 id="cp-translation-h" data-i18n="composer.translation.heading"></h2>
+            <p id="cp-translation-summary" class="st-hint"></p>
+            <ul id="cp-translation" class="st-list"></ul>
+          </section>
+          <section aria-labelledby="cp-preview-h">
+            <h2 id="cp-preview-h" data-i18n="studio.preview.heading"></h2>
+            <p class="st-hint" data-i18n="composer.preview.hint"></p>
+            <div class="st-actions">
+              <button id="cp-preview-go" type="button" class="ui-button" data-i18n="composer.preview.student"></button>
+              <a id="cp-preview-author" class="ui-button" target="_blank" rel="noopener" data-i18n="composer.preview.author" hidden></a>
+            </div>
+            <iframe
+              id="cp-preview"
+              class="st-preview"
+              title="Gravitas, running this investigation as a student meets it"
+              data-i18n-aria-label="composer.preview.frame"
+            ></iframe>
+          </section>
+          <section aria-labelledby="cp-key-h">
+            <h2 id="cp-key-h" data-i18n="composer.key.heading"></h2>
+            <p class="st-hint" data-i18n="composer.key.hint"></p>
+            <div id="cp-key" class="st-scroll"></div>
+          </section>
+          <section aria-labelledby="cp-report-h">
+            <h2 id="cp-report-h" data-i18n="composer.report.heading"></h2>
+            <p class="st-hint" data-i18n="composer.report.hint"></p>
+            <div class="st-actions">
+              <button id="cp-report-go" type="button" class="ui-button" data-i18n="composer.report.make"></button>
+              <a id="cp-report-open" class="ui-button" target="_blank" rel="noopener" data-i18n="composer.report.open" hidden></a>
+            </div>
+          </section>
+          <section aria-labelledby="cp-diff-h">
+            <h2 id="cp-diff-h" data-i18n="studio.diff.heading"></h2>
+            <p id="cp-diff-summary" class="st-hint"></p>
+            <ul id="cp-diff" class="st-list"></ul>
+          </section>
+        </div>
+      </div>
+
+      <dialog id="cp-conflict" aria-labelledby="cp-conflict-h">
+        <h2 id="cp-conflict-h" data-i18n="studio.conflict.heading"></h2>
+        <p id="cp-conflict-text"></p>
+        <ul id="cp-conflict-diff" class="st-list"></ul>
+        <div class="st-actions">
+          <button id="cp-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
+          <button id="cp-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>
+          <button id="cp-conflict-cancel" type="button" class="ui-button" data-i18n="studio.conflict.cancel" autofocus></button>
+        </div>
+      </dialog>
+    </main>
+    <script type="module" src="/js/composerPage.js"></script>
+  </body>
+</html>

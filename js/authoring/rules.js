@@ -121,13 +121,15 @@ export const RULE_INDEX = {
   'interaction/validate': "A validator accepts the author's own hint values",
   'interaction/compute': 'A computed field survives the hint values',
   'interaction/checklist': 'A checklist asks for things',
+  'interaction/when':
+    'A remediation step follows an earlier graded step every student reaches',
   'interaction/animated': 'An animated widget can be rewound',
   'i18n/shape': 'A translation matches the shape of its lesson',
   'i18n/machinery': 'A translation never replaces machinery',
   'i18n/coverage': 'A translation is complete enough to ship',
   'instructor/present': 'Every lesson has instructor guidance',
   'instructor/sections': 'Every required guide section carries something',
-  'instructor/expectations': 'Expectations point at steps that exist and grade',
+  'instructor/expectations': 'Expectations name real steps and say something',
   'instructor/attribution': 'A lesson that cites a source attributes it',
   'agree/manifest': 'The manifest says what the lesson says',
   'agree/counts': 'The manifest counts what the lesson contains',
@@ -900,6 +902,51 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
+      // A remediation step is shown only when an earlier graded step was
+      // answered wrongly (or rightly): js/investigations.js stepApplies(). One
+      // level deep, so every student still walks a straight line to the end:
+      // the step it names is graded and one every student reaches, and it is
+      // neither the last step nor where a prediction is marked.
+      if (step.when !== undefined) {
+        const w = step.when;
+        const at = isPlainObject(w)
+          ? steps.findIndex(x => x.sid === w.sid)
+          : -1;
+        const named = steps[at];
+        const gradedKind =
+          named &&
+          (named.type === 'predict' ||
+            (named.type === 'question' &&
+              (named.kind === 'choice' || named.kind === 'numeric')));
+        if (!isPlainObject(w) || !['incorrect', 'correct'].includes(w.is)) {
+          E('interaction/when', 'when is {sid, is: "incorrect" | "correct"}');
+        } else if (at < 0 || at >= i) {
+          E(
+            'interaction/when',
+            `when names "${w.sid}", which is not an earlier step`
+          );
+        } else if (!gradedKind) {
+          E(
+            'interaction/when',
+            `when names "${w.sid}", which is not a graded step`
+          );
+        } else if (named.when !== undefined) {
+          E(
+            'interaction/when',
+            `when names "${w.sid}", which is itself remediation`
+          );
+        }
+        if (i === steps.length - 1) {
+          E('interaction/when', 'the last step is one every student reaches');
+        }
+        if (steps.some(x => x.reveal === step.sid)) {
+          E(
+            'interaction/when',
+            'a held prediction is marked here, but not every student reaches it'
+          );
+        }
+      }
+
       // --- Answers -----------------------------------------------------------
       const graded = step.type === 'predict' || step.type === 'question';
       if (!graded) return;
@@ -1075,11 +1122,13 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
           continue;
         }
-        // Any step type may carry an expected observation: js/instructorDocs.js
-        // renders one against every entry in the key, not only the graded ones,
-        // and "what to look for" is most of what an explore step is for. So the
-        // check is that the number lands on a step and says something - which
-        // is what goes stale when a step is inserted or removed.
+        // Any step type may carry an expected observation, and "what to look
+        // for" is most of what an explore step is for. js/instructorDocs.js
+        // prints one under its step in the answer key whatever the step asks,
+        // including a reading step, which the key leaves out only when it has
+        // no expectation either. So the check is that the number lands on a
+        // step and says something - which is what goes stale when a step is
+        // inserted or removed.
         if (!isNonEmptyString(guide.expectations[key])) {
           err(
             'instructor/expectations',
