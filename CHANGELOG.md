@@ -708,6 +708,28 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A screen reader was told how a held prediction did before the
+  experiment.**
+  - **What it did:** a prediction that names `reveal` shows no verdict and no
+    explanation until the student reaches that step, only the note that the
+    answer is recorded. The choice handler graded it anyway and announced the
+    result in `#srStatus`: "Correct." for a right answer, and "Recorded."
+    followed by the whole `because` for a wrong one. A screen-reader user
+    heard the answer key at the moment of commitment, in every lesson, while
+    a sighted student was told nothing.
+  - **What it does now:** a held prediction announces the note under its
+    options, read from the page, so it names the step that will settle it in
+    the same words, English or Spanish. A graded choice, and a prediction
+    whose reveal step has already been reached, still announce the verdict
+    at once.
+  - **Tests:** `e2e/predictionLoops.spec.js` now checks the announcement in
+    each of its sixteen loops, which commit a wrong answer: it must equal the
+    note and contain no sentence of the explanation. A new test commits a
+    right answer and checks "Correct." is not announced. Two more check that
+    a graded choice still announces "Correct." or "Recorded." with its
+    explanation. The held tests fail on v2.
+  - **Cost:** 46 bytes of deferred JavaScript, which is on every lesson
+    route, and no request.
 - **An instructor guide printed lesson markup as text.**
   - **What it did:** `js/instructorDocs.js` put the prose in
     `js/data/instructorContent.js` on the page as written, and Listening to
