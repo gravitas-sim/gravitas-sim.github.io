@@ -16,6 +16,7 @@
 import { describe, test, expect } from '@jest/globals';
 
 import { buildLabReport } from '../js/labReport.js';
+import { decodeEntities } from '../js/lessonMarkup.js';
 import { checkAnswer } from '../js/answerCheck.js';
 import {
   LOCALE_SUFFIX,
@@ -52,6 +53,7 @@ function report({ responses = {}, attempts = {}, visited, locale = 'en' }) {
       checkAnswer(step, value, {
         locale: localeOfAnswer(responses, id, locale),
       }),
+    decodeEntities,
   });
 }
 

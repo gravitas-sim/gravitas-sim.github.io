@@ -99,6 +99,9 @@ const plain = text =>
  * @param {Function} opts.checkAnswer - (step, value, key) -> boolean|null.
  *   The key is passed so the caller can grade under the locale the answer was
  *   written in rather than under whatever is current.
+ * @param {Function} opts.decodeEntities - decodeEntities() from
+ *   js/lessonMarkup.js. Passed in, like checkAnswer, so this file does not pull
+ *   it into the notebook's chunk and cost every lesson a request.
  * @returns {Uint8Array} PDF bytes
  */
 export function buildLabReport({
@@ -115,11 +118,15 @@ export function buildLabReport({
   assignment = null,
   binding = null,
   submissionToken = '',
+  decodeEntities,
 }) {
   const inv = investigation;
+  // For what the lesson says. What a student wrote goes through plain() as
+  // typed: the completion code is computed over it.
+  const lessonPlain = text => plain(decodeEntities(text));
   const doc = createDocument({
-    title: `${inv.title}: ${name}`,
-    footer: `Gravitas - ${plain(inv.title)}`,
+    title: `${lessonPlain(inv.title)}: ${name}`,
+    footer: `Gravitas - ${lessonPlain(inv.title)}`,
     // The machine-readable copy. See the note beside /Keywords in js/pdf.js
     // for why the instructor page prefers this to the printed block.
     keywords: submissionToken || '',
@@ -127,8 +134,8 @@ export function buildLabReport({
 
   // --- Header ----------------------------------------------------------------
   doc
-    .heading(inv.title, { size: 19, spaceBefore: 0 })
-    .paragraph(plain(inv.subtitle), {
+    .heading(lessonPlain(inv.title), { size: 19, spaceBefore: 0 })
+    .paragraph(lessonPlain(inv.subtitle), {
       size: 11,
       color: '0.35 0.35 0.42',
       gap: 4,
@@ -168,7 +175,7 @@ export function buildLabReport({
   if (inv.objectives?.length) {
     doc.heading('Learning objectives', { size: 12, spaceBefore: 8 });
     for (const o of inv.objectives) {
-      doc.paragraph(`- ${plain(o)}`, { size: 10, indent: 8, gap: 3 });
+      doc.paragraph(`- ${lessonPlain(o)}`, { size: 10, indent: 8, gap: 3 });
     }
   }
 
@@ -193,13 +200,16 @@ export function buildLabReport({
         String(responses[`${id}:${f.id}`] ?? '').trim()
       );
       if (!any && !reached) return;
-      doc.heading(`${index + 1}. ${plain(step.title)}`, {
+      doc.heading(`${index + 1}. ${lessonPlain(step.title)}`, {
         size: 11,
         spaceBefore: 12,
       });
       for (const f of step.fields) {
         const v = String(responses[`${id}:${f.id}`] ?? '').trim();
-        doc.row(plain(f.label) + (f.unit ? ` (${f.unit})` : ''), v || '-');
+        doc.row(
+          lessonPlain(f.label) + (f.unit ? ` (${f.unit})` : ''),
+          v || '-'
+        );
         canonical.push(`${id}:${f.id}=${v}`);
       }
       return;
@@ -210,7 +220,7 @@ export function buildLabReport({
         (_, i) => responses[`${id}:check:${i}`]
       ).length;
       if (!reached) return;
-      doc.heading(`${index + 1}. ${plain(step.title)}`, {
+      doc.heading(`${index + 1}. ${lessonPlain(step.title)}`, {
         size: 11,
         spaceBefore: 12,
       });
@@ -236,7 +246,7 @@ export function buildLabReport({
     const answered = value !== undefined && String(value).trim() !== '';
     if (!answered && !reached) return;
 
-    doc.heading(`${index + 1}. ${plain(step.title)}`, {
+    doc.heading(`${index + 1}. ${lessonPlain(step.title)}`, {
       size: 11,
       spaceBefore: 12,
     });
@@ -246,7 +256,7 @@ export function buildLabReport({
         typeof value === 'number' ? step.options[value] : '(no prediction)';
       // Predictions are reported, never marked. Their value is that the student
       // committed before seeing the answer.
-      doc.field(`Prediction: ${plain(step.prompt)}`, plain(chosen));
+      doc.field(`Prediction: ${lessonPlain(step.prompt)}`, lessonPlain(chosen));
       canonical.push(`${id}=${value}`);
       return;
     }
@@ -259,14 +269,14 @@ export function buildLabReport({
         autoTotal++;
         if (right) autoRight++;
       }
-      doc.field(plain(step.prompt), plain(chosen));
+      doc.field(lessonPlain(step.prompt), lessonPlain(chosen));
       doc.row(
         'Result',
         !answered
           ? 'not answered'
           : right
             ? 'correct'
-            : `incorrect (answer: ${plain(step.options[step.answer])})`
+            : `incorrect (answer: ${lessonPlain(step.options[step.answer])})`
       );
       canonical.push(`${id}=${value}`);
       return;
@@ -279,7 +289,7 @@ export function buildLabReport({
         if (right) autoRight++;
       }
       doc.field(
-        plain(step.prompt),
+        lessonPlain(step.prompt),
         answered ? `${value}${step.unit ? ` ${step.unit}` : ''}` : ''
       );
       const tries = attempts[id] || 0;
@@ -296,9 +306,9 @@ export function buildLabReport({
     }
 
     if (step.kind === 'short') {
-      doc.field(plain(step.prompt), plain(value));
+      doc.field(lessonPlain(step.prompt), plain(value));
       if (step.rubric) {
-        doc.paragraph(`Marking note: ${plain(step.rubric)}`, {
+        doc.paragraph(`Marking note: ${lessonPlain(step.rubric)}`, {
           size: 8.5,
           indent: 10,
           color: '0.45 0.45 0.52',
@@ -390,7 +400,7 @@ export function buildLabReport({
       { size: 9.5, color: '0.35 0.35 0.42' }
     );
     for (const l of links) {
-      doc.link(`Step ${l.step}: ${plain(l.title)}`, l.url);
+      doc.link(`Step ${l.step}: ${lessonPlain(l.title)}`, l.url);
     }
   }
 
