@@ -201,9 +201,24 @@ projection:
 larger type, the Daylight theme, a spotlight pointer, and arrow keys that step
 through a prepared sequence of links.
 
+**A scenario studio.** `/studio/` makes a scenario as data rather than code:
+its settings, its bodies as an orbital system or as positions and velocities,
+its seed, and the panels and tools it opens with, in English and Spanish. Every
+field is checked where it is typed, with undo, drafts kept in the browser and a
+raw JSON view, and the result is a file the SDK validates and packages or a
+link Gravitas opens ([STUDIO.md](STUDIO.md)).
+
+**An investigation composer.** `/studio/lesson/` composes a guided investigation
+as data: predictions marked at a later step, explorations, measurements,
+questions written in place or drawn from a versioned bank with scored,
+controlled variants, and remediation shown only after a wrong answer, every
+word in English and Spanish side by side. It is judged by the same checker as
+every lesson Gravitas ships and previews in the real lesson engine
+([COMPOSER.md](COMPOSER.md)).
+
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->5964<!--/fact--> strings, and
+of <!--fact:uiStrings-->6213<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -239,7 +254,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->6760<!--/fact--> tests across <!--fact:jestSuites-->206<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->6849<!--/fact--> tests across <!--fact:jestSuites-->208<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -265,7 +280,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->201<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->619<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->4168<!--/fact--> KB         | <!--fact:buildDeferredChunks-->187<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4169<!--/fact--> KB         | <!--fact:buildDeferredChunks-->187<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->820<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -366,8 +381,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1397<!--/fact--> tests
-in <!--fact:e2eFiles-->112<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1410<!--/fact--> tests
+in <!--fact:e2eFiles-->113<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -519,6 +534,9 @@ part was built:
 | [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                                                                                |
 | [`DARK_MATTER.md`](DARK_MATTER.md)                                 | The halo, the rotation-curve panel and the lesson built on them                                                                                |
 | [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md)                       | The per-body readout and its orbital elements                                                                                                  |
+| [`ORBITAL_SYSTEM_BUILDER.md`](ORBITAL_SYSTEM_BUILDER.md)           | Building a hierarchical system from orbital elements: the construction, its checks, and the file it saves                                      |
+| [`STUDIO.md`](STUDIO.md)                                           | The Scenario Studio: what a scenario file holds, its checks and cautions, how it opens, and what still needs the source                        |
+| [`COMPOSER.md`](COMPOSER.md)                                       | The Investigation Composer: the pack and bank formats, variants from vetted relations, remediation, translation, and what it does not do     |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |

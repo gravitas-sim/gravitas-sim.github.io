@@ -43,6 +43,7 @@
 // =============================================================================
 
 import { spawn } from 'node:child_process';
+import net from 'node:net';
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -86,6 +87,7 @@ export const ROUTES = [
   { id: 'observatory', url: '/observatory/', page: true },
   { id: 'catalog', url: '/catalog/', page: true },
   { id: 'studio', url: '/studio/', page: true },
+  { id: 'composer', url: '/studio/lesson/', page: true },
 ];
 
 const CONFIGS = {
@@ -94,7 +96,30 @@ const CONFIGS = {
 };
 
 /** Serve a directory with the repository's own static server. */
+/** Whether a server already answers on a port. */
+const portTaken = port =>
+  new Promise(resolve => {
+    const socket = net.connect({ port, host: '127.0.0.1' });
+    socket.once('connect', () => {
+      socket.destroy();
+      resolve(true);
+    });
+    socket.once('error', () => resolve(false));
+  });
+
+/**
+ * Serve a tree on the first free port from `port`, and say which.
+ *
+ * A server already on the port - another checkout's, left running - would
+ * answer in this one's place, and every route would be measured on the wrong
+ * tree; a page that tree lacks counts 0 KB, which passes. So a taken port is
+ * skipped, and a server that did not start is an error, not a measurement.
+ *
+ * @returns {Promise<import('node:child_process').ChildProcess & {port: number}>}
+ */
 async function serve(root, port) {
+  let at = port;
+  while (await portTaken(at)) at++;
   const child = spawn(
     process.execPath,
     [
@@ -102,11 +127,16 @@ async function serve(root, port) {
       '--root',
       root,
       '--port',
-      String(port),
+      String(at),
     ],
     { stdio: 'ignore' }
   );
   await sleep(800);
+  if (child.exitCode !== null)
+    throw new Error(
+      `the static server for ${root} on port ${at} exited (${child.exitCode})`
+    );
+  child.port = at;
   return child;
 }
 
@@ -374,6 +404,7 @@ async function reportLessons(browser, configs, { json, repeat }) {
   }
   let port = 4480;
   const planServer = await serve(REPO, ++port);
+  port = planServer.port;
   let plan;
   try {
     plan = await lessonPlan(browser, `http://127.0.0.1:${port}`);
@@ -387,6 +418,7 @@ async function reportLessons(browser, configs, { json, repeat }) {
       continue;
     }
     const server = await serve(root, ++port);
+    port = server.port;
     try {
       for (const lesson of plan) {
         const runs = [];
@@ -474,6 +506,7 @@ async function main() {
         continue;
       }
       const server = await serve(root, ++port);
+      port = server.port;
       try {
         for (const route of ROUTES) {
           const got = await measure(browser, `http://127.0.0.1:${port}`, route);
