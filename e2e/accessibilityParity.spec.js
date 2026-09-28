@@ -25,24 +25,9 @@
 
 import { test, expect } from './fixtures.js';
 import { scrollLikeAReader } from './reach.js';
+import { stepKey } from './keyboard.js';
 
 const DIST = process.env.GRAVITAS_E2E_TARGET === 'dist';
-
-/**
- * The key a reader presses to step to the next control of any kind.
- *
- * Tab in Chromium and Firefox. WebKit on macOS keeps Safari's default: Tab
- * moves only between text fields and pop-up menus, and Option+Tab reaches
- * buttons and links as well. From #objectTypeBtn a plain Tab went straight to
- * <body>, because the rail is all buttons. Firefox ignores Alt+Tab
- * altogether, so it cannot be one key for every engine. WebKit on Linux, where
- * CI runs it, moves to every control with either key (e2e/historyOriginal.spec.js
- * relies on Alt+Tab there).
- *
- * @param {string} browserName - Playwright's engine name
- * @returns {string} The key to press
- */
-const stepKey = browserName => (browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
 
 /** Press a key (Tab unless told) until the focused element has this id, or give up loudly. */
 async function tabTo(page, id, limit = 40, key = 'Tab') {
