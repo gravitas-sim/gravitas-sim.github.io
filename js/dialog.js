@@ -84,9 +84,16 @@ export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
 
   // The class is the animation; `hidden` above is the semantics. Removed on the
   // next frame so the browser has a chance to lay the panel out first and the
-  // transition actually runs from its closed state.
+  // transition actually runs from its closed state. Unless it has been closed
+  // before that frame came - under load an Escape can beat it - because the
+  // close has already put the class back, and taking it off again now would
+  // leave the panel on screen and inert, with finish() below reading the
+  // missing class as a reopen and never hiding it.
   if (reducedMotion()) panel.classList.remove('hidden');
-  else requestAnimationFrame(() => panel.classList.remove('hidden'));
+  else
+    requestAnimationFrame(
+      () => panel.hasAttribute('inert') || panel.classList.remove('hidden')
+    );
 
   if (!wired.get(panel).keydown) {
     const keydown = event => {
