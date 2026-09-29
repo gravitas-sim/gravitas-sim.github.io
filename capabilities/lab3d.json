@@ -1,0 +1,87 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "gravitas.lab3d",
+  "version": "1.0.0",
+  "kind": "built-in",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "The 3-D small-N dynamics kernel",
+    "es": "El núcleo de dinámica de pocos cuerpos en 3-D"
+  },
+  "provides": {
+    "routes": [
+      {
+        "path": "/lab3d/"
+      }
+    ],
+    "models": [
+      {
+        "id": "lab3d-small-n"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "js/lab3d/kernel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/elements.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/state.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/engine.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/worker.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/api.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/experiment.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/references.js",
+      "role": "code",
+      "offline": "optional"
+    }
+  ],
+  "citations": [],
+  "licenses": [
+    {
+      "scope": "js/lab3d/**",
+      "license": "MIT"
+    }
+  ],
+  "offline": {
+    "policy": "on-demand"
+  },
+  "validation": [
+    {
+      "check": "registry:lab3d"
+    },
+    {
+      "check": "jest:tests/lab3d.test.js"
+    },
+    {
+      "check": "e2e:e2e/lab3d.spec.js"
+    }
+  ]
+}

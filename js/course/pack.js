@@ -16,7 +16,7 @@
 // goes on reading /1.
 //
 // The structural guard and the texts are the investigation pack's
-// (js/platform/investigation.js makeChecker): a hostile file is refused for
+// (js/platform/checker.js makeChecker): a hostile file is refused for
 // one reason before any rule reads it, and every text carries the digest of
 // the English its Spanish was written from. Course texts are plain: the
 // course home writes them as text, so the four prose tags a lesson may use are
@@ -25,7 +25,7 @@
 // Pure, so the builder, the course home, the tests and the SDK share it.
 // =============================================================================
 
-import { makeChecker } from '../platform/investigation.js';
+import { makeChecker } from '../platform/checker.js';
 
 export const FORMAT = 'gravitas.course-pack';
 export const FORMAT_VERSION = 2;

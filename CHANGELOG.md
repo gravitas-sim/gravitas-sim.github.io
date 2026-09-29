@@ -36,6 +36,25 @@ the release rather than in the tag.
     the first course Gravitas ships.
   - A /1 course migrates. The Observatory opens a built-in observation by
     `?open=<id>`.
+- **A 3-D small-N dynamics kernel** (LAB3D.md), the accepted design of
+  VALIDATED_3D_LAB_GATE.md. It runs only in disposable Worker realms, with
+  nothing from the 2-D engine.
+  - **Integrators:** compensated fourth-order Yoshida by default, with
+    leapfrog, Yoshida and RK4, and adaptive Dormand-Prince 5(4) for close
+    approaches.
+  - **Physics:** mergers, orbital elements (elliptic and hyperbolic) and
+    frames.
+  - **Reproducible to the byte:** no engine-dependent arithmetic, so the
+    same numbers give the same bytes in every browser.
+  - **`gravitas.system3d/1`:** code or solar units with a dimensional check.
+    It refuses ambiguous input and migrates the 2-D Orbital System Builder's
+    files.
+  - **Runs:** limits, cancellation, events, residuals and warnings.
+  - **Integration:** a versioned capability API, and 3-D experiments through
+    the experiment scheduler.
+  - **Validation:** the gate's reference problems, permanent in
+    `npm run validate:lab3d` and the check registry.
+  - **Diagnostics:** the page `/lab3d/`.
 
 - **The Investigation Composer** (COMPOSER.md). A page at `/studio/lesson/`
   composes a guided investigation as data, `gravitas.investigation-pack/1`,
@@ -618,6 +637,13 @@ the release rather than in the tag.
 
 ### Changed
 
+- **The checker every declarative format shares has a module of its own**
+  (`js/platform/checker.js`). Course packs and 3-D systems had reached it
+  through `js/platform/investigation.js`, which brought the investigation
+  format, the question bank and the vetted relations with it. The course
+  pages now download about 41 KB less from the sources, and `/lab3d/` about
+  as much. Their route ceilings were lowered to match; the composer, which
+  uses all of them, is unchanged.
 - **The English catalog no longer repeats the sentences lessons compute.**
   Each of its 139 `lessonFn.*` entries was keyed on its own text, and
   `js/i18n/lesson.js` already returns the sentence when a locale has no
