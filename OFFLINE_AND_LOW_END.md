@@ -49,25 +49,27 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 `tools/precache-inventory.mjs`; gzip at level 6, as a typical server sends it.
 
 <!--fact-block:precache-->
-| | Files | Raw | Gzipped |
-| --- | ---: | ---: | ---: |
-| JavaScript | 515 | 11.3 MB | 3.7 MB |
-| Images | 62 | 1.7 MB | 1.7 MB |
-| Stylesheets | 8 | 440 KB | 100 KB |
-| Fonts | 9 | 140 KB | 140 KB |
-| Pages | 6 | 220 KB | 50 KB |
-| Other | 1 | 20 KB | 10 KB |
-| **Total** | **601** | **13.9 MB** | **5.7 MB** |
+| | Files | Raw |
+| --- | ---: | ---: |
+| JavaScript | 515 | 11.3 MB |
+| Images | 62 | 1.7 MB |
+| Stylesheets | 8 | 440 KB |
+| Fonts | 9 | 140 KB |
+| Pages | 6 | 220 KB |
+| Other | 1 | 20 KB |
+| **Total** | **601** | **13.9 MB** |
 
 Of those, 471 are core (the install fails without them) and 130 optional (a missing one is reported and costs nothing).
+
+Gzipped, as Pages serves it, the whole is about 6 MB.
 
 | Link | Precache transfer |
 | --- | --- |
 | 10 Mbps | ~5 s |
-| 3 Mbps | ~16 s |
-| 1.5 Mbps | ~32 s |
+| 3 Mbps | ~17 s |
+| 1.5 Mbps | ~34 s |
 <!--/fact-block-->
-Pages serves gzip, so the real transfer is about <!--fact:precacheGzipMB-->5.7<!--/fact--> MB. The images barely
+Pages serves gzip, so the real transfer is about <!--fact:precacheGzipMB-->6<!--/fact--> MB. The images barely
 compress, being WebP already.
 
 The transfer times are computed from that payload rather than measured: CDP

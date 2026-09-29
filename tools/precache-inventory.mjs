@@ -83,20 +83,29 @@ const mb = n =>
     ? `${(n / 1048576).toFixed(1)} MB`
     : `${Math.max(10, Math.round(n / 10240) * 10)} KB`;
 
+/**
+ * The gzip total in whole megabytes. Gzip's output differs by a few kilobytes
+ * between zlib versions - Node 20's and Node 24's disagreed at the tenth - so
+ * a checked document quotes it only this coarsely, and never per kind.
+ */
+export const gzipMB = inv => Math.round(inv.gzip / 1048576);
+
 /** The table OFFLINE_AND_LOW_END.md shows, and the transfer times from its gzip total. */
 export function precacheTable(inv) {
   const rows = inv.kinds.map(
-    k => `| ${k.kind} | ${k.files} | ${mb(k.bytes)} | ${mb(k.gzip)} |`
+    k => `| ${k.kind} | ${k.files} | ${mb(k.bytes)} |`
   );
-  const secs = mbps => Math.round((inv.gzip * 8) / (mbps * 1e6));
+  const secs = mbps => Math.round((gzipMB(inv) * 1048576 * 8) / (mbps * 1e6));
   return [
     '',
-    '| | Files | Raw | Gzipped |',
-    '| --- | ---: | ---: | ---: |',
+    '| | Files | Raw |',
+    '| --- | ---: | ---: |',
     ...rows,
-    `| **Total** | **${inv.files}** | **${mb(inv.bytes)}** | **${mb(inv.gzip)}** |`,
+    `| **Total** | **${inv.files}** | **${mb(inv.bytes)}** |`,
     '',
     `Of those, ${inv.core} are core (the install fails without them) and ${inv.optional} optional (a missing one is reported and costs nothing).`,
+    '',
+    `Gzipped, as Pages serves it, the whole is about ${gzipMB(inv)} MB.`,
     '',
     '| Link | Precache transfer |',
     '| --- | --- |',
