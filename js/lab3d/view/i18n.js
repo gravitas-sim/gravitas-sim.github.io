@@ -4,11 +4,13 @@
 // The same shape as ../i18n.js (the diagnostics page's), with the lab's own
 // catalog pair, so neither page downloads the other's words. It shares the
 // `gravitas_locale` key, and the function is `t`, so `npm run i18n:check`
-// audits its ids.
+// audits its ids. English is the page's own; Spanish loads when a reader
+// arrives with it or chooses it (loadLanguage), as the Observatory's does, so
+// an English reader never downloads it. Until it loads, t() falls back to
+// English.
 // =============================================================================
 
 import { EN_LAB3DLAB } from '../../i18n/en.lab3dLab.js';
-import { ES_LAB3DLAB } from '../../i18n/es.lab3dLab.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
@@ -17,7 +19,18 @@ export const LANGUAGES = Object.freeze([
   { id: 'es', endonym: 'Español' },
 ]);
 
-const CATALOGS = { en: EN_LAB3DLAB, es: ES_LAB3DLAB };
+const CATALOGS = { en: EN_LAB3DLAB, es: {} };
+const LOADERS = {
+  es: () => import('../../i18n/es.lab3dLab.js').then(m => m.ES_LAB3DLAB),
+};
+const loaded = new Set(['en']);
+
+/** Load a language's catalog, if it is not loaded yet. */
+export async function loadLanguage(id) {
+  if (loaded.has(id) || !LOADERS[id]) return;
+  CATALOGS[id] = await LOADERS[id]();
+  loaded.add(id);
+}
 const DEFAULT = 'en';
 let current = DEFAULT;
 

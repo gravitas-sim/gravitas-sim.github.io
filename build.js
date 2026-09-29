@@ -543,6 +543,24 @@ async function buildDocPages() {
     });
   }
 
+  // The lab's guide panel (js/lab3d/view/guidePanel.js, Prompt 37): a bundle
+  // of its own at the same path, which the lab loads by URL when a guide
+  // opens. Were it a lazy chunk of the lab's bundle, esbuild would split out
+  // what the two share, and every reader of the lab would download those
+  // chunks; built apart, it carries its own copy and costs only a guide.
+  if (existsSync('js/lab3d/view/guidePanel.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3d/view/guidePanel.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js/lab3d/view/guidePanel.js'),
+      legalComments: 'none',
+    });
+  }
+
   // The figure builder. Its own entry for the reason the other document pages
   // have theirs: it reads the scenario catalog and the share encoder, and a
   // page only an author opens may not grow anybody's start-up download.

@@ -178,7 +178,14 @@ it):
   transferred, not copied.
 - **A session lasts one engine run:** 100,000 intervals, or an hour of wall
   clock. It then stops with that status. `restartFrom(system, snapshot)` is
-  the system to continue from its own numbers, and the lab says when it does.
+  the system to continue from its own numbers.
+  - **Continuing by itself:** a session that ran its full length with every
+    body still present goes on in a new one at once, in the same slots, and
+    the events list says so. A Kozai-Lidov cycle is many sessions long.
+  - **After a merger,** the slots change, so the lab asks the reader to press
+    Play instead.
+  - **Errors restart:** a continued session's conserved-quantity errors are
+    against its own start.
 
 `capabilities/lab3d.json` declares the model (`lab3d-small-n`) and the route
 (`/lab3d/`). It has no entry in the application's lazy registry: the kernel
@@ -404,7 +411,12 @@ pixels:
 - distance;
 - the angle at a body between two others;
 - a body's orbit about its primary (osculating elements and period);
-- the relative velocity and the rate the distance changes.
+- the relative velocity and the rate the distance changes;
+- **on the sky:** body b as seen along the view's line of sight, its
+  separation from body a across that line and along it, and which is nearer
+  (the geometry of an eclipse);
+- **between two orbits:** the angle between two bodies' orbital planes, each
+  about its own primary (their mutual inclination).
 
 A body's primary is the heavier body that pulls on it hardest, and ties go
 to the lower index.
@@ -432,9 +444,23 @@ tables update once a second while playing, or on request.
   returns when the browser restores it.
 - **Checked:** axe finds no violations in either language at phone width.
 
+**Guided investigations:**
+- **What they are:** four guides, run in the lab by a lazy panel, described
+  in [LAB3D_CURRICULUM.md](LAB3D_CURRICULUM.md).
+- **What the page lends them:** the page lends the panel a small interface
+  (`labApi` in `js/lab3dLab.js`): open a system, set a control, read the
+  choices and the numbers the tables show.
+- **A guide's own tick:** a guide's system may carry one; R6 plays at a
+  fortieth of its inner orbit.
+- **Spanish** loads only for a Spanish reader.
+- **Build:** in dist/ the panel is a bundle of its own, loaded by URL, so
+  the lab's own bundle is not split and a reader who opens no guide
+  downloads none of it.
+
 **Costs,** measured on the commit that added the page:
 - **Route:** 791.6 KB in 35 requests from the sources, and 592.3 KB in 2
-  from the build. That includes the Worker and the kernel it runs, and
+  from the build. With the curriculum's commit, 792.2 KB in 35 and 588.3 KB
+  in 3; with a guide open, 909.3 KB in 40 and 672.8 KB in 4. That includes the Worker and the kernel it runs, and
   three.js from the lab's own vendored build
   (`vendor/three/lab3d.module.js`, 476 KB of the sources).
 - **The application:** nothing. Its 3-D view keeps its own narrower
@@ -456,7 +482,7 @@ it does less, this is why:
 | An object inspector | The tables and the orbit instrument | |
 | The energy chart | Conserved-quantity errors against the start, as text | The diagnostics page plots them |
 | Observing panels, sonification, the spacetime view | None | They are 2-D instruments on the 2-D engine. Bringing them here would be a separate design |
-| Lessons, share links, embeds, lecture mode, data export | None yet | Prompt 37 (curriculum) and Roadmap II's integration prompts |
+| Lessons, share links, embeds, lecture mode, data export | Four guided investigations with reports (LAB3D_CURRICULUM.md); no share links, embeds or lecture mode yet | Roadmap II's integration prompts |
 | Spanish, keyboard, reduced motion, low-end mode | The same | |
 | Offline | Not yet | Like the diagnostics page, the page itself is not precached; its modules and three.js are, as optional, so they cost nothing to an install that fails to fetch them |
 

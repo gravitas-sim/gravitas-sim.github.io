@@ -63,6 +63,7 @@
     "packs:provenance": "node tools/build-data-packs.mjs --check --require-sources && node tools/catalog.mjs provenance",
     "analysis:validate": "node tools/analysis-validate.mjs",
     "guides:key": "node tools/exoplanet-reference.mjs",
+    "lab3d:key": "node tools/lab3d-guides-key.mjs",
     "guides:populations-key": "node tools/populations-reference.mjs",
     "measure:validate": "node tools/measure-validate.mjs",
     "packs:check": "node tools/build-data-packs.mjs --check",

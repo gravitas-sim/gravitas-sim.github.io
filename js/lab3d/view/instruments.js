@@ -124,3 +124,56 @@ export function elementsAbout(f, i, p, G) {
 export function mutualInclination(n1, n2) {
   return Math.atan2(norm(cross(n1, n2)), dot(n1, n2));
 }
+
+/**
+ * Body b as seen from far along `dir` (a unit vector from the scene toward
+ * the observer): its separation from body a across the line of sight (on
+ * the sky) and along it, and which of the two is nearer the observer.
+ * This is the geometry of an eclipse: b is in front of a when it is nearer
+ * and its sky separation is below the sum of their radii.
+ */
+export function onTheSky(f, a, b, dir) {
+  const d = vec.unit(dir);
+  const r = sub(at(f.x, b), at(f.x, a));
+  const along = dot(r, d);
+  const across = norm(
+    sub(
+      r,
+      d.map(c => c * along)
+    )
+  );
+  return { across, along, nearer: along > 0 ? b : a };
+}
+
+/**
+ * The angle between two bodies' orbits, each about its own primary: their
+ * mutual inclination, from the two angular momentum directions. Null when
+ * either body orbits nothing (the hierarchy's root).
+ */
+export function between(f, a, b, G) {
+  const h = hierarchy(f);
+  const pa = h.primary[a];
+  const pb = h.primary[b];
+  if (pa < 0 || pb < 0) return null;
+  const ea = elementsAbout(f, a, pa, G);
+  const eb = elementsAbout(f, b, pb, G);
+  if (!ea || !eb) return null;
+  return {
+    angle: mutualInclination(ea.normal, eb.normal),
+    about: [pa, pb],
+    inclinations: [ea.i, eb.i],
+  };
+}
+
+/**
+ * The Kozai-Lidov quantity sqrt(1 - e^2) cos i of a body's orbit about its
+ * primary, with i measured from the reference plane: conserved, to the
+ * quadrupole order, for a test particle whose perturber orbits in that plane.
+ */
+export function kozaiOf(f, i, G) {
+  const h = hierarchy(f);
+  const p = h.primary[i];
+  if (p < 0) return null;
+  const e = elementsAbout(f, i, p, G);
+  return e ? Math.sqrt(Math.max(0, 1 - e.e * e.e)) * Math.cos(e.i) : null;
+}

@@ -36,6 +36,26 @@ the release rather than in the tag.
     the first course Gravitas ships.
   - A /1 course migrates. The Observatory opens a built-in observation by
     `?open=<id>`.
+- **Orbits in three dimensions** (LAB3D_CURRICULUM.md): four guides in the
+  3-D lab.
+  - **The four:** an orbit's plane (inclination and nodes); seen from
+    outside (an eclipse lost to half a degree, and a drawn size that lies);
+    two orbits' planes (equal inclinations that are not one plane, and when
+    a flat model of a planetary system is good enough); and a distant third
+    body (the Kozai-Lidov cycle, with √(1 − e²) cos i held while e and i
+    trade).
+  - **Every guide:** a prediction, a manipulation and a measurement, a 2-D
+    comparison and the model's limits. Answers are checked against the
+    lab's own numbers.
+  - **Runs** on introductory and advanced paths, in English and Spanish,
+    from the tables with no WebGL, and offline.
+  - **Reports:** a deterministic report file.
+  - **For instructors:** an instructor guide and answer key.
+  - **The key:** a reference run (`npm run lab3d:key`).
+  - **The lab gained** two instruments (on the sky, and between two orbits),
+    sessions that continue by themselves, and Spanish loaded only for
+    Spanish readers. In the build the guide panel is a bundle of its own.
+
 - **The 3-D lab** (`/3d/`, LAB3D.md): small systems in three dimensions,
   played by the 3-D kernel in a Worker and drawn in WebGL, without touching
   the 2-D renderer.

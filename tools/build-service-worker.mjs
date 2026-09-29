@@ -126,6 +126,11 @@ const FILES = [
   // opened, since the pack is in the link and the page's modules are under
   // js/. Optional, as the catalog is. The builder (studio/course/) is not.
   { path: 'course/index.html', core: false },
+  // The 3-D lab and its guided investigations (LAB3D_CURRICULUM.md): the
+  // page, its modules, three.js and the kernel are all optional, so a class
+  // that has opened it once can work offline, and an install that cannot
+  // fetch them loses only the lab.
+  { path: '3d/index.html', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },
