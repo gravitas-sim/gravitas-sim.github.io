@@ -177,6 +177,11 @@ jobs:
       - name: Physics validation
         run: npm run validate:physics -- --report .facts/physics.json
 
+      # The 3-D kernel's reference problems (LAB3D.md): about a minute, most
+      # of it the Kozai-Lidov run.
+      - name: 3-D kernel validation
+        run: npm run validate:lab3d
+
       - name: Internal links and anchors
         run: npm run validate:links
 

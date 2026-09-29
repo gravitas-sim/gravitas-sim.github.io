@@ -225,9 +225,21 @@ course's links, embeds, manifest and printable syllabus. `/course/` is what
 students open, and it works offline. Gravitas ships an introductory astronomy
 course made this way ([COURSE_PACKS.md](COURSE_PACKS.md)).
 
+**A 3-D dynamics kernel.** A small-N Newtonian engine in 3-D, 2 to 50 bodies
+and test particles, run only in Worker realms of its own:
+- symplectic fourth-order integration by default, and an adaptive scheme for
+  close approaches;
+- mergers, orbital elements and frames;
+- the same bytes in every browser from the same numbers;
+- validation against analytic and published reference problems in the check
+  registry.
+
+`/lab3d/` is its diagnostic page, with numbers and plain plots, not yet a
+student view ([LAB3D.md](LAB3D.md)).
+
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->6513<!--/fact--> strings, and
+of <!--fact:uiStrings-->6601<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -263,7 +275,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->6999<!--/fact--> tests across <!--fact:jestSuites-->210<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->7042<!--/fact--> tests across <!--fact:jestSuites-->211<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -390,8 +402,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1438<!--/fact--> tests
-in <!--fact:e2eFiles-->114<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1445<!--/fact--> tests
+in <!--fact:e2eFiles-->115<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -547,6 +559,7 @@ part was built:
 | [`STUDIO.md`](STUDIO.md)                                           | The Scenario Studio: what a scenario file holds, its checks and cautions, how it opens, and what still needs the source                        |
 | [`COMPOSER.md`](COMPOSER.md)                                       | The Investigation Composer: the pack and bank formats, variants from vetted relations, remediation, translation, and what it does not do     |
 | [`COURSE_PACKS.md`](COURSE_PACKS.md)                               | Course packs: the format, pins and the reviewed upgrade, the checks, links, the course home, the manifest and the course Gravitas ships      |
+| [`LAB3D.md`](LAB3D.md)                                             | The 3-D small-N kernel: its state format, integrators, runs, API, experiments, validation and limits                                         |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
