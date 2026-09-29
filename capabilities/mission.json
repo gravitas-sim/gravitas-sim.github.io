@@ -1,0 +1,130 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "gravitas.mission",
+  "version": "1.0.0",
+  "kind": "built-in",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "The mission-design core",
+    "es": "El núcleo de diseño de misiones"
+  },
+  "requires": {
+    "gravitas.lab3d": "^1.2.0"
+  },
+  "provides": {
+    "routes": [
+      {
+        "path": "/mission/"
+      }
+    ],
+    "models": [
+      {
+        "id": "mission-two-body"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "js/mission/bodies.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/twobody.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/lambert.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/transfers.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/patched.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/window.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/plan.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/verify.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/references.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/workerCore.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/worker.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/api.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/mission/i18n.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/missionPage.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.mission.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.mission.js",
+      "role": "code",
+      "offline": "optional"
+    }
+  ],
+  "citations": [],
+  "licenses": [
+    {
+      "scope": "js/mission/**",
+      "license": "MIT"
+    }
+  ],
+  "offline": {
+    "policy": "on-demand"
+  },
+  "validation": [
+    {
+      "check": "registry:mission"
+    },
+    {
+      "check": "jest:tests/mission.test.js"
+    },
+    {
+      "check": "e2e:e2e/mission.spec.js"
+    }
+  ]
+}

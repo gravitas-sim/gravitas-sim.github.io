@@ -182,6 +182,10 @@ jobs:
       - name: 3-D kernel validation
         run: npm run validate:lab3d
 
+      # The mission core's reference cases (MISSION.md): a second or so.
+      - name: Mission core validation
+        run: npm run validate:mission
+
       - name: Internal links and anchors
         run: npm run validate:links
 

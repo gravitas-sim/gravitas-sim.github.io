@@ -488,6 +488,38 @@
       "bytes": 62881
     },
     {
+      "id": "gravitas.mission",
+      "version": "1.0.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "The mission-design core",
+        "es": "El núcleo de diseño de misiones"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "routes": [
+          {
+            "path": "/mission/"
+          }
+        ],
+        "models": [
+          {
+            "id": "mission-two-body"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/mission/**",
+          "license": "MIT"
+        }
+      ],
+      "citations": [],
+      "offline": "on-demand",
+      "bytes": 150783
+    },
+    {
       "id": "gravitas.power-law-instruments",
       "version": "1.0.0",
       "kind": "built-in",

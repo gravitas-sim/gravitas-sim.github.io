@@ -37,14 +37,20 @@ const DATA = 'gravitas.sdss-dr18-spectra';
 const TESS = 'gravitas.tess-hd209458-s56';
 // The 3-D kernel (LAB3D.md): a model and a route, and no code entry.
 const LAB3D = 'gravitas.lab3d';
+// The mission-design core (MISSION.md): a model and a route, on the kernel.
+const MISSION = 'gravitas.mission';
 const messages = errors => errors.map(e => `${e.path}: ${e.message}`);
 
 describe('T1: one format describes three unlike capabilities', () => {
   test('the three are an instrument, an authentic dataset and a lesson', () => {
     expect(manifests.map(m => m.id).sort()).toEqual(
-      [INSTRUMENTS, LESSON, DATA, TESS, LAB3D].sort()
+      [INSTRUMENTS, LESSON, DATA, TESS, LAB3D, MISSION].sort()
     );
     expect(byId(LAB3D).provides.models).toEqual([{ id: 'lab3d-small-n' }]);
+    expect(byId(MISSION).provides.models).toEqual([
+      { id: 'mission-two-body' },
+    ]);
+    expect(byId(MISSION).requires).toEqual({ 'gravitas.lab3d': '^1.2.0' });
     expect(byId(INSTRUMENTS).provides.widgetFamilies).toHaveLength(1);
     expect(byId(DATA).provides.dataPacks).toHaveLength(1);
     expect(byId(LESSON).provides.investigations).toHaveLength(1);

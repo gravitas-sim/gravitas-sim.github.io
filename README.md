@@ -255,9 +255,22 @@ The lab has four guides, each asking what a flat model cannot hold:
 Each takes a prediction, a measurement and a statement of where the model
 stops, and ends in a report file ([LAB3D_CURRICULUM.md](LAB3D_CURRICULUM.md)).
 
+**The mission-design core** at `/mission/` is a diagnostic page for
+educational astrodynamics on the same engine:
+- impulsive transfers between circular orbits, and plane changes;
+- rendezvous and phasing;
+- Lambert's problem;
+- patched-conic transfers between the planets, and transfer windows;
+- unpowered flybys.
+
+Every solver reports how it converged, or refuses a problem it cannot
+answer with confidence. The 3-D kernel checks every answer independently.
+Answers save as plan files that keep inputs, model and results apart. It
+is not operational mission design or navigation ([MISSION.md](MISSION.md)).
+
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->7037<!--/fact--> strings, and
+of <!--fact:uiStrings-->7266<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -293,7 +306,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->7090<!--/fact--> tests across <!--fact:jestSuites-->213<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->7149<!--/fact--> tests across <!--fact:jestSuites-->214<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -420,8 +433,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1463<!--/fact--> tests
-in <!--fact:e2eFiles-->117<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1469<!--/fact--> tests
+in <!--fact:e2eFiles-->118<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not

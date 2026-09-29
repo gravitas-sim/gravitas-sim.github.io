@@ -71,6 +71,7 @@ const DOC_PAGES = [
   'studio/course',
   'course',
   'lab3d',
+  'mission',
   '3d',
 ];
 
@@ -198,13 +199,16 @@ async function buildJs() {
     // page, and carrying its own copy of the engine. So is the inference
     // core's (js/inference/inferenceWorker.js), which carries no engine at
     // all, only the models it fits. The 3-D kernel's realm
-    // (js/lab3d/worker.js, LAB3D.md) is the only place that kernel runs.
+    // (js/lab3d/worker.js, LAB3D.md) is the only place that kernel runs, and
+    // the mission core's (js/mission/worker.js, MISSION.md) the only place a
+    // transfer is solved.
     entryPoints: [
       'js/physicsWorker.js',
       'js/chartWorker.js',
       'js/experiments/experimentWorker.js',
       'js/inference/inferenceWorker.js',
       'js/lab3d/worker.js',
+      'js/mission/worker.js',
     ],
     bundle: true,
     minify: true,
@@ -502,6 +506,24 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: chunks,
+      legalComments: 'none',
+    });
+  }
+
+  // The mission-design diagnostics page (/mission/): its own entry. It reads
+  // the bodies' constants and the plan file's format, never a solver, which
+  // run in the mission Worker (built with the others above).
+  if (existsSync('js/missionPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/missionPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'mission-[hash]',
       legalComments: 'none',
     });
   }
