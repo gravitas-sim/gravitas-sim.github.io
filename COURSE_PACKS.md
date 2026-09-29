@@ -176,7 +176,7 @@ same file always makes the same links.
 | Item | Link |
 |---|---|
 | Lesson | `/#investigation=<id>`, the lesson browser's own link |
-| Assignment | The teaching page's assignment link, `/#a2z…`, made from the id, date, steps and hashes the pack records, one for each language |
+| Assignment | The teaching page's assignment link, `/#a1z…` (`/#a2z…` when the lesson came from a package, whose pin only version 2 carries), made from the id, date, steps and hashes the pack records, one for each language |
 | Scenario | A world link, `/#1z…`, the scenario at the seed its word names, as Share writes one; and the figure embed of the same world (EMBEDDING.md) |
 | Dataset | `/observatory/?open=<id>` for a built-in observation; `/observatory/?installed=<id>` for a catalog data pack, which a student installs from `/catalog/` first |
 | Reading | Its address, or `https://doi.org/<doi>` |
