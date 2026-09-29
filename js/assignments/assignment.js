@@ -57,6 +57,9 @@ export const ASSIGNMENT_KIND = 'gravitas.assignment';
  */
 export const ASSIGNMENT_SCHEMA = 2;
 
+/** 2 only with a package pin (`p`), all 2 added, so a build that knows 1 opens the rest. */
+export const assignmentVersion = payload => (payload?.p ? 2 : 1);
+
 /** The tag that marks an assignment fragment, so a world link is never one. */
 export const ASSIGNMENT_TAG = 'a';
 
@@ -253,7 +256,7 @@ export function buildAssignment({
   return {
     // Short keys: this is a URL fragment before it is anything else.
     k: ASSIGNMENT_KIND,
-    v: ASSIGNMENT_SCHEMA,
+    v: provider ? 2 : 1,
     i:
       id ||
       assignmentIdFor({ lesson: lesson.id, sids: resolved.sids, title }, now),

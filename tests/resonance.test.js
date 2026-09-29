@@ -11,7 +11,7 @@
 // a ramp, and a slow circulation with a wobble on it - the case that fooled an
 // earlier version of the classifier into reporting a tidy libration for
 // Callisto - is a ramp plus a sine. The engine-backed checks live in
-// tools/physics-checks.mjs, where they belong.
+// js/validation/physicsChecks.js, where they belong.
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';

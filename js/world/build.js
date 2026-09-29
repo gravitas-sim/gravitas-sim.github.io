@@ -3009,7 +3009,7 @@ export const buildWorld = ctx => {
   //
   // All three are built from js/resonance/systems.js, which holds the published
   // elements and the paper each came from. Nothing numeric is written here: the
-  // scenario, the validation suite in tools/physics-checks.mjs and the unit
+  // scenario, the validation suite in js/validation/physicsChecks.js and the unit
   // tests all read the same table, so they cannot quote different values for
   // the same moon.
   //

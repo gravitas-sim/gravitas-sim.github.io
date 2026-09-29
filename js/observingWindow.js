@@ -500,7 +500,7 @@ export function meanObliquity(jd) {
 // longitude, a mean anomaly, and the first two terms of the equation of the
 // center. The Almanac states its own accuracy as 0.01 degrees in longitude over
 // 1950 to 2050, which is a hundred times finer than anything a twilight time
-// is quoted to, and the checks in tools/physics-checks.mjs hold it to that.
+// is quoted to, and the checks in js/validation/physicsChecks.js hold it to that.
 // =============================================================================
 
 /** Kilometers in an astronomical unit. IAU 2012, exact by definition. */

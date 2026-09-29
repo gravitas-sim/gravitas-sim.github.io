@@ -30,7 +30,7 @@ import {
 } from '../shareState.js';
 import {
   ASSIGNMENT_KIND,
-  ASSIGNMENT_SCHEMA,
+  assignmentVersion,
   ASSIGNMENT_TAG,
 } from '../assignments/assignment.js';
 import { formatSeed, parseSeed } from '../rng.js';
@@ -52,7 +52,7 @@ const text = (v, locale) => (v && (v[locale] || v.en)) || '';
 export function assignmentPayload(item, locale) {
   return {
     k: ASSIGNMENT_KIND,
-    v: ASSIGNMENT_SCHEMA,
+    v: item.pin?.pkg ? 2 : 1,
     i: item.assignment.id,
     l: item.lesson,
     t: text(item.title, locale),
@@ -84,11 +84,13 @@ export async function itemLink(item, { root, locale = 'en' }) {
         href: `${root}#investigation=${encodeURIComponent(item.lesson)}`,
         kind: 'app',
       };
-    case 'assignment':
+    case 'assignment': {
+      const a = assignmentPayload(item, locale);
       return {
-        href: `${root}#${await encodeTagged(ASSIGNMENT_TAG, ASSIGNMENT_SCHEMA, assignmentPayload(item, locale))}`,
+        href: `${root}#${await encodeTagged(ASSIGNMENT_TAG, assignmentVersion(a), a)}`,
         kind: 'app',
       };
+    }
     case 'scenario':
       return {
         href: `${root}#${await encodeTagged('', 1, scenarioPayload(item))}`,

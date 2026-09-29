@@ -83,6 +83,14 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `tests/fixtures/archive/gaia-epphot-su-dra.vot` | one Gaia DR3 epoch-photometry answer from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO; credit ESA/Gaia/DPAC, see NOTICE |
 | `tests/fixtures/archive/sesame-su-dra.xml` | one CDS Sesame answer, kept for tests | a position and names from SIMBAD; acknowledge CDS, see NOTICE |
 
+The repository's own licenses (MIT for the code, CC BY 4.0 for the content)
+cover only what is Gravitas's to license. The files in the table above keep
+theirs wherever the repository goes, its release archives included. The one
+non-commercial file among them is the Gaia test fixture: it is in the
+repository and its archives, and not on the site, which does not serve
+`tests/`. Whether a non-commercial fixture belongs in an archive at all is
+the owner's question, in [`OWNER_ACTIONS.md`](OWNER_ACTIONS.md).
+
 ## Extensions and the catalog
 
 `extensions/**` holds extensions built with the SDK outside the core, and

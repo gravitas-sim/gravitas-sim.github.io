@@ -845,6 +845,20 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **An assignment link made on `v2` could not be opened by the deployed
+  build.** Every link was written as version 2, which the site `main` serves
+  refuses as "made by a newer version", and a browser still running its
+  cached copy after an upgrade refuses it too. A link is version 2 only when
+  it carries a package pin, the one thing version 2 added; every other link
+  is version 1 again. `tests/assignment.test.js` opens both kinds with the
+  reader archived from the deployed commit.
+- **The deploy published directories no page uses.** `spike/`, `tests/`,
+  `e2e/` and `tools/` are dropped from the staged tree after it has been
+  verified. The physics suite `/validation/` runs live moved from `tools/` to
+  `js/validation/` first, and `tests/spikeNotShipped.test.js` checks that no
+  page, and nothing the service worker lists, points into a dropped
+  directory. The spike stays in the repository and its archives.
+
 - **The numeric test suites ran 8 to 25 times slower under Jest than in
   Node, and timed out on a loaded machine.**
   - **What it did:** Jest runs every module in a `vm` context, where each

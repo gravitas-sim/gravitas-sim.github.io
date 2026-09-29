@@ -1,7 +1,7 @@
 // =============================================================================
 // The spherical-astronomy module's contract
 // -----------------------------------------------------------------------------
-// tools/physics-checks.mjs already holds this module against published
+// js/validation/physicsChecks.js already holds this module against published
 // ephemerides: the Almanac's Sun, the eclipse canon's Moon, Kasten & Young's
 // airmass. Those checks answer "are the numbers right".
 //

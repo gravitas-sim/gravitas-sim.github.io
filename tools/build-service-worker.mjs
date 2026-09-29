@@ -153,6 +153,19 @@ const OBSERVATORY_ONLY = new Set([
 ]);
 
 /**
+ * The physics validation suite and its DOM stand-in, which the /validation/
+ * page's live run loads in its Worker on demand. They lived in tools/, which
+ * was never precached, until tools/ stopped being published (Roadmap II,
+ * Prompt 47); under js/ the walk would make them core, adding 290 KB to every
+ * reader's install for a page one reader in many opens. Kept out, as before:
+ * the live run needs the network either way.
+ */
+const ON_DEMAND_ONLY = new Set([
+  'js/validation/physicsChecks.js',
+  'js/validation/domShim.js',
+]);
+
+/**
  * Paths kept out of the precache. Matched against the repo-relative path.
  *
  * The translated lesson shadows are the deliberate exclusion; see the header.
@@ -289,7 +302,9 @@ export async function buildManifest() {
   }
 
   const kept = applyCapabilityOffline(
-    collected.filter(f => !EXCLUDE.some(re => re.test(f.path)))
+    collected.filter(
+      f => !EXCLUDE.some(re => re.test(f.path)) && !ON_DEMAND_ONLY.has(f.path)
+    )
   ).sort((a, b) => a.path.localeCompare(b.path));
   const paths = kept.map(f => f.path);
   const core = kept.filter(f => f.core).map(f => f.path);

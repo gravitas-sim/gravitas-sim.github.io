@@ -187,7 +187,7 @@ test.describe('Kuiper Belt scenario contract', () => {
 // -----------------------------------------------------------------------------
 // The chaos investigation asks a student to draw a physical conclusion from
 // this scenario, so what it builds has to be exactly what the lesson describes.
-// The physics of the divergence is checked in tools/physics-checks.mjs; what is
+// The physics of the divergence is checked in js/validation/physicsChecks.js; what is
 // checked here is the thing only a real browser can see - that the scenario, as
 // the application actually builds it, is the configuration the lesson names.
 // =============================================================================

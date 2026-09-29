@@ -114,7 +114,7 @@ export function centsToPeriod(cents, referencePeriod) {
  * approximately, not to within a scale degree: to within the error of log2 and
  * pow, which is a bit or two. This is what "invertible" means operationally,
  * and stating it as a function rather than as a comment is what lets
- * tools/physics-checks.mjs put a number on it.
+ * js/validation/physicsChecks.js put a number on it.
  *
  * @param {number} period - The period to round-trip
  * @param {number} referencePeriod - The reference to do it against

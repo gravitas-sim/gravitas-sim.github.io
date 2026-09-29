@@ -106,7 +106,7 @@ call the result divergence.
 
 ## Why the result is not a timestep artifact
 
-The evidence, from `tools/physics-checks.mjs`, run on every `npm test`:
+The evidence, from `js/validation/physicsChecks.js`, run on every `npm test`:
 
 | Integrator       | dt    | τ (simulated seconds) |
 | ---------------- | ----- | --------------------- |
@@ -202,7 +202,7 @@ Applying a perturbation now restores into it.
 | `js/scenarios.js`                               | The scenario's settings                                                                    |
 | `js/render.js`                                  | `setFixedStep()`, for reproducible recordings                                              |
 | `js/physics.js`                                 | `name` carried through a state round trip                                                  |
-| `tools/physics-checks.mjs`                      | Ten validation checks, in the group "Three-body sensitivity"                               |
+| `js/validation/physicsChecks.js`                      | Ten validation checks, in the group "Three-body sensitivity"                               |
 | `e2e/chaos.spec.js`                             | The paired experiment, performed in a browser                                              |
 | `e2e/scenarioContract.spec.js`                  | That the scenario builds the configuration the lesson describes                            |
 

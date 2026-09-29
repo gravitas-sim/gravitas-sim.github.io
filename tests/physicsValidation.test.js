@@ -1,7 +1,7 @@
 // =============================================================================
 // The scientific validation suite, as a test
 // -----------------------------------------------------------------------------
-// The checks themselves live in tools/physics-checks.mjs, which is also what
+// The checks themselves live in js/validation/physicsChecks.js, which is also what
 // `npm run validate:physics` runs. This file exists so that a physics
 // regression fails `npm test` and therefore fails a pull request, rather than
 // waiting for someone to remember to print the table.
@@ -41,7 +41,7 @@ import { describe, test, expect } from '@jest/globals';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { KIND_ORDER, KIND_LABEL, KIND_SHORT } from '../js/physicsKinds.js';
-import { score } from '../tools/physics-checks.mjs';
+import { score } from '../js/validation/physicsChecks.js';
 import { conjunctions, conjunctionCluster } from '../js/resonance/elements.js';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -305,7 +305,7 @@ describe('a missing measurement fails its own row, not the suite', () => {
     // the registry in, so the invariant is asserted on the source: every read of
     // atConjunction goes through a guard, and a bare `atConjunction.` is the bug.
     const registry = readFileSync(
-      path.join(here, '..', 'tools', 'physics-checks.mjs'),
+      path.join(here, '..', 'js', 'validation', 'physicsChecks.js'),
       'utf8'
     );
     // Guard against the test silently passing because the name changed.
