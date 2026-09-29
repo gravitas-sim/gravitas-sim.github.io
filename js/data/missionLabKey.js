@@ -421,3 +421,223 @@ export const MISSION_LAB_KEY = [
     expected: null,
   },
 ];
+
+// The guides' structure, for the instructor documents.
+export const MISSION_LAB_SUITE = {
+  GUIDES: [
+    {
+      id: 'ml-orbit',
+      target: 'earth-orbit',
+      minutes: {
+        intro: 15,
+        advanced: 25,
+      },
+      steps: [
+        {
+          id: 'intro',
+          kind: 'read',
+          path: 'both',
+        },
+        {
+          id: 'predict',
+          kind: 'choose',
+          path: 'both',
+          options: ['climb', 'turn', 'same'],
+          correct: null,
+        },
+        {
+          id: 'dv',
+          kind: 'answer',
+          path: 'both',
+          unit: 'm/s',
+        },
+        {
+          id: 'wait',
+          kind: 'answer',
+          path: 'both',
+          unit: 'min',
+        },
+        {
+          id: 'compare',
+          kind: 'choose',
+          path: 'both',
+          options: ['climb', 'turn', 'same'],
+          correct: 'computed',
+        },
+        {
+          id: 'phase',
+          kind: 'do',
+          path: 'advanced',
+        },
+        {
+          id: 'waitAgain',
+          kind: 'answer',
+          path: 'advanced',
+          unit: 'min',
+        },
+        {
+          id: 'limits',
+          kind: 'read',
+          path: 'both',
+        },
+      ],
+    },
+    {
+      id: 'ml-window',
+      target: 'window-2026',
+      minutes: {
+        intro: 20,
+        advanced: 30,
+      },
+      steps: [
+        {
+          id: 'intro',
+          kind: 'read',
+          path: 'both',
+        },
+        {
+          id: 'predict',
+          kind: 'choose',
+          path: 'both',
+          options: ['yes', 'no'],
+          correct: null,
+        },
+        {
+          id: 'open',
+          kind: 'do',
+          path: 'both',
+        },
+        {
+          id: 'best',
+          kind: 'do',
+          path: 'both',
+        },
+        {
+          id: 'c3',
+          kind: 'answer',
+          path: 'both',
+          unit: 'km²/s²',
+        },
+        {
+          id: 'fast',
+          kind: 'choose',
+          path: 'both',
+          options: ['more', 'about', 'less'],
+          correct: 'computed',
+        },
+        {
+          id: 'vinf',
+          kind: 'answer',
+          path: 'advanced',
+          unit: 'km/s',
+        },
+        {
+          id: 'declination',
+          kind: 'answer',
+          path: 'advanced',
+          unit: '°',
+        },
+        {
+          id: 'limits',
+          kind: 'read',
+          path: 'both',
+        },
+      ],
+    },
+    {
+      id: 'ml-cruise',
+      target: 'direct-flight',
+      minutes: {
+        intro: 25,
+        advanced: 40,
+      },
+      steps: [
+        {
+          id: 'intro',
+          kind: 'read',
+          path: 'both',
+        },
+        {
+          id: 'predict',
+          kind: 'choose',
+          path: 'both',
+          options: ['km1e3', 'km1e4', 'km1e5', 'km1e6'],
+          correct: null,
+        },
+        {
+          id: 'fly',
+          kind: 'do',
+          path: 'both',
+        },
+        {
+          id: 'miss',
+          kind: 'answer',
+          path: 'both',
+          unit: 'million km',
+        },
+        {
+          id: 'test',
+          kind: 'do',
+          path: 'both',
+        },
+        {
+          id: 'diagnose',
+          kind: 'choose',
+          path: 'both',
+          options: ['integration', 'planets', 'earth', 'mars'],
+          correct: 'earth',
+        },
+        {
+          id: 'explain',
+          kind: 'explain',
+          path: 'both',
+        },
+        {
+          id: 'correct',
+          kind: 'do',
+          path: 'both',
+        },
+        {
+          id: 'cost',
+          kind: 'answer',
+          path: 'both',
+          unit: 'm/s',
+        },
+        {
+          id: 'late',
+          kind: 'do',
+          path: 'advanced',
+        },
+        {
+          id: 'lateCost',
+          kind: 'answer',
+          path: 'advanced',
+          unit: 'm/s',
+        },
+        {
+          id: 'early',
+          kind: 'choose',
+          path: 'advanced',
+          options: ['early', 'late', 'same'],
+          correct: 'early',
+        },
+        {
+          id: 'propellant',
+          kind: 'answer',
+          path: 'both',
+          unit: 'kg',
+        },
+        {
+          id: 'limits',
+          kind: 'read',
+          path: 'both',
+        },
+      ],
+    },
+  ],
+  TARGETS: {
+    'earth-orbit': {},
+    'window-2026': {},
+    'direct-flight': {},
+  },
+};

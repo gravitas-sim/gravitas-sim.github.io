@@ -250,7 +250,8 @@ export function createGuidePanel({ els, t, lab }) {
       }),
       el('h3', { text: words(s, 'title') }),
       el('p', { text: words(s, 'body') }),
-      box.node,
+      // A read step has no input; replaceChildren would write null as text.
+      box.node ?? '',
       buttons,
       el('p', {
         class: 'ml-feedback',

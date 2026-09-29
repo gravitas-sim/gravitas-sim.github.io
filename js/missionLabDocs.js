@@ -5,11 +5,15 @@
 // suite's are: what this module adds is only what no data structure holds,
 // the teaching notes, the data, the approximations and the introduction.
 // tools/build-instructor-materials.js renders both; the key is the committed
-// reference run, js/data/missionLabKey.js (npm run mission:key).
+// reference run, js/data/missionLabKey.js (npm run mission:key), which also
+// records the guides' structure. The documents read that, not the
+// curriculum: js/mission/lab/curriculum.js carries the functions that check
+// a step and everything they import, which the instructor bundle's digest
+// (tools/instructor-freshness.mjs) would then have to follow.
 // =============================================================================
 
 import { suiteAnswerKey, suiteInstructorGuide } from './guideDocs.js';
-import { SUITE } from './mission/lab/curriculum.js';
+import { MISSION_LAB_SUITE as SUITE } from './data/missionLabKey.js';
 import { EN_MISSIONLABGUIDES } from './i18n/en.missionLabGuides.js';
 
 // What an instructor should know before a class runs each part.

@@ -142,7 +142,8 @@ export const EN_MISSIONLAB = {
   'ml.views.side': 'From the ecliptic’s edge, heights stretched {k} times',
   'ml.views.sideAlt':
     'The same seen edge-on, with every height above the ecliptic stretched {k} times so that the tilts can be seen.',
-  'ml.views.departure': 'Leaving the Earth',
+  'ml.views.departure':
+    'Leaving the Earth, {k} depot-orbit radii across each way',
   'ml.views.departureAlt':
     'The depot orbit, {rp} from the Earth’s center at {vc}, and the first 20 hours of the departure hyperbola.',
 

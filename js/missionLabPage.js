@@ -336,6 +336,8 @@ const COLORS = {
   sun: '#ffd24a',
 };
 const Z_STRETCH = 20;
+/** The departure view's half-width, in periapsis radii. */
+const DEPARTURE_FRAME = 10;
 
 function view(title, caption, paths, markers, project, extent) {
   const size = 300;
@@ -397,8 +399,9 @@ function drawViews(at) {
     ['direct', at.direct, 3],
   ];
   const dep = v.departure;
-  const depExtent =
-    Math.max(...dep.hyperbola.map(p => Math.hypot(p[0], p[1])), dep.rp) * 1.08;
+  // Ten periapsis radii: the depot orbit is seen, and the hyperbola leaves
+  // the frame along its way out (the caption gives the scale).
+  const depExtent = DEPARTURE_FRAME * dep.rp;
   $('ml-views').replaceChildren(
     view(
       t('ml.views.top'),
@@ -417,7 +420,7 @@ function drawViews(at) {
       extent
     ),
     view(
-      t('ml.views.departure'),
+      t('ml.views.departure', { k: DEPARTURE_FRAME }),
       t('ml.views.departureAlt', { rp: km(dep.rp), vc: kms(dep.vc) }),
       [
         ['earth', dep.circle],

@@ -97,6 +97,9 @@ test.describe('the mission lab', () => {
   }) => {
     await openLab(page, { query: '?guide=ml-orbit&path=advanced' });
     await expect(step(page)).toContainText('Step 1 of 8');
+    // A read step has words and buttons, and nothing else.
+    await expect(step(page)).not.toContainText('null');
+    await expect(step(page).locator('input, textarea')).toHaveCount(0);
     await next(page);
     await page.getByLabel('Climbing 100 km').check();
     await step(page).getByRole('button', { name: 'Check' }).click();

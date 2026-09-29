@@ -148,7 +148,8 @@ export const ES_MISSIONLAB = {
     'Desde el borde de la eclíptica, alturas multiplicadas por {k}',
   'ml.views.sideAlt':
     'Lo mismo visto de canto, con cada altura sobre la eclíptica multiplicada por {k} para que las inclinaciones se vean.',
-  'ml.views.departure': 'Al dejar la Tierra',
+  'ml.views.departure':
+    'Al dejar la Tierra, {k} radios de la órbita del depósito a cada lado',
   'ml.views.departureAlt':
     'La órbita del depósito, a {rp} del centro de la Tierra a {vc}, y las primeras 20 horas de la hipérbola de salida.',
 

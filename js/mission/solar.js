@@ -539,7 +539,8 @@ function departureView(mu, rp, peri) {
   });
   const hyperbola = [];
   for (let k = 0; k <= 60; k++) {
-    const p = propagate(mu, peri.r, peri.v, (k / 60) * 20 * 3600);
+    // Squared times: the curve bends in the first minutes, not the last hours.
+    const p = propagate(mu, peri.r, peri.v, (k / 60) ** 2 * 20 * 3600);
     if (p.ok) hyperbola.push(p.r);
   }
   return { circle, hyperbola, rp, vc };

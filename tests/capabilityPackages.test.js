@@ -47,7 +47,10 @@ describe('T1: one format describes three unlike capabilities', () => {
       [INSTRUMENTS, LESSON, DATA, TESS, LAB3D, MISSION].sort()
     );
     expect(byId(LAB3D).provides.models).toEqual([{ id: 'lab3d-small-n' }]);
-    expect(byId(MISSION).provides.models).toEqual([{ id: 'mission-two-body' }]);
+    expect(byId(MISSION).provides.models).toEqual([
+      { id: 'mission-two-body' },
+      { id: 'mission-lab-ephemeris' },
+    ]);
     expect(byId(MISSION).requires).toEqual({ 'gravitas.lab3d': '^1.2.0' });
     expect(byId(INSTRUMENTS).provides.widgetFamilies).toHaveLength(1);
     expect(byId(DATA).provides.dataPacks).toHaveLength(1);

@@ -26,6 +26,7 @@ import {
 import { computeWindow } from '../js/mission/window.js';
 import {
   GUIDES,
+  TARGETS,
   correctOption,
   stepsOn,
 } from '../js/mission/lab/curriculum.js';
@@ -81,6 +82,29 @@ export function referenceRun(path) {
 }
 
 const key = [...referenceRun('intro'), ...referenceRun('advanced')];
+
+/**
+ * The guides' structure as data, for the instructor documents
+ * (js/missionLabDocs.js): what js/guideDocs.js lays out, with none of the
+ * functions that check a step. Written beside the key so that the documents
+ * read one committed module, not the curriculum and everything it imports.
+ */
+export const suiteData = () => ({
+  GUIDES: GUIDES.map(g => ({
+    id: g.id,
+    target: g.target,
+    minutes: g.minutes,
+    steps: g.steps.map(s => ({
+      id: s.id,
+      kind: s.kind,
+      path: s.path,
+      ...(s.options ? { options: [...s.options] } : {}),
+      ...(s.kind === 'choose' ? { correct: s.correct } : {}),
+      ...(s.unit ? { unit: s.unit } : {}),
+    })),
+  })),
+  TARGETS: Object.fromEntries(Object.keys(TARGETS).map(k => [k, {}])),
+});
 const failedDo = key.filter(r => r.kind === 'do' && !r.passed);
 if (failedDo.length) {
   console.error(
@@ -89,10 +113,15 @@ if (failedDo.length) {
   process.exit(1);
 }
 if (process.argv.includes('--json')) {
-  console.log(JSON.stringify(key.map(({ passed: _p, ...r }) => r)));
+  console.log(
+    JSON.stringify({
+      key: key.map(({ passed: _p, ...r }) => r),
+      suite: suiteData(),
+    })
+  );
 } else if (process.argv.includes('--write')) {
   const rows = key.map(({ passed: _p, ...r }) => r);
-  const source = `// Written by \`npm run mission:key -- --write\` from a reference run of every\n// guide (tools/mission-lab-key.mjs). Do not edit by hand;\n// tests/missionLab.test.js fails when it is stale.\n\nexport const MISSION_LAB_KEY = ${JSON.stringify(rows, null, 2)};\n`;
+  const source = `// Written by \`npm run mission:key -- --write\` from a reference run of every\n// guide (tools/mission-lab-key.mjs). Do not edit by hand;\n// tests/missionLab.test.js fails when it is stale.\n\nexport const MISSION_LAB_KEY = ${JSON.stringify(rows, null, 2)};\n\n// The guides' structure, for the instructor documents.\nexport const MISSION_LAB_SUITE = ${JSON.stringify(suiteData(), null, 2)};\n`;
   const prettier = await import('prettier');
   const options = (await prettier.resolveConfig(OUT)) || {};
   writeFileSync(

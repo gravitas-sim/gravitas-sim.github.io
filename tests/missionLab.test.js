@@ -50,7 +50,10 @@ import {
   stepsOn,
   wordCount,
 } from '../js/mission/lab/curriculum.js';
-import { MISSION_LAB_KEY } from '../js/data/missionLabKey.js';
+import {
+  MISSION_LAB_KEY,
+  MISSION_LAB_SUITE,
+} from '../js/data/missionLabKey.js';
 import { EN_MISSIONLAB } from '../js/i18n/en.missionLab.js';
 import { ES_MISSIONLAB } from '../js/i18n/es.missionLab.js';
 import { EN_MISSIONLABGUIDES } from '../js/i18n/en.missionLabGuides.js';
@@ -408,7 +411,12 @@ describe('the guides', () => {
         maxBuffer: 1 << 24,
       })
     );
-    expect(fresh).toEqual(MISSION_LAB_KEY);
+    expect(fresh.key).toEqual(MISSION_LAB_KEY);
+    // The structure the instructor documents read is the curriculum's.
+    expect(fresh.suite).toEqual(MISSION_LAB_SUITE);
+    expect(
+      MISSION_LAB_SUITE.GUIDES.map(g => g.steps.map(s => `${s.id}:${s.kind}`))
+    ).toEqual(GUIDES.map(g => g.steps.map(s => `${s.id}:${s.kind}`)));
     for (const g of GUIDES)
       for (const path of ['intro', 'advanced'])
         expect(
