@@ -246,7 +246,7 @@ number is also in tables that work without WebGL, and the keyboard does
 everything the pointer does. `/lab3d/` is the kernel's diagnostic page
 ([LAB3D.md](LAB3D.md)).
 
-Four guided investigations in the lab ask what a flat model cannot hold:
+The lab has four guides, each asking what a flat model cannot hold:
 - an orbit's plane;
 - whether a tilted orbit eclipses its star;
 - two orbits' planes;
@@ -578,7 +578,7 @@ part was built:
 | [`COMPOSER.md`](COMPOSER.md)                                       | The Investigation Composer: the pack and bank formats, variants from vetted relations, remediation, translation, and what it does not do     |
 | [`COURSE_PACKS.md`](COURSE_PACKS.md)                               | Course packs: the format, pins and the reviewed upgrade, the checks, links, the course home, the manifest and the course Gravitas ships      |
 | [`LAB3D.md`](LAB3D.md)                                             | The 3-D small-N kernel: its state format, integrators, runs, API, experiments, validation and limits                                         |
-| [`LAB3D_CURRICULUM.md`](LAB3D_CURRICULUM.md)                       | Orbits in three dimensions: the 3-D lab's four guided investigations, their concept map, the physics that checks them and the model's limits  |
+| [`LAB3D_CURRICULUM.md`](LAB3D_CURRICULUM.md)                       | Orbits in three dimensions: the 3-D lab's four guides, their concept map, the physics that checks them and the model's limits              |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |

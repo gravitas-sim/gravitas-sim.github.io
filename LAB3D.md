@@ -453,13 +453,14 @@ tables update once a second while playing, or on request.
 - **A guide's own tick:** a guide's system may carry one; R6 plays at a
   fortieth of its inner orbit.
 - **Spanish** loads only for a Spanish reader.
-- **Build:** the lab is built without esbuild's `keepNames`, whose helper had
-  become a request of its own once the panel split the bundle.
+- **Build:** in dist/ the panel is a bundle of its own, loaded by URL, so
+  the lab's own bundle is not split and a reader who opens no guide
+  downloads none of it.
 
 **Costs,** measured on the commit that added the page:
 - **Route:** 791.6 KB in 35 requests from the sources, and 592.3 KB in 2
-  from the build. With the curriculum's commit, 792.0 KB in 35 and 578.9 KB
-  in 3; with a guide open, 909.2 KB in 40 and 657.9 KB in 4. That includes the Worker and the kernel it runs, and
+  from the build. With the curriculum's commit, 792.2 KB in 35 and 588.3 KB
+  in 3; with a guide open, 909.3 KB in 40 and 672.8 KB in 4. That includes the Worker and the kernel it runs, and
   three.js from the lab's own vendored build
   (`vendor/three/lab3d.module.js`, 476 KB of the sources).
 - **The application:** nothing. Its 3-D view keeps its own narrower

@@ -1,7 +1,7 @@
 # Orbits in three dimensions: the 3-D lab's curriculum
 
-Four guided investigations in the 3-D lab (`/3d/`, LAB3D.md) of what a flat
-model cannot hold:
+Four guides in the 3-D lab (`/3d/`, LAB3D.md) to what a flat model cannot
+hold:
 - an orbit's plane;
 - how an orbit looks from outside;
 - two orbits' planes;

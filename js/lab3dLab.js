@@ -1084,7 +1084,11 @@ let guidePanel = null;
 /** Open the guide panel, loading it the first time. */
 async function openGuides(options = {}) {
   if (!guidePanel) {
-    const m = await import('./lab3d/view/guidePanel.js');
+    // By URL, so the build does not split the lab's bundle: in dist/ the
+    // panel is a bundle of its own at this same path (build.js).
+    const m = await import(
+      new URL('./lab3d/view/guidePanel.js', import.meta.url).href
+    );
     guidePanel = m.createGuidePanel($('l3-guide'), labApi);
   }
   await guidePanel.show(options);

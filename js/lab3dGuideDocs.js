@@ -70,7 +70,7 @@ export const DOCS = {
   title: 'Orbits in three dimensions',
   subtitle: `${SUITE.GUIDES.length} guided investigations  |  the validated 3-D kernel  |  introductory and advanced paths`,
   intro: [
-    'Four investigations, done in the 3-D lab (/3d/), of what a flat model cannot hold: an orbit’s plane, how an orbit looks from outside, two orbits’ planes, and a distant third body. Each asks for a prediction, has students change something and measure it with the lab’s instruments, and ends with what a 2-D model keeps and loses and where the model stops. Every answer is checked against the lab’s own numbers, the ones the tables under the view show; nothing is adopted from the literature.',
+    'Four guides, done in the 3-D lab (/3d/), of what a flat model cannot hold: an orbit’s plane, how an orbit looks from outside, two orbits’ planes, and a distant third body. Each asks for a prediction, has students change something and measure it with the lab’s instruments, and ends with what a 2-D model keeps and loses and where the model stops. Every answer is checked against the lab’s own numbers, the ones the tables under the view show; nothing is adopted from the literature.',
     'They are meant to be done in order: the first sets up inclination and the line of nodes, which the other three use. Each takes one class period on the introductory path. The tables make every step answerable without the 3-D picture, so a student on a device without WebGL, or using a screen reader, can do the whole investigation.',
   ],
   dataNote:

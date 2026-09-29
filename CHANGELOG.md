@@ -36,8 +36,8 @@ the release rather than in the tag.
     the first course Gravitas ships.
   - A /1 course migrates. The Observatory opens a built-in observation by
     `?open=<id>`.
-- **Orbits in three dimensions** (LAB3D_CURRICULUM.md): four guided
-  investigations in the 3-D lab.
+- **Orbits in three dimensions** (LAB3D_CURRICULUM.md): four guides in the
+  3-D lab.
   - **The four:** an orbit's plane (inclination and nodes); seen from
     outside (an eclipse lost to half a degree, and a drawn size that lies);
     two orbits' planes (equal inclinations that are not one plane, and when
@@ -54,7 +54,7 @@ the release rather than in the tag.
   - **The key:** a reference run (`npm run lab3d:key`).
   - **The lab gained** two instruments (on the sky, and between two orbits),
     sessions that continue by themselves, and Spanish loaded only for
-    Spanish readers.
+    Spanish readers. In the build the guide panel is a bundle of its own.
 
 - **The 3-D lab** (`/3d/`, LAB3D.md): small systems in three dimensions,
   played by the 3-D kernel in a Worker and drawn in WebGL, without touching

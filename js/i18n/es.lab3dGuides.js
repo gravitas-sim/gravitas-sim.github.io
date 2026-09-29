@@ -6,7 +6,7 @@ export const ES_LAB3DGUIDES = {
   // --- El ejecutor
   'g3.heading': 'Investigaciones guiadas',
   'g3.intro':
-    'Cuatro investigaciones sobre lo que un modelo plano no puede contener: el plano de una órbita, cómo se ve desde fuera, los planos de dos órbitas y un tercer cuerpo lejano. Cada una pide una predicción, te hace cambiar algo y medir, y dice dónde se detiene el modelo. Cada respuesta se comprueba con los números del propio laboratorio.',
+    'Cuatro guías sobre lo que un modelo plano no puede contener: el plano de una órbita, cómo se ve desde fuera, los planos de dos órbitas y un tercer cuerpo lejano. Cada una pide una predicción, te hace cambiar algo y medir, y dice dónde se detiene el modelo. Cada respuesta se comprueba con los números del propio laboratorio.',
   'g3.meta': 'Unos {intro} minutos; {advanced} en el recorrido avanzado.',
   'g3.startIntro': 'Empezar',
   'g3.startAdvanced': 'Empezar el recorrido avanzado',

@@ -7,7 +7,7 @@ export const EN_LAB3DGUIDES = {
   // --- The runner
   'g3.heading': 'Guided investigations',
   'g3.intro':
-    'Four investigations of what a flat model cannot hold: an orbit’s plane, how it looks from outside, two orbits’ planes, and a distant third body. Each asks for a prediction, has you change something and measure, and says where the model stops. Every answer is checked against the lab’s own numbers.',
+    'Four guides to what a flat model cannot hold: an orbit’s plane, how it looks from outside, two orbits’ planes, and a distant third body. Each asks for a prediction, has you change something and measure, and says where the model stops. Every answer is checked against the lab’s own numbers.',
   'g3.meta': 'About {intro} minutes; {advanced} on the advanced path.',
   'g3.startIntro': 'Start',
   'g3.startAdvanced': 'Start the advanced path',
