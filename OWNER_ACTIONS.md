@@ -37,6 +37,14 @@ box here means the thing is done and verified, not merely decided.
       Documented in [`RELEASING.md`](RELEASING.md), including the consequence:
       the commit that records the DOI is not inside the archived tag.
 
+- [ ] **A non-commercial test fixture in the archive.** One CC BY-NC 3.0 IGO
+      Gaia answer, `tests/fixtures/archive/gaia-epphot-su-dra.vot`, is in the
+      repository and so in every release archive, under its own license and
+      credited (LICENSES.md, NOTICE). It is no longer on the site. Keep it, as
+      now, or replace it with a synthetic answer of the same shape before the
+      release so the archive carries nothing non-commercial. (Prompt 47 left it
+      as it is: removing test evidence is not a repair.)
+
 ## Zenodo
 
 - [x] **Verify the GitHub–Zenodo integration is live.** Confirmed on Zenodo's

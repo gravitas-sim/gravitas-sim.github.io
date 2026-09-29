@@ -201,6 +201,28 @@ projection:
 larger type, the Daylight theme, a spotlight pointer, and arrow keys that step
 through a prepared sequence of links.
 
+**The Observatory.** `/observatory/` works with authentic data rather than
+simulated worlds:
+- observation data packs, pinned and checksummed, with their records;
+- a measurement pipeline;
+- model fits with uncertainties;
+- a notebook that keeps the evidence;
+- two guided suites: finding exoplanets in TESS light curves, and reading a
+  cluster's stellar populations.
+
+An opt-in panel imports a star's Gaia epochs live from CDS. No lesson depends on
+it. See [`EXOPLANET_OBSERVATORY.md`](EXOPLANET_OBSERVATORY.md) and
+[`STELLAR_POPULATIONS.md`](STELLAR_POPULATIONS.md).
+
+**An experiment runner.** `/experiments/` varies one or two settings over a
+range, runs every value with several seeds, each in a Worker of its own, and
+reports what changed, with a manifest that runs it again ([`EXPERIMENTS.md`](EXPERIMENTS.md)).
+
+**A catalog.** `/catalog/` lists what Gravitas offers beyond its lessons (data,
+courses and instruments), each reviewed before it was listed. An installed
+one works offline
+([`CATALOG.md`](CATALOG.md)).
+
 **A scenario studio.** `/studio/` makes a scenario as data rather than code:
 its settings, its bodies as an orbital system or as positions and velocities,
 its seed, and the panels and tools it opens with, in English and Spanish. Every
@@ -318,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->7184<!--/fact--> tests across <!--fact:jestSuites-->216<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->7190<!--/fact--> tests across <!--fact:jestSuites-->216<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -394,14 +416,32 @@ js/
   *Widgets.js       the instruments lessons measure with
 model/              the public physics-model page
 teaching/           the public showcase page for instructors
-instructors/        the instructor area
+instructors/        the instructor area; instructors/submissions/ reviews hand-ins
 evaluation/         printable pilot instruments for evaluating a section
+observatory/        the Observatory: data, measurement and the guided suites
+catalog/            the curated catalog of extensions, and its archives
+experiments/        the experiment runner
+figure/             the figure builder, and embeds
+studio/             the Scenario Studio; lesson/ the composer, course/ the course builder
+course/             the course home students open
+lab3d/              the 3-D kernel's diagnostic page
+3d/                 the 3-D lab and its guides
+mission/            the mission-design core; lab/ the mission lab
+capabilities/       the capability-package manifests
+data-packs/         observation data-pack manifests (pinned sources)
+ephemeris-packs/    the ephemeris pack's manifest (pinned JPL Horizons answers)
+sdk/                the extension SDK: a command line, a library, four schemas
+extensions/         extensions built with the SDK outside the core
+vendor/             three.js, Chart.js and the fonts, vendored
+history/            the first Gravitas, kept as it was
+docs/               generated inventories (capabilities, lesson scenes)
 manual/             LaTeX source for the user manual PDF
 notebooks/          the Colab notebook that reads an exported CSV
-tools/              build and development tooling
-tests/              jest
-e2e/                the Playwright browser suite
 validation/         the physics validation page and its data
+spike/              a prototype kept as evidence (MULTI_WORLD_DECISION.md); not published
+tools/              build and development tooling; not published
+tests/              jest; not published
+e2e/                the Playwright browser suite; not published
 ```
 
 Two conventions worth knowing before changing anything:
@@ -518,7 +558,7 @@ npm run validate:physics
 ```
 
 That is <!--fact:physicsChecks-->286<!--/fact--> deterministic checks, about
-fifteen seconds, printed as a table of measured value, expected value, error and
+two minutes, printed as a table of measured value, expected value, error and
 tolerance. Five kinds, and the table labels each: closed-form arithmetic,
 quantities measured by running the N-body engine, literature values with their
 sources named, educational approximations validated against the equation they
@@ -704,9 +744,16 @@ Two licenses, because this is two kinds of work.
   course pack, translate it, cut it down: no permission needed, just credit.
 
 [`LICENSES.md`](LICENSES.md) says exactly which files each one covers.
-[`NOTICE`](NOTICE) carries the third-party attributions — three.js, Chart.js,
-three font families, the Transit of Venus photograph, the GWOSC strain data and
-the MIST tracks, each under its own license.
+[`NOTICE`](NOTICE) carries the third-party attributions, each under its own
+license:
+- three.js, Chart.js and three font families;
+- the Transit of Venus photograph;
+- the GWOSC strain data;
+- the MIST tracks and isochrones;
+- SDSS spectra, photometry and SEGUE parameters;
+- TESS light curves from MAST;
+- a Gaia DR3 answer kept for tests;
+- the JPL Horizons (DE441) planetary states.
 
 Scenario data uses published values for real systems; sources are noted at
 [/model/](https://gravitas-sim.online/model/).

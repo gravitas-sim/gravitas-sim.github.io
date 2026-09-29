@@ -12,7 +12,7 @@ reason for every tolerance.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->286<!--/fact--> checks, about 15 seconds, and a
+That is <!--fact:physicsChecks-->286<!--/fact--> checks, about two minutes, and a
 PASS/FAIL table with measured error against stated tolerance. Add `--verbose` to print the rationale for each tolerance,
 `--json` for machine-readable output, or `--group "Conservation"` to run one
 section. Exit status is 0 only if everything passes, so it works in CI unchanged.
@@ -22,7 +22,7 @@ The same checks run as part of `npm test`
 physics regression fails a pull request rather than waiting for someone to
 remember to print the table.
 
-Everything lives in [`tools/physics-checks.mjs`](tools/physics-checks.mjs). There
+Everything lives in [`js/validation/physicsChecks.js`](js/validation/physicsChecks.js). There
 is one copy of every expected value; the command-line table and the jest suite
 are two front ends onto it.
 
@@ -860,7 +860,7 @@ Stated plainly, because a coverage claim is only useful with an edge.
 
 ## Adding or changing a check
 
-Checks live in [`tools/physics-checks.mjs`](tools/physics-checks.mjs) as records:
+Checks live in [`js/validation/physicsChecks.js`](js/validation/physicsChecks.js) as records:
 
 ```js
 add({

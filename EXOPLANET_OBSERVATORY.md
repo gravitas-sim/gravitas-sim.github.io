@@ -215,10 +215,15 @@ depth expected as the PDCSAP depth times CROWDSAP. `npm run catalog:check` and
 
 ## Budgets
 
+Measured when the suite landed (#76). The current ceilings are in
+`tools/route-budgets.json`: `/observatory/`'s have since been lowered to
+86.3 KB and 3 requests (build) and 175.3 KB and 17 (sources).
+
 - **The application:** unchanged, 818.9 of 830 KB at start-up and 4177.8 of
   4180 KB deferred. Nothing the guides need is reachable from js/main.js.
 - **`/observatory/`:** 89 KB in 3 requests from the build and 170.8 KB in 17
-  from the sources, within their ceilings (97.2 KB and 3; 189.6 KB and 19).
+  from the sources, within the ceilings of the time (97.2 KB and 3; 189.6 KB
+  and 19).
   At start-up the page carries only the guides' loader, the panel's title and
   its styles; the guides load when opened, as one lazy chunk of 113 KB, most
   of it the two languages' text.

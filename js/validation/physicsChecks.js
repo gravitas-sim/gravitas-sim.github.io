@@ -45,7 +45,7 @@
 // documented departures, not silently omitted.
 // =============================================================================
 
-import { installDomShim } from './dom-shim.mjs';
+import { installDomShim } from './domShim.js';
 
 // --- Published reference values ----------------------------------------------
 //
@@ -446,31 +446,31 @@ export async function runChecks() {
     sonifyLaw,
     sky,
   ] = await Promise.all([
-    import('../js/constants.js'),
-    import('../js/physics.js'),
-    import('../js/units.js'),
-    import('../js/orbital.js'),
-    import('../js/darkMatter.js'),
-    import('../js/habitability.js'),
-    import('../js/exoplanetObservables.js'),
-    import('../js/blackHolePhysics.js'),
-    import('../js/observerGeometry.js'),
-    import('../js/referenceFrame.js'),
-    import('../js/energyWidgets.js'),
-    import('../js/binaryWidgets.js'),
-    import('../js/transitWidgets.js'),
-    import('../js/data/trappist1.js'),
-    import('../js/data/exoplanetSystems.js'),
-    import('../js/darkMatterWidgets.js'),
-    import('../js/chaos/divergence.js'),
-    import('../js/resonance/elements.js'),
-    import('../js/resonance/systems.js'),
-    import('../js/mond.js'),
-    import('../js/binaryOrbits.js'),
-    import('../js/binaryStability.js'),
-    import('../js/gravityAssist.js'),
-    import('../js/sonify/law.js'),
-    import('../js/observingWindow.js'),
+    import('../constants.js'),
+    import('../physics.js'),
+    import('../units.js'),
+    import('../orbital.js'),
+    import('../darkMatter.js'),
+    import('../habitability.js'),
+    import('../exoplanetObservables.js'),
+    import('../blackHolePhysics.js'),
+    import('../observerGeometry.js'),
+    import('../referenceFrame.js'),
+    import('../energyWidgets.js'),
+    import('../binaryWidgets.js'),
+    import('../transitWidgets.js'),
+    import('../data/trappist1.js'),
+    import('../data/exoplanetSystems.js'),
+    import('../darkMatterWidgets.js'),
+    import('../chaos/divergence.js'),
+    import('../resonance/elements.js'),
+    import('../resonance/systems.js'),
+    import('../mond.js'),
+    import('../binaryOrbits.js'),
+    import('../binaryStability.js'),
+    import('../gravityAssist.js'),
+    import('../sonify/law.js'),
+    import('../observingWindow.js'),
   ]);
 
   const out = [];
@@ -6376,7 +6376,7 @@ function k2Percent(k) {
  * @param {Array<object>} results - From runChecks
  * @returns {Array<{group: string, checks: Array<object>}>} Grouped
  */
-export { KIND_LABEL, KIND_SHORT, KIND_ORDER } from '../js/physicsKinds.js';
+export { KIND_LABEL, KIND_SHORT, KIND_ORDER } from '../physicsKinds.js';
 
 export function groupResults(results) {
   const order = [];

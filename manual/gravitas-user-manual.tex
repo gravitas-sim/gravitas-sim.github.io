@@ -392,7 +392,7 @@ to.
 \input{investigations.tex}
 
 % =============================================================================
-\section{Running a controlled experiment}
+\section{Running a controlled experiment}\label{sec:experiment}
 
 The \ui{A/B Bench}, in \ui{Tools}, is for the question a sandbox cannot
 otherwise answer: \emph{what does changing this one thing actually do?}
@@ -519,6 +519,64 @@ file, so a mistranslation can change what a student reads but never what the
 simulation measures or what counts as a correct answer.
 
 % =============================================================================
+\section{Beyond the simulation}
+
+The simulation is one page of several. Each of the pages below has its own
+address on the site, works in English and Spanish, and keeps what it makes in
+the browser or in a file you download; none of them needs an account.
+
+\subsection{The Observatory}
+
+\texttt{/observatory/} works with real observations rather than simulated
+worlds. Its data come in packs that are pinned to a source and checksummed,
+with the record of where each came from. The page measures them, fits models
+to them with uncertainties, and keeps the evidence in a notebook. Two guided
+suites use it: finding exoplanets in TESS light curves, and reading a star
+cluster's stellar populations. An optional panel imports one star's Gaia
+measurements live from the CDS archive; no guided suite depends on it.
+
+\subsection{The experiment runner}
+
+\texttt{/experiments/} runs the bench's question at scale. It varies one or two
+settings over a range, runs every value with several seeds, each trial in a
+background worker of its own, and reports what changed. The result comes with a
+manifest precise enough to run the whole experiment again. The A/B bench inside
+the simulation (Section~\ref{sec:experiment}) is unchanged: it still compares
+two runs of the live world.
+
+\subsection{The catalog}
+
+\texttt{/catalog/} lists what Gravitas offers beyond its investigations: data,
+courses and instruments, each reviewed before it was listed. A data pack or a
+course installed from it works offline on that device. It is not an app store:
+nothing in it runs code that was not reviewed and built into Gravitas, and
+nothing is fetched from anywhere but the site.
+
+\subsection{The figure builder}
+
+\texttt{/figure/} makes an interactive figure for somebody else's page --- a
+course page, an article, a slide. Bring a state from the \ui{Share} dialog, or
+pick a scenario and a seed, choose how the figure opens and looks, check it in
+the preview, and copy the markup.
+
+\subsection{The Studio}
+
+The Studio makes new material as data, never as code:
+\begin{description}[style=nextline,leftmargin=1em]
+  \item[\texttt{/studio/}, the Scenario Studio] a scenario: its settings, its
+  bodies, the seed that makes it the same world every time, the instruments
+  it opens with, and its title and summary in both languages. It writes a
+  scenario file and a link the simulation opens.
+  \item[\texttt{/studio/lesson/}, the Investigation Composer] a guided
+  investigation: what students read, predict, explore, measure and answer,
+  and what they see after a wrong answer. It is checked by the same rules
+  every built-in investigation passes, and previews in the real lesson engine.
+  \item[\texttt{/studio/course/}, the course-pack builder] a course: lessons,
+  assignments, simulations, data and readings, in order and in units. Students
+  open the course at \texttt{/course/}.
+\end{description}
+
+% =============================================================================
 \section{For instructors}
 
 Instructor guides and answer keys for all \GravInvestigations{} investigations,
@@ -534,6 +592,18 @@ the browser. That is real protection against casual discovery and against a
 student who finds the URL. It is not protection against a determined attacker who
 has the ciphertext. Instructors can request the passphrase through the contact
 link on that page.
+
+\subsection{Reading what students hand in}
+
+\texttt{/instructors/submissions/} needs no passphrase. Drop in the lab reports
+students handed in --- the PDFs themselves, their JSON progress backups, or the
+token printed on a report's last page --- and it returns one table of how often
+each question was answered wrongly, hardest first. Each answer is graded in the
+language it was typed in, and a written answer is counted as unmarkable rather
+than wrong. What it reads can be downloaded as a spreadsheet or as JSON.
+Nothing leaves the browser and nothing is saved; there is no roster and no
+gradebook. It checks answers, not identity: a token made in a browser can be
+forged.
 
 \subsection{Citing Gravitas}
 

@@ -83,7 +83,7 @@ const LAYERS = [
       /^js\/lessonLocale\.js$/,
       // The period-to-pitch law. Arithmetic over two numbers handed in - no
       // AudioContext, no oscillator, no state and no clock - which is what
-      // makes it checkable from tools/physics-checks.mjs in plain Node. The
+      // makes it checkable from js/validation/physicsChecks.js in plain Node. The
       // existing sound, js/audio.js, is a feature-layer module that owns an
       // AudioContext and reads the body lists; this is deliberately not that,
       // and keeping the law down here is what stops it acquiring either.

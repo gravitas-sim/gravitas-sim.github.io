@@ -36,7 +36,7 @@
 // The scenarios, the published parameters they were built from, and the
 // measurements that justify every number quoted below are in
 // js/resonance/systems.js and the "Orbital resonance" group of
-// tools/physics-checks.mjs.
+// js/validation/physicsChecks.js.
 // =============================================================================
 
 /**

@@ -22,6 +22,7 @@ import {
 } from '../shareState.js';
 import {
   ASSIGNMENT_SCHEMA,
+  assignmentVersion,
   ASSIGNMENT_TAG,
   validateAssignment,
 } from './assignment.js';
@@ -41,7 +42,7 @@ export const isAssignmentFragment = hash =>
 export async function assignmentLink(assignment, base) {
   const fragment = await encodeTagged(
     ASSIGNMENT_TAG,
-    ASSIGNMENT_SCHEMA,
+    assignmentVersion(assignment),
     assignment
   );
   // A clean base, deliberately. shareUrl() defaults to the current address
