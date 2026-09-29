@@ -8,6 +8,10 @@
 //                    {type: 'run', id, system, options}
 //                    {type: 'cancel', id}
 //                    {type: 'trial', manifest, trial}  (the scheduler's)
+//                    {type: 'reference', id, problem, integrator?}
+//                    -> {type: 'result', id, result, checks}
+//                    {type: 'bench', bodies: [n...], ms}
+//                    -> {type: 'bench', results: {'scheme/n': steps per s}}
 //   worker -> page   {type: 'hello', api}
 //                    {type: 'progress', id, fraction}
 //                    {type: 'result', id, result}
@@ -20,11 +24,132 @@
 // =============================================================================
 
 import { LAB3D_API } from './api.js';
-import { createRun, runProblems } from './engine.js';
+import { createRun, runProblems, runToEnd } from './engine.js';
+import { REFERENCES, passes } from './references.js';
+import { EVALS_PER_STEP, makeState, run } from './kernel.js';
+import { fromElements } from './elements.js';
 import { migrateSystem } from './state.js';
 import { trialOptions, trialResult, trialSystem } from './experiment.js';
 
 const runs = new Map();
+
+/** At most `max` samples, evenly spread, the first and last kept: for plotting. */
+function thin(samples, max = 1500) {
+  if (samples.length <= max) return samples;
+  const out = [];
+  for (let k = 0; k < max; k++)
+    out.push(samples[Math.round((k * (samples.length - 1)) / (max - 1))]);
+  return out;
+}
+
+/**
+ * One reference problem (./references.js), made, run and checked in this
+ * realm, with the checks' extra runs too: the page never integrates.
+ */
+async function reference({ id, problem, integrator }, post) {
+  const ref = REFERENCES.find(r => r.id === problem);
+  if (!ref)
+    return post({
+      type: 'refused',
+      id,
+      problems: [{ path: 'problem', code: 'problem' }],
+    });
+  try {
+    const made = ref.make();
+    const system = integrator ? { ...made.system, integrator } : made.system;
+    const options = {
+      ...made.options,
+      limits: { maxSamples: 30000, maxEvals: 1e9 },
+    };
+    const problems = runProblems(system, options);
+    if (problems.length) return post({ type: 'refused', id, problems });
+    const r = createRun(system, options);
+    runs.set(id, r);
+    let last = -1;
+    while (!r.advance(30)) {
+      if (r.fraction - last >= 0.02) {
+        last = r.fraction;
+        post({ type: 'progress', id, fraction: r.fraction });
+      }
+      await tick();
+    }
+    runs.delete(id);
+    const result = r.result();
+    const checks =
+      result.status === 'ok'
+        ? ref
+            .check(result, made.context, (sys, opt) =>
+              runToEnd(integrator ? { ...sys, integrator } : sys, {
+                ...opt,
+                limits: options.limits,
+              })
+            )
+            .map(c => ({ ...c, ok: passes(c) }))
+        : [];
+    post({
+      type: 'result',
+      id,
+      result: {
+        ...result,
+        samples: thin(result.samples).map(({ v: _v, ...rest }) => rest),
+      },
+      checks,
+      system: {
+        bodies: system.bodies.map(b => b.id),
+        integrator: system.integrator,
+      },
+    });
+  } catch (err) {
+    runs.delete(id);
+    post({
+      type: 'error',
+      id,
+      message: String(err?.message || err).slice(0, 500),
+    });
+  }
+}
+
+/**
+ * Steps a second for each fixed scheme and body count, in this realm: a
+ * star and n - 1 planets on inclined orbits, run for about `ms` each.
+ */
+export function bench(
+  bodies = [3, 10, 50],
+  ms = 400,
+  now = () => performance.now()
+) {
+  const results = {};
+  for (const n of bodies) {
+    const list = [{ m: 1, x: [0, 0, 0], v: [0, 0, 0] }];
+    for (let i = 1; i < n; i++) {
+      const r = fromElements(
+        {
+          a: 1 + 0.7 * i,
+          e: 0.02 * (i % 5),
+          i: 0.02 * i,
+          Omega: 0.7 * i,
+          omega: 1.3 * i,
+          M: 0.9 * i,
+        },
+        1
+      );
+      list.push({ m: 1e-5, x: r.x, v: r.v });
+    }
+    for (const scheme of Object.keys(EVALS_PER_STEP)) {
+      const s = makeState(list);
+      // Warm the compiler first: the first few thousand steps are slower.
+      run(s, scheme, 0.01, 2000);
+      let steps = 0;
+      const t0 = now();
+      while (now() - t0 < ms) {
+        run(s, scheme, 0.01, 50);
+        steps += 50;
+      }
+      results[`${scheme}/${n}`] = Math.round((steps / (now() - t0)) * 1000);
+    }
+  }
+  return results;
+}
 
 /**
  * One trial of a 3-D experiment (./experiment.js), for the scheduler: it
@@ -65,6 +190,9 @@ export async function handle(msg, post) {
   if (msg.type === 'hello') return post({ type: 'hello', api: LAB3D_API });
   if (msg.type === 'cancel') return runs.get(msg.id)?.cancel();
   if (msg.type === 'trial') return trial(msg, post);
+  if (msg.type === 'reference') return reference(msg, post);
+  if (msg.type === 'bench')
+    return post({ type: 'bench', results: bench(msg.bodies, msg.ms) });
   if (msg.type !== 'run')
     return post({
       type: 'error',

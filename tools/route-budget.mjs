@@ -88,6 +88,7 @@ export const ROUTES = [
   { id: 'catalog', url: '/catalog/', page: true },
   { id: 'studio', url: '/studio/', page: true },
   { id: 'composer', url: '/studio/lesson/', page: true },
+  { id: 'lab3d', url: '/lab3d/', page: true },
 ];
 
 const CONFIGS = {

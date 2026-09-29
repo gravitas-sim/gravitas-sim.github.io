@@ -68,6 +68,7 @@ const DOC_PAGES = [
   'catalog',
   'studio',
   'studio/lesson',
+  'lab3d',
 ];
 
 // Archival pages: copied byte for byte, and never processed.
@@ -193,12 +194,14 @@ async function buildJs() {
     // the same kind of thing: started with `new Worker(new URL(...))` from its
     // page, and carrying its own copy of the engine. So is the inference
     // core's (js/inference/inferenceWorker.js), which carries no engine at
-    // all, only the models it fits.
+    // all, only the models it fits. The 3-D kernel's realm
+    // (js/lab3d/worker.js, LAB3D.md) is the only place that kernel runs.
     entryPoints: [
       'js/physicsWorker.js',
       'js/chartWorker.js',
       'js/experiments/experimentWorker.js',
       'js/inference/inferenceWorker.js',
+      'js/lab3d/worker.js',
     ],
     bundle: true,
     minify: true,
@@ -473,6 +476,24 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'composer-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The 3-D dynamics diagnostics page (/lab3d/): its own entry. It reads the
+  // 3-D kernel's state checks and reference problems, never the kernel,
+  // which runs in its Worker (built with the others above).
+  if (existsSync('js/lab3dPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3dPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'lab3d-[hash]',
       legalComments: 'none',
     });
   }
