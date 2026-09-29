@@ -43,7 +43,7 @@ export function worldSnapshot() {
     for (const b of physics[list]) {
       out.push([
         list,
-        b.constructor.name,
+        physics.className(b),
         b.pos.x,
         b.pos.y,
         b.vel.x,
