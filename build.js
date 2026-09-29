@@ -68,6 +68,8 @@ const DOC_PAGES = [
   'catalog',
   'studio',
   'studio/lesson',
+  'studio/course',
+  'course',
 ];
 
 // Archival pages: copied byte for byte, and never processed.
@@ -473,6 +475,29 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'composer-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The course-pack builder (/studio/course/), the Studio's third page, and
+  // the course home (/course/) a student opens: an entry each, for the same
+  // reason. The builder loads the lessons a course names to pin them; the
+  // course home reads only the pack, the lesson cards and the link encoder.
+  for (const [entry, chunks] of [
+    ['js/coursePage.js', 'course-builder-[hash]'],
+    ['js/courseHome.js', 'course-home-[hash]'],
+  ]) {
+    if (!existsSync(entry)) continue;
+    await esbuild.build({
+      entryPoints: [entry],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: chunks,
       legalComments: 'none',
     });
   }

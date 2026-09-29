@@ -23,7 +23,7 @@ the SDK enforces it rather than working around it.
 | Type | Kind | What it holds | What Gravitas does with it today |
 |---|---|---|---|
 | `data-pack` | declarative | one observation: a `gravitas.observation-data-pack/1` record (`pack.json`) and its encoded series (`series.json`) | validated, tested and archived by the SDK. A maintainer turns an accepted one into a built-in pack ([DATA_PACKS.md](../DATA_PACKS.md)) |
-| `course-pack` | declarative | a `gravitas.course-pack/1` sequence (`course.json`): units of existing lessons, by id, with notes, in every declared language | validated, tested and archived. Gravitas does not read course packs at run time yet; the course-pack builder will |
+| `course-pack` | declarative | a `gravitas.course-pack/1` sequence (`course.json`): units of existing lessons, by id, with notes, in every declared language | validated, tested and archived. The course-pack builder opens one and migrates it to /2 (COURSE_PACKS.md) |
 | `scenario-pack` | declarative | a `gravitas.scenario-pack/1` scenario (`scenario.json`): settings Gravitas understands, a seed, the instruments it opens with, and bodies as an orbital system or typed states, in every declared language | validated, tested and archived. Gravitas opens one as a link: the Scenario Studio (`/studio/`) compiles it into the share link the application already reads |
 | `capability` | built-in | an instrument family: one JavaScript module and its manifest | validated and contract-tested by the SDK, then reviewed and vendored by a maintainer |
 
@@ -314,8 +314,10 @@ anything else.
   4. Move its manifest into `capabilities/`, with repository paths.
   5. Route its strings through the catalogs.
   6. Run `npm run capabilities`.
-- **A course pack** waits for the course-pack builder, which will read the
-  format as it is. Until then it is reviewed and archived.
+- **A course pack** opens in the course-pack builder (`/studio/course/`,
+  COURSE_PACKS.md), which migrates it to `gravitas.course-pack/2` with its
+  lessons unpinned until an instructor upgrades them. The catalog still
+  installs and shows /1.
 - **A scenario pack** needs no vendoring to be used: its link opens it. Making
   one a built-in scenario, listed in the gallery with a thumbnail, is a
   maintainer's edit: a preset branch in `js/scenarios.js`, its tags and
@@ -432,7 +434,9 @@ repository from shipping an extension end to end:
    together, in this repository.
 8. **A course cannot name a data pack.** `gravitas.course-pack/1` sequences
    lessons, so the pulsating-stars course names the SU Draconis pack in a
-   note's words, and nothing checks that the pack exists.
+   note's words, and nothing checks that the pack exists. The builder's
+   `gravitas.course-pack/2` can name one (COURSE_PACKS.md), but the SDK and
+   the catalog read /1 only.
 9. **A data pack cannot bring its own check.** The SDK runs `folded-depth` and
    `harmonic-period`; a pack of another kind of variable needs another check
    added to the SDK, which is a core change.
