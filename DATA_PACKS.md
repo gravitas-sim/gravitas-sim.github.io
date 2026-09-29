@@ -206,7 +206,10 @@ npm run packs:data
 ```
 
 Fetches any missing raw product into `.packs-cache/` (gitignored), checks it
-against its pin, then writes the manifest and the runtime module.
+against its pin, then writes the manifest and the runtime module. It also
+fetches the raw files of the catalog's extension packs (`node tools/catalog.mjs
+fetch`), each from the pin its `build.mjs` exports, so `packs:provenance` can
+rebuild them too.
 
 ```bash
 npm run packs:check

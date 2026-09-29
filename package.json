@@ -60,7 +60,7 @@
     "gwosc:data": "node tools/build-gwosc-events.mjs",
     "gwosc:provenance": "node tools/build-gwosc-events.mjs --check --require-sources",
     "gwosc:check": "node tools/build-gwosc-events.mjs --check --offline",
-    "packs:data": "node tools/build-data-packs.mjs",
+    "packs:data": "node tools/build-data-packs.mjs && node tools/catalog.mjs fetch",
     "packs:provenance": "node tools/build-data-packs.mjs --check --require-sources && node tools/catalog.mjs provenance",
     "analysis:validate": "node tools/analysis-validate.mjs",
     "guides:key": "node tools/exoplanet-reference.mjs",

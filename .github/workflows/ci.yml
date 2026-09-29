@@ -794,7 +794,7 @@ jobs:
             .gwosc-cache
             .packs-cache
             .ephemeris-cache
-          key: sources-${{ hashFiles('tools/build-gw-data.mjs', 'tools/build-stellar-tracks.mjs', 'tools/build-sdss-spectra.mjs', 'tools/build-gwosc-events.mjs', 'tools/build-data-packs.mjs', 'tools/build-ephemeris.mjs', 'data-packs/**', 'ephemeris-packs/**') }}
+          key: sources-${{ hashFiles('tools/build-gw-data.mjs', 'tools/build-stellar-tracks.mjs', 'tools/build-sdss-spectra.mjs', 'tools/build-gwosc-events.mjs', 'tools/build-data-packs.mjs', 'tools/build-ephemeris.mjs', 'data-packs/**', 'extensions/*/build.mjs', 'ephemeris-packs/**') }}
           restore-keys: sources-
 
       # One step per source, so an archive that is down (SDSS answered HTTP
@@ -813,7 +813,7 @@ jobs:
         run: node tools/build-gwosc-events.mjs
       - name: Fetch any source not cached (packs)
         continue-on-error: true
-        run: node tools/build-data-packs.mjs
+        run: npm run packs:data
       - name: Fetch any source not cached (ephemeris)
         continue-on-error: true
         run: node tools/build-ephemeris.mjs --fetch
