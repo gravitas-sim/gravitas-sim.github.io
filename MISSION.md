@@ -202,12 +202,12 @@ Every tolerance is fixed in the case and argued in its `why`.
 | # | Case | Kind | Measured | Value | Expected | |
 |---|---|---|---|---|---|---|
 | L1 | Lambert: Curtis, example 5.2 | textbook | solver status | ok | = ok | pass |
-| L1 | Lambert: Curtis, example 5.2 | textbook | |v1 - printed| | 5.2e-5 | 0 ± 8.7e-5 km/s | pass |
-| L1 | Lambert: Curtis, example 5.2 | textbook | |v2 - printed| | 4.3e-5 | 0 ± 8.7e-5 km/s | pass |
+| L1 | Lambert: Curtis, example 5.2 | textbook | \|v1 - printed\| | 5.2e-5 | 0 ± 8.7e-5 km/s | pass |
+| L1 | Lambert: Curtis, example 5.2 | textbook | \|v2 - printed\| | 4.3e-5 | 0 ± 8.7e-5 km/s | pass |
 | L1 | Lambert: Curtis, example 5.2 | textbook | kernel miss at r2 | 1.3e-13 | 0 ± 1.0e-9 | pass |
 | L2 | Lambert: Vallado, example 7-5 | textbook | solver status | ok | = ok | pass |
-| L2 | Lambert: Vallado, example 7-5 | textbook | |v1 - printed| | 7.4e-7 | 0 ± 2.8e-6 km/s | pass |
-| L2 | Lambert: Vallado, example 7-5 | textbook | |v2 - printed| | 7.7e-7 | 0 ± 2.8e-6 km/s | pass |
+| L2 | Lambert: Vallado, example 7-5 | textbook | \|v1 - printed\| | 7.4e-7 | 0 ± 2.8e-6 km/s | pass |
+| L2 | Lambert: Vallado, example 7-5 | textbook | \|v2 - printed\| | 7.7e-7 | 0 ± 2.8e-6 km/s | pass |
 | L2 | Lambert: Vallado, example 7-5 | textbook | kernel miss at r2 | 1.5e-13 | 0 ± 1.0e-9 | pass |
 | L3 | Lambert: both branches, an ellipse and a hyperbola | independent | retrograde status | ok | = ok | pass |
 | L3 | Lambert: both branches, an ellipse and a hyperbola | independent | retrograde h_z sign | -1 | -1 ± 0 | pass |
@@ -215,7 +215,7 @@ Every tolerance is fixed in the case and argued in its `why`.
 | L3 | Lambert: both branches, an ellipse and a hyperbola | independent | fast conic | hyperbola | = hyperbola | pass |
 | L3 | Lambert: both branches, an ellipse and a hyperbola | independent | fast kernel miss | 7.7e-15 | 0 ± 1.0e-9 | pass |
 | L4 | Lambert approaches the Hohmann ellipse near 180 degrees | analytic | 0.1 degrees: status | ok | = ok | pass |
-| L4 | Lambert approaches the Hohmann ellipse near 180 degrees | analytic | |v1| / Hohmann perihelion speed - 1 | 6.0e-8 | 0 ± 1.0e-3 | pass |
+| L4 | Lambert approaches the Hohmann ellipse near 180 degrees | analytic | \|v1\| / Hohmann perihelion speed - 1 | 6.0e-8 | 0 ± 1.0e-3 | pass |
 | L4 | Lambert approaches the Hohmann ellipse near 180 degrees | analytic | kernel miss at r2 | 3.7e-10 | 0 ± 1.0e-9 | pass |
 | L4 | Lambert approaches the Hohmann ellipse near 180 degrees | analytic | 0.01 degrees: status | antipodal | = antipodal | pass |
 | L4 | Lambert approaches the Hohmann ellipse near 180 degrees | analytic | 180 degrees: status | antipodal | = antipodal | pass |

@@ -53,12 +53,15 @@ for (const c of CASES) {
     );
 }
 
+/** A table cell: a measure's name may hold |v|, which would end the cell. */
+const cell = v => String(v).replace(/\|/g, '\\|');
+
 const table = [
   '| # | Case | Kind | Measured | Value | Expected | |',
   '|---|---|---|---|---|---|---|',
   ...rows.map(
     r =>
-      `| ${r.id} | ${r.title} | ${r.kind} | ${r.name} | ${fmt(r.value)} | ${bound(r)} | ${r.ok ? 'pass' : '**fail**'} |`
+      `| ${r.id} | ${cell(r.title)} | ${r.kind} | ${cell(r.name)} | ${cell(fmt(r.value))} | ${cell(bound(r))} | ${r.ok ? 'pass' : '**fail**'} |`
   ),
 ].join('\n');
 
