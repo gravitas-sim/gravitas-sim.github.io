@@ -247,6 +247,7 @@ These are recorded rather than built in this change:
 | `studio/lesson/index.html` | The page (its own bundle in `build.js`) |
 | `js/composerPage.js` | The page controller |
 | `js/platform/investigation.js` | The format and its rules |
+| `js/platform/checker.js` | The structural guard and text rules every Studio format shares |
 | `js/platform/questionBank.js` | Bank items and the bank file |
 | `js/platform/relations.js` | The vetted relations |
 | `js/composer/compile.js` | Pack to lesson and shadow, variants, scoring, status, estimate, module export |

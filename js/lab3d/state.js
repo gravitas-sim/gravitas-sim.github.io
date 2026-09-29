@@ -33,7 +33,7 @@
 // Pure: no DOM and no engine. The page, the Worker and the tests share it.
 // =============================================================================
 
-import { makeChecker } from '../platform/investigation.js';
+import { makeChecker } from '../platform/checker.js';
 import { fromElements, elementsProblem } from './elements.js';
 import { mulberry32 } from '../rng.js';
 

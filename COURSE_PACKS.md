@@ -136,7 +136,7 @@ The file from before the upgrade is the archive. The upgrade makes a new one.
 Checks run in two stages, as the other Studio pages' do:
 
 1. **The format** (`js/course/pack.js`). It starts with the structural guard
-   of the investigation pack (`js/platform/investigation.js makeChecker`),
+   every Studio format shares (`js/platform/checker.js makeChecker`),
    which refuses a hostile file for one reason and stops: a prototype key
    (`__proto__`, `constructor`, `prototype`), anything that is not plain data,
    a non-finite number, or a file larger or deeper than any pack needs. Then

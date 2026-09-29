@@ -516,8 +516,8 @@ function checkRelationVariants(item, itemPath, { need }) {
  * Every problem with a question-bank file.
  *
  * @param {unknown} b - A parsed bank
- * @param {object} api - What Gravitas has (see ./investigation.js makeChecker)
- * @param {Function} makeChecker - ./investigation.js's, which owns the text
+ * @param {object} api - What Gravitas has (see ./checker.js makeChecker)
+ * @param {Function} makeChecker - ./checker.js's, which owns the text
  *   rules both formats share
  * @returns {Array<{path: string, code: string, vars: object, message: string}>}
  */
