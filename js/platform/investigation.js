@@ -63,13 +63,7 @@ const UNSAFE_KEY = new Set(['__proto__', 'constructor', 'prototype']);
 const PROSE_TAG = /<\/?(strong|em|sub|sup)>/g;
 /** Anything else that looks like markup, a script URL or a link. */
 const UNSAFE = /<[a-z!/?]|javascript:|data:|vbscript:|https?:\/\/|www\./i;
-/**
- * A step id as js/investigations/progressSchema.js isValidSid takes it: a
- * public id, and not only digits. A pack's sid is imported text that the
- * lesson panel writes into attributes and selectors, so anything that could
- * end an attribute - a quote, an angle bracket, a space - is refused here
- * rather than trusted to be escaped everywhere it lands.
- */
+/** A step id as js/investigations/progressSchema.js isValidSid takes it. */
 export const isValidSid = sid =>
   typeof sid === 'string' &&
   sid.length <= 80 &&
