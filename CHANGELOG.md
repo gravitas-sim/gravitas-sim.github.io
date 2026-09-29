@@ -732,6 +732,23 @@ the release rather than in the tag.
     both land on the same step.
   - **Cost:** deferred JavaScript is 178 bytes larger, inside its 4180 KB.
     No route or request ceiling moved.
+- **A saved answer with a double quote in it broke out of its box.**
+  - **What it did:** the lesson panel wrote a saved numeric answer and a
+    saved measure field back into `value="…"` with `escape()`, which is
+    `escapeHtml()` from `js/lessonMarkup.js`. That is for element text and
+    leaves `"` alone. A student who typed a quote got back only what came
+    before it, and the rest was read as more attributes of the box. Saved
+    answers are also restored from progress backups, which accept any string,
+    so an edited backup could put an `onfocus` on the lesson page and run it.
+  - **What it does now:** both use `attr()`, which `js/investigations.js`
+    already had for its other attributes. Nothing else in `js/` writes typed
+    or imported text into an attribute that way: the other panels' own
+    escapers already escape the quote.
+  - **Tests:** `e2e/answerEntry.spec.js` types a breakout string into the
+    numeric box of Kepler's Laws, and restores one from a crafted backup into
+    a measure field. Each step is reopened from storage in a fresh page, and
+    must hold the whole string, with no attribute added and nothing run when
+    it is focused.
 - **Fifteen expected observations reached no document.**
   - **What it did:** the answer key leaves out a step that only asks students
     to read or watch, and it left that step's expectation out with it. The
