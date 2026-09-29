@@ -52,7 +52,6 @@ const text = (v, locale) => (v && (v[locale] || v.en)) || '';
 export function assignmentPayload(item, locale) {
   return {
     k: ASSIGNMENT_KIND,
-    // 2 only with a package pin (js/assignments/assignment.js assignmentVersion).
     v: item.pin?.pkg ? 2 : 1,
     i: item.assignment.id,
     l: item.lesson,
@@ -85,11 +84,13 @@ export async function itemLink(item, { root, locale = 'en' }) {
         href: `${root}#investigation=${encodeURIComponent(item.lesson)}`,
         kind: 'app',
       };
-    case 'assignment':
+    case 'assignment': {
+      const a = assignmentPayload(item, locale);
       return {
-        href: `${root}#${await encodeTagged(ASSIGNMENT_TAG, assignmentVersion(assignmentPayload(item, locale)), assignmentPayload(item, locale))}`,
+        href: `${root}#${await encodeTagged(ASSIGNMENT_TAG, assignmentVersion(a), a)}`,
         kind: 'app',
       };
+    }
     case 'scenario':
       return {
         href: `${root}#${await encodeTagged('', 1, scenarioPayload(item))}`,
