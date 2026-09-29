@@ -90,7 +90,8 @@ const MANIFEST_MIRRORED = [
 export const RULE_INDEX = {
   'id/lesson': 'Lesson ids exist, are kebab-case, and are unique',
   'id/file': 'A lesson lives in a file named after its id',
-  'id/step': 'Every step has a stable sid, unique within the lesson',
+  'id/step':
+    'Every step has a stable sid of lowercase letters, digits and hyphens, unique within the lesson',
   'id/field': 'Response field ids are unique within a step and usable as keys',
   'content/lesson': 'Title, subtitle, duration, level, summary and thumbnail',
   'content/objectives': 'Objectives exist and say something',
@@ -464,7 +465,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           'id/step',
           step.sid === undefined
             ? 'step has no sid; run `node tools/add-step-ids.mjs` to mint one'
-            : `sid ${JSON.stringify(step.sid)} is not usable as a key: it must be a non-numeric string with no colon`
+            : `sid ${JSON.stringify(step.sid)} is not usable as a key: it must be lowercase letters, digits and single hyphens, and not only digits`
         );
       } else if (sidsSeen.has(step.sid)) {
         E('id/step', `sid "${step.sid}" is already used by another step`);

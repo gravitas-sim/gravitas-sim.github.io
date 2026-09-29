@@ -66,9 +66,8 @@ const UNSAFE = /<[a-z!/?]|javascript:|data:|vbscript:|https?:\/\/|www\./i;
 /** A step id as js/investigations/progressSchema.js isValidSid takes it. */
 export const isValidSid = sid =>
   typeof sid === 'string' &&
-  sid.length > 0 &&
   sid.length <= 80 &&
-  !sid.includes(':') &&
+  PUBLIC_ID.test(sid) &&
   !/^\d+$/.test(sid);
 
 const PACK_FIELDS = new Set([
@@ -498,7 +497,7 @@ function checkStep(s, path, index, ctx) {
     isValidSid(s.sid),
     `${path}.sid`,
     'sid',
-    'a step id: up to 80 characters, no colon, not only digits'
+    'a step id: up to 80 lowercase letters, digits and single hyphens, not only digits'
   );
   const fromBank = s.type === 'question' && s.from !== undefined;
   text(s.title, `${path}.title`, true);
