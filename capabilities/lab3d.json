@@ -2,7 +2,7 @@
   "format": "gravitas.capability-package",
   "formatVersion": 1,
   "id": "gravitas.lab3d",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "built-in",
   "gravitas": "^1.0.0",
   "title": {
@@ -124,6 +124,31 @@
       "path": "js/i18n/es.lab3dLab.js",
       "role": "code",
       "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/tick.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/guidePanel.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/guides/curriculum.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.lab3dGuides.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.lab3dGuides.js",
+      "role": "code",
+      "offline": "optional"
     }
   ],
   "citations": [],
@@ -151,6 +176,12 @@
     },
     {
       "check": "e2e:e2e/lab3dView.spec.js"
+    },
+    {
+      "check": "jest:tests/lab3dGuides.test.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dGuides.spec.js"
     }
   ]
 }
