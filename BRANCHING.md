@@ -118,6 +118,14 @@ The world golden is the exception: if `e2e/golden/world-construction.json`
 conflicts, that is a signal, not a chore. Two branches changed physics. Resolve
 the physics first.
 
+## `v2` lives until the final release
+
+[`INTEGRATION.md`](INTEGRATION.md) makes `v2` the integration branch for all of
+Roadmap II, with one release at the end (Carl's decision of 2026-09-29).
+**`v2` is deleted only after that final release,** at step 7 below, never at a
+checkpoint. Checkpoints 48, 58, 81, 99 and 113 report readiness; none of them
+is a release, and none of them removes the branch.
+
 ## Rolling out
 
 When `v2` is complete and you have decided it is a release:

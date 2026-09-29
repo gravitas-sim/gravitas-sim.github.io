@@ -144,6 +144,8 @@ const DOCS = [
   // The decision register (Prompt 45): no counts, but its links to the gate
   // documents and their headings are checked with everyone else's.
   'DECISION_REGISTER.md',
+  // And the integration model (Prompt 46), whose links name the protocol files.
+  'INTEGRATION.md',
   // The paper. Typeset by pandoc, so it carries no `<!--fact:-->` markers - a
   // comment would either reach the PDF or need another tool to strip it - and
   // is matched by pattern in ATTRIBUTE_FACTS instead. It was not listed here at
