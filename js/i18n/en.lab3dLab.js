@@ -171,4 +171,13 @@ export const EN_LAB3DLAB = {
     'This browser cannot draw in 3-D here (no WebGL). The run and the tables below still work.',
   'l3.status.lost':
     'The graphics context was lost. The run and the tables go on, and the picture comes back when the browser restores it.',
+  'l3.guides': 'Guided investigations',
+  'l3.tool.sky': 'On the sky, seen from here',
+  'l3.tool.between': 'Between two orbits',
+  'l3.read.sky':
+    'Seen from here, {b} is {across} from {a} across the line of sight and {along} along it; {nearer} is nearer.',
+  'l3.read.between':
+    'The orbits of {a} and {b} are inclined to each other by {angle}.',
+  'l3.read.betweenNone':
+    'Both bodies must orbit something: the heaviest body has no orbit here.',
 };

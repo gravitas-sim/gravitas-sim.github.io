@@ -175,4 +175,13 @@ export const ES_LAB3DLAB = {
     'Este navegador no puede dibujar en 3-D aquí (no hay WebGL). La integración y las tablas de abajo siguen funcionando.',
   'l3.status.lost':
     'Se perdió el contexto gráfico. La integración y las tablas continúan, y la imagen vuelve cuando el navegador lo restaura.',
+  'l3.guides': 'Investigaciones guiadas',
+  'l3.tool.sky': 'En el cielo, visto desde aquí',
+  'l3.tool.between': 'Entre dos órbitas',
+  'l3.read.sky':
+    'Visto desde aquí, {b} está a {across} de {a} a través de la línea de visión y a {along} a lo largo de ella; {nearer} está más cerca.',
+  'l3.read.between':
+    'Las órbitas de {a} y {b} están inclinadas entre sí {angle}.',
+  'l3.read.betweenNone':
+    'Los dos cuerpos deben orbitar algo: aquí el cuerpo más pesado no tiene órbita.',
 };

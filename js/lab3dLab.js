@@ -40,11 +40,14 @@ import {
 import {
   KM_S_PER_AU_DAY,
   angleAt,
+  between,
+  onTheSky,
   elementsAbout,
   hierarchy,
   relative,
 } from './lab3d/view/instruments.js';
 import { formatNumber } from './format.js';
+import { chooseInterval } from './lab3d/view/tick.js';
 import { createScene, PALETTE } from './lab3d/view/scene.js';
 
 const $ = id => document.getElementById(id);
@@ -56,7 +59,15 @@ const MAX_FILE = 1024 * 1024;
 const BASE_RATE = 60; // intervals a second at x1
 const SPEEDS = [0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256];
 const PRESETS = ['oblique', 'top', 'side', 'faceOn', 'edgeOn'];
-const TOOLS = ['none', 'distance', 'angle', 'elements', 'relative'];
+const TOOLS = [
+  'none',
+  'distance',
+  'angle',
+  'elements',
+  'relative',
+  'sky',
+  'between',
+];
 const SIZES = ['marker', 'radius10', 'radius'];
 const reducedQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)');
 
@@ -83,6 +94,8 @@ const state = {
   lastLegend: 0,
   firstFrame: false,
   fileSystem: null,
+  extras: new Map(), // id -> {id, make, label}: systems a guide brings
+  listeners: new Set(), // the guide panel's, told when anything changes
 };
 
 // --- Small helpers ----------------------------------------------------------------
@@ -139,42 +152,15 @@ function reference(id) {
   return { system: made.system, options: made.options };
 }
 
-/**
- * The lab's tick: a 400th of the shortest bound orbit at the start, or a
- * hundredth of the closest pair's crossing time when nothing is bound.
- */
-function chooseInterval(system) {
-  const n = system.bodies.length;
-  const f = {
-    m: Float64Array.from(system.bodies.map(b => b.m)),
-    x: Float64Array.from(system.bodies.flatMap(b => b.x)),
-    v: Float64Array.from(system.bodies.flatMap(b => b.v)),
-    alive: new Uint8Array(n).fill(1),
-  };
-  const g = gravityOf(system);
-  const h = hierarchy(f);
-  let best = Infinity;
-  for (let i = 0; i < n; i++) {
-    const p = h.primary[i];
-    if (p < 0) continue;
-    const el = elementsAbout(f, i, p, g);
-    if (el?.bound) best = Math.min(best, el.period / 400);
-    else {
-      const r = relative(f, p, i);
-      if (r.speed > 0) best = Math.min(best, r.distance / r.speed / 100);
-    }
-  }
-  return Number.isFinite(best) && best > 0 ? best : 0.01;
-}
-
 function systemItems() {
   return [
     ...REFERENCES.map(r => [r.id, t(`l3.ref.${r.id}`)]),
+    ...[...state.extras.values()].map(x => [x.id, x.label()]),
     ['file', t('l3.system.file')],
   ];
 }
 
-async function open(choice) {
+async function open(choice, { interval } = {}) {
   state.choice = choice;
   $('l3-file-row').hidden = choice !== 'file';
   let system;
@@ -182,6 +168,9 @@ async function open(choice) {
   if (choice === 'file') {
     if (!state.fileSystem) return notice(t('l3.status.chooseFile'), true);
     system = state.fileSystem;
+  } else if (state.extras.has(choice)) {
+    // A system a guide brought (js/lab3d/guides/), made from its numbers.
+    system = state.extras.get(choice).make();
   } else ({ system, options } = reference(choice));
   const checked = validateSystem(system);
   if (checked.length)
@@ -191,12 +180,14 @@ async function open(choice) {
       'error'
     );
   await start(system, {
+    interval,
     closeWithin: options.closeWithin,
     escapeBeyond: options.escapeBeyond,
     crossings: options.crossings,
   });
   const url = new URL(location.href);
-  if (choice === 'file') url.searchParams.delete('system');
+  if (choice === 'file' || state.extras.has(choice))
+    url.searchParams.delete('system');
   else url.searchParams.set('system', choice);
   history.replaceState(null, '', url);
 }
@@ -204,7 +195,8 @@ async function open(choice) {
 async function start(system, extra = {}) {
   state.session?.stop();
   state.system = system;
-  state.interval = chooseInterval(system);
+  // A guide may play a system at its own tick (js/lab3d/guides/).
+  state.interval = extra.interval || chooseInterval(system);
   state.snaps = [];
   state.pendingTrail = [];
   state.trailTimes = [];
@@ -212,7 +204,7 @@ async function start(system, extra = {}) {
   $('l3-events').replaceChildren();
   state.follow = -1;
   state.colors = system.bodies.map((_, i) => PALETTE[i % PALETTE.length]);
-  state.options = { interval: state.interval, ...extra };
+  state.options = { ...extra, interval: state.interval };
   const session = createLiveSession({ spawn }, system, state.options);
   state.session = session;
   status(t('l3.status.starting'));
@@ -263,8 +255,34 @@ function accept(snap) {
   for (const e of snap.events) addEvent(e);
   for (const w of snap.warnings) addEvent({ kind: 'warning', ...w });
   if (snap.status) {
+    // A session that ran its full length with every body still there goes
+    // on by itself, from its own numbers, in the same slots: a Kozai cycle
+    // is many sessions long. After a merger the slots change, so the reader
+    // is asked instead (play() below).
+    if (snap.status === 'ok' && snap.alive.every(Boolean)) {
+      continueSession(snap);
+      return;
+    }
     play(false);
     addEvent({ kind: 'stopped', status: snap.status, t: snap.t });
+  }
+}
+
+/** Go on from a finished session's last snapshot, keeping everything else. */
+async function continueSession(last) {
+  const next = restartFrom(state.system, last);
+  state.session?.stop();
+  state.system = next;
+  const session = createLiveSession({ spawn }, next, state.options);
+  state.session = session;
+  try {
+    const { snapshot } = await session.ready;
+    if (session !== state.session) return;
+    accept(snapshot);
+    addEvent({ kind: 'continued', t: last.t });
+  } catch (err) {
+    if (session !== state.session) return;
+    notice(t('l3.status.failed', { why: err.message }), false, 'error');
   }
 }
 
@@ -450,6 +468,7 @@ function frame(now) {
     legend();
     clock();
     reading(numbersFrame());
+    tell();
   }
   if (state.playing && $('l3-live').checked && now - state.lastTables > 1000) {
     state.lastTables = now;
@@ -627,6 +646,7 @@ function syncTool() {
   $('l3-tool-bodies').hidden = tool === 'none';
   $('l3-v-row').hidden = tool !== 'angle';
   $('l3-b-row').hidden = tool === 'elements' || tool === 'none';
+  // On the sky: body b as seen from the view's direction, against body a.
   $('l3-a-label').textContent = t(
     tool === 'angle' ? 'l3.tool.from' : 'l3.tool.a'
   );
@@ -641,7 +661,11 @@ function instrumentShape(f, d) {
   const v = Number($('l3-v').value);
   const at = i => [0, 1, 2].map(k => d.x[3 * i + k]);
   const live = (...ids) => ids.every(i => f.alive[i]);
-  if ((tool === 'distance' || tool === 'relative') && a !== b && live(a, b))
+  if (
+    (tool === 'distance' || tool === 'relative' || tool === 'sky') &&
+    a !== b &&
+    live(a, b)
+  )
     return { distance: [at(a), at(b)], angle: null };
   if (tool === 'angle' && a !== v && b !== v && live(a, v, b))
     return { distance: null, angle: [at(a), at(v), at(b)] };
@@ -694,8 +718,33 @@ function reading(f) {
           })
         : '';
     }
+  } else if (tool === 'sky' && a !== b) {
+    const r = onTheSky(f, a, b, viewDirection());
+    text = t('l3.read.sky', {
+      a: nameOf(a),
+      b: nameOf(b),
+      across: length(r.across),
+      along: length(Math.abs(r.along)),
+      nearer: nameOf(r.nearer),
+    });
+  } else if (tool === 'between' && a !== b) {
+    const r = between(f, a, b, G());
+    text = r
+      ? t('l3.read.between', {
+          a: nameOf(a),
+          b: nameOf(b),
+          angle: deg(r.angle),
+        })
+      : t('l3.read.betweenNone');
   } else if (tool !== 'none') text = t('l3.read.pick');
   if (out.textContent !== text) out.textContent = text;
+}
+
+/** From the scene toward the viewer: the line of sight the sky reading uses. */
+function viewDirection() {
+  const cam = state.scene ? state.scene.readCamera() : state.camera;
+  if (!cam) return [0, 0, 1];
+  return cam.eye.map((q, k) => q - cam.target[k]);
 }
 
 // --- The legend, the clock and the tables ------------------------------------------
@@ -953,6 +1002,93 @@ function notice(text, keepRunning = true, kind = 'info') {
   if (!keepRunning) play(false);
 }
 
+// --- What a guide may read and do ---------------------------------------------------
+//
+// The guide panel (js/lab3d/view/guidePanel.js) is loaded only when a guide
+// is opened, and drives the lab through this: it opens systems, sets the
+// controls a reader would, and reads the page's own state and numbers. It
+// never reaches the kernel or the scene.
+
+function tell() {
+  for (const fn of state.listeners) fn();
+}
+
+const CONTROLS = {
+  preset: 'l3-preset',
+  frame: 'l3-frame',
+  projection: 'l3-projection',
+  follow: 'l3-follow',
+  size: 'l3-size',
+  tool: 'l3-tool',
+  a: 'l3-a',
+  b: 'l3-b',
+  v: 'l3-v',
+  speed: 'l3-speed',
+};
+
+const labApi = Object.freeze({
+  /** Systems a guide brings: [{id, make: () => system, label: () => text}]. */
+  addSystems(list) {
+    for (const x of list) state.extras.set(x.id, x);
+    fillSelect($('l3-system'), systemItems(), state.choice);
+  },
+  async open(id, options) {
+    $('l3-system').value = id;
+    await open(id, options);
+    tell();
+  },
+  /** Set a control as a reader would, by its name in CONTROLS. */
+  set(name, value) {
+    const el = $(CONTROLS[name]);
+    if (!el) return;
+    el.value = String(value);
+    el.dispatchEvent(new Event('change'));
+    tell();
+  },
+  play: on => play(on),
+  /** The page's choices now, as plain values. */
+  read: () => ({
+    system: state.choice,
+    ids: state.system ? state.system.bodies.map(b => b.id) : [],
+    ...Object.fromEntries(
+      Object.entries(CONTROLS).map(([k, id]) => [k, $(id).value])
+    ),
+    playing: state.playing,
+    tau: state.tau,
+    t0: state.t0 ?? 0,
+  }),
+  /** The newest snapshot at or before the clock, copied: what the tables show. */
+  exact() {
+    const f = numbersFrame();
+    return (
+      f && {
+        t: f.t,
+        m: Float64Array.from(f.m),
+        x: Float64Array.from(f.x),
+        v: Float64Array.from(f.v),
+        alive: Uint8Array.from(f.alive),
+      }
+    );
+  },
+  G: () => G(),
+  events: () => state.events.slice(),
+  language: () => language(),
+  onChange(fn) {
+    state.listeners.add(fn);
+    return () => state.listeners.delete(fn);
+  },
+});
+
+let guidePanel = null;
+/** Open the guide panel, loading it the first time. */
+async function openGuides(options = {}) {
+  if (!guidePanel) {
+    const m = await import('./lab3d/view/guidePanel.js');
+    guidePanel = m.createGuidePanel($('l3-guide'), labApi);
+  }
+  await guidePanel.show(options);
+}
+
 // --- Setup ---------------------------------------------------------------------------
 
 function setupScene() {
@@ -1051,6 +1187,7 @@ function retranslate() {
   }
   $('l3-play').textContent = t(state.playing ? 'l3.pause' : 'l3.play');
   updateTables(true);
+  tell();
 }
 
 function init() {
@@ -1123,6 +1260,7 @@ function init() {
   );
   $('l3-refresh').addEventListener('click', () => updateTables(true));
   $('l3-canvas').addEventListener('keydown', keyboard);
+  $('l3-guides').addEventListener('click', () => openGuides());
 
   // For the browser tests: what the page believes, read-only.
   window.gravitasLab3d = Object.freeze({
@@ -1157,7 +1295,11 @@ function init() {
   });
 
   requestAnimationFrame(frame);
-  open(state.choice);
+  const params = new URL(location.href).searchParams;
+  const guide = params.get('guide');
+  // A guide opens its own system, so the page does not open one first.
+  if (guide) openGuides({ id: guide, path: params.get('path') });
+  else open(state.choice);
 }
 
 init();

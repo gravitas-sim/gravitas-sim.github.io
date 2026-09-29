@@ -197,6 +197,63 @@
         margin: 0;
         padding-left: 1.1rem;
       }
+      .l3-guide {
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin: 0 0 1rem;
+        display: grid;
+        gap: 0.6rem;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 64rem) {
+        .l3-guide {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 16rem);
+        }
+      }
+      .l3-guide h2,
+      .l3-guide h3 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+      .l3-guide ol {
+        margin: 0;
+        padding-left: 1.2rem;
+      }
+      .l3-guide .l3-steplink {
+        font: inherit;
+        font-size: 0.88rem;
+        color: inherit;
+        background: none;
+        border: 0;
+        padding: 0.1rem 0;
+        text-align: left;
+        cursor: pointer;
+        text-decoration: underline;
+        text-decoration-color: rgba(255, 255, 255, 0.3);
+        text-underline-offset: 3px;
+      }
+      .l3-guide [aria-current='step'] .l3-steplink {
+        font-weight: 600;
+        text-decoration-color: var(--accent);
+      }
+      .l3-guide .l3-step-state {
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .l3-guide [data-status='passed']::marker {
+        color: #90be6d;
+      }
+      .l3-guide input[type='text'] {
+        font: inherit;
+        color: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.3rem 0.4rem;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
       .l3-keys {
         font-size: 0.85rem;
         color: #b7bfcf;
@@ -219,6 +276,10 @@
         <a href="/lab3d/" data-i18n="l3.diagnostics">The kernel's diagnostics</a> ·
         <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/LAB3D.md" data-i18n="l3.docs">How it works (LAB3D.md)</a>
       </p>
+      <p>
+        <button id="l3-guides" type="button" class="ui-button" data-i18n="l3.guides">Guided investigations</button>
+      </p>
+      <section class="l3-guide" id="l3-guide" aria-labelledby="l3-guide-h" hidden></section>
 
       <div class="l3-top">
         <div>
