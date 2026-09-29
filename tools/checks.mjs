@@ -409,8 +409,7 @@ export const CHECKS = [
     label: 'the SDK example extensions validate and pass their tests',
     command: ['npm', 'run', 'sdk:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'correctness',
   },
   {
@@ -434,8 +433,7 @@ export const CHECKS = [
     label: 'start-up bundle composition',
     command: ['npm', 'run', 'budget:composition', '--', '--check'],
     tier: 'slow',
-    ci: null,
-    why: 'needs an esbuild pass; the gate has one already',
+    ci: 'build',
     group: 'correctness',
   },
   {
@@ -604,8 +602,7 @@ export const CHECKS = [
     label: 'activity formats and their step lists',
     command: ['npm', 'run', 'activities:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'generated',
   },
   {
@@ -613,8 +610,7 @@ export const CHECKS = [
     label: 'lesson cards',
     command: ['npm', 'run', 'cards:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'generated',
   },
   // The scene catalog and the record beside it are generated from the lesson
@@ -626,8 +622,7 @@ export const CHECKS = [
     label: 'the lesson scene catalog and acceptance map',
     command: ['npm', 'run', 'audit:scene:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'generated',
   },
   // The list of engine operations that destroy information is scanned out of
@@ -639,8 +634,7 @@ export const CHECKS = [
     label: 'the audit of operations that destroy information',
     command: ['npm', 'run', 'audit:irreversible:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'generated',
   },
   // The counts that cost a test run to measure: how many jest tests there are,
@@ -681,8 +675,7 @@ export const CHECKS = [
     label: 'GW150914 data is complete and self-consistent',
     command: ['npm', 'run', 'gw:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'science',
   },
   {
@@ -690,8 +683,7 @@ export const CHECKS = [
     label: 'MIST tracks are complete and self-consistent',
     command: ['npm', 'run', 'stellar:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'science',
   },
   {
@@ -699,8 +691,7 @@ export const CHECKS = [
     label: 'the four SDSS spectra are complete and self-consistent',
     command: ['npm', 'run', 'spectra:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'science',
   },
   {
@@ -708,8 +699,7 @@ export const CHECKS = [
     label: 'the five GWOSC events are complete and self-consistent',
     command: ['npm', 'run', 'gwosc:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'science',
   },
   {
@@ -717,8 +707,7 @@ export const CHECKS = [
     label: 'the observation data packs are valid, decode and pass their checks',
     command: ['npm', 'run', 'packs:check'],
     tier: 'quick',
-    ci: null,
-    why: 'added after the workflow was written; runs in seconds',
+    ci: 'checks',
     group: 'science',
   },
   {
@@ -727,7 +716,7 @@ export const CHECKS = [
     label: 'GW150914 regenerates from the published traces',
     command: ['npm', 'run', 'gw:provenance'],
     tier: 'provenance',
-    ci: null,
+    ci: 'provenance',
     why: 'needs the GWOSC sources cached; see --provenance',
     group: 'science',
   },
@@ -737,7 +726,7 @@ export const CHECKS = [
     label: 'MIST tracks regenerate from the published grid',
     command: ['npm', 'run', 'stellar:provenance'],
     tier: 'provenance',
-    ci: null,
+    ci: 'provenance',
     why: 'needs the 100 MB MIST grid cached; see --provenance',
     group: 'science',
   },
@@ -748,7 +737,7 @@ export const CHECKS = [
     label: 'the five GWOSC events regenerate from the cached strain',
     command: ['npm', 'run', 'gwosc:provenance'],
     tier: 'provenance',
-    ci: null,
+    ci: 'provenance',
     why: 'needs the GWOSC strain cached; see --provenance',
     group: 'science',
   },
@@ -758,7 +747,7 @@ export const CHECKS = [
     label: 'the four SDSS spectra regenerate from the archive CSVs',
     command: ['npm', 'run', 'spectra:provenance'],
     tier: 'provenance',
-    ci: null,
+    ci: 'provenance',
     why: 'needs the SDSS CSVs cached; see --provenance',
     group: 'science',
   },
@@ -768,7 +757,7 @@ export const CHECKS = [
     label: 'the ephemeris pack rebuilds from its pinned Horizons answers',
     command: ['npm', 'run', 'ephemeris:provenance'],
     tier: 'provenance',
-    ci: null,
+    ci: 'provenance',
     why: 'needs the Horizons answers cached; see --provenance',
     group: 'science',
   },
@@ -778,7 +767,7 @@ export const CHECKS = [
     label: 'the observation data packs rebuild from their pinned raw products',
     command: ['npm', 'run', 'packs:provenance'],
     tier: 'provenance',
-    ci: null,
+    ci: 'provenance',
     why: 'needs the raw products cached; see --provenance',
     group: 'science',
   },
@@ -828,6 +817,17 @@ export const CI_SETUP_STEPS = [
   'Deploy',
   'Say what went live',
   'Say why nothing went live',
+  // The scheduled jobs' plumbing: fetching the pinned sources into their
+  // caches, proving the fetch rewrote nothing committed, and recording and
+  // offering the e2e timings. The checks they serve are the provenance
+  // entries above and tools/e2e-shards.mjs's own tests.
+  'Fetch any source not cached',
+  'Nothing committed was rewritten by the fetch',
+  'Record the timings',
+  'Offer them if they changed',
+  // tools/observatory-budgets.json: "a manual instrument, not a registry
+  // check". CI runs it on the schedule, report-only.
+  'Measure, and compare with the budgets',
 ];
 
 /** And the commands that are setup wherever they appear. */

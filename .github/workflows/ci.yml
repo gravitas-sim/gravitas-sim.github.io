@@ -100,7 +100,16 @@ on:
     # Monday morning, UTC. Catches an engine or dependency change that landed
     # while nobody was pushing.
     - cron: '0 6 * * 1'
+    # The first of the month: the datasets against their pinned sources (the
+    # `provenance` job), which is otherwise asked only before a release.
+    - cron: '0 5 1 * *'
   workflow_dispatch:
+    inputs:
+      scheduled:
+        description: Also run a scheduled job (a dry run of it)
+        type: choice
+        options: [none, provenance, timings, observatory]
+        default: none
 
 # A second push to the same branch makes the first one irrelevant. Never cancel
 # a run on main, though: those are the ones whose result gets referenced later.
@@ -232,6 +241,27 @@ jobs:
       # written for people evaluating whether to adopt this.
       - name: Teaching demonstration links are current
         run: npm run teaching:check
+
+      # Quick checks that ran only in `release:check`, each for the same
+      # stated reason - it was added after this job was written. They run in
+      # seconds, so a pull request now finds what only the gate found before.
+      - name: Extensions validate against the SDK
+        run: npm run sdk:check
+      - name: Classroom activities are current
+        run: npm run activities:check
+      - name: Lesson cards are current
+        run: npm run cards:check
+      - name: The lesson scene catalog and acceptance map
+        run: npm run audit:scene:check
+      - name: The irreversible-operations audit is current
+        run: npm run audit:irreversible:check
+      - name: Dataset structure (GW, stellar tracks, spectra, GWOSC, packs)
+        run: |
+          npm run gw:check
+          npm run stellar:check
+          npm run spectra:check
+          npm run gwosc:check
+          npm run packs:check
 
       # Import cycles and layer violations. The graph had eleven cycles before
       # the state was pulled out of ui.js and every one of them ran through a
@@ -370,6 +400,10 @@ jobs:
       - name: Bundle budget
         run: npm run budget
 
+      # Which modules the budget is spent on, against its committed record.
+      - name: Bundle composition
+        run: npm run budget:composition -- --check
+
       - name: Check the built site's internal links
         run: node tools/check-links.mjs --root dist
 
@@ -448,28 +482,10 @@ jobs:
       # Playwright's browsers are ~400MB and unpack slowly, so they are cached
       # separately from npm and keyed on the pinned version: a browser build and
       # the client that drives it have to match.
-      - name: Resolve the Playwright version
-        id: pw
-        run: |
-          version=$(node -p "require('./package.json').devDependencies['@playwright/test']")
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Cache browsers
-        uses: actions/cache@v6
-        id: browsers
+      - name: Playwright browsers
+        uses: ./.github/actions/playwright-browsers
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-chromium
-
-      - name: Install Chromium
-        if: steps.browsers.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      # The system libraries the browser links against are not in the cache, so
-      # they are installed even on a hit. This is a few seconds.
-      - name: Install browser dependencies
-        if: steps.browsers.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
+          browser: chromium
 
       - name: Plan this shard
         run: node tools/e2e-shards.mjs plan --of ${{ strategy.job-total }} --shard ${{ matrix.shard }} --out shard-tests.txt
@@ -612,28 +628,10 @@ jobs:
       # Playwright's browsers are ~400MB and unpack slowly, so they are cached
       # separately from npm and keyed on the pinned version: a browser build and
       # the client that drives it have to match.
-      - name: Resolve the Playwright version
-        id: pw
-        run: |
-          version=$(node -p "require('./package.json').devDependencies['@playwright/test']")
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Cache browsers
-        uses: actions/cache@v6
-        id: browsers
+      - name: Playwright browsers
+        uses: ./.github/actions/playwright-browsers
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-chromium
-
-      - name: Install Chromium
-        if: steps.browsers.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      # The system libraries the browser links against are not in the cache, so
-      # they are installed even on a hit. This is a few seconds.
-      - name: Install browser dependencies
-        if: steps.browsers.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
+          browser: chromium
 
       - name: axe-core over every surface, both languages, both themes
         run: npm run a11y:axe
@@ -678,26 +676,10 @@ jobs:
           name: dist
           path: dist
 
-      - name: Resolve the Playwright version
-        id: pw
-        run: |
-          version=$(node -p "require('./package.json').devDependencies['@playwright/test']")
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Cache browsers
-        uses: actions/cache@v6
-        id: browsers
+      - name: Playwright browsers
+        uses: ./.github/actions/playwright-browsers
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-chromium
-
-      - name: Install Chromium
-        if: steps.browsers.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      - name: Install browser dependencies
-        if: steps.browsers.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
+          browser: chromium
 
       # What a fresh visitor downloads, route by route, against
       # tools/route-budgets.json: the sources this job checked out, which are
@@ -749,28 +731,10 @@ jobs:
 
       - run: npm ci
 
-      - name: Resolve the Playwright version
-        id: pw
-        run: |
-          version=$(node -p "require('./package.json').devDependencies['@playwright/test']")
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Cache browsers
-        uses: actions/cache@v6
-        id: browsers
+      - name: Playwright browsers
+        uses: ./.github/actions/playwright-browsers
         with:
-          path: ~/.cache/ms-playwright
-          key: >-
-            playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-${{
-            matrix.browser }}
-
-      - name: Install ${{ matrix.browser }}
-        if: steps.browsers.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps ${{ matrix.browser }}
-
-      - name: Install browser dependencies
-        if: steps.browsers.outputs.cache-hit == 'true'
-        run: npx playwright install-deps ${{ matrix.browser }}
+          browser: ${{ matrix.browser }}
 
       # The @cross-browser profile, not the full suite. One worker for both
       # engines: a GitHub runner has two cores, and a second WebKit worker
@@ -792,6 +756,158 @@ jobs:
             test-results
           retention-days: 7
           if-no-files-found: ignore
+
+  # The scheduled jobs. None is required by the `ci` job below: a source that
+  # has moved or a slower machine is news for the maintainers, not a failure
+  # of whoever pushed on the first of the month. Each can be dry-run from
+  # workflow_dispatch with the `scheduled` input.
+
+  # Every dataset against the source it was built from. The builders fetch
+  # into their caches (kept between runs) when the cache is missing, and the
+  # provenance checks then rebuild from the cache and compare with what is
+  # committed. A difference is a source that changed or a builder that drifted.
+  provenance:
+    name: Datasets against their pinned sources
+    if: ${{ github.event.schedule == '0 5 1 * *' || inputs.scheduled == 'provenance' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Cache the pinned sources
+        uses: actions/cache@v6
+        with:
+          path: |
+            .gw-cache
+            .mist-cache
+            .sdss-cache
+            .gwosc-cache
+            .packs-cache
+            .ephemeris-cache
+          key: sources-${{ hashFiles('tools/build-gw-data.mjs', 'tools/build-stellar-tracks.mjs', 'tools/build-sdss-spectra.mjs', 'tools/build-gwosc-events.mjs', 'tools/build-data-packs.mjs', 'tools/build-ephemeris.mjs', 'data-packs/**', 'ephemeris-packs/**') }}
+          restore-keys: sources-
+
+      - name: Fetch any source not cached
+        run: |
+          node tools/build-gw-data.mjs
+          node tools/build-stellar-tracks.mjs
+          node tools/build-sdss-spectra.mjs
+          node tools/build-gwosc-events.mjs
+          node tools/build-data-packs.mjs
+          node tools/build-ephemeris.mjs --fetch
+
+      - name: GW figure data
+        run: npm run gw:provenance
+      - name: Stellar tracks
+        run: npm run stellar:provenance
+      - name: SDSS spectra
+        run: npm run spectra:provenance
+      - name: GWOSC events
+        run: npm run gwosc:provenance
+      - name: Observation packs
+        run: npm run packs:provenance
+      - name: Ephemeris pack
+        run: npm run ephemeris:provenance
+
+      - name: Nothing committed was rewritten by the fetch
+        run: git diff --exit-code
+
+  # tools/e2e-timings.json, from the Monday run's merged results. The shard
+  # planner reads it, and it goes stale as tests are added. A changed file is
+  # offered as a pull request into the integration branch (INTEGRATION.md).
+  # If the repository does not let Actions open pull requests, the file is left
+  # as an artifact and the summary says so.
+  e2e-timings:
+    name: Refresh the e2e timings
+    if: ${{ !cancelled() && (github.event.schedule == '0 6 * * 1' || inputs.scheduled == 'timings') }}
+    needs: [e2e-coverage]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: e2e-results-sources
+
+      - name: Record the timings
+        run: node tools/e2e-shards.mjs record e2e-results.json
+
+      - name: Offer them if they changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- tools/e2e-timings.json; then
+            echo "The timings are current." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          branch="chore/e2e-timings-$(date -u +%Y%m%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit -m "Refresh tools/e2e-timings.json from the scheduled run" -- tools/e2e-timings.json
+          if git push origin "$branch" && gh pr create --base v2 --head "$branch" --title "Refresh the e2e timings" --body "From the scheduled run's merged results (tools/e2e-shards.mjs record)."; then
+            echo "Opened a pull request from $branch." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "The timings changed, and a pull request could not be opened; the file is attached as the e2e-timings artifact." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Keep the file
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-timings
+          path: tools/e2e-timings.json
+          retention-days: 30
+
+  # What the Observatory costs a reader, against tools/observatory-budgets.json.
+  # Report-only: timings on a shared runner are not evidence
+  # (OBSERVATORY_WORKSPACE_DESIGN.md), so this writes the measurements to the
+  # summary and fails nothing.
+  observatory-report:
+    name: Observatory interaction budgets (report only)
+    if: ${{ github.event.schedule == '0 6 * * 1' || inputs.scheduled == 'observatory' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Playwright browsers
+        uses: ./.github/actions/playwright-browsers
+        with:
+          browser: chromium
+
+      - name: Measure, and compare with the budgets
+        continue-on-error: true
+        run: |
+          echo '### Observatory interaction budgets' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          npm run bench:observatory -- --check 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
 
   # A single job to require in branch protection, so the rule does not have to be
   # edited every time a job is added or a matrix entry changes. It fails if any

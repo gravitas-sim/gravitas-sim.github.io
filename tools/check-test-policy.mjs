@@ -249,6 +249,54 @@ export function checkSpecSource(rel, src) {
   return { problems, allowed, buildTarget };
 }
 
+// --- Fixed sleeps and quarantine -------------------------------------------
+//
+// A fixed sleep is a race with a guessed length, and a wait that is long
+// enough here is too short on a loaded runner. The suite has hundreds; the
+// rule is that no file gets more. tools/wait-ceilings.json records each
+// file's count, and a file above its ceiling fails. So does one below it: a
+// file that lost sleeps has its ceiling lowered with --record-waits, so the
+// record can only fall.
+//
+// A flaky test may be quarantined by its title, `@quarantine:<owner>:<date>`.
+// It still runs; the tag says who owns the fix and until when it may stay
+// flaky. A tag with no owner, or a date that has passed, fails.
+export const WAIT_CEILINGS = join(ROOT, 'tools', 'wait-ceilings.json');
+
+/** waitForTimeout calls outside comments. */
+export const countWaits = src =>
+  src
+    .split('\n')
+    .map(line => line.replace(/\/\/.*$/, ''))
+    .reduce(
+      (n, line) => n + (line.match(/\bwaitForTimeout\s*\(/g) || []).length,
+      0
+    );
+
+/**
+ * Quarantine tags in a spec, and what is wrong with them.
+ *
+ * @param {string} rel - The spec's path
+ * @param {string} src - Its source
+ * @param {Date} [now] - Today
+ * @returns {Array<string>} Problems
+ */
+export function checkQuarantine(rel, src, now = new Date()) {
+  const problems = [];
+  const today = now.toISOString().slice(0, 10);
+  for (const m of src.matchAll(
+    /@quarantine(?::([^:\s'"`]*))?(?::([0-9-]*))?/g
+  )) {
+    const [, owner, until] = m;
+    if (!owner) problems.push(`${rel}: a quarantine tag names no owner`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(until || ''))
+      problems.push(`${rel}: a quarantine tag has no expiry date (YYYY-MM-DD)`);
+    else if (until < today)
+      problems.push(`${rel}: a quarantine by ${owner} expired on ${until}`);
+  }
+  return problems;
+}
+
 /**
  * Check the suite against the policy.
  *
@@ -260,13 +308,35 @@ export async function checkTestPolicy() {
   const buildTarget = [];
   const used = new Set();
 
+  const ceilings = JSON.parse(await readFile(WAIT_CEILINGS, 'utf8')).counts;
+  const seen = new Set();
   for (const path of await specs()) {
     const rel = relative(ROOT, path);
-    const found = checkSpecSource(rel, await readFile(path, 'utf8'));
-    problems.push(...found.problems);
+    const src = await readFile(path, 'utf8');
+    const found = checkSpecSource(rel, src);
+    problems.push(...found.problems, ...checkQuarantine(rel, src));
+    const waits = countWaits(src);
+    const ceiling = ceilings[rel] ?? 0;
+    seen.add(rel);
+    if (waits > ceiling)
+      problems.push(
+        `${rel}: ${waits} waitForTimeout calls, over its ceiling of ${ceiling}. ` +
+          'Wait for the condition instead (e2e/README.md, "Waiting").'
+      );
+    else if (waits < ceiling)
+      problems.push(
+        `${rel}: ${waits} waitForTimeout calls, under its ceiling of ${ceiling}. ` +
+          'Lower it: node tools/check-test-policy.mjs --record-waits'
+      );
     buildTarget.push(...found.buildTarget);
     for (const key of found.allowed) used.add(key);
   }
+
+  for (const rel of Object.keys(ceilings))
+    if (!seen.has(rel))
+      problems.push(
+        `${rel}: has a waitForTimeout ceiling and no longer exists`
+      );
 
   // An allowlist entry whose skip has gone is an entry nobody will remove.
   for (const allow of ALLOWED_SKIPS) {
@@ -288,6 +358,31 @@ const entry = a => `${a.file}::${a.match}`;
 // ALLOWED_SKIPS to assert the list stays small and stays about capabilities,
 // and feeds checkSpecSource() specs that put a build target beside application
 // behavior; importing it should not also run the check and print to the console.
+if (
+  import.meta.url === `file://${process.argv[1]}` &&
+  process.argv.includes('--record-waits')
+) {
+  const counts = {};
+  for (const path of await specs()) {
+    const n = countWaits(await readFile(path, 'utf8'));
+    if (n) counts[relative(ROOT, path)] = n;
+  }
+  const { writeFile } = await import('node:fs/promises');
+  await writeFile(
+    WAIT_CEILINGS,
+    `${JSON.stringify(
+      {
+        note: 'waitForTimeout calls per e2e spec, written by node tools/check-test-policy.mjs --record-waits. A file may not rise above its count, and one that falls below has its count lowered here.',
+        counts,
+      },
+      null,
+      2
+    )}\n`
+  );
+  console.log(`Recorded ${Object.keys(counts).length} files.`);
+  process.exit(0);
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const { problems, buildTarget } = await checkTestPolicy();
   if (problems.length) {

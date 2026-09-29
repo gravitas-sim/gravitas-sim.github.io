@@ -145,6 +145,12 @@ gh run download <run-id> -n e2e-results-sources
 node tools/e2e-shards.mjs record e2e-results.json [more runs' results ...]
 ```
 
+The Monday run does this by itself. Its `e2e-timings` job records the merged
+results and, when the file changed, offers it as a pull request into the
+integration branch. If Actions may not open pull requests in this repository,
+it attaches the file as the `e2e-timings` artifact instead, and says so in the
+job summary.
+
 `record` keeps each test's median passing duration - a retried test counts only
 the attempt that passed - so several runs give a steadier file than one.
 
@@ -406,6 +412,29 @@ Every test gets two fixtures automatically:
 is no `networkidle` and no settled DOM. Wait on application state:
 `app.waitForFrames(30)`, `expect.poll(...)`, `expect(locator).toBeVisible()`.
 A `waitForTimeout` is a test that will fail on a slower machine.
+
+The suite still has 218 of them, in 52 files, and `npm run test:policy` holds
+each file to its count in `tools/wait-ceilings.json`. A file cannot gain one.
+A file that loses some fails too, until its ceiling is lowered with
+`node tools/check-test-policy.mjs --record-waits`, so the record only falls.
+
+**Wait on a positive.** "The panel is not there" passes before the panel has
+had a chance to appear. Wait for something that proves the redraw happened,
+then assert the absence.
+
+**Dilate the clock, not the CPU.** For a race against a fixed interval in the
+page, slow `performance.now()` inside the page. CPU throttling makes the race
+rarer; a slower clock makes it certain.
+
+**Pair with the base under load.** A timeout on a loaded machine is not
+evidence about the change. Run the same specs on the base commit at the same
+time; identical failures on both are the machine, and a failure only on the
+change is the change.
+
+**Quarantine by title, never by skip.** A test that is flaky and being fixed
+carries `@quarantine:<owner>:<YYYY-MM-DD>` in its title. It still runs, and
+still fails the run. The tag records who owns the fix and until when. The
+policy check fails a tag with no owner, and one whose date has passed.
 
 **Do not compare a running simulation against itself.** Positions depend on how
 many frames have elapsed, which is not something a test controls. Build the world

@@ -162,6 +162,19 @@ describe('the check registry', () => {
     }
   });
 
+  // A quick check has no reason to stay out of CI: it costs seconds. Ten of
+  // them did, all "added after the workflow was written" (Prompt 110 moved
+  // them in). One that stays out has to say what in CI covers it instead.
+  test('a quick check runs in CI, or says what in CI covers it', () => {
+    const out = CHECKS.filter(c => c.tier === 'quick' && c.ci === null);
+    for (const check of out) {
+      expect({
+        id: check.id,
+        covered: /CI runs/.test(check.why || ''),
+      }).toEqual({ id: check.id, covered: true });
+    }
+  });
+
   test('platform checks name the engine they need', () => {
     for (const check of CHECKS.filter(c => c.tier === 'platform')) {
       expect(typeof check.engine).toBe('string');
@@ -916,5 +929,43 @@ describe('the documentation facts CI gathers', () => {
     // rather than a silent narrowing.
     expect(CI_EQUIVALENTS['npm run docs:check:tests']).toBe('docs-full');
     expect(CI_EQUIVALENTS['npm run docs:check:build']).toBe('docs-full');
+  });
+});
+
+describe('fixed sleeps and quarantine in the browser suite', () => {
+  test('waitForTimeout is counted in code, not in comments', async () => {
+    const { countWaits } = await import('../tools/check-test-policy.mjs');
+    expect(
+      countWaits(
+        'await page.waitForTimeout(100);\n// page.waitForTimeout(5) in prose\nx.waitForTimeout (2)'
+      )
+    ).toBe(2);
+  });
+
+  test('the recorded ceilings are the counts today, and only fall', async () => {
+    const { checkTestPolicy } = await import('../tools/check-test-policy.mjs');
+    const { problems } = await checkTestPolicy();
+    expect(problems.filter(p => /waitForTimeout/.test(p))).toEqual([]);
+  });
+
+  test('a quarantine names its owner and its expiry', async () => {
+    const { checkQuarantine } = await import('../tools/check-test-policy.mjs');
+    const now = new Date('2026-10-01T00:00:00Z');
+    expect(
+      checkQuarantine('a.spec.js', "test('x @quarantine:carl:2026-11-01'", now)
+    ).toEqual([]);
+    expect(
+      checkQuarantine(
+        'a.spec.js',
+        "test('x @quarantine:carl:2026-09-01'",
+        now
+      )[0]
+    ).toMatch(/expired/);
+    expect(
+      checkQuarantine('a.spec.js', "test('x @quarantine::2026-11-01'", now)[0]
+    ).toMatch(/owner/);
+    expect(
+      checkQuarantine('a.spec.js', "test('x @quarantine:carl'", now)[0]
+    ).toMatch(/expiry/);
   });
 });

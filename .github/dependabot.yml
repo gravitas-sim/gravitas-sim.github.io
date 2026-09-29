@@ -73,6 +73,17 @@ updates:
         update-types:
           - minor
           - patch
+      # axe-core and the Playwright integration that runs it: the integration
+      # pins the core it was tested against, and the two stale single-package
+      # PRs (#2 and #3) are what bumping one without the other produced.
+      axe:
+        applies-to: version-updates
+        patterns:
+          - 'axe-core'
+          - '@axe-core/*'
+        update-types:
+          - minor
+          - patch
       # Everything else that is only a patch. Individually dull, collectively
       # worth taking, and safe to review as one diff.
       patch-updates:
