@@ -94,6 +94,37 @@ box here means the thing is done and verified, not merely decided.
       "if discussions are enabled"; either enable them or edit that sentence.
       They are off, so that sentence currently describes nothing.
 
+### The settings plan for the integration model (Prompt 46)
+
+For Carl, and not done by any session: a repository setting is a governance
+change, made by hand. The boxes above that are still unchecked stay as they
+are, and each is given here with its exact path.
+
+- [ ] **Protect `main` behind the aggregate check.** Settings → Rules →
+      Rulesets → New ruleset → New branch ruleset.
+      - Name it `main`, set Enforcement status to Active, and under Target
+        branches choose Add target → Include default branch.
+      - Tick **Require a pull request before merging**.
+      - Tick **Require status checks to pass**, then Add checks → `CI`. This is
+        the aggregate job, which fails if any job it needs fails.
+      - Tick **Block force pushes**, then Create.
+      - Leave `v2` unprotected: the merge-queue session merges into it by pull
+        request, and `v2` requires no checks. (A required check on `v2` would
+        make GitHub refuse auto-merge as "unstable", which the queue already
+        works around.)
+- [ ] **Keep the `github-pages` environment restricted to `main`.** It already
+      is: the one deployment branch policy names `main`. To confirm:
+      Settings → Environments → `github-pages` → Deployment branches and tags
+      → Selected branches and tags → only `main` is listed. Do not add `v2`.
+- [ ] **Turn on private vulnerability reporting.** Settings → Advanced Security
+      (Code security) → Private vulnerability reporting → Enable.
+- [ ] **Discussions, or SUPPORT.md's sentence.** Either Settings → General →
+      Features → tick Discussions, or edit SUPPORT.md so it does not say "if
+      discussions are enabled". Discussions are off.
+- [ ] **Description and topics.** On the repository's main page, the gear
+      beside **About** → Description (the suggested text above) and Topics (the
+      suggested list above) → Save changes.
+
 ## The release itself
 
 - [x] **Create the tag and the GitHub release.** Done for v1.0.0. The annotated

@@ -114,6 +114,31 @@ Every step is manual and step 6 is the one to be careful with: the file uploaded
 has to be the archive of the tag, not of a working tree that has moved on.
 `npm run archive:check -- --commit v1.0.0` builds and checks exactly that.
 
+## Version policy
+
+**The version is chosen once, by Carl, at the final release** of the
+integration branch ([`INTEGRATION.md`](INTEGRATION.md)). No feature pull
+request picks or bumps it.
+
+What a change means for the number, following semantic versioning from the
+reader's side:
+
+- **Major:**
+  - a saved-state change that an older build cannot read (a stored record, a
+    file or a link whose new version the old code refuses);
+  - a public format whose previous version is no longer read;
+  - anything that removes a page or a route a reader could have bookmarked.
+- **Minor:**
+  - a new page, lesson, guide, instrument, format or format version that keeps
+    a reader for the previous one;
+  - a new capability package.
+- **Patch:** a fix that changes no stored state and no format.
+
+**The changelog.** `CHANGELOG.md`'s `[Unreleased]` section collects entries as
+pull requests land. It is cut into a dated, versioned section **by the release,
+not by feature pull requests**. A feature pull request adds its entry under
+`[Unreleased]` and nothing else.
+
 ## The checklist
 
 ### 1. Decide the version, and say so in one place
