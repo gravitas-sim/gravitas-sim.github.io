@@ -76,12 +76,17 @@ export function precacheInventory(root) {
   };
 }
 
-const kb = n => Math.round(n / 1024).toLocaleString('en-US');
+// Tenths of a megabyte, or tens of kilobytes under one, so the document moves
+// when the precache does and not every time a precached file gains a line.
+const mb = n =>
+  n >= 1048576
+    ? `${(n / 1048576).toFixed(1)} MB`
+    : `${Math.max(10, Math.round(n / 10240) * 10)} KB`;
 
 /** The table OFFLINE_AND_LOW_END.md shows, and the transfer times from its gzip total. */
 export function precacheTable(inv) {
   const rows = inv.kinds.map(
-    k => `| ${k.kind} | ${k.files} | ${kb(k.bytes)} KB | ${kb(k.gzip)} KB |`
+    k => `| ${k.kind} | ${k.files} | ${mb(k.bytes)} | ${mb(k.gzip)} |`
   );
   const secs = mbps => Math.round((inv.gzip * 8) / (mbps * 1e6));
   return [
@@ -89,7 +94,7 @@ export function precacheTable(inv) {
     '| | Files | Raw | Gzipped |',
     '| --- | ---: | ---: | ---: |',
     ...rows,
-    `| **Total** | **${inv.files}** | **${kb(inv.bytes)} KB** | **${kb(inv.gzip)} KB** |`,
+    `| **Total** | **${inv.files}** | **${mb(inv.bytes)}** | **${mb(inv.gzip)}** |`,
     '',
     `Of those, ${inv.core} are core (the install fails without them) and ${inv.optional} optional (a missing one is reported and costs nothing).`,
     '',
