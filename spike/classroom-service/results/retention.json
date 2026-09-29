@@ -1,0 +1,51 @@
+{
+  "purgeAfterMs": 30000,
+  "hardLimitMs": 14400000,
+  "ended": {
+    "presentAt": [
+      [
+        0,
+        true
+      ],
+      [
+        29000,
+        true
+      ],
+      [
+        29999,
+        true
+      ],
+      [
+        30000,
+        false
+      ],
+      [
+        60000,
+        false
+      ]
+    ],
+    "purgedBy": 30000,
+    "afterPurge": "noSession"
+  },
+  "abandoned": {
+    "states": [
+      [
+        10800000,
+        "live"
+      ],
+      [
+        14399999,
+        "live"
+      ],
+      [
+        14400000,
+        "ended"
+      ],
+      [
+        14430000,
+        "gone"
+      ]
+    ]
+  },
+  "T8": "pass"
+}

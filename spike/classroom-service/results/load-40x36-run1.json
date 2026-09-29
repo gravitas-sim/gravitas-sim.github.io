@@ -1,0 +1,26 @@
+{
+  "machine": "darwin x64, Node v24.4.0",
+  "sessions": 40,
+  "connections": 1440,
+  "setupSeconds": 1.1100094360000001,
+  "seconds": 60,
+  "broadcastsReceived": 82600,
+  "expectedAboutBroadcasts": 84000,
+  "statusesToInstructors": 82575,
+  "latencyMs": {
+    "p50": 0.6588799999990442,
+    "p95": 1.4547500000044238,
+    "p99": 1.9880769999981567,
+    "max": 14.064599000004819
+  },
+  "serverRssMB": {
+    "idle": 45.91015625,
+    "admitted": 62.83203125,
+    "underLoad": 88.6875
+  },
+  "perConnectionKB": 30.419444444444444,
+  "serverCpuShareOfOneCore": 0.08041417320484914,
+  "errors": [],
+  "T1": "pass",
+  "T2": "pass"
+}

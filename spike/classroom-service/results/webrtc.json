@@ -1,0 +1,19 @@
+{
+  "browser": "Chromium 151.0.7922.34 (Playwright, headless)",
+  "mdnsHiding": "off (--disable-features=WebRtcHideLocalIpsWithMdns)",
+  "trials": 20,
+  "opened": 20,
+  "openMs": {
+    "p50": 137.30000019073486,
+    "p95": 144,
+    "max": 144
+  },
+  "echoMs": 0.5,
+  "offerBytes": 565,
+  "mdnsHostCandidates": false,
+  "connectionsFor36": {
+    "mesh": 630,
+    "star": 35
+  },
+  "T9": "pass"
+}

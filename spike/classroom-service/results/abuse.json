@@ -1,0 +1,82 @@
+{
+  "T5": {
+    "joinLimitPerMinute": 10,
+    "attemptsFromOneAddress": 30,
+    "answeredNoSession": 10,
+    "refusedTooManyJoins": 20,
+    "codeSpace": 887503681,
+    "guessesInAnHour": 600000,
+    "chanceOfAnyCodeHitInAnHour": 0.49137990425801514,
+    "knockerSaw": [
+      "waiting",
+      "forbidden",
+      "refused"
+    ],
+    "knockerClosedWith": 1000,
+    "verdict": "pass",
+    "note": "A guessed code only knocks: the instructor admits or refuses every knock, so T5 passes by admission, not by the code being unguessable."
+  },
+  "T6": {
+    "fuzzed": 10000,
+    "perCase": [
+      520,
+      436,
+      479,
+      493,
+      485,
+      456,
+      466,
+      477,
+      459,
+      475,
+      498,
+      475,
+      473,
+      487,
+      466,
+      478,
+      484,
+      469,
+      470,
+      446,
+      508
+    ],
+    "typedErrors": 10000,
+    "errorCodes": {
+      "badShape": 2829,
+      "notData": 3307,
+      "tooLarge": 466,
+      "notJson": 1028,
+      "already": 669,
+      "unknownType": 493,
+      "forbidden": 599,
+      "noSuchMember": 164,
+      "noSuchKnock": 152,
+      "badHave": 140,
+      "badToken": 153
+    },
+    "otherRepliesToAttackers": [
+      "log"
+    ],
+    "reachedHonestStudent": 0,
+    "honestMedianRttMs": {
+      "before": 0.28859099999863247,
+      "during": 0.26486800000020594,
+      "after": 0.25963599999886355
+    },
+    "serverStillAnswers": true,
+    "verdict": "pass"
+  },
+  "T7": {
+    "tried": 11,
+    "refused": 11,
+    "sessionStillLive": true,
+    "verdict": "pass"
+  },
+  "rateLimit": {
+    "sent": 400,
+    "refusedForbidden": 40,
+    "refusedRateLimited": 200,
+    "closedWith": 1008
+  }
+}

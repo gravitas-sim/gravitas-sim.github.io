@@ -278,6 +278,7 @@ export function createRelay(o = {}) {
         JSON.stringify({
           rss: mem.rss,
           heapUsed: mem.heapUsed,
+          cpuMicros: process.cpuUsage().user + process.cpuUsage().system,
           sessions: sessions.size,
           ...counts,
         })

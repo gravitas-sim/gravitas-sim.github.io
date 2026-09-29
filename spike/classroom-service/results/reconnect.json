@@ -1,0 +1,20 @@
+{
+  "trials": 100,
+  "exact": 100,
+  "allStudentsExact": true,
+  "rejoinMs": {
+    "p50": 1.9158989999996265,
+    "p95": 2.6784200000001874,
+    "max": 4.164712000000009
+  },
+  "lateJoin": {
+    "entries": 702,
+    "exact": true,
+    "ms": 3.7144039999993765
+  },
+  "instructorResume": 702,
+  "faults": [],
+  "refusals": [],
+  "T3": "pass",
+  "T4": "pass"
+}

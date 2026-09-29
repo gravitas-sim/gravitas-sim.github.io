@@ -1,0 +1,14 @@
+{
+  "browser": "Chromium 151.0.7922.34 (Playwright, headless)",
+  "mdnsHiding": "on (Chrome default)",
+  "trials": 3,
+  "opened": 0,
+  "openMs": {},
+  "offerBytes": 587,
+  "mdnsHostCandidates": true,
+  "connectionsFor36": {
+    "mesh": 630,
+    "star": 35
+  },
+  "T9": "not a T9 run"
+}

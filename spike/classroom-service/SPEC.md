@@ -57,8 +57,9 @@ pull requests, and the project's own records.
 
 ## Thresholds
 
-Measured on the development machine (Apple Silicon, macOS), which is stated
-beside every number. A loopback number is a floor on latency, never a
+Measured on the development machine (an Intel Core i5-10500, 12 threads,
+24 GB, macOS; corrected after commit ac27cc2 named it wrongly as Apple
+Silicon, with no threshold changed), which is stated beside every number. A loopback number is a floor on latency, never a
 prediction of it over a campus network.
 
 | Id | Property | Pass when |
