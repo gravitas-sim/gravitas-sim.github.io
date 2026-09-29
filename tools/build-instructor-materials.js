@@ -73,6 +73,11 @@ import {
 import { POPULATIONS_KEY } from '../js/data/populationsAnswerKey.js';
 import { lab3dAnswerKey, lab3dInstructorGuide } from '../js/lab3dGuideDocs.js';
 import { LAB3D_KEY } from '../js/data/lab3dAnswerKey.js';
+import {
+  missionLabAnswerKey,
+  missionLabInstructorGuide,
+} from '../js/missionLabDocs.js';
+import { MISSION_LAB_KEY } from '../js/data/missionLabKey.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** A path as the repository sees it, for a message. */
@@ -420,6 +425,22 @@ function renderDocuments(version, { stub = false } = {}) {
     'key',
     null,
     lab3dAnswerKey(LAB3D_KEY, { version })
+  );
+  // And the mission lab's (MISSION_LAB.md), whose key tools/mission-lab-key.mjs
+  // writes from a reference run.
+  add(
+    'mission-lab-guide',
+    'A Mission to Mars - Instructor Guide.pdf',
+    'guide',
+    null,
+    missionLabInstructorGuide({ version })
+  );
+  add(
+    'mission-lab-key',
+    'A Mission to Mars - Answer Key.pdf',
+    'key',
+    null,
+    missionLabAnswerKey(MISSION_LAB_KEY, { version })
   );
 
   // Classroom activities. One guide per activity covering all three formats,

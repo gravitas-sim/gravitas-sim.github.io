@@ -62,19 +62,7 @@ export const AIM_KM = 100;
 /** And gives up after this many aims. */
 export const MAX_AIMS = 8;
 
-/** A plan as the lab starts it: the 2026 Earth-Mars opportunity. */
-export const DEFAULT_PLAN = Object.freeze({
-  parking: { altitude: 300 },
-  depot: { altitude: 400, phaseDeg: 17 },
-  depart: { date: '2026-11-01', tofDays: 309 },
-  arrive: { periapsisAltitude: 400, apoapsisAltitude: 400 },
-  correct: null,
-  vehicle: { dryKg: 2000, ispS: 320 },
-  direct: {
-    bodies: ['venus', 'earth', 'mars', 'jupiter'],
-    start: 'periapsis',
-  },
-});
+export { DEFAULT_PLAN } from './lab/defaults.js';
 
 /** The planets' states from the pack, by days from J2000.0, for ./window.js. */
 export const statesFrom = eph => (id, days) => eph.stateAt(id, JD_J2000 + days);

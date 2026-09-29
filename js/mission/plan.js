@@ -34,6 +34,8 @@ export const APPROXIMATIONS = Object.freeze([
   'patchedConic',
   'zeroRevolution',
   'planarFlyby',
+  'ephemerisPack',
+  'namedPullers',
 ]);
 
 /** Which approximations each kind of result rests on. */
@@ -60,6 +62,7 @@ export const RESTS_ON = Object.freeze({
     'zeroRevolution',
   ],
   flyby: ['pointMass', 'patchedConic', 'planarFlyby'],
+  missionLab: ['impulsive', 'pointMass', 'patchedConic', 'zeroRevolution', 'ephemerisPack', 'namedPullers'],
 });
 
 /**

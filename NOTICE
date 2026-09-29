@@ -322,3 +322,20 @@ The Observatory's archive import (js/archive/) fetches the same kind of data
 live, in the reader's own browser, and never through Gravitas. What it imports
 carries this license and credit with it.
 
+===============================================================================
+Planetary states from JPL Horizons (DE441)
+-------------------------------------------------------------------------------
+js/data/ephemeris/solarSystem2025.js, js/data/ephemeris/solarSystem2025Check.js
+Derived from heliocentric states of Venus, the Earth, Mars and the Jupiter
+system barycenter, 2025 to 2045, served by the NASA/JPL Horizons system of the
+Solar System Dynamics group: https://ssd.jpl.nasa.gov/horizons/
+
+Horizons states no license for its output and asks that the Solar System
+Dynamics group and the ephemeris be credited. What is bundled is a reduced
+derivative for teaching - Chebyshev coefficients fitted to daily states, and a
+set of held-out states to check them - with every request and the SHA-256 of
+every answer's data rows recorded in ephemeris-packs/solar-system-2025-2045.json.
+`npm run ephemeris:provenance` rebuilds the pack from those answers.
+
+  Park, Folkner, Williams and Boggs (2021), AJ 161, 105,
+  doi:10.3847/1538-3881/abd414 - the DE440 and DE441 ephemerides

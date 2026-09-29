@@ -25,6 +25,7 @@ const KIND = {
   do: 'Do, and checked',
   answer: 'Answer, checked',
   choose: 'Choose',
+  explain: 'Explain (recorded)',
 };
 const kindOf = s =>
   s.kind === 'choose' && s.correct === null
@@ -177,13 +178,15 @@ export function suiteInstructorGuide(suite, docs, { version = '' } = {}) {
     );
     doc.bullets(
       stepsOn(g, 'advanced')
-        .filter(s => s.kind === 'answer' || s.kind === 'choose')
+        .filter(s => s.kind === 'answer' || s.kind === 'choose' || s.kind === 'explain')
         .map(
           s =>
             `${step(g, s, 'title')}${s.path === 'advanced' ? ' (advanced)' : ''}: ${
               s.kind === 'answer'
                 ? 'the number, and how you found it'
-                : 'your choice, and why'
+                : s.kind === 'explain'
+                  ? 'your explanation, in full'
+                  : 'your choice, and why'
             }.`
         )
     );
@@ -244,7 +247,9 @@ export function suiteAnswerKey(suite, rows, docs, { version = '' } = {}) {
               : r.expected === null
                 ? r.kind === 'do'
                   ? 'Done'
-                  : 'Not computed'
+                  : r.kind === 'explain'
+                    ? 'Written; read by the instructor'
+                    : 'Not computed'
                 : `${fmt(r.expected)}${r.tolerance !== undefined ? ` (+/- ${r.tolerance})` : ''}`;
           const why =
             r.kind === 'choose' && r.expected === null
