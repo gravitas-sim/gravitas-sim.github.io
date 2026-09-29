@@ -299,15 +299,18 @@ export function buildLabReport({
         if (right) autoRight++;
       }
       doc.field(lessonPlain(step.prompt), lessonPlain(chosen));
+      // A choice can be changed, as a number can be re-checked, so it says
+      // how many tries it took as a number does.
+      const tries = attempts[id] || 0;
       doc.row(
         t('rp.result'),
         !answered
           ? t('rp.none')
-          : right
-            ? t('rp.right')
-            : t('rp.wrongChoice', {
-                answer: lessonPlain(step.options[step.answer]),
-              })
+          : (right
+              ? t('rp.right')
+              : t('rp.wrongChoice', {
+                  answer: lessonPlain(step.options[step.answer]),
+                })) + (tries > 1 ? t('rp.tries', { n: tries }) : '')
       );
       canonical.push(`${id}=${value}`);
       return;

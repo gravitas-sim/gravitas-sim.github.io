@@ -158,6 +158,7 @@ import {
 import {
   assignmentStorageKey,
   filterResponses,
+  shortHash,
   stepBindings,
 } from './assignments/assignment.js';
 import { stepFingerprint } from './investigations/progressBackup.js';
@@ -288,6 +289,9 @@ let assignmentBinding = null;
 /** @returns {?object} The assignment in force */
 export const activeAssignment = () => assignment;
 
+/** @returns {?string} Where the open assignment's progress is stored */
+export const activeAssignmentKey = () => (assignment ? assignmentKey : null);
+
 /** @returns {?object} How its steps bound to the current lesson */
 export const activeAssignmentBinding = () => assignmentBinding;
 
@@ -297,8 +301,44 @@ export const activeAssignmentBinding = () => assignmentBinding;
  * @param {string} id - Lesson id
  * @returns {string} Storage key
  */
-const progressKey = id =>
-  assignment ? assignmentStorageKey(assignment) : storageKey(id);
+const progressKey = id => (assignment ? assignmentKey : storageKey(id));
+
+/** The open assignment's progress key; set with `assignment`. */
+let assignmentKey = null;
+
+/**
+ * An assignment's progress key: its lesson, steps and title, never its date,
+ * so a link re-issued on another day keeps the work. A new title is a new
+ * activity and re-keys on purpose. Work under the old dated key, from this
+ * link or an earlier issue of it, moves across the first time it is read.
+ *
+ * @param {object} a - A validated assignment payload
+ * @returns {string} The storage key
+ */
+function keyForAssignment(a) {
+  const hash = shortHash(`${a.l}|${a.s.join(',')}|${a.t}`);
+  const key = `gravitas_assignment_${hash}`;
+  if (authoring) return key;
+  try {
+    if (localStorage.getItem(key) === null) {
+      const old = Object.keys(localStorage)
+        .filter(
+          k =>
+            k === assignmentStorageKey(a) ||
+            new RegExp(`^gravitas_assignment_\\d{6}${hash}$`).test(k)
+        )
+        .sort()
+        .pop();
+      if (old) {
+        localStorage.setItem(key, localStorage.getItem(old));
+        localStorage.removeItem(old);
+      }
+    }
+  } catch {
+    /* storage refused: there is nothing to move */
+  }
+  return key;
+}
 
 /**
  * Whether the last write reached the disk, and what went wrong if not.
@@ -2138,6 +2178,13 @@ function renderStep() {
     if (marked && step.because) {
       parts.push(`<p class="inv-because">${prose(step.because)}</p>`);
     }
+    // A graded choice can be revised, as a number can; a prediction only
+    // until its verdict is shown. The first answer and the count are kept.
+    if (locked && (step.kind === 'choice' || held)) {
+      parts.push(
+        `<button type="button" class="ui-button subtle" data-change>${escape(t('inv.answer.change'))}</button>`
+      );
+    }
   }
 
   // The other half of a held prediction: the step where the result arrives
@@ -3275,9 +3322,18 @@ function renderProbe() {
 function bindStepInputs() {
   const id = stepId(stepIndex);
 
+  els.body.querySelector('[data-change]')?.addEventListener('click', () => {
+    delete responses[id];
+    save();
+    renderStep();
+    els.body.querySelector('[data-option]')?.focus();
+    announce(t('inv.answer.changed'));
+  });
+
   els.body.querySelectorAll('[data-option]').forEach(btn => {
     btn.addEventListener('click', () => {
       const choice = Number(btn.dataset.option);
+      responses[`${id}:first`] ??= choice;
       responses[id] = choice;
       attempts[id] = (attempts[id] || 0) + 1;
       save();
@@ -3673,6 +3729,7 @@ export async function openInvestigation(id, opts = {}) {
       return { ok: false, reason: 'noStepsLeft' };
     }
     active = { ...inv, steps: assignmentBinding.steps };
+    assignmentKey = keyForAssignment(assignment);
   } else {
     active = inv;
   }
@@ -4559,6 +4616,8 @@ function openFinish() {
   }).length;
 
   showToken('');
+  // Not in an authoring preview, as the panel's backup controls are not.
+  els.finishProgress.hidden = Boolean(authoring);
   els.finishSummary.innerHTML = `
     <p>${t('inv.finish.summary', {
       visited: visited.size,
@@ -4899,6 +4958,7 @@ export function initInvestigations() {
     nameInput: document.getElementById('investigationName'),
     nameError: document.getElementById('investigationNameError'),
     downloadBtn: document.getElementById('investigationDownload'),
+    finishProgress: document.getElementById('investigationFinishProgress'),
     token: document.getElementById('investigationToken'),
     tokenBody: document.getElementById('investigationTokenBody'),
     finishClose: document.getElementById('investigationFinishClose'),
@@ -5002,7 +5062,7 @@ export function initInvestigations() {
   els.downloadBtn?.addEventListener('click', generateReport);
   const on = (id, fn) =>
     document.getElementById(id)?.addEventListener('click', fn);
-  on('investigationFinishProgress', downloadProgressBackup);
+  els.finishProgress?.addEventListener('click', downloadProgressBackup);
   on('investigationTokenShow', revealToken);
   on('investigationTokenCopy', copyToken);
   on('investigationTokenSave', () =>

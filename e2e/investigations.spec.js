@@ -242,7 +242,8 @@ test.describe('advancing through representative step types', () => {
     // And it reveals the explanation, which is the part a student reads.
     await expect(page.locator('#investigationBody .inv-because')).toBeVisible();
 
-    // The options lock once answered, so a student cannot try again for credit.
+    // The options lock once answered: trying again takes Change answer, which
+    // keeps the first answer and counts the try.
     await expect(options.first()).toBeDisabled();
   });
 
@@ -272,6 +273,47 @@ test.describe('advancing through representative step types', () => {
     await expect(
       page.locator('#investigationBody .inv-option.is-correct')
     ).toHaveCount(1);
+  });
+
+  test('a graded choice can be changed, keeping the first answer and the count', async ({
+    page,
+    app,
+  }) => {
+    await openLesson(page, app);
+    await answerAndAdvance(page);
+    await answerAndAdvance(page);
+    const correct = await page.evaluate(
+      async ([id, n]) => {
+        const data = await import('/js/data/investigations.js');
+        return data.getInvestigation(id).steps[n - 1].answer;
+      },
+      [LESSON, 3]
+    );
+    const options = page.locator('#investigationBody .inv-option');
+    const wrong = (correct + 1) % (await options.count());
+    await options.nth(wrong).click();
+    await expect(options.nth(wrong)).toHaveClass(/is-wrong/);
+
+    const change = page.locator('#investigationBody [data-change]');
+    await change.click();
+    await expect(options.first()).toBeFocused();
+    await expect(
+      page.locator('#investigationBody .inv-option.is-chosen')
+    ).toHaveCount(0);
+    await options.nth(correct).click();
+    await expect(options.nth(correct)).toHaveClass(/is-correct/);
+
+    // What was stored: the answer now, the first one, and both tries.
+    const stored = await page.evaluate(() => {
+      const key = Object.keys(localStorage).find(k => /invest/i.test(k));
+      return JSON.parse(localStorage.getItem(key));
+    });
+    const entries = Object.entries(stored.responses);
+    const first = entries.find(([k]) => k.endsWith(':first'));
+    expect(first?.[1]).toBe(wrong);
+    const own = first[0].replace(/:first$/, '');
+    expect(stored.responses[own]).toBe(correct);
+    expect(stored.attempts[own]).toBe(2);
   });
 
   test('a measure step accepts numbers and plots them back @covers:ce.keplers-laws', async ({
@@ -463,12 +505,16 @@ test.describe('the student report', () => {
     const bytes = Buffer.concat(chunks);
     expect(bytes.length).toBeGreaterThan(2000);
     expect(bytes.subarray(0, 5).toString('latin1')).toBe('%PDF-');
+
+    // And beside the report, the progress file.
+    const [backup] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#investigationFinishProgress').click(),
+    ]);
+    expect(backup.suggestedFilename()).toMatch(/\.json$/);
   });
 
-  test('in Spanish, with the token to paste and a progress file beside the report', async ({
-    page,
-    app,
-  }) => {
+  test('in Spanish, with the token to paste', async ({ page, app }) => {
     // The dialog was English whatever the lesson was in, and the token existed
     // only inside the PDF, where a learning management system's text box
     // cannot reach it. Opened on the last step through the authoring preview,
@@ -520,11 +566,8 @@ test.describe('the student report', () => {
       await token.inputValue()
     );
 
-    const [backup] = await Promise.all([
-      page.waitForEvent('download'),
-      page.locator('#investigationFinishProgress').click(),
-    ]);
-    expect(backup.suggestedFilename()).toMatch(/\.json$/);
+    // A preview has no progress to keep, so it offers no file of it.
+    await expect(page.locator('#investigationFinishProgress')).toBeHidden();
   });
 });
 
@@ -837,6 +880,14 @@ test.describe('lesson prose reads as characters, not entity names', () => {
     await expect.poll(() => status.textContent()).not.toBe('');
     expect(await status.textContent()).not.toMatch(ENTITY);
 
+    // Held, so it can still be changed: nothing has told the reader yet.
+    const change = page.locator('#investigationBody [data-change]');
+    await change.click();
+    await expect(options.nth(2)).toBeEnabled();
+    await expect(options.nth(2)).not.toHaveClass(/is-chosen/);
+    await options.nth(2).click();
+    await expect(change).toBeVisible();
+
     // The reveal is the next step, and it carries the verdict.
     await page.locator('#investigationNext').click();
     const verdict = page.locator('#investigationBody .inv-verdict');
@@ -847,6 +898,12 @@ test.describe('lesson prose reads as characters, not entity names', () => {
       'Only the core\u2019s hydrogen'
     );
     expect(await verdict.innerText()).not.toMatch(ENTITY);
+
+    // Once the verdict has been shown, the prediction stands.
+    await page.locator('#investigationPrev').click();
+    await expect(page.locator('.inv-step-title')).toHaveText(wanted);
+    await expect(options.nth(2)).toHaveClass(/is-chosen/);
+    await expect(change).toHaveCount(0);
   });
 });
 
