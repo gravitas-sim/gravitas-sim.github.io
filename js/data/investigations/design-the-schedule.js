@@ -108,6 +108,9 @@ const DESIGN_THE_SCHEDULE = {
     'Eight nights on the real instrument, and the times you choose decide the answer',
   duration: '35-40 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'arithmetic',
+  prerequisites: ['radial-velocity', 'detect-this-planet'],
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
   summary:

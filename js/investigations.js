@@ -4116,7 +4116,10 @@ function browserCardHtml(inv, index, shared) {
     .filter(Boolean)
     .join('. ');
 
-  return `<button type="button" class="inv-card${complete ? ' is-complete' : ''}"
+  // The objectives sit beside the card, not in it: the card is one button, and
+  // a disclosure inside a button is not a disclosure. They are fetched with
+  // the lesson when a reader opens them, since the manifest carries a count.
+  return `<div class="inv-card-wrap"><button type="button" class="inv-card${complete ? ' is-complete' : ''}"
             data-investigation="${escape(inv.id)}"
             aria-label="${attr(label)}" title="${attr(inv.summary || inv.title)}">
       <span class="inv-card-shot">
@@ -4154,7 +4157,9 @@ function browserCardHtml(inv, index, shared) {
           <span class="inv-card-cta">${escape(cta)}<span aria-hidden="true"> →</span></span>
         </span>
       </span>
-    </button>`;
+    </button><details class="inv-card-objectives" data-objectives="${attr(inv.id)}">
+      <summary>${escape(t('inv.card.objectivesShow'))}</summary><ul></ul>
+    </details></div>`;
 }
 
 // --- Search, filters and the curated orders -----------------------------------
@@ -4405,6 +4410,16 @@ function renderBrowser() {
 
   els.list.querySelectorAll('[data-investigation]').forEach(btn => {
     btn.addEventListener('click', () => openCardLesson(btn));
+  });
+  els.list.querySelectorAll('[data-objectives]').forEach(box => {
+    box.addEventListener('toggle', async () => {
+      if (!box.open || box.dataset.loaded) return;
+      box.dataset.loaded = '1';
+      const inv = await loadInvestigation(box.dataset.objectives);
+      box.querySelector('ul').innerHTML = (inv?.objectives || [])
+        .map(o => `<li>${prose(o)}</li>`)
+        .join('');
+    });
   });
 
   renderEmpty(rows);

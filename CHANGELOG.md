@@ -845,6 +845,32 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **The way back to the instructor was hard to find, and half-read.**
+  - `/instructors/submissions/` is linked from the instructor portal's public
+    section and from the adopters guide. The guide also no longer says three
+    things that stopped being true: that there is no instructor-side
+    gradebook (there is still none, but the review page reads the reports
+    back), that a student who changes machines starts again (a progress file
+    carries the work), and that units typed with a number are ignored (they
+    are read, converted or refused).
+  - The assignment builder takes an optional class or roster code, which it
+    adds to the link as `?roster=` - where the submission token has always
+    read it - and to the printed instructions.
+  - The review page shows each submission's written answers beside the
+    rubric their step has, in a disclosure. They were read, counted as
+    unmarkable, and never shown.
+  - The exports count points: what each question is worth (one, or what the
+    step declares) and what it earned, with the totals in the summary and
+    the written answers' points reported as unmarked rather than as zero.
+    `gravitas.submission-results` is version 2; `readResults()` reads a
+    version 1 file, with the points it never had as null. The screen grades
+    as it did.
+- **Lesson cards can say what a lesson teaches.** A card's objectives open
+  under it, fetched with the lesson only when asked for. Every lesson now
+  declares its audience, the mathematics it asks for and the lessons it
+  builds on, generated into `js/data/investigations/discovery.js` for the
+  course-planning views (the lesson browser does not show them yet).
+
 - **What a Spanish student handed in was partly English, and partly wrong.**
   - A measurement typed the Spanish way ("1,52") was NaN to the step's own
     check, so derived columns stayed blank and nothing was checked. Fields

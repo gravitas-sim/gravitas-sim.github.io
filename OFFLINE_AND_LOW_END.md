@@ -51,15 +51,15 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw | Gzipped |
 | --- | ---: | ---: | ---: |
-| JavaScript | 517 | 11.3 MB | 3.7 MB |
+| JavaScript | 518 | 11.3 MB | 3.7 MB |
 | Images | 62 | 1.7 MB | 1.7 MB |
-| Stylesheets | 8 | 440 KB | 100 KB |
+| Stylesheets | 8 | 450 KB | 100 KB |
 | Fonts | 9 | 140 KB | 140 KB |
 | Pages | 6 | 230 KB | 50 KB |
 | Other | 1 | 20 KB | 10 KB |
-| **Total** | **603** | **13.9 MB** | **5.7 MB** |
+| **Total** | **604** | **13.9 MB** | **5.7 MB** |
 
-Of those, 473 are core (the install fails without them) and 130 optional (a missing one is reported and costs nothing).
+Of those, 474 are core (the install fails without them) and 130 optional (a missing one is reported and costs nothing).
 
 | Link | Precache transfer |
 | --- | --- |

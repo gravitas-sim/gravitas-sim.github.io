@@ -89,6 +89,10 @@ function mount() {
         <span>${esc(t('assign.intro'))}</span>
         <textarea id="assignIntro" rows="3" maxlength="${MAX_INTRO}"></textarea>
       </label>
+      <label class="assignment-field">
+        <span>${esc(t('assign.roster'))}</span>
+        <input id="assignRoster" type="text" maxlength="120" />
+      </label>
 
       <div class="assignment-row">
         <button id="assignAll" class="ui-button">${esc(t('assign.selectAll'))}</button>
@@ -250,6 +254,16 @@ async function build() {
   });
 
   const link = await assignmentLink(built);
+  // The class code rides on the query string, where the lesson puts it in
+  // the submission token, so the review page can sort by it.
+  const roster = $('assignRoster').value.trim();
+  if (roster) {
+    const u = new URL(link.url);
+    u.searchParams.set('roster', roster);
+    link.url = u.href;
+    link.length = link.url.length;
+    link.comfortable = link.length <= link.limit;
+  }
   builtLink = link;
   $('assignResult').hidden = false;
   $('assignLink').value = link.url;
@@ -276,6 +290,7 @@ async function build() {
  */
 function printInstructions() {
   if (!built) return;
+  const roster = builtLink && new URL(builtLink.url).searchParams.get('roster');
   const byId = new Map(lesson.steps.map(s => [s.sid, s]));
   const rows = built.s
     .map(sid => {
@@ -311,6 +326,7 @@ function printInstructions() {
       <p>${esc(t('assign.print.open'))}</p>
       <p><code>${esc(builtLink?.url || '')}</code></p>
       <p>${esc(t('assign.print.id', { id: built.i, date: built.c }))}</p>
+      ${roster ? `<p>${esc(t('assign.print.roster', { code: roster }))}</p>` : ''}
     </div></body></html>`);
   win.document.close();
   win.focus();

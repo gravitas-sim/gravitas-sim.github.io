@@ -148,6 +148,9 @@ const GOLDILOCKS = {
     "Move a planet, change its star, and decide what 'habitable' really means",
   duration: '40-50 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'algebra',
+  prerequisites: ['transit-photometry'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

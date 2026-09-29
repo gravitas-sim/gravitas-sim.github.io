@@ -651,6 +651,7 @@ export const ES_DEFERRED = {
   'assign.close': 'Cerrar',
   'assign.name': 'Nombre de la tarea',
   'assign.intro': 'Instrucciones para el alumnado (opcional)',
+  'assign.roster': 'Código de clase o de lista (opcional)',
   'assign.selectAll': 'Seleccionar todo',
   'assign.selectNone': 'Limpiar',
   'assign.count':
@@ -672,6 +673,7 @@ export const ES_DEFERRED = {
   'assign.print.steps': '{n} pasos',
   'assign.print.open': 'Abre la tarea en esta direccion:',
   'assign.print.id': 'Tarea {id}, emitida el {date}.',
+  'assign.print.roster': 'Código de clase: {code}',
 
   'assign.error.nothingSelected': 'Elige al menos un paso.',
   'assign.error.noLesson': 'No se pudo leer esa leccion.',
@@ -1829,6 +1831,7 @@ export const ES_DEFERRED = {
   'inv.summary.going': '{n} en curso',
   'inv.card.objectives': { one: '{n} objetivo', other: '{n} objetivos' },
 
+  'inv.card.objectivesShow': 'Objetivos de aprendizaje',
   'inv.step.counter': 'Paso {n} de {total}',
   'inv.step.kind.read': 'lectura',
   'inv.step.kind.predict': 'predicción',

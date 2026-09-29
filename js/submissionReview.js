@@ -46,6 +46,7 @@ import {
 } from './submission/i18n.js';
 import { validateBackup } from './investigations/progressBackup.js';
 import { MANIFEST } from './data/investigations/manifest.js';
+import { decodeEntities } from './lessonMarkup.js';
 
 const $ = id => document.getElementById(id);
 
@@ -192,6 +193,39 @@ const esc = s =>
     c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]
   );
 
+/** Lesson prose as text: its markup dropped and its entities read. */
+const plain = s => decodeEntities(String(s ?? '').replace(/<[^>]*>/g, ''));
+
+/**
+ * One submission's written answers, each beside its rubric where the lesson
+ * has one. They were read and counted as unmarkable but never shown, so an
+ * instructor had to open every PDF to read them.
+ *
+ * @param {object} s - An annotated record
+ * @returns {string} A disclosure, or '' when there is nothing written
+ */
+function writtenAnswers(s) {
+  const steps = new Map(
+    (lessons.get(s.lessonId)?.steps || []).map(x => [x.sid, x])
+  );
+  const written = s.questions.filter(
+    q => q.response !== null && steps.get(q.sid)?.kind === 'short'
+  );
+  if (!written.length) return '';
+  return `<details class="sr-written"><summary>${esc(
+    t('sub.written.summary', { n: written.length })
+  )}</summary><dl>${written
+    .map(q => {
+      const rubric = steps.get(q.sid).rubric;
+      return `<dt>${esc(plain(q.title))}</dt><dd>${esc(q.response)}</dd>${
+        rubric
+          ? `<dd class="sr-rubric">${esc(t('sub.written.rubric'))}: ${esc(plain(rubric))}</dd>`
+          : ''
+      }`;
+    })
+    .join('')}</dl></details>`;
+}
+
 /** Announce something to a screen reader and show it. */
 function say(message) {
   const status = $('exportStatus');
@@ -256,7 +290,7 @@ function render() {
           ].filter(Boolean);
           return `<li>${esc(s.nameAsTyped || t('sub.read.noName'))} &mdash; ${esc(
             s.lessonTitle
-          )}${notes.map(x => ` &mdash; ${esc(x)}`).join('')}</li>`;
+          )}${notes.map(x => ` &mdash; ${esc(x)}`).join('')}${writtenAnswers(s)}</li>`;
         })
         .join('')}</ol>`
     : '';

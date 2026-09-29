@@ -103,6 +103,9 @@ const LAGRANGE_POINTS = {
   // while nobody types.
   duration: '25-30 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'algebra',
+  prerequisites: ['hohmann-transfer', 'when-orbits-lock'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

@@ -141,6 +141,9 @@ const GRAVITY_ASSIST = {
   // minutes, three of which is the sweep running while nobody types.
   duration: '15-20 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'algebra',
+  prerequisites: ['orbital-energy'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
