@@ -182,7 +182,12 @@ jobs:
       - name: 3-D kernel validation
         run: npm run validate:lab3d
 
-      # The mission core's reference cases (MISSION.md): a second or so.
+      # The ephemeris pack against its manifest and held-out states (MISSION_LAB.md).
+      - name: Ephemeris pack
+        run: npm run ephemeris:check
+
+      # The mission core's and the mission lab's reference cases (MISSION.md,
+      # MISSION_LAB.md): a few seconds.
       - name: Mission core validation
         run: npm run validate:mission
 

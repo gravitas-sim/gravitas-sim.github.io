@@ -78,6 +78,7 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `js/data/observations/sdssNgc2420Photometry.js` | derived from SDSS DR18 photometry of NGC 2420 | public domain; acknowledge SDSS, see NOTICE |
 | `js/data/observations/sdssNgc2420Segue.js` | derived from SDSS DR18 SEGUE stellar parameters of NGC 2420 | public domain; acknowledge SDSS, see NOTICE |
 | `js/data/observations/mistSdssIsochrones.js` | derived from the MIST v1.2 isochrones in SDSS ugriz | cite the papers; see NOTICE |
+| `js/data/ephemeris/**` | derived from JPL Horizons planetary states (the DE441 ephemeris) | no license stated; credit JPL and cite DE441, see NOTICE |
 | `tests/fixtures/fits/*.headers.txt` | the headers of two TESS light curves served by MAST, kept for tests | public domain (NASA); acknowledge TESS and MAST, see NOTICE |
 | `tests/fixtures/archive/gaia-epphot-su-dra.vot` | one Gaia DR3 epoch-photometry answer from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO; credit ESA/Gaia/DPAC, see NOTICE |
 | `tests/fixtures/archive/sesame-su-dra.xml` | one CDS Sesame answer, kept for tests | a position and names from SIMBAD; acknowledge CDS, see NOTICE |

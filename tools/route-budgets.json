@@ -90,6 +90,10 @@
       "mission": {
         "kb": 74.6,
         "requests": 8
+      },
+      "mission-lab": {
+        "kb": 431.6,
+        "requests": 36
       }
     },
     "build": {
@@ -180,6 +184,10 @@
       "mission": {
         "kb": 49.4,
         "requests": 2
+      },
+      "mission-lab": {
+        "kb": 256.4,
+        "requests": 3
       }
     }
   },

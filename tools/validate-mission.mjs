@@ -4,17 +4,20 @@
 // -----------------------------------------------------------------------------
 // Runs every reference case in js/mission/references.js (textbook examples,
 // closed-form constants, and the 3-D kernel flying each solver's answer) and
+// in js/mission/labReferences.js (the ephemeris pack and the mission lab), and
 // compares each measure with its fixed tolerance. Node, not Jest, for the
 // same reason as validate:lab3d: Jest's module VM is far slower at arithmetic.
 //
 //   node tools/validate-mission.mjs            the table; exit 1 on any failure
 //   node tools/validate-mission.mjs L1 W1      some cases
-//   node tools/validate-mission.mjs --write    and write the table into MISSION.md
+//   node tools/validate-mission.mjs --write    and write the tables into MISSION.md
+//                                              (the core) and MISSION_LAB.md (the lab)
 //   node tools/validate-mission.mjs --json     one JSON line per case
 // =============================================================================
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { CASES, runCase } from '../js/mission/references.js';
+import { LAB_CASES } from '../js/mission/labReferences.js';
 
 const args = process.argv.slice(2);
 const ids = args.filter(a => /^[A-Z]\d+$/.test(a));
@@ -34,49 +37,56 @@ const bound = m =>
     ? `${fmt(m.expected)} ± ${fmt(m.tolerance)}${m.unit ? ` ${m.unit}` : ''}`
     : `= ${m.expected}`;
 
-const rows = [];
 let failed = 0;
-for (const c of CASES) {
-  if (ids.length && !ids.includes(c.id)) continue;
-  const started = Date.now();
-  const measures = runCase(c);
-  const ms = Date.now() - started;
-  for (const m of measures) {
-    if (!m.ok) failed++;
-    rows.push({ id: c.id, kind: c.kind, title: c.title, ...m });
-  }
-  if (json)
-    console.log(JSON.stringify({ id: c.id, kind: c.kind, ms, measures }));
-  else
-    process.stderr.write(
-      `${c.id} ${measures.every(m => m.ok) ? 'pass' : 'FAIL'} (${ms} ms)\n`
-    );
-}
+const tableOf = rows =>
+  [
+    '| # | Case | Kind | Measured | Value | Expected | |',
+    '|---|---|---|---|---|---|---|',
+    ...rows.map(
+      r =>
+        `| ${r.id} | ${cell(r.title)} | ${r.kind} | ${cell(r.name)} | ${cell(fmt(r.value))} | ${cell(bound(r))} | ${r.ok ? 'pass' : '**fail**'} |`
+    ),
+  ].join('\n');
 
 /** A table cell: a measure's name may hold |v|, which would end the cell. */
 const cell = v => String(v).replace(/\|/g, '\\|');
 
-const table = [
-  '| # | Case | Kind | Measured | Value | Expected | |',
-  '|---|---|---|---|---|---|---|',
-  ...rows.map(
-    r =>
-      `| ${r.id} | ${cell(r.title)} | ${r.kind} | ${cell(r.name)} | ${cell(fmt(r.value))} | ${cell(bound(r))} | ${r.ok ? 'pass' : '**fail**'} |`
-  ),
-].join('\n');
-
-if (!json) console.log(table);
-if (write) {
-  const doc = readFileSync('MISSION.md', 'utf8');
-  const open = '<!-- mission:validation -->';
-  const close = '<!-- /mission:validation -->';
-  const a = doc.indexOf(open);
-  const b = doc.indexOf(close);
-  if (a < 0 || b < a) throw new Error('MISSION.md has no validation block');
-  writeFileSync(
-    'MISSION.md',
-    `${doc.slice(0, a + open.length)}\n${table}\n${doc.slice(b)}`
-  );
+for (const [doc, marker, cases] of [
+  ['MISSION.md', 'mission', CASES],
+  ['MISSION_LAB.md', 'missionlab', LAB_CASES],
+]) {
+  const rows = [];
+  for (const c of cases) {
+    if (ids.length && !ids.includes(c.id)) continue;
+    const started = Date.now();
+    const measures = runCase(c);
+    const ms = Date.now() - started;
+    for (const m of measures) {
+      if (!m.ok) failed++;
+      rows.push({ id: c.id, kind: c.kind, title: c.title, ...m });
+    }
+    if (json)
+      console.log(JSON.stringify({ id: c.id, kind: c.kind, ms, measures }));
+    else
+      process.stderr.write(
+        `${c.id} ${measures.every(m => m.ok) ? 'pass' : 'FAIL'} (${ms} ms)\n`
+      );
+  }
+  if (!rows.length) continue;
+  const table = tableOf(rows);
+  if (!json) console.log(`\n${doc}\n${table}`);
+  if (write && !ids.length) {
+    const text = readFileSync(doc, 'utf8');
+    const open = `<!-- ${marker}:validation -->`;
+    const close = `<!-- /${marker}:validation -->`;
+    const a = text.indexOf(open);
+    const b = text.indexOf(close);
+    if (a < 0 || b < a) throw new Error(`${doc} has no validation block`);
+    writeFileSync(
+      doc,
+      `${text.slice(0, a + open.length)}\n${table}\n${text.slice(b)}`
+    );
+  }
 }
 if (failed) {
   console.error(`${failed} measure(s) failed.`);

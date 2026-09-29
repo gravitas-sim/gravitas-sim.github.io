@@ -489,23 +489,29 @@
     },
     {
       "id": "gravitas.mission",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "kind": "built-in",
       "delivery": "built-in",
       "title": {
-        "en": "The mission-design core",
-        "es": "El núcleo de diseño de misiones"
+        "en": "The mission-design core and the mission lab",
+        "es": "El núcleo de diseño de misiones y el laboratorio de misiones"
       },
       "gravitas": "^1.0.0",
       "provides": {
         "routes": [
           {
             "path": "/mission/"
+          },
+          {
+            "path": "/mission/lab/"
           }
         ],
         "models": [
           {
             "id": "mission-two-body"
+          },
+          {
+            "id": "mission-lab-ephemeris"
           }
         ]
       },
@@ -513,11 +519,20 @@
         {
           "scope": "js/mission/**",
           "license": "MIT"
+        },
+        {
+          "scope": "js/data/ephemeris/**",
+          "license": "no license stated; credit JPL and cite DE441, see NOTICE"
         }
       ],
-      "citations": [],
+      "citations": [
+        {
+          "text": "JPL Horizons, ephemeris DE441 (Park et al. 2021, AJ 161, 105)",
+          "url": "https://doi.org/10.3847/1538-3881/abd414"
+        }
+      ],
       "offline": "on-demand",
-      "bytes": 150959
+      "bytes": 447601
     },
     {
       "id": "gravitas.power-law-instruments",

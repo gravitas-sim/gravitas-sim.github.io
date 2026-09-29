@@ -131,6 +131,9 @@ const FILES = [
   // that has opened it once can work offline, and an install that cannot
   // fetch them loses only the lab.
   { path: '3d/index.html', core: false },
+  // The mission lab (MISSION_LAB.md): the page, its modules, the ephemeris
+  // pack and the solvers, optional as the 3-D lab's are.
+  { path: 'mission/lab/index.html', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },

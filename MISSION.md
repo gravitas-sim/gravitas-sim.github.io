@@ -76,6 +76,8 @@ lists the ones its result rests on.
 | `patchedConic` | Inside a sphere of influence only the planet pulls, outside only the Sun; the sphere is a point in the heliocentric leg |
 | `zeroRevolution` | Lambert transfers go less than one revolution |
 | `planarFlyby` | A flyby is unpowered and in one plane |
+| `ephemerisPack` | The mission lab's planets are the ephemeris pack's: JPL DE441, to within its stated bounds (MISSION_LAB.md) |
+| `namedPullers` | The mission lab's direct flight is pulled only by the Sun and the planets named |
 
 **Derived outputs:**
 - speeds, times and angles;
@@ -174,9 +176,10 @@ The thresholds are measurements, not guesses:
 
 - **Multi-revolution Lambert transfers.** `revolutions` must be 0.
 - **Finite or low-thrust burns.** Every burn is impulsive.
-- **Real planetary positions.** The planets move on circles in one plane,
-  so a window's dates are the model's, not the sky's. Prompt 39's
-  ephemeris packs are where real positions come from.
+- **Real planetary positions, on this page.** The planets move on circles
+  in one plane, so a window's dates here are the model's, not the sky's.
+  The mission lab (`/mission/lab/`, MISSION_LAB.md) runs the same solvers
+  on JPL's DE441 positions.
 - **Trajectories flown under every body at once.** The 3-D kernel checks
   the solvers, and M1 measures the patched conic against three bodies, but
   no trajectory is designed that way.

@@ -41,6 +41,7 @@ const CACHES = {
   spectra: path.join(REPO, '.sdss-cache'),
   gwosc: path.join(REPO, '.gwosc-cache'),
   packs: path.join(REPO, '.packs-cache'),
+  ephemeris: path.join(REPO, '.ephemeris-cache'),
 };
 
 /**
@@ -61,7 +62,7 @@ export const SOURCE_KEYS = Object.freeze(Object.keys(CACHES));
  * run was able to establish, and a release summary that calls it a pass is
  * lying about which.
  *
- * @param {'gw'|'stellar'|'spectra'|'gwosc'|'packs'} which - The dataset
+ * @param {'gw'|'stellar'|'spectra'|'gwosc'|'packs'|'ephemeris'} which - The dataset
  * @returns {boolean} True when the cache has something in it
  */
 export function sourcesCached(which) {
@@ -322,6 +323,14 @@ export const CHECKS = [
     tier: 'slow',
     ci: 'checks',
     group: 'correctness',
+  },
+  {
+    id: 'ephemeris',
+    label: 'the ephemeris pack decodes and holds its stated accuracy',
+    command: ['npm', 'run', 'ephemeris:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'science',
   },
   {
     id: 'mission',
@@ -751,6 +760,16 @@ export const CHECKS = [
     tier: 'provenance',
     ci: null,
     why: 'needs the SDSS CSVs cached; see --provenance',
+    group: 'science',
+  },
+  {
+    id: 'ephemeris-provenance',
+    sources: 'ephemeris',
+    label: 'the ephemeris pack rebuilds from its pinned Horizons answers',
+    command: ['npm', 'run', 'ephemeris:provenance'],
+    tier: 'provenance',
+    ci: null,
+    why: 'needs the Horizons answers cached; see --provenance',
     group: 'science',
   },
   {

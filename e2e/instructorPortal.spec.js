@@ -55,10 +55,13 @@ const ACTIVITY_DOCUMENTS = 8;
 const OBSERVATORY_DOCUMENTS = 4;
 // The 3-D lab's curriculum (LAB3D_CURRICULUM.md): its guides live in /3d/.
 const LAB3D_DOCUMENTS = 2;
+// The mission lab's (MISSION_LAB.md): its guides live in /mission/lab/.
+const MISSION_LAB_DOCUMENTS = 2;
 const ALL_DOCUMENTS =
   GENERAL_DOCUMENTS +
   OBSERVATORY_DOCUMENTS +
   LAB3D_DOCUMENTS +
+  MISSION_LAB_DOCUMENTS +
   ACTIVITY_DOCUMENTS +
   DOCUMENTS;
 

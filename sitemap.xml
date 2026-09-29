@@ -56,6 +56,11 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://gravitas-sim.online/mission/lab/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://gravitas-sim.online/3d/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

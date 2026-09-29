@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mission lab | Gravitas</title>
+    <meta
+      name="description"
+      content="A mission to Mars on JPL's DE441 ephemeris, in three guided parts: a rendezvous in Earth orbit, the 2026 launch window, and the patched-conic design against the spacecraft flown directly. Educational software, not operational mission design."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: the editor, the guide, tables and plain views. */
+      .ml-wrap {
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .ml-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .ml-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        align-items: end;
+        margin: 0.75rem 0;
+      }
+      /* A field's width comes from the bar, not from its control: WebKit
+         sizes a select to its longest option (R6's title is long), and an
+         automatic grid track grows to fit it. */
+      .ml-field {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.25rem;
+        min-width: 0;
+        flex: 1 1 12rem;
+        max-width: 100%;
+      }
+      /* WebKit lays a select's menu out wider than the select and counts
+         it as overflow; clip it inside the select (its focus ring is
+         outside, and stays). */
+      .ml-field select {
+        overflow: hidden;
+      }
+      .ml-field select,
+      .ml-field input {
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
+        max-width: 100%;
+        font: inherit;
+        color: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.35rem 0.45rem;
+      }
+      .ml-wrap section {
+        margin: 1.5rem 0;
+      }
+      .ml-wrap h2 {
+        font-size: 1.15rem;
+      }
+      .ml-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+      }
+      .ml-table caption {
+        text-align: left;
+        color: #b7bfcf;
+        padding-bottom: 0.25rem;
+      }
+      .ml-table th,
+      .ml-table td {
+        text-align: left;
+        vertical-align: top;
+        padding: 0.3rem 0.4rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        overflow-wrap: anywhere;
+      }
+      .ml-scroll {
+        overflow-x: auto;
+      }
+      .ml-plots {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+      }
+      .ml-plots figure {
+        margin: 0;
+      }
+      .ml-plot {
+        width: 100%;
+        height: auto;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 6px;
+      }
+      .ml-plots figcaption {
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .ml-note {
+        border-left: 3px solid var(--accent);
+        padding: 0.25rem 0.75rem;
+        color: #d7dce6;
+      }
+      .ml-window {
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: minmax(0, 1fr);
+        max-width: 40rem;
+      }
+      .ml-window canvas {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 6px;
+        background: #0b0d17;
+      }
+      .ml-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 1rem;
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .ml-swatch {
+        display: inline-block;
+        width: 0.9rem;
+        height: 0.9rem;
+        vertical-align: -0.1rem;
+        margin-right: 0.3rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .ml-refused {
+        background: #3a3f52;
+      }
+      .ml-grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 1100px) {
+        .ml-grid {
+          grid-template-columns: minmax(0, 1fr) 24rem;
+          align-items: start;
+        }
+        .ml-guide {
+          position: sticky;
+          top: 1rem;
+          max-height: calc(100vh - 2rem);
+          overflow-y: auto;
+        }
+      }
+      .ml-guide {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+      }
+      .ml-guide fieldset,
+      .ml-wrap fieldset {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 6px;
+        margin: 0.5rem 0;
+        padding: 0.5rem 0.75rem;
+        min-width: 0;
+      }
+      .ml-wrap legend {
+        padding: 0 0.25rem;
+        color: #d7dce6;
+      }
+      .ml-choice {
+        display: block;
+        margin: 0.25rem 0;
+      }
+      .ml-guide textarea {
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 6rem;
+        font: inherit;
+        color: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+      }
+      .ml-views {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+      }
+      .ml-views figure {
+        margin: 0;
+      }
+      .ml-views svg {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 6px;
+        background: #0b0d17;
+      }
+      .ml-views figcaption,
+      .ml-legend {
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .ml-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 1rem;
+      }
+      .ml-swatch {
+        display: inline-block;
+        width: 0.9rem;
+        height: 0.9rem;
+        vertical-align: -0.1rem;
+        margin-right: 0.3rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .ml-slider {
+        width: 100%;
+      }
+      .ml-window canvas {
+        width: 100%;
+        max-width: 32rem;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 6px;
+        background: #0b0d17;
+      }
+      .ml-row-active {
+        outline: 2px solid var(--accent);
+      }
+      .ml-feedback {
+        min-height: 1.5rem;
+      }
+      progress {
+        width: 12rem;
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main class="ml-wrap" aria-labelledby="ml-title">
+      <div id="langSwitch" class="ml-bar" role="group" aria-label="Language" data-i18n-aria-label="ml.lang"></div>
+      <h1 id="ml-title" data-i18n="ml.title">Mission lab</h1>
+      <p data-i18n="ml.intro"></p>
+      <p class="ml-note" data-i18n="ml.notFor"></p>
+      <p>
+        <a href="/" data-i18n="ml.back">Back to Gravitas</a> ·
+        <a href="/mission/" data-i18n="ml.core">The mission-design core</a> ·
+        <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/MISSION_LAB.md" data-i18n="ml.docs">How the lab works (MISSION_LAB.md)</a>
+      </p>
+      <div class="ml-grid">
+        <div>
+          <section aria-labelledby="ml-plan-h">
+            <h2 id="ml-plan-h" data-i18n="ml.plan.heading"></h2>
+            <p data-i18n="ml.plan.hint"></p>
+            <fieldset>
+              <legend data-i18n="ml.plan.earth"></legend>
+              <div class="ml-bar">
+            <div class="ml-field">
+              <label for="ml-parking" data-i18n="ml.plan.parking"></label>
+              <input id="ml-parking" type="text" inputmode="decimal" value="300" />
+            </div>
+            <div class="ml-field">
+              <label for="ml-depot" data-i18n="ml.plan.depot"></label>
+              <input id="ml-depot" type="text" inputmode="decimal" value="400" />
+            </div>
+            <div class="ml-field">
+              <label for="ml-phase" data-i18n="ml.plan.phase"></label>
+              <input id="ml-phase" type="text" inputmode="decimal" value="17" />
+            </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend data-i18n="ml.plan.departure"></legend>
+              <div class="ml-bar">
+            <div class="ml-field">
+              <label for="ml-date" data-i18n="ml.plan.date"></label>
+              <input id="ml-date" type="text" inputmode="text" value="2026-11-01" />
+            </div>
+            <div class="ml-field">
+              <label for="ml-tof" data-i18n="ml.plan.tof"></label>
+              <input id="ml-tof" type="text" inputmode="numeric" value="309" />
+            </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend data-i18n="ml.plan.arrival"></legend>
+              <div class="ml-bar">
+            <div class="ml-field">
+              <label for="ml-peri" data-i18n="ml.plan.peri"></label>
+              <input id="ml-peri" type="text" inputmode="decimal" value="400" />
+            </div>
+            <div class="ml-field">
+              <label for="ml-apo" data-i18n="ml.plan.apo"></label>
+              <input id="ml-apo" type="text" inputmode="decimal" value="400" />
+            </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend data-i18n="ml.plan.correction"></legend>
+              <div class="ml-bar">
+                <label class="ml-choice"><input id="ml-correct-on" type="checkbox" /> <span data-i18n="ml.plan.correctOn"></span></label>
+            <div class="ml-field">
+              <label for="ml-correct-day" data-i18n="ml.plan.correctDay"></label>
+              <input id="ml-correct-day" type="text" inputmode="numeric" value="30" />
+            </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend data-i18n="ml.plan.vehicle"></legend>
+              <div class="ml-bar">
+            <div class="ml-field">
+              <label for="ml-dry" data-i18n="ml.plan.dry"></label>
+              <input id="ml-dry" type="text" inputmode="decimal" value="2000" />
+            </div>
+            <div class="ml-field">
+              <label for="ml-isp" data-i18n="ml.plan.isp"></label>
+              <input id="ml-isp" type="text" inputmode="decimal" value="320" />
+            </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend data-i18n="ml.plan.direct"></legend>
+              <div class="ml-bar" id="ml-bodies"></div>
+              <div class="ml-bar" role="radiogroup" aria-labelledby="ml-start-label">
+                <span id="ml-start-label" data-i18n="ml.plan.start"></span>
+                <label class="ml-choice"><input type="radio" name="ml-start" value="periapsis" checked /> <span data-i18n="ml.plan.startPeriapsis"></span></label>
+                <label class="ml-choice"><input type="radio" name="ml-start" value="center" /> <span data-i18n="ml.plan.startCenter"></span></label>
+              </div>
+            </fieldset>
+            <div class="ml-bar">
+              <button id="ml-go" type="button" class="ui-button is-primary" data-i18n="ml.compute"></button>
+              <button id="ml-save-plan" type="button" class="ui-button" data-i18n="ml.savePlan" disabled></button>
+            </div>
+            <p id="ml-status" role="status" aria-live="polite"></p>
+          </section>
+
+          <section aria-labelledby="ml-timeline-h">
+            <h2 id="ml-timeline-h" data-i18n="ml.timeline.heading"></h2>
+            <div class="ml-field">
+              <label for="ml-slider" data-i18n="ml.timeline.slider"></label>
+              <input id="ml-slider" class="ml-slider" type="range" min="0" max="309" step="1" value="0" disabled />
+            </div>
+            <p id="ml-slider-out" aria-live="polite"></p>
+            <div id="ml-timeline" class="ml-scroll" tabindex="0" role="region" aria-label="Timeline table" data-i18n-aria-label="ml.timeline.table"></div>
+          </section>
+
+          <section aria-labelledby="ml-views-h">
+            <h2 id="ml-views-h" data-i18n="ml.views.heading"></h2>
+            <div class="ml-views" id="ml-views"></div>
+            <div class="ml-legend" id="ml-legend"></div>
+            <div id="ml-positions" class="ml-scroll" tabindex="0" role="region" aria-label="Positions table" data-i18n-aria-label="ml.views.table"></div>
+          </section>
+
+          <section aria-labelledby="ml-results-h">
+            <h2 id="ml-results-h" data-i18n="ml.results.heading"></h2>
+            <div id="ml-results" class="ml-scroll" tabindex="0" role="region" aria-label="Results tables" data-i18n-aria-label="ml.results.table"></div>
+          </section>
+
+          <section aria-labelledby="ml-window-h" class="ml-window">
+            <h2 id="ml-window-h" data-i18n="ml.window.heading"></h2>
+            <p data-i18n="ml.window.hint"></p>
+            <div class="ml-bar">
+              <button id="ml-window-go" type="button" class="ui-button" data-i18n="ml.window.go"></button>
+              <button id="ml-window-cancel" type="button" class="ui-button" data-i18n="ml.cancel" disabled></button>
+              <progress id="ml-window-progress" max="1" value="0" aria-labelledby="ml-window-status"></progress>
+            </div>
+            <p id="ml-window-status" role="status" aria-live="polite"></p>
+            <canvas id="ml-window-canvas" width="453" height="378" role="img" hidden></canvas>
+            <div class="ml-legend" id="ml-window-legend"></div>
+            <div id="ml-window-out" class="ml-scroll"></div>
+          </section>
+
+          <section aria-labelledby="ml-check-h">
+            <h2 id="ml-check-h" data-i18n="ml.check.heading"></h2>
+            <p data-i18n="ml.check.hint"></p>
+            <button id="ml-check-go" type="button" class="ui-button" data-i18n="ml.check.go"></button>
+            <p id="ml-check-status" role="status" aria-live="polite"></p>
+            <div id="ml-check-out" class="ml-scroll"></div>
+          </section>
+
+          <section aria-labelledby="ml-limits-h">
+            <h2 id="ml-limits-h" data-i18n="ml.limits.heading"></h2>
+            <p data-i18n="ml.limits.intro"></p>
+            <ul id="ml-limits"></ul>
+            <p data-i18n="ml.limits.why"></p>
+          </section>
+        </div>
+
+        <aside class="ml-guide" aria-labelledby="ml-guide-h">
+          <h2 id="ml-guide-h" data-i18n="ml.guide.heading"></h2>
+          <div class="ml-bar" id="ml-guide-pick" role="group" aria-labelledby="ml-guide-h"></div>
+          <div class="ml-bar" role="radiogroup" aria-labelledby="ml-path-label">
+            <span id="ml-path-label" data-i18n="ml.guide.path"></span>
+            <label class="ml-choice"><input type="radio" name="ml-path" value="intro" checked /> <span data-i18n="ml.guide.intro"></span></label>
+            <label class="ml-choice"><input type="radio" name="ml-path" value="advanced" /> <span data-i18n="ml.guide.advanced"></span></label>
+          </div>
+          <div id="ml-step"></div>
+          <details>
+            <summary data-i18n="ml.guide.steps"></summary>
+            <ol id="ml-step-list"></ol>
+          </details>
+          <div class="ml-field">
+            <label for="ml-name" data-i18n="ml.guide.name"></label>
+            <input id="ml-name" type="text" autocomplete="name" />
+          </div>
+          <button id="ml-report" type="button" class="ui-button" data-i18n="ml.guide.report"></button>
+        </aside>
+      </div>
+    </main>
+    <script type="module" src="/js/missionLabPage.js"></script>
+  </body>
+</html>

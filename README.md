@@ -268,9 +268,21 @@ answer with confidence. The 3-D kernel checks every answer independently.
 Answers save as plan files that keep inputs, model and results apart. It
 is not operational mission design or navigation ([MISSION.md](MISSION.md)).
 
+**The mission lab** at `/mission/lab/` flies one mission to Mars on JPL's
+DE441 ephemeris, in three guided parts:
+- a rendezvous with a depot in Earth orbit;
+- the 2026 launch window and its trade-offs;
+- the patched-conic design against the same spacecraft flown directly
+  under the Sun and the planets.
+
+Students measure why the design misses Mars by millions of kilometers, and
+explain it. The ephemeris is a compact pack built once from JPL Horizons,
+with every request and checksum recorded, so the lab needs no remote
+service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
+
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->7266<!--/fact--> strings, and
+of <!--fact:uiStrings-->7625<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -306,7 +318,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->7149<!--/fact--> tests across <!--fact:jestSuites-->214<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->7175<!--/fact--> tests across <!--fact:jestSuites-->215<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -433,8 +445,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1469<!--/fact--> tests
-in <!--fact:e2eFiles-->118<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1478<!--/fact--> tests
+in <!--fact:e2eFiles-->119<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not

@@ -1,0 +1,223 @@
+{
+  "format": "gravitas.ephemeris-pack",
+  "formatVersion": 1,
+  "id": "solar-system-2025-2045",
+  "version": "1.0.0",
+  "title": "Venus, Earth, Mars and Jupiter, 2025 to 2045 (JPL DE441)",
+  "source": {
+    "system": "NASA/JPL Horizons API",
+    "api": "https://ssd.jpl.nasa.gov/api/horizons.api",
+    "apiVersion": "1.2",
+    "ephemeris": "DE441",
+    "citation": "R. S. Park, W. M. Folkner, J. G. Williams and D. H. Boggs 2021, The JPL Planetary and Lunar Ephemerides DE440 and DE441, AJ 161, 105"
+  },
+  "license": {
+    "status": "no-license-stated",
+    "statement": "JPL's Horizons system states no license for its output and asks that the Solar System Dynamics group and the ephemeris be credited.",
+    "basis": "A reduced derivative for teaching, credited in full, with the exact requests and the checksum of every answer recorded so the original states can be fetched again and compared."
+  },
+  "credit": "Planetary states from NASA/JPL Horizons (Solar System Dynamics group), ephemeris DE441 (Park et al. 2021)",
+  "retrieved": "2026-09-29",
+  "frame": {
+    "name": "ecliptic of J2000.0 (ICRF)",
+    "horizons": "Ecliptic of J2000.0",
+    "center": "the Sun's center (Horizons 500@10)"
+  },
+  "timeScale": "TDB",
+  "units": {
+    "length": "km",
+    "velocity": "km/s",
+    "time": "Julian date (TDB)"
+  },
+  "range": {
+    "start": "2025-01-01 00:00 TDB",
+    "stop": "2045-01-01 00:00 TDB",
+    "startJd": 2460676.5,
+    "stopJd": 2467981.5
+  },
+  "request": {
+    "center": "500@10",
+    "step": "1 d",
+    "sampling": {
+      "daily": {
+        "start": "2025-01-01",
+        "stop": "2045-01-01"
+      },
+      "noon": {
+        "start": "2025-01-01 12:00",
+        "stop": "2044-12-31 12:00"
+      }
+    },
+    "fixed": "EPHEM_TYPE=VECTORS, VEC_TABLE=2, REF_PLANE=ECLIPTIC, REF_SYSTEM=ICRF, VEC_CORR=NONE (geometric), OUT_UNITS=KM-S, CSV_FORMAT=YES"
+  },
+  "encoding": {
+    "method": "Chebyshev series per segment and axis, fitted by least squares to daily positions and velocities",
+    "layout": "for each segment, x then y then z: c0 and c1 float64, c2 to cn float32, little-endian, base64",
+    "segments": "fixed length from the start; the last one ends on the last day"
+  },
+  "bodies": [
+    {
+      "id": "venus",
+      "name": {
+        "en": "Venus",
+        "es": "Venus"
+      },
+      "command": "299",
+      "target": "Venus (299)",
+      "source": "DE441",
+      "segmentDays": 64,
+      "degree": 12,
+      "raw": {
+        "daily": {
+          "sha256": "cce895ab97d6b453516e5085b79ef0a7e8bffbf366e19eb199d9d2e07f6427bb",
+          "rows": 7306
+        },
+        "noon": {
+          "sha256": "022bcc7b19ed3d39848f9060e2dd2ed8a3515da73ea0d0dd8609dcbb8badd2af",
+          "rows": 7305
+        }
+      },
+      "segments": 115,
+      "bytes": 20700,
+      "sha256": "6b04f1af3381f72d3b598a602aa07cdcd21afaa1a913cf1dc9d431e66d744f66",
+      "measured": {
+        "fitted": {
+          "positionKm": 1.0426814859016833,
+          "velocityKmS": 0.0000016953840582202223
+        },
+        "heldOut": {
+          "positionKm": 1.0043854652561164,
+          "velocityKmS": 0.0000016380862347755985
+        }
+      },
+      "maxError": {
+        "positionKm": 1.05,
+        "velocityKmS": 0.0000017
+      }
+    },
+    {
+      "id": "earth",
+      "name": {
+        "en": "Earth",
+        "es": "la Tierra"
+      },
+      "command": "399",
+      "target": "Earth (399)",
+      "source": "DE441",
+      "segmentDays": 32,
+      "degree": 12,
+      "raw": {
+        "daily": {
+          "sha256": "fc0ab9f542cba0ca38840d6af25d4b6463e047a347ffb0e8c491e36a8e262b8a",
+          "rows": 7306
+        },
+        "noon": {
+          "sha256": "ddfa478776f3d496d2b2f0208ed448f1fe5a8ef9004a582a79cb383e4b858ee2",
+          "rows": 7305
+        }
+      },
+      "segments": 229,
+      "bytes": 41220,
+      "sha256": "012c493060c3352b7cdb1096b14692b8dadf11cc625f20e8d1703cd8f2d8b93b",
+      "measured": {
+        "fitted": {
+          "positionKm": 4.17350981629949,
+          "velocityKmS": 0.00005296660430377834
+        },
+        "heldOut": {
+          "positionKm": 4.079057420051325,
+          "velocityKmS": 0.00007290000928926511
+        }
+      },
+      "maxError": {
+        "positionKm": 4.18,
+        "velocityKmS": 0.000073
+      }
+    },
+    {
+      "id": "mars",
+      "name": {
+        "en": "Mars",
+        "es": "Marte"
+      },
+      "command": "499",
+      "target": "Mars (499)",
+      "source": "mar099",
+      "segmentDays": 128,
+      "degree": 14,
+      "raw": {
+        "daily": {
+          "sha256": "67896d1bff08c7d301e579fa48d52d00be5c85787185caa5e61c336007942af5",
+          "rows": 7306
+        },
+        "noon": {
+          "sha256": "22aa41eb403cb3867847f3b2cba13f685748e2aeea24740327a7968049bd1874",
+          "rows": 7305
+        }
+      },
+      "segments": 58,
+      "bytes": 11832,
+      "sha256": "bdb98d1618254f23b7028ed621a1ddd59d5f2f859e81adb35a0a44e84c4968a5",
+      "measured": {
+        "fitted": {
+          "positionKm": 1.0304645454256756,
+          "velocityKmS": 0.0000017800436390433405
+        },
+        "heldOut": {
+          "positionKm": 1.0302360225178626,
+          "velocityKmS": 0.0000011346757724643866
+        }
+      },
+      "maxError": {
+        "positionKm": 1.04,
+        "velocityKmS": 0.00000179
+      }
+    },
+    {
+      "id": "jupiter",
+      "name": {
+        "en": "Jupiter (system barycenter)",
+        "es": "Júpiter (baricentro del sistema)"
+      },
+      "command": "5",
+      "target": "Jupiter Barycenter (5)",
+      "source": "DE441",
+      "segmentDays": 256,
+      "degree": 10,
+      "raw": {
+        "daily": {
+          "sha256": "15cddc764ff743a0be9b3f3e9c294fa3b99dfab9a06bf743bacfa18773a0b10a",
+          "rows": 7306
+        },
+        "noon": {
+          "sha256": "851aaab7f20317326304edc42a0a7c58cdf7ffe2e7a72cbb8059b0b84254784a",
+          "rows": 7305
+        }
+      },
+      "segments": 29,
+      "bytes": 4524,
+      "sha256": "d0159ac9f6dde990f0556ff5a3b90894ae3cd84ed4b41c95ade51a0c68043fa8",
+      "measured": {
+        "fitted": {
+          "positionKm": 3.859768831366561,
+          "velocityKmS": 0.000025128165189836464
+        },
+        "heldOut": {
+          "positionKm": 2.8516666429308097,
+          "velocityKmS": 0.000022120082783858864
+        }
+      },
+      "maxError": {
+        "positionKm": 3.86,
+        "velocityKmS": 0.0000252
+      }
+    }
+  ],
+  "output": {
+    "module": "js/data/ephemeris/solarSystem2025.js",
+    "check": "js/data/ephemeris/solarSystem2025Check.js",
+    "moduleSha256": "34b784803056031641962d85fb4e8b9dca87075bf7dabaf470b0fd11f3d1bccf",
+    "moduleBytes": 107129,
+    "checkSha256": "1e37fa0e4f2bfbb0310f20d22b726dadd5dcee3bfab361f281cf896ec614f4e3"
+  }
+}

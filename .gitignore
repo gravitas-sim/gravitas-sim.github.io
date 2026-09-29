@@ -73,5 +73,9 @@ manual/gravitas-user-manual.pdf
 # today). `npm run packs:data` refills it; the packs are committed, these are not.
 .packs-cache/
 
+# Cached JPL Horizons answers for tools/build-ephemeris.mjs. `npm run
+# ephemeris:data` refills it; the pack is committed, these 11 MB are not.
+.ephemeris-cache/
+
 # Reports an earlier CI step left for tools/docs-facts.mjs to read back.
 .facts/
