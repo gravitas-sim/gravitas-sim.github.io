@@ -13,12 +13,15 @@
 //     Gravitas lacks, and a network failure, and leaves what was installed
 //     untouched each time; statusOf() tells available, installed, update,
 //     newer and incompatible apart;
-//   - the stepped series encoding the pulsating star needs decodes exactly.
+//   - the stepped series encoding the pulsating star needs decodes exactly;
+//   - every extension that rebuilds from a raw file pins it, and
+//     `catalog.mjs fetch` keeps nothing an archive serves that is not it.
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
 import { Buffer } from 'node:buffer';
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readdirSync, readFileSync } from 'node:fs';
+import os from 'node:os';
 import { gzipSync } from 'node:zlib';
 import { createHash, webcrypto } from 'node:crypto';
 import { DecompressionStream } from 'node:stream/web';
@@ -36,6 +39,7 @@ import {
 } from '../js/catalog/install.js';
 import { createMemoryStore } from '../js/catalog/store.js';
 import { observationOf } from '../js/observation.js';
+import { fetchSources, readCuration } from '../tools/catalog.mjs';
 
 // Jest's environment lacks two Web APIs the browser and Node itself have; the
 // reader uses them as it would in a page.
@@ -417,5 +421,58 @@ describe('binned-relative-flux/2', () => {
         SERIES: { ...pack.SERIES, fluxStepPpm: 0.5 },
       })
     ).toThrow(/fluxStepPpm/);
+  });
+});
+
+describe("the extensions' raw files", () => {
+  const withScript = () =>
+    readCuration().extensions.filter(item => {
+      try {
+        readFileSync(path.join(REPO, item.path, 'build.mjs'));
+        return true;
+      } catch {
+        return false;
+      }
+    });
+
+  test('every extension that rebuilds from a raw file exports its pin', async () => {
+    const items = withScript();
+    expect(items.length).toBeGreaterThan(0);
+    for (const item of items) {
+      const { RAW } = await import(path.join(REPO, item.path, 'build.mjs'));
+      expect(RAW.url).toMatch(/^https:\/\/mast\.stsci\.edu\/.*\.fits$/);
+      expect(RAW.url.endsWith(RAW.file)).toBe(true);
+      expect(Number.isInteger(RAW.bytes)).toBe(true);
+      expect(RAW.sha256).toMatch(/^[0-9a-f]{64}$/);
+    }
+  });
+
+  test('fetch keeps nothing that is not the pinned file, and says why', async () => {
+    const cache = mkdtempSync(path.join(os.tmpdir(), 'gravitas-xfetch-'));
+    const asked = [];
+    const served = await fetchSources(undefined, {
+      cache,
+      fetchImpl: async url => {
+        asked.push(url);
+        return {
+          ok: true,
+          status: 200,
+          arrayBuffer: async () => new ArrayBuffer(16),
+        };
+      },
+    });
+    expect(served.cached).toBe(0);
+    expect(served.problems).toHaveLength(withScript().length);
+    for (const p of served.problems)
+      expect(p).toMatch(/the archive served different bytes/);
+    expect(readdirSync(cache)).toEqual([]);
+    expect(asked.length).toBe(withScript().length);
+
+    const down = await fetchSources(undefined, {
+      cache,
+      fetchImpl: async () => ({ ok: false, status: 503 }),
+    });
+    for (const p of down.problems) expect(p).toMatch(/HTTP 503/);
+    expect(readdirSync(cache)).toEqual([]);
   });
 });
