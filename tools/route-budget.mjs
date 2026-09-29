@@ -88,6 +88,8 @@ export const ROUTES = [
   { id: 'catalog', url: '/catalog/', page: true },
   { id: 'studio', url: '/studio/', page: true },
   { id: 'composer', url: '/studio/lesson/', page: true },
+  { id: 'course-builder', url: '/studio/course/', page: true },
+  { id: 'course-home', url: '/course/?course=intro-astronomy', page: true },
 ];
 
 const CONFIGS = {
@@ -131,11 +133,22 @@ async function serve(root, port) {
     ],
     { stdio: 'ignore' }
   );
-  await sleep(800);
-  if (child.exitCode !== null)
-    throw new Error(
-      `the static server for ${root} on port ${at} exited (${child.exitCode})`
-    );
+  // Until it answers, not for a fixed time: under load a server takes longer
+  // than any sleep chosen on a quiet machine, and the first route is refused.
+  const deadline = Date.now() + 15_000;
+  while (!(await portTaken(at))) {
+    if (child.exitCode !== null)
+      throw new Error(
+        `the static server for ${root} on port ${at} exited (${child.exitCode})`
+      );
+    if (Date.now() > deadline) {
+      child.kill();
+      throw new Error(
+        `the static server for ${root} on port ${at} never answered`
+      );
+    }
+    await sleep(50);
+  }
   child.port = at;
   return child;
 }

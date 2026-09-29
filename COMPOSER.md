@@ -70,11 +70,16 @@ parser: the graded unit, and the others it accepts.
   remediation itself.
 - A remediation step is never the last step, and never where a prediction is
   marked.
+- Remediation on a held prediction comes after the step where it is marked
+  (`whenHeld`). Before then the prediction has no verdict, and a step that Next
+  showed or passed over would give the verdict away before the experiment runs.
 - So every student walks a straight line to the end, with detours.
 
 The engine does this in `stepApplies` in `js/investigations.js`, and
-`js/authoring/rules.js` checks it as `interaction/when`. A lesson without
-`when` moves exactly as before.
+`js/authoring/rules.js` checks it as `interaction/when`. The engine also treats
+a held prediction as unanswered until its reveal step is reached, as the lesson
+panel does, so a preview staged before `whenHeld` existed still holds it. A
+lesson without `when` moves exactly as before.
 
 ## The question bank
 
@@ -154,6 +159,8 @@ Checks run in two stages:
 
    Prose may use lesson prose's four tags (strong, em, sub, sup) and the
    entities lessons use. It may not use other markup, links or script URLs.
+   A step id is lowercase letters, digits and single hyphens, like the pack's
+   other ids, because the lesson panel writes it into attributes.
 2. **The lesson checker** (`js/authoring/rules.js`), once the file is sound,
    over the compiled lesson and its Spanish shadow. Every rule a lesson in the
    repository passes applies, except the ones that need what a pack does not

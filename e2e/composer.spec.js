@@ -19,6 +19,8 @@
 //     file merges its new questions and refuses a clash, and the lesson
 //     files export;
 //   - a file with the id of a different draft asks first;
+//   - a step id that would end an attribute is refused by the Composer, and a
+//     preview staged with one before that is refused by the lesson panel;
 //   - it reads in Spanish, passes axe in both languages, and fits a phone.
 // =============================================================================
 
@@ -239,6 +241,110 @@ test.describe('the Investigation Composer', () => {
     expect(saved).toEqual([]);
   });
 
+  test('remediation on a held prediction comes after the step it is marked at', async ({
+    page,
+  }) => {
+    await openComposer(page);
+    const at = sid => EXAMPLE_INVESTIGATION.steps.findIndex(s => s.sid === sid);
+    // `guess` is marked at `period`: a step before that is not offered it.
+    const offered = async sid => {
+      await page.locator(`#cp-steps-${at(sid)} > summary`).click();
+      const when = page.locator(`#cp-steps-${at(sid)}-when`);
+      await expect(when).toBeVisible();
+      return when.locator('option').evaluateAll(list => list.map(o => o.value));
+    };
+    expect(await offered('watch')).toEqual(['']);
+    expect(await offered('again')).toEqual([
+      '',
+      'incorrect:guess',
+      'correct:guess',
+      'incorrect:period',
+      'correct:period',
+    ]);
+    // A file that puts one there anyway is refused, in words, and not saved.
+    const pack = JSON.parse(JSON.stringify(EXAMPLE_INVESTIGATION));
+    pack.id = 'held-too-soon';
+    pack.steps[at('watch')].when = { sid: 'guess', is: 'incorrect' };
+    await openFile(page, 'held-too-soon.investigation.json', pack);
+    await expect(page.locator('#cp-checks')).toContainText(
+      `Move this step after step ${at('period') + 1}, where that prediction is marked`
+    );
+    await expect(page.locator('#cp-save')).toBeDisabled();
+  });
+
+  test('the engine holds the prediction even when a stale preview puts remediation before its reveal', async ({
+    page,
+  }) => {
+    await openComposer(page);
+    await page.locator('#cp-preview-go').click();
+    await expect(page.locator('#cp-preview')).toHaveAttribute(
+      'src',
+      /\/\?author=draft-reading-an-orbit&view=student$/
+    );
+    // What a composer from before the rule could stage: a step for students
+    // who predicted wrongly, before the step where the prediction is marked.
+    await page.evaluate(key => {
+      const staged = JSON.parse(localStorage.getItem(key));
+      staged.lesson.steps.find(s => s.sid === 'watch').when = {
+        sid: 'guess',
+        is: 'incorrect',
+      };
+      localStorage.setItem(key, JSON.stringify(staged));
+    }, 'gravitas_composer_preview');
+    const title = sid =>
+      EXAMPLE_INVESTIGATION.steps.find(s => s.sid === sid).title.en;
+    const heading = () =>
+      page.evaluate(
+        () =>
+          document
+            .getElementById('cp-preview')
+            .contentWindow?.document?.getElementById('investigationBody')
+            ?.querySelector('h3')?.textContent ?? null
+      );
+    const count = selector =>
+      page.evaluate(
+        q =>
+          document
+            .getElementById('cp-preview')
+            .contentDocument.querySelectorAll(q).length,
+        selector
+      );
+    const click = selector =>
+      page.evaluate(
+        q =>
+          document
+            .getElementById('cp-preview')
+            .contentDocument.querySelector(q)
+            .click(),
+        selector
+      );
+    const guess = EXAMPLE_INVESTIGATION.steps.find(s => s.sid === 'guess');
+    const wrong = guess.answer === 0 ? 1 : 0;
+    // Right or wrong, Next goes to the same place: nothing says which it was.
+    for (const choice of [guess.answer, wrong]) {
+      await page.evaluate(
+        n => {
+          const f = document.getElementById('cp-preview');
+          f.src = `${f.src.replace(/&step=.*$/, '')}&step=${n}&try=${Date.now()}`;
+        },
+        EXAMPLE_INVESTIGATION.steps.indexOf(guess) + 1
+      );
+      await expect.poll(heading, { timeout: 30_000 }).toBe(guess.title.en);
+      await click(`#investigationBody [data-option="${choice}"]`);
+      await expect.poll(() => count('#investigationBody .inv-held')).toBe(1);
+      await click('#investigationNext');
+      await expect.poll(heading).toBe(title('time-it'));
+    }
+    // Once the reveal has marked it wrong, the step is there going back.
+    await click('#investigationNext');
+    await expect.poll(heading).toBe(title('period'));
+    await expect.poll(() => count('.inv-verdict.is-wrong')).toBe(1);
+    await click('#investigationPrev');
+    await expect.poll(heading).toBe(title('time-it'));
+    await click('#investigationPrev');
+    await expect.poll(heading).toBe(title('watch'));
+  });
+
   test('a sample lab report is a PDF made from the answer key', async ({
     page,
   }) => {
@@ -334,6 +440,99 @@ test.describe('the Investigation Composer', () => {
     ]);
     await page.locator('#cp-conflict-both').click();
     await expect(page.locator('#cp-id')).toHaveValue('reading-an-orbit-2');
+  });
+
+  test.describe('a step id is text from a file', () => {
+    // The lesson panel writes `<lesson>:<sid>` into attributes, and a pack's
+    // sid is whatever the file says. This one closes data-field="..." on the
+    // measure step's input, and the `//` comments out the `:<field>` the key
+    // carries after it, so the handler is one that would really run.
+    const INJECTED = 'x" autofocus onfocus="window.__injected=1;//';
+    const MEASURE = EXAMPLE_INVESTIGATION.steps.findIndex(
+      s => s.sid === 'time-it'
+    );
+
+    test('the Composer refuses one that would end an attribute, and stages nothing', async ({
+      page,
+    }) => {
+      await openComposer(page);
+      const pack = JSON.parse(JSON.stringify(EXAMPLE_INVESTIGATION));
+      pack.id = 'crafted-sid';
+      pack.steps[MEASURE].sid = INJECTED;
+      await openFile(page, 'crafted-sid.investigation.json', pack);
+      await expect(page.locator('#cp-id')).toHaveValue('crafted-sid');
+      await expect(page.locator('#cp-checks')).toContainText(
+        'Up to 80 lowercase letters, digits and single hyphens, and not only digits.'
+      );
+      await expect(page.locator('#cp-preview-go')).toBeDisabled();
+      await expect(page.locator('#cp-preview-author')).toBeHidden();
+      expect(
+        await page.evaluate(() =>
+          localStorage.getItem('gravitas_composer_preview')
+        )
+      ).toBeNull();
+    });
+
+    test('a preview staged with one before that is refused by the lesson panel', async ({
+      page,
+      app,
+    }) => {
+      // Stage the example, then give it the sid an earlier Composer compiled
+      // verbatim: that draft is still in storage after an upgrade.
+      await openComposer(page);
+      await page.locator('#cp-preview-go').click();
+      await expect(page.locator('#cp-preview')).toHaveAttribute(
+        'src',
+        /draft-reading-an-orbit/
+      );
+      await page.evaluate(sid => {
+        const stored = JSON.parse(
+          localStorage.getItem('gravitas_composer_preview')
+        );
+        stored.lesson.steps.find(s => s.sid === 'time-it').sid = sid;
+        localStorage.setItem(
+          'gravitas_composer_preview',
+          JSON.stringify(stored)
+        );
+      }, INJECTED);
+
+      await app.boot({
+        url: `/?author=draft-reading-an-orbit&view=student&step=${MEASURE + 1}`,
+      });
+      // The open has run to the end, whichever way it went.
+      await expect
+        .poll(
+          () =>
+            page.evaluate(
+              () =>
+                document.getElementById('gravitasToast')?.textContent ||
+                document.querySelector('#investigationBody h3')?.textContent ||
+                null
+            ),
+          { timeout: 30_000 }
+        )
+        .not.toBeNull();
+      const added = await page.evaluate(() =>
+        [...document.querySelectorAll('#investigationPanel *')].flatMap(el =>
+          el
+            .getAttributeNames()
+            .filter(name => name === 'autofocus' || name.startsWith('on'))
+        )
+      );
+      expect(added).toEqual([]);
+      await page.evaluate(() => {
+        for (const input of document.querySelectorAll(
+          '#investigationBody input'
+        ))
+          input.focus();
+      });
+      expect(await page.evaluate(() => window.__injected)).toBeUndefined();
+      // Refused rather than drawn, and said so.
+      await expect(page.locator('#gravitasToast')).toHaveText(
+        'That lesson could not be loaded. Try again.'
+      );
+      await expect(page.locator('#investigationPanel')).toBeHidden();
+    });
   });
 
   test('the raw view refuses what does not parse and changes nothing', async ({

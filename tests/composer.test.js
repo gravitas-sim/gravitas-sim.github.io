@@ -298,10 +298,25 @@ describe('the rules the engine’s remediation needs (js/authoring/rules.js)', (
       inv => (step(inv, 'guess').reveal = 'again'),
       /held prediction/,
     ],
+    [
+      'names a held prediction before it is marked',
+      inv => (step(inv, 'watch').when = { sid: 'guess', is: 'incorrect' }),
+      /^2 when names "guess", a held prediction not marked until "period"$/,
+    ],
   ])('refuse one that %s', (_, mutate, expected) => {
     const inv = lesson();
     mutate(inv);
     expect(whenFindings(inv).join('\n')).toMatch(expected);
+  });
+
+  test('pass one on a held prediction once it is marked, in the whole verdict', async () => {
+    const inv = lesson();
+    step(inv, 'again').when = { sid: 'guess', is: 'incorrect' };
+    expect(whenFindings(inv)).toEqual([]);
+    const pack = clone(EXAMPLE_INVESTIGATION);
+    step(pack, 'again').when = { sid: 'guess', is: 'correct' };
+    const r = await checkInvestigationPack(pack);
+    expect([r.errors, r.findings]).toEqual([[], []]);
   });
 
   test('find nothing to say about the lessons Gravitas ships', () => {

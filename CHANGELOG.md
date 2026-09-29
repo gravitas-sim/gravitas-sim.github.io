@@ -15,6 +15,28 @@ the release rather than in the tag.
 
 ### Added
 
+- **Course packs** (COURSE_PACKS.md). `gravitas.course-pack/2` orders a
+  course's lessons, assignments cut from them, scenarios, datasets and
+  readings in units, with objectives, prerequisites, time, optional
+  introductory and advanced paths, and notes in English and Spanish.
+  - **The builder,** at `/studio/course/`, picks content from this build and
+    the catalog. It checks what the course depends on, its licenses and its
+    translations, configures assignments, and makes the course's links,
+    embeds, a machine-readable manifest and a printable syllabus.
+  - **Pins:** every lesson is pinned to a digest of its steps and its
+    package. A course is exact (an archive: any change waits for review) or
+    compatible (only what can break waits). The reviewed upgrade re-pins
+    what an instructor has looked at, re-issues an assignment whose steps
+    moved, and raises the course's version.
+  - **The course home,** at `/course/`, is what students open: from a link, a
+    file, or a course Gravitas ships. It filters by path, prints as a
+    syllabus, reads in English or Spanish, and opens offline once Gravitas
+    has been opened.
+  - **Introductory astronomy,** a four-unit course from existing content, is
+    the first course Gravitas ships.
+  - A /1 course migrates. The Observatory opens a built-in observation by
+    `?open=<id>`.
+
 - **The Investigation Composer** (COMPOSER.md). A page at `/studio/lesson/`
   composes a guided investigation as data, `gravitas.investigation-pack/1`,
   judged by the same lesson checker as every built-in lesson.
@@ -739,6 +761,60 @@ the release rather than in the tag.
   - **Cost:** nothing. The minifier shortens the local name, so the built
     Observatory, experiments and inference-worker chunks are 724 bytes
     smaller; the app's deferred bundle is unchanged.
+- **A pull request could go over a route budget with green CI.**
+  - **What it did:** `npm run budget:routes` ran only in the local release
+    gate. Its registry entry said no CI job had both the sources and a
+    build, but `e2e-build` has had both since before the check existed.
+    #97 took the published front door and sandbox 317 bytes over their
+    ceilings, and only a later local gate run found it.
+  - **What it does now:** `e2e-build` runs the check before its specs,
+    against its checkout and the `dist/` artifact, with a five-minute step
+    timeout. It takes about a minute, and that job finishes well before the
+    slowest sources shard. `tools/route-budget.mjs` now waits for its static
+    server to answer instead of sleeping 800 ms, which under load let the
+    first route be refused.
+  - **Cost:** no ceiling moved, and nothing in the application changed.
+- **A remediation step could tell a student whether a held prediction was
+  right** before the experiment did (COMPOSER.md).
+  - **What it did:** a pack could put a remediation step (`when`) on a held
+    prediction (`reveal`) before the step where the prediction is marked.
+    The lesson panel held the verdict on screen, but Next showed that step
+    to students who predicted one way and passed over it for the rest. Where Next went was the verdict, so the answer key, not
+    the experiment, settled the prediction.
+  - **What it does now:** the composer refuses such a step as `whenHeld`, on
+    its "Shown to" field, in English and Spanish, and that list no longer
+    offers a prediction before it is marked. `js/authoring/rules.js` refuses
+    the same thing as `interaction/when` in any lesson. The engine also
+    treats a held prediction as unanswered until its reveal step is reached,
+    as the panel already did. So a preview staged by an older composer passes
+    over the step for every student, and shows it on the way back once the
+    prediction is marked.
+  - **Tests:** `tests/investigationPack.test.js` refuses remediation before
+    the reveal, answered either way or with the reveal moved past it, and
+    accepts it after. `tests/composer.test.js` does the same through the
+    lesson checker and the whole verdict. `e2e/composer.spec.js` checks the
+    list and the refusal on the page. It also stages the old shape in the
+    preview and presses Next after a right and after a wrong prediction:
+    both land on the same step.
+  - **Cost:** deferred JavaScript is 178 bytes larger, inside its 4180 KB.
+    No route or request ceiling moved.
+- **A saved answer with a double quote in it broke out of its box.**
+  - **What it did:** the lesson panel wrote a saved numeric answer and a
+    saved measure field back into `value="…"` with `escape()`, which is
+    `escapeHtml()` from `js/lessonMarkup.js`. That is for element text and
+    leaves `"` alone. A student who typed a quote got back only what came
+    before it, and the rest was read as more attributes of the box. Saved
+    answers are also restored from progress backups, which accept any string,
+    so an edited backup could put an `onfocus` on the lesson page and run it.
+  - **What it does now:** both use `attr()`, which `js/investigations.js`
+    already had for its other attributes. Nothing else in `js/` writes typed
+    or imported text into an attribute that way: the other panels' own
+    escapers already escape the quote.
+  - **Tests:** `e2e/answerEntry.spec.js` types a breakout string into the
+    numeric box of Kepler's Laws, and restores one from a crafted backup into
+    a measure field. Each step is reopened from storage in a fresh page, and
+    must hold the whole string, with no attribute added and nothing run when
+    it is focused.
 - **Fifteen expected observations reached no document.**
   - **What it did:** the answer key leaves out a step that only asks students
     to read or watch, and it left that step's expectation out with it. The
@@ -864,6 +940,34 @@ the release rather than in the tag.
 - **Refresh Scenario emptied a world a link had brought its own bodies to.**
   A link with bodies and no scenario, such as a shared Blank Simulation
   world, now rebuilds those bodies, as it already did for a built system.
+- **A Composer pack's step id could add attributes to the lesson panel.**
+  - **What it did:** a step's `sid` only had to be 1 to 80 characters, with
+    no colon and not only digits, in the pack format
+    (`js/platform/investigation.js`) and in the lesson checker
+    (`js/investigations/progressSchema.js`). The panel writes
+    `<lesson>:<sid>` into attributes without escaping it, and since the
+    Investigation Composer (#98) opens a pack from a file, a sid is text
+    someone else may have written. A quote in one ended `data-field="…"` on a
+    measure step's input, and the rest of the sid became attributes of it: a
+    preview of such a pack gave the field an `autofocus` and an `onfocus`
+    handler, and focusing it ran the handler on the lesson page.
+  - **What it does now:** a sid is lowercase letters, digits and single
+    hyphens, like every other public id in a pack, and still not only digits.
+    Both copies of the rule say so, and so does the Composer's message on the
+    field. Every sid in the built-in lessons, their Spanish and the capability
+    packages already had that form. The lesson panel refuses to open a lesson
+    with any other sid, which covers a preview an earlier Composer staged, and
+    it escapes the step key with `attr()` in every attribute it is written
+    into (the checklist, the written and numeric answers and their buttons,
+    and the measure fields), and with `CSS.escape()` in the measure-field
+    lookup.
+  - **Tests:** `tests/investigationPack.test.js` and
+    `tests/authoring.test.js` refuse a sid with a quote in a pack and in a
+    lesson, and `tests/progressIdentity.test.js` holds both copies of the rule
+    to one table. `e2e/composer.spec.js` opens a crafted pack file, which the
+    Composer now marks and will not preview, and a crafted preview left in
+    storage, which the panel now refuses, with no attribute added and nothing
+    run.
 - **Lesson prose showed its HTML entities as text** (STUDIO_ROUNDTRIP_GATE.md,
   bugs the audit found).
   - **What it did:** `prose()` escaped every `&` before it let its four tags

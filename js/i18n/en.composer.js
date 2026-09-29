@@ -254,7 +254,8 @@ export const EN_COMPOSER = {
   'composer.error.closing':
     'The last step closes the investigation: make it a read or an explore step.',
   'composer.error.stepType': 'One of: {options}.',
-  'composer.error.sid': 'Up to 80 characters, no colon, and not only digits.',
+  'composer.error.sid':
+    'Up to 80 lowercase letters, digits and single hyphens, and not only digits.',
   'composer.error.firstSetup': 'The first step opens a scenario.',
   'composer.error.widget': 'Choose an instrument Gravitas has.',
   'composer.error.earlier': 'Choose an earlier step.',
@@ -278,6 +279,8 @@ export const EN_COMPOSER = {
     'Choose a graded step: a prediction, or a choice or number question.',
   'composer.error.whenNested':
     'Choose a step every student reaches: remediation is one level deep.',
+  'composer.error.whenHeld':
+    'Move this step after step {n}, where that prediction is marked: before then, showing it or passing it over gives the answer away.',
   'composer.error.whenLast': 'The last step is one every student reaches.',
   'composer.error.kind': 'One of: {options}.',
   'composer.error.itemVersion': 'A whole number from 1.',

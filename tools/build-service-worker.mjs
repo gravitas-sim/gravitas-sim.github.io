@@ -122,6 +122,10 @@ const FILES = [
   // (js/catalog/store.js), and one not installed is not wanted offline.
   { path: 'catalog/index.html', core: false },
   { path: 'catalog/catalog.json', core: false },
+  // The course home: a course link opens offline once Gravitas has been
+  // opened, since the pack is in the link and the page's modules are under
+  // js/. Optional, as the catalog is. The builder (studio/course/) is not.
+  { path: 'course/index.html', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
   { path: 'images/transit-of-venus-2012.jpg', core: false },

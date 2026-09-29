@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Course-pack builder | Gravitas</title>
+    <meta
+      name="description"
+      content="Assemble a Gravitas course from its lessons, assignments, simulations, data and readings, with objectives, time, optional paths and notes in English and Spanish; pin its lessons, check what it depends on, and make its links, manifest and syllabus."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page, and the same as the Investigation Composer's
+         (studio/lesson/): a toolbar, an editor, and a column of checks,
+         links and the preview. */
+      .st-wrap {
+        max-width: 84rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .st-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .st-layout {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 64rem) {
+        .st-layout {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+          align-items: start;
+        }
+        .st-side {
+          position: sticky;
+          top: 1rem;
+          max-height: calc(100vh - 2rem);
+          overflow-y: auto;
+        }
+      }
+      .st-toolbar,
+      .st-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        margin: 0.75rem 0;
+      }
+      .st-section,
+      .st-side section,
+      .st-wrap fieldset {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.9rem 1rem 1rem;
+        margin: 0 0 1.25rem;
+        min-width: 0;
+      }
+      .st-wrap h2 {
+        font-size: 1.15rem;
+        margin: 0 0 0.5rem;
+      }
+      .st-wrap h3 {
+        font-size: 1rem;
+        margin: 0.75rem 0 0.5rem;
+      }
+      .cp-card {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        margin: 0 0 0.75rem;
+      }
+      .cp-card[open] {
+        padding-bottom: 1rem;
+      }
+      .cp-card > summary {
+        cursor: pointer;
+        font-weight: 600;
+        padding: 0.25rem 0;
+        overflow-wrap: anywhere;
+      }
+      .st-wrap legend {
+        font-weight: 600;
+        padding: 0 0.35rem;
+      }
+      .st-grid {
+        display: grid;
+        gap: 0.25rem 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      }
+      .st-pair {
+        display: grid;
+        gap: 0.25rem 1rem;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 40rem) {
+        .st-pair {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+      }
+      .st-field {
+        display: grid;
+        gap: 0.25rem;
+        align-content: start;
+        margin: 0.5rem 0 0;
+        min-width: 0;
+      }
+      .st-check {
+        display: inline-flex;
+        gap: 0.4rem;
+        align-items: center;
+        margin: 0.3rem 1rem 0.3rem 0;
+      }
+      .st-wrap input[type='text'],
+      .st-wrap select,
+      .st-wrap textarea {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        font: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.4rem 0.5rem;
+      }
+      .st-wrap [aria-invalid='true'] {
+        border-color: #ff8a80;
+      }
+      .st-hint {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .st-error {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #ff8a80;
+      }
+      .st-state {
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .st-state[data-state='missing'] {
+        color: #ffd180;
+      }
+      .st-state[data-state='stale'] {
+        color: #ff8a80;
+      }
+      .st-state[data-state='done'] {
+        color: #9be7a0;
+      }
+      .st-list {
+        margin: 0.5rem 0 0;
+        padding-left: 1.2rem;
+      }
+      .st-list li {
+        margin: 0.25rem 0;
+        overflow-wrap: anywhere;
+      }
+      .st-list li[data-level='error'] {
+        color: #ff8a80;
+      }
+      .st-list li[data-level='warn'] {
+        color: #ffd180;
+      }
+      .st-link {
+        background: none;
+        border: 0;
+        padding: 0;
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .st-status {
+        min-height: 1.3em;
+        margin: 0.25rem 0 0;
+      }
+      .st-preview {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        background: #07080f;
+      }
+      .st-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+      }
+      .st-table th,
+      .st-table td {
+        text-align: left;
+        vertical-align: top;
+        padding: 0.3rem 0.4rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        overflow-wrap: anywhere;
+      }
+      .st-scroll {
+        overflow-x: auto;
+      }
+      #st-raw-text {
+        min-height: 18rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.8rem;
+      }
+      .st-wrap dialog {
+        max-width: 36rem;
+        color: inherit;
+        background: #11131e;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+      }
+      .st-wrap dialog::backdrop {
+        background: rgba(0, 0, 0, 0.6);
+      }
+      .cb-steps {
+        margin: 0.25rem 0 0;
+        padding-left: 1.5rem;
+        max-height: 22rem;
+        overflow-y: auto;
+      }
+      .st-preview.cb-home {
+        aspect-ratio: 3 / 4;
+        background: #07080f;
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main
+      class="st-wrap"
+      aria-label="Course-pack builder"
+      data-i18n-aria-label="course.title"
+    >
+      <div
+        id="langSwitch"
+        class="st-actions"
+        role="group"
+        aria-label="Language"
+        data-i18n-aria-label="studio.lang.label"
+      ></div>
+      <h1 data-i18n="course.title">Course-pack builder</h1>
+      <p data-i18n="course.intro"></p>
+      <p>
+        <a href="/" data-i18n="studio.back">Back to Gravitas</a> ·
+        <a href="/studio/" data-i18n="course.toStudio">The Scenario Studio</a> ·
+        <a href="/studio/lesson/" data-i18n="course.toComposer">The Investigation Composer</a> ·
+        <a href="/course/" data-i18n="course.toHome">The course home</a>
+      </p>
+
+      <div
+        class="st-toolbar"
+        role="group"
+        aria-label="Course file"
+        data-i18n-aria-label="course.toolbar.label"
+      >
+        <button id="cb-new" type="button" class="ui-button" data-i18n="course.action.new"></button>
+        <button id="cb-example" type="button" class="ui-button" data-i18n="course.action.example"></button>
+        <button id="cb-open" type="button" class="ui-button" data-i18n="studio.action.open"></button>
+        <input id="cb-file" type="file" accept="application/json,.json" hidden />
+        <button id="cb-save" type="button" class="ui-button is-primary" data-i18n="studio.action.save"></button>
+        <button id="cb-manifest" type="button" class="ui-button" data-i18n="course.action.manifest"></button>
+        <button id="cb-syllabus" type="button" class="ui-button" data-i18n="course.action.syllabus"></button>
+        <button id="cb-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
+        <button id="cb-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+      </div>
+      <div class="st-toolbar">
+        <label for="cb-drafts" data-i18n="studio.drafts.label"></label>
+        <select id="cb-drafts"></select>
+        <button id="cb-drafts-open" type="button" class="ui-button" data-i18n="studio.drafts.open"></button>
+        <button id="cb-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
+      </div>
+      <p id="cb-storage" class="st-error" data-i18n="studio.storage.failed" hidden></p>
+      <p id="cb-status" class="st-status" role="status" aria-live="polite"></p>
+
+      <div class="st-layout">
+        <div>
+          <div id="cb-editor"></div>
+          <details id="cb-raw" class="st-section">
+            <summary data-i18n="studio.raw.heading"></summary>
+            <label for="st-raw-text" data-i18n="course.raw.label"></label>
+            <textarea id="st-raw-text" spellcheck="false" aria-describedby="cb-raw-error"></textarea>
+            <p id="cb-raw-error" class="st-error" role="alert" hidden></p>
+            <div class="st-actions">
+              <button id="cb-raw-apply" type="button" class="ui-button" data-i18n="studio.raw.apply"></button>
+              <button id="cb-raw-revert" type="button" class="ui-button" data-i18n="studio.raw.revert"></button>
+            </div>
+          </details>
+        </div>
+        <div class="st-side">
+          <section aria-labelledby="cb-checks-h">
+            <h2 id="cb-checks-h" data-i18n="studio.checks.heading"></h2>
+            <p id="cb-checks-summary" class="st-hint"></p>
+            <ul id="cb-checks" class="st-list"></ul>
+          </section>
+          <section aria-labelledby="cb-review-h">
+            <h2 id="cb-review-h" data-i18n="course.review.heading"></h2>
+            <p class="st-hint" data-i18n="course.review.hint"></p>
+            <p id="cb-review-summary" class="st-hint"></p>
+            <ul id="cb-review" class="st-list"></ul>
+            <div class="st-actions">
+              <button id="cb-upgrade" type="button" class="ui-button" data-i18n="course.action.upgrade" disabled></button>
+            </div>
+          </section>
+          <section aria-labelledby="cb-estimate-h">
+            <h2 id="cb-estimate-h" data-i18n="course.estimate.heading"></h2>
+            <ul id="cb-estimate" class="st-list"></ul>
+          </section>
+          <section aria-labelledby="cb-translation-h">
+            <h2 id="cb-translation-h" data-i18n="course.translation.heading"></h2>
+            <p id="cb-translation-summary" class="st-hint"></p>
+            <ul id="cb-translation" class="st-list"></ul>
+          </section>
+          <section aria-labelledby="cb-graph-h">
+            <h2 id="cb-graph-h" data-i18n="course.graph.heading"></h2>
+            <div id="cb-graph"></div>
+          </section>
+          <section aria-labelledby="cb-links-h">
+            <h2 id="cb-links-h" data-i18n="course.links.heading"></h2>
+            <p class="st-hint" data-i18n="course.links.hint"></p>
+            <div id="cb-links"></div>
+          </section>
+          <section aria-labelledby="cb-preview-h">
+            <h2 id="cb-preview-h" data-i18n="studio.preview.heading"></h2>
+            <p class="st-hint" data-i18n="course.preview.hint"></p>
+            <div class="st-actions">
+              <button id="cb-preview-go" type="button" class="ui-button" data-i18n="course.preview.go"></button>
+            </div>
+            <iframe
+              id="cb-preview"
+              class="st-preview cb-home"
+              title="The course home, as a student sees it"
+              data-i18n-aria-label="course.preview.frame"
+            ></iframe>
+          </section>
+          <section aria-labelledby="cb-diff-h">
+            <h2 id="cb-diff-h" data-i18n="studio.diff.heading"></h2>
+            <p id="cb-diff-summary" class="st-hint"></p>
+            <ul id="cb-diff" class="st-list"></ul>
+          </section>
+        </div>
+      </div>
+
+      <dialog id="cb-conflict" aria-labelledby="cb-conflict-h">
+        <h2 id="cb-conflict-h" data-i18n="studio.conflict.heading"></h2>
+        <p id="cb-conflict-text"></p>
+        <ul id="cb-conflict-diff" class="st-list"></ul>
+        <div class="st-actions">
+          <button id="cb-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
+          <button id="cb-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>
+          <button id="cb-conflict-cancel" type="button" class="ui-button" data-i18n="studio.conflict.cancel" autofocus></button>
+        </div>
+      </dialog>
+    </main>
+    <script type="module" src="/js/coursePage.js"></script>
+  </body>
+</html>
