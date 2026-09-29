@@ -418,10 +418,7 @@ export const CHECKS = [
     label: 'what a fresh visitor downloads, route by route',
     command: ['npm', 'run', 'budget:routes'],
     tier: 'slow',
-    ci: null,
-    why:
-      'loads every page route in a browser, against the sources and against ' +
-      'the build the gate has just made; no CI job has both',
+    ci: 'e2e-build',
     group: 'correctness',
   },
   {
