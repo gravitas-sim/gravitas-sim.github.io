@@ -858,6 +858,11 @@ jobs:
             echo "The timings are current." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
+          # A dispatch is a dry run: it says what the schedule would offer.
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "Dry run: the timings changed, and the scheduled run would offer them as a pull request. The file is attached as the e2e-timings artifact." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           branch="chore/e2e-timings-$(date -u +%Y%m%d)"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
