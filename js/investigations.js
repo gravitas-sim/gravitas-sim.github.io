@@ -116,6 +116,7 @@ import {
 } from './widgets.js';
 import {
   indexOfSid,
+  isValidSid,
   readProgress,
   stepKey,
   writeProgress,
@@ -2058,7 +2059,7 @@ function renderStep() {
         .map((c, i) => {
           const key = `${id}:check:${i}`;
           const on = responses[key] ? 'checked' : '';
-          return `<li><label><input type="checkbox" data-check="${key}" ${on} /> <span>${prose(c)}</span></label></li>`;
+          return `<li><label><input type="checkbox" data-check="${attr(key)}" ${on} /> <span>${prose(c)}</span></label></li>`;
         })
         .join('')}</ul>`
     );
@@ -2149,7 +2150,7 @@ function renderStep() {
       );
     }
     parts.push(
-      `<textarea class="inv-answer" data-answer="${id}" rows="4"
+      `<textarea class="inv-answer" data-answer="${attr(id)}" rows="4"
          aria-describedby="invAnswerNote"
          placeholder="${escape(t('inv.answer.placeholder'))}">${escape(saved || '')}</textarea>`
     );
@@ -2170,7 +2171,7 @@ function renderStep() {
       const ready = String(saved || '').trim().length >= SHORT_ANSWER_MIN;
       parts.push(
         `<div class="inv-short-reveal">
-           <button type="button" class="ui-button" data-reveal="${id}"
+           <button type="button" class="ui-button" data-reveal="${attr(id)}"
                    ${shown ? 'hidden' : ''} ${ready ? '' : 'disabled'}>
              Compare with a model answer
            </button>
@@ -2195,10 +2196,10 @@ function renderStep() {
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
     parts.push(
       `<div class="inv-numeric">
-         <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${id}"
+         <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${attr(id)}"
                 value="${attr(saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
          ${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}
-         <button type="button" class="ui-button" data-check-numeric="${id}">${escape(t('inv.answer.check'))}</button>
+         <button type="button" class="ui-button" data-check-numeric="${attr(id)}">${escape(t('inv.answer.check'))}</button>
        </div>`
     );
 
@@ -2250,7 +2251,7 @@ function renderStep() {
           return `<label class="inv-field${derived ? ' is-derived' : ''}">
               <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ' <span class="inv-field-auto">worked out for you</span>' : ''}</span>
               <input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
-                     data-field="${key}" value="${attr(responses[key] ?? '')}"
+                     data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
                      placeholder="${escape(f.hint || '')}" />
             </label>`;
@@ -2939,7 +2940,9 @@ function refreshMeasurements() {
   if (recomputeFields(step, id)) {
     for (const f of step.fields || []) {
       if (!f.compute) continue;
-      const input = els.body.querySelector(`[data-field="${id}:${f.id}"]`);
+      const input = els.body.querySelector(
+        `[data-field="${CSS.escape(`${id}:${f.id}`)}"]`
+      );
       if (input) input.value = responses[`${id}:${f.id}`] ?? '';
     }
     save();
@@ -3615,6 +3618,17 @@ export async function openInvestigation(id, opts = {}) {
   // lesson might not be there yet.
   const inv = await loadInvestigation(id);
   if (!inv || generation !== openGeneration) return;
+  // Every step key is written into the panel's attributes and selectors. The
+  // pack validator and the lesson checker refuse a sid that could end an
+  // attribute; this refuses a lesson that reached the panel without passing
+  // either - a Composer preview staged before they did, for one - rather than
+  // rendering it.
+  const unsafe = inv.steps.find(s => !isValidSid(s.sid));
+  if (unsafe) {
+    throw new Error(
+      `Lesson "${id}" has a step id that is not a safe key: ${JSON.stringify(unsafe.sid)}`
+    );
+  }
 
   // An assignment is the same lesson with most of its steps taken out. It is
   // built here rather than being a second kind of thing the panel has to know

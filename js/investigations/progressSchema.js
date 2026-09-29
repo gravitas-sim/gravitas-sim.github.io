@@ -64,14 +64,16 @@ export const stepKey = (lessonId, sid) => `${lessonId}:${sid}`;
  * confused for one another, and anything containing a colon so the sub-key
  * scheme above stays unambiguous.
  *
+ * And anything but lowercase letters, digits and single hyphens: the key is
+ * written into the lesson panel's attributes, and a pack's sid is imported.
+ *
  * @param {*} sid - Candidate
  * @returns {boolean} Whether it is well formed
  */
 export const isValidSid = sid =>
   typeof sid === 'string' &&
-  sid.length > 0 &&
   sid.length <= 80 &&
-  !sid.includes(':') &&
+  /^[a-z0-9]+(-[a-z0-9]+)*$/.test(sid) &&
   !/^\d+$/.test(sid);
 
 /** @param {object} lesson - A merged lesson @returns {Array<string>} Its sids, in order */
