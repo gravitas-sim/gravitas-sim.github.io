@@ -9,10 +9,11 @@
 // LAB3D.md documents the API.
 //
 // The kernel is not imported here: this module is what a page loads, and the
-// kernel belongs to the Worker.
+// kernel belongs to the Worker. A live session (API 1.1) has its own client,
+// ./liveClient.js, so a page that only runs systems does not download it.
 // =============================================================================
 
-export const LAB3D_API = '1.0.0';
+export const LAB3D_API = '1.1.0';
 export {
   validateSystem,
   migrateSystem,

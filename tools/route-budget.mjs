@@ -91,6 +91,7 @@ export const ROUTES = [
   { id: 'course-builder', url: '/studio/course/', page: true },
   { id: 'course-home', url: '/course/?course=intro-astronomy', page: true },
   { id: 'lab3d', url: '/lab3d/', page: true },
+  { id: 'lab3d-lab', url: '/3d/?system=R3', page: true },
 ];
 
 const CONFIGS = {

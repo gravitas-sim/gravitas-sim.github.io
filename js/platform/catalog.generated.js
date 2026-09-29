@@ -2,7 +2,7 @@
 
 export const PLATFORM_API = '1.0.0';
 export const PACKAGES = {
-  'gravitas.lab3d': ['1.0.0', '^1.0.0', {}],
+  'gravitas.lab3d': ['1.1.0', '^1.0.0', {}],
   'gravitas.lesson.power-law-gravity': [
     '1.0.0',
     '^1.0.0',

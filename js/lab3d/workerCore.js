@@ -12,6 +12,10 @@
 //                    -> {type: 'result', id, result, checks}
 //                    {type: 'bench', bodies: [n...], ms}
 //                    -> {type: 'bench', results: {'scheme/n': steps per s}}
+//                    {type: 'live', id, system, options}   (API 1.1)
+//                    {type: 'live-advance', id, intervals}
+//                    {type: 'live-stop', id}
+//                    -> {type: 'snapshot', id, snapshot} (./snapshot.js)
 //   worker -> page   {type: 'hello', api}
 //                    {type: 'progress', id, fraction}
 //                    {type: 'result', id, result}
@@ -30,8 +34,21 @@ import { EVALS_PER_STEP, makeState, run } from './kernel.js';
 import { fromElements } from './elements.js';
 import { migrateSystem } from './state.js';
 import { trialOptions, trialResult, trialSystem } from './experiment.js';
+import { createLive } from './live.js';
 
 const runs = new Map();
+const live = new Map();
+
+/** A snapshot's arrays, handed over rather than copied. */
+const transfer = snap => [
+  snap.m.buffer,
+  snap.radius.buffer,
+  snap.x.buffer,
+  snap.v.buffer,
+  snap.alive.buffer,
+  snap.trail.buffer,
+  snap.trailT.buffer,
+];
 
 /** At most `max` samples, evenly spread, the first and last kept: for plotting. */
 function thin(samples, max = 1500) {
@@ -193,6 +210,46 @@ export async function handle(msg, post) {
   if (msg.type === 'reference') return reference(msg, post);
   if (msg.type === 'bench')
     return post({ type: 'bench', results: bench(msg.bodies, msg.ms) });
+  if (msg.type === 'live') {
+    const migrated = migrateSystem(msg.system);
+    if (!migrated.ok)
+      return post({
+        type: 'refused',
+        id: msg.id,
+        problems: [
+          { path: 'system', code: migrated.code, vars: migrated.vars },
+        ],
+      });
+    const made = createLive(migrated.system, msg.options || {});
+    if (made.problems)
+      return post({ type: 'refused', id: msg.id, problems: made.problems });
+    live.set(msg.id, made.session);
+    const snapshot = made.session.now();
+    return post(
+      { type: 'snapshot', id: msg.id, snapshot, migrated: migrated.migrated },
+      transfer(snapshot)
+    );
+  }
+  if (msg.type === 'live-advance') {
+    const session = live.get(msg.id);
+    if (!session)
+      return post({ type: 'error', id: msg.id, message: 'no live session' });
+    try {
+      const snapshot = session.advance(msg.intervals);
+      return post(
+        { type: 'snapshot', id: msg.id, snapshot },
+        transfer(snapshot)
+      );
+    } catch (err) {
+      live.delete(msg.id);
+      return post({
+        type: 'error',
+        id: msg.id,
+        message: String(err?.message || err).slice(0, 500),
+      });
+    }
+  }
+  if (msg.type === 'live-stop') return live.delete(msg.id);
   if (msg.type !== 'run')
     return post({
       type: 'error',

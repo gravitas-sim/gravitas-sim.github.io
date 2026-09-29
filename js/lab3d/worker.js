@@ -9,4 +9,6 @@
 import { handle } from './workerCore.js';
 
 self.onmessage = ({ data }) =>
-  handle(data, message => self.postMessage(message));
+  handle(data, (message, transfer) =>
+    self.postMessage(message, transfer || [])
+  );
