@@ -197,9 +197,25 @@ For Prompt 50, under the "no ceiling increase" rule:
    first-run policies and the responsive specification** are ratified as
    design for Prompts 50–57, within their own budgets.
 
-Not authorized: the Library merge, a Home hub or any page restructuring
-beyond the shell. Each of those is its own prompt (54, 52, 53) and its own
-gate.
+Not authorized: the Library merge (Prompt 54) or any page restructuring
+beyond the shell. The Home hub is part of Prompt 50, under the same rule: it
+lands only if the front door's route pays for it.
+
+### What the budgets allow today
+
+Measured on `v2` c4d0984 (`node tools/route-budget.mjs --report`). The shell
+needs about 5.6 KB of raw JavaScript and one request on each page it serves.
+
+| Room for the shell | Routes (sources) |
+|---|---|
+| Kilobytes, and a request | experiments (7.6 KB), figure (5.2), course builder (4.9), studio (4.4), 3-D guides (4.1), 3-D lab (3.4) |
+| Kilobytes, but no request | the four lesson routes (11 KB each, at their request ceilings) |
+| Neither | front door and sandbox (0), teaching (0.3), evaluation (0.2), instructors (1.3), observatory (0.5), catalog (0.4), composer (0.1), course home (1.1), 3-D kernel page (0.4), mission (0.1), mission lab (1.7) |
+
+A shell on only the first row's six pages would add a fifth shell to the
+four there are now. So Prompt 50 is only useful once one of two things has
+happened: Carl allows the shell its bytes on each route, or Prompt 109's
+deploy pipeline serves minified sources and so gives the routes room.
 
 ## Rejected alternatives
 
