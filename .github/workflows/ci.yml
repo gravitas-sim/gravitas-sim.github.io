@@ -249,8 +249,6 @@ jobs:
         run: npm run sdk:check
       - name: Classroom activities are current
         run: npm run activities:check
-      - name: Lesson cards are current
-        run: npm run cards:check
       - name: The lesson scene catalog and acceptance map
         run: npm run audit:scene:check
       - name: The irreversible-operations audit is current
@@ -636,6 +634,11 @@ jobs:
       - name: axe-core over every surface, both languages, both themes
         run: npm run a11y:axe
 
+      # The lesson cards are drawn in Chromium and compared with what is
+      # committed, so this is the job that has a browser for them.
+      - name: Lesson cards are current
+        run: npm run cards:check
+
       # Focus order, focus traps, Escape, focus restoration, heading order,
       # landmarks, reflow at 200% and 400%, reduced motion, and the textual
       # description of the canvas. The half axe cannot see.
@@ -794,14 +797,26 @@ jobs:
           key: sources-${{ hashFiles('tools/build-gw-data.mjs', 'tools/build-stellar-tracks.mjs', 'tools/build-sdss-spectra.mjs', 'tools/build-gwosc-events.mjs', 'tools/build-data-packs.mjs', 'tools/build-ephemeris.mjs', 'data-packs/**', 'ephemeris-packs/**') }}
           restore-keys: sources-
 
-      - name: Fetch any source not cached
-        run: |
-          node tools/build-gw-data.mjs
-          node tools/build-stellar-tracks.mjs
-          node tools/build-sdss-spectra.mjs
-          node tools/build-gwosc-events.mjs
-          node tools/build-data-packs.mjs
-          node tools/build-ephemeris.mjs --fetch
+      # One step per source, so an archive that is down (SDSS answered HTTP
+      # 500 on the first dry run) is reported for itself and the rest still run.
+      - name: Fetch any source not cached (GW)
+        continue-on-error: true
+        run: node tools/build-gw-data.mjs
+      - name: Fetch any source not cached (stellar tracks)
+        continue-on-error: true
+        run: node tools/build-stellar-tracks.mjs
+      - name: Fetch any source not cached (SDSS)
+        continue-on-error: true
+        run: node tools/build-sdss-spectra.mjs
+      - name: Fetch any source not cached (GWOSC)
+        continue-on-error: true
+        run: node tools/build-gwosc-events.mjs
+      - name: Fetch any source not cached (packs)
+        continue-on-error: true
+        run: node tools/build-data-packs.mjs
+      - name: Fetch any source not cached (ephemeris)
+        continue-on-error: true
+        run: node tools/build-ephemeris.mjs --fetch
 
       - name: GW figure data
         run: npm run gw:provenance

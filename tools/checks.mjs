@@ -610,7 +610,7 @@ export const CHECKS = [
     label: 'lesson cards',
     command: ['npm', 'run', 'cards:check'],
     tier: 'quick',
-    ci: 'checks',
+    ci: 'accessibility',
     group: 'generated',
   },
   // The scene catalog and the record beside it are generated from the lesson
@@ -821,7 +821,12 @@ export const CI_SETUP_STEPS = [
   // caches, proving the fetch rewrote nothing committed, and recording and
   // offering the e2e timings. The checks they serve are the provenance
   // entries above and tools/e2e-shards.mjs's own tests.
-  'Fetch any source not cached',
+  'Fetch any source not cached (GW)',
+  'Fetch any source not cached (stellar tracks)',
+  'Fetch any source not cached (SDSS)',
+  'Fetch any source not cached (GWOSC)',
+  'Fetch any source not cached (packs)',
+  'Fetch any source not cached (ephemeris)',
   'Nothing committed was rewritten by the fetch',
   'Record the timings',
   'Offer them if they changed',
