@@ -1,13 +1,5 @@
-// =============================================================================
-// The checker every declarative format shares
-// -----------------------------------------------------------------------------
-// A problem list, the structural guard that runs before anything reads a
-// field, and the text rules. The investigation pack and the question bank
-// (./investigation.js), course packs (js/course/pack.js) and 3-D systems
-// (js/lab3d/state.js) all check a file with it. It lives on its own so that a
-// page checking one format downloads only this, not every other format's rules.
-// It is pure: what it needs to know about Gravitas arrives as `api`.
-// =============================================================================
+// The checker every declarative format shares: the structural guard and the
+// text rules. Its own module, so checking one format downloads no other.
 
 const MAX_TEXT = 4000;
 const MAX_DEPTH = 12;

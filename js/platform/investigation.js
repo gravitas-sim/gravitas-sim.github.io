@@ -36,8 +36,6 @@
 import { isObject, makeChecker } from './checker.js';
 import { checkItems } from './questionBank.js';
 
-// The shared checker lives in ./checker.js, so a page that checks another
-// format with it does not also download this one and the question bank.
 export { makeChecker };
 
 export const FORMAT = 'gravitas.investigation-pack';
