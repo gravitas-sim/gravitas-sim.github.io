@@ -3,6 +3,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 import * as THREE from '../vendor/three/three.module.js';
+import * as LAB3D_THREE from '../vendor/three/lab3d.module.js';
 
 // =============================================================================
 // The vendored three.js exports what the 3-D view is built from
@@ -16,9 +17,14 @@ import * as THREE from '../vendor/three/three.module.js';
 //
 // So this reads every module that imports the vendored file for the names it
 // uses, through the namespace and by name, and holds each to the exports.
+//
+// The 3-D lab (/3d/) has its own vendored build, vendor/three/lab3d.module.js,
+// with its own list, so nothing it draws can grow the application's 3-D view.
+// Each module is held to the file it imports.
 // =============================================================================
 
-const VENDORED = /['"][./]*vendor\/three\/three\.module\.js['"]/;
+const VENDORED = /['"][./]*vendor\/three\/(three|lab3d)\.module\.js['"]/;
+const EXPORTS = { three: THREE, lab3d: LAB3D_THREE };
 
 /** The application's modules that import the vendored three.js. */
 function threeModules() {
@@ -29,7 +35,8 @@ function threeModules() {
       if (statSync(at).isDirectory()) walk(at);
       else if (name.endsWith('.js')) {
         const text = readFileSync(at, 'utf8');
-        if (VENDORED.test(text)) out.push({ at, text });
+        const m = text.match(VENDORED);
+        if (m) out.push({ at, text, file: m[1] });
       }
     }
   })('js');
@@ -40,7 +47,7 @@ function threeModules() {
 function namesUsed(text) {
   const names = new Set();
   const namespace = text.match(
-    /import\s+\*\s+as\s+(\w+)\s+from\s+['"][./]*vendor\/three\/three\.module\.js['"]/
+    /import\s+\*\s+as\s+(\w+)\s+from\s+['"][./]*vendor\/three\/(?:three|lab3d)\.module\.js['"]/
   );
   if (namespace) {
     const ns = namespace[1];
@@ -50,7 +57,7 @@ function namesUsed(text) {
       names.add(m[1]);
   }
   const named =
-    /import\s*\{([^}]*)\}\s*from\s*['"][./]*vendor\/three\/three\.module\.js['"]/g;
+    /import\s*\{([^}]*)\}\s*from\s*['"][./]*vendor\/three\/(?:three|lab3d)\.module\.js['"]/g;
   for (const m of text.matchAll(named)) {
     for (const part of m[1].split(',')) {
       const name = part.trim().split(/\s+as\s+/)[0];
@@ -67,18 +74,26 @@ describe('the vendored three.js', () => {
     expect(modules.map(m => m.at)).toContain(path.join('js', 'view3d.js'));
   });
 
-  test.each(modules.map(m => [m.at, m.text]))(
+  test('and by the 3-D lab, which has its own', () => {
+    const lab = modules.find(
+      m => m.at === path.join('js', 'lab3d', 'view', 'scene.js')
+    );
+    expect(lab?.file).toBe('lab3d');
+  });
+
+  test.each(modules.map(m => [m.at, m.text, m.file]))(
     '%s uses only names the vendored file exports',
-    (at, text) => {
+    (at, text, file) => {
       const used = [...namesUsed(text)];
       // A reader of the regular expression above deserves proof it matched.
       expect(used.length).toBeGreaterThan(5);
-      const missing = used.filter(name => THREE[name] === undefined);
+      const missing = used.filter(name => EXPORTS[file][name] === undefined);
       expect(missing).toEqual([]);
     }
   );
 
-  test('the orbit controls come with it', () => {
+  test('the orbit controls come with both', () => {
     expect(typeof THREE.OrbitControls).toBe('function');
+    expect(typeof LAB3D_THREE.OrbitControls).toBe('function');
   });
 });

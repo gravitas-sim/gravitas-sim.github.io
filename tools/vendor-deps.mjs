@@ -75,6 +75,25 @@ const TARGETS = [
     ].join('\n'),
   },
   {
+    // The 3-D lab (/3d/) draws with its own copy, so nothing it needs can
+    // grow the application's 3-D view: that chunk is in the app's deferred
+    // bundle, which has little room, and a pre-bundled file's unused
+    // exports cannot be dropped from it. This one is on the lab's route only.
+    // tests/vendoredThree.test.js holds js/lab3d/view/ to these exports.
+    package: 'three',
+    out: 'vendor/three/lab3d.module.js',
+    license: 'vendor/three/LICENSE',
+    entry: [
+      'export {',
+      '  AmbientLight, BufferAttribute, BufferGeometry, Color, DirectionalLight,',
+      '  GridHelper, Group, Line, LineBasicMaterial, Mesh, MeshStandardMaterial,',
+      '  OrthographicCamera, PerspectiveCamera, SRGBColorSpace, Scene,',
+      '  SphereGeometry, Vector3, WebGLRenderer,',
+      "} from 'three';",
+      "export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';",
+    ].join('\n'),
+  },
+  {
     package: 'chart.js',
     out: 'vendor/chartjs/chart.js',
     license: 'vendor/chartjs/LICENSE.md',

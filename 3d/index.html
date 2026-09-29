@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The 3-D lab | Gravitas</title>
+    <meta
+      name="description"
+      content="Small systems of bodies in three dimensions, run by the validated 3-D kernel in a Worker: move around them, change the frame, and measure distances, angles and orbital elements, with every number also in a table."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: a view, a panel of controls, and tables. */
+      .l3-wrap {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 1.5rem 1rem 4rem;
+      }
+      .l3-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .l3-top {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: minmax(0, 1fr);
+      }
+      @media (min-width: 64rem) {
+        .l3-top {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+        }
+      }
+      .l3-view {
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 4 / 3;
+        background: #07080f;
+      }
+      .l3-view canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .l3-view canvas:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: -3px;
+      }
+      .l3-labels {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .l3-label {
+        position: absolute;
+        transform: translate(8px, -50%);
+        font-size: 0.8rem;
+        white-space: nowrap;
+        color: #e9edf5;
+        text-shadow: 0 0 3px #000, 0 0 3px #000;
+      }
+      .l3-legend {
+        position: absolute;
+        left: 0.5rem;
+        bottom: 0.5rem;
+        max-width: calc(100% - 1rem);
+        font-size: 0.78rem;
+        line-height: 1.35;
+        color: #d3d9e6;
+        background: rgba(7, 8, 15, 0.78);
+        border-radius: 6px;
+        padding: 0.35rem 0.5rem;
+      }
+      .l3-bar {
+        display: inline-block;
+        height: 0;
+        border-top: 2px solid #e9edf5;
+        vertical-align: middle;
+        margin-right: 0.4rem;
+      }
+      .l3-notice {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 1rem;
+        background: rgba(7, 8, 15, 0.86);
+      }
+      .l3-notice[hidden] {
+        display: none;
+      }
+      .l3-panel {
+        display: grid;
+        gap: 0.75rem;
+        align-content: start;
+      }
+      .l3-panel fieldset {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem 0.75rem;
+        margin: 0;
+        min-width: 0;
+      }
+      .l3-panel legend {
+        font-weight: 600;
+        padding: 0 0.25rem;
+      }
+      .l3-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 0.6rem;
+        align-items: end;
+        margin-top: 0.4rem;
+      }
+      .l3-field {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.2rem;
+        flex: 1 1 9rem;
+        min-width: 0;
+      }
+      .l3-field select {
+        overflow: hidden;
+      }
+      .l3-field select,
+      .l3-field input[type='file'] {
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
+        max-width: 100%;
+        font: inherit;
+        color: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.3rem 0.4rem;
+      }
+      .l3-check {
+        display: flex;
+        gap: 0.35rem;
+        align-items: center;
+        flex: 1 1 9rem;
+      }
+      .l3-readout {
+        font-variant-numeric: tabular-nums;
+        margin: 0.4rem 0 0;
+      }
+      .l3-wrap section {
+        margin: 1.5rem 0;
+      }
+      .l3-wrap h2 {
+        font-size: 1.15rem;
+      }
+      .l3-scroll {
+        overflow-x: auto;
+      }
+      .l3-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        font-variant-numeric: tabular-nums;
+      }
+      .l3-table caption {
+        text-align: left;
+        color: #b7bfcf;
+        padding-bottom: 0.25rem;
+      }
+      .l3-table th,
+      .l3-table td {
+        text-align: left;
+        padding: 0.28rem 0.4rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        white-space: nowrap;
+      }
+      .l3-tree,
+      .l3-tree ul {
+        list-style: none;
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+      .l3-tree {
+        padding-left: 0;
+      }
+      .l3-swatch {
+        display: inline-block;
+        width: 0.8em;
+        height: 0.8em;
+        border-radius: 50%;
+        margin-right: 0.35em;
+        vertical-align: -0.05em;
+      }
+      .l3-events {
+        max-height: 14rem;
+        overflow-y: auto;
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+      .l3-keys {
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .l3-keys kbd {
+        font: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        padding: 0 0.3em;
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main class="l3-wrap" aria-labelledby="l3-title">
+      <div id="langSwitch" class="l3-row" role="group" aria-label="Language" data-i18n-aria-label="l3.lang"></div>
+      <h1 id="l3-title" data-i18n="l3.title">The 3-D lab</h1>
+      <p data-i18n="l3.intro"></p>
+      <p>
+        <a href="/" data-i18n="l3.back">Back to Gravitas</a> ·
+        <a href="/lab3d/" data-i18n="l3.diagnostics">The kernel's diagnostics</a> ·
+        <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/LAB3D.md" data-i18n="l3.docs">How it works (LAB3D.md)</a>
+      </p>
+
+      <div class="l3-top">
+        <div>
+          <div class="l3-view" id="l3-view">
+            <canvas
+              id="l3-canvas"
+              tabindex="0"
+              role="img"
+              aria-roledescription="3-D view"
+              aria-describedby="l3-keys l3-legend"
+            ></canvas>
+            <div class="l3-labels" id="l3-labels" aria-hidden="true"></div>
+            <div class="l3-legend" id="l3-legend" aria-live="off"></div>
+            <div class="l3-notice" id="l3-notice" role="status" hidden></div>
+          </div>
+          <p class="l3-keys" id="l3-keys" data-i18n="l3.keys"></p>
+          <p class="l3-readout" id="l3-clock" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="l3-panel">
+          <fieldset>
+            <legend data-i18n="l3.system">System</legend>
+            <div class="l3-row">
+              <div class="l3-field">
+                <label for="l3-system" data-i18n="l3.system.choose">Open</label>
+                <select id="l3-system"></select>
+              </div>
+              <div class="l3-field" id="l3-file-row" hidden>
+                <label for="l3-file" data-i18n="l3.file">System file</label>
+                <input id="l3-file" type="file" accept="application/json,.json" />
+              </div>
+            </div>
+            <div class="l3-row">
+              <button id="l3-play" type="button" class="ui-button is-primary" data-i18n="l3.play">Play</button>
+              <button id="l3-step" type="button" class="ui-button" data-i18n="l3.step">Step</button>
+              <button id="l3-restart" type="button" class="ui-button" data-i18n="l3.restart">Restart</button>
+            </div>
+            <div class="l3-row">
+              <div class="l3-field">
+                <label for="l3-speed" data-i18n="l3.speed">Speed</label>
+                <select id="l3-speed"></select>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend data-i18n="l3.view">View</legend>
+            <div class="l3-row">
+              <div class="l3-field">
+                <label for="l3-frame" data-i18n="l3.frame">Frame</label>
+                <select id="l3-frame"></select>
+              </div>
+              <div class="l3-field">
+                <label for="l3-preset" data-i18n="l3.preset">Look</label>
+                <select id="l3-preset"></select>
+              </div>
+            </div>
+            <div class="l3-row">
+              <div class="l3-field">
+                <label for="l3-projection" data-i18n="l3.projection">Projection</label>
+                <select id="l3-projection"></select>
+              </div>
+              <div class="l3-field">
+                <label for="l3-follow" data-i18n="l3.follow">Keep centered</label>
+                <select id="l3-follow"></select>
+              </div>
+            </div>
+            <div class="l3-row">
+              <div class="l3-field">
+                <label for="l3-size" data-i18n="l3.size">Body size</label>
+                <select id="l3-size"></select>
+              </div>
+            </div>
+            <div class="l3-row">
+              <label class="l3-check"><input id="l3-trails" type="checkbox" checked /> <span data-i18n="l3.trails">Trails</span></label>
+              <label class="l3-check"><input id="l3-drops" type="checkbox" checked /> <span data-i18n="l3.drops">Height lines</span></label>
+              <label class="l3-check"><input id="l3-grid" type="checkbox" checked /> <span data-i18n="l3.grid">Reference plane</span></label>
+              <label class="l3-check"><input id="l3-arrows" type="checkbox" /> <span data-i18n="l3.arrows">Velocity arrows</span></label>
+              <label class="l3-check"><input id="l3-labelson" type="checkbox" checked /> <span data-i18n="l3.labels">Names</span></label>
+              <label class="l3-check"><input id="l3-low" type="checkbox" /> <span data-i18n="l3.low">Low quality</span></label>
+              <label class="l3-check"><input id="l3-reduced" type="checkbox" /> <span data-i18n="l3.reduced">Reduce motion</span></label>
+            </div>
+            <div class="l3-row">
+              <button id="l3-cleartrails" type="button" class="ui-button" data-i18n="l3.clearTrails">Clear trails</button>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend data-i18n="l3.measure">Measure</legend>
+            <div class="l3-row">
+              <div class="l3-field">
+                <label for="l3-tool" data-i18n="l3.tool">Instrument</label>
+                <select id="l3-tool"></select>
+              </div>
+            </div>
+            <div class="l3-row" id="l3-tool-bodies">
+              <div class="l3-field">
+                <label for="l3-a" id="l3-a-label" data-i18n="l3.tool.a">Body</label>
+                <select id="l3-a"></select>
+              </div>
+              <div class="l3-field" id="l3-v-row">
+                <label for="l3-v" data-i18n="l3.tool.vertex">At</label>
+                <select id="l3-v"></select>
+              </div>
+              <div class="l3-field" id="l3-b-row">
+                <label for="l3-b" data-i18n="l3.tool.b">To</label>
+                <select id="l3-b"></select>
+              </div>
+            </div>
+            <p class="l3-readout" id="l3-reading" aria-live="polite"></p>
+          </fieldset>
+        </div>
+      </div>
+
+      <section aria-labelledby="l3-scene-h">
+        <h2 id="l3-scene-h" data-i18n="l3.scene.heading">What is in the view</h2>
+        <p data-i18n="l3.scene.hint"></p>
+        <ul class="l3-tree" id="l3-tree"></ul>
+        <div class="l3-scroll"><table class="l3-table" id="l3-state"></table></div>
+        <div class="l3-scroll"><table class="l3-table" id="l3-elements"></table></div>
+        <p class="l3-readout" id="l3-conserved"></p>
+        <p class="l3-readout" id="l3-sync">
+          <button id="l3-refresh" type="button" class="ui-button" data-i18n="l3.refresh">Update the tables</button>
+          <label class="l3-check"><input id="l3-live" type="checkbox" checked /> <span data-i18n="l3.liveTables">Update while playing</span></label>
+        </p>
+      </section>
+
+      <section aria-labelledby="l3-events-h">
+        <h2 id="l3-events-h" data-i18n="l3.events.heading">Events</h2>
+        <ol class="l3-events" id="l3-events" aria-live="polite" aria-relevant="additions"></ol>
+      </section>
+    </main>
+    <script type="module" src="/js/lab3dLab.js"></script>
+  </body>
+</html>
