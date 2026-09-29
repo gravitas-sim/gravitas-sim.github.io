@@ -2,9 +2,11 @@
 // Transfer windows: a Lambert solve for every departure date and flight time
 // -----------------------------------------------------------------------------
 // The grid a "porkchop plot" is drawn from. For each departure date and each
-// time of flight, the two planets' model positions (./bodies.js: circles in
-// one plane) are the ends of a Lambert problem about the Sun (./lambert.js),
-// and the cell records
+// time of flight, the two planets' positions are the ends of a Lambert
+// problem about the Sun (./lambert.js). By default they are the model's
+// circles in one plane (./bodies.js); `states` may give them from the
+// ephemeris pack instead (./ephemeris.js, the mission lab), in three
+// dimensions. The cell records
 //
 //   c3      km^2/s^2, the square of the departure's hyperbolic excess speed
 //   vinf    km/s, the arrival's excess speed
@@ -82,9 +84,9 @@ export const axisAt = (start, span, steps, i) =>
  * One cell: depart on day `t` (from J2000.0) and fly for `tof` days.
  * @returns {{status: string, c3, vinf, total, iterations, v1?, v2?, r1?, r2?}}
  */
-export function windowCell(o, t, tof) {
-  const A = planetState(o.from, t);
-  const B = planetState(o.to, t + tof);
+export function windowCell(o, t, tof, states = planetState) {
+  const A = states(o.from, t);
+  const B = states(o.to, t + tof);
   const s = lambert({
     mu: BODIES.sun.GM,
     r1: A.r,
@@ -127,7 +129,10 @@ export function windowCell(o, t, tof) {
  * A window to compute in slices.
  * @returns {{advance(ms: number): boolean, cancel(): void, result(): object, fraction: number}}
  */
-export function createWindow(o, { now = () => performance.now() } = {}) {
+export function createWindow(
+  o,
+  { now = () => performance.now(), states = planetState } = {}
+) {
   const problems = windowProblems(o);
   if (problems.length) throw Object.assign(new Error('refused'), { problems });
   const nd = o.departSteps;
@@ -150,7 +155,7 @@ export function createWindow(o, { now = () => performance.now() } = {}) {
         const t = axisAt(o.departStart, o.departSpan, nd, row);
         for (let j = 0; j < nt; j++) {
           const tof = axisAt(o.tofMin, o.tofMax - o.tofMin, nt, j);
-          const cell = windowCell(o, t, tof);
+          const cell = windowCell(o, t, tof, states);
           const k = row * nt + j;
           c3[k] = cell.c3;
           vinf[k] = cell.vinf;
@@ -207,8 +212,8 @@ export function createWindow(o, { now = () => performance.now() } = {}) {
 }
 
 /** Compute a whole window at once (the tests and tools). */
-export function computeWindow(o) {
-  const w = createWindow(o);
+export function computeWindow(o, { states } = {}) {
+  const w = createWindow(o, states ? { states } : {});
   while (!w.advance(Infinity));
   return w.result();
 }
