@@ -398,9 +398,12 @@ export function generatedBlocks({
   instructor,
   physics = null,
   irreversible = null,
+  precache = null,
 }) {
   return {
     doiBadge: doiBadgeBlock(),
+    // OFFLINE_AND_LOW_END.md's table, from the committed sw-manifest.js.
+    ...(precache ? { precache } : {}),
     citation: citationBlock(),
     ...(irreversible
       ? {

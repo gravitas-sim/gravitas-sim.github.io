@@ -5,10 +5,16 @@ serves, and every merge is live. A *release* is a different thing — a tagged,
 archived, citable point in that history — and this is the checklist for making
 one.
 
-**There has been no release yet.** No tag, no GitHub release, no DOI. Until
-there is, `CITATION.cff` and `.zenodo.json` deliberately carry no `version` and
-no `date-released`: a citation file that names a version nobody can check out
-is worse than one that names none.
+**There has been one release, `v1.0.0`** (2026-09-16): a tag, a GitHub
+release and a Zenodo archive with its version and concept DOIs. "What 1.0.0
+produced" below has every identifier. `CITATION.cff` and `.zenodo.json` name
+that version, because it is the one a reader can check out.
+
+**The next is the release of `v2`,** the integration branch of the next major
+version. It is one release at the end, decided by Carl after Roadmap II's
+Prompt 121 returns GO ([`INTEGRATION.md`](INTEGRATION.md)). Until then, `main`
+and the live site stay at what was last deployed, and nothing merged into
+`v2` is released.
 
 ## This document, and the other one
 

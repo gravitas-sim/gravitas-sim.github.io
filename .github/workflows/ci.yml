@@ -268,7 +268,7 @@ jobs:
       # Three questions about the instructor materials, asked of different
       # things. See the `instructors` entries in tools/checks.mjs.
       #
-      # This one is the pipeline: all fifty-four documents rendered, every
+      # This one is the pipeline: every document rendered, every
       # derived answer re-checked against the site's own grading function, a
       # throwaway key, nothing written. No secret, so it runs on every branch
       # and in every fork.
@@ -287,8 +287,8 @@ jobs:
       # The release question, and only on a release path.
       #
       # It compares the tree against the committed production ciphertext, which
-      # only the real passphrase can produce. On a pull request into the v1.1
-      # integration branch that is the wrong question: every instructional
+      # only the real passphrase can produce. On a pull request into an
+      # integration branch (v2, INTEGRATION.md) that is the wrong question: every instructional
       # branch edits a lesson, so every one of them is red until one person
       # rebuilds a four-megabyte encrypted file that then conflicts with every
       # other branch doing the same. Three open pull requests were red on this

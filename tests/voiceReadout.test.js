@@ -226,7 +226,7 @@ describe('ACCESSIBILITY.md tells the truth about the sound', () => {
       'js/ui.js',
       'tests/voiceReadout.test.js',
       'e2e/sonifyTextEquivalent.spec.js',
-      'tools/physics-checks.mjs',
+      'js/validation/physicsChecks.js',
     ]) {
       expect(() => read(file)).not.toThrow();
       expect(doc).toContain(file);
@@ -235,7 +235,7 @@ describe('ACCESSIBILITY.md tells the truth about the sound', () => {
 
   test('it says the checks exist, and the named group does', () => {
     expect(doc).toMatch(/Sonification law/);
-    expect(read('tools/physics-checks.mjs')).toMatch(
+    expect(read('js/validation/physicsChecks.js')).toMatch(
       /group: 'Sonification law'/
     );
   });

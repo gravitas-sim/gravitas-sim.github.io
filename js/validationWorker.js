@@ -8,7 +8,7 @@
 //
 // It runs here rather than on the page's own thread because the suite integrates
 // orbits for about ten seconds and would otherwise freeze the tab solid for the
-// whole of it. Nothing here touches the DOM: physics-checks.mjs installs a stub
+// whole of it. Nothing here touches the DOM: js/validation/physicsChecks.js installs a stub
 // document when it does not find one, which is exactly the situation in a
 // worker.
 //
@@ -17,7 +17,7 @@
 // that copy, not the engine.
 // =============================================================================
 
-import { runChecks } from '../tools/physics-checks.mjs';
+import { runChecks } from './validation/physicsChecks.js';
 
 self.onmessage = async () => {
   const started = performance.now();

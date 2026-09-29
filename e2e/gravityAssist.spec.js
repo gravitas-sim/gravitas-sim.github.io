@@ -2,7 +2,7 @@
 // Gravity assist
 // -----------------------------------------------------------------------------
 // The scattering arithmetic is proved in tests/gravityAssist.test.js and the
-// encounters are run against theory in tools/physics-checks.mjs. What only a
+// encounters are run against theory in js/validation/physicsChecks.js. What only a
 // browser can show is that the two are wired to the same simulation and to the
 // same panel: that the scenario a student loads is the encounter the elements
 // describe, that flipping one number flips the outcome, and that the two

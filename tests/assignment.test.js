@@ -1,10 +1,21 @@
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, beforeAll, afterAll } from '@jest/globals';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import process from 'node:process';
+import {
+  assignmentLink,
+  readAssignmentLink,
+} from '../js/assignments/assignmentLink.js';
+import { itemLink } from '../js/course/links.js';
 import {
   ASSIGNMENT_KIND,
   ASSIGNMENT_SCHEMA,
   BINDING,
   MAX_STEPS,
   assignmentStorageKey,
+  assignmentVersion,
   buildAssignment,
   filterResponses,
   assignmentIdFor,
@@ -135,7 +146,8 @@ describe('the payload', () => {
     expect(json).not.toMatch(/"x"|"y"|"z"/);
     // What it does carry.
     expect(built.k).toBe(ASSIGNMENT_KIND);
-    expect(built.v).toBe(ASSIGNMENT_SCHEMA);
+    // No package pin, so a version 1 payload (assignmentVersion).
+    expect(built.v).toBe(1);
     expect(built.l).toBe('tides');
     expect(built.s).toEqual(['build-a', 'guess', 'build-b', 'ask']);
     expect(built.f).toHaveLength(4);
@@ -704,5 +716,102 @@ describe('pinning the package a lesson comes from', () => {
     );
     // A schema-1 link still opens.
     expect(validateAssignment({ ...base, v: 1 }).ok).toBe(true);
+  });
+});
+
+// The deployed site, and every browser still running its cached copy after the
+// release, knows only version 1 and refuses anything newer as "made by a newer
+// version of Gravitas". So a link that needs nothing version 2 added is
+// written as version 1, and this checks it against that build's own reader:
+// main's code at the revision the site serves, archived and run in Node.
+describe('links the deployed build can open', () => {
+  // gravitas-sim.online's deployed-revision.json names this commit (2026-09-18).
+  // When the site redeploys, this names whatever it then serves.
+  const DEPLOYED = '16d0f24ffce707a8e39889e79f33993db5f64d82';
+  let deployed;
+
+  beforeAll(() => {
+    deployed = mkdtempSync(path.join(tmpdir(), 'gravitas-deployed-'));
+    const tar = path.join(deployed, 'js.tar');
+    execFileSync('git', ['archive', '--format=tar', '-o', tar, DEPLOYED, 'js']);
+    execFileSync('tar', ['-xf', tar, '-C', deployed]);
+  });
+  afterAll(() => rmSync(deployed, { recursive: true, force: true }));
+
+  /** What the deployed build's reader says of each fragment. */
+  const deployedReads = fragments =>
+    JSON.parse(
+      execFileSync(
+        process.execPath,
+        [
+          '--input-type=module',
+          '-e',
+          `const { readAssignmentLink } = await import(${JSON.stringify(
+            path.join(deployed, 'js/assignments/assignmentLink.js')
+          )});
+           const out = [];
+           for (const f of ${JSON.stringify(fragments)}) out.push(await readAssignmentLink(f));
+           console.log(JSON.stringify(out.map(r => ({ ok: r.ok, reason: r.reason }))));`,
+        ],
+        { encoding: 'utf8' }
+      )
+    );
+
+  const built = (provider = null) =>
+    buildAssignment({
+      lesson: lesson(),
+      chosen: ['guess', 'ask'],
+      title: 'Week 3',
+      fingerprint: stepFingerprint,
+      provider,
+    });
+
+  test('the deployed build has the rule this relies on', () => {
+    const source = execFileSync(
+      'git',
+      ['show', `${DEPLOYED}:js/assignments/assignment.js`],
+      { encoding: 'utf8' }
+    );
+    expect(source).toMatch(/export const ASSIGNMENT_SCHEMA = 1;/);
+    expect(source).toMatch(
+      /version > ASSIGNMENT_SCHEMA\) return fail\('newerVersion'/
+    );
+  });
+
+  test('a link without a package pin is version 1, and the deployed build opens it', async () => {
+    const plain = await assignmentLink(built(), 'https://gravitas-sim.online/');
+    expect(plain.fragment).toMatch(/^a1[zr]/);
+    expect((await readAssignmentLink(plain.fragment)).ok).toBe(true);
+    const item = {
+      kind: 'assignment',
+      lesson: 'tides',
+      steps: ['guess', 'ask'],
+      title: { en: 'Week 3' },
+      intro: { en: '' },
+      assignment: { id: 'abc123', created: '2026-09-29' },
+      pin: { f: ['0000000', '1111111'] },
+    };
+    const course = (
+      await itemLink(item, { root: 'https://gravitas-sim.online/' })
+    ).href.split('#')[1];
+    expect(course).toMatch(/^a1[zr]/);
+    expect(deployedReads([plain.fragment, course])).toEqual([
+      { ok: true, reason: null },
+      { ok: true, reason: null },
+    ]);
+  });
+
+  test('a link with a package pin still needs version 2', async () => {
+    const pinned = await assignmentLink(
+      built({ id: 'gravitas.lesson.power-law-gravity', version: '1.0.0' }),
+      'https://gravitas-sim.online/'
+    );
+    expect(pinned.fragment).toMatch(/^a2[zr]/);
+    expect(assignmentVersion(built({ id: 'x.y', version: '1.0.0' }))).toBe(2);
+    expect((await readAssignmentLink(pinned.fragment)).ok).toBe(true);
+    // The deployed build refuses it, as it must: it cannot honor the pin.
+    expect(deployedReads([pinned.fragment])).toEqual([
+      { ok: false, reason: 'newerVersion' },
+    ]);
   });
 });

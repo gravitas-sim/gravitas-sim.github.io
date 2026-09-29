@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // One table per system, each carrying the measured quantities and the paper
 // they came from, and one function per system that turns the table into bodies.
-// js/ui.js builds the scenarios from these, tools/physics-checks.mjs validates
+// js/ui.js builds the scenarios from these, js/validation/physicsChecks.js validates
 // them from these, and tests/resonance.test.js checks the arithmetic - so a
 // scenario, its validation and its lesson cannot quote three different numbers
 // for the same moon.

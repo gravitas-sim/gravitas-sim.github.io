@@ -53,7 +53,7 @@ describe('a step plan has a direction', () => {
 
 describe('the engine can be asked to step backwards, and refuses nonsense', () => {
   test('zero and non-finite do nothing', async () => {
-    const { installDomShim } = await import('../tools/dom-shim.mjs');
+    const { installDomShim } = await import('../js/validation/domShim.js');
     installDomShim();
     const P = await import('../js/physics.js');
     P.stars.length = 0;

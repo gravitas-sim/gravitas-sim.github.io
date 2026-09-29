@@ -30,7 +30,7 @@ import {
 } from '../shareState.js';
 import {
   ASSIGNMENT_KIND,
-  ASSIGNMENT_SCHEMA,
+  assignmentVersion,
   ASSIGNMENT_TAG,
 } from '../assignments/assignment.js';
 import { formatSeed, parseSeed } from '../rng.js';
@@ -52,7 +52,8 @@ const text = (v, locale) => (v && (v[locale] || v.en)) || '';
 export function assignmentPayload(item, locale) {
   return {
     k: ASSIGNMENT_KIND,
-    v: ASSIGNMENT_SCHEMA,
+    // 2 only with a package pin (js/assignments/assignment.js assignmentVersion).
+    v: item.pin?.pkg ? 2 : 1,
     i: item.assignment.id,
     l: item.lesson,
     t: text(item.title, locale),
@@ -86,7 +87,7 @@ export async function itemLink(item, { root, locale = 'en' }) {
       };
     case 'assignment':
       return {
-        href: `${root}#${await encodeTagged(ASSIGNMENT_TAG, ASSIGNMENT_SCHEMA, assignmentPayload(item, locale))}`,
+        href: `${root}#${await encodeTagged(ASSIGNMENT_TAG, assignmentVersion(assignmentPayload(item, locale)), assignmentPayload(item, locale))}`,
         kind: 'app',
       };
     case 'scenario':

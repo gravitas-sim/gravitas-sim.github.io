@@ -228,8 +228,13 @@ round trip within half a step.
 | HD 209458 light curve | MAST, built in | public domain (NASA) |
 | Adopted numbers | the papers each names | cited, not redistributed |
 
-Gaia DR3's data are CC BY-NC 3.0 IGO, which Gravitas does not redistribute;
-its catalog quantities enter only as numbers published from it.
+Gaia DR3's data are CC BY-NC 3.0 IGO. No lesson, data pack or page of
+Gravitas carries them: the catalog quantities enter only as numbers published
+from them. The one Gaia file in the repository is a test fixture, a single
+CDS VizieR answer (`tests/fixtures/archive/gaia-epphot-su-dra.vot`) that the
+archive-import tests read. It is in the repository and so in its release
+archives, under its own license and credited as that license requires
+(LICENSES.md, NOTICE). It is not on the site, which does not serve `tests/`.
 
 ## Accessibility and languages
 

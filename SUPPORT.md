@@ -8,6 +8,14 @@ where to put each kind of question so it gets seen.
 
 [Open an issue.](https://github.com/gravitas-sim/gravitas-sim.github.io/issues/new)
 
+**Which browsers.** Current versions of Chrome and Edge, Firefox and Safari, on
+desktop and on phones and tablets. That is what is tested: every change runs
+the browser suite in Chromium, and every push to the integration branch runs it
+in Firefox and WebKit (Safari's engine) as well. The code needs ES2022 and
+module Workers, which those browsers have had for some years; an older browser
+may load the page and then fail where a Worker starts. WebGL is optional:
+without it the 3-D views say so and every number is still in the tables.
+
 The three things that make a bug fixable here:
 
 1. **A share link.** Nearly every state in Gravitas encodes itself into the URL

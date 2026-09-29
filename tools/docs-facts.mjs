@@ -74,6 +74,7 @@ import {
   zenodoJson,
 } from './generated-blocks.mjs';
 import { RELEASE } from './project-metadata.mjs';
+import { precacheInventory, precacheTable } from './precache-inventory.mjs';
 import { CHECKS } from './checks.mjs';
 import {
   catalogLayout,
@@ -434,6 +435,16 @@ async function cheapFacts() {
     conceptDoi: RELEASE.conceptDoi ?? '',
     scenarios: Object.keys(SCENARIO_INFO).length,
     investigations: MANIFEST.length,
+    // What the service worker installs (OFFLINE_AND_LOW_END.md), read from the
+    // committed sw-manifest.js and the files it lists.
+    ...(() => {
+      const p = precacheInventory(REPO);
+      return {
+        precacheFiles: p.files,
+        precacheGzipMB: (p.gzip / 1048576).toFixed(1),
+        spanishShadows: p.localeWarm.es ?? 0,
+      };
+    })(),
     // From the manifest rather than by walking the lessons: the manifest is
     // itself generated from them and is what the lesson browser draws, so a
     // number quoted from here is the number a reader sees on the cards.
@@ -755,6 +766,7 @@ export async function gatherBlocks({ physics = null } = {}) {
   return generatedBlocks({
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,
+    precache: precacheTable(precacheInventory(REPO)),
     physics: physics ? physicsInventory(physics) : null,
     // Cheap: reading a generated data module, not running anything. The audit
     // it comes from is itself checked by `npm run audit:irreversible -- --check`.
@@ -1085,7 +1097,7 @@ async function checkCitationMetadata(facts) {
  */
 async function checkModelNoteClaims() {
   const problems = [];
-  const checksPath = join(REPO, 'tools', 'physics-checks.mjs');
+  const checksPath = join(REPO, 'js', 'validation', 'physicsChecks.js');
   if (!existsSync(checksPath)) return problems;
 
   const source = readFileSync(checksPath, 'utf8');

@@ -57,6 +57,19 @@ export const ASSIGNMENT_KIND = 'gravitas.assignment';
  */
 export const ASSIGNMENT_SCHEMA = 2;
 
+/**
+ * The version a payload is written as: 2 only when it carries a package pin
+ * (`p`), which is all version 2 added. A link without one is a version 1
+ * link, and a build that knows only version 1 - the deployed site, until the
+ * release, and a browser still running its cached copy after it - opens it
+ * instead of refusing it as "made by a newer version". The same number goes
+ * in the payload's `v` and in the fragment in front of it.
+ *
+ * @param {object} payload - An assignment payload
+ * @returns {1|2} Its version
+ */
+export const assignmentVersion = payload => (payload?.p ? 2 : 1);
+
 /** The tag that marks an assignment fragment, so a world link is never one. */
 export const ASSIGNMENT_TAG = 'a';
 
@@ -253,7 +266,7 @@ export function buildAssignment({
   return {
     // Short keys: this is a URL fragment before it is anything else.
     k: ASSIGNMENT_KIND,
-    v: ASSIGNMENT_SCHEMA,
+    v: provider ? 2 : 1,
     i:
       id ||
       assignmentIdFor({ lesson: lesson.id, sids: resolved.sids, title }, now),

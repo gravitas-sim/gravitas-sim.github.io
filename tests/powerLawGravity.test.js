@@ -3,14 +3,14 @@
 // -----------------------------------------------------------------------------
 // js/powerLawGravity.js is a contained model: it computes its own orbits and
 // never touches the engine, so the Newtonian validation suite in
-// tools/physics-checks.mjs cannot see it and should not try to. This file is
+// js/validation/physicsChecks.js cannot see it and should not try to. This file is
 // its validation layer, and it is deliberately separate for the reason the
 // suite's own header gives - a check belongs with the thing it checks, and
 // inflating the global Newtonian registry with checks about a different force
 // law would make the registry's own account of itself less true.
 //
 // Every tolerance below says why it is what it is, which is the convention
-// tools/physics-checks.mjs sets and the reason that suite is worth reading. A
+// js/validation/physicsChecks.js sets and the reason that suite is worth reading. A
 // tolerance with no stated reason is a number chosen to make a test pass.
 //
 // Two of these are the whole point of the investigation and are worth naming:
