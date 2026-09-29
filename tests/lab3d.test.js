@@ -21,6 +21,7 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
+import { Buffer } from 'node:buffer';
 import { webcrypto } from 'node:crypto';
 import {
   SCHEMES,
@@ -70,10 +71,26 @@ import { REFERENCES, passes } from '../js/lab3d/references.js';
 import { createScheduler } from '../js/experiments/scheduler.js';
 import { mulberry32 } from '../js/rng.js';
 
-// jsdom's crypto has no subtle digest; the kernel's hash is the platform's.
+// jsdom's crypto has no subtle digest, so the test lends Node's. The kernel's
+// arrays are this realm's, and Node 20's WebCrypto refuses another realm's
+// ArrayBuffer (Node 24's does not, which is how CI found it), so the bytes are
+// copied into a Node buffer first. In a Worker, crypto and the arrays share a
+// realm and nothing is copied.
 if (!globalThis.crypto?.subtle)
   Object.defineProperty(globalThis, 'crypto', {
-    value: webcrypto,
+    value: {
+      subtle: {
+        digest: (alg, data) =>
+          webcrypto.subtle.digest(
+            alg,
+            Buffer.from(
+              ArrayBuffer.isView(data)
+                ? new Uint8Array(data.buffer, data.byteOffset, data.byteLength)
+                : new Uint8Array(data)
+            )
+          ),
+      },
+    },
     configurable: true,
   });
 
