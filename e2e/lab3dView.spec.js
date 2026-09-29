@@ -224,7 +224,9 @@ test.describe('the 3-D lab', () => {
       window.__lose.loseContext();
       return true;
     });
-    test.skip(!ok, 'this browser offers no WEBGL_lose_context');
+    // Every engine Gravitas supports offers the extension; its absence would
+    // be a failure to report, not a reason to skip.
+    expect(ok).toBe(true);
     await expect(page.locator('#l3-notice')).toBeVisible();
     await expect(page.locator('#l3-notice')).toContainText(
       'The graphics context was lost'

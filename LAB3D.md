@@ -433,7 +433,7 @@ tables update once a second while playing, or on request.
 - **Checked:** axe finds no violations in either language at phone width.
 
 **Costs,** measured on the commit that added the page:
-- **Route:** 784.7 KB in 35 requests from the sources, and 590.7 KB in 2
+- **Route:** 791.6 KB in 35 requests from the sources, and 592.3 KB in 2
   from the build. That includes the Worker and the kernel it runs, and
   three.js from the lab's own vendored build
   (`vendor/three/lab3d.module.js`, 476 KB of the sources).
