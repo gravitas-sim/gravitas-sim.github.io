@@ -249,9 +249,28 @@ The table below is written by `node tools/validate-lab3d.mjs --write`:
 engine, and in Node. The low-end profile is modelled as a quarter of the
 slowest desktop engine: Chromium cannot slow a Worker down to measure one,
 which is the experiment manifest's convention (`PROFILES`). No phone was
-measured.
+measured. These figures were taken on a shared desktop, with other test
+suites running (load average 11 to 15), so treat them as a floor.
 
 <!-- lab3d:throughput -->
+| Scheme / bodies | Node | Chromium | Firefox | Webkit | Low-end, modelled |
+|---|---:|---:|---:|---:|---:|
+| leapfrog/3 | 4,499,932 | 4,610,815 | 3,784,250 | 7,195,250 | 946,063 |
+| yoshida4/3 | 1,630,593 | 1,503,083 | 1,382,083 | 2,453,250 | 345,521 |
+| yoshida4c/3 | 1,496,339 | 1,358,667 | 1,248,917 | 2,018,250 | 312,229 |
+| rk4/3 | 1,907,534 | 1,727,583 | 1,294,667 | 2,266,917 | 323,667 |
+| leapfrog/10 | 742,409 | 760,833 | 693,500 | 1,201,917 | 173,375 |
+| yoshida4/10 | 233,797 | 257,333 | 227,667 | 389,583 | 56,917 |
+| yoshida4c/10 | 233,101 | 241,667 | 219,917 | 349,083 | 54,979 |
+| rk4/10 | 316,319 | 350,333 | 281,000 | 476,083 | 70,250 |
+| leapfrog/25 | 126,208 | 139,167 | 117,250 | 202,917 | 29,313 |
+| yoshida4/25 | 41,966 | 47,028 | 43,000 | 68,083 | 10,750 |
+| yoshida4c/25 | 40,798 | 45,681 | 40,500 | 66,333 | 10,125 |
+| rk4/25 | 56,649 | 67,383 | 56,500 | 95,583 | 14,125 |
+| leapfrog/50 | 32,212 | 36,821 | 32,167 | 52,083 | 8,042 |
+| yoshida4/50 | 10,868 | 12,290 | 10,844 | 17,500 | 2,711 |
+| yoshida4c/50 | 10,434 | 12,126 | 10,614 | 17,138 | 2,654 |
+| rk4/50 | 15,011 | 18,115 | 15,449 | 25,374 | 3,862 |
 <!-- /lab3d:throughput -->
 
 ## Supported body counts and time spans
@@ -260,6 +279,12 @@ What a run can promise at the default scheme and a step of 1/1000 of the
 shortest orbit, from the throughput table:
 
 <!-- lab3d:envelope -->
+| Bodies | Compensated Yoshida, slowest desktop engine | 100 orbits, desktop / low-end | 10,000 orbits, desktop / low-end |
+|---:|---:|---|---|
+| 3 | 1,248,917 steps a second | 80 ms / 320 ms | 8.0 s / 32.0 s |
+| 10 | 219,917 steps a second | 455 ms / 1.8 s | 45.5 s / 3 min |
+| 25 | 40,500 steps a second | 2.5 s / 9.9 s | 4 min / 16 min |
+| 50 | 10,614 steps a second | 9.4 s / 37.7 s | 16 min / 63 min |
 <!-- /lab3d:envelope -->
 
 ## Where the engine refuses or warns
