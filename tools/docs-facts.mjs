@@ -141,6 +141,9 @@ const DOCS = [
   'RELEASING.md',
   'ACCESSIBILITY.md',
   'OFFLINE_AND_LOW_END.md',
+  // The decision register (Prompt 45): no counts, but its links to the gate
+  // documents and their headings are checked with everyone else's.
+  'DECISION_REGISTER.md',
   // The paper. Typeset by pandoc, so it carries no `<!--fact:-->` markers - a
   // comment would either reach the PDF or need another tool to strip it - and
   // is matched by pattern in ATTRIBUTE_FACTS instead. It was not listed here at
