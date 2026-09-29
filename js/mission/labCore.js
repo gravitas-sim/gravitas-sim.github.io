@@ -52,7 +52,9 @@ async function runWindow({ id, options, limits }, post, now) {
   const problems = labWindowProblems(options);
   if (problems.length) return post({ type: 'refused', id, problems });
   const wall = Math.min(
-    Number.isFinite(limits?.maxWallMs) && limits.maxWallMs > 0 ? limits.maxWallMs : WALL.maxWallMs,
+    Number.isFinite(limits?.maxWallMs) && limits.maxWallMs > 0
+      ? limits.maxWallMs
+      : WALL.maxWallMs,
     WALL.ceiling
   );
   try {
@@ -76,7 +78,12 @@ async function runWindow({ id, options, limits }, post, now) {
     running.delete(id);
     const result = w.result();
     if (timedOut) result.status = 'timeLimit';
-    post({ type: 'result', id, result }, [result.c3.buffer, result.vinf.buffer, result.total.buffer, result.cellStatus.buffer]);
+    post({ type: 'result', id, result }, [
+      result.c3.buffer,
+      result.vinf.buffer,
+      result.total.buffer,
+      result.cellStatus.buffer,
+    ]);
   } catch (err) {
     running.delete(id);
     post(errorOf(id, err));
@@ -84,7 +91,9 @@ async function runWindow({ id, options, limits }, post, now) {
 }
 
 async function runValidation({ id, cases }, post) {
-  const list = Array.isArray(cases) ? LAB_CASES.filter(c => cases.includes(c.id)) : LAB_CASES;
+  const list = Array.isArray(cases)
+    ? LAB_CASES.filter(c => cases.includes(c.id))
+    : LAB_CASES;
   let canceled = false;
   running.set(id, { cancel: () => (canceled = true) });
   const out = [];
@@ -95,7 +104,11 @@ async function runValidation({ id, cases }, post) {
     await tick();
   }
   running.delete(id);
-  post({ type: 'result', id, result: { status: canceled ? 'canceled' : 'ok', cases: out } });
+  post({
+    type: 'result',
+    id,
+    result: { status: canceled ? 'canceled' : 'ok', cases: out },
+  });
 }
 
 /** Handle one message; `post` sends an answer. */
@@ -106,10 +119,15 @@ export async function handle(msg, post, now = () => performance.now()) {
   if (msg.type === 'window') return runWindow(msg, post, now);
   if (msg.type === 'validate') return runValidation(msg, post);
   if (msg.type !== 'solve' || msg.problem?.kind !== 'mission')
-    return post({ type: 'error', id: msg.id ?? null, message: `unknown message ${msg.type}` });
+    return post({
+      type: 'error',
+      id: msg.id ?? null,
+      message: `unknown message ${msg.type}`,
+    });
   try {
     const result = computeMission(ephemeris(), msg.problem.plan);
-    if (!result.ok && result.problems) return post({ type: 'refused', id: msg.id, problems: result.problems });
+    if (!result.ok && result.problems)
+      return post({ type: 'refused', id: msg.id, problems: result.problems });
     return post({ type: 'result', id: msg.id, result });
   } catch (err) {
     return post(errorOf(msg.id, err));

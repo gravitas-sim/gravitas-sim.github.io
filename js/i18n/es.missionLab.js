@@ -41,8 +41,10 @@ export const ES_MISSIONLAB = {
   'ml.plan.isp': 'Impulso específico (s)',
   'ml.plan.direct': 'El vuelo directo',
   'ml.plan.start': 'Partir desde',
-  'ml.plan.startPeriapsis': 'la órbita del depósito, como partiría una nave real',
-  'ml.plan.startCenter': 'el centro de la Tierra, como supone la cónica empalmada',
+  'ml.plan.startPeriapsis':
+    'la órbita del depósito, como partiría una nave real',
+  'ml.plan.startCenter':
+    'el centro de la Tierra, como supone la cónica empalmada',
 
   'ml.body.venus': 'Venus',
   'ml.body.earth': 'la Tierra',
@@ -54,20 +56,28 @@ export const ES_MISSIONLAB = {
   'ml.status.refused': 'Rechazado: {why}',
   'ml.status.failed': 'Falló: {why}',
   'ml.refused.input': 'falta un número o está fuera de rango.',
-  'ml.refused.sameOrbit': 'la órbita de estacionamiento y la del depósito son la misma.',
-  'ml.refused.revolutions': 'las transferencias de varias vueltas no se admiten.',
-  'ml.refused.collinear': 'la Tierra y Marte están en la misma dirección desde el Sol en esas fechas.',
+  'ml.refused.sameOrbit':
+    'la órbita de estacionamiento y la del depósito son la misma.',
+  'ml.refused.revolutions':
+    'las transferencias de varias vueltas no se admiten.',
+  'ml.refused.collinear':
+    'la Tierra y Marte están en la misma dirección desde el Sol en esas fechas.',
   'ml.refused.antipodal':
     'la Tierra y Marte están a menos de 0,06 grados de estar opuestos desde el Sol: el plano de transferencia lo fija entonces el redondeo. Mueve la fecha o el tiempo de vuelo un día.',
-  'ml.refused.branchAmbiguous': 'el plano de transferencia contiene el polo de la eclíptica.',
-  'ml.refused.tooFast': 'ninguna órbita puede hacer la transferencia en ese tiempo.',
-  'ml.refused.noConvergence': 'el método, o la puntería de la corrección, no convergió dentro de su límite.',
-  'ml.refused.checkFailed': 'la transferencia no se pudo confirmar llevándola adelante de forma independiente.',
+  'ml.refused.branchAmbiguous':
+    'el plano de transferencia contiene el polo de la eclíptica.',
+  'ml.refused.tooFast':
+    'ninguna órbita puede hacer la transferencia en ese tiempo.',
+  'ml.refused.noConvergence':
+    'el método, o la puntería de la corrección, no convergió dentro de su límite.',
+  'ml.refused.checkFailed':
+    'la transferencia no se pudo confirmar llevándola adelante de forma independiente.',
   'ml.problem': '{field}: {why}',
   'ml.problem.value': 'falta un número o está fuera de rango.',
   'ml.problem.sameOrbit': 'debe ser distinta de la órbita de estacionamiento.',
   'ml.problem.date': 'debe ser una fecha, AAAA-MM-DD.',
-  'ml.problem.outOfRange': 'la efeméride cubre del 2025-01-01 al 2045-01-01, llegada incluida.',
+  'ml.problem.outOfRange':
+    'la efeméride cubre del 2025-01-01 al 2045-01-01, llegada incluida.',
   'ml.problem.planet': 'elige un planeta de la efeméride.',
   'ml.problem.samePlanet': 'elige dos planetas distintos.',
   'ml.problem.steps': 'demasiados pasos.',
@@ -78,13 +88,16 @@ export const ES_MISSIONLAB = {
   'ml.field.depart.date': 'Fecha de salida',
   'ml.field.depart.tofDays': 'Tiempo de vuelo',
   'ml.field.arrive.periapsisAltitude': 'Periapsis de captura',
-  'ml.field.arrive.apoapsisAltitude': 'Apoapsis de captura (al menos el periapsis)',
-  'ml.field.correct.day': 'Día de la corrección (al menos 1, y 10 días antes de la llegada)',
+  'ml.field.arrive.apoapsisAltitude':
+    'Apoapsis de captura (al menos el periapsis)',
+  'ml.field.correct.day':
+    'Día de la corrección (al menos 1, y 10 días antes de la llegada)',
   'ml.field.vehicle.dryKg': 'Masa en seco',
   'ml.field.vehicle.ispS': 'Impulso específico',
   'ml.field.direct.bodies': 'Cuerpos',
   'ml.field.direct.start': 'Punto de partida',
 
+  'ml.timeline.table': 'La cronología, como tabla',
   'ml.timeline.heading': 'La cronología de la misión',
   'ml.timeline.slider': 'Día del crucero',
   'ml.timeline.show': 'Ver',
@@ -121,6 +134,7 @@ export const ES_MISSIONLAB = {
   'ml.col.total': 'Ambos impulsos',
   'ml.col.use': 'Usarla',
 
+  'ml.views.table': 'Las posiciones el día elegido, como tabla',
   'ml.views.heading': 'La geometría',
   'ml.views.positions': 'Dónde está cada uno el {date}',
   'ml.views.earth': 'la Tierra',
@@ -130,20 +144,23 @@ export const ES_MISSIONLAB = {
   'ml.views.top': 'Desde encima de la eclíptica',
   'ml.views.topAlt':
     'El Sol en el centro; las órbitas de la Tierra y de Marte durante el crucero; la transferencia por cónica empalmada y la nave volada directamente (a trazos). Los puntos marcan dónde está cada uno el día elegido.',
-  'ml.views.side': 'Desde el borde de la eclíptica, alturas multiplicadas por {k}',
+  'ml.views.side':
+    'Desde el borde de la eclíptica, alturas multiplicadas por {k}',
   'ml.views.sideAlt':
     'Lo mismo visto de canto, con cada altura sobre la eclíptica multiplicada por {k} para que las inclinaciones se vean.',
   'ml.views.departure': 'Al dejar la Tierra',
   'ml.views.departureAlt':
     'La órbita del depósito, a {rp} del centro de la Tierra a {vc}, y las primeras 20 horas de la hipérbola de salida.',
 
+  'ml.results.table': 'Los números de la misión, como tablas',
   'ml.results.heading': 'La misión en números',
   'ml.results.earthOrbit': 'En órbita terrestre',
   'ml.results.lead': 'Adelanto del depósito que necesita la transferencia',
   'ml.results.wait': 'Espera antes del primer impulso',
   'ml.results.rvTime': 'Tiempo de transferencia',
   'ml.results.rvTotal': 'El encuentro, ambos impulsos',
-  'ml.results.turn5': 'Girar el plano de la órbita del depósito 5 grados costaría',
+  'ml.results.turn5':
+    'Girar el plano de la órbita del depósito 5 grados costaría',
   'ml.results.patched': 'El diseño por cónicas empalmadas',
   'ml.results.depart': 'Salida',
   'ml.results.arrive': 'Llegada',
@@ -170,7 +187,8 @@ export const ES_MISSIONLAB = {
   'ml.results.budget': 'Delta-v y propelente, impulso a impulso',
   'ml.results.total': 'Total',
   'ml.results.resources': 'De dónde sale el propelente',
-  'ml.results.launchLoad': 'Lo que deja en los tanques el lanzamiento, para el encuentro',
+  'ml.results.launchLoad':
+    'Lo que deja en los tanques el lanzamiento, para el encuentro',
   'ml.results.depotLoad': 'Cargado en el depósito, para el resto',
   'ml.results.exhaust': 'Velocidad de escape de los gases',
   'ml.results.solver': 'Cómo le fue al método de Lambert',
@@ -178,7 +196,8 @@ export const ES_MISSIONLAB = {
   'ml.results.solverOk': 'Convergió y se confirmó',
   'ml.results.iterations': 'Iteraciones',
   'ml.results.residual': 'Residuo del tiempo de vuelo (relativo)',
-  'ml.results.solverMiss': 'Comprobación independiente: error en Marte (relativo)',
+  'ml.results.solverMiss':
+    'Comprobación independiente: error en Marte (relativo)',
 
   'ml.unit.ms': '{v} m/s',
   'ml.unit.kms': '{v} km/s',
@@ -197,17 +216,21 @@ export const ES_MISSIONLAB = {
   'ml.window.go': 'Calcular la ventana',
   'ml.window.running': 'Calculando: {percent} %',
   'ml.window.ok': 'Terminado: {n} celdas.',
-  'ml.window.canceled': 'Cancelado: se muestran las celdas calculadas hasta ahora.',
-  'ml.window.timeLimit': 'Detenido en el límite de tiempo: se muestran las celdas calculadas hasta ahora.',
+  'ml.window.canceled':
+    'Cancelado: se muestran las celdas calculadas hasta ahora.',
+  'ml.window.timeLimit':
+    'Detenido en el límite de tiempo: se muestran las celdas calculadas hasta ahora.',
   'ml.window.alt':
     'Ventana de transferencia de la Tierra a Marte: salida del {d1} (izquierda) al {d2} (derecha), tiempo de vuelo de {t1} a {t2} días (de abajo arriba). Más oscuro es más barato; la celda más barata es {best}, saliendo el {date} por {tof} días.',
   'ml.window.cheap': 'La más barata, {v}',
   'ml.window.dear': 'El doble, {v}, o más',
-  'ml.window.axes': 'A lo ancho: fecha de salida. Hacia arriba: tiempo de vuelo. Gris: rechazada.',
+  'ml.window.axes':
+    'A lo ancho: fecha de salida. Hacia arriba: tiempo de vuelo. Gris: rechazada.',
   'ml.window.candidates': 'Cuatro maneras de elegir',
   'ml.window.cheapest': 'La más barata en delta-v',
   'ml.window.lowC3': 'El menor C3 de salida (lo que mira el lanzador)',
-  'ml.window.lowVinf': 'La llegada más lenta (lo que mira el módulo de aterrizaje)',
+  'ml.window.lowVinf':
+    'La llegada más lenta (lo que mira el módulo de aterrizaje)',
   'ml.window.fastest': 'El viaje más corto dentro de un 10 % de la más barata',
   'ml.window.use': 'Usar esta',
 
@@ -227,19 +250,24 @@ export const ES_MISSIONLAB = {
   'ml.limits.heading': 'Lo que este modelo deja fuera',
   'ml.limits.intro':
     'Las posiciones de los planetas son las de la DE441 del JPL, con unos pocos kilómetros de error de 2025 a 2045. Todo lo demás es un modelo para enseñar:',
-  'ml.limits.impulsive': 'Cada impulso es instantáneo: sin impulsos finitos, sin pérdidas por gravedad, sin encendido ni regulación del motor.',
+  'ml.limits.impulsive':
+    'Cada impulso es instantáneo: sin impulsos finitos, sin pérdidas por gravedad, sin encendido ni regulación del motor.',
   'ml.limits.soi':
     'El diseño es una cónica empalmada: dentro de la esfera de influencia de un planeta solo atrae el planeta, fuera solo el Sol. El vuelo directo muestra lo que eso cuesta.',
   'ml.limits.pullers':
     'En el vuelo directo solo atraen el Sol y los planetas marcados: ni Mercurio, Saturno, Urano, Neptuno, la Luna ni los asteroides.',
-  'ml.limits.moon': 'La Luna queda fuera por completo, aunque es la que más atrae a una nave que deja la Tierra.',
-  'ml.limits.shape': 'Cada cuerpo es una masa puntual: sin achatamiento (el J2 de la Tierra gira el plano de una órbita de estacionamiento), sin atmósfera, sin rozamiento.',
-  'ml.limits.relativity': 'Sin presión de radiación, sin desgasificación, sin relatividad.',
+  'ml.limits.moon':
+    'La Luna queda fuera por completo, aunque es la que más atrae a una nave que deja la Tierra.',
+  'ml.limits.shape':
+    'Cada cuerpo es una masa puntual: sin achatamiento (el J2 de la Tierra gira el plano de una órbita de estacionamiento), sin atmósfera, sin rozamiento.',
+  'ml.limits.relativity':
+    'Sin presión de radiación, sin desgasificación, sin relatividad.',
   'ml.limits.ephemeris':
     'En el vuelo directo los planetas parten de sus estados en la efeméride y luego se mueven bajo las atracciones del propio modelo, así que en la llegada se han alejado de los del JPL hasta unos miles de kilómetros.',
   'ml.limits.aiming':
     'La corrección apunta al centro de Marte como lo hace el tramo heliocéntrico, sin que Marte atraiga: una misión real apunta a un punto junto a Marte (el plano B), algo que este laboratorio no admite.',
-  'ml.limits.launch': 'No hay lanzamiento: la nave parte en su órbita de estacionamiento, y el depósito se da por hecho.',
+  'ml.limits.launch':
+    'No hay lanzamiento: la nave parte en su órbita de estacionamiento, y el depósito se da por hecho.',
   'ml.limits.operations':
     'No hay navegación, ni seguimiento, ni incertidumbre: cada estado se conoce exactamente. Las misiones reales se diseñan con modelos mucho más completos y vuelan con determinación de órbitas.',
   'ml.limits.why':
@@ -263,8 +291,10 @@ export const ES_MISSIONLAB = {
   'ml.guide.next': 'Siguiente',
   'ml.guide.notYet': 'Todavía no: el laboratorio no lo muestra hecho.',
   'ml.guide.tooShort': 'Escribe al menos {n} palabras; llevas {have}.',
-  'ml.guide.computeFirst': 'Calcula primero la misión: la respuesta se lee de ella.',
-  'ml.guide.wrong': 'No del todo. Vuelve a mirar las tablas, o pide que te lo muestren.',
+  'ml.guide.computeFirst':
+    'Calcula primero la misión: la respuesta se lee de ella.',
+  'ml.guide.wrong':
+    'No del todo. Vuelve a mirar las tablas, o pide que te lo muestren.',
   'ml.guide.shown': 'La respuesta: {answer}.',
   'ml.guide.passed': 'superado',
   'ml.guide.wasShown': 'mostrado',

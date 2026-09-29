@@ -94,6 +94,7 @@ export const ROUTES = [
   { id: 'lab3d-lab', url: '/3d/?system=R3', page: true },
   { id: 'lab3d-guide', url: '/3d/?guide=l3-planes', page: true },
   { id: 'mission', url: '/mission/', page: true },
+  { id: 'mission-lab', url: '/mission/lab/', page: true },
 ];
 
 const CONFIGS = {

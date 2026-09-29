@@ -48,12 +48,19 @@ export const DEFAULT_WINDOW = Object.freeze({
 const ALL = ['venus', 'earth', 'mars', 'jupiter'];
 const sameSet = (a, b) => a.length === b.length && a.every(x => b.includes(x));
 const flownAsDesigned = s =>
-  s.mission?.ok && sameSet(s.mission.direct.bodies, ALL) && s.mission.direct.start === 'periapsis';
+  s.mission?.ok &&
+  sameSet(s.mission.direct.bodies, ALL) &&
+  s.mission.direct.start === 'periapsis';
 
 /** The window's cheapest cell, as a date and a whole time of flight. */
 export function bestOf(w) {
   if (!w?.best) return null;
-  return { date: dateOfJd(JD_J2000 + w.best.depart), tofDays: Math.round(w.best.tof), total: w.best.total, c3: w.best.c3 };
+  return {
+    date: dateOfJd(JD_J2000 + w.best.depart),
+    tofDays: Math.round(w.best.tof),
+    total: w.best.total,
+    c3: w.best.c3,
+  };
 }
 
 /** The cheapest total among the window's cells of about 200 days. */
@@ -62,9 +69,17 @@ export function fastestNear(w, days = 200, halfWidth = 10) {
   let best = Infinity;
   for (let i = 0; i < w.rows; i++)
     for (let j = 0; j < o.tofSteps; j++) {
-      const tof = o.tofSteps === 1 ? o.tofMin : o.tofMin + ((o.tofMax - o.tofMin) * j) / (o.tofSteps - 1);
+      const tof =
+        o.tofSteps === 1
+          ? o.tofMin
+          : o.tofMin + ((o.tofMax - o.tofMin) * j) / (o.tofSteps - 1);
       const k = i * o.tofSteps + j;
-      if (Math.abs(tof - days) <= halfWidth && w.cellStatus[k] === 0 && w.total[k] < best) best = w.total[k];
+      if (
+        Math.abs(tof - days) <= halfWidth &&
+        w.cellStatus[k] === 0 &&
+        w.total[k] < best
+      )
+        best = w.total[k];
     }
   return best;
 }
@@ -76,7 +91,13 @@ export const GUIDES = [
     minutes: { intro: 15, advanced: 25 },
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
-      { id: 'predict', kind: 'choose', path: 'both', options: ['climb', 'turn', 'same'], correct: null },
+      {
+        id: 'predict',
+        kind: 'choose',
+        path: 'both',
+        options: ['climb', 'turn', 'same'],
+        correct: null,
+      },
       {
         id: 'dv',
         kind: 'answer',
@@ -99,14 +120,26 @@ export const GUIDES = [
         path: 'both',
         options: ['climb', 'turn', 'same'],
         correct: 'computed',
-        correctOf: s => (turnCost(s) > s.mission.rendezvous.total * 1000 * 1.1 ? 'turn' : turnCost(s) * 1.1 < s.mission.rendezvous.total * 1000 ? 'climb' : 'same'),
+        correctOf: s =>
+          turnCost(s) > s.mission.rendezvous.total * 1000 * 1.1
+            ? 'turn'
+            : turnCost(s) * 1.1 < s.mission.rendezvous.total * 1000
+              ? 'climb'
+              : 'same',
       },
       {
         id: 'phase',
         kind: 'do',
         path: 'advanced',
         check: s => s.mission?.ok && s.mission.rendezvous.wait < 600,
-        go: s => ({ depot: { ...s.plan.depot, phaseDeg: Number(((s.mission.rendezvous.lead / DEG) + 0.3).toFixed(2)) } }),
+        go: s => ({
+          depot: {
+            ...s.plan.depot,
+            phaseDeg: Number(
+              (s.mission.rendezvous.lead / DEG + 0.3).toFixed(2)
+            ),
+          },
+        }),
       },
       {
         id: 'waitAgain',
@@ -125,12 +158,21 @@ export const GUIDES = [
     minutes: { intro: 20, advanced: 30 },
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
-      { id: 'predict', kind: 'choose', path: 'both', options: ['yes', 'no'], correct: null },
+      {
+        id: 'predict',
+        kind: 'choose',
+        path: 'both',
+        options: ['yes', 'no'],
+        correct: null,
+      },
       {
         id: 'open',
         kind: 'do',
         path: 'both',
-        check: s => s.window?.options?.from === 'earth' && s.window.options.to === 'mars' && s.window.status === 'ok',
+        check: s =>
+          s.window?.options?.from === 'earth' &&
+          s.window.options.to === 'mars' &&
+          s.window.status === 'ok',
         go: () => ({ window: { ...DEFAULT_WINDOW } }),
       },
       {
@@ -139,9 +181,19 @@ export const GUIDES = [
         path: 'both',
         check: s => {
           const b = bestOf(s.window);
-          return !!b && s.mission?.ok && s.plan.depart.date === b.date && s.plan.depart.tofDays === b.tofDays;
+          return (
+            !!b &&
+            s.mission?.ok &&
+            s.plan.depart.date === b.date &&
+            s.plan.depart.tofDays === b.tofDays
+          );
         },
-        go: s => ({ depart: { date: bestOf(s.window).date, tofDays: bestOf(s.window).tofDays } }),
+        go: s => ({
+          depart: {
+            date: bestOf(s.window).date,
+            tofDays: bestOf(s.window).tofDays,
+          },
+        }),
       },
       {
         id: 'c3',
@@ -188,13 +240,22 @@ export const GUIDES = [
     minutes: { intro: 25, advanced: 40 },
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
-      { id: 'predict', kind: 'choose', path: 'both', options: ['km1e3', 'km1e4', 'km1e5', 'km1e6'], correct: null },
+      {
+        id: 'predict',
+        kind: 'choose',
+        path: 'both',
+        options: ['km1e3', 'km1e4', 'km1e5', 'km1e6'],
+        correct: null,
+      },
       {
         id: 'fly',
         kind: 'do',
         path: 'both',
         check: s => flownAsDesigned(s) && !s.plan.correct,
-        go: () => ({ direct: { bodies: [...ALL], start: 'periapsis' }, correct: null }),
+        go: () => ({
+          direct: { bodies: [...ALL], start: 'periapsis' },
+          correct: null,
+        }),
       },
       {
         id: 'miss',
@@ -208,7 +269,11 @@ export const GUIDES = [
         id: 'test',
         kind: 'do',
         path: 'both',
-        check: s => s.mission?.ok && s.mission.direct.bodies.length === 0 && s.mission.direct.start === 'center' && !s.plan.correct,
+        check: s =>
+          s.mission?.ok &&
+          s.mission.direct.bodies.length === 0 &&
+          s.mission.direct.start === 'center' &&
+          !s.plan.correct,
         go: () => ({ direct: { bodies: [], start: 'center' }, correct: null }),
       },
       {
@@ -227,7 +292,10 @@ export const GUIDES = [
         kind: 'do',
         path: 'both',
         check: s => flownAsDesigned(s) && s.plan.correct?.day === 30,
-        go: () => ({ direct: { bodies: [...ALL], start: 'periapsis' }, correct: { day: 30 } }),
+        go: () => ({
+          direct: { bodies: [...ALL], start: 'periapsis' },
+          correct: { day: 30 },
+        }),
       },
       {
         id: 'cost',
@@ -242,7 +310,10 @@ export const GUIDES = [
         kind: 'do',
         path: 'advanced',
         check: s => flownAsDesigned(s) && s.plan.correct?.day === 200,
-        go: () => ({ direct: { bodies: [...ALL], start: 'periapsis' }, correct: { day: 200 } }),
+        go: () => ({
+          direct: { bodies: [...ALL], start: 'periapsis' },
+          correct: { day: 200 },
+        }),
       },
       {
         id: 'lateCost',
@@ -280,7 +351,8 @@ export function turnCost(s) {
 }
 
 /** The steps of a guide on a path. */
-export const stepsOn = (guide, path) => guide.steps.filter(s => s.path === 'both' || s.path === path);
+export const stepsOn = (guide, path) =>
+  guide.steps.filter(s => s.path === 'both' || s.path === path);
 
 /** A typed number: a decimal comma as well as a point. */
 export function parseAnswer(text) {
@@ -293,7 +365,8 @@ export function parseAnswer(text) {
 }
 
 /** Words in an explanation, in any script. */
-export const wordCount = text => (String(text ?? '').match(/[\p{L}\p{N}]+/gu) || []).length;
+export const wordCount = text =>
+  (String(text ?? '').match(/[\p{L}\p{N}]+/gu) || []).length;
 
 /** The right option of a choose step for this state; null for a prediction. */
 export function correctOption(step, state) {
@@ -308,17 +381,23 @@ export function correctOption(step, state) {
 export function evaluate(step, state, input) {
   if (step.kind === 'read') return { passed: true };
   if (step.kind === 'do') return { passed: !!step.check(state) };
-  if (step.kind === 'explain') return { passed: wordCount(input) >= step.minWords };
+  if (step.kind === 'explain')
+    return { passed: wordCount(input) >= step.minWords };
   if (step.kind === 'choose') {
     const right = correctOption(step, state);
-    if (right === null) return { passed: typeof input === 'string' && step.options.includes(input) };
+    if (right === null)
+      return {
+        passed: typeof input === 'string' && step.options.includes(input),
+      };
     return { passed: input === right, expected: right };
   }
   if (!state.mission?.ok) return { passed: false };
   const expected = step.answer(state);
   const typed = parseAnswer(input);
   return {
-    passed: typed !== null && Math.abs(typed - expected) <= step.tolerance + 1e-9 * Math.abs(expected),
+    passed:
+      typed !== null &&
+      Math.abs(typed - expected) <= step.tolerance + 1e-9 * Math.abs(expected),
     expected,
   };
 }

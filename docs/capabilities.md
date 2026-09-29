@@ -10,7 +10,7 @@ manifest. Everything else is still built into the core; see
 | Package | Version | Kind | Provides | Licenses | Citations |
 |---|---|---|---|---|---|
 | `gravitas.lab3d` | 1.2.0 | built-in | 2 routes, 1 models | MIT (`js/lab3d/**`) | - |
-| `gravitas.mission` | 1.0.0 | built-in | 1 routes, 1 models | MIT (`js/mission/**`) | - |
+| `gravitas.mission` | 1.1.0 | built-in | 2 routes, 2 models | MIT (`js/mission/**`); no license stated; credit JPL and cite DE441, see NOTICE (`js/data/ephemeris/**`) | JPL Horizons, ephemeris DE441 (Park et al. 2021, AJ 161, 105) |
 | `gravitas.lesson.power-law-gravity` | 1.0.0 | built-in | 1 routes, 1 investigations, 1 translations | CC-BY-4.0 (`js/data/investigations/**`) | - |
 | `gravitas.power-law-instruments` | 1.0.0 | built-in | 1 models, 1 widgetFamilies | MIT (`js/powerLaw*.js`) | - |
 | `gravitas.sdss-dr18-spectra` | 1.0.0 | built-in | 1 dataPacks | public domain; acknowledge SDSS, see NOTICE (`js/data/spectra/**`) | SDSS DR18 (Almeida et al. 2023, ApJS 267, 44) |

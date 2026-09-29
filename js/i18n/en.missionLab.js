@@ -56,18 +56,23 @@ export const EN_MISSIONLAB = {
   'ml.refused.input': 'a number is missing or out of range.',
   'ml.refused.sameOrbit': 'the parking orbit and the depot orbit are the same.',
   'ml.refused.revolutions': 'multi-revolution transfers are not supported.',
-  'ml.refused.collinear': 'the Earth and Mars are in the same direction from the Sun at those dates.',
+  'ml.refused.collinear':
+    'the Earth and Mars are in the same direction from the Sun at those dates.',
   'ml.refused.antipodal':
     'the Earth and Mars are within 0.06 degrees of opposite each other from the Sun: the transfer plane is then set by rounding. Move the date or the time of flight by a day.',
-  'ml.refused.branchAmbiguous': 'the transfer plane contains the ecliptic pole.',
+  'ml.refused.branchAmbiguous':
+    'the transfer plane contains the ecliptic pole.',
   'ml.refused.tooFast': 'no orbit can make the transfer in that time.',
-  'ml.refused.noConvergence': 'the solver, or the correction’s aiming, did not converge within its limit.',
-  'ml.refused.checkFailed': 'the transfer could not be confirmed by carrying it forward independently.',
+  'ml.refused.noConvergence':
+    'the solver, or the correction’s aiming, did not converge within its limit.',
+  'ml.refused.checkFailed':
+    'the transfer could not be confirmed by carrying it forward independently.',
   'ml.problem': '{field}: {why}',
   'ml.problem.value': 'a number is missing or out of range.',
   'ml.problem.sameOrbit': 'it must differ from the parking orbit.',
   'ml.problem.date': 'it must be a date, YYYY-MM-DD.',
-  'ml.problem.outOfRange': 'the ephemeris covers 2025-01-01 to 2045-01-01, arrival included.',
+  'ml.problem.outOfRange':
+    'the ephemeris covers 2025-01-01 to 2045-01-01, arrival included.',
   'ml.problem.planet': 'choose a planet of the ephemeris.',
   'ml.problem.samePlanet': 'choose two different planets.',
   'ml.problem.steps': 'too many steps.',
@@ -78,13 +83,16 @@ export const EN_MISSIONLAB = {
   'ml.field.depart.date': 'Departure date',
   'ml.field.depart.tofDays': 'Time of flight',
   'ml.field.arrive.periapsisAltitude': 'Capture periapsis',
-  'ml.field.arrive.apoapsisAltitude': 'Capture apoapsis (at least the periapsis)',
-  'ml.field.correct.day': 'Correction day (at least 1, and 10 days before arrival)',
+  'ml.field.arrive.apoapsisAltitude':
+    'Capture apoapsis (at least the periapsis)',
+  'ml.field.correct.day':
+    'Correction day (at least 1, and 10 days before arrival)',
   'ml.field.vehicle.dryKg': 'Dry mass',
   'ml.field.vehicle.ispS': 'Specific impulse',
   'ml.field.direct.bodies': 'Bodies',
   'ml.field.direct.start': 'Start',
 
+  'ml.timeline.table': 'The timeline, as a table',
   'ml.timeline.heading': 'The mission timeline',
   'ml.timeline.slider': 'Day of the cruise',
   'ml.timeline.show': 'Show',
@@ -121,6 +129,7 @@ export const EN_MISSIONLAB = {
   'ml.col.total': 'Both burns',
   'ml.col.use': 'Use it',
 
+  'ml.views.table': 'Positions on the chosen day, as a table',
   'ml.views.heading': 'The geometry',
   'ml.views.positions': 'Where everything is on {date}',
   'ml.views.earth': 'Earth',
@@ -137,6 +146,7 @@ export const EN_MISSIONLAB = {
   'ml.views.departureAlt':
     'The depot orbit, {rp} from the Earth’s center at {vc}, and the first 20 hours of the departure hyperbola.',
 
+  'ml.results.table': "The mission's numbers, as tables",
   'ml.results.heading': 'The mission in numbers',
   'ml.results.earthOrbit': 'In Earth orbit',
   'ml.results.lead': 'Depot lead the transfer needs',
@@ -170,7 +180,8 @@ export const EN_MISSIONLAB = {
   'ml.results.budget': 'Delta-v and propellant, burn by burn',
   'ml.results.total': 'Total',
   'ml.results.resources': 'Where the propellant comes from',
-  'ml.results.launchLoad': 'Left in the tanks by the launch, for the rendezvous',
+  'ml.results.launchLoad':
+    'Left in the tanks by the launch, for the rendezvous',
   'ml.results.depotLoad': 'Loaded at the depot, for the rest',
   'ml.results.exhaust': 'Exhaust speed',
   'ml.results.solver': 'How the Lambert solver did',
@@ -198,12 +209,14 @@ export const EN_MISSIONLAB = {
   'ml.window.running': 'Working: {percent}%',
   'ml.window.ok': 'Finished: {n} cells.',
   'ml.window.canceled': 'Canceled: the cells computed so far are shown.',
-  'ml.window.timeLimit': 'Stopped at the time limit: the cells computed so far are shown.',
+  'ml.window.timeLimit':
+    'Stopped at the time limit: the cells computed so far are shown.',
   'ml.window.alt':
     'Transfer window from Earth to Mars: departure from {d1} (left) to {d2} (right), time of flight {t1} to {t2} days (bottom to top). Darker is cheaper; the cheapest cell is {best}, leaving {date} for {tof} days.',
   'ml.window.cheap': 'Cheapest, {v}',
   'ml.window.dear': 'Twice that, {v}, or more',
-  'ml.window.axes': 'Across: departure date. Up: time of flight. Gray: refused.',
+  'ml.window.axes':
+    'Across: departure date. Up: time of flight. Gray: refused.',
   'ml.window.candidates': 'Four ways to choose',
   'ml.window.cheapest': 'Cheapest in delta-v',
   'ml.window.lowC3': 'Lowest departure C3 (the launch vehicle’s view)',
@@ -227,19 +240,24 @@ export const EN_MISSIONLAB = {
   'ml.limits.heading': 'What this model leaves out',
   'ml.limits.intro':
     'The planets’ positions are JPL’s DE441, to a few kilometers from 2025 to 2045. Everything else is a teaching model:',
-  'ml.limits.impulsive': 'Every burn is instantaneous: no finite burns, no gravity losses, no engine start-up or throttling.',
+  'ml.limits.impulsive':
+    'Every burn is instantaneous: no finite burns, no gravity losses, no engine start-up or throttling.',
   'ml.limits.soi':
     'The design is a patched conic: inside a planet’s sphere of influence only the planet pulls, outside it only the Sun. The direct flight shows what that costs.',
   'ml.limits.pullers':
     'The direct flight is pulled only by the Sun and the planets ticked: not Mercury, Saturn, Uranus, Neptune, the Moon or the asteroids.',
-  'ml.limits.moon': 'The Moon is left out entirely, though it pulls hardest on a spacecraft leaving the Earth.',
-  'ml.limits.shape': 'Every body is a point mass: no oblateness (the Earth’s J2 turns a parking orbit’s plane), no atmosphere, no drag.',
-  'ml.limits.relativity': 'No radiation pressure, no outgassing, no relativity.',
+  'ml.limits.moon':
+    'The Moon is left out entirely, though it pulls hardest on a spacecraft leaving the Earth.',
+  'ml.limits.shape':
+    'Every body is a point mass: no oblateness (the Earth’s J2 turns a parking orbit’s plane), no atmosphere, no drag.',
+  'ml.limits.relativity':
+    'No radiation pressure, no outgassing, no relativity.',
   'ml.limits.ephemeris':
     'The planets in the direct flight start at their ephemeris states and then move under the model’s own pulls, so by arrival they have drifted from JPL’s by up to a few thousand kilometers.',
   'ml.limits.aiming':
     'The correction aims at Mars’s center as the heliocentric leg does, with Mars not pulling: a real mission aims at a point beside Mars (the B-plane), which this lab does not support.',
-  'ml.limits.launch': 'There is no launch: the spacecraft starts in its parking orbit, and the depot is a given.',
+  'ml.limits.launch':
+    'There is no launch: the spacecraft starts in its parking orbit, and the depot is a given.',
   'ml.limits.operations':
     'There is no navigation, no tracking and no uncertainty: every state is known exactly. Real missions design with far more complete models and fly with orbit determination.',
   'ml.limits.why':
@@ -263,7 +281,8 @@ export const EN_MISSIONLAB = {
   'ml.guide.next': 'Next',
   'ml.guide.notYet': 'Not yet: the lab does not show it done.',
   'ml.guide.tooShort': 'Write at least {n} words; that is {have}.',
-  'ml.guide.computeFirst': 'Compute the mission first: the answer is read from it.',
+  'ml.guide.computeFirst':
+    'Compute the mission first: the answer is read from it.',
   'ml.guide.wrong': 'Not quite. Look again at the tables, or ask to be shown.',
   'ml.guide.shown': 'The answer: {answer}.',
   'ml.guide.passed': 'passed',

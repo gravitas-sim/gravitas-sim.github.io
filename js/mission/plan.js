@@ -62,7 +62,14 @@ export const RESTS_ON = Object.freeze({
     'zeroRevolution',
   ],
   flyby: ['pointMass', 'patchedConic', 'planarFlyby'],
-  missionLab: ['impulsive', 'pointMass', 'patchedConic', 'zeroRevolution', 'ephemerisPack', 'namedPullers'],
+  missionLab: [
+    'impulsive',
+    'pointMass',
+    'patchedConic',
+    'zeroRevolution',
+    'ephemerisPack',
+    'namedPullers',
+  ],
 });
 
 /**

@@ -178,7 +178,10 @@ export function suiteInstructorGuide(suite, docs, { version = '' } = {}) {
     );
     doc.bullets(
       stepsOn(g, 'advanced')
-        .filter(s => s.kind === 'answer' || s.kind === 'choose' || s.kind === 'explain')
+        .filter(
+          s =>
+            s.kind === 'answer' || s.kind === 'choose' || s.kind === 'explain'
+        )
         .map(
           s =>
             `${step(g, s, 'title')}${s.path === 'advanced' ? ' (advanced)' : ''}: ${

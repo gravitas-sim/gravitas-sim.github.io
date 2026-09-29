@@ -63,7 +63,9 @@ const num = (v, digits = 5) =>
     : v === 0
       ? '0'
       : Math.abs(v) >= 1e-3 && Math.abs(v) < 1e9
-        ? new Intl.NumberFormat(language(), { maximumSignificantDigits: digits }).format(v)
+        ? new Intl.NumberFormat(language(), {
+            maximumSignificantDigits: digits,
+          }).format(v)
         : v.toExponential(digits - 1);
 const ms = kms => t('ml.unit.ms', { v: num(kms * 1000, 5) });
 const kms = v => t('ml.unit.kms', { v: num(v) });
@@ -77,7 +79,15 @@ function table(caption, head, rows) {
     'table',
     { class: 'ml-table' },
     el('caption', { text: caption }),
-    el('thead', {}, el('tr', {}, head.map(h => el('th', { scope: 'col', text: h })))),
+    el(
+      'thead',
+      {},
+      el(
+        'tr',
+        {},
+        head.map(h => el('th', { scope: 'col', text: h }))
+      )
+    ),
     el(
       'tbody',
       {},
@@ -86,14 +96,19 @@ function table(caption, head, rows) {
           'tr',
           {},
           r.map((c, i) =>
-            i === 0 ? el('th', { scope: 'row', text: c }) : c instanceof Node ? el('td', {}, c) : el('td', { text: c })
+            i === 0
+              ? el('th', { scope: 'row', text: c })
+              : c !== null && typeof c === 'object'
+                ? el('td', {}, c)
+                : el('td', { text: c })
           )
         )
       )
     )
   );
 }
-const facts = (caption, pairs) => table(caption, [t('ml.col.quantity'), t('ml.col.value')], pairs);
+const facts = (caption, pairs) =>
+  table(caption, [t('ml.col.quantity'), t('ml.col.value')], pairs);
 
 // --- The plan, as the editor holds it --------------------------------------------
 
@@ -119,12 +134,19 @@ function readPlan() {
     parking: { altitude: numberIn('ml-parking') },
     depot: { altitude: numberIn('ml-depot'), phaseDeg: numberIn('ml-phase') },
     depart: { date: $('ml-date').value.trim(), tofDays: numberIn('ml-tof') },
-    arrive: { periapsisAltitude: numberIn('ml-peri'), apoapsisAltitude: numberIn('ml-apo') },
-    correct: $('ml-correct-on').checked ? { day: numberIn('ml-correct-day') } : null,
+    arrive: {
+      periapsisAltitude: numberIn('ml-peri'),
+      apoapsisAltitude: numberIn('ml-apo'),
+    },
+    correct: $('ml-correct-on').checked
+      ? { day: numberIn('ml-correct-day') }
+      : null,
     vehicle: { dryKg: numberIn('ml-dry'), ispS: numberIn('ml-isp') },
     direct: {
       bodies: PULLER_IDS.filter(id => $(`ml-body-${id}`).checked),
-      start: document.querySelector('input[name="ml-start"]:checked')?.value ?? 'periapsis',
+      start:
+        document.querySelector('input[name="ml-start"]:checked')?.value ??
+        'periapsis',
     },
   };
 }
@@ -142,8 +164,10 @@ function writePlan(p) {
   if (p.correct) set('ml-correct-day', p.correct.day);
   set('ml-dry', p.vehicle.dryKg);
   set('ml-isp', p.vehicle.ispS);
-  for (const id of PULLER_IDS) $(`ml-body-${id}`).checked = p.direct.bodies.includes(id);
-  for (const r of document.querySelectorAll('input[name="ml-start"]')) r.checked = r.value === p.direct.start;
+  for (const id of PULLER_IDS)
+    $(`ml-body-${id}`).checked = p.direct.bodies.includes(id);
+  for (const r of document.querySelectorAll('input[name="ml-start"]'))
+    r.checked = r.value === p.direct.start;
 }
 
 function markProblems(problems = []) {
@@ -166,7 +190,9 @@ async function compute() {
     if (!result.ok) {
       state.mission = result;
       markProblems();
-      $('ml-status').textContent = t('ml.status.refused', { why: t(`ml.refused.${result.status}`) });
+      $('ml-status').textContent = t('ml.status.refused', {
+        why: t(`ml.refused.${result.status}`),
+      });
     } else {
       state.mission = result;
       markProblems();
@@ -179,7 +205,14 @@ async function compute() {
     markProblems(err.problems);
     $('ml-status').textContent = err.problems
       ? t('ml.status.refused', {
-          why: err.problems.map(p => t('ml.problem', { field: t(`ml.field.${p.path}`), why: t(`ml.problem.${p.code}`) })).join(' '),
+          why: err.problems
+            .map(p =>
+              t('ml.problem', {
+                field: t(`ml.field.${p.path}`),
+                why: t(`ml.problem.${p.code}`),
+              })
+            )
+            .join(' '),
         })
       : t('ml.status.failed', { why: err.message });
   } finally {
@@ -217,7 +250,11 @@ function renderTimeline() {
     const go =
       day >= 0
         ? (() => {
-            const b = el('button', { type: 'button', class: 'ui-link', text: t('ml.timeline.show') });
+            const b = el('button', {
+              type: 'button',
+              class: 'ui-link',
+              text: t('ml.timeline.show'),
+            });
             b.addEventListener('click', () => {
               slider.value = String(Math.round(day));
               moved();
@@ -225,10 +262,19 @@ function renderTimeline() {
             return b;
           })()
         : '';
-    return [t(`ml.event.${e.id}`), date(e.jd), burn[e.id] ? ms(burn[e.id].dv) : '', go];
+    return [
+      t(`ml.event.${e.id}`),
+      date(e.jd),
+      burn[e.id] ? ms(burn[e.id].dv) : '',
+      go,
+    ];
   });
   $('ml-timeline').replaceChildren(
-    table(t('ml.timeline.caption'), [t('ml.col.event'), t('ml.col.date'), t('ml.col.dv'), t('ml.col.view')], rows)
+    table(
+      t('ml.timeline.caption'),
+      [t('ml.col.event'), t('ml.col.date'), t('ml.col.dv'), t('ml.col.view')],
+      rows
+    )
   );
 }
 
@@ -250,8 +296,14 @@ function moved() {
   const at = {
     earth: along(v.earth, f),
     mars: along(v.mars, f),
-    patched: along(v.arc.map(p => p.r), f),
-    direct: along(v.direct.map(p => p.r), f),
+    patched: along(
+      v.arc.map(p => p.r),
+      f
+    ),
+    direct: along(
+      v.direct.map(p => p.r),
+      f
+    ),
   };
   const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
   $('ml-slider-out').textContent = t('ml.timeline.at', {
@@ -276,15 +328,28 @@ function moved() {
 
 // --- Geometry views --------------------------------------------------------------
 
-const COLORS = { earth: '#5ab0ff', mars: '#ff7a59', patched: '#f5d76e', direct: '#9be38a', sun: '#ffd24a' };
+const COLORS = {
+  earth: '#5ab0ff',
+  mars: '#ff7a59',
+  patched: '#f5d76e',
+  direct: '#9be38a',
+  sun: '#ffd24a',
+};
 const Z_STRETCH = 20;
 
 function view(title, caption, paths, markers, project, extent) {
   const size = 300;
-  const s = svg('svg', { viewBox: `0 0 ${size} ${size}`, role: 'img', 'aria-label': caption });
+  const s = svg('svg', {
+    viewBox: `0 0 ${size} ${size}`,
+    role: 'img',
+    'aria-label': caption,
+  });
   const map = p => {
     const [a, b] = project(p);
-    return [size / 2 + (a / extent) * (size / 2 - 10), size / 2 - (b / extent) * (size / 2 - 10)];
+    return [
+      size / 2 + (a / extent) * (size / 2 - 10),
+      size / 2 - (b / extent) * (size / 2 - 10),
+    ];
   };
   for (const [id, pts, dash] of paths) {
     const list = pts.filter(Boolean).map(map);
@@ -301,7 +366,9 @@ function view(title, caption, paths, markers, project, extent) {
   }
   for (const [id, p, r] of markers) {
     const [x, y] = map(p);
-    s.append(svg('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r, fill: COLORS[id] }));
+    s.append(
+      svg('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r, fill: COLORS[id] })
+    );
   }
   return el('figure', {}, s, el('figcaption', { text: title }));
 }
@@ -309,7 +376,12 @@ function view(title, caption, paths, markers, project, extent) {
 function drawViews(at) {
   const m = state.mission;
   const v = m.views;
-  const all = [...v.earth, ...v.mars, ...v.arc.map(p => p.r), ...v.direct.map(p => p.r)].filter(Boolean);
+  const all = [
+    ...v.earth,
+    ...v.mars,
+    ...v.arc.map(p => p.r),
+    ...v.direct.map(p => p.r),
+  ].filter(Boolean);
   const extent = Math.max(...all.map(p => Math.hypot(p[0], p[1]))) * 1.08;
   const paths = [
     ['earth', v.earth],
@@ -325,10 +397,25 @@ function drawViews(at) {
     ['direct', at.direct, 3],
   ];
   const dep = v.departure;
-  const depExtent = Math.max(...dep.hyperbola.map(p => Math.hypot(p[0], p[1])), dep.rp) * 1.08;
+  const depExtent =
+    Math.max(...dep.hyperbola.map(p => Math.hypot(p[0], p[1])), dep.rp) * 1.08;
   $('ml-views').replaceChildren(
-    view(t('ml.views.top'), t('ml.views.topAlt'), paths, markers, p => [p[0], p[1]], extent),
-    view(t('ml.views.side', { k: Z_STRETCH }), t('ml.views.sideAlt', { k: Z_STRETCH }), paths, markers, p => [p[0], p[2] * Z_STRETCH], extent),
+    view(
+      t('ml.views.top'),
+      t('ml.views.topAlt'),
+      paths,
+      markers,
+      p => [p[0], p[1]],
+      extent
+    ),
+    view(
+      t('ml.views.side', { k: Z_STRETCH }),
+      t('ml.views.sideAlt', { k: Z_STRETCH }),
+      paths,
+      markers,
+      p => [p[0], p[2] * Z_STRETCH],
+      extent
+    ),
     view(
       t('ml.views.departure'),
       t('ml.views.departureAlt', { rp: km(dep.rp), vc: kms(dep.vc) }),
@@ -343,7 +430,12 @@ function drawViews(at) {
   );
   $('ml-legend').replaceChildren(
     ...['earth', 'mars', 'patched', 'direct'].map(id =>
-      el('span', {}, el('span', { class: 'ml-swatch', style: `background:${COLORS[id]}` }), t(`ml.views.${id}`))
+      el(
+        'span',
+        {},
+        el('span', { class: 'ml-swatch', style: `background:${COLORS[id]}` }),
+        t(`ml.views.${id}`)
+      )
     )
   );
 }
@@ -365,7 +457,10 @@ function renderResults() {
   const r = m.rendezvous;
   const out = [
     facts(t('ml.results.earthOrbit'), [
-      [t('ml.results.lead'), t('ml.unit.deg', { v: num((r.lead * 180) / Math.PI, 4) })],
+      [
+        t('ml.results.lead'),
+        t('ml.unit.deg', { v: num((r.lead * 180) / Math.PI, 4) }),
+      ],
       [t('ml.results.wait'), t('ml.unit.min', { v: num(r.wait / 60, 4) })],
       [t('ml.results.rvTime'), t('ml.unit.min', { v: num(r.tof / 60, 4) })],
       [t('ml.results.rvTotal'), ms(r.total)],
@@ -376,18 +471,44 @@ function renderResults() {
       [t('ml.results.arrive'), date(p.arriveJd)],
       [t('ml.results.c3'), t('ml.unit.c3', { v: num(p.c3) })],
       [t('ml.results.vinfDep'), kms(p.vinfDep)],
-      [t('ml.results.declination'), t('ml.unit.deg', { v: num((p.declination * 180) / Math.PI, 4) })],
+      [
+        t('ml.results.declination'),
+        t('ml.unit.deg', { v: num((p.declination * 180) / Math.PI, 4) }),
+      ],
       [t('ml.results.vinfArr'), kms(p.vinfArr)],
       [t('ml.results.departDv'), ms(p.departDv)],
       [t('ml.results.captureDv'), ms(p.captureDv)],
-      [t('ml.results.captureOrbit'), t('ml.unit.h', { v: num(p.captureOrbitPeriod / 3600, 4) })],
+      [
+        t('ml.results.captureOrbit'),
+        t('ml.unit.h', { v: num(p.captureOrbitPeriod / 3600, 4) }),
+      ],
     ]),
     facts(t('ml.results.direct'), [
-      [t('ml.results.bodies'), d.bodies.length ? d.bodies.map(b => t(`ml.body.${b}`)).join(', ') : t('ml.results.sunOnly')],
-      [t('ml.results.start'), t(`ml.plan.start${d.start === 'center' ? 'Center' : 'Periapsis'}`)],
+      [
+        t('ml.results.bodies'),
+        d.bodies.length
+          ? d.bodies.map(b => t(`ml.body.${b}`)).join(', ')
+          : t('ml.results.sunOnly'),
+      ],
+      [
+        t('ml.results.start'),
+        t(`ml.plan.start${d.start === 'center' ? 'Center' : 'Periapsis'}`),
+      ],
       [t('ml.results.miss'), km(d.missKm)],
-      ...(d.closestKm !== null ? [[t('ml.results.closest'), t('ml.results.closestValue', { km: km(d.closestKm), date: date(p.departJd + d.closestDay) })]] : []),
-      ...(d.marsDriftKm !== null ? [[t('ml.results.drift'), km(d.marsDriftKm)]] : []),
+      ...(d.closestKm !== null
+        ? [
+            [
+              t('ml.results.closest'),
+              t('ml.results.closestValue', {
+                km: km(d.closestKm),
+                date: date(p.departJd + d.closestDay),
+              }),
+            ],
+          ]
+        : []),
+      ...(d.marsDriftKm !== null
+        ? [[t('ml.results.drift'), km(d.marsDriftKm)]]
+        : []),
     ]),
   ];
   if (m.correction)
@@ -400,12 +521,34 @@ function renderResults() {
       ])
     );
   const b = m.budget;
-  const rows = [...b.earthOrbit.rows, ...b.interplanetary.rows].map(r => [t(`ml.event.${r.id}`), date(r.jd), ms(r.dv), kg(r.propellant), kg(r.massBefore)]);
+  const rows = [...b.earthOrbit.rows, ...b.interplanetary.rows].map(r => [
+    t(`ml.event.${r.id}`),
+    date(r.jd),
+    ms(r.dv),
+    kg(r.propellant),
+    kg(r.massBefore),
+  ]);
   out.push(
-    table(t('ml.results.budget'), [t('ml.col.burn'), t('ml.col.date'), t('ml.col.dv'), t('ml.col.propellant'), t('ml.col.massBefore')], [
-      ...rows,
-      [t('ml.results.total'), '', ms(b.total), kg(b.earthOrbit.propellantKg + b.interplanetary.propellantKg), ''],
-    ]),
+    table(
+      t('ml.results.budget'),
+      [
+        t('ml.col.burn'),
+        t('ml.col.date'),
+        t('ml.col.dv'),
+        t('ml.col.propellant'),
+        t('ml.col.massBefore'),
+      ],
+      [
+        ...rows,
+        [
+          t('ml.results.total'),
+          '',
+          ms(b.total),
+          kg(b.earthOrbit.propellantKg + b.interplanetary.propellantKg),
+          '',
+        ],
+      ]
+    ),
     facts(t('ml.results.resources'), [
       [t('ml.results.launchLoad'), kg(b.earthOrbit.propellantKg)],
       [t('ml.results.depotLoad'), kg(b.interplanetary.propellantKg)],
@@ -426,7 +569,15 @@ function render() {
   renderTimeline();
   renderResults();
   guide?.render();
-  window.__missionLab = { plan: state.plan, mission: state.mission, window: state.window && { status: state.window.status, best: state.window.best, rows: state.window.rows } };
+  window.__missionLab = {
+    plan: state.plan,
+    mission: state.mission,
+    window: state.window && {
+      status: state.window.status,
+      best: state.window.best,
+      rows: state.window.rows,
+    },
+  };
 }
 
 // --- The launch window -----------------------------------------------------------
@@ -462,7 +613,9 @@ function candidates(w) {
     }
   const by = f => cells.reduce((a, c) => (f(c) < f(a) ? c : a));
   const cheap = by(c => c.total);
-  const fast = cells.filter(c => c.total <= cheap.total * 1.1).reduce((a, c) => (c.tof < a.tof ? c : a));
+  const fast = cells
+    .filter(c => c.total <= cheap.total * 1.1)
+    .reduce((a, c) => (c.tof < a.tof ? c : a));
   return [
     ['cheapest', cheap],
     ['lowC3', by(c => c.c3)],
@@ -484,7 +637,8 @@ function drawWindow(w) {
   for (let i = 0; i < w.rows; i++)
     for (let j = 0; j < o.tofSteps; j++) {
       const k = i * o.tofSteps + j;
-      ctx.fillStyle = w.cellStatus[k] !== 0 ? '#3a3f52' : colour((w.total[k] - lo) / lo);
+      ctx.fillStyle =
+        w.cellStatus[k] !== 0 ? '#3a3f52' : colour((w.total[k] - lo) / lo);
       ctx.fillRect(xs(i), ys(j + 1), xs(i + 1) - xs(i), ys(j) - ys(j + 1));
     }
   c.hidden = false;
@@ -502,25 +656,66 @@ function drawWindow(w) {
     })
   );
   $('ml-window-legend').replaceChildren(
-    el('span', {}, el('span', { class: 'ml-swatch', style: `background:${colour(0)}` }), t('ml.window.cheap', { v: kms(lo) })),
-    el('span', {}, el('span', { class: 'ml-swatch', style: `background:${colour(1)}` }), t('ml.window.dear', { v: kms(2 * lo) })),
+    el(
+      'span',
+      {},
+      el('span', { class: 'ml-swatch', style: `background:${colour(0)}` }),
+      t('ml.window.cheap', { v: kms(lo) })
+    ),
+    el(
+      'span',
+      {},
+      el('span', { class: 'ml-swatch', style: `background:${colour(1)}` }),
+      t('ml.window.dear', { v: kms(2 * lo) })
+    ),
     el('span', { text: t('ml.window.axes') })
   );
   $('ml-window-out').replaceChildren(
     table(
       t('ml.window.candidates'),
-      [t('ml.col.choice'), t('ml.col.date'), t('ml.col.tof'), t('ml.col.c3'), t('ml.col.vinf'), t('ml.col.total'), t('ml.col.use')],
+      [
+        t('ml.col.choice'),
+        t('ml.col.date'),
+        t('ml.col.tof'),
+        t('ml.col.c3'),
+        t('ml.col.vinf'),
+        t('ml.col.total'),
+        t('ml.col.use'),
+      ],
       candidates(w).map(([id, c]) => {
-        const use = el('button', { type: 'button', class: 'ui-button', text: t('ml.window.use') });
-        use.addEventListener('click', () => apply({ depart: { date: date(JD_J2000 + c.depart), tofDays: Math.round(c.tof) } }));
-        return [t(`ml.window.${id}`), date(JD_J2000 + c.depart), days(c.tof), t('ml.unit.c3', { v: num(c.c3) }), kms(c.vinf), kms(c.total), use];
+        const use = el('button', {
+          type: 'button',
+          class: 'ui-button',
+          text: t('ml.window.use'),
+        });
+        use.addEventListener('click', () =>
+          apply({
+            depart: {
+              date: date(JD_J2000 + c.depart),
+              tofDays: Math.round(c.tof),
+            },
+          })
+        );
+        return [
+          t(`ml.window.${id}`),
+          date(JD_J2000 + c.depart),
+          days(c.tof),
+          t('ml.unit.c3', { v: num(c.c3) }),
+          kms(c.vinf),
+          kms(c.total),
+          use,
+        ];
       })
     )
   );
 }
 
 async function computeWindow(options = DEFAULT_WINDOW) {
-  const o = { ...options, fromAltitude: state.plan.depot.altitude, toAltitude: state.plan.arrive.periapsisAltitude };
+  const o = {
+    ...options,
+    fromAltitude: state.plan.depot.altitude,
+    toAltitude: state.plan.arrive.periapsisAltitude,
+  };
   $('ml-window-go').disabled = true;
   $('ml-window-cancel').disabled = false;
   $('ml-window-status').textContent = t('ml.status.working');
@@ -528,17 +723,23 @@ async function computeWindow(options = DEFAULT_WINDOW) {
     windowRun = lab.window(o, {
       onProgress: f => {
         $('ml-window-progress').value = f;
-        $('ml-window-status').textContent = t('ml.window.running', { percent: Math.round(f * 100) });
+        $('ml-window-status').textContent = t('ml.window.running', {
+          percent: Math.round(f * 100),
+        });
       },
     });
     const w = await windowRun.done;
     state.window = w;
     $('ml-window-progress').value = 1;
     if (w.best) drawWindow(w);
-    $('ml-window-status').textContent = t(`ml.window.${w.status}`, { n: num(w.rows * o.tofSteps, 6) });
+    $('ml-window-status').textContent = t(`ml.window.${w.status}`, {
+      n: num(w.rows * o.tofSteps, 6),
+    });
   } catch (err) {
     $('ml-window-status').textContent = err.problems
-      ? t('ml.status.refused', { why: err.problems.map(p => t(`ml.problem.${p.code}`)).join(' ') })
+      ? t('ml.status.refused', {
+          why: err.problems.map(p => t(`ml.problem.${p.code}`)).join(' '),
+        })
       : t('ml.status.failed', { why: err.message });
   } finally {
     windowRun = null;
@@ -560,17 +761,34 @@ async function check() {
         c.id,
         m.name,
         typeof m.value === 'number' ? num(m.value, 4) : String(m.value),
-        typeof m.expected === 'number' ? `${num(m.expected, 5)} ± ${num(m.tolerance, 2)}` : `= ${m.expected}`,
+        typeof m.expected === 'number'
+          ? `${num(m.expected, 5)} ± ${num(m.tolerance, 2)}`
+          : `= ${m.expected}`,
         m.ok ? t('ml.check.pass') : t('ml.check.fail'),
       ])
     );
     $('ml-check-out').replaceChildren(
-      table(t('ml.check.caption'), [t('ml.check.case'), t('ml.check.measure'), t('ml.col.value'), t('ml.check.expected'), t('ml.check.result')], rows)
+      table(
+        t('ml.check.caption'),
+        [
+          t('ml.check.case'),
+          t('ml.check.measure'),
+          t('ml.col.value'),
+          t('ml.check.expected'),
+          t('ml.check.result'),
+        ],
+        rows
+      )
     );
-    $('ml-check-status').textContent = t('ml.check.done', { n: rows.length, failed: rows.filter(x => x[4] !== t('ml.check.pass')).length });
+    $('ml-check-status').textContent = t('ml.check.done', {
+      n: rows.length,
+      failed: rows.filter(x => x[4] !== t('ml.check.pass')).length,
+    });
     window.__missionLabCheck = r;
   } catch (err) {
-    $('ml-check-status').textContent = t('ml.status.failed', { why: err.message });
+    $('ml-check-status').textContent = t('ml.status.failed', {
+      why: err.message,
+    });
   } finally {
     $('ml-check-go').disabled = false;
   }
@@ -578,28 +796,53 @@ async function check() {
 
 // --- Start-up --------------------------------------------------------------------
 
-const LIMITS = ['impulsive', 'soi', 'pullers', 'moon', 'shape', 'relativity', 'ephemeris', 'aiming', 'launch', 'operations'];
+const LIMITS = [
+  'impulsive',
+  'soi',
+  'pullers',
+  'moon',
+  'shape',
+  'relativity',
+  'ephemeris',
+  'aiming',
+  'launch',
+  'operations',
+];
 
 function fillControls() {
   $('ml-bodies').replaceChildren(
     ...PULLER_IDS.map(id => {
       const box = el('input', { id: `ml-body-${id}`, type: 'checkbox' });
       box.checked = readBodies().includes(id);
-      return el('label', { class: 'ml-choice', for: `ml-body-${id}` }, box, ` ${t(`ml.body.${id}`)}`);
+      return el(
+        'label',
+        { class: 'ml-choice', for: `ml-body-${id}` },
+        box,
+        ` ${t(`ml.body.${id}`)}`
+      );
     })
   );
-  $('ml-limits').replaceChildren(...LIMITS.map(k => el('li', { text: t(`ml.limits.${k}`) })));
+  $('ml-limits').replaceChildren(
+    ...LIMITS.map(k => el('li', { text: t(`ml.limits.${k}`) }))
+  );
 }
 /** The bodies the editor has ticked, or the plan's before the editor exists. */
 const readBodies = () => {
   const boxes = PULLER_IDS.map(id => $(`ml-body-${id}`));
-  return boxes.every(Boolean) ? PULLER_IDS.filter(id => $(`ml-body-${id}`).checked) : state.plan.direct.bodies;
+  return boxes.every(Boolean)
+    ? PULLER_IDS.filter(id => $(`ml-body-${id}`).checked)
+    : state.plan.direct.bodies;
 };
 
 function languageSwitch() {
   $('langSwitch').replaceChildren(
     ...LANGUAGES.map(({ id, endonym }) => {
-      const b = el('button', { type: 'button', class: 'ui-button', lang: id, text: endonym });
+      const b = el('button', {
+        type: 'button',
+        class: 'ui-button',
+        lang: id,
+        text: endonym,
+      });
       b.setAttribute('aria-pressed', String(language() === id));
       b.addEventListener('click', () => useLanguage(id));
       return b;
@@ -624,13 +867,29 @@ $('ml-window-cancel').addEventListener('click', () => windowRun?.cancel());
 $('ml-check-go').addEventListener('click', check);
 $('ml-save-plan').addEventListener('click', () => {
   if (!state.mission?.ok) return;
-  const { views: _v, ...result } = state.mission;
-  const plan = planFile('missionLab', state.plan, { ...result, burns: state.mission.burns.map(b => ({ at: (b.jd - state.mission.patched.departJd) * 86400, dv: b.dv })) }, {
-    bodies: ['sun', 'earth', 'mars', ...state.plan.direct.bodies],
-    version: MISSION_API,
-  });
+  // The plan keeps the results; the views are for the page.
+  const result = { ...state.mission };
+  delete result.views;
+  const plan = planFile(
+    'missionLab',
+    state.plan,
+    {
+      ...result,
+      burns: state.mission.burns.map(b => ({
+        at: (b.jd - state.mission.patched.departJd) * 86400,
+        dv: b.dv,
+      })),
+    },
+    {
+      bodies: ['sun', 'earth', 'mars', ...state.plan.direct.bodies],
+      version: MISSION_API,
+    }
+  );
   const blob = new Blob([planBytes(plan)], { type: 'application/json' });
-  const a = el('a', { href: URL.createObjectURL(blob), download: 'gravitas-mission-lab-plan.json' });
+  const a = el('a', {
+    href: URL.createObjectURL(blob),
+    download: 'gravitas-mission-lab-plan.json',
+  });
   document.body.append(a);
   a.click();
   a.remove();
@@ -640,11 +899,20 @@ setLanguage(preferred());
 fillControls();
 writePlan(state.plan);
 guide = createGuidePanel({
-  els: { pick: $('ml-guide-pick'), step: $('ml-step'), list: $('ml-step-list'), name: $('ml-name'), report: $('ml-report') },
+  els: {
+    pick: $('ml-guide-pick'),
+    step: $('ml-step'),
+    list: $('ml-step-list'),
+    name: $('ml-name'),
+    report: $('ml-report'),
+  },
   t,
   lab: { state: () => state, apply, language, num: v => num(v, 6) },
 });
 const params = new URLSearchParams(location.search);
-guide.open(params.get('guide') || 'ml-orbit', params.get('path') === 'advanced' ? 'advanced' : 'intro');
+guide.open(
+  params.get('guide') || 'ml-orbit',
+  params.get('path') === 'advanced' ? 'advanced' : 'intro'
+);
 useLanguage(language());
 compute().then(() => (document.documentElement.dataset.ready = 'true'));

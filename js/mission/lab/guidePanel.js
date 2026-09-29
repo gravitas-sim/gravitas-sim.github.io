@@ -12,7 +12,13 @@
 // apply a step's `go` (a plan patch, or a window), through `lab`.
 // =============================================================================
 
-import { GUIDES, correctOption, evaluate, stepsOn, wordCount } from './curriculum.js';
+import {
+  GUIDES,
+  correctOption,
+  evaluate,
+  stepsOn,
+  wordCount,
+} from './curriculum.js';
 
 export const REPORT_FORMAT = 'gravitas.mission-lab-report';
 const STORE = (guide, path) => `gravitas_missionlab_${guide}_${path}`;
@@ -44,14 +50,21 @@ export function createGuidePanel({ els, t, lab }) {
 
   function load() {
     try {
-      return JSON.parse(window.localStorage?.getItem(STORE(guide.id, path)) || '{}') || {};
+      return (
+        JSON.parse(
+          window.localStorage?.getItem(STORE(guide.id, path)) || '{}'
+        ) || {}
+      );
     } catch {
       return {};
     }
   }
   function save() {
     try {
-      window.localStorage?.setItem(STORE(guide.id, path), JSON.stringify(progress));
+      window.localStorage?.setItem(
+        STORE(guide.id, path),
+        JSON.stringify(progress)
+      );
     } catch {
       /* progress lasts for this visit only */
     }
@@ -78,10 +91,18 @@ export function createGuidePanel({ els, t, lab }) {
     const state = lab.state();
     const r = evaluate(s, state, input);
     record(s, { input: input ?? null, passed: r.passed });
-    if (r.passed) feedback = words(s, 'ok', { value: r.expected === undefined ? '' : lab.num(r.expected) });
+    if (r.passed)
+      feedback = words(s, 'ok', {
+        value: r.expected === undefined ? '' : lab.num(r.expected),
+      });
     else if (s.kind === 'do') feedback = t('ml.guide.notYet');
-    else if (s.kind === 'explain') feedback = t('ml.guide.tooShort', { n: s.minWords, have: wordCount(input) });
-    else if (s.kind === 'answer' && !state.mission?.ok) feedback = t('ml.guide.computeFirst');
+    else if (s.kind === 'explain')
+      feedback = t('ml.guide.tooShort', {
+        n: s.minWords,
+        have: wordCount(input),
+      });
+    else if (s.kind === 'answer' && !state.mission?.ok)
+      feedback = t('ml.guide.computeFirst');
     else feedback = t('ml.guide.wrong');
     render();
   }
@@ -96,7 +117,9 @@ export function createGuidePanel({ els, t, lab }) {
     const r = evaluate(s, lab.state(), null);
     feedback =
       s.kind === 'choose'
-        ? t('ml.guide.shown', { answer: words(s, `opt.${correctOption(s, lab.state())}`) })
+        ? t('ml.guide.shown', {
+            answer: words(s, `opt.${correctOption(s, lab.state())}`),
+          })
         : t('ml.guide.shown', { answer: `${lab.num(r.expected)} ${s.unit}` });
     render();
   }
@@ -104,26 +127,63 @@ export function createGuidePanel({ els, t, lab }) {
   function input(s) {
     const saved = progress[s.id]?.input ?? '';
     if (s.kind === 'choose') {
-      const set = el('fieldset', {}, el('legend', { text: t('ml.guide.choose') }));
+      const set = el(
+        'fieldset',
+        {},
+        el('legend', { text: t('ml.guide.choose') })
+      );
       for (const o of s.options) {
         const id = `ml-opt-${s.id}-${o}`;
-        const box = el('input', { type: 'radio', name: `ml-opt-${s.id}`, id, value: o });
+        const box = el('input', {
+          type: 'radio',
+          name: `ml-opt-${s.id}`,
+          id,
+          value: o,
+        });
         box.checked = saved === o;
-        set.append(el('label', { class: 'ml-choice', for: id }, box, ` ${words(s, `opt.${o}`)}`));
+        set.append(
+          el(
+            'label',
+            { class: 'ml-choice', for: id },
+            box,
+            ` ${words(s, `opt.${o}`)}`
+          )
+        );
       }
-      return { node: set, value: () => set.querySelector('input:checked')?.value ?? null };
+      return {
+        node: set,
+        value: () => set.querySelector('input:checked')?.value ?? null,
+      };
     }
     if (s.kind === 'answer') {
       const id = `ml-ans-${s.id}`;
-      const box = el('input', { id, type: 'text', inputmode: 'decimal', value: saved });
-      const f = el('div', { class: 'ml-field' }, el('label', { for: id, text: t('ml.guide.answer', { unit: s.unit }) }), box);
+      const box = el('input', {
+        id,
+        type: 'text',
+        inputmode: 'decimal',
+        value: saved,
+      });
+      const f = el(
+        'div',
+        { class: 'ml-field' },
+        el('label', { for: id, text: t('ml.guide.answer', { unit: s.unit }) }),
+        box
+      );
       return { node: f, value: () => box.value };
     }
     if (s.kind === 'explain') {
       const id = `ml-exp-${s.id}`;
       const box = el('textarea', { id });
       box.value = saved;
-      const f = el('div', { class: 'ml-field' }, el('label', { for: id, text: t('ml.guide.explain', { n: s.minWords }) }), box);
+      const f = el(
+        'div',
+        { class: 'ml-field' },
+        el('label', {
+          for: id,
+          text: t('ml.guide.explain', { n: s.minWords }),
+        }),
+        box
+      );
       return { node: f, value: () => box.value };
     }
     return { node: null, value: () => null };
@@ -132,50 +192,87 @@ export function createGuidePanel({ els, t, lab }) {
   function render() {
     els.pick.replaceChildren(
       ...GUIDES.map(g => {
-        const b = el('button', { type: 'button', class: 'ui-button', text: t(`gd.${g.id}.title`) });
+        const b = el('button', {
+          type: 'button',
+          class: 'ui-button',
+          text: t(`gd.${g.id}.title`),
+        });
         b.setAttribute('aria-pressed', String(g.id === guide.id));
         b.addEventListener('click', () => open(g.id));
         return b;
       })
     );
-    for (const r of document.querySelectorAll('input[name="ml-path"]')) r.checked = r.value === path;
+    for (const r of document.querySelectorAll('input[name="ml-path"]'))
+      r.checked = r.value === path;
     const list = steps();
     const s = list[index];
     const box = input(s);
     const buttons = el('div', { class: 'ml-bar' });
     if (s.kind !== 'read') {
-      const check = el('button', { type: 'button', class: 'ui-button is-primary', text: t(s.kind === 'do' ? 'ml.guide.checkDo' : 'ml.guide.check') });
+      const check = el('button', {
+        type: 'button',
+        class: 'ui-button is-primary',
+        text: t(s.kind === 'do' ? 'ml.guide.checkDo' : 'ml.guide.check'),
+      });
       check.addEventListener('click', () => checkStep(s, box.value()));
       buttons.append(check);
       const passed = progress[s.id]?.passed;
       const tried = progress[s.id] && !passed;
       const predicts = s.kind === 'choose' && s.correct === null;
       if ((s.kind === 'do' || tried) && !predicts && s.kind !== 'explain') {
-        const show = el('button', { type: 'button', class: 'ui-button', text: t('ml.guide.showMe') });
+        const show = el('button', {
+          type: 'button',
+          class: 'ui-button',
+          text: t('ml.guide.showMe'),
+        });
         show.addEventListener('click', () => showMe(s));
         buttons.append(show);
       }
     }
-    const back = el('button', { type: 'button', class: 'ui-button', text: t('ml.guide.back') });
+    const back = el('button', {
+      type: 'button',
+      class: 'ui-button',
+      text: t('ml.guide.back'),
+    });
     back.disabled = index === 0;
     back.addEventListener('click', () => move(-1));
-    const next = el('button', { type: 'button', class: 'ui-button', text: t('ml.guide.next') });
+    const next = el('button', {
+      type: 'button',
+      class: 'ui-button',
+      text: t('ml.guide.next'),
+    });
     next.disabled = index === list.length - 1;
     next.addEventListener('click', () => move(1));
     els.step.replaceChildren(
-      el('p', { class: 'ml-count', text: t('ml.guide.count', { n: index + 1, of: list.length }) }),
+      el('p', {
+        class: 'ml-count',
+        text: t('ml.guide.count', { n: index + 1, of: list.length }),
+      }),
       el('h3', { text: words(s, 'title') }),
       el('p', { text: words(s, 'body') }),
       box.node,
       buttons,
-      el('p', { class: 'ml-feedback', role: 'status', 'aria-live': 'polite', text: feedback }),
+      el('p', {
+        class: 'ml-feedback',
+        role: 'status',
+        'aria-live': 'polite',
+        text: feedback,
+      }),
       el('div', { class: 'ml-bar' }, back, next)
     );
     els.list.replaceChildren(
       ...list.map((x, i) => {
         const p = progress[x.id];
-        const mark = p?.passed ? t('ml.guide.passed') : p?.shown ? t('ml.guide.wasShown') : '';
-        const b = el('button', { type: 'button', class: 'ui-link', text: `${words(x, 'title')}${mark ? ` (${mark})` : ''}` });
+        const mark = p?.passed
+          ? t('ml.guide.passed')
+          : p?.shown
+            ? t('ml.guide.wasShown')
+            : '';
+        const b = el('button', {
+          type: 'button',
+          class: 'ui-link',
+          text: `${words(x, 'title')}${mark ? ` (${mark})` : ''}`,
+        });
         if (i === index) b.setAttribute('aria-current', 'step');
         b.addEventListener('click', () => {
           index = i;
@@ -203,7 +300,9 @@ export function createGuidePanel({ els, t, lab }) {
     const guides = GUIDES.map(g => {
       let p = {};
       try {
-        p = JSON.parse(window.localStorage?.getItem(STORE(g.id, path)) || '{}') || {};
+        p =
+          JSON.parse(window.localStorage?.getItem(STORE(g.id, path)) || '{}') ||
+          {};
       } catch {
         /* nothing kept */
       }
@@ -245,8 +344,13 @@ export function createGuidePanel({ els, t, lab }) {
   }
 
   els.report.addEventListener('click', () => {
-    const blob = new Blob([`${JSON.stringify(report(), null, 2)}\n`], { type: 'application/json' });
-    const a = el('a', { href: URL.createObjectURL(blob), download: 'gravitas-mission-lab-report.json' });
+    const blob = new Blob([`${JSON.stringify(report(), null, 2)}\n`], {
+      type: 'application/json',
+    });
+    const a = el('a', {
+      href: URL.createObjectURL(blob),
+      download: 'gravitas-mission-lab-report.json',
+    });
     document.body.append(a);
     a.click();
     a.remove();
@@ -254,5 +358,10 @@ export function createGuidePanel({ els, t, lab }) {
   for (const r of document.querySelectorAll('input[name="ml-path"]'))
     r.addEventListener('change', () => r.checked && open(guide.id, r.value));
 
-  return { open, render, report, current: () => ({ guide: guide.id, path, step: steps()[index].id }) };
+  return {
+    open,
+    render,
+    report,
+    current: () => ({ guide: guide.id, path, step: steps()[index].id }),
+  };
 }

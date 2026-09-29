@@ -7,7 +7,8 @@
 
 export const ES_MISSIONLABGUIDES = {
   'gd.target.earth-orbit': 'Órbita terrestre: el encuentro con el depósito',
-  'gd.target.window-2026': 'La ventana Tierra-Marte de 2026 sobre la DE441 del JPL',
+  'gd.target.window-2026':
+    'La ventana Tierra-Marte de 2026 sobre la DE441 del JPL',
   'gd.target.direct-flight': 'El vuelo directo, por el núcleo en 3-D validado',
 
   'gd.ml-orbit.title': 'En órbita terrestre: el encuentro con el depósito',
@@ -45,7 +46,8 @@ export const ES_MISSIONLABGUIDES = {
   'gd.ml-orbit.phase.title': 'Sin esperar',
   'gd.ml-orbit.phase.body':
     'Cambia en el plan el adelanto del depósito para que la espera sea de menos de 10 minutos, y vuelve a calcular. El adelanto que necesita la transferencia está en la tabla.',
-  'gd.ml-orbit.phase.ok': 'Hecho: el depósito parte ahora justo por delante de donde lo necesita la transferencia.',
+  'gd.ml-orbit.phase.ok':
+    'Hecho: el depósito parte ahora justo por delante de donde lo necesita la transferencia.',
   'gd.ml-orbit.waitAgain.title': 'La espera ahora',
   'gd.ml-orbit.waitAgain.body': '¿Cuánto es la espera ahora, en minutos?',
   'gd.ml-orbit.waitAgain.ok': 'Correcto: {value} minutos.',
@@ -62,18 +64,21 @@ export const ES_MISSIONLABGUIDES = {
     'La Tierra y Marte se alinean para una transferencia barata cada unos 26 meses. Para cualquier día de salida y cualquier tiempo de vuelo, la efeméride da las posiciones de ambos planetas, y una transferencia de Lambert alrededor del Sol las une. Hacerlo para cada par dibuja la ventana de lanzamiento.',
   'gd.ml-window.intro.ok': '',
   'gd.ml-window.predict.title': '¿Barato y rápido?',
-  'gd.ml-window.predict.body': '¿El día más barato para salir es también el del viaje más corto?',
+  'gd.ml-window.predict.body':
+    '¿El día más barato para salir es también el del viaje más corto?',
   'gd.ml-window.predict.opt.yes': 'Sí',
   'gd.ml-window.predict.opt.no': 'No',
   'gd.ml-window.predict.ok': 'Anotado. La ventana lo dirá.',
   'gd.ml-window.open.title': 'Dibuja la ventana',
   'gd.ml-window.open.body':
     'Calcula la ventana en la sección «La ventana de lanzamiento de 2026»: unas 19 000 transferencias de Lambert, en el Worker.',
-  'gd.ml-window.open.ok': 'Hecho: la ventana está dibujada, y debajo aparecen cuatro candidatas.',
+  'gd.ml-window.open.ok':
+    'Hecho: la ventana está dibujada, y debajo aparecen cuatro candidatas.',
   'gd.ml-window.best.title': 'El día más barato',
   'gd.ml-window.best.body':
     'Haz de la celda más barata el plan: pulsa «Usar esta» junto a «La más barata en delta-v». La fecha de salida y el tiempo de vuelo cambian, y la misión se vuelve a calcular.',
-  'gd.ml-window.best.ok': 'Hecho: el plan sale ahora el día más barato de la ventana.',
+  'gd.ml-window.best.ok':
+    'Hecho: el plan sale ahora el día más barato de la ventana.',
   'gd.ml-window.c3.title': 'C3',
   'gd.ml-window.c3.body':
     '¿Cuál es el C3 de la salida, en km²/s²? Es el cuadrado de la velocidad de exceso que debe dar la salida, y con él se clasifican los lanzadores.',
@@ -101,7 +106,8 @@ export const ES_MISSIONLABGUIDES = {
     'Cada celda es una transferencia de dos cuerpos entre los centros de los planetas, con el impulso de una cónica empalmada en cada extremo: la parte siguiente la vuela directamente y ve lo que eso deja fuera. Las posiciones son las del JPL, ajustadas con unos pocos km de error (la tabla está en MISSION_LAB.md). La ventana muestra una oportunidad; el paquete abarca de 2025 a 2045.',
   'gd.ml-window.limits.ok': '',
 
-  'gd.ml-cruise.title': 'En el camino: la cónica empalmada frente al vuelo directo',
+  'gd.ml-cruise.title':
+    'En el camino: la cónica empalmada frente al vuelo directo',
   'gd.ml-cruise.summary':
     'Vuela la nave diseñada bajo el Sol y los planetas desde su órbita de salida real, mira por cuánto falla Marte, averigua por qué y paga una corrección.',
   'gd.ml-cruise.intro.title': 'Dos modelos de una trayectoria',
@@ -134,7 +140,8 @@ export const ES_MISSIONLABGUIDES = {
   'gd.ml-cruise.diagnose.body':
     'Vuelve a marcar los planetas uno a uno y prueba ambos puntos de partida. ¿Qué causa la mayor parte del error?',
   'gd.ml-cruise.diagnose.opt.integration': 'El error de la integración',
-  'gd.ml-cruise.diagnose.opt.planets': 'La atracción de Venus, Marte y Júpiter en el camino',
+  'gd.ml-cruise.diagnose.opt.planets':
+    'La atracción de Venus, Marte y Júpiter en el camino',
   'gd.ml-cruise.diagnose.opt.earth':
     'La atracción de la Tierra sobre una nave que sale de una órbita real, que la cónica empalmada termina en su esfera de influencia',
   'gd.ml-cruise.diagnose.opt.mars': 'La atracción de Marte al llegar',

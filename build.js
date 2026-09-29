@@ -72,6 +72,7 @@ const DOC_PAGES = [
   'course',
   'lab3d',
   'mission',
+  'mission/lab',
   '3d',
 ];
 
@@ -209,6 +210,7 @@ async function buildJs() {
       'js/inference/inferenceWorker.js',
       'js/lab3d/worker.js',
       'js/mission/worker.js',
+      'js/mission/labWorker.js',
     ],
     bundle: true,
     minify: true,
@@ -524,6 +526,23 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'mission-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The mission lab (/mission/lab/, MISSION_LAB.md): its own entry. The
+  // ephemeris pack and the solvers are the lab Worker's (built above).
+  if (existsSync('js/missionLabPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/missionLabPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'mission-lab-[hash]',
       legalComments: 'none',
     });
   }

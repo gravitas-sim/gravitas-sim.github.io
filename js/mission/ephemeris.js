@@ -1,7 +1,7 @@
 // =============================================================================
 // Reading the educational ephemeris pack
 // -----------------------------------------------------------------------------
-// gravitas.ephemeris-pack/1 (EPHEMERIS.md): Chebyshev coefficients fitted by
+// gravitas.ephemeris-pack/1 (MISSION_LAB.md): Chebyshev coefficients fitted by
 // tools/build-ephemeris.mjs to JPL Horizons (DE441) states. The pack module
 // (js/data/ephemeris/solarSystem2025.js) holds them as base64; this decodes
 // them once and evaluates any body's state at any time in the range:

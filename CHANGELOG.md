@@ -36,6 +36,32 @@ the release rather than in the tag.
     the first course Gravitas ships.
   - A /1 course migrates. The Observatory opens a built-in observation by
     `?open=<id>`.
+- **The mission lab** (`/mission/lab/`, MISSION_LAB.md): a mission to Mars on
+  JPL's DE441 ephemeris, in three guided parts.
+  - **The ephemeris pack** (`gravitas.ephemeris-pack` 1): Venus, the Earth,
+    Mars and the Jupiter system barycenter, 2025 to 2045.
+    - Chebyshev fits to daily JPL Horizons states, within 4.2 km and
+      7.3e-5 km/s of held-out states; 107 KB.
+    - Built reproducibly by `tools/build-ephemeris.mjs`, every request and
+      answer pinned. It is checked offline in CI (`ephemeris:check`) and
+      rebuilt byte for byte from the pinned answers
+      (`ephemeris:provenance`).
+  - **The mission:**
+    - a rendezvous with a depot in Earth orbit;
+    - the 2026 window on the real positions, in three dimensions, with four
+      ways to choose;
+    - the patched-conic design against the same spacecraft flown directly
+      by the 3-D kernel under the Sun and the planets;
+    - a correction burn found by aiming again;
+    - delta-v and propellant by the rocket equation.
+  - **The page:** a maneuver editor, an interactive timeline, three geometry
+    views with every number in tables, and plan and report files.
+  - **The guides:** checked against the reader's own lab, with a measured
+    diagnosis of why the design misses Mars and an explanation students
+    write.
+  - **Around it:** instructor guide and answer key; English and Spanish;
+    offline; ten reference cases.
+
 - **The mission-design core** (`/mission/`, MISSION.md): educational
   astrodynamics on the 3-D engine, as a diagnostic page.
   - **Solvers:** impulsive Hohmann and bi-elliptic transfers; plane changes

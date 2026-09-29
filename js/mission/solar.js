@@ -45,7 +45,7 @@ export const AU_KM = 149597870.7;
 export const G0 = 9.80665;
 /**
  * GM of the Jupiter system, planet and moons, km^3/s^2: the pack's Jupiter is
- * the system's barycenter (EPHEMERIS.md), which moves as the whole system's
+ * the system's barycenter (MISSION_LAB.md), which moves as the whole system's
  * mass pulls. JPL's value, rounded.
  */
 export const JUPITER_SYSTEM_GM = 126712764.1;

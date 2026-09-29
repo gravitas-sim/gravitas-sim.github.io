@@ -46,7 +46,8 @@ export const EN_MISSIONLABGUIDES = {
   'gd.ml-orbit.phase.title': 'No waiting',
   'gd.ml-orbit.phase.body':
     'Change the depot’s lead in the plan so that the wait is under 10 minutes, and compute again. The lead the transfer needs is in the table.',
-  'gd.ml-orbit.phase.ok': 'Done: the depot now starts just ahead of where the transfer needs it.',
+  'gd.ml-orbit.phase.ok':
+    'Done: the depot now starts just ahead of where the transfer needs it.',
   'gd.ml-orbit.waitAgain.title': 'The wait now',
   'gd.ml-orbit.waitAgain.body': 'What is the wait now, in minutes?',
   'gd.ml-orbit.waitAgain.ok': 'Right: {value} minutes.',
@@ -63,18 +64,21 @@ export const EN_MISSIONLABGUIDES = {
     'The Earth and Mars line up for a cheap transfer about every 26 months. For any day to leave and any time of flight, the ephemeris gives both planets’ positions, and a Lambert transfer about the Sun joins them. Doing that for every pair draws the launch window.',
   'gd.ml-window.intro.ok': '',
   'gd.ml-window.predict.title': 'Cheap and fast?',
-  'gd.ml-window.predict.body': 'Is the cheapest day to leave also the one with the shortest trip?',
+  'gd.ml-window.predict.body':
+    'Is the cheapest day to leave also the one with the shortest trip?',
   'gd.ml-window.predict.opt.yes': 'Yes',
   'gd.ml-window.predict.opt.no': 'No',
   'gd.ml-window.predict.ok': 'Recorded. The window will say.',
   'gd.ml-window.open.title': 'Draw the window',
   'gd.ml-window.open.body':
     'Compute the window in the section “The 2026 launch window”: about 19,000 Lambert transfers, in the Worker.',
-  'gd.ml-window.open.ok': 'Done: the window is drawn, and four candidates are listed under it.',
+  'gd.ml-window.open.ok':
+    'Done: the window is drawn, and four candidates are listed under it.',
   'gd.ml-window.best.title': 'The cheapest day',
   'gd.ml-window.best.body':
     'Make the cheapest cell the plan: press “Use this” beside “Cheapest in delta-v”. The departure date and time of flight change, and the mission is computed again.',
-  'gd.ml-window.best.ok': 'Done: the plan now leaves on the window’s cheapest day.',
+  'gd.ml-window.best.ok':
+    'Done: the plan now leaves on the window’s cheapest day.',
   'gd.ml-window.c3.title': 'C3',
   'gd.ml-window.c3.body':
     'What is the departure’s C3, in km²/s²? It is the square of the excess speed the departure must give, and what launch vehicles are rated by.',
@@ -102,7 +106,8 @@ export const EN_MISSIONLABGUIDES = {
     'Each cell is a two-body transfer between the planets’ centers, with a patched conic’s burn at each end: the next part flies it directly and sees what that leaves out. The positions are JPL’s, fitted to within a few km (MISSION_LAB.md has the table). The window shows one opportunity; the pack holds 2025 to 2045.',
   'gd.ml-window.limits.ok': '',
 
-  'gd.ml-cruise.title': 'On the way: the patched conic against the direct flight',
+  'gd.ml-cruise.title':
+    'On the way: the patched conic against the direct flight',
   'gd.ml-cruise.summary':
     'Fly the designed spacecraft under the Sun and the planets from its real departure orbit, see how far it misses Mars, find out why, and pay for a correction.',
   'gd.ml-cruise.intro.title': 'Two models of one trajectory',
@@ -135,7 +140,8 @@ export const EN_MISSIONLABGUIDES = {
   'gd.ml-cruise.diagnose.body':
     'Tick the planets back one at a time, and try both starting points. What makes most of the miss?',
   'gd.ml-cruise.diagnose.opt.integration': 'The integration’s error',
-  'gd.ml-cruise.diagnose.opt.planets': 'The pulls of Venus, Mars and Jupiter on the way',
+  'gd.ml-cruise.diagnose.opt.planets':
+    'The pulls of Venus, Mars and Jupiter on the way',
   'gd.ml-cruise.diagnose.opt.earth':
     'The Earth’s pull on a spacecraft leaving from a real orbit, which the patched conic ends at its sphere of influence',
   'gd.ml-cruise.diagnose.opt.mars': 'Mars’s pull as it arrives',
