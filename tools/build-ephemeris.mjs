@@ -45,7 +45,11 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const MANIFEST = path.join(ROOT, 'ephemeris-packs', 'solar-system-2025-2045.json');
+const MANIFEST = path.join(
+  ROOT,
+  'ephemeris-packs',
+  'solar-system-2025-2045.json'
+);
 const CACHE = path.join(ROOT, '.ephemeris-cache');
 const API = 'https://ssd.jpl.nasa.gov/api/horizons.api';
 
@@ -109,18 +113,22 @@ function query(m, body, kind) {
     .join('&')}`;
 }
 
-const cacheFile = (body, kind) => path.join(CACHE, `${body.command}-${kind}.json`);
+const cacheFile = (body, kind) =>
+  path.join(CACHE, `${body.command}-${kind}.json`);
 
 /** Every problem with one cached answer against its pin and the manifest. */
 function rawProblems(m, body, kind) {
   const file = cacheFile(body, kind);
-  if (!existsSync(file)) return [`${path.relative(ROOT, file)} is not cached (run --fetch)`];
+  if (!existsSync(file))
+    return [`${path.relative(ROOT, file)} is not cached (run --fetch)`];
   const parsed = parseHorizons(readFileSync(file, 'utf8'));
   const pin = body.raw[kind];
   const out = [];
   const digest = sha256(Buffer.from(parsed.block));
   if (digest !== pin.sha256)
-    out.push(`${body.id} ${kind}: its data rows are ${digest}, not the pinned ${pin.sha256}`);
+    out.push(
+      `${body.id} ${kind}: its data rows are ${digest}, not the pinned ${pin.sha256}`
+    );
   if (parsed.rows.length !== pin.rows)
     out.push(`${body.id} ${kind}: ${parsed.rows.length} rows, not ${pin.rows}`);
   const want = {
@@ -133,7 +141,9 @@ function rawProblems(m, body, kind) {
   };
   for (const [k, v] of Object.entries(want))
     if (parsed.facts[k] !== v)
-      out.push(`${body.id} ${kind}: the answer says ${k} "${parsed.facts[k]}", the manifest "${v}"`);
+      out.push(
+        `${body.id} ${kind}: the answer says ${k} "${parsed.facts[k]}", the manifest "${v}"`
+      );
   return out;
 }
 
@@ -153,7 +163,10 @@ async function fetchAll(m) {
       // A pin that is still empty is being made: record what came back.
       if (!body.raw[kind].sha256) {
         const parsed = parseHorizons(readFileSync(file, 'utf8'));
-        body.raw[kind] = { sha256: sha256(Buffer.from(parsed.block)), rows: parsed.rows.length };
+        body.raw[kind] = {
+          sha256: sha256(Buffer.from(parsed.block)),
+          rows: parsed.rows.length,
+        };
       }
       const problems = rawProblems(m, body, kind);
       if (problems.length) throw new Error(problems.join('\n'));
@@ -183,7 +196,8 @@ function solve(A, b) {
   const n = b.length;
   for (let i = 0; i < n; i++) {
     let p = i;
-    for (let r = i + 1; r < n; r++) if (Math.abs(A[r][i]) > Math.abs(A[p][i])) p = r;
+    for (let r = i + 1; r < n; r++)
+      if (Math.abs(A[r][i]) > Math.abs(A[p][i])) p = r;
     [A[i], A[p]] = [A[p], A[i]];
     [b[i], b[p]] = [b[p], b[i]];
     for (let r = i + 1; r < n; r++) {
@@ -204,7 +218,8 @@ function solve(A, b) {
 /** Segment k's first day: fixed steps, the last one ending on the last day. */
 export const segmentStart = (start, stop, days, count, k) =>
   k === count - 1 ? stop - days : start + k * days;
-export const segmentCount = (start, stop, days) => Math.ceil((stop - start) / days - 1e-9);
+export const segmentCount = (start, stop, days) =>
+  Math.ceil((stop - start) / days - 1e-9);
 
 /**
  * Fit one body: for each segment and axis, n + 1 coefficients minimizing the
@@ -225,7 +240,8 @@ function fitBody(rows, start, stop, days, n) {
       for (const r of pts) {
         const [T, U] = basis((r[0] - a) / half - 1, n);
         for (let i = 0; i <= n; i++) {
-          for (let j = 0; j <= n; j++) M[i][j] += T[i] * T[j] + (U[i] * U[j]) / (half * half);
+          for (let j = 0; j <= n; j++)
+            M[i][j] += T[i] * T[j] + (U[i] * U[j]) / (half * half);
           y[i] += T[i] * r[1 + ax] + (U[i] / half) * r[4 + ax] * 86400;
         }
       }
@@ -263,8 +279,14 @@ function errorsAgainst(eph, id, rows) {
   let vel = 0;
   for (const r of rows) {
     const s = eph.stateAt(id, r[0]);
-    pos = Math.max(pos, Math.hypot(s.r[0] - r[1], s.r[1] - r[2], s.r[2] - r[3]));
-    vel = Math.max(vel, Math.hypot(s.v[0] - r[4], s.v[1] - r[5], s.v[2] - r[6]));
+    pos = Math.max(
+      pos,
+      Math.hypot(s.r[0] - r[1], s.r[1] - r[2], s.r[2] - r[3])
+    );
+    vel = Math.max(
+      vel,
+      Math.hypot(s.v[0] - r[4], s.v[1] - r[5], s.v[2] - r[6])
+    );
   }
   return { positionKm: pos, velocityKmS: vel };
 }
@@ -318,9 +340,19 @@ async function build(m) {
   const heldOut = {};
   const fitRows = {};
   for (const body of m.bodies) {
-    const daily = parseHorizons(readFileSync(cacheFile(body, 'daily'), 'utf8')).rows;
-    const noon = parseHorizons(readFileSync(cacheFile(body, 'noon'), 'utf8')).rows;
-    const segments = fitBody(daily, m.range.startJd, m.range.stopJd, body.segmentDays, body.degree);
+    const daily = parseHorizons(
+      readFileSync(cacheFile(body, 'daily'), 'utf8')
+    ).rows;
+    const noon = parseHorizons(
+      readFileSync(cacheFile(body, 'noon'), 'utf8')
+    ).rows;
+    const segments = fitBody(
+      daily,
+      m.range.startJd,
+      m.range.stopJd,
+      body.segmentDays,
+      body.degree
+    );
     const bytes = encodeBody(segments, body.degree);
     data[body.id] = bytes.toString('base64');
     body.segments = segments.length;
@@ -356,16 +388,34 @@ async function build(m) {
     file
   );
   // The held-out check set: every 73rd noon state of each body, for the
-  // offline check and the tests, which have no cache.
-  const check = {
-    note: 'Held-out JPL Horizons (DE441) states at 12:00 TDB, never fitted: every 73rd day of each body. Written by tools/build-ephemeris.mjs --write.',
-    columns: ['jdTdb', 'x', 'y', 'z', 'vx', 'vy', 'vz'],
-    bodies: Object.fromEntries(
-      m.bodies.map(b => [b.id, heldOut[b.id].filter((_, i) => i % 73 === 0)])
-    ),
-  };
+  // offline check, the tests and the lab's reference cases, which have no
+  // cache. Rows of seven float64s (jd, x, y, z, vx, vy, vz), base64.
+  const picked = Object.fromEntries(
+    m.bodies.map(b => [b.id, heldOut[b.id].filter((_, i) => i % 73 === 0)])
+  );
   const checkFile = path.join(ROOT, m.output.check);
-  const checkSource = `${JSON.stringify(check, null, 1)}\n`;
+  const checkSource = await prettierFormat(
+    [
+      `// Generated by tools/build-ephemeris.mjs from ${path.relative(ROOT, MANIFEST)}. Do not edit.`,
+      '// Held-out JPL Horizons (DE441) states at 12:00 TDB that the fit never saw.',
+      '',
+      `export const CHECK = ${JSON.stringify({
+        columns: ['jdTdb', 'x', 'y', 'z', 'vx', 'vy', 'vz'],
+        rows: Object.fromEntries(
+          Object.entries(picked).map(([id, r]) => [id, r.length])
+        ),
+        data: Object.fromEntries(
+          Object.entries(picked).map(([id, r]) => {
+            const buf = Buffer.alloc(r.length * 7 * 8);
+            r.flat().forEach((x, i) => buf.writeDoubleLE(x, 8 * i));
+            return [id, buf.toString('base64')];
+          })
+        ),
+      })};`,
+      '',
+    ].join('\n'),
+    checkFile
+  );
   m.output.moduleSha256 = sha256(Buffer.from(source));
   m.output.moduleBytes = Buffer.byteLength(source);
   m.output.checkSha256 = sha256(Buffer.from(checkSource));
@@ -374,42 +424,59 @@ async function build(m) {
 
 async function check(m, requireSources) {
   const problems = [];
-  const mod = await import(`${path.join(ROOT, m.output.module)}?t=${Date.now()}`);
+  const mod = await import(
+    `${path.join(ROOT, m.output.module)}?t=${Date.now()}`
+  );
   const want = JSON.stringify(runtimeMeta(m));
   if (JSON.stringify(mod.PACK) !== want)
-    problems.push(`${m.output.module}: PACK is not the manifest's runtime part`);
+    problems.push(
+      `${m.output.module}: PACK is not the manifest's runtime part`
+    );
   const moduleBytes = readFileSync(path.join(ROOT, m.output.module));
   if (sha256(moduleBytes) !== m.output.moduleSha256)
     problems.push(`${m.output.module}: its SHA-256 is not the manifest's`);
   for (const b of m.bodies) {
     const bytes = Buffer.from(mod.DATA[b.id] || '', 'base64');
     if (bytes.length !== b.bytes || sha256(bytes) !== b.sha256)
-      problems.push(`${b.id}: its coefficients are not the manifest's (${bytes.length} bytes)`);
+      problems.push(
+        `${b.id}: its coefficients are not the manifest's (${bytes.length} bytes)`
+      );
   }
   const checkBytes = readFileSync(path.join(ROOT, m.output.check));
   if (sha256(checkBytes) !== m.output.checkSha256)
     problems.push(`${m.output.check}: its SHA-256 is not the manifest's`);
-  const set = JSON.parse(checkBytes.toString('utf8'));
+  const { CHECK } = await import(
+    `${path.join(ROOT, m.output.check)}?t=${Date.now()}`
+  );
+  const { checkRows } = await import('../js/mission/ephemeris.js');
   const eph = await runtimeFrom(mod.PACK, mod.DATA);
   for (const b of m.bodies) {
-    const e = errorsAgainst(eph, b.id, set.bodies[b.id]);
-    if (!(e.positionKm <= b.maxError.positionKm && e.velocityKmS <= b.maxError.velocityKmS))
+    const e = errorsAgainst(eph, b.id, checkRows(CHECK, b.id));
+    if (!(
+      e.positionKm <= b.maxError.positionKm &&
+      e.velocityKmS <= b.maxError.velocityKmS
+    ))
       problems.push(
         `${b.id}: the held-out check set is ${e.positionKm} km and ${e.velocityKmS} km/s off, over the stated ${b.maxError.positionKm} km and ${b.maxError.velocityKmS} km/s`
       );
   }
   if (requireSources) {
     for (const b of m.bodies)
-      for (const kind of ['daily', 'noon']) problems.push(...rawProblems(m, b, kind));
+      for (const kind of ['daily', 'noon'])
+        problems.push(...rawProblems(m, b, kind));
     if (!problems.length) {
       const copy = JSON.parse(JSON.stringify(m));
       const rebuilt = await build(copy);
       if (rebuilt.source !== moduleBytes.toString('utf8'))
-        problems.push(`${m.output.module} is not what the cached sources build`);
+        problems.push(
+          `${m.output.module} is not what the cached sources build`
+        );
       if (rebuilt.checkSource !== checkBytes.toString('utf8'))
         problems.push(`${m.output.check} is not what the cached sources build`);
       if (JSON.stringify(copy) !== JSON.stringify(m))
-        problems.push(`${path.relative(ROOT, MANIFEST)}: its measures are not what the cached sources give`);
+        problems.push(
+          `${path.relative(ROOT, MANIFEST)}: its measures are not what the cached sources give`
+        );
     }
   }
   return problems;

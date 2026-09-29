@@ -108,7 +108,14 @@ export function captureBurn(mu, rp, ra, vinf) {
   const vHyp = sqrt(vinf * vinf + (2 * mu) / rp);
   const a = (rp + ra) / 2;
   const vOrbit = sqrt(mu * (2 / rp - 1 / a));
-  return { ok: true, status: 'ok', dv: vHyp - vOrbit, vHyp, vOrbit, period: 2 * PI * sqrt((a * a * a) / mu) };
+  return {
+    ok: true,
+    status: 'ok',
+    dv: vHyp - vOrbit,
+    vHyp,
+    vOrbit,
+    period: 2 * PI * sqrt((a * a * a) / mu),
+  };
 }
 
 /**
@@ -122,7 +129,12 @@ export function propellant(burns, dryKg, ispS) {
   const rows = [];
   for (let k = burns.length - 1; k >= 0; k--) {
     const before = after * exp(burns[k].dv / ve);
-    rows.unshift({ ...burns[k], massBefore: before, massAfter: after, propellant: before - after });
+    rows.unshift({
+      ...burns[k],
+      massBefore: before,
+      massAfter: after,
+      propellant: before - after,
+    });
     after = before;
   }
   return { rows, startKg: after, propellantKg: after - dryKg, exhaustKmS: ve };
@@ -136,16 +148,30 @@ export function propellant(burns, dryKg, ispS) {
  * back heliocentric.
  * @returns {{end, bodiesEnd, closest, track, steps}}
  */
-export function flyDirect(eph, ship, jdStart, days, { bodies = [], samples = 120, tol = 1e-12, near = 'mars' } = {}) {
+export function flyDirect(
+  eph,
+  ship,
+  jdStart,
+  days,
+  { bodies = [], samples = 120, tol = 1e-12, near = 'mars' } = {}
+) {
   const muS = BODIES.sun.GM;
   const TU = sqrt((AU_KM * AU_KM * AU_KM) / muS);
   const list = [
     { id: 'sun', m: 1, r: [0, 0, 0], v: [0, 0, 0] },
-    ...bodies.map(id => ({ id, m: PULLERS[id] / muS, ...eph.stateAt(id, jdStart) })),
+    ...bodies.map(id => ({
+      id,
+      m: PULLERS[id] / muS,
+      ...eph.stateAt(id, jdStart),
+    })),
   ];
   const mt = list.reduce((q, b) => q + b.m, 0);
-  const cr = [0, 1, 2].map(k => list.reduce((q, b) => q + b.m * b.r[k], 0) / mt);
-  const cv = [0, 1, 2].map(k => list.reduce((q, b) => q + b.m * b.v[k], 0) / mt);
+  const cr = [0, 1, 2].map(
+    k => list.reduce((q, b) => q + b.m * b.r[k], 0) / mt
+  );
+  const cv = [0, 1, 2].map(
+    k => list.reduce((q, b) => q + b.m * b.v[k], 0) / mt
+  );
   const kernelBodies = [...list, { id: 'ship', m: 0, ...ship }].map(b => ({
     m: b.m,
     x: b.r.map((x, k) => (x - cr[k]) / AU_KM),
@@ -156,7 +182,8 @@ export function flyDirect(eph, ship, jdStart, days, { bodies = [], samples = 120
   const ship3 = 3 * (n - 1);
   const nearIndex = list.findIndex(b => b.id === near);
   const helio = k => [0, 1, 2].map(a => (s.x[3 * k + a] - s.x[a]) * AU_KM);
-  const helioV = k => [0, 1, 2].map(a => ((s.v[3 * k + a] - s.v[a]) * AU_KM) / TU);
+  const helioV = k =>
+    [0, 1, 2].map(a => ((s.v[3 * k + a] - s.v[a]) * AU_KM) / TU);
   let closest = { km: Infinity, day: 0 };
   const onStep = () => {
     if (nearIndex < 0) return;
@@ -176,8 +203,16 @@ export function flyDirect(eph, ship, jdStart, days, { bodies = [], samples = 120
     steps += res.accepted;
     track.push({ day: (days * k) / samples, r: helio(n - 1) });
   }
-  const bodiesEnd = Object.fromEntries(list.map((b, i) => [b.id, { r: helio(i), v: helioV(i) }]));
-  return { end: { r: helio(n - 1), v: helioV(n - 1) }, bodiesEnd, closest, track, steps };
+  const bodiesEnd = Object.fromEntries(
+    list.map((b, i) => [b.id, { r: helio(i), v: helioV(i) }])
+  );
+  return {
+    end: { r: helio(n - 1), v: helioV(n - 1) },
+    bodiesEnd,
+    closest,
+    track,
+    steps,
+  };
 }
 
 /** Why a plan cannot be computed, as {path, code}; empty if it can be. */
@@ -190,20 +225,45 @@ export function planProblems(plan, eph) {
   num('depot.altitude', plan?.depot?.altitude, x => x >= 150 && x <= 2000);
   num('depot.phaseDeg', plan?.depot?.phaseDeg, x => x >= 0 && x < 360);
   num('depart.tofDays', plan?.depart?.tofDays, x => x >= 60 && x <= 600);
-  num('arrive.periapsisAltitude', plan?.arrive?.periapsisAltitude, x => x >= 100 && x <= 100000);
-  num('arrive.apoapsisAltitude', plan?.arrive?.apoapsisAltitude, x => x >= (plan?.arrive?.periapsisAltitude ?? 0) && x <= 500000);
+  num(
+    'arrive.periapsisAltitude',
+    plan?.arrive?.periapsisAltitude,
+    x => x >= 100 && x <= 100000
+  );
+  num(
+    'arrive.apoapsisAltitude',
+    plan?.arrive?.apoapsisAltitude,
+    x => x >= (plan?.arrive?.periapsisAltitude ?? 0) && x <= 500000
+  );
   num('vehicle.dryKg', plan?.vehicle?.dryKg, x => x > 0 && x <= 1e6);
   num('vehicle.ispS', plan?.vehicle?.ispS, x => x >= 50 && x <= 10000);
-  if (plan?.parking?.altitude === plan?.depot?.altitude) out.push({ path: 'depot.altitude', code: 'sameOrbit' });
+  if (plan?.parking?.altitude === plan?.depot?.altitude)
+    out.push({ path: 'depot.altitude', code: 'sameOrbit' });
   const jd = jdOf(plan?.depart?.date);
   if (!Number.isFinite(jd)) out.push({ path: 'depart.date', code: 'date' });
-  else if (eph && !(jd >= eph.range.startJd && jd + (plan.depart.tofDays || 0) <= eph.range.stopJd))
+  else if (
+    eph &&
+    !(
+      jd >= eph.range.startJd &&
+      jd + (plan.depart.tofDays || 0) <= eph.range.stopJd
+    )
+  )
     out.push({ path: 'depart.date', code: 'outOfRange' });
-  if (plan?.correct) num('correct.day', plan.correct.day, x => x >= 1 && x <= (plan.depart.tofDays || 0) - 10);
+  if (plan?.correct)
+    num(
+      'correct.day',
+      plan.correct.day,
+      x => x >= 1 && x <= (plan.depart.tofDays || 0) - 10
+    );
   const bodies = plan?.direct?.bodies;
-  if (!Array.isArray(bodies) || bodies.some(b => !(b in PULLERS)) || new Set(bodies).size !== bodies.length)
+  if (
+    !Array.isArray(bodies) ||
+    bodies.some(b => !(b in PULLERS)) ||
+    new Set(bodies).size !== bodies.length
+  )
     out.push({ path: 'direct.bodies', code: 'value' });
-  if (!['periapsis', 'center'].includes(plan?.direct?.start)) out.push({ path: 'direct.start', code: 'value' });
+  if (!['periapsis', 'center'].includes(plan?.direct?.start))
+    out.push({ path: 'direct.start', code: 'value' });
   return out;
 }
 
@@ -227,7 +287,12 @@ export function computeMission(eph, plan) {
   const Mars = BODIES.mars;
   const muS = BODIES.sun.GM;
   // In Earth orbit: meet the depot.
-  const meet = rendezvous(E.GM, E.radius + plan.parking.altitude, E.radius + plan.depot.altitude, (plan.depot.phaseDeg * PI) / 180);
+  const meet = rendezvous(
+    E.GM,
+    E.radius + plan.parking.altitude,
+    E.radius + plan.depot.altitude,
+    (plan.depot.phaseDeg * PI) / 180
+  );
   if (!meet.ok) return { ok: false, status: meet.status };
   // Between the planets: Lambert on the ephemeris.
   const jd0 = jdOf(plan.depart.date);
@@ -235,24 +300,39 @@ export function computeMission(eph, plan) {
   const A = eph.stateAt('earth', jd0);
   const B = eph.stateAt('mars', jd0 + tof);
   const transfer = lambert({ mu: muS, r1: A.r, r2: B.r, tof: tof * DAY_S });
-  if (!transfer.ok) return { ok: false, status: transfer.status, transfer: { iterations: transfer.iterations ?? 0 } };
+  if (!transfer.ok)
+    return {
+      ok: false,
+      status: transfer.status,
+      transfer: { iterations: transfer.iterations ?? 0 },
+    };
   const vinfDepV = sub(transfer.v1, A.v);
   const vinfArrV = sub(transfer.v2, B.v);
   const vinfDep = norm(vinfDepV);
   const vinfArr = norm(vinfArrV);
   const rpDepart = E.radius + plan.depot.altitude;
   const depart = hyperbolicBurn(E.GM, rpDepart, vinfDep);
-  const capture = captureBurn(Mars.GM, Mars.radius + plan.arrive.periapsisAltitude, Mars.radius + plan.arrive.apoapsisAltitude, vinfArr);
+  const capture = captureBurn(
+    Mars.GM,
+    Mars.radius + plan.arrive.periapsisAltitude,
+    Mars.radius + plan.arrive.apoapsisAltitude,
+    vinfArr
+  );
   // The same spacecraft, flown directly.
   const peri = departurePeriapsis(E.GM, rpDepart, vinfDepV);
   const shipStart =
-    plan.direct.start === 'center' ? { r: [...A.r], v: [...transfer.v1] } : { r: add(A.r, peri.r), v: add(A.v, peri.v) };
+    plan.direct.start === 'center'
+      ? { r: [...A.r], v: [...transfer.v1] }
+      : { r: add(A.r, peri.r), v: add(A.v, peri.v) };
   const opts = { bodies: plan.direct.bodies };
   let direct;
   let correction = null;
   if (plan.correct) {
     const d = plan.correct.day;
-    const first = flyDirect(eph, shipStart, jd0, d, { ...opts, samples: Math.max(4, Math.round((120 * d) / tof)) });
+    const first = flyDirect(eph, shipStart, jd0, d, {
+      ...opts,
+      samples: Math.max(4, Math.round((120 * d) / tof)),
+    });
     // Retarget Mars's ephemeris position at the planned arrival. A Lambert
     // solve about the Sun alone leaves out the pulls that made the miss, so
     // the aim point is moved by the miss and the leg flown again, until the
@@ -269,7 +349,12 @@ export function computeMission(eph, plan) {
     let iterations = 0;
     let missKm = Infinity;
     for (; iterations < MAX_AIMS; iterations++) {
-      re = lambert({ mu: muS, r1: first.end.r, r2: aim, tof: (tof - d) * DAY_S });
+      re = lambert({
+        mu: muS,
+        r1: first.end.r,
+        r2: aim,
+        tof: (tof - d) * DAY_S,
+      });
       if (!re.ok) return { ok: false, status: re.status };
       second = flyDirect(eph, { r: first.end.r, v: re.v1 }, jd0 + d, tof - d, {
         ...aimOpts,
@@ -292,10 +377,21 @@ export function computeMission(eph, plan) {
       track: [...first.track, ...second.track.slice(1).map(offset)],
       steps: first.steps + second.steps,
     };
-    correction = { day: d, dv, aims: iterations + 1, missKm, lambert: { iterations: re.iterations, residual: re.residual, miss: re.miss } };
+    correction = {
+      day: d,
+      dv,
+      aims: iterations + 1,
+      missKm,
+      lambert: {
+        iterations: re.iterations,
+        residual: re.residual,
+        miss: re.miss,
+      },
+    };
   } else {
     direct = flyDirect(eph, shipStart, jd0, tof, opts);
-    if (!plan.direct.bodies.includes('mars')) direct.closest = { km: null, day: null };
+    if (!plan.direct.bodies.includes('mars'))
+      direct.closest = { km: null, day: null };
   }
   const marsDirect = direct.bodiesEnd.mars?.r ?? null;
   const missEphemeris = norm(sub(direct.end.r, B.r));
@@ -307,28 +403,61 @@ export function computeMission(eph, plan) {
     arc.push({ day: (tof * k) / 60, r: p.ok ? p.r : null });
   }
   const orbitOf = (id, from, to, n = 90) =>
-    Array.from({ length: n + 1 }, (_, k) => eph.stateAt(id, from + ((to - from) * k) / n).r);
+    Array.from(
+      { length: n + 1 },
+      (_, k) => eph.stateAt(id, from + ((to - from) * k) / n).r
+    );
   // Budget, in time order.
   const depotDays = 7;
   const tRendezvous = jd0 - depotDays - (meet.arrival + 0) / DAY_S;
   const burns = [
-    { id: 'meet1', jd: tRendezvous + meet.burns[0].at / DAY_S, dv: meet.burns[0].dv, phase: 'earthOrbit' },
-    { id: 'meet2', jd: tRendezvous + meet.burns[1].at / DAY_S, dv: meet.burns[1].dv, phase: 'earthOrbit' },
+    {
+      id: 'meet1',
+      jd: tRendezvous + meet.burns[0].at / DAY_S,
+      dv: meet.burns[0].dv,
+      phase: 'earthOrbit',
+    },
+    {
+      id: 'meet2',
+      jd: tRendezvous + meet.burns[1].at / DAY_S,
+      dv: meet.burns[1].dv,
+      phase: 'earthOrbit',
+    },
     { id: 'depart', jd: jd0, dv: depart.dv, phase: 'interplanetary' },
-    ...(correction ? [{ id: 'correct', jd: jd0 + correction.day, dv: correction.dv, phase: 'interplanetary' }] : []),
+    ...(correction
+      ? [
+          {
+            id: 'correct',
+            jd: jd0 + correction.day,
+            dv: correction.dv,
+            phase: 'interplanetary',
+          },
+        ]
+      : []),
     { id: 'capture', jd: jd0 + tof, dv: capture.dv, phase: 'interplanetary' },
   ];
   // The depot refuels the spacecraft: the burns after it are paid from the
   // depot's propellant, those before from what the launch left in the tanks.
-  const after = propellant(burns.filter(b => b.phase === 'interplanetary'), plan.vehicle.dryKg, plan.vehicle.ispS);
-  const before = propellant(burns.filter(b => b.phase === 'earthOrbit'), plan.vehicle.dryKg, plan.vehicle.ispS);
+  const after = propellant(
+    burns.filter(b => b.phase === 'interplanetary'),
+    plan.vehicle.dryKg,
+    plan.vehicle.ispS
+  );
+  const before = propellant(
+    burns.filter(b => b.phase === 'earthOrbit'),
+    plan.vehicle.dryKg,
+    plan.vehicle.ispS
+  );
   const events = [
     { id: 'parking', jd: tRendezvous },
     { id: 'meet1', jd: burns[0].jd },
     { id: 'meet2', jd: burns[1].jd },
     { id: 'docked', jd: burns[1].jd },
     { id: 'depart', jd: jd0 },
-    { id: 'soi', jd: jd0 + soiDays(E.GM, rpDepart, vinfDep, sphereOfInfluence('earth')) },
+    {
+      id: 'soi',
+      jd: jd0 + soiDays(E.GM, rpDepart, vinfDep, sphereOfInfluence('earth')),
+    },
     ...(correction ? [{ id: 'correct', jd: jd0 + correction.day }] : []),
     ...(direct.closest.km !== null && Number.isFinite(direct.closest.km)
       ? [{ id: 'closest', jd: jd0 + direct.closest.day }]
@@ -339,7 +468,13 @@ export function computeMission(eph, plan) {
     ok: true,
     status: 'ok',
     plan,
-    rendezvous: { lead: meet.lead, wait: meet.wait, synodic: meet.synodic, tof: meet.tof, total: meet.total },
+    rendezvous: {
+      lead: meet.lead,
+      wait: meet.wait,
+      synodic: meet.synodic,
+      tof: meet.tof,
+      total: meet.total,
+    },
     patched: {
       departJd: jd0,
       arriveJd: jd0 + tof,
@@ -352,15 +487,24 @@ export function computeMission(eph, plan) {
       captureOrbitPeriod: capture.period,
       transferAngle: transfer.transferAngle,
       a: transfer.a,
-      solver: { status: transfer.status, iterations: transfer.iterations, residual: transfer.residual, miss: transfer.miss },
+      solver: {
+        status: transfer.status,
+        iterations: transfer.iterations,
+        residual: transfer.residual,
+        miss: transfer.miss,
+      },
     },
     direct: {
       bodies: [...plan.direct.bodies],
       start: plan.direct.start,
       missKm: missEphemeris,
-      missVsIntegratedMarsKm: marsDirect ? norm(sub(direct.end.r, marsDirect)) : null,
+      missVsIntegratedMarsKm: marsDirect
+        ? norm(sub(direct.end.r, marsDirect))
+        : null,
       closestKm: Number.isFinite(direct.closest.km) ? direct.closest.km : null,
-      closestDay: Number.isFinite(direct.closest.km) ? direct.closest.day : null,
+      closestDay: Number.isFinite(direct.closest.km)
+        ? direct.closest.day
+        : null,
       marsDriftKm: marsDirect ? norm(sub(marsDirect, B.r)) : null,
       steps: direct.steps,
     },
@@ -378,7 +522,12 @@ export function computeMission(eph, plan) {
       arc,
       direct: direct.track,
       departure: departureView(E.GM, rpDepart, peri),
-      at: { earth0: A.r, mars0: eph.stateAt('mars', jd0).r, earth1: eph.stateAt('earth', jd0 + tof).r, mars1: B.r },
+      at: {
+        earth0: A.r,
+        mars0: eph.stateAt('mars', jd0).r,
+        earth1: eph.stateAt('earth', jd0 + tof).r,
+        mars1: B.r,
+      },
     },
   };
 }

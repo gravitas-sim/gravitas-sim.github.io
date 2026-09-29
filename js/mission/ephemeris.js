@@ -29,7 +29,8 @@ function bytesOf(b64) {
 }
 
 /** Segment k's first day, and how many there are: the builder's rule. */
-const segmentCount = (start, stop, days) => Math.ceil((stop - start) / days - 1e-9);
+const segmentCount = (start, stop, days) =>
+  Math.ceil((stop - start) / days - 1e-9);
 const segmentStart = (start, stop, days, count, k) =>
   k === count - 1 ? stop - days : start + k * days;
 
@@ -47,7 +48,9 @@ export function createEphemeris(pack, data) {
     const n = b.degree;
     const per = 16 + 4 * (n - 1);
     if (bytes.length !== b.bytes || bytes.length !== b.segments * 3 * per)
-      throw new Error(`ephemeris: ${b.id} has ${bytes.length} bytes, not ${b.bytes}`);
+      throw new Error(
+        `ephemeris: ${b.id} has ${bytes.length} bytes, not ${b.bytes}`
+      );
     const view = new DataView(bytes.buffer);
     const c = new Float64Array(b.segments * 3 * (n + 1));
     let o = 0;
@@ -55,7 +58,8 @@ export function createEphemeris(pack, data) {
     for (let s = 0; s < b.segments * 3; s++) {
       c[q++] = view.getFloat64(o, true);
       c[q++] = view.getFloat64(o + 8, true);
-      for (let k = 2; k <= n; k++) c[q++] = view.getFloat32(o + 16 + 4 * (k - 2), true);
+      for (let k = 2; k <= n; k++)
+        c[q++] = view.getFloat32(o + 16 + 4 * (k - 2), true);
       o += per;
     }
     if (segmentCount(startJd, stopJd, b.segmentDays) !== b.segments)
@@ -71,7 +75,10 @@ export function createEphemeris(pack, data) {
     /** Position (km) and velocity (km/s) of a body at a TDB Julian date. */
     stateAt(id, jd) {
       const t = tables[id];
-      if (!t) throw Object.assign(new Error(`ephemeris: no body ${id}`), { code: 'body' });
+      if (!t)
+        throw Object.assign(new Error(`ephemeris: no body ${id}`), {
+          code: 'body',
+        });
       if (!(jd >= startJd && jd <= stopJd))
         throw Object.assign(new Error(`ephemeris: ${jd} is outside the pack`), {
           code: 'outOfRange',
@@ -111,6 +118,20 @@ export function createEphemeris(pack, data) {
       return { r, v };
     },
   };
+}
+
+/** A check set's rows for one body: [jd, x, y, z, vx, vy, vz] each. */
+export function checkRows(check, id) {
+  const bytes = bytesOf(check.data[id]);
+  const view = new DataView(bytes.buffer);
+  const out = [];
+  for (let i = 0; i < check.rows[id]; i++)
+    out.push(
+      Array.from({ length: 7 }, (_, k) =>
+        view.getFloat64(8 * (7 * i + k), true)
+      )
+    );
+  return out;
 }
 
 /** A calendar date, YYYY-MM-DD (00:00), as a Julian date; NaN if not a date. */

@@ -215,9 +215,9 @@
   ],
   "output": {
     "module": "js/data/ephemeris/solarSystem2025.js",
-    "check": "ephemeris-packs/solar-system-2025-2045.check.json",
+    "check": "js/data/ephemeris/solarSystem2025Check.js",
     "moduleSha256": "72cb6d1b14cc75572edface25c8ecd8c9b1de0f02fd74214804f35560e0ad1c8",
     "moduleBytes": 107127,
-    "checkSha256": "25dd6825f432a4152f7f8aca3d1578e13dd847671b0030f945a656171a5d9bbe"
+    "checkSha256": "1e37fa0e4f2bfbb0310f20d22b726dadd5dcee3bfab361f281cf896ec614f4e3"
   }
 }
