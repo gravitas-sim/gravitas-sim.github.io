@@ -1401,4 +1401,12 @@ function begin(lang) {
         lightCurveObservation
       )
     );
+  // ?open=<fixture id>: a built-in observation by name, the link a course
+  // pack gives a dataset (js/course/links.js). The same as choosing it and
+  // pressing Open; an id the page does not have is ignored.
+  const fixtureId = new URLSearchParams(location.search).get('open');
+  if (!installedId && FIXTURES.some(f => f.id === fixtureId)) {
+    $('obsFixture').value = fixtureId;
+    $('obsOpen').click();
+  }
 }

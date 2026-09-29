@@ -160,9 +160,13 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * because in dist/ the composer is a page with its own bundle and its preview
  * is the served lesson engine opening the compiled draft, whose remediation
  * steps the bundle's navigation has to honor.
+ *
+ * e2e/course.spec.js builds and opens a course in both, because in dist/ the
+ * builder and the course home are pages with bundles of their own, and the
+ * links they make open the served application and Observatory.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js|exoplanetGuides\.spec\.js|populationsGuides\.spec\.js|systemBuilder\.spec\.js|studio\.spec\.js|composer\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js|exoplanetGuides\.spec\.js|populationsGuides\.spec\.js|systemBuilder\.spec\.js|studio\.spec\.js|composer\.spec\.js|course\.spec\.js/;
 
 /**
  * Which engines to run.

@@ -166,7 +166,7 @@ here.
 | Encoding a star that swings from 0.77 to 1.46 of its median | `binned-relative-flux/1` holds ±3.3%, and the pipeline refused to clip | `binned-relative-flux/2`, flux in steps of `fluxStepPpm` |
 | A scientific check for a pulsating star | only `folded-depth`, a transit's | `harmonic-period` |
 | Validating a course in the browser | `sdk/lib/course.mjs`, SDK-only | moved to `js/platform/course.js`; the SDK re-exports it |
-| A course naming the data pack it ends on | not in `gravitas.course-pack/1` | **not changed.** The note names it in words. A structured reference is a format change for the course-pack builder (Prompt 31) |
+| A course naming the data pack it ends on | not in `gravitas.course-pack/1` | **not changed.** The note names it in words. The builder's `gravitas.course-pack/2` names datasets (COURSE_PACKS.md); the catalog does not list /2 courses yet |
 | A pack bringing its own kind of check | checks are SDK code | **not changed.** A new kind of variable needs a new check in the SDK |
 
 The earlier gaps in sdk/README.md still stand: an instrument's strings and
