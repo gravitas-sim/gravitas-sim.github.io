@@ -413,6 +413,38 @@
       "history": []
     },
     {
+      "id": "gravitas.lab3d",
+      "version": "1.0.0",
+      "kind": "built-in",
+      "delivery": "built-in",
+      "title": {
+        "en": "The 3-D small-N dynamics kernel",
+        "es": "El núcleo de dinámica de pocos cuerpos en 3-D"
+      },
+      "gravitas": "^1.0.0",
+      "provides": {
+        "routes": [
+          {
+            "path": "/lab3d/"
+          }
+        ],
+        "models": [
+          {
+            "id": "lab3d-small-n"
+          }
+        ]
+      },
+      "licenses": [
+        {
+          "scope": "js/lab3d/**",
+          "license": "MIT"
+        }
+      ],
+      "citations": [],
+      "offline": "on-demand",
+      "bytes": 88884
+    },
+    {
       "id": "gravitas.lesson.power-law-gravity",
       "version": "1.0.0",
       "kind": "built-in",
