@@ -891,9 +891,10 @@ the release rather than in the tag.
     field. Every sid in the built-in lessons, their Spanish and the capability
     packages already had that form. The lesson panel refuses to open a lesson
     with any other sid, which covers a preview an earlier Composer staged, and
-    it escapes the step key with `attr()` in the checklist, written-answer,
-    model-answer and numeric Check attributes, and with `CSS.escape()` in the
-    measure-field lookup.
+    it escapes the step key with `attr()` in every attribute it is written
+    into (the checklist, the written and numeric answers and their buttons,
+    and the measure fields), and with `CSS.escape()` in the measure-field
+    lookup.
   - **Tests:** `tests/investigationPack.test.js` and
     `tests/authoring.test.js` refuse a sid with a quote in a pack and in a
     lesson, and `tests/progressIdentity.test.js` holds both copies of the rule
