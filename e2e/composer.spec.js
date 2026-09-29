@@ -239,6 +239,110 @@ test.describe('the Investigation Composer', () => {
     expect(saved).toEqual([]);
   });
 
+  test('remediation on a held prediction comes after the step it is marked at', async ({
+    page,
+  }) => {
+    await openComposer(page);
+    const at = sid => EXAMPLE_INVESTIGATION.steps.findIndex(s => s.sid === sid);
+    // `guess` is marked at `period`: a step before that is not offered it.
+    const offered = async sid => {
+      await page.locator(`#cp-steps-${at(sid)} > summary`).click();
+      const when = page.locator(`#cp-steps-${at(sid)}-when`);
+      await expect(when).toBeVisible();
+      return when.locator('option').evaluateAll(list => list.map(o => o.value));
+    };
+    expect(await offered('watch')).toEqual(['']);
+    expect(await offered('again')).toEqual([
+      '',
+      'incorrect:guess',
+      'correct:guess',
+      'incorrect:period',
+      'correct:period',
+    ]);
+    // A file that puts one there anyway is refused, in words, and not saved.
+    const pack = JSON.parse(JSON.stringify(EXAMPLE_INVESTIGATION));
+    pack.id = 'held-too-soon';
+    pack.steps[at('watch')].when = { sid: 'guess', is: 'incorrect' };
+    await openFile(page, 'held-too-soon.investigation.json', pack);
+    await expect(page.locator('#cp-checks')).toContainText(
+      `Move this step after step ${at('period') + 1}, where that prediction is marked`
+    );
+    await expect(page.locator('#cp-save')).toBeDisabled();
+  });
+
+  test('the engine holds the prediction even when a stale preview puts remediation before its reveal', async ({
+    page,
+  }) => {
+    await openComposer(page);
+    await page.locator('#cp-preview-go').click();
+    await expect(page.locator('#cp-preview')).toHaveAttribute(
+      'src',
+      /\/\?author=draft-reading-an-orbit&view=student$/
+    );
+    // What a composer from before the rule could stage: a step for students
+    // who predicted wrongly, before the step where the prediction is marked.
+    await page.evaluate(key => {
+      const staged = JSON.parse(localStorage.getItem(key));
+      staged.lesson.steps.find(s => s.sid === 'watch').when = {
+        sid: 'guess',
+        is: 'incorrect',
+      };
+      localStorage.setItem(key, JSON.stringify(staged));
+    }, 'gravitas_composer_preview');
+    const title = sid =>
+      EXAMPLE_INVESTIGATION.steps.find(s => s.sid === sid).title.en;
+    const heading = () =>
+      page.evaluate(
+        () =>
+          document
+            .getElementById('cp-preview')
+            .contentWindow?.document?.getElementById('investigationBody')
+            ?.querySelector('h3')?.textContent ?? null
+      );
+    const count = selector =>
+      page.evaluate(
+        q =>
+          document
+            .getElementById('cp-preview')
+            .contentDocument.querySelectorAll(q).length,
+        selector
+      );
+    const click = selector =>
+      page.evaluate(
+        q =>
+          document
+            .getElementById('cp-preview')
+            .contentDocument.querySelector(q)
+            .click(),
+        selector
+      );
+    const guess = EXAMPLE_INVESTIGATION.steps.find(s => s.sid === 'guess');
+    const wrong = guess.answer === 0 ? 1 : 0;
+    // Right or wrong, Next goes to the same place: nothing says which it was.
+    for (const choice of [guess.answer, wrong]) {
+      await page.evaluate(
+        n => {
+          const f = document.getElementById('cp-preview');
+          f.src = `${f.src.replace(/&step=.*$/, '')}&step=${n}&try=${Date.now()}`;
+        },
+        EXAMPLE_INVESTIGATION.steps.indexOf(guess) + 1
+      );
+      await expect.poll(heading, { timeout: 30_000 }).toBe(guess.title.en);
+      await click(`#investigationBody [data-option="${choice}"]`);
+      await expect.poll(() => count('#investigationBody .inv-held')).toBe(1);
+      await click('#investigationNext');
+      await expect.poll(heading).toBe(title('time-it'));
+    }
+    // Once the reveal has marked it wrong, the step is there going back.
+    await click('#investigationNext');
+    await expect.poll(heading).toBe(title('period'));
+    await expect.poll(() => count('.inv-verdict.is-wrong')).toBe(1);
+    await click('#investigationPrev');
+    await expect.poll(heading).toBe(title('time-it'));
+    await click('#investigationPrev');
+    await expect.poll(heading).toBe(title('watch'));
+  });
+
   test('a sample lab report is a PDF made from the answer key', async ({
     page,
   }) => {
