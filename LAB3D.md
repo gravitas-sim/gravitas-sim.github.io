@@ -204,6 +204,15 @@ R7's deflection is measured as `atan2(|u × w|, u · w)`: `acos` of a cosine
 so close to 1 cannot tell 1e-9 rad from 0, and the gate's first figure for
 it, 2.1e-8 rad, was that floor. The deflection error is 1.4e-10 rad.
 
+The reference problems build their initial conditions from orbital
+elements, with `sin` and `cos`, in whichever engine runs them. So their last
+digits differ between engines: R6's energy error is 4.8e-13 in Node and
+1.7e-12 in Chromium's Worker on the diagnostics page, both far inside
+1e-8. That is the rule this kernel is built on, not a failure of it: from
+the same numbers every engine gives the same bytes (the gate's R9, and
+`tests/lab3d.test.js`), and a shared or archived system is always its
+numbers.
+
 The table below is written by `node tools/validate-lab3d.mjs --write`:
 
 <!-- lab3d:validation -->
