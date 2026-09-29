@@ -428,21 +428,25 @@ describe('an aperture, against a synthetic star', () => {
       const u = uniform(777 + k);
       const x0 = 20 + u() - 0.5;
       const y0 = 20 + u() - 0.5;
+      // The Gaussian separates, so its 4 x 4 sub-sampled mean over a pixel is
+      // the product of two 4-sample means along the axes: the same image,
+      // without 16 exponentials a pixel (slow inside Jest's VM).
+      const along = c0 =>
+        Array.from({ length: Wd }, (_, i) => {
+          let s = 0;
+          for (let a = 0; a < 4; a++)
+            s += Math.exp(
+              -((i - 0.5 + (a + 0.5) / 4 - c0) ** 2) / (2 * sig * sig)
+            );
+          return s / 4;
+        });
+      const gx = along(x0);
+      const gy = along(y0);
       const values = new Float64Array(Wd * Wd);
       for (let j = 0; j < Wd; j++)
-        for (let i = 0; i < Wd; i++) {
-          let v = 0;
-          for (let a = 0; a < 4; a++)
-            for (let b = 0; b < 4; b++) {
-              const uu = i - 0.5 + (a + 0.5) / 4;
-              const ww = j - 0.5 + (b + 0.5) / 4;
-              v +=
-                Math.exp(-((uu - x0) ** 2 + (ww - y0) ** 2) / (2 * sig * sig)) /
-                16;
-            }
+        for (let i = 0; i < Wd; i++)
           values[j * Wd + i] =
-            200 + (F * v) / (2 * Math.PI * sig * sig) + 10 * g();
-        }
+            200 + (F * gx[i] * gy[j]) / (2 * Math.PI * sig * sig) + 10 * g();
       const r = A.measureFlux(
         { width: Wd, height: Wd, values },
         { x: x0, y: y0, r: 6, rIn: 9, rOut: 15 }
@@ -560,6 +564,12 @@ describe('tables: a filter that knows units, a match that pairs once', () => {
 
 describe('the pipeline: digests, staleness, the document, reading it back', () => {
   let o;
+  // A box search a few tenths of a day around HD 209458 b's period: these
+  // tests are about the node and the saved document, not the search, and
+  // 2-5 d cost 0.8 s a search inside Jest's VM, twice in one test, which a
+  // loaded machine turned into Jest's 5 s timeout. The peak is inside the
+  // window, and its SDE is low only because the window is mostly peak.
+  const BOX = { minPeriod: 3.3, maxPeriod: 3.8, durations: [0.12] };
   beforeAll(async () => {
     o = await openFixture('tess-light-curve');
   });
@@ -580,7 +590,7 @@ describe('the pipeline: digests, staleness, the document, reading it back', () =
     const n = await pipe.runNode(o, {
       id: 'm1',
       tool: 'box',
-      params: { minPeriod: 2, maxPeriod: 5, durations: [0.12] },
+      params: BOX,
       at: 0,
     });
     expect(n).toMatchObject({
@@ -626,7 +636,7 @@ describe('the pipeline: digests, staleness, the document, reading it back', () =
       await pipe.runNode(view, {
         id: 'm1',
         tool: 'box',
-        params: { minPeriod: 2, maxPeriod: 5, durations: [0.12] },
+        params: BOX,
         at: 1,
       }),
     ];

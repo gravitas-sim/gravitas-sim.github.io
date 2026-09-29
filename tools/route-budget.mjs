@@ -88,6 +88,8 @@ export const ROUTES = [
   { id: 'catalog', url: '/catalog/', page: true },
   { id: 'studio', url: '/studio/', page: true },
   { id: 'composer', url: '/studio/lesson/', page: true },
+  { id: 'course-builder', url: '/studio/course/', page: true },
+  { id: 'course-home', url: '/course/?course=intro-astronomy', page: true },
   { id: 'lab3d', url: '/lab3d/', page: true },
 ];
 

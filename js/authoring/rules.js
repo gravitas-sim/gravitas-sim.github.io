@@ -905,8 +905,9 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       // A remediation step is shown only when an earlier graded step was
       // answered wrongly (or rightly): js/investigations.js stepApplies(). One
       // level deep, so every student still walks a straight line to the end:
-      // the step it names is graded and one every student reaches, and it is
-      // neither the last step nor where a prediction is marked.
+      // the step it names is graded and one every student reaches (and, if a
+      // held prediction, already marked), and it is neither the last step nor
+      // where a prediction is marked.
       if (step.when !== undefined) {
         const w = step.when;
         const at = isPlainObject(w)
@@ -934,6 +935,16 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           E(
             'interaction/when',
             `when names "${w.sid}", which is itself remediation`
+          );
+        } else if (
+          named.reveal !== undefined &&
+          steps.findIndex(x => x.sid === named.reveal) > i
+        ) {
+          // Before its reveal a held prediction has no verdict, and a step
+          // shown or passed over by it would be one.
+          E(
+            'interaction/when',
+            `when names "${w.sid}", a held prediction not marked until "${named.reveal}"`
           );
         }
         if (i === steps.length - 1) {

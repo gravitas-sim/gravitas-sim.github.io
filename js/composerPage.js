@@ -1060,7 +1060,9 @@ function fillStep(card, s, i, d) {
   if (i > 0) {
     const options = [['', t('composer.when.everyone')]];
     d.steps.slice(0, i).forEach((x, k) => {
-      if (!gradedStep(x)) return;
+      // A held prediction only once it is marked (whenHeld).
+      const markedAt = d.steps.findIndex(y => x.reveal && y.sid === x.reveal);
+      if (!gradedStep(x) || markedAt > i) return;
       options.push(
         [`incorrect:${x.sid}`, t('composer.when.incorrect', { n: k + 1 })],
         [`correct:${x.sid}`, t('composer.when.correct', { n: k + 1 })]

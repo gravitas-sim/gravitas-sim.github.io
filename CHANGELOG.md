@@ -15,6 +15,27 @@ the release rather than in the tag.
 
 ### Added
 
+- **Course packs** (COURSE_PACKS.md). `gravitas.course-pack/2` orders a
+  course's lessons, assignments cut from them, scenarios, datasets and
+  readings in units, with objectives, prerequisites, time, optional
+  introductory and advanced paths, and notes in English and Spanish.
+  - **The builder,** at `/studio/course/`, picks content from this build and
+    the catalog. It checks what the course depends on, its licenses and its
+    translations, configures assignments, and makes the course's links,
+    embeds, a machine-readable manifest and a printable syllabus.
+  - **Pins:** every lesson is pinned to a digest of its steps and its
+    package. A course is exact (an archive: any change waits for review) or
+    compatible (only what can break waits). The reviewed upgrade re-pins
+    what an instructor has looked at, re-issues an assignment whose steps
+    moved, and raises the course's version.
+  - **The course home,** at `/course/`, is what students open: from a link, a
+    file, or a course Gravitas ships. It filters by path, prints as a
+    syllabus, reads in English or Spanish, and opens offline once Gravitas
+    has been opened.
+  - **Introductory astronomy,** a four-unit course from existing content, is
+    the first course Gravitas ships.
+  - A /1 course migrates. The Observatory opens a built-in observation by
+    `?open=<id>`.
 - **A 3-D small-N dynamics kernel** (LAB3D.md), the accepted design of
   VALIDATED_3D_LAB_GATE.md. It runs only in disposable Worker realms, with
   nothing from the 2-D engine.
@@ -728,6 +749,47 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A remediation step could tell a student whether a held prediction was
+  right** before the experiment did (COMPOSER.md).
+  - **What it did:** a pack could put a remediation step (`when`) on a held
+    prediction (`reveal`) before the step where the prediction is marked.
+    The lesson panel held the verdict on screen, but Next showed that step
+    to students who predicted one way and passed over it for the rest. Where Next went was the verdict, so the answer key, not
+    the experiment, settled the prediction.
+  - **What it does now:** the composer refuses such a step as `whenHeld`, on
+    its "Shown to" field, in English and Spanish, and that list no longer
+    offers a prediction before it is marked. `js/authoring/rules.js` refuses
+    the same thing as `interaction/when` in any lesson. The engine also
+    treats a held prediction as unanswered until its reveal step is reached,
+    as the panel already did. So a preview staged by an older composer passes
+    over the step for every student, and shows it on the way back once the
+    prediction is marked.
+  - **Tests:** `tests/investigationPack.test.js` refuses remediation before
+    the reveal, answered either way or with the reveal moved past it, and
+    accepts it after. `tests/composer.test.js` does the same through the
+    lesson checker and the whole verdict. `e2e/composer.spec.js` checks the
+    list and the refusal on the page. It also stages the old shape in the
+    preview and presses Next after a right and after a wrong prediction:
+    both land on the same step.
+  - **Cost:** deferred JavaScript is 178 bytes larger, inside its 4180 KB.
+    No route or request ceiling moved.
+- **A saved answer with a double quote in it broke out of its box.**
+  - **What it did:** the lesson panel wrote a saved numeric answer and a
+    saved measure field back into `value="…"` with `escape()`, which is
+    `escapeHtml()` from `js/lessonMarkup.js`. That is for element text and
+    leaves `"` alone. A student who typed a quote got back only what came
+    before it, and the rest was read as more attributes of the box. Saved
+    answers are also restored from progress backups, which accept any string,
+    so an edited backup could put an `onfocus` on the lesson page and run it.
+  - **What it does now:** both use `attr()`, which `js/investigations.js`
+    already had for its other attributes. Nothing else in `js/` writes typed
+    or imported text into an attribute that way: the other panels' own
+    escapers already escape the quote.
+  - **Tests:** `e2e/answerEntry.spec.js` types a breakout string into the
+    numeric box of Kepler's Laws, and restores one from a crafted backup into
+    a measure field. Each step is reopened from storage in a fresh page, and
+    must hold the whole string, with no attribute added and nothing run when
+    it is focused.
 - **Fifteen expected observations reached no document.**
   - **What it did:** the answer key leaves out a step that only asks students
     to read or watch, and it left that step's expectation out with it. The
