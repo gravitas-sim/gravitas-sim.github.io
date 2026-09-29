@@ -637,6 +637,13 @@ the release rather than in the tag.
 
 ### Changed
 
+- **The checker every declarative format shares has a module of its own**
+  (`js/platform/checker.js`). Course packs and 3-D systems had reached it
+  through `js/platform/investigation.js`, which brought the investigation
+  format, the question bank and the vetted relations with it. The course
+  pages now download about 41 KB less from the sources, and `/lab3d/` about
+  as much. Their route ceilings were lowered to match; the composer, which
+  uses all of them, is unchanged.
 - **The English catalog no longer repeats the sentences lessons compute.**
   Each of its 139 `lessonFn.*` entries was keyed on its own text, and
   `js/i18n/lesson.js` already returns the sentence when a locale has no
