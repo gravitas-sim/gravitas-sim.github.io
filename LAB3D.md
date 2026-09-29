@@ -3,10 +3,13 @@
 A 3-D Newtonian engine for small numbers of bodies. It runs only in
 disposable Worker realms, with explicit state and nothing from the 2-D
 engine. It is the production form of the design VALIDATED_3D_LAB_GATE.md
-accepted (verdict B, staged), and is `gravitas.lab3d` 1.0.0.
+accepted (verdict B, staged), and is `gravitas.lab3d` 1.1.0.
 
-There is no student renderer here. The diagnostic page, `/lab3d/`, runs the
-reference problems or any system file and shows numbers and plain plots.
+Two pages use it:
+- **The 3-D lab, `/3d/`:** plays a system, draws it in WebGL, and measures
+  it, with every number also in tables ([below](#the-3-d-lab-3d)).
+- **The diagnostics page, `/lab3d/`:** runs the reference problems or any
+  system file to the end, and shows numbers and plain plots.
 
 ## What it is for, and what it is not
 
@@ -145,7 +148,7 @@ R9 showed identical bytes in Node, Chromium, Firefox and WebKit.
 them, so `cancel()` is read within a slice. Terminating the Worker ends it
 at once, and that is what the scheduler does to a trial past its limit.
 
-## The capability API: `gravitas.lab3d` 1.0.0
+## The capability API: `gravitas.lab3d` 1.1.0
 
 `js/lab3d/api.js`. `createLab3d({spawn})` returns a client with three
 methods:
@@ -157,6 +160,25 @@ methods:
 Each request gets a fresh Worker, which answers a `hello` with its API
 version. The client refuses a Worker of another major version. The protocol
 is in `js/lab3d/workerCore.js`.
+
+**1.1 adds live sessions** (`js/lab3d/live.js`, and a client of its own,
+`js/lab3d/liveClient.js`, so a page that only runs systems does not download
+it):
+- `createLiveSession({spawn}, system, {interval, closeWithin?, escapeBeyond?,
+  crossings?})` starts a Worker holding one engine run whose sample interval
+  is the tick.
+- `ready` resolves with the first snapshot. `advance(k)` integrates exactly
+  k intervals (at most 256) and resolves with the next snapshot, and one
+  advance is in flight at a time. `stop()` ends the Worker.
+- **The snapshot** (`js/lab3d/snapshot.js`, `gravitas.lab3d.snapshot` 1) is a
+  versioned copy of the bodies at one time: ids, masses, radii, positions,
+  velocities and liveness. It carries every interval's positions since the
+  last snapshot for trails, the events and warnings since then, and the
+  conserved-quantity errors against the session's start. Its arrays are
+  transferred, not copied.
+- **A session lasts one engine run:** 100,000 intervals, or an hour of wall
+  clock. It then stops with that status. `restartFrom(system, snapshot)` is
+  the system to continue from its own numbers, and the lab says when it does.
 
 `capabilities/lab3d.json` declares the model (`lab3d-small-n`) and the route
 (`/lab3d/`). It has no entry in the application's lazy registry: the kernel
@@ -309,6 +331,129 @@ shortest orbit, from the throughput table:
 | A run that stops being finite | Stopped (`notFinite`) |
 | Every massive body merged into one | Stopped (`empty`) |
 
+## The 3-D lab (`/3d/`)
+
+**What it shows.** The eight reference problems, or a system file (a
+`gravitas.system3d/1`, or a 2-D Orbital System Builder file, migrated). The
+system plays as it runs.
+
+**The clock:**
+- **Ticks:** the page keeps a clock in simulation time and asks the Worker
+  for whole intervals ahead of it. A tick is a 400th of the shortest bound
+  orbit at the start, or a hundredth of the closest pair's crossing time
+  when nothing is bound.
+- **Speed:** ×1 is 60 intervals a second, and ×256 the cap. A faster speed
+  asks for more intervals at a time, never a longer step, so the numbers do
+  not depend on how fast anyone watches (tests/lab3dView.test.js checks that
+  one advance of 60 equals 60 of 1, byte for byte).
+- **When the device is slower than the speed asked,** the clock waits for
+  the kernel and says so.
+- **The frame drawn** is the moment between the two snapshots around the
+  clock, by cubic Hermite interpolation from both ends' positions and
+  velocities: exact for cubic motion, and never ahead of the newer snapshot.
+- **Trails** are the snapshots' interval positions up to the clock, never
+  ahead of the bodies.
+
+**Frames are views** (`js/lab3d/view/frames.js`):
+- the system's own coordinates;
+- barycentric;
+- centered on a body;
+- rotating with a pair, where they stay on the x axis and a particle at L4
+  holds still.
+
+A trail point is re-expressed with every body's position at its own time. A
+frame change starts the trails again.
+
+**The camera** (`js/lab3d/view/projection.js`, drawn by three.js from the
+same numbers):
+- **Looks:** oblique, down onto the reference plane, along it, face-on to an
+  orbit (along its angular momentum) and edge-on to it (along its line of
+  nodes).
+- **Projection:** perspective or orthographic.
+- **Keep centered** follows a body, and frames what orbits it.
+- **Framing** takes every bound orbit's apoapsis, so an eccentric orbit that
+  starts near periapsis is framed whole.
+- **Pointer:** orbit, pan and zoom.
+- **Keyboard,** with the view focused:
+  - arrows orbit;
+  - Shift and an arrow pans;
+  - + and − zoom;
+  - 1 to 5 choose a look;
+  - 0 frames everything;
+  - Space plays or pauses.
+
+**What could be mistaken for scale is stated under the view:**
+- the frame;
+- a scale bar (true everywhere in orthographic, and "at the center of the
+  view" in perspective);
+- the body size (equal markers, radius × 10 or the true radius);
+- the time span the trails cover;
+- the height lines, which drop to the reference plane z = 0;
+- the grid's square;
+- the velocity arrows' time scale: where a body would be in that time at its
+  speed.
+
+**Instruments** (`js/lab3d/view/instruments.js`) measure numbers, never
+pixels:
+- distance;
+- the angle at a body between two others;
+- a body's orbit about its primary (osculating elements and period);
+- the relative velocity and the rate the distance changes.
+
+A body's primary is the heavier body that pulls on it hardest, and ties go
+to the lower index.
+
+**The tables are the lab too.** Under the view:
+- the hierarchy (which body orbits which, and what merged);
+- positions, distances and speeds in the chosen frame;
+- every orbit's elements;
+- the conserved-quantity errors;
+- the events: mergers, close approaches, plane crossings, escapes and the
+  kernel's warnings.
+
+Everything the picture shows is there, and the page works without WebGL. The
+tables update once a second while playing, or on request.
+
+**Accessibility:**
+- **Controls:** every control is a native control with a label. The view is
+  a focusable, labeled image with its own keys, and colors are never the
+  only cue (bodies are named on the picture and in the tables).
+- **Reduced motion** (the system setting or the checkbox): no run starts by
+  itself, and the camera does not glide.
+- **Low quality,** chosen by default on a device with two cores or 2 GB:
+  pixel ratio 1, no antialiasing, and shorter trails.
+- **A lost WebGL context:** the run and the tables go on, and the picture
+  returns when the browser restores it.
+- **Checked:** axe finds no violations in either language at phone width.
+
+**Costs,** measured on the commit that added the page:
+- **Route:** 784.7 KB in 35 requests from the sources, and 590.7 KB in 2
+  from the build. That includes the Worker and the kernel it runs, and
+  three.js from the lab's own vendored build
+  (`vendor/three/lab3d.module.js`, 476 KB of the sources).
+- **The application:** nothing. Its 3-D view keeps its own narrower
+  three.js, and its initial and deferred budgets did not move.
+- **First frame:** a median of 217 ms from the sources and 184 ms from the
+  build, in headless Chromium on loopback on the development machine.
+
+**Against the 2-D sandbox.** The lab is a new instrument, not a port. Where
+it does less, this is why:
+
+| The 2-D sandbox has | The 3-D lab | Why |
+|---|---|---|
+| The built-in scenarios | 8 validated systems, and any system file | Each built-in 3-D system is a reference problem with fixed tolerances. Curriculum systems are Prompt 37 |
+| Placing and dragging bodies | No placing: a system file, or the Orbital System Builder's file | Placing in 3-D needs depth the pointer cannot give. A file is exact, and the kernel checks it |
+| A choice of integrator | The system's integrator, set in its file | The diagnostics page compares integrators. The lab plays what the file says |
+| Trails, labels, pan, zoom, follow | The same, with orbit, looks, perspective or orthographic | |
+| Force and acceleration arrows | Velocity arrows | Accelerations of point masses near an encounter swamp every other arrow. Velocities are what the table and the elements use |
+| Reference frames | Barycentric, body-centered, rotating with a pair, and the system's own | |
+| An object inspector | The tables and the orbit instrument | |
+| The energy chart | Conserved-quantity errors against the start, as text | The diagnostics page plots them |
+| Observing panels, sonification, the spacetime view | None | They are 2-D instruments on the 2-D engine. Bringing them here would be a separate design |
+| Lessons, share links, embeds, lecture mode, data export | None yet | Prompt 37 (curriculum) and Roadmap II's integration prompts |
+| Spanish, keyboard, reduced motion, low-end mode | The same | |
+| Offline | Not yet | Like the diagnostics page, the page itself is not precached; its modules and three.js are, as optional, so they cost nothing to an install that fails to fetch them |
+
 ## Where it lives
 
 | Path | What it is |
@@ -321,13 +466,22 @@ shortest orbit, from the throughput table:
 | `js/lab3d/api.js` | The capability API and client |
 | `js/lab3d/experiment.js` | 3-D experiments through the scheduler |
 | `js/lab3d/references.js` | The reference problems and their tolerances |
+| `js/lab3d/live.js`, `js/lab3d/snapshot.js`, `js/lab3d/liveClient.js` | Live sessions, the snapshot, and their client (API 1.1) |
+| `3d/index.html`, `js/lab3dLab.js` | The 3-D lab |
+| `js/lab3d/view/` | The lab's frames, camera, instruments, scene and translator |
+| `vendor/three/lab3d.module.js` | The lab's own three.js build (`npm run vendor`) |
 | `lab3d/index.html`, `js/lab3dPage.js` | The diagnostics page |
 | `tools/validate-lab3d.mjs`, `tools/lab3d-bench.mjs` | Validation and throughput |
 
 Tests:
 - `tests/lab3d.test.js`: properties, round trips, refusals, determinism,
   events, the protocol and experiments;
-- `e2e/lab3d.spec.js`: the page in both targets.
+- `e2e/lab3d.spec.js`: the diagnostics page in both targets;
+- `tests/lab3dView.test.js`: snapshots and interpolation, live sessions and
+  their protocol, the camera against three.js, instruments and frames;
+- `e2e/lab3dView.spec.js`: the lab in both targets: playing, frames, looks,
+  instruments, the keyboard, a lost context, no WebGL, reduced motion, files,
+  Spanish and axe.
 
 References:
 - Yoshida, H. 1990, Phys. Lett. A 150, 262;

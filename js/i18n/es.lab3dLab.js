@@ -107,6 +107,8 @@ export const ES_LAB3DLAB = {
   'l3.clock': 't = {t}, velocidad {speed}.',
   'l3.clock.behind':
     'El núcleo va retrasado: avanza tan rápido como lo permite este dispositivo.',
+  'l3.unit.length1': 'unidad de longitud',
+  'l3.unit.time1': 'unidad de tiempo',
   'l3.unit.length': 'unidades de longitud',
   'l3.unit.time': 'unidades de tiempo',
   'l3.unit.mass': 'unidades de masa',

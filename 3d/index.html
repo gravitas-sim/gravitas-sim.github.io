@@ -67,16 +67,10 @@
         text-shadow: 0 0 3px #000, 0 0 3px #000;
       }
       .l3-legend {
-        position: absolute;
-        left: 0.5rem;
-        bottom: 0.5rem;
-        max-width: calc(100% - 1rem);
-        font-size: 0.78rem;
-        line-height: 1.35;
+        font-size: 0.82rem;
+        line-height: 1.4;
         color: #d3d9e6;
-        background: rgba(7, 8, 15, 0.78);
-        border-radius: 6px;
-        padding: 0.35rem 0.5rem;
+        margin: 0.4rem 0 0;
       }
       .l3-bar {
         display: inline-block;
@@ -238,9 +232,9 @@
               aria-describedby="l3-keys l3-legend"
             ></canvas>
             <div class="l3-labels" id="l3-labels" aria-hidden="true"></div>
-            <div class="l3-legend" id="l3-legend" aria-live="off"></div>
             <div class="l3-notice" id="l3-notice" role="status" hidden></div>
           </div>
+          <div class="l3-legend" id="l3-legend" aria-live="off"></div>
           <p class="l3-keys" id="l3-keys" data-i18n="l3.keys"></p>
           <p class="l3-readout" id="l3-clock" role="status" aria-live="polite"></p>
         </div>

@@ -105,6 +105,8 @@ export const EN_LAB3DLAB = {
   'l3.clock': 't = {t}, speed {speed}.',
   'l3.clock.behind':
     'The kernel is behind: it is running as fast as this device allows.',
+  'l3.unit.length1': 'length unit',
+  'l3.unit.time1': 'time unit',
   'l3.unit.length': 'length units',
   'l3.unit.time': 'time units',
   'l3.unit.mass': 'mass units',

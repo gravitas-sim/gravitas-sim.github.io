@@ -104,10 +104,14 @@ const deg = r => (Number.isFinite(r) ? `${num((r * 180) / Math.PI, 4)}°` : '—
 /** An angle that goes all the way round, on [0°, 360°), as elements are given. */
 const turn = r => deg(((r % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI));
 const solar = () => state.system?.units === 'solar';
-const unitL = () => t(solar() ? 'l3.unit.au' : 'l3.unit.length');
-const unitT = () => t(solar() ? 'l3.unit.day' : 'l3.unit.time');
+const unitL = (v = 2) =>
+  t(solar() ? 'l3.unit.au' : v === 1 ? 'l3.unit.length1' : 'l3.unit.length');
+const unitT = (v = 2) =>
+  t(solar() ? 'l3.unit.day' : v === 1 ? 'l3.unit.time1' : 'l3.unit.time');
 const unitM = () => t(solar() ? 'l3.unit.msun' : 'l3.unit.mass');
 const length = v => `${num(v)} ${unitL()}`;
+/** A round number (1, 2 or 5 times a power of ten) as the round number it is. */
+const round = (v, unit) => `${num(v, 1)} ${unit(v)}`;
 const time = v => `${num(v)} ${unitT()}`;
 const speed = v =>
   solar()
@@ -373,10 +377,10 @@ function arrowTips(d, alive) {
         Math.hypot(d.v[3 * i], d.v[3 * i + 1], d.v[3 * i + 2])
       );
   if (!(vmax > 0)) return null;
-  const { radius } = bounds(d.x, alive);
-  // The fastest body's arrow is a quarter of the view's radius, at a round
-  // number of time units per length, which the legend states.
-  const perTime = niceLength((0.25 * radius) / vmax) || (0.25 * radius) / vmax;
+  // The fastest body's arrow is a fifth of the view's reach, at a round
+  // number of time units, which the legend states.
+  const reach = state.reach || bounds(d.x, alive).radius;
+  const perTime = niceLength((0.2 * reach) / vmax) || (0.2 * reach) / vmax;
   state.arrowScale = perTime;
   const tips = new Float64Array(d.x.length);
   for (let k = 0; k < tips.length; k++) tips[k] = d.x[k] + d.v[k] * perTime;
@@ -479,24 +483,50 @@ function selectedOrbitNormal(f) {
   return elementsAbout(f, body, h.primary[body], G())?.normal ?? null;
 }
 
+/**
+ * How far from the view's center the system reaches: every live body where
+ * it is now, and every bound body's apoapsis about its primary, so an
+ * eccentric orbit that starts near periapsis is framed whole.
+ */
+function extent(f, d) {
+  const at = i => [0, 1, 2].map(k => d.x[3 * i + k] - d.offset[k]);
+  const h = hierarchy(f);
+  // Following a body frames what orbits it: its own subsystem.
+  const inView = new Set();
+  const take = i => {
+    inView.add(i);
+    for (const c of h.children[i]) take(c);
+  };
+  if (state.follow >= 0 && h.children[state.follow]?.length) take(state.follow);
+  else for (let i = 0; i < f.m.length; i++) inView.add(i);
+  let r = 0;
+  for (let i = 0; i < f.m.length; i++) {
+    if (!f.alive[i] || !inView.has(i)) continue;
+    r = Math.max(r, Math.hypot(...at(i)));
+    const p = h.primary[i];
+    if (p < 0 || !inView.has(p)) continue;
+    const e = elementsAbout(f, i, p, G());
+    if (e?.bound) r = Math.max(r, Math.hypot(...at(p)) + e.a * (1 + e.e));
+  }
+  return r > 0 ? r : 1;
+}
+
 function resetView() {
   const f = currentFrame();
   if (!f) return;
   const d = display(f);
-  const b = bounds(
-    d.x.map((q, k) => q - d.offset[k % 3]),
-    f.alive
-  );
+  const reach = extent(f, d);
+  state.reach = reach;
   const cam = preset($('l3-preset').value, {
     target: [0, 0, 0],
-    radius: b.radius + Math.hypot(...b.center),
+    radius: reach,
     normal: selectedOrbitNormal(f),
     base: { mode: $('l3-projection').value },
   });
   state.camera = cam;
   state.scene?.setCamera(cam);
   // The reference plane: a round half-width past everything, in 20 squares.
-  const half = 2 * niceLength(b.radius + Math.hypot(...b.center));
+  const half = 2 * niceLength(reach);
   state.gridStep = (2 * half) / 20;
   state.scene?.setGrid(2 * half, 20);
 }
@@ -670,7 +700,7 @@ function legend() {
           style: `width:${Math.round(bar.px)}px`,
         }),
         t(bar.exact ? 'l3.legend.scale' : 'l3.legend.scalePerspective', {
-          len: length(bar.length),
+          len: round(bar.length, unitL),
         })
       )
     );
@@ -685,9 +715,9 @@ function legend() {
     );
   if ($('l3-drops').checked) parts.push(t('l3.legend.drops'));
   if ($('l3-grid').checked && state.gridStep)
-    parts.push(t('l3.legend.grid', { step: length(state.gridStep) }));
+    parts.push(t('l3.legend.grid', { step: round(state.gridStep, unitL) }));
   if ($('l3-arrows').checked && state.arrowScale)
-    parts.push(t('l3.legend.arrows', { per: time(state.arrowScale) }));
+    parts.push(t('l3.legend.arrows', { per: round(state.arrowScale, unitT) }));
   const box = $('l3-legend');
   box.replaceChildren(...parts.map(p => el('div', {}, p)));
 }

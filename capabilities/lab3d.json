@@ -109,6 +109,21 @@
       "path": "vendor/three/lab3d.module.js",
       "role": "code",
       "offline": "optional"
+    },
+    {
+      "path": "js/lab3dLab.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/en.lab3dLab.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/i18n/es.lab3dLab.js",
+      "role": "code",
+      "offline": "optional"
     }
   ],
   "citations": [],

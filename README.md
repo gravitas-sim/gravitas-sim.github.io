@@ -234,8 +234,17 @@ and test particles, run only in Worker realms of its own:
 - validation against analytic and published reference problems in the check
   registry.
 
-`/lab3d/` is its diagnostic page, with numbers and plain plots, not yet a
-student view ([LAB3D.md](LAB3D.md)).
+**The 3-D lab** at `/3d/` plays those systems as they run, in WebGL:
+- orbit, pan and zoom, face-on and edge-on looks at any orbit, and
+  perspective or orthographic projection;
+- barycentric, body-centered and rotating frames;
+- trails, height lines to the reference plane, and velocity arrows;
+- distances, angles and orbital elements measured from the numbers.
+
+A legend under the view states every scale the picture could suggest. Every
+number is also in tables that work without WebGL, and the keyboard does
+everything the pointer does. `/lab3d/` is the kernel's diagnostic page
+([LAB3D.md](LAB3D.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog

@@ -36,6 +36,28 @@ the release rather than in the tag.
     the first course Gravitas ships.
   - A /1 course migrates. The Observatory opens a built-in observation by
     `?open=<id>`.
+- **The 3-D lab** (`/3d/`, LAB3D.md): small systems in three dimensions,
+  played by the 3-D kernel in a Worker and drawn in WebGL, without touching
+  the 2-D renderer.
+  - **Snapshots:** the page draws from versioned snapshots, by cubic Hermite
+    interpolation between them. Playing faster asks for more whole
+    intervals, never a longer step, so no number depends on the speed. API
+    1.1.0 adds live sessions.
+  - **The view:** looks face-on and edge-on to an orbit or the reference
+    plane, perspective or orthographic, orbit, pan, zoom and follow.
+    Frames: barycentric, body-centered and rotating with a pair.
+  - **Honest scale:** a legend states the scale bar, the body size (equal
+    markers, radius × 10 or true), the trails' span, the grid, the height
+    lines and the arrows' time scale.
+  - **Instruments** measure from the numbers: distance, angle, relative
+    velocity and orbital elements about a body's primary.
+  - **Tables:** the hierarchy, positions and speeds, elements, conserved
+    errors and events, with no WebGL needed.
+  - **Access:** keyboard throughout, reduced motion, low quality, recovery
+    from a lost WebGL context, and Spanish.
+  - **Its own three.js build** (`vendor/three/lab3d.module.js`), so the
+    application's 3-D view and budgets do not move.
+
 - **A 3-D small-N dynamics kernel** (LAB3D.md), the accepted design of
   VALIDATED_3D_LAB_GATE.md. It runs only in disposable Worker realms, with
   nothing from the 2-D engine.
