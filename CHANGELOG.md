@@ -36,6 +36,26 @@ the release rather than in the tag.
     the first course Gravitas ships.
   - A /1 course migrates. The Observatory opens a built-in observation by
     `?open=<id>`.
+- **The mission-design core** (`/mission/`, MISSION.md): educational
+  astrodynamics on the 3-D engine, as a diagnostic page.
+  - **Solvers:** impulsive Hohmann and bi-elliptic transfers; plane changes
+    and their best split; rendezvous and phasing; Lambert's problem (zero
+    revolutions, either branch, bracketed and bounded); patched-conic
+    departures and captures; transfer windows; planar unpowered flybys.
+  - **Refusals, not plausible numbers:** every solver returns its
+    convergence or a coded refusal. Lambert's answers are confirmed by an
+    independent propagation, and near-antipodal, unconfirmable and too-fast
+    cases are refused.
+  - **Validated** against textbook examples (Curtis, Vallado), closed-form
+    constants, and the 3-D kernel flying each answer, with fixed tolerances
+    (`npm run validate:mission`, a CI step).
+  - **Runs in a Worker,** with cancellation, a wall-clock limit and bounded
+    windows. Delta-v budgets, event timelines, a transfer-window plot with
+    a CSV, and a plan file (`gravitas.mission-plan` 1) that keeps inputs,
+    model and results apart, in English and Spanish.
+  - **Not operational mission design or navigation,** and every page, table
+    and file says so.
+
 - **Orbits in three dimensions** (LAB3D_CURRICULUM.md): four guides in the
   3-D lab.
   - **The four:** an orbit's plane (inclination and nodes); seen from

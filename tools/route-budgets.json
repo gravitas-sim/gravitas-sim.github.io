@@ -86,6 +86,10 @@
       "lab3d-guide": {
         "kb": 913.9,
         "requests": 41
+      },
+      "mission": {
+        "kb": 74.6,
+        "requests": 8
       }
     },
     "build": {
@@ -172,6 +176,10 @@
       "lab3d-guide": {
         "kb": 676.2,
         "requests": 5
+      },
+      "mission": {
+        "kb": 49.4,
+        "requests": 2
       }
     }
   },

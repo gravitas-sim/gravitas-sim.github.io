@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mission design diagnostics | Gravitas</title>
+    <meta
+      name="description"
+      content="The Gravitas mission-design core, run in a Worker: impulsive transfers, plane changes, rendezvous, Lambert's problem, patched conics, flybys and transfer windows, each against its reference cases. An educational model, not operational mission design."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: forms, tables and one plot. */
+      .mn-wrap {
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .mn-wrap a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      .mn-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        align-items: end;
+        margin: 0.75rem 0;
+      }
+      /* A field's width comes from the bar, not from its control: WebKit
+         sizes a select to its longest option (R6's title is long), and an
+         automatic grid track grows to fit it. */
+      .mn-field {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.25rem;
+        min-width: 0;
+        flex: 1 1 12rem;
+        max-width: 100%;
+      }
+      /* WebKit lays a select's menu out wider than the select and counts
+         it as overflow; clip it inside the select (its focus ring is
+         outside, and stays). */
+      .mn-field select {
+        overflow: hidden;
+      }
+      .mn-field select,
+      .mn-field input {
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
+        max-width: 100%;
+        font: inherit;
+        color: inherit;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        padding: 0.35rem 0.45rem;
+      }
+      .mn-wrap section {
+        margin: 1.5rem 0;
+      }
+      .mn-wrap h2 {
+        font-size: 1.15rem;
+      }
+      .mn-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+      }
+      .mn-table caption {
+        text-align: left;
+        color: #b7bfcf;
+        padding-bottom: 0.25rem;
+      }
+      .mn-table th,
+      .mn-table td {
+        text-align: left;
+        vertical-align: top;
+        padding: 0.3rem 0.4rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        overflow-wrap: anywhere;
+      }
+      .mn-scroll {
+        overflow-x: auto;
+      }
+      .mn-plots {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+      }
+      .mn-plots figure {
+        margin: 0;
+      }
+      .mn-plot {
+        width: 100%;
+        height: auto;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 6px;
+      }
+      .mn-plots figcaption {
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .mn-note {
+        border-left: 3px solid var(--accent);
+        padding: 0.25rem 0.75rem;
+        color: #d7dce6;
+      }
+      .mn-window {
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: minmax(0, 1fr);
+        max-width: 40rem;
+      }
+      .mn-window canvas {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 6px;
+        background: #0b0d17;
+      }
+      .mn-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 1rem;
+        font-size: 0.85rem;
+        color: #b7bfcf;
+      }
+      .mn-swatch {
+        display: inline-block;
+        width: 0.9rem;
+        height: 0.9rem;
+        vertical-align: -0.1rem;
+        margin-right: 0.3rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .mn-refused {
+        background: #3a3f52;
+      }
+      progress {
+        width: 12rem;
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body class="doc-page">
+    <main class="mn-wrap" aria-labelledby="mn-title">
+      <div id="langSwitch" class="mn-bar" role="group" aria-label="Language" data-i18n-aria-label="mission.lang"></div>
+      <h1 id="mn-title" data-i18n="mission.title">Mission design diagnostics</h1>
+      <p data-i18n="mission.intro"></p>
+      <p class="mn-note" data-i18n="mission.notFor"></p>
+      <p>
+        <a href="/" data-i18n="mission.back">Back to Gravitas</a> ·
+        <a href="/lab3d/" data-i18n="mission.kernel">The 3-D kernel</a> ·
+        <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/MISSION.md" data-i18n="mission.docs">How the core works (MISSION.md)</a>
+      </p>
+
+      <section aria-labelledby="mn-transfer-h">
+        <h2 id="mn-transfer-h" data-i18n="mission.transfer.heading"></h2>
+        <p data-i18n="mission.transfer.hint"></p>
+        <div class="mn-bar">
+          <div class="mn-field">
+            <label for="mn-transfer-body" data-i18n="mission.body"></label>
+            <select id="mn-transfer-body"></select>
+          </div>
+          <div class="mn-field">
+            <label for="mn-transfer-h1" data-i18n="mission.transfer.h1"></label>
+            <input id="mn-transfer-h1" type="text" inputmode="decimal" value="300" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-transfer-h2" data-i18n="mission.transfer.h2"></label>
+            <input id="mn-transfer-h2" type="text" inputmode="decimal" value="35786" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-transfer-hb" data-i18n="mission.transfer.hb"></label>
+            <input id="mn-transfer-hb" type="text" inputmode="decimal" value="100000" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-transfer-di" data-i18n="mission.transfer.di"></label>
+            <input id="mn-transfer-di" type="text" inputmode="decimal" value="28.5" />
+          </div>
+          <button id="mn-transfer-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
+        </div>
+        <p id="mn-transfer-status" role="status" aria-live="polite"></p>
+        <div id="mn-transfer-out" class="mn-scroll"></div>
+        <button id="mn-transfer-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
+      </section>
+
+      <section aria-labelledby="mn-meet-h">
+        <h2 id="mn-meet-h" data-i18n="mission.meet.heading"></h2>
+        <p data-i18n="mission.meet.hint"></p>
+        <div class="mn-bar">
+          <div class="mn-field">
+            <label for="mn-meet-body" data-i18n="mission.body"></label>
+            <select id="mn-meet-body"></select>
+          </div>
+          <div class="mn-field">
+            <label for="mn-meet-h1" data-i18n="mission.meet.h1"></label>
+            <input id="mn-meet-h1" type="text" inputmode="decimal" value="300" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-meet-h2" data-i18n="mission.meet.h2"></label>
+            <input id="mn-meet-h2" type="text" inputmode="decimal" value="700" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-meet-phase" data-i18n="mission.meet.phase"></label>
+            <input id="mn-meet-phase" type="text" inputmode="decimal" value="17" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-meet-laps" data-i18n="mission.meet.laps"></label>
+            <input id="mn-meet-laps" type="text" inputmode="numeric" value="2" />
+          </div>
+          <button id="mn-meet-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
+        </div>
+        <p id="mn-meet-status" role="status" aria-live="polite"></p>
+        <div id="mn-meet-out" class="mn-scroll"></div>
+        <button id="mn-meet-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
+      </section>
+
+      <section aria-labelledby="mn-lambert-h">
+        <h2 id="mn-lambert-h" data-i18n="mission.lambert.heading"></h2>
+        <p data-i18n="mission.lambert.hint"></p>
+        <div class="mn-bar">
+          <div class="mn-field">
+            <label for="mn-lambert-body" data-i18n="mission.body"></label>
+            <select id="mn-lambert-body"></select>
+          </div>
+          <div class="mn-field">
+            <label for="mn-lambert-r1" data-i18n="mission.lambert.r1"></label>
+            <input id="mn-lambert-r1" type="text" inputmode="decimal" value="15945.34, 0, 0" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-lambert-r2" data-i18n="mission.lambert.r2"></label>
+            <input id="mn-lambert-r2" type="text" inputmode="decimal" value="12214.83899, 10249.46731, 0" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-lambert-tof" data-i18n="mission.lambert.tof"></label>
+            <input id="mn-lambert-tof" type="text" inputmode="decimal" value="4560" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-lambert-dir" data-i18n="mission.lambert.direction"></label>
+            <select id="mn-lambert-dir"></select>
+          </div>
+          <button id="mn-lambert-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
+        </div>
+        <p id="mn-lambert-status" role="status" aria-live="polite"></p>
+        <div id="mn-lambert-out" class="mn-scroll"></div>
+        <button id="mn-lambert-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
+      </section>
+
+      <section aria-labelledby="mn-planets-h">
+        <h2 id="mn-planets-h" data-i18n="mission.planets.heading"></h2>
+        <p data-i18n="mission.planets.hint"></p>
+        <div class="mn-bar">
+          <div class="mn-field">
+            <label for="mn-planets-from" data-i18n="mission.from"></label>
+            <select id="mn-planets-from"></select>
+          </div>
+          <div class="mn-field">
+            <label for="mn-planets-to" data-i18n="mission.to"></label>
+            <select id="mn-planets-to"></select>
+          </div>
+          <div class="mn-field">
+            <label for="mn-planets-h1" data-i18n="mission.planets.h1"></label>
+            <input id="mn-planets-h1" type="text" inputmode="decimal" value="300" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-planets-h2" data-i18n="mission.planets.h2"></label>
+            <input id="mn-planets-h2" type="text" inputmode="decimal" value="300" />
+          </div>
+          <button id="mn-planets-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
+        </div>
+        <p id="mn-planets-status" role="status" aria-live="polite"></p>
+        <div id="mn-planets-out" class="mn-scroll"></div>
+        <button id="mn-planets-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
+      </section>
+
+      <section aria-labelledby="mn-window-h">
+        <h2 id="mn-window-h" data-i18n="mission.window.heading"></h2>
+        <p data-i18n="mission.window.hint"></p>
+        <div class="mn-bar">
+          <div class="mn-field">
+            <label for="mn-window-from" data-i18n="mission.from"></label>
+            <select id="mn-window-from"></select>
+          </div>
+          <div class="mn-field">
+            <label for="mn-window-to" data-i18n="mission.to"></label>
+            <select id="mn-window-to"></select>
+          </div>
+          <div class="mn-field">
+            <label for="mn-window-start" data-i18n="mission.window.start"></label>
+            <input id="mn-window-start" type="text" inputmode="text" value="2024-08-01" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-window-span" data-i18n="mission.window.span"></label>
+            <input id="mn-window-span" type="text" inputmode="decimal" value="120" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-window-tof1" data-i18n="mission.window.tof1"></label>
+            <input id="mn-window-tof1" type="text" inputmode="decimal" value="150" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-window-tof2" data-i18n="mission.window.tof2"></label>
+            <input id="mn-window-tof2" type="text" inputmode="decimal" value="350" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-window-steps" data-i18n="mission.window.steps"></label>
+            <input id="mn-window-steps" type="text" inputmode="numeric" value="61" />
+          </div>
+          <button id="mn-window-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
+          <button id="mn-window-cancel" type="button" class="ui-button" data-i18n="mission.cancel" disabled></button>
+          <progress id="mn-window-progress" max="1" value="0" aria-labelledby="mn-window-status"></progress>
+        </div>
+        <p id="mn-window-status" role="status" aria-live="polite"></p>
+        <div class="mn-window" id="mn-window-plot" hidden>
+          <canvas id="mn-window-canvas" width="480" height="480" role="img"></canvas>
+          <div class="mn-legend" id="mn-window-legend"></div>
+        </div>
+        <div id="mn-window-out" class="mn-scroll"></div>
+        <button id="mn-window-csv" type="button" class="ui-button" data-i18n="mission.window.csv" disabled></button>
+        <button id="mn-window-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
+      </section>
+
+      <section aria-labelledby="mn-flyby-h">
+        <h2 id="mn-flyby-h" data-i18n="mission.flyby.heading"></h2>
+        <p data-i18n="mission.flyby.hint"></p>
+        <div class="mn-bar">
+          <div class="mn-field">
+            <label for="mn-flyby-body" data-i18n="mission.planet"></label>
+            <select id="mn-flyby-body"></select>
+          </div>
+          <div class="mn-field">
+            <label for="mn-flyby-vinf" data-i18n="mission.flyby.vinf"></label>
+            <input id="mn-flyby-vinf" type="text" inputmode="decimal" value="5.6" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-flyby-alt" data-i18n="mission.flyby.h"></label>
+            <input id="mn-flyby-alt" type="text" inputmode="decimal" value="357460" />
+          </div>
+          <div class="mn-field">
+            <label for="mn-flyby-side" data-i18n="mission.flyby.side"></label>
+            <select id="mn-flyby-side"></select>
+          </div>
+          <button id="mn-flyby-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
+        </div>
+        <p id="mn-flyby-status" role="status" aria-live="polite"></p>
+        <div id="mn-flyby-out" class="mn-scroll"></div>
+        <button id="mn-flyby-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
+      </section>
+
+      <section aria-labelledby="mn-check-h">
+        <h2 id="mn-check-h" data-i18n="mission.check.heading"></h2>
+        <p data-i18n="mission.check.hint"></p>
+        <button id="mn-check-go" type="button" class="ui-button" data-i18n="mission.check.go"></button>
+        <p id="mn-check-status" role="status" aria-live="polite"></p>
+        <div id="mn-check-out" class="mn-scroll"></div>
+      </section>
+
+      <section aria-labelledby="mn-scope-h">
+        <h2 id="mn-scope-h" data-i18n="mission.scope.heading"></h2>
+        <h3 data-i18n="mission.scope.supported"></h3>
+        <ul id="mn-scope-yes"></ul>
+        <h3 data-i18n="mission.scope.unsupported"></h3>
+        <ul id="mn-scope-no"></ul>
+      </section>
+    </main>
+    <script type="module" src="/js/missionPage.js"></script>
+  </body>
+</html>

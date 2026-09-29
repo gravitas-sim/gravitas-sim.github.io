@@ -139,6 +139,7 @@ export default [
       'js/experiments/experimentWorker.js',
       'js/inference/inferenceWorker.js',
       'js/lab3d/worker.js',
+      'js/mission/worker.js',
     ],
     languageOptions: {
       ecmaVersion: 2021,

@@ -324,6 +324,14 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    id: 'mission',
+    label: 'mission core validation',
+    command: ['npm', 'run', 'validate:mission'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  {
     id: 'scenarios',
     label: 'scenario stability',
     command: ['npm', 'run', 'validate:scenarios'],
