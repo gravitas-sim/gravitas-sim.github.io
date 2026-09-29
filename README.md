@@ -216,6 +216,18 @@ word in English and Spanish side by side. It is judged by the same checker as
 every lesson Gravitas ships and previews in the real lesson engine
 ([COMPOSER.md](COMPOSER.md)).
 
+**A 3-D dynamics kernel.** A small-N Newtonian engine in 3-D, 2 to 50 bodies
+and test particles, run only in Worker realms of its own:
+- symplectic fourth-order integration by default, and an adaptive scheme for
+  close approaches;
+- mergers, orbital elements and frames;
+- the same bytes in every browser from the same numbers;
+- validation against analytic and published reference problems in the check
+  registry.
+
+`/lab3d/` is its diagnostic page, with numbers and plain plots, not yet a
+student view ([LAB3D.md](LAB3D.md)).
+
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
 of <!--fact:uiStrings-->6213<!--/fact--> strings, and
@@ -537,6 +549,7 @@ part was built:
 | [`ORBITAL_SYSTEM_BUILDER.md`](ORBITAL_SYSTEM_BUILDER.md)           | Building a hierarchical system from orbital elements: the construction, its checks, and the file it saves                                      |
 | [`STUDIO.md`](STUDIO.md)                                           | The Scenario Studio: what a scenario file holds, its checks and cautions, how it opens, and what still needs the source                        |
 | [`COMPOSER.md`](COMPOSER.md)                                       | The Investigation Composer: the pack and bank formats, variants from vetted relations, remediation, translation, and what it does not do     |
+| [`LAB3D.md`](LAB3D.md)                                             | The 3-D small-N kernel: its state format, integrators, runs, API, experiments, validation and limits                                         |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |

@@ -15,6 +15,26 @@ the release rather than in the tag.
 
 ### Added
 
+- **A 3-D small-N dynamics kernel** (LAB3D.md), the accepted design of
+  VALIDATED_3D_LAB_GATE.md. It runs only in disposable Worker realms, with
+  nothing from the 2-D engine.
+  - **Integrators:** compensated fourth-order Yoshida by default, with
+    leapfrog, Yoshida and RK4, and adaptive Dormand-Prince 5(4) for close
+    approaches.
+  - **Physics:** mergers, orbital elements (elliptic and hyperbolic) and
+    frames.
+  - **Reproducible to the byte:** no engine-dependent arithmetic, so the
+    same numbers give the same bytes in every browser.
+  - **`gravitas.system3d/1`:** code or solar units with a dimensional check.
+    It refuses ambiguous input and migrates the 2-D Orbital System Builder's
+    files.
+  - **Runs:** limits, cancellation, events, residuals and warnings.
+  - **Integration:** a versioned capability API, and 3-D experiments through
+    the experiment scheduler.
+  - **Validation:** the gate's reference problems, permanent in
+    `npm run validate:lab3d` and the check registry.
+  - **Diagnostics:** the page `/lab3d/`.
+
 - **The Investigation Composer** (COMPOSER.md). A page at `/studio/lesson/`
   composes a guided investigation as data, `gravitas.investigation-pack/1`,
   judged by the same lesson checker as every built-in lesson.

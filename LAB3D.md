@@ -207,6 +207,40 @@ it, 2.1e-8 rad, was that floor. The deflection error is 1.4e-10 rad.
 The table below is written by `node tools/validate-lab3d.mjs --write`:
 
 <!-- lab3d:validation -->
+| # | Problem | Integrator | Measured | Value | Tolerance | |
+|---|---|---|---|---|---|---|
+| R1 | Two-body Kepler orbit in 3-D: e = 0.6, i = 40° | yoshida4c, h = 7.9e-4 | position after 100 orbits, against the analytic orbit | 7.2e-8 | ≤ 1.0e-6 | pass |
+| R1 | Two-body Kepler orbit in 3-D: e = 0.6, i = 40° | yoshida4c, h = 7.9e-4 | largest relative energy error over 1000 orbits | 3.8e-11 | ≤ 1.0e-8 | pass |
+| R1 | Two-body Kepler orbit in 3-D: e = 0.6, i = 40° | yoshida4c, h = 7.9e-4 | that error over 1000 orbits against over 100 (bounded) | 1 | ≤ 1.5 | pass |
+| R1 | Two-body Kepler orbit in 3-D: e = 0.6, i = 40° | yoshida4c, h = 7.9e-4 | relative change of the angular momentum vector | 8.5e-16 | ≤ 1.0e-12 | pass |
+| R1 | Two-body Kepler orbit in 3-D: e = 0.6, i = 40° | yoshida4c, h = 7.9e-4 | drift of the inclination over 1000 orbits (radians) | 3.3e-16 | ≤ 1.0e-10 | pass |
+| R1 | Two-body Kepler orbit in 3-D: e = 0.6, i = 40° | yoshida4c, h = 7.9e-4 | drift of the node over 1000 orbits (radians) | 1.1e-16 | ≤ 1.0e-10 | pass |
+| R2 | Inclined binary, the whole system moving | yoshida4c, h = 6.3e-3 | barycenter against uniform motion, relative to the distance traveled | 1.7e-16 | ≤ 1.0e-12 | pass |
+| R2 | Inclined binary, the whole system moving | yoshida4c, h = 6.3e-3 | relative orbit against the same binary at rest | 3.9e-11 | ≤ 1.0e-9 | pass |
+| R3 | Barycentric three-body: a star, Jupiter- and Saturn-like planets | yoshida4c, h = 0.0745 | total momentum, relative to the largest body momentum | 1.4e-15 | ≤ 1.0e-13 | pass |
+| R3 | Barycentric three-body: a star, Jupiter- and Saturn-like planets | yoshida4c, h = 0.0745 | largest relative energy error over 1000 inner orbits | 1.4e-10 | ≤ 1.0e-9 | pass |
+| R3 | Barycentric three-body: a star, Jupiter- and Saturn-like planets | yoshida4c, h = 0.0745 | relative change of the angular momentum vector | 8.1e-16 | ≤ 1.0e-12 | pass |
+| R4 | Restricted three-body, mu = 0.001: L4 holds, L1 does not | yoshida4c, h = 0.0126 | largest distance from L4 over 100 orbits | 0.0406 | ≤ 0.05 | pass |
+| R4 | Restricted three-body, mu = 0.001: L4 holds, L1 does not | yoshida4c, h = 0.0126 | relative change of the particle's Jacobi constant | 9.0e-10 | ≤ 1.0e-9 | pass |
+| R4 | Restricted three-body, mu = 0.001: L4 holds, L1 does not | yoshida4c, h = 0.0126 | largest distance from L1 reached within 20 orbits (must leave) | 1.81 | ≥ 0.1 | pass |
+| R5 | The figure-eight choreography, rotated into 3-D | yoshida4c, h = 6.3e-3 | largest position error after one period (Chenciner and Montgomery 2000) | 1.3e-7 | ≤ 1.0e-6 | pass |
+| R5 | The figure-eight choreography, rotated into 3-D | yoshida4c, h = 6.3e-3 | out-of-plane motion, rotated back | 1.1e-16 | ≤ 1.0e-12 | pass |
+| R6 | Kozai-Lidov: a test particle at i = 65° under a distant perturber | dopri5, tol 1e-10 | secular cycles resolved (numerically defensible) | 5 | ≥ 2 | pass |
+| R6 | Kozai-Lidov: a test particle at i = 65° under a distant perturber | dopri5, tol 1e-10 | largest relative energy error (defensible) | 1.7e-12 | ≤ 1.0e-8 | pass |
+| R6 | Kozai-Lidov: a test particle at i = 65° under a distant perturber | dopri5, tol 1e-10 | closest approach to the perturber (defensible) | 18.6 | ≥ 0.5 | pass |
+| R6 | Kozai-Lidov: a test particle at i = 65° under a distant perturber | dopri5, tol 1e-10 | largest eccentricity against the quadrupole prediction 0.838 | 2.2e-3 | ≤ 0.03 | pass |
+| R6 | Kozai-Lidov: a test particle at i = 65° under a distant perturber | dopri5, tol 1e-10 | variation of sqrt(1 - e^2) cos i | 0.0118 | ≤ 0.02 | pass |
+| R7 | A hyperbolic close approach: v_inf = 0.5, pericenter 0.01 | dopri5, tol 1e-10 | deflection against the analytic 2 arcsin(1/e) (radians) | 1.4e-10 | ≤ 1.0e-6 | pass |
+| R7 | A hyperbolic close approach: v_inf = 0.5, pericenter 0.01 | dopri5, tol 1e-10 | relative error in the visitor's orbital energy through the encounter | 5.1e-9 | ≤ 1.0e-8 | pass |
+| R7 | A hyperbolic close approach: v_inf = 0.5, pericenter 0.01 | dopri5, tol 1e-10 | closest approach at the step found, against the pericenter 0.01 (relative) | 5.4e-6 | diagnostic | pass |
+| R8 | Mergers, head-on and grazing | yoshida4c, h = 1.0e-4 | head-on: mergers | 1 | = 1 | pass |
+| R8 | Mergers, head-on and grazing | yoshida4c, h = 1.0e-4 | head-on: mass after the merger, against 1.5 | 0 | ≤ 1.0e-15 | pass |
+| R8 | Mergers, head-on and grazing | yoshida4c, h = 1.0e-4 | head-on: momentum through the merger, relative | 0 | ≤ 1.0e-15 | pass |
+| R8 | Mergers, head-on and grazing | yoshida4c, h = 1.0e-4 | head-on: kinetic energy lost | 4.8 | ≥ 0 | pass |
+| R8 | Mergers, head-on and grazing | yoshida4c, h = 1.0e-4 | grazing: mergers | 1 | = 1 | pass |
+| R8 | Mergers, head-on and grazing | yoshida4c, h = 1.0e-4 | grazing: mass after the merger, against 1.5 | 0 | ≤ 1.0e-15 | pass |
+| R8 | Mergers, head-on and grazing | yoshida4c, h = 1.0e-4 | grazing: momentum through the merger, relative | 0 | ≤ 1.0e-15 | pass |
+| R8 | Mergers, head-on and grazing | yoshida4c, h = 1.0e-4 | grazing: kinetic energy lost | 4.81 | ≥ 0 | pass |
 <!-- /lab3d:validation -->
 
 ## Throughput
