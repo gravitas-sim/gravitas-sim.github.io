@@ -149,7 +149,12 @@ import { buildLabReport, downloadPdf } from './labReport.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer, gradeAnswer, toleranceFor } from './answerCheck.js';
-import { localeOfAnswer, recordAnswer } from './answerParse.js';
+import {
+  formatFieldNumber,
+  localeOfAnswer,
+  parseFieldNumber,
+  recordAnswer,
+} from './answerParse.js';
 import {
   assignmentStorageKey,
   filterResponses,
@@ -1486,8 +1491,14 @@ function predictionAnsweredHere(step) {
 function fieldValues(step, id) {
   const out = {};
   for (const f of step.fields || []) {
-    const raw = responses[`${id}:${f.id}`];
-    out[f.id] = raw === undefined || raw === '' ? NaN : Number(raw);
+    const key = `${id}:${f.id}`;
+    const raw = responses[key];
+    // Under the convention it was typed in, as a single numeric answer is,
+    // so a Spanish "0,91" is 0.91 and not NaN.
+    out[f.id] = parseFieldNumber(
+      raw,
+      localeOfAnswer(responses, key, getLocale())
+    );
     out[`${f.id}_text`] = raw ?? '';
   }
   return out;
@@ -1516,9 +1527,16 @@ function recomputeFields(step, id) {
     } catch {
       next = NaN;
     }
-    const text = Number.isFinite(next) ? next.toFixed(f.decimals ?? 2) : '';
-    if (responses[`${id}:${f.id}`] !== text) {
-      responses[`${id}:${f.id}`] = text;
+    // Written in the reader's convention, and recorded as such: "0.910" read
+    // back as Spanish would be nine hundred and ten.
+    const locale = getLocale();
+    const text = formatFieldNumber(next, f.decimals ?? 2, locale);
+    const key = `${id}:${f.id}`;
+    if (
+      responses[key] !== text ||
+      localeOfAnswer(responses, key, '') !== locale
+    ) {
+      recordAnswer(responses, key, text, locale);
       changed = true;
     }
   }
@@ -3336,7 +3354,7 @@ function bindStepInputs() {
   els.body.querySelectorAll('[data-field]').forEach(input => {
     if (input.hasAttribute('readonly')) return;
     input.addEventListener('input', () => {
-      responses[input.dataset.field] = input.value;
+      recordAnswer(responses, input.dataset.field, input.value, getLocale());
       save();
       refreshMeasurements();
     });
@@ -3449,8 +3467,12 @@ function importSelection() {
     return;
   }
 
+  // The lesson writes these in JavaScript's convention, whatever the reader's
+  // language, so they are recorded as English: a Spanish reading of "0.910"
+  // would be nine hundred and ten.
   target.forEach((fid, i) => {
-    if (values[i] !== undefined) responses[`${id}:${fid}`] = String(values[i]);
+    if (values[i] !== undefined)
+      recordAnswer(responses, `${id}:${fid}`, String(values[i]), 'en');
   });
   save();
   renderStep();

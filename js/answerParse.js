@@ -276,6 +276,43 @@ export function parseNumber(raw, locale = 'en') {
 }
 
 /**
+ * One measure-step field, as a number.
+ *
+ * A measure step's fields are read by the lesson's own validate(), plot and
+ * compute functions, which expect a number or NaN. They used to get
+ * Number(raw), which reads a Spanish "0,91" as NaN, so a measurement typed the
+ * way a Spanish reader writes it failed every check on the step. This reads it
+ * the way a single numeric answer is read, under the convention it was typed
+ * in, and keeps the rest of Number()'s strictness: trailing text is NaN, as it
+ * always was. A bare leading separator (".5", ",5") keeps reading as Number()
+ * read ".5".
+ *
+ * @param {string} raw - What is in the field
+ * @param {string} [locale] - The convention it was typed under
+ * @returns {number} The value, or NaN where blank or unreadable
+ */
+export function parseFieldNumber(raw, locale = 'en') {
+  const text = String(raw ?? '')
+    .trim()
+    .replace(/^([+-]?)([.,])(?=\d)/, '$10$2');
+  const parsed = parseNumber(text, locale);
+  return parsed.ok && !parsed.rest ? parsed.value : NaN;
+}
+
+/**
+ * A computed field's value, written the way its locale writes numbers.
+ *
+ * @param {number} value - The computed value
+ * @param {number} decimals - Places to show
+ * @param {string} [locale] - The reader's locale
+ * @returns {string} The text, or '' where the value is not finite
+ */
+export function formatFieldNumber(value, decimals, locale = 'en') {
+  if (!Number.isFinite(value)) return '';
+  return value.toFixed(decimals).replace('.', decimalSeparatorFor(locale));
+}
+
+/**
  * Turn a run of digits and separators into a number.
  *
  * The awkward case is a single separator with exactly three digits after it:
