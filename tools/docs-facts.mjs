@@ -74,7 +74,11 @@ import {
   zenodoJson,
 } from './generated-blocks.mjs';
 import { RELEASE } from './project-metadata.mjs';
-import { precacheInventory, precacheTable } from './precache-inventory.mjs';
+import {
+  precacheInventory,
+  precacheTable,
+  gzipMB,
+} from './precache-inventory.mjs';
 import { CHECKS } from './checks.mjs';
 import {
   catalogLayout,
@@ -441,7 +445,7 @@ async function cheapFacts() {
       const p = precacheInventory(REPO);
       return {
         precacheFiles: p.files,
-        precacheGzipMB: (p.gzip / 1048576).toFixed(1),
+        precacheGzipMB: String(gzipMB(p)),
         spanishShadows: p.localeWarm.es ?? 0,
       };
     })(),
