@@ -71,6 +71,8 @@ import {
   populationsInstructorGuide,
 } from '../js/populationsGuideDocs.js';
 import { POPULATIONS_KEY } from '../js/data/populationsAnswerKey.js';
+import { lab3dAnswerKey, lab3dInstructorGuide } from '../js/lab3dGuideDocs.js';
+import { LAB3D_KEY } from '../js/data/lab3dAnswerKey.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** A path as the repository sees it, for a message. */
@@ -402,6 +404,22 @@ function renderDocuments(version, { stub = false } = {}) {
     'key',
     null,
     populationsAnswerKey(POPULATIONS_KEY, { version })
+  );
+  // And the 3-D lab's curriculum (LAB3D_CURRICULUM.md), whose key
+  // tools/lab3d-guides-key.mjs writes from a reference run.
+  add(
+    'lab3d-curriculum-guide',
+    'Orbits in Three Dimensions - Instructor Guide.pdf',
+    'guide',
+    null,
+    lab3dInstructorGuide({ version })
+  );
+  add(
+    'lab3d-curriculum-key',
+    'Orbits in Three Dimensions - Answer Key.pdf',
+    'key',
+    null,
+    lab3dAnswerKey(LAB3D_KEY, { version })
   );
 
   // Classroom activities. One guide per activity covering all three formats,

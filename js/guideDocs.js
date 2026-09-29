@@ -59,6 +59,11 @@ const CHANGE_NAMES = { derive: 'new column', crop: 'crop' };
  * @property {Array<{name: string, source: string, license: string}>} datasets
  * @property {string[]} approximations - What remains an approximation
  * @property {string} keyTool - The command that writes the answer key
+ * @property {string} [kicker] - The product line over each title
+ * @property {string} [route] - The page a guide opens on, with ?guide=
+ * @property {string} [handIn] - What the assignment sheet says to hand in with
+ * @property {string} [keyNote] - The answer key's opening paragraph
+ * @property {string} [pathNote] - The instructor guide's note on paths
  */
 
 function words(docs) {
@@ -103,13 +108,14 @@ export function suiteInstructorGuide(suite, docs, { version = '' } = {}) {
     footer: footer(docs.name, 'Instructor Guide', version),
   });
   doc.titleBlock({
-    kicker: 'Gravitas Observatory | Instructor Guide',
+    kicker: `${docs.kicker ?? 'Gravitas Observatory'} | Instructor Guide`,
     title: docs.title,
     subtitle: docs.subtitle,
   });
   for (const p of docs.intro) doc.paragraph(p);
   doc.paragraph(
-    'The advanced path is the introductory one with steps added: the same data, the same checks and the same answers, and more of them. A student can move on without passing a step, and after a wrong answer can ask to see the right one; the progress list, and the notebook entry, say which steps were passed and which were shown.'
+    docs.pathNote ??
+      'The advanced path is the introductory one with steps added: the same data, the same checks and the same answers, and more of them. A student can move on without passing a step, and after a wrong answer can ask to see the right one; the progress list, and the notebook entry, say which steps were passed and which were shown.'
   );
 
   doc.heading('The curriculum map', { size: 13 });
@@ -167,7 +173,7 @@ export function suiteInstructorGuide(suite, docs, { version = '' } = {}) {
     doc.bullets(docs.notes[g.id] ?? []);
     doc.heading('Assignment sheet', { size: 11 });
     doc.paragraph(
-      `Open /observatory/?guide=${g.id} for the introductory path, or /observatory/?guide=${g.id}&path=advanced for the advanced one. Hand in:`
+      `Open ${docs.route ?? '/observatory/'}?guide=${g.id} for the introductory path, or ${docs.route ?? '/observatory/'}?guide=${g.id}&path=advanced for the advanced one. Hand in:`
     );
     doc.bullets(
       stepsOn(g, 'advanced')
@@ -182,7 +188,8 @@ export function suiteInstructorGuide(suite, docs, { version = '' } = {}) {
         )
     );
     doc.paragraph(
-      'At the last step, “Add my answers to the notebook” records the answers as an Observatory entry, with which were checked and which were shown; the notebook’s report can then be handed in with them.',
+      docs.handIn ??
+        'At the last step, “Add my answers to the notebook” records the answers as an Observatory entry, with which were checked and which were shown; the notebook’s report can then be handed in with them.',
       { size: 9 }
     );
   }
@@ -207,13 +214,14 @@ export function suiteAnswerKey(suite, rows, docs, { version = '' } = {}) {
     footer: footer(docs.name, 'Answer Key', version),
   });
   doc.titleBlock({
-    kicker: 'Gravitas Observatory | Answer Key',
+    kicker: `${docs.kicker ?? 'Gravitas Observatory'} | Answer Key`,
     title: `${docs.title}: Answer Key`,
     subtitle:
       'Every step, on the advanced path, which includes the introductory one',
   });
   doc.paragraph(
-    `Instructor copy. These answers were worked out by ${docs.keyTool}, which does what a student does with each panel’s default settings and then applies the guides’ own answer functions to the results. The page checks each student against their own measurements and fits, not against this key: a student who chose other settings is checked against what they found. Predictions are recorded and never marked.`,
+    docs.keyNote ??
+      `Instructor copy. These answers were worked out by ${docs.keyTool}, which does what a student does with each panel’s default settings and then applies the guides’ own answer functions to the results. The page checks each student against their own measurements and fits, not against this key: a student who chose other settings is checked against what they found. Predictions are recorded and never marked.`,
     { size: 9, color: '0.35 0.35 0.42' }
   );
   const fmt = v =>

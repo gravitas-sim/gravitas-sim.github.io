@@ -54,6 +54,9 @@ export const EN_LAB3DGUIDES = {
   'g3.unit.none': 'Your answer (a number without units)',
 
   // --- The systems the guides bring
+  'gd.target.R1': 'An inclined Kepler orbit (R1)',
+  'gd.target.R3': 'A star and two planets (R3)',
+  'gd.target.R6': 'Kozai-Lidov cycles (R6)',
   'gd.target.tilt-0': 'Guide: a planet in the reference plane',
   'gd.target.tilt-02': 'Guide: the same orbit tilted 0.2°',
   'gd.target.tilt-05': 'Guide: the same orbit tilted 0.5°',

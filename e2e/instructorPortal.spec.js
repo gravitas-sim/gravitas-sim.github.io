@@ -53,8 +53,14 @@ const ACTIVITY_DOCUMENTS = 8;
 // STELLAR_POPULATIONS.md): their investigations live in /observatory/, not in
 // the lesson manifest.
 const OBSERVATORY_DOCUMENTS = 4;
+// The 3-D lab's curriculum (LAB3D_CURRICULUM.md): its guides live in /3d/.
+const LAB3D_DOCUMENTS = 2;
 const ALL_DOCUMENTS =
-  GENERAL_DOCUMENTS + OBSERVATORY_DOCUMENTS + ACTIVITY_DOCUMENTS + DOCUMENTS;
+  GENERAL_DOCUMENTS +
+  OBSERVATORY_DOCUMENTS +
+  LAB3D_DOCUMENTS +
+  ACTIVITY_DOCUMENTS +
+  DOCUMENTS;
 
 const PASSPHRASE = 'gravitas-fixture-not-a-secret';
 

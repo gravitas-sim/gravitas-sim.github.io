@@ -53,6 +53,9 @@ export const ES_LAB3DGUIDES = {
   'g3.unit.none': 'Tu respuesta (un número sin unidades)',
 
   // --- Los sistemas que traen las guías
+  'gd.target.R1': 'Una órbita de Kepler inclinada (R1)',
+  'gd.target.R3': 'Una estrella y dos planetas (R3)',
+  'gd.target.R6': 'Ciclos de Kozai-Lidov (R6)',
   'gd.target.tilt-0': 'Guía: un planeta en el plano de referencia',
   'gd.target.tilt-02': 'Guía: la misma órbita inclinada 0,2°',
   'gd.target.tilt-05': 'Guía: la misma órbita inclinada 0,5°',
