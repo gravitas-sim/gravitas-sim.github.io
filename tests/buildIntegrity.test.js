@@ -51,32 +51,66 @@ describe('the published surface carries nothing it did not mean to', () => {
 });
 
 describe('the production build preserves what the physics reads', () => {
+  // esbuild's minifier renames classes, after which constructor.name is a
+  // single letter. Star merging, stellar collapse, tidal disruption and rocky
+  // collisions were all dead in a minified build because physics.js compared
+  // those names; build.js kept every name to prevent it, at 63 KB of deferred
+  // JavaScript. The comparisons are by class identity now, and these hold that.
+  const code = f => read(f).replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
   const physics = read('js/physics.js');
-  const build = read('build.js');
 
-  test('physics.js still branches on class names', () => {
-    // If this ever reaches zero the keepNames requirement below is obsolete and
-    // both this test and the build flag can go.
-    const uses = physics.match(/\.constructor\.name/g) || [];
-    expect(uses.length).toBeGreaterThan(0);
+  test('nothing in js/ reads a constructor by its name', () => {
+    const readers = [];
+    const walk = dir => {
+      for (const e of readdirSync(path.join(ROOT, dir), {
+        withFileTypes: true,
+      })) {
+        const rel = `${dir}/${e.name}`;
+        if (e.isDirectory()) walk(rel);
+        else if (
+          /\.m?js$/.test(e.name) &&
+          /\.constructor\.name\b/.test(code(rel))
+        )
+          readers.push(rel);
+      }
+    };
+    walk('js');
+    expect(readers).toEqual([]);
   });
 
-  test('every esbuild call keeps class names', () => {
-    // esbuild's minifier renames classes, after which constructor.name is a
-    // single letter and all fifteen comparisons in physics.js are false. Star
-    // merging, stellar collapse, tidal disruption and rocky collisions were all
-    // dead on the deployed site because of this, and passed locally.
-    const minify = (build.match(/minify:\s*true/g) || []).length;
-    const keep = (build.match(/keepNames:\s*true/g) || []).length;
-    expect(minify).toBeGreaterThan(0);
-    expect(keep).toBe(minify);
+  test('no object stands in for a class by carrying its name', () => {
+    // asPhysicsObject() wrapped each black hole for the merge loop with
+    // constructor: { name: 'BlackHole' }, which a name comparison accepted and
+    // an identity one does not; the loop then merged two holes forever. A
+    // wrapper carries the class itself.
+    expect(code('js/physics.js')).not.toMatch(/constructor:\s*\{/);
   });
 
-  test('obj_type is not substituted for the class name', () => {
-    // Tempting, because every class sets obj_type to its own class name. They
-    // are not interchangeable: a transformed body carries the obj_type of what
-    // it became and the class of what it was.
-    expect(physics).toContain('.constructor.name');
+  test('every body class has its own name in CLASS_NAMES', () => {
+    const bodies = [
+      ...physics.matchAll(/^class (\w+) extends PhysicsObject\b/gm),
+    ].map(m => m[1]);
+    bodies.push('BlackHole');
+    const map = physics.match(/const CLASS_NAMES = new Map\(\[([\s\S]*?)\]\);/);
+    expect(map).not.toBeNull();
+    const entries = [...map[1].matchAll(/\[(\w+), '(\w+)'\]/g)];
+    for (const [, cls, name] of entries) expect(name).toBe(cls);
+    expect(entries.map(e => e[1]).sort()).toEqual(bodies.sort());
+    // By the constructor, never obj_type: a transformed body carries the
+    // obj_type of what it became and the class of what it was.
+    expect(physics).toMatch(
+      /export const className = o => CLASS_NAMES\.get\(o\?\.constructor\)/
+    );
+  });
+
+  test('the chunk mirror builds the application as build.js does', () => {
+    const app = read('build.js').match(
+      /entryPoints: \[\{ in: 'js\/main\.js', out: 'app' \}\][\s\S]*?keepNames: (\w+)/
+    );
+    const mirror = read('tools/instrument-families.mjs').match(
+      /keepNames: (\w+)/
+    );
+    expect(app?.[1]).toBe(mirror?.[1]);
   });
 });
 

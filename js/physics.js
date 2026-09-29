@@ -7096,6 +7096,22 @@ const purgeDead = list =>
     return false;
   });
 
+/** A body's class by name; minifying renames classes. Not obj_type (see below). */
+const CLASS_NAMES = new Map([
+  [Planet, 'Planet'],
+  [GasGiant, 'GasGiant'],
+  [Asteroid, 'Asteroid'],
+  [Comet, 'Comet'],
+  [Debris, 'Debris'],
+  [BlackHole, 'BlackHole'],
+  [StarObject, 'StarObject'],
+  [NeutronStar, 'NeutronStar'],
+  [WhiteDwarf, 'WhiteDwarf'],
+  [Galaxy, 'Galaxy'],
+  [AccretionDiskParticle, 'AccretionDiskParticle'],
+]);
+export const className = o => CLASS_NAMES.get(o?.constructor) ?? '';
+
 // Handle star merging - stars combining into more massive objects
 /**
  * Handle merging between stars, neutron stars, and white dwarfs
@@ -7126,21 +7142,10 @@ const handle_star_merging = stars_list => {
         const min_dist = star1.radius + star2.radius;
 
         if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-          // These comparisons are against class names, so the build must not
-          // rename the classes. esbuild would: minified, constructor.name comes
-          // back as "t" and every branch below is false, which left star
-          // merging, stellar collapse, tidal disruption and rocky collisions
-          // dead on the deployed site while working perfectly in development.
-          // build.js sets keepNames for exactly this, and the validation page's
-          // three Mergers checks are what catch it if anyone turns it off.
-          //
-          // Not obj_type, though every class sets that to its own class name
-          // too. The two are not interchangeable: a body that has been
-          // transformed carries the obj_type of what it became and the class of
-          // what it was, and swapping them here changed behavior enough to hang
-          // the physics test suite.
-          const star1_type = star1.constructor.name;
-          const star2_type = star2.constructor.name;
+          // By class, never obj_type: a transformed body carries the obj_type
+          // of what it became and the class of what it was.
+          const star1_type = className(star1);
+          const star2_type = className(star2);
 
           // Skip BH-BH pairs here; dedicated BH-BH merger runs separately
           if (star1_type === 'BlackHole' && star2_type === 'BlackHole') {
@@ -7218,12 +7223,12 @@ const handle_star_merging = stars_list => {
             // Mark only the non-BH as dead
             other.alive = false;
             // Remove the non-BH from its global list
-            if (other.constructor.name === 'StarObject')
+            if (other.constructor === StarObject)
               stars = stars.filter(s => s !== other);
-            if (other.constructor.name === 'WhiteDwarf')
+            if (other.constructor === WhiteDwarf)
               clearObjectEnergyHistory(other.id);
             white_dwarfs = white_dwarfs.filter(wd => wd !== other);
-            if (other.constructor.name === 'NeutronStar')
+            if (other.constructor === NeutronStar)
               clearObjectEnergyHistory(other.id);
             neutron_stars = neutron_stars.filter(ns => ns !== other);
             // No new black hole is created, and the existing one remains in
@@ -7499,11 +7504,11 @@ const handle_star_object_collisions = () => {
         star.mass += planet.mass;
 
         // Update star properties based on type
-        if (star.constructor.name === 'NeutronStar') {
+        if (star.constructor === NeutronStar) {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'WhiteDwarf') {
+        } else if (star.constructor === WhiteDwarf) {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'StarObject') {
+        } else if (star.constructor === StarObject) {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
@@ -7547,11 +7552,11 @@ const handle_star_object_collisions = () => {
         star.mass += gasGiant.mass;
 
         // Update star properties based on type
-        if (star.constructor.name === 'NeutronStar') {
+        if (star.constructor === NeutronStar) {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'WhiteDwarf') {
+        } else if (star.constructor === WhiteDwarf) {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'StarObject') {
+        } else if (star.constructor === StarObject) {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
@@ -7596,11 +7601,11 @@ const handle_star_object_collisions = () => {
         star.mass += asteroid.mass;
 
         // Update star properties based on type
-        if (star.constructor.name === 'NeutronStar') {
+        if (star.constructor === NeutronStar) {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'WhiteDwarf') {
+        } else if (star.constructor === WhiteDwarf) {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
-        } else if (star.constructor.name === 'StarObject') {
+        } else if (star.constructor === StarObject) {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
@@ -7642,7 +7647,7 @@ const handle_rocky_collisions = objects_list => {
   // Comets are included: they are solid bodies and were previously able to fly
   // straight through planets and asteroids because this filter excluded them.
   const rocky_objects = objects_list.filter(obj =>
-    ROCKY_TYPES.has(obj.constructor.name)
+    ROCKY_TYPES.has(className(obj))
   );
 
   // This is the densest pairwise pass in the frame - the Kuiper Belt scenario
@@ -8171,7 +8176,7 @@ function asPhysicsObject(bh) {
     mass: bh.mass,
     radius: bh.radius,
     alive: true,
-    constructor: { name: 'BlackHole' },
+    constructor: BlackHole,
     _bh_ref: bh, // Keep reference to real BlackHole
   };
 }
