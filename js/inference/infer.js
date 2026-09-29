@@ -31,6 +31,10 @@ import {
 } from './fit.js';
 import { halfDuration } from './transit.js';
 
+// Bound once, not read as globals: in Jest's vm context every free global read
+// goes through the context, which made these loops 8-25x slower than in Node.
+const { Math, Number, Float64Array, Int32Array } = globalThis;
+
 /**
  * The observatory's time units (js/observatory/units.js), in seconds. A copy,
  * not an import: the fit panel must reach none of its page's modules

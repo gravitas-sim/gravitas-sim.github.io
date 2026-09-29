@@ -708,6 +708,37 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **The numeric test suites ran 8 to 25 times slower under Jest than in
+  Node, and timed out on a loaded machine.**
+  - **What it did:** Jest runs every module in a `vm` context, where each
+    read of a free global such as `Math` or `Float64Array` goes through the
+    context's global lookup instead of a cached property. The transit model,
+    the fitter, the period and box searches and the curve comparison read
+    `Math` millions of times a run. `tests/inference.test.js` took 299 s, one
+    profile test 101 s of it, and the searches in `tests/measure.test.js` and
+    `tests/stellarTools.test.js`, which yield to the page and so can time
+    out, were the ones that did.
+  - **What it does now:** the seven modules that measured a difference
+    (`js/inference/transit.js`, `fit.js`, `infer.js` and `rv.js`,
+    `js/measure/periodogram.js` and `curveCompare.js`, and
+    `js/analysis/stats.js`) bind the globals they use once, at module scope:
+    `const { Math, Number, Float64Array } = globalThis;`. They are the same
+    objects, so every result is bit-identical. The eight numeric suites take
+    20 s of CPU instead of 325 s, `inference.test.js` 12 s instead of 299 s,
+    which is plain Node's speed. At a load average of 64 to 127, the
+    sinusoid pulls take 8 to 10 s of their 60 s (26 to 38 s before) and the
+    TESS reference case 2 s of its 120 s (13 to 20 s before). The other
+    numeric modules (`aperture.js`, `bandIndex.js`, `spectrumLine.js`,
+    `pipeline.js`, `js/observatory/*` and the rest of `js/inference` and
+    `js/analysis`) measured no difference and are unchanged.
+  - **Tests:** unchanged, and so is what they assert, their explicit
+    timeouts included. The outputs of all seven modules on seventeen
+    workloads (fits, profiles, searches on the TESS light curve, the curve
+    comparison, the resampling statistics) are byte-for-byte the same as
+    before, 1.0 MB of them.
+  - **Cost:** nothing. The minifier shortens the local name, so the built
+    Observatory, experiments and inference-worker chunks are 724 bytes
+    smaller; the app's deferred bundle is unchanged.
 - **Fifteen expected observations reached no document.**
   - **What it did:** the answer key leaves out a step that only asks students
     to read or watch, and it left that step's expectation out with it. The

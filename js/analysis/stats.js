@@ -27,6 +27,10 @@
 // teach with, and the methods say which it is.
 // =============================================================================
 
+// Bound once, not read as globals: in Jest's vm context every free global read
+// goes through the context, which made these loops 8-25x slower than in Node.
+const { Math, Number, Float64Array } = globalThis;
+
 /** The level of every interval here. */
 export const LEVEL = 0.95;
 
