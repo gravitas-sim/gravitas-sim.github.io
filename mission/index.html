@@ -143,7 +143,7 @@
         border: 1px solid rgba(255, 255, 255, 0.3);
       }
       .mn-refused {
-        background: repeating-linear-gradient(45deg, #3a3f52 0 3px, #0b0d17 3px 6px);
+        background: #3a3f52;
       }
       progress {
         width: 12rem;
@@ -320,11 +320,11 @@
           <progress id="mn-window-progress" max="1" value="0" aria-labelledby="mn-window-status"></progress>
         </div>
         <p id="mn-window-status" role="status" aria-live="polite"></p>
-        <div id="mn-window-out" class="mn-scroll"></div>
         <div class="mn-window" id="mn-window-plot" hidden>
           <canvas id="mn-window-canvas" width="480" height="480" role="img"></canvas>
           <div class="mn-legend" id="mn-window-legend"></div>
         </div>
+        <div id="mn-window-out" class="mn-scroll"></div>
         <button id="mn-window-csv" type="button" class="ui-button" data-i18n="mission.window.csv" disabled></button>
         <button id="mn-window-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
       </section>

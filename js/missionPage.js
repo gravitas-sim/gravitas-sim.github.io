@@ -480,6 +480,8 @@ function planets() {
 
 // --- Transfer windows ------------------------------------------------------------
 
+/** A refused cell: a hole in the plot, the same gray as its legend. */
+const REFUSED = '#3a3f52';
 const COLORS = [
   [68, 1, 84],
   [59, 82, 139],
@@ -508,20 +510,18 @@ function drawWindow(r) {
   ctx.fillRect(0, 0, W, H);
   const lo = r.best ? r.best.total : 0;
   const span = Math.max(lo, 1e-9); // the scale runs from the best to twice it
+  // Cells on whole pixels: a cell's edges are the rounded multiples, so
+  // neighbors meet exactly and no seam of background shows between them.
   const cw = W / nd;
   const ch = H / nt;
+  const xs = i => Math.round(i * cw);
+  const ys = j => H - Math.round(j * ch);
   for (let i = 0; i < r.rows; i++) {
     for (let j = 0; j < nt; j++) {
       const k = i * nt + j;
-      const x = i * cw;
-      const y = H - (j + 1) * ch;
-      if (r.cellStatus[k] !== 0) {
-        ctx.fillStyle = '#3a3f52';
-        ctx.fillRect(x, y, Math.ceil(cw), Math.ceil(ch));
-        continue;
-      }
-      ctx.fillStyle = colour((r.total[k] - lo) / span);
-      ctx.fillRect(x, y, Math.ceil(cw), Math.ceil(ch));
+      ctx.fillStyle =
+        r.cellStatus[k] !== 0 ? REFUSED : colour((r.total[k] - lo) / span);
+      ctx.fillRect(xs(i), ys(j + 1), xs(i + 1) - xs(i), ys(j) - ys(j + 1));
     }
   }
   if (r.best) {
