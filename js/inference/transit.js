@@ -38,6 +38,10 @@
 // Pure: no DOM, no state.
 // =============================================================================
 
+// Bound once, not read as globals: in Jest's vm context every free global read
+// goes through the context, which made these loops 8-25x slower than in Node.
+const { Math, Number, Float64Array } = globalThis;
+
 /** The quadratic coefficients from Kipping's (2013) q1, q2 in [0, 1]. */
 export function limbDarkening(q1, q2) {
   const s = Math.sqrt(q1);
