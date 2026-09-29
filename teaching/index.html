@@ -31,6 +31,7 @@
          otherwise be concatenated into css/app.css, which every visitor to the
          simulation downloads before anything is drawn. -->
     <link rel="stylesheet" href="/css/teaching.css" />
+    <link rel="stylesheet" href="/css/shell.css" />
     <script>
       try {
         const t = localStorage.getItem('gravitas_theme');
@@ -51,27 +52,10 @@
   <body class="doc-page">
     <a class="doc-skip" href="#main" data-i18n="teach.skip">Skip to content</a>
 
-    <header class="doc-top">
-      <a class="doc-brand" href="/">GRAVITAS <span>simulation</span></a>
-      <nav class="doc-nav" aria-label="Site">
-        <a href="/" data-i18n="teach.nav.simulation">Simulation</a>
-        <a href="/model/" data-i18n="teach.nav.model">The model</a>
-        <a href="/validation/" data-i18n="teach.nav.validation">Validation</a>
-        <a href="/teaching/" aria-current="page" data-i18n="teach.nav.teaching"
-          >Teaching</a
-        >
-        <a href="/instructors/" data-i18n="teach.nav.instructors"
-          >Instructors</a
-        >
-      </nav>
-      <div
-        class="teach-lang"
-        id="teachLang"
-        role="group"
-        data-i18n-aria-label="teach.lang.label"
-        aria-label="Language"
-      ></div>
-    </header>
+    <!-- Spike: the shell replaces this page's own header, navigation and
+         language buttons. The page's language group stays, hidden, for its
+         script. -->
+    <div id="teachLang" hidden></div>
 
     <!-- Announcements for a reader who cannot see a figure appear. -->
     <p
@@ -324,27 +308,12 @@
       </section>
     </main>
 
-    <footer class="doc-foot">
-      <a href="/" data-i18n="teach.foot.home">Gravitas</a>
-      <span class="doc-foot-sep">·</span>
-      <a href="/model/" data-i18n="teach.foot.model">The model</a>
-      <span class="doc-foot-sep">·</span>
-      <a href="/validation/" data-i18n="teach.foot.validation">Validation</a>
-      <span class="doc-foot-sep">·</span>
-      <a href="/instructors/" data-i18n="teach.foot.instructors">Instructors</a>
-      <span class="doc-foot-sep">·</span>
-      <a
-        href="https://github.com/gravitas-sim/gravitas-sim.github.io"
-        rel="noopener"
-        data-i18n="teach.foot.source"
-        >Source</a
-      >
-      <span class="doc-foot-sep">·</span>
-      <span data-i18n="teach.foot.license">MIT licensed</span>
-    </footer>
+    <!-- Spike: the shell's footer replaces this page's. -->
 
     <script type="module">
       import { initTeachingPage } from '/js/teachingPage.js';
+      import { mountShell } from '/js/shell.js';
+      mountShell();
       initTeachingPage();
     </script>
   </body>

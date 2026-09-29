@@ -1,0 +1,324 @@
+{
+ "/3d/": {
+  "file": "3d/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/",
+   "/lab3d/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": []
+ },
+ "/catalog/": {
+  "file": "catalog/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/",
+   "/observatory/"
+  ],
+  "jsLinks": [
+   "/observatory/"
+  ],
+  "linkedFrom": [
+   "/observatory/"
+  ]
+ },
+ "/course/": {
+  "file": "course/index.html",
+  "shell": [
+   "locale"
+  ],
+  "links": [
+   "/",
+   "/studio/course/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/studio/course/"
+  ]
+ },
+ "/evaluation/": {
+  "file": "evaluation/index.html",
+  "shell": [],
+  "links": [
+   "/instructors/",
+   "/model/",
+   "/teaching/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/instructors/",
+   "/teaching/"
+  ]
+ },
+ "/experiments/": {
+  "file": "experiments/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": []
+ },
+ "/figure/": {
+  "file": "figure/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/"
+  ]
+ },
+ "/": {
+  "file": "index.html",
+  "shell": [
+   "app-menu",
+   "locale",
+   "footer"
+  ],
+  "links": [
+   "/figure/",
+   "/instructors/",
+   "/model/",
+   "/teaching/",
+   "/validation/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/3d/",
+   "/catalog/",
+   "/course/",
+   "/experiments/",
+   "/figure/",
+   "/instructors/",
+   "/lab3d/",
+   "/mission/",
+   "/mission/lab/",
+   "/model/",
+   "/observatory/",
+   "/studio/",
+   "/studio/course/",
+   "/studio/lesson/",
+   "/teaching/",
+   "/validation/"
+  ]
+ },
+ "/instructors/": {
+  "file": "instructors/index.html",
+  "shell": [
+   "doc-nav",
+   "footer"
+  ],
+  "links": [
+   "/",
+   "/evaluation/",
+   "/model/",
+   "/teaching/"
+  ],
+  "jsLinks": [
+   "/model/",
+   "/teaching/"
+  ],
+  "linkedFrom": [
+   "/",
+   "/evaluation/",
+   "/model/",
+   "/teaching/",
+   "/validation/"
+  ]
+ },
+ "/instructors/submissions/": {
+  "file": "instructors/submissions/index.html",
+  "shell": [
+   "locale"
+  ],
+  "links": [],
+  "jsLinks": [],
+  "linkedFrom": []
+ },
+ "/lab3d/": {
+  "file": "lab3d/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/3d/",
+   "/mission/"
+  ]
+ },
+ "/mission/": {
+  "file": "mission/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/",
+   "/lab3d/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/mission/lab/"
+  ]
+ },
+ "/mission/lab/": {
+  "file": "mission/lab/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/",
+   "/mission/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": []
+ },
+ "/model/": {
+  "file": "model/index.html",
+  "shell": [
+   "doc-nav",
+   "footer"
+  ],
+  "links": [
+   "/",
+   "/instructors/",
+   "/teaching/",
+   "/validation/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/",
+   "/evaluation/",
+   "/instructors/",
+   "/teaching/",
+   "/validation/"
+  ]
+ },
+ "/observatory/": {
+  "file": "observatory/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/",
+   "/catalog/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/catalog/"
+  ]
+ },
+ "/studio/course/": {
+  "file": "studio/course/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/",
+   "/course/",
+   "/studio/",
+   "/studio/lesson/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/course/"
+  ]
+ },
+ "/studio/": {
+  "file": "studio/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/studio/course/",
+   "/studio/lesson/"
+  ]
+ },
+ "/studio/lesson/": {
+  "file": "studio/lesson/index.html",
+  "shell": [
+   "back-link",
+   "locale"
+  ],
+  "links": [
+   "/",
+   "/studio/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/studio/course/"
+  ]
+ },
+ "/teaching/": {
+  "file": "teaching/index.html",
+  "shell": [
+   "doc-nav",
+   "footer"
+  ],
+  "links": [
+   "/",
+   "/evaluation/",
+   "/instructors/",
+   "/model/",
+   "/validation/"
+  ],
+  "jsLinks": [
+   "/instructors/",
+   "/model/",
+   "/validation/"
+  ],
+  "linkedFrom": [
+   "/",
+   "/evaluation/",
+   "/instructors/",
+   "/model/",
+   "/validation/"
+  ]
+ },
+ "/validation/": {
+  "file": "validation/index.html",
+  "shell": [
+   "doc-nav",
+   "footer"
+  ],
+  "links": [
+   "/",
+   "/instructors/",
+   "/model/",
+   "/teaching/"
+  ],
+  "jsLinks": [],
+  "linkedFrom": [
+   "/",
+   "/model/",
+   "/teaching/"
+  ]
+ }
+}

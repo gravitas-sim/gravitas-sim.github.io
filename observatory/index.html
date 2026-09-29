@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/components.css" />
     <link rel="stylesheet" href="/css/page.css" />
+    <link rel="stylesheet" href="/css/shell.css" />
     <style>
       /* Local to this page: a plot, an image, a grid and some forms. */
       .ow-wrap {
@@ -331,6 +332,7 @@
     >
       <div
         id="langSwitch"
+        hidden
         class="ow-actions"
         role="group"
         aria-label="Language"
@@ -342,7 +344,6 @@
         image at once.
       </p>
       <p>
-        <a href="/" data-i18n="obs.back">Back to Gravitas</a> ·
         <a href="../catalog/" data-i18n="obs.catalog"
           >Install more data from the catalog</a
         >
@@ -754,6 +755,10 @@
       </section>
       <p id="obsStatus" class="visually-hidden" role="status" aria-live="polite"></p>
     </main>
+    <script type="module">
+      import { mountShell } from '/js/shell.js';
+      mountShell();
+    </script>
     <script type="module" src="/js/observatoryPage.js"></script>
   </body>
 </html>

@@ -1,0 +1,194 @@
+{
+ "c1": {
+  "teaching/mouse": {
+   "reached": 19,
+   "missing": []
+  },
+  "teaching/keyboard": {
+   "reached": 19,
+   "missing": []
+  },
+  "teaching/touch": {
+   "reached": 19,
+   "missing": []
+  },
+  "observatory/mouse": {
+   "reached": 19,
+   "missing": []
+  },
+  "observatory/keyboard": {
+   "reached": 19,
+   "missing": []
+  },
+  "observatory/touch": {
+   "reached": 19,
+   "missing": []
+  }
+ },
+ "c2": {
+  "js/shell.js": {
+   "raw": 8266,
+   "gzip": 2866
+  },
+  "css/shell.css": {
+   "raw": 2576,
+   "gzip": 900
+  }
+ },
+ "c3": [
+  {
+   "page": "teaching",
+   "theme": "midnight",
+   "locale": "en",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "teaching",
+   "theme": "midnight",
+   "locale": "es",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "teaching",
+   "theme": "deep",
+   "locale": "en",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "teaching",
+   "theme": "deep",
+   "locale": "es",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "teaching",
+   "theme": "observatory",
+   "locale": "en",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "teaching",
+   "theme": "observatory",
+   "locale": "es",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "teaching",
+   "theme": "daylight",
+   "locale": "en",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "teaching",
+   "theme": "daylight",
+   "locale": "es",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "observatory",
+   "theme": "midnight",
+   "locale": "en",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "observatory",
+   "theme": "midnight",
+   "locale": "es",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "observatory",
+   "theme": "deep",
+   "locale": "en",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "observatory",
+   "theme": "deep",
+   "locale": "es",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "observatory",
+   "theme": "observatory",
+   "locale": "en",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "observatory",
+   "theme": "observatory",
+   "locale": "es",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "observatory",
+   "theme": "daylight",
+   "locale": "en",
+   "shell": [],
+   "page_": []
+  },
+  {
+   "page": "observatory",
+   "theme": "daylight",
+   "locale": "es",
+   "shell": [],
+   "page_": []
+  }
+ ],
+ "c4": [
+  {
+   "page": "teaching",
+   "width": 375,
+   "overflowPx": 0
+  },
+  {
+   "page": "teaching",
+   "width": 768,
+   "overflowPx": 0
+  },
+  {
+   "page": "teaching",
+   "width": 1024,
+   "overflowPx": 0
+  },
+  {
+   "page": "teaching",
+   "width": 1440,
+   "overflowPx": 0
+  },
+  {
+   "page": "observatory",
+   "width": 375,
+   "overflowPx": 0
+  },
+  {
+   "page": "observatory",
+   "width": 768,
+   "overflowPx": 0
+  },
+  {
+   "page": "observatory",
+   "width": 1024,
+   "overflowPx": 0
+  },
+  {
+   "page": "observatory",
+   "width": 1440,
+   "overflowPx": 0
+  }
+ ]
+}

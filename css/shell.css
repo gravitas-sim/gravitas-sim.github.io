@@ -1,0 +1,126 @@
+/* The Gravitas shell (spike, Roadmap II Prompt 49): header, navigation,
+   footer. Tokens only, so the four themes come with it. */
+.gs-shell {
+  position: relative;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+.gs-brand {
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.gs-shell button,
+.gs-shell select {
+  font: inherit;
+  color: var(--text-primary);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+  min-height: 32px;
+  cursor: pointer;
+}
+.gs-shell :focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+.gs-nav > ul {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.gs-nav li {
+  position: relative;
+  list-style: none;
+}
+.gs-nav ul ul {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 14rem;
+  margin: 0;
+  padding: var(--space-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.gs-nav ul ul a {
+  display: block;
+  padding: var(--space-1) var(--space-2);
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+.gs-nav ul ul a:hover,
+.gs-nav [aria-current='page'] {
+  background: var(--surface-3);
+}
+.gs-controls {
+  display: flex;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+.gs-toggle {
+  display: none;
+}
+.gs-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.gs-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: center;
+  padding: var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-sm);
+}
+.gs-foot a {
+  color: var(--text-secondary);
+}
+/* Under 768 px the groups stack behind one Menu button, full width. */
+@media (max-width: 767px) {
+  .gs-shell {
+    flex-wrap: wrap;
+  }
+  .gs-toggle {
+    display: inline-block;
+    margin-left: auto;
+  }
+  .gs-nav,
+  .gs-controls {
+    display: none;
+    width: 100%;
+  }
+  .gs-shell.is-open .gs-nav,
+  .gs-shell.is-open .gs-controls {
+    display: block;
+  }
+  .gs-nav > ul {
+    flex-direction: column;
+  }
+  .gs-nav ul ul {
+    position: static;
+    min-width: 0;
+  }
+  .gs-shell button {
+    width: 100%;
+    text-align: left;
+  }
+}
