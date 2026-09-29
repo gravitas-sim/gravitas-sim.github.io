@@ -17,7 +17,18 @@
 // =============================================================================
 
 import { createDocument } from './pdf.js';
+import { registerMessages } from './i18n/index.js';
 
+/** The report's strings, both languages, fetched the first time one is built. */
+let text = null;
+export const reportMessages = () =>
+  (text ??= Promise.all([
+    import('./i18n/en.report.js'),
+    import('./i18n/es.report.js'),
+  ]).then(([en, es]) => {
+    registerMessages('en', en.EN_REPORT);
+    registerMessages('es', es.ES_REPORT);
+  }));
 /**
  * Short, stable checksum over the report's contents.
  *
@@ -54,10 +65,10 @@ function tokenLines(token) {
   return lines;
 }
 
-const dateText = iso => {
+const dateText = (iso, locale) => {
   const d = iso ? new Date(iso) : new Date();
   if (Number.isNaN(d.getTime())) return '-';
-  return d.toLocaleDateString(undefined, {
+  return d.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -102,6 +113,9 @@ const plain = text =>
  * @param {Function} opts.decodeEntities - decodeEntities() from
  *   js/lessonMarkup.js. Passed in, like checkAnswer, so this file does not pull
  *   it into the notebook's chunk and cost every lesson a request.
+ * @param {Function} opts.t - The translator, passed in like checkAnswer: the
+ *   report is written in the language the student worked in
+ * @param {string} [opts.locale] - That language, for the dates
  * @returns {Uint8Array} PDF bytes
  */
 export function buildLabReport({
@@ -119,8 +133,14 @@ export function buildLabReport({
   binding = null,
   submissionToken = '',
   decodeEntities,
+  t,
+  locale = 'en',
 }) {
   const inv = investigation;
+  const stepsDone = t('rp.nOf', {
+    n: visited.size,
+    total: inv.steps.length,
+  });
   // For what the lesson says. What a student wrote goes through plain() as
   // typed: the completion code is computed over it.
   const lessonPlain = text => plain(decodeEntities(text));
@@ -141,11 +161,11 @@ export function buildLabReport({
       gap: 4,
     })
     .rule({ gap: 8 })
-    .row('Submitted by', name)
-    .row('Investigation', inv.id)
-    .row('Started', dateText(startedAt))
-    .row('Report generated', dateText(new Date().toISOString()))
-    .row('Steps completed', `${visited.size} of ${inv.steps.length}`);
+    .row(t('rp.by'), name)
+    .row(t('rp.inv'), inv.id)
+    .row(t('rp.start'), dateText(startedAt, locale))
+    .row(t('rp.made'), dateText(new Date().toISOString(), locale))
+    .row(t('rp.steps'), stepsDone);
 
   // --- Which activity this is ------------------------------------------------
   // An assignment is a subset of a lesson, so "12 of 12 steps" on its own is
@@ -157,15 +177,21 @@ export function buildLabReport({
   if (assignment) {
     doc
       .row(
-        'Assignment',
+        t('rp.asg'),
         `${plain(assignment.t || assignment.i)} (${assignment.i})`
       )
-      .row('Assignment version', `v${assignment.v}, issued ${assignment.c}`)
-      .row('Steps in this assignment', assignment.s.join(', '));
+      .row(
+        t('rp.asgV'),
+        t('rp.asgIssued', { v: assignment.v, date: assignment.c })
+      )
+      .row(t('rp.asgSteps'), assignment.s.join(', '));
     if (binding && (binding.changed || binding.missing)) {
       doc.row(
-        'Since this was set',
-        `${binding.changed} step(s) rewritten, ${binding.missing} no longer in the lesson`
+        t('rp.since'),
+        t('rp.sinceV', {
+          changed: binding.changed,
+          missing: binding.missing,
+        })
       );
     }
   }
@@ -173,14 +199,14 @@ export function buildLabReport({
 
   // --- Objectives ------------------------------------------------------------
   if (inv.objectives?.length) {
-    doc.heading('Learning objectives', { size: 12, spaceBefore: 8 });
+    doc.heading(t('rp.obj'), { size: 12, spaceBefore: 8 });
     for (const o of inv.objectives) {
       doc.paragraph(`- ${lessonPlain(o)}`, { size: 10, indent: 8, gap: 3 });
     }
   }
 
   // --- Responses -------------------------------------------------------------
-  doc.heading('Responses', { size: 14 });
+  doc.heading(t('rp.resp'), { size: 14 });
 
   let autoTotal = 0;
   let autoRight = 0;
@@ -225,8 +251,8 @@ export function buildLabReport({
         spaceBefore: 12,
       });
       doc.row(
-        'Exploration checklist',
-        `${done} of ${step.checklist.length} completed`
+        t('rp.check'),
+        t('rp.checkV', { done, total: step.checklist.length })
       );
       canonical.push(`${id}:explore=${done}`);
       return;
@@ -253,17 +279,20 @@ export function buildLabReport({
 
     if (step.type === 'predict') {
       const chosen =
-        typeof value === 'number' ? step.options[value] : '(no prediction)';
+        typeof value === 'number' ? step.options[value] : t('rp.noPred');
       // Predictions are reported, never marked. Their value is that the student
       // committed before seeing the answer.
-      doc.field(`Prediction: ${lessonPlain(step.prompt)}`, lessonPlain(chosen));
+      doc.field(
+        t('rp.pred', { prompt: lessonPlain(step.prompt) }),
+        lessonPlain(chosen)
+      );
       canonical.push(`${id}=${value}`);
       return;
     }
 
     if (step.kind === 'choice') {
       const chosen =
-        typeof value === 'number' ? step.options[value] : '(not answered)';
+        typeof value === 'number' ? step.options[value] : t('rp.noAns');
       const right = checkAnswer(step, value, id);
       if (right !== null && answered) {
         autoTotal++;
@@ -271,12 +300,14 @@ export function buildLabReport({
       }
       doc.field(lessonPlain(step.prompt), lessonPlain(chosen));
       doc.row(
-        'Result',
+        t('rp.result'),
         !answered
-          ? 'not answered'
+          ? t('rp.none')
           : right
-            ? 'correct'
-            : `incorrect (answer: ${lessonPlain(step.options[step.answer])})`
+            ? t('rp.right')
+            : t('rp.wrongChoice', {
+                answer: lessonPlain(step.options[step.answer]),
+              })
       );
       canonical.push(`${id}=${value}`);
       return;
@@ -294,12 +325,15 @@ export function buildLabReport({
       );
       const tries = attempts[id] || 0;
       doc.row(
-        'Result',
+        t('rp.result'),
         !answered
-          ? 'not answered'
-          : `${right ? 'correct' : 'incorrect'} - expected ${step.answer}${
-              step.tolerance ? ` +/- ${step.tolerance}` : ''
-            }${tries > 1 ? `, ${tries} attempts` : ''}`
+          ? t('rp.none')
+          : t('rp.expected', {
+              verdict: t(right ? 'rp.right' : 'rp.wrong'),
+              answer: `${step.answer}${
+                step.tolerance ? ` +/- ${step.tolerance}` : ''
+              }`,
+            }) + (tries > 1 ? t('rp.tries', { n: tries }) : '')
       );
       canonical.push(`${id}=${value}`);
       return;
@@ -308,7 +342,7 @@ export function buildLabReport({
     if (step.kind === 'short') {
       doc.field(lessonPlain(step.prompt), plain(value));
       if (step.rubric) {
-        doc.paragraph(`Marking note: ${lessonPlain(step.rubric)}`, {
+        doc.paragraph(t('rp.rubric', { note: lessonPlain(step.rubric) }), {
           size: 8.5,
           indent: 10,
           color: '0.45 0.45 0.52',
@@ -321,13 +355,8 @@ export function buildLabReport({
 
   // --- The student's own plot ------------------------------------------------
   if (plot?.points?.length) {
-    doc.heading('Your measurements, plotted', { size: 12 });
-    doc.paragraph(
-      'Each point is a value you measured. The dashed line is a least-squares ' +
-        'fit through the origin; a straight line through the origin is what a ' +
-        'power law looks like once the axes are chosen correctly.',
-      { size: 9, color: '0.35 0.35 0.42' }
-    );
+    doc.heading(t('rp.plot'), { size: 12 });
+    doc.paragraph(t('rp.plotNote'), { size: 9, color: '0.35 0.35 0.42' });
     doc.chart({
       points: plot.points,
       xLabel: plot.xLabel,
@@ -337,25 +366,20 @@ export function buildLabReport({
   }
 
   // --- Summary ---------------------------------------------------------------
-  doc.heading('Summary', { size: 14 });
-  doc.row('Steps completed', `${visited.size} of ${inv.steps.length}`);
+  doc.heading(t('rp.sum'), { size: 14 });
+  doc.row(t('rp.steps'), stepsDone);
   if (autoTotal) {
     doc.row(
-      'Automatically checked answers',
-      `${autoRight} of ${autoTotal} correct`
+      t('rp.auto'),
+      t('rp.autoV', { right: autoRight, total: autoTotal })
     );
   }
-  doc.row('Written answers', 'to be marked by the instructor');
+  doc.row(t('rp.written'), t('rp.writtenV'));
 
   const code = completionCode(canonical.join('\n'));
-  doc.row('Completion code', code);
+  doc.row(t('rp.code'), code);
   doc.space(4);
-  doc.paragraph(
-    'The completion code is a checksum of the answers above. It changes if the ' +
-      'report is edited, so it can be used to spot alterations, but it is ' +
-      'generated in the browser and is not proof of authorship.',
-    { size: 8.5, color: '0.45 0.45 0.52' }
-  );
+  doc.paragraph(t('rp.codeNote'), { size: 8.5, color: '0.45 0.45 0.52' });
 
   // --- Submission token ------------------------------------------------------
   //
@@ -373,14 +397,11 @@ export function buildLabReport({
   // '_' are base64url alphabet, not punctuation.
   if (submissionToken) {
     doc.pageBreak();
-    doc.heading('Submission token', { size: 14, spaceBefore: 0 });
-    doc.paragraph(
-      'For the instructor. Drop this PDF on the submission review page, or ' +
-        'copy the block below and paste it there. It carries the answers in ' +
-        'this report and nothing else - no name beyond the one above, and no ' +
-        'proof of authorship, which a browser cannot provide.',
-      { size: 9.5, color: '0.35 0.35 0.42' }
-    );
+    doc.heading(t('rp.token'), { size: 14, spaceBefore: 0 });
+    doc.paragraph(t('rp.tokenNote'), {
+      size: 9.5,
+      color: '0.35 0.35 0.42',
+    });
     doc.space(4);
     for (const line of tokenLines(submissionToken)) {
       // gap 1 so the lines stack as a block rather than as paragraphs, and a
@@ -393,14 +414,13 @@ export function buildLabReport({
 
   // --- Links -----------------------------------------------------------------
   if (links.length) {
-    doc.heading('Reproduce this investigation', { size: 12 });
-    doc.paragraph(
-      'Each link below reopens the exact simulation used in that step, so the ' +
-        'measurements in this report can be checked independently.',
-      { size: 9.5, color: '0.35 0.35 0.42' }
-    );
+    doc.heading(t('rp.links'), { size: 12 });
+    doc.paragraph(t('rp.linksNote'), {
+      size: 9.5,
+      color: '0.35 0.35 0.42',
+    });
     for (const l of links) {
-      doc.link(`Step ${l.step}: ${lessonPlain(l.title)}`, l.url);
+      doc.link(t('rp.link', { n: l.step, title: lessonPlain(l.title) }), l.url);
     }
   }
 

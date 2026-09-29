@@ -16,6 +16,8 @@
 import { describe, test, expect } from '@jest/globals';
 
 import { buildLabReport } from '../js/labReport.js';
+import { EN_REPORT } from '../js/i18n/en.report.js';
+import { ES_REPORT } from '../js/i18n/es.report.js';
 import { decodeEntities } from '../js/lessonMarkup.js';
 import { checkAnswer } from '../js/answerCheck.js';
 import {
@@ -31,12 +33,26 @@ const kepler = await import('../js/data/investigations/keplers-laws.js').then(
 
 const key = sid => stepKey(kepler.id, sid);
 
+/** The engine's translator, reduced to what the report needs: a catalog and {name} slots. */
+const translator = catalog => (id, vars) =>
+  String(catalog[id] ?? id).replace(/\{(\w+)\}/g, (whole, k) =>
+    vars && k in vars ? String(vars[k]) : whole
+  );
+
 /**
  * A report, from the arguments the engine passes. `locale` stands in for
  * getLocale() at the moment the student presses Download.
  */
-function report({ responses = {}, attempts = {}, visited, locale = 'en' }) {
+function report({
+  responses = {},
+  attempts = {},
+  visited,
+  locale = 'en',
+  reportLocale,
+}) {
   return buildLabReport({
+    locale: reportLocale || 'en',
+    t: translator(reportLocale === 'es' ? ES_REPORT : EN_REPORT),
     investigation: kepler,
     plot: null,
     name: 'Ada',
@@ -171,5 +187,42 @@ describe('a number typed under another convention', () => {
       'weighing-another-star'
     );
     expect(says).toMatch(/incorrect - expected 0\.91/);
+  });
+});
+
+describe('the language it is written in', () => {
+  // The report used to be English whatever the student worked in: every
+  // heading, every result and the notes an instructor reads.
+  const reached = () => new Set(kepler.steps.map(s => s.sid));
+
+  test('a Spanish student hands in a Spanish report', () => {
+    const lines = drawn(
+      report({
+        responses: { [key('where-is-the-star')]: 1 },
+        visited: reached(),
+        reportLocale: 'es',
+      })
+    );
+    const all = lines.join('\n');
+    for (const heading of ['Respuestas', 'Resumen', 'Entregado por']) {
+      expect(lines).toContain(heading);
+    }
+    expect(all).toMatch(/Resultado/);
+    for (const english of [
+      'Responses',
+      'Summary',
+      'Submitted by',
+      'Result',
+      'Steps completed',
+      'Completion code',
+    ]) {
+      expect(lines).not.toContain(english);
+    }
+  });
+
+  test('every report string exists in both languages', () => {
+    expect(Object.keys(ES_REPORT).sort()).toEqual(
+      Object.keys(EN_REPORT).sort()
+    );
   });
 });

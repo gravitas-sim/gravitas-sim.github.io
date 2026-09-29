@@ -145,14 +145,14 @@ import { normalizeSeed, formatSeed } from './rng.js';
 // every edge in it was lazy, a cycle that exists only because of a convenience
 // re-export is not one worth keeping.
 import { toast, announce } from './notify.js';
-import { buildLabReport, downloadPdf } from './labReport.js';
+import { buildLabReport, downloadPdf, reportMessages } from './labReport.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer, gradeAnswer, toleranceFor } from './answerCheck.js';
 import {
-  formatFieldNumber,
+  decimalSeparatorFor,
   localeOfAnswer,
-  parseFieldNumber,
+  parseNumber,
   recordAnswer,
 } from './answerParse.js';
 import {
@@ -477,14 +477,7 @@ async function downloadProgressBackup() {
   const blob = new Blob([JSON.stringify(payload, null, 2)], {
     type: 'application/json',
   });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = backup.backupFilename(active);
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+  saveFile(blob, backup.backupFilename(active));
   announce(t('inv.backup.downloaded'));
 }
 
@@ -1482,6 +1475,23 @@ function predictionAnsweredHere(step) {
 
 // --- Measured values ----------------------------------------------------------
 
+/** A field as a number: its own convention, trailing text NaN, ".5" kept. */
+function parseFieldNumber(raw, locale) {
+  const p = parseNumber(
+    String(raw ?? '')
+      .trim()
+      .replace(/^([+-]?)([.,])(?=\d)/, '$10$2'),
+    locale
+  );
+  return p.ok && !p.rest ? p.value : NaN;
+}
+
+/** A computed field's text, in the reader's convention. */
+const formatFieldNumber = (value, decimals, locale) =>
+  Number.isFinite(value)
+    ? value.toFixed(decimals).replace('.', decimalSeparatorFor(locale))
+    : '';
+
 /**
  * The numbers a student has typed into the current step, keyed by field id.
  * @param {Object} step - Step definition
@@ -1493,8 +1503,7 @@ function fieldValues(step, id) {
   for (const f of step.fields || []) {
     const key = `${id}:${f.id}`;
     const raw = responses[key];
-    // Under the convention it was typed in, as a single numeric answer is,
-    // so a Spanish "0,91" is 0.91 and not NaN.
+    // In the convention it was typed in: Number() made "0,91" NaN.
     out[f.id] = parseFieldNumber(
       raw,
       localeOfAnswer(responses, key, getLocale())
@@ -1527,8 +1536,7 @@ function recomputeFields(step, id) {
     } catch {
       next = NaN;
     }
-    // Written in the reader's convention, and recorded as such: "0.910" read
-    // back as Spanish would be nine hundred and ten.
+    // Recorded with its convention: "0.910" read as Spanish is 910.
     const locale = getLocale();
     const text = formatFieldNumber(next, f.decimals ?? 2, locale);
     const key = `${id}:${f.id}`;
@@ -2191,10 +2199,10 @@ function renderStep() {
         `<div class="inv-short-reveal">
            <button type="button" class="ui-button" data-reveal="${attr(id)}"
                    ${shown ? 'hidden' : ''} ${ready ? '' : 'disabled'}>
-             Compare with a model answer
+             ${escape(t('inv.model.compare'))}
            </button>
            <span class="inv-short-hint" data-reveal-hint ${shown || ready ? 'hidden' : ''}>
-             Write your own answer first.
+             ${escape(t('inv.model.writeFirst'))}
            </span>
            <div class="inv-because is-model" data-reveal-body ${shown ? '' : 'hidden'}>
              <strong>${escape(t('inv.answer.oneGood'))}</strong> ${prose(step.because)}
@@ -2267,7 +2275,7 @@ function renderStep() {
           const key = `${id}:${f.id}`;
           const derived = Boolean(f.compute);
           return `<label class="inv-field${derived ? ' is-derived' : ''}">
-              <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ' <span class="inv-field-auto">worked out for you</span>' : ''}</span>
+              <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ` <span class="inv-field-auto">${escape(t('inv.field.auto'))}</span>` : ''}</span>
               <input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
                      data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
@@ -3370,10 +3378,10 @@ function bindStepInputs() {
       setAreaSweepWedges(n);
       const ov = state.areaSweepOverlay;
       if (readout && ov?.wedgeTime) {
-        readout.innerHTML =
-          `Each slice is <strong>${(100 / n).toFixed(1)}%</strong> of the orbit's area, ` +
-          `and the planet spends <strong>${formatTime(ov.wedgeTime)}</strong> ` +
-          `traversing every one of them.`;
+        readout.innerHTML = t('inv.wedge.readout', {
+          share: formatFieldNumber(100 / n, 1, getLocale()),
+          time: escape(formatTime(ov.wedgeTime)),
+        });
       }
       responses[`${stepId(stepIndex)}:wedges`] = String(n);
       save();
@@ -3467,9 +3475,7 @@ function importSelection() {
     return;
   }
 
-  // The lesson writes these in JavaScript's convention, whatever the reader's
-  // language, so they are recorded as English: a Spanish reading of "0.910"
-  // would be nine hundred and ten.
+  // The lesson writes these the JavaScript way, so they are English.
   target.forEach((fid, i) => {
     if (values[i] !== undefined)
       recordAnswer(responses, `${id}:${fid}`, String(values[i]), 'en');
@@ -3477,7 +3483,7 @@ function importSelection() {
   save();
   renderStep();
   const h = els.body.querySelector('[data-import-hint]');
-  if (h) h.textContent = `Added ${values[0]}.`;
+  if (h) h.textContent = t('inv.import.added', { value: values[0] });
 }
 
 // --- Navigation ---------------------------------------------------------------
@@ -4552,11 +4558,15 @@ function openFinish() {
     return String(responses[id] ?? '').trim() !== '';
   }).length;
 
+  showToken('');
   els.finishSummary.innerHTML = `
-    <p>You have worked through <strong>${visited.size} of ${active.steps.length}</strong>
-       steps and answered <strong>${answered} of ${graded.length}</strong> questions.</p>
-    <p class="inv-finish-note">A report is only needed if you are submitting this for
-       credit. If you are here for your own interest, you can simply close the panel: your progress is saved either way.</p>`;
+    <p>${t('inv.finish.summary', {
+      visited: visited.size,
+      steps: active.steps.length,
+      answered,
+      graded: graded.length,
+    })}</p>
+    <p class="inv-finish-note">${escape(t('inv.finish.note'))}</p>`;
   els.nameInput.value = getStudentName();
   els.finish.classList.remove('hidden');
   els.nameInput.focus();
@@ -4566,15 +4576,124 @@ function closeFinish() {
   els.finish?.classList.add('hidden');
 }
 
-async function generateReport() {
+/**
+ * The submission token for what is on record now, or '' if it cannot be made.
+ *
+ * The return channel. Both modules are dynamic imports for the same reason
+ * the backup one is: a reader who never hands anything in never pays for the
+ * encoder, and the lesson engine is already the heaviest thing here.
+ *
+ * The roster id comes off the assignment link's query string rather than from
+ * any roster the application keeps, because it keeps none - an instructor who
+ * wants the class sorted puts ?roster=<whatever> on the link they hand out and
+ * it rides home in the token.
+ *
+ * @param {string} name - The name the student typed
+ * @returns {Promise<string>} The token
+ */
+async function makeSubmissionToken(name) {
+  try {
+    const backupMod = await import('./investigations/progressBackup.js');
+    const tokenMod = await import('./submission/submissionToken.js');
+    const encoded = await tokenMod.encodeSubmission(
+      tokenMod.buildSubmission({
+        backup: backupMod.buildBackup({
+          lesson: active,
+          responses,
+          attempts,
+          visited,
+          stepSid: active.steps[stepIndex]?.sid ?? null,
+          startedAt,
+          studentName: name,
+        }),
+        assignmentId: assignment?.i ?? null,
+        rosterId: new URLSearchParams(location.search).get('roster') || null,
+        fallbackLocale: getLocale(),
+      })
+    );
+    if (!encoded.comfortable) {
+      // Say so rather than hand over something that will be truncated at the
+      // far end, where the student cannot fix it.
+      console.warn(
+        `[gravitas] submission token is ${encoded.length} characters, over ` +
+          `the ${encoded.limit} this project treats as safely pasteable.`
+      );
+    }
+    return encoded.token;
+  } catch (err) {
+    // A report without a token is still a report. The completion code and
+    // every answer are on the page either way.
+    console.warn('[gravitas] could not build a submission token:', err);
+    return '';
+  }
+}
+
+/** The file name a student's report and token are saved under. */
+const reportSlug = name =>
+  `${name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}-${active.id}`;
+
+/** A file the browser saves. */
+function saveFile(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = name;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+/** The name typed in the finish dialog, or null having asked for one. */
+function finishName() {
   const name = els.nameInput.value.trim();
+  els.nameError.hidden = Boolean(name);
   if (!name) {
     els.nameInput.focus();
-    els.nameError.hidden = false;
+    return null;
+  }
+  setStudentName(name);
+  return name;
+}
+
+/** Put a token in the finish dialog's field, or clear it. */
+function showToken(token) {
+  els.token.value = token || '';
+  els.tokenBody.hidden = !token;
+}
+
+/** The token alone, to paste into a text box. */
+async function revealToken() {
+  const name = finishName();
+  if (!name) return;
+  const token = await makeSubmissionToken(name);
+  if (!token) {
+    toast(t('inv.token.failed'));
     return;
   }
-  els.nameError.hidden = true;
-  setStudentName(name);
+  showToken(token);
+  els.token.focus();
+  els.token.select();
+}
+
+async function copyToken() {
+  let ok = true;
+  try {
+    await navigator.clipboard.writeText(els.token.value);
+  } catch {
+    // Selected, so the reader can copy it themselves.
+    els.token.select();
+    ok = false;
+  }
+  toast(t(ok ? 'inv.token.copied' : 'inv.token.noCopy'));
+}
+
+async function generateReport() {
+  const name = finishName();
+  if (!name) return;
 
   els.downloadBtn.disabled = true;
   els.downloadBtn.textContent = t('inv.report.building');
@@ -4605,48 +4724,9 @@ async function generateReport() {
     }
     stepIndex = here;
 
-    // The return channel. Both modules are dynamic imports for the same reason
-    // the backup one is: a reader who never downloads a report never pays for
-    // the encoder, and the lesson engine is already the heaviest thing here.
-    //
-    // The roster id comes off the assignment link's query string rather than
-    // from any roster the application keeps, because it keeps none - an
-    // instructor who wants the class sorted puts ?roster=<whatever> on the
-    // link they hand out and it rides home in the token.
-    let submissionToken = '';
-    try {
-      const backupMod = await import('./investigations/progressBackup.js');
-      const tokenMod = await import('./submission/submissionToken.js');
-      const encoded = await tokenMod.encodeSubmission(
-        tokenMod.buildSubmission({
-          backup: backupMod.buildBackup({
-            lesson: active,
-            responses,
-            attempts,
-            visited,
-            stepSid: active.steps[stepIndex]?.sid ?? null,
-            startedAt,
-            studentName: name,
-          }),
-          assignmentId: assignment?.i ?? null,
-          rosterId: new URLSearchParams(location.search).get('roster') || null,
-          fallbackLocale: getLocale(),
-        })
-      );
-      submissionToken = encoded.token;
-      if (!encoded.comfortable) {
-        // Say so rather than hand over something that will be truncated at the
-        // far end, where the student cannot fix it.
-        console.warn(
-          `[gravitas] submission token is ${encoded.length} characters, over ` +
-            `the ${encoded.limit} this project treats as safely pasteable.`
-        );
-      }
-    } catch (err) {
-      // A report without a token is still a report. The completion code and
-      // every answer are on the page either way.
-      console.warn('[gravitas] could not build a submission token:', err);
-    }
+    const submissionToken = await makeSubmissionToken(name);
+    showToken(submissionToken);
+    await reportMessages();
 
     const bytes = buildLabReport({
       investigation: active,
@@ -4670,13 +4750,11 @@ async function generateReport() {
           locale: localeOfAnswer(responses, key, getLocale()),
         }),
       decodeEntities,
+      t,
+      locale: getLocale(),
     });
 
-    const slug = `${name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '')}-${active.id}`;
-    downloadPdf(bytes, `${slug}.pdf`);
+    downloadPdf(bytes, `${reportSlug(name)}.pdf`);
     toast(t('inv.report.done'));
     announce(t('inv.report.done'));
   } catch (err) {
@@ -4821,6 +4899,8 @@ export function initInvestigations() {
     nameInput: document.getElementById('investigationName'),
     nameError: document.getElementById('investigationNameError'),
     downloadBtn: document.getElementById('investigationDownload'),
+    token: document.getElementById('investigationToken'),
+    tokenBody: document.getElementById('investigationTokenBody'),
     finishClose: document.getElementById('investigationFinishClose'),
     finishBack: document.getElementById('investigationFinishBack'),
     resetBtn: document.getElementById('investigationReset'),
@@ -4920,6 +5000,17 @@ export function initInvestigations() {
   els.finishClose?.addEventListener('click', closeFinish);
   els.finishBack?.addEventListener('click', closeFinish);
   els.downloadBtn?.addEventListener('click', generateReport);
+  const on = (id, fn) =>
+    document.getElementById(id)?.addEventListener('click', fn);
+  on('investigationFinishProgress', downloadProgressBackup);
+  on('investigationTokenShow', revealToken);
+  on('investigationTokenCopy', copyToken);
+  on('investigationTokenSave', () =>
+    saveFile(
+      new Blob([`${els.token.value}\n`], { type: 'text/plain' }),
+      `${reportSlug(els.nameInput.value.trim() || 'token')}-token.txt`
+    )
+  );
   els.finish?.addEventListener('click', e => {
     if (e.target === els.finish) closeFinish();
   });

@@ -464,6 +464,68 @@ test.describe('the student report', () => {
     expect(bytes.length).toBeGreaterThan(2000);
     expect(bytes.subarray(0, 5).toString('latin1')).toBe('%PDF-');
   });
+
+  test('in Spanish, with the token to paste and a progress file beside the report', async ({
+    page,
+    app,
+  }) => {
+    // The dialog was English whatever the lesson was in, and the token existed
+    // only inside the PDF, where a learning management system's text box
+    // cannot reach it. Opened on the last step through the authoring preview,
+    // because what is checked is the dialog, not the walk to it.
+    await app.boot({ url: '/?author=keplers-laws&step=1' });
+    const total = await page.evaluate(async () => {
+      const data = await import('/js/data/investigations.js');
+      const i18n = await import('/js/i18n/index.js');
+      await i18n.setLocale('es');
+      return data.getInvestigation('keplers-laws').steps.length;
+    });
+    const url = `/?author=keplers-laws&step=${total}`;
+    await app.boot({ url });
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await page.locator('#investigationNext').click();
+
+    const dialog = page.locator('#investigationFinishContent');
+    await expect(dialog).toBeVisible();
+    await expect(page.locator('#investigationFinishTitle')).toHaveText(
+      'Terminado'
+    );
+    await expect(page.locator('#investigationFinishSummary')).toContainText(
+      /Has recorrido\s+\d+\s+de\s+\d+\s+pasos/
+    );
+    for (const english of ['Keep working', 'Finished', 'Your name']) {
+      await expect(dialog).not.toContainText(english);
+    }
+
+    // The token needs a name, as the report does.
+    const show = page.locator('#investigationTokenShow');
+    await show.click();
+    await expect(page.locator('#investigationNameError')).toBeVisible();
+    await page.locator('#investigationName').fill('Ada');
+    await show.click();
+    const token = page.locator('#investigationToken');
+    await expect(token).toHaveValue(/^s\d+[zr]/);
+    await expect(token).toHaveAttribute('readonly', '');
+    await expect(token).toBeFocused();
+    await expect(page.getByLabel(/Código de entrega/)).toHaveCount(1);
+
+    const [txt] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#investigationTokenSave').click(),
+    ]);
+    expect(txt.suggestedFilename()).toMatch(/-token\.txt$/);
+    const chunks = [];
+    for await (const chunk of await txt.createReadStream()) chunks.push(chunk);
+    expect(Buffer.concat(chunks).toString('utf8').trim()).toBe(
+      await token.inputValue()
+    );
+
+    const [backup] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#investigationFinishProgress').click(),
+    ]);
+    expect(backup.suggestedFilename()).toMatch(/\.json$/);
+  });
 });
 
 // =============================================================================

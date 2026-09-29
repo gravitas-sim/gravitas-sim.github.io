@@ -1,7 +1,5 @@
 import { describe, test, expect } from '@jest/globals';
 import {
-  formatFieldNumber,
-  parseFieldNumber,
   LOCALE_SUFFIX,
   PARSE_FAILURE,
   UNITS,
@@ -394,36 +392,5 @@ describe('the locale an answer was stored under', () => {
     for (const bad of ['', null, 7, {}]) {
       expect(localeOfAnswer({ 'k:s:locale': bad }, 'k:s', 'es')).toBe('es');
     }
-  });
-});
-
-describe('measure-step fields', () => {
-  test('a Spanish decimal comma is a number, not NaN', () => {
-    expect(parseFieldNumber('0,91', 'es')).toBe(0.91);
-    expect(parseFieldNumber('1 234,5', 'es')).toBe(1234.5);
-    expect(parseFieldNumber('0,910', 'es')).toBe(0.91);
-    expect(parseFieldNumber('0.91', 'en')).toBe(0.91);
-  });
-
-  test('keeps what Number() read, and what it refused', () => {
-    expect(parseFieldNumber('.5', 'en')).toBe(0.5);
-    expect(parseFieldNumber(',5', 'es')).toBe(0.5);
-    expect(parseFieldNumber('3.2e5', 'en')).toBe(320000);
-    expect(parseFieldNumber('-4', 'es')).toBe(-4);
-    for (const blank of ['', '   ', undefined, null]) {
-      expect(parseFieldNumber(blank, 'en')).toBeNaN();
-    }
-    // Trailing text was NaN under Number(), and still is.
-    expect(parseFieldNumber('5 AU', 'en')).toBeNaN();
-    expect(parseFieldNumber('Mercury', 'es')).toBeNaN();
-  });
-
-  test('a computed value is written so its own locale reads it back', () => {
-    for (const locale of ['en', 'es']) {
-      const text = formatFieldNumber(0.91, 3, locale);
-      expect(parseFieldNumber(text, locale)).toBe(0.91);
-    }
-    expect(formatFieldNumber(0.91, 3, 'es')).toBe('0,910');
-    expect(formatFieldNumber(NaN, 2, 'en')).toBe('');
   });
 });
