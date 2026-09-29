@@ -16,6 +16,7 @@
 // =============================================================================
 
 import { writeFileSync } from 'node:fs';
+import * as prettier from 'prettier';
 import process from 'node:process';
 import { REFERENCES } from '../js/lab3d/references.js';
 import { createLive, restartFrom } from '../js/lab3d/live.js';
@@ -217,9 +218,9 @@ if (isMain) {
       );
   }
   if (process.argv.includes('--write')) {
-    writeFileSync(
-      OUT,
-      `// =============================================================================
+    // Through Prettier, so the file is a fixed point of format:check.
+    const config = (await prettier.resolveConfig(OUT)) || {};
+    const text = `// =============================================================================
 // The 3-D curriculum's answer key (generated)
 // -----------------------------------------------------------------------------
 // Written by \`npm run lab3d:key -- --write\` from a reference run of every
@@ -230,7 +231,10 @@ if (isMain) {
 // =============================================================================
 
 export const LAB3D_KEY = ${JSON.stringify(rows, null, 2)};
-`
+`;
+    writeFileSync(
+      OUT,
+      await prettier.format(text, { ...config, filepath: OUT })
     );
     console.error(`Wrote ${OUT}: ${rows.length} rows.`);
   }
