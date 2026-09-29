@@ -1901,7 +1901,7 @@ async function sampleReport() {
   if (!c || blocking(verdict)) return setStatus(t('studio.status.fixFirst'));
   try {
     const [
-      { buildLabReport },
+      { buildLabReport, reportMessages },
       { checkAnswer },
       { decodeEntities },
       { stepKey },
@@ -1911,6 +1911,7 @@ async function sampleReport() {
       import('./lessonMarkup.js'),
       import('./investigations/progressSchema.js'),
     ]);
+    await reportMessages();
     const lesson = c.lesson;
     const responses = {};
     for (const s of lesson.steps) {
@@ -1939,6 +1940,8 @@ async function sampleReport() {
       binding: null,
       checkAnswer: (step, value) => checkAnswer(step, value, { locale: 'en' }),
       decodeEntities,
+      t,
+      locale: getLocale(),
     });
     if (reportUrl) URL.revokeObjectURL(reportUrl);
     reportUrl = URL.createObjectURL(

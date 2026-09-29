@@ -872,6 +872,36 @@ export const EN_DEFERRED = {
   'inv.report.done': 'Lab report downloaded',
   'inv.report.failed': 'Could not build the report.',
   'inv.report.download': 'Download lab report (PDF)',
+  'inv.finish.title': 'Finished',
+  'inv.finish.close': 'Close without downloading',
+  'inv.finish.summary':
+    'You have worked through <strong>{visited} of {steps}</strong> steps and answered <strong>{answered} of {graded}</strong> questions.',
+  'inv.finish.note':
+    'A report is only needed if you are submitting this for credit. If you are here for your own interest, you can simply close the panel: your progress is saved either way.',
+  'inv.finish.name': 'Your name, as it should appear on the report',
+  'inv.finish.namePh': 'e.g. Ada Lovelace',
+  'inv.finish.nameErr': 'Enter a name so the report can be attributed to you.',
+  'inv.finish.back': 'Keep working',
+  'inv.finish.fine':
+    'The report lists every question, your answers, and which of the automatically checked ones matched. It also carries links that reopen the exact simulations you used.',
+  'inv.finish.progress': 'Download a progress file',
+  'inv.token.show': 'Show the submission token',
+  'inv.token.label':
+    'Submission token. Paste it where your instructor asks for it.',
+  'inv.token.copy': 'Copy',
+  'inv.token.copied': 'Submission token copied.',
+  'inv.token.noCopy': 'Could not copy. Select the text and copy it yourself.',
+  'inv.token.save': 'Download as a text file',
+  'inv.token.failed':
+    'The submission token could not be made. The PDF report still carries every answer.',
+  'inv.field.auto': 'worked out for you',
+  'inv.model.compare': 'Compare with a model answer',
+  'inv.model.writeFirst': 'Write your own answer first.',
+  'inv.answer.change': 'Change answer',
+  'inv.answer.changed': 'Answer cleared. Your first answer is still on record.',
+  'inv.wedge.readout':
+    "Each slice is <strong>{share}%</strong> of the orbit's area, and the planet spends <strong>{time}</strong> traversing every one of them.",
+  'inv.import.added': 'Added {value}.',
   'inv.progress.cleared': 'Progress cleared',
   'inv.progress.steps': '{done} of {total} steps',
   'inv.scenario.reset': 'Scenario reset',

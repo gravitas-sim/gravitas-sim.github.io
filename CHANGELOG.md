@@ -845,6 +845,29 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **What a Spanish student handed in was partly English, and partly wrong.**
+  - A measurement typed the Spanish way ("1,52") was NaN to the step's own
+    check, so derived columns stayed blank and nothing was checked. Fields
+    now record the convention they were typed in, as a checked number does.
+  - The finish dialog, the model-answer controls, "worked out for you", the
+    wedge readout and every heading and result in the lab report were
+    literal English. They are translated, and the report is written in the
+    language the student worked in.
+- **The submission token could only be handed in as a PDF.** The finish
+  dialog now shows it in a read-only field with Copy and a .txt download,
+  for a learning management system that takes a text box, and offers a
+  progress file beside the report.
+- **A choice was final on the first click.** A graded choice now has Change
+  answer, as a number can be re-checked: the first answer and the count of
+  tries are kept, and the report says how many tries it took. A prediction
+  can be changed only until the step that shows its verdict.
+- **A re-issued assignment link lost the work done on it.** Progress was
+  kept under the assignment's id, which starts with the day it was made, so
+  the same worksheet handed out again on another day opened empty. It is
+  now kept under the lesson, the steps and the title; work under the old
+  key moves across the first time it is read. A new title is a new activity
+  and starts afresh, on purpose.
+
 - **An assignment link made on `v2` could not be opened by the deployed
   build.** Every link was written as version 2, which the site `main` serves
   refuses as "made by a newer version", and a browser still running its

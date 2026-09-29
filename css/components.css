@@ -2928,7 +2928,8 @@
     gap: var(--space-2);
     align-items: stretch;
   }
-  #shareUrl {
+  #shareUrl,
+  #investigationToken {
     flex: 1 1 auto;
     min-width: 0;
     padding: var(--space-2) var(--space-3);
@@ -2942,7 +2943,8 @@
        tell a truncated link from a complete one. */
     text-overflow: ellipsis;
   }
-  #shareUrl:focus {
+  #shareUrl:focus,
+  #investigationToken:focus {
     outline: var(--focus-ring);
     outline-offset: 1px;
   }
@@ -4436,6 +4438,7 @@
   }
   .inv-finish-actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--space-2);
     margin-top: var(--space-4);

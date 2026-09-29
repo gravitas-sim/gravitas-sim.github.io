@@ -363,6 +363,30 @@ test.describe('in Spanish', () => {
     );
   });
 
+  test('a measurement table reads a decimal comma too', async ({
+    page,
+    app,
+  }) => {
+    // A measure step's fields went through Number(), which reads "1,52" as
+    // NaN: every derived column stayed blank and the step's own check never
+    // ran, for anyone typing the way Spanish writes numbers.
+    await app.boot({ url: '/?author=keplers-laws&step=15' });
+    await page.evaluate(async () => {
+      const i = await import('/js/i18n/index.js');
+      await i.setLocale('es');
+    });
+    await app.boot({ url: '/?author=keplers-laws&step=15' });
+    const field = id => page.locator(`[data-field$=":${id}"]`);
+    await expect(field('k_a')).toBeVisible();
+
+    await field('k_a').fill('1,52');
+    await field('k_P').fill('1,874');
+    // Worked out, and written back the Spanish way: "1.000" read as Spanish
+    // would be one thousand.
+    await expect(field('k_ratio')).toHaveValue(/^1,0\d\d$/);
+    await expect(page.locator('[data-check-slot]')).toHaveClass(/is-ok/);
+  });
+
   test('switching language does not re-mark an answer already given', async ({
     page,
     app,

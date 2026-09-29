@@ -878,6 +878,37 @@ export const ES_DEFERRED = {
   'inv.report.done': 'Informe de laboratorio descargado',
   'inv.report.failed': 'No se pudo generar el informe.',
   'inv.report.download': 'Descargar informe de laboratorio (PDF)',
+  'inv.finish.title': 'Terminado',
+  'inv.finish.close': 'Cerrar sin descargar',
+  'inv.finish.summary':
+    'Has recorrido <strong>{visited} de {steps}</strong> pasos y has respondido <strong>{answered} de {graded}</strong> preguntas.',
+  'inv.finish.note':
+    'Solo necesitas un informe si vas a entregar esto para una calificación. Si estás aquí por tu propio interés, puedes cerrar el panel: tu progreso se guarda de todos modos.',
+  'inv.finish.name': 'Tu nombre, tal como debe aparecer en el informe',
+  'inv.finish.namePh': 'p. ej., Ada Lovelace',
+  'inv.finish.nameErr':
+    'Escribe un nombre para que el informe se te pueda atribuir.',
+  'inv.finish.back': 'Seguir trabajando',
+  'inv.finish.fine':
+    'El informe enumera cada pregunta, tus respuestas y cuáles de las comprobadas automáticamente coincidieron. También incluye enlaces que vuelven a abrir exactamente las simulaciones que usaste.',
+  'inv.finish.progress': 'Descargar un archivo de progreso',
+  'inv.token.show': 'Mostrar el código de entrega',
+  'inv.token.label': 'Código de entrega. Pégalo donde te lo pida tu profesor.',
+  'inv.token.copy': 'Copiar',
+  'inv.token.copied': 'Código de entrega copiado.',
+  'inv.token.noCopy': 'No se pudo copiar. Selecciona el texto y cópialo tú.',
+  'inv.token.save': 'Descargar como archivo de texto',
+  'inv.token.failed':
+    'No se pudo generar el código de entrega. El informe en PDF sigue incluyendo todas las respuestas.',
+  'inv.field.auto': 'calculado automáticamente',
+  'inv.model.compare': 'Comparar con una respuesta modelo',
+  'inv.model.writeFirst': 'Escribe primero tu propia respuesta.',
+  'inv.answer.change': 'Cambiar respuesta',
+  'inv.answer.changed':
+    'Respuesta borrada. Tu primera respuesta sigue registrada.',
+  'inv.wedge.readout':
+    'Cada porción es el <strong>{share} %</strong> del área de la órbita, y el planeta tarda <strong>{time}</strong> en recorrer cada una.',
+  'inv.import.added': 'Añadido: {value}.',
   'inv.progress.cleared': 'Progreso borrado',
   'inv.progress.steps': '{done} de {total} pasos',
   'inv.scenario.reset': 'Escenario reiniciado',
