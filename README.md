@@ -257,7 +257,7 @@ stops, and ends in a report file ([LAB3D_CURRICULUM.md](LAB3D_CURRICULUM.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->6743<!--/fact--> strings, and
+of <!--fact:uiStrings-->7036<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -293,7 +293,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->7071<!--/fact--> tests across <!--fact:jestSuites-->212<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->7090<!--/fact--> tests across <!--fact:jestSuites-->213<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -420,8 +420,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1454<!--/fact--> tests
-in <!--fact:e2eFiles-->116<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1463<!--/fact--> tests
+in <!--fact:e2eFiles-->117<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -578,6 +578,7 @@ part was built:
 | [`COMPOSER.md`](COMPOSER.md)                                       | The Investigation Composer: the pack and bank formats, variants from vetted relations, remediation, translation, and what it does not do     |
 | [`COURSE_PACKS.md`](COURSE_PACKS.md)                               | Course packs: the format, pins and the reviewed upgrade, the checks, links, the course home, the manifest and the course Gravitas ships      |
 | [`LAB3D.md`](LAB3D.md)                                             | The 3-D small-N kernel: its state format, integrators, runs, API, experiments, validation and limits                                         |
+| [`LAB3D_CURRICULUM.md`](LAB3D_CURRICULUM.md)                       | Orbits in three dimensions: the 3-D lab's four guided investigations, their concept map, the physics that checks them and the model's limits  |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
