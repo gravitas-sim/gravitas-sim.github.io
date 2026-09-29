@@ -30,6 +30,10 @@
 // units, and each point at each shift is then one lookup.
 // =============================================================================
 
+// Bound once, not read as globals: in Jest's vm context every free global read
+// goes through the context, which made these loops 8-25x slower than in Node.
+const { Math, Number, Float64Array, Int32Array } = globalThis;
+
 export const VERSION = '1.0.0';
 
 export class CurveError extends Error {

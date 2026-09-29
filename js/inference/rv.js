@@ -20,6 +20,10 @@
 // Pure: no DOM, no state.
 // =============================================================================
 
+// Bound once, not read as globals: in Jest's vm context every free global read
+// goes through the context, which made these loops 8-25x slower than in Node.
+const { Math, Float64Array } = globalThis;
+
 /**
  * The eccentric anomaly.
  * @param {number} M - Mean anomaly, radians
