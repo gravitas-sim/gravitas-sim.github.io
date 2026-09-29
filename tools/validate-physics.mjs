@@ -25,7 +25,7 @@
 
 import { writeFileSync } from 'node:fs';
 
-import { runChecks, groupResults } from './physics-checks.mjs';
+import { runChecks, groupResults } from '../js/validation/physicsChecks.js';
 import { KIND_SHORT } from '../js/physicsKinds.js';
 
 const argv = process.argv.slice(2);

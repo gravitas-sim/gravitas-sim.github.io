@@ -35,7 +35,7 @@
 //   node tools/reversibility-probe.mjs --json
 // =============================================================================
 
-import { installDomShim } from './dom-shim.mjs';
+import { installDomShim } from '../js/validation/domShim.js';
 import { substepPlan } from '../js/timestep.js';
 
 installDomShim();

@@ -170,6 +170,7 @@ export const GRAPH = Object.freeze([
       'e2e',
       'tools',
       'package.json',
+      'sw-manifest.js',
       'dist/build-summary.json',
     ],
     outputs: ['manual/facts.tex', 'CITATION.cff', '.zenodo.json'],

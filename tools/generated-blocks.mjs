@@ -425,10 +425,13 @@ export function generatedBlocks({
   physics = null,
   irreversible = null,
   graph = null,
+  precache = null,
 }) {
   return {
     ...(graph ? { generatedArtifacts: generatedArtifactsTable(graph) } : {}),
     doiBadge: doiBadgeBlock(),
+    // OFFLINE_AND_LOW_END.md's table, from the committed sw-manifest.js.
+    ...(precache ? { precache } : {}),
     citation: citationBlock(),
     ...(irreversible
       ? {

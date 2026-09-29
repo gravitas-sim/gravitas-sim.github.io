@@ -1,7 +1,7 @@
 // =============================================================================
 // When Orbits Lock, end to end
 // -----------------------------------------------------------------------------
-// The unit tests cover the analysis and tools/physics-checks.mjs covers the
+// The unit tests cover the analysis and js/validation/physicsChecks.js covers the
 // physics. What is left is the claim the lesson makes to a student: that they
 // can load these scenarios in this browser, watch, and get the four verdicts.
 //

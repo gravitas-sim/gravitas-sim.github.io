@@ -53,7 +53,7 @@
 // pass which would overshoot the optimum is a pass that hits the planet.
 //
 // Numbers in this file were measured through the engine, not derived and hoped
-// for. See tools/physics-checks.mjs, group "Gravity assist", and
+// for. See js/validation/physicsChecks.js, group "Gravity assist", and
 // e2e/assistExperiments.spec.js for the comparison and the sweep.
 // =============================================================================
 

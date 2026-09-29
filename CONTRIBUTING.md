@@ -35,7 +35,7 @@ Everything CI runs, you can run:
 npm test                  # jest: physics, data, formatting of numbers, i18n parity
 npm run lint              # eslint (prettier runs inside it)
 npm run format:check      # prettier, for the files it owns
-npm run docs:check        # the counts in the docs still match the source
+npm run docs:check:full   # every count in the docs matches the source, the test counts too
 npm run check:architecture  # no import cycles, no low-level module importing up
 npm run vendor:check      # vendor/ matches the pinned three.js, Chart.js and fonts
 npm run a11y              # axe over every surface, plus the keyboard checks

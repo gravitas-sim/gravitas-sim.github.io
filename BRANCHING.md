@@ -85,7 +85,7 @@ never be resolved with a whole-file choice:
 | `PHYSICS_VALIDATION.md` | Hand-written methodology around a generated coverage table |
 | `model/index.html` | The public physics-model page, with generated blocks inside it |
 | `ACCESSIBILITY.md`, `paper.md`, `index.html`, `js/i18n/en.js`, `js/i18n/es.js` | Prose and code around generated facts and attributes |
-| `tools/physics-checks.mjs` | Hand-written, and the file two branches will both append a validation group to |
+| `js/validation/physicsChecks.js` | Hand-written, and the file two branches will both append a validation group to |
 
 **`git checkout --ours/--theirs <path>` does not mean "take my side of these
 hunks."** It restores the whole file from that stage and discards every

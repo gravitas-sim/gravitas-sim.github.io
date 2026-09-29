@@ -12,10 +12,14 @@ into `sw-manifest.js` by `tools/build-service-worker.mjs`.
 
 ### Why the source tree and not `dist/`
 
-Gravitas is published as the repository root. There is no deploy step, `dist/`
-is gitignored, and GitHub Pages serves the unbundled sources — which is why the
-live site answers for `/js/physics.js`. So the precache list is the source tree,
-and the paths in it are the paths the browser actually requests.
+Gravitas publishes the committed repository tree, not `dist/`. The deploy job
+(RELEASE.md) exports the commit, stamps its pages, regenerates this manifest
+over the stamped bytes, and drops what the site does not serve (`spike/`,
+`tests/`, `e2e/` and `tools/`; `tools/prepare-pages.mjs`). `dist/` is
+gitignored and never published. GitHub Pages serves the unbundled sources,
+which is why the live site answers for `/js/physics.js`. So the precache list
+is the source tree, and the paths in it are the paths the browser actually
+requests.
 
 `sw.js` and `sw-manifest.js` are deliberately **not** copied into `dist/`. The
 precache list is source paths, and in a bundle those paths do not exist — a
@@ -41,39 +45,52 @@ JavaScript out of its own cache, and no error appears anywhere.
 
 ### What is precached
 
-| | Files | Raw | Gzipped |
-| --- | ---: | ---: | ---: |
-| JavaScript | 127 | 3,358 KB | 1,034 KB |
-| Scenario thumbnails and figures | 56 | 1,754 KB | 1,730 KB |
-| Stylesheets | 6 | 350 KB | 75 KB |
-| `index.html` | 1 | 93 KB | 21 KB |
-| **Total** | **190** | **5,554 KB** | **2,860 KB** |
+Measured from the committed `sw-manifest.js` and the files it lists, by
+`tools/precache-inventory.mjs`; gzip at level 6, as a typical server sends it.
 
-Pages serves gzip, so the real transfer is about 2.9 MB. The images dominate it
-and barely compress, being WebP already.
+<!--fact-block:precache-->
+| | Files | Raw |
+| --- | ---: | ---: |
+| JavaScript | 515 | 11.3 MB |
+| Images | 62 | 1.7 MB |
+| Stylesheets | 8 | 440 KB |
+| Fonts | 9 | 140 KB |
+| Pages | 6 | 220 KB |
+| Other | 1 | 20 KB |
+| **Total** | **601** | **13.9 MB** |
 
-Transfer time, computed from that payload rather than measured — CDP network
-emulation applies to page requests and not to a service worker's own fetches,
-so a measured figure here would have been throttling nothing:
+Of those, 471 are core (the install fails without them) and 130 optional (a missing one is reported and costs nothing).
+
+Gzipped, as Pages serves it, the whole is about 6 MB.
 
 | Link | Precache transfer |
 | --- | --- |
-| 10 Mbps | ~2 s |
-| 3 Mbps | ~7 s |
-| 1.5 Mbps | ~15 s |
+| 10 Mbps | ~5 s |
+| 3 Mbps | ~17 s |
+| 1.5 Mbps | ~34 s |
+<!--/fact-block-->
+Pages serves gzip, so the real transfer is about <!--fact:precacheGzipMB-->6<!--/fact--> MB. The images barely
+compress, being WebP already.
+
+The transfer times are computed from that payload rather than measured: CDP
+network emulation applies to page requests and not to a service worker's own
+fetches, so a measured figure here would have been throttling nothing.
 
 It runs in the background after the first frame, so this is time before the
 class is *protected*, not time before the application is usable.
 
-**Out**: the user manual PDF and the notebooks (downloads, not the shell), the
-`model/`, `instructors/` and `validation/` pages (runtime-cached), and
-`social-card.png` (only ever fetched by a link unfurler).
+**Out**: the user manual PDF and the notebooks (downloads, not the shell); the
+document pages other than the application itself, the Observatory, the
+catalog, the course home and the two labs (`model/`, `instructors/`,
+`validation/` and the rest are runtime-cached); the physics validation suite
+the `/validation/` page runs on demand; and `social-card.png` (only ever
+fetched by a link unfurler).
 
 ### Which of the <!--fact:investigations-->24<!--/fact--> lessons
 
 Each lesson is one dynamically imported file, so this is a real decision.
 
-**All <!--fact:investigations-->24<!--/fact--> English bodies are precached** — 553 KB, about a tenth of the
+**All <!--fact:investigations-->24<!--/fact--> English bodies are precached**, about a tenth of the
 payload. The reasoning: the lesson a class is already in when the wifi dies is
 by definition already fetched, so precaching buys nothing there. What it buys is
 the teacher who *switches lesson after the drop*, which is exactly the moment a
@@ -81,10 +98,10 @@ runtime cache has nothing. A tenth of the payload to remove that cliff is worth
 it, and picking a favorite subset would be guessing which lesson a class is
 about to want.
 
-**The twelve Spanish shadows are not** — a further 439 KB that is only ever
-fetched when the interface is in Spanish. They are runtime-cached on first use,
-and `js/offline.js` asks the worker to warm all twelve the moment the language
-is switched. A Spanish classroom is therefore covered from when it chooses
+**The <!--fact:spanishShadows-->24<!--/fact--> Spanish shadows are not**: they are only ever fetched
+when the interface is in Spanish. They are runtime-cached on first use, and
+`js/offline.js` asks the worker to warm all of them the moment the language is
+switched. A Spanish classroom is therefore covered from when it chooses
 Spanish, not from when it opens a lesson.
 
 ### Strategies

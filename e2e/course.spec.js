@@ -164,7 +164,9 @@ test.describe('the course home', () => {
     const href = await page
       .locator('#ch-item-a-first-transit .ch-actions a')
       .getAttribute('href');
-    expect(href).toMatch(/\/#a2[zr]/);
+    // Version 1: the item pins its steps but no package, so the deployed
+    // build, which reads only version 1, opens it too.
+    expect(href).toMatch(/\/#a1[zr]/);
     await page.goto(href, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('body')).toContainText(
       '6 steps of Finding Planets by Their Shadows',
@@ -262,7 +264,7 @@ test.describe('the course home offline', () => {
     await expect(page.locator('.ch-item')).toHaveCount(ITEMS.length);
     await expect(
       page.locator('#ch-item-a-first-transit .ch-actions a')
-    ).toHaveAttribute('href', /#a2[zr]/);
+    ).toHaveAttribute('href', /#a1[zr]/);
   });
 });
 
