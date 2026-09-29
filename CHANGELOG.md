@@ -39,9 +39,10 @@ the release rather than in the tag.
 - **The 3-D lab** (`/3d/`, LAB3D.md): small systems in three dimensions,
   played by the 3-D kernel in a Worker and drawn in WebGL, without touching
   the 2-D renderer.
-  - **Snapshots:** the page draws from versioned snapshots, by cubic Hermite
-    interpolation between them. Playing faster asks for more whole
-    intervals, never a longer step, so no number depends on the speed. API
+  - **Snapshots:** the page draws from versioned snapshots, interpolating
+    between their every-tick rows, and reads every number from a snapshot
+    as it is. Playing faster asks for more whole intervals, never a longer
+    step, so no number depends on the speed. API
     1.1.0 adds live sessions.
   - **The view:** looks face-on and edge-on to an orbit or the reference
     plane, perspective or orthographic, orbit, pan, zoom and follow.

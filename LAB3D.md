@@ -349,8 +349,14 @@ system plays as it runs.
 - **When the device is slower than the speed asked,** the clock waits for
   the kernel and says so.
 - **The frame drawn** is the moment between the two snapshots around the
-  clock, by cubic Hermite interpolation from both ends' positions and
-  velocities: exact for cubic motion, and never ahead of the newer snapshot.
+  clock, never ahead of the newer one. It is interpolated between that
+  snapshot's rows, which are every tick's positions, so its error is one
+  tick's, however many ticks a snapshot covers. (A first version used cubic
+  Hermite across the whole snapshot. At high speed that is most of an orbit,
+  and it drew bodies off their own trails.)
+- **Every number shown** (the tables, the instruments, the framing) is read
+  from the newest snapshot at or before the clock, as it is, never
+  interpolated.
 - **Trails** are the snapshots' interval positions up to the clock, never
   ahead of the bodies.
 
