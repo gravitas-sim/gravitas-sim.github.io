@@ -36,6 +36,25 @@ async function openLab(page, system = 'R3', { locale } = {}) {
   });
 }
 
+/** Whether this browser can give a canvas a WebGL context at all. */
+function hasWebGL(page) {
+  return page.evaluate(() => {
+    try {
+      const c = document.createElement('canvas');
+      return Boolean(c.getContext('webgl2') || c.getContext('webgl'));
+    } catch {
+      return false;
+    }
+  });
+}
+
+/** Without WebGL: the page says it cannot draw, and its tables still fill. */
+async function expectTablesOnly(page) {
+  expect(await page.evaluate(() => window.gravitasLab3d.webgl)).toBe(false);
+  await expect(page.locator('#l3-notice')).toContainText('no WebGL');
+  await expect(page.locator('#l3-state tbody tr').first()).toBeVisible();
+}
+
 const tau = page => page.evaluate(() => window.gravitasLab3d.tau);
 const pause = async page => {
   if (await page.evaluate(() => window.gravitasLab3d.playing))
@@ -78,6 +97,10 @@ test.describe('the 3-D lab', () => {
     page,
   }) => {
     await openLab(page, 'R3');
+    // A browser with no WebGL at all (CI's headless Linux Firefox) cannot
+    // draw. What the page must do then is say so and keep its tables, and
+    // that is what this asserts there; the picture is asserted elsewhere.
+    if (!(await hasWebGL(page))) return expectTablesOnly(page);
     expect(await page.evaluate(() => window.gravitasLab3d.webgl)).toBe(true);
     const t0 = await tau(page);
     await expect
@@ -114,6 +137,10 @@ test.describe('the 3-D lab', () => {
     page,
   }) => {
     await openLab(page, 'R4');
+    // A browser with no WebGL at all (CI's headless Linux Firefox) cannot
+    // draw. What the page must do then is say so and keep its tables, and
+    // that is what this asserts there; the picture is asserted elsewhere.
+    if (!(await hasWebGL(page))) return expectTablesOnly(page);
     await pause(page);
     await page.locator('#l3-frame').selectOption('pair:0,1');
     await expect(page.locator('#l3-legend')).toContainText(
@@ -184,6 +211,10 @@ test.describe('the 3-D lab', () => {
     page,
   }) => {
     await openLab(page, 'R1');
+    // A browser with no WebGL at all (CI's headless Linux Firefox) cannot
+    // draw. What the page must do then is say so and keep its tables, and
+    // that is what this asserts there; the picture is asserted elsewhere.
+    if (!(await hasWebGL(page))) return expectTablesOnly(page);
     await pause(page);
     await page.locator('#l3-canvas').focus();
     await page.keyboard.press('Space');
@@ -216,6 +247,10 @@ test.describe('the 3-D lab', () => {
     page,
   }) => {
     await openLab(page, 'R3');
+    // A browser with no WebGL at all (CI's headless Linux Firefox) cannot
+    // draw. What the page must do then is say so and keep its tables, and
+    // that is what this asserts there; the picture is asserted elsewhere.
+    if (!(await hasWebGL(page))) return expectTablesOnly(page);
     const ok = await page.evaluate(() => {
       const c = document.getElementById('l3-canvas');
       const gl = c.getContext('webgl2') || c.getContext('webgl');
