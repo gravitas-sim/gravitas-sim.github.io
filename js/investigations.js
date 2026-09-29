@@ -2196,7 +2196,7 @@ function renderStep() {
     parts.push(
       `<div class="inv-numeric">
          <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${id}"
-                value="${escape(saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
+                value="${attr(saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
          ${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}
          <button type="button" class="ui-button" data-check-numeric="${id}">${escape(t('inv.answer.check'))}</button>
        </div>`
@@ -2250,7 +2250,7 @@ function renderStep() {
           return `<label class="inv-field${derived ? ' is-derived' : ''}">
               <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ' <span class="inv-field-auto">worked out for you</span>' : ''}</span>
               <input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
-                     data-field="${key}" value="${escape(responses[key] ?? '')}"
+                     data-field="${key}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
                      placeholder="${escape(f.hint || '')}" />
             </label>`;
@@ -3254,16 +3254,22 @@ function bindStepInputs() {
       save();
       renderStep();
       const step = currentStep();
-      const right = checkAnswer(step, choice);
+      // A held prediction has no verdict yet, on screen or off it. This used to
+      // be graded here regardless, so a screen reader heard "Correct.", or the
+      // whole explanation, before the experiment meant to settle it, while the
+      // screen said only that the answer was recorded. The note renderStep()
+      // has just drawn under the options is what it hears now: the same words,
+      // by construction, and nothing the screen is keeping back.
       announce(
-        right
-          ? t('inv.answer.correct')
-          : `${t('inv.answer.recorded')} ${decodeEntities(
-              String(step.because ?? '').replace(
-                /<\/?(strong|em|sub|sup)>/g,
-                ''
-              )
-            )}`
+        els.body.querySelector('.inv-held')?.textContent ||
+          (checkAnswer(step, choice)
+            ? t('inv.answer.correct')
+            : `${t('inv.answer.recorded')} ${decodeEntities(
+                String(step.because ?? '').replace(
+                  /<\/?(strong|em|sub|sup)>/g,
+                  ''
+                )
+              )}`)
       );
     });
   });

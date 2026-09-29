@@ -810,7 +810,8 @@ export function initControls() {
   window.addEventListener('gravitasSimulationReset', () => {
     clearPlacementHistory();
     resetTimeline();
-    announce(`Scenario loaded: ${SETTINGS.preset_scenario}`);
+    // Once: every build fires this, each sweep trial too.
+    announce(`Scenario loaded: ${SETTINGS.preset_scenario}`, false);
   });
   setupTransport();
   setupViewMenu();

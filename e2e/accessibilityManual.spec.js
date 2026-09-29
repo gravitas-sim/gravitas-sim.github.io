@@ -344,6 +344,44 @@ test.describe('the simulation is described in words', () => {
       `the polite live region was written ${writes} times in six seconds of ordinary running`
     ).toBeLessThanOrEqual(1);
   });
+
+  test('a world rebuilt again and again says which scenario once', async ({
+    page,
+    app,
+  }) => {
+    // Every build fires gravitasSimulationReset, and js/controls.js announces
+    // the scenario from it. A parameter sweep builds the same world once per
+    // trial, and a lesson stage whose scene was replaced rebuilds it from a
+    // timer. announce() says a repeated message again now, so that a second
+    // "Correct." is heard; this caller asks not to be repeated, and a sweep
+    // must not read the scenario's name out once a trial.
+    await app.boot();
+    await app.loadScenario('Solar System');
+    const said = await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const el = document.getElementById('srStatus');
+      const states = [];
+      const observer = new window.MutationObserver(() =>
+        states.push(el.textContent)
+      );
+      observer.observe(el, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
+      for (let trial = 0; trial < 5; trial++) {
+        ui.initialize_simulation({ seed: 'e2e' });
+        await new Promise(r => setTimeout(r, 200));
+      }
+      observer.disconnect();
+      return states.filter(s => /^Scenario loaded:/.test(s.trim()));
+    });
+
+    expect(
+      said.length,
+      `five builds of one scenario announced it ${said.length} times`
+    ).toBeLessThanOrEqual(1);
+  });
 });
 
 test.describe('reflow and zoom', () => {

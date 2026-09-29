@@ -730,6 +730,107 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A saved answer with a double quote in it broke out of its box.**
+  - **What it did:** the lesson panel wrote a saved numeric answer and a
+    saved measure field back into `value="…"` with `escape()`, which is
+    `escapeHtml()` from `js/lessonMarkup.js`. That is for element text and
+    leaves `"` alone. A student who typed a quote got back only what came
+    before it, and the rest was read as more attributes of the box. Saved
+    answers are also restored from progress backups, which accept any string,
+    so an edited backup could put an `onfocus` on the lesson page and run it.
+  - **What it does now:** both use `attr()`, which `js/investigations.js`
+    already had for its other attributes. Nothing else in `js/` writes typed
+    or imported text into an attribute that way: the other panels' own
+    escapers already escape the quote.
+  - **Tests:** `e2e/answerEntry.spec.js` types a breakout string into the
+    numeric box of Kepler's Laws, and restores one from a crafted backup into
+    a measure field. Each step is reopened from storage in a fresh page, and
+    must hold the whole string, with no attribute added and nothing run when
+    it is focused.
+- **Fifteen expected observations reached no document.**
+  - **What it did:** the answer key leaves out a step that only asks students
+    to read or watch, and it left that step's expectation out with it. The
+    authoring rule `instructor/expectations` accepts an expectation on any
+    step, and its comment said the key printed one against every entry; for a
+    reading step it did not, and the instructor guide prints no expectations,
+    so 15 of the 238 were in neither. They were the balance point in Weighing
+    the Stars, both horizon screens of Black Holes by the Numbers, five
+    screens of Tides, three of What Is a Gravitational Wave?, and one each in
+    The Goldilocks Question, Can You Detect This Planet?, Listening to
+    Spacetime and A Universe of Stars.
+  - **What it does now:** a reading step with an expectation is printed in
+    the key like any other entry: its heading, "Reading", and the expected
+    observation. A reading step without one is still left out, and the key's
+    opening note says which. The expectations were kept rather than refused or
+    moved, because each describes its own screen (the numbers on its readout,
+    what to say aloud about it) and five of the steps beside them have one of
+    their own. The rule's comment now says what the key does, and its summary
+    no longer says an expectation must point at a step that grades.
+  - **Tests:** `tests/instructorMaterials.test.js` finds every expectation's
+    opening words under its own step's heading in its lesson's key, so one
+    printed against the wrong step fails as well as a missing one. Before
+    this change it failed the eight lessons above, and an expectation looked
+    up one step off fails all 24. "Reading-only steps are left out of the
+    key" now checks both halves on Black Holes by the Numbers, which has
+    both kinds.
+  - **Cost:** nothing in the browser; the keys are built in Node. The
+    published keys change when the encrypted instructor bundle is next
+    rebuilt, which needs the passphrase.
+- **A screen reader heard a repeated announcement once, and then never.**
+  - **What it did:** `announce()` in `js/notify.js` returned early when a
+    message was the one it had last written to `#srStatus`, and nothing
+    reset that. The lesson panel announces nothing between steps, so a
+    student who answered two graded choices right in a row heard "Correct."
+    for the first and silence for the second (Black Holes by the Numbers,
+    "What did doubling do?" then "Read the graph"). With held predictions
+    announcing their note, the two in a row in Lagrange Points that name the
+    same reveal step would have said it once. A toast repeated for a second
+    click was silent too.
+  - **What it does now:** a repeat is announced again. Writing the words the
+    region already holds is not a change a screen reader reads, so a repeat
+    gains or drops a trailing no-break space, which is not heard. The dedupe
+    had one real use, and it stays there: every world build announces
+    "Scenario loaded", and a parameter sweep builds the same world once per
+    trial, and a lesson stage whose scene was replaced rebuilds it from a
+    timer. That caller passes `again` false and says a scenario once until
+    something else is said. No other caller of `announce()` or `toast()`
+    fires on a timer or per frame.
+  - **Tests:** `tests/notify.test.js` announces a message, waits a frame and
+    announces it again, and checks the region changed each time and reads
+    the same words; `again` false says a repeat once. In
+    `e2e/investigations.spec.js`, a student resumed at "What did doubling
+    do?" answers it and the next step right, and a MutationObserver on
+    `#srStatus` must see "Correct." twice. `e2e/accessibilityManual.spec.js`
+    builds Solar System five times and allows one "Scenario loaded" at most.
+    The first two fail on v2, and the last fails without the caller's
+    `again` false.
+  - **Cost:** 29 bytes of start-up JavaScript and none deferred, and no
+    request. `js/notify.js` loads on every route, so in the sources, where
+    comments count, it is 321 bytes on the front door, the sandbox, every
+    lesson and the figure page. The front door and the sandbox have 109
+    bytes of their sources ceiling left. No ceiling moved.
+- **A screen reader was told how a held prediction did before the
+  experiment.**
+  - **What it did:** a prediction that names `reveal` shows no verdict and no
+    explanation until the student reaches that step, only the note that the
+    answer is recorded. The choice handler graded it anyway and announced the
+    result in `#srStatus`: "Correct." for a right answer, and "Recorded."
+    followed by the whole `because` for a wrong one. A screen-reader user
+    heard the answer key at the moment of commitment, in every lesson, while
+    a sighted student was told nothing.
+  - **What it does now:** a held prediction announces the note under its
+    options, read from the page, so it names the step that will settle it in
+    the same words, English or Spanish. A graded choice, and a prediction
+    whose reveal step has already been reached, still announce the verdict
+    at once.
+  - **Tests:** `e2e/predictionLoops.spec.js` now checks the announcement in
+    each of its sixteen loops, which commit a wrong answer: it must equal the
+    note and contain no sentence of the explanation. A new test commits a
+    right answer and checks "Correct." is not announced. Two more check that
+    a graded choice still announces "Correct." or "Recorded." with its
+    explanation. The held tests fail on v2.
+  - **Cost:** 46 bytes of deferred JavaScript, which is on every lesson
+    route, and no request.
 - **An instructor guide printed lesson markup as text.**
   - **What it did:** `js/instructorDocs.js` put the prose in
     `js/data/instructorContent.js` on the page as written, and Listening to
