@@ -2,7 +2,7 @@
   "format": "gravitas.capability-package",
   "formatVersion": 1,
   "id": "gravitas.lab3d",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "built-in",
   "gravitas": "^1.0.0",
   "title": {
@@ -13,6 +13,9 @@
     "routes": [
       {
         "path": "/lab3d/"
+      },
+      {
+        "path": "/3d/"
       }
     ],
     "models": [
@@ -61,6 +64,51 @@
       "path": "js/lab3d/references.js",
       "role": "code",
       "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/liveClient.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/live.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/snapshot.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/projection.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/instruments.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/frames.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/scene.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "js/lab3d/view/i18n.js",
+      "role": "code",
+      "offline": "optional"
+    },
+    {
+      "path": "vendor/three/lab3d.module.js",
+      "role": "code",
+      "offline": "optional"
     }
   ],
   "citations": [],
@@ -82,6 +130,12 @@
     },
     {
       "check": "e2e:e2e/lab3d.spec.js"
+    },
+    {
+      "check": "jest:tests/lab3dView.test.js"
+    },
+    {
+      "check": "e2e:e2e/lab3dView.spec.js"
     }
   ]
 }

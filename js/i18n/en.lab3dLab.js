@@ -2,6 +2,10 @@
 // ids. Read by js/lab3d/view/i18n.js.
 
 export const EN_LAB3DLAB = {
+  'l3.canvas':
+    'A 3-D view of the system; the tables below hold every number it shows',
+  'l3.region.state': 'Positions and speeds',
+  'l3.region.elements': 'Orbits',
   'l3.lang': 'Language',
   'l3.title': 'The 3-D lab',
   'l3.intro':

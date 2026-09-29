@@ -33,7 +33,8 @@ import {
   restartFrom,
 } from '../js/lab3d/live.js';
 import { handle } from '../js/lab3d/workerCore.js';
-import { LAB3D_API, createLab3d } from '../js/lab3d/api.js';
+import { LAB3D_API } from '../js/lab3d/api.js';
+import { createLiveSession } from '../js/lab3d/liveClient.js';
 import { FORMAT, placeByElements } from '../js/lab3d/state.js';
 import { fromElements } from '../js/lab3d/elements.js';
 import { REFERENCES } from '../js/lab3d/references.js';
@@ -292,9 +293,9 @@ describe('the live protocol', () => {
 
   test('the client plays a session, one advance at a time, and stops it', async () => {
     expect(LAB3D_API).toBe('1.1.0');
-    const lab = createLab3d({ spawn: () => fakeWorker() });
+    const spawn = () => fakeWorker();
     const system = kepler({ a: 1, e: 0.1, i: 0.2, Omega: 0, omega: 0, M: 0 });
-    const live = lab.live(system, { interval: 0.01 });
+    const live = createLiveSession({ spawn }, system, { interval: 0.01 });
     const { snapshot } = await live.ready;
     expect(snapshot.t).toBe(0);
     const p1 = live.advance(3);
@@ -303,7 +304,11 @@ describe('the live protocol', () => {
     expect((await p1).trailT).toHaveLength(3);
     live.stop();
     await expect(live.advance(1)).rejects.toMatchObject({ code: 'stopped' });
-    const refused = lab.live({ ...system, units: 'x' }, { interval: 0.01 });
+    const refused = createLiveSession(
+      { spawn },
+      { ...system, units: 'x' },
+      { interval: 0.01 }
+    );
     await expect(refused.ready).rejects.toMatchObject({ code: 'refused' });
   });
 });

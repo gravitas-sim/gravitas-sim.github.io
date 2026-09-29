@@ -2,6 +2,10 @@
 // ./en.lab3dLab.js. Lo lee js/lab3d/view/i18n.js.
 
 export const ES_LAB3DLAB = {
+  'l3.canvas':
+    'Una vista 3-D del sistema; las tablas de abajo contienen cada número que muestra',
+  'l3.region.state': 'Posiciones y velocidades',
+  'l3.region.elements': 'Órbitas',
   'l3.lang': 'Idioma',
   'l3.title': 'El laboratorio 3-D',
   'l3.intro':

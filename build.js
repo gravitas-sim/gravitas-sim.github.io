@@ -71,6 +71,7 @@ const DOC_PAGES = [
   'studio/course',
   'course',
   'lab3d',
+  '3d',
 ];
 
 // Archival pages: copied byte for byte, and never processed.
@@ -519,6 +520,25 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'lab3d-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The 3-D lab (/3d/): its own entry, with three.js from the lab's own
+  // vendored build (vendor/three/lab3d.module.js), so the application's 3-D
+  // view and every other page are untouched. Like the diagnostics page it
+  // never integrates: its live runs are the same Worker's.
+  if (existsSync('js/lab3dLab.js')) {
+    await esbuild.build({
+      entryPoints: ['js/lab3dLab.js'],
+      bundle: true,
+      minify: true,
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'lab3d-lab-[hash]',
       legalComments: 'none',
     });
   }

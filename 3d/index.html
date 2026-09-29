@@ -233,7 +233,8 @@
               id="l3-canvas"
               tabindex="0"
               role="img"
-              aria-roledescription="3-D view"
+              aria-label="A 3-D view of the system"
+              data-i18n-aria-label="l3.canvas"
               aria-describedby="l3-keys l3-legend"
             ></canvas>
             <div class="l3-labels" id="l3-labels" aria-hidden="true"></div>
@@ -343,8 +344,8 @@
         <h2 id="l3-scene-h" data-i18n="l3.scene.heading">What is in the view</h2>
         <p data-i18n="l3.scene.hint"></p>
         <ul class="l3-tree" id="l3-tree"></ul>
-        <div class="l3-scroll"><table class="l3-table" id="l3-state"></table></div>
-        <div class="l3-scroll"><table class="l3-table" id="l3-elements"></table></div>
+        <div class="l3-scroll" tabindex="0" role="region" aria-label="Positions and speeds" data-i18n-aria-label="l3.region.state"><table class="l3-table" id="l3-state"></table></div>
+        <div class="l3-scroll" tabindex="0" role="region" aria-label="Orbits" data-i18n-aria-label="l3.region.elements"><table class="l3-table" id="l3-elements"></table></div>
         <p class="l3-readout" id="l3-conserved"></p>
         <p class="l3-readout" id="l3-sync">
           <button id="l3-refresh" type="button" class="ui-button" data-i18n="l3.refresh">Update the tables</button>

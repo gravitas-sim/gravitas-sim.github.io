@@ -23,7 +23,7 @@ import {
   t,
   translatePage,
 } from './lab3d/view/i18n.js';
-import { createLab3d } from './lab3d/api.js';
+import { createLiveSession } from './lab3d/liveClient.js';
 import { migrateSystem, validateSystem, gravityOf } from './lab3d/state.js';
 import { REFERENCES } from './lab3d/references.js';
 import { frameAt, snapshotProblem } from './lab3d/snapshot.js';
@@ -48,12 +48,10 @@ import { formatNumber } from './format.js';
 import { createScene, PALETTE } from './lab3d/view/scene.js';
 
 const $ = id => document.getElementById(id);
-const lab = createLab3d({
-  spawn: () =>
-    new Worker(new URL('./lab3d/worker.js', import.meta.url), {
-      type: 'module',
-    }),
-});
+const spawn = () =>
+  new Worker(new URL('./lab3d/worker.js', import.meta.url), {
+    type: 'module',
+  });
 const MAX_FILE = 1024 * 1024;
 const BASE_RATE = 60; // intervals a second at x1
 const SPEEDS = [0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256];
@@ -211,7 +209,7 @@ async function start(system, extra = {}) {
   state.follow = -1;
   state.colors = system.bodies.map((_, i) => PALETTE[i % PALETTE.length]);
   state.options = { interval: state.interval, ...extra };
-  const session = lab.live(system, state.options);
+  const session = createLiveSession({ spawn }, system, state.options);
   state.session = session;
   status(t('l3.status.starting'));
   try {
@@ -234,8 +232,10 @@ async function start(system, extra = {}) {
     state.trailPoints
   );
   resetView();
-  notice(null);
+  // With no picture, its notice stays: the tables are the lab.
+  notice(state.scene ? null : t('l3.status.noWebgl'));
   updateTables(true);
+  document.documentElement.dataset.ready = 'true';
   if (!reduced()) play(true);
   else play(false);
 }

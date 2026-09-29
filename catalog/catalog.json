@@ -414,7 +414,7 @@
     },
     {
       "id": "gravitas.lab3d",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "kind": "built-in",
       "delivery": "built-in",
       "title": {
@@ -426,6 +426,9 @@
         "routes": [
           {
             "path": "/lab3d/"
+          },
+          {
+            "path": "/3d/"
           }
         ],
         "models": [
@@ -442,7 +445,7 @@
       ],
       "citations": [],
       "offline": "on-demand",
-      "bytes": 88878
+      "bytes": 622937
     },
     {
       "id": "gravitas.lesson.power-law-gravity",
