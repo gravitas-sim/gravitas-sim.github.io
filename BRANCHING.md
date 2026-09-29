@@ -47,18 +47,28 @@ on this branch can disturb what has already been archived.
 These files are build output. Resolving a conflict in one by hand produces a
 file that no generator would have produced, which is worse than either side.
 
-| File | Notes |
-| --- | --- |
-| `instructors/materials.enc.json` | **Conflicts on every merge, by design.** Fresh salt and IV per build, so the ciphertext differs in every byte even when the content is identical. Check `materials.manifest.json`'s digest to see whether anything actually changed. |
-| `instructors/materials.manifest.json` | Deterministic. If this is unchanged, the bundle's *content* is unchanged. |
-| `sw-manifest.js` | Precache list and version hash. |
-| `validation/data.json` | The physics suite's own output; the `/validation/` page paints from it. |
-| `CITATION.cff`, `.zenodo.json` | Generated from `tools/project-metadata.mjs`. |
-| `manual/facts.tex`, `manual/*.tex`, `Gravitas_User_Manual.pdf` | |
-| `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md` | |
-| `js/data/investigations/manifest.js`, `manifest.es.js`, `browseData.js` | |
-| `js/data/teachingGenerated.js` | |
-| `e2e/golden/world-construction.json` | Regenerate only deliberately — a change here means behaviour moved, not that a file went stale. |
+The table is written from `tools/generate-graph.mjs`, the list that
+`npm run generate` runs in order, so an artifact cannot be missing from it.
+
+<!--fact-block:generatedArtifacts-->
+| File | Made by | Notes |
+| --- | --- | --- |
+| `js/platform/catalog.generated.js`, `docs/capabilities.md` | `node tools/capabilities.mjs generate` |  |
+| `catalog/catalog.json` | `node tools/catalog.mjs generate` |  |
+| `js/data/investigations/manifest.js`, `js/data/investigations/manifest.es.js`, `js/data/investigations/browseData.js` | `node tools/build-investigation-manifest.js` |  |
+| `images/investigations` | `node tools/generate-lesson-cards.mjs` |  |
+| `js/data/teachingGenerated.js` | `node tools/build-teaching-demos.mjs` |  |
+| `images/scenarios` | `node tools/generate-scenario-thumbnails.mjs` |  |
+| `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md`, `js/data/investigations/provenance.js` | `node tools/lesson-scene-audit.mjs --write` |  |
+| `js/data/irreversible.js` | `node tools/build-irreversibility-audit.mjs` |  |
+| `validation/data.json` | `node tools/build-validation-data.mjs` | The physics suite's own output; the `/validation/` page paints from it. |
+| `tools/README.md` | `node tools/build-tools-index.mjs` |  |
+| `sw-manifest.js` | `node tools/build-service-worker.mjs` | Precache list and version hash. |
+| `manual/facts.tex`, `CITATION.cff`, `.zenodo.json` | `node tools/docs-facts.mjs --sync --full` |  |
+| `Gravitas_User_Manual.pdf`, `manual/scenarios.tex`, `manual/investigations.tex` | needs a LaTeX engine (npm run manual) |  |
+| `instructors/materials.enc.json`, `instructors/materials.manifest.json` | needs the instructor passphrase (npm run build:instructors) | **Conflicts on every merge, by design.** Fresh salt and IV per build, so the ciphertext differs in every byte even when the content is identical. Check `materials.manifest.json`'s digest to see whether anything actually changed. |
+| `e2e/golden/world-construction.json` | needs a deliberate decision (GRAVITAS_UPDATE_WORLD_GOLDEN=1, e2e/README.md) | Regenerate only deliberately — a change here means behaviour moved, not that a file went stale. |
+<!--/fact-block-->
 
 ### The files that are NOT on that list, and why it matters
 

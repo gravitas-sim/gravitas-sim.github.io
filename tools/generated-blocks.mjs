@@ -393,13 +393,41 @@ function doiBadgeBlock() {
   return `\n[![DOI](https://zenodo.org/badge/DOI/${d}.svg)](https://doi.org/${d})\n`;
 }
 
+/**
+ * BRANCHING.md's table of generated artifacts, from tools/generate-graph.mjs:
+ * every committed output, what makes it, and what a person resolving a
+ * conflict in it needs to know.
+ *
+ * @param {ReadonlyArray<object>} graph - The generate graph
+ * @returns {string} Markdown table
+ */
+export function generatedArtifactsTable(graph) {
+  const code = s => `\`${s}\``;
+  const rows = graph
+    .filter(n => !n.uncommitted)
+    .map(n => {
+      const by = n.generate ? code(n.generate) : `needs ${n.needs}`;
+      const note = n.notes || '';
+      return `| ${n.outputs.map(code).join(', ')} | ${by} | ${note} |`;
+    });
+  return [
+    '',
+    '| File | Made by | Notes |',
+    '| --- | --- | --- |',
+    ...rows,
+    '',
+  ].join('\n');
+}
+
 export function generatedBlocks({
   manifest,
   instructor,
   physics = null,
   irreversible = null,
+  graph = null,
 }) {
   return {
+    ...(graph ? { generatedArtifacts: generatedArtifactsTable(graph) } : {}),
     doiBadge: doiBadgeBlock(),
     citation: citationBlock(),
     ...(irreversible
