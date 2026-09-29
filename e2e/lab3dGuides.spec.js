@@ -308,6 +308,7 @@ test.describe('the 3-D lab’s guided investigations', () => {
     await page.reload({ waitUntil: 'domcontentloaded' });
     await expect(page.locator('#l3-guide')).toContainText('step 3 of 13');
     await expect(page.locator('#l3-guide-input')).toHaveValue('10');
+    await page.locator('#l3-guide nav summary').click();
     await page.locator('nav button[data-at="12"]').click();
     await page.locator('#l3-guide-finish').click();
     await expect(title(page)).toHaveText('Your report');

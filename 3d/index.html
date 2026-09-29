@@ -206,19 +206,18 @@
         gap: 0.6rem;
         grid-template-columns: minmax(0, 1fr);
       }
-      @media (min-width: 64rem) {
-        .l3-guide {
-          grid-template-columns: minmax(0, 1fr) minmax(0, 16rem);
-        }
-      }
       .l3-guide h2,
       .l3-guide h3 {
         margin: 0;
         font-size: 1.05rem;
       }
       .l3-guide ol {
-        margin: 0;
+        margin: 0.4rem 0 0;
         padding-left: 1.2rem;
+      }
+      .l3-guide summary {
+        cursor: pointer;
+        font-size: 0.88rem;
       }
       .l3-guide .l3-steplink {
         font: inherit;
@@ -279,7 +278,6 @@
       <p>
         <button id="l3-guides" type="button" class="ui-button" data-i18n="l3.guides">Guided investigations</button>
       </p>
-      <section class="l3-guide" id="l3-guide" aria-labelledby="l3-guide-h" hidden></section>
 
       <div class="l3-top">
         <div>
@@ -301,6 +299,7 @@
         </div>
 
         <div class="l3-panel">
+          <section class="l3-guide" id="l3-guide" aria-labelledby="l3-guide-h" hidden></section>
           <fieldset>
             <legend data-i18n="l3.system">System</legend>
             <div class="l3-row">

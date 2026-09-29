@@ -381,9 +381,24 @@ export function createGuidePanel(root, lab) {
         })
       )
     );
+    // The steps, folded away: beside the view the panel has room for one step.
+    const done = steps.filter(q =>
+      ['passed', 'shown', 'recorded'].includes(status(q))
+    ).length;
     root.replaceChildren(
       body,
-      el('nav', { 'aria-label': tr('g3.progress') }, list)
+      el(
+        'nav',
+        { 'aria-label': tr('g3.progress') },
+        el(
+          'details',
+          {},
+          el('summary', {
+            text: tr('g3.stepsDone', { done, of: steps.length }),
+          }),
+          list
+        )
+      )
     );
     wire(s);
     refresh();
