@@ -40,7 +40,6 @@ current, and the orchestrator checks it.
 | `check-test-policy.mjs` | A skip has to be a capability, and it has to be on the record | `npm run test:policy` |
 | `checks.mjs` | One list of what has to pass |  |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
-| `dom-shim.mjs` | A browser-shaped hole, just big enough for the physics to fall through |  |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |
 | `empty-world.mjs` | A world with nothing in it |  |
 | `evaluation-summary.mjs` | npm run evaluation:summary -- <files...> | `npm run evaluation:summary` |
@@ -73,9 +72,9 @@ current, and the orchestrator checks it.
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
-| `physics-checks.mjs` | The scientific validation suite |  |
 | `playwright-cache.mjs` | A Playwright transform cache that no other process is writing |  |
 | `populations-reference.mjs` | Stars and their populations: the reference run, and its answer key | `npm run guides:populations-key` |
+| `precache-inventory.mjs` | What the service worker precaches, measured |  |
 | `prepare-pages.mjs` | Assemble the tree that gets published |  |
 | `project-metadata.mjs` | The project's own description of itself |  |
 | `release-check.mjs` | npm run release:check | `npm run release:check` |
