@@ -246,6 +246,15 @@ number is also in tables that work without WebGL, and the keyboard does
 everything the pointer does. `/lab3d/` is the kernel's diagnostic page
 ([LAB3D.md](LAB3D.md)).
 
+Four guided investigations in the lab ask what a flat model cannot hold:
+- an orbit's plane;
+- whether a tilted orbit eclipses its star;
+- two orbits' planes;
+- the Kozai-Lidov cycle a distant third body drives.
+
+Each takes a prediction, a measurement and a statement of where the model
+stops, and ends in a report file ([LAB3D_CURRICULUM.md](LAB3D_CURRICULUM.md)).
+
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
 of <!--fact:uiStrings-->6743<!--/fact--> strings, and

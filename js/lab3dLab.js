@@ -18,6 +18,7 @@
 import {
   LANGUAGES,
   language,
+  loadLanguage,
   preferred,
   setLanguage,
   t,
@@ -1190,8 +1191,11 @@ function retranslate() {
   tell();
 }
 
-function init() {
-  setLanguage(preferred());
+async function init() {
+  // A Spanish reader's catalog, before anything is written in it.
+  const lang = preferred();
+  await loadLanguage(lang);
+  setLanguage(lang);
   $('l3-reduced').checked = Boolean(reducedQuery?.matches);
   const weak =
     (navigator.hardwareConcurrency || 8) <= 2 ||
@@ -1203,9 +1207,10 @@ function init() {
   retranslate();
   setupScene();
 
-  $('langSwitch').addEventListener('click', e => {
+  $('langSwitch').addEventListener('click', async e => {
     const b = e.target.closest('button[data-lang]');
     if (!b) return;
+    await loadLanguage(b.dataset.lang);
     setLanguage(b.dataset.lang);
     retranslate();
   });

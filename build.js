@@ -533,7 +533,11 @@ async function buildDocPages() {
       entryPoints: ['js/lab3dLab.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // Without keepNames: with it, the lazy guide panel (Prompt 37) gets
+      // esbuild's __name helper in a 95-byte chunk of its own, one request
+      // more for every reader of the lab, and nothing in the lab reads a
+      // function's name.
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
