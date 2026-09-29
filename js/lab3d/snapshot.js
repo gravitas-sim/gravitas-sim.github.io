@@ -16,10 +16,13 @@
 //    errors: {energy, angularMomentum, momentum},  against the session start
 //    status}                null while live, else why it stopped
 //
-// Between two snapshots a page draws with cubic Hermite interpolation of
-// position from both ends' positions and velocities: exact for uniform
-// motion, third order in the gap, and never a guess past the newer snapshot.
-// A body that merged between them is drawn where the newer one says.
+// Between two snapshots a page draws from the newer one's trail rows, which
+// are every interval's positions: a cubic through the four rows around the
+// moment (Catmull-Rom on a uniform grid), so the error is set by one tick of
+// the kernel, however many ticks a snapshot covers. With no rows it falls
+// back to cubic Hermite from both ends' positions and velocities. A body that
+// merged is drawn where the newer snapshot says. Numbers a reader measures
+// come from a snapshot itself, never from these.
 // =============================================================================
 
 export const SNAPSHOT_FORMAT = 'gravitas.lab3d.snapshot';
@@ -137,3 +140,85 @@ export function frameAt(a, b, t) {
     v: a ? interpolateVelocity(a, b, t) : b.v.slice(),
   };
 }
+
+/**
+ * Positions at time t from b's trail rows (every interval since a), with a's
+ * positions as the row before the first: a cubic through the four rows around
+ * t. Falls back to interpolate() when b has no rows.
+ * @returns {Float64Array} 3n positions
+ */
+export function positionsAt(a, b, t, out = new Float64Array(b.x.length)) {
+  const k = b.trailT.length;
+  if (!a || !k || a.x.length !== b.x.length)
+    return a ? interpolate(a, b, t, out) : (out.set(b.x), out);
+  const n3 = b.x.length;
+  // Row r: -1 is a's positions, 0..k-1 are b's trail rows.
+  const T = r => (r < 0 ? a.t : b.trailT[Math.min(r, k - 1)]);
+  const row = r =>
+    r < 0
+      ? a.x
+      : b.trail.subarray(
+          Math.min(r, k - 1) * n3,
+          (Math.min(r, k - 1) + 1) * n3
+        );
+  if (t <= a.t) {
+    out.set(a.x);
+    return out;
+  }
+  if (t >= b.trailT[k - 1]) {
+    out.set(row(k - 1));
+    return out;
+  }
+  let j = 0;
+  while (j < k && b.trailT[j] < t) j++;
+  // t lies in [T(j - 1), T(j)].
+  const t1 = T(j - 1);
+  const t2 = T(j);
+  const s = (t - t1) / (t2 - t1);
+  const p1 = row(j - 1);
+  const p2 = row(j);
+  // Neighbors outside the rows repeat the end, which makes that end's
+  // tangent one-sided rather than inventing a point.
+  const p0 = j - 2 >= -1 ? row(j - 2) : p1;
+  const p3 = j + 1 <= k - 1 ? row(j + 1) : p2;
+  const s2 = s * s;
+  const s3 = s2 * s;
+  for (let q = 0; q < n3; q++) {
+    const m1 = (p2[q] - p0[q]) / 2;
+    const m2 = (p3[q] - p1[q]) / 2;
+    out[q] =
+      (2 * s3 - 3 * s2 + 1) * p1[q] +
+      (s3 - 2 * s2 + s) * m1 +
+      (-2 * s3 + 3 * s2) * p2[q] +
+      (s3 - s2) * m2;
+  }
+  const i0 = b.m.length;
+  for (let i = 0; i < i0; i++)
+    if (!b.alive[i] || !a.alive[i] || a.m[i] !== b.m[i])
+      for (let c = 0; c < 3; c++) out[3 * i + c] = b.x[3 * i + c];
+  return out;
+}
+
+/**
+ * The frame a page draws at t: positions from the trail rows, velocities by
+ * Hermite from the snapshots' own (for arrows only), masses and liveness of
+ * the newer snapshot.
+ */
+export function drawnAt(a, b, t) {
+  return {
+    t: Math.min(Math.max(t, a ? a.t : b.t), b.t),
+    m: b.m,
+    alive: b.alive,
+    x: positionsAt(a, b, t),
+    v: a ? interpolateVelocity(a, b, t) : b.v.slice(),
+  };
+}
+
+/** A snapshot's own state as a frame: what the tables and instruments read. */
+export const exactFrame = s => ({
+  t: s.t,
+  m: s.m,
+  alive: s.alive,
+  x: s.x,
+  v: s.v,
+});

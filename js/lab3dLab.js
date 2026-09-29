@@ -26,7 +26,7 @@ import {
 import { createLiveSession } from './lab3d/liveClient.js';
 import { migrateSystem, validateSystem, gravityOf } from './lab3d/state.js';
 import { REFERENCES } from './lab3d/references.js';
-import { frameAt, snapshotProblem } from './lab3d/snapshot.js';
+import { drawnAt, exactFrame, snapshotProblem } from './lab3d/snapshot.js';
 import { restartFrom } from './lab3d/live.js';
 import { toFrame, trailToFrame, frameKey } from './lab3d/view/frames.js';
 import {
@@ -332,14 +332,26 @@ async function stepOnce() {
 
 // --- Drawing ------------------------------------------------------------------------
 
-/** The snapshots around the clock, and the frame between them. */
+/** The snapshots around the clock, and the frame drawn between them. */
 function currentFrame() {
   const snaps = state.snaps;
   if (!snaps.length) return null;
   let b = snaps.length - 1;
   while (b > 0 && snaps[b - 1].t >= state.tau) b--;
   const a = b > 0 ? snaps[b - 1] : null;
-  return frameAt(a, snaps[b], state.tau);
+  return drawnAt(a, snaps[b], state.tau);
+}
+
+/**
+ * The newest snapshot at or before the clock, as it is: what the tables,
+ * the instruments and the framing read, so no number shown is interpolated.
+ */
+function numbersFrame() {
+  const snaps = state.snaps;
+  if (!snaps.length) return null;
+  let i = snaps.length - 1;
+  while (i > 0 && snaps[i].t > state.tau) i--;
+  return exactFrame(snaps[i]);
 }
 
 function display(f) {
@@ -437,11 +449,11 @@ function frame(now) {
     state.lastLegend = now;
     legend();
     clock();
-    reading(f, d);
+    reading(numbersFrame());
   }
   if (state.playing && $('l3-live').checked && now - state.lastTables > 1000) {
     state.lastTables = now;
-    updateTables(false, f, d);
+    updateTables(false);
   }
 }
 
@@ -504,7 +516,10 @@ function extent(f, d) {
     if (!f.alive[i] || !inView.has(i)) continue;
     r = Math.max(r, Math.hypot(...at(i)));
     const p = h.primary[i];
-    if (p < 0 || !inView.has(p)) continue;
+    // Only where the primary dominates: two comparable masses have no
+    // two-body orbit worth framing (the figure-eight's would be ten times
+    // too wide).
+    if (p < 0 || !inView.has(p) || f.m[p] < 10 * f.m[i]) continue;
     const e = elementsAbout(f, i, p, G());
     if (e?.bound) r = Math.max(r, Math.hypot(...at(p)) + e.a * (1 + e.e));
   }
@@ -512,7 +527,7 @@ function extent(f, d) {
 }
 
 function resetView() {
-  const f = currentFrame();
+  const f = numbersFrame();
   if (!f) return;
   const d = display(f);
   const reach = extent(f, d);
@@ -549,7 +564,7 @@ function changeFrame() {
 function fillBodySelects() {
   const n = state.system.bodies.length;
   const bodies = state.system.bodies.map((_, i) => [String(i), nameOf(i)]);
-  const f = currentFrame();
+  const f = numbersFrame();
   const h = f ? hierarchy(f) : null;
   const frames = [
     ['barycentric', t('l3.frame.barycentric')],
@@ -735,11 +750,11 @@ function clock() {
   if (c.textContent !== text) c.textContent = text;
 }
 
-function updateTables(force, f0, d0) {
+function updateTables(force) {
   if (!force && !$('l3-live').checked) return;
-  const f = f0 || currentFrame();
+  const f = numbersFrame();
   if (!f) return;
-  const d = d0 || display(f);
+  const d = display(f);
   const h = hierarchy(f);
   const n = f.m.length;
 
@@ -1128,7 +1143,7 @@ function init() {
     },
     camera: () => state.scene?.readCamera() ?? null,
     frame: () => {
-      const f = currentFrame();
+      const f = numbersFrame();
       return (
         f && {
           t: f.t,

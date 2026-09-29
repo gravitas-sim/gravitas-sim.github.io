@@ -24,6 +24,9 @@ import {
   SNAPSHOT_VERSION,
   frameAt,
   interpolate,
+  positionsAt,
+  drawnAt,
+  exactFrame,
   interpolateVelocity,
   snapshotProblem,
 } from '../js/lab3d/snapshot.js';
@@ -172,6 +175,35 @@ describe('snapshots', () => {
         trailT: Float64Array.of(0),
       })
     ).toBe('trail');
+  });
+});
+
+describe('drawing between snapshots', () => {
+  test('a wide snapshot is drawn from its rows, to a tick, where Hermite across it is not', () => {
+    // An eccentric orbit, and a snapshot that covers 256 ticks: most of it.
+    const system = kepler({ a: 1, e: 0.6, i: 0.4, Omega: 0, omega: 0, M: 0 });
+    const dt = TAU / 400;
+    const coarse = createLive(system, { interval: dt }).session;
+    const a = coarse.advance(10);
+    const b = coarse.advance(256);
+    // The rows are exact at their own times.
+    const at = positionsAt(a, b, b.trailT[99]);
+    expect([...at]).toEqual([...b.trail.subarray(99 * 6, 100 * 6)]);
+    // Half-way through tick 100, against a run with half the tick.
+    const fine = createLive(system, { interval: dt / 2 }).session;
+    const truth = fine.advance(2 * (10 + 100) + 1);
+    const t = truth.t;
+    expect(t).toBeCloseTo((b.trailT[99] + b.trailT[100]) / 2, 12);
+    const rows = positionsAt(a, b, t);
+    const whole = interpolate(a, b, t);
+    const err = x =>
+      Math.hypot(x[3] - truth.x[3], x[4] - truth.x[4], x[5] - truth.x[5]);
+    expect(err(rows)).toBeLessThan(1e-6);
+    // What the first version drew: off the orbit by a visible amount.
+    expect(err(whole)).toBeGreaterThan(1e-2);
+    // A drawn frame has the newer snapshot's masses; an exact one is the snapshot.
+    expect(drawnAt(a, b, t).m).toBe(b.m);
+    expect(exactFrame(b).x).toBe(b.x);
   });
 });
 
