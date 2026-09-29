@@ -730,6 +730,19 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A pull request could go over a route budget with green CI.**
+  - **What it did:** `npm run budget:routes` ran only in the local release
+    gate. Its registry entry said no CI job had both the sources and a
+    build, but `e2e-build` has had both since before the check existed.
+    #97 took the published front door and sandbox 317 bytes over their
+    ceilings, and only a later local gate run found it.
+  - **What it does now:** `e2e-build` runs the check before its specs,
+    against its checkout and the `dist/` artifact, with a five-minute step
+    timeout. It takes about a minute, and that job finishes well before the
+    slowest sources shard. `tools/route-budget.mjs` now waits for its static
+    server to answer instead of sleeping 800 ms, which under load let the
+    first route be refused.
+  - **Cost:** no ceiling moved, and nothing in the application changed.
 - **A remediation step could tell a student whether a held prediction was
   right** before the experiment did (COMPOSER.md).
   - **What it did:** a pack could put a remediation step (`when`) on a held
