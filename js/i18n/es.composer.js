@@ -280,6 +280,8 @@ export const ES_COMPOSER = {
     'Elige un paso con nota: una predicción, o una pregunta de opción o de número.',
   'composer.error.whenNested':
     'Elige un paso al que llega todo estudiante: el refuerzo tiene un solo nivel.',
+  'composer.error.whenHeld':
+    'Mueve este paso después del paso {n}, donde se corrige esa predicción: antes, mostrarlo o saltarlo revela la respuesta.',
   'composer.error.whenLast': 'Al último paso llega todo estudiante.',
   'composer.error.kind': 'Uno de estos: {options}.',
   'composer.error.itemVersion': 'Un número entero desde 1.',

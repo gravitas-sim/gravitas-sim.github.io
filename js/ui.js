@@ -6345,9 +6345,10 @@ export function commitKeyboardPlacement() {
 function moveKeyboardAim(dx, dy, { coarse = false, fine = false } = {}) {
   if (!keyboardAim) return;
   const step = AIM_STEP * (coarse ? AIM_COARSE : fine ? AIM_FINE : 1);
-  const rect = canvas.getBoundingClientRect();
-  state.mouse.x = Math.max(0, Math.min(rect.width, state.mouse.x + dx * step));
-  state.mouse.y = Math.max(0, Math.min(rect.height, state.mouse.y + dy * step));
+  // Canvas pixels, like state.mouse, not the CSS box.
+  const { width, height } = canvas;
+  state.mouse.x = Math.max(0, Math.min(width, state.mouse.x + dx * step));
+  state.mouse.y = Math.max(0, Math.min(height, state.mouse.y + dy * step));
 }
 
 // Its own listener, in the capture phase and before the general shortcut

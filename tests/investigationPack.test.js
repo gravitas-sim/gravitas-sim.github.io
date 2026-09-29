@@ -188,6 +188,51 @@ describe('remediation is one level deep', () => {
     expect(codesAt(p)).toContain(expected);
   });
 
+  // `guess` is a held prediction, marked at `period` (step 5). Before then
+  // Next showing or passing over a step on it would be the verdict itself.
+  describe('on a held prediction', () => {
+    const on = (p, sid, is = 'incorrect') =>
+      (step(p, sid).when = { sid: 'guess', is });
+
+    test.each([
+      ['incorrect', 'watch', 2],
+      ['correct', 'time-it', 3],
+    ])('refuses one answered %s before it is marked (%s)', (is, sid, i) => {
+      const p = good();
+      on(p, sid, is);
+      expect(problems(p)).toContainEqual(
+        expect.objectContaining({
+          path: `steps[${i}].when.sid`,
+          code: 'whenHeld',
+          vars: { n: 5 },
+        })
+      );
+    });
+
+    test('refuses one the prediction is moved past', () => {
+      const p = good();
+      on(p, 'again');
+      step(p, 'guess').reveal = 'which';
+      expect(codesAt(p)).toEqual(['steps[5].when.sid whenHeld']);
+    });
+
+    test('accepts one after the step where it is marked', () => {
+      const p = good();
+      on(p, 'again');
+      expect(problems(p)).toEqual([]);
+      on(p, 'again', 'correct');
+      expect(problems(p)).toEqual([]);
+    });
+
+    test('says once, not twice, that the step it is marked at is for everyone', () => {
+      const p = good();
+      on(p, 'period');
+      const codes = codesAt(p);
+      expect(codes).toContain('steps[1].reveal revealConditional');
+      expect(codes.filter(c => c.endsWith('whenHeld'))).toEqual([]);
+    });
+  });
+
   test('refuses to mark a held prediction at a step some students skip', () => {
     const p = good();
     step(p, 'guess').reveal = 'again';

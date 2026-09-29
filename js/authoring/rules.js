@@ -130,7 +130,7 @@ export const RULE_INDEX = {
   'i18n/coverage': 'A translation is complete enough to ship',
   'instructor/present': 'Every lesson has instructor guidance',
   'instructor/sections': 'Every required guide section carries something',
-  'instructor/expectations': 'Expectations point at steps that exist and grade',
+  'instructor/expectations': 'Expectations name real steps and say something',
   'instructor/attribution': 'A lesson that cites a source attributes it',
   'agree/manifest': 'The manifest says what the lesson says',
   'agree/counts': 'The manifest counts what the lesson contains',
@@ -906,8 +906,9 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       // A remediation step is shown only when an earlier graded step was
       // answered wrongly (or rightly): js/investigations.js stepApplies(). One
       // level deep, so every student still walks a straight line to the end:
-      // the step it names is graded and one every student reaches, and it is
-      // neither the last step nor where a prediction is marked.
+      // the step it names is graded and one every student reaches (and, if a
+      // held prediction, already marked), and it is neither the last step nor
+      // where a prediction is marked.
       if (step.when !== undefined) {
         const w = step.when;
         const at = isPlainObject(w)
@@ -935,6 +936,16 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           E(
             'interaction/when',
             `when names "${w.sid}", which is itself remediation`
+          );
+        } else if (
+          named.reveal !== undefined &&
+          steps.findIndex(x => x.sid === named.reveal) > i
+        ) {
+          // Before its reveal a held prediction has no verdict, and a step
+          // shown or passed over by it would be one.
+          E(
+            'interaction/when',
+            `when names "${w.sid}", a held prediction not marked until "${named.reveal}"`
           );
         }
         if (i === steps.length - 1) {
@@ -1123,11 +1134,13 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
           continue;
         }
-        // Any step type may carry an expected observation: js/instructorDocs.js
-        // renders one against every entry in the key, not only the graded ones,
-        // and "what to look for" is most of what an explore step is for. So the
-        // check is that the number lands on a step and says something - which
-        // is what goes stale when a step is inserted or removed.
+        // Any step type may carry an expected observation, and "what to look
+        // for" is most of what an explore step is for. js/instructorDocs.js
+        // prints one under its step in the answer key whatever the step asks,
+        // including a reading step, which the key leaves out only when it has
+        // no expectation either. So the check is that the number lands on a
+        // step and says something - which is what goes stale when a step is
+        // inserted or removed.
         if (!isNonEmptyString(guide.expectations[key])) {
           err(
             'instructor/expectations',

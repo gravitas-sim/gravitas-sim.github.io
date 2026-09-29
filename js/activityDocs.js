@@ -120,7 +120,7 @@ export function activityGuide(
       'The full investigation assumes a little more, and its guide lists it:',
       { size: 9.5, gap: 4 }
     );
-    doc.bullets(shared.priorKnowledge, { size: 9.5, gap: 1 });
+    doc.bullets(shared.priorKnowledge.map(plainText), { size: 9.5, gap: 1 });
   }
 
   let n = 3;
