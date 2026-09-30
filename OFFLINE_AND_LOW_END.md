@@ -57,7 +57,7 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | Fonts | 9 | 140 KB |
 | Pages | 6 | 230 KB |
 | Other | 1 | 20 KB |
-| **Total** | **614** | **13.9 MB** |
+| **Total** | **614** | **14.0 MB** |
 
 Of those, 484 are core (the install fails without them) and 130 optional (a missing one is reported and costs nothing).
 

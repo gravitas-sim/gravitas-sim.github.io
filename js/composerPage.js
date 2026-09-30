@@ -84,6 +84,10 @@ const LOADERS = {
       import('./i18n/es.composer.js').then(m => m.ES_COMPOSER),
     ]),
 };
+const LANGUAGES = [
+  { id: 'en', endonym: 'English' },
+  { id: 'es', endonym: 'Español' },
+];
 /** js/authoring/preview.js DRAFT_KEY: where the engine looks for the draft. */
 const PREVIEW_KEY = 'gravitas_composer_preview';
 const DRAFT_KEYS = {
@@ -208,6 +212,18 @@ function translateStatic() {
   for (const node of document.querySelectorAll('[data-i18n-aria-label]'))
     node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel));
   $('cp-preview').title = t('composer.preview.frame');
+  const host = $('langSwitch');
+  host.textContent = '';
+  for (const { id, endonym } of LANGUAGES) {
+    const b = el(
+      'button',
+      { type: 'button', className: 'ui-button', lang: id },
+      endonym
+    );
+    b.setAttribute('aria-pressed', String(getLocale() === id));
+    b.addEventListener('click', () => useLanguage(id));
+    host.append(b);
+  }
 }
 
 // --- Editing ----------------------------------------------------------------

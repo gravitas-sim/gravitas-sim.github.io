@@ -12,6 +12,7 @@ export const EN_STUDIO = {
   'studio.title': 'Scenario Studio',
   'studio.intro':
     'Make a scenario as data: the settings it runs under, the bodies it starts with, the seed that makes it the same world every time, and the instruments it opens with. Save it as a file the Gravitas SDK can check and package, or open it in Gravitas as a link.',
+  'studio.lang.label': 'Language',
   'studio.toolbar.label': 'Scenario file',
   'studio.action.new': 'New scenario',
   'studio.action.fromLabel': 'Start from a built-in scenario',

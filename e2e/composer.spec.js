@@ -47,19 +47,6 @@ async function openComposer(page, { locale } = {}) {
   await valid(page);
 }
 
-/**
- * Choose Spanish in the shell. The Composer's route cannot pay for the shell's
- * module (tests/shell.test.js, STATIC_ONLY), so its switch stays hidden: the
- * choice is made on the course builder, which can, and the Composer reads it.
- */
-async function chooseSpanish(page) {
-  await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
-  await page.locator('[data-gs-lang]').selectOption('es');
-  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-  // The builder translates itself in place.
-  await expect(page.locator('h1')).toHaveText('Creador de paquetes de curso');
-}
-
 /** The checks have run on the edit just made and found nothing. */
 const valid = page =>
   expect(page.locator('#cp-checks-summary')).toHaveText(
@@ -571,15 +558,12 @@ test.describe('the Investigation Composer', () => {
   });
 
   test('reads in Spanish', async ({ page }) => {
-    await chooseSpanish(page);
     await openComposer(page);
+    await page.locator('#langSwitch button[lang="es"]').click();
     await expect(page.locator('h1')).toHaveText(
       'Compositor de investigaciones'
     );
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-    await expect(
-      page.locator('.gs-group summary .gs-es').first()
-    ).toBeVisible();
     await valid(page);
     await enter(page, 'cp-duration', 'pronto');
     await expect(page.locator('#cp-duration-error')).toHaveText(
