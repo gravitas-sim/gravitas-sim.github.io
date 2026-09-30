@@ -9,8 +9,6 @@ export const EN_COURSEHOME = {
   'courseHome.doc.title': 'Course | Gravitas',
   'courseHome.doc.titleOf': '{title} | Gravitas',
   'courseHome.label': 'Course home',
-  'courseHome.lang': 'Language',
-  'courseHome.back': 'Gravitas',
   'courseHome.controls': 'What to show',
   'courseHome.show': 'Show',
   'courseHome.show.all': 'Every item',

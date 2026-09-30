@@ -20,7 +20,6 @@
 // =============================================================================
 
 import {
-  LANGUAGES,
   language,
   preferred,
   setLanguage,
@@ -418,23 +417,6 @@ async function fillLinks(pending) {
 
 // --- Start-up -----------------------------------------------------------------
 
-function languageSwitch() {
-  const host = $('langSwitch');
-  host.replaceChildren(
-    ...LANGUAGES.map(({ id, endonym }) => {
-      const b = el('button', {
-        type: 'button',
-        className: 'ui-button',
-        lang: id,
-        text: endonym,
-      });
-      b.setAttribute('aria-pressed', String(language() === id));
-      b.addEventListener('click', () => useLanguage(id));
-      return b;
-    })
-  );
-}
-
 async function useLanguage(id) {
   setLanguage(id);
   if (id === 'es' && !LESSONS.es) {
@@ -442,7 +424,6 @@ async function useLanguage(id) {
     LESSONS.es = new Map(m.MANIFEST.map(x => [x.id, x]));
   }
   translatePage();
-  languageSwitch();
   render();
 }
 

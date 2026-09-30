@@ -13,11 +13,6 @@ import { ES_COURSEHOME } from '../i18n/es.courseHome.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
-export const LANGUAGES = Object.freeze([
-  { id: 'en', endonym: 'English' },
-  { id: 'es', endonym: 'Español' },
-]);
-
 const CATALOGS = { en: EN_COURSEHOME, es: ES_COURSEHOME };
 const DEFAULT = 'en';
 let current = DEFAULT;

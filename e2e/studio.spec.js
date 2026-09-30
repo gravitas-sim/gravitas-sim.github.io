@@ -58,6 +58,19 @@ async function openStudio(page, { locale } = {}) {
   });
 }
 
+/**
+ * Choose Spanish in the shell. The Studio's route cannot pay for the shell's
+ * module (tests/shell.test.js, STATIC_ONLY), so its switch stays hidden: the
+ * choice is made on the course builder, which can, and the Studio reads it.
+ */
+async function chooseSpanish(page) {
+  await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
+  await page.locator('[data-gs-lang]').selectOption('es');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+  // The builder translates itself in place.
+  await expect(page.locator('h1')).toHaveText('Creador de paquetes de curso');
+}
+
 /** Type into a field and leave it, which is when the Studio commits an edit. */
 async function enter(page, id, value) {
   const input = page.locator(`#${id}`);
@@ -561,10 +574,13 @@ test.describe('the Scenario Studio', () => {
   test('reads in Spanish, and the choice survives a reload', async ({
     page,
   }) => {
+    await chooseSpanish(page);
     await openStudio(page);
-    await page.locator('#langSwitch button[lang="es"]').click();
     await expect(page.locator('h1')).toHaveText('Estudio de escenarios');
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+    await expect(
+      page.locator('.gs-group summary .gs-es').first()
+    ).toBeVisible();
     await expect(
       page.locator('#st-from option[value="Star Cluster"]')
     ).toHaveText(ES['scenario.Star Cluster.title']);

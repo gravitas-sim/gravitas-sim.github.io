@@ -92,12 +92,6 @@ const RAIL_LABEL = {
   stopwatch: 'rail.toggleStopwatch',
 };
 
-/** The two languages the page is written in. */
-const LANGUAGES = [
-  { id: 'en', endonym: 'English' },
-  { id: 'es', endonym: 'Español' },
-];
-
 let history = null;
 let drafts = null;
 /** The document as it was last opened, started or saved: what "changes" means. */
@@ -139,18 +133,6 @@ function translateStatic() {
   from.textContent = '';
   from.append(generated, handBuilt);
   if (chosen) from.value = chosen;
-  const host = $('langSwitch');
-  host.textContent = '';
-  for (const { id, endonym } of LANGUAGES) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'ui-button';
-    b.lang = id;
-    b.textContent = endonym;
-    b.setAttribute('aria-pressed', String(getLocale() === id));
-    b.addEventListener('click', () => useLanguage(id));
-    host.append(b);
-  }
 }
 
 // --- Editing ----------------------------------------------------------------

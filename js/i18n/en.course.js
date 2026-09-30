@@ -11,9 +11,6 @@ export const EN_COURSE = {
   'course.title': 'Course-pack builder',
   'course.intro':
     'Assemble a course from what Gravitas has: lessons, assignments cut from them, simulations, data and readings, in units, with objectives, time, optional introductory and advanced paths, and notes for students and instructors in English and Spanish. It checks what the course depends on and pins every lesson, so an archived course can say what it was made with. Nothing needs an account: the course is a file and a link.',
-  'course.toStudio': 'The Scenario Studio',
-  'course.toComposer': 'The Investigation Composer',
-  'course.toHome': 'The course home',
   'course.toolbar.label': 'Course file',
   'course.action.new': 'New course',
   'course.action.example': 'Open the example course',

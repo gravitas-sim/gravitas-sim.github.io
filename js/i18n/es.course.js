@@ -11,9 +11,6 @@ export const ES_COURSE = {
   'course.title': 'Creador de paquetes de curso',
   'course.intro':
     'Arma un curso con lo que tiene Gravitas: lecciones, tareas recortadas de ellas, simulaciones, datos y lecturas, en unidades, con objetivos, tiempos, caminos opcionales introductorios y avanzados, y notas para estudiantes y docentes en inglés y español. Comprueba de qué depende el curso y fija cada lección, para que un curso archivado pueda decir con qué se hizo. No hace falta ninguna cuenta: el curso es un archivo y un enlace.',
-  'course.toStudio': 'El Estudio de escenarios',
-  'course.toComposer': 'El Compositor de investigaciones',
-  'course.toHome': 'La página del curso',
   'course.toolbar.label': 'Archivo del curso',
   'course.action.new': 'Curso nuevo',
   'course.action.example': 'Abrir el curso de ejemplo',

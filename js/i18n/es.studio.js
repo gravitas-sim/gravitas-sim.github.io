@@ -9,8 +9,6 @@ export const ES_STUDIO = {
   'studio.title': 'Estudio de escenarios',
   'studio.intro':
     'Crea un escenario como datos: los ajustes con los que se ejecuta, los cuerpos con los que empieza, la semilla que lo hace el mismo mundo cada vez y los instrumentos con los que se abre. Guárdalo como un archivo que el SDK de Gravitas puede comprobar y empaquetar, o ábrelo en Gravitas como un enlace.',
-  'studio.back': 'Volver a Gravitas',
-  'studio.lang.label': 'Idioma',
   'studio.toolbar.label': 'Archivo del escenario',
   'studio.action.new': 'Escenario nuevo',
   'studio.action.fromLabel': 'Empezar desde un escenario incluido',

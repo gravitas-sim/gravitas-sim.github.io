@@ -31,14 +31,10 @@ const read = f => readFileSync(f, 'utf8');
 const PENDING = {
   'index.html': 'the application and Home: Part 3',
   'catalog/index.html': 'tool pages: Part 2',
-  'course/index.html': 'tool pages: Part 2',
   'experiments/index.html': 'tool pages: Part 2',
   'figure/index.html': 'tool pages: Part 2',
   'instructors/submissions/index.html': 'tool pages: Part 2',
   'observatory/index.html': 'tool pages: Part 2',
-  'studio/index.html': 'tool pages: Part 2',
-  'studio/course/index.html': 'tool pages: Part 2',
-  'studio/lesson/index.html': 'tool pages: Part 2',
   'lab3d/index.html': 'tool pages: Part 2',
   '3d/index.html': 'tool pages: Part 2',
   'mission/index.html': 'tool pages: Part 2',
@@ -53,6 +49,10 @@ const PENDING = {
 const STATIC_ONLY = {
   'evaluation/index.html': 'route has 0.2 KB of room; the module is 3.2 KB',
   'instructors/index.html': 'route has 1.3 KB of room; the module is 3.2 KB',
+  'studio/index.html': 'route has 0.6 KB of room; the module is 3.2 KB',
+  'studio/lesson/index.html':
+    'route has 20.5 KB but no request of room; the module is one',
+  'course/index.html': 'route has 1.3 KB of room; the module is 3.2 KB',
 };
 
 const carrying = shellPages().filter(p => !Object.hasOwn(PENDING, p));
