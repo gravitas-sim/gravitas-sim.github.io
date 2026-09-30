@@ -111,6 +111,9 @@ const BINARY_STAR_PLANETS = {
   subtitle: 'What survives around two stars, and how you would know',
   duration: '40-50 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'algebra',
+  prerequisites: ['butterfly-effect'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

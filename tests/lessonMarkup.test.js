@@ -17,6 +17,7 @@ import { readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { INVESTIGATIONS, getInvestigation } from '../js/data/investigations.js';
+import { EN_REPORT } from '../js/i18n/en.report.js';
 import {
   ENTITIES,
   decodeEntities,
@@ -70,6 +71,12 @@ const SPANISH = await Promise.all(
 );
 
 const LESSONS = [...INVESTIGATIONS.map(inv => [inv.id, inv]), ...SPANISH];
+
+/** The engine's translator, reduced to what the report needs: a catalog and {name} slots. */
+const translator = catalog => (id, vars) =>
+  String(catalog[id] ?? id).replace(/\{(\w+)\}/g, (whole, k) =>
+    vars && k in vars ? String(vars[k]) : whole
+  );
 
 describe('a step with entities, on screen', () => {
   // The step the bug was found on, read back as a student reads it.
@@ -240,6 +247,7 @@ describe('the PDFs read the same table', () => {
         stepIdFor,
         checkAnswer,
         decodeEntities,
+        t: translator(EN_REPORT),
       })
     );
   }

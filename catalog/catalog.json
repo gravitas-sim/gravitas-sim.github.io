@@ -445,7 +445,7 @@
       ],
       "citations": [],
       "offline": "on-demand",
-      "bytes": 794615
+      "bytes": 794982
     },
     {
       "id": "gravitas.lesson.power-law-gravity",
@@ -485,7 +485,7 @@
       ],
       "citations": [],
       "offline": "precache",
-      "bytes": 62881
+      "bytes": 62952
     },
     {
       "id": "gravitas.mission",

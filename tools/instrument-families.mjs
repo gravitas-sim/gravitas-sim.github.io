@@ -90,7 +90,8 @@ export async function startupFileCounts() {
       bundle: true,
       format: 'esm',
       target: ['es2022'],
-      keepNames: true,
+      // As build.js bundles the application.
+      keepNames: false,
       splitting: true,
       chunkNames: 'chunk-[hash]',
       outdir: path.join(root, 'dist', 'js'),

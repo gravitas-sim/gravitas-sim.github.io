@@ -104,6 +104,76 @@ const browseMetaOf = inv => ({
 });
 
 /**
+ * Who a lesson is written for, what mathematics it asks of them, and which
+ * lessons it builds on, as each lesson declares them.
+ */
+const discoveryOf = inv => ({
+  audience: oneOf(inv, 'audience', AUDIENCES),
+  mathematics: oneOf(inv, 'mathematics', MATHEMATICS),
+  prerequisites: [...(inv.prerequisites || [])],
+});
+
+/** The discovery metadata as data, keyed by lesson id. */
+export const discoveryMeta = (lessons = INVESTIGATIONS) =>
+  Object.fromEntries(lessons.map(inv => [inv.id, discoveryOf(inv)]));
+
+/** Where the discovery metadata lives. */
+export const DISCOVERY_PATH = path.join(DIR, 'discovery.js');
+
+const DISCOVERY_HEADER = `// =============================================================================
+// Lesson discovery metadata - GENERATED, do not edit
+// -----------------------------------------------------------------------------
+// Written by tools/build-investigation-manifest.js from the lesson files in
+// this directory. Run \`npm run manifest\` after changing a lesson's audience,
+// mathematics or prerequisites.
+//
+// For the views that choose lessons for a course, not for the lesson browser:
+// browseData.js is read at start by every lesson and by the teaching page, and
+// this is read by neither, so it costs them nothing until something needs it.
+//
+//   audience       who it is written for. \`level\` stays the words a card prints.
+//   mathematics    what the student is asked to do: logarithms if they read or
+//                  plot a logarithmic axis, algebra if a step asks for a number
+//                  they must work out, arithmetic if they record measurements
+//                  and the lesson works out the rest, none otherwise.
+//   prerequisites  lesson ids, including every \`needs\` in sequences.js.
+// =============================================================================
+`;
+
+/**
+ * Render the discovery module.
+ *
+ * @returns {Promise<string>} The file contents
+ */
+export async function renderDiscovery() {
+  const raw = `${DISCOVERY_HEADER}\nexport const DISCOVERY = ${JSON.stringify(
+    discoveryMeta(),
+    null,
+    2
+  )};\n`;
+  const options = (await prettier.resolveConfig(DISCOVERY_PATH)) || {};
+  return prettier.format(raw, { ...options, filepath: DISCOVERY_PATH });
+}
+
+/** Who a lesson is written for. `level` stays the words a card prints. */
+export const AUDIENCES = Object.freeze(['beginner', 'intro']);
+
+/** What mathematics a lesson asks of the student; the rule is in discovery.js. */
+export const MATHEMATICS = Object.freeze([
+  'none',
+  'arithmetic',
+  'algebra',
+  'logarithms',
+]);
+
+/** A declared value, or a thrown error naming the lesson. */
+function oneOf(inv, key, allowed) {
+  if (!allowed.includes(inv[key]))
+    throw new Error(`${inv.id}: ${key} must be one of ${allowed.join(', ')}`);
+  return inv[key];
+}
+
+/**
  * The manifest as data.
  *
  * Separate from rendering it so a test can compare it against the checked-in
@@ -235,5 +305,17 @@ if (
   console.log(
     `${browseChanged ? 'Wrote' : 'Unchanged'}: ` +
       `${path.relative(process.cwd(), BROWSE_PATH)} (filter metadata)`
+  );
+  const discovery = await renderDiscovery();
+  let before = '';
+  try {
+    before = readFileSync(DISCOVERY_PATH, 'utf8');
+  } catch {
+    /* first run */
+  }
+  writeFileSync(DISCOVERY_PATH, discovery);
+  console.log(
+    `${before !== discovery ? 'Wrote' : 'Unchanged'}: ` +
+      `${path.relative(process.cwd(), DISCOVERY_PATH)} (discovery metadata)`
   );
 }

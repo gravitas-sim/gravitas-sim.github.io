@@ -304,7 +304,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->7625<!--/fact--> strings, and
+of <!--fact:uiStrings-->7697<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->7196<!--/fact--> tests across <!--fact:jestSuites-->216<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->7202<!--/fact--> tests across <!--fact:jestSuites-->216<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -365,9 +365,9 @@ reports what the browser downloads at start-up separately from what is deferred:
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->201<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->619<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->4170<!--/fact--> KB         | <!--fact:buildDeferredChunks-->187<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->820<!--/fact--> KB** |                                               |
+| JavaScript at start-up | <!--fact:buildStartupJs-->592<!--/fact--> KB           | <!--fact:buildStartupFiles-->51<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4122<!--/fact--> KB         | <!--fact:buildDeferredChunks-->190<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->794<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -485,7 +485,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1478<!--/fact--> tests
+The suite is <!--fact:e2eTests-->1487<!--/fact--> tests
 in <!--fact:e2eFiles-->119<!--/fact--> files and takes several minutes in
 Chromium.
 

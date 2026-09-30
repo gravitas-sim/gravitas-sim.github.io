@@ -179,8 +179,6 @@ export function getOrbitPreview() {
       // Minimal drag/speed gate, but we will override this if direction-only condition is met
       const minSnapSpeed =
         (typeof SETTINGS !== 'undefined' && SETTINGS.snap_min_speed) || 2.0;
-      // const E =
-      //   0.5 * vMag * vMag - (Gval * primary.mass) / Math.max(rMag, 1e-9);
 
       // Sticky snapping: if velocity is roughly compatible with circular, snap
       // Compute ideal circular speed and allow both CCW and CW tangential directions
@@ -196,14 +194,6 @@ export function getOrbitPreview() {
         x: vCirc * Math.cos(dirCW),
         y: vCirc * Math.sin(dirCW),
       };
-      // const dvx = v0.x - vIdeal.x;
-      // const dvy = v0.y - vIdeal.y;
-      // const velError = Math.hypot(dvx, dvy);
-      // Dial down stickiness: require closer match to ideal
-      // const baseTol =
-      //   (typeof SETTINGS !== 'undefined' && SETTINGS.sticky_orbit_tolerance) ||
-      //   5.0;
-      // const speedScale = Math.max(1, vMag * 0.1);
       const denom = Math.max(1e-9, vMag * vCirc);
       const dotCCW = v0.x * vIdealCCW.x + v0.y * vIdealCCW.y;
       const cosCCW = Math.max(-1, Math.min(1, dotCCW / denom));
@@ -212,7 +202,6 @@ export function getOrbitPreview() {
       const cosCW = Math.max(-1, Math.min(1, dotCW / denom));
       const angErrCW = Math.acos(cosCW);
       const angErr = Math.min(angErrCCW, angErrCW);
-      // General angle tolerance removed in direction-only logic
       // Direction-only snap: if within this narrower angle, snap regardless of speed
       const dirOnlyDeg =
         (typeof SETTINGS !== 'undefined' &&
@@ -302,14 +291,9 @@ export function getOrbitPreview() {
       const angErrCW2 = Math.acos(cosCW2);
       const useCCW2 = angErrCCW2 <= angErrCW2;
       const vIdeal = useCCW2 ? vIdealCCW2 : vIdealCW2;
-      // deviation thresholds no longer used in direction-only maintain logic
       const dot2 = vel.x * vIdeal.x + vel.y * vIdeal.y;
       const cosTheta2 = Math.max(-1, Math.min(1, dot2 / denom2));
       const angErr2 = Math.acos(cosTheta2);
-      // const breakAngleDeg =
-      //   (typeof SETTINGS !== 'undefined' && SETTINGS.sticky_break_angle_deg) ||
-      //   20;
-      // const breakAngle = (breakAngleDeg * Math.PI) / 180;
       // Maintain snap only while within the direction-only cone
       const dirOnlyDeg2 =
         (typeof SETTINGS !== 'undefined' &&

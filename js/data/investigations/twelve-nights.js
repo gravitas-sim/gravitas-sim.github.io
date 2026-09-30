@@ -81,6 +81,9 @@ const TWELVE_NIGHTS = {
     'You get to choose when to look, and most of the choice has already been made',
   duration: '40-50 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'arithmetic',
+  prerequisites: [],
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
   summary:

@@ -170,10 +170,11 @@ async function buildJs() {
     entryPoints: [{ in: 'js/main.js', out: 'app' }],
     bundle: true,
     minify: true,
-    // physics.js branches on constructor.name in fifteen places. Without
-    // this, minification renames the classes and every one of those branches
-    // is false in production and true in development.
-    keepNames: true,
+    // Names may be minified here. physics.js compares body classes by
+    // identity (className), and nothing the application bundles reads a
+    // constructor's name; tests/buildIntegrity.test.js holds both. Keeping
+    // them cost the deferred budget 63 KB.
+    keepNames: false,
     format: 'esm',
     target: ['es2022'],
     // Split, so the dynamic imports in the source become their own chunks
@@ -214,10 +215,8 @@ async function buildJs() {
     ],
     bundle: true,
     minify: true,
-    // physics.js branches on constructor.name in fifteen places. Without
-    // this, minification renames the classes and every one of those branches
-    // is false in production and true in development.
-    keepNames: true,
+    // As for the application: physics.js no longer needs class names.
+    keepNames: false,
     format: 'esm',
     target: ['es2022'],
     outdir: path.join(OUT, 'js'),

@@ -319,8 +319,9 @@ export function answersOf(submission, lesson = null) {
         value: typed
           .map(id => `${id}=${String(entry.sub[id]).trim()}`)
           .join('; '),
-        // Fields carry no locale of their own; only a checked number does.
-        locale: fallback,
+        // Fields record the convention they were typed in, as a checked
+        // number does; a report from before they did falls back.
+        locale: entry.sub[`${typed[0]}${LOCALE_SUFFIX}`] || fallback,
       });
     } else if (entry.key !== null) {
       out.push({

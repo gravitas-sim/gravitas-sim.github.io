@@ -316,3 +316,110 @@ test.describe('the application recovers from rough handling', () => {
     expect((await app.bodySnapshot()).nonFinite).toBe(0);
   });
 });
+
+test.describe('a worker that fails, and an error nobody caught', () => {
+  test('a physics Worker ended mid-run hands gravity back to the main thread', async ({
+    page,
+    app,
+    errors,
+  }) => {
+    // Its busy flag stayed set when it died, so no job was ever scheduled
+    // again and every body kept the last pull it had been given.
+    await page.addInitScript(() => {
+      const Native = window.Worker;
+      window.__workers = [];
+      window.Worker = class extends Native {
+        constructor(url, opts) {
+          super(url, opts);
+          window.__workers.push({ url: String(url), worker: this });
+        }
+      };
+    });
+    await app.boot();
+    await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const physics = await import('/js/physics.js');
+      ui.SETTINGS.mutual_gravity = true;
+      ui.SETTINGS.use_barnes_hut = true;
+      physics.updatePhysicsSettings(ui.SETTINGS);
+    });
+    // Running, and answering: some body holds a pull the worker computed.
+    await expect
+      .poll(() =>
+        page.evaluate(async () => {
+          const physics = await import('/js/physics.js');
+          return physics.planets.some(p => p.cached_accel);
+        })
+      )
+      .toBe(true);
+
+    // Ended without a word, which fires no error event - so it is the
+    // watchdog that has to notice. Its clock is moved on rather than waited
+    // for.
+    await page.evaluate(() => {
+      const w = window.__workers.find(x => /physicsWorker/.test(x.url));
+      w.worker.terminate();
+      const now = performance.now.bind(performance);
+      performance.now = () => now() + 11_000;
+    });
+    // Said once the deferred catalog it is written in has arrived.
+    await expect(page.locator('#srStatus')).toContainText(
+      /gravity is now worked out on the main thread/i,
+      { timeout: 20_000 }
+    );
+
+    // And the world goes on, on the main thread: no body keeps a stale pull.
+    const where = () =>
+      page.evaluate(async () => {
+        const physics = await import('/js/physics.js');
+        const p = physics.planets[0];
+        return [p.pos.x, p.pos.y];
+      });
+    const before = await where();
+    await app.waitForFrames(30);
+    expect(await where()).not.toEqual(before);
+    expect((await app.bodySnapshot()).nonFinite).toBe(0);
+    const stale = await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      return physics.planets.filter(p => p.cached_accel).length;
+    });
+    expect(stale).toBe(0);
+    // The one console error this test causes, said on purpose; any other
+    // still fails it.
+    const said = errors.consoleErrors.filter(e =>
+      /Physics Worker stopped answering/.test(e)
+    );
+    expect(said).toHaveLength(1);
+    errors.consoleErrors.splice(
+      0,
+      errors.consoleErrors.length,
+      ...errors.consoleErrors.filter(e => !said.includes(e))
+    );
+  });
+
+  test('an uncaught error is said in the status region, and still reported', async ({
+    page,
+    app,
+    errors,
+  }) => {
+    const seen = [];
+    page.on('pageerror', e => seen.push(e.message));
+    await app.boot();
+    await page.evaluate(() =>
+      setTimeout(() => {
+        throw new Error('a deliberate failure');
+      })
+    );
+    await expect(page.locator('#srStatus')).toContainText(
+      'Something went wrong: a deliberate failure'
+    );
+    // Not swallowed: the browser still saw it. It is this test's own, so
+    // it is taken off the list every test is failed by.
+    expect(seen).toContain('a deliberate failure');
+    errors.pageErrors.splice(
+      0,
+      errors.pageErrors.length,
+      ...errors.pageErrors.filter(e => e !== 'a deliberate failure')
+    );
+  });
+});

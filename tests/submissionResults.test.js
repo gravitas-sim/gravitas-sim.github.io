@@ -19,6 +19,7 @@ import {
   fingerprintOf,
   gradeSubmission,
   questionCsv,
+  readResults,
   resultsJson,
   summaryCsv,
 } from '../js/submission/results.js';
@@ -612,7 +613,68 @@ describe('the JSON export', () => {
       unmarked: 1,
       incomplete: 7,
       stale: 0,
+      // One point a question, as the Composer counts: five right, and the
+      // written answer's point waiting for the instructor rather than lost.
+      points: 5,
+      pointsPossible: 13,
+      pointsUnmarked: 1,
     });
+  });
+
+  test('counts points per question: earned, zero, or not yet marked', () => {
+    const qs = JSON.parse(resultsJson(rows, { now })).submissions[0].questions;
+    for (const q of qs) {
+      expect(q.pointsPossible).toBe(1);
+      expect(q.points).toBe(
+        q.verdict === 'correct' ? 1 : q.verdict === 'unmarked' ? null : 0
+      );
+    }
+  });
+
+  test('a step that declares its points is worth them', () => {
+    const lesson = {
+      ...kepler,
+      steps: kepler.steps.map(s =>
+        s.sid === 'where-is-the-star' ? { ...s, points: 3 } : s
+      ),
+    };
+    const one = grade(submission({ responses: RIGHT }), lesson);
+    const q = one.questions.find(x => x.sid === 'where-is-the-star');
+    expect(q.pointsPossible).toBe(3);
+    expect(one.pointsPossible).toBe(15);
+  });
+
+  test('the CSVs end with the points columns, after everything version 1 had', () => {
+    expect(SUMMARY_COLUMNS.slice(-3)).toEqual([
+      'points',
+      'points_possible',
+      'points_unmarked',
+    ]);
+    expect(QUESTION_COLUMNS.slice(-2)).toEqual(['points', 'points_possible']);
+  });
+
+  test('a version 1 file is still read, with points it never had as null', () => {
+    const v2 = JSON.parse(resultsJson(rows, { now }));
+    // The same document as a version 1 build wrote it: no points anywhere.
+    const v1 = JSON.parse(JSON.stringify(v2));
+    v1.version = 1;
+    for (const sub of v1.submissions) {
+      for (const k of ['points', 'pointsPossible', 'pointsUnmarked'])
+        delete sub.counts[k];
+      for (const q of sub.questions) {
+        delete q.points;
+        delete q.pointsPossible;
+      }
+    }
+    const read = readResults(JSON.stringify(v1));
+    expect(read.ok).toBe(true);
+    expect(read.doc.version).toBe(RESULTS_VERSION);
+    expect(read.doc.submissions[0].counts.points).toBeNull();
+    expect(read.doc.submissions[0].questions[0].pointsPossible).toBeNull();
+    expect(readResults(v2)).toEqual({ ok: true, doc: v2 });
+    expect(readResults('{').reason).toBe('notJson');
+    expect(readResults({ kind: 'other', version: 2 }).reason).toBe('wrongKind');
+    expect(readResults({ ...v2, version: 9 }).reason).toBe('unknownVersion');
   });
 
   test('withholds written answers by default, like the CSV', () => {

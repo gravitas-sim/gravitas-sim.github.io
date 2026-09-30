@@ -23,6 +23,9 @@ export {
 } from './state.js';
 
 const major = v => Number(String(v).split('.')[0]);
+/** An Error with a code the page can say something about. */
+const coded = (code, extra) =>
+  Object.assign(new Error(code), { code, ...extra });
 
 /**
  * A client that runs systems, each in a fresh Worker.
@@ -39,17 +42,25 @@ export function createLab3d({ spawn }) {
     const done = new Promise((ok, bad) => {
       settle = { ok, bad };
     });
+    // Thirty silent seconds is a stopped Worker; any message resets it.
+    let quiet;
+    const listen = () => {
+      clearTimeout(quiet);
+      quiet = setTimeout(() => finish(settle.bad, coded('stalled')), 30_000);
+    };
     const finish = (fn, value) => {
+      clearTimeout(quiet);
       worker.terminate();
       fn(value);
     };
+    listen();
     worker.onmessage = ({ data }) => {
+      listen();
       if (data?.type === 'hello') {
         if (major(data.api) !== major(LAB3D_API))
           return finish(
             settle.bad,
-            Object.assign(new Error('api'), {
-              code: 'api',
+            coded('api', {
               vars: { theirs: data.api, ours: LAB3D_API },
             })
           );
@@ -63,8 +74,7 @@ export function createLab3d({ spawn }) {
       else if (data.type === 'refused')
         finish(
           settle.bad,
-          Object.assign(new Error('refused'), {
-            code: 'refused',
+          coded('refused', {
             problems: data.problems,
           })
         );
@@ -73,15 +83,13 @@ export function createLab3d({ spawn }) {
     };
     worker.onerror = e =>
       finish(settle.bad, new Error(e?.message || 'the Worker failed'));
+    worker.onmessageerror = () =>
+      finish(settle.bad, new Error('the Worker sent an unreadable answer'));
     worker.postMessage({ type: 'hello' });
     return {
       done,
       cancel: () => worker.postMessage({ type: 'cancel', id }),
-      terminate: () =>
-        finish(
-          settle.bad,
-          Object.assign(new Error('terminated'), { code: 'terminated' })
-        ),
+      terminate: () => finish(settle.bad, coded('terminated')),
     };
   };
   return {

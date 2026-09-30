@@ -35,6 +35,15 @@ import { watchForManeuver } from './maneuverBridge.js';
 import { watchForInvestigations } from './investigationsLoader.js';
 import { shouldShowWelcome } from './welcomeGate.js';
 
+// Failures go to #srStatus too, by js/failures.js, fetched only then.
+for (const type of ['error', 'unhandledrejection', 'gravitasWorkerFailed'])
+  window.addEventListener(type, e =>
+    import('./failures.js').then(
+      m => m.record(e),
+      () => {}
+    )
+  );
+
 /**
  * Load the front door, once, and wire its own listeners the first time.
  *
