@@ -100,7 +100,7 @@ test.describe('the first sketch', () => {
       await expect(link).toHaveCount(1);
       await expect(link).toHaveAttribute('href', HREF);
       const where = await link.evaluate(a => ({
-        inFooter: Boolean(a.closest('footer.doc-foot')),
+        inFooter: Boolean(a.closest('footer.gs-foot')),
         inText: Boolean(a.closest('main, nav, header, aside')),
         last: a === [...document.querySelectorAll('a[href]')].at(-1),
         className: a.className,

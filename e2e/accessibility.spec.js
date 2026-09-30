@@ -257,6 +257,16 @@ const THEMES = [
   { id: 'daylight', label: 'light' },
 ];
 
+/**
+ * All four, for the pages that carry the shared shell (Prompt 50): its theme
+ * switch offers every one, so every one is checked where it is offered.
+ */
+const ALL_THEMES = [
+  ...THEMES,
+  { id: 'deep', label: 'deep space' },
+  { id: 'observatory', label: 'observatory red' },
+];
+
 const LOCALES = [
   { id: 'en', label: 'English' },
   { id: 'es', label: 'Spanish' },
@@ -374,7 +384,7 @@ async function assertConfigured(page, locale, theme) {
 for (const surface of SURFACES) {
   test.describe(`axe: ${surface.name}`, () => {
     for (const locale of LOCALES) {
-      for (const theme of THEMES) {
+      for (const theme of surface.standalone ? ALL_THEMES : THEMES) {
         test(`${locale.label}, ${theme.label} theme`, async ({
           page,
           app,
@@ -399,6 +409,10 @@ for (const surface of SURFACES) {
               timeout: 30_000,
             });
           }
+
+          // With a navigation group open, so its links are checked too.
+          const group = page.locator('.gs-group').first();
+          if (await group.count()) await group.evaluate(d => (d.open = true));
 
           const violations = await analyze(
             page,

@@ -111,7 +111,7 @@ const ARCHIVAL_PAGES = ['history/original'];
  * budget asks for; raising the limit for a stylesheet the sandbox never reads
  * would have been the wrong half of the trade.
  */
-const PAGE_STYLESHEETS = ['css/teaching.css', 'css/page.css'];
+const PAGE_STYLESHEETS = ['css/teaching.css', 'css/page.css', 'css/shell.css'];
 
 async function buildCss() {
   // tokens → styles → components → page, matching the cascade-layer order.
@@ -418,13 +418,30 @@ async function buildDocPages() {
       entryPoints: ['js/teachingPage.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing on this page reads a function's name (physics.js,
+      // which did, is not in it), and its helper would be one more request.
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
-      outfile: path.join(OUT, 'js', 'teachingPage.js'),
+      // Split, so the Spanish strings and lesson catalog stay chunks of their
+      // own that only a Spanish reader fetches (js/teaching/i18n.js).
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'teaching-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The shared shell's module, for the pages that load it by URL rather
+  // than through a bundle of their own (/model/, /validation/).
+  if (existsSync('js/shell.js')) {
+    await esbuild.build({
+      entryPoints: ['js/shell.js'],
+      bundle: true,
+      minify: true,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'shell.js'),
       legalComments: 'none',
     });
   }
