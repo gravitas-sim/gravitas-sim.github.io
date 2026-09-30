@@ -140,6 +140,39 @@ export interface Observation {
   source: { kind: 'pack'; id: string; version: string; credit: string };
 }
 
+/** What kind of number a quantity is (PROVENANCE.md). */
+export type Origin = 'measured' | 'derived' | 'assumed' | 'fitted' | 'fixed' | 'truth' | 'analytic' | 'synthetic';
+
+/** A quantity's uncertainty, and where it comes from. */
+export type Uncertainty =
+  | { kind: 'none' }
+  | { kind: 'sigma'; sigma: number; basis: 'data' | 'model' | 'assumed' | 'scaled' | 'profile' }
+  | { kind: 'interval'; lo: number; hi: number; level?: number; basis: 'data' | 'model' | 'assumed' | 'scaled' | 'profile' };
+
+/** gravitas.artifact/1: one scientific result (sdk/schemas/artifact-1.schema.json). */
+export interface Artifact {
+  format: 'gravitas.artifact';
+  formatVersion: 1;
+  id: string;
+  made: { app: string; platform?: string; engineFingerprint?: string; at?: string };
+  source: {
+    kind: 'simulation' | 'observation' | 'data-pack' | 'pipeline' | 'inference' | 'experiment' | 'analysis' | 'guide' | 'forward-model';
+    id: string;
+    version?: string;
+    digest?: string;
+  };
+  provenance?: {
+    credit?: string;
+    license?: { status: string; statement?: string; basis?: string };
+    citations?: string[];
+    retrieved?: string;
+    reductions?: unknown[];
+  };
+  /** Each unit is an id of js/units/registry.js, exactly. */
+  quantities: Array<{ id: string; value: number; unit: string; uncertainty: Uncertainty; origin: Origin; label?: string }>;
+  warnings?: string[];
+}
+
 /** An instrument, as js/widgets.js loads one. */
 export interface Instrument<V = Record<string, number>> {
   id: string;
@@ -170,6 +203,12 @@ export function acceptsPlatform(range: string): boolean;
 export function installedDataPack(id: string): Promise<{ record: ObservationDataPack; file: string; module: object; observation: Observation }>;
 export function observationOf(pack: { PACK: object; SERIES: object }): Observation;
 export function checkObservation(o: Observation): string[];
+export function artifact(parts: Pick<Artifact, 'id' | 'source' | 'quantities'> & Partial<Pick<Artifact, 'provenance' | 'warnings' | 'made'>>): Artifact;
+export function validateArtifact(doc: unknown): Array<{ path: string; code: string; message: string }>;
+export const ORIGINS: readonly Origin[];
+export const BASES: readonly string[];
+export const UNCERTAINTY_KINDS: readonly string[];
+export const SOURCE_KINDS: readonly string[];
 export interface FitsUnit {
   cards: Record<string, string | number | boolean | null>;
   columns?: Record<string, { unit: string | null; values: ArrayLike<number> }>;
