@@ -23,20 +23,13 @@ export const G_SI = 6.6743e-11;
 /** Speed of light in vacuum, m/s. Exact by definition. */
 export const C_SI = 299792458;
 
-/**
- * Solar mass, kg: the simulation's model value, to four figures. The IAU 2015
- * nominal value is 1.98841e30 (js/units/registry.js); the physics validation
- * and every golden are measured with this one.
- */
+/** Solar mass, kg. The model's; IAU nominal is 1.98841e30. */
 export const SOLAR_MASS_KG = 1.989e30;
 
 /** Solar radius, m. IAU 2015 nominal. */
 export const SOLAR_RADIUS_M = 6.957e8;
 
-/**
- * Astronomical unit, m: the simulation's model value, to four figures. The IAU
- * 2012 definition is exactly 149 597 870 700 m (js/units/registry.js).
- */
+/** Astronomical unit, m. The model's; exactly 149597870700. */
 export const AU_METERS = 1.496e11;
 
 /** Parsec, m. */

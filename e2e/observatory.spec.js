@@ -310,6 +310,33 @@ test.describe('the observatory', () => {
     await expect(page.locator('#obsImportForm')).toBeHidden();
   });
 
+  // Most visitors never export, so the exporter and the CSV writer behind it
+  // are fetched by the first export, not at start-up (js/observatoryPage.js).
+  test('the exporter is fetched by the first export, not at start-up', async ({
+    page,
+  }) => {
+    await openPage(page);
+    await openFixture(page, 'tess-light-curve');
+    const fetched = () =>
+      page.evaluate(() =>
+        performance
+          .getEntriesByType('resource')
+          .map(e => new URL(e.name).pathname)
+          .filter(p => p === '/js/observatory/export.js' || p === '/js/csv.js')
+          .sort()
+      );
+    expect(await fetched()).toEqual([]);
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#obsExportCsv').click(),
+    ]);
+    expect(readFileSync(await download.path(), 'utf8')).toContain(',');
+    expect(await fetched()).toEqual([
+      '/js/csv.js',
+      '/js/observatory/export.js',
+    ]);
+  });
+
   test('speaks Spanish, and has no accessibility violations in either language', async ({
     page,
   }) => {
