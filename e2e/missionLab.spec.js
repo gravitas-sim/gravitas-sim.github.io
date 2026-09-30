@@ -358,7 +358,13 @@ test.describe('the mission lab', () => {
       );
       expect(overflow).toBeLessThanOrEqual(0);
     }
-    await page.locator('#langSwitch button[lang="en"]').click();
+    // The shell's language switch waits for js/shell.js, which this route
+    // cannot pay for yet (STATIC_ONLY in tests/shell.test.js): no control is
+    // offered that does nothing, and a language chosen elsewhere in Gravitas
+    // is the one the lab opens in, its numbers with it.
+    await expect(page.locator('[data-gs-lang]')).toBeHidden();
+    await openLab(page, { locale: 'en' });
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(row(page, 'Departure C3')).toHaveText('9.2596 km²/s²');
   });
 });

@@ -16,7 +16,6 @@
 
 /* global ResizeObserver */
 import {
-  LANGUAGES,
   language,
   loadLanguage,
   preferred,
@@ -1153,25 +1152,8 @@ function keyboard(e) {
   fn();
 }
 
-function languageSwitch() {
-  const box = $('langSwitch');
-  box.replaceChildren(
-    ...LANGUAGES.map(l =>
-      el('button', {
-        type: 'button',
-        class: 'ui-button',
-        lang: l.id,
-        'aria-pressed': String(l.id === language()),
-        'data-lang': l.id,
-        text: l.endonym,
-      })
-    )
-  );
-}
-
 function retranslate() {
   translatePage();
-  languageSwitch();
   fillStaticSelects();
   if (state.system) {
     const keep = [
@@ -1211,13 +1193,6 @@ async function init() {
   retranslate();
   setupScene();
 
-  $('langSwitch').addEventListener('click', async e => {
-    const b = e.target.closest('button[data-lang]');
-    if (!b) return;
-    await loadLanguage(b.dataset.lang);
-    setLanguage(b.dataset.lang);
-    retranslate();
-  });
   $('l3-system').addEventListener('change', e => open(e.target.value));
   $('l3-file').addEventListener('change', async e => {
     const file = e.target.files?.[0];

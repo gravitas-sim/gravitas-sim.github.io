@@ -11,8 +11,6 @@ export const ES_MISSION = {
     'El núcleo de diseño de misiones, ejecutado en un Worker: transferencias entre órbitas circulares, cambios de plano, encuentros, el problema de Lambert, cónicas empalmadas, ventanas de transferencia y sobrevuelos. Cada respuesta dice qué supuso, cómo convergió su método o por qué se rechazó. Es una página de diagnóstico, no un plan de estudios.',
   'mission.notFor':
     'Un modelo educativo. Sus números no son diseño operativo de misiones ni navegación: los planetas se mueven en círculos en un mismo plano, los impulsos son instantáneos y solo atraen los cuerpos nombrados.',
-  'mission.lang': 'Idioma',
-  'mission.back': 'Volver a Gravitas',
   'mission.kernel': 'El núcleo en 3-D',
   'mission.docs': 'Cómo funciona el núcleo (MISSION.md)',
   'mission.compute': 'Calcular',

@@ -11,7 +11,6 @@
 // =============================================================================
 
 import {
-  LANGUAGES,
   language,
   preferred,
   setLanguage,
@@ -451,27 +450,10 @@ async function bench() {
 
 // --- Start-up --------------------------------------------------------------------
 
-function languageSwitch() {
-  $('langSwitch').replaceChildren(
-    ...LANGUAGES.map(({ id, endonym }) => {
-      const b = el('button', {
-        type: 'button',
-        class: 'ui-button',
-        lang: id,
-        text: endonym,
-      });
-      b.setAttribute('aria-pressed', String(language() === id));
-      b.addEventListener('click', () => useLanguage(id));
-      return b;
-    })
-  );
-}
-
 function useLanguage(id) {
   setLanguage(id);
   translatePage();
   document.title = t('lab3d.doc.title');
-  languageSwitch();
   fillControls();
   render();
 }

@@ -12,7 +12,6 @@
 // =============================================================================
 
 import {
-  LANGUAGES,
   language,
   preferred,
   setLanguage,
@@ -897,27 +896,10 @@ function fillControls() {
   );
 }
 
-function languageSwitch() {
-  $('langSwitch').replaceChildren(
-    ...LANGUAGES.map(({ id, endonym }) => {
-      const b = el('button', {
-        type: 'button',
-        class: 'ui-button',
-        lang: id,
-        text: endonym,
-      });
-      b.setAttribute('aria-pressed', String(language() === id));
-      b.addEventListener('click', () => useLanguage(id));
-      return b;
-    })
-  );
-}
-
 function useLanguage(id) {
   setLanguage(id);
   translatePage();
   document.title = t('mission.doc.title');
-  languageSwitch();
   fillControls();
   for (const draw of Object.values(shown)) draw();
 }

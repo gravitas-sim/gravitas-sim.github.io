@@ -13,11 +13,6 @@ import { ES_MISSION } from '../i18n/es.mission.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
-export const LANGUAGES = Object.freeze([
-  { id: 'en', endonym: 'English' },
-  { id: 'es', endonym: 'Español' },
-]);
-
 const CATALOGS = { en: EN_MISSION, es: ES_MISSION };
 const DEFAULT = 'en';
 let current = DEFAULT;

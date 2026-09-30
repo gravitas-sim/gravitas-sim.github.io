@@ -278,8 +278,15 @@ test.describe('the mission diagnostics page', () => {
       );
       expect(overflow).toBeLessThanOrEqual(0);
     }
-    // Switching language redraws what is on the page in the new one.
-    await page.locator('#langSwitch button[lang="en"]').click();
+    // The shell's language switch waits for js/shell.js, which this route
+    // cannot pay for yet (STATIC_ONLY in tests/shell.test.js): no control is
+    // offered that does nothing, and a language chosen elsewhere in Gravitas
+    // is the one the page opens in, its numbers with it.
+    await expect(page.locator('[data-gs-lang]')).toBeHidden();
+    await openPage(page, 'en');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await compute(page, 'mn-transfer');
+    await compute(page, 'mn-window');
     await expect(page.locator('#mn-transfer-out')).toContainText('3.8926 km/s');
     await expect(page.locator('#mn-window-status')).toHaveText(
       /^Finished: 3,721 cells/

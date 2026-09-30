@@ -12,8 +12,6 @@ export const EN_MISSIONLAB = {
     'A mission to Mars on JPL’s DE441 ephemeris, in three guided parts: meeting a depot in Earth orbit, choosing a day to leave in the 2026 launch window, and comparing the patched-conic design with the spacecraft flown directly under the Sun and the planets. Edit the plan, compute, and read every number in the tables.',
   'ml.notFor':
     'Educational software, not operational mission design or navigation. The planets’ positions are JPL’s, to a few kilometers; everything else is a teaching model, and the list at the end of the page says what it leaves out.',
-  'ml.lang': 'Language',
-  'ml.back': 'Back to Gravitas',
   'ml.core': 'The mission-design core',
   'ml.docs': 'How the lab works (MISSION_LAB.md)',
   'ml.compute': 'Compute the mission',

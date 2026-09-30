@@ -14,11 +14,6 @@ import { ES_MISSIONLABGUIDES } from '../../i18n/es.missionLabGuides.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
-export const LANGUAGES = Object.freeze([
-  { id: 'en', endonym: 'English' },
-  { id: 'es', endonym: 'Español' },
-]);
-
 const CATALOGS = {
   en: { ...EN_MISSIONLAB, ...EN_MISSIONLABGUIDES },
   es: { ...ES_MISSIONLAB, ...ES_MISSIONLABGUIDES },

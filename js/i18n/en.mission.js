@@ -11,8 +11,6 @@ export const EN_MISSION = {
     'The mission-design core, run in a Worker: transfers between circular orbits, plane changes, rendezvous, Lambert’s problem, patched conics, transfer windows and flybys. Each answer says what it assumed, how its solver converged, or why it was refused. This is a diagnostic page, not a curriculum.',
   'mission.notFor':
     'An educational model. Its numbers are not operational mission design or navigation: the planets move on circles in one plane, burns are instantaneous, and only the bodies named pull.',
-  'mission.lang': 'Language',
-  'mission.back': 'Back to Gravitas',
   'mission.kernel': 'The 3-D kernel',
   'mission.docs': 'How the core works (MISSION.md)',
   'mission.compute': 'Compute',

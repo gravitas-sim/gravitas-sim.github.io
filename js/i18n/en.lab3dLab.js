@@ -6,11 +6,9 @@ export const EN_LAB3DLAB = {
     'A 3-D view of the system; the tables below hold every number it shows',
   'l3.region.state': 'Positions and speeds',
   'l3.region.elements': 'Orbits',
-  'l3.lang': 'Language',
   'l3.title': 'The 3-D lab',
   'l3.intro':
     'Small systems of bodies in three dimensions, run by the validated 3-D kernel in a Worker. Move around them, change the frame they are seen in, and measure distances, angles and orbits. Every number the picture shows is also in the tables below it, which work without graphics.',
-  'l3.back': 'Back to Gravitas',
   'l3.diagnostics': "The kernel's diagnostics",
   'l3.docs': 'How it works (LAB3D.md)',
   'l3.keys':
