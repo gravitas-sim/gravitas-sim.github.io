@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 44 of them. 7 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 44 of them. 13 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -32,8 +32,8 @@ The columns:
 | gravitas.orbital-system | format, version | 1 | js/systemSpec.js systemFromFile | download | v1 only | refused, in words | no |
 | gravitas.system3d | format, formatVersion | 1 | js/lab3d/state.js migrateSystem | file, repository | v1 only; reads orbital-system/1 | refused, in words | no |
 | gravitas.lab3d.snapshot | format, formatVersion | 1 | js/lab3d/snapshot.js snapshotProblem | memory | v1 only | refused | no |
-| gravitas.experiment | format, formatVersion | 1 | js/experiments/experimentManifest.js migrateExperiment | memory, inside results | converts an unversioned sweep spec | refused, in words | no |
-| gravitas.experiment-result | format, formatVersion | 1 | js/experiments/experimentManifest.js reproducibility | download, localStorage | v1 only | refused; the analysis panel does not check | no |
+| gravitas.experiment | format, formatVersion | 1 | js/experiments/experimentManifest.js migrateExperiment | memory, inside results | converts an unversioned sweep spec | refused, in words | [yes](sdk/schemas/experiment-1.schema.json) |
+| gravitas.experiment-result | format, formatVersion | 1 | js/experiments/experimentManifest.js reproducibility | download, localStorage | v1 only | refused; the analysis panel does not check | [yes](sdk/schemas/experiment-result-1.schema.json) |
 | gravitas-experiment | format, version | 1 | js/experiments/exports.js importManifest | download | v1 only | refused by reason code | no |
 | experiment store | v | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2 | refused by reason code | no |
 | gravitas.mission-plan | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
@@ -49,20 +49,20 @@ The columns:
 | gravitas.mission-lab-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | notebook store | v | 1 | js/notebook/store.js load | localStorage | v1 only | kept and not overwritten, in words | no |
 | notebook entry snapshot | snapshot.v | 1 | js/notebook/entry.js validateEntry | localStorage, download | v1 only | refused by reason code | no |
-| gravitas.evidence.notebook | kind, version | 1 | js/notebook/notebook.js validateBackup | download | v1 only | refused, in words | no |
+| gravitas.evidence.notebook | kind, version | 1 | js/notebook/notebook.js validateBackup | download | v1 only | refused, in words | [yes](sdk/schemas/evidence-notebook-1.schema.json) |
 | gravitas.course-pack (extension form) | format, formatVersion | 1 | js/platform/course.js validateCoursePack | repository, extension archive, IndexedDB | v1 only | a validation problem, which /2 gets too | [yes](sdk/schemas/course-pack-1.schema.json) |
 | gravitas.course-pack (builder form) | format, formatVersion | 2 | js/course/pack.js migrateCoursePack | download, localStorage, repository | migrates v1 | refused, in words | no |
 | course home link | link prefix c | 2 | js/course/links.js readCourseFragment | link | migrates c1 | refused by reason code | no |
 | gravitas.course-manifest | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.capability-package | format, formatVersion | 1 | js/platform/manifest.js validateManifest | repository, IndexedDB | v1 only | refused, in words | [yes](sdk/schemas/capability-package-1.schema.json) |
 | gravitas.scenario-pack | format, formatVersion | 1 | js/platform/scenario.js migrateScenarioPack | download, localStorage, link | v1 only; reads orbital-system/1 | refused, in words | [yes](sdk/schemas/scenario-pack-1.schema.json) |
-| gravitas.catalog | format, formatVersion | 1 | js/catalogPage.js load | repository | v1 only | refused | no |
-| gravitas.catalog-curation | format, formatVersion | 1 | tools/catalog.mjs readCuration | repository | not checked | not checked | no |
+| gravitas.catalog | format, formatVersion | 1 | js/catalogPage.js load | repository | v1 only | refused | [yes](sdk/schemas/catalog-1.schema.json) |
+| gravitas.catalog-curation | format, formatVersion | 1 | tools/catalog.mjs readCuration | repository | not checked | not checked | [yes](sdk/schemas/catalog-curation-1.schema.json) |
 | gravitas.extension-archive | none (the archive structure) | 1 | sdk/lib/archive.mjs, js/catalog/archive.js | repository, download | structure checked, not version | structure checked, not version | no |
 | gravitas-embed messages | protocol, version | 1 | js/embedMessages.js readMessage | memory | v1 only | refused by error code | no |
 | embed options | query ev | 1 | js/embedOptions.js readEmbedOptions | link | v1 only | ignored: opens as a plain embed | no |
 | gravitas.student-data | format, formatVersion | 1 | js/storage/index.js Store.importAll | download | v1 only | refused, with a reason | no |
-| gravitas.evaluation | kind, schema | 1 | tools/evaluation-summary.mjs | download, localStorage draft | v1 only | skipped, in words | no |
+| gravitas.evaluation | kind, schema | 1 | tools/evaluation-summary.mjs | download, localStorage draft | v1 only | skipped, in words | [yes](sdk/schemas/evaluation-1.schema.json) |
 
 ## What the table shows
 
