@@ -159,6 +159,14 @@ describe('CSV field writing', () => {
     expect(csvField('\tplain')).toBe('"\'\tplain"');
     // Full-width forms, which some spreadsheets fold to the ASCII ones.
     expect(csvField('＝SUM(A1)')).toBe('"\'＝SUM(A1)"');
+    expect(csvField('\uff0b1')).toBe('"\'\uff0b1"');
+    expect(csvField('\uff0dx')).toBe('"\'\uff0dx"');
+    expect(csvField('\uff20x')).toBe('"\'\uff20x"');
+    // Behind a zero-width space or a no-break space, which a spreadsheet skips
+    // before it decides (Roadmap II Prompt 67: the measure panel's own writer
+    // missed both, and now uses this one).
+    expect(csvField('\u200b=1+1')).toBe('"\'\u200b=1+1"');
+    expect(csvField('\u00a0@x')).toBe('"\'\u00a0@x"');
     // Not a number and not a formula: left alone.
     expect(csvField('Infinity')).toBe('Infinity');
     // Not finite, and a leading minus makes it a formula to Excel.

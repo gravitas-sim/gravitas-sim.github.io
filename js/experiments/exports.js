@@ -24,6 +24,7 @@
 import { csvField, num, toCsv } from '../csv.js';
 import { METRIC_UNITS, SCALAR_METRICS } from './metrics.js';
 import { canonicalJson } from './canonicalState.js';
+import { plainDataProblem } from '../platform/common.js';
 
 /** The manifest format, versioned separately from the storage schema. */
 export const MANIFEST_VERSION = 1;
@@ -388,6 +389,8 @@ export function importManifest(text) {
   } catch {
     return { ok: false, experiment: null, reason: 'not-json' };
   }
+  if (plainDataProblem(parsed, { depth: 6, items: 10_000, text: 10_000 }))
+    return { ok: false, experiment: null, reason: 'not-plain-data' };
   if (parsed?.format !== 'gravitas-experiment') {
     return { ok: false, experiment: null, reason: 'not-an-experiment' };
   }

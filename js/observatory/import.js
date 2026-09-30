@@ -32,6 +32,7 @@
 // =============================================================================
 
 import { FORMAT, FORMAT_VERSION, validateObservation } from './schema.js';
+import { plainDataProblem } from '../platform/common.js';
 import { TIME_FORMATS, TIME_SCALES, dimensionOf, parseUnit } from './units.js';
 
 export const LIMITS = Object.freeze({
@@ -319,6 +320,13 @@ function readJson(body, file, opts) {
     // The engine's own message differs between browsers; this one does not.
     return fail('the file starts like JSON and is not valid JSON');
   }
+  // Plain data within the workspace's own limits, and no prototype key.
+  const why = plainDataProblem(data, {
+    depth: 6,
+    items: LIMITS.rows,
+    text: 10_000,
+  });
+  if (why) return fail(`it is not plain data (${why})`);
   if (data && data.format === FORMAT) {
     if (data.formatVersion !== FORMAT_VERSION) {
       return fail(
