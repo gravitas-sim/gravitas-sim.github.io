@@ -119,6 +119,9 @@ const LIVES_OF_STARS = {
   subtitle: 'From clouds to cosmic remnants, along eight published tracks',
   duration: '80-100 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'logarithms',
+  prerequisites: [],
   tags: ['stars', 'stellar-evolution'],
   lock: { placement: true, inspector: false, areaSweep: false },
   summary:

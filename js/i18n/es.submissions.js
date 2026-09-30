@@ -35,6 +35,8 @@ export const ES_SUBMISSIONS = {
   'sub.read.noName': '(sin nombre)',
   'sub.read.duplicate': 'duplicado exacto de la n.º {n}',
   'sub.read.attempt': 'intento {n} de {of}',
+  'sub.written.summary': 'Respuestas escritas: {n}',
+  'sub.written.rubric': 'Nota para corregir',
   'sub.refused.title': 'No leídas',
   'sub.reason.empty': 'no hay nada que leer',
   'sub.reason.wrongKind': 'no es un código de entrega de Gravitas',

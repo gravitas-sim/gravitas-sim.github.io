@@ -253,6 +253,9 @@ const A_UNIVERSE_OF_STARS = {
   subtitle: 'Size, color and the H-R diagram, from eight modeled stars',
   duration: '70-90 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'logarithms',
+  prerequisites: [],
   tags: ['stars', 'observing'],
   lock: { placement: true, inspector: false, areaSweep: false },
   summary:

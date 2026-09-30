@@ -647,6 +647,7 @@ export const EN_DEFERRED = {
   'assign.close': 'Close',
   'assign.name': 'Assignment name',
   'assign.intro': 'Instructions for students (optional)',
+  'assign.roster': 'Class or roster code (optional)',
   'assign.selectAll': 'Select all',
   'assign.selectNone': 'Clear',
   'assign.count':
@@ -668,6 +669,7 @@ export const EN_DEFERRED = {
   'assign.print.steps': '{n} steps',
   'assign.print.open': 'Open the assignment at this address:',
   'assign.print.id': 'Assignment {id}, issued {date}.',
+  'assign.print.roster': 'Class code: {code}',
 
   'assign.error.nothingSelected': 'Choose at least one step.',
   'assign.error.noLesson': 'That lesson could not be read.',
@@ -1809,6 +1811,7 @@ export const EN_DEFERRED = {
   'inv.summary.going': '{n} in progress',
   'inv.card.objectives': { one: '{n} objective', other: '{n} objectives' },
 
+  'inv.card.objectivesShow': 'Learning objectives',
   'inv.step.counter': 'Step {n} of {total}',
   'inv.step.kind.read': 'read',
   'inv.step.kind.predict': 'predict',

@@ -486,3 +486,33 @@ test.describe('everyone can use it', () => {
     await expect.poll(() => shownIds(page)).toEqual(['tides']);
   });
 });
+
+test.describe('a card says what the lesson teaches', () => {
+  test('its objectives open under it, fetched only when asked for', async ({
+    page,
+    app,
+  }) => {
+    await openBrowser(page, app);
+    const box = page.locator('[data-objectives="keplers-laws"]');
+    // Not a control inside the card: the card is one button, and a disclosure
+    // inside a button is not a disclosure.
+    await expect(
+      page.locator('.inv-card [data-objectives], .inv-card details')
+    ).toHaveCount(0);
+    const fetched = () =>
+      page.evaluate(() =>
+        performance
+          .getEntriesByType('resource')
+          .some(r => /\/investigations\/keplers-laws\.js/.test(r.name))
+      );
+    expect(await fetched()).toBe(false);
+
+    await box.locator('summary').click();
+    const want = await page.evaluate(async () => {
+      const { MANIFEST } = await import('/js/data/investigations/registry.js');
+      return MANIFEST.find(m => m.id === 'keplers-laws').objectiveCount;
+    });
+    await expect(box.locator('li')).toHaveCount(want);
+    expect(await fetched()).toBe(true);
+  });
+});

@@ -86,6 +86,9 @@ const RADIAL_VELOCITY = {
   subtitle: 'Watch a star wobble, weigh its planet, and combine the clues',
   duration: '45-55 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'algebra',
+  prerequisites: ['transit-photometry'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

@@ -126,6 +126,9 @@ const TRANSITS = {
     'Measure a transit, weigh what it tells you, and find what is hiding',
   duration: '50-70 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'algebra',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

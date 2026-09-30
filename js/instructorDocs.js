@@ -474,11 +474,20 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
     'Progress is saved in the student’s own browser, so an investigation can be started, left, and ' +
       'resumed. When a student finishes, they enter their name and download a PDF lab report listing ' +
       'every question, their answer, and whether the automatically checked ones matched. The report ' +
-      'also carries links that reopen the exact simulation state each step used.'
+      'also carries links that reopen the exact simulation state each step used, and a submission ' +
+      'token, which the finish dialog also offers to copy or save for a learning management system ' +
+      'that takes text rather than a file.'
   );
+  doc.paragraph(
+    'To read the class’s work back, drop the reports, progress files or pasted tokens on the ' +
+      'submission review page. It needs no passphrase and returns one table of how often each question ' +
+      'was answered wrongly, hardest first, which can be downloaded as a spreadsheet. It keeps nothing ' +
+      'and sends nothing: close the tab and it is gone.'
+  );
+  doc.link('Submission review', `${SITE}/instructors/submissions/`);
   doc.bullets([
-    'Because progress lives in the browser, a student who switches machines starts again. Say so when assigning.',
-    'The report is the deliverable. There is no instructor-side gradebook and no account system.',
+    'Progress lives in the browser. A student who switches machines can download a progress file on one and restore it on the other; without one they start again. Say so when assigning.',
+    'The report is the deliverable. The review page reads it but is not a gradebook: there is no roster and no account system, and it checks answers, not identity.',
     'Multiple-choice and numeric answers are checked automatically. Written answers, predictions and measurements are not, and are where an instructor’s attention is best spent.',
     'A useful assignment pattern: "complete the investigation and submit the report, then answer these two discussion questions in a paragraph each."',
   ]);
@@ -491,12 +500,12 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
       [
         'Multiple choice',
         'Yes',
-        'Marked immediately, with an explanation shown once answered.',
+        'Marked immediately, with an explanation shown once answered. A student can change the answer, and the report says how many tries it took.',
       ],
       [
         'Numeric',
         'Yes',
-        'Marked against a stated tolerance. Units in the typed answer are ignored.',
+        'Marked against a stated tolerance. A unit typed with the answer is read: an equivalent one is converted, and one of the wrong kind is reported rather than marked wrong.',
       ],
       [
         'Prediction',

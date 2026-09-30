@@ -56,6 +56,9 @@ const KEPLER = {
   subtitle: 'Measure the shape, pacing and timing of real orbits',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'logarithms',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

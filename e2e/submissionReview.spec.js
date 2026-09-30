@@ -210,6 +210,30 @@ test.describe('the submission review page', () => {
     expect(json.options.includeWritten).toBe(true);
   });
 
+  test('shows each written answer beside its rubric, on this screen only', async ({
+    page,
+  }) => {
+    // Read and counted as unmarkable, and never shown: an instructor had to
+    // open every PDF to read them.
+    await open(page);
+    await page.locator('#picker').setInputFiles(PILE.slice(0, 2));
+    await expect(page.locator('#count')).toHaveText('2 submissions');
+    const boxes = page.locator('#who .sr-written');
+    // Ada wrote one; Ben wrote nothing, so he gets no disclosure.
+    await expect(boxes).toHaveCount(1);
+    await expect(boxes.locator('summary')).toHaveText('Written answers: 1');
+    await boxes.locator('summary').click();
+    await expect(boxes.locator('dd').first()).toHaveText(
+      'Closer to the star, so it moves faster.'
+    );
+    const step = kepler.steps.find(s => s.sid === 'why-the-speed-changes');
+    if (step.rubric) {
+      await expect(boxes.locator('.sr-rubric')).toContainText('Marking note:');
+    }
+    // Nothing on the page is an entity or a tag left as text.
+    expect(await boxes.innerText()).not.toMatch(/&[a-z]+;|<\/?[a-z]/);
+  });
+
   test('works from the keyboard alone', async ({ page }) => {
     await open(page);
     await page.locator('#picker').setInputFiles(PILE.slice(0, 2));
@@ -310,6 +334,10 @@ test.describe('the submission review page', () => {
       unmarked: 1,
       incomplete: 10,
       stale: 0,
+      // A point a question: two earned, and the written answer's one waiting.
+      points: 2,
+      pointsPossible: 13,
+      pointsUnmarked: 1,
     });
     expect(sub.warnings).toEqual(['noRosterId']);
     const q = sid => sub.questions.find(x => x.stepId === sid);

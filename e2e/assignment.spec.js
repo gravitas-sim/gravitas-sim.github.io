@@ -78,6 +78,24 @@ async function makeLink(page, name = 'Week 3') {
 }
 
 test.describe('building one', () => {
+  test('a class code rides on the link, where the submission token reads it', async ({
+    page,
+    app,
+  }) => {
+    // The token has read ?roster= since it existed; the builder had no field
+    // to put it there, so an instructor had to edit the address by hand.
+    await openBuilder(page, app);
+    await tick(page, await dependentIndices(page, 1));
+    await page.locator('#assignRoster').fill('PHYS 101-A');
+    const url = new URL(await makeLink(page));
+    expect(url.searchParams.get('roster')).toBe('PHYS 101-A');
+    expect(url.hash).toMatch(/^#a1[zr]/);
+    // And the field is optional: without it the link carries no query.
+    await page.locator('#assignRoster').fill('');
+    const bare = new URL(await makeLink(page, 'Week 4'));
+    expect(bare.search).toBe('');
+  });
+
   test('the world a step is about is added, and the reason is on screen', async ({
     page,
     app,

@@ -122,6 +122,9 @@ const ENERGY = {
   subtitle: 'Find out what decides whether something comes back',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'arithmetic',
+  prerequisites: ['keplers-laws'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

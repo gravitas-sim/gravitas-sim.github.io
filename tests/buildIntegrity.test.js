@@ -172,10 +172,11 @@ describe('the service worker manifest is current', () => {
       /^js\/data\/investigations\/[a-z0-9-]+\.js$/.test(p)
     );
     // provenance.js is generated infrastructure, not a lesson body - it is in
-    // this directory because the lesson engine imports it.
+    // this directory because the lesson engine imports it. So is discovery.js,
+    // the course-planning metadata generated with the manifest.
     const bodies = lessons.filter(
       p =>
-        !/\/(manifest|manifest\.es|registry|i18n|catalog|browse|browseData|sequences|provenance)\.js$/.test(
+        !/\/(manifest|manifest\.es|registry|i18n|catalog|browse|browseData|discovery|sequences|provenance)\.js$/.test(
           p
         )
     );

@@ -37,6 +37,8 @@ export const EN_SUBMISSIONS = {
   'sub.read.noName': '(no name)',
   'sub.read.duplicate': 'exact duplicate of #{n}',
   'sub.read.attempt': 'attempt {n} of {of}',
+  'sub.written.summary': 'Written answers: {n}',
+  'sub.written.rubric': 'Marking note',
   'sub.refused.title': 'Not read',
   'sub.reason.empty': 'nothing to read',
   'sub.reason.wrongKind': 'not a Gravitas submission token',

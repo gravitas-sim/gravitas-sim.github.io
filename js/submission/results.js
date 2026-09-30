@@ -57,8 +57,11 @@ export const RESULTS_KIND = 'gravitas.submission-results';
 /**
  * The export schema. Bump it when a column or field changes meaning or goes
  * away; adding a column at the end is not a change a reader must handle.
+ *
+ * 2 added points: what each question is worth and what it earned, and the
+ * totals. readResults() still reads a version 1 file.
  */
-export const RESULTS_VERSION = 1;
+export const RESULTS_VERSION = 2;
 
 /** Written into the `schema` column of every CSV row. */
 export const RESULTS_SCHEMA_ID = `${RESULTS_KIND}/${RESULTS_VERSION}`;
@@ -115,6 +118,9 @@ export const SUMMARY_COLUMNS = Object.freeze([
   'attempt_number',
   'attempts_in_group',
   'warnings',
+  'points',
+  'points_possible',
+  'points_unmarked',
 ]);
 
 /** One row per graded step of every accepted submission. */
@@ -134,6 +140,8 @@ export const QUESTION_COLUMNS = Object.freeze([
   'step_changed',
   'response_status',
   'response',
+  'points',
+  'points_possible',
 ]);
 
 /**
@@ -258,12 +266,19 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
       verdict =
         ok === true ? 'correct' : ok === false ? 'incorrect' : 'unmarked';
     }
+    // What it is worth: the step's own points where a composed lesson declared
+    // them, one otherwise, as the Composer counts. A written answer earns
+    // nothing yet - it is the instructor's to mark - rather than zero.
+    const worth =
+      Number.isInteger(step.points) && step.points > 0 ? step.points : 1;
     questions.push({
       stepNumber: steps.indexOf(step) + 1,
       sid: step.sid,
       type: step.type,
       title: step.title || step.sid,
       verdict,
+      pointsPossible: worth,
+      points: verdict === 'correct' ? worth : verdict === 'unmarked' ? null : 0,
       attempts: attempts.get(step.sid) ?? null,
       locale: has ? answer.locale : null,
       changed: changed.has(step.sid),
@@ -281,6 +296,8 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
       type: null,
       title: sid,
       verdict: 'stale',
+      pointsPossible: null,
+      points: null,
       attempts: attempts.get(sid) ?? null,
       locale: answer.locale,
       changed: false,
@@ -289,6 +306,7 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
   }
 
   const count = v => questions.filter(q => q.verdict === v).length;
+  const sum = f => questions.reduce((a, q) => a + (f(q) ?? 0), 0);
   const visited = Array.isArray(backup.progress?.visited)
     ? new Set(backup.progress.visited).size
     : 0;
@@ -327,6 +345,9 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
     unmarked: count('unmarked'),
     incomplete: count('incomplete'),
     stale: count('stale'),
+    points: sum(q => q.points),
+    pointsPossible: sum(q => q.pointsPossible),
+    pointsUnmarked: sum(q => (q.points === null ? q.pointsPossible : 0)),
     questions,
   };
 }
@@ -454,6 +475,9 @@ export function summaryCsv(records) {
       attempt_number: r.attemptNumber,
       attempts_in_group: r.attemptsInGroup,
       warnings: r.warnings.join(' '),
+      points: r.points,
+      points_possible: r.pointsPossible,
+      points_unmarked: r.pointsUnmarked,
     };
     rows.push(SUMMARY_COLUMNS.map(c => cells[c]));
   }
@@ -505,6 +529,8 @@ export function questionCsv(records, { includeWritten = false } = {}) {
         step_changed: q.changed ? 'yes' : 'no',
         response_status: response.status,
         response: response.text,
+        points: q.points,
+        points_possible: q.pointsPossible,
       };
       rows.push(QUESTION_COLUMNS.map(c => cells[c]));
     }
@@ -564,6 +590,9 @@ export function resultsJson(
         unmarked: r.unmarked,
         incomplete: r.incomplete,
         stale: r.stale,
+        points: r.points,
+        pointsPossible: r.pointsPossible,
+        pointsUnmarked: r.pointsUnmarked,
       },
       duplicateOf: r.duplicateOf,
       attempt:
@@ -588,10 +617,58 @@ export function resultsJson(
           stepChanged: q.changed,
           responseStatus: response.status,
           response: response.text,
+          points: q.points,
+          pointsPossible: q.pointsPossible,
         };
       }),
     })),
     refused: refused.map(r => ({ label: r.label, reason: r.reason })),
   };
   return `${JSON.stringify(doc, null, 2)}\n`;
+}
+
+/**
+ * Read a results file this build or an earlier one wrote.
+ *
+ * Version 1 had no points; it is read with them as null, which is what they
+ * are - the file does not say - rather than as zero.
+ *
+ * @param {string|object} input - The JSON text, or the parsed document
+ * @returns {{ok: true, doc: object}|{ok: false, reason: string}} The document,
+ *   in this version's shape
+ */
+export function readResults(input) {
+  let doc = input;
+  if (typeof input === 'string') {
+    try {
+      doc = JSON.parse(input);
+    } catch {
+      return { ok: false, reason: 'notJson' };
+    }
+  }
+  if (!doc || doc.kind !== RESULTS_KIND)
+    return { ok: false, reason: 'wrongKind' };
+  if (doc.version === RESULTS_VERSION) return { ok: true, doc };
+  if (doc.version !== 1) return { ok: false, reason: 'unknownVersion' };
+  return {
+    ok: true,
+    doc: {
+      ...doc,
+      version: RESULTS_VERSION,
+      submissions: (doc.submissions || []).map(sub => ({
+        ...sub,
+        counts: {
+          ...sub.counts,
+          points: null,
+          pointsPossible: null,
+          pointsUnmarked: null,
+        },
+        questions: (sub.questions || []).map(q => ({
+          ...q,
+          points: null,
+          pointsPossible: null,
+        })),
+      })),
+    },
+  };
 }
