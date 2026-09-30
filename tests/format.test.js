@@ -9,6 +9,8 @@ import {
   NBSP,
   MINUS,
   TIMES,
+  fixed,
+  withUncertainty,
 } from '../js/format.js';
 
 describe('superscript', () => {
@@ -175,5 +177,50 @@ describe('parseFormatted', () => {
   test('handles a value carrying no unit and a plain string', () => {
     expect(parseFormatted('1,000')).toBe(1000);
     expect(parseFormatted(null)).toBeNaN();
+  });
+});
+
+// Roadmap II Prompt 59: the locale's decimal convention, a fixed decimal count,
+// and an uncertainty. English is what every caller had before; Spanish is the
+// SI's and the RAE's, which js/answerParse.js reads back.
+describe('in the reader’s locale', () => {
+  const NNBSP = '\u202f';
+  test.each([
+    [12345.6, { sig: 6 }, '12,345.6', `12${NNBSP}345,6`],
+    [1234.5, { sig: 5 }, '1,234.5', '1234,5'],
+    [0.5, {}, '0.500', '0,500'],
+    [-0.0123, {}, '\u22120.0123', '\u22120,0123'],
+    [
+      1.99e30,
+      {},
+      '1.99\u00a0\u00d7\u00a010\u00b3\u2070',
+      '1,99\u00a0\u00d7\u00a010\u00b3\u2070',
+    ],
+  ])('%p %p', (value, options, en, es) => {
+    expect(formatNumber(value, options)).toBe(en);
+    expect(formatNumber(value, { ...options, locale: 'en' })).toBe(en);
+    expect(formatNumber(value, { ...options, locale: 'es' })).toBe(es);
+  });
+
+  test('a fixed count of decimals, ungrouped, for a field a student edits', () => {
+    expect(fixed(0.914, 2)).toBe('0.91');
+    expect(fixed(-0.914, 2, 'es')).toBe('\u22120,91');
+    expect(fixed(12345.678, 1, 'es')).toBe('12345,7');
+    expect(fixed(Number.NaN, 2)).toBe('');
+  });
+
+  test('an uncertainty sets the precision of the value it goes with', () => {
+    expect(withUncertainty(1.2345, 0.0123)).toBe('1.235\u00a0±\u00a00.012');
+    expect(withUncertainty(1.2345, 0.0123, { locale: 'es' })).toBe(
+      '1,235\u00a0±\u00a00,012'
+    );
+    expect(withUncertainty(1.2345, 0.0123, { interval: true })).toBe(
+      '[1.222, 1.247]'
+    );
+    expect(
+      withUncertainty(1.2345, 0.0123, { interval: true, locale: 'es' })
+    ).toBe('[1,222; 1,247]');
+    expect(withUncertainty(1234, 56, { sig: 1 })).toBe('1230\u00a0±\u00a060');
+    expect(withUncertainty(5, 0)).toBe('5.00');
   });
 });

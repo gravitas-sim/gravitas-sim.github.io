@@ -79,6 +79,23 @@ function typesetMinus(s) {
 }
 
 /**
+ * English digits in a locale's convention. Spanish writes a decimal comma and,
+ * as the SI and the RAE do, groups with a narrow no-break space from five
+ * digits up: 12 345,6 but 1234,5. Derived here rather than asked of Intl,
+ * whose Spanish grouping differs between browsers.
+ * @param {string} text - As en-US writes it
+ * @param {string} [locale] - 'en', 'es', …
+ * @returns {string}
+ */
+function inLocale(text, locale) {
+  if (!String(locale || '').startsWith('es')) return text;
+  const [whole, frac] = text.split('.');
+  const digits = whole.replace(/\D/g, '').length;
+  const grouped = whole.replace(/,/g, digits > 4 ? '\u202f' : '');
+  return frac === undefined ? grouped : `${grouped},${frac}`;
+}
+
+/**
  * Write a value as a power of ten.
  *
  * The mantissa is always shown, including when it rounds to 1. "1.00 x 10^6"
@@ -91,7 +108,7 @@ function typesetMinus(s) {
  *   zeros, for places where width matters more than alignment: axis ticks.
  * @returns {string} e.g. "1.99 × 10³⁰"
  */
-export function scientific(value, sig = 3, compact = false) {
+export function scientific(value, sig = 3, compact = false, locale) {
   if (!Number.isFinite(value)) return '-';
   if (value === 0) return '0';
   const digits = Math.max(1, Math.min(20, Math.round(sig)));
@@ -104,9 +121,10 @@ export function scientific(value, sig = 3, compact = false) {
     if (mantissa === '1') return `10${superscript(exp)}`;
     if (mantissa === '-1') return `${MINUS}10${superscript(exp)}`;
   }
+  mantissa = typesetMinus(inLocale(mantissa, locale));
   // A power of ten of zero is just the number.
-  if (exp === 0) return typesetMinus(mantissa);
-  return `${typesetMinus(mantissa)}${NBSP}${TIMES}${NBSP}10${superscript(exp)}`;
+  if (exp === 0) return mantissa;
+  return `${mantissa}${NBSP}${TIMES}${NBSP}10${superscript(exp)}`;
 }
 
 /**
@@ -116,7 +134,7 @@ export function scientific(value, sig = 3, compact = false) {
  * @param {number} [sig] - Significant figures
  * @returns {string} e.g. "1,230"
  */
-export function decimal(value, sig = 3) {
+export function decimal(value, sig = 3, locale) {
   if (!Number.isFinite(value)) return '-';
   if (value === 0) return '0';
   const digits = Math.max(1, Math.min(21, Math.round(sig)));
@@ -128,10 +146,13 @@ export function decimal(value, sig = 3) {
   const exponent = Math.floor(Math.log10(Math.abs(rounded)));
   const decimals = Math.max(0, Math.min(20, digits - 1 - exponent));
   return typesetMinus(
-    rounded.toLocaleString('en-US', {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals,
-    })
+    inLocale(
+      rounded.toLocaleString('en-US', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      }),
+      locale
+    )
   );
 }
 
@@ -146,7 +167,7 @@ export function decimal(value, sig = 3) {
  * @returns {string} Formatted number, with no unit attached
  */
 export function formatNumber(value, options = {}) {
-  const { sig = 3, sci, compact = false } = options;
+  const { sig = 3, sci, compact = false, locale } = options;
   if (!Number.isFinite(value)) return '-';
   if (value === 0) return '0';
   // Decided on the rounded value, not the raw one: 99999 to three figures is
@@ -154,7 +175,50 @@ export function formatNumber(value, options = {}) {
   const magnitude = Math.abs(Number(value.toPrecision(Math.max(1, sig))));
   const useSci =
     sci === undefined ? magnitude >= SCI_UPPER || magnitude < SCI_LOWER : sci;
-  return useSci ? scientific(value, sig, compact) : decimal(value, sig);
+  return useSci
+    ? scientific(value, sig, compact, locale)
+    : decimal(value, sig, locale);
+}
+
+/**
+ * A fixed number of decimals, for the few places the count is the point: a
+ * lesson widget whose text names a precision, or a value written into a field
+ * a student edits. Not grouped, so js/answerParse.js reads it back.
+ * @param {number} value
+ * @param {number} decimals
+ * @param {string} [locale]
+ * @returns {string} '' when not finite
+ */
+export function fixed(value, decimals, locale) {
+  if (!Number.isFinite(value)) return '';
+  const text = value.toFixed(Math.max(0, Math.min(20, decimals)));
+  return typesetMinus(inLocale(text, locale).replace(/\u202f/g, ''));
+}
+
+/**
+ * A value and its uncertainty at the uncertainty's precision: "1.234 ± 0.012",
+ * or, with `interval`, the range it spans, "[1.222, 1.246]" ("[1,222; 1,246]"
+ * in Spanish, whose comma is taken). Which uncertainty it is - one sigma, a
+ * 95% interval - is the caller's to say beside it.
+ * @param {number} value
+ * @param {number} sigma - Not negative
+ * @param {{sig?: number, locale?: string, interval?: boolean}} [options] -
+ *   `sig` is the uncertainty's significant figures, 2 by default
+ * @returns {string}
+ */
+export function withUncertainty(value, sigma, options = {}) {
+  const { sig = 2, locale, interval = false } = options;
+  if (!Number.isFinite(value)) return '-';
+  if (!(sigma > 0)) return formatNumber(value, { locale });
+  const place = Math.floor(Math.log10(sigma)) - (sig - 1);
+  const decimals = Math.max(0, -place);
+  const round = x => Math.round(x / 10 ** place) * 10 ** place;
+  const show = x => typesetMinus(inLocale(x.toFixed(decimals), locale));
+  if (interval) {
+    const sep = String(locale || '').startsWith('es') ? ';' : ',';
+    return `[${show(round(value - sigma))}${sep} ${show(round(value + sigma))}]`;
+  }
+  return `${show(round(value))}${NBSP}±${NBSP}${show(round(sigma))}`;
 }
 
 /**
