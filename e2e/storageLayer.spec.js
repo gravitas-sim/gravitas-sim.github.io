@@ -1,0 +1,95 @@
+// =============================================================================
+// js/storage/ in a real browser (Roadmap II Prompt 65, step 2)
+// -----------------------------------------------------------------------------
+// tests/storageLayer.test.js covers the policies, migrations and export/import
+// over the memory and localStorage backends. What only a browser has is here:
+// IndexedDB, a quota estimate, and a second tab hearing a change.
+//
+// Sources only: no page loads the module yet (step 3 moves the writers onto
+// it), so the build has nothing to bundle and dist/ has no copy to test.
+// =============================================================================
+
+import { test, expect } from './fixtures.js';
+
+const PAGE = '/model/';
+
+test.describe('the storage module', () => {
+  test('uses IndexedDB, knows the quota, and keeps a record across a reload', async ({
+    page,
+  }) => {
+    await page.goto(PAGE, { waitUntil: 'load' });
+    const first = await page.evaluate(async () => {
+      const storage = await import('/js/storage/index.js');
+      const store = await storage.openStore();
+      const put = await store.collection('drafts').put('orbits', { t: 1 });
+      const est = await store.estimate();
+      store.close();
+      return { mode: store.mode, fallback: store.fallback, ok: put.ok, est };
+    });
+    expect(first).toMatchObject({ mode: 'idb', fallback: null, ok: true });
+    expect(first.est.known).toBe(true);
+    expect(first.est.reserve).toBeGreaterThanOrEqual(5 * 1024 * 1024);
+
+    await page.reload({ waitUntil: 'load' });
+    const again = await page.evaluate(async () => {
+      const storage = await import('/js/storage/index.js');
+      const store = await storage.openStore();
+      const v = await store.collection('drafts').get('orbits');
+      await store.deleteAll();
+      store.close();
+      return v;
+    });
+    expect(again).toEqual({ t: 1 });
+  });
+
+  test('a write in one tab is heard in another', async ({ page, context }) => {
+    await page.goto(PAGE, { waitUntil: 'load' });
+    const other = await context.newPage();
+    await other.goto(PAGE, { waitUntil: 'load' });
+    await other.evaluate(async () => {
+      const { openStore } = await import('/js/storage/index.js');
+      const store = await openStore();
+      window.__heard = [];
+      store.addEventListener('change', e => window.__heard.push(e.detail));
+      window.__store = store;
+    });
+    await page.evaluate(async () => {
+      const storage = await import('/js/storage/index.js');
+      const store = await storage.openStore();
+      await store.collection('evidence').put('entry', { v: 2 });
+      await store.collection('evidence').delete('entry');
+      store.close();
+    });
+    await expect
+      .poll(() => other.evaluate(() => window.__heard))
+      .toEqual([
+        { collection: 'evidence', id: 'entry', op: 'put', remote: true },
+        { collection: 'evidence', id: 'entry', op: 'delete', remote: true },
+      ]);
+    await other.close();
+  });
+
+  test('without IndexedDB it falls back to localStorage, and says so', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(window, 'indexedDB', { value: undefined });
+    });
+    await page.goto(PAGE, { waitUntil: 'load' });
+    const got = await page.evaluate(async () => {
+      const storage = await import('/js/storage/index.js');
+      const store = await storage.openStore();
+      const put = await store.collection('preferences').put('units', { s: 1 });
+      const keys = Object.keys(localStorage).filter(k =>
+        k.startsWith(storage.LOCAL_PREFIX)
+      );
+      await store.deleteAll();
+      store.close();
+      return { mode: store.mode, fallback: store.fallback, ok: put.ok, keys };
+    });
+    expect(got.mode).toBe('local');
+    expect(got.fallback.persistent).toBe(true);
+    expect(got.ok).toBe(true);
+    expect(got.keys).toEqual(['gravitas_store:preferences:units']);
+  });
+});
