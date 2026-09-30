@@ -59,10 +59,13 @@ These are the student's own work, and what an "export everything" would carry:
 | sessionStorage `gravitas_instructor_key` | The instructor materials' key, for the session only | `js/instructorPortal.js` |
 | IndexedDB `gravitas-catalog` | Installed catalog extensions: their archives' files | `js/catalog/store.js` |
 | IndexedDB `gravitas-archive` | The archive import's cached answers | `js/archive/cache.js` |
+| IndexedDB `gravitas-store` | The storage module's collections (Prompt 65): one object store, `records`, keyed by collection and name. Nothing writes to it yet; step 3 moves the writers above onto it | `js/storage/index.js` |
+| `gravitas_store:<collection>:<name>` | The same records, one key each, when IndexedDB is unavailable | `js/storage/index.js` |
 | Cache Storage `gravitas-<build>` | The service worker's precache; an older build's cache is deleted when a new one activates | `sw.js` |
 
 ## Size policies
 
+**The storage module** (`js/storage/index.js`, Prompt 65 step 2) states a policy for each of its nine collections: the most one record and the collection may hold (`COLLECTIONS`). It refuses a write that would leave less than a reserve free: 5 MiB or a tenth of the origin's quota, whichever is more, as `navigator.storage.estimate()` reports it. Until step 3 moves the writers over, the keys above keep their own handling:
+
 - **Only the experiment store states a budget:** 512 KB per experiment and 2 MB in total (`js/experiments/store.js`, `LIMITS`), with checkpoints of up to 1.5 million characters (`js/experimentsPage.js`).
-- **Every other key relies on the browser's quota.** `navigator.storage.estimate()` is called nowhere, and a full quota is handled where a write fails, in a few catch blocks.
-- **Prompt 65's storage module** adds the estimate, a reserve, and a policy per collection.
+- **Every other key relies on the browser's quota.** Nothing else calls `navigator.storage.estimate()`, and a full quota is handled where a write fails, in a few catch blocks.

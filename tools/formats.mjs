@@ -431,6 +431,16 @@ export const FORMATS = Object.freeze([
     newer: 'ignored: opens as a plain embed',
   },
   {
+    name: 'gravitas.student-data',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/storage/index.js', 'EXPORT_VERSION'],
+    owner: 'js/storage/index.js Store.importAll',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'refused, with a reason',
+  },
+  {
     name: 'gravitas.evaluation',
     fields: 'kind, schema',
     version: 1,
