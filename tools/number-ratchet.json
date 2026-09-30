@@ -41,6 +41,7 @@
     "js/gwEventWidgets.js": 8,
     "js/gwWidgets.js": 27,
     "js/habitabilityWidgets.js": 22,
+    "js/hash.js": 1,
     "js/inference/manifest.js": 1,
     "js/instructorDocs.js": 1,
     "js/instruments.js": 1,
