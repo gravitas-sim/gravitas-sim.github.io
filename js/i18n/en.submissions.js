@@ -43,6 +43,7 @@ export const EN_SUBMISSIONS = {
   'sub.reason.empty': 'nothing to read',
   'sub.reason.wrongKind': 'not a Gravitas submission token',
   'sub.reason.newerVersion': 'made by a newer version of Gravitas',
+  'sub.reason.tooLarge': 'larger than a submission can be',
   'sub.reason.corrupt': 'truncated or altered in transit',
   'sub.reason.mangled':
     'characters were changed in transit - a rich-text box turns "--" into a dash. Paste into a plain-text field, or drop the PDF instead.',

@@ -79,3 +79,4 @@ manual/gravitas-user-manual.pdf
 
 # Reports an earlier CI step left for tools/docs-facts.mjs to read back.
 .facts/
+.generate-state.json
