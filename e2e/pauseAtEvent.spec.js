@@ -102,6 +102,39 @@ const isPaused = page =>
     return Boolean(state.paused);
   });
 
+// The tool is not part of start-up (js/pauseAtEventBridge.js): it is fetched
+// by the first press of its button, and the page works without it until then.
+test('the tool is fetched by the first press, not at start-up', async ({
+  page,
+  app,
+}) => {
+  await app.boot();
+  await app.waitForFrames(10);
+  const fetched = () =>
+    page.evaluate(() =>
+      performance
+        .getEntriesByType('resource')
+        .filter(e => /\/js\/pauseAtEvent(Panel)?\.js(\?|$)/.test(e.name))
+        .map(e => e.name.replace(/^.*\/js\//, ''))
+        .sort()
+    );
+  expect(await fetched()).toEqual([]);
+  await expect(page.locator('#timelineEventMarker')).toBeHidden();
+
+  await app.railControl('togglePauseAtEvent');
+  await page.locator('#togglePauseAtEvent').click();
+  await expect(page.locator('#pauseEventContainer')).toBeVisible();
+  await expect(page.locator('#togglePauseAtEvent')).toHaveAttribute(
+    'aria-pressed',
+    'true'
+  );
+  expect(await fetched()).toEqual(['pauseAtEvent.js', 'pauseAtEventPanel.js']);
+
+  // The panel's own listener has taken over: one press closes it.
+  await page.locator('#togglePauseAtEvent').click();
+  await expect(page.locator('#pauseEventContainer')).toBeHidden();
+});
+
 test.describe('arming and refusing', () => {
   test('a circular orbit is refused a periapsis, in as many words', async ({
     page,
