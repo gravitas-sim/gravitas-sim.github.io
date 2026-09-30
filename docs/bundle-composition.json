@@ -1,9 +1,9 @@
 {
- "total": 588372,
+ "total": 586303,
  "modules": [
   {
    "module": "js/ui.js",
-   "bytes": 109998
+   "bytes": 110227
   },
   {
    "module": "js/i18n/en.js",
@@ -15,7 +15,7 @@
   },
   {
    "module": "js/world/build.js",
-   "bytes": 34897
+   "bytes": 34879
   },
   {
    "module": "js/render.js",
@@ -134,8 +134,8 @@
    "bytes": 2856
   },
   {
-   "module": "js/capture.js",
-   "bytes": 2756
+   "module": "js/utils.js",
+   "bytes": 2695
   },
   {
    "module": "js/habitability.js",
@@ -168,10 +168,6 @@
   {
    "module": "js/objectGlyphs.js",
    "bytes": 2249
-  },
-  {
-   "module": "js/utils.js",
-   "bytes": 2219
   },
   {
    "module": "js/notebookBridge.js",
