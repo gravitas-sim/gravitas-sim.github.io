@@ -145,7 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // An embed is a figure in somebody else's page. The front door is a
   // first-visit introduction to *this application*, which is not what the
   // reader came to that page for, and it would cover the figure entirely.
-  const frontDoorPending = !embedded && shouldShowWelcome();
+  // `#home` is Home asked for by name - the shell's GRAVITAS link - and opens
+  // it for a returning visitor too (PLATFORM_MODEL.md, "The surfaces").
+  const frontDoorPending =
+    !embedded && (location.hash === '#home' || shouldShowWelcome());
 
   const revealApp = () => {
     if (revealed) return;
@@ -498,6 +501,13 @@ document.addEventListener('DOMContentLoaded', () => {
           .then(mod => mod.openWelcome({ automatic: false }))
           .catch(err => console.warn('Front door unavailable:', err));
       });
+    // The GRAVITAS link on this page changes only the hash.
+    window.addEventListener('hashchange', () => {
+      if (embedded || location.hash !== '#home') return;
+      loadWelcome()
+        .then(mod => mod.openWelcome({ automatic: false }))
+        .catch(err => console.warn('Front door unavailable:', err));
+    });
     // The gallery does not load scenarios itself: it hands the chosen key to
     // the one authoritative loader, the same one the front door's featured
     // cards use.

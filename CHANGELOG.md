@@ -15,6 +15,14 @@ the release rather than in the tag.
 
 ### Added
 
+- **Home** (Roadmap II Prompt 50, item 3). The front door is a page of
+  the shell now, not a layer over it: it opens below the bar, and the bar
+  stays live, with its navigation, switches and Tab order, while it is up.
+  Every page's GRAVITAS link opens it by name (`/#home`), for a returning
+  visitor too. Leaving it lands in the sandbox and takes `#home` out of the
+  address, and a deep link still goes straight to what it names. Its
+  content is the front door's own, the three ways in and the featured
+  scenarios and investigations, until Prompt 73 redesigns onboarding.
 - **The shared shell, on the application** (Roadmap II Prompt 50, Part 3).
   The simulation at `/` carries the same header as every other page, fixed
   over its full-bleed canvas: the navigation to every surface, and the
