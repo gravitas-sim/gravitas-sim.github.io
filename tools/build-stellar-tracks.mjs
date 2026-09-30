@@ -480,10 +480,17 @@ async function build({ offline }) {
       eeps: names.slice(0, track.eeps.length).map((name, i) => ({
         name,
         at: eepIndex[i],
-        ageYr:
-          10 **
-          (Math.round(logAgeOf(track.rows[track.eeps[i] - 1]) * AGE_SCALE) /
-            AGE_SCALE),
+        // Twelve significant digits: `10 **` is not correctly rounded, and
+        // Node 20 and Node 24 disagree in its last bit, so the unrounded power
+        // made a file only one of them could regenerate. A part in 1e12 is far
+        // inside what landing on the sample needs.
+        ageYr: Number(
+          (
+            10 **
+            (Math.round(logAgeOf(track.rows[track.eeps[i] - 1]) * AGE_SCALE) /
+              AGE_SCALE)
+          ).toPrecision(12)
+        ),
         publishedAgeYr: Number(
           track.rows[track.eeps[i] - 1][COL.age].toPrecision(8)
         ),

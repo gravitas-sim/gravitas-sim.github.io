@@ -825,21 +825,45 @@ jobs:
         continue-on-error: true
         run: node tools/build-ephemeris.mjs --fetch
 
+      # A fetch writes the module as well as the cache. Put the committed bytes
+      # back, so each check below judges what is committed and not a file this
+      # runner has just written: on the second dry run the stellar check passed
+      # against its own Node 20 rewrite of a file it could not reproduce.
+      - name: Put back what the fetch rewrote
+        run: |
+          git diff --stat > "$RUNNER_TEMP/rewritten.txt"
+          git diff > "$RUNNER_TEMP/rewritten.diff"
+          git checkout -- .
+
+      # Each check reports for itself: a failed one does not skip the rest.
       - name: GW figure data
+        if: ${{ !cancelled() }}
         run: npm run gw:provenance
       - name: Stellar tracks
+        if: ${{ !cancelled() }}
         run: npm run stellar:provenance
       - name: SDSS spectra
+        if: ${{ !cancelled() }}
         run: npm run spectra:provenance
       - name: GWOSC events
+        if: ${{ !cancelled() }}
         run: npm run gwosc:provenance
       - name: Observation packs
+        if: ${{ !cancelled() }}
         run: npm run packs:provenance
       - name: Ephemeris pack
+        if: ${{ !cancelled() }}
         run: npm run ephemeris:provenance
 
       - name: Nothing committed was rewritten by the fetch
-        run: git diff --exit-code
+        if: ${{ !cancelled() }}
+        run: |
+          if [ -s "$RUNNER_TEMP/rewritten.txt" ]; then
+            echo "The fetch rewrote committed files, so their builder does not reproduce them on this runner:"
+            cat "$RUNNER_TEMP/rewritten.txt"
+            head -n 200 "$RUNNER_TEMP/rewritten.diff"
+            exit 1
+          fi
 
   # tools/e2e-timings.json, from the Monday run's merged results. The shard
   # planner reads it, and it goes stale as tests are added. A changed file is
