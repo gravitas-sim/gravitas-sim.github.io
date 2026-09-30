@@ -50,6 +50,7 @@ import { toCsv } from '../csv.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import { answersOf, attemptsOf } from './submissionToken.js';
+import { plainDataProblem } from '../platform/common.js';
 
 /** What the JSON export says it is. */
 export const RESULTS_KIND = 'gravitas.submission-results';
@@ -646,6 +647,8 @@ export function readResults(input) {
       return { ok: false, reason: 'notJson' };
     }
   }
+  if (plainDataProblem(doc, { depth: 8, items: 100_000, text: 100_000 }))
+    return { ok: false, reason: 'notPlainData' };
   if (!doc || doc.kind !== RESULTS_KIND)
     return { ok: false, reason: 'wrongKind' };
   if (doc.version === RESULTS_VERSION) return { ok: true, doc };

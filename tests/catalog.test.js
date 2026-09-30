@@ -255,6 +255,82 @@ describe('and refuses what the SDK would not write', () => {
   });
 });
 
+// Roadmap II Prompt 67: the SDK's Node reader (sdk/lib/archive.mjs) walks an
+// archive with the same core and limits, so it refuses what the browser does,
+// by the same code: a gzip bomb stops at the limit there too.
+describe('the SDK reads an archive as strictly as the browser', () => {
+  const nodeCode = (fn, expected) => {
+    let err = null;
+    try {
+      fn();
+    } catch (e) {
+      err = e;
+    }
+    expect(err).toBeInstanceOf(ArchiveError);
+    expect(err.code).toBe(expected);
+  };
+
+  test('the same refusals, by the same codes', async () => {
+    const { read } = await import('../sdk/lib/archive.mjs');
+    nodeCode(
+      () => read(tar([MANIFEST, ['../escape.json', 'x']])),
+      'unsafePath'
+    );
+    nodeCode(
+      () => read(tar([MANIFEST, ['b.json', 'x', { prefix: '..' }]])),
+      'unsafePath'
+    );
+    nodeCode(
+      () => read(tar([MANIFEST, ['link.json', '', { type: '2' }]])),
+      'entryType'
+    );
+    nodeCode(
+      () => read(tar([MANIFEST, ['a.json', 'x'], ['a.json', 'y']])),
+      'duplicate'
+    );
+    const many = Array.from({ length: 5 }, (_, i) => [`f${i}.json`, 'x']);
+    nodeCode(
+      () => read(tar([MANIFEST, ...many]), { ...LIMITS, entries: 4 }),
+      'tooManyEntries'
+    );
+    const t = Buffer.concat([
+      header('gravitas-extension.json', 2),
+      Buffer.from('{}'),
+    ]);
+    t[150] = 0x39;
+    nodeCode(() => read(new Uint8Array(gzipSync(t))), 'badHeader');
+    const short = Buffer.concat([
+      header('gravitas-extension.json', 4096),
+      Buffer.from('{}'),
+    ]);
+    nodeCode(() => read(new Uint8Array(gzipSync(short))), 'truncated');
+    nodeCode(() => read(new Uint8Array([1, 2, 3])), 'notGzip');
+  });
+
+  test('a gzip bomb stops at the limit, and an oversized archive is not read', async () => {
+    const { read } = await import('../sdk/lib/archive.mjs');
+    const bomb = tar([MANIFEST, ['zeros.json', Buffer.alloc(3_000_000)]]);
+    nodeCode(
+      () => read(bomb, { ...LIMITS, unpackedBytes: 1_000_000 }),
+      'unpackedTooLarge'
+    );
+    nodeCode(() => read(bomb, { ...LIMITS, archiveBytes: 100 }), 'tooLarge');
+  });
+
+  test('an archive the SDK packs, it reads', async () => {
+    const { pack, read } = await import('../sdk/lib/archive.mjs');
+    const bytes = pack(
+      new Map([
+        ['gravitas-extension.json', Buffer.from('{}')],
+        ['data/a.json', Buffer.from('[1,2]')],
+      ])
+    );
+    const r = read(bytes);
+    expect(r.problems).toEqual([]);
+    expect(r.files.get('data/a.json').toString()).toBe('[1,2]');
+  });
+});
+
 // --- Installing ------------------------------------------------------------------
 
 // By id: the catalog holds more than one data-pack archive since Kepler-13's.

@@ -47,6 +47,7 @@ import {
   crossMatch,
   VERSION as TABLE_VERSION,
 } from './tableOps.js';
+import { isObject, plainDataProblem } from '../platform/common.js';
 
 export const FORMAT = 'gravitas.pipeline';
 export const FORMAT_VERSION = 1;
@@ -778,6 +779,15 @@ export function readPipeline(text) {
       return { ok: false, code: 'unknownTool', detail: { tool: n?.tool } };
     if (!Number.isInteger(n.at) || n.at < 0)
       return { ok: false, code: 'badNode', detail: { id: n.id } };
+    // A saved node's parameters are recomputed from, so they are held to
+    // plain, bounded data before any tool sees them.
+    const why = plainDataProblem(n.params ?? {}, {}, 'params');
+    if (why || (n.params !== undefined && !isObject(n.params)))
+      return {
+        ok: false,
+        code: 'badNode',
+        detail: { id: n.id, why: why ?? 'params: not an object' },
+      };
     nodes.push(n);
   }
   return {
