@@ -18,6 +18,8 @@
 // Decided by OBSERVATION_DATA_PACK_GATE.md; described in DATA_PACKS.md.
 // =============================================================================
 
+import { isUnit } from '../../js/units/registry.js';
+
 export const FORMAT = 'gravitas.observation-data-pack';
 export const FORMAT_VERSION = 1;
 
@@ -243,6 +245,12 @@ export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
       `columns[${i}].unit`,
       "is required ('' if dimensionless)"
     );
+    if (typeof c?.unit === 'string')
+      need(
+        isUnit(c.unit),
+        `columns[${i}].unit`,
+        `"${c.unit}" is not a unit of js/units/registry.js`
+      );
     if (c?.uncertaintyOf !== undefined) {
       need(
         names.has(c.uncertaintyOf),
@@ -255,6 +263,12 @@ export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
     text(m.time?.scale, 'time.scale');
     text(m.time?.reference, 'time.reference');
     text(m.time?.unit, 'time.unit');
+    if (typeof m.time?.unit === 'string' && m.time.unit)
+      need(
+        isUnit(m.time.unit),
+        'time.unit',
+        `"${m.time.unit}" is not a unit of js/units/registry.js`
+      );
   }
   if (m.dataType === 'image') {
     const im = m.image;

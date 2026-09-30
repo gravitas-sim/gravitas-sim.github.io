@@ -102,6 +102,10 @@ export const UNITS = Object.freeze({
     es: 'ua/año',
   },
 
+  W: { dim: 'power', factor: 1, symbol: 'W' },
+  // IAU 2015 nominal solar luminosity.
+  Lsun: { dim: 'power', factor: 3.828e26, symbol: 'L☉' },
+
   K: { dim: 'temperature', factor: 1, symbol: 'K' },
   'electron/s': { dim: 'count-rate', factor: 1, symbol: 'e⁻/s' },
   count: {
@@ -144,9 +148,13 @@ export const ALIASES = new Map(
     hours: 'h',
     day: 'd',
     days: 'd',
+    día: 'd',
+    días: 'd',
     yrs: 'yr',
     year: 'yr',
     years: 'yr',
+    año: 'yr',
+    años: 'yr',
     å: 'Angstrom',
     angstrom: 'Angstrom',
     angstroms: 'Angstrom',
@@ -168,6 +176,7 @@ export const ALIASES = new Map(
     r_earth: 'Rearth',
     'r⊕': 'Rearth',
     au: 'AU',
+    ua: 'AU',
     'erg / s / cm^2 / angstrom': 'erg/s/cm2/Angstrom',
     'erg/s/cm^2/angstrom': 'erg/s/cm2/Angstrom',
     'erg s-1 cm-2 angstrom-1': 'erg/s/cm2/Angstrom',
@@ -179,6 +188,9 @@ export const ALIASES = new Map(
     'm☉': 'Msun',
     'solar mass': 'Msun',
     'solar masses': 'Msun',
+    l_sun: 'Lsun',
+    'l☉': 'Lsun',
+    μm: 'um',
     m_earth: 'Mearth',
     'm⊕': 'Mearth',
     m_jup: 'MJup',
@@ -187,6 +199,7 @@ export const ALIASES = new Map(
     'kg/m³': 'kg/m3',
     degree: 'deg',
     degrees: 'deg',
+    grados: 'deg',
     '°': 'deg',
     radian: 'rad',
     radians: 'rad',
@@ -221,6 +234,18 @@ export function unitIdOf(text) {
   if (Object.hasOwn(UNITS, s)) return s;
   const key = s.toLowerCase();
   return ALIASES.get(key) ?? BY_LOWER.get(key);
+}
+
+/**
+ * Whether a unit field names a unit: an id or spelling, `''` for none, or
+ * either after a power of ten, as `1e-17 erg/s/cm2/Angstrom` is written.
+ * @param {string} text - The field
+ * @returns {boolean}
+ */
+export function isUnit(text) {
+  if (text === '') return true;
+  const scaled = /^(?:1e[+-]?\d+|10\^[+-]?\d+)\s+(.+)$/i.exec(String(text));
+  return unitIdOf(scaled ? scaled[1] : text) !== undefined;
 }
 
 /**

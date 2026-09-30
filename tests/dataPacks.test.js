@@ -199,6 +199,20 @@ describe('the manifest format', () => {
     ]);
   });
 
+  test('a column or a time axis in a unit the registry does not know is refused', () => {
+    const m = clone(manifest);
+    m.columns[0].unit = 'furlongs';
+    m.time.unit = 'fortnights';
+    expect(paths(validateDataPack(m)).sort()).toEqual([
+      'columns[0].unit',
+      'time.unit',
+    ]);
+    // A spelling of a registry unit, or one after a power of ten, is a unit.
+    m.columns[0].unit = 'days';
+    m.time.unit = '1e-3 d';
+    expect(validateDataPack(m)).toEqual([]);
+  });
+
   test('raw products are pinned by size and hash, or by a named canonical form', () => {
     const m = clone(manifest);
     delete m.raw[0].bytes;
@@ -318,6 +332,8 @@ function copyForCheck() {
     'js/tableObservation.js',
     // The aperture pack's check projects pixels through its world coordinates.
     'js/observatory/wcs.js',
+    // A manifest's units are checked against the registry.
+    'js/units/registry.js',
     'js/data/observations',
     'data-packs',
     'capabilities',
