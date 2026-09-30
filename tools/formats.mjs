@@ -35,6 +35,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'refused: "reads /1"',
+    schema: 'observation-1.schema.json',
   },
   {
     name: 'gravitas.pipeline',
