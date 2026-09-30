@@ -6,16 +6,18 @@
 //
 // Roadmap II Prompt 67, step 6. Every published page gets one policy, as a
 // <meta http-equiv> first in its <head>, because GitHub Pages sets no headers:
-//   - scripts and workers from this origin only, and the page's own inline
+//   - scripts from this origin only, and the page's own inline
 //     scripts by the hash of their text, which --write recomputes, so an edited
 //     script is either re-hashed or refused and never silently allowed;
 //   - styles from this origin, inline too: pages carry <style> blocks and
 //     style attributes, and a style cannot run code;
 //   - images from this origin, data: and blob: (a canvas saved as a picture,
 //     the stylesheets' SVG icons), media as blob: (a recorded clip);
-//   - fetches to this origin only, except the Observatory, which may also
-//     reach the two CDS origins its archive import names (js/archive/cds.js
-//     ALLOW; tests/csp.test.js holds the page to that list);
+//   - fetches to this origin and blob: only, except the Observatory, which
+//     may also reach the two CDS origins its archive import names
+//     (js/archive/cds.js ALLOW; tests/csp.test.js holds the page to that list);
+//   - workers from this origin and blob:. A blob: URL can only be made by a
+//     script the page already runs, so it admits no code 'self' does not;
 //   - no plugins, no <base> elsewhere, forms back to this origin.
 // frame-ancestors is left out: a browser ignores it in a <meta>, and says so,
 // so embedding is governed by EMBEDDING.md, not by the page.
@@ -79,6 +81,7 @@ export function policyFor(page, html) {
   const scripts = [`'self'`, ...inlineScripts(html).map(hash)];
   const connect = [
     `'self'`,
+    'blob:',
     ...(page === 'observatory/index.html' ? ALLOW : []),
   ];
   return [
@@ -89,7 +92,7 @@ export function policyFor(page, html) {
     `img-src 'self' data: blob:`,
     `media-src 'self' blob:`,
     `connect-src ${connect.join(' ')}`,
-    `worker-src 'self'`,
+    `worker-src 'self' blob:`,
     `frame-src 'self'`,
     `object-src 'none'`,
     `base-uri 'self'`,

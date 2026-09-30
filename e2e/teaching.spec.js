@@ -208,9 +208,12 @@ test.describe('the demonstrations', () => {
     // Read out of the embedded application's own modules. This spec runs
     // against the sources only - the dist run is production.spec.js, which
     // checks the same figure opens against the bundle - so the import resolves.
-    const state = await frame.evaluate(async f => {
-      const ui = await f.contentWindow.eval("import('/js/ui.js')");
-      const rng = await f.contentWindow.eval("import('/js/rng.js')");
+    // In the frame's own context: the page's policy refuses eval, so the
+    // import cannot be a string handed to the frame's window.
+    const child = await (await frame.elementHandle()).contentFrame();
+    const state = await child.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const rng = await import('/js/rng.js');
       return {
         scenario: ui.current_scenario_name,
         paused: ui.state.paused,
