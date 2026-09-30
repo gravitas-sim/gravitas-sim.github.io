@@ -19,11 +19,6 @@ import { ES_SUBMISSIONS } from '../i18n/es.submissions.js';
 const STORAGE_KEY = 'gravitas_locale';
 
 /** The languages this page is written in, in the order the switch offers them. */
-export const LANGUAGES = Object.freeze([
-  { id: 'en', endonym: 'English' },
-  { id: 'es', endonym: 'Español' },
-]);
-
 const CATALOGS = { en: EN_SUBMISSIONS, es: ES_SUBMISSIONS };
 const DEFAULT = 'en';
 let current = DEFAULT;

@@ -16,13 +16,13 @@
 // =============================================================================
 
 import {
-  LANGUAGES,
   language,
   preferred,
   setLanguage,
   t,
   translatePage,
 } from './experiments/i18n.js';
+import { mountShell } from './shell.js';
 import {
   EXPERIMENT_METRICS,
   FORMAT,
@@ -739,28 +739,8 @@ async function checkSaved() {
 
 // --- Start ----------------------------------------------------------------------
 
-function renderLanguageSwitch() {
-  const box = $('langSwitch');
-  box.replaceChildren(
-    ...LANGUAGES.map(({ id, endonym }) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'ui-button';
-      b.lang = id;
-      b.textContent = endonym;
-      b.setAttribute('aria-pressed', String(id === language()));
-      b.addEventListener('click', async () => {
-        await setLanguage(id);
-        translateAll();
-      });
-      return b;
-    })
-  );
-}
-
 function translateAll() {
   translatePage();
-  renderLanguageSwitch();
   fillScenarios();
   fillParameters();
   fillMetrics();
@@ -777,7 +757,6 @@ function translateAll() {
 async function start() {
   await setLanguage(preferred());
   translatePage();
-  renderLanguageSwitch();
   fillScenarios();
   fillParameters();
   fillMetrics();
@@ -786,6 +765,12 @@ async function start() {
     realms: concurrencyFor(profile, nav),
     cores: nav.hardwareConcurrency || '?',
     minutes: PROFILES[profile].maxWallMs / 60_000,
+  });
+  mountShell({
+    onLanguage: async id => {
+      await setLanguage(id);
+      translateAll();
+    },
   });
   if (typeof Worker === 'undefined') {
     $('xpEstimate').textContent = t('exp.noWorkers');

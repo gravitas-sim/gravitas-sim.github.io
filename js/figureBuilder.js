@@ -31,6 +31,7 @@ import {
   t,
   translatePage,
 } from './figure/i18n.js';
+import { mountShell } from './shell.js';
 import { EMBED_CHOICES, embedParams, parentOrigin } from './embedOptions.js';
 import { figureMarkup } from './embedMarkup.js';
 import { buildPayload, decodePayload, encodePayload } from './shareState.js';
@@ -100,29 +101,6 @@ function fillChoices() {
   fill(
     'reset',
     EMBED_CHOICES.reset.map(id => [id, t(`fig.look.reset.${id}`)])
-  );
-}
-
-function renderLanguageSwitch() {
-  const box = $('langSwitch');
-  box.replaceChildren(
-    ...LANGUAGES.map(({ id, endonym }) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'ui-button';
-      b.lang = id;
-      b.textContent = endonym;
-      b.setAttribute('aria-pressed', String(id === language()));
-      b.addEventListener('click', async () => {
-        setLanguage(id);
-        await loadSpanishNames();
-        translatePage();
-        renderLanguageSwitch();
-        fillChoices();
-        update();
-      });
-      return b;
-    })
   );
 }
 
@@ -339,7 +317,6 @@ async function init() {
   setLanguage(preferred());
   await loadSpanishNames();
   translatePage();
-  renderLanguageSwitch();
   fillChoices();
   els.scenario.value = 'Solar System';
   els.seed.value = formatSeed(randomSeed());
@@ -369,6 +346,15 @@ async function init() {
   $('fbCopyLink').addEventListener('click', () =>
     copy(els.url, els.copyStatus)
   );
+  mountShell({
+    onLanguage: async id => {
+      setLanguage(id);
+      await loadSpanishNames();
+      translatePage();
+      fillChoices();
+      update();
+    },
+  });
   await update();
 }
 

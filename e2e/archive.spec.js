@@ -441,7 +441,7 @@ test.describe('the archive import', () => {
     await openPanel(page);
     await toReview(page);
     expect(await axe(page)).toEqual([]);
-    await page.locator('#langSwitch button[lang="es"]').click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(page.locator('#arcPrivacy')).toContainText(
       'No se envía nada hasta que pulses Buscar'
     );

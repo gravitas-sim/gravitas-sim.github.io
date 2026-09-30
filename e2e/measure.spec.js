@@ -352,7 +352,7 @@ test.describe('the measurement pipeline', () => {
       page.locator('#msNodes li[data-node="m1"] svg.ow-plot')
     ).toBeVisible();
     expect(await axe(page)).toEqual([]);
-    await page.locator('#langSwitch button[lang="es"]').click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(page.locator('#msNodes li[data-node="m1"]')).toContainText(
       'Búsqueda de tránsitos'
     );

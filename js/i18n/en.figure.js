@@ -12,10 +12,8 @@ export const EN_FIGURE = {
   'fig.title': 'Make an interactive figure',
   // The page's own landmark: its preview frame holds the application's.
   'fig.main.label': 'Figure builder',
-  'fig.lang.label': 'Language',
   'fig.intro':
     'Turn a Gravitas simulation into a figure for a course page or an article: choose what it shows and how, check it in the preview, and copy the markup. Nothing you type here is sent anywhere; the figure is the link.',
-  'fig.back': 'Back to Gravitas',
 
   'fig.what.title': 'What it shows',
   'fig.what.link.label': 'A Gravitas link',

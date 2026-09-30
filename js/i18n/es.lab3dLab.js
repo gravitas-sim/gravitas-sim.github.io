@@ -10,7 +10,6 @@ export const ES_LAB3DLAB = {
   'l3.title': 'El laboratorio 3-D',
   'l3.intro':
     'Sistemas pequeños de cuerpos en tres dimensiones, integrados por el núcleo 3-D validado en un Worker. Muévete a su alrededor, cambia el marco desde el que se ven y mide distancias, ángulos y órbitas. Cada número que muestra la imagen está también en las tablas de abajo, que funcionan sin gráficos.',
-  'l3.back': 'Volver a Gravitas',
   'l3.diagnostics': 'Los diagnósticos del núcleo',
   'l3.docs': 'Cómo funciona (LAB3D.md)',
   'l3.keys':

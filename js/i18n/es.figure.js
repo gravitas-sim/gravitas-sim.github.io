@@ -10,10 +10,8 @@ export const ES_FIGURE = {
   'fig.doc.title': 'Constructor de figuras | Gravitas',
   'fig.main.label': 'Constructor de figuras',
   'fig.title': 'Crea una figura interactiva',
-  'fig.lang.label': 'Idioma',
   'fig.intro':
     'Convierte una simulación de Gravitas en una figura para la página de un curso o un artículo: elige qué muestra y cómo, compruébala en la vista previa y copia el código. Nada de lo que escribes aquí se envía a ninguna parte; la figura es el enlace.',
-  'fig.back': 'Volver a Gravitas',
 
   'fig.what.title': 'Qué muestra',
   'fig.what.link.label': 'Un enlace de Gravitas',

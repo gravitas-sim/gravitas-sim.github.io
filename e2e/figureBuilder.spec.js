@@ -205,7 +205,7 @@ test('works from the keyboard alone, and copies what it made', async ({
 
 test('in Spanish, the page and the figure it writes', async ({ page }) => {
   await openBuilder(page);
-  await page.getByRole('button', { name: 'Español' }).click();
+  await page.locator('[data-gs-lang]').selectOption('es');
   await expect(page.locator('h1')).toHaveText('Crea una figura interactiva');
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await page.locator('#fbTitle').fill('');

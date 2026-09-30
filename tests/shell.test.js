@@ -30,29 +30,34 @@ const read = f => readFileSync(f, 'utf8');
  */
 const PENDING = {
   'index.html': 'the application and Home: Part 3',
-  'catalog/index.html': 'tool pages: Part 2',
-  'course/index.html': 'tool pages: Part 2',
-  'experiments/index.html': 'tool pages: Part 2',
-  'figure/index.html': 'tool pages: Part 2',
-  'instructors/submissions/index.html': 'tool pages: Part 2',
-  'observatory/index.html': 'tool pages: Part 2',
-  'studio/index.html': 'tool pages: Part 2',
-  'studio/course/index.html': 'tool pages: Part 2',
-  'studio/lesson/index.html': 'tool pages: Part 2',
-  'lab3d/index.html': 'tool pages: Part 2',
-  '3d/index.html': 'tool pages: Part 2',
-  'mission/index.html': 'tool pages: Part 2',
-  'mission/lab/index.html': 'tool pages: Part 2',
 };
 
 /**
  * Pages whose route cannot pay for js/shell.js yet (tools/route-budgets.json):
- * the markup is there and the navigation works, since it needs no script;
- * the theme and language switches stay hidden until the module is loaded.
+ * the markup is there and the navigation works, since it needs no script,
+ * and the head script applies the stored theme; the shell's two switches
+ * stay hidden until the module is loaded. A bilingual page keeps its own
+ * language switch meanwhile (PLATFORM_MODEL.md, "What B authorizes", rule 1).
  */
 const STATIC_ONLY = {
   'evaluation/index.html': 'route has 0.2 KB of room; the module is 3.2 KB',
   'instructors/index.html': 'route has 1.3 KB of room; the module is 3.2 KB',
+  'catalog/index.html':
+    'keeps its own language switch until its route can pay: 0.6 KB of room (sources) and 0.4 KB (build); the module is 3.2 KB, 1.8 KB bundled',
+  'studio/index.html':
+    'route has 0.1 KB of room, the module 3.2 KB: keeps its own language switch until its route can pay',
+  'studio/lesson/index.html':
+    'route has no request of room, the module is one: keeps its own language switch until its route can pay',
+  'course/index.html':
+    'route has 0.6 KB of room, the module 3.2 KB: keeps its own language switch until its route can pay',
+  'lab3d/index.html':
+    'keeps its own language switch until its route can pay: 0.1 KB of room, 2.5 KB over mounted',
+  '3d/index.html':
+    'keeps its own language switch until its routes can pay: mounted, lab3d-lab 2.5 KB and lab3d-guide 1.8 KB over',
+  'mission/index.html':
+    'keeps its own language switch until its route can pay: 0.1 KB of room, 2.5 KB over mounted',
+  'mission/lab/index.html':
+    'keeps its own language switch until its route can pay: 1.7 KB of room, 0.9 KB over mounted',
 };
 
 const carrying = shellPages().filter(p => !Object.hasOwn(PENDING, p));

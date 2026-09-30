@@ -224,7 +224,7 @@ export function abstractParagraphs(facts) {
       'installation, and encodes any simulation state into a shareable URL. ' +
       'It works offline after a first visit, targets WCAG 2.2 Level AA with ' +
       `axe-core run over ${facts.axeSurfaces} surfaces in ` +
-      `${facts.locales} languages and ${facts.axeThemes} themes on every ` +
+      `${facts.locales} languages and up to ${facts.axeAllThemes} themes on every ` +
       'build, and is published in English and Spanish.',
     `The physics is checked in public: ${facts.physicsChecks} ` +
       'checks of the engine against analytic results, published values and ' +

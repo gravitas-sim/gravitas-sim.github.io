@@ -301,7 +301,7 @@ test.describe('the analysis laboratory', () => {
     const scan = () =>
       new AxeBuilder({ page }).withTags(TAGS).include('#xpAnalysis').analyze();
     expect((await scan()).violations).toEqual([]);
-    await page.locator('#langSwitch button[lang="es"]').click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(page.locator('#labRun')).toHaveText('Analizar');
     await expect(page.locator('#labOut h3').first()).toHaveText('Qué dice');
     expect((await scan()).violations).toEqual([]);
