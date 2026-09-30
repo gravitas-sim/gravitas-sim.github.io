@@ -9,6 +9,7 @@ export const ES_LAB3D = {
   'lab3d.title': 'Diagnóstico de dinámica en 3-D',
   'lab3d.intro':
     'El núcleo de pocos cuerpos en 3-D, ejecutado en un Worker propio: los problemas de referencia con los que se valida, cualquier archivo de sistema y lo rápido que corre aquí. Solo números y gráficas sencillas; es una página de diagnóstico, no una vista para estudiantes.',
+  'lab3d.lang': 'Idioma',
   'lab3d.docs': 'Cómo funciona el núcleo (LAB3D.md)',
   'lab3d.run.heading': 'Ejecutar',
   'lab3d.problem': 'Problema',

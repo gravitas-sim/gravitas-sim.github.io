@@ -14,6 +14,11 @@ import { EN_LAB3DLAB } from '../../i18n/en.lab3dLab.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
+export const LANGUAGES = Object.freeze([
+  { id: 'en', endonym: 'English' },
+  { id: 'es', endonym: 'Español' },
+]);
+
 const CATALOGS = { en: EN_LAB3DLAB, es: {} };
 const LOADERS = {
   es: () => import('../../i18n/es.lab3dLab.js').then(m => m.ES_LAB3DLAB),

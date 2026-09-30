@@ -11,6 +11,7 @@
 // =============================================================================
 
 import {
+  LANGUAGES,
   language,
   preferred,
   setLanguage,
@@ -836,10 +837,27 @@ const readBodies = () => {
     : state.plan.direct.bodies;
 };
 
+function languageSwitch() {
+  $('langSwitch').replaceChildren(
+    ...LANGUAGES.map(({ id, endonym }) => {
+      const b = el('button', {
+        type: 'button',
+        class: 'ui-button',
+        lang: id,
+        text: endonym,
+      });
+      b.setAttribute('aria-pressed', String(language() === id));
+      b.addEventListener('click', () => useLanguage(id));
+      return b;
+    })
+  );
+}
+
 function useLanguage(id) {
   setLanguage(id);
   translatePage();
   document.title = t('ml.doc.title');
+  languageSwitch();
   fillControls();
   if (state.window?.best) drawWindow(state.window);
   render();

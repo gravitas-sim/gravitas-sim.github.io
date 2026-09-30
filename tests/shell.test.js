@@ -49,13 +49,13 @@ const STATIC_ONLY = {
   'evaluation/index.html': 'route has 0.2 KB of room; the module is 3.2 KB',
   'instructors/index.html': 'route has 1.3 KB of room; the module is 3.2 KB',
   'lab3d/index.html':
-    'route has 0.1 KB of room (0.0 KB built); mounted, 2.5 KB over (1.3 KB built)',
+    'keeps its own language switch until its route can pay: 0.1 KB of room, 2.5 KB over mounted',
   '3d/index.html':
-    'lab3d-lab has 0.1 KB of room, lab3d-guide 0.8 KB; mounted, 2.5 and 1.8 KB over',
+    'keeps its own language switch until its routes can pay: mounted, lab3d-lab 2.5 KB and lab3d-guide 1.8 KB over',
   'mission/index.html':
-    'route has 0.1 KB of room (0.0 KB built); mounted, 2.5 KB over (1.3 KB built)',
+    'keeps its own language switch until its route can pay: 0.1 KB of room, 2.5 KB over mounted',
   'mission/lab/index.html':
-    'route has 1.7 KB of room; mounted, 0.9 KB over (the build fits)',
+    'keeps its own language switch until its route can pay: 1.7 KB of room, 0.9 KB over mounted',
 };
 
 const carrying = shellPages().filter(p => !Object.hasOwn(PENDING, p));

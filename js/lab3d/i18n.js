@@ -13,6 +13,11 @@ import { ES_LAB3D } from '../i18n/es.lab3d.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
+export const LANGUAGES = Object.freeze([
+  { id: 'en', endonym: 'English' },
+  { id: 'es', endonym: 'Español' },
+]);
+
 const CATALOGS = { en: EN_LAB3D, es: ES_LAB3D };
 const DEFAULT = 'en';
 let current = DEFAULT;

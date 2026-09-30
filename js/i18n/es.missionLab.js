@@ -12,6 +12,7 @@ export const ES_MISSIONLAB = {
     'Una misión a Marte sobre la efeméride DE441 del JPL, en tres partes guiadas: encontrarse con un depósito en órbita terrestre, elegir el día de salida en la ventana de lanzamiento de 2026 y comparar el diseño por cónicas empalmadas con la nave volada directamente bajo el Sol y los planetas. Edita el plan, calcula y lee cada número en las tablas.',
   'ml.notFor':
     'Software educativo, no diseño operativo de misiones ni navegación. Las posiciones de los planetas son las del JPL, con unos pocos kilómetros de error; todo lo demás es un modelo para enseñar, y la lista al final de la página dice qué deja fuera.',
+  'ml.lang': 'Idioma',
   'ml.core': 'El núcleo de diseño de misiones',
   'ml.docs': 'Cómo funciona el laboratorio (MISSION_LAB.md)',
   'ml.compute': 'Calcular la misión',
