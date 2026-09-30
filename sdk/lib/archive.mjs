@@ -22,6 +22,7 @@
 import { Buffer } from 'node:buffer';
 import { createHash } from 'node:crypto';
 import { gzipSync, gunzipSync, constants } from 'node:zlib';
+import { ArchiveError, LIMITS, readTar } from '../../js/catalog/archive.js';
 
 export const MANIFEST_ENTRY = 'gravitas-extension.json';
 export const CHECKSUMS_ENTRY = 'CHECKSUMS';
@@ -101,28 +102,39 @@ export function pack(files) {
  * @param {Uint8Array} bytes - The archive
  * @returns {{files: Map<string, Buffer>, checksums: Map<string, string>, problems: string[]}}
  */
-export function read(bytes) {
-  const tar = gunzipSync(bytes);
-  const files = new Map();
-  const problems = [];
-  let at = 0;
-  while (at + BLOCK <= tar.length) {
-    const h = tar.subarray(at, at + BLOCK);
-    if (h.every(b => b === 0)) break;
-    const name = h.subarray(0, 100).toString('utf8').replace(/\0.*$/s, '');
-    const type = String.fromCharCode(h[156] || 48);
-    const size = parseInt(h.subarray(124, 136).toString('ascii'), 8);
-    if (type !== '0')
-      throw new Error(
-        `${name}: entry type ${type}; an extension archive holds regular files only`
+export function read(bytes, limits = LIMITS) {
+  // The catalog's own limits and walk (js/catalog/archive.js), so a file the
+  // browser would refuse is refused here too: no gzip bomb inflates past
+  // unpackedBytes, and every header is checked before its entry is read.
+  if (bytes.length > limits.archiveBytes)
+    throw new ArchiveError(
+      'tooLarge',
+      `${bytes.length} bytes, more than an archive may be`,
+      { bytes: bytes.length, max: limits.archiveBytes }
+    );
+  if (bytes[0] !== 0x1f || bytes[1] !== 0x8b)
+    throw new ArchiveError('notGzip', 'not a gzip stream');
+  let tar;
+  try {
+    tar = gunzipSync(bytes, { maxOutputLength: limits.unpackedBytes });
+  } catch (err) {
+    if (err?.code === 'ERR_BUFFER_TOO_LARGE')
+      throw new ArchiveError(
+        'unpackedTooLarge',
+        `decompresses to more than ${limits.unpackedBytes} bytes`,
+        { max: limits.unpackedBytes }
       );
-    if (!SAFE_PATH.test(name))
-      throw new Error(`${name}: not a relative path inside the extension`);
-    if (files.has(name)) throw new Error(`${name} appears twice`);
-    at += BLOCK;
-    files.set(name, Buffer.from(tar.subarray(at, at + size)));
-    at += Math.ceil(size / BLOCK) * BLOCK;
+    throw new ArchiveError(
+      'notGzip',
+      `not a valid gzip stream: ${err.message}`
+    );
   }
+  const entries = readTar(
+    new Uint8Array(tar.buffer, tar.byteOffset, tar.length),
+    limits
+  );
+  const files = new Map([...entries].map(([n, b]) => [n, Buffer.from(b)]));
+  const problems = [];
   const names = [...files.keys()];
   if (names[0] !== MANIFEST_ENTRY)
     problems.push(`the first entry is ${names[0]}, not ${MANIFEST_ENTRY}`);
