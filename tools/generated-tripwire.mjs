@@ -88,12 +88,16 @@ const git = (...args) =>
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'ignore'],
   });
+// A file a commit does not have reads as empty. Any other failure throws: in
+// CI's blob-less clone, `git show` fetches the blob, and a fetch that failed
+// must not read as "nothing was added" and pass.
 const show = (rev, file) => {
   try {
-    return git('show', `${rev}:${file}`);
+    git('cat-file', '-e', `${rev}:${file}`);
   } catch {
     return '';
   }
+  return git('show', `${rev}:${file}`);
 };
 
 function main(commit = 'HEAD') {
