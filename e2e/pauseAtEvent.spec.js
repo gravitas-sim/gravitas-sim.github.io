@@ -10,6 +10,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { encodePayload } from '../js/shareState.js';
 
 /**
  * The one eccentric pair the crossing tests use.
@@ -133,6 +134,26 @@ test('the tool is fetched by the first press, not at start-up', async ({
   // The panel's own listener has taken over: one press closes it.
   await page.locator('#togglePauseAtEvent').click();
   await expect(page.locator('#pauseEventContainer')).toBeHidden();
+});
+
+// A scenario pack can start with the tool open (js/startingPanels.js clicks the
+// rail button), which is the other way it gets fetched before anyone presses.
+test('a link that starts with the tool open fetches and opens it', async ({
+  page,
+  app,
+}) => {
+  const fragment = await encodePayload({
+    v: 1,
+    s: ECCENTRIC.scenario,
+    seed: 'e2e',
+    x: { v: 1, open: ['pauseAtEvent'] },
+  });
+  await app.boot({ url: `/#${fragment}` });
+  await expect(page.locator('#pauseEventContainer')).toBeVisible();
+  await expect(page.locator('#togglePauseAtEvent')).toHaveAttribute(
+    'aria-pressed',
+    'true'
+  );
 });
 
 test.describe('arming and refusing', () => {
