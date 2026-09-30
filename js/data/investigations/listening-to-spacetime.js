@@ -95,6 +95,9 @@ const LISTENING_TO_SPACETIME = {
   subtitle: 'Work out what made a signal, then check it against the real thing',
   duration: '75-90 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'arithmetic',
+  prerequisites: ['what-is-a-gravitational-wave'],
   tags: ['compact-objects', 'gravity', 'observing', 'waves'],
   // The second of the pair. What Is a Gravitational Wave? comes first and
   // answers the question this one assumes; neither requires the other to have

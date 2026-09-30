@@ -727,10 +727,11 @@ the release rather than in the tag.
 ### Changed
 
 - **CI runs what the release gate runs.**
-  - Ten quick checks that only `release:check` ran now run in the checks
-    job: the SDK extensions, the classroom activities, the lesson cards, the
-    scene catalog, the irreversible-operations audit and the five dataset
-    structure checks. The bundle-composition check now runs in the build job.
+  - Ten quick checks that only `release:check` ran now run in CI. The SDK
+    extensions, the classroom activities, the scene catalog, the
+    irreversible-operations audit and the five dataset structure checks run in
+    the checks job. The lesson cards run in the accessibility job, which has a
+    browser. The bundle-composition check now runs in the build job.
   - A quick check may stay out of CI only if it says what in CI covers it.
   - On the first of each month, the datasets are checked against their pinned
     sources, with the sources cached between runs.
@@ -742,6 +743,12 @@ the release rather than in the tag.
   - A flaky test can be quarantined by its title, with an owner and an expiry
     date; it still runs.
   - The browser install is one composite action instead of four copies.
+  - `npm run packs:data` also fetches the catalog's extension packs' raw
+    files (`node tools/catalog.mjs fetch`), from the pins their `build.mjs`
+    files export.
+  - The MIST tracks now regenerate byte for byte on Node 20 as well as
+    Node 24. Their stage ages keep twelve significant digits, because the two
+    disagree in the last bit of `10 ** x`.
 
 - **The checker every declarative format shares has a module of its own**
   (`js/platform/checker.js`). Course packs and 3-D systems had reached it
@@ -861,6 +868,66 @@ the release rather than in the tag.
   means two overlapping runs can briefly wait for runners.
 
 ### Fixed
+
+- **A physics Worker that died stopped gravity, silently.** Its busy flag
+  stayed set, so no job was scheduled again, and every body kept the last
+  pull the Worker had computed. An error, an unreadable answer or ten seconds
+  without one now ends the Worker; gravity is summed on the main thread, and
+  the status region says so. The chart Worker falls back to drawing directly,
+  and a 3-D lab Worker that sends nothing for thirty seconds, or an
+  unreadable answer, is ended with a reason. An uncaught error or unhandled
+  rejection is also said in the status region; nothing is swallowed, and the
+  browser reports it as before. Commented-out code in `js/preview.js` and
+  `js/physics.js` was removed to keep the front door within its budget.
+
+- **The way back to the instructor was hard to find, and half-read.**
+  - `/instructors/submissions/` is linked from the instructor portal's public
+    section and from the adopters guide. The guide also no longer says three
+    things that stopped being true: that there is no instructor-side
+    gradebook (there is still none, but the review page reads the reports
+    back), that a student who changes machines starts again (a progress file
+    carries the work), and that units typed with a number are ignored (they
+    are read, converted or refused).
+  - The assignment builder takes an optional class or roster code, which it
+    adds to the link as `?roster=` - where the submission token has always
+    read it - and to the printed instructions.
+  - The review page shows each submission's written answers beside the
+    rubric their step has, in a disclosure. They were read, counted as
+    unmarkable, and never shown.
+  - The exports count points: what each question is worth (one, or what the
+    step declares) and what it earned, with the totals in the summary and
+    the written answers' points reported as unmarked rather than as zero.
+    `gravitas.submission-results` is version 2; `readResults()` reads a
+    version 1 file, with the points it never had as null. The screen grades
+    as it did.
+- **Lesson cards can say what a lesson teaches.** A card's objectives open
+  under it, fetched with the lesson only when asked for. Every lesson now
+  declares its audience, the mathematics it asks for and the lessons it
+  builds on, generated into `js/data/investigations/discovery.js` for the
+  course-planning views (the lesson browser does not show them yet).
+
+- **What a Spanish student handed in was partly English, and partly wrong.**
+  - A measurement typed the Spanish way ("1,52") was NaN to the step's own
+    check, so derived columns stayed blank and nothing was checked. Fields
+    now record the convention they were typed in, as a checked number does.
+  - The finish dialog, the model-answer controls, "worked out for you", the
+    wedge readout and every heading and result in the lab report were
+    literal English. They are translated, and the report is written in the
+    language the student worked in.
+- **The submission token could only be handed in as a PDF.** The finish
+  dialog now shows it in a read-only field with Copy and a .txt download,
+  for a learning management system that takes a text box, and offers a
+  progress file beside the report.
+- **A choice was final on the first click.** A graded choice now has Change
+  answer, as a number can be re-checked: the first answer and the count of
+  tries are kept, and the report says how many tries it took. A prediction
+  can be changed only until the step that shows its verdict.
+- **A re-issued assignment link lost the work done on it.** Progress was
+  kept under the assignment's id, which starts with the day it was made, so
+  the same worksheet handed out again on another day opened empty. It is
+  now kept under the lesson, the steps and the title; work under the old
+  key moves across the first time it is read. A new title is a new activity
+  and starts afresh, on purpose.
 
 - **An assignment link made on `v2` could not be opened by the deployed
   build.** Every link was written as version 2, which the site `main` serves

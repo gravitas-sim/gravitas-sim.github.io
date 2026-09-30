@@ -2928,7 +2928,8 @@
     gap: var(--space-2);
     align-items: stretch;
   }
-  #shareUrl {
+  #shareUrl,
+  #investigationToken {
     flex: 1 1 auto;
     min-width: 0;
     padding: var(--space-2) var(--space-3);
@@ -2942,7 +2943,8 @@
        tell a truncated link from a complete one. */
     text-overflow: ellipsis;
   }
-  #shareUrl:focus {
+  #shareUrl:focus,
+  #investigationToken:focus {
     outline: var(--focus-ring);
     outline-offset: 1px;
   }
@@ -3412,6 +3414,31 @@
   }
 
   /* --- The card ------------------------------------------------------------- */
+
+  /* A card and its objectives: the disclosure sits under the card's button
+     because it cannot sit inside it. */
+  .inv-card-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  /* Its own height, not the row's: a neighbour's open objectives make the
+     row taller, and the card would stretch to fill it. */
+  .inv-card-wrap > .inv-card {
+    flex: 0 0 auto;
+  }
+  .inv-card-objectives {
+    padding: 0 var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+  .inv-card-objectives summary {
+    cursor: pointer;
+  }
+  .inv-card-objectives ul {
+    margin: var(--space-1) 0 0;
+    padding-left: var(--space-5);
+  }
 
   .inv-card {
     display: flex;
@@ -4436,6 +4463,7 @@
   }
   .inv-finish-actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--space-2);
     margin-top: var(--space-4);

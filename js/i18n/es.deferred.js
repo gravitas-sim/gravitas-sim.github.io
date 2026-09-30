@@ -651,6 +651,7 @@ export const ES_DEFERRED = {
   'assign.close': 'Cerrar',
   'assign.name': 'Nombre de la tarea',
   'assign.intro': 'Instrucciones para el alumnado (opcional)',
+  'assign.roster': 'Código de clase o de lista (opcional)',
   'assign.selectAll': 'Seleccionar todo',
   'assign.selectNone': 'Limpiar',
   'assign.count':
@@ -672,6 +673,7 @@ export const ES_DEFERRED = {
   'assign.print.steps': '{n} pasos',
   'assign.print.open': 'Abre la tarea en esta direccion:',
   'assign.print.id': 'Tarea {id}, emitida el {date}.',
+  'assign.print.roster': 'Código de clase: {code}',
 
   'assign.error.nothingSelected': 'Elige al menos un paso.',
   'assign.error.noLesson': 'No se pudo leer esa leccion.',
@@ -878,6 +880,37 @@ export const ES_DEFERRED = {
   'inv.report.done': 'Informe de laboratorio descargado',
   'inv.report.failed': 'No se pudo generar el informe.',
   'inv.report.download': 'Descargar informe de laboratorio (PDF)',
+  'inv.finish.title': 'Terminado',
+  'inv.finish.close': 'Cerrar sin descargar',
+  'inv.finish.summary':
+    'Has recorrido <strong>{visited} de {steps}</strong> pasos y has respondido <strong>{answered} de {graded}</strong> preguntas.',
+  'inv.finish.note':
+    'Solo necesitas un informe si vas a entregar esto para una calificación. Si estás aquí por tu propio interés, puedes cerrar el panel: tu progreso se guarda de todos modos.',
+  'inv.finish.name': 'Tu nombre, tal como debe aparecer en el informe',
+  'inv.finish.namePh': 'p. ej., Ada Lovelace',
+  'inv.finish.nameErr':
+    'Escribe un nombre para que el informe se te pueda atribuir.',
+  'inv.finish.back': 'Seguir trabajando',
+  'inv.finish.fine':
+    'El informe enumera cada pregunta, tus respuestas y cuáles de las comprobadas automáticamente coincidieron. También incluye enlaces que vuelven a abrir exactamente las simulaciones que usaste.',
+  'inv.finish.progress': 'Descargar un archivo de progreso',
+  'inv.token.show': 'Mostrar el código de entrega',
+  'inv.token.label': 'Código de entrega. Pégalo donde te lo pida tu profesor.',
+  'inv.token.copy': 'Copiar',
+  'inv.token.copied': 'Código de entrega copiado.',
+  'inv.token.noCopy': 'No se pudo copiar. Selecciona el texto y cópialo tú.',
+  'inv.token.save': 'Descargar como archivo de texto',
+  'inv.token.failed':
+    'No se pudo generar el código de entrega. El informe en PDF sigue incluyendo todas las respuestas.',
+  'inv.field.auto': 'calculado automáticamente',
+  'inv.model.compare': 'Comparar con una respuesta modelo',
+  'inv.model.writeFirst': 'Escribe primero tu propia respuesta.',
+  'inv.answer.change': 'Cambiar respuesta',
+  'inv.answer.changed':
+    'Respuesta borrada. Tu primera respuesta sigue registrada.',
+  'inv.wedge.readout':
+    'Cada porción es el <strong>{share} %</strong> del área de la órbita, y el planeta tarda <strong>{time}</strong> en recorrer cada una.',
+  'inv.import.added': 'Añadido: {value}.',
   'inv.progress.cleared': 'Progreso borrado',
   'inv.progress.steps': '{done} de {total} pasos',
   'inv.scenario.reset': 'Escenario reiniciado',
@@ -1798,6 +1831,7 @@ export const ES_DEFERRED = {
   'inv.summary.going': '{n} en curso',
   'inv.card.objectives': { one: '{n} objetivo', other: '{n} objetivos' },
 
+  'inv.card.objectivesShow': 'Objetivos de aprendizaje',
   'inv.step.counter': 'Paso {n} de {total}',
   'inv.step.kind.read': 'lectura',
   'inv.step.kind.predict': 'predicción',
@@ -3870,4 +3904,7 @@ export const ES_DEFERRED = {
   'specW.row.limits': 'Qué son cuatro espectros',
   'specW.value.limits':
     'Cuatro ejemplos, uno por letra. No es un atlas, ni un sondeo, ni una muestra representativa de nada: cuatro estrellas que se observaron.',
+  'failure.error': 'Algo falló: {message}',
+  'failure.worker.physics':
+    'El proceso de gravedad se detuvo, así que la gravedad se calcula ahora en el hilo principal. La simulación sigue siendo correcta, pero puede ir más lenta.',
 };

@@ -40,6 +40,7 @@ export const DEFERRED_NAMESPACES = Object.freeze([
   'energyW',
   'exoW',
   'export',
+  'failure',
   'gwE',
   'gwW',
   'hzW',

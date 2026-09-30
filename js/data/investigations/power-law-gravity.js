@@ -57,6 +57,9 @@ const POWER_LAW_GRAVITY = {
   subtitle: 'Change the exponent, and find out what depended on it',
   duration: '45-60 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'logarithms',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

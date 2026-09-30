@@ -1977,6 +1977,7 @@ const updateEnergyChart = () => {
 
   // Worker-decimated update
   try {
+    if (window._chartWorker === false) throw new Error('failed');
     if (!window._chartWorker) {
       const workerUrl = new URL('./chartWorker.js', import.meta.url);
       window._chartWorker = new Worker(workerUrl, { type: 'module' });
@@ -1986,6 +1987,10 @@ const updateEnergyChart = () => {
         desiredHz,
         maxPoints: 200,
       });
+      window._chartWorker.onerror = window._chartWorker.onmessageerror = () => {
+        window._chartWorker.terminate();
+        window._chartWorker = false; // and the direct update takes over
+      };
       window._chartWorker.onmessage = evt => {
         if (evt.data && evt.data.type === 'update') {
           const payload = evt.data.data;

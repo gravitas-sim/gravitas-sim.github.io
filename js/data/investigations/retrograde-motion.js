@@ -35,6 +35,9 @@ const RETROGRADE = {
   subtitle: 'Change the frame, and fourteen centuries of epicycles fall away',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'algebra',
+  prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.

@@ -88,6 +88,9 @@ const HOHMANN_TRANSFER = {
   subtitle: 'Two burns, a long coast, and the arithmetic that decides both',
   duration: '20-25 min',
   level: 'Introductory astronomy',
+  audience: 'intro',
+  mathematics: 'algebra',
+  prerequisites: ['orbital-energy'],
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
