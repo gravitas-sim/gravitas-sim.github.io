@@ -82,10 +82,12 @@ export const countImportant = css =>
 /**
  * Emoji: the Unicode Extended_Pictographic property, which is what one is,
  * less what it also covers that is notation rather than an icon - the Sun's
- * ☉ in M☉ and the planets' signs, arrows, and ©, ® and ™.
+ * ☉ in M☉ and the planets' signs, arrows, and ©, ® and ™. A star is notation
+ * only as a subscript on a stellar quantity, R★ or M<sub>★</sub>; a star
+ * anywhere else is an icon.
  */
 const NOTATION =
-  /[\u2609\u263D\u263E\u263F-\u2647\u26E2\u2190-\u21FF\u00A9\u00AE\u2122]/gu;
+  /[\u2609\u263D\u263E\u263F-\u2647\u26E2\u2190-\u21FF\u00A9\u00AE\u2122]|(?<=[RMLT](?:<sub>|_)?)\u2605/gu;
 export const countEmoji = text =>
   (text.replace(NOTATION, '').match(/\p{Extended_Pictographic}/gu) || [])
     .length;

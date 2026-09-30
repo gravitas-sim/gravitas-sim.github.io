@@ -51,6 +51,11 @@ describe('what is counted', () => {
     ).toBe(0);
     // Pictographs used as icons are emoji whatever their presentation.
     expect(countEmoji("'warn': '⚠ Careful', 'play': '▶'")).toBe(2);
+    // A star is notation as a stellar subscript, and an icon anywhere else.
+    expect(countEmoji("'a': 'a / R★', 'r': 'R<sub>★</sub>', 'm': 'M_★'")).toBe(
+      0
+    );
+    expect(countEmoji("'fav': '★ Favourite', 'b': 'B★'")).toBe(2);
   });
 
   test('a control with no class, but not a checkbox, radio, range or hidden field, nor one in a comment or the shell', () => {

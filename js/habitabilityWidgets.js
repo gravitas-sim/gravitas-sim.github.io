@@ -1057,6 +1057,7 @@ const ORBIT = {
   actions: [
     {
       id: 'run',
+      icon: 'play',
       get label() {
         return t('hzW.runPause');
       },
