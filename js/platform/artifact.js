@@ -164,9 +164,12 @@ export function validateArtifact(doc) {
         'is not a finite number'
       );
       // A registry id, exactly: the envelope is the canonical form, so a
-      // spelling the registry would accept ("days") is not enough here.
+      // spelling the registry would accept ("days") is not enough here. Null
+      // is "not stated", which a unit is until someone states it; it is never
+      // guessed, and '' would claim the number is dimensionless.
       need(
-        typeof q.unit === 'string' && Object.hasOwn(UNITS, q.unit),
+        q.unit === null ||
+          (typeof q.unit === 'string' && Object.hasOwn(UNITS, q.unit)),
         `${at}.unit`,
         'unit',
         `"${q.unit}" is not an id of js/units/registry.js`

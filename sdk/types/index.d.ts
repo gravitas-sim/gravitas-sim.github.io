@@ -168,8 +168,8 @@ export interface Artifact {
     retrieved?: string;
     reductions?: unknown[];
   };
-  /** Each unit is an id of js/units/registry.js, exactly. */
-  quantities: Array<{ id: string; value: number; unit: string; uncertainty: Uncertainty; origin: Origin; label?: string }>;
+  /** Each unit is an id of js/units/registry.js, exactly; null is not stated. */
+  quantities: Array<{ id: string; value: number; unit: string | null; uncertainty: Uncertainty; origin: Origin; label?: string }>;
   warnings?: string[];
 }
 

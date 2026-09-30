@@ -403,9 +403,10 @@ describe('the JSON Schemas describe what the validators accept', () => {
         : Number.isInteger(v)
           ? 'integer'
           : typeof v;
+    const types = s.type === undefined ? null : [s.type].flat();
     if (
-      s.type &&
-      !(s.type === type || (s.type === 'number' && type === 'integer'))
+      types &&
+      !types.some(t => t === type || (t === 'number' && type === 'integer'))
     )
       return false;
     if (typeof v === 'string') {

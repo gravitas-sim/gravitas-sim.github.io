@@ -134,8 +134,11 @@
             "type": "number"
           },
           "unit": {
-            "type": "string",
-            "description": "An id of js/units/registry.js, exactly; the empty string is dimensionless."
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An id of js/units/registry.js, exactly; the empty string is dimensionless and null is not stated."
           },
           "uncertainty": {
             "type": "object",
