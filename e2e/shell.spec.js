@@ -339,57 +339,58 @@ test.describe('the shell on the application', () => {
 // =============================================================================
 
 test.describe('Home', () => {
-  test('the GRAVITAS link opens Home from any page, under a bar that still works', async ({
-    page,
-    app,
-  }) => {
-    await app.boot();
-    await page.goto('/model/', { waitUntil: 'load' });
-    await expect(page.locator('.gs-brand')).toHaveAttribute('href', '/#home');
-    await page.locator('.gs-brand').click();
-    await page.waitForFunction(() => window.splashScreenEnded === true);
-    const home = page.locator('#welcomeScreen');
-    await expect(home).toBeVisible();
-    // A page under the bar, not a layer over it.
-    expect(
-      await home.evaluate(e => Math.round(e.getBoundingClientRect().top))
-    ).toBe(48);
-    await expect(page.locator('.gs-shell')).not.toHaveAttribute('inert', '');
-    // The navigation above it is live: a group opens and its link is there.
-    await page.locator('.gs-group').nth(3).locator('summary').click();
-    await expect(
-      page.locator('.gs-nav a[href="/teaching/"]').filter({ visible: true })
-    ).toBeVisible();
-  });
+  test(
+    'the GRAVITAS link opens Home from any page, under a bar that still works',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await page.goto('/model/', { waitUntil: 'load' });
+      await expect(page.locator('.gs-brand')).toHaveAttribute('href', '/#home');
+      await page.locator('.gs-brand').click();
+      await page.waitForFunction(() => window.splashScreenEnded === true);
+      const home = page.locator('#welcomeScreen');
+      await expect(home).toBeVisible();
+      // A page under the bar, not a layer over it.
+      expect(
+        await home.evaluate(e => Math.round(e.getBoundingClientRect().top))
+      ).toBe(48);
+      await expect(page.locator('.gs-shell')).not.toHaveAttribute('inert', '');
+      // The navigation above it is live: a group opens and its link is there.
+      await page.locator('.gs-group').nth(3).locator('summary').click();
+      await expect(
+        page.locator('.gs-nav a[href="/teaching/"]').filter({ visible: true })
+      ).toBeVisible();
+    }
+  );
 
-  test('Tab moves between Home and the bar, and leaving Home lands in the sandbox', async ({
-    page,
-    app,
-    browserName,
-  }) => {
-    // Booted as a returning visitor, then Home by name: boot() itself waits
-    // for the rail, which Home holds back until it is left.
-    await app.boot();
-    await page.goto('/#home', { waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => window.splashScreenEnded === true);
-    await expect(page.locator('#welcomeScreen')).toBeVisible();
-    // Shift+Tab from the start of Home reaches the bar, not the hidden rail.
-    await page.locator('#welcomeDialog').focus();
-    const step = browserName === 'webkit' ? 'Alt+Shift+Tab' : 'Shift+Tab';
-    await page.keyboard.press(step);
-    expect(
-      await page.evaluate(() =>
-        Boolean(document.activeElement?.closest('.gs-shell, #welcomeScreen'))
-      )
-    ).toBe(true);
+  test(
+    'Tab moves between Home and the bar, and leaving Home lands in the sandbox',
+    { tag: '@cross-browser' },
+    async ({ page, app, browserName }) => {
+      // Booted as a returning visitor, then Home by name: boot() itself waits
+      // for the rail, which Home holds back until it is left.
+      await app.boot();
+      await page.goto('/#home', { waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(() => window.splashScreenEnded === true);
+      await expect(page.locator('#welcomeScreen')).toBeVisible();
+      // Shift+Tab from the start of Home reaches the bar, not the hidden rail.
+      await page.locator('#welcomeDialog').focus();
+      const step = browserName === 'webkit' ? 'Alt+Shift+Tab' : 'Shift+Tab';
+      await page.keyboard.press(step);
+      expect(
+        await page.evaluate(() =>
+          Boolean(document.activeElement?.closest('.gs-shell, #welcomeScreen'))
+        )
+      ).toBe(true);
 
-    await page.locator('#welcomeClose').click();
-    await expect(page.locator('#welcomeScreen')).toBeHidden();
-    await expect(page.locator('#mainControls')).toHaveClass(/showUI/);
-    // Leaving Home by name takes the name out of the address, so a reload
-    // lands where the reader went.
-    expect(await page.evaluate(() => location.hash)).toBe('');
-  });
+      await page.locator('#welcomeClose').click();
+      await expect(page.locator('#welcomeScreen')).toBeHidden();
+      await expect(page.locator('#mainControls')).toHaveClass(/showUI/);
+      // Leaving Home by name takes the name out of the address, so a reload
+      // lands where the reader went.
+      expect(await page.evaluate(() => location.hash)).toBe('');
+    }
+  );
 
   test('a deep link still goes straight to what it names', async ({
     page,
