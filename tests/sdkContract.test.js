@@ -16,6 +16,7 @@ import { gunzipSync, gzipSync } from 'node:zlib';
 
 import { run } from '../sdk/cli.mjs';
 import * as api from '../sdk/lib/api.mjs';
+import { valid } from './jsonSchemaSubset.js';
 
 // =============================================================================
 // The Extension SDK's contract, held from the outside
@@ -75,10 +76,15 @@ describe('the public surface', () => {
           spec === '@jest/globals' ||
           /(^|\/)sdk\/examples\//.test(spec) ||
           /(^|\/)sdk\/(cli|lib\/api)\.mjs$/.test(spec) ||
-          /^\.\.\/\.\.\/lib\/api\.mjs$/.test(spec);
+          /^\.\.\/\.\.\/lib\/api\.mjs$/.test(spec) ||
+          // The schema checker the suites share: not Gravitas, and it imports
+          // nothing (held just below).
+          (file === 'tests/sdkContract.test.js' &&
+            spec === './jsonSchemaSubset.js');
         expect([file, spec, ok]).toEqual([file, spec, true]);
       }
     }
+    expect(importsOf('tests/jsonSchemaSubset.js')).toEqual([]);
   });
 
   test('every export of the API is declared in its types, and nothing more', () => {
@@ -391,47 +397,6 @@ describe('archives that pack would never write are refused', () => {
 describe('the JSON Schemas describe what the validators accept', () => {
   const schema = name =>
     JSON.parse(readFileSync(`sdk/schemas/${name}.schema.json`, 'utf8'));
-
-  /** The subset of JSON Schema the SDK's schemas use. */
-  function valid(s, v) {
-    if (s.const !== undefined && v !== s.const) return false;
-    if (s.enum && !s.enum.includes(v)) return false;
-    const type = Array.isArray(v)
-      ? 'array'
-      : v === null
-        ? 'null'
-        : Number.isInteger(v)
-          ? 'integer'
-          : typeof v;
-    const types = s.type === undefined ? null : [s.type].flat();
-    if (
-      types &&
-      !types.some(t => t === type || (t === 'number' && type === 'integer'))
-    )
-      return false;
-    if (typeof v === 'string') {
-      if (s.pattern && !new RegExp(s.pattern).test(v)) return false;
-      if (s.minLength && v.length < s.minLength) return false;
-    }
-    if (Array.isArray(v)) {
-      if (s.minItems && v.length < s.minItems) return false;
-      if (s.items && !v.every(x => valid(s.items, x))) return false;
-    }
-    if (type === 'object') {
-      for (const k of s.required || []) if (!(k in v)) return false;
-      for (const [k, x] of Object.entries(v)) {
-        const sub =
-          s.properties?.[k] ??
-          (s.additionalProperties === false
-            ? null
-            : typeof s.additionalProperties === 'object'
-              ? s.additionalProperties
-              : {});
-        if (sub === null || !valid(sub, x)) return false;
-      }
-    }
-    return true;
-  }
 
   test('an artifact the validator accepts fits its schema, and the enums agree', async () => {
     const a = { ...api, FORMAT: 'gravitas.artifact', FORMAT_VERSION: 1 };

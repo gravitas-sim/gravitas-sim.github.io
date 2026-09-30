@@ -613,6 +613,25 @@ export const CHECKS = [
     ci: 'checks',
     group: 'generated',
   },
+  // A merge must not drop what one side wrote into a file with generated
+  // regions (tools/generated-tripwire.mjs). On anything but a merge commit it
+  // says so and passes; CI checks out a pull request as its merge.
+  {
+    id: 'tripwire',
+    label: 'no merge dropped hand-written lines around generated regions',
+    command: ['node', 'tools/generated-tripwire.mjs'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'generated',
+  },
+  {
+    id: 'tools-index',
+    label: 'tools/README.md describes every tool',
+    command: ['npm', 'run', 'tools:index:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'generated',
+  },
   {
     id: 'cards',
     label: 'lesson cards',
