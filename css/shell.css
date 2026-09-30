@@ -183,8 +183,91 @@ html:lang(es) .gs-en {
   }
 }
 
+/* The application template (tools/shell.mjs APPLICATION): fixed over the
+   full-bleed canvas, one row tall. Everything the application anchors to the
+   top of the window adds --shell-height, so it sits below the bar rather
+   than under it; the canvas itself does not move. */
+body:has(> .gs-app) {
+  --shell-height: 48px;
+}
+.gs-shell.gs-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 45;
+  height: var(--shell-height);
+  flex-wrap: nowrap;
+  padding-block: 0;
+  background: color-mix(in srgb, var(--surface-1) 92%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+/* Where the control rail is a column at the right edge (above 1024 px,
+   css/components.css), the bar stops at the rail's inner edge: the rail is
+   beside the canvas, not above it, and keeps the whole height of the window
+   that its sections are sized for. */
+@media (min-width: 1025px) {
+  .gs-shell.gs-app {
+    right: calc(var(--rail-width) + 2 * var(--space-4));
+    border-bottom-right-radius: var(--radius-md);
+    border-right: 1px solid var(--border);
+  }
+}
+
+/* Solid for a reader who has asked for less transparency (css/tokens.css
+   turns off the blur; this sheet is unlayered, so it sets its own ground). */
+@media (prefers-reduced-transparency: reduce) {
+  .gs-shell.gs-app {
+    background: var(--surface-1);
+  }
+}
+
+/* Below 1100 px the groups and switches do not fit one row beside the
+   application's own controls: they fold behind Menu. Open, the bar grows
+   into a panel over the canvas; --shell-height is set on body, so nothing
+   the application placed moves. */
+@media (max-width: 1099px) {
+  .gs-shell.gs-app .gs-toggle:not([hidden]) {
+    display: inline-flex;
+    margin-left: auto;
+  }
+  .gs-shell.gs-app.gs-js .gs-nav,
+  .gs-shell.gs-app.gs-js .gs-controls {
+    display: none;
+  }
+  .gs-shell.gs-app.gs-js.is-open {
+    height: auto;
+    max-height: 100vh;
+    overflow-y: auto;
+    flex-wrap: wrap;
+    padding-block: var(--space-2);
+    background: var(--surface-1);
+  }
+  .gs-shell.gs-app.gs-js.is-open .gs-nav,
+  .gs-shell.gs-app.gs-js.is-open .gs-controls {
+    display: block;
+    width: 100%;
+  }
+  .gs-shell.gs-app .gs-nav > ul {
+    flex-direction: column;
+  }
+  .gs-shell.gs-app .gs-nav details ul {
+    position: static;
+    min-width: 0;
+    box-shadow: none;
+  }
+}
+
 /* A figure embedded in someone else's page is the figure alone
-   (EMBEDDING.md). */
+   (EMBEDDING.md), and a lecture is the canvas and its own bar. */
+body.presentation-embed,
+body[data-presentation='lecture'] {
+  --shell-height: 0px;
+}
+body[data-presentation='lecture'] .gs-shell {
+  display: none;
+}
 .presentation-embed .gs-skip,
 .presentation-embed .gs-shell,
 .presentation-embed .gs-foot {

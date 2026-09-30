@@ -193,12 +193,12 @@
   },
   "lessonsMeasuredAt": "fe2c4ec",
   "shell": {
-    "note": "The shared shell (Roadmap II Prompt 50): js/shell.js and css/shell.css as published, raw bytes, measured when the shell landed plus 0.5%. Every route that carries it pays js/shell.js; its markup is static HTML, which no route counts. PLATFORM_MODEL.md's C2 limits what is served: 6 KB of JavaScript and 4 KB of CSS gzipped. tests/shell.test.js holds both.",
+    "note": "The shared shell (Roadmap II Prompt 50): js/shell.js and css/shell.css as published, raw bytes, measured when the shell landed plus 0.5%. Every route that carries it pays js/shell.js; its markup is static HTML, which no route counts. PLATFORM_MODEL.md's C2 limits what is served: 6 KB of JavaScript and 4 KB of CSS gzipped. tests/shell.test.js holds both. Re-measured with the application template (Prompt 50 Part 3: the fixed header, its Menu panel below 1100 px, and the lecture and embed rules): css/shell.css 6028 B raw, 1.9 KB served.",
     "js": {
       "bytes": 3246
     },
     "css": {
-      "bytes": 4249
+      "bytes": 6058
     }
   }
 }

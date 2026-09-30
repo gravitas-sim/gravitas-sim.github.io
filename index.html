@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-RHhhyhd8z0RGrbqhN5CPuNy8hcenWROg+WKCU28f6sI='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-UFvwQtoB4BYCwISX9k+Dflq/BGyi3hKGCLORsw9kcb8=' 'sha256-RHhhyhd8z0RGrbqhN5CPuNy8hcenWROg+WKCU28f6sI='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta
       name="viewport"
@@ -84,11 +84,37 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+</script>
+<!-- /shell:head -->
   </head>
   <body>
     <a class="skip-link" href="#mainControls" data-i18n="chrome.text1"
       >Skip to controls</a
     >
+    <!-- shell:header main=mainControls -->
+<header class="gs-shell gs-app">
+<a class="gs-brand" href="/"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/" aria-current="page"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<!-- /shell:header -->
 
     <!--
       The document's one top-level heading. The splash carries a visible
@@ -2417,22 +2443,6 @@
           </button>
           <a
             class="rail-link"
-            href="/model/"
-            title="How Gravitas models the universe: what the simulation calculates, approximates and visualizes"
-            data-i18n-title="rail.railLearnBody.hint"
-            data-i18n="rail.railLearnBody"
-            >How the model works</a
-          >
-          <a
-            class="rail-link"
-            href="/instructors/"
-            title="Teaching guides, answer keys and a curriculum map for instructors"
-            data-i18n-title="rail.railLearnBody.hint.2"
-            data-i18n="rail.railLearnBody.2"
-            >Instructor resources</a
-          >
-          <a
-            class="rail-link"
             href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/Gravitas_User_Manual.pdf"
             target="_blank"
             rel="noopener"
@@ -4286,69 +4296,6 @@
     </a>
 
     <footer id="attribution" class="attribution attribution-fade">
-      <!--
-        The theme picker lives here rather than in the rail: it is a preference
-        for the whole page, not a simulation control, and it was one of the
-        taller rows in a rail that had outgrown the screen. Options are written
-        by controls.js from the THEMES registry so the list cannot drift.
-      -->
-      <div class="theme-dock">
-        <button
-          type="button"
-          id="themeButton"
-          class="theme-dock-btn"
-          aria-haspopup="true"
-          aria-expanded="false"
-          aria-controls="themeMenu"
-          title="Change the interface color scheme. Observatory uses red chrome to preserve night vision; Daylight suits bright rooms and projectors (T cycles)."
-          data-i18n-title="footer.theme.hint"
-        >
-          <span class="theme-dock-swatch" aria-hidden="true"></span>
-          <span class="theme-dock-name" id="themeButtonName">Theme</span>
-        </button>
-        <div
-          id="themeMenu"
-          class="theme-menu"
-          role="menu"
-          aria-labelledby="themeButton"
-          hidden=""
-        ></div>
-      </div>
-      <!--
-        The language picker sits beside the theme picker for the same reason the
-        theme picker is here rather than in the rail: both are preferences for
-        the whole page, not controls on the simulation. Options are written by
-        js/i18n/picker.js from the LOCALES registry, so the list cannot drift
-        from what the build actually ships.
-      -->
-      <div class="theme-dock locale-dock">
-        <button
-          type="button"
-          id="localeButton"
-          class="theme-dock-btn"
-          aria-haspopup="true"
-          aria-expanded="false"
-          aria-controls="localeMenu"
-          data-i18n-title="locale.picker.hint"
-          title="Change the interface language"
-        >
-          <span
-            class="theme-dock-swatch locale-dock-glyph"
-            id="localeButtonCode"
-            aria-hidden="true"
-            >EN</span
-          >
-          <span class="theme-dock-name" id="localeButtonName">English</span>
-        </button>
-        <div
-          id="localeMenu"
-          class="theme-menu locale-menu"
-          role="menu"
-          aria-labelledby="localeButton"
-          hidden=""
-        ></div>
-      </div>
-      <span class="attribution-sep" aria-hidden="true">·</span>
       <span>©&nbsp;<span class="attribution-year">2025</span></span>
       <a
         href="https://carlziegler.space/"

@@ -131,6 +131,10 @@ async function buildCss() {
     // component-layer files so it can restate what the older sheets set for
     // the same elements without reaching for !important.
     'css/chrome.css',
+    // The shared shell's header, which the application carries too; folded in
+    // here so the initial download counts it (index.html links it by the
+    // absolute path every other page uses, collapsed below).
+    'css/shell.css',
   ]) {
     parts.push(`/* ${f} */`, await readFile(f, 'utf8'));
   }
@@ -322,6 +326,12 @@ async function buildHtml() {
     );
     replacedFirst = true;
   }
+
+  // The shell's stylesheet is inside app.css in the build.
+  html = html.replace(
+    /\s*<link rel="stylesheet" href="\/css\/shell\.css" \/>/,
+    ''
+  );
 
   // Only main.js is needed once bundled; the other module tags were loading
   // the same graph a second time.

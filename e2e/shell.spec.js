@@ -150,3 +150,142 @@ test.describe('the shell', () => {
     expect(wide).toBe(false);
   });
 });
+
+// =============================================================================
+// The application template (Prompt 50, Part 3)
+// -----------------------------------------------------------------------------
+// The canvas stays full-bleed; the bar is fixed over it, and everything the
+// application anchors to the top moves down by --shell-height.
+// =============================================================================
+
+/** What the application places from the top of the window. */
+const TOP_ANCHORED = [
+  '#overlay',
+  '#mainControls',
+  '#mobileMenuToggle',
+  '#scenarioInfoDisplay',
+  '#scenarioInfoBox',
+  '#objectInspector',
+  '.investigation-panel',
+];
+
+test.describe('the shell on the application', () => {
+  for (const [width, height] of [
+    [1440, 900],
+    [1024, 768],
+    [768, 1024],
+    [375, 740],
+  ]) {
+    test(`at ${width} px nothing the application draws starts under the bar`, async ({
+      page,
+      app,
+    }) => {
+      await page.setViewportSize({ width, height });
+      await app.boot();
+      await expect(page.locator('#mainControls')).toHaveClass(/showUI/);
+      const got = await page.evaluate(sels => {
+        const bar = document.querySelector('.gs-shell').getBoundingClientRect();
+        const canvas = document
+          .getElementById('simulationCanvas')
+          .getBoundingClientRect();
+        const under = [];
+        for (const s of sels) {
+          const e = document.querySelector(s);
+          if (!e) continue;
+          const cs = getComputedStyle(e);
+          const r = e.getBoundingClientRect();
+          if (cs.display === 'none' || cs.visibility === 'hidden' || !r.height)
+            continue;
+          // Under the bar means sharing its box: beside it is fine, which is
+          // where the docked rail sits on a wide window.
+          const overlaps =
+            r.top < bar.bottom - 0.5 &&
+            r.bottom > bar.top + 0.5 &&
+            r.left < bar.right - 0.5 &&
+            r.right > bar.left + 0.5;
+          if (overlaps) under.push(`${s} at ${r.top},${r.left}`);
+        }
+        return {
+          under,
+          barBottom: bar.bottom,
+          canvasTop: canvas.top,
+          canvasHeight: canvas.height,
+          innerHeight: window.innerHeight,
+          wide: document.documentElement.scrollWidth > window.innerWidth,
+        };
+      }, TOP_ANCHORED);
+      expect(got.under).toEqual([]);
+      expect(got.barBottom).toBe(48);
+      // The canvas does not move: it still fills the window behind the bar.
+      expect(got.canvasTop).toBe(0);
+      expect(got.canvasHeight).toBe(got.innerHeight);
+      expect(got.wide).toBe(false);
+    });
+  }
+
+  test('the theme switch is the application theme, and follows the T shortcut', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.locator('[data-gs-theme]').selectOption('daylight');
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-theme',
+      'daylight'
+    );
+    expect(
+      await page.evaluate(() => localStorage.getItem('gravitas_theme'))
+    ).toBe('daylight');
+    // js/theme.js cycles on T; the select follows the theme, not its clicks.
+    await page
+      .locator('#simulationCanvas')
+      .click({ position: { x: 5, y: 300 } });
+    await page.keyboard.press('t');
+    await expect(page.locator('[data-gs-theme]')).not.toHaveValue('daylight');
+  });
+
+  test('the language switch translates the application in place', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    const learn = page.locator('#railLearn [data-i18n="rail.railLearn"]');
+    await expect(learn).toHaveText('Learn');
+    await page.evaluate(() => {
+      window.__stillHere = true;
+    });
+    await page.locator('[data-gs-lang]').selectOption('es');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+    await expect(learn).toHaveText('Aprender');
+    // In place: the page was not reloaded.
+    expect(await page.evaluate(() => window.__stillHere)).toBe(true);
+  });
+
+  test('an embedded figure and a lecture have no bar', async ({
+    page,
+    app,
+  }) => {
+    await app.boot({ url: '/?embed=1' });
+    await expect(page.locator('.gs-shell')).toBeHidden();
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => window.splashScreenEnded === true);
+    await expect(page.locator('#mainControls')).toHaveClass(/showUI/);
+    await page
+      .locator('#simulationCanvas')
+      .click({ position: { x: 5, y: 300 } });
+    await page.keyboard.press('v');
+    await expect(page.locator('body')).toHaveAttribute(
+      'data-presentation',
+      'lecture'
+    );
+    await expect(page.locator('.gs-shell')).toBeHidden();
+    await expect(page.locator('#overlay')).toBeVisible();
+    // The readout eases to its lecture place (a 0.3 s transition), up into
+    // the room the bar left.
+    await expect
+      .poll(() =>
+        page.locator('#overlay').evaluate(e => e.getBoundingClientRect().top)
+      )
+      .toBeLessThan(48);
+  });
+});

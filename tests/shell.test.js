@@ -11,6 +11,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 
 import {
+  APPLICATION,
   EXEMPT,
   NAV,
   THEMES,
@@ -28,9 +29,7 @@ const read = f => readFileSync(f, 'utf8');
  * only shrinks: a page taken off it must carry the shell, and a new page must
  * be put on it with a reason or carry the shell from the start.
  */
-const PENDING = {
-  'index.html': 'the application and Home: Part 3',
-};
+const PENDING = {};
 
 /**
  * Pages whose route cannot pay for js/shell.js yet (tools/route-budgets.json):
@@ -66,7 +65,7 @@ describe('every page carries the shell', () => {
   test('and the pending list names only pages without it', () => {
     for (const page of shellPages()) {
       const html = read(page);
-      expect({ page, shell: hasShell(html) }).toEqual({
+      expect({ page, shell: hasShell(html, page) }).toEqual({
         page,
         shell: !Object.hasOwn(PENDING, page),
       });
@@ -88,7 +87,7 @@ describe('every page carries the shell', () => {
   });
 
   test('once, with a skip link to content that exists, and no second banner or footer', () => {
-    for (const page of carrying) {
+    for (const page of carrying.filter(p => !APPLICATION.has(p))) {
       const html = read(page);
       const count = re => (html.match(re) || []).length;
       expect({ page, header: count(/<header class="gs-shell">/g) }).toEqual({
@@ -112,6 +111,27 @@ describe('every page carries the shell', () => {
         page,
         target: true,
       });
+    }
+  });
+
+  test('the application carries the fixed header, keeps its own skip link and footer, and adds no other', () => {
+    for (const page of APPLICATION) {
+      const html = read(page);
+      const count = re => (html.match(re) || []).length;
+      expect(count(/<header class="gs-shell gs-app">/g)).toBe(1);
+      expect(count(/<nav id="gs-nav"/g)).toBe(1);
+      // Its panels' own <header>s are inside dialogs and sections, not
+      // banners; the shell's footer would be a second contentinfo.
+      expect(count(/class="gs-foot"/g)).toBe(0);
+      expect(count(/class="gs-skip"/g)).toBe(0);
+      expect(count(/<footer id="attribution"/g)).toBe(1);
+      // The skip link stays the first thing in <body>, ahead of the shell.
+      const body = html.slice(html.indexOf('<body'));
+      expect(body.indexOf('class="skip-link"')).toBeLessThan(
+        body.indexOf('<header class="gs-shell gs-app">')
+      );
+      const target = /class="skip-link" href="#([\w-]+)"/.exec(html)[1];
+      expect(html).toContain(`id="${target}"`);
     }
   });
 

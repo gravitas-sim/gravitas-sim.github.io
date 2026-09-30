@@ -60,7 +60,11 @@ test.describe('keyboard operation', () => {
           s.display !== 'none' &&
           s.visibility !== 'hidden' &&
           b.width > 0 &&
-          b.height > 0
+          b.height > 0 &&
+          // Inside a closed <details> (the shell's navigation groups) a link
+          // has a box but is not rendered, and cannot take focus until the
+          // group is opened; the shell's own spec opens and focuses them.
+          (!el.checkVisibility || el.checkVisibility())
         );
       };
       const out = [];

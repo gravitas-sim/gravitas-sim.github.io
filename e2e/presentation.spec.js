@@ -620,9 +620,11 @@ test.describe('language', () => {
   }) => {
     await app.boot();
     expect(await localeOf(page)).toBe('en');
-    await page.locator('#localeButton').click();
-    await expect(page.locator('#localeMenu')).toBeVisible();
-    await expect(page.locator('[data-locale-option="es"]')).toBeVisible();
+    // The shared shell's switch (tools/shell.mjs), which replaced the footer's.
+    const pick = page.locator('[data-gs-lang]');
+    await expect(pick).toBeVisible();
+    await expect(pick).toHaveValue('en');
+    await expect(pick.locator('option[value="es"]')).toHaveCount(1);
   });
 
   test('the picker is a code and a language, and nothing else', async ({
@@ -634,16 +636,16 @@ test.describe('language', () => {
     // translated now, so the sentence describes nothing and a menu of two
     // languages does not need three lines to say so.
     await app.boot();
-    await page.locator('#localeButton').click();
-    const option = page.locator('[data-locale-option="es"]');
-    await expect(option).toBeVisible();
-    await expect(option.locator('.locale-menu-code')).toHaveText('ES');
+    const options = page.locator('[data-gs-lang] option');
+    await expect(options).toHaveCount(2);
     // The endonym, not the English name: somebody looking for Spanish is
-    // looking for the word they use for their own language.
-    await expect(option.locator('.theme-menu-label')).toHaveText('Español');
-    await expect(option.locator('.theme-menu-hint')).toHaveCount(0);
-    // And the button itself says which language is on without opening anything.
-    await expect(page.locator('#localeButtonCode')).toHaveText('EN');
+    // looking for the word they use for their own language - and marked as
+    // Spanish, so a screen reader says it in a Spanish voice.
+    const es = page.locator('[data-gs-lang] option[value="es"]');
+    await expect(es).toHaveText('Español');
+    await expect(es).toHaveAttribute('lang', 'es');
+    // And the switch itself says which language is on without opening it.
+    await expect(page.locator('[data-gs-lang]')).toHaveValue('en');
   });
 
   test(
@@ -651,8 +653,7 @@ test.describe('language', () => {
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      await page.locator('#localeButton').click();
-      await page.locator('[data-locale-option="es"]').click();
+      await page.locator('[data-gs-lang]').selectOption('es');
       await page.waitForTimeout(300);
 
       await expect(page.locator('#loadScenarioBtn')).toContainText(
@@ -1016,7 +1017,7 @@ test.describe('the bottom dock', () => {
           await page.evaluate(async () =>
             (await import('/js/i18n/index.js')).setLocale('es')
           );
-          await expect(page.locator('#localeButtonCode')).toHaveText('ES');
+          await expect(page.locator('html')).toHaveAttribute('lang', 'es');
         }
         await expect(page.locator('.timeline-bar')).toBeVisible();
         await expect(page.locator('#attribution')).toBeVisible();
@@ -1062,8 +1063,14 @@ test.describe('the bottom dock', () => {
   }) => {
     // Between the width where the full bar no longer fits and the width where
     // the slider would be too short to use, the bar gives up width and keeps
-    // the center. Below that it keeps its width and gives up the center.
-    await page.setViewportSize({ width: 1600, height: 900 });
+    // the center. Below that it would keep its width and give up the center.
+    //
+    // Since the footer's theme and language menus moved into the shared shell
+    // (Prompt 50), the footer is a third of its old width, and the narrowing
+    // starts near 1225 px rather than above 1600. It then lasts all the way to
+    // the width where the rail stops being a column (1025 px), so a docked
+    // rail never makes the bar band; both halves are asserted where they hold.
+    await page.setViewportSize({ width: 1150, height: 900 });
     await app.boot();
     const narrowed = await read(page);
     expect(narrowed.banded).toBe(false);
@@ -1071,15 +1078,15 @@ test.describe('the bottom dock', () => {
     expect(narrowed.barWidth).toBeLessThan(680);
     expect(narrowed.barWidth).toBeGreaterThanOrEqual(420);
 
-    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.setViewportSize({ width: 1025, height: 900 });
     await expect
-      .poll(() =>
-        page.evaluate(() => document.body.classList.contains('dock-banded'))
-      )
-      .toBe(true);
-    const banded = await read(page);
-    expect(Math.abs(banded.offCenter)).toBeGreaterThan(1);
-    expect(banded.gap).toBeGreaterThanOrEqual(12);
+      .poll(async () => (await read(page)).barWidth)
+      .toBeLessThan(narrowed.barWidth);
+    const narrowest = await read(page);
+    expect(narrowest.banded).toBe(false);
+    expect(Math.abs(narrowest.offCenter)).toBeLessThanOrEqual(1);
+    expect(narrowest.barWidth).toBeGreaterThanOrEqual(420);
+    expect(narrowest.gap).toBeGreaterThanOrEqual(12);
   });
 
   test('the footer keeps the corner unless the rail comes down into it', async ({
