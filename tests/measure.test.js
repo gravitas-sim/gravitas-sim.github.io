@@ -34,10 +34,11 @@ const A = await import('../js/measure/aperture.js');
 const T = await import('../js/measure/tableOps.js');
 const pipe = await import('../js/measure/pipeline.js');
 const { validateArtifact } = await import('../js/platform/artifact.js');
+const { nodeArtifact } = await import('../js/measure/envelope.js');
 /** Every node's result is a gravitas.artifact/1 envelope (Prompt 60). */
 const enveloped = node => {
-  expect(validateArtifact(pipe.nodeArtifact(node))).toEqual([]);
-  return pipe.nodeArtifact(node);
+  expect(validateArtifact(nodeArtifact(node))).toEqual([]);
+  return nodeArtifact(node);
 };
 const { openFixture } = await import('../js/observatory/fixtures.js');
 const W = await import('../js/observatory/wcs.js');
@@ -734,7 +735,7 @@ describe('the pipeline: digests, staleness, the document, reading it back', () =
 
 describe('a node as an envelope', () => {
   test('a scaled column unit is the registry unit, and a citation is provenance', () => {
-    const e = pipe.nodeArtifact({
+    const e = nodeArtifact({
       id: 'm1',
       tool: 'line',
       version: 1,

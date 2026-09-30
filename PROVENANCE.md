@@ -69,7 +69,7 @@ Three mappings lose something. Each says so where it happens:
 
 | Producer | Function | Test |
 |---|---|---|
-| The measurement pipeline: every node | `nodeArtifact()` in `js/measure/pipeline.js` | `tests/measure.test.js`: the period, box, line and aperture results on their real fixtures, and the scaling and citation rules |
+| The measurement pipeline: every node | `nodeArtifact()` in `js/measure/envelope.js` | `tests/measure.test.js`: the period, box, line and aperture results on their real fixtures, and the scaling and citation rules |
 
 The remaining producers adopt it in the order of Roadmap II Prompt 60:
 1. the notebook's quantities and observed group, with the report rendering envelopes;
