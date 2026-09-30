@@ -1,4 +1,5 @@
 import { describe, test, expect } from '@jest/globals';
+import { readFileSync } from 'node:fs';
 
 // =============================================================================
 // The observation workspace's contracts, without a page
@@ -770,5 +771,42 @@ describe('the fixtures are the data they say they are', () => {
     // Pixel (1, 1) is the first value, and its sky position is the WCS's.
     const first = skyOf(ap.image.wcs, 1, 1);
     expect(columnOf(ap, 'ra').values[0]).toBe(first.ra);
+  });
+});
+
+// Roadmap II Prompt 61: gravitas.observation/1 has a JSON Schema
+// (sdk/schemas/observation-1.schema.json). Every built-in observation, saved
+// as the Observatory saves one, fits it, and its enums are the validator's.
+describe('the observation schema', () => {
+  test('every built-in observation, saved, fits it', async () => {
+    const { valid } = await import('./jsonSchemaSubset.js');
+    const { FIXTURES } = await import('../js/observatory/fixtures.js');
+    const schema = JSON.parse(
+      readFileSync('sdk/schemas/observation-1.schema.json', 'utf8')
+    );
+    for (const f of FIXTURES) {
+      const o = await openFixture(f.id);
+      const saved = JSON.parse(observationJson(o, { source: o, changes: [] }));
+      expect({ fixture: f.id, fits: valid(schema, saved) }).toEqual({
+        fixture: f.id,
+        fits: true,
+      });
+    }
+  });
+
+  test('its enums are the validator’s own tables', async () => {
+    const s = await import('../js/observatory/schema.js');
+    const u = await import('../js/observatory/units.js');
+    const schema = JSON.parse(
+      readFileSync('sdk/schemas/observation-1.schema.json', 'utf8')
+    );
+    const p = schema.properties;
+    expect(p.kind.enum).toEqual([...s.KINDS]);
+    expect(p.origin.enum).toEqual([...s.ORIGINS]);
+    expect(p.source.properties.kind.enum).toEqual([...s.SOURCE_KINDS]);
+    expect(p.spectral.properties.medium.enum).toEqual([...s.MEDIA]);
+    expect(p.columns.items.properties.role.enum).toEqual([...s.ROLES]);
+    expect(p.time.properties.format.enum).toEqual(Object.keys(u.TIME_FORMATS));
+    expect(p.time.properties.scale.enum).toEqual([...u.TIME_SCALES]);
   });
 });
