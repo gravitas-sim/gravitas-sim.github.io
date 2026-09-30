@@ -7,7 +7,7 @@ Everything Gravitas stores stays in the reader's browser; nothing leaves it with
 
 For each, it gives its owner module, what it holds, its format and version, and its migrations. `tests/storageInventory.test.js` fails when the code names a key this page does not.
 
-Formats are described in FORMATS.md (Roadmap II Prompt 61) where they have one. What `main` wrote and how v2 reads it is in the Prompt 48 checkpoint, which found nothing unreadable.
+Formats are described in [FORMATS.md](FORMATS.md) where they have one. What `main` wrote and how v2 reads it is in the Prompt 48 checkpoint, which found nothing unreadable.
 
 ## What a student owns
 
