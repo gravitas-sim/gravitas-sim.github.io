@@ -39,12 +39,14 @@ current, and the orchestrator checks it.
 | `check-links.mjs` | Internal link and asset checker | `npm run validate:links`, `npm run validate:links:dist` |
 | `check-test-policy.mjs` | A skip has to be a capability, and it has to be on the record | `npm run test:policy` |
 | `checks.mjs` | One list of what has to pass |  |
+| `csp.mjs` | A Content-Security-Policy on every page |  |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |
 | `empty-world.mjs` | A world with nothing in it |  |
 | `evaluation-summary.mjs` | npm run evaluation:summary -- <files...> | `npm run evaluation:summary` |
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
 | `experiment-bench.mjs` | npm run bench:experiments - how fast experiments run, and what they cost | `npm run bench:experiments` |
+| `formats.mjs` | Every versioned format Gravitas reads or writes, and FORMATS.md from them |  |
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |
@@ -69,6 +71,7 @@ current, and the orchestrator checks it.
 | `mission-lab-key.mjs` | The mission lab's answer key: a reference run of every guide | `npm run mission:key` |
 | `module-load-hook.mjs` | Write down every module Node loads |  |
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |
+| `number-ratchet.mjs` | Two migrations that may only go one way: numbers through the formatter, and |  |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
