@@ -150,6 +150,15 @@ For that to work the figure's URL must name the page's origin:
   `load` takes a share state that Gravitas's own decoder accepts, never a URL,
   and no message navigates the frame.
 
+**Who may frame a figure.** Every page carries a Content-Security-Policy
+(`tools/csp.mjs`), but as a `<meta>` element, because GitHub Pages sets no
+response headers. A browser ignores `frame-ancestors` in a `<meta>`, so the
+policy does not say who may frame a figure, and any site can. That is the
+intended reach of an embed, and the model above is built for it: a framing
+page learns nothing it could not see, and can tell the figure nothing unless
+it is the configured parent. A host that can set headers, and wants to limit
+framing, sends `Content-Security-Policy: frame-ancestors` itself.
+
 **Sandboxing.** A `sandbox` attribute on the figure's iframe, or a parent page
 that is itself sandboxed without `allow-same-origin`, gives the figure an opaque
 origin too, because sandboxing is inherited. The figure's scripts then cannot

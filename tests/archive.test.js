@@ -292,15 +292,13 @@ describe('one bounded request, every failure named', () => {
       /http-equiv="Content-Security-Policy"\s+content="([^"]+)"/
     )?.[1];
     expect(csp).toBeDefined();
-    // connect-src alone: the page has inline styles a default-src would stop.
-    expect(csp.split(';').map(d => d.trim().split(/\s+/)[0])).toEqual([
-      'connect-src',
-    ]);
-    const origins = csp
-      .trim()
-      .split(/\s+/)
-      .slice(1)
-      .filter(s => s !== "'self'");
+    // The page's whole policy is tools/csp.mjs's (tests/csp.test.js); what
+    // this holds is that its fetches reach exactly the archive's list.
+    const connect = csp
+      .split(';')
+      .map(d => d.trim().split(/\s+/))
+      .find(([name]) => name === 'connect-src');
+    const origins = connect.slice(1).filter(s => s !== "'self'");
     expect(origins.sort()).toEqual([...cds.ALLOW].sort());
   });
 });

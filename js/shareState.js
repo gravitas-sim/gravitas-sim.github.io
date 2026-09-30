@@ -37,6 +37,14 @@ const VERSION = 1;
 // is a warning threshold rather than a limit.
 export const COMFORTABLE_URL_LENGTH = 8000;
 
+/**
+ * The most a link's payload may inflate to: eight times the comfortable link
+ * length (Roadmap II Prompt 67). A course link at that length inflates to a
+ * sixth of it; anything past it is a file's worth, or a payload built to
+ * inflate enormously from a few bytes.
+ */
+export const MAX_INFLATED_BYTES = 8 * COMFORTABLE_URL_LENGTH;
+
 // --- base64url ---------------------------------------------------------------
 
 function bytesToBase64Url(bytes) {
@@ -73,7 +81,7 @@ function base64UrlToBytes(text) {
  * the compression path silently fall back: including the one the tests run
  * in, where it would have hidden this code from them entirely.
  */
-async function drain(stream) {
+async function drain(stream, max = Infinity) {
   const reader = stream.getReader();
   const chunks = [];
   let total = 0;
@@ -82,6 +90,17 @@ async function drain(stream) {
     if (done) break;
     chunks.push(value);
     total += value.length;
+    // Stopped while reading, so a small payload built to inflate enormously
+    // is never inflated in full.
+    if (total > max) {
+      reader.cancel().catch(() => {});
+      throw Object.assign(
+        new Error(
+          'That link holds more than a link can carry, so it was not opened. Ask for it as a file.'
+        ),
+        { code: 'tooLarge' }
+      );
+    }
   }
   const out = new Uint8Array(total);
   let at = 0;
@@ -116,8 +135,9 @@ async function inflate(bytes) {
     // already having failed; the read below reports it properly.
     writer.write(bytes).catch(() => {});
     writer.close().catch(() => {});
-    return await drain(ds.readable);
-  } catch {
+    return await drain(ds.readable, MAX_INFLATED_BYTES);
+  } catch (err) {
+    if (err?.code === 'tooLarge') throw err;
     // A cut-short payload surfaces from the stream as an opaque low-level
     // error, which tells a student handed a broken link nothing at all. Half a
     // URL is by far the likeliest way this fails: mail clients and chat apps
@@ -436,7 +456,14 @@ export async function decodeTagged(tag, fragment, maxVersion) {
   if (!(version >= 1)) throw new Error('wrongKind');
   if (version > maxVersion) throw new Error('newerVersion');
   const bytes = base64UrlToBytes(match[3]);
-  const raw = match[2] === 'z' ? await inflate(bytes) : bytes;
+  let raw;
+  try {
+    raw = match[2] === 'z' ? await inflate(bytes) : bytes;
+  } catch (err) {
+    if (err?.code === 'tooLarge') throw new Error('tooLarge');
+    throw err;
+  }
+  if (raw.length > MAX_INFLATED_BYTES) throw new Error('tooLarge');
   if (!raw) throw new Error('corrupt');
   let payload;
   try {
@@ -478,6 +505,11 @@ export async function decodePayload(fragment) {
   }
 
   if (mode === 'z') bytes = await inflate(bytes);
+  if (bytes.length > MAX_INFLATED_BYTES) {
+    throw new Error(
+      'That link holds more than a link can carry, so it was not opened. Ask for it as a file.'
+    );
+  }
   const json = new TextDecoder().decode(bytes);
 
   let payload;
