@@ -195,6 +195,34 @@ test.describe('the measurement pipeline', () => {
     ).toHaveCount(1);
   });
 
+  test('a number typed in Spanish is read as Spanish, and an ambiguous one is refused', async ({
+    page,
+  }) => {
+    // js/answerParse.js reads the field: "3,0" is three here, where Number()
+    // made it NaN and the tool refused it. The same three pairs as "> 3".
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem('gravitas_locale', 'es');
+      } catch {
+        /* storage unavailable */
+      }
+    });
+    await openFixture(page, 'gwosc-events');
+    await openPanel(page);
+    await page.locator('#msTool').selectOption('filter');
+    await page.locator('#msCol0').selectOption('mass_2_source');
+    await page.locator('#msOp0').selectOption('>');
+    await page.locator('#msVal0').fill('3,0');
+    await page.locator('#msRun').click();
+    const node = page.locator('#msNodes li[data-node="m1"]');
+    await expect(node.locator('table')).toBeVisible();
+    expect(num(await value(node, 'kept'))).toBe(3);
+
+    await page.locator('#msVal0').fill('1,2,3');
+    await page.locator('#msRun').click();
+    await expect(page.locator('#msNodes li[data-node="m2"]')).toHaveCount(0);
+  });
+
   test('a cross-match pairs the GWTC events with a second table, one to one', async ({
     page,
   }) => {
