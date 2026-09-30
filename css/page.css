@@ -1060,6 +1060,21 @@
     --val-kind: #818cf8;
   }
 
+  /* The three hues above are light enough for the dark themes and too light
+     for Daylight's white cards and table rows (pink was 2.4:1 against the
+     4.5:1 the count and the chip text need). The same hues, darker. */
+  :root[data-theme='daylight'] [data-kind='data'] {
+    --val-kind: #be185d;
+  }
+
+  :root[data-theme='daylight'] [data-kind='approximation'] {
+    --val-kind: #7e22ce;
+  }
+
+  :root[data-theme='daylight'] [data-kind='empirical'] {
+    --val-kind: #4338ca;
+  }
+
   /* --- Margin chart -------------------------------------------------------- */
 
   .val-chart-wrap {
@@ -1134,13 +1149,6 @@
     background: var(--warning);
     border-color: var(--warning);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--warning) 30%, transparent);
-  }
-
-  /* White rather than var(--focus-ring): these dots are drawn in the accent
-     and warning colors, so the ring has to be something neither of them is. */
-  .val-dot:focus-visible {
-    outline: 2px solid var(--text-primary);
-    outline-offset: 2px;
   }
 
   .val-axis {
