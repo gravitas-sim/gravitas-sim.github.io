@@ -44,6 +44,10 @@ export const WALL = Object.freeze({
   ceiling: 10 * 60 * 1000,
 });
 const running = new Map();
+// Cancels that came before their request: the client sends a cancel as soon
+// as it is pressed, which can be before the request it names has arrived.
+// Each Worker serves one request, so this never grows.
+const early = new Set();
 const tick = () => new Promise(ok => setTimeout(ok, 0));
 
 /** Why a problem cannot be solved, as {path, code}; empty if it can be. */
@@ -145,6 +149,8 @@ async function runWindow({ id, options, limits }, post, now) {
     let last = -1;
     let timedOut = false;
     while (!w.advance(30)) {
+      // Read at the first slice's end, as a cancel sent during it would be.
+      if (early.delete(id)) w.cancel();
       if (now() - t0 > wall) {
         timedOut = true;
         w.cancel();
@@ -177,6 +183,7 @@ async function runValidation({ id, cases }, post) {
     : CASES;
   let canceled = false;
   running.set(id, { cancel: () => (canceled = true) });
+  if (early.delete(id)) canceled = true;
   const out = [];
   for (const [i, c] of list.entries()) {
     if (canceled) break;
@@ -199,7 +206,10 @@ async function runValidation({ id, cases }, post) {
 export async function handle(msg, post, now = () => performance.now()) {
   if (!msg || typeof msg !== 'object') return;
   if (msg.type === 'hello') return post({ type: 'hello', api: MISSION_API });
-  if (msg.type === 'cancel') return running.get(msg.id)?.cancel();
+  if (msg.type === 'cancel') {
+    const run = running.get(msg.id);
+    return run ? run.cancel() : void early.add(msg.id);
+  }
   if (msg.type === 'window') return runWindow(msg, post, now);
   if (msg.type === 'validate') return runValidation(msg, post);
   if (msg.type !== 'solve')
