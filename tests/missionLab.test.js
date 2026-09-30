@@ -258,6 +258,33 @@ describe('the mission model', () => {
 });
 
 describe('the lab Worker', () => {
+  test('a cancel that arrives before its request is kept, and read at the first chance', async () => {
+    // The client sends a cancel the moment it is pressed; the handshake means
+    // that can be before the Worker has the request it names.
+    await handle({ type: 'cancel', id: 'w-early' }, () => {});
+    const out = [];
+    await handle(
+      {
+        type: 'window',
+        id: 'w-early',
+        options: { ...DEFAULT_WINDOW, departSteps: 200, tofSteps: 200 },
+      },
+      m => out.push(m)
+    );
+    const r = out.find(m => m.type === 'result').result;
+    expect(r.status).toBe('canceled');
+    expect(r.rows).toBeGreaterThan(0);
+    expect(r.rows).toBeLessThan(200);
+
+    await handle({ type: 'cancel', id: 'v-early' }, () => {});
+    const got = [];
+    await handle({ type: 'validate', id: 'v-early' }, m => got.push(m));
+    expect(got.find(m => m.type === 'result').result).toEqual({
+      status: 'canceled',
+      cases: [],
+    });
+  });
+
   test('a mission, a window on the pack, and what it refuses', async () => {
     const out = [];
     const post = m => out.push(m);
