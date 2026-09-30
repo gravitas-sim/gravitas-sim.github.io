@@ -49,6 +49,7 @@ import {
   EVIDENCE,
 } from './data/teaching.js';
 import { DEMO_LINKS, SCENARIO_COUNT } from './data/teachingGenerated.js';
+import { mountShell } from './shell.js';
 import {
   LANGUAGES,
   applyTranslations,
@@ -788,31 +789,6 @@ function renderEvidence() {
 
 // --- The language switch ------------------------------------------------------
 
-function renderLanguageSwitch() {
-  const group = $('teachLang');
-  if (!group) return;
-  clear(group);
-  for (const lang of LANGUAGES) {
-    const active = lang.id === language();
-    const button = el('button', {
-      className: 'ui-button is-quiet',
-      text: lang.endonym,
-      attrs: {
-        type: 'button',
-        lang: lang.id,
-        'aria-pressed': String(active),
-      },
-    });
-    button.addEventListener('click', async () => {
-      if (lang.id === language()) return;
-      await useLanguage(lang.id);
-      renderAll();
-      announce(tr('teach.lang.switched'));
-    });
-    group.append(button);
-  }
-}
-
 // --- Assembly -----------------------------------------------------------------
 
 /**
@@ -1044,7 +1020,6 @@ function renderAll() {
   const description = document.querySelector('meta[name="description"]');
   if (description)
     description.setAttribute('content', tr('teach.meta.description'));
-  renderLanguageSwitch();
   renderGlance();
   renderValidation();
   renderCycle();
@@ -1065,6 +1040,13 @@ export async function initTeachingPage() {
   activityRoute = routeFor(location.search);
   await useLanguage(preferred());
   renderAll();
+  mountShell({
+    onLanguage: async id => {
+      await useLanguage(id);
+      renderAll();
+      announce(tr('teach.lang.switched'));
+    },
+  });
 
   // After the first paint. The results are one number in a strip of five and
   // one line at the bottom; nothing above them should wait on a fetch.

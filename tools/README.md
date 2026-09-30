@@ -84,6 +84,7 @@ current, and the orchestrator checks it.
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
+| `shell.mjs` | The shared shell, stamped into every page |  |
 | `small-body-sweep.mjs` | Small-body scenario sweep |  |
 | `source-closure.mjs` | Which files a program actually reads |  |
 | `starfield-probe.mjs` | Starfield phase profile |  |

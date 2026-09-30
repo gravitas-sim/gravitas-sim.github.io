@@ -15,6 +15,22 @@ the release rather than in the tag.
 
 ### Added
 
+- **The shared shell, on the document pages** (PLATFORM_MODEL.md, Roadmap
+  II Prompt 50, Part 1). /model/, /validation/, /teaching/, /instructors/
+  and /evaluation/ share one header, five navigation groups, a language and
+  a theme switch, and one footer, stamped from `tools/shell.mjs`.
+  - The navigation is native disclosure (`<details>`), so it works with no
+    script at all; `js/shell.js` adds one group open at a time, Escape, the
+    two switches and the phone Menu.
+  - Every label is written in both languages and the page's language picks
+    one, so the shell costs a route no catalog: 3.2 KB of script where the
+    prototype needed 8.3.
+  - The stored theme now applies on all five pages before the first paint;
+    on /evaluation/ it exposed hint text and rules that were legible only in
+    Midnight, now drawn with the theme's tokens.
+  - /evaluation/ and /instructors/ carry the shell without its module, which
+    their routes cannot yet pay for: the navigation works and the theme
+    applies, and the two switches wait.
 - **Course packs** (COURSE_PACKS.md). `gravitas.course-pack/2` orders a
   course's lessons, assignments cut from them, scenarios, datasets and
   readings in units, with objectives, prerequisites, time, optional

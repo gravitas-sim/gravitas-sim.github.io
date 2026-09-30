@@ -17,16 +17,6 @@
    ============================================================================ */
 
 @layer components {
-  /* --- The language switch, in the page header ---------------------------- */
-  .teach-lang {
-    display: flex;
-    gap: var(--space-2);
-  }
-  .teach-lang button[aria-pressed='true'] {
-    color: var(--text-primary);
-    border-color: var(--accent);
-  }
-
   /* --text-secondary rather than --text-muted. css/page.css already records
      that muted gray fails contrast at small sizes in every theme, and this is
      small type; there is no reason to relearn it here. */
@@ -333,12 +323,7 @@
   }
 
   /* --- Narrow screens ------------------------------------------------------- */
-  /* The page header already stacks at 720px (css/page.css). The language switch
-     is a third child of that flex column, so it needs to stop stretching. */
   @media (max-width: 720px) {
-    .teach-lang {
-      margin-left: 0;
-    }
     .teach-stage {
       grid-template-columns: 1fr;
       gap: var(--space-2);
@@ -366,7 +351,6 @@
      that carries an argument stays, and the grids collapse to one column so a
      three-column card grid does not straddle a page break. */
   @media print {
-    .teach-lang,
     .teach-figure,
     .teach-sequence,
     .teach-demo-actions {

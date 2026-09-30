@@ -217,6 +217,29 @@ four there are now. So Prompt 50 is only useful once one of two things has
 happened: Carl allows the shell its bytes on each route, or Prompt 109's
 deploy pipeline serves minified sources and so gives the routes room.
 
+## As built (Prompt 50)
+
+The shell was built lighter than the prototype, and that changes the
+arithmetic above.
+
+- **The markup is static HTML**, stamped into each page by
+  `tools/shell.mjs` (`--write`, `--check`; tests/shell.test.js), because
+  route budgets count only the JavaScript a page fetches.
+- **Each label is written in both languages;** css/shell.css shows the one
+  the page's `<html lang>` names. The shell needs no catalog.
+- **The groups are `<details>` elements,** the native disclosure: they open
+  and close with no script, by mouse and keyboard.
+- **`js/shell.js` is 3.2 KB raw** (1.3 KB gzipped): one group open at a
+  time, Escape, a click elsewhere, the two switches, the phone Menu. The
+  prototype was 8.3 KB. css/shell.css is 1.4 KB gzipped.
+- **A page whose route cannot pay for the module carries the markup
+  without it.** Its navigation works and its stored theme applies (a head
+  script, which no route counts); only the two switches wait. Part 1 does
+  this on /evaluation/ and /instructors/.
+
+Part 1 put the shell on the five document pages. Part 2 is the thirteen
+tool pages; Part 3 is the application and the Home hub.
+
 ## Rejected alternatives
 
 - **A framework** (React, Vue, Lit). It would cost far more than the whole
