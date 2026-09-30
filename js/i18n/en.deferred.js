@@ -694,6 +694,8 @@ export const EN_DEFERRED = {
   'assign.error.unexpectedField':
     'That file carries a \u201c{field}\u201d field, which an assignment never has. It was not made by this tool and has not been opened.',
   'assign.error.notJson': 'That file is not an assignment.',
+  'assign.error.tooLarge':
+    'That link holds more than a link can carry, so it was not opened. Ask for the assignment as a file.',
   'assign.error.corrupt':
     'That link looks incomplete. Mail clients sometimes break long links across lines.',
   'assign.error.noStepsLeft':

@@ -72,6 +72,7 @@ import {
   solarHTML,
   earthHTML,
   jupiterHTML,
+  canRecordClips,
 } from './utils.js';
 import {
   WORLD,
@@ -105,7 +106,7 @@ import {
   resetAssumedDistance,
   setAssumedDistance,
 } from './astrometry.js';
-import { lastEvent } from './pauseAtEvent.js';
+import { lastEvent } from './pauseAtEventBridge.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { glyphMarkup } from './objectGlyphs.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
@@ -129,14 +130,6 @@ import {
   stopwatchTarget,
   setCaptureMode,
 } from './sandboxTools.js';
-import {
-  canRecord,
-  isRecording,
-  startRecording,
-  stopRecording,
-  recordingStatus,
-  extensionFor,
-} from './capture.js';
 import { setBodySelector } from './widgetRuntime.js';
 import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
 import { orbitalElements, dominantPrimary } from './orbital.js';
@@ -7366,6 +7359,16 @@ document.getElementById('screenshotBtn').onclick = takeScreenshot;
 // byte and time budgets - is in js/capture.js; what is here is the button, the
 // indicator and the save, which are the parts that have to know about this
 // page.
+//
+// js/capture.js is fetched on the first press of the button. Most visits never
+// record, and it was 11 KB and a request of every start-up. Until it is here
+// nothing is recording, which is all the rest of this module asks of it.
+
+/** js/capture.js, once the record button has fetched it. */
+let recorder = null;
+function isRecording() {
+  return Boolean(recorder?.isRecording());
+}
 
 const recordBtn = document.getElementById('recordBtn');
 const recordingBadge = document.getElementById('recordingBadge');
@@ -7422,7 +7425,7 @@ const saveRecording = (blob, meta) => {
   }
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
-  link.download = `gravitas-clip-${Date.now()}.${extensionFor(meta.type)}`;
+  link.download = `gravitas-clip-${Date.now()}.${recorder.extensionFor(meta.type)}`;
   link.href = url;
   link.click();
   // The Blob is the last thing holding the recording; the URL keeps it alive
@@ -7436,15 +7439,21 @@ const saveRecording = (blob, meta) => {
   else toast(t('capture.record.saved', { s: clockText(meta.seconds), mb }));
 };
 
-const toggleRecording = () => {
+const toggleRecording = async () => {
+  try {
+    recorder ??= await import('./capture.js');
+  } catch {
+    toast(t('capture.record.failed'));
+    return;
+  }
   if (isRecording()) {
-    stopRecording('user');
+    recorder.stopRecording('user');
     return;
   }
   // The clip carries the same provenance a still does: the scenario title, the
   // scale bar and the simulated clock, burned in for every frame of it.
   setCaptureMode(true, { caption: captureCaption() });
-  const started = startRecording({
+  const started = recorder.startRecording({
     sources: [starfieldCanvas, canvas],
     onTick: status => {
       // Re-read the caption rather than holding the one the take started with:
@@ -7460,20 +7469,20 @@ const toggleRecording = () => {
     toast(t('capture.record.unsupported'));
     return;
   }
-  paintRecordingState(recordingStatus());
+  paintRecordingState(recorder.recordingStatus());
 };
 
 if (recordBtn) {
   // Nothing to offer where MediaRecorder or captureStream is missing: a button
   // that can only apologize is worse than no button.
-  if (!canRecord()) recordBtn.hidden = true;
+  if (!canRecordClips()) recordBtn.hidden = true;
   else recordBtn.onclick = toggleRecording;
 }
 
 // A language change rewrites every data-i18n element from its key, which would
 // put "Record Clip" back on a button that is currently recording.
 onLocaleChange(() => {
-  if (isRecording()) paintRecordingState(recordingStatus());
+  if (isRecording()) paintRecordingState(recorder.recordingStatus());
 });
 
 // Leaving the page mid-take releases the encoder and the chunks it is holding.
@@ -7481,7 +7490,7 @@ onLocaleChange(() => {
 // away - but a take that is abandoned should not also leave a recorder running
 // against a canvas that is about to be torn down.
 window.addEventListener('pagehide', () => {
-  if (isRecording()) stopRecording('user');
+  if (isRecording()) recorder.stopRecording('user');
 });
 
 // --- Measurement tools --------------------------------------------------------

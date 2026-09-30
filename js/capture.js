@@ -32,6 +32,11 @@
 //   far from its provenance as an image is.
 // =============================================================================
 
+import {
+  canRecordClips as canRecord,
+  clipMimeType as pickMimeType,
+} from './utils.js';
+
 /** Frames a second. 30 is smooth enough for orbital motion and half the bytes
  *  of 60; the physics step is decoupled from this either way. */
 const FPS = 30;
@@ -70,57 +75,27 @@ const state = {
   reason: 'user',
 };
 
-/** @returns {boolean} Whether this browser can record the canvas at all */
-export function canRecord() {
-  return (
-    typeof window !== 'undefined' &&
-    typeof window.MediaRecorder === 'function' &&
-    typeof HTMLCanvasElement !== 'undefined' &&
-    typeof HTMLCanvasElement.prototype.captureStream === 'function' &&
-    Boolean(pickMimeType())
-  );
-}
-
-/**
- * The best container the browser will actually give us, in the order the
- * clip's destinations - a slide and a lab report - will accept.
- *
- * H.264 in MP4 first, where the browser can encode it. This is not a
- * preference about quality; it is the only choice that plays where these clips
- * are going. PowerPoint and Keynote will not open a WebM at all, and a PDF
- * reader that plays embedded video plays H.264 and nothing else, so a WebM in
- * a lab report is an attachment its reader cannot see. Chromium-based browsers
- * have recorded H.264 for a while now; where one does, taking it saves the
- * user a conversion step they would otherwise have to find out about the hard
- * way, in front of a class.
- *
- * WebM after it, VP9 before VP8: for this kind of picture - large flat black
- * areas and a few bright moving objects - VP9 is markedly smaller at the same
- * quality. Firefox lands here, and a Firefox WebM plays in every browser, in
- * Google Slides and in VLC; it is desktop presentation software and PDF that
- * cannot take it.
- *
- * @returns {string} A MIME type, or '' when nothing is supported
- */
-export function pickMimeType() {
-  if (
-    typeof window === 'undefined' ||
-    typeof window.MediaRecorder !== 'function'
-  )
-    return '';
-  const candidates = [
-    'video/mp4;codecs=avc1.42E01E',
-    'video/mp4;codecs=avc1',
-    'video/webm;codecs=vp9',
-    'video/webm;codecs=vp8',
-    'video/webm',
-    'video/mp4',
-  ];
-  for (const type of candidates) {
-    if (window.MediaRecorder.isTypeSupported?.(type)) return type;
-  }
-  return '';
-}
+// Whether a clip can be recorded, and in which container, is asked at
+// start-up to decide whether the button is shown, before this module has been
+// fetched (js/ui.js), so both live in js/utils.js. The container is the best
+// the browser will actually give us, in the order the clip's destinations - a
+// slide and a lab report - will accept.
+//
+// H.264 in MP4 first, where the browser can encode it. This is not a
+// preference about quality; it is the only choice that plays where these clips
+// are going. PowerPoint and Keynote will not open a WebM at all, and a PDF
+// reader that plays embedded video plays H.264 and nothing else, so a WebM in
+// a lab report is an attachment its reader cannot see. Chromium-based browsers
+// have recorded H.264 for a while now; where one does, taking it saves the
+// user a conversion step they would otherwise have to find out about the hard
+// way, in front of a class.
+//
+// WebM after it, VP9 before VP8: for this kind of picture - large flat black
+// areas and a few bright moving objects - VP9 is markedly smaller at the same
+// quality. Firefox lands here, and a Firefox WebM plays in every browser, in
+// Google Slides and in VLC; it is desktop presentation software and PDF that
+// cannot take it.
+export { canRecord, pickMimeType };
 
 /** @returns {boolean} True while a recording is in flight */
 export const isRecording = () => state.recorder !== null;

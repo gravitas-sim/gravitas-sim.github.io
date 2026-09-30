@@ -44,12 +44,6 @@ import { createHistory } from './observatory/history.js';
 import { createSelection } from './observatory/selection.js';
 import { pixelScale, skyOf } from './observatory/wcs.js';
 import {
-  exportName,
-  observationCsv,
-  observationJson,
-  sameObservation,
-} from './observatory/export.js';
-import {
   TIME_FORMATS,
   TIME_SCALES,
   UNITS,
@@ -290,10 +284,18 @@ const modelOf = id => {
   return models.get(id);
 };
 
+// The exporter, and the CSV writer behind it: loaded with the first export,
+// read-back or measurement. Most visitors never do any of them.
+let exporting = null;
+const exporter = () => (exporting ??= import('./observatory/export.js'));
+
 // The measurement pipeline (MEASUREMENT_PIPELINE.md): loaded when first opened.
 let measure = null;
 const measurePanel = () =>
-  (measure ??= import('./observatory/measurePanel.js').then(m =>
+  (measure ??= Promise.all([
+    import('./observatory/measurePanel.js'),
+    exporter(),
+  ]).then(([m, { observationJson }]) =>
     m.mountMeasurePanel($('obsMeasurePanel'), {
       ...lent,
       ...{ open, status, apply, state, replay, observationJson, importer },
@@ -1041,7 +1043,8 @@ async function readImport() {
     // changes made again to it, so undo reaches back to where it started.
     $('obsImport').hidden = true;
     open(r.observation, r.changes);
-    const same = !r.expected || sameObservation(state.view, r.expected);
+    const same =
+      !r.expected || (await exporter()).sameObservation(state.view, r.expected);
     status(
       t(same ? 'obs.import.readBack' : 'obs.import.readBackDiffers', {
         n: r.changes.length,
@@ -1310,23 +1313,25 @@ function download(name, text, type) {
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-$('obsExportJson').addEventListener('click', () =>
+$('obsExportJson').addEventListener('click', async () => {
+  const x = await exporter();
   download(
-    exportName(state.view, 'json'),
-    observationJson(state.view, {
+    x.exportName(state.view, 'json'),
+    x.observationJson(state.view, {
       source: state.source,
       changes: state.history.changes(),
     }),
     'application/json'
-  )
-);
-$('obsExportCsv').addEventListener('click', () =>
+  );
+});
+$('obsExportCsv').addEventListener('click', async () => {
+  const x = await exporter();
   download(
-    exportName(state.view, 'csv'),
-    observationCsv(state.view),
+    x.exportName(state.view, 'csv'),
+    x.observationCsv(state.view),
     'text/csv'
-  )
-);
+  );
+});
 
 // --- Language ----------------------------------------------------------------------
 

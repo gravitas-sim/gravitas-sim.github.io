@@ -41,6 +41,7 @@ export const ES_SUBMISSIONS = {
   'sub.reason.empty': 'no hay nada que leer',
   'sub.reason.wrongKind': 'no es un código de entrega de Gravitas',
   'sub.reason.newerVersion': 'lo creó una versión más reciente de Gravitas',
+  'sub.reason.tooLarge': 'más grande de lo que puede ser una entrega',
   'sub.reason.corrupt': 'se truncó o se alteró en el camino',
   'sub.reason.mangled':
     'algunos caracteres cambiaron en el camino: un cuadro de texto enriquecido convierte "--" en un guion largo. Péguelo en un campo de texto sin formato o suelte el PDF.',

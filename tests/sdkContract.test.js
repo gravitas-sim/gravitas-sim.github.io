@@ -403,9 +403,10 @@ describe('the JSON Schemas describe what the validators accept', () => {
         : Number.isInteger(v)
           ? 'integer'
           : typeof v;
+    const types = s.type === undefined ? null : [s.type].flat();
     if (
-      s.type &&
-      !(s.type === type || (s.type === 'number' && type === 'integer'))
+      types &&
+      !types.some(t => t === type || (t === 'number' && type === 'integer'))
     )
       return false;
     if (typeof v === 'string') {
@@ -431,6 +432,49 @@ describe('the JSON Schemas describe what the validators accept', () => {
     }
     return true;
   }
+
+  test('an artifact the validator accepts fits its schema, and the enums agree', async () => {
+    const a = { ...api, FORMAT: 'gravitas.artifact', FORMAT_VERSION: 1 };
+    const s = schema('artifact-1');
+    const doc = a.artifact({
+      id: 'transit-depth',
+      source: { kind: 'pipeline', id: 'hd209458-s56', digest: 'a1b2c3d4' },
+      quantities: [
+        {
+          id: 'depth',
+          value: 0.0146,
+          unit: '',
+          uncertainty: { kind: 'sigma', sigma: 0.0003, basis: 'data' },
+          origin: 'measured',
+        },
+        {
+          id: 'period',
+          value: 3.52474859,
+          unit: 'd',
+          uncertainty: {
+            kind: 'interval',
+            lo: 3.5247,
+            hi: 3.5248,
+            level: 0.68,
+            basis: 'profile',
+          },
+          origin: 'fitted',
+        },
+      ],
+    });
+    expect(a.validateArtifact(doc)).toEqual([]);
+    expect(valid(s, doc)).toBe(true);
+    const q = s.properties.quantities.items.properties;
+    expect(q.origin.enum).toEqual([...a.ORIGINS]);
+    expect(q.uncertainty.properties.kind.enum).toEqual([
+      ...a.UNCERTAINTY_KINDS,
+    ]);
+    expect(q.uncertainty.properties.basis.enum).toEqual([...a.BASES]);
+    expect(s.properties.source.properties.kind.enum).toEqual([
+      ...a.SOURCE_KINDS,
+    ]);
+    expect(api.FORMATS[a.FORMAT]).toBe(a.FORMAT_VERSION);
+  });
 
   test('every example and every installed package fits its schema', () => {
     const capability = schema('capability-package-1');
@@ -527,6 +571,7 @@ describe('the JSON Schemas describe what the validators accept', () => {
       ['observation-data-pack-1', 'gravitas.observation-data-pack/1'],
       ['course-pack-1', 'gravitas.course-pack/1'],
       ['scenario-pack-1', 'gravitas.scenario-pack/1'],
+      ['artifact-1', 'gravitas.artifact/1'],
     ]) {
       const s = schema(file);
       expect(s.$schema).toBe('https://json-schema.org/draft/2020-12/schema');

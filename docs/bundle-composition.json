@@ -1,9 +1,9 @@
 {
- "total": 588372,
+ "total": 577153,
  "modules": [
   {
    "module": "js/ui.js",
-   "bytes": 109998
+   "bytes": 110227
   },
   {
    "module": "js/i18n/en.js",
@@ -15,7 +15,7 @@
   },
   {
    "module": "js/world/build.js",
-   "bytes": 34897
+   "bytes": 34879
   },
   {
    "module": "js/render.js",
@@ -35,7 +35,7 @@
   },
   {
    "module": "js/controls.js",
-   "bytes": 9589
+   "bytes": 9619
   },
   {
    "module": "js/lightCurve.js",
@@ -60,10 +60,6 @@
   {
    "module": "js/data/objectNames.js",
    "bytes": 6197
-  },
-  {
-   "module": "js/pauseAtEventPanel.js",
-   "bytes": 6167
   },
   {
    "module": "js/astrometry.js",
@@ -106,10 +102,6 @@
    "bytes": 4019
   },
   {
-   "module": "js/pauseAtEvent.js",
-   "bytes": 3847
-  },
-  {
    "module": "js/energyChartNew.js",
    "bytes": 3799
   },
@@ -134,8 +126,8 @@
    "bytes": 2856
   },
   {
-   "module": "js/capture.js",
-   "bytes": 2756
+   "module": "js/utils.js",
+   "bytes": 2695
   },
   {
    "module": "js/habitability.js",
@@ -168,10 +160,6 @@
   {
    "module": "js/objectGlyphs.js",
    "bytes": 2249
-  },
-  {
-   "module": "js/utils.js",
-   "bytes": 2219
   },
   {
    "module": "js/notebookBridge.js",
@@ -284,6 +272,10 @@
   {
    "module": "js/observerGeometry.js",
    "bytes": 850
+  },
+  {
+   "module": "js/pauseAtEventBridge.js",
+   "bytes": 834
   },
   {
    "module": "js/maneuverBridge.js",

@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/artifact-1.schema.json",
+  "title": "gravitas.artifact/1",
+  "description": "One envelope for a scientific result: what made it, what it was made from, what may be done with it, and each quantity with its value, registry unit, uncertainty and origin. Data, not rendered text. js/platform/artifact.js validateArtifact() is the authority; PROVENANCE.md maps the older vocabularies onto origin and basis.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "made",
+    "source",
+    "quantities"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.artifact"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "made": {
+      "type": "object",
+      "required": [
+        "app"
+      ],
+      "properties": {
+        "app": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "engineFingerprint": {
+          "type": "string"
+        },
+        "at": {
+          "type": "string"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "simulation",
+            "observation",
+            "data-pack",
+            "pipeline",
+            "inference",
+            "experiment",
+            "analysis",
+            "guide",
+            "forward-model"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8,64}$"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "credit": {
+          "type": "string"
+        },
+        "license": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "statement": {
+              "type": "string"
+            },
+            "basis": {
+              "type": "string"
+            }
+          }
+        },
+        "citations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "retrieved": {
+          "type": "string"
+        },
+        "reductions": {
+          "type": "array"
+        }
+      }
+    },
+    "quantities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "value",
+          "unit",
+          "uncertainty",
+          "origin"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An id of js/units/registry.js, exactly; the empty string is dimensionless and null is not stated."
+          },
+          "uncertainty": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "sigma",
+                  "interval",
+                  "none"
+                ]
+              },
+              "sigma": {
+                "type": "number",
+                "minimum": 0
+              },
+              "lo": {
+                "type": "number"
+              },
+              "hi": {
+                "type": "number"
+              },
+              "level": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "exclusiveMaximum": 1
+              },
+              "basis": {
+                "enum": [
+                  "data",
+                  "model",
+                  "assumed",
+                  "scaled",
+                  "profile"
+                ]
+              }
+            }
+          },
+          "origin": {
+            "enum": [
+              "measured",
+              "derived",
+              "assumed",
+              "fitted",
+              "fixed",
+              "truth",
+              "analytic",
+              "synthetic"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "Optional, in the language the result was made in; a report renders its own."
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

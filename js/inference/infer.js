@@ -36,16 +36,19 @@ import { halfDuration } from './transit.js';
 const { Math, Number, Float64Array, Int32Array } = globalThis;
 
 /**
- * The observatory's time units (js/observatory/units.js), in seconds. A copy,
- * not an import: the fit panel must reach none of its page's modules
- * (js/observatory/fitPanel.js says why), and tests/inference.test.js holds
- * the two to agreement.
+ * The time units of js/units/registry.js, in seconds. A copy, not an import:
+ * the fit panel must reach none of its page's modules (js/observatory/
+ * fitPanel.js says why: a shared module becomes a chunk and a request of its
+ * own), and tests/inference.test.js holds the two to agreement.
  */
 export const TIME_UNIT_SECONDS = Object.freeze({
   s: 1,
   min: 60,
   h: 3600,
   d: 86400,
+  yr: 31557600,
+  Myr: 31557600e6,
+  Gyr: 31557600e9,
 });
 
 /**

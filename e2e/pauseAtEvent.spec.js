@@ -10,6 +10,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { encodePayload } from '../js/shareState.js';
 
 /**
  * The one eccentric pair the crossing tests use.
@@ -101,6 +102,90 @@ const isPaused = page =>
     const { state } = await import('/js/appState.js');
     return Boolean(state.paused);
   });
+
+// The tool is not part of start-up (js/pauseAtEventBridge.js): it is fetched
+// by the first press of its button, and the page works without it until then.
+test('the tool is fetched by the first press, not at start-up', async ({
+  page,
+  app,
+}) => {
+  await app.boot();
+  await app.waitForFrames(10);
+  const fetched = () =>
+    page.evaluate(() =>
+      performance
+        .getEntriesByType('resource')
+        .filter(e => /\/js\/pauseAtEvent(Panel)?\.js(\?|$)/.test(e.name))
+        .map(e => e.name.replace(/^.*\/js\//, ''))
+        .sort()
+    );
+  expect(await fetched()).toEqual([]);
+  await expect(page.locator('#timelineEventMarker')).toBeHidden();
+
+  await app.railControl('togglePauseAtEvent');
+  await page.locator('#togglePauseAtEvent').click();
+  await expect(page.locator('#pauseEventContainer')).toBeVisible();
+  await expect(page.locator('#togglePauseAtEvent')).toHaveAttribute(
+    'aria-pressed',
+    'true'
+  );
+  expect(await fetched()).toEqual(['pauseAtEvent.js', 'pauseAtEventPanel.js']);
+
+  // The panel's own listener has taken over: one press closes it.
+  await page.locator('#togglePauseAtEvent').click();
+  await expect(page.locator('#pauseEventContainer')).toBeHidden();
+});
+
+// A fetch that fails is said, and the page carries on without the tool. The
+// browser keeps a failed module import for the life of the document, so a
+// second press says so again rather than pretending to retry.
+test('a tool that cannot be fetched says so, and the page carries on', async ({
+  page,
+  app,
+  errors,
+}) => {
+  await app.boot();
+  await app.waitForFrames(5);
+  await page.route('**/js/pauseAtEventPanel.js', route => route.abort());
+  await app.railControl('togglePauseAtEvent');
+  await page.locator('#togglePauseAtEvent').click();
+  await expect(page.locator('#gravitasToast')).toContainText(
+    'Something went wrong'
+  );
+  await expect(page.locator('#pauseEventContainer')).toBeHidden();
+  await expect(page.locator('#togglePauseAtEvent')).toBeEnabled();
+  await app.waitForFrames(5);
+
+  // What was logged is the failed fetch and the bridge's own report of it.
+  const other = errors.consoleErrors.filter(
+    e =>
+      !/Failed to load resource|net::ERR_FAILED|Pause at event could not be loaded/.test(
+        e
+      )
+  );
+  expect(other).toEqual([]);
+  errors.consoleErrors.length = 0;
+});
+
+// A scenario pack can start with the tool open (js/startingPanels.js clicks the
+// rail button), which is the other way it gets fetched before anyone presses.
+test('a link that starts with the tool open fetches and opens it', async ({
+  page,
+  app,
+}) => {
+  const fragment = await encodePayload({
+    v: 1,
+    s: ECCENTRIC.scenario,
+    seed: 'e2e',
+    x: { v: 1, open: ['pauseAtEvent'] },
+  });
+  await app.boot({ url: `/#${fragment}` });
+  await expect(page.locator('#pauseEventContainer')).toBeVisible();
+  await expect(page.locator('#togglePauseAtEvent')).toHaveAttribute(
+    'aria-pressed',
+    'true'
+  );
+});
 
 test.describe('arming and refusing', () => {
   test('a circular orbit is refused a periapsis, in as many words', async ({

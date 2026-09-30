@@ -619,3 +619,41 @@ describe('settings that have been renamed', () => {
     }
   });
 });
+
+// Roadmap II Prompt 67: a link may not inflate past eight times the
+// comfortable link length, and the read stops there.
+describe('a link that inflates past what a link can carry', () => {
+  const bomb = async tag => {
+    const { deflateRawSync } = await import('node:zlib');
+    const { Buffer } = await import('node:buffer');
+    // A megabyte of spaces deflates to about a kilobyte.
+    const z = deflateRawSync(Buffer.alloc(1_000_000, 0x20));
+    return `${tag}z${Buffer.from(z).toString('base64url')}`;
+  };
+
+  test('a world link is refused, in words', async () => {
+    const { MAX_INFLATED_BYTES } = await import('../js/shareState.js');
+    expect(MAX_INFLATED_BYTES).toBe(64000);
+    await expect(decodePayload(await bomb('1'))).rejects.toThrow(
+      /more than a link can carry/
+    );
+  });
+
+  test('an assignment, course or submission link is refused by its code', async () => {
+    const { decodeTagged } = await import('../js/shareState.js');
+    await expect(decodeTagged('a', await bomb('a2'), 2)).rejects.toThrow(
+      'tooLarge'
+    );
+  });
+
+  test('a large world that is still a link opens', async () => {
+    const payload = {
+      v: 1,
+      s: 'Solar System',
+      seed: 'e2e',
+      b: Array.from({ length: 400 }, (_, i) => [i, i * 0.37, -i, 1e-3 * i]),
+    };
+    const fragment = await encodePayload(payload);
+    expect((await decodePayload(fragment)).b).toHaveLength(400);
+  });
+});

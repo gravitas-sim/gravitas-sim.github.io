@@ -219,6 +219,36 @@ const SURFACES = [
     expect: '#teachDemos article',
     standalone: true,
   },
+  {
+    name: 'figure builder',
+    open: async ({ page }) => {
+      await page.goto('/figure/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#figureForm',
+    // The preview is the application itself, in a frame, and axe caught its
+    // splash mid-fade (a wordmark at 1.15:1 on its way in). The application
+    // has its own surfaces above; this one is the builder around it.
+    exclude: ['#fbPreview'],
+    standalone: true,
+  },
+  {
+    name: 'evaluation kit',
+    open: async ({ page }) => {
+      await page.goto('/evaluation/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#ekTools',
+    standalone: true,
+  },
+  {
+    // Painted by js/validationPage.js from validation/data.json: a check row,
+    // not the empty shell.
+    name: 'validation report',
+    open: async ({ page }) => {
+      await page.goto('/validation/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '.val-row',
+    standalone: true,
+  },
 ];
 
 /** The two extremes of the palette. Midnight is the default. */
@@ -273,9 +303,10 @@ async function waitForStableStyles(page) {
     .catch(() => {});
 }
 
-async function analyze(page, context) {
+async function analyze(page, context, exclude = []) {
   await waitForStableStyles(page);
   let builder = new AxeBuilder({ page }).withTags(TAGS);
+  for (const selector of exclude) builder = builder.exclude(selector);
   for (const [rule, on] of Object.entries(OFF)) {
     if (!on) builder = builder.disableRules(rule);
   }
@@ -371,7 +402,8 @@ for (const surface of SURFACES) {
 
           const violations = await analyze(
             page,
-            `${surface.name} / ${locale.label} / ${theme.label}`
+            `${surface.name} / ${locale.label} / ${theme.label}`,
+            surface.exclude
           );
 
           expect(
