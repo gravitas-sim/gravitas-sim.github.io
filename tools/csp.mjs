@@ -20,8 +20,8 @@
 // frame-ancestors is left out: a browser ignores it in a <meta>, and says so,
 // so embedding is governed by EMBEDDING.md, not by the page.
 //
-// history/original/ is the first Gravitas, kept as it was, and loads its
-// fonts from Google; its policy names those two origins and no page's else.
+// history/original/ is the first Gravitas, kept byte for byte, so it is the
+// one published page without a policy: adding one would change what it is.
 // =============================================================================
 
 import { createHash } from 'node:crypto';
@@ -44,7 +44,10 @@ export function pages() {
     .filter(
       f =>
         f.endsWith('.html') &&
-        !/^(spike|dist|e2e|tests|sdk|node_modules)\//.test(f)
+        !/^(spike|dist|e2e|tests|sdk|node_modules)\//.test(f) &&
+        // Kept byte for byte as the first Gravitas (tests/historyOriginal
+        // .test.js pins its blob), so it carries no policy of its own.
+        f !== 'history/original/index.html'
     )
     .sort();
 }
@@ -73,7 +76,6 @@ const hash = text =>
  * @returns {string}
  */
 export function policyFor(page, html) {
-  const original = page === 'history/original/index.html';
   const scripts = [`'self'`, ...inlineScripts(html).map(hash)];
   const connect = [
     `'self'`,
@@ -82,8 +84,8 @@ export function policyFor(page, html) {
   return [
     `default-src 'self'`,
     `script-src ${scripts.join(' ')}`,
-    `style-src 'self' 'unsafe-inline'${original ? ' https://fonts.googleapis.com' : ''}`,
-    `font-src 'self'${original ? ' https://fonts.gstatic.com' : ''}`,
+    `style-src 'self' 'unsafe-inline'`,
+    `font-src 'self'`,
     `img-src 'self' data: blob:`,
     `media-src 'self' blob:`,
     `connect-src ${connect.join(' ')}`,
