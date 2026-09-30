@@ -87,7 +87,6 @@ import {
 import { stellarPropertiesFor, relativeInsolation } from './habitability.js';
 
 // Import the getRandomName function from ui.js
-// import { getRandomName } from './ui.js';
 
 // Local getRandomName function since it's not exported from ui.js
 /**
@@ -325,6 +324,21 @@ let workerBuffers = {
 };
 let workerJobObjects = []; // Stores references to objects currently being processed by worker
 let cachedGravityDirty = false; // True while any object holds worker-cached gravity
+let workerSentAt = 0;
+let workerFailed = null;
+
+// A dead or silent worker left workerBusy set, and every pull went stale.
+const failPhysicsWorker = why => {
+  console.error(`Physics Worker ${why}; summing gravity on the main thread`);
+  physicsWorker?.terminate();
+  physicsWorker = null;
+  workerFailed = why;
+  workerBusy = false;
+  workerJobObjects = [];
+  globalThis.dispatchEvent?.(
+    new CustomEvent('gravitasWorkerFailed', { detail: { worker: 'physics' } })
+  );
+};
 
 let PhysicsObject_id_counter = 0;
 
@@ -1404,7 +1418,8 @@ const activeMondA0 = () => {
  */
 const isBarnesHutActive = () =>
   physicsSettings.mutual_gravity === true &&
-  physicsSettings.use_barnes_hut === true;
+  physicsSettings.use_barnes_hut === true &&
+  !workerFailed;
 
 /**
  * Drop accelerations and potentials cached from the Barnes-Hut worker.
@@ -2401,11 +2416,6 @@ const updateCachedArrays = () => {
     key => currentCounts[key] !== lastObjectCounts[key]
   );
 
-  // Debug logging for tests
-  // if (countsChanged) {
-  //   console.log('Array counts changed:', lastObjectCounts, '->', currentCounts);
-  // }
-
   if (
     countsChanged ||
     lastWorldGeneration !== worldGeneration ||
@@ -2580,11 +2590,17 @@ const updatePhysics = dt => {
           workerBusy = false;
         }
       };
+      physicsWorker.onerror = e => failPhysicsWorker(e?.message || 'failed');
+      physicsWorker.onmessageerror = () =>
+        failPhysicsWorker('sent an unreadable answer');
     } catch (err) {
       console.error('Physics Worker init failed:', err);
       physicsWorker = null;
     }
   }
+
+  if (workerBusy && performance.now() - workerSentAt > 10_000)
+    failPhysicsWorker('stopped answering');
 
   // Schedule new worker job if free
   if (
@@ -2678,6 +2694,7 @@ const updatePhysics = dt => {
     workerBuffers.sx = null;
     workerBuffers.tself = null;
     workerBusy = true;
+    workerSentAt = performance.now();
   }
 
   // One tick per step, before anything appends: every point pushed below shares
@@ -4698,7 +4715,6 @@ class AccretionDiskParticle extends PhysicsObject {
     this.pos.y += (Math.random() - 0.5) * random_motion * dt;
 
     // Enhanced temperature calculations - dramatic heating as particle spirals inward
-    // const initial_distance = this.disk_radius; // reserved for future use
 
     // Exponential heating as particle approaches black hole
     const proximity_factor = Math.max(

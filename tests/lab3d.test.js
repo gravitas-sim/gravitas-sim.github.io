@@ -19,7 +19,7 @@
 //     played in-process.
 // =============================================================================
 
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, jest } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { Buffer } from 'node:buffer';
 import { webcrypto } from 'node:crypto';
@@ -649,6 +649,35 @@ describe('the Worker protocol and the experiment integration', () => {
       lab.run({ ...system, units: 'x' }, { span: 1 }).done
     ).rejects.toMatchObject({ code: 'refused' });
     expect(LAB3D_API).toMatch(/^1\.\d+\.\d+$/);
+  });
+
+  test('a Worker that goes silent, or answers unreadably, is ended and says so', async () => {
+    jest.useFakeTimers();
+    try {
+      // Never answers: not even the hello.
+      const mute = {
+        postMessage() {},
+        terminated: false,
+        terminate() {
+          this.terminated = true;
+        },
+      };
+      const lab = createLab3d({ spawn: () => mute });
+      const stalled = lab.run({}, {}).done;
+      jest.advanceTimersByTime(29_999);
+      expect(mute.terminated).toBe(false);
+      jest.advanceTimersByTime(2);
+      await expect(stalled).rejects.toMatchObject({ code: 'stalled' });
+      expect(mute.terminated).toBe(true);
+
+      const garbled = { postMessage() {}, terminate() {} };
+      const lab2 = createLab3d({ spawn: () => garbled });
+      const unreadable = lab2.run({}, {}).done;
+      garbled.onmessageerror();
+      await expect(unreadable).rejects.toThrow(/unreadable/);
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   test('a 3-D experiment validates, plans its trials and runs them through the scheduler', async () => {

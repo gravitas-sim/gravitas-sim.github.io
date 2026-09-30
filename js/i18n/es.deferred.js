@@ -3904,4 +3904,7 @@ export const ES_DEFERRED = {
   'specW.row.limits': 'Qué son cuatro espectros',
   'specW.value.limits':
     'Cuatro ejemplos, uno por letra. No es un atlas, ni un sondeo, ni una muestra representativa de nada: cuatro estrellas que se observaron.',
+  'failure.error': 'Algo falló: {message}',
+  'failure.worker.physics':
+    'El proceso de gravedad se detuvo, así que la gravedad se calcula ahora en el hilo principal. La simulación sigue siendo correcta, pero puede ir más lenta.',
 };

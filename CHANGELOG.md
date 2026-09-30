@@ -845,6 +845,17 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A physics Worker that died stopped gravity, silently.** Its busy flag
+  stayed set, so no job was scheduled again, and every body kept the last
+  pull the Worker had computed. An error, an unreadable answer or ten seconds
+  without one now ends the Worker; gravity is summed on the main thread, and
+  the status region says so. The chart Worker falls back to drawing directly,
+  and a 3-D lab Worker that sends nothing for thirty seconds, or an
+  unreadable answer, is ended with a reason. An uncaught error or unhandled
+  rejection is also said in the status region; nothing is swallowed, and the
+  browser reports it as before. Commented-out code in `js/preview.js` and
+  `js/physics.js` was removed to keep the front door within its budget.
+
 - **The way back to the instructor was hard to find, and half-read.**
   - `/instructors/submissions/` is linked from the instructor portal's public
     section and from the adopters guide. The guide also no longer says three

@@ -3651,6 +3651,11 @@ export const EN_DEFERRED = {
   'nb.stellar.limit.fitted':
     'The comparison was drawn with each star fitted to its own box, so the apparent sizes in it are not comparable.',
 
+  // --- Failures (js/failures.js) --------------------------------------------
+  'failure.error': 'Something went wrong: {message}',
+  'failure.worker.physics':
+    'The gravity worker stopped, so gravity is now worked out on the main thread. The simulation is still correct, but may run more slowly.',
+
   // --- Words a lesson computes ----------------------------------------------
   // None in English, on purpose. js/i18n/lesson.js looks a computed sentence
   // up by an id made from what it says, and returns the sentence itself when
