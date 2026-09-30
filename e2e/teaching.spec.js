@@ -165,7 +165,7 @@ test.describe('the demonstrations', () => {
   test('and it is labeled in Spanish too', async ({ page }) => {
     await openTeaching(page);
     // Through the page's own switch, which is what a reader uses.
-    await page.locator('#teachLang button', { hasText: 'Español' }).click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     const meta = page
       .locator('#teachDemos article')
       .first()
@@ -290,7 +290,7 @@ test.describe('both languages', () => {
       firstLesson.title
     );
 
-    await page.locator('#teachLang button', { hasText: 'Español' }).click();
+    await page.locator('[data-gs-lang]').selectOption('es');
 
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
     await expect(page.locator('h1')).toHaveText('Enseñar con Gravitas');
@@ -307,7 +307,7 @@ test.describe('both languages', () => {
     page,
   }) => {
     await openTeaching(page);
-    await page.locator('#teachLang button', { hasText: 'Español' }).click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 
     expect(
@@ -327,6 +327,40 @@ test.describe('both languages', () => {
       page.locator('#teachDemos .teach-demo-field dt').first()
     ).toHaveText('La pregunta, y la respuesta equivocada de siempre');
   });
+
+  test('an English reader downloads no Spanish, and choosing it fetches it', async ({
+    page,
+  }) => {
+    const SPANISH = /\/(es\.teaching|es\.activities|manifest\.es)\.js$/;
+    const fetched = [];
+    page.on('request', r => fetched.push(new URL(r.url()).pathname));
+    await openTeaching(page);
+    await page.waitForLoadState('load');
+    expect(fetched.filter(p => SPANISH.test(p))).toEqual([]);
+
+    await page.locator('[data-gs-lang]').selectOption('es');
+    await expect(page.locator('h1')).toHaveText('Ense\u00f1ar con Gravitas');
+    expect(fetched.filter(p => SPANISH.test(p)).length).toBe(3);
+  });
+
+  test('Spanish that fails to arrive renders English, and the choice is kept', async ({
+    page,
+    errors,
+  }) => {
+    await page.route('**/js/i18n/es.teaching.js', r => r.abort());
+    await openTeaching(page, { locale: 'es' });
+    await expect(page.locator('h1')).toHaveText('Teaching with Gravitas');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    // A failed fetch is not the reader choosing English.
+    expect(
+      await page.evaluate(() => localStorage.getItem('gravitas_locale'))
+    ).toBe('es');
+    // The refused fetch is the only thing the browser complains about.
+    expect(
+      errors.consoleErrors.filter(e => !/Failed to load resource/.test(e))
+    ).toEqual([]);
+    errors.consoleErrors.length = 0;
+  });
 });
 
 test.describe('operating it without a mouse', () => {
@@ -343,11 +377,14 @@ test.describe('operating it without a mouse', () => {
     await page.keyboard.press('Enter');
     await expect(run).toHaveAttribute('aria-expanded', 'false');
 
-    const spanish = page.locator('#teachLang button', { hasText: 'Español' });
-    await spanish.focus();
-    await page.keyboard.press('Enter');
+    // The shell's language select: a native control, so the keyboard works
+    // it as the platform does.
+    const language = page.locator('[data-gs-lang]');
+    await language.focus();
+    await expect(language).toBeFocused();
+    await language.selectOption('es');
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-    await expect(spanish).toHaveAttribute('aria-pressed', 'true');
+    await expect(language).toHaveValue('es');
   });
 
   test('the skip link is the first thing Tab reaches, and it goes to the content', async ({
@@ -463,19 +500,20 @@ test.describe('narrow screens and print', () => {
     await page.setViewportSize({ width: 360, height: 720 });
     await openTeaching(page);
 
-    const boxes = await page.evaluate(() => {
-      const nav = document.querySelector('.doc-nav').getBoundingClientRect();
-      const lang = document
-        .querySelector('.teach-lang')
-        .getBoundingClientRect();
-      return {
-        navBottom: nav.bottom,
-        langTop: lang.top,
-        langRight: lang.right,
-      };
-    });
-    expect(boxes.langTop).toBeGreaterThanOrEqual(boxes.navBottom - 1);
-    expect(boxes.langRight).toBeLessThanOrEqual(360);
+    // The shell folds its groups behind one Menu button, and opening it
+    // stacks them rather than pushing anything off the side.
+    const menu = page.locator('.gs-toggle');
+    await expect(menu).toBeVisible();
+    await menu.click();
+    await expect(page.locator('[data-gs-lang]')).toBeVisible();
+    const right = await page.evaluate(() =>
+      Math.max(
+        ...[...document.querySelectorAll('.gs-shell *')].map(
+          e => e.getBoundingClientRect().right
+        )
+      )
+    );
+    expect(right).toBeLessThanOrEqual(360);
   });
 
   test('printing drops the figures and keeps the argument', async ({
@@ -496,7 +534,7 @@ test.describe('narrow screens and print', () => {
       return {
         figure: shown('.teach-figure'),
         actions: shown('.teach-demo-actions'),
-        language: shown('.teach-lang'),
+        shell: shown('.gs-shell'),
         question: shown('.teach-demo-field'),
         cycle: shown('.teach-step'),
       };
@@ -504,7 +542,7 @@ test.describe('narrow screens and print', () => {
     expect(printed).toEqual({
       figure: false,
       actions: false,
-      language: false,
+      shell: false,
       question: true,
       cycle: true,
     });

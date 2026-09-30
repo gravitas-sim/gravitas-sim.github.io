@@ -78,9 +78,19 @@ describe('nothing is transmitted', () => {
   test('the page markup posts nowhere', () => {
     // A <form action> would submit on Enter even with no JavaScript at all,
     // which is exactly the case this page is built for.
-    expect(html).not.toMatch(/<form/i);
-    expect(html).not.toMatch(/action\s*=/i);
-    expect(html).not.toMatch(/https?:\/\/(?!localhost)/);
+    // The shared shell's navigation is stamped in by tools/shell.mjs and held
+    // by tests/shell.test.js; its only absolute URLs are links to the source
+    // a reader may choose to follow, never somewhere the page sends anything.
+    const shell = /<!-- shell:(\w+)[^>]*-->[\s\S]*?<!-- \/shell:\1 -->/g;
+    const own = html.replace(shell, '');
+    expect(own).not.toMatch(/<form/i);
+    expect(own).not.toMatch(/action\s*=/i);
+    expect(own).not.toMatch(/https?:\/\/(?!localhost)/);
+    const stamped = (html.match(shell) || []).join('\n');
+    expect(stamped).not.toMatch(/<form|action\s*=|src="https?:/i);
+    for (const [url] of stamped.matchAll(/https?:\/\/[^"]+/g)) {
+      expect(url).toMatch(/^https:\/\/github\.com\/gravitas-sim\//);
+    }
   });
 
   test('the built bundle contains no network call either', () => {

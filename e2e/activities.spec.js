@@ -312,7 +312,7 @@ test.describe('both languages, and the keyboard', () => {
       'why do planets change speed'
     );
 
-    await page.locator('#teachLang button', { hasText: 'Español' }).click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(page.locator('#teachActivities')).toContainText(
       'por qué cambian de velocidad'
     );

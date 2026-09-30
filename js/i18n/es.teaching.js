@@ -17,18 +17,11 @@ export const ES_TEACHING = {
   'teach.title': 'Enseñar con Gravitas',
   'teach.meta.description':
     'Cómo se usa Gravitas en un curso introductorio de astronomía: investigaciones guiadas, un cuaderno de evidencia, experimentos controlados y seis demostraciones que puede ejecutar en esta página.',
-  'teach.nav.simulation': 'Simulación',
-  'teach.nav.model': 'El modelo',
-  'teach.nav.validation': 'Validación',
-  'teach.nav.teaching': 'Enseñanza',
-  'teach.nav.instructors': 'Docentes',
-  'teach.skip': 'Saltar al contenido',
   'teach.eyebrow': 'Para docentes y quienes evalúan adoptarlo',
   'teach.lede':
     'Gravitas es un simulador gravitacional que funciona en el navegador y está hecho para enseñar. El estudiantado no mira la demostración de un resultado: lo predice, lo ejecuta, lo mide y escribe lo que encontró. Esta página muestra cómo funciona eso, qué cuesta adoptarlo y dónde comprobar la física.',
 
   // --- Language --------------------------------------------------------------
-  'teach.lang.label': 'Idioma',
   'teach.lang.en': 'English',
   'teach.lang.es': 'Español',
   'teach.lang.switched': 'El idioma de la página cambió a español.',
@@ -313,12 +306,6 @@ export const ES_TEACHING = {
     'Abra la página de validación para ver los resultados actuales.',
 
   // --- Footer ----------------------------------------------------------------
-  'teach.foot.home': 'Gravitas',
-  'teach.foot.model': 'El modelo',
-  'teach.foot.validation': 'Validación',
-  'teach.foot.instructors': 'Docentes',
-  'teach.foot.source': 'Código fuente',
-  'teach.foot.license': 'Licencia MIT',
 
   // --- Inicio rápido para docentes ------------------------------------------
   'teach.section.quickstart': 'Inicio rápido para docentes',

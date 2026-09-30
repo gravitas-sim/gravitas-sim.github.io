@@ -157,7 +157,7 @@ describe('the first sketch is fetched only by following its link', () => {
 describe('one quiet link reaches it, the last word of /model/', () => {
   const html = read('model/index.html');
   const footer = html.slice(
-    html.indexOf('<footer class="doc-foot">'),
+    html.indexOf('<footer class="gs-foot">'),
     html.indexOf('</footer>')
   );
 

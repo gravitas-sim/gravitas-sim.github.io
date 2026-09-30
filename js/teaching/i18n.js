@@ -14,6 +14,9 @@
 // convention; and the same rule that a missing string falls back to English
 // rather than rendering its own id.
 //
+// Spanish is fetched when it is chosen (loadLanguage), not at start-up: an
+// English reader would otherwise download about 45KB of it to read none.
+//
 // What it deliberately does NOT have: plurals, number formatting, a locale
 // change event, registration of late-arriving catalogs. None of them has a
 // caller on this page, and a second half-implementation of the real i18n
@@ -21,7 +24,6 @@
 // =============================================================================
 
 import { EN_TEACHING } from '../i18n/en.teaching.js';
-import { ES_TEACHING } from '../i18n/es.teaching.js';
 
 /** The same key the application writes, so the two pages agree. */
 const STORAGE_KEY = 'gravitas_locale';
@@ -32,7 +34,11 @@ export const LANGUAGES = Object.freeze([
   { id: 'es', endonym: 'Español', label: 'teach.lang.es' },
 ]);
 
-const CATALOGS = { en: EN_TEACHING, es: ES_TEACHING };
+/** English is always here; another language is null until it is loaded. */
+const CATALOGS = { en: EN_TEACHING, es: null };
+const LOADERS = {
+  es: () => import('../i18n/es.teaching.js').then(m => m.ES_TEACHING),
+};
 const DEFAULT = 'en';
 
 let current = DEFAULT;
@@ -62,18 +68,40 @@ export function preferred() {
 }
 
 /**
+ * Fetch a language's catalog, once.
+ * @param {string} id - A language id
+ * @returns {Promise<boolean>} Whether it can be rendered in now
+ */
+export async function loadLanguage(id) {
+  if (!Object.hasOwn(CATALOGS, id)) return false;
+  if (!CATALOGS[id]) {
+    try {
+      CATALOGS[id] = await LOADERS[id]();
+    } catch (err) {
+      console.warn(`[teaching] could not load "${id}"`, err);
+    }
+  }
+  return Boolean(CATALOGS[id]);
+}
+
+/**
  * Change the language, and remember it for the application too.
+ *
+ * A language whose catalog is not loaded renders in English, and is not
+ * remembered as English: a failed fetch is not the reader's choice.
+ *
  * @param {string} id - A language id
  * @returns {string} The language actually in force
  */
 export function setLanguage(id) {
-  current = Object.hasOwn(CATALOGS, id) ? id : DEFAULT;
+  current = CATALOGS[id] ? id : DEFAULT;
+  document.documentElement.setAttribute('lang', current);
+  if (current !== id) return current;
   try {
     window.localStorage?.setItem(STORAGE_KEY, current);
   } catch {
     /* the page still works; the choice just will not survive a reload */
   }
-  document.documentElement.setAttribute('lang', current);
   return current;
 }
 
