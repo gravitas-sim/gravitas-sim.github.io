@@ -213,10 +213,12 @@ loading, canvas animation, the scenario gallery, pause/resume/reset, downloads,
 `MediaRecorder` availability, history and share-link restoration, a lesson
 advancing, a lesson walked at phone width, the deferred chart chunk, the
 inspector, the A/B bench recording, WebGL, embed mode, language switching and
-Spanish layout, the document pages, and the shared shell: its native
-`<details>` groups, keyboard order, the stored theme and language across pages,
-the phone fold, the application's layout under the bar at its widest and
-narrowest, and embed and lecture without it.
+Spanish layout, the document pages, the shared shell (its native `<details>`
+groups, keyboard order, the stored theme and language across pages, the phone
+fold, the application's layout under the bar at its widest and narrowest, and
+embed and lecture without it), and the storage module: IndexedDB, the quota
+estimate and a change heard across tabs are among the least uniform APIs
+between engines.
 
 The phone-width walk is there for iPhones, where every browser is WebKit. It
 presses Next where Next is drawn rather than letting Playwright scroll it into
@@ -381,6 +383,7 @@ The screenshot test runs in every browser: it needs no codec.
 | `mobile.spec.js`                 | A Pixel 7 profile: layout, overflow, the menu, a lesson on a phone                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `production.spec.js`             | The built `dist/` — DOM only, and the only spec that runs against the bundle alone                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `shell.spec.js`                  | The shared shell (Prompt 50) on the pages that carry it: a group opens one at a time and closes on Escape or a click elsewhere, every page two activations away by mouse and by keyboard, the skip link, a theme and a language chosen on one page holding on the next two, a page without the module still navigating, and the Menu fold on a phone |
+| `storageLayer.spec.js`           | The storage module (Prompt 65) in a real browser: IndexedDB with a quota estimate and its reserve, a record kept across a reload, a write in one tab heard in another, and the localStorage fallback when IndexedDB is missing |
 
 `fixtures.js` holds the shared machinery: the error trap and the `app` helper.
 
