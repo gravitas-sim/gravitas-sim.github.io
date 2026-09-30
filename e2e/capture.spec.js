@@ -182,6 +182,36 @@ test.describe('capture', () => {
     }
   );
 
+  // Most visits never record, so the recorder is not part of start-up: it is
+  // fetched on the first press of the button (js/ui.js). captureCapability()
+  // imports it, so this asks js/utils.js instead, which start-up has loaded.
+  test('the recorder is fetched on the first press, not at start-up', async ({
+    page,
+    app,
+  }) => {
+    const fetched = () =>
+      page.evaluate(() =>
+        performance
+          .getEntriesByType('resource')
+          .some(e => /\/js\/capture\.js(\?|$)/.test(e.name))
+      );
+    expect(await fetched()).toBe(false);
+    const can = await page.evaluate(() =>
+      import('/js/utils.js').then(m => m.canRecordClips())
+    );
+    test.skip(
+      !can,
+      'this engine cannot record, so there is no button to press'
+    );
+
+    await app.railControl('recordBtn');
+    await page.locator('#recordBtn').click();
+    await expect.poll(fetched).toBe(true);
+    await expect(page.locator('#recordingBadge')).toBeVisible();
+    await page.locator('#recordBtn').click();
+    await expect(page.locator('#recordingBadge')).toBeHidden();
+  });
+
   test('a clip records, announces itself, and saves a playable file', async ({
     page,
     app,

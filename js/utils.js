@@ -527,3 +527,43 @@ export const drawSolarLabel = (ctx, value, x, y, opts = {}) => {
 
   ctx.textAlign = prevAlign;
 };
+
+// =============================================================================
+// CLIP RECORDING SUPPORT
+// =============================================================================
+
+/** @returns {boolean} Whether this browser can record the canvas at all (js/capture.js) */
+export function canRecordClips() {
+  return (
+    typeof window !== 'undefined' &&
+    typeof window.MediaRecorder === 'function' &&
+    typeof HTMLCanvasElement !== 'undefined' &&
+    typeof HTMLCanvasElement.prototype.captureStream === 'function' &&
+    Boolean(clipMimeType())
+  );
+}
+
+/**
+ * The best container the browser will record, in the order the clip's
+ * destinations accept. Why this order: js/capture.js, at its re-export.
+ * @returns {string} A MIME type, or '' when nothing is supported
+ */
+export function clipMimeType() {
+  if (
+    typeof window === 'undefined' ||
+    typeof window.MediaRecorder !== 'function'
+  )
+    return '';
+  const candidates = [
+    'video/mp4;codecs=avc1.42E01E',
+    'video/mp4;codecs=avc1',
+    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp8',
+    'video/webm',
+    'video/mp4',
+  ];
+  for (const type of candidates) {
+    if (window.MediaRecorder.isTypeSupported?.(type)) return type;
+  }
+  return '';
+}
