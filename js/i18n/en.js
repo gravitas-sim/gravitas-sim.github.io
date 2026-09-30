@@ -32,8 +32,6 @@
 
 export const EN = {
   // --- Locale and the language picker ---------------------------------------
-  'locale.picker.label': 'Language',
-  'locale.picker.hint': 'Change the interface language',
   // Describes how much of a locale is translated, for a picker that wants to
   // say so. It has to be specific about *what* is and is not translated:
   // "partially translated" would leave a student wondering whether the lesson
@@ -130,8 +128,6 @@ export const EN = {
   'export.dataExportNotebook': 'Open the companion notebook in Colab',
 
   // --- footer ----------------------------------------------------------------
-  'footer.theme.hint':
-    'Change the interface color scheme. Observatory uses red chrome to preserve night vision; Daylight suits bright rooms and projectors (T cycles).',
   'footer.attribution.hint': 'Carl Ziegler: author of Gravitas',
   'footer.attribution.hint.2':
     'What the physics engine has been checked against: 286 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser.',
@@ -228,10 +224,6 @@ export const EN = {
   'rail.railLearn.hint': 'Show or hide the learn controls',
   'rail.aboutGravitas.hint':
     'What Gravitas is, what you can do here, and where to start',
-  'rail.railLearnBody.hint':
-    'How Gravitas models the universe: what the simulation calculates, approximates and visualizes',
-  'rail.railLearnBody.hint.2':
-    'Teaching guides, answer keys and a curriculum map for instructors',
   'rail.railLearnBody.hint.3': 'Open the Gravitas user manual (PDF)',
   'rail.objectType.hint':
     'Choose what to add, then click the canvas to place it',
@@ -311,8 +303,6 @@ export const EN = {
   'rail.shortcuts': 'Shortcuts',
   'rail.railLearn': 'Learn',
   'rail.aboutGravitas': 'About Gravitas',
-  'rail.railLearnBody': 'How the model works',
-  'rail.railLearnBody.2': 'Instructor resources',
   'rail.railLearnBody.3': 'User manual (PDF)',
   'rail.objectType': 'Add object',
   'rail.objectType.choose': 'Add object',

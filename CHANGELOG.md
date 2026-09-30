@@ -15,6 +15,20 @@ the release rather than in the tag.
 
 ### Added
 
+- **The shared shell, on the application** (Roadmap II Prompt 50, Part 3).
+  The simulation at `/` carries the same header as every other page, fixed
+  over its full-bleed canvas: the navigation to every surface, and the
+  language and theme switches.
+  - The readout, the control rail, the lesson panel, the inspector and the
+    scenario title move down by the bar's height (`--shell-height`). The
+    canvas does not move.
+  - The bar is gone in an embedded figure and in lecture mode, where the
+    readout moves back up into the room it left.
+  - The footer's theme and language menus are gone: the shell's switches
+    are the application's own `setTheme` and `setLocale`, so a theme change
+    still repaints the canvas and a language change still translates in
+    place. The rail's Learn section keeps About Gravitas and the manual; its
+    links to the model and instructor pages are in the navigation now.
 - **The shared shell, on the tool pages** (Roadmap II Prompt 50, Part 2).
   The Observatory, the catalog, the experiment runner, the figure builder,
   the Scenario Studio, the Investigation Composer, the course builder, the

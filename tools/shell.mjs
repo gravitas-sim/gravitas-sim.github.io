@@ -38,6 +38,15 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
  */
 export const EXEMPT = new Set(['history/original/index.html']);
 
+/**
+ * The application template (PLATFORM_MODEL.md, "Page templates"): the canvas
+ * is full-bleed and the shell header is the only chrome above it, fixed, with
+ * the application's own chrome moved down by --shell-height (css/shell.css).
+ * It keeps its own skip link, to the controls, and its own footer, which
+ * already carries the credit, the licence, validation and the source.
+ */
+export const APPLICATION = new Set(['index.html']);
+
 /** Every label, in both languages. */
 export const WORDS = {
   menu: ['Menu', 'Menú'],
@@ -174,9 +183,10 @@ export function shellFor(page, { main }) {
   const themes = THEMES.map(
     ([id, en, es]) => `<option value="${id}" data-es="${es}">${en}</option>`
   ).join('');
+  const app = APPLICATION.has(page);
   const header = [
-    `<a class="gs-skip" href="#${main}">${say('skip')}</a>`,
-    `<header class="gs-shell">`,
+    ...(app ? [] : [`<a class="gs-skip" href="#${main}">${say('skip')}</a>`]),
+    `<header class="gs-shell${app ? ' gs-app' : ''}">`,
     `<a class="gs-brand" href="/"><span class="gs-vh">${say('home')}</span><span aria-hidden="true">GRAVITAS</span></a>`,
     `<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden>${say('menu')}</button>`,
     `<nav id="gs-nav" class="gs-nav" aria-label="${WORDS.nav[0]}"><ul>${groups}</ul></nav>`,
@@ -225,8 +235,10 @@ const OPEN =
 const FOOT = /<!-- shell:footer -->[\s\S]*?<!-- \/shell:footer -->/;
 
 /** Whether a page carries the shell's markers. */
-export const hasShell = html =>
-  TOP.test(html) && OPEN.test(html) && FOOT.test(html);
+export const hasShell = (html, page) =>
+  TOP.test(html) &&
+  OPEN.test(html) &&
+  (APPLICATION.has(page) || FOOT.test(html));
 
 /**
  * The page with its shell written between its markers. A page without them
@@ -234,7 +246,7 @@ export const hasShell = html =>
  */
 export function withShell(page, html) {
   const at = OPEN.exec(html);
-  if (!at || !hasShell(html)) return html;
+  if (!at || !hasShell(html, page)) return html;
   const main = at[1] || 'main';
   const { header, footer } = shellFor(page, { main });
   return html
@@ -263,7 +275,7 @@ if (
   for (const page of shellPages()) {
     const file = path.join(ROOT, page);
     const html = readFileSync(file, 'utf8');
-    if (!hasShell(html)) continue;
+    if (!hasShell(html, page)) continue;
     stamped++;
     const next = withShell(page, html);
     if (next === html) continue;

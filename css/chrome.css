@@ -36,7 +36,7 @@
     width: min(280px, calc(100vw - 2 * var(--space-4)));
     max-width: none;
     padding: 0;
-    top: var(--space-4);
+    top: calc(var(--space-4) + var(--shell-height, 0px));
     left: var(--space-4);
     font-family: var(--font-sans);
     font-size: var(--text-xs);
@@ -608,7 +608,7 @@
      ======================================================================== */
   .recording-badge {
     position: fixed;
-    top: 6px;
+    top: calc(6px + var(--shell-height, 0px));
     left: 50%;
     transform: translateX(-50%);
     /* Above the scenario info card, which is also fixed to the top center and
@@ -1583,23 +1583,23 @@
 
   body.investigation-open.bench-open .inv-plot-panel {
     /* 120px is the stack's own base offset, which is where the bench starts. */
-    max-height: calc(100vh - var(--space-3) - 120px - var(--bench-reserve));
+    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - 120px - var(--bench-reserve));
   }
 
   /* A step carrying an instrument and a plot at once already splits the column
      0.62/0.38; with the bench open it is the same split of a shorter column. */
   body.investigation-split.bench-open #investigationTool {
     max-height: calc(
-      (100vh - var(--space-3) - 120px - var(--bench-reserve)) * 0.62
+      (100vh - var(--space-3) - var(--shell-height, 0px) - 120px - var(--bench-reserve)) * 0.62
     );
   }
   body.investigation-split.bench-open #investigationPlot {
     top: calc(
-      (100vh - var(--space-3) - 120px - var(--bench-reserve)) * 0.62 +
-        var(--space-3) * 2
+      (100vh - var(--space-3) - var(--shell-height, 0px) - 120px - var(--bench-reserve)) * 0.62 +
+        var(--space-3) * 2 + var(--shell-height, 0px)
     );
     max-height: calc(
-      (100vh - var(--space-3) - 120px - var(--bench-reserve)) * 0.38 -
+      (100vh - var(--space-3) - var(--shell-height, 0px) - 120px - var(--bench-reserve)) * 0.38 -
         var(--space-3)
     );
   }
@@ -1641,7 +1641,7 @@
         var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--space-2)
       ) !important;
       max-height: calc(
-        100vh - var(--transport-reserve, 76px) - var(--lesson-sheet) -
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - var(--lesson-sheet) -
           var(--space-2) * 3
       ) !important;
     }
@@ -1657,7 +1657,7 @@
         var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--space-2)
       );
       max-height: calc(
-        100vh - var(--transport-reserve, 76px) - var(--lesson-sheet) -
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - var(--lesson-sheet) -
           var(--space-2) * 3
       );
     }
@@ -1670,7 +1670,7 @@
     }
     body.investigation-open.bench-open .inv-plot-panel {
       max-height: calc(
-        100vh - var(--transport-reserve, 76px) - var(--lesson-sheet) -
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - var(--lesson-sheet) -
           min(30vh, 260px) - var(--space-2) * 4
       );
     }

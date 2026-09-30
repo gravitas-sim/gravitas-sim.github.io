@@ -28,8 +28,6 @@
 
 export const ES = {
   // --- Locale and the language picker ---------------------------------------
-  'locale.picker.label': 'Idioma',
-  'locale.picker.hint': 'Cambiar el idioma de la interfaz',
   'locale.coverage.es': 'Interfaz e investigaciones en español.',
   'locale.coverage.complete': 'Traducción completa.',
 
@@ -103,8 +101,6 @@ export const ES = {
   'chrome.text2': 'Gravitas: laboratorio interactivo de astrofísica',
 
   // --- Footer ----------------------------------------------------------------
-  'footer.theme.hint':
-    'Cambiar la combinación de colores de la interfaz. Observatorio usa tonos rojos para conservar la visión nocturna; Luz de día conviene a salas iluminadas y a proyectores (T alterna).',
   'footer.attribution.hint': 'Carl Ziegler: autor de Gravitas',
   'footer.attribution.hint.2':
     'Contra qué se ha comprobado el motor físico: 286 verificaciones con error medido, tolerancia declarada y una razón para cada tolerancia. Se ejecuta en directo en el navegador.',
@@ -180,10 +176,6 @@ export const ES = {
   'rail.railLearn.hint': 'Mostrar u ocultar la sección de aprendizaje',
   'rail.aboutGravitas.hint':
     'Qué es Gravitas, qué se puede hacer aquí y por dónde empezar',
-  'rail.railLearnBody.hint':
-    'Cómo modela Gravitas el universo: qué calcula la simulación, qué aproxima y qué solo dibuja',
-  'rail.railLearnBody.hint.2':
-    'Guías docentes, soluciones y un mapa curricular para el profesorado',
   'rail.railLearnBody.hint.3': 'Abrir el manual de usuario de Gravitas (PDF)',
   'rail.objectType.hint':
     'Elige qué añadir y luego haz clic en el lienzo para colocarlo',
@@ -268,8 +260,6 @@ export const ES = {
   'rail.shortcuts': 'Atajos',
   'rail.railLearn': 'Aprender',
   'rail.aboutGravitas': 'Acerca de Gravitas',
-  'rail.railLearnBody': 'Cómo funciona el modelo',
-  'rail.railLearnBody.2': 'Recursos para el profesorado',
   'rail.railLearnBody.3': 'Manual de usuario (PDF)',
   'rail.objectType': 'Añadir objeto',
   'rail.objectType.choose': 'Añadir objeto',
