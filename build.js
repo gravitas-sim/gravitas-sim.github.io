@@ -418,13 +418,16 @@ async function buildDocPages() {
       entryPoints: ['js/teachingPage.js'],
       bundle: true,
       minify: true,
-      // physics.js branches on constructor.name in fifteen places. Without
-      // this, minification renames the classes and every one of those branches
-      // is false in production and true in development.
-      keepNames: true,
+      // No keepNames: nothing on this page reads a function's name (physics.js,
+      // which did, is not in it), and its helper would be one more request.
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
-      outfile: path.join(OUT, 'js', 'teachingPage.js'),
+      // Split, so the Spanish strings and lesson catalog stay chunks of their
+      // own that only a Spanish reader fetches (js/teaching/i18n.js).
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'teaching-[hash]',
       legalComments: 'none',
     });
   }
