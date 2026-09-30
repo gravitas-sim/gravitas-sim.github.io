@@ -16,7 +16,7 @@
 import { SCENARIO_INFO } from '../data/scenarioInfo.js';
 import { MANIFEST } from '../data/investigations/manifest.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
-import { DEFAULT_SETTINGS } from '../appState.js';
+import { SETTING_KEYS } from '../data/settingKeys.js';
 import { WIDGET_FAMILIES, WIDGET_IDS } from './widgetIds.js';
 import { ENTITIES } from '../lessonMarkup.js';
 import { UNITS } from '../answerParse.js';
@@ -69,7 +69,7 @@ export async function checkInvestigationPack(pack) {
     checkCatalog,
     scenarios: SCENARIO_INFO,
     widgets: registry ? registry.allWidgets() : [],
-    settingKeys: new Set(Object.keys(DEFAULT_SETTINGS)),
+    settingKeys: new Set(SETTING_KEYS),
     gradedSteps,
   });
   return { errors, findings, compiled };
