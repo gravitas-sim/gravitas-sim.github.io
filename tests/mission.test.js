@@ -618,6 +618,41 @@ describe('the Worker protocol', () => {
     r.terminate();
     await expect(r.done).rejects.toMatchObject({ code: 'terminated' });
   });
+
+  test('a cancel that arrives before its request stops it at the first slice, showing what that slice made', async () => {
+    // The client sends a cancel the moment it is pressed, which can be before
+    // the Worker has the request: the handshake comes first.
+    const big = {
+      from: 'earth',
+      to: 'mars',
+      departStart: 9000,
+      departSpan: 700,
+      departSteps: 200,
+      tofMin: 100,
+      tofMax: 500,
+      tofSteps: 200,
+    };
+    await handle({ type: 'cancel', id: 'early' }, () => {});
+    const out = [];
+    await handle({ type: 'window', id: 'early', options: big }, m =>
+      out.push(m)
+    );
+    const r = out.find(m => m.type === 'result').result;
+    expect(r.status).toBe('canceled');
+    expect(r.rows).toBeGreaterThan(0);
+    expect(r.rows).toBeLessThan(200);
+    // Once used, it is gone: the same id runs to the end.
+    const again = [];
+    await handle(
+      {
+        type: 'window',
+        id: 'early',
+        options: { ...big, departSteps: 5, tofSteps: 5 },
+      },
+      m => again.push(m)
+    );
+    expect(again.find(m => m.type === 'result').result.status).toBe('ok');
+  });
 });
 
 describe('the plan file', () => {

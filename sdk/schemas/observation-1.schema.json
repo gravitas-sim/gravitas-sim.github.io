@@ -1,0 +1,336 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/observation-1.schema.json",
+  "title": "gravitas.observation/1",
+  "description": "An observation as the Observatory saves one: its columns with their roles and units, the axes, the time or spectral system, masks and notes, and the workspace it was opened in. js/observatory/schema.js validateObservation() is the authority; it also requires credit and a license on anything not imported, a unit from js/units/registry.js on every column but a label, each dependent column to name its value column, and the time or spectral axis to have the right dimension. FORMATS.md lists it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "kind",
+    "id",
+    "title",
+    "origin",
+    "source",
+    "columns",
+    "axes"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.observation"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "kind": {
+      "enum": [
+        "time-series",
+        "spectrum",
+        "image",
+        "table"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "object": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "ra": {
+          "type": "number"
+        },
+        "dec": {
+          "type": "number"
+        },
+        "frame": {
+          "type": "string"
+        }
+      },
+      "description": "null for a catalog of many objects"
+    },
+    "facility": {
+      "type": "string"
+    },
+    "origin": {
+      "enum": [
+        "observed",
+        "model",
+        "compilation",
+        "imported"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "pack",
+            "builtin",
+            "import"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "null for a built-in observation, which has no version of its own"
+        },
+        "file": {
+          "type": "string"
+        }
+      }
+    },
+    "credit": {
+      "type": "string"
+    },
+    "license": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string"
+        },
+        "basis": {
+          "type": "string"
+        }
+      }
+    },
+    "retrieved": {
+      "type": "string"
+    },
+    "citations": {
+      "type": "array"
+    },
+    "reductions": {
+      "type": "array"
+    },
+    "axes": {
+      "type": "object",
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "type": "string"
+        },
+        "y": {
+          "type": "string"
+        }
+      }
+    },
+    "time": {
+      "type": "object",
+      "properties": {
+        "column": {
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "JD",
+            "MJD",
+            "BJD",
+            "BTJD",
+            "relative"
+          ]
+        },
+        "scale": {
+          "enum": [
+            "TDB",
+            "TT",
+            "TAI",
+            "UTC",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "spectral": {
+      "type": "object",
+      "properties": {
+        "column": {
+          "type": "string"
+        },
+        "quantity": {
+          "enum": [
+            "wavelength",
+            "frequency"
+          ]
+        },
+        "medium": {
+          "enum": [
+            "vacuum",
+            "air",
+            "unknown"
+          ]
+        },
+        "frame": {
+          "type": "string"
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        }
+      }
+    },
+    "columns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "role",
+          "values"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "role": {
+            "enum": [
+              "x",
+              "value",
+              "uncertainty",
+              "lower",
+              "upper",
+              "flag",
+              "label"
+            ]
+          },
+          "of": {
+            "type": "string"
+          },
+          "level": {
+            "type": "number"
+          },
+          "bits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "value",
+                "meaning"
+              ],
+              "properties": {
+                "value": {
+                  "type": "integer"
+                },
+                "meaning": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": [
+                "number",
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "masks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "rows"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "annotations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "rows",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "workspace": {
+      "type": "object",
+      "description": "What the file was opened from, the changes made to it in order, and the observation as opened, so a read-back replays them."
+    }
+  }
+}

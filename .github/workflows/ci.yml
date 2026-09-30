@@ -245,6 +245,13 @@ jobs:
       # Quick checks that ran only in `release:check`, each for the same
       # stated reason - it was added after this job was written. They run in
       # seconds, so a pull request now finds what only the gate found before.
+      # A merge that took one side of a file with generated regions, and lost
+      # what the other side had written. A pull request is checked out as its
+      # merge, so this sees the merge before it lands.
+      - name: No merge dropped hand-written lines
+        run: node tools/generated-tripwire.mjs
+      - name: The tools index is current
+        run: npm run tools:index:check
       - name: Extensions validate against the SDK
         run: npm run sdk:check
       - name: Classroom activities are current

@@ -110,6 +110,7 @@ const loadCatalogs = () => (catalogs ??= completeCatalogs());
 // carry markers; it just will not be found by --sync or --check.
 const DOCS = [
   'README.md',
+  'BRANCHING.md',
   'CONTRIBUTING.md',
   'DARK_MATTER.md',
   'EXOPLANET_OBSERVING.md',
@@ -784,7 +785,11 @@ export async function gatherBlocks({ physics = null } = {}) {
   const { IRREVERSIBLE } = await import(
     new URL('../js/data/irreversible.js', import.meta.url)
   );
+  const { GRAPH } = await import(
+    new URL('./generate-graph.mjs', import.meta.url)
+  );
   return generatedBlocks({
+    graph: GRAPH,
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,
     precache: precacheTable(precacheInventory(REPO)),

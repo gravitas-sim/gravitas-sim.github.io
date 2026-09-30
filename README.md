@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->7322<!--/fact--> tests across <!--fact:jestSuites-->225<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->7352<!--/fact--> tests across <!--fact:jestSuites-->227<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -366,8 +366,8 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->201<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->581<!--/fact--> KB           | <!--fact:buildStartupFiles-->51<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->4134<!--/fact--> KB         | <!--fact:buildDeferredChunks-->193<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->782<!--/fact--> KB** |                                               |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4135<!--/fact--> KB         | <!--fact:buildDeferredChunks-->193<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->783<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -485,7 +485,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1641<!--/fact--> tests
+The suite is <!--fact:e2eTests-->1642<!--/fact--> tests
 in <!--fact:e2eFiles-->120<!--/fact--> files and takes several minutes in
 Chromium.
 

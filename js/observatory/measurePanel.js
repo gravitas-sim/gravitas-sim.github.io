@@ -32,6 +32,7 @@ import {
   sameResult,
   toolsFor,
 } from '../measure/pipeline.js';
+import { toCsv } from '../csv.js';
 import { OPERATORS } from '../measure/tableOps.js';
 import { LIMITS } from '../measure/periodogram.js';
 import { BAND_PRESETS } from '../measure/bandIndex.js';
@@ -1478,12 +1479,8 @@ export function mountMeasurePanel(root, ctx) {
   }
 
   function saveCsv() {
-    const esc = v => {
-      const s = v === null || v === undefined ? '' : String(v);
-      // A cell a spreadsheet would run as a formula starts with a quote.
-      const safe = /^[=+\-@\t\r]/.test(s) && !/^-?\d/.test(s) ? `'${s}` : s;
-      return /[",\n]/.test(safe) ? `"${safe.replace(/"/g, '""')}"` : safe;
-    };
+    // Through js/csv.js, which disarms what a spreadsheet would run as a
+    // formula, full-width and behind a zero-width space included.
     const rows = [
       [
         'node',
@@ -1514,11 +1511,7 @@ export function mountMeasurePanel(root, ctx) {
           q.unit ?? '',
           q.kind,
         ]);
-    download(
-      `${fileBase()}-results.csv`,
-      `${rows.map(r => r.map(esc).join(',')).join('\r\n')}\r\n`,
-      'text/csv'
-    );
+    download(`${fileBase()}-results.csv`, toCsv(rows), 'text/csv');
   }
 
   async function openPipeline(text) {

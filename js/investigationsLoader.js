@@ -185,6 +185,15 @@ export function watchForInvestigations() {
     onFirstLoad.add(() => btn.removeEventListener('click', firstClick));
   }
 
+  // `#investigations` is the shared shell's Investigations entry, which opens
+  // the chooser until Prompt 54's Library replaces it.
+  const browse = () => {
+    if (location.hash === '#investigations')
+      ensureInvestigations().then(mod => mod.openBrowser());
+  };
+  browse();
+  window.addEventListener('hashchange', browse);
+
   // An assignment link names a lesson, so the system is needed immediately.
   // initInvestigations() reads the hash itself and opens the right lesson.
   if (lessonInHash()) ensureInvestigations();
