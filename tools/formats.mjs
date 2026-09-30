@@ -1,0 +1,509 @@
+// =============================================================================
+// Every versioned format Gravitas reads or writes, and FORMATS.md from them
+// -----------------------------------------------------------------------------
+//   node tools/formats.mjs --write   rewrite FORMATS.md from the table below
+//   node tools/formats.mjs --check   fail when FORMATS.md is not what it would write
+//
+// Roadmap II Prompt 61 puts every public format under one rule: a schema, a
+// format and version pair, a reader for the previous version or a refusal in
+// words, and a deprecation window. This is the inventory that rule starts
+// from, as data: one entry per format, with the constant that sets its
+// version where the code has one. tests/formats.test.js holds each recorded
+// version to that constant, each "schema" to sdk/schemas, and FORMATS.md to
+// this table, so the table cannot say what the code does not.
+// =============================================================================
+
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+export const DOC = path.join(ROOT, 'FORMATS.md');
+
+// persisted: where a copy outlives the page. older: what the reader does with
+// the previous version. newer: what it does with a later one.
+//   const: [module, export] whose value is the current version, if any
+//   schema: the file under sdk/schemas, if any
+export const FORMATS = Object.freeze([
+  // --- Observation, measurement and inference ---
+  {
+    name: 'gravitas.observation',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/observatory/schema.js', 'FORMAT_VERSION'],
+    owner: 'js/observatory/schema.js validateObservation',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'refused: "reads /1"',
+  },
+  {
+    name: 'gravitas.pipeline',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/measure/pipeline.js', 'FORMAT_VERSION'],
+    owner: 'js/measure/pipeline.js readPipeline',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'gravitas.inference',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/inference/manifest.js', 'FORMAT_VERSION'],
+    owner: 'js/inference/manifest.js validateInference',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'a validation problem',
+  },
+  {
+    name: 'gravitas.analysis',
+    fields: 'format, formatVersion, kind',
+    version: 1,
+    owner: 'none: written, never read',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'nothing reads it',
+  },
+  {
+    name: 'gravitas.artifact',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/platform/artifact.js', 'FORMAT_VERSION'],
+    owner: 'js/platform/artifact.js validateArtifact',
+    persisted: 'memory',
+    older: 'v1 only',
+    newer: 'a validation problem',
+    schema: 'artifact-1.schema.json',
+  },
+  {
+    name: 'gravitas.observed',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'js/notebook/observed.js (inside a notebook entry)',
+    persisted: 'localStorage',
+    older: 'v1 only',
+    newer: 'not checked',
+  },
+  {
+    name: 'gravitas.observation-data-pack',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['tools/data-packs/schema.mjs', 'FORMAT_VERSION'],
+    owner: 'tools/data-packs/schema.mjs validateDataPack',
+    persisted: 'repository, extension archive',
+    older: 'v1 only',
+    newer: 'a validation problem',
+    schema: 'observation-data-pack-1.schema.json',
+  },
+  // --- Simulation, systems and experiments ---
+  {
+    name: 'world share link',
+    fields: 'v (link prefix 1)',
+    version: 1,
+    owner: 'js/shareState.js decodePayload',
+    persisted: 'link',
+    older: 'v1 only',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'experiment link block (xp)',
+    fields: 'v',
+    version: 1,
+    owner: 'js/experiments/shareExperiment.js readExperimentBlock',
+    persisted: 'link',
+    older: 'v1 only',
+    newer: 'reported, not checked',
+  },
+  {
+    name: 'link extras (x)',
+    fields: 'v',
+    version: 1,
+    owner: 'js/experiments/canonicalState.js readExtras',
+    persisted: 'link',
+    older: 'v1 only',
+    newer: 'reported, not checked',
+  },
+  {
+    name: 'gravitas.orbital-system',
+    fields: 'format, version',
+    version: 1,
+    owner: 'js/systemSpec.js systemFromFile',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'gravitas.system3d',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/lab3d/state.js', 'FORMAT_VERSION'],
+    owner: 'js/lab3d/state.js migrateSystem',
+    persisted: 'file, repository',
+    older: 'v1 only; reads orbital-system/1',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'gravitas.lab3d.snapshot',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'js/lab3d/snapshot.js snapshotProblem',
+    persisted: 'memory',
+    older: 'v1 only',
+    newer: 'refused',
+  },
+  {
+    name: 'gravitas.experiment',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/experiments/experimentManifest.js', 'FORMAT_VERSION'],
+    owner: 'js/experiments/experimentManifest.js migrateExperiment',
+    persisted: 'memory, inside results',
+    older: 'converts an unversioned sweep spec',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'gravitas.experiment-result',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'js/experiments/experimentManifest.js reproducibility',
+    persisted: 'download, localStorage',
+    older: 'v1 only',
+    newer: 'refused; the analysis panel does not check',
+  },
+  {
+    name: 'gravitas-experiment',
+    fields: 'format, version',
+    version: 1,
+    owner: 'js/experiments/exports.js importManifest',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'refused by reason code',
+  },
+  {
+    name: 'experiment store',
+    fields: 'v',
+    version: 3,
+    owner: 'js/experiments/store.js migrate',
+    persisted: 'localStorage',
+    older: 'migrates v1 and v2',
+    newer: 'refused by reason code',
+  },
+  {
+    name: 'gravitas.mission-plan',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'none: written, never read',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'nothing reads it',
+  },
+  {
+    name: 'gravitas.ephemeris-pack',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'js/mission/ephemeris.js createEphemeris',
+    persisted: 'repository',
+    older: 'v1 only',
+    newer: 'refused',
+  },
+  // --- Lessons, assignments and student work ---
+  {
+    name: 'gravitas.investigation-pack',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/platform/investigation.js', 'FORMAT_VERSION'],
+    owner: 'js/platform/investigation.js migrateInvestigationPack',
+    persisted: 'download, localStorage, repository',
+    older: 'v1 only',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'gravitas.question-bank',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/platform/questionBank.js', 'BANK_FORMAT_VERSION'],
+    owner: 'js/platform/questionBank.js validateQuestionBankWith',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'a validation problem',
+  },
+  {
+    name: 'gravitas.assignment',
+    fields: 'k, v (link prefix a)',
+    version: 2,
+    owner: 'js/assignments/assignment.js validateAssignment',
+    persisted: 'link, download',
+    older: 'reads v1 as it is',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'investigation progress',
+    fields: 'schema',
+    version: 2,
+    owner: 'js/investigations/progressSchema.js readProgress',
+    persisted: 'localStorage',
+    older: 'migrates v1 (migrateFromV1)',
+    newer: 'kept and not overwritten, in words',
+  },
+  {
+    name: 'gravitas.investigation.progress',
+    fields: 'kind, version',
+    version: 2,
+    owner: 'js/investigations/progressBackup.js restoreProgress',
+    persisted: 'download',
+    older: 'migrates v1',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'submission token',
+    fields: 'v (link prefix s)',
+    version: 1,
+    owner: 'js/submission/submissionToken.js readSubmissionToken',
+    persisted: 'pasted text',
+    older: 'v1 only',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'gravitas.submission-results',
+    fields: 'kind, version',
+    version: 2,
+    owner: 'js/submission/results.js readResults',
+    persisted: 'download',
+    older: 'migrates v1',
+    newer: 'refused by reason code',
+  },
+  {
+    name: 'gravitas.lab3d-guide-report',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'none: written, never read',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'nothing reads it',
+  },
+  {
+    name: 'gravitas.mission-lab-report',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'none: written, never read',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'nothing reads it',
+  },
+  // --- The notebook ---
+  {
+    name: 'notebook store',
+    fields: 'v',
+    version: 1,
+    owner: 'js/notebook/store.js load',
+    persisted: 'localStorage',
+    older: 'v1 only',
+    newer: 'kept and not overwritten, in words',
+  },
+  {
+    name: 'notebook entry snapshot',
+    fields: 'snapshot.v',
+    version: 1,
+    owner: 'js/notebook/entry.js validateEntry',
+    persisted: 'localStorage, download',
+    older: 'v1 only',
+    newer: 'refused by reason code',
+  },
+  {
+    name: 'gravitas.evidence.notebook',
+    fields: 'kind, version',
+    version: 1,
+    owner: 'js/notebook/notebook.js validateBackup',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'refused, in words',
+  },
+  // --- Courses, packages and the catalog ---
+  {
+    name: 'gravitas.course-pack (extension form)',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/platform/course.js', 'FORMAT_VERSION'],
+    owner: 'js/platform/course.js validateCoursePack',
+    persisted: 'repository, extension archive, IndexedDB',
+    older: 'v1 only',
+    newer: 'a validation problem, which /2 gets too',
+    schema: 'course-pack-1.schema.json',
+  },
+  {
+    name: 'gravitas.course-pack (builder form)',
+    fields: 'format, formatVersion',
+    version: 2,
+    const: ['js/course/pack.js', 'FORMAT_VERSION'],
+    owner: 'js/course/pack.js migrateCoursePack',
+    persisted: 'download, localStorage, repository',
+    older: 'migrates v1',
+    newer: 'refused, in words',
+  },
+  {
+    name: 'course home link',
+    fields: 'link prefix c',
+    version: 2,
+    owner: 'js/course/links.js readCourseFragment',
+    persisted: 'link',
+    older: 'migrates c1',
+    newer: 'refused by reason code',
+  },
+  {
+    name: 'gravitas.course-manifest',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/course/manifest.js', 'MANIFEST_FORMAT_VERSION'],
+    owner: 'none: written, never read',
+    persisted: 'download',
+    older: 'v1 only',
+    newer: 'nothing reads it',
+  },
+  {
+    name: 'gravitas.capability-package',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/platform/manifest.js', 'FORMAT_VERSION'],
+    owner: 'js/platform/manifest.js validateManifest',
+    persisted: 'repository, IndexedDB',
+    older: 'v1 only',
+    newer: 'refused, in words',
+    schema: 'capability-package-1.schema.json',
+  },
+  {
+    name: 'gravitas.scenario-pack',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/platform/scenario.js', 'FORMAT_VERSION'],
+    owner: 'js/platform/scenario.js migrateScenarioPack',
+    persisted: 'download, localStorage, link',
+    older: 'v1 only; reads orbital-system/1',
+    newer: 'refused, in words',
+    schema: 'scenario-pack-1.schema.json',
+  },
+  {
+    name: 'gravitas.catalog',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'js/catalogPage.js load',
+    persisted: 'repository',
+    older: 'v1 only',
+    newer: 'refused',
+  },
+  {
+    name: 'gravitas.catalog-curation',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'tools/catalog.mjs readCuration',
+    persisted: 'repository',
+    older: 'not checked',
+    newer: 'not checked',
+  },
+  {
+    name: 'gravitas.extension-archive',
+    fields: 'none (the archive structure)',
+    version: 1,
+    owner: 'sdk/lib/archive.mjs, js/catalog/archive.js',
+    persisted: 'repository, download',
+    older: 'structure checked, not version',
+    newer: 'structure checked, not version',
+  },
+  // --- The embed and the evaluation kit ---
+  {
+    name: 'gravitas-embed messages',
+    fields: 'protocol, version',
+    version: 1,
+    owner: 'js/embedMessages.js readMessage',
+    persisted: 'memory',
+    older: 'v1 only',
+    newer: 'refused by error code',
+  },
+  {
+    name: 'embed options',
+    fields: 'query ev',
+    version: 1,
+    owner: 'js/embedOptions.js readEmbedOptions',
+    persisted: 'link',
+    older: 'v1 only',
+    newer: 'ignored: opens as a plain embed',
+  },
+  {
+    name: 'gravitas.evaluation',
+    fields: 'kind, schema',
+    version: 1,
+    owner: 'tools/evaluation-summary.mjs',
+    persisted: 'download, localStorage draft',
+    older: 'v1 only',
+    newer: 'skipped, in words',
+  },
+]);
+
+const cell = s => String(s).replace(/\|/g, '\\|');
+
+/** FORMATS.md, as this table writes it. */
+export function render(formats = FORMATS) {
+  const withSchema = formats.filter(f => f.schema).length;
+  const migrating = formats.filter(f =>
+    /^migrates|^reads v1|^converts/.test(f.older)
+  ).length;
+  const rows = formats.map(
+    f =>
+      `| ${cell(f.name)} | ${cell(f.fields)} | ${f.version} | ${cell(f.owner)} | ${cell(f.persisted)} | ${cell(f.older)} | ${cell(f.newer)} | ${f.schema ? `[yes](sdk/schemas/${f.schema})` : 'no'} |`
+  );
+  return `<!-- Generated by tools/formats.mjs from its table. Do not edit by hand: node tools/formats.mjs --write -->
+
+# Formats
+
+Every versioned format Gravitas reads or writes: ${formats.length} of them. ${withSchema} have a JSON Schema in \`sdk/schemas\`, and ${migrating} read their previous version rather than only their own.
+
+Roadmap II Prompt 61 puts each under one rule:
+- a JSON Schema;
+- a \`format\` and \`formatVersion\` pair;
+- a reader for the previous version (\`readVersioned()\` in \`js/platform/common.js\`), or a written refusal with an export path;
+- a deprecation window.
+
+This table is where that starts. \`tests/formats.test.js\` holds each version here to the constant the code sets it with, and each schema to \`sdk/schemas\`.
+
+The columns:
+- **persisted** says where a copy outlives the page, and so what a change of version must still read.
+- **previous** is what the reader does with the previous version.
+- **newer** is what it does with a later one.
+
+| Format | Identified by | Version | Owner | Persisted | Previous | Newer | Schema |
+|---|---|---|---|---|---|---|---|
+${rows.join('\n')}
+
+## What the table shows
+
+- **Five ways to say a version:**
+  - \`format\` with \`formatVersion\`;
+  - \`format\` with \`version\`;
+  - \`kind\` with \`version\` or \`schema\`;
+  - a bare \`v\`;
+  - a link prefix.
+
+  Prompt 61 makes \`format\` and \`formatVersion\` the one convention, and \`readVersioned()\` reads the older pairs by name for one major version.
+- **Confusable ids.** \`gravitas-experiment\` and \`gravitas.experiment\` are different formats. \`gravitas.course-pack\` is two: /1, which extensions and the catalog carry, and /2, which the builder writes. The /1 validator refuses a /2 pack with the same message it gives any other version.
+- **Written but never read:** \`gravitas.analysis\`, the two guide reports, \`gravitas.mission-plan\` and \`gravitas.course-manifest\`. A student's file in any of them cannot be opened again.
+- **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled \`newer\`, \`newerVersion\`, \`tooNew\`, \`schemaTooNew\` and \`from-a-newer-version\`), and not at all in the link blocks, \`gravitas.observed\` and the catalog curation.
+`;
+}
+
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  const text = render();
+  if (process.argv.includes('--write')) {
+    writeFileSync(DOC, text);
+    console.log(`Wrote FORMATS.md: ${FORMATS.length} formats.`);
+  } else {
+    const now = existsSync(DOC) ? readFileSync(DOC, 'utf8') : '';
+    if (now !== text) {
+      console.error('FORMATS.md is stale. Run node tools/formats.mjs --write');
+      process.exit(1);
+    }
+    console.log(`FORMATS.md is current: ${FORMATS.length} formats.`);
+  }
+}
