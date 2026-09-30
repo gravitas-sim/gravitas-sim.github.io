@@ -79,6 +79,7 @@ import {
   semanticDiff,
   serialize,
 } from './studio/model.js';
+import { mountShell } from './shell.js';
 
 const clone = v => JSON.parse(JSON.stringify(v));
 const $ = id => document.getElementById(id);
@@ -91,10 +92,6 @@ const LOADERS = {
       import('./i18n/es.course.js').then(m => m.ES_COURSE),
     ]),
 };
-const LANGUAGES = [
-  { id: 'en', endonym: 'English' },
-  { id: 'es', endonym: 'Español' },
-];
 const DRAFT_KEYS = {
   prefix: 'gravitas_course_draft:',
   last: 'gravitas_course_last',
@@ -229,18 +226,6 @@ function translateStatic() {
   for (const node of document.querySelectorAll('[data-i18n-aria-label]'))
     node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel));
   $('cb-preview').title = t('course.preview.frame');
-  const host = $('langSwitch');
-  host.textContent = '';
-  for (const { id, endonym } of LANGUAGES) {
-    const b = el(
-      'button',
-      { type: 'button', className: 'ui-button', lang: id },
-      endonym
-    );
-    b.setAttribute('aria-pressed', String(getLocale() === id));
-    b.addEventListener('click', () => useLanguage(id));
-    host.append(b);
-  }
 }
 
 // --- Editing ------------------------------------------------------------------------
@@ -2016,6 +2001,7 @@ async function init() {
   );
   baseline = history.current();
   render();
+  mountShell({ onLanguage: useLanguage });
   setStatus(
     draft
       ? t('studio.status.restored', { id: draft.doc.id })

@@ -9,7 +9,6 @@ export const ES_COMPOSER = {
   'composer.title': 'Compositor de investigaciones',
   'composer.intro':
     'Compón una investigación guiada como datos: lo que los estudiantes leen, predicen, prueban, miden y responden, qué escenario e instrumento abre cada paso y qué ven cuando una respuesta es incorrecta. La comprueban las mismas reglas que cada lección que trae Gravitas, y nunca ejecuta nada de lo que escribes.',
-  'composer.toStudio': 'El Estudio de escenarios',
   'composer.toolbar.label': 'Archivo de la investigación',
   'composer.action.new': 'Investigación nueva',
   'composer.action.saveBank': 'Guardar el banco de preguntas',

@@ -213,7 +213,12 @@ loading, canvas animation, the scenario gallery, pause/resume/reset, downloads,
 `MediaRecorder` availability, history and share-link restoration, a lesson
 advancing, a lesson walked at phone width, the deferred chart chunk, the
 inspector, the A/B bench recording, WebGL, embed mode, language switching and
-Spanish layout, and the document pages.
+Spanish layout, the document pages, the shared shell (its native `<details>`
+groups, keyboard order, the stored theme and language across pages, the phone
+fold, the application's layout under the bar at its widest and narrowest, and
+embed and lecture without it), and the storage module: IndexedDB, the quota
+estimate and a change heard across tabs are among the least uniform APIs
+between engines.
 
 The phone-width walk is there for iPhones, where every browser is WebKit. It
 presses Next where Next is drawn rather than letting Playwright scroll it into

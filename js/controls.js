@@ -39,15 +39,7 @@ import {
   unitModeLabel,
   formatTime,
 } from './units.js';
-import {
-  initTheme,
-  cycleTheme,
-  getTheme,
-  setTheme,
-  THEMES,
-  themeLabel,
-  themeHint,
-} from './theme.js';
+import { initTheme, cycleTheme, themeLabel } from './theme.js';
 import { t } from './i18n/index.js';
 import { setSonificationMuted, getSonificationState } from './audio.js';
 import {
@@ -218,89 +210,6 @@ function refreshTransport() {
   );
 }
 
-// --- Theme dock ---------------------------------------------------------------
-//
-// The picker sits beside the copyright rather than in the control rail: it is a
-// preference for the page, not a control for the simulation, and the rail had
-// grown past the height of a laptop screen. Closed it is a swatch and a word;
-// open it lists every theme with its one-line hint, so choosing Daylight is one
-// click rather than three presses of the cycle shortcut.
-
-/** Repaint the dock's swatch and label from the active theme. */
-function syncThemeDock() {
-  const name = document.getElementById('themeButtonName');
-  if (name) name.textContent = themeLabel(getTheme());
-  for (const item of document.querySelectorAll('[data-theme-option]')) {
-    const on = item.dataset.themeOption === getTheme();
-    item.setAttribute('aria-checked', String(on));
-    item.classList.toggle('is-active', on);
-  }
-}
-
-function setupThemeDock() {
-  const btn = document.getElementById('themeButton');
-  const menu = document.getElementById('themeMenu');
-  if (!btn || !menu) return;
-
-  // Rebuilt on a language change as well as at start-up: the menu holds
-  // rendered text, so it goes stale the moment the reader switches language.
-  const renderMenu = () => {
-    menu.innerHTML = THEMES.map(
-      theme => `<button type="button" role="menuitemradio" aria-checked="false"
-             class="theme-menu-item" data-theme-option="${theme.id}">
-             <span class="theme-menu-swatch" data-swatch="${theme.id}"></span>
-             <span class="theme-menu-text">
-               <span class="theme-menu-label">${themeLabel(theme.id)}</span>
-               <span class="theme-menu-hint">${themeHint(theme.id)}</span>
-             </span>
-           </button>`
-    ).join('');
-    syncThemeDock();
-  };
-  renderMenu();
-  window.addEventListener('gravitasLocaleChanged', renderMenu);
-
-  const close = ({ refocus = false } = {}) => {
-    if (menu.hidden) return;
-    menu.hidden = true;
-    btn.setAttribute('aria-expanded', 'false');
-    if (refocus) btn.focus();
-  };
-
-  const open = () => {
-    menu.hidden = false;
-    btn.setAttribute('aria-expanded', 'true');
-    menu.querySelector('.is-active, .theme-menu-item')?.focus();
-  };
-
-  btn.addEventListener('click', () => (menu.hidden ? open() : close()));
-
-  menu.addEventListener('click', e => {
-    const item = e.target.closest('[data-theme-option]');
-    if (!item) return;
-    setTheme(item.dataset.themeOption);
-    close({ refocus: true });
-  });
-
-  // A menu that cannot be dismissed by Escape or by clicking away is a trap,
-  // and this one floats over the simulation.
-  menu.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      e.stopPropagation();
-      close({ refocus: true });
-    }
-  });
-  document.addEventListener('click', e => {
-    if (!menu.hidden && !e.target.closest('.theme-dock')) close();
-  });
-  window.addEventListener('gravitasEscape', () => close({ refocus: true }));
-
-  // The T shortcut and any other caller change the theme without going through
-  // this menu, so the dock follows the theme rather than its own clicks.
-  window.addEventListener('gravitasThemeChanged', syncThemeDock);
-  syncThemeDock();
-}
-
 // --- Rail sections ------------------------------------------------------------
 //
 // The rail outgrew a laptop screen once every group was present. Collapsing is
@@ -400,7 +309,6 @@ function setupRailSections() {
 
 // --- View menu ----------------------------------------------------------------
 function setupViewMenu() {
-  setupThemeDock();
   setupRailSections();
 
   const unitBtn = document.getElementById('unitToggle');

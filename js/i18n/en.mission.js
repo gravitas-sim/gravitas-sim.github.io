@@ -12,7 +12,6 @@ export const EN_MISSION = {
   'mission.notFor':
     'An educational model. Its numbers are not operational mission design or navigation: the planets move on circles in one plane, burns are instantaneous, and only the bodies named pull.',
   'mission.lang': 'Language',
-  'mission.back': 'Back to Gravitas',
   'mission.kernel': 'The 3-D kernel',
   'mission.docs': 'How the core works (MISSION.md)',
   'mission.compute': 'Compute',

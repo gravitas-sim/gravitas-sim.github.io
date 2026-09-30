@@ -80,7 +80,8 @@ import { initI18nDom } from './i18n/dom.js';
 import { createDoubleTapRecognizer } from './gestures.js';
 import { setRequestedLessonLocale } from './lessonLocale.js';
 import { resetFollowCamera } from './followCamera.js';
-import { initLocalePicker } from './i18n/picker.js';
+import { mountShell } from './shell.js';
+import { setTheme } from './theme.js';
 import { initBottomDock } from './bottomDock.js';
 import {
   initEmbedMode,
@@ -414,7 +415,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // The markup sweep runs after the dialogs exist but before the interface is
     // revealed, so nothing is ever seen in the wrong language.
     initI18nDom();
-    initLocalePicker();
+    // The shared shell's switches (tools/shell.mjs), through the application's
+    // own setters, so a language change re-translates in place and a theme
+    // change repaints the canvas.
+    mountShell({
+      onLanguage: id => setLocale(id),
+      onTheme: id => setTheme(id),
+    });
     initBottomDock();
     // The lesson registry imports nothing, so it cannot read the locale for
     // itself; the two are connected here. Lessons are content and are fetched

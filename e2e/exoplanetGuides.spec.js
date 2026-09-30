@@ -182,7 +182,7 @@ test.describe('the Exoplanet Observatory guides', () => {
           .analyze()
       ).violations.map(v => `${v.id}: ${v.nodes.length}`);
     expect(await axe()).toEqual([]);
-    await page.locator('#langSwitch button[lang="es"]').click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(title(page)).toHaveText(
       'Paso 1 de 9: Un modelo de un tránsito'
     );

@@ -10,10 +10,8 @@
 export const EN_EXPERIMENTS = {
   'exp.doc.title': 'Experiment runner | Gravitas',
   'exp.title': 'Run an experiment',
-  'exp.lang.label': 'Language',
   'exp.intro':
     'Vary one laboratory setting across a range, run every value with several seeds, and read what changed. Each trial runs in a separate background worker, several at once, so the page stays usable; nothing is sent anywhere. Before anything runs, one trial is built and the whole experiment priced for this device, and an experiment too large for it is refused with the reason.',
-  'exp.back': 'Back to Gravitas',
 
   'exp.what.title': 'What to run',
   'exp.what.scenario': 'Scenario',

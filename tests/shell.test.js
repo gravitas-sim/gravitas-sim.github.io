@@ -11,6 +11,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 
 import {
+  APPLICATION,
   EXEMPT,
   NAV,
   THEMES,
@@ -28,31 +29,34 @@ const read = f => readFileSync(f, 'utf8');
  * only shrinks: a page taken off it must carry the shell, and a new page must
  * be put on it with a reason or carry the shell from the start.
  */
-const PENDING = {
-  'index.html': 'the application and Home: Part 3',
-  'catalog/index.html': 'tool pages: Part 2',
-  'course/index.html': 'tool pages: Part 2',
-  'experiments/index.html': 'tool pages: Part 2',
-  'figure/index.html': 'tool pages: Part 2',
-  'instructors/submissions/index.html': 'tool pages: Part 2',
-  'observatory/index.html': 'tool pages: Part 2',
-  'studio/index.html': 'tool pages: Part 2',
-  'studio/course/index.html': 'tool pages: Part 2',
-  'studio/lesson/index.html': 'tool pages: Part 2',
-  'lab3d/index.html': 'tool pages: Part 2',
-  '3d/index.html': 'tool pages: Part 2',
-  'mission/index.html': 'tool pages: Part 2',
-  'mission/lab/index.html': 'tool pages: Part 2',
-};
+const PENDING = {};
 
 /**
  * Pages whose route cannot pay for js/shell.js yet (tools/route-budgets.json):
- * the markup is there and the navigation works, since it needs no script;
- * the theme and language switches stay hidden until the module is loaded.
+ * the markup is there and the navigation works, since it needs no script,
+ * and the head script applies the stored theme; the shell's two switches
+ * stay hidden until the module is loaded. A bilingual page keeps its own
+ * language switch meanwhile (PLATFORM_MODEL.md, "What B authorizes", rule 1).
  */
 const STATIC_ONLY = {
   'evaluation/index.html': 'route has 0.2 KB of room; the module is 3.2 KB',
   'instructors/index.html': 'route has 1.3 KB of room; the module is 3.2 KB',
+  'catalog/index.html':
+    'keeps its own language switch until its route can pay: 0.6 KB of room (sources) and 0.4 KB (build); the module is 3.2 KB, 1.8 KB bundled',
+  'studio/index.html':
+    'route has 0.1 KB of room, the module 3.2 KB: keeps its own language switch until its route can pay',
+  'studio/lesson/index.html':
+    'route has no request of room, the module is one: keeps its own language switch until its route can pay',
+  'course/index.html':
+    'route has 0.6 KB of room, the module 3.2 KB: keeps its own language switch until its route can pay',
+  'lab3d/index.html':
+    'keeps its own language switch until its route can pay: 0.1 KB of room, 2.5 KB over mounted',
+  '3d/index.html':
+    'keeps its own language switch until its routes can pay: mounted, lab3d-lab 2.5 KB and lab3d-guide 1.8 KB over',
+  'mission/index.html':
+    'keeps its own language switch until its route can pay: 0.1 KB of room, 2.5 KB over mounted',
+  'mission/lab/index.html':
+    'keeps its own language switch until its route can pay: 1.7 KB of room, 0.9 KB over mounted',
 };
 
 const carrying = shellPages().filter(p => !Object.hasOwn(PENDING, p));
@@ -61,7 +65,7 @@ describe('every page carries the shell', () => {
   test('and the pending list names only pages without it', () => {
     for (const page of shellPages()) {
       const html = read(page);
-      expect({ page, shell: hasShell(html) }).toEqual({
+      expect({ page, shell: hasShell(html, page) }).toEqual({
         page,
         shell: !Object.hasOwn(PENDING, page),
       });
@@ -83,7 +87,7 @@ describe('every page carries the shell', () => {
   });
 
   test('once, with a skip link to content that exists, and no second banner or footer', () => {
-    for (const page of carrying) {
+    for (const page of carrying.filter(p => !APPLICATION.has(p))) {
       const html = read(page);
       const count = re => (html.match(re) || []).length;
       expect({ page, header: count(/<header class="gs-shell">/g) }).toEqual({
@@ -107,6 +111,27 @@ describe('every page carries the shell', () => {
         page,
         target: true,
       });
+    }
+  });
+
+  test('the application carries the fixed header, keeps its own skip link and footer, and adds no other', () => {
+    for (const page of APPLICATION) {
+      const html = read(page);
+      const count = re => (html.match(re) || []).length;
+      expect(count(/<header class="gs-shell gs-app">/g)).toBe(1);
+      expect(count(/<nav id="gs-nav"/g)).toBe(1);
+      // Its panels' own <header>s are inside dialogs and sections, not
+      // banners; the shell's footer would be a second contentinfo.
+      expect(count(/class="gs-foot"/g)).toBe(0);
+      expect(count(/class="gs-skip"/g)).toBe(0);
+      expect(count(/<footer id="attribution"/g)).toBe(1);
+      // The skip link stays the first thing in <body>, ahead of the shell.
+      const body = html.slice(html.indexOf('<body'));
+      expect(body.indexOf('class="skip-link"')).toBeLessThan(
+        body.indexOf('<header class="gs-shell gs-app">')
+      );
+      const target = /class="skip-link" href="#([\w-]+)"/.exec(html)[1];
+      expect(html).toContain(`id="${target}"`);
     }
   });
 

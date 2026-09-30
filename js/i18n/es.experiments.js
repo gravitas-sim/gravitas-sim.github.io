@@ -8,10 +8,8 @@
 export const ES_EXPERIMENTS = {
   'exp.doc.title': 'Ejecutor de experimentos | Gravitas',
   'exp.title': 'Ejecutar un experimento',
-  'exp.lang.label': 'Idioma',
   'exp.intro':
     'Varía un ajuste de laboratorio a lo largo de un intervalo, ejecuta cada valor con varias semillas y observa qué cambió. Cada ensayo se ejecuta en un proceso de fondo propio, varios a la vez, así que la página sigue respondiendo; no se envía nada a ninguna parte. Antes de ejecutar nada, se construye un ensayo y se estima el coste del experimento completo en este dispositivo, y un experimento demasiado grande para él se rechaza explicando por qué.',
-  'exp.back': 'Volver a Gravitas',
 
   'exp.what.title': 'Qué ejecutar',
   'exp.what.scenario': 'Escenario',

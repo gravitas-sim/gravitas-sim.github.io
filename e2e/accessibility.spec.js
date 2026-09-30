@@ -249,6 +249,119 @@ const SURFACES = [
     expect: '.val-row',
     standalone: true,
   },
+  // The tool pages, which carry the shared shell since Prompt 50 Part 2 and
+  // with it the stored theme: checked in all four, as the document pages are.
+  // Each waits for the page's own content, not the shell.
+  {
+    name: 'observatory',
+    open: async ({ page }) => {
+      await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '.gs-controls',
+    standalone: true,
+  },
+  {
+    name: 'catalog',
+    open: async ({ page }) => {
+      await page.goto('/catalog/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'article[data-entry]',
+    standalone: true,
+  },
+  {
+    name: 'experiment runner',
+    open: async ({ page }) => {
+      await page.goto('/experiments/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '.gs-controls',
+    standalone: true,
+  },
+  {
+    name: 'scenario studio',
+    open: async ({ page }) => {
+      await page.goto('/studio/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'body[data-ready="true"]',
+    standalone: true,
+  },
+  {
+    name: 'investigation composer',
+    open: async ({ page }) => {
+      await page.goto('/studio/lesson/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'body[data-ready="true"]',
+    standalone: true,
+  },
+  {
+    name: 'course builder',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'body[data-ready="true"]',
+    standalone: true,
+  },
+  {
+    name: 'course home',
+    open: async ({ page }) => {
+      await page.goto('/course/?course=intro-astronomy', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: 'html[data-ready="true"]',
+    standalone: true,
+  },
+  {
+    name: '3-D kernel diagnostics',
+    open: async ({ page }) => {
+      await page.goto('/lab3d/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#lb-problem',
+    standalone: true,
+  },
+  {
+    name: '3-D lab',
+    open: async ({ page }) => {
+      await page.goto('/3d/?system=R3', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#l3-canvas',
+    standalone: true,
+  },
+  {
+    name: '3-D lab guide',
+    open: async ({ page }) => {
+      await page.goto('/3d/?guide=l3-planes', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: '#l3-guide h2',
+    standalone: true,
+  },
+  {
+    name: 'mission diagnostics',
+    open: async ({ page }) => {
+      await page.goto('/mission/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#mn-transfer-go',
+    standalone: true,
+  },
+  {
+    name: 'mission lab',
+    open: async ({ page }) => {
+      await page.goto('/mission/lab/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#ml-go',
+    standalone: true,
+  },
+  {
+    name: 'submission review',
+    open: async ({ page }) => {
+      await page.goto('/instructors/submissions/', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: '#drop',
+    standalone: true,
+  },
 ];
 
 /** The two extremes of the palette. Midnight is the default. */

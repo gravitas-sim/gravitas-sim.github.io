@@ -9,7 +9,7 @@
   .floating-close-chip {
     position: fixed;
     right: 10px;
-    top: 10px;
+    top: calc(10px + var(--shell-height, 0px));
     width: 32px;
     height: 32px;
     border-radius: 16px;
@@ -258,7 +258,7 @@
 
   #overlay {
     position: fixed;
-    top: 10px;
+    top: calc(10px + var(--shell-height, 0px));
     left: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
@@ -356,7 +356,7 @@
 
   #scenarioInfoDisplay {
     position: fixed;
-    top: 15px;
+    top: calc(15px + var(--shell-height, 0px));
     left: 50%;
     transform: translateX(-50%);
     width: min(90%, 640px);
@@ -391,7 +391,7 @@
 
   @media (max-width: 1024px) {
     #scenarioInfoDisplay {
-      top: 10px;
+      top: calc(10px + var(--shell-height, 0px));
       width: 95%;
       max-width: none;
       padding: 8px 16px;
@@ -434,7 +434,7 @@
       min-width: 42px;
     }
     #scenarioInfoDisplay {
-      top: 5px;
+      top: calc(5px + var(--shell-height, 0px));
       width: 98%;
       padding: 6px 12px;
     }
@@ -450,7 +450,7 @@
 
   @media (max-width: 360px) {
     #scenarioInfoDisplay {
-      top: 5px;
+      top: calc(5px + var(--shell-height, 0px));
       width: 98%;
       padding: 6px 12px;
     }
@@ -466,7 +466,7 @@
 
   @media (max-width: 1024px) {
     #overlay {
-      top: 10px;
+      top: calc(10px + var(--shell-height, 0px));
       left: 10px;
       font-size: 12px;
       max-width: calc(100vw - 20px);
@@ -474,7 +474,7 @@
     }
 
     #scenarioInfoDisplay {
-      top: 10px;
+      top: calc(10px + var(--shell-height, 0px));
       width: 95%;
       max-width: none;
       padding: 8px 16px;
@@ -491,7 +491,7 @@
 
   @media (max-width: 480px) {
     #overlay {
-      top: 10px;
+      top: calc(10px + var(--shell-height, 0px));
       left: 10px;
       font-size: 11px;
       max-width: calc(100vw - 20px);
@@ -499,7 +499,7 @@
     }
 
     #scenarioInfoDisplay {
-      top: 5px;
+      top: calc(5px + var(--shell-height, 0px));
       width: 98%;
       padding: 6px 12px;
     }
@@ -515,7 +515,7 @@
 
   @media (max-width: 360px) {
     #overlay {
-      top: 10px;
+      top: calc(10px + var(--shell-height, 0px));
       left: 10px;
       font-size: 10px;
       max-width: calc(100vw - 20px);
@@ -587,7 +587,7 @@
   .mobile-menu-toggle {
     display: none;
     position: fixed;
-    top: 15px;
+    top: calc(15px + var(--shell-height, 0px));
     right: 15px;
     width: 50px;
     height: 50px;
@@ -688,7 +688,7 @@
 
     /* Mobile menu positioning */
     .mobile-menu-toggle {
-      top: 10px;
+      top: calc(10px + var(--shell-height, 0px));
       right: 10px;
       width: 45px;
       height: 45px;
@@ -744,7 +744,7 @@
 
   @media (max-width: 480px) {
     .mobile-menu-toggle {
-      top: 5px;
+      top: calc(5px + var(--shell-height, 0px));
       right: 5px;
       width: 40px;
       height: 40px;
@@ -761,7 +761,7 @@
   /* Extra small screens */
   @media (max-width: 360px) {
     .mobile-menu-toggle {
-      top: 3px;
+      top: calc(3px + var(--shell-height, 0px));
       right: 3px;
       width: 38px;
       height: 38px;
@@ -1661,7 +1661,7 @@
   /* Enhanced Scenario Info Box Styles */
   .scenario-info-box {
     position: fixed;
-    top: 20px;
+    top: calc(20px + var(--shell-height, 0px));
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
@@ -1889,7 +1889,7 @@
 
   @media (max-width: 1024px) {
     .scenario-info-box {
-      top: 15px;
+      top: calc(15px + var(--shell-height, 0px));
       left: 10px;
       right: 10px;
       transform: none;
@@ -1926,7 +1926,7 @@
 
   @media (max-width: 480px) {
     .scenario-info-box {
-      top: 10px;
+      top: calc(10px + var(--shell-height, 0px));
       left: 8px;
       right: 8px;
     }
@@ -1978,7 +1978,7 @@
 
   @media (max-width: 360px) {
     .scenario-info-box {
-      top: 8px;
+      top: calc(8px + var(--shell-height, 0px));
       left: 6px;
       right: 6px;
     }

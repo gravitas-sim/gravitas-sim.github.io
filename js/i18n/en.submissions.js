@@ -10,7 +10,6 @@
 export const EN_SUBMISSIONS = {
   'sub.doc.title': 'Submission review | Gravitas',
   'sub.title': 'Submission review',
-  'sub.lang.label': 'Language',
   'sub.intro':
     'Drop the lab reports your students handed in and this page will tell you which question the class got wrong. It reads the PDF itself, the JSON progress backup, or a token pasted out of the last page of a report.',
   'sub.privacy':

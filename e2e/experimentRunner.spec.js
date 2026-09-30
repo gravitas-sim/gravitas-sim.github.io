@@ -234,7 +234,7 @@ test.describe('the experiment runner', () => {
 
   test('speaks Spanish when asked', async ({ page }) => {
     await openRunner(page);
-    await page.getByRole('button', { name: 'Español' }).click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(page.locator('h1')).toHaveText('Ejecutar un experimento');
     await expect(page.locator('#xpEstimate')).toContainText('ensayos de', {
       timeout: 30_000,
