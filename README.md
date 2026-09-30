@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | CSS                    | <!--fact:buildCss-->201<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->581<!--/fact--> KB           | <!--fact:buildStartupFiles-->51<!--/fact-->   |
 | JavaScript on demand   | <!--fact:buildDeferredJs-->4135<!--/fact--> KB         | <!--fact:buildDeferredChunks-->193<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->782<!--/fact--> KB** |                                               |
+| **Initial download**   | **<!--fact:buildInitialDownload-->783<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -485,7 +485,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1537<!--/fact--> tests
+The suite is <!--fact:e2eTests-->1538<!--/fact--> tests
 in <!--fact:e2eFiles-->120<!--/fact--> files and takes several minutes in
 Chromium.
 
