@@ -219,6 +219,32 @@ const SURFACES = [
     expect: '#teachDemos article',
     standalone: true,
   },
+  {
+    name: 'figure builder',
+    open: async ({ page }) => {
+      await page.goto('/figure/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#figureForm',
+    standalone: true,
+  },
+  {
+    name: 'evaluation kit',
+    open: async ({ page }) => {
+      await page.goto('/evaluation/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#ekTools',
+    standalone: true,
+  },
+  {
+    // Painted by js/validationPage.js from validation/data.json: a check row,
+    // not the empty shell.
+    name: 'validation report',
+    open: async ({ page }) => {
+      await page.goto('/validation/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '.val-row',
+    standalone: true,
+  },
 ];
 
 /** The two extremes of the palette. Midnight is the default. */

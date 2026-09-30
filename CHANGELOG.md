@@ -869,6 +869,18 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **The validation report** had three serious accessibility defects, found
+  when axe was extended to it.
+  - Each of the margin chart's 280 or so dots was a focusable
+    `role="button"` that did nothing, inside a chart that is one labeled
+    image. The dots are drawn now, with the check's name on hover, and the
+    table's "Used" column says its percentage in text as well as in a bar.
+  - The Published, Approximation and Empirical hues were too light for the
+    Daylight theme (pink was 2.4:1). They are darker there.
+- **axe now covers the figure builder, the evaluation kit and the validation
+  report**, in both languages and both themes. They were the three pages it
+  did not reach.
+
 - **A physics Worker that died stopped gravity, silently.** Its busy flag
   stayed set, so no job was scheduled again, and every body kept the last
   pull the Worker had computed. An error, an unreadable answer or ten seconds
@@ -1473,7 +1485,7 @@ listed here because this is the release that first carries it.
   cycle or on a low-level module importing a coordinator.
 - **A bundle budget.** `npm run budget` holds the initial download to a written
   ceiling; raising it means saying why in the same commit.
-- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->15<!--/fact--> surfaces in both
+- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->18<!--/fact--> surfaces in both
   languages and both themes, plus keyboard, focus-trap, reflow and reduced-motion tests.
   See [ACCESSIBILITY.md](ACCESSIBILITY.md).
 
