@@ -8,6 +8,7 @@
 //                                     not true of the repository
 //   node tools/catalog.mjs provenance rebuild each data pack from its pinned raw
 //                                     file (GRAVITAS_PACKS_CACHE) and compare
+//   node tools/catalog.mjs fetch      fetch any of those raw files not cached
 //
 // What a reader browses at /catalog/ (CATALOG.md). Two kinds of entry:
 //
@@ -43,6 +44,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { PLATFORM_API } from '../js/platform/manifest.js';
 import { satisfies } from '../js/platform/semver.js';
 import { readPackages } from './capabilities.mjs';
+import { pinnedBytes } from './data-packs/pinned.mjs';
 import { LOCALES, publicIds } from '../sdk/lib/api.mjs';
 import { pack, read } from '../sdk/lib/archive.mjs';
 import {
@@ -333,8 +335,53 @@ export async function checkProvenance(curation = readCuration()) {
   return { problems, rebuilt };
 }
 
+/**
+ * Fetch each accepted extension's pinned raw file into the cache its build.mjs
+ * reads (the built-in packs' cache, DATA_PACKS.md), checked against the pin
+ * before it is kept. The pin is the extension's own `RAW` export: an extension
+ * reaches Gravitas only through the SDK, so it never imports this downloader,
+ * and this never copies its URL.
+ *
+ * @returns {Promise<{problems: string[], cached: number}>}
+ */
+export async function fetchSources(
+  curation = readCuration(),
+  {
+    cache = process.env.GRAVITAS_PACKS_CACHE || path.join(REPO, '.packs-cache'),
+    fetchImpl = globalThis.fetch,
+  } = {}
+) {
+  const problems = [];
+  let cached = 0;
+  for (const item of curation.extensions) {
+    const script = path.join(REPO, item.path, 'build.mjs');
+    if (!existsSync(script)) continue;
+    const { RAW } = await import(pathToFileURL(script).href);
+    if (!RAW) {
+      problems.push(`${item.path}/build.mjs exports no RAW pin`);
+      continue;
+    }
+    try {
+      await pinnedBytes(RAW, { cache, offline: false, fetchImpl });
+      cached++;
+    } catch (err) {
+      problems.push(`${item.path}: ${err.message}`);
+    }
+  }
+  return { problems, cached };
+}
+
 async function main(argv) {
   const cmd = argv[2];
+  if (cmd === 'fetch') {
+    const { problems, cached } = await fetchSources();
+    if (problems.length) {
+      console.error(problems.map(p => `  ${p}`).join('\n'));
+      return 1;
+    }
+    console.log(`${cached} extension raw file(s) cached and checked.`);
+    return 0;
+  }
   if (cmd === 'provenance') {
     const { problems, rebuilt } = await checkProvenance();
     if (problems.length) {
@@ -386,7 +433,9 @@ async function main(argv) {
     console.log('The catalog matches the repository.');
     return 0;
   }
-  console.error('usage: node tools/catalog.mjs generate|check|provenance');
+  console.error(
+    'usage: node tools/catalog.mjs generate|check|provenance|fetch'
+  );
   return 2;
 }
 

@@ -38,7 +38,7 @@ import {
 
 export const VERSION = '1.0.0';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const RAW = {
+export const RAW = {
   file: 'tess2019226182529-s0015-0000000142848794-0151-s_lc.fits',
   url: 'https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019226182529-s0015-0000000142848794-0151-s_lc.fits',
   bytes: 1906560,

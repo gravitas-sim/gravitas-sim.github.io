@@ -726,6 +726,30 @@ the release rather than in the tag.
 
 ### Changed
 
+- **CI runs what the release gate runs.**
+  - Ten quick checks that only `release:check` ran now run in CI. The SDK
+    extensions, the classroom activities, the scene catalog, the
+    irreversible-operations audit and the five dataset structure checks run in
+    the checks job. The lesson cards run in the accessibility job, which has a
+    browser. The bundle-composition check now runs in the build job.
+  - A quick check may stay out of CI only if it says what in CI covers it.
+  - On the first of each month, the datasets are checked against their pinned
+    sources, with the sources cached between runs.
+  - On Mondays, the e2e timings are refreshed and offered as a pull request,
+    and the Observatory's interaction budgets are reported, report-only.
+  - Each scheduled job can be dry-run from `workflow_dispatch`.
+  - `waitForTimeout` is held per file to today's count (218 calls, in 52
+    files), and the count can only fall.
+  - A flaky test can be quarantined by its title, with an owner and an expiry
+    date; it still runs.
+  - The browser install is one composite action instead of four copies.
+  - `npm run packs:data` also fetches the catalog's extension packs' raw
+    files (`node tools/catalog.mjs fetch`), from the pins their `build.mjs`
+    files export.
+  - The MIST tracks now regenerate byte for byte on Node 20 as well as
+    Node 24. Their stage ages keep twelve significant digits, because the two
+    disagree in the last bit of `10 ** x`.
+
 - **The checker every declarative format shares has a module of its own**
   (`js/platform/checker.js`). Course packs and 3-D systems had reached it
   through `js/platform/investigation.js`, which brought the investigation

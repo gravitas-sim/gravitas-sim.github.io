@@ -77,9 +77,22 @@ describe('the deploy job only runs behind the gate', () => {
     // fail, so requiring it would mean a failed suite could not produce its
     // own diagnostics, and it decides nothing.
     const REPORTING_ONLY = new Set(['e2e-report']);
+    // And the scheduled jobs, which run on the schedule or a dispatch and
+    // never on a push or a pull request, so they cannot be required: a
+    // required job that does not run would block every merge.
+    const SCHEDULED = new Set([
+      'provenance',
+      'e2e-timings',
+      'observatory-report',
+    ]);
     const aggregated = new Set(gate.needs);
     for (const name of Object.keys(workflow.jobs)) {
       if (name === 'ci' || name === 'deploy') continue;
+      if (SCHEDULED.has(name)) {
+        expect(aggregated.has(name)).toBe(false);
+        expect(String(workflow.jobs[name].if)).toMatch(/schedule/);
+        continue;
+      }
       if (REPORTING_ONLY.has(name)) {
         expect(aggregated.has(name)).toBe(false);
         continue;

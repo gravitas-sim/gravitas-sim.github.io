@@ -46,7 +46,7 @@ import {
 const FLUX = 'sap';
 export const VERSION = '1.0.0';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const RAW = {
+export const RAW = {
   file: 'tess2019198215352-s0014-0000000158324245-0150-s_lc.fits',
   url: 'https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:TESS/product/tess2019198215352-s0014-0000000158324245-0150-s_lc.fits',
   bytes: 1964160,
