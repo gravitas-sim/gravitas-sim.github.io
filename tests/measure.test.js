@@ -33,6 +33,13 @@ const L = await import('../js/measure/spectrumLine.js');
 const A = await import('../js/measure/aperture.js');
 const T = await import('../js/measure/tableOps.js');
 const pipe = await import('../js/measure/pipeline.js');
+const { validateArtifact } = await import('../js/platform/artifact.js');
+const { nodeArtifact } = await import('../js/measure/envelope.js');
+/** Every node's result is a gravitas.artifact/1 envelope (Prompt 60). */
+const enveloped = node => {
+  expect(validateArtifact(nodeArtifact(node))).toEqual([]);
+  return nodeArtifact(node);
+};
 const { openFixture } = await import('../js/observatory/fixtures.js');
 const W = await import('../js/observatory/wcs.js');
 
@@ -225,6 +232,13 @@ describe('reference cases on the data the Observatory ships', () => {
     });
     const period = n.quantities.find(q => q.id === 'period');
     expect(Math.abs(period.value - 0.66042001) / period.error).toBeLessThan(2);
+    const e = enveloped(n);
+    expect(e.source.digest).toBe(n.input.digest);
+    expect(e.quantities.find(q => q.id === 'period').uncertainty).toEqual({
+      kind: 'sigma',
+      sigma: period.error,
+      basis: 'data',
+    });
     expect(n.quantities.find(q => q.id === 'falseAlarm').value).toBeLessThan(
       1e-6
     );
@@ -239,6 +253,7 @@ describe('reference cases on the data the Observatory ships', () => {
       at: 0,
     });
     const q = id => box.quantities.find(x => x.id === id).value;
+    enveloped(box);
     // One sector: seven transits in 20-minute bins.
     expect(Math.abs(q('period') - 3.52474859)).toBeLessThan(0.002);
     // (Rp/Rs)^2 is about 1.5% for this planet; a box is shallower than the
@@ -280,6 +295,7 @@ describe('reference cases on the data the Observatory ships', () => {
         at: 0,
       });
       const q = k => n.quantities.find(x => x.id === k);
+      enveloped(n);
       return {
         cz: c * z,
         v: q('velocity'),
@@ -315,6 +331,9 @@ describe('reference cases on the data the Observatory ships', () => {
       { skyOf: W.skyOf, pixelScale: W.pixelScale }
     );
     const q = k => n.quantities.find(x => x.id === k)?.value;
+    expect(enveloped(n).quantities.find(x => x.id === 'count').unit).toBe(
+      'pix'
+    );
     expect(q('count')).toBe(23);
     const sep = W.separation({ ra: q('ra'), dec: q('dec') }, o.object) * 3600;
     expect(sep).toBeLessThan(Math.max(sx, sy));
@@ -711,5 +730,68 @@ describe('the pipeline: digests, staleness, the document, reading it back', () =
     expect(Object.keys(pipe.CHANGE_CLASS).sort()).toEqual(
       Object.keys(OPS).sort()
     );
+  });
+});
+
+describe('a node as an envelope', () => {
+  test('a scaled column unit is the registry unit, and a citation is provenance', () => {
+    const e = nodeArtifact({
+      id: 'm1',
+      tool: 'line',
+      version: 1,
+      input: { digest: 'ab'.repeat(32) },
+      warnings: [],
+      quantities: [
+        {
+          id: 'ew',
+          value: 5,
+          unit: '0.001 d',
+          kind: 'measured',
+          error: 0.5,
+          errorKind: 'assumed',
+        },
+        { id: 'mass', value: 2, unit: 'solar masses', kind: 'derived' },
+        { id: 'flux', value: 3, unit: null, kind: 'measured' },
+        {
+          id: 'definition',
+          value: null,
+          unit: '',
+          kind: 'assumed',
+          cite: 'Lick',
+        },
+      ],
+    });
+    expect(validateArtifact(e)).toEqual([]);
+    expect(e.quantities).toEqual([
+      {
+        id: 'ew',
+        value: 0.005,
+        unit: 'd',
+        uncertainty: { kind: 'sigma', sigma: 0.0005, basis: 'assumed' },
+        origin: 'measured',
+      },
+      {
+        id: 'mass',
+        value: 2,
+        unit: 'Msun',
+        uncertainty: { kind: 'none' },
+        origin: 'derived',
+      },
+      // Not stated stays not stated: never '' (dimensionless), never guessed.
+      {
+        id: 'flux',
+        value: 3,
+        unit: null,
+        uncertainty: { kind: 'none' },
+        origin: 'measured',
+      },
+    ]);
+    expect(e.provenance).toEqual({ citations: ['Lick'] });
+    expect(e.source).toEqual({
+      kind: 'pipeline',
+      id: 'line',
+      version: '1',
+      digest: 'ab'.repeat(32),
+    });
   });
 });

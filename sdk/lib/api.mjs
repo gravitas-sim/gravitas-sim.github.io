@@ -23,6 +23,15 @@ import { parseRange, satisfies } from '../../js/platform/semver.js';
 
 export { PLATFORM_API };
 export { observationOf, checkObservation } from '../../js/observation.js';
+// gravitas.artifact/1, the envelope a scientific result is written in.
+export {
+  artifact,
+  validateArtifact,
+  ORIGINS,
+  BASES,
+  UNCERTAINTY_KINDS,
+  SOURCE_KINDS,
+} from '../../js/platform/artifact.js';
 
 /**
  * A FITS file's header-data units, as the data-pack pipeline reads them: each
@@ -60,6 +69,7 @@ export const FORMATS = Object.freeze({
   'gravitas.course-pack': 1,
   'gravitas.scenario-pack': 1,
   'gravitas.extension-archive': 1,
+  'gravitas.artifact': 1,
 });
 
 /** The four kinds of extension, and whether each may carry code. */
