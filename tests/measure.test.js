@@ -795,3 +795,54 @@ describe('a node as an envelope', () => {
     });
   });
 });
+
+// Roadmap II Prompt 61: gravitas.pipeline/1 has a JSON Schema
+// (sdk/schemas/pipeline-1.schema.json). A pipeline saved as the measure panel
+// saves one, with a node that measured and one that failed, fits it and reads
+// back; its enums are the pipeline's own tables.
+describe('the pipeline schema', () => {
+  test('a saved pipeline fits it, and reads back', async () => {
+    const { valid } = await import('./jsonSchemaSubset.js');
+    const { observationJson } = await import('../js/observatory/export.js');
+    const schema = JSON.parse(
+      readFileSync('sdk/schemas/pipeline-1.schema.json', 'utf8')
+    );
+    const o = await openFixture('gwosc-events');
+    const column = o.columns.find(c => c.role === 'value').id;
+    const good = await pipe.runNode(o, {
+      id: 'm1',
+      tool: 'describe',
+      params: { column },
+      at: 0,
+    });
+    const bad = await pipe.runNode(o, {
+      id: 'm2',
+      tool: 'describe',
+      params: { column: 'no-such-column' },
+      at: 0,
+    });
+    expect([good.status, bad.status]).toEqual(['current', 'failed']);
+    const text = pipe.pipelineJson({
+      source: o,
+      digest: await pipe.contentDigest(o),
+      workspace: observationJson(o, { source: o, changes: [] }),
+      nodes: [good, bad],
+      methods: ['Described one column.'],
+    });
+    expect(valid(schema, JSON.parse(text))).toBe(true);
+    expect(pipe.readPipeline(text).ok).toBe(true);
+  });
+
+  test('its enums are the pipeline’s own tables', () => {
+    const schema = JSON.parse(
+      readFileSync('sdk/schemas/pipeline-1.schema.json', 'utf8')
+    );
+    const node = schema.properties.nodes.items.properties;
+    expect(node.tool.enum).toEqual(Object.keys(pipe.TOOLS));
+    expect(node.quantities.items.properties.kind.enum).toEqual(
+      Object.values(pipe.KIND)
+    );
+    for (const t of Object.values(pipe.TOOLS))
+      expect(t.version).toMatch(new RegExp(node.version.pattern));
+  });
+});
