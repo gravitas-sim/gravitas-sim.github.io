@@ -118,6 +118,13 @@ const isExternal = value =>
 // opens, the lesson does not, and nothing says why. So a route is resolved
 // against the catalog it names.
 const ROUTES = [
+  // The lesson chooser, the shared shell's Investigations entry: a route with
+  // nothing to resolve.
+  {
+    pattern: /^(investigations)$/,
+    what: 'route',
+    load: async () => ['investigations'],
+  },
   {
     pattern: /^investigation=([\w-]+)$/,
     what: 'investigation',

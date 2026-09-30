@@ -51,6 +51,23 @@ test.describe('the shell', () => {
     ).toHaveAttribute('href', '/teaching/');
   });
 
+  test('the Investigations entry opens the lesson chooser', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.goto('/model/', { waitUntil: 'load' });
+    await groups(page).nth(0).locator('summary').click();
+    await page
+      .locator('.gs-nav a[href="/#investigations"]')
+      .filter({ visible: true })
+      .click();
+    await page.waitForFunction(() => window.splashScreenEnded === true);
+    await expect(page.locator('#investigationBrowser')).toBeVisible({
+      timeout: 30_000,
+    });
+  });
+
   test('and by keyboard', async ({ page, browserName }) => {
     await page.goto('/validation/', { waitUntil: 'load' });
     // The skip link first, then Home, then the first group.

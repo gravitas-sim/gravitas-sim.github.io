@@ -159,29 +159,14 @@ function parseHeader(tar, at) {
 }
 
 /**
- * Read an archive the catalog names.
- * @param {Uint8Array} bytes - The archive as fetched
- * @param {{sha256?: string, limits?: object}} [opts] - The catalog's checksum
- * @returns {Promise<Map<string, Uint8Array>>} Every entry but CHECKSUMS
+ * Every entry of an unpacked archive, each header checked: the walk this
+ * reader and the SDK's (sdk/lib/archive.mjs) share, so both refuse alike.
+ * @param {Uint8Array} tar
+ * @param {object} [limits]
+ * @returns {Map<string, Uint8Array>}
  * @throws {ArchiveError}
  */
-export async function readArchive(bytes, { sha256, limits = LIMITS } = {}) {
-  if (bytes.length > limits.archiveBytes)
-    throw new ArchiveError(
-      'tooLarge',
-      `${bytes.length} bytes, more than an archive may be`,
-      { bytes: bytes.length, max: limits.archiveBytes }
-    );
-  if (sha256 !== undefined) {
-    const got = await sha256Hex(bytes);
-    if (got !== sha256)
-      throw new ArchiveError(
-        'checksum',
-        `the archive is not the one the catalog names (${got})`,
-        { expected: sha256, got }
-      );
-  }
-  const tar = await gunzip(bytes, limits.unpackedBytes);
+export function readTar(tar, limits = LIMITS) {
   const files = new Map();
   let at = 0;
   for (;;) {
@@ -204,6 +189,33 @@ export async function readArchive(bytes, { sha256, limits = LIMITS } = {}) {
     files.set(h.name, tar.slice(at, at + h.size));
     at += Math.ceil(h.size / BLOCK) * BLOCK;
   }
+  return files;
+}
+
+/**
+ * Read an archive the catalog names.
+ * @param {Uint8Array} bytes - The archive as fetched
+ * @param {{sha256?: string, limits?: object}} [opts] - The catalog's checksum
+ * @returns {Promise<Map<string, Uint8Array>>} Every entry but CHECKSUMS
+ * @throws {ArchiveError}
+ */
+export async function readArchive(bytes, { sha256, limits = LIMITS } = {}) {
+  if (bytes.length > limits.archiveBytes)
+    throw new ArchiveError(
+      'tooLarge',
+      `${bytes.length} bytes, more than an archive may be`,
+      { bytes: bytes.length, max: limits.archiveBytes }
+    );
+  if (sha256 !== undefined) {
+    const got = await sha256Hex(bytes);
+    if (got !== sha256)
+      throw new ArchiveError(
+        'checksum',
+        `the archive is not the one the catalog names (${got})`,
+        { expected: sha256, got }
+      );
+  }
+  const files = readTar(await gunzip(bytes, limits.unpackedBytes), limits);
   const names = [...files.keys()];
   if (names[0] !== MANIFEST_ENTRY || names.at(-1) !== CHECKSUMS_ENTRY)
     throw new ArchiveError(

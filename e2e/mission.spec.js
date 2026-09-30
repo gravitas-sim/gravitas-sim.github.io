@@ -171,21 +171,25 @@ test.describe('the mission diagnostics page', () => {
     );
     expect(lines.filter(l => l.endsWith(',antipodal'))).toHaveLength(4);
 
-    // A window of the largest size, canceled after its first slices.
+    // A window of the largest size, canceled at once. Go and Cancel in one
+    // task, so the cancel is waiting before the Worker starts: it stops after
+    // its first slice however fast the machine is. Clicking Cancel once the
+    // status said "Working" raced a runner that finished all 40,000 cells
+    // first.
     await page.locator('#mn-window-steps').fill('200');
     await page.locator('#mn-window-span').fill('700');
-    await page.locator('#mn-window-go').click();
-    await expect(page.locator('#mn-window-status')).toHaveText(
-      /^Working: [1-9]/,
-      { timeout: 30_000 }
-    );
-    await page.locator('#mn-window-cancel').click();
+    await page.evaluate(() => {
+      document.getElementById('mn-window-go').click();
+      document.getElementById('mn-window-cancel').click();
+    });
     await expect(page.locator('#mn-window-status')).toHaveText(
       'Canceled: the cells computed so far are shown.',
       { timeout: 30_000 }
     );
     const done = await page.evaluate(() => window.__missionWindow);
     expect(done.status).toBe('canceled');
+    // The rows computed before it stopped are kept and shown.
+    expect(done.rows).toBeGreaterThan(0);
     expect(done.rows).toBeLessThan(200);
     await expect(page.locator('#mn-window-go')).toBeEnabled();
   });
