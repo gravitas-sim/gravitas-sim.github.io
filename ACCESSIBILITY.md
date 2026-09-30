@@ -20,7 +20,9 @@ The surfaces, named as the spec names them: front door, sandbox, settings rail,
 scenario gallery, object inspector, investigations browser, active
 investigation, lesson measurement screen, share dialog, A/B bench, observing
 panels, lecture mode, model page, instructor portal, teaching page, figure
-builder, evaluation kit, validation report. That list
+builder, evaluation kit, validation report. (The figure builder is checked
+without its live preview, which is the application in a frame and is
+checked as the surfaces above.) That list
 and the count above both come from the `SURFACES` array in the spec — the count through `npm run docs:sync`, the names by hand,
 and `tests/accessibilityDocs.test.js` fails if a surface is in the array and
 not in the prose.
