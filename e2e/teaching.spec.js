@@ -324,6 +324,42 @@ test.describe('both languages', () => {
       page.locator('#teachDemos .teach-demo-field dt').first()
     ).toHaveText('La pregunta, y la respuesta equivocada de siempre');
   });
+
+  test('an English reader downloads no Spanish, and choosing it fetches it', async ({
+    page,
+  }) => {
+    const SPANISH = /\/(es\.teaching|es\.activities|manifest\.es)\.js$/;
+    const fetched = [];
+    page.on('request', r => fetched.push(new URL(r.url()).pathname));
+    await openTeaching(page);
+    await page.waitForLoadState('load');
+    expect(fetched.filter(p => SPANISH.test(p))).toEqual([]);
+
+    await page
+      .locator('#teachLang button', { hasText: 'Espa\u00f1ol' })
+      .click();
+    await expect(page.locator('h1')).toHaveText('Ense\u00f1ar con Gravitas');
+    expect(fetched.filter(p => SPANISH.test(p)).length).toBe(3);
+  });
+
+  test('Spanish that fails to arrive renders English, and the choice is kept', async ({
+    page,
+    errors,
+  }) => {
+    await page.route('**/js/i18n/es.teaching.js', r => r.abort());
+    await openTeaching(page, { locale: 'es' });
+    await expect(page.locator('h1')).toHaveText('Teaching with Gravitas');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    // A failed fetch is not the reader choosing English.
+    expect(
+      await page.evaluate(() => localStorage.getItem('gravitas_locale'))
+    ).toBe('es');
+    // The refused fetch is the only thing the browser complains about.
+    expect(
+      errors.consoleErrors.filter(e => !/Failed to load resource/.test(e))
+    ).toEqual([]);
+    errors.consoleErrors.length = 0;
+  });
 });
 
 test.describe('operating it without a mouse', () => {
