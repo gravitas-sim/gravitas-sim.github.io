@@ -8,7 +8,7 @@ simulation cannot offer regardless of effort.
 
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->15<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages × <!--fact:axeThemes-->2<!--/fact--> themes — <!--fact:axeRuns-->60<!--/fact--> runs |
+| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->18<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages × <!--fact:axeThemes-->2<!--/fact--> themes — <!--fact:axeRuns-->72<!--/fact--> runs |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
 
 Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
@@ -19,7 +19,8 @@ a real defect with a real fix.
 The surfaces, named as the spec names them: front door, sandbox, settings rail,
 scenario gallery, object inspector, investigations browser, active
 investigation, lesson measurement screen, share dialog, A/B bench, observing
-panels, lecture mode, model page, instructor portal, teaching page. That list
+panels, lecture mode, model page, instructor portal, teaching page, figure
+builder, evaluation kit, validation report. That list
 and the count above both come from the `SURFACES` array in the spec — the count through `npm run docs:sync`, the names by hand,
 and `tests/accessibilityDocs.test.js` fails if a surface is in the array and
 not in the prose.
@@ -281,7 +282,7 @@ will not get one; the form gives you the number instead of the feel.
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
 mean changing a line of running text into a row of buttons.
 
-**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->60<!--/fact--> clean axe runs mean no
+**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->72<!--/fact--> clean axe runs mean no
 machine-detectable violation on those surfaces in those states. They do not
 mean the application is pleasant to use with a screen reader, and nothing here
 substitutes for testing with one. Nothing in this pass was made to pass by
@@ -327,6 +328,6 @@ only route to the material.
 
 ```bash
 npm run a11y            # both suites
-npm run a11y:axe        # axe only, all <!--fact:axeRuns-->60<!--/fact--> combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->72<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 ```
