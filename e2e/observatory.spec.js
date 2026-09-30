@@ -317,24 +317,30 @@ test.describe('the observatory', () => {
   }) => {
     await openPage(page);
     await openFixture(page, 'tess-light-curve');
-    const fetched = () =>
+    // Every script the page has fetched. Against dist/ the modules are hashed
+    // chunks, so what holds on both targets is that the export fetches new
+    // code and start-up did not; the sources also say which files.
+    const scripts = () =>
       page.evaluate(() =>
         performance
           .getEntriesByType('resource')
           .map(e => new URL(e.name).pathname)
-          .filter(p => p === '/js/observatory/export.js' || p === '/js/csv.js')
-          .sort()
+          .filter(p => p.endsWith('.js'))
       );
-    expect(await fetched()).toEqual([]);
+    const before = new Set(await scripts());
+    if (!DIST) {
+      expect(before.has('/js/observatory/export.js')).toBe(false);
+      expect(before.has('/js/csv.js')).toBe(false);
+    }
     const [download] = await Promise.all([
       page.waitForEvent('download'),
       page.locator('#obsExportCsv').click(),
     ]);
     expect(readFileSync(await download.path(), 'utf8')).toContain(',');
-    expect(await fetched()).toEqual([
-      '/js/csv.js',
-      '/js/observatory/export.js',
-    ]);
+    const fresh = (await scripts()).filter(p => !before.has(p)).sort();
+    expect(fresh.length).toBeGreaterThan(0);
+    if (!DIST)
+      expect(fresh).toEqual(['/js/csv.js', '/js/observatory/export.js']);
   });
 
   test('speaks Spanish, and has no accessibility violations in either language', async ({
