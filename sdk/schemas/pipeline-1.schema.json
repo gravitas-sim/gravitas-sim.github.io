@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/pipeline-1.schema.json",
+  "title": "gravitas.pipeline/1",
+  "description": "A measurement pipeline as the Observatory saves one: the observation it measured (named, credited and content-digested), each node with its tool, version, parameters and the quantities it gave, the fits, the methods summary, and the workspace save, so reading it back replays. js/measure/pipeline.js readPipeline() is the authority; it also holds every parameters object to plain, bounded data. FORMATS.md lists it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "observation",
+    "nodes",
+    "workspace"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.pipeline"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "observation": {
+      "type": "object",
+      "required": [
+        "id",
+        "digest"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "source": {
+          "type": "object"
+        },
+        "retrieved": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "credit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "license": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "tool",
+          "version",
+          "params",
+          "at",
+          "input",
+          "status",
+          "quantities"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "tool": {
+            "enum": [
+              "period",
+              "box",
+              "line",
+              "band",
+              "curve",
+              "describe",
+              "aperture",
+              "filter",
+              "match"
+            ]
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$"
+          },
+          "params": {
+            "type": "object"
+          },
+          "at": {
+            "type": "integer"
+          },
+          "input": {
+            "type": "object",
+            "required": [
+              "observation",
+              "digest"
+            ],
+            "properties": {
+              "observation": {
+                "type": "string"
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "second": {
+                "type": "string"
+              }
+            }
+          },
+          "status": {
+            "enum": [
+              "current",
+              "failed"
+            ]
+          },
+          "quantities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "kind"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "kind": {
+                  "enum": [
+                    "measured",
+                    "derived",
+                    "assumed"
+                  ]
+                },
+                "error": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "errorKind": {
+                  "enum": [
+                    "measured",
+                    "derived",
+                    "assumed"
+                  ]
+                },
+                "cite": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "warnings": {
+            "type": "array"
+          },
+          "error": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "detail": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "fits": {
+      "type": "array"
+    },
+    "methods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "workspace": {
+      "type": "object",
+      "required": [
+        "format"
+      ],
+      "properties": {
+        "format": {
+          "const": "gravitas.observation"
+        }
+      },
+      "description": "The Observatory save of the observation and its changes (observation-1.schema.json)."
+    }
+  }
+}

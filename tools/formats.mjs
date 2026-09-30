@@ -46,6 +46,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'refused, in words',
+    schema: 'pipeline-1.schema.json',
   },
   {
     name: 'gravitas.inference',
