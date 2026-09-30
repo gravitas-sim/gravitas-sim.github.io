@@ -21,6 +21,7 @@
 // =============================================================================
 
 import {
+  LANGUAGES,
   language,
   preferred,
   setLanguage,
@@ -469,6 +470,25 @@ function renderCourse() {
 
 // --- Language and start --------------------------------------------------------------
 
+function renderLanguages() {
+  $('langSwitch').replaceChildren(
+    ...LANGUAGES.map(l => {
+      const b = el('button', {
+        type: 'button',
+        class: 'ui-button',
+        lang: l.id,
+        text: l.endonym,
+        'aria-pressed': String(language() === l.id),
+      });
+      b.addEventListener('click', () => {
+        setLanguage(l.id);
+        translateAll();
+      });
+      return b;
+    })
+  );
+}
+
 function fillTypes() {
   const sel = $('catType');
   const keep = sel.value || 'all';
@@ -482,6 +502,7 @@ function fillTypes() {
 
 function translateAll() {
   translatePage();
+  renderLanguages();
   fillTypes();
   render();
 }
