@@ -196,13 +196,14 @@ test.describe('capture', () => {
           .some(e => /\/js\/capture\.js(\?|$)/.test(e.name))
       );
     expect(await fetched()).toBe(false);
-    const can = await page.evaluate(() =>
-      import('/js/utils.js').then(m => m.canRecordClips())
-    );
-    test.skip(
-      !can,
-      'this engine cannot record, so there is no button to press'
-    );
+    // The same verdict captureCapability() gives, without its import of the
+    // recorder, which is the very thing this test says has not happened yet.
+    const capability = {
+      canRecord: await page.evaluate(() =>
+        import('/js/utils.js').then(m => m.canRecordClips())
+      ),
+    };
+    test.skip(!capability.canRecord, 'no button where it cannot record');
 
     await app.railControl('recordBtn');
     await page.locator('#recordBtn').click();
