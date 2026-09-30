@@ -37,13 +37,10 @@ const VERSION = 1;
 // is a warning threshold rather than a limit.
 export const COMFORTABLE_URL_LENGTH = 8000;
 
-/**
- * The most a link's payload may inflate to: eight times the comfortable link
- * length (Roadmap II Prompt 67). A course link at that length inflates to a
- * sixth of it; anything past it is a file's worth, or a payload built to
- * inflate enormously from a few bytes.
- */
+/** The most a link may inflate to (Prompt 67): a course link is a sixth. */
 export const MAX_INFLATED_BYTES = 8 * COMFORTABLE_URL_LENGTH;
+const TOO_LARGE =
+  'That link holds more than a link can carry. Ask for it as a file.';
 
 // --- base64url ---------------------------------------------------------------
 
@@ -90,16 +87,10 @@ async function drain(stream, max = Infinity) {
     if (done) break;
     chunks.push(value);
     total += value.length;
-    // Stopped while reading, so a small payload built to inflate enormously
-    // is never inflated in full.
+    // Stopped while reading: a bomb is never inflated in full.
     if (total > max) {
       reader.cancel().catch(() => {});
-      throw Object.assign(
-        new Error(
-          'That link holds more than a link can carry, so it was not opened. Ask for it as a file.'
-        ),
-        { code: 'tooLarge' }
-      );
+      throw Object.assign(new Error(TOO_LARGE), { code: 'tooLarge' });
     }
   }
   const out = new Uint8Array(total);
@@ -131,17 +122,13 @@ async function inflate(bytes) {
   try {
     const ds = new DecompressionStream('deflate-raw');
     const writer = ds.writable.getWriter();
-    // Errors surface on the read side, so a rejection here is the stream
-    // already having failed; the read below reports it properly.
+    // Errors surface on the read side, which reports them.
     writer.write(bytes).catch(() => {});
     writer.close().catch(() => {});
     return await drain(ds.readable, MAX_INFLATED_BYTES);
   } catch (err) {
     if (err?.code === 'tooLarge') throw err;
-    // A cut-short payload surfaces from the stream as an opaque low-level
-    // error, which tells a student handed a broken link nothing at all. Half a
-    // URL is by far the likeliest way this fails: mail clients and chat apps
-    // wrap long ones, so say that instead.
+    // Most likely half a URL: mail and chat wrap long ones. Say so.
     throw new Error('That link is incomplete or was cut short in transit.');
   }
 }
@@ -463,7 +450,6 @@ export async function decodeTagged(tag, fragment, maxVersion) {
     if (err?.code === 'tooLarge') throw new Error('tooLarge');
     throw err;
   }
-  if (raw.length > MAX_INFLATED_BYTES) throw new Error('tooLarge');
   if (!raw) throw new Error('corrupt');
   let payload;
   try {
@@ -505,11 +491,6 @@ export async function decodePayload(fragment) {
   }
 
   if (mode === 'z') bytes = await inflate(bytes);
-  if (bytes.length > MAX_INFLATED_BYTES) {
-    throw new Error(
-      'That link holds more than a link can carry, so it was not opened. Ask for it as a file.'
-    );
-  }
   const json = new TextDecoder().decode(bytes);
 
   let payload;
