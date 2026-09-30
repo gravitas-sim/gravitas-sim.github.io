@@ -87,11 +87,16 @@ let loaded = null;
  */
 async function ensureLoaded() {
   if (!loaded) {
+    // Through the bridge, which wires the panel once and lets the timeline
+    // marker and a screenshot's note see the event this watch produces.
     loaded = Promise.all([
-      import('../pauseAtEvent.js'),
-      import('../pauseAtEventPanel.js'),
+      import('../pauseAtEventBridge.js').then(b => b.ensurePauseAtEvent()),
       import('../physics.js'),
-    ]).then(([events, panel, physics]) => ({ events, panel, physics }));
+    ]).then(([{ watch, panel }, physics]) => ({
+      events: watch,
+      panel,
+      physics,
+    }));
   }
   return loaded;
 }

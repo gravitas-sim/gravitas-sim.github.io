@@ -18,7 +18,7 @@ import {
 } from './physics.js';
 import { state, SETTINGS } from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
-import { renderEventMarker } from './pauseAtEventPanel.js';
+import { ensurePauseAtEvent, renderEventMarker } from './pauseAtEventBridge.js';
 import { toast, announce } from './notify.js';
 export { toast, announce };
 import {
@@ -636,9 +636,13 @@ function setupShortcuts() {
     match: 'n',
     group: 'Tools',
     label: t('shortcut.pauseAtEvent'),
-    run: () => {
+    run: async () => {
       const toggle = document.getElementById('togglePauseAtEvent');
       toggle?.click();
+      // The first press fetches the tool (js/pauseAtEventBridge.js). The
+      // button's handler awaits the same load and was first to, so the panel
+      // is open by the time this resumes.
+      await ensurePauseAtEvent().catch(() => {});
       // Focus the panel's first control, so the whole tool is reachable without
       // a mouse: choose an event, tab to Arm, press it.
       if (toggle?.getAttribute('aria-pressed') === 'true') {

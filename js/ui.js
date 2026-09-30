@@ -105,7 +105,7 @@ import {
   resetAssumedDistance,
   setAssumedDistance,
 } from './astrometry.js';
-import { lastEvent } from './pauseAtEvent.js';
+import { lastEvent } from './pauseAtEventBridge.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { glyphMarkup } from './objectGlyphs.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';

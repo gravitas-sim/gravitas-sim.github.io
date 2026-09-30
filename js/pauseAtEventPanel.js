@@ -485,10 +485,16 @@ function simToDaysApprox(simTime) {
   return (simTime * now) / clock;
 }
 
-/** Wire the panel up. Called once at start-up. */
+let wired = false;
+
+/**
+ * Wire the panel up, once: js/pauseAtEventBridge.js calls it when the tool is
+ * first needed.
+ */
 export function initPauseAtEvent() {
   const e = cacheElements();
-  if (!e.container) return;
+  if (!e.container || wired) return;
+  wired = true;
 
   e.toggle?.addEventListener('click', () => setPauseAtEventEnabled(!enabled));
   e.close?.addEventListener('click', () => setPauseAtEventEnabled(false));

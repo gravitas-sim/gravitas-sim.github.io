@@ -15,7 +15,7 @@ import { initLightCurve } from './lightCurve.js';
 import { initRadialVelocity } from './radialVelocity.js';
 import { initRotationCurve } from './rotationCurve.js';
 import { initAstrometry } from './astrometry.js';
-import { initPauseAtEvent } from './pauseAtEventPanel.js';
+import { watchForPauseAtEvent } from './pauseAtEventBridge.js';
 import { initScenarioPanels } from './scenarioPanelBridge.js';
 import { initObservationLayout } from './observationLayout.js';
 import { initControls, setPlaying } from './controls.js';
@@ -388,13 +388,14 @@ document.addEventListener('DOMContentLoaded', () => {
     watchForBench();
     // And the evidence notebook, on the same terms.
     watchForNotebook();
+    // And pause-at-event.
+    watchForPauseAtEvent();
     // An optional panel must never take the simulation down with it.
     try {
       initLightCurve();
       initRadialVelocity();
       initRotationCurve();
       initAstrometry();
-      initPauseAtEvent();
       initScenarioPanels();
       initObservationLayout();
     } catch (err) {

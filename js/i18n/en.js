@@ -1361,6 +1361,8 @@ export const EN = {
   'view3d.close.label': 'Close the spacetime view',
   'view3d.loadFailed':
     'The spacetime view could not be loaded. Check your connection.',
+  'pauseEvent.loadFailed':
+    'Pause at event could not be loaded. Check your connection.',
   'tutorial.welcome': 'Welcome to Gravitas',
   'tutorial.place': 'Place an object by dragging',
   'tutorial.choose': 'Choose what you are placing',
