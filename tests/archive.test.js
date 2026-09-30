@@ -298,7 +298,10 @@ describe('one bounded request, every failure named', () => {
       .split(';')
       .map(d => d.trim().split(/\s+/))
       .find(([name]) => name === 'connect-src');
-    const origins = connect.slice(1).filter(s => s !== "'self'");
+    // blob: is the page's own data, not an origin it reaches.
+    const origins = connect
+      .slice(1)
+      .filter(s => s !== "'self'" && s !== 'blob:');
     expect(origins.sort()).toEqual([...cds.ALLOW].sort());
   });
 });

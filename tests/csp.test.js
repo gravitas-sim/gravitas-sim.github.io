@@ -61,7 +61,10 @@ describe('every published page', () => {
   test('only the Observatory fetches beyond this origin, and only what the archive names', () => {
     for (const page of all) {
       const d = directives(policyOf(readFileSync(page, 'utf8')));
-      const beyond = d['connect-src'].filter(s => s !== "'self'");
+      // blob: is this page's own data, made by its own scripts.
+      const beyond = d['connect-src'].filter(
+        s => s !== "'self'" && s !== 'blob:'
+      );
       expect({ page, beyond: beyond.sort() }).toEqual({
         page,
         beyond: page === 'observatory/index.html' ? [...ALLOW].sort() : [],
