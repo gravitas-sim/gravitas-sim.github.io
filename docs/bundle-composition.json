@@ -1,5 +1,5 @@
 {
- "total": 586303,
+ "total": 577153,
  "modules": [
   {
    "module": "js/ui.js",
@@ -35,7 +35,7 @@
   },
   {
    "module": "js/controls.js",
-   "bytes": 9589
+   "bytes": 9619
   },
   {
    "module": "js/lightCurve.js",
@@ -60,10 +60,6 @@
   {
    "module": "js/data/objectNames.js",
    "bytes": 6197
-  },
-  {
-   "module": "js/pauseAtEventPanel.js",
-   "bytes": 6167
   },
   {
    "module": "js/astrometry.js",
@@ -104,10 +100,6 @@
   {
    "module": "js/darkMatter.js",
    "bytes": 4019
-  },
-  {
-   "module": "js/pauseAtEvent.js",
-   "bytes": 3847
   },
   {
    "module": "js/energyChartNew.js",
@@ -280,6 +272,10 @@
   {
    "module": "js/observerGeometry.js",
    "bytes": 850
+  },
+  {
+   "module": "js/pauseAtEventBridge.js",
+   "bytes": 834
   },
   {
    "module": "js/maneuverBridge.js",
