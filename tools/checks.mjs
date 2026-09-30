@@ -204,6 +204,14 @@ export function summarize(results) {
 export const RELEASE_REF_ONLY =
   "github.ref == 'refs/heads/main' || github.base_ref == 'main'";
 
+/**
+ * The provenance job's checks run even after one of them failed, so each
+ * source is reported for itself: a failed pack does not hide the ephemeris.
+ * Written as the workflow spells it, because `!` cannot start a bare YAML
+ * value.
+ */
+export const EVEN_AFTER_A_FAILURE = '${{ !cancelled() }}';
+
 /** The heading each group prints under. */
 export const GROUPS = {
   correctness: 'Correctness',
@@ -717,6 +725,7 @@ export const CHECKS = [
     command: ['npm', 'run', 'gw:provenance'],
     tier: 'provenance',
     ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
     why: 'needs the GWOSC sources cached; see --provenance',
     group: 'science',
   },
@@ -727,6 +736,7 @@ export const CHECKS = [
     command: ['npm', 'run', 'stellar:provenance'],
     tier: 'provenance',
     ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
     why: 'needs the 100 MB MIST grid cached; see --provenance',
     group: 'science',
   },
@@ -738,6 +748,7 @@ export const CHECKS = [
     command: ['npm', 'run', 'gwosc:provenance'],
     tier: 'provenance',
     ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
     why: 'needs the GWOSC strain cached; see --provenance',
     group: 'science',
   },
@@ -748,6 +759,7 @@ export const CHECKS = [
     command: ['npm', 'run', 'spectra:provenance'],
     tier: 'provenance',
     ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
     why: 'needs the SDSS CSVs cached; see --provenance',
     group: 'science',
   },
@@ -758,6 +770,7 @@ export const CHECKS = [
     command: ['npm', 'run', 'ephemeris:provenance'],
     tier: 'provenance',
     ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
     why: 'needs the Horizons answers cached; see --provenance',
     group: 'science',
   },
@@ -768,6 +781,7 @@ export const CHECKS = [
     command: ['npm', 'run', 'packs:provenance'],
     tier: 'provenance',
     ci: 'provenance',
+    ciCondition: EVEN_AFTER_A_FAILURE,
     why: 'needs the raw products cached; see --provenance',
     group: 'science',
   },
@@ -827,6 +841,7 @@ export const CI_SETUP_STEPS = [
   'Fetch any source not cached (GWOSC)',
   'Fetch any source not cached (packs)',
   'Fetch any source not cached (ephemeris)',
+  'Put back what the fetch rewrote',
   'Nothing committed was rewritten by the fetch',
   'Record the timings',
   'Offer them if they changed',
