@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-UFvwQtoB4BYCwISX9k+Dflq/BGyi3hKGCLORsw9kcb8='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mission lab | Gravitas</title>
@@ -61,8 +61,8 @@
         max-width: 100%;
         font: inherit;
         color: inherit;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: var(--surface-2);
+        border: 1px solid var(--border-strong);
         border-radius: 6px;
         padding: 0.35rem 0.45rem;
       }
@@ -80,7 +80,7 @@
       }
       .ml-table caption {
         text-align: left;
-        color: #b7bfcf;
+        color: var(--text-secondary);
         padding-bottom: 0.25rem;
       }
       .ml-table th,
@@ -88,7 +88,7 @@
         text-align: left;
         vertical-align: top;
         padding: 0.3rem 0.4rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid var(--border);
         overflow-wrap: anywhere;
       }
       .ml-scroll {
@@ -105,17 +105,17 @@
       .ml-plot {
         width: 100%;
         height: auto;
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        border: 1px solid var(--border);
         border-radius: 6px;
       }
       .ml-plots figcaption {
         font-size: 0.85rem;
-        color: #b7bfcf;
+        color: var(--text-secondary);
       }
       .ml-note {
         border-left: 3px solid var(--accent);
         padding: 0.25rem 0.75rem;
-        color: #d7dce6;
+        color: var(--text-primary);
       }
       .ml-window {
         display: grid;
@@ -127,7 +127,7 @@
         width: 100%;
         height: auto;
         aspect-ratio: 1 / 1;
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        border: 1px solid var(--border);
         border-radius: 6px;
         background: #0b0d17;
       }
@@ -136,7 +136,7 @@
         flex-wrap: wrap;
         gap: 0.25rem 1rem;
         font-size: 0.85rem;
-        color: #b7bfcf;
+        color: var(--text-secondary);
       }
       .ml-swatch {
         display: inline-block;
@@ -144,7 +144,7 @@
         height: 0.9rem;
         vertical-align: -0.1rem;
         margin-right: 0.3rem;
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid var(--border-strong);
       }
       .ml-refused {
         background: #3a3f52;
@@ -167,13 +167,13 @@
         }
       }
       .ml-guide {
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        border: 1px solid var(--border);
         border-radius: 8px;
         padding: 0.75rem 1rem;
       }
       .ml-guide fieldset,
       .ml-wrap fieldset {
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        border: 1px solid var(--border);
         border-radius: 6px;
         margin: 0.5rem 0;
         padding: 0.5rem 0.75rem;
@@ -181,7 +181,7 @@
       }
       .ml-wrap legend {
         padding: 0 0.25rem;
-        color: #d7dce6;
+        color: var(--text-primary);
       }
       .ml-choice {
         display: block;
@@ -193,8 +193,8 @@
         min-height: 6rem;
         font: inherit;
         color: inherit;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: var(--surface-2);
+        border: 1px solid var(--border-strong);
         border-radius: 6px;
       }
       .ml-views {
@@ -209,14 +209,14 @@
         width: 100%;
         height: auto;
         aspect-ratio: 1 / 1;
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        border: 1px solid var(--border);
         border-radius: 6px;
         background: #0b0d17;
       }
       .ml-views figcaption,
       .ml-legend {
         font-size: 0.85rem;
-        color: #b7bfcf;
+        color: var(--text-secondary);
       }
       .ml-legend {
         display: flex;
@@ -229,7 +229,7 @@
         height: 0.9rem;
         vertical-align: -0.1rem;
         margin-right: 0.3rem;
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid var(--border-strong);
       }
       .ml-slider {
         width: 100%;
@@ -239,7 +239,7 @@
         max-width: 32rem;
         height: auto;
         aspect-ratio: 1 / 1;
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        border: 1px solid var(--border);
         border-radius: 6px;
         background: #0b0d17;
       }
@@ -254,15 +254,41 @@
         max-width: 100%;
       }
     </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+</script>
+<!-- /shell:head -->
   </head>
   <body class="doc-page">
-    <main class="ml-wrap" aria-labelledby="ml-title">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/" aria-current="page"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<!-- /shell:header -->
+    <main class="ml-wrap" id="main" aria-labelledby="ml-title">
       <div id="langSwitch" class="ml-bar" role="group" aria-label="Language" data-i18n-aria-label="ml.lang"></div>
       <h1 id="ml-title" data-i18n="ml.title">Mission lab</h1>
       <p data-i18n="ml.intro"></p>
       <p class="ml-note" data-i18n="ml.notFor"></p>
       <p>
-        <a href="/" data-i18n="ml.back">Back to Gravitas</a> ·
         <a href="/mission/" data-i18n="ml.core">The mission-design core</a> ·
         <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/MISSION_LAB.md" data-i18n="ml.docs">How the lab works (MISSION_LAB.md)</a>
       </p>
@@ -426,6 +452,14 @@
         </aside>
       </div>
     </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
     <script type="module" src="/js/missionLabPage.js"></script>
   </body>
 </html>

@@ -13,7 +13,6 @@ export const EN_MISSIONLAB = {
   'ml.notFor':
     'Educational software, not operational mission design or navigation. The planets’ positions are JPL’s, to a few kilometers; everything else is a teaching model, and the list at the end of the page says what it leaves out.',
   'ml.lang': 'Language',
-  'ml.back': 'Back to Gravitas',
   'ml.core': 'The mission-design core',
   'ml.docs': 'How the lab works (MISSION_LAB.md)',
   'ml.compute': 'Compute the mission',

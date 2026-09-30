@@ -7,7 +7,6 @@
 export const ES_SUBMISSIONS = {
   'sub.doc.title': 'Revisión de entregas | Gravitas',
   'sub.title': 'Revisión de entregas',
-  'sub.lang.label': 'Idioma',
   'sub.intro':
     'Suelte aquí los informes de laboratorio que entregaron sus estudiantes y esta página le dirá qué pregunta falló la clase. Lee el propio PDF, la copia de seguridad del progreso en JSON o un código pegado desde la última página de un informe.',
   'sub.privacy':

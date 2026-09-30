@@ -36,10 +36,8 @@ import {
   summaryCsv,
 } from './submission/results.js';
 import {
-  LANGUAGES,
   applyTranslations,
   has,
-  language,
   preferred,
   setLanguage,
   t,
@@ -47,6 +45,7 @@ import {
 import { validateBackup } from './investigations/progressBackup.js';
 import { MANIFEST } from './data/investigations/manifest.js';
 import { decodeEntities } from './lessonMarkup.js';
+import { mountShell } from './shell.js';
 
 const $ = id => document.getElementById(id);
 
@@ -375,35 +374,11 @@ function exportResults(which) {
   }
 }
 
-/** Build the language switch and put every string in the chosen language. */
+/** Put every string in the chosen language. */
 function applyLanguage() {
   document.title = t('sub.doc.title');
   applyTranslations();
-  for (const button of document.querySelectorAll('[data-lang]')) {
-    button.setAttribute(
-      'aria-pressed',
-      String(button.dataset.lang === language())
-    );
-  }
   render();
-}
-
-function wireLanguage() {
-  const host = $('langSwitch');
-  if (!host) return;
-  for (const lang of LANGUAGES) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'ui-button';
-    button.dataset.lang = lang.id;
-    button.lang = lang.id;
-    button.textContent = lang.endonym;
-    button.addEventListener('click', () => {
-      setLanguage(lang.id);
-      applyLanguage();
-    });
-    host.append(button);
-  }
 }
 
 function wire() {
@@ -449,9 +424,14 @@ function wire() {
   );
   $('exportJson')?.addEventListener('click', () => exportResults('json'));
 
-  wireLanguage();
   setLanguage(preferred());
   applyLanguage();
+  mountShell({
+    onLanguage: id => {
+      setLanguage(id);
+      applyLanguage();
+    },
+  });
 }
 
 if (document.readyState === 'loading') {
