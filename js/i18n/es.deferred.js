@@ -698,6 +698,8 @@ export const ES_DEFERRED = {
   'assign.error.unexpectedField':
     'Ese archivo lleva un campo \u201c{field}\u201d, que una tarea nunca tiene. No lo creo esta herramienta y no se ha abierto.',
   'assign.error.notJson': 'Ese archivo no es una tarea.',
+  'assign.error.tooLarge':
+    'Ese enlace contiene más de lo que un enlace puede llevar, así que no se abrió. Pide la tarea como archivo.',
   'assign.error.corrupt':
     'Ese enlace parece incompleto. Algunos clientes de correo parten los enlaces largos en varias lineas.',
   'assign.error.noStepsLeft':
