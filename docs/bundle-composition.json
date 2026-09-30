@@ -1,5 +1,5 @@
 {
- "total": 579186,
+ "total": 579222,
  "modules": [
   {
    "module": "js/ui.js",
@@ -7,7 +7,7 @@
   },
   {
    "module": "js/i18n/en.js",
-   "bytes": 85690
+   "bytes": 85605
   },
   {
    "module": "js/physics.js",
@@ -278,16 +278,16 @@
    "bytes": 850
   },
   {
+   "module": "js/pauseAtEventBridge.js",
+   "bytes": 834
+  },
+  {
    "module": "js/maneuverBridge.js",
    "bytes": 723
   },
   {
    "module": "js/scenarioPanelBridge.js",
    "bytes": 717
-  },
-  {
-   "module": "js/pauseAtEventBridge.js",
-   "bytes": 713
   },
   {
    "module": "js/data/exoplanetSystems.js",

@@ -136,6 +136,37 @@ test('the tool is fetched by the first press, not at start-up', async ({
   await expect(page.locator('#pauseEventContainer')).toBeHidden();
 });
 
+// A fetch that fails is said, and the page carries on without the tool. The
+// browser keeps a failed module import for the life of the document, so a
+// second press says so again rather than pretending to retry.
+test('a tool that cannot be fetched says so, and the page carries on', async ({
+  page,
+  app,
+  errors,
+}) => {
+  await app.boot();
+  await app.waitForFrames(5);
+  await page.route('**/js/pauseAtEventPanel.js', route => route.abort());
+  await app.railControl('togglePauseAtEvent');
+  await page.locator('#togglePauseAtEvent').click();
+  await expect(page.locator('#gravitasToast')).toContainText(
+    'Something went wrong'
+  );
+  await expect(page.locator('#pauseEventContainer')).toBeHidden();
+  await expect(page.locator('#togglePauseAtEvent')).toBeEnabled();
+  await app.waitForFrames(5);
+
+  // What was logged is the failed fetch and the bridge's own report of it.
+  const other = errors.consoleErrors.filter(
+    e =>
+      !/Failed to load resource|net::ERR_FAILED|Pause at event could not be loaded/.test(
+        e
+      )
+  );
+  expect(other).toEqual([]);
+  errors.consoleErrors.length = 0;
+});
+
 // A scenario pack can start with the tool open (js/startingPanels.js clicks the
 // rail button), which is the other way it gets fetched before anyone presses.
 test('a link that starts with the tool open fetches and opens it', async ({

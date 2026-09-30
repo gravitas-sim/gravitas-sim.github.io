@@ -1342,8 +1342,6 @@ export const ES = {
   'view3d.close.label': 'Cerrar la vista del espacio-tiempo',
   'view3d.loadFailed':
     'No se pudo cargar la vista del espacio-tiempo. Comprueba tu conexión.',
-  'pauseEvent.loadFailed':
-    'No se pudo cargar Pausar en un evento. Comprueba tu conexión.',
   'tutorial.welcome': 'Bienvenido a Gravitas',
   'tutorial.place': 'Coloca un objeto arrastrando',
   'tutorial.choose': 'Elige qué estás colocando',

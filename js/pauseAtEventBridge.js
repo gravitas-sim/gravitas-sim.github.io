@@ -65,8 +65,14 @@ export function watchForPauseAtEvent() {
       console.error('Pause at event could not be loaded:', err);
       loading = null;
       btn.addEventListener('click', firstClick);
-      const { toast } = await import('./controls.js');
-      toast(t('pauseEvent.loadFailed'));
+      // From the deferred catalog, not a new start-up string: every page that
+      // loads the base catalog pays for one, and the Composer has no room.
+      const [{ toast }, { ensureDeferredMessages }] = await Promise.all([
+        import('./controls.js'),
+        import('./i18n/deferredMessages.js'),
+      ]);
+      await ensureDeferredMessages().catch(() => {});
+      toast(t('failure.error', { message: err.message }));
     } finally {
       btn.disabled = false;
     }
