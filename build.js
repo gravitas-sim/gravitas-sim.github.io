@@ -662,7 +662,10 @@ async function buildDocPages() {
       entryPoints: ['js/observatoryPage.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing the observatory bundles reads a function's name
+      // (physics.js, which does, is not in it), and the helper that keeps them
+      // was a request of its own and the room the shared shell needed.
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),

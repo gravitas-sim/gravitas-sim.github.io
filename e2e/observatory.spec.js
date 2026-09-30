@@ -352,7 +352,7 @@ test.describe('the observatory', () => {
     expect(await axe(page)).toEqual([]);
     await openFixture(page, 'tess-aperture');
     expect(await axe(page)).toEqual([]);
-    await page.getByRole('button', { name: 'Español' }).click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
     await expect(page.locator('h1')).toHaveText('Observatorio');
     await expect(page.locator('#obsSelected')).toContainText('seleccionadas');

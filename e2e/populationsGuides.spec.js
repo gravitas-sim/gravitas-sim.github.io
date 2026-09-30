@@ -229,7 +229,7 @@ test.describe('the stellar populations guides', () => {
           .analyze()
       ).violations.map(v => `${v.id}: ${v.nodes.length}`);
     expect(await axe()).toEqual([]);
-    await page.locator('#langSwitch button[lang="es"]').click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(title(page)).toHaveText('Paso 6 de 11: Las cuatro juntas');
     await expect(page.locator('#gdShow')).toContainText(
       'el espectro de la estrella A'

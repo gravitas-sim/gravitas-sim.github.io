@@ -234,7 +234,15 @@ test.describe('the catalog', () => {
         v => `${v.id}: ${v.nodes.map(n => n.target).join(' ')}`
       );
     expect(await axe()).toEqual([]);
-    await page.getByRole('button', { name: 'Español' }).click();
+    // The page carries the shell without its module (tests/shell.test.js), so
+    // it has no switch of its own: it opens in the language a reader chose.
+    await page.evaluate(() => localStorage.setItem('gravitas_locale', 'es'));
+    await openCatalog(page);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+    await status(page, COURSE, 'installed');
+    await entry(page, COURSE)
+      .getByRole('button', { name: 'Mostrar el curso' })
+      .click();
     await expect(page.locator('h1')).toHaveText('Catálogo');
     await expect(entry(page, SU_DRA)).toContainText('Paquete de datos');
     await expect(page.locator('#catCourse')).toContainText(

@@ -7,12 +7,9 @@
 export const ES_CATALOG = {
   'cat.doc.title': 'Catálogo | Gravitas',
   'cat.main.label': 'Catálogo',
-  'cat.lang.label': 'Idioma',
   'cat.title': 'Catálogo',
   'cat.intro':
     'Datos, cursos e instrumentos para Gravitas. Todo lo que aparece aquí se revisó antes de incluirse, y nada ejecuta código. Un paquete de datos o un curso que instales se guarda en este dispositivo y funciona sin conexión.',
-  'cat.back': 'Volver a Gravitas',
-  'cat.observatory': 'Observatorio',
   'cat.loading': 'Cargando el catálogo…',
   'cat.loadFailed': 'El catálogo no se cargó: {why}',
   'cat.retry': 'Intentar de nuevo',
