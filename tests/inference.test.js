@@ -501,9 +501,8 @@ describe('the data it is given', () => {
     expect(dataFrom(series('m', ['a', 'a', 'a'])).perDay).toBe(null);
   });
 
-  test("its copy of the time units is the observatory's", async () => {
-    const { UNITS, conversionFactor } =
-      await import('../js/observatory/units.js');
+  test("its copy of the time units is the registry's", async () => {
+    const { UNITS, conversionFactor } = await import('../js/units/registry.js');
     const registry = Object.keys(UNITS).filter(id => UNITS[id].dim === 'time');
     expect(Object.keys(TIME_UNIT_SECONDS).sort()).toEqual(registry.sort());
     for (const id of registry) {

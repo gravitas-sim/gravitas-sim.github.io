@@ -23,13 +23,13 @@ export const G_SI = 6.6743e-11;
 /** Speed of light in vacuum, m/s. Exact by definition. */
 export const C_SI = 299792458;
 
-/** Solar mass, kg. IAU 2015 nominal. */
+/** Solar mass, kg. The model's; IAU nominal is 1.98841e30. */
 export const SOLAR_MASS_KG = 1.989e30;
 
 /** Solar radius, m. IAU 2015 nominal. */
 export const SOLAR_RADIUS_M = 6.957e8;
 
-/** Astronomical unit, m. Exact by definition since IAU 2012. */
+/** Astronomical unit, m. The model's; exactly 149597870700. */
 export const AU_METERS = 1.496e11;
 
 /** Parsec, m. */

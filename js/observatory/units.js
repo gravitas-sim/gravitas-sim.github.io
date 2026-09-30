@@ -23,138 +23,20 @@
 // JD in UTC at the observatory to BJD in TDB at the solar-system barycenter -
 // needs the target's position and the observer's, and is refused.
 //
-// Pure: no DOM, no imports. Browser and Node alike.
+// Pure: no DOM. Browser and Node alike.
 // =============================================================================
 
-/**
- * Every unit, by its canonical id. `factor` is the size of one of these in the
- * dimension's base unit; `symbol` is how the page writes it.
- */
-export const UNITS = Object.freeze({
-  '': { dim: 'ratio', factor: 1, symbol: '' },
-  ppm: { dim: 'ratio', factor: 1e-6, symbol: 'ppm' },
-  ppt: { dim: 'ratio', factor: 1e-3, symbol: 'ppt' },
-  '%': { dim: 'ratio', factor: 1e-2, symbol: '%' },
+import {
+  UNITS,
+  cannotConvert,
+  conversionFactor,
+  unitIdOf,
+} from '../units/registry.js';
 
-  s: { dim: 'time', factor: 1, symbol: 's' },
-  min: { dim: 'time', factor: 60, symbol: 'min' },
-  h: { dim: 'time', factor: 3600, symbol: 'h' },
-  d: { dim: 'time', factor: 86400, symbol: 'd' },
-
-  Angstrom: { dim: 'length', factor: 1e-10, symbol: 'Å' },
-  nm: { dim: 'length', factor: 1e-9, symbol: 'nm' },
-  um: { dim: 'length', factor: 1e-6, symbol: 'µm' },
-  m: { dim: 'length', factor: 1, symbol: 'm' },
-  km: { dim: 'length', factor: 1e3, symbol: 'km' },
-  AU: { dim: 'length', factor: 1.495978707e11, symbol: 'AU' },
-  pc: { dim: 'length', factor: 3.085677581491367e16, symbol: 'pc' },
-  Mpc: { dim: 'length', factor: 3.085677581491367e22, symbol: 'Mpc' },
-
-  Hz: { dim: 'frequency', factor: 1, symbol: 'Hz' },
-  kHz: { dim: 'frequency', factor: 1e3, symbol: 'kHz' },
-  MHz: { dim: 'frequency', factor: 1e6, symbol: 'MHz' },
-  GHz: { dim: 'frequency', factor: 1e9, symbol: 'GHz' },
-
-  // A flux per unit wavelength, in erg s^-1 cm^-2 Angstrom^-1. One W m^-2
-  // nm^-1 is 1e7 erg s^-1 over 1e4 cm^2 over 10 Angstrom, which is 100.
-  'erg/s/cm2/Angstrom': {
-    dim: 'flux-per-wavelength',
-    factor: 1,
-    symbol: 'erg s⁻¹ cm⁻² Å⁻¹',
-  },
-  'W/m2/nm': { dim: 'flux-per-wavelength', factor: 100, symbol: 'W m⁻² nm⁻¹' },
-  // A flux per unit frequency. Not convertible to the one above by a factor.
-  Jy: { dim: 'flux-per-frequency', factor: 1, symbol: 'Jy' },
-  mJy: { dim: 'flux-per-frequency', factor: 1e-3, symbol: 'mJy' },
-  mag: { dim: 'magnitude', factor: null, symbol: 'mag' },
-  // A logarithm, as [Fe/H], log g and log age are written: not convertible.
-  dex: { dim: 'logarithm', factor: null, symbol: 'dex' },
-
-  kg: { dim: 'mass', factor: 1, symbol: 'kg' },
-  // The IAU 2015 nominal solar mass parameter over CODATA 2018 G.
-  Msun: { dim: 'mass', factor: 1.988409870698051e30, symbol: 'M☉' },
-
-  rad: { dim: 'angle', factor: 1, symbol: 'rad' },
-  deg: { dim: 'angle', factor: Math.PI / 180, symbol: '°' },
-  arcmin: { dim: 'angle', factor: Math.PI / 10800, symbol: '′' },
-  arcsec: { dim: 'angle', factor: Math.PI / 648000, symbol: '″' },
-
-  'm/s': { dim: 'velocity', factor: 1, symbol: 'm/s' },
-  'km/s': { dim: 'velocity', factor: 1e3, symbol: 'km/s' },
-
-  K: { dim: 'temperature', factor: 1, symbol: 'K' },
-  'electron/s': { dim: 'count-rate', factor: 1, symbol: 'e⁻/s' },
-  count: { dim: 'count', factor: 1, symbol: 'counts' },
-  pix: { dim: 'pixel', factor: 1, symbol: 'px' },
-});
-
-/**
- * Spellings in the data Gravitas already ships, and the common ones in a
- * spreadsheet a student made, mapped to a canonical id. An exact match on the
- * whole string, after trimming and ignoring case: no pattern matching that
- * could turn "m" in "mag" into a meter.
- */
-const ALIASES = new Map(
-  Object.entries({
-    dimensionless: '',
-    ratio: '',
-    relative: '',
-    fraction: '',
-    'parts per million': 'ppm',
-    percent: '%',
-    sec: 's',
-    second: 's',
-    seconds: 's',
-    minute: 'min',
-    minutes: 'min',
-    hr: 'h',
-    hour: 'h',
-    hours: 'h',
-    day: 'd',
-    days: 'd',
-    å: 'Angstrom',
-    angstrom: 'Angstrom',
-    angstroms: 'Angstrom',
-    'angstrom, vacuum': 'Angstrom',
-    'angstrom, air': 'Angstrom',
-    nanometre: 'nm',
-    nanometer: 'nm',
-    micron: 'um',
-    microns: 'um',
-    µm: 'um',
-    'erg / s / cm^2 / angstrom': 'erg/s/cm2/Angstrom',
-    'erg/s/cm^2/angstrom': 'erg/s/cm2/Angstrom',
-    'erg s-1 cm-2 angstrom-1': 'erg/s/cm2/Angstrom',
-    'w / m^2 / nm': 'W/m2/nm',
-    jansky: 'Jy',
-    mags: 'mag',
-    magnitude: 'mag',
-    m_sun: 'Msun',
-    msun: 'Msun',
-    'solar mass': 'Msun',
-    'solar masses': 'Msun',
-    degree: 'deg',
-    degrees: 'deg',
-    'km s-1': 'km/s',
-    'm s-1': 'm/s',
-    kelvin: 'K',
-    'e-/s': 'electron/s',
-    'electrons/s': 'electron/s',
-    counts: 'count',
-    pixel: 'pix',
-    pixels: 'pix',
-  })
-);
-
-/**
- * Case is ignored only for ids of three letters or more: `MPC` is a
- * megaparsec, but `M` is not a meter and `S` is not a second.
- */
-const BY_LOWER = new Map(
-  Object.keys(UNITS)
-    .filter(id => id.length >= 3)
-    .map(id => [id.toLowerCase(), id])
-);
+// The units themselves are js/units/registry.js, the one registry of
+// Gravitas; this module reads them the way a data column is written and adds
+// the time systems a column also names.
+export { UNITS, cannotConvert, conversionFactor };
 
 /** The medium a wavelength is measured in, where the spelling says. */
 const MEDIUM = /,\s*(vacuum|air)\s*$/i;
@@ -181,12 +63,7 @@ export function parseUnit(text) {
     scale = Number(scaled[1].replace(/^10\^/, '1e'));
     s = scaled[2];
   }
-  const key = s.toLowerCase();
-  // Aliases are matched without case; an alias that needs its case, like the
-  // symbol Å, is written in the table as the lower-case form it folds to.
-  const id = Object.hasOwn(UNITS, s)
-    ? s
-    : (ALIASES.get(key) ?? BY_LOWER.get(key));
+  const id = unitIdOf(s);
   if (id === undefined) {
     return {
       ok: false,
@@ -220,46 +97,6 @@ export function formatUnit(unit, notStated = 'unit not stated') {
 export function unitId(unit) {
   if (!unit) return null;
   return unit.scale === 1 ? unit.id : `${unit.scale} ${unit.id}`;
-}
-
-/**
- * Why one unit cannot become another, or null when it can.
- * @returns {string|null}
- */
-export function cannotConvert(from, to) {
-  if (!from)
-    return 'its unit is not stated, so there is nothing to convert from';
-  if (!to) return 'there is no unit to convert to';
-  const a = UNITS[from.id];
-  const b = UNITS[to.id];
-  if (a.dim === 'magnitude' || b.dim === 'magnitude') {
-    return from.id === to.id && from.scale === to.scale
-      ? null
-      : 'magnitudes are logarithmic and need a zero point';
-  }
-  if (a.dim !== b.dim) {
-    if (
-      new Set([a.dim, b.dim]).size === 2 &&
-      [a.dim, b.dim].every(d => d.startsWith('flux-per-'))
-    ) {
-      return 'a flux per wavelength and a flux per frequency differ by the wavelength of each sample, not by a factor';
-    }
-    return `${a.dim} cannot become ${b.dim}`;
-  }
-  return null;
-}
-
-/**
- * The factor that turns a value in `from` into one in `to`.
- * @throws {Error} With the reason, when they do not convert
- */
-export function conversionFactor(from, to) {
-  const why = cannotConvert(from, to);
-  if (why) throw new Error(why);
-  if (UNITS[from.id].factor === null) return 1;
-  return (
-    (from.scale * UNITS[from.id].factor) / (to.scale * UNITS[to.id].factor)
-  );
 }
 
 // --- Time ------------------------------------------------------------------------
