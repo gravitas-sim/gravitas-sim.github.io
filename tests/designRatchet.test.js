@@ -47,7 +47,7 @@ describe('what is counted', () => {
   test('an emoji, not a symbol of the interface', () => {
     expect(countEmoji("'toast.saved': '💾 Saved'")).toBe(1);
     expect(
-      countEmoji("'unit.sun': 'M☉', 'arrow': '→', 'x': '×', 'j': '♃'")
+      countEmoji("'unit.sun': 'M☉', 'arrow': '↗', 'x': '×', 'j': '♃', 'c': '©'")
     ).toBe(0);
     // Pictographs used as icons are emoji whatever their presentation.
     expect(countEmoji("'warn': '⚠ Careful', 'play': '▶'")).toBe(2);
