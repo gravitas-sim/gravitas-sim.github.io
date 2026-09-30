@@ -67,8 +67,10 @@ export function watchForPauseAtEvent() {
       btn.addEventListener('click', firstClick);
       // From the deferred catalog, not a new start-up string: every page that
       // loads the base catalog pays for one, and the Composer has no room.
+      // notify.js, not controls.js, which imports this module: the check
+      // of the module graph refuses the cycle (tools/check-architecture.mjs).
       const [{ toast }, { ensureDeferredMessages }] = await Promise.all([
-        import('./controls.js'),
+        import('./notify.js'),
         import('./i18n/deferredMessages.js'),
       ]);
       await ensureDeferredMessages().catch(() => {});
