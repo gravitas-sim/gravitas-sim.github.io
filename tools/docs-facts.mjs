@@ -226,7 +226,7 @@ const ATTRIBUTE_FACTS = [
   {
     file: 'paper.md',
     key: 'axeRuns',
-    pattern: /(two themes — )(\d+)( runs)/,
+    pattern: /(themes and the rest in two — )(\d+)( runs)/,
   },
   {
     file: 'validation/index.html',
@@ -345,7 +345,14 @@ function activityDocumentCount(activities) {
  */
 function axeMatrix() {
   const path = join(REPO, 'e2e', 'accessibility.spec.js');
-  const empty = { surfaces: 0, locales: 0, themes: 0, runs: 0 };
+  const empty = {
+    surfaces: 0,
+    locales: 0,
+    themes: 0,
+    shellSurfaces: 0,
+    allThemes: 0,
+    runs: 0,
+  };
   if (!existsSync(path)) return empty;
   const text = readFileSync(path, 'utf8');
   /** Entries in a top-level `const NAME = [ ... ];` array of objects. */
@@ -361,7 +368,15 @@ function axeMatrix() {
   const surfaces = lengthOf('SURFACES', 'name');
   const locales = lengthOf('LOCALES', 'id');
   const themes = lengthOf('THEMES', 'id');
-  return { surfaces, locales, themes, runs: surfaces * locales * themes };
+  // The standalone pages carry the shared shell and its theme switch, so
+  // they run in every theme: THEMES plus the ones ALL_THEMES adds to it.
+  const start = text.indexOf('const SURFACES = [');
+  const body = text.slice(start, text.indexOf('\n];', start));
+  const shellSurfaces = (body.match(/^\s+standalone: true,/gm) || []).length;
+  const allThemes = themes + lengthOf('ALL_THEMES', 'id');
+  const runs =
+    ((surfaces - shellSurfaces) * themes + shellSurfaces * allThemes) * locales;
+  return { surfaces, locales, themes, shellSurfaces, allThemes, runs };
 }
 
 /**
@@ -487,6 +502,8 @@ async function cheapFacts() {
     activities: ACTIVITIES.length,
     axeSurfaces: axe.surfaces,
     axeThemes: axe.themes,
+    axeShellSurfaces: axe.shellSurfaces,
+    axeAllThemes: axe.allThemes,
     axeRuns: axe.runs,
     // How many MIST evolutionary tracks are bundled, counted from the grid
     // itself. /model/ said "Seven tracks are bundled" directly above a list of

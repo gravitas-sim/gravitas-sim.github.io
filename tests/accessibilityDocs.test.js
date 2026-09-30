@@ -60,9 +60,20 @@ describe('ACCESSIBILITY.md against the axe matrix', () => {
 
   test('the marked counts agree with the array', () => {
     const themes = fact(doc, 'axeThemes');
+    const allThemes = fact(doc, 'axeAllThemes');
     const locales = fact(doc, 'locales');
+    // The standalone pages carry the shared shell, and run in every theme.
+    const spec = read('e2e/accessibility.spec.js');
+    const start = spec.indexOf('const SURFACES = [');
+    const body = spec.slice(start, spec.indexOf('\n];', start));
+    const shell = (body.match(/^ {4}standalone: true,/gm) || []).length;
+    expect(shell).toBeGreaterThan(0);
+    expect(allThemes).toBeGreaterThan(themes);
     expect(fact(doc, 'axeSurfaces')).toBe(names.length);
-    expect(fact(doc, 'axeRuns')).toBe(names.length * locales * themes);
+    expect(fact(doc, 'axeShellSurfaces')).toBe(shell);
+    expect(fact(doc, 'axeRuns')).toBe(
+      ((names.length - shell) * themes + shell * allThemes) * locales
+    );
   });
 
   // The count beside the command is the one that went stale before, because a
