@@ -364,10 +364,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->210<!--/fact--> KB                 | 1                                             |
+| CSS                    | <!--fact:buildCss-->209<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->581<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
 | JavaScript on demand   | <!--fact:buildDeferredJs-->4169<!--/fact--> KB         | <!--fact:buildDeferredChunks-->195<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->791<!--/fact--> KB** |                                               |
+| **Initial download**   | **<!--fact:buildInitialDownload-->790<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
