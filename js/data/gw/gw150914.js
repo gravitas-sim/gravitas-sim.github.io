@@ -1,127 +1,105 @@
 // =============================================================================
 // GW150914, as published
 // -----------------------------------------------------------------------------
-// GENERATED FILE. Do not edit. Written by tools/build-gw-data.mjs; run
+// GENERATED FILE. Do not edit. Written by tools/data-packs/gw150914.mjs; run
 // `npm run gw:data` to regenerate and `npm run gw:check` to verify.
 //
 // This is a measurement. Everything else this application draws under the word
 // "gravitational wave" is a model or an illustration, and the interface keeps
-// the two apart. The provenance block below travels with every capture made
-// from these traces.
+// the two apart. PACK - the runtime fields of the data pack's manifest,
+// data-packs/gw150914-figure-data.json, which holds the full record - travels
+// with every capture made from these traces.
 // =============================================================================
 
 /* eslint-disable */
 
-/** Where every number here came from, and what was done to it. */
-export const PROVENANCE = {
-  event: 'GW150914',
-  detectedAt: '2015-09-14T09:50:45Z',
-  gpsEpoch: 1126259462,
-  timeAxis: 'seconds after GPS 1126259462',
-  paper: 'Abbott et al. (2016), Phys. Rev. Lett. 116, 061102',
-  doi: '10.1103/PhysRevLett.116.061102',
-  arxiv: 'arXiv:1602.03837',
-  archive: 'Gravitational Wave Open Science Center',
-  eventPage: 'https://gwosc.org/events/GW150914/',
-  baseUrl: 'https://gwosc.org/GW150914data/P150914/',
-  license: 'CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
-  attribution:
-    'This research has made use of data or software obtained from the Gravitational Wave Open Science Center (gwosc.org), a service of the LIGO Scientific Collaboration, the Virgo Collaboration, and KAGRA.',
-  sourceSampleRate: 16384,
-  processing: [
-    'Parsed the published two-column text as-is.',
-    'Decimated 16384 Hz to the rate recorded on each trace. The six strain traces kept every nth sample with no anti-alias filter, which is safe because the collaboration band-passed them to 35-350 Hz before publication; the measured power above each new Nyquist frequency is recorded on the trace. The two figure-2 curves were block-averaged instead, which low-pass filters and decimates in one step.',
-    'Quantized to 16-bit integers with a per-trace scale. The largest error this introduced is recorded per trace.',
-  ],
-  notApplied: [
-    'No time shift between detectors.',
-    'No sign inversion.',
-    'No additional filtering, whitening, normalization or alignment.',
-  ],
-  priorProcessingByPublisher: [
-    'Band-pass 35-350 Hz.',
-    'Band-reject filters at the instrumental line frequencies.',
-  ],
-  findings: {
-    observedHvsL: {
-      correlation: -0.757,
-      lagMs: -7.324,
-      inverted: true,
-    },
-    reconstructionHvsL: {
-      correlation: -0.9768,
-      lagMs: -7.568,
-      inverted: true,
-    },
-    observedVsReconstructionH1: {
-      correlation: 0.8756,
-      lagMs: 0,
-      inverted: false,
-    },
-    observedVsReconstructionL1: {
-      correlation: 0.8327,
-      lagMs: 0,
-      inverted: false,
-    },
+/** What the data is and who to credit, as an interface shows it. */
+export const PACK = {
+  id: 'gw150914-figure-data',
+  version: '1.0.0',
+  title: 'GW150914: the published figure data',
+  object: {
+    name: 'GW150914',
+    identifiers: ['GW150914'],
+    detectedAt: '2015-09-14T09:50:45Z',
+    gpsEpoch: 1126259462,
   },
-  inputs: [
+  facility: {
+    observatory: 'LIGO Hanford and LIGO Livingston',
+    instrument: 'Advanced LIGO, both detectors',
+    pipeline:
+      'figure data of Abbott et al. 2016, band-passed 35-350 Hz and notched by the collaborations before publication',
+  },
+  dataType: 'strain',
+  origin: 'observed',
+  credit: 'Abbott et al. (2016), Phys. Rev. Lett. 116, 061102',
+  license: {
+    status: 'cc-by-4.0',
+    statement: 'CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
+  },
+  retrieved: '2026-10-01',
+  time: {
+    scale: 'GPS',
+    reference: 'seconds after GPS 1126259462',
+    unit: 's',
+  },
+  columns: [
     {
-      file: 'fig1-observed-H.txt',
-      url: 'https://gwosc.org/GW150914data/P150914/fig1-observed-H.txt',
-      bytes: 173833,
-      sha256:
-        '3ce5475160fd6b39c41205c2055bfaf4e507981721a2eb4c5df0c99e2fa48d94',
+      name: 'time',
+      unit: 's',
+      description: 't0 + i / sampleRate, per trace',
     },
     {
-      file: 'fig1-observed-L.txt',
-      url: 'https://gwosc.org/GW150914data/P150914/fig1-observed-L.txt',
-      bytes: 173974,
-      sha256:
-        'dc41302512f3e28336680030a255cc1f4fb3ec43ea5267cc044c9015051ecd85',
-    },
-    {
-      file: 'fig1-waveform-H.txt',
-      url: 'https://gwosc.org/GW150914data/P150914/fig1-waveform-H.txt',
-      bytes: 173827,
-      sha256:
-        '720a2ae7d4d0cfbe3af29ed42d1450ec8f312e4ec15e7fd1df80d5a3ca134c97',
-    },
-    {
-      file: 'fig1-waveform-L.txt',
-      url: 'https://gwosc.org/GW150914data/P150914/fig1-waveform-L.txt',
-      bytes: 173766,
-      sha256:
-        '35615f652c9dda90a947ccf2c6e97835dd784b563ded5ebe4d6810de09db6e0c',
-    },
-    {
-      file: 'fig1-residual-H.txt',
-      url: 'https://gwosc.org/GW150914data/P150914/fig1-residual-H.txt',
-      bytes: 173808,
-      sha256:
-        'ae379352f21dbdde9c3b1e582fb3614627df169cd6f28ea4508f5b6611c4b50c',
-    },
-    {
-      file: 'fig1-residual-L.txt',
-      url: 'https://gwosc.org/GW150914data/P150914/fig1-residual-L.txt',
-      bytes: 173942,
-      sha256:
-        '59ea4081a678f7c376399d320e1d896afca9797b7a71f8b656452f2fa78e8234',
-    },
-    {
-      file: 'fig2-keplerian-separation-H.txt',
-      url: 'https://gwosc.org/GW150914data/P150914/fig2-keplerian-separation-H.txt',
-      bytes: 141558,
-      sha256:
-        'c68e4dfe0108d1d2a78c4dd71b9938f8c3ba979ed89807441af2830cc8664358',
-    },
-    {
-      file: 'fig2-postNewtonian-velocity-H.txt',
-      url: 'https://gwosc.org/GW150914data/P150914/fig2-postNewtonian-velocity-H.txt',
-      bytes: 141537,
-      sha256:
-        '5580b8ee8aaaf2ef43f2bdc53addad33cd5252b37617b81500a60e45f1e9f0e6',
+      name: 'value',
+      unit: '',
+      description:
+        'per trace: strain (valueScale x unitScale), or the Keplerian separation in Schwarzschild radii, or v/c - all three dimensionless',
     },
   ],
+  masks: [],
+  reductions: [
+    'Decimated from 16384 Hz: the six strain traces keep every fourth sample, safe because the collaborations band-passed them first; the two figure-2 curves are averages of each block of sixteen.',
+    'Quantised to 16-bit integers with a per-trace scale; the largest error is recorded on each trace.',
+    'Nothing is shifted, inverted, filtered, normalised or aligned here.',
+  ],
+  citations: [
+    {
+      text: 'Abbott et al. (LIGO Scientific and Virgo Collaborations) 2016, Phys. Rev. Lett. 116, 061102 (GW150914)',
+      doi: '10.1103/PhysRevLett.116.061102',
+    },
+    {
+      text: 'Abbott et al. 2021, SoftwareX 13, 100658 (O1 and O2 open data)',
+      doi: '10.1016/j.softx.2021.100658',
+    },
+  ],
+};
+
+/**
+ * Measured from the traces by the build, and never applied to them: the time
+ * shift and sign between the detectors, and between each trace and its
+ * reconstruction, by cross-correlation.
+ */
+export const FINDINGS = {
+  observedHvsL: {
+    correlation: -0.757,
+    lagMs: -7.324,
+    inverted: true,
+  },
+  reconstructionHvsL: {
+    correlation: -0.9768,
+    lagMs: -7.568,
+    inverted: true,
+  },
+  observedVsReconstructionH1: {
+    correlation: 0.8756,
+    lagMs: 0,
+    inverted: false,
+  },
+  observedVsReconstructionL1: {
+    correlation: 0.8327,
+    lagMs: 0,
+    inverted: false,
+  },
 };
 
 /** The traces themselves, base64 little-endian int16. */

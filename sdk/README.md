@@ -162,7 +162,8 @@ A data pack is two files and a script:
 The record is checked by the same validator as Gravitas's own packs. It
 refuses the following:
 
-- synthetic data;
+- synthetic data, unless the record says what made it (`model.name`,
+  `model.parameters` and `model.scatter`, since 1.6.0);
 - restricted data;
 - a status that is not a licence, without a stated `basis`;
 - an unpinned raw input;
@@ -280,7 +281,7 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.4.0` |
+| `SDK_VERSION` | this SDK, `1.6.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with its version |
 | `EXTENSION_TYPES`, `LOCALES` | the four types and their kinds; the interface languages (`en`, `es`) |
@@ -335,6 +336,26 @@ anything else.
 | 1.3.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the optional runtime field `crowding` | 1 | - | 1 |
 | 1.4.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `catalog` data type | 1 | - | 1 |
 | 1.5.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with the `catalog` data type | 1 | 1 | 1 |
+| 1.6.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with synthetic packs that record their model, and the optional runtime fields `model` and `citations` | 1 | 1 | 1 |
+
+SDK 1.6.0 adds, and removes nothing, what bringing Gravitas's older datasets
+under the data-pack format needed (DATA_PACKS.md, Roadmap II Prompt 62):
+
+- **Synthetic packs** (`origin: "synthetic"`) are accepted when the record
+  says what made the numbers - `model.name`, `model.parameters` and
+  `model.scatter` - and carry `model` in their runtime copy, so an interface
+  says what they are wherever it shows them. Without that record they are
+  refused, as every synthetic pack was before.
+- **The optional runtime field `model`**: what made the numbers when a model
+  did, for a model grid as for a synthetic curve.
+- **The optional runtime field `citations`**: the record's
+  `source.citations`, copied, so an interface credits a pack from the pack. A
+  runtime copy without it is neither refused nor warned about.
+- **`installedDataPack()` reads a pack whose module keeps its own shape**
+  (the SDSS spectra, the GWOSC events, GW150914 and the MIST tracks, which
+  carry `PACK` beside the data their instruments read): it returns the record
+  and the module, with `observation: null`. It refused the SDSS spectra until
+  their record was a manifest.
 
 SDK 1.5.0 adds, and removes nothing, the `scenario-pack` type: the
 `gravitas.scenario-pack/1` format (`sdk/schemas/scenario-pack-1.schema.json`),

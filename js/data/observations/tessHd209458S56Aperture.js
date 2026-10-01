@@ -110,6 +110,24 @@ export const PACK = {
       row: 352,
     },
   },
+  citations: [
+    {
+      text: 'TESS Light Curves - All Sectors, STScI/MAST',
+      doi: '10.17909/t9-nmc8-f686',
+    },
+    {
+      text: 'Ricker et al. 2015, JATIS 1, 014003 (TESS)',
+      doi: '10.1117/1.JATIS.1.1.014003',
+    },
+    {
+      text: 'Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC)',
+      doi: '10.1117/12.2233418',
+    },
+    {
+      text: 'TESS Science Data Products Description Document, NASA/TM-2018-220036 (EXP-TESS-ARC-ICD-0014 Rev D, 31 July 2018), table 15: aperture mask image bits',
+      url: 'https://ntrs.nasa.gov/citations/20180007935',
+    },
+  ],
 };
 
 /** The series, encoded as SERIES.encoding says; see js/observation.js. */
