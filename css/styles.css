@@ -568,15 +568,15 @@
     max-width: 1040px;
     height: 90vh;
     max-height: 850px;
-    background: rgba(13, 13, 26, 0.85);
+    /* The theme's own panel surface. It was a fixed dark navy, so in Daylight
+       the panel stayed dark while everything the theme coloured inside it -
+       the course level, the section headings' text - turned dark too. */
+    background: color-mix(in srgb, var(--surface-1) 92%, transparent);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(0, 170, 255, 0.2);
+    border: 1px solid var(--accent-line);
     border-radius: 20px;
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-lg);
     display: flex;
     flex-direction: column;
     z-index: 1000;
@@ -659,7 +659,7 @@
     flex-grow: 1;
     overflow-y: auto;
     padding: 25px 35px;
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--surface-inset);
   }
 
   .settings-grid {
@@ -691,8 +691,7 @@
     justify-self: end;
     text-align: right;
     font-size: 15px;
-    color: rgba(224, 224, 224, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
   }
 
   .setting-control {
@@ -791,12 +790,8 @@
     display: flex;
     justify-content: center;
     gap: 15px;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 170, 255, 0.05),
-      rgba(0, 170, 255, 0.1)
-    );
-    border-top: 1px solid rgba(0, 170, 255, 0.2);
+    background: var(--accent-soft);
+    border-top: 1px solid var(--accent-line);
   }
 
   .footer-button {
@@ -967,7 +962,7 @@
   .preset-info {
     margin: 18px 0 10px;
     padding: 12px 16px;
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--surface-inset);
     border: 1px solid var(--separator-color);
     font-size: 14px;
     line-height: 1.4;
