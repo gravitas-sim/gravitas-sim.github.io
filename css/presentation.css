@@ -249,12 +249,6 @@
     background: color-mix(in srgb, var(--surface-1) 92%, transparent);
     border: 1px solid var(--border-subtle);
     box-shadow: var(--shadow);
-    /* The readout's color is a hard-coded light gray with a dark text-shadow,
-       which is right over its usual dark translucent panel and invisible once
-       that panel is the light surface Daylight gives it. Both have to move
-       together, so the token comes with the background. */
-    color: var(--text-primary);
-    text-shadow: none;
   }
 
   /* Every descendant, deliberately. The readout's spans carry four different
@@ -775,11 +769,6 @@
 
   @media (max-width: 620px) {
     .attribution {
-      left: var(--space-2);
-      right: var(--space-2);
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      white-space: normal;
       row-gap: 2px;
     }
 
