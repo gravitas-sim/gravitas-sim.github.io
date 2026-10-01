@@ -486,18 +486,30 @@ function trapFocus(e) {
  *
  * @param {boolean} on - True to hide, false to restore
  */
+/** The elements setBackgroundInert(true) changed, to restore and no others. */
+let madeInert = [];
+
 function setBackgroundInert(on) {
   if (!els.screen) return;
-  for (const node of document.body.children) {
-    // The layer, and the shell's bar above it, which stays usable.
-    if (node === els.screen || node.classList.contains('gs-shell')) continue;
-    if (on) {
-      node.setAttribute('inert', '');
-      node.setAttribute('aria-hidden', 'true');
-    } else {
+  if (!on) {
+    // Only what this layer changed. It used to clear inert from every child of
+    // <body>, which un-hid closed dialogs that were inert before Home opened.
+    for (const node of madeInert) {
       node.removeAttribute('inert');
       node.removeAttribute('aria-hidden');
     }
+    madeInert = [];
+    return;
+  }
+  for (const node of document.body.children) {
+    // The layer, and the shell's bar above it, which stays usable.
+    if (node === els.screen || node.classList.contains('gs-shell')) continue;
+    // A live region stays audible: what is announced over Home is still said.
+    if (node.matches('[aria-live], [role="status"], [role="alert"]')) continue;
+    if (node.hasAttribute('inert')) continue;
+    node.setAttribute('inert', '');
+    node.setAttribute('aria-hidden', 'true');
+    madeInert.push(node);
   }
 }
 

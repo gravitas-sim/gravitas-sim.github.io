@@ -168,7 +168,6 @@ import {
   matchMisconception,
   nextHintStage,
 } from './answerFeedback.js';
-import { trapFocus } from './focusTrap.js';
 import { frameState } from './referenceFrame.js';
 import {
   SCALE,
@@ -4516,18 +4515,21 @@ function wireBrowserFilters() {
   });
 }
 
-// Where focus was when the browser opened. The panel is an aria-modal dialog,
-// so leaving focus behind it would let a keyboard user tab through the rail
-// underneath, and closing it would drop them at the top of the document.
-/** Releases the browser's focus trap while it is open. */
-let releaseBrowserFocus = null;
-
-let browserLastFocus = null;
+/**
+ * js/dialog.js, fetched the first time the browser or the finish dialog opens.
+ * Dynamic rather than static because this module is on every lesson's route
+ * and a lesson that is only being worked through opens neither.
+ */
+let dialogs = null;
+const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
 
 /** Show the list of available investigations. */
-export function openBrowser() {
-  if (!els.browser) return;
-  browserLastFocus = document.activeElement;
+export async function openBrowser() {
+  if (!els.browser || isBrowserOpen()) return;
+  // Where the reader was, asked before the wait for the module.
+  const trigger = document.activeElement;
+  const { openDialog } = await loadDialogs();
+  if (isBrowserOpen()) return;
   renderBrowser();
   // And again once the catalog for this language has arrived, if it had not.
   //
@@ -4536,51 +4538,50 @@ export function openBrowser() {
   // Spanish before the lesson system was ever loaded would otherwise be left
   // looking at English titles until they touched a filter. Resolved already in
   // the common cases: English, or any second open.
+  //
+  // It resolves after the open even when the catalog is already here, and the
+  // redraw replaces the card that has focus. So the same card takes it back:
+  // the first, on an ordinary open.
   lessonCatalogReady()
     .then(() => {
-      if (els.browser && !els.browser.classList.contains('hidden')) {
-        renderBrowser();
-      }
+      if (!isBrowserOpen()) return;
+      const card = document.activeElement?.closest?.('[data-investigation]');
+      renderBrowser();
+      if (card)
+        els.list
+          ?.querySelector(
+            `[data-investigation="${CSS.escape(card.dataset.investigation)}"]`
+          )
+          ?.focus({ preventScroll: true });
     })
     .catch(() => {
       /* the English catalog is already on screen; that is the fallback */
     });
-  els.browser.classList.remove('hidden');
-  // Both of them. #investigationBrowserScroll is the list, but the element that
-  // actually scrolls is #investigationBrowserContent, and resetting only the
-  // former left the panel wherever it had been.
+  // The browser declares aria-modal="true", and js/dialog.js keeps it: Tab
+  // stays inside, the page behind is inert to a screen reader, Escape and the
+  // backdrop close it, and focus goes back where it came from.
+  openDialog(els.browserContent, {
+    backdrop: els.browser,
+    isolate: true,
+    trigger,
+    // The first lesson, not the close button: the point of arriving here is
+    // to choose one, and it puts the keyboard user at the top of the same list
+    // a sighted user is reading. Focused without scrolling (js/dialog.js
+    // passes preventScroll), because the first card sits below the panel's
+    // heading and its intro paragraph: at 320x568 a scrolled focus opened the
+    // panel 137px down, on the second half of a sentence and no title at all.
+    //
+    // With a filter still applied from earlier there may be no first card at
+    // all. The search box is the right fallback - it is both focusable and
+    // the thing they need in order to see any lessons again.
+    initialFocus: () => els.list?.querySelector('.inv-card') || els.search,
+  });
+  // Both of them, now that they are laid out. #investigationBrowserScroll is
+  // the list, but the element that actually scrolls is
+  // #investigationBrowserContent, and resetting only the former left the panel
+  // wherever it had been.
   if (els.browserScroll) els.browserScroll.scrollTop = 0;
   if (els.browserContent) els.browserContent.scrollTop = 0;
-  // The browser declares aria-modal="true"; without a trap, Tab left it for
-  // the rail behind and a screen reader could browse the whole page under it.
-  // The trap also marks the background inert and restores focus on release.
-  releaseBrowserFocus = trapFocus(els.browserContent, {
-    returnFocusTo: browserLastFocus,
-    // Focus is placed on the first card below, after the panel has laid out.
-    initialFocus: null,
-  });
-  // The first lesson, not the close button: the point of arriving here is to
-  // choose one, and it puts the keyboard user at the top of the same list a
-  // sighted user is reading. Deferred because a display change has to land
-  // before the element can take focus.
-  //
-  // preventScroll, because the first card sits below the panel's heading and
-  // its intro paragraph. Without it the browser scrolls the newly focused card
-  // into view and drags the heading off the top: at 320x568 the panel opened
-  // 137px down, so the first thing a reader saw was the second half of a
-  // sentence and no title at all.
-  //
-  // With a filter still applied from earlier there may be no first card at
-  // all, and the trap places focus nowhere: a keyboard user would arrive
-  // inside a modal with focus on the document and nothing to tab from. The
-  // search box is the right fallback - it is both focusable and the thing they
-  // need in order to see any lessons again.
-  setTimeout(() => {
-    const first = els.list?.querySelector('.inv-card');
-    if (first) first.focus({ preventScroll: true });
-    else els.search?.focus({ preventScroll: true });
-    if (els.browserContent) els.browserContent.scrollTop = 0;
-  }, 60);
 }
 
 /**
@@ -4591,29 +4592,10 @@ export function openBrowser() {
  *   it back on the rail button first would be a visible detour.
  */
 export function closeBrowser({ restoreFocus = true } = {}) {
-  els.browser?.classList.add('hidden');
-  if (releaseBrowserFocus) {
-    const release = releaseBrowserFocus;
-    releaseBrowserFocus = null;
-    // The trap restores focus itself, so it is only released that way when the
-    // caller wants focus back; otherwise the background is un-inerted without
-    // moving focus, which is what opening a lesson from a card needs.
-    if (restoreFocus) {
-      release();
-      browserLastFocus = null;
-      return;
-    }
-    release();
-  }
-  if (
-    restoreFocus &&
-    browserLastFocus &&
-    document.contains(browserLastFocus) &&
-    browserLastFocus !== document.body
-  ) {
-    browserLastFocus.focus();
-  }
-  browserLastFocus = null;
+  // Loaded by definition: the browser cannot be open without it.
+  dialogs?.closeDialog(els.browserContent, 'close', {
+    returnFocus: restoreFocus !== false,
+  });
 }
 
 const isBrowserOpen = () =>
@@ -4647,12 +4629,25 @@ function openFinish() {
     })}</p>
     <p class="inv-finish-note">${escape(t('inv.finish.note'))}</p>`;
   els.nameInput.value = getStudentName();
-  els.finish.classList.remove('hidden');
-  els.nameInput.focus();
+  // Modal: the lesson behind it inert, Escape and the backdrop closing it,
+  // and focus back on Next, where the reader asked to finish.
+  const trigger = document.activeElement;
+  loadDialogs()
+    .then(({ openDialog }) =>
+      openDialog(els.finishContent, {
+        backdrop: els.finish,
+        isolate: true,
+        trigger,
+        initialFocus: els.nameInput,
+      })
+    )
+    .catch(() => {
+      /* offline and never fetched: Next on the last step asks again */
+    });
 }
 
 function closeFinish() {
-  els.finish?.classList.add('hidden');
+  dialogs?.closeDialog(els.finishContent);
 }
 
 /**
@@ -4974,6 +4969,7 @@ export function initInvestigations() {
     backupRestore: document.getElementById('investigationBackupRestore'),
     backupFile: document.getElementById('investigationBackupFile'),
     finish: document.getElementById('investigationFinish'),
+    finishContent: document.getElementById('investigationFinishContent'),
     finishSummary: document.getElementById('investigationFinishSummary'),
     nameInput: document.getElementById('investigationName'),
     nameError: document.getElementById('investigationNameError'),
@@ -5043,9 +5039,6 @@ export function initInvestigations() {
   wireBrowserFilters();
   els.browserClose?.addEventListener('click', closeBrowser);
   els.browserChip?.addEventListener('click', closeBrowser);
-  els.browser.addEventListener('click', e => {
-    if (e.target === els.browser) closeBrowser();
-  });
 
   els.prev?.addEventListener('click', () =>
     goToStep(applyingFrom(stepIndex, -1))
@@ -5115,9 +5108,6 @@ export function initInvestigations() {
       `${reportSlug(els.nameInput.value.trim() || 'token')}-token.txt`
     )
   );
-  els.finish?.addEventListener('click', e => {
-    if (e.target === els.finish) closeFinish();
-  });
 
   // The widget and plot canvases are sized from their panel's width, which is a
   // percentage of the viewport, so a resized window leaves them stretched.
@@ -5135,6 +5125,8 @@ export function initInvestigations() {
     }, 150);
   });
 
+  // js/dialog.js takes an Escape pressed inside either dialog; this is one
+  // pressed with focus on <body>.
   window.addEventListener('gravitasEscape', () => {
     if (els.finish && !els.finish.classList.contains('hidden')) closeFinish();
     else if (isBrowserOpen()) closeBrowser();

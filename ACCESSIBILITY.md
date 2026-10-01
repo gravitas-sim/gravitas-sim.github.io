@@ -81,9 +81,20 @@ already did.
 **Three modals did not trap focus.** The gallery, the share dialog and the
 investigations browser all declared `aria-modal="true"` and let Tab walk out
 into a control rail the reader could not see. The front door had a correct
-implementation; it is now `js/focusTrap.js` and all four use it. It cycles Tab
-within the dialog, marks the rest of the page `inert`, and restores focus to
-whatever opened it.
+implementation, and it became a shared trap that cycled Tab within the dialog,
+marked the rest of the page `inert` and restored focus to whatever opened it.
+
+**One module for every modal (Prompt 52).** That trap was a second one beside
+`js/dialog.js`, and six more modals had neither: export, the lesson finish, the
+black-hole masses, the lecture sequence and the shortcut list kept focus
+nowhere in particular, and none of them gave it back. Every modal now opens
+through `js/dialog.js`, and `tests/dialogInventory.test.js` fails on one that
+does not. Its `isolate` option is the old trap's inert background, except that
+it leaves live regions alone, so what `#srStatus` says over a dialog is heard,
+and on the way out it puts back only what it changed: the old release took
+`inert` off every child of `<body>`, closed dialogs included. The modules on
+the start-up path fetch `js/dialog.js` on the first open, primed when the
+pointer reaches the button or focus does, so it costs no route anything.
 
 **Two ways out of Settings and the System Builder.** Both are opened by
 `js/dialog.js`, which listens for Escape and Tab on the panel itself. A click on

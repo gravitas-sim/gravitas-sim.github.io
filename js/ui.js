@@ -5398,7 +5398,7 @@ const updateIndivBHMassButtonVisibility = () => {
         : 'none';
 };
 
-const showIndivBHMassMenu = () => {
+const showIndivBHMassMenu = async () => {
   const content = document.getElementById('bhMassesContent');
   content.innerHTML = '';
   const num_bh = localSettings.num_black_holes;
@@ -5439,7 +5439,20 @@ const showIndivBHMassMenu = () => {
     itemDiv.append(label, controlDiv);
     content.appendChild(itemDiv);
   }
-  document.getElementById('bhMassesModal').classList.remove('hidden');
+  // A dialog over Settings, through js/dialog.js like Settings itself, which
+  // is loaded by definition: the button is inside the Settings panel. Settings
+  // is inert behind it, and every close but Done - the close chip, Escape -
+  // puts the masses back as they were, which is what the chip says it does.
+  const masses = [...localSettings.bh_masses];
+  const { openDialog } = await dialog();
+  openDialog(document.getElementById('bhMassesModal'), {
+    isolate: true,
+    trigger: document.getElementById('indivBHMassBtn'),
+    initialFocus: '#bhMassesContent input',
+    onClose: reason => {
+      if (reason !== 'done') localSettings.bh_masses = masses;
+    },
+  });
 };
 
 // Legacy function for backward compatibility
@@ -5447,8 +5460,9 @@ const showBHMassesModal = () => {
   showIndivBHMassMenu();
 };
 
-const hideBHMassesModal = () => {
-  document.getElementById('bhMassesModal').classList.add('hidden');
+/** @param {string} [reason] - 'done' keeps the masses; anything else does not */
+const hideBHMassesModal = (reason = 'done') => {
+  dialogModule?.closeDialog(document.getElementById('bhMassesModal'), reason);
 };
 // Save/Load functions
 
@@ -7077,7 +7091,10 @@ window.addEventListener('beforeunload', () => {
 });
 
 // BH Masses Modal event handlers
-document.getElementById('bhMassesDone').onclick = hideBHMassesModal;
+document.getElementById('bhMassesDone').onclick = () =>
+  hideBHMassesModal('done');
+document.getElementById('bhMassesCloseChip').onclick = () =>
+  hideBHMassesModal('cancel');
 
 // Speed control functionality
 document.getElementById('slowDownBtn').onclick = () => {

@@ -22,7 +22,6 @@ import {
 } from './shareState.js';
 import { getWorldSeed, formatSeed, parseSeed } from './rng.js';
 import { toast, announce } from './notify.js';
-import { trapFocus } from './focusTrap.js';
 import {
   activityInHash,
   assignmentInHash,
@@ -30,8 +29,14 @@ import {
 } from './investigationsLoader.js';
 import { t } from './i18n/index.js';
 
-/** Releases the focus trap; set while the dialog is open. */
-let releaseFocus = null;
+/**
+ * js/dialog.js, fetched on the first open: this module is on the start-up
+ * path, the dialog machinery is not. Primed when a reader points at or focuses
+ * the Share button, so the press finds it here.
+ */
+let dialogs = null;
+const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
+const primeDialogs = () => loadDialogs().catch(() => {});
 
 let els = {};
 let kind = 'auto';
@@ -342,17 +347,19 @@ function applyTypedSeed() {
 }
 
 /** Show the dialog, with the link already computed. */
-export function openShareDialog() {
-  if (!els.modal) return;
+export async function openShareDialog() {
+  if (!els.modal || isShareDialogOpen()) return;
+  const { openDialog } = await loadDialogs();
+  if (isShareDialogOpen()) return;
   kind = 'auto';
-  els.modal.classList.remove('hidden');
-  // The dialog declares aria-modal="true" and, until this, did not behave like
-  // one: Tab walked straight out of it into the control rail behind. The trap
-  // also marks the rest of the page inert, which is what stops a screen reader
-  // browsing the page underneath, and remembers where focus came from.
-  releaseFocus = trapFocus(document.getElementById('shareContent'), {
+  // Modal, with the rest of the page inert so a screen reader cannot browse
+  // the rail behind it, Tab kept inside, Escape and the backdrop closing it,
+  // and focus back on the Share button however it was opened: js/dialog.js.
+  openDialog(document.getElementById('shareContent'), {
+    backdrop: els.modal,
+    isolate: true,
+    trigger: document.getElementById('shareBtn'),
     initialFocus: els.url,
-    returnFocusTo: document.getElementById('shareBtn'),
   });
   refresh().then(() => els.url?.focus());
   markup().catch(() => {
@@ -362,16 +369,8 @@ export function openShareDialog() {
 
 /** Hide the dialog. */
 export function closeShareDialog() {
-  if (!els.modal) return;
-  els.modal.classList.add('hidden');
-  // Releasing restores focus to the button that opened it, so this no longer
-  // has to do it by hand.
-  if (releaseFocus) {
-    releaseFocus();
-    releaseFocus = null;
-  } else {
-    document.getElementById('shareBtn')?.focus();
-  }
+  // Loaded by definition: the dialog cannot be open without it.
+  dialogs?.closeDialog(document.getElementById('shareContent'));
 }
 
 /** @returns {boolean} True while the dialog is showing */
@@ -400,9 +399,12 @@ export function initShare() {
   };
   if (!els.modal || !els.url) return;
 
-  document.getElementById('shareBtn')?.addEventListener('click', () => {
+  const button = document.getElementById('shareBtn');
+  button?.addEventListener('click', () => {
     isShareDialogOpen() ? closeShareDialog() : openShareDialog();
   });
+  button?.addEventListener('pointerenter', primeDialogs, { once: true });
+  button?.addEventListener('focus', primeDialogs, { once: true });
   els.copy?.addEventListener('click', copyLink);
   els.embed?.addEventListener('click', copyEmbed);
   els.close?.addEventListener('click', closeShareDialog);
@@ -420,10 +422,8 @@ export function initShare() {
   els.seed?.addEventListener('blur', applyTypedSeed);
   els.reroll?.addEventListener('click', () => rebuildWithSeed());
 
-  // Clicking the backdrop closes, the same as every other panel here.
-  els.modal.addEventListener('click', e => {
-    if (e.target === els.modal) closeShareDialog();
-  });
+  // js/dialog.js takes an Escape pressed inside the dialog; this is one
+  // pressed with focus on <body>.
   window.addEventListener('gravitasEscape', () => {
     if (isShareDialogOpen()) closeShareDialog();
   });
