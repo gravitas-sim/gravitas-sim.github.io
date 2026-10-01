@@ -85,11 +85,16 @@ export const countImportant = css =>
  * ☉ in M☉ and the planets' signs, arrows, and ©, ® and ™. A star is notation
  * only as a subscript on a stellar quantity, R★ or M<sub>★</sub>; a star
  * anywhere else is an icon.
+ *
+ * The star is also named outright. The property's membership is the
+ * runtime's Unicode data, and CI's Node 20 does not count \u2605 where the Mac's
+ * Node 24 does, so a count resting on the property alone would differ
+ * between the machine that records it and the one that checks it.
  */
 const NOTATION =
   /[\u2609\u263D\u263E\u263F-\u2647\u26E2\u2190-\u21FF\u00A9\u00AE\u2122]|(?<=[RMLT](?:<sub>|_)?)\u2605/gu;
 export const countEmoji = text =>
-  (text.replace(NOTATION, '').match(/\p{Extended_Pictographic}/gu) || [])
+  (text.replace(NOTATION, '').match(/\p{Extended_Pictographic}|\u2605/gu) || [])
     .length;
 
 /** Native controls with no class at all, in a page's markup. */
