@@ -76,7 +76,7 @@ const vector = v => `(${v.map(x => num(x, 6)).join('; ')})`;
 function table(caption, head, rows) {
   return el(
     'table',
-    { class: 'mn-table' },
+    { class: 'ui-table' },
     el('caption', { text: caption }),
     el(
       'thead',
@@ -555,19 +555,19 @@ function drawWindow(r) {
     el(
       'span',
       {},
-      el('span', { class: 'mn-swatch', style: `background:${colour(0)}` }),
+      el('span', { class: 'ui-swatch', style: `background:${colour(0)}` }),
       t('mission.window.cheap', { v: kms(lo) })
     ),
     el(
       'span',
       {},
-      el('span', { class: 'mn-swatch', style: `background:${colour(1)}` }),
+      el('span', { class: 'ui-swatch', style: `background:${colour(1)}` }),
       t('mission.window.dear', { v: kms(2 * lo) })
     ),
     el(
       'span',
       {},
-      el('span', { class: 'mn-swatch mn-refused' }),
+      el('span', { class: 'ui-swatch', style: `background:${REFUSED}` }),
       t('mission.window.refusedCell')
     ),
     el('span', { text: t('mission.window.axes') })

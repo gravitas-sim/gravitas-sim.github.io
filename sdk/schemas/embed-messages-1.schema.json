@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/embed-messages-1.schema.json",
+  "title": "gravitas-embed messages/1",
+  "description": "A message a page sends an embedded Gravitas figure with postMessage (EMBEDDING.md, \"Messages\"): the protocol, its version, the request, the page's own id for it, and for `load` a share fragment. js/embedMessages.js readMessage() is the authority, and it refuses rather than ignores anything else: another key, `state` on any request but `load`, an id outside the pattern. It also refuses more than 16 KiB of JSON, which the bounds here already keep a message under, and a `state` that does not decode, which only decoding can tell. What the figure sends back is $defs/figure. FORMATS.md lists it.",
+  "anyOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type"
+      ],
+      "properties": {
+        "protocol": {
+          "$ref": "#/$defs/protocol"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "type": {
+          "enum": [
+            "ping",
+            "play",
+            "pause",
+            "reset"
+          ]
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "version",
+        "type",
+        "state"
+      ],
+      "properties": {
+        "protocol": {
+          "$ref": "#/$defs/protocol"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "type": {
+          "const": "load"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "state": {
+          "description": "A Gravitas share fragment such as `1z…`, with or without its `#`, not a URL.",
+          "type": "string",
+          "maxLength": 8000,
+          "pattern": "^#?\\d+[zr][A-Za-z0-9_-]+$"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "protocol": {
+      "const": "gravitas-embed"
+    },
+    "version": {
+      "const": 1
+    },
+    "id": {
+      "description": "The page's own label for a request, echoed in the figure's ack or error.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.:-]{1,64}$"
+    },
+    "figure": {
+      "description": "What the figure sends the page: ready (what it will obey, and whether it is running), status, ack and error. A figure opened without a parent origin sends one ready with no requests and no running.",
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "protocol",
+            "version",
+            "type",
+            "requests"
+          ],
+          "properties": {
+            "protocol": {
+              "$ref": "#/$defs/protocol"
+            },
+            "version": {
+              "$ref": "#/$defs/version"
+            },
+            "type": {
+              "const": "ready"
+            },
+            "requests": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "ping",
+                  "play",
+                  "pause",
+                  "reset",
+                  "load"
+                ]
+              }
+            },
+            "running": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "protocol",
+            "version",
+            "type",
+            "running"
+          ],
+          "properties": {
+            "protocol": {
+              "$ref": "#/$defs/protocol"
+            },
+            "version": {
+              "$ref": "#/$defs/version"
+            },
+            "type": {
+              "const": "status"
+            },
+            "running": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "protocol",
+            "version",
+            "type"
+          ],
+          "properties": {
+            "protocol": {
+              "$ref": "#/$defs/protocol"
+            },
+            "version": {
+              "$ref": "#/$defs/version"
+            },
+            "type": {
+              "const": "ack"
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/id"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "protocol",
+            "version",
+            "type",
+            "code"
+          ],
+          "properties": {
+            "protocol": {
+              "$ref": "#/$defs/protocol"
+            },
+            "version": {
+              "$ref": "#/$defs/version"
+            },
+            "type": {
+              "const": "error"
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/id"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "code": {
+              "enum": [
+                "bad-message",
+                "unsupported-version",
+                "unknown-type",
+                "bad-state",
+                "failed"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

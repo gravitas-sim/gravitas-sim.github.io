@@ -240,7 +240,7 @@ function showPreview(src, aspect = { w: 16, h: 10 }, title = '') {
   if (!src) {
     shownSrc = '';
     const empty = document.createElement('p');
-    empty.className = 'fb-empty';
+    empty.className = 'ui-state is-empty is-bare';
     empty.textContent = t('fig.out.none');
     box.replaceChildren(empty);
     return;

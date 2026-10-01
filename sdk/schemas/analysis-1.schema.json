@@ -1,0 +1,561 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/analysis-1.schema.json",
+  "title": "gravitas.analysis/1",
+  "description": "An analysis, saved with what it analyzed (ANALYSIS_LAB.md), in one of two kinds. `sweep` is the analysis laboratory's reading of an experiment result: its options, the design, the source result whole (its manifest is how anyone reruns it), each cell's statistics, the pooled distribution, the sensitivity, the shares of the scatter, the comparison at another step, what not to conclude, and the methods in words. `models` is the Observatory's comparison of fits to one dataset: the ranked models, which is nested in which, the preferred one and how strongly, and each fit's gravitas.inference/1 document whole. js/analysis/sweepAnalysis.js analyzeSweep() and js/analysis/modelCompare.js compareModels() write them, and the pages add the methods; nothing in Gravitas reads one back, so this schema, held to those writers, is the only statement of its shape. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "kind",
+    "tool"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.analysis"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "kind": {
+      "enum": [
+        "sweep",
+        "models"
+      ]
+    },
+    "tool": {
+      "description": "The analysis and its version.",
+      "type": "object",
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "sweep-analysis",
+            "model-comparison"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      }
+    },
+    "methods": {
+      "description": "What was done, in words, for a methods section.",
+      "type": "string"
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/$defs/sweep"
+    },
+    {
+      "$ref": "#/$defs/models"
+    }
+  ],
+  "$defs": {
+    "warnings": {
+      "description": "What not to conclude: each a code and the numbers it is about.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "objectOrNull": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "sweep": {
+      "required": [
+        "options",
+        "design",
+        "source",
+        "cells",
+        "warnings",
+        "work"
+      ],
+      "properties": {
+        "kind": {
+          "const": "sweep"
+        },
+        "tool": {
+          "properties": {
+            "id": {
+              "const": "sweep-analysis"
+            }
+          }
+        },
+        "options": {
+          "type": "object",
+          "required": [
+            "metric",
+            "resamples",
+            "permutations",
+            "seed",
+            "level"
+          ],
+          "properties": {
+            "metric": {
+              "type": "string"
+            },
+            "resamples": {
+              "type": "integer",
+              "minimum": 200,
+              "maximum": 10000
+            },
+            "permutations": {
+              "type": "integer",
+              "minimum": 199,
+              "maximum": 9999
+            },
+            "seed": {
+              "type": [
+                "string",
+                "number"
+              ]
+            },
+            "level": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 1
+            }
+          }
+        },
+        "design": {
+          "type": "object",
+          "required": [
+            "kind",
+            "axes"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "grid-1d",
+                "grid-2d",
+                "sampled"
+              ]
+            },
+            "axes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": [
+                  "parameter",
+                  "sampled",
+                  "values"
+                ],
+                "properties": {
+                  "parameter": {
+                    "type": "string"
+                  },
+                  "sampled": {
+                    "type": "boolean"
+                  },
+                  "values": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "source": {
+          "description": "The experiment result analyzed, without its trials: its hash, and its manifest whole.",
+          "type": "object",
+          "required": [
+            "format",
+            "formatVersion",
+            "hash",
+            "manifest"
+          ],
+          "properties": {
+            "format": {
+              "const": "gravitas.experiment-result"
+            },
+            "formatVersion": {
+              "const": 1
+            },
+            "hash": {
+              "type": "string"
+            },
+            "manifest": {
+              "type": "object",
+              "required": [
+                "format"
+              ],
+              "properties": {
+                "format": {
+                  "const": "gravitas.experiment"
+                }
+              }
+            },
+            "engine": {
+              "$ref": "#/$defs/objectOrNull"
+            },
+            "environment": {
+              "$ref": "#/$defs/objectOrNull"
+            },
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "finishedAt": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "cells": {
+          "description": "One per setting (or pair of settings): its trials, how many gave a number, and their statistics with intervals.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "params",
+              "trials",
+              "n"
+            ],
+            "properties": {
+              "params": {
+                "type": "object"
+              },
+              "trials": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "n": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "left": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "statuses": {
+                "type": "object"
+              },
+              "identical": {
+                "type": "boolean"
+              },
+              "meanInterval": {
+                "$ref": "#/$defs/objectOrNull"
+              },
+              "medianInterval": {
+                "$ref": "#/$defs/objectOrNull"
+              }
+            }
+          }
+        },
+        "pooled": {
+          "$ref": "#/$defs/objectOrNull"
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/objectOrNull"
+        },
+        "shares": {
+          "$ref": "#/$defs/objectOrNull"
+        },
+        "numerical": {
+          "description": "The same experiment at another step, when one was given: the numerical uncertainty beside the statistical one.",
+          "$ref": "#/$defs/objectOrNull"
+        },
+        "warnings": {
+          "$ref": "#/$defs/warnings"
+        },
+        "work": {
+          "type": "object",
+          "required": [
+            "draws"
+          ],
+          "properties": {
+            "draws": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "models": {
+      "required": [
+        "observation",
+        "comparison",
+        "sources"
+      ],
+      "properties": {
+        "kind": {
+          "const": "models"
+        },
+        "tool": {
+          "properties": {
+            "id": {
+              "const": "model-comparison"
+            }
+          }
+        },
+        "observation": {
+          "type": "object",
+          "required": [
+            "id",
+            "rows",
+            "key"
+          ],
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "rows": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "key": {
+              "description": "What makes two fits fits of the same data: they are compared only when it agrees.",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "comparison": {
+          "type": "object",
+          "required": [
+            "tool",
+            "models",
+            "nested",
+            "preferred",
+            "refused",
+            "warnings"
+          ],
+          "properties": {
+            "tool": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "const": "model-comparison"
+                }
+              }
+            },
+            "data": {
+              "type": "object"
+            },
+            "models": {
+              "description": "Each model, the constant first: its free parameters, -2 ln L, AIC, AICc, BIC, their differences and the Akaike weight, and its residuals read for structure.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "model",
+                  "n",
+                  "k",
+                  "aic",
+                  "bic",
+                  "weight"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "builtIn": {
+                    "type": "boolean"
+                  },
+                  "model": {
+                    "type": "object"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "k": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "aic": {
+                    "type": "number"
+                  },
+                  "aicc": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "bic": {
+                    "type": "number"
+                  },
+                  "dAic": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "dBic": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "weight": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              }
+            },
+            "nested": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "simpler",
+                  "fuller",
+                  "delta",
+                  "df",
+                  "p",
+                  "boundary"
+                ],
+                "properties": {
+                  "simpler": {
+                    "type": "string"
+                  },
+                  "fuller": {
+                    "type": "string"
+                  },
+                  "delta": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "df": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "p": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "boundary": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "preferred": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "byAic",
+                    "byBic",
+                    "strength"
+                  ],
+                  "properties": {
+                    "byAic": {
+                      "type": "string"
+                    },
+                    "byBic": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "strength": {
+                      "enum": [
+                        "none",
+                        "weak",
+                        "positive",
+                        "strong"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "refused": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "reason"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "enum": [
+                      "notFitted",
+                      "otherData"
+                    ]
+                  }
+                }
+              }
+            },
+            "warnings": {
+              "$ref": "#/$defs/warnings"
+            }
+          }
+        },
+        "sources": {
+          "description": "Each fit compared, as the inference core wrote it (inference-1.schema.json): how to rerun it.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "document"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "document": {
+                "type": "object",
+                "required": [
+                  "format",
+                  "formatVersion"
+                ],
+                "properties": {
+                  "format": {
+                    "const": "gravitas.inference"
+                  },
+                  "formatVersion": {
+                    "const": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

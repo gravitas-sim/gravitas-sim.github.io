@@ -148,7 +148,7 @@ function build(root, ctx, initialName) {
   });
   const form = el(
     'form',
-    { id: 'arcForm', class: 'ow-grid' },
+    { id: 'arcForm', class: 'ui-grid is-end' },
     el('label', { class: 'ui-field' }, el('span'), nameIn),
     el('div', {}, find, ' ', cancel)
   );
@@ -161,7 +161,7 @@ function build(root, ctx, initialName) {
   });
   const error = el('p', {
     id: 'arcError',
-    class: 'ow-problems',
+    class: 'ui-alert is-error',
     role: 'alert',
     hidden: true,
   });
@@ -386,7 +386,7 @@ function build(root, ctx, initialName) {
     const fields = el(
       'div',
       {
-        class: 'ow-table-wrap',
+        class: 'ui-table-wrap is-numeric',
         tabindex: '0',
         role: 'region',
         'aria-label': t('obs.arc.fields'),

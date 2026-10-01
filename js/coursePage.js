@@ -140,7 +140,10 @@ const cardKey = (d, base) => {
 function card(d, base, summary, build) {
   const id = idOf(base);
   const key = cardKey(d, base);
-  const node = el('details', { id, className: 'cp-card' });
+  const node = el('details', {
+    id,
+    className: 'ui-card is-compact ui-disclosure',
+  });
   node.open = openCards.has(key);
   node.append(
     el(
@@ -319,7 +322,7 @@ function checkbox(id, label, checked, onChange) {
   const box = el('input', { type: 'checkbox', id });
   box.checked = !!checked;
   box.addEventListener('change', () => onChange(box.checked));
-  return el('label', { className: 'st-check', for: id }, box, label);
+  return el('label', { className: 'ui-choice', for: id }, box, label);
 }
 
 /**
@@ -426,11 +429,11 @@ function aboutSection(d) {
   );
   return el(
     'section',
-    { className: 'st-section', 'aria-labelledby': 'cb-about-h' },
+    { className: 'ui-card', 'aria-labelledby': 'cb-about-h' },
     el('h2', { id: 'cb-about-h' }, t('course.section.about')),
     el(
       'div',
-      { className: 'st-grid' },
+      { className: 'ui-grid' },
       plain('id', t('course.field.id'), { hint: t('course.hint.id') }),
       plain('version', t('course.field.version')),
       field(
@@ -464,7 +467,7 @@ function objectivesSection(d) {
   return el(
     'section',
     {
-      className: 'st-section',
+      className: 'ui-card',
       'aria-labelledby': 'cb-obj-h',
       id: idOf('objectives'),
     },
@@ -513,7 +516,7 @@ function prerequisitesSection(d) {
   return el(
     'section',
     {
-      className: 'st-section',
+      className: 'ui-card',
       'aria-labelledby': 'cb-pre-h',
       id: idOf('prerequisites'),
     },
@@ -654,7 +657,7 @@ function unitsSection(d) {
   return el(
     'section',
     {
-      className: 'st-section',
+      className: 'ui-card',
       'aria-labelledby': 'cb-units-h',
       id: idOf('units'),
     },
@@ -766,7 +769,7 @@ function fillItem(node, d, item, i, j, base) {
   const common = [
     el(
       'div',
-      { className: 'st-grid' },
+      { className: 'ui-grid' },
       plain(`${base}.id`, t('course.field.id')),
       field(
         idOf(`${base}.path`),
@@ -916,7 +919,7 @@ function kindFields(d, item, base) {
       return [
         el(
           'div',
-          { className: 'st-grid' },
+          { className: 'ui-grid' },
           field(
             idOf(`${base}.scenario`),
             t('course.field.scenario'),
@@ -978,7 +981,7 @@ function kindFields(d, item, base) {
         pair(`${base}.title`, t('course.field.readingTitle')),
         el(
           'div',
-          { className: 'st-grid' },
+          { className: 'ui-grid' },
           plain(`${base}.cite.authors`, t('course.field.authors')),
           plain(`${base}.cite.year`, t('course.field.year'), { numeric: true }),
           plain(`${base}.cite.source`, t('course.field.source')),
@@ -1236,7 +1239,7 @@ function renderVerdict() {
         { 'data-level': level === 'warning' ? 'warn' : level },
         el(
           'button',
-          { type: 'button', className: 'st-link', onclick: () => reveal(path) },
+          { type: 'button', className: 'ui-link', onclick: () => reveal(path) },
           where ? `${where}: ${text}` : text
         )
       )
@@ -1417,7 +1420,7 @@ function renderGraph(r, d) {
     if (!byFrom.has(e.from)) byFrom.set(e.from, []);
     byFrom.get(e.from).push(e);
   }
-  const rows = el('ul', { className: 'st-list' });
+  const rows = el('ul', { className: 'ui-issues' });
   for (const n of g.nodes.filter(
     x => x.id.startsWith('item:') || x.id.startsWith('lesson:')
   )) {
@@ -1534,7 +1537,7 @@ function renderLinks(r, d) {
 
   const table = el(
     'table',
-    { className: 'st-table', id: 'cb-link-table' },
+    { className: 'ui-table', id: 'cb-link-table' },
     el(
       'thead',
       {},
@@ -1571,7 +1574,7 @@ function renderLinks(r, d) {
     );
   }
   table.append(body);
-  host.append(el('div', { className: 'st-scroll' }, table));
+  host.append(el('div', { className: 'ui-table-wrap' }, table));
 
   // A scenario is the one item that can also be a figure in another page.
   for (const { item } of itemsOf(d)) {
@@ -1824,7 +1827,7 @@ function renderTranslation(d) {
           'button',
           {
             type: 'button',
-            className: 'st-link',
+            className: 'ui-link',
             onclick: () => reveal(`${x.path}.es`),
           },
           t('course.translation.item', {

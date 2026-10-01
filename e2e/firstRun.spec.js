@@ -51,6 +51,32 @@ test.describe('on a first visit', () => {
   });
 });
 
+test('Home hides the page behind it, and gives back only what it took', async ({
+  page,
+  app,
+}) => {
+  await page.addInitScript(() => {
+    // Inert before Home opens, as a closed dialog is.
+    document.addEventListener('DOMContentLoaded', () => {
+      const probe = document.createElement('div');
+      probe.id = 'inertProbe';
+      probe.setAttribute('inert', '');
+      document.body.appendChild(probe);
+    });
+  });
+  await app.boot({ firstVisit: true });
+  await expect(page.locator('#welcomeScreen')).toBeVisible();
+  // What is announced over Home is still said.
+  await expect(page.locator('#srStatus')).not.toHaveAttribute(
+    'aria-hidden',
+    'true'
+  );
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#welcomeScreen')).toBeHidden();
+  // Closing Home used to clear inert from every child of <body>.
+  await expect(page.locator('#inertProbe')).toHaveAttribute('inert', '');
+});
+
 test('a screen reader hears the scenario by name, not the sentinel', async ({
   page,
   app,

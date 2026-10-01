@@ -1,0 +1,520 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/inference-1.schema.json",
+  "title": "gravitas.inference/1",
+  "description": "A fit, stated completely enough to repeat (INFERENCE_CORE.md): the data it used, named rather than copied (the observation, its source's id and version, the rows used, masked and missing); the model and its version; each parameter fitted within bounds or fixed at a value; the settings, the algorithm, the limits and the engine's fingerprint; and, in the file the Observatory's fit panel exports, the result. A measurement pipeline and a model comparison carry these whole. js/inference/manifest.js validateInference() is the rule for what this build will fit: a model it has at the version it fits, the parameters that model has, each fitted one with its lower bound below its upper, inside the model's range, and starting inside them, a fixed one with its value, and a transit's settings in range. That a fitted parameter's bounds are in order and its start between them is a rule across fields that a schema cannot state. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "data",
+    "model",
+    "parameters"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.inference"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "observation"
+      ],
+      "properties": {
+        "observation": {
+          "description": "The observation's id.",
+          "type": "string"
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "description": "Where the observation came from: a data pack's id and version, for one.",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "columns": {
+          "type": "object"
+        },
+        "units": {
+          "type": "object"
+        },
+        "rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "used": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "masked": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "missing": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "withoutUncertainty": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "type": "number"
+        },
+        "perDay": {
+          "description": "How many of the time column's units make a day, or null when its unit does not say.",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "time": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "format": {
+                  "type": "string"
+                },
+                "scale": {
+                  "type": "string"
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "transit-quadratic",
+            "rv-keplerian"
+          ]
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "settings": {
+      "type": "object"
+    },
+    "algorithm": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "const": "grid-lm"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "points": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "concurrency": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "trialTimeoutMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "totalTimeoutMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxResultBytes": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "engine": {
+      "type": "object",
+      "required": [
+        "fingerprint"
+      ],
+      "properties": {
+        "fingerprint": {
+          "description": "A reference transit and orbit, evaluated and hashed: a build whose curves differ gives another.",
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        }
+      }
+    },
+    "results": {
+      "description": "Null in a manifest; in the exported file, the fit (without its residuals and model curve, which are as long as the data, but with their count) and each profile.",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "fit"
+          ],
+          "properties": {
+            "fit": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "parameters": {
+                  "type": "array"
+                },
+                "derived": {
+                  "type": "array"
+                },
+                "warnings": {
+                  "type": "array"
+                },
+                "residualCount": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "profiles": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "anyOf": [
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "transit-quadratic"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "t0",
+            "P"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "t0": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "P": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "k": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0.005,
+                  "exclusiveMaximum": 0.5
+                },
+                "hi": {
+                  "exclusiveMinimum": 0.005,
+                  "maximum": 0.5
+                }
+              }
+            },
+            "aRs": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 1.5,
+                  "exclusiveMaximum": 200
+                },
+                "hi": {
+                  "exclusiveMinimum": 1.5,
+                  "maximum": 200
+                }
+              }
+            },
+            "b": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 1.5
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 1.5
+                }
+              }
+            },
+            "q1": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 1
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                }
+              }
+            },
+            "q2": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 1
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                }
+              }
+            }
+          }
+        },
+        "settings": {
+          "properties": {
+            "exposure": {
+              "description": "The exposure each point integrates over, in the time column's unit.",
+              "type": "number",
+              "minimum": 0
+            },
+            "supersample": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "annuli": {
+              "type": "integer",
+              "minimum": 8,
+              "maximum": 512
+            },
+            "dilution": {
+              "description": "The other stars' fraction of the light.",
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 1
+            },
+            "stellarRadius": {
+              "description": "The star's radius, in solar radii, for the planet's.",
+              "type": "object",
+              "required": [
+                "value"
+              ],
+              "properties": {
+                "value": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "sigma": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "rv-keplerian"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "P",
+            "tc"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "P": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "tc": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "K": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 2000
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 2000
+                }
+              }
+            },
+            "sqrtEcosw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.95,
+                  "exclusiveMaximum": 0.95
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.95,
+                  "maximum": 0.95
+                }
+              }
+            },
+            "sqrtEsinw": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": -0.95,
+                  "exclusiveMaximum": 0.95
+                },
+                "hi": {
+                  "exclusiveMinimum": -0.95,
+                  "maximum": 0.95
+                }
+              }
+            },
+            "jitter": {
+              "$ref": "#/$defs/parameter",
+              "properties": {
+                "lo": {
+                  "minimum": 0,
+                  "exclusiveMaximum": 200
+                },
+                "hi": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "parameter": {
+      "description": "A parameter with a range of its own: fitted (the default) within it, or narrower bounds inside it, from an optional start; or fixed at a value.",
+      "type": "object",
+      "anyOf": [
+        {
+          "required": [
+            "mode",
+            "value"
+          ],
+          "properties": {
+            "mode": {
+              "const": "fixed"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "properties": {
+            "mode": {
+              "const": "fitted"
+            },
+            "lo": {
+              "type": "number"
+            },
+            "hi": {
+              "type": "number"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        }
+      ]
+    },
+    "unbounded": {
+      "description": "A parameter with no range of its own, such as a time or a period: fitted between bounds the manifest gives, or fixed at a value.",
+      "type": "object",
+      "anyOf": [
+        {
+          "required": [
+            "mode",
+            "value"
+          ],
+          "properties": {
+            "mode": {
+              "const": "fixed"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "required": [
+            "lo",
+            "hi"
+          ],
+          "properties": {
+            "mode": {
+              "const": "fitted"
+            },
+            "lo": {
+              "type": "number"
+            },
+            "hi": {
+              "type": "number"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

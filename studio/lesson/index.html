@@ -20,77 +20,49 @@
     <link rel="stylesheet" href="/css/page.css" />
     <style>
       /* Local to this page, and the same as the Scenario Studio's (studio/):
-         a toolbar, an editor, and a column of checks and previews. */
-      .st-wrap {
-        max-width: 84rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      .st-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
-      .st-layout {
-        display: grid;
-        gap: 2rem;
-        grid-template-columns: minmax(0, 1fr);
-      }
-      @media (min-width: 64rem) {
-        .st-layout {
-          grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
-          align-items: start;
-        }
-        .st-side {
-          position: sticky;
-          top: 1rem;
-          max-height: calc(100vh - 2rem);
-          overflow-y: auto;
-        }
-      }
-      .st-section,
-      .st-side section,
-      .st-wrap fieldset {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.9rem 1rem 1rem;
-        margin: 0 0 1.25rem;
-        min-width: 0;
-      }
+         the editor's spacing, its paired fields, a step's state and the
+         conflict dialog. The layout, cards, lists and tables are
+         css/page.css's. */
       .st-wrap h2 {
-        font-size: 1.15rem;
-        margin: 0 0 0.5rem;
+        margin: 0 0 var(--space-2);
       }
       .st-wrap h3 {
-        font-size: 1rem;
-        margin: 0.75rem 0 0.5rem;
+        margin: var(--space-3) 0 var(--space-2);
       }
-      .cp-card {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        margin: 0 0 0.75rem;
+      /* Fields stack with room between them; toolbars keep room below. */
+      .st-wrap .ui-field {
+        margin: var(--space-2) 0 0;
       }
-      .cp-card[open] {
-        padding-bottom: 1rem;
+      .st-wrap .ui-grid {
+        gap: var(--space-1) var(--space-4);
       }
-      .cp-card > summary {
-        cursor: pointer;
-        font-weight: 600;
-        padding: 0.25rem 0;
-        overflow-wrap: anywhere;
+      .st-wrap .ui-toolbar {
+        margin-bottom: var(--space-3);
       }
-      .st-wrap legend {
-        font-weight: 600;
-        padding: 0 0.35rem;
+      .st-wrap .ui-choice {
+        margin-block: var(--space-1);
       }
-      .st-grid {
-        display: grid;
-        gap: 0.25rem 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      .st-preview {
+        aspect-ratio: 4 / 3;
+      }
+      #st-raw-text {
+        min-height: 18rem;
+      }
+      /* The conflict dialog. js/dialog.js and Prompt 52 own dialogs; this one
+         is still the page's own. */
+      .st-wrap dialog {
+        max-width: 36rem;
+        color: inherit;
+        background: var(--surface-1);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius);
+      }
+      .st-wrap dialog::backdrop {
+        background: color-mix(in srgb, var(--space-far) 60%, transparent);
       }
       .st-pair {
         display: grid;
-        gap: 0.25rem 1rem;
+        gap: var(--space-1) var(--space-4);
         grid-template-columns: minmax(0, 1fr);
       }
       @media (min-width: 40rem) {
@@ -98,22 +70,9 @@
           grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         }
       }
-      /* Fields stack with room between them; toolbars keep room below. */
-      .st-wrap .ui-field {
-        margin: 0.5rem 0 0;
-      }
-      .st-wrap .ui-toolbar {
-        margin-bottom: 0.75rem;
-      }
-      .st-check {
-        display: inline-flex;
-        gap: 0.4rem;
-        align-items: center;
-        margin: 0.3rem 1rem 0.3rem 0;
-      }
       .st-state {
-        font-size: 0.8rem;
-        font-weight: 600;
+        font-size: var(--text-sm);
+        font-weight: var(--weight-semibold);
       }
       .st-state[data-state='missing'] {
         color: var(--warning);
@@ -123,70 +82,6 @@
       }
       .st-state[data-state='done'] {
         color: var(--success);
-      }
-      .st-list {
-        margin: 0.5rem 0 0;
-        padding-left: 1.2rem;
-      }
-      .st-list li {
-        margin: 0.25rem 0;
-        overflow-wrap: anywhere;
-      }
-      .st-list li[data-level='error'] {
-        color: var(--danger);
-      }
-      .st-list li[data-level='warn'] {
-        color: var(--warning);
-      }
-      .st-link {
-        background: none;
-        border: 0;
-        padding: 0;
-        color: inherit;
-        font: inherit;
-        text-align: left;
-        text-decoration: underline;
-        cursor: pointer;
-      }
-      .st-status {
-        min-height: 1.3em;
-        margin: 0.25rem 0 0;
-      }
-      .st-preview {
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        background: #07080f;
-      }
-      .st-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.85rem;
-      }
-      .st-table th,
-      .st-table td {
-        text-align: left;
-        vertical-align: top;
-        padding: 0.3rem 0.4rem;
-        border-bottom: 1px solid var(--border-subtle);
-        overflow-wrap: anywhere;
-      }
-      .st-scroll {
-        overflow-x: auto;
-      }
-      #st-raw-text {
-        min-height: 18rem;
-      }
-      .st-wrap dialog {
-        max-width: 36rem;
-        color: inherit;
-        background: var(--surface-1);
-        border: 1px solid var(--border-strong);
-        border-radius: 8px;
-      }
-      .st-wrap dialog::backdrop {
-        background: rgba(0, 0, 0, 0.6);
       }
     </style>
     <!-- shell:head -->
@@ -220,7 +115,7 @@ try {
 <!-- /shell:header -->
     <main
       id="main"
-      class="st-wrap"
+      class="ui-page is-full st-wrap"
       aria-label="Investigation Composer"
       data-i18n-aria-label="composer.title"
     >
@@ -259,12 +154,12 @@ try {
         <button id="cp-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
       </div>
       <p id="cp-storage" class="ui-error" data-i18n="studio.storage.failed" hidden></p>
-      <p id="cp-status" class="st-status" role="status" aria-live="polite"></p>
+      <p id="cp-status" class="ui-status" role="status" aria-live="polite"></p>
 
-      <div class="st-layout">
+      <div class="ui-split">
         <div>
           <div id="cp-editor"></div>
-          <details id="cp-raw" class="st-section">
+          <details id="cp-raw" class="ui-card ui-disclosure">
             <summary data-i18n="studio.raw.heading"></summary>
             <label for="st-raw-text" data-i18n="composer.raw.label"></label>
             <textarea class="ui-textarea is-code" id="st-raw-text" spellcheck="false" aria-describedby="cp-raw-error"></textarea>
@@ -275,22 +170,22 @@ try {
             </div>
           </details>
         </div>
-        <div class="st-side">
-          <section aria-labelledby="cp-checks-h">
+        <div class="ui-split-aside is-scroll">
+          <section class="ui-card" aria-labelledby="cp-checks-h">
             <h2 id="cp-checks-h" data-i18n="studio.checks.heading"></h2>
             <p id="cp-checks-summary" class="ui-hint"></p>
-            <ul id="cp-checks" class="st-list"></ul>
+            <ul id="cp-checks" class="ui-issues"></ul>
           </section>
-          <section aria-labelledby="cp-estimate-h">
+          <section class="ui-card" aria-labelledby="cp-estimate-h">
             <h2 id="cp-estimate-h" data-i18n="composer.estimate.heading"></h2>
-            <ul id="cp-estimate" class="st-list"></ul>
+            <ul id="cp-estimate" class="ui-issues"></ul>
           </section>
-          <section aria-labelledby="cp-translation-h">
+          <section class="ui-card" aria-labelledby="cp-translation-h">
             <h2 id="cp-translation-h" data-i18n="composer.translation.heading"></h2>
             <p id="cp-translation-summary" class="ui-hint"></p>
-            <ul id="cp-translation" class="st-list"></ul>
+            <ul id="cp-translation" class="ui-issues"></ul>
           </section>
-          <section aria-labelledby="cp-preview-h">
+          <section class="ui-card" aria-labelledby="cp-preview-h">
             <h2 id="cp-preview-h" data-i18n="studio.preview.heading"></h2>
             <p class="ui-hint" data-i18n="composer.preview.hint"></p>
             <div class="ui-toolbar">
@@ -299,17 +194,17 @@ try {
             </div>
             <iframe
               id="cp-preview"
-              class="st-preview"
+              class="ui-plot ui-sky st-preview"
               title="Gravitas, running this investigation as a student meets it"
               data-i18n-aria-label="composer.preview.frame"
             ></iframe>
           </section>
-          <section aria-labelledby="cp-key-h">
+          <section class="ui-card" aria-labelledby="cp-key-h">
             <h2 id="cp-key-h" data-i18n="composer.key.heading"></h2>
             <p class="ui-hint" data-i18n="composer.key.hint"></p>
-            <div id="cp-key" class="st-scroll"></div>
+            <div id="cp-key" class="ui-table-wrap"></div>
           </section>
-          <section aria-labelledby="cp-report-h">
+          <section class="ui-card" aria-labelledby="cp-report-h">
             <h2 id="cp-report-h" data-i18n="composer.report.heading"></h2>
             <p class="ui-hint" data-i18n="composer.report.hint"></p>
             <div class="ui-toolbar">
@@ -317,10 +212,10 @@ try {
               <a id="cp-report-open" class="ui-button" target="_blank" rel="noopener" data-i18n="composer.report.open" hidden></a>
             </div>
           </section>
-          <section aria-labelledby="cp-diff-h">
+          <section class="ui-card" aria-labelledby="cp-diff-h">
             <h2 id="cp-diff-h" data-i18n="studio.diff.heading"></h2>
             <p id="cp-diff-summary" class="ui-hint"></p>
-            <ul id="cp-diff" class="st-list"></ul>
+            <ul id="cp-diff" class="ui-issues"></ul>
           </section>
         </div>
       </div>
@@ -328,7 +223,7 @@ try {
       <dialog id="cp-conflict" aria-labelledby="cp-conflict-h">
         <h2 id="cp-conflict-h" data-i18n="studio.conflict.heading"></h2>
         <p id="cp-conflict-text"></p>
-        <ul id="cp-conflict-diff" class="st-list"></ul>
+        <ul id="cp-conflict-diff" class="ui-issues"></ul>
         <div class="ui-toolbar">
           <button id="cp-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
           <button id="cp-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>

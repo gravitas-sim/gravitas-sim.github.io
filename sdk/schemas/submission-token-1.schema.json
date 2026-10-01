@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/submission-token-1.schema.json",
+  "title": "submission token/1",
+  "description": "A student's lab report as data: what a submission token carries once it is decoded. The token itself ($defs/token) is the letter s, the version, and the payload deflated and base64url-encoded, as a world link is; this schema is the payload: the assignment and roster ids, the locale for answers stored before each answer recorded its own, and the student's progress backup whole (gravitas.investigation.progress, every response, attempt count and step fingerprint). It proves nothing about who wrote it. js/submission/submissionToken.js readSubmissionToken() is the authority. Its check is of shape only: a version, a backup naming its lesson, a response table and a step list; this schema also states the backup as js/investigations/progressBackup.js writes and checks one, and the ids and locale as the report writes them. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v",
+    "b"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "a": {
+      "description": "The assignment's id, when the report was made from one.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 120
+    },
+    "r": {
+      "description": "Whatever the instructor's link put there to sort by. Not identity.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 120
+    },
+    "fl": {
+      "description": "The locale an answer with no recorded locale of its own is read in.",
+      "type": "string"
+    },
+    "b": {
+      "$ref": "#/$defs/backup"
+    }
+  },
+  "$defs": {
+    "token": {
+      "description": "The token as it is pasted: whitespace is dropped and a leading # tolerated before it is read.",
+      "type": "string",
+      "pattern": "^#?s\\d+[zr][A-Za-z0-9_-]+$"
+    },
+    "backup": {
+      "description": "A progress backup, as the investigation panel downloads one (version 2: keyed by step id; version 1 was keyed by position).",
+      "type": "object",
+      "required": [
+        "lesson",
+        "progress",
+        "steps"
+      ],
+      "properties": {
+        "kind": {
+          "const": "gravitas.investigation.progress"
+        },
+        "version": {
+          "enum": [
+            1,
+            2
+          ]
+        },
+        "savedAt": {
+          "type": "string"
+        },
+        "lesson": {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "stepCount": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "student": {
+          "description": "The name the student typed, exactly. Not identity.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "progress": {
+          "type": "object",
+          "required": [
+            "responses"
+          ],
+          "properties": {
+            "stepSid": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "stepIndex": {
+              "type": "integer"
+            },
+            "startedAt": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "visited": {
+              "type": "array"
+            },
+            "responses": {
+              "description": "Every stored value, under the engine's keys (`<lesson>:<sid>` and the sub-keys that hang off it): a chosen option, a number, a sentence, a flag. Null is no answers.",
+              "type": [
+                "object",
+                "null"
+              ],
+              "additionalProperties": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ],
+                "maxLength": 20000
+              }
+            },
+            "attempts": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1000000
+              }
+            }
+          }
+        },
+        "steps": {
+          "description": "Each step of the lesson as the student had it: its id, and the fingerprint and option count that show whether it has been rewritten since.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "index": {
+                "type": "integer"
+              },
+              "sid": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "fingerprint": {
+                "type": "string"
+              },
+              "optionCount": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

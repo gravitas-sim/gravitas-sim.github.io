@@ -119,9 +119,11 @@ Three things to know when adding an interface:
   3-D viewport carried `aria-hidden="true"` over two focusable buttons, so a
   keyboard reader could focus a close button and hear nothing. That is a worse
   defect than the one it silenced.
-- **A modal must actually be modal.** If it declares `aria-modal="true"`, wrap
-  it with `trapFocus()` from `js/focusTrap.js`, which cycles Tab inside it,
-  marks the rest of the page `inert` and restores focus on release.
+- **A modal must actually be modal.** Open it with `openDialog()` from
+  `js/dialog.js`, which keeps Tab inside it, closes it on Escape, puts focus
+  back on what opened it and, with `isolate`, marks the rest of the page
+  `inert`. `tests/dialogInventory.test.js` fails on a `role="dialog"` that does
+  not, unless it is on that file's list of the ones that are not modal.
 
 The canvas has a textual equivalent (`js/canvasSummary.js`) reached through
 `aria-describedby`. It is deliberately **not** a live region: the simulation

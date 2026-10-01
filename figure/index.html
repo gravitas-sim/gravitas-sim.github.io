@@ -19,92 +19,23 @@
     <link rel="stylesheet" href="/css/components.css" />
     <link rel="stylesheet" href="/css/page.css" />
     <style>
-      /* Local to this page: a form, a preview and two boxes to copy from. */
-      .fb-wrap {
-        max-width: 72rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      .fb-grid {
-        display: grid;
-        gap: 2rem;
-        grid-template-columns: minmax(0, 1fr);
-      }
-      @media (min-width: 60rem) {
-        .fb-grid {
-          grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
-          align-items: start;
-        }
-        .fb-side {
-          position: sticky;
-          top: 1rem;
-        }
-      }
-      /* The document pages' link colour (.doc-main a in css/page.css), which
-         this page's own wrapper does not inherit: the browser's default blue
-         is 2.2:1 on this background. */
-      .fb-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
-      .fb-wrap fieldset {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.9rem 1rem 1rem;
-        margin: 0 0 1.25rem;
-      }
-      .fb-wrap legend {
-        font-weight: 600;
-        padding: 0 0.35rem;
-      }
-      /* The form is one column of fields, spaced as one. */
-      .fb-wrap .ui-field {
-        margin: 0.7rem 0 0;
-      }
-      .fb-check {
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
-        margin: 0.7rem 0 0;
-      }
-      .fb-status {
-        margin: 0.4rem 0 0;
-        font-size: 0.88rem;
-        min-height: 1.2em;
-      }
-      .fb-status.is-error {
-        color: var(--danger);
-      }
+      /* Local to this page: the form is one column of fields, spaced as one,
+         and the preview clips the figure it shows. */
+      .fb-wrap .ui-field,
+      .fb-check,
       .fb-or {
-        margin: 0.9rem 0 0;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
+        margin: var(--space-3) 0 0;
       }
       .fb-row {
         display: grid;
-        gap: 0.75rem;
+        gap: var(--space-3);
         grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
       }
-      .fb-radios {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin: 0.3rem 0 0;
-      }
       .fb-preview {
-        border: 1px solid var(--border);
-        border-radius: 8px;
         overflow: hidden;
-        background: #05060d;
       }
       .fb-out {
-        margin-top: 1.5rem;
-      }
-      /* On the preview's own dark, in every theme. */
-      .fb-empty {
-        color: var(--hud-text);
-        padding: 2rem 1rem;
-        text-align: center;
+        margin-top: var(--space-6);
       }
     </style>
     <!-- shell:head -->
@@ -138,7 +69,7 @@ try {
 <!-- /shell:header -->
     <main
       id="main"
-      class="fb-wrap"
+      class="ui-page is-wide fb-wrap"
       aria-label="Figure builder"
       data-i18n-aria-label="fig.main.label"
     >
@@ -150,9 +81,9 @@ try {
         link.
       </p>
 
-      <div class="fb-grid">
+      <div class="ui-split is-aside-start">
         <form id="figureForm" autocomplete="off" novalidate>
-          <fieldset>
+          <fieldset class="ui-fieldset">
             <legend data-i18n="fig.what.title">What it shows</legend>
             <label class="ui-field">
               <span data-i18n="fig.what.link.label">A Gravitas link</span>
@@ -169,7 +100,7 @@ try {
               In Gravitas, set the simulation up, open Share and choose “Build a
               figure”, or copy the link and paste it here.
             </p>
-            <p class="fb-or" data-i18n="fig.what.or">
+            <p class="ui-note fb-or" data-i18n="fig.what.or">
               or start from a scenario
             </p>
             <div class="fb-row">
@@ -194,7 +125,7 @@ try {
             </p>
             <p
               id="fbLinkStatus"
-              class="fb-status"
+              class="ui-status"
               role="status"
               aria-live="polite"
             ></p>
@@ -206,12 +137,12 @@ try {
               <span id="fbStartLabel" data-i18n="fig.what.start.label"
                 >When the figure opens</span
               >
-              <div class="fb-radios">
-                <label
+              <div class="ui-choices">
+                <label class="ui-choice"
                   ><input type="radio" name="fbStart" value="running" checked />
                   <span data-i18n="fig.what.start.running">running</span></label
                 >
-                <label
+                <label class="ui-choice"
                   ><input type="radio" name="fbStart" value="paused" />
                   <span data-i18n="fig.what.start.paused">paused</span></label
                 >
@@ -219,7 +150,7 @@ try {
             </div>
           </fieldset>
 
-          <fieldset>
+          <fieldset class="ui-fieldset">
             <legend data-i18n="fig.look.title">How it looks</legend>
             <label class="ui-field">
               <span data-i18n="fig.look.lang.label"
@@ -244,17 +175,17 @@ try {
               <span data-i18n="fig.look.reset.label">Reset returns to</span>
               <select class="ui-select" id="fbReset"></select>
             </label>
-            <label class="fb-check">
+            <label class="ui-choice is-block fb-check">
               <input id="fbControls" type="checkbox" checked />
               <span data-i18n="fig.look.controls.label"
                 >Show the play controls</span
               >
             </label>
-            <label class="fb-check">
+            <label class="ui-choice is-block fb-check">
               <input id="fbMotion" type="checkbox" />
               <span data-i18n="fig.look.motion.label">Reduce motion</span>
             </label>
-            <label class="fb-check">
+            <label class="ui-choice is-block fb-check">
               <input id="fbQuality" type="checkbox" />
               <span data-i18n="fig.look.quality.label"
                 >Low-cost rendering, for older machines</span
@@ -262,7 +193,7 @@ try {
             </label>
           </fieldset>
 
-          <fieldset>
+          <fieldset class="ui-fieldset">
             <legend data-i18n="fig.words.title">Words around it</legend>
             <label class="ui-field">
               <span data-i18n="fig.words.name.label">Title</span>
@@ -281,7 +212,7 @@ try {
               <span data-i18n="fig.words.caption.label">Caption</span>
               <textarea class="ui-textarea" id="fbCaption" maxlength="600"></textarea>
             </label>
-            <label class="fb-check">
+            <label class="ui-choice is-block fb-check">
               <input id="fbFallback" type="checkbox" checked />
               <span data-i18n="fig.words.fallback.label"
                 >Add a link to the figure under it</span
@@ -289,7 +220,7 @@ try {
             </label>
           </fieldset>
 
-          <fieldset>
+          <fieldset class="ui-fieldset">
             <legend data-i18n="fig.page.title">
               Controlling it from your page
             </legend>
@@ -311,7 +242,7 @@ try {
             </label>
             <p
               id="fbOriginStatus"
-              class="fb-status"
+              class="ui-status"
               role="status"
               aria-live="polite"
             ></p>
@@ -325,9 +256,9 @@ try {
           </fieldset>
         </form>
 
-        <div class="fb-side">
+        <div class="ui-split-aside">
           <h2 data-i18n="fig.preview.title">Preview</h2>
-          <div id="fbPreviewBox" class="fb-preview"></div>
+          <div id="fbPreviewBox" class="ui-plot ui-sky fb-preview"></div>
 
           <section class="fb-out" aria-labelledby="fbOutTitle">
             <h2 id="fbOutTitle" data-i18n="fig.out.title">Copy it</h2>
@@ -366,7 +297,7 @@ try {
               </button>
               <span
                 id="fbCopyStatus"
-                class="fb-status"
+                class="ui-status"
                 role="status"
                 aria-live="polite"
               ></span>

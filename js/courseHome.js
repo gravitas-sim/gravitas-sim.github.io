@@ -199,7 +199,7 @@ function render() {
     el('h1', { id: 'ch-title', text: words(pack.title) }),
     pack.summary ? el('p', { text: words(pack.summary) }) : null,
     pack.audience
-      ? el('p', { className: 'ch-muted', text: words(pack.audience) })
+      ? el('p', { className: 'ui-note', text: words(pack.audience) })
       : null,
     el(
       'ul',
@@ -298,7 +298,7 @@ function render() {
             return el(
               'li',
               {
-                className: 'ch-item',
+                className: 'ui-card is-compact ch-item',
                 id: `ch-item-${item.id}`,
                 'data-kind': item.kind,
                 'data-path': path,
@@ -313,18 +313,18 @@ function render() {
                 el('h3', { text: titleOf(item) }),
                 path !== 'core'
                   ? el('span', {
-                      className: 'ch-badge',
+                      className: 'ui-badge',
                       text: t(`courseHome.badge.${path}`),
                     })
                   : null,
                 el('span', {
-                  className: 'ch-muted',
+                  className: 'ui-note',
                   text: duration(time.items.get(item.id)),
                 })
               ),
               needs.length
                 ? el('p', {
-                    className: 'ch-muted',
+                    className: 'ui-note',
                     text: t('courseHome.after', { list: needs.join('; ') }),
                   })
                 : null,
@@ -342,14 +342,14 @@ function render() {
               item.kind === 'reading' ? citation(item) : null,
               missing
                 ? el('p', {
-                    className: 'ch-warn',
+                    className: 'ui-alert is-warning',
                     text: t('courseHome.missing'),
                   })
                 : null,
               item.kind === 'dataset' && item.dataset.includes('.')
                 ? el(
                     'p',
-                    { className: 'ch-muted' },
+                    { className: 'ui-note' },
                     t('courseHome.install'),
                     ' ',
                     el('a', {

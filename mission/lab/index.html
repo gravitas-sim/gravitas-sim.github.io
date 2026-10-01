@@ -19,203 +19,44 @@
     <link rel="stylesheet" href="/css/components.css" />
     <link rel="stylesheet" href="/css/page.css" />
     <style>
-      /* Local to this page: the editor, the guide, tables and plain views. */
-      .ml-wrap {
-        max-width: 64rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      .ml-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
-      .ml-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem 1rem;
-        align-items: end;
-        margin: 0.75rem 0;
-      }
-      /* A field's width comes from the bar, not from its control: WebKit
-         sizes a select to its longest option (R6's title is long), and an
-         automatic grid track grows to fit it. */
-      .ml-bar > .ui-field {
-        flex: 1 1 12rem;
-        max-width: 100%;
-      }
+      /* Local to this page: room between its sections, the guide beside the
+         editor, and the views' and the window's squares. Rows of fields,
+         fieldsets, tables, notes, legends and the guide's card are
+         css/page.css's. */
       .ml-wrap section {
-        margin: 1.5rem 0;
+        margin: var(--space-6) 0;
       }
-      .ml-wrap h2 {
-        font-size: 1.15rem;
+      .ml-grid {
+        --ui-split-aside: 24rem;
+        gap: var(--space-6);
       }
-      .ml-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.9rem;
-        margin: 0.5rem 0;
+      .ml-wrap fieldset {
+        margin: var(--space-2) 0;
       }
-      .ml-table caption {
-        text-align: left;
-        color: var(--text-secondary);
-        padding-bottom: 0.25rem;
+      .ml-views {
+        --ui-figures-min: 18rem;
       }
-      .ml-table th,
-      .ml-table td {
-        text-align: left;
-        vertical-align: top;
-        padding: 0.3rem 0.4rem;
-        border-bottom: 1px solid var(--border);
-        overflow-wrap: anywhere;
-      }
-      .ml-scroll {
-        overflow-x: auto;
-      }
-      .ml-plots {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
-      }
-      .ml-plots figure {
-        margin: 0;
-      }
-      .ml-plot {
+      .ml-views svg {
+        display: block;
         width: 100%;
         height: auto;
+        aspect-ratio: 1 / 1;
+        background: var(--space-far);
         border: 1px solid var(--border);
-        border-radius: 6px;
-      }
-      .ml-plots figcaption {
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      .ml-note {
-        border-left: 3px solid var(--accent);
-        padding: 0.25rem 0.75rem;
-        color: var(--text-primary);
+        border-radius: var(--radius-sm);
       }
       .ml-window {
         display: grid;
-        gap: 0.5rem;
+        gap: var(--space-2);
         grid-template-columns: minmax(0, 1fr);
         max-width: 40rem;
       }
       .ml-window canvas {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1 / 1;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        background: #0b0d17;
-      }
-      .ml-legend {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.25rem 1rem;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      .ml-swatch {
-        display: inline-block;
-        width: 0.9rem;
-        height: 0.9rem;
-        vertical-align: -0.1rem;
-        margin-right: 0.3rem;
-        border: 1px solid var(--border-strong);
-      }
-      .ml-refused {
-        background: #3a3f52;
-      }
-      .ml-grid {
-        display: grid;
-        gap: 1.5rem;
-        grid-template-columns: minmax(0, 1fr);
-      }
-      @media (min-width: 1100px) {
-        .ml-grid {
-          grid-template-columns: minmax(0, 1fr) 24rem;
-          align-items: start;
-        }
-        .ml-guide {
-          position: sticky;
-          top: 1rem;
-          max-height: calc(100vh - 2rem);
-          overflow-y: auto;
-        }
-      }
-      .ml-guide {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.75rem 1rem;
-      }
-      .ml-guide fieldset,
-      .ml-wrap fieldset {
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        margin: 0.5rem 0;
-        padding: 0.5rem 0.75rem;
-        min-width: 0;
-      }
-      .ml-wrap legend {
-        padding: 0 0.25rem;
-        color: var(--text-primary);
-      }
-      .ml-choice {
-        display: block;
-        margin: 0.25rem 0;
-      }
-      .ml-views {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
-      }
-      .ml-views figure {
-        margin: 0;
-      }
-      .ml-views svg {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1 / 1;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        background: #0b0d17;
-      }
-      .ml-views figcaption,
-      .ml-legend {
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      .ml-legend {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.25rem 1rem;
-      }
-      .ml-swatch {
-        display: inline-block;
-        width: 0.9rem;
-        height: 0.9rem;
-        vertical-align: -0.1rem;
-        margin-right: 0.3rem;
-        border: 1px solid var(--border-strong);
-      }
-      .ml-window canvas {
-        width: 100%;
         max-width: 32rem;
-        height: auto;
         aspect-ratio: 1 / 1;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        background: #0b0d17;
-      }
-      .ml-row-active {
-        outline: 2px solid var(--accent);
       }
       .ml-feedback {
         min-height: 1.5rem;
-      }
-      progress {
-        width: 12rem;
-        max-width: 100%;
       }
     </style>
     <!-- shell:head -->
@@ -247,23 +88,23 @@ try {
 </div>
 </header>
 <!-- /shell:header -->
-    <main class="ml-wrap" id="main" aria-labelledby="ml-title">
-      <div id="langSwitch" class="ml-bar" role="group" aria-label="Language" data-i18n-aria-label="ml.lang"></div>
+    <main class="ui-page ml-wrap" id="main" aria-labelledby="ml-title">
+      <div id="langSwitch" class="ui-toolbar" role="group" aria-label="Language" data-i18n-aria-label="ml.lang"></div>
       <h1 id="ml-title" data-i18n="ml.title">Mission lab</h1>
       <p data-i18n="ml.intro"></p>
-      <p class="ml-note" data-i18n="ml.notFor"></p>
+      <p class="ui-alert" data-i18n="ml.notFor"></p>
       <p>
         <a href="/mission/" data-i18n="ml.core">The mission-design core</a> ·
         <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/MISSION_LAB.md" data-i18n="ml.docs">How the lab works (MISSION_LAB.md)</a>
       </p>
-      <div class="ml-grid">
+      <div class="ui-split ml-grid">
         <div>
           <section aria-labelledby="ml-plan-h">
             <h2 id="ml-plan-h" data-i18n="ml.plan.heading"></h2>
             <p data-i18n="ml.plan.hint"></p>
-            <fieldset>
+            <fieldset class="is-compact">
               <legend data-i18n="ml.plan.earth"></legend>
-              <div class="ml-bar">
+              <div class="ui-toolbar is-fields">
             <div class="ui-field">
               <label for="ml-parking" data-i18n="ml.plan.parking"></label>
               <input class="ui-input" id="ml-parking" type="text" inputmode="decimal" value="300" />
@@ -278,9 +119,9 @@ try {
             </div>
               </div>
             </fieldset>
-            <fieldset>
+            <fieldset class="is-compact">
               <legend data-i18n="ml.plan.departure"></legend>
-              <div class="ml-bar">
+              <div class="ui-toolbar is-fields">
             <div class="ui-field">
               <label for="ml-date" data-i18n="ml.plan.date"></label>
               <input class="ui-input" id="ml-date" type="text" inputmode="text" value="2026-11-01" />
@@ -291,9 +132,9 @@ try {
             </div>
               </div>
             </fieldset>
-            <fieldset>
+            <fieldset class="is-compact">
               <legend data-i18n="ml.plan.arrival"></legend>
-              <div class="ml-bar">
+              <div class="ui-toolbar is-fields">
             <div class="ui-field">
               <label for="ml-peri" data-i18n="ml.plan.peri"></label>
               <input class="ui-input" id="ml-peri" type="text" inputmode="decimal" value="400" />
@@ -304,19 +145,19 @@ try {
             </div>
               </div>
             </fieldset>
-            <fieldset>
+            <fieldset class="is-compact">
               <legend data-i18n="ml.plan.correction"></legend>
-              <div class="ml-bar">
-                <label class="ml-choice"><input id="ml-correct-on" type="checkbox" /> <span data-i18n="ml.plan.correctOn"></span></label>
+              <div class="ui-toolbar is-fields">
+                <label class="ui-choice"><input id="ml-correct-on" type="checkbox" /> <span data-i18n="ml.plan.correctOn"></span></label>
             <div class="ui-field">
               <label for="ml-correct-day" data-i18n="ml.plan.correctDay"></label>
               <input class="ui-input" id="ml-correct-day" type="text" inputmode="numeric" value="30" />
             </div>
               </div>
             </fieldset>
-            <fieldset>
+            <fieldset class="is-compact">
               <legend data-i18n="ml.plan.vehicle"></legend>
-              <div class="ml-bar">
+              <div class="ui-toolbar is-fields">
             <div class="ui-field">
               <label for="ml-dry" data-i18n="ml.plan.dry"></label>
               <input class="ui-input" id="ml-dry" type="text" inputmode="decimal" value="2000" />
@@ -327,16 +168,16 @@ try {
             </div>
               </div>
             </fieldset>
-            <fieldset>
+            <fieldset class="is-compact">
               <legend data-i18n="ml.plan.direct"></legend>
-              <div class="ml-bar" id="ml-bodies"></div>
-              <div class="ml-bar" role="radiogroup" aria-labelledby="ml-start-label">
+              <div class="ui-toolbar is-fields" id="ml-bodies"></div>
+              <div class="ui-toolbar is-fields" role="radiogroup" aria-labelledby="ml-start-label">
                 <span id="ml-start-label" data-i18n="ml.plan.start"></span>
-                <label class="ml-choice"><input type="radio" name="ml-start" value="periapsis" checked /> <span data-i18n="ml.plan.startPeriapsis"></span></label>
-                <label class="ml-choice"><input type="radio" name="ml-start" value="center" /> <span data-i18n="ml.plan.startCenter"></span></label>
+                <label class="ui-choice"><input type="radio" name="ml-start" value="periapsis" checked /> <span data-i18n="ml.plan.startPeriapsis"></span></label>
+                <label class="ui-choice"><input type="radio" name="ml-start" value="center" /> <span data-i18n="ml.plan.startCenter"></span></label>
               </div>
             </fieldset>
-            <div class="ml-bar">
+            <div class="ui-toolbar is-fields">
               <button id="ml-go" type="button" class="ui-button is-primary" data-i18n="ml.compute"></button>
               <button id="ml-save-plan" type="button" class="ui-button" data-i18n="ml.savePlan" disabled></button>
             </div>
@@ -352,33 +193,33 @@ try {
               </div>
             </div>
             <p id="ml-slider-out" aria-live="polite"></p>
-            <div id="ml-timeline" class="ml-scroll" tabindex="0" role="region" aria-label="Timeline table" data-i18n-aria-label="ml.timeline.table"></div>
+            <div id="ml-timeline" class="ui-table-wrap" tabindex="0" role="region" aria-label="Timeline table" data-i18n-aria-label="ml.timeline.table"></div>
           </section>
 
           <section aria-labelledby="ml-views-h">
             <h2 id="ml-views-h" data-i18n="ml.views.heading"></h2>
-            <div class="ml-views" id="ml-views"></div>
-            <div class="ml-legend" id="ml-legend"></div>
-            <div id="ml-positions" class="ml-scroll" tabindex="0" role="region" aria-label="Positions table" data-i18n-aria-label="ml.views.table"></div>
+            <div class="ui-figures ml-views" id="ml-views"></div>
+            <div class="ui-legend" id="ml-legend"></div>
+            <div id="ml-positions" class="ui-table-wrap" tabindex="0" role="region" aria-label="Positions table" data-i18n-aria-label="ml.views.table"></div>
           </section>
 
           <section aria-labelledby="ml-results-h">
             <h2 id="ml-results-h" data-i18n="ml.results.heading"></h2>
-            <div id="ml-results" class="ml-scroll" tabindex="0" role="region" aria-label="Results tables" data-i18n-aria-label="ml.results.table"></div>
+            <div id="ml-results" class="ui-table-wrap" tabindex="0" role="region" aria-label="Results tables" data-i18n-aria-label="ml.results.table"></div>
           </section>
 
           <section aria-labelledby="ml-window-h" class="ml-window">
             <h2 id="ml-window-h" data-i18n="ml.window.heading"></h2>
             <p data-i18n="ml.window.hint"></p>
-            <div class="ml-bar">
+            <div class="ui-toolbar is-fields">
               <button id="ml-window-go" type="button" class="ui-button" data-i18n="ml.window.go"></button>
               <button id="ml-window-cancel" type="button" class="ui-button" data-i18n="ml.cancel" disabled></button>
-              <progress id="ml-window-progress" max="1" value="0" aria-labelledby="ml-window-status"></progress>
+              <progress id="ml-window-progress" class="ui-progress" max="1" value="0" aria-labelledby="ml-window-status"></progress>
             </div>
             <p id="ml-window-status" role="status" aria-live="polite"></p>
-            <canvas id="ml-window-canvas" width="453" height="378" role="img" hidden></canvas>
-            <div class="ml-legend" id="ml-window-legend"></div>
-            <div id="ml-window-out" class="ml-scroll"></div>
+            <canvas id="ml-window-canvas" class="ui-plot ui-sky" width="453" height="378" role="img" hidden></canvas>
+            <div class="ui-legend" id="ml-window-legend"></div>
+            <div id="ml-window-out" class="ui-table-wrap"></div>
           </section>
 
           <section aria-labelledby="ml-check-h">
@@ -386,7 +227,7 @@ try {
             <p data-i18n="ml.check.hint"></p>
             <button id="ml-check-go" type="button" class="ui-button" data-i18n="ml.check.go"></button>
             <p id="ml-check-status" role="status" aria-live="polite"></p>
-            <div id="ml-check-out" class="ml-scroll"></div>
+            <div id="ml-check-out" class="ui-table-wrap"></div>
           </section>
 
           <section aria-labelledby="ml-limits-h">
@@ -397,16 +238,16 @@ try {
           </section>
         </div>
 
-        <aside class="ml-guide" aria-labelledby="ml-guide-h">
+        <aside class="ui-card is-compact ui-split-aside is-scroll ml-guide" aria-labelledby="ml-guide-h">
           <h2 id="ml-guide-h" data-i18n="ml.guide.heading"></h2>
-          <div class="ml-bar" id="ml-guide-pick" role="group" aria-labelledby="ml-guide-h"></div>
-          <div class="ml-bar" role="radiogroup" aria-labelledby="ml-path-label">
+          <div class="ui-toolbar is-fields" id="ml-guide-pick" role="group" aria-labelledby="ml-guide-h"></div>
+          <div class="ui-toolbar is-fields" role="radiogroup" aria-labelledby="ml-path-label">
             <span id="ml-path-label" data-i18n="ml.guide.path"></span>
-            <label class="ml-choice"><input type="radio" name="ml-path" value="intro" checked /> <span data-i18n="ml.guide.intro"></span></label>
-            <label class="ml-choice"><input type="radio" name="ml-path" value="advanced" /> <span data-i18n="ml.guide.advanced"></span></label>
+            <label class="ui-choice"><input type="radio" name="ml-path" value="intro" checked /> <span data-i18n="ml.guide.intro"></span></label>
+            <label class="ui-choice"><input type="radio" name="ml-path" value="advanced" /> <span data-i18n="ml.guide.advanced"></span></label>
           </div>
           <div id="ml-step"></div>
-          <details>
+          <details class="ui-disclosure">
             <summary data-i18n="ml.guide.steps"></summary>
             <ol id="ml-step-list"></ol>
           </details>
