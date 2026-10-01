@@ -137,6 +137,10 @@ import {
   formatSpeed,
   formatDistance,
   formatTime,
+  COURSE_LEVELS,
+  courseLevelDefaults,
+  getCourseLevel,
+  setCourseLevel,
 } from './units.js';
 import { blackHoleFacts, yearsLabel } from './blackHolePhysics.js';
 import {
@@ -517,6 +521,8 @@ const SAVE_KEY = 'gravitas_simulation_save';
 const LONG_PRESS_MS = 380;
 
 let localSettings = {};
+// The course level the panel has staged, applied with everything else.
+let pendingCourseLevel = null;
 
 // Space Object Name Database
 if (typeof window !== 'undefined') {
@@ -4868,7 +4874,10 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
     settingsGrid.querySelector('.settings-advanced')?.open
   );
   settingsGrid.innerHTML = '';
-  if (!keep) localSettings = JSON.parse(JSON.stringify(SETTINGS));
+  if (!keep) {
+    localSettings = JSON.parse(JSON.stringify(SETTINGS));
+    pendingCourseLevel = getCourseLevel();
+  }
 
   function updatePresetInfo(presetName) {
     const box = document.getElementById('presetInfo');
@@ -4881,6 +4890,40 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
     box.style.display = 'block';
     box.innerHTML = `<h4>${scenarioTitle(presetName)}</h4>${scenarioSummary(presetName)}`;
   }
+
+  // The course level: a bundle of defaults, staged like any other change.
+  // Choosing one sets the conservation check here and opens or closes
+  // Advanced; Apply stores it and sets the units and the readout precision.
+  const levelRow = document.createElement('div');
+  levelRow.className = 'settings-level';
+  const levelLabel = document.createElement('label');
+  levelLabel.htmlFor = 'settingsCourseLevel';
+  levelLabel.textContent = t('settings.level.label');
+  const levelSelect = document.createElement('select');
+  levelSelect.id = 'settingsCourseLevel';
+  levelSelect.setAttribute('aria-describedby', 'settingsCourseLevelHint');
+  for (const id of Object.keys(COURSE_LEVELS)) {
+    const option = document.createElement('option');
+    option.value = id;
+    option.textContent = t(`settings.level.${id}`);
+    option.selected = id === pendingCourseLevel;
+    levelSelect.appendChild(option);
+  }
+  const levelHint = document.createElement('p');
+  levelHint.id = 'settingsCourseLevelHint';
+  levelHint.className = 'settings-level-hint';
+  levelHint.textContent = t(`settings.level.${pendingCourseLevel}.hint`);
+  levelSelect.onchange = () => {
+    pendingCourseLevel = levelSelect.value;
+    const d = courseLevelDefaults(pendingCourseLevel);
+    localSettings.show_conservation_diagnostics = d.conservation;
+    buildSettingsMenu({ keep: true });
+    const advancedBox = settingsGrid.querySelector('.settings-advanced');
+    if (advancedBox) advancedBox.open = d.advancedOpen;
+    document.getElementById('settingsCourseLevel')?.focus();
+  };
+  levelRow.append(levelLabel, levelSelect, levelHint);
+  settingsGrid.appendChild(levelRow);
 
   // The sections, in the schema's order. The advanced ones sit together in
   // one disclosure after the rest, closed until it is opened.
@@ -6841,6 +6884,8 @@ document.getElementById('settingsApply').onclick = () => {
   );
 
   setSettings(next);
+  if (pendingCourseLevel && pendingCourseLevel !== getCourseLevel())
+    setCourseLevel(pendingCourseLevel);
   dialogModule?.closeDialog(settingsPanel(), 'apply');
 
   if (needsRebuild.length > 0) {

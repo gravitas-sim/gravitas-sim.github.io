@@ -363,6 +363,16 @@ export const ES = {
   'settings.section.objects': 'Objetos',
   'settings.section.ui-control': 'Interfaz y control',
   'settings.section.educational': 'Didáctico',
+  'settings.level.label': 'Nivel del curso',
+  'settings.level.introductory': 'Introductorio',
+  'settings.level.majors': 'Especialidad',
+  'settings.level.advanced': 'Avanzado',
+  'settings.level.introductory.hint':
+    'Los valores por defecto: unidades físicas, tres cifras significativas y la lectura de conservación desactivada. Ningún nivel oculta nada.',
+  'settings.level.majors.hint':
+    'Activa la lectura de conservación y muestra cuatro cifras significativas, en unidades físicas. Ningún nivel oculta nada.',
+  'settings.level.advanced.hint':
+    'Activa la lectura de conservación, abre «Avanzado» (el integrador y el rendimiento) y muestra seis cifras significativas en las unidades propias de la simulación. Ningún nivel oculta nada.',
   'settings.section.advanced': 'Avanzado',
   'settings.section.reset': 'Restablecer',
   'settings.section.resetNamed':

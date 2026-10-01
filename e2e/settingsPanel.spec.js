@@ -217,6 +217,67 @@ test.describe('interactive add', () => {
   });
 });
 
+test.describe('course level', () => {
+  test('a level stages its defaults, and Apply keeps it', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await openSettings(page);
+    const level = page.locator('#settingsCourseLevel');
+    await expect(level).toHaveValue('introductory');
+    const conservation = page.locator(
+      '.setting-control[data-setting-key="show_conservation_diagnostics"] button'
+    );
+    await expect(conservation).toHaveAttribute('data-state', 'off');
+
+    await level.selectOption('advanced');
+    // Staged in the panel, not yet applied.
+    await expect(conservation).toHaveAttribute('data-state', 'on');
+    await expect(
+      page.locator('#settingsGrid .settings-advanced')
+    ).toHaveJSProperty('open', true);
+    const applied = () =>
+      page.evaluate(async () => {
+        const units = await import('/js/units.js');
+        const { SETTINGS } = await import('/js/appState.js');
+        return {
+          level: units.getCourseLevel(),
+          digits: units.getReadoutDigits(),
+          conservation: SETTINGS.show_conservation_diagnostics,
+        };
+      });
+    expect((await applied()).level).toBe('introductory');
+
+    await page.locator('#settingsApply').click();
+    await expect(page.locator(PANEL)).toBeHidden();
+    expect(await applied()).toEqual({
+      level: 'advanced',
+      digits: 6,
+      conservation: true,
+    });
+
+    // Remembered, and offered again as the current choice.
+    await app.boot();
+    expect((await applied()).digits).toBe(6);
+    await openSettings(page);
+    await expect(page.locator('#settingsCourseLevel')).toHaveValue('advanced');
+  });
+
+  test('Cancel leaves the level as it was', async ({ page, app }) => {
+    await app.boot();
+    await openSettings(page);
+    await page.locator('#settingsCourseLevel').selectOption('majors');
+    await page.locator('#settingsCancel').click();
+    await expect(page.locator(PANEL)).toBeHidden();
+    expect(
+      await page.evaluate(async () =>
+        (await import('/js/units.js')).getCourseLevel()
+      )
+    ).toBe('introductory');
+  });
+});
+
 test.describe('help', () => {
   test('the help behind an info button is in the reader’s language', async ({
     page,

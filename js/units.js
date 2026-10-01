@@ -62,6 +62,12 @@ const MODES = ['physical', 'simulation'];
 const STORAGE_KEY = 'gravitas_units';
 
 let mode = 'physical';
+// How many significant figures a readout shows when its caller does not say:
+// the course level's choice, and 3, what every readout showed, until one is
+// made.
+let readoutDigits = 3;
+/** @returns {number} Significant figures in a readout */
+export const getReadoutDigits = () => readoutDigits;
 
 /** @returns {string} Current unit mode: 'physical' or 'simulation' */
 export const getUnitMode = () => mode;
@@ -91,11 +97,20 @@ export function toggleUnitMode() {
   return mode;
 }
 
-/** Restore the persisted preference. */
+/**
+ * Restore the persisted preferences: the unit mode, and the course level's
+ * readout precision. The units are their own preference once chosen, so a
+ * reader who switched them after choosing a level keeps the switch.
+ */
 export function initUnits() {
   try {
     const saved = window.localStorage?.getItem(STORAGE_KEY);
     if (MODES.includes(saved)) mode = saved;
+    const level = window.localStorage?.getItem(LEVEL_KEY);
+    if (Object.hasOwn(COURSE_LEVELS, level)) {
+      courseLevel = level;
+      readoutDigits = COURSE_LEVELS[level].digits;
+    }
   } catch {
     /* ignore */
   }
@@ -129,8 +144,77 @@ export function velocityUnitToMs() {
  * @param {number} digits - Significant digits
  * @returns {string} Formatted number
  */
-export function sig(v, digits = 3) {
+export function sig(v, digits = readoutDigits) {
   return formatNumber(v, { sig: digits });
+}
+
+// --- Course level ---------------------------------------------------------------
+//
+// Introductory, majors or advanced: a documented bundle of defaults, never a
+// lock. Choosing one stages the conservation check and the Advanced section in
+// the Settings panel and, once applied, sets the units and how many
+// significant figures a readout shows; every control stays where it is and
+// can be changed after. Introductory is exactly what the application did
+// before there were levels. Prompt 72 maps a level onto a lesson's depth.
+//
+// It lives here, rather than in a module of its own, because what it decides
+// is how a quantity is written down - and a module of its own would be one
+// more request on every lesson route, which have two to spare.
+
+/** The levels, in the order a reader is offered them. */
+export const COURSE_LEVELS = Object.freeze({
+  introductory: Object.freeze({
+    depth: 'core',
+    conservation: false,
+    advancedOpen: false,
+    units: 'physical',
+    digits: 3,
+  }),
+  majors: Object.freeze({
+    depth: 'quantitative',
+    conservation: true,
+    advancedOpen: false,
+    units: 'physical',
+    digits: 4,
+  }),
+  advanced: Object.freeze({
+    depth: 'advanced',
+    conservation: true,
+    advancedOpen: true,
+    units: 'simulation',
+    digits: 6,
+  }),
+});
+
+const LEVEL_KEY = 'gravitas_course_level';
+let courseLevel = 'introductory';
+
+/** @returns {string} The reader's course level */
+export const getCourseLevel = () => courseLevel;
+
+/**
+ * What a level sets.
+ * @param {string} id - A course level
+ * @returns {{depth: string, conservation: boolean, advancedOpen: boolean, units: string, digits: number}}
+ */
+export const courseLevelDefaults = id =>
+  COURSE_LEVELS[id] || COURSE_LEVELS.introductory;
+
+/**
+ * Choose a level: store it, and set the units and the readout precision it
+ * names. The settings it stages are the Settings panel's to apply.
+ * @param {string} id - A course level; anything else is ignored
+ */
+export function setCourseLevel(id) {
+  if (!Object.hasOwn(COURSE_LEVELS, id)) return;
+  courseLevel = id;
+  try {
+    window.localStorage?.setItem(LEVEL_KEY, id);
+  } catch {
+    /* storage unavailable */
+  }
+  readoutDigits = COURSE_LEVELS[id].digits;
+  setUnitMode(COURSE_LEVELS[id].units);
 }
 
 /**

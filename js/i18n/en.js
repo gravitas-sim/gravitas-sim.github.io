@@ -622,6 +622,16 @@ export const EN = {
   'settings.section.objects': 'Objects',
   'settings.section.ui-control': 'UI & Control',
   'settings.section.educational': 'Educational',
+  'settings.level.label': 'Course level',
+  'settings.level.introductory': 'Introductory',
+  'settings.level.majors': 'Majors',
+  'settings.level.advanced': 'Advanced',
+  'settings.level.introductory.hint':
+    'The defaults: physical units, three significant figures, and the conservation readout off. No level hides anything.',
+  'settings.level.majors.hint':
+    'Turns the conservation readout on and shows four significant figures, in physical units. No level hides anything.',
+  'settings.level.advanced.hint':
+    "Turns the conservation readout on, opens Advanced (the integrator and performance), and shows six significant figures in the simulation's own units. No level hides anything.",
   'settings.section.advanced': 'Advanced',
   'settings.section.reset': 'Reset',
   'settings.section.resetNamed': 'Reset {section} to its defaults',
