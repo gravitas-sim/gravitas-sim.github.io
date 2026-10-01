@@ -10,7 +10,7 @@ export const PACKAGES = {
     { 'gravitas.power-law-instruments': '^1.0.0' },
   ],
   'gravitas.power-law-instruments': ['1.0.0', '^1.0.0', {}],
-  'gravitas.sdss-dr18-spectra': ['1.0.0', '^1.0.0', {}],
+  'gravitas.sdss-dr18-spectra': ['1.1.0', '^1.0.0', {}],
   'gravitas.tess-hd209458-s56': ['1.1.0', '^1.0.0', {}],
 };
 export const FAMILIES = {

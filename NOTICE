@@ -201,8 +201,8 @@ The bundled spectra are trimmed to the wavelength range all four share,
 averaged three adjacent samples into one and stored as 16-bit integers. There
 is no smoothing, normalization, resampling or shift to rest wavelength. Every
 processing step, each archive URL, and SHA-256 checksums of both the CSV the
-archive served and the flux as committed are recorded beside the data in
-js/data/spectra/sdssSpectraProvenance.js. `npm run spectra:provenance`
+archive served and the flux as committed are recorded in the data pack's
+manifest, data-packs/sdss-dr18-stellar-spectra.json. `npm run spectra:provenance`
 regenerates both files from the archive CSVs and compares byte for byte.
 
 Primary reference: Almeida et al. (2023), ApJS 267, 44,
@@ -339,3 +339,142 @@ every answer's data rows recorded in ephemeris-packs/solar-system-2025-2045.json
 
   Park, Folkner, Williams and Boggs (2021), AJ 161, 105,
   doi:10.3847/1538-3881/abd414 - the DE440 and DE441 ephemerides
+
+===============================================================================
+Data packs: the inventory
+-------------------------------------------------------------------------------
+
+Generated from the data-pack manifests in data-packs/ by tools/docs-facts.mjs
+(npm run docs:sync); the sections above give the acknowledgements in full.
+For each pack: the file the browser loads, its licence status as its manifest
+records it, the basis where that status is not a licence, and what to cite.
+
+<!--fact-block:dataPackNotices-->
+exoplanet-systems: HD 209458 and the Sun and Jupiter: parameters compiled from the literature
+  File: js/data/exoplanetSystems.js (compilation)
+  Licence: no license; attribution requested. Published values, each cited to its paper; the NASA Exoplanet Archive and SIMBAD ask that work using them acknowledge them (NOTICE).
+  Basis: A few dozen numbers, each a published measurement cited to the paper that published it, read from the archives’ public tables. No table or text of anyone’s is reproduced, and the archives ask for acknowledgement, not a licence.
+  Cite:
+    Southworth 2010, MNRAS 408, 1689, doi:10.1111/j.1365-2966.2010.17231.x
+    Torres, Winn & Holman 2008, ApJ 677, 1324, doi:10.1086/529429
+    del Burgo & Allende Prieto 2016, MNRAS 463, 1400, doi:10.1093/mnras/stw2005
+    Stassun et al. 2019, AJ 158, 138 (TESS Input Catalog v8), doi:10.3847/1538-3881/ab3467
+    Sing et al. 2016, Nature 529, 59, doi:10.1038/nature16068
+    Knutson et al. 2007, ApJ 655, 564, doi:10.1086/510111
+    Casasayas-Barris et al. 2020, A&A 635, A206, doi:10.1051/0004-6361/201937221
+    Stassun et al. 2017, AJ 153, 136, doi:10.3847/1538-3881/aa5df3
+    Bonomo et al. 2017, A&A 602, A107, doi:10.1051/0004-6361/201629882
+    Prša et al. 2016, AJ 152, 41 (IAU 2015 Resolution B3, nominal solar values), doi:10.3847/0004-6256/152/2/41
+    NASA Jupiter Fact Sheet (NSSDCA, updated 2 October 2024), https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html
+    NASA Exoplanet Archive, Planetary Systems table (NASA Exoplanet Science Institute 2020), doi:10.26133/NEA12
+    Christiansen et al. 2025, PSJ 6, 186 (the NASA Exoplanet Archive), doi:10.3847/psj/ade3c2
+
+gw150914-figure-data: GW150914: the published figure data
+  File: js/data/gw/gw150914.js (observed)
+  Licence: CC BY 4.0. CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+  Cite:
+    Abbott et al. (LIGO Scientific and Virgo Collaborations) 2016, Phys. Rev. Lett. 116, 061102 (GW150914), doi:10.1103/PhysRevLett.116.061102
+    Abbott et al. 2021, SoftwareX 13, 100658 (O1 and O2 open data), doi:10.1016/j.softx.2021.100658
+
+gwosc-five-events: Five gravitational-wave events: whitened GWOSC strain
+  File: js/data/gw/gwoscEvents.js (observed)
+  Licence: CC BY 4.0. GWOSC data are released under CC BY 4.0. GWOSC asks that work using them cite the open-data papers and carry its acknowledgement (NOTICE).
+  Cite:
+    LIGO Scientific and Virgo Collaborations (Abbott et al.) 2019, Phys. Rev. X 9, 031040 (GWTC-1), doi:10.1103/PhysRevX.9.031040
+    GWOSC strain data release for GWTC-1, doi:10.7935/82H3-HH23
+    LIGO Scientific and Virgo Collaborations (Abbott et al.) 2024, Phys. Rev. D 109, 022001 (GWTC-2.1), doi:10.1103/PhysRevD.109.022001
+    GWOSC strain data release for GWTC-2.1, doi:10.7935/qf3a-3z67
+    Abbott et al. 2021, SoftwareX 13, 100658 (O1 and O2 open data), doi:10.1016/j.softx.2021.100658
+    Abbott et al. 2023, ApJS 267, 29 (O3 open data), doi:10.3847/1538-4365/acdc9f
+
+mist-sdss-isochrones: MIST v1.2 isochrones in the SDSS bands (a model)
+  File: js/data/observations/mistSdssIsochrones.js (model)
+  Licence: no license stated. MIST asks that Dotter 2016, Choi et al. 2016 and the MESA instrument papers be cited by any publication using the models, and states no separate redistribution license.
+  Basis: A heavily reduced derived subset for teaching, attributed in full, with the exact source and checksum recorded so the originals can be recovered, as for the MIST tracks Gravitas already ships (NOTICE).
+  Cite:
+    Dotter 2016, ApJS 222, 8 (MIST 0), doi:10.3847/0067-0049/222/1/8
+    Choi et al. 2016, ApJ 823, 102 (MIST I), doi:10.3847/0004-637X/823/2/102
+    Paxton et al. 2011, ApJS 192, 3 (MESA), doi:10.1088/0067-0049/192/1/3
+    Paxton et al. 2013, ApJS 208, 4 (MESA), doi:10.1088/0067-0049/208/1/4
+    Paxton et al. 2015, ApJS 220, 15 (MESA), doi:10.1088/0067-0049/220/1/15
+
+mist-v12-tracks: MIST v1.2 evolutionary tracks: eight model stars at solar metallicity
+  File: js/data/stellar/mistTracks.js (model)
+  Licence: no license stated. MIST asks that Dotter 2016 and Choi et al. 2016 be cited by any publication using the models, and states no separate redistribution license.
+  Basis: What is bundled here is a heavily reduced derived subset for teaching, attributed in full, with the exact source and checksum recorded so the originals can be recovered. If MIST would prefer this not be redistributed, the build script reproduces it from their download in one command.
+  Cite:
+    Dotter 2016, ApJS 222, 8 (MIST 0), doi:10.3847/0067-0049/222/1/8
+    Choi et al. 2016, ApJ 823, 102 (MIST I), doi:10.3847/0004-637X/823/2/102
+    Paxton et al. 2011, ApJS 192, 3 (MESA), doi:10.1088/0067-0049/192/1/3
+    Paxton et al. 2013, ApJS 208, 4 (MESA), doi:10.1088/0067-0049/208/1/4
+    Paxton et al. 2015, ApJS 220, 15 (MESA), doi:10.1088/0067-0049/220/1/15
+    Asplund et al. 2009, ARA&A 47, 481 (the solar abundances MIST scales), doi:10.1146/annurev.astro.46.060407.145222
+
+ngc3198-synthetic-curve: NGC 3198: a synthetic rotation curve
+  File: js/data/ngc3198Synthetic.js (synthetic)
+  Licence: CC BY 4.0. Gravitas’s own synthetic data, licensed as its teaching material is (CC BY 4.0, LICENSES.md).
+  Cite:
+    van Albada, Bahcall, Begeman & Sancisi 1985, ApJ 295, 305 (the galaxy the model is built to resemble), doi:10.1086/163375
+    Freeman 1970, ApJ 160, 811 (the exponential disc), doi:10.1086/150474
+    de Blok et al. 2008, AJ 136, 2648 (THINGS: a published NGC 3198 curve, not used here), doi:10.1088/0004-6256/136/6/2648
+
+sdss-dr18-ngc2420-photometry: NGC 2420: SDSS DR18 photometry
+  File: js/data/observations/sdssNgc2420Photometry.js (observed)
+  Licence: public domain. SDSS data are in the public domain. SDSS asks that work using them acknowledge the survey and cite the data release (NOTICE).
+  Cite:
+    Almeida et al. 2023, ApJS 267, 44 (SDSS DR18), doi:10.3847/1538-4365/acda98
+    York et al. 2000, AJ 120, 1579 (the Sloan Digital Sky Survey), doi:10.1086/301513
+    An et al. 2008, ApJS 179, 326 (SDSS photometry of crowded cluster fields), doi:10.1086/592090
+
+sdss-dr18-ngc2420-segue: NGC 2420: SEGUE stellar parameters
+  File: js/data/observations/sdssNgc2420Segue.js (observed)
+  Licence: public domain. SDSS data are in the public domain. SDSS asks that work using them acknowledge the survey and cite the data release (NOTICE).
+  Cite:
+    Almeida et al. 2023, ApJS 267, 44 (SDSS DR18), doi:10.3847/1538-4365/acda98
+    York et al. 2000, AJ 120, 1579 (the Sloan Digital Sky Survey), doi:10.1086/301513
+    Lee et al. 2008a, AJ 136, 2022 (the SEGUE Stellar Parameter Pipeline), doi:10.1088/0004-6256/136/5/2022
+    Lee et al. 2008b, AJ 136, 2050 (its validation on globular and open clusters, NGC 2420 among them), doi:10.1088/0004-6256/136/5/2050
+    Yanny et al. 2009, AJ 137, 4377 (SEGUE), doi:10.1088/0004-6256/137/5/4377
+
+sdss-dr18-stellar-spectra: Four observed stellar spectra: SDSS DR18, one each of A, G, K and M
+  File: js/data/spectra/sdssSpectra.js (observed)
+  Licence: public domain. SDSS data are public; SDSS asks that work using them cite the data release and acknowledge the survey (NOTICE).
+  Basis: SDSS’s image-use policy, read 2026-10-01: “All SDSS data released in our public data releases are considered in the public domain” (source.terms). The acknowledgement SDSS asks for is in NOTICE.
+  Cite:
+    Almeida et al. 2023, ApJS 267, 44 (SDSS DR18), doi:10.3847/1538-4365/acda98
+    Smee et al. 2013, AJ 146, 32 (the SDSS and BOSS spectrographs), doi:10.1088/0004-6256/146/2/32
+    Gunn et al. 2006, AJ 131, 2332 (the SDSS 2.5 m telescope), doi:10.1086/500975
+    Yanny et al. 2009, AJ 137, 4377 (SEGUE), doi:10.1088/0004-6256/137/5/4377
+
+tess-hd209458-s56-aperture: HD 209458: TESS sector 56 aperture mask
+  File: js/data/observations/tessHd209458S56Aperture.js (observed)
+  Licence: public domain. NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.
+  Cite:
+    TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
+    Ricker et al. 2015, JATIS 1, 014003 (TESS), doi:10.1117/1.JATIS.1.1.014003
+    Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC), doi:10.1117/12.2233418
+    TESS Science Data Products Description Document, NASA/TM-2018-220036 (EXP-TESS-ARC-ICD-0014 Rev D, 31 July 2018), table 15: aperture mask image bits, https://ntrs.nasa.gov/citations/20180007935
+
+tess-hd209458-s56-lc: HD 209458: TESS sector 56 light curve
+  File: js/data/observations/tessHd209458S56.js (observed)
+  Licence: public domain. NASA mission data, released through MAST without restriction on reuse. MAST asks that work using its data acknowledge the mission and the archive.
+  Cite:
+    TESS Light Curves - All Sectors, STScI/MAST, doi:10.17909/t9-nmc8-f686
+    Ricker et al. 2015, JATIS 1, 014003 (TESS), doi:10.1117/1.JATIS.1.1.014003
+    Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC), doi:10.1117/12.2233418
+
+trappist-1-system: TRAPPIST-1: the star and its seven planets, compiled from the literature
+  File: js/data/trappist1.js (compilation)
+  Licence: no license; attribution requested. Published values, each cited to its paper; the NASA Exoplanet Archive and SIMBAD ask that work using them acknowledge them (NOTICE).
+  Basis: A few dozen numbers, each a published measurement cited to the paper that published it, read from the archives’ public tables. No table or text of anyone’s is reproduced, and the archives ask for acknowledgement, not a licence.
+  Cite:
+    Agol et al. 2021, PSJ 2, 1, doi:10.3847/PSJ/abd022
+    Gillon et al. 2016, Nature 533, 221, doi:10.1038/nature17448
+    Gaia EDR3 parallax, 80.2123 mas, via SIMBAD (Gaia Collaboration 2021, A&A 649, A1), doi:10.1051/0004-6361/202039657
+    Gillon et al. 2017, Nature 542, 456, doi:10.1038/nature21360
+    Ducrot et al. 2020, A&A 640, A112, doi:10.1051/0004-6361/201937392
+    Grimm et al. 2018, A&A 613, A68, doi:10.1051/0004-6361/201732233
+    NASA Exoplanet Archive, Planetary Systems table (NASA Exoplanet Science Institute 2020), doi:10.26133/NEA12
+    Christiansen et al. 2025, PSJ 6, 186 (the NASA Exoplanet Archive), doi:10.3847/psj/ade3c2
+    Wenger et al. 2000, A&AS 143, 9 (SIMBAD), doi:10.1051/aas:2000332
+<!--/fact-block-->
