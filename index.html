@@ -3120,9 +3120,12 @@ try {
            before this, which ACCESSIBILITY.md records as a known gap; this
            closes it for the objects a lesson is actually about. -->
       <div id="investigationObjectsWrap" class="inv-probe-wrap" hidden="">
-        <p class="inv-probe-title" data-i18n="inv.objects.title">
+        <!-- Collapsible, and remembered: a reader who folds it away is not
+             handed it back open on the next step or the next visit. -->
+        <details id="investigationObjectsDisclosure" class="inv-objects-disclosure" open="">
+        <summary class="inv-probe-title" data-i18n="inv.objects.title">
           Objects in this activity
-        </p>
+        </summary>
         <div
           id="investigationObjects"
           class="inv-objects"
@@ -3150,6 +3153,7 @@ try {
             <span data-i18n="inv.stage.scale">True scale</span>
           </button>
         </div>
+        </details>
       </div>
 
       <!-- Progress safety. The save status is a standing statement rather than
@@ -3177,32 +3181,37 @@ try {
           aria-live="polite"
           hidden=""
         ></p>
-        <div class="inv-backup-actions">
-          <button
-            id="investigationBackupDownload"
-            class="ui-button subtle"
-            title="Save a copy of your answers to a file you keep"
-            data-i18n-title="inv.backup.download.hint"
-            data-i18n="inv.backup.download"
-          >
-            Download progress backup
-          </button>
-          <button
-            id="investigationBackupRestore"
-            class="ui-button subtle"
-            title="Load answers back from a file you saved earlier"
-            data-i18n-title="inv.backup.restore.hint"
-            data-i18n="inv.backup.restore"
-          >
-            Restore progress backup
-          </button>
-          <input
-            id="investigationBackupFile"
-            type="file"
-            accept="application/json,.json"
-            hidden=""
-          />
-        </div>
+        <!-- Kept, but out of the way: two full-width buttons under every step
+             for something a reader does once a term. -->
+        <details class="inv-backup">
+          <summary data-i18n="inv.backup.summary">Progress backup</summary>
+          <div class="inv-backup-actions">
+            <button
+              id="investigationBackupDownload"
+              class="ui-button subtle"
+              title="Save a copy of your answers to a file you keep"
+              data-i18n-title="inv.backup.download.hint"
+              data-i18n="inv.backup.download"
+            >
+              Download progress backup
+            </button>
+            <button
+              id="investigationBackupRestore"
+              class="ui-button subtle"
+              title="Load answers back from a file you saved earlier"
+              data-i18n-title="inv.backup.restore.hint"
+              data-i18n="inv.backup.restore"
+            >
+              Restore progress backup
+            </button>
+            <input
+              id="investigationBackupFile"
+              type="file"
+              accept="application/json,.json"
+              hidden=""
+            />
+          </div>
+        </details>
       </div>
 
       <footer class="inv-footer">

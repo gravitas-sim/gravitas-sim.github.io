@@ -7165,8 +7165,14 @@
     gap: var(--space-2, 8px);
   }
 
-  .inv-backup-actions[hidden] {
-    display: none !important;
+  /* The two backup buttons, behind one disclosure. An authoring preview
+     hides the disclosure itself: it has nothing to back up. */
+  .inv-backup > summary {
+    min-height: 24px;
+    margin-bottom: var(--space-2, 8px);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    cursor: pointer;
   }
 
   .inv-backup-actions .ui-button {

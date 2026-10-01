@@ -1385,6 +1385,7 @@ export const ES = {
   'inv.action.back': 'Atrás',
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
   'inv.body.label': 'Paso de la lección',
+  'inv.backup.summary': 'Copia del progreso',
   'inv.backup.download': 'Descargar copia del progreso',
   'inv.backup.download.hint':
     'Guarda una copia de tus respuestas en un archivo tuyo. El informe PDF sigue siendo lo que se entrega.',

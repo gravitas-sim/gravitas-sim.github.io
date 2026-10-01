@@ -1408,6 +1408,7 @@ export const EN = {
   'inv.action.back': 'Back',
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
   'inv.body.label': 'Lesson step',
+  'inv.backup.summary': 'Progress backup',
   'inv.backup.download': 'Download progress backup',
   'inv.backup.download.hint':
     'Save a copy of your answers to a file you keep. The PDF report is still what you hand in.',
