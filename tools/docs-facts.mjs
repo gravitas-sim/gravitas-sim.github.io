@@ -123,6 +123,9 @@ const DOCS = [
   // The component language (Prompt 51): no counts, but its links to the
   // stylesheets and tools it documents are checked.
   'DESIGN_SYSTEM.md',
+  // The plotting component's parity table and thresholds (Prompt 64): no
+  // counts, but its links are checked.
+  'PLOT_COMPONENT.md',
   'OBJECT_INSPECTOR.md',
   'PERFORMANCE_PROFILING_GUIDE.md',
   'PERFORMANCE_OPTIMIZATIONS_SUMMARY.md',
