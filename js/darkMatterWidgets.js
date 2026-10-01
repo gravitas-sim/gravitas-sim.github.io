@@ -1339,6 +1339,7 @@ const FLYBY = {
   actions: [
     {
       id: 'run',
+      icon: 'play',
       get label() {
         return t('dmW.runPause');
       },

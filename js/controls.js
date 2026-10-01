@@ -192,7 +192,11 @@ function refreshTransport() {
   const scrubbingNow = isScrubbing();
   const paused = state.paused;
   const showPlayIcon = scrubbingNow || paused;
-  playBtn.textContent = showPlayIcon ? '▶' : '❚❚';
+  // The picture is an icon (css/icons.css) and the name is the aria-label
+  // below, so swapping the class is all the glyph needs.
+  playBtn
+    .querySelector('.icon')
+    ?.setAttribute('class', `icon icon-${showPlayIcon ? 'play' : 'pause'}`);
   // In the reader's language: these were English literals, so a paused figure
   // told a Spanish screen reader "Play simulation" over a Spanish interface.
   playBtn.setAttribute(

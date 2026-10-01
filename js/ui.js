@@ -3865,7 +3865,12 @@ const show_enhanced_scenario_info = scenarioName => {
 // now opens the panel. The panel's first control is the switch.
 // =============================================================================
 
-const SOUND_GLYPH = { off: '🔇', ready: '🔈', playing: '🔊', blocked: '🔇' };
+const SOUND_GLYPH = {
+  off: 'sound-off',
+  ready: 'sound',
+  playing: 'sound-on',
+  blocked: 'sound-off',
+};
 
 /** Where a lesson route hangs off. The sandbox is the site root. */
 const LESSON_ROUTE_BASE = '/';
@@ -3885,11 +3890,14 @@ function soundStatusKey() {
 const refreshSonificationToggle = () => {
   const toggle = document.getElementById('sonificationToggle');
   if (!toggle) return;
-  const glyph = toggle.querySelector('.readout-icon-glyph') || toggle;
+  // The glyph is an icon from css/icons.css; the state is also in the name.
+  const glyph = toggle.querySelector('.readout-icon-glyph');
+  const show = name =>
+    glyph?.setAttribute('class', `readout-icon-glyph icon icon-${name}`);
   const status = soundStatusKey();
 
   if (status === 'unsupported') {
-    glyph.textContent = SOUND_GLYPH.off;
+    show(SOUND_GLYPH.off);
     toggle.disabled = true;
     toggle.dataset.state = 'disabled';
     toggle.title = t('sound.state.unsupported');
@@ -3898,12 +3906,13 @@ const refreshSonificationToggle = () => {
   }
 
   toggle.disabled = false;
-  glyph.textContent =
+  show(
     status === 'playing'
       ? SOUND_GLYPH.playing
       : status === 'ready'
         ? SOUND_GLYPH.ready
-        : SOUND_GLYPH.off;
+        : SOUND_GLYPH.off
+  );
   toggle.dataset.state = status;
   const label = t('sound.button.labeled', {
     state: t(`sound.state.${status}`),
@@ -7193,6 +7202,23 @@ const settingsCloseChip = document.getElementById('settingsCloseChip');
 if (settingsCloseChip)
   settingsCloseChip.onclick = () => dismissSettings('chip');
 
+/**
+ * Point a button that is an icon and a label at another icon and message.
+ *
+ * The label is a span carrying data-i18n, so moving the id as well as the
+ * text keeps a language change mid-recording on the right words; textContent
+ * on the button itself would have erased the icon.
+ * @param {HTMLElement} btn - The button
+ * @param {string} icon - A name from css/icons.css, without the icon- prefix
+ * @param {string} id - The message the label should carry
+ */
+const setIconLabel = (btn, icon, id) => {
+  btn.querySelector('.icon')?.setAttribute('class', `icon icon-${icon}`);
+  const label = btn.querySelector('[data-i18n]') || btn;
+  if (label !== btn) label.dataset.i18n = id;
+  label.textContent = t(id);
+};
+
 // Demo mode functionality
 let demoModeInterval = null;
 let demoModeActive = false;
@@ -7205,7 +7231,7 @@ const startDemoMode = () => {
   demoModeActive = true;
   const demoBtn = document.getElementById('demoModeBtn');
   demoBtn.classList.add('active');
-  demoBtn.textContent = '⏹️ Stop Demo';
+  setIconLabel(demoBtn, 'stop', 'settings.demoMode.stop');
 
   // Start with a random scenario
   currentDemoIndex = Math.floor(Math.random() * demoScenarios.length);
@@ -7237,7 +7263,7 @@ const stopDemoMode = () => {
   demoModeActive = false;
   const demoBtn = document.getElementById('demoModeBtn');
   demoBtn.classList.remove('active');
-  demoBtn.textContent = '🎬 Demo Mode';
+  setIconLabel(demoBtn, 'clapper', 'settings.demoMode');
 
   if (demoModeInterval) {
     clearInterval(demoModeInterval);
@@ -7389,7 +7415,11 @@ const paintRecordingState = status => {
   const on = Boolean(status?.recording);
   if (recordBtn) {
     recordBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    recordBtn.textContent = on ? t('rail.record.stop') : t('rail.record');
+    setIconLabel(
+      recordBtn,
+      on ? 'stop' : 'video',
+      on ? 'rail.record.stop' : 'rail.record'
+    );
     recordBtn.title = on ? t('rail.record.stop.hint') : t('rail.record.hint');
   }
   if (!recordingBadge || !recordingReadout) return;

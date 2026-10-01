@@ -107,7 +107,10 @@ async function figureFrame(page) {
 const received = page => page.evaluate(() => window.received.map(r => r.data));
 const running = frame =>
   frame.evaluate(
-    () => document.getElementById('timelinePlay')?.textContent.trim() === '❚❚'
+    () =>
+      document
+        .querySelector('#timelinePlay .icon')
+        ?.classList.contains('icon-pause') === true
   );
 
 let fragment;

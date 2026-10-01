@@ -2585,7 +2585,9 @@ function syncToolPanel(step) {
   els.toolActions.innerHTML = actions
     .map(
       a =>
-        `<button type="button" class="inv-tool-action" data-tool-action="${escape(a.id)}">${escape(a.label)}</button>`
+        // An action may name an icon from css/icons.css; the words stay, in a
+        // span of their own so a relabel below does not erase the picture.
+        `<button type="button" class="inv-tool-action" data-tool-action="${escape(a.id)}">${a.icon ? `<span class="icon icon-${escape(a.icon)}" aria-hidden="true"></span>` : ''}<span>${escape(a.label)}</span></button>`
     )
     .join('');
   els.toolActions.hidden = !actions.length;
@@ -2908,8 +2910,9 @@ function paintTool({ quiet = false } = {}) {
       `[data-tool-action="${CSS.escape(action.id)}"]`
     );
     const label = action.label;
-    if (btn && typeof label === 'string' && btn.textContent !== label) {
-      btn.textContent = label;
+    const text = btn?.querySelector('span:not(.icon)');
+    if (text && typeof label === 'string' && text.textContent !== label) {
+      text.textContent = label;
     }
   }
 

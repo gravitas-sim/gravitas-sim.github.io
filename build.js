@@ -131,6 +131,8 @@ async function buildCss() {
     // component-layer files so it can restate what the older sheets set for
     // the same elements without reaching for !important.
     'css/chrome.css',
+    // The icon set: one class per picture, drawn as a mask in the text color.
+    'css/icons.css',
     // The shared shell's header, which the application carries too; folded in
     // here so the initial download counts it (index.html links it by the
     // absolute path every other page uses, collapsed below).
@@ -313,6 +315,7 @@ async function buildHtml() {
     'components.css',
     'presentation.css',
     'chrome.css',
+    'icons.css',
   ];
   let replacedFirst = false;
   for (const name of DEV_STYLESHEETS) {

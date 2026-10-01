@@ -294,6 +294,7 @@ const BINARY = {
         ? [
             {
               id: 'mark',
+              icon: 'flag',
               get label() {
                 return t('binW.mark');
               },
@@ -306,6 +307,7 @@ const BINARY = {
             },
             {
               id: 'run',
+              icon: 'play',
               get label() {
                 return t('binW.runPause');
               },
@@ -320,6 +322,7 @@ const BINARY = {
         : [
             {
               id: 'run',
+              icon: 'play',
               get label() {
                 return t('binW.runPause');
               },
@@ -740,6 +743,7 @@ const BINARY_COMPARE = {
   actions: [
     {
       id: 'run',
+      icon: 'play',
       get label() {
         return t('binW.runPause');
       },

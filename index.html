@@ -81,6 +81,7 @@
     <link rel="stylesheet" href="css/components.css?v=3" />
     <link rel="stylesheet" href="css/presentation.css?v=3" />
     <link rel="stylesheet" href="css/chrome.css?v=3" />
+    <link rel="stylesheet" href="css/icons.css?v=3" />
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
@@ -1818,7 +1819,10 @@ try {
             data-i18n-aria-label="sound.button.label"
             aria-label="Sound settings"
           >
-            <span class="readout-icon-glyph" aria-hidden="true">🔇</span>
+            <span
+              class="readout-icon-glyph icon icon-sound-off"
+              aria-hidden="true"
+            ></span>
           </button>
           <button
             id="overlayMinimize"
@@ -1952,9 +1956,9 @@ try {
             class="ui-button"
             title="Guided lessons that walk you through a concept step by step, with questions and an optional lab report you can submit"
             data-i18n-title="rail.investigations.hint"
-            data-i18n="rail.investigations"
           >
-            🎓 Investigations
+            <span class="icon icon-cap" aria-hidden="true"></span>
+            <span data-i18n="rail.investigations">Investigations</span>
           </button>
           <button
             id="settingsBtn"
@@ -2059,18 +2063,18 @@ try {
             class="ui-button"
             title="Create a link that reopens this exact simulation: hand it out as an assignment, or send back what you built (K)"
             data-i18n-title="rail.share.hint"
-            data-i18n="rail.share"
           >
-            🔗 Share Link
+            <span class="icon icon-link" aria-hidden="true"></span>
+            <span data-i18n="rail.share">Share Link</span>
           </button>
           <button
             id="exportDataBtn"
             class="ui-button"
             title="Download the recorded simulation as CSV: positions, velocities and energies over time, and the light curve if it is running. Open them in Excel, or in the companion Python notebook (E)"
             data-i18n-title="rail.exportData.hint"
-            data-i18n="rail.exportData"
           >
-            📊 Export Data
+            <span class="icon icon-chart" aria-hidden="true"></span>
+            <span data-i18n="rail.exportData">Export Data</span>
           </button>
         </div>
       </div>
@@ -2114,9 +2118,9 @@ try {
               aria-pressed="false"
               title="Lay a ruler across the scene. Drag either end onto whatever you want the distance between; the reading is given in AU and in kilometers, and it is anchored to the world, so panning and zooming move the ruler with the things it is measuring rather than changing what it says."
               data-i18n-title="rail.toggleRuler.hint"
-              data-i18n="rail.toggleRuler"
             >
-              📏 Ruler
+              <span class="icon icon-ruler" aria-hidden="true"></span>
+              <span data-i18n="rail.toggleRuler">Ruler</span>
             </button>
             <button
               id="toggleProtractor"
@@ -2124,9 +2128,9 @@ try {
               aria-pressed="false"
               title="Measure an angle. Drag the middle handle onto the corner and the two outer handles along the directions you want the angle between - a velocity and a line to the star, say, which on an eccentric orbit is ninety degrees only at periapsis and apoapsis."
               data-i18n-title="rail.toggleProtractor.hint"
-              data-i18n="rail.toggleProtractor"
             >
-              📐 Protractor
+              <span class="icon icon-angle" aria-hidden="true"></span>
+              <span data-i18n="rail.toggleProtractor">Protractor</span>
             </button>
             <button
               id="toggleStopwatch"
@@ -2134,9 +2138,9 @@ try {
               aria-pressed="false"
               title="Time things in simulated time, so pausing pauses the clock and the simulation speed does not change what you measure. With a body selected you can latch it to that body's periapsis passages and read its period off directly."
               data-i18n-title="rail.toggleStopwatch.hint"
-              data-i18n="rail.toggleStopwatch"
             >
-              ⏱ Stopwatch
+              <span class="icon icon-stopwatch" aria-hidden="true"></span>
+              <span data-i18n="rail.toggleStopwatch">Stopwatch</span>
             </button>
           </div>
           <div id="stopwatchControls" class="measure-tools" hidden="">
@@ -2145,9 +2149,9 @@ try {
               class="ui-button secondary measure-btn"
               title="Start timing from now"
               data-i18n-title="rail.stopwatchMark.hint"
-              data-i18n="rail.stopwatchMark"
             >
-              ⚑ Mark
+              <span class="icon icon-flag" aria-hidden="true"></span>
+              <span data-i18n="rail.stopwatchMark">Mark</span>
             </button>
             <button
               id="stopwatchStop"
@@ -2327,9 +2331,9 @@ try {
               aria-label="Decrease speed"
               data-i18n-title="rail.slowDown.hint"
               data-i18n-aria-label="rail.slowDown.label"
-              data-i18n="rail.slowDown"
             >
-              ⏪ Slow
+              <span class="icon icon-rewind" aria-hidden="true"></span>
+              <span data-i18n="rail.slowDown">Slow</span>
             </button>
             <span id="speedDisplay" class="speed-display">1.0x</span>
             <button
@@ -2339,9 +2343,9 @@ try {
               aria-label="Increase speed"
               data-i18n-title="rail.speedUp.hint"
               data-i18n-aria-label="rail.speedUp.label"
-              data-i18n="rail.speedUp"
             >
-              Fast ⏩
+              <span data-i18n="rail.speedUp">Fast</span>
+              <span class="icon icon-fast-forward" aria-hidden="true"></span>
             </button>
           </div>
 
@@ -2358,29 +2362,29 @@ try {
               class="ui-button"
               title="Take a screenshot (or press P). The scale bar, the elapsed simulated time and any measurement tools you have out are drawn on the canvas itself, so the image documents its own scale and its own clock."
               data-i18n-title="rail.screenshot.hint"
-              data-i18n="rail.screenshot"
             >
-              📸 Screenshot
+              <span class="icon icon-camera" aria-hidden="true"></span>
+              <span data-i18n="rail.screenshot">Screenshot</span>
             </button>
             <button
               id="recordBtn"
               class="ui-button"
               title="Record a clip of the simulation as it runs: an MP4 where the browser can encode one, a WebM where it cannot. The scenario name, the scale bar and the simulated clock are burned into every frame, so the clip documents itself in a slide. Recording stops itself at 3 minutes or 80 MB, whichever comes first."
               data-i18n-title="rail.record.hint"
-              data-i18n="rail.record"
               aria-pressed="false"
             >
-              🎬 Record Clip
+              <span class="icon icon-video" aria-hidden="true"></span>
+              <span data-i18n="rail.record">Record Clip</span>
             </button>
           </div>
           <button
             id="lectureBtn"
             class="ui-button"
             data-i18n-title="lecture.action.enter.hint"
-            data-i18n="lecture.action.enter"
             title="Fill the screen for projection: larger type and controls, the Daylight theme, a spotlight pointer, and arrow keys to step through a prepared sequence of links. Escape leaves."
           >
-            🎦 Lecture Mode
+            <span class="icon icon-present" aria-hidden="true"></span>
+            <span data-i18n="lecture.action.enter">Lecture Mode</span>
           </button>
           <div class="rail-grid">
             <button
@@ -2465,7 +2469,8 @@ try {
           data-i18n-title="rail.objectType.hint"
           data-i18n-aria-label="rail.objectType.label"
         >
-          ⭐ Add object
+          <span class="icon icon-star" aria-hidden="true"></span>
+          <span>Add object</span>
         </button>
         <div
           id="objectTypePicker"
@@ -2689,7 +2694,7 @@ try {
         data-i18n-title="transport.timelinePlay.hint"
         data-i18n-aria-label="transport.timelinePlay.label"
       >
-        ❚❚
+        <span class="icon icon-pause" aria-hidden="true"></span>
       </button>
       <button
         id="timelineStepBack"
@@ -2699,7 +2704,7 @@ try {
         data-i18n-title="transport.timelineStepBack.hint"
         data-i18n-aria-label="transport.timelineStepBack.label"
       >
-        ⏮
+        <span class="icon icon-step-back" aria-hidden="true"></span>
       </button>
       <button
         id="timelineStepFwd"
@@ -2709,7 +2714,7 @@ try {
         data-i18n-title="transport.timelineStepFwd.hint"
         data-i18n-aria-label="transport.timelineStepFwd.label"
       >
-        ⏭
+        <span class="icon icon-step-fwd" aria-hidden="true"></span>
       </button>
       <!-- Only in a gravitas-embed/1 figure (js/embed.js): back to what the
            figure's author made, or to its scenario, as its URL says. -->
@@ -3122,15 +3127,17 @@ try {
             id="investigationAuthorPrev"
             class="ui-button subtle"
             title="Previous step"
+            aria-label="Previous step"
           >
-            ◀
+            <span class="icon icon-back" aria-hidden="true"></span>
           </button>
           <button
             id="investigationAuthorNext"
             class="ui-button subtle"
             title="Next step"
+            aria-label="Next step"
           >
-            ▶
+            <span class="icon icon-play" aria-hidden="true"></span>
           </button>
         </div>
         <div id="investigationAuthorDiag" class="inv-author-diag"></div>
@@ -3864,9 +3871,9 @@ try {
           class="ui-button footer-button demo-mode-btn"
           title="Start demo mode - cycles through scenarios automatically"
           data-i18n-title="settings.demoMode.hint"
-          data-i18n="settings.demoMode"
         >
-          🎬 Demo Mode
+          <span class="icon icon-clapper" aria-hidden="true"></span>
+          <span data-i18n="settings.demoMode">Demo Mode</span>
         </button>
       </div>
     </div>

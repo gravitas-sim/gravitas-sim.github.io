@@ -104,6 +104,13 @@
     --space-8: 2rem;
     --space-10: 2.5rem;
 
+    /* --- Icons (css/icons.css) ------------------------------------------ */
+    /* In em, so an icon is the size of the words beside it at every type
+       size; and the text's own color, so it follows all four themes and a
+       button's hover, disabled and armed states without a rule of its own. */
+    --icon-size: 1.15em;
+    --icon-color: currentColor;
+
     /* --- Radii ---------------------------------------------------------- */
     --radius-sm: 6px;
     --radius: 9px;
