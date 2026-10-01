@@ -7,26 +7,7 @@
 @layer legacy {
   /* Floating close chip for small screens */
   .floating-close-chip {
-    position: fixed;
-    right: 10px;
-    top: calc(10px + var(--shell-height, 0px));
-    width: 32px;
-    height: 32px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
     background: rgba(0, 0, 0, 0.55);
-    color: #fff;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 2005;
-    backdrop-filter: blur(6px);
-  }
-
-  @media (max-width: 480px) {
-    .floating-close-chip {
-      display: flex;
-    }
   }
 
   /* ===== Splash screen ===== */
@@ -192,7 +173,6 @@
   body {
     margin: 0;
     padding: 0;
-    background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Poppins', sans-serif;
     overflow: hidden;
@@ -257,23 +237,17 @@
   }
 
   #overlay {
-    position: fixed;
-    top: calc(10px + var(--shell-height, 0px));
-    left: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     color: #e0e0e0;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     pointer-events: none;
     line-height: 1.6;
-    z-index: 10;
     max-width: 384px; /* ~1.2x wider than previous 320px */
     word-wrap: break-word;
     overflow-wrap: anywhere;
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
     padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
   }
 
@@ -289,53 +263,25 @@
 
   /* Overlay minimize button */
   .overlay-minimize-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
     background: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: bold;
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
     transition: all 0.2s ease;
-    z-index: 11;
     pointer-events: auto !important;
-    width: 28px;
-    height: 28px;
     display: flex !important;
-    align-items: center;
-    justify-content: center;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     /* Ensure button is always visible when overlay is visible */
     opacity: 1 !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     /* Force visibility */
     visibility: visible !important;
   }
 
   .overlay-minimize-btn:hover {
     background: rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-    transform: scale(1.1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
   .overlay-minimize-btn:active {
     transform: scale(0.95);
-  }
-
-  /* Minimized overlay state.
-     
-     Sized and colored in css/chrome.css now, along with the rest of the
-     readout. The `!important` that used to be on every declaration here could
-     not be overridden from a later layer at all - an important declaration in
-     an earlier layer wins - so a 200px box with 8px of padding was still being
-     forced onto a panel that had been rebuilt around a header row. */
-  #overlay.minimized {
-    pointer-events: auto;
   }
 
   @keyframes fadeInOverlay {
@@ -389,85 +335,16 @@
     }
   }
 
-  @media (max-width: 1024px) {
-    #scenarioInfoDisplay {
-      top: calc(10px + var(--shell-height, 0px));
-      width: 95%;
-      max-width: none;
-      padding: 8px 16px;
-    }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 16px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 13px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    /* General UI scaling for small screens */
-    .ui-button {
-      padding: 6px 10px;
-      font-size: 12px;
-      border-radius: 8px;
-    }
-    .speed-controls {
-      gap: 6px;
-      padding: 6px 8px;
-    }
-    .measure-tools {
-      gap: 4px;
-    }
-    .measure-btn {
-      padding: 5px 8px;
-      font-size: 11px;
-    }
-    .speed-btn {
-      padding: 5px 10px;
-      font-size: 11px;
-      min-width: 50px;
-    }
-    .speed-display {
-      font-size: 12px;
-      min-width: 42px;
-    }
-    #scenarioInfoDisplay {
-      top: calc(5px + var(--shell-height, 0px));
-      width: 98%;
-      padding: 6px 12px;
-    }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 15px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 12px;
-    }
-  }
-
   @media (max-width: 360px) {
     #scenarioInfoDisplay {
       top: calc(5px + var(--shell-height, 0px));
       width: 98%;
       padding: 6px 12px;
     }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 15px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 12px;
-    }
   }
 
   @media (max-width: 1024px) {
     #overlay {
-      top: calc(10px + var(--shell-height, 0px));
-      left: 10px;
       font-size: 12px;
       max-width: calc(100vw - 20px);
       padding: 8px;
@@ -479,20 +356,10 @@
       max-width: none;
       padding: 8px 16px;
     }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 16px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 13px;
-    }
   }
 
   @media (max-width: 480px) {
     #overlay {
-      top: calc(10px + var(--shell-height, 0px));
-      left: 10px;
       font-size: 11px;
       max-width: calc(100vw - 20px);
       padding: 6px;
@@ -503,20 +370,10 @@
       width: 98%;
       padding: 6px 12px;
     }
-
-    #scenarioInfoDisplay h4 {
-      font-size: 15px;
-    }
-
-    #scenarioInfoDisplay p {
-      font-size: 12px;
-    }
   }
 
   @media (max-width: 360px) {
     #overlay {
-      top: calc(10px + var(--shell-height, 0px));
-      left: 10px;
       font-size: 10px;
       max-width: calc(100vw - 20px);
       padding: 5px;
@@ -553,14 +410,7 @@
   /* Responsive UI Container */
   .ui-container {
     position: fixed;
-    top: 15px;
-    right: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 10;
     max-width: calc(100vw - 30px);
-    flex-wrap: wrap;
     /* Opacity is owned by the .showUI / .is-open classes, not by an entrance
        animation. A CSS animation outranks every cascade layer, so while
        fadeInUI held opacity here the narrow-screen menu could open to a fully
@@ -585,18 +435,8 @@
 
   /* Mobile menu styles */
   .mobile-menu-toggle {
-    display: none;
-    position: fixed;
-    top: calc(15px + var(--shell-height, 0px));
-    right: 15px;
-    width: 50px;
-    height: 50px;
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    border: none;
-    border-radius: 12px;
     cursor: pointer;
-    z-index: 1001;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
   }
 
@@ -606,12 +446,6 @@
   }
 
   .mobile-menu-toggle .hamburger {
-    width: 24px;
-    height: 2px;
-    background: white;
-    margin: 0 auto;
-    transition: all 0.3s ease;
-    display: block;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -629,38 +463,16 @@
     top: 30px;
   }
 
-  .mobile-menu-toggle.active .hamburger:nth-child(1) {
-    transform: translateX(-50%) rotate(45deg) translate(0, 8px);
-  }
-
-  .mobile-menu-toggle.active .hamburger:nth-child(2) {
-    opacity: 0;
-  }
-
-  .mobile-menu-toggle.active .hamburger:nth-child(3) {
-    transform: translateX(-50%) rotate(-45deg) translate(0, -8px);
-  }
-
   /* Responsive breakpoints */
   @media (max-width: 1200px) {
-    .ui-container {
-      gap: 8px;
-    }
-
     .ui-button {
       padding: 8px 12px !important;
       font-size: 13px !important;
-      min-height: 36px;
-    }
-
-    .speed-controls {
-      padding: 8px 10px;
     }
 
     .speed-btn {
       padding: 6px 10px !important;
       font-size: 12px !important;
-      min-width: 55px;
       min-height: 32px;
     }
   }
@@ -669,39 +481,6 @@
     /* Hide desktop UI container on mobile and tablet */
     /* The rail is no longer hidden on narrow screens - it *is* the menu the
        hamburger opens. See the narrow-screen block in components.css. */
-
-    /* Show mobile menu toggle */
-    .mobile-menu-toggle {
-      display: block;
-    }
-
-    /* Mobile menu positioning */
-    .mobile-menu-toggle {
-      top: calc(10px + var(--shell-height, 0px));
-      right: 10px;
-      width: 45px;
-      height: 45px;
-    }
-
-    #settingsPanel {
-      width: 95%;
-      max-width: none;
-      height: 95vh;
-      max-height: none;
-      top: 2.5%;
-      left: 2.5%;
-      transform: none;
-    }
-
-    .settings-grid {
-      grid-template-columns: 1fr;
-      gap: 15px 20px;
-    }
-
-    .setting-label {
-      justify-self: start;
-      text-align: left;
-    }
 
     #mobileInstructions {
       position: fixed;
@@ -731,71 +510,8 @@
     }
   }
 
-  @media (max-width: 480px) {
-    .mobile-menu-toggle {
-      top: calc(5px + var(--shell-height, 0px));
-      right: 5px;
-      width: 40px;
-      height: 40px;
-    }
-
-    #settingsPanel {
-      width: 98%;
-      height: 98vh;
-      top: 1%;
-      left: 1%;
-    }
-  }
-
-  /* Extra small screens */
-  @media (max-width: 360px) {
-    .mobile-menu-toggle {
-      top: calc(3px + var(--shell-height, 0px));
-      right: 3px;
-      width: 38px;
-      height: 38px;
-    }
-
-    .settings-header {
-      padding: 20px 25px;
-      font-size: 24px;
-    }
-
-    .settings-content {
-      padding: 20px 25px;
-    }
-  }
-
   .ui-button {
-    padding: 8px 16px;
-    background-color: var(--button-bg);
-    color: var(--text-color);
-    border: 1px solid #666;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    transition:
-      background-color 0.2s ease,
-      transform 0.1s ease;
     text-align: center;
-  }
-
-  .ui-button:hover {
-    background-color: var(--button-hover-bg);
-  }
-  .ui-button:active {
-    transform: scale(0.98);
-  }
-
-  .speed-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(20, 20, 40, 0.8);
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(0, 170, 255, 0.3);
   }
 
   /* The measurement tools. A wrapping row rather than one button per line:
@@ -835,12 +551,6 @@
   }
 
   .speed-display {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 14px;
-    color: var(--primary-color);
-
-    min-width: 50px;
-    text-align: center;
     font-weight: bold;
   }
 
@@ -907,11 +617,6 @@
       position: sticky;
       top: 0;
       z-index: 3;
-      background: linear-gradient(
-        135deg,
-        rgba(0, 170, 255, 0.12),
-        rgba(0, 170, 255, 0.06)
-      );
     }
   }
 
@@ -948,7 +653,6 @@
     color: var(--text-primary);
     background: var(--surface-2);
     border-bottom: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
   }
 
   .settings-content {
@@ -974,11 +678,6 @@
   @media (max-width: 1024px) {
     .settings-grid {
       gap: 15px 20px;
-    }
-
-    .setting-label {
-      justify-self: start;
-      text-align: left;
     }
   }
 
@@ -1045,41 +744,6 @@
 
   .setting-control select {
     width: 100%;
-    padding: 10px 14px;
-    background: rgba(34, 34, 34, 0.92);
-    border: 1.5px solid rgba(0, 170, 255, 0.25);
-    color: var(--text-color);
-    border-radius: 10px;
-    font-size: 15px;
-    font-family: 'Inter', sans-serif;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s,
-      background 0.2s;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-  }
-
-  .setting-control select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 170, 255, 0.18);
-    background: rgba(44, 44, 64, 0.98);
-  }
-
-  .setting-control select:hover {
-    background: rgba(44, 44, 64, 0.98);
-    border-color: rgba(0, 170, 255, 0.45);
-  }
-
-  /* Custom arrow for select (optional, for modern look) */
-  .setting-control select {
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%2300aaff" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 18px 18px;
   }
 
   /* Style dropdown options (limited support, but improves look on some browsers) */
@@ -1096,12 +760,6 @@
   .setting-control select option:focus,
   .setting-control select option:active {
     background: #00aaff;
-    color: #fff;
-  }
-
-  /* For browsers that support option:hover */
-  .setting-control select option:hover {
-    background: #2e2e4d;
     color: #fff;
   }
 
@@ -1139,7 +797,6 @@
       rgba(0, 170, 255, 0.1)
     );
     border-top: 1px solid rgba(0, 170, 255, 0.2);
-    border-radius: 0 0 20px 20px;
   }
 
   .footer-button {
@@ -1312,7 +969,6 @@
     padding: 12px 16px;
     background: rgba(0, 0, 0, 0.25);
     border: 1px solid var(--separator-color);
-    border-radius: 6px;
     font-size: 14px;
     line-height: 1.4;
   }
@@ -1416,24 +1072,11 @@
     animation: scenarioMenuFadeIn 0.5s ease-out;
   }
   #scenarioListContent {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    border-radius: 20px;
-    box-shadow:
-      0 20px 60px rgba(0, 0, 0, 0.4),
-      0 8px 32px rgba(79, 172, 254, 0.15);
-    border: 1px solid rgba(79, 172, 254, 0.2);
-    padding: 40px 32px;
-    min-width: 320px;
-    max-width: 90vw;
-    max-height: 85vh;
-    overflow-y: auto;
-    color: #fff;
     position: relative;
     scrollbar-width: thin;
     scrollbar-color: #555 transparent;
   }
   #scenarioListContent::before {
-    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -1449,12 +1092,6 @@
   }
 
   #closeScenarioList {
-    font-size: 1.4em;
-    padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     position: fixed;
     top: 40px;
@@ -1464,8 +1101,6 @@
   }
 
   #closeScenarioList:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   #scenarioListItems {
@@ -1522,18 +1157,9 @@
   /* Responsive typography */
 
   #closeScenarioList {
-    background: #23233a;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     transition:
       background 0.2s,
       transform 0.18s;
-  }
-  #closeScenarioList:hover {
-    background: #2e2e4d;
-    transform: scale(1.08);
   }
 
   @keyframes scenarioMenuFadeIn {
@@ -1548,14 +1174,6 @@
   }
 
   @media (max-width: 1024px) {
-    #scenarioListContent {
-      min-width: 0;
-      width: 95vw;
-      padding: 1.5rem 1.25rem;
-      max-height: 90vh;
-      border-radius: 16px;
-    }
-
     #closeScenarioList {
       top: 24px;
       right: calc(50% - 47.5vw + 20px);
@@ -1568,10 +1186,6 @@
 
   @media (max-width: 600px) {
     #scenarioListContent {
-      width: 100vw;
-      padding: 1rem 0.75rem;
-      border-radius: 12px;
-      max-height: 95vh;
       margin: 0;
     }
 
@@ -1588,10 +1202,6 @@
 
   @media (max-width: 480px) {
     #scenarioListContent {
-      width: 100vw;
-      padding: 0.75rem 0.5rem;
-      border-radius: 10px;
-      max-height: 98vh;
       margin: 0;
     }
 
@@ -1608,10 +1218,6 @@
 
   @media (max-width: 360px) {
     #scenarioListContent {
-      width: 100vw;
-      padding: 0.5rem 0.25rem;
-      border-radius: 8px;
-      max-height: 100vh;
       margin: 0;
     }
 
@@ -1631,8 +1237,6 @@
     position: fixed;
     top: calc(20px + var(--shell-height, 0px));
     left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
     opacity: 0;
     visibility: hidden;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1641,12 +1245,6 @@
 
   .scenario-info-content {
     background: var(--panel-bg);
-    border: 1px solid var(--separator-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    padding: 10px 20px;
-    width: 95%;
-    max-width: 900px;
     position: relative;
     text-align: left;
   }
@@ -1774,9 +1372,7 @@
   }
 
   .scenario-info-body p {
-    margin: 0 0 8px 0;
     font-size: 14px;
-    color: var(--text-color);
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
@@ -1842,13 +1438,6 @@
       top: calc(15px + var(--shell-height, 0px));
       left: 10px;
       right: 10px;
-      transform: none;
-    }
-
-    .scenario-info-content {
-      width: 95%;
-      max-width: none;
-      padding: 8px 16px;
     }
 
     .scenario-info-header h2 {
@@ -1879,11 +1468,6 @@
       top: calc(10px + var(--shell-height, 0px));
       left: 8px;
       right: 8px;
-    }
-
-    .scenario-info-content {
-      width: 98%;
-      padding: 8px 14px;
     }
 
     .scenario-info-header h2 {
@@ -1931,11 +1515,6 @@
       top: calc(8px + var(--shell-height, 0px));
       left: 6px;
       right: 6px;
-    }
-
-    .scenario-info-content {
-      width: 99%;
-      padding: 6px 12px;
     }
 
     .scenario-info-header h2 {
@@ -2262,13 +1841,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 12px;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 122, 255, 0.18),
-      rgba(0, 0, 0, 0)
-    );
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     cursor: grab; /* Indicates draggable */
     flex-shrink: 0;
   }
@@ -2285,16 +1857,7 @@
   }
 
   .three-view-title {
-    font-size: 13px;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
-    font-weight: 600;
-    color: #c9e8ff;
-  }
-
-  .three-view-status {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.7);
   }
 
   .three-toolbar-actions {
@@ -2303,12 +1866,8 @@
   }
 
   .three-toolbar-btn {
-    background: rgba(9, 15, 32, 0.75);
     border-radius: 6px;
     border: 1px solid rgba(0, 180, 255, 0.4);
-    color: #dff5ff;
-    font-size: 11px;
-    padding: 4px 8px;
     cursor: pointer;
     transition:
       background 0.2s ease,
@@ -2316,7 +1875,6 @@
   }
 
   .three-toolbar-btn:hover {
-    background: rgba(14, 24, 55, 0.85);
     border-color: rgba(0, 227, 255, 0.6);
   }
 
@@ -2335,12 +1893,8 @@
   }
 
   .three-view-hint {
-    font-size: 11px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-    padding: 6px 10px;
     background: rgba(0, 0, 0, 0.2);
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
     flex-shrink: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -2398,14 +1952,7 @@
     bottom: 120px;
     width: 420px;
     height: 320px;
-    background: rgba(5, 9, 22, 0.95);
-    border: 1px solid rgba(0, 180, 255, 0.3);
-    border-radius: 12px;
-    box-shadow:
-      0 12px 48px rgba(0, 0, 0, 0.5),
-      0 4px 16px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(6px);
-    overflow: hidden;
     z-index: 160;
     display: flex;
     flex-direction: column;
@@ -2417,13 +1964,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 12px;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 122, 255, 0.15),
-      rgba(0, 0, 0, 0)
-    );
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     flex-shrink: 0;
   }
 
@@ -2434,16 +1974,7 @@
   }
 
   .light-curve-title {
-    font-size: 13px;
-    letter-spacing: 0.04em;
     text-transform: uppercase;
-    font-weight: 600;
-    color: #c9e8ff;
-  }
-
-  .light-curve-status {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.55);
   }
 
   .light-curve-actions {
@@ -2482,12 +2013,8 @@
   }
 
   .light-curve-hint {
-    font-size: 10px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.4);
-    padding: 4px 10px;
     background: rgba(0, 0, 0, 0.15);
-    border-top: 1px solid rgba(255, 255, 255, 0.03);
     flex-shrink: 0;
     white-space: nowrap;
     overflow: hidden;
