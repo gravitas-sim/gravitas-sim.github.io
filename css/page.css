@@ -7,10 +7,13 @@
    the same four themes, the same radii and spacing scale, so a reader arriving
    from the simulation does not feel they have left the product.
 
-   Buttons and panels reuse the app's existing classes. The form controls the
-   tool pages share - .ui-field, .ui-input, .ui-select, .ui-textarea, .ui-file,
-   .ui-range, .ui-toolbar and .ui-button-group - are the last section of this
-   file, and DESIGN_SYSTEM.md documents each of them.
+   Buttons and panels reuse the app's existing classes. The component language
+   the tool pages share is the last three sections of this file: the form
+   controls (.ui-field, .ui-input, .ui-select, .ui-textarea, .ui-file,
+   .ui-range, .ui-toolbar, .ui-button-group), then the containers, data and
+   feedback (.ui-page, .ui-split, .ui-grid, .ui-card, fieldsets, .ui-disclosure,
+   .ui-table, .ui-status, .ui-issues, .ui-alert, .ui-state and the small
+   parts), then the observation plot's marks. DESIGN_SYSTEM.md documents each.
    ============================================================================ */
 
 @layer components {
@@ -1657,6 +1660,20 @@
     margin: var(--space-3) 0 0;
   }
 
+  /* A row of fields and the buttons acting on them: the fields share the
+     row and wrap, and everything lines up along its foot. A field's width
+     comes from the row, not from its control - WebKit sizes a select to its
+     longest option, and an automatic track would grow to fit it. */
+  .ui-toolbar.is-fields {
+    align-items: end;
+    margin-bottom: var(--space-3);
+  }
+
+  .ui-toolbar.is-fields > .ui-field {
+    flex: 1 1 var(--ui-field-basis, 12rem);
+    max-width: 100%;
+  }
+
   /* Buttons that act on one thing - undo and redo - joined into one shape.
      The group is role="group" with a label; each button keeps its own. */
   .ui-button-group {
@@ -1718,5 +1735,765 @@
       )[aria-invalid='true'] {
       border-width: 2px;
     }
+  }
+}
+
+/* =============================================================================
+   Containers, data and feedback: the rest of the tool pages' component language
+   -----------------------------------------------------------------------------
+   Every tool page wrote its own column, its own bordered box, its own table,
+   its own status line and its own copy of a plot's colours, in an unlayered
+   <style> of its own: thirteen copies of the same nine rules, at five radii,
+   seven cell paddings and nine font sizes. These are the one copy, each
+   documented in DESIGN_SYSTEM.md with its states, tokens and accessibility
+   notes. What a page still writes for itself is its own layout - which column
+   is beside which - and nothing it shares.
+
+   Tokens only: every color, size and space below is a var() from
+   css/tokens.css, so the four themes, the Observatory's red night vision
+   among them, follow without a rule of their own here.
+   ============================================================================ */
+
+@layer components {
+  /* --- Page: the tool pages' column ---------------------------------------- */
+  .ui-page {
+    box-sizing: border-box;
+    max-width: 64rem;
+    margin: 0 auto;
+    /* 4rem below: room above the footer. Off the spacing scale, which stops
+       at --space-10; written as two of its steps rather than a literal. */
+    padding: var(--space-8) var(--space-4) calc(2 * var(--space-8));
+  }
+
+  .ui-page.is-narrow {
+    max-width: 52rem;
+  }
+
+  .ui-page.is-wide {
+    max-width: 72rem;
+  }
+
+  .ui-page.is-full {
+    max-width: 76rem;
+  }
+
+  /* The document pages' link color (.doc-main a): the browser's own blue is
+     2.2:1 on these grounds. A link drawn as a button keeps its button face. */
+  .ui-page a:not(.ui-button) {
+    color: var(--accent);
+    text-underline-offset: 3px;
+  }
+
+  /* One heading scale on every tool page. */
+  .ui-page h2 {
+    font-size: var(--text-lg);
+  }
+
+  .ui-page h3 {
+    font-size: var(--text-md);
+  }
+
+  /* --- Split: a workspace beside a column of its own ----------------------- */
+  .ui-split {
+    display: grid;
+    gap: var(--space-8);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 64rem) {
+    .ui-split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, var(--ui-split-aside, 26rem));
+      align-items: start;
+    }
+
+    .ui-split.is-aside-start {
+      grid-template-columns: minmax(0, var(--ui-split-aside, 26rem)) minmax(0, 1fr);
+    }
+
+    /* The column stays in view while the workspace scrolls. is-scroll
+       bounds it to the window and lets it scroll itself, for a column of
+       checks taller than any window; without it a tall column scrolls with
+       the page once its foot is reached. */
+    .ui-split-aside {
+      position: sticky;
+      top: var(--space-4);
+    }
+
+    .ui-split-aside.is-scroll {
+      max-height: calc(100vh - 2 * var(--space-4));
+      overflow-y: auto;
+    }
+  }
+
+  /* --- Grid: fields side by side, as many as fit --------------------------- */
+  .ui-grid {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--ui-grid-min, 12rem)), 1fr));
+    align-items: start;
+  }
+
+  /* Controls along the row's foot, whatever their labels wrap to: for a row
+     of fields that ends in the button acting on them. */
+  .ui-grid.is-end {
+    align-items: end;
+  }
+
+  /* --- Card: a bordered box on the page's ground --------------------------- */
+  .ui-card,
+  :is(fieldset.ui-fieldset, .ui-page fieldset) {
+    box-sizing: border-box;
+    min-width: 0;
+    margin: 0 0 var(--space-5);
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  /* Compact: tighter, and closer to the next, for a list of them. */
+  .ui-card.is-compact {
+    margin-bottom: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  :is(fieldset.ui-fieldset, .ui-page fieldset).is-compact {
+    padding: var(--space-2) var(--space-3) var(--space-3);
+  }
+
+  .ui-card > :first-child {
+    margin-top: 0;
+  }
+
+  .ui-card > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* --- Fieldset: a card with a legend --------------------------------------
+     Every fieldset on a tool page is one, classed or not: a script that
+     builds a form gets it without naming it. min-width 0 (above) undoes the
+     user agent's min-content, which lets one wide control push a fieldset,
+     and the page with it, past a phone's edge. */
+  :is(fieldset.ui-fieldset, .ui-page fieldset) > legend {
+    padding: 0 var(--space-1);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+
+  /* --- Disclosure: details and its summary ---------------------------------- */
+  details.ui-disclosure > summary {
+    min-height: 24px;
+    padding: var(--space-1) 0;
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+    overflow-wrap: anywhere;
+  }
+
+  details.ui-disclosure > summary:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
+  }
+
+  details.ui-disclosure[open] > summary {
+    margin-bottom: var(--space-2);
+  }
+
+  /* --- Data table -----------------------------------------------------------
+     .ui-table on the table, or a table directly inside .ui-table-wrap, which
+     is how a script that builds its tables gets the look without naming it
+     twice. The wrapper is the table's scroller: a wide table scrolls sideways
+     inside it rather than pushing the page. is-scroll bounds its height too,
+     and the header row then stays on top of the rows scrolling under it. */
+  .ui-table-wrap {
+    max-width: 100%;
+    margin: var(--space-3) 0;
+    overflow: auto;
+  }
+
+  .ui-table-wrap.is-scroll {
+    max-height: var(--ui-table-height, 24rem);
+  }
+
+  :is(.ui-table, .ui-table-wrap > table) {
+    width: 100%;
+    margin: var(--space-2) 0;
+    border-collapse: collapse;
+    font-size: var(--text-base);
+  }
+
+  .ui-table-wrap > table {
+    margin: 0;
+  }
+
+  :is(.ui-table, .ui-table-wrap > table) caption {
+    padding: 0 0 var(--space-1);
+    text-align: start;
+    color: var(--text-secondary);
+  }
+
+  :is(.ui-table, .ui-table-wrap > table) :is(th, td) {
+    padding: var(--space-1) var(--space-2);
+    text-align: start;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border);
+    overflow-wrap: anywhere;
+  }
+
+  :is(.ui-table, .ui-table-wrap > table) thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: var(--weight-semibold);
+    background: var(--bg-color);
+  }
+
+  /* Numbers: right-aligned in tabular figures, one per line, so a column of
+     them reads down its digits. The header stays left. On the table or on
+     its wrapper. */
+  :is(.ui-table.is-numeric, .ui-table-wrap.is-numeric > table) {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :is(.ui-table.is-numeric, .ui-table-wrap.is-numeric > table) :is(th, td) {
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+
+  :is(.ui-table.is-numeric, .ui-table-wrap.is-numeric > table) td {
+    text-align: end;
+  }
+
+  /* A value the data does not have, said in words by the page as well. */
+  :is(.ui-table, .ui-table-wrap > table) .is-missing {
+    color: var(--text-secondary);
+  }
+
+  /* Selectable rows: a grid whose rows carry aria-selected (the Observatory's
+     table, the analysis lab's trials; js/observatory/table.js gives them the
+     keys). Selected is a tint and a bar at the row's start, so it is not
+     color alone even before the words a screen reader is given. */
+  :is(.ui-table, .ui-table-wrap > table) tr[aria-selected] {
+    cursor: pointer;
+  }
+
+  :is(.ui-table, .ui-table-wrap > table) tr[aria-selected]:hover > * {
+    background: var(--surface-2);
+  }
+
+  :is(.ui-table, .ui-table-wrap > table) tr[aria-selected='true'] > * {
+    background: var(--accent-soft);
+  }
+
+  :is(.ui-table, .ui-table-wrap > table) tr[aria-selected='true'] > :first-child {
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+
+  :is(.ui-table, .ui-table-wrap > table) tr:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: calc(-1 * var(--focus-ring-width));
+  }
+
+  /* A row left out of the analysis: in italics as well as dimmed. */
+  :is(.ui-table, .ui-table-wrap > table) tr.is-masked > * {
+    font-style: italic;
+    color: var(--text-secondary);
+  }
+
+  /* The wrapper is a scroll region a keyboard reaches (tabindex="0" and a
+     label, from its page): it shows the same ring. */
+  .ui-table-wrap:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  /* --- Status line ------------------------------------------------------------
+     One line under a form that says what happened. It keeps its line while
+     empty, so text arriving does not move the page. */
+  .ui-status {
+    min-height: 1.3em;
+    margin: var(--space-2) 0 0;
+    color: var(--text-primary);
+  }
+
+  .ui-status.is-error {
+    color: var(--danger);
+  }
+
+  .ui-status.is-warning {
+    color: var(--warning);
+  }
+
+  .ui-status.is-success {
+    color: var(--success);
+  }
+
+  /* --- Issues: a list of what a check found ----------------------------------
+     Each item's data-level says what it is - error or warn - and the item's
+     words say so too; the color is the second telling. */
+  .ui-issues {
+    margin: var(--space-2) 0 0;
+    padding-inline-start: var(--space-5);
+  }
+
+  .ui-issues > li {
+    margin: var(--space-1) 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-issues > li[data-level='error'] {
+    color: var(--danger);
+  }
+
+  .ui-issues > li[data-level='warn'] {
+    color: var(--warning);
+  }
+
+  /* --- Inline alert ------------------------------------------------------------
+     A message about the page's content, in its flow: a bar at its start in the
+     alert's color, a faint tint, and text in the reading color so it reaches
+     4.5:1 in every theme. The words say what kind it is. */
+  .ui-alert {
+    --ui-alert: var(--accent);
+
+    margin: var(--space-3) 0 0;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--ui-alert) 10%, transparent);
+    border-inline-start: 3px solid var(--ui-alert);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .ui-alert.is-success {
+    --ui-alert: var(--success);
+  }
+
+  .ui-alert.is-warning {
+    --ui-alert: var(--warning);
+  }
+
+  .ui-alert.is-error {
+    --ui-alert: var(--danger);
+  }
+
+  /* An alert with nothing to say yet takes no room. */
+  .ui-alert:empty {
+    display: none;
+  }
+
+  ul.ui-alert,
+  ol.ui-alert {
+    padding-inline-start: var(--space-8);
+  }
+
+  .ui-alert > :first-child {
+    margin-top: 0;
+  }
+
+  .ui-alert > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* --- Empty, loading and error blocks ---------------------------------------
+     The place where content will be, saying why it is not there yet.
+     Prompt 57 writes their words; this is their shape. A loading block is
+     marked aria-busy by its page. */
+  .ui-state {
+    display: grid;
+    place-content: center;
+    gap: var(--space-2);
+    min-height: 6rem;
+    margin: var(--space-3) 0;
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    color: var(--text-secondary);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+  }
+
+  .ui-state > * {
+    margin: 0;
+  }
+
+  .ui-state.is-error {
+    color: var(--text-primary);
+    border-style: solid;
+    border-color: var(--danger);
+  }
+
+  /* A loading block's bar: indeterminate, because nothing it waits for
+     reports a fraction; still, and full, under reduced motion. */
+  .ui-state.is-loading::after {
+    content: '';
+    justify-self: center;
+    width: min(12rem, 100%);
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--accent),
+        transparent
+      )
+      0 0 / 40% 100% no-repeat,
+      var(--accent-line);
+    animation: ui-state-sweep 1.2s var(--ease) infinite;
+  }
+
+  @keyframes ui-state-sweep {
+    from {
+      background-position: -40% 0, 0 0;
+    }
+    to {
+      background-position: 140% 0, 0 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-state.is-loading::after {
+      animation: none;
+      background: var(--accent-line);
+    }
+  }
+
+  /* Bare: the block's words alone, inside a box that already has an edge. */
+  .ui-state.is-bare {
+    border: 0;
+  }
+
+  /* Over a view, covering it, on the view's own dark. */
+  .ui-state.is-overlay {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: var(--space-4);
+    border: 0;
+    border-radius: 0;
+    color: var(--hud-text-strong);
+    background: color-mix(in srgb, var(--space-far) 86%, transparent);
+  }
+
+  /* --- Badge ------------------------------------------------------------------ */
+  .ui-badge {
+    display: inline-block;
+    padding: 0 var(--space-2);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    white-space: nowrap;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-full);
+  }
+
+  .ui-badge.is-accent {
+    border-color: var(--accent);
+  }
+
+  /* --- Secondary text: a caption, a legend, a note ---------------------------- */
+  .ui-note {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+  }
+
+  /* --- Facts: a definition list, term beside value --------------------------- */
+  .ui-meta {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: var(--space-1) var(--space-4);
+    margin: 0 0 var(--space-4);
+  }
+
+  .ui-meta > dt {
+    font-weight: var(--weight-semibold);
+    color: var(--text-secondary);
+  }
+
+  .ui-meta > dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-meta ul {
+    margin: 0;
+    padding-inline-start: var(--space-4);
+  }
+
+  @media (max-width: 30rem) {
+    .ui-meta {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 0;
+    }
+
+    .ui-meta > dd {
+      margin-bottom: var(--space-2);
+    }
+  }
+
+  /* --- Choice: a checkbox or radio and its words, one target ------------------ */
+  .ui-choice {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-height: 24px;
+  }
+
+  /* One per line: the options of a question. */
+  .ui-choice.is-block {
+    display: flex;
+    margin: var(--space-1) 0;
+  }
+
+  .ui-choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  /* --- A button that reads as a link: in a list of steps, in a sentence -------
+     Still a button: Enter and Space press it, and it is named by its words.
+     24px tall, WCAG 2.2's minimum target. */
+  /* inline-flex, as every button is, so its baseline is its first line and a
+     list marker sits beside the first line of a wrapped link, not the last. */
+  button.ui-link {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    min-height: 24px;
+    padding: 0;
+    font: inherit;
+    letter-spacing: normal;
+    line-height: inherit;
+    text-align: start;
+    color: inherit;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+    user-select: auto;
+  }
+
+  button.ui-link:hover,
+  button.ui-link:active {
+    color: inherit;
+    background: none;
+    box-shadow: none;
+    transform: none;
+    text-decoration-color: var(--accent);
+  }
+
+  /* The step a reader is on. */
+  :is(button.ui-link[aria-current], [aria-current] > button.ui-link) {
+    font-weight: var(--weight-semibold);
+    text-decoration-color: var(--accent);
+  }
+
+  /* --- Small button: a secondary action beside a table or a selection -------- */
+  .ui-button.is-small {
+    min-height: 28px;
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  /* --- Legend: what a plot's colors and marks mean --------------------------- */
+  .ui-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+  }
+
+  .ui-legend.is-stacked {
+    display: grid;
+  }
+
+  .ui-legend.is-stacked > li {
+    display: flex;
+    gap: var(--space-1);
+    align-items: baseline;
+  }
+
+  /* The swatch's own color is the data's, set by the page's script. */
+  .ui-swatch {
+    display: inline-block;
+    flex: none;
+    width: 0.9em;
+    height: 0.9em;
+    margin-inline-end: var(--space-1);
+    vertical-align: -0.1em;
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+  }
+
+  .ui-swatch.is-round {
+    border: 0;
+    border-radius: 50%;
+  }
+
+  /* --- Figures: plots side by side, as many as fit ---------------------------- */
+  .ui-figures {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--ui-figures-min, 16rem)), 1fr));
+  }
+
+  .ui-figures > figure,
+  figure.ui-figure {
+    margin: 0;
+  }
+
+  :is(.ui-figures, .ui-figure) figcaption {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+  }
+
+  /* A plot or a view: full width, an edge, a radius. */
+  .ui-plot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  /* --- Sky: the dark of the simulation's sky, in every theme -----------------
+     A plot drawn in light marks, a view, a preview of the simulation: they sit
+     on the sky as the simulation does, so their marks are drawn for it, and
+     the text on them is the HUD's. The marks' colors are the object hues,
+     which no theme changes; Observatory red reddens the ground and the text. */
+  .ui-sky {
+    color: var(--hud-text);
+    background: var(--space-far);
+  }
+
+  /* A block on the sky speaks in the HUD's words, not the page's. */
+  .ui-sky .ui-state {
+    color: var(--hud-text);
+  }
+
+  /* --- Progress ----------------------------------------------------------------- */
+  progress.ui-progress {
+    width: 12rem;
+    max-width: 100%;
+    height: var(--space-3);
+    accent-color: var(--accent);
+  }
+
+  progress.ui-progress.is-block {
+    width: 100%;
+  }
+
+  /* --- Windows high contrast ---------------------------------------------------- */
+  @media (forced-colors: active) {
+    :is(.ui-table, .ui-table-wrap > table) tr[aria-selected='true'] > * {
+      forced-color-adjust: none;
+      color: HighlightText;
+      background: Highlight;
+    }
+    .ui-alert,
+    .ui-state.is-error {
+      border-color: CanvasText;
+    }
+    .ui-swatch {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+/* =============================================================================
+   Observation plots
+   -----------------------------------------------------------------------------
+   The marks js/observatory/plot.js draws, on the Observatory and in the
+   experiment runner's analysis laboratory, which shares it. One copy here, so
+   the two pages draw one plot: on the sky, in the object hues. The selected
+   points are the star's amber, near the lighter amber the image view
+   (js/observatory/image.js) draws its selection in on its canvas; the third
+   model curve is the cyan and the amber mixed, a green neither of them is.
+   ============================================================================ */
+
+@layer components {
+  /* On the sky, as .ui-sky is; the class is the plot module's own, set on
+     every plot it draws. */
+  .ow-plot {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--hud-text);
+    background: var(--space-far);
+    border-radius: var(--radius-sm);
+    touch-action: none;
+    user-select: none;
+  }
+
+  .ow-plot:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .ow-axes line {
+    stroke: color-mix(in srgb, var(--hud-text-strong) 50%, transparent);
+  }
+
+  .ow-tick,
+  .ow-label {
+    fill: currentColor;
+    font-size: var(--text-xs);
+  }
+
+  .ow-label {
+    font-size: var(--text-sm);
+  }
+
+  .ow-bars line {
+    stroke: color-mix(in srgb, var(--hue-comet) 45%, transparent);
+    stroke-width: 1;
+  }
+
+  .ow-pt {
+    fill: var(--hue-comet);
+  }
+
+  .ow-pt.is-selected {
+    fill: var(--hue-star);
+  }
+
+  .ow-pt.is-masked {
+    fill: none;
+    stroke: var(--hue-asteroid);
+    stroke-width: 1;
+  }
+
+  /* Curves a measurement draws over the points: a model, say. */
+  .ow-overlay {
+    fill: none;
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+
+  .ow-overlay-0 {
+    stroke: var(--hue-gasgiant);
+  }
+
+  .ow-overlay-1 {
+    stroke: var(--hue-blackhole);
+  }
+
+  .ow-overlay-2 {
+    stroke: color-mix(in oklab, var(--hue-comet), var(--hue-star));
+  }
+
+  .ow-focus {
+    fill: none;
+    stroke: var(--hud-text-strong);
+    stroke-width: 2;
+  }
+
+  .ow-brush {
+    fill: color-mix(in srgb, var(--hue-star) 15%, transparent);
+    stroke: var(--hue-star);
   }
 }

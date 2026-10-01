@@ -576,7 +576,7 @@ function renderLegend(legend) {
   for (const entry of legend) {
     const li = document.createElement('li');
     const swatch = document.createElement('span');
-    swatch.className = 'ow-swatch';
+    swatch.className = 'ui-swatch';
     swatch.style.background = entry.color;
     swatch.setAttribute('aria-hidden', 'true');
     const text = document.createElement('span');
@@ -613,7 +613,7 @@ function renderMarks(o) {
       if (m.source === 'reader') {
         const b = document.createElement('button');
         b.type = 'button';
-        b.className = 'ui-button ow-small';
+        b.className = 'ui-button is-small';
         b.textContent = t('obs.mask.remove');
         b.addEventListener('click', () => apply({ op: 'unmask', id: m.id }));
         li.append(' ', b);
@@ -627,7 +627,7 @@ function renderMarks(o) {
       const li = document.createElement('li');
       const go = document.createElement('button');
       go.type = 'button';
-      go.className = 'ui-button ow-small';
+      go.className = 'ui-button is-small';
       go.textContent = t('obs.note.show', {
         first: a.rows[0] + 1,
         last: a.rows[1] + 1,
@@ -640,7 +640,7 @@ function renderMarks(o) {
       text.textContent = ` ${a.text} `;
       const rm = document.createElement('button');
       rm.type = 'button';
-      rm.className = 'ui-button ow-small';
+      rm.className = 'ui-button is-small';
       rm.textContent = t('obs.note.remove');
       rm.addEventListener('click', () => apply({ op: 'unannotate', id: a.id }));
       li.append(go, text, rm);
@@ -1219,7 +1219,7 @@ function renderMapping(tbl) {
     if (col.suggestion) {
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'ui-button ow-small';
+      b.className = 'ui-button is-small';
       b.textContent = t('obs.import.useSuggestion', {
         unit:
           formatUnit(col.suggestion.unit, t('obs.unit.none')) ||

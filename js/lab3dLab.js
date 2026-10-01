@@ -814,7 +814,7 @@ function updateTables(force) {
       'li',
       {},
       el('span', {
-        class: 'l3-swatch',
+        class: 'ui-swatch is-round',
         style: `background:${state.colors[i]}`,
         'aria-hidden': 'true',
       }),

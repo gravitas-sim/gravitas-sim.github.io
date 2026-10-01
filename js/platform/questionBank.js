@@ -88,7 +88,7 @@ export function checkBankItem(item, path, { need, text, api }) {
       { key: k }
     );
   need(
-    PUBLIC_ID.test(item.id || ''),
+    typeof item.id === 'string' && PUBLIC_ID.test(item.id),
     `${path}.id`,
     'id',
     'a public id such as "kepler-period"'
@@ -211,7 +211,12 @@ export function checkBankItem(item, path, { need, text, api }) {
             `"${k}" is not a misconception field`,
             { key: k }
           );
-        need(PUBLIC_ID.test(m.id || ''), `${at}.id`, 'id', 'a public id');
+        need(
+          typeof m.id === 'string' && PUBLIC_ID.test(m.id),
+          `${at}.id`,
+          'id',
+          'a public id'
+        );
         need(
           (typeof m.factor === 'number' &&
             Number.isFinite(m.factor) &&
@@ -554,7 +559,7 @@ export function validateQuestionBankWith(b, api, makeChecker) {
     `must be ${BANK_FORMAT_VERSION}`
   );
   need(
-    PUBLIC_ID.test(b.id || ''),
+    typeof b.id === 'string' && PUBLIC_ID.test(b.id),
     'id',
     'id',
     'a public id such as "orbits-bank"'

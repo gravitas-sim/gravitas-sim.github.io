@@ -211,7 +211,7 @@ function writtenAnswers(s) {
     q => q.response !== null && steps.get(q.sid)?.kind === 'short'
   );
   if (!written.length) return '';
-  return `<details class="sr-written"><summary>${esc(
+  return `<details class="ui-disclosure sr-written"><summary>${esc(
     t('sub.written.summary', { n: written.length })
   )}</summary><dl>${written
     .map(q => {
@@ -254,7 +254,9 @@ function render() {
 
   const rates = failureRates(records);
   $('rates').innerHTML = rates.length
-    ? `<table class="sr-table"><thead><tr>
+    ? `<div class="ui-table-wrap" tabindex="0" role="region" aria-label="${esc(
+        t('sub.rates.title')
+      )}"><table class="ui-table sr-table"><thead><tr>
          <th scope="col">${esc(t('sub.col.question'))}</th>
          <th scope="col">${esc(t('sub.col.lesson'))}</th>
          <th scope="col">${esc(t('sub.col.wrong'))}</th>
@@ -268,11 +270,11 @@ function render() {
              <td>${r.wrong}</td><td>${r.marked}</td>
              <td>${pct(r.rate)}</td><td>${r.unmarked}</td></tr>`
          )
-         .join('')}</tbody></table>`
-    : `<p class="sr-empty">${esc(t('sub.rates.empty'))}</p>`;
+         .join('')}</tbody></table></div>`
+    : `<p class="ui-state is-empty">${esc(t('sub.rates.empty'))}</p>`;
 
   $('who').innerHTML = n
-    ? `<ol class="sr-who">${records
+    ? `<ol class="ui-note">${records
         .map(s => {
           const notes = [
             s.rosterId,
@@ -295,7 +297,7 @@ function render() {
     : '';
 
   $('refused').innerHTML = refused.length
-    ? `<h2>${esc(t('sub.refused.title'))}</h2><ul class="sr-refused">${refused
+    ? `<h2>${esc(t('sub.refused.title'))}</h2><ul class="ui-note">${refused
         .map(r => `<li>${esc(r.label)}: ${esc(reasonText(r.reason))}</li>`)
         .join('')}</ul>`
     : '';

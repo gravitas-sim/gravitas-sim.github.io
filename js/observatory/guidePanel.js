@@ -513,7 +513,7 @@ export function mountGuidePanel(root, ctx) {
       );
     const chooser = el(
       'div',
-      { class: 'ow-grid' },
+      { class: 'ui-grid is-end' },
       field('gd.suite', suite),
       field('gd.pick', pick),
       field('gd.path', path),
@@ -616,7 +616,7 @@ export function mountGuidePanel(root, ctx) {
       parts.splice(
         1,
         0,
-        el('p', { class: 'ow-guide-tag', text: t('gd.advanced') })
+        el('p', { class: 'ui-badge is-accent', text: t('gd.advanced') })
       );
     const show = el('div', { id: 'gdShow' });
     parts.push(show);
@@ -693,7 +693,7 @@ export function mountGuidePanel(root, ctx) {
         set.append(
           el(
             'label',
-            { class: 'ow-guide-option' },
+            { class: 'ui-choice is-block' },
             input,
             el('span', { text: words.step(step, `opt.${o}`) })
           )
@@ -713,11 +713,11 @@ export function mountGuidePanel(root, ctx) {
     }
     parts.push(actions);
     parts.push(
-      el('p', { id: 'gdFeedback', class: 'ow-guide-feedback', role: 'status' })
+      el('p', { id: 'gdFeedback', class: 'ui-status', role: 'status' })
     );
     const nav = el('div', { class: 'ui-toolbar' });
     const prev = el('button', {
-      class: 'ui-button ow-small',
+      class: 'ui-button is-small',
       type: 'button',
       id: 'gdPrev',
       text: t('gd.back'),
@@ -725,7 +725,7 @@ export function mountGuidePanel(root, ctx) {
     });
     prev.addEventListener('click', () => move(-1));
     const next = el('button', {
-      class: 'ui-button ow-small',
+      class: 'ui-button is-small',
       type: 'button',
       id: 'gdNext',
       text: t(run.at === list.length - 1 ? 'gd.finish' : 'gd.next'),
@@ -736,7 +736,7 @@ export function mountGuidePanel(root, ctx) {
     nav.append(prev, next);
     if (step.id === 'wrap') {
       const nb = el('button', {
-        class: 'ui-button ow-small',
+        class: 'ui-button is-small',
         type: 'button',
         id: 'gdNotebook',
         text: t('gd.nb.add'),
@@ -776,11 +776,14 @@ export function mountGuidePanel(root, ctx) {
     const f = run.feedback;
     box.replaceChildren();
     box.dataset.ok = f ? String(f.ok) : '';
+    box.className = f
+      ? `ui-status is-${f.ok ? 'success' : 'error'}`
+      : 'ui-status';
     if (!f) return;
     box.append(f.text);
     if (f.canReveal) {
       const b = el('button', {
-        class: 'ui-button ow-small',
+        class: 'ui-button is-small',
         type: 'button',
         id: 'gdReveal',
         text: t('gd.reveal'),
@@ -796,7 +799,7 @@ export function mountGuidePanel(root, ctx) {
       ...list.map((s, i) => {
         const b = el('button', {
           type: 'button',
-          class: 'ow-guide-jump',
+          class: 'ui-link',
           'aria-current': i === run.at ? 'step' : null,
           'data-state': stateOf(s),
           text: `${words.step(s, 'title')} (${t(`gd.state.${stateOf(s)}`)})`,
@@ -835,7 +838,7 @@ export function mountGuidePanel(root, ctx) {
     await prepare(step);
     const shown = run.suite.SHOWS?.[step.show];
     if (!shown) return;
-    const dl = el('dl', { class: 'ow-meta' });
+    const dl = el('dl', { class: 'ui-meta' });
     for (const [a, b] of shown.rows(context, step, helpers))
       dl.append(el('dt', { text: a }), el('dd', { text: b }));
     const parts = [dl];

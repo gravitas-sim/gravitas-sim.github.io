@@ -126,6 +126,15 @@ export function validateInference(m) {
       )
     )
       continue;
+    // Not an object, it is neither fitted nor fixed (and null would throw).
+    if (
+      !need(
+        p && typeof p === 'object' && !Array.isArray(p),
+        `parameters.${name}`,
+        'is { mode, value } or { lo, hi }'
+      )
+    )
+      continue;
     need(
       ['fitted', 'fixed'].includes(p.mode ?? 'fitted'),
       `parameters.${name}.mode`,

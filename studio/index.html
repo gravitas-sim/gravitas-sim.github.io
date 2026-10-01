@@ -19,132 +19,57 @@
     <link rel="stylesheet" href="/css/components.css" />
     <link rel="stylesheet" href="/css/page.css" />
     <style>
-      /* Local to this page: a toolbar, an editor, and a column of checks,
-         changes and the preview. */
-      .st-wrap {
-        max-width: 80rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      .st-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
-      .st-layout {
-        display: grid;
-        gap: 2rem;
-        grid-template-columns: minmax(0, 1fr);
-      }
-      @media (min-width: 64rem) {
-        .st-layout {
-          grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
-          align-items: start;
-        }
-        .st-side {
-          position: sticky;
-          top: 1rem;
-        }
-      }
-      .st-section,
-      .st-side section,
-      .st-wrap fieldset {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.9rem 1rem 1rem;
-        margin: 0 0 1.25rem;
-      }
+      /* Local to this page: the editor's spacing, its wider field grid, the
+         preview's shape and the conflict dialog. The layout, the cards and
+         the lists are css/page.css's. */
       .st-wrap h2 {
-        font-size: 1.15rem;
-        margin: 0 0 0.5rem;
+        margin: 0 0 var(--space-2);
       }
       .st-wrap h3 {
-        font-size: 1rem;
-        margin: 0.75rem 0 0.5rem;
-      }
-      .st-wrap legend {
-        font-weight: 600;
-        padding: 0 0.35rem;
-      }
-      .st-grid {
-        display: grid;
-        gap: 0.25rem 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-      }
-      .st-grid-3 {
-        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-      }
-      .st-grid-4 {
-        grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+        margin: var(--space-3) 0 var(--space-2);
       }
       /* Fields stack with room between them; toolbars keep room below. */
       .st-wrap .ui-field {
-        margin: 0.5rem 0 0;
+        margin: var(--space-2) 0 0;
+      }
+      .st-wrap .ui-grid {
+        gap: var(--space-1) var(--space-4);
       }
       .st-wrap .ui-toolbar {
-        margin-bottom: 0.75rem;
+        margin-bottom: var(--space-3);
       }
-      .st-check {
-        display: inline-flex;
-        gap: 0.4rem;
-        align-items: center;
-        margin: 0.3rem 1rem 0.3rem 0;
-      }
-      .st-checks {
-        display: flex;
-        flex-wrap: wrap;
-      }
-      .st-group > summary {
-        cursor: pointer;
-        font-weight: 600;
-        margin: 0.5rem 0;
-      }
-      .st-body {
-        margin: 0.5rem 0 0.75rem;
-      }
-      .st-list {
-        margin: 0.5rem 0 0;
-        padding-left: 1.2rem;
-      }
-      .st-list li {
-        margin: 0.25rem 0;
-        overflow-wrap: anywhere;
-      }
-      .st-list li[data-level='error'] {
-        color: var(--danger);
-      }
-      .st-link {
-        background: none;
-        border: 0;
-        padding: 0;
-        color: inherit;
-        font: inherit;
-        text-align: left;
-        text-decoration: underline;
-        cursor: pointer;
-      }
-      .st-status {
-        min-height: 1.3em;
-        margin: 0.25rem 0 0;
+      .st-wrap .ui-choice {
+        margin-block: var(--space-1);
       }
       .st-preview {
-        width: 100%;
         aspect-ratio: 4 / 3;
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        background: #07080f;
       }
       #st-raw-text {
         min-height: 18rem;
       }
+      /* The conflict dialog. js/dialog.js and Prompt 52 own dialogs; this one
+         is still the page's own. */
       .st-wrap dialog {
         max-width: 36rem;
         color: inherit;
         background: var(--surface-1);
         border: 1px solid var(--border-strong);
-        border-radius: 8px;
+        border-radius: var(--radius);
       }
       .st-wrap dialog::backdrop {
-        background: rgba(0, 0, 0, 0.6);
+        background: color-mix(in srgb, var(--space-far) 60%, transparent);
+      }
+      .st-wrap .ui-grid {
+        --ui-grid-min: 14rem;
+      }
+      .st-wrap .ui-grid.st-grid-3 {
+        --ui-grid-min: 12rem;
+      }
+      .st-wrap .ui-grid.st-grid-4 {
+        --ui-grid-min: 10rem;
+      }
+      .st-body {
+        margin: var(--space-2) 0 var(--space-3);
       }
     </style>
     <!-- shell:head -->
@@ -178,7 +103,7 @@ try {
 <!-- /shell:header -->
     <main
       id="main"
-      class="st-wrap"
+      class="ui-page is-full st-wrap"
       aria-label="Scenario Studio"
       data-i18n-aria-label="studio.title"
     >
@@ -221,12 +146,12 @@ try {
         <button id="st-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
       </div>
       <p id="st-storage" class="ui-error" data-i18n="studio.storage.failed" hidden></p>
-      <p id="st-status" class="st-status" role="status" aria-live="polite"></p>
+      <p id="st-status" class="ui-status" role="status" aria-live="polite"></p>
 
-      <div class="st-layout">
+      <div class="ui-split">
         <div>
           <div id="st-editor"></div>
-          <details id="st-raw" class="st-section">
+          <details id="st-raw" class="ui-card ui-disclosure">
             <summary data-i18n="studio.raw.heading"></summary>
             <label for="st-raw-text" data-i18n="studio.raw.label"></label>
             <textarea class="ui-textarea is-code" id="st-raw-text" spellcheck="false" aria-describedby="st-raw-error"></textarea>
@@ -237,26 +162,26 @@ try {
             </div>
           </details>
         </div>
-        <div class="st-side">
-          <section aria-labelledby="st-checks-h">
+        <div class="ui-split-aside">
+          <section class="ui-card" aria-labelledby="st-checks-h">
             <h2 id="st-checks-h" data-i18n="studio.checks.heading"></h2>
             <p id="st-checks-summary" class="ui-hint"></p>
-            <ul id="st-checks" class="st-list"></ul>
+            <ul id="st-checks" class="ui-issues"></ul>
           </section>
-          <section aria-labelledby="st-preview-h">
+          <section class="ui-card" aria-labelledby="st-preview-h">
             <h2 id="st-preview-h" data-i18n="studio.preview.heading"></h2>
             <button id="st-preview-go" type="button" class="ui-button" data-i18n="studio.action.preview"></button>
             <iframe
               id="st-preview"
-              class="st-preview"
+              class="ui-plot ui-sky st-preview"
               title="Gravitas, running this scenario"
               data-i18n-aria-label="studio.preview.frame"
             ></iframe>
           </section>
-          <section aria-labelledby="st-diff-h">
+          <section class="ui-card" aria-labelledby="st-diff-h">
             <h2 id="st-diff-h" data-i18n="studio.diff.heading"></h2>
             <p id="st-diff-summary" class="ui-hint"></p>
-            <ul id="st-diff" class="st-list"></ul>
+            <ul id="st-diff" class="ui-issues"></ul>
           </section>
         </div>
       </div>
@@ -264,7 +189,7 @@ try {
       <dialog id="st-conflict" aria-labelledby="st-conflict-h">
         <h2 id="st-conflict-h" data-i18n="studio.conflict.heading"></h2>
         <p id="st-conflict-text"></p>
-        <ul id="st-conflict-diff" class="st-list"></ul>
+        <ul id="st-conflict-diff" class="ui-issues"></ul>
         <div class="ui-toolbar">
           <button id="st-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
           <button id="st-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>

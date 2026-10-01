@@ -183,7 +183,7 @@ export function mountFitPanel(root, ctx) {
     role: 'status',
     'aria-live': 'polite',
   });
-  const refusals = el('ul', { id: 'fitRefusals', class: 'ow-problems' });
+  const refusals = el('ul', { id: 'fitRefusals', class: 'ui-alert is-error' });
   const cost = el('p', { id: 'fitEstimate', class: 'ui-hint' });
   const results = el('div', { id: 'fitResults' });
   const exportBtn = el('button', {
@@ -209,7 +209,7 @@ export function mountFitPanel(root, ctx) {
     el('p', { class: 'ui-hint', text: t('obs.fit.intro') }),
     el(
       'div',
-      { class: 'ow-grid' },
+      { class: 'ui-grid is-end' },
       label(t('obs.fit.model'), modelSelect),
       label('', exposure),
       label(t('obs.fit.supersample'), supersample),
@@ -229,7 +229,7 @@ export function mountFitPanel(root, ctx) {
         realms: device.concurrency,
       }),
     }),
-    el('div', { class: 'ow-table-wrap' }, table),
+    el('div', { class: 'ui-table-wrap is-numeric' }, table),
     cost,
     refusals,
     el('div', { class: 'ui-toolbar' }, run, cancel, exportBtn),
@@ -560,7 +560,7 @@ export function mountFitPanel(root, ctx) {
       el(
         'div',
         {
-          class: 'ow-table-wrap',
+          class: 'ui-table-wrap is-numeric',
           tabindex: '0',
           role: 'region',
           'aria-label': caption,
@@ -675,7 +675,7 @@ export function mountFitPanel(root, ctx) {
       warn.length
         ? el(
             'ul',
-            { id: 'fitCompareWarnings', class: 'ow-problems' },
+            { id: 'fitCompareWarnings', class: 'ui-alert is-warning' },
             ...warn.map(w => el('li', { text: w }))
           )
         : el('p', {
@@ -845,7 +845,7 @@ export function mountFitPanel(root, ctx) {
     );
     const warnings = el(
       'ul',
-      { id: 'fitWarnings', class: 'ow-problems' },
+      { id: 'fitWarnings', class: 'ui-alert is-warning' },
       ...fit.warnings.map(w =>
         el('li', {
           text: t(`obs.fit.warn.${w.code}`, {
@@ -871,7 +871,7 @@ export function mountFitPanel(root, ctx) {
         ? el(
             'div',
             {
-              class: 'ow-table-wrap',
+              class: 'ui-table-wrap is-numeric',
               tabindex: '0',
               role: 'region',
               'aria-label': t('obs.fit.corr.caption'),
@@ -968,7 +968,7 @@ export function mountFitPanel(root, ctx) {
       el(
         'div',
         {
-          class: 'ow-table-wrap',
+          class: 'ui-table-wrap is-numeric',
           tabindex: '0',
           role: 'region',
           'aria-label': t('obs.fit.res.caption'),

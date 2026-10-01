@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 44 of them. 13 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 44 of them. 22 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -21,15 +21,15 @@ The columns:
 |---|---|---|---|---|---|---|---|
 | gravitas.observation | format, formatVersion | 1 | js/observatory/schema.js validateObservation | download | v1 only | refused: "reads /1" | [yes](sdk/schemas/observation-1.schema.json) |
 | gravitas.pipeline | format, formatVersion | 1 | js/measure/pipeline.js readPipeline | download | v1 only | refused, in words | [yes](sdk/schemas/pipeline-1.schema.json) |
-| gravitas.inference | format, formatVersion | 1 | js/inference/manifest.js validateInference | download | v1 only | a validation problem | no |
-| gravitas.analysis | format, formatVersion, kind | 1 | none: written, never read | download | v1 only | nothing reads it | no |
+| gravitas.inference | format, formatVersion | 1 | js/inference/manifest.js validateInference | download | v1 only | a validation problem | [yes](sdk/schemas/inference-1.schema.json) |
+| gravitas.analysis | format, formatVersion, kind | 1 | none: written, never read | download | v1 only | nothing reads it | [yes](sdk/schemas/analysis-1.schema.json) |
 | gravitas.artifact | format, formatVersion | 1 | js/platform/artifact.js validateArtifact | memory | v1 only | a validation problem | [yes](sdk/schemas/artifact-1.schema.json) |
 | gravitas.observed | format, formatVersion | 1 | js/notebook/observed.js (inside a notebook entry) | localStorage | v1 only | not checked | no |
 | gravitas.observation-data-pack | format, formatVersion | 1 | tools/data-packs/schema.mjs validateDataPack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/observation-data-pack-1.schema.json) |
 | world share link | v (link prefix 1) | 1 | js/shareState.js decodePayload | link | v1 only | refused, in words | no |
 | experiment link block (xp) | v | 1 | js/experiments/shareExperiment.js readExperimentBlock | link | v1 only | reported, not checked | no |
 | link extras (x) | v | 1 | js/experiments/canonicalState.js readExtras | link | v1 only | reported, not checked | no |
-| gravitas.orbital-system | format, version | 1 | js/systemSpec.js systemFromFile | download | v1 only | refused, in words | no |
+| gravitas.orbital-system | format, version | 1 | js/systemSpec.js systemFromFile | download | v1 only | refused, in words | [yes](sdk/schemas/orbital-system-1.schema.json) |
 | gravitas.system3d | format, formatVersion | 1 | js/lab3d/state.js migrateSystem | file, repository | v1 only; reads orbital-system/1 | refused, in words | no |
 | gravitas.lab3d.snapshot | format, formatVersion | 1 | js/lab3d/snapshot.js snapshotProblem | memory | v1 only | refused | no |
 | gravitas.experiment | format, formatVersion | 1 | js/experiments/experimentManifest.js migrateExperiment | memory, inside results | converts an unversioned sweep spec | refused, in words | [yes](sdk/schemas/experiment-1.schema.json) |
@@ -38,13 +38,13 @@ The columns:
 | experiment store | v | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2 | refused by reason code | no |
 | gravitas.mission-plan | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.ephemeris-pack | format, formatVersion | 1 | js/mission/ephemeris.js createEphemeris | repository | v1 only | refused | no |
-| gravitas.investigation-pack | format, formatVersion | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words | no |
-| gravitas.question-bank | format, formatVersion | 1 | js/platform/questionBank.js validateQuestionBankWith | download | v1 only | a validation problem | no |
-| gravitas.assignment | k, v (link prefix a) | 2 | js/assignments/assignment.js validateAssignment | link, download | reads v1 as it is | refused, in words | no |
+| gravitas.investigation-pack | format, formatVersion | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words | [yes](sdk/schemas/investigation-pack-1.schema.json) |
+| gravitas.question-bank | format, formatVersion | 1 | js/platform/questionBank.js validateQuestionBankWith | download | v1 only | a validation problem | [yes](sdk/schemas/question-bank-1.schema.json) |
+| gravitas.assignment | k, v (link prefix a) | 2 | js/assignments/assignment.js validateAssignment | link, download | reads v1 as it is | refused, in words | [yes](sdk/schemas/assignment-2.schema.json) |
 | investigation progress | schema | 2 | js/investigations/progressSchema.js readProgress | localStorage | migrates v1 (migrateFromV1) | kept and not overwritten, in words | no |
 | gravitas.investigation.progress | kind, version | 2 | js/investigations/progressBackup.js restoreProgress | download | migrates v1 | refused, in words | no |
-| submission token | v (link prefix s) | 1 | js/submission/submissionToken.js readSubmissionToken | pasted text | v1 only | refused, in words | no |
-| gravitas.submission-results | kind, version | 2 | js/submission/results.js readResults | download | migrates v1 | refused by reason code | no |
+| submission token | v (link prefix s) | 1 | js/submission/submissionToken.js readSubmissionToken | pasted text | v1 only | refused, in words | [yes](sdk/schemas/submission-token-1.schema.json) |
+| gravitas.submission-results | kind, version | 2 | js/submission/results.js readResults | download | migrates v1 | refused by reason code | [yes](sdk/schemas/submission-results-2.schema.json) |
 | gravitas.lab3d-guide-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.mission-lab-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | notebook store | v | 1 | js/notebook/store.js load | localStorage | v1 only | kept and not overwritten, in words | no |
@@ -59,7 +59,7 @@ The columns:
 | gravitas.catalog | format, formatVersion | 1 | js/catalogPage.js load | repository | v1 only | refused | [yes](sdk/schemas/catalog-1.schema.json) |
 | gravitas.catalog-curation | format, formatVersion | 1 | tools/catalog.mjs readCuration | repository | not checked | not checked | [yes](sdk/schemas/catalog-curation-1.schema.json) |
 | gravitas.extension-archive | none (the archive structure) | 1 | sdk/lib/archive.mjs, js/catalog/archive.js | repository, download | structure checked, not version | structure checked, not version | no |
-| gravitas-embed messages | protocol, version | 1 | js/embedMessages.js readMessage | memory | v1 only | refused by error code | no |
+| gravitas-embed messages | protocol, version | 1 | js/embedMessages.js readMessage | memory | v1 only | refused by error code | [yes](sdk/schemas/embed-messages-1.schema.json) |
 | embed options | query ev | 1 | js/embedOptions.js readEmbedOptions | link | v1 only | ignored: opens as a plain embed | no |
 | gravitas.student-data | format, formatVersion | 1 | js/storage/index.js Store.importAll | download | v1 only | refused, with a reason | no |
 | gravitas.evaluation | kind, schema | 1 | tools/evaluation-summary.mjs | download, localStorage draft | v1 only | skipped, in words | [yes](sdk/schemas/evaluation-1.schema.json) |

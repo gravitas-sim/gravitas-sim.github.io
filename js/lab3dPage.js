@@ -192,7 +192,7 @@ async function openFile(file) {
 function table(caption, head, rows) {
   return el(
     'table',
-    { class: 'lb-table' },
+    { class: 'ui-table' },
     el('caption', { text: caption }),
     el(
       'thead',
@@ -325,7 +325,7 @@ function errorPlot(host, samples, key, label) {
     viewBox: `0 0 ${W} ${H}`,
     role: 'img',
     'aria-label': label,
-    class: 'lb-plot',
+    class: 'ui-plot',
   });
   if (pts.length > 1) {
     const [t0, t1] = [pts[0][0], pts.at(-1)[0]];
@@ -371,7 +371,7 @@ function pathPlot(host, samples, bodies, [a, b], label) {
     viewBox: `0 0 ${W} ${W}`,
     role: 'img',
     'aria-label': label,
-    class: 'lb-plot lb-square',
+    class: 'ui-plot lb-square',
   });
   const withX = samples.filter(s => s.x);
   if (withX.length) {
