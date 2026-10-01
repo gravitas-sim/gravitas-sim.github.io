@@ -95,6 +95,10 @@
       .lib-progress {
         color: var(--text-primary);
       }
+      /* Two menus a row on a phone: nine stacked fill a screen. */
+      .lib-find {
+        --ui-grid-min: 9rem;
+      }
       .lib-group h2 {
         margin: var(--space-6) 0 var(--space-2);
       }
@@ -144,7 +148,7 @@ try {
 
       <section class="ui-card" aria-labelledby="libFindTitle">
         <h2 id="libFindTitle" data-i18n="lib.find.title">Find something</h2>
-        <div class="ui-grid is-end">
+        <div class="ui-grid is-end lib-find">
           <label class="ui-field">
             <span data-i18n="lib.search">Search</span>
             <input
