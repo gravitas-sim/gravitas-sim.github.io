@@ -151,7 +151,7 @@ export function validateInvestigationPack(p, api) {
     `must be ${FORMAT_VERSION}`
   );
   need(
-    PUBLIC_ID.test(p.id || ''),
+    typeof p.id === 'string' && PUBLIC_ID.test(p.id),
     'id',
     'id',
     'a public id such as "reading-an-orbit"'

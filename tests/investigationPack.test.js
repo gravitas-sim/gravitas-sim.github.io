@@ -56,6 +56,8 @@ describe('the example', () => {
 describe('what a pack may hold', () => {
   const cases = [
     ['an id Gravitas already uses', p => (p.id = 'keplers-laws'), 'id idTaken'],
+    // Tested as text, a number passed for a public id.
+    ['an id that is a number', p => (p.id = 2026), 'id id'],
     [
       'a duration the card cannot print',
       p => (p.duration = 'soon'),
@@ -405,6 +407,11 @@ describe('a bank item', () => {
       'with no version',
       p => delete item(p).version,
       'bank.items[0].version itemVersion',
+    ],
+    [
+      'with an id that is a number',
+      p => (item(p).id = 7),
+      'bank.items[0].id id',
     ],
     [
       'with no points',
