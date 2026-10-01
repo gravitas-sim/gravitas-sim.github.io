@@ -451,18 +451,32 @@ describe('a pack changed after it was built is caught', () => {
     const dir = copyForCheck();
     const file = path.join(dir, 'js/data/trappist1.js');
     const text = readFileSync(file, 'utf8');
+    writeFileSync(file, text.replace('massInSuns: 0.0898', 'massInSuns: 0.09'));
+    // Planet g's period is the one value no table gives; drop the words
+    // that say so, and the sources no longer match what the tables found.
+    const sources = path.join(dir, 'js/data/realSystemSources.js');
+    const cited = readFileSync(sources, 'utf8');
+    const g = cited.indexOf("'js/data/trappist1.js TRAPPIST1_PLANETS g'");
+    const unsourced = cited.indexOf(
+      "{ ...UNSOURCED, fields: ['periodDays'] }",
+      g
+    );
+    expect(unsourced).toBeGreaterThan(g);
     writeFileSync(
-      file,
-      text
-        .replace('massInSuns: 0.0898', 'massInSuns: 0.09')
-        .replace("{ text: 'approximate, unsourced', fields: PERIOD }", '')
+      sources,
+      cited.slice(0, unsourced) +
+        cited.slice(
+          unsourced + "{ ...UNSOURCED, fields: ['periodDays'] }".length
+        )
     );
     const { ok, out } = runCheck(dir);
     expect(ok).toBe(false);
     expect(out).toContain(
       'TRAPPIST1_STAR.massInSuns is not the 0.0898 the manifest records'
     );
-    expect(out).toMatch(/TRAPPIST1_PLANETS\.g\.sources is/);
+    expect(out).toMatch(
+      /TRAPPIST1_PLANETS\.g's sources in js\/data\/realSystemSources\.js are/
+    );
   });
 
   test('a synthetic curve that stops saying it is synthetic', () => {
