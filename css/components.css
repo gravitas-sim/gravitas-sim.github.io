@@ -350,6 +350,56 @@
     transform: rotate(-90deg);
   }
 
+  /* The heading's button: the section's name and its chevron, as plain as the
+     heading it replaced. The generic button rule above would otherwise give it
+     a fill and a border of its own inside the header's. */
+  .settings-section-fold {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .settings-section-fold:hover {
+    background: none;
+    transform: none;
+  }
+
+  .settings-section-fold:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .settings-section-reset {
+    flex: none;
+    min-height: 24px;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  /* Numerical accuracy and performance, closed until asked for. */
+  .settings-advanced > summary {
+    margin-bottom: var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    min-height: 24px;
+    color: var(--text-secondary);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+  }
+
+  .settings-advanced > summary:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
   .settings-section-content {
     padding: var(--space-4);
     max-height: 1400px;
