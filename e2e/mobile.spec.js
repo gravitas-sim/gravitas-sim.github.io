@@ -59,6 +59,23 @@ test.describe('on a phone', () => {
     await expect(load).toBeVisible();
   });
 
+  test('a section heading opens its section and leaves the menu open', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.locator('#mobileMenuToggle').click();
+    const rail = page.locator('.ui-container');
+    await expect(rail).toHaveClass(/is-open/);
+    // Any button in the rail closes the menu once it has run; a heading used
+    // to as well, so a phone reader could open no section but the first.
+    const tools = page.locator('#railTools');
+    await tools.click();
+    await expect(tools).toHaveAttribute('aria-expanded', 'true');
+    await expect(rail).toHaveClass(/is-open/);
+    await expect(page.locator('#railToolsBody')).toBeVisible();
+  });
+
   test('a scenario loads from the gallery and fits the screen', async ({
     page,
     app,

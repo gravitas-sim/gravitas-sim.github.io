@@ -491,17 +491,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Not initInvestigations(): the lesson system is half the bundle and is
     // loaded the first time somebody asks for it. See investigationsLoader.js.
     watchForInvestigations();
-    // The reopen button waits for its own module rather than pulling it into
-    // start-up: it is in the footer, and most visits never touch it.
-    document
-      .getElementById('aboutGravitasBtn')
-      ?.addEventListener('click', event => {
-        event.preventDefault();
-        loadWelcome()
-          .then(mod => mod.openWelcome({ automatic: false }))
-          .catch(err => console.warn('Front door unavailable:', err));
-      });
-    // The GRAVITAS link on this page changes only the hash.
+    // Home reopens from the shell's GRAVITAS link, which on this page changes
+    // only the hash. The module waits until then rather than joining start-up.
     window.addEventListener('hashchange', () => {
       if (embedded || location.hash !== '#home') return;
       loadWelcome()

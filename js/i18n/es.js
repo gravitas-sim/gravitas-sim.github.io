@@ -173,10 +173,6 @@ export const ES = {
   'rail.shortcuts.hint': 'Atajos de teclado (?)',
 
   // --- Rail: learn -----------------------------------------------------------
-  'rail.railLearn.hint': 'Mostrar u ocultar la sección de aprendizaje',
-  'rail.aboutGravitas.hint':
-    'Qué es Gravitas, qué se puede hacer aquí y por dónde empezar',
-  'rail.railLearnBody.hint.3': 'Abrir el manual de usuario de Gravitas (PDF)',
   'rail.objectType.hint':
     'Elige qué añadir y luego haz clic en el lienzo para colocarlo',
   'rail.mainControls.label': 'Controles de la simulación',
@@ -258,9 +254,6 @@ export const ES = {
   'rail.speedUp': 'Rápido',
   'rail.resetView': 'Restablecer vista',
   'rail.shortcuts': 'Atajos',
-  'rail.railLearn': 'Aprender',
-  'rail.aboutGravitas': 'Acerca de Gravitas',
-  'rail.railLearnBody.3': 'Manual de usuario (PDF)',
   'rail.objectType': 'Añadir objeto',
   'rail.objectType.choose': 'Añadir objeto',
   'rail.objectType.placing': 'Haz clic para colocar · Esc',

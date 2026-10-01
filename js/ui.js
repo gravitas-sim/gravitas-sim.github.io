@@ -7813,10 +7813,14 @@ if (mobileMenuToggle && uiRail) {
   // opens it took the picker off the screen before a single object type could
   // be read, let alone chosen. Picking a type then closes both deliberately,
   // from the item's own handler.
+  //
+  // A section's heading is the other: it opens a section of this menu, and
+  // the menu closing under it left a phone reader unable to open any section
+  // at all.
   uiRail.addEventListener('click', e => {
     if (!uiRail.classList.contains('is-open')) return;
     if (!e.target.closest('button')) return;
-    if (e.target.closest('#objectTypeBtn')) return;
+    if (e.target.closest('#objectTypeBtn, .rail-section-toggle')) return;
     closeRail();
   });
 

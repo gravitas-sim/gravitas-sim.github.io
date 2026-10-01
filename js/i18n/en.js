@@ -221,10 +221,6 @@ export const EN = {
   'rail.speedUp.hint': 'Increase speed by 0.5x',
   'rail.resetView.hint': 'Recenter the camera and return to 1× zoom (R).',
   'rail.shortcuts.hint': 'Keyboard shortcuts (?)',
-  'rail.railLearn.hint': 'Show or hide the learn controls',
-  'rail.aboutGravitas.hint':
-    'What Gravitas is, what you can do here, and where to start',
-  'rail.railLearnBody.hint.3': 'Open the Gravitas user manual (PDF)',
   'rail.objectType.hint':
     'Choose what to add, then click the canvas to place it',
   'rail.mainControls.label': 'Simulation controls',
@@ -301,9 +297,6 @@ export const EN = {
   'rail.speedUp': 'Fast',
   'rail.resetView': 'Reset View',
   'rail.shortcuts': 'Shortcuts',
-  'rail.railLearn': 'Learn',
-  'rail.aboutGravitas': 'About Gravitas',
-  'rail.railLearnBody.3': 'User manual (PDF)',
   'rail.objectType': 'Add object',
   'rail.objectType.choose': 'Add object',
   'rail.objectType.placing': 'Click to place · Esc',

@@ -235,7 +235,7 @@ const RAIL_SECTIONS_KEY = 'gravitas_rail_sections';
 // section, which fits any screen the application runs on, and every group is
 // one click away with its name permanently in view. The choice persists, so a
 // user who lives in Tools opens Tools once.
-const RAIL_SECTIONS = ['railScenario', 'railState', 'railTools', 'railLearn'];
+const RAIL_SECTIONS = ['railScenario', 'railState', 'railTools'];
 
 /** The one open on a first visit: loading something is where everyone starts. */
 const DEFAULT_OPEN = 'railScenario';

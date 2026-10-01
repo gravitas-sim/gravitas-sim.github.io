@@ -1499,46 +1499,6 @@
     }
   }
 
-  /* --- Rail: the Learn group ------------------------------------------------
-     Text links, not buttons. Everything else in the rail acts on the
-     simulation; these navigate away from it, and giving them button chrome
-     would put four more full-width controls in front of the ones that matter.
-     The group sits last for the same reason. */
-  .rail-group-learn {
-    margin-top: var(--space-1);
-  }
-
-  .rail-links {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    padding: 0 var(--space-3);
-  }
-
-  .rail-link {
-    padding: var(--space-1) 0;
-    font: inherit;
-    font-size: var(--text-xs);
-    line-height: 1.4;
-    text-align: left;
-    text-decoration: none;
-    color: var(--text-secondary);
-    background: none;
-    border: 0;
-    border-bottom: 1px solid transparent;
-    cursor: pointer;
-    transition:
-      color var(--duration) var(--ease),
-      border-color var(--duration) var(--ease);
-  }
-
-  .rail-link:hover,
-  .rail-link:focus-visible {
-    color: var(--accent);
-    border-bottom-color: currentColor;
-  }
-
   .rail-field {
     display: flex;
     align-items: center;
