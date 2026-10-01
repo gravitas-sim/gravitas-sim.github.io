@@ -55,6 +55,7 @@ import { SDSS_SPECTRA } from './data-packs/sdss-spectra.mjs';
 import { GWOSC_EVENTS } from './data-packs/gwosc-events.mjs';
 import { GW150914_FIGURES } from './data-packs/gw150914.mjs';
 import { MIST_TRACKS } from './data-packs/mist-tracks.mjs';
+import { COMPILATIONS } from './data-packs/compilations.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CACHE =
@@ -424,6 +425,8 @@ export const PACKS = [
   GWOSC_EVENTS,
   GW150914_FIGURES,
   MIST_TRACKS,
+  // The compilations: hand-written modules, each value held to its table.
+  ...COMPILATIONS,
 ];
 
 // A table pack (js/tableObservation.js) is decoded and checked as a table;
