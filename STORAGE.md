@@ -45,6 +45,8 @@ These are the student's own work, and what an "export everything" would carry:
 | `gravitas_locale` | The interface language, shared by every page | `js/i18n/index.js` and each page's catalog loader |
 | `gravitas_theme` | The theme | `js/theme.js` |
 | `gravitas_units` | Physical or simulation units | `js/units.js` |
+| `gravitas_course_level` | The course level: introductory, majors or advanced (sets the readout precision) | `js/settingsSchema.js` |
+| `gravitas_lesson_objects_open` | Whether the lesson panel's objects list was left open | `js/investigations.js` |
 | `gravitas_rail_sections` | Which rail sections are open | `js/controls.js` |
 | `gravitas_lecture_sequence` | Lecture mode's sequence | `js/lecture.js` |
 | `gravitas_welcome_seen_v1` | That the welcome was seen | `js/welcomeGate.js` |

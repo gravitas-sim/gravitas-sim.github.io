@@ -17,8 +17,8 @@
 //               stylesheet or a page's own <style>
 //   important   an !important outside css/tokens.css
 //   emoji       an emoji in a message catalog (js/i18n) or in a page's markup
-//   controls    a select, textarea, button or text-like input with no class,
-//               on a tool page
+//   controls    a select, textarea, button or text-like input on a tool page
+//               without a component class (one beginning ui-)
 //
 // A file above its count fails; a file below it fails too until the record is
 // rewritten with --record, so the counts can only fall - the rule of
@@ -97,19 +97,26 @@ export const countEmoji = text =>
   (text.replace(NOTATION, '').match(/\p{Extended_Pictographic}|\u2605/gu) || [])
     .length;
 
-/** Native controls with no class at all, in a page's markup. */
-export const countBareControls = html => {
-  let n = 0;
-  for (const m of markupOf(html).matchAll(
-    /<(select|button|textarea|input)\b([^>]*)>/g
-  )) {
-    const attrs = m[2];
-    // Choices and hidden fields have no chrome of their own to style.
-    if (/type="(hidden|checkbox|radio|range)"/.test(attrs)) continue;
-    if (!/\bclass=/.test(attrs)) n++;
-  }
-  return n;
-};
+/**
+ * The native controls the count is about, in a page's markup, as their
+ * attribute strings. Choices and hidden fields have no chrome of their own to
+ * style.
+ */
+export const nativeControls = html =>
+  [...markupOf(html).matchAll(/<(select|button|textarea|input)\b([^>]*)>/g)]
+    .map(m => m[2])
+    .filter(attrs => !/type="(hidden|checkbox|radio|range)"/.test(attrs));
+
+/**
+ * Native controls without a component class, in a page's markup. A class of
+ * the page's own does not count: .fb-code styled one box on one page, and the
+ * point of the count is that every page's controls look like every other's.
+ */
+export const countBareControls = html =>
+  nativeControls(html).filter(attrs => {
+    const cls = (attrs.match(/\bclass="([^"]*)"/) || [])[1] ?? '';
+    return !cls.split(/\s+/).some(c => c.startsWith('ui-'));
+  }).length;
 
 /** The stylesheets under css/, the tokens aside. */
 const stylesheets = () =>

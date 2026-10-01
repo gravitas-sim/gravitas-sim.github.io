@@ -173,10 +173,6 @@ export const ES = {
   'rail.shortcuts.hint': 'Atajos de teclado (?)',
 
   // --- Rail: learn -----------------------------------------------------------
-  'rail.railLearn.hint': 'Mostrar u ocultar la sección de aprendizaje',
-  'rail.aboutGravitas.hint':
-    'Qué es Gravitas, qué se puede hacer aquí y por dónde empezar',
-  'rail.railLearnBody.hint.3': 'Abrir el manual de usuario de Gravitas (PDF)',
   'rail.objectType.hint':
     'Elige qué añadir y luego haz clic en el lienzo para colocarlo',
   'rail.mainControls.label': 'Controles de la simulación',
@@ -258,9 +254,6 @@ export const ES = {
   'rail.speedUp': 'Rápido',
   'rail.resetView': 'Restablecer vista',
   'rail.shortcuts': 'Atajos',
-  'rail.railLearn': 'Aprender',
-  'rail.aboutGravitas': 'Acerca de Gravitas',
-  'rail.railLearnBody.3': 'Manual de usuario (PDF)',
   'rail.objectType': 'Añadir objeto',
   'rail.objectType.choose': 'Añadir objeto',
   'rail.objectType.placing': 'Haz clic para colocar · Esc',
@@ -334,9 +327,9 @@ export const ES = {
   'settings.demoMode.stop': 'Detener demostración',
   'settings.bhMassesDone': 'Hecho',
   'settings.toggle.on': 'Sí',
+  'settings.bhMass.item': 'Agujero negro n.º {n}:',
   'settings.toggle.off': 'No',
   'settings.info.about': 'Información sobre {label}',
-  'settings.option.presetScenario.none': 'Ninguno',
 
   // --- Settings: sections ----------------------------------------------------
   'settings.section.simulation': 'Simulación',
@@ -363,9 +356,19 @@ export const ES = {
   'settings.section.objects': 'Objetos',
   'settings.section.ui-control': 'Interfaz y control',
   'settings.section.educational': 'Didáctico',
+  'settings.level.label': 'Nivel del curso',
+  'settings.level.introductory': 'Introductorio',
+  'settings.level.majors': 'Especialidad',
+  'settings.level.advanced': 'Avanzado',
+  'settings.section.advanced': 'Avanzado',
+  'settings.section.reset': 'Restablecer',
+  'settings.section.resetNamed':
+    'Devolver los ajustes de {section} a su valor por defecto',
+  'settings.section.resetDone':
+    'Ajustes de {section} devueltos a su valor por defecto; se aplican al pulsar «Aplicar y reiniciar».',
+  'settings.button.indivBhMasses': 'Masas individuales de los agujeros negros',
 
   // --- Settings: labels ------------------------------------------------------
-  'settings.label.presetScenario': 'Escenario predefinido',
   'settings.label.gravitationalConstant': 'Constante gravitatoria',
   'settings.label.mutualGravity': 'Gravedad mutua (todos)',
   'settings.label.simSpeed': 'Velocidad de simulación',
@@ -525,11 +528,9 @@ export const ES = {
   'mond.limitation.external':
     'El efecto de campo externo. En MOND un sistema se ve afectado por el campo gravitatorio en el que esta inmerso incluso cuando ese campo es uniforme, lo que rompe el principio de equivalencia fuerte y dificulta enunciar predicciones aisladas.',
   'settings.label.qualityTier': 'Calidad',
-  'settings.option.qualityTier.auto': 'Automatica',
+  'settings.option.qualityTier.auto': 'Automática',
   'settings.option.qualityTier.full': 'Completa',
   'settings.option.qualityTier.low': 'Baja',
-  'settings.tooltip.qualityTier':
-    'La opcion automatica mide los fotogramas por segundo que esta maquina consigue de verdad y baja al nivel bajo por debajo de unos 32: menos pixeles, menos cuerpos generados y los efectos a pantalla completa desactivados. Los sistemas construidos a mano conservan todos sus cuerpos, porque ahi el numero es la fisica.',
   'settings.filter.label': 'Buscar ajustes',
   'settings.filter.placeholder': 'Buscar ajustes',
   'settings.filter.hint':
@@ -548,8 +549,7 @@ export const ES = {
   'settings.label.numAsteroids': 'Número de asteroides',
   'settings.label.numComets': 'Número de cometas',
   'settings.label.initVelocity': 'Velocidad inicial',
-  'settings.label.velocityStddev': 'Desviación de la velocidad',
-  'settings.label.inputObjectType': 'Tipo de objeto que se inserta',
+  'settings.label.velocityStddev': 'Dispersión de la velocidad',
   'settings.label.showTrails': 'Mostrar trazas',
   'settings.label.trailStyle': 'Estilo de traza',
   'settings.label.trailLength': 'Longitud de la traza',
@@ -558,6 +558,8 @@ export const ES = {
   'settings.label.showPotentialWell': 'Mostrar el pozo de potencial',
   'settings.label.showScaleBar': 'Mostrar la barra de escala',
   'settings.label.showElapsedTime': 'Mostrar el tiempo transcurrido',
+  // No longer in the Settings panel (it drew no glow), but a scenario pack can
+  // still carry it, and the Studio names it by this label.
   'settings.label.showBhGlow': 'Mostrar el halo del agujero negro',
   'settings.label.showAccretionDisk': 'Mostrar el disco de acreción',
   'settings.label.realisticDiskPhysics': 'Física realista del disco',
@@ -565,12 +567,10 @@ export const ES = {
   'settings.label.starDensity': 'Densidad del campo de estrellas',
   'settings.label.showAmbientLighting': 'Iluminación ambiental',
   'settings.label.dynamicObjectProperties': 'Colores dinámicos de los objetos',
-  'settings.label.planetBaseColor': 'Color base de los planetas',
-  'settings.label.starBaseColor': 'Color base de las estrellas',
+  'settings.label.planetBaseColor': 'Color de las trazas de los planetas',
   'settings.label.interactiveAdd': 'Añadir objetos con el ratón',
   'settings.label.followMode': 'Modo de seguimiento',
   'settings.label.showDynamicOverlays': 'Mostrar las capas de datos',
-  'settings.label.recordSimulation': 'Grabar la simulación',
   'settings.label.showGravitationalWaves': 'Mostrar ondas gravitatorias',
   'settings.label.habitableZoneOptimism': 'Modelo de zona habitable',
 
@@ -1382,6 +1382,7 @@ export const ES = {
   'inv.action.back': 'Atrás',
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
   'inv.body.label': 'Paso de la lección',
+  'inv.backup.summary': 'Copia del progreso',
   'inv.backup.download': 'Descargar copia del progreso',
   'inv.backup.download.hint':
     'Guarda una copia de tus respuestas en un archivo tuyo. El informe PDF sigue siendo lo que se entrega.',

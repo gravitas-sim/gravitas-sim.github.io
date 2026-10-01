@@ -85,15 +85,17 @@ export function mountAnalysis(root, ctx) {
   const metricUnit = m => ctx.metricUnits[m] || '';
 
   // --- The controls ---------------------------------------------------------------
-  const source = el('p', { id: 'labSource', class: 'xp-hint' });
+  const source = el('p', { id: 'labSource', class: 'ui-hint' });
   const file = el('input', {
     id: 'labFile',
+    class: 'ui-file',
     type: 'file',
     accept: 'application/json,.json',
   });
-  const metric = el('select', { id: 'labMetric' });
+  const metric = el('select', { id: 'labMetric', class: 'ui-select' });
   const resamples = el('input', {
     id: 'labResamples',
+    class: 'ui-input',
     type: 'number',
     min: LIMITS.resamples.min,
     max: LIMITS.resamples.max,
@@ -102,15 +104,16 @@ export function mountAnalysis(root, ctx) {
   });
   const seed = el('input', {
     id: 'labSeed',
+    class: 'ui-input',
     type: 'text',
     value: 'analysis',
     maxlength: 24,
     spellcheck: 'false',
   });
-  const axis = el('select', { id: 'labAxis' });
+  const axis = el('select', { id: 'labAxis', class: 'ui-select' });
   const axisField = el(
     'label',
-    { class: 'xp-field', hidden: true },
+    { class: 'ui-field', hidden: true },
     el('span', { text: t('lab.axis') }),
     axis
   );
@@ -155,16 +158,17 @@ export function mountAnalysis(root, ctx) {
     hidden: true,
     'aria-label': t('lab.title'),
   });
-  const refSelect = el('select', { id: 'labReference' });
+  const refSelect = el('select', { id: 'labReference', class: 'ui-select' });
   const refFile = el('input', {
     id: 'labStepFile',
+    class: 'ui-file',
     type: 'file',
     accept: 'application/json,.json',
   });
-  const stepIntro = el('p', { class: 'xp-hint', text: t('lab.step.intro') });
+  const stepIntro = el('p', { class: 'ui-hint', text: t('lab.step.intro') });
 
   const field = (label, control) =>
-    el('label', { class: 'xp-field' }, el('span', { text: label }), control);
+    el('label', { class: 'ui-field' }, el('span', { text: label }), control);
   root.replaceChildren(
     el('p', { text: t('lab.intro') }),
     source,
@@ -185,7 +189,7 @@ export function mountAnalysis(root, ctx) {
     ),
     forecast,
     refusals,
-    el('div', { class: 'xp-actions' }, run, cancel),
+    el('div', { class: 'ui-toolbar' }, run, cancel),
     progress,
     status,
     out
@@ -542,7 +546,7 @@ export function mountAnalysis(root, ctx) {
     kids.push(
       el('h3', { text: t('lab.h.methods') }),
       el('p', { id: 'labMethods', text: methods }),
-      el('div', { class: 'xp-actions' }, saveJson, saveCsv)
+      el('div', { class: 'ui-toolbar' }, saveJson, saveCsv)
     );
 
     out.replaceChildren(...kids);
@@ -887,7 +891,7 @@ export function mountAnalysis(root, ctx) {
         {},
         svg,
         el('figcaption', {
-          class: 'xp-hint',
+          class: 'ui-hint',
           text: t('lab.hist.caption', {
             metric: metricName(m),
             bins: h.counts.length,
@@ -996,7 +1000,7 @@ export function mountAnalysis(root, ctx) {
         'figure',
         {},
         svg,
-        el('figcaption', { class: 'xp-hint', text: t('lab.plot.caption') })
+        el('figcaption', { class: 'ui-hint', text: t('lab.plot.caption') })
       ),
       selected,
       live,
@@ -1103,7 +1107,7 @@ export function mountAnalysis(root, ctx) {
     run.textContent = t('lab.run');
     cancel.textContent = t('lab.cancel');
     root.firstElementChild.textContent = t('lab.intro');
-    const labels = root.querySelectorAll('.xp-grid > .xp-field > span');
+    const labels = root.querySelectorAll('.xp-grid > .ui-field > span');
     stepIntro.textContent = t('lab.step.intro');
     [
       'lab.open',

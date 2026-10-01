@@ -258,6 +258,30 @@ the bar stays live (outside the inert set, inside the Tab loop, so the
 layer is a non-modal dialog), and `/#home` opens it by name from every
 page's GRAVITAS link. Its content is unchanged until Prompt 73.
 
+## As built (Prompt 52)
+
+**Settings.**
+- The panel is `js/settingsSchema.js`: nine sections (one Visuals), with Numerical accuracy and Performance inside a closed Advanced disclosure that a search opens.
+- Each section has a Reset, every row has help in both languages, and `tests/settingsInventory.test.js` holds each row to a section, words, a reader and a stable id.
+- Four controls that did nothing left the panel; their keys still open. The course level (introductory, majors, advanced) sits at the top: a bundle of defaults, never a lock.
+
+**Menus.**
+- The rail is simulation controls only: Scenario, State, Tools and Add object. Its Learn section went to the shell (Home and the user manual).
+- It is one accordion with stable ids, and on a phone a section heading no longer closes the menu.
+
+**Dialogs.** Fourteen in the application.
+- Through `js/dialog.js`: Settings, precise placement and the system builder.
+- With their own open, close and focus code: the scenario browser, the lesson browser, export, the lesson finish, share, the black-hole masses, the tutorial, the sound panel, the lecture sequence, the welcome (Home, non-modal by design since Prompt 50) and the object inspector (inline).
+- Moving the first nine onto `js/dialog.js` is the next part of Prompt 52.
+- The two conversions this model names as inline are done. The lesson panel's backup buttons are a Progress disclosure, and its objects list folds and remembers.
+
+**First run.** One overlay at a time, in order:
+1. Home (marked pending from the moment it is decided, so nothing rises under it).
+2. The scenario card, once Home closes. On a phone it sits above the transport bar, not over the readout.
+3. The touch tips, at the first touch on a clear screen.
+
+Escape closes each one. A card closed for a scenario does not return when that scenario is rebuilt. The footer's year is generated from `tools/project-metadata.mjs`.
+
 ## Rejected alternatives
 
 - **A framework** (React, Vue, Lit). It would cost far more than the whole

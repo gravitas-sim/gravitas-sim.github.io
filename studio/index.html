@@ -45,14 +45,6 @@
           top: 1rem;
         }
       }
-      .st-toolbar,
-      .st-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        align-items: center;
-        margin: 0.75rem 0;
-      }
       .st-section,
       .st-side section,
       .st-wrap fieldset {
@@ -84,11 +76,12 @@
       .st-grid-4 {
         grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
       }
-      .st-field {
-        display: grid;
-        gap: 0.25rem;
-        align-content: start;
+      /* Fields stack with room between them; toolbars keep room below. */
+      .st-wrap .ui-field {
         margin: 0.5rem 0 0;
+      }
+      .st-wrap .ui-toolbar {
+        margin-bottom: 0.75rem;
       }
       .st-check {
         display: inline-flex;
@@ -99,35 +92,6 @@
       .st-checks {
         display: flex;
         flex-wrap: wrap;
-      }
-      .st-wrap input[type='text'],
-      .st-wrap select,
-      .st-wrap textarea {
-        width: 100%;
-        box-sizing: border-box;
-        font: inherit;
-        background: var(--surface-2);
-        color: inherit;
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        padding: 0.4rem 0.5rem;
-      }
-      .st-wrap [aria-invalid='true'] {
-        border-color: var(--danger);
-      }
-      .st-wrap input::placeholder {
-        color: var(--text-muted);
-      }
-      .st-hint {
-        margin: 0;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      .st-error {
-        margin: 0;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--danger);
       }
       .st-group > summary {
         cursor: pointer;
@@ -171,8 +135,6 @@
       }
       #st-raw-text {
         min-height: 18rem;
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 0.8rem;
       }
       .st-wrap dialog {
         max-width: 36rem;
@@ -207,7 +169,7 @@ try {
 <header class="gs-shell">
 <a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
 <button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
-<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/" aria-current="page"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li></ul></details></li></ul></nav>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/" aria-current="page"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
 <div class="gs-controls" hidden>
 <label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
 <label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
@@ -222,7 +184,7 @@ try {
     >
       <div
         id="langSwitch"
-        class="st-actions"
+        class="ui-toolbar"
         role="group"
         aria-label="Language"
         data-i18n-aria-label="studio.lang.label"
@@ -231,32 +193,34 @@ try {
       <p data-i18n="studio.intro"></p>
 
       <div
-        class="st-toolbar"
+        class="ui-toolbar"
         role="group"
         aria-label="Scenario file"
         data-i18n-aria-label="studio.toolbar.label"
       >
         <button id="st-new" type="button" class="ui-button" data-i18n="studio.action.new"></button>
         <button id="st-open" type="button" class="ui-button" data-i18n="studio.action.open"></button>
-        <input id="st-file" type="file" accept="application/json,.json" hidden />
+        <input class="ui-file" id="st-file" type="file" accept="application/json,.json" hidden />
         <button id="st-save" type="button" class="ui-button is-primary" data-i18n="studio.action.save"></button>
         <button id="st-copy" type="button" class="ui-button" data-i18n="studio.action.copy"></button>
         <a id="st-open-app" class="ui-button" target="_blank" rel="noopener" data-i18n="studio.action.openApp" hidden></a>
-        <button id="st-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
-        <button id="st-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+        <span class="ui-button-group">
+          <button id="st-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
+          <button id="st-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+        </span>
       </div>
-      <div class="st-toolbar">
+      <div class="ui-toolbar">
         <label for="st-from" data-i18n="studio.action.fromLabel"></label>
-        <select id="st-from"></select>
+        <select class="ui-select" id="st-from"></select>
         <button id="st-from-go" type="button" class="ui-button" data-i18n="studio.action.from"></button>
       </div>
-      <div class="st-toolbar">
+      <div class="ui-toolbar">
         <label for="st-drafts" data-i18n="studio.drafts.label"></label>
-        <select id="st-drafts"></select>
+        <select class="ui-select" id="st-drafts"></select>
         <button id="st-drafts-open" type="button" class="ui-button" data-i18n="studio.drafts.open"></button>
         <button id="st-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
       </div>
-      <p id="st-storage" class="st-error" data-i18n="studio.storage.failed" hidden></p>
+      <p id="st-storage" class="ui-error" data-i18n="studio.storage.failed" hidden></p>
       <p id="st-status" class="st-status" role="status" aria-live="polite"></p>
 
       <div class="st-layout">
@@ -265,9 +229,9 @@ try {
           <details id="st-raw" class="st-section">
             <summary data-i18n="studio.raw.heading"></summary>
             <label for="st-raw-text" data-i18n="studio.raw.label"></label>
-            <textarea id="st-raw-text" spellcheck="false" aria-describedby="st-raw-error"></textarea>
-            <p id="st-raw-error" class="st-error" role="alert" hidden></p>
-            <div class="st-actions">
+            <textarea class="ui-textarea is-code" id="st-raw-text" spellcheck="false" aria-describedby="st-raw-error"></textarea>
+            <p id="st-raw-error" class="ui-error" role="alert" hidden></p>
+            <div class="ui-toolbar">
               <button id="st-raw-apply" type="button" class="ui-button" data-i18n="studio.raw.apply"></button>
               <button id="st-raw-revert" type="button" class="ui-button" data-i18n="studio.raw.revert"></button>
             </div>
@@ -276,7 +240,7 @@ try {
         <div class="st-side">
           <section aria-labelledby="st-checks-h">
             <h2 id="st-checks-h" data-i18n="studio.checks.heading"></h2>
-            <p id="st-checks-summary" class="st-hint"></p>
+            <p id="st-checks-summary" class="ui-hint"></p>
             <ul id="st-checks" class="st-list"></ul>
           </section>
           <section aria-labelledby="st-preview-h">
@@ -291,7 +255,7 @@ try {
           </section>
           <section aria-labelledby="st-diff-h">
             <h2 id="st-diff-h" data-i18n="studio.diff.heading"></h2>
-            <p id="st-diff-summary" class="st-hint"></p>
+            <p id="st-diff-summary" class="ui-hint"></p>
             <ul id="st-diff" class="st-list"></ul>
           </section>
         </div>
@@ -301,7 +265,7 @@ try {
         <h2 id="st-conflict-h" data-i18n="studio.conflict.heading"></h2>
         <p id="st-conflict-text"></p>
         <ul id="st-conflict-diff" class="st-list"></ul>
-        <div class="st-actions">
+        <div class="ui-toolbar">
           <button id="st-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
           <button id="st-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>
           <button id="st-conflict-cancel" type="button" class="ui-button" data-i18n="studio.conflict.cancel" autofocus></button>

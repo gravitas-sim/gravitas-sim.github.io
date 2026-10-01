@@ -454,12 +454,12 @@ export function mountGuidePanel(root, ctx) {
 
   let ui = null;
   function build() {
-    const intro = el('p', { class: 'ow-hint', text: t('gd.intro') });
-    const suite = el('select', { id: 'gdSuite' });
+    const intro = el('p', { class: 'ui-hint', text: t('gd.intro') });
+    const suite = el('select', { id: 'gdSuite', class: 'ui-select' });
     for (const s of SUITES)
       suite.append(el('option', { value: s.id, text: t(`gd.suite.${s.id}`) }));
-    const pick = el('select', { id: 'gdGuide' });
-    const path = el('select', { id: 'gdPath' });
+    const pick = el('select', { id: 'gdGuide', class: 'ui-select' });
+    const path = el('select', { id: 'gdPath', class: 'ui-select' });
     for (const p of PATHS)
       path.append(el('option', { value: p, text: t(`gd.path.${p}`) }));
     const startBtn = el('button', {
@@ -469,8 +469,8 @@ export function mountGuidePanel(root, ctx) {
       text: t('gd.start'),
     });
     startBtn.addEventListener('click', () => start(pick.value, path.value));
-    const suiteIntro = el('p', { id: 'gdSuiteIntro', class: 'ow-hint' });
-    const summary = el('p', { id: 'gdSummary', class: 'ow-hint' });
+    const suiteIntro = el('p', { id: 'gdSuiteIntro', class: 'ui-hint' });
+    const summary = el('p', { id: 'gdSummary', class: 'ui-hint' });
     const fillGuides = () => {
       const keep = pick.value;
       pick.replaceChildren(
@@ -507,7 +507,7 @@ export function mountGuidePanel(root, ctx) {
     const field = (label, control) =>
       el(
         'label',
-        { class: 'ow-field' },
+        { class: 'ui-field' },
         el('span', { text: t(label) }),
         control
       );
@@ -621,7 +621,7 @@ export function mountGuidePanel(root, ctx) {
     const show = el('div', { id: 'gdShow' });
     parts.push(show);
     if (step.show) drawShow(step, show);
-    const actions = el('div', { class: 'ow-actions' });
+    const actions = el('div', { class: 'ui-toolbar' });
     if (step.go) {
       const b = el('button', {
         class: 'ui-button',
@@ -650,6 +650,7 @@ export function mountGuidePanel(root, ctx) {
     if (step.kind === 'answer') {
       const input = el('input', {
         id: 'gdAnswer',
+        class: 'ui-input',
         type: 'text',
         inputmode: 'decimal',
         autocomplete: 'off',
@@ -669,7 +670,7 @@ export function mountGuidePanel(root, ctx) {
       parts.push(
         el(
           'label',
-          { class: 'ow-field ow-guide-answer' },
+          { class: 'ui-field ow-guide-answer' },
           el('span', { text: t('gd.answer') }),
           input
         )
@@ -714,7 +715,7 @@ export function mountGuidePanel(root, ctx) {
     parts.push(
       el('p', { id: 'gdFeedback', class: 'ow-guide-feedback', role: 'status' })
     );
-    const nav = el('div', { class: 'ow-actions' });
+    const nav = el('div', { class: 'ui-toolbar' });
     const prev = el('button', {
       class: 'ui-button ow-small',
       type: 'button',
@@ -841,7 +842,7 @@ export function mountGuidePanel(root, ctx) {
     for (const link of shown.links?.(step, helpers) ?? [])
       parts.push(el('p', {}, el('a', { href: link.href, text: link.text })));
     parts.push(
-      el('p', { class: 'ow-hint', text: t(`gd.show.how.${step.show}`) })
+      el('p', { class: 'ui-hint', text: t(`gd.show.how.${step.show}`) })
     );
     box.replaceChildren(...parts);
   }

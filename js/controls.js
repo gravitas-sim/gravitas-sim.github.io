@@ -16,7 +16,7 @@ import {
   white_dwarfs,
   clearObjectEnergyHistory,
 } from './physics.js';
-import { state, SETTINGS } from './appState.js';
+import { state, SETTINGS, current_scenario_name } from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
 import { ensurePauseAtEvent, renderEventMarker } from './pauseAtEventBridge.js';
 import { toast, announce } from './notify.js';
@@ -41,6 +41,7 @@ import {
 } from './units.js';
 import { initTheme, cycleTheme, themeLabel } from './theme.js';
 import { t } from './i18n/index.js';
+import { scenarioTitle } from './i18n/scenario.js';
 import { setSonificationMuted, getSonificationState } from './audio.js';
 import {
   initShortcuts,
@@ -235,7 +236,7 @@ const RAIL_SECTIONS_KEY = 'gravitas_rail_sections';
 // section, which fits any screen the application runs on, and every group is
 // one click away with its name permanently in view. The choice persists, so a
 // user who lives in Tools opens Tools once.
-const RAIL_SECTIONS = ['railScenario', 'railState', 'railTools', 'railLearn'];
+const RAIL_SECTIONS = ['railScenario', 'railState', 'railTools'];
 
 /** The one open on a first visit: loading something is where everyone starts. */
 const DEFAULT_OPEN = 'railScenario';
@@ -727,7 +728,15 @@ export function initControls() {
     clearPlacementHistory();
     resetTimeline();
     // Once: every build fires this, each sweep trial too.
-    announce(`Scenario loaded: ${SETTINGS.preset_scenario}`, false);
+    // By the scenario on screen and in the reader's language. It named
+    // SETTINGS.preset_scenario, which a load leaves as the 'None' sentinel, so
+    // a screen reader heard "Scenario loaded: None", in English.
+    const name = current_scenario_name;
+    if (name && name !== 'None')
+      announce(
+        t('summary.announce.scenario', { name: scenarioTitle(name) || name }),
+        false
+      );
   });
   setupTransport();
   setupViewMenu();

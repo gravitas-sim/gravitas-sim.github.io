@@ -440,6 +440,7 @@ export function createGuidePanel(root, lab) {
         ' ',
         el('input', {
           id: 'l3-guide-input',
+          class: 'ui-input is-inline',
           type: 'text',
           inputmode: 'decimal',
           autocomplete: 'off',
@@ -630,6 +631,7 @@ export function createGuidePanel(root, lab) {
           ' ',
           el('input', {
             id: 'l3-guide-name',
+            class: 'ui-input is-inline',
             type: 'text',
             autocomplete: 'name',
             value: name,

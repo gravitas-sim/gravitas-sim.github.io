@@ -221,10 +221,6 @@ export const EN = {
   'rail.speedUp.hint': 'Increase speed by 0.5x',
   'rail.resetView.hint': 'Recenter the camera and return to 1× zoom (R).',
   'rail.shortcuts.hint': 'Keyboard shortcuts (?)',
-  'rail.railLearn.hint': 'Show or hide the learn controls',
-  'rail.aboutGravitas.hint':
-    'What Gravitas is, what you can do here, and where to start',
-  'rail.railLearnBody.hint.3': 'Open the Gravitas user manual (PDF)',
   'rail.objectType.hint':
     'Choose what to add, then click the canvas to place it',
   'rail.mainControls.label': 'Simulation controls',
@@ -301,9 +297,6 @@ export const EN = {
   'rail.speedUp': 'Fast',
   'rail.resetView': 'Reset View',
   'rail.shortcuts': 'Shortcuts',
-  'rail.railLearn': 'Learn',
-  'rail.aboutGravitas': 'About Gravitas',
-  'rail.railLearnBody.3': 'User manual (PDF)',
   'rail.objectType': 'Add object',
   'rail.objectType.choose': 'Add object',
   'rail.objectType.placing': 'Click to place · Esc',
@@ -537,8 +530,8 @@ export const EN = {
   // --- Settings chrome -------------------------------------------------------
   'settings.toggle.on': 'On',
   'settings.toggle.off': 'Off',
+  'settings.bhMass.item': 'Black Hole #{n}:',
   'settings.info.about': 'Information about {label}',
-  'settings.option.presetScenario.none': 'None',
 
   // --- Object inspector ------------------------------------------------------
   // The row headings the inspector prints beside a body's measured values. The
@@ -622,7 +615,16 @@ export const EN = {
   'settings.section.objects': 'Objects',
   'settings.section.ui-control': 'UI & Control',
   'settings.section.educational': 'Educational',
-  'settings.label.presetScenario': 'Preset Scenario',
+  'settings.level.label': 'Course level',
+  'settings.level.introductory': 'Introductory',
+  'settings.level.majors': 'Majors',
+  'settings.level.advanced': 'Advanced',
+  'settings.section.advanced': 'Advanced',
+  'settings.section.reset': 'Reset',
+  'settings.section.resetNamed': 'Reset {section} to its defaults',
+  'settings.section.resetDone':
+    '{section} back to its defaults; they take effect on Apply & Restart.',
+  'settings.button.indivBhMasses': 'Set Individual BH Masses',
   'settings.label.gravitationalConstant': 'Gravitational Constant',
   'settings.label.mutualGravity': 'Mutual Gravity (All)',
   'settings.label.simSpeed': 'Simulation Speed',
@@ -793,8 +795,6 @@ export const EN = {
   'settings.option.qualityTier.auto': 'Automatic',
   'settings.option.qualityTier.full': 'Full',
   'settings.option.qualityTier.low': 'Low',
-  'settings.tooltip.qualityTier':
-    'Automatic measures the frame rate this machine is actually achieving and drops to the low tier below about 32fps: fewer pixels, fewer generated bodies, and the full-screen effects switched off. Hand-built systems keep every body, because there the count is the physics.',
   'settings.filter.label': 'Search settings',
   'settings.filter.placeholder': 'Search settings',
   'settings.filter.hint':
@@ -813,8 +813,7 @@ export const EN = {
   'settings.label.numAsteroids': 'Number of Asteroids',
   'settings.label.numComets': 'Number of Comets',
   'settings.label.initVelocity': 'Initial Velocity',
-  'settings.label.velocityStddev': 'Velocity StdDev',
-  'settings.label.inputObjectType': 'Input Object Type',
+  'settings.label.velocityStddev': 'Velocity Spread',
   'settings.label.showTrails': 'Show Trails',
   'settings.label.trailStyle': 'Trail Style',
   'settings.label.trailLength': 'Trail Length',
@@ -823,6 +822,8 @@ export const EN = {
   'settings.label.showPotentialWell': 'Show Potential Well',
   'settings.label.showScaleBar': 'Show Scale Bar',
   'settings.label.showElapsedTime': 'Show Elapsed Time',
+  // No longer in the Settings panel (it drew no glow), but a scenario pack can
+  // still carry it, and the Studio names it by this label.
   'settings.label.showBhGlow': 'Show BH Glow',
   'settings.label.showAccretionDisk': 'Show Accretion Disk',
   'settings.label.realisticDiskPhysics': 'Realistic Disk Physics',
@@ -830,12 +831,10 @@ export const EN = {
   'settings.label.starDensity': 'Star Field Density',
   'settings.label.showAmbientLighting': 'Ambient Lighting',
   'settings.label.dynamicObjectProperties': 'Dynamic Object Colors',
-  'settings.label.planetBaseColor': 'Planet Base Color',
-  'settings.label.starBaseColor': 'Star Base Color',
+  'settings.label.planetBaseColor': 'Planet Trail Color',
   'settings.label.interactiveAdd': 'Interactive Add',
   'settings.label.followMode': 'Follow Mode',
   'settings.label.showDynamicOverlays': 'Show Overlays',
-  'settings.label.recordSimulation': 'Record Simulation',
   'settings.label.showGravitationalWaves': 'Show Gravitational Waves',
   'settings.label.habitableZoneOptimism': 'Habitable Zone Model',
   'settings.option.simSize.small': 'Small',
@@ -859,21 +858,21 @@ export const EN = {
   'settings.option.inputObjectType.star': 'Star',
   'settings.option.inputObjectType.asteroid': 'Asteroid',
   'settings.option.inputObjectType.comet': 'Comet',
-  'settings.option.inputObjectType.gasgiant': 'GasGiant',
-  'settings.option.inputObjectType.neutronstar': 'NeutronStar',
-  'settings.option.inputObjectType.whitedwarf': 'WhiteDwarf',
+  'settings.option.inputObjectType.gasgiant': 'Gas Giant',
+  'settings.option.inputObjectType.neutronstar': 'Neutron Star',
+  'settings.option.inputObjectType.whitedwarf': 'White Dwarf',
   'settings.option.trailStyle.cloud': 'Cloud',
   'settings.option.trailStyle.simple': 'Simple',
   'settings.option.trailStyle.glow': 'Glow',
   'settings.option.followMode.none': 'None',
-  'settings.option.followMode.blackhole': 'BlackHole',
+  'settings.option.followMode.blackhole': 'Black Hole',
   'settings.option.followMode.planet': 'Planet',
-  'settings.option.followMode.gasgiant': 'GasGiant',
+  'settings.option.followMode.gasgiant': 'Gas Giant',
   'settings.option.followMode.star': 'Star',
   'settings.option.followMode.asteroid': 'Asteroid',
   'settings.option.followMode.comet': 'Comet',
-  'settings.option.followMode.neutronstar': 'NeutronStar',
-  'settings.option.followMode.whitedwarf': 'WhiteDwarf',
+  'settings.option.followMode.neutronstar': 'Neutron Star',
+  'settings.option.followMode.whitedwarf': 'White Dwarf',
 
   // --- Scenario catalog ----------------------------------------------------
   // Titles and summaries for every built-in scenario. They live here rather
@@ -1406,6 +1405,7 @@ export const EN = {
   'inv.action.back': 'Back',
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
   'inv.body.label': 'Lesson step',
+  'inv.backup.summary': 'Progress backup',
   'inv.backup.download': 'Download progress backup',
   'inv.backup.download.hint':
     'Save a copy of your answers to a file you keep. The PDF report is still what you hand in.',

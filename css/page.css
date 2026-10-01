@@ -7,8 +7,10 @@
    the same four themes, the same radii and spacing scale, so a reader arriving
    from the simulation does not feel they have left the product.
 
-   Not styled here: buttons, panels and form fields, which reuse the app's
-   existing classes.
+   Buttons and panels reuse the app's existing classes. The form controls the
+   tool pages share - .ui-field, .ui-input, .ui-select, .ui-textarea, .ui-file,
+   .ui-range, .ui-toolbar and .ui-button-group - are the last section of this
+   file, and DESIGN_SYSTEM.md documents each of them.
    ============================================================================ */
 
 @layer components {
@@ -1318,6 +1320,403 @@
     .val-table th:nth-child(4),
     .val-table td:nth-child(4) {
       display: none;
+    }
+  }
+}
+
+/* =============================================================================
+   Form controls: the tool pages' shared component language
+   -----------------------------------------------------------------------------
+   Thirteen tool pages (tools/design-ratchet.mjs, TOOL_PAGES) each wrote their
+   own copy of the same field: a grid of a label and a control, a box in
+   --surface-2 with a --border-strong edge, a hint in --text-secondary, a row
+   of buttons. The copies drifted - four paddings, three hint sizes, a textarea
+   the browser drew white on one page and dark on the next, file inputs left
+   entirely to the user agent - and none of them reached a control that a
+   page's script made after the page's <style> was written for it. These are
+   the one copy. DESIGN_SYSTEM.md documents each component: its states, the
+   tokens it reads and its accessibility notes.
+
+   Here rather than in css/components.css because every tool page links this
+   sheet and the simulation does not: css/components.css is part of the
+   application's initial download (css/app.css), and nothing in the sandbox
+   draws one of these.
+
+   Specificity, and why the element is named: css/components.css styles bare
+   select and text inputs at element level (input[type='text'] is 0,1,1), so
+   a bare class (0,1,0) would lose to it. Naming the element as well puts the
+   component at 0,1,1, and this sheet comes later.
+
+   Colors are tokens only, so all four themes - the Observatory's red night
+   vision among them - follow without a rule of their own here.
+   ============================================================================ */
+
+@layer components {
+  /* --- Field: a label, its control, a hint and an error ------------------- */
+  .ui-field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+    align-content: start;
+    min-width: 0;
+  }
+
+  .ui-hint,
+  .ui-error {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .ui-hint {
+    color: var(--text-secondary);
+  }
+
+  /* Never color alone: the message says what is wrong, and the control it
+     belongs to carries aria-invalid and an aria-describedby naming it. */
+  .ui-error {
+    font-weight: var(--weight-semibold);
+    color: var(--danger);
+  }
+
+  .ui-field > .ui-hint,
+  .ui-field > .ui-error {
+    margin: 0;
+  }
+
+  /* --- The control box: .ui-input, .ui-select, .ui-textarea --------------- */
+  :is(input, select, textarea):is(.ui-input, .ui-select, .ui-textarea) {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    /* 36px: over WCAG 2.2's 24px minimum target with room to spare. */
+    min-height: 2.25rem;
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    /* 16px, the size below which iOS zooms the page on focus. */
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: var(--leading-tight);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    box-shadow: none;
+    transition:
+      border-color var(--duration) var(--ease),
+      background var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
+  }
+
+  :is(input, select, textarea):is(
+      .ui-input,
+      .ui-select,
+      .ui-textarea
+    ):hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border-strong));
+  }
+
+  /* The ring itself is css/components.css's, drawn for every control. */
+  :is(input, select, textarea):is(
+      .ui-input,
+      .ui-select,
+      .ui-textarea
+    ):focus-visible {
+    border-color: var(--accent);
+  }
+
+  :is(input, textarea):is(.ui-input, .ui-textarea)::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+
+  :is(input, select, textarea):is(
+      .ui-input,
+      .ui-select,
+      .ui-textarea
+    ):disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  :is(input, textarea):is(.ui-input, .ui-textarea)[readonly] {
+    background: var(--surface-1);
+  }
+
+  /* Invalid: set by the page's own check, not by :invalid, which would mark
+     an empty required field red before anybody has typed in it. The inset
+     ring thickens the edge without moving anything. */
+  :is(input, select, textarea):is(
+      .ui-input,
+      .ui-select,
+      .ui-textarea
+    )[aria-invalid='true'],
+  .ui-field.is-invalid
+    > :is(input, select, textarea):is(.ui-input, .ui-select, .ui-textarea) {
+    border-color: var(--danger);
+    box-shadow: inset 0 0 0 1px var(--danger);
+  }
+
+  /* Inline: a control that sits in a sentence or a toolbar beside buttons
+     takes the width of its content rather than the whole row. */
+  :is(input, select):is(.ui-input, .ui-select).is-inline,
+  .ui-toolbar > :is(input, select):is(.ui-input, .ui-select) {
+    width: auto;
+  }
+
+  /* In a toolbar, an empty list - no drafts yet - would otherwise shrink to
+     its arrow. */
+  .ui-toolbar > :is(input, select):is(.ui-input, .ui-select) {
+    min-width: min(12rem, 100%);
+  }
+
+  /* Numbers line up in their columns as they are typed. */
+  input[type='number'].ui-input,
+  input.ui-input.is-numeric {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Code, JSON and links to copy. */
+  :is(input, textarea):is(.ui-input, .ui-textarea).is-code {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+
+  /* --- Select -------------------------------------------------------------- */
+  select.ui-select {
+    cursor: pointer;
+    /* WebKit sizes a select to its longest option and lays the open menu out
+       wider still, which it counts as overflow; this clips it inside the box.
+       The focus ring is outside it and stays. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Windows draws the open list from these, not from the select. */
+  select.ui-select option,
+  select.ui-select optgroup {
+    color: var(--text-primary);
+    background: var(--surface-1);
+  }
+
+  /* --- Textarea ------------------------------------------------------------ */
+  textarea.ui-textarea {
+    min-height: 4.5rem;
+    line-height: var(--leading-normal);
+    resize: vertical;
+  }
+
+  /* --- A number with its unit ---------------------------------------------- */
+  .ui-input-group {
+    display: flex;
+    align-items: stretch;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .ui-input-group > input.ui-input {
+    flex: 1 1 auto;
+    width: auto;
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .ui-input-unit {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    padding: 0 var(--space-3);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    color: var(--text-secondary);
+    background: var(--surface-1);
+    border: 1px solid var(--border-strong);
+    border-inline-start: 0;
+    border-start-end-radius: var(--radius-sm);
+    border-end-end-radius: var(--radius-sm);
+  }
+
+  /* --- File: a picker that is also a drop zone ----------------------------
+     The browser accepts a file dropped on a file input in every engine, so
+     the zone is the input itself, drawn large enough to aim a file at, and
+     needs no script. */
+  input[type='file'].ui-file {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    padding: var(--space-2);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    background: var(--surface-inset);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition:
+      border-color var(--duration) var(--ease),
+      background var(--duration) var(--ease);
+  }
+
+  input[type='file'].ui-file:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  input[type='file'].ui-file:focus-visible {
+    border-style: solid;
+    border-color: var(--accent);
+  }
+
+  input[type='file'].ui-file:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* Compact: the button alone, for a picker that already sits inside a
+     larger drop zone of its own. */
+  input[type='file'].ui-file.is-compact {
+    display: inline-block;
+    width: auto;
+    padding: 0;
+    background: none;
+    border: 0;
+  }
+
+  input[type='file'].ui-file.is-compact:hover:not(:disabled) {
+    background: none;
+  }
+
+  /* The picker's button is a .ui-button: same face, same 36px target. */
+  input[type='file'].ui-file::file-selector-button {
+    min-height: 2.25rem;
+    margin: 0 var(--space-3) 0 0;
+    padding: var(--space-2) var(--space-4);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition:
+      background var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+
+  input[type='file'].ui-file:hover:not(:disabled)::file-selector-button {
+    background: var(--surface-3);
+    border-color: var(--border-strong);
+  }
+
+  /* --- Range, with its value beside it ------------------------------------
+     The slider's own look - track, fill, thumb - is css/components.css's,
+     for every range on the site. The 18px thumb is under 24px, and meets
+     WCAG 2.2's target size by its spacing instead: the row is 36px tall and
+     nothing else is within its reach. */
+  .ui-range {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 0;
+    min-height: 2.25rem;
+  }
+
+  .ui-range > input[type='range'] {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .ui-range > input[type='range']:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .ui-range-value {
+    flex: none;
+    min-width: 4ch;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+    color: var(--text-primary);
+  }
+
+  /* --- Toolbar and button group ------------------------------------------- */
+  .ui-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    margin: var(--space-3) 0 0;
+  }
+
+  /* Buttons that act on one thing - undo and redo - joined into one shape.
+     The group is role="group" with a label; each button keeps its own. */
+  .ui-button-group {
+    display: inline-flex;
+    flex-wrap: nowrap;
+  }
+
+  .ui-button-group > .ui-button {
+    border-radius: 0;
+  }
+
+  .ui-button-group > .ui-button:first-child {
+    border-start-start-radius: var(--radius);
+    border-end-start-radius: var(--radius);
+  }
+
+  .ui-button-group > .ui-button:last-child {
+    border-start-end-radius: var(--radius);
+    border-end-end-radius: var(--radius);
+  }
+
+  .ui-button-group > .ui-button + .ui-button {
+    margin-inline-start: -1px;
+  }
+
+  /* The hovered or focused button's whole edge, and its ring, on top. */
+  .ui-button-group > .ui-button:is(:hover, :focus-visible) {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* --- The primary action ---------------------------------------------------
+     The tool pages mark one button a form exists for (Run, Save, Compute)
+     with is-primary, which nothing styled. Accent on its own contrast color:
+     4.5:1 or better in all four themes (tokens.css). */
+  .ui-button.is-primary {
+    color: var(--accent-contrast);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .ui-button.is-primary:hover {
+    color: var(--accent-contrast);
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+  }
+
+  /* Windows high contrast: the system palette draws the edges, and the
+     invalid state keeps a border it can see. */
+  @media (forced-colors: active) {
+    input[type='file'].ui-file,
+    :is(input, select, textarea):is(.ui-input, .ui-select, .ui-textarea) {
+      border-color: CanvasText;
+    }
+    :is(input, select, textarea):is(
+        .ui-input,
+        .ui-select,
+        .ui-textarea
+      )[aria-invalid='true'] {
+      border-width: 2px;
     }
   }
 }
