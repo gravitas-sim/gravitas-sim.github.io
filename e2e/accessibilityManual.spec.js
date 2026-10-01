@@ -39,6 +39,25 @@ const DIALOGS = [
     dialog: '#investigationBrowser',
     modal: '#investigationBrowserContent',
   },
+  // These two had no trap and gave focus back to nothing until they moved
+  // onto js/dialog.js with the others (Prompt 52).
+  {
+    name: 'export dialog',
+    opener: '#exportDataBtn',
+    dialog: '#dataExport',
+    modal: '#dataExportContent',
+    rail: 'exportDataBtn',
+    // Radios and buttons only: nothing Safari's plain Tab stops on, so in
+    // WebKit on macOS every Tab is the trip to the toolbar (e2e/keyboard.js).
+    safariStops: false,
+  },
+  {
+    name: 'shortcut list',
+    opener: '#shortcutsBtn',
+    dialog: '#shortcutOverlay',
+    modal: '#shortcutOverlay',
+    rail: 'shortcutsBtn',
+  },
 ];
 
 test.describe('keyboard operation', () => {
@@ -162,6 +181,7 @@ test.describe('dialogs', () => {
     test(`${d.name}: focus stays inside while it is open`, async ({
       page,
       app,
+      browserName,
     }) => {
       // A modal that lets Tab wander behind it puts a keyboard reader in a
       // dialog they cannot see and cannot leave.
@@ -191,12 +211,109 @@ test.describe('dialogs', () => {
         strayStops(stops),
         `focus left ${d.name} for the page behind: ${stops.join(', ')}`
       ).toEqual([]);
-      expect(
-        stops.filter(stop => stop !== TOOLBAR),
-        'and Tab ever brought it back into the dialog'
-      ).not.toEqual([]);
+      // Unless the dialog has no stop on Safari's route, where the toolbar is
+      // the only place a plain Tab can go and staying out of the page behind
+      // is the whole of the claim.
+      if (browserName !== 'webkit' || d.safariStops !== false)
+        expect(
+          stops.filter(stop => stop !== TOOLBAR),
+          'and Tab ever brought it back into the dialog'
+        ).not.toEqual([]);
     });
   }
+});
+
+test.describe('every modal keeps the same keys', () => {
+  // One module (js/dialog.js) opens all of them now, so the keys a reader
+  // learns in one hold in the next: Space opens it from its button, Shift+Tab
+  // wraps without leaving, and Escape gives focus back.
+  for (const d of DIALOGS) {
+    test(`${d.name}: Space opens it, and Shift+Tab never leaves it`, async ({
+      page,
+      app,
+    }) => {
+      await app.boot();
+      if (d.rail) await app.railControl(d.rail);
+      await page.locator(d.opener).focus();
+      await page.keyboard.press('Space');
+      await expect(page.locator(d.dialog)).toBeVisible({ timeout: 20_000 });
+      // Focus arrives inside: a modal with focus behind it is not one.
+      await expect.poll(() => page.evaluate(focusStop, d.modal)).toBe('inside');
+
+      const stops = [];
+      for (let i = 0; i < 20; i++) {
+        await page.keyboard.press('Shift+Tab');
+        stops.push(await page.evaluate(focusStop, d.modal));
+      }
+      expect(
+        strayStops(stops),
+        `Shift+Tab left ${d.name} for the page behind: ${stops.join(', ')}`
+      ).toEqual([]);
+    });
+  }
+
+  test('the lecture sequence: in, around and out by the keyboard', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.keyboard.press('v');
+    await expect
+      .poll(() =>
+        page.evaluate(() => document.body.getAttribute('data-presentation'))
+      )
+      .toBe('lecture');
+    await page.locator('#lectureSequenceBtn').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#lectureSequenceSheet')).toBeVisible();
+    await expect(page.locator('#lectureSequenceText')).toBeFocused();
+
+    const stops = [];
+    for (let i = 0; i < 12; i++) {
+      await page.keyboard.press(i % 2 ? 'Shift+Tab' : 'Tab');
+      stops.push(await page.evaluate(focusStop, '#lectureSequenceDialog'));
+    }
+    expect(strayStops(stops)).toEqual([]);
+
+    // Escape closes the sheet and leaves Lecture Mode where it was.
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#lectureSequenceSheet')).toBeHidden();
+    await expect(page.locator('#lectureSequenceBtn')).toBeFocused();
+    expect(
+      await page.evaluate(() => document.body.getAttribute('data-presentation'))
+    ).toBe('lecture');
+  });
+
+  test('the lesson finish: Tab stays in it and Escape returns to Next', async ({
+    page,
+    app,
+  }) => {
+    // Opened on the last step through the authoring preview, as
+    // e2e/investigations.spec.js does: what is checked is the dialog.
+    await app.boot({ url: '/?author=keplers-laws&step=1' });
+    const total = await page.evaluate(async () => {
+      const data = await import('/js/data/investigations.js');
+      return data.getInvestigation('keplers-laws').steps.length;
+    });
+    await app.boot({ url: `/?author=keplers-laws&step=${total}` });
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await page.locator('#investigationNext').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#investigationFinish')).toBeVisible();
+    await expect(page.locator('#investigationName')).toBeFocused();
+
+    const stops = [];
+    for (let i = 0; i < 20; i++) {
+      await page.keyboard.press('Tab');
+      stops.push(await page.evaluate(focusStop, '#investigationFinishContent'));
+    }
+    expect(strayStops(stops)).toEqual([]);
+
+    await page.locator('#investigationName').focus();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#investigationFinish')).toBeHidden();
+    await expect(page.locator('#investigationNext')).toBeFocused();
+  });
 });
 
 test.describe('structure', () => {
