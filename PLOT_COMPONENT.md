@@ -8,7 +8,8 @@ before anything is built:
 - the **byte threshold** the component has to meet on every route it enters.
 
 This file fixes all three, with the measurements a build-out decision
-needs. *js/plot/* does not exist yet. Nothing here changes the application.
+needs. The build-out it recommends is recorded at the end, step by step
+("Build-out log").
 
 Measured on `v2` at 4c4ea5a, the base of `feat/plot-component`. Prompt 60's
 artifact envelope (#130) and Prompt 51's design-system pull requests (#152,
@@ -25,9 +26,10 @@ request already holds a plotting component.
     drawn into PDFs.
   - **Out of scope:** about 30 diagrams with no data axes. They are listed at
     the end.
-- **The one shared plot that already exists** is `js/observatory/plot.js`
-  (`createPlot`). It is SVG, with brushing, keyboard selection, error bars
-  and min-max decimation, and it is linked to `selection.js` and `table.js`.
+- **The one shared plot that already exists** was js/observatory/plot.js
+  (`createPlot`, now `js/plot/plot.js`). It is SVG, with brushing, keyboard
+  selection, error bars and min-max decimation, and it is linked to
+  `selection.js` and `table.js`.
   Five charts use it. The component should be built by promoting it, not
   beside it.
 - **Chart.js costs 168.2 KB of deferred JavaScript.** Its chunk is 172,191
@@ -269,7 +271,7 @@ image export.
 
 | # | Chart | Kind | Type · series | Live | Sel | Err | Log | Ann. | Leg. | Exp. | Keys | Text | Tests | Parity means |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| D1 | Observatory plot: `js/observatory/plot.js` `createPlot`, from `observatoryPage.js`; `#obsPlot` | SVG | scatter (magnitude axis flipped) · kept, masked (hollow gray), selected, focus; model overlays (`measurePanel.js` `publishOverlays`) | static. Min-max decimation at 2 points per pixel column; error bars when ≤ 2000 points are drawn | **drag selects an x range, click picks**; shared with the table and the image | σ or interval | reversed y | overlays | none; overlay names in `#obsOverlayNote` | JSON and CSV (data) | **arrows, PgUp and PgDn ±50, Home, End, Space and Enter toggle, Shift extends, Esc clears** | `role=group`, `aria-roledescription=plot`, label "{y} against {x}, {n} points"; focused point announced (120 ms throttle); linked ARIA grid `#obsTable` | `e2e/observatory.spec.js:100-137, 346-369`, `archive.spec.js:209-220`, `populationsGuides.spec.js:161`; `tests/observatory.test.js` (selection). **No unit test of plot.js; the plot's keys are not tested here** | everything, since this is the base. Golden tick tables for `ticks`, `decimate` and `decimateGrid` come first |
+| D1 | Observatory plot: `createPlot` (js/observatory/plot.js then, `js/plot/plot.js` now), from `observatoryPage.js`; `#obsPlot` | SVG | scatter (magnitude axis flipped) · kept, masked (hollow gray), selected, focus; model overlays (`measurePanel.js` `publishOverlays`) | static. Min-max decimation at 2 points per pixel column; error bars when ≤ 2000 points are drawn | **drag selects an x range, click picks**; shared with the table and the image | σ or interval | reversed y | overlays | none; overlay names in `#obsOverlayNote` | JSON and CSV (data) | **arrows, PgUp and PgDn ±50, Home, End, Space and Enter toggle, Shift extends, Esc clears** | `role=group`, `aria-roledescription=plot`, label "{y} against {x}, {n} points"; focused point announced (120 ms throttle); linked ARIA grid `#obsTable` | `e2e/observatory.spec.js:100-137, 346-369`, `archive.spec.js:209-220`, `populationsGuides.spec.js:161`; `tests/observatory.test.js` (selection). **No unit test of plot.js; the plot's keys are not tested here** | everything, since this is the base. Golden tick tables for `ticks`, `decimate` and `decimateGrid` come first |
 | D2 | Fit residuals: `observatory/fitPanel.js` (createPlot) | SVG | residual scatter · 1 | once per fit | handlers on an unused selection | none passed | none | none | none | fit JSON (no residuals) | none | `role=img`, label with n | `e2e/inference.spec.js:76-95` (text). **SVG not asserted** | a static mode with no dead handlers |
 | D3 | Periodogram: `measurePanel.js` `periodogram` (createPlot) | SVG | dots, power against period · 1 | on demand | as D2 | none | none | none (best period only in the label) | none | CSV; notebook figure | none | `role=img`, label with the best period | `e2e/measure.spec.js:376-382` | the label; optionally a line mode |
 | D4 | Archive preview: `archivePanel.js` `convert` (createPlot) | SVG | magnitude against time · 1 | on a band change | as D2 | if the Gaia `mag-error` column is linked | reversed y | none | none | none (opens D1) | none | `role=img`, label | `e2e/archive.spec.js:195-220`. **SVG not asserted** | error bars when linked |
@@ -568,11 +570,92 @@ Drawn from data, but with no data axes. The component is for plots:
 
 ## Build-out log
 
-| Step | Charts | Pull request | Route deltas (sources / build) | Deferred delta | Verdict per chart |
+The gate is D-PLOT-01 in [DECISION_REGISTER.md](DECISION_REGISTER.md): B,
+staged. Steps 1-3 proceed; step 4 changes package files and waits for Carl.
+Route deltas are against the step's base, measured as "How these numbers were
+measured" says, in bytes and requests; the deferred figure is the bundle
+budget's.
+
+| Step | Charts | Commit | Route deltas (sources / build) | Deferred delta | Verdict per chart |
 |---|---|---|---|---|---|
-| 1 | D1-D4 | | | | |
+| 1 | D1-D4 | on `feat/plot-component` | Observatory −411 B, 16 → 16 requests / −764 B, 2 → 2. Every other route unchanged | 0 (4170.7 KB); the experiment runner's analysis chunk −754 B, outside that budget | D1-D4 migrated: see below |
 | 2 | D5-D7 | | | | |
 | 3 | D8-D12 | | | | |
 | 4 | A1-A5, Chart.js removed | | | | |
 | 5 | B1-B8 | | | | |
 | 6 | C1-C56, by family | | | | |
+
+### Step 1: the component, and D1-D4
+
+**What *js/plot/* is now.** Three feature modules, each loaded only by a
+chart that uses it:
+
+- **`js/plot/plot.js`, the core.** Scales, ticks, axes and their titles
+  (from the column's unit id, through `js/observatory/units.js`). Points with
+  min-max or grid decimation, masked points, σ and interval bars, overlays,
+  and the selection and focus layers when a selection is given.
+  - Without a selection the plot only shows its data: no layers, no
+    listeners, nothing to focus. That is D2-D4's mode. Before this step they
+    attached handlers to a selection nobody read.
+- **`js/plot/select.js`.** The shared selection, and `interact()`: drag,
+  click and keyboard selection on a plot. D1 and D6 use it.
+- **`js/plot/table.js`.** The rows as an ARIA grid. Its page caption is now
+  the caller's (`range`), rather than a hard-coded Observatory string id that
+  the analysis lab had to rewrite.
+
+**Why there is no other feature yet.** Legend, log axes, live summary, reduced
+motion, palette and pattern fallback, and the sonification hook are added only
+when a chart that needs one migrates, so that no route pays for unused code.
+None of D1-D4 needs any of them:
+
+- D1-D4 draw no legend: overlay names are text in `#obsOverlayNote`.
+- They draw no log axis.
+- Their accessible text is already a label, D1's focused-point announcement
+  and the linked table.
+- They animate nothing.
+- Their colors are css/page.css's tokens.
+
+**The data contract.**
+
+- The input is the observation's table of columns with unit ids, read with
+  `js/observatory/schema.js`'s three small readers. The analysis lab already
+  builds that shape for its trials.
+- Bringing the application's charts in (step 4) also brings those two
+  observatory modules into the application's graph. Their cost is part of
+  that step's estimate.
+
+**Tests.**
+
+- `tests/plot.test.js`:
+  - the golden tables: ticks for eleven ranges and two counts; decimation and
+    grid decimation; the tick labels and titles for five data sets;
+  - the magnitude axis reversed;
+  - the static mode;
+  - keyboard and pointer selection;
+  - table parity: every table row's numbers, read back, are where its point
+    is drawn, to 0.06 px.
+- The markup the plot and table draw for seven data sets was compared before
+  and after the move, and is the same apart from one attribute's order on
+  the focus ring.
+- Characterization tests where the parity table found the chart itself
+  untested:
+  - D1's keys in `e2e/observatory.spec.js`;
+  - D2's residuals in `e2e/inference.spec.js`;
+  - D3's points in `e2e/measure.spec.js`;
+  - D4's points and bars in `e2e/archive.spec.js`.
+- axe already ran on every host (`#obsPlot`, the fit panel, the periodogram,
+  the archive review). Those runs pass unchanged.
+
+**Verdicts.**
+
+| Chart | Verdict |
+|---|---|
+| D1 Observatory plot | **Migrated.** Same markup; its e2e tests pass unchanged, and its keyboard is now tested |
+| D2 Fit residuals | **Migrated**, static: the dead handlers are gone |
+| D3 Periodogram | **Migrated**, static |
+| D4 Archive preview | **Migrated**, static; 47 points and 47 bars asserted |
+
+The WebKit run of `e2e/observatory.spec.js`'s offline test fails on this
+machine, and fails the same way at this step's base (e48d59a, run separately):
+WebKit cannot navigate offline here. Chromium passes it, and so does every
+other test of these four charts in all three engines.

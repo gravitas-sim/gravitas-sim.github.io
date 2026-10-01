@@ -37,7 +37,7 @@ import {
 } from '../js/observatory/schema.js';
 import { OPS, replay, whyNot } from '../js/observatory/transforms.js';
 import { createHistory } from '../js/observatory/history.js';
-import { createSelection } from '../js/observatory/selection.js';
+import { createSelection } from '../js/plot/select.js';
 import { build, read, LIMITS } from '../js/observatory/import.js';
 import {
   observationCsv,

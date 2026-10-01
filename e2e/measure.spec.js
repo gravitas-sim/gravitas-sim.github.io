@@ -376,9 +376,13 @@ test.describe('the measurement pipeline', () => {
     await page
       .locator('#msNodes li[data-node="m1"] button[data-action="periodogram"]')
       .click();
-    await expect(
-      page.locator('#msNodes li[data-node="m1"] svg.ow-plot')
-    ).toBeVisible();
+    const periodogram = page.locator('#msNodes li[data-node="m1"] svg.ow-plot');
+    await expect(periodogram).toBeVisible();
+    // PLOT_COMPONENT.md, D3: points drawn, and nothing to select.
+    expect(
+      await periodogram.locator('.ow-points .ow-pt').count()
+    ).toBeGreaterThan(10);
+    await expect(periodogram.locator('.ow-selected, .ow-focus')).toHaveCount(0);
     expect(await axe(page)).toEqual([]);
     await page.locator('[data-gs-lang]').selectOption('es');
     await expect(page.locator('#msNodes li[data-node="m1"]')).toContainText(

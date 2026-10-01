@@ -8,7 +8,7 @@
 //
 //   - a summary in words, and the warnings: what the result does not say;
 //   - every trial, as a plot and a table sharing one selection
-//     (js/observatory/selection.js), so a drag across the plot selects the
+//     (js/plot/select.js), so a drag across the plot selects the
 //     rows and the summary of the selected trials follows;
 //   - each setting's numbers with their intervals, the slopes and the shares,
 //     and the distribution as a histogram with its counts in a table;
@@ -32,9 +32,9 @@ import {
   sameExperiment,
 } from '../analysis/sweepAnalysis.js';
 import { describe, meanInterval } from '../analysis/stats.js';
-import { createPlot } from '../observatory/plot.js';
-import { createTable } from '../observatory/table.js';
-import { createSelection } from '../observatory/selection.js';
+import { createPlot } from '../plot/plot.js';
+import { createTable } from '../plot/table.js';
+import { createSelection, interact } from '../plot/select.js';
 
 // The page's own modules - its translator, the metrics' units, the CSV writer
 // - arrive in `ctx`, as the Observatory's fit panel has them: a module both
@@ -985,13 +985,12 @@ export function mountAnalysis(root, ctx) {
           ? `${num(o.columns.at(-1).values[i])} ${unit}`
           : t('lab.missing')
       }`;
-    // The workspace's table names its page of rows with its own string id.
     const hooks = {
       announce: text => (live.textContent = text),
       describe: describeRow,
       labels,
       number: num,
-      t: (id, vars) => t(id === 'obs.table.rows' ? 'lab.table.rows' : id, vars),
+      range: vars => t('lab.table.rows', vars),
     };
     axisField.hidden = keys.length < 2;
     box.replaceChildren(
@@ -1016,6 +1015,7 @@ export function mountAnalysis(root, ctx) {
       )
     );
     const plot = createPlot(svg, hooks);
+    interact(plot, svg, hooks);
     const grid = createTable(tbl, hooks);
     selection = createSelection(trials.length);
     const draw = () => {
