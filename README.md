@@ -364,10 +364,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->210<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->580<!--/fact--> KB           | <!--fact:buildStartupFiles-->51<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->4170<!--/fact--> KB         | <!--fact:buildDeferredChunks-->195<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->790<!--/fact--> KB** |                                               |
+| CSS                    | <!--fact:buildCss-->209<!--/fact--> KB                 | 1                                             |
+| JavaScript at start-up | <!--fact:buildStartupJs-->581<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4171<!--/fact--> KB         | <!--fact:buildDeferredChunks-->196<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->789<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -485,7 +485,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1688<!--/fact--> tests
+The suite is <!--fact:e2eTests-->1690<!--/fact--> tests
 in <!--fact:e2eFiles-->123<!--/fact--> files and takes several minutes in
 Chromium.
 
