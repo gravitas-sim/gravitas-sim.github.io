@@ -302,6 +302,8 @@ export const GUIDES = [
   {
     id: 'exo-star',
     minutes: { intro: 15, advanced: 20 },
+    level: 'intro',
+    tags: ['exoplanets', 'observing'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -370,6 +372,8 @@ export const GUIDES = [
   {
     id: 'exo-find',
     minutes: { intro: 15, advanced: 25 },
+    level: 'intro',
+    tags: ['exoplanets', 'observing'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -423,6 +427,8 @@ export const GUIDES = [
   {
     id: 'exo-fit',
     minutes: { intro: 20, advanced: 35 },
+    level: 'intro',
+    tags: ['exoplanets', 'observing'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -493,6 +499,8 @@ export const GUIDES = [
   {
     id: 'exo-dilution',
     minutes: { intro: 20, advanced: 35 },
+    level: 'intro',
+    tags: ['exoplanets', 'observing'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -582,6 +590,8 @@ export const GUIDES = [
   {
     id: 'exo-planet',
     minutes: { intro: 20, advanced: 25 },
+    level: 'intro',
+    tags: ['exoplanets', 'observing'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
