@@ -47,6 +47,9 @@ export function pages() {
       f =>
         f.endsWith('.html') &&
         !/^(spike|dist|e2e|tests|sdk|node_modules)\//.test(f) &&
+        // A panel's markup, inserted into index.html (INDEX_DECOMPOSITION.md):
+        // it runs under index.html's policy and is not a page of its own.
+        !f.startsWith('js/fragments/') &&
         // Kept byte for byte as the first Gravitas (tests/historyOriginal
         // .test.js pins its blob), so it carries no policy of its own.
         f !== 'history/original/index.html'

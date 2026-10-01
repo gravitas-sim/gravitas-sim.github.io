@@ -285,7 +285,7 @@ Escape closes each one. A card closed for a scenario does not return when that s
 
 ## As built (Prompt 53)
 
-`index.html` is the shell, the canvas and its scene description, the live regions, the readout, the rail and the transport bar, plus the four observation panels and the Share and Settings dialogs that start-up binds. Every other panel's markup ships with its family and is mounted at an empty `<template data-host>` where it used to stand. For the on-demand families that is a `js/fragments/` file; for the panels start-up binds it is a template in their module. The file went from 165.9 KB to 87.8 KB, and no route moved past its ceiling. The 40 KB and accessibility-tree thresholds are recorded as not met (D-INDEX-01). [INDEX_DECOMPOSITION.md](INDEX_DECOMPOSITION.md) has the mechanism and the measurements.
+`index.html` is the shell, the canvas and its scene description, the live regions, the readout, the rail and the transport bar, plus the four observation panels and the Share and Settings dialogs that start-up binds. Every other panel's markup ships with its family and is mounted at an empty `<template data-host>` where it used to stand. For the on-demand families that is a `js/fragments/` file; for the panels start-up binds it is a template in their module. The binary-run panel and the lesson browser stay as well, because the suite reads them before their code loads. The file went from 165.9 KB to 102.1 KB, and no route moved past its ceiling. The 40 KB and accessibility-tree thresholds are recorded as not met (D-INDEX-01). [INDEX_DECOMPOSITION.md](INDEX_DECOMPOSITION.md) has the mechanism and the measurements.
 
 ## Rejected alternatives
 

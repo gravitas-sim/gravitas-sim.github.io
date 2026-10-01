@@ -63,13 +63,6 @@ export const FRAGMENTS = [
     ids: ['assistContainer'],
   },
   {
-    host: 'binary-run',
-    family: 'binary run',
-    kind: 'file',
-    owner: 'js/binaryRunPanel.js',
-    ids: ['binaryRunContainer'],
-  },
-  {
     host: 'precise-placement',
     family: 'precise placement',
     kind: 'file',
@@ -98,7 +91,6 @@ export const FRAGMENTS = [
     kind: 'file',
     owner: 'js/investigations.js',
     ids: [
-      'investigationBrowser',
       'investigationPanel',
       'investigationPlot',
       'investigationEllipse',
@@ -156,7 +148,11 @@ export const FRAGMENTS = [
  * The top-level elements index.html keeps, in document order: the shell, the
  * canvas and its scene description, the live regions, the readout, the rail,
  * the transport bar, the four observation panels start-up binds, and the
- * share and settings dialogs (D-INDEX-01, Option B).
+ * share and settings dialogs (D-INDEX-01, Option B). And two that ship with
+ * on-demand code but stay, because the suite reads them before that code
+ * loads: the binary-run panel, which lessons and specs drive in the same task
+ * as the rebuild that fetches its module, and the lesson browser, whose
+ * activities link is read at boot.
  */
 export const STATIC_SET = [
   'a.skip-link',
@@ -166,6 +162,7 @@ export const STATIC_SET = [
   'div#updateBadge',
   'p#srStatus',
   'div#rvContainer',
+  'div#binaryRunContainer',
   'div#astrometryContainer',
   'div#rotationCurveContainer',
   'div#lightCurveContainer',
@@ -179,6 +176,7 @@ export const STATIC_SET = [
   'div#placementStatus',
   'div#timelineBar',
   'button#mobileMenuToggle',
+  'div#investigationBrowser',
   'div#shareModal',
   'div#settingsPanel',
   'div#pinnedInspectors',

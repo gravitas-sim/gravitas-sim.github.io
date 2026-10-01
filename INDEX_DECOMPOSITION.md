@@ -9,6 +9,20 @@ panels that start-up binds (light curve, radial velocity, astrometry, rotation
 curve) and the Share and Settings dialogs. That is decision D-INDEX-01,
 Option B, in [DECISION_REGISTER.md](DECISION_REGISTER.md).
 
+Two blocks whose code loads on demand stay static as well, because the
+browser suite reads them before that code arrives, and every existing spec
+had to pass unchanged:
+
+- **The binary-run panel.** Lessons and specs (`binaryPlanets`,
+  `centralExperiments`) drive it in the same task as the rebuild that fetches
+  its module, and read its readout synchronously. Fetched markup is never
+  there that soon.
+- **The lesson browser.** `activities.spec.js` reads its activities link at
+  boot, and the teaching page links to `/#investigationBrowser`. The browser
+  becomes the Library in Prompt 54, which is the place to move it.
+
+Moving both was tried first: four tests in three specs failed, and the blocks went back.
+
 ## How it works
 
 - **A host.** Each moved block left an empty `<template data-host="name">` at
@@ -19,7 +33,7 @@ Option B, in [DECISION_REGISTER.md](DECISION_REGISTER.md).
   live (`tools/index-fragments.mjs` lists every one):
   - _file_: `js/fragments/<host>.html`, fetched beside the family's modules
     by its loader. These are HTML files, not template strings, because the
-    deferred JavaScript total had 9 KB of room and these panels are 56 KB of
+    deferred JavaScript total had 9 KB of room and these panels are 43 KB of
     markup. Route and bundle budgets count JavaScript only.
   - _template_: an exported template string in the start-up module that binds
     the panel, mounted before it binds. A start-up fetch would delay the first
@@ -58,9 +72,8 @@ Option B, in [DECISION_REGISTER.md](DECISION_REGISTER.md).
 | `pause-event`       | pause at event      | file     | `js/pauseAtEventBridge.js`                        | 4,784 | 1,316 |
 | `rv-workspace`      | RV workspace        | file     | `js/rvWorkspaceBridge.js`                         | 5,810 | 1,811 |
 | `assist`            | gravity assist      | file     | `js/scenarioPanelBridge.js`                       | 7,728 | 1,817 |
-| `binary-run`        | binary run          | file     | `js/scenarioPanelBridge.js`                       | 6,330 | 1,621 |
 | `precise-placement` | precise placement   | file     | `js/precisePlacement.js`                          | 1,731 |   743 |
-| `lesson`            | lesson engine       | file     | `js/investigationsLoader.js`                      | 18,326 | 5,350 |
+| `lesson`            | lesson engine       | file     | `js/investigationsLoader.js`                      | 11,503 | 3,455 |
 | `export`            | data export         | file     | `js/exportBridge.js`                              | 2,190 |   896 |
 | `lesson-finish`     | lesson engine       | file     | `js/investigationsLoader.js`                      | 3,565 | 1,119 |
 | `lecture`           | Lecture Mode        | file     | `js/lecture.js`                                   | 3,820 | 1,249 |
@@ -78,33 +91,37 @@ comments, which cost no route anything.
 
 The thresholds were fixed before any implementation, and are recorded with
 the decision. Before is 3805f47; after is this branch. The front door was
-loaded as a returning visitor, at 1280 × 800, with the service worker blocked,
-and each value is the median of five loads.
+loaded as a returning visitor, at 1280 × 800, with the service worker blocked.
+Each value is the median of five loads. First interaction is the median of
+three such medians, taken before and after alternately, because the machine
+was loaded.
 
 | Threshold                                                    | Before                  | After                   | Met?    |
 | ------------------------------------------------------------ | ----------------------- | ----------------------- | ------- |
-| `index.html` under 40 KB as served (raw: the site serves the tree) | 165,915 B (36,238 gzip) | 89,944 B (20,815 gzip)  | **No**  |
-| Accessibility tree at front-door load under ⅓ of today's     | 96,684 chars, 203 nodes | 96,497 chars, 203 nodes | **No**  |
-| Time to first interaction unchanged or better                | 3,838 ms                | 3,842 ms                | Yes     |
+| `index.html` under 40 KB as served (raw: the site serves the tree) | 165,915 B (36,238 gzip) | 104,540 B (23,840 gzip) | **No**  |
+| Accessibility tree at front-door load under ⅓ of today's     | 96,680 chars, 203 nodes | 94,540 chars, 197 nodes | **No**  |
+| Time to first interaction unchanged or better                | 3,925 ms                | 3,889 ms                | Yes     |
 | No route ceiling exceeded; every lesson route within its own | all within              | all within              | Yes     |
 
-- **`index.html`** fell 46% raw and 43% gzipped. `dist/index.html` went from
-  165,118 to 89,147 bytes. Getting under 40 KB would also need the four
-  observation panels and the Share and Settings dialogs to load on demand,
-  and every comment and indent stripped from the file (Option C).
-  `tests/indexDecomposition.test.js` holds the file under 92 KB.
+- **`index.html`** fell 37% raw and 34% gzipped. `dist/index.html` went from
+  165,118 to 103,743 bytes. Getting under 40 KB would also need the binary-run
+  panel, the lesson browser, the four observation panels and the Share and
+  Settings dialogs to load on demand, and every comment and indent stripped
+  from the file (Option C). `tests/indexDecomposition.test.js` holds the file
+  under 104 KB.
 - **The accessibility tree** is the serialized length of Chromium's full tree
   (CDP `Accessibility.getFullAXTree`) without the nodes it marks ignored. The
   prompt's figure was about 94,000 characters. A panel that is closed adds
   nothing to that tree, so the tree is the visible chrome: the shell header,
-  the rail, the readout, the transport bar and the footer. Moving every
-  movable panel left it where it was, as Phase 1 predicted. Counting ignored
-  nodes as well, the tree went from 220,335 to 158,600 characters (678 to 442
-  nodes), and the document from 1,278 to 808 elements. On a first visit, with
+  the rail, the readout, the transport bar and the footer. Moving the panels
+  left it nearly where it was, as Phase 1 predicted. Counting ignored nodes
+  as well, the tree went from 220,330 to 171,743 characters (678 to 494
+  nodes), and the document from 1,275 to 915 elements. On a first visit, with
   Home open, the tree went from 134,584 to 134,364 characters.
 - **First interaction** is when the first rail button can be clicked
-  (`elementFromPoint` hits it). The splash sets that time, at 3,609 ms both
-  before and after. DOMContentLoaded is about 340 ms both times.
+  (`elementFromPoint` hits it). The splash sets that time: three paired runs
+  gave 3,845, 3,925 and 3,938 ms before, and 3,889, 3,875 and 3,937 ms after.
+  DOMContentLoaded was 270 to 430 ms both times.
 
 ### Routes
 
@@ -114,19 +131,21 @@ counts did not move on any route.
 | Route                  | Sources before | Sources after | Ceiling | Build before | Build after | Ceiling |
 | ---------------------- | -------------: | ------------: | ------: | -----------: | ----------: | ------: |
 | front door, sandbox    | 2075.6 KB / 99 | 2094.8 KB / 99 | 2103.3 / 102 | 588.8 KB / 54 | 600.8 KB / 54 | 628.4 / 55 |
-| Kepler                 | 3264.6 / 138   | 3285.0 / 138  | 3292 / 140 | 1284.5 / 69 | 1296.9 / 69 | 1341 / 69 |
-| transit                | 3276.0 / 138   | 3296.5 / 138  | 3303.4 / 140 | 1297.7 / 69 | 1310.0 / 69 | 1354.2 / 69 |
-| transit, instrument    | 3484.1 / 140   | 3504.5 / 140  | 3512.6 / 142 | 1490.3 / 73 | 1502.8 / 73 | 1554.4 / 73 |
-| power law              | 3242.7 / 138   | 3263.1 / 138  | 3269.9 / 140 | 1269.9 / 69 | 1282.3 / 69 | 1326 / 69 |
-| power law, instrument  | 3295.9 / 141   | 3316.3 / 141  | 3323.4 / 143 | 1286.9 / 72 | 1299.4 / 72 | 1344.1 / 72 |
-| largest lesson         | 3373.7 / 140   | 3394.1 / 140  | 3401.5 / 142 | 1331.5 / 71 | 1343.9 / 71 | 1389 / 71 |
-| figure                 | 2322.3 / 115   | 2341.5 / 115  | 2353 / 117 | 720.7 / 57 | 732.8 / 57 | 761.6 / 58 |
+| Kepler                 | 3264.6 / 138   | 3285.4 / 138  | 3292 / 140 | 1284.5 / 69 | 1296.9 / 69 | 1341 / 69 |
+| transit                | 3276.0 / 138   | 3296.8 / 138  | 3303.4 / 140 | 1297.7 / 69 | 1310.0 / 69 | 1354.2 / 69 |
+| transit, instrument    | 3484.1 / 140   | 3504.9 / 140  | 3512.6 / 142 | 1490.3 / 73 | 1502.8 / 73 | 1554.4 / 73 |
+| power law              | 3242.7 / 138   | 3263.4 / 138  | 3269.9 / 140 | 1269.9 / 69 | 1282.2 / 69 | 1326 / 69 |
+| power law, instrument  | 3295.9 / 141   | 3316.7 / 141  | 3323.4 / 143 | 1286.9 / 72 | 1299.4 / 72 | 1344.1 / 72 |
+| largest lesson         | 3373.7 / 140   | 3394.4 / 140  | 3401.5 / 142 | 1331.5 / 71 | 1343.9 / 71 | 1389 / 71 |
+| figure                 | 2322.3 / 115   | 2341.5 / 115  | 2353 / 117 | 720.7 / 57 | 732.7 / 57 | 761.6 / 58 |
 
 No other route moved. Every route that loads the application pays about 19 KB
 of sources for the start-up templates and the mounting code. The fragment
 files cost no route anything until their family opens. The bundle budget is
-803.2 of 830 KB initial and 4173.8 of 4180 KB deferred. The growth of
-`js/ui.js` and `js/scenarioBrowser.js` is recorded in
+801.1 of 830 KB initial and 4173.7 of 4180 KB deferred. The deferred figure is
+3.0 KB more than v2's 4170.7, all of it the mount and unmount code in the
+lazy families, and none of it markup. The growth of `js/ui.js`,
+`js/scenarioBrowser.js` and `js/tutorial.js` is recorded in
 `docs/bundle-composition.json`: that markup was already downloaded at
 start-up, as HTML.
 
@@ -140,7 +159,7 @@ start-up, as HTML.
   resolved. `index.html` stays under its ceiling.
 - `tests/fragmentMount.test.js`: mounting, translating, the refusals and
   unmounting, on a probe and on every real fragment.
-- `e2e/fragments.spec.js`: each family in the application. Its markup is
+- `e2e/fragments.spec.js`: each moved family in the application. Its markup is
   absent until it is asked for. Once its loader has mounted it, all of it is
   there, after its host, with no id twice. Unmounting removes it, along with
   every listener the family put outside it, round trip after round trip. The

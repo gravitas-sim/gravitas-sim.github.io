@@ -108,16 +108,6 @@ const FAMILIES = [
       ),
   },
   {
-    name: 'binary run',
-    host: 'binary-run',
-    ids: ['binaryRunContainer'],
-    scenario: 'Binary Planet Lab',
-    unmount: async () =>
-      (await import('/js/scenarioPanelBridge.js')).unmountScenarioPanel(
-        'binary-run'
-      ),
-  },
-  {
     name: 'precise placement',
     host: 'precise-placement',
     ids: ['precisePlaceDialog'],
@@ -152,7 +142,6 @@ const FAMILIES = [
     name: 'lesson engine',
     host: 'lesson',
     ids: [
-      'investigationBrowser',
       'investigationPanel',
       'investigationPlot',
       'investigationEllipse',

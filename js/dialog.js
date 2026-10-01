@@ -237,16 +237,22 @@ export function openDialog(
       if (!to || !isOpen(panel) || wired.get(panel).closing) return;
       if (!panel.contains(event.target)) to.focus();
     };
-    panel.addEventListener('keydown', keydown);
+    // All four go with releaseDialog(), which a panel leaving the page - or
+    // one that stays while its family is unmounted - asks for.
+    const release = new AbortController();
+    const { signal } = release;
+    panel.addEventListener('keydown', keydown, { signal });
     // A press on the backdrop itself, not on anything inside the panel.
     if (host !== panel)
-      host.addEventListener('click', event => {
-        if (event.target === host && isOpen(panel))
-          closeDialog(panel, 'backdrop');
-      });
-    // The document's two outlive the panel, so they go with releaseDialog().
-    const release = new AbortController();
-    const outside = { capture: true, signal: release.signal };
+      host.addEventListener(
+        'click',
+        event => {
+          if (event.target === host && isOpen(panel))
+            closeDialog(panel, 'backdrop');
+        },
+        { signal }
+      );
+    const outside = { capture: true, signal };
     document.addEventListener('focusin', focusin, outside);
     // A click is never the Tab's, not even one after a trip to the toolbar.
     document.addEventListener('pointerdown', () => (wrapTo = null), outside);
@@ -268,10 +274,9 @@ export function openDialog(
 }
 
 /**
- * Let go of a dialog whose markup is leaving the page: the listeners
- * openDialog() put on the document for it, and the record of it. A panel whose
- * markup ships with its family is unmounted with it (INDEX_DECOMPOSITION.md),
- * and a mounted copy is a new element that openDialog() wires afresh.
+ * Let go of a dialog whose family is being unmounted: every listener
+ * openDialog() added for it, on the panel and the document, and the record of
+ * it (INDEX_DECOMPOSITION.md). The next openDialog() wires it afresh.
  *
  * @param {?HTMLElement} panel - The dialog
  */

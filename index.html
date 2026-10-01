@@ -528,7 +528,200 @@ try {
 
     <template data-host="assist"></template>
 
-    <template data-host="binary-run"></template>
+    <!-- 🪐 Binary planet run -->
+    <div
+      id="binaryRunContainer"
+      class="obs-panel binary-run-container"
+      style="display: none"
+      role="region"
+      aria-labelledby="binaryRunTitle"
+    >
+      <div class="obs-panel-toolbar">
+        <div class="obs-panel-meta">
+          <span class="obs-panel-title" id="binaryRunTitle"
+            >Binary Planet Run</span
+          >
+          <span id="binaryRunStatus" class="obs-panel-status">Not started</span>
+        </div>
+        <div class="obs-panel-actions">
+          <button
+            id="binaryRunClose"
+            class="obs-panel-btn"
+            title="Hide the binary run panel"
+            data-i18n-title="binaryRun.close.hint"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div class="pause-event-form">
+        <label class="pause-event-field">
+          <span data-i18n="binaryRun.planetA">Planet start (a / a_binary)</span>
+          <input
+            type="number"
+            id="binaryRunPlanetA"
+            step="0.01"
+            min="0.02"
+            max="12"
+          />
+        </label>
+        <label class="pause-event-field">
+          <span data-i18n="binaryRun.periods">Binary periods to run</span>
+          <input
+            type="number"
+            id="binaryRunPeriods"
+            step="1"
+            min="1"
+            max="400"
+          />
+        </label>
+        <label class="pause-event-field">
+          <span data-i18n="binaryRun.timestep">Integration step</span>
+          <input
+            type="number"
+            id="binaryRunTimestep"
+            step="0.05"
+            min="0.05"
+            max="8"
+          />
+        </label>
+        <div class="pause-event-actions">
+          <button id="binaryRunStart" class="obs-panel-btn" type="button">
+            <span data-i18n="binaryRun.start">Run</span>
+          </button>
+          <button id="binaryRunHalve" class="obs-panel-btn" type="button">
+            <span data-i18n="binaryRun.halve">Repeat at half the step</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pause-event-readout">
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.progress"
+            >Integrated</span
+          >
+          <span id="binaryRunProgress" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.drift"
+            >Energy drift</span
+          >
+          <span id="binaryRunDrift" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.step"
+            >Step actually used</span
+          >
+          <span id="binaryRunStep" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.encounters"
+            >Close encounters</span
+          >
+          <span id="binaryRunEncounters" class="rv-readout-value numeric"
+            >—</span
+          >
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.closest"
+            >Closest to the other star</span
+          >
+          <span id="binaryRunClosest" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.farthest"
+            >Farthest out</span
+          >
+          <span id="binaryRunFarthest" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.orbit"
+            >Planet's orbit now</span
+          >
+          <span id="binaryRunOrbit" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.maxEcc"
+            >Highest eccentricity reached</span
+          >
+          <span id="binaryRunMaxEcc" class="rv-readout-value numeric">—</span>
+        </div>
+      </div>
+
+      <p id="binaryRunOutcome" class="binary-run-outcome" role="status">—</p>
+      <p id="binaryRunBoundary" class="binary-run-boundary"></p>
+
+      <!-- The sweep. Collapsed, because the lesson wants the individual runs
+           done and understood first: it exists to replace the repetitive part
+           of the boundary hunt, not the part where a student learns to read
+           the diagnostics. -->
+      <details id="binarySweepSection" class="binary-sweep">
+        <summary data-i18n="binarySweep.title">
+          Sweep the starting radius
+        </summary>
+        <p class="obs-panel-hint" data-i18n="binarySweep.hint">
+          The same run you have been doing by hand, at five starting radii, with
+          everything else held fixed. Each trial reports what happened to the
+          planet — not an average of where it was.
+        </p>
+        <div class="pause-event-actions">
+          <button
+            id="binarySweepRun"
+            class="obs-panel-btn"
+            type="button"
+            data-i18n="binarySweep.run"
+          >
+            Run the sweep
+          </button>
+          <button
+            id="binarySweepCancel"
+            class="obs-panel-btn"
+            type="button"
+            hidden=""
+            data-i18n="binarySweep.cancel"
+          >
+            Stop
+          </button>
+          <label class="pause-event-field">
+            <span data-i18n="binarySweep.recheck">Re-run at half the step</span>
+            <select id="binarySweepRecheck"></select>
+          </label>
+          <button
+            id="binarySweepRecheckRun"
+            class="obs-panel-btn"
+            type="button"
+            disabled=""
+            data-i18n="binarySweep.recheckRun"
+          >
+            Check it
+          </button>
+          <button
+            id="binarySweepKeep"
+            class="obs-panel-btn"
+            type="button"
+            disabled=""
+            data-i18n="binarySweep.keep"
+          >
+            Keep in the notebook
+          </button>
+        </div>
+        <p id="binarySweepStatus" class="obs-panel-hint" role="status"></p>
+        <div id="binarySweepTable"></div>
+        <canvas id="binarySweepPlot" width="380" height="150"></canvas>
+        <p id="binarySweepCaveat" class="obs-panel-hint"></p>
+      </details>
+
+      <p class="obs-panel-hint" data-i18n="binaryRun.hint">
+        An outcome here describes this integration and no more. Instability in
+        these systems is often slow: a planet can circle quietly for hundreds of
+        binary periods before its orbit is walked out of the system, so
+        "survived" is a statement about the run you did, not about the future.
+        Energy drift is a screen and not a certificate — the test that settles
+        an outcome is repeating the run at half the step and getting the same
+        answer.
+      </p>
+    </div>
 
     <!-- 🎯 Astrometry panel -->
     <div
@@ -1827,6 +2020,194 @@ try {
     </button>
 
     <template data-host="scenario-list"></template>
+
+    <!--
+      Investigations: the lesson browser. A sibling of the scenario gallery
+      above, on purpose - same shell, same borrowed thumbnails, same count line
+      - but the cards are wide landscape ones because a lesson is an hour of
+      work, not a tile you click on a whim. Every card, the count line and the
+      level note are written by js/investigations.js from the manifest in
+      js/data/investigations/manifest.js: no lesson title, duration, step count
+      or total is spelled out here, so nothing in this file can go stale. The
+      lessons themselves are a file each in that directory, and only the one a
+      student opens is fetched.
+    -->
+    <div id="investigationBrowser" class="hidden" hidden inert>
+      <div
+        id="investigationBrowserContent"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="investigationBrowserTitle"
+      >
+        <div class="inv-browser-header">
+          <div>
+            <h3 id="investigationBrowserTitle">Investigations</h3>
+            <p class="inv-browser-sub">
+              Guided lessons you work through beside the simulation, each one a
+              sitting's worth of measuring and writing down. Progress saves as
+              you go, and finishing one gets you a lab report with your answers.
+            </p>
+            <p class="inv-browser-links">
+              <a href="/model/">About the physics model</a>
+              <span aria-hidden="true">·</span>
+              <a href="/instructors/">Instructor resources</a>
+            </p>
+            <!--
+              The other door into the same content. These are the complete
+              topics; a classroom activity is one of them cut to a teaching
+              format and a length. Said in a sentence rather than as a bare
+              link, because "Classroom activities" on its own does not tell an
+              instructor how it differs from the grid underneath it.
+            -->
+            <p class="inv-browser-links">
+              <!--
+                The sentence and the link are separate elements on purpose. A
+                data-i18n on the paragraph sets its textContent, which deletes
+                any child it contains - so putting one on a <p> that wraps an
+                <a> removes the link the moment the page translates itself.
+              -->
+              <span data-i18n="inv.browser.activities"
+                >Short on time? Classroom activities are prepared teaching
+                formats — a five-minute demonstration, a twenty-minute activity,
+                a full lab — cut from these same investigations.</span
+              >
+              <a
+                href="/teaching/#activities"
+                data-i18n="inv.browser.activities.link"
+                >See the classroom activities</a
+              >
+            </p>
+          </div>
+          <button
+            id="investigationBrowserClose"
+            class="ui-button"
+            title="Close the investigation list"
+          >
+            ×
+          </button>
+        </div>
+        <button
+          class="floating-close-chip"
+          id="investigationBrowserChip"
+          aria-label="Close"
+          title="Close the investigation list"
+        >
+          ✕
+        </button>
+
+        <p class="inv-browser-count-row">
+          <span
+            id="investigationBrowserCount"
+            class="inv-count"
+            role="status"
+            aria-live="polite"
+          ></span>
+          <span
+            id="investigationBrowserLevel"
+            class="inv-count-level"
+            hidden=""
+          ></span>
+        </p>
+
+        <!--
+          Search and filters. Every option in every one of these menus is
+          written by js/investigations.js from the manifest: the subjects are
+          the tags the lessons declare, and the lengths are bucketed from the
+          durations they declare. Nothing about a lesson is spelled out here,
+          so nothing here can disagree with the catalog.
+        -->
+        <div class="inv-browser-tools">
+          <div class="inv-search">
+            <label class="visually-hidden" for="investigationSearch"
+              >Search lessons</label
+            >
+            <input
+              id="investigationSearch"
+              class="inv-search-input"
+              type="search"
+              autocomplete="off"
+              placeholder="Search by title, topic or subject"
+              data-i18n-placeholder="inv.filter.search.placeholder"
+            />
+          </div>
+          <div class="inv-filters">
+            <label class="inv-filter">
+              <span data-i18n="inv.filter.subject">Subject</span>
+              <select id="investigationFilterSubject"></select>
+            </label>
+            <label class="inv-filter">
+              <span data-i18n="inv.filter.length">Time needed</span>
+              <select id="investigationFilterLength"></select>
+            </label>
+            <label class="inv-filter">
+              <span data-i18n="inv.filter.calculation">Calculation</span>
+              <select id="investigationFilterCalculation"></select>
+            </label>
+            <label class="inv-filter">
+              <span data-i18n="inv.filter.progress">Progress</span>
+              <select id="investigationFilterProgress"></select>
+            </label>
+            <button
+              type="button"
+              id="investigationFilterClear"
+              class="ui-button inv-filter-clear"
+              hidden=""
+              data-i18n="inv.filter.clear"
+            >
+              Clear filters
+            </button>
+          </div>
+        </div>
+
+        <div id="investigationBrowserScroll" class="inv-browser-scroll">
+          <!--
+            No role="list": the children are buttons, which cannot be
+            listitems, and the scenario grid above carries no role either.
+          -->
+          <!--
+            Curated orders through the catalog. The order and the reasons
+            come from js/data/investigations/sequences.js; the titles,
+            durations and "fits a demonstration" labels are read off the
+            manifest, so a lesson that gets longer stops being called short
+            without anybody editing a sequence.
+          -->
+          <section
+            id="investigationSequences"
+            class="inv-sequences"
+            aria-labelledby="investigationSequencesTitle"
+            hidden=""
+          >
+            <h4 id="investigationSequencesTitle" data-i18n="inv.seq.heading">
+              Ways through
+            </h4>
+            <p class="inv-seq-intro" data-i18n="inv.seq.intro">
+              Lessons stand alone, but some build on each other. These are
+              orders that work, with what each one assumes you have already
+              done.
+            </p>
+            <div id="investigationSequenceList" class="inv-seq-list"></div>
+          </section>
+          <h4
+            id="investigationAllHeading"
+            class="inv-all-heading"
+            data-i18n="inv.seq.all"
+            hidden=""
+          >
+            Every lesson
+          </h4>
+          <div id="investigationList" class="inv-grid"></div>
+          <p id="investigationEmpty" class="inv-empty" hidden="" role="status">
+            <span id="investigationEmptyText"></span>
+            <button
+              type="button"
+              id="investigationEmptyAction"
+              class="ui-button"
+              hidden=""
+            ></button>
+          </p>
+        </div>
+      </div>
+    </div>
 
     <template data-host="lesson"></template>
 

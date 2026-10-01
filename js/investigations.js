@@ -4466,29 +4466,41 @@ function clearBrowserFilters() {
   renderBrowser();
 }
 
-/** Wire the search box and the four menus. Once, at start-up. */
-function wireBrowserFilters() {
+/**
+ * Wire the search box and the four menus. Once per mount: the browser is
+ * index.html's, so its listeners go with the engine's signal.
+ * @param {AddEventListenerOptions} [opts] - Carries that signal
+ */
+function wireBrowserFilters(opts) {
   // Debounced, because a keystroke rebuilds seventeen cards and their
   // thumbnails; 150ms is below the point a reader notices and above the rate
   // anybody types.
-  els.search?.addEventListener('input', () => {
-    if (pendingQuery !== null) clearTimeout(pendingQuery);
-    pendingQuery = setTimeout(() => {
-      pendingQuery = null;
-      setBrowserFilter('query', els.search.value.trim());
-    }, 150);
-  });
+  els.search?.addEventListener(
+    'input',
+    () => {
+      if (pendingQuery !== null) clearTimeout(pendingQuery);
+      pendingQuery = setTimeout(() => {
+        pendingQuery = null;
+        setBrowserFilter('query', els.search.value.trim());
+      }, 150);
+    },
+    opts
+  );
   // Escape empties the box rather than closing the panel out from under
   // somebody who was only trying to undo a search.
-  els.search?.addEventListener('keydown', event => {
-    if (event.key !== 'Escape' || !els.search.value) return;
-    event.stopPropagation();
-    event.preventDefault();
-    if (pendingQuery !== null) clearTimeout(pendingQuery);
-    pendingQuery = null;
-    els.search.value = '';
-    setBrowserFilter('query', '');
-  });
+  els.search?.addEventListener(
+    'keydown',
+    event => {
+      if (event.key !== 'Escape' || !els.search.value) return;
+      event.stopPropagation();
+      event.preventDefault();
+      if (pendingQuery !== null) clearTimeout(pendingQuery);
+      pendingQuery = null;
+      els.search.value = '';
+      setBrowserFilter('query', '');
+    },
+    opts
+  );
 
   const menus = [
     [els.filterSubject, 'subject'],
@@ -4497,22 +4509,32 @@ function wireBrowserFilters() {
     [els.filterProgress, 'progress'],
   ];
   menus.forEach(([select, key]) => {
-    select?.addEventListener('change', () =>
-      setBrowserFilter(key, select.value)
+    select?.addEventListener(
+      'change',
+      () => setBrowserFilter(key, select.value),
+      opts
     );
   });
 
-  els.filterClear?.addEventListener('click', () => {
-    clearBrowserFilters();
-    els.search?.focus();
-  });
+  els.filterClear?.addEventListener(
+    'click',
+    () => {
+      clearBrowserFilters();
+      els.search?.focus();
+    },
+    opts
+  );
 
-  els.emptyAction?.addEventListener('click', () => {
-    const key = els.emptyAction.dataset.relax;
-    if (key) setBrowserFilter(key, '');
-    else clearBrowserFilters();
-    els.search?.focus();
-  });
+  els.emptyAction?.addEventListener(
+    'click',
+    () => {
+      const key = els.emptyAction.dataset.relax;
+      if (key) setBrowserFilter(key, '');
+      else clearBrowserFilters();
+      els.search?.focus();
+    },
+    opts
+  );
 }
 
 /**
@@ -5046,9 +5068,9 @@ export function initInvestigations({ signal } = {}) {
     },
     opts
   );
-  wireBrowserFilters();
-  els.browserClose?.addEventListener('click', closeBrowser);
-  els.browserChip?.addEventListener('click', closeBrowser);
+  wireBrowserFilters(opts);
+  els.browserClose?.addEventListener('click', closeBrowser, opts);
+  els.browserChip?.addEventListener('click', closeBrowser, opts);
 
   els.prev?.addEventListener('click', () =>
     goToStep(applyingFrom(stepIndex, -1))

@@ -27,16 +27,16 @@ import {
 } from './i18n/deferredMessages.js';
 
 /**
- * Which scenarios pull in which chunk, and the host of each panel's markup
- * (js/fragments/, INDEX_DECOMPOSITION.md); the Lagrange panel builds its own.
+ * Which scenarios pull in which chunk, and the host of a panel whose markup
+ * ships with it (js/fragments/, INDEX_DECOMPOSITION.md).
  */
 const PANELS = [
   {
     scenarios: ['Binary Planet Lab', 'Circumbinary Planet Lab'],
-    host: 'binary-run',
+    // Its markup stays in index.html: lessons and tests drive this panel
+    // directly, in the same task as the rebuild that fetches it.
     load: () => import('./binaryRunPanel.js'),
-    init: (m, opts) => m.initBinaryRun(opts),
-    teardown: m => m.teardownBinaryRun(),
+    init: m => m.initBinaryRun(),
   },
   {
     scenarios: ['Gravity Assist Lab', 'Gravity Assist: Heliocentric'],
@@ -90,7 +90,7 @@ async function loadForScenario() {
 
 /**
  * Unmount a scenario panel; its next scenario brings it back.
- * @param {string} host - 'binary-run' or 'assist'
+ * @param {string} host - 'assist'
  * @returns {Promise<boolean>} Whether it was mounted
  */
 export async function unmountScenarioPanel(host) {
