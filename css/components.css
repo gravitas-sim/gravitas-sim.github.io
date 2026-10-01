@@ -645,9 +645,6 @@
      had been missed, chiefly the object inspector and the live HUD.
      ====================================================================== */
   #overlayStats,
-  .stat-row,
-  .stat-value,
-  .energy-value-display,
   .inv-wedge-readout,
   .inv-answer-num {
     font-variant-numeric: tabular-nums;
@@ -1059,8 +1056,7 @@
     z-index: var(--z-overlay);
   }
 
-  #overlayStats,
-  #overlay .overlay-panel {
+  #overlayStats {
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     line-height: var(--leading-normal);
@@ -1155,7 +1151,6 @@
     transform: none;
   }
 
-  .scenario-info-title,
   #scenarioInfoBox h3 {
     color: var(--accent);
     font-size: var(--text-lg);
@@ -1225,7 +1220,6 @@
   /* ==========================================================================
      Speed control cluster
      ====================================================================== */
-  .speed-control,
   .speed-controls {
     display: flex;
     align-items: center;
@@ -1265,7 +1259,6 @@
      when both stay on one line and take the same width - at the rail's width
      "Slow" was wrapping under its own arrow while "Fast" stayed beside its own,
      which made the two look like different kinds of control. */
-  .speed-control .ui-button,
   .speed-controls .ui-button {
     flex: 1 1 0;
     justify-content: center;
@@ -2568,7 +2561,6 @@
     }
 
     .inspector-tab,
-    .scenario-list-item,
     .settings-section-header,
     #scenarioSearch,
     input[type='text'],
@@ -2667,23 +2659,6 @@
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     color: var(--text-primary);
-  }
-
-  .scenario-list-item {
-    background: var(--surface-2);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition:
-      background var(--duration) var(--ease),
-      border-color var(--duration) var(--ease);
-  }
-
-  .scenario-list-item:hover,
-  .scenario-list-item:focus-visible {
-    background: var(--surface-3);
-    border-color: var(--border-strong);
   }
 }
 
@@ -7119,9 +7094,7 @@
 
   /* A bare checkbox is 13-15px in every engine. The label beside it is part of
      the same target, but the box itself is what a finger aims at. */
-  .share-check input[type='checkbox'],
-  .settings-panel input[type='checkbox'],
-  input[type='checkbox'].ui-checkbox {
+  .share-check input[type='checkbox'] {
     width: 24px;
     height: 24px;
     accent-color: var(--accent);
