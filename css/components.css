@@ -396,6 +396,7 @@
 
   .settings-level label {
     font-weight: var(--weight-semibold);
+    color: var(--text-primary);
   }
 
   .settings-level-hint {
@@ -486,8 +487,8 @@
       to right,
       var(--accent) 0%,
       var(--accent) var(--range-fill, 0%),
-      var(--range-track, #2b3245) var(--range-fill, 0%),
-      var(--range-track, #2b3245) 100%
+      var(--range-track) var(--range-fill, 0%),
+      var(--range-track) 100%
     );
     border: 1px solid var(--border-strong);
     outline: none;
@@ -501,8 +502,6 @@
   input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 18px;
-    height: 18px;
     border-radius: var(--radius-full);
     background: var(--accent);
     /* A ring in the panel color separates the thumb from the filled track it
@@ -520,8 +519,6 @@
   }
 
   input[type='range']::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
     border-radius: var(--radius-full);
     background: var(--accent);
     border: 2px solid var(--panel-bg);
@@ -663,8 +660,8 @@
     left: 20px;
     bottom: 120px;
     width: 420px;
-    background: var(--surface-1, rgba(5, 9, 22, 0.95));
-    border: 1px solid var(--border-subtle, rgba(0, 180, 255, 0.3));
+    background: var(--surface-1);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg, 12px);
     box-shadow: var(--shadow-lg, 0 12px 48px rgba(0, 0, 0, 0.5));
     backdrop-filter: blur(6px);
@@ -699,7 +696,7 @@
     position: sticky;
     top: 0;
     z-index: 1;
-    background: var(--surface-1, rgba(5, 9, 22, 0.95));
+    background: var(--surface-1);
   }
 
   /* Collapsed: the title bar and nothing else. Three instruments will not fit
@@ -802,7 +799,7 @@
     line-height: 1.4;
     color: var(--text-secondary);
     background: var(--surface-2);
-    border-left: 3px solid var(--warning, #e0a458);
+    border-left: 3px solid var(--warning);
     border-radius: var(--radius-sm, 4px);
   }
 
@@ -840,7 +837,7 @@
     color: var(--text-muted);
   }
   .rv-direction.is-receding {
-    color: var(--danger, #e2725b);
+    color: var(--danger);
   }
   .rv-direction.is-approaching {
     color: var(--info, #5b9bd5);
@@ -875,7 +872,7 @@
       var(--info, #5b9bd5) 0%,
       var(--surface-2) 45%,
       var(--surface-2) 55%,
-      var(--danger, #e2725b) 100%
+      var(--danger) 100%
     );
     opacity: 0.5;
   }
@@ -1052,9 +1049,6 @@
   /* ==========================================================================
      HUD overlay (top-left readout)
      ====================================================================== */
-  #overlay {
-    z-index: var(--z-overlay);
-  }
 
   #overlayStats {
     font-family: var(--font-sans);
@@ -1132,25 +1126,6 @@
     color: var(--text-secondary);
   }
 
-  .scenario-info-close {
-    min-height: 26px;
-    min-width: 26px;
-    padding: 0;
-    background: transparent;
-    border-color: transparent;
-    box-shadow: none;
-    color: var(--text-muted);
-    font-size: var(--text-md);
-    line-height: 1;
-  }
-
-  .scenario-info-close:hover {
-    background: var(--surface-2);
-    border-color: transparent;
-    color: var(--text-primary);
-    transform: none;
-  }
-
   #scenarioInfoBox h3 {
     color: var(--accent);
     font-size: var(--text-lg);
@@ -1185,35 +1160,16 @@
   }
 
   .tutorial-popup {
-    position: fixed;
-    left: var(--space-4);
-    bottom: calc(var(--space-10) + var(--space-6));
-    width: min(360px, calc(100vw - var(--space-8)));
-    max-height: 80vh;
-    background: var(--surface-1);
     color: var(--text-primary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
-    font-family: var(--font-sans);
     font-size: var(--text-base);
     line-height: var(--leading-normal);
-    z-index: var(--z-modal);
     touch-action: none;
-    user-select: none;
   }
 
   @media (max-width: 600px) {
     .tutorial-btn {
       left: var(--space-3);
       bottom: var(--space-3);
-    }
-
-    .tutorial-popup {
-      left: var(--space-3);
-      width: calc(100vw - var(--space-6));
-      max-height: 70vh;
     }
   }
 
@@ -1246,11 +1202,6 @@
       min-height: 30px;
       padding: var(--space-1) var(--space-3);
       font-size: var(--text-xs);
-    }
-
-    .rail-group + .rail-group {
-      margin-top: var(--space-2);
-      padding-top: var(--space-2);
     }
   }
 
@@ -1396,9 +1347,7 @@
 
     /* Two columns of controls on tablets, so the sheet is not a long scroll */
     .rail-group > [role='group'] {
-      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: var(--space-1);
     }
 
     .rail-field,
@@ -1855,7 +1804,6 @@
     right: var(--space-2);
     z-index: 1;
 
-    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-1);
@@ -2534,15 +2482,6 @@
       justify-content: stretch;
     }
 
-    #scenarioListContent {
-      width: 100%;
-      min-width: 0;
-      max-width: none;
-      max-height: 100%;
-      padding: var(--space-4) var(--space-3);
-      border-radius: var(--radius-lg);
-    }
-
     #objectInspector,
     #settingsPanel {
       top: calc(var(--space-2) + env(safe-area-inset-top, 0px));
@@ -2573,16 +2512,6 @@
     /* A 4px range track is unhittable with a fingertip */
     input[type='range'] {
       height: 6px;
-    }
-
-    input[type='range']::-webkit-slider-thumb {
-      width: 24px;
-      height: 24px;
-    }
-
-    input[type='range']::-moz-range-thumb {
-      width: 24px;
-      height: 24px;
     }
 
     .settings-footer,
@@ -2645,20 +2574,6 @@
 
   .placement-armed-hint.is-visible {
     opacity: 1;
-  }
-}
-
-/* =============================================================================
-   Scenario browser surface
-   ========================================================================== */
-
-@layer components {
-  #scenarioListContent {
-    background: var(--surface-1);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    color: var(--text-primary);
   }
 }
 
@@ -6407,14 +6322,10 @@
 
   /* --- Help and disclosure ------------------------------------------------ */
   .insp-help {
-    width: 16px;
-    height: 16px;
-    min-height: 16px;
     padding: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
     line-height: 1;
     color: var(--text-muted);
     background: transparent;
@@ -6778,7 +6689,7 @@
    series would be worse than no legend. */
 .rc-key-visible {
   height: 0;
-  border-top: 2px dashed var(--danger, #e2725b);
+  border-top: 2px dashed var(--danger);
 }
 
 .rc-key-total {
@@ -6948,8 +6859,8 @@
  * ------------------------------------------------------------------------- */
 @layer components {
   .inv-author-bar {
-    border-bottom: 1px solid var(--border, #2a2f3a);
-    background: color-mix(in srgb, var(--accent, #4dd0e1) 8%, transparent);
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
     padding: var(--space-2, 8px) var(--space-3, 12px);
     font-size: 11px;
     display: flex;
@@ -6976,7 +6887,7 @@
     font-size: 9px;
     padding: 2px 6px;
     border-radius: 3px;
-    background: var(--accent, #4dd0e1);
+    background: var(--accent);
     color: var(--bg, #10131a);
   }
 
@@ -7028,11 +6939,11 @@
   }
 
   .inv-author-finding.is-error {
-    border-left-color: var(--danger, #ef5350);
+    border-left-color: var(--danger);
   }
 
   .inv-author-finding.is-warn {
-    border-left-color: var(--warning, #ffb74d);
+    border-left-color: var(--warning);
   }
 
   .inv-author-level {
@@ -7112,7 +7023,7 @@
 @layer components {
   .inv-progress-safety {
     padding: var(--space-2, 8px) var(--space-3, 12px);
-    border-top: 1px solid var(--border-subtle, #232a38);
+    border-top: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
     gap: var(--space-2, 8px);
@@ -7173,7 +7084,7 @@
    ========================================================================== */
 @layer components {
   .rv-survey {
-    border-top: 1px solid var(--border, rgb(255 255 255 / 12%));
+    border-top: 1px solid var(--border);
     margin-top: 0.5rem;
     padding-top: 0.5rem;
   }
@@ -7221,7 +7132,7 @@
   .rv-survey-list textarea,
   .rv-survey-list input {
     background: var(--input-bg, rgb(255 255 255 / 6%));
-    border: 1px solid var(--border, rgb(255 255 255 / 15%));
+    border: 1px solid var(--border);
     border-radius: 4px;
     color: inherit;
     font: inherit;
@@ -7275,13 +7186,13 @@
   .binary-sweep,
   /* The assist lesson's two experiments: same furniture, same rule. */
   .assist-experiment {
-    border-top: 1px solid var(--border-subtle, rgb(255 255 255 / 10%));
+    border-top: 1px solid var(--border-subtle);
     padding-top: 0.5rem;
   }
 
   .rv-survey-field select {
     background: var(--input-bg, rgb(255 255 255 / 6%));
-    border: 1px solid var(--border, rgb(255 255 255 / 15%));
+    border: 1px solid var(--border);
     border-radius: 4px;
     color: inherit;
     font: inherit;
@@ -7326,7 +7237,7 @@
 
   .rv-survey-note[data-state='warn'],
   .rv-survey-compare-report[data-state='warn'] {
-    border-left: 3px solid var(--warning, #e0a458);
+    border-left: 3px solid var(--warning);
     padding-left: 0.5rem;
   }
 
@@ -7366,7 +7277,7 @@
   .pause-event-field select,
   .pause-event-field input {
     background: var(--input-bg, rgb(255 255 255 / 6%));
-    border: 1px solid var(--border, rgb(255 255 255 / 15%));
+    border: 1px solid var(--border);
     border-radius: 4px;
     color: inherit;
     flex: 1 1 auto;
@@ -7395,11 +7306,11 @@
   }
 
   .pause-event-message[data-kind='refused'] {
-    border-left-color: var(--warning, #e0a458);
+    border-left-color: var(--warning);
   }
 
   .pause-event-message[data-kind='fired'] {
-    border-left-color: var(--accent, #6fb1ff);
+    border-left-color: var(--accent);
   }
 
   .pause-event-readout {
@@ -7422,7 +7333,7 @@
 
   .pause-event-note input {
     background: var(--input-bg, rgb(255 255 255 / 6%));
-    border: 1px solid var(--border, rgb(255 255 255 / 15%));
+    border: 1px solid var(--border);
     border-radius: 4px;
     color: inherit;
     font: inherit;
@@ -7450,7 +7361,7 @@
   }
 
   .timeline-event-marker {
-    background: var(--accent, #6fb1ff);
+    background: var(--accent);
     border-radius: 1px;
     height: 1rem;
     pointer-events: none;
@@ -7499,7 +7410,7 @@
   }
 
   .inv-hint {
-    border-left: 3px solid var(--border, rgb(255 255 255 / 20%));
+    border-left: 3px solid var(--border);
     font-size: 0.85rem;
     line-height: 1.5;
     margin: 0;
@@ -7507,7 +7418,7 @@
   }
 
   .inv-hint.is-worked {
-    border-left-color: var(--accent, #6fb1ff);
+    border-left-color: var(--accent);
   }
 
   .inv-hint-row {
@@ -7532,7 +7443,7 @@
     position: fixed;
     inset: 0;
     z-index: 300;
-    background: var(--surface-0, rgba(3, 6, 16, 0.97));
+    background: var(--surface-0);
     overflow-y: auto;
     padding: var(--space-4, 20px);
   }
@@ -7559,8 +7470,8 @@
     width: 100%;
     font: inherit;
     padding: 6px 8px;
-    background: var(--surface-2, rgba(255, 255, 255, 0.06));
-    border: 1px solid var(--border-subtle, rgba(0, 180, 255, 0.3));
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm, 6px);
     color: inherit;
   }
@@ -7574,7 +7485,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    border: 1px solid var(--border-subtle, rgba(0, 180, 255, 0.3));
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm, 6px);
     max-height: 46vh;
     overflow-y: auto;
@@ -7585,7 +7496,7 @@
     gap: var(--space-2, 8px);
     flex-wrap: wrap;
     padding: 5px 10px;
-    border-bottom: 1px solid var(--border-faint, rgba(255, 255, 255, 0.07));
+    border-bottom: 1px solid var(--border-subtle);
   }
   .assignment-step label {
     display: flex;
@@ -7599,12 +7510,12 @@
      included without looking chosen: the instructor did not tick it, and the
      interface should not pretend they did. */
   .assignment-step[data-included='true'] {
-    background: var(--surface-2, rgba(255, 255, 255, 0.05));
+    background: var(--surface-2);
   }
   .assignment-kind,
   .assignment-why {
     font-size: 0.82em;
-    color: var(--text-muted, rgba(255, 255, 255, 0.6));
+    color: var(--text-muted);
   }
   .assignment-why {
     flex-basis: 100%;
@@ -7616,7 +7527,7 @@
   }
   .assignment-hint {
     font-size: 0.88em;
-    color: var(--text-muted, rgba(255, 255, 255, 0.65));
+    color: var(--text-muted);
     margin: 0;
   }
   #assignLinkNote[data-state='long'] {
@@ -7652,8 +7563,8 @@
      distinct from the numbers so it does not read as one of them. */
   .maneuver-caveat {
     font-size: 0.85em;
-    color: var(--text-muted, rgba(255, 255, 255, 0.66));
-    border-left: 2px solid var(--border-subtle, rgba(0, 180, 255, 0.35));
+    color: var(--text-muted);
+    border-left: 2px solid var(--border-subtle);
     padding-left: var(--space-2, 8px);
     margin: 0;
   }
@@ -7690,7 +7601,7 @@
     font-size: 0.88em;
   }
   .cr3bp-validity[data-state='ok'] {
-    color: var(--text-muted, rgba(255, 255, 255, 0.65));
+    color: var(--text-muted);
   }
   .cr3bp-validity[data-state='invalid'] {
     color: var(--accent-warm, #e8b04b);
@@ -7702,8 +7613,8 @@
   }
   .cr3bp-convention {
     font-size: 0.82em;
-    color: var(--text-muted, rgba(255, 255, 255, 0.6));
-    border-left: 2px solid var(--border-subtle, rgba(0, 180, 255, 0.35));
+    color: var(--text-muted);
+    border-left: 2px solid var(--border-subtle);
     padding-left: var(--space-2, 8px);
     margin: 0;
   }
