@@ -576,7 +576,10 @@ function setupShortcuts() {
     match: 'escape',
     group: 'Help',
     label: t('shortcut.closePanel'),
-    run: () => {
+    run: event => {
+      // An Escape inside the list has already closed it (js/dialog.js), and
+      // closes nothing else.
+      if (event?.target?.closest?.('#shortcutOverlay')) return;
       if (isShortcutHelpOpen()) {
         hideShortcutHelp();
         return;

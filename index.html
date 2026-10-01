@@ -3361,7 +3361,7 @@ try {
     </aside>
 
     <!-- Data export -->
-    <div id="dataExport" class="hidden">
+    <div id="dataExport" class="hidden" hidden inert>
       <div
         id="dataExportContent"
         role="dialog"
@@ -4206,8 +4206,9 @@ try {
       </button>
     </div>
 
-    <div id="lectureSequenceSheet" class="lecture-sheet" hidden="">
+    <div id="lectureSequenceSheet" class="lecture-sheet" hidden="" inert>
       <div
+        id="lectureSequenceDialog"
         class="lecture-sheet-panel"
         role="dialog"
         aria-modal="true"
