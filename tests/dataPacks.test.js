@@ -21,6 +21,7 @@ import {
 } from '../tools/data-packs/pinned.mjs';
 import {
   agreesWithPackage,
+  runtimeDisagreement,
   runtimeMeta,
   validateDataPack,
 } from '../tools/data-packs/schema.mjs';
@@ -167,10 +168,27 @@ describe('the manifest format', () => {
     expect(TESS.transformVersion).toBe(TRANSFORM_VERSION);
   });
 
-  test('synthetic data is refused however complete its manifest is', () => {
+  test('synthetic data is refused unless its manifest records the model that made it', () => {
     expect(
       paths(validateDataPack({ ...clone(manifest), origin: 'synthetic' }))
     ).toEqual(['origin']);
+    // The one synthetic pack, and what it may not lose.
+    const ngc = json('data-packs/ngc3198-synthetic-curve.json');
+    expect(ngc.origin).toBe('synthetic');
+    expect(validateDataPack(ngc)).toEqual([]);
+    for (const k of ['name', 'parameters', 'scatter']) {
+      const m = clone(ngc);
+      delete m.model[k];
+      expect(paths(validateDataPack(m))).toContain(
+        k === 'name' ? 'model.name' : 'origin'
+      );
+    }
+    // Its runtime copy must say what made it, so no interface can drop it.
+    const { model, ...unlabelled } = runtimeMeta(ngc);
+    expect(model.parameters).toEqual(ngc.model.parameters);
+    expect(runtimeDisagreement(unlabelled, ngc).errors).toEqual([
+      'model is required in the runtime copy of synthetic data, so an interface can say what made it',
+    ]);
   });
 
   test('restricted data is refused, and a status that is not a licence needs its basis', () => {
@@ -335,6 +353,20 @@ function copyForCheck() {
     // A manifest's units are checked against the registry.
     'js/units/registry.js',
     'js/data/observations',
+    // The datasets that came before packs, and what their checks measure
+    // with: the spectral indices, and the GW noise and time-frequency code.
+    'js/data/spectra',
+    'js/data/gw',
+    'js/data/stellar',
+    'js/stellar/spectrumIndex.js',
+    'js/gw',
+    'js/rng.js',
+    // The compilations, and the synthetic curve's model.
+    'js/data/exoplanetSystems.js',
+    'js/data/trappist1.js',
+    'js/data/ngc3198Synthetic.js',
+    'js/data/realSystemSources.js',
+    'js/darkMatter.js',
     'data-packs',
     'capabilities',
   ]) {
@@ -392,6 +424,52 @@ describe('a pack changed after it was built is caught', () => {
     const file = path.join(dir, TESS.manifest);
     const m = JSON.parse(readFileSync(file, 'utf8'));
     m.credit = 'somebody else';
+    writeFileSync(file, JSON.stringify(m, null, 2));
+    expect(runCheck(dir).out).toContain(
+      "the module's PACK is not the manifest's runtime fields"
+    );
+  });
+
+  test('a dataset that came before packs: one byte of its payload', () => {
+    const dir = copyForCheck();
+    const file = path.join(dir, 'js/data/spectra/sdssSpectra.js');
+    const text = readFileSync(file, 'utf8');
+    const at = text.indexOf("data: '") + 30;
+    writeFileSync(
+      file,
+      text.slice(0, at) + (text[at] === 'A' ? 'B' : 'A') + text.slice(at + 1)
+    );
+    const { ok, out } = runCheck(dir);
+    expect(ok).toBe(false);
+    expect(out).toContain(
+      'js/data/spectra/sdssSpectra.js is not the file its manifest records'
+    );
+    expect(out).toMatch(/the payload does not match its own checksum/);
+  });
+
+  test('a compiled value changed in its module, or its source dropped', () => {
+    const dir = copyForCheck();
+    const file = path.join(dir, 'js/data/trappist1.js');
+    const text = readFileSync(file, 'utf8');
+    writeFileSync(
+      file,
+      text
+        .replace('massInSuns: 0.0898', 'massInSuns: 0.09')
+        .replace("{ text: 'approximate, unsourced', fields: PERIOD }", '')
+    );
+    const { ok, out } = runCheck(dir);
+    expect(ok).toBe(false);
+    expect(out).toContain(
+      'TRAPPIST1_STAR.massInSuns is not the 0.0898 the manifest records'
+    );
+    expect(out).toMatch(/TRAPPIST1_PLANETS\.g\.sources is/);
+  });
+
+  test('a synthetic curve that stops saying it is synthetic', () => {
+    const dir = copyForCheck();
+    const file = path.join(dir, 'data-packs/ngc3198-synthetic-curve.json');
+    const m = JSON.parse(readFileSync(file, 'utf8'));
+    m.origin = 'observed';
     writeFileSync(file, JSON.stringify(m, null, 2));
     expect(runCheck(dir).out).toContain(
       "the module's PACK is not the manifest's runtime fields"
@@ -606,7 +684,12 @@ describe('what a pack owes, and where it goes', () => {
     const files = execFileSync('git', ['ls-files', 'js'], { encoding: 'utf8' })
       .split('\n')
       .filter(f => f.endsWith('.js'));
-    for (const pack of PACKS) {
+    // The lazy packs: precached as optional, reached only on request. A pack
+    // whose manifest says `core` is one an instrument has always loaded, and
+    // is held to that below instead.
+    for (const pack of PACKS.filter(
+      p => json(p.manifest).offline === 'optional'
+    )) {
       const name = path.basename(pack.module);
       const naming = files.filter(
         f => f !== pack.module && read(f).toString('utf8').includes(name)
@@ -625,11 +708,18 @@ describe('what a pack owes, and where it goes', () => {
     }
   });
 
-  test('the pack is precached as optional, and its record is not precached at all', async () => {
+  test('the pack is precached as its manifest says, and its record is not precached at all', async () => {
     const { core, optional } = await precacheLists();
     for (const pack of PACKS) {
-      expect(optional).toContain(pack.module);
-      expect(core).not.toContain(pack.module);
+      const offline = json(pack.manifest).offline;
+      expect({ pack: pack.id, offline }).toEqual({
+        pack: pack.id,
+        offline: expect.stringMatching(/^(core|optional)$/),
+      });
+      expect(offline === 'optional' ? optional : core).toContain(pack.module);
+      expect(offline === 'optional' ? core : optional).not.toContain(
+        pack.module
+      );
       expect([...core, ...optional]).not.toContain(pack.manifest);
     }
   });

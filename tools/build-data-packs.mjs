@@ -56,6 +56,7 @@ import { GWOSC_EVENTS } from './data-packs/gwosc-events.mjs';
 import { GW150914_FIGURES } from './data-packs/gw150914.mjs';
 import { MIST_TRACKS } from './data-packs/mist-tracks.mjs';
 import { COMPILATIONS } from './data-packs/compilations.mjs';
+import { NGC3198_SYNTHETIC } from './data-packs/ngc3198-synthetic.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CACHE =
@@ -427,6 +428,8 @@ export const PACKS = [
   MIST_TRACKS,
   // The compilations: hand-written modules, each value held to its table.
   ...COMPILATIONS,
+  // The one synthetic pack: a model curve, which says so wherever it is shown.
+  NGC3198_SYNTHETIC,
 ];
 
 // A table pack (js/tableObservation.js) is decoded and checked as a table;
