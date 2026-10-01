@@ -127,7 +127,10 @@ const cardKey = (d, base) => {
 function card(d, base, summary, build) {
   const id = idOf(base);
   const key = cardKey(d, base);
-  const node = el('details', { id, className: 'cp-card' });
+  const node = el('details', {
+    id,
+    className: 'ui-card is-compact ui-disclosure',
+  });
   node.open = openCards.has(key);
   node.append(
     el(
@@ -466,11 +469,11 @@ function aboutSection(d) {
 
   return el(
     'section',
-    { className: 'st-section', 'aria-labelledby': 'cp-about-h' },
+    { className: 'ui-card', 'aria-labelledby': 'cp-about-h' },
     el('h2', { id: 'cp-about-h' }, t('composer.section.about')),
     el(
       'div',
-      { className: 'st-grid' },
+      { className: 'ui-grid' },
       field(
         idOf('id'),
         t('composer.field.id'),
@@ -637,7 +640,7 @@ function choiceOptions(base, s, { answerKey = 'answer' } = {}) {
     radios.append(
       el(
         'label',
-        { className: 'st-check' },
+        { className: 'ui-choice' },
         r,
         t('composer.option', { n: j + 1 })
       )
@@ -656,7 +659,7 @@ function choiceOptions(base, s, { answerKey = 'answer' } = {}) {
 function scoringFields(base, s) {
   return el(
     'div',
-    { className: 'st-grid' },
+    { className: 'ui-grid' },
     field(
       idOf(`${base}.scoring.points`),
       t('composer.scoring.points'),
@@ -729,7 +732,7 @@ function expectFields(base, s) {
       )
     );
   }
-  return el('div', { className: 'st-grid' }, ...out);
+  return el('div', { className: 'ui-grid' }, ...out);
 }
 
 /** A question's parts, whether it is a step's own or a bank item. */
@@ -740,7 +743,7 @@ function questionParts(base, s, { bankItem = false } = {}) {
   if (s.kind === 'choice') parts.push(...choiceOptions(base, s));
   if (s.kind === 'numeric') {
     const relation = bankItem ? s.variants?.relation : undefined;
-    const grid = el('div', { className: 'st-grid' });
+    const grid = el('div', { className: 'ui-grid' });
     if (!relation) {
       grid.append(
         field(
@@ -864,7 +867,7 @@ function fillStep(card, s, i, d) {
   card.append(
     el(
       'div',
-      { className: 'st-grid' },
+      { className: 'ui-grid' },
       field(
         idOf(`${base}.sid`),
         t('composer.step.sid'),
@@ -904,7 +907,7 @@ function fillStep(card, s, i, d) {
           {},
           el(
             'div',
-            { className: 'st-grid' },
+            { className: 'ui-grid' },
             field(
               idOf(`${at}.id`),
               t('composer.measure.id'),
@@ -994,7 +997,7 @@ function fillStep(card, s, i, d) {
   const setup = s.setup;
   const setupGrid = el(
     'div',
-    { className: 'st-grid' },
+    { className: 'ui-grid' },
     field(
       idOf(`${base}.setup.scenario`),
       t('composer.step.setup'),
@@ -1042,7 +1045,12 @@ function fillStep(card, s, i, d) {
           { numeric: true }
         )
       ),
-      el('label', { className: 'st-check' }, paused, t('composer.setup.paused'))
+      el(
+        'label',
+        { className: 'ui-choice' },
+        paused,
+        t('composer.setup.paused')
+      )
     );
   }
   const families = Object.entries(WIDGET_FAMILIES).map(([family, ids]) => ({
@@ -1127,7 +1135,7 @@ function fillStep(card, s, i, d) {
 function stepsSection(d) {
   const section = el(
     'section',
-    { className: 'st-section', 'aria-labelledby': 'cp-steps-h' },
+    { className: 'ui-card', 'aria-labelledby': 'cp-steps-h' },
     el('h2', { id: 'cp-steps-h' }, t('composer.section.steps')),
     el('p', {
       id: `${idOf('steps')}-error`,
@@ -1294,7 +1302,7 @@ function variantFields(base, item) {
   (v.values || []).forEach((set, k) => {
     const at = `${base}.variants.values[${k}]`;
     const got = evaluateRelation(v.relation, set);
-    const row = el('div', { className: 'st-grid' });
+    const row = el('div', { className: 'ui-grid' });
     for (const [name, spec] of Object.entries(r.inputs)) {
       row.append(
         field(
@@ -1357,7 +1365,7 @@ function bankSection(d) {
   const items = d.bank?.items || [];
   const section = el(
     'section',
-    { className: 'st-section', 'aria-labelledby': 'cp-bank-h' },
+    { className: 'ui-card', 'aria-labelledby': 'cp-bank-h' },
     el('h2', { id: 'cp-bank-h' }, t('composer.section.bank')),
     el('p', { className: 'ui-hint' }, t('composer.hint.bank'))
   );
@@ -1384,7 +1392,7 @@ function fillItem(card, item, i, base) {
   card.append(
     el(
       'div',
-      { className: 'st-grid' },
+      { className: 'ui-grid' },
       field(
         idOf(`${base}.id`),
         t('composer.item.id'),
@@ -1431,7 +1439,7 @@ function fillItem(card, item, i, base) {
     ...questionParts(base, item, { bankItem: true }),
     el(
       'label',
-      { className: 'st-check' },
+      { className: 'ui-choice' },
       textOnly,
       t('composer.a11y.textOnly')
     ),
@@ -1605,7 +1613,7 @@ function renderVerdict() {
           'button',
           {
             type: 'button',
-            className: 'st-link',
+            className: 'ui-link',
             onclick: () => reveal(e.path),
           },
           where ? `${where}: ${text}` : text
@@ -1631,7 +1639,7 @@ function renderVerdict() {
           'button',
           {
             type: 'button',
-            className: 'st-link',
+            className: 'ui-link',
             onclick: () =>
               reveal(
                 f.step === null || f.step === undefined
@@ -1739,7 +1747,7 @@ function renderTranslation(d) {
           'button',
           {
             type: 'button',
-            className: 'st-link',
+            className: 'ui-link',
             onclick: () => reveal(`${x.path}.es`),
           },
           t('composer.translation.item', {
@@ -1797,7 +1805,7 @@ function renderKey(r) {
   host.append(
     el(
       'table',
-      { className: 'st-table' },
+      { className: 'ui-table' },
       el(
         'thead',
         {},

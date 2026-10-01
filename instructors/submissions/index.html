@@ -22,37 +22,22 @@
     <style>
       /* Local to this page. It is one table and a drop zone, and giving it a
          stylesheet of its own would be the first step towards it becoming a
-         product. */
-      .sr-wrap {
-        max-width: 60rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
+         product. The table, the notes and the empty state are css/page.css's. */
       .sr-drop {
-        border: 2px dashed var(--border-strong);
-        border-radius: 10px;
-        padding: 1.75rem 1rem;
+        padding: var(--space-8) var(--space-4);
         text-align: center;
-        transition: border-color 0.15s ease, background 0.15s ease;
+        border: 2px dashed var(--border-strong);
+        border-radius: var(--radius);
+        transition:
+          border-color var(--duration-fast) var(--ease),
+          background var(--duration-fast) var(--ease);
       }
       .sr-drop.sr-over {
         border-color: var(--accent);
         background: var(--accent-soft);
       }
       .sr-paste {
-        margin-top: 0.75rem;
-      }
-      .sr-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1rem;
-        font-size: 0.92rem;
-      }
-      .sr-table th,
-      .sr-table td {
-        text-align: left;
-        padding: 0.4rem 0.6rem;
-        border-bottom: 1px solid var(--border);
+        margin-top: var(--space-3);
       }
       .sr-table td:nth-child(n + 3) {
         text-align: right;
@@ -61,27 +46,19 @@
       .sr-hot td {
         color: var(--danger);
       }
-      .sr-who,
-      .sr-refused {
-        font-size: 0.88rem;
-        color: var(--text-secondary);
-      }
-      .sr-empty {
-        color: var(--text-secondary);
-      }
       .sr-written dt {
-        margin-top: 0.5rem;
-        font-weight: 600;
+        margin-top: var(--space-2);
+        font-weight: var(--weight-semibold);
       }
       .sr-written dd {
-        margin: 0.15rem 0 0 1rem;
+        margin: var(--space-1) 0 0 var(--space-4);
         white-space: pre-wrap;
       }
       .sr-rubric {
         font-style: italic;
       }
       .sr-export {
-        margin-top: 2rem;
+        margin-top: var(--space-8);
       }
     </style>
     <!-- shell:head -->
@@ -113,7 +90,7 @@ try {
 </div>
 </header>
 <!-- /shell:header -->
-    <main class="sr-wrap" id="main">
+    <main class="ui-page" id="main">
       <h1 data-i18n="sub.title">Submission review</h1>
       <p data-i18n="sub.intro">
         Drop the lab reports your students handed in and this page will tell you
@@ -131,7 +108,7 @@ try {
             >Drop reports, backups or tokens here</strong
           >
         </p>
-        <p class="sr-empty">.pdf &middot; .json &middot; .txt</p>
+        <p class="ui-note">.pdf &middot; .json &middot; .txt</p>
         <input
           class="ui-file is-compact"
           id="picker"
@@ -141,7 +118,7 @@ try {
           aria-label="Choose reports, backups or token files"
           data-i18n-aria-label="sub.drop.picker"
         />
-        <label for="paste" class="sr-empty" data-i18n="sub.paste.label"
+        <label for="paste" class="ui-note" data-i18n="sub.paste.label"
           >or paste one token</label
         >
         <textarea
@@ -167,11 +144,11 @@ try {
           >
             Clear everything
           </button>
-          <span id="count" class="sr-empty" role="status">nothing yet</span>
+          <span id="count" class="ui-note" role="status">nothing yet</span>
         </div>
       </div>
       <h2 data-i18n="sub.rates.title">Per-question failure rate</h2>
-      <p class="sr-empty" data-i18n="sub.rates.note">
+      <p class="ui-note" data-i18n="sub.rates.note">
         Hardest first. &ldquo;Marked&rdquo; counts only the answers Gravitas can
         check itself; written answers are yours to read and are counted under
         &ldquo;unmarkable&rdquo; rather than as failures. An exact duplicate is
@@ -185,7 +162,7 @@ try {
         <h2 id="exportTitle" data-i18n="sub.export.title">
           Download the results
         </h2>
-        <p class="sr-empty" data-i18n="sub.export.note">
+        <p class="ui-note" data-i18n="sub.export.note">
           The summary has one row per report; the question file has one row per
           question per report. Exact duplicates and repeated attempts are kept
           and marked, never merged or chosen between. Reports are grouped as
@@ -204,7 +181,7 @@ try {
         </p>
         <p
           id="includeWrittenNote"
-          class="sr-empty"
+          class="ui-note"
           data-i18n="sub.export.writtenNote"
         >
           Off by default. Numbers and chosen options are always included,
@@ -239,18 +216,18 @@ try {
             Everything (JSON)
           </button>
         </div>
-        <p id="exportEmpty" class="sr-empty" data-i18n="sub.export.empty">
+        <p id="exportEmpty" class="ui-note" data-i18n="sub.export.empty">
           Read at least one report to download results.
         </p>
         <p
           id="exportStatus"
-          class="sr-empty"
+          class="ui-note"
           role="status"
           aria-live="polite"
         ></p>
       </section>
       <hr />
-      <p class="sr-empty" data-i18n="sub.notice">
+      <p class="ui-note" data-i18n="sub.notice">
         A submission token says what a student answered. It is not proof of who
         answered: it is computed in a browser, and anything a browser computes,
         whoever controls the browser can forge. What it saves you is typing.

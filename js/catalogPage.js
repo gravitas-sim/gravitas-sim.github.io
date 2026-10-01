@@ -108,7 +108,7 @@ async function load() {
     box.replaceChildren(
       el(
         'div',
-        { class: 'cw-error', role: 'alert' },
+        { class: 'ui-alert is-error', role: 'alert' },
         el('p', { text: t('cat.loadFailed', { why: err.message }) }),
         retry
       )
@@ -178,7 +178,7 @@ function entryItem(e) {
   const s = statusOf(e, installed);
   const type = typeOf(e);
   const headId = `cat-${e.id.replace(/[^A-Za-z0-9_-]/g, '-')}`;
-  const meta = el('dl', { class: 'cw-meta' });
+  const meta = el('dl', { class: 'ui-meta' });
   const row = (label, value) => {
     if (!value) return;
     meta.append(el('dt', { text: label }), el('dd', {}, value));
@@ -279,7 +279,7 @@ function entryItem(e) {
   if (err) {
     const box = el(
       'div',
-      { class: 'cw-error', role: 'alert' },
+      { class: 'ui-alert is-error', role: 'alert' },
       el('p', {
         text: t(`cat.error.${err.code}`, {
           check: err.check ? t(`cat.check.${err.check}`) : '',
@@ -305,7 +305,7 @@ function entryItem(e) {
     el(
       'article',
       {
-        class: 'cw-panel cw-entry',
+        class: 'ui-card cw-entry',
         'aria-labelledby': headId,
         'data-entry': e.id,
         'data-status': s,
@@ -314,9 +314,9 @@ function entryItem(e) {
       el(
         'p',
         { class: 'cw-badges' },
-        el('span', { class: 'cw-badge', text: t(`cat.type.${type}`) }),
+        el('span', { class: 'ui-badge', text: t(`cat.type.${type}`) }),
         el('span', {
-          class: 'cw-badge',
+          class: 'ui-badge',
           text: t('cat.version', { version: e.version }),
         })
       ),
@@ -438,7 +438,7 @@ function renderCourse() {
             l.teacherNote
               ? el(
                   'p',
-                  { class: 'cw-note' },
+                  { class: 'ui-hint' },
                   el('strong', { text: `${t('cat.course.teacher')}: ` }),
                   pick(l.teacherNote)
                 )
@@ -446,7 +446,7 @@ function renderCourse() {
             l.studentNote
               ? el(
                   'p',
-                  { class: 'cw-note' },
+                  { class: 'ui-hint' },
                   el('strong', { text: `${t('cat.course.student')}: ` }),
                   pick(l.studentNote)
                 )

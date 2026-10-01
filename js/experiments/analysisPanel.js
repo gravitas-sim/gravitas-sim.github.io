@@ -119,13 +119,13 @@ export function mountAnalysis(root, ctx) {
   );
   const forecast = el('p', {
     id: 'labForecast',
-    class: 'xp-status',
+    class: 'ui-status',
     role: 'status',
     'aria-live': 'polite',
   });
   const refusals = el('ul', {
     id: 'labRefusals',
-    class: 'xp-refusals',
+    class: 'ui-alert is-error',
     hidden: true,
   });
   const run = el('button', {
@@ -149,7 +149,7 @@ export function mountAnalysis(root, ctx) {
   });
   const status = el('p', {
     id: 'labStatus',
-    class: 'xp-status',
+    class: 'ui-status',
     role: 'status',
     'aria-live': 'polite',
   });
@@ -174,7 +174,7 @@ export function mountAnalysis(root, ctx) {
     source,
     el(
       'div',
-      { class: 'xp-grid' },
+      { class: 'ui-grid' },
       field(t('lab.open'), file),
       field(t('lab.metric'), metric),
       field(t('lab.resamples'), resamples),
@@ -183,7 +183,7 @@ export function mountAnalysis(root, ctx) {
     stepIntro,
     el(
       'div',
-      { class: 'xp-grid' },
+      { class: 'ui-grid' },
       field(t('lab.step.compare'), refSelect),
       field(t('lab.step.open'), refFile)
     ),
@@ -385,7 +385,7 @@ export function mountAnalysis(root, ctx) {
     return el(
       'div',
       {
-        class: 'xp-table-wrap',
+        class: 'ui-table-wrap is-numeric',
         role: 'region',
         tabindex: 0,
         'aria-label': caption,
@@ -973,7 +973,7 @@ export function mountAnalysis(root, ctx) {
     const tbl = el('table', { id: 'labTrials' });
     const selected = el('p', {
       id: 'labSelected',
-      class: 'xp-status',
+      class: 'ui-status',
       role: 'status',
       'aria-live': 'polite',
       text: t('lab.selected.none'),
@@ -1007,7 +1007,7 @@ export function mountAnalysis(root, ctx) {
       el(
         'div',
         {
-          class: 'ow-table-wrap',
+          class: 'ui-table-wrap is-numeric is-scroll',
           role: 'region',
           tabindex: 0,
           'aria-label': t('lab.h.trials'),
@@ -1107,7 +1107,7 @@ export function mountAnalysis(root, ctx) {
     run.textContent = t('lab.run');
     cancel.textContent = t('lab.cancel');
     root.firstElementChild.textContent = t('lab.intro');
-    const labels = root.querySelectorAll('.xp-grid > .ui-field > span');
+    const labels = root.querySelectorAll('.ui-grid > .ui-field > span');
     stepIntro.textContent = t('lab.step.intro');
     [
       'lab.open',

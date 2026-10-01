@@ -205,7 +205,7 @@ export function createGuidePanel(root, lab) {
               el('h3', { text: tr(`gd.${g.id}.title`) }),
               el('p', { text: tr(`gd.${g.id}.summary`) }),
               el('p', {
-                class: 'l3-step-state',
+                class: 'ui-note',
                 text: tr('g3.meta', {
                   intro: g.minutes.intro,
                   advanced: g.minutes.advanced,
@@ -316,7 +316,7 @@ export function createGuidePanel(root, lab) {
           },
           el('button', {
             type: 'button',
-            class: 'l3-steplink',
+            class: 'ui-link',
             'data-at': String(n),
             text: `${words(guide, q, 'title')} (${tr(`g3.status.${status(q)}`)})`,
           })
@@ -327,7 +327,7 @@ export function createGuidePanel(root, lab) {
       'div',
       {},
       el('p', {
-        class: 'l3-step-state',
+        class: 'ui-note',
         text: tr('g3.where', {
           guide: tr(`gd.${guide.id}.title`),
           n: at + 1,
@@ -343,7 +343,7 @@ export function createGuidePanel(root, lab) {
       el('p', { text: words(guide, s, 'text') }),
       stepControls(s),
       el('p', {
-        class: 'l3-step-state',
+        class: 'ui-note',
         id: 'l3-guide-say',
         role: 'status',
         'aria-live': 'polite',
@@ -474,7 +474,7 @@ export function createGuidePanel(root, lab) {
         s.options.map(o =>
           el(
             'label',
-            { class: 'l3-check' },
+            { class: 'ui-choice is-block' },
             el('input', {
               type: 'radio',
               name: 'l3-guide-choice',

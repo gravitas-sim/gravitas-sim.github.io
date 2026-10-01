@@ -19,79 +19,10 @@
     <link rel="stylesheet" href="/css/components.css" />
     <link rel="stylesheet" href="/css/page.css" />
     <style>
-      /* Local to this page: a form, tables and plain plots. */
-      .lb-wrap {
-        max-width: 64rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      .lb-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
-      .lb-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem 1rem;
-        align-items: end;
-        margin: 0.75rem 0;
-      }
-      /* A field's width comes from the bar, not from its control: WebKit
-         sizes a select to its longest option (R6's title is long), and an
-         automatic grid track grows to fit it. */
-      .lb-bar > .ui-field {
-        flex: 1 1 12rem;
-        max-width: 100%;
-      }
+      /* Local to this page: room between its sections. The rows of fields,
+         the tables and the plots are css/page.css's. */
       .lb-wrap section {
-        margin: 1.5rem 0;
-      }
-      .lb-wrap h2 {
-        font-size: 1.15rem;
-      }
-      .lb-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.9rem;
-        margin: 0.5rem 0;
-      }
-      .lb-table caption {
-        text-align: left;
-        color: var(--text-secondary);
-        padding-bottom: 0.25rem;
-      }
-      .lb-table th,
-      .lb-table td {
-        text-align: left;
-        vertical-align: top;
-        padding: 0.3rem 0.4rem;
-        border-bottom: 1px solid var(--border);
-        overflow-wrap: anywhere;
-      }
-      .lb-scroll {
-        overflow-x: auto;
-      }
-      .lb-plots {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
-      }
-      .lb-plots figure {
-        margin: 0;
-      }
-      .lb-plot {
-        width: 100%;
-        height: auto;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-      }
-      .lb-plots figcaption {
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      progress {
-        width: 12rem;
-        max-width: 100%;
+        margin: var(--space-6) 0;
       }
     </style>
     <!-- shell:head -->
@@ -123,8 +54,8 @@ try {
 </div>
 </header>
 <!-- /shell:header -->
-    <main class="lb-wrap" id="main" aria-labelledby="lb-title">
-      <div id="langSwitch" class="lb-bar" role="group" aria-label="Language" data-i18n-aria-label="lab3d.lang"></div>
+    <main class="ui-page lb-wrap" id="main" aria-labelledby="lb-title">
+      <div id="langSwitch" class="ui-toolbar" role="group" aria-label="Language" data-i18n-aria-label="lab3d.lang"></div>
       <h1 id="lb-title" data-i18n="lab3d.title">3-D dynamics diagnostics</h1>
       <p data-i18n="lab3d.intro"></p>
       <p>
@@ -133,7 +64,7 @@ try {
 
       <section aria-labelledby="lb-run-h">
         <h2 id="lb-run-h" data-i18n="lab3d.run.heading">Run</h2>
-        <div class="lb-bar">
+        <div class="ui-toolbar is-fields">
           <div class="ui-field">
             <label for="lb-problem" data-i18n="lab3d.problem">Problem</label>
             <select class="ui-select" id="lb-problem"></select>
@@ -158,32 +89,32 @@ try {
           </div>
           <button id="lb-go" type="button" class="ui-button is-primary" data-i18n="lab3d.go">Run</button>
           <button id="lb-cancel" type="button" class="ui-button" data-i18n="lab3d.cancel" disabled>Cancel</button>
-          <progress id="lb-progress" max="1" value="0" aria-labelledby="lb-status"></progress>
+          <progress id="lb-progress" class="ui-progress" max="1" value="0" aria-labelledby="lb-status"></progress>
         </div>
         <p id="lb-status" role="status" aria-live="polite"></p>
       </section>
 
       <section aria-labelledby="lb-results-h">
         <h2 id="lb-results-h" data-i18n="lab3d.results.heading">Results</h2>
-        <div id="lb-results" class="lb-scroll"></div>
+        <div id="lb-results" class="ui-table-wrap"></div>
         <h3 data-i18n="lab3d.checks.heading">Against the reference</h3>
-        <div id="lb-checks" class="lb-scroll"></div>
+        <div id="lb-checks" class="ui-table-wrap"></div>
         <h3 data-i18n="lab3d.warnings.heading">Warnings</h3>
         <ul id="lb-warnings"></ul>
         <h3 data-i18n="lab3d.events.heading">Events</h3>
-        <div id="lb-events" class="lb-scroll"></div>
+        <div id="lb-events" class="ui-table-wrap"></div>
       </section>
 
       <section aria-labelledby="lb-plots-h">
         <h2 id="lb-plots-h" data-i18n="lab3d.plots.heading">Plots</h2>
-        <div id="lb-plots" class="lb-plots"></div>
+        <div id="lb-plots" class="ui-figures"></div>
       </section>
 
       <section aria-labelledby="lb-bench-h">
         <h2 id="lb-bench-h" data-i18n="lab3d.bench.heading">How fast it runs here</h2>
         <p data-i18n="lab3d.bench.hint"></p>
         <button id="lb-bench-go" type="button" class="ui-button" data-i18n="lab3d.bench.go">Measure</button>
-        <div id="lb-bench" class="lb-scroll"></div>
+        <div id="lb-bench" class="ui-table-wrap"></div>
       </section>
     </main>
     <!-- shell:footer -->

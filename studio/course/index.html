@@ -20,78 +20,49 @@
     <link rel="stylesheet" href="/css/page.css" />
     <style>
       /* Local to this page, and the same as the Investigation Composer's
-         (studio/lesson/): a toolbar, an editor, and a column of checks,
-         links and the preview. */
-      .st-wrap {
-        max-width: 84rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      .st-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
-      .st-layout {
-        display: grid;
-        gap: 2rem;
-        grid-template-columns: minmax(0, 1fr);
-      }
-      @media (min-width: 64rem) {
-        .st-layout {
-          grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
-          align-items: start;
-        }
-        .st-side {
-          position: sticky;
-          top: 1rem;
-          max-height: calc(100vh - 2rem);
-          overflow-y: auto;
-        }
-      }
-      .st-section,
-      .st-side section,
-      .st-wrap fieldset {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.9rem 1rem 1rem;
-        margin: 0 0 1.25rem;
-        min-width: 0;
-      }
+         (studio/lesson/): the editor's spacing, its paired fields, a step's
+         state and the conflict dialog. The layout, cards, lists and tables
+         are css/page.css's. */
       .st-wrap h2 {
-        font-size: 1.15rem;
-        margin: 0 0 0.5rem;
+        margin: 0 0 var(--space-2);
       }
       .st-wrap h3 {
-        font-size: 1rem;
-        margin: 0.75rem 0 0.5rem;
+        margin: var(--space-3) 0 var(--space-2);
       }
-      .cp-card {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        margin: 0 0 0.75rem;
+      /* Fields stack with room between them; toolbars keep room below. */
+      .st-wrap .ui-field {
+        margin: var(--space-2) 0 0;
       }
-      .cp-card[open] {
-        padding-bottom: 1rem;
+      .st-wrap .ui-grid {
+        gap: var(--space-1) var(--space-4);
       }
-      .cp-card > summary {
-        cursor: pointer;
-        font-weight: 600;
-        padding: 0.25rem 0;
-        overflow-wrap: anywhere;
+      .st-wrap .ui-toolbar {
+        margin-bottom: var(--space-3);
       }
-      .st-wrap legend {
-        font-weight: 600;
-        padding: 0 0.35rem;
+      .st-wrap .ui-choice {
+        margin-block: var(--space-1);
       }
-      .st-grid {
-        display: grid;
-        gap: 0.25rem 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      .st-preview {
+        aspect-ratio: 4 / 3;
+      }
+      #st-raw-text {
+        min-height: 18rem;
+      }
+      /* The conflict dialog. js/dialog.js and Prompt 52 own dialogs; this one
+         is still the page's own. */
+      .st-wrap dialog {
+        max-width: 36rem;
+        color: inherit;
+        background: var(--surface-1);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius);
+      }
+      .st-wrap dialog::backdrop {
+        background: color-mix(in srgb, var(--space-far) 60%, transparent);
       }
       .st-pair {
         display: grid;
-        gap: 0.25rem 1rem;
+        gap: var(--space-1) var(--space-4);
         grid-template-columns: minmax(0, 1fr);
       }
       @media (min-width: 40rem) {
@@ -99,22 +70,9 @@
           grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         }
       }
-      /* Fields stack with room between them; toolbars keep room below. */
-      .st-wrap .ui-field {
-        margin: 0.5rem 0 0;
-      }
-      .st-wrap .ui-toolbar {
-        margin-bottom: 0.75rem;
-      }
-      .st-check {
-        display: inline-flex;
-        gap: 0.4rem;
-        align-items: center;
-        margin: 0.3rem 1rem 0.3rem 0;
-      }
       .st-state {
-        font-size: 0.8rem;
-        font-weight: 600;
+        font-size: var(--text-sm);
+        font-weight: var(--weight-semibold);
       }
       .st-state[data-state='missing'] {
         color: var(--warning);
@@ -125,85 +83,20 @@
       .st-state[data-state='done'] {
         color: var(--success);
       }
-      .st-list {
-        margin: 0.5rem 0 0;
-        padding-left: 1.2rem;
-      }
-      .st-list li {
-        margin: 0.25rem 0;
-        overflow-wrap: anywhere;
-      }
-      .st-list li[data-level='error'] {
-        color: var(--danger);
-      }
-      .st-list li[data-level='warn'] {
-        color: var(--warning);
-      }
-      .st-link {
-        background: none;
-        border: 0;
-        padding: 0;
-        color: inherit;
-        font: inherit;
-        text-align: left;
-        text-decoration: underline;
-        cursor: pointer;
-      }
-      .st-status {
-        min-height: 1.3em;
-        margin: 0.25rem 0 0;
-      }
-      .st-preview {
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        background: #07080f;
-      }
-      .st-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.85rem;
-      }
-      .st-table th,
-      .st-table td {
-        text-align: left;
-        vertical-align: top;
-        padding: 0.3rem 0.4rem;
-        border-bottom: 1px solid var(--border-subtle);
-        overflow-wrap: anywhere;
-      }
-      .st-scroll {
-        overflow-x: auto;
-      }
       /* A link alone in a cell is a target, and WCAG 2.2 wants 24px of it. */
-      .st-table a {
+      .st-wrap .ui-table a {
         display: inline-block;
         min-height: 24px;
         line-height: 24px;
       }
-      #st-raw-text {
-        min-height: 18rem;
-      }
-      .st-wrap dialog {
-        max-width: 36rem;
-        color: inherit;
-        background: var(--surface-1);
-        border: 1px solid var(--border-strong);
-        border-radius: 8px;
-      }
-      .st-wrap dialog::backdrop {
-        background: rgba(0, 0, 0, 0.6);
-      }
       .cb-steps {
-        margin: 0.25rem 0 0;
-        padding-left: 1.5rem;
         max-height: 22rem;
+        margin: var(--space-1) 0 0;
+        padding-left: var(--space-6);
         overflow-y: auto;
       }
       .st-preview.cb-home {
         aspect-ratio: 3 / 4;
-        background: #07080f;
       }
     </style>
     <!-- shell:head -->
@@ -237,7 +130,7 @@ try {
 <!-- /shell:header -->
     <main
       id="main"
-      class="st-wrap"
+      class="ui-page is-full st-wrap"
       aria-label="Course-pack builder"
       data-i18n-aria-label="course.title"
     >
@@ -269,12 +162,12 @@ try {
         <button id="cb-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
       </div>
       <p id="cb-storage" class="ui-error" data-i18n="studio.storage.failed" hidden></p>
-      <p id="cb-status" class="st-status" role="status" aria-live="polite"></p>
+      <p id="cb-status" class="ui-status" role="status" aria-live="polite"></p>
 
-      <div class="st-layout">
+      <div class="ui-split">
         <div>
           <div id="cb-editor"></div>
-          <details id="cb-raw" class="st-section">
+          <details id="cb-raw" class="ui-card ui-disclosure">
             <summary data-i18n="studio.raw.heading"></summary>
             <label for="st-raw-text" data-i18n="course.raw.label"></label>
             <textarea class="ui-textarea is-code" id="st-raw-text" spellcheck="false" aria-describedby="cb-raw-error"></textarea>
@@ -285,40 +178,40 @@ try {
             </div>
           </details>
         </div>
-        <div class="st-side">
-          <section aria-labelledby="cb-checks-h">
+        <div class="ui-split-aside is-scroll">
+          <section class="ui-card" aria-labelledby="cb-checks-h">
             <h2 id="cb-checks-h" data-i18n="studio.checks.heading"></h2>
             <p id="cb-checks-summary" class="ui-hint"></p>
-            <ul id="cb-checks" class="st-list"></ul>
+            <ul id="cb-checks" class="ui-issues"></ul>
           </section>
-          <section aria-labelledby="cb-review-h">
+          <section class="ui-card" aria-labelledby="cb-review-h">
             <h2 id="cb-review-h" data-i18n="course.review.heading"></h2>
             <p class="ui-hint" data-i18n="course.review.hint"></p>
             <p id="cb-review-summary" class="ui-hint"></p>
-            <ul id="cb-review" class="st-list"></ul>
+            <ul id="cb-review" class="ui-issues"></ul>
             <div class="ui-toolbar">
               <button id="cb-upgrade" type="button" class="ui-button" data-i18n="course.action.upgrade" disabled></button>
             </div>
           </section>
-          <section aria-labelledby="cb-estimate-h">
+          <section class="ui-card" aria-labelledby="cb-estimate-h">
             <h2 id="cb-estimate-h" data-i18n="course.estimate.heading"></h2>
-            <ul id="cb-estimate" class="st-list"></ul>
+            <ul id="cb-estimate" class="ui-issues"></ul>
           </section>
-          <section aria-labelledby="cb-translation-h">
+          <section class="ui-card" aria-labelledby="cb-translation-h">
             <h2 id="cb-translation-h" data-i18n="course.translation.heading"></h2>
             <p id="cb-translation-summary" class="ui-hint"></p>
-            <ul id="cb-translation" class="st-list"></ul>
+            <ul id="cb-translation" class="ui-issues"></ul>
           </section>
-          <section aria-labelledby="cb-graph-h">
+          <section class="ui-card" aria-labelledby="cb-graph-h">
             <h2 id="cb-graph-h" data-i18n="course.graph.heading"></h2>
             <div id="cb-graph"></div>
           </section>
-          <section aria-labelledby="cb-links-h">
+          <section class="ui-card" aria-labelledby="cb-links-h">
             <h2 id="cb-links-h" data-i18n="course.links.heading"></h2>
             <p class="ui-hint" data-i18n="course.links.hint"></p>
             <div id="cb-links"></div>
           </section>
-          <section aria-labelledby="cb-preview-h">
+          <section class="ui-card" aria-labelledby="cb-preview-h">
             <h2 id="cb-preview-h" data-i18n="studio.preview.heading"></h2>
             <p class="ui-hint" data-i18n="course.preview.hint"></p>
             <div class="ui-toolbar">
@@ -326,15 +219,15 @@ try {
             </div>
             <iframe
               id="cb-preview"
-              class="st-preview cb-home"
+              class="ui-plot ui-sky st-preview cb-home"
               title="The course home, as a student sees it"
               data-i18n-aria-label="course.preview.frame"
             ></iframe>
           </section>
-          <section aria-labelledby="cb-diff-h">
+          <section class="ui-card" aria-labelledby="cb-diff-h">
             <h2 id="cb-diff-h" data-i18n="studio.diff.heading"></h2>
             <p id="cb-diff-summary" class="ui-hint"></p>
-            <ul id="cb-diff" class="st-list"></ul>
+            <ul id="cb-diff" class="ui-issues"></ul>
           </section>
         </div>
       </div>
@@ -342,7 +235,7 @@ try {
       <dialog id="cb-conflict" aria-labelledby="cb-conflict-h">
         <h2 id="cb-conflict-h" data-i18n="studio.conflict.heading"></h2>
         <p id="cb-conflict-text"></p>
-        <ul id="cb-conflict-diff" class="st-list"></ul>
+        <ul id="cb-conflict-diff" class="ui-issues"></ul>
         <div class="ui-toolbar">
           <button id="cb-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
           <button id="cb-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>

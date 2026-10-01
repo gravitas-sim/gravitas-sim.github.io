@@ -19,81 +19,35 @@
     <link rel="stylesheet" href="/css/components.css" />
     <link rel="stylesheet" href="/css/page.css" />
     <style>
-      /* Local to this page: a filter form, a list of entries and a course. */
-      .cw-wrap {
-        max-width: 60rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      .cw-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
-      .cw-panel {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.9rem 1rem 1rem;
-        margin: 0 0 1.25rem;
-      }
-      .cw-grid {
-        display: grid;
-        gap: 0.75rem;
-        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-        align-items: end;
-      }
+      /* Local to this page: the list of entries and a course's outline. */
       .cw-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
         display: grid;
-        gap: 1rem;
+        gap: var(--space-4);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .cw-list .ui-card {
+        margin: 0;
       }
       .cw-entry h2 {
-        margin: 0 0 0.35rem;
-        font-size: 1.2rem;
+        margin: 0 0 var(--space-1);
       }
       .cw-badges {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.4rem;
-        margin: 0 0 0.5rem;
-        font-size: 0.85em;
-      }
-      .cw-badge {
-        border: 1px solid var(--border-strong);
-        border-radius: 999px;
-        padding: 0.1rem 0.55rem;
-      }
-      .cw-meta {
-        display: grid;
-        grid-template-columns: max-content 1fr;
-        gap: 0.25rem 0.9rem;
-        margin: 0.6rem 0;
-      }
-      .cw-meta dt {
-        color: var(--text-secondary);
-      }
-      .cw-meta dd {
-        margin: 0;
-      }
-      .cw-error {
-        border-left: 3px solid var(--danger);
-        padding: 0.35rem 0.7rem;
-        margin: 0.6rem 0 0;
+        gap: var(--space-1);
+        margin: 0 0 var(--space-2);
       }
       .cw-course h3 {
-        margin: 1rem 0 0.4rem;
-        font-size: 1.05rem;
+        margin: var(--space-4) 0 var(--space-1);
       }
       .cw-course ol {
         margin: 0;
-        padding-left: 1.3rem;
+        padding-left: var(--space-5);
       }
       .cw-course li {
-        margin: 0 0 0.6rem;
-      }
-      .cw-note {
-        margin: 0.2rem 0 0;
+        margin: 0 0 var(--space-2);
       }
     </style>
     <!-- shell:head -->
@@ -127,7 +81,7 @@ try {
 <!-- /shell:header -->
     <main
       id="main"
-      class="cw-wrap"
+      class="ui-page"
       aria-label="Catalog"
       data-i18n-aria-label="cat.main.label"
     >
@@ -145,9 +99,9 @@ try {
       </p>
       <p id="catStorage" class="ui-hint"></p>
 
-      <section class="cw-panel" aria-labelledby="catFindTitle">
+      <section class="ui-card" aria-labelledby="catFindTitle">
         <h2 id="catFindTitle" data-i18n="cat.filter.title">Find</h2>
-        <div class="cw-grid">
+        <div class="ui-grid is-end" style="--ui-grid-min: 14rem">
           <label class="ui-field">
             <span data-i18n="cat.filter.search">Search</span>
             <input
@@ -170,7 +124,7 @@ try {
       <ul id="catList" class="cw-list"></ul>
       <section
         id="catCourse"
-        class="cw-panel cw-course"
+        class="ui-card cw-course"
         tabindex="-1"
         hidden
       ></section>

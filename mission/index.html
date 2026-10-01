@@ -19,116 +19,20 @@
     <link rel="stylesheet" href="/css/components.css" />
     <link rel="stylesheet" href="/css/page.css" />
     <style>
-      /* Local to this page: forms, tables and one plot. */
-      .mn-wrap {
-        max-width: 64rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      .mn-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
-      .mn-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem 1rem;
-        align-items: end;
-        margin: 0.75rem 0;
-      }
-      /* A field's width comes from the bar, not from its control: WebKit
-         sizes a select to its longest option (R6's title is long), and an
-         automatic grid track grows to fit it. */
-      .mn-bar > .ui-field {
-        flex: 1 1 12rem;
-        max-width: 100%;
-      }
+      /* Local to this page: room between its sections and the transfer
+         window's square. Rows of fields, tables, the note, the legend and the
+         plot's surface are css/page.css's. */
       .mn-wrap section {
-        margin: 1.5rem 0;
-      }
-      .mn-wrap h2 {
-        font-size: 1.15rem;
-      }
-      .mn-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.9rem;
-        margin: 0.5rem 0;
-      }
-      .mn-table caption {
-        text-align: left;
-        color: var(--text-secondary);
-        padding-bottom: 0.25rem;
-      }
-      .mn-table th,
-      .mn-table td {
-        text-align: left;
-        vertical-align: top;
-        padding: 0.3rem 0.4rem;
-        border-bottom: 1px solid var(--border);
-        overflow-wrap: anywhere;
-      }
-      .mn-scroll {
-        overflow-x: auto;
-      }
-      .mn-plots {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
-      }
-      .mn-plots figure {
-        margin: 0;
-      }
-      .mn-plot {
-        width: 100%;
-        height: auto;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-      }
-      .mn-plots figcaption {
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      .mn-note {
-        border-left: 3px solid var(--accent);
-        padding: 0.25rem 0.75rem;
-        color: var(--text-primary);
+        margin: var(--space-6) 0;
       }
       .mn-window {
         display: grid;
-        gap: 0.5rem;
+        gap: var(--space-2);
         grid-template-columns: minmax(0, 1fr);
         max-width: 40rem;
       }
       .mn-window canvas {
-        width: 100%;
-        height: auto;
         aspect-ratio: 1 / 1;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        background: #0b0d17;
-      }
-      .mn-legend {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.25rem 1rem;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      .mn-swatch {
-        display: inline-block;
-        width: 0.9rem;
-        height: 0.9rem;
-        vertical-align: -0.1rem;
-        margin-right: 0.3rem;
-        border: 1px solid var(--border-strong);
-      }
-      .mn-refused {
-        background: #3a3f52;
-      }
-      progress {
-        width: 12rem;
-        max-width: 100%;
       }
     </style>
     <!-- shell:head -->
@@ -160,11 +64,11 @@ try {
 </div>
 </header>
 <!-- /shell:header -->
-    <main class="mn-wrap" id="main" aria-labelledby="mn-title">
-      <div id="langSwitch" class="mn-bar" role="group" aria-label="Language" data-i18n-aria-label="mission.lang"></div>
+    <main class="ui-page mn-wrap" id="main" aria-labelledby="mn-title">
+      <div id="langSwitch" class="ui-toolbar" role="group" aria-label="Language" data-i18n-aria-label="mission.lang"></div>
       <h1 id="mn-title" data-i18n="mission.title">Mission design diagnostics</h1>
       <p data-i18n="mission.intro"></p>
-      <p class="mn-note" data-i18n="mission.notFor"></p>
+      <p class="ui-alert" data-i18n="mission.notFor"></p>
       <p>
         <a href="/lab3d/" data-i18n="mission.kernel">The 3-D kernel</a> ·
         <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/MISSION.md" data-i18n="mission.docs">How the core works (MISSION.md)</a>
@@ -173,7 +77,7 @@ try {
       <section aria-labelledby="mn-transfer-h">
         <h2 id="mn-transfer-h" data-i18n="mission.transfer.heading"></h2>
         <p data-i18n="mission.transfer.hint"></p>
-        <div class="mn-bar">
+        <div class="ui-toolbar is-fields">
           <div class="ui-field">
             <label for="mn-transfer-body" data-i18n="mission.body"></label>
             <select class="ui-select" id="mn-transfer-body"></select>
@@ -197,14 +101,14 @@ try {
           <button id="mn-transfer-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
         </div>
         <p id="mn-transfer-status" role="status" aria-live="polite"></p>
-        <div id="mn-transfer-out" class="mn-scroll"></div>
+        <div id="mn-transfer-out" class="ui-table-wrap"></div>
         <button id="mn-transfer-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
       </section>
 
       <section aria-labelledby="mn-meet-h">
         <h2 id="mn-meet-h" data-i18n="mission.meet.heading"></h2>
         <p data-i18n="mission.meet.hint"></p>
-        <div class="mn-bar">
+        <div class="ui-toolbar is-fields">
           <div class="ui-field">
             <label for="mn-meet-body" data-i18n="mission.body"></label>
             <select class="ui-select" id="mn-meet-body"></select>
@@ -228,14 +132,14 @@ try {
           <button id="mn-meet-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
         </div>
         <p id="mn-meet-status" role="status" aria-live="polite"></p>
-        <div id="mn-meet-out" class="mn-scroll"></div>
+        <div id="mn-meet-out" class="ui-table-wrap"></div>
         <button id="mn-meet-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
       </section>
 
       <section aria-labelledby="mn-lambert-h">
         <h2 id="mn-lambert-h" data-i18n="mission.lambert.heading"></h2>
         <p data-i18n="mission.lambert.hint"></p>
-        <div class="mn-bar">
+        <div class="ui-toolbar is-fields">
           <div class="ui-field">
             <label for="mn-lambert-body" data-i18n="mission.body"></label>
             <select class="ui-select" id="mn-lambert-body"></select>
@@ -259,14 +163,14 @@ try {
           <button id="mn-lambert-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
         </div>
         <p id="mn-lambert-status" role="status" aria-live="polite"></p>
-        <div id="mn-lambert-out" class="mn-scroll"></div>
+        <div id="mn-lambert-out" class="ui-table-wrap"></div>
         <button id="mn-lambert-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
       </section>
 
       <section aria-labelledby="mn-planets-h">
         <h2 id="mn-planets-h" data-i18n="mission.planets.heading"></h2>
         <p data-i18n="mission.planets.hint"></p>
-        <div class="mn-bar">
+        <div class="ui-toolbar is-fields">
           <div class="ui-field">
             <label for="mn-planets-from" data-i18n="mission.from"></label>
             <select class="ui-select" id="mn-planets-from"></select>
@@ -286,14 +190,14 @@ try {
           <button id="mn-planets-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
         </div>
         <p id="mn-planets-status" role="status" aria-live="polite"></p>
-        <div id="mn-planets-out" class="mn-scroll"></div>
+        <div id="mn-planets-out" class="ui-table-wrap"></div>
         <button id="mn-planets-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
       </section>
 
       <section aria-labelledby="mn-window-h">
         <h2 id="mn-window-h" data-i18n="mission.window.heading"></h2>
         <p data-i18n="mission.window.hint"></p>
-        <div class="mn-bar">
+        <div class="ui-toolbar is-fields">
           <div class="ui-field">
             <label for="mn-window-from" data-i18n="mission.from"></label>
             <select class="ui-select" id="mn-window-from"></select>
@@ -324,14 +228,14 @@ try {
           </div>
           <button id="mn-window-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
           <button id="mn-window-cancel" type="button" class="ui-button" data-i18n="mission.cancel" disabled></button>
-          <progress id="mn-window-progress" max="1" value="0" aria-labelledby="mn-window-status"></progress>
+          <progress id="mn-window-progress" class="ui-progress" max="1" value="0" aria-labelledby="mn-window-status"></progress>
         </div>
         <p id="mn-window-status" role="status" aria-live="polite"></p>
         <div class="mn-window" id="mn-window-plot" hidden>
-          <canvas id="mn-window-canvas" width="480" height="480" role="img"></canvas>
-          <div class="mn-legend" id="mn-window-legend"></div>
+          <canvas id="mn-window-canvas" class="ui-plot ui-sky" width="480" height="480" role="img"></canvas>
+          <div class="ui-legend" id="mn-window-legend"></div>
         </div>
-        <div id="mn-window-out" class="mn-scroll"></div>
+        <div id="mn-window-out" class="ui-table-wrap"></div>
         <button id="mn-window-csv" type="button" class="ui-button" data-i18n="mission.window.csv" disabled></button>
         <button id="mn-window-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
       </section>
@@ -339,7 +243,7 @@ try {
       <section aria-labelledby="mn-flyby-h">
         <h2 id="mn-flyby-h" data-i18n="mission.flyby.heading"></h2>
         <p data-i18n="mission.flyby.hint"></p>
-        <div class="mn-bar">
+        <div class="ui-toolbar is-fields">
           <div class="ui-field">
             <label for="mn-flyby-body" data-i18n="mission.planet"></label>
             <select class="ui-select" id="mn-flyby-body"></select>
@@ -359,7 +263,7 @@ try {
           <button id="mn-flyby-go" type="button" class="ui-button is-primary" data-i18n="mission.compute"></button>
         </div>
         <p id="mn-flyby-status" role="status" aria-live="polite"></p>
-        <div id="mn-flyby-out" class="mn-scroll"></div>
+        <div id="mn-flyby-out" class="ui-table-wrap"></div>
         <button id="mn-flyby-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
       </section>
 
@@ -368,7 +272,7 @@ try {
         <p data-i18n="mission.check.hint"></p>
         <button id="mn-check-go" type="button" class="ui-button" data-i18n="mission.check.go"></button>
         <p id="mn-check-status" role="status" aria-live="polite"></p>
-        <div id="mn-check-out" class="mn-scroll"></div>
+        <div id="mn-check-out" class="ui-table-wrap"></div>
       </section>
 
       <section aria-labelledby="mn-scope-h">
