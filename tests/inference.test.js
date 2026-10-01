@@ -616,6 +616,12 @@ describe('the manifest', () => {
     expect(
       at({ ...m, settings: { ...m.settings, stellarRadius: { value: 0 } } })
     ).toEqual(['settings.stellarRadius']);
+    // A parameter that is not an object is neither fitted nor fixed: it was
+    // read as a fit within the model's range, and null threw.
+    for (const k of [5, null, 'fitted', [0.1, 0.2]])
+      expect(at({ ...m, parameters: { ...m.parameters, k } })).toEqual([
+        'parameters.k',
+      ]);
   });
 
   test('prices a fit, and refuses one too large for the device rather than freezing it', () => {

@@ -1,0 +1,417 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/submission-results-2.schema.json",
+  "title": "gravitas.submission-results/2",
+  "description": "The review page's JSON export: every accepted lab report graded against the lesson it names, one row per graded step, with points, and every file that was refused. A token verifies answers and structure, not who wrote them: `nameAsTyped` is what the student typed and `rosterId` what the assignment supplied. Written answers are withheld unless the instructor asked for them, and each question says which it did. js/submission/results.js resultsJson() writes it and readResults() reads it, migrating version 1, which had no points. readResults() checks only that it is plain, bounded data of this kind and version, so this schema, which is the export as resultsJson() writes it, is the only statement of its shape. A field added at the end within a version is not a change a reader must handle, so nothing here refuses one. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "kind",
+    "version",
+    "generatedAt",
+    "notice",
+    "options",
+    "submissions",
+    "refused"
+  ],
+  "properties": {
+    "kind": {
+      "const": "gravitas.submission-results"
+    },
+    "version": {
+      "const": 2
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "notice": {
+      "type": "string"
+    },
+    "options": {
+      "type": "object",
+      "required": [
+        "includeWritten"
+      ],
+      "properties": {
+        "includeWritten": {
+          "type": "boolean"
+        }
+      }
+    },
+    "submissions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/submission"
+      }
+    },
+    "refused": {
+      "description": "Every file that was handed in and not read, and why.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "reason"
+        ],
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "countOrNull": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/count"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "label": {
+      "description": "A 53-bit hash, for a person to match rows by: not what duplicates are decided by.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{14}$"
+    },
+    "submission": {
+      "type": "object",
+      "required": [
+        "submission",
+        "fingerprint",
+        "source",
+        "rosterId",
+        "assignmentId",
+        "nameAsTyped",
+        "lesson",
+        "submissionSchema",
+        "backupVersion",
+        "savedAt",
+        "fallbackLocale",
+        "answerLocales",
+        "visitedSteps",
+        "completion",
+        "counts",
+        "duplicateOf",
+        "attempt",
+        "warnings",
+        "questions"
+      ],
+      "properties": {
+        "submission": {
+          "description": "Its place in the order the reports were accepted, from 1.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "fingerprint": {
+          "$ref": "#/$defs/label"
+        },
+        "source": {
+          "type": "object",
+          "required": [
+            "kind",
+            "label"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "token",
+                "pdf",
+                "backup"
+              ]
+            },
+            "label": {
+              "type": "string"
+            }
+          }
+        },
+        "rosterId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assignmentId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "nameAsTyped": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lesson": {
+          "type": "object",
+          "required": [
+            "id",
+            "title",
+            "version",
+            "steps",
+            "recordedSteps",
+            "changedSteps"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "version": {
+              "description": "The lesson's steps, reduced to one label: the same label is the same questions.",
+              "$ref": "#/$defs/label"
+            },
+            "steps": {
+              "$ref": "#/$defs/count"
+            },
+            "recordedSteps": {
+              "$ref": "#/$defs/countOrNull"
+            },
+            "changedSteps": {
+              "$ref": "#/$defs/count"
+            }
+          }
+        },
+        "submissionSchema": {
+          "description": "The token's version; null for a progress backup handed in as it is.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "backupVersion": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "savedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fallbackLocale": {
+          "type": "string"
+        },
+        "answerLocales": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "visitedSteps": {
+          "$ref": "#/$defs/count"
+        },
+        "completion": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "counts": {
+          "type": "object",
+          "required": [
+            "scorable",
+            "correct",
+            "incorrect",
+            "unmarked",
+            "incomplete",
+            "stale",
+            "points",
+            "pointsPossible",
+            "pointsUnmarked"
+          ],
+          "properties": {
+            "scorable": {
+              "$ref": "#/$defs/count"
+            },
+            "correct": {
+              "$ref": "#/$defs/count"
+            },
+            "incorrect": {
+              "$ref": "#/$defs/count"
+            },
+            "unmarked": {
+              "$ref": "#/$defs/count"
+            },
+            "incomplete": {
+              "$ref": "#/$defs/count"
+            },
+            "stale": {
+              "$ref": "#/$defs/count"
+            },
+            "points": {
+              "$ref": "#/$defs/count"
+            },
+            "pointsPossible": {
+              "$ref": "#/$defs/count"
+            },
+            "pointsUnmarked": {
+              "description": "What the written answers are worth, which are the instructor's to mark.",
+              "$ref": "#/$defs/count"
+            }
+          }
+        },
+        "duplicateOf": {
+          "description": "The submission this one exactly repeats, if any. Kept and marked, never dropped.",
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attempt": {
+          "description": "Repeated attempts with one roster id, assignment and lesson, numbered by when each was saved. Nothing chooses a winner.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "group",
+                "number",
+                "of"
+              ],
+              "properties": {
+                "group": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "number": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "of": {
+                  "type": "integer",
+                  "minimum": 2
+                }
+              }
+            }
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "noRosterId",
+              "exactDuplicate",
+              "repeatedAttempt",
+              "changedSteps",
+              "staleAnswers"
+            ]
+          }
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/question"
+          }
+        }
+      }
+    },
+    "question": {
+      "description": "One graded step, answered or not, or an answer to a step the lesson no longer has (`stale`).",
+      "type": "object",
+      "required": [
+        "stepNumber",
+        "stepId",
+        "stepType",
+        "stepTitle",
+        "verdict",
+        "attempts",
+        "answerLocale",
+        "stepChanged",
+        "responseStatus",
+        "response",
+        "points",
+        "pointsPossible"
+      ],
+      "properties": {
+        "stepNumber": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stepId": {
+          "type": "string"
+        },
+        "stepType": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "stepTitle": {
+          "type": "string"
+        },
+        "verdict": {
+          "enum": [
+            "correct",
+            "incorrect",
+            "unmarked",
+            "incomplete",
+            "stale"
+          ]
+        },
+        "attempts": {
+          "$ref": "#/$defs/countOrNull"
+        },
+        "answerLocale": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "stepChanged": {
+          "type": "boolean"
+        },
+        "responseStatus": {
+          "description": "none: not answered. checked: machine-checked, so exported. written: a written answer the instructor asked for. withheld: a written answer they did not.",
+          "enum": [
+            "none",
+            "checked",
+            "written",
+            "withheld"
+          ]
+        },
+        "response": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "points": {
+          "description": "Null for a written answer: unmarked, not zero.",
+          "$ref": "#/$defs/countOrNull"
+        },
+        "pointsPossible": {
+          "$ref": "#/$defs/countOrNull"
+        }
+      }
+    }
+  }
+}
