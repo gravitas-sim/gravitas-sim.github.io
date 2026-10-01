@@ -364,6 +364,28 @@ test.describe('without a pointer', () => {
     expect(chosen.scene).toBe(chosen.pin);
   });
 
+  test('the object list folds away, and stays folded', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await openLesson(page, app);
+    await goTo(page, 'Measure it');
+    const disclosure = page.locator('#investigationObjectsDisclosure');
+    const buttons = page.locator('#investigationObjects [data-object-id]');
+    await expect(buttons.first()).toBeVisible();
+    await disclosure.locator('summary').click();
+    await expect(disclosure).toHaveJSProperty('open', false);
+    await expect(buttons.first()).toBeHidden();
+
+    // The next visit hands it back folded.
+    await openLesson(page, app);
+    await goTo(page, 'Measure it');
+    await expect(disclosure).toHaveJSProperty('open', false);
+    await disclosure.locator('summary').click();
+    await expect(buttons.first()).toBeVisible();
+  });
+
   test('the object list reaches the same stars', async ({ page, app }) => {
     test.slow();
     await openLesson(page, app);

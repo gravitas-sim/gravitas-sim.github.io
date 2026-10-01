@@ -14,7 +14,7 @@ import {
   GENERATED_SCENARIOS,
 } from '../js/scenarioPack.js';
 import { readFileSync } from 'node:fs';
-import { parse } from 'acorn';
+import { SETTING_ITEMS } from '../js/settingsSchema.js';
 import {
   FORMAT,
   SETTING_RULES,
@@ -282,26 +282,11 @@ function zeroPopulation() {
 }
 
 describe('the option lists are the Settings panel’s', () => {
-  // js/ui.js's setting_items is the reader's list of controls. A pack may not
+  // js/settingsSchema.js is the reader's list of controls. A pack may not
   // name an option the panel would not offer.
-  const ast = parse(readFileSync('js/ui.js', 'utf8'), {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-  });
-  let items;
-  for (const n of ast.body) {
-    if (n.type !== 'VariableDeclaration') continue;
-    for (const d of n.declarations) {
-      if (d.id.name === 'setting_items') items = d.init.elements;
-    }
-  }
   const panel = {};
-  for (const el of items) {
-    const key = el.properties.find(p => p.key.name === 'key')?.value.value;
-    const options = el.properties.find(p => p.key.name === 'options');
-    if (key && options?.value.type === 'ArrayExpression') {
-      panel[key] = options.value.elements.map(e => e.value);
-    }
+  for (const item of SETTING_ITEMS) {
+    if (Array.isArray(item.options)) panel[item.key] = [...item.options];
   }
   test.each(
     Object.entries(SETTING_RULES).filter(

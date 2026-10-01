@@ -62,6 +62,10 @@ const MODES = ['physical', 'simulation'];
 const STORAGE_KEY = 'gravitas_units';
 
 let mode = 'physical';
+// A readout's significant figures when its caller does not say.
+let readoutDigits = 3;
+/** @returns {number} Significant figures in a readout */
+export const getReadoutDigits = () => readoutDigits;
 
 /** @returns {string} Current unit mode: 'physical' or 'simulation' */
 export const getUnitMode = () => mode;
@@ -129,8 +133,14 @@ export function velocityUnitToMs() {
  * @param {number} digits - Significant digits
  * @returns {string} Formatted number
  */
-export function sig(v, digits = 3) {
+export function sig(v, digits = readoutDigits) {
   return formatNumber(v, { sig: digits });
+}
+
+/** The course level's readout precision (js/settingsSchema.js). */
+export function setReadoutDigits(digits) {
+  readoutDigits =
+    Number.isInteger(digits) && digits >= 2 && digits <= 8 ? digits : 3;
 }
 
 /**

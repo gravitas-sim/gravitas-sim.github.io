@@ -203,6 +203,36 @@ test.describe('the space bar', () => {
     ).toBe(false);
     await page.evaluate(() => document.getElementById('spaceProbe')?.remove());
   });
+
+  test('nor while a button has the focus: the space bar presses it', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    // Space is how a keyboard presses a button. The pause shortcut used to take
+    // it, so a focused button paused the simulation and never fired.
+    await page.evaluate(() => {
+      const button = document.createElement('button');
+      button.id = 'spaceButtonProbe';
+      button.dataset.presses = '0';
+      button.onclick = () => {
+        button.dataset.presses = String(Number(button.dataset.presses) + 1);
+      };
+      document.body.appendChild(button);
+      button.focus();
+    });
+    await page.keyboard.press('Space');
+    await expect(page.locator('#spaceButtonProbe')).toHaveAttribute(
+      'data-presses',
+      '1'
+    );
+    expect(
+      await page.evaluate(async () => (await import('/js/ui.js')).state.paused)
+    ).toBe(false);
+    await page.evaluate(() =>
+      document.getElementById('spaceButtonProbe')?.remove()
+    );
+  });
 });
 
 test.describe('the transport controls', () => {
