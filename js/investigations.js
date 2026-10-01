@@ -4922,7 +4922,15 @@ onLocaleChange(() => {
   }
 });
 
-export function initInvestigations() {
+/**
+ * Wire the lesson engine to its markup, once the loader has mounted it.
+ *
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the markup is
+ *   unmounted (js/investigationsLoader.js); removes every listener this adds
+ *   outside it - the rail's Lessons button and the window's
+ */
+export function initInvestigations({ signal } = {}) {
+  const opts = signal ? { signal } : undefined;
   els = {
     browser: document.getElementById('investigationBrowser'),
     list: document.getElementById('investigationList'),
@@ -5031,11 +5039,13 @@ export function initInvestigations() {
     });
   }
 
-  document
-    .getElementById('investigationsBtn')
-    ?.addEventListener('click', () => {
+  document.getElementById('investigationsBtn')?.addEventListener(
+    'click',
+    () => {
       isBrowserOpen() ? closeBrowser() : openBrowser();
-    });
+    },
+    opts
+  );
   wireBrowserFilters();
   els.browserClose?.addEventListener('click', closeBrowser);
   els.browserChip?.addEventListener('click', closeBrowser);
@@ -5112,25 +5122,35 @@ export function initInvestigations() {
   // The widget and plot canvases are sized from their panel's width, which is a
   // percentage of the viewport, so a resized window leaves them stretched.
   let resizeTimer = null;
-  window.addEventListener('resize', () => {
-    if (!active) return;
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      const step = currentStep();
-      if (step?.tool) paintTool();
-      if (step?.plot) drawPlot(step, stepId(stepIndex));
-      if (step?.type === 'ellipse') {
-        paintEllipse(responses[`${stepId(stepIndex)}:e`] ?? step.start ?? 0.5);
-      }
-    }, 150);
-  });
+  window.addEventListener(
+    'resize',
+    () => {
+      if (!active) return;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const step = currentStep();
+        if (step?.tool) paintTool();
+        if (step?.plot) drawPlot(step, stepId(stepIndex));
+        if (step?.type === 'ellipse') {
+          paintEllipse(
+            responses[`${stepId(stepIndex)}:e`] ?? step.start ?? 0.5
+          );
+        }
+      }, 150);
+    },
+    opts
+  );
 
   // js/dialog.js takes an Escape pressed inside either dialog; this is one
   // pressed with focus on <body>.
-  window.addEventListener('gravitasEscape', () => {
-    if (els.finish && !els.finish.classList.contains('hidden')) closeFinish();
-    else if (isBrowserOpen()) closeBrowser();
-  });
+  window.addEventListener(
+    'gravitasEscape',
+    () => {
+      if (els.finish && !els.finish.classList.contains('hidden')) closeFinish();
+      else if (isBrowserOpen()) closeBrowser();
+    },
+    opts
+  );
 
   // A lesson can be opened by URL: gravitas-sim.online/#investigation=<id>.
   // That is what makes an investigation assignable, and what the instructor
@@ -5153,7 +5173,7 @@ export function initInvestigations() {
   });
 
   openInvestigationFromHash();
-  window.addEventListener('hashchange', openInvestigationFromHash);
+  window.addEventListener('hashchange', openInvestigationFromHash, opts);
 
   // The authoring preview: ?author=<lesson>&step=<n>.
   //
@@ -5215,30 +5235,62 @@ export function initInvestigations() {
 
   // The plot reads its colors from the theme tokens, so it has to be redrawn
   // when the theme changes rather than keeping the old palette.
-  window.addEventListener('gravitasLightCurveToggled', () => {
-    if (active) reflowForLightCurve();
-  });
+  window.addEventListener(
+    'gravitasLightCurveToggled',
+    () => {
+      if (active) reflowForLightCurve();
+    },
+    opts
+  );
 
-  window.addEventListener('gravitasThemeChanged', () => {
-    if (!active) return;
-    drawPlot(currentStep(), stepId(stepIndex));
-    if (currentStep()?.tool) paintTool();
-  });
+  window.addEventListener(
+    'gravitasThemeChanged',
+    () => {
+      if (!active) return;
+      drawPlot(currentStep(), stepId(stepIndex));
+      if (currentStep()?.tool) paintTool();
+    },
+    opts
+  );
 
   // Arrow keys move through a lesson, but only when the student is not typing
   // into one of its own answer fields.
-  window.addEventListener('keydown', e => {
-    if (!active) return;
-    const tag = e.target?.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target?.isContentEditable) {
-      return;
-    }
-    if (e.key === 'ArrowRight' && e.shiftKey) {
-      e.preventDefault();
-      next();
-    } else if (e.key === 'ArrowLeft' && e.shiftKey) {
-      e.preventDefault();
-      goToStep(applyingFrom(stepIndex, -1));
-    }
-  });
+  window.addEventListener(
+    'keydown',
+    e => {
+      if (!active) return;
+      const tag = e.target?.tagName;
+      if (
+        tag === 'INPUT' ||
+        tag === 'TEXTAREA' ||
+        e.target?.isContentEditable
+      ) {
+        return;
+      }
+      if (e.key === 'ArrowRight' && e.shiftKey) {
+        e.preventDefault();
+        next();
+      } else if (e.key === 'ArrowLeft' && e.shiftKey) {
+        e.preventDefault();
+        goToStep(applyingFrom(stepIndex, -1));
+      }
+    },
+    opts
+  );
+}
+
+/**
+ * Undo initInvestigations(), for when the engine's markup leaves the page:
+ * close the lesson and its dialogs, and forget every element. The listeners
+ * outside the markup go with the mount's signal.
+ */
+export function teardownInvestigations() {
+  if (active) closeInvestigation();
+  if (els.finish && !els.finish.classList.contains('hidden')) closeFinish();
+  if (isBrowserOpen()) closeBrowser();
+  // Opened through js/dialog.js, which keeps two document listeners per
+  // dialog; a mounted copy is a new element, so these are let go.
+  dialogs?.releaseDialog(els.browserContent);
+  dialogs?.releaseDialog(els.finishContent);
+  els = {};
 }

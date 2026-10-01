@@ -32,7 +32,13 @@ import { t, onLocaleChange } from './i18n/index.js';
 import { getTheme, setTheme } from './theme.js';
 import { setPresentationMode, isLecture } from './presentation.js';
 // Statically: this module is fetched only when somebody enters Lecture Mode.
-import { openDialog, closeDialog } from './dialog.js';
+import { openDialog, closeDialog, releaseDialog } from './dialog.js';
+import {
+  fragmentMounted,
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './i18n/deferredMessages.js';
 
 /**
  * Say something, through the application's toast and live region.
@@ -473,7 +479,14 @@ function onKeyDown(e) {
 /** Wire Lecture Mode. Safe to call once, from init. */
 let wired = false;
 
-export function initLecture() {
+/** Undoes the locale subscription; null while not wired. */
+let unsubscribeLocale = null;
+
+/**
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the bar's markup is
+ *   unmounted; removes every listener this adds outside it
+ */
+export function initLecture({ signal } = {}) {
   // Idempotent, because there are now three ways in and any of them may be
   // first: the toolbar button, the V shortcut in js/controls.js - which has
   // always imported this module on demand - and a direct import from a test.
@@ -498,9 +511,10 @@ export function initLecture() {
 
   loadStoredSequence();
 
+  const opts = signal ? { signal } : undefined;
   document
     .getElementById('lectureBtn')
-    ?.addEventListener('click', enterLecture);
+    ?.addEventListener('click', enterLecture, opts);
   els.exit?.addEventListener('click', exitLecture);
   els.spotlight?.addEventListener('click', () => setSpotlight());
   els.next?.addEventListener('click', () => nextStep());
@@ -514,13 +528,66 @@ export function initLecture() {
 
   // Capture phase: ui.js's pan handler is on window in the bubble phase, and
   // whichever of the two runs first must be able to stop the other.
-  window.addEventListener('keydown', onKeyDown, true);
+  window.addEventListener('keydown', onKeyDown, { capture: true, signal });
 
   // The step counter is rendered text - "Step 2 of 3" - so it has to be redrawn
   // when the language changes and not only when the position does.
-  onLocaleChange(renderSequenceState);
+  unsubscribeLocale = onLocaleChange(renderSequenceState);
 
   renderSequenceState();
+}
+
+/** The bar's markup once fetched: js/fragments/lecture.html. */
+let markup = null;
+
+/** The toolbar button's first-press listener unmountLecture() puts back. */
+let rearm = null;
+
+/**
+ * Put the bar and the sequence sheet in the page, at their host in
+ * index.html, and wire them (INDEX_DECOMPOSITION.md).
+ *
+ * A page without the host - a test that wrote its own markup, or none - is
+ * wired as it stands, and nothing is fetched.
+ *
+ * @returns {Promise<void>}
+ */
+export async function mountLecture() {
+  if (wired) return;
+  // Mounted by something other than the button unmountLecture() re-armed.
+  rearm?.abort();
+  rearm = null;
+  if (document.querySelector('template[data-host="lecture"]')) {
+    markup ??= await loadFragment('lecture');
+  }
+  const signal = markup ? mountFragment('lecture', markup) : null;
+  initLecture({ signal: signal ?? undefined });
+}
+
+/**
+ * Take the bar out of the page again: leave Lecture Mode, let go of every
+ * listener, and leave the toolbar button loading it afresh on its next press,
+ * as start-up left it.
+ *
+ * @returns {boolean} Whether it was mounted
+ */
+export function unmountLecture() {
+  if (!wired || !fragmentMounted('lecture')) return false;
+  exitLecture();
+  unsubscribeLocale?.();
+  unsubscribeLocale = null;
+  wired = false;
+  releaseDialog(els.sheetPanel);
+  els = {};
+  unmountFragment('lecture');
+  rearm = new AbortController();
+  document
+    .getElementById('lectureBtn')
+    ?.addEventListener('click', () => mountLecture().then(enterLecture), {
+      once: true,
+      signal: rearm.signal,
+    });
+  return true;
 }
 
 // The module wires itself when it loads, whoever loaded it.
@@ -535,4 +602,14 @@ export function initLecture() {
 //
 // Guarded on a document rather than on a flag: the authoring CLI reads this
 // file in a plain Node process, and there is nothing there to wire.
-if (typeof document !== 'undefined') initLecture();
+//
+// The bar's markup now arrives with the module rather than with index.html, so
+// wiring is a promise: whoever imports this - the toolbar button, the V
+// shortcut - waits for `lectureReady` before entering, and finds the bar in the
+// page and wired, exactly as before.
+export const lectureReady =
+  typeof document !== 'undefined'
+    ? mountLecture().catch(err => {
+        console.error('Lecture Mode could not be loaded:', err);
+      })
+    : Promise.resolve();

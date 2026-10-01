@@ -20,18 +20,30 @@
 
 import { current_scenario_name } from './appState.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import {
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './i18n/deferredMessages.js';
 
-/** Which scenarios pull in which chunk. */
+/**
+ * Which scenarios pull in which chunk, and the host of each panel's markup
+ * (js/fragments/, INDEX_DECOMPOSITION.md); the Lagrange panel builds its own.
+ */
 const PANELS = [
   {
     scenarios: ['Binary Planet Lab', 'Circumbinary Planet Lab'],
+    host: 'binary-run',
     load: () => import('./binaryRunPanel.js'),
-    init: m => m.initBinaryRun(),
+    init: (m, opts) => m.initBinaryRun(opts),
+    teardown: m => m.teardownBinaryRun(),
   },
   {
     scenarios: ['Gravity Assist Lab', 'Gravity Assist: Heliocentric'],
+    host: 'assist',
     load: () => import('./assistPanel.js'),
-    init: m => m.initAssist(),
+    init: (m, opts) => m.initAssist(opts),
+    teardown: m => m.teardownAssist(),
   },
   {
     scenarios: ['Lagrange Point Lab'],
@@ -59,16 +71,36 @@ async function loadForScenario() {
     if (!entry.scenarios.includes(name)) continue;
     // The strings for these panels are not in the start-up catalog.
     await ensureDeferredMessages().catch(() => {});
-    const mod = await entry.load();
+    const [mod, html] = await Promise.all([
+      entry.load(),
+      entry.host ? loadFragment(entry.host) : null,
+    ]);
     if (!loaded.has(mod)) {
       loaded.add(mod);
-      entry.init(mod);
+      // Markup a page already has (a test's own) is wired as it stands.
+      const signal = entry.host ? mountFragment(entry.host, html) : null;
+      entry.init(mod, { signal: signal ?? undefined });
       // init() subscribes to the reset event, but the reset that triggered
       // this import has already been dispatched, so the first appearance has
       // to be asked for directly.
       mod.notifyScenarioReady?.();
     }
   }
+}
+
+/**
+ * Unmount a scenario panel; its next scenario brings it back.
+ * @param {string} host - 'binary-run' or 'assist'
+ * @returns {Promise<boolean>} Whether it was mounted
+ */
+export async function unmountScenarioPanel(host) {
+  const entry = PANELS.find(p => p.host === host);
+  if (!entry) return false;
+  const mod = await entry.load();
+  if (!loaded.has(mod)) return false;
+  entry.teardown(mod);
+  loaded.delete(mod);
+  return unmountFragment(host);
 }
 
 /** Start watching for scenarios that bring their own instrument. */

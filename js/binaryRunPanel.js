@@ -872,8 +872,18 @@ export const isBinarySweeping = () => sweepRunning;
 /** For the lesson and the tests: run the sweep as the button does. */
 export const startBinarySweep = opts => runBinarySweep(opts);
 
-/** Wire the panel up. Called once at boot. */
-export function initBinaryRun() {
+/** Undoes the locale subscription init made; null while not wired. */
+let unsubscribeLocale = null;
+
+/**
+ * Wire the panel up. Called once, when js/scenarioPanelBridge.js has put its
+ * markup in the page.
+ *
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the markup is
+ *   unmounted; removes the one listener this adds outside it
+ */
+export function initBinaryRun({ signal } = {}) {
+  if (unsubscribeLocale) return;
   // This panel's strings are not in the start-up catalog, so it registers
   // them itself rather than trusting whoever opened it to have done so. The
   // bridge does register them first in the normal path; a lesson, a share link
@@ -889,8 +899,11 @@ export function initBinaryRun() {
   // share link, a test - can render before that await resolves and paint
   // message ids. Redrawing when the catalog changes removes the race rather
   // than narrowing it, and is the same subscription a language switch needs.
-  onLocaleChange(() => render());
+  unsubscribeLocale = onLocaleChange(() => render());
 
+  // Anything that asked for the elements before the markup was mounted
+  // cached nothing; ask again now that it is there.
+  els = null;
   const e = cacheElements();
   if (!e.container) return;
 
@@ -940,12 +953,30 @@ export function initBinaryRun() {
   // instrument for two scenarios rather than a general tool, and the rail's
   // chip grid is full. So it shows itself when one of its scenarios loads and
   // stays out of the way everywhere else.
-  window.addEventListener('gravitasSimulationReset', () => {
-    stopBinaryWatch();
-    showForCurrentScenario();
-  });
+  window.addEventListener(
+    'gravitasSimulationReset',
+    () => {
+      stopBinaryWatch();
+      showForCurrentScenario();
+    },
+    signal ? { signal } : undefined
+  );
 
   e.container.style.display = 'none';
+}
+
+/**
+ * Undo initBinaryRun(), for when the panel's markup leaves the page: stop the
+ * watch, close the panel, stop listening for the language, forget the
+ * elements.
+ */
+export function teardownBinaryRun() {
+  if (!unsubscribeLocale) return;
+  stopBinaryWatch();
+  setBinaryRunEnabled(false);
+  unsubscribeLocale();
+  unsubscribeLocale = null;
+  els = null;
 }
 
 /**

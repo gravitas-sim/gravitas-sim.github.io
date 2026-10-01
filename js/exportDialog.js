@@ -40,7 +40,7 @@ import { toast, announce } from './notify.js';
 import { t } from './i18n/index.js';
 // Statically: this module is itself fetched on the first press of Export
 // (js/exportBridge.js), so the dialog machinery costs start-up nothing here.
-import { openDialog, closeDialog } from './dialog.js';
+import { openDialog, closeDialog, releaseDialog } from './dialog.js';
 
 // This module's prose lives in the deferred half of the catalog - see the
 // note in js/i18n/en.deferred.js. Registered from here rather than left to the
@@ -371,8 +371,14 @@ export function closeExportDialog() {
 export const isExportDialogOpen = () =>
   Boolean(els.modal) && !els.modal.classList.contains('hidden');
 
-/** Wire up the dialog. Safe to call once, from init. */
-export function initExportDialog() {
+/**
+ * Wire up the dialog. Safe to call once, from init.
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the dialog's
+ *   markup is unmounted (js/exportBridge.js); removes every listener this
+ *   adds outside it
+ */
+export function initExportDialog({ signal } = {}) {
+  const opts = signal ? { signal } : undefined;
   els = {
     modal: document.getElementById('dataExport'),
     content: document.getElementById('dataExportContent'),
@@ -383,9 +389,13 @@ export function initExportDialog() {
   };
   if (!els.modal || !els.files) return;
 
-  document.getElementById('exportDataBtn')?.addEventListener('click', () => {
-    isExportDialogOpen() ? closeExportDialog() : openExportDialog();
-  });
+  document.getElementById('exportDataBtn')?.addEventListener(
+    'click',
+    () => {
+      isExportDialogOpen() ? closeExportDialog() : openExportDialog();
+    },
+    opts
+  );
   els.close?.addEventListener('click', closeExportDialog);
   els.scope?.addEventListener('change', e => {
     if (e.target.name !== 'exportScope') return;
@@ -394,12 +404,29 @@ export function initExportDialog() {
   });
   // js/dialog.js takes an Escape pressed inside the dialog; this is one
   // pressed with focus on <body>.
-  window.addEventListener('gravitasEscape', () => {
-    if (isExportDialogOpen()) closeExportDialog();
-  });
+  window.addEventListener(
+    'gravitasEscape',
+    () => {
+      if (isExportDialogOpen()) closeExportDialog();
+    },
+    opts
+  );
   // A rebuild throws the ring buffer away, so a dialog left open would be
   // offering to export a recording that no longer exists.
-  window.addEventListener('gravitasSimulationReset', () => {
-    if (isExportDialogOpen()) render();
-  });
+  window.addEventListener(
+    'gravitasSimulationReset',
+    () => {
+      if (isExportDialogOpen()) render();
+    },
+    opts
+  );
+}
+
+/**
+ * Undo initExportDialog(), for when the dialog's markup leaves the page.
+ */
+export function teardownExportDialog() {
+  if (isExportDialogOpen()) closeExportDialog();
+  releaseDialog(els.content);
+  els = {};
 }

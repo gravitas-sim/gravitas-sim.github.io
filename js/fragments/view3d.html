@@ -1,0 +1,45 @@
+<!-- ⚙️ Spacetime viewport -->
+<div
+  id="threeViewportContainer"
+  class="three-view-container"
+  role="region"
+  aria-labelledby="threeViewTitle"
+  style="display: none"
+>
+  <!-- This carried aria-hidden="true", which hid a panel containing two
+       real buttons. They stayed in the tab order, so a keyboard reader
+       could focus the close button and be told nothing about it at all.
+       The panel is hidden from everyone by display:none when it is shut,
+       which is the correct mechanism and the only one needed. -->
+  <div class="three-view-toolbar">
+    <div class="three-view-meta">
+      <span class="three-view-title" id="threeViewTitle"
+        >Spacetime View</span
+      >
+      <span id="threeViewStatus" class="three-view-status">Hidden</span>
+    </div>
+    <div class="three-toolbar-actions">
+      <button
+        id="reset3DCameraBtn"
+        class="three-toolbar-btn"
+        title="Reframe around active system"
+      >
+        Reset
+      </button>
+      <button
+        id="close3DViewBtn"
+        class="three-toolbar-btn"
+        title="Hide the spacetime viewport"
+        aria-label="Close the spacetime view"
+        data-i18n-aria-label="view3d.close.label"
+      >
+        <span aria-hidden="true">✕</span>
+      </button>
+    </div>
+  </div>
+  <div id="threeViewport" class="three-view-stage"></div>
+  <div class="three-view-hint">
+    Drag to orbit • Scroll to zoom • Right-click or two-finger drag to pan
+  </div>
+  <div id="threeViewResizeHandle" class="three-view-resize-handle"></div>
+</div>

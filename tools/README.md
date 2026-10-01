@@ -57,6 +57,7 @@ current, and the orchestrator checks it.
 | `gw-shots.mjs` | Captures of the gravitational-wave lab |  |
 | `i18n-audit.mjs` | Message-catalog audit | `npm run i18n:check` |
 | `i18n-catalog.mjs` | The message catalog, however many files it is split across |  |
+| `index-fragments.mjs` | The panels index.html no longer carries, and where each one went |  |
 | `inference-bench.mjs` | npm run bench:inference - how long a fit takes in its Workers, and what the | `npm run bench:inference` |
 | `inference-cases.mjs` | The cases the inference core is validated and timed on |  |
 | `inference-validate.mjs` | npm run validate:inference - what the inference core recovers, and how often | `npm run validate:inference` |

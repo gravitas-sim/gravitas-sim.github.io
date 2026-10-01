@@ -18,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 import { completeCatalogs } from '../tools/i18n-catalog.mjs';
+import { assembledIndexHtml } from '../tools/index-fragments.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -93,7 +94,13 @@ function claims(where, text) {
 
 /** An HTML page's visible text. */
 function visibleText(rel) {
-  return readFileSync(path.join(REPO, rel), 'utf8')
+  // index.html as a reader has it: the panels that ship with their family
+  // (INDEX_DECOMPOSITION.md) are still this page's text.
+  const html =
+    rel === 'index.html'
+      ? assembledIndexHtml()
+      : readFileSync(path.join(REPO, rel), 'utf8');
+  return html
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<!--[\s\S]*?-->/g, ' ')

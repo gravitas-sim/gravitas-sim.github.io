@@ -244,10 +244,13 @@ export function openDialog(
         if (event.target === host && isOpen(panel))
           closeDialog(panel, 'backdrop');
       });
-    document.addEventListener('focusin', focusin, true);
+    // The document's two outlive the panel, so they go with releaseDialog().
+    const release = new AbortController();
+    const outside = { capture: true, signal: release.signal };
+    document.addEventListener('focusin', focusin, outside);
     // A click is never the Tab's, not even one after a trip to the toolbar.
-    document.addEventListener('pointerdown', () => (wrapTo = null), true);
-    wired.set(panel, { ...wired.get(panel), keydown });
+    document.addEventListener('pointerdown', () => (wrapTo = null), outside);
+    wired.set(panel, { ...wired.get(panel), keydown, release });
   }
 
   // Focusable itself, so that a click inside it leaves focus inside it. A
@@ -262,6 +265,20 @@ export function openDialog(
   const wanted = initialFocus && named(panel, initialFocus);
   const target = wanted || focusable(panel)[0] || panel;
   target.focus({ preventScroll: true });
+}
+
+/**
+ * Let go of a dialog whose markup is leaving the page: the listeners
+ * openDialog() put on the document for it, and the record of it. A panel whose
+ * markup ships with its family is unmounted with it (INDEX_DECOMPOSITION.md),
+ * and a mounted copy is a new element that openDialog() wires afresh.
+ *
+ * @param {?HTMLElement} panel - The dialog
+ */
+export function releaseDialog(panel) {
+  if (!panel) return;
+  wired.get(panel)?.release?.abort();
+  wired.delete(panel);
 }
 
 /**

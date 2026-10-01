@@ -35,7 +35,13 @@
 // =============================================================================
 
 import { t, getLocale, registerMessages } from './i18n/index.js';
-import { openDialog, closeDialog } from './dialog.js';
+import { openDialog, closeDialog, releaseDialog } from './dialog.js';
+import {
+  fragmentMounted,
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './i18n/deferredMessages.js';
 import { announce } from './notify.js';
 import { SETTINGS } from './appState.js';
 import { SOLAR_MASS_UNIT } from './physics.js';
@@ -71,6 +77,37 @@ export async function ensurePlacementMessages() {
 }
 
 const $ = id => document.getElementById(id);
+
+/** The dialog's markup, once fetched: js/fragments/precise-placement.html. */
+let markup = null;
+
+/**
+ * Put the dialog in the page, at its host in index.html, if it is not there
+ * already (INDEX_DECOMPOSITION.md). Everything it wires is inside it, so
+ * taking it out again takes every listener with it.
+ *
+ * @returns {Promise<void>}
+ */
+export async function mountPrecisePlacement() {
+  if (fragmentMounted('precise-placement')) return;
+  // The words first, so the markup is translated as it goes in.
+  await ensurePlacementMessages().catch(() => {});
+  markup ??= await loadFragment('precise-placement');
+  mountFragment('precise-placement', markup);
+}
+
+/**
+ * Take the dialog out of the page again; the next open brings it back.
+ * @returns {boolean} Whether it was mounted
+ */
+export function unmountPrecisePlacement() {
+  const panel = $('precisePlaceDialog');
+  if (panel && fragmentMounted('precise-placement')) {
+    closeDialog(panel, 'close');
+    releaseDialog(panel);
+  }
+  return unmountFragment('precise-placement');
+}
 
 /** The last values, so reopening the form does not throw away a near-miss. */
 let remembered = null;
@@ -321,11 +358,14 @@ function submit(placeBody) {
  * @param {HTMLElement} [deps.trigger] - What to give focus back to
  */
 export async function openPrecisePlacement({ placeBody, trigger } = {}) {
-  const panel = $('precisePlaceDialog');
-  if (!panel || typeof placeBody !== 'function') return;
+  if (typeof placeBody !== 'function') return;
   // Awaited before anything is rendered: a form whose labels are message ids
-  // for a moment is worse than one that takes a moment to appear.
+  // for a moment is worse than one that takes a moment to appear. The markup
+  // after the words, so it is translated as it goes in.
   await ensurePlacementMessages().catch(() => {});
+  await mountPrecisePlacement();
+  const panel = $('precisePlaceDialog');
+  if (!panel) return;
 
   const select = $('precisePlaceType');
   if (select && !select.dataset.ready) {

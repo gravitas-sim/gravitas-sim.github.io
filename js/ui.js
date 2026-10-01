@@ -172,7 +172,10 @@ import {
   getVoicedBodies,
 } from './audio.js';
 import { describeVoices } from './sonify/voiceReadout.js';
-import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import {
+  ensureDeferredMessages,
+  mountFragment,
+} from './i18n/deferredMessages.js';
 import {
   COURSE_LEVELS,
   SETTING_SECTIONS,
@@ -194,6 +197,310 @@ import {
   exportChart,
   resizeChart,
 } from './energyChartNew.js';
+
+// -----------------------------------------------------------------------------
+// The three panels this module binds at load, and the markup they bind to.
+// Their markup was static in index.html; it lives here now, beside the code
+// that binds it (INDEX_DECOMPOSITION.md), and goes in at the hosts index.html
+// keeps for them before anything below reaches for an element - this module
+// binds several of them at the top level. In a page without the hosts (a test
+// that wrote its own markup) mountFragment declines, and nothing changes.
+// -----------------------------------------------------------------------------
+
+export const SOUND_PANEL_MARKUP = `<!--
+The sound panel. Moved to <body> at start-up and positioned from the
+speaker button, for the same reason the object picker is: the readout is
+an overflow container and clips its absolutely positioned descendants.
+-->
+<div
+id="soundPanel"
+class="sound-panel"
+role="dialog"
+aria-modal="false"
+aria-labelledby="soundPanelTitle"
+hidden
+>
+<h2 id="soundPanelTitle" class="sound-panel-title"></h2>
+<p id="soundPanelState" class="sound-panel-state" aria-live="polite"></p>
+<button
+id="soundPanelToggle"
+type="button"
+class="sound-panel-switch"
+aria-pressed="false"
+></button>
+<p id="soundPanelPermission" class="sound-panel-note"></p>
+<dl class="sound-panel-rows">
+<div class="sound-panel-row">
+<dt id="soundPanelModeLabel"></dt>
+<dd id="soundPanelMode"></dd>
+</div>
+<div class="sound-panel-row">
+<dt id="soundPanelNowLabel"></dt>
+<dd id="soundPanelNow"></dd>
+</div>
+</dl>
+<!--
+What the tones stand for, in numbers. The sandbox's audio is lossy by
+design - orbital frequency is compressed and then quantized onto a
+pentatonic scale - so this is deliberately not a description of what
+you hear. It is the quantity the sound is derived from, printed
+losslessly, for a reader who cannot use the audio at all.
+
+NOT aria-live, and that is not an oversight. The voices are re-chosen
+several times a second; a polite live region over them would interrupt
+a screen reader continuously and make the panel unusable for exactly
+the person it exists for. js/ui.js fills this in refreshSoundPanel(),
+which runs when the panel opens and on each state change and returns
+immediately while the panel is hidden - so the list is a snapshot that
+holds still while it is being read.
+-->
+<section id="soundPanelVoices" class="sound-panel-voices" hidden>
+<h3 id="soundPanelVoicesTitle" class="sound-panel-voices-title"></h3>
+<ol id="soundPanelVoicesList" class="sound-panel-voices-list"></ol>
+<p id="soundPanelVoicesNote" class="sound-panel-note"></p>
+</section>
+<label class="sound-panel-volume" for="soundPanelVolume">
+<span id="soundPanelVolumeLabel"></span>
+<input
+id="soundPanelVolume"
+type="range"
+min="0"
+max="1"
+step="0.05"
+value="0.65"
+/>
+<output id="soundPanelVolumeOut">65%</output>
+</label>
+<div class="sound-panel-actions">
+<button
+id="soundPanelPreview"
+type="button"
+class="sound-panel-btn"
+></button>
+<button
+id="soundPanelStop"
+type="button"
+class="sound-panel-btn"
+></button>
+</div>
+<p id="soundPanelPreviewNote" class="sound-panel-note"></p>
+<p class="sound-panel-link">
+<!--
+The href is set from js/ui.js along with the label. A static
+"#investigation=..." here is a route rather than an anchor, and
+tools/check-links.mjs is right to say that no element has that id.
+-->
+<a id="soundPanelLesson"></a>
+</p>
+</div>
+`;
+
+export const BH_MASSES_MARKUP = `<div
+id="bhMassesModal"
+class="hidden"
+hidden
+inert
+role="dialog"
+aria-modal="true"
+aria-labelledby="bhMassesHeading"
+>
+<div class="bh-masses-header" id="bhMassesHeading">
+Set Individual Black Hole Masses (M<sub class="solar-sub">☉</sub>)
+</div>
+<button
+class="floating-close-chip"
+id="bhMassesCloseChip"
+aria-label="Close"
+title="Close without changing the masses"
+data-i18n-title="settings.bhMassesCloseChip.hint"
+data-i18n-aria-label="settings.bhMassesCloseChip.label"
+>
+✕
+</button>
+<div id="bhMassesContent" class="bh-masses-content"></div>
+<div class="bh-masses-footer">
+<button
+id="bhMassesDone"
+class="ui-button"
+title="Confirm these black hole masses and close"
+data-i18n-title="settings.bhMassesDone.hint"
+data-i18n="settings.bhMassesDone"
+>
+Done
+</button>
+</div>
+</div>
+`;
+
+export const INSPECTOR_MARKUP = `<!-- Object Inspector Modal -->
+<!-- Object inspector: a compact instrument readout, not a modal -->
+<div
+id="objectInspector"
+role="dialog"
+aria-labelledby="inspectorTitle"
+aria-modal="false"
+>
+<div class="inspector-header" id="inspectorDragHandle">
+<span
+class="inspector-icon"
+id="inspectorIcon"
+aria-hidden="true"
+></span>
+<span class="inspector-identity">
+<span
+class="inspector-title"
+id="inspectorTitle"
+data-i18n="inspector.inspectorTitle"
+>Object</span
+>
+<span class="inspector-kind" id="inspectorKind"></span>
+</span>
+<span class="inspector-controls">
+<button
+class="inspector-pin"
+id="inspectorPin"
+type="button"
+aria-label="Pin a copy of this object for comparison"
+title="Pin a copy for comparison"
+data-i18n-title="inspector.inspectorPin.hint"
+data-i18n-aria-label="inspector.inspectorPin.label"
+>
+<svg
+width="14"
+height="14"
+viewBox="0 0 16 16"
+aria-hidden="true"
+focusable="false"
+>
+<path
+fill="none"
+stroke="currentColor"
+stroke-width="1.4"
+stroke-linecap="round"
+stroke-linejoin="round"
+d="M6 1.8h4l-.6 3.3 2.1 2.3H4.5l2.1-2.3zM8 7.4v6.8"
+></path>
+</svg>
+</button>
+<button
+class="inspector-icon-btn"
+id="inspectorManeuver"
+type="button"
+title="Plan an impulsive burn for this body: set a radial and transverse delta-v, see the orbit it would produce, and apply it only if you mean to"
+data-i18n-title="burn.open.hint"
+aria-label="Plan a burn"
+data-i18n-aria-label="burn.open.label"
+hidden
+>
+&#9650;
+</button>
+<button
+class="inspector-delete"
+id="inspectorDelete"
+type="button"
+aria-label="Delete this object"
+title="Delete this object"
+data-i18n-title="inspector.inspectorDelete.hint"
+data-i18n-aria-label="inspector.inspectorDelete.label"
+>
+<svg
+width="14"
+height="14"
+viewBox="0 0 16 16"
+aria-hidden="true"
+focusable="false"
+>
+<path
+fill="none"
+stroke="currentColor"
+stroke-width="1.4"
+stroke-linecap="round"
+d="M2.5 4h11M6.5 4V2.6h3V4M4 4l.7 9.4h6.6L12 4M6.6 6.6v4.4M9.4 6.6v4.4"
+></path>
+</svg>
+</button>
+<button
+class="inspector-close"
+id="inspectorClose"
+type="button"
+aria-label="Close the inspector"
+title="Close (Esc)"
+data-i18n-title="inspector.inspectorClose.hint"
+data-i18n-aria-label="inspector.inspectorClose.label"
+>
+×
+</button>
+</span>
+</div>
+
+<div
+class="inspector-tabs"
+role="tablist"
+aria-label="Inspector views"
+data-i18n-aria-label="inspector.objectInspector.label"
+>
+<button
+class="inspector-tab active"
+id="inspectorTabDetails"
+data-tab="details"
+role="tab"
+type="button"
+aria-selected="true"
+aria-controls="detailsTab"
+data-i18n="inspector.inspectorTabDetails"
+>
+Details
+</button>
+<button
+class="inspector-tab"
+id="inspectorTabEnergy"
+data-tab="energy"
+role="tab"
+type="button"
+aria-selected="false"
+aria-controls="energyTab"
+data-i18n="inspector.inspectorTabEnergy"
+>
+Energy
+</button>
+</div>
+
+<div class="inspector-content" id="inspectorContent">
+<div
+class="inspector-tab-content active"
+id="detailsTab"
+role="tabpanel"
+aria-labelledby="inspectorTabDetails"
+></div>
+<div
+class="inspector-tab-content"
+id="energyTab"
+role="tabpanel"
+aria-labelledby="inspectorTabEnergy"
+></div>
+</div>
+</div>
+`;
+
+mountFragment('sound', SOUND_PANEL_MARKUP);
+mountFragment('bh-masses', BH_MASSES_MARKUP);
+if (mountFragment('inspector', INSPECTOR_MARKUP)) {
+  // Hidden before it is ever painted. This was an inline script in index.html,
+  // run as the parser reached it; the markup arrives here now, so its first
+  // state is set here, and the page carries one inline script fewer.
+  const inspector = document.getElementById('objectInspector');
+  Object.assign(inspector.style, {
+    display: 'none',
+    opacity: '0',
+    visibility: 'hidden',
+    pointerEvents: 'none',
+    position: 'absolute',
+    left: '-9999px',
+    top: '-9999px',
+    zIndex: '-9999',
+  });
+  inspector.classList.remove('visible', 'showUI');
+}
 
 const canvas = document.getElementById('simulationCanvas');
 const starfieldCanvas = document.getElementById('starfieldCanvas');

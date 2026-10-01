@@ -11,8 +11,16 @@
 // =============================================================================
 
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import {
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './i18n/deferredMessages.js';
 
 let loading = null;
+
+/** Whether the first press has been handed to the dialog's own toggle. */
+let handedOver = false;
 
 /**
  * Fetch the dialog and wire it up, once.
@@ -24,11 +32,15 @@ function ensureDialog() {
     // The prose is nice to have; the dialog is the point. A failure to fetch
     // the strings must not stop the dialog opening - it would show message ids,
     // which is visible and recoverable, where not opening is neither.
+    // Its markup is js/fragments/export.html (INDEX_DECOMPOSITION.md).
     loading = ensureDeferredMessages()
       .catch(() => {})
-      .then(() => import('./exportDialog.js'))
-      .then(mod => {
-        mod.initExportDialog();
+      .then(() =>
+        Promise.all([import('./exportDialog.js'), loadFragment('export')])
+      )
+      .then(([mod, html]) => {
+        const signal = mountFragment('export', html);
+        mod.initExportDialog({ signal: signal ?? undefined });
         return mod;
       });
   }
@@ -59,13 +71,25 @@ export function initExportBridge() {
   const button = document.getElementById('exportDataBtn');
   if (!button) return;
 
-  let handedOver = false;
   button.addEventListener('click', async () => {
     if (handedOver) return;
     handedOver = true;
     const mod = await ensureDialog();
     mod.openExportDialog();
   });
+}
+
+/**
+ * Unmount the dialog; the button's next press loads it afresh.
+ * @returns {Promise<boolean>} Whether it was mounted
+ */
+export async function unmountExport() {
+  if (!loading) return false;
+  const mod = await loading;
+  mod.teardownExportDialog();
+  loading = null;
+  handedOver = false;
+  return unmountFragment('export');
 }
 
 /**
