@@ -61,9 +61,11 @@ export function catalogEntries() {
       // The search index is built from the *displayed* strings, so a Spanish
       // reader searching Spanish words finds the card they can see. The key and
       // the tag ids stay in it as well, which keeps "kepler" and "tides"
-      // working in any language.
+      // working in any language - the key spaced too, so a reader who knows a
+      // scenario by the name it was keyed by before ids still finds it.
       const haystack = [
         key,
+        key.replace(/-/g, ' '),
         scenarioTitle(key),
         scenarioSummary(key),
         ...tags,

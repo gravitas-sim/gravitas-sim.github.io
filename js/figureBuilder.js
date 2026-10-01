@@ -318,7 +318,7 @@ async function init() {
   await loadSpanishNames();
   translatePage();
   fillChoices();
-  els.scenario.value = 'Solar System';
+  els.scenario.value = 'solar-system';
   els.seed.value = formatSeed(randomSeed());
   els.reset.value = 'authored';
 

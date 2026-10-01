@@ -61,8 +61,8 @@ let previous = null;
 
 /** The two scenarios this panel is for. */
 const SCENARIOS = {
-  'Binary Planet Lab': CIRCUMSTELLAR,
-  'Circumbinary Planet Lab': CIRCUMBINARY,
+  'binary-planet-lab': CIRCUMSTELLAR,
+  'circumbinary-planet-lab': CIRCUMBINARY,
 };
 
 /**
@@ -470,8 +470,8 @@ let sweepRecheck = null;
 
 /** @returns {?string} Which sweep this scenario offers, if any */
 function sweepKindFor(scenario) {
-  if (scenario === 'Binary Planet Lab') return 'circumstellar';
-  if (scenario === 'Circumbinary Planet Lab') return 'circumbinary';
+  if (scenario === 'binary-planet-lab') return 'circumstellar';
+  if (scenario === 'circumbinary-planet-lab') return 'circumbinary';
   return null;
 }
 

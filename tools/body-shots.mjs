@@ -39,18 +39,18 @@ const SEED = 'body-shots';
  * camera. Returning null keeps the scenario's own framing.
  */
 const SCENES = [
-  { id: 'solar-system', scenario: 'Solar System', steps: 200, zoom: 1.1 },
-  { id: 'earth-moon', scenario: 'Earth-Moon System', steps: 200, zoom: 2.2 },
-  { id: 'binary-bh', scenario: 'Binary BH', steps: 200, zoom: 1.5 },
-  { id: 'gw150914', scenario: 'GW150914', steps: 120, zoom: 2.5 },
-  { id: 'trappist1', scenario: 'TRAPPIST-1 System', steps: 200, zoom: 1.6 },
+  { id: 'solar-system', scenario: 'solar-system', steps: 200, zoom: 1.1 },
+  { id: 'earth-moon', scenario: 'earth-moon-system', steps: 200, zoom: 2.2 },
+  { id: 'binary-bh', scenario: 'binary-bh', steps: 200, zoom: 1.5 },
+  { id: 'gw150914', scenario: 'gw150914', steps: 120, zoom: 2.5 },
+  { id: 'trappist1', scenario: 'trappist-1-system', steps: 200, zoom: 1.6 },
   {
     // Framed on the comet nearest the Sun. As the scenario builds them these
     // are all in the outer system, so this is the cold case on purpose: a
     // subdued nucleus, no coma, no tail. A comet seven astronomical units out
     // has none, and a picture that draws one anyway teaches the wrong thing.
     id: 'comet-cold',
-    scenario: 'Solar System',
+    scenario: 'solar-system',
     steps: 400,
     zoom: 6,
     centerOn: 'comet',
@@ -60,17 +60,17 @@ const SCENES = [
     // unit for the picture - this tool draws, it does not simulate anything
     // anyone measures - so the coma and the two tails have something to show.
     id: 'comet-active',
-    scenario: 'Solar System',
+    scenario: 'solar-system',
     steps: 400,
     zoom: 6,
     centerOn: 'comet',
     cometAtAu: 0.8,
   },
-  { id: 'star-cluster', scenario: 'Star Cluster', steps: 150, zoom: 1.0 },
+  { id: 'star-cluster', scenario: 'star-cluster', steps: 150, zoom: 1.0 },
   // One rocky planet, large, so the shading and the limb are legible.
   {
     id: 'planet-closeup',
-    scenario: 'Solar System',
+    scenario: 'solar-system',
     steps: 200,
     zoom: 26,
     centerOn: 'planet',
@@ -78,7 +78,7 @@ const SCENES = [
   // And one gas giant, for the bands and the rings.
   {
     id: 'gasgiant-closeup',
-    scenario: 'Solar System',
+    scenario: 'solar-system',
     steps: 200,
     zoom: 16,
     centerOn: 'gasgiant',
@@ -88,7 +88,7 @@ const SCENES = [
   // bands, the division and the disc passing in front of the far half.
   {
     id: 'saturn',
-    scenario: 'Solar System',
+    scenario: 'solar-system',
     steps: 200,
     zoom: 20,
     centerOnName: 'Saturn',
@@ -99,7 +99,7 @@ const SCENES = [
   // will try to read it off the first.
   {
     id: 'transit',
-    scenario: 'Transit Lab',
+    scenario: 'transit-lab',
     steps: 120,
     zoom: 60,
   },
@@ -111,7 +111,7 @@ const SCENES = [
     // Supermassive BH rather than a busy exoplanet catalog: a crowded field
     // deliberately drops to the simplified treatment, which is correct and is
     // the wrong picture for judging the detailed one.
-    scenario: 'Supermassive BH',
+    scenario: 'supermassive-bh',
     steps: 150,
     zoom: 22,
     centerOnRinged: true,

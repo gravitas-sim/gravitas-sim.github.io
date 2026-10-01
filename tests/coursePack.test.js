@@ -844,7 +844,7 @@ describe('time, the graph and the manifest', () => {
       has('item:a-first-transit', 'lesson:transit-photometry', 'opens')
     ).toBe(true);
     expect(
-      has('lesson:transit-photometry', 'scenario:Transit Lab', 'uses')
+      has('lesson:transit-photometry', 'scenario:transit-lab', 'uses')
     ).toBe(true);
     expect(has('lesson:orbital-energy', 'lesson:keplers-laws', 'assumes')).toBe(
       true
@@ -928,16 +928,26 @@ describe('links', () => {
   test('a scenario link is a world link the app decodes, at the seed its word names', async () => {
     const item = {
       kind: 'scenario',
-      scenario: 'Solar System',
+      scenario: 'solar-system',
       seed: 'sky-1',
       paused: true,
     };
     const { href } = await itemLink(item, { root: ROOT });
     const payload = await decodePayload(href.slice(href.indexOf('#')));
     expect(payload).toEqual(scenarioPayload(item));
-    expect(payload.s).toBe('Solar System');
+    expect(payload.v).toBe(2);
+    expect(payload.s).toBe('solar-system');
     expect(payload.seed).toBe(formatSeed(parseSeed('sky-1')));
     expect(payload.p).toBe(1);
+    // A pack made before ids names it in English, and its link still opens
+    // the same scenario.
+    const old = await itemLink(
+      { ...item, scenario: 'Solar System' },
+      { root: ROOT }
+    );
+    expect((await decodePayload(old.href.slice(old.href.indexOf('#')))).s).toBe(
+      'solar-system'
+    );
   });
 
   test('datasets open in the Observatory; a catalog one after it is installed', async () => {

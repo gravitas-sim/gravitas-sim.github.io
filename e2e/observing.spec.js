@@ -16,7 +16,7 @@ import { test, expect } from './fixtures.js';
 /** Get all three panels open on a system worth observing. */
 async function openObservatory(page, app) {
   await app.boot();
-  await app.loadScenario('Transit Lab');
+  await app.loadScenario('transit-lab');
   await app.waitForFrames(10);
   await app.openPanel('toggleLightCurve', 'lightCurveContainer');
   await app.openPanel('toggleRadialVelocity', 'rvContainer');
@@ -29,7 +29,7 @@ test.describe('the light curve', () => {
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      await app.loadScenario('Transit Lab');
+      await app.loadScenario('transit-lab');
       await app.openPanel('toggleLightCurve', 'lightCurveContainer');
 
       await expect(page.locator('#lightCurveCanvas')).toBeVisible();
@@ -62,7 +62,7 @@ test.describe('the light curve', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Transit Lab');
+    await app.loadScenario('transit-lab');
     await app.openPanel('toggleLightCurve', 'lightCurveContainer');
 
     await page.locator('#closeLightCurve').click();
@@ -81,7 +81,7 @@ test.describe('radial velocity', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.waitForFrames(10);
     await app.openPanel('toggleRadialVelocity', 'rvContainer');
 
@@ -109,7 +109,7 @@ test.describe('radial velocity', () => {
     // Transit Lab pins the star, so a reflex velocity would be an artifact. The
     // panel refusing to report one is a deliberate behavior worth defending.
     await app.boot();
-    await app.loadScenario('Transit Lab');
+    await app.loadScenario('transit-lab');
     await app.openPanel('toggleRadialVelocity', 'rvContainer');
 
     const held = await page.evaluate(async () => {
@@ -132,7 +132,7 @@ test.describe('astrometry', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.waitForFrames(10);
     await app.openPanel('toggleAstrometry', 'astrometryContainer');
 
@@ -269,7 +269,7 @@ test.describe('the shared observer geometry', () => {
     // A physics claim the panels have to agree with: at i = 0 the line of sight
     // is perpendicular to the orbit and there is nothing to measure.
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.openPanel('toggleRadialVelocity', 'rvContainer');
     await app.waitForFrames(20);
 
@@ -290,7 +290,7 @@ test.describe('the shared observer geometry', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(20);
 
     // The rail is an accordion, so the Tools section has to be open before the

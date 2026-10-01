@@ -23,7 +23,7 @@ import { encodePayload } from '../js/shareState.js';
  * day an unrelated change moved the seeded stream along.
  */
 const ECCENTRIC = Object.freeze({
-  scenario: "Kepler's 2nd Law",
+  scenario: 'keplers-2nd-law',
   body: 'Eccentric Orbiter',
   primary: 'Kepler Star',
 });
@@ -195,7 +195,7 @@ test.describe('arming and refusing', () => {
     // The refusal that matters: on a circular orbit the radial rate is zero
     // everywhere and its sign is decided by integration error, so a watch would
     // fire immediately and mean nothing.
-    await openTool(page, app, 'Solar System');
+    await openTool(page, app, 'solar-system');
     await page.locator('#pauseEventKind').selectOption('periapsis');
     // Solar System planets are built on circular orbits.
     await choosePair(page, 'Earth', 'Sol');
@@ -212,7 +212,7 @@ test.describe('arming and refusing', () => {
     page,
     app,
   }) => {
-    await openTool(page, app, 'Solar System');
+    await openTool(page, app, 'solar-system');
     await page.locator('#pauseEventKind').selectOption('separationInward');
     await choosePair(page, 'Earth', 'Sol');
     await page.locator('#pauseEventSeparation').fill('99');
@@ -225,7 +225,7 @@ test.describe('arming and refusing', () => {
   });
 
   test('the fields shown follow the event chosen', async ({ page, app }) => {
-    await openTool(page, app, 'Solar System');
+    await openTool(page, app, 'solar-system');
 
     await page.locator('#pauseEventKind').selectOption('periapsis');
     await expect(page.locator('#pauseEventSeparationField')).toBeHidden();
@@ -246,7 +246,7 @@ test.describe('arming and refusing', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(10);
 
     // The shortcut is handled on the document. Clicking the canvas to focus it
@@ -358,7 +358,7 @@ test.describe('everything else still agrees afterwards', () => {
     // never existed. So after a pause every one of them must still end at the
     // clock the simulation is actually holding.
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.waitForFrames(10);
     await app.openPanel('toggleLightCurve', 'lightCurveContainer');
     await app.openPanel('toggleRadialVelocity', 'rvContainer');
@@ -436,7 +436,7 @@ test.describe('everything else still agrees afterwards', () => {
     await armInwardCrossing(page);
     expect((await watchState(page)).armed).not.toBeNull();
 
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(10);
 
     // A rebuilt world reuses body ids for different objects, so a surviving

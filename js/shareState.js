@@ -27,10 +27,12 @@
 // scenarios.js takes its settings object as a parameter.
 // =============================================================================
 
-import { applyPreset } from './scenarios.js';
+import { applyPreset, scenarioId } from './scenarios.js';
 import { formatSeed, parseSeed } from './rng.js';
 
-const VERSION = 1;
+/** 2 names a scenario by id, 1 by its English name; both are read. */
+const VERSION = 2;
+export { VERSION as LINK_VERSION };
 
 // Above this the link starts getting refused or line-wrapped by mail clients,
 // LMS text fields and chat apps. Browsers themselves handle far more, so this
@@ -136,18 +138,24 @@ async function inflate(bytes) {
 // --- Number hygiene ----------------------------------------------------------
 
 /**
- * Round to 7 significant figures, recursively.
- *
- * Float arithmetic leaves positions like 123.40000000000001. Those extra
- * digits are noise, but they cost bytes and: worse: they compress badly,
- * because deflate finds no repetition in random mantissa tails. Trimming them
- * roughly halves a full payload and changes no orbit anyone can see.
+ * Significant figures a written world keeps: here and in the pack compiler
+ * (js/scenarioPack.js), one policy. Why twelve: FORMATS.md.
+ */
+export const LINK_PRECISION = 12;
+
+/** One number as a link writes it. */
+export const linkNumber = v => Number(v.toPrecision(LINK_PRECISION));
+
+/**
+ * Round every number in a value to the link's precision, recursively. The
+ * noise digits float arithmetic leaves (123.40000000000001) cost bytes and
+ * compress badly; nobody sees them.
  */
 function trim(value) {
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) return 0;
     if (value === 0) return 0;
-    return Number(value.toPrecision(7));
+    return linkNumber(value);
   }
   if (Array.isArray(value)) return value.map(trim);
   if (value && typeof value === 'object') {
@@ -168,7 +176,7 @@ function trim(value) {
  * scenario would give. Anything the live settings hold beyond this is a
  * deliberate change by the author and is the only part worth transmitting.
  *
- * @param {string} scenario - Scenario name
+ * @param {string} scenario - Scenario id, or a key it was known by
  * @param {Object} DEFAULT_SETTINGS - The baseline settings object
  * @returns {Object} Settings as the scenario alone would leave them
  */
@@ -336,7 +344,7 @@ export function diffSettings(from, to) {
  * and is applied once the bodies exist.
  *
  * @param {Object} opts
- * @param {string} opts.scenario - Scenario name
+ * @param {string} opts.scenario - Scenario id (or a key it was known by), or 'None'
  * @param {number} opts.seed - Seed that generated the world
  * @param {Object} opts.settings - Live settings
  * @param {Object} [opts.generationSettings] - Settings as of the last build
@@ -360,7 +368,9 @@ export function buildPayload({
   extras,
   experiment,
 }) {
-  const payload = { v: VERSION, s: scenario, seed: formatSeed(seed) };
+  // By id; 'None' stays 'None'.
+  const s = scenarioId(scenario) ?? scenario;
+  const payload = { v: VERSION, s, seed: formatSeed(seed) };
   const atBuild = generationSettings || settings;
   const delta = settingsDelta(atBuild, DEFAULT_SETTINGS, scenario);
   if (Object.keys(delta).length) payload.d = delta;
@@ -501,6 +511,17 @@ export async function decodePayload(fragment) {
   }
   if (!payload || typeof payload !== 'object' || !payload.s) {
     throw new Error('That link does not contain a simulation.');
+  }
+  // Out by id, from either version; a scenario this build lacks is refused
+  // rather than built as the default world.
+  if (payload.s !== 'None') {
+    const id = scenarioId(payload.s);
+    if (!id) {
+      throw new Error(
+        'That link names a scenario this version of Gravitas does not have. Reload the page and try again.'
+      );
+    }
+    payload.s = id;
   }
   return payload;
 }

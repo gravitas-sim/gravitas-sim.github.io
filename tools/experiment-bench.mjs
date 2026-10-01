@@ -114,7 +114,7 @@ function serve() {
 const CASES = [
   {
     name: 'binary planet, short',
-    scenario: 'Binary Planet Lab',
+    scenario: 'binary-planet-lab',
     parameter: 'binary_lab_planet_a',
     from: 0.05,
     to: 0.4,
@@ -123,7 +123,7 @@ const CASES = [
   },
   {
     name: 'binary planet, long',
-    scenario: 'Binary Planet Lab',
+    scenario: 'binary-planet-lab',
     parameter: 'binary_lab_planet_a',
     from: 0.05,
     to: 0.4,
@@ -132,7 +132,7 @@ const CASES = [
   },
   {
     name: 'gravity assist',
-    scenario: 'Gravity Assist Lab',
+    scenario: 'gravity-assist-lab',
     parameter: 'assist_impact_parameter',
     from: 20,
     to: 400,

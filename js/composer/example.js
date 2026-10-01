@@ -132,7 +132,7 @@ export const EXAMPLE_INVESTIGATION = {
         esOf: 'fd66b991',
       },
       setup: {
-        scenario: 'Solar System',
+        scenario: 'solar-system',
         seed: 'orbit-1',
       },
     },

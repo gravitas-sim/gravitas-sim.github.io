@@ -97,7 +97,7 @@ test.describe('an ordinary share link reproduces the viewing context', () => {
       app,
     }) => {
       await app.boot();
-      await app.loadScenario('Binary Star System');
+      await app.loadScenario('binary-star-system');
       await app.waitForFrames(20);
 
       const { before, after } = await shareAndRestore(page, { kind });
@@ -125,7 +125,7 @@ test.describe('an ordinary share link reproduces the viewing context', () => {
       app,
     }) => {
       await app.boot();
-      await app.loadScenario('Binary Star System');
+      await app.loadScenario('binary-star-system');
       await app.waitForFrames(20);
 
       const { before, after } = await shareAndRestore(page, {
@@ -149,7 +149,7 @@ test.describe('an ordinary share link reproduces the viewing context', () => {
     // the distance unconditionally, so a link that specified one lost it the
     // moment anyone looked at the panel it applied to.
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.waitForFrames(20);
 
     const distances = await page.evaluate(async pc => {
@@ -288,7 +288,7 @@ test.describe('an ordinary share link reproduces the viewing context', () => {
     // A rebuilt world hands the same body ids to different objects. The
     // recordings must not span the rebuild.
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.waitForFrames(10);
     await app.openPanel('toggleRadialVelocity', 'rvContainer');
 
@@ -334,7 +334,7 @@ test.describe('embed mode', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Star System');
+    await app.loadScenario('binary-star-system');
     await app.waitForFrames(20);
 
     const fragment = await page.evaluate(async ctx => {

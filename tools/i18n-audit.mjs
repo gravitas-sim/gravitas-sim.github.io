@@ -75,8 +75,8 @@ const files = sources(join(ROOT, 'js'));
  *
  * The test is deliberately only that no segment is empty. A first attempt
  * required word characters throughout and silently discarded 114 real ids -
- * every `scenario.Solar System.title`, whose middle segment is a scenario name
- * with spaces and colons in it. Ids here are built by joining catalog keys, so
+ * every `scenario.Solar System.title`, whose middle segment was then a scenario
+ * name with spaces and colons in it (scenarios are keyed by id since Prompt 63). Ids here are built by joining catalog keys, so
  * a segment can contain almost anything; what it can never be is nothing.
  * Stripping comments first would be the tidier fix and the more dangerous one,
  * since a regex removing `//` to end of line also truncates every `https://`

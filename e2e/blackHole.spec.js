@@ -54,7 +54,7 @@ test.describe('a display setting cannot change the world', () => {
   test('one seed builds one world, disk on or off', async ({ page, app }) => {
     await app.boot();
     const on = await build(page, {
-      scenario: 'Black Hole Lab',
+      scenario: 'black-hole-lab',
       seed: 'same-seed',
       settings: {
         show_accretion_disk: true,
@@ -63,7 +63,7 @@ test.describe('a display setting cannot change the world', () => {
       },
     });
     const off = await build(page, {
-      scenario: 'Black Hole Lab',
+      scenario: 'black-hole-lab',
       seed: 'same-seed',
       settings: {
         show_accretion_disk: false,
@@ -78,12 +78,12 @@ test.describe('a display setting cannot change the world', () => {
   test('and the quality tier does not either', async ({ page, app }) => {
     await app.boot();
     const full = await build(page, {
-      scenario: 'Black Hole Lab',
+      scenario: 'black-hole-lab',
       seed: 'tier',
       settings: { quality_tier: 'full' },
     });
     const low = await build(page, {
-      scenario: 'Black Hole Lab',
+      scenario: 'black-hole-lab',
       seed: 'tier',
       settings: { quality_tier: 'low' },
     });
@@ -97,7 +97,7 @@ test.describe('the appearance is a display choice and nothing else', () => {
     const moved = await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       const sim = await import('/js/physics.js');
-      ui.loadScenarioByKey('Black Hole Lab');
+      ui.loadScenarioByKey('black-hole-lab');
       const snap = () =>
         [...sim.bh_list, ...sim.planets].map(
           b =>
@@ -122,7 +122,7 @@ test.describe('the appearance is a display choice and nothing else', () => {
     const round = await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       const sim = await import('/js/physics.js');
-      ui.loadScenarioByKey('Black Hole Lab');
+      ui.loadScenarioByKey('black-hole-lab');
       const bh = sim.bh_list[0];
       bh.setAppearance({
         environment: 'jet',
@@ -201,7 +201,7 @@ test.describe('the picture', () => {
 
   test('pausing freezes the disk and the jets', async ({ page, app }) => {
     await app.boot();
-    await frame(page, 'Quasar Cannon');
+    await frame(page, 'quasar-cannon');
     await page.waitForTimeout(500);
     const first = await pixels(page);
     await page.waitForTimeout(1400);
@@ -230,12 +230,12 @@ test.describe('the picture', () => {
     app,
   }) => {
     await app.boot();
-    const seen = await frame(page, 'GW150914', 0.1);
+    const seen = await frame(page, 'gw150914', 0.1);
     expect(seen.env).toBe('quiescent');
     await page.waitForTimeout(400);
     const dark = await flowBrightness(page);
 
-    await frame(page, 'Black Hole Lab', 0.1);
+    await frame(page, 'black-hole-lab', 0.1);
     await page.waitForTimeout(400);
     const lit = await flowBrightness(page);
 
@@ -249,7 +249,7 @@ test.describe('the picture', () => {
     app,
   }) => {
     await app.boot();
-    await frame(page, 'Black Hole Lab', 0.1);
+    await frame(page, 'black-hole-lab', 0.1);
     await page.waitForTimeout(500);
     const read = await page.evaluate(() => {
       const c = document.getElementById('simulationCanvas');
@@ -286,11 +286,11 @@ test.describe('the picture', () => {
     app,
   }) => {
     await app.boot();
-    await frame(page, 'Quasar Cannon');
+    await frame(page, 'quasar-cannon');
     await page.waitForTimeout(400);
     const a = await pixels(page);
     // Rebuild the identical scene and compare.
-    await frame(page, 'Quasar Cannon');
+    await frame(page, 'quasar-cannon');
     await page.waitForTimeout(400);
     const b = await pixels(page);
     expect(b).toBe(a);
@@ -305,7 +305,7 @@ test.describe('the inspector says which numbers are which', () => {
     await app.boot();
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
-      ui.loadScenarioByKey('Black Hole Lab');
+      ui.loadScenarioByKey('black-hole-lab');
       const sim = await import('/js/physics.js');
       ui.showObjectInspector(sim.bh_list[0], 'BlackHole');
     });
@@ -375,7 +375,7 @@ test.describe('a picture cannot reach into the physics', () => {
   }, testInfo) => {
     testInfo.setTimeout(90_000);
     await app.boot();
-    await app.loadScenario('Binary BH', 'bh-visual-isolation');
+    await app.loadScenario('binary-bh', 'bh-visual-isolation');
     await app.setPaused(true);
     await app.waitForFrames(2);
 
@@ -411,7 +411,7 @@ test.describe('a picture cannot reach into the physics', () => {
   }, testInfo) => {
     testInfo.setTimeout(90_000);
     await app.boot();
-    await app.loadScenario('Sagittarius A*', 'bh-tier-isolation');
+    await app.loadScenario('sagittarius-a', 'bh-tier-isolation');
     await app.setPaused(true);
     await app.waitForFrames(2);
     const before = await physicsOf(page);
@@ -434,7 +434,7 @@ test.describe('the render cache is bounded', () => {
   }, testInfo) => {
     testInfo.setTimeout(120_000);
     await app.boot();
-    await app.loadScenario('Binary BH', 'bh-cache');
+    await app.loadScenario('binary-bh', 'bh-cache');
     await app.waitForFrames(5);
 
     // Every inclination a reader can choose, at both tiers: far more distinct

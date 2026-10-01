@@ -22,7 +22,7 @@
 
 import { describe, test, expect } from '@jest/globals';
 import { INVESTIGATIONS, getInvestigation } from '../js/data/investigations.js';
-import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
+import { SCENARIO_INFO, scenarioId } from '../js/data/scenarioInfo.js';
 import {
   allWidgets,
   getWidget,
@@ -403,9 +403,12 @@ describe('instrument references', () => {
 describe('scenario references', () => {
   test('every scenario a step sets up is in the catalog', () => {
     // A renamed scenario key leaves the lesson showing whatever was on screen
-    // before, which reads to a student as "the step did nothing".
+    // before, which reads to a student as "the step did nothing". By id, or
+    // by the English key a lesson written before ids keeps.
     const bad = EVERY_STEP.filter(
-      s => s.step.setup?.scenario && !SCENARIO_INFO[s.step.setup.scenario]
+      s =>
+        s.step.setup?.scenario &&
+        !SCENARIO_INFO[scenarioId(s.step.setup.scenario)]
     ).map(
       s => `${where(s)} sets up "${s.step.setup.scenario}", not in the catalog`
     );

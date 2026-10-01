@@ -44,9 +44,9 @@ const PORT = 8129;
  */
 const SCENES = [
   { id: 'empty', scenario: null },
-  { id: 'binary-bh', scenario: 'Binary BH' },
-  { id: 'gw-merger', scenario: 'GW150914', forceMerge: true },
-  { id: 'crowded', scenario: 'Compact Object Zoo' },
+  { id: 'binary-bh', scenario: 'binary-bh' },
+  { id: 'gw-merger', scenario: 'gw150914', forceMerge: true },
+  { id: 'crowded', scenario: 'compact-object-zoo' },
 ];
 
 const pct = (sorted, p) => {

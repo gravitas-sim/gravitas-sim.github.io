@@ -326,7 +326,7 @@ const m = {
 };
 const R = await load('js/experiments/trialRunner.js');
 const manifest = {
-  model: { scenario: 'Binary Planet Lab' },
+  model: { scenario: 'binary-planet-lab' },
   initial: { settings: {} },
   observables: { metrics: ['distance_to_primary', 'energy_drift'], roles: { bodies: ['planet'], primary: 'Star A' } },
   stop: { duration: 10000, events: [] },

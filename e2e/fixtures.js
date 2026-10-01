@@ -78,7 +78,8 @@ const isIgnorable = text => IGNORED_CONSOLE.some(re => re.test(text));
  */
 export async function requireScenarioKey(page, key) {
   const { known, near } = await page.evaluate(async k => {
-    const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
+    const { SCENARIO_INFO, scenarioId } =
+      await import('/js/data/scenarioInfo.js');
     const keys = Object.keys(SCENARIO_INFO);
     // Typographic quotes and case, the two ways a correct-looking name misses.
     const fold = s =>
@@ -89,7 +90,9 @@ export async function requireScenarioKey(page, key) {
         .toLowerCase();
     return {
       known: keys.includes(k),
-      near: keys.find(x => fold(x) === fold(k)) ?? null,
+      // And the English name a scenario was keyed by before ids, which the
+      // application still reads but a spec names by id.
+      near: keys.find(x => fold(x) === fold(k)) ?? scenarioId(k) ?? null,
     };
   }, key);
   if (known) return;

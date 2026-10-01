@@ -161,7 +161,7 @@ test.describe('the chaos investigation', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(600_000);
-    await app.loadScenario('Three-Body Sensitivity Lab', 'chaos-lab');
+    await app.loadScenario('three-body-sensitivity-lab', 'chaos-lab');
     await app.waitForBodies(3);
     await openBench(page, app);
     await prepare(page, 'Reproducibility control');
@@ -181,7 +181,7 @@ test.describe('the chaos investigation', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(600_000);
-    await app.loadScenario('Binary Pair', 'chaos-binary');
+    await app.loadScenario('binary-pair', 'chaos-binary');
     await app.waitForBodies(2);
     // The lesson raises the speed for this section, because the pair's year is
     // 795 simulated seconds and the drift needs several of them.
@@ -220,7 +220,7 @@ test.describe('the chaos investigation', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(700_000);
-    await app.loadScenario('Three-Body Sensitivity Lab', 'chaos-lab');
+    await app.loadScenario('three-body-sensitivity-lab', 'chaos-lab');
     await app.waitForBodies(3);
     await openBench(page, app);
     await prepare(page, 'Butterfly effect');
@@ -290,7 +290,7 @@ test.describe('the chaos investigation', () => {
     const files = await page.evaluate(() => window.__bench.exportFiles('e2e'));
     expect(files.csv.text).toMatch(/^experiment,run,t_days/);
     const manifest = JSON.parse(files.json.text);
-    expect(manifest.provenance.scenario).toBe('Three-Body Sensitivity Lab');
+    expect(manifest.provenance.scenario).toBe('three-body-sensitivity-lab');
     expect(manifest.provenance.integrator).toBeTruthy();
     expect(manifest.provenance.initialStateHash).toMatch(/^[0-9a-f]{8}$/);
 
@@ -478,7 +478,7 @@ test.describe('the experiment bench works in this engine', () => {
       testInfo.setTimeout(120_000);
 
       await app.boot();
-      await app.loadScenario('Three-Body Sensitivity Lab');
+      await app.loadScenario('three-body-sensitivity-lab');
       await app.waitForFrames(10);
       await openBench(page, app);
       // The bench will not record until a start state has been captured: that

@@ -37,11 +37,16 @@
           "properties": {
             "scenario": {
               "enum": [
-                "Binary Planet Lab",
-                "Circumbinary Planet Lab",
+                "binary-planet-lab",
+                "circumbinary-planet-lab",
+                "gravity-assist-lab",
+                "gravity-assist-heliocentric",
                 "Gravity Assist Lab",
-                "Gravity Assist: Heliocentric"
-              ]
+                "Gravity Assist: Heliocentric",
+                "Binary Planet Lab",
+                "Circumbinary Planet Lab"
+              ],
+              "description": "A sweepable scenario: its id, or the English name an experiment made before ids names it by."
             },
             "platform": {
               "const": "^1.0.0"

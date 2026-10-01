@@ -1996,7 +1996,7 @@ function blankInvestigation(seed) {
         type: 'read',
         title: { en: '' },
         body: { en: '' },
-        setup: { scenario: 'Solar System' },
+        setup: { scenario: 'solar-system' },
       },
       { sid: 'close', type: 'read', title: { en: '' }, body: { en: '' } },
     ],

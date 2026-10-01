@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 44 of them. 22 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 45 of them. 23 have a JSON Schema in `sdk/schemas`, and 9 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -26,7 +26,8 @@ The columns:
 | gravitas.artifact | format, formatVersion | 1 | js/platform/artifact.js validateArtifact | memory | v1 only | a validation problem | [yes](sdk/schemas/artifact-1.schema.json) |
 | gravitas.observed | format, formatVersion | 1 | js/notebook/observed.js (inside a notebook entry) | localStorage | v1 only | not checked | no |
 | gravitas.observation-data-pack | format, formatVersion | 1 | tools/data-packs/schema.mjs validateDataPack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/observation-data-pack-1.schema.json) |
-| world share link | v (link prefix 1) | 1 | js/shareState.js decodePayload | link | v1 only | refused, in words | no |
+| world share link | v (link prefix 2) | 2 | js/shareState.js decodePayload | link | reads v1, whose scenario is an English name, by id | refused, in words | no |
+| built-in scenario id | a public id (SCENARIO_INFO key) | 1 | js/scenarios.js scenarioId, js/data/scenarioInfo.js scenarioId | link, lesson, course pack, investigation pack, experiment, notebook entry | reads the English name it was keyed by before ids | refused: a link in words, a pack by its validator | [yes](sdk/schemas/scenario-id-1.schema.json) |
 | experiment link block (xp) | v | 1 | js/experiments/shareExperiment.js readExperimentBlock | link | v1 only | reported, not checked | no |
 | link extras (x) | v | 1 | js/experiments/canonicalState.js readExtras | link | v1 only | reported, not checked | no |
 | gravitas.orbital-system | format, version | 1 | js/systemSpec.js systemFromFile | download | v1 only | refused, in words | [yes](sdk/schemas/orbital-system-1.schema.json) |
@@ -77,3 +78,17 @@ The columns:
 - **Confusable ids.** `gravitas-experiment` and `gravitas.experiment` are different formats. `gravitas.course-pack` is two: /1, which extensions and the catalog carry, and /2, which the builder writes. The /1 validator refuses a /2 pack with the same message it gives any other version.
 - **Written but never read:** `gravitas.analysis`, the two guide reports, `gravitas.mission-plan` and `gravitas.course-manifest`. A student's file in any of them cannot be opened again.
 - **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled `newer`, `newerVersion`, `tooNew`, `schemaTooNew` and `from-a-newer-version`), and not at all in the link blocks, `gravitas.observed` and the catalog curation.
+
+## Scenarios by id
+
+Roadmap II Prompt 63 gave every built-in scenario a public id: lower case, words joined by hyphens, permanent (`sdk/schemas/scenario-id-1.schema.json`). Until then a scenario was keyed by its English name, and that name is what every link, lesson, course pack and experiment made before carries. The rule `scenarioId()` reads both: an id is its old name lower-cased, with apostrophes dropped and every other run of spaces and punctuation one hyphen (`"Kepler's 2nd Law"` is `keplers-2nd-law`). `tests/scenarioIds.test.js` holds the rule to all 59 old names. A title is a translation of the id and never a key.
+
+- **World links are version 2** and name the scenario by id. Version 1 still opens: its English name is read as the id. A scenario this build does not have is refused in words, where it used to build the default world.
+- **A pack's world says which pack.** A link made from a scenario pack carries `{pack: {id, version}}` in its extras, and the application carries it on into any link it makes of the same world. A pack may also name a built-in to start from, by id.
+- **The built-in lessons keep their English keys.** A step's scenario is part of its fingerprint, which assignment links, course-pack pins, submission results and progress backups store, so the lessons written before ids keep the key they were written with, and every reader resolves it. New lessons name scenarios by id.
+
+## One precision for a written world
+
+Every number a world is written down in - a share link's bodies and settings, an A/B setup, a scenario pack's compiled bodies - keeps twelve significant figures (`LINK_PRECISION` in `js/shareState.js`). The share trimmer kept seven and the pack compiler twelve, so a pack's world shared from the application lost five digits the pack had.
+
+Twelve, because seven is not below what Gravitas measures. The labs report conserved speeds and energies to parts in 1e-7 and 1e-8, and a world rounded to seven figures carries that much error into the reading it is shared to show. Twelve is four orders of magnitude below any of them, and still drops the noise digits float arithmetic leaves, which cost bytes and compress badly. Measured on full links of six built-in worlds: 30 to 40 per cent longer than at seven figures, 13 per cent more JSON to inflate (Kessler Cascade, 301 bodies: 47 KB to 53 KB, against a 64,000-byte limit), and 17 per cent shorter than every digit. A seeded link, the kind an instructor sends, carries no bodies and is the same length either way.

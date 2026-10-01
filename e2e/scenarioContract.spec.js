@@ -77,7 +77,7 @@ function namedBodies(page) {
 test.describe('Kuiper Belt scenario contract', () => {
   test.beforeEach(async ({ app }) => {
     await app.boot();
-    await app.loadScenario('Kuiper Belt', 'kbo-contract');
+    await app.loadScenario('kuiper-belt', 'kbo-contract');
   });
 
   test('all eight named objects exist at startup', async ({ page }) => {
@@ -166,9 +166,9 @@ test.describe('Kuiper Belt scenario contract', () => {
     // Both builds are loaded paused. A running world moves between the two
     // snapshots, and this test is about what initialization produces, not about
     // how far the belt has traveled since.
-    await app.loadScenario('Kuiper Belt', 'kbo-seeded', { run: false });
+    await app.loadScenario('kuiper-belt', 'kbo-seeded', { run: false });
     const first = await namedBodies(page);
-    await app.loadScenario('Kuiper Belt', 'kbo-seeded', { run: false });
+    await app.loadScenario('kuiper-belt', 'kbo-seeded', { run: false });
     const second = await namedBodies(page);
 
     const shape = list =>
@@ -199,7 +199,7 @@ test.describe('Three-Body Sensitivity Lab scenario contract', () => {
     // Paused: these are assertions about the configuration the scenario
     // *builds*, and a running world has already left it by the time the test
     // reads the numbers.
-    await app.loadScenario('Three-Body Sensitivity Lab', 'chaos-lab', {
+    await app.loadScenario('three-body-sensitivity-lab', 'chaos-lab', {
       run: false,
     });
     await app.waitForBodies(3);
@@ -276,7 +276,7 @@ test.describe('Three-Body Sensitivity Lab scenario contract', () => {
         return P.stars.map(s => [s.id, s.pos.x, s.pos.y, s.vel.x, s.vel.y]);
       });
     const first = await snapshot();
-    await app.loadScenario('Three-Body Sensitivity Lab', 'chaos-lab', {
+    await app.loadScenario('three-body-sensitivity-lab', 'chaos-lab', {
       run: false,
     });
     await app.waitForBodies(3);

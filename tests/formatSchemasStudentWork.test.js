@@ -24,6 +24,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { valid } from './jsonSchemaSubset.js';
+import { LEGACY_NAMES } from './scenarioLegacyKeys.js';
 import { as, holds, isItsRow } from './schemaCorpus.js';
 import { encodePayload } from '../js/shareState.js';
 import * as AS from '../js/assignments/assignment.js';
@@ -839,11 +840,13 @@ describe('the investigation pack schema', () => {
     expect(Object.keys(s.properties).sort()).toEqual(set('PACK_FIELDS').sort());
     expect(s.properties.locales.items.enum).toEqual(api.locales);
     expect(s.properties.id.not.enum).toEqual(api.lessons);
-    expect(s.properties.thumbnail.enum).toEqual(api.scenarios);
+    // A scenario by id, or by the English name a pack made before ids used.
+    const scenarios = [...api.scenarios, ...LEGACY_NAMES];
+    expect(s.properties.thumbnail.enum).toEqual(scenarios);
     expect(
       s.properties.prerequisites.items.anyOf[0].properties.lesson.enum
     ).toEqual(api.lessons);
-    expect(s.$defs.setup.properties.scenario.enum).toEqual(api.scenarios);
+    expect(s.$defs.setup.properties.scenario.enum).toEqual(scenarios);
     expect(s.$defs.tool.properties.id.enum).toEqual(api.widgets);
     expect(s.$defs.when.properties.is.enum).toEqual([...IP.WHEN_STATES]);
     // Each type of step has exactly its fields (the common ones and its own).

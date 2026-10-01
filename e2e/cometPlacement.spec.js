@@ -409,7 +409,7 @@ test('the scenario comets nobody could see are on screen now', async ({
   // The Solar System scenario has built ten comets all along - num_comets: 10
   // in js/scenarios.js - and not one of them was ever painted.
   await app.boot();
-  await app.loadScenario('Solar System', 'comet-scenario');
+  await app.loadScenario('solar-system', 'comet-scenario');
   const count = await cometCount(page);
   expect(count).toBeGreaterThan(0);
 

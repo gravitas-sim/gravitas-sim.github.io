@@ -2,13 +2,14 @@
 
 Every built-in scenario shows a real capture of itself in the scenario gallery and
 on the front door's featured cards. The images live in `images/scenarios/`, one
-WebP per scenario, and their paths are recorded in `js/data/scenarioInfo.js`.
+WebP per scenario, named by the scenario's id: `images/scenarios/<id>.webp`, the
+path `js/data/scenarioInfo.js` gives it.
 
 ## Regenerating
 
 ```bash
 npm run thumbnails                       # every scenario
-npm run thumbnails -- "Solar System"     # one or a few
+npm run thumbnails -- solar-system       # one or a few, by id
 npm run thumbnails:check                 # verify the committed set, capture nothing
 ```
 
@@ -24,8 +25,8 @@ like itself.
 ## When to regenerate
 
 - After changing a scenario's initial conditions, framing or visual style.
-- After adding a scenario. Add it to `SCENARIO_INFO` first, with a `thumbnail`
-  path, then capture just that one.
+- After adding a scenario. Add it to `SCENARIO_INFO` first, under its id, then
+  capture just that one.
 - Not for copy edits. Titles and summaries are not in the image.
 
 Until a new scenario is captured, its card shows the titled fallback rather than

@@ -95,7 +95,7 @@ const SURFACES = [
     name: 'object inspector',
     open: async ({ app }) => {
       await app.boot();
-      await app.loadScenario('Solar System');
+      await app.loadScenario('solar-system');
       await app.selectFirstObject();
     },
     expect: '#objectInspector',

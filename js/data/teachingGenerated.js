@@ -17,17 +17,17 @@
 
 export const DEMO_LINKS = Object.freeze({
   retrograde:
-    '1zq1YqU7Iy1FEqVrJSCkotKcpPL0pMSVXwTSwqVgKKpqamACVKUhOTM4DcArBSoEi1UnFGfnl8SVFiZg5QZ0lRaaqOEpgXn5Oal16SoWRlYmBQWwsA',
+    '2zHYvBCoAgEAX_5Z0NLDr5MyK5aGAZ61YH8d9bOs4M0_HALQYNDkzCNXGINB2BG9QSRQ1CYcuKF9xsoKaj5fp64bAXPYVvMvjJFzqTZLjV2jE-',
   assist:
-    '1zq1YqU7Iy1FEqVrJSci9KLMssqVRwLC7OLC5R8ElMUgJKpKamAOVKUhOTM4DcArBqoEi1UnFGfnl8WWpOfjJQE5CRXJJfBDSmpKg0VQciWVKUmJkDFaqtBQA',
+    '2zLYzBCoAgEET_Zc52qKM_E5stKQiGuxkh_nsLdZt5j5mOBr84CDyOSi3pM5FIEp0ybTDBvJtTphCtnvCzg5EOieVeG-cSbGQhaKl2o_Vi90mtlPKPxngB',
   chaos:
-    '1zHYwxCoAwEAS_EraOoI1FSms77SWawwREJTmVIP7dI-UsM_vihmk0EgxGH4mq7nBZDbSnwOEOnFVvZ4hA5MRhsosXPEsly4vkj2fiaMMmJxwv0ig0bbSv7GHauv6-Hw',
+    '2zHYxBCoAgFAXv8tYK1qLFv4xofVIQDf0VEd09aznDMDcO0KjQQJBQmbUvy6Ub5xYlHlEunZxHD5iXr2E3h44baFDo5kYL5bRSXUx9InVnhZ9s4rxKAE3GPM8L',
   rotation:
-    '1zq1YqU7Iy1FEqVrJS8s3Mya5UCE-sVAjKL0ksyczPUwJKpKamAOVKUhOTM4DcArBqoEi1UnFGfnl8WWpOfnJmSSWQkVySXwQ0pqSoNLW2FgA',
+    '2zDYxBCsAgDAT_smc9tEc_U8QGlNqmaKqI-PfmtjMDO9HgdoMKhzvla9juhy0sXhI_0EB0ahPyISq-cJuBmokauR-NMockQ0cQLnoj5aO1fg',
   tides:
-    '1zq1YqU7Iy1FEqVrJSck0sKsnQ9c3Pz1MIriwuSc1VAoqnpqYApUpSE5MzgNwCsGKgSLVScUZ-eXxJUWJmDlBvSVFpam0tAA',
+    '2zDYtBCoAwDAT_suf2oMd8RoIGKlgjTVSk9O_mODNMxwOaEwwE4eYlV9Uz22cuFeFFtkguvJbACzQlhOmwou_ijfcjXm-3jPED',
   transit:
-    '1zq1YqU7Iy1FEqVrJSCilKzCvOLFHwSUxSAoqkpqYABUtSE5MzgNwCsDKgSLVScUZ-eXxqTmJBcWpKfElmbqqSVUlRaWptLQA',
+    '2zFcgxDoAgDAXQu_wZBx17GVKlCSSghFYdCHcXx_c6HtDmoCBY41OTLZl3zBEJfwofcbKCVoc5HRqv10vmqhK8pSIga7eM8QE',
 });
 
 /** How many scenarios js/data/scenarioInfo.js describes. */

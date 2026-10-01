@@ -881,197 +881,197 @@ export const EN = {
   // thumbnails - and reads its prose back out of this file. The id embeds the
   // scenario key verbatim, which is already the stable primary key, so an id
   // cannot drift away from the scenario it describes.
-  'scenario.Solar System.title': 'Solar System',
-  'scenario.Solar System.summary':
+  'scenario.solar-system.title': 'Solar System',
+  'scenario.solar-system.summary':
     'A simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteristics.',
-  'scenario.Retrograde Mars.title':
+  'scenario.retrograde-mars.title':
     'Retrograde Mars: the loop that needed epicycles',
-  'scenario.Retrograde Mars.summary':
+  'scenario.retrograde-mars.summary':
     'The Sun, Earth and Mars at their real distances and periods, and nothing else. Watched from outside, both planets go round the Sun the same way and never turn back. Switch the reference frame to Earth, in Tools, and Mars stops circling and starts drawing a loop that doubles back on itself. Nothing about the physics changed; only the frame did. That loop is the observation Ptolemy built epicycles to reproduce and Copernicus explained away, and here you can turn it on and off with one control.',
-  'scenario.Earth-Moon System.title': 'Earth-Moon System',
-  'scenario.Earth-Moon System.summary':
+  'scenario.earth-moon-system.title': 'Earth-Moon System',
+  'scenario.earth-moon-system.summary':
     'A detailed simulation of the Earth-Moon system with accurate masses, orbital mechanics, and realistic appearances. Features Earth with its blue oceans and green continents, and the Moon with its characteristic gray surface and craters. Perfect for studying orbital dynamics and tidal effects.',
-  'scenario.TRAPPIST-1 System.title': 'TRAPPIST-1 System',
-  'scenario.TRAPPIST-1 System.summary':
+  'scenario.trappist-1-system.title': 'TRAPPIST-1 System',
+  'scenario.trappist-1-system.summary':
     'A compact planetary system with seven Earth-sized worlds orbiting a cool red dwarf star just 40 light-years away. All planets are packed close to their tiny sun, with several in the habitable zone. Can you keep this delicate system stable?',
-  'scenario.Three-Body Sensitivity Lab.title':
+  'scenario.three-body-sensitivity-lab.title':
     'Three-Body Sensitivity Lab: the same start, twice',
-  'scenario.Three-Body Sensitivity Lab.summary':
+  'scenario.three-body-sensitivity-lab.summary':
     'Three six-solar-mass stars at the corners of an equilateral triangle, rotating rigidly about their common center. This is an exact solution of the three-body problem, found by Lagrange in 1772, and for three equal masses it is unstable: the triangle holds for a few turns and then comes apart. Built for one experiment - run it twice from starts that differ by fifteen hundred kilometers in a system a hundred and thirty million kilometers across, and watch how long the two runs stay together.',
-  'scenario.Galilean Resonance.title': 'Galilean Resonance: the Laplace lock',
-  'scenario.Galilean Resonance.summary':
+  'scenario.galilean-resonance.title': 'Galilean Resonance: the Laplace lock',
+  'scenario.galilean-resonance.summary':
     'Io, Europa and Ganymede on the 4:2:1 chain Laplace explained in 1805, with Callisto outside it for contrast. The periods are not exactly 4:2:1 — Europa takes 0.37% longer than two Io years — and that near miss is the point: what holds them is the Laplace argument, which stays near 180 degrees instead of running through every value, so the three are never all in conjunction. Callisto sits within 0.03% of 7:3 with Ganymede and is in no resonance at all. A scale model, 100 times life size.',
-  'scenario.Broken Laplace Resonance.title':
+  'scenario.broken-laplace-resonance.title':
     'Broken Laplace Resonance: one percent out',
-  'scenario.Broken Laplace Resonance.summary':
+  'scenario.broken-laplace-resonance.summary':
     'The same four moons with one number changed: Europa starts one percent further from Jupiter. That is a hundred times wider than the resonance can hold, and the lock fails — the Laplace argument stops swinging about 180 degrees and starts going all the way round, once every forty-six Io orbits. Run it beside Galilean Resonance and the difference between a system that is locked and one that merely has convenient periods is on screen in under a minute.',
-  'scenario.Pluto and Neptune.title':
+  'scenario.pluto-and-neptune.title':
     'Pluto and Neptune: the 3:2 that protects',
-  'scenario.Pluto and Neptune.summary':
+  'scenario.pluto-and-neptune.summary':
     "Pluto's orbit crosses Neptune's, and they have never come close. The 3:2 resonance is why: Pluto goes round twice for every three Neptune years, and the resonant argument librates about 180 degrees rather than circulating — so every conjunction happens near Pluto's aphelion, far outside Neptune's reach. A third body runs almost the same orbit from outside the resonance; watch what becomes of it. True scale; one second is about 270 years.",
-  'scenario.Jupiter Trojans.title':
+  'scenario.jupiter-trojans.title':
     'Jupiter Trojans: the 1:1 co-orbital resonance',
-  'scenario.Jupiter Trojans.summary':
+  'scenario.jupiter-trojans.summary':
     "Two of the five Lagrange points are places a body can sit still relative to Jupiter forever, and thousands of asteroids do. A probe placed exactly at L4 does not move in Jupiter's rotating frame; the Trojan 617 Patroclus loops around L5 once every twelve and a half Jupiter years. A third probe starts one degree from L3 — an equilibrium too, and unstable — and leaves. The fourth runs a wider ordinary orbit and is in no resonance at all.",
-  'scenario.Binary Pair.title': 'Binary Pair: two stars, one balance point',
-  'scenario.Binary Pair.summary':
+  'scenario.binary-pair.title': 'Binary Pair: two stars, one balance point',
+  'scenario.binary-pair.summary':
     'Two stars of two solar masses each, four AU apart, circling their common center of mass once every four years. Neither one is stationary and neither one is orbiting the other: both go round the same point in between them. Watch the trails and the balance point gives itself away.',
-  'scenario.Interstellar Visitor.title': "Interstellar Visitor: 1I/'Oumuamua",
-  'scenario.Interstellar Visitor.summary':
+  'scenario.interstellar-visitor.title': "Interstellar Visitor: 1I/'Oumuamua",
+  'scenario.interstellar-visitor.summary':
     'The first object ever seen passing through the Solar System from somewhere else, on its measured orbit: perihelion inside Mercury, eccentricity 1.20, and 87.7 km/s at closest approach. Earth is shown for scale. Select the visitor and look at the sign of its total energy: it is positive, which is the whole story. It is not bound to the Sun, it was never going to stay, and it will not be back.',
-  'scenario.Transit Lab.title': 'Transit Lab: HD 209458 b',
-  'scenario.Transit Lab.summary':
+  'scenario.transit-lab.title': 'Transit Lab: HD 209458 b',
+  'scenario.transit-lab.summary':
     'The first exoplanet ever caught crossing its star, found in 1999 after radial velocities said where to look. A hot Jupiter on a 3.5-day orbit, drawn here at true relative scale: the star is 1.155 solar radii, the planet 1.38 Jupiter radii, and the silhouette on screen is the same 12% radius ratio the light curve reports. Open the Light Curve panel and watch the 1.7% dip repeat.',
-  'scenario.Spiral Galaxy.title': 'Spiral Galaxy: what we expected',
-  'scenario.Spiral Galaxy.summary':
+  'scenario.spiral-galaxy.title': 'Spiral Galaxy: what we expected',
+  'scenario.spiral-galaxy.summary':
     'A galactic bulge with ninety stars orbiting it, each launched at exactly the speed the visible mass says it should have. This is the prediction, not the observation: with the mass concentrated in the middle, orbital speed falls away as the inverse square root of radius, the same way it does across the Solar System. Open the Rotation Curve panel and read the slope. Then load Milky Way Rotation and read it again.',
-  'scenario.Milky Way Rotation.title':
+  'scenario.milky-way-rotation.title':
     'Milky Way Rotation: what we actually see',
-  'scenario.Milky Way Rotation.summary':
+  'scenario.milky-way-rotation.summary':
     'The same disc, with every star moving at the same speed no matter how far out it is. That is what telescopes measure in real spiral galaxies, and it is far too fast for the stars you can see to hold on to: this scenario starts with a dark-matter halo switched on, because without one the disc does not survive. Open the Rotation Curve panel and switch the halo off to watch it come apart.',
-  'scenario.Coma Cluster.title': 'Coma Cluster: Zwicky, 1933',
-  'scenario.Coma Cluster.summary':
+  'scenario.coma-cluster.title': 'Coma Cluster: Zwicky, 1933',
+  'scenario.coma-cluster.summary':
     'Twenty-four galaxies swarming in a bound cluster, on randomly oriented orbits, named after the members of the real Coma Cluster that Fritz Zwicky measured. He added up the light, added up the motions, and found the second answer hundreds of times larger than the first. He called the difference dunkle Materie and was ignored for forty years. Select a galaxy to read its speed, and work the same calculation he did.',
-  'scenario.Exoplanet Characterization Lab.title':
+  'scenario.exoplanet-characterization-lab.title':
     'Exoplanet Characterization Lab',
-  'scenario.Exoplanet Characterization Lab.summary':
+  'scenario.exoplanet-characterization-lab.summary':
     'HD 209458 again, but with the star free to move. In the Transit Lab it is pinned so the light curve stays centered; here both bodies orbit their common center of mass, which is what the radial-velocity and astrometry instruments need in order to measure anything. The star circles a point 2.7 millionths of an AU away at 84 meters per second: far too small to see and easily large enough to detect. Open Radial Velocity and watch the wobble that found this planet.',
-  'scenario.Blended Binary.title': 'Blended Binary: a hidden companion',
-  'scenario.Blended Binary.summary':
+  'scenario.blended-binary.title': 'Blended Binary: a hidden companion',
+  'scenario.blended-binary.summary':
     'The same star and planet as the Transit Lab, with a second star half a magnitude fainter sitting 300 AU away: far too close on the sky for a survey telescope to separate, and well inside one photometric aperture. Its light fills in part of the dip, so the transit measures shallower and the planet looks smaller than it is. Correcting for exactly this effect is what high-resolution imaging surveys of planet hosts are for.',
-  'scenario.Lagrange Point Lab.title':
+  'scenario.lagrange-point-lab.title':
     'Lagrange Point Lab: two stars, one circular orbit, one test particle',
-  'scenario.Lagrange Point Lab.summary':
+  'scenario.lagrange-point-lab.summary':
     'A sunlike star and a companion a thirtieth its mass, on an exactly circular orbit eight astronomical units across, with a tracer light enough that neither notices it. This is the circular restricted three-body problem: the simplest system with Lagrange points, forbidden regions and a conserved Jacobi constant, and the only arrangement in which any of those are exactly true.',
-  'scenario.Orbital Transfer Lab.title':
+  'scenario.orbital-transfer-lab.title':
     'Orbital Transfer Lab: one star, one spacecraft, one destination',
-  'scenario.Orbital Transfer Lab.summary':
+  'scenario.orbital-transfer-lab.summary':
     'A spacecraft on a circular orbit at 1 AU and a station on a circular orbit at 2.5 AU, about a single sunlike star with nothing else in the system. Circular and coplanar is what makes the transfer between them exactly solvable, so a burn planned by hand can be checked against the arithmetic rather than only watched.',
-  'scenario.Gravity Assist Lab.title':
+  'scenario.gravity-assist-lab.title':
     'Gravity Assist Lab: one planet, one spacecraft, nothing else',
-  'scenario.Gravity Assist Lab.summary':
+  'scenario.gravity-assist-lab.summary':
     'A rogue planet of five Jupiter masses drifting through empty space, and an Earth-mass spacecraft crossing its path. No star, which is the point: with nothing else in the universe the planet moves in a straight line and its frame is exactly inertial, so the strangest fact about a gravity assist can be stated exactly rather than approximately. The spacecraft leaves at the same speed relative to the planet that it arrived with, and at a completely different speed relative to everything else.',
-  'scenario.Gravity Assist: Heliocentric.title':
+  'scenario.gravity-assist-heliocentric.title':
     'Gravity Assist: the same flyby, with a Sun to steal from',
-  'scenario.Gravity Assist: Heliocentric.summary':
+  'scenario.gravity-assist-heliocentric.summary':
     'The same planet, now on a circular orbit five AU from a star, and a spacecraft that meets it. This is where the energy comes from: the spacecraft leaves faster around the star than it arrived, and the planet is slowed by exactly the momentum it gained. Everything here is approximate - the planet is accelerating, so its frame is not inertial and the encounter is only locally two-body - and the panel reports how approximate rather than hiding it.',
-  'scenario.Binary Planet Lab.title':
+  'scenario.binary-planet-lab.title':
     'Binary Planet Lab: a planet around one star of a pair',
-  'scenario.Binary Planet Lab.summary':
+  'scenario.binary-planet-lab.summary':
     'Two stars of one and half a solar mass, ten AU apart on an orbit of eccentricity 0.4, and an Earth-mass planet circling the heavier one at 1.5 AU. Nothing here is randomized: every mass, distance and starting angle is written down, so two runs differ only where you make them differ. Move the planet outward and there is a distance past which it stops coming back. Finding roughly where, and how much of that answer is physics rather than timestep, is the experiment.',
-  'scenario.Circumbinary Planet Lab.title':
+  'scenario.circumbinary-planet-lab.title':
     'Circumbinary Planet Lab: a planet around both stars at once',
-  'scenario.Circumbinary Planet Lab.summary':
+  'scenario.circumbinary-planet-lab.summary':
     'The same two stars, with the planet outside them both at 40 AU, orbiting the pair as though it were one object. Real planets do this - Kepler-16b is the famous one - but only far enough out that the two stars begin to look like one. Bring it inward and the approximation fails: the changing pull of a binary it can still tell apart walks its orbit outward over a few dozen binary periods until it leaves. Here the boundary is a floor, not a ceiling.',
-  'scenario.Black Hole Lab.title':
+  'scenario.black-hole-lab.title':
     'Black Hole Lab: a ten solar mass hole, and four things orbiting it',
-  'scenario.Black Hole Lab.summary':
+  'scenario.black-hole-lab.summary':
     'A single stellar-mass black hole with four bodies on stable circular orbits around it. Nothing is falling in. Gravity a long way from a black hole is the same gravity as anywhere else, and an object with sideways motion goes round it exactly as it would go round a star of the same mass. Select the black hole to read its Schwarzschild radius, its average density on that scale, its Hawking temperature and how long it has left.',
-  'scenario.Habitable Zone Lab.title':
+  'scenario.habitable-zone-lab.title':
     'Habitable Zone Lab: the inner Solar System, with the zone drawn',
-  'scenario.Habitable Zone Lab.summary':
+  'scenario.habitable-zone-lab.summary':
     'The Sun with Venus, Earth, Mars and Ceres on their real orbits, and the circumstellar habitable zone drawn around the star from a published prescription. Venus sits inside the inner edge and Mars outside the outer one on the conservative definition, and only one of the four has liquid water on its surface today. Switch the Habitable Zone Model setting to see the optimistic band, which reaches out past Mars.',
-  "scenario.Kepler's 2nd Law.title": "Kepler's 2nd Law - Equal Areas",
-  "scenario.Kepler's 2nd Law.summary":
+  'scenario.keplers-2nd-law.title': "Kepler's 2nd Law - Equal Areas",
+  'scenario.keplers-2nd-law.summary':
     'A planet in a nearly circular orbit and an eccentric orbiter around a central star. The area sweep visualization starts automatically for the eccentric body - watch how the wedges change shape but maintain equal area, showing why objects move faster at periapsis than at apoapsis.',
-  'scenario.GW150914.title': 'GW150914: First Gravitational Wave Merger',
-  'scenario.GW150914.summary':
+  'scenario.gw150914.title': 'GW150914: First Gravitational Wave Merger',
+  'scenario.gw150914.summary':
     'Simulates the historic merger of two massive black holes (36 & 29 M☉) detected by LIGO in 2015. Watch as they spiral together, emit gravitational waves, and merge into a single, more massive black hole.',
-  'scenario.Binary BH.title': 'Binary Black Hole',
-  'scenario.Binary BH.summary':
+  'scenario.binary-bh.title': 'Binary Black Hole',
+  'scenario.binary-bh.summary':
     'Two stellar-mass black holes (15 & 10 M☉) locked in mutual orbit with spectacular relativistic jets. Watch as they spiral together, create gravitational waves, and eventually merge into a single, more massive black hole. The jets point in random directions for each black hole, creating a dynamic cosmic display.',
-  'scenario.Triple BH System.title': 'Triple Black Hole',
-  'scenario.Triple BH System.summary':
+  'scenario.triple-bh-system.title': 'Triple Black Hole',
+  'scenario.triple-bh-system.summary':
     'A chaotic three-body dance of massive black holes (20, 15, & 10 M☉) in a complex orbital arrangement. This unstable configuration will eventually eject one black hole while the remaining two merge. Demonstrates the chaotic nature of multi-body gravitational systems.',
-  'scenario.Supermassive BH.title': 'Supermassive Core',
-  'scenario.Supermassive BH.summary':
+  'scenario.supermassive-bh.title': 'Supermassive Core',
+  'scenario.supermassive-bh.summary':
     'One enormous black hole (80 M☉) dominates a dense stellar swarm with 50 planets, 5 gas giants, and 100 asteroids. The intense gravitational field creates spectacular accretion disks and tidal disruption events. Similar to the environment around real supermassive black holes in galactic centers.',
-  'scenario.Star Cluster.title': 'Dense Star Cluster',
-  'scenario.Star Cluster.summary':
+  'scenario.star-cluster.title': 'Dense Star Cluster',
+  'scenario.star-cluster.summary':
     'A gravitationally bound collection of main-sequence stars, evolved giants, and stellar remnants with mutual gravitational interactions. Watch stellar encounters, binary formation, and the dynamic evolution of this stellar community over time.',
-  'scenario.Kuiper Belt.title': 'Kuiper Belt',
-  'scenario.Kuiper Belt.summary':
+  'scenario.kuiper-belt.title': 'Kuiper Belt',
+  'scenario.kuiper-belt.summary':
     "An accurate simulation of our Solar System's Kuiper Belt featuring real dwarf planets (Pluto, Eris, Haumea, Makemake), large KBOs (Quaoar, Sedna, Orcus, Varuna), and smaller objects (Ixion, Huya, 2002 AW197) with realistic masses and orbital properties.",
-  'scenario.Sagittarius A*.title': 'Sagittarius A*',
-  'scenario.Sagittarius A*.summary':
+  'scenario.sagittarius-a.title': 'Sagittarius A*',
+  'scenario.sagittarius-a.summary':
     "The Milky Way's central supermassive black hole (4000 M☉, scaled down for simulation) with fast-moving S-stars, compact objects, and debris in extreme orbits. Witness the incredible gravitational forces and relativistic effects near our galaxy's supermassive black hole.",
-  'scenario.Binary Star System.title': 'Binary Stars',
-  'scenario.Binary Star System.summary':
+  'scenario.binary-star-system.title': 'Binary Stars',
+  'scenario.binary-star-system.summary':
     'A pair of suns in mutual orbit with 5 planets orbiting the binary system. The complex gravitational environment creates interesting orbital dynamics and potential habitable zones. Similar to real binary star systems like Alpha Centauri.',
-  'scenario.Slingshot.title': 'Gravity Slingshot',
-  'scenario.Slingshot.summary':
+  'scenario.slingshot.title': 'Gravity Slingshot',
+  'scenario.slingshot.summary':
     'A massive black hole (60 M☉) paired with a smaller companion (3 M☉) create dramatic gravitational assists for nearby planets and gas giants. Watch objects gain tremendous velocity through close encounters, mimicking spacecraft gravity assists.',
-  'scenario.Rogue Encounter.title': 'Rogue Encounter',
-  'scenario.Rogue Encounter.summary':
+  'scenario.rogue-encounter.title': 'Rogue Encounter',
+  'scenario.rogue-encounter.summary':
     'A wandering black hole (30 M☉) passes through a stable planetary system with 12 planets, 4 gas giants, and asteroids. Watch the dramatic orbital disruption, planet ejection, and tidal capture events as the rogue intruder wreaks havoc.',
-  'scenario.Neutron Star Collision.title': 'Neutron Star Merger',
-  'scenario.Neutron Star Collision.summary':
+  'scenario.neutron-star-collision.title': 'Neutron Star Merger',
+  'scenario.neutron-star-collision.summary':
     'Two neutron stars (1.4 M☉ each) spiral toward each other in a death dance. This rare event produces gravitational waves, gamma-ray bursts, and creates heavy elements through r-process nucleosynthesis. Based on the LIGO-detected GW170817 event.',
-  'scenario.Pulsar System.title': 'Pulsar with Planets',
-  'scenario.Pulsar System.summary':
+  'scenario.pulsar-system.title': 'Pulsar with Planets',
+  'scenario.pulsar-system.summary':
     "A rapidly spinning neutron star with 3 planets in tight orbits. The pulsar's intense magnetic field and radiation create a harsh environment. Based on the first confirmed exoplanets discovered around PSR B1257+12.",
-  'scenario.White Dwarf Binary.title': 'White Dwarf Binary',
-  'scenario.White Dwarf Binary.summary':
+  'scenario.white-dwarf-binary.title': 'White Dwarf Binary',
+  'scenario.white-dwarf-binary.summary':
     'Two white dwarf stars in a close binary system with accretion between them. One star gradually steals material from its companion, potentially leading to a Type Ia supernova. Includes debris disk and stellar remnants.',
-  'scenario.Stellar Graveyard.title': 'Stellar Graveyard',
-  'scenario.Stellar Graveyard.summary':
+  'scenario.stellar-graveyard.title': 'Stellar Graveyard',
+  'scenario.stellar-graveyard.summary':
     'A dynamic collection of stellar remnants: 3 black holes, 5 neutron stars, and 8 white dwarfs with surviving planets and extensive debris fields. Watch these stellar corpses interact in their final gravitational dance.',
-  'scenario.Galactic Center.title': 'Galactic Center',
-  'scenario.Galactic Center.summary':
+  'scenario.galactic-center.title': 'Galactic Center',
+  'scenario.galactic-center.summary':
     'A supermassive black hole (4000 M☉) surrounded by high-velocity stars, stellar remnants, and dense stellar populations. Experience the extreme gravitational environment with spectacular accretion, jets, and relativistic effects.',
-  'scenario.Supernova Remnant.title': 'Supernova Remnant',
-  'scenario.Supernova Remnant.summary':
+  'scenario.supernova-remnant.title': 'Supernova Remnant',
+  'scenario.supernova-remnant.summary':
     'The explosive aftermath of a massive star death: a neutron star surrounded by high-velocity debris, shocked planets, and disrupted gas giants. Experience the violent and energetic environment left behind by stellar death.',
-  'scenario.Compact Object Zoo.title': 'Compact Object Zoo',
-  'scenario.Compact Object Zoo.summary':
+  'scenario.compact-object-zoo.title': 'Compact Object Zoo',
+  'scenario.compact-object-zoo.summary':
     'A diverse collection of compact objects: multiple black holes, neutron stars, and white dwarfs of various masses interacting in a dense environment. Perfect for studying the different types of stellar endpoints and their interactions.',
-  'scenario.Millisecond Pulsar.title': 'Millisecond Pulsar',
-  'scenario.Millisecond Pulsar.summary':
+  'scenario.millisecond-pulsar.title': 'Millisecond Pulsar',
+  'scenario.millisecond-pulsar.summary':
     "An extremely fast-spinning neutron star (recycled pulsar) with a white dwarf companion and planetary debris. These 'recycled' pulsars are spun up by accretion and are among the most precise timekeepers in the universe.",
-  'scenario.Tidal Disruption Event.title': 'Tidal Disruption',
-  'scenario.Tidal Disruption Event.summary':
+  'scenario.tidal-disruption-event.title': 'Tidal Disruption',
+  'scenario.tidal-disruption-event.summary':
     'Multiple objects approach a supermassive black hole (2000 M☉) and are torn apart by extreme tidal forces. Watch as planets and gas giants are stretched, disrupted, and either ejected or accreted, creating spectacular debris streams.',
-  'scenario.Intermediate Mass BH.title': 'Intermediate Mass BH',
-  'scenario.Intermediate Mass BH.summary':
+  'scenario.intermediate-mass-bh.title': 'Intermediate Mass BH',
+  'scenario.intermediate-mass-bh.summary':
     'A rare intermediate-mass black hole (400 M☉) in a globular cluster environment with dense stellar populations. These elusive objects bridge the gap between stellar-mass and supermassive black holes.',
-  'scenario.Galactic Collision.title': 'Galactic Collision',
-  'scenario.Galactic Collision.summary':
+  'scenario.galactic-collision.title': 'Galactic Collision',
+  'scenario.galactic-collision.summary':
     'Two supermassive black holes (1.2M & 1.0M M☉) with hundreds of stars representing galactic cores in collision. Witness the formation of tidal streams, stellar disruption, and the eventual merger of supermassive black holes.',
-  'scenario.Micro BH Swarm.title': 'Micro BH Swarm',
-  'scenario.Micro BH Swarm.summary':
+  'scenario.micro-bh-swarm.title': 'Micro BH Swarm',
+  'scenario.micro-bh-swarm.summary':
     'A dynamic swarm of small black holes (0.6-1.8 M☉) with planets and gas giants in chaotic orbital dance. Watch as these stellar-mass black holes interact, merge, and create complex gravitational resonances.',
-  'scenario.Exoplanet Lab.title': 'Exoplanet Lab',
-  'scenario.Exoplanet Lab.summary':
+  'scenario.exoplanet-lab.title': 'Exoplanet Lab',
+  'scenario.exoplanet-lab.summary':
     'A diverse collection of 120+ exoplanets, gas giants, and even pulsar planets around various stellar hosts. Explore the incredible diversity of planetary systems with interactive orbital mechanics and planetary interactions.',
-  'scenario.Quasar Cannon.title': 'Quasar Cannon',
-  'scenario.Quasar Cannon.summary':
+  'scenario.quasar-cannon.title': 'Quasar Cannon',
+  'scenario.quasar-cannon.summary':
     'A supermassive black hole is actively feeding on a dense star cluster. Watch a beam of light form as stars spiral inward.',
-  'scenario.The Pinwheel Galaxy Core.title': 'The Pinwheel Galaxy Core',
-  'scenario.The Pinwheel Galaxy Core.summary':
+  'scenario.the-pinwheel-galaxy-core.title': 'The Pinwheel Galaxy Core',
+  'scenario.the-pinwheel-galaxy-core.summary':
     'Two intermediate black holes in the center of a stellar disk. The disk forms a rotating pinwheel pattern as stars are slung around.',
-  'scenario.Star Frisbee.title': 'Star Frisbee',
-  'scenario.Star Frisbee.summary':
+  'scenario.star-frisbee.title': 'Star Frisbee',
+  'scenario.star-frisbee.summary':
     'A dense stellar disk thrown past a rogue black hole. Will it be shredded or survive the flyby?',
-  'scenario.Kessler Cascade.title': 'Kessler Cascade',
-  'scenario.Kessler Cascade.summary':
+  'scenario.kessler-cascade.title': 'Kessler Cascade',
+  'scenario.kessler-cascade.summary':
     'Hundreds of micro‑stars orbiting chaotically, colliding and ejecting like a debris cloud.',
-  'scenario.Alien Dyson Swarm Collapse.title': 'Alien Dyson Swarm Collapse',
-  'scenario.Alien Dyson Swarm Collapse.summary':
+  'scenario.alien-dyson-swarm-collapse.title': 'Alien Dyson Swarm Collapse',
+  'scenario.alien-dyson-swarm-collapse.summary':
     'A hypothetical Dyson swarm of artificial satellites falls into a black hole after a catastrophic orbital failure.',
-  'scenario.Tidal Arm Tango.title': 'Tidal Arm Tango',
-  'scenario.Tidal Arm Tango.summary':
+  'scenario.tidal-arm-tango.title': 'Tidal Arm Tango',
+  'scenario.tidal-arm-tango.summary':
     'Two black holes dance past each other, flinging stars into massive tidal arms like colliding galaxies.',
-  'scenario.Hungry Hungry Holes.title': 'Hungry Hungry Holes',
-  'scenario.Hungry Hungry Holes.summary':
+  'scenario.hungry-hungry-holes.title': 'Hungry Hungry Holes',
+  'scenario.hungry-hungry-holes.summary':
     'Four black holes at the corners of a square, pulling stars from a shared central cluster.',
-  'scenario.Slingshot Gauntlet.title': 'Slingshot Gauntlet',
-  'scenario.Slingshot Gauntlet.summary':
+  'scenario.slingshot-gauntlet.title': 'Slingshot Gauntlet',
+  'scenario.slingshot-gauntlet.summary':
     'A fast-moving star fired through a black hole obstacle course. Watch gravitational slingshots.',
-  'scenario.Black Hole Billiards.title': 'Black Hole Billiards',
-  'scenario.Black Hole Billiards.summary':
+  'scenario.black-hole-billiards.title': 'Black Hole Billiards',
+  'scenario.black-hole-billiards.summary':
     'A few small black holes orbiting a supermassive one, perturbing each other and creating chaotic motion.',
-  'scenario.Stellar Nursery.title': 'Stellar Nursery',
-  'scenario.Stellar Nursery.summary':
+  'scenario.stellar-nursery.title': 'Stellar Nursery',
+  'scenario.stellar-nursery.summary':
     'A dense cluster of young stars around a proto-black hole. Watch interactions and ejections as the cluster evolves.',
 
   // --- Scenario concept tags -------------------------------------------------

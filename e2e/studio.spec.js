@@ -39,7 +39,7 @@ import { EN } from '../js/i18n/en.js';
 import { ES } from '../js/i18n/es.js';
 
 const DIST = process.env.GRAVITAS_E2E_TARGET === 'dist';
-const CLUSTER = EN['scenario.Star Cluster.title'];
+const CLUSTER = EN['scenario.star-cluster.title'];
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'];
 
 async function openStudio(page, { locale } = {}) {
@@ -71,7 +71,7 @@ const current = async page =>
 
 /** Start from Star Cluster and write its Spanish, which leaves it valid. */
 async function validStarCluster(page, { seed } = {}) {
-  await page.locator('#st-from').selectOption('Star Cluster');
+  await page.locator('#st-from').selectOption('star-cluster');
   await page.locator('#st-from-go').click();
   await expect(page.locator('#st-status')).toHaveText(
     `Started from ${CLUSTER}.`
@@ -156,7 +156,7 @@ test.describe('the Scenario Studio', () => {
 
     // Choosing and starting from a built-in, by keyboard alone.
     await page.locator('#st-from').focus();
-    await page.locator('#st-from').selectOption('Star Cluster');
+    await page.locator('#st-from').selectOption('star-cluster');
     await page.locator('#st-from-go').focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('#st-status')).toHaveText(
@@ -509,7 +509,7 @@ test.describe('the Scenario Studio', () => {
     expect(fromLink).toEqual(STAR_CLUSTER);
     if (!DIST) {
       // The built-in itself, by name, under the same seed.
-      await app.loadScenario('Star Cluster', 424242, { run: false });
+      await app.loadScenario('star-cluster', 424242, { run: false });
       expect(await census(page)).toEqual(fromLink);
     }
   });
@@ -566,15 +566,15 @@ test.describe('the Scenario Studio', () => {
     await expect(page.locator('h1')).toHaveText('Estudio de escenarios');
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
     await expect(
-      page.locator('#st-from option[value="Star Cluster"]')
-    ).toHaveText(ES['scenario.Star Cluster.title']);
+      page.locator('#st-from option[value="star-cluster"]')
+    ).toHaveText(ES['scenario.star-cluster.title']);
     await expect(page.locator('#st-title-en-error')).toHaveText(
       'Escribe esto en cada idioma que declara el escenario.'
     );
-    await page.locator('#st-from').selectOption('Star Cluster');
+    await page.locator('#st-from').selectOption('star-cluster');
     await page.locator('#st-from-go').click();
     await expect(page.locator('#st-title-es')).toHaveValue(
-      `${ES['scenario.Star Cluster.title']} (una copia)`
+      `${ES['scenario.star-cluster.title']} (una copia)`
     );
     await enter(page, 'st-setting-num_planets', 5000);
     await expect(page.locator('#st-setting-num_planets-error')).toHaveText(
@@ -596,7 +596,7 @@ test.describe('the Scenario Studio', () => {
       };
       await scan();
       await page.locator('#st-raw summary').click();
-      await page.locator('#st-from').selectOption('Star Cluster');
+      await page.locator('#st-from').selectOption('star-cluster');
       await page.locator('#st-from-go').click();
       const mine = await current(page);
       await openFile(page, 'x.scenario.json', { ...mine, seed: 1 });

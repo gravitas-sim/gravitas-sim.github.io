@@ -9,7 +9,7 @@
 // bundled or shipped; the gallery just reads the committed .webp files.
 //
 //   npm run thumbnails                  every scenario
-//   npm run thumbnails -- "Solar System" "GW150914"   just these
+//   npm run thumbnails -- 'solar-system' 'gw150914'   just these
 //   npm run thumbnails -- --check       verify the committed set, capture nothing
 //
 // How it captures
@@ -107,7 +107,7 @@ async function main() {
   const checkOnly = args.includes('--check');
   const wanted = args.filter(a => !a.startsWith('--'));
 
-  const { SCENARIO_INFO } = await import(
+  const { SCENARIO_INFO, scenarioId } = await import(
     `file://${join(ROOT, 'js/data/scenarioInfo.js')}`
   );
   const { captureFor, THUMBNAIL_SEED } = await import(
@@ -115,7 +115,8 @@ async function main() {
   );
 
   const all = Object.keys(SCENARIO_INFO);
-  const keys = wanted.length ? wanted : all;
+  // By id, or by the English name a scenario had before ids.
+  const keys = wanted.length ? wanted.map(k => scenarioId(k) ?? k) : all;
   const unknown = keys.filter(k => !SCENARIO_INFO[k]);
   if (unknown.length) {
     console.error(`Unknown scenario(s): ${unknown.join(', ')}`);

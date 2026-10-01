@@ -67,7 +67,7 @@ describe('the experiment block', () => {
   });
 
   test('a payload with no block reads as absent, not as an empty experiment', () => {
-    const back = readExperimentBlock({ v: 1, s: 'Binary BH' });
+    const back = readExperimentBlock({ v: 1, s: 'binary-bh' });
     expect(back.present).toBe(false);
     expect(back.metrics).toEqual([]);
   });
@@ -89,16 +89,16 @@ describe('the experiment block', () => {
 
 describe('backward compatibility', () => {
   const common = {
-    scenario: 'Binary BH',
+    scenario: 'binary-bh',
     seed: 42,
-    settings: { ...DEFAULTS, preset_scenario: 'Binary BH' },
+    settings: { ...DEFAULTS, preset_scenario: 'binary-bh' },
     DEFAULT_SETTINGS: DEFAULTS,
   };
 
   test('a link made without an experiment decodes exactly as before', async () => {
     const payload = buildPayload(common);
     const back = await decodePayload(await encodePayload(payload));
-    expect(back.s).toBe('Binary BH');
+    expect(back.s).toBe('binary-bh');
     expect(back.xp).toBeUndefined();
     expect(back.x).toBeUndefined();
     // And the extras reader gives it sane defaults rather than failing.
@@ -107,7 +107,7 @@ describe('backward compatibility', () => {
   });
 
   test('an old-style payload object still restores its experiment defaults', () => {
-    const legacy = { v: 1, s: 'Solar System', seed: 'aa', d: { sim_speed: 2 } };
+    const legacy = { v: 1, s: 'solar-system', seed: 'aa', d: { sim_speed: 2 } };
     expect(readExperimentBlock(legacy).present).toBe(false);
     expect(readExtras(legacy).observer).toEqual({
       positionAngle: 0,
@@ -122,7 +122,7 @@ describe('backward compatibility', () => {
       experiment: experimentBlock(experiment()),
     });
     const back = await decodePayload(await encodePayload(payload));
-    expect(back.s).toBe('Binary BH');
+    expect(back.s).toBe('binary-bh');
     expect(readExtras(back).clock).toBeCloseTo(12.5, 6);
     expect(readExperimentBlock(back).metrics).toContain('separation');
   });

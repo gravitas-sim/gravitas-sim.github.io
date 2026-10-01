@@ -24,17 +24,17 @@ import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 /** Which scenarios pull in which chunk. */
 const PANELS = [
   {
-    scenarios: ['Binary Planet Lab', 'Circumbinary Planet Lab'],
+    scenarios: ['binary-planet-lab', 'circumbinary-planet-lab'],
     load: () => import('./binaryRunPanel.js'),
     init: m => m.initBinaryRun(),
   },
   {
-    scenarios: ['Gravity Assist Lab', 'Gravity Assist: Heliocentric'],
+    scenarios: ['gravity-assist-lab', 'gravity-assist-heliocentric'],
     load: () => import('./assistPanel.js'),
     init: m => m.initAssist(),
   },
   {
-    scenarios: ['Lagrange Point Lab'],
+    scenarios: ['lagrange-point-lab'],
     load: () => import('./cr3bpPanel.js'),
     init: m => m.initCr3bp(),
   },

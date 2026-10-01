@@ -1034,7 +1034,7 @@ export function fromAssistComparison({
     figure: fig,
     provenance: provenanceOf({
       ...provenance,
-      scenario: provenance.scenario ?? report.scenario ?? 'Gravity Assist Lab',
+      scenario: provenance.scenario ?? report.scenario ?? 'gravity-assist-lab',
       seed: provenance.seed ?? report.seed ?? null,
       // What the passes were actually integrated at, from the experiment's own
       // record rather than from whatever the panel shows now.
@@ -1186,7 +1186,7 @@ export function fromAssistSweep({ report, prediction = '', provenance = {} }) {
     figure: fig,
     provenance: provenanceOf({
       ...provenance,
-      scenario: provenance.scenario ?? report.scenario ?? 'Gravity Assist Lab',
+      scenario: provenance.scenario ?? report.scenario ?? 'gravity-assist-lab',
       seed: provenance.seed ?? report.seed ?? null,
       integrator: provenance.integrator ?? held.integrator ?? null,
       timestep: provenance.timestep ?? report.numerics?.step ?? null,

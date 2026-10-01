@@ -66,7 +66,7 @@ const DEG = Math.PI / 180;
  */
 export const GALILEAN = {
   id: 'galilean',
-  scenario: 'Galilean Resonance',
+  scenario: 'galilean-resonance',
   scale: SCALE_JOVIAN,
   /** M_sun / M_jupiter, IAU 2015 nominal. */
   sunOverJupiter: 1047.3486,
@@ -249,7 +249,7 @@ export function galileanBodies(G, opts = {}) {
  */
 export const PLUTO_NEPTUNE = {
   id: 'pluto-neptune',
-  scenario: 'Pluto and Neptune',
+  scenario: 'pluto-and-neptune',
   scale: 1,
   source:
     'NASA planetary fact sheets; Cohen & Hubbard (1965) AJ 70, 10; Williams & Benson (1971) AJ 76, 167; Malhotra & Williams (1997), in Pluto and Charon',
@@ -394,7 +394,7 @@ export function plutoBodies(G, opts = {}) {
  */
 export const JUPITER_TROJANS = {
   id: 'jupiter-trojans',
-  scenario: 'Jupiter Trojans',
+  scenario: 'jupiter-trojans',
   scale: 1,
   source:
     'NASA Jupiter fact sheet; Lagrange (1772); Gascheau (1843); Murray & Dermott, Solar System Dynamics (1999) §3.9',

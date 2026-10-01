@@ -69,7 +69,7 @@ test.describe('an ordinary launch', () => {
   test('keeps the clock, the counts and the scale', async ({ page, app }) => {
     // What was removed is the diagnostic, not the instrumentation.
     await app.boot();
-    await scenario(page, 'Solar System');
+    await scenario(page, 'solar-system');
     const text = await page.locator('#overlayStats').innerText();
     expect(text).toMatch(/Elapsed/i);
     expect(text).toMatch(/Zoom/i);
@@ -80,7 +80,7 @@ test.describe('an ordinary launch', () => {
     // Presentation only. Everything the reliability check, the investigations
     // and the exports read is unchanged.
     await app.boot();
-    await scenario(page, 'Solar System');
+    await scenario(page, 'solar-system');
     const drift = await page.evaluate(async () => {
       const physics = await import('/js/physics.js');
       const d = physics.conservationDrift(true);
@@ -104,7 +104,7 @@ test.describe('when it is asked for', () => {
     app,
   }) => {
     await app.boot();
-    await scenario(page, 'Solar System', {
+    await scenario(page, 'solar-system', {
       show_conservation_diagnostics: true,
     });
     await expect(block(page)).toHaveCount(1);
@@ -123,7 +123,7 @@ test.describe('when it is asked for', () => {
     app,
   }) => {
     await app.boot();
-    await scenario(page, 'Solar System', {
+    await scenario(page, 'solar-system', {
       show_conservation_diagnostics: true,
     });
     const summary = help(page).locator('summary');
@@ -153,7 +153,7 @@ test.describe('when it is asked for', () => {
 
   test('a touch tap opens it too', async ({ page, app }) => {
     await app.boot();
-    await scenario(page, 'Solar System', {
+    await scenario(page, 'solar-system', {
       show_conservation_diagnostics: true,
     });
     const details = help(page);
@@ -168,7 +168,7 @@ test.describe('what the scene does to its own conservation', () => {
     // Two bodies under mutual gravity and nothing else, closed as built. This
     // used to load Kepler's 2nd Law, which is star-only gravity on purpose, so
     // it passed on the list of reasons and never once saw the closed line.
-    await scenario(page, 'Earth-Moon System', {
+    await scenario(page, 'earth-moon-system', {
       show_conservation_diagnostics: true,
     });
     // The premise, from the engine, so that a scenario which gains a reason
@@ -197,7 +197,7 @@ test.describe('what the scene does to its own conservation', () => {
     app,
   }) => {
     await app.boot();
-    await scenario(page, 'Black Hole Lab', {
+    await scenario(page, 'black-hole-lab', {
       show_conservation_diagnostics: true,
     });
     const caveats = block(page).locator('.readout-caveats li');
@@ -241,9 +241,9 @@ test.describe('deliberate choices are respected', () => {
   }) => {
     await app.boot();
     for (const name of [
-      'Three-Body Sensitivity Lab',
-      'Lagrange Point Lab',
-      'Orbital Transfer Lab',
+      'three-body-sensitivity-lab',
+      'lagrange-point-lab',
+      'orbital-transfer-lab',
     ]) {
       // Start from the new default, explicitly off, and let the scenario have
       // its say: applyPreset re-stamps its own settings during the rebuild.
@@ -267,7 +267,7 @@ test.describe('deliberate choices are respected', () => {
       const ui = await import('/js/ui.js');
       // A configuration where somebody turned it on deliberately.
       const payload = share.buildPayload({
-        scenario: 'Solar System',
+        scenario: 'solar-system',
         seed: 1234,
         settings: { ...DEFAULT_SETTINGS, show_conservation_diagnostics: true },
         DEFAULT_SETTINGS,
@@ -294,7 +294,7 @@ test.describe('deliberate choices are respected', () => {
       const share = await import('/js/shareState.js');
       const { DEFAULT_SETTINGS } = await import('/js/appState.js');
       const payload = share.buildPayload({
-        scenario: 'Solar System',
+        scenario: 'solar-system',
         seed: 1234,
         settings: { ...DEFAULT_SETTINGS, show_conservation_diagnostics: false },
         DEFAULT_SETTINGS,
@@ -318,7 +318,7 @@ test.describe('in Spanish', () => {
       const i18n = await import('/js/i18n/index.js');
       await i18n.setLocale('es');
     });
-    await scenario(page, 'Solar System', {
+    await scenario(page, 'solar-system', {
       show_conservation_diagnostics: true,
     });
     const text = await block(page).innerText();

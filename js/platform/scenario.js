@@ -1,7 +1,7 @@
 // =============================================================================
 // gravitas.scenario-pack/1: a scenario, as data
 // -----------------------------------------------------------------------------
-// A built-in scenario is a branch of applyPreset (js/scenarios.js), usually
+// A built-in scenario is a row of the preset table (js/scenarios.js), usually
 // with hand-built geometry in js/world/build.js as well: code, which only a
 // reviewed commit may add. A scenario pack is the part of a scenario that is
 // content - the settings it runs under, the bodies it starts with, the seed
@@ -182,6 +182,7 @@ const FIELDS = new Set([
   'summary',
   'tags',
   'seed',
+  'scenario',
   'settings',
   'camera',
   'paused',
@@ -204,6 +205,7 @@ const FIELDS = new Set([
  * @param {string[]} api.locales - The interface's locales
  * @param {string[]} api.tags - The scenario tags
  * @param {string[]} api.integrators - The integrator names
+ * @param {string[]} [api.scenarios] - The built-in scenarios' public ids
  * @param {Function} [api.validateSystem] - js/systemSpec.js's, for `system`
  * @param {Function} [api.validateBody] - For one entry of `bodies`
  * @param {Function} [api.explain] - A message key and its values, in English
@@ -530,6 +532,17 @@ export function validateScenarioPack(s, api) {
         }
       });
     }
+  }
+  // A built-in to start from, by id: its world, geometry included, under the
+  // pack's seed and settings. The bodies are its own, so the pack brings none.
+  if (s.scenario !== undefined) {
+    need(
+      (api.scenarios || []).includes(s.scenario) && !hasSystem && !hasBodies,
+      'scenario',
+      'scenario',
+      'a built-in scenario id, such as "solar-system", and then no bodies of its own',
+      { scenario: String(s.scenario) }
+    );
   }
   if (hasSystem || hasBodies) {
     for (const key of POPULATION_COUNTS) {

@@ -108,7 +108,7 @@ test.describe('the trials', () => {
         const M = await import('/js/experiments/metrics.js');
         const units = await import('/js/units.js');
 
-        ui.SETTINGS.preset_scenario = 'Binary Planet Lab';
+        ui.SETTINGS.preset_scenario = 'binary-planet-lab';
         ui.initialize_simulation({ seed });
         ui.SETTINGS.binary_lab_planet_a = v;
         ui.initialize_simulation({ seed });
@@ -216,7 +216,7 @@ test.describe('stopping it', () => {
   }, testInfo) => {
     testInfo.setTimeout(240_000);
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(5);
     await openBench(page, app);
 

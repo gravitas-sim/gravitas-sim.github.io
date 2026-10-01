@@ -78,7 +78,7 @@ test.describe('the spacetime view', () => {
   });
 
   test('opens into the window, not below it', async ({ page, app }) => {
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await openSpacetimeView(page, app);
 
     const box = await page.evaluate(() => {
@@ -116,7 +116,7 @@ test.describe('the spacetime view', () => {
     page,
     app,
   }) => {
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await openSpacetimeView(page, app);
     await app.railControl('toggleLightCurve');
     await page.locator('#toggleLightCurve').click();
@@ -147,21 +147,21 @@ test.describe('the spacetime view', () => {
       // camera's far plane was pinned at 6000 world units, and the Solar System
       // with its comets is 20,000 across, so the whole scene sat behind it and
       // the panel rendered nothing but its background.
-      await app.loadScenario('Binary BH');
+      await app.loadScenario('binary-bh');
       await openSpacetimeView(page, app);
       expect(await drawnPercent(page)).toBeGreaterThan(2);
 
       // No Reset click: loading a world re-frames the view on its own, which is
       // what stops a scenario change from leaving the panel pointed at empty
       // space where the last scenario used to be.
-      await app.loadScenario('Solar System');
+      await app.loadScenario('solar-system');
       await page.waitForTimeout(2000);
       expect(await drawnPercent(page)).toBeGreaterThan(2);
     }
   );
 
   test('closes cleanly and gives the corner back', async ({ page, app }) => {
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await openSpacetimeView(page, app);
     await page.locator('#close3DViewBtn').click();
     await expect(page.locator('#threeViewportContainer')).toBeHidden();

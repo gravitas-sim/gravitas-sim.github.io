@@ -110,7 +110,7 @@ import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { glyphMarkup } from './objectGlyphs.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS } from './data/scenarioTags.js';
-import { applyPreset } from './scenarios.js';
+import { applyPreset, scenarioId } from './scenarios.js';
 import { buildWorld } from './world/build.js';
 import {
   t,
@@ -2995,9 +2995,9 @@ const buildInspectorView = (object, type, info) => {
   });
 
   const sweepScenarios = [
-    'Solar System',
-    'Earth-Moon System',
-    "Kepler's 2nd Law",
+    'solar-system',
+    'earth-moon-system',
+    'keplers-2nd-law',
   ];
   if (
     ORBITING_TYPES.includes(type) &&
@@ -4293,6 +4293,11 @@ window.addEventListener('gravitasSignalAudio', event => {
 // link that brought its own bodies (a scenario pack). Any other build forgets it.
 let builtSystem = null;
 
+// The scenario pack this world was built from, {id, version}, carried on into
+// any link made of it (the extras' `pack`). Any build forgets it; restoring a
+// pack's link sets it again, Refresh of a pack with bodies included.
+let worldPack = null;
+
 /**
  * Build the world, then hand it a fresh identity.
  *
@@ -4331,6 +4336,7 @@ const initialize_simulation = (options = {}) => {
   }
 
   builtSystem = null;
+  worldPack = null;
   const seed = getWorldSeed();
   withSeed(seed, () => build_simulation());
   // The object lists have just been repopulated; the physics caches hold the
@@ -5688,6 +5694,7 @@ const captureShareState = ({
       },
       observedStarId: starId,
       distancePc: getAssumedDistance(),
+      pack: worldPack,
     }
   ).x;
 
@@ -5767,7 +5774,10 @@ const activeToolIds = () =>
  * @returns {{scenario:string, kind:string, bodies:number}} What was restored
  */
 const applyShareState = payload => {
-  const scenario = payload.s;
+  // By id: a lesson's or a pack's own setup arrives here without passing
+  // through decodePayload(), and may name its scenario the way it did before
+  // scenarios had ids.
+  const scenario = scenarioId(payload.s) ?? payload.s;
   if (scenario === 'None') {
     // Blank Simulation, or a built system. Its delta was taken against the
     // defaults, so it is rebuilt from them; otherwise initialize_simulation()
@@ -5828,6 +5838,7 @@ const applyShareState = payload => {
   // frame, edge-on observer - which is exactly what an ordinary share link
   // means, so this path is safe for every link ever made.
   const extras = readExtras(payload);
+  worldPack = extras.pack;
   setSimulationTime(extras.clock);
   try {
     if (extras.frame.mode && extras.frame.mode !== 'world') {
@@ -6929,7 +6940,7 @@ window.addEventListener('gravitasRequestRebuild', () => {
 document.getElementById('refreshScenarioBtn').onclick = () => {
   if (rebuildBuiltSystem()) return;
   // Preserve current scenario name and restart it
-  const currentScenario = current_scenario_name || 'Binary BH';
+  const currentScenario = current_scenario_name || 'binary-bh';
   SETTINGS.preset_scenario = currentScenario;
   initialize_simulation();
   state.paused = false;
@@ -6939,7 +6950,7 @@ document.getElementById('refreshScenarioBtn').onclick = () => {
 document.getElementById('resetAllBtn').onclick = () => {
   // Reset to default settings and ensure Binary BH scenario
   setSettings(JSON.parse(JSON.stringify(DEFAULT_SETTINGS)));
-  SETTINGS.preset_scenario = 'Binary BH'; // Ensure default scenario
+  SETTINGS.preset_scenario = 'binary-bh'; // Ensure default scenario
   initialize_simulation();
   state.paused = false;
   show_scenario_info();
@@ -7992,7 +8003,8 @@ if (closeScenarioInfoBtn) {
 window.addEventListener('gravitasEscape', dismissScenarioCard);
 
 /**
- * Load a built-in scenario by its SCENARIO_INFO key.
+ * Load a built-in scenario by its id (a key of SCENARIO_INFO), or by the
+ * English name it had before ids.
  *
  * The one authoritative way to switch scenario from the UI. The scenario
  * browser and the welcome screen's featured gallery both call this, so the two
@@ -8000,15 +8012,16 @@ window.addEventListener('gravitasEscape', dismissScenarioCard);
  * one place, and the readouts that depend on the new world are refreshed in one
  * place.
  *
- * @param {string} key - A key of SCENARIO_INFO
+ * @param {string} key - A scenario id, or the English name it had before ids
  * @returns {boolean} True if the scenario existed and was loaded
  */
 export function loadScenarioByKey(key, options = {}) {
-  if (!key || !SCENARIO_INFO[key]) {
+  const id = scenarioId(key);
+  if (!id || !SCENARIO_INFO[id]) {
     console.warn(`Unknown scenario key: ${key}`);
     return false;
   }
-  SETTINGS.preset_scenario = key;
+  SETTINGS.preset_scenario = id;
   // The rebuild raises the scenario card itself, through apply_preset, so this
   // must not call show_enhanced_scenario_info() as well: a second call stacks a
   // second 18-second auto-hide timer on the same element.
