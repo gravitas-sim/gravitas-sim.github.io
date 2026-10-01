@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/evaluation-1.schema.json",
+  "title": "gravitas.evaluation/1",
+  "description": "The classroom evidence kit's JSON export (/evaluation/, js/evaluationKit.js): one de-identified record per instrument, concept, fidelity and usability, each with the kit's schema version, the occasion and the participant's anonymous code, and an answer per item: an option's index as text for a choice, a rating's index for an agreement item, and free text otherwise. tools/evaluation-summary.mjs reads it more loosely than this: it also takes a bare array of records, or the kit's CSV, and a missing kind or schema; it refuses a foreign kind and a newer schema. It refuses no field, so neither does this schema. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "kind",
+    "schema",
+    "records"
+  ],
+  "properties": {
+    "kind": {
+      "const": "gravitas.evaluation"
+    },
+    "schema": {
+      "const": 1
+    },
+    "exported": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "instrument",
+          "occasion"
+        ],
+        "properties": {
+          "schema": {
+            "const": 1
+          },
+          "instrument": {
+            "enum": [
+              "fidelity",
+              "concept",
+              "usability"
+            ]
+          },
+          "occasion": {
+            "enum": [
+              "pre",
+              "post"
+            ]
+          },
+          "participant": {
+            "type": "string",
+            "description": "An anonymous code, or empty. Never a name or any other identifier."
+          },
+          "investigations": {
+            "type": "string"
+          },
+          "setting": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          },
+          "minutes": {
+            "type": "string"
+          },
+          "grouping": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "intervention": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "deviations": {
+            "type": "string"
+          },
+          "q01": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q02": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q03": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q04": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q05": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q06": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q07": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q08": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q09": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q10": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q11": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "q12": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "u1": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4"
+            ]
+          },
+          "u2": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4"
+            ]
+          },
+          "u3": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4"
+            ]
+          },
+          "u4": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4"
+            ]
+          },
+          "u5": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4"
+            ]
+          },
+          "u6": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4"
+            ]
+          },
+          "u7": {
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4"
+            ]
+          },
+          "u8": {
+            "type": "string"
+          },
+          "u9": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

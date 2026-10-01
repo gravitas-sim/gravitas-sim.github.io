@@ -3,14 +3,16 @@
 // -----------------------------------------------------------------------------
 // No schema engine is a dependency, so the suites that hold a document to its
 // schema share this: const, enum, type (one or a list), pattern, minLength,
-// minItems, items, required, properties and additionalProperties. Not a test
-// file (Jest runs *.test.js), and not Gravitas.
+// minItems, items, required, properties, additionalProperties and anyOf (for
+// a format with two shapes, such as gravitas.experiment/1's 2-D and 3-D
+// models). Not a test file (Jest runs *.test.js), and not Gravitas.
 // =============================================================================
 
 /** The subset of JSON Schema the SDK's schemas use. */
 export function valid(s, v) {
   if (s.const !== undefined && v !== s.const) return false;
   if (s.enum && !s.enum.includes(v)) return false;
+  if (s.anyOf && !s.anyOf.some(x => valid(x, v))) return false;
   const type = Array.isArray(v)
     ? 'array'
     : v === null
