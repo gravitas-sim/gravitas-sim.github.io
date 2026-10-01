@@ -12,7 +12,6 @@ export const EN_COMPOSER = {
   'composer.title': 'Investigation Composer',
   'composer.intro':
     'Compose a guided investigation as data: what students read, predict, try, measure and answer, which scenario and instrument each step opens, and what they see when an answer is wrong. It is checked by the same rules as every lesson Gravitas ships, and it never runs anything you write.',
-  'composer.toStudio': 'The Scenario Studio',
   'composer.toolbar.label': 'Investigation file',
   'composer.action.new': 'New investigation',
   'composer.action.saveBank': 'Save the question bank',

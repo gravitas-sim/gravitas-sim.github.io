@@ -32,6 +32,7 @@ import {
   SUMMARY_COLUMNS,
 } from '../js/submission/results.js';
 import { fromCsv } from '../js/csv.js';
+import { stepKey as tabKey } from './keyboard.js';
 
 const kepler = await import('../js/data/investigations/keplers-laws.js').then(
   m => m.default || Object.values(m)[0]
@@ -234,14 +235,15 @@ test.describe('the submission review page', () => {
     expect(await boxes.innerText()).not.toMatch(/&[a-z]+;|<\/?[a-z]/);
   });
 
-  test('works from the keyboard alone', async ({ page }) => {
+  test('works from the keyboard alone', async ({ page, browserName }) => {
     await open(page);
     await page.locator('#picker').setInputFiles(PILE.slice(0, 2));
     await expect(page.locator('#count')).toHaveText('2 submissions');
     await page.locator('#includeWritten').focus();
     await page.keyboard.press('Space');
     await expect(page.locator('#includeWritten')).toBeChecked();
-    await page.keyboard.press('Tab');
+    // Tab in macOS WebKit skips buttons (e2e/keyboard.js).
+    await page.keyboard.press(tabKey(browserName));
     await expect(page.locator('#exportSummary')).toBeFocused();
     const [download] = await Promise.all([
       page.waitForEvent('download'),
@@ -255,7 +257,7 @@ test.describe('the submission review page', () => {
   }) => {
     await open(page);
     await page.locator('#picker').setInputFiles(PILE);
-    await page.locator('#langSwitch [data-lang="es"]').click();
+    await page.locator('[data-gs-lang]').selectOption('es');
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
     await expect(page.locator('h1')).toHaveText('Revisión de entregas');
     await expect(page.locator('#count')).toHaveText('4 entregas');

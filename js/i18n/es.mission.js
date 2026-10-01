@@ -12,7 +12,6 @@ export const ES_MISSION = {
   'mission.notFor':
     'Un modelo educativo. Sus números no son diseño operativo de misiones ni navegación: los planetas se mueven en círculos en un mismo plano, los impulsos son instantáneos y solo atraen los cuerpos nombrados.',
   'mission.lang': 'Idioma',
-  'mission.back': 'Volver a Gravitas',
   'mission.kernel': 'El núcleo en 3-D',
   'mission.docs': 'Cómo funciona el núcleo (MISSION.md)',
   'mission.compute': 'Calcular',

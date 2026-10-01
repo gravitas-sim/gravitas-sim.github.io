@@ -1,6 +1,6 @@
 // =============================================================================
-// Two migrations that may only go one way: numbers through the formatter, and
-// units through the registry
+// Three migrations that may only go one way: numbers through the formatter,
+// units through the registry, and typed numbers through one parser
 // -----------------------------------------------------------------------------
 //   node tools/number-ratchet.mjs            check the sources against the record
 //   node tools/number-ratchet.mjs --record   rewrite the record from the sources
@@ -17,6 +17,12 @@
 // names units the registry knows. A file below it fails too, until the record
 // is rewritten with --record, so the counts can only fall. The same rule as
 // the fixed sleeps in the browser suite (tools/check-test-policy.mjs).
+//
+// The third is Prompt 59's step 5. A number a person types is read by
+// js/answerParse.js's parseNumber, which knows the locale's decimal mark and
+// refuses what is ambiguous; `Number(field.value)` and the one-shot
+// `.replace(',', '.')` do neither. Both are counted, sliders and selects too
+// (valueAsNumber is the cheap way out for those), and the count only falls.
 //
 // tests/numberRatchet.test.js runs the check.
 // =============================================================================
@@ -70,18 +76,36 @@ export const countUnknownUnits = src =>
     return n;
   }, 0);
 
-/** Both counts for every file that has either. */
+/** A field's text read as a number directly, or its comma swapped once. */
+export const countRawParsing = src =>
+  code(src).reduce(
+    (n, line) =>
+      n +
+      (line.match(/\b(?:Number|parseFloat|parseInt)\s*\([^)]*\.value\b/g) || [])
+        .length +
+      (line.match(/\.replace\(\s*(['"]),\1\s*,\s*(['"])\.\2\s*\)/g) || [])
+        .length,
+    0
+  );
+
+/** The parser itself, which is where the reading belongs. */
+const PARSER = 'js/answerParse.js';
+
+/** Every count for every file that has any. */
 export function measure() {
   const formatting = {};
   const units = {};
+  const parsing = {};
   for (const rel of sources()) {
     const src = readFileSync(path.join(ROOT, rel), 'utf8');
     const f = countFormatting(src);
     const u = countUnknownUnits(src);
+    const p = rel === PARSER ? 0 : countRawParsing(src);
     if (f) formatting[rel] = f;
     if (u) units[rel] = u;
+    if (p) parsing[rel] = p;
   }
-  return { formatting, units };
+  return { formatting, units, parsing };
 }
 
 const WHAT = {
@@ -93,6 +117,10 @@ const WHAT = {
     'unit literals the registry does not know',
     'Name a unit of js/units/registry.js, or add it there',
   ],
+  parsing: [
+    'raw reads of a typed number',
+    'Read it with parseNumber from js/answerParse.js',
+  ],
 };
 
 /**
@@ -103,13 +131,12 @@ export function check(now = measure(), record = readRecord()) {
   const problems = [];
   for (const kind of Object.keys(WHAT)) {
     const [noun, fix] = WHAT[kind];
-    const files = new Set([
-      ...Object.keys(now[kind]),
-      ...Object.keys(record[kind]),
-    ]);
+    const has = record[kind] ?? {};
+    const got = now[kind] ?? {};
+    const files = new Set([...Object.keys(got), ...Object.keys(has)]);
     for (const rel of [...files].sort()) {
-      const n = now[kind][rel] ?? 0;
-      const max = record[kind][rel] ?? 0;
+      const n = got[rel] ?? 0;
+      const max = has[rel] ?? 0;
       if (n > max)
         problems.push(`${rel}: ${n} ${noun}, over its ${max}. ${fix}.`);
       else if (n < max)
@@ -135,7 +162,7 @@ if (
       RECORD,
       `${JSON.stringify(
         {
-          note: 'Per file under js/: toFixed/toPrecision calls outside js/format.js, and unit literals js/units/registry.js does not know. Written by node tools/number-ratchet.mjs --record; a file may not rise above its count, and one that falls has its count lowered here.',
+          note: 'Per file under js/: toFixed/toPrecision calls outside js/format.js, unit literals js/units/registry.js does not know, and typed numbers read without js/answerParse.js (Number/parseFloat/parseInt of a .value, or a one-shot comma swap). Written by node tools/number-ratchet.mjs --record; a file may not rise above its count, and one that falls has its count lowered here.',
           ...now,
         },
         null,
@@ -143,7 +170,7 @@ if (
       )}\n`
     );
     console.log(
-      `Recorded ${total(now.formatting)} formatting calls and ${total(now.units)} unknown unit literals.`
+      `Recorded ${total(now.formatting)} formatting calls, ${total(now.units)} unknown unit literals and ${total(now.parsing)} raw reads of a typed number.`
     );
   } else {
     const problems = check();
@@ -153,7 +180,7 @@ if (
     }
     const r = readRecord();
     console.log(
-      `Within the record: ${total(r.formatting)} formatting calls, ${total(r.units)} unknown unit literals.`
+      `Within the record: ${total(r.formatting)} formatting calls, ${total(r.units)} unknown unit literals, ${total(r.parsing ?? {})} raw reads of a typed number.`
     );
   }
 }

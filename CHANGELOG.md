@@ -15,6 +15,44 @@ the release rather than in the tag.
 
 ### Added
 
+- **Home** (Roadmap II Prompt 50, item 3). The front door is a page of
+  the shell now, not a layer over it: it opens below the bar, and the bar
+  stays live, with its navigation, switches and Tab order, while it is up.
+  Every page's GRAVITAS link opens it by name (`/#home`), for a returning
+  visitor too. Leaving it lands in the sandbox and takes `#home` out of the
+  address, and a deep link still goes straight to what it names. Its
+  content is the front door's own, the three ways in and the featured
+  scenarios and investigations, until Prompt 73 redesigns onboarding.
+- **The shared shell, on the application** (Roadmap II Prompt 50, Part 3).
+  The simulation at `/` carries the same header as every other page, fixed
+  over its full-bleed canvas: the navigation to every surface, and the
+  language and theme switches.
+  - The readout, the control rail, the lesson panel, the inspector and the
+    scenario title move down by the bar's height (`--shell-height`). The
+    canvas does not move.
+  - The bar is gone in an embedded figure and in lecture mode, where the
+    readout moves back up into the room it left.
+  - The footer's theme and language menus are gone: the shell's switches
+    are the application's own `setTheme` and `setLocale`, so a theme change
+    still repaints the canvas and a language change still translates in
+    place. The rail's Learn section keeps About Gravitas and the manual; its
+    links to the model and instructor pages are in the navigation now.
+- **The shared shell, on the tool pages** (Roadmap II Prompt 50, Part 2).
+  The Observatory, the catalog, the experiment runner, the figure builder,
+  the Scenario Studio, the Investigation Composer, the course builder, the
+  course home, both 3-D pages, both mission pages and submission review
+  carry the shell. Every page now has the whole navigation, and no page
+  has a "Back to Gravitas" link.
+  - Five routes pay for the module and use the shell's switches, the
+    language one re-translating the page in place: the Observatory, the
+    experiment runner, the figure builder, the course builder and
+    submission review. Submission review was a dead end with no links out.
+  - The other eight carry the markup without the module and keep their own
+    language switch until their routes can pay.
+  - The stored theme now reaches all thirteen pages. That exposed text,
+    rules and fields written for Midnight only, which now use the theme's
+    tokens. The course builder's link-table links are at least 24 pixels
+    tall (WCAG 2.2, 2.5.8).
 - **The shared shell, on the document pages** (PLATFORM_MODEL.md, Roadmap
   II Prompt 50, Part 1). /model/, /validation/, /teaching/, /instructors/
   and /evaluation/ share one header, five navigation groups, a language and
@@ -1501,7 +1539,7 @@ listed here because this is the release that first carries it.
   cycle or on a low-level module importing a coordinator.
 - **A bundle budget.** `npm run budget` holds the initial download to a written
   ceiling; raising it means saying why in the same commit.
-- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->18<!--/fact--> surfaces in both
+- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->31<!--/fact--> surfaces in both
   languages and both themes, plus keyboard, focus-trap, reflow and reduced-motion tests.
   See [ACCESSIBILITY.md](ACCESSIBILITY.md).
 

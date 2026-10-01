@@ -80,7 +80,8 @@ import { initI18nDom } from './i18n/dom.js';
 import { createDoubleTapRecognizer } from './gestures.js';
 import { setRequestedLessonLocale } from './lessonLocale.js';
 import { resetFollowCamera } from './followCamera.js';
-import { initLocalePicker } from './i18n/picker.js';
+import { mountShell } from './shell.js';
+import { setTheme } from './theme.js';
 import { initBottomDock } from './bottomDock.js';
 import {
   initEmbedMode,
@@ -144,7 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // An embed is a figure in somebody else's page. The front door is a
   // first-visit introduction to *this application*, which is not what the
   // reader came to that page for, and it would cover the figure entirely.
-  const frontDoorPending = !embedded && shouldShowWelcome();
+  // `#home` is Home asked for by name - the shell's GRAVITAS link - and opens
+  // it for a returning visitor too (PLATFORM_MODEL.md, "The surfaces").
+  const frontDoorPending =
+    !embedded && (location.hash === '#home' || shouldShowWelcome());
 
   const revealApp = () => {
     if (revealed) return;
@@ -414,7 +418,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // The markup sweep runs after the dialogs exist but before the interface is
     // revealed, so nothing is ever seen in the wrong language.
     initI18nDom();
-    initLocalePicker();
+    // The shared shell's switches (tools/shell.mjs), through the application's
+    // own setters, so a language change re-translates in place and a theme
+    // change repaints the canvas.
+    mountShell({
+      onLanguage: id => setLocale(id),
+      onTheme: id => setTheme(id),
+    });
     initBottomDock();
     // The lesson registry imports nothing, so it cannot read the locale for
     // itself; the two are connected here. Lessons are content and are fetched
@@ -491,6 +501,13 @@ document.addEventListener('DOMContentLoaded', () => {
           .then(mod => mod.openWelcome({ automatic: false }))
           .catch(err => console.warn('Front door unavailable:', err));
       });
+    // The GRAVITAS link on this page changes only the hash.
+    window.addEventListener('hashchange', () => {
+      if (embedded || location.hash !== '#home') return;
+      loadWelcome()
+        .then(mod => mod.openWelcome({ automatic: false }))
+        .catch(err => console.warn('Front door unavailable:', err));
+    });
     // The gallery does not load scenarios itself: it hands the chosen key to
     // the one authoritative loader, the same one the front door's featured
     // cards use.

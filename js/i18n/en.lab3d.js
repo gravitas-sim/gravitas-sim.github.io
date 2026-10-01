@@ -10,7 +10,6 @@ export const EN_LAB3D = {
   'lab3d.intro':
     'The 3-D small-N kernel, run in a Worker of its own: the reference problems it is validated against, any system file, and how fast it runs here. Numbers and plain plots only; this is a diagnostic page, not a student view.',
   'lab3d.lang': 'Language',
-  'lab3d.back': 'Back to Gravitas',
   'lab3d.docs': 'How the kernel works (LAB3D.md)',
   'lab3d.run.heading': 'Run',
   'lab3d.problem': 'Problem',

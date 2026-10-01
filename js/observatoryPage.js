@@ -18,7 +18,6 @@
 // =============================================================================
 
 import {
-  LANGUAGES,
   language,
   preferred,
   loadLanguage,
@@ -27,6 +26,7 @@ import {
   t,
   translatePage,
 } from './observatory/i18n.js';
+import { mountShell } from './shell.js';
 import {
   FIXTURES,
   lightCurveObservation,
@@ -247,7 +247,14 @@ function rebuild({ announceChange = null } = {}) {
  * reader opens it, so the page itself carries none of the inference core.
  */
 // What the page lends its lazily loaded panels (see js/observatory/fitPanel.js).
-const lent = { t, number, registerMessages, createPlot, createSelection };
+const lent = {
+  t,
+  number,
+  language,
+  registerMessages,
+  createPlot,
+  createSelection,
+};
 const fit = { panel: null, loading: null, suits: false };
 function mountFit(m) {
   fit.module = m;
@@ -1335,34 +1342,8 @@ $('obsExportCsv').addEventListener('click', async () => {
 
 // --- Language ----------------------------------------------------------------------
 
-function renderLanguages() {
-  const box = $('langSwitch');
-  box.replaceChildren(
-    ...LANGUAGES.map(l => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'ui-button ow-small';
-      b.lang = l.id;
-      b.textContent = l.endonym;
-      b.setAttribute('aria-pressed', String(language() === l.id));
-      // A catalog that cannot be fetched leaves the page as it was.
-      b.addEventListener('click', () =>
-        loadLanguage(l.id).then(
-          () => {
-            setLanguage(l.id);
-            translateAll();
-          },
-          () => {}
-        )
-      );
-      return b;
-    })
-  );
-}
-
 function translateAll() {
   translatePage();
-  renderLanguages();
   fillFixtures();
   fillImportChoices();
   if (state.table) {
@@ -1390,6 +1371,17 @@ loadLanguage(opening).then(
 function begin(lang) {
   setLanguage(lang);
   translateAll();
+  // A catalog that cannot be fetched leaves the page as it was.
+  mountShell({
+    onLanguage: id =>
+      loadLanguage(id).then(
+        () => {
+          setLanguage(id);
+          translateAll();
+        },
+        () => setLanguage(language())
+      ),
+  });
   document.documentElement.dataset.ready = 'true';
   // Opened from the catalog with ?installed=<package id>: js/catalog/installed.js
   // opens the pack, so a visitor who installs nothing never loads it.

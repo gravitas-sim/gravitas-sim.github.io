@@ -157,7 +157,7 @@
   .floating-close-chip {
     display: none;
     position: fixed;
-    top: var(--space-3);
+    top: calc(var(--space-3) + var(--shell-height, 0px));
     right: var(--space-3);
     z-index: var(--z-toast);
 
@@ -1234,7 +1234,7 @@
   .mobile-menu-toggle {
     display: none;
     position: fixed;
-    top: var(--space-4);
+    top: calc(var(--space-4) + var(--shell-height, 0px));
     right: var(--space-4);
     z-index: calc(var(--z-chrome) + 1);
 
@@ -1292,7 +1292,7 @@
     /* The rail becomes the dropdown the hamburger opens. */
     .ui-container {
       display: flex;
-      top: calc(var(--space-4) + 52px);
+      top: calc(var(--space-4) + 52px + var(--shell-height, 0px));
       right: var(--space-3);
       left: var(--space-3);
       width: auto;
@@ -1300,7 +1300,7 @@
          top of its lower edge, so whichever control landed in the last fifty
          pixels was underneath the playback controls. This is the width where
          the reservation is needed and the only one where it is. */
-      max-height: calc(100vh - var(--space-10) - 64px - var(--transport-space));
+      max-height: calc(100vh - var(--space-10) - 64px - var(--transport-space) - var(--shell-height, 0px));
 
       opacity: 0;
       visibility: hidden;
@@ -1796,7 +1796,7 @@
 @layer components {
   #overlay {
     position: fixed;
-    top: var(--space-4);
+    top: calc(var(--space-4) + var(--shell-height, 0px));
     left: var(--space-4);
     z-index: var(--z-overlay);
     width: min(var(--hud-width), calc(100vw - var(--space-8)));
@@ -1911,7 +1911,7 @@
 
   @media (max-width: 640px) {
     #overlay {
-      top: var(--space-2);
+      top: calc(var(--space-2) + var(--shell-height, 0px));
       left: var(--space-2);
       width: calc(100vw - var(--space-4));
       font-size: var(--text-2xs);
@@ -2120,155 +2120,6 @@
     opacity: 0.7;
   }
 
-  /* --- Theme dock -----------------------------------------------------------
-     Docked in the footer pill, left of the copyright. Closed it is a swatch and
-     a word; the list opens upward, because there is nothing below it. */
-  .theme-dock {
-    position: relative;
-    display: flex;
-    pointer-events: auto;
-  }
-
-  .theme-dock-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    /* Padding, not zero: collapsed to a swatch this is a 14px-wide control, and
-       a 14px target is not one most people can hit. The negative margin keeps
-       the extra area from pushing the row wider. */
-    padding: var(--space-2);
-    margin: calc(var(--space-2) * -1) 0 calc(var(--space-2) * -1)
-      calc(var(--space-2) * -1);
-    font: inherit;
-    color: var(--hud-text);
-    background: none;
-    border: 0;
-    cursor: pointer;
-    transition: color var(--duration) var(--ease);
-  }
-
-  .theme-dock-btn:hover,
-  .theme-dock-btn:focus-visible {
-    color: var(--accent);
-  }
-
-  /* The swatch is the theme itself: page ground, panel and accent, in the three
-     bands the interface actually uses. It recolors with the tokens, so it
-     cannot fall out of step with what it is describing. */
-  .theme-dock-swatch,
-  .theme-menu-swatch {
-    flex: none;
-    width: 14px;
-    height: 14px;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--border);
-    background: linear-gradient(
-      135deg,
-      var(--surface-0) 0 40%,
-      var(--surface-2) 40% 70%,
-      var(--accent) 70% 100%
-    );
-  }
-
-  .theme-menu {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + var(--space-3));
-    z-index: 1;
-
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    width: max-content;
-    min-width: 13rem;
-    padding: var(--space-2);
-
-    background: var(--surface-1);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .theme-menu-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-2) var(--space-3);
-    font: inherit;
-    font-size: var(--text-xs);
-    text-align: left;
-    color: var(--text-secondary);
-    background: none;
-    border: 0;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition:
-      color var(--duration) var(--ease),
-      background-color var(--duration) var(--ease);
-  }
-
-  .theme-menu-item:hover,
-  .theme-menu-item:focus-visible {
-    color: var(--text-primary);
-    background: var(--surface-2);
-  }
-
-  .theme-menu-item.is-active {
-    color: var(--text-primary);
-    background: var(--accent-soft);
-  }
-
-  /* Each row previews its own theme rather than the active one, which is the
-     only way a swatch helps before you have switched. */
-  .theme-menu-swatch[data-swatch='midnight'] {
-    background: linear-gradient(
-      135deg,
-      #000105 0 40%,
-      #0d111c 40% 70%,
-      #22d3ee 70% 100%
-    );
-  }
-  .theme-menu-swatch[data-swatch='deep'] {
-    background: linear-gradient(
-      135deg,
-      #070a16 0 40%,
-      #161a2c 40% 70%,
-      #38bdf8 70% 100%
-    );
-  }
-  .theme-menu-swatch[data-swatch='observatory'] {
-    background: linear-gradient(
-      135deg,
-      #0a0304 0 40%,
-      #221310 40% 70%,
-      #fb7185 70% 100%
-    );
-  }
-  .theme-menu-swatch[data-swatch='daylight'] {
-    background: linear-gradient(
-      135deg,
-      #eef2f9 0 40%,
-      #f1f5fb 40% 70%,
-      #0284c7 70% 100%
-    );
-  }
-
-  .theme-menu-text {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-
-  .theme-menu-label {
-    font-weight: var(--weight-semibold);
-  }
-
-  .theme-menu-hint {
-    font-size: var(--text-2xs);
-    line-height: 1.4;
-    color: var(--text-muted);
-  }
-
   /* Where the footer sits once the control rail is docked.
 
      The rail is docked against the right edge and painted above the footer, so
@@ -2303,11 +2154,10 @@
       display: none;
     }
 
-    /* The last pixels. The symbol carries the notice and the swatch carries the
-       theme; the words beside them are what a reader can lose without losing
-       the meaning, and both come back as soon as there is room. */
-    .attribution-year,
-    .theme-dock-name {
+    /* The last pixels. The symbol carries the notice; the year beside it is
+       what a reader can lose without losing the meaning, and it comes back as
+       soon as there is room. */
+    .attribution-year {
       display: none;
     }
   }
@@ -2562,7 +2412,7 @@
 
     /* --- Readout: collapsed by default, tap to expand -------------------- */
     #overlay {
-      top: calc(var(--space-2) + env(safe-area-inset-top, 0px));
+      top: calc(var(--space-2) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
       left: calc(var(--space-2) + env(safe-area-inset-left, 0px));
       right: auto;
       width: auto;
@@ -2585,7 +2435,7 @@
 
     /* --- Menu button clears the notch ------------------------------------ */
     .mobile-menu-toggle {
-      top: calc(var(--space-2) + env(safe-area-inset-top, 0px));
+      top: calc(var(--space-2) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
       right: calc(var(--space-2) + env(safe-area-inset-right, 0px));
       width: 44px;
       height: 44px;
@@ -2593,7 +2443,7 @@
     }
 
     .ui-container {
-      top: calc(var(--space-2) + 52px + env(safe-area-inset-top, 0px));
+      top: calc(var(--space-2) + 52px + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
       left: var(--space-2);
       right: var(--space-2);
       max-height: calc(100vh - 200px - env(safe-area-inset-top, 0px));
@@ -2734,7 +2584,7 @@
     /* --- Scenario info card sits under the top chrome -------------------- */
     #scenarioInfoBox,
     .scenario-info-box {
-      top: calc(64px + env(safe-area-inset-top, 0px));
+      top: calc(64px + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
       left: var(--space-2);
       right: var(--space-2);
       width: auto;
@@ -2746,7 +2596,7 @@
   .placement-armed-hint {
     position: fixed;
     left: 50%;
-    top: calc(var(--space-8) + env(safe-area-inset-top, 0px));
+    top: calc(var(--space-8) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
     transform: translateX(-50%);
     z-index: var(--z-toast);
 
@@ -3740,7 +3590,7 @@
   /* --- The working panel -------------------------------------------------- */
   .investigation-panel {
     position: fixed;
-    top: var(--space-3);
+    top: calc(var(--space-3) + var(--shell-height, 0px));
     left: var(--space-3);
     /* Clears the transport bar, which is fixed to the bottom at a higher
        z-index: overlapping it would put the Next button underneath the
@@ -4685,14 +4535,14 @@
      column it went unnoticed until the last value went in. */
   .inv-plot-panel {
     position: fixed;
-    top: var(--space-3);
+    top: calc(var(--space-3) + var(--shell-height, 0px));
     left: calc(min(396px, 40vw) + var(--space-3) * 2);
     z-index: var(--z-panel);
     width: min(460px, 42vw);
     /* Clears the transport bar, same as the lesson panel. Anything taller than
        the window scrolls inside the panel rather than off the bottom of it,
        which is what the widgets with three sliders and five presets need. */
-    max-height: calc(100vh - var(--space-3) - 88px);
+    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - 88px);
     overflow-y: auto;
     overscroll-behavior: contain;
     padding: var(--space-3) var(--space-4) var(--space-4);
@@ -4773,11 +4623,11 @@
      diagram until it cannot be read. */
   @media (max-width: 900px) {
     .inv-plot-panel {
-      top: var(--space-2);
+      top: calc(var(--space-2) + var(--shell-height, 0px));
       left: var(--space-2);
       right: var(--space-2);
       max-height: calc(
-        100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
           var(--space-2) * 3
       );
     }
@@ -5014,7 +4864,7 @@
     height: 168px;
   }
   body.investigation-lightcurve .inv-plot-panel {
-    max-height: calc(100vh - var(--space-3) - 88px - 184px);
+    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - 88px - 184px);
   }
 
   /* --- A step that carries both an instrument and a plot ------------------- */
@@ -5027,11 +4877,11 @@
      a caption. At 0.56 the slider a measurement step tells students to move
      ended up below the fold. */
   body.investigation-split #investigationTool {
-    max-height: calc((100vh - var(--space-3) - 88px) * 0.62);
+    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - 88px) * 0.62);
   }
   body.investigation-split #investigationPlot {
-    top: calc((100vh - var(--space-3) - 88px) * 0.62 + var(--space-3) * 2);
-    max-height: calc((100vh - var(--space-3) - 88px) * 0.38 - var(--space-3));
+    top: calc((100vh - var(--space-3) - var(--shell-height, 0px) - 88px) * 0.62 + var(--space-3) * 2 + var(--shell-height, 0px));
+    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - 88px) * 0.38 - var(--space-3));
   }
   @media (max-width: 900px) {
     /* Two panels above a bottom sheet, sharing the band between them in the
@@ -5049,7 +4899,7 @@
     body.investigation-split #investigationTool {
       max-height: calc(
         (
-            100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
               var(--space-2) * 3
           ) *
           0.62
@@ -5058,14 +4908,14 @@
     body.investigation-split #investigationPlot {
       top: calc(
         (
-            100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
               var(--space-2) * 3
           ) *
-          0.62 + var(--space-2) * 2
+          0.62 + var(--space-2) * 2 + var(--shell-height, 0px)
       );
       max-height: calc(
         (
-            100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
               var(--space-2) * 3
           ) *
           0.38
@@ -5268,7 +5118,8 @@
 @layer components {
   .welcome-screen {
     position: fixed;
-    inset: 0;
+    /* Home is a page of the shell: below its bar, which stays in use. */
+    inset: var(--shell-height, 0px) 0 0 0;
     z-index: var(--z-welcome);
 
     overflow-y: auto;
@@ -6241,7 +6092,7 @@
      ====================================================================== */
   #objectInspector {
     position: fixed;
-    top: 96px;
+    top: calc(96px + var(--shell-height, 0px));
     right: 300px;
     width: 420px;
     max-width: calc(100vw - 2 * var(--space-4));

@@ -19,12 +19,6 @@ import { EN_OBSERVATORY } from '../i18n/en.observatory.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
-/** The languages this page is written in, in the order the switch offers them. */
-export const LANGUAGES = Object.freeze([
-  { id: 'en', endonym: 'English' },
-  { id: 'es', endonym: 'Español' },
-]);
-
 const CATALOGS = { en: { ...EN_OBSERVATORY }, es: {} };
 const LOADERS = {
   es: () => import('../i18n/es.observatory.js').then(m => m.ES_OBSERVATORY),

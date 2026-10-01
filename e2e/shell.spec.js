@@ -17,26 +17,28 @@ const openGroups = page =>
   );
 
 test.describe('the shell', () => {
-  test('a group opens, one at a time, and Escape or a click elsewhere closes it', async ({
-    page,
-  }) => {
-    await page.goto('/model/', { waitUntil: 'load' });
-    await expect(page.locator('.gs-controls')).toBeVisible();
+  test(
+    'a group opens, one at a time, and Escape or a click elsewhere closes it',
+    { tag: '@cross-browser' },
+    async ({ page }) => {
+      await page.goto('/model/', { waitUntil: 'load' });
+      await expect(page.locator('.gs-controls')).toBeVisible();
 
-    await groups(page).nth(0).locator('summary').click();
-    await expect(groups(page).nth(0)).toHaveAttribute('open', '');
-    await groups(page).nth(4).locator('summary').click();
-    await expect(groups(page).nth(4)).toHaveAttribute('open', '');
-    expect(await openGroups(page)).toBe(1);
+      await groups(page).nth(0).locator('summary').click();
+      await expect(groups(page).nth(0)).toHaveAttribute('open', '');
+      await groups(page).nth(4).locator('summary').click();
+      await expect(groups(page).nth(4)).toHaveAttribute('open', '');
+      expect(await openGroups(page)).toBe(1);
 
-    await page.keyboard.press('Escape');
-    await expect.poll(() => openGroups(page)).toBe(0);
-    await expect(groups(page).nth(4).locator('summary')).toBeFocused();
+      await page.keyboard.press('Escape');
+      await expect.poll(() => openGroups(page)).toBe(0);
+      await expect(groups(page).nth(4).locator('summary')).toBeFocused();
 
-    await groups(page).nth(1).locator('summary').click();
-    await page.locator('h1').click();
-    await expect.poll(() => openGroups(page)).toBe(0);
-  });
+      await groups(page).nth(1).locator('summary').click();
+      await page.locator('h1').click();
+      await expect.poll(() => openGroups(page)).toBe(0);
+    }
+  );
 
   test('every page is two activations away, by mouse', async ({ page }) => {
     await page.goto('/model/', { waitUntil: 'load' });
@@ -51,36 +53,41 @@ test.describe('the shell', () => {
     ).toHaveAttribute('href', '/teaching/');
   });
 
-  test('the Investigations entry opens the lesson chooser', async ({
-    page,
-    app,
-  }) => {
-    await app.boot();
-    await page.goto('/model/', { waitUntil: 'load' });
-    await groups(page).nth(0).locator('summary').click();
-    await page
-      .locator('.gs-nav a[href="/#investigations"]')
-      .filter({ visible: true })
-      .click();
-    await page.waitForFunction(() => window.splashScreenEnded === true);
-    await expect(page.locator('#investigationBrowser')).toBeVisible({
-      timeout: 30_000,
-    });
-  });
+  test(
+    'the Investigations entry opens the lesson chooser',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await page.goto('/model/', { waitUntil: 'load' });
+      await groups(page).nth(0).locator('summary').click();
+      await page
+        .locator('.gs-nav a[href="/#investigations"]')
+        .filter({ visible: true })
+        .click();
+      await page.waitForFunction(() => window.splashScreenEnded === true);
+      await expect(page.locator('#investigationBrowser')).toBeVisible({
+        timeout: 30_000,
+      });
+    }
+  );
 
-  test('and by keyboard', async ({ page, browserName }) => {
-    await page.goto('/validation/', { waitUntil: 'load' });
-    // The skip link first, then Home, then the first group.
-    await page.keyboard.press(stepKey(browserName));
-    await expect(page.locator('.gs-skip')).toBeFocused();
-    const learn = groups(page).nth(0).locator('summary');
-    await learn.focus();
-    await page.keyboard.press('Enter');
-    await expect(groups(page).nth(0)).toHaveAttribute('open', '');
-    await page.keyboard.press(stepKey(browserName));
-    const link = page.locator('.gs-nav details[open] a').first();
-    await expect(link).toBeFocused();
-  });
+  test(
+    'and by keyboard',
+    { tag: '@cross-browser' },
+    async ({ page, browserName }) => {
+      await page.goto('/validation/', { waitUntil: 'load' });
+      // The skip link first, then Home, then the first group.
+      await page.keyboard.press(stepKey(browserName));
+      await expect(page.locator('.gs-skip')).toBeFocused();
+      const learn = groups(page).nth(0).locator('summary');
+      await learn.focus();
+      await page.keyboard.press('Enter');
+      await expect(groups(page).nth(0)).toHaveAttribute('open', '');
+      await page.keyboard.press(stepKey(browserName));
+      const link = page.locator('.gs-nav details[open] a').first();
+      await expect(link).toBeFocused();
+    }
+  );
 
   test('the skip link goes to the content', async ({ page }) => {
     await page.goto('/model/', { waitUntil: 'load' });
@@ -89,42 +96,46 @@ test.describe('the shell', () => {
     await expect(page).toHaveURL(/#main$/);
   });
 
-  test('a theme and a language chosen on one page hold on the next two', async ({
-    page,
-  }) => {
-    await page.goto('/teaching/', { waitUntil: 'load' });
-    await expect(page.locator('#teachDemos article').first()).toBeVisible();
+  test(
+    'a theme and a language chosen on one page hold on the next two',
+    { tag: '@cross-browser' },
+    async ({ page }) => {
+      await page.goto('/teaching/', { waitUntil: 'load' });
+      await expect(page.locator('#teachDemos article').first()).toBeVisible();
 
-    await page.locator('[data-gs-theme]').selectOption('daylight');
-    await expect(page.locator('html')).toHaveAttribute(
-      'data-theme',
-      'daylight'
-    );
-    await page.locator('[data-gs-lang]').selectOption('es');
-    await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-    // The shell speaks the page's language without a reload.
-    await expect(groups(page).nth(0).locator('summary .gs-es')).toBeVisible();
-    await expect(groups(page).nth(0).locator('summary .gs-en')).toBeHidden();
-
-    for (const next of ['/model/', '/validation/']) {
-      await page.goto(next, { waitUntil: 'load' });
+      await page.locator('[data-gs-theme]').selectOption('daylight');
       await expect(page.locator('html')).toHaveAttribute(
         'data-theme',
         'daylight'
       );
-      await expect(page.locator('[data-gs-theme]')).toHaveValue('daylight');
-      // English-only pages: the choice is kept, and shown, but the page and
-      // its shell stay in the language the page is written in.
-      await expect(page.locator('[data-gs-lang]')).toHaveValue('es');
-      await expect(groups(page).nth(0).locator('summary .gs-en')).toBeVisible();
-    }
+      await page.locator('[data-gs-lang]').selectOption('es');
+      await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+      // The shell speaks the page's language without a reload.
+      await expect(groups(page).nth(0).locator('summary .gs-es')).toBeVisible();
+      await expect(groups(page).nth(0).locator('summary .gs-en')).toBeHidden();
 
-    await page.goto('/teaching/', { waitUntil: 'load' });
-    await expect(page.locator('h1')).toHaveText('Enseñar con Gravitas');
-    await expect(page.locator('[data-gs-theme] option:checked')).toHaveText(
-      'Luz de día'
-    );
-  });
+      for (const next of ['/model/', '/validation/']) {
+        await page.goto(next, { waitUntil: 'load' });
+        await expect(page.locator('html')).toHaveAttribute(
+          'data-theme',
+          'daylight'
+        );
+        await expect(page.locator('[data-gs-theme]')).toHaveValue('daylight');
+        // English-only pages: the choice is kept, and shown, but the page and
+        // its shell stay in the language the page is written in.
+        await expect(page.locator('[data-gs-lang]')).toHaveValue('es');
+        await expect(
+          groups(page).nth(0).locator('summary .gs-en')
+        ).toBeVisible();
+      }
+
+      await page.goto('/teaching/', { waitUntil: 'load' });
+      await expect(page.locator('h1')).toHaveText('Enseñar con Gravitas');
+      await expect(page.locator('[data-gs-theme] option:checked')).toHaveText(
+        'Luz de día'
+      );
+    }
+  );
 
   test('a page whose route cannot pay for the module still navigates', async ({
     page,
@@ -146,24 +157,249 @@ test.describe('the shell', () => {
     ).toBeVisible();
   });
 
-  test('on a phone it folds behind Menu, and nothing scrolls sideways', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 375, height: 740 });
-    await page.goto('/model/', { waitUntil: 'load' });
-    const menu = page.locator('.gs-toggle');
-    await expect(menu).toBeVisible();
-    await expect(page.locator('.gs-nav')).toBeHidden();
-    await menu.click();
-    await expect(menu).toHaveAttribute('aria-expanded', 'true');
-    await expect(page.locator('.gs-nav')).toBeVisible();
-    await groups(page).nth(2).locator('summary').click();
-    await expect(
-      page.locator('.gs-nav a[href="/studio/"]').filter({ visible: true })
-    ).toBeVisible();
-    const wide = await page.evaluate(
-      () => document.documentElement.scrollWidth > window.innerWidth
+  test(
+    'on a phone it folds behind Menu, and nothing scrolls sideways',
+    { tag: '@cross-browser' },
+    async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 740 });
+      await page.goto('/model/', { waitUntil: 'load' });
+      const menu = page.locator('.gs-toggle');
+      await expect(menu).toBeVisible();
+      await expect(page.locator('.gs-nav')).toBeHidden();
+      await menu.click();
+      await expect(menu).toHaveAttribute('aria-expanded', 'true');
+      await expect(page.locator('.gs-nav')).toBeVisible();
+      await groups(page).nth(2).locator('summary').click();
+      await expect(
+        page.locator('.gs-nav a[href="/studio/"]').filter({ visible: true })
+      ).toBeVisible();
+      const wide = await page.evaluate(
+        () => document.documentElement.scrollWidth > window.innerWidth
+      );
+      expect(wide).toBe(false);
+    }
+  );
+});
+
+// =============================================================================
+// The application template (Prompt 50, Part 3)
+// -----------------------------------------------------------------------------
+// The canvas stays full-bleed; the bar is fixed over it, and everything the
+// application anchors to the top moves down by --shell-height.
+// =============================================================================
+
+/** What the application places from the top of the window. */
+const TOP_ANCHORED = [
+  '#overlay',
+  '#mainControls',
+  '#mobileMenuToggle',
+  '#scenarioInfoDisplay',
+  '#scenarioInfoBox',
+  '#objectInspector',
+  '.investigation-panel',
+];
+
+test.describe('the shell on the application', () => {
+  for (const [width, height] of [
+    [1440, 900],
+    [1024, 768],
+    [768, 1024],
+    [375, 740],
+  ]) {
+    test(
+      `at ${width} px nothing the application draws starts under the bar`,
+      width === 1440 || width === 375 ? { tag: '@cross-browser' } : {},
+      async ({ page, app }) => {
+        await page.setViewportSize({ width, height });
+        await app.boot();
+        await expect(page.locator('#mainControls')).toHaveClass(/showUI/);
+        const got = await page.evaluate(sels => {
+          const bar = document
+            .querySelector('.gs-shell')
+            .getBoundingClientRect();
+          const canvas = document
+            .getElementById('simulationCanvas')
+            .getBoundingClientRect();
+          const under = [];
+          for (const s of sels) {
+            const e = document.querySelector(s);
+            if (!e) continue;
+            const cs = getComputedStyle(e);
+            const r = e.getBoundingClientRect();
+            if (
+              cs.display === 'none' ||
+              cs.visibility === 'hidden' ||
+              !r.height
+            )
+              continue;
+            // Under the bar means sharing its box: beside it is fine, which is
+            // where the docked rail sits on a wide window.
+            const overlaps =
+              r.top < bar.bottom - 0.5 &&
+              r.bottom > bar.top + 0.5 &&
+              r.left < bar.right - 0.5 &&
+              r.right > bar.left + 0.5;
+            if (overlaps) under.push(`${s} at ${r.top},${r.left}`);
+          }
+          return {
+            under,
+            barBottom: bar.bottom,
+            canvasTop: canvas.top,
+            canvasHeight: canvas.height,
+            innerHeight: window.innerHeight,
+            wide: document.documentElement.scrollWidth > window.innerWidth,
+          };
+        }, TOP_ANCHORED);
+        expect(got.under).toEqual([]);
+        expect(got.barBottom).toBe(48);
+        // The canvas does not move: it still fills the window behind the bar.
+        expect(got.canvasTop).toBe(0);
+        expect(got.canvasHeight).toBe(got.innerHeight);
+        expect(got.wide).toBe(false);
+      }
     );
-    expect(wide).toBe(false);
+  }
+
+  test(
+    'the theme switch is the application theme, and follows the T shortcut',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await page.locator('[data-gs-theme]').selectOption('daylight');
+      await expect(page.locator('html')).toHaveAttribute(
+        'data-theme',
+        'daylight'
+      );
+      expect(
+        await page.evaluate(() => localStorage.getItem('gravitas_theme'))
+      ).toBe('daylight');
+      // js/theme.js cycles on T; the select follows the theme, not its clicks.
+      await page
+        .locator('#simulationCanvas')
+        .click({ position: { x: 5, y: 300 } });
+      await page.keyboard.press('t');
+      await expect(page.locator('[data-gs-theme]')).not.toHaveValue('daylight');
+    }
+  );
+
+  test(
+    'the language switch translates the application in place',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      const learn = page.locator('#railLearn [data-i18n="rail.railLearn"]');
+      await expect(learn).toHaveText('Learn');
+      await page.evaluate(() => {
+        window.__stillHere = true;
+      });
+      await page.locator('[data-gs-lang]').selectOption('es');
+      await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+      await expect(learn).toHaveText('Aprender');
+      // In place: the page was not reloaded.
+      expect(await page.evaluate(() => window.__stillHere)).toBe(true);
+    }
+  );
+
+  test(
+    'an embedded figure and a lecture have no bar',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot({ url: '/?embed=1' });
+      await expect(page.locator('.gs-shell')).toBeHidden();
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(() => window.splashScreenEnded === true);
+      await expect(page.locator('#mainControls')).toHaveClass(/showUI/);
+      await page
+        .locator('#simulationCanvas')
+        .click({ position: { x: 5, y: 300 } });
+      await page.keyboard.press('v');
+      await expect(page.locator('body')).toHaveAttribute(
+        'data-presentation',
+        'lecture'
+      );
+      await expect(page.locator('.gs-shell')).toBeHidden();
+      await expect(page.locator('#overlay')).toBeVisible();
+      // The readout eases to its lecture place (a 0.3 s transition), up into
+      // the room the bar left.
+      await expect
+        .poll(() =>
+          page.locator('#overlay').evaluate(e => e.getBoundingClientRect().top)
+        )
+        .toBeLessThan(48);
+    }
+  );
+});
+
+// =============================================================================
+// Home (Prompt 50, item 3)
+// -----------------------------------------------------------------------------
+// The front door is Home, a page of the shell: below its bar, which stays in
+// use, and reached by name from every page's GRAVITAS link (`/#home`), for a
+// returning visitor too.
+// =============================================================================
+
+test.describe('Home', () => {
+  test(
+    'the GRAVITAS link opens Home from any page, under a bar that still works',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await page.goto('/model/', { waitUntil: 'load' });
+      await expect(page.locator('.gs-brand')).toHaveAttribute('href', '/#home');
+      await page.locator('.gs-brand').click();
+      await page.waitForFunction(() => window.splashScreenEnded === true);
+      const home = page.locator('#welcomeScreen');
+      await expect(home).toBeVisible();
+      // A page under the bar, not a layer over it.
+      expect(
+        await home.evaluate(e => Math.round(e.getBoundingClientRect().top))
+      ).toBe(48);
+      await expect(page.locator('.gs-shell')).not.toHaveAttribute('inert', '');
+      // The navigation above it is live: a group opens and its link is there.
+      await page.locator('.gs-group').nth(3).locator('summary').click();
+      await expect(
+        page.locator('.gs-nav a[href="/teaching/"]').filter({ visible: true })
+      ).toBeVisible();
+    }
+  );
+
+  test(
+    'Tab moves between Home and the bar, and leaving Home lands in the sandbox',
+    { tag: '@cross-browser' },
+    async ({ page, app, browserName }) => {
+      // Booted as a returning visitor, then Home by name: boot() itself waits
+      // for the rail, which Home holds back until it is left.
+      await app.boot();
+      await page.goto('/#home', { waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(() => window.splashScreenEnded === true);
+      await expect(page.locator('#welcomeScreen')).toBeVisible();
+      // Shift+Tab from the start of Home reaches the bar, not the hidden rail.
+      await page.locator('#welcomeDialog').focus();
+      const step = browserName === 'webkit' ? 'Alt+Shift+Tab' : 'Shift+Tab';
+      await page.keyboard.press(step);
+      expect(
+        await page.evaluate(() =>
+          Boolean(document.activeElement?.closest('.gs-shell, #welcomeScreen'))
+        )
+      ).toBe(true);
+
+      await page.locator('#welcomeClose').click();
+      await expect(page.locator('#welcomeScreen')).toBeHidden();
+      await expect(page.locator('#mainControls')).toHaveClass(/showUI/);
+      // Leaving Home by name takes the name out of the address, so a reload
+      // lands where the reader went.
+      expect(await page.evaluate(() => location.hash)).toBe('');
+    }
+  );
+
+  test('a deep link still goes straight to what it names', async ({
+    page,
+    app,
+  }) => {
+    await app.boot({ url: '/#investigation=keplers-laws' });
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(page.locator('#welcomeScreen')).toBeHidden();
   });
 });

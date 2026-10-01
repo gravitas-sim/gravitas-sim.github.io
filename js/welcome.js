@@ -230,7 +230,7 @@ function build() {
   const total = Object.keys(SCENARIO_INFO).length;
 
   els.body.innerHTML = `
-    <header class="wel-hero">
+    <div class="wel-hero">
       <p class="wel-eyebrow">Interactive astrophysics in your browser</p>
       <h1 class="wel-wordmark" id="welcomeTitle">GRAVITAS</h1>
       <p class="wel-lede">
@@ -249,7 +249,7 @@ function build() {
           Take a quick tour
         </button>
       </div>
-    </header>
+    </div>
 
     <section class="wel-section wel-what" aria-labelledby="welWhat">
       <h2 id="welWhat" class="wel-h2">What Gravitas is</h2>
@@ -459,9 +459,13 @@ const FOCUSABLE =
  */
 function trapFocus(e) {
   if (e.key !== 'Tab' || !open || !els.screen) return;
-  const items = [...els.screen.querySelectorAll(FOCUSABLE)].filter(
-    el => el.offsetParent !== null || el === document.activeElement
-  );
+  // Home is a page of the shell: the bar above it is part of it, and Tab
+  // moves through both.
+  const bar = document.querySelector('.gs-shell');
+  const items = [
+    ...(bar ? bar.querySelectorAll(FOCUSABLE) : []),
+    ...els.screen.querySelectorAll(FOCUSABLE),
+  ].filter(el => el.offsetParent !== null || el === document.activeElement);
   if (!items.length) return;
   const first = items[0];
   const last = items[items.length - 1];
@@ -485,7 +489,8 @@ function trapFocus(e) {
 function setBackgroundInert(on) {
   if (!els.screen) return;
   for (const node of document.body.children) {
-    if (node === els.screen) continue;
+    // The layer, and the shell's bar above it, which stays usable.
+    if (node === els.screen || node.classList.contains('gs-shell')) continue;
     if (on) {
       node.setAttribute('inert', '');
       node.setAttribute('aria-hidden', 'true');
@@ -563,6 +568,10 @@ export function closeWelcome() {
   // Only an intentional pass through the front door records it. A door skipped
   // by a deep link never opens, so it can never mark itself seen here.
   markWelcomeSeen();
+  // Leaving Home by name leaves its name out of the address, so a reload
+  // lands in the sandbox the reader chose.
+  if (location.hash === '#home')
+    history.replaceState(null, '', location.pathname + location.search);
 
   els.screen.classList.remove('is-shown');
   setBackgroundInert(false);

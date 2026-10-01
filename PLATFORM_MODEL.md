@@ -237,8 +237,26 @@ arithmetic above.
   script, which no route counts); only the two switches wait. Part 1 does
   this on /evaluation/ and /instructors/.
 
-Part 1 put the shell on the five document pages. Part 2 is the thirteen
-tool pages; Part 3 is the application and the Home hub.
+Part 1 put the shell on the five document pages.
+Part 2 put it on the thirteen tool pages. Five mount the module: the
+Observatory, the experiment runner, the figure builder, the course builder
+and submission review. Eight cannot pay for it yet and keep their own
+language switch, under rule 1 above: the catalog, the Studio, the
+Composer, the course home, /lab3d/, /3d/, /mission/ and /mission/lab/.
+Most of those lack 2 to 3 KB of room; the Composer lacks a request. The
+observatory's build dropped keepNames, as the teaching page's did: nothing
+in it reads a function's name, and its helper was a request of its own.
+Part 3 put it on the application, as the application template: the bar
+is fixed over the full-bleed canvas, and everything the application
+anchors to the top adds `--shell-height`, which is 0 in an embed and in a
+lecture. It keeps its own skip link (to the controls) and its own footer.
+The footer's theme and language menus gave way to the shell's switches,
+which call the application's own setters.
+
+Home followed: the front door opens below the bar rather than over it,
+the bar stays live (outside the inert set, inside the Tab loop, so the
+layer is a non-modal dialog), and `/#home` opens it by name from every
+page's GRAVITAS link. Its content is unchanged until Prompt 73.
 
 ## Rejected alternatives
 

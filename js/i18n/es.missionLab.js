@@ -13,7 +13,6 @@ export const ES_MISSIONLAB = {
   'ml.notFor':
     'Software educativo, no diseño operativo de misiones ni navegación. Las posiciones de los planetas son las del JPL, con unos pocos kilómetros de error; todo lo demás es un modelo para enseñar, y la lista al final de la página dice qué deja fuera.',
   'ml.lang': 'Idioma',
-  'ml.back': 'Volver a Gravitas',
   'ml.core': 'El núcleo de diseño de misiones',
   'ml.docs': 'Cómo funciona el laboratorio (MISSION_LAB.md)',
   'ml.compute': 'Calcular la misión',

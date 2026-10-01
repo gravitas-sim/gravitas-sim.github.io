@@ -15,8 +15,6 @@ export const EN_CATALOG = {
   'cat.title': 'Catalog',
   'cat.intro':
     'Data, courses and instruments for Gravitas. Everything here was reviewed before it was listed, and none of it runs code. A data pack or a course you install is kept on this device and works offline.',
-  'cat.back': 'Back to Gravitas',
-  'cat.observatory': 'Observatory',
   'cat.loading': 'Loading the catalog…',
   'cat.loadFailed': 'The catalog did not load: {why}',
   'cat.retry': 'Try again',
