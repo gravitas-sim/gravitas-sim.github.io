@@ -166,7 +166,9 @@ imports it, and the page never loads the engine itself; only its Workers do.
   - every trial in planned order;
   - an SVG plot of each trial and the mean line, with a log axis when the
     values span more than two orders of magnitude (the plot's label says so,
-    and the table beside it holds the same numbers);
+    and the table beside it holds the same numbers). It is drawn by `js/plot/`
+    ([PLOT_COMPONENT.md](PLOT_COMPONENT.md)), which the page fetches with its
+    first result, not when it opens;
   - the manifest.
 - **Saving and checking.** The result downloads as JSON, and the trials as
   CSV. "Check a saved result" reports whether a pasted result reproduces

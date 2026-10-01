@@ -99,12 +99,11 @@ function spacing(x) {
  * @param {HTMLElement} root
  * @param {{t: Function, number: Function, observation: object,
  *   registerMessages: Function, createPlot: Function,
- *   createSelection: Function, dimensionOfText: Function}} ctx - The page's
+ *   dimensionOfText: Function}} ctx - The page's
  *   translator, number format and views, handed over rather than imported
  */
 export function mountFitPanel(root, ctx) {
-  const { t, number, language, createPlot, createSelection, dimensionOfText } =
-    ctx;
+  const { t, number, language, createPlot, dimensionOfText } = ctx;
   ctx.registerMessages({ en: EN_INFERENCE, es: ES_INFERENCE });
   let o = ctx.observation;
   let job = null;
@@ -952,17 +951,10 @@ export function mountFitPanel(root, ctx) {
       'aria-label',
       t('obs.fit.res.plotLabel', { n: fit.residuals.length })
     );
-    const plot = createPlot(svg, {
-      announce: () => {},
-      describe: () => '',
+    createPlot(svg, {
       number,
       labels: { notStated: t('obs.unit.notStated') },
-    });
-    plot.draw(residualObs, {
-      xColumn: 'x',
-      yColumn: 'r',
-      selection: createSelection(fit.residuals.length),
-    });
+    }).draw(residualObs, { xColumn: 'x', yColumn: 'r' });
     results.replaceChildren(
       // Scrolls sideways on a narrow screen, so a keyboard must reach it.
       el(

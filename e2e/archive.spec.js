@@ -193,6 +193,13 @@ test.describe('the archive import', () => {
     await expect(page.locator('#arcReductions')).toContainText('43 of 47 rows');
     await page.locator('#arcBand').selectOption('G');
     await expect(page.locator('#arcReductions')).toContainText('47 of 47 rows');
+    // The preview (PLOT_COMPONENT.md, D4): a point for every epoch, its
+    // error bar, and nothing to select or focus.
+    const preview = page.locator('#arcPreview svg.ow-plot');
+    await expect(preview.locator('.ow-points .ow-pt')).toHaveCount(47);
+    await expect(preview.locator('.ow-bars line')).toHaveCount(47);
+    await expect(preview).not.toHaveAttribute('tabindex');
+    await expect(preview.locator('.ow-selected, .ow-focus')).toHaveCount(0);
 
     const opens = Number(
       (await page.locator('html').getAttribute('data-opens')) || 0
