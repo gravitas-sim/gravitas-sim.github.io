@@ -1831,10 +1831,18 @@ const is_offscreen = (pos, buffer_factor = 10.0) => {
  * @param {Array} bh_list - Array of black hole objects
  * @param {number} threshold - Distance threshold for color change
  * @param {Object} target_color - Target RGB color to blend towards
- * @param {Object} settings - Settings object (optional)
  * @returns {string} RGB color string
+ * With the engine's own settings, so "Dynamic Object Properties" works.
  */
-const compute_dynamic_color = computeDynamicColor;
+const compute_dynamic_color = (hex, pos, bh_list, threshold, target_color) =>
+  computeDynamicColor(
+    hex,
+    pos,
+    bh_list,
+    threshold,
+    target_color,
+    physicsSettings
+  );
 
 // Core physics function
 /**

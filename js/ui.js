@@ -38,7 +38,6 @@ import {
   EARTH_MASS_UNIT,
   CERES_MASS_UNIT,
   HALLEY_MASS_UNIT,
-  INTEGRATORS,
   getSimulationTime,
   resetSimulationTime,
   setSimulationTime,
@@ -113,7 +112,13 @@ import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS } from './data/scenarioTags.js';
 import { applyPreset } from './scenarios.js';
 import { buildWorld } from './world/build.js';
-import { t, hasMessage, onLocaleChange } from './i18n/index.js';
+import {
+  t,
+  hasMessage,
+  onLocaleChange,
+  getLocale,
+  registerMessages,
+} from './i18n/index.js';
 import { EN } from './i18n/en.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 import { resetPotentialCache } from './vectorOverlay.js';
@@ -168,6 +173,19 @@ import {
 } from './audio.js';
 import { describeVoices } from './sonify/voiceReadout.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import {
+  COURSE_LEVELS,
+  SETTING_SECTIONS,
+  courseLevelDefaults,
+  getCourseLevel,
+  helpId,
+  initCourseLevel,
+  itemsOf,
+  sectionLabelId,
+  setCourseLevel,
+} from './settingsSchema.js';
+
+initCourseLevel();
 import { stellarStateFor, spectralType } from './stellar/state.js';
 import {
   initChart,
@@ -512,6 +530,8 @@ const SAVE_KEY = 'gravitas_simulation_save';
 const LONG_PRESS_MS = 380;
 
 let localSettings = {};
+// The course level the panel has staged, applied with everything else.
+let pendingCourseLevel = null;
 
 // Space Object Name Database
 if (typeof window !== 'undefined') {
@@ -2506,7 +2526,7 @@ const paintFrameControls = () => {
     const on = !!sel && frame.mode === OBJECT && frame.objectId === sel.id;
     btn.setAttribute('data-state', on ? 'on' : 'off');
     btn.setAttribute('aria-checked', on ? 'true' : 'false');
-    btn.textContent = on ? 'On' : 'Off';
+    btn.textContent = on ? t('settings.toggle.on') : t('settings.toggle.off');
   }
 };
 
@@ -2786,7 +2806,9 @@ const wireBlackHoleAppearance = () => {
       SETTINGS.bh_explain_view = next;
       explain.setAttribute('data-state', next ? 'on' : 'off');
       explain.setAttribute('aria-checked', next ? 'true' : 'false');
-      explain.textContent = next ? 'On' : 'Off';
+      explain.textContent = next
+        ? t('settings.toggle.on')
+        : t('settings.toggle.off');
     };
   }
 };
@@ -2805,7 +2827,9 @@ const wireInspectorOverlayToggles = () => {
       obj.showHabitableZone = next;
       hzBtn.setAttribute('data-state', next ? 'on' : 'off');
       hzBtn.setAttribute('aria-checked', next ? 'true' : 'false');
-      hzBtn.textContent = next ? 'On' : 'Off';
+      hzBtn.textContent = next
+        ? t('settings.toggle.on')
+        : t('settings.toggle.off');
     };
   }
 
@@ -2835,7 +2859,9 @@ const wireInspectorOverlayToggles = () => {
       const set = on => {
         sweepBtn.setAttribute('data-state', on ? 'on' : 'off');
         sweepBtn.setAttribute('aria-checked', on ? 'true' : 'false');
-        sweepBtn.textContent = on ? 'On' : 'Off';
+        sweepBtn.textContent = on
+          ? t('settings.toggle.on')
+          : t('settings.toggle.off');
       };
       if (isOn) {
         state.areaSweepOverlay.active = false;
@@ -3792,6 +3818,11 @@ const show_enhanced_scenario_info = scenarioName => {
   // initialize_simulation and leave the app half-built.
   if (!infoBox || !title || !summary || !features) return;
 
+  // A card the reader closed does not come back for the same scenario - on
+  // Refresh, or an Apply that rebuilds it. A different scenario is new news.
+  if (infoBox.dataset.dismissed === scenarioName) return;
+  delete infoBox.dataset.dismissed;
+
   // Set the title and summary. The key is kept on the element because the card
   // outlives the call that wrote it: a language arriving late has to be able to
   // ask which scenario is on screen.
@@ -3822,7 +3853,9 @@ const show_enhanced_scenario_info = scenarioName => {
       !splash.classList.contains('hidden') &&
       splash.style.display !== 'none';
     return (
-      Boolean(splashUp) || document.body.classList.contains('welcome-open')
+      Boolean(splashUp) ||
+      document.body.classList.contains('welcome-open') ||
+      document.body.classList.contains('welcome-pending')
     );
   };
 
@@ -4494,11 +4527,6 @@ onLocaleChange(() => {
 });
 
 const settingOptionLabel = (key, value) => {
-  if (key === 'preset_scenario') {
-    return value === 'None'
-      ? t('settings.option.presetScenario.none')
-      : scenarioTitle(value);
-  }
   const camel = key.replace(/_([a-z0-9])/g, (_, c) => c.toUpperCase());
   const slug = String(value)
     .toLowerCase()
@@ -4508,372 +4536,6 @@ const settingOptionLabel = (key, value) => {
   return hasMessage(id) || EN[id] ? t(id) : value;
 };
 
-const setting_items = [
-  {
-    labelId: 'settings.label.presetScenario',
-    key: 'preset_scenario',
-    type: 'option',
-    // Derived, never listed: this used to be a hand-written copy of all
-    // forty-three scenario names, which is a second catalog that silently
-    // drifts the first time someone adds a scenario and forgets this list.
-    options: ['None', ...Object.keys(SCENARIO_INFO)],
-  },
-  { labelId: 'settings.section.simulation', type: 'separator' },
-  {
-    labelId: 'settings.label.gravitationalConstant',
-    key: 'gravitational_constant',
-    type: 'float',
-    min: 0.1,
-    max: 20.0,
-    step: 0.1,
-  },
-  {
-    labelId: 'settings.label.mutualGravity',
-    key: 'mutual_gravity',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.simSpeed',
-    key: 'sim_speed',
-    type: 'float',
-    min: 0.0,
-    max: 5.0,
-    step: 0.1,
-  },
-  {
-    labelId: 'settings.label.simSize',
-    key: 'sim_size',
-    type: 'option',
-    options: ['Small', 'Medium', 'Large', 'Huge'],
-  },
-  {
-    labelId: 'settings.label.placement',
-    key: 'placement',
-    type: 'option',
-    options: ['Circular', 'Multi-Ring', 'Random', 'Grid', 'Empty'],
-  },
-  {
-    labelId: 'settings.label.integrator',
-    key: 'integrator',
-    type: 'option',
-    options: INTEGRATORS,
-  },
-  // Its own section, named for what it is. It sat unlabeled under
-  // "Simulation" beside the integrator, which is where somebody looking for it
-  // would never think to look and where somebody not looking for it kept
-  // finding it.
-  { labelId: 'settings.section.accuracy', type: 'separator' },
-  {
-    labelId: 'settings.label.showConservationDiagnostics',
-    key: 'show_conservation_diagnostics',
-    type: 'bool',
-  },
-  { labelId: 'settings.section.performance', type: 'separator' },
-  {
-    labelId: 'settings.label.useBarnesHut',
-    key: 'use_barnes_hut',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.barnesHutTheta',
-    key: 'barnes_hut_theta',
-    type: 'float',
-    min: 0.2,
-    max: 1.2,
-    step: 0.05,
-  },
-  {
-    labelId: 'settings.label.adaptiveDetail',
-    key: 'adaptive_detail',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.qualityTier',
-    key: 'quality_tier',
-    type: 'option',
-    options: ['auto', 'full', 'low'],
-  },
-  { labelId: 'settings.section.visuals', type: 'separator' },
-  {
-    labelId: 'settings.label.trailColorMode',
-    key: 'trail_color_mode',
-    type: 'option',
-    options: ['type', 'speed'],
-  },
-  {
-    labelId: 'settings.label.showObjectLensing',
-    key: 'show_object_lensing',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.lensingQuality',
-    key: 'lensing_quality',
-    type: 'option',
-    options: ['off', 'low', 'medium', 'high'],
-  },
-  {
-    labelId: 'settings.label.diskDoppler',
-    key: 'disk_doppler',
-    type: 'bool',
-  },
-  { labelId: 'settings.section.black-holes', type: 'separator' },
-  {
-    labelId: 'settings.label.numBlackHoles',
-    key: 'num_black_holes',
-    type: 'int',
-    min: 0,
-    max: 10,
-    step: 1,
-  },
-  {
-    labelId: 'settings.label.bhMass',
-    key: 'bh_mass',
-    type: 'float',
-    min: 0.1,
-    max: 1000,
-    step: 0.5,
-  },
-  {
-    labelId: 'settings.label.useIndividualBhMasses',
-    key: 'use_individual_bh_masses',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.bhBehavior',
-    key: 'bh_behavior',
-    type: 'option',
-    options: ['Static', 'Orbiting'],
-  },
-  {
-    labelId: 'settings.label.orbitDecayRate',
-    key: 'orbit_decay_rate',
-    type: 'float',
-    min: 0.0,
-    max: 0.1,
-    step: 0.001,
-    precision: 3,
-  },
-  { labelId: 'settings.section.compact-objects', type: 'separator' },
-  {
-    labelId: 'settings.label.numNeutronStars',
-    key: 'num_neutron_stars',
-    type: 'int',
-    min: 0,
-    max: 20,
-    step: 1,
-  },
-  {
-    labelId: 'settings.label.numWhiteDwarfs',
-    key: 'num_white_dwarfs',
-    type: 'int',
-    min: 0,
-    max: 30,
-    step: 1,
-  },
-  {
-    labelId: 'settings.label.numStars',
-    key: 'num_stars',
-    type: 'int',
-    min: 0,
-    max: 20,
-    step: 1,
-  },
-  { labelId: 'settings.section.objects', type: 'separator' },
-  {
-    labelId: 'settings.label.numPlanets',
-    key: 'num_planets',
-    type: 'int',
-    min: 0,
-    max: 200,
-    step: 1,
-  },
-  {
-    labelId: 'settings.label.numGasGiants',
-    key: 'num_gas_giants',
-    type: 'int',
-    min: 0,
-    max: 50,
-    step: 1,
-  },
-  {
-    labelId: 'settings.label.enableAsteroids',
-    key: 'enable_asteroids',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.numAsteroids',
-    key: 'num_asteroids',
-    type: 'int',
-    min: 0,
-    max: 500,
-    step: 5,
-  },
-  {
-    labelId: 'settings.label.numComets',
-    key: 'num_comets',
-    type: 'int',
-    min: 0,
-    max: 100,
-    step: 1,
-  },
-  {
-    labelId: 'settings.label.initVelocity',
-    key: 'init_velocity',
-    type: 'float',
-    min: 0,
-    max: 100,
-    step: 1,
-  },
-  {
-    labelId: 'settings.label.velocityStddev',
-    key: 'velocity_stddev',
-    type: 'float',
-    min: 0,
-    max: 50,
-    step: 1,
-  },
-  {
-    labelId: 'settings.label.inputObjectType',
-    key: 'input_object_type',
-    type: 'option',
-    options: [
-      'Planet',
-      'Star',
-      'Asteroid',
-      'Comet',
-      'GasGiant',
-      'NeutronStar',
-      'WhiteDwarf',
-    ],
-  },
-  { labelId: 'settings.section.visuals', type: 'separator' },
-  { labelId: 'settings.label.showTrails', key: 'show_trails', type: 'bool' },
-  {
-    labelId: 'settings.label.trailStyle',
-    key: 'trail_style',
-    type: 'option',
-    options: ['Cloud', 'Simple', 'Glow'],
-  },
-  {
-    labelId: 'settings.label.trailLength',
-    key: 'trail_length',
-    type: 'int',
-    min: 5,
-    max: 300,
-    step: 5,
-  },
-  {
-    labelId: 'settings.label.showVelocityVectors',
-    key: 'show_velocity_vectors',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.showAccelerationVectors',
-    key: 'show_acceleration_vectors',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.showPotentialWell',
-    key: 'show_potential_well',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.showScaleBar',
-    key: 'show_scale_bar',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.showElapsedTime',
-    key: 'show_elapsed_time',
-    type: 'bool',
-  },
-  { labelId: 'settings.label.showBhGlow', key: 'show_bh_glow', type: 'bool' },
-  {
-    labelId: 'settings.label.showAccretionDisk',
-    key: 'show_accretion_disk',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.realisticDiskPhysics',
-    key: 'realistic_disk_physics',
-    type: 'bool',
-  },
-  { labelId: 'settings.label.showBhJets', key: 'show_bh_jets', type: 'bool' },
-  {
-    labelId: 'settings.label.starDensity',
-    key: 'star_density',
-    type: 'int',
-    min: 0,
-    max: 30000,
-    step: 100,
-  },
-  {
-    labelId: 'settings.label.showAmbientLighting',
-    key: 'show_ambient_lighting',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.dynamicObjectProperties',
-    key: 'dynamic_object_properties',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.planetBaseColor',
-    key: 'planet_base_color',
-    type: 'color',
-  },
-  {
-    labelId: 'settings.label.starBaseColor',
-    key: 'star_base_color',
-    type: 'color',
-  },
-  { labelId: 'settings.section.ui-control', type: 'separator' },
-  {
-    labelId: 'settings.label.interactiveAdd',
-    key: 'interactive_add',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.followMode',
-    key: 'follow_mode',
-    type: 'option',
-    options: [
-      'None',
-      'BlackHole',
-      'Planet',
-      'GasGiant',
-      'Star',
-      'Asteroid',
-      'Comet',
-      'NeutronStar',
-      'WhiteDwarf',
-    ],
-  },
-  {
-    labelId: 'settings.label.showDynamicOverlays',
-    key: 'show_dynamic_overlays',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.recordSimulation',
-    key: 'record_simulation',
-    type: 'bool',
-  },
-  {
-    labelId: 'settings.label.showGravitationalWaves',
-    key: 'show_gravitational_waves',
-    type: 'bool',
-  },
-  { labelId: 'settings.section.educational', type: 'separator' },
-  {
-    labelId: 'settings.label.habitableZoneOptimism',
-    key: 'habitable_zone_optimism',
-    type: 'float',
-    min: 0.5,
-    max: 2.0,
-    step: 0.1,
-  },
-];
 // ===== Reusable Tooltip System =====
 class TooltipManager {
   constructor() {
@@ -4911,7 +4573,7 @@ class TooltipManager {
     const closeButton = document.createElement('button');
     closeButton.className = 'tooltip-close';
     closeButton.title = t('tip.dismiss');
-    closeButton.setAttribute('aria-label', 'Dismiss this tip');
+    closeButton.setAttribute('aria-label', t('tip.dismiss'));
     closeButton.innerHTML = '×';
     closeButton.style.cssText = `
       position: absolute;
@@ -4990,7 +4652,7 @@ class TooltipManager {
     const closeButton = document.createElement('button');
     closeButton.className = 'tooltip-close';
     closeButton.title = t('tip.dismiss');
-    closeButton.setAttribute('aria-label', 'Dismiss this tip');
+    closeButton.setAttribute('aria-label', t('tip.dismiss'));
     closeButton.innerHTML = '×';
     closeButton.style.cssText = `
       position: absolute;
@@ -5184,89 +4846,96 @@ class TooltipManager {
 const tooltipManager = new TooltipManager();
 
 // Function to get tooltip text for settings
-const getSettingTooltip = (key, label) => {
-  const tooltips = {
-    // Simulation settings
-    gravitational_constant:
-      'Determines the strength of gravity in the simulation. Higher values exaggerate gravitational effects for visualization.',
-    sim_speed:
-      'Controls how fast the simulation runs. Higher values make time pass faster.',
-    mutual_gravity:
-      'When enabled, all objects attract each other. When disabled, only black holes create gravity.',
-    enable_star_merging:
-      'When enabled, stars and other objects can merge when they get too close to each other.',
+/** The Settings help, by language, once fetched. */
+const settingsHelpCache = {};
+/** The languages whose Settings help has been registered with the catalog. */
+const settingsHelpLoaded = new Set();
+const helpLocale = () => (getLocale() === 'es' ? 'es' : 'en');
 
-    // Object counts
-    num_black_holes:
-      'Number of black holes in the simulation. Each black hole creates a strong gravitational field.',
-    bh_mass:
-      'Mass of black holes in solar masses (M☉). Higher mass creates stronger gravity.',
-    num_stars:
-      'Number of stars in the simulation. Stars are lighter than black holes but still create gravity.',
-    num_planets:
-      'Number of planets in the simulation. Planets are small objects that orbit around larger bodies.',
-    num_gas_giants:
-      'Number of gas giant planets. These are larger than regular planets.',
-    num_asteroids:
-      'Number of asteroids in the simulation. These are small rocky objects.',
-    num_comets:
-      'Number of comets. These objects have highly elliptical orbits.',
-    num_neutron_stars:
-      'Number of neutron stars. These are dense stellar remnants.',
-    num_white_dwarfs:
-      'Number of white dwarfs. These are small, dense stellar remnants.',
-
-    // Behavior settings
-    bh_behavior:
-      'How black holes behave: Static (stationary), Orbiting (move in orbits), or Rogue (random movement).',
-    use_individual_bh_masses:
-      'Toggle to assign unique masses to each black hole instead of a shared mass.',
-
-    // Visual settings
-    show_trails:
-      'When enabled, objects leave trails showing their recent path.',
-    trail_length: 'How long object trails persist on screen before fading.',
-    trail_style: 'Style of the trails: Simple lines or glowing effects.',
-    show_accretion_disk:
-      'When enabled, black holes display accretion disk effects.',
-    show_bh_glow: 'When enabled, black holes have a glowing effect.',
-    star_density: 'Number of background stars in the starfield.',
-
-    // Initial conditions
-    placement:
-      'How objects are initially positioned: Random, Circular, or Empty.',
-    init_velocity: 'Initial velocity given to objects when they are created.',
-    velocity_stddev:
-      'Standard deviation of initial velocities, creating variation.',
-    orbit_decay_rate:
-      'How quickly orbits decay due to gravitational radiation.',
-
-    // Scenario settings
-    preset_scenario:
-      'Choose from predefined scenarios with specific object configurations.',
-    sim_size: 'Overall scale of the simulation: Small, Medium, or Large.',
-
-    // Additional settings
-    softening_length:
-      'Reduces numerical instabilities by softening gravity at very small distances.',
-    time_step:
-      'Controls simulation speed and precision. Smaller steps = more accuracy but slower performance.',
-
-    // Educational
-    habitable_zone_optimism:
-      'Which published habitable-zone definition the ring shows. Below 1.3 draws the conservative zone, bounded by the runaway and maximum greenhouse limits. 1.3 and above draws the optimistic zone, bounded by the empirical recent-Venus and early-Mars limits. The edges also depend on the star, not just this setting.',
-  };
-
-  return (
-    tooltips[key] ||
-    t('settings.tooltip.generic', { label: label.toLowerCase() })
-  );
+/**
+ * Fetch the Settings help for the reader's language, once.
+ *
+ * Its own pair of files rather than the deferred catalogs: those are fetched in
+ * both languages on every lesson route, for the lesson panel, and the help is
+ * read by nobody there. English is the only fallback a string needs.
+ * @returns {Promise<Object<string, string>>}
+ */
+const fetchSettingsHelp = async () => {
+  const locale = helpLocale();
+  settingsHelpCache[locale] ??=
+    locale === 'es'
+      ? (await import('./i18n/es.settingsHelp.js')).ES_SETTINGSHELP
+      : (await import('./i18n/en.settingsHelp.js')).EN_SETTINGSHELP;
+  return settingsHelpCache[locale];
 };
 
-const buildSettingsMenu = () => {
+/**
+ * Register the Settings help with the catalog, which repaints everything that
+ * shows text - this panel included. Only on an info button's press, which
+ * copes with being rebuilt under it; never while the panel is opening, where a
+ * rebuild takes the focus the dialog has just placed.
+ */
+const loadSettingsHelp = async () => {
+  const locale = helpLocale();
+  if (settingsHelpLoaded.has(locale)) return;
+  registerMessages(locale, await fetchSettingsHelp());
+  settingsHelpLoaded.add(locale);
+};
+
+/** What a course level sets, in words, if they have arrived. */
+const levelHintText = level => {
+  const id = `settings.level.${level}.hint`;
+  return hasMessage(id) ? t(id) : (settingsHelpCache[helpLocale()]?.[id] ?? '');
+};
+
+/**
+ * A setting's help text, `setHelp.<key>` (js/i18n/en.settingsHelp.js).
+ *
+ * It used to be a table of English sentences in this file: downloaded by every
+ * visitor at start-up, shown in English to a Spanish reader, and written for
+ * about half of the panel - several of them describing options the controls
+ * did not have. It arrives on the first press of an info button.
+ * @param {string} key - The setting
+ * @param {string} label - Its label, for the generic sentence
+ * @returns {Promise<string>}
+ */
+const getSettingTooltip = async (key, label) => {
+  try {
+    await loadSettingsHelp();
+  } catch {
+    /* the generic sentence below is still true */
+  }
+  return hasMessage(helpId(key))
+    ? t(helpId(key))
+    : t('settings.tooltip.generic', { label: label.toLowerCase() });
+};
+
+/**
+ * Build the Settings panel from js/settingsSchema.js.
+ *
+ * `keep` rebuilds it around the values already pending in the panel instead of
+ * the applied ones: what a reset does. Both resets used to start from the
+ * applied values - the footer's Reset set every pending value to its default
+ * and then rebuilt the panel from SETTINGS, so it put back what was there and
+ * changed nothing.
+ * @param {{keep?: boolean}} [options]
+ */
+const buildSettingsMenu = ({ keep = false } = {}) => {
   const settingsGrid = document.getElementById('settingsGrid');
+  // What the reader had folded or opened survives a rebuild.
+  const folded = new Set(
+    [...settingsGrid.querySelectorAll('.settings-section.collapsed')].map(
+      el => el.dataset.section
+    )
+  );
+  const advancedOpen = Boolean(
+    settingsGrid.querySelector('.settings-advanced')?.open
+  );
   settingsGrid.innerHTML = '';
-  localSettings = JSON.parse(JSON.stringify(SETTINGS));
+  if (!keep) {
+    localSettings = JSON.parse(JSON.stringify(SETTINGS));
+    pendingCourseLevel = getCourseLevel();
+  }
 
   function updatePresetInfo(presetName) {
     const box = document.getElementById('presetInfo');
@@ -5280,55 +4949,99 @@ const buildSettingsMenu = () => {
     box.innerHTML = `<h4>${scenarioTitle(presetName)}</h4>${scenarioSummary(presetName)}`;
   }
 
-  // Group settings into sections
-  const sections = [];
-  let currentSection = null;
-  let currentSectionItems = [];
-
-  setting_items.forEach(item => {
-    if (item.type === 'separator') {
-      // Save previous section if it exists
-      if (currentSection && currentSectionItems.length > 0) {
-        sections.push({
-          title: currentSection,
-          items: currentSectionItems,
-        });
-      }
-      // Start new section
-      currentSection = t(item.labelId);
-      currentSectionItems = [];
-    } else {
-      currentSectionItems.push(item);
-    }
-  });
-
-  // Add the last section
-  if (currentSection && currentSectionItems.length > 0) {
-    sections.push({
-      title: currentSection,
-      items: currentSectionItems,
-    });
+  // The course level: a bundle of defaults, staged like any other change.
+  // Choosing one sets the conservation check here and opens or closes
+  // Advanced; Apply stores it and sets the units and the readout precision.
+  const levelRow = document.createElement('div');
+  levelRow.className = 'settings-level';
+  const levelLabel = document.createElement('label');
+  levelLabel.htmlFor = 'settingsCourseLevel';
+  levelLabel.textContent = t('settings.level.label');
+  const levelSelect = document.createElement('select');
+  levelSelect.id = 'settingsCourseLevel';
+  levelSelect.setAttribute('aria-describedby', 'settingsCourseLevelHint');
+  for (const id of Object.keys(COURSE_LEVELS)) {
+    const option = document.createElement('option');
+    option.value = id;
+    option.textContent = t(`settings.level.${id}`);
+    option.selected = id === pendingCourseLevel;
+    levelSelect.appendChild(option);
   }
+  const levelHint = document.createElement('p');
+  levelHint.id = 'settingsCourseLevelHint';
+  levelHint.className = 'settings-level-hint';
+  // What the level sets is help text, in the Settings help files: written
+  // once they have arrived, which opening the panel asks for.
+  levelHint.textContent = levelHintText(pendingCourseLevel);
+  levelSelect.onchange = () => {
+    pendingCourseLevel = levelSelect.value;
+    const d = courseLevelDefaults(pendingCourseLevel);
+    localSettings.show_conservation_diagnostics = d.conservation;
+    buildSettingsMenu({ keep: true });
+    const advancedBox = settingsGrid.querySelector('.settings-advanced');
+    if (advancedBox) advancedBox.open = d.advancedOpen;
+    document.getElementById('settingsCourseLevel')?.focus();
+  };
+  levelRow.append(levelLabel, levelSelect, levelHint);
+  settingsGrid.appendChild(levelRow);
 
-  // Create collapsible sections
-  sections.forEach(section => {
+  // The sections, in the schema's order. The advanced ones sit together in
+  // one disclosure after the rest, closed until it is opened.
+  let advanced = null;
+  SETTING_SECTIONS.forEach(({ id, advanced: isAdvanced }) => {
+    const section = { id, items: itemsOf(id) };
+    if (!section.items.length) return;
     const sectionDiv = document.createElement('div');
     sectionDiv.className = 'settings-section';
+    sectionDiv.dataset.section = id;
+    if (folded.has(id)) sectionDiv.classList.add('collapsed');
 
-    // Create section header
     const headerDiv = document.createElement('div');
     headerDiv.className = 'settings-section-header';
 
+    // The heading's own button folds the section. The header used to be a
+    // <div> with a click handler, which a keyboard could not reach and a screen
+    // reader did not report as a control at all.
     const titleDiv = document.createElement('h3');
     titleDiv.className = 'settings-section-title';
-    titleDiv.textContent = section.title;
-
-    const toggleDiv = document.createElement('div');
+    const fold = document.createElement('button');
+    fold.type = 'button';
+    fold.className = 'settings-section-fold';
+    fold.setAttribute('aria-expanded', String(!folded.has(id)));
+    const toggleDiv = document.createElement('span');
     toggleDiv.className = 'settings-section-toggle';
+    toggleDiv.setAttribute('aria-hidden', 'true');
     toggleDiv.textContent = '▼';
+    fold.append(toggleDiv, t(sectionLabelId(id)));
+    titleDiv.appendChild(fold);
 
-    headerDiv.appendChild(titleDiv);
-    headerDiv.appendChild(toggleDiv);
+    // Reset this section: its pending values back to the defaults, to be
+    // applied or cancelled with everything else in the panel.
+    const reset = document.createElement('button');
+    reset.type = 'button';
+    reset.className = 'ui-button settings-section-reset';
+    reset.textContent = t('settings.section.reset');
+    reset.setAttribute(
+      'aria-label',
+      t('settings.section.resetNamed', { section: t(sectionLabelId(id)) })
+    );
+    reset.onclick = event => {
+      event.stopPropagation();
+      for (const item of section.items) {
+        localSettings[item.key] = JSON.parse(
+          JSON.stringify(DEFAULT_SETTINGS[item.key])
+        );
+      }
+      buildSettingsMenu({ keep: true });
+      settingsGrid
+        .querySelector(`[data-section="${id}"] .settings-section-reset`)
+        ?.focus();
+      announce(
+        t('settings.section.resetDone', { section: t(sectionLabelId(id)) })
+      );
+    };
+
+    headerDiv.append(titleDiv, reset);
 
     // Create section content
     const contentDiv = document.createElement('div');
@@ -5368,8 +5081,21 @@ const buildSettingsMenu = () => {
         e.preventDefault();
         e.stopPropagation();
 
-        const tooltipText = getSettingTooltip(item.key, t(item.labelId));
-        tooltipManager.show(tooltipText, infoIcon, { position: 'bottom' });
+        const hadFocus = document.activeElement === infoIcon;
+        getSettingTooltip(item.key, t(item.labelId)).then(text => {
+          // The first press registers the deferred catalog, which translates
+          // the page again and so rebuilds this panel: the button pressed has
+          // been replaced by its twin by the time the words arrive. The help
+          // goes to the twin, and so does the focus a keyboard reader had.
+          const icon = infoIcon.isConnected
+            ? infoIcon
+            : document.querySelector(
+                `#settingsGrid .setting-label-container[data-setting-key="${item.key}"] .setting-info-icon`
+              );
+          if (!icon) return;
+          if (hadFocus && icon !== infoIcon) icon.focus();
+          tooltipManager.show(text, icon, { position: 'bottom' });
+        });
       });
 
       // Add label and icon to container
@@ -5468,7 +5194,9 @@ const buildSettingsMenu = () => {
         button.onclick = () => {
           localSettings[item.key] = !localSettings[item.key];
           const newState = localSettings[item.key];
-          button.textContent = newState ? 'On' : 'Off';
+          button.textContent = newState
+            ? t('settings.toggle.on')
+            : t('settings.toggle.off');
           button.setAttribute('data-state', newState ? 'on' : 'off');
           if (item.key === 'use_individual_bh_masses')
             updateIndivBHMassButtonVisibility();
@@ -5490,10 +5218,6 @@ const buildSettingsMenu = () => {
         });
         select.onchange = e => {
           localSettings[item.key] = e.target.value;
-          if (item.key === 'preset_scenario') {
-            updatePresetInfo(e.target.value);
-            setCurrentScenarioName(e.target.value);
-          }
         };
         controlContainer.appendChild(select);
       } else if (item.type === 'color') {
@@ -5550,20 +5274,44 @@ const buildSettingsMenu = () => {
         const bhMassBtnContainer = document.createElement('div');
         bhMassBtnContainer.style.gridColumn = '1 / -1';
         bhMassBtnContainer.style.textAlign = 'center';
-        bhMassBtnContainer.innerHTML = `<button id="indivBHMassBtn" class="ui-button" style="margin-top: 10px;">Set Individual BH Masses</button>`;
+        // Built rather than written as markup, so its words come from the
+        // catalog: it was the one English button left in a Spanish panel.
+        const bhMassBtn = document.createElement('button');
+        bhMassBtn.id = 'indivBHMassBtn';
+        bhMassBtn.className = 'ui-button';
+        bhMassBtn.style.marginTop = '10px';
+        bhMassBtn.textContent = t('settings.button.indivBhMasses');
+        bhMassBtn.onclick = showIndivBHMassMenu;
+        bhMassBtnContainer.appendChild(bhMassBtn);
         sectionGrid.appendChild(bhMassBtnContainer);
-        bhMassBtnContainer.firstElementChild.onclick = showIndivBHMassMenu;
       }
     });
 
     contentDiv.appendChild(sectionGrid);
     sectionDiv.appendChild(headerDiv);
     sectionDiv.appendChild(contentDiv);
-    settingsGrid.appendChild(sectionDiv);
+    if (isAdvanced) {
+      if (!advanced) {
+        advanced = document.createElement('details');
+        advanced.className = 'settings-advanced';
+        advanced.open = advancedOpen;
+        const summary = document.createElement('summary');
+        summary.textContent = t('settings.section.advanced');
+        advanced.appendChild(summary);
+        settingsGrid.appendChild(advanced);
+      }
+      advanced.appendChild(sectionDiv);
+    } else {
+      settingsGrid.appendChild(sectionDiv);
+    }
 
-    // Add click handler for collapsible functionality
-    headerDiv.addEventListener('click', () => {
-      sectionDiv.classList.toggle('collapsed');
+    fold.onclick = () => {
+      const shut = sectionDiv.classList.toggle('collapsed');
+      fold.setAttribute('aria-expanded', String(!shut));
+    };
+    // The whole header still folds it for a pointer, as it always did.
+    headerDiv.addEventListener('click', event => {
+      if (event.target === headerDiv) fold.click();
     });
   });
 
@@ -5611,6 +5359,17 @@ const wireSettingsFilter = () => {
       shown += matchesHere;
     });
 
+    // The Advanced disclosure opens for a match inside it and steps aside
+    // for a search that has nothing there.
+    const advanced = document.querySelector('#settingsGrid .settings-advanced');
+    if (advanced) {
+      const hits = [...advanced.querySelectorAll('.settings-section')].some(
+        section => !section.hidden
+      );
+      advanced.hidden = Boolean(query) && !hits;
+      if (query && hits) advanced.open = true;
+    }
+
     if (empty) empty.hidden = !query || shown > 0;
   };
 
@@ -5652,7 +5411,7 @@ const showIndivBHMassMenu = () => {
     itemDiv.className = 'bh-mass-item';
 
     const label = document.createElement('label');
-    label.textContent = `Black Hole #${i + 1}:`;
+    label.textContent = t('settings.bhMass.item', { n: i + 1 });
 
     const controlDiv = document.createElement('div');
     controlDiv.className = 'bh-mass-control';
@@ -7059,6 +6818,15 @@ async function openSettings() {
   buildSettingsMenu();
   pausedBeforeSettings = state.paused;
   state.paused = true;
+  // The level's description arrives while the reader looks. Written into its
+  // one line rather than registered: registering repaints the panel, and a
+  // repaint now would take the focus the dialog is about to place.
+  fetchSettingsHelp()
+    .then(() => {
+      const hint = document.getElementById('settingsCourseLevelHint');
+      if (hint) hint.textContent = levelHintText(pendingCourseLevel);
+    })
+    .catch(() => {});
   openDialog(panel, {
     trigger: document.getElementById('settingsBtn'),
     // The close chip comes first in the markup, and landing on "close" is a
@@ -7168,10 +6936,29 @@ document.getElementById('settingsApply').onclick = () => {
     next.star_density !== SETTINGS.star_density ||
     next.show_ambient_lighting !== SETTINGS.show_ambient_lighting;
 
+  // What the reader changed, to be laid over the scenario's own values when
+  // the world is rebuilt. The rebuild applies the scenario's preset first,
+  // which resets every setting to the defaults and the scenario's choices; on
+  // its own that put back the planet count, the layout and everything else
+  // the reader had just changed, so Apply rebuilt the same world it started
+  // with. Share links carry their settings through the same override.
+  const changed = Object.fromEntries(
+    Object.keys(next)
+      .filter(
+        k =>
+          k !== 'preset_scenario' &&
+          JSON.stringify(next[k]) !== JSON.stringify(SETTINGS[k])
+      )
+      .map(k => [k, next[k]])
+  );
+
   setSettings(next);
+  if (pendingCourseLevel && pendingCourseLevel !== getCourseLevel())
+    setCourseLevel(pendingCourseLevel);
   dialogModule?.closeDialog(settingsPanel(), 'apply');
 
   if (needsRebuild.length > 0) {
+    pendingSettingsOverride = changed;
     initialize_simulation();
     show_scenario_info();
   } else {
@@ -7191,10 +6978,13 @@ document.getElementById('settingsApply').onclick = () => {
   state.paused = false;
   pausedBeforeSettings = false;
   updateSpeedDisplay();
+  // "Interactive Add" switched off here used to leave the Add object button
+  // lit and pressable, arming nothing; a lesson's lock already did this.
+  syncPlacementAvailability();
 };
 document.getElementById('settingsReset').onclick = () => {
   localSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
-  buildSettingsMenu();
+  buildSettingsMenu({ keep: true });
 };
 document.getElementById('settingsCancel').onclick = () =>
   dismissSettings('cancel');
@@ -8092,10 +7882,14 @@ if (mobileMenuToggle && uiRail) {
   // opens it took the picker off the screen before a single object type could
   // be read, let alone chosen. Picking a type then closes both deliberately,
   // from the item's own handler.
+  //
+  // A section's heading is the other: it opens a section of this menu, and
+  // the menu closing under it left a phone reader unable to open any section
+  // at all.
   uiRail.addEventListener('click', e => {
     if (!uiRail.classList.contains('is-open')) return;
     if (!e.target.closest('button')) return;
-    if (e.target.closest('#objectTypeBtn')) return;
+    if (e.target.closest('#objectTypeBtn, .rail-section-toggle')) return;
     closeRail();
   });
 
@@ -8114,40 +7908,32 @@ if (mobileMenuToggle && uiRail) {
 }
 
 // Scenario info box close button
+/**
+ * Close the card that names the scenario, and remember that it was closed: it
+ * does not come back for this scenario (show_enhanced_scenario_info).
+ */
+const dismissScenarioCard = () => {
+  const infoBox = document.getElementById('scenarioInfoBox');
+  if (!infoBox?.classList.contains('showUI')) return;
+  infoBox.classList.remove('showUI', 'show');
+  if (infoBox.dataset.scenarioKey)
+    infoBox.dataset.dismissed = infoBox.dataset.scenarioKey;
+};
+
 const closeScenarioInfoBtn = document.getElementById('closeScenarioInfo');
 if (closeScenarioInfoBtn) {
-  // Add multiple event listeners to ensure it works
-  closeScenarioInfoBtn.addEventListener('click', e => {
-    debugLog('Close scenario info button clicked');
-    e.preventDefault();
-    e.stopPropagation();
-    const infoBox = document.getElementById('scenarioInfoBox');
-    if (infoBox) {
-      debugLog('Removing showUI class from scenario info box');
-      debugLog('Before removal - classes:', infoBox.className);
-      infoBox.classList.remove('showUI');
-      infoBox.classList.remove('show'); // Also remove show class for compatibility
-      debugLog('After removal - classes:', infoBox.className);
-    } else {
-      console.error('Scenario info box element not found');
-    }
-  });
-
-  // Also add mousedown event as backup
-  closeScenarioInfoBtn.addEventListener('mousedown', e => {
-    debugLog('Close scenario info button mousedown');
-    e.preventDefault();
-    e.stopPropagation();
-    const infoBox = document.getElementById('scenarioInfoBox');
-    if (infoBox) {
-      debugLog('Removing showUI class from scenario info box (mousedown)');
-      infoBox.classList.remove('showUI');
-      infoBox.classList.remove('show'); // Also remove show class for compatibility
-    }
-  });
-} else {
-  console.error('Close scenario info button not found');
+  // The press is taken on mousedown as well as click so that a drag handler
+  // on the canvas beneath cannot swallow it.
+  for (const type of ['click', 'mousedown']) {
+    closeScenarioInfoBtn.addEventListener(type, e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dismissScenarioCard();
+    });
+  }
 }
+// Escape closes it like any other overlay.
+window.addEventListener('gravitasEscape', dismissScenarioCard);
 
 /**
  * Load a built-in scenario by its SCENARIO_INFO key.

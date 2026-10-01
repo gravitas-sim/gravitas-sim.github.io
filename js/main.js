@@ -75,7 +75,9 @@ import {
   getLocale,
   onLocaleChange,
   setLocale,
+  t,
 } from './i18n/index.js';
+import { announce } from './notify.js';
 import { initI18nDom } from './i18n/dom.js';
 import { createDoubleTapRecognizer } from './gestures.js';
 import { setRequestedLessonLocale } from './lessonLocale.js';
@@ -182,6 +184,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // blank screen behind a removed splash. A front door that fails to load
       // is a missing introduction; an interface that never appears is a broken
       // application.
+      //
+      // Until the door is open nothing else may take the screen. The scenario
+      // card waited for the door, but the door was not up yet while its module
+      // loaded, so on a first visit the card rose first and sat under it.
+      document.body.classList.add('welcome-pending');
       loadWelcome()
         .then(mod =>
           mod.openWelcome({ automatic: true, onEnter: revealInterface })
@@ -189,7 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => {
           console.warn('Front door unavailable:', err);
           revealInterface();
-        });
+        })
+        .finally(() => document.body.classList.remove('welcome-pending'));
     } else {
       revealInterface();
     }
@@ -224,10 +232,17 @@ document.addEventListener('DOMContentLoaded', () => {
       // Show scenario info box after splash ends, unless a lesson has already
       // started: a deep link straight into an investigation opens the panel
       // before this fires, and the card lands on top of its instruments.
+      // Nor if the reader has already closed it: this runs 200 ms after the
+      // door closes, and a quick Escape in between used to be undone.
       const scenarioInfoBox = document.getElementById('scenarioInfoBox');
       if (
         scenarioInfoBox &&
-        !document.body.classList.contains('investigation-open')
+        !document.body.classList.contains('investigation-open') &&
+        !(
+          scenarioInfoBox.dataset.dismissed &&
+          scenarioInfoBox.dataset.dismissed ===
+            scenarioInfoBox.dataset.scenarioKey
+        )
       ) {
         scenarioInfoBox.classList.add('showUI');
       }
@@ -259,8 +274,43 @@ document.addEventListener('DOMContentLoaded', () => {
         objectInspector.classList.add('showUI');
       }
 
-      showMobileInstructionsOnce();
+      armTouchTips();
     }, 200);
+  }
+
+  /**
+   * Whether another first-run overlay has the screen: Home, or the card that
+   * names the scenario. PLATFORM_MODEL.md, "First run": one at a time.
+   */
+  const anotherOverlayUp = () =>
+    document.body.classList.contains('welcome-open') ||
+    document.body.classList.contains('welcome-pending') ||
+    Boolean(document.querySelector('#scenarioInfoBox.showUI'));
+
+  /**
+   * The touch tips wait for the first touch on the simulation, and for the
+   * screen to be clear. They used to rise with the interface, which on a first
+   * visit is the moment the scenario card rises too, and the two stood one on
+   * top of the other over the readout. A touch made while something else is up
+   * is passed over and the next one asked again.
+   */
+  function armTouchTips() {
+    try {
+      if (localStorage.getItem('mobile_instructions_shown')) return;
+    } catch {
+      /* storage refused: armed for this load */
+    }
+    const onTouch = event => {
+      if (event.pointerType !== 'touch' || anotherOverlayUp()) return;
+      canvas.removeEventListener('pointerdown', onTouch);
+      showMobileInstructionsOnce();
+    };
+    canvas.addEventListener('pointerdown', onTouch);
+    // Escape dismisses them like any other overlay.
+    window.addEventListener('gravitasEscape', () => {
+      const tips = document.getElementById('mobileInstructions');
+      if (tips) tips.style.display = 'none';
+    });
   }
 
   /**
@@ -291,6 +341,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     mobileInstructions.style.display = 'block';
+    // Said as well as shown: the last of the first-run overlays, in order.
+    announce(t('readout.mobileInstructions'), false);
     setTimeout(() => {
       if (mobileInstructions.style.display === 'block') {
         mobileInstructions.style.display = 'none';
@@ -491,17 +543,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Not initInvestigations(): the lesson system is half the bundle and is
     // loaded the first time somebody asks for it. See investigationsLoader.js.
     watchForInvestigations();
-    // The reopen button waits for its own module rather than pulling it into
-    // start-up: it is in the footer, and most visits never touch it.
-    document
-      .getElementById('aboutGravitasBtn')
-      ?.addEventListener('click', event => {
-        event.preventDefault();
-        loadWelcome()
-          .then(mod => mod.openWelcome({ automatic: false }))
-          .catch(err => console.warn('Front door unavailable:', err));
-      });
-    // The GRAVITAS link on this page changes only the hash.
+    // Home reopens from the shell's GRAVITAS link, which on this page changes
+    // only the hash. The module waits until then rather than joining start-up.
     window.addEventListener('hashchange', () => {
       if (embedded || location.hash !== '#home') return;
       loadWelcome()

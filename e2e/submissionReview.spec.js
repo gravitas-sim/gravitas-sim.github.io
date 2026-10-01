@@ -34,6 +34,12 @@ import {
 import { fromCsv } from '../js/csv.js';
 import { stepKey as tabKey } from './keyboard.js';
 
+/** The backup buttons are in the lesson panel's Progress disclosure. */
+const openBackup = page =>
+  page.locator('.inv-backup').evaluate(el => {
+    el.open = true;
+  });
+
 const kepler = await import('../js/data/investigations/keplers-laws.js').then(
   m => m.default || Object.values(m)[0]
 );
@@ -312,6 +318,7 @@ test.describe('the submission review page', () => {
     }
 
     const download = page.waitForEvent('download');
+    await openBackup(page);
     await page.locator('#investigationBackupDownload').click();
     const saved = join(test.info().outputDir, 'engine-backup.json');
     await (await download).saveAs(saved);

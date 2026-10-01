@@ -3044,8 +3044,8 @@ function renderFooter() {
   // the controls that do both are not offered. The status line still shows,
   // saying why nothing is being saved.
   const safety = els.backupDownload?.closest('.inv-progress-safety');
-  const actions = safety?.querySelector('.inv-backup-actions');
-  if (actions) actions.hidden = Boolean(authoring);
+  const backup = safety?.querySelector('.inv-backup');
+  if (backup) backup.hidden = Boolean(authoring);
   els.prev.disabled = stepIndex === 0;
   els.next.textContent =
     stepIndex === active.steps.length - 1
@@ -3063,6 +3063,8 @@ function renderFooter() {
 let lastProbeHtml = '';
 let lastSweepId = null;
 let lastObjectsKey = '';
+/** Whether the lesson's objects list was left open. */
+const OBJECTS_OPEN_KEY = 'gravitas_lesson_objects_open';
 
 /** Past this many, the object list is a count rather than a row of chips. */
 const OBJECT_LIST_MAX = 12;
@@ -5008,6 +5010,30 @@ export function initInvestigations() {
     presetNote: document.getElementById('investigationPresetNote'),
   };
   if (!els.panel || !els.browser) return;
+
+  // The objects list folds away, and stays folded: on the next step, and on
+  // the next visit.
+  const objectsDisclosure = document.getElementById(
+    'investigationObjectsDisclosure'
+  );
+  if (objectsDisclosure) {
+    try {
+      if (window.localStorage?.getItem(OBJECTS_OPEN_KEY) === '0')
+        objectsDisclosure.open = false;
+    } catch {
+      /* storage unavailable: it opens, as it always did */
+    }
+    objectsDisclosure.addEventListener('toggle', () => {
+      try {
+        window.localStorage?.setItem(
+          OBJECTS_OPEN_KEY,
+          objectsDisclosure.open ? '1' : '0'
+        );
+      } catch {
+        /* the list still folds; the choice just will not outlive the page */
+      }
+    });
+  }
 
   document
     .getElementById('investigationsBtn')

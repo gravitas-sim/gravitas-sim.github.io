@@ -55,7 +55,7 @@ export const STARTING_TOOLS = Object.freeze([
 /**
  * The settings a scenario may set, and what each may be.
  *
- * The Settings panel's own list (js/ui.js setting_items) is a list of sliders
+ * The Settings panel's own list (js/settingsSchema.js) is a list of sliders
  * for a reader, and its bounds are the slider's: the built-in scenarios step
  * outside them (the Earth-Moon system runs at G = 9000, the Dyson swarm has
  * 150 stars). These are the bounds an author may write, wide enough for every
