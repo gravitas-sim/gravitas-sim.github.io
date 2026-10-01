@@ -194,6 +194,29 @@ test.describe('apply', () => {
   });
 });
 
+test.describe('interactive add', () => {
+  test('switched off, the Add object button stops offering placement', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await openSettings(page);
+    const toggle = page.locator(
+      '.setting-control[data-setting-key="interactive_add"] button'
+    );
+    await expect(toggle).toHaveAttribute('data-state', 'on');
+    await toggle.click();
+    await page.locator('#settingsApply').click();
+    await expect(page.locator(PANEL)).toBeHidden();
+    await expect(page.locator('#objectTypeBtn')).toBeDisabled();
+
+    await openSettings(page);
+    await toggle.click();
+    await page.locator('#settingsApply').click();
+    await expect(page.locator('#objectTypeBtn')).toBeEnabled();
+  });
+});
+
 test.describe('help', () => {
   test('the help behind an info button is in the reader’s language', async ({
     page,

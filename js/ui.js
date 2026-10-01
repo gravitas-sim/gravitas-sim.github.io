@@ -6864,6 +6864,9 @@ document.getElementById('settingsApply').onclick = () => {
   state.paused = false;
   pausedBeforeSettings = false;
   updateSpeedDisplay();
+  // "Interactive Add" switched off here used to leave the Add object button
+  // lit and pressable, arming nothing; a lesson's lock already did this.
+  syncPlacementAvailability();
 };
 document.getElementById('settingsReset').onclick = () => {
   localSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
