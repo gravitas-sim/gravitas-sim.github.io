@@ -55,6 +55,8 @@ let resizeObserver = null;
 let viewEnabled = false;
 let needsFocusReset = false;
 let lastRender = 0;
+/** Aborted when the panel's markup is unmounted: every listener outside it. */
+let mountSignal;
 
 const MIN_RENDER_INTERVAL = 1000 / 45; // ~45 FPS cap for the 3D viewport
 
@@ -123,9 +125,13 @@ let gridSize = SPACETIME_SIZE;
 
 /**
  * Initialize DOM bindings for the 3D viewport.
- * @param {{ state?: object }} options
+ * @param {{ signal?: AbortSignal }} [options] - Aborted when the panel's
+ *   markup is unmounted (js/view3dBridge.js); removes every listener this adds
+ *   outside it
  */
-function init3DView() {
+function init3DView({ signal } = {}) {
+  mountSignal = signal;
+  const opts = signal ? { signal } : undefined;
   containerEl = document.getElementById('threeViewportContainer');
   canvasHost = document.getElementById('threeViewport');
   statusLabel = document.getElementById('threeViewStatus');
@@ -142,7 +148,7 @@ function init3DView() {
 
   if (toggleBtn) {
     toggleBtn.removeEventListener('click', toggleHandler);
-    toggleBtn.addEventListener('click', toggleHandler);
+    toggleBtn.addEventListener('click', toggleHandler, opts);
   }
 
   if (closeBtn) {
@@ -159,9 +165,13 @@ function init3DView() {
   // while the view was open left it pointed at where the old one used to be,
   // which looks exactly like a panel that has stopped working.
   if (hasWindow) {
-    window.addEventListener('gravitasSimulationReset', () => {
-      needsFocusReset = true;
-    });
+    window.addEventListener(
+      'gravitasSimulationReset',
+      () => {
+        needsFocusReset = true;
+      },
+      opts
+    );
   }
 
   // Draggable logic
@@ -195,31 +205,45 @@ function init3DView() {
       e.preventDefault(); // Prevent text selection
     });
 
-    window.addEventListener('mousemove', e => {
-      if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
+    window.addEventListener(
+      'mousemove',
+      e => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
 
-      // Constrain to window bounds
-      const newLeft = Math.max(
-        0,
-        Math.min(window.innerWidth - containerEl.offsetWidth, initialLeft + dx)
-      );
-      const newTop = Math.max(
-        0,
-        Math.min(window.innerHeight - containerEl.offsetHeight, initialTop + dy)
-      );
+        // Constrain to window bounds
+        const newLeft = Math.max(
+          0,
+          Math.min(
+            window.innerWidth - containerEl.offsetWidth,
+            initialLeft + dx
+          )
+        );
+        const newTop = Math.max(
+          0,
+          Math.min(
+            window.innerHeight - containerEl.offsetHeight,
+            initialTop + dy
+          )
+        );
 
-      containerEl.style.left = `${newLeft}px`;
-      containerEl.style.top = `${newTop}px`;
-    });
+        containerEl.style.left = `${newLeft}px`;
+        containerEl.style.top = `${newTop}px`;
+      },
+      opts
+    );
 
-    window.addEventListener('mouseup', () => {
-      if (isDragging) {
-        isDragging = false;
-        containerEl.classList.remove('interacting');
-      }
-    });
+    window.addEventListener(
+      'mouseup',
+      () => {
+        if (isDragging) {
+          isDragging = false;
+          containerEl.classList.remove('interacting');
+        }
+      },
+      opts
+    );
   }
 
   // Resizable logic (Top-Left Handle)
@@ -250,37 +274,45 @@ function init3DView() {
       e.stopPropagation();
     });
 
-    window.addEventListener('mousemove', e => {
-      if (!isResizing) return;
+    window.addEventListener(
+      'mousemove',
+      e => {
+        if (!isResizing) return;
 
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
 
-      // The handle is the top-right corner, so the left and bottom edges are
-      // the ones that stay put: moving right widens, moving up heightens.
-      let newWidth = Math.max(300, startWidth + dx);
-      let newHeight = Math.max(240, startHeight - dy);
+        // The handle is the top-right corner, so the left and bottom edges are
+        // the ones that stay put: moving right widens, moving up heightens.
+        let newWidth = Math.max(300, startWidth + dx);
+        let newHeight = Math.max(240, startHeight - dy);
 
-      // Never larger than the window it has to live in.
-      newWidth = Math.min(newWidth, window.innerWidth - startLeft - 20);
-      newHeight = Math.min(newHeight, window.innerHeight - 20);
+        // Never larger than the window it has to live in.
+        newWidth = Math.min(newWidth, window.innerWidth - startLeft - 20);
+        newHeight = Math.min(newHeight, window.innerHeight - 20);
 
-      const bottomEdge = startTop + startHeight;
+        const bottomEdge = startTop + startHeight;
 
-      containerEl.style.width = `${newWidth}px`;
-      containerEl.style.height = `${newHeight}px`;
-      containerEl.style.left = `${startLeft}px`;
-      containerEl.style.top = `${bottomEdge - newHeight}px`;
+        containerEl.style.width = `${newWidth}px`;
+        containerEl.style.height = `${newHeight}px`;
+        containerEl.style.left = `${startLeft}px`;
+        containerEl.style.top = `${bottomEdge - newHeight}px`;
 
-      handleWindowResize();
-    });
+        handleWindowResize();
+      },
+      opts
+    );
 
-    window.addEventListener('mouseup', () => {
-      if (isResizing) {
-        isResizing = false;
-        containerEl.classList.remove('interacting');
-      }
-    });
+    window.addEventListener(
+      'mouseup',
+      () => {
+        if (isResizing) {
+          isResizing = false;
+          containerEl.classList.remove('interacting');
+        }
+      },
+      opts
+    );
   }
 
   updateToggleLabel();
@@ -403,7 +435,11 @@ function ensureScene() {
   addEnvironment();
 
   if (hasWindow) {
-    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener(
+      'resize',
+      handleWindowResize,
+      mountSignal ? { signal: mountSignal } : undefined
+    );
   }
   if (supportsResizeObserver && canvasHost) {
     resizeObserver = new window.ResizeObserver(() => handleWindowResize());
@@ -1063,4 +1099,21 @@ function updateToggleLabel() {
   }
 }
 
-export { init3DView, update3DScene, set3DViewEnabled };
+/**
+ * Undo init3DView(), for when the panel's markup leaves the document: close
+ * the view, let the renderer go, and forget every element it bound. The
+ * listeners outside the panel go with the mount's signal.
+ */
+function teardown3DView() {
+  set3DViewEnabled(false);
+  resizeObserver?.disconnect();
+  resizeObserver = null;
+  controls?.dispose?.();
+  renderer?.dispose?.();
+  renderer = scene = camera = controls = rootGroup = gridMesh = null;
+  meshCache.clear();
+  containerEl = canvasHost = statusLabel = toggleBtn = null;
+  mountSignal = undefined;
+}
+
+export { init3DView, update3DScene, set3DViewEnabled, teardown3DView };

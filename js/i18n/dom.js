@@ -70,3 +70,68 @@ export function initI18nDom() {
   applyTranslations();
   return onLocaleChange(() => applyTranslations());
 }
+
+// =============================================================================
+// Panel markup that ships with its family (INDEX_DECOMPOSITION.md)
+// -----------------------------------------------------------------------------
+// A js/fragments/ file fetched with the family, or a start-up module's
+// template, inserted after its empty `<template data-host>` in index.html: the
+// same parent and order the static markup had, translated before it is seen.
+// =============================================================================
+
+/** Host name -> {nodes, controller} for every fragment in the document. */
+const mounted = new Map();
+
+/**
+ * Fetch js/fragments/<name>.html - against the document, not this module,
+ * which a build moves.
+ * @param {string} name - Fragment name
+ * @returns {Promise<string>} Its markup
+ */
+export async function loadFragment(name) {
+  const url = new URL(`js/fragments/${name}.html`, document.baseURI);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${url.pathname}: ${res.status}`);
+  return res.text();
+}
+
+/**
+ * Insert markup at its host, translated, once. Declines (null) without the
+ * host, or when one of its ids is already in the page: never a duplicate.
+ * @param {string} host - The host's data-host
+ * @param {string} html - The markup
+ * @returns {?AbortSignal} Aborted on unmount: for every listener the family
+ *   adds outside its markup
+ */
+export function mountFragment(host, html) {
+  if (mounted.has(host)) return null;
+  const marker = document.querySelector(`template[data-host="${host}"]`);
+  if (!marker) return null;
+  const tpl = document.createElement('template');
+  tpl.innerHTML = html;
+  // Every node, so unmounting leaves the page exactly as it was.
+  const nodes = [...tpl.content.childNodes];
+  if (nodes.some(n => n.id && document.getElementById(n.id))) return null;
+  applyTranslations(tpl.content);
+  marker.after(tpl.content);
+  const controller = new AbortController();
+  mounted.set(host, { nodes, controller });
+  return controller.signal;
+}
+
+/**
+ * Remove a host's markup and abort its signal.
+ * @param {string} host - The host's data-host
+ * @returns {boolean} Whether it was mounted
+ */
+export function unmountFragment(host) {
+  const entry = mounted.get(host);
+  if (!entry) return false;
+  mounted.delete(host);
+  entry.controller.abort();
+  for (const node of entry.nodes) node.remove();
+  return true;
+}
+
+/** @returns {boolean} Whether a host's markup is in the page */
+export const fragmentMounted = host => mounted.has(host);

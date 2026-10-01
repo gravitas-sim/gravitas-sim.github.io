@@ -34,6 +34,7 @@ import {
   sampleRows,
   MAX_ROWS,
 } from '../js/seriesTable.js';
+import { assembledIndexHtml } from '../tools/index-fragments.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(here, '..');
@@ -450,7 +451,8 @@ describe('ACCESSIBILITY.md narrowed only what was fixed', () => {
     const forbidden =
       /\b(accessible|usable) (to|for|by) (blind|visually impaired|low.vision|screen.reader)/i;
     for (const file of ['README.md', 'ACCESSIBILITY.md', 'index.html']) {
-      expect({ file, claim: forbidden.test(read(file)) }).toEqual({
+      const text = file === 'index.html' ? assembledIndexHtml() : read(file);
+      expect({ file, claim: forbidden.test(text) }).toEqual({
         file,
         claim: false,
       });

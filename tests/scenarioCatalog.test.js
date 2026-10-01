@@ -10,6 +10,7 @@ import {
   tagCounts,
   resultSummary,
 } from '../js/scenarioBrowser.js';
+import { assembledIndexHtml } from '../tools/index-fragments.mjs';
 
 const KEYS = Object.keys(SCENARIO_INFO);
 const repoFile = rel => fileURLToPath(new URL(`../${rel}`, import.meta.url));
@@ -249,9 +250,8 @@ describe('the catalog is the only source of truth', () => {
   });
 
   test('no scenario count is hardcoded in the markup', async () => {
-    const html = await import('node:fs').then(fs =>
-      fs.readFileSync(repoFile('index.html'), 'utf8')
-    );
+    // With the gallery's own markup, which ships with js/scenarioBrowser.js.
+    const html = assembledIndexHtml();
     // The gallery writes its own subtitle from Object.keys(SCENARIO_INFO). A
     // number typed into the page is the bug this replaced: it said 37 while the
     // catalog held 43.

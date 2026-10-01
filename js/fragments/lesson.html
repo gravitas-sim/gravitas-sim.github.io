@@ -1,0 +1,340 @@
+<!-- Investigations: the working panel -->
+<aside
+  id="investigationPanel"
+  class="investigation-panel"
+  hidden=""
+  aria-label="Investigation"
+>
+  <header class="inv-header">
+    <div class="inv-header-text">
+      <!-- tabindex="-1" so choosing a lesson can move focus in here
+           rather than leaving it on the card the browser just destroyed. -->
+      <h2 id="investigationTitle" tabindex="-1">Investigation</h2>
+      <p id="investigationSubtitle"></p>
+    </div>
+    <button
+      id="investigationClose"
+      class="ui-button"
+      title="Close this lesson. Your progress is saved."
+    >
+      ×
+    </button>
+  </header>
+
+  <div class="inv-progress">
+    <div
+      class="inv-progress-track"
+      role="progressbar"
+      aria-label="Lesson progress"
+    >
+      <div id="investigationProgressBar"></div>
+    </div>
+    <span id="investigationProgressText"></span>
+    <button
+      id="investigationResetScenario"
+      class="inv-reset-scenario"
+      title="Put this step's system back the way it started. Useful once objects have drifted, merged or left the view."
+      aria-label="Reset the scenario for this step"
+    >
+      ↺
+    </button>
+  </div>
+
+  <!-- Authoring preview only: hidden unless ?author= put the panel in it.
+       See js/authoring/preview.js. -->
+  <div id="investigationAuthorBar" class="inv-author-bar" hidden="">
+    <div class="inv-author-jump">
+      <span class="inv-author-badge">AUTHORING</span>
+      <label for="investigationAuthorStep">Step</label>
+      <input
+        id="investigationAuthorStep"
+        type="number"
+        min="1"
+        step="1"
+        aria-label="Jump to step"
+      />
+      <span id="investigationAuthorOf"></span>
+      <button
+        id="investigationAuthorPrev"
+        class="ui-button subtle"
+        title="Previous step"
+        aria-label="Previous step"
+      >
+        <span class="icon icon-back" aria-hidden="true"></span>
+      </button>
+      <button
+        id="investigationAuthorNext"
+        class="ui-button subtle"
+        title="Next step"
+        aria-label="Next step"
+      >
+        <span class="icon icon-play" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div id="investigationAuthorDiag" class="inv-author-diag"></div>
+  </div>
+
+  <!-- tabindex="0" because this scrolls. A lesson step is often longer
+       than the panel, and a keyboard reader with no pointer had no way to
+       scroll it: the panel's own controls are above and below it, so Tab
+       went straight past the text. -->
+  <div
+    id="investigationBody"
+    class="inv-body"
+    tabindex="0"
+    role="region"
+    aria-label="Lesson step"
+    data-i18n-aria-label="inv.body.label"
+  ></div>
+
+  <div id="investigationProbeWrap" class="inv-probe-wrap" hidden="">
+    <p class="inv-probe-title" data-i18n="inv.probe.title">Live readout</p>
+    <div id="investigationProbe" class="inv-probe"></div>
+  </div>
+
+  <!-- The keyboard's way to do what a click on the canvas does. A step
+       that names objects gets a list of them here, in the same order the
+       canvas hit-testing walks, with the lesson's own word for each where
+       it has one. Direct manipulation had no keyboard equivalent at all
+       before this, which ACCESSIBILITY.md records as a known gap; this
+       closes it for the objects a lesson is actually about. -->
+  <div id="investigationObjectsWrap" class="inv-probe-wrap" hidden="">
+    <!-- Collapsible, and remembered: a reader who folds it away is not
+         handed it back open on the next step or the next visit. -->
+    <details id="investigationObjectsDisclosure" class="inv-objects-disclosure" open="">
+    <summary class="inv-probe-title" data-i18n="inv.objects.title">
+      Objects in this activity
+    </summary>
+    <div
+      id="investigationObjects"
+      class="inv-objects"
+      role="group"
+      data-i18n-aria-label="inv.objects.label"
+      aria-label="Objects in this activity"
+    ></div>
+    <!-- Camera and scale, for a step that stands objects on the canvas.
+         Both cameras act once, on request: a view that re-framed itself
+         every frame would take the scene back every time a reader looked
+         somewhere else. -->
+    <div id="investigationStageTools" class="inv-objects" hidden="">
+      <button type="button" id="investigationFit" class="inv-stage-btn">
+        <span data-i18n="inv.stage.fit">Fit comparison</span>
+      </button>
+      <button type="button" id="investigationFollow" class="inv-stage-btn">
+        <span data-i18n="inv.stage.follow">Follow selected</span>
+      </button>
+      <button
+        type="button"
+        id="investigationScale"
+        class="inv-stage-btn"
+        aria-pressed="false"
+      >
+        <span data-i18n="inv.stage.scale">True scale</span>
+      </button>
+    </div>
+    </details>
+  </div>
+
+  <!-- Progress safety. The save status is a standing statement rather than
+       a toast: a storage failure needs a message that persists until it is
+       resolved, and a toast on every keystroke would be unusable. The two
+       buttons are recovery, not submission - the PDF report is still what
+       gets handed in. -->
+  <div class="inv-progress-safety">
+    <p
+      id="investigationSaveStatus"
+      class="inv-save-status"
+      role="status"
+      aria-live="off"
+      hidden=""
+    ></p>
+    <!-- What reading the saved progress had to say: a migration from the
+         pre-sid format, answers for steps that no longer exist, or a
+         payload a newer build wrote. All three mean an answer may not be
+         where the reader left it, so this stays on screen rather than
+         passing as a toast. -->
+    <p
+      id="investigationProgressNotice"
+      class="inv-progress-notice"
+      role="status"
+      aria-live="polite"
+      hidden=""
+    ></p>
+    <!-- Kept, but out of the way: two full-width buttons under every step
+         for something a reader does once a term. -->
+    <details class="inv-backup">
+      <summary data-i18n="inv.backup.summary">Progress backup</summary>
+      <div class="inv-backup-actions">
+        <button
+          id="investigationBackupDownload"
+          class="ui-button subtle"
+          title="Save a copy of your answers to a file you keep"
+          data-i18n-title="inv.backup.download.hint"
+          data-i18n="inv.backup.download"
+        >
+          Download progress backup
+        </button>
+        <button
+          id="investigationBackupRestore"
+          class="ui-button subtle"
+          title="Load answers back from a file you saved earlier"
+          data-i18n-title="inv.backup.restore.hint"
+          data-i18n="inv.backup.restore"
+        >
+          Restore progress backup
+        </button>
+        <input
+          id="investigationBackupFile"
+          type="file"
+          accept="application/json,.json"
+          hidden=""
+        />
+      </div>
+    </details>
+  </div>
+
+  <footer class="inv-footer">
+    <button
+      id="investigationReset"
+      class="ui-button subtle"
+      title="Clear every answer and start this lesson again"
+      data-i18n-title="inv.action.restart.hint"
+      data-i18n="inv.action.restart"
+    >
+      Restart
+    </button>
+    <div class="inv-footer-nav">
+      <button
+        id="investigationPrev"
+        class="ui-button"
+        title="Previous step (Shift + Left arrow)"
+        data-i18n-title="inv.action.back.hint"
+        data-i18n="inv.action.back"
+      >
+        Back
+      </button>
+      <button
+        id="investigationNext"
+        class="ui-button primary"
+        title="Next step (Shift + Right arrow)"
+      >
+        Next
+      </button>
+    </div>
+  </footer>
+</aside>
+
+<!-- Investigations: the measurement plot, docked beside the lesson -->
+<aside
+  id="investigationPlot"
+  class="inv-plot-panel"
+  hidden=""
+  aria-label="Measurement plot"
+>
+  <header class="inv-plot-panel-head">
+    <span id="investigationPlotTitle" class="inv-plot-title"
+      >Your measurements</span
+    >
+    <div class="inv-plot-actions">
+      <button
+        type="button"
+        id="investigationPlotLog"
+        class="inv-plot-toggle"
+        aria-pressed="false"
+        title="Plot both axes logarithmically. On a log-log plot a power law is a straight line whatever its exponent, and the inner planets stop being squashed into the corner."
+      >
+        Log axes
+      </button>
+      <button
+        type="button"
+        id="investigationPlotToggle"
+        class="inv-plot-toggle"
+        aria-pressed="false"
+      ></button>
+    </div>
+  </header>
+  <canvas
+    id="investigationPlotCanvas"
+    role="img"
+    aria-describedby="investigationPlotTableWrap"
+  ></canvas>
+  <p id="investigationPlotNote" class="inv-plot-note"></p>
+  <!-- The plot as numbers. A scatter of points is a picture of a
+       relationship, and the position of a dot is not available to a reader
+       using a screen reader, or to one who cannot separate two colors.
+       Every point the canvas draws is in this table, in the order the
+       student recorded them. Kept in step by js/investigations.js. -->
+  <div
+    id="investigationPlotTableWrap"
+    class="inv-plot-table-wrap"
+    hidden=""
+  >
+    <table id="investigationPlotTable" class="inv-plot-table"></table>
+  </div>
+</aside>
+
+<!-- Investigations: the ellipse explorer, in its own panel -->
+<aside
+  id="investigationEllipse"
+  class="inv-plot-panel"
+  hidden=""
+  aria-label="Ellipse explorer"
+>
+  <header class="inv-plot-panel-head">
+    <span class="inv-plot-title">Anatomy of an ellipse</span>
+  </header>
+  <canvas id="investigationEllipseCanvas"></canvas>
+  <div class="inv-ellipse-key">
+    <span class="k-a">a: semi-major axis, the orbit's size</span>
+    <span class="k-c">c = a×e: focus offset from center</span>
+    <span class="k-b">b: semi-minor axis</span>
+    <span class="k-star">focus holding the star</span>
+    <span class="k-empty">the empty focus</span>
+  </div>
+  <label class="inv-ecc-row" for="investigationEcc">
+    <span>Eccentricity</span>
+    <input
+      type="range"
+      id="investigationEcc"
+      min="0"
+      max="0.98"
+      step="0.001"
+      value="0.017"
+    />
+    <output id="investigationEccOut">0.017</output>
+  </label>
+  <div id="investigationPresets" class="inv-presets"></div>
+  <p id="investigationPresetNote" class="inv-preset-note"></p>
+</aside>
+
+<!-- Investigations: the interactive instrument for the current step -->
+<aside
+  id="investigationTool"
+  class="inv-plot-panel inv-tool-panel"
+  hidden=""
+  aria-label="Interactive tool"
+>
+  <header class="inv-plot-panel-head">
+    <span id="investigationToolTitle" class="inv-plot-title"></span>
+  </header>
+  <canvas
+    id="investigationToolCanvas"
+    role="img"
+    aria-describedby="investigationToolReadout"
+  ></canvas>
+  <p id="investigationToolNote" class="inv-plot-note"></p>
+  <!-- A description list rather than rows of divs: every number this
+       instrument computes is a labeled value, and a screen reader should
+       hear which label goes with which number rather than an undifferentiated
+       run of text. This is also the canvas's text equivalent, which is why
+       the canvas points at it. -->
+  <dl id="investigationToolReadout" class="inv-tool-readout"></dl>
+  <div id="investigationToolControls" class="inv-tool-controls"></div>
+  <div
+    id="investigationToolActions"
+    class="inv-tool-actions"
+    hidden=""
+  ></div>
+  <div id="investigationToolPresets" class="inv-presets"></div>
+  <p id="investigationToolPresetNote" class="inv-preset-note"></p>
+</aside>

@@ -18,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { describeVoices } from '../js/sonify/voiceReadout.js';
 import { periodToCents } from '../js/sonify/law.js';
+import { assembledIndexHtml } from '../tools/index-fragments.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(here, '..');
@@ -154,7 +155,9 @@ describe('the readout and the audio cannot drift apart', () => {
     // over them interrupts a screen reader without pause and makes the panel
     // unusable for the one person it exists for, so the section is plain
     // content that holds still while it is read.
-    const html = read('index.html');
+    // The page as a reader has it: the sound panel's markup ships with
+    // js/ui.js rather than in index.html (INDEX_DECOMPOSITION.md).
+    const html = assembledIndexHtml();
     const section = html.slice(
       html.indexOf('id="soundPanelVoices"'),
       html.indexOf('</section>', html.indexOf('id="soundPanelVoices"'))
@@ -272,7 +275,7 @@ describe('ACCESSIBILITY.md tells the truth about the sound', () => {
     ]) {
       let text;
       try {
-        text = read(file);
+        text = file === 'index.html' ? assembledIndexHtml() : read(file);
       } catch {
         continue; // paper.md is not present on every branch
       }

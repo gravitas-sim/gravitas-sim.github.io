@@ -1,0 +1,122 @@
+<!-- Investigations: finish and report -->
+<div id="investigationFinish" class="hidden" hidden inert>
+  <div
+    id="investigationFinishContent"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="investigationFinishTitle"
+  >
+    <div class="inv-finish-header">
+      <h3 id="investigationFinishTitle" data-i18n="inv.finish.title">
+        Finished
+      </h3>
+      <button
+        id="investigationFinishClose"
+        class="ui-button"
+        title="Close without downloading"
+        aria-label="Close without downloading"
+        data-i18n-title="inv.finish.close"
+        data-i18n-aria-label="inv.finish.close"
+      >
+        ×
+      </button>
+    </div>
+    <div id="investigationFinishSummary" class="inv-finish-summary"></div>
+
+    <label class="inv-name-field" for="investigationName">
+      <span data-i18n="inv.finish.name"
+        >Your name, as it should appear on the report</span
+      >
+      <input
+        type="text"
+        id="investigationName"
+        autocomplete="name"
+        placeholder="e.g. Ada Lovelace"
+        data-i18n-placeholder="inv.finish.namePh"
+      />
+    </label>
+    <p
+      id="investigationNameError"
+      class="inv-name-error"
+      hidden=""
+      data-i18n="inv.finish.nameErr"
+    >
+      Enter a name so the report can be attributed to you.
+    </p>
+
+    <!-- The progress file sits beside the report because a student who
+         is finishing is the one most likely to lose work to a cleared
+         browser. The submission token is here as well as in the PDF: a
+         learning management system that takes a text box, not a file,
+         can take this. -->
+    <div class="inv-finish-actions">
+      <button
+        id="investigationFinishBack"
+        class="ui-button"
+        data-i18n="inv.finish.back"
+      >
+        Keep working
+      </button>
+      <button
+        id="investigationFinishProgress"
+        class="ui-button"
+        data-i18n="inv.finish.progress"
+      >
+        Download a progress file
+      </button>
+      <button
+        id="investigationDownload"
+        class="ui-button primary"
+        data-i18n="inv.report.download"
+      >
+        Download lab report (PDF)
+      </button>
+    </div>
+    <div class="inv-finish-actions">
+      <button
+        id="investigationTokenShow"
+        class="ui-button subtle"
+        data-i18n="inv.token.show"
+      >
+        Show the submission token
+      </button>
+    </div>
+    <div id="investigationTokenBody" hidden="">
+      <label class="inv-name-field" for="investigationToken"
+        ><span data-i18n="inv.token.label"
+          >Submission token. Paste it where your instructor asks for
+          it.</span
+        ></label
+      >
+      <div class="share-link-row">
+        <input
+          type="text"
+          id="investigationToken"
+          readonly=""
+          spellcheck="false"
+        />
+        <button
+          id="investigationTokenCopy"
+          class="ui-button primary"
+          data-i18n="inv.token.copy"
+        >
+          Copy
+        </button>
+      </div>
+      <div class="inv-finish-actions">
+        <button
+          id="investigationTokenSave"
+          class="ui-button subtle"
+          data-i18n="inv.token.save"
+        >
+          Download as a text file
+        </button>
+      </div>
+    </div>
+    <p class="inv-finish-fineprint" data-i18n="inv.finish.fine">
+      The report lists every question, your answers, and which of the
+      automatically checked ones matched. It also carries links that reopen
+      the exact simulations you used.
+    </p>
+  </div>
+</div>

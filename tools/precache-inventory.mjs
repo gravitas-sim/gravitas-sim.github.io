@@ -32,6 +32,9 @@ const KINDS = [
   ['Images', /\.(webp|png|jpe?g|svg|ico|gif)$/],
   ['Stylesheets', /\.css$/],
   ['Fonts', /\.(woff2?|ttf|otf)$/],
+  // The panels' markup, which each family fetches as it mounts
+  // (INDEX_DECOMPOSITION.md): HTML, but not a page anyone opens.
+  ['Panel markup', /(^|\/)js\/fragments\/[^/]+\.html$/],
   ['Pages', /\.html$/],
 ];
 

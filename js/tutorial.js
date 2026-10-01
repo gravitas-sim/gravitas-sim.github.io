@@ -24,6 +24,61 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
+import { mountFragment } from './i18n/deferredMessages.js';
+
+/**
+ * The guided tour's popup, inserted at its host in index.html by initTutorial() before
+ * anything is bound to it (INDEX_DECOMPOSITION.md).
+ */
+export const TUTORIAL_MARKUP = `<!-- Guided tour (initially hidden) -->
+<div
+id="tutorialPopup"
+class="tutorial-popup"
+role="dialog"
+aria-modal="false"
+aria-label="Guided tour"
+aria-hidden="true"
+style="display: none"
+data-i18n-aria-label="tour.tutorialPopup.label"
+>
+<div class="tutorial-header">
+<span class="tutorial-eyebrow" data-i18n="tour.tutorialPopup"
+>Guided tour</span
+>
+<button
+id="tutorialCloseBtn"
+class="tutorial-close"
+aria-label="Close the tour"
+title="Close the tour (Esc)"
+data-i18n-title="tour.tutorialClose.hint"
+data-i18n-aria-label="tour.tutorialClose.label"
+>
+✕
+</button>
+</div>
+<div id="tutorialPopupBody" class="tutorial-body"></div>
+<div class="tutorial-footer">
+<button
+id="tutorialPrevBtn"
+class="ui-button"
+title="Back to the previous step (left arrow)"
+data-i18n-title="tour.tutorialPrev.hint"
+data-i18n="tour.tutorialPrev"
+>
+Back
+</button>
+<button
+id="tutorialNextBtn"
+class="ui-button is-primary"
+title="On to the next step (right arrow)"
+data-i18n-title="tour.tutorialNext.hint"
+data-i18n="tour.tutorialNext"
+>
+Next
+</button>
+</div>
+</div>
+`;
 
 /**
  * The tour.
@@ -247,6 +302,7 @@ function go(delta) {
 
 /** Wire up the tour. Safe to call once, from init. */
 export function initTutorial() {
+  mountFragment('tutorial', TUTORIAL_MARKUP);
   els = {
     btn: document.getElementById('tutorialBtn'),
     popup: document.getElementById('tutorialPopup'),

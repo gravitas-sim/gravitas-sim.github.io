@@ -1,0 +1,64 @@
+<!-- Data export -->
+<div id="dataExport" class="hidden" hidden inert>
+  <div
+    id="dataExportContent"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="dataExportTitle"
+  >
+    <div class="inv-finish-header">
+      <h3 id="dataExportTitle" data-i18n="export.dataExportTitle">
+        Export data
+      </h3>
+      <button
+        id="dataExportClose"
+        class="ui-button"
+        title="Close"
+        data-i18n-title="export.dataExportClose.hint"
+      >
+        ×
+      </button>
+    </div>
+    <p class="export-intro" data-i18n="export.dataExportContent">
+      Everything the simulation has recorded, as CSV. Open it in a
+      spreadsheet, or read it straight into pandas.
+    </p>
+
+    <fieldset class="export-scope" id="dataExportScope">
+      <legend data-i18n="export.dataExportScope">Which objects</legend>
+      <label>
+        <input type="radio" name="exportScope" value="selected" />
+        <span
+          id="dataExportSelectedLabel"
+          data-i18n="export.dataExportSelectedLabel"
+          >Selected object only</span
+        >
+      </label>
+      <label>
+        <input type="radio" name="exportScope" value="all" checked="" />
+        <span data-i18n="export.dataExportScope.2">Every object</span>
+      </label>
+    </fieldset>
+
+    <div class="export-files" id="dataExportFiles"></div>
+
+    <p class="export-fineprint" data-i18n="export.dataExportContent.2">
+      Columns carry their units in the name: distances in AU, times in days,
+      speeds in km/s, energies in joules. Positions are recorded ten times a
+      second of real time, and the history holds the last several hundred
+      frames.
+    </p>
+    <p class="export-fineprint">
+      <a
+        id="dataExportNotebook"
+        href="https://colab.research.google.com/github/gravitas-sim/gravitas-sim.github.io/blob/main/notebooks/gravitas_analysis.ipynb"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-i18n="export.dataExportNotebook"
+        >Open the companion notebook in Colab</a
+      >
+      to plot the orbits, fit a period and recover the central mass from
+      these files. No installation: it runs in a browser tab.
+    </p>
+  </div>
+</div>

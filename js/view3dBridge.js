@@ -15,6 +15,11 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
+import {
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './i18n/deferredMessages.js';
 
 let loading = null;
 let updater = null;
@@ -33,18 +38,38 @@ export function update3DScene(timestamp) {
 }
 
 /**
- * Load the spacetime view and wire it up, once.
+ * Load the spacetime view and its markup (js/fragments/view3d.html,
+ * INDEX_DECOMPOSITION.md), and wire it up, once.
+ *
  * @returns {Promise<Object>} The view3d module
  */
 export function ensureView3D() {
   if (!loading) {
-    loading = import('./view3d.js').then(mod => {
-      mod.init3DView();
-      updater = mod.update3DScene;
-      return mod;
-    });
+    loading = Promise.all([import('./view3d.js'), loadFragment('view3d')]).then(
+      ([mod, html]) => {
+        const signal = mountFragment('view3d', html);
+        mod.init3DView({ signal: signal ?? undefined });
+        updater = mod.update3DScene;
+        return mod;
+      }
+    );
   }
   return loading;
+}
+
+/**
+ * Unmount the panel; the button's next press loads it afresh.
+ * @returns {Promise<boolean>} Whether it was mounted
+ */
+export async function unmountView3D() {
+  if (!loading) return false;
+  const mod = await loading;
+  mod.teardown3DView();
+  updater = null;
+  loading = null;
+  const was = unmountFragment('view3d');
+  watchFor3DView();
+  return was;
 }
 
 /**
@@ -54,11 +79,15 @@ export function ensureView3D() {
  * init3DView() attaches the real one and this stands down: leaving both
  * attached would toggle the view twice per click.
  */
+let firstClick = null;
+
 export function watchFor3DView() {
   const btn = document.getElementById('toggle3DView');
   if (!btn) return;
+  // Called again by unmountView3D(); one first-press listener, never two.
+  if (firstClick) btn.removeEventListener('click', firstClick);
 
-  const firstClick = async () => {
+  firstClick = async () => {
     btn.removeEventListener('click', firstClick);
     // Loading three.js over a slow connection is not instant, and a button
     // that looks inert is a button people press again.

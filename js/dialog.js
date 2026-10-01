@@ -237,17 +237,26 @@ export function openDialog(
       if (!to || !isOpen(panel) || wired.get(panel).closing) return;
       if (!panel.contains(event.target)) to.focus();
     };
-    panel.addEventListener('keydown', keydown);
+    // All four go with releaseDialog(), which a panel leaving the page - or
+    // one that stays while its family is unmounted - asks for.
+    const release = new AbortController();
+    const { signal } = release;
+    panel.addEventListener('keydown', keydown, { signal });
     // A press on the backdrop itself, not on anything inside the panel.
     if (host !== panel)
-      host.addEventListener('click', event => {
-        if (event.target === host && isOpen(panel))
-          closeDialog(panel, 'backdrop');
-      });
-    document.addEventListener('focusin', focusin, true);
+      host.addEventListener(
+        'click',
+        event => {
+          if (event.target === host && isOpen(panel))
+            closeDialog(panel, 'backdrop');
+        },
+        { signal }
+      );
+    const outside = { capture: true, signal };
+    document.addEventListener('focusin', focusin, outside);
     // A click is never the Tab's, not even one after a trip to the toolbar.
-    document.addEventListener('pointerdown', () => (wrapTo = null), true);
-    wired.set(panel, { ...wired.get(panel), keydown });
+    document.addEventListener('pointerdown', () => (wrapTo = null), outside);
+    wired.set(panel, { ...wired.get(panel), keydown, release });
   }
 
   // Focusable itself, so that a click inside it leaves focus inside it. A
@@ -262,6 +271,19 @@ export function openDialog(
   const wanted = initialFocus && named(panel, initialFocus);
   const target = wanted || focusable(panel)[0] || panel;
   target.focus({ preventScroll: true });
+}
+
+/**
+ * Let go of a dialog whose family is being unmounted: every listener
+ * openDialog() added for it, on the panel and the document, and the record of
+ * it (INDEX_DECOMPOSITION.md). The next openDialog() wires it afresh.
+ *
+ * @param {?HTMLElement} panel - The dialog
+ */
+export function releaseDialog(panel) {
+  if (!panel) return;
+  wired.get(panel)?.release?.abort();
+  wired.delete(panel);
 }
 
 /**

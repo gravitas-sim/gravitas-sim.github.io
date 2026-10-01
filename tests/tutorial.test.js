@@ -4,6 +4,7 @@ import path from 'node:path';
 import { TUTORIAL_STEPS } from '../js/tutorial.js';
 import { EN } from '../js/i18n/en.js';
 import { ES } from '../js/i18n/es.js';
+import { assembledIndexHtml } from '../tools/index-fragments.mjs';
 
 // =============================================================================
 // The guided tour
@@ -19,7 +20,9 @@ import { ES } from '../js/i18n/es.js';
 // counted thirty-seven scenarios when there were fifty-three.
 // =============================================================================
 
-const html = fs.readFileSync(path.join(process.cwd(), 'index.html'), 'utf8');
+// index.html with every panel mounted: a step may point into one
+// (INDEX_DECOMPOSITION.md).
+const html = assembledIndexHtml();
 
 describe('every step points at something that exists', () => {
   test('each target is an id or class present in index.html', () => {
