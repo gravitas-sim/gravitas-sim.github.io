@@ -1639,24 +1639,6 @@
     pointer-events: none;
   }
 
-  /* Ensure close button is always clickable when parent is visible */
-  .scenario-info-box.show .scenario-info-close {
-    pointer-events: auto !important;
-    cursor: pointer !important;
-  }
-
-  .scenario-info-box.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    animation: scenarioInfoSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .scenario-info-box.show .scenario-info-close {
-    pointer-events: auto !important;
-    cursor: pointer !important;
-  }
-
   .scenario-info-content {
     background: var(--panel-bg);
     border: 1px solid var(--separator-color);
