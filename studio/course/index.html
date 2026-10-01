@@ -48,14 +48,6 @@
           overflow-y: auto;
         }
       }
-      .st-toolbar,
-      .st-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        align-items: center;
-        margin: 0.75rem 0;
-      }
       .st-section,
       .st-side section,
       .st-wrap fieldset {
@@ -107,46 +99,18 @@
           grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         }
       }
-      .st-field {
-        display: grid;
-        gap: 0.25rem;
-        align-content: start;
+      /* Fields stack with room between them; toolbars keep room below. */
+      .st-wrap .ui-field {
         margin: 0.5rem 0 0;
-        min-width: 0;
+      }
+      .st-wrap .ui-toolbar {
+        margin-bottom: 0.75rem;
       }
       .st-check {
         display: inline-flex;
         gap: 0.4rem;
         align-items: center;
         margin: 0.3rem 1rem 0.3rem 0;
-      }
-      .st-wrap input[type='text'],
-      .st-wrap select,
-      .st-wrap textarea {
-        width: 100%;
-        min-width: 0;
-        max-width: 100%;
-        box-sizing: border-box;
-        font: inherit;
-        background: var(--surface-2);
-        color: inherit;
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        padding: 0.4rem 0.5rem;
-      }
-      .st-wrap [aria-invalid='true'] {
-        border-color: var(--danger);
-      }
-      .st-hint {
-        margin: 0;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      .st-error {
-        margin: 0;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--danger);
       }
       .st-state {
         font-size: 0.8rem;
@@ -220,8 +184,6 @@
       }
       #st-raw-text {
         min-height: 18rem;
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 0.8rem;
       }
       .st-wrap dialog {
         max-width: 36rem;
@@ -283,7 +245,7 @@ try {
       <p data-i18n="course.intro"></p>
 
       <div
-        class="st-toolbar"
+        class="ui-toolbar"
         role="group"
         aria-label="Course file"
         data-i18n-aria-label="course.toolbar.label"
@@ -291,20 +253,22 @@ try {
         <button id="cb-new" type="button" class="ui-button" data-i18n="course.action.new"></button>
         <button id="cb-example" type="button" class="ui-button" data-i18n="course.action.example"></button>
         <button id="cb-open" type="button" class="ui-button" data-i18n="studio.action.open"></button>
-        <input id="cb-file" type="file" accept="application/json,.json" hidden />
+        <input class="ui-file" id="cb-file" type="file" accept="application/json,.json" hidden />
         <button id="cb-save" type="button" class="ui-button is-primary" data-i18n="studio.action.save"></button>
         <button id="cb-manifest" type="button" class="ui-button" data-i18n="course.action.manifest"></button>
         <button id="cb-syllabus" type="button" class="ui-button" data-i18n="course.action.syllabus"></button>
-        <button id="cb-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
-        <button id="cb-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+        <span class="ui-button-group">
+          <button id="cb-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
+          <button id="cb-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+        </span>
       </div>
-      <div class="st-toolbar">
+      <div class="ui-toolbar">
         <label for="cb-drafts" data-i18n="studio.drafts.label"></label>
-        <select id="cb-drafts"></select>
+        <select class="ui-select" id="cb-drafts"></select>
         <button id="cb-drafts-open" type="button" class="ui-button" data-i18n="studio.drafts.open"></button>
         <button id="cb-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
       </div>
-      <p id="cb-storage" class="st-error" data-i18n="studio.storage.failed" hidden></p>
+      <p id="cb-storage" class="ui-error" data-i18n="studio.storage.failed" hidden></p>
       <p id="cb-status" class="st-status" role="status" aria-live="polite"></p>
 
       <div class="st-layout">
@@ -313,9 +277,9 @@ try {
           <details id="cb-raw" class="st-section">
             <summary data-i18n="studio.raw.heading"></summary>
             <label for="st-raw-text" data-i18n="course.raw.label"></label>
-            <textarea id="st-raw-text" spellcheck="false" aria-describedby="cb-raw-error"></textarea>
-            <p id="cb-raw-error" class="st-error" role="alert" hidden></p>
-            <div class="st-actions">
+            <textarea class="ui-textarea is-code" id="st-raw-text" spellcheck="false" aria-describedby="cb-raw-error"></textarea>
+            <p id="cb-raw-error" class="ui-error" role="alert" hidden></p>
+            <div class="ui-toolbar">
               <button id="cb-raw-apply" type="button" class="ui-button" data-i18n="studio.raw.apply"></button>
               <button id="cb-raw-revert" type="button" class="ui-button" data-i18n="studio.raw.revert"></button>
             </div>
@@ -324,15 +288,15 @@ try {
         <div class="st-side">
           <section aria-labelledby="cb-checks-h">
             <h2 id="cb-checks-h" data-i18n="studio.checks.heading"></h2>
-            <p id="cb-checks-summary" class="st-hint"></p>
+            <p id="cb-checks-summary" class="ui-hint"></p>
             <ul id="cb-checks" class="st-list"></ul>
           </section>
           <section aria-labelledby="cb-review-h">
             <h2 id="cb-review-h" data-i18n="course.review.heading"></h2>
-            <p class="st-hint" data-i18n="course.review.hint"></p>
-            <p id="cb-review-summary" class="st-hint"></p>
+            <p class="ui-hint" data-i18n="course.review.hint"></p>
+            <p id="cb-review-summary" class="ui-hint"></p>
             <ul id="cb-review" class="st-list"></ul>
-            <div class="st-actions">
+            <div class="ui-toolbar">
               <button id="cb-upgrade" type="button" class="ui-button" data-i18n="course.action.upgrade" disabled></button>
             </div>
           </section>
@@ -342,7 +306,7 @@ try {
           </section>
           <section aria-labelledby="cb-translation-h">
             <h2 id="cb-translation-h" data-i18n="course.translation.heading"></h2>
-            <p id="cb-translation-summary" class="st-hint"></p>
+            <p id="cb-translation-summary" class="ui-hint"></p>
             <ul id="cb-translation" class="st-list"></ul>
           </section>
           <section aria-labelledby="cb-graph-h">
@@ -351,13 +315,13 @@ try {
           </section>
           <section aria-labelledby="cb-links-h">
             <h2 id="cb-links-h" data-i18n="course.links.heading"></h2>
-            <p class="st-hint" data-i18n="course.links.hint"></p>
+            <p class="ui-hint" data-i18n="course.links.hint"></p>
             <div id="cb-links"></div>
           </section>
           <section aria-labelledby="cb-preview-h">
             <h2 id="cb-preview-h" data-i18n="studio.preview.heading"></h2>
-            <p class="st-hint" data-i18n="course.preview.hint"></p>
-            <div class="st-actions">
+            <p class="ui-hint" data-i18n="course.preview.hint"></p>
+            <div class="ui-toolbar">
               <button id="cb-preview-go" type="button" class="ui-button" data-i18n="course.preview.go"></button>
             </div>
             <iframe
@@ -369,7 +333,7 @@ try {
           </section>
           <section aria-labelledby="cb-diff-h">
             <h2 id="cb-diff-h" data-i18n="studio.diff.heading"></h2>
-            <p id="cb-diff-summary" class="st-hint"></p>
+            <p id="cb-diff-summary" class="ui-hint"></p>
             <ul id="cb-diff" class="st-list"></ul>
           </section>
         </div>
@@ -379,7 +343,7 @@ try {
         <h2 id="cb-conflict-h" data-i18n="studio.conflict.heading"></h2>
         <p id="cb-conflict-text"></p>
         <ul id="cb-conflict-diff" class="st-list"></ul>
-        <div class="st-actions">
+        <div class="ui-toolbar">
           <button id="cb-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
           <button id="cb-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>
           <button id="cb-conflict-cancel" type="button" class="ui-button" data-i18n="studio.conflict.cancel" autofocus></button>
