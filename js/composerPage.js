@@ -28,6 +28,7 @@ import {
   registerMessages,
   hasMessage,
 } from './i18n/index.js';
+import { parseNumber } from './answerParse.js';
 import { EN_STUDIO } from './i18n/en.studio.js';
 import { EN_COMPOSER } from './i18n/en.composer.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
@@ -188,12 +189,16 @@ function setAt(o, path, value) {
   else delete cur[last];
 }
 
-/** A number from a field; what cannot be read is kept, so the checks can say so. */
+/**
+ * A number from a field, read in the author's language (js/answerParse.js):
+ * "3,14" in Spanish, "1,234" as a thousand in English, and nothing ambiguous.
+ * What cannot be read is kept, so the checks can say so.
+ */
 const numberOf = text => {
   const s = String(text).trim();
   if (s === '') return undefined;
-  const n = Number(s.replace(',', '.'));
-  return Number.isFinite(n) ? n : s;
+  const r = parseNumber(s, getLocale());
+  return r.ok && !r.rest ? r.value : s;
 };
 
 // --- Language ---------------------------------------------------------------

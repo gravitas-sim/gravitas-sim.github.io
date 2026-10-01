@@ -11,6 +11,7 @@ import { describe, test, expect } from '@jest/globals';
 import {
   check,
   countFormatting,
+  countRawParsing,
   countUnknownUnits,
 } from '../tools/number-ratchet.mjs';
 
@@ -29,6 +30,17 @@ describe('what is counted', () => {
     expect(countUnknownUnits("{ unit: 'days' }, { unit: '' }")).toBe(0);
     expect(countUnknownUnits("{ unit: '1e-17 erg/s/cm2/Angstrom' }")).toBe(0);
     expect(countUnknownUnits('{ unit: \'furlongs\' }, { unit: "x" }')).toBe(2);
+  });
+
+  test('a typed number read raw, or its comma swapped once, not one read by the parser', () => {
+    expect(countRawParsing('Number(field.value)')).toBe(1);
+    expect(
+      countRawParsing('parseFloat(el.value.trim()) + parseInt(n.value, 10)')
+    ).toBe(2);
+    expect(countRawParsing("Number(s.replace(',', '.'))")).toBe(1);
+    expect(countRawParsing('parseNumber(field.value, locale)')).toBe(0);
+    expect(countRawParsing('// Number(field.value)')).toBe(0);
+    expect(countRawParsing('Number(row.mass)')).toBe(0);
   });
 
   test('a file over or under its record is reported, and which', () => {
