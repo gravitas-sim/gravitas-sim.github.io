@@ -172,8 +172,6 @@
      step and the clock survive, which is enough to make the figure a figure
      rather than a picture. */
   @media (max-width: 400px) {
-    body.presentation-embed .timeline-bar #timelineRange,
-    body.presentation-embed .timeline-bar .timeline-range,
     body.presentation-embed .timeline-bar input[type='range'] {
       display: none;
     }
@@ -297,8 +295,7 @@
   }
 
   body.presentation-lecture #scenarioInfoBox h2,
-  body.presentation-lecture #scenarioInfoBox h3,
-  body.presentation-lecture .scenario-info-title {
+  body.presentation-lecture #scenarioInfoBox h3 {
     font-size: var(--text-2xl);
     line-height: var(--leading-tight);
   }
