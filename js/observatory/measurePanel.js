@@ -32,6 +32,7 @@ import {
   sameResult,
   toolsFor,
 } from '../measure/pipeline.js';
+import { parseNumber } from '../answerParse.js';
 import { toCsv } from '../csv.js';
 import { OPERATORS } from '../measure/tableOps.js';
 import { LIMITS } from '../measure/periodogram.js';
@@ -1001,11 +1002,12 @@ export function mountMeasurePanel(root, ctx) {
   function readParams(toolId, box) {
     const { t } = ctx;
     const val = id => box.querySelector(`#${id}`)?.value.trim() ?? '';
+    // In the reader's language (js/answerParse.js): "1,5" in Spanish, and
+    // nothing ambiguous taken for a number.
     const num = (id, label) => {
-      const v = Number(val(id));
-      if (val(id) === '' || !Number.isFinite(v))
-        throw new Error(t('obs.ms.p.bad', { field: label }));
-      return v;
+      const r = parseNumber(val(id), ctx.language?.() ?? 'en');
+      if (!r.ok || r.rest) throw new Error(t('obs.ms.p.bad', { field: label }));
+      return r.value;
     };
     const label = id =>
       box.querySelector(`#${id}`)?.closest('label')?.querySelector('span')

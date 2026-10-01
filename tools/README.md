@@ -72,7 +72,7 @@ current, and the orchestrator checks it.
 | `mission-lab-key.mjs` | The mission lab's answer key: a reference run of every guide | `npm run mission:key` |
 | `module-load-hook.mjs` | Write down every module Node loads |  |
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |
-| `number-ratchet.mjs` | Two migrations that may only go one way: numbers through the formatter, and |  |
+| `number-ratchet.mjs` | Three migrations that may only go one way: numbers through the formatter, |  |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |

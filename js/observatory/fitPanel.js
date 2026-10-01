@@ -19,6 +19,7 @@
 // it is the harness that shows what the core does.
 // =============================================================================
 
+import { parseNumber } from '../answerParse.js';
 import { dataFrom } from '../inference/infer.js';
 import { MODELS } from '../inference/models.js';
 import { runInference } from '../inference/run.js';
@@ -102,7 +103,8 @@ function spacing(x) {
  *   translator, number format and views, handed over rather than imported
  */
 export function mountFitPanel(root, ctx) {
-  const { t, number, createPlot, createSelection, dimensionOfText } = ctx;
+  const { t, number, language, createPlot, createSelection, dimensionOfText } =
+    ctx;
   ctx.registerMessages({ en: EN_INFERENCE, es: ES_INFERENCE });
   let o = ctx.observation;
   let job = null;
@@ -122,17 +124,14 @@ export function mountFitPanel(root, ctx) {
   const exposure = el('input', {
     id: 'fitExposure',
     class: 'ui-input',
-    type: 'number',
-    step: 'any',
-    min: '0',
+    type: 'text',
+    inputmode: 'decimal',
   });
   const dilution = el('input', {
     id: 'fitDilution',
     class: 'ui-input',
-    type: 'number',
-    step: 'any',
-    min: '0',
-    max: '0.99',
+    type: 'text',
+    inputmode: 'decimal',
     value: '0',
   });
   // The star's radius, to turn Rp/R* into a planet's radius: adopted from
@@ -141,23 +140,20 @@ export function mountFitPanel(root, ctx) {
   const stellarRadius = el('input', {
     id: 'fitStellarRadius',
     class: 'ui-input',
-    type: 'number',
-    step: 'any',
-    min: '0',
+    type: 'text',
+    inputmode: 'decimal',
   });
   const stellarRadiusSigma = el('input', {
     id: 'fitStellarRadiusSigma',
     class: 'ui-input',
-    type: 'number',
-    step: 'any',
-    min: '0',
+    type: 'text',
+    inputmode: 'decimal',
   });
   const supersample = el('input', {
     id: 'fitSupersample',
     class: 'ui-input',
-    type: 'number',
-    min: '1',
-    max: '31',
+    type: 'text',
+    inputmode: 'numeric',
     value: '5',
   });
   const profiles = el('input', { id: 'fitProfiles', type: 'checkbox' });
@@ -276,8 +272,8 @@ export function mountFitPanel(root, ctx) {
         el('input', {
           id: `fit${k}-${p.name}`,
           class: 'ui-input',
-          type: 'number',
-          step: 'any',
+          type: 'text',
+          inputmode: 'decimal',
           value: Number.isFinite(v) ? String(v) : '',
           'aria-label': t(`obs.fit.${k}Of`, { name: nameOf(p) }),
         });
@@ -314,16 +310,26 @@ export function mountFitPanel(root, ctx) {
     price();
   }
 
+  /**
+   * A field's number in the reader's language (js/answerParse.js), undefined
+   * when it is blank, and NaN - refused by the fit's own checks - when it is
+   * not a number, rather than the silent 0 a number field gave for "1,5"
+   * typed into a browser set to English.
+   */
+  const read = input => {
+    const text = input.value.trim();
+    if (text === '') return undefined;
+    const r = parseNumber(text, language?.() ?? 'en');
+    return r.ok && !r.rest ? r.value : NaN;
+  };
+
   function request() {
     const id = modelSelect.value;
     const model = MODELS[id];
     const parameters = {};
     for (const p of [...model.parameters, ...(model.nuisance || [])]) {
       const mode = document.getElementById(`fitMode-${p.name}`).value;
-      const num = k => {
-        const v = document.getElementById(`fit${k}-${p.name}`).value.trim();
-        return v === '' ? undefined : Number(v);
-      };
+      const num = k => read(document.getElementById(`fit${k}-${p.name}`));
       parameters[p.name] =
         mode === 'fixed'
           ? { mode, value: num('Value') }
@@ -337,17 +343,16 @@ export function mountFitPanel(root, ctx) {
     const settings =
       id === 'transit-quadratic'
         ? {
-            exposure: Number(exposure.value) || 0,
-            supersample: Math.round(Number(supersample.value)) || 5,
+            exposure: read(exposure) || 0,
+            supersample: Math.round(read(supersample)) || 5,
             annuli: 32,
-            dilution: Number(dilution.value) || 0,
-            ...(Number(stellarRadius.value) > 0
+            dilution: read(dilution) || 0,
+            ...(read(stellarRadius) > 0
               ? {
                   stellarRadius: {
-                    value: Number(stellarRadius.value),
-                    ...(Number(stellarRadiusSigma.value) >= 0 &&
-                    stellarRadiusSigma.value !== ''
-                      ? { sigma: Number(stellarRadiusSigma.value) }
+                    value: read(stellarRadius),
+                    ...(read(stellarRadiusSigma) >= 0
+                      ? { sigma: read(stellarRadiusSigma) }
                       : {}),
                   },
                 }

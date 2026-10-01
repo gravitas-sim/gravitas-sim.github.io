@@ -79,6 +79,9 @@ export const ACCEPTED_LICENSES = Object.freeze([
   },
 ]);
 
+/** The extension types the catalog serves as archives: declarative ones only. */
+export const ARCHIVE_TYPES = Object.freeze(['data-pack', 'course-pack']);
+
 const sha256 = b => createHash('sha256').update(b).digest('hex');
 const json = v => `${JSON.stringify(v, null, 2)}\n`;
 const accepted = license => ACCEPTED_LICENSES.some(l => l.match.test(license));
@@ -124,7 +127,7 @@ export async function archiveEntry(item) {
   const { type, manifest: m, findings } = await validateExtension(ext);
   const errors = findings.filter(f => f.severity === 'error');
   const problems = errors.map(f => `${item.path}: ${f.message}`);
-  if (m && !['data-pack', 'course-pack'].includes(type))
+  if (m && !ARCHIVE_TYPES.includes(type))
     problems.push(
       `${item.path}: a ${type} runs code; the catalog serves only declarative packs`
     );

@@ -247,7 +247,14 @@ function rebuild({ announceChange = null } = {}) {
  * reader opens it, so the page itself carries none of the inference core.
  */
 // What the page lends its lazily loaded panels (see js/observatory/fitPanel.js).
-const lent = { t, number, registerMessages, createPlot, createSelection };
+const lent = {
+  t,
+  number,
+  language,
+  registerMessages,
+  createPlot,
+  createSelection,
+};
 const fit = { panel: null, loading: null, suits: false };
 function mountFit(m) {
   fit.module = m;
