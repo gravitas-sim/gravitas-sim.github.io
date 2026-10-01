@@ -2611,10 +2611,18 @@
       grid-template-columns: 1fr;
     }
 
-    /* --- Scenario info card sits under the top chrome -------------------- */
+    /* --- Scenario info card sits just above the transport bar ------------
+       It sat under the top chrome, which on a phone is where the readout chip
+       is, and the chip's height changes with what it shows. Above the
+       transport reserve and the 44px help button that stands on it, it
+       covers none of the three. */
     #scenarioInfoBox,
     .scenario-info-box {
-      top: calc(64px + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
+      top: auto;
+      bottom: calc(
+        var(--transport-reserve, 76px) + env(safe-area-inset-bottom, 0px) +
+          44px + var(--space-3)
+      );
       left: var(--space-2);
       right: var(--space-2);
       width: auto;

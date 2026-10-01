@@ -3809,6 +3809,11 @@ const show_enhanced_scenario_info = scenarioName => {
   // initialize_simulation and leave the app half-built.
   if (!infoBox || !title || !summary || !features) return;
 
+  // A card the reader closed does not come back for the same scenario - on
+  // Refresh, or an Apply that rebuilds it. A different scenario is new news.
+  if (infoBox.dataset.dismissed === scenarioName) return;
+  delete infoBox.dataset.dismissed;
+
   // Set the title and summary. The key is kept on the element because the card
   // outlives the call that wrote it: a language arriving late has to be able to
   // ask which scenario is on screen.
@@ -3839,7 +3844,9 @@ const show_enhanced_scenario_info = scenarioName => {
       !splash.classList.contains('hidden') &&
       splash.style.display !== 'none';
     return (
-      Boolean(splashUp) || document.body.classList.contains('welcome-open')
+      Boolean(splashUp) ||
+      document.body.classList.contains('welcome-open') ||
+      document.body.classList.contains('welcome-pending')
     );
   };
 
@@ -7839,40 +7846,32 @@ if (mobileMenuToggle && uiRail) {
 }
 
 // Scenario info box close button
+/**
+ * Close the card that names the scenario, and remember that it was closed: it
+ * does not come back for this scenario (show_enhanced_scenario_info).
+ */
+const dismissScenarioCard = () => {
+  const infoBox = document.getElementById('scenarioInfoBox');
+  if (!infoBox?.classList.contains('showUI')) return;
+  infoBox.classList.remove('showUI', 'show');
+  if (infoBox.dataset.scenarioKey)
+    infoBox.dataset.dismissed = infoBox.dataset.scenarioKey;
+};
+
 const closeScenarioInfoBtn = document.getElementById('closeScenarioInfo');
 if (closeScenarioInfoBtn) {
-  // Add multiple event listeners to ensure it works
-  closeScenarioInfoBtn.addEventListener('click', e => {
-    debugLog('Close scenario info button clicked');
-    e.preventDefault();
-    e.stopPropagation();
-    const infoBox = document.getElementById('scenarioInfoBox');
-    if (infoBox) {
-      debugLog('Removing showUI class from scenario info box');
-      debugLog('Before removal - classes:', infoBox.className);
-      infoBox.classList.remove('showUI');
-      infoBox.classList.remove('show'); // Also remove show class for compatibility
-      debugLog('After removal - classes:', infoBox.className);
-    } else {
-      console.error('Scenario info box element not found');
-    }
-  });
-
-  // Also add mousedown event as backup
-  closeScenarioInfoBtn.addEventListener('mousedown', e => {
-    debugLog('Close scenario info button mousedown');
-    e.preventDefault();
-    e.stopPropagation();
-    const infoBox = document.getElementById('scenarioInfoBox');
-    if (infoBox) {
-      debugLog('Removing showUI class from scenario info box (mousedown)');
-      infoBox.classList.remove('showUI');
-      infoBox.classList.remove('show'); // Also remove show class for compatibility
-    }
-  });
-} else {
-  console.error('Close scenario info button not found');
+  // The press is taken on mousedown as well as click so that a drag handler
+  // on the canvas beneath cannot swallow it.
+  for (const type of ['click', 'mousedown']) {
+    closeScenarioInfoBtn.addEventListener(type, e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dismissScenarioCard();
+    });
+  }
 }
+// Escape closes it like any other overlay.
+window.addEventListener('gravitasEscape', dismissScenarioCard);
 
 /**
  * Load a built-in scenario by its SCENARIO_INFO key.

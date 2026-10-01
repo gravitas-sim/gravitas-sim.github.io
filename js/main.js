@@ -75,7 +75,9 @@ import {
   getLocale,
   onLocaleChange,
   setLocale,
+  t,
 } from './i18n/index.js';
+import { announce } from './notify.js';
 import { initI18nDom } from './i18n/dom.js';
 import { createDoubleTapRecognizer } from './gestures.js';
 import { setRequestedLessonLocale } from './lessonLocale.js';
@@ -182,6 +184,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // blank screen behind a removed splash. A front door that fails to load
       // is a missing introduction; an interface that never appears is a broken
       // application.
+      //
+      // Until the door is open nothing else may take the screen. The scenario
+      // card waited for the door, but the door was not up yet while its module
+      // loaded, so on a first visit the card rose first and sat under it.
+      document.body.classList.add('welcome-pending');
       loadWelcome()
         .then(mod =>
           mod.openWelcome({ automatic: true, onEnter: revealInterface })
@@ -189,7 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => {
           console.warn('Front door unavailable:', err);
           revealInterface();
-        });
+        })
+        .finally(() => document.body.classList.remove('welcome-pending'));
     } else {
       revealInterface();
     }
@@ -259,8 +267,43 @@ document.addEventListener('DOMContentLoaded', () => {
         objectInspector.classList.add('showUI');
       }
 
-      showMobileInstructionsOnce();
+      armTouchTips();
     }, 200);
+  }
+
+  /**
+   * Whether another first-run overlay has the screen: Home, or the card that
+   * names the scenario. PLATFORM_MODEL.md, "First run": one at a time.
+   */
+  const anotherOverlayUp = () =>
+    document.body.classList.contains('welcome-open') ||
+    document.body.classList.contains('welcome-pending') ||
+    Boolean(document.querySelector('#scenarioInfoBox.showUI'));
+
+  /**
+   * The touch tips wait for the first touch on the simulation, and for the
+   * screen to be clear. They used to rise with the interface, which on a first
+   * visit is the moment the scenario card rises too, and the two stood one on
+   * top of the other over the readout. A touch made while something else is up
+   * is passed over and the next one asked again.
+   */
+  function armTouchTips() {
+    try {
+      if (localStorage.getItem('mobile_instructions_shown')) return;
+    } catch {
+      /* storage refused: armed for this load */
+    }
+    const onTouch = event => {
+      if (event.pointerType !== 'touch' || anotherOverlayUp()) return;
+      canvas.removeEventListener('pointerdown', onTouch);
+      showMobileInstructionsOnce();
+    };
+    canvas.addEventListener('pointerdown', onTouch);
+    // Escape dismisses them like any other overlay.
+    window.addEventListener('gravitasEscape', () => {
+      const tips = document.getElementById('mobileInstructions');
+      if (tips) tips.style.display = 'none';
+    });
   }
 
   /**
@@ -291,6 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     mobileInstructions.style.display = 'block';
+    // Said as well as shown: the last of the first-run overlays, in order.
+    announce(t('readout.mobileInstructions'), false);
     setTimeout(() => {
       if (mobileInstructions.style.display === 'block') {
         mobileInstructions.style.display = 'none';
