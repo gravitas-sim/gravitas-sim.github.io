@@ -211,16 +211,16 @@ function field(id, label, control, hint = '') {
   const described = [];
   const row = el(
     'div',
-    { className: 'st-field' },
+    { className: 'ui-field' },
     el('label', { for: id }, label),
     control
   );
   if (hint) {
-    row.append(el('p', { id: `${id}-hint`, className: 'st-hint' }, hint));
+    row.append(el('p', { id: `${id}-hint`, className: 'ui-hint' }, hint));
     described.push(`${id}-hint`);
   }
   row.append(
-    el('p', { id: `${id}-error`, className: 'st-error', hidden: true })
+    el('p', { id: `${id}-error`, className: 'ui-error', hidden: true })
   );
   if (described.length)
     control.setAttribute('aria-describedby', described.join(' '));
@@ -234,7 +234,7 @@ function textInput(
   { multiline = false, numeric = false } = {}
 ) {
   const input = el(multiline ? 'textarea' : 'input', {
-    className: 'st-input',
+    className: multiline ? 'ui-textarea' : 'ui-input',
     type: multiline ? undefined : 'text',
     inputmode: numeric ? 'decimal' : undefined,
     autocomplete: 'off',
@@ -247,7 +247,7 @@ function textInput(
 }
 
 function select(options, value, onCommit) {
-  const s = el('select', { className: 'st-input' });
+  const s = el('select', { className: 'ui-select' });
   for (const [v, label] of options) {
     const o = el('option', { value: v }, label);
     s.append(o);
@@ -408,7 +408,7 @@ function settingsSection(d) {
     'section',
     { className: 'st-section', 'aria-labelledby': 'st-world-h' },
     el('h2', { id: 'st-world-h' }, t('studio.section.world')),
-    el('p', { className: 'st-hint' }, t('studio.hint.settings'))
+    el('p', { className: 'ui-hint' }, t('studio.hint.settings'))
   );
   for (const [group, list] of Object.entries(groups)) {
     const box = el(
@@ -458,7 +458,7 @@ function systemSection(d) {
     'section',
     { className: 'st-section', 'aria-labelledby': 'st-bodies-h' },
     el('h2', { id: 'st-bodies-h' }, t('studio.section.bodies')),
-    el('p', { className: 'st-hint' }, t('studio.hint.bodies'))
+    el('p', { className: 'ui-hint' }, t('studio.hint.bodies'))
   );
   // An orbital system, as the builder takes it.
   const sys = el(
@@ -469,7 +469,7 @@ function systemSection(d) {
   const bodies = d.system?.bodies;
   if (!bodies) {
     sys.append(
-      el('p', { className: 'st-hint' }, t('studio.system.none')),
+      el('p', { className: 'ui-hint' }, t('studio.system.none')),
       el(
         'button',
         {
@@ -626,7 +626,7 @@ function systemSection(d) {
     sys.append(
       el(
         'div',
-        { className: 'st-actions' },
+        { className: 'ui-toolbar' },
         el(
           'button',
           {
@@ -806,7 +806,7 @@ function instrumentsSection(d) {
     'section',
     { className: 'st-section', 'aria-labelledby': 'st-instruments-h' },
     el('h2', { id: 'st-instruments-h' }, t('studio.section.instruments')),
-    el('p', { className: 'st-hint' }, t('studio.hint.instruments')),
+    el('p', { className: 'ui-hint' }, t('studio.hint.instruments')),
     box(STARTING_PANELS, 'open'),
     box(STARTING_TOOLS, 'tools')
   );
@@ -871,7 +871,7 @@ function startSection(d) {
     ),
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       el(
         'button',
         {

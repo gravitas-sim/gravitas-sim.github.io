@@ -1,7 +1,7 @@
 // =============================================================================
 // Course levels, and every setting the panel shows through a share link
 // -----------------------------------------------------------------------------
-// A course level (js/units.js) is a bundle of defaults, never a lock:
+// A course level (js/settingsSchema.js) is a bundle of defaults, never a lock:
 // introductory is exactly what the application did before there were levels,
 // and the deeper ones turn the conservation readout on, open Advanced, and
 // show more significant figures. Prompt 72 maps a level onto a lesson's
@@ -15,16 +15,19 @@
 import { describe, test, expect, beforeEach } from '@jest/globals';
 
 import {
-  COURSE_LEVELS,
-  courseLevelDefaults,
-  getCourseLevel,
   getReadoutDigits,
   getUnitMode,
   initUnits,
-  setCourseLevel,
   setUnitMode,
   sig,
 } from '../js/units.js';
+import {
+  COURSE_LEVELS,
+  courseLevelDefaults,
+  getCourseLevel,
+  initCourseLevel,
+  setCourseLevel,
+} from '../js/settingsSchema.js';
 import { DEFAULT_SETTINGS } from '../js/appState.js';
 import { SETTING_ITEMS } from '../js/settingsSchema.js';
 import {
@@ -34,6 +37,8 @@ import {
 } from '../js/shareState.js';
 import { EN } from '../js/i18n/en.js';
 import { ES } from '../js/i18n/es.js';
+import { EN_SETTINGSHELP } from '../js/i18n/en.settingsHelp.js';
+import { ES_SETTINGSHELP } from '../js/i18n/es.settingsHelp.js';
 
 const LEVELS = Object.keys(COURSE_LEVELS);
 
@@ -97,17 +102,21 @@ describe('the levels', () => {
     setCourseLevel('advanced'); // simulation units, six figures
     setUnitMode('physical'); // the reader switches the units back
     initUnits();
+    initCourseLevel();
     expect(getUnitMode()).toBe('physical');
     expect(getReadoutDigits()).toBe(6);
   });
 
   test('each has a name and a description in both languages', () => {
+    // The name is in the catalog the panel is built from; what the level sets
+    // is help, in the Settings help files fetched when the panel opens.
     for (const id of LEVELS) {
-      for (const catalog of [EN, ES]) {
+      for (const [catalog, help] of [
+        [EN, EN_SETTINGSHELP],
+        [ES, ES_SETTINGSHELP],
+      ]) {
         expect(catalog[`settings.level.${id}`]).toEqual(expect.any(String));
-        expect(catalog[`settings.level.${id}.hint`]).toEqual(
-          expect.any(String)
-        );
+        expect(help[`settings.level.${id}.hint`]).toEqual(expect.any(String));
       }
     }
     expect(ES['settings.level.label']).toEqual(expect.any(String));

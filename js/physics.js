@@ -1832,10 +1832,7 @@ const is_offscreen = (pos, buffer_factor = 10.0) => {
  * @param {number} threshold - Distance threshold for color change
  * @param {Object} target_color - Target RGB color to blend towards
  * @returns {string} RGB color string
- *
- * The settings are always the engine's own, so "Dynamic Object Properties" in
- * the Settings panel turns the tint off. No caller passed them, and the switch
- * did nothing.
+ * With the engine's own settings, so "Dynamic Object Properties" works.
  */
 const compute_dynamic_color = (hex, pos, bh_list, threshold, target_color) =>
   computeDynamicColor(

@@ -232,10 +232,17 @@ document.addEventListener('DOMContentLoaded', () => {
       // Show scenario info box after splash ends, unless a lesson has already
       // started: a deep link straight into an investigation opens the panel
       // before this fires, and the card lands on top of its instruments.
+      // Nor if the reader has already closed it: this runs 200 ms after the
+      // door closes, and a quick Escape in between used to be undone.
       const scenarioInfoBox = document.getElementById('scenarioInfoBox');
       if (
         scenarioInfoBox &&
-        !document.body.classList.contains('investigation-open')
+        !document.body.classList.contains('investigation-open') &&
+        !(
+          scenarioInfoBox.dataset.dismissed &&
+          scenarioInfoBox.dataset.dismissed ===
+            scenarioInfoBox.dataset.scenarioKey
+        )
       ) {
         scenarioInfoBox.classList.add('showUI');
       }

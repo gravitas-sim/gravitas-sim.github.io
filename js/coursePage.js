@@ -148,7 +148,7 @@ function card(d, base, summary, build) {
       {},
       summary,
       ' ',
-      el('span', { id: `${id}-error`, className: 'st-error', hidden: true })
+      el('span', { id: `${id}-error`, className: 'ui-error', hidden: true })
     )
   );
   node.addEventListener('toggle', () => {
@@ -258,17 +258,17 @@ function field(id, label, control, hint = '') {
   control.id = id;
   const row = el(
     'div',
-    { className: 'st-field' },
+    { className: 'ui-field' },
     el('label', { for: id }, label),
     control
   );
   const described = [];
   if (hint) {
-    row.append(el('p', { id: `${id}-hint`, className: 'st-hint' }, hint));
+    row.append(el('p', { id: `${id}-hint`, className: 'ui-hint' }, hint));
     described.push(`${id}-hint`);
   }
   row.append(
-    el('p', { id: `${id}-error`, className: 'st-error', hidden: true })
+    el('p', { id: `${id}-error`, className: 'ui-error', hidden: true })
   );
   if (described.length)
     control.setAttribute('aria-describedby', described.join(' '));
@@ -282,7 +282,7 @@ function textInput(
   { multiline = false, numeric = false } = {}
 ) {
   const input = el(multiline ? 'textarea' : 'input', {
-    className: 'st-input',
+    className: multiline ? 'ui-textarea' : 'ui-input',
     type: multiline ? undefined : 'text',
     inputmode: numeric ? 'numeric' : undefined,
     autocomplete: 'off',
@@ -294,7 +294,7 @@ function textInput(
 }
 
 function select(options, value, onCommit) {
-  const s = el('select', { className: 'st-input' });
+  const s = el('select', { className: 'ui-select' });
   for (const o of options) {
     if (o.group) {
       const g = el('optgroup', { label: o.group });
@@ -413,7 +413,7 @@ const lessonTitle = id =>
 function aboutSection(d) {
   const locales = el(
     'div',
-    { className: 'st-field' },
+    { className: 'ui-field' },
     checkbox(
       'cb-locales-es',
       t('course.field.spanish'),
@@ -469,7 +469,7 @@ function objectivesSection(d) {
       id: idOf('objectives'),
     },
     el('h2', { id: 'cb-obj-h' }, t('course.section.objectives')),
-    el('p', { className: 'st-hint' }, t('course.hint.objectives')),
+    el('p', { className: 'ui-hint' }, t('course.hint.objectives')),
     ...list.map((o, i) =>
       el(
         'fieldset',
@@ -479,7 +479,7 @@ function objectivesSection(d) {
         pair(`objectives[${i}].text`, t('course.field.objective')),
         el(
           'div',
-          { className: 'st-actions' },
+          { className: 'ui-toolbar' },
           button(t('course.action.remove'), () =>
             commit(x => {
               const gone = x.objectives[i].id;
@@ -494,7 +494,7 @@ function objectivesSection(d) {
     ),
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       button(t('course.action.addObjective'), () =>
         commit(x => {
           x.objectives ||= [];
@@ -534,7 +534,7 @@ function prerequisitesSection(d) {
           : pair(`prerequisites[${i}].text`, t('course.field.prerequisite')),
         el(
           'div',
-          { className: 'st-actions' },
+          { className: 'ui-toolbar' },
           button(t('course.action.remove'), () =>
             commit(x => x.prerequisites.splice(i, 1))
           )
@@ -543,7 +543,7 @@ function prerequisitesSection(d) {
     ),
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       button(t('course.action.addPrereqText'), () =>
         commit(x => (x.prerequisites ||= []).push({ text: { en: '' } }))
       ),
@@ -659,11 +659,11 @@ function unitsSection(d) {
       id: idOf('units'),
     },
     el('h2', { id: 'cb-units-h' }, t('course.section.units')),
-    el('p', { className: 'st-hint' }, t('course.hint.units')),
+    el('p', { className: 'ui-hint' }, t('course.hint.units')),
     ...units.map((u, i) => unitCard(d, u, i)),
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       button(t('course.action.addUnit'), () =>
         commit(x => {
           let n = x.units.length + 1;
@@ -696,7 +696,7 @@ function unitCard(d, u, i) {
       addItemRow(i),
       el(
         'div',
-        { className: 'st-actions' },
+        { className: 'ui-toolbar' },
         button(t('course.action.up'), () => commit(x => move(x.units, i, -1)), {
           disabled: i === 0,
         }),
@@ -734,7 +734,7 @@ function addItemRow(i) {
   );
   return el(
     'div',
-    { className: 'st-actions' },
+    { className: 'ui-toolbar' },
     field(id, t('course.field.addKind'), kind),
     button(t('course.action.addItem'), () => {
       let path = null;
@@ -849,7 +849,7 @@ function fillItem(node, d, item, i, j, base) {
     }),
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       button(
         t('course.action.up'),
         () => commit(x => move(x.units[i].items, j, -1)),
@@ -1027,7 +1027,7 @@ function pinLine(item) {
     : t('course.pin.none');
   return el(
     'p',
-    { className: 'st-hint' },
+    { className: 'ui-hint' },
     text,
     r ? ` ${t(`course.standing.${r.status}`)}` : ''
   );
@@ -1042,7 +1042,7 @@ function stepPicker(item, base) {
     el('legend', {}, t('course.field.steps'))
   );
   if (!lesson) {
-    box.append(el('p', { className: 'st-hint' }, t('course.steps.loading')));
+    box.append(el('p', { className: 'ui-hint' }, t('course.steps.loading')));
     return box;
   }
   const chosen = new Set(item.steps || []);
@@ -1055,7 +1055,7 @@ function stepPicker(item, base) {
     )
   );
   box.append(
-    el('p', { className: 'st-hint' }, t('course.hint.steps', { n: lesson.n }))
+    el('p', { className: 'ui-hint' }, t('course.hint.steps', { n: lesson.n }))
   );
   const list = el('ol', { className: 'cb-steps' });
   lesson.steps.forEach((s, k) => {
@@ -1152,7 +1152,7 @@ function clearFieldErrors() {
       node.setAttribute('aria-describedby', node.dataset.described);
     else node.removeAttribute('aria-describedby');
   }
-  for (const note of $('cb-editor').querySelectorAll('.st-error')) {
+  for (const note of $('cb-editor').querySelectorAll('.ui-error')) {
     note.textContent = '';
     note.hidden = true;
   }
@@ -1325,7 +1325,7 @@ function renderReview(r, d) {
               else reviewed.delete(x.id);
               $('cb-upgrade').disabled = !reviewed.size;
             })
-          : el('span', { className: 'st-hint' }, t('course.review.remove'))
+          : el('span', { className: 'ui-hint' }, t('course.review.remove'))
       )
     );
   }
@@ -1436,7 +1436,7 @@ function renderGraph(r, d) {
   host.append(
     el(
       'p',
-      { className: 'st-hint' },
+      { className: 'ui-hint' },
       t('course.graph.summary', {
         nodes: g.nodes.length,
         edges: g.edges.length,
@@ -1475,13 +1475,13 @@ function renderLinks(r, d) {
   const host = $('cb-links');
   host.textContent = '';
   if (!r.links) {
-    host.append(el('p', { className: 'st-hint' }, t('course.links.fixFirst')));
+    host.append(el('p', { className: 'ui-hint' }, t('course.links.fixFirst')));
     return;
   }
   const c = r.links.course;
   const home = el('input', {
     type: 'text',
-    className: 'st-input',
+    className: 'ui-input is-code',
     readonly: true,
     id: 'cb-course-link',
   });
@@ -1497,7 +1497,7 @@ function renderLinks(r, d) {
     ),
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       copyButton(c.url, t('course.links.copy')),
       el(
         'a',
@@ -1521,7 +1521,7 @@ function renderLinks(r, d) {
     height: 900,
   });
   const embedBox = el('textarea', {
-    className: 'st-input',
+    className: 'ui-textarea is-code',
     readonly: true,
     rows: 4,
     id: 'cb-course-embed',
@@ -1592,7 +1592,7 @@ function renderLinks(r, d) {
       fallback: { href, text: t('course.links.figureFallback') },
     });
     const box = el('textarea', {
-      className: 'st-input',
+      className: 'ui-textarea is-code',
       readonly: true,
       rows: 4,
       id: `cb-embed-${item.id}`,

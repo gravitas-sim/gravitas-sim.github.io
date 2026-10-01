@@ -226,6 +226,8 @@ test.describe('course level', () => {
     await openSettings(page);
     const level = page.locator('#settingsCourseLevel');
     await expect(level).toHaveValue('introductory');
+    // What the level sets arrives with the help files, a moment after opening.
+    await expect(page.locator('#settingsCourseLevelHint')).not.toBeEmpty();
     const conservation = page.locator(
       '.setting-control[data-setting-key="show_conservation_diagnostics"] button'
     );
@@ -240,9 +242,10 @@ test.describe('course level', () => {
     const applied = () =>
       page.evaluate(async () => {
         const units = await import('/js/units.js');
+        const schema = await import('/js/settingsSchema.js');
         const { SETTINGS } = await import('/js/appState.js');
         return {
-          level: units.getCourseLevel(),
+          level: schema.getCourseLevel(),
           digits: units.getReadoutDigits(),
           conservation: SETTINGS.show_conservation_diagnostics,
         };
@@ -272,7 +275,7 @@ test.describe('course level', () => {
     await expect(page.locator(PANEL)).toBeHidden();
     expect(
       await page.evaluate(async () =>
-        (await import('/js/units.js')).getCourseLevel()
+        (await import('/js/settingsSchema.js')).getCourseLevel()
       )
     ).toBe('introductory');
   });
@@ -289,8 +292,8 @@ test.describe('help', () => {
     await app.boot();
     await openSettings(page);
     const expected = await page.evaluate(async () => {
-      const { ES_DEFERRED } = await import('/js/i18n/es.deferred.js');
-      return ES_DEFERRED['setHelp.gravitational_constant'];
+      const { ES_SETTINGSHELP } = await import('/js/i18n/es.settingsHelp.js');
+      return ES_SETTINGSHELP['setHelp.gravitational_constant'];
     });
     expect(expected).toEqual(expect.any(String));
     await page

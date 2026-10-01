@@ -21,6 +21,7 @@
 // =============================================================================
 
 import { INTEGRATORS } from './physics.js';
+import { setReadoutDigits, setUnitMode } from './units.js';
 
 /**
  * The sections, in the panel's order. An `advanced` section sits inside the
@@ -456,3 +457,89 @@ export const SETTING_ITEMS = Object.freeze([
 
 /** A section's rows, in order. */
 export const itemsOf = id => SETTING_ITEMS.filter(item => item.section === id);
+
+// --- Course level ---------------------------------------------------------------
+//
+// Introductory, majors or advanced: a documented bundle of defaults, never a
+// lock. Choosing one stages the conservation readout and the Advanced section
+// in the panel and, once applied, sets the units and how many significant
+// figures a readout shows; every control stays where it is and can be changed
+// after. Introductory is exactly what the application did before there were
+// levels. Prompt 72 maps a level onto a lesson's depth.
+//
+// Here rather than in js/units.js, which the Studio and the experiment runner
+// load too and whose routes had no room for it: this module is the
+// application's alone, and every route that has it already pays for it.
+
+/** The levels, in the order a reader is offered them. */
+export const COURSE_LEVELS = Object.freeze({
+  introductory: Object.freeze({
+    depth: 'core',
+    conservation: false,
+    advancedOpen: false,
+    units: 'physical',
+    digits: 3,
+  }),
+  majors: Object.freeze({
+    depth: 'quantitative',
+    conservation: true,
+    advancedOpen: false,
+    units: 'physical',
+    digits: 4,
+  }),
+  advanced: Object.freeze({
+    depth: 'advanced',
+    conservation: true,
+    advancedOpen: true,
+    units: 'simulation',
+    digits: 6,
+  }),
+});
+
+const LEVEL_KEY = 'gravitas_course_level';
+let courseLevel = 'introductory';
+
+/** @returns {string} The reader's course level */
+export const getCourseLevel = () => courseLevel;
+
+/**
+ * What a level sets.
+ * @param {string} id - A course level
+ * @returns {{depth: string, conservation: boolean, advancedOpen: boolean, units: string, digits: number}}
+ */
+export const courseLevelDefaults = id =>
+  COURSE_LEVELS[id] || COURSE_LEVELS.introductory;
+
+/**
+ * Choose a level: store it, and set the units and the readout precision it
+ * names. The settings it stages are the Settings panel's to apply.
+ * @param {string} id - A course level; anything else is ignored
+ */
+export function setCourseLevel(id) {
+  if (!Object.hasOwn(COURSE_LEVELS, id)) return;
+  courseLevel = id;
+  try {
+    window.localStorage?.setItem(LEVEL_KEY, id);
+  } catch {
+    /* storage unavailable */
+  }
+  setReadoutDigits(COURSE_LEVELS[id].digits);
+  setUnitMode(COURSE_LEVELS[id].units);
+}
+
+/**
+ * Restore the stored level's readout precision. Not its units: those are a
+ * preference of their own once chosen (js/units.js), so a reader who switched
+ * them after choosing a level keeps the switch.
+ */
+export function initCourseLevel() {
+  try {
+    const level = window.localStorage?.getItem(LEVEL_KEY);
+    if (Object.hasOwn(COURSE_LEVELS, level)) {
+      courseLevel = level;
+      setReadoutDigits(COURSE_LEVELS[level].digits);
+    }
+  } catch {
+    /* storage unavailable */
+  }
+}

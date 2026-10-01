@@ -126,6 +126,7 @@ function build(root, ctx, initialName) {
 
   const nameIn = el('input', {
     id: 'arcName',
+    class: 'ui-input',
     type: 'text',
     maxlength: 80,
     autocomplete: 'off',
@@ -148,13 +149,13 @@ function build(root, ctx, initialName) {
   const form = el(
     'form',
     { id: 'arcForm', class: 'ow-grid' },
-    el('label', { class: 'ow-field' }, el('span'), nameIn),
+    el('label', { class: 'ui-field' }, el('span'), nameIn),
     el('div', {}, find, ' ', cancel)
   );
-  const privacy = el('p', { id: 'arcPrivacy', class: 'ow-hint' });
+  const privacy = el('p', { id: 'arcPrivacy', class: 'ui-hint' });
   const progress = el('p', {
     id: 'arcProgress',
-    class: 'ow-hint',
+    class: 'ui-hint',
     role: 'status',
     'aria-live': 'polite',
   });
@@ -259,7 +260,7 @@ function build(root, ctx, initialName) {
     if (old.length) {
       const c = old.find(x => x.stale) ?? old[0];
       results.append(
-        el('p', { class: 'ow-hint', 'data-arc-note': '', text: cacheNote(c) })
+        el('p', { class: 'ui-hint', 'data-arc-note': '', text: cacheNote(c) })
       );
     }
     if (!sources.length) {
@@ -400,7 +401,7 @@ function build(root, ctx, initialName) {
     );
     const sums = el(
       'dl',
-      { class: 'ow-hint', id: 'arcChecksums' },
+      { class: 'ui-hint', id: 'arcChecksums' },
       el('dt', { text: t('obs.arc.sha.bytes') }),
       el('dd', {}, el('code', { text: answer.sha256 })),
       el('dt', { text: t('obs.arc.sha.content') }),
@@ -413,7 +414,7 @@ function build(root, ctx, initialName) {
     );
     const bandField = el(
       'label',
-      { class: 'ow-field' },
+      { class: 'ui-field' },
       el('span', { text: t('obs.arc.band') }),
       band
     );
@@ -487,7 +488,7 @@ function build(root, ctx, initialName) {
       title,
       summary,
       ...notes.map(n =>
-        el('p', { class: 'ow-hint', 'data-arc-note': '', text: n })
+        el('p', { class: 'ui-hint', 'data-arc-note': '', text: n })
       ),
       fields,
       sums,
