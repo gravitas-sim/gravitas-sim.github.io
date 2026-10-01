@@ -637,13 +637,11 @@ test.describe('the front door is fetched only when it is needed', () => {
     await expect(page.locator('#welcomeScreen')).toBeVisible();
   });
 
-  test('the reopen button opens it on a later visit', async ({ page, app }) => {
+  test('the GRAVITAS link opens it on a later visit', async ({ page, app }) => {
     await app.boot();
-    // Activated directly rather than through the rail's accordion: whether the
-    // Learn section happens to be expanded is a different question, and it has
-    // its own tests.
-    const press = () =>
-      page.locator('#aboutGravitasBtn').evaluate(el => el.click());
+    // The rail's "About Gravitas" reopened it until the shell's own name
+    // linked Home on every page; the rail's Learn section went with it.
+    const press = () => page.locator('.gs-app .gs-brand').click();
 
     await press();
     await expect(page.locator('#welcomeScreen')).toBeVisible();

@@ -15,6 +15,12 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { test, expect } from './fixtures.js';
 
+/** The backup buttons are in the lesson panel's Progress disclosure. */
+const openBackup = page =>
+  page.locator('.inv-backup').evaluate(el => {
+    el.open = true;
+  });
+
 const OUT = join(process.cwd(), 'test-results', 'progress-safety');
 const LESSON = 'missing-mass';
 const PREFIX = 'gravitas_investigation_';
@@ -246,6 +252,7 @@ test.describe('work survives the panel closing when storage refuses', () => {
     await reopen(page);
 
     const download = page.waitForEvent('download');
+    await openBackup(page);
     await page.locator('#investigationBackupDownload').click();
     const path = join(OUT, 'after-failure.json');
     await (await download).saveAs(path);
@@ -263,6 +270,7 @@ test.describe('work survives the panel closing when storage refuses', () => {
     await openLesson(page, app);
     await answerAndAdvance(page);
     const download = page.waitForEvent('download');
+    await openBackup(page);
     await page.locator('#investigationBackupDownload').click();
     const path = join(OUT, 'session-restore.json');
     await (await download).saveAs(path);
@@ -308,6 +316,20 @@ test.describe('work survives the panel closing when storage refuses', () => {
 });
 
 test.describe('the backup file', () => {
+  test('lives behind a Progress disclosure, closed until opened', async ({
+    page,
+    app,
+  }) => {
+    await openLesson(page, app);
+    const backup = page.locator('.inv-backup');
+    await expect(backup).toBeVisible();
+    await expect(backup).toHaveJSProperty('open', false);
+    await expect(page.locator('#investigationBackupDownload')).toBeHidden();
+    await backup.locator('summary').click();
+    await expect(page.locator('#investigationBackupDownload')).toBeVisible();
+    await expect(page.locator('#investigationBackupRestore')).toBeVisible();
+  });
+
   test('carries the work out and puts it back', async ({ page, app }) => {
     await openLesson(page, app);
     await answerAndAdvance(page);
@@ -315,6 +337,7 @@ test.describe('the backup file', () => {
     const reached = await stepNumber(page);
 
     const download = page.waitForEvent('download');
+    await openBackup(page);
     await page.locator('#investigationBackupDownload').click();
     const file = await download;
     expect(file.suggestedFilename()).toMatch(
@@ -376,6 +399,7 @@ test.describe('the backup file', () => {
     await answerAndAdvance(page);
 
     const download = page.waitForEvent('download');
+    await openBackup(page);
     await page.locator('#investigationBackupDownload').click();
     const path = join(OUT, 'confirm.json');
     await (await download).saveAs(path);
@@ -472,6 +496,7 @@ test.describe('the backup file', () => {
     await expect(status(page)).toHaveAttribute('data-state', 'full');
 
     const download = page.waitForEvent('download');
+    await openBackup(page);
     await page.locator('#investigationBackupDownload').click();
     const path = join(OUT, 'rescued.json');
     await (await download).saveAs(path);
@@ -540,7 +565,7 @@ test.describe('an authoring preview is not a student', () => {
     await expect(page.locator('#investigationPanel')).toBeVisible();
     await expect(page.locator('.inv-step-title')).not.toBeEmpty();
 
-    await expect(page.locator('.inv-backup-actions')).toBeHidden();
+    await expect(page.locator('.inv-backup')).toBeHidden();
     await expect(status(page)).toHaveAttribute('data-state', 'authoring');
 
     // The student's progress is untouched.

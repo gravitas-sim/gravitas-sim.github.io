@@ -287,14 +287,16 @@ test.describe('the shell on the application', () => {
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      const learn = page.locator('#railLearn [data-i18n="rail.railLearn"]');
-      await expect(learn).toHaveText('Learn');
+      const scenario = page.locator(
+        '#railScenario [data-i18n="rail.railScenario"]'
+      );
+      await expect(scenario).toHaveText('Scenario');
       await page.evaluate(() => {
         window.__stillHere = true;
       });
       await page.locator('[data-gs-lang]').selectOption('es');
       await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-      await expect(learn).toHaveText('Aprender');
+      await expect(scenario).toHaveText('Escenario');
       // In place: the page was not reloaded.
       expect(await page.evaluate(() => window.__stillHere)).toBe(true);
     }

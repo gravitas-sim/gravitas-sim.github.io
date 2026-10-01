@@ -48,38 +48,6 @@
         grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
         align-items: end;
       }
-      .ow-field {
-        display: grid;
-        gap: 0.3rem;
-      }
-      .ow-wrap input:not([type='checkbox']),
-      .ow-wrap select {
-        width: 100%;
-        box-sizing: border-box;
-        font: inherit;
-        background: var(--surface-2);
-        color: inherit;
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        padding: 0.45rem 0.55rem;
-      }
-      .ow-wrap select option,
-      .ow-wrap select optgroup {
-        background: var(--surface-1);
-        color: var(--text-primary);
-      }
-      .ow-hint {
-        margin: 0.4rem 0 0;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      .ow-actions {
-        display: flex;
-        gap: 0.6rem;
-        align-items: center;
-        flex-wrap: wrap;
-        margin-top: 0.6rem;
-      }
       .ow-small {
         padding: 0.25rem 0.6rem;
         font-size: 0.85rem;
@@ -250,14 +218,6 @@
         margin: 0;
         font-weight: 600;
       }
-      .visually-hidden {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        white-space: nowrap;
-      }
       /* The guided investigations (js/observatory/guidePanel.js). */
       .ow-guide-step {
         border-top: 1px solid var(--border);
@@ -348,7 +308,7 @@ try {
 <header class="gs-shell">
 <a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
 <button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
-<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group" data-here><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/" aria-current="page"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li></ul></details></li></ul></nav>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group" data-here><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/" aria-current="page"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
 <div class="gs-controls" hidden>
 <label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
 <label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
@@ -377,9 +337,9 @@ try {
           Open an observation
         </h2>
         <div class="ow-grid">
-          <label class="ow-field">
+          <label class="ui-field">
             <span data-i18n="obs.open.fixture">A real observation</span>
-            <select id="obsFixture"></select>
+            <select class="ui-select" id="obsFixture"></select>
           </label>
           <div>
             <button
@@ -392,16 +352,17 @@ try {
             </button>
           </div>
         </div>
-        <label class="ow-field" style="margin-top: 1rem">
+        <label class="ui-field" style="margin-top: 1rem">
           <span data-i18n="obs.import.file">Or import your own file</span>
           <input
+            class="ui-file"
             id="obsFile"
             type="file"
             accept=".csv,.tsv,.txt,.json,text/csv,text/tab-separated-values,application/json"
             aria-describedby="obsImportHint"
           />
         </label>
-        <p id="obsImportHint" class="ow-hint" data-i18n="obs.import.hint">
+        <p id="obsImportHint" class="ui-hint" data-i18n="obs.import.hint">
           CSV, tab- or semicolon-separated text, or JSON, up to 5 MB and
           200,000 rows. It stays on this device.
         </p>
@@ -428,18 +389,18 @@ try {
         <ul id="obsImportProblems" class="ow-problems" role="alert" hidden></ul>
         <div id="obsImportForm">
           <p id="obsImportSummary"></p>
-          <ul id="obsImportComments" class="ow-hint" hidden></ul>
+          <ul id="obsImportComments" class="ui-hint" hidden></ul>
           <div class="ow-table-wrap"><table id="obsPreview"></table></div>
           <div class="ow-grid">
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.import.kind">What kind of data this is</span>
-              <select id="obsImportKind"></select>
+              <select class="ui-select" id="obsImportKind"></select>
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.import.titleLabel">Title</span>
-              <input id="obsImportTitleIn" type="text" maxlength="120" />
+              <input class="ui-input" id="obsImportTitleIn" type="text" maxlength="120" />
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span>
                 <input id="obsDecimalComma" type="checkbox" />
                 <span data-i18n="obs.import.decimalComma"
@@ -451,26 +412,27 @@ try {
           <fieldset id="obsTimeFields" hidden>
             <legend data-i18n="obs.import.timeTitle">The time axis</legend>
             <div class="ow-grid">
-              <label class="ow-field">
+              <label class="ui-field">
                 <span data-i18n="obs.import.timeFormat">How it counts</span>
-                <select id="obsTimeFormat"></select>
+                <select class="ui-select" id="obsTimeFormat"></select>
               </label>
-              <label class="ow-field">
+              <label class="ui-field">
                 <span data-i18n="obs.import.timeScale">Time scale</span>
-                <select id="obsTimeScale"></select>
+                <select class="ui-select" id="obsTimeScale"></select>
               </label>
             </div>
           </fieldset>
           <fieldset id="obsSpectralFields" hidden>
             <legend data-i18n="obs.import.spectralTitle">The spectral axis</legend>
             <div class="ow-grid">
-              <label class="ow-field">
+              <label class="ui-field">
                 <span data-i18n="obs.import.medium">Wavelengths measured in</span>
-                <select id="obsMedium"></select>
+                <select class="ui-select" id="obsMedium"></select>
               </label>
-              <label class="ow-field">
+              <label class="ui-field">
                 <span data-i18n="obs.import.frame">Frame</span>
                 <input
+                  class="ui-input"
                   id="obsFrame"
                   type="text"
                   maxlength="60"
@@ -482,13 +444,13 @@ try {
           </fieldset>
           <fieldset>
             <legend data-i18n="obs.import.columnsTitle">Columns</legend>
-            <p class="ow-hint" data-i18n="obs.import.unitRule">
+            <p class="ui-hint" data-i18n="obs.import.unitRule">
               Every column of numbers needs a unit. Nothing is assumed: choose
               one, choose "no unit" for a ratio, or say it is not stated.
             </p>
             <div id="obsMapping"></div>
           </fieldset>
-          <div class="ow-actions">
+          <div class="ui-toolbar">
             <button
               id="obsImportGo"
               class="ui-button"
@@ -518,17 +480,17 @@ try {
         </details>
 
         <div id="obsAxes" class="ow-grid">
-          <label class="ow-field">
+          <label class="ui-field">
             <span data-i18n="obs.axes.x">Across</span>
-            <select id="obsAxisX"></select>
+            <select class="ui-select" id="obsAxisX"></select>
           </label>
-          <label class="ow-field">
+          <label class="ui-field">
             <span data-i18n="obs.axes.y">Up</span>
-            <select id="obsAxisY"></select>
+            <select class="ui-select" id="obsAxisY"></select>
           </label>
         </div>
 
-        <p id="obsKeys" class="ow-hint" data-i18n="obs.keys">
+        <p id="obsKeys" class="ui-hint" data-i18n="obs.keys">
           Drag across the plot or the image, or click the table, to select.
           With the keyboard: arrow keys move, Shift with an arrow selects,
           Space adds or removes one, Escape clears.
@@ -545,7 +507,7 @@ try {
                 data-i18n-aria-roledescription="obs.plot.role"
                 aria-describedby="obsKeys"
               ></svg>
-              <figcaption id="obsOverlayNote" class="ow-hint" hidden></figcaption>
+              <figcaption id="obsOverlayNote" class="ui-hint" hidden></figcaption>
             </figure>
             <figure id="obsImageBox" hidden>
               <canvas
@@ -558,28 +520,28 @@ try {
               ></canvas>
               <ul id="obsLegend" class="ow-legend"></ul>
             </figure>
-            <p id="obsReadout" class="ow-hint"></p>
+            <p id="obsReadout" class="ui-hint"></p>
           </div>
           <div>
-            <div class="ow-actions">
+            <div class="ui-toolbar">
               <span id="obsSelected"></span>
               <button id="obsClear" class="ui-button ow-small" type="button" data-i18n="obs.selection.clear">
                 Clear selection
               </button>
             </div>
             <div class="ow-grid">
-              <label class="ow-field">
+              <label class="ui-field">
                 <span data-i18n="obs.mask.label">Why these are left out (optional)</span>
-                <input id="obsMaskLabel" type="text" maxlength="80" />
+                <input class="ui-input" id="obsMaskLabel" type="text" maxlength="80" />
               </label>
               <div>
                 <button id="obsMask" class="ui-button" type="button" data-i18n="obs.mask.go">
                   Mask the selection
                 </button>
               </div>
-              <label class="ow-field">
+              <label class="ui-field">
                 <span data-i18n="obs.note.label">A note on the selection</span>
-                <input id="obsNoteText" type="text" maxlength="500" />
+                <input class="ui-input" id="obsNoteText" type="text" maxlength="500" />
               </label>
               <div>
                 <button id="obsNoteGo" class="ui-button" type="button" data-i18n="obs.note.go">
@@ -587,7 +549,7 @@ try {
                 </button>
               </div>
             </div>
-            <div class="ow-actions">
+            <div class="ui-toolbar">
               <button id="obsUndo" class="ui-button" type="button" data-i18n="obs.undo" aria-keyshortcuts="Control+Z Meta+Z">
                 Undo
               </button>
@@ -605,38 +567,38 @@ try {
 
         <details class="ow-panel">
           <summary data-i18n="obs.changes.title">Change what you are looking at</summary>
-          <p class="ow-hint" data-i18n="obs.changes.hint">
+          <p class="ui-hint" data-i18n="obs.changes.hint">
             Every change can be undone, and the saved file lists them all.
           </p>
           <div id="obsCropBox" class="ow-grid">
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.crop.min">Keep from</span>
-              <input id="obsCropMin" type="number" step="any" />
+              <input class="ui-input" id="obsCropMin" type="number" step="any" />
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.crop.max">to</span>
-              <input id="obsCropMax" type="number" step="any" />
+              <input class="ui-input" id="obsCropMax" type="number" step="any" />
             </label>
             <div>
-              <span id="obsCropUnit" class="ow-hint"></span>
+              <span id="obsCropUnit" class="ui-hint"></span>
               <button id="obsCropGo" class="ui-button" type="button" data-i18n="obs.crop.go">
                 Crop
               </button>
             </div>
           </div>
-          <div id="obsNormBox" class="ow-actions">
+          <div id="obsNormBox" class="ui-toolbar">
             <button id="obsNormGo" class="ui-button" type="button" data-i18n="obs.normalize.go">
               Divide by the median
             </button>
           </div>
           <div id="obsFoldBox" class="ow-grid">
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.fold.period">Period</span>
-              <input id="obsFoldPeriod" type="number" step="any" min="0" />
+              <input class="ui-input" id="obsFoldPeriod" type="number" step="any" min="0" />
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.fold.epoch">Epoch (a time of mid-transit)</span>
-              <input id="obsFoldEpoch" type="number" step="any" />
+              <input class="ui-input" id="obsFoldEpoch" type="number" step="any" />
             </label>
             <div>
               <button id="obsFoldGo" class="ui-button" type="button" data-i18n="obs.fold.go">
@@ -645,21 +607,21 @@ try {
             </div>
           </div>
           <div id="obsBinBox" class="ow-grid">
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.bin.width">Bin width</span>
-              <input id="obsBinWidth" type="number" step="any" min="0" />
+              <input class="ui-input" id="obsBinWidth" type="number" step="any" min="0" />
             </label>
             <div>
-              <span id="obsBinUnit" class="ow-hint"></span>
+              <span id="obsBinUnit" class="ui-hint"></span>
               <button id="obsBinGo" class="ui-button" type="button" data-i18n="obs.bin.go">
                 Bin
               </button>
             </div>
           </div>
           <div id="obsRestBox" class="ow-grid">
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.rest.z">Redshift z</span>
-              <input id="obsRestZ" type="number" step="any" />
+              <input class="ui-input" id="obsRestZ" type="number" step="any" />
             </label>
             <div>
               <button id="obsRestGo" class="ui-button" type="button" data-i18n="obs.rest.go">
@@ -668,13 +630,13 @@ try {
             </div>
           </div>
           <div id="obsConvertBox" class="ow-grid">
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.convert.column">Convert</span>
-              <select id="obsConvertColumn"></select>
+              <select class="ui-select" id="obsConvertColumn"></select>
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.convert.to">to</span>
-              <select id="obsConvertTo"></select>
+              <select class="ui-select" id="obsConvertTo"></select>
             </label>
             <div>
               <button id="obsConvertGo" class="ui-button" type="button" data-i18n="obs.convert.go">
@@ -683,9 +645,9 @@ try {
             </div>
           </div>
           <div id="obsTimeBox" class="ow-grid">
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.time.to">Count time as</span>
-              <select id="obsTimeTo"></select>
+              <select class="ui-select" id="obsTimeTo"></select>
             </label>
             <div>
               <button id="obsTimeGo" class="ui-button" type="button" data-i18n="obs.time.go">
@@ -694,29 +656,29 @@ try {
             </div>
           </div>
           <div id="obsDeriveBox" class="ow-grid">
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.derive.name">New column</span>
-              <input id="obsDeriveName" type="text" autocomplete="off" />
+              <input class="ui-input" id="obsDeriveName" type="text" autocomplete="off" />
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.derive.from">From</span>
-              <select id="obsDeriveA"></select>
+              <select class="ui-select" id="obsDeriveA"></select>
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.derive.sign">then</span>
-              <select id="obsDeriveSign">
+              <select class="ui-select" id="obsDeriveSign">
                 <option value="-1" data-i18n="obs.derive.minus">minus</option>
                 <option value="1" data-i18n="obs.derive.plus">plus</option>
                 <option value="0" data-i18n="obs.derive.none">no second column</option>
               </select>
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.derive.second">the column</span>
-              <select id="obsDeriveB"></select>
+              <select class="ui-select" id="obsDeriveB"></select>
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.derive.constant">and add the constant</span>
-              <input id="obsDeriveK" type="number" step="any" value="0" />
+              <input class="ui-input" id="obsDeriveK" type="number" step="any" value="0" />
             </label>
             <div>
               <button id="obsDeriveGo" class="ui-button" type="button" data-i18n="obs.derive.go">
@@ -725,17 +687,17 @@ try {
             </div>
           </div>
           <div id="obsSepBox" class="ow-grid">
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.derive.sepName">New column: distance from a position</span>
-              <input id="obsSepName" type="text" autocomplete="off" />
+              <input class="ui-input" id="obsSepName" type="text" autocomplete="off" />
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.derive.ra">RA of the position (deg)</span>
-              <input id="obsSepRa" type="number" step="any" />
+              <input class="ui-input" id="obsSepRa" type="number" step="any" />
             </label>
-            <label class="ow-field">
+            <label class="ui-field">
               <span data-i18n="obs.derive.dec">Dec of the position (deg)</span>
-              <input id="obsSepDec" type="number" step="any" />
+              <input class="ui-input" id="obsSepDec" type="number" step="any" />
             </label>
             <div>
               <button id="obsSepGo" class="ui-button" type="button" data-i18n="obs.derive.sepGo">
@@ -758,7 +720,7 @@ try {
         <div class="ow-table-wrap">
           <table id="obsTable" aria-describedby="obsKeys"></table>
         </div>
-        <div class="ow-actions">
+        <div class="ui-toolbar">
           <button id="obsPrevPage" class="ui-button ow-small" type="button" data-i18n="obs.table.prev">
             Previous rows
           </button>
@@ -767,7 +729,7 @@ try {
           </button>
         </div>
 
-        <div class="ow-actions">
+        <div class="ui-toolbar">
           <button id="obsExportJson" class="ui-button" type="button" data-i18n="obs.export.json">
             Save as JSON (everything, with your changes)
           </button>

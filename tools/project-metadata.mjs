@@ -60,6 +60,15 @@ export const PAPER = {
 };
 
 /**
+ * The copyright notice: the year the work was first published and its holder,
+ * as LICENSE, LICENSE-CC-BY-4.0.md and LICENSES.md state it. The
+ * application's footer is generated from this (tools/docs-facts.mjs,
+ * copyrightYear) rather than typed, and tests/copyrightNotice.test.js holds the
+ * licence files to it.
+ */
+export const COPYRIGHT = { year: 2025, holder: 'Carl Ziegler' };
+
+/**
  * Release identity.
  *
  * Every field is null until there is something real to point at. The generators

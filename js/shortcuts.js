@@ -46,6 +46,14 @@ function isTypingTarget(target) {
   );
 }
 
+/** Space presses a focused button; the pause shortcut used to take it. */
+const ownsSpace = target =>
+  Boolean(
+    target?.closest?.(
+      'button, summary, [role="button"], [role="switch"], [role="checkbox"], [role="tab"], [role="menuitem"]'
+    )
+  );
+
 function handleKey(e) {
   if (!enabled) return;
   if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -63,6 +71,7 @@ function handleKey(e) {
   // text before the panel closes. That is the right way round: the field
   // decides, and silence means the dialog gets it.
   if (e.key !== 'Escape' && isTypingTarget(e.target)) return;
+  if (e.key === ' ' && ownsSpace(e.target)) return;
 
   const key = e.key.toLowerCase();
   for (const s of registry) {

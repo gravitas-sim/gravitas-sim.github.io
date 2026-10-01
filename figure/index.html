@@ -57,9 +57,8 @@
         font-weight: 600;
         padding: 0 0.35rem;
       }
-      .fb-field {
-        display: grid;
-        gap: 0.3rem;
+      /* The form is one column of fields, spaced as one. */
+      .fb-wrap .ui-field {
         margin: 0.7rem 0 0;
       }
       .fb-check {
@@ -67,32 +66,6 @@
         gap: 0.5rem;
         align-items: center;
         margin: 0.7rem 0 0;
-      }
-      .fb-wrap input[type='text'],
-      .fb-wrap input[type='url'],
-      .fb-wrap select,
-      .fb-wrap textarea {
-        width: 100%;
-        box-sizing: border-box;
-        font: inherit;
-        background: var(--surface-2);
-        color: inherit;
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        padding: 0.45rem 0.55rem;
-      }
-      .fb-wrap textarea {
-        min-height: 4.5rem;
-        resize: vertical;
-      }
-      .fb-code {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 0.78rem;
-      }
-      .fb-hint {
-        margin: 0;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
       }
       .fb-status {
         margin: 0.4rem 0 0;
@@ -123,13 +96,6 @@
         border-radius: 8px;
         overflow: hidden;
         background: #05060d;
-      }
-      .fb-actions {
-        display: flex;
-        gap: 0.75rem;
-        align-items: center;
-        flex-wrap: wrap;
-        margin-top: 0.5rem;
       }
       .fb-out {
         margin-top: 1.5rem;
@@ -163,7 +129,7 @@ try {
 <header class="gs-shell">
 <a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
 <button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
-<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/" aria-current="page"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li></ul></details></li></ul></nav>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group" data-here><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/" aria-current="page"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
 <div class="gs-controls" hidden>
 <label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
 <label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
@@ -188,9 +154,10 @@ try {
         <form id="figureForm" autocomplete="off" novalidate>
           <fieldset>
             <legend data-i18n="fig.what.title">What it shows</legend>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.what.link.label">A Gravitas link</span>
               <input
+                class="ui-input"
                 id="fbLink"
                 type="url"
                 inputmode="url"
@@ -198,7 +165,7 @@ try {
                 aria-describedby="fbLinkHint fbLinkStatus"
               />
             </label>
-            <p id="fbLinkHint" class="fb-hint" data-i18n="fig.what.link.hint">
+            <p id="fbLinkHint" class="ui-hint" data-i18n="fig.what.link.hint">
               In Gravitas, set the simulation up, open Share and choose “Build a
               figure”, or copy the link and paste it here.
             </p>
@@ -206,13 +173,14 @@ try {
               or start from a scenario
             </p>
             <div class="fb-row">
-              <label class="fb-field">
+              <label class="ui-field">
                 <span data-i18n="fig.what.scenario.label">Scenario</span>
-                <select id="fbScenario"></select>
+                <select class="ui-select" id="fbScenario"></select>
               </label>
-              <label class="fb-field">
+              <label class="ui-field">
                 <span data-i18n="fig.what.seed.label">Seed</span>
                 <input
+                  class="ui-input"
                   id="fbSeed"
                   type="text"
                   spellcheck="false"
@@ -221,7 +189,7 @@ try {
                 />
               </label>
             </div>
-            <p id="fbSeedHint" class="fb-hint" data-i18n="fig.what.seed.hint">
+            <p id="fbSeedHint" class="ui-hint" data-i18n="fig.what.seed.hint">
               The same seed builds the same world every time.
             </p>
             <p
@@ -231,7 +199,7 @@ try {
               aria-live="polite"
             ></p>
             <div
-              class="fb-field"
+              class="ui-field"
               role="radiogroup"
               aria-labelledby="fbStartLabel"
             >
@@ -253,28 +221,28 @@ try {
 
           <fieldset>
             <legend data-i18n="fig.look.title">How it looks</legend>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.look.lang.label"
                 >Language of the figure</span
               >
-              <select id="fbLang"></select>
+              <select class="ui-select" id="fbLang"></select>
             </label>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.look.theme.label">Theme</span>
-              <select id="fbTheme"></select>
+              <select class="ui-select" id="fbTheme"></select>
             </label>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.look.aspect.label">Shape</span>
-              <select id="fbAspect">
+              <select class="ui-select" id="fbAspect">
                 <option value="16:10">16:10</option>
                 <option value="16:9">16:9</option>
                 <option value="4:3">4:3</option>
                 <option value="1:1">1:1</option>
               </select>
             </label>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.look.reset.label">Reset returns to</span>
-              <select id="fbReset"></select>
+              <select class="ui-select" id="fbReset"></select>
             </label>
             <label class="fb-check">
               <input id="fbControls" type="checkbox" checked />
@@ -296,21 +264,22 @@ try {
 
           <fieldset>
             <legend data-i18n="fig.words.title">Words around it</legend>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.words.name.label">Title</span>
               <input
+                class="ui-input"
                 id="fbTitle"
                 type="text"
                 maxlength="160"
                 aria-describedby="fbTitleHint"
               />
             </label>
-            <p id="fbTitleHint" class="fb-hint" data-i18n="fig.words.name.hint">
+            <p id="fbTitleHint" class="ui-hint" data-i18n="fig.words.name.hint">
               What a screen reader announces for the figure.
             </p>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.words.caption.label">Caption</span>
-              <textarea id="fbCaption" maxlength="600"></textarea>
+              <textarea class="ui-textarea" id="fbCaption" maxlength="600"></textarea>
             </label>
             <label class="fb-check">
               <input id="fbFallback" type="checkbox" checked />
@@ -324,13 +293,14 @@ try {
             <legend data-i18n="fig.page.title">
               Controlling it from your page
             </legend>
-            <p class="fb-hint" data-i18n="fig.page.intro">
+            <p class="ui-hint" data-i18n="fig.page.intro">
               Optional. If your page will send the figure play, pause, reset or
               load messages, give its origin.
             </p>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.page.origin.label">Your page’s origin</span>
               <input
+                class="ui-input"
                 id="fbOrigin"
                 type="url"
                 inputmode="url"
@@ -345,7 +315,7 @@ try {
               role="status"
               aria-live="polite"
             ></p>
-            <p class="fb-hint">
+            <p class="ui-hint">
               <a
                 href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/v2/EMBEDDING.md"
                 data-i18n="fig.page.docs"
@@ -361,17 +331,17 @@ try {
 
           <section class="fb-out" aria-labelledby="fbOutTitle">
             <h2 id="fbOutTitle" data-i18n="fig.out.title">Copy it</h2>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.out.markup.label">Markup for your page</span>
               <textarea
                 id="fbMarkup"
-                class="fb-code"
+                class="ui-textarea is-code"
                 readonly
                 rows="9"
                 spellcheck="false"
               ></textarea>
             </label>
-            <div class="fb-actions">
+            <div class="ui-toolbar">
               <button
                 id="fbCopyMarkup"
                 type="button"
@@ -381,11 +351,11 @@ try {
                 Copy markup
               </button>
             </div>
-            <label class="fb-field">
+            <label class="ui-field">
               <span data-i18n="fig.out.link.label">Plain link</span>
-              <input id="fbUrl" type="text" class="fb-code" readonly />
+              <input id="fbUrl" type="text" class="ui-input is-code" readonly />
             </label>
-            <div class="fb-actions">
+            <div class="ui-toolbar">
               <button
                 id="fbCopyLink"
                 type="button"

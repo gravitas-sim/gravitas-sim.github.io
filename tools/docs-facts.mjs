@@ -73,7 +73,7 @@ import {
   generatedBlocks,
   zenodoJson,
 } from './generated-blocks.mjs';
-import { RELEASE } from './project-metadata.mjs';
+import { COPYRIGHT, RELEASE } from './project-metadata.mjs';
 import {
   precacheInventory,
   precacheTable,
@@ -120,6 +120,9 @@ const DOCS = [
   'PHYSICS_VALIDATION.md',
   'MASS_UNITS.md',
   'NUMBER_TYPOGRAPHY.md',
+  // The component language (Prompt 51): no counts, but its links to the
+  // stylesheets and tools it documents are checked.
+  'DESIGN_SYSTEM.md',
   'OBJECT_INSPECTOR.md',
   'PERFORMANCE_PROFILING_GUIDE.md',
   'PERFORMANCE_OPTIMIZATIONS_SUMMARY.md',
@@ -451,6 +454,8 @@ async function cheapFacts() {
     // changes at every release while the concept DOI never does - exactly the
     // pair a reader would never notice going stale.
     version: RELEASE.version ?? '',
+    // The footer's copyright year, from the notice the licences carry.
+    copyrightYear: COPYRIGHT.year,
     doi: RELEASE.doi ?? '',
     conceptDoi: RELEASE.conceptDoi ?? '',
     scenarios: Object.keys(SCENARIO_INFO).length,

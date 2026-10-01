@@ -1,21 +1,21 @@
 {
- "total": 577153,
+ "total": 577119,
  "modules": [
   {
    "module": "js/ui.js",
-   "bytes": 110227
+   "bytes": 104453
   },
   {
    "module": "js/i18n/en.js",
-   "bytes": 85605
+   "bytes": 84626
   },
   {
    "module": "js/physics.js",
-   "bytes": 73855
+   "bytes": 73881
   },
   {
    "module": "js/world/build.js",
-   "bytes": 34879
+   "bytes": 34877
   },
   {
    "module": "js/render.js",
@@ -34,12 +34,12 @@
    "bytes": 10031
   },
   {
-   "module": "js/controls.js",
-   "bytes": 9619
-  },
-  {
    "module": "js/lightCurve.js",
    "bytes": 9116
+  },
+  {
+   "module": "js/controls.js",
+   "bytes": 8078
   },
   {
    "module": "js/audio.js",
@@ -58,12 +58,20 @@
    "bytes": 6624
   },
   {
+   "module": "js/settingsSchema.js",
+   "bytes": 6567
+  },
+  {
    "module": "js/data/objectNames.js",
    "bytes": 6197
   },
   {
    "module": "js/astrometry.js",
    "bytes": 5737
+  },
+  {
+   "module": "js/main.js",
+   "bytes": 5423
   },
   {
    "module": "js/resonance/systems.js",
@@ -82,16 +90,12 @@
    "bytes": 4732
   },
   {
-   "module": "js/main.js",
-   "bytes": 4730
+   "module": "js/shareState.js",
+   "bytes": 4452
   },
   {
    "module": "js/vectorOverlay.js",
    "bytes": 4272
-  },
-  {
-   "module": "js/shareState.js",
-   "bytes": 4192
   },
   {
    "module": "js/tutorial.js",
@@ -179,43 +183,43 @@
   },
   {
    "module": "js/shortcuts.js",
-   "bytes": 1801
+   "bytes": 1956
   },
   {
    "module": "js/experimentsBridge.js",
    "bytes": 1758
   },
   {
+   "module": "js/shell.js",
+   "bytes": 1722
+  },
+  {
    "module": "js/mond.js",
    "bytes": 1719
+  },
+  {
+   "module": "js/format.js",
+   "bytes": 1669
   },
   {
    "module": "js/quality.js",
    "bytes": 1636
   },
   {
-   "module": "js/i18n/picker.js",
-   "bytes": 1530
-  },
-  {
    "module": "js/observationLayout.js",
    "bytes": 1495
   },
   {
-   "module": "js/format.js",
-   "bytes": 1464
+   "module": "js/investigationsLoader.js",
+   "bytes": 1486
+  },
+  {
+   "module": "js/units.js",
+   "bytes": 1458
   },
   {
    "module": "js/gravityAssist.js",
    "bytes": 1422
-  },
-  {
-   "module": "js/units.js",
-   "bytes": 1394
-  },
-  {
-   "module": "js/investigationsLoader.js",
-   "bytes": 1366
   },
   {
    "module": "js/bottomDock.js",
@@ -234,12 +238,12 @@
    "bytes": 1228
   },
   {
-   "module": "js/theme.js",
-   "bytes": 1146
-  },
-  {
    "module": "js/rng.js",
    "bytes": 1135
+  },
+  {
+   "module": "js/theme.js",
+   "bytes": 1124
   },
   {
    "module": "js/orbital.js",
@@ -275,7 +279,7 @@
   },
   {
    "module": "js/pauseAtEventBridge.js",
-   "bytes": 834
+   "bytes": 832
   },
   {
    "module": "js/maneuverBridge.js",
@@ -323,7 +327,7 @@
   },
   {
    "module": "js/welcomeGate.js",
-   "bytes": 470
+   "bytes": 474
   },
   {
    "module": "js/i18n/deferredNamespaces.js",

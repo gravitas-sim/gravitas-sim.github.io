@@ -80,6 +80,7 @@ export const WORDS = {
   validation: ['Physics validation', 'Validación física'],
   kernel: ['3-D kernel diagnostics', 'Diagnóstico del núcleo 3-D'],
   mission: ['Mission core diagnostics', 'Diagnóstico de misiones'],
+  manual: ['User manual (PDF)', 'Manual de usuario (PDF)'],
   source: ['Source code', 'Código fuente'],
   cite: ['Cite Gravitas', 'Citar Gravitas'],
   license: ['MIT licensed', 'Licencia MIT'],
@@ -130,6 +131,7 @@ export const NAV = [
       ['validation', '/validation/'],
       ['kernel', '/lab3d/'],
       ['mission', '/mission/'],
+      ['manual', '/Gravitas_User_Manual.pdf'],
     ],
   ],
 ];

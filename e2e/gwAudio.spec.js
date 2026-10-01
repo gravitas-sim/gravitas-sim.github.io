@@ -39,7 +39,10 @@ const controlState = page =>
     const p = document.getElementById('soundPanel');
     return {
       state: b.dataset.state,
-      glyph: b.querySelector('.readout-icon-glyph').textContent,
+      // Which icon from css/icons.css the speaker shows.
+      glyph: [...b.querySelector('.readout-icon-glyph').classList].find(c =>
+        c.startsWith('icon-')
+      ),
       label: b.getAttribute('aria-label'),
       expanded: b.getAttribute('aria-expanded'),
       panelHidden: p.hidden,
@@ -65,7 +68,7 @@ test.describe('nothing makes a sound on its own', () => {
     expect(await contextExists(page)).toBe(false);
     const s = await controlState(page);
     expect(s.state).toBe('muted');
-    expect(s.glyph).toBe('🔇');
+    expect(s.glyph).toBe('icon-sound-off');
     expect(s.panelHidden).toBe(true);
   });
 
@@ -172,7 +175,7 @@ test.describe('the states are distinguished', () => {
       .poll(async () => (await controlState(page)).state)
       .toBe('ready');
     const s = await controlState(page);
-    expect(s.glyph).toBe('🔈');
+    expect(s.glyph).toBe('icon-sound');
     expect(s.label).toMatch(/nothing playing/i);
     expect(s.status).toMatch(/sound is permitted, not started/i);
     // ...and a context now exists, which is exactly the thing that must not by
@@ -209,7 +212,7 @@ test.describe('the states are distinguished', () => {
       .poll(async () => (await controlState(page)).state)
       .toBe('playing');
     const s = await controlState(page);
-    expect(s.glyph).toBe('🔊');
+    expect(s.glyph).toBe('icon-sound-on');
     expect(s.mode).toBe('Gravitational-wave signal');
     expect(s.now).toMatch(/gravitational-wave signal/i);
   });
