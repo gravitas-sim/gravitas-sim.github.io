@@ -19,174 +19,53 @@
     <link rel="stylesheet" href="/css/components.css" />
     <link rel="stylesheet" href="/css/page.css" />
     <style>
-      /* Local to this page: a form, a progress bar, two tables and a plot. */
-      .xp-wrap {
-        max-width: 72rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      /* The document pages' link colour (.doc-main a in css/page.css), which
-         this page's own wrapper does not inherit: the browser's default blue
-         is 2.2:1 on this background. */
-      .xp-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
-      .xp-wrap fieldset {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.9rem 1rem 1rem;
-        margin: 0 0 1.25rem;
-      }
-      .xp-wrap legend {
-        font-weight: 600;
-        padding: 0 0.35rem;
-      }
-      .xp-grid {
-        display: grid;
-        gap: 0.75rem;
-        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-      }
-      .xp-status {
-        margin: 0.5rem 0 0;
-        min-height: 1.2em;
-      }
-      .xp-refusals {
-        color: var(--danger);
-        margin: 0.5rem 0 0;
-      }
-      .xp-wrap progress {
-        width: 100%;
-        height: 0.9rem;
-      }
-      .xp-table-wrap {
-        overflow-x: auto;
-        margin: 1rem 0;
-      }
-      .xp-wrap table {
-        border-collapse: collapse;
-        width: 100%;
-        font-size: 0.88rem;
-      }
-      .xp-wrap caption {
-        text-align: left;
-        font-weight: 600;
-        padding: 0 0 0.4rem;
-      }
-      .xp-wrap th,
-      .xp-wrap td {
-        border-bottom: 1px solid var(--border);
-        padding: 0.3rem 0.5rem;
-        text-align: right;
-        font-variant-numeric: tabular-nums;
-      }
-      .xp-wrap thead th,
-      .xp-wrap tbody th {
-        text-align: left;
-      }
+      /* Local to this page: its own plots' marks. The analysis laboratory's
+         plot and table are the Observatory's (js/observatory/plot.js,
+         table.js), drawn by css/page.css. */
       .xp-bad {
         color: var(--danger);
       }
-      /* The plots sit on the dark of the simulation's sky in every theme, as
-         the simulation itself does: their colours are drawn for it. */
-      .xp-plot,
-      .ow-plot {
-        background: var(--space-far);
-        color: var(--hud-text);
-      }
+      /* On the dark of the simulation's sky in every theme, as .ui-sky is:
+         js/experimentsPage.js and the laboratory's histogram both make one. */
       .xp-plot {
+        display: block;
         width: 100%;
         max-width: 42rem;
         height: auto;
-        border-radius: 8px;
+        color: var(--hud-text);
+        background: var(--space-far);
+        border-radius: var(--radius-sm);
       }
       .xp-axis {
-        stroke: rgba(255, 255, 255, 0.45);
+        stroke: color-mix(in srgb, var(--hud-text-strong) 45%, transparent);
       }
       .xp-tick,
       .xp-label {
         fill: currentColor;
-        font-size: 12px;
+        font-size: var(--text-xs);
         opacity: 0.8;
       }
-      .xp-point {
-        fill: #8fd3ff;
+      .xp-point,
+      .xp-bar {
+        fill: var(--hue-comet);
       }
       .xp-mean {
         fill: none;
-        stroke: #ffd27a;
+        stroke: var(--hue-star);
         stroke-width: 2;
       }
       .xp-fail {
-        fill: #ffb4a2;
-        font-size: 14px;
+        fill: color-mix(in srgb, var(--hue-gasgiant) 60%, var(--hud-text-strong));
+        font-size: var(--text-base);
       }
-      /* The analysis laboratory (js/experiments/analysisPanel.js): its plot
-         and table are the Observatory's (js/observatory/plot.js, table.js),
-         so they carry its class names. */
       .xp-lab {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.6rem 1rem;
-        margin: 1.5rem 0;
+        margin: var(--space-6) 0;
       }
       .xp-lab > summary {
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 1.1rem;
+        font-size: var(--text-lg);
       }
       .xp-lab h3 {
-        margin: 1.4rem 0 0.4rem;
-        font-size: 1rem;
-      }
-      .xp-bar {
-        fill: #8fd3ff;
-      }
-      .ow-plot:focus-visible,
-      #labTrials tr:focus-visible {
-        outline: 3px solid var(--accent);
-        outline-offset: 2px;
-      }
-      .ow-axes line {
-        stroke: rgba(255, 255, 255, 0.5);
-      }
-      .ow-tick,
-      .ow-label {
-        fill: currentColor;
-        font-size: 12px;
-      }
-      .ow-bars line {
-        stroke: rgba(143, 211, 255, 0.45);
-      }
-      .ow-pt {
-        fill: #8fd3ff;
-      }
-      .ow-pt.is-selected {
-        fill: #ffd27a;
-      }
-      .ow-pt.is-masked {
-        fill: none;
-        stroke: #9aa0a6;
-      }
-      .ow-focus {
-        fill: none;
-        stroke: #ffffff;
-        stroke-width: 2;
-      }
-      .ow-brush {
-        fill: rgba(255, 210, 122, 0.15);
-        stroke: #ffd27a;
-      }
-      .ow-table-wrap {
-        overflow-x: auto;
-        max-height: 24rem;
-        margin: 0.8rem 0;
-      }
-      #labTrials tr[aria-selected='true'] td {
-        background: rgba(255, 210, 122, 0.16);
-      }
-      .is-missing {
-        color: var(--text-secondary);
+        margin: var(--space-6) 0 var(--space-1);
       }
     </style>
     <!-- shell:head -->
@@ -218,7 +97,7 @@ try {
 </div>
 </header>
 <!-- /shell:header -->
-    <main id="main" class="xp-wrap">
+    <main id="main" class="ui-page is-wide">
       <h1 data-i18n="exp.title">Run an experiment</h1>
       <p data-i18n="exp.intro">
         Vary one laboratory setting across a range, run every value with
@@ -226,9 +105,9 @@ try {
       </p>
 
       <form id="xpForm" autocomplete="off" novalidate>
-        <fieldset>
+        <fieldset class="ui-fieldset">
           <legend data-i18n="exp.what.title">What to run</legend>
-          <div class="xp-grid">
+          <div class="ui-grid">
             <label class="ui-field">
               <span data-i18n="exp.what.scenario">Scenario</span>
               <select class="ui-select" id="xpScenario"></select>
@@ -240,9 +119,9 @@ try {
           </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="ui-fieldset">
           <legend data-i18n="exp.values.title">Values</legend>
-          <div class="xp-grid">
+          <div class="ui-grid">
             <label class="ui-field">
               <span data-i18n="exp.values.from">From</span>
               <input
@@ -277,15 +156,15 @@ try {
           </div>
           <p id="xpRangeHint" class="ui-hint"></p>
         </fieldset>
-        <fieldset id="xpSecond" hidden>
+        <fieldset id="xpSecond" class="ui-fieldset" hidden>
           <legend data-i18n="exp.second.title">A second setting</legend>
-          <div class="xp-grid">
+          <div class="ui-grid">
             <label class="ui-field">
               <span data-i18n="exp.second.param">Also vary</span>
               <select class="ui-select" id="xpParam2"></select>
             </label>
           </div>
-          <div id="xpSecondRange" class="xp-grid" hidden>
+          <div id="xpSecondRange" class="ui-grid" hidden>
             <label class="ui-field">
               <span data-i18n="exp.values.from">From</span>
               <input class="ui-input" id="xpFrom2" type="number" step="any" />
@@ -301,9 +180,9 @@ try {
           </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="ui-fieldset">
           <legend data-i18n="exp.runs.title">Seeds and length</legend>
-          <div class="xp-grid">
+          <div class="ui-grid">
             <label class="ui-field">
               <span data-i18n="exp.runs.seeds">Seeds per value</span>
               <input
@@ -353,7 +232,7 @@ try {
           </p>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="ui-fieldset">
           <legend data-i18n="exp.measure.title">What to measure</legend>
           <label class="ui-field">
             <span data-i18n="exp.measure.metric">Measurement</span>
@@ -362,8 +241,8 @@ try {
         </fieldset>
 
         <p id="xpDevice" class="ui-hint"></p>
-        <p id="xpEstimate" class="xp-status" role="status" aria-live="polite"></p>
-        <ul id="xpRefusals" class="xp-refusals" hidden></ul>
+        <p id="xpEstimate" class="ui-status" role="status" aria-live="polite"></p>
+        <ul id="xpRefusals" class="ui-alert is-error" hidden></ul>
         <div class="ui-toolbar">
           <button id="xpRun" class="ui-button" type="submit" disabled data-i18n="exp.run">
             Run
@@ -378,9 +257,9 @@ try {
       <section id="xpProgressBox" hidden>
         <label class="ui-field">
           <span data-i18n="exp.progress.label">Progress</span>
-          <progress id="xpProgress" max="1000" value="0"></progress>
+          <progress id="xpProgress" class="ui-progress is-block" max="1000" value="0"></progress>
         </label>
-        <p id="xpStatus" class="xp-status" role="status" aria-live="polite"></p>
+        <p id="xpStatus" class="ui-status" role="status" aria-live="polite"></p>
       </section>
 
       <section id="xpResults" hidden aria-labelledby="xpResultsTitle">
@@ -391,7 +270,7 @@ try {
             Each dot is one trial; the line joins the mean at each value.
           </figcaption>
         </figure>
-        <div class="xp-table-wrap">
+        <div class="ui-table-wrap is-numeric">
           <table>
             <caption id="xpSummaryCaption"></caption>
             <thead>
@@ -416,7 +295,7 @@ try {
             Download the trials (CSV)
           </button>
         </div>
-        <div class="xp-table-wrap">
+        <div class="ui-table-wrap is-numeric">
           <table>
             <caption data-i18n="exp.trials.caption">
               Every trial, in the order it was planned
@@ -435,13 +314,13 @@ try {
             <tbody id="xpTrialsBody"></tbody>
           </table>
         </div>
-        <details>
+        <details class="ui-disclosure">
           <summary data-i18n="exp.manifest.title">The experiment as a file</summary>
           <pre id="xpManifest" class="ui-hint"></pre>
         </details>
       </section>
 
-      <details id="xpAnalysis" class="xp-lab">
+      <details id="xpAnalysis" class="ui-card is-compact ui-disclosure xp-lab">
         <summary data-i18n="exp.analysis.title">
           Analyze: uncertainty, sensitivity, distribution
         </summary>
@@ -462,7 +341,7 @@ try {
             Check
           </button>
         </div>
-        <p id="xpCheckOut" class="xp-status" role="status" aria-live="polite"></p>
+        <p id="xpCheckOut" class="ui-status" role="status" aria-live="polite"></p>
       </section>
     </main>
     <!-- shell:footer -->

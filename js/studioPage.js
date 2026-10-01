@@ -270,7 +270,7 @@ function aboutSection(d) {
     );
   const tags = el(
     'fieldset',
-    { id: 'st-tags', className: 'st-checks' },
+    { id: 'st-tags', className: 'ui-choices' },
     el('legend', {}, t('studio.field.tags'))
   );
   for (const tag of TAG_ORDER) {
@@ -285,16 +285,16 @@ function aboutSection(d) {
       })
     );
     tags.append(
-      el('label', { className: 'st-check' }, box, t(`tag.${tag}.label`))
+      el('label', { className: 'ui-choice' }, box, t(`tag.${tag}.label`))
     );
   }
   return el(
     'section',
-    { className: 'st-section', 'aria-labelledby': 'st-about-h' },
+    { className: 'ui-card', 'aria-labelledby': 'st-about-h' },
     el('h2', { id: 'st-about-h' }, t('studio.section.about')),
     el(
       'div',
-      { className: 'st-grid' },
+      { className: 'ui-grid' },
       field(
         'st-id',
         t('studio.field.id'),
@@ -309,13 +309,13 @@ function aboutSection(d) {
     ),
     el(
       'div',
-      { className: 'st-grid' },
+      { className: 'ui-grid' },
       text('title', 'en'),
       text('title', 'es')
     ),
     el(
       'div',
-      { className: 'st-grid' },
+      { className: 'ui-grid' },
       text('summary', 'en', true),
       text('summary', 'es', true)
     ),
@@ -406,7 +406,7 @@ function settingsSection(d) {
     (groups[rule.group] ||= []).push([key, rule]);
   const section = el(
     'section',
-    { className: 'st-section', 'aria-labelledby': 'st-world-h' },
+    { className: 'ui-card', 'aria-labelledby': 'st-world-h' },
     el('h2', { id: 'st-world-h' }, t('studio.section.world')),
     el('p', { className: 'ui-hint' }, t('studio.hint.settings'))
   );
@@ -414,12 +414,12 @@ function settingsSection(d) {
     const box = el(
       'details',
       {
-        className: 'st-group',
+        className: 'ui-disclosure',
         open: group === 'physics' || group === 'population',
       },
       el('summary', {}, t(`studio.group.${group}`))
     );
-    const grid = el('div', { className: 'st-grid st-grid-3' });
+    const grid = el('div', { className: 'ui-grid st-grid-3' });
     for (const [key, rule] of list) {
       const range =
         rule.kind === 'int' || rule.kind === 'number'
@@ -456,7 +456,7 @@ const massUnit = type =>
 function systemSection(d) {
   const section = el(
     'section',
-    { className: 'st-section', 'aria-labelledby': 'st-bodies-h' },
+    { className: 'ui-card', 'aria-labelledby': 'st-bodies-h' },
     el('h2', { id: 'st-bodies-h' }, t('studio.section.bodies')),
     el('p', { className: 'ui-hint' }, t('studio.hint.bodies'))
   );
@@ -522,7 +522,7 @@ function systemSection(d) {
             : t('builder.body.companion', { n: i + 1 })
         )
       );
-      const grid = el('div', { className: 'st-grid st-grid-4' });
+      const grid = el('div', { className: 'ui-grid st-grid-4' });
       grid.append(
         field(
           at('name'),
@@ -688,7 +688,7 @@ function systemSection(d) {
     row.append(
       el(
         'div',
-        { className: 'st-grid st-grid-4' },
+        { className: 'ui-grid st-grid-4' },
         field(
           at('name'),
           t('builder.field.name'),
@@ -780,7 +780,7 @@ function instrumentsSection(d) {
   const box = (list, key) => {
     const set = el(
       'fieldset',
-      { id: `st-${key}`, className: 'st-checks' },
+      { id: `st-${key}`, className: 'ui-choices' },
       el('legend', {}, t(`studio.field.${key}`))
     );
     for (const id of list) {
@@ -797,14 +797,14 @@ function instrumentsSection(d) {
         })
       );
       set.append(
-        el('label', { className: 'st-check' }, input, t(RAIL_LABEL[id]))
+        el('label', { className: 'ui-choice' }, input, t(RAIL_LABEL[id]))
       );
     }
     return set;
   };
   return el(
     'section',
-    { className: 'st-section', 'aria-labelledby': 'st-instruments-h' },
+    { className: 'ui-card', 'aria-labelledby': 'st-instruments-h' },
     el('h2', { id: 'st-instruments-h' }, t('studio.section.instruments')),
     el('p', { className: 'ui-hint' }, t('studio.hint.instruments')),
     box(STARTING_PANELS, 'open'),
@@ -823,11 +823,11 @@ function startSection(d) {
   );
   return el(
     'section',
-    { className: 'st-section', 'aria-labelledby': 'st-start-h' },
+    { className: 'ui-card', 'aria-labelledby': 'st-start-h' },
     el('h2', { id: 'st-start-h' }, t('studio.section.start')),
     el(
       'div',
-      { className: 'st-grid st-grid-3' },
+      { className: 'ui-grid st-grid-3' },
       field(
         'st-seed',
         t('studio.field.seed'),
@@ -882,7 +882,7 @@ function startSection(d) {
         },
         t('studio.action.newSeed')
       ),
-      el('label', { className: 'st-check' }, paused, t('studio.field.paused'))
+      el('label', { className: 'ui-choice' }, paused, t('studio.field.paused'))
     )
   );
 }
@@ -971,7 +971,7 @@ function renderChecks(d, errors) {
     const text = label ? `${label.textContent}: ${describe(e)}` : describe(e);
     const button = el(
       'button',
-      { type: 'button', className: 'st-link', onclick: () => $(id)?.focus() },
+      { type: 'button', className: 'ui-link', onclick: () => $(id)?.focus() },
       text
     );
     list.append(el('li', { 'data-level': 'error' }, id ? button : text));
