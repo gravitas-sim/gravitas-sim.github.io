@@ -15,8 +15,9 @@
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
+import { readFileSync } from 'node:fs';
 import {
-  PROVENANCE,
+  PACK,
   TRACKS,
   TRACK_IDS,
   decodeTrack,
@@ -170,19 +171,29 @@ describe('the main-sequence estimates, which are estimates', () => {
 });
 
 describe('the bundled tracks are the published ones, reduced', () => {
+  // The record is the data pack's manifest; the browser gets PACK.
+  const M = JSON.parse(
+    readFileSync(
+      new URL('../data-packs/mist-v12-tracks.json', import.meta.url),
+      'utf8'
+    )
+  );
+
   test('provenance names the grid, the composition and the citation', () => {
-    expect(PROVENANCE.grid).toBe('MIST v1.2');
-    expect(PROVENANCE.composition.feH).toBe(0);
-    expect(PROVENANCE.rotation).toMatch(/v\/vcrit = 0/);
-    expect(PROVENANCE.cite.join(' ')).toMatch(/Choi/);
-    expect(PROVENANCE.cite.join(' ')).toMatch(/Dotter/);
-    expect(PROVENANCE.sourceSha256).toMatch(/^[0-9a-f]{64}$/);
-    expect(PROVENANCE.source).toMatch(/^https:\/\//);
+    expect(PACK.model.name).toBe('MIST v1.2');
+    expect(PACK.origin).toBe('model');
+    expect(PACK.model.composition.feH).toBe(0);
+    expect(PACK.model.rotation).toMatch(/v\/vcrit = 0/);
+    const cited = PACK.citations.map(c => c.text).join(' ');
+    expect(cited).toMatch(/Choi/);
+    expect(cited).toMatch(/Dotter/);
+    expect(M.raw[0].sha256).toMatch(/^[0-9a-f]{64}$/);
+    expect(M.raw[0].url).toMatch(/^https:\/\//);
   });
 
   test('the grid says what it does not model', () => {
-    expect(PROVENANCE.notModeled.join(' ')).toMatch(/rotation/i);
-    expect(PROVENANCE.notModeled.join(' ')).toMatch(/core collapse/i);
+    expect(M.notModeled.join(' ')).toMatch(/rotation/i);
+    expect(M.notModeled.join(' ')).toMatch(/core collapse/i);
   });
 
   test('the eight masses are the eight asked for', () => {
@@ -194,11 +205,12 @@ describe('the bundled tracks are the published ones, reduced', () => {
   });
 
   test('the Stefan-Boltzmann check that licenses deriving the radius was made', () => {
-    expect(PROVENANCE.stefanBoltzmannCheck.rows).toBeGreaterThan(7000);
-    expect(PROVENANCE.stefanBoltzmannCheck.impliedTeffSunSpreadK).toBeLessThan(
+    const record = M.transformation.record;
+    expect(record.stefanBoltzmannCheck.rows).toBeGreaterThan(7000);
+    expect(record.stefanBoltzmannCheck.impliedTeffSunSpreadK).toBeLessThan(
       1e-6
     );
-    expect(near(PROVENANCE.teffSunK, 5772, 0.001)).toBe(true);
+    expect(near(record.teffSunK, 5772, 0.001)).toBe(true);
   });
 
   test('the reduction stayed inside its stated tolerance on every track', () => {

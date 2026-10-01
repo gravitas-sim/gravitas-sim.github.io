@@ -39,12 +39,11 @@ import path from 'node:path';
 
 import {
   BEFORE_MERGER,
-  CITATION,
+  PACK,
   EVENTS,
   EVENT_IDS,
   decodeEvent,
 } from '../js/data/gw/gwoscEvents.js';
-import { PROVENANCE, RECORDS } from '../js/data/gw/gwoscEventsProvenance.js';
 import {
   GW_EVENT_WIDGETS,
   measureEvent,
@@ -62,6 +61,11 @@ import { mergeTranslation } from '../js/data/investigations/i18n.js';
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const source = rel => readFileSync(path.join(REPO, rel), 'utf8');
 
+/** The data pack's manifest: the record of where the strain came from. */
+const MANIFEST = JSON.parse(source('data-packs/gwosc-five-events.json'));
+const RECORDS = MANIFEST.records;
+const SIZE = MANIFEST.transformation.record.size;
+
 /** The events in the order they were recorded. */
 const RECORDED = ['GW150914', 'GW170817', 'GW190412', 'GW190521', 'GW190814'];
 
@@ -74,17 +78,25 @@ beforeAll(async () => {
 
 describe('provenance', () => {
   test('names the archive, its licence, its attribution and both catalogs', () => {
-    const a = PROVENANCE.archive;
-    expect(a.url).toBe('https://gwosc.org');
-    expect(a.license).toMatch(/CC BY 4\.0/);
-    expect(a.attribution).toMatch(/Gravitational Wave Open Science Center/);
-    expect(a.catalogs['GWTC-1-confident'].doi).toMatch(/10\.7935\/82H3-HH23/);
-    expect(a.catalogs['GWTC-2.1-confident'].doi).toMatch(/10\.7935\/qf3a-3z67/);
-    expect(a.retrieved).toMatch(/^\d{4}-\d{2}-\d{2} UTC$/);
+    const a = MANIFEST.source;
+    expect(a.urls[0]).toBe('https://gwosc.org');
+    expect(MANIFEST.license.status).toBe('cc-by-4.0');
+    expect(a.acknowledgement).toMatch(/Gravitational Wave Open Science Center/);
+    const dois = a.citations.map(c => c.doi);
+    // Both catalog papers, and both strain releases, each under its own DOI.
+    for (const doi of [
+      '10.1103/PhysRevX.9.031040',
+      '10.7935/82H3-HH23',
+      '10.1103/PhysRevD.109.022001',
+      '10.7935/qf3a-3z67',
+    ]) {
+      expect(dois).toContain(doi);
+    }
+    expect(MANIFEST.retrieved).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 
   test('says which of its numbers are observed, measured, copied and modelled', () => {
-    const e = PROVENANCE.evidence;
+    const e = MANIFEST.evidence;
     expect(e.observedStrain).toMatch(/Measured by the LIGO detectors/);
     expect(e.measuredFromStrain).toMatch(/Computed by this project/);
     expect(e.measuredFromStrain).toMatch(/not the merger time/);
@@ -94,12 +106,12 @@ describe('provenance', () => {
   });
 
   test('records why the chirp mass is not measured here', () => {
-    expect(PROVENANCE.notDone.join(' ')).toMatch(/No chirp-mass estimate/);
-    expect(PROVENANCE.notDone.join(' ')).toMatch(/No template, matched filter/);
+    expect(MANIFEST.notDone.join(' ')).toMatch(/No chirp-mass estimate/);
+    expect(MANIFEST.notDone.join(' ')).toMatch(/No template, matched filter/);
   });
 
   test('every rejected candidate says why, and none of them is shipped', () => {
-    for (const r of PROVENANCE.selection.rejected) {
+    for (const r of MANIFEST.selection.rejected) {
       expect(r.why.length).toBeGreaterThan(40);
       expect(EVENT_IDS).not.toContain(r.id);
     }
@@ -122,7 +134,7 @@ describe('provenance', () => {
   });
 
   test('a detector with a documented glitch in its window is not the one drawn', () => {
-    for (const g of PROVENANCE.documentedGlitches) {
+    for (const g of MANIFEST.documentedGlitches) {
       expect(g.source).toMatch(/^https:\/\/gwosc\.org\/events\//);
       const r = RECORDS[g.event];
       expect(r.chosen).not.toBe(g.detector);
@@ -156,18 +168,18 @@ describe('checksums', () => {
       }
     }
     expect(seen.size).toBe(2 * EVENT_IDS.length);
-    expect(PROVENANCE.size.sourceFiles).toBe(seen.size);
+    expect(SIZE.sourceFiles).toBe(seen.size);
   });
 
   test('the recorded payload size is the payload', () => {
     const total = EVENT_IDS.reduce((n, id) => n + EVENTS[id].data.length, 0);
-    expect(PROVENANCE.size.payloadBase64Bytes).toBe(total);
+    expect(SIZE.payloadBase64Bytes).toBe(total);
   });
 
   test('the catalog numbers in the browser are the ones the build pinned', () => {
     // Read from the build tool's own source rather than from anything it
     // generated: the literal is what was checked against GWOSC's JSON.
-    const tool = source('tools/build-gwosc-events.mjs');
+    const tool = source('tools/data-packs/gwosc-events.mjs');
     for (const id of EVENT_IDS) {
       const block = tool.slice(tool.indexOf(`id: '${id}'`));
       const c = EVENTS[id].catalog.chirp_mass_source;
@@ -192,8 +204,15 @@ describe('when the archive is unavailable or wrong, the build says so', () => {
       encoding: 'utf8',
       env: { ...process.env, GRAVITAS_GWOSC_CACHE: cache },
     });
-  const names = EVENT_IDS.flatMap(id =>
-    Object.values(RECORDS[id].detectors).map(d => d.url.split('/').pop())
+  // Every raw file the manifest pins: the strain, and the event-API answers
+  // the catalog values are held to.
+  const names = MANIFEST.raw.map(r => r.file);
+  expect(names).toEqual(
+    expect.arrayContaining(
+      EVENT_IDS.flatMap(id =>
+        Object.values(RECORDS[id].detectors).map(d => d.url.split('/').pop())
+      )
+    )
   );
   let empty;
   let corrupt;
@@ -233,7 +252,8 @@ describe('when the archive is unavailable or wrong, the build says so', () => {
   test('bytes that are not the pinned ones are refused by their checksum', () => {
     const r = run(corrupt, '--check', '--require-sources');
     expect(r.status).toBe(1);
-    expect(r.stderr).toMatch(/expected [0-9a-f]{64}/);
+    // Refused by its size or its SHA-256, whichever differs first.
+    expect(r.stderr).toMatch(/not the pinned ([0-9a-f]{64}|\d+)/);
     expect(r.stdout).not.toMatch(/provenance verified/);
   });
 });
@@ -248,16 +268,19 @@ describe('the runtime copy and the record', () => {
             ? [path.join(dir, e.name)]
             : []
       );
-    const importers = walk('js')
-      .filter(f => !f.startsWith(path.join('js', 'data', 'gw')))
-      .filter(f => source(f).includes('gwoscEventsProvenance'));
+    // The record is the pack manifest, outside js/, and nothing in js/
+    // imports a manifest.
+    const importers = walk('js').filter(f =>
+      /\bimport\b[^;]*data-packs\/|gwoscEventsProvenance/.test(source(f))
+    );
     expect(importers).toEqual([]);
+    expect(MANIFEST.derived.file).toBe('js/data/gw/gwoscEvents.js');
   });
 
   test('the readout can still name its source and its licence', () => {
-    expect(CITATION).toMatch(/GWOSC/);
-    expect(CITATION).toMatch(/CC BY 4\.0/);
-    expect(CITATION).toMatch(/GWTC-1 and GWTC-2\.1/);
+    expect(PACK.credit).toMatch(/GWOSC/);
+    expect(PACK.credit).toMatch(/CC BY 4\.0/);
+    expect(PACK.credit).toMatch(/GWTC-1 and GWTC-2\.1/);
   });
 
   test('the committed data stays small enough to be a lesson and not an archive', () => {
@@ -266,7 +289,7 @@ describe('the runtime copy and the record', () => {
     // here before it showed in the bundle budget.
     const bytes = Buffer.byteLength(source('js/data/gw/gwoscEvents.js'));
     expect(bytes).toBeLessThan(64 * 1024);
-    expect(PROVENANCE.size.sourceBytes).toBeGreaterThan(12_000_000);
+    expect(SIZE.sourceBytes).toBeGreaterThan(12_000_000);
   });
 });
 
@@ -514,7 +537,6 @@ describe('the disagreement with the model is in the data, not the map', () => {
 describe('nothing reaches the network at run time', () => {
   const FILES = [
     'js/data/gw/gwoscEvents.js',
-    'js/data/gw/gwoscEventsProvenance.js',
     'js/gwEventWidgets.js',
     'js/gw/psd.js',
     'js/gw/qscan.js',

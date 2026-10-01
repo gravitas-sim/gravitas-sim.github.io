@@ -321,8 +321,8 @@
   "offline": "optional",
   "derived": {
     "file": "js/data/observations/mistSdssIsochrones.js",
-    "bytes": 34731,
-    "sha256": "1a550816d14dfec4e3f2348ca42fc7a14114c724aaa70289bfaa4f46eff287e3"
+    "bytes": 35286,
+    "sha256": "e939f2ce4c2d1a6cf2307768f79f2ef22f5e01d4d0c2d96ac29458582f89c588"
   },
   "validation": {
     "check": "on the solar-metallicity main sequence at log age 9.6, a 1 Msun star (interpolated in mass) is within 0.1 dex of log L = 0 and 0.01 dex of the Sun's log Teff",

@@ -84,6 +84,20 @@ export const PACK = {
     '20-minute bins average 10 two-minute cadences each, which rounds ingress and egress to a bin.',
     'Flux is kept to 1 ppm and its error to 5 ppm.',
   ],
+  citations: [
+    {
+      text: 'TESS Light Curves - All Sectors, STScI/MAST',
+      doi: '10.17909/t9-nmc8-f686',
+    },
+    {
+      text: 'Ricker et al. 2015, JATIS 1, 014003 (TESS)',
+      doi: '10.1117/1.JATIS.1.1.014003',
+    },
+    {
+      text: 'Jenkins et al. 2016, Proc. SPIE 9913, 99133E (SPOC)',
+      doi: '10.1117/12.2233418',
+    },
+  ],
 };
 
 /** The series, encoded as SERIES.encoding says; see js/observation.js. */

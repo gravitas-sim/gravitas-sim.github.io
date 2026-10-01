@@ -41,7 +41,12 @@ const { EN_POPULATIONS } = await import('../js/i18n/en.populations.js');
 const { ES_POPULATIONS } = await import('../js/i18n/es.populations.js');
 const EN_GUIDES = { ...EN_RUNNER, ...EN_POPULATIONS };
 const ES_GUIDES = { ...ES_RUNNER, ...ES_POPULATIONS };
-const { RECORDS } = await import('../js/data/spectra/sdssSpectraProvenance.js');
+const { records: RECORDS } = JSON.parse(
+  readFileSync(
+    new URL('../data-packs/sdss-dr18-stellar-spectra.json', import.meta.url),
+    'utf8'
+  )
+);
 const PHOT = await import('../js/data/observations/sdssNgc2420Photometry.js');
 const R = await import('../tools/populations-reference.mjs');
 const { POPULATIONS_KEY } = await import('../js/data/populationsAnswerKey.js');

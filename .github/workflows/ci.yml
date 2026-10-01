@@ -801,7 +801,7 @@ jobs:
             .gwosc-cache
             .packs-cache
             .ephemeris-cache
-          key: sources-${{ hashFiles('tools/build-gw-data.mjs', 'tools/build-stellar-tracks.mjs', 'tools/build-sdss-spectra.mjs', 'tools/build-gwosc-events.mjs', 'tools/build-data-packs.mjs', 'tools/build-ephemeris.mjs', 'data-packs/**', 'extensions/*/build.mjs', 'ephemeris-packs/**') }}
+          key: sources-${{ hashFiles('tools/build-gw-data.mjs', 'tools/build-stellar-tracks.mjs', 'tools/build-sdss-spectra.mjs', 'tools/build-gwosc-events.mjs', 'tools/build-data-packs.mjs', 'tools/data-packs/**', 'tools/build-ephemeris.mjs', 'data-packs/**', 'extensions/*/build.mjs', 'ephemeris-packs/**') }}
           restore-keys: sources-
 
       # One step per source, so an archive that is down (SDSS answered HTTP

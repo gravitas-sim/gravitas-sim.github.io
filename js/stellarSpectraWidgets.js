@@ -497,7 +497,7 @@ const SPECTRA_COMPARE = {
         value: whereMeasured(f),
       });
     }
-    rows.push({ label: t('specW.row.cite'), value: data.CITATION });
+    rows.push({ label: t('specW.row.cite'), value: data.PACK.credit });
     rows.push({ label: t('specW.row.limits'), value: t('specW.value.limits') });
     return rows;
   },
@@ -648,7 +648,7 @@ const SPECTRA_IDENTIFY = {
         date: s.observed,
       }),
     });
-    rows.push({ label: t('specW.row.cite'), value: data.CITATION });
+    rows.push({ label: t('specW.row.cite'), value: data.PACK.credit });
     rows.push({
       label: t('specW.row.answer'),
       value: revealed

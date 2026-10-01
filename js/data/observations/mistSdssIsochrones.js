@@ -97,6 +97,28 @@ export const PACK = {
     "Each phase of each isochrone thinned (Ramer-Douglas-Peucker) to within 0.005 mag of MIST's in g and g - r.",
     'Absolute magnitudes with no extinction: a comparison with a cluster adds its distance modulus and its extinction.',
   ],
+  citations: [
+    {
+      text: 'Dotter 2016, ApJS 222, 8 (MIST 0)',
+      doi: '10.3847/0067-0049/222/1/8',
+    },
+    {
+      text: 'Choi et al. 2016, ApJ 823, 102 (MIST I)',
+      doi: '10.3847/0004-637X/823/2/102',
+    },
+    {
+      text: 'Paxton et al. 2011, ApJS 192, 3 (MESA)',
+      doi: '10.1088/0067-0049/192/1/3',
+    },
+    {
+      text: 'Paxton et al. 2013, ApJS 208, 4 (MESA)',
+      doi: '10.1088/0067-0049/208/1/4',
+    },
+    {
+      text: 'Paxton et al. 2015, ApJS 220, 15 (MESA)',
+      doi: '10.1088/0067-0049/220/1/15',
+    },
+  ],
 };
 
 /** The series, encoded as SERIES.encoding says; see js/tableObservation.js. */

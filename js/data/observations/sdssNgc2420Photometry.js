@@ -99,6 +99,20 @@ export const PACK = {
     'Positions are rounded to 0.00001 degree (0.04 arcsec), magnitudes to 1 mmag and their errors to 0.5 mmag.',
     "The SDSS object ids are left out; the query in the pack's manifest returns them.",
   ],
+  citations: [
+    {
+      text: 'Almeida et al. 2023, ApJS 267, 44 (SDSS DR18)',
+      doi: '10.3847/1538-4365/acda98',
+    },
+    {
+      text: 'York et al. 2000, AJ 120, 1579 (the Sloan Digital Sky Survey)',
+      doi: '10.1086/301513',
+    },
+    {
+      text: 'An et al. 2008, ApJS 179, 326 (SDSS photometry of crowded cluster fields)',
+      doi: '10.1086/592090',
+    },
+  ],
 };
 
 /** The series, encoded as SERIES.encoding says; see js/tableObservation.js. */

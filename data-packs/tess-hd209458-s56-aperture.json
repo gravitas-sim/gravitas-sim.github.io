@@ -189,8 +189,8 @@
   "offline": "optional",
   "derived": {
     "file": "js/data/observations/tessHd209458S56Aperture.js",
-    "bytes": 4131,
-    "sha256": "7e1ab91b524d9a39bc0c1082ed3b74edd27b1bb359d54c4b66cb36e8992d1f5d"
+    "bytes": 4719,
+    "sha256": "82abe3d902c8f56417c543085f4289efb10afcbab0c1ac3f0c1c6a12705c4d60"
   },
   "validation": {
     "check": "the optimal aperture holds the NPIXSAP pixels the header counts, every pixel was collected, and the flux-weighted-centroid pixels center within one pixel (about 19 arcseconds) of the target",

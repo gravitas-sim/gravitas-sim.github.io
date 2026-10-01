@@ -12,7 +12,8 @@
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
-import { PROVENANCE, TRACES, decodeTrace } from '../js/data/gw/gw150914.js';
+import { readFileSync } from 'node:fs';
+import { PACK, FINDINGS, TRACES, decodeTrace } from '../js/data/gw/gw150914.js';
 import { iscoFrequency } from '../js/gw/waveform.js';
 
 const peakOf = values => {
@@ -28,35 +29,44 @@ const peakOf = values => {
 };
 
 describe('provenance is complete enough to audit', () => {
+  // The record is the data pack's manifest; the browser gets PACK, its
+  // runtime fields, and FINDINGS.
+  const M = JSON.parse(
+    readFileSync(
+      new URL('../data-packs/gw150914-figure-data.json', import.meta.url),
+      'utf8'
+    )
+  );
+
   test.each([
-    'event',
-    'doi',
-    'arxiv',
-    'license',
-    'attribution',
-    'baseUrl',
-    'eventPage',
-    'gpsEpoch',
-    'sourceSampleRate',
-  ])('records %s', field => {
-    expect(PROVENANCE[field]).toBeTruthy();
+    ['event', M.object.name],
+    ['doi', M.source.citations[0].doi],
+    ['license', M.license.statement],
+    ['attribution', M.source.acknowledgement],
+    ['event page', M.source.urls[0]],
+    ['GPS epoch', M.object.gpsEpoch],
+    ['source sample rate', M.transformation.record.sourceSampleRate],
+    ['retrieval date', M.retrieved],
+  ])('records %s', (field, value) => {
+    expect(value).toBeTruthy();
   });
 
   test('names the paper and its DOI', () => {
-    expect(PROVENANCE.doi).toBe('10.1103/PhysRevLett.116.061102');
-    expect(PROVENANCE.paper).toMatch(/Abbott/);
+    expect(PACK.citations[0].doi).toBe('10.1103/PhysRevLett.116.061102');
+    expect(PACK.credit).toMatch(/Abbott/);
   });
 
   test('is CC BY 4.0 and carries the GWOSC acknowledgment', () => {
-    expect(PROVENANCE.license).toMatch(/CC BY 4\.0/);
-    expect(PROVENANCE.attribution).toMatch(
+    expect(M.license.status).toBe('cc-by-4.0');
+    expect(PACK.license.statement).toMatch(/CC BY 4\.0/);
+    expect(M.source.acknowledgement).toMatch(
       /Gravitational Wave Open Science Center/
     );
   });
 
-  test('records a checksum and a URL for every input file', () => {
-    expect(PROVENANCE.inputs.length).toBe(Object.keys(TRACES).length);
-    for (const input of PROVENANCE.inputs) {
+  test('pins every input file by size and SHA-256', () => {
+    expect(M.raw.length).toBe(Object.keys(TRACES).length);
+    for (const input of M.raw) {
       expect(input.sha256).toMatch(/^[0-9a-f]{64}$/);
       expect(input.url.startsWith('https://gwosc.org/')).toBe(true);
       expect(input.bytes).toBeGreaterThan(1000);
@@ -64,15 +74,20 @@ describe('provenance is complete enough to audit', () => {
   });
 
   test('says what was done and what was deliberately not done', () => {
-    expect(PROVENANCE.processing.length).toBeGreaterThan(0);
-    expect(PROVENANCE.notApplied.join(' ')).toMatch(/No time shift/);
-    expect(PROVENANCE.notApplied.join(' ')).toMatch(/No sign inversion/);
-    expect(PROVENANCE.priorProcessingByPublisher.join(' ')).toMatch(/35-350/);
+    expect(M.transformation.steps.length).toBeGreaterThan(0);
+    expect(M.notApplied.join(' ')).toMatch(/No time shift/);
+    expect(M.notApplied.join(' ')).toMatch(/No sign inversion/);
+    expect(M.priorProcessingByPublisher.join(' ')).toMatch(/35-350/);
   });
 
   test('the time axis is the published one', () => {
-    expect(PROVENANCE.gpsEpoch).toBe(1126259462);
-    expect(PROVENANCE.detectedAt).toBe('2015-09-14T09:50:45Z');
+    expect(M.object.gpsEpoch).toBe(1126259462);
+    expect(M.object.detectedAt).toBe('2015-09-14T09:50:45Z');
+    expect(PACK.time.reference).toBe('seconds after GPS 1126259462');
+  });
+
+  test('the findings the browser shows are the ones the manifest records', () => {
+    expect(FINDINGS).toEqual(M.transformation.record.findings);
   });
 });
 
@@ -184,24 +199,24 @@ describe('the traces decode to the published numbers', () => {
 
 describe('the two detectors, as published', () => {
   test('the observed traces are anti-correlated, and the build measured it', () => {
-    expect(PROVENANCE.findings.observedHvsL.inverted).toBe(true);
-    expect(PROVENANCE.findings.observedHvsL.correlation).toBeLessThan(-0.5);
+    expect(FINDINGS.observedHvsL.inverted).toBe(true);
+    expect(FINDINGS.observedHvsL.correlation).toBeLessThan(-0.5);
   });
 
   test('the shift between them is a light-travel time across the Earth', () => {
     // The detectors are 3002 km apart, so 10.0 ms is the largest possible
     // delay. The recorded value has to be under that and comfortably non-zero.
     for (const key of ['observedHvsL', 'reconstructionHvsL']) {
-      const lag = Math.abs(PROVENANCE.findings[key].lagMs);
+      const lag = Math.abs(FINDINGS[key].lagMs);
       expect(lag).toBeGreaterThan(3);
       expect(lag).toBeLessThan(10.1);
     }
   });
 
   test('the two reconstructions agree far better than the two observations', () => {
-    expect(
-      Math.abs(PROVENANCE.findings.reconstructionHvsL.correlation)
-    ).toBeGreaterThan(Math.abs(PROVENANCE.findings.observedHvsL.correlation));
+    expect(Math.abs(FINDINGS.reconstructionHvsL.correlation)).toBeGreaterThan(
+      Math.abs(FINDINGS.observedHvsL.correlation)
+    );
   });
 
   test('each observation matches its own reconstruction with no shift', () => {
@@ -209,7 +224,7 @@ describe('the two detectors, as published', () => {
       'observedVsReconstructionH1',
       'observedVsReconstructionL1',
     ]) {
-      const f = PROVENANCE.findings[key];
+      const f = FINDINGS[key];
       expect(f.correlation).toBeGreaterThan(0.7);
       expect(Math.abs(f.lagMs)).toBeLessThan(0.5);
     }

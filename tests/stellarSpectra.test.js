@@ -30,15 +30,11 @@ import {
   GRID,
   SPECTRA,
   SPECTRUM_IDS,
-  CITATION,
+  PACK,
   decodeSpectrum,
   wavelengths,
   wavelengthAt,
 } from '../js/data/spectra/sdssSpectra.js';
-import {
-  PROVENANCE,
-  RECORDS,
-} from '../js/data/spectra/sdssSpectraProvenance.js';
 import {
   SPECTRAL_FEATURES,
   airToVacuum,
@@ -59,6 +55,12 @@ import A_UNIVERSE_OF_STARS from '../js/data/investigations/a-universe-of-stars.j
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const source = rel => readFileSync(path.join(REPO, rel), 'utf8');
 
+/** The data pack's manifest: the record of where the four came from. */
+const MANIFEST = JSON.parse(
+  source('data-packs/sdss-dr18-stellar-spectra.json')
+);
+const RECORDS = MANIFEST.records;
+
 /**
  * The four feature labels, as a reader sees them.
  *
@@ -75,32 +77,37 @@ const byLetter = Object.fromEntries(
 
 describe('provenance', () => {
   test('says these are observations, not models', () => {
-    expect(PROVENANCE.kind).toBe('observation');
-    expect(PROVENANCE.what).toMatch(/measurements of four real stars/i);
-    expect(PROVENANCE.what).toMatch(/nothing here is a model/i);
-    expect(PROVENANCE.what).toMatch(/synthetic/i);
+    expect(MANIFEST.origin).toBe('observed');
+    expect(PACK.origin).toBe('observed');
+    const header = source('js/data/spectra/sdssSpectra.js');
+    expect(header).toMatch(/THESE ARE OBSERVATIONS/);
+    expect(header).toMatch(
+      /Nothing in this file is a\s+\/\/ model, a fit or a synthetic spectrum/
+    );
   });
 
   test('carries every field a reader needs to find the data again', () => {
-    for (const field of [
-      'archive',
-      'catalogQuery',
-      'selection',
-      'classification',
-      'grid',
-      'units',
-      'transformations',
-      'notDone',
-      'size',
-      'thinning',
-      'caveats',
+    for (const value of [
+      MANIFEST.source.archive,
+      MANIFEST.source.catalogQuery,
+      MANIFEST.selection,
+      MANIFEST.assumptions,
+      MANIFEST.columns,
+      MANIFEST.transformation.steps,
+      MANIFEST.notDone,
+      MANIFEST.transformation.record.size,
+      MANIFEST.transformation.record.thinning,
+      MANIFEST.caveats,
     ]) {
-      expect(PROVENANCE[field]).toBeTruthy();
+      expect(value).toBeTruthy();
     }
-    expect(PROVENANCE.archive.acknowledgement).toMatch(/Sloan/);
-    expect(PROVENANCE.archive.retrieved).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-    expect(PROVENANCE.units.wavelength).toMatch(/vacuum/i);
-    expect(PROVENANCE.units.flux).toMatch(/erg/);
+    expect(MANIFEST.assumptions.join(' ')).toMatch(
+      /two independent pipeline classifications/i
+    );
+    expect(MANIFEST.source.acknowledgement).toMatch(/Sloan/);
+    expect(MANIFEST.retrieved).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(MANIFEST.columns[0].description).toMatch(/vacuum/i);
+    expect(MANIFEST.columns[1].unit).toMatch(/erg/);
   });
 
   test('every spectrum names its archive identity and its observation date', () => {
@@ -133,28 +140,26 @@ describe('provenance', () => {
   });
 
   test('records what was done to the numbers, and what was not', () => {
-    const steps = PROVENANCE.transformations.map(t => t.step);
-    expect(steps).toEqual(['trim', 'bin', 'quantise']);
-    for (const t of PROVENANCE.transformations) {
-      expect(t.from).toBeTruthy();
-      expect(t.to).toBeTruthy();
-      expect(t.why).toBeTruthy();
-      expect(t.parameters).toBeTruthy();
-    }
+    const steps = MANIFEST.transformation.steps;
+    expect(steps).toHaveLength(4);
+    expect(steps[1]).toMatch(/^Trim/);
+    expect(steps[2]).toMatch(/^Average/);
+    expect(steps[3]).toMatch(/^Quantise/);
+    expect(MANIFEST.transformation.version).toMatch(/^\d+\.\d+\.\d+$/);
     // The four things a spectrum bundle is most likely to have done quietly.
-    const notDone = PROVENANCE.notDone.join(' ').toLowerCase();
+    const notDone = MANIFEST.notDone.join(' ').toLowerCase();
     for (const word of ['smoothing', 'normalisation', 'continuum', 'rest']) {
       expect(notDone).toContain(word);
     }
   });
 
   test('the recorded bin factor is the one the grid actually has', () => {
-    const bin = PROVENANCE.transformations.find(t => t.step === 'bin');
+    const { bin } = MANIFEST.transformation.options;
     // SDSS samples at log step 1e-4. The stored grid must be an exact whole
     // multiple of it, and that multiple must be the factor the record claims.
     const factor = GRID.logStep / 1e-4;
     expect(factor).toBeCloseTo(Math.round(factor), 9);
-    expect(bin.parameters).toContain(String(Math.round(factor)));
+    expect(bin).toBe(Math.round(factor));
     expect(GRID.count * Math.round(factor)).toBeLessThanOrEqual(
       Math.min(...SPECTRUM_IDS.map(id => RECORDS[id].sourceSamples))
     );
@@ -162,19 +167,23 @@ describe('provenance', () => {
 
   test('the thinning cost is recorded per feature and is small', () => {
     for (const f of SPECTRAL_FEATURES) {
-      expect(PROVENANCE.thinning.worstShiftPP[f.id]).toBeLessThan(3);
+      expect(
+        MANIFEST.transformation.record.thinning.worstShiftPP[f.id]
+      ).toBeLessThan(3);
     }
     // Smaller than the smallest contrast the lesson asks a reader to see,
     // which is the G star's hydrogen against the K star's - about 5 points.
-    expect(PROVENANCE.thinning.worstOverall).toBeLessThan(2);
+    expect(MANIFEST.transformation.record.thinning.worstOverall).toBeLessThan(
+      2
+    );
   });
 });
 
 describe('checksums', () => {
   test('the data the browser loads is the data the record checksums', () => {
     // Across the two files: the flux from the module the widget imports, the
-    // checksum from the record nothing imports. If either were regenerated
-    // without the other, this is what fails.
+    // checksum from the manifest the browser never loads. If either were
+    // regenerated without the other, this is what fails.
     for (const id of SPECTRUM_IDS) {
       const digest = createHash('sha256')
         .update(Buffer.from(SPECTRA[id].data, 'base64'))
@@ -222,8 +231,9 @@ describe('the runtime copy and the record', () => {
   });
 
   test('no module in the application imports the record, so it is never shipped', () => {
-    // The whole reason it is a separate file. A single import from js/ would
-    // put its 8 KB back into the lesson's chunk without failing anything else.
+    // The record is the pack manifest, outside js/. A single import of it
+    // from js/ would put its kilobytes into the lesson's chunk without failing
+    // anything else.
     const walk = dir =>
       readdirSync(path.join(REPO, dir), { withFileTypes: true }).flatMap(e =>
         e.isDirectory()
@@ -232,15 +242,18 @@ describe('the runtime copy and the record', () => {
             ? [path.join(dir, e.name)]
             : []
       );
-    const importers = walk('js')
-      .filter(f => !f.startsWith(path.join('js', 'data', 'spectra')))
-      .filter(f => source(f).includes('sdssSpectraProvenance'));
+    const importers = walk('js').filter(f =>
+      /\bimport\b[^;]*data-packs\/|sdssSpectraProvenance/.test(source(f))
+    );
     expect(importers).toEqual([]);
+    expect(MANIFEST.derived.file).toBe('js/data/spectra/sdssSpectra.js');
   });
 
-  test('the readout can still name its source', () => {
-    expect(CITATION).toMatch(/SDSS DR18/);
-    expect(CITATION).toMatch(/Almeida et al\. 2023/);
+  test('the readout can still name its source, and it is the manifest’s', () => {
+    expect(PACK.credit).toMatch(/SDSS DR18/);
+    expect(PACK.credit).toMatch(/Almeida et al\. 2023/);
+    expect(PACK.credit).toBe(MANIFEST.credit);
+    expect(PACK.citations).toEqual(MANIFEST.source.citations);
   });
 });
 
@@ -457,7 +470,6 @@ describe('the claims the lesson makes about the data', () => {
 describe('nothing reaches the network at run time', () => {
   const FILES = [
     'js/data/spectra/sdssSpectra.js',
-    'js/data/spectra/sdssSpectraProvenance.js',
     'js/stellarSpectraWidgets.js',
     'js/stellar/spectrumIndex.js',
   ];

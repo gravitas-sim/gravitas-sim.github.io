@@ -122,15 +122,22 @@ describe('the public surface', () => {
     });
   });
 
-  test('an installed pack is readable, and a dataset that predates packs says so', async () => {
+  test('an installed pack is readable, the SDSS spectra among them now their record is a manifest', async () => {
     const { record, observation } = await api.installedDataPack(
       'tess-hd209458-s56-lc'
     );
     expect(record.format).toBe('gravitas.observation-data-pack');
     expect(api.checkObservation(observation)).toEqual([]);
-    await expect(
-      api.installedDataPack('sdss-dr18-stellar-spectra')
-    ).rejects.toThrow(/predates gravitas.observation-data-pack/);
+    // Refused until Roadmap II Prompt 62, when its record was a .js module.
+    const sdss = await api.installedDataPack('sdss-dr18-stellar-spectra');
+    expect(sdss.record.format).toBe('gravitas.observation-data-pack');
+    expect(sdss.record.id).toBe('sdss-dr18-stellar-spectra');
+    expect(sdss.file).toBe('js/data/spectra/sdssSpectra.js');
+    // Its module keeps the shape the spectra instruments read, with PACK
+    // beside it, so there is no shared-encoding observation to decode.
+    expect(sdss.observation).toBe(null);
+    expect(sdss.module.PACK.id).toBe(sdss.record.id);
+    expect(sdss.module.SPECTRUM_IDS).toEqual(['a', 'g', 'k', 'm']);
     await expect(api.installedDataPack('nothing-here')).rejects.toThrow(
       /no data pack/
     );

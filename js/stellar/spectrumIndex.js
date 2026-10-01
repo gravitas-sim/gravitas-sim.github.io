@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The air-to-vacuum conversion, the window mean, and the band depth. No canvas,
 // no state and no strings: js/stellarSpectraWidgets.js draws what this returns
-// and tools/build-sdss-spectra.mjs measures with it at build time.
+// and tools/data-packs/sdss-spectra.mjs measures with it at build time.
 //
 // One implementation on purpose. The build has to measure a feature in the
 // full-resolution archive spectrum to say what the thinning cost, and the

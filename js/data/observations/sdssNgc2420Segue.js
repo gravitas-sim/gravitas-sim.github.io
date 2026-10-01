@@ -142,6 +142,28 @@ export const PACK = {
     'Positions are rounded to 0.00002 degree (0.07 arcsec), velocities to 0.01 km/s, Teff to 1 K, log g and [Fe/H] to 0.001 dex.',
     "The spectrum ids are left out; the query in the pack's manifest returns them.",
   ],
+  citations: [
+    {
+      text: 'Almeida et al. 2023, ApJS 267, 44 (SDSS DR18)',
+      doi: '10.3847/1538-4365/acda98',
+    },
+    {
+      text: 'York et al. 2000, AJ 120, 1579 (the Sloan Digital Sky Survey)',
+      doi: '10.1086/301513',
+    },
+    {
+      text: 'Lee et al. 2008a, AJ 136, 2022 (the SEGUE Stellar Parameter Pipeline)',
+      doi: '10.1088/0004-6256/136/5/2022',
+    },
+    {
+      text: 'Lee et al. 2008b, AJ 136, 2050 (its validation on globular and open clusters, NGC 2420 among them)',
+      doi: '10.1088/0004-6256/136/5/2050',
+    },
+    {
+      text: 'Yanny et al. 2009, AJ 137, 4377 (SEGUE)',
+      doi: '10.1088/0004-6256/137/5/4377',
+    },
+  ],
 };
 
 /** The series, encoded as SERIES.encoding says; see js/tableObservation.js. */

@@ -1,71 +1,129 @@
 // =============================================================================
 // A curated subset of the MIST stellar evolution tracks
 // -----------------------------------------------------------------------------
-// GENERATED FILE. Do not edit. Written by tools/build-stellar-tracks.mjs; run
+// GENERATED FILE. Do not edit. Written by tools/data-packs/mist-tracks.mjs; run
 // `npm run stellar:data` to regenerate and `npm run stellar:check` to verify.
 //
-// Seven tracks at solar metallicity with no rotation, reduced from about 7,700
+// Eight tracks at solar metallicity with no rotation, reduced from about 7,700
 // rows of 77 columns to a few hundred rows of four. MIST computed these; this
-// project reduced them and recorded how. PROVENANCE carries the version, the
-// composition, the source URL and checksum, the citation the modelers ask for,
-// and the error the reduction introduced.
+// project reduced them and recorded how, in the data pack's manifest,
+// data-packs/mist-v12-tracks.json: the version, the composition, the source
+// URL and checksum, the citations the modelers ask for, and the error the
+// reduction introduced. PACK is that manifest's runtime fields.
 //
 // These are model examples. None of them is a reconstruction of a named star.
 // =============================================================================
 
 /* eslint-disable */
 
-/** Where every number here came from, and what was done to it. */
-export const PROVENANCE = {
-  grid: 'MIST v1.2',
-  mesaRevision: 7503,
-  source:
-    'https://mist.science/data/tarballs_v1.2/MIST_v1.2_feh_p0.00_afe_p0.0_vvcrit0.0_EEPS.txz',
-  sourceSha256:
-    'a445d926c1765e951eb1bf6811dbfb14635725efcf63aaaa883d02f36cc58741',
-  sourceBytes: 100050704,
-  homepage: 'https://mist.science/',
-  composition: {
-    yInit: 0.2703,
-    zInit: 0.0142857,
-    feH: 0,
-    alphaFe: 0,
-    vDivVcrit: 0,
-    note: 'Solar-scaled abundances from Asplund et al. (2009). [Fe/H] = 0, [a/Fe] = 0.',
+/** What the data is and who to credit, as an interface shows it. */
+export const PACK = {
+  id: 'mist-v12-tracks',
+  version: '1.0.0',
+  title:
+    'MIST v1.2 evolutionary tracks: eight model stars at solar metallicity',
+  object: {
+    name: 'Eight model stars of 0.2 to 40 solar masses',
+    identifiers: [
+      '0.2 Msun',
+      '0.5 Msun',
+      '1 Msun',
+      '2 Msun',
+      '5 Msun',
+      '10 Msun',
+      '20 Msun',
+      '40 Msun',
+    ],
   },
-  rotation: 'none: v/vcrit = 0',
-  cite: [
-    'Dotter (2016), ApJS 222, 8',
-    'Choi et al. (2016), ApJ 823, 102',
-    'Paxton et al. (2011, 2013, 2015), the MESA instrument papers',
+  facility: {
+    observatory: 'MIST (MESA Isochrones and Stellar Tracks)',
+    instrument: 'MESA r7503',
+    pipeline: 'MIST v1.2 EEP tracks, [Fe/H] = 0, [a/Fe] = 0, v/vcrit = 0',
+  },
+  dataType: 'model-grid',
+  origin: 'model',
+  credit: 'MIST v1.2 (Dotter 2016; Choi et al. 2016)',
+  license: {
+    status: 'no-license-stated',
+    statement:
+      'MIST asks that Dotter 2016 and Choi et al. 2016 be cited by any publication using the models, and states no separate redistribution license.',
+    basis:
+      'What is bundled here is a heavily reduced derived subset for teaching, attributed in full, with the exact source and checksum recorded so the originals can be recovered. If MIST would prefer this not be redistributed, the build script reproduces it from their download in one command.',
+  },
+  retrieved: '2026-10-01',
+  columns: [
+    {
+      name: 'log age',
+      unit: 'dex',
+      description:
+        'log10 of years since the start of the MIST track (EEP 1, an early pre-main-sequence model)',
+    },
+    {
+      name: 'mass',
+      unit: 'Msun',
+      description: 'current, not initial',
+    },
+    {
+      name: 'log L',
+      unit: 'dex',
+      description: 'log10 of bolometric luminosity in solar units',
+    },
+    {
+      name: 'log Teff',
+      unit: 'dex',
+      description: 'log10 of effective temperature in kelvin',
+    },
+    {
+      name: 'phase',
+      unit: '',
+      description: 'MIST’s own phase flag',
+    },
   ],
-  terms:
-    'MIST asks that the papers above be cited by any publication using the models and states no separate redistribution license. What is bundled here is a heavily reduced derived subset for teaching, attributed in full, with the exact source and checksum recorded so the originals can be recovered. If MIST would prefer this not be redistributed, the build script reproduces it from their download in one command.',
-  whyV12:
-    'v1.2 rather than the newer v2.5 because its two describing papers are published and citable; the v2.5 references are listed as forthcoming.',
-  units: {
-    age: 'years since the start of the MIST track (EEP 1, an early pre-main-sequence model), stored as log10',
-    mass: 'solar masses, current rather than initial',
-    luminosity: 'log10 of bolometric luminosity in solar units',
-    temperature: 'log10 of effective temperature in kelvin',
-    radius: 'not stored; derived from L and Teff',
+  masks: [],
+  reductions: [
+    'Thinned from about 7,700 rows of 77 columns to a few hundred rows of four, within 0.004 dex of the curve, with the primary evolutionary points kept; the worst error is recorded on each track.',
+    'The radius is not stored: it follows from L and Teff, which MIST’s own radii satisfy to machine precision.',
+  ],
+  model: {
+    name: 'MIST v1.2',
+    mesaRevision: 7503,
+    composition: {
+      yInit: 0.2703,
+      zInit: 0.0142857,
+      feH: 0,
+      alphaFe: 0,
+      vDivVcrit: 0,
+      note: 'Solar-scaled abundances from Asplund et al. (2009). [Fe/H] = 0, [a/Fe] = 0.',
+    },
+    rotation: 'none: v/vcrit = 0',
+    ageZeroPoint:
+      'years since the start of the MIST track (EEP 1, an early pre-main-sequence model), stored as log10',
   },
-  teffSunK: 5772.16,
-  stefanBoltzmannCheck: {
-    rows: 8285,
-    impliedTeffSunSpreadK: 3.55e-11,
-    note: "MIST's own log_R column is reproduced by L = 4 pi R^2 sigma Teff^4 to machine precision across every row of every track, which is why the radius is derived here rather than stored.",
-  },
-  reduction: {
-    algorithm:
-      'Ramer-Douglas-Peucker on the H-R curve, on luminosity against age, and on mass against age, unioned, within each primary-EEP segment. The primary EEPs are pinned.',
-    toleranceDex: 0.004,
-    note: 'The worst error the thinning introduced is recorded per track.',
-  },
-  notModeled: [
-    'Rotation, binarity, magnetic fields, and any metallicity but solar.',
-    'Core collapse and everything after it: the 10 and 20 solar-mass tracks stop while the star is still a red supergiant.',
-    'White-dwarf cooling beyond the first few million years, which is where MIST stops following it.',
+  citations: [
+    {
+      text: 'Dotter 2016, ApJS 222, 8 (MIST 0)',
+      doi: '10.3847/0067-0049/222/1/8',
+    },
+    {
+      text: 'Choi et al. 2016, ApJ 823, 102 (MIST I)',
+      doi: '10.3847/0004-637X/823/2/102',
+    },
+    {
+      text: 'Paxton et al. 2011, ApJS 192, 3 (MESA)',
+      doi: '10.1088/0067-0049/192/1/3',
+    },
+    {
+      text: 'Paxton et al. 2013, ApJS 208, 4 (MESA)',
+      doi: '10.1088/0067-0049/208/1/4',
+    },
+    {
+      text: 'Paxton et al. 2015, ApJS 220, 15 (MESA)',
+      doi: '10.1088/0067-0049/220/1/15',
+    },
+    {
+      text: 'Asplund et al. 2009, ARA&A 47, 481 (the solar abundances MIST scales)',
+      doi: '10.1146/annurev.astro.46.060407.145222',
+    },
   ],
 };
 
@@ -802,7 +860,7 @@ function scaleColumn(column, of) {
  * Decode one column of one track.
  *
  * @param {object} column - One of the encoded column objects on a track
- * @returns {Float64Array} The values, in the units PROVENANCE records
+ * @returns {Float64Array} The values, in the units PACK.columns gives
  */
 function decodeColumn(column) {
   const binary =
@@ -812,7 +870,7 @@ function decodeColumn(column) {
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
   // The age column is 32-bit and everything else is 16. See the note on the
-  // encoder in tools/build-stellar-tracks.mjs: a logarithmic age axis at 16
+  // encoder in tools/data-packs/mist-tracks.mjs: a logarithmic age axis at 16
   // bits cannot resolve a helium flash inside an eleven-billion-year life.
   const width = column.bits === 32 ? 4 : 2;
   const Ints = column.bits === 32 ? Int32Array : Int16Array;

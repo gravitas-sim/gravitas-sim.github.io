@@ -2840,7 +2840,7 @@ export const ES_DEFERRED = {
   'dmW.maximumDisc': 'Disco máximo',
   'dmW.wrongScaleLength': 'Longitud de escala equivocada',
   'dmW.publishedDecomposition': 'Descomposición publicada',
-  'dmW.fitARealGalaxy': 'Ajusta una galaxia real',
+  'dmW.fitARealGalaxy': 'Ajusta NGC 3198 (datos sintéticos)',
   'dmW.discMassTheStarsYou': 'Masa del disco (las estrellas que ves)',
   'dmW.discScaleLength': 'Longitud de escala del disco',
   'dmW.haloStrengthItsFlatSpeed': 'Intensidad del halo (su velocidad plana)',

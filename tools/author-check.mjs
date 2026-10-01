@@ -23,6 +23,7 @@
 
 import { loadAuthoringInputs } from './authoring/inputs.mjs';
 import { checkCatalog, RULE_INDEX } from '../js/authoring/rules.js';
+import { realSystemFindings } from './authoring/realSystems.mjs';
 
 const argv = process.argv.slice(2);
 const has = flag => argv.includes(flag);
@@ -64,6 +65,19 @@ if (has('--rules')) {
 
 const inputs = await loadAuthoringInputs();
 let findings = checkCatalog(inputs);
+// The attribution rule reaches the data a lesson stands on: every real-system
+// parameter object names where each value comes from, or says it is
+// approximate and unsourced (tools/authoring/realSystems.mjs). Node-only, so
+// it runs here rather than in the browser's copy of the rules.
+for (const f of await realSystemFindings()) {
+  findings.push({
+    level: 'error',
+    rule: 'instructor/attribution',
+    lesson: f.where,
+    step: null,
+    message: f.message,
+  });
+}
 
 const only = value('lesson');
 if (only) {
