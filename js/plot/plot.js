@@ -40,7 +40,7 @@ export const el = (name, attrs = {}) => {
 };
 
 /** A coordinate as the markup writes it. */
-const px = v => v.toFixed(1);
+export const px = v => v.toFixed(1);
 
 /** Round, readable tick values across a range. */
 export function ticks(lo, hi, count = 5) {
@@ -106,6 +106,48 @@ export const axisTitle = (c, notStated) =>
     ''
   );
 
+/** Data to the viewBox, upward unless flipped; s.scale (./log.js) maps y. */
+export function scales(s) {
+  const f = s.scale?.f ?? (v => v);
+  return {
+    sx: x => PAD.left + ((x - s.x0) / (s.x1 - s.x0 || 1)) * FW,
+    sy: y => {
+      const k = ((f(y) - s.y0) / (s.y1 - s.y0 || 1)) * FH;
+      return s.flip ? PAD.top + k : H - PAD.bottom - k;
+    },
+  };
+}
+
+/** The axes, their ticks and titles, as one group; sc is scales(s). */
+export function axes(s, { sx, sy }, number, xTitle, yTitle, yTicks = ticks) {
+  const B = H - PAD.bottom;
+  const g = el('g', { class: 'ow-axes', 'aria-hidden': 'true' });
+  const line = (x1, y1, x2, y2) => g.append(el('line', { x1, y1, x2, y2 }));
+  const text = (words, x, y, anchor, cls, more) => {
+    const t = el('text', { x, y, 'text-anchor': anchor, class: cls, ...more });
+    t.textContent = words;
+    g.append(t);
+  };
+  line(PAD.left, B, W - PAD.right, B);
+  line(PAD.left, PAD.top, PAD.left, B);
+  for (const v of ticks(s.x0, s.x1)) {
+    const x = sx(v);
+    line(x, B, x, B + 5);
+    text(number(v), x, B + 18, 'middle', 'ow-tick');
+  }
+  for (const v of (s.scale?.ticks ?? yTicks)(s.y0, s.y1)) {
+    const y = sy(v);
+    line(PAD.left - 5, y, PAD.left, y);
+    text(number(v), PAD.left - 8, y + 4, 'end', 'ow-tick');
+  }
+  const mid = (PAD.top + B) / 2;
+  text(xTitle, PAD.left + FW / 2, H - 6, 'middle', 'ow-label');
+  text(yTitle, 14, mid, 'middle', 'ow-label', {
+    transform: `rotate(-90 14 ${mid})`,
+  });
+  return g;
+}
+
 // Each plot's clip region needs an id of its own: two plots, one page.
 let plots = 0;
 
@@ -118,13 +160,8 @@ export function createPlot(svg, hooks) {
   const clipId = `owPlotClip${++plots}`;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   let state = null;
-
-  const sx = x => PAD.left + ((x - state.x0) / (state.x1 - state.x0 || 1)) * FW;
-  // Magnitudes are drawn brighter-up.
-  const sy = y => {
-    const f = ((y - state.y0) / (state.y1 - state.y0 || 1)) * FH;
-    return state.flip ? PAD.top + f : H - PAD.bottom - f;
-  };
+  let sx;
+  let sy;
   const dot = (i, r, cls) =>
     el('circle', {
       cx: px(sx(state.xs[i])),
@@ -139,10 +176,13 @@ export function createPlot(svg, hooks) {
    * @param {{xColumn: string, yColumn: string, selection?: object,
    *   overlays?: Array<{label: string, points: Array<[number, number]>}>}} view
    *   - selection is ./select.js's, for a view that shows one; overlays are
-   *   curves drawn over the points in the axes' own units: a model to compare
-   *   with, say. A break in a curve is a point that is not finite.
+   *   curves in the axes' units, broken where a point is not finite; the x
+   *   axis spans xAlso too; yScale is ./log.js's.
    */
-  function draw(o, { xColumn, yColumn, selection = null, overlays = [] }) {
+  function draw(
+    o,
+    { xColumn, yColumn, selection, overlays = [], yScale, xAlso = [] }
+  ) {
     const xc = columnOf(o, xColumn);
     const yc = columnOf(o, yColumn);
     const xs = xc.values;
@@ -176,6 +216,14 @@ export function createPlot(svg, hooks) {
       y0 = 0;
       y1 = 1;
     }
+    for (const v of xAlso) {
+      x0 = Math.min(x0, v);
+      x1 = Math.max(x1, v);
+    }
+    if (yScale) {
+      y0 = yScale.f(y0);
+      y1 = yScale.f(y1);
+    }
     const padY = (y1 - y0) * 0.05 || Math.abs(y0) * 0.05 || 1;
     const padX = x1 === x0 ? Math.abs(x0) * 0.05 || 1 : 0;
     state = {
@@ -192,65 +240,35 @@ export function createPlot(svg, hooks) {
       // A column's unit is a canonical id (js/observatory/schema.js), so this
       // is every magnitude.
       flip: yc.unit === 'mag',
+      scale: yScale,
     };
-    const columns = FW;
+    ({ sx, sy } = scales(state));
     const drawn =
       o.kind === 'table'
         ? decimateGrid(
             order,
             xs,
-            ys,
+            yScale ? Float64Array.from(ys, yScale.f) : ys,
             state.x0,
             state.x1,
             state.y0,
             state.y1,
-            columns / 2,
+            FW / 2,
             FH / 2
           )
-        : decimate(order, xs, ys, state.x0, state.x1, columns);
+        : decimate(order, xs, ys, state.x0, state.x1, FW);
     state.drawn = drawn.length;
 
-    svg.replaceChildren();
-    // Axes and ticks.
-    const B = H - PAD.bottom;
-    const g = el('g', { class: 'ow-axes', 'aria-hidden': 'true' });
-    const line = (x1, y1, x2, y2) => g.append(el('line', { x1, y1, x2, y2 }));
-    const text = (words, x, y, anchor, cls, more) => {
-      const t = el('text', {
-        x,
-        y,
-        'text-anchor': anchor,
-        class: cls,
-        ...more,
-      });
-      t.textContent = words;
-      g.append(t);
-    };
-    line(PAD.left, B, W - PAD.right, B);
-    line(PAD.left, PAD.top, PAD.left, B);
-    for (const v of ticks(state.x0, state.x1)) {
-      const x = sx(v);
-      line(x, B, x, B + 5);
-      text(hooks.number(v), x, B + 18, 'middle', 'ow-tick');
-    }
-    for (const v of ticks(state.y0, state.y1)) {
-      const y = sy(v);
-      line(PAD.left - 5, y, PAD.left, y);
-      text(hooks.number(v), PAD.left - 8, y + 4, 'end', 'ow-tick');
-    }
-    const mid = (PAD.top + B) / 2;
     const L = hooks.labels;
-    text(
-      axisTitle(xc, L.notStated),
-      PAD.left + FW / 2,
-      H - 6,
-      'middle',
-      'ow-label'
+    svg.replaceChildren(
+      axes(
+        state,
+        { sx, sy },
+        hooks.number,
+        axisTitle(xc, L.notStated),
+        axisTitle(yc, L.notStated)
+      )
     );
-    text(axisTitle(yc, L.notStated), 14, mid, 'middle', 'ow-label', {
-      transform: `rotate(-90 14 ${mid})`,
-    });
-    svg.append(g);
     // The frame: bars that reach past a table's range, and curves, stop at it.
     const clip = el('clipPath', { id: clipId });
     clip.append(el('rect', { x: PAD.left, y: PAD.top, width: FW, height: FH }));
@@ -332,13 +350,9 @@ export function createPlot(svg, hooks) {
       if (position.has(i))
         dots.push(dot(i, Math.max(r, 2), 'ow-pt is-selected'));
     }
-    layer.replaceChildren(...dots);
-    svg.querySelector('.ow-focus')?.remove();
     const f = selection.focus;
-    if (!(f >= 0) || !position.has(f)) return;
-    const ring = dot(f, 6, 'ow-focus');
-    ring.setAttribute('aria-hidden', 'true');
-    svg.append(ring);
+    if (position.has(f)) dots.push(dot(f, 6, 'ow-focus'));
+    layer.replaceChildren(...dots);
   }
 
   return {
@@ -347,7 +361,7 @@ export function createPlot(svg, hooks) {
     drawnCount: () => state?.drawn ?? 0,
     /** What ./select.js reads: the rows as drawn, and the x scale both ways. */
     at: () => state,
-    sx,
+    sx: x => sx(x),
     toX: p => state.x0 + ((p - PAD.left) / FW) * (state.x1 - state.x0),
   };
 }

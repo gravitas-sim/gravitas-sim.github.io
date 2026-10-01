@@ -2457,6 +2457,11 @@
     fill: var(--hue-comet);
   }
 
+  /* A histogram's bins (js/plot/bars.js). */
+  .ow-bin {
+    fill: var(--hue-comet);
+  }
+
   .ow-pt.is-selected {
     fill: var(--hue-star);
   }

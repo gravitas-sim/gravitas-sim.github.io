@@ -35,6 +35,7 @@ import { describe, meanInterval } from '../analysis/stats.js';
 import { createPlot } from '../plot/plot.js';
 import { createTable } from '../plot/table.js';
 import { createSelection, interact } from '../plot/select.js';
+import { histogram } from '../plot/bars.js';
 
 // The page's own modules - its translator, the metrics' units, the CSV writer
 // - arrive in `ctx`, as the Observatory's fit panel has them: a module both
@@ -829,11 +830,7 @@ export function mountAnalysis(root, ctx) {
   function distributionView(a, m, unit) {
     const h = a.pooled.histogram;
     if (!h) return [];
-    const W = 640;
-    const H = 220;
-    const pad = { l: 48, r: 12, t: 10, b: 36 };
     const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.setAttribute('class', 'xp-plot');
     svg.setAttribute('id', 'labHist');
     svg.setAttribute('role', 'img');
@@ -842,48 +839,11 @@ export function mountAnalysis(root, ctx) {
       'aria-label',
       t('lab.hist.label', { metric: metricName(m), n: total })
     );
-    const top = Math.max(...h.counts) || 1;
-    const bw = (W - pad.l - pad.r) / h.counts.length;
-    const add = (name, attrs, text) => {
-      const e = document.createElementNS(NS, name);
-      for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
-      if (text !== undefined) e.textContent = text;
-      svg.append(e);
-    };
-    add('line', {
-      x1: pad.l,
-      y1: H - pad.b,
-      x2: W - pad.r,
-      y2: H - pad.b,
-      class: 'xp-axis',
+    histogram(svg, h, {
+      number: num,
+      xTitle: `${metricName(m)} (${unit})`,
+      yTitle: t('lab.col.count'),
     });
-    h.counts.forEach((c, i) => {
-      const hgt = ((H - pad.t - pad.b) * c) / top;
-      add('rect', {
-        x: pad.l + i * bw + 1,
-        y: H - pad.b - hgt,
-        width: Math.max(1, bw - 2),
-        height: hgt,
-        class: 'xp-bar',
-      });
-    });
-    add('text', { x: pad.l, y: H - 12, class: 'xp-tick' }, num(h.edges[0]));
-    add(
-      'text',
-      { x: W - pad.r, y: H - 12, class: 'xp-tick', 'text-anchor': 'end' },
-      num(h.edges.at(-1))
-    );
-    add('text', { x: 8, y: pad.t + 10, class: 'xp-tick' }, String(top));
-    add(
-      'text',
-      {
-        x: (W + pad.l) / 2,
-        y: H - 12,
-        class: 'xp-label',
-        'text-anchor': 'middle',
-      },
-      `${metricName(m)} (${unit})`
-    );
     const p = a.pooled;
     return [
       el(

@@ -579,7 +579,7 @@ budget's.
 | Step | Charts | Commit | Route deltas (sources / build) | Deferred delta | Verdict per chart |
 |---|---|---|---|---|---|
 | 1 | D1-D4 | on `feat/plot-component` | Observatory −411 B, 16 → 16 requests / −764 B, 2 → 2. Every other route unchanged | 0 (4170.7 KB); the experiment runner's analysis chunk −754 B, outside that budget | D1-D4 migrated: see below |
-| 2 | D5-D7 | | | | |
+| 2 | D5-D7 | on `feat/plot-component` | Experiment runner −2742 B, 47 → 47 requests / −1540 B, 3 → 3. Observatory +319 B / +144 B against step 1, still −92 B / −620 B against the base. Every other route unchanged | 0 (4170.7 KB) | D5-D7 migrated: see below |
 | 3 | D8-D12 | | | | |
 | 4 | A1-A5, Chart.js removed | | | | |
 | 5 | B1-B8 | | | | |
@@ -659,3 +659,71 @@ The WebKit run of `e2e/observatory.spec.js`'s offline test fails on this
 machine, and fails the same way at this step's base (e48d59a, run separately):
 WebKit cannot navigate offline here. Chromium passes it, and so does every
 other test of these four charts in all three engines.
+
+### Step 2: the analysis lab and the experiment runner, D5-D7
+
+**Two features, each where a chart needs it.**
+
+- **`js/plot/log.js`, a log y axis.** `wantsLog()` is D5's rule: more than one
+  value, all positive, across more than two orders of magnitude. The axis's
+  ticks are powers of ten, or 1, 2 and 5 times them, at most six.
+  - The core takes it as `draw(o, { yScale })`, and only D5 loads it.
+- **`js/plot/bars.js`, a histogram.** It is drawn on the core's axes, now
+  exported as `scales()` and `axes()`. The counts axis marks whole numbers
+  and always the highest count. Only D7 loads it.
+- **Two changes to the core:**
+  - `xAlso`, so an axis spans rows a chart marks itself: D5's crosses for
+    trials without a measurement.
+  - The focus ring is now drawn inside the selection layer instead of after
+    it. It looks the same, and the code is shorter.
+  - These, with the y-scale hook, put 319 B on the Observatory route. Step 1
+    had freed 411 B there.
+
+**D5 loads when a run finishes.**
+
+- `js/experiments/resultPlot.js` is imported by the page with its first
+  result. It brings the component, the log axis and the column readers.
+- The route at load loses the page's own 3.3 KB plot and gains a five-line
+  import. Its request count does not move, and it had none to spare.
+- What the first result fetches is recorded here, not gated: 47,061 B in 6
+  requests from the sources, and 12,534 B in 2 from the build.
+  - Most of the sources' figure is `js/observatory/schema.js` and the units
+    registry, both of which the component reads.
+- Everything the module needs from the page arrives as an argument, so the
+  build splits no start-up chunk.
+
+**Tests.**
+
+- `tests/plot.test.js` adds:
+  - the log rule and the log ticks;
+  - a log plot's tick labels and point positions, with `xAlso`;
+  - the histogram's ticks, titles and bar heights against its counts.
+- `e2e/experimentRunner.spec.js` adds D5's 16 points, its mean line, no
+  crosses, and ticks in powers of ten.
+- `e2e/analysisLab.spec.js` checks that D7's bars are its table: one bar per
+  row, each in proportion to its count. The parity table found that chart
+  untested.
+- The two specs' existing assertions pass unchanged, and so does
+  `e2e/accessibility.spec.js`, which runs axe on the runner.
+
+**Verdicts.**
+
+| Chart | Verdict |
+|---|---|
+| D5 Experiment runner | **Migrated**, by the documented equivalents below. The log rule and its "(log scale)" label, the means as a line, a cross for each trial without a measurement, and the label with its counts are all unchanged |
+| D6 Analysis trials | **Migrated** in step 1, by its imports; its keyboard test passes unchanged |
+| D7 Analysis histogram | **Migrated**, by the documented equivalent below; the bars equal the table |
+
+**Documented equivalents:**
+
+- **D5's ticks.** The only ticks were the two ends of each axis. They are now
+  round ticks on both axes, and on a log axis the powers of ten.
+- **D5's value axis** now has a title: the metric and its unit.
+- **D5's mean line** is the component's overlay color, not amber.
+- **D7's ticks.** They were the first and last bin edges and the peak count.
+  They are now round ticks across the edges, and whole counts up to the peak,
+  which is always marked. Every edge and count is in `#labHistTable`, as
+  before.
+- **D7's height.** The histogram is drawn in the component's 720 × 380 frame
+  instead of 640 × 220.
+

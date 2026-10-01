@@ -550,122 +550,28 @@ function renderResult(result) {
 }
 
 /**
- * Each trial's value against the parameter, and each value's mean. An SVG,
- * so it scales and prints; the summary table beside it is the same numbers
- * for anybody who cannot see it, and the plot says so.
+ * Each trial's value against the parameter, and each value's mean: drawn by
+ * js/plot/, which arrives with the first result (./experiments/resultPlot.js).
+ * The summary table beside it is the same numbers, whether or not it came.
  */
+let resultPlot = null;
 function drawPlot(result, metric, key) {
-  const svg = $('xpPlot');
-  const W = 640;
-  const H = 320;
-  const pad = { l: 64, r: 16, t: 16, b: 44 };
-  const pts = result.trials
-    .filter(
-      tr => tr.status === STATUS.OK && Number.isFinite(tr.results?.[metric])
-    )
-    .map(tr => [tr.params[key], tr.results[metric]]);
-  const failed = result.trials.filter(
-    tr => !(tr.status === STATUS.OK && Number.isFinite(tr.results?.[metric]))
-  );
-  const xs = result.trials.map(tr => tr.params[key]);
-  const ys = pts.map(p => p[1]);
-  const x0 = Math.min(...xs);
-  const x1 = Math.max(...xs);
-  const y0 = ys.length ? Math.min(...ys) : 0;
-  const y1 = ys.length ? Math.max(...ys) : 1;
-  // A planet ejected at one value and bound at the next puts hundreds of AU
-  // beside one: on a linear axis every bound orbit sits on the floor. Across
-  // more than two orders of magnitude of positive values the axis is
-  // logarithmic, and its label says so.
-  const log = ys.length > 1 && y0 > 0 && y1 / y0 > 100;
-  const f = log ? Math.log10 : v => v;
-  const X = x => pad.l + ((x - x0) / (x1 - x0 || 1)) * (W - pad.l - pad.r);
-  const Y = y =>
-    H - pad.b - ((f(y) - f(y0)) / (f(y1) - f(y0) || 1)) * (H - pad.t - pad.b);
-  const ns = 'http://www.w3.org/2000/svg';
-  const el = (name, attrs, text) => {
-    const e = document.createElementNS(ns, name);
-    for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
-    if (text !== undefined) e.textContent = text;
-    return e;
-  };
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  const kids = [
-    el('line', {
-      x1: pad.l,
-      y1: H - pad.b,
-      x2: W - pad.r,
-      y2: H - pad.b,
-      class: 'xp-axis',
-    }),
-    el('line', {
-      x1: pad.l,
-      y1: pad.t,
-      x2: pad.l,
-      y2: H - pad.b,
-      class: 'xp-axis',
-    }),
-    el('text', { x: pad.l, y: H - 10, class: 'xp-tick' }, fmt(x0)),
-    el(
-      'text',
-      { x: W - pad.r, y: H - 10, class: 'xp-tick', 'text-anchor': 'end' },
-      fmt(x1)
-    ),
-    el('text', { x: 8, y: H - pad.b, class: 'xp-tick' }, fmt(y0)),
-    el('text', { x: 8, y: pad.t + 10, class: 'xp-tick' }, fmt(y1)),
-    el(
-      'text',
-      {
-        x: (W + pad.l) / 2,
-        y: H - 10,
-        class: 'xp-label',
-        'text-anchor': 'middle',
-      },
-      t(`exp.param.${key}`)
-    ),
-  ];
-  if (log)
-    kids.push(
-      el(
-        'text',
-        { x: pad.l + 6, y: pad.t + 10, class: 'xp-tick' },
-        t('exp.plot.log')
-      )
-    );
-  for (const [x, y] of pts)
-    kids.push(el('circle', { cx: X(x), cy: Y(y), r: 3.5, class: 'xp-point' }));
-  const means = result.summary.metrics[metric].filter(g => g.mean !== null);
-  if (means.length > 1) {
-    kids.push(
-      el('polyline', {
-        points: means.map(g => `${X(g.params[key])},${Y(g.mean)}`).join(' '),
-        class: 'xp-mean',
+  resultPlot ??= import('./experiments/resultPlot.js');
+  resultPlot
+    .then(m =>
+      m.drawResult($('xpPlot'), result, metric, key, {
+        t,
+        number: fmt,
+        unit: METRIC_UNITS[metric],
+        measured: tr =>
+          tr.status === STATUS.OK && Number.isFinite(tr.results?.[metric]),
       })
-    );
-  }
-  for (const tr of failed)
-    kids.push(
-      el(
-        'text',
-        {
-          x: X(tr.params[key]),
-          y: H - pad.b - 4,
-          class: 'xp-fail',
-          'text-anchor': 'middle',
-        },
-        '×'
-      )
-    );
-  svg.replaceChildren(...kids);
-  svg.setAttribute(
-    'aria-label',
-    t('exp.plot.label', {
-      metric: t(`exp.metric.${metric}`),
-      param: t(`exp.param.${key}`),
-      ok: pts.length,
-      failed: failed.length,
-    })
-  );
+    )
+    .catch(() => {
+      // Asked again with the next result: a reader whose connection came back
+      // gets the plot then.
+      resultPlot = null;
+    });
 }
 
 function download(name, text, type) {

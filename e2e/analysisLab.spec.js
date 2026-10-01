@@ -214,6 +214,22 @@ test.describe('the analysis laboratory', () => {
     );
     await expect(page.locator('#labRho')).toContainText('Rank correlation');
     await expect(page.locator('#labHistTable tbody tr').first()).toBeVisible();
+    // The histogram (PLOT_COMPONENT.md, D7) is its table: a bar per row, each
+    // as tall against the tallest as its count is against the largest.
+    const counts = (
+      await page
+        .locator('#labHistTable tbody tr td:last-child')
+        .allTextContents()
+    ).map(Number);
+    const heights = await page
+      .locator('#labHist .ow-bin')
+      .evaluateAll(rs => rs.map(r => Number(r.getAttribute('height'))));
+    expect(heights).toHaveLength(counts.length);
+    const top = Math.max(...counts);
+    const tallest = Math.max(...heights);
+    heights.forEach((h, i) =>
+      expect(Math.abs(h - (tallest * counts[i]) / top)).toBeLessThan(0.1)
+    );
   });
 
   test('saves the analysis with the experiment inside, and reads a saved result back', async ({

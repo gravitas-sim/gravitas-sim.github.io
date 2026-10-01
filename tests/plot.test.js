@@ -18,7 +18,10 @@ import { JSDOM } from 'jsdom';
 //   - a plot that only shows its data has no selection layer and listens to
 //     nothing; one given ./select.js selects by keyboard and by pointer;
 //   - the table's numbers are the plotted data: every row's cells, read back,
-//     are where its point is drawn.
+//     are where its point is drawn;
+//   - the features step 2 added: a log y axis and the rule that asks for one,
+//     an x axis widened to rows a chart marks itself, and a histogram whose
+//     bars are its counts.
 // =============================================================================
 
 import {
@@ -29,6 +32,8 @@ import {
   ticks,
 } from '../js/plot/plot.js';
 import { createSelection, interact } from '../js/plot/select.js';
+import { log10, wantsLog } from '../js/plot/log.js';
+import { histogram } from '../js/plot/bars.js';
 import { createTable } from '../js/plot/table.js';
 
 // tests/setup.js replaces the global document with a stub for the physics
@@ -472,5 +477,92 @@ describe('the table is the plotted data', () => {
         expect(Math.abs(points[k][1] - cy)).toBeLessThan(0.06);
       });
     }
+  });
+});
+
+describe('a logarithmic y axis', () => {
+  test('is asked for across more than two decades of positive values', () => {
+    expect(wantsLog([1, 500])).toBe(true);
+    expect(wantsLog([1, 50])).toBe(false);
+    expect(wantsLog([0, 500])).toBe(false);
+    expect(wantsLog([5])).toBe(false);
+    // A trial without a measurement is not a value.
+    expect(wantsLog([1, NaN, 200])).toBe(true);
+  });
+
+  test('ticks: the powers of ten, or 1, 2 and 5 times them, at most six', () => {
+    expect(log10.ticks(0, 2)).toEqual([1, 10, 100]);
+    expect(log10.ticks(-0.1, 2.7)).toEqual([1, 10, 100]);
+    expect(log10.ticks(0.3, 1.7)).toEqual([2, 5, 10, 20, 50]);
+    expect(log10.ticks(-15, 0)).toEqual([1e-15, 1e-12, 1e-9, 1e-6, 1e-3, 1]);
+    expect(log10.ticks(0.95, 1.05)).toEqual([10]);
+  });
+
+  test('places the values by their logarithm, and widens x to rows marked elsewhere', () => {
+    const o = {
+      kind: 'time-series',
+      masks: [],
+      columns: [
+        col('x', 'Separation', '', 'x', [0.1, 0.2, 0.3, 0.4, 0.5]),
+        col('y', 'Apoapsis', 'AU', 'value', [0.8, 1.5, 3, 40, 650]),
+      ],
+    };
+    const svg = svgEl();
+    createPlot(svg, { number, labels }).draw(o, {
+      xColumn: 'x',
+      yColumn: 'y',
+      yScale: log10,
+      xAlso: [0, 0.6],
+    });
+    expect(texts(svg, '.ow-tick[text-anchor="middle"]')).toEqual([
+      '0',
+      '0.2',
+      '0.4',
+      '0.6',
+    ]);
+    expect(texts(svg, '.ow-tick[text-anchor="end"]')).toEqual([
+      '1',
+      '10',
+      '100',
+    ]);
+    expect(
+      [...svg.querySelectorAll('.ow-pt')].map(c => c.getAttribute('cy'))
+    ).toEqual(['319.5', '292.2', '262.1', '149.6', '28.5']);
+  });
+});
+
+describe('a histogram', () => {
+  test('its bars are its counts, on axes that mark whole counts and the peak', () => {
+    const svg = svgEl();
+    histogram(
+      svg,
+      { edges: [0, 0.5, 1, 1.5, 2], counts: [3, 7, 0, 1] },
+      { number, xTitle: 'Speed (km/s)', yTitle: 'Count' }
+    );
+    expect(texts(svg, '.ow-tick[text-anchor="middle"]')).toEqual([
+      '0',
+      '0.5',
+      '1',
+      '1.5',
+      '2',
+    ]);
+    expect(texts(svg, '.ow-tick[text-anchor="end"]')).toEqual([
+      '0',
+      '2',
+      '4',
+      '6',
+      '7',
+    ]);
+    expect(texts(svg, '.ow-label')).toEqual(['Speed (km/s)', 'Count']);
+    const bars = [...svg.querySelectorAll('.ow-bin')].map(r => [
+      r.getAttribute('x'),
+      Number(r.getAttribute('height')),
+    ]);
+    expect(bars.map(b => b[0])).toEqual(['71.0', '229.5', '388.0', '546.5']);
+    // Height in proportion to count: the tallest is the frame's height.
+    const full = 380 - 14 - 46;
+    [3, 7, 0, 1].forEach((c, i) =>
+      expect(Math.abs(bars[i][1] - (full * c) / 7)).toBeLessThan(0.06)
+    );
   });
 });
