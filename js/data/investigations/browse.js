@@ -9,6 +9,8 @@
 //
 // No DOM. The browser panel renders what these return; the rules for what
 // matches live here so they can be checked without a page.
+// The Library (LIBRARY.md) filters with them too: its entries carry their own
+// subjects, length and calculation, and a kind, format and level.
 // =============================================================================
 
 import { BROWSE_META } from './browseData.js';
@@ -26,8 +28,8 @@ import { LENGTH, lengthOf, calculationOf } from './sequences.js';
  */
 export const metaFor = id => BROWSE_META[id] || { tags: [], numericCount: 0 };
 
-/** The subjects a lesson declares. */
-export const tagsOf = entry => metaFor(entry?.id).tags;
+/** The subjects a lesson, or a Library entry, declares. */
+export const tagsOf = entry => entry?.subjects || metaFor(entry?.id).tags;
 
 /** How far through a lesson somebody is, as a filter. */
 export const PROGRESS = Object.freeze({
@@ -49,7 +51,13 @@ export const NO_FILTERS = Object.freeze({
   length: '',
   progress: '',
   calculation: '',
+  kind: '',
+  format: '',
+  level: '',
 });
+
+/** The Library's facets: matched as they are, on entries that carry them. */
+const FACETS = ['kind', 'format', 'level'];
 
 /**
  * Whether anything is narrowing the list.
@@ -167,8 +175,9 @@ export function filterCatalog(manifest = [], filters = {}, progressOf) {
       const p = progressOf ? progressOf(entry.id) : null;
       return {
         entry,
-        length: lengthOf(entry),
-        calculation: calculationOf(entry),
+        length: 'length' in entry ? entry.length : lengthOf(entry),
+        calculation:
+          'calculation' in entry ? entry.calculation : calculationOf(entry),
         progress: p ? progressBucket(p) : PROGRESS.NEW,
         saved: p,
       };
@@ -179,6 +188,7 @@ export function filterCatalog(manifest = [], filters = {}, progressOf) {
         (!wantLength || row.length === wantLength) &&
         (!wantProgress || row.progress === wantProgress) &&
         (!wantCalculation || row.calculation === wantCalculation) &&
+        FACETS.every(key => !filters[key] || row.entry[key] === filters[key]) &&
         matchesQuery(row.entry, filters.query || '')
     );
 }

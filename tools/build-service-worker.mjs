@@ -126,6 +126,10 @@ const FILES = [
   // (js/catalog/store.js), and one not installed is not wanted offline.
   { path: 'catalog/index.html', core: false },
   { path: 'catalog/catalog.json', core: false },
+  // The Library and its index (LIBRARY.md): optional, as the catalog is. What
+  // it links to is precached, or not, by the page that runs it.
+  { path: 'library/index.html', core: false },
+  { path: 'library/library.json', core: false },
   // The course home: a course link opens offline once Gravitas has been
   // opened, since the pack is in the link and the page's modules are under
   // js/. Optional, as the catalog is. The builder (studio/course/) is not.

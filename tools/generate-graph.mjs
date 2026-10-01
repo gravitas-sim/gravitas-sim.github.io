@@ -74,6 +74,31 @@ export const GRAPH = Object.freeze([
     after: [],
   },
   {
+    // Roadmap II Prompt 54 (LIBRARY.md): one record for everything a reader
+    // can open, read from the sources that own each thing. Its coverage table
+    // in LIBRARY.md and Home's Library cards are generated regions.
+    id: 'library',
+    generate: 'node tools/build-library.mjs',
+    check: 'node tools/build-library.mjs --check',
+    inputs: [
+      'js/data/investigations',
+      'js/data/activities.js',
+      'js/data/scenarioInfo.js',
+      'js/data/courses',
+      'js/observatory/guides',
+      'js/observatory/fixtures.js',
+      'js/lab3d/guides',
+      'js/mission/lab/curriculum.js',
+      'js/experiments/sweep.js',
+      'js/i18n',
+      'catalog/catalog.json',
+      'tools/build-library.mjs',
+    ],
+    outputs: ['library/library.json'],
+    regions: ['LIBRARY.md', 'js/fragments/home.html'],
+    after: ['manifest', 'catalog', 'teaching'],
+  },
+  {
     id: 'thumbnails',
     generate: 'node tools/generate-scenario-thumbnails.mjs',
     check: 'node tools/generate-scenario-thumbnails.mjs --check',
@@ -133,7 +158,15 @@ export const GRAPH = Object.freeze([
     id: 'sw',
     generate: 'node tools/build-service-worker.mjs',
     check: 'node tools/build-service-worker.mjs --check',
-    inputs: ['js', 'css', 'images', 'catalog', 'index.html', 'sw.js'],
+    inputs: [
+      'js',
+      'css',
+      'images',
+      'catalog',
+      'library',
+      'index.html',
+      'sw.js',
+    ],
     outputs: ['sw-manifest.js'],
     after: [
       'capabilities',
@@ -141,6 +174,7 @@ export const GRAPH = Object.freeze([
       'manifest',
       'cards',
       'teaching',
+      'library',
       'thumbnails',
       'scene',
       'irreversible',

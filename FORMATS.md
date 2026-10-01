@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 44 of them. 22 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 45 of them. 23 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -57,6 +57,7 @@ The columns:
 | gravitas.capability-package | format, formatVersion | 1 | js/platform/manifest.js validateManifest | repository, IndexedDB | v1 only | refused, in words | [yes](sdk/schemas/capability-package-1.schema.json) |
 | gravitas.scenario-pack | format, formatVersion | 1 | js/platform/scenario.js migrateScenarioPack | download, localStorage, link | v1 only; reads orbital-system/1 | refused, in words | [yes](sdk/schemas/scenario-pack-1.schema.json) |
 | gravitas.catalog | format, formatVersion | 1 | js/catalogPage.js load | repository | v1 only | refused | [yes](sdk/schemas/catalog-1.schema.json) |
+| gravitas.library | format, formatVersion | 1 | js/library/format.js checkLibrary | repository | v1 only | refused | [yes](sdk/schemas/library-1.schema.json) |
 | gravitas.catalog-curation | format, formatVersion | 1 | tools/catalog.mjs readCuration | repository | not checked | not checked | [yes](sdk/schemas/catalog-curation-1.schema.json) |
 | gravitas.extension-archive | none (the archive structure) | 1 | sdk/lib/archive.mjs, js/catalog/archive.js | repository, download | structure checked, not version | structure checked, not version | no |
 | gravitas-embed messages | protocol, version | 1 | js/embedMessages.js readMessage | memory | v1 only | refused by error code | [yes](sdk/schemas/embed-messages-1.schema.json) |
