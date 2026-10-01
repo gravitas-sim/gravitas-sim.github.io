@@ -232,15 +232,20 @@ describe('the result line', () => {
 });
 
 describe('the catalog is the only source of truth', () => {
-  test('the settings panel derives its preset list rather than listing it', async () => {
-    const src = await import('node:fs').then(fs =>
-      fs.readFileSync(repoFile('js/ui.js'), 'utf8')
-    );
-    // The hand-written copy of all forty-three names is gone. Spot-check a few
-    // that only ever appeared in that list.
-    expect(src).toContain("options: ['None', ...Object.keys(SCENARIO_INFO)]");
-    expect(src).not.toContain("'Stellar Graveyard',");
-    expect(src).not.toContain("'Micro BH Swarm',");
+  test('the settings panel lists no scenarios of its own', async () => {
+    const fs = await import('node:fs');
+    // The hand-written copy of all forty-three names went first, for a list
+    // derived from the catalog; then the picker itself, which the panel never
+    // drew (js/settingsSchema.js). Scenarios are chosen from Load Scenario.
+    // Spot-check a few names that only ever appeared in that list.
+    for (const file of ['js/ui.js', 'js/settingsSchema.js']) {
+      const src = fs.readFileSync(repoFile(file), 'utf8');
+      expect(src).not.toContain("'Stellar Graveyard',");
+      expect(src).not.toContain("'Micro BH Swarm',");
+    }
+    expect(
+      fs.readFileSync(repoFile('js/settingsSchema.js'), 'utf8')
+    ).not.toContain("key: 'preset_scenario'");
   });
 
   test('no scenario count is hardcoded in the markup', async () => {

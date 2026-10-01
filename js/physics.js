@@ -1831,10 +1831,18 @@ const is_offscreen = (pos, buffer_factor = 10.0) => {
  * @param {Array} bh_list - Array of black hole objects
  * @param {number} threshold - Distance threshold for color change
  * @param {Object} target_color - Target RGB color to blend towards
- * @param {Object} settings - Settings object (optional)
  * @returns {string} RGB color string
+ * With the engine's own settings, so "Dynamic Object Properties" works.
  */
-const compute_dynamic_color = computeDynamicColor;
+const compute_dynamic_color = (hex, pos, bh_list, threshold, target_color) =>
+  computeDynamicColor(
+    hex,
+    pos,
+    bh_list,
+    threshold,
+    target_color,
+    physicsSettings
+  );
 
 // Core physics function
 /**
@@ -2929,7 +2937,7 @@ const updatePhysics = dt => {
     particles = particlePool.getActiveParticles();
   }
 
-  // Update accretion disk particles - this was missing!
+  // The one place an accretion-disk tracer moves (see updateDiskParticles).
   for (const particle of accretion_disk_particles) {
     if (particle.alive) {
       particle.update_physics(dt, []);
@@ -5124,13 +5132,13 @@ class BlackHole {
       }
     }
 
-    // Update existing particles
+    // Moved once per step, by simulate()'s pass over accretion_disk_particles.
+    // Every tracer is in that list as well as this one, and moving it here as
+    // well ran each one at twice its speed and aged it twice as fast. That
+    // pass also keeps moving the tracers of a hole that has been swallowed,
+    // so they fade out rather than freeze. This list only forgets the dead.
     for (let i = this.disk_particles.length - 1; i >= 0; i--) {
-      const particle = this.disk_particles[i];
-      particle.update_physics(dt, []);
-
-      // Remove dead particles
-      if (!particle.alive) {
+      if (!this.disk_particles[i].alive) {
         this.disk_particles.splice(i, 1);
       }
     }
