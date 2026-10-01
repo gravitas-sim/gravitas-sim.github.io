@@ -15,6 +15,12 @@
 // resolves, so callers never have to think about ordering.
 // =============================================================================
 
+import {
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './i18n/deferredMessages.js';
+
 let loading = null;
 
 /** Run once, when the system is first requested, whichever route asked. */
@@ -38,17 +44,39 @@ export function ensureInvestigations() {
     // is the only module that reads it, it is the largest family of strings in
     // the application, and a visitor who never opens a lesson was downloading
     // all of it. Registered here, before initInvestigations() renders anything.
+    // The engine's markup is two js/fragments/ files, mounted before it binds
+    // and after the deferred words, so it goes in translated
+    // (INDEX_DECOMPOSITION.md).
     loading = Promise.all([
       import('./investigations.js'),
       import('./i18n/deferredMessages.js').then(m =>
         m.ensureDeferredMessages().catch(() => {})
       ),
-    ]).then(([mod]) => {
-      mod.initInvestigations();
+      loadFragment('lesson'),
+      loadFragment('lesson-finish'),
+    ]).then(([mod, , lesson, finish]) => {
+      const signal = mountFragment('lesson', lesson);
+      mountFragment('lesson-finish', finish);
+      mod.initInvestigations({ signal: signal ?? undefined });
       return mod;
     });
   }
   return loading;
+}
+
+/**
+ * Unmount the engine's markup; the Lessons button loads it afresh.
+ * @returns {Promise<boolean>} Whether it was mounted
+ */
+export async function unmountInvestigations() {
+  if (!loading) return false;
+  const mod = await loading;
+  mod.teardownInvestigations();
+  loading = null;
+  unmountFragment('lesson-finish');
+  const was = unmountFragment('lesson');
+  armLessonsButton();
+  return was;
 }
 
 /** @returns {boolean} True once the system has been asked for */
@@ -163,6 +191,18 @@ export function watchForAssignments() {
 export const authoringInUrl = () =>
   /[?&#]author=[\w-]+/.test(window.location.href || '');
 
+/** The Lessons button's first press loads the engine, then stands down. */
+function armLessonsButton() {
+  const btn = document.getElementById('investigationsBtn');
+  if (!btn) return;
+  const firstClick = async () => {
+    const mod = await ensureInvestigations();
+    mod.openBrowser();
+  };
+  btn.addEventListener('click', firstClick);
+  onFirstLoad.add(() => btn.removeEventListener('click', firstClick));
+}
+
 /**
  * Watch for the first sign that a lesson is wanted.
  *
@@ -175,15 +215,7 @@ export function watchForInvestigations() {
   // both stayed attached the next click would open and immediately close it, so
   // this one handles the first activation and then stands down - however the
   // system came to be loaded.
-  const btn = document.getElementById('investigationsBtn');
-  if (btn) {
-    const firstClick = async () => {
-      const mod = await ensureInvestigations();
-      mod.openBrowser();
-    };
-    btn.addEventListener('click', firstClick);
-    onFirstLoad.add(() => btn.removeEventListener('click', firstClick));
-  }
+  armLessonsButton();
 
   // `#investigations` is the shared shell's Investigations entry, which opens
   // the chooser until Prompt 54's Library replaces it.

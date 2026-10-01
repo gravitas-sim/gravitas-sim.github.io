@@ -521,6 +521,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'click',
       async () => {
         const lecture = await import('./lecture.js');
+        // Its bar arrives with it (js/fragments/lecture.html).
+        await lecture.lectureReady;
         // initLecture() runs on load and attaches this button's own handler for
         // every later press; this first press has to be passed on by hand, or
         // the click that fetched the module would be the one that did nothing.

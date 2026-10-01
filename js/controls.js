@@ -539,7 +539,8 @@ function setupShortcuts() {
     group: 'View',
     label: t('shortcut.lecture'),
     run: async () => {
-      const { toggleLecture } = await import('./lecture.js');
+      const { toggleLecture, lectureReady } = await import('./lecture.js');
+      await lectureReady;
       toggleLecture();
     },
   });

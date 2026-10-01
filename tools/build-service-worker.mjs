@@ -98,6 +98,10 @@ const OUT = 'sw-manifest.js';
  */
 const TREES = [
   { dir: 'js', ext: ['.js'], core: true },
+  // The panels' markup, which each family fetches as it mounts. Core for the
+  // same reason its modules are: a family that loads offline and cannot find
+  // its markup is a family that does not open (INDEX_DECOMPOSITION.md).
+  { dir: 'js/fragments', ext: ['.html'], core: true },
   { dir: 'css', ext: ['.css'], core: true },
   // The self-hosted fonts and the two vendored libraries. These used to come
   // from Google and jsdelivr, which meant the interface lost its typography

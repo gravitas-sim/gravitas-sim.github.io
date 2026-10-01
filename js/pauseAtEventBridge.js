@@ -14,6 +14,11 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
+import {
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './i18n/deferredMessages.js';
 
 let loading = null;
 let loaded = null;
@@ -23,15 +28,33 @@ let loaded = null;
  * @returns {Promise<{watch: object, panel: object}>} The two modules
  */
 export function ensurePauseAtEvent() {
+  // Its markup is js/fragments/pause-event.html (INDEX_DECOMPOSITION.md).
   loading ??= Promise.all([
     import('./pauseAtEvent.js'),
     import('./pauseAtEventPanel.js'),
-  ]).then(([watch, panel]) => {
-    panel.initPauseAtEvent();
+    loadFragment('pause-event'),
+  ]).then(([watch, panel, html]) => {
+    const signal = mountFragment('pause-event', html);
+    panel.initPauseAtEvent({ signal: signal ?? undefined });
     loaded = { watch, panel };
     return loaded;
   });
   return loading;
+}
+
+/**
+ * Unmount the panel; the rail button's next press loads it afresh.
+ * @returns {Promise<boolean>} Whether it was mounted
+ */
+export async function unmountPauseAtEvent() {
+  if (!loading) return false;
+  const { panel } = await loading;
+  panel.teardownPauseAtEvent();
+  loading = null;
+  loaded = null;
+  const was = unmountFragment('pause-event');
+  watchForPauseAtEvent();
+  return was;
 }
 
 /** @returns {?object} The event that fired last, or null if none could have */
@@ -51,10 +74,14 @@ export function renderEventMarker(info) {
  * The panel attaches its own toggle listener when it loads; this one stands
  * down first, or a click would toggle it twice.
  */
+let firstClick = null;
+
 export function watchForPauseAtEvent() {
   const btn = document.getElementById('togglePauseAtEvent');
   if (!btn) return;
-  const firstClick = async () => {
+  // Called again by unmountPauseAtEvent(); one first-press listener, never two.
+  if (firstClick) btn.removeEventListener('click', firstClick);
+  firstClick = async () => {
     btn.removeEventListener('click', firstClick);
     btn.disabled = true;
     try {

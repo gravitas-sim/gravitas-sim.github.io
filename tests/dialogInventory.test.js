@@ -21,9 +21,17 @@ import { describe, test, expect } from '@jest/globals';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import {
+  FRAGMENTS,
+  assembledIndexHtml,
+  fragmentMarkup,
+} from '../tools/index-fragments.mjs';
+
 const ROOT = process.cwd();
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
-const html = read('index.html');
+// index.html as a reader has it once every panel has mounted: the markup that
+// ships with its family (INDEX_DECOMPOSITION.md) is still the page's markup.
+const html = assembledIndexHtml();
 
 /**
  * The dialogs that are not modal, and why. Each is non-modal in its markup
@@ -72,10 +80,18 @@ function jsFiles(dir = 'js') {
   return out;
 }
 
+// A module's markup template is index.html's markup, counted above, and not
+// a dialog the module builds: taken out here so it is not counted twice.
+const withoutTemplates = (file, src) =>
+  FRAGMENTS.filter(f => f.kind === 'template' && f.owner === file).reduce(
+    (text, f) => text.replace(fragmentMarkup(f), ''),
+    src
+  );
+
 const SOURCES = Object.fromEntries(
   jsFiles()
     .filter(file => !file.startsWith('js/i18n/'))
-    .map(file => [file, read(file)])
+    .map(file => [file, withoutTemplates(file, read(file))])
 );
 
 /**
