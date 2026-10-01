@@ -51,6 +51,12 @@ import {
   NGC2420_SEGUE,
 } from './data-packs/ngc2420.mjs';
 import { separation, skyOf } from '../js/observatory/wcs.js';
+import { SDSS_SPECTRA } from './data-packs/sdss-spectra.mjs';
+import { GWOSC_EVENTS } from './data-packs/gwosc-events.mjs';
+import { GW150914_FIGURES } from './data-packs/gw150914.mjs';
+import { MIST_TRACKS } from './data-packs/mist-tracks.mjs';
+import { COMPILATIONS } from './data-packs/compilations.mjs';
+import { NGC3198_SYNTHETIC } from './data-packs/ngc3198-synthetic.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CACHE =
@@ -411,14 +417,35 @@ export const PACKS = [
   NGC2420_PHOTOMETRY,
   NGC2420_SEGUE,
   MIST_ISOCHRONES,
+  // The four datasets that came before packs (Roadmap II Prompt 62). Each
+  // writes its own runtime module, in the shape its instrument has always
+  // read, with PACK - the runtime fields of its manifest - beside the data.
+  // Each keeps its own cache and its own commands (npm run spectra:*, and so
+  // on), which go through runDataset() below.
+  SDSS_SPECTRA,
+  GWOSC_EVENTS,
+  GW150914_FIGURES,
+  MIST_TRACKS,
+  // The compilations: hand-written modules, each value held to its table.
+  ...COMPILATIONS,
+  // The one synthetic pack: a model curve, which says so wherever it is shown.
+  NGC3198_SYNTHETIC,
 ];
 
 // A table pack (js/tableObservation.js) is decoded and checked as a table;
-// every other pack, as a series or an image (js/observation.js).
-const decodeOf = pack => (pack.table ? tableOf : observationOf);
+// a pack that writes its own module decodes it itself; every other pack, as a
+// series or an image (js/observation.js).
+const decodeOf = pack =>
+  pack.decode ? m => pack.decode(m) : pack.table ? tableOf : observationOf;
 const checkOf = pack => (pack.table ? checkTable : checkObservation);
 const decoderOf = pack =>
   pack.table ? 'js/tableObservation.js' : 'js/observation.js';
+/** Where a pack keeps its raw products: its own cache, or the packs'. */
+const cacheOf = pack => pack.cache?.() || CACHE;
+
+/** A module's text as a module, without writing it anywhere. */
+const importText = text =>
+  import(`data:text/javascript;base64,${Buffer.from(text).toString('base64')}`);
 
 // --- Writing -------------------------------------------------------------------
 
@@ -456,10 +483,16 @@ export const SERIES = ${JSON.stringify(series, null, 2)};
 
 /**
  * Build one pack from its raw bytes: the module text and the manifest.
+ *
+ * A pack's build() returns its runtime metadata, the rest of its manifest,
+ * and either its series - which the shared template writes as PACK and SERIES
+ * - or render(PACK), which writes a module of its own shape around the PACK it
+ * is given. Either way PACK is cut from the manifest, never written apart.
  * @returns {Promise<{moduleText: string, manifest: object, validation: object}>}
  */
 export async function buildPack(pack, raw) {
-  const { meta, manifestRest, series } = pack.build(raw);
+  const built = await pack.build(raw);
+  const { meta, manifestRest, series } = built;
   const core = {
     format: 'gravitas.observation-data-pack',
     formatVersion: 1,
@@ -469,24 +502,31 @@ export async function buildPack(pack, raw) {
   // The runtime metadata is cut from the manifest, never written separately,
   // so the two cannot say different things.
   const PACK = runtimeMeta(core);
-  const observation = decodeOf(pack)({ PACK, SERIES: series });
-  const problems = checkOf(pack)(observation);
+  const text = built.render
+    ? await built.render(PACK)
+    : await moduleText(pack, PACK, series);
+  const mod = built.render ? await importText(text) : { PACK, SERIES: series };
+  const derived = {
+    file: pack.module,
+    bytes: Buffer.byteLength(text),
+    sha256: sha256(text),
+  };
+  const observation = decodeOf(pack)(mod);
+  const problems = pack.check
+    ? await pack.check(mod, { ...core, derived })
+    : checkOf(pack)(observation);
   if (problems.length) throw new Error(`${pack.id}: ${problems[0]}`);
   const { ok, ...validation } = pack.validate(observation);
   if (!ok)
     throw new Error(
       `${pack.id} fails its check: ${validation.check} (${JSON.stringify(validation.result)})`
     );
-  const text = await moduleText(pack, PACK, series);
-  const manifest = {
-    ...core,
-    derived: {
-      file: pack.module,
-      bytes: Buffer.byteLength(text),
-      sha256: sha256(text),
-    },
-    validation,
-  };
+  const manifest = { ...core, derived, validation };
+  const invalid = validateDataPack(manifest);
+  if (invalid.length)
+    throw new Error(
+      `${pack.id}: ${invalid[0].path} ${invalid[0].message} in the manifest it would write`
+    );
   return {
     moduleText: text,
     manifest,
@@ -497,15 +537,17 @@ export async function buildPack(pack, raw) {
 // --- Checking ------------------------------------------------------------------
 
 const readJson = file => JSON.parse(readFileSync(file, 'utf8'));
+const byId = ids => pack => !ids || ids.includes(pack.id);
 
 /**
  * Everything that can be verified without the raw products.
- * @param {{root?: string}} [opts] - A copy of the repository to check instead
+ * @param {{root?: string, only?: string[]}} [opts] - A copy of the repository
+ *   to check instead, and the packs to check (every one by default)
  * @returns {Promise<string[]>} Problems, empty when there are none
  */
-export async function checkPacks({ root = REPO } = {}) {
+export async function checkPacks({ root = REPO, only } = {}) {
   const problems = [];
-  for (const pack of PACKS) {
+  for (const pack of PACKS.filter(byId(only))) {
     const say = message => problems.push(`${pack.id}: ${message}`);
     const at = rel => path.join(root, rel);
     if (!existsSync(at(pack.manifest))) {
@@ -536,8 +578,20 @@ export async function checkPacks({ root = REPO } = {}) {
         `${pack.module} is not the file its manifest records (${bytes.length} bytes, ${sha256(bytes)})`
       );
     }
-    const mod = await import(pathToFileURL(at(pack.module)).href);
-    if (JSON.stringify(mod.PACK) !== JSON.stringify(runtimeMeta(manifest))) {
+    let mod;
+    try {
+      mod = await import(pathToFileURL(at(pack.module)).href);
+    } catch (err) {
+      say(`${pack.module} will not load: ${err.message}`);
+      continue;
+    }
+    // A compilation's module is content Gravitas wrote, with no PACK: its
+    // check compares each value, and its sources (js/data/realSystemSources.js),
+    // with the manifest instead.
+    if (
+      pack.runtime !== 'sources' &&
+      JSON.stringify(mod.PACK) !== JSON.stringify(runtimeMeta(manifest))
+    ) {
       say("the module's PACK is not the manifest's runtime fields");
     }
     let observation;
@@ -547,7 +601,10 @@ export async function checkPacks({ root = REPO } = {}) {
       say(`will not decode: ${err.message}`);
       continue;
     }
-    for (const p of checkOf(pack)(observation)) say(p);
+    const structural = pack.check
+      ? await pack.check(mod, manifest, { root })
+      : checkOf(pack)(observation);
+    for (const p of structural) say(p);
     const { ok, result } = pack.validate(observation);
     if (!ok) say(`fails its check: ${JSON.stringify(result)}`);
     if (
@@ -560,7 +617,7 @@ export async function checkPacks({ root = REPO } = {}) {
 
     // A pack only the Observatory opens is no capability package: its loader
     // would land in js/platform/builtins.js, which the application reaches.
-    if (pack.capability === null) continue;
+    if (!pack.capability) continue;
     if (!existsSync(at(pack.capability))) {
       say(`${pack.capability} is missing`);
       continue;
@@ -576,13 +633,32 @@ export async function checkPacks({ root = REPO } = {}) {
   return problems;
 }
 
-/** Rebuild every pack from the cache and compare with what is committed. */
-async function provenance() {
+/** The raw products of one pack, from its cache and checked against its pins. */
+const rawOf = (pack, { offline = true, offlineFlag = false } = {}) =>
+  Promise.all(
+    pack.raw.map(pin =>
+      pinnedBytes(pin, {
+        cache: cacheOf(pack),
+        offline,
+        offlineFlag,
+        refetch: pack.refetch || 'npm run packs:data',
+        headers: pack.headers,
+      })
+    )
+  );
+
+/** Whether every raw product of a pack is in its cache. */
+export const rawCached = pack =>
+  pack.raw.every(pin => existsSync(path.join(cacheOf(pack), pin.file)));
+
+/**
+ * Rebuild packs from the cache and compare with what is committed.
+ * @param {{only?: string[], offline?: boolean}} [opts]
+ */
+async function provenance({ only, offline = true } = {}) {
   const problems = [];
-  for (const pack of PACKS) {
-    const raw = await Promise.all(
-      pack.raw.map(pin => pinnedBytes(pin, { cache: CACHE, offline: true }))
-    );
+  for (const pack of PACKS.filter(byId(only))) {
+    const raw = await rawOf(pack, { offline });
     const built = await buildPack(pack, raw);
     if (
       readFileSync(path.join(REPO, pack.module), 'utf8') !== built.moduleText
@@ -603,15 +679,47 @@ async function provenance() {
   return problems;
 }
 
+/** Build packs and write their modules and manifests. */
+async function write({ only, offline, offlineFlag = false } = {}) {
+  for (const pack of PACKS.filter(byId(only))) {
+    const raw = await rawOf(pack, { offline, offlineFlag });
+    const built = await buildPack(pack, raw);
+    mkdirSync(path.dirname(path.join(REPO, pack.module)), { recursive: true });
+    mkdirSync(path.dirname(path.join(REPO, pack.manifest)), {
+      recursive: true,
+    });
+    if (!pack.handWritten)
+      writeFileSync(path.join(REPO, pack.module), built.moduleText);
+    writeFileSync(path.join(REPO, pack.manifest), built.manifestText);
+    console.log(
+      `${pack.id}: ${built.manifest.derived.bytes} bytes, ${JSON.stringify(built.manifest.validation.result)}`
+    );
+  }
+}
+
+/**
+ * The packs `npm run packs:provenance` rebuilds. A dataset with a provenance
+ * step of its own in the release gate (spectra-provenance and the rest, each
+ * against its own cache, so an archive that is down is reported for itself)
+ * is rebuilt there, through runDataset(), and not a second time here.
+ */
+const OWN_PROVENANCE = pack => Boolean(pack.ownCommands);
+
 async function main(argv) {
   const check = argv.includes('--check');
+  const all = argv.includes('--all');
   if (check && argv.includes('--require-sources')) {
-    const problems = [...(await checkPacks()), ...(await provenance())];
+    const only = PACKS.filter(p => all || !OWN_PROVENANCE(p)).map(p => p.id);
+    const problems = [...(await checkPacks()), ...(await provenance({ only }))];
     for (const p of problems) console.error(`  ${p}`);
     if (problems.length) process.exit(1);
-    const n = PACKS.length;
+    const n = only.length;
+    const others = PACKS.length - n;
     console.log(
-      `${n} data pack${n === 1 ? ' rebuilds' : 's rebuild'} byte for byte from the pinned raw products.`
+      `${n} data pack${n === 1 ? ' rebuilds' : 's rebuild'} byte for byte from the pinned raw products.` +
+        (others
+          ? ` ${others} more rebuild under their own commands (npm run spectra:provenance, gwosc:provenance, gw:provenance, stellar:provenance), or here with --all.`
+          : '')
     );
     return;
   }
@@ -624,22 +732,78 @@ async function main(argv) {
     );
     return;
   }
-  for (const pack of PACKS) {
-    const raw = await Promise.all(
-      pack.raw.map(pin =>
-        pinnedBytes(pin, { cache: CACHE, offline: argv.includes('--offline') })
-      )
-    );
-    const built = await buildPack(pack, raw);
-    mkdirSync(path.dirname(path.join(REPO, pack.module)), { recursive: true });
-    mkdirSync(path.dirname(path.join(REPO, pack.manifest)), {
-      recursive: true,
-    });
-    writeFileSync(path.join(REPO, pack.module), built.moduleText);
-    writeFileSync(path.join(REPO, pack.manifest), built.manifestText);
+  // Every pack this command builds from the network: the ones with commands
+  // of their own are fetched by those, unless --all.
+  const only = PACKS.filter(p => all || !OWN_PROVENANCE(p)).map(p => p.id);
+  await write({ only, offline: argv.includes('--offline') });
+}
+
+/**
+ * One dataset's own commands, as they were before it was a pack:
+ *
+ *   (no flags)                 fetch what is missing, build, write
+ *   --offline                  the same, refusing the network
+ *   --check [--offline]        the structural check; and the rebuild from the
+ *                              cache when the cache is there, saying plainly
+ *                              when it is not
+ *   --check --require-sources  the structural check and the rebuild, failing
+ *                              when the cache is missing
+ *
+ * @param {string} id - The pack
+ * @param {string[]} argv - The command line
+ */
+export async function runDataset(id, argv) {
+  const pack = PACKS.find(p => p.id === id);
+  const label = pack.label || pack.id;
+  const check = argv.includes('--check');
+  const offline = argv.includes('--offline');
+  const requireSources = argv.includes('--require-sources');
+  try {
+    if (!check) {
+      await write({ only: [id], offline, offlineFlag: offline });
+      return;
+    }
+    const problems = await checkPacks({ only: [id] });
+    if (problems.length) {
+      console.error(`${label}: problems found`);
+      for (const p of problems) console.error(`  ${p}`);
+      process.exit(1);
+    }
+    if (!rawCached(pack)) {
+      if (requireSources) {
+        console.error(
+          `Provenance NOT verified: the raw products are not cached.\n` +
+            `  ${path.relative(REPO, cacheOf(pack))} does not hold ${pack.raw.map(r => r.file).join(', ')},\n` +
+            `  so ${pack.module} could not be rebuilt and compared. Structural\n` +
+            '  validity says the module is complete and self-consistent. It does\n' +
+            '  not say where its numbers came from.\n' +
+            `  Run \`${pack.refetch}\` once to fetch them, then run this again.`
+        );
+        process.exit(1);
+      }
+      console.log(
+        `${label}: complete and internally consistent.\n` +
+          '  PROVENANCE NOT VERIFIED: the raw products are not cached, so the\n' +
+          '  module was not rebuilt and compared byte for byte. This run checked\n' +
+          '  the structure of what is checked in, not where it came from.\n' +
+          `  Run \`${pack.refetch}\` once to fetch them, or the provenance\n` +
+          '  command to make the missing sources a failure rather than a caveat.'
+      );
+      return;
+    }
+    const stale = await provenance({ only: [id] });
+    if (stale.length) {
+      for (const p of stale) console.error(`  ${p}`);
+      console.error(`Run \`${pack.refetch}\` and commit the result.`);
+      process.exit(1);
+    }
     console.log(
-      `${pack.id}: ${built.manifest.derived.bytes} bytes, ${JSON.stringify(built.manifest.validation.result)}`
+      `${label}: current, and rebuilds byte for byte from the cached raw products\n` +
+        `  whose pins ${pack.manifest} records - provenance verified.`
     );
+  } catch (err) {
+    console.error(String(err.message || err));
+    process.exit(1);
   }
 }
 

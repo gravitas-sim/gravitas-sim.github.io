@@ -61,7 +61,7 @@
 // =============================================================================
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -110,6 +110,10 @@ const loadCatalogs = () => (catalogs ??= completeCatalogs());
 // carry markers; it just will not be found by --sync or --check.
 const DOCS = [
   'README.md',
+  // The licence inventory: LICENSES.md's data-pack table and NOTICE's list of
+  // what each data pack cites, both generated from data-packs/*.json.
+  'LICENSES.md',
+  'NOTICE',
   'BRANCHING.md',
   'CONTRIBUTING.md',
   'DARK_MATTER.md',
@@ -796,7 +800,17 @@ export async function gatherBlocks({ physics = null } = {}) {
   const { GRAPH } = await import(
     new URL('./generate-graph.mjs', import.meta.url)
   );
+  // The data-pack licence inventory, from the manifests themselves.
+  const packDir = join(REPO, 'data-packs');
+  const dataPacks = readdirSync(packDir)
+    .filter(f => f.endsWith('.json'))
+    .map(f => JSON.parse(readFileSync(join(packDir, f), 'utf8')));
+  const { loadRealSystems } = await import(
+    new URL('./authoring/realSystems.mjs', import.meta.url)
+  );
   return generatedBlocks({
+    dataPacks,
+    realSystems: await loadRealSystems(),
     graph: GRAPH,
     manifest: MANIFEST,
     instructor: INSTRUCTOR_CONTENT,

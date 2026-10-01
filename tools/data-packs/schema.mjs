@@ -43,9 +43,15 @@ export const TIME_SERIES = new Set([
   'strain',
 ]);
 /**
- * What the numbers are. `synthetic` is listed so a manifest can say it and
- * then be refused: numbers made to look like a measurement are not a data
- * pack, however well documented. A lesson that needs them labels them itself.
+ * What the numbers are. `synthetic` numbers were made by a model to stand in
+ * for a measurement - a rotation curve built from a galaxy's published
+ * structure, with a scatter added - and a pack of them is accepted only when
+ * its manifest records that model: what it is, its parameters, and the
+ * scatter (`model.name`, `model.parameters`, `model.scatter`). Numbers made to
+ * look like a measurement without that record are refused, however complete
+ * the rest of the manifest is. The runtime copy of a synthetic pack carries
+ * `origin` and `model`, so an interface says what the numbers are wherever it
+ * shows them (Roadmap II binding decision 7; DATA_PACKS.md).
  */
 export const ORIGINS = ['observed', 'model', 'compilation', 'synthetic'];
 export const LICENSE_STATUS = [
@@ -92,11 +98,31 @@ export const RUNTIME_FIELDS = [
  * policy). Gravitas's own packs carry them. An image pack must carry `image`,
  * because there was no image pack before it.
  */
-export const RUNTIME_OPTIONAL = ['reductions', 'image', 'crowding'];
+export const RUNTIME_OPTIONAL = [
+  'reductions',
+  'image',
+  'crowding',
+  'model',
+  'citations',
+];
 // `crowding`, added in SDK 1.3.0: what a TESS light curve's pipeline says of
 // the light in its aperture, CROWDSAP (the fraction that is the target's) and
 // FLFRCSAP (the fraction of the target's light the aperture holds), as its
 // header records them. An interface shows it where a transit is diluted.
+//
+// `model` and `citations`, added in SDK 1.6.0. `model` is what made the
+// numbers when a model did - a grid's version and inputs, or a synthetic
+// curve's generating model and scatter - and is required in the runtime copy
+// of a synthetic pack. `citations` is not a manifest field of its own: it is
+// the manifest's `source.citations`, copied so that an interface credits a
+// pack from the pack rather than from a list of its own. A runtime copy
+// without it is neither refused nor warned about, since every copy written
+// before SDK 1.6.0 lacks it and loses nothing by that.
+
+/** Runtime fields cut from somewhere other than a top-level manifest field. */
+const DERIVED_RUNTIME = { citations: m => m.source?.citations };
+const manifestField = (m, k) =>
+  k in DERIVED_RUNTIME ? DERIVED_RUNTIME[k](m) : m[k];
 
 const PUBLIC_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/; // as js/platform/manifest.js
 const SEMVER = /^\d+\.\d+\.\d+$/;
@@ -155,10 +181,21 @@ export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
   );
   need(ORIGINS.includes(m.origin), 'origin', `one of ${ORIGINS.join(', ')}`);
   need(
-    m.origin !== 'synthetic',
+    m.origin !== 'synthetic' ||
+      (isObject(m.model) &&
+        typeof m.model.name === 'string' &&
+        m.model.name.trim() !== '' &&
+        isObject(m.model.parameters) &&
+        Object.keys(m.model.parameters).length > 0 &&
+        typeof m.model.scatter === 'string' &&
+        m.model.scatter.trim() !== ''),
     'origin',
-    'synthetic data is not a data pack; label it in the lesson'
+    'synthetic data is a data pack only with the model that made it: model.name, model.parameters and model.scatter'
   );
+  if (m.model !== undefined) {
+    need(isObject(m.model), 'model', 'is an object');
+    text(m.model?.name, 'model.name');
+  }
   text(m.credit, 'credit');
   need(DATE.test(m.retrieved || ''), 'retrieved', 'a date, YYYY-MM-DD');
 
@@ -186,8 +223,11 @@ export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
   if (NEEDS_BASIS.has(m.license?.status))
     text(m.license?.basis, 'license.basis');
 
-  // A compilation's source is its citations; there is no file to hash.
-  if (m.origin !== 'compilation') list(m.raw, 'raw');
+  // A compilation's source is its citations; there is no file to hash. Nor
+  // for synthetic numbers, whose source is the model the manifest records.
+  if (m.origin !== 'compilation' && m.origin !== 'synthetic')
+    list(m.raw, 'raw');
+  else list(m.raw, 'raw', 0);
   (m.raw || []).forEach((r, i) => {
     text(r?.file, `raw[${i}].file`);
     text(r?.url, `raw[${i}].url`);
@@ -234,6 +274,15 @@ export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
     m.transformation?.steps,
     'transformation.steps',
     m.origin === 'compilation' ? 0 : 1
+  );
+  // A citation is something a reader can find: a DOI, a bibcode or a URL,
+  // with the words to show beside it.
+  (m.source?.citations || []).forEach((c, i) =>
+    need(
+      typeof c?.text === 'string' && c.text.trim() !== '',
+      `source.citations[${i}].text`,
+      'is required'
+    )
   );
 
   list(m.columns, 'columns');
@@ -331,8 +380,8 @@ export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
 export function runtimeMeta(m) {
   return Object.fromEntries(
     [...RUNTIME_FIELDS, ...RUNTIME_OPTIONAL]
-      .filter(k => m[k] !== undefined)
-      .map(k => [k, m[k]])
+      .filter(k => manifestField(m, k) !== undefined)
+      .map(k => [k, manifestField(m, k)])
   );
 }
 
@@ -359,16 +408,21 @@ export function runtimeDisagreement(PACK, m) {
     if (!same(PACK[k], m[k])) errors.push(`${k} is not the manifest's`);
   }
   for (const k of RUNTIME_OPTIONAL) {
+    const want = manifestField(m, k);
     if (PACK[k] === undefined) {
-      if (m[k] === undefined) continue;
+      if (want === undefined || k in DERIVED_RUNTIME) continue;
       if (k === 'image' && m.dataType === 'image') {
         errors.push('image is required in the runtime copy of an image');
+      } else if (k === 'model' && m.origin === 'synthetic') {
+        errors.push(
+          'model is required in the runtime copy of synthetic data, so an interface can say what made it'
+        );
       } else {
         warnings.push(
           `${k} is in the manifest and not the runtime copy, so an interface cannot show it`
         );
       }
-    } else if (!same(PACK[k], m[k])) {
+    } else if (!same(PACK[k], want)) {
       errors.push(`${k} is not the manifest's`);
     }
   }

@@ -16,11 +16,12 @@
 // data reached Gravitas is carried in `reductions`, and what this adds - an
 // image pixel's position on the sky - is said to be added.
 //
-// A few numbers here are copied from the SDSS and GWOSC provenance records,
-// which the browser never loads (a test keeps them out of js/, because they
-// are several kilobytes nothing on screen needs): each star's position and
-// redshift, and the catalog citations. tests/observatory.test.js
-// holds every copied value to its record.
+// Every credit, licence, retrieval date and citation comes from the pack the
+// data came in: PACK, its manifest's runtime fields (DATA_PACKS.md). The
+// manifests themselves the browser never loads. One kind of number is still
+// copied here from a manifest, because the runtime copy does not carry it:
+// each SDSS star's position and redshift. tests/observatory.test.js holds
+// every copied value to its manifest.
 // =============================================================================
 
 import { BUILTINS } from '../platform/builtins.js';
@@ -38,7 +39,10 @@ const base = {
   annotations: [],
 };
 
-/** Positions and redshifts, copied from the SDSS provenance record. */
+/**
+ * Positions and redshifts, copied from the records in
+ * data-packs/sdss-dr18-stellar-spectra.json.
+ */
 export const SDSS_STARS = Object.freeze({
   a: { ra: 302.69822, dec: -11.853501, z: -0.0008099225 },
   g: { ra: 340.01167, dec: 13.415657, z: -0.0002128853 },
@@ -46,17 +50,23 @@ export const SDSS_STARS = Object.freeze({
   m: { ra: 166.17079, dec: 37.659994, z: 0.0000618252 },
 });
 
-/** The GWOSC catalogs, as their provenance record cites them. */
-export const GWOSC_CATALOGS = Object.freeze({
-  'GWTC-1-confident': {
-    text: 'LIGO Scientific and Virgo Collaborations, Phys. Rev. X 9, 031040 (2019)',
-    url: 'https://doi.org/10.7935/82H3-HH23',
-  },
-  'GWTC-2.1-confident': {
-    text: 'LIGO Scientific and Virgo Collaborations, Phys. Rev. D 109, 022001 (2024)',
-    url: 'https://doi.org/10.7935/qf3a-3z67',
-  },
-});
+/**
+ * A pack's citations as an observation carries them: the words, and a link a
+ * reader can follow, made from the DOI or bibcode the manifest records.
+ * @param {Array<{text: string, doi?: string, bibcode?: string, url?: string}>} cites
+ * @returns {Array<{text: string, url?: string}>}
+ */
+export const linkedCitations = (cites = []) =>
+  cites.map(c => {
+    const url = c.url
+      ? c.url
+      : c.doi
+        ? `https://doi.org/${c.doi}`
+        : c.bibcode
+          ? `https://ui.adsabs.harvard.edu/abs/${c.bibcode}`
+          : null;
+    return url ? { text: c.text, url } : { text: c.text };
+  });
 
 /** The catalog values the table shows, and what each is. */
 const GWOSC_PARAMETERS = [
@@ -79,25 +89,20 @@ const GWOSC_UNITS = { M_sun: 'Msun', Mpc: 'Mpc', '': '' };
 const loadPack = id => BUILTINS[id]();
 
 async function tessLightCurve() {
-  return lightCurveObservation(await loadPack('data/tess-hd209458-s56'), {
-    citations: [
-      {
-        text: 'TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)',
-        url: 'https://doi.org/10.17909/t9-nmc8-f686',
-      },
-    ],
-  });
+  return lightCurveObservation(await loadPack('data/tess-hd209458-s56'), {});
 }
 
 /**
  * A TESS light-curve pack module as a gravitas.observation/1: this one, and
  * one installed from the catalog (js/catalog/installed.js, prefix `installed`).
+ * The citations are the pack's own unless the caller has others to give.
  */
 export async function lightCurveObservation(
   mod,
   { citations, idPrefix = 'pack' }
 ) {
   const P = mod.PACK;
+  citations = citations || linkedCitations(P.citations);
   const o = await decode(mod);
   if (!/^BTJD = BJD - 2457000$/.test(P.time.reference)) {
     throw new Error(`the pack counts time as ${P.time.reference}, not BTJD`);
@@ -155,6 +160,7 @@ export async function lightCurveObservation(
 
 async function sdssSpectrum(id) {
   const mod = await loadPack('data/sdss-spectra');
+  const P = mod.PACK;
   const s = mod.decodeSpectrum(id);
   const star = SDSS_STARS[id];
   const name = `SDSS ${s.plate}-${s.mjd}-${s.fiberID}`;
@@ -166,19 +172,14 @@ async function sdssSpectrum(id) {
     object: { name, ra: star.ra, dec: star.dec, frame: 'ICRS' },
     facility:
       'SDSS 2.5 m telescope, Apache Point Observatory; legacy spectrograph',
-    origin: 'observed',
+    origin: P.origin,
     source: { kind: 'builtin', id: 'sdss-dr18-spectra', version: null },
-    credit: mod.CITATION,
-    license: {
-      status: 'public-domain',
-      statement:
-        'SDSS data are public; SDSS asks that work using them cite the release and acknowledge the survey (see NOTICE).',
-    },
-    retrieved: '2026-09-21',
-    citations: [{ text: mod.CITATION, url: 'https://www.sdss.org/dr18/' }],
+    credit: P.credit,
+    license: P.license,
+    retrieved: P.retrieved,
+    citations: linkedCitations(P.citations),
     reductions: [
-      'Averaged three adjacent archive samples into one: 3,813 samples at a log step of 0.0001 became 1,271 at 0.0003. SDSS resolves about 2.2 samples, so the average costs resolution the spectrograph did not deliver.',
-      'The archive’s per-sample uncertainty is not in this bundle, so the flux has no uncertainty here.',
+      ...P.reductions,
       `Wavelengths in vacuum, heliocentric, not shifted to rest; SDSS measures this star’s redshift as z = ${star.z}.`,
     ],
     columns: [
@@ -254,7 +255,6 @@ async function gwoscCatalog() {
       }
     );
   }
-  const used = [...new Set(events.map(e => e.catalogVersion.split(' ')[0]))];
   return {
     ...base,
     kind: 'table',
@@ -264,14 +264,10 @@ async function gwoscCatalog() {
     facility: 'LIGO and Virgo (GWOSC)',
     origin: 'compilation',
     source: { kind: 'builtin', id: 'gwosc-events', version: null },
-    credit: mod.CITATION,
-    license: {
-      status: 'cc-by-4.0',
-      statement:
-        'GWOSC open data, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).',
-    },
-    retrieved: '2026-09-23',
-    citations: used.map(c => GWOSC_CATALOGS[c]).filter(Boolean),
+    credit: mod.PACK.credit,
+    license: mod.PACK.license,
+    retrieved: mod.PACK.retrieved,
+    citations: linkedCitations(mod.PACK.citations),
     reductions: [
       'Copied as GWOSC serves them: the median, and the lower and upper offsets to the edges of the 90% interval. Gravitas measured none of them.',
     ],
@@ -285,7 +281,7 @@ async function gwoscCatalog() {
  * columns, their uncertainties marked as such, and what was done to it. The
  * decoder and the pack both arrive only when it is opened.
  */
-async function tablePack(load, { axes, citations }) {
+async function tablePack(load, { axes }) {
   const [mod, { tableOf }] = await Promise.all([
     load(),
     import('../tableObservation.js'),
@@ -318,7 +314,7 @@ async function tablePack(load, { axes, citations }) {
     credit: P.credit,
     license: P.license,
     retrieved: P.retrieved,
-    citations,
+    citations: linkedCitations(P.citations),
     reductions: [
       ...P.masks.map(m => `${m.column}: ${m.rule} (${m.dropped} dropped)`),
       ...(P.reductions || []),
@@ -336,40 +332,19 @@ async function tablePack(load, { axes, citations }) {
   };
 }
 
-const SDSS_CITATIONS = [
-  {
-    text: 'SDSS DR18 (Almeida et al. 2023, ApJS 267, 44)',
-    url: 'https://doi.org/10.3847/1538-4365/acda98',
-  },
-];
-
 // Observatory-only packs: imported here, never through js/platform/builtins.js,
 // which the application reaches (DATA_PACKS.md).
 const ngc2420Photometry = () =>
   tablePack(() => import('../data/observations/sdssNgc2420Photometry.js'), {
     axes: { x: 'ra', y: 'dec' },
-    citations: SDSS_CITATIONS,
   });
 const ngc2420Segue = () =>
   tablePack(() => import('../data/observations/sdssNgc2420Segue.js'), {
     axes: { x: 'rv', y: 'feh' },
-    citations: [
-      ...SDSS_CITATIONS,
-      {
-        text: 'The SEGUE Stellar Parameter Pipeline (Lee et al. 2008a, AJ 136, 2022)',
-        url: 'https://doi.org/10.1088/0004-6256/136/5/2022',
-      },
-    ],
   });
 const mistIsochrones = () =>
   tablePack(() => import('../data/observations/mistSdssIsochrones.js'), {
     axes: { x: 'logTeff', y: 'logL' },
-    citations: [
-      {
-        text: 'MIST (Dotter 2016, ApJS 222, 8; Choi et al. 2016, ApJ 823, 102)',
-        url: 'https://mist.science/',
-      },
-    ],
   });
 
 async function tessAperture() {
@@ -410,16 +385,7 @@ async function tessAperture() {
     credit: P.credit,
     license: P.license,
     retrieved: P.retrieved,
-    citations: [
-      {
-        text: 'TESS light curves from MAST (Ricker et al. 2015, JATIS 1, 014003)',
-        url: 'https://doi.org/10.17909/t9-nmc8-f686',
-      },
-      {
-        text: P.image.bitsSource,
-        url: 'https://ntrs.nasa.gov/citations/20180007935',
-      },
-    ],
+    citations: linkedCitations(P.citations),
     reductions: [
       'The pixels are as the archive has them.',
       'Each pixel’s right ascension and declination are computed here from the file’s TAN world coordinates, at the pixel’s center; they are not in the file.',

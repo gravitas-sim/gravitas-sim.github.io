@@ -1,0 +1,443 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "sdss-dr18-stellar-spectra",
+  "version": "1.0.0",
+  "title": "Four observed stellar spectra: SDSS DR18, one each of A, G, K and M",
+  "object": {
+    "name": "Four SDSS DR18 stars, one each of spectral type A, G, K and M",
+    "identifiers": [
+      "SDSS specObjID 3533193009329971200",
+      "SDSS specObjID 3521863916999254016",
+      "SDSS specObjID 3514074151541383168",
+      "SDSS specObjID 3232526053733853184"
+    ]
+  },
+  "facility": {
+    "observatory": "Sloan Digital Sky Survey, Apache Point Observatory",
+    "instrument": "SDSS legacy spectrograph on the 2.5 m Sloan Foundation Telescope",
+    "pipeline": "spectro1d (run2d 26 and 104), as released in DR18"
+  },
+  "dataType": "spectrum",
+  "origin": "observed",
+  "credit": "SDSS DR18 (Almeida et al. 2023, ApJS 267, 44)",
+  "license": {
+    "status": "public-domain",
+    "statement": "SDSS data are public; SDSS asks that work using them cite the data release and acknowledge the survey (NOTICE).",
+    "basis": "SDSS’s image-use policy, read 2026-10-01: “All SDSS data released in our public data releases are considered in the public domain” (source.terms). The acknowledgement SDSS asks for is in NOTICE."
+  },
+  "retrieved": "2026-09-21",
+  "columns": [
+    {
+      "name": "wavelength",
+      "unit": "Angstrom",
+      "description": "vacuum, heliocentric: sample i is at 10 ** (GRID.logStart + i * GRID.logStep)"
+    },
+    {
+      "name": "flux",
+      "unit": "1e-17 erg/s/cm2/Angstrom",
+      "description": "as the archive published it, averaged over three samples; no uncertainty is carried"
+    }
+  ],
+  "masks": [],
+  "reductions": [
+    "Averaged three adjacent archive samples into one: 3,813 samples at a log step of 0.0001 became 1,271 at 0.0003. SDSS resolves about 2.2 samples, so the average costs resolution the spectrograph did not deliver.",
+    "Flux as little-endian int16, one scale per spectrum.",
+    "The archive’s per-sample uncertainty is not in this bundle, so the flux has no uncertainty here."
+  ],
+  "source": {
+    "archive": "Sloan Digital Sky Survey DR18",
+    "urls": [
+      "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=3138&mjd=54740&fiberid=433",
+      "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=3128&mjd=54776&fiberid=178",
+      "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=3121&mjd=54749&fiberid=511",
+      "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=2871&mjd=54536&fiberid=245",
+      "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch"
+    ],
+    "citations": [
+      {
+        "text": "Almeida et al. 2023, ApJS 267, 44 (SDSS DR18)",
+        "doi": "10.3847/1538-4365/acda98"
+      },
+      {
+        "text": "Smee et al. 2013, AJ 146, 32 (the SDSS and BOSS spectrographs)",
+        "doi": "10.1088/0004-6256/146/2/32"
+      },
+      {
+        "text": "Gunn et al. 2006, AJ 131, 2332 (the SDSS 2.5 m telescope)",
+        "doi": "10.1086/500975"
+      },
+      {
+        "text": "Yanny et al. 2009, AJ 137, 4377 (SEGUE)",
+        "doi": "10.1088/0004-6256/137/5/4377"
+      }
+    ],
+    "catalogQuery": "SELECT s.specObjID, s.plate, s.mjd, s.fiberID, s.class, s.subClass, s.snMedian, s.ra, s.dec, s.z, s.zErr, s.zWarning, s.survey, s.instrument, s.run2d, s.programname, s.elodieTEff, s.elodieLogG, s.elodieFeH, s.elodieSpType FROM SpecObj AS s WHERE s.specObjID IN (3533193009329971200, 3521863916999254016, 3514074151541383168, 3232526053733853184)",
+    "acknowledgement": "Funding for the Sloan Digital Sky Survey has been provided by the Alfred P. Sloan Foundation, the Participating Institutions, the National Science Foundation, and the U.S. Department of Energy Office of Science. SDSS acknowledges support and resources from the Center for High-Performance Computing at the University of Utah. SDSS data are public; see https://www.sdss.org/collaboration/citing-sdss/ for the terms this acknowledgement satisfies.",
+    "terms": [
+      "https://www.sdss.org/collaboration/citing-sdss/",
+      "https://www.sdss.org/collaboration/image-use-policy/"
+    ]
+  },
+  "raw": [
+    {
+      "file": "spec-3138-54740-433.csv",
+      "url": "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=3138&mjd=54740&fiberid=433",
+      "bytes": 117130,
+      "sha256": "0b1bfb79ef95e9a3b876b56c50f23486dcbc03b469083ca1d7d616095eec9276"
+    },
+    {
+      "file": "spec-3128-54776-178.csv",
+      "url": "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=3128&mjd=54776&fiberid=178",
+      "bytes": 120947,
+      "sha256": "85042d96f02152576ac4ee6ac6af11f88447b2687b22d1920806d1ffafc8087f"
+    },
+    {
+      "file": "spec-3121-54749-511.csv",
+      "url": "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=3121&mjd=54749&fiberid=511",
+      "bytes": 118163,
+      "sha256": "5372c5a05ad57ee8292c82efa71dd99667b2e3dea212ffb7ce378505a0d06f83"
+    },
+    {
+      "file": "spec-2871-54536-245.csv",
+      "url": "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=2871&mjd=54536&fiberid=245",
+      "bytes": 114698,
+      "sha256": "67b0112fbb0aa205c67220685e791467cea9a58a76dfb43097c016d09c077d5f"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/sdss-spectra.mjs",
+    "version": "1.0.0",
+    "options": {
+      "bin": 3,
+      "logStep": 0.0001
+    },
+    "steps": [
+      "Parse the Wavelength and Flux columns of each archive CSV (BestFit, the pipeline's model, and SkyFlux, what was subtracted, are not read), and check every sample sits on the SDSS grid log10(lambda / Angstrom) = 1e-4 * i.",
+      "Trim the four to the 3815 grid indices all four cover, of which 3813 are used, so they share one wavelength axis without resampling.",
+      "Average 3 adjacent samples into one; the bin center is their mean log wavelength. SDSS's resolving power of about 2000 puts a resolution element at roughly 2.2 samples, so this costs resolution the spectrograph did not deliver; record.thinning has what it cost in each feature the lesson uses.",
+      "Quantise to little-endian int16, one integer scale per spectrum: value = round(flux * scale); flux = value / scale."
+    ],
+    "record": {
+      "grid": {
+        "logStart": 3.5815,
+        "logStep": 0.0003,
+        "count": 1271,
+        "firstA": 3815.048,
+        "lastA": 9172.759
+      },
+      "size": {
+        "sourceBytes": 470938,
+        "sourceSamples": 15334,
+        "keptSamples": 5084,
+        "payloadBase64Bytes": 13568,
+        "thinningFactor": 3.02,
+        "byteFactor": 34.71
+      },
+      "thinning": {
+        "measure": "band depth, in percentage points, of the four features the lesson uses, measured on the full-resolution archive spectrum and on the thinned copy. The shift is the difference.",
+        "worstShiftPP": {
+          "cak": 0.75,
+          "hbeta": 0.48,
+          "nad": 1.32,
+          "tio": 0.03
+        },
+        "worstOverall": 1.32
+      }
+    }
+  },
+  "records": {
+    "a": {
+      "letter": "A",
+      "specObjID": "3533193009329971200",
+      "plate": 3138,
+      "mjd": 54740,
+      "fiberID": 433,
+      "observed": "2008-10-01",
+      "ra": 302.69822,
+      "dec": -11.853501,
+      "subClass": "A0",
+      "elodieSpType": "A1V",
+      "elodieTEff": 7852,
+      "elodieLogG": 3.18,
+      "elodieFeH": -1.67,
+      "snMedian": 108.2831,
+      "z": -0.0008099225,
+      "zErr": 0.000003089933,
+      "survey": "segue2",
+      "run2d": "104",
+      "url": "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=3138&mjd=54740&fiberid=433",
+      "sourceSha256": "0b1bfb79ef95e9a3b876b56c50f23486dcbc03b469083ca1d7d616095eec9276",
+      "sourceBytes": 117130,
+      "sourceSamples": 3844,
+      "count": 1271,
+      "scale": 119,
+      "quantisation": 0.0201,
+      "tio5": 0.9751,
+      "thinning": {
+        "cak": {
+          "depth": 3.4,
+          "shiftPP": 0.07
+        },
+        "hbeta": {
+          "depth": 36.63,
+          "shiftPP": 0.45
+        },
+        "nad": {
+          "depth": 3.75,
+          "shiftPP": 0.06
+        },
+        "tio": {
+          "depth": 1.91,
+          "shiftPP": 0
+        }
+      },
+      "payloadSha256": "5e89556eb7f66f3da226b7dd34f4e44b3970cb20fba9559ac35a5fb0ebdee5d0"
+    },
+    "g": {
+      "letter": "G",
+      "specObjID": "3521863916999254016",
+      "plate": 3128,
+      "mjd": 54776,
+      "fiberID": 178,
+      "observed": "2008-11-06",
+      "ra": 340.01167,
+      "dec": 13.415657,
+      "subClass": "G2",
+      "elodieSpType": "G5",
+      "elodieTEff": 5625,
+      "elodieLogG": 4.2,
+      "elodieFeH": -0.21,
+      "snMedian": 127.4957,
+      "z": -0.0002128853,
+      "zErr": 0.000008202044,
+      "survey": "segue2",
+      "run2d": "104",
+      "url": "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=3128&mjd=54776&fiberid=178",
+      "sourceSha256": "85042d96f02152576ac4ee6ac6af11f88447b2687b22d1920806d1ffafc8087f",
+      "sourceBytes": 120947,
+      "sourceSamples": 3828,
+      "count": 1271,
+      "scale": 111,
+      "quantisation": 0.0233,
+      "tio5": 0.9592,
+      "thinning": {
+        "cak": {
+          "depth": 56.07,
+          "shiftPP": 0.75
+        },
+        "hbeta": {
+          "depth": 14.37,
+          "shiftPP": 0.28
+        },
+        "nad": {
+          "depth": 8.96,
+          "shiftPP": 0.21
+        },
+        "tio": {
+          "depth": 1.8,
+          "shiftPP": 0.03
+        }
+      },
+      "payloadSha256": "0a4219fd342a9006af818fb717feefa79990d15f5e43edf1a6d86f74d4b6a7e0"
+    },
+    "k": {
+      "letter": "K",
+      "specObjID": "3514074151541383168",
+      "plate": 3121,
+      "mjd": 54749,
+      "fiberID": 511,
+      "observed": "2008-10-10",
+      "ra": 59.305354,
+      "dec": 11.870116,
+      "subClass": "K3",
+      "elodieSpType": "K3V",
+      "elodieTEff": 4775,
+      "elodieLogG": 4.409,
+      "elodieFeH": -0.12,
+      "snMedian": 115.9964,
+      "z": 0.00003935811,
+      "zErr": 0.000006265696,
+      "survey": "segue2",
+      "run2d": "104",
+      "url": "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=3121&mjd=54749&fiberid=511",
+      "sourceSha256": "5372c5a05ad57ee8292c82efa71dd99667b2e3dea212ffb7ce378505a0d06f83",
+      "sourceBytes": 118163,
+      "sourceSamples": 3847,
+      "count": 1271,
+      "scale": 220,
+      "quantisation": 0.0353,
+      "tio5": 0.9452,
+      "thinning": {
+        "cak": {
+          "depth": 52.6,
+          "shiftPP": 0.47
+        },
+        "hbeta": {
+          "depth": 8.96,
+          "shiftPP": 0.48
+        },
+        "nad": {
+          "depth": 23.04,
+          "shiftPP": 0.38
+        },
+        "tio": {
+          "depth": 0.19,
+          "shiftPP": 0.02
+        }
+      },
+      "payloadSha256": "422cc11f2724a4b30aa46b57bbb0617e3ab53d9d5f406531c9ba9811416c8628"
+    },
+    "m": {
+      "letter": "M",
+      "specObjID": "3232526053733853184",
+      "plate": 2871,
+      "mjd": 54536,
+      "fiberID": 245,
+      "observed": "2008-03-11",
+      "ra": 166.17079,
+      "dec": 37.659994,
+      "subClass": "M1",
+      "elodieSpType": "M2Vvar",
+      "elodieTEff": 3980,
+      "elodieLogG": 4.958,
+      "elodieFeH": -0.04,
+      "snMedian": 86.63696,
+      "z": 0.0000618252,
+      "zErr": 0.000008059405,
+      "survey": "segue1",
+      "run2d": "26",
+      "url": "https://dr18.sdss.org/optical/spectrum/view/data/format=csv/spec=lite?plateid=2871&mjd=54536&fiberid=245",
+      "sourceSha256": "67b0112fbb0aa205c67220685e791467cea9a58a76dfb43097c016d09c077d5f",
+      "sourceBytes": 114698,
+      "sourceSamples": 3815,
+      "count": 1271,
+      "scale": 130,
+      "quantisation": 0.1567,
+      "tio5": 0.6569,
+      "thinning": {
+        "cak": {
+          "depth": 21.92,
+          "shiftPP": 0.31
+        },
+        "hbeta": {
+          "depth": 4.79,
+          "shiftPP": 0.19
+        },
+        "nad": {
+          "depth": 52.64,
+          "shiftPP": 1.32
+        },
+        "tio": {
+          "depth": 13.54,
+          "shiftPP": 0.01
+        }
+      },
+      "payloadSha256": "80151824c5f8f838452e5baf93997b6673ee34f06fd107d488142876ce83847b"
+    }
+  },
+  "selection": [
+    "class = 'STAR' and zWarning = 0.",
+    "plate < 3510, the SDSS legacy spectrograph, so all four share one instrument, one wavelength grid, one resolution and one flux calibration.",
+    "One spectral class each, at a subtype not adjacent to a class boundary.",
+    "Of those, the highest snMedian.",
+    "After selection, the class's defining signature checked in the data: the highest-signal M dwarf in the catalog is an M0V whose TiO5 index is 0.887 against 0.940 for the K star, which is not a feature a student can find, and is excluded by the subtype rule above."
+  ],
+  "assumptions": [
+    "Two independent pipeline classifications agree on the letter for all four: the spectro1d subClass and the ELODIE template match elodieSpType. No class here was inferred from a color.",
+    "SDSS samples every spectrum at log10(lambda / Angstrom) = 1e-4 * i for integer i; all four are runs of consecutive i on that one grid, which is why no wavelength array is stored and why trimming moves no flux value. The build checks the grid rather than assuming it.",
+    "Wavelengths are in vacuum and heliocentric, not shifted to rest: each star carries its own radial velocity, recorded as z, and the largest here is 2.0 Angstroms at H-alpha - a fifth of the narrowest window the lesson measures in."
+  ],
+  "notDone": [
+    "No smoothing.",
+    "No normalisation, of any kind. The four are stored in the flux units the archive published them in, so the continuum slope that separates an A star from an M star is in the committed data and is not a drawing decision.",
+    "No continuum fitting or division.",
+    "No resampling or interpolation onto a new wavelength grid.",
+    "No shift to rest wavelength.",
+    "No masking, sky subtraction or repair. What the pipeline delivered is what is here, including any sky residual it left behind."
+  ],
+  "caveats": [
+    "Four spectra are four examples. This is not a spectral atlas, not a representative sample of anything, and not a survey. Each letter here is represented by exactly one star.",
+    "The A star has a pipeline surface gravity of 3.18 and a metallicity of -1.67, so it is very probably not a main-sequence A dwarf; it is an A-type spectrum, which is all this bundle calls it.",
+    "The M star is classified M2Vvar by the ELODIE match, and its H-alpha is filled in rather than absorbed - chromospheric emission, which is ordinary in an M dwarf. H-alpha is not one of the four features the lesson uses.",
+    "snMedian is the pipeline median signal-to-noise over the whole spectrum. The blue end of every one of these is noisier than the red."
+  ],
+  "compatible": {
+    "widgets": [
+      "spectra-compare",
+      "spectra-identify"
+    ],
+    "investigations": [
+      "a-universe-of-stars"
+    ]
+  },
+  "offline": "core",
+  "derived": {
+    "file": "js/data/spectra/sdssSpectra.js",
+    "bytes": 21503,
+    "sha256": "0699c3907c9d8bda52f0832f006207ad922148834825d8a11c647b9962a8c5f8"
+  },
+  "validation": {
+    "check": "each star shows the signature its two archive classifications give it, measured on the committed spectra: H-beta deepest in the A star; Ca II K deeper in the G and K stars than in the A star; Na D and the TiO band deepest in the M star, whose TiO5 index is below 0.75 while the other three are above 0.9",
+    "against": [
+      {
+        "quantity": "spectral type of A",
+        "value": "A0 / A1V",
+        "unit": "",
+        "ref": "SDSS DR18 SpecObj subClass and elodieSpType"
+      },
+      {
+        "quantity": "spectral type of G",
+        "value": "G2 / G5",
+        "unit": "",
+        "ref": "SDSS DR18 SpecObj subClass and elodieSpType"
+      },
+      {
+        "quantity": "spectral type of K",
+        "value": "K3 / K3V",
+        "unit": "",
+        "ref": "SDSS DR18 SpecObj subClass and elodieSpType"
+      },
+      {
+        "quantity": "spectral type of M",
+        "value": "M1 / M2Vvar",
+        "unit": "",
+        "ref": "SDSS DR18 SpecObj subClass and elodieSpType"
+      }
+    ],
+    "result": {
+      "bandDepthPP": {
+        "a": {
+          "cak": 3.4,
+          "hbeta": 36.63,
+          "nad": 3.75,
+          "tio": 1.91
+        },
+        "g": {
+          "cak": 56.07,
+          "hbeta": 14.37,
+          "nad": 8.96,
+          "tio": 1.81
+        },
+        "k": {
+          "cak": 52.6,
+          "hbeta": 8.96,
+          "nad": 23.04,
+          "tio": 0.19
+        },
+        "m": {
+          "cak": 21.91,
+          "hbeta": 4.79,
+          "nad": 52.63,
+          "tio": 13.54
+        }
+      },
+      "tio5": {
+        "a": 0.975,
+        "g": 0.9592,
+        "k": 0.9452,
+        "m": 0.6569
+      }
+    }
+  }
+}

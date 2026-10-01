@@ -131,7 +131,8 @@ export const RULE_INDEX = {
   'instructor/present': 'Every lesson has instructor guidance',
   'instructor/sections': 'Every required guide section carries something',
   'instructor/expectations': 'Expectations name real steps and say something',
-  'instructor/attribution': 'A lesson that cites a source attributes it',
+  'instructor/attribution':
+    'A lesson that cites a source attributes it, and every real-system parameter names its source',
   'agree/manifest': 'The manifest says what the lesson says',
   'agree/counts': 'The manifest counts what the lesson contains',
   'agree/answerKey': 'The generated answer key verifies',

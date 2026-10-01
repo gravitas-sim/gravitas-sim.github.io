@@ -136,8 +136,8 @@
   "offline": "optional",
   "derived": {
     "file": "js/data/observations/tessHd209458S56.js",
-    "bytes": 10710,
-    "sha256": "ac140763382bcefe3db3e6ee9a1c10ff769cf8a4cd2ae13a6da436c552dd0ac8"
+    "bytes": 11063,
+    "sha256": "1a5b2462c48762357cd7eb3988418078b07529a26cb726352d46627c9040f601"
   },
   "validation": {
     "check": "folding on the published period finds a transit of the published depth, within 0.003",

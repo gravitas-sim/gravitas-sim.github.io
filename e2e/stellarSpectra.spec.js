@@ -99,9 +99,11 @@ test.describe('the spectra arrive only when something needs them', () => {
     );
 
     // Once, in total: not once per widget, not once per step. And only the
-    // data: the provenance record beside it is imported by nothing in the
-    // application, which is the reason it is a separate file.
-    expect(hits.filter(u => /sdssSpectraProvenance/.test(u))).toEqual([]);
+    // data: its record is the pack manifest in data-packs/, which nothing in
+    // the application loads.
+    expect(
+      hits.filter(u => /sdssSpectraProvenance|data-packs\//.test(u))
+    ).toEqual([]);
     expect(hits).toHaveLength(1);
   });
 });

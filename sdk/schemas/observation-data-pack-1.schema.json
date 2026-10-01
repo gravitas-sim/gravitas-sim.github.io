@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/observation-data-pack-1.schema.json",
   "title": "gravitas.observation-data-pack/1",
-  "description": "The record of a data pack: where the numbers came from and what was done to them. The structure only; tools/data-packs/schema.mjs validateDataPack() is the authority (it refuses synthetic data, restricted data, and a time series without a time system, among others). DATA_PACKS.md.",
+  "description": "The record of a data pack: where the numbers came from and what was done to them. The structure only; tools/data-packs/schema.mjs validateDataPack() is the authority (it refuses restricted data, synthetic data that does not record the model that made it, and a time series without a time system, among others). DATA_PACKS.md.",
   "type": "object",
   "required": [
     "format",
@@ -364,6 +364,25 @@
         "optional",
         "none"
       ]
+    },
+    "model": {
+      "type": "object",
+      "description": "What made the numbers when a model did; required, with name, parameters and scatter, for origin synthetic (SDK 1.6.0).",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "scatter": {
+          "type": "string"
+        }
+      }
     }
   }
 }

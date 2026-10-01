@@ -60,7 +60,7 @@ export {
 // the check a transit pack states (added in 1.3.0; `sdk test` runs the same).
 
 /** This SDK. A major version changes only with a breaking change to this file. */
-export const SDK_VERSION = '1.5.0';
+export const SDK_VERSION = '1.6.0';
 
 /** The formats this SDK reads and writes, and the version of each. */
 export const FORMATS = Object.freeze({
@@ -143,8 +143,15 @@ export function acceptsPlatform(range) {
  * runtime module and the decoded observation. An extension derived from an
  * installed pack reads its source through this, and pins what it read by the
  * record's `derived` checksum.
+ *
+ * A pack whose module is in the shared encoding (PACK and SERIES) comes with
+ * its observation decoded. The four datasets that came before that encoding -
+ * the SDSS spectra, the GWOSC events, GW150914 and the MIST tracks - keep the
+ * module shape their instruments read, with PACK beside it, and come with
+ * `observation: null` and the module to read: their manifests are packs like
+ * any other, which is what the SDK checks (DATA_PACKS.md).
  * @param {string} id - A public data-pack id, as publicIds().dataPacks lists
- * @returns {Promise<{record: object, file: string, module: object, observation: object}>}
+ * @returns {Promise<{record: object, file: string, module: object, observation: object|null}>}
  */
 export async function installedDataPack(id) {
   const dir = path.join(REPO, 'capabilities');
@@ -168,7 +175,7 @@ export async function installedDataPack(id) {
       record,
       file: record.derived.file,
       module,
-      observation: observationOf(module),
+      observation: module.SERIES ? observationOf(module) : null,
     };
   }
   throw new Error(`Gravitas has no data pack "${id}"`);

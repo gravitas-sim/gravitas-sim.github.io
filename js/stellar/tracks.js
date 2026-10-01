@@ -31,7 +31,7 @@
 // =============================================================================
 
 import {
-  PROVENANCE,
+  PACK,
   TRACKS,
   TRACK_IDS,
   decodeTrack,
@@ -42,7 +42,10 @@ import {
 } from './geometry.js';
 import { clamp } from '../utils.js';
 
-export { PROVENANCE as TRACK_PROVENANCE, TRACK_IDS };
+export { TRACK_IDS };
+
+/** What made the tracks, as the data pack's runtime fields give it. */
+const MODEL = PACK.model;
 
 /**
  * The named stretches of a track, between the primary equivalent evolutionary
@@ -349,10 +352,10 @@ function stateFrom(t, { ageYr, logL, logTeff, massSun, seg }) {
       ms && ageYr >= ms.startYr && ageYr <= ms.endYr && ms.durationYr > 0
         ? (ageYr - ms.startYr) / ms.durationYr
         : null,
-    composition: PROVENANCE.composition,
-    rotation: PROVENANCE.rotation,
-    grid: PROVENANCE.grid,
-    ageZeroPoint: PROVENANCE.units.age,
+    composition: MODEL.composition,
+    rotation: MODEL.rotation,
+    grid: MODEL.name,
+    ageZeroPoint: MODEL.ageZeroPoint,
     estimated: false,
   });
 }
@@ -431,10 +434,10 @@ export function mainSequenceAt(massSun, fraction = 0) {
     remainingMainSequenceYr:
       (1 - f) * logMix(a.mainSequenceYr, b.mainSequenceYr),
     mainSequenceFraction: f,
-    composition: PROVENANCE.composition,
-    rotation: PROVENANCE.rotation,
-    grid: PROVENANCE.grid,
-    ageZeroPoint: PROVENANCE.units.age,
+    composition: MODEL.composition,
+    rotation: MODEL.rotation,
+    grid: MODEL.name,
+    ageZeroPoint: MODEL.ageZeroPoint,
     estimated: false,
   });
 }

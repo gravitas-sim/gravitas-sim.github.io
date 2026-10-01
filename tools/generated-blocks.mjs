@@ -1,8 +1,9 @@
 // =============================================================================
 // Generated files and generated regions
 // -----------------------------------------------------------------------------
-// Three things that are derived rather than written, and so are produced here
-// and checked for staleness by tools/docs-facts.mjs:
+// Things that are derived rather than written, and so are produced here and
+// checked for staleness by tools/docs-facts.mjs (among them, the data-pack
+// licence inventory in LICENSES.md and NOTICE, from the pack manifests):
 //
 //   CITATION.cff        from tools/project-metadata.mjs plus the live counts
 //   .zenodo.json        the same source, in Zenodo's shape
@@ -419,6 +420,127 @@ export function generatedArtifactsTable(graph) {
   ].join('\n');
 }
 
+/** A licence status, as LICENSES.md says it. */
+const STATUS_WORDS = {
+  'public-domain': 'public domain',
+  cc0: 'CC0',
+  'cc-by-4.0': 'CC BY 4.0',
+  'attribution-requested': 'no license; attribution requested',
+  'no-license-stated': 'no license stated',
+};
+
+/** What a citation points at, as plain text. */
+const citationRef = c =>
+  c.doi ? `doi:${c.doi}` : c.bibcode ? `bibcode ${c.bibcode}` : c.url || '';
+
+/**
+ * LICENSES.md's data-pack table: every pack's derived file, what it is, and
+ * the status and basis its manifest records. One row per pack, in id order.
+ * @param {object[]} packs - Parsed manifests from data-packs/
+ */
+export function dataPackLicenseRows(packs) {
+  const cell = s => String(s).replace(/\|/g, '\\|').replace(/\s+/g, ' ');
+  return [
+    '| File | Pack | Origin | Status |',
+    '| --- | --- | --- | --- |',
+    ...[...packs]
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map(
+        m =>
+          `| \`${m.derived.file}\` | ${cell(m.title)} (\`${m.id}\`) | ${m.origin} | ${cell(STATUS_WORDS[m.license.status] || m.license.status)}; see NOTICE |`
+      ),
+  ].join('\n');
+}
+
+/**
+ * NOTICE's data-pack inventory: for each pack, its file, its licence status
+ * and statement, the basis where the status is not a licence, and every
+ * citation with its DOI, bibcode or URL - from the manifests, so it cannot say
+ * something different from them.
+ * @param {object[]} packs - Parsed manifests from data-packs/
+ */
+export function dataPackNoticeText(packs) {
+  const out = [];
+  for (const m of [...packs].sort((a, b) => a.id.localeCompare(b.id))) {
+    out.push(`${m.id}: ${m.title}`);
+    out.push(`  File: ${m.derived.file} (${m.origin})`);
+    out.push(
+      `  Licence: ${STATUS_WORDS[m.license.status] || m.license.status}. ${m.license.statement}`
+    );
+    if (m.license.basis) out.push(`  Basis: ${m.license.basis}`);
+    out.push('  Cite:');
+    for (const c of m.source.citations)
+      out.push(`    ${c.text}${citationRef(c) ? `, ${citationRef(c)}` : ''}`);
+    out.push('');
+  }
+  return out.join('\n').trimEnd();
+}
+
+/** A data pack's origin, as the model page's badge says it. */
+const ORIGIN_BADGE = {
+  observed: ['is-measured', 'Measured'],
+  compilation: ['is-measured', 'Compiled from papers'],
+  model: ['is-analytic', 'Model'],
+  synthetic: ['is-illustrative', 'Synthetic'],
+};
+
+/**
+ * The model page's data-pack table: every pack, its badge read from its
+ * manifest's origin, its file and its credit.
+ * @param {object[]} packs - Parsed manifests from data-packs/
+ */
+export function dataPackRows(packs) {
+  return [...packs]
+    .sort((a, b) => a.title.localeCompare(b.title))
+    .map(m => {
+      const [cls, label] = ORIGIN_BADGE[m.origin] || [
+        'is-approximate',
+        m.origin,
+      ];
+      return [
+        '            <tr>',
+        `              <td>${escapeHtml(m.title)}</td>`,
+        `              <td><span class="doc-badge ${cls}">${label}</span></td>`,
+        `              <td><code>${escapeHtml(m.derived.file)}</code></td>`,
+        `              <td>${escapeHtml(m.credit)}</td>`,
+        '            </tr>',
+      ].join('\n');
+    })
+    .join('\n');
+}
+
+/**
+ * The model page's parameter-sources table: every real-system parameter
+ * object, each of its sources with the fields it gives, and the fields that
+ * are approximate and unsourced, said as such.
+ * @param {Array<{where: string, sources: object[]}>} systems - From
+ *   tools/authoring/realSystems.mjs loadRealSystems()
+ */
+export function parameterSourceRows(systems) {
+  const cite = s => {
+    const href = s.url || (s.doi ? `https://doi.org/${s.doi}` : null);
+    const words = escapeHtml(s.text);
+    return href ? `<a href="${escapeHtml(href)}">${words}</a>` : words;
+  };
+  return systems
+    .map(({ where, sources: list }) => {
+      const [file, ...rest] = where.split(' ');
+      const sources = list
+        .map(
+          s =>
+            `${s.text === 'approximate, unsourced' ? '<strong>approximate, unsourced</strong>' : cite(s)}: ${s.fields ? s.fields.map(f => `<code>${escapeHtml(f)}</code>`).join(', ') : list.length > 1 ? 'every other value' : 'every value'}`
+        )
+        .join('<br />');
+      return [
+        '            <tr>',
+        `              <td>${escapeHtml(rest.join(' '))} <small>(<code>${escapeHtml(file)}</code>)</small></td>`,
+        `              <td>${sources}</td>`,
+        '            </tr>',
+      ].join('\n');
+    })
+    .join('\n');
+}
+
 export function generatedBlocks({
   manifest,
   instructor,
@@ -426,8 +548,22 @@ export function generatedBlocks({
   irreversible = null,
   graph = null,
   precache = null,
+  dataPacks = null,
+  realSystems = null,
 }) {
   return {
+    ...(dataPacks
+      ? {
+          dataPackLicenses: `\n${dataPackLicenseRows(dataPacks)}\n`,
+          dataPackNotices: `\n${dataPackNoticeText(dataPacks)}\n`,
+          dataPacks: `\n${dataPackRows(dataPacks)}\n          `,
+        }
+      : {}),
+    ...(realSystems
+      ? {
+          parameterSources: `\n${parameterSourceRows(realSystems)}\n          `,
+        }
+      : {}),
     ...(graph ? { generatedArtifacts: generatedArtifactsTable(graph) } : {}),
     doiBadge: doiBadgeBlock(),
     // OFFLINE_AND_LOW_END.md's table, from the committed sw-manifest.js.

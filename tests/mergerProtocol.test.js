@@ -26,6 +26,7 @@ import {
   resetFrame,
   frameObjectId,
   transferFrame,
+  resolveFrameOrigin,
   OBJECT,
 } from '../js/referenceFrame.js';
 
@@ -321,6 +322,32 @@ describe.each(PAIRS)('$name', ({ build, into, resultClass, resultList }) => {
     transferFrame([evt.primaryId, evt.secondaryId], evt.resultId);
     expect(frameObjectId()).toBe(evt.resultId);
     expect(allBodies().some(body => body.id === frameObjectId())).toBe(true);
+  });
+
+  // And the renderer can find it straight away. It resolves the frame against
+  // barycenterBodies(), on the frame the merger happened in, and drops a frame
+  // whose body it cannot find back to the world origin. That list was the
+  // cache the step built before the merger, so when no further substep ran
+  // first - a merger in a frame's last - the frame that had just been moved
+  // onto the result was thrown away - e2e/cameraStability.spec.js, failing in
+  // CI and passing on the retry.
+  test('the renderer finds the result on the step it was made', () => {
+    const [a, b] = build();
+    overlap(a, b);
+    P[into[0]].push(a);
+    P[into[1]].push(b);
+    setFrame(OBJECT, a.id);
+    const [evt] = captureMerges(() => P.updatePhysics(0.001));
+    transferFrame([evt.primaryId, evt.secondaryId], evt.resultId);
+    const origin = resolveFrameOrigin(P.barycenterBodies());
+    expect(origin).not.toBeNull();
+    const result = allBodies().find(body => body.id === evt.resultId);
+    expect(origin.now).toEqual({ x: result.pos.x, y: result.pos.y });
+    // Nor does the list still offer a progenitor the merger retired.
+    for (const gone of [a, b]) {
+      if (gone.id === evt.resultId) continue;
+      expect(P.barycenterBodies()).not.toContain(gone);
+    }
   });
 });
 

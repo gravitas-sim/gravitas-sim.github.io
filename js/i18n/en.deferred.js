@@ -2814,7 +2814,7 @@ export const EN_DEFERRED = {
   'dmW.maximumDisc': 'Maximum disc',
   'dmW.wrongScaleLength': 'Wrong scale length',
   'dmW.publishedDecomposition': 'Published decomposition',
-  'dmW.fitARealGalaxy': 'Fit a real galaxy',
+  'dmW.fitARealGalaxy': 'Fit NGC 3198 (synthetic data)',
   'dmW.discMassTheStarsYou': 'Disc mass (the stars you can see)',
   'dmW.discScaleLength': 'Disc scale length',
   'dmW.haloStrengthItsFlatSpeed': 'Halo strength (its flat speed)',

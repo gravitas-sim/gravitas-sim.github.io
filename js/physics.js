@@ -2329,15 +2329,15 @@ let cachedAllPhysicsObjects = [];
 const cachedBarycenterBodies = [];
 
 /**
- * Every body a reference frame's barycenter is averaged over.
- *
- * Exposed so the renderer's current barycenter and the recorded history are
- * taken over exactly the same set. If they disagreed, the origin would jump by
- * the difference the moment a frame was selected.
+ * Every body a frame's barycenter is averaged over, as its history records.
+ * Refreshed first, or a merger's product is missing from it until next step.
  *
  * @returns {Array} The live list, not a copy
  */
-const barycenterBodies = () => cachedBarycenterBodies;
+const barycenterBodies = () => {
+  updateCachedArrays();
+  return cachedBarycenterBodies;
+};
 let lastMutualGravityState = null;
 let lastStarOnlyGravityState = null;
 let lastObjectCounts = {

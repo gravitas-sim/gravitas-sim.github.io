@@ -468,7 +468,7 @@ const GW_EVENTS = {
       }
     }
 
-    rows.push({ label: t('gwE.row.source'), value: data.CITATION });
+    rows.push({ label: t('gwE.row.source'), value: data.PACK.credit });
     rows.push({ label: t('gwE.row.limits'), value: t('gwE.value.limits') });
     return rows;
   },

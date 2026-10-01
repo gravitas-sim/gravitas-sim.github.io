@@ -1,11 +1,11 @@
 // =============================================================================
 // A raw product, fetched once and pinned
 // -----------------------------------------------------------------------------
-// The four dataset builders that came before this each carry their own copy of
-// fetch-cache-hash, and they do not agree on when the hash is checked: two
-// compare it on every read, one only when the file was already cached, and one
-// records whatever it read. OBSERVATION_DATA_PACK_GATE.md has the audit. Every
-// data pack goes through this one instead, and the rule is the same for all of
+// The four dataset builders that came before this each carried their own copy
+// of fetch-cache-hash, and they did not agree on when the hash is checked: two
+// compared it on every read, one only when the file was already cached, and
+// one recorded whatever it read. OBSERVATION_DATA_PACK_GATE.md has the audit.
+// Every dataset goes through this one now, and the rule is the same for all of
 // them: the bytes are compared with the pin whether they came from the cache
 // or the network a moment ago, and bytes that do not match are never used.
 //
@@ -62,13 +62,33 @@ export function pinProblem(bytes, pin) {
  * The raw product's bytes: from the cache, or fetched into it when allowed,
  * and in either case checked against the pin before anything reads them.
  *
+ * Every dataset builder goes through this one function: the data packs, and
+ * since Roadmap II Prompt 62 the four datasets that came before them (the
+ * SDSS spectra, the GWOSC events, GW150914 and the MIST tracks), which each
+ * used to carry a fetch-cache-hash copy of their own.
+ *
  * @param {{file: string, url: string, bytes?: number, sha256: string, canonical?: string}} pin
- * @param {{cache: string, offline?: boolean, fetchImpl?: typeof fetch}} opts
+ * @param {object} opts
+ * @param {string} opts.cache - The directory raw products are kept in
+ * @param {boolean} [opts.offline] - Refuse the network (the default)
+ * @param {typeof fetch} [opts.fetchImpl] - For the tests
+ * @param {string} [opts.refetch] - The command that fills the cache, for the message
+ * @param {boolean} [opts.offlineFlag] - The caller was told --offline, and the message says so
+ * @param {object} [opts.headers] - Request headers, for an archive that asks to be told who is asking
+ * @param {number} [opts.timeoutMs] - How long a download may take
  * @returns {Promise<Uint8Array>}
  */
 export async function pinnedBytes(
   pin,
-  { cache, offline = true, fetchImpl = globalThis.fetch }
+  {
+    cache,
+    offline = true,
+    fetchImpl = globalThis.fetch,
+    refetch = 'npm run packs:data',
+    offlineFlag = false,
+    headers,
+    timeoutMs = 120_000,
+  }
 ) {
   const at = path.join(cache, pin.file);
   let bytes;
@@ -76,11 +96,12 @@ export async function pinnedBytes(
     bytes = readFileSync(at);
   } else if (offline) {
     throw new Error(
-      `${pin.file} is not in ${cache}. Run \`npm run packs:data\` once to fetch it from ${pin.url}.`
+      `${pin.file} is not in ${cache}${offlineFlag ? ' and --offline was given' : ''}. Run \`${refetch}\` once to fetch it from ${pin.url}.`
     );
   } else {
     const res = await fetchImpl(pin.url, {
-      signal: globalThis.AbortSignal.timeout(120_000),
+      signal: globalThis.AbortSignal.timeout(timeoutMs),
+      ...(headers ? { headers } : {}),
     });
     if (!res.ok) throw new Error(`${pin.url}: HTTP ${res.status}`);
     bytes = Buffer.from(await res.arrayBuffer());
@@ -95,7 +116,7 @@ export async function pinnedBytes(
   const problem = pinProblem(bytes, pin);
   if (problem) {
     throw new Error(
-      `${problem}\nDelete it and let \`npm run packs:data\` fetch it again, or re-pin deliberately if the archive has republished.`
+      `${problem}\nDelete it and let \`${refetch}\` fetch it again, or re-pin deliberately if the archive has republished.`
     );
   }
   return new Uint8Array(bytes);

@@ -576,7 +576,7 @@
     },
     {
       "id": "gravitas.sdss-dr18-spectra",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "kind": "built-in",
       "delivery": "built-in",
       "title": {
@@ -589,7 +589,7 @@
           {
             "id": "sdss-dr18-stellar-spectra",
             "entry": "builtin:data/sdss-spectra",
-            "provenance": "js/data/spectra/sdssSpectraProvenance.js"
+            "provenance": "data-packs/sdss-dr18-stellar-spectra.json"
           }
         ]
       },
@@ -602,11 +602,11 @@
       "citations": [
         {
           "text": "SDSS DR18 (Almeida et al. 2023, ApJS 267, 44)",
-          "url": "https://www.sdss.org/dr18/"
+          "url": "https://doi.org/10.3847/1538-4365/acda98"
         }
       ],
       "offline": "precache",
-      "bytes": 19009
+      "bytes": 21503
     },
     {
       "id": "gravitas.tess-hd209458-s56",
@@ -649,7 +649,7 @@
         }
       ],
       "offline": "precache",
-      "bytes": 14841
+      "bytes": 15782
     }
   ]
 }

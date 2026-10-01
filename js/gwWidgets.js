@@ -70,7 +70,7 @@ import {
   restart,
 } from './gwLab.js';
 import { playFromCursor, aligned } from './gw/transport.js';
-import { TRACES, PROVENANCE, decodeTrace } from './data/gw/gw150914.js';
+import { TRACES, PACK, FINDINGS, decodeTrace } from './data/gw/gw150914.js';
 import { sampledTimeline } from './gw/timeline.js';
 import { similarity as overlapOf, sampleOnto } from './gw/match.js';
 // Through the seam, not the service: a widget definition is content, and the
@@ -1960,12 +1960,12 @@ function realTimeline(id) {
         t0: d.t0,
         id,
         meta: {
-          event: PROVENANCE.event,
+          event: PACK.object.name,
           detector: d.detector,
           role: d.role,
           unit: d.unit,
-          doi: PROVENANCE.doi,
-          license: PROVENANCE.license,
+          doi: PACK.citations[0].doi,
+          license: PACK.license.statement,
         },
       })
     );
@@ -2138,8 +2138,8 @@ const GW_REAL = {
     const mode = spec.mode || 'detectors';
     const rows = [
       { label: t('gwW.real.row.event'), value: 'GW150914', emphasis: true },
-      { label: t('gwW.real.row.source'), value: PROVENANCE.paper },
-      { label: t('gwW.real.row.doi'), value: PROVENANCE.doi },
+      { label: t('gwW.real.row.source'), value: PACK.credit },
+      { label: t('gwW.real.row.doi'), value: PACK.citations[0].doi },
       {
         label: t('gwW.real.row.filtering'),
         value: t('gwW.real.value.filtering'),
@@ -2160,17 +2160,15 @@ const GW_REAL = {
       rows.push({
         label: t('gwW.real.row.measured'),
         value: t('gwW.real.value.measured', {
-          lag: Math.abs(PROVENANCE.findings.observedHvsL.lagMs).toFixed(1),
-          r: PROVENANCE.findings.observedHvsL.correlation.toFixed(2),
+          lag: Math.abs(FINDINGS.observedHvsL.lagMs).toFixed(1),
+          r: FINDINGS.observedHvsL.correlation.toFixed(2),
         }),
       });
     } else {
       rows.push({
         label: t('gwW.real.row.agreement'),
         value: t('gwW.real.value.agreement', {
-          r: PROVENANCE.findings.observedVsReconstructionH1.correlation.toFixed(
-            2
-          ),
+          r: FINDINGS.observedVsReconstructionH1.correlation.toFixed(2),
         }),
       });
       rows.push({
@@ -2178,7 +2176,10 @@ const GW_REAL = {
         value: t('gwW.real.value.residual'),
       });
     }
-    rows.push({ label: t('gwW.real.row.license'), value: PROVENANCE.license });
+    rows.push({
+      label: t('gwW.real.row.license'),
+      value: PACK.license.statement,
+    });
     return rows;
   },
 };

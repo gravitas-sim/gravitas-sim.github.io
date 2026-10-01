@@ -8,8 +8,8 @@ CC BY 4.0, and real data in two different senses:
   adjusted or invented by this project.
 - `gwoscEvents.js` - five events, one detector's strain each, 59 KB. Recorded
   strain that this project whitens and measures, with every step recorded in
-  `gwoscEventsProvenance.js`. See [Five events](#five-events-from-the-open-archive)
-  below.
+  its data pack's manifest, `data-packs/gwosc-five-events.json`. See
+  [Five events](#five-events-from-the-open-archive) below.
 
 Both are generated. Do not edit them.
 
@@ -78,7 +78,7 @@ The time axis on every trace is seconds after GPS 1126259462, which is
 - No additional filtering, whitening, normalization or alignment.
 
 The relative time shift and sign between Hanford and Livingston are **measured**
-by the build and recorded in `PROVENANCE.findings`, not applied. As published,
+by the build and recorded in `FINDINGS`, not applied. As published,
 the two observed traces correlate at −0.757 with Livingston leading Hanford by
 7.3 ms; the two reconstructions correlate at −0.977 at 7.6 ms. The lesson asks
 a student to find that for themselves from the traces on screen. Applying it
@@ -129,7 +129,7 @@ digital-to-analog saturation about 1.1 s before the merger
 (<https://gwosc.org/events/GW170817/>).
 
 Four candidates were tested and left out, each for a stated reason recorded in
-`PROVENANCE.selection`: GW151226 and GW170608 are too faint pixel by pixel to
+the manifest's `selection`: GW151226 and GW170608 are too faint pixel by pixel to
 follow, GW170814 would repeat GW150914, and GW200115 shows nothing above the
 noise.
 
