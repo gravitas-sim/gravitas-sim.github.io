@@ -396,6 +396,7 @@
 
   .settings-level label {
     font-weight: var(--weight-semibold);
+    color: var(--text-primary);
   }
 
   .settings-level-hint {
