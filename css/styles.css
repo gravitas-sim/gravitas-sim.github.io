@@ -641,17 +641,6 @@
     transform: translateX(-50%) rotate(-45deg) translate(0, -8px);
   }
 
-  @keyframes mobileMenuSlideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
   /* Responsive breakpoints */
   @media (max-width: 1200px) {
     .ui-container {
@@ -1546,32 +1535,11 @@
     background: #2e2e4d;
     transform: scale(1.08);
   }
-  @keyframes modalFadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9) translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-  }
 
   @keyframes scenarioMenuFadeIn {
     from {
       opacity: 0;
       transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes scenarioCardFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
     }
     to {
       opacity: 1;
