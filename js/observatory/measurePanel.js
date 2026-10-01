@@ -629,7 +629,7 @@ export function mountMeasurePanel(root, ctx) {
         options,
         p ? 'custom' : options[0][0]
       );
-      const grid = el('div', { class: 'ow-grid' });
+      const grid = el('div', { class: 'ui-grid is-end' });
       const fill = id => {
         const L = LINES.find(x => x.id === id);
         const v = p ?? (L ? presetWindows(L, d.medium, d.z) : null);
@@ -679,7 +679,7 @@ export function mountMeasurePanel(root, ctx) {
         ],
         p ? 'custom' : 'tio5'
       );
-      const grid = el('div', { class: 'ow-grid' });
+      const grid = el('div', { class: 'ui-grid is-end' });
       const fill = id => {
         const b = p ?? BAND_PRESETS[id] ?? BAND_PRESETS.tio5;
         grid.replaceChildren(
@@ -747,7 +747,7 @@ export function mountMeasurePanel(root, ctx) {
         ],
         p?.mode ?? d.mode
       );
-      const grid = el('div', { class: 'ow-grid' });
+      const grid = el('div', { class: 'ui-grid is-end' });
       const fill = mode => {
         const kids = [];
         if (mode === 'bits') {
@@ -816,7 +816,7 @@ export function mountMeasurePanel(root, ctx) {
         const c = conds[i];
         const row = el(
           'fieldset',
-          { class: 'ow-grid' },
+          { class: 'ui-grid is-end' },
           el('legend', { text: `${t('obs.ms.p.op')} ${i + 1}` }),
           select(
             `msCol${i}`,
@@ -891,7 +891,7 @@ export function mountMeasurePanel(root, ctx) {
           ],
           p?.how?.by ?? 'value'
         );
-        const cols = el('div', { class: 'ow-grid' });
+        const cols = el('div', { class: 'ui-grid is-end' });
         const fillCols = by => {
           const B = model.second.o;
           cols.replaceChildren(
@@ -1285,7 +1285,7 @@ export function mountMeasurePanel(root, ctx) {
     const params = el('div', { id: 'msParams' });
     const problem = el('p', {
       id: 'msProblem',
-      class: 'ow-problems',
+      class: 'ui-alert is-error',
       role: 'alert',
     });
     const runBtn = el('button', {
@@ -1321,25 +1321,25 @@ export function mountMeasurePanel(root, ctx) {
     });
     const undo = el('button', {
       id: 'msUndo',
-      class: 'ui-button ow-small',
+      class: 'ui-button is-small',
       type: 'button',
       text: t('obs.ms.undo'),
     });
     const redo = el('button', {
       id: 'msRedo',
-      class: 'ui-button ow-small',
+      class: 'ui-button is-small',
       type: 'button',
       text: t('obs.ms.redo'),
     });
     const save = el('button', {
       id: 'msSave',
-      class: 'ui-button ow-small',
+      class: 'ui-button is-small',
       type: 'button',
       text: t('obs.ms.save'),
     });
     const csv = el('button', {
       id: 'msCsv',
-      class: 'ui-button ow-small',
+      class: 'ui-button is-small',
       type: 'button',
       text: t('obs.ms.csv'),
     });
@@ -1356,7 +1356,7 @@ export function mountMeasurePanel(root, ctx) {
       intro,
       el(
         'div',
-        { class: 'ow-grid' },
+        { class: 'ui-grid is-end' },
         el(
           'label',
           { class: 'ui-field' },
@@ -1735,7 +1735,7 @@ export function mountMeasurePanel(root, ctx) {
         selection: ctx.createSelection(periods.length),
       });
     const gridCsv = el('button', {
-      class: 'ui-button ow-small',
+      class: 'ui-button is-small',
       type: 'button',
       text: t('obs.ms.gridCsv'),
     });
@@ -1785,7 +1785,7 @@ export function mountMeasurePanel(root, ctx) {
       ? el(
           'div',
           {
-            class: 'ow-table-wrap',
+            class: 'ui-table-wrap is-numeric',
             tabindex: '0',
             role: 'region',
             'aria-label': head.textContent,
@@ -1832,7 +1832,7 @@ export function mountMeasurePanel(root, ctx) {
       : null;
     const problem =
       n.status === 'failed'
-        ? el('p', { class: 'ow-problems', text: n.error?.message ?? '' })
+        ? el('p', { class: 'ui-alert is-error', text: n.error?.message ?? '' })
         : null;
     const warnings = n.warnings?.length
       ? el(
@@ -1845,7 +1845,7 @@ export function mountMeasurePanel(root, ctx) {
     const plotBox = el('div', {});
     const button = (text, fn, attrs = {}) => {
       const b = el('button', {
-        class: 'ui-button ow-small',
+        class: 'ui-button is-small',
         type: 'button',
         text,
         ...attrs,

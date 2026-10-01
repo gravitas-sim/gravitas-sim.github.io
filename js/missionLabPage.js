@@ -77,7 +77,7 @@ const date = jd => dateOfJd(jd);
 function table(caption, head, rows) {
   return el(
     'table',
-    { class: 'ml-table' },
+    { class: 'ui-table' },
     el('caption', { text: caption }),
     el(
       'thead',
@@ -436,7 +436,7 @@ function drawViews(at) {
       el(
         'span',
         {},
-        el('span', { class: 'ml-swatch', style: `background:${COLORS[id]}` }),
+        el('span', { class: 'ui-swatch', style: `background:${COLORS[id]}` }),
         t(`ml.views.${id}`)
       )
     )
@@ -662,13 +662,13 @@ function drawWindow(w) {
     el(
       'span',
       {},
-      el('span', { class: 'ml-swatch', style: `background:${colour(0)}` }),
+      el('span', { class: 'ui-swatch', style: `background:${colour(0)}` }),
       t('ml.window.cheap', { v: kms(lo) })
     ),
     el(
       'span',
       {},
-      el('span', { class: 'ml-swatch', style: `background:${colour(1)}` }),
+      el('span', { class: 'ui-swatch', style: `background:${colour(1)}` }),
       t('ml.window.dear', { v: kms(2 * lo) })
     ),
     el('span', { text: t('ml.window.axes') })
@@ -819,7 +819,7 @@ function fillControls() {
       box.checked = readBodies().includes(id);
       return el(
         'label',
-        { class: 'ml-choice', for: `ml-body-${id}` },
+        { class: 'ui-choice', for: `ml-body-${id}` },
         box,
         ` ${t(`ml.body.${id}`)}`
       );

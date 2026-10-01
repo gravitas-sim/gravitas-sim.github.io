@@ -6,17 +6,8 @@
     "css/page.css": 14,
     "css/presentation.css": 1,
     "css/styles.css": 149,
-    "3d/index.html": 5,
     "course/index.html": 6,
-    "evaluation/index.html": 2,
-    "experiments/index.html": 14,
-    "figure/index.html": 1,
-    "mission/index.html": 2,
-    "mission/lab/index.html": 4,
-    "observatory/index.html": 12,
-    "studio/course/index.html": 3,
-    "studio/index.html": 2,
-    "studio/lesson/index.html": 2
+    "evaluation/index.html": 2
   },
   "important": {
     "css/chrome.css": 3,

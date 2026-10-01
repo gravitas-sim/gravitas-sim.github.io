@@ -144,7 +144,7 @@ export function createGuidePanel({ els, t, lab }) {
         set.append(
           el(
             'label',
-            { class: 'ml-choice', for: id },
+            { class: 'ui-choice is-block', for: id },
             box,
             ` ${words(s, `opt.${o}`)}`
           )
@@ -208,7 +208,7 @@ export function createGuidePanel({ els, t, lab }) {
     const list = steps();
     const s = list[index];
     const box = input(s);
-    const buttons = el('div', { class: 'ml-bar' });
+    const buttons = el('div', { class: 'ui-toolbar' });
     if (s.kind !== 'read') {
       const check = el('button', {
         type: 'button',
@@ -255,12 +255,12 @@ export function createGuidePanel({ els, t, lab }) {
       box.node ?? '',
       buttons,
       el('p', {
-        class: 'ml-feedback',
+        class: 'ui-status ml-feedback',
         role: 'status',
         'aria-live': 'polite',
         text: feedback,
       }),
-      el('div', { class: 'ml-bar' }, back, next)
+      el('div', { class: 'ui-toolbar' }, back, next)
     );
     els.list.replaceChildren(
       ...list.map((x, i) => {

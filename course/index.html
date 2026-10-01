@@ -20,55 +20,31 @@
     <link rel="stylesheet" href="/css/page.css" />
     <style>
       /* Local to this page: a course, read top to bottom, and its syllabus
-         when printed. */
-      .ch-wrap {
-        max-width: 52rem;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-      .ch-wrap a {
-        color: var(--accent);
-        text-underline-offset: 3px;
-      }
+         when printed. Cards, badges and notes are css/page.css's. */
       .ch-bar {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem 1rem;
+        gap: var(--space-2) var(--space-4);
         align-items: center;
-        margin: 0.75rem 0 1.5rem;
+        margin: var(--space-3) 0 var(--space-6);
       }
       .ch-wrap h1 {
-        margin: 0 0 0.5rem;
+        margin: 0 0 var(--space-2);
       }
       .ch-wrap h2 {
-        font-size: 1.2rem;
-        margin: 1.75rem 0 0.5rem;
-      }
-      .ch-muted {
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-      }
-      .ch-warn {
-        color: var(--warning);
-        font-weight: 600;
+        margin: var(--space-6) 0 var(--space-2);
       }
       .ch-time {
-        list-style: none;
-        padding: 0;
         display: flex;
         flex-wrap: wrap;
-        gap: 0.25rem 1.5rem;
+        gap: var(--space-1) var(--space-6);
+        padding: 0;
+        list-style: none;
       }
       .ch-items {
-        list-style: none;
-        padding: 0;
         margin: 0;
-      }
-      .ch-item {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.75rem 1rem;
-        margin: 0 0 0.75rem;
+        padding: 0;
+        list-style: none;
       }
       .ch-item[data-path='intro'],
       .ch-item[data-path='advanced'] {
@@ -77,34 +53,27 @@
       .ch-item-head {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.25rem 0.75rem;
+        gap: var(--space-1) var(--space-3);
         align-items: baseline;
       }
       .ch-item-head h3 {
-        font-size: 1rem;
         margin: 0;
         overflow-wrap: anywhere;
       }
       .ch-kind {
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: var(--text-xs);
+        font-weight: var(--weight-semibold);
         text-transform: uppercase;
         letter-spacing: 0.04em;
         color: var(--text-secondary);
       }
-      .ch-badge {
-        font-size: 0.8rem;
-        border: 1px solid var(--border-strong);
-        border-radius: 999px;
-        padding: 0 0.5rem;
-      }
       .ch-item p {
-        margin: 0.4rem 0 0;
+        margin: var(--space-2) 0 0;
         overflow-wrap: anywhere;
       }
       .ch-teacher {
+        padding-left: var(--space-2);
         border-left: 3px solid var(--accent);
-        padding-left: 0.6rem;
       }
       .ch-print-only {
         display: none;
@@ -137,12 +106,12 @@
         }
         .ch-actions a[data-print]::after {
           content: ' ' attr(data-print);
-          font-size: 0.8rem;
+          font-size: var(--text-sm);
         }
         .ch-print-only {
           display: block;
         }
-        .ch-muted {
+        .ui-note {
           color: #333;
         }
         .ch-item {
@@ -182,7 +151,7 @@ try {
 <!-- /shell:header -->
     <main
       id="main"
-      class="ch-wrap"
+      class="ui-page is-narrow ch-wrap"
       aria-label="Course home"
       data-i18n-aria-label="courseHome.label"
     >
@@ -216,7 +185,7 @@ try {
         <input class="ui-file" id="ch-file" type="file" accept="application/json,.json" hidden />
       </div>
 
-      <p class="ch-print-only ch-muted" data-i18n="courseHome.printNote"></p>
+      <p class="ch-print-only ui-note" data-i18n="courseHome.printNote"></p>
 
       <article id="ch-course" aria-labelledby="ch-title" hidden></article>
 
@@ -233,7 +202,7 @@ try {
       <section id="ch-refused" aria-labelledby="ch-refused-h" role="alert" hidden>
         <h1 id="ch-refused-h" data-i18n="courseHome.refused.heading">This course cannot be opened</h1>
         <p data-i18n="courseHome.refused.text"></p>
-        <p id="ch-refused-why" class="ch-muted"></p>
+        <p id="ch-refused-why" class="ui-note"></p>
       </section>
     </main>
     <!-- shell:footer -->
