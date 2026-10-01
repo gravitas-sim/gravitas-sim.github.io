@@ -175,7 +175,7 @@
     box-shadow: none;
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     /* Chevron only. The accessible name still says what it does. */
     #overlay .overlay-toggle-label {
       display: none;
@@ -361,7 +361,7 @@
      being reliably longer than English.
      ====================================================================== */
 
-  @media (min-width: 1025px) {
+  @media (min-width: 1201px) {
     /* Centered on the window, which is where the eye goes looking for it, and
        narrowed rather than shifted when the footer would be in the way.
        --transport-max is the widest it can be and still stop short of the
@@ -399,7 +399,7 @@
      footer wraps into its own row, and a lesson panel covers the screen. Adding
      the footer's height to the bar's offset there lifts it over the lesson's
      own Next button, which is a control the student has to be able to press. */
-  @media (min-width: 621px) and (max-width: 1024px) {
+  @media (min-width: 768px) and (max-width: 1200px) {
     .timeline-bar {
       left: var(--space-3);
       right: var(--space-3);
@@ -411,7 +411,7 @@
     }
   }
 
-  @media (min-width: 1025px) {
+  @media (min-width: 1201px) {
     /* Into the corner. The inset that used to be here reserved the control
        rail's full width on every screen, which put the footer a quarter of the
        way across a wide window to avoid a rail that stops nowhere near it.
@@ -422,7 +422,7 @@
     }
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     .attribution {
       left: var(--space-3);
       right: var(--space-3);
@@ -983,7 +983,7 @@
 
   /* A phone gets the full width and a shorter chart: the panel is a form, and
      a form squeezed into 320px with a 170px chart above it is all chart. */
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .experiment-panel {
       width: auto;
       /* A phone has the transport bar and the keyboard to clear as well. */
@@ -1312,7 +1312,7 @@
     margin-top: var(--space-3);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .notebook-panel {
       width: auto;
       max-height: 60vh;
@@ -1514,7 +1514,7 @@
     color: var(--text-muted);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .rvfit-mc-field {
       flex-basis: calc(50% - var(--space-2));
     }
@@ -1604,7 +1604,7 @@
     );
   }
 
-  @media (max-width: 1100px) {
+  @media (max-width: 1200px) {
     body.investigation-open .experiment-panel,
     body.investigation-open .obs-panel {
       left: calc(min(396px, 40vw) + var(--space-2) * 2);
@@ -1612,7 +1612,7 @@
     }
   }
 
-  /* --- Below 900px the lesson is a sheet across the bottom ---------------- */
+  /* --- At 900px and under the lesson is a sheet across the bottom ---------- */
   /* No strip beside it, so the bench returns to the left edge and sits above
      the sheet. `bottom` needs !important because the stack writes it inline and
      cannot know the sheet is there.

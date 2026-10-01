@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       );
-    if (!isMobile || window.innerWidth > 768) return;
+    if (!isMobile || window.innerWidth > 900) return;
 
     const mobileInstructions = document.getElementById('mobileInstructions');
     if (!mobileInstructions) return;

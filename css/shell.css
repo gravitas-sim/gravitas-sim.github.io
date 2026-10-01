@@ -203,11 +203,11 @@ body:has(> .gs-app) {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-/* Where the control rail is a column at the right edge (above 1024 px,
+/* Where the control rail is a column at the right edge (above 1200 px,
    css/components.css), the bar stops at the rail's inner edge: the rail is
    beside the canvas, not above it, and keeps the whole height of the window
    that its sections are sized for. */
-@media (min-width: 1025px) {
+@media (min-width: 1201px) {
   .gs-shell.gs-app {
     right: calc(var(--rail-width) + 2 * var(--space-4));
     border-bottom-right-radius: var(--radius-md);
@@ -223,11 +223,11 @@ body:has(> .gs-app) {
   }
 }
 
-/* Below 1100 px the groups and switches do not fit one row beside the
+/* At 1200 px and under the groups and switches do not fit one row beside the
    application's own controls: they fold behind Menu. Open, the bar grows
    into a panel over the canvas; --shell-height is set on body, so nothing
    the application placed moves. */
-@media (max-width: 1099px) {
+@media (max-width: 1200px) {
   .gs-shell.gs-app .gs-toggle:not([hidden]) {
     display: inline-flex;
     margin-left: auto;
