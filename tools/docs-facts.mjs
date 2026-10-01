@@ -73,7 +73,7 @@ import {
   generatedBlocks,
   zenodoJson,
 } from './generated-blocks.mjs';
-import { RELEASE } from './project-metadata.mjs';
+import { COPYRIGHT, RELEASE } from './project-metadata.mjs';
 import {
   precacheInventory,
   precacheTable,
@@ -451,6 +451,8 @@ async function cheapFacts() {
     // changes at every release while the concept DOI never does - exactly the
     // pair a reader would never notice going stale.
     version: RELEASE.version ?? '',
+    // The footer's copyright year, from the notice the licences carry.
+    copyrightYear: COPYRIGHT.year,
     doi: RELEASE.doi ?? '',
     conceptDoi: RELEASE.conceptDoi ?? '',
     scenarios: Object.keys(SCENARIO_INFO).length,
