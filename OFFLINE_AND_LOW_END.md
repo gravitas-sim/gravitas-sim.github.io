@@ -51,7 +51,7 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 526 | 11.4 MB |
+| JavaScript | 527 | 11.4 MB |
 | Images | 62 | 1.7 MB |
 | Stylesheets | 10 | 450 KB |
 | Fonts | 9 | 140 KB |
