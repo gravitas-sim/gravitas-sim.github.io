@@ -46,6 +46,19 @@ function isTypingTarget(target) {
   );
 }
 
+/**
+ * True when Space belongs to the focused control: it is how a keyboard presses
+ * a button, opens a <summary> and ticks a box. The pause shortcut took it from
+ * all of them, so with focus on any button the space bar paused the
+ * simulation and the button never fired.
+ */
+const ownsSpace = target =>
+  Boolean(
+    target?.closest?.(
+      'button, summary, [role="button"], [role="switch"], [role="checkbox"], [role="tab"], [role="menuitem"]'
+    )
+  );
+
 function handleKey(e) {
   if (!enabled) return;
   if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -63,6 +76,7 @@ function handleKey(e) {
   // text before the panel closes. That is the right way round: the field
   // decides, and silence means the dialog gets it.
   if (e.key !== 'Escape' && isTypingTarget(e.target)) return;
+  if (e.key === ' ' && ownsSpace(e.target)) return;
 
   const key = e.key.toLowerCase();
   for (const s of registry) {
