@@ -159,13 +159,14 @@ export function createGuidePanel({ els, t, lab }) {
       const id = `ml-ans-${s.id}`;
       const box = el('input', {
         id,
+        class: 'ui-input',
         type: 'text',
         inputmode: 'decimal',
         value: saved,
       });
       const f = el(
         'div',
-        { class: 'ml-field' },
+        { class: 'ui-field' },
         el('label', { for: id, text: t('ml.guide.answer', { unit: s.unit }) }),
         box
       );
@@ -173,11 +174,11 @@ export function createGuidePanel({ els, t, lab }) {
     }
     if (s.kind === 'explain') {
       const id = `ml-exp-${s.id}`;
-      const box = el('textarea', { id });
+      const box = el('textarea', { id, class: 'ui-textarea', rows: 4 });
       box.value = saved;
       const f = el(
         'div',
-        { class: 'ml-field' },
+        { class: 'ui-field' },
         el('label', {
           for: id,
           text: t('ml.guide.explain', { n: s.minWords }),

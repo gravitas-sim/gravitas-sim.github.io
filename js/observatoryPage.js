@@ -584,7 +584,7 @@ function renderLegend(legend) {
   const src = state.view.image.bitsSource;
   if (src) {
     const li = document.createElement('li');
-    li.className = 'ow-hint';
+    li.className = 'ui-hint';
     li.lang = 'en';
     li.textContent = t('obs.legend.source', { source: src });
     ul.append(li);
@@ -1127,6 +1127,7 @@ function renderPreview(tbl) {
 
 function unitSelect(col, index) {
   const sel = document.createElement('select');
+  sel.className = 'ui-select';
   sel.id = `obsUnit${index}`;
   sel.append(
     option(CHOOSE, t('obs.import.chooseUnit')),
@@ -1162,7 +1163,7 @@ function renderMapping(tbl) {
     title.className = 'ow-map-name';
     title.textContent = col.name;
     const stats = document.createElement('p');
-    stats.className = 'ow-hint';
+    stats.className = 'ui-hint';
     stats.textContent = col.numeric
       ? t('obs.import.stats', {
           numbers: col.numbers,
@@ -1176,23 +1177,25 @@ function renderMapping(tbl) {
         })
       : t('obs.import.statsText', { numbers: col.numbers, n: tbl.rows.length });
     const use = document.createElement('select');
+    use.className = 'ui-select';
     use.id = `obsUse${i}`;
     use.append(...USES.map(u => option(u, t(`obs.use.${u}`))));
     use.value = col.numeric ? (i === 0 ? 'x' : 'value') : 'label';
     const useLabel = document.createElement('label');
-    useLabel.className = 'ow-field';
+    useLabel.className = 'ui-field';
     const useText = document.createElement('span');
     useText.textContent = t('obs.import.use', { column: col.name });
     useLabel.append(useText, use);
 
     const unit = unitSelect(col, i);
     const unitLabel = document.createElement('label');
-    unitLabel.className = 'ow-field';
+    unitLabel.className = 'ui-field';
     const unitText2 = document.createElement('span');
     unitText2.textContent = t('obs.import.unit', { column: col.name });
     unitLabel.append(unitText2, unit);
 
     const of = document.createElement('select');
+    of.className = 'ui-select';
     of.id = `obsOf${i}`;
     of.append(
       ...tbl.columns
@@ -1200,7 +1203,7 @@ function renderMapping(tbl) {
         .filter((_, k) => k !== i)
     );
     const ofLabel = document.createElement('label');
-    ofLabel.className = 'ow-field';
+    ofLabel.className = 'ui-field';
     const ofText = document.createElement('span');
     ofText.textContent = t('obs.import.of', { column: col.name });
     ofLabel.append(ofText, of);

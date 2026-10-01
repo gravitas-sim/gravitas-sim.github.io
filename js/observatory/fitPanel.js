@@ -117,16 +117,18 @@ export function mountFitPanel(root, ctx) {
     typeof navigator !== 'undefined' ? navigator : {}
   );
 
-  const modelSelect = el('select', { id: 'fitModel' });
+  const modelSelect = el('select', { id: 'fitModel', class: 'ui-select' });
   const table = el('table', { class: 'ow-fit-params' });
   const exposure = el('input', {
     id: 'fitExposure',
+    class: 'ui-input',
     type: 'number',
     step: 'any',
     min: '0',
   });
   const dilution = el('input', {
     id: 'fitDilution',
+    class: 'ui-input',
     type: 'number',
     step: 'any',
     min: '0',
@@ -138,18 +140,21 @@ export function mountFitPanel(root, ctx) {
   // added in quadrature to the fit's.
   const stellarRadius = el('input', {
     id: 'fitStellarRadius',
+    class: 'ui-input',
     type: 'number',
     step: 'any',
     min: '0',
   });
   const stellarRadiusSigma = el('input', {
     id: 'fitStellarRadiusSigma',
+    class: 'ui-input',
     type: 'number',
     step: 'any',
     min: '0',
   });
   const supersample = el('input', {
     id: 'fitSupersample',
+    class: 'ui-input',
     type: 'number',
     min: '1',
     max: '31',
@@ -178,12 +183,12 @@ export function mountFitPanel(root, ctx) {
   progress.hidden = true;
   const status = el('p', {
     id: 'fitStatus',
-    class: 'ow-hint',
+    class: 'ui-hint',
     role: 'status',
     'aria-live': 'polite',
   });
   const refusals = el('ul', { id: 'fitRefusals', class: 'ow-problems' });
-  const cost = el('p', { id: 'fitEstimate', class: 'ow-hint' });
+  const cost = el('p', { id: 'fitEstimate', class: 'ui-hint' });
   const results = el('div', { id: 'fitResults' });
   const exportBtn = el('button', {
     id: 'fitExport',
@@ -203,9 +208,9 @@ export function mountFitPanel(root, ctx) {
     return u ? `${nameOf(p)} (${u})` : nameOf(p);
   };
   const label = (text, control) =>
-    el('label', { class: 'ow-field' }, el('span', { text }), control);
+    el('label', { class: 'ui-field' }, el('span', { text }), control);
   root.replaceChildren(
-    el('p', { class: 'ow-hint', text: t('obs.fit.intro') }),
+    el('p', { class: 'ui-hint', text: t('obs.fit.intro') }),
     el(
       'div',
       { class: 'ow-grid' },
@@ -217,12 +222,12 @@ export function mountFitPanel(root, ctx) {
       label(t('obs.fit.stellarRadiusSigma'), stellarRadiusSigma),
       el(
         'label',
-        { class: 'ow-field' },
+        { class: 'ui-field' },
         el('span', {}, profiles, ` ${t('obs.fit.profiles')}`)
       )
     ),
     el('p', {
-      class: 'ow-hint',
+      class: 'ui-hint',
       text: t('obs.fit.device', {
         profile: t(`obs.fit.profile.${device.profile}`),
         realms: device.concurrency,
@@ -231,7 +236,7 @@ export function mountFitPanel(root, ctx) {
     el('div', { class: 'ow-table-wrap' }, table),
     cost,
     refusals,
-    el('div', { class: 'ow-actions' }, run, cancel, exportBtn),
+    el('div', { class: 'ui-toolbar' }, run, cancel, exportBtn),
     progress,
     status,
     results
@@ -260,6 +265,7 @@ export function mountFitPanel(root, ctx) {
       const hi = seed[p.name]?.hi ?? p.hi;
       const mode = el('select', {
         id: `fitMode-${p.name}`,
+        class: 'ui-select',
         'aria-label': t('obs.fit.modeOf', { name: nameOf(p) }),
       });
       mode.append(
@@ -269,6 +275,7 @@ export function mountFitPanel(root, ctx) {
       const input = (k, v) =>
         el('input', {
           id: `fit${k}-${p.name}`,
+          class: 'ui-input',
           type: 'number',
           step: 'any',
           value: Number.isFinite(v) ? String(v) : '',
@@ -531,9 +538,9 @@ export function mountFitPanel(root, ctx) {
     });
     compare.replaceChildren(
       el('h3', { id: 'fitCompareTitle', text: t('obs.fit.cmp.title') }),
-      el('p', { class: 'ow-hint', text: t('obs.fit.cmp.intro') }),
+      el('p', { class: 'ui-hint', text: t('obs.fit.cmp.intro') }),
       el('ul', { id: 'fitCompareList', class: 'ow-plain' }, ...boxes),
-      el('div', { class: 'ow-actions' }, go),
+      el('div', { class: 'ui-toolbar' }, go),
       out
     );
   }
@@ -712,8 +719,8 @@ export function mountFitPanel(root, ctx) {
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     });
     kids.push(
-      el('p', { id: 'fitCompareMethods', class: 'ow-hint', text: methods }),
-      el('div', { class: 'ow-actions' }, save)
+      el('p', { id: 'fitCompareMethods', class: 'ui-hint', text: methods }),
+      el('div', { class: 'ui-toolbar' }, save)
     );
     return kids;
   }
@@ -969,13 +976,13 @@ export function mountFitPanel(root, ctx) {
           body
         )
       ),
-      el('p', { class: 'ow-hint', text: t('obs.fit.res.legend') }),
+      el('p', { class: 'ui-hint', text: t('obs.fit.res.legend') }),
       stats,
       ...(correlations
         ? [
             el('h3', { text: t('obs.fit.corr.title') }),
             correlations,
-            el('p', { class: 'ow-hint', text: t('obs.fit.corr.legend') }),
+            el('p', { class: 'ui-hint', text: t('obs.fit.corr.legend') }),
           ]
         : []),
       el('h3', { text: t('obs.fit.warnTitle') }),

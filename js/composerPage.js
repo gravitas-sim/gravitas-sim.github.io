@@ -134,7 +134,7 @@ function card(d, base, summary, build) {
       {},
       summary,
       ' ',
-      el('span', { id: `${id}-error`, className: 'st-error', hidden: true })
+      el('span', { id: `${id}-error`, className: 'ui-error', hidden: true })
     )
   );
   node.addEventListener('toggle', () => {
@@ -256,17 +256,17 @@ function field(id, label, control, hint = '') {
   control.id = id;
   const row = el(
     'div',
-    { className: 'st-field' },
+    { className: 'ui-field' },
     el('label', { for: id }, label),
     control
   );
   const described = [];
   if (hint) {
-    row.append(el('p', { id: `${id}-hint`, className: 'st-hint' }, hint));
+    row.append(el('p', { id: `${id}-hint`, className: 'ui-hint' }, hint));
     described.push(`${id}-hint`);
   }
   row.append(
-    el('p', { id: `${id}-error`, className: 'st-error', hidden: true })
+    el('p', { id: `${id}-error`, className: 'ui-error', hidden: true })
   );
   if (described.length)
     control.setAttribute('aria-describedby', described.join(' '));
@@ -280,7 +280,7 @@ function textInput(
   { multiline = false, numeric = false } = {}
 ) {
   const input = el(multiline ? 'textarea' : 'input', {
-    className: 'st-input',
+    className: multiline ? 'ui-textarea' : 'ui-input',
     type: multiline ? undefined : 'text',
     inputmode: numeric ? 'decimal' : undefined,
     autocomplete: 'off',
@@ -292,7 +292,7 @@ function textInput(
 }
 
 function select(options, value, onCommit) {
-  const s = el('select', { className: 'st-input' });
+  const s = el('select', { className: 'ui-select' });
   for (const o of options) {
     if (o.group) {
       const g = el('optgroup', { label: o.group });
@@ -407,7 +407,7 @@ function aboutSection(d) {
   objectives.append(
     el('p', {
       id: `${idOf('objectives')}-error`,
-      className: 'st-error',
+      className: 'ui-error',
       hidden: true,
     })
   );
@@ -447,7 +447,7 @@ function aboutSection(d) {
   prereqs.append(
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       button(
         `${t('composer.prereq.add')}: ${t('composer.prereq.lesson')}`,
         () =>
@@ -503,7 +503,7 @@ function aboutSection(d) {
     ),
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       button(
         t('studio.action.newSeed'),
         () => commit(x => (x.seed = randomSeed())),
@@ -596,7 +596,7 @@ function listOf(
       );
   });
   fs.append(
-    el('p', { id: `${idOf(path)}-error`, className: 'st-error', hidden: true })
+    el('p', { id: `${idOf(path)}-error`, className: 'ui-error', hidden: true })
   );
   return { fs, add: onAdd => fs.append(button(addLabel, () => commit(onAdd))) };
 }
@@ -641,7 +641,7 @@ function choiceOptions(base, s, { answerKey = 'answer' } = {}) {
   radios.append(
     el('p', {
       id: `${idOf(`${base}.${answerKey}`)}-error`,
-      className: 'st-error',
+      className: 'ui-error',
       hidden: true,
     })
   );
@@ -1090,7 +1090,7 @@ function fillStep(card, s, i, d) {
   card.append(
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       button(
         t('composer.step.up', { n }),
         () => commit(x => x.steps.splice(i - 1, 0, x.steps.splice(i, 1)[0])),
@@ -1126,7 +1126,7 @@ function stepsSection(d) {
     el('h2', { id: 'cp-steps-h' }, t('composer.section.steps')),
     el('p', {
       id: `${idOf('steps')}-error`,
-      className: 'st-error',
+      className: 'ui-error',
       hidden: true,
     })
   );
@@ -1140,7 +1140,7 @@ function stepsSection(d) {
   section.append(
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       button(t('composer.steps.openAll'), every(true), { id: 'cp-steps-open' }),
       button(t('composer.steps.closeAll'), every(false), {
         id: 'cp-steps-close',
@@ -1156,7 +1156,7 @@ function stepsSection(d) {
   section.append(
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       field('cp-add-type', t('composer.step.addType'), kind),
       button(
         t('composer.step.add'),
@@ -1308,7 +1308,7 @@ function variantFields(base, item) {
       values.append(
         el(
           'p',
-          { className: 'st-hint' },
+          { className: 'ui-hint' },
           t('composer.values.answer', {
             answer: got.answer,
             unit: r.output.unit,
@@ -1325,7 +1325,7 @@ function variantFields(base, item) {
   values.append(
     el('p', {
       id: `${idOf(`${base}.variants.values`)}-error`,
-      className: 'st-error',
+      className: 'ui-error',
       hidden: true,
     })
   );
@@ -1354,7 +1354,7 @@ function bankSection(d) {
     'section',
     { className: 'st-section', 'aria-labelledby': 'cp-bank-h' },
     el('h2', { id: 'cp-bank-h' }, t('composer.section.bank')),
-    el('p', { className: 'st-hint' }, t('composer.hint.bank'))
+    el('p', { className: 'ui-hint' }, t('composer.hint.bank'))
   );
   items.forEach((item, i) => {
     const base = `bank.items[${i}]`;
@@ -1436,7 +1436,7 @@ function fillItem(card, item, i, base) {
     }),
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       button(t('composer.item.duplicate', { id: item.id }), () =>
         commit(x => {
           const copy = clone(x.bank.items[i]);
@@ -1464,7 +1464,7 @@ function finishBank(section) {
   section.append(
     el(
       'div',
-      { className: 'st-actions' },
+      { className: 'ui-toolbar' },
       field('cp-add-kind', t('composer.item.kind'), kind),
       button(
         t('composer.item.add'),
@@ -1575,7 +1575,7 @@ function clearFieldErrors() {
       node.setAttribute('aria-describedby', node.dataset.described);
     else node.removeAttribute('aria-describedby');
   }
-  for (const note of $('cp-editor').querySelectorAll('.st-error')) {
+  for (const note of $('cp-editor').querySelectorAll('.ui-error')) {
     note.textContent = '';
     note.hidden = true;
   }
@@ -1787,7 +1787,7 @@ function renderKey(r) {
   });
   if (!rows.length)
     return host.append(
-      el('p', { className: 'st-hint' }, t('composer.key.none'))
+      el('p', { className: 'ui-hint' }, t('composer.key.none'))
     );
   host.append(
     el(

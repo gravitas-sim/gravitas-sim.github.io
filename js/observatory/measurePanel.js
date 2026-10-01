@@ -554,10 +554,11 @@ export function mountMeasurePanel(root, ctx) {
   function field(id, label, value, attrs = {}) {
     return el(
       'label',
-      { class: 'ow-field' },
+      { class: 'ui-field' },
       el('span', { text: label }),
       el('input', {
         id,
+        class: 'ui-input',
         type: 'text',
         inputmode: 'decimal',
         value: value ?? '',
@@ -567,10 +568,10 @@ export function mountMeasurePanel(root, ctx) {
     );
   }
   function select(id, label, options, selected) {
-    const s = el('select', { id });
+    const s = el('select', { id, class: 'ui-select' });
     for (const [value, text] of options)
       s.append(el('option', { value, text, selected: value === selected }));
-    return el('label', { class: 'ow-field' }, el('span', { text: label }), s);
+    return el('label', { class: 'ui-field' }, el('span', { text: label }), s);
   }
 
   function renderParams(box, toolId, o, preset = null) {
@@ -706,7 +707,7 @@ export function mountMeasurePanel(root, ctx) {
       const v = p ?? d;
       const fehSel = select('msCurveFeh', t('obs.ms.p.feh'), [], '');
       box.append(
-        el('p', { class: 'ow-hint', text: t('obs.ms.p.curveModel') }),
+        el('p', { class: 'ui-hint', text: t('obs.ms.p.curveModel') }),
         fehSel,
         field('msDmLo', t('obs.ms.p.dmLo'), v.dm[0]),
         field('msDmHi', t('obs.ms.p.dmHi'), v.dm[1]),
@@ -762,7 +763,7 @@ export function mountMeasurePanel(root, ctx) {
             ),
             el(
               'label',
-              { class: 'ow-field' },
+              { class: 'ui-field' },
               el('input', {
                 id: 'msCircle',
                 type: 'checkbox',
@@ -829,7 +830,7 @@ export function mountMeasurePanel(root, ctx) {
             c?.op ?? '>'
           ),
           field(`msVal${i}`, t('obs.ms.p.value'), c?.value ?? ''),
-          el('p', { id: `msUnit${i}`, class: 'ow-hint' })
+          el('p', { id: `msUnit${i}`, class: 'ui-hint' })
         );
         const unitNote = () => {
           const k = cols.find(x => x.id === row.querySelector('select').value);
@@ -857,12 +858,13 @@ export function mountMeasurePanel(root, ctx) {
     } else if (toolId === 'match') {
       const file = el('input', {
         id: 'msSecond',
+        class: 'ui-file',
         type: 'file',
         accept: '.csv,.tsv,.txt,.json',
       });
       const note = el('p', {
         id: 'msSecondNote',
-        class: 'ow-hint',
+        class: 'ui-hint',
         role: 'status',
       });
       const how = el('div', { id: 'msHow' });
@@ -984,7 +986,7 @@ export function mountMeasurePanel(root, ctx) {
       box.append(
         el(
           'label',
-          { class: 'ow-field' },
+          { class: 'ui-field' },
           el('span', { text: t('obs.ms.p.second') }),
           file
         ),
@@ -1276,8 +1278,8 @@ export function mountMeasurePanel(root, ctx) {
   function build() {
     const { t } = ctx;
     const body = el('div', { id: 'msBody' });
-    const intro = el('p', { class: 'ow-hint', text: t('obs.ms.intro') });
-    const tool = el('select', { id: 'msTool' });
+    const intro = el('p', { class: 'ui-hint', text: t('obs.ms.intro') });
+    const tool = el('select', { id: 'msTool', class: 'ui-select' });
     const params = el('div', { id: 'msParams' });
     const problem = el('p', {
       id: 'msProblem',
@@ -1306,12 +1308,12 @@ export function mountMeasurePanel(root, ctx) {
     });
     const busyText = el('p', {
       id: 'msBusy',
-      class: 'ow-hint',
+      class: 'ui-hint',
       role: 'status',
     });
     const none = el('p', {
       id: 'msNone',
-      class: 'ow-hint',
+      class: 'ui-hint',
       hidden: true,
       text: t('obs.ms.none'),
     });
@@ -1341,12 +1343,13 @@ export function mountMeasurePanel(root, ctx) {
     });
     const openFile = el('input', {
       id: 'msOpen',
+      class: 'ui-file',
       type: 'file',
       accept: '.json,application/json',
     });
     const list = el('ol', { id: 'msNodes', class: 'ow-list' });
     const pipeline = el('ol', { id: 'msPipeline', class: 'ow-list' });
-    const methodsList = el('ol', { id: 'msMethods', class: 'ow-hint' });
+    const methodsList = el('ol', { id: 'msMethods', class: 'ui-hint' });
     body.append(
       intro,
       el(
@@ -1354,7 +1357,7 @@ export function mountMeasurePanel(root, ctx) {
         { class: 'ow-grid' },
         el(
           'label',
-          { class: 'ow-field' },
+          { class: 'ui-field' },
           el('span', { text: t('obs.ms.tool') }),
           tool
         )
@@ -1362,14 +1365,14 @@ export function mountMeasurePanel(root, ctx) {
       none,
       params,
       problem,
-      el('div', { class: 'ow-actions' }, runBtn, cancel, progress),
+      el('div', { class: 'ui-toolbar' }, runBtn, cancel, progress),
       busyText,
       el('h3', { id: 'msNodesTitle', text: t('obs.ms.nodes') }),
       list,
-      el('div', { class: 'ow-actions' }, undo, redo, save, csv),
+      el('div', { class: 'ui-toolbar' }, undo, redo, save, csv),
       el(
         'label',
-        { class: 'ow-field' },
+        { class: 'ui-field' },
         el('span', { text: t('obs.ms.open') }),
         openFile
       ),
@@ -1757,14 +1760,14 @@ export function mountMeasurePanel(root, ctx) {
       }),
     });
     const state = el('p', {
-      class: 'ow-hint',
+      class: 'ui-hint',
       'data-status': status,
       text: w.status(status),
     });
     const back = model.readBack.get(n.id);
     const backNote = back
       ? el('p', {
-          class: 'ow-hint',
+          class: 'ui-hint',
           'data-readback': back.same ? 'same' : 'differs',
           text: [
             back.same ? t('obs.ms.nodeSame') : t('obs.ms.nodeDiffers'),
@@ -1832,11 +1835,11 @@ export function mountMeasurePanel(root, ctx) {
     const warnings = n.warnings?.length
       ? el(
           'ul',
-          { class: 'ow-hint' },
+          { class: 'ui-hint' },
           ...n.warnings.map(x => el('li', { text: w.warning(x) }))
         )
       : null;
-    const actions = el('div', { class: 'ow-actions' });
+    const actions = el('div', { class: 'ui-toolbar' });
     const plotBox = el('div', {});
     const button = (text, fn, attrs = {}) => {
       const b = el('button', {
@@ -2005,7 +2008,7 @@ export function mountMeasurePanel(root, ctx) {
     ui.list.replaceChildren(
       ...(nodes().length
         ? nodes().map(nodeItem)
-        : [el('li', { class: 'ow-hint', text: t('obs.ms.nodesNone') })])
+        : [el('li', { class: 'ui-hint', text: t('obs.ms.nodesNone') })])
     );
     ui.undo.disabled = model.at === 0;
     ui.redo.disabled = model.at >= model.stack.length - 1;
