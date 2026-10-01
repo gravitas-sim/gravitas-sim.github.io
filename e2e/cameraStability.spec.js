@@ -591,6 +591,14 @@ const collideStars = (page, at, arm = 'none') =>
     async ({ where, arm: how }) => {
       const p = await import('/js/physics.js');
       const ui = await import('/js/ui.js');
+      // Every module this needs, before the stars exist. An import() is not
+      // synchronous even for a module already loaded - Chromium settles it in
+      // a later task - so one between the push and the arming below is a gap
+      // a frame can run in, and measured, one in a few thousand does. If the
+      // pair merges in it, the frame is then pointed at a star already gone
+      // and the renderer sends it to the world origin - this test's failure,
+      // seen on a loaded machine with the engine's own race already fixed.
+      const rf = await import('/js/referenceFrame.js');
       ui.SETTINGS.max_timestep = 0.002;
       ui.SETTINGS.sim_speed = 0.2;
       ui.SETTINGS.enable_star_merging = true;
@@ -610,7 +618,6 @@ const collideStars = (page, at, arm = 'none') =>
           out.armed = ui.state.selectedObject?.object?.id ?? null;
         }
       } else if (how === 'frame') {
-        const rf = await import('/js/referenceFrame.js');
         rf.setFrame(rf.OBJECT, a.id);
         out.armed = rf.frameState().objectId ?? null;
       }
