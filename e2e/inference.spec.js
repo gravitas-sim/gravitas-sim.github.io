@@ -86,6 +86,15 @@ test.describe('the inference core', () => {
     await expect(results).toContainText('Rp/R*');
     await expect(results).toContainText('Total duration');
     await expect(results).toContainText('mass and density');
+    // The residuals (PLOT_COMPONENT.md, D2): drawn, labeled with how many,
+    // and only shown - nothing to select or focus.
+    const residuals = results.locator('svg.ow-plot');
+    await expect(residuals).toHaveAttribute('aria-label', /1882 points/);
+    expect(
+      await residuals.locator('.ow-points .ow-pt').count()
+    ).toBeGreaterThan(100);
+    await expect(residuals).not.toHaveAttribute('tabindex');
+    await expect(residuals.locator('.ow-selected, .ow-focus')).toHaveCount(0);
     // The observation on the page is untouched.
     expect(await page.locator('#obsTable tbody').innerText()).toBe(before);
     expect(await page.locator('#obsTable caption').innerText()).toBe(caption);

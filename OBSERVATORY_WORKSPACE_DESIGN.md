@@ -106,7 +106,7 @@ starts a new selection, and the page says so.
 
 ### Linked views
 
-One selection (`js/observatory/selection.js`) holds a set of rows and a
+One selection (`js/plot/select.js`) holds a set of rows and a
 focused row. An image's rows are its pixels. Every view changes it, names
 itself when it does, and redraws from it.
 

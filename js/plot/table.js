@@ -1,9 +1,10 @@
 // =============================================================================
 // The table: every row, readable by eye and by screen reader, and selectable
 // -----------------------------------------------------------------------------
-// An ARIA grid (a real <table> with the grid role), a page of rows at a time.
-// It holds every row there is, masked and missing ones included, and the
-// plot and image views select the same rows through the same selection:
+// A plot's numbers as an ARIA grid (a real <table> with the grid role), a
+// page of rows at a time. It holds every row there is, masked and missing
+// ones included, and the plot and image views select the same rows through
+// the same selection (./select.js):
 //
 // - Each column's header says its unit, or that it has none stated.
 // - A missing value reads "missing", not a blank cell or a zero.
@@ -20,15 +21,16 @@
 // technology (aria-rowcount, aria-rowindex), so the whole is still announced.
 // =============================================================================
 
-import { formatUnit, parseUnit } from './units.js';
-import { maskedRows } from './schema.js';
+import { formatUnit, parseUnit } from '../observatory/units.js';
+import { maskedRows } from '../observatory/schema.js';
 
 export const PAGE = 50;
 
 /**
  * @param {HTMLTableElement} table
  * @param {{announce: Function, describe: Function, labels: object,
- *   number: Function, onPage?: Function}} hooks
+ *   number: Function, range: Function, onPage?: Function}} hooks - range
+ *   names the rows shown
  */
 export function createTable(table, hooks) {
   table.setAttribute('role', 'grid');
@@ -121,7 +123,7 @@ export function createTable(table, hooks) {
     table.setAttribute('aria-rowcount', String(n + 1));
     table.setAttribute('aria-colcount', String(o.columns.length + 1));
     const cap = document.createElement('caption');
-    cap.textContent = `${caption} ${hooks.t('obs.table.rows', { first: first + 1, last: last + 1, n })}`;
+    cap.textContent = `${caption} ${hooks.range({ first: first + 1, last: last + 1, n })}`;
     const head = document.createElement('thead');
     const hr = document.createElement('tr');
     hr.setAttribute('aria-rowindex', '1');

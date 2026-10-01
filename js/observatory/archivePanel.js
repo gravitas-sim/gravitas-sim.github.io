@@ -98,7 +98,7 @@ export function aladinLink({ ra, dec }) {
 /**
  * @param {HTMLElement} root - The panel's <details>, whose summary stays
  * @param {{t: Function, number: Function, registerMessages: Function,
- *   createPlot: Function, createSelection: Function,
+ *   createPlot: Function,
  *   open: (o: object) => void, status: (text: string) => void,
  *   store?: object, fetchImpl?: Function}} ctx - The page's own pieces; a
  *   test may pass a store and a fetch
@@ -459,16 +459,10 @@ function build(root, ctx, initialName) {
       if (n) {
         ctx
           .createPlot(svg, {
-            announce: () => {},
-            describe: () => '',
             number: ctx.number,
             labels: { notStated: t('obs.arc.unit.notStated') },
           })
-          .draw(current, {
-            xColumn: 'time',
-            yColumn: 'mag',
-            selection: ctx.createSelection(n),
-          });
+          .draw(current, { xColumn: 'time', yColumn: 'mag' });
       }
       preview.replaceChildren(
         svg,

@@ -83,7 +83,7 @@ export { LINES };
 /**
  * @param {HTMLElement} root - The panel's <details>, whose summary stays
  * @param {object} ctx - The page's pieces: t, number, registerMessages,
- *   createPlot, createSelection, open(o, changes), status(text),
+ *   createPlot, open(o, changes), status(text),
  *   apply(change), state, replay(source, changes), observationJson(o, ws),
  *   importer() => import.js, skyOf, pixelScale
  * @returns {{update: () => Promise<void>, rebuild: () => void,
@@ -1723,17 +1723,8 @@ export function mountMeasurePanel(root, ctx) {
       })
     );
     ctx
-      .createPlot(svg, {
-        announce: () => {},
-        describe: () => '',
-        number: ctx.number,
-        labels: { notStated: '' },
-      })
-      .draw(o, {
-        xColumn: 'period',
-        yColumn: 'power',
-        selection: ctx.createSelection(periods.length),
-      });
+      .createPlot(svg, { number: ctx.number, labels: { notStated: '' } })
+      .draw(o, { xColumn: 'period', yColumn: 'power' });
     const gridCsv = el('button', {
       class: 'ui-button is-small',
       type: 'button',
