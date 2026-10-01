@@ -47,32 +47,6 @@
         gap: 0.75rem;
         grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
       }
-      .xp-field {
-        display: grid;
-        gap: 0.3rem;
-      }
-      .xp-wrap input,
-      .xp-wrap select,
-      .xp-wrap textarea {
-        width: 100%;
-        box-sizing: border-box;
-        font: inherit;
-        background: var(--surface-2);
-        color: inherit;
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        padding: 0.45rem 0.55rem;
-      }
-      .xp-wrap textarea {
-        min-height: 6rem;
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 0.8rem;
-      }
-      .xp-hint {
-        margin: 0.5rem 0 0;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
       .xp-status {
         margin: 0.5rem 0 0;
         min-height: 1.2em;
@@ -80,13 +54,6 @@
       .xp-refusals {
         color: var(--danger);
         margin: 0.5rem 0 0;
-      }
-      .xp-actions {
-        display: flex;
-        gap: 0.75rem;
-        align-items: center;
-        flex-wrap: wrap;
-        margin-top: 0.75rem;
       }
       .xp-wrap progress {
         width: 100%;
@@ -262,13 +229,13 @@ try {
         <fieldset>
           <legend data-i18n="exp.what.title">What to run</legend>
           <div class="xp-grid">
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.what.scenario">Scenario</span>
-              <select id="xpScenario"></select>
+              <select class="ui-select" id="xpScenario"></select>
             </label>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.what.param">Setting to vary</span>
-              <select id="xpParam"></select>
+              <select class="ui-select" id="xpParam"></select>
             </label>
           </div>
         </fieldset>
@@ -276,58 +243,60 @@ try {
         <fieldset>
           <legend data-i18n="exp.values.title">Values</legend>
           <div class="xp-grid">
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.values.from">From</span>
               <input
+                class="ui-input"
                 id="xpFrom"
                 type="number"
                 step="any"
                 aria-describedby="xpRangeHint"
               />
             </label>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.values.to">To</span>
               <input
+                class="ui-input"
                 id="xpTo"
                 type="number"
                 step="any"
                 aria-describedby="xpRangeHint"
               />
             </label>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.values.count">How many values</span>
-              <input id="xpCount" type="number" min="3" max="20" value="8" />
+              <input class="ui-input" id="xpCount" type="number" min="3" max="20" value="8" />
             </label>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.values.spacing">Spacing</span>
-              <select id="xpSpacing">
+              <select class="ui-select" id="xpSpacing">
                 <option value="even" data-i18n="exp.values.even">Evenly</option>
                 <option value="random" data-i18n="exp.values.random">At random</option>
               </select>
             </label>
           </div>
-          <p id="xpRangeHint" class="xp-hint"></p>
+          <p id="xpRangeHint" class="ui-hint"></p>
         </fieldset>
         <fieldset id="xpSecond" hidden>
           <legend data-i18n="exp.second.title">A second setting</legend>
           <div class="xp-grid">
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.second.param">Also vary</span>
-              <select id="xpParam2"></select>
+              <select class="ui-select" id="xpParam2"></select>
             </label>
           </div>
           <div id="xpSecondRange" class="xp-grid" hidden>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.values.from">From</span>
-              <input id="xpFrom2" type="number" step="any" />
+              <input class="ui-input" id="xpFrom2" type="number" step="any" />
             </label>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.values.to">To</span>
-              <input id="xpTo2" type="number" step="any" />
+              <input class="ui-input" id="xpTo2" type="number" step="any" />
             </label>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.values.count">How many values</span>
-              <input id="xpCount2" type="number" min="3" max="20" value="3" />
+              <input class="ui-input" id="xpCount2" type="number" min="3" max="20" value="3" />
             </label>
           </div>
         </fieldset>
@@ -335,9 +304,10 @@ try {
         <fieldset>
           <legend data-i18n="exp.runs.title">Seeds and length</legend>
           <div class="xp-grid">
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.runs.seeds">Seeds per value</span>
               <input
+                class="ui-input"
                 id="xpSeeds"
                 type="number"
                 min="1"
@@ -346,9 +316,10 @@ try {
                 aria-describedby="xpSeedHint"
               />
             </label>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.runs.seedBase">Seed name</span>
               <input
+                class="ui-input"
                 id="xpSeedBase"
                 type="text"
                 value="run"
@@ -356,9 +327,10 @@ try {
                 spellcheck="false"
               />
             </label>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.runs.duration">Simulated time per trial</span>
               <input
+                class="ui-input"
                 id="xpDuration"
                 type="number"
                 min="1"
@@ -367,32 +339,32 @@ try {
                 value="10000"
               />
             </label>
-            <label class="xp-field">
+            <label class="ui-field">
               <span data-i18n="exp.runs.step">Integration step</span>
-              <select id="xpStep">
+              <select class="ui-select" id="xpStep">
                 <option value="120">1/120 s</option>
                 <option value="60" selected>1/60 s</option>
                 <option value="30">1/30 s</option>
               </select>
             </label>
           </div>
-          <p id="xpSeedHint" class="xp-hint" data-i18n="exp.runs.seedHint">
+          <p id="xpSeedHint" class="ui-hint" data-i18n="exp.runs.seedHint">
             Every value runs once per seed.
           </p>
         </fieldset>
 
         <fieldset>
           <legend data-i18n="exp.measure.title">What to measure</legend>
-          <label class="xp-field">
+          <label class="ui-field">
             <span data-i18n="exp.measure.metric">Measurement</span>
-            <select id="xpMetric"></select>
+            <select class="ui-select" id="xpMetric"></select>
           </label>
         </fieldset>
 
-        <p id="xpDevice" class="xp-hint"></p>
+        <p id="xpDevice" class="ui-hint"></p>
         <p id="xpEstimate" class="xp-status" role="status" aria-live="polite"></p>
         <ul id="xpRefusals" class="xp-refusals" hidden></ul>
-        <div class="xp-actions">
+        <div class="ui-toolbar">
           <button id="xpRun" class="ui-button" type="submit" disabled data-i18n="exp.run">
             Run
           </button>
@@ -404,7 +376,7 @@ try {
       </form>
 
       <section id="xpProgressBox" hidden>
-        <label class="xp-field">
+        <label class="ui-field">
           <span data-i18n="exp.progress.label">Progress</span>
           <progress id="xpProgress" max="1000" value="0"></progress>
         </label>
@@ -415,7 +387,7 @@ try {
         <h2 id="xpResultsTitle" data-i18n="exp.results.title">Results</h2>
         <figure>
           <svg id="xpPlot" class="xp-plot" role="img"></svg>
-          <figcaption class="xp-hint" data-i18n="exp.plot.caption">
+          <figcaption class="ui-hint" data-i18n="exp.plot.caption">
             Each dot is one trial; the line joins the mean at each value.
           </figcaption>
         </figure>
@@ -436,7 +408,7 @@ try {
             <tbody id="xpSummaryBody"></tbody>
           </table>
         </div>
-        <div class="xp-actions">
+        <div class="ui-toolbar">
           <button id="xpDownloadJson" class="ui-button" type="button" data-i18n="exp.download.json">
             Download the result (JSON)
           </button>
@@ -465,7 +437,7 @@ try {
         </div>
         <details>
           <summary data-i18n="exp.manifest.title">The experiment as a file</summary>
-          <pre id="xpManifest" class="xp-hint"></pre>
+          <pre id="xpManifest" class="ui-hint"></pre>
         </details>
       </section>
 
@@ -478,14 +450,14 @@ try {
 
       <section aria-labelledby="xpCheckTitle">
         <h2 id="xpCheckTitle" data-i18n="exp.check.title">Check a saved result</h2>
-        <p id="xpCheckHint" class="xp-hint" data-i18n="exp.check.hint">
+        <p id="xpCheckHint" class="ui-hint" data-i18n="exp.check.hint">
           Paste a result file this page saved, or an experiment file.
         </p>
-        <label class="xp-field">
+        <label class="ui-field">
           <span data-i18n="exp.check.input">Result or experiment (JSON)</span>
-          <textarea id="xpCheckInput" spellcheck="false" aria-describedby="xpCheckHint"></textarea>
+          <textarea class="ui-textarea is-code" id="xpCheckInput" rows="5" spellcheck="false" aria-describedby="xpCheckHint"></textarea>
         </label>
-        <div class="xp-actions">
+        <div class="ui-toolbar">
           <button id="xpCheckBtn" class="ui-button" type="button" data-i18n="exp.check.run">
             Check
           </button>

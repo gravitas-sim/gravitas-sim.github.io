@@ -47,14 +47,6 @@
           overflow-y: auto;
         }
       }
-      .st-toolbar,
-      .st-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        align-items: center;
-        margin: 0.75rem 0;
-      }
       .st-section,
       .st-side section,
       .st-wrap fieldset {
@@ -106,46 +98,18 @@
           grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         }
       }
-      .st-field {
-        display: grid;
-        gap: 0.25rem;
-        align-content: start;
+      /* Fields stack with room between them; toolbars keep room below. */
+      .st-wrap .ui-field {
         margin: 0.5rem 0 0;
-        min-width: 0;
+      }
+      .st-wrap .ui-toolbar {
+        margin-bottom: 0.75rem;
       }
       .st-check {
         display: inline-flex;
         gap: 0.4rem;
         align-items: center;
         margin: 0.3rem 1rem 0.3rem 0;
-      }
-      .st-wrap input[type='text'],
-      .st-wrap select,
-      .st-wrap textarea {
-        width: 100%;
-        min-width: 0;
-        max-width: 100%;
-        box-sizing: border-box;
-        font: inherit;
-        background: var(--surface-2);
-        color: inherit;
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        padding: 0.4rem 0.5rem;
-      }
-      .st-wrap [aria-invalid='true'] {
-        border-color: var(--danger);
-      }
-      .st-hint {
-        margin: 0;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-      }
-      .st-error {
-        margin: 0;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--danger);
       }
       .st-state {
         font-size: 0.8rem;
@@ -213,8 +177,6 @@
       }
       #st-raw-text {
         min-height: 18rem;
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 0.8rem;
       }
       .st-wrap dialog {
         max-width: 36rem;
@@ -264,7 +226,7 @@ try {
     >
       <div
         id="langSwitch"
-        class="st-actions"
+        class="ui-toolbar"
         role="group"
         aria-label="Language"
         data-i18n-aria-label="studio.lang.label"
@@ -273,28 +235,30 @@ try {
       <p data-i18n="composer.intro"></p>
 
       <div
-        class="st-toolbar"
+        class="ui-toolbar"
         role="group"
         aria-label="Investigation file"
         data-i18n-aria-label="composer.toolbar.label"
       >
         <button id="cp-new" type="button" class="ui-button" data-i18n="composer.action.new"></button>
         <button id="cp-open" type="button" class="ui-button" data-i18n="studio.action.open"></button>
-        <input id="cp-file" type="file" accept="application/json,.json" hidden />
+        <input class="ui-file" id="cp-file" type="file" accept="application/json,.json" hidden />
         <button id="cp-save" type="button" class="ui-button is-primary" data-i18n="studio.action.save"></button>
         <button id="cp-save-bank" type="button" class="ui-button" data-i18n="composer.action.saveBank"></button>
         <button id="cp-export" type="button" class="ui-button" data-i18n="composer.action.export"></button>
         <button id="cp-export-es" type="button" class="ui-button" data-i18n="composer.action.exportEs"></button>
-        <button id="cp-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
-        <button id="cp-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+        <span class="ui-button-group">
+          <button id="cp-undo" type="button" class="ui-button" data-i18n="studio.action.undo"></button>
+          <button id="cp-redo" type="button" class="ui-button" data-i18n="studio.action.redo"></button>
+        </span>
       </div>
-      <div class="st-toolbar">
+      <div class="ui-toolbar">
         <label for="cp-drafts" data-i18n="studio.drafts.label"></label>
-        <select id="cp-drafts"></select>
+        <select class="ui-select" id="cp-drafts"></select>
         <button id="cp-drafts-open" type="button" class="ui-button" data-i18n="studio.drafts.open"></button>
         <button id="cp-drafts-delete" type="button" class="ui-button" data-i18n="studio.drafts.delete"></button>
       </div>
-      <p id="cp-storage" class="st-error" data-i18n="studio.storage.failed" hidden></p>
+      <p id="cp-storage" class="ui-error" data-i18n="studio.storage.failed" hidden></p>
       <p id="cp-status" class="st-status" role="status" aria-live="polite"></p>
 
       <div class="st-layout">
@@ -303,9 +267,9 @@ try {
           <details id="cp-raw" class="st-section">
             <summary data-i18n="studio.raw.heading"></summary>
             <label for="st-raw-text" data-i18n="composer.raw.label"></label>
-            <textarea id="st-raw-text" spellcheck="false" aria-describedby="cp-raw-error"></textarea>
-            <p id="cp-raw-error" class="st-error" role="alert" hidden></p>
-            <div class="st-actions">
+            <textarea class="ui-textarea is-code" id="st-raw-text" spellcheck="false" aria-describedby="cp-raw-error"></textarea>
+            <p id="cp-raw-error" class="ui-error" role="alert" hidden></p>
+            <div class="ui-toolbar">
               <button id="cp-raw-apply" type="button" class="ui-button" data-i18n="studio.raw.apply"></button>
               <button id="cp-raw-revert" type="button" class="ui-button" data-i18n="studio.raw.revert"></button>
             </div>
@@ -314,7 +278,7 @@ try {
         <div class="st-side">
           <section aria-labelledby="cp-checks-h">
             <h2 id="cp-checks-h" data-i18n="studio.checks.heading"></h2>
-            <p id="cp-checks-summary" class="st-hint"></p>
+            <p id="cp-checks-summary" class="ui-hint"></p>
             <ul id="cp-checks" class="st-list"></ul>
           </section>
           <section aria-labelledby="cp-estimate-h">
@@ -323,13 +287,13 @@ try {
           </section>
           <section aria-labelledby="cp-translation-h">
             <h2 id="cp-translation-h" data-i18n="composer.translation.heading"></h2>
-            <p id="cp-translation-summary" class="st-hint"></p>
+            <p id="cp-translation-summary" class="ui-hint"></p>
             <ul id="cp-translation" class="st-list"></ul>
           </section>
           <section aria-labelledby="cp-preview-h">
             <h2 id="cp-preview-h" data-i18n="studio.preview.heading"></h2>
-            <p class="st-hint" data-i18n="composer.preview.hint"></p>
-            <div class="st-actions">
+            <p class="ui-hint" data-i18n="composer.preview.hint"></p>
+            <div class="ui-toolbar">
               <button id="cp-preview-go" type="button" class="ui-button" data-i18n="composer.preview.student"></button>
               <a id="cp-preview-author" class="ui-button" target="_blank" rel="noopener" data-i18n="composer.preview.author" hidden></a>
             </div>
@@ -342,20 +306,20 @@ try {
           </section>
           <section aria-labelledby="cp-key-h">
             <h2 id="cp-key-h" data-i18n="composer.key.heading"></h2>
-            <p class="st-hint" data-i18n="composer.key.hint"></p>
+            <p class="ui-hint" data-i18n="composer.key.hint"></p>
             <div id="cp-key" class="st-scroll"></div>
           </section>
           <section aria-labelledby="cp-report-h">
             <h2 id="cp-report-h" data-i18n="composer.report.heading"></h2>
-            <p class="st-hint" data-i18n="composer.report.hint"></p>
-            <div class="st-actions">
+            <p class="ui-hint" data-i18n="composer.report.hint"></p>
+            <div class="ui-toolbar">
               <button id="cp-report-go" type="button" class="ui-button" data-i18n="composer.report.make"></button>
               <a id="cp-report-open" class="ui-button" target="_blank" rel="noopener" data-i18n="composer.report.open" hidden></a>
             </div>
           </section>
           <section aria-labelledby="cp-diff-h">
             <h2 id="cp-diff-h" data-i18n="studio.diff.heading"></h2>
-            <p id="cp-diff-summary" class="st-hint"></p>
+            <p id="cp-diff-summary" class="ui-hint"></p>
             <ul id="cp-diff" class="st-list"></ul>
           </section>
         </div>
@@ -365,7 +329,7 @@ try {
         <h2 id="cp-conflict-h" data-i18n="studio.conflict.heading"></h2>
         <p id="cp-conflict-text"></p>
         <ul id="cp-conflict-diff" class="st-list"></ul>
-        <div class="st-actions">
+        <div class="ui-toolbar">
           <button id="cp-conflict-replace" type="button" class="ui-button" data-i18n="studio.conflict.replace"></button>
           <button id="cp-conflict-both" type="button" class="ui-button" data-i18n="studio.conflict.both"></button>
           <button id="cp-conflict-cancel" type="button" class="ui-button" data-i18n="studio.conflict.cancel" autofocus></button>

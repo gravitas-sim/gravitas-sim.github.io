@@ -28,19 +28,5 @@
     "evaluation/index.html": 1
   },
   "emoji": {},
-  "controls": {
-    "observatory/index.html": 29,
-    "catalog/index.html": 2,
-    "experiments/index.html": 16,
-    "figure/index.html": 10,
-    "studio/index.html": 4,
-    "studio/lesson/index.html": 3,
-    "studio/course/index.html": 3,
-    "course/index.html": 2,
-    "instructors/submissions/index.html": 1,
-    "lab3d/index.html": 6,
-    "3d/index.html": 12,
-    "mission/index.html": 30,
-    "mission/lab/index.html": 11
-  }
+  "controls": {}
 }

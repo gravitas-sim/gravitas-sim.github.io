@@ -7,6 +7,10 @@
 // its count lowered.
 // =============================================================================
 
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { describe, test, expect } from '@jest/globals';
 
 import {
@@ -17,7 +21,10 @@ import {
   countEmoji,
   countImportant,
   measure,
+  nativeControls,
 } from '../tools/design-ratchet.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 test('no file has more than its record, and none has fewer unrecorded', () => {
   expect(check()).toEqual([]);
@@ -27,7 +34,14 @@ test('it finds what it is looking for, so it cannot pass by matching nothing', (
   const now = measure();
   const total = kind => Object.values(now[kind]).reduce((a, b) => a + b, 0);
   expect(total('colors')).toBeGreaterThan(50);
-  expect(total('controls')).toBeGreaterThan(20);
+  // Every tool page's control has its class now, so the count of bare ones
+  // is zero; what proves the scan is looking is the controls it sees.
+  const seen = TOOL_PAGES.reduce(
+    (n, rel) =>
+      n + nativeControls(readFileSync(path.join(ROOT, rel), 'utf8')).length,
+    0
+  );
+  expect(seen).toBeGreaterThan(200);
   expect(TOOL_PAGES).toHaveLength(13);
 });
 
@@ -67,6 +81,16 @@ describe('what is counted', () => {
           '<!-- shell:header main=main --><select data-gs-lang></select><!-- /shell:header -->'
       )
     ).toBe(3);
+  });
+
+  test("a page's own class is not a component class", () => {
+    expect(
+      countBareControls(
+        '<textarea class="fb-code"></textarea>' +
+          '<input type="text" class="ui-input is-code">' +
+          '<select class="x ui-select"></select>'
+      )
+    ).toBe(1);
   });
 
   test('a file over or under its record is reported, and which', () => {

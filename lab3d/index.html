@@ -39,32 +39,9 @@
       /* A field's width comes from the bar, not from its control: WebKit
          sizes a select to its longest option (R6's title is long), and an
          automatic grid track grows to fit it. */
-      .lb-field {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        gap: 0.25rem;
-        min-width: 0;
+      .lb-bar > .ui-field {
         flex: 1 1 12rem;
         max-width: 100%;
-      }
-      /* WebKit lays a select's menu out wider than the select and counts
-         it as overflow; clip it inside the select (its focus ring is
-         outside, and stays). */
-      .lb-field select {
-        overflow: hidden;
-      }
-      .lb-field select,
-      .lb-field input {
-        width: 100%;
-        box-sizing: border-box;
-        min-width: 0;
-        max-width: 100%;
-        font: inherit;
-        color: inherit;
-        background: var(--surface-2);
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        padding: 0.35rem 0.45rem;
       }
       .lb-wrap section {
         margin: 1.5rem 0;
@@ -157,27 +134,27 @@ try {
       <section aria-labelledby="lb-run-h">
         <h2 id="lb-run-h" data-i18n="lab3d.run.heading">Run</h2>
         <div class="lb-bar">
-          <div class="lb-field">
+          <div class="ui-field">
             <label for="lb-problem" data-i18n="lab3d.problem">Problem</label>
-            <select id="lb-problem"></select>
+            <select class="ui-select" id="lb-problem"></select>
           </div>
-          <div class="lb-field" id="lb-file-row" hidden>
+          <div class="ui-field" id="lb-file-row" hidden>
             <label for="lb-file" data-i18n="lab3d.file">System file</label>
-            <input id="lb-file" type="file" accept="application/json,.json" />
+            <input class="ui-file" id="lb-file" type="file" accept="application/json,.json" />
           </div>
-          <div class="lb-field">
+          <div class="ui-field">
             <label for="lb-scheme" data-i18n="lab3d.scheme">Integrator</label>
-            <select id="lb-scheme"></select>
+            <select class="ui-select" id="lb-scheme"></select>
           </div>
-          <div class="lb-field">
+          <div class="ui-field">
             <label for="lb-step" data-i18n="lab3d.step">Step, or tolerance for Dormand-Prince</label>
-            <input id="lb-step" type="text" inputmode="decimal" value="0.001" />
+            <input class="ui-input" id="lb-step" type="text" inputmode="decimal" value="0.001" />
           </div>
-          <div class="lb-field" id="lb-span-row" hidden>
+          <div class="ui-field" id="lb-span-row" hidden>
             <label for="lb-span" data-i18n="lab3d.span">Span (time units)</label>
-            <input id="lb-span" type="text" inputmode="decimal" value="100" />
+            <input class="ui-input" id="lb-span" type="text" inputmode="decimal" value="100" />
             <label for="lb-samples" data-i18n="lab3d.samples">Samples</label>
-            <input id="lb-samples" type="text" inputmode="numeric" value="500" />
+            <input class="ui-input" id="lb-samples" type="text" inputmode="numeric" value="500" />
           </div>
           <button id="lb-go" type="button" class="ui-button is-primary" data-i18n="lab3d.go">Run</button>
           <button id="lb-cancel" type="button" class="ui-button" data-i18n="lab3d.cancel" disabled>Cancel</button>

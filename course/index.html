@@ -37,16 +37,6 @@
         align-items: center;
         margin: 0.75rem 0 1.5rem;
       }
-      .ch-bar select {
-        min-width: 0;
-        max-width: 100%;
-        font: inherit;
-        color: inherit;
-        background: var(--surface-2);
-        border: 1px solid var(--border-strong);
-        border-radius: 6px;
-        padding: 0.3rem 0.4rem;
-      }
       .ch-wrap h1 {
         margin: 0 0 0.5rem;
       }
@@ -211,7 +201,7 @@ try {
         data-i18n-aria-label="courseHome.controls"
       >
         <label for="ch-path" data-i18n="courseHome.show">Show</label>
-        <select id="ch-path">
+        <select class="ui-select is-inline" id="ch-path">
           <option value="all" data-i18n="courseHome.show.all">Every item</option>
           <option value="core" data-i18n="courseHome.show.core">The core only</option>
           <option value="intro" data-i18n="courseHome.show.intro">The core and the introductions</option>
@@ -223,7 +213,7 @@ try {
         </label>
         <button id="ch-print" type="button" class="ui-button" data-i18n="courseHome.print">Print the syllabus</button>
         <button id="ch-open" type="button" class="ui-button" data-i18n="courseHome.openFile">Open a course file</button>
-        <input id="ch-file" type="file" accept="application/json,.json" hidden />
+        <input class="ui-file" id="ch-file" type="file" accept="application/json,.json" hidden />
       </div>
 
       <p class="ch-print-only ch-muted" data-i18n="courseHome.printNote"></p>
