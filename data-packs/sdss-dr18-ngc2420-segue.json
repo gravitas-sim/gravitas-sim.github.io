@@ -345,8 +345,8 @@
   "offline": "optional",
   "derived": {
     "file": "js/data/observations/sdssNgc2420Segue.js",
-    "bytes": 23911,
-    "sha256": "dda89bc2fc31361fcaa9c4b12dd97521252e7d67a77d478d13b0f9fc565899e0"
+    "bytes": 24585,
+    "sha256": "3213d3d96c9f46958a8f6d6fc229a947f9e0e2556fdb9d61c0a89d5d6106fca7"
   },
   "validation": {
     "check": "the median radial velocity within 10 arcmin of the center is within 5 km/s of the cluster's",

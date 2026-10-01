@@ -172,6 +172,7 @@ export const GRAPH = Object.freeze([
       'package.json',
       'sw-manifest.js',
       'dist/build-summary.json',
+      'data-packs',
     ],
     outputs: ['manual/facts.tex', 'CITATION.cff', '.zenodo.json'],
     // Hand-written, with generated facts and blocks inside. Never resolved by
@@ -184,6 +185,8 @@ export const GRAPH = Object.freeze([
       'BRANCHING.md',
       'model/index.html',
       'paper.md',
+      'LICENSES.md',
+      'NOTICE',
     ],
     after: ['build', 'sw', 'manifest', 'scene', 'irreversible'],
   },

@@ -325,7 +325,7 @@
      "origin": "observation",
      "dataset": "js/data/gw/gwoscEvents.js",
      "via": "js/data/gw/gwoscEvents.js",
-     "binding": ".CITATION"
+     "binding": ".PACK"
     }
    ]
   },
@@ -755,7 +755,7 @@
      "origin": "observation",
      "dataset": "js/data/spectra/sdssSpectra.js",
      "via": "js/data/spectra/sdssSpectra.js",
-     "binding": ".CITATION"
+     "binding": ".PACK"
     }
    ]
   },
@@ -776,7 +776,7 @@
      "origin": "observation",
      "dataset": "js/data/spectra/sdssSpectra.js",
      "via": "js/data/spectra/sdssSpectra.js",
-     "binding": ".CITATION"
+     "binding": ".PACK"
     }
    ]
   },

@@ -4,8 +4,25 @@ A data pack is data that a lesson shows as coming from outside Gravitas, with
 the record of where it came from and what was done to it. The data might be an
 observation, a published model grid, or values compiled from papers. The format
 is `gravitas.observation-data-pack/1`, decided by
-[OBSERVATION_DATA_PACK_GATE.md](OBSERVATION_DATA_PACK_GATE.md). There is one
-pack so far: TESS's light curve of HD 209458.
+[OBSERVATION_DATA_PACK_GATE.md](OBSERVATION_DATA_PACK_GATE.md). Every dataset
+Gravitas shows as coming from outside it is a pack: twelve are built in, and
+the table below lists them. LICENSES.md and NOTICE carry the licence inventory,
+and the model page their badges, all generated from the manifests.
+
+| Pack | What it is | Origin | Module | Commands |
+|---|---|---|---|---|
+| `tess-hd209458-s56-lc` | TESS light curve of HD 209458 | observed | `js/data/observations/tessHd209458S56.js` | `packs:*` |
+| `tess-hd209458-s56-aperture` | its aperture mask | observed | `js/data/observations/tessHd209458S56Aperture.js` | `packs:*` |
+| `sdss-dr18-ngc2420-photometry` | SDSS photometry of NGC 2420 | observed | `js/data/observations/sdssNgc2420Photometry.js` | `packs:*` |
+| `sdss-dr18-ngc2420-segue` | SEGUE parameters of NGC 2420 | observed | `js/data/observations/sdssNgc2420Segue.js` | `packs:*` |
+| `mist-sdss-isochrones` | MIST isochrones in SDSS g and r | model | `js/data/observations/mistSdssIsochrones.js` | `packs:*` |
+| `sdss-dr18-stellar-spectra` | four SDSS DR18 spectra | observed | `js/data/spectra/sdssSpectra.js` | `spectra:*` |
+| `gwosc-five-events` | five GWOSC events, whitened strain | observed | `js/data/gw/gwoscEvents.js` | `gwosc:*` |
+| `gw150914-figure-data` | GW150914, the published figure data | observed | `js/data/gw/gw150914.js` | `gw:*` |
+| `mist-v12-tracks` | eight MIST v1.2 evolutionary tracks | model | `js/data/stellar/mistTracks.js` | `stellar:*` |
+| `exoplanet-systems` | HD 209458, and the Sun and Jupiter | compilation | `js/data/exoplanetSystems.js` | `packs:*` |
+| `trappist-1-system` | TRAPPIST-1 and its seven planets | compilation | `js/data/trappist1.js` | `packs:*` |
+| `ngc3198-synthetic-curve` | the NGC 3198 curve The Missing Mass fits | **synthetic** | `js/data/ngc3198Synthetic.js` | `packs:*` |
 
 ## Three files per pack
 
@@ -18,7 +35,18 @@ pack so far: TESS's light curve of HD 209458.
 The manifest and the runtime module are generated in one run of
 `tools/build-data-packs.mjs`. The capability package is hand-written and
 checked against them: the pack id, the provenance path and the offline class
-must agree.
+must agree. Only the packs a lesson reaches through `builtin:` have one (the
+TESS packs and the SDSS spectra); the others are reached by their
+instruments' own imports, or the Observatory's, and say `capability: null`.
+
+**Three kinds of runtime module.** The packs written for the format carry
+`PACK` and `SERIES`, as below. The four datasets that came before it (the
+SDSS spectra, the GWOSC events, GW150914 and the MIST tracks) keep the module
+shape their instruments have always read - `SPECTRA`, `EVENTS`, `TRACES`,
+`TRACKS` and their decoders, byte for byte - with `PACK`, the manifest's
+runtime fields, beside it in place of the private provenance object each used
+to carry. The two compilations are content modules written by hand, whose
+values' sources are in `js/data/realSystemSources.js`, with no `PACK` (below).
 
 **Pack modules carry no decoder.** Every pack is decoded by `js/observation.js`,
 which turns `PACK` and `SERIES` into the one in-memory observation every
@@ -42,7 +70,7 @@ this build doesn't know is refused, not guessed at.
 | Series | 1,882 twenty-minute bins in 5 runs (3 bins with fewer than 3 cadences dropped); flux as int16 ppm, error in 5 ppm steps |
 | Time | BTJD (BJD − 2457000), TDB |
 | Check | folding on 3.52474859 d (Knutson et al. 2007) gives a central depth of 0.01592, against (Rp/Rs)² = 0.0146 (Torres et al. 2008), within the 0.003 limb darkening allows |
-| Module | 10,710 bytes as committed (it carries its `reductions` since SDK 1.1.0); 9.1 KB minified |
+| Module | 11,063 bytes as committed (it carries its `reductions` since SDK 1.1.0, and its `citations` since 1.6.0); 9.1 KB minified before the citations |
 | Rights | public domain (NASA mission data); acknowledge TESS and MAST and cite doi:10.17909/t9-nmc8-f686. See NOTICE |
 | Offline | `optional`: precached at install, and a failed fetch does not fail the install |
 | Used by | the observatory (`/observatory/`), as its time series |
@@ -88,7 +116,7 @@ from.
 | World coordinates | the extension's TAN projection (CRPIX, CRVAL, CDELT, PC), 19.4 arcseconds a pixel |
 | Encoding | `image-uint16/1`: little-endian 16-bit pixels, row by row from the lowest (the FITS order); `js/observation.js` decodes it |
 | Check | the optimal aperture holds the 23 pixels the header's `NPIXSAP` counts; all 143 were collected; the flux-weighted-centroid pixels, projected through the WCS, centre 7.13 arcseconds from the target, against a pixel of about 19 |
-| Module | 4,131 bytes as committed |
+| Module | 4,719 bytes as committed, with its `citations` (SDK 1.6.0) |
 | Rights, offline | as the light-curve pack; a second pack in the same capability package (`gravitas.tess-hd209458-s56` 1.1.0) |
 
 The file carries no description of its own bits, so the meanings are the data
@@ -232,16 +260,105 @@ npm run packs:provenance
 
 Rebuilds every pack from the cached raw product and compares both files byte
 for byte. It fails, rather than passes, when the cache is empty. In the release
-gate this is the `packs-provenance` step, which runs under `--provenance`.
+gate this is the `packs-provenance` step, which runs under `--provenance`. The
+four datasets with commands of their own are rebuilt by those
+(`npm run spectra:provenance`, `gwosc:provenance`, `gw:provenance`,
+`stellar:provenance`), each a step of the same gate against its own cache, so
+an archive that is down is reported for itself; `node tools/build-data-packs.mjs
+--check --require-sources --all` rebuilds all twelve at once.
+
+## The datasets that came before packs
+
+Roadmap II Prompt 62 brought every dataset under the format. What each one
+gained, and what it lost:
+
+| Dataset | Before | Now |
+|---|---|---|
+| SDSS DR18 spectra | its own builder; the record a JS module (`sdssSpectraProvenance.js`) the SDK refused | manifest `data-packs/sdss-dr18-stellar-spectra.json`; the capability package names it, so `installedDataPack()` reads it; the readout's credit and the Observatory's citations come from `PACK` |
+| GWOSC five events | its own builder; the record a JS module (`gwoscEventsProvenance.js`) | manifest `data-packs/gwosc-five-events.json`, which also pins the five GWOSC event-API answers the catalog values were copied from and holds every copied value to them; each catalog paper now cites its own DOI, where the record had paired it with its strain release's |
+| GW150914 figure data | the hash of whatever was read, recorded, nothing compared on a fresh download; `PROVENANCE` inside the browser's module | the eight inputs pinned by size and SHA-256 (the hashes the record carried; a fresh download on 2026-10-01 matched each); manifest `data-packs/gw150914-figure-data.json`; the module carries `PACK` and `FINDINGS` |
+| MIST v1.2 tracks | a fresh download used unchecked; `PROVENANCE` inside the browser's module | the tarball checked against its pin on every read; the tracks extracted into a fresh directory on every build; manifest `data-packs/mist-v12-tracks.json`; the module carries `PACK`, whose `model` the Stellar Lab reads |
+| HD 209458 and the Sun and Jupiter | no citation at all | `origin: compilation`, `data-packs/exoplanet-systems.json`; every value held to a pinned table and cited, field by field, in `js/data/realSystemSources.js` |
+| TRAPPIST-1 | three papers named in a comment, one of them wrongly | `origin: compilation`, `data-packs/trappist-1-system.json`, the same way |
+| NGC 3198 | a literal inside `js/darkMatterWidgets.js` | `origin: synthetic`, `data-packs/ngc3198-synthetic-curve.json`, with its generating model and scatter; `js/data/ngc3198Synthetic.js` |
+
+The browser's data did not change: every data export of the four older
+modules (the spectra, the events, the traces, the tracks, their grids, ids and
+decoders) is byte for byte what it was, and only the provenance object beside
+it became `PACK`. Each keeps its own cache directory (`.sdss-cache/`,
+`.gwosc-cache/`, `.gw-cache/`, `.mist-cache/`) and its own commands, which
+now run the same build, check and rebuild as every pack
+(`tools/build-data-packs.mjs` `runDataset()`), with the transformation in
+`tools/data-packs/`. Raw products are fetched and checked by the one helper,
+`tools/data-packs/pinned.mjs`, which replaced the four builders' copies.
+
+### The compilations: a citation per value
+
+`js/data/exoplanetSystems.js` and `js/data/trappist1.js` are written by hand,
+and stay so, byte for byte but for a comment. Every real-system object in them
+has its sources in `js/data/realSystemSources.js`, keyed by where the object
+is: `[{text, doi | bibcode | url, fields}]`, each paper and the fields it
+gives. `tools/data-packs/compilations.mjs` reads every value and finds it in a
+pinned copy of the table it cites - the NASA Exoplanet Archive's Planetary
+Systems table, SIMBAD, NASA's Jupiter fact sheet, JPL's mean elements - and
+fails unless the module's value is the published one rounded to the digits it
+keeps, and unless the sources name that table's paper for that field. The
+manifest records each value, the row and column it was found in, and what the
+table said.
+
+A value no cited table gives is marked `approximate, unsourced` rather than
+given a source it does not have: three in the Sun-Jupiter comparison (the
+Sun's spectral type, Jupiter's 5.2028 AU, which is JPL's 5.20288700 cut short,
+and its eccentricity, 0.0489 against the fact sheet's 0.0487) and one for
+TRAPPIST-1 (planet g's period). A unit (one solar mass) or a choice the
+scenario makes (the Sun seen from ten parsecs) is said to be one.
+
+The same module holds the sources of every real-system table in
+`js/world/build.js` - the Solar System's planets, asteroids and comets, the
+Kuiper belt, the habitable-zone and resonance worlds - compared on 2026-10-01
+with NASA's fact sheets, JPL's elements and the JPL Small-Body Database. Many
+of the small bodies' values match none of them and say so. The author check's
+attribution rule (`tools/authoring/realSystems.mjs`) requires an entry for
+every one of these objects, naming every value on it; a captured frame's
+provenance line prints a one-line summary for the scenario on screen
+(`SCENARIO_SOURCES`, js/sandboxTools.js); the model page lists them all.
+
+**Why beside the objects and not on them.** Roadmap II Prompt 62 asks for a
+`sources` field on every real-system parameter object. Written onto the
+objects, the sources cost the experiment runner's route 14.6 KB and a request
+it does not have (1122.7 KB and 48 requests against ceilings of 1109 and 47),
+because the objects live in modules every world builder loads. No ceiling is
+raised to fit a feature, so they live in a module nothing in the application
+imports, and the objects are unchanged. Putting them on the objects is a
+decision for Carl: it needs the experiments route's ceiling raised.
+
+### NGC 3198: synthetic, and a pack so it can say so
+
+The curve *The Missing Mass* is fitted to is a model: a bulge, a Freeman disc
+and a pseudo-isothermal halo built to resemble NGC 3198 as van Albada et al.
+(1985) describe it - their 2.68 kpc disc scale length (2.6 here), a curve flat
+near 150 km/s, measured to 30 kpc - plus a scatter of a few km/s written out
+point by point, so the fit has an exact answer. It is a pack of
+`origin: synthetic`, whose manifest and runtime copy record that model
+(`model.name`, `model.parameters`, `model.scatter`), so the panel, the lesson
+and the model page's badge can all say what it is.
+
+No published NGC 3198 curve ships beside it. Van Albada et al.'s table 2 and
+the THINGS curve (de Blok et al. 2008) are candidates for an `observed` pack,
+and their redistribution terms have not been confirmed; a pack is not added
+before its rights are.
 
 ## Rules the format enforces
 
 The rules are in `tools/data-packs/schema.mjs`; the tests are
 `tests/dataPacks.test.js`.
 
-- **Synthetic data is refused**, however complete its manifest is. A lesson
-  that needs made-up numbers labels them itself. A pack is how a lesson says it
-  is showing something real.
+- **Synthetic data is refused unless the manifest records the model that made
+  it**: `model.name`, `model.parameters` and `model.scatter`. Its runtime copy
+  must carry `model` too, so no interface can show the numbers without saying
+  what they are. Until Roadmap II Prompt 62 synthetic data was refused
+  outright; binding decision 7 of that roadmap admits it on these terms, and
+  DECISION_REGISTER.md records the change for review.
 - **Every raw input is pinned**, by byte count and SHA-256, or by a named
   canonical form for sources that aren't byte-stable.
   - Pins are compared on a fresh download as well as on the cached copy, and
@@ -277,7 +394,8 @@ The rules are in `tools/data-packs/schema.mjs`; the tests are
 2. **Add an entry to `PACKS`** in `tools/build-data-packs.mjs`. It needs:
    - the raw pin, the options, and the published values the check uses;
    - `build()`, which returns the runtime metadata, the rest of the manifest
-     and the series;
+     and the series - or, for a pack whose module keeps a shape of its own,
+     `render(PACK)`, which writes that module around the `PACK` it is given;
    - `validate()`, the scientific check. It runs on the decoded pack, so CI
      checks the science without the raw file.
 3. **Write the capability package** and add its `builtin:` entry to
@@ -295,22 +413,6 @@ The rules are in `tools/data-packs/schema.mjs`; the tests are
 
 Don't commit a raw product. Don't commit a derivative before its redistribution
 rights are confirmed and recorded in the manifest.
-
-## Migrating the datasets that came before packs
-
-Four datasets were built before this format. Each has its own tool, provenance
-shape and decoder. None is converted by the change that introduced packs. When
-one is migrated, it follows the rule for its kind. The gate's retrofit gives
-exactly what each dataset still lacks.
-
-| Dataset | Rule |
-|---|---|
-| SDSS DR18 spectra (`js/data/spectra/`) | Closest to a pack already: a capability package, a separate provenance module, pinned raw hashes, payload hashes. Give `tools/build-sdss-spectra.mjs` a version and have it write the manifest beside the provenance module. Point the package's `provenance` at the manifest. Keep `sdssSpectraProvenance.js` as the per-spectrum record. Add a `spectrum` encoding to `js/observation.js` when an instrument reads spectra through it. |
-| GWOSC five events (`js/data/gw/gwoscEvents.js`) | The same as SDSS: pins and payload hashes already exist. It needs a tool version, a manifest and a capability package. The per-event record stays where it is. |
-| GW150914 figure data (`js/data/gw/gw150914.js`) | First **pin** the eight inputs. Today the tool records the hash of whatever it read and compares nothing on a fresh download. Move the fetch to `pinnedBytes()`, record a retrieval date, then as above. |
-| MIST v1.2 tracks (`js/data/stellar/mistTracks.js`) | First make a fresh download check its pin: `ensureGrid()` checks only a cached tarball. Record a retrieval date. It is `origin: model`, not an observation, and the manifest says so. |
-| TRAPPIST-1 and the exoplanet systems (`js/data/trappist1.js`, `js/data/exoplanetSystems.js`) | `origin: compilation`. They need a small tool that writes each value from a cited table, and a citation per value. The exoplanet module has none. Until then they stay content modules and are not packs. |
-| NGC 3198 in *The Missing Mass* | **Not a pack: the curve is synthetic.** The lesson must say so on the fitting panel, as the MOND panel already does. Published curves (for example THINGS, de Blok et al. 2008) would be a new pack, with its own gate. |
 
 ## Not supported
 

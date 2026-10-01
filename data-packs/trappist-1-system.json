@@ -1,0 +1,414 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "trappist-1-system",
+  "version": "1.0.0",
+  "title": "TRAPPIST-1: the star and its seven planets, compiled from the literature",
+  "object": {
+    "name": "TRAPPIST-1",
+    "identifiers": [
+      "TRAPPIST-1",
+      "2MASS J23062928-0502285"
+    ]
+  },
+  "facility": {
+    "observatory": "compiled from the literature",
+    "pipeline": "NASA Exoplanet Archive and SIMBAD tables, read 2026-10-01"
+  },
+  "dataType": "system-parameters",
+  "origin": "compilation",
+  "license": {
+    "status": "attribution-requested",
+    "statement": "Published values, each cited to its paper; the NASA Exoplanet Archive and SIMBAD ask that work using them acknowledge them (NOTICE).",
+    "basis": "A few dozen numbers, each a published measurement cited to the paper that published it, read from the archives’ public tables. No table or text of anyone’s is reproduced, and the archives ask for acknowledgement, not a licence."
+  },
+  "retrieved": "2026-10-01",
+  "masks": [],
+  "reductions": [
+    "Each value is kept to the digits the simulation and the lessons use: the published value rounded, never cut short."
+  ],
+  "credit": "Compiled from Agol et al. 2021; Gillon et al. 2016; Gaia EDR3 parallax; Gillon et al. 2017; Ducrot et al. 2020; Grimm et al. 2018",
+  "columns": [
+    {
+      "name": "value",
+      "unit": "",
+      "description": "per parameter, in the unit its name gives (massSolar, periodDays, …)"
+    }
+  ],
+  "source": {
+    "archive": "NASA Exoplanet Archive; SIMBAD; NASA NSSDCA; JPL SSD",
+    "urls": [
+      "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name%2Cpl_refname%2Cpl_orbper%2Cpl_orbsmax%2Cpl_rade%2Cpl_bmasse%2Cst_teff%2Cst_rad%2Cst_mass%2Cst_lum+from+ps+where+hostname%3D%27TRAPPIST-1%27+order+by+pl_name%2Cpl_refname&format=csv",
+      "https://simbad.cds.unistra.fr/simbad/sim-tap/sync?request=doQuery&lang=adql&format=csv&query=SELECT+main_id%2C+plx_value%2C+plx_err%2C+plx_bibcode%2C+sp_type%2C+sp_bibcode+FROM+basic+JOIN+ident+ON+oidref%3Doid+WHERE+id+%3D+%27TRAPPIST-1%27"
+    ],
+    "citations": [
+      {
+        "text": "Agol et al. 2021, PSJ 2, 1",
+        "doi": "10.3847/PSJ/abd022"
+      },
+      {
+        "text": "Gillon et al. 2016, Nature 533, 221",
+        "doi": "10.1038/nature17448"
+      },
+      {
+        "text": "Gaia EDR3 parallax, 80.2123 mas, via SIMBAD (Gaia Collaboration 2021, A&A 649, A1)",
+        "doi": "10.1051/0004-6361/202039657"
+      },
+      {
+        "text": "Gillon et al. 2017, Nature 542, 456",
+        "doi": "10.1038/nature21360"
+      },
+      {
+        "text": "Ducrot et al. 2020, A&A 640, A112",
+        "doi": "10.1051/0004-6361/201937392"
+      },
+      {
+        "text": "Grimm et al. 2018, A&A 613, A68",
+        "doi": "10.1051/0004-6361/201732233"
+      },
+      {
+        "text": "NASA Exoplanet Archive, Planetary Systems table (NASA Exoplanet Science Institute 2020)",
+        "doi": "10.26133/NEA12"
+      },
+      {
+        "text": "Christiansen et al. 2025, PSJ 6, 186 (the NASA Exoplanet Archive)",
+        "doi": "10.3847/psj/ade3c2"
+      },
+      {
+        "text": "Wenger et al. 2000, A&AS 143, 9 (SIMBAD)",
+        "doi": "10.1051/aas:2000332"
+      }
+    ],
+    "acknowledgement": "This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program. This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France."
+  },
+  "raw": [
+    {
+      "file": "nea-ps-trappist1.csv",
+      "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name%2Cpl_refname%2Cpl_orbper%2Cpl_orbsmax%2Cpl_rade%2Cpl_bmasse%2Cst_teff%2Cst_rad%2Cst_mass%2Cst_lum+from+ps+where+hostname%3D%27TRAPPIST-1%27+order+by+pl_name%2Cpl_refname&format=csv",
+      "bytes": 8448,
+      "sha256": "8e066be6da176d2285333312ff13d941b5ed3875a03a1e3df5f37465c9ebd6e7"
+    },
+    {
+      "file": "simbad-trappist1.csv",
+      "url": "https://simbad.cds.unistra.fr/simbad/sim-tap/sync?request=doQuery&lang=adql&format=csv&query=SELECT+main_id%2C+plx_value%2C+plx_err%2C+plx_bibcode%2C+sp_type%2C+sp_bibcode+FROM+basic+JOIN+ident+ON+oidref%3Doid+WHERE+id+%3D+%27TRAPPIST-1%27",
+      "bytes": 137,
+      "sha256": "d831247c6ea27907d6acaf854e36642bd81de724073497e48ebc5f679a337e86"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/compilations.mjs",
+    "version": "1.0.0",
+    "options": {},
+    "steps": [
+      "Read each value from the hand-written module.",
+      "Find it in the pinned table its source names, at the row and column recorded beside it.",
+      "Refuse a value that is not the published one rounded to the places the module keeps, and a source list on the object that does not say which source each value has."
+    ]
+  },
+  "values": [
+    {
+      "object": "TRAPPIST1_STAR",
+      "field": "massInSuns",
+      "value": 0.0898,
+      "found": 0.0898,
+      "where": "TRAPPIST-1 b, AGOL_ET_AL__2021, st_mass",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_STAR",
+      "field": "radiusInSuns",
+      "value": 0.1192,
+      "found": 0.1192,
+      "where": "TRAPPIST-1 b, AGOL_ET_AL__2021, st_rad",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_STAR",
+      "field": "luminosityInSuns",
+      "value": 0.000553,
+      "found": 0.0005530061995,
+      "where": "TRAPPIST-1 b, AGOL_ET_AL__2021, st_lum",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_STAR",
+      "field": "temperatureK",
+      "value": 2566,
+      "found": 2566,
+      "where": "TRAPPIST-1 b, AGOL_ET_AL__2021, st_teff",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_STAR",
+      "field": "spectralType",
+      "value": "M8V",
+      "where": "“an M8.0 ± 0.5-type dwarf star”, in the text of the paper (read 2026-10-01)",
+      "cite": "gillon2016"
+    },
+    {
+      "object": "TRAPPIST1_STAR",
+      "field": "distanceLightYears",
+      "value": 40.7,
+      "found": 40.66164138,
+      "where": "SIMBAD, TRAPPIST-1, plx_value (Gaia EDR3), as light years",
+      "cite": "gaiaEdr3"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.b",
+      "field": "a",
+      "value": 0.0115,
+      "found": 0.01154,
+      "where": "TRAPPIST-1 b, AGOL_ET_AL__2021, pl_orbsmax",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.b",
+      "field": "mass",
+      "value": 1.374,
+      "found": 1.374,
+      "where": "TRAPPIST-1 b, AGOL_ET_AL__2021, pl_bmasse",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.b",
+      "field": "radius",
+      "value": 1.116,
+      "found": 1.116,
+      "where": "TRAPPIST-1 b, AGOL_ET_AL__2021, pl_rade",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.b",
+      "field": "periodDays",
+      "value": 1.5109,
+      "found": 1.51087081,
+      "where": "TRAPPIST-1 b, GILLON_ET_AL__2017, pl_orbper",
+      "cite": "gillon2017"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.c",
+      "field": "a",
+      "value": 0.0158,
+      "found": 0.0158,
+      "where": "TRAPPIST-1 c, AGOL_ET_AL__2021, pl_orbsmax",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.c",
+      "field": "mass",
+      "value": 1.308,
+      "found": 1.308,
+      "where": "TRAPPIST-1 c, AGOL_ET_AL__2021, pl_bmasse",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.c",
+      "field": "radius",
+      "value": 1.097,
+      "found": 1.097,
+      "where": "TRAPPIST-1 c, AGOL_ET_AL__2021, pl_rade",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.c",
+      "field": "periodDays",
+      "value": 2.4218,
+      "found": 2.4218233,
+      "where": "TRAPPIST-1 c, GILLON_ET_AL__2017, pl_orbper",
+      "cite": "gillon2017"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.d",
+      "field": "a",
+      "value": 0.0223,
+      "found": 0.02227,
+      "where": "TRAPPIST-1 d, AGOL_ET_AL__2021, pl_orbsmax",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.d",
+      "field": "mass",
+      "value": 0.388,
+      "found": 0.388,
+      "where": "TRAPPIST-1 d, AGOL_ET_AL__2021, pl_bmasse",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.d",
+      "field": "radius",
+      "value": 0.788,
+      "found": 0.788,
+      "where": "TRAPPIST-1 d, AGOL_ET_AL__2021, pl_rade",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.d",
+      "field": "periodDays",
+      "value": 4.0496,
+      "found": 4.04961,
+      "where": "TRAPPIST-1 d, GILLON_ET_AL__2017, pl_orbper",
+      "cite": "gillon2017"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.e",
+      "field": "a",
+      "value": 0.0292,
+      "found": 0.02924,
+      "where": "TRAPPIST-1 e, DUCROT_ET_AL__2020, pl_orbsmax",
+      "cite": "ducrot2020"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.e",
+      "field": "mass",
+      "value": 0.692,
+      "found": 0.692,
+      "where": "TRAPPIST-1 e, AGOL_ET_AL__2021, pl_bmasse",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.e",
+      "field": "radius",
+      "value": 0.92,
+      "found": 0.92,
+      "where": "TRAPPIST-1 e, AGOL_ET_AL__2021, pl_rade",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.e",
+      "field": "periodDays",
+      "value": 6.0996,
+      "found": 6.099615,
+      "where": "TRAPPIST-1 e, GILLON_ET_AL__2017, pl_orbper",
+      "cite": "gillon2017"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.f",
+      "field": "a",
+      "value": 0.0385,
+      "found": 0.03849,
+      "where": "TRAPPIST-1 f, AGOL_ET_AL__2021, pl_orbsmax",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.f",
+      "field": "mass",
+      "value": 1.039,
+      "found": 1.039,
+      "where": "TRAPPIST-1 f, AGOL_ET_AL__2021, pl_bmasse",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.f",
+      "field": "radius",
+      "value": 1.045,
+      "found": 1.045,
+      "where": "TRAPPIST-1 f, AGOL_ET_AL__2021, pl_rade",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.f",
+      "field": "periodDays",
+      "value": 9.2067,
+      "found": 9.20669,
+      "where": "TRAPPIST-1 f, GILLON_ET_AL__2017, pl_orbper",
+      "cite": "gillon2017"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.g",
+      "field": "a",
+      "value": 0.0469,
+      "found": 0.04687692,
+      "where": "TRAPPIST-1 g, GRIMM_ET_AL__2018, pl_orbsmax",
+      "cite": "grimm2018"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.g",
+      "field": "mass",
+      "value": 1.321,
+      "found": 1.321,
+      "where": "TRAPPIST-1 g, AGOL_ET_AL__2021, pl_bmasse",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.g",
+      "field": "radius",
+      "value": 1.129,
+      "found": 1.129,
+      "where": "TRAPPIST-1 g, AGOL_ET_AL__2021, pl_rade",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.g",
+      "field": "periodDays",
+      "value": 12.3535,
+      "unsourced": "Agol et al. 2021 give 12.352446 d, Gillon et al. 2017 12.35294 and Ducrot et al. 2020 12.3535557: the stored 12.3535 is none of them to its places",
+      "nearest": 12.3535557
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.h",
+      "field": "a",
+      "value": 0.0619,
+      "found": 0.06189,
+      "where": "TRAPPIST-1 h, AGOL_ET_AL__2021, pl_orbsmax",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.h",
+      "field": "mass",
+      "value": 0.326,
+      "found": 0.326,
+      "where": "TRAPPIST-1 h, AGOL_ET_AL__2021, pl_bmasse",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.h",
+      "field": "radius",
+      "value": 0.755,
+      "found": 0.755,
+      "where": "TRAPPIST-1 h, AGOL_ET_AL__2021, pl_rade",
+      "cite": "agol2021"
+    },
+    {
+      "object": "TRAPPIST1_PLANETS.h",
+      "field": "periodDays",
+      "value": 18.7729,
+      "found": 18.772866,
+      "where": "TRAPPIST-1 h, AGOL_ET_AL__2021, pl_orbper",
+      "cite": "agol2021"
+    }
+  ],
+  "assumptions": [
+    "Each value is the published one, rounded; a value no cited table gives is marked approximate and unsourced in the module, on the object it belongs to.",
+    "A unit (one solar mass) or a choice the scenario makes (the Sun seen from ten parsecs) is said to be one, not cited as a measurement."
+  ],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "core",
+  "derived": {
+    "file": "js/data/trappist1.js",
+    "bytes": 2249,
+    "sha256": "2415ae3e0f36803a622b83ad16a883c83c242b473490f497443089a5f8ad6eed"
+  },
+  "validation": {
+    "check": "Kepler’s third law closes on the stored values for all seven planets: a^3 / P^2, in AU and years, is the star’s mass to within 3 per cent",
+    "against": [
+      {
+        "quantity": "a^3 / P^2 / M",
+        "value": 1,
+        "unit": "",
+        "ref": "Kepler’s third law, the planets’ masses neglected"
+      }
+    ],
+    "result": {
+      "b": 0.9898,
+      "c": 0.9991,
+      "d": 1.0046,
+      "e": 0.9941,
+      "f": 1.0002,
+      "g": 1.0043,
+      "h": 0.9998
+    }
+  }
+}

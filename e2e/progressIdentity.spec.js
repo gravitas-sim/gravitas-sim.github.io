@@ -157,6 +157,15 @@ test.describe('saved progress is keyed by stable id', () => {
     await openLesson(page, app);
     await answerAndAdvance(page);
     await answerAndAdvance(page);
+    // The step this lands on has an instrument, and its family is fetched on
+    // demand. When it arrives the panel draws its sliders and saves their
+    // settings in the same task, under this step's sid. Read the save before
+    // that and `before` is missing them; let the fetch land before the reload
+    // and the store gains them, and the comparison fails over five keys no
+    // language switch touched. So wait for the sliders, which are only drawn
+    // in the call that saves them.
+    const instrument = page.locator('#investigationToolControls input').first();
+    await expect(instrument).toBeVisible();
     await expect.poll(async () => (await stored(page))?.schema).toBe(2);
     const before = (await stored(page)).responses;
 
@@ -169,6 +178,9 @@ test.describe('saved progress is keyed by stable id', () => {
     await page.locator('#investigationsBtn').click();
     await page.locator(`[data-investigation="${LESSON}"]`).click();
     await expect(page.locator('#investigationPanel')).toBeVisible();
+    // And the Spanish page has saved this step for itself, so what is compared
+    // below is its save and not the English one it inherited.
+    await expect(instrument).toBeVisible();
 
     // Same keys, because a sid is not a word.
     expect((await stored(page)).responses).toEqual(before);

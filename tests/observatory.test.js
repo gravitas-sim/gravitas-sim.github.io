@@ -47,13 +47,16 @@ import {
 import { separation, skyOf, unusableWcs } from '../js/observatory/wcs.js';
 import {
   FIXTURES,
-  GWOSC_CATALOGS,
   SDSS_STARS,
   openFixture,
 } from '../js/observatory/fixtures.js';
 import { fromCsv } from '../js/csv.js';
-import { RECORDS as SDSS_RECORDS } from '../js/data/spectra/sdssSpectraProvenance.js';
-import { PROVENANCE as GWOSC_PROVENANCE } from '../js/data/gw/gwoscEventsProvenance.js';
+/** A data pack's manifest, the record a fixture's copied values come from. */
+const manifestOf = id =>
+  JSON.parse(
+    readFileSync(new URL(`../data-packs/${id}.json`, import.meta.url), 'utf8')
+  );
+const SDSS_RECORDS = manifestOf('sdss-dr18-stellar-spectra').records;
 
 const unit = s => parseUnit(s).unit;
 
@@ -732,7 +735,7 @@ describe('world coordinates', () => {
 });
 
 describe('the fixtures are the data they say they are', () => {
-  test('every SDSS position and redshift is the provenance record’s', async () => {
+  test('every SDSS position and redshift is the manifest record’s', async () => {
     for (const [id, star] of Object.entries(SDSS_STARS)) {
       const r = SDSS_RECORDS[id];
       expect([id, star]).toEqual([id, { ra: r.ra, dec: r.dec, z: r.z }]);
@@ -742,13 +745,16 @@ describe('the fixtures are the data they say they are', () => {
     }
   });
 
-  test('every GWOSC citation and the licence are the provenance record’s', async () => {
-    const catalogs = GWOSC_PROVENANCE.archive.catalogs;
-    for (const [id, c] of Object.entries(GWOSC_CATALOGS)) {
-      expect(c).toEqual({ text: catalogs[id].paper, url: catalogs[id].doi });
-    }
+  test('every GWOSC citation and the licence are the manifest’s', async () => {
+    const m = manifestOf('gwosc-five-events');
     const o = await openFixture('gwosc-events');
-    expect(GWOSC_PROVENANCE.archive.license).toContain('CC BY 4.0');
+    expect(o.citations.map(c => c.text)).toEqual(
+      m.source.citations.map(c => c.text)
+    );
+    expect(o.citations.map(c => c.url)).toEqual(
+      m.source.citations.map(c => `https://doi.org/${c.doi}`)
+    );
+    expect(o.license).toEqual(m.license);
     expect(o.license.status).toBe('cc-by-4.0');
     // The first row is GW150914, 34.6 (-2.6, +4.4) solar masses, as GWOSC has it.
     expect(columnOf(o, 'event').values[0]).toBe('GW150914');

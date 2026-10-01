@@ -31,18 +31,25 @@
 // On the "observed" curve in dm-fit
 // -----------------------------------------------------------------------------
 // It is synthetic, and both panels that plot it (dm-fit and dm-mond) say so on
-// the canvas, through syntheticLabel(). It is built from NGC 3198's published
-// structural parameters - a 2.6 kpc disc scale length and a 150 km/s asymptotic
-// speed, measured out to about 30 kpc - rather than transcribed from anyone's
-// data table, with a fixed scatter of a few km/s so it reads as measurement. The
-// consequence is that the exercise has an exact right answer, which is what makes
-// it a fitting game rather than a shrug, and no number is attributed to a paper
-// that did not publish it. The words around it must not call it measured either:
-// the lesson and the panel note say what it was built from.
+// the canvas, through syntheticLabel(). It is the data pack
+// js/data/ngc3198Synthetic.js, `origin: synthetic`, whose manifest
+// (data-packs/ngc3198-synthetic-curve.json) records the model that made it: a
+// model galaxy built to resemble NGC 3198 as van Albada et al. (1985) describe
+// it - their 2.68 kpc disc scale length (2.6 here), a curve flat near 150 km/s,
+// measured to 30 kpc - with a fixed scatter of a few km/s written out. The
+// bulge mass, disc mass and halo core are the model's own choices. The
+// consequence is that the exercise has an exact right answer, which is what
+// makes it a fitting game rather than a shrug, and no number is attributed to
+// a paper that did not publish it. The words around it must not call it
+// measured either: the lesson and the panel note say what it was built from.
 // =============================================================================
 
 // Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
 import './instrumentStartup.js';
+import {
+  PACK as NGC3198_PACK,
+  POINTS as NGC3198_POINTS,
+} from './data/ngc3198Synthetic.js';
 import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
 import { scientific, decimal, withUnit } from './format.js';
 import { t } from './i18n/index.js';
@@ -943,44 +950,21 @@ const ENCLOSED = {
 // curve, and discovering that by failing to do it is worth more than being told.
 
 /**
- * The model the synthetic curve is generated from.
- *
- * Built from NGC 3198's published structural parameters rather than from anyone's
- * data table: a 2.6 kpc exponential disc scale length, an asymptotic speed near
- * 150 km/s, and a curve measured out to about 30 kpc. The halo core radius is
- * chosen to put the decomposition in the usual place, where the disc dominates
- * inside about 8 kpc and the halo takes over outside it.
+ * The model the synthetic curve is generated from: the synthetic data pack's
+ * own record of it (PACK.model.parameters). Built to resemble NGC 3198 - see
+ * the note at the top of this file. The halo core radius is chosen to put the
+ * decomposition in the usual place, where the disc dominates inside about
+ * 8 kpc and the halo takes over outside it.
  */
-const NGC3198 = {
-  bulgeMass: 0.05e10,
-  discMass: 3.3e10,
-  discScale: 2.6,
-  haloVFlat: 150,
-  haloCore: 6,
-};
+const NGC3198 = { ...NGC3198_PACK.model.parameters };
 
 /**
- * The synthetic observed curve, with a fixed scatter so it reads as measurement.
- *
- * The offsets are written out rather than generated, because a random scatter
- * would give every student a different galaxy and a fitting exercise needs a
- * fixed target. Errors grow outward, as they do in a real curve: the outer
- * points come from fainter gas over a longer integration.
+ * The synthetic observed curve: the pack's written-out scatter, added to the
+ * model. Written out rather than generated, because a random scatter would
+ * give every student a different galaxy and a fitting exercise needs a fixed
+ * target. Errors grow outward, as they do in a real curve.
  */
-const NGC3198_OBSERVED = [
-  { r: 1, off: 2, err: 3 },
-  { r: 2, off: -3, err: 3 },
-  { r: 3, off: 1, err: 3 },
-  { r: 4, off: 3, err: 3 },
-  { r: 6, off: -2, err: 4 },
-  { r: 8, off: 2, err: 4 },
-  { r: 11, off: -3, err: 5 },
-  { r: 14, off: 1, err: 5 },
-  { r: 18, off: 2, err: 6 },
-  { r: 22, off: -2, err: 6 },
-  { r: 26, off: 1, err: 7 },
-  { r: 30, off: -1, err: 7 },
-].map(p => ({
+const NGC3198_OBSERVED = NGC3198_POINTS.map(p => ({
   r: p.r,
   v: galaxyCurveAt(p.r, NGC3198).total + p.off,
   err: p.err,

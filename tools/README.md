@@ -17,16 +17,16 @@ current, and the orchestrator checks it.
 | `body-shots.mjs` | Reference captures of the bodies, for a before-and-after on their drawing |  |
 | `build-data-packs.mjs` | Observation data packs: build, check, reproduce | `npm run packs:data`, `npm run packs:provenance`, `npm run packs:check` |
 | `build-ephemeris.mjs` | The educational ephemeris pack, from JPL Horizons | `npm run ephemeris:data`, `npm run ephemeris:check`, `npm run ephemeris:provenance` |
-| `build-gw-data.mjs` | Bundle the published GW150914 figure data | `npm run gw:data`, `npm run gw:provenance`, `npm run gw:check` |
-| `build-gwosc-events.mjs` | Five gravitational-wave events, from GWOSC strain | `npm run gwosc:data`, `npm run gwosc:provenance`, `npm run gwosc:check` |
+| `build-gw-data.mjs` | The published GW150914 figure data, as a data pack | `npm run gw:data`, `npm run gw:provenance`, `npm run gw:check` |
+| `build-gwosc-events.mjs` | The five GWOSC events, as a data pack | `npm run gwosc:data`, `npm run gwosc:provenance`, `npm run gwosc:check` |
 | `build-instructor-materials.js` | Build the instructor materials, and encrypt them. | `npm run build`, `npm run build:instructors`, `npm run instructors:validate`, `npm run instructors:restamp`, `npm run build:ci` |
 | `build-investigation-manifest.js` | Generate js/data/investigations/manifest.js | `npm run manifest` |
 | `build-irreversibility-audit.mjs` | npm run audit:irreversible  /  npm run audit:irreversible -- --check | `npm run audit:irreversible` |
 | `build-lesson-translation-skeleton.mjs` | Skeleton for a lesson translation |  |
 | `build-manual.mjs` | Build the user manual | `npm run manual` |
-| `build-sdss-spectra.mjs` | Bundle four observed stellar spectra from the SDSS archive | `npm run spectra:data`, `npm run spectra:provenance`, `npm run spectra:check` |
+| `build-sdss-spectra.mjs` | The four SDSS DR18 spectra, as a data pack | `npm run spectra:data`, `npm run spectra:provenance`, `npm run spectra:check` |
 | `build-service-worker.mjs` | Generate the service worker's precache manifest. | `npm run build`, `npm run build:ci`, `npm run sw:manifest` |
-| `build-stellar-tracks.mjs` | Bundle a curated subset of the MIST stellar evolution tracks | `npm run stellar:data`, `npm run stellar:provenance`, `npm run stellar:check` |
+| `build-stellar-tracks.mjs` | The MIST v1.2 tracks, as a data pack | `npm run stellar:data`, `npm run stellar:provenance`, `npm run stellar:check` |
 | `build-teaching-demos.mjs` | The showcase page's demonstration links | `npm run teaching:data` |
 | `build-tools-index.mjs` | tools/README.md, from the tools' own headers |  |
 | `build-validation-data.mjs` | npm run validation:data | `npm run validation:data` |

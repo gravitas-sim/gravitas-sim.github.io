@@ -83,6 +83,31 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `tests/fixtures/archive/gaia-epphot-su-dra.vot` | one Gaia DR3 epoch-photometry answer from CDS VizieR, kept for tests | CC BY-NC 3.0 IGO; credit ESA/Gaia/DPAC, see NOTICE |
 | `tests/fixtures/archive/sesame-su-dra.xml` | one CDS Sesame answer, kept for tests | a position and names from SIMBAD; acknowledge CDS, see NOTICE |
 
+### Data packs
+
+Every dataset Gravitas shows as coming from outside it is a data pack
+(DATA_PACKS.md), and its manifest in `data-packs/` records its licence status
+and, where the status is not a licence, the basis for redistributing it. This
+table is generated from those manifests (`npm run docs:sync`), so it cannot
+say something different from them; NOTICE lists what each one cites.
+
+<!--fact-block:dataPackLicenses-->
+| File | Pack | Origin | Status |
+| --- | --- | --- | --- |
+| `js/data/exoplanetSystems.js` | HD 209458 and the Sun and Jupiter: parameters compiled from the literature (`exoplanet-systems`) | compilation | no license; attribution requested; see NOTICE |
+| `js/data/gw/gw150914.js` | GW150914: the published figure data (`gw150914-figure-data`) | observed | CC BY 4.0; see NOTICE |
+| `js/data/gw/gwoscEvents.js` | Five gravitational-wave events: whitened GWOSC strain (`gwosc-five-events`) | observed | CC BY 4.0; see NOTICE |
+| `js/data/observations/mistSdssIsochrones.js` | MIST v1.2 isochrones in the SDSS bands (a model) (`mist-sdss-isochrones`) | model | no license stated; see NOTICE |
+| `js/data/stellar/mistTracks.js` | MIST v1.2 evolutionary tracks: eight model stars at solar metallicity (`mist-v12-tracks`) | model | no license stated; see NOTICE |
+| `js/data/ngc3198Synthetic.js` | NGC 3198: a synthetic rotation curve (`ngc3198-synthetic-curve`) | synthetic | CC BY 4.0; see NOTICE |
+| `js/data/observations/sdssNgc2420Photometry.js` | NGC 2420: SDSS DR18 photometry (`sdss-dr18-ngc2420-photometry`) | observed | public domain; see NOTICE |
+| `js/data/observations/sdssNgc2420Segue.js` | NGC 2420: SEGUE stellar parameters (`sdss-dr18-ngc2420-segue`) | observed | public domain; see NOTICE |
+| `js/data/spectra/sdssSpectra.js` | Four observed stellar spectra: SDSS DR18, one each of A, G, K and M (`sdss-dr18-stellar-spectra`) | observed | public domain; see NOTICE |
+| `js/data/observations/tessHd209458S56Aperture.js` | HD 209458: TESS sector 56 aperture mask (`tess-hd209458-s56-aperture`) | observed | public domain; see NOTICE |
+| `js/data/observations/tessHd209458S56.js` | HD 209458: TESS sector 56 light curve (`tess-hd209458-s56-lc`) | observed | public domain; see NOTICE |
+| `js/data/trappist1.js` | TRAPPIST-1: the star and its seven planets, compiled from the literature (`trappist-1-system`) | compilation | no license; attribution requested; see NOTICE |
+<!--/fact-block-->
+
 The repository's own licenses (MIT for the code, CC BY 4.0 for the content)
 cover only what is Gravitas's to license. The files in the table above keep
 theirs wherever the repository goes, its release archives included. The one

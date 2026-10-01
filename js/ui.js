@@ -134,6 +134,7 @@ import {
   stopwatch,
   stopwatchTarget,
   setCaptureMode,
+  SCENARIO_SOURCES,
 } from './sandboxTools.js';
 import { setBodySelector } from './widgetRuntime.js';
 import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
@@ -6265,16 +6266,53 @@ const adjustSimSpeed = (current, direction) => {
  */
 const captureCaption = () => {
   const named = current_scenario_name && current_scenario_name !== 'None';
-  return named
-    ? scenarioTitle(current_scenario_name) || current_scenario_name
-    : t('capture.caption.sandbox');
+  if (!named) return t('capture.caption.sandbox');
+  const title = scenarioTitle(current_scenario_name) || current_scenario_name;
+  // A scenario built on a real system says where its numbers come from, and
+  // when some are approximate (js/data/realSystemSources.js). Its words are a
+  // small catalog of their own, loaded before the first capture
+  // (ensureCaptureStrings below), so no page that never captures pays for them.
+  const cited = captureStringsReady && SCENARIO_SOURCES[current_scenario_name];
+  if (!cited) return title;
+  const approximate =
+    cited.approximate === 'all'
+      ? t('capture.caption.approximate.all')
+      : cited.approximate === 'some'
+        ? t('capture.caption.approximate.some')
+        : '';
+  const sources = [cited.cites, approximate].filter(Boolean).join('; ');
+  // Drawn as a second, smaller line under the title (js/sandboxTools.js).
+  return `${title}\n${t('capture.caption.sources', { sources })}`;
 };
+
+/** The provenance line's words (js/i18n/en.capture.js), once loaded. */
+let captureStringsReady = false;
+let captureLoad = null;
+/**
+ * Load them, both languages, once. Never rejects: a caption without its
+ * sources line is still a caption.
+ * @returns {Promise<void>}
+ */
+const ensureCaptureStrings = () =>
+  (captureLoad ??= Promise.all([
+    import('./i18n/en.capture.js'),
+    import('./i18n/es.capture.js'),
+  ])
+    .then(([en, es]) => {
+      registerMessages('en', en.EN_CAPTURE);
+      registerMessages('es', es.ES_CAPTURE);
+      captureStringsReady = true;
+    })
+    .catch(() => {
+      captureLoad = null;
+    }));
 
 /**
  * Take a screenshot of the current simulation
  * Combines the starfield and simulation canvases into a single image
  */
-const takeScreenshot = () => {
+const takeScreenshot = async () => {
+  await ensureCaptureStrings();
   // Ask for the provenance line - the simulated clock, the stopwatch, the
   // vector key - to be painted on the canvas, then let one frame be drawn
   // before reading the pixels back. Live, those readings are in the readout
@@ -7596,6 +7634,7 @@ const toggleRecording = async () => {
   }
   // The clip carries the same provenance a still does: the scenario title, the
   // scale bar and the simulated clock, burned in for every frame of it.
+  await ensureCaptureStrings();
   setCaptureMode(true, { caption: captureCaption() });
   const started = recorder.startRecording({
     sources: [starfieldCanvas, canvas],

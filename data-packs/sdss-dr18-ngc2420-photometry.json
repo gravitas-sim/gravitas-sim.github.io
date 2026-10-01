@@ -226,8 +226,8 @@
   "offline": "optional",
   "derived": {
     "file": "js/data/observations/sdssNgc2420Photometry.js",
-    "bytes": 41510,
-    "sha256": "de519ab977820de5b92ce91b1bc3281b358d8c18a9a135c6f47ed5c7663a69c0"
+    "bytes": 41893,
+    "sha256": "83c9c11e012836da20534637ae4f03d968037343799abf798990eeaa5c0e6e4d"
   },
   "validation": {
     "check": "stars brighter than g = 20 are more than 1.2 times as dense between 3 and 8 arcmin of the center as between 10 and 14.14 arcmin",

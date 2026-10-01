@@ -1,25 +1,105 @@
 // =============================================================================
 // Five gravitational-wave events, as whitened GWOSC strain
 // -----------------------------------------------------------------------------
-// GENERATED FILE. Do not edit. Written by tools/build-gwosc-events.mjs; run
-// `npm run gwosc:data` to regenerate, `npm run gwosc:check` to verify the
-// committed modules offline, and `npm run gwosc:provenance` to rebuild them
-// from the cached strain and compare byte for byte.
+// GENERATED FILE. Do not edit. Written by tools/data-packs/gwosc-events.mjs;
+// run `npm run gwosc:data` to regenerate, `npm run gwosc:check` to verify the
+// committed module offline, and `npm run gwosc:provenance` to rebuild it from
+// the cached strain and compare byte for byte.
 //
 // OBSERVED STRAIN, from one LIGO detector per event, whitened by the noise that
 // detector had at the time, band-limited to 20-400 Hz, in units of that noise,
 // at 1024 samples per second. The catalog values beside each event are GWOSC's,
 // copied, and are not measurements this project made. The full record - URLs,
 // checksums, the detector-choice rule and the energies it compared, the noise
-// estimate, the decimation and the quantisation - is in the sibling file
-// js/data/gw/gwoscEventsProvenance.js, which nothing in the application imports.
+// estimate, the decimation and the quantisation - is the data pack's manifest,
+// data-packs/gwosc-five-events.json, which nothing in the application loads.
+// PACK is that manifest's runtime fields.
 // =============================================================================
 
 /* eslint-disable */
 
-/** The source, as the readout names it. */
-export const CITATION =
-  'GWOSC, LIGO/Virgo/KAGRA open data (CC BY 4.0); catalog values from GWTC-1 and GWTC-2.1';
+/** What the data is and who to credit, as an interface shows it. */
+export const PACK = {
+  id: 'gwosc-five-events',
+  version: '1.0.0',
+  title: 'Five gravitational-wave events: whitened GWOSC strain',
+  object: {
+    name: 'Five compact-binary mergers',
+    identifiers: ['GW150914', 'GW170817', 'GW190412', 'GW190521', 'GW190814'],
+  },
+  facility: {
+    observatory: 'LIGO Hanford and LIGO Livingston, through GWOSC',
+    instrument: 'one detector per event, 32 s at 4096 Hz',
+    pipeline: 'GWOSC 4 kHz strain releases (GWTC-1 v3, GWTC-2.1 v4)',
+  },
+  dataType: 'strain',
+  origin: 'observed',
+  credit:
+    'GWOSC, LIGO/Virgo/KAGRA open data (CC BY 4.0); catalog values from GWTC-1 and GWTC-2.1',
+  license: {
+    status: 'cc-by-4.0',
+    statement:
+      'GWOSC data are released under CC BY 4.0. GWOSC asks that work using them cite the open-data papers and carry its acknowledgement (NOTICE).',
+  },
+  retrieved: '2026-09-23',
+  time: {
+    scale: 'GPS',
+    reference: 'seconds from each event’s t0, a GPS time EVENTS gives',
+    unit: 's',
+  },
+  columns: [
+    {
+      name: 'time',
+      unit: 's',
+      description: 't0 + i / sampleRate',
+    },
+    {
+      name: 'whitened strain',
+      unit: '',
+      description:
+        'whitened by the detector’s own noise, band-limited to 20-400 Hz, in units of its standard deviation',
+    },
+  ],
+  masks: [
+    {
+      column: 'detector',
+      rule: 'a detector with a transient GWOSC documents inside the window is not used',
+      dropped: 1,
+    },
+  ],
+  reductions: [
+    'Whitened by the noise spectrum the detector had at the time and band-limited to 20-400 Hz, in units of that noise.',
+    'A window around each merger, decimated from 4096 to 1024 samples a second.',
+    'Quantised to 16-bit integers, one scale per event.',
+    'The masses, distances and signal-to-noise ratios are GWOSC’s catalog values, copied: Gravitas measured none of them.',
+  ],
+  citations: [
+    {
+      text: 'LIGO Scientific and Virgo Collaborations (Abbott et al.) 2019, Phys. Rev. X 9, 031040 (GWTC-1)',
+      doi: '10.1103/PhysRevX.9.031040',
+    },
+    {
+      text: 'GWOSC strain data release for GWTC-1',
+      doi: '10.7935/82H3-HH23',
+    },
+    {
+      text: 'LIGO Scientific and Virgo Collaborations (Abbott et al.) 2024, Phys. Rev. D 109, 022001 (GWTC-2.1)',
+      doi: '10.1103/PhysRevD.109.022001',
+    },
+    {
+      text: 'GWOSC strain data release for GWTC-2.1',
+      doi: '10.7935/qf3a-3z67',
+    },
+    {
+      text: 'Abbott et al. 2021, SoftwareX 13, 100658 (O1 and O2 open data)',
+      doi: '10.1016/j.softx.2021.100658',
+    },
+    {
+      text: 'Abbott et al. 2023, ApJS 267, 29 (O3 open data)',
+      doi: '10.3847/1538-4365/acdc9f',
+    },
+  ],
+};
 
 /**
  * Seconds before the end of the chirp at which the lesson reads the loudest

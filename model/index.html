@@ -109,6 +109,7 @@ try {
           <li><a href="#other">Other educational models</a></li>
           <li><a href="#trust">What should I trust this to show?</a></li>
           <li><a href="#validation">Validation: what has been checked</a></li>
+          <li><a href="#data">Where the data comes from</a></li>
           <li>
             <a href="#investigations">Which model each investigation uses</a>
           </li>
@@ -1884,9 +1885,13 @@ try {
                 the Freeman&nbsp;(1970) solution, and the same pseudo-isothermal
                 halo as above; their circular speeds add in quadrature, because
                 accelerations add and each equals <em>v</em>&sup2;/<em>r</em>.
-                The curve being fitted is synthetic, generated from
-                NGC&nbsp;3198's published structural parameters with a fixed
-                scatter, so the exercise has an exact answer.
+                The curve being fitted is synthetic: a model galaxy built to
+                resemble NGC&nbsp;3198 as van Albada et&nbsp;al.&nbsp;(1985)
+                describe it &mdash; their 2.68&nbsp;kpc disc scale length
+                (2.6 here), a curve flat near 150&nbsp;km/s, measured to
+                30&nbsp;kpc &mdash; with a fixed scatter, so the exercise has an
+                exact answer. It is a data pack of origin
+                <span class="doc-badge is-illustrative">Synthetic</span>.
               </td>
               <td>
                 The disc is a real solution rather than an approximation: its
@@ -2431,6 +2436,369 @@ try {
           >PHYSICS_VALIDATION.md</a
         >.
       </p>
+
+      <h2 id="data">Where the data comes from</h2>
+      <p>
+        Everything Gravitas shows as coming from outside it is a data pack: a
+        file the page loads, and a manifest in the repository recording its
+        sources, its license, the checksums of what was downloaded and every
+        step done to it. The badge is read from the manifest&rsquo;s origin, so
+        a pack can only be called measured if its record says it was. One is
+        synthetic: the NGC&nbsp;3198 rotation curve the fitting instrument
+        uses, which is a model built to resemble the galaxy and says so
+        wherever it is drawn. Both tables are generated from the files
+        themselves.
+      </p>
+      <div class="doc-table-wrap" tabindex="0" role="region" aria-labelledby="data">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col">Data pack</th>
+              <th scope="col">What it is</th>
+              <th scope="col">File</th>
+              <th scope="col">Credit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--fact-block:dataPacks-->
+            <tr>
+              <td>Five gravitational-wave events: whitened GWOSC strain</td>
+              <td><span class="doc-badge is-measured">Measured</span></td>
+              <td><code>js/data/gw/gwoscEvents.js</code></td>
+              <td>GWOSC, LIGO/Virgo/KAGRA open data (CC BY 4.0); catalog values from GWTC-1 and GWTC-2.1</td>
+            </tr>
+            <tr>
+              <td>Four observed stellar spectra: SDSS DR18, one each of A, G, K and M</td>
+              <td><span class="doc-badge is-measured">Measured</span></td>
+              <td><code>js/data/spectra/sdssSpectra.js</code></td>
+              <td>SDSS DR18 (Almeida et al. 2023, ApJS 267, 44)</td>
+            </tr>
+            <tr>
+              <td>GW150914: the published figure data</td>
+              <td><span class="doc-badge is-measured">Measured</span></td>
+              <td><code>js/data/gw/gw150914.js</code></td>
+              <td>Abbott et al. (2016), Phys. Rev. Lett. 116, 061102</td>
+            </tr>
+            <tr>
+              <td>HD 209458 and the Sun and Jupiter: parameters compiled from the literature</td>
+              <td><span class="doc-badge is-measured">Compiled from papers</span></td>
+              <td><code>js/data/exoplanetSystems.js</code></td>
+              <td>Compiled from Southworth 2010; Torres; del Burgo &amp; Allende Prieto 2016; Stassun et al. 2019; Sing et al. 2016; Knutson et al. 2007; Casasayas-Barris et al. 2020; Stassun et al. 2017; Bonomo et al. 2017; Prša et al. 2016; NASA Jupiter Fact Sheet (NSSDCA</td>
+            </tr>
+            <tr>
+              <td>HD 209458: TESS sector 56 aperture mask</td>
+              <td><span class="doc-badge is-measured">Measured</span></td>
+              <td><code>js/data/observations/tessHd209458S56Aperture.js</code></td>
+              <td>TESS, sector 56 (NASA; SPOC light-curve aperture from MAST)</td>
+            </tr>
+            <tr>
+              <td>HD 209458: TESS sector 56 light curve</td>
+              <td><span class="doc-badge is-measured">Measured</span></td>
+              <td><code>js/data/observations/tessHd209458S56.js</code></td>
+              <td>TESS, sector 56 (NASA; SPOC light curve from MAST)</td>
+            </tr>
+            <tr>
+              <td>MIST v1.2 evolutionary tracks: eight model stars at solar metallicity</td>
+              <td><span class="doc-badge is-analytic">Model</span></td>
+              <td><code>js/data/stellar/mistTracks.js</code></td>
+              <td>MIST v1.2 (Dotter 2016; Choi et al. 2016)</td>
+            </tr>
+            <tr>
+              <td>MIST v1.2 isochrones in the SDSS bands (a model)</td>
+              <td><span class="doc-badge is-analytic">Model</span></td>
+              <td><code>js/data/observations/mistSdssIsochrones.js</code></td>
+              <td>MIST v1.2 (Dotter 2016; Choi et al. 2016), built on MESA (Paxton et al. 2011, 2013, 2015)</td>
+            </tr>
+            <tr>
+              <td>NGC 2420: SDSS DR18 photometry</td>
+              <td><span class="doc-badge is-measured">Measured</span></td>
+              <td><code>js/data/observations/sdssNgc2420Photometry.js</code></td>
+              <td>SDSS DR18 imaging (Almeida et al. 2023)</td>
+            </tr>
+            <tr>
+              <td>NGC 2420: SEGUE stellar parameters</td>
+              <td><span class="doc-badge is-measured">Measured</span></td>
+              <td><code>js/data/observations/sdssNgc2420Segue.js</code></td>
+              <td>SDSS DR18 SEGUE spectroscopy and SSPP parameters (Almeida et al. 2023; Lee et al. 2008a)</td>
+            </tr>
+            <tr>
+              <td>NGC 3198: a synthetic rotation curve</td>
+              <td><span class="doc-badge is-illustrative">Synthetic</span></td>
+              <td><code>js/data/ngc3198Synthetic.js</code></td>
+              <td>Synthetic: built by Gravitas to resemble NGC 3198 (van Albada et al. 1985). Not a measurement.</td>
+            </tr>
+            <tr>
+              <td>TRAPPIST-1: the star and its seven planets, compiled from the literature</td>
+              <td><span class="doc-badge is-measured">Compiled from papers</span></td>
+              <td><code>js/data/trappist1.js</code></td>
+              <td>Compiled from Agol et al. 2021; Gillon et al. 2016; Gaia EDR3 parallax; Gillon et al. 2017; Ducrot et al. 2020; Grimm et al. 2018</td>
+            </tr>
+          <!--/fact-block-->
+          </tbody>
+        </table>
+      </div>
+      <p>
+        The real systems the scenarios are built from have their sources
+        recorded object by object and field by field, in
+        <code>js/data/realSystemSources.js</code>. A value no cited table gives
+        is marked <strong>approximate, unsourced</strong>, rather than credited
+        to a source that does not give it; a unit or a choice the scenario
+        makes is said to be one.
+      </p>
+      <div class="doc-table-wrap" tabindex="0" role="region" aria-label="Sources of the real-system parameters">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col">Object</th>
+              <th scope="col">Sources, and the fields each gives</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--fact-block:parameterSources-->
+            <tr>
+              <td>HD209458 <small>(<code>js/data/exoplanetSystems.js</code>)</small></td>
+              <td><a href="https://doi.org/10.1111/j.1365-2966.2010.17231.x">Southworth 2010, MNRAS 408, 1689</a>: <code>star.massSolar</code>, <code>planet.radiusJupiter</code>, <code>planet.semiMajorAU</code><br /><a href="https://doi.org/10.1086/529429">Torres, Winn &amp; Holman 2008, ApJ 677, 1324</a>: <code>star.radiusSolar</code>, <code>star.temperatureK</code>, <code>planet.inclinationDeg</code><br /><a href="https://doi.org/10.1093/mnras/stw2005">del Burgo &amp; Allende Prieto 2016, MNRAS 463, 1400</a>: <code>star.luminositySolar</code>, <code>star.spectralType</code><br /><a href="https://doi.org/10.3847/1538-3881/ab3467">Stassun et al. 2019, AJ 158, 138 (TESS Input Catalog v8)</a>: <code>star.distancePc</code><br /><a href="https://doi.org/10.1038/nature16068">Sing et al. 2016, Nature 529, 59</a>: <code>planet.massJupiter</code><br /><a href="https://doi.org/10.1086/510111">Knutson et al. 2007, ApJ 655, 564</a>: <code>planet.periodDays</code><br /><a href="https://doi.org/10.1051/0004-6361/201937221">Casasayas-Barris et al. 2020, A&amp;A 635, A206</a>: <code>planet.eccentricity</code><br /><a href="https://doi.org/10.3847/1538-3881/aa5df3">Stassun et al. 2017, AJ 153, 136</a>: <code>measured.transitDepthPercent</code><br /><a href="https://doi.org/10.1051/0004-6361/201629882">Bonomo et al. 2017, A&amp;A 602, A107</a>: <code>measured.semiAmplitudeMs</code></td>
+            </tr>
+            <tr>
+              <td>SUN_JUPITER <small>(<code>js/data/exoplanetSystems.js</code>)</small></td>
+              <td><a href="https://doi.org/10.3847/0004-6256/152/2/41">Prša et al. 2016, AJ 152, 41 (IAU 2015 Resolution B3, nominal solar values)</a>: <code>star.massSolar</code>, <code>star.radiusSolar</code>, <code>star.luminositySolar</code>, <code>star.temperatureK</code><br /><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html">NASA Jupiter Fact Sheet (NSSDCA, updated 2 October 2024)</a>: <code>planet.periodDays</code><br />not a measurement: a unit, or a choice the scenario makes: <code>star.distancePc</code>, <code>planet.massJupiter</code>, <code>planet.radiusJupiter</code>, <code>planet.inclinationDeg</code><br /><strong>approximate, unsourced</strong>: <code>star.spectralType</code>, <code>planet.semiMajorAU</code>, <code>planet.eccentricity</code></td>
+            </tr>
+            <tr>
+              <td>TRAPPIST1_STAR <small>(<code>js/data/trappist1.js</code>)</small></td>
+              <td><a href="https://doi.org/10.3847/PSJ/abd022">Agol et al. 2021, PSJ 2, 1</a>: <code>massInSuns</code>, <code>radiusInSuns</code>, <code>luminosityInSuns</code>, <code>temperatureK</code><br /><a href="https://doi.org/10.1038/nature17448">Gillon et al. 2016, Nature 533, 221</a>: <code>spectralType</code><br /><a href="https://doi.org/10.1051/0004-6361/202039657">Gaia EDR3 parallax, 80.2123 mas, via SIMBAD (Gaia Collaboration 2021, A&amp;A 649, A1)</a>: <code>distanceLightYears</code></td>
+            </tr>
+            <tr>
+              <td>TRAPPIST1_PLANETS b <small>(<code>js/data/trappist1.js</code>)</small></td>
+              <td><a href="https://doi.org/10.3847/PSJ/abd022">Agol et al. 2021, PSJ 2, 1</a>: <code>a</code>, <code>mass</code>, <code>radius</code><br /><a href="https://doi.org/10.1038/nature21360">Gillon et al. 2017, Nature 542, 456</a>: <code>periodDays</code></td>
+            </tr>
+            <tr>
+              <td>TRAPPIST1_PLANETS c <small>(<code>js/data/trappist1.js</code>)</small></td>
+              <td><a href="https://doi.org/10.3847/PSJ/abd022">Agol et al. 2021, PSJ 2, 1</a>: <code>a</code>, <code>mass</code>, <code>radius</code><br /><a href="https://doi.org/10.1038/nature21360">Gillon et al. 2017, Nature 542, 456</a>: <code>periodDays</code></td>
+            </tr>
+            <tr>
+              <td>TRAPPIST1_PLANETS d <small>(<code>js/data/trappist1.js</code>)</small></td>
+              <td><a href="https://doi.org/10.3847/PSJ/abd022">Agol et al. 2021, PSJ 2, 1</a>: <code>a</code>, <code>mass</code>, <code>radius</code><br /><a href="https://doi.org/10.1038/nature21360">Gillon et al. 2017, Nature 542, 456</a>: <code>periodDays</code></td>
+            </tr>
+            <tr>
+              <td>TRAPPIST1_PLANETS e <small>(<code>js/data/trappist1.js</code>)</small></td>
+              <td><a href="https://doi.org/10.1051/0004-6361/201937392">Ducrot et al. 2020, A&amp;A 640, A112</a>: <code>a</code><br /><a href="https://doi.org/10.3847/PSJ/abd022">Agol et al. 2021, PSJ 2, 1</a>: <code>mass</code>, <code>radius</code><br /><a href="https://doi.org/10.1038/nature21360">Gillon et al. 2017, Nature 542, 456</a>: <code>periodDays</code></td>
+            </tr>
+            <tr>
+              <td>TRAPPIST1_PLANETS f <small>(<code>js/data/trappist1.js</code>)</small></td>
+              <td><a href="https://doi.org/10.3847/PSJ/abd022">Agol et al. 2021, PSJ 2, 1</a>: <code>a</code>, <code>mass</code>, <code>radius</code><br /><a href="https://doi.org/10.1038/nature21360">Gillon et al. 2017, Nature 542, 456</a>: <code>periodDays</code></td>
+            </tr>
+            <tr>
+              <td>TRAPPIST1_PLANETS g <small>(<code>js/data/trappist1.js</code>)</small></td>
+              <td><a href="https://doi.org/10.1051/0004-6361/201732233">Grimm et al. 2018, A&amp;A 613, A68</a>: <code>a</code><br /><a href="https://doi.org/10.3847/PSJ/abd022">Agol et al. 2021, PSJ 2, 1</a>: <code>mass</code>, <code>radius</code><br /><strong>approximate, unsourced</strong>: <code>periodDays</code></td>
+            </tr>
+            <tr>
+              <td>TRAPPIST1_PLANETS h <small>(<code>js/data/trappist1.js</code>)</small></td>
+              <td><a href="https://doi.org/10.3847/PSJ/abd022">Agol et al. 2021, PSJ 2, 1</a>: <code>a</code>, <code>mass</code>, <code>radius</code>, <code>periodDays</code></td>
+            </tr>
+            <tr>
+              <td>solarSystemData Mercury <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>density_kg_m3</code>, <code>escape_velocity</code>, <code>atmosphere</code>, <code>surface_pressure</code><br /><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html">NASA Mercury Fact Sheet (NSSDCA, updated 11 January 2024)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>solarSystemData Venus <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html">NASA Venus Fact Sheet (NSSDCA, updated 11 January 2024)</a>: every value</td>
+            </tr>
+            <tr>
+              <td>solarSystemData Earth <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>gravity</code>, <code>density_kg_m3</code>, <code>surface_pressure</code><br /><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html">NASA Earth Fact Sheet (NSSDCA, updated 15 November 2024)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>solarSystemData Mars <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>temperature</code>, <code>gravity</code>, <code>density_kg_m3</code><br /><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html">NASA Mars Fact Sheet (NSSDCA, updated 19 May 2025)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>solarSystemData Jupiter <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>gravity</code><br /><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html">NASA Jupiter Fact Sheet (NSSDCA, updated 2 October 2024)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>solarSystemData Saturn <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>distance</code>, <code>orbital_period</code>, <code>gravity</code>, <code>rotation_period</code><br /><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html">NASA Saturn Fact Sheet (NSSDCA, updated 18 March 2025)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>solarSystemData Uranus <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>distance</code>, <code>orbital_period</code>, <code>density_kg_m3</code><br /><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/uranusfact.html">NASA Uranus Fact Sheet (NSSDCA, updated 2 October 2024)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>solarSystemData Neptune <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">JPL Solar System Dynamics, approximate positions of the planets, table 1</a>: <code>distance</code><br /><strong>approximate, unsourced</strong>: <code>orbital_period</code>, <code>gravity</code><br /><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/neptunefact.html">NASA Neptune Fact Sheet (NSSDCA, updated 3 October 2024)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Ceres <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Vesta <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>diameter</code><br /><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Pallas <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>diameter</code><br /><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Hygiea <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>mass</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Interamnia <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>diameter</code><br /><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Europa <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Davida <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>distance</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Sylvia <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Hektor <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>diameter</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Juno <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>distance</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Iris <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>mass</code><br /><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Eunomia <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Psyche <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Themis <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>diameter</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Bamberga <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>realAsteroids Patientia <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>famousComets Halley <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>perihelion</code>, <code>aphelion</code><br /><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>famousComets Hale-Bopp <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>diameter</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>famousComets Hyakutake <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>period</code>, <code>aphelion</code><br /><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>famousComets Shoemaker-Levy 9 <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>perihelion</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>famousComets Comet ISON <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>perihelion</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>famousComets Lovejoy <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>aphelion</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>famousComets McNaught <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>perihelion</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>famousComets Pan-STARRS <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: <code>perihelion</code><br /><strong>approximate, unsourced</strong>: every other value</td>
+            </tr>
+            <tr>
+              <td>famousComets Swift-Tuttle <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every value</td>
+            </tr>
+            <tr>
+              <td>famousComets Tempel-Tuttle <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every value</td>
+            </tr>
+            <tr>
+              <td>famousComets Wild 2 <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>perihelion</code>, <code>diameter</code><br /><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>famousComets Hartley 2 <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>kuiperBeltObjects Orcus <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>kuiperBeltObjects Pluto <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>kuiperBeltObjects Varuna <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>kuiperBeltObjects Haumea <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>kuiperBeltObjects Quaoar <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>kuiperBeltObjects Makemake <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>kuiperBeltObjects Eris <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>kuiperBeltObjects Sedna <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: every value</td>
+            </tr>
+            <tr>
+              <td>worlds (Habitable Zone Lab) Venus <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">JPL Solar System Dynamics, approximate positions of the planets, table 1</a>: every value</td>
+            </tr>
+            <tr>
+              <td>worlds (Habitable Zone Lab) Earth <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">JPL Solar System Dynamics, approximate positions of the planets, table 1</a>: every value</td>
+            </tr>
+            <tr>
+              <td>worlds (Habitable Zone Lab) Mars <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">JPL Solar System Dynamics, approximate positions of the planets, table 1</a>: every value</td>
+            </tr>
+            <tr>
+              <td>worlds (Habitable Zone Lab) Ceres <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html">JPL Small-Body Database (read 2026-10-01)</a>: every value</td>
+            </tr>
+            <tr>
+              <td>worlds (Retrograde Mars) Earth <small>(<code>js/world/build.js</code>)</small></td>
+              <td><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html">NASA Earth Fact Sheet (NSSDCA, updated 15 November 2024)</a>: <code>earths</code><br /><a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">JPL Solar System Dynamics, approximate positions of the planets, table 1</a>: every other value</td>
+            </tr>
+            <tr>
+              <td>worlds (Retrograde Mars) Mars <small>(<code>js/world/build.js</code>)</small></td>
+              <td><strong>approximate, unsourced</strong>: <code>aAU</code><br /><a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html">NASA Mars Fact Sheet (NSSDCA, updated 19 May 2025)</a>: every other value</td>
+            </tr>
+          <!--/fact-block-->
+          </tbody>
+        </table>
+      </div>
 
       <h2 id="investigations">Which model each investigation uses</h2>
       <p>
