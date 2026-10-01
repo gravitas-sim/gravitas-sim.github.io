@@ -14,7 +14,7 @@ for accessibility.
 | [`css/tokens.css`](css/tokens.css)         | Every color, size, radius, shadow, duration and focus ring, and the four themes      | Every page                                                 |
 | [`css/components.css`](css/components.css) | `.ui-button`, `.ui-checkbox`, the focus ring, and the element-level look of bare controls | Every page; part of the application's initial download |
 | [`css/icons.css`](css/icons.css)           | The icon set                                                                         | Every page; part of the initial download                   |
-| [`css/page.css`](css/page.css)             | The form controls below: field, input, select, textarea, file, range, toolbar, button group | The document and tool pages, not the simulation    |
+| [`css/page.css`](css/page.css)             | Everything below: the form controls, the page, cards, tables, status, alerts and states | The document and tool pages, not the simulation    |
 
 The form controls are in `css/page.css` rather than `css/components.css`
 because the simulation draws none of them, and `css/components.css` is part of
@@ -242,9 +242,269 @@ Under `forced-colors: active` the system palette draws every edge, and an
 invalid control keeps a 2px border so its state survives without the danger
 color.
 
-## Not yet components
+## Page: `.ui-page`
 
-Cards, data tables with sticky headers, tabs, disclosure sections, status
-lines, toasts, inline alerts and the empty, loading and error blocks are still
-page-local. Until each joins this document, copy the nearest page's rule
-rather than inventing a new one.
+The tool pages' column: centered, `--space-8` above, `--space-4` at the sides
+and twice `--space-8` below, above the footer. 64rem wide; `is-narrow` is
+52rem (a course read top to bottom), `is-wide` 72rem (a form beside its
+output), `is-full` 76rem (a workbench). Links inside it are `--accent` with
+the document pages' underline offset - the browser's own blue is 2.2:1 on
+these grounds - except a link drawn as a `.ui-button`, which keeps its face.
+Headings are on one scale: `h2` is `--text-lg`, `h3` is `--text-md`.
+
+```html
+<main id="main" class="ui-page is-wide">...</main>
+```
+
+A page keeps its own class beside it (`class="ui-page is-wide fb-wrap"`) when
+it has layout of its own to scope.
+
+## Split: `.ui-split`
+
+A workspace beside a narrower column: one column on a phone, two from 64rem.
+The narrow column is 26rem (`--ui-split-aside` changes it) and second;
+`is-aside-start` puts it first. A child with `.ui-split-aside` stays in view as
+the page scrolls; `.ui-split-aside.is-scroll` is also bounded to the window and
+scrolls itself, for a column of checks taller than any window.
+
+```html
+<div class="ui-split">
+  <div id="editor"></div>
+  <div class="ui-split-aside is-scroll">...</div>
+</div>
+```
+
+Tokens: `--space-4`, `--space-8`. A scrolling aside holds focusable controls, so
+it is reachable by keyboard without a `tabindex` of its own.
+
+## Grid: `.ui-grid`
+
+Fields side by side, as many as fit at 12rem each (`--ui-grid-min`), with
+`--space-3` between. Fields align at their tops; `is-end` aligns them along the
+row's foot, for a row of fields that ends in the button acting on them.
+
+```html
+<div class="ui-grid is-end">
+  <label class="ui-field">...</label>
+  <div><button type="button" class="ui-button">Open</button></div>
+</div>
+```
+
+`.ui-toolbar.is-fields` is the same idea as a wrapping flex row: its fields
+share the row at `--ui-field-basis` (12rem) each and line up with the buttons
+at its foot.
+
+## Card: `.ui-card`
+
+A bordered box on the page's ground: 1px `--border`, `--radius`, `--space-4`
+inside, `--space-5` below. Its first child has no top margin and its last no
+bottom margin. `is-compact` is `--space-3` by `--space-4` inside and
+`--space-3` below, for a list of cards (a course's items, the composer's steps).
+
+```html
+<section class="ui-card" aria-labelledby="openTitle">
+  <h2 id="openTitle">Open an observation</h2>
+  ...
+</section>
+```
+
+A card is a region only when it has a heading that names it.
+
+## Fieldset
+
+Every `<fieldset>` on a tool page is a card with its `<legend>` in
+`--weight-semibold` - whether or not it carries `.ui-fieldset`, so a script
+that builds a form gets it without naming it. `min-width: 0` undoes the user
+agent's `min-content`, which otherwise lets one wide select push a fieldset,
+and the page, past a phone's edge. `is-compact` is `--space-2` by `--space-3`
+inside, for a panel of controls.
+
+```html
+<fieldset class="ui-fieldset">
+  <legend>Values</legend>
+  ...
+</fieldset>
+```
+
+## Disclosure: `details.ui-disclosure`
+
+A section that opens. The summary is semibold, at least 24px tall, with
+`--space-2` below it when open, the browser's own marker and the focus ring on
+`:focus-visible`. With `.ui-card` it is a card that opens.
+
+```html
+<details class="ui-card ui-disclosure">
+  <summary>Change what you are looking at</summary>
+  ...
+</details>
+```
+
+The marker turns with `[open]`, which assistive technology announces as
+expanded or collapsed; nothing is hidden by script.
+
+## Data table: `.ui-table` and `.ui-table-wrap`
+
+```html
+<div class="ui-table-wrap is-numeric is-scroll" tabindex="0" role="region" aria-label="Rows">
+  <table id="obsTable">
+    <caption>...</caption>
+    <thead><tr><th scope="col">Row</th>...</tr></thead>
+    <tbody>...</tbody>
+  </table>
+</div>
+```
+
+`.ui-table` on the table, or any table directly inside `.ui-table-wrap`: a
+script that builds a table gets the look from its wrapper. The wrapper scrolls
+a wide table sideways instead of widening the page; `is-scroll` also bounds
+its height (24rem, `--ui-table-height`) and the header row stays on top of the
+rows under it. A wrapper that can scroll is a region with a name and
+`tabindex="0"`, so a keyboard can reach it, and draws the focus ring.
+
+| Part or state            | Look                                                              | Tokens                                   |
+| ------------------------ | ----------------------------------------------------------------- | ---------------------------------------- |
+| Table                    | Full width, `--text-base`, collapsed borders                      | `--text-base`                            |
+| Caption                  | Start-aligned, secondary                                          | `--text-secondary`, `--space-1`          |
+| Cell                     | `--space-1` by `--space-2`, 1px rule below, top-aligned, wraps    | `--border`                               |
+| Header                   | Semibold, sticky, on the page's ground                            | `--bg-color`, `--weight-semibold`        |
+| `is-numeric`             | Cells right-aligned in tabular figures on one line; heads stay left |                                        |
+| `.is-missing` cell       | Secondary; the page says "missing" in words                       | `--text-secondary`                       |
+| `tr[aria-selected]`      | Pointer; hover tint                                               | `--surface-2`                            |
+| `tr[aria-selected=true]` | Accent tint and a 3px bar at the row's start                      | `--accent-soft`, `--accent`              |
+| `tr:focus-visible`       | The focus ring, inset                                             | `--focus-ring`                           |
+| `tr.is-masked`           | Italic and secondary                                              | `--text-secondary`                       |
+
+**Keyboard row selection** is the page's script: `js/observatory/table.js` makes
+the table an ARIA grid (`role="grid"`, `aria-multiselectable`), gives the
+focused row `tabindex="0"` and the rest `-1`, and moves with the arrows, Page
+Up and Down, Home and End, toggles with Space and clears with Escape; the
+Observatory and the analysis laboratory's trials both use it. The component
+draws the states those keys set. Selected is never color alone: the bar is a
+shape, and the row is `aria-selected`. Under `forced-colors` a selected row is
+drawn in `Highlight`. The submission review's table has no selection and
+needs none.
+
+## Status line: `.ui-status`
+
+One line under a form that says what happened, at least one line tall even
+while empty, so text arriving does not move the page. `is-error`, `is-warning`
+and `is-success` color it; the words say the same thing. The element carries
+`role="status"` (or `aria-live`) from its page.
+
+```html
+<p id="fbLinkStatus" class="ui-status" role="status" aria-live="polite"></p>
+```
+
+## Issues: `.ui-issues`
+
+The list a check produces. Each item's `data-level` - `error` or `warn` - colors
+it `--danger` or `--warning`; the item's text states the problem, so the color
+is the second telling.
+
+```html
+<ul id="st-checks" class="ui-issues">
+  <li data-level="error">Title (English): write this in every language.</li>
+</ul>
+```
+
+## Inline alert: `.ui-alert`
+
+A message about the content, in the page's flow: a 3px bar at its start in the
+alert's color, a 10% tint of it, and the text in `--text-primary`, so it meets
+4.5:1 in every theme whatever the alert's color. Info (the default) is
+`--accent`; `is-success`, `is-warning` and `is-error` use the status colors.
+An empty alert takes no room, so a script can keep one in place and fill it.
+It may be a `<p>`, or a `<ul>` of several problems. A message that appears
+while the reader works carries `role="alert"`; a standing note does not.
+
+```html
+<ul id="importProblems" class="ui-alert is-error" role="alert" hidden></ul>
+<p class="ui-alert">Educational software, not operational mission design.</p>
+```
+
+## Toasts and tabs
+
+None of the tool pages has a toast or a tab set of its own, so neither is a
+component here. The application's toast is `js/controls.js`'s, styled in
+`css/components.css`.
+
+## Empty, loading and error blocks: `.ui-state`
+
+The place where content will be, saying why it is not there: centered,
+secondary text in a dashed `--border` box, `--space-8` of room. Prompt 57 writes
+their words; this is their shape.
+
+| Modifier     | Look                                                                        |
+| ------------ | --------------------------------------------------------------------------- |
+| `is-empty`   | The default look: nothing yet                                               |
+| `is-loading` | An indeterminate 3px `--accent` bar under the words; still under reduced motion |
+| `is-error`   | Solid `--danger` edge, text in `--text-primary`                             |
+| `is-bare`    | No edge, inside a box that has one                                          |
+| `is-overlay` | Covers a view, on its own dark (`--space-far` at 86%), in `--hud-text-strong` |
+
+On `.ui-sky` the words are `--hud-text`. A loading block carries
+`aria-busy="true"` from its page and its words are in a live region, so the
+change to content is announced; the bar is decoration.
+
+```html
+<p class="ui-state is-empty">Drop reports, backups or tokens above.</p>
+<div class="ui-state is-overlay" id="l3-notice" role="status" hidden></div>
+```
+
+## Small parts
+
+| Class                         | What                                                                          | Tokens                                     |
+| ----------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------ |
+| `.ui-badge`, `is-accent`      | A pill: a kind, a version, "advanced"                                         | `--border-strong`/`--accent`, `--text-sm`, `--radius-full` |
+| `.ui-note`                    | Secondary text: a caption, a legend, a note under a heading                   | `--text-base`, `--text-secondary`          |
+| `.ui-meta`                    | A definition list, term beside value; one column under 30rem                  | `--space-1`, `--space-4`                   |
+| `.ui-choice`, `is-block`      | A checkbox or radio and its words, one 24px target; `is-block` one per line   | `--space-2`                                |
+| `.ui-choices`                 | A wrapping row of choices                                                     | `--space-1`, `--space-4`                   |
+| `button.ui-link`              | A button that reads as a link, in a list of steps; `aria-current` is semibold | `--border-strong`, `--accent`              |
+| `.ui-button.is-small`         | A 28px button beside a table or a selection                                   | `--space-1`, `--space-3`, `--text-sm`      |
+| `.ui-legend`, `is-stacked`    | What a plot's colors mean, in a wrapping row or a column                      | `--text-base`, `--text-secondary`          |
+| `.ui-swatch`, `is-round`      | A legend's square or dot; its color is the data's, set by script              | `--border-strong`                          |
+| `.ui-figures`                 | Plots side by side at 16rem (`--ui-figures-min`), captions secondary          | `--space-4`                                |
+| `.ui-plot`                    | A plot or a view: full width, an edge, `--radius-sm`                          | `--border`                                 |
+| `.ui-sky`                     | The simulation's dark sky in every theme, with the HUD's text                 | `--space-far`, `--hud-text`                |
+| `progress.ui-progress`        | 12rem, or the row with `is-block`, in `--accent`                              | `--accent`, `--space-3`                    |
+
+`button.ui-link` is still a button: Enter and Space press it, it is named by
+its words, and it is at least 24px tall. A swatch is `aria-hidden`; its entry's
+words say what it stands for. Plots drawn on `.ui-sky` keep the object hues
+(`--hue-*`), which no theme changes, so a mark means the same thing in every
+theme; Observatory red reddens the ground and the text around them.
+
+## Observation plots
+
+`js/observatory/plot.js` draws the Observatory's plot and the analysis
+laboratory's, and its marks are styled once, in `css/page.css`: points in
+`--hue-comet`, the selection in `--hue-star`, masked points as `--hue-asteroid`
+rings, the model curves in `--hue-gasgiant`, `--hue-blackhole` and the cyan and
+amber mixed, the focus ring in `--hud-text-strong`, on `--space-far`.
+
+## The Observatory's red night vision
+
+Observatory red is a set of token values in `css/tokens.css`. The tool pages
+write no color of their own, so every card, table, status line and alert
+follows it: grounds and edges go red, text goes warm. The plots keep the
+object hues, as the simulation's canvas does. A proposal to give the plots
+their own red set is in the token proposals below.
+
+## Token proposals
+
+`css/tokens.css` is not edited by component work. What the components above
+wanted and did not have, for whoever next changes the tokens:
+
+- `--space-7` (1.75rem) and `--space-9` (2.25rem) are used by `css/page.css`'s
+  document-page rules (`.doc-main h2`, `.doc-glance`, `.portal-login`) and are
+  not defined, so those margins and gaps compute to their initial values. Define
+  them, or move those rules to `--space-6`/`--space-8`.
+- `--space-12` (3rem) and `--space-16` (4rem): the tool pages' foot is written
+  as `calc(2 * var(--space-8))`.
+- Plot tokens - `--plot-point`, `--plot-selected`, `--plot-masked`,
+  `--plot-model-1` to `--plot-model-3`, `--plot-axis` - defaulting to the
+  object hues used today, with an Observatory-red set, so a plot in that theme
+  is night-vision safe too. Today they are theme-invariant by design.
+- `--focus-ring-inset` for a ring drawn inside a row or a view, now written as
+  `calc(-1 * var(--focus-ring-width))`.
