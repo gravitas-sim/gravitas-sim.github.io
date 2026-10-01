@@ -183,11 +183,15 @@ describe('the navigation', () => {
   test('every link is a page that exists, and none appears twice', () => {
     const hrefs = NAV.flatMap(([, links]) => links.map(([, href]) => href));
     expect(new Set(hrefs).size).toBe(hrefs.length);
+    // A document rather than a page - the user manual - is a file the site
+    // ships: in the repository, and copied into the build by build.js.
+    const shipped = read('build.js');
     for (const href of hrefs) {
-      expect({ href, exists: served.has(href.split('#')[0]) }).toEqual({
-        href,
-        exists: true,
-      });
+      const file = /\.pdf$/.test(href) ? href.slice(1) : null;
+      const exists = file
+        ? existsSync(file) && shipped.includes(`'${file}'`)
+        : served.has(href.split('#')[0]);
+      expect({ href, exists }).toEqual({ href, exists: true });
     }
   });
 

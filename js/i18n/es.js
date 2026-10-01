@@ -360,12 +360,6 @@ export const ES = {
   'settings.level.introductory': 'Introductorio',
   'settings.level.majors': 'Especialidad',
   'settings.level.advanced': 'Avanzado',
-  'settings.level.introductory.hint':
-    'Los valores por defecto: unidades físicas, tres cifras significativas y la lectura de conservación desactivada. Ningún nivel oculta nada.',
-  'settings.level.majors.hint':
-    'Activa la lectura de conservación y muestra cuatro cifras significativas, en unidades físicas. Ningún nivel oculta nada.',
-  'settings.level.advanced.hint':
-    'Activa la lectura de conservación, abre «Avanzado» (el integrador y el rendimiento) y muestra seis cifras significativas en las unidades propias de la simulación. Ningún nivel oculta nada.',
   'settings.section.advanced': 'Avanzado',
   'settings.section.reset': 'Restablecer',
   'settings.section.resetNamed':
@@ -564,6 +558,9 @@ export const ES = {
   'settings.label.showPotentialWell': 'Mostrar el pozo de potencial',
   'settings.label.showScaleBar': 'Mostrar la barra de escala',
   'settings.label.showElapsedTime': 'Mostrar el tiempo transcurrido',
+  // No longer in the Settings panel (it drew no glow), but a scenario pack can
+  // still carry it, and the Studio names it by this label.
+  'settings.label.showBhGlow': 'Mostrar el halo del agujero negro',
   'settings.label.showAccretionDisk': 'Mostrar el disco de acreción',
   'settings.label.realisticDiskPhysics': 'Física realista del disco',
   'settings.label.showBhJets': 'Mostrar los chorros relativistas',

@@ -619,12 +619,6 @@ export const EN = {
   'settings.level.introductory': 'Introductory',
   'settings.level.majors': 'Majors',
   'settings.level.advanced': 'Advanced',
-  'settings.level.introductory.hint':
-    'The defaults: physical units, three significant figures, and the conservation readout off. No level hides anything.',
-  'settings.level.majors.hint':
-    'Turns the conservation readout on and shows four significant figures, in physical units. No level hides anything.',
-  'settings.level.advanced.hint':
-    "Turns the conservation readout on, opens Advanced (the integrator and performance), and shows six significant figures in the simulation's own units. No level hides anything.",
   'settings.section.advanced': 'Advanced',
   'settings.section.reset': 'Reset',
   'settings.section.resetNamed': 'Reset {section} to its defaults',
@@ -828,6 +822,9 @@ export const EN = {
   'settings.label.showPotentialWell': 'Show Potential Well',
   'settings.label.showScaleBar': 'Show Scale Bar',
   'settings.label.showElapsedTime': 'Show Elapsed Time',
+  // No longer in the Settings panel (it drew no glow), but a scenario pack can
+  // still carry it, and the Studio names it by this label.
+  'settings.label.showBhGlow': 'Show BH Glow',
   'settings.label.showAccretionDisk': 'Show Accretion Disk',
   'settings.label.realisticDiskPhysics': 'Realistic Disk Physics',
   'settings.label.showBhJets': 'Show BH Jets',

@@ -46,12 +46,7 @@ function isTypingTarget(target) {
   );
 }
 
-/**
- * True when Space belongs to the focused control: it is how a keyboard presses
- * a button, opens a <summary> and ticks a box. The pause shortcut took it from
- * all of them, so with focus on any button the space bar paused the
- * simulation and the button never fired.
- */
+/** Space presses a focused button; the pause shortcut used to take it. */
 const ownsSpace = target =>
   Boolean(
     target?.closest?.(

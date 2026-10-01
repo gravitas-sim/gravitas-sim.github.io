@@ -1,7 +1,7 @@
 // =============================================================================
 // Course levels, and every setting the panel shows through a share link
 // -----------------------------------------------------------------------------
-// A course level (js/units.js) is a bundle of defaults, never a lock:
+// A course level (js/settingsSchema.js) is a bundle of defaults, never a lock:
 // introductory is exactly what the application did before there were levels,
 // and the deeper ones turn the conservation readout on, open Advanced, and
 // show more significant figures. Prompt 72 maps a level onto a lesson's
@@ -15,16 +15,19 @@
 import { describe, test, expect, beforeEach } from '@jest/globals';
 
 import {
-  COURSE_LEVELS,
-  courseLevelDefaults,
-  getCourseLevel,
   getReadoutDigits,
   getUnitMode,
   initUnits,
-  setCourseLevel,
   setUnitMode,
   sig,
 } from '../js/units.js';
+import {
+  COURSE_LEVELS,
+  courseLevelDefaults,
+  getCourseLevel,
+  initCourseLevel,
+  setCourseLevel,
+} from '../js/settingsSchema.js';
 import { DEFAULT_SETTINGS } from '../js/appState.js';
 import { SETTING_ITEMS } from '../js/settingsSchema.js';
 import {
@@ -97,6 +100,7 @@ describe('the levels', () => {
     setCourseLevel('advanced'); // simulation units, six figures
     setUnitMode('physical'); // the reader switches the units back
     initUnits();
+    initCourseLevel();
     expect(getUnitMode()).toBe('physical');
     expect(getReadoutDigits()).toBe(6);
   });

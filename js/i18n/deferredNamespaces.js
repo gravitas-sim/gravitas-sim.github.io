@@ -53,7 +53,6 @@ export const DEFERRED_NAMESPACES = Object.freeze([
   'rv',
   'rvfit',
   'rvsched',
-  'setHelp',
   'sound',
   'specW',
   'stelE',

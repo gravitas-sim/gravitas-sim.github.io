@@ -6,7 +6,7 @@
 //   a section    it names one of SETTING_SECTIONS, and each section has rows;
 //                there is one "Visuals", where there used to be two
 //   words        its label and its section's heading in both catalogs, and a
-//                help text, setHelp.<key>, in both deferred catalogs
+//                help text, setHelp.<key>, in js/i18n/en.settingsHelp.js and its Spanish
 //   a reader     some module other than the panel and the lists of defaults
 //                reads the setting - "Record Simulation" was a switch nothing
 //                read, and stayed in the panel for years
@@ -29,8 +29,8 @@ import {
 import { DEFAULT_SETTINGS } from '../js/appState.js';
 import { EN } from '../js/i18n/en.js';
 import { ES } from '../js/i18n/es.js';
-import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
-import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
+import { EN_SETTINGSHELP } from '../js/i18n/en.settingsHelp.js';
+import { ES_SETTINGSHELP } from '../js/i18n/es.settingsHelp.js';
 
 /** Keys the panel used to show and no longer does. Each still opens. */
 const RETIRED = [
@@ -86,8 +86,8 @@ describe('words', () => {
   });
 
   test.each(keys)('%s has a help text in both languages', key => {
-    const en = EN_DEFERRED[helpId(key)];
-    const es = ES_DEFERRED[helpId(key)];
+    const en = EN_SETTINGSHELP[helpId(key)];
+    const es = ES_SETTINGSHELP[helpId(key)];
     expect(en).toEqual(expect.any(String));
     expect(es).toEqual(expect.any(String));
     // A translation, not a copy of the English.
@@ -96,7 +96,7 @@ describe('words', () => {
 
   test('no help text for a setting the panel does not show', () => {
     const ids = new Set(keys.map(helpId));
-    for (const catalog of [EN_DEFERRED, ES_DEFERRED]) {
+    for (const catalog of [EN_SETTINGSHELP, ES_SETTINGSHELP]) {
       const extra = Object.keys(catalog).filter(
         id => id.startsWith('setHelp.') && !ids.has(id)
       );

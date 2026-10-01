@@ -112,7 +112,13 @@ import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS } from './data/scenarioTags.js';
 import { applyPreset } from './scenarios.js';
 import { buildWorld } from './world/build.js';
-import { t, hasMessage, onLocaleChange } from './i18n/index.js';
+import {
+  t,
+  hasMessage,
+  onLocaleChange,
+  getLocale,
+  registerMessages,
+} from './i18n/index.js';
 import { EN } from './i18n/en.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 import { resetPotentialCache } from './vectorOverlay.js';
@@ -137,10 +143,6 @@ import {
   formatSpeed,
   formatDistance,
   formatTime,
-  COURSE_LEVELS,
-  courseLevelDefaults,
-  getCourseLevel,
-  setCourseLevel,
 } from './units.js';
 import { blackHoleFacts, yearsLabel } from './blackHolePhysics.js';
 import {
@@ -172,11 +174,18 @@ import {
 import { describeVoices } from './sonify/voiceReadout.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import {
+  COURSE_LEVELS,
   SETTING_SECTIONS,
+  courseLevelDefaults,
+  getCourseLevel,
   helpId,
+  initCourseLevel,
   itemsOf,
   sectionLabelId,
+  setCourseLevel,
 } from './settingsSchema.js';
+
+initCourseLevel();
 import { stellarStateFor, spectralType } from './stellar/state.js';
 import {
   initChart,
@@ -4837,20 +4846,41 @@ class TooltipManager {
 const tooltipManager = new TooltipManager();
 
 // Function to get tooltip text for settings
+/** The languages whose Settings help has been fetched. */
+const settingsHelpLoaded = new Set();
+
 /**
- * A setting's help text, `setHelp.<key>` in the deferred catalogs.
+ * Fetch the Settings help for the reader's language, once.
+ *
+ * Its own pair of files rather than the deferred catalogs: those are fetched in
+ * both languages on every lesson route, for the lesson panel, and the help is
+ * read by nobody there. English is the only fallback a string needs.
+ */
+const loadSettingsHelp = async () => {
+  const locale = getLocale() === 'es' ? 'es' : 'en';
+  if (settingsHelpLoaded.has(locale)) return;
+  const messages =
+    locale === 'es'
+      ? (await import('./i18n/es.settingsHelp.js')).ES_SETTINGSHELP
+      : (await import('./i18n/en.settingsHelp.js')).EN_SETTINGSHELP;
+  registerMessages(locale, messages);
+  settingsHelpLoaded.add(locale);
+};
+
+/**
+ * A setting's help text, `setHelp.<key>` (js/i18n/en.settingsHelp.js).
  *
  * It used to be a table of English sentences in this file: downloaded by every
  * visitor at start-up, shown in English to a Spanish reader, and written for
  * about half of the panel - several of them describing options the controls
- * did not have. The catalogs arrive on the first press of an info button.
+ * did not have. It arrives on the first press of an info button.
  * @param {string} key - The setting
  * @param {string} label - Its label, for the generic sentence
  * @returns {Promise<string>}
  */
 const getSettingTooltip = async (key, label) => {
   try {
-    await ensureDeferredMessages();
+    await loadSettingsHelp();
   } catch {
     /* the generic sentence below is still true */
   }
@@ -4919,7 +4949,10 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
   const levelHint = document.createElement('p');
   levelHint.id = 'settingsCourseLevelHint';
   levelHint.className = 'settings-level-hint';
-  levelHint.textContent = t(`settings.level.${pendingCourseLevel}.hint`);
+  // What the level sets is help text, in the Settings help files: written
+  // once they have arrived, which opening the panel asks for.
+  const hintId = `settings.level.${pendingCourseLevel}.hint`;
+  if (hasMessage(hintId)) levelHint.textContent = t(hintId);
   levelSelect.onchange = () => {
     pendingCourseLevel = levelSelect.value;
     const d = courseLevelDefaults(pendingCourseLevel);
@@ -6765,6 +6798,9 @@ async function openSettings() {
   buildSettingsMenu();
   pausedBeforeSettings = state.paused;
   state.paused = true;
+  // The help arrives while the reader looks; registering it rebuilds the
+  // panel with the level's description in place.
+  loadSettingsHelp().catch(() => {});
   openDialog(panel, {
     trigger: document.getElementById('settingsBtn'),
     // The close chip comes first in the markup, and landing on "close" is a
