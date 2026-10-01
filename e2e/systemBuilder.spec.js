@@ -62,7 +62,7 @@ async function census(page) {
 
 const KEPLER16 = { Stars: 2, 'Gas Giants': 1 };
 
-async function openBuilder(page, app, { locale } = {}) {
+async function openBuilder(page, app, { locale, paused = false } = {}) {
   if (locale) {
     await page.addInitScript(l => {
       try {
@@ -73,6 +73,8 @@ async function openBuilder(page, app, { locale } = {}) {
     }, locale);
   }
   await app.boot();
+  // Through the transport bar, before the dialog covers it.
+  if (paused) await app.pressPause();
   // At phone and tablet widths the rail is a menu (e2e/uiCoherence.spec.js).
   if (await page.evaluate(() => window.innerWidth <= 1024)) {
     const open = await page
@@ -180,10 +182,15 @@ test.describe('the Orbital System Builder', () => {
     page,
     app,
   }) => {
-    await openBuilder(page, app);
+    // The question is whether anything was built, so the world behind the
+    // dialog is held still while it is asked. Left running, the default world
+    // is a random one with black holes in it, and now and then one swallows a
+    // planet between the two counts below: "Planets" went from 10 to 9 with
+    // nothing built. Building would start it again - installSystem unpauses -
+    // and replace every body, so a pause hides nothing this asks about.
+    await openBuilder(page, app, { paused: true });
     await useTemplate(page, 'starPlanet');
-    // Without the particles and debris the default world sheds as it runs:
-    // the question is only whether anything was built.
+    // Without the particles and debris, which are not bodies anyone built.
     const bodies = async () => {
       const c = await census(page);
       delete c.Particles;
@@ -198,6 +205,11 @@ test.describe('the Orbital System Builder', () => {
     ]);
     await expect(page.locator('#systemBuilderDialog')).toBeVisible();
     expect(await bodies()).toEqual(before);
+    // And the world was not started again, which a build would have done.
+    await expect(page.locator('#overlayStatus')).toHaveAttribute(
+      'data-state',
+      'paused'
+    );
   });
 
   test('saved to a file, and opened again from it', async ({ page, app }) => {
