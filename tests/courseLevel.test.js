@@ -37,6 +37,8 @@ import {
 } from '../js/shareState.js';
 import { EN } from '../js/i18n/en.js';
 import { ES } from '../js/i18n/es.js';
+import { EN_SETTINGSHELP } from '../js/i18n/en.settingsHelp.js';
+import { ES_SETTINGSHELP } from '../js/i18n/es.settingsHelp.js';
 
 const LEVELS = Object.keys(COURSE_LEVELS);
 
@@ -106,12 +108,15 @@ describe('the levels', () => {
   });
 
   test('each has a name and a description in both languages', () => {
+    // The name is in the catalog the panel is built from; what the level sets
+    // is help, in the Settings help files fetched when the panel opens.
     for (const id of LEVELS) {
-      for (const catalog of [EN, ES]) {
+      for (const [catalog, help] of [
+        [EN, EN_SETTINGSHELP],
+        [ES, ES_SETTINGSHELP],
+      ]) {
         expect(catalog[`settings.level.${id}`]).toEqual(expect.any(String));
-        expect(catalog[`settings.level.${id}.hint`]).toEqual(
-          expect.any(String)
-        );
+        expect(help[`settings.level.${id}.hint`]).toEqual(expect.any(String));
       }
     }
     expect(ES['settings.level.label']).toEqual(expect.any(String));
