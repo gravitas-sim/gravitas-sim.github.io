@@ -3677,7 +3677,7 @@ export const EN_DEFERRED = {
   'setHelp.sim_size':
     'Sets the size of the region the generator lays bodies out in: Small 100 units (1 AU), Medium 200 (2 AU), Large 300 (3 AU), Huge 500 (5 AU). A very heavy central body widens it so that nothing starts inside it. Takes effect when Apply & Restart rebuilds the simulation.',
   'setHelp.placement':
-    'How the generator lays out bodies around the most massive star or compact object, which starts at rest at the center. Circular and Multi-Ring put them on rings (20 per ring for Multi-Ring) at circular-orbit speed; Random scatters them, orbiting the center if it outweighs the rest threefold and otherwise with random velocities; Grid sets them on a square grid with small random velocities; Empty does no layout at all. Takes effect when Apply & Restart rebuilds the simulation.',
+    'How the generator lays out bodies around the most massive star or compact object, which starts at rest at the center. Circular and Multi-Ring put them on rings (20 per ring for Multi-Ring) at circular-orbit speed; Random scatters them, orbiting the center if it outweighs the rest threefold and otherwise with random velocities; Grid sets them on a square grid with small random velocities; Empty lays nothing out: it is for bodies placed by hand, so set the counts to zero first, or every generated body starts together at the center. Takes effect when Apply & Restart rebuilds the simulation.',
   'setHelp.num_black_holes':
     'How many black holes the generator creates, each with the default black-hole mass unless individual masses are set. Every body is attracted to them; whether they move is set by BH Behavior. Takes effect when Apply & Restart rebuilds the simulation.',
   'setHelp.bh_mass':
