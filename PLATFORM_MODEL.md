@@ -251,7 +251,12 @@ is fixed over the full-bleed canvas, and everything the application
 anchors to the top adds `--shell-height`, which is 0 in an embed and in a
 lecture. It keeps its own skip link (to the controls) and its own footer.
 The footer's theme and language menus gave way to the shell's switches,
-which call the application's own setters. The Home hub is next.
+which call the application's own setters.
+
+Home followed: the front door opens below the bar rather than over it,
+the bar stays live (outside the inert set, inside the Tab loop, so the
+layer is a non-modal dialog), and `/#home` opens it by name from every
+page's GRAVITAS link. Its content is unchanged until Prompt 73.
 
 ## Rejected alternatives
 

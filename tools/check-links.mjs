@@ -118,12 +118,13 @@ const isExternal = value =>
 // opens, the lesson does not, and nothing says why. So a route is resolved
 // against the catalog it names.
 const ROUTES = [
-  // The lesson chooser, the shared shell's Investigations entry: a route with
-  // nothing to resolve.
+  // Two routes the shared shell links with nothing to resolve: Home, which its
+  // GRAVITAS link opens by name, and the lesson chooser, its Investigations
+  // entry.
   {
-    pattern: /^(investigations)$/,
+    pattern: /^(home|investigations)$/,
     what: 'route',
-    load: async () => ['investigations'],
+    load: async () => ['home', 'investigations'],
   },
   {
     pattern: /^investigation=([\w-]+)$/,

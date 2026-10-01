@@ -187,7 +187,7 @@ export function shellFor(page, { main }) {
   const header = [
     ...(app ? [] : [`<a class="gs-skip" href="#${main}">${say('skip')}</a>`]),
     `<header class="gs-shell${app ? ' gs-app' : ''}">`,
-    `<a class="gs-brand" href="/"><span class="gs-vh">${say('home')}</span><span aria-hidden="true">GRAVITAS</span></a>`,
+    `<a class="gs-brand" href="/#home"><span class="gs-vh">${say('home')}</span><span aria-hidden="true">GRAVITAS</span></a>`,
     `<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden>${say('menu')}</button>`,
     `<nav id="gs-nav" class="gs-nav" aria-label="${WORDS.nav[0]}"><ul>${groups}</ul></nav>`,
     `<div class="gs-controls" hidden>`,

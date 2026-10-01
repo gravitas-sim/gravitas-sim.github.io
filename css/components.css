@@ -5118,7 +5118,8 @@
 @layer components {
   .welcome-screen {
     position: fixed;
-    inset: 0;
+    /* Home is a page of the shell: below its bar, which stays in use. */
+    inset: var(--shell-height, 0px) 0 0 0;
     z-index: var(--z-welcome);
 
     overflow-y: auto;
