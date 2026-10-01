@@ -38,6 +38,9 @@ import {
 } from './physics.js';
 import { toast, announce } from './notify.js';
 import { t } from './i18n/index.js';
+// Statically: this module is itself fetched on the first press of Export
+// (js/exportBridge.js), so the dialog machinery costs start-up nothing here.
+import { openDialog, closeDialog } from './dialog.js';
 
 // This module's prose lives in the deferred half of the catalog - see the
 // note in js/i18n/en.deferred.js. Registered from here rather than left to the
@@ -347,17 +350,21 @@ function render() {
 
 /** Show the dialog. */
 export function openExportDialog() {
-  if (!els.modal) return;
-  els.modal.classList.remove('hidden');
+  if (!els.modal || isExportDialogOpen()) return;
   render();
-  els.close?.focus();
+  // Modal: the page behind it inert, Tab kept inside, Escape and the backdrop
+  // closing it, and focus back on Export however it was opened.
+  openDialog(els.content, {
+    backdrop: els.modal,
+    isolate: true,
+    trigger: document.getElementById('exportDataBtn'),
+    initialFocus: els.close,
+  });
 }
 
 /** Hide the dialog. */
 export function closeExportDialog() {
-  if (!els.modal) return;
-  els.modal.classList.add('hidden');
-  document.getElementById('exportDataBtn')?.focus();
+  closeDialog(els.content);
 }
 
 /** @returns {boolean} True while the dialog is showing */
@@ -368,6 +375,7 @@ export const isExportDialogOpen = () =>
 export function initExportDialog() {
   els = {
     modal: document.getElementById('dataExport'),
+    content: document.getElementById('dataExportContent'),
     files: document.getElementById('dataExportFiles'),
     scope: document.getElementById('dataExportScope'),
     selectedLabel: document.getElementById('dataExportSelectedLabel'),
@@ -384,9 +392,8 @@ export function initExportDialog() {
     scope = e.target.value;
     render();
   });
-  els.modal.addEventListener('click', e => {
-    if (e.target === els.modal) closeExportDialog();
-  });
+  // js/dialog.js takes an Escape pressed inside the dialog; this is one
+  // pressed with focus on <body>.
   window.addEventListener('gravitasEscape', () => {
     if (isExportDialogOpen()) closeExportDialog();
   });

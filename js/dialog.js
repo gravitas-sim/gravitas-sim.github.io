@@ -29,6 +29,16 @@
 //   - a reader who has asked for less motion does not wait on a transition
 //     that is not going to run
 //
+// Every modal in the application opens here (tests/dialogInventory.test.js
+// holds index.html to that). Most of them are a dialog inside a full-screen
+// backdrop, and two options cover what those had each written for themselves:
+//
+//   - `backdrop` is the element that is shown and hidden around the dialog,
+//     and a click on it, outside the dialog, closes it
+//   - `isolate` makes the rest of the page inert while the dialog is open, so
+//     a screen reader cannot browse what the backdrop covers. js/focusTrap.js
+//     did this for three of them, and it is gone
+//
 // It knows nothing about settings, or about the simulation. It takes an
 // element and a trigger, which is what makes it testable and what keeps it
 // from acquiring an import back up to the coordinator.
@@ -59,8 +69,53 @@ const reducedMotion = () =>
 /** Per-panel bookkeeping, so a second open does not install a second listener. */
 const wired = new WeakMap();
 
+/** What is shown and hidden: the backdrop around the panel, or the panel. */
+const hostOf = panel => wired.get(panel)?.host || panel;
+
 /** @param {HTMLElement} panel - The dialog @returns {boolean} Whether it is open */
-export const isOpen = panel => Boolean(panel) && panel.hidden === false;
+export const isOpen = panel => Boolean(panel) && hostOf(panel).hidden === false;
+
+/** Live regions are left alone: an announcement made over a dialog is heard. */
+const LIVE = '[aria-live], [role="status"], [role="alert"], [role="log"]';
+
+/**
+ * Make everything outside the dialog inert, and say how to undo exactly that.
+ *
+ * Walks the body's children rather than the whole tree: the dialog lives under
+ * one of them, and marking that one would hide the dialog too. A node that was
+ * already inert - a closed dialog is - is left as it was and is not touched
+ * on the way back, so closing one dialog never opens another's closed panel.
+ *
+ * @param {HTMLElement} host - The element that holds the dialog
+ * @returns {Function} Put back what this changed
+ */
+function isolate(host) {
+  let top = host;
+  while (top.parentElement && top.parentElement !== document.body) {
+    top = top.parentElement;
+  }
+  const changed = [];
+  for (const node of document.body.children) {
+    if (node === top || node.tagName === 'SCRIPT') continue;
+    if (node.hasAttribute('inert') || node.matches(LIVE)) continue;
+    const aria = !node.hasAttribute('aria-hidden');
+    node.setAttribute('inert', '');
+    if (aria) node.setAttribute('aria-hidden', 'true');
+    changed.push([node, aria]);
+  }
+  return () => {
+    for (const [node, aria] of changed) {
+      node.removeAttribute('inert');
+      if (aria) node.removeAttribute('aria-hidden');
+    }
+  };
+}
+
+/** The element initialFocus names: a selector, an element, or a function. */
+const named = (panel, wanted) => {
+  const el = typeof wanted === 'function' ? wanted() : wanted;
+  return typeof el === 'string' ? panel.querySelector(el) : el || null;
+};
 
 /**
  * Open a panel as a modal dialog.
@@ -68,31 +123,51 @@ export const isOpen = panel => Boolean(panel) && panel.hidden === false;
  * @param {HTMLElement} panel - The dialog element
  * @param {object} [opts] - Options
  * @param {HTMLElement} [opts.trigger] - What to put focus back on when it closes
- * @param {string} [opts.initialFocus] - Selector for the first control to focus
+ * @param {string|HTMLElement|Function} [opts.initialFocus] - The first control
+ *   to focus: a selector, an element, or a function returning either, asked
+ *   after the panel is shown
  * @param {Function} [opts.onClose] - Called after every close, with the reason
+ * @param {HTMLElement} [opts.backdrop] - The element shown and hidden around
+ *   the panel, if it is not the panel itself; a click on it closes the dialog
+ * @param {boolean} [opts.isolate] - Make the rest of the page inert while open
  */
-export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
-  if (!panel || isOpen(panel)) return;
+export function openDialog(
+  panel,
+  { trigger, initialFocus, onClose, backdrop, isolate: alone } = {}
+) {
+  const host = backdrop || hostOf(panel || document.body);
+  if (!panel || host.hidden === false) return;
 
-  const record = { trigger: trigger ?? document.activeElement, onClose };
+  const record = {
+    trigger: trigger ?? document.activeElement,
+    onClose,
+    host,
+    closing: false,
+  };
   wired.set(panel, { ...(wired.get(panel) || {}), ...record });
 
-  panel.hidden = false;
-  panel.removeAttribute('inert');
+  host.hidden = false;
+  host.removeAttribute('inert');
   panel.setAttribute('aria-modal', 'true');
   panel.setAttribute('role', 'dialog');
+  if (alone) wired.get(panel).restore = isolate(host);
 
   // The class is the animation; `hidden` above is the semantics. Removed on the
   // next frame so the browser has a chance to lay the panel out first and the
   // transition actually runs from its closed state. Unless it has been closed
   // before that frame came - under load an Escape can beat it - because the
   // close has already put the class back, and taking it off again now would
-  // leave the panel on screen and inert, with finish() below reading the
-  // missing class as a reopen and never hiding it.
-  if (reducedMotion()) panel.classList.remove('hidden');
+  // leave the panel on screen and inert, and never hidden.
+  //
+  // Where the class is what hides it - display: none, as every backdrop here
+  // is - there is no transition to wait a frame for, and the panel has to be
+  // laid out now: the first control cannot take focus inside a box that is
+  // not rendered.
+  if (reducedMotion() || getComputedStyle(host).display === 'none')
+    host.classList.remove('hidden');
   else
     requestAnimationFrame(
-      () => panel.hasAttribute('inert') || panel.classList.remove('hidden')
+      () => wired.get(panel).closing || host.classList.remove('hidden')
     );
 
   if (!wired.get(panel).keydown) {
@@ -159,10 +234,16 @@ export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
       // Disarmed here as well as by the timer, because under load a click can
       // arrive before the timer runs, and it is not the Tab's to send back.
       wrapTo = null;
-      if (!to || !isOpen(panel) || panel.hasAttribute('inert')) return;
+      if (!to || !isOpen(panel) || wired.get(panel).closing) return;
       if (!panel.contains(event.target)) to.focus();
     };
     panel.addEventListener('keydown', keydown);
+    // A press on the backdrop itself, not on anything inside the panel.
+    if (host !== panel)
+      host.addEventListener('click', event => {
+        if (event.target === host && isOpen(panel))
+          closeDialog(panel, 'backdrop');
+      });
     document.addEventListener('focusin', focusin, true);
     // A click is never the Tab's, not even one after a trip to the toolbar.
     document.addEventListener('pointerdown', () => (wrapTo = null), true);
@@ -178,7 +259,7 @@ export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
 
   // Focus the first thing worth acting on. Named by the caller when the
   // sensible first control is not simply the first one in the markup.
-  const wanted = initialFocus && panel.querySelector(initialFocus);
+  const wanted = initialFocus && named(panel, initialFocus);
   const target = wanted || focusable(panel)[0] || panel;
   target.focus({ preventScroll: true });
 }
@@ -193,31 +274,54 @@ export function openDialog(panel, { trigger, initialFocus, onClose } = {}) {
  *
  * @param {HTMLElement} panel - The dialog element
  * @param {string} [reason] - Passed to onClose: 'apply', 'cancel', 'escape', ...
+ * @param {object} [opts] - Options
+ * @param {boolean} [opts.returnFocus] - False when the caller is about to put
+ *   focus somewhere else itself, as opening a lesson from its card does
  */
-export function closeDialog(panel, reason = 'close') {
-  if (!panel || !isOpen(panel)) return;
-  const record = wired.get(panel) || {};
+export function closeDialog(
+  panel,
+  reason = 'close',
+  { returnFocus = true } = {}
+) {
+  // Never opened here is never open here: a panel inside a backdrop is not
+  // hidden itself, and closing it would hide it inside the next open.
+  if (!panel || !wired.has(panel) || !isOpen(panel)) return;
+  const record = wired.get(panel);
+  // Already on its way out: a second close - Escape, and then the
+  // application's Escape after it - must not report a second reason.
+  if (record.closing) return;
+  record.closing = true;
+  const host = hostOf(panel);
 
-  panel.classList.add('hidden');
+  host.classList.add('hidden');
   // Inert immediately: the panel is on its way out and must stop being
   // reachable now, not when the animation finishes.
-  panel.setAttribute('inert', '');
+  host.setAttribute('inert', '');
   panel.setAttribute('aria-modal', 'false');
+  // And the page behind it back before focus goes there.
+  record.restore?.();
+  record.restore = null;
 
   const finish = () => {
-    if (!panel.classList.contains('hidden')) return; // reopened mid-transition
-    panel.hidden = true;
+    if (!wired.get(panel)?.closing) return; // reopened mid-transition
+    host.hidden = true;
   };
-  if (reducedMotion()) finish();
+  // Nothing to wait for when the class hides it outright, or when nothing is
+  // animating it at all: the lecture sheet and the shortcut list have no
+  // closing transition, and would sit on screen, inert, until the timer.
+  const still =
+    getComputedStyle(host).display === 'none' ||
+    (typeof host.getAnimations === 'function' && !host.getAnimations().length);
+  if (reducedMotion() || still) finish();
   else {
     let done = false;
     const once = () => {
       if (done) return;
       done = true;
-      panel.removeEventListener('transitionend', once);
+      host.removeEventListener('transitionend', once);
       finish();
     };
-    panel.addEventListener('transitionend', once);
+    host.addEventListener('transitionend', once);
     // A panel with no transition at all fires no transitionend, and a reader
     // must not be left with an invisible panel still in the tab order.
     setTimeout(once, 600);
@@ -227,7 +331,7 @@ export function closeDialog(panel, reason = 'close') {
   // hidden behind a collapsed menu since the dialog opened, which happens at
   // phone widths - then anywhere is better than inside a panel that is on its
   // way to display:none, because focus left there is focus nowhere.
-  const trigger = record.trigger;
+  const trigger = returnFocus && record.trigger;
   if (trigger && typeof trigger.focus === 'function' && trigger.isConnected) {
     trigger.focus({ preventScroll: true });
   }
