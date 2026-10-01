@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 44 of them. 15 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 44 of them. 17 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -21,8 +21,8 @@ The columns:
 |---|---|---|---|---|---|---|---|
 | gravitas.observation | format, formatVersion | 1 | js/observatory/schema.js validateObservation | download | v1 only | refused: "reads /1" | [yes](sdk/schemas/observation-1.schema.json) |
 | gravitas.pipeline | format, formatVersion | 1 | js/measure/pipeline.js readPipeline | download | v1 only | refused, in words | [yes](sdk/schemas/pipeline-1.schema.json) |
-| gravitas.inference | format, formatVersion | 1 | js/inference/manifest.js validateInference | download | v1 only | a validation problem | no |
-| gravitas.analysis | format, formatVersion, kind | 1 | none: written, never read | download | v1 only | nothing reads it | no |
+| gravitas.inference | format, formatVersion | 1 | js/inference/manifest.js validateInference | download | v1 only | a validation problem | [yes](sdk/schemas/inference-1.schema.json) |
+| gravitas.analysis | format, formatVersion, kind | 1 | none: written, never read | download | v1 only | nothing reads it | [yes](sdk/schemas/analysis-1.schema.json) |
 | gravitas.artifact | format, formatVersion | 1 | js/platform/artifact.js validateArtifact | memory | v1 only | a validation problem | [yes](sdk/schemas/artifact-1.schema.json) |
 | gravitas.observed | format, formatVersion | 1 | js/notebook/observed.js (inside a notebook entry) | localStorage | v1 only | not checked | no |
 | gravitas.observation-data-pack | format, formatVersion | 1 | tools/data-packs/schema.mjs validateDataPack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/observation-data-pack-1.schema.json) |

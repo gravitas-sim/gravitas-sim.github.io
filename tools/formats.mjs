@@ -57,15 +57,18 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'a validation problem',
+    schema: 'inference-1.schema.json',
   },
   {
     name: 'gravitas.analysis',
     fields: 'format, formatVersion, kind',
     version: 1,
+    const: ['js/analysis/sweepAnalysis.js', 'ANALYSIS_VERSION'],
     owner: 'none: written, never read',
     persisted: 'download',
     older: 'v1 only',
     newer: 'nothing reads it',
+    schema: 'analysis-1.schema.json',
   },
   {
     name: 'gravitas.artifact',
