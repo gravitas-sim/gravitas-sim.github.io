@@ -174,8 +174,8 @@ reproducible pipeline.
 # Accessibility, offline use and low-end hardware
 
 The interface targets WCAG 2.2 Level AA. An automated axe-core sweep runs over
-31 surfaces in two languages, the pages with the shared shell in all four
-themes and the rest in two — 200 runs — with no rule disabled,
+33 surfaces in two languages, the pages with the shared shell in all four
+themes and the rest in two — 216 runs — with no rule disabled,
 and a second suite covers focus order, focus traps, Escape handling, focus
 restoration, heading order, landmarks, reflow, reduced motion and the canvas
 description. Automated checks are a floor rather than a ceiling, and the
@@ -198,7 +198,7 @@ analytic, integrated, published, approximation or empirical — and its measured
 error. The public validation page is generated from the suite that ran, not
 transcribed from it.
 
-A release gate runs 55 checks covering formatting, linting, module architecture,
+A release gate runs 56 checks covering formatting, linting, module architecture,
 authoring rules including lesson-quality warnings, internal links, dependency
 audits, the unit and browser suites, the physics validation, bundle budget and
 composition, and the currency of every generated artifact. It additionally

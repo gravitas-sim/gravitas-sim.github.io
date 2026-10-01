@@ -72,6 +72,7 @@ Moving both was tried first: four tests in three specs failed, and the blocks we
 | `pause-event`       | pause at event      | file     | `js/pauseAtEventBridge.js`                        | 4,784 | 1,316 |
 | `rv-workspace`      | RV workspace        | file     | `js/rvWorkspaceBridge.js`                         | 5,810 | 1,811 |
 | `assist`            | gravity assist      | file     | `js/scenarioPanelBridge.js`                       | 7,728 | 1,817 |
+| `home`              | Home (Prompt 54)    | file     | `js/welcome.js`, moved into `#welcomeBody`        | 7,932 | 2,519 |
 | `precise-placement` | precise placement   | file     | `js/precisePlacement.js`                          | 1,731 |   743 |
 | `lesson`            | lesson engine       | file     | `js/investigationsLoader.js`                      | 11,503 | 3,455 |
 | `export`            | data export         | file     | `js/exportBridge.js`                              | 2,190 |   896 |
