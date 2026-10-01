@@ -226,6 +226,8 @@ test.describe('course level', () => {
     await openSettings(page);
     const level = page.locator('#settingsCourseLevel');
     await expect(level).toHaveValue('introductory');
+    // What the level sets arrives with the help files, a moment after opening.
+    await expect(page.locator('#settingsCourseLevelHint')).not.toBeEmpty();
     const conservation = page.locator(
       '.setting-control[data-setting-key="show_conservation_diagnostics"] button'
     );
