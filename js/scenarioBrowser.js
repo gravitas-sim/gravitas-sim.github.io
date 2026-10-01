@@ -15,7 +15,6 @@
 // callback and calls it; ui.js owns the one authoritative loadScenarioByKey().
 // =============================================================================
 
-import { trapFocus } from './focusTrap.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS, TAG_ORDER } from './data/scenarioTags.js';
 import {
@@ -32,10 +31,16 @@ let els = {};
 let onSelect = null;
 let activeTag = ALL;
 let query = '';
-/** Releases the focus trap; set while the gallery is open. */
-let releaseFocus = null;
 
-let lastFocus = null;
+/**
+ * js/dialog.js, fetched on the first open rather than with the page: the
+ * gallery is initialized at start-up, and the dialog machinery is not start-up
+ * code. Primed when a reader points at or focuses the button, so the press
+ * finds it here.
+ */
+let dialogs = null;
+const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
+const primeDialogs = () => loadDialogs().catch(() => {});
 
 // --- The catalog, as the gallery sees it -------------------------------------
 
@@ -278,44 +283,34 @@ function choose(key) {
 }
 
 /** Show the gallery. */
-export function openScenarioBrowser() {
-  if (!els.modal) return;
-  lastFocus = document.activeElement;
+export async function openScenarioBrowser() {
+  if (!els.modal || isScenarioBrowserOpen()) return;
+  // Asked now, before the wait for the module: it is where the reader was.
+  const trigger = document.activeElement;
+  const { openDialog } = await loadDialogs();
+  if (isScenarioBrowserOpen()) return;
   query = '';
   if (els.search) els.search.value = '';
   renderChips();
   renderResults();
-  els.modal.classList.remove('hidden');
-  if (els.scroller) els.scroller.scrollTop = 0;
-  // aria-modal="true" was a promise the gallery did not keep: Tab left it for
-  // the rail behind. The trap also marks the background inert for assistive
-  // technology and restores focus when it is released.
+  // Modal, focus kept inside it, the page behind it inert, Escape and the
+  // backdrop close it and focus goes back where it came from: js/dialog.js.
   //
   // The search field is the fastest way in for anyone who already knows what
   // they want, and focusing it does not stop the chips being tabbed to.
-  releaseFocus = trapFocus(document.getElementById('scenarioListContent'), {
+  openDialog(els.content, {
+    backdrop: els.modal,
+    isolate: true,
+    trigger,
     initialFocus: els.search,
-    returnFocusTo: lastFocus,
   });
-  setTimeout(() => els.search?.focus(), 60);
+  if (els.scroller) els.scroller.scrollTop = 0;
 }
 
 /** Hide the gallery. */
 export function closeScenarioBrowser() {
-  if (!els.modal) return;
-  els.modal.classList.add('hidden');
-  if (releaseFocus) {
-    releaseFocus();
-    releaseFocus = null;
-    return;
-  }
-  if (
-    lastFocus &&
-    document.contains(lastFocus) &&
-    lastFocus !== document.body
-  ) {
-    lastFocus.focus();
-  }
+  // Loaded by definition: the gallery cannot be open without it.
+  dialogs?.closeDialog(els.content);
 }
 
 /** @returns {boolean} True while the gallery is showing */
@@ -398,16 +393,15 @@ export function initScenarioBrowser({ onScenarioSelected } = {}) {
     .getElementById('scenarioListCloseChip')
     ?.addEventListener('click', closeScenarioBrowser);
 
-  els.modal.addEventListener('click', e => {
-    if (e.target === els.modal) closeScenarioBrowser();
-  });
+  const button = document.getElementById('loadScenarioBtn');
+  button?.addEventListener('click', () =>
+    isScenarioBrowserOpen() ? closeScenarioBrowser() : openScenarioBrowser()
+  );
+  button?.addEventListener('pointerenter', primeDialogs, { once: true });
+  button?.addEventListener('focus', primeDialogs, { once: true });
 
-  document
-    .getElementById('loadScenarioBtn')
-    ?.addEventListener('click', () =>
-      isScenarioBrowserOpen() ? closeScenarioBrowser() : openScenarioBrowser()
-    );
-
+  // js/dialog.js takes an Escape pressed inside the gallery. This is the one
+  // pressed with focus on <body>, where a chip that redrew itself leaves it.
   window.addEventListener('gravitasEscape', () => {
     if (isScenarioBrowserOpen()) closeScenarioBrowser();
   });

@@ -2745,7 +2745,7 @@ try {
       js/data/scenarioInfo.js: no scenario title, summary, tag or count is
       spelled out here, so nothing in this file can go stale.
     -->
-    <div id="scenarioListModal" class="hidden">
+    <div id="scenarioListModal" class="hidden" hidden inert>
       <div
         id="scenarioListContent"
         role="dialog"
@@ -2842,7 +2842,7 @@ try {
       lessons themselves are a file each in that directory, and only the one a
       student opens is fetched.
     -->
-    <div id="investigationBrowser" class="hidden">
+    <div id="investigationBrowser" class="hidden" hidden inert>
       <div
         id="investigationBrowserContent"
         role="dialog"
@@ -3361,7 +3361,7 @@ try {
     </aside>
 
     <!-- Data export -->
-    <div id="dataExport" class="hidden">
+    <div id="dataExport" class="hidden" hidden inert>
       <div
         id="dataExportContent"
         role="dialog"
@@ -3426,7 +3426,7 @@ try {
     </div>
 
     <!-- Investigations: finish and report -->
-    <div id="investigationFinish" class="hidden">
+    <div id="investigationFinish" class="hidden" hidden inert>
       <div
         id="investigationFinishContent"
         role="dialog"
@@ -3548,7 +3548,7 @@ try {
       </div>
     </div>
 
-    <div id="shareModal" class="hidden">
+    <div id="shareModal" class="hidden" hidden inert>
       <div
         id="shareContent"
         role="dialog"
@@ -3842,6 +3842,8 @@ try {
     <div
       id="bhMassesModal"
       class="hidden"
+      hidden
+      inert
       role="dialog"
       aria-modal="true"
       aria-labelledby="bhMassesHeading"
@@ -4206,8 +4208,9 @@ try {
       </button>
     </div>
 
-    <div id="lectureSequenceSheet" class="lecture-sheet" hidden="">
+    <div id="lectureSequenceSheet" class="lecture-sheet" hidden="" inert>
       <div
+        id="lectureSequenceDialog"
         class="lecture-sheet-panel"
         role="dialog"
         aria-modal="true"

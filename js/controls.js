@@ -456,10 +456,9 @@ function setupShortcuts() {
     group: 'State',
     label: t('shortcut.export'),
     run: () => {
-      // Lazily imported for the same reason as the two above: exportDialog.js
-      // imports this module for its toast, so a static import here would close
-      // a cycle for one keystroke.
-      import('./exportDialog.js').then(m => m.openExportDialog());
+      // Through the bridge, which initialises the dialog first; lazily, for the
+      // same reason as the two above (exportDialog.js imports this module).
+      import('./exportBridge.js').then(m => m.openExport());
     },
   });
   registerShortcut({
@@ -576,7 +575,10 @@ function setupShortcuts() {
     match: 'escape',
     group: 'Help',
     label: t('shortcut.closePanel'),
-    run: () => {
+    run: event => {
+      // An Escape inside the list has already closed it (js/dialog.js), and
+      // closes nothing else.
+      if (event?.target?.closest?.('#shortcutOverlay')) return;
       if (isShortcutHelpOpen()) {
         hideShortcutHelp();
         return;

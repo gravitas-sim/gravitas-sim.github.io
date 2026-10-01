@@ -45,6 +45,16 @@ function ensureDialog() {
  *
  * @returns {void}
  */
+/**
+ * Open the export dialog from anywhere - the E shortcut - initialising it
+ * first. Importing the dialog's module and calling open, as the shortcut did,
+ * opened nothing until Export had been pressed once.
+ * @returns {Promise<void>}
+ */
+export async function openExport() {
+  (await ensureDialog()).openExportDialog();
+}
+
 export function initExportBridge() {
   const button = document.getElementById('exportDataBtn');
   if (!button) return;

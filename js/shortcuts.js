@@ -10,6 +10,13 @@ let overlayEl = null;
 let enabled = true;
 
 /**
+ * js/dialog.js, fetched the first time the list is shown: this module is on
+ * the start-up path, and the dialog machinery is not.
+ */
+let dialogs = null;
+const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
+
+/**
  * Register a shortcut.
  * @param {Object} spec
  * @param {string} spec.keys - Display form, e.g. 'Shift + ←'
@@ -101,6 +108,7 @@ function buildOverlay() {
   el.setAttribute('aria-modal', 'true');
   el.setAttribute('aria-label', 'Keyboard shortcuts');
   el.hidden = true;
+  el.inert = true;
 
   const groups = new Map();
   for (const s of registry) {
@@ -148,20 +156,30 @@ function buildOverlay() {
   return el;
 }
 
-/** Show the shortcut cheatsheet. */
-export function showShortcutHelp() {
+/**
+ * Show the shortcut cheatsheet: a modal, through js/dialog.js, so Tab stays in
+ * it, the page behind it is inert, and Escape puts focus back where it was.
+ */
+export async function showShortcutHelp() {
   if (!overlayEl) overlayEl = buildOverlay();
-  overlayEl.hidden = false;
-  overlayEl.querySelector('[data-close]')?.focus();
+  if (isShortcutHelpOpen()) return;
+  const trigger = document.activeElement;
+  const { openDialog } = await loadDialogs();
+  openDialog(overlayEl, {
+    isolate: true,
+    trigger,
+    initialFocus: '[data-close]',
+  });
 }
 
 /** Hide the shortcut cheatsheet. */
 export function hideShortcutHelp() {
-  if (overlayEl) overlayEl.hidden = true;
+  if (overlayEl) dialogs?.closeDialog(overlayEl);
 }
 
-/** @returns {boolean} True while the cheatsheet is open */
-export const isShortcutHelpOpen = () => !!overlayEl && !overlayEl.hidden;
+/** @returns {boolean} True while the cheatsheet is open, and not closing */
+export const isShortcutHelpOpen = () =>
+  !!overlayEl && !overlayEl.hidden && !overlayEl.inert;
 
 /** Toggle the cheatsheet. */
 export function toggleShortcutHelp() {

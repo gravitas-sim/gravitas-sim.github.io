@@ -269,10 +269,11 @@ page's GRAVITAS link. Its content is unchanged until Prompt 73.
 - The rail is simulation controls only: Scenario, State, Tools and Add object. Its Learn section went to the shell (Home and the user manual).
 - It is one accordion with stable ids, and on a phone a section heading no longer closes the menu.
 
-**Dialogs.** Fourteen in the application.
-- Through `js/dialog.js`: Settings, precise placement and the system builder.
-- With their own open, close and focus code: the scenario browser, the lesson browser, export, the lesson finish, share, the black-hole masses, the tutorial, the sound panel, the lecture sequence, the welcome (Home, non-modal by design since Prompt 50) and the object inspector (inline).
-- Moving the first nine onto `js/dialog.js` is the next part of Prompt 52.
+**Dialogs.** Sixteen in the application: fourteen in `index.html`, and the shortcut list and the assignment builder, which modules build.
+- Every modal opens through `js/dialog.js`: Settings, precise placement, the system builder, the scenario browser, the lesson browser, export, the lesson finish, share, the black-hole masses, the lecture sequence and the shortcut list. Tab stays inside, Escape and the backdrop close, focus goes back to what opened it, and the page behind is inert (`isolate`) for all but the three that were on the module already: Settings, precise placement (no scrim on purpose) and the system builder.
+- `js/focusTrap.js`, the second trap three of them used, is gone. The modules on the start-up path fetch `js/dialog.js` on the first open, so no route carries it.
+- Not modal, by this model: the welcome (Home, a page of the shell since Prompt 50), the object inspector (inline), the sound panel (an inline popover on its button), the guided tour (its scrim lets presses through to the control each step names) and the assignment builder (a full-screen tool reached by URL). `tests/dialogInventory.test.js` keeps that list and fails on any other dialog that does not open through `js/dialog.js`.
+- The lesson browser is still a modal, on `js/dialog.js`, until Prompt 54 makes it the Library.
 - The two conversions this model names as inline are done. The lesson panel's backup buttons are a Progress disclosure, and its objects list folds and remembers.
 
 **First run.** One overlay at a time, in order:

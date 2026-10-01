@@ -31,6 +31,8 @@
 import { t, onLocaleChange } from './i18n/index.js';
 import { getTheme, setTheme } from './theme.js';
 import { setPresentationMode, isLecture } from './presentation.js';
+// Statically: this module is fetched only when somebody enters Lecture Mode.
+import { openDialog, closeDialog } from './dialog.js';
 
 /**
  * Say something, through the application's toast and live region.
@@ -346,18 +348,29 @@ export const borrowedFrom = () => themeBeforeLecture;
 
 // --- The sequence editor ------------------------------------------------------
 
+/**
+ * The sheet is a modal: Tab stays inside it, the lecture behind it is inert,
+ * a press on the backdrop closes it and focus goes back to Sequence. Escape is
+ * taken by onKeyDown below first, which closes the sheet before Lecture Mode.
+ */
 function openSequenceEditor() {
-  if (!els.sheet) return;
-  els.sheet.hidden = false;
+  if (!els.sheet || isSequenceEditorOpen()) return;
   els.textarea.value = sequence.join('\n');
-  els.textarea.focus();
+  openDialog(els.sheetPanel, {
+    backdrop: els.sheet,
+    isolate: true,
+    trigger: els.sequenceBtn,
+    initialFocus: els.textarea,
+  });
 }
 
 function closeSequenceEditor() {
-  if (els.sheet) els.sheet.hidden = true;
+  if (els.sheetPanel) closeDialog(els.sheetPanel);
 }
 
-const isSequenceEditorOpen = () => Boolean(els.sheet) && !els.sheet.hidden;
+/** Open, and not on its way out. */
+const isSequenceEditorOpen = () =>
+  Boolean(els.sheet) && !els.sheet.hidden && !els.sheet.hasAttribute('inert');
 
 /** Repaint the step counter and the enabled state of the arrows. */
 function renderSequenceState() {
@@ -477,6 +490,7 @@ export function initLecture() {
     position: document.getElementById('lecturePosition'),
     sequenceBtn: document.getElementById('lectureSequenceBtn'),
     sheet: document.getElementById('lectureSequenceSheet'),
+    sheetPanel: document.getElementById('lectureSequenceDialog'),
     textarea: document.getElementById('lectureSequenceText'),
     load: document.getElementById('lectureSequenceLoad'),
     clear: document.getElementById('lectureSequenceClear'),
@@ -496,9 +510,6 @@ export function initLecture() {
   els.clear?.addEventListener('click', () => {
     els.textarea.value = '';
     setSequence([]);
-  });
-  els.sheet?.addEventListener('click', e => {
-    if (e.target === els.sheet) closeSequenceEditor();
   });
 
   // Capture phase: ui.js's pan handler is on window in the bubble phase, and

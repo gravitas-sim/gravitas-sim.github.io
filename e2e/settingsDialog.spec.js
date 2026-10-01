@@ -507,3 +507,81 @@ test.describe('the small-screen way out', () => {
     expect(['settingsBtn', '', 'BODY']).toContain(focus.id || 'BODY');
   });
 });
+
+test.describe('the black-hole masses, a dialog over Settings', () => {
+  // Opened from inside Settings, and until Prompt 52 a class on a div: no
+  // focus moved into it, Tab walked on through Settings behind it, Escape did
+  // nothing, and its close chip - "close without changing the masses" - had
+  // no handler at all. It opens through js/dialog.js now, like Settings.
+  const masses = page => page.locator('#bhMassesContent input');
+  const openMasses = async page => {
+    await page.evaluate(async () => {
+      const { SETTINGS } = await import('/js/ui.js');
+      SETTINGS.num_black_holes = 3;
+      SETTINGS.use_individual_bh_masses = true;
+    });
+    await openDirect(page);
+    const button = page.locator('#indivBHMassBtn');
+    await expect(button).toBeVisible();
+    await button.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#bhMassesModal')).toBeVisible();
+    await expect(masses(page).first()).toBeFocused();
+  };
+
+  test('keeps focus inside, over an inert Settings, and Escape gives it back', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await openMasses(page);
+    expect(await page.locator(PANEL).evaluate(el => el.inert)).toBe(true);
+
+    const stops = [];
+    for (let i = 0; i < 12; i++) {
+      await page.keyboard.press(i % 2 ? 'Shift+Tab' : 'Tab');
+      stops.push(await page.evaluate(focusStop, '#bhMassesModal'));
+    }
+    expect(strayStops(stops)).toEqual([]);
+
+    await masses(page).first().focus();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#bhMassesModal')).toBeHidden();
+    // Settings is still open, live again, with focus on the button.
+    await expect(page.locator(PANEL)).toBeVisible();
+    expect(await page.locator(PANEL).evaluate(el => el.inert)).toBe(false);
+    await expect(page.locator('#indivBHMassBtn')).toBeFocused();
+  });
+
+  test('Escape and the chip leave the masses as they were; Done keeps them', async ({
+    page,
+    app,
+  }) => {
+    // At a phone's width, where the close chip is the way out it offers.
+    await page.setViewportSize({ width: 390, height: 780 });
+    await app.boot();
+    await openMasses(page);
+    const before = await masses(page).first().inputValue();
+
+    for (const leave of [
+      () => page.keyboard.press('Escape'),
+      () => page.locator('#bhMassesCloseChip').click(),
+    ]) {
+      await masses(page).first().focus();
+      await page.keyboard.press('End');
+      await leave();
+      await expect(page.locator('#bhMassesModal')).toBeHidden();
+      await page.locator('#indivBHMassBtn').click();
+      await expect(masses(page).first()).toHaveValue(before);
+    }
+
+    await masses(page).first().focus();
+    await page.keyboard.press('End');
+    const moved = await masses(page).first().inputValue();
+    expect(moved).not.toBe(before);
+    await page.locator('#bhMassesDone').click();
+    await expect(page.locator('#bhMassesModal')).toBeHidden();
+    await page.locator('#indivBHMassBtn').click();
+    await expect(masses(page).first()).toHaveValue(moved);
+  });
+});
