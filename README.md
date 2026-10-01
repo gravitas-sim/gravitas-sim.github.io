@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->7382<!--/fact--> tests across <!--fact:jestSuites-->229<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->7397<!--/fact--> tests across <!--fact:jestSuites-->230<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -645,6 +645,7 @@ part was built:
 | [`LAB3D.md`](LAB3D.md)                                             | The 3-D small-N kernel: its state format, integrators, runs, API, experiments, validation and limits                                         |
 | [`LAB3D_CURRICULUM.md`](LAB3D_CURRICULUM.md)                       | Orbits in three dimensions: the 3-D lab's four guides, their concept map, the physics that checks them and the model's limits              |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
+| [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md)                             | The shared controls: field, input, select, textarea, file, range, toolbar, buttons; their states, tokens and accessibility                     |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
 | [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->24<!--/fact--> lessons, and what a 2019 Chromebook actually gets |

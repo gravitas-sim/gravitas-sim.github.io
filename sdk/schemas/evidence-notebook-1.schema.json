@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/evidence-notebook-1.schema.json",
+  "title": "gravitas.evidence.notebook/1",
+  "description": "The evidence notebook as a student downloads it and restores it on another machine: every entry whole, each a frozen snapshot of what was measured (quantities, each measured, analytic or revealed truth, a figure, and the conditions it was taken under) beside the student's own prose, with the snapshot's checksum. js/notebook/notebook.js validateBackup() is the authority, with js/notebook/entry.js validateEntry() for each entry; it also refuses more than 60 entries or more than 40 quantities in one, which this schema does not say. A figure series' kind and style are what entry.js writes; validateEntry() does not check them. Neither validator refuses a field it does not know, so neither does this schema. The notebook in localStorage (js/notebook/store.js) is another format. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "kind",
+    "version",
+    "entries"
+  ],
+  "properties": {
+    "kind": {
+      "const": "gravitas.evidence.notebook"
+    },
+    "version": {
+      "const": 1
+    },
+    "entrySchema": {
+      "const": 1
+    },
+    "savedAt": {
+      "type": "string"
+    },
+    "app": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "string"
+        }
+      }
+    },
+    "student": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "snapshot"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "description": "The instrument it was captured from: one of js/notebook/entry.js SOURCES in this build, kept as written otherwise."
+          },
+          "title": {
+            "type": "string"
+          },
+          "prose": {
+            "type": "object",
+            "properties": {
+              "claim": {
+                "type": "string"
+              },
+              "evidence": {
+                "type": "string"
+              },
+              "limitations": {
+                "type": "string"
+              }
+            }
+          },
+          "snapshot": {
+            "type": "object",
+            "required": [
+              "quantities"
+            ],
+            "properties": {
+              "v": {
+                "const": 1
+              },
+              "capturedAt": {
+                "type": "number"
+              },
+              "quantities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "label"
+                  ],
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "unit": {
+                      "type": "string"
+                    },
+                    "kind": {
+                      "enum": [
+                        "measured",
+                        "analytic",
+                        "truth"
+                      ]
+                    },
+                    "uncertainty": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "figure": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "required": [
+                  "series"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "xLabel": {
+                    "type": "string"
+                  },
+                  "yLabel": {
+                    "type": "string"
+                  },
+                  "logX": {
+                    "type": "boolean"
+                  },
+                  "series": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        },
+                        "kind": {
+                          "enum": [
+                            "measured",
+                            "analytic",
+                            "truth"
+                          ]
+                        },
+                        "style": {
+                          "enum": [
+                            "line",
+                            "points"
+                          ]
+                        },
+                        "points": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "errors": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "provenance": {
+                "type": "object",
+                "properties": {
+                  "flags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "numerical": {
+                    "type": "object"
+                  }
+                }
+              },
+              "observed": {
+                "type": "object",
+                "required": [
+                  "format"
+                ],
+                "properties": {
+                  "format": {
+                    "const": "gravitas.observed"
+                  },
+                  "formatVersion": {
+                    "const": 1
+                  }
+                },
+                "description": "For a measurement on real data, what the data were and what was done to them (js/notebook/observed.js), in place of a simulation's conditions."
+              }
+            }
+          },
+          "fingerprint": {
+            "type": "string",
+            "description": "The snapshot's checksum when it was saved. A restore recomputes it, and marks an entry whose snapshot no longer matches rather than refusing it."
+          },
+          "revisedAt": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

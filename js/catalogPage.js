@@ -89,7 +89,7 @@ const typeOf = e => (e.delivery === 'built-in' ? 'built-in' : e.type);
 
 async function load() {
   const box = $('catLoad');
-  box.replaceChildren(el('p', { class: 'cw-hint', text: t('cat.loading') }));
+  box.replaceChildren(el('p', { class: 'ui-hint', text: t('cat.loading') }));
   try {
     const res = await fetch(CATALOG_URL, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -223,7 +223,7 @@ function entryItem(e) {
       })
     );
 
-  const actions = el('div', { class: 'cw-actions' });
+  const actions = el('div', { class: 'ui-toolbar' });
   const busy = state.busy.has(e.id);
   const button = (text, onClick, attrs = {}) => {
     const b = el('button', {
@@ -268,7 +268,7 @@ function entryItem(e) {
   if (s === 'update' && installed && breaking(installed.version, e.version))
     notes.push(
       el('p', {
-        class: 'cw-hint',
+        class: 'ui-hint',
         text: t('cat.breaking', {
           version: e.version,
           installed: installed.version,
@@ -321,7 +321,7 @@ function entryItem(e) {
         })
       ),
       e.summary ? el('p', { text: pick(e.summary) }) : null,
-      el('p', { class: 'cw-hint', text: statusText(e, s, installed) }),
+      el('p', { class: 'ui-hint', text: statusText(e, s, installed) }),
       meta,
       actions,
       ...notes

@@ -120,6 +120,9 @@ const DOCS = [
   'PHYSICS_VALIDATION.md',
   'MASS_UNITS.md',
   'NUMBER_TYPOGRAPHY.md',
+  // The component language (Prompt 51): no counts, but its links to the
+  // stylesheets and tools it documents are checked.
+  'DESIGN_SYSTEM.md',
   'OBJECT_INSPECTOR.md',
   'PERFORMANCE_PROFILING_GUIDE.md',
   'PERFORMANCE_OPTIMIZATIONS_SUMMARY.md',

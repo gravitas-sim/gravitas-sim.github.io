@@ -163,6 +163,7 @@ export const FORMATS = Object.freeze([
     persisted: 'memory, inside results',
     older: 'converts an unversioned sweep spec',
     newer: 'refused, in words',
+    schema: 'experiment-1.schema.json',
   },
   {
     name: 'gravitas.experiment-result',
@@ -172,6 +173,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download, localStorage',
     older: 'v1 only',
     newer: 'refused; the analysis panel does not check',
+    schema: 'experiment-result-1.schema.json',
   },
   {
     name: 'gravitas-experiment',
@@ -320,6 +322,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'refused, in words',
+    schema: 'evidence-notebook-1.schema.json',
   },
   // --- Courses, packages and the catalog ---
   {
@@ -392,6 +395,7 @@ export const FORMATS = Object.freeze([
     persisted: 'repository',
     older: 'v1 only',
     newer: 'refused',
+    schema: 'catalog-1.schema.json',
   },
   {
     name: 'gravitas.catalog-curation',
@@ -401,6 +405,7 @@ export const FORMATS = Object.freeze([
     persisted: 'repository',
     older: 'not checked',
     newer: 'not checked',
+    schema: 'catalog-curation-1.schema.json',
   },
   {
     name: 'gravitas.extension-archive',
@@ -448,6 +453,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download, localStorage draft',
     older: 'v1 only',
     newer: 'skipped, in words',
+    schema: 'evaluation-1.schema.json',
   },
 ]);
 

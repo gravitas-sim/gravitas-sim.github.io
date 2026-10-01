@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/experiment-result-1.schema.json",
+  "title": "gravitas.experiment-result/1",
+  "description": "A finished run of a gravitas.experiment/1, as the experiment runner (/experiments/, js/experimentsPage.js) saves one: the manifest and its hash, the engine's fingerprint and the build, the device, when it ran and how it ended, every trial in planned order, and the summary per parameter value. js/experiments/experimentManifest.js reproducibility() reads it, and says whether it can be reproduced here; js/analysis/sweepAnalysis.js analyses it. Neither refuses a field it does not know, so neither does this schema. EXPERIMENTS.md describes it; FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "hash",
+    "manifest",
+    "engine",
+    "status",
+    "trials",
+    "summary"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.experiment-result"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}$"
+    },
+    "manifest": {
+      "type": "object",
+      "required": [
+        "format",
+        "formatVersion"
+      ],
+      "properties": {
+        "format": {
+          "const": "gravitas.experiment"
+        },
+        "formatVersion": {
+          "const": 1
+        }
+      },
+      "description": "The experiment that ran, as it was run (experiment-1.schema.json)."
+    },
+    "engine": {
+      "type": "object",
+      "required": [
+        "fingerprint"
+      ],
+      "properties": {
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        },
+        "app": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "enum": [
+            "low-end",
+            "desktop"
+          ]
+        },
+        "concurrency": {
+          "type": "integer"
+        },
+        "cores": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "startedAt": {
+      "type": "string"
+    },
+    "finishedAt": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "complete",
+        "partial",
+        "canceled"
+      ]
+    },
+    "stopReason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resumedTrials": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "elapsedMs": {
+      "type": "number"
+    },
+    "trials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "index",
+          "params",
+          "seed",
+          "status",
+          "results",
+          "steps"
+        ],
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "seed": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "buildFailed",
+              "bodiesMissing",
+              "notFinite",
+              "lostBody",
+              "canceled",
+              "stalled",
+              "capped",
+              "timeout",
+              "corrupt",
+              "workerFailed",
+              "resourceLimit"
+            ]
+          },
+          "results": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "kinds": {
+            "type": "object"
+          },
+          "series": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array"
+            }
+          },
+          "frames": {
+            "type": "integer"
+          },
+          "steps": {
+            "type": "integer"
+          },
+          "samples": {
+            "type": "integer"
+          },
+          "simTime": {
+            "type": "number"
+          },
+          "wallMs": {
+            "type": "number"
+          },
+          "realmMs": {
+            "type": "number"
+          },
+          "timing": {
+            "type": "object"
+          },
+          "numerics": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "stoppedBy": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "statusCounts",
+        "metrics"
+      ],
+      "properties": {
+        "statusCounts": {
+          "type": "object",
+          "required": [
+            "total"
+          ],
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "params",
+                "n"
+              ],
+              "properties": {
+                "params": {
+                  "type": "object"
+                },
+                "n": {
+                  "type": "integer"
+                },
+                "mean": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "min": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "max": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "spread": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "partial": {
+                  "type": "integer"
+                },
+                "missing": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
