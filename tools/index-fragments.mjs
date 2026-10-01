@@ -63,6 +63,15 @@ export const FRAGMENTS = [
     ids: ['assistContainer'],
   },
   {
+    // Home's sections below its heading. Mounted after its host and moved
+    // into #welcomeBody, which js/welcome.js fills.
+    host: 'home',
+    family: 'Home',
+    kind: 'file',
+    owner: 'js/welcome.js',
+    ids: ['welcomeSections'],
+  },
+  {
     host: 'precise-placement',
     family: 'precise placement',
     kind: 'file',
