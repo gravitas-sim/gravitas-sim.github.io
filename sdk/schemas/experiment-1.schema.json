@@ -1,0 +1,457 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/experiment-1.schema.json",
+  "title": "gravitas.experiment/1",
+  "description": "An experiment written down so it can be run again: the model, the fixed settings, the seed set, the one or two parameters varied, the observables, when a trial stops, the numerics, the scheduler's limits and the summaries wanted. Two shapes share the format: a 2-D laboratory scenario, which js/experiments/experimentManifest.js validateExperiment() is the authority on, and a 3-D system, which js/lab3d/experiment.js validateLab3dExperiment() is. Both validators also hold every number to its bounds, a varied parameter to its scenario, and the trial count to a ceiling, which this schema does not. Neither refuses a field it does not know, so neither does this schema. EXPERIMENTS.md and LAB3D.md describe it; FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "model"
+  ],
+  "anyOf": [
+    {
+      "title": "a 2-D laboratory scenario (js/experiments/experimentManifest.js)",
+      "type": "object",
+      "required": [
+        "title",
+        "model",
+        "seeds",
+        "vary",
+        "observables",
+        "stop",
+        "numerics",
+        "limits"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "model": {
+          "type": "object",
+          "required": [
+            "scenario",
+            "platform"
+          ],
+          "properties": {
+            "scenario": {
+              "enum": [
+                "Binary Planet Lab",
+                "Circumbinary Planet Lab",
+                "Gravity Assist Lab",
+                "Gravity Assist: Heliocentric"
+              ]
+            },
+            "platform": {
+              "const": "^1.0.0"
+            }
+          }
+        },
+        "initial": {
+          "type": "object",
+          "properties": {
+            "settings": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              },
+              "description": "Laboratory settings held fixed across trials: a parameter the scenario carries across a rebuild, inside its bounds, and not one that is varied."
+            }
+          }
+        },
+        "seeds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          }
+        },
+        "vary": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "parameter"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "values"
+                ]
+              },
+              {
+                "required": [
+                  "from",
+                  "to",
+                  "count"
+                ]
+              },
+              {
+                "required": [
+                  "distribution"
+                ]
+              }
+            ],
+            "properties": {
+              "parameter": {
+                "enum": [
+                  "binary_lab_planet_a",
+                  "assist_impact_parameter",
+                  "assist_v_infinity"
+                ]
+              },
+              "values": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "number"
+                }
+              },
+              "from": {
+                "type": "number"
+              },
+              "to": {
+                "type": "number"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "distribution": {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "samples",
+                  "seed",
+                  "min",
+                  "max"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "uniform"
+                  },
+                  "samples": {
+                    "type": "integer"
+                  },
+                  "seed": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "min": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "observables": {
+          "type": "object",
+          "required": [
+            "metrics"
+          ],
+          "properties": {
+            "metrics": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "enum": [
+                  "distance_to_primary",
+                  "orbital_period",
+                  "closest_approach",
+                  "speed",
+                  "separation",
+                  "total_energy",
+                  "angular_momentum",
+                  "energy_drift",
+                  "angular_drift"
+                ]
+              }
+            },
+            "roles": {
+              "type": "object",
+              "required": [
+                "bodies"
+              ],
+              "properties": {
+                "bodies": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "primary": {
+                  "type": "string"
+                }
+              },
+              "description": "The bodies the metrics are about; the scenario's own (SWEEPABLE roles) when left out."
+            }
+          }
+        },
+        "stop": {
+          "type": "object",
+          "required": [
+            "duration"
+          ],
+          "properties": {
+            "duration": {
+              "type": "number"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "au"
+                ],
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "separation-below",
+                      "separation-above"
+                    ]
+                  },
+                  "au": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "numerics": {
+          "type": "object",
+          "required": [
+            "frameSeconds",
+            "sampleEvery"
+          ],
+          "properties": {
+            "frameSeconds": {
+              "type": "number",
+              "description": "One of 1/120, 1/60 and 1/30 (FRAME_SECONDS)."
+            },
+            "sampleEvery": {
+              "type": "integer"
+            }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "required": [
+            "concurrency",
+            "trialTimeoutMs",
+            "totalTimeoutMs",
+            "maxSamplesPerTrial",
+            "maxResultBytes"
+          ],
+          "properties": {
+            "concurrency": {
+              "type": "integer"
+            },
+            "trialTimeoutMs": {
+              "type": "number"
+            },
+            "totalTimeoutMs": {
+              "type": "number"
+            },
+            "maxSamplesPerTrial": {
+              "type": "integer"
+            },
+            "maxResultBytes": {
+              "type": "integer"
+            }
+          }
+        },
+        "summaries": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "mean",
+              "min",
+              "max",
+              "spread",
+              "status-counts"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "a 3-D system (js/lab3d/experiment.js, LAB3D.md)",
+      "type": "object",
+      "required": [
+        "model",
+        "seeds",
+        "observables",
+        "stop",
+        "limits"
+      ],
+      "properties": {
+        "model": {
+          "type": "object",
+          "required": [
+            "kind",
+            "api",
+            "system"
+          ],
+          "properties": {
+            "kind": {
+              "const": "lab3d"
+            },
+            "api": {
+              "type": "string",
+              "minLength": 1
+            },
+            "system": {
+              "type": "object",
+              "required": [
+                "format"
+              ],
+              "properties": {
+                "format": {
+                  "const": "gravitas.system3d"
+                }
+              },
+              "description": "A gravitas.system3d/1, which js/lab3d/state.js validateSystem() checks."
+            }
+          }
+        },
+        "seeds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer"
+          }
+        },
+        "perturb": {
+          "type": "object",
+          "properties": {
+            "position": {
+              "type": "number"
+            },
+            "velocity": {
+              "type": "number"
+            }
+          }
+        },
+        "vary": {
+          "type": "object",
+          "required": [
+            "parameter",
+            "values"
+          ],
+          "properties": {
+            "parameter": {
+              "type": "string",
+              "pattern": "^(integrator\\.h|body:[a-z0-9-]+\\.(m|speed))$"
+            },
+            "values": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "observables": {
+          "type": "object",
+          "required": [
+            "metrics"
+          ],
+          "properties": {
+            "metrics": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "enum": [
+                      "energyDrift",
+                      "angularMomentumDrift",
+                      "momentumDrift",
+                      "minSeparation",
+                      "maxEccentricity",
+                      "escaped"
+                    ]
+                  },
+                  "bodies": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "stop": {
+          "type": "object",
+          "required": [
+            "span"
+          ],
+          "properties": {
+            "span": {
+              "type": "number"
+            },
+            "escapeBeyond": {
+              "type": "number"
+            },
+            "samples": {
+              "type": "integer"
+            }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "required": [
+            "concurrency",
+            "trialTimeoutMs",
+            "totalTimeoutMs",
+            "maxResultBytes"
+          ],
+          "properties": {
+            "concurrency": {
+              "type": "integer"
+            },
+            "trialTimeoutMs": {
+              "type": "number"
+            },
+            "totalTimeoutMs": {
+              "type": "number"
+            },
+            "maxResultBytes": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.experiment"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    }
+  }
+}
