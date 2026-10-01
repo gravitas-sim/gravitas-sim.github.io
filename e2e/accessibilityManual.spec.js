@@ -252,6 +252,22 @@ test.describe('every modal keeps the same keys', () => {
     });
   }
 
+  test('E opens the export dialog before Export has ever been pressed', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    // The shortcut imported the dialog and opened it uninitialised, so it did
+    // nothing until the button had been used once.
+    await page
+      .locator('#simulationCanvas')
+      .click({ position: { x: 5, y: 300 } });
+    await page.keyboard.press('e');
+    await expect(page.locator('#dataExportContent')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#dataExportContent')).toBeHidden();
+  });
+
   test('the lecture sequence: in, around and out by the keyboard', async ({
     page,
     app,

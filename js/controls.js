@@ -456,10 +456,9 @@ function setupShortcuts() {
     group: 'State',
     label: t('shortcut.export'),
     run: () => {
-      // Lazily imported for the same reason as the two above: exportDialog.js
-      // imports this module for its toast, so a static import here would close
-      // a cycle for one keystroke.
-      import('./exportDialog.js').then(m => m.openExportDialog());
+      // Through the bridge, which initialises the dialog first; lazily, for the
+      // same reason as the two above (exportDialog.js imports this module).
+      import('./exportBridge.js').then(m => m.openExport());
     },
   });
   registerShortcut({
