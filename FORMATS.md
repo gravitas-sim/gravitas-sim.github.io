@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 44 of them. 17 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 44 of them. 22 have a JSON Schema in `sdk/schemas`, and 8 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -38,13 +38,13 @@ The columns:
 | experiment store | v | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2 | refused by reason code | no |
 | gravitas.mission-plan | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.ephemeris-pack | format, formatVersion | 1 | js/mission/ephemeris.js createEphemeris | repository | v1 only | refused | no |
-| gravitas.investigation-pack | format, formatVersion | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words | no |
-| gravitas.question-bank | format, formatVersion | 1 | js/platform/questionBank.js validateQuestionBankWith | download | v1 only | a validation problem | no |
-| gravitas.assignment | k, v (link prefix a) | 2 | js/assignments/assignment.js validateAssignment | link, download | reads v1 as it is | refused, in words | no |
+| gravitas.investigation-pack | format, formatVersion | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words | [yes](sdk/schemas/investigation-pack-1.schema.json) |
+| gravitas.question-bank | format, formatVersion | 1 | js/platform/questionBank.js validateQuestionBankWith | download | v1 only | a validation problem | [yes](sdk/schemas/question-bank-1.schema.json) |
+| gravitas.assignment | k, v (link prefix a) | 2 | js/assignments/assignment.js validateAssignment | link, download | reads v1 as it is | refused, in words | [yes](sdk/schemas/assignment-2.schema.json) |
 | investigation progress | schema | 2 | js/investigations/progressSchema.js readProgress | localStorage | migrates v1 (migrateFromV1) | kept and not overwritten, in words | no |
 | gravitas.investigation.progress | kind, version | 2 | js/investigations/progressBackup.js restoreProgress | download | migrates v1 | refused, in words | no |
-| submission token | v (link prefix s) | 1 | js/submission/submissionToken.js readSubmissionToken | pasted text | v1 only | refused, in words | no |
-| gravitas.submission-results | kind, version | 2 | js/submission/results.js readResults | download | migrates v1 | refused by reason code | no |
+| submission token | v (link prefix s) | 1 | js/submission/submissionToken.js readSubmissionToken | pasted text | v1 only | refused, in words | [yes](sdk/schemas/submission-token-1.schema.json) |
+| gravitas.submission-results | kind, version | 2 | js/submission/results.js readResults | download | migrates v1 | refused by reason code | [yes](sdk/schemas/submission-results-2.schema.json) |
 | gravitas.lab3d-guide-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.mission-lab-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | notebook store | v | 1 | js/notebook/store.js load | localStorage | v1 only | kept and not overwritten, in words | no |
