@@ -7451,7 +7451,7 @@
     gap: var(--space-2, 8px);
     flex-wrap: wrap;
     padding: 5px 10px;
-    border-bottom: 1px solid var(--border-faint, rgba(255, 255, 255, 0.07));
+    border-bottom: 1px solid var(--border-subtle);
   }
   .assignment-step label {
     display: flex;
