@@ -3514,6 +3514,11 @@
   }
 
   /* --- The working panel -------------------------------------------------- */
+  /* Its width, which every panel docked beside it reads to stand clear of it
+     (css/chrome.css narrows it on a laptop). */
+  :root {
+    --lesson-width: min(396px, 40vw);
+  }
   .investigation-panel {
     position: fixed;
     top: calc(var(--space-3) + var(--shell-height, 0px));
@@ -3531,7 +3536,7 @@
     z-index: var(--z-panel);
     display: flex;
     flex-direction: column;
-    width: min(396px, 40vw);
+    width: var(--lesson-width);
     background: var(--panel-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -4462,13 +4467,13 @@
   .inv-plot-panel {
     position: fixed;
     top: calc(var(--space-3) + var(--shell-height, 0px));
-    left: calc(min(396px, 40vw) + var(--space-3) * 2);
+    left: calc(var(--lesson-width) + var(--space-3) * 2);
     z-index: var(--z-panel);
     width: min(460px, 42vw);
     /* Clears the transport bar, same as the lesson panel. Anything taller than
        the window scrolls inside the panel rather than off the bottom of it,
        which is what the widgets with three sliders and five presets need. */
-    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - 88px);
+    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px));
     overflow-y: auto;
     overscroll-behavior: contain;
     padding: var(--space-3) var(--space-4) var(--space-4);
@@ -4535,7 +4540,7 @@
      all. */
   @media (max-width: 1200px) {
     .inv-plot-panel {
-      left: calc(min(396px, 40vw) + var(--space-3) * 2);
+      left: calc(var(--lesson-width) + var(--space-3) * 2);
       right: var(--space-3);
       width: auto;
     }
@@ -4772,7 +4777,7 @@
      which is the widest free space on the screen and the right shape for a
      light curve. The rail is content-sized and measures 208px; 240 clears it. */
   body.investigation-open .light-curve-container {
-    left: calc(min(396px, 40vw) + var(--space-3) * 2);
+    left: calc(var(--lesson-width) + var(--space-3) * 2);
     right: 240px;
     bottom: 88px;
     width: auto;
@@ -4803,11 +4808,11 @@
      a caption. At 0.56 the slider a measurement step tells students to move
      ended up below the fold. */
   body.investigation-split #investigationTool {
-    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - 88px) * 0.62);
+    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)) * 0.62);
   }
   body.investigation-split #investigationPlot {
-    top: calc((100vh - var(--space-3) - var(--shell-height, 0px) - 88px) * 0.62 + var(--space-3) * 2 + var(--shell-height, 0px));
-    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - 88px) * 0.38 - var(--space-3));
+    top: calc((100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)) * 0.62 + var(--space-3) * 2 + var(--shell-height, 0px));
+    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)) * 0.38 - var(--space-3));
   }
   @media (max-width: 900px) {
     /* Two panels above a bottom sheet, sharing the band between them in the
@@ -4850,7 +4855,7 @@
   }
   @media (max-width: 1200px) {
     body.investigation-open .light-curve-container {
-      left: calc(min(396px, 40vw) + var(--space-2) * 2);
+      left: calc(var(--lesson-width) + var(--space-2) * 2);
       right: var(--space-2);
       bottom: var(--transport-reserve, 76px);
       height: 240px;

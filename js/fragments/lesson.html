@@ -338,3 +338,32 @@
   <div id="investigationToolPresets" class="inv-presets"></div>
   <p id="investigationToolPresetNote" class="inv-preset-note"></p>
 </aside>
+
+<!-- Investigations: which docked panel is in front. A step with an
+     instrument and a graph shows both side by side only on a desktop; below
+     that they share one place, and these choose (css/chrome.css, "The lesson
+     at each width"). Radio buttons, so it needs no script. Both languages are
+     written here and the page's lang picks one, as the shell's labels do. -->
+<div
+  id="investigationDockTabs"
+  class="inv-dock-tabs"
+  role="radiogroup"
+  aria-labelledby="investigationDockTabsName"
+>
+  <span id="investigationDockTabsName" class="gs-vh"
+    ><span class="gs-en">Show</span
+    ><span class="gs-es" lang="es">Mostrar</span></span
+  >
+  <label
+    ><input type="radio" name="investigationDock" id="investigationDockTool" checked="" /><span
+      class="gs-en"
+      >Instrument</span
+    ><span class="gs-es" lang="es">Instrumento</span></label
+  >
+  <label
+    ><input type="radio" name="investigationDock" id="investigationDockPlot" /><span
+      class="gs-en"
+      >Graph</span
+    ><span class="gs-es" lang="es">Gráfica</span></label
+  >
+</div>

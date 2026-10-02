@@ -5043,13 +5043,18 @@ export function initInvestigations({ signal } = {}) {
     'investigationObjectsDisclosure'
   );
   if (objectsDisclosure) {
+    // On a phone it starts folded until the reader says otherwise: the step
+    // comes first on a sheet that small. Not remembered, being no choice.
+    let quiet = false;
     try {
-      if (window.localStorage?.getItem(OBJECTS_OPEN_KEY) === '0')
-        objectsDisclosure.open = false;
+      const kept = window.localStorage?.getItem(OBJECTS_OPEN_KEY);
+      quiet = kept == null && window.innerWidth <= 767;
+      if (kept === '0' || quiet) objectsDisclosure.open = false;
     } catch {
       /* storage unavailable: it opens, as it always did */
     }
     objectsDisclosure.addEventListener('toggle', () => {
+      if (quiet) return void (quiet = false);
       try {
         window.localStorage?.setItem(
           OBJECTS_OPEN_KEY,

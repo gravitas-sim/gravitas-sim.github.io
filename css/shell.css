@@ -172,6 +172,15 @@ html:lang(es) .gs-en {
   .gs-nav > ul {
     flex-direction: column;
   }
+  /* A page without the script keeps its groups in view, so they share rows
+     rather than standing five deep, and an open one takes a row of its own. */
+  .gs-shell:not(.gs-js) .gs-nav > ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  }
+  .gs-shell:not(.gs-js) .gs-nav > ul > li:has(> details[open]) {
+    grid-column: 1 / -1;
+  }
   .gs-nav details ul {
     position: static;
     min-width: 0;
@@ -180,6 +189,25 @@ html:lang(es) .gs-en {
   .gs-controls label {
     display: block;
     margin-top: var(--space-2);
+  }
+}
+
+/* A finger rather than a pointer: on a touch screen every control in the
+   bar, and every link in an open group, is at least 44 px tall (WCAG 2.2,
+   2.5.5). The application's bar is 48 px, so it still holds one row. */
+@media (pointer: coarse) {
+  .gs-shell summary,
+  .gs-shell button,
+  .gs-shell select,
+  .gs-brand,
+  .gs-nav details a {
+    box-sizing: border-box;
+    min-height: 44px;
+  }
+  .gs-brand,
+  .gs-nav details a {
+    display: flex;
+    align-items: center;
   }
 }
 
