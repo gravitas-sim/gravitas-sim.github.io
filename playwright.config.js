@@ -241,11 +241,42 @@ if (PROFILE !== 'full' && PROFILE !== 'cross-browser') {
 const MOBILE_SPEC = /mobile\.spec\.js/;
 
 /**
+ * The viewport matrix (Roadmap II Prompt 55).
+ *
+ * PLATFORM_MODEL.md lays the application out at four widths, and the desktop
+ * projects test one of them. Two more projects carry the rest: the phone
+ * profile and a tablet. Each runs the investigation walker - every step of
+ * every lesson, at that size - and the layout assertions, which measure named
+ * regions at the size (no overlap, Next on screen, a third of the window
+ * left to the canvas) rather than compare screenshots. Nothing else: the
+ * rest of the suite tests behavior, which a viewport does not change, and a
+ * third copy of it would add CI time without adding a finding.
+ *
+ * e2e/responsiveLayout.spec.js picks its width from the project: 375 in the
+ * phone project, 768 in the tablet, 1024 and 1440 in the desktop ones.
+ */
+const WALKTHROUGH_SPEC = /authorWalk\.spec\.js/;
+const LAYOUT_SPEC = /responsiveLayout\.spec\.js/;
+
+/**
+ * A tablet held upright, in Chromium: 768 by 1024 CSS pixels, a touch screen
+ * and a tablet's user agent, which the application reads for its touch tips.
+ * Playwright's iPad profiles default to WebKit, and the matrix runs where the
+ * rest of the deep suite runs, so this is the iPad Mini's geometry in the
+ * engine CI already has.
+ */
+const TABLET = {
+  ...devices['iPad Mini'],
+  defaultBrowserType: 'chromium',
+};
+
+/**
  * The desktop projects.
  *
- * A generous viewport on purpose: the rail, the instrument column and the lesson
- * sheet all collapse below about 1100px, and the desktop suite is meant to be
- * testing the desktop layout. The mobile layout has its own project.
+ * A generous viewport on purpose: the rail docks only from 1201px (the
+ * breakpoint scale, tests/breakpoints.test.js), and the desktop suite is meant
+ * to be testing the desktop layout. The phone and the tablet have projects of
+ * their own.
  */
 
 const DESKTOP_VIEWPORT = { width: 1440, height: 900 };
@@ -338,14 +369,20 @@ export default defineConfig({
     // branches on touch support and on the user agent, not only on width. Only
     // meaningful against sources, where the mobile spec can read app state.
     // Pixel 7 is a Chromium profile, so the phone project only exists when
-    // chromium is among the engines being run.
+    // chromium is among the engines being run; the tablet beside it, for the
+    // same reason. See WALKTHROUGH_SPEC above.
     ...(target === 'dist' || !engines.includes('chromium')
       ? []
       : [
           {
             name: 'mobile-chrome',
             use: { ...devices['Pixel 7'] },
-            testMatch: MOBILE_SPEC,
+            testMatch: [MOBILE_SPEC, WALKTHROUGH_SPEC, LAYOUT_SPEC],
+          },
+          {
+            name: 'tablet',
+            use: TABLET,
+            testMatch: [WALKTHROUGH_SPEC, LAYOUT_SPEC],
           },
         ]),
   ],
