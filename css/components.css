@@ -5413,6 +5413,12 @@
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   }
 
+  /* A lesson to continue (Home): the title is the button. */
+  .wel-lesson > .wel-quiet {
+    align-self: flex-start;
+    text-align: start;
+  }
+
   .wel-lesson-title {
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);

@@ -605,6 +605,18 @@ export const CHECKS = [
     ci: 'checks',
     group: 'generated',
   },
+  // The Library's index (LIBRARY.md), against the sources it is read from.
+  {
+    id: 'library',
+    label: 'the Library index and its coverage table',
+    command: ['node', 'tools/generate.mjs', '--check', '--only', 'library'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same check inside the unit tests (tests/library.test.js ' +
+      'runs `build-library.mjs --check`); a step of its own is a workflow change',
+    group: 'generated',
+  },
   {
     id: 'activities',
     label: 'activity formats and their step lists',

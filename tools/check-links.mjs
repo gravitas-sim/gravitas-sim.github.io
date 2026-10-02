@@ -275,6 +275,22 @@ async function main() {
     }
   }
 
+  // The Library's routes (LIBRARY.md): not hrefs in a page but links the
+  // Library page and Home render from library/library.json, each resolved
+  // against the source its page reads it from (tools/library-routes.mjs).
+  const index = join(root, 'library', 'library.json');
+  if (existsSync(index)) {
+    const { routeTables, routeProblem } = await import(
+      pathToFileURL(join(REPO, 'tools', 'library-routes.mjs')).href
+    );
+    const tables = await routeTables();
+    for (const e of JSON.parse(await readFile(index, 'utf8')).entries) {
+      checked++;
+      const why = await routeProblem(e.route, tables, root);
+      if (why) broken.push({ file: index, value: `${e.id} ${e.route}`, why });
+    }
+  }
+
   const label = relative(REPO, root) || '.';
   console.log(
     `\nChecked ${checked} internal references across ${files.length} HTML ` +

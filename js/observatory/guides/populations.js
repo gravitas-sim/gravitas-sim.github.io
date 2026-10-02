@@ -381,6 +381,8 @@ export const GUIDES = [
   {
     id: 'pop-spectra',
     minutes: { intro: 15, advanced: 20 },
+    level: 'intro',
+    tags: ['observing', 'stars'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -479,6 +481,8 @@ export const GUIDES = [
   {
     id: 'pop-cmd',
     minutes: { intro: 20, advanced: 30 },
+    level: 'intro',
+    tags: ['stars', 'stellar-evolution'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -568,6 +572,8 @@ export const GUIDES = [
   {
     id: 'pop-members',
     minutes: { intro: 20, advanced: 30 },
+    level: 'intro',
+    tags: ['observing', 'stars'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -646,6 +652,8 @@ export const GUIDES = [
   {
     id: 'pop-age',
     minutes: { intro: 25, advanced: 40 },
+    level: 'intro',
+    tags: ['stars', 'stellar-evolution'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -796,6 +804,8 @@ export const GUIDES = [
   {
     id: 'pop-variable',
     minutes: { intro: 15, advanced: 25 },
+    level: 'intro',
+    tags: ['observing', 'stars'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {

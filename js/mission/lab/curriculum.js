@@ -89,6 +89,8 @@ export const GUIDES = [
     id: 'ml-orbit',
     target: 'earth-orbit',
     minutes: { intro: 15, advanced: 25 },
+    level: 'intro',
+    tags: ['orbits', 'spaceflight'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -156,6 +158,8 @@ export const GUIDES = [
     id: 'ml-window',
     target: 'window-2026',
     minutes: { intro: 20, advanced: 30 },
+    level: 'intro',
+    tags: ['orbits', 'spaceflight'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -238,6 +242,8 @@ export const GUIDES = [
     id: 'ml-cruise',
     target: 'direct-flight',
     minutes: { intro: 25, advanced: 40 },
+    level: 'intro',
+    tags: ['gravity', 'spaceflight'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
