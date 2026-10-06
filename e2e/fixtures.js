@@ -92,7 +92,7 @@ export async function requireScenarioKey(page, key) {
       known: keys.includes(k),
       // And the English name a scenario was keyed by before ids, which the
       // application still reads but a spec names by id.
-      near: keys.find(x => fold(x) === fold(k)) ?? scenarioId(k) ?? null,
+      near: keys.find(x => fold(x) === fold(k)) ?? scenarioId(fold(k)) ?? null,
     };
   }, key);
   if (known) return;

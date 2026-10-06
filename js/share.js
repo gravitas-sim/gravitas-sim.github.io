@@ -28,6 +28,10 @@ import {
   lessonInHash,
 } from './investigationsLoader.js';
 import { t } from './i18n/index.js';
+import { scenarioTitle } from './i18n/scenario.js';
+
+/** A scenario as a reader says it: its title, or 'None' for a hand-built world. */
+const said = s => (s && s !== 'None' ? scenarioTitle(s) : s);
 
 /**
  * js/dialog.js, fetched on the first open: this module is on the start-up
@@ -104,7 +108,10 @@ export async function applySharedLinkFromUrl() {
     }
 
     announce(
-      t('share.link.opened', { scenario: result.scenario, n: result.bodies })
+      t('share.link.opened', {
+        scenario: said(result.scenario),
+        n: result.bodies,
+      })
     );
     return true;
   } catch (err) {
@@ -215,7 +222,7 @@ async function refresh() {
 
   const fragment = await encodePayload(payload);
   lastUrl = shareUrl(fragment);
-  lastScenario = payload.s || '';
+  lastScenario = said(payload.s) || '';
   // The figure builder opens on the state the dialog is showing.
   if (els.figure)
     els.figure.href = new URL(`figure/#${fragment}`, location.href).href;

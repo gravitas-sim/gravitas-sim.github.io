@@ -323,13 +323,18 @@ test.describe('Three-Body Sensitivity Lab scenario contract', () => {
     page,
   }) => {
     const known = await page.evaluate(async () => {
-      const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
+      const { SCENARIO_INFO, scenarioId } =
+        await import('/js/data/scenarioInfo.js');
       const lesson =
         await import('/js/data/investigations/butterfly-effect.js');
       const wanted = lesson.default.steps
         .map(s => s.setup?.scenario)
         .filter(Boolean);
-      return wanted.map(name => [name, Boolean(SCENARIO_INFO[name])]);
+      // By id, or by the English key a lesson written before ids keeps.
+      return wanted.map(name => [
+        name,
+        Boolean(SCENARIO_INFO[scenarioId(name)]),
+      ]);
     });
     expect(known.length).toBeGreaterThan(0);
     for (const [, exists] of known) expect(exists).toBe(true);
@@ -350,10 +355,15 @@ test.describe('a scenario is asked for by its key', () => {
         async () => (await import('/js/ui.js')).current_scenario_name
       );
     const before = await current();
-    // One character from the key - the curly apostrophe "a closed system says
-    // so" asked for - and named back as the key it missed.
+    // The name the scenario had before ids, one character off - the curly
+    // apostrophe "a closed system says so" asked for - and named back as the
+    // id it missed.
     await expect(app.loadScenario('Kepler’s 2nd Law')).rejects.toThrow(
-      'did you mean "Kepler\'s 2nd Law"?'
+      'did you mean "keplers-2nd-law"?'
+    );
+    // And the old name itself is not an id either.
+    await expect(app.loadScenario("Kepler's 2nd Law")).rejects.toThrow(
+      'did you mean "keplers-2nd-law"?'
     );
     // A placement value, and nothing like a key.
     await expect(app.loadScenario('Empty')).rejects.toThrow(
