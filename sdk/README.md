@@ -203,10 +203,15 @@ four `tags`, a `seed`, and any of these:
 - **`open` and `tools`:** the instruments the scenario opens with, by the
   rail's ids.
 - **`camera`, `observer` and `paused`.**
+- **`scenario`:** a built-in scenario to start from, by its id
+  (`"binary-pair"`; 1.7.0). The world is then that scenario's, hand-built
+  geometry included, under the pack's seed, with `settings` over the
+  scenario's own.
 
 A pack generates its population from its settings under its seed, or brings
 its own bodies; not both, because opening a world with its own bodies replaces
-the generated ones. Text is plain: no markup and no URLs.
+the generated ones. A pack that names a built-in brings no bodies either. Text
+is plain: no markup and no URLs.
 
 The Scenario Studio writes the file. To wrap an export as an extension:
 
@@ -239,7 +244,7 @@ The example is [`kepler-third-law`](examples/kepler-third-law/).
 | Declarative boundary | a declarative extension that names code, a `builtin:` reference, a script path, a `data:` or `javascript:` URL, or a fetchable URL outside `url`/`doi` |
 | Type | provides no type, or more than one; the wrong `kind` for its type |
 | API compatibility | a `gravitas` range this platform does not satisfy; a `requires` package that is not installed or not in range; a `uses` id Gravitas does not have |
-| Public ids | a package id, data-pack id, course id, scenario name or instrument id Gravitas already has |
+| Public ids | a package id, data-pack id, course id, built-in scenario id or instrument id Gravitas already has |
 | Licences and provenance | an asset no licence covers; a data pack's record failing its validator, or not matching its series file byte for byte |
 | Localization | a course or scenario string missing a declared locale; a locale Gravitas has no interface in. A title without Spanish is a warning |
 | Scenario content | a setting a pack cannot set, or one of the wrong type or outside its bounds; an instrument the rail does not have; a body of a type a pack cannot hold; a population generated alongside the pack's own bodies |
@@ -281,7 +286,7 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.6.0` |
+| `SDK_VERSION` | this SDK, `1.7.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with its version |
 | `EXTENSION_TYPES`, `LOCALES` | the four types and their kinds; the interface languages (`en`, `es`) |
@@ -321,10 +326,10 @@ anything else.
   installs and shows /1.
 - **A scenario pack** needs no vendoring to be used: its link opens it. Making
   one a built-in scenario, listed in the gallery with a thumbnail, is a
-  maintainer's edit: a preset branch in `js/scenarios.js`, its tags and
-  thumbnail in `js/data/scenarioInfo.js`, its title and summary in both
-  catalogs, and the regeneration the Scenario Studio's documentation lists
-  (STUDIO.md).
+  maintainer's edit: a row of the preset table in `js/scenarios.js` and its
+  tags in `js/data/scenarioInfo.js`, both under the scenario's id, its title
+  and summary in both catalogs, and the regeneration the Scenario Studio's
+  documentation lists (STUDIO.md).
 
 ## Compatibility
 
@@ -337,6 +342,23 @@ anything else.
 | 1.4.0 | 1.0.0 | 1 (with `provides.courses`) | 1, with the `catalog` data type | 1 | - | 1 |
 | 1.5.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with the `catalog` data type | 1 | 1 | 1 |
 | 1.6.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with synthetic packs that record their model, and the optional runtime fields `model` and `citations` | 1 | 1 | 1 |
+| 1.7.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with synthetic packs that record their model, and the optional runtime fields `model` and `citations` | 1 | 1, with the optional `scenario` | 1 |
+
+SDK 1.7.0 adds, and removes nothing, what giving the built-in scenarios ids
+needed (Roadmap II Prompt 63):
+
+- **A scenario pack may name a built-in scenario to start from,** by its id
+  (`"scenario": "binary-pair"`): the pack's world is then that scenario's,
+  hand-built geometry included, under the pack's seed and with its settings
+  over the scenario's own. A pack that names one brings no bodies. The
+  validator checks the id against this build's (`scenarioApi().scenarios`),
+  and an English name such as `"Binary Pair"` is not an id.
+- **A pack's link carries its identity,** `{pack: {id, version}}` in the
+  link's extras, which an older build ignores.
+- **Built-in scenarios are public ids,** so an extension's
+  `provides.scenarios` id may not be one (`publicIds().scenarios`), and
+  `sdk/schemas/scenario-id-1.schema.json` lists them, with the English names
+  older packs and links still use.
 
 SDK 1.6.0 adds, and removes nothing, what bringing Gravitas's older datasets
 under the data-pack format needed (DATA_PACKS.md, Roadmap II Prompt 62):

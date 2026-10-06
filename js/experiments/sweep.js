@@ -113,6 +113,39 @@ export const MIN_DURATION = 1;
 export const MAX_DURATION = 200000;
 
 /**
+ * The gravity-assist encounter, which both of its scenarios sweep the same
+ * way: the same probe, the same planet and the same two parameters, so one
+ * entry serves the isolated flyby and the heliocentric one.
+ */
+const ASSIST = {
+  roles: { bodies: ['Spacecraft'], primary: 'planet' },
+  parameters: [
+    {
+      key: 'assist_impact_parameter',
+      labelKey: 'sweep.param.impact',
+      unitKey: 'sweep.unit.simUnits',
+      // Signed: the sign is which side of the planet the probe passes, and
+      // it is the whole lesson, so both halves are offered. Zero and its
+      // neighborhood are excluded because they are a collision.
+      min: -400,
+      max: 400,
+      exclude: { from: -8, to: 8 },
+      decimals: 1,
+    },
+    {
+      key: 'assist_v_infinity',
+      labelKey: 'sweep.param.vInfinity',
+      unitKey: 'sweep.unit.simVelocity',
+      // Below 0.05 the encounter is a capture rather than a flyby; above 3
+      // the deflection is too small to read against the gate distance.
+      min: 0.05,
+      max: 3,
+      decimals: 3,
+    },
+  ],
+};
+
+/**
  * The parameters a sweep may vary, per scenario.
  *
  * Every entry is a member of LAB_VARIABLES in js/scenarios.js - which is what
@@ -124,7 +157,7 @@ export const MAX_DURATION = 200000;
  * and `primary` is what a distance-to-primary is measured against.
  */
 export const SWEEPABLE = Object.freeze({
-  'Binary Planet Lab': {
+  'binary-planet-lab': {
     roles: { bodies: ['planet'], primary: 'Star A' },
     parameters: [
       {
@@ -140,7 +173,7 @@ export const SWEEPABLE = Object.freeze({
       },
     ],
   },
-  'Circumbinary Planet Lab': {
+  'circumbinary-planet-lab': {
     roles: { bodies: ['planet'], primary: 'Star A' },
     parameters: [
       {
@@ -156,69 +189,36 @@ export const SWEEPABLE = Object.freeze({
       },
     ],
   },
-  'Gravity Assist Lab': {
-    roles: { bodies: ['Spacecraft'], primary: 'planet' },
-    parameters: [
-      {
-        key: 'assist_impact_parameter',
-        labelKey: 'sweep.param.impact',
-        unitKey: 'sweep.unit.simUnits',
-        // Signed: the sign is which side of the planet the probe passes, and
-        // it is the whole lesson, so both halves are offered. Zero and its
-        // neighborhood are excluded because they are a collision.
-        min: -400,
-        max: 400,
-        exclude: { from: -8, to: 8 },
-        decimals: 1,
-      },
-      {
-        key: 'assist_v_infinity',
-        labelKey: 'sweep.param.vInfinity',
-        unitKey: 'sweep.unit.simVelocity',
-        // Below 0.05 the encounter is a capture rather than a flyby; above 3
-        // the deflection is too small to read against the gate distance.
-        min: 0.05,
-        max: 3,
-        decimals: 3,
-      },
-    ],
-  },
-  'Gravity Assist: Heliocentric': {
-    roles: { bodies: ['Spacecraft'], primary: 'planet' },
-    parameters: [
-      {
-        key: 'assist_impact_parameter',
-        labelKey: 'sweep.param.impact',
-        unitKey: 'sweep.unit.simUnits',
-        min: -400,
-        max: 400,
-        exclude: { from: -8, to: 8 },
-        decimals: 1,
-      },
-      {
-        key: 'assist_v_infinity',
-        labelKey: 'sweep.param.vInfinity',
-        unitKey: 'sweep.unit.simVelocity',
-        min: 0.05,
-        max: 3,
-        decimals: 3,
-      },
-    ],
-  },
+  'gravity-assist-lab': ASSIST,
+  'gravity-assist-heliocentric': ASSIST,
 });
 
-/** @returns {Array<string>} Scenarios a sweep can run in */
+/** @returns {Array<string>} Scenarios a sweep can run in, by id */
 export const sweepableScenarios = () => Object.keys(SWEEPABLE);
+
+/**
+ * A sweepable scenario's entry, by its id or by the English name a sweep or
+ * an experiment saved before scenarios had ids recorded ('Binary Planet Lab').
+ *
+ * @param {string} scenario - Scenario id or name
+ * @returns {?object} Its SWEEPABLE entry, or null when it cannot be swept
+ */
+export const sweepLab = scenario => {
+  const own = k => (Object.hasOwn(SWEEPABLE, k) ? SWEEPABLE[k] : null);
+  return (
+    own(scenario) ?? own(String(scenario).toLowerCase().replace(/\W+/g, '-'))
+  );
+};
 
 /**
  * The definition of one sweepable parameter.
  *
- * @param {string} scenario - Scenario key
+ * @param {string} scenario - Scenario id (or a name it had before ids)
  * @param {string} key - Setting name
  * @returns {?object} The definition, or null if it is not sweepable here
  */
 export function parameterFor(scenario, key) {
-  const entry = SWEEPABLE[scenario];
+  const entry = sweepLab(scenario);
   if (!entry) return null;
   return entry.parameters.find(p => p.key === key) || null;
 }

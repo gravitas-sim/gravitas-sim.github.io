@@ -20,7 +20,7 @@ import { INVESTIGATIONS } from '../../js/data/investigations.js';
 import { MANIFEST as MANIFEST_EN } from '../../js/data/investigations/manifest.js';
 import { MANIFEST as MANIFEST_ES } from '../../js/data/investigations/manifest.es.js';
 import { INSTRUCTOR_CONTENT } from '../../js/data/instructorContent.js';
-import { SCENARIO_INFO } from '../../js/data/scenarioInfo.js';
+import { SCENARIO_INFO, scenarioId } from '../../js/data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../../js/appState.js';
 import { allWidgets, whenWidgetsReady } from '../../js/widgets.js';
 import { gradedSteps } from '../../js/data/investigations/catalog.js';
@@ -70,6 +70,7 @@ export async function loadAuthoringInputs() {
     manifests: { en: MANIFEST_EN, es: MANIFEST_ES },
     instructor: INSTRUCTOR_CONTENT,
     scenarios: SCENARIO_INFO,
+    scenarioId,
     settingKeys: new Set(Object.keys(DEFAULT_SETTINGS)),
     widgets: allWidgets(),
     translations,

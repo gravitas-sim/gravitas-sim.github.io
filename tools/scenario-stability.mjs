@@ -25,7 +25,7 @@
 // needed an answer with numbers in it.
 //
 //   npm run validate:scenarios
-//   node tools/scenario-stability.mjs "Binary Star System" --seconds 30
+//   node tools/scenario-stability.mjs 'binary-star-system' --seconds 30
 //   node tools/scenario-stability.mjs --all
 //
 // Reported per scenario, over a simulated run at the scenario's own sim_speed:
@@ -59,23 +59,23 @@ const PORT = 8127;
 // gravity, a binary, or a tightly packed system. Ordered roughly by how much a
 // lesson depends on them being right.
 const DEFAULT_SCENARIOS = [
-  'Solar System',
-  'TRAPPIST-1 System',
-  'Binary Star System',
-  'Binary Pair',
-  'Earth-Moon System',
-  'Transit Lab',
-  'Star Cluster',
-  'GW150914',
-  'Kuiper Belt',
+  'solar-system',
+  'trappist-1-system',
+  'binary-star-system',
+  'binary-pair',
+  'earth-moon-system',
+  'transit-lab',
+  'star-cluster',
+  'gw150914',
+  'kuiper-belt',
   // The three resonance scenarios. They belong here more than most: each one
   // asks a student to conclude something from an angle measured over hundreds
   // of orbits, so a slow drift in a semi-major axis that no other scenario
   // would notice is exactly what would spoil them. The fourth, Broken Laplace
   // Resonance, is deliberately unstable and is left out.
-  'Galilean Resonance',
-  'Pluto and Neptune',
-  'Jupiter Trojans',
+  'galilean-resonance',
+  'pluto-and-neptune',
+  'jupiter-trojans',
 ];
 
 const pad = (s, n) => String(s).padEnd(n);

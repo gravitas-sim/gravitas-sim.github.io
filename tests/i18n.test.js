@@ -466,11 +466,12 @@ describe('scenario prose', () => {
 
   test('the accessors answer in the reader’s language', async () => {
     await setLocale('es', { persist: false });
-    expect(scenarioTitle('Solar System')).toBe('Sistema solar');
-    expect(scenarioSummary('Solar System')).toMatch(/sistema solar/i);
+    // By id: a title is a translation of the id, never a key.
+    expect(scenarioTitle('solar-system')).toBe('Sistema solar');
+    expect(scenarioSummary('solar-system')).toMatch(/sistema solar/i);
     expect(tagLabelLocalized('dark-matter')).toBe('Materia oscura');
     await setLocale('en', { persist: false });
-    expect(scenarioTitle('Solar System')).toBe('Solar System');
+    expect(scenarioTitle('solar-system')).toBe('Solar System');
     expect(tagLabelLocalized('dark-matter')).toBe('Dark Matter');
   });
 

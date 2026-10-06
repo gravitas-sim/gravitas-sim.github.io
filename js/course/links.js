@@ -11,7 +11,7 @@
 //                opened a year later makes the link it made then; one per
 //                language, since an assignment's title and introduction are
 //                one language's words
-//   scenario     a world link (#1z...): the scenario and its seed word, as
+//   scenario     a world link (#2z...): the scenario and its seed word, as
 //                Share writes one, and the figure embed of the same world
 //   dataset      /observatory/?open=<id> for a built-in observation, and
 //                /observatory/?installed=<id> for a catalog package, which a
@@ -27,6 +27,7 @@ import {
   COMFORTABLE_URL_LENGTH,
   decodeTagged,
   encodeTagged,
+  LINK_VERSION,
 } from '../shareState.js';
 import {
   ASSIGNMENT_KIND,
@@ -64,9 +65,13 @@ export function assignmentPayload(item, locale) {
   };
 }
 
-/** The world payload a scenario item makes: the scenario at its seed. */
+/**
+ * The world payload a scenario item makes: the scenario at its seed, as the
+ * pack names it - by id, or in English in a pack older than ids, which the
+ * link's reader resolves. Resolving it here would cost this page the table.
+ */
 export const scenarioPayload = item => ({
-  v: 1,
+  v: LINK_VERSION,
   s: item.scenario,
   seed: formatSeed(parseSeed(item.seed)),
   ...(item.paused ? { p: 1 } : {}),
@@ -93,7 +98,7 @@ export async function itemLink(item, { root, locale = 'en' }) {
     }
     case 'scenario':
       return {
-        href: `${root}#${await encodeTagged('', 1, scenarioPayload(item))}`,
+        href: `${root}#${await encodeTagged('', LINK_VERSION, scenarioPayload(item))}`,
         kind: 'app',
       };
     case 'dataset':

@@ -395,7 +395,7 @@ describe('the bridge', () => {
     f.deliver(req('load', { id: 'l2', state }));
     expect(await answered(f, 'l2')).toEqual(message('ack', { id: 'l2' }));
     expect(s.applySharePayload).toHaveBeenCalledWith(
-      expect.objectContaining({ s: 'Binary Pair' })
+      expect.objectContaining({ s: 'binary-pair' })
     );
     s.setPlaying(false); // the reader, not the page
     f.tick();
@@ -407,10 +407,10 @@ describe('the bridge', () => {
     const s = services();
     await resetFigure({ reset: 'authored', authored, services: s });
     expect(s.applySharePayload).toHaveBeenCalledWith(
-      expect.objectContaining({ s: 'Binary Pair', seed: 'x' })
+      expect.objectContaining({ s: 'binary-pair', seed: 'x' })
     );
     await resetFigure({ reset: 'scenario', authored, services: s });
-    expect(s.loadScenarioByKey).toHaveBeenCalledWith('Binary Pair');
+    expect(s.loadScenarioByKey).toHaveBeenCalledWith('binary-pair');
     await resetFigure({ reset: 'authored', authored: null, services: s });
     expect(s.loadScenarioByKey).toHaveBeenLastCalledWith('Solar System');
   });

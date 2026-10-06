@@ -57,7 +57,7 @@ test.describe('each format opens what it says it opens', () => {
       'watch-it-happen',
       'equal-areas-however-you-slice',
     ]);
-    expect(s.scenario).toBe("Kepler's 2nd Law");
+    expect(s.scenario).toBe('keplers-2nd-law');
     expect(s.bodies).toEqual(
       expect.arrayContaining(['Kepler Star', 'Eccentric Orbiter'])
     );
@@ -73,7 +73,7 @@ test.describe('each format opens what it says it opens', () => {
     expect(s.steps[0]).toBe('eight-minutes-of-arc');
     expect(s.steps).toContain('fast-and-slow-in-numbers');
     expect(s.steps.at(-1)).toBe('why-the-speed-changes');
-    expect(s.scenario).toBe("Kepler's 2nd Law");
+    expect(s.scenario).toBe('keplers-2nd-law');
   });
 
   test('the full lab: twelve steps, ending on the transfer', async ({

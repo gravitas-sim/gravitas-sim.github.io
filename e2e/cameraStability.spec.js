@@ -370,7 +370,7 @@ async function firstMerge(page) {
 
 test('Binary BH does not move the camera on its own', async ({ page, app }) => {
   await app.boot();
-  await app.loadScenario('Binary BH', 'camera-drift');
+  await app.loadScenario('binary-bh', 'camera-drift');
   await app.waitForFrames(5);
 
   const before = await camera(page);
@@ -406,7 +406,7 @@ test('a drag while Follow mode is on is kept, and following continues', async ({
   // exercises exactly the code under test, and a small step over a short span
   // cannot merge anything.
   await app.boot();
-  await app.loadScenario('Solar System', 'follow-offset');
+  await app.loadScenario('solar-system', 'follow-offset');
   await app.setPaused(true);
 
   const step = (n, dt = 0.01) =>
@@ -488,7 +488,7 @@ test('a merger carries the reference frame onto the black hole it made', async (
 }, testInfo) => {
   testInfo.setTimeout(90_000);
   await app.boot();
-  await app.loadScenario('Binary BH', 'merge-frame');
+  await app.loadScenario('binary-bh', 'merge-frame');
 
   // The recorder goes in first. The merge fires on the very next physics step
   // once the two overlap, which is sooner than a second round trip into the
@@ -536,7 +536,7 @@ test('a merger leaves a world-frame reader alone', async ({
 }, testInfo) => {
   testInfo.setTimeout(90_000);
   await app.boot();
-  await app.loadScenario('Binary BH', 'merge-world');
+  await app.loadScenario('binary-bh', 'merge-world');
 
   await recordMerges(page);
 
@@ -637,7 +637,7 @@ test('a star merger carries the reference frame onto the star it made', async ({
 }, testInfo) => {
   testInfo.setTimeout(90_000);
   await app.boot();
-  await app.loadScenario('Solar System', 'merge-star-frame');
+  await app.loadScenario('solar-system', 'merge-star-frame');
 
   await recordMerges(page);
 
@@ -704,7 +704,7 @@ test('a merger moves the inspector onto the body it produced', async ({
 }, testInfo) => {
   testInfo.setTimeout(90_000);
   await app.boot();
-  await app.loadScenario('Solar System', 'merge-inspector');
+  await app.loadScenario('solar-system', 'merge-inspector');
 
   await recordMerges(page);
 

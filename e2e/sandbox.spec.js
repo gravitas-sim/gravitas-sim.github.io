@@ -241,7 +241,7 @@ test.describe('the transport controls', () => {
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      await app.loadScenario('Binary Pair');
+      await app.loadScenario('binary-pair');
       await app.waitForFrames(5);
 
       const play = page.locator('#timelinePlay');
@@ -268,7 +268,7 @@ test.describe('the transport controls', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
 
     const speedOf = () =>
       page.evaluate(async () => {
@@ -294,7 +294,7 @@ test.describe('the transport controls', () => {
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      await app.loadScenario('Solar System');
+      await app.loadScenario('solar-system');
       await app.waitForFrames(30);
 
       const before = await app.bodySnapshot();

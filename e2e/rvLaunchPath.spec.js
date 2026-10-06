@@ -22,7 +22,7 @@ const OUT = join(process.cwd(), 'test-results', 'rv-launch');
 /** Open the RV panel on a scenario whose star is free to move. */
 async function openRv(page, app) {
   await app.boot();
-  await app.loadScenario('Exoplanet Characterization Lab');
+  await app.loadScenario('exoplanet-characterization-lab');
   await app.waitForFrames(10);
   await app.openPanel('toggleRadialVelocity', 'rvContainer');
   await expect(page.locator('#rvCanvas')).toBeVisible();

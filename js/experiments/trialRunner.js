@@ -396,7 +396,7 @@ function eventHappened(event, sample, found) {
  * can then say why it no longer reproduces rather than silently disagreeing.
  */
 export function engineFingerprint(m) {
-  buildScenario(m, { scenario: 'Binary Planet Lab', seed: 'fingerprint' });
+  buildScenario(m, { scenario: 'binary-planet-lab', seed: 'fingerprint' });
   const plan = m.timestep.substepPlan(
     m.timestep.frameAdvance(
       1 / 60,

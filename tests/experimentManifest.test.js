@@ -40,13 +40,13 @@ const base = () => ({
   format: FORMAT,
   formatVersion: 1,
   title: 'Where does the planet stop being bound?',
-  model: { scenario: 'Binary Planet Lab', platform: '^1.0.0' },
+  model: { scenario: 'binary-planet-lab', platform: '^1.0.0' },
   initial: { settings: {} },
   seeds: ['a', 'b'],
   vary: [{ parameter: 'binary_lab_planet_a', from: 0.1, to: 0.4, count: 4 }],
   observables: {
     metrics: ['distance_to_primary'],
-    roles: SWEEPABLE['Binary Planet Lab'].roles,
+    roles: SWEEPABLE['binary-planet-lab'].roles,
   },
   stop: { duration: 10000, events: [] },
   numerics: { frameSeconds: 1 / 60, sampleEvery: 1 },
@@ -67,14 +67,14 @@ describe('what an experiment may ask for', () => {
     out.vary[0].to = 0.9;
     expect(paths(out)).toEqual(['vary[0]']);
     const scenario = base();
-    scenario.model.scenario = 'Solar System';
+    scenario.model.scenario = 'solar-system';
     expect(paths(scenario)).toContain('model.scenario');
   });
 
   test('a range that crosses the collision neighbourhood of an assist is refused', () => {
     const m = base();
-    m.model.scenario = 'Gravity Assist Lab';
-    m.observables.roles = SWEEPABLE['Gravity Assist Lab'].roles;
+    m.model.scenario = 'gravity-assist-lab';
+    m.observables.roles = SWEEPABLE['gravity-assist-lab'].roles;
     m.vary = [{ parameter: 'assist_impact_parameter', values: [-40, 0, 40] }];
     expect(
       validateExperiment(m)
@@ -135,8 +135,8 @@ describe('what an experiment may ask for', () => {
     expect(validateExperiment(most)).toEqual([]);
     // Two parameters of twenty values each, with twenty seeds, is 8000.
     const grid = clone(most);
-    grid.model.scenario = 'Gravity Assist Lab';
-    grid.observables.roles = SWEEPABLE['Gravity Assist Lab'].roles;
+    grid.model.scenario = 'gravity-assist-lab';
+    grid.observables.roles = SWEEPABLE['gravity-assist-lab'].roles;
     grid.vary = [
       { parameter: 'assist_impact_parameter', from: 20, to: 400, count: 20 },
       { parameter: 'assist_v_infinity', from: 0.1, to: 3, count: 20 },
@@ -169,8 +169,8 @@ describe('the order trials run in', () => {
 
   test('two parameters make a grid, the first slowest', () => {
     const m = base();
-    m.model.scenario = 'Gravity Assist Lab';
-    m.observables.roles = SWEEPABLE['Gravity Assist Lab'].roles;
+    m.model.scenario = 'gravity-assist-lab';
+    m.observables.roles = SWEEPABLE['gravity-assist-lab'].roles;
     m.seeds = ['s'];
     m.vary = [
       { parameter: 'assist_impact_parameter', values: [20, 40] },
@@ -446,7 +446,7 @@ describe('reading a result', () => {
 describe('migration', () => {
   test('a bench sweep becomes an experiment that validates', () => {
     const sweep = {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       parameter: 'binary_lab_planet_a',
       from: 0.05,
       to: 0.4,

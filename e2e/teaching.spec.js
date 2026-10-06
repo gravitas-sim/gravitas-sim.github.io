@@ -650,7 +650,7 @@ test.describe('the short routes', () => {
     // What the reader had before: an ordinary sandbox, with a scenario of
     // their own and a camera they had moved.
     await app.boot({ url: '/' });
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await page.evaluate(async () => {
       const { state } = await import('/js/appState.js');
       state.zoom = 2.5;

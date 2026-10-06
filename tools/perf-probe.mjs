@@ -6,7 +6,7 @@
 // scenario for a few seconds, and reports where the frame budget goes.
 //
 //   npm run perf                     the default scenario set
-//   npm run perf -- "Star Cluster"   one or more scenarios by name
+//   npm run perf -- 'star-cluster'   one or more scenarios by name
 //   npm run perf -- --seconds 8      longer sample
 //   npm run perf -- --tier low       pin the quality tier
 //   npm run perf -- --dpr 2          emulate a HiDPI display
@@ -47,12 +47,12 @@ const PORT = 8126;
 // multi-body system at real scale, a tightly integrated one, a dense cluster,
 // an inspiral, and a scenario built out of visual effects.
 const DEFAULT_SCENARIOS = [
-  'Binary Pair',
-  'Solar System',
-  'TRAPPIST-1 System',
-  'Star Cluster',
-  'GW150914',
-  'Tidal Disruption Event',
+  'binary-pair',
+  'solar-system',
+  'trappist-1-system',
+  'star-cluster',
+  'gw150914',
+  'tidal-disruption-event',
 ];
 
 const ms = n => `${n.toFixed(2)}ms`;

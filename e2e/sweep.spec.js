@@ -108,7 +108,7 @@ test.describe('the trials', () => {
         const M = await import('/js/experiments/metrics.js');
         const units = await import('/js/units.js');
 
-        ui.SETTINGS.preset_scenario = 'Binary Planet Lab';
+        ui.SETTINGS.preset_scenario = 'binary-planet-lab';
         ui.initialize_simulation({ seed });
         ui.SETTINGS.binary_lab_planet_a = v;
         ui.initialize_simulation({ seed });
@@ -216,7 +216,7 @@ test.describe('stopping it', () => {
   }, testInfo) => {
     testInfo.setTimeout(240_000);
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(5);
     await openBench(page, app);
 
@@ -400,7 +400,8 @@ test.describe('what it reports', () => {
       };
     });
 
-    expect(sweepOut.scenario).toBe('Binary Planet Lab');
+    // A sweep names its world by id, like every other written scenario.
+    expect(sweepOut.scenario).toBe('binary-planet-lab');
     expect(sweepOut.parameter).toBe('binary_lab_planet_a');
     // The point of a guided example is that something visibly depends on the
     // parameter. If nothing moved, the example teaches nothing.

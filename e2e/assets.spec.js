@@ -61,7 +61,7 @@ test.describe('the application loads everything it asks for', () => {
     async ({ page, app }) => {
       const failures = watchRequests(page);
       await app.boot();
-      await app.loadScenario('Transit Lab');
+      await app.loadScenario('transit-lab');
       await app.openPanel('toggleLightCurve', 'lightCurveContainer');
       await app.waitForFrames(30);
       expect(failures).toEqual([]);

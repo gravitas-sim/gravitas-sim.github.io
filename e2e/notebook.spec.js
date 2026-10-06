@@ -121,7 +121,7 @@ test.describe('a reading survives the world it came from', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.waitForFrames(10);
     await analyzeSynthetic(page);
     await keepFit(page, 'The period is about three and a half days.');
@@ -137,7 +137,7 @@ test.describe('a reading survives the world it came from', () => {
     // Now change the world out from under it, twice, in the two ways that
     // matter: a different scenario entirely, and a re-seed of the same one.
     // Both bump the world generation and hand every body a new id.
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(30);
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
@@ -222,7 +222,7 @@ test.describe('a reading survives the world it came from', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.waitForFrames(10);
     await analyzeSynthetic(page);
 
@@ -240,7 +240,7 @@ test.describe('a reading survives the world it came from', () => {
       };
     });
 
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(30);
 
     await page.locator('#nbDraftClaim').fill('Written after the world moved.');
@@ -256,7 +256,7 @@ test.describe('a reading survives the world it came from', () => {
 test.describe('what a saved reading records', () => {
   test('the live conditions, read at capture', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.waitForFrames(40);
     await analyzeSynthetic(page, { target: 'HD 12345', seed: 'seed-x' });
     await keepFit(page, '');
@@ -464,7 +464,7 @@ test.describe('the files', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.loadScenario('exoplanet-characterization-lab');
     await app.waitForFrames(20);
     await analyzeSynthetic(page, { target: 'HD 999', seed: 'file-seed' });
     await keepFit(page, 'A claim worth keeping.');

@@ -74,6 +74,8 @@ export interface ScenarioPack {
   summary: Localized;
   tags?: string[];
   seed: number;
+  /** A built-in scenario to start from, by its public id ('solar-system'). */
+  scenario?: string;
   settings?: Record<string, number | boolean | string | null | number[]>;
   camera?: { zoom: number; pan?: { x: number; y: number } };
   paused?: boolean;

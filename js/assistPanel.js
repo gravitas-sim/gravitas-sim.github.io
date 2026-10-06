@@ -50,8 +50,8 @@ let dismissed = false;
 
 /** The scenarios this panel has anything to say about. */
 const SCENARIOS = {
-  'Gravity Assist Lab': 'isolated',
-  'Gravity Assist: Heliocentric': 'heliocentric',
+  'gravity-assist-lab': 'isolated',
+  'gravity-assist-heliocentric': 'heliocentric',
 };
 
 /** @returns {?string} 'isolated', 'heliocentric', or null */

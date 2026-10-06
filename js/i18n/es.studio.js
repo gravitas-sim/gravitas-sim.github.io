@@ -203,4 +203,6 @@ export const ES_STUDIO = {
   'studio.error.name': 'Un nombre sencillo de como mucho 40 caracteres.',
   'studio.error.populationWithBodies':
     'Pon esto a 0: un escenario con sus propios cuerpos no los genera también.',
+  'studio.error.scenario':
+    'Un escenario incluido, por su identificador (como solar-system), y en ese caso ningún cuerpo propio.',
 };

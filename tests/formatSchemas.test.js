@@ -24,6 +24,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { valid } from './jsonSchemaSubset.js';
+import { LEGACY_NAMES } from './scenarioLegacyKeys.js';
+import { sweepLab } from '../js/experiments/sweep.js';
 import * as X from '../js/experiments/experimentManifest.js';
 import { METRICS3D, validateLab3dExperiment } from '../js/lab3d/experiment.js';
 import { FORMAT as SYSTEM3D, placeByElements } from '../js/lab3d/state.js';
@@ -76,7 +78,7 @@ const twoAxes = () => ({
   format: X.FORMAT,
   formatVersion: X.FORMAT_VERSION,
   title: 'Impact parameter against speed at infinity',
-  model: { scenario: 'Gravity Assist Lab', platform: X.PLATFORM_RANGE },
+  model: { scenario: 'gravity-assist-lab', platform: X.PLATFORM_RANGE },
   initial: { settings: {} },
   seeds: ['a', 'b'],
   vary: [
@@ -94,7 +96,7 @@ const twoAxes = () => ({
   ],
   observables: {
     metrics: ['speed', 'closest_approach'],
-    roles: X.SWEEPABLE['Gravity Assist Lab'].roles,
+    roles: X.SWEEPABLE['gravity-assist-lab'].roles,
   },
   stop: {
     duration: 4000,
@@ -153,7 +155,7 @@ describe('the experiment schema', () => {
 
   test('every manifest the code writes, and both validators accept, fits it', () => {
     const sweep = {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       parameter: 'binary_lab_planet_a',
       from: 0.05,
       to: 0.4,
@@ -223,7 +225,11 @@ describe('the experiment schema', () => {
     expect(s.properties.format.const).toBe(X.FORMAT);
     expect(s.properties.formatVersion.const).toBe(X.FORMAT_VERSION);
     const p = twoD.properties;
-    expect(p.model.properties.scenario.enum).toEqual(Object.keys(X.SWEEPABLE));
+    // By id, or by the English name an experiment made before ids used.
+    expect(p.model.properties.scenario.enum).toEqual([
+      ...Object.keys(X.SWEEPABLE),
+      ...LEGACY_NAMES.filter(n => sweepLab(n) && !X.SWEEPABLE[n]),
+    ]);
     expect(p.model.properties.platform.const).toBe(X.PLATFORM_RANGE);
     expect(p.vary.items.properties.parameter.enum).toEqual([
       ...new Set(
@@ -283,7 +289,7 @@ const ask = msg => new Promise((resolve, reject) => {
 });
 const nav = { hardwareConcurrency: 4 };
 const manifest = M.fromSweepSpec({
-  scenario: 'Binary Planet Lab', parameter: 'binary_lab_planet_a',
+  scenario: 'binary-planet-lab', parameter: 'binary_lab_planet_a',
   values: [0.1, 0.2], duration: 2000,
   metrics: ['distance_to_primary', 'energy_drift'], seed: 'schema',
 }, { profile: 'desktop', nav });

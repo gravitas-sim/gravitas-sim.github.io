@@ -45,7 +45,7 @@ test.describe('the chaos lesson’s controlled pair', () => {
     // Measured at 55 s for the pair on an idle laptop; the ceiling is for a
     // loaded two-core runner.
     test.setTimeout(LONG);
-    await openBench(page, app, 'Three-Body Sensitivity Lab', 'chaos-lab');
+    await openBench(page, app, 'three-body-sensitivity-lab', 'chaos-lab');
 
     await page.evaluate(async () => {
       const panel = await import('/js/experiments/panel.js');
@@ -109,7 +109,7 @@ test.describe('the chaos lesson’s controlled pair', () => {
     app,
   }) => {
     test.setTimeout(LONG);
-    await openBench(page, app, 'Three-Body Sensitivity Lab', 'chaos-lab');
+    await openBench(page, app, 'three-body-sensitivity-lab', 'chaos-lab');
     await page.evaluate(async () => {
       const panel = await import('/js/experiments/panel.js');
       await panel.startChaosPair({ nudge: false });
@@ -131,7 +131,7 @@ test.describe('the chaos lesson’s controlled pair', () => {
     app,
   }) => {
     test.setTimeout(LONG);
-    await openBench(page, app, 'Binary Pair', 'chaos-binary');
+    await openBench(page, app, 'binary-pair', 'chaos-binary');
     await page.evaluate(async () => {
       const panel = await import('/js/experiments/panel.js');
       await panel.startChaosPair();
@@ -152,7 +152,7 @@ test.describe('the chaos lesson’s controlled pair', () => {
   }) => {
     // Measured at 2.8 min for a pair plus two controls.
     test.setTimeout(LONG);
-    await openBench(page, app, 'Three-Body Sensitivity Lab', 'chaos-lab');
+    await openBench(page, app, 'three-body-sensitivity-lab', 'chaos-lab');
     const before = await page.evaluate(async () => {
       const { SETTINGS } = await import('/js/appState.js');
       return { step: SETTINGS.max_timestep, integrator: SETTINGS.integrator };
@@ -205,7 +205,7 @@ test.describe('the chaos lesson’s controlled pair', () => {
     page,
     app,
   }) => {
-    await openBench(page, app, 'Three-Body Sensitivity Lab', 'chaos-lab');
+    await openBench(page, app, 'three-body-sensitivity-lab', 'chaos-lab');
     // A reader's own experiment, with a run in it.
     await page.evaluate(async () => {
       const bench = await import('/js/experiments/bench.js');
@@ -232,7 +232,7 @@ test.describe('the Lagrange lesson’s controlled pair', () => {
   /** Open the lab with the three-body panel and the pair section showing. */
   async function openLab(page, app) {
     await app.boot();
-    await app.loadScenario('Lagrange Point Lab', 'lagrange', { run: false });
+    await app.loadScenario('lagrange-point-lab', 'lagrange', { run: false });
     await expect(page.locator('#cr3bpContainer')).toBeVisible();
     await page.evaluate(() => {
       document.getElementById('cr3bpPairSection').open = true;

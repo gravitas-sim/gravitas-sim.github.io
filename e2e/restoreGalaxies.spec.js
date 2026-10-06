@@ -99,7 +99,7 @@ test.describe('restoring a world', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Coma Cluster', 'e2e', { run: false });
+    await app.loadScenario('coma-cluster', 'e2e', { run: false });
     // Without galaxies to begin with this would pass whether or not Load
     // clears them.
     expect((await census(page)).galaxies).toBeGreaterThan(0);
@@ -132,7 +132,7 @@ test.describe('restoring a world', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Coma Cluster', 'e2e', { run: false });
+    await app.loadScenario('coma-cluster', 'e2e', { run: false });
     await runThenPause(page);
 
     const saved = await page.evaluate(async () => {
@@ -158,7 +158,7 @@ test.describe('restoring a world', () => {
 
     // A different world in between, so Load has something to replace and the
     // halo setting has somewhere else to have been.
-    await app.loadScenario('TRAPPIST-1 System', 'e2e', { run: false });
+    await app.loadScenario('trappist-1-system', 'e2e', { run: false });
     expect((await census(page)).galaxies).toBe(0);
     expect(
       await page.evaluate(
@@ -203,7 +203,7 @@ test.describe('restoring a world', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Coma Cluster', 'e2e', { run: false });
+    await app.loadScenario('coma-cluster', 'e2e', { run: false });
     await runThenPause(page);
 
     const sent = await page.evaluate(async () => {
@@ -241,7 +241,7 @@ test.describe('restoring a world', () => {
           async () => (await import('/js/ui.js')).current_scenario_name
         )
       )
-      .toBe('Coma Cluster');
+      .toBe('coma-cluster');
 
     const got = await page.evaluate(async () => {
       const ui = await import('/js/ui.js');

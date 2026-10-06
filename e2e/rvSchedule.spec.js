@@ -15,7 +15,7 @@ import { test, expect } from './fixtures.js';
 /** Open the RV panel on a scenario whose star is free to move. */
 async function openRv(page, app) {
   await app.boot();
-  await app.loadScenario('Exoplanet Characterization Lab');
+  await app.loadScenario('exoplanet-characterization-lab');
   await app.waitForFrames(10);
   await app.openPanel('toggleRadialVelocity', 'rvContainer');
   await page.locator('#rvSurveyEnabled').check();
@@ -485,7 +485,7 @@ test.describe('the lesson that uses it', () => {
       const s = await import('/js/appState.js');
       return s.current_scenario_name;
     });
-    expect(scenario).toBe('Exoplanet Characterization Lab');
+    expect(scenario).toBe('exoplanet-characterization-lab');
   });
 
   test('the reading step cannot be taken without the prediction @covers:ce.design-the-schedule', async ({

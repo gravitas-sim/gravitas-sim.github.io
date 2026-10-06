@@ -382,7 +382,7 @@ test.describe('the simulation is described in words', () => {
     // 1.1.1 Non-text Content. The canvas is the application; without this a
     // screen reader reports "graphic" and nothing else.
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(40);
 
     // Polled for the scenario name rather than for any text at all. The
@@ -417,7 +417,7 @@ test.describe('the simulation is described in words', () => {
 
   test('the summary follows the simulation', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(30);
     await page.waitForTimeout(2000);
 
@@ -446,7 +446,7 @@ test.describe('the simulation is described in words', () => {
     // times a second - which produces speech a reader cannot interrupt and
     // drowns out every announcement that matters.
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
 
     const live = await page.evaluate(() => {
       const el = document.getElementById('canvasSummary');
@@ -493,7 +493,7 @@ test.describe('the simulation is described in words', () => {
     // "Correct." is heard; this caller asks not to be repeated, and a sweep
     // must not read the scenario's name out once a trial.
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     const said = await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       const el = document.getElementById('srStatus');

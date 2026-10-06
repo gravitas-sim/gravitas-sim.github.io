@@ -141,15 +141,15 @@ describe('the attribution rule', () => {
 describe('the provenance line and the model page print them', () => {
   test('every scenario the provenance line credits exists, and its summary is its sources’', () => {
     const keysOf = {
-      'Solar System':
+      'solar-system':
         /^js\/world\/build\.js (solarSystemData|realAsteroids|famousComets) /,
-      'Kuiper Belt': /^js\/world\/build\.js kuiperBeltObjects /,
-      'Habitable Zone Lab':
+      'kuiper-belt': /^js\/world\/build\.js kuiperBeltObjects /,
+      'habitable-zone-lab':
         /^js\/world\/build\.js worlds \(Habitable Zone Lab\) /,
-      'Retrograde Mars': /^js\/world\/build\.js worlds \(Retrograde Mars\) /,
-      'TRAPPIST-1 System': /^js\/data\/trappist1\.js /,
-      'Transit Lab': /^js\/data\/exoplanetSystems\.js HD209458$/,
-      'Exoplanet Characterization Lab':
+      'retrograde-mars': /^js\/world\/build\.js worlds \(Retrograde Mars\) /,
+      'trappist-1-system': /^js\/data\/trappist1\.js /,
+      'transit-lab': /^js\/data\/exoplanetSystems\.js HD209458$/,
+      'exoplanet-characterization-lab':
         /^js\/data\/exoplanetSystems\.js HD209458$/,
     };
     expect(Object.keys(SCENARIO_SOURCES).sort()).toEqual(

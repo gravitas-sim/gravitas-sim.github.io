@@ -96,33 +96,33 @@ describe('search', () => {
 
   test('matches a title', () => {
     expect(keysOf(filterScenarios({ search: 'trappist' }))).toContain(
-      'TRAPPIST-1 System'
+      'trappist-1-system'
     );
   });
 
   test('matches a summary', () => {
     // "kilonova"-adjacent wording lives only in the summary.
     const hits = keysOf(filterScenarios({ search: 'gamma-ray' }));
-    expect(hits).toContain('Neutron Star Collision');
+    expect(hits).toContain('neutron-star-collision');
   });
 
   test('matches the scenario key even when the title differs', () => {
     // 'Binary Star System' is titled "Binary Stars": searching the key works.
     const hits = keysOf(filterScenarios({ search: 'Binary Star System' }));
-    expect(hits).toContain('Binary Star System');
+    expect(hits).toContain('binary-star-system');
   });
 
   test('matches a concept nobody wrote in the prose', () => {
     // The whole point of indexing the tags. "kepler" is a curriculum word, not
     // necessarily a word in a given scenario's description.
     const hits = keysOf(filterScenarios({ search: 'kepler' }));
-    expect(hits).toContain('Solar System');
-    expect(hits).toContain('Binary Pair');
+    expect(hits).toContain('solar-system');
+    expect(hits).toContain('binary-pair');
     expect(hits.length).toBe(tagCounts()['orbits-kepler']);
 
     const tidal = keysOf(filterScenarios({ search: 'tides' }));
-    expect(tidal).toContain('Earth-Moon System');
-    expect(tidal).toContain('Tidal Disruption Event');
+    expect(tidal).toContain('earth-moon-system');
+    expect(tidal).toContain('tidal-disruption-event');
   });
 
   test('is case-insensitive and ignores surrounding space', () => {
@@ -150,10 +150,10 @@ describe('concept filtering', () => {
     const res = filterScenarios({ tag: 'exoplanets' });
     expect(res.length).toBeGreaterThan(0);
     for (const r of res) expect(r.tags).toContain('exoplanets');
-    expect(keysOf(res)).toContain('TRAPPIST-1 System');
-    expect(keysOf(res)).toContain('Transit Lab');
+    expect(keysOf(res)).toContain('trappist-1-system');
+    expect(keysOf(res)).toContain('transit-lab');
     // A scenario with planets in it is not automatically an exoplanet lesson.
-    expect(keysOf(res)).not.toContain('Solar System');
+    expect(keysOf(res)).not.toContain('solar-system');
   });
 
   test('All restores the full catalog', () => {

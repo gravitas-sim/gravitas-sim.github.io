@@ -17,7 +17,7 @@
 import { test, expect } from './fixtures.js';
 
 /** Open the isolated laboratory with both experiment sections showing. */
-async function openLab(page, app, scenario = 'Gravity Assist Lab') {
+async function openLab(page, app, scenario = 'gravity-assist-lab') {
   await app.boot();
   await app.loadScenario(scenario, 'e2e', { run: false });
   await expect(page.locator('#assistContainer')).toBeVisible();
@@ -336,7 +336,7 @@ test.describe('where the experiments belong', () => {
     await expect(page.locator('#assistCompareSection')).toBeVisible();
     await expect(page.locator('#assistSweepSection')).toBeVisible();
 
-    await app.loadScenario('Gravity Assist: Heliocentric', 'e2e', {
+    await app.loadScenario('gravity-assist-heliocentric', 'e2e', {
       run: false,
     });
     await expect(page.locator('#assistContainer')).toBeVisible();

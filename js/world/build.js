@@ -80,7 +80,7 @@ import {
   plutoBodies,
   trojanBodies,
 } from '../resonance/systems.js';
-import { applyPresetLayout } from '../scenarios.js';
+import { applyPresetLayout, scenarioId } from '../scenarios.js';
 import { populationCaps } from '../quality.js';
 import { SIM_UNITS_PER_AU } from '../units.js';
 
@@ -97,7 +97,8 @@ import { SIM_UNITS_PER_AU } from '../units.js';
  * @property {object} state - The shared UI state object
  * @property {() => void} applyPreset - Reset settings to the scenario's own
  * @property {() => (object|null)} takePendingSettings - Share-link settings, once
- * @property {(name: string) => void} setScenarioName - Record what was built
+ * @property {(name: string) => void} setScenarioName - Record what was built:
+ *   a scenario id, or 'None'
  * @property {() => void} hideObjectInspector - Close the inspector before rebuild
  * @property {(key: string) => void} showScenarioInfo - Repaint the scenario card
  * @property {() => void} updateObjectTypeButton - Sync the insertion-type button
@@ -404,7 +405,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
 
   // Special positioning for various scenarios
   if (
-    current_scenario_name === 'Neutron Star Collision' &&
+    current_scenario_name === 'neutron-star-collision' &&
     neutron_stars.length >= 2
   ) {
     neutron_stars[0].pos.x = -50;
@@ -419,7 +420,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
   }
 
   if (
-    current_scenario_name === 'White Dwarf Binary' &&
+    current_scenario_name === 'white-dwarf-binary' &&
     white_dwarfs.length >= 2
   ) {
     white_dwarfs[0].pos.x = -80;
@@ -434,7 +435,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
   }
 
   if (
-    current_scenario_name === 'Tidal Disruption Event' &&
+    current_scenario_name === 'tidal-disruption-event' &&
     bh_list.length >= 1 &&
     planets.length >= 1
   ) {
@@ -452,7 +453,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
   // Special positioning for black holes in specific scenarios
   if (bh_list.length > 1) {
     switch (current_scenario_name) {
-      case 'Slingshot':
+      case 'slingshot':
         if (bh_list.length >= 2) {
           // Create a binary black hole system with proper orbital parameters
           const separation = 100; // Initial separation distance
@@ -487,7 +488,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
         }
         break;
 
-      case 'Binary BH':
+      case 'binary-bh':
         if (bh_list.length >= 2) {
           // Calculate proper orbital parameters for binary black holes
           const separation = 120; // Initial separation distance
@@ -523,7 +524,7 @@ export const applyPlacement = (SETTINGS, current_scenario_name) => {
         }
         break;
 
-      case 'Triple BH System':
+      case 'triple-bh-system':
         if (bh_list.length >= 3) {
           // Triangle formation
           const radius = 150;
@@ -569,7 +570,11 @@ export const buildWorld = ctx => {
   // Set the state reference in physics.js to ensure single source of truth
   setStateReference(state);
 
-  const starting_preset = SETTINGS.preset_scenario;
+  // By id: preset_scenario may hold a key the scenario was known by before it
+  // had one (a share link, a saved setting, an older lesson). 'None' and a key
+  // that names nothing stay as they are, which is what they always built.
+  const starting_preset =
+    scenarioId(SETTINGS.preset_scenario) ?? SETTINGS.preset_scenario;
   apply_preset();
 
   // Settings carried in a shared link land here rather than before the call,
@@ -674,7 +679,7 @@ export const buildWorld = ctx => {
 
   // Add central stars for specific presets
   if (
-    ['Kuiper Belt', 'Rogue Encounter', 'Solar System'].includes(starting_preset)
+    ['kuiper-belt', 'rogue-encounter', 'solar-system'].includes(starting_preset)
   ) {
     const central = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
     // Named as the anchor rather than inferred from mass: num_stars can add a
@@ -899,7 +904,7 @@ export const buildWorld = ctx => {
   }
 
   // --- Fix for GW150914 scenario: two black holes in close inspiral ---
-  if (starting_preset === 'GW150914' && bh_list.length >= 2) {
+  if (starting_preset === 'gw150914' && bh_list.length >= 2) {
     const separation = 90; // Slightly closer for faster merger
     const m1 = bh_list[0].mass;
     const m2 = bh_list[1].mass;
@@ -928,7 +933,7 @@ export const buildWorld = ctx => {
   show_enhanced_scenario_info(starting_preset);
 
   // Special scenario setups
-  if (starting_preset === 'Binary Star System') {
+  if (starting_preset === 'binary-star-system') {
     // Clear any existing stars and create binary system
     stars.length = 0;
 
@@ -996,7 +1001,7 @@ export const buildWorld = ctx => {
     // planets, giants and asteroids all circulate the same way and their
     // momentum does not cancel on its own.
     zeroNetMomentum();
-  } else if (starting_preset === 'Tidal Disruption Event') {
+  } else if (starting_preset === 'tidal-disruption-event') {
     // One star, falling in on a long ellipse whose closest approach is inside
     // the hole's tidal radius but outside the radius at which it would simply
     // be absorbed. StarObject.tidal_mass_loss strips it there and sheds the
@@ -1047,7 +1052,7 @@ export const buildWorld = ctx => {
       star.name = 'Doomed star';
       stars.push(star);
     }
-  } else if (starting_preset === 'Black Hole Billiards') {
+  } else if (starting_preset === 'black-hole-billiards') {
     // Three light holes on staggered circular orbits around the heavy one, so
     // the scene opens as something recognizably in motion rather than four
     // holes scattered at random that have merged by the time anyone looks.
@@ -1068,7 +1073,7 @@ export const buildWorld = ctx => {
         bh_list[i].vel.y = Math.cos(angle) * v;
       }
     }
-  } else if (starting_preset === 'Solar System') {
+  } else if (starting_preset === 'solar-system') {
     // Clear any existing objects
     stars.length = 0;
     planets.length = 0;
@@ -1494,7 +1499,7 @@ export const buildWorld = ctx => {
         comets.push(comet);
       }
     }
-  } else if (starting_preset === 'Rogue Encounter') {
+  } else if (starting_preset === 'rogue-encounter') {
     // Set up central star system first
     const centralStar = stars[0];
     const centralMass = centralStar.mass;
@@ -1541,7 +1546,7 @@ export const buildWorld = ctx => {
       bh_list[0].pos = { x: -800, y: 200 }; // Start far away
       bh_list[0].vel = { x: 20, y: -5 }; // Approach velocity
     }
-  } else if (starting_preset === 'Kuiper Belt') {
+  } else if (starting_preset === 'kuiper-belt') {
     // Set up central star system (our Sun)
     const centralStar = stars[0];
     centralStar.name = 'Sol';
@@ -1650,7 +1655,7 @@ export const buildWorld = ctx => {
         asteroids[i].name = smallKBOs[i];
       }
     }
-  } else if (starting_preset === 'Sagittarius A*') {
+  } else if (starting_preset === 'sagittarius-a') {
     // Set up Sagittarius A* with correct name
     if (bh_list.length > 0) {
       bh_list[0].name = 'Sagittarius A*';
@@ -1704,7 +1709,7 @@ export const buildWorld = ctx => {
     ) {
       neutron_stars[i].name = galacticNeutronStars[i];
     }
-  } else if (starting_preset === 'Galactic Center') {
+  } else if (starting_preset === 'galactic-center') {
     // Name some neutron stars with real binary star names for Galactic Center scenario
     const realBinaryStars = [
       'Alpha Centauri A',
@@ -1751,7 +1756,7 @@ export const buildWorld = ctx => {
     ) {
       planets[i].name = binaryExoplanets[i];
     }
-  } else if (starting_preset === 'Pulsar System') {
+  } else if (starting_preset === 'pulsar-system') {
     // Set up pulsar system with real pulsar and planet names
     if (neutron_stars.length > 0) {
       neutron_stars[0].name = 'PSR B1257+12'; // The real pulsar with the first confirmed exoplanets
@@ -1767,13 +1772,13 @@ export const buildWorld = ctx => {
     for (let i = 0; i < Math.min(planets.length, pulsarPlanets.length); i++) {
       planets[i].name = pulsarPlanets[i];
     }
-  } else if (starting_preset === 'Neutron Star Collision') {
+  } else if (starting_preset === 'neutron-star-collision') {
     // Set up neutron star collision based on GW170817
     if (neutron_stars.length >= 2) {
       neutron_stars[0].name = 'GW170817-A';
       neutron_stars[1].name = 'GW170817-B';
     }
-  } else if (starting_preset === 'Earth-Moon System') {
+  } else if (starting_preset === 'earth-moon-system') {
     // Clear any existing objects and create Earth-Moon system
     stars.length = 0;
     planets.length = 0;
@@ -1868,7 +1873,7 @@ export const buildWorld = ctx => {
     SETTINGS.sim_size = 'Small'; // Use small simulation size for better zoom
   }
   // --- Fix for Binary BH scenario: two black holes in mutual orbit, planets orbiting center of mass ---
-  else if (starting_preset === 'Binary BH') {
+  else if (starting_preset === 'binary-bh') {
     if (bh_list.length >= 2) {
       const separation = 120;
       const m1 = bh_list[0].mass;
@@ -1925,7 +1930,7 @@ export const buildWorld = ctx => {
         }
       }
     }
-  } else if (starting_preset === 'TRAPPIST-1 System') {
+  } else if (starting_preset === 'trappist-1-system') {
     // Clear planets array
     planets.length = 0;
     // Every number here comes from js/data/trappist1.js, which the habitable
@@ -1992,7 +1997,7 @@ export const buildWorld = ctx => {
   }
 
   // --- Binary Pair: two equal stars round their common center ---
-  if (starting_preset === 'Binary Pair') {
+  if (starting_preset === 'binary-pair') {
     planets.length = 0;
     gas_giants.length = 0;
     asteroids.length = 0;
@@ -2031,7 +2036,7 @@ export const buildWorld = ctx => {
   }
 
   // --- Black Hole Lab: one hole, four things happily orbiting it ---
-  if (starting_preset === 'Black Hole Lab') {
+  if (starting_preset === 'black-hole-lab') {
     gas_giants.length = 0;
     asteroids.length = 0;
     comets.length = 0;
@@ -2079,7 +2084,7 @@ export const buildWorld = ctx => {
   }
 
   // --- Habitable Zone Lab: the inner Solar System, with the zone drawn ---
-  if (starting_preset === 'Habitable Zone Lab') {
+  if (starting_preset === 'habitable-zone-lab') {
     gas_giants.length = 0;
     asteroids.length = 0;
     comets.length = 0;
@@ -2140,7 +2145,7 @@ export const buildWorld = ctx => {
   }
 
   // --- Interstellar Visitor: 1I/'Oumuamua on its measured hyperbolic orbit ---
-  if (starting_preset === 'Interstellar Visitor') {
+  if (starting_preset === 'interstellar-visitor') {
     planets.length = 0;
     gas_giants.length = 0;
     asteroids.length = 0;
@@ -2221,8 +2226,8 @@ export const buildWorld = ctx => {
   // starts with the halo switched on. Switch it off and the disc flies apart,
   // which is the whole argument in one gesture.
   if (
-    starting_preset === 'Spiral Galaxy' ||
-    starting_preset === 'Milky Way Rotation'
+    starting_preset === 'spiral-galaxy' ||
+    starting_preset === 'milky-way-rotation'
   ) {
     stars.length = 0;
     planets.length = 0;
@@ -2236,7 +2241,7 @@ export const buildWorld = ctx => {
     debris.length = 0;
 
     const G = SETTINGS.gravitational_constant;
-    const flat = starting_preset === 'Milky Way Rotation';
+    const flat = starting_preset === 'milky-way-rotation';
 
     // A compact central bulge carrying most of the visible mass. This is what
     // makes the Keplerian prediction a prediction: outside it, the enclosed
@@ -2293,7 +2298,7 @@ export const buildWorld = ctx => {
   // The excess is put in by hand, as a halo, because that is what the
   // measurement finds: the members move as though there were far more mass
   // than the members account for.
-  if (starting_preset === 'Coma Cluster') {
+  if (starting_preset === 'coma-cluster') {
     stars.length = 0;
     planets.length = 0;
     gas_giants.length = 0;
@@ -2354,8 +2359,8 @@ export const buildWorld = ctx => {
 
   // --- Gravity Assist Lab / Gravity Assist: Heliocentric -----------------------
   if (
-    starting_preset === 'Gravity Assist Lab' ||
-    starting_preset === 'Gravity Assist: Heliocentric'
+    starting_preset === 'gravity-assist-lab' ||
+    starting_preset === 'gravity-assist-heliocentric'
   ) {
     stars.length = 0;
     planets.length = 0;
@@ -2469,7 +2474,7 @@ export const buildWorld = ctx => {
   }
 
   // --- Lagrange Point Lab ------------------------------------------------------
-  if (starting_preset === 'Lagrange Point Lab') {
+  if (starting_preset === 'lagrange-point-lab') {
     stars.length = 0;
     planets.length = 0;
     gas_giants.length = 0;
@@ -2536,7 +2541,7 @@ export const buildWorld = ctx => {
   }
 
   // --- Orbital Transfer Lab ----------------------------------------------------
-  if (starting_preset === 'Orbital Transfer Lab') {
+  if (starting_preset === 'orbital-transfer-lab') {
     stars.length = 0;
     planets.length = 0;
     gas_giants.length = 0;
@@ -2612,8 +2617,8 @@ export const buildWorld = ctx => {
 
   // --- Binary Planet Lab / Circumbinary Planet Lab -----------------------------
   if (
-    starting_preset === 'Binary Planet Lab' ||
-    starting_preset === 'Circumbinary Planet Lab'
+    starting_preset === 'binary-planet-lab' ||
+    starting_preset === 'circumbinary-planet-lab'
   ) {
     stars.length = 0;
     planets.length = 0;
@@ -2629,7 +2634,7 @@ export const buildWorld = ctx => {
     const R_SUN = 0.00465047 * AU;
     const G = SETTINGS.gravitational_constant;
     const mode =
-      starting_preset === 'Circumbinary Planet Lab'
+      starting_preset === 'circumbinary-planet-lab'
         ? CIRCUMBINARY
         : CIRCUMSTELLAR;
     /** How much larger than life the stars are drawn. See the note below. */
@@ -2727,7 +2732,7 @@ export const buildWorld = ctx => {
     zeroNetMomentum();
   }
 
-  if (starting_preset === 'Exoplanet Characterization Lab') {
+  if (starting_preset === 'exoplanet-characterization-lab') {
     stars.length = 0;
     planets.length = 0;
     gas_giants.length = 0;
@@ -2797,8 +2802,8 @@ export const buildWorld = ctx => {
 
   // --- Transit Lab / Blended Binary: HD 209458 at true relative scale ---
   if (
-    starting_preset === 'Transit Lab' ||
-    starting_preset === 'Blended Binary'
+    starting_preset === 'transit-lab' ||
+    starting_preset === 'blended-binary'
   ) {
     planets.length = 0;
     gas_giants.length = 0;
@@ -2834,7 +2839,7 @@ export const buildWorld = ctx => {
     // Companion, only for the blended case. Half a magnitude fainter: a
     // contrast Robo-AO and SOAR both detect routinely, and one that changes the
     // measured planet radius by a quarter.
-    const blended = starting_preset === 'Blended Binary';
+    const blended = starting_preset === 'blended-binary';
     const DELTA_MAG = 0.5;
     const COMPANION_SEP_AU = 300;
     const M_COMP_SUNS = 1.0;
@@ -2960,7 +2965,7 @@ export const buildWorld = ctx => {
   // eigenvalue; the measured 6.9 s is 15% longer, which is what a finite
   // perturbation measured over a finite window gives and is worth a question in
   // the lesson rather than a fudge here.
-  if (starting_preset === 'Three-Body Sensitivity Lab') {
+  if (starting_preset === 'three-body-sensitivity-lab') {
     stars.length = 0;
     planets.length = 0;
     gas_giants.length = 0;
@@ -3072,7 +3077,7 @@ export const buildWorld = ctx => {
   // twentieth of the radius Jupiter would be drawn at. Distances are multiplied
   // by GALILEAN.scale, which under Newtonian gravity is exactly equivalent to
   // dividing every duration by scale^1.5, and leaves every ratio alone.
-  if (starting_preset === 'Galilean Resonance') {
+  if (starting_preset === 'galilean-resonance') {
     const spec = galileanBodies(SETTINGS.gravitational_constant);
     balance([spec.primary, ...spec.bodies]);
     installResonanceSystem(spec);
@@ -3083,7 +3088,7 @@ export const buildWorld = ctx => {
   // argument stops librating and starts going round, once every forty-six Io
   // orbits. The resonance's half-width in Europa's semi-major axis is between
   // one and two parts in a thousand, so a percent is well outside it.
-  if (starting_preset === 'Broken Laplace Resonance') {
+  if (starting_preset === 'broken-laplace-resonance') {
     const spec = galileanBodies(SETTINGS.gravitational_constant, {
       detune: GALILEAN.detune,
     });
@@ -3094,7 +3099,7 @@ export const buildWorld = ctx => {
   // Pluto, Neptune and a body on a Pluto-like orbit that is not in the 3:2.
   // True scale, so every distance and period the interface reports is the real
   // one.
-  if (starting_preset === 'Pluto and Neptune') {
+  if (starting_preset === 'pluto-and-neptune') {
     const spec = plutoBodies(SETTINGS.gravitational_constant);
     balance([spec.primary, ...spec.bodies]);
     installResonanceSystem(spec);
@@ -3104,12 +3109,12 @@ export const buildWorld = ctx => {
   // circular restricted frame - both massive bodies turning about a barycenter
   // at the origin - because the triangular points are only exact in that frame.
   // Already balanced by construction, so no balance() call.
-  if (starting_preset === 'Jupiter Trojans') {
+  if (starting_preset === 'jupiter-trojans') {
     installResonanceSystem(trojanBodies(SETTINGS.gravitational_constant));
   }
 
   // --- Retrograde Mars: the Sun, Earth and Mars, and nothing else -----------
-  if (starting_preset === 'Retrograde Mars') {
+  if (starting_preset === 'retrograde-mars') {
     stars.length = 0;
     planets.length = 0;
     gas_giants.length = 0;
@@ -3167,7 +3172,7 @@ export const buildWorld = ctx => {
   }
 
   // --- Kepler's 2nd Law scenario: star + nearly-circular planet + eccentric planet ---
-  if (starting_preset === "Kepler's 2nd Law") {
+  if (starting_preset === 'keplers-2nd-law') {
     stars.length = 0;
     planets.length = 0;
     gas_giants.length = 0;

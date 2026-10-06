@@ -199,7 +199,7 @@ test.describe('embed mode', () => {
     app,
   }) => {
     await app.boot();
-    const link = await shareLinkFor(page, 'Kuiper Belt');
+    const link = await shareLinkFor(page, 'kuiper-belt');
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       ui.state.zoom = 2.25;
@@ -237,7 +237,7 @@ test.describe('embed mode', () => {
     // app.captureClipboard() for why granting the permissions is not portable.
     await app.captureClipboard();
     await app.boot();
-    await app.loadScenario('Kuiper Belt', 'embed-copy');
+    await app.loadScenario('kuiper-belt', 'embed-copy');
     await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       ui.state.zoom = 1.75;
@@ -299,7 +299,7 @@ test.describe('embed mode', () => {
       };
     });
     await app.boot();
-    await app.loadScenario('Kuiper Belt', 'embed-fallback');
+    await app.loadScenario('kuiper-belt', 'embed-fallback');
 
     await app.railControl('shareBtn');
     await page.locator('#shareBtn').click();
@@ -450,7 +450,7 @@ test.describe('lecture mode', () => {
   }) => {
     await app.boot();
     const links = [];
-    for (const key of ['Solar System', 'Kuiper Belt', 'Binary Star System']) {
+    for (const key of ['solar-system', 'kuiper-belt', 'binary-star-system']) {
       links.push(await shareLinkFor(page, key, `seq-${key}`));
     }
 
@@ -484,19 +484,19 @@ test.describe('lecture mode', () => {
 
     // The non-link line was dropped rather than failing the whole paste.
     expect((await read()).length).toBe(3);
-    expect((await read()).scenario).toBe('Solar System');
+    expect((await read()).scenario).toBe('solar-system');
 
     await page.keyboard.press('ArrowRight');
     await expect.poll(async () => (await read()).position).toBe(1);
-    expect((await read()).scenario).toBe('Kuiper Belt');
+    expect((await read()).scenario).toBe('kuiper-belt');
 
     await page.keyboard.press('ArrowRight');
     await expect.poll(async () => (await read()).position).toBe(2);
-    expect((await read()).scenario).toBe('Binary Star System');
+    expect((await read()).scenario).toBe('binary-star-system');
 
     await page.keyboard.press('ArrowLeft');
     await expect.poll(async () => (await read()).position).toBe(1);
-    expect((await read()).scenario).toBe('Kuiper Belt');
+    expect((await read()).scenario).toBe('kuiper-belt');
 
     // Changing share state does not drop out of the presentation.
     const now = await read();
@@ -509,7 +509,7 @@ test.describe('lecture mode', () => {
     app,
   }) => {
     await app.boot();
-    const link = await shareLinkFor(page, 'Solar System');
+    const link = await shareLinkFor(page, 'solar-system');
     await enterLecture(page);
     await page.locator('#lectureSequenceBtn').click();
     await page.locator('#lectureSequenceText').fill(`${link}\n${link}`);
@@ -534,7 +534,7 @@ test.describe('lecture mode', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Star System', 'spotlight');
+    await app.loadScenario('binary-star-system', 'spotlight');
     await enterLecture(page);
     const before = await worldState(page);
 
@@ -813,7 +813,7 @@ test.describe('language', () => {
     // it has to be repainted rather than swept. It said "Paso 2 de 3" after a
     // switch back to English until it was.
     await app.boot();
-    const link = await shareLinkFor(page, 'Solar System', 'locale-mid-lecture');
+    const link = await shareLinkFor(page, 'solar-system', 'locale-mid-lecture');
     await enterLecture(page);
     await page.locator('#lectureSequenceBtn').click();
     await page.locator('#lectureSequenceText').fill(`${link}\n${link}`);
@@ -840,7 +840,7 @@ test.describe('language', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Kuiper Belt', 'locale-stability');
+    await app.loadScenario('kuiper-belt', 'locale-stability');
     await app.waitForFrames(5);
     await app.setPaused(true);
     const before = await worldState(page);

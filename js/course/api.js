@@ -18,7 +18,7 @@
 import { MANIFEST } from '../data/investigations/manifest.js';
 import { MANIFEST as MANIFEST_ES } from '../data/investigations/manifest.es.js';
 import { SEQUENCES } from '../data/investigations/sequences.js';
-import { SCENARIO_INFO } from '../data/scenarioInfo.js';
+import { SCENARIO_INFO, scenarioId } from '../data/scenarioInfo.js';
 import { PLATFORM_API } from '../platform/catalog.generated.js';
 import { satisfies } from '../platform/semver.js';
 import { lessonProvider } from '../assignments/provider.js';
@@ -78,6 +78,7 @@ export function courseApi(catalog) {
     locales: [...LOCALES],
     lessons: MANIFEST.map(m => m.id),
     scenarios: Object.keys(SCENARIO_INFO),
+    scenarioId,
     datasets: [...datasetsOf(catalog).keys()],
   };
 }
@@ -93,7 +94,10 @@ export function lessonFacts(lesson) {
   const es = SPANISH.get(lesson.id);
   const uses = { scenarios: new Set(), widgets: new Set() };
   for (const s of steps) {
-    if (s.setup?.scenario) uses.scenarios.add(s.setup.scenario);
+    // By id: a lesson written before ids names its scenario in English, and
+    // keeps that key because its steps' fingerprints are made from it.
+    if (s.setup?.scenario)
+      uses.scenarios.add(scenarioId(s.setup.scenario) ?? s.setup.scenario);
     if (s.tool?.id) uses.widgets.add(s.tool.id);
   }
   return {
@@ -108,7 +112,7 @@ export function lessonFacts(lesson) {
       sid: s.sid,
       type: s.type,
       title: s.title || '',
-      scenario: s.setup?.scenario || null,
+      scenario: scenarioId(s.setup?.scenario) ?? s.setup?.scenario ?? null,
     })),
     pkg: lessonProvider(lesson.id),
     locales: es ? ['en', 'es'] : ['en'],
@@ -147,6 +151,7 @@ export async function courseFacts(pack, { load, catalog, known = new Map() }) {
     locales: [...LOCALES],
     lessons,
     scenarios: new Map(Object.keys(SCENARIO_INFO).map(k => [k, {}])),
+    scenarioId,
     datasets: datasetsOf(catalog),
     sequences: SEQUENCES,
   };

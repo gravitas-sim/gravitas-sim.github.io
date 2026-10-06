@@ -14,7 +14,7 @@ import { test, expect } from './fixtures.js';
 /** Load the lab and wait for the panel its scenario brings. */
 async function openLab(page, app) {
   await app.boot();
-  await app.loadScenario('Lagrange Point Lab');
+  await app.loadScenario('lagrange-point-lab');
   await app.waitForFrames(5);
   await expect(page.locator('#cr3bpContainer')).toBeVisible({
     timeout: 30_000,
@@ -319,7 +319,7 @@ test.describe('the claims switch off when they stop being true', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(5);
     // Nothing loaded it, so nothing draws.
     const count = await page.evaluate(async () => {

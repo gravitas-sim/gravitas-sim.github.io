@@ -13,7 +13,7 @@
 // the families of the tools the pack uses - and only those - are fetched first.
 // =============================================================================
 
-import { SCENARIO_INFO } from '../data/scenarioInfo.js';
+import { SCENARIO_INFO, scenarioId } from '../data/scenarioInfo.js';
 import { MANIFEST } from '../data/investigations/manifest.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
 import { SETTING_KEYS } from '../data/settingKeys.js';
@@ -32,6 +32,7 @@ export function packApi() {
     locales: ['en', 'es'],
     entities: Object.keys(ENTITIES),
     scenarios: Object.keys(SCENARIO_INFO),
+    scenarioId,
     widgets: [...WIDGET_IDS],
     lessons: MANIFEST.map(m => m.id),
     units: Object.fromEntries(
@@ -53,7 +54,10 @@ export function packApi() {
 export async function checkInvestigationPack(pack) {
   const errors = validateInvestigationPack(pack, packApi());
   if (errors.length) return { errors, findings: [], compiled: null };
-  const compiled = compileInvestigation(pack, { scenarios: SCENARIO_INFO });
+  const compiled = compileInvestigation(pack, {
+    scenarios: SCENARIO_INFO,
+    scenarioId,
+  });
   // The instrument registry only when a step docks one: importing it fetches
   // the deferred catalogs of words (./widgetIds.js), and a pack with no
   // instrument has nothing for the rules to look up.
@@ -68,6 +72,7 @@ export async function checkInvestigationPack(pack) {
   const findings = judge(compiled, {
     checkCatalog,
     scenarios: SCENARIO_INFO,
+    scenarioId,
     widgets: registry ? registry.allWidgets() : [],
     settingKeys: new Set(SETTING_KEYS),
     gradedSteps,

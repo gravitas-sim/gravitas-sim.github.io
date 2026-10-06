@@ -37,6 +37,7 @@ import {
   PARTIAL_STATUSES,
   SWEEPABLE,
   parameterFor,
+  sweepLab,
   planValues,
 } from './sweep.js';
 import { STATUS } from './status.js';
@@ -199,7 +200,7 @@ export function validateExperiment(m) {
   need(typeof m.title === 'string' && m.title.trim(), 'title', 'is required');
 
   const scenario = m.model?.scenario;
-  const lab = SWEEPABLE[scenario];
+  const lab = sweepLab(scenario);
   need(
     Boolean(lab),
     'model.scenario',
@@ -659,7 +660,7 @@ export function defaultLimits(profile, nav = {}) {
  * experiment, so a sweep a reader has already set up can be run in realms.
  */
 export function fromSweepSpec(spec, { profile = 'desktop', nav = {} } = {}) {
-  const lab = SWEEPABLE[spec.scenario];
+  const lab = sweepLab(spec.scenario);
   const vary =
     Array.isArray(spec.values) && spec.values.length
       ? { parameter: spec.parameter, values: [...spec.values] }
