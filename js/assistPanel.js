@@ -1138,7 +1138,16 @@ function syncExperimentSections() {
 }
 
 /** Wire the panel up. Called once at boot. */
-export function initAssist() {
+/** Undoes the locale subscription init made; null while not wired. */
+let unsubscribeLocale = null;
+
+/**
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the panel's markup
+ *   is unmounted (js/scenarioPanelBridge.js); removes the one listener this
+ *   adds outside it
+ */
+export function initAssist({ signal } = {}) {
+  if (unsubscribeLocale) return;
   // This panel's strings are not in the start-up catalog, so it registers
   // them itself rather than trusting whoever opened it to have done so. The
   // bridge does register them first in the normal path; a lesson, a share link
@@ -1157,7 +1166,7 @@ export function initAssist() {
   // share link, a test - can render before that await resolves and paint
   // message ids. Redrawing when the catalog changes removes the race rather
   // than narrowing it, and is the same subscription a language switch needs.
-  onLocaleChange(() => {
+  unsubscribeLocale = onLocaleChange(() => {
     render();
     // The retained tables are built from strings too, and a reader who
     // switches language with two passes on screen should not be left holding
@@ -1165,6 +1174,9 @@ export function initAssist() {
     renderExperiments();
   });
 
+  // Anything that asked for the elements before the markup was mounted
+  // cached nothing; ask again now that it is there.
+  els = null;
   const e = cacheElements();
   if (!e.container) return;
 
@@ -1217,15 +1229,33 @@ export function initAssist() {
   // chip grid is full. So it shows itself when one of its scenarios loads and
   // stays out of the way everywhere else. Without this the panel is not
   // reachable at all, which is how the e2e suite found it missing.
-  window.addEventListener('gravitasSimulationReset', () => {
-    stopAssistWatch();
-    // A rebuilt world is a new encounter, and the frame pointed at the old
-    // planet is pointing at an id that now means something else.
-    setFrame(WORLD);
-    showForCurrentScenario();
-  });
+  window.addEventListener(
+    'gravitasSimulationReset',
+    () => {
+      stopAssistWatch();
+      // A rebuilt world is a new encounter, and the frame pointed at the old
+      // planet is pointing at an id that now means something else.
+      setFrame(WORLD);
+      showForCurrentScenario();
+    },
+    signal ? { signal } : undefined
+  );
 
   e.container.style.display = 'none';
+}
+
+/**
+ * Undo initAssist(), for when the panel's markup leaves the page: stop the
+ * watch, close the panel, stop listening for the language, forget the
+ * elements.
+ */
+export function teardownAssist() {
+  if (!unsubscribeLocale) return;
+  stopAssistWatch();
+  setAssistEnabled(false);
+  unsubscribeLocale();
+  unsubscribeLocale = null;
+  els = null;
 }
 
 /**

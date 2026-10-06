@@ -251,8 +251,19 @@ export const isRvWorkspaceEnabled = () => enabled;
 /** @returns {?object} The exportable report, for the export dialog */
 export const currentReport = () => exportReport();
 
-/** Wire the panel up. Called once, when the chunk loads. */
-export function initRvWorkspacePanel() {
+/** Undoes the locale subscription init made; null while not wired. */
+let unsubscribeLocale = null;
+
+/**
+ * Wire the panel up. Called by js/rvWorkspaceBridge.js once it has put the
+ * panel's markup in the page, which is what made a call at the bottom of this
+ * module - wiring whatever was there when the chunk loaded - wrong.
+ *
+ * @param {{signal?: AbortSignal}} [options] - Aborted when the markup is
+ *   unmounted; removes the one listener this adds outside it
+ */
+export function initRvWorkspacePanel({ signal } = {}) {
+  if (unsubscribeLocale) return;
   // This panel's strings are not in the start-up catalog, so it registers
   // them itself rather than trusting whoever opened it to have done so. The
   // bridge does register them first in the normal path; a lesson, a share link
@@ -264,8 +275,11 @@ export function initRvWorkspacePanel() {
 
   // The catalog can arrive after this panel does; see the note on the same
   // subscription in js/binaryRunPanel.js.
-  onLocaleChange(() => render());
+  unsubscribeLocale = onLocaleChange(() => render());
 
+  // Anything that asked for the elements before the markup was mounted
+  // cached nothing; ask again now that it is there.
+  els = null;
   const e = cacheElements();
   if (!e.container) return;
 
@@ -348,16 +362,28 @@ export function initRvWorkspacePanel() {
 
   e.close?.addEventListener('click', () => setRvWorkspaceEnabled(false));
 
-  window.addEventListener('resize', () => {
-    if (enabled) render();
-  });
+  window.addEventListener(
+    'resize',
+    () => {
+      if (enabled) render();
+    },
+    signal ? { signal } : undefined
+  );
 
   e.container.style.display = 'none';
 }
 
-// The panel is only ever constructed inside the lazy chunk, so wiring it here
-// is safe: by the time this module has been imported, its DOM is present.
-initRvWorkspacePanel();
+/**
+ * Undo initRvWorkspacePanel(), for when the panel's markup leaves the page:
+ * close it, stop listening for the language, forget the elements.
+ */
+export function teardownRvWorkspacePanel() {
+  if (!unsubscribeLocale) return;
+  setRvWorkspaceEnabled(false);
+  unsubscribeLocale();
+  unsubscribeLocale = null;
+  els = null;
+}
 
 /** @returns {?object} The recording under analysis, for the export dialog */
 export const analyzedRecording = () => currentRecording();

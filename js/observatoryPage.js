@@ -41,7 +41,7 @@ import {
 } from './observatory/schema.js';
 import { OPS, replay, whyNot } from './observatory/transforms.js';
 import { createHistory } from './observatory/history.js';
-import { createSelection } from './observatory/selection.js';
+import { createSelection, interact } from './plot/select.js';
 import { pixelScale, skyOf } from './observatory/wcs.js';
 import {
   TIME_FORMATS,
@@ -54,9 +54,9 @@ import {
   parseUnit,
   unitId,
 } from './observatory/units.js';
-import { createPlot } from './observatory/plot.js';
+import { createPlot } from './plot/plot.js';
 import { createImageView, decodeBits } from './observatory/image.js';
-import { createTable } from './observatory/table.js';
+import { createTable } from './plot/table.js';
 
 const $ = id => document.getElementById(id);
 
@@ -182,19 +182,18 @@ const labels = () => ({
 });
 
 const plot = createPlot($('obsPlot'), {
-  announce,
-  describe,
   number,
   get labels() {
     return labels();
   },
 });
+interact(plot, $('obsPlot'), { announce, describe });
 const image = createImageView($('obsImage'), { announce, describe });
 const table = createTable($('obsTable'), {
   announce,
   describe,
   number,
-  t,
+  range: v => t('obs.table.rows', v),
   get labels() {
     return labels();
   },
@@ -253,7 +252,6 @@ const lent = {
   language,
   registerMessages,
   createPlot,
-  createSelection,
 };
 const fit = { panel: null, loading: null, suits: false };
 function mountFit(m) {

@@ -42,7 +42,16 @@ const STATIC_FILES = [
 // repository, and the library bundles are already built.
 // catalog/packages: the curated archives the catalog page installs from
 // (CATALOG.md). The page itself is a document page, built below.
-const STATIC_DIRS = ['images', 'notebooks', 'vendor', 'catalog/packages'];
+// js/fragments: the panels' markup, fetched by each family as it mounts
+// (INDEX_DECOMPOSITION.md). HTML the bundler never sees, so it is copied, to
+// the path the page asks for.
+const STATIC_DIRS = [
+  'images',
+  'notebooks',
+  'vendor',
+  'catalog/packages',
+  'js/fragments',
+];
 
 // Static document pages outside the single-page app.
 //

@@ -24,6 +24,104 @@ import {
   tagDescription,
 } from './i18n/scenario.js';
 import { t, onLocaleChange } from './i18n/index.js';
+import { mountFragment } from './i18n/deferredMessages.js';
+
+/**
+ * The scenario gallery, inserted at its host in index.html by initScenarioBrowser() before
+ * anything is bound to it (INDEX_DECOMPOSITION.md).
+ */
+export const SCENARIO_LIST_MARKUP = `<!--
+Scenario gallery. Cards, concept chips, counts and the result line are all
+written by js/scenarioBrowser.js from the catalog in
+js/data/scenarioInfo.js: no scenario title, summary, tag or count is
+spelled out here, so nothing in this file can go stale.
+-->
+<div id="scenarioListModal" class="hidden" hidden inert>
+<div
+id="scenarioListContent"
+role="dialog"
+aria-modal="true"
+aria-labelledby="scenarioBrowserTitle"
+>
+<div class="sc-head">
+<div class="sc-head-text">
+<h3
+id="scenarioBrowserTitle"
+data-i18n="gallery.scenarioBrowserTitle"
+>
+Explore scenarios
+</h3>
+<p id="scenarioBrowserSubtitle" class="sc-subtitle"></p>
+</div>
+<button
+id="closeScenarioList"
+class="ui-button"
+title="Close the scenario gallery"
+data-i18n-title="gallery.closeScenarioList.hint"
+>
+×
+</button>
+</div>
+<button
+class="floating-close-chip"
+id="scenarioListCloseChip"
+aria-label="Close"
+title="Close the scenario gallery"
+data-i18n-title="gallery.scenarioListCloseChip.hint"
+data-i18n-aria-label="gallery.scenarioListCloseChip.label"
+>
+✕
+</button>
+
+<div class="scenario-search-wrap">
+<span class="scenario-search-icon" aria-hidden="true">⌕</span>
+<input
+type="search"
+id="scenarioSearch"
+placeholder="Search scenarios, objects, or concepts…"
+autocomplete="off"
+aria-label="Search scenarios"
+title='Filter by name, description or concept. Try "neutron", "merger", "tides" or "kepler". Enter loads the first result.'
+data-i18n-title="gallery.scenarioSearch.hint"
+data-i18n-aria-label="gallery.scenarioSearch.label"
+data-i18n-placeholder="gallery.scenarioSearch.placeholder"
+/>
+</div>
+
+<div class="sc-concepts">
+<p
+class="sc-concepts-label"
+id="scenarioConceptsLabel"
+data-i18n="gallery.scenarioConceptsLabel"
+>
+Browse by concept
+</p>
+<div
+id="scenarioTagChips"
+class="sc-chips"
+role="group"
+aria-labelledby="scenarioConceptsLabel"
+></div>
+<p id="scenarioConceptNote" class="sc-concept-note" hidden=""></p>
+</div>
+
+<p
+id="scenarioResultCount"
+class="sc-count"
+role="status"
+aria-live="polite"
+></p>
+
+<div id="scenarioListScroll" class="sc-scroll">
+<div id="scenarioListItems" class="sc-grid"></div>
+<p id="scenarioSearchEmpty" class="scenario-search-empty" hidden="">
+No scenarios match that search. Try a different word, or choose
+<strong data-i18n="gallery.scenarioSearchEmpty">All</strong> above.
+</p>
+</div>
+</div>
+</div>
+`;
 
 const ALL = 'all';
 
@@ -325,6 +423,7 @@ export const isScenarioBrowserOpen = () =>
  * @param {Function} opts.onScenarioSelected - Called with the chosen key
  */
 export function initScenarioBrowser({ onScenarioSelected } = {}) {
+  mountFragment('scenario-list', SCENARIO_LIST_MARKUP);
   onSelect = onScenarioSelected;
   els = {
     modal: document.getElementById('scenarioListModal'),

@@ -9,6 +9,18 @@
 import { registerMessages, settleDeferredMessages } from './index.js';
 import { applyTranslations } from './dom.js';
 
+// The panels' markup helpers (./dom.js), handed on from here, and imported from
+// here by every module that mounts a fragment (INDEX_DECOMPOSITION.md). Not a
+// nicety: this module and ./dom.js are one chunk of the bundle because every
+// entry that reaches one reaches the other, and a lazy family importing
+// ./dom.js on its own split them, which put a request on every lesson.
+export {
+  fragmentMounted,
+  loadFragment,
+  mountFragment,
+  unmountFragment,
+} from './dom.js';
+
 /**
  * The load in flight, or the completed one. Null until somebody asks, and null
  * again after a failure so the next caller retries.

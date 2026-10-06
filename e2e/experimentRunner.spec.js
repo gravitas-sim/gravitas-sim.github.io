@@ -96,6 +96,18 @@ test.describe('the experiment runner', () => {
     expect(Number(means[0])).toBeLessThan(1);
     expect(Number(means.at(-1))).toBeGreaterThan(100);
     await expect(page.locator('#xpPlot')).toContainText('(log scale)');
+    // PLOT_COMPONENT.md, D5: a point for every trial, the means as a line, a
+    // log axis marked in powers of ten.
+    await expect(page.locator('#xpPlot .ow-points .ow-pt')).toHaveCount(16);
+    await expect(page.locator('#xpPlot .ow-overlay')).toHaveCount(1);
+    await expect(page.locator('#xpPlot .xp-fail')).toHaveCount(0);
+    expect(
+      (
+        await page
+          .locator('#xpPlot .ow-tick[text-anchor="end"]')
+          .allTextContents()
+      ).every(v => /^(1|10+|0\.0*1)$/.test(v))
+    ).toBe(true);
     await expect(page.locator('#xpPlot')).toHaveAttribute(
       'aria-label',
       /16 trials with a measurement, 0 without/

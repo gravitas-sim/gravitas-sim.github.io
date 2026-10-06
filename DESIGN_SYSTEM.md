@@ -374,7 +374,7 @@ rows under it. A wrapper that can scroll is a region with a name and
 | `tr:focus-visible`       | The focus ring, inset                                             | `--focus-ring`                           |
 | `tr.is-masked`           | Italic and secondary                                              | `--text-secondary`                       |
 
-**Keyboard row selection** is the page's script: `js/observatory/table.js` makes
+**Keyboard row selection** is the page's script: `js/plot/table.js` makes
 the table an ARIA grid (`role="grid"`, `aria-multiselectable`), gives the
 focused row `tabindex="0"` and the rest `-1`, and moves with the arrows, Page
 Up and Down, Home and End, toggles with Space and clears with Escape; the
@@ -477,11 +477,12 @@ theme; Observatory red reddens the ground and the text around them.
 
 ## Observation plots
 
-`js/observatory/plot.js` draws the Observatory's plot and the analysis
-laboratory's, and its marks are styled once, in `css/page.css`: points in
-`--hue-comet`, the selection in `--hue-star`, masked points as `--hue-asteroid`
-rings, the model curves in `--hue-gasgiant`, `--hue-blackhole` and the cyan and
-amber mixed, the focus ring in `--hud-text-strong`, on `--space-far`.
+`js/plot/plot.js` ([PLOT_COMPONENT.md](PLOT_COMPONENT.md)) draws the
+Observatory's plots and the analysis laboratory's, and its marks are styled
+once, in `css/page.css`: points in `--hue-comet`, the selection in
+`--hue-star`, masked points as `--hue-asteroid` rings, the model curves in
+`--hue-gasgiant`, `--hue-blackhole` and the cyan and amber mixed, the focus
+ring in `--hud-text-strong`, on `--space-far`.
 
 ## The Observatory's red night vision
 

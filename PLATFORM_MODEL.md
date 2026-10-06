@@ -269,7 +269,7 @@ page's GRAVITAS link. Its content is unchanged until Prompt 73.
 - The rail is simulation controls only: Scenario, State, Tools and Add object. Its Learn section went to the shell (Home and the user manual).
 - It is one accordion with stable ids, and on a phone a section heading no longer closes the menu.
 
-**Dialogs.** Sixteen in the application: fourteen in `index.html`, and the shortcut list and the assignment builder, which modules build.
+**Dialogs.** Sixteen in the application: fourteen in its markup (`index.html` and, since Prompt 53, the fragments its families mount), and the shortcut list and the assignment builder, which modules build.
 - Every modal opens through `js/dialog.js`: Settings, precise placement, the system builder, the scenario browser, the lesson browser, export, the lesson finish, share, the black-hole masses, the lecture sequence and the shortcut list. Tab stays inside, Escape and the backdrop close, focus goes back to what opened it, and the page behind is inert (`isolate`) for all but the three that were on the module already: Settings, precise placement (no scrim on purpose) and the system builder.
 - `js/focusTrap.js`, the second trap three of them used, is gone. The modules on the start-up path fetch `js/dialog.js` on the first open, so no route carries it.
 - Not modal, by this model: the welcome (Home, a page of the shell since Prompt 50), the object inspector (inline), the sound panel (an inline popover on its button), the guided tour (its scrim lets presses through to the control each step names) and the assignment builder (a full-screen tool reached by URL). `tests/dialogInventory.test.js` keeps that list and fails on any other dialog that does not open through `js/dialog.js`.
@@ -282,6 +282,10 @@ page's GRAVITAS link. Its content is unchanged until Prompt 73.
 3. The touch tips, at the first touch on a clear screen.
 
 Escape closes each one. A card closed for a scenario does not return when that scenario is rebuilt. The footer's year is generated from `tools/project-metadata.mjs`.
+
+## As built (Prompt 53)
+
+`index.html` is the shell, the canvas and its scene description, the live regions, the readout, the rail and the transport bar, plus the four observation panels and the Share and Settings dialogs that start-up binds. Every other panel's markup ships with its family and is mounted at an empty `<template data-host>` where it used to stand. For the on-demand families that is a `js/fragments/` file; for the panels start-up binds it is a template in their module. The binary-run panel and the lesson browser stay as well, because the suite reads them before their code loads. The file went from 165.9 KB to 102.1 KB, and no route moved past its ceiling. The 40 KB and accessibility-tree thresholds are recorded as not met (D-INDEX-01). [INDEX_DECOMPOSITION.md](INDEX_DECOMPOSITION.md) has the mechanism and the measurements.
 
 ## Rejected alternatives
 

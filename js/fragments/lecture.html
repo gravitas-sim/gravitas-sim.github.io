@@ -1,0 +1,119 @@
+<!--
+  Lecture Mode's own chrome. Mounted by js/lecture.js when the mode is first
+  asked for, and from then on in the document and shown by CSS on
+  body.presentation-lecture, the same way every other mode in this
+  application is expressed: there is no second layout engine, and nothing
+  here is built at runtime.
+-->
+<!-- role="region", not "toolbar", for the same reason as the control rail:
+     a toolbar promises that the arrow keys move focus between its buttons,
+     and in Lecture Mode the arrow keys step the sequence instead. Claiming
+     the role would have told a screen-reader user to expect the one
+     behavior the mode deliberately does not have. -->
+<div
+  id="lectureBar"
+  class="lecture-bar"
+  role="region"
+  aria-label="Lecture"
+  data-i18n-aria-label="lecture.lectureBar.label"
+>
+  <button
+    type="button"
+    id="lecturePrevBtn"
+    class="lecture-btn"
+    data-i18n-title="lecture.action.previous.hint"
+    data-i18n-aria-label="lecture.action.previous"
+    title="Go to the previous prepared state (Left Arrow)"
+    aria-label="Previous"
+  >
+    <span aria-hidden="true">←</span>
+  </button>
+  <span
+    id="lecturePosition"
+    class="lecture-position"
+    role="status"
+    aria-live="polite"
+    >No sequence loaded</span
+  >
+  <button
+    type="button"
+    id="lectureNextBtn"
+    class="lecture-btn"
+    data-i18n-title="lecture.action.next.hint"
+    data-i18n-aria-label="lecture.action.next"
+    title="Go to the next prepared state (Right Arrow)"
+    aria-label="Next"
+  >
+    <span aria-hidden="true">→</span>
+  </button>
+  <span class="lecture-sep" aria-hidden="true"></span>
+  <button
+    type="button"
+    id="lectureSequenceBtn"
+    class="lecture-btn lecture-btn-wide"
+    data-i18n-title="lecture.action.sequence.hint"
+    title="Prepare or load an ordered list of links"
+  >
+    <span data-i18n="lecture.action.sequence">Sequence</span>
+  </button>
+  <button
+    type="button"
+    id="lectureSpotlightBtn"
+    class="lecture-btn lecture-btn-wide"
+    aria-pressed="false"
+    data-i18n-title="lecture.action.spotlight.hint"
+    title="Dim everything but a circle around the pointer"
+  >
+    <span data-i18n="lecture.action.spotlight">Spotlight</span>
+  </button>
+  <button
+    type="button"
+    id="lectureExitBtn"
+    class="lecture-btn lecture-btn-wide lecture-btn-exit"
+    data-i18n-title="lecture.action.exit.hint"
+    title="Return to the normal interface (Escape)"
+  >
+    <span data-i18n="lecture.action.exit">Exit Lecture Mode</span>
+  </button>
+</div>
+
+<div id="lectureSequenceSheet" class="lecture-sheet" hidden="" inert>
+  <div
+    id="lectureSequenceDialog"
+    class="lecture-sheet-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lectureSequenceHeading"
+  >
+    <h2 id="lectureSequenceHeading" data-i18n="lecture.sequence.heading">
+      Lecture sequence
+    </h2>
+    <p data-i18n="lecture.sequence.intro">
+      Paste Gravitas share links, one per line, in the order you will
+      present them. The arrow keys step through them without leaving Lecture
+      Mode.
+    </p>
+    <textarea
+      id="lectureSequenceText"
+      class="lecture-sequence-text"
+      rows="8"
+      spellcheck="false"
+      data-i18n-placeholder="lecture.sequence.placeholder"
+      placeholder="https://gravitas-sim.online/#…"
+      data-i18n-aria-label="lecture.sequence.heading"
+      aria-label="Lecture sequence"
+    ></textarea>
+    <div class="lecture-sheet-actions">
+      <button type="button" id="lectureSequenceLoad" class="ui-button">
+        <span data-i18n="lecture.sequence.load">Load sequence</span>
+      </button>
+      <button
+        type="button"
+        id="lectureSequenceClear"
+        class="ui-button secondary"
+      >
+        <span data-i18n="lecture.sequence.clear">Clear</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -22,6 +22,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 import { completeCatalogs } from './i18n-catalog.mjs';
+import { assembledIndexHtml } from './index-fragments.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const { LOCALES } = await import(`${ROOT}js/i18n/index.js`);
@@ -51,7 +52,7 @@ const TRANSLATIONS = new Map(
 const { SCENARIO_INFO } = await import(`${ROOT}js/data/scenarioInfo.js`);
 const { TAG_ORDER } = await import(`${ROOT}js/data/scenarioTags.js`);
 
-/** Every .js under js/, and index.html. */
+/** Every .js under js/; index.html and its fragments are read below. */
 function sources(dir, out = []) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
@@ -99,7 +100,11 @@ for (const f of files) {
   // would be a crash rather than a wrong word.
   for (const m of src.matchAll(/\btranslate\(\s*'([^']+)'/g)) used.add(m[1]);
 }
-const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
+// index.html, and every panel's markup that ships with its family instead -
+// js/fragments/*.html and the start-up modules' templates - read as the page
+// is once each has mounted (tools/index-fragments.mjs). Reading index.html
+// alone would report every string those panels ask for as dead.
+const html = assembledIndexHtml();
 for (const m of html.matchAll(/data-i18n(?:-[a-z-]+)?="([^"]+)"/g))
   used.add(m[1]);
 
