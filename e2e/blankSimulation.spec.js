@@ -55,7 +55,7 @@ test('Blank Simulation from Coma Cluster leaves every body list empty', async ({
   app,
 }) => {
   await app.boot();
-  await app.loadScenario('Coma Cluster', 'e2e', { run: false });
+  await app.loadScenario('coma-cluster', 'e2e', { run: false });
   // Without galaxies to begin with this would pass whether or not the button
   // clears them.
   expect((await census(page)).galaxies).toBeGreaterThan(0);

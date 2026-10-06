@@ -23,7 +23,7 @@
 import { checkLesson } from './rules.js';
 import { provideLessonLoaders } from '../data/investigations/registry.js';
 import { allWidgets } from '../widgets.js';
-import { SCENARIO_INFO } from '../data/scenarioInfo.js';
+import { SCENARIO_INFO, scenarioId } from '../data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../appState.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
 
@@ -149,6 +149,7 @@ function findingsFor(inv) {
     findings = checkLesson(inv, {
       widgets: allWidgets(),
       scenarios: SCENARIO_INFO,
+      scenarioId,
       settingKeys: new Set(Object.keys(DEFAULT_SETTINGS)),
       gradedSteps,
     });

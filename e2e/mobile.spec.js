@@ -33,7 +33,7 @@ test.describe('on a phone', () => {
 
   test('nothing overflows sideways', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(20);
 
     const overflow = await page.evaluate(() => ({
@@ -149,7 +149,7 @@ test.describe('on a phone', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.waitForFrames(10);
     await app.selectFirstObject('StarObject');
 
@@ -189,7 +189,7 @@ test.describe('on a phone', () => {
     // js/ui.js.
 
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.selectFirstObject('StarObject');
     await expect(page.locator('#objectInspector')).toBeVisible();
 
@@ -221,7 +221,7 @@ test.describe('on a phone', () => {
     // cancels the click the browser would otherwise synthesise. Every control in
     // the inspector header was dead on a phone as a result.
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.selectFirstObject('StarObject');
     await expect(page.locator('#objectInspector')).toBeVisible();
 

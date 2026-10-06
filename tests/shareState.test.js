@@ -17,7 +17,7 @@ import { withExtras, readExtras } from '../js/experiments/canonicalState.js';
 // A stand-in for DEFAULT_SETTINGS: only the keys these tests touch, so the
 // suite does not have to track every setting the simulation grows.
 const DEFAULTS = {
-  preset_scenario: 'Binary BH',
+  preset_scenario: 'binary-bh',
   gravitational_constant: 2.0,
   num_planets: 15,
   sim_speed: 1.0,
@@ -28,30 +28,30 @@ const DEFAULTS = {
 
 describe('settings deltas', () => {
   test('a scenario at its own defaults produces no delta', () => {
-    const pristine = pristineSettingsFor('Binary BH', DEFAULTS);
-    expect(settingsDelta(pristine, DEFAULTS, 'Binary BH')).toEqual({});
+    const pristine = pristineSettingsFor('binary-bh', DEFAULTS);
+    expect(settingsDelta(pristine, DEFAULTS, 'binary-bh')).toEqual({});
   });
 
   test('records only what the author actually changed', () => {
-    const settings = pristineSettingsFor('Binary BH', DEFAULTS);
+    const settings = pristineSettingsFor('binary-bh', DEFAULTS);
     settings.gravitational_constant = 9.5;
-    const delta = settingsDelta(settings, DEFAULTS, 'Binary BH');
+    const delta = settingsDelta(settings, DEFAULTS, 'binary-bh');
     expect(delta).toEqual({ gravitational_constant: 9.5 });
   });
 
   test('never carries the scenario name, which travels separately', () => {
-    const settings = pristineSettingsFor('Star Cluster', DEFAULTS);
+    const settings = pristineSettingsFor('star-cluster', DEFAULTS);
     settings.sim_speed = 3;
     expect(
-      settingsDelta(settings, DEFAULTS, 'Star Cluster')
+      settingsDelta(settings, DEFAULTS, 'star-cluster')
     ).not.toHaveProperty('preset_scenario');
   });
 
   test('compares arrays by value, not identity', () => {
-    const settings = pristineSettingsFor('Binary BH', DEFAULTS);
+    const settings = pristineSettingsFor('binary-bh', DEFAULTS);
     // A fresh array with identical contents is not a change.
     settings.bh_masses = [...settings.bh_masses];
-    expect(settingsDelta(settings, DEFAULTS, 'Binary BH')).toEqual({});
+    expect(settingsDelta(settings, DEFAULTS, 'binary-bh')).toEqual({});
   });
 
   test('an unknown scenario degrades to the defaults rather than throwing', () => {
@@ -64,9 +64,9 @@ describe('settings deltas', () => {
 describe('encode and decode', () => {
   const basePayload = () =>
     buildPayload({
-      scenario: 'Binary BH',
+      scenario: 'binary-bh',
       seed: 12345,
-      settings: pristineSettingsFor('Binary BH', DEFAULTS),
+      settings: pristineSettingsFor('binary-bh', DEFAULTS),
       DEFAULT_SETTINGS: DEFAULTS,
       camera: { zoom: 1.5, pan: { x: -20, y: 40 } },
     });
@@ -74,18 +74,18 @@ describe('encode and decode', () => {
   test('round-trips a seeded payload', async () => {
     const payload = basePayload();
     const decoded = await decodePayload(await encodePayload(payload));
-    expect(decoded.s).toBe('Binary BH');
+    expect(decoded.s).toBe('binary-bh');
     expect(payloadSeed(decoded)).toBe(12345);
     expect(decoded.c).toEqual([1.5, -20, 40]);
     expect(decoded.b).toBeUndefined();
   });
 
   test('round-trips settings changes', async () => {
-    const settings = pristineSettingsFor('Binary BH', DEFAULTS);
+    const settings = pristineSettingsFor('binary-bh', DEFAULTS);
     settings.gravitational_constant = 4.25;
     settings.show_trails = false;
     const payload = buildPayload({
-      scenario: 'Binary BH',
+      scenario: 'binary-bh',
       seed: 1,
       settings,
       DEFAULT_SETTINGS: DEFAULTS,
@@ -112,9 +112,9 @@ describe('encode and decode', () => {
       }),
     ];
     const payload = buildPayload({
-      scenario: 'Binary BH',
+      scenario: 'binary-bh',
       seed: 3,
-      settings: pristineSettingsFor('Binary BH', DEFAULTS),
+      settings: pristineSettingsFor('binary-bh', DEFAULTS),
       DEFAULT_SETTINGS: DEFAULTS,
       bodies,
     });
@@ -132,9 +132,9 @@ describe('encode and decode', () => {
 
   test('omits the camera when it was not asked for', async () => {
     const payload = buildPayload({
-      scenario: 'Binary BH',
+      scenario: 'binary-bh',
       seed: 1,
-      settings: pristineSettingsFor('Binary BH', DEFAULTS),
+      settings: pristineSettingsFor('binary-bh', DEFAULTS),
       DEFAULT_SETTINGS: DEFAULTS,
       camera: null,
     });
@@ -143,11 +143,11 @@ describe('encode and decode', () => {
   });
 
   test('carries the paused flag only when paused', async () => {
-    const settings = pristineSettingsFor('Binary BH', DEFAULTS);
+    const settings = pristineSettingsFor('binary-bh', DEFAULTS);
     const running = await decodePayload(
       await encodePayload(
         buildPayload({
-          scenario: 'Binary BH',
+          scenario: 'binary-bh',
           seed: 1,
           settings,
           DEFAULT_SETTINGS: DEFAULTS,
@@ -158,7 +158,7 @@ describe('encode and decode', () => {
     const paused = await decodePayload(
       await encodePayload(
         buildPayload({
-          scenario: 'Binary BH',
+          scenario: 'binary-bh',
           seed: 1,
           settings,
           DEFAULT_SETTINGS: DEFAULTS,
@@ -173,9 +173,9 @@ describe('encode and decode', () => {
   test('a seed survives as text, including the extremes', async () => {
     for (const seed of [0, 1, 0xffffffff]) {
       const payload = buildPayload({
-        scenario: 'Binary BH',
+        scenario: 'binary-bh',
         seed,
-        settings: pristineSettingsFor('Binary BH', DEFAULTS),
+        settings: pristineSettingsFor('binary-bh', DEFAULTS),
         DEFAULT_SETTINGS: DEFAULTS,
       });
       const decoded = await decodePayload(await encodePayload(payload));
@@ -194,9 +194,9 @@ describe('encode and decode', () => {
     );
     const fragment = await encodePayload(
       buildPayload({
-        scenario: 'Star Cluster',
+        scenario: 'star-cluster',
         seed: 9,
-        settings: pristineSettingsFor('Star Cluster', DEFAULTS),
+        settings: pristineSettingsFor('star-cluster', DEFAULTS),
         DEFAULT_SETTINGS: DEFAULTS,
         bodies,
       })
@@ -232,14 +232,14 @@ describe('malformed input', () => {
     );
     const long = await encodePayload(
       buildPayload({
-        scenario: 'Star Cluster',
+        scenario: 'star-cluster',
         seed: 1,
-        settings: pristineSettingsFor('Star Cluster', DEFAULTS),
+        settings: pristineSettingsFor('star-cluster', DEFAULTS),
         DEFAULT_SETTINGS: DEFAULTS,
         bodies,
       })
     );
-    expect(long.startsWith('1z')).toBe(true); // actually compressed
+    expect(long.startsWith('2z')).toBe(true); // actually compressed
     await expect(
       decodePayload(long.slice(0, long.length - 40))
     ).rejects.toThrow(/incomplete or was cut short/);
@@ -248,9 +248,9 @@ describe('malformed input', () => {
   test('rejects a truncated payload', async () => {
     const fragment = await encodePayload(
       buildPayload({
-        scenario: 'Binary BH',
+        scenario: 'binary-bh',
         seed: 1,
-        settings: pristineSettingsFor('Binary BH', DEFAULTS),
+        settings: pristineSettingsFor('binary-bh', DEFAULTS),
         DEFAULT_SETTINGS: DEFAULTS,
       })
     );
@@ -265,14 +265,14 @@ describe('malformed input', () => {
   test('tolerates a leading hash', async () => {
     const fragment = await encodePayload(
       buildPayload({
-        scenario: 'Binary BH',
+        scenario: 'binary-bh',
         seed: 1,
-        settings: pristineSettingsFor('Binary BH', DEFAULTS),
+        settings: pristineSettingsFor('binary-bh', DEFAULTS),
         DEFAULT_SETTINGS: DEFAULTS,
       })
     );
     const decoded = await decodePayload(`#${fragment}`);
-    expect(decoded.s).toBe('Binary BH');
+    expect(decoded.s).toBe('binary-bh');
   });
 });
 
@@ -322,7 +322,7 @@ describe('generation-time versus later settings', () => {
   // same settings can also be changed afterwards, applying live. Collapsing
   // both into one set rebuilt a different experiment from the one shared.
   const atBuild = () => {
-    const s = pristineSettingsFor("Kepler's 2nd Law", DEFAULTS);
+    const s = pristineSettingsFor('keplers-2nd-law', DEFAULTS);
     s.gravitational_constant = 1;
     return s;
   };
@@ -331,7 +331,7 @@ describe('generation-time versus later settings', () => {
     const built = atBuild();
     const now = { ...built, gravitational_constant: 8 };
     const payload = buildPayload({
-      scenario: "Kepler's 2nd Law",
+      scenario: 'keplers-2nd-law',
       seed: 1,
       settings: now,
       generationSettings: built,
@@ -344,7 +344,7 @@ describe('generation-time versus later settings', () => {
   test('no after-delta when nothing changed since the build', () => {
     const built = atBuild();
     const payload = buildPayload({
-      scenario: "Kepler's 2nd Law",
+      scenario: 'keplers-2nd-law',
       seed: 1,
       settings: built,
       generationSettings: built,
@@ -357,7 +357,7 @@ describe('generation-time versus later settings', () => {
     const now = atBuild();
     now.sim_speed = 2.5;
     const payload = buildPayload({
-      scenario: "Kepler's 2nd Law",
+      scenario: 'keplers-2nd-law',
       seed: 1,
       settings: now,
       DEFAULT_SETTINGS: DEFAULTS,
@@ -372,7 +372,7 @@ describe('generation-time versus later settings', () => {
     const decoded = await decodePayload(
       await encodePayload(
         buildPayload({
-          scenario: "Kepler's 2nd Law",
+          scenario: 'keplers-2nd-law',
           seed: 1,
           settings: now,
           generationSettings: built,
@@ -448,7 +448,7 @@ describe('shareUrl', () => {
 
 const basePayload = () =>
   buildPayload({
-    scenario: 'Binary Star System',
+    scenario: 'binary-star-system',
     seed: 12345,
     settings: {},
     DEFAULT_SETTINGS: {},
@@ -649,7 +649,7 @@ describe('a link that inflates past what a link can carry', () => {
   test('a large world that is still a link opens', async () => {
     const payload = {
       v: 1,
-      s: 'Solar System',
+      s: 'solar-system',
       seed: 'e2e',
       b: Array.from({ length: 400 }, (_, i) => [i, i * 0.37, -i, 1e-3 * i]),
     };

@@ -211,9 +211,14 @@ pack cannot do any of them:
 - **A place in the gallery.** A pack travels as a file or a link.
   - It is not listed in the scenario gallery or the picker.
   - It has no thumbnail, no scenario-information card and no search entry.
-  - A built-in is a preset in `js/scenarios.js`, an entry in
-    `js/data/scenarioInfo.js`, its strings in `js/i18n/en.js` and
-    `js/i18n/es.js`, and a thumbnail in `images/scenarios/`.
+  - A built-in is a row of the preset table in `js/scenarios.js` and an
+    entry in `js/data/scenarioInfo.js`, both under its id, its strings in
+    `js/i18n/en.js` and `js/i18n/es.js`, and a thumbnail in
+    `images/scenarios/`.
+  - A pack can name one to start from, by that id (`scenario`): it then
+    builds that scenario's world, hand-built geometry included, under the
+    pack's seed and settings, and brings no bodies of its own. The Studio
+    does not write the field yet.
 - **Geometry by rule.** 37 of the 59 built-ins place their bodies with code in
   `js/world/build.js`: spiral arms, resonant chains, Lagrange points, the
   gravitational-wave binaries and the rest.

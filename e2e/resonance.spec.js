@@ -203,16 +203,16 @@ test.describe('the resonance scenarios', () => {
     await app.boot();
 
     const expected = {
-      'Galilean Resonance': ['Jupiter', 'Io', 'Europa', 'Ganymede', 'Callisto'],
-      'Broken Laplace Resonance': [
+      'galilean-resonance': ['Jupiter', 'Io', 'Europa', 'Ganymede', 'Callisto'],
+      'broken-laplace-resonance': [
         'Jupiter',
         'Io',
         'Europa',
         'Ganymede',
         'Callisto',
       ],
-      'Pluto and Neptune': ['Sun', 'Neptune', 'Pluto', 'Unbound Wanderer'],
-      'Jupiter Trojans': [
+      'pluto-and-neptune': ['Sun', 'Neptune', 'Pluto', 'Unbound Wanderer'],
+      'jupiter-trojans': [
         'Sun',
         'Jupiter',
         'L4 probe',
@@ -244,9 +244,9 @@ test.describe('the resonance scenarios', () => {
     // of 2 is a third of the converged value, so these two settings are the
     // difference between a measurement and an artifact.
     for (const key of [
-      'Galilean Resonance',
-      'Pluto and Neptune',
-      'Jupiter Trojans',
+      'galilean-resonance',
+      'pluto-and-neptune',
+      'jupiter-trojans',
     ]) {
       await app.loadScenario(key, 'resonance-e2e', { run: false });
       const settings = await page.evaluate(async () => {
@@ -273,7 +273,7 @@ test.describe('the instruments against a live world', () => {
   }, testInfo) => {
     testInfo.setTimeout(420_000);
     await app.boot();
-    await loadResonanceScenario(page, app, 'Jupiter Trojans');
+    await loadResonanceScenario(page, app, 'jupiter-trojans');
 
     // The rotating frame is the only view in which any of this is visible.
     await page.waitForFunction(() => window.__res.frame().ready, null, {
@@ -349,7 +349,7 @@ test.describe('the instruments against a live world', () => {
   }, testInfo) => {
     testInfo.setTimeout(420_000);
     await app.boot();
-    await loadResonanceScenario(page, app, 'Pluto and Neptune');
+    await loadResonanceScenario(page, app, 'pluto-and-neptune');
     await page.evaluate(() => window.__res.watch({ argument: 'pluto' }));
 
     const v = await waitForVerdict(page, ['libration'], 300_000);
@@ -392,7 +392,7 @@ test.describe('the instruments against a live world', () => {
   }, testInfo) => {
     testInfo.setTimeout(420_000);
     await app.boot();
-    await loadResonanceScenario(page, app, 'Galilean Resonance');
+    await loadResonanceScenario(page, app, 'galilean-resonance');
     await page.evaluate(() => window.__res.watch({ argument: 'laplace' }));
 
     // The periods first. These settle within a few Io orbits.
@@ -460,7 +460,7 @@ test.describe('the instruments against a live world', () => {
   }, testInfo) => {
     testInfo.setTimeout(300_000);
     await app.boot();
-    await loadResonanceScenario(page, app, 'Broken Laplace Resonance');
+    await loadResonanceScenario(page, app, 'broken-laplace-resonance');
     await page.evaluate(() => window.__res.watch({ argument: 'laplace' }));
 
     const v = await waitForVerdict(page, ['circulation'], 240_000);

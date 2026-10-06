@@ -221,13 +221,23 @@ restates the line below it will be asked about in review.
 
 ## Adding a scenario
 
+A scenario is named by its **id**: lower case, words joined by hyphens
+(`binary-planet-lab`), and permanent once it ships, because share links,
+lessons, course packs and experiments name it by that id. Its title is a
+translation of the id and may be reworded at any time; the id may not. (Until
+Roadmap II Prompt 63 a scenario was keyed by its English name. Those 59 names
+still read, through the rule in `scenarioId()`; a new scenario has no such
+name.)
+
 Two places, both data:
 
-1. **`js/data/scenarioInfo.js`** — the title, the summary a student reads, one
-   to four concept tags from the fixed tag list, and a thumbnail path.
-2. **`js/scenarios.js`** — a branch in `applyPreset` that transforms the
-   settings object. It is a pure function of settings: it may not reach into
-   the UI.
+1. **`js/data/scenarioInfo.js`** — an entry under the id with one to four
+   concept tags from the fixed tag list. Its title and summary are
+   `scenario.<id>.title` and `scenario.<id>.summary` in `js/i18n/en.js` and
+   `js/i18n/es.js`, and its thumbnail is `images/scenarios/<id>.webp`.
+2. **`js/scenarios.js`** — a row of `SCENARIO_PRESETS` under the same id: the
+   settings the scenario runs under, as data. Geometry that settings cannot
+   describe is a branch on the id in `js/world/build.js`.
 
 Then:
 

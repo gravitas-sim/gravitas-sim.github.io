@@ -198,7 +198,7 @@ test.describe('the experiment runner', () => {
     // be cut short and be left out of every average.
     await page
       .locator('#xpScenario')
-      .selectOption('Gravity Assist: Heliocentric');
+      .selectOption('gravity-assist-heliocentric');
     await expect(page.locator('#xpRefusals')).toContainText(
       'after 1249 of its 10000 units of time',
       { timeout: 30_000 }
@@ -299,13 +299,13 @@ test.describe('realms that misbehave, in a real browser', () => {
         format: M.FORMAT,
         formatVersion: 1,
         title: 't',
-        model: { scenario: 'Binary Planet Lab', platform: '^1.0.0' },
+        model: { scenario: 'binary-planet-lab', platform: '^1.0.0' },
         initial: { settings: {} },
         seeds: ['a'],
         vary: [{ parameter: 'binary_lab_planet_a', values: [0.1, 0.2, 0.3] }],
         observables: {
           metrics: ['distance_to_primary'],
-          roles: M.SWEEPABLE['Binary Planet Lab'].roles,
+          roles: M.SWEEPABLE['binary-planet-lab'].roles,
         },
         stop: { duration: 10000, events: [] },
         numerics: { frameSeconds: 1 / 60, sampleEvery: 1 },

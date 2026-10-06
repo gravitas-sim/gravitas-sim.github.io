@@ -1069,7 +1069,7 @@ function renderSweepControls() {
     for (const name of sweepableScenarios()) {
       const opt = document.createElement('option');
       opt.value = name;
-      opt.textContent = name;
+      opt.textContent = t(`scenario.${name}.title`);
       scenarioSel.appendChild(opt);
     }
     // Open on the scenario that is loaded, when it is one that can be swept.
@@ -1868,7 +1868,7 @@ function wire() {
   // reading about it should be looking at the same numbers, so nothing here is
   // taken from whatever the controls happen to say.
   $('benchSweepGuided').onclick = () => {
-    $('benchSweepScenario').value = 'Binary Planet Lab';
+    $('benchSweepScenario').value = 'binary-planet-lab';
     renderSweepControls();
     $('benchSweepParam').value = 'binary_lab_planet_a';
     $('benchSweepFrom').value = '0.05';
@@ -1876,7 +1876,7 @@ function wire() {
     $('benchSweepCount').value = '12';
     $('benchSweepDuration').value = '10000';
     return startSweep({
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       parameter: 'binary_lab_planet_a',
       from: 0.05,
       to: 0.4,

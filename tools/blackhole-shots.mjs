@@ -36,11 +36,11 @@ const PORT = 8133;
  * across scenarios and across the before/after pair.
  */
 const SHOTS = [
-  { id: 'quiescent', scenario: 'Stellar Graveyard', framings: [0.02, 0.12] },
-  { id: 'accreting', scenario: 'Black Hole Lab', framings: [0.02, 0.06, 0.16] },
-  { id: 'jets', scenario: 'Quasar Cannon', framings: [0.02, 0.06, 0.16] },
-  { id: 'merger', scenario: 'GW150914', framings: [0.03, 0.1] },
-  { id: 'agn', scenario: 'Galactic Center', framings: [0.08] },
+  { id: 'quiescent', scenario: 'stellar-graveyard', framings: [0.02, 0.12] },
+  { id: 'accreting', scenario: 'black-hole-lab', framings: [0.02, 0.06, 0.16] },
+  { id: 'jets', scenario: 'quasar-cannon', framings: [0.02, 0.06, 0.16] },
+  { id: 'merger', scenario: 'gw150914', framings: [0.03, 0.1] },
+  { id: 'agn', scenario: 'galactic-center', framings: [0.08] },
 ];
 
 const args = process.argv.slice(2);

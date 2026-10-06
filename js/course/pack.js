@@ -117,7 +117,8 @@ export function itemsOf(pack) {
  *
  * @param {unknown} c - A parsed pack
  * @param {{locales: string[], lessons?: Iterable<string>,
- *   scenarios?: Iterable<string>, datasets?: Iterable<string>}} api - What
+ *   scenarios?: Iterable<string>, scenarioId?: Function,
+ *   datasets?: Iterable<string>}} api - What
  *   this build of Gravitas has (./api.js courseApi()); a list left out is not
  *   checked
  * @returns {Array<{path: string, code: string, vars: object, message: string}>}
@@ -138,7 +139,11 @@ export function validateCoursePack(c, api) {
   // ./review.js reports that as missing instead.
   const known = list => (list === undefined ? ANY : new Set(list));
   const lessons = known(api.lessons);
-  const scenarios = known(api.scenarios);
+  const scenarioIds = known(api.scenarios);
+  // By id, or in English in a pack older than ids.
+  const scenarios = {
+    has: key => scenarioIds.has(api.scenarioId?.(key) ?? key),
+  };
   const datasets = known(api.datasets);
 
   /** A text, in plain words: no markup, no entity, no address. */

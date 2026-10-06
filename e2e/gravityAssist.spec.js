@@ -66,7 +66,7 @@ test.describe('the controlled encounter', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Gravity Assist Lab', 'e2e', { run: false });
+    await app.loadScenario('gravity-assist-lab', 'e2e', { run: false });
 
     const world = await page.evaluate(async () => {
       const p = await import('/js/physics.js');
@@ -118,7 +118,7 @@ test.describe('the controlled encounter', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Gravity Assist: Heliocentric', 'e2e', {
+    await app.loadScenario('gravity-assist-heliocentric', 'e2e', {
       run: false,
     });
     const world = await page.evaluate(async () => {
@@ -151,7 +151,7 @@ test.describe('the controlled encounter', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Gravity Assist Lab', 'e2e', { run: false });
+    await app.loadScenario('gravity-assist-lab', 'e2e', { run: false });
     const snapshot = () =>
       page.evaluate(async () => {
         const p = await import('/js/physics.js');
@@ -177,8 +177,8 @@ test.describe('what the flyby does', () => {
     app,
   }) => {
     await app.boot();
-    const behind = await fly(page, { scenario: 'Gravity Assist Lab', b: 40 });
-    const ahead = await fly(page, { scenario: 'Gravity Assist Lab', b: -40 });
+    const behind = await fly(page, { scenario: 'gravity-assist-lab', b: 40 });
+    const ahead = await fly(page, { scenario: 'gravity-assist-lab', b: -40 });
 
     expect(behind.appliedB).toBe(40);
     expect(behind.run.side).toBe('trailing');
@@ -201,7 +201,7 @@ test.describe('what the flyby does', () => {
     // frame is inertial and the encounter can only turn the velocity.
     for (const b of [40, -40, 90]) {
       const { run, relResidual } = await fly(page, {
-        scenario: 'Gravity Assist Lab',
+        scenario: 'gravity-assist-lab',
         b,
       });
       expect(run.phase).toBe('done');
@@ -218,7 +218,7 @@ test.describe('what the flyby does', () => {
     app,
   }) => {
     await app.boot();
-    const { run } = await fly(page, { scenario: 'Gravity Assist Lab', b: 40 });
+    const { run } = await fly(page, { scenario: 'gravity-assist-lab', b: 40 });
     const predicted = await page.evaluate(
       async ([b, vInf]) => {
         const GA = await import('/js/gravityAssist.js');
@@ -237,7 +237,7 @@ test.describe('what the flyby does', () => {
     app,
   }) => {
     await app.boot();
-    const { run } = await fly(page, { scenario: 'Gravity Assist Lab', b: 40 });
+    const { run } = await fly(page, { scenario: 'gravity-assist-lab', b: 40 });
     const probe = Math.hypot(run.probeDeltaP.x, run.probeDeltaP.y);
     const planet = Math.hypot(run.planetDeltaP.x, run.planetDeltaP.y);
     expect(probe).toBeGreaterThan(0);
@@ -251,9 +251,9 @@ test.describe('what the flyby does', () => {
     app,
   }) => {
     await app.boot();
-    const isolated = await fly(page, { scenario: 'Gravity Assist Lab', b: 40 });
+    const isolated = await fly(page, { scenario: 'gravity-assist-lab', b: 40 });
     const helio = await fly(page, {
-      scenario: 'Gravity Assist: Heliocentric',
+      scenario: 'gravity-assist-heliocentric',
       b: 18,
     });
 
@@ -277,11 +277,11 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Gravity Assist Lab', 'e2e', { run: false });
+    await app.loadScenario('gravity-assist-lab', 'e2e', { run: false });
     await expect(page.locator('#assistContainer')).toBeVisible();
     await expect(page.locator('#assistImpact')).toHaveValue('40');
 
-    await fly(page, { scenario: 'Gravity Assist Lab', b: 40 });
+    await fly(page, { scenario: 'gravity-assist-lab', b: 40 });
     await page.evaluate(async () => {
       const panel = await import('/js/assistPanel.js');
       panel.setAssistEnabled(false);
@@ -303,7 +303,7 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
-    await fly(page, { scenario: 'Gravity Assist Lab', b: 40 });
+    await fly(page, { scenario: 'gravity-assist-lab', b: 40 });
     await page.evaluate(async () => {
       const panel = await import('/js/assistPanel.js');
       panel.setAssistEnabled(true);
@@ -311,7 +311,7 @@ test.describe('the panel', () => {
     // Nothing to qualify: with no star the claim is exact.
     expect(await page.locator('#assistCaveat').innerText()).toBe('');
 
-    await fly(page, { scenario: 'Gravity Assist: Heliocentric', b: 18 });
+    await fly(page, { scenario: 'gravity-assist-heliocentric', b: 18 });
     await page.evaluate(async () => {
       const panel = await import('/js/assistPanel.js');
       panel.setAssistEnabled(false);
@@ -328,12 +328,12 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Gravity Assist Lab', 'e2e', { run: false });
+    await app.loadScenario('gravity-assist-lab', 'e2e', { run: false });
     await expect(page.locator('#assistContainer')).toBeVisible();
-    await app.loadScenario('Solar System', 'e2e', { run: false });
+    await app.loadScenario('solar-system', 'e2e', { run: false });
     await expect(page.locator('#assistContainer')).toBeHidden();
 
-    await app.loadScenario('Gravity Assist Lab', 'e2e', { run: false });
+    await app.loadScenario('gravity-assist-lab', 'e2e', { run: false });
     for (const locale of ['en', 'es']) {
       await page.evaluate(async l => {
         const i18n = await import('/js/i18n/index.js');

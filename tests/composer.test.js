@@ -75,7 +75,7 @@ describe('the example compiles to a lesson the lesson checker passes', () => {
 
   test('with the scenario’s picture for its card', () => {
     const { lesson } = compile(clone(EXAMPLE_INVESTIGATION));
-    expect(lesson.thumbnail).toBe(SCENARIO_INFO['Solar System'].thumbnail);
+    expect(lesson.thumbnail).toBe(SCENARIO_INFO['solar-system'].thumbnail);
   });
 
   test('and no Spanish shadow when nothing is translated', () => {

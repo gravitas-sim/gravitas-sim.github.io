@@ -113,7 +113,7 @@ export const DEMOS = Object.freeze([
     id: 'retrograde',
     lesson: 'retrograde-motion',
     state: {
-      scenario: 'Retrograde Mars',
+      scenario: 'retrograde-mars',
       seed: 'teach',
       settings: { show_trails: true, trail_length: 400 },
     },
@@ -122,7 +122,7 @@ export const DEMOS = Object.freeze([
     id: 'assist',
     lesson: 'gravity-assist',
     state: {
-      scenario: 'Gravity Assist Lab',
+      scenario: 'gravity-assist-lab',
       seed: 'teach',
       settings: { show_velocity_vectors: true, show_trails: true },
     },
@@ -131,7 +131,7 @@ export const DEMOS = Object.freeze([
     id: 'chaos',
     lesson: 'butterfly-effect',
     state: {
-      scenario: 'Three-Body Sensitivity Lab',
+      scenario: 'three-body-sensitivity-lab',
       seed: 'teach',
       settings: { show_trails: true, trail_length: 600 },
     },
@@ -140,7 +140,7 @@ export const DEMOS = Object.freeze([
     id: 'rotation',
     lesson: 'missing-mass',
     state: {
-      scenario: 'Milky Way Rotation',
+      scenario: 'milky-way-rotation',
       seed: 'teach',
       settings: { show_velocity_vectors: true },
     },
@@ -149,7 +149,7 @@ export const DEMOS = Object.freeze([
     id: 'tides',
     lesson: 'tides',
     state: {
-      scenario: 'Earth-Moon System',
+      scenario: 'earth-moon-system',
       seed: 'teach',
       settings: { show_trails: true },
     },
@@ -158,7 +158,7 @@ export const DEMOS = Object.freeze([
     id: 'transit',
     lesson: 'transit-photometry',
     state: {
-      scenario: 'Transit Lab',
+      scenario: 'transit-lab',
       seed: 'teach',
       settings: { show_elapsed_time: true },
     },

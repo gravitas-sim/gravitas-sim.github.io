@@ -316,7 +316,7 @@ describe('compiling a pack into a link', () => {
     p.observer = { inclination: 60 };
     const payload = compileScenarioPack(p);
     expect(payload).toMatchObject({
-      v: 1,
+      v: 2,
       s: 'None',
       d: { num_planets: 3, placement: 'Circular' },
       x: { v: 1, inc: 60, open: ['lightCurve'], tools: ['ruler', 'stopwatch'] },

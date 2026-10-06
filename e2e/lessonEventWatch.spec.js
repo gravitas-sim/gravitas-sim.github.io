@@ -275,7 +275,7 @@ test.describe('leaving an armed activity', () => {
     // every assertion below this line had never run. Kepler's 2nd Law holds an
     // Eccentric Orbiter on an e = 0.65 orbit, which is what a periapsis watch
     // needs; a circular orbit is refused one, correctly.
-    await app.loadScenario("Kepler's 2nd Law");
+    await app.loadScenario('keplers-2nd-law');
     await app.waitForFrames(5);
 
     // Arm something of their own first, from the tool, before any lesson.

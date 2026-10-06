@@ -41,6 +41,10 @@ import {
   galaxies,
 } from './physics.js';
 import { t } from './i18n/index.js';
+import { scenarioTitle } from './i18n/scenario.js';
+
+/** A scenario id, as opposed to 'None', the sentinel for a hand-built world. */
+const SCENARIO_KEY = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 import { announce } from './notify.js';
 
 /** How often the description may be rewritten, in milliseconds. */
@@ -77,7 +81,7 @@ export function summaryText() {
 
   parts.push(
     current_scenario_name && current_scenario_name !== 'None'
-      ? t('summary.scenario', { name: current_scenario_name })
+      ? t('summary.scenario', { name: scenarioTitle(current_scenario_name) })
       : t('summary.scenario.custom')
   );
 
@@ -155,7 +159,10 @@ function announceChanges() {
   };
 
   if (announced.scenario !== null && now.scenario !== announced.scenario) {
-    announce(t('summary.announce.scenario', { name: now.scenario }));
+    const name = SCENARIO_KEY.test(now.scenario)
+      ? scenarioTitle(now.scenario)
+      : now.scenario;
+    announce(t('summary.announce.scenario', { name }));
   } else if (announced.running !== null && now.running !== announced.running) {
     announce(now.running ? t('summary.running') : t('summary.paused'));
   } else if (

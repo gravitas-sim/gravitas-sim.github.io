@@ -62,7 +62,7 @@ test.describe('the two runs', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(180_000);
-    await setUp(page, app, "Kepler's 2nd Law", {
+    await setUp(page, app, 'keplers-2nd-law', {
       bodies: 2,
       metrics: ['separation', 'energy_drift'],
     });
@@ -92,7 +92,7 @@ test.describe('the two runs', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(180_000);
-    await setUp(page, app, "Kepler's 2nd Law", {
+    await setUp(page, app, 'keplers-2nd-law', {
       bodies: 2,
       metrics: ['separation'],
     });
@@ -137,7 +137,7 @@ test.describe('the two runs', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(180_000);
-    await setUp(page, app, "Kepler's 2nd Law", {
+    await setUp(page, app, 'keplers-2nd-law', {
       bodies: 2,
       metrics: ['separation'],
     });
@@ -177,7 +177,7 @@ test.describe('three systems, three answers', () => {
     testInfo.setTimeout(240_000);
     // A single planet on a wide, near-circular orbit: the case with a closed
     // form, and the one a working check must not call unresolved.
-    await setUp(page, app, "Kepler's 2nd Law", {
+    await setUp(page, app, 'keplers-2nd-law', {
       bodies: 2,
       metrics: ['separation', 'energy_drift', 'angular_drift'],
     });
@@ -212,7 +212,7 @@ test.describe('three systems, three answers', () => {
     // unresolved would be as useless as one that called everything converged.
     // So this drives it from both sides: the same encounter at the shipped
     // step and at a deliberately coarse one, and the two answers must differ.
-    await setUp(page, app, 'Slingshot', {
+    await setUp(page, app, 'slingshot', {
       bodies: 2,
       metrics: ['separation', 'speed', 'closest_approach', 'energy_drift'],
     });
@@ -255,7 +255,7 @@ test.describe('three systems, three answers', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(240_000);
-    await setUp(page, app, 'Three-Body Sensitivity Lab', {
+    await setUp(page, app, 'three-body-sensitivity-lab', {
       bodies: 2,
       metrics: ['separation', 'speed', 'energy_drift'],
     });
@@ -281,7 +281,7 @@ test.describe('what it reports', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(180_000);
-    await setUp(page, app, "Kepler's 2nd Law", {
+    await setUp(page, app, 'keplers-2nd-law', {
       bodies: 2,
       metrics: ['separation', 'energy_drift'],
     });
@@ -316,7 +316,7 @@ test.describe('what it reports', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(180_000);
-    await setUp(page, app, "Kepler's 2nd Law", {
+    await setUp(page, app, 'keplers-2nd-law', {
       bodies: 2,
       metrics: ['separation'],
     });
@@ -334,7 +334,7 @@ test.describe('what it reports', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(180_000);
-    await setUp(page, app, "Kepler's 2nd Law", {
+    await setUp(page, app, 'keplers-2nd-law', {
       bodies: 2,
       metrics: ['separation', 'energy_drift'],
     });
@@ -366,7 +366,7 @@ test.describe('what it reports', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(180_000);
-    await setUp(page, app, "Kepler's 2nd Law", {
+    await setUp(page, app, 'keplers-2nd-law', {
       bodies: 2,
       metrics: ['separation', 'energy_drift'],
     });
@@ -394,7 +394,7 @@ test.describe('what it reports', () => {
     await page.addInitScript(() => {
       localStorage.setItem('gravitas_locale', 'es');
     });
-    await setUp(page, app, "Kepler's 2nd Law", {
+    await setUp(page, app, 'keplers-2nd-law', {
       bodies: 2,
       metrics: ['separation', 'energy_drift'],
     });

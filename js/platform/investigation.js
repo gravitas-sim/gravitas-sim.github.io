@@ -125,7 +125,9 @@ const STEP_FIELDS = {
  * @param {object} api - What Gravitas has
  * @param {string[]} api.locales - The interface's locales
  * @param {string[]} api.entities - Entity names lesson prose may use
- * @param {string[]} api.scenarios - Scenario names a step may open
+ * @param {string[]} api.scenarios - Scenario ids a step may open
+ * @param {Function} [api.scenarioId] - A scenario's id from any key it has
+ *   had, so a pack made before ids, which names one in English, still reads
  * @param {string[]} api.widgets - Instrument ids a step may dock
  * @param {string[]} api.lessons - Built-in lesson ids, which a pack may not reuse
  * @param {Record<string, string[]>} api.units - Answer-parser units by dimension
@@ -195,7 +197,7 @@ export function validateInvestigationPack(p, api) {
   );
   if (p.thumbnail !== undefined)
     need(
-      api.scenarios.includes(p.thumbnail),
+      isScenario(api, p.thumbnail),
       'thumbnail',
       'scenario',
       'a scenario, whose picture the card shows'
@@ -531,6 +533,10 @@ function checkStep(s, path, index, ctx) {
   }
 }
 
+/** Whether a pack names a built-in scenario, by its id or an older key. */
+const isScenario = (api, key) =>
+  api.scenarios.includes(api.scenarioId?.(key) ?? key);
+
 /** Where a step starts: a built-in scenario, its seed, and how it is framed. */
 function checkSetup(setup, path, { need, api }) {
   if (!isObject(setup))
@@ -544,7 +550,7 @@ function checkSetup(setup, path, { need, api }) {
       { key: k }
     );
   need(
-    api.scenarios.includes(setup.scenario),
+    isScenario(api, setup.scenario),
     `${path}.scenario`,
     'scenario',
     'a scenario Gravitas has'

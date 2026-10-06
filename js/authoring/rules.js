@@ -348,6 +348,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
     manifests,
     instructor,
     scenarios,
+    scenarioId,
     settingKeys,
     widgets,
     translations,
@@ -552,7 +553,11 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         if (s.scenario !== undefined) {
           if (!isNonEmptyString(s.scenario)) {
             E('ref/scenario', 'setup.scenario is empty');
-          } else if (!scenarioNames.has(s.scenario)) {
+          } else if (
+            !scenarioNames.has(scenarioId?.(s.scenario) ?? s.scenario)
+          ) {
+            // By id, or by the English key a lesson written before ids keeps:
+            // its steps' fingerprints are made from that key.
             E('ref/scenario', `setup names no such scenario "${s.scenario}"`);
           }
         }
@@ -1306,7 +1311,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
  * property of the lesson itself, which is what an author is editing.
  *
  * @param {object} inv - One investigation
- * @param {object} refs - {widgets, scenarios, settingKeys, gradedSteps}
+ * @param {object} refs - {widgets, scenarios, scenarioId, settingKeys,
+ *   gradedSteps}
  * @returns {Array<object>} Findings for this lesson only
  */
 export function checkLesson(inv, refs) {
@@ -1316,6 +1322,7 @@ export function checkLesson(inv, refs) {
       manifests: {},
       instructor: {},
       scenarios: refs.scenarios,
+      scenarioId: refs.scenarioId,
       settingKeys: refs.settingKeys,
       widgets: refs.widgets,
       translations: {},

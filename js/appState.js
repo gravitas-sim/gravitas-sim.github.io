@@ -29,7 +29,7 @@
 // =============================================================================
 
 export const DEFAULT_SETTINGS = {
-  preset_scenario: 'Binary BH',
+  preset_scenario: 'binary-bh',
   gravitational_constant: 2.0,
   follow_mode: 'None',
   num_planets: 15,

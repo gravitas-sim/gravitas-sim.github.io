@@ -82,12 +82,22 @@ const kindText = kind =>
  * @param {object} p - An entry's provenance
  * @returns {Array<Array<string>>} Label/value pairs
  */
+/**
+ * A recorded scenario as a reader says it: an id's title, or the English name
+ * an entry made before scenarios had ids recorded, as it was written.
+ */
+const scenarioName = key => {
+  const id = `scenario.${key}.title`;
+  const title = t(id);
+  return title === id ? key : title;
+};
+
 export function provenanceRows(p) {
   const missing = t('nb.report.notRecorded');
   const or = v =>
     v === null || v === undefined || v === '' ? missing : String(v);
   const rows = [
-    [t('nb.prov.scenario'), or(p.scenario)],
+    [t('nb.prov.scenario'), or(p.scenario && scenarioName(p.scenario))],
     [t('nb.prov.target'), or(p.target)],
     [
       t('nb.prov.simTime'),

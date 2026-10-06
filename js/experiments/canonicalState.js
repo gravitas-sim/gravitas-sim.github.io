@@ -189,6 +189,8 @@ export function stripVolatile(payload) {
  * @param {Object} [extras.frame] - {mode, objectId} from referenceFrame.js
  * @param {Object} [extras.observer] - {positionAngle, inclination}
  * @param {Array<Object>} [extras.tools] - Active measurement tools
+ * @param {?{id: string, version: string}} [extras.pack] - The scenario pack
+ *   the world was built from
  * @returns {Object} The same payload with an `x` block
  */
 export function withExtras(payload, extras = {}) {
@@ -235,8 +237,17 @@ export function withExtras(payload, extras = {}) {
   if (Number.isFinite(extras.distancePc) && extras.distancePc > 0) {
     x.dpc = Number(extras.distancePc.toPrecision(9));
   }
+  // The scenario pack this world was built from, if one was.
+  const pack = packIdentity(extras.pack);
+  if (pack) x.pack = pack;
   return { ...payload, x };
 }
+
+/** A pack's {id, version}, or null for anything that is not one. */
+const packIdentity = p =>
+  typeof p?.id === 'string' && typeof p.version === 'string'
+    ? { id: p.id, version: p.version }
+    : null;
 
 /**
  * Read the extras back, with defaults for a payload that has none.
@@ -248,7 +259,8 @@ export function withExtras(payload, extras = {}) {
  * @param {Object} payload - A decoded share payload
  * @returns {{version:number, clock:number, frame:{mode:string,objectId:*},
  *   observer:{positionAngle:number, inclination:number}, tools:Array<string>,
- *   observedStarId:?number, distancePc:?number}}
+ *   observedStarId:?number, distancePc:?number,
+ *   pack:?{id: string, version: string}}}
  *   The extras
  */
 export function readExtras(payload) {
@@ -272,6 +284,8 @@ export function readExtras(payload) {
     // null means "use whatever the scenario says", which is what every link
     // made before this field existed means.
     distancePc: Number.isFinite(x.dpc) ? x.dpc : null,
+    // null: no pack built it, as with every link before packs said so.
+    pack: packIdentity(x.pack),
   };
 }
 

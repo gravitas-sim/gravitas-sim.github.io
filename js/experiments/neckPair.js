@@ -42,7 +42,7 @@ import { jacobiConstant, lagrangePoints, regimeFor } from '../cr3bp.js';
 
 /** The laboratory this activity belongs to, and the state it starts from. */
 export const BASELINE = Object.freeze({
-  scenario: 'Lagrange Point Lab',
+  scenario: 'lagrange-point-lab',
   seed: 'lagrange',
   /** Where the tracer is put, in rotating-frame units of the separation. */
   position: Object.freeze({ x: 0.6, y: 0 }),

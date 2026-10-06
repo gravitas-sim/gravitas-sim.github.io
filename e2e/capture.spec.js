@@ -25,7 +25,7 @@ test.describe('capture', () => {
     mkdirSync(OUT, { recursive: true });
     await app.boot();
     await app.dismissFrontDoor();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(5);
   });
 
@@ -313,7 +313,7 @@ test.describe('capture', () => {
       })
     ).toBe(true);
 
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await page.waitForTimeout(1500);
 
     // Registered here, not before the still: the first download of the test is

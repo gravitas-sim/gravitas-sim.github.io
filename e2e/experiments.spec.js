@@ -100,7 +100,7 @@ test.describe('the A/B experiment bench', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(180_000);
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await app.waitForFrames(5);
     await openBench(page, app);
 
@@ -109,7 +109,7 @@ test.describe('the A/B experiment bench', () => {
     await page.locator('#benchCapture').click();
     const captured = await benchState(page);
     expect(captured.name).toBe('Gravity doubled');
-    expect(captured.scenario).toBe('Binary BH');
+    expect(captured.scenario).toBe('binary-bh');
     expect(captured.hash).toMatch(/^[0-9a-f]{8}$/);
 
     // 2. Select two bodies, which is what a separation needs.
@@ -200,7 +200,7 @@ test.describe('the A/B experiment bench', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(120_000);
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await app.waitForFrames(5);
     await openBench(page, app);
 
@@ -246,7 +246,7 @@ test.describe('the A/B experiment bench', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(180_000);
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await app.waitForFrames(5);
     await openBench(page, app);
 
@@ -286,7 +286,7 @@ test.describe('the A/B experiment bench', () => {
     await jsonFile.saveAs(jsonPath);
     const manifest = JSON.parse(readFileSync(jsonPath, 'utf8'));
     expect(manifest.format).toBe('gravitas-experiment');
-    expect(manifest.provenance.scenario).toBe('Binary BH');
+    expect(manifest.provenance.scenario).toBe('binary-bh');
     expect(manifest.provenance.seed).toBeTruthy();
     expect(manifest.provenance.integrator).toBeTruthy();
     expect(manifest.provenance.initialStateHash).toMatch(/^[0-9a-f]{8}$/);
@@ -315,7 +315,7 @@ test.describe('the A/B experiment bench', () => {
   });
 
   test('saves locally, lists, renames and deletes', async ({ page, app }) => {
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await app.waitForFrames(5);
     await openBench(page, app);
 
@@ -350,7 +350,7 @@ test.describe('the A/B experiment bench', () => {
     page,
     app,
   }) => {
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await app.waitForFrames(5);
     await openBench(page, app);
 
@@ -414,7 +414,7 @@ test.describe('the A/B experiment bench', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(120_000);
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await app.waitForFrames(5);
     await openBench(page, app);
 
@@ -474,7 +474,7 @@ test.describe('the A/B experiment bench', () => {
     // from the bottom, so an unbounded one puts its own controls above the top
     // edge where nothing can reach them.
     await page.setViewportSize({ width: 390, height: 844 });
-    await app.loadScenario('Binary BH');
+    await app.loadScenario('binary-bh');
     await app.waitForFrames(5);
     await page.evaluate(async () => {
       const { ensureBench } = await import('/js/experimentsBridge.js');
@@ -507,7 +507,7 @@ test.describe('the A/B experiment bench', () => {
     page,
     app,
   }) => {
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.waitForFrames(5);
     const fragment = await page.evaluate(async () => {
       const ui = await import('/js/ui.js');

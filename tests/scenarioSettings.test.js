@@ -337,9 +337,9 @@ describe('scenario settings can all be reset', () => {
       }
     }
     expect(scaled.sort()).toEqual([
-      'Coma Cluster',
-      'Milky Way Rotation',
-      'Spiral Galaxy',
+      'coma-cluster',
+      'milky-way-rotation',
+      'spiral-galaxy',
     ]);
   });
 });

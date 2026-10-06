@@ -144,7 +144,7 @@ for (const locale of LOCALES) {
 
       await page.evaluate(async seed => {
         const ui = await import('/js/ui.js');
-        ui.SETTINGS.preset_scenario = 'Solar System';
+        ui.SETTINGS.preset_scenario = 'solar-system';
         ui.initialize_simulation({ seed });
         ui.state.paused = true;
         document.getElementById('scenarioInfo')?.classList.add('hidden');

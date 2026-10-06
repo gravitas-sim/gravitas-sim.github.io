@@ -199,4 +199,6 @@ export const EN_STUDIO = {
   'studio.error.name': 'A plain name of at most 40 characters.',
   'studio.error.populationWithBodies':
     'Set this to 0: a scenario with its own bodies does not also generate them.',
+  'studio.error.scenario':
+    'A built-in scenario by its id, such as solar-system, and then no bodies of its own.',
 };

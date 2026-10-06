@@ -30,7 +30,7 @@ test.describe('heavy scenarios stay finite', () => {
     // Galactic Collision is the biggest thing here: two galaxies, hundreds of
     // bodies, mutual gravity and mergers all at once.
     await app.boot();
-    const { before, after } = await stress(app, 'Galactic Collision', {
+    const { before, after } = await stress(app, 'galactic-collision', {
       frames: 240,
     });
 
@@ -47,7 +47,7 @@ test.describe('heavy scenarios stay finite', () => {
     // which is the regime where a softening floor set for a scenario a hundred
     // times larger used to starve them of gravity and throw them out.
     await app.boot();
-    const { before, after } = await stress(app, 'TRAPPIST-1 System', {
+    const { before, after } = await stress(app, 'trappist-1-system', {
       frames: 400,
     });
 
@@ -61,7 +61,7 @@ test.describe('heavy scenarios stay finite', () => {
     app,
   }) => {
     await app.boot();
-    const { before, after } = await stress(app, 'GW150914', { frames: 300 });
+    const { before, after } = await stress(app, 'gw150914', { frames: 300 });
 
     expect(before.nonFinite).toBe(0);
     expect(after.nonFinite).toBe(0);
@@ -171,8 +171,8 @@ test.describe('heavy scenarios stay finite', () => {
         };
       };
       return {
-        kessler: read('Kessler Cascade'),
-        slingshot: read('Slingshot Gauntlet'),
+        kessler: read('kessler-cascade'),
+        slingshot: read('slingshot-gauntlet'),
       };
     });
 
@@ -272,11 +272,11 @@ test.describe('the application recovers from rough handling', () => {
     // world each rebuild produces.
     const counts = [];
     for (const key of [
-      'Binary Pair',
-      'Solar System',
-      'Binary Pair',
-      'Solar System',
-      'Binary Pair',
+      'binary-pair',
+      'solar-system',
+      'binary-pair',
+      'solar-system',
+      'binary-pair',
     ]) {
       // run: false builds the world with the clock already stopped, so no body
       // is absorbed or culled between the build and the count.
@@ -305,7 +305,7 @@ test.describe('the application recovers from rough handling', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.waitForFrames(20);
 
     for (let i = 0; i < 8; i++) {

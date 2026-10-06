@@ -22,7 +22,13 @@
 import { DEFAULT_SETTINGS } from './appState.js';
 import { INTEGRATORS, GasGiant, ABSORB_BUFFER } from './physics.js';
 import { TAG_ORDER } from './data/scenarioTags.js';
-import { pristineSettingsFor, settingsDelta } from './shareState.js';
+import {
+  LINK_VERSION,
+  linkNumber,
+  pristineSettingsFor,
+  settingsDelta,
+} from './shareState.js';
+import { SCENARIO_IDS } from './scenarios.js';
 import { formatSeed } from './rng.js';
 import {
   BUILDER_TYPES,
@@ -65,8 +71,8 @@ const REPORTED = Object.freeze({
   Planet: 'massInEarths',
 });
 
-/** Twelve significant figures: exact for any orbit, and a shorter link. */
-const sig = v => Number(v.toPrecision(12));
+/** One precision with the share trimmer: LINK_PRECISION in js/shareState.js. */
+const sig = linkNumber;
 
 /**
  * Judge one typed body of a pack: a type, a mass in the type's unit, a
@@ -117,6 +123,7 @@ export function scenarioApi() {
     locales: ['en', 'es'],
     tags: [...TAG_ORDER],
     integrators: [...INTEGRATORS],
+    scenarios: [...SCENARIO_IDS],
     validateSystem,
     validateBody,
     explain,
@@ -318,14 +325,20 @@ export function describeCaution(pack, c) {
  * `s: 'None'` with the pack's settings as the delta: the application rebuilds
  * a 'None' link from its default settings plus that delta (js/ui.js
  * applyShareState), which is what a built-in scenario's preset does to the
- * same defaults. The instruments to open ride in the extras, where an older
- * build ignores them.
+ * same defaults; a pack naming a built-in compiles to its id, the settings
+ * over that scenario's own. The instruments to open, and the pack's identity
+ * ({pack: {id, version}}, carried on into links made of the world), ride in
+ * the extras, where an older build ignores them.
  *
  * @param {object} pack - A valid pack (checkPack(pack) is empty)
  * @returns {object} A payload for encodePayload()
  */
 export function compileScenarioPack(pack) {
-  const payload = { v: 1, s: 'None', seed: formatSeed(pack.seed) };
+  const payload = {
+    v: LINK_VERSION,
+    s: pack.scenario ?? 'None',
+    seed: formatSeed(pack.seed),
+  };
   const d = { ...(pack.settings || {}) };
   if (Object.keys(d).length) payload.d = d;
   if (pack.camera) {
@@ -338,7 +351,7 @@ export function compileScenarioPack(pack) {
   const { bodies } = packBodies(pack);
   if (bodies.length) payload.b = bodies;
   if (pack.paused) payload.p = 1;
-  const x = { v: 1 };
+  const x = { v: 1, pack: { id: pack.id, version: pack.version } };
   const inc = pack.observer?.inclination;
   const pa = pack.observer?.positionAngle;
   if (Number.isFinite(pa) && pa !== 0) x.pa = pa;
@@ -377,7 +390,7 @@ export function blankPack(seed) {
  * a scratch copy of the defaults: the same code the application runs, so the
  * settings are the scenario's exactly. What a pack cannot carry is reported
  * rather than dropped quietly. Hand-built geometry is never copied: it is code
- * in js/world/build.js, keyed on the scenario's name.
+ * in js/world/build.js, keyed on the scenario's id.
  *
  * @param {string} name - A key of SCENARIO_INFO
  * @returns {{settings: object, dropped: string[]}}
@@ -430,33 +443,33 @@ export function packFromOrbitalSystem(data) {
  *
  * A pack made from one of these (settingsFromScenario) builds exactly the
  * built-in's world under the same seed. Every other built-in places its
- * bodies by code in js/world/build.js, keyed on its name, so a pack made from
+ * bodies by code in js/world/build.js, keyed on its id, so a pack made from
  * it carries its settings and not its bodies. tests/scenarioPack.test.js
  * builds all of them both ways and holds this list to the result.
  */
 export const GENERATED_SCENARIOS = Object.freeze([
-  'Supermassive BH',
-  'Star Cluster',
-  'Sagittarius A*',
-  'Pulsar System',
-  'Stellar Graveyard',
-  'Galactic Center',
-  'Supernova Remnant',
-  'Compact Object Zoo',
-  'Millisecond Pulsar',
-  'Intermediate Mass BH',
-  'Galactic Collision',
-  'Micro BH Swarm',
-  'Exoplanet Lab',
-  'Quasar Cannon',
-  'The Pinwheel Galaxy Core',
-  'Star Frisbee',
-  'Kessler Cascade',
-  'Alien Dyson Swarm Collapse',
-  'Tidal Arm Tango',
-  'Hungry Hungry Holes',
-  'Slingshot Gauntlet',
-  'Stellar Nursery',
+  'supermassive-bh',
+  'star-cluster',
+  'sagittarius-a',
+  'pulsar-system',
+  'stellar-graveyard',
+  'galactic-center',
+  'supernova-remnant',
+  'compact-object-zoo',
+  'millisecond-pulsar',
+  'intermediate-mass-bh',
+  'galactic-collision',
+  'micro-bh-swarm',
+  'exoplanet-lab',
+  'quasar-cannon',
+  'the-pinwheel-galaxy-core',
+  'star-frisbee',
+  'kessler-cascade',
+  'alien-dyson-swarm-collapse',
+  'tidal-arm-tango',
+  'hungry-hungry-holes',
+  'slingshot-gauntlet',
+  'stellar-nursery',
 ]);
 
 export { SYSTEM_TYPES, BUILDER_TYPES };

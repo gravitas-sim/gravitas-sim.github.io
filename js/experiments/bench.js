@@ -1171,7 +1171,7 @@ export async function runSweep(spec, opts = {}) {
     return { ok: false, reason: check.reason, detail: check.detail };
   }
 
-  const entry = SWEEP.SWEEPABLE[spec.scenario];
+  const entry = SWEEP.sweepLab(spec.scenario);
   const values = SWEEP.planValues(spec);
   const seed = spec.seed || 'sweep';
   const abort = { canceled: false };

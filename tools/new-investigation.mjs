@@ -188,7 +188,7 @@ const ${constName} = {
       body: \`Set the scene. Two or three short paragraphs; separate them with a
              blank line.\`,
       setup: {
-        scenario: 'Solar System',
+        scenario: 'solar-system',
         seed: '${id}',
         camera: { zoom: 1, pan: { x: 0, y: 0 } },
         paused: false,

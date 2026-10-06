@@ -127,8 +127,9 @@ for (const inv of lessons) {
 
         // --- Its setup was applied ---------------------------------------
         if (step.setup?.scenario) {
-          const world = await page.evaluate(async () => {
+          const world = await page.evaluate(async asked => {
             const ui = await import('/js/ui.js');
+            const { scenarioId } = await import('/js/data/scenarioInfo.js');
             const p = await import('/js/physics.js');
             const lists = [
               'bh_list',
@@ -142,11 +143,14 @@ for (const inv of lessons) {
               'galaxies',
             ];
             return {
+              // The world is named by id; a built-in lesson keeps the English
+              // key its fingerprint was made from (D-SCN-01), so compare ids.
               scenario: ui.current_scenario_name,
+              asked: scenarioId(asked) ?? asked,
               bodies: lists.reduce((n, l) => n + (p[l] || []).length, 0),
             };
-          });
-          if (world.scenario !== step.setup.scenario) {
+          }, step.setup.scenario);
+          if (world.scenario !== world.asked) {
             note(
               i,
               `asked for "${step.setup.scenario}", the world is "${world.scenario}"`

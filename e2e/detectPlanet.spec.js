@@ -26,7 +26,7 @@ const LESSON = 'detect-this-planet';
 /** Open the RV panel on a scenario whose star is free to move. */
 async function openRv(page, app) {
   await app.boot();
-  await app.loadScenario('Exoplanet Characterization Lab');
+  await app.loadScenario('exoplanet-characterization-lab');
   await app.waitForFrames(10);
   await app.openPanel('toggleRadialVelocity', 'rvContainer');
   await expect(page.locator('#rvCanvas')).toBeVisible();
@@ -416,7 +416,7 @@ test.describe('a recording belongs to what it recorded', () => {
     // and the panel then fell through and appended - so this produced a
     // one-sample recording of an instant nobody observed.
     await app.boot();
-    await app.loadScenario('Binary Star System');
+    await app.loadScenario('binary-star-system');
     await app.waitForFrames(20);
     await app.openPanel('toggleRadialVelocity', 'rvContainer');
 

@@ -51,7 +51,7 @@ const byId = list => Object.fromEntries(list.map(m => [m.id, [m.x, m.y]]));
 /** Load the cluster running and wait until a few frames are recorded. */
 const recordTheCluster = async (page, app) => {
   await app.boot();
-  await app.loadScenario('Coma Cluster', 'e2e', { run: true });
+  await app.loadScenario('coma-cluster', 'e2e', { run: true });
   await expect.poll(() => frameCount(page)).toBeGreaterThan(5);
 };
 

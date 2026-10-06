@@ -32,21 +32,21 @@ import {
  */
 const PANELS = [
   {
-    scenarios: ['Binary Planet Lab', 'Circumbinary Planet Lab'],
+    scenarios: ['binary-planet-lab', 'circumbinary-planet-lab'],
     // Its markup stays in index.html: lessons and tests drive this panel
     // directly, in the same task as the rebuild that fetches it.
     load: () => import('./binaryRunPanel.js'),
     init: m => m.initBinaryRun(),
   },
   {
-    scenarios: ['Gravity Assist Lab', 'Gravity Assist: Heliocentric'],
+    scenarios: ['gravity-assist-lab', 'gravity-assist-heliocentric'],
     host: 'assist',
     load: () => import('./assistPanel.js'),
     init: (m, opts) => m.initAssist(opts),
     teardown: m => m.teardownAssist(),
   },
   {
-    scenarios: ['Lagrange Point Lab'],
+    scenarios: ['lagrange-point-lab'],
     load: () => import('./cr3bpPanel.js'),
     init: m => m.initCr3bp(),
   },

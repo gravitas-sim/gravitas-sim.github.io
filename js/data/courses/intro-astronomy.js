@@ -143,7 +143,7 @@ export const INTRO_ASTRONOMY = {
           kind: 'scenario',
           minutes: 10,
           objectives: ['orbits'],
-          scenario: 'Solar System',
+          scenario: 'solar-system',
           seed: 'sky-1',
           title: {
             en: 'The Solar System, to explore',

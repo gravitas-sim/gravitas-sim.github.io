@@ -77,7 +77,7 @@ function namedBodies(page) {
 test.describe('Kuiper Belt scenario contract', () => {
   test.beforeEach(async ({ app }) => {
     await app.boot();
-    await app.loadScenario('Kuiper Belt', 'kbo-contract');
+    await app.loadScenario('kuiper-belt', 'kbo-contract');
   });
 
   test('all eight named objects exist at startup', async ({ page }) => {
@@ -166,9 +166,9 @@ test.describe('Kuiper Belt scenario contract', () => {
     // Both builds are loaded paused. A running world moves between the two
     // snapshots, and this test is about what initialization produces, not about
     // how far the belt has traveled since.
-    await app.loadScenario('Kuiper Belt', 'kbo-seeded', { run: false });
+    await app.loadScenario('kuiper-belt', 'kbo-seeded', { run: false });
     const first = await namedBodies(page);
-    await app.loadScenario('Kuiper Belt', 'kbo-seeded', { run: false });
+    await app.loadScenario('kuiper-belt', 'kbo-seeded', { run: false });
     const second = await namedBodies(page);
 
     const shape = list =>
@@ -199,7 +199,7 @@ test.describe('Three-Body Sensitivity Lab scenario contract', () => {
     // Paused: these are assertions about the configuration the scenario
     // *builds*, and a running world has already left it by the time the test
     // reads the numbers.
-    await app.loadScenario('Three-Body Sensitivity Lab', 'chaos-lab', {
+    await app.loadScenario('three-body-sensitivity-lab', 'chaos-lab', {
       run: false,
     });
     await app.waitForBodies(3);
@@ -276,7 +276,7 @@ test.describe('Three-Body Sensitivity Lab scenario contract', () => {
         return P.stars.map(s => [s.id, s.pos.x, s.pos.y, s.vel.x, s.vel.y]);
       });
     const first = await snapshot();
-    await app.loadScenario('Three-Body Sensitivity Lab', 'chaos-lab', {
+    await app.loadScenario('three-body-sensitivity-lab', 'chaos-lab', {
       run: false,
     });
     await app.waitForBodies(3);
@@ -323,13 +323,18 @@ test.describe('Three-Body Sensitivity Lab scenario contract', () => {
     page,
   }) => {
     const known = await page.evaluate(async () => {
-      const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
+      const { SCENARIO_INFO, scenarioId } =
+        await import('/js/data/scenarioInfo.js');
       const lesson =
         await import('/js/data/investigations/butterfly-effect.js');
       const wanted = lesson.default.steps
         .map(s => s.setup?.scenario)
         .filter(Boolean);
-      return wanted.map(name => [name, Boolean(SCENARIO_INFO[name])]);
+      // By id, or by the English key a lesson written before ids keeps.
+      return wanted.map(name => [
+        name,
+        Boolean(SCENARIO_INFO[scenarioId(name)]),
+      ]);
     });
     expect(known.length).toBeGreaterThan(0);
     for (const [, exists] of known) expect(exists).toBe(true);
@@ -350,10 +355,15 @@ test.describe('a scenario is asked for by its key', () => {
         async () => (await import('/js/ui.js')).current_scenario_name
       );
     const before = await current();
-    // One character from the key - the curly apostrophe "a closed system says
-    // so" asked for - and named back as the key it missed.
+    // The name the scenario had before ids, one character off - the curly
+    // apostrophe "a closed system says so" asked for - and named back as the
+    // id it missed.
     await expect(app.loadScenario('Kepler’s 2nd Law')).rejects.toThrow(
-      'did you mean "Kepler\'s 2nd Law"?'
+      'did you mean "keplers-2nd-law"?'
+    );
+    // And the old name itself is not an id either.
+    await expect(app.loadScenario("Kepler's 2nd Law")).rejects.toThrow(
+      'did you mean "keplers-2nd-law"?'
     );
     // A placement value, and nothing like a key.
     await expect(app.loadScenario('Empty')).rejects.toThrow(

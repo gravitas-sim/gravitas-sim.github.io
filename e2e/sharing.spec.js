@@ -19,7 +19,7 @@ test.describe('a shared link', () => {
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      await app.loadScenario('TRAPPIST-1 System');
+      await app.loadScenario('trappist-1-system');
       await app.waitForFrames(20);
 
       const before = await app.bodySnapshot();
@@ -65,7 +65,7 @@ test.describe('a shared link', () => {
     // The seeded kind is the small link: it stores a seed rather than every body,
     // so everything about it depends on the seed surviving the round trip.
     await app.boot();
-    await app.loadScenario('Star Cluster', 'shared-seed');
+    await app.loadScenario('star-cluster', 'shared-seed');
     await app.waitForFrames(10);
 
     const round = await page.evaluate(async () => {
@@ -108,7 +108,7 @@ test.describe('a shared link', () => {
       page.evaluate(async () => {
         const ui = await import('/js/ui.js');
         const p = await import('/js/physics.js');
-        ui.SETTINGS.preset_scenario = 'Star Cluster';
+        ui.SETTINGS.preset_scenario = 'star-cluster';
         ui.initialize_simulation({ seed: 'determinism-check' });
         ui.state.paused = true;
         return [...p.stars, ...p.planets, ...p.bh_list].map(b => [
@@ -129,7 +129,7 @@ test.describe('a shared link', () => {
     const other = await page.evaluate(async () => {
       const ui = await import('/js/ui.js');
       const p = await import('/js/physics.js');
-      ui.SETTINGS.preset_scenario = 'Star Cluster';
+      ui.SETTINGS.preset_scenario = 'star-cluster';
       ui.initialize_simulation({ seed: 'a-different-seed' });
       ui.state.paused = true;
       return [...p.stars, ...p.planets, ...p.bh_list].map(b => [
@@ -143,7 +143,7 @@ test.describe('a shared link', () => {
 
   test('the share dialog produces a usable link', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.waitForFrames(10);
 
     await app.railControl('shareBtn');

@@ -61,6 +61,9 @@ export const lessonDigest = steps =>
 
 const major = v => Number(String(v).split('.')[0]);
 
+/** A scenario item's id: a pack made before ids names one in English. */
+const scenarioOf = (facts, key) => facts.scenarioId?.(key) ?? key;
+
 /**
  * A pin for an item, from the lesson as it is now.
  * @param {object} item - A lesson or assignment item
@@ -100,7 +103,9 @@ export function reviewItem(item, facts, pinning) {
   switch (item.kind) {
     case 'scenario':
       return verdict(
-        facts.scenarios.has(item.scenario) ? STATUS.SAME : STATUS.MISSING
+        facts.scenarios.has(scenarioOf(facts, item.scenario))
+          ? STATUS.SAME
+          : STATUS.MISSING
       );
     case 'dataset':
       return verdict(
@@ -540,12 +545,10 @@ export function dependencyGraph(pack, facts) {
       for (const d of lesson?.uses?.dataPacks || [])
         edge(l, node(`data:${d}`, 'data', d), 'uses');
     }
-    if (item.kind === 'scenario')
-      edge(
-        me,
-        node(`scenario:${item.scenario}`, 'scenario-source', item.scenario),
-        'opens'
-      );
+    if (item.kind === 'scenario') {
+      const s = scenarioOf(facts, item.scenario);
+      edge(me, node(`scenario:${s}`, 'scenario-source', s), 'opens');
+    }
     if (item.kind === 'dataset')
       edge(me, node(`data:${item.dataset}`, 'data', item.dataset), 'opens');
   }

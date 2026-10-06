@@ -14,7 +14,7 @@ import {
 
 /** A valid request, which each test then breaks in one way. */
 const spec = (over = {}) => ({
-  scenario: 'Binary Planet Lab',
+  scenario: 'binary-planet-lab',
   parameter: 'binary_lab_planet_a',
   from: 0.05,
   to: 0.4,
@@ -37,22 +37,22 @@ describe('the allowlist', () => {
     // sweep of it would run the same world at every value and draw a flat
     // line - a believable result and a false one.
     const LAB_VARIABLES = {
-      'Binary Planet Lab': [
+      'binary-planet-lab': [
         'binary_lab_planet_a',
         'binary_lab_periods',
         'max_timestep',
       ],
-      'Circumbinary Planet Lab': [
+      'circumbinary-planet-lab': [
         'binary_lab_planet_a',
         'binary_lab_periods',
         'max_timestep',
       ],
-      'Gravity Assist Lab': [
+      'gravity-assist-lab': [
         'assist_impact_parameter',
         'assist_v_infinity',
         'max_timestep',
       ],
-      'Gravity Assist: Heliocentric': [
+      'gravity-assist-heliocentric': [
         'assist_impact_parameter',
         'assist_v_infinity',
         'max_timestep',
@@ -83,10 +83,10 @@ describe('the allowlist', () => {
   });
 
   test('a setting that is not on the list is not sweepable', () => {
-    expect(parameterFor('Binary Planet Lab', 'gravitational_constant')).toBe(
+    expect(parameterFor('binary-planet-lab', 'gravitational_constant')).toBe(
       null
     );
-    expect(parameterFor('Solar System', 'binary_lab_planet_a')).toBe(null);
+    expect(parameterFor('solar-system', 'binary_lab_planet_a')).toBe(null);
   });
 });
 
@@ -132,7 +132,7 @@ describe('a list of values the caller chose', () => {
   test('a list is checked against the same bounds as a range', () => {
     // Not a way round the limits, a way of choosing inside them.
     const base = {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       parameter: 'binary_lab_planet_a',
       duration: 2000,
       metrics: ['distance_to_primary'],
@@ -151,7 +151,7 @@ describe('a list of values the caller chose', () => {
     // a deliberate re-measurement of one configuration, which is what the
     // binary lesson's convergence check is.
     const base = {
-      scenario: 'Binary Planet Lab',
+      scenario: 'binary-planet-lab',
       parameter: 'binary_lab_planet_a',
       duration: 2000,
       metrics: ['distance_to_primary'],
@@ -196,7 +196,7 @@ describe('refusing a sweep that cannot mean anything', () => {
     // -100 to +100 would pass through values the scenario cannot represent.
     const out = validateSweepSpec(
       spec({
-        scenario: 'Gravity Assist Lab',
+        scenario: 'gravity-assist-lab',
         parameter: 'assist_impact_parameter',
         from: -100,
         to: 100,
@@ -210,7 +210,7 @@ describe('refusing a sweep that cannot mean anything', () => {
     expect(
       validateSweepSpec(
         spec({
-          scenario: 'Gravity Assist Lab',
+          scenario: 'gravity-assist-lab',
           parameter: 'assist_impact_parameter',
           from: 10,
           to: 100,
@@ -220,7 +220,7 @@ describe('refusing a sweep that cannot mean anything', () => {
     expect(
       validateSweepSpec(
         spec({
-          scenario: 'Gravity Assist Lab',
+          scenario: 'gravity-assist-lab',
           parameter: 'assist_impact_parameter',
           from: -100,
           to: -10,
@@ -236,7 +236,7 @@ describe('refusing a sweep that cannot mean anything', () => {
     const listed = values =>
       validateSweepSpec(
         spec({
-          scenario: 'Gravity Assist Lab',
+          scenario: 'gravity-assist-lab',
           parameter: 'assist_impact_parameter',
           values,
         })
@@ -252,7 +252,7 @@ describe('refusing a sweep that cannot mean anything', () => {
     expect(listed([-40, 4, 40]).detail.inside).toEqual([4]);
 
     // The exclusion is open at its ends: the boundary itself is offered.
-    const def = parameterFor('Gravity Assist Lab', 'assist_impact_parameter');
+    const def = parameterFor('gravity-assist-lab', 'assist_impact_parameter');
     expect(listed([def.exclude.to, 40]).ok).toBe(true);
   });
 

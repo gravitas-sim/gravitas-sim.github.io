@@ -387,7 +387,7 @@ test('panning moves the sky, but barely', async ({ page, app }) => {
 
 test('a black hole still bends the sky around it', async ({ page, app }) => {
   await app.boot();
-  await sky(page, app, { scenario: 'Binary BH', seed: 'lens' });
+  await sky(page, app, { scenario: 'binary-bh', seed: 'lens' });
 
   // The sky near a hole differs from the sky far from it in a way that a plain
   // blit cannot produce: the stars there have been displaced.

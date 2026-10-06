@@ -15,7 +15,7 @@ test.describe('the object inspector', () => {
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await app.boot();
-      await app.loadScenario('Solar System');
+      await app.loadScenario('solar-system');
       await app.waitForFrames(10);
 
       const picked = await app.selectFirstObject('StarObject');
@@ -36,7 +36,7 @@ test.describe('the object inspector', () => {
 
   test('the readout keeps up with a moving body', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.selectFirstObject('StarObject');
 
     const content = page.locator('#inspectorContent');
@@ -58,7 +58,7 @@ test.describe('the object inspector', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.selectFirstObject('StarObject');
 
     const energyTab = page.locator('#inspectorTabEnergy');
@@ -97,7 +97,7 @@ test.describe('the object inspector', () => {
 
   test('closing the inspector clears the selection', async ({ page, app }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.selectFirstObject();
 
     await expect(page.locator('#objectInspector')).toBeVisible();
@@ -112,7 +112,7 @@ test.describe('changing a physical property', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
     await app.waitForFrames(10);
 
     const picked = await app.selectFirstObject('StarObject');
@@ -152,7 +152,7 @@ test.describe('changing a physical property', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Binary Pair');
+    await app.loadScenario('binary-pair');
 
     const gravityOf = () =>
       page.evaluate(async () => {
@@ -178,7 +178,7 @@ test.describe('changing a physical property', () => {
     app,
   }) => {
     await app.boot();
-    await app.loadScenario('Solar System');
+    await app.loadScenario('solar-system');
     await app.selectFirstObject('StarObject');
 
     const content = page.locator('#inspectorContent');

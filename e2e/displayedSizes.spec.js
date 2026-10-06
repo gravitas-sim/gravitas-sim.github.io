@@ -115,7 +115,7 @@ test.describe('the hierarchy on screen', () => {
     await app.boot();
     // Zoomed in far enough that no body is held at the marker floor, which is
     // where the policy's ratios are the ones it promises.
-    await scene(page, 'Solar System', { zoom: 4 });
+    await scene(page, 'solar-system', { zoom: 4 });
     const r = await drawnRadii(page, ['Sol', 'Earth', 'Jupiter']);
 
     expect(r.Sol).toBeDefined();
@@ -140,7 +140,7 @@ test.describe('the hierarchy on screen', () => {
     app,
   }) => {
     await app.boot();
-    await scene(page, 'Solar System', { zoom: 4 });
+    await scene(page, 'solar-system', { zoom: 4 });
     const r = await drawnRadii(page, ['Earth', 'Jupiter', 'Saturn']);
     expect(r.Jupiter.px).toBeGreaterThan(r.Earth.px * 1.4);
     expect(r.Saturn.px).toBeGreaterThan(r.Earth.px);
@@ -151,7 +151,7 @@ test.describe('the hierarchy on screen', () => {
     app,
   }) => {
     await app.boot();
-    await scene(page, 'Solar System', { zoom: 4 });
+    await scene(page, 'solar-system', { zoom: 4 });
     const grew = await page.evaluate(async () => {
       const physics = await import('/js/physics.js');
       const visuals = await import('/js/bodyVisuals.js');
@@ -183,7 +183,7 @@ test.describe('the small bodies stay usable', () => {
   }) => {
     await app.boot();
     // Whole-system framing, where every planet is a marker.
-    await scene(page, 'Solar System', { zoom: 0.25 });
+    await scene(page, 'solar-system', { zoom: 0.25 });
 
     const result = await page.evaluate(async () => {
       const physics = await import('/js/physics.js');
@@ -219,7 +219,7 @@ test.describe('the small bodies stay usable', () => {
     app,
   }) => {
     await app.boot();
-    await scene(page, 'Solar System', { zoom: 1 });
+    await scene(page, 'solar-system', { zoom: 1 });
     const sizes = await page.evaluate(async () => {
       const physics = await import('/js/physics.js');
       const visuals = await import('/js/bodyVisuals.js');
@@ -244,7 +244,7 @@ test.describe('the canvas admits what it is doing', () => {
     app,
   }) => {
     await app.boot();
-    await scene(page, 'Solar System');
+    await scene(page, 'solar-system');
     // Read back through the same instrument code the canvas uses, then confirm
     // pixels actually changed in the corner it is drawn in - a string that is
     // computed and never painted would pass the first check alone.
@@ -264,7 +264,7 @@ test.describe('the canvas admits what it is doing', () => {
     app,
   }) => {
     await app.boot();
-    await scene(page, 'Solar System');
+    await scene(page, 'solar-system');
     const described = await page.evaluate(() => {
       const el = document.getElementById('canvasSummary');
       return el ? el.textContent : '';
@@ -311,7 +311,7 @@ test.describe('the canvas admits what it is doing', () => {
 
   test('a screenshot carries the disclosure with it', async ({ page, app }) => {
     await app.boot();
-    await scene(page, 'Solar System');
+    await scene(page, 'solar-system');
     // The capture composites the canvases, so anything drawn in the interface
     // rather than on the canvas would be missing from the saved file. This
     // reproduces that composite and looks in the corner the line is drawn in.
@@ -348,7 +348,7 @@ test.describe('ring systems survive a round trip', () => {
       page.evaluate(async () => {
         const ui = await import('/js/ui.js');
         const physics = await import('/js/physics.js');
-        ui.SETTINGS.preset_scenario = 'Supermassive BH';
+        ui.SETTINGS.preset_scenario = 'supermassive-bh';
         ui.initialize_simulation({ seed: 'ringtrip' });
         return physics.gas_giants.map(g => ({
           id: g.id,
@@ -384,7 +384,7 @@ test.describe('ring systems survive a round trip', () => {
       const ui = await import('/js/ui.js');
       const physics = await import('/js/physics.js');
       const visuals = await import('/js/bodyVisuals.js');
-      ui.SETTINGS.preset_scenario = 'Supermassive BH';
+      ui.SETTINGS.preset_scenario = 'supermassive-bh';
       ui.initialize_simulation({ seed: 'ringsave' });
 
       const before = physics.gas_giants.map(g => ({
@@ -437,7 +437,7 @@ for (const vp of VIEWPORTS) {
       app,
     }) => {
       await app.boot();
-      await scene(page, 'Solar System');
+      await scene(page, 'solar-system');
       const sizes = await page.evaluate(async () => {
         const physics = await import('/js/physics.js');
         const visuals = await import('/js/bodyVisuals.js');
@@ -462,7 +462,7 @@ for (const vp of VIEWPORTS) {
 
     test('the disclosure fits on the canvas', async ({ page, app }) => {
       await app.boot();
-      await scene(page, 'Solar System');
+      await scene(page, 'solar-system');
       const overflow = await page.evaluate(
         () =>
           document.documentElement.scrollWidth -

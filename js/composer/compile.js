@@ -184,6 +184,7 @@ const factorial = n => (n <= 1 ? 1 : n * factorial(n - 1));
  * @param {object} pack - A valid pack
  * @param {object} api
  * @param {Record<string, {thumbnail?: string}>} api.scenarios - SCENARIO_INFO
+ * @param {Function} [api.scenarioId] - An id from any key a scenario has had
  * @returns {{lesson: object, shadow: ?object, scoring: object, variants: object}}
  */
 export function compileInvestigation(pack, api) {
@@ -198,7 +199,8 @@ export function compileInvestigation(pack, api) {
     duration: pack.duration,
     level: en(pack.level),
     summary: en(pack.summary),
-    thumbnail: api.scenarios[thumbFrom]?.thumbnail ?? '',
+    thumbnail:
+      api.scenarios[api.scenarioId?.(thumbFrom) ?? thumbFrom]?.thumbnail ?? '',
     objectives: pack.objectives.map(en),
     steps: [],
   };
@@ -362,6 +364,7 @@ export function outsideDuration(minutes, duration) {
  * @param {object} refs
  * @param {Function} refs.checkCatalog - js/authoring/rules.js
  * @param {object} refs.scenarios - SCENARIO_INFO
+ * @param {Function} [refs.scenarioId] - An id from any key a scenario has had
  * @param {Array} refs.widgets - allWidgets()
  * @param {Set<string>} refs.settingKeys
  * @param {Function} refs.gradedSteps
@@ -375,6 +378,7 @@ export function judge(compiled, refs) {
       manifests: {},
       instructor: {},
       scenarios: refs.scenarios,
+      scenarioId: refs.scenarioId,
       settingKeys: refs.settingKeys,
       widgets: refs.widgets,
       translations: shadow

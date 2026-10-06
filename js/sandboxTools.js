@@ -529,19 +529,19 @@ let captureNote = '';
  * tests/realSystemSources.test.js holds this summary to it.
  */
 export const SCENARIO_SOURCES = {
-  'Solar System': { cites: 'NASA fact sheets, JPL', approximate: 'some' },
-  'Kuiper Belt': { cites: '', approximate: 'all' },
-  'Habitable Zone Lab': { cites: 'JPL', approximate: '' },
-  'Retrograde Mars': { cites: 'JPL, NASA fact sheets', approximate: 'some' },
-  'TRAPPIST-1 System': {
+  'solar-system': { cites: 'NASA fact sheets, JPL', approximate: 'some' },
+  'kuiper-belt': { cites: '', approximate: 'all' },
+  'habitable-zone-lab': { cites: 'JPL', approximate: '' },
+  'retrograde-mars': { cites: 'JPL, NASA fact sheets', approximate: 'some' },
+  'trappist-1-system': {
     cites: 'Agol et al. 2021, Gillon et al. 2017',
     approximate: 'some',
   },
-  'Transit Lab': {
+  'transit-lab': {
     cites: 'Torres et al. 2008, Southworth 2010',
     approximate: '',
   },
-  'Exoplanet Characterization Lab': {
+  'exoplanet-characterization-lab': {
     cites: 'Torres et al. 2008, Southworth 2010',
     approximate: '',
   },

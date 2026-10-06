@@ -1253,7 +1253,7 @@ export function initCr3bp() {
  * @returns {void}
  */
 export function notifyScenarioReady() {
-  if (current_scenario_name === 'Lagrange Point Lab') setCr3bpEnabled(true);
+  if (current_scenario_name === 'lagrange-point-lab') setCr3bpEnabled(true);
 }
 
 /** Redraw the readout, for callers driving the panel. @returns {void} */

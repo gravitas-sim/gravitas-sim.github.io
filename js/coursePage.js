@@ -34,7 +34,7 @@ import {
 } from './i18n/index.js';
 import { EN_STUDIO } from './i18n/en.studio.js';
 import { EN_COURSE } from './i18n/en.course.js';
-import { SCENARIO_INFO } from './data/scenarioInfo.js';
+import { SCENARIO_INFO, scenarioId } from './data/scenarioInfo.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import { loadInvestigation } from './data/investigations/registry.js';
 import { BUILTIN_COURSES } from './data/courses/index.js';
@@ -569,7 +569,9 @@ const itemName = item => {
       datasetsOf(catalog).get(item.dataset)?.title?.en ||
       item.dataset
     );
-  if (item.kind === 'scenario') return scenarioTitle(item.scenario);
+  // By id: a pack made before ids names its scenario in English.
+  if (item.kind === 'scenario')
+    return scenarioTitle(scenarioId(item.scenario) ?? item.scenario);
   return item.id;
 };
 
@@ -597,7 +599,7 @@ function newItem(x, kind) {
         assignment: { id: 'pending', created: today() },
       };
     case 'scenario': {
-      const scenario = 'Solar System';
+      const scenario = 'solar-system';
       return {
         ...base,
         id: freshId(x, 'solar-system'),
@@ -1412,7 +1414,8 @@ function renderGraph(r, d) {
     if (id.startsWith('item:'))
       return itemName(itemById(n.label) || { id: n.label });
     if (id.startsWith('lesson:')) return lessonTitle(n.label);
-    if (id.startsWith('scenario:')) return scenarioTitle(n.label);
+    if (id.startsWith('scenario:'))
+      return scenarioTitle(scenarioId(n.label) ?? n.label);
     return n.label;
   };
   const byFrom = new Map();
@@ -1701,6 +1704,17 @@ function start(pack, message) {
   if (message) setStatus(message);
 }
 
+/**
+ * A pack by scenario id: one made before ids names its scenario items in
+ * English, and is saved by id from here on.
+ */
+function byScenarioId(pack) {
+  for (const { item } of itemsOf(pack))
+    if (item?.kind === 'scenario' && scenarioId(item.scenario))
+      item.scenario = scenarioId(item.scenario);
+  return pack;
+}
+
 /** A file's pack, or why it is refused. */
 function readPack(data) {
   if (!data || typeof data !== 'object' || data.format !== FORMAT)
@@ -1710,7 +1724,9 @@ function readPack(data) {
       ok: false,
       message: t('studio.file.newer', { version: data.formatVersion }),
     };
-  const pack = migrateCoursePack(data, { platform: PLATFORM_API });
+  const pack = byScenarioId(
+    migrateCoursePack(data, { platform: PLATFORM_API })
+  );
   // Refused outright only for what a hand-made or hostile file could carry
   // into the page; anything else opens, with the checks saying what to fix.
   const hostile = validateCoursePack(pack, { locales: ['en', 'es'] }).find(e =>
@@ -2000,7 +2016,9 @@ async function init() {
   const draft = last ? drafts.load(last) : null;
   // A first visit opens the example course; New starts from nothing.
   history = createHistory(
-    draft?.doc ?? clone(await BUILTIN_COURSES['intro-astronomy']())
+    draft?.doc
+      ? byScenarioId(draft.doc)
+      : clone(await BUILTIN_COURSES['intro-astronomy']())
   );
   baseline = history.current();
   render();

@@ -181,7 +181,7 @@ test.describe('the analysis laboratory', () => {
     page,
   }) => {
     await openRunner(page);
-    await page.locator('#xpScenario').selectOption('Gravity Assist Lab');
+    await page.locator('#xpScenario').selectOption('gravity-assist-lab');
     await page.locator('#xpParam2').selectOption({ index: 1 });
     await page.locator('#xpCount').fill('3');
     await page.locator('#xpCount2').fill('3');

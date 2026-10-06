@@ -52,7 +52,7 @@ test('a pasted Share link becomes a preview, markup and a plain link', async ({
     const src = srcOf(await markup(page));
     return src ? decodePayload(new URL(src).hash) : null;
   };
-  await expect.poll(described).toEqual({ v: 1, s: 'Binary Pair', seed: 'e2e' });
+  await expect.poll(described).toEqual({ v: 1, s: 'binary-pair', seed: 'e2e' });
 
   const html = await markup(page);
   const src = srcOf(html);
