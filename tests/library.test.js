@@ -25,6 +25,7 @@ import {
   MATHEMATICS,
   SCENARIO_SUBJECTS,
   coverage,
+  rawWorldLink,
   renderCoverage,
   renderHome,
 } from '../tools/build-library.mjs';
@@ -42,6 +43,7 @@ import {
   tagsOf,
 } from '../js/data/investigations/browse.js';
 import { SCENARIO_TAGS } from '../js/data/scenarioTags.js';
+import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
 import { FIXTURES } from '../js/observatory/fixtures.js';
 import { GUIDES as EXOPLANET } from '../js/observatory/guides/exoplanet.js';
 import { GUIDES as POPULATIONS } from '../js/observatory/guides/populations.js';
@@ -66,6 +68,19 @@ describe('library/library.json', () => {
       { cwd: ROOT, encoding: 'utf8' }
     );
     expect(out).toMatch(/125|\d+ entries/);
+  });
+
+  test('writes world links uncompressed, so every Node writes the same bytes', async () => {
+    const scenarios = library.entries.filter(e => e.kind === 'scenario');
+    expect(scenarios.length).toBeGreaterThan(0);
+    const { decodePayload } = await import('../js/shareState.js');
+    for (const e of scenarios) {
+      expect([e.id, e.route.startsWith('/#1r')]).toEqual([e.id, true]);
+      // The app reads it back as the world the entry names.
+      const payload = await decodePayload(e.route.slice(2));
+      expect([e.id, payload.s in SCENARIO_INFO]).toEqual([e.id, true]);
+      expect(e.route).toBe(`/#${rawWorldLink(payload)}`);
+    }
   });
 
   test('fits its schema, entry by entry', () => {
