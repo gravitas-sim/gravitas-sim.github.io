@@ -847,7 +847,7 @@ test.describe('an assignment and the package its lesson comes from', () => {
       timeout: 30_000,
     });
     await expect(toast).toContainText(
-      'made before lessons came in versioned packages'
+      'made before investigations came in versioned packages'
     );
     await page.goto(links.major);
     await expect(page.locator('#investigationPanel')).toBeVisible({

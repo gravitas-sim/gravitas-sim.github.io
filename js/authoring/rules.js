@@ -88,16 +88,16 @@ const MANIFEST_MIRRORED = [
 
 /** What each rule is for, printed by --rules. */
 export const RULE_INDEX = {
-  'id/lesson': 'Investigation ids exist, are kebab-case, and are unique',
-  'id/file': 'An investigation lives in a file named after its id',
+  'id/lesson': 'Lesson ids exist, are kebab-case, and are unique',
+  'id/file': 'A lesson lives in a file named after its id',
   'id/step':
-    'Every step has a stable sid of lowercase letters, digits and hyphens, unique within the investigation',
+    'Every step has a stable sid of lowercase letters, digits and hyphens, unique within the lesson',
   'id/field': 'Response field ids are unique within a step and usable as keys',
   'content/lesson': 'Title, subtitle, duration, level, summary and thumbnail',
   'content/objectives': 'Objectives exist and say something',
   'content/duration': 'Duration is a range the card can print',
   'content/step': 'Every step has a title and a body',
-  'content/completion': 'An investigation ends on a step that closes it',
+  'content/completion': 'A lesson ends on a step that closes it',
   'content/prompt': 'A step that asks for something says what',
   'content/placeholder': 'A placeholder does not give away the expected value',
   'content/hints':
@@ -117,7 +117,7 @@ export const RULE_INDEX = {
   'answer/discriminates': 'The tolerance rejects something',
   'answer/options': 'An option list is long enough and has no repeats',
   'answer/reveal':
-    'A held prediction names a later step in the same investigation to be marked at',
+    'A held prediction names a later step in the same lesson to be marked at',
   'answer/rubric': 'A short answer carries a rubric',
   'interaction/validate': "A validator accepts the author's own hint values",
   'interaction/compute': 'A computed field survives the hint values',
@@ -125,18 +125,18 @@ export const RULE_INDEX = {
   'interaction/when':
     'A remediation step follows an earlier graded step every student reaches',
   'interaction/animated': 'An animated widget can be rewound',
-  'i18n/shape': 'A translation matches the shape of its investigation',
+  'i18n/shape': 'A translation matches the shape of its lesson',
   'i18n/machinery': 'A translation never replaces machinery',
   'i18n/coverage': 'A translation is complete enough to ship',
-  'instructor/present': 'Every investigation has instructor guidance',
+  'instructor/present': 'Every lesson has instructor guidance',
   'instructor/sections': 'Every required guide section carries something',
   'instructor/expectations': 'Expectations name real steps and say something',
   'instructor/attribution':
-    'An investigation that cites a source attributes it, and every real-system parameter names its source',
-  'agree/manifest': 'The manifest says what the investigation says',
-  'agree/counts': 'The manifest counts what the investigation contains',
+    'A lesson that cites a source attributes it, and every real-system parameter names its source',
+  'agree/manifest': 'The manifest says what the lesson says',
+  'agree/counts': 'The manifest counts what the lesson contains',
   'agree/answerKey': 'The generated answer key verifies',
-  'agree/instructorIds': 'Instructor guidance names investigations that exist',
+  'agree/instructorIds': 'Instructor guidance names lessons that exist',
 };
 
 const isNonEmptyString = v => typeof v === 'string' && v.trim().length > 0;
@@ -371,37 +371,29 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
 
     // --- Identity ------------------------------------------------------------
     if (!isNonEmptyString(inv.id)) {
-      err('id/lesson', null, 'investigation has no id');
+      err('id/lesson', null, 'lesson has no id');
     } else {
       if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(inv.id)) {
         err('id/lesson', null, `id "${inv.id}" is not kebab-case`);
       }
       if (seenLessonIds.has(inv.id)) {
-        err(
-          'id/lesson',
-          null,
-          `id "${inv.id}" is used by another investigation`
-        );
+        err('id/lesson', null, `id "${inv.id}" is used by another lesson`);
       }
       seenLessonIds.set(inv.id, true);
       const src = sources[inv.id];
       if (src && src.text === null) {
-        err(
-          'id/file',
-          null,
-          `no file at ${src.file} for investigation "${inv.id}"`
-        );
+        err('id/file', null, `no file at ${src.file} for lesson "${inv.id}"`);
       }
     }
 
     // --- Lesson-level content ------------------------------------------------
     for (const key of ['title', 'subtitle', 'duration', 'level', 'summary']) {
       if (!isNonEmptyString(inv[key])) {
-        err('content/lesson', null, `investigation has no ${key}`);
+        err('content/lesson', null, `lesson has no ${key}`);
       }
     }
     if (!isNonEmptyString(inv.thumbnail)) {
-      err('content/lesson', null, 'investigation has no thumbnail');
+      err('content/lesson', null, 'lesson has no thumbnail');
     }
     if (
       isNonEmptyString(inv.duration) &&
@@ -414,7 +406,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       );
     }
     if (!Array.isArray(inv.objectives) || inv.objectives.length === 0) {
-      err('content/objectives', null, 'investigation states no objectives');
+      err('content/objectives', null, 'lesson states no objectives');
     } else {
       inv.objectives.forEach((o, i) => {
         if (!isNonEmptyString(o)) {
@@ -425,7 +417,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
 
     const steps = Array.isArray(inv.steps) ? inv.steps : [];
     if (steps.length === 0) {
-      err('content/step', null, 'investigation has no steps');
+      err('content/step', null, 'lesson has no steps');
       continue;
     }
 
@@ -444,14 +436,14 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       err(
         'content/completion',
         steps.length - 1,
-        'the last step does not close the investigation: it needs a title and a body'
+        'the last step does not close the lesson: it needs a title and a body'
       );
     }
     if (['question', 'measure', 'predict'].includes(last.type)) {
       warn(
         'content/completion',
         steps.length - 1,
-        `investigation ends on a graded "${last.type}" step; every other investigation ends on a closing summary`
+        `lesson ends on a graded "${last.type}" step; every other lesson ends on a closing summary`
       );
     }
 
@@ -1036,7 +1028,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         } else if (revealAt < 0) {
           E(
             'answer/reveal',
-            `reveal names "${step.reveal}", which is not a step in this investigation`
+            `reveal names "${step.reveal}", which is not a step in this lesson`
           );
         } else if (revealAt <= i) {
           E(
@@ -1112,11 +1104,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
     // --- Instructor guidance -------------------------------------------------
     const guide = instructor[inv.id];
     if (!guide) {
-      err(
-        'instructor/present',
-        null,
-        'no instructor guidance for this investigation'
-      );
+      err('instructor/present', null, 'no instructor guidance for this lesson');
     } else {
       for (const key of INSTRUCTOR_REQUIRED) {
         const v = guide[key];
@@ -1148,7 +1136,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           err(
             'instructor/expectations',
             null,
-            `expectations has an entry for step ${key}, which this investigation does not have`
+            `expectations has an entry for step ${key}, which this lesson does not have`
           );
           continue;
         }
@@ -1207,7 +1195,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           'agree/manifest',
           entry.id,
           null,
-          `the ${locale} manifest lists an investigation that does not exist`
+          `the ${locale} manifest lists a lesson that does not exist`
         );
         continue;
       }
@@ -1222,7 +1210,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             'agree/manifest',
             inv.id,
             null,
-            `the ${locale} manifest's ${key} is not the investigation's: ${JSON.stringify(entry[key])} vs ${JSON.stringify(expected[key])}`
+            `the ${locale} manifest's ${key} is not the lesson's: ${JSON.stringify(entry[key])} vs ${JSON.stringify(expected[key])}`
           );
         }
       }
@@ -1238,7 +1226,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             'agree/counts',
             inv.id,
             null,
-            `the ${locale} manifest says ${key} ${entry[key]}, the investigation has ${want}`
+            `the ${locale} manifest says ${key} ${entry[key]}, the lesson has ${want}`
           );
         }
       }
@@ -1263,7 +1251,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         'agree/instructorIds',
         id,
         null,
-        'instructor guidance for an investigation that does not exist'
+        'instructor guidance for a lesson that does not exist'
       );
     }
   }
@@ -1278,7 +1266,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           'i18n/shape',
           id,
           null,
-          `${file} translates an investigation that does not exist`
+          `${file} translates a lesson that does not exist`
         );
         continue;
       }
@@ -1415,7 +1403,7 @@ function checkTranslationShape(
       if (!Object.hasOwn(base, key)) {
         report(
           'error',
-          `${locale}: ${[...path, key].join('.')} is not a key the investigation has, so this translation is silently discarded`,
+          `${locale}: ${[...path, key].join('.')} is not a key the lesson has, so this translation is silently discarded`,
           stepIndex
         );
         continue;

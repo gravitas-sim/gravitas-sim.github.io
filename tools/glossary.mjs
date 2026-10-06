@@ -256,9 +256,7 @@ export function render() {
       'Estas palabras significaban más de una cosa, o lo mismo que un sustantivo de arriba. Cada una tiene un solo reemplazo.'
     )}</p>`
   );
-  out.push(
-    '<div class="doc-table-wrap" tabindex="0">'
-  );
+  out.push('<div class="doc-table-wrap" tabindex="0">');
   out.push('<table class="doc-table">');
   out.push(
     `<thead><tr><th scope="col">${both('Instead of', 'En vez de')}</th><th scope="col">${both('Say', 'Di')}</th></tr></thead>`

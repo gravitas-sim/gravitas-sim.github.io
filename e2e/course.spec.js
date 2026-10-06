@@ -140,7 +140,7 @@ test.describe('the course home', () => {
     await page.locator('#ch-teacher').check();
     await expect(page.locator('#ch-guide-h')).toHaveText('For instructors');
     await expect(page.locator('#ch-item-a-first-transit')).toContainText(
-      'A thirty-minute cut of a seventy-minute lesson.'
+      'A thirty-minute cut of a seventy-minute investigation.'
     );
   });
 
