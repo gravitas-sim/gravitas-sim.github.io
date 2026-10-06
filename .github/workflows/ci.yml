@@ -349,11 +349,11 @@ jobs:
 
       # No advisories, and none in the production dependency tree in
       # particular. Not `audit fix`: this reports, and a fix is a reviewed
-      # change like any other.
+      # change like any other. The full-tree half passes over the advisories
+      # tools/deps-audit.mjs names, each with no patched release; the
+      # production half has no exceptions.
       - name: Dependency audit
-        run: |
-          npm audit --audit-level=moderate
-          npm audit --omit=dev
+        run: npm run deps:audit
 
       # Every count the documentation cites is generated from the catalog, the
       # lesson manifest or the test output. This is the job that notices when
