@@ -110,7 +110,13 @@ the start of the dialog.
 **Target size.** Sliders presented a 7-pixel-tall target across their whole
 width; the inspector's help affordances were 16px and checkboxes 15px. All are
 at least 24×24 now. The sliders keep their thin visual track — the element grew
-and its background is clipped to the content box.
+and its background is clipped to the content box. On a touch screen
+(`pointer: coarse`) every control the application, the shell and the page
+components draw is at least 44×44, the AAA size of 2.5.5, and
+`e2e/responsiveLayout.spec.js` measures it on the phone and tablet projects.
+A pinch on the canvas zooms the simulation, which takes the gesture for itself
+(`touch-action: none`); anywhere else it zooms the page, and the viewport tag
+never forbids that.
 
 **Reduced motion.** `css/tokens.css` collapsed the duration tokens, which
 covered `components.css`. It did not cover `styles.css`, which animates with

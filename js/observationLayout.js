@@ -120,9 +120,19 @@ export function layoutObservationPanels() {
   const open = PANEL_IDS.map(id => document.getElementById(id))
     .filter(isOpen)
     .filter(isStacked);
+  // Below the laptop a lesson's sheet holds the bottom of the window, and the
+  // stack stands on it instead, in the room css/chrome.css gives it
+  // (--observe-bottom, --observe-room; "The lesson at each width").
+  document.body.classList.toggle('observing', open.length > 0);
   if (!open.length) return;
 
-  const available = window.innerHeight - BASE_BOTTOM - TOP_MARGIN;
+  const css = getComputedStyle(document.body);
+  const base =
+    parseFloat(css.getPropertyValue('--observe-bottom')) || BASE_BOTTOM;
+  const available =
+    parseFloat(css.getPropertyValue('--observe-room')) ||
+    window.innerHeight - base - TOP_MARGIN;
+  const floor = Math.min(MIN_PANEL_HEIGHT, available);
   const totalGaps = GAP * (open.length - 1);
 
   // Any panel the user has never touched still needs a place in the order.
@@ -160,12 +170,12 @@ export function layoutObservationPanels() {
     const expanded = open.filter(el => !el.classList.contains('is-collapsed'));
     const perPanel = shortfall / Math.max(1, expanded.length);
     for (const el of expanded) {
-      const capped = Math.max(MIN_PANEL_HEIGHT, el.offsetHeight - perPanel);
+      const capped = Math.max(floor, el.offsetHeight - perPanel);
       el.style.maxHeight = `${Math.round(capped)}px`;
     }
   }
 
-  let cursor = BASE_BOTTOM;
+  let cursor = base;
   for (const el of open) {
     el.style.bottom = `${Math.round(cursor)}px`;
     cursor += el.offsetHeight + GAP;

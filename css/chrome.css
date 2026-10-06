@@ -1675,6 +1675,21 @@
   }
 }
 
+/* The room js/observationLayout.js stacks the observing panels in while a
+   lesson's sheet holds the bottom of the window (below). Registered as
+   lengths so the script reads pixels, not the calc() that sets them; 0 means
+   "no sheet", and the stack keeps its own place. */
+@property --observe-bottom {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+@property --observe-room {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
 /* ==========================================================================
    The lesson at each width (Roadmap II Prompt 55)
    --------------------------------------------------------------------------
@@ -1701,7 +1716,7 @@
      Below the desktop the readout and the Menu button hold the top corners,
      and the card used to span the top between them and lie over both. It
      stands on the transport bar instead, as it does on a phone (the phone
-     rule is in css/components.css), centred, and the help button stands on
+     rule is in css/components.css), centered, and the help button stands on
      the bar's right end rather than beside its left end, which the bar
      reaches on a tablet. A lecture places the card itself. */
   @media (min-width: 768px) and (max-width: 1200px) {
@@ -1887,6 +1902,26 @@
     body.investigation-lightcurve .investigation-panel {
       right: calc(50% + var(--space-1));
     }
+
+    /* An observing panel a step opens (the pause-at-event form, the radial
+       velocity curve) takes the same half. The script stacks them from the
+       foot of the band, inside it. */
+    body.investigation-open.observing {
+      --lesson-sheet: var(--lesson-band);
+      --observe-bottom: var(--transport-reserve, 76px);
+      --observe-room: var(--lesson-band);
+    }
+    body.investigation-open.observing .investigation-panel {
+      right: calc(50% + var(--space-1));
+      height: var(--lesson-sheet);
+    }
+    body.investigation-open.observing .obs-panel {
+      left: calc(50% + var(--space-1));
+      right: var(--space-2);
+      width: auto;
+      max-width: none;
+      max-height: var(--lesson-band);
+    }
   }
 
   /* Phone: the step's sheet on the transport bar, and a second sheet on top
@@ -1894,13 +1929,22 @@
      the question, the answer boxes and Next. */
   @media (max-width: 767px) {
     body.investigation-aux,
-    body.investigation-lightcurve {
+    body.investigation-lightcurve,
+    body.investigation-open.observing {
       --lesson-sheet: calc(var(--lesson-band) * 0.56);
       --dock-sheet: calc(var(--lesson-band) * 0.44 - var(--space-2));
     }
     body.investigation-aux .investigation-panel,
-    body.investigation-lightcurve .investigation-panel {
+    body.investigation-lightcurve .investigation-panel,
+    body.investigation-open.observing .investigation-panel {
       height: var(--lesson-sheet);
+    }
+    /* The observing panels stack in the second sheet's room, on the first. */
+    body.investigation-open.observing {
+      --observe-bottom: calc(
+        var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--space-2)
+      );
+      --observe-room: var(--dock-sheet);
     }
     body.investigation-aux .inv-plot-panel,
     body.investigation-split .inv-dock-tabs,

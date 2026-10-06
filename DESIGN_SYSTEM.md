@@ -43,13 +43,50 @@ on every tool page in all four themes and both languages.
   A text field also turns its border `--accent`.
 - **Targets are at least 24px** (WCAG 2.2, 2.5.8). Buttons, inputs, selects
   and the file picker's button are 36px tall; a checkbox with `.ui-checkbox`
-  is 24px.
+  is 24px. **On a touch screen they are at least 44px** (2.5.5), under
+  `@media (pointer: coarse)`: in this file for the components, in
+  `css/shell.css` for the shell and in `css/chrome.css` for the application.
+  A slider keeps its thin track and grows the box a finger presses by
+  padding; a link inside running text stays text, the criterion's inline
+  exception.
 - **Text is 16px in a field,** the size below which iOS zooms the page when
   the field takes focus.
 - **State is never color alone.** An invalid field has a message; a disabled
   control is dimmed and says why nearby when the reason is not obvious.
 - **Every control has a name** from a `<label>`, or an `aria-label` where a
   visible label would repeat a heading.
+
+## Breakpoints
+
+One scale, for every stylesheet, every page's own `<style>` and every script
+that compares the window's width with a number. PLATFORM_MODEL.md lays the
+platform out at four widths; each has a tier, and each width sits inside its
+tier rather than on an edge, so a window a few pixels either side of a layout
+width gets that layout and not an untested one.
+
+| Tier | Widths | Laid out at | `max-width` that ends it | `min-width` that starts the next |
+| --- | --- | --- | --- | --- |
+| phone | up to 767 | 375 | `767px` | `768px` |
+| tablet | 768 to 900 | 768 | `900px` | `901px` |
+| laptop | 901 to 1200 | 1024 | `1200px` | `1201px` |
+| desktop | 1201 and up | 1440 | - | - |
+
+`(max-width: 375px)` is the fourth edge, for the few things that do not fit
+even the narrowest phone layout (an embedded figure drops its scrubber there).
+
+[`tests/breakpoints.test.js`](tests/breakpoints.test.js) refuses any other
+width, in px, rem or em, in a `min-width`, `max-width` or range query. Height
+queries (`max-height`) are not widths and are not on the scale.
+
+The scale replaced twenty widths (Roadmap II Prompt 55): 360, 400, 480, 560,
+600, 620, 640, 700, 720, 760, 767, 768, 860, 900, 1024, 1099, 1100, 1180,
+1200 and 1320, with 30rem, 40rem, 60rem and 64rem in the pages. Each moved to
+the edge of its own tier, the one that gave the same answer at 375, 768, 1024
+and 1440, so the computed styles at those widths did not change (measured on
+seventeen surfaces, every element). Between them a window can change tier:
+the control rail now docks from 1201 px rather than 1025, and a rule written
+for 480 px holds to 767. The four 360 px rules went: the phone tier holds at
+320 without them.
 
 ## Field: `.ui-field`
 

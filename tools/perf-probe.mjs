@@ -11,6 +11,7 @@
 //   npm run perf -- --tier low       pin the quality tier
 //   npm run perf -- --dpr 2          emulate a HiDPI display
 //   npm run perf -- --cpu 4          throttle the CPU by that factor
+//   npm run perf -- --viewport 375x812   another window size (default 1440x900)
 //   npm run perf -- --json out.json  also write the numbers, for a comparison
 //
 // --dpr and --cpu exist because a resolution change cannot be judged on the
@@ -19,6 +20,9 @@
 // at the pixel density that machine might have; --cpu 4 with --tier low is the
 // closest this instrument gets to a 2019 Chromebook, and --dpr is the only way
 // to see a device-pixel budget bind at all, since headless Chromium reports 1.
+// --viewport is for the four layouts of PLATFORM_MODEL.md: a phone's window
+// draws fewer pixels and a tablet's sheets cover more of the canvas, and the
+// frame times at each width are recorded against the tiers (Prompt 55).
 //
 // The tier flag matters for a rendering change. Left to itself the tier is a
 // measurement of the machine, so a before-and-after pair taken on 'auto' can
@@ -76,8 +80,15 @@ async function main() {
   const cpu = ci >= 0 ? Number(args[ci + 1]) : 1;
   if (!(cpu >= 1))
     throw new Error(`--cpu ${args[ci + 1]} is not a number >= 1`);
+  const vi = args.indexOf('--viewport');
+  const [width, height] = (vi >= 0 ? String(args[vi + 1]) : '1440x900')
+    .split('x')
+    .map(Number);
+  if (!(width > 0 && height > 0)) {
+    throw new Error(`--viewport ${args[vi + 1]} is not WIDTHxHEIGHT`);
+  }
   const valueIndexes = new Set(
-    [si, ti, ji, di, ci].filter(i => i >= 0).map(i => i + 1)
+    [si, ti, ji, di, ci, vi].filter(i => i >= 0).map(i => i + 1)
   );
   const wanted = args.filter(
     (a, i) => !a.startsWith('--') && !valueIndexes.has(i)
@@ -102,7 +113,7 @@ async function main() {
     ],
   });
   const page = await browser.newPage({
-    viewport: { width: 1440, height: 900 },
+    viewport: { width, height },
     deviceScaleFactor: dpr,
   });
   page.on('pageerror', e => console.warn(`  ! ${e.message}`));
@@ -115,7 +126,7 @@ async function main() {
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpu });
   }
   console.log(
-    `profile: viewport 1440x900, dpr ${dpr}, cpu x${cpu}, tier ${tier}`
+    `profile: viewport ${width}x${height}, dpr ${dpr}, cpu x${cpu}, tier ${tier}`
   );
 
   await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'load' });
