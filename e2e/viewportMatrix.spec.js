@@ -162,7 +162,22 @@ for (const lang of ['en', 'es']) {
 
         // 3. Everything the step needs can be got to.
         await reachable(page, '#investigationToolReadout .inv-tool-row');
+        // Below a desktop the instrument and the graph share one place and
+        // a tab chooses between them (css/chrome.css), so the table is
+        // reached through its own tab, and the instrument comes back after.
+        const tabs = page.locator('#investigationDockTabs');
+        const tabbed = await tabs.isVisible();
+        if (tabbed) {
+          await tabs
+            .locator('label', { has: page.locator('#investigationDockPlot') })
+            .click();
+        }
         await reachable(page, '#investigationPlotTable');
+        if (tabbed) {
+          await tabs
+            .locator('label', { has: page.locator('#investigationDockTool') })
+            .click();
+        }
         await reachable(page, '#investigationBody input[data-field]', {
           minHeight: 32,
         });

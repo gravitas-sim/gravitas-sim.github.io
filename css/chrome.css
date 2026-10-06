@@ -1939,6 +1939,20 @@
     body.investigation-open.observing .investigation-panel {
       height: var(--lesson-sheet);
     }
+    /* A screen this short (a phone held sideways, a laptop at 200% zoom) leaves
+       the band so little that the sheet came out at 88px (a floor of 150px: the
+       band's own share is never above that at this height), and the footer
+       pinned inside it covered the one answer box the step asks for. The
+       sheet keeps a floor, and the footer scrolls with the step rather than
+       over it: Next is the last thing in the sheet, as it always was. */
+    @media (max-height: 560px) {
+      body.investigation-open {
+        --lesson-sheet: 150px;
+      }
+      body.investigation-open .investigation-panel .inv-footer {
+        position: static;
+      }
+    }
     /* The observing panels stack in the second sheet's room, on the first. */
     body.investigation-open.observing {
       --observe-bottom: calc(
@@ -1972,6 +1986,25 @@
       top: auto;
       height: calc(var(--dock-sheet) - var(--dock-tabs) - var(--space-2));
       max-height: none;
+    }
+
+    /* The bench, when it is open, stands on the lesson's sheet (above); what
+       the step docks goes on top of the bench rather than on the same place. */
+    body.investigation-open.bench-open {
+      --bench-sheet: min(30vh, 260px);
+    }
+    body.investigation-aux.bench-open .inv-plot-panel,
+    body.investigation-lightcurve.investigation-open.bench-open .light-curve-container {
+      bottom: calc(
+        var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--bench-sheet) +
+          var(--space-2) * 2
+      );
+    }
+    body.investigation-split.bench-open .inv-dock-tabs {
+      bottom: calc(
+        var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--bench-sheet) +
+          var(--dock-sheet) - var(--dock-tabs) + var(--space-2) * 2
+      );
     }
 
     /* The step comes first. The title, the close button and the progress

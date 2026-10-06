@@ -668,4 +668,16 @@ export const test = base.extend({
   ],
 });
 
+/**
+ * Opens the lesson's objects list if it is folded. On a phone it starts
+ * folded until the reader opens it (the step comes first on a sheet that
+ * small), so a test that wants a chip opens it as a reader would.
+ */
+export async function openObjectsList(page) {
+  const disclosure = page.locator('#investigationObjectsDisclosure');
+  if ((await disclosure.count()) === 0) return;
+  if (await disclosure.evaluate(el => el.open)) return;
+  await disclosure.locator('summary').click();
+}
+
 export { expect };

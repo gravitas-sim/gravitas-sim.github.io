@@ -491,15 +491,16 @@ test.describe('the course-pack builder', () => {
     expect((await current(page)).id).toBe('intro-astronomy-2');
   });
 
-  test('passes axe in both languages and fits a phone', async ({ page }) => {
+  test('passes axe in both languages and is read-only on a phone', async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 375, height: 800 });
     for (const locale of ['en', 'es']) {
       await openBuilder(page, { locale });
-      await page.locator('#cb-units-3 > summary').click();
-      await page.locator('#cb-units-3-items-0 > summary').click();
-      await expect(page.locator('#cb-units-3-items-0-steps input')).toHaveCount(
-        29
-      );
+      // PLATFORM_MODEL.md: the Studio pages read, and do not edit, under
+      // 768 px. The note says so and the editors are not there.
+      await expect(page.locator('.st-narrow')).toBeVisible();
+      await expect(page.locator('#cb-units-3 > summary')).toBeHidden();
       await noOverflow(page);
       const r = await new AxeBuilder({ page })
         .withTags(TAGS)

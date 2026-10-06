@@ -986,6 +986,10 @@ test.describe('the bottom dock', () => {
         barWidth: Math.round(b.width),
         footerInset: Math.round(window.innerWidth - f.right),
         gap: Math.round(f.left - b.right),
+        // From 768 to 1200 px the bar stands above the footer instead of
+        // beside it (css/chrome.css, the laptop tier), so clearance is
+        // whichever of the two it has.
+        clear: Math.round(Math.max(f.left - b.right, f.top - b.bottom)),
         railOverFooter: r ? r.bottom > f.top && r.left < f.right : false,
         banded: document.body.classList.contains('dock-banded'),
       };
@@ -1030,7 +1034,7 @@ test.describe('the bottom dock', () => {
         // immediately afterwards. This asserts the real requirement, and gives
         // the layout the time it takes rather than a fixed delay.
         await expect
-          .poll(async () => (await read(page)).gap, {
+          .poll(async () => (await read(page)).clear, {
             message: `bar-to-footer gap at ${size.width}px in ${locale}`,
           })
           .toBeGreaterThanOrEqual(12); // A clear gap, not merely no overlap.
@@ -1057,36 +1061,35 @@ test.describe('the bottom dock', () => {
     expect(m.barWidth).toBe(680);
   });
 
-  test('it narrows rather than shifting, until narrowing stops paying', async ({
+  test('it stays centered and clear of the footer, and stands above it below 1201', async ({
     page,
     app,
   }) => {
-    // Between the width where the full bar no longer fits and the width where
-    // the slider would be too short to use, the bar gives up width and keeps
-    // the center. Below that it would keep its width and give up the center.
-    //
-    // Since the footer's theme and language menus moved into the shared shell
-    // (Prompt 50), the footer is a third of its old width, and the narrowing
-    // starts near 1225 px rather than above 1600. It then lasts all the way to
-    // the width where the rail stops being a column (1025 px), so a docked
-    // rail never makes the bar band; both halves are asserted where they hold.
-    await page.setViewportSize({ width: 1150, height: 900 });
+    // From 1201 px the bar sits beside the footer and, where the full bar no
+    // longer fits, gives up width and keeps the center. Below 1201 (the
+    // laptop tier) there is no beside: the bar stands above the footer, so
+    // the footer's width costs it nothing, and both halves are asserted where
+    // they hold.
+    await page.setViewportSize({ width: 1201, height: 900 });
     await app.boot();
     const narrowed = await read(page);
     expect(narrowed.banded).toBe(false);
     expect(Math.abs(narrowed.offCenter)).toBeLessThanOrEqual(1);
-    expect(narrowed.barWidth).toBeLessThan(680);
+    // The footer is a third of its old width (Prompt 50), so at the tier's
+    // first width the full bar still fits: the narrowing is there for a
+    // longer footer (Spanish) and is never wider than the bar.
+    expect(narrowed.barWidth).toBeLessThanOrEqual(680);
     expect(narrowed.barWidth).toBeGreaterThanOrEqual(420);
+    expect(narrowed.gap).toBeGreaterThanOrEqual(12);
 
-    await page.setViewportSize({ width: 1025, height: 900 });
+    await page.setViewportSize({ width: 1100, height: 900 });
     await expect
       .poll(async () => (await read(page)).barWidth)
-      .toBeLessThan(narrowed.barWidth);
-    const narrowest = await read(page);
-    expect(narrowest.banded).toBe(false);
-    expect(Math.abs(narrowest.offCenter)).toBeLessThanOrEqual(1);
-    expect(narrowest.barWidth).toBeGreaterThanOrEqual(420);
-    expect(narrowest.gap).toBeGreaterThanOrEqual(12);
+      .toBeGreaterThanOrEqual(narrowed.barWidth);
+    const above = await read(page);
+    expect(above.banded).toBe(false);
+    expect(Math.abs(above.offCenter)).toBeLessThanOrEqual(1);
+    expect(above.clear).toBeGreaterThanOrEqual(12);
   });
 
   test('the footer keeps the corner unless the rail comes down into it', async ({
