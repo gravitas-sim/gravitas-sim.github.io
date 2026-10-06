@@ -189,8 +189,26 @@ test.describe('apply', () => {
       el.value = String(value);
       el.dispatchEvent(new Event('input', { bubbles: true }));
     }, target);
-    await page.locator('#settingsApply').click();
-    await expect.poll(planets).toEqual({ bodies: target, setting: target });
+    // The count is read in the same task as the click. Apply rebuilds the
+    // world synchronously and then unpauses it, and a live world of sixty
+    // planets can lose one to a merger before a later read: CI once saw 59
+    // (PR #168's run). What this test is about is the world Apply built, so
+    // it is read before a single frame has run.
+    const apply = page.locator('#settingsApply');
+    await expect(apply).toBeVisible();
+    const built = await apply.evaluate(async el => {
+      // Both through their module namespaces: Apply replaces the SETTINGS
+      // object (setSettings) and the build replaces the body arrays, so a
+      // binding taken before the click would read the world it replaced.
+      const physics = await import('/js/physics.js');
+      const appState = await import('/js/appState.js');
+      el.click();
+      return {
+        bodies: physics.planets.length,
+        setting: appState.SETTINGS.num_planets,
+      };
+    });
+    expect(built).toEqual({ bodies: target, setting: target });
   });
 });
 
