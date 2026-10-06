@@ -605,6 +605,18 @@ export const CHECKS = [
     ci: 'checks',
     group: 'generated',
   },
+  // The Library's index (LIBRARY.md), against the sources it is read from.
+  {
+    id: 'library',
+    label: 'the Library index and its coverage table',
+    command: ['node', 'tools/generate.mjs', '--check', '--only', 'library'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same check inside the unit tests (tests/library.test.js ' +
+      'runs `build-library.mjs --check`); a step of its own is a workflow change',
+    group: 'generated',
+  },
   {
     id: 'activities',
     label: 'activity formats and their step lists',
@@ -895,10 +907,6 @@ export const CI_EQUIVALENTS = {
   'npm run docs:check:build': 'docs-full',
   'node tools/check-links.mjs --root dist': 'links-dist',
   'node tools/validate-citation.mjs': 'citation',
-  // One npm script in the gate, two lines of a shell block in CI. Same two
-  // commands, same thresholds.
-  'npm audit --audit-level=moderate': 'deps',
-  'npm audit --omit=dev': 'deps',
   // The accessibility job runs two specs that are already inside the full
   // browser suite the gate runs, so `e2e-sources` covers them. Kept as its own
   // CI job because it uploads its own report and can fail independently;

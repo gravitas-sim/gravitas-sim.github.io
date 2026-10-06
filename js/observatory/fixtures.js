@@ -429,18 +429,72 @@ async function tessAperture() {
   };
 }
 
-/** Every fixture, in the order the page offers them. */
+/**
+ * Every fixture, in the order the page offers them. `tags` are subjects from
+ * the lessons' vocabulary (js/data/investigations/browseData.js), which the
+ * Library files each one under (LIBRARY.md).
+ */
 export const FIXTURES = Object.freeze([
-  { id: 'tess-light-curve', kind: 'time-series', load: tessLightCurve },
-  { id: 'sdss-a', kind: 'spectrum', load: () => sdssSpectrum('a') },
-  { id: 'sdss-g', kind: 'spectrum', load: () => sdssSpectrum('g') },
-  { id: 'sdss-k', kind: 'spectrum', load: () => sdssSpectrum('k') },
-  { id: 'sdss-m', kind: 'spectrum', load: () => sdssSpectrum('m') },
-  { id: 'gwosc-events', kind: 'table', load: gwoscCatalog },
-  { id: 'tess-aperture', kind: 'image', load: tessAperture },
-  { id: 'ngc2420-photometry', kind: 'table', load: ngc2420Photometry },
-  { id: 'ngc2420-segue', kind: 'table', load: ngc2420Segue },
-  { id: 'mist-isochrones', kind: 'table', load: mistIsochrones },
+  {
+    id: 'tess-light-curve',
+    kind: 'time-series',
+    tags: ['exoplanets', 'observing'],
+    load: tessLightCurve,
+  },
+  {
+    id: 'sdss-a',
+    kind: 'spectrum',
+    tags: ['observing', 'stars'],
+    load: () => sdssSpectrum('a'),
+  },
+  {
+    id: 'sdss-g',
+    kind: 'spectrum',
+    tags: ['observing', 'stars'],
+    load: () => sdssSpectrum('g'),
+  },
+  {
+    id: 'sdss-k',
+    kind: 'spectrum',
+    tags: ['observing', 'stars'],
+    load: () => sdssSpectrum('k'),
+  },
+  {
+    id: 'sdss-m',
+    kind: 'spectrum',
+    tags: ['observing', 'stars'],
+    load: () => sdssSpectrum('m'),
+  },
+  {
+    id: 'gwosc-events',
+    kind: 'table',
+    tags: ['compact-objects', 'waves'],
+    load: gwoscCatalog,
+  },
+  {
+    id: 'tess-aperture',
+    kind: 'image',
+    tags: ['exoplanets', 'observing'],
+    load: tessAperture,
+  },
+  {
+    id: 'ngc2420-photometry',
+    kind: 'table',
+    tags: ['observing', 'stars'],
+    load: ngc2420Photometry,
+  },
+  {
+    id: 'ngc2420-segue',
+    kind: 'table',
+    tags: ['observing', 'stars'],
+    load: ngc2420Segue,
+  },
+  {
+    id: 'mist-isochrones',
+    kind: 'table',
+    tags: ['stars', 'stellar-evolution'],
+    load: mistIsochrones,
+  },
 ]);
 
 /** Open a fixture by id. */

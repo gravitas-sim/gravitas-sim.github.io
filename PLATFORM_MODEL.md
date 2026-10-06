@@ -273,7 +273,7 @@ page's GRAVITAS link. Its content is unchanged until Prompt 73.
 - Every modal opens through `js/dialog.js`: Settings, precise placement, the system builder, the scenario browser, the lesson browser, export, the lesson finish, share, the black-hole masses, the lecture sequence and the shortcut list. Tab stays inside, Escape and the backdrop close, focus goes back to what opened it, and the page behind is inert (`isolate`) for all but the three that were on the module already: Settings, precise placement (no scrim on purpose) and the system builder.
 - `js/focusTrap.js`, the second trap three of them used, is gone. The modules on the start-up path fetch `js/dialog.js` on the first open, so no route carries it.
 - Not modal, by this model: the welcome (Home, a page of the shell since Prompt 50), the object inspector (inline), the sound panel (an inline popover on its button), the guided tour (its scrim lets presses through to the control each step names) and the assignment builder (a full-screen tool reached by URL). `tests/dialogInventory.test.js` keeps that list and fails on any other dialog that does not open through `js/dialog.js`.
-- The lesson browser is still a modal, on `js/dialog.js`, until Prompt 54 makes it the Library.
+- The lesson browser is still a modal, on `js/dialog.js`. Prompt 54 made it the Library's view of its lessons and left it a modal (see "As built (Prompt 54)").
 - The two conversions this model names as inline are done. The lesson panel's backup buttons are a Progress disclosure, and its objects list folds and remembers.
 
 **First run.** One overlay at a time, in order:
@@ -286,6 +286,12 @@ Escape closes each one. A card closed for a scenario does not return when that s
 ## As built (Prompt 53)
 
 `index.html` is the shell, the canvas and its scene description, the live regions, the readout, the rail and the transport bar, plus the four observation panels and the Share and Settings dialogs that start-up binds. Every other panel's markup ships with its family and is mounted at an empty `<template data-host>` where it used to stand. For the on-demand families that is a `js/fragments/` file; for the panels start-up binds it is a template in their module. The binary-run panel and the lesson browser stay as well, because the suite reads them before their code loads. The file went from 165.9 KB to 102.1 KB, and no route moved past its ceiling. The 40 KB and accessibility-tree thresholds are recorded as not met (D-INDEX-01). [INDEX_DECOMPOSITION.md](INDEX_DECOMPOSITION.md) has the mechanism and the measurements.
+
+## As built (Prompt 54)
+
+The Library is a tool page, `/library/`, over one generated index of everything there is to open (`library/library.json`, [LIBRARY.md](LIBRARY.md)): 125 entries of the six nouns it holds, each with the same fields, each linking to the surface that runs it. The Observatory's, the 3-D lab's and the mission lab's guides are Investigations in it, with the lessons' fields. Home leads into it by kind and continues a lesson left part-way, and every page's Learn group links it.
+
+The lesson browser inside the application is the Library's view of its lessons by data and by filter: the same tables, the same order, the same filtering functions, held together by `tests/library.test.js`. It keeps its own card and stays a modal: rendering the Library's card and kinds inside the application needs about 9.7 KB of deferred JavaScript, and the deferred total had 2.8 KB of room after Home's sections moved to a fragment (D-LIB-01). The teaching page's activity list and the scenario gallery are still their own lists.
 
 ## Rejected alternatives
 

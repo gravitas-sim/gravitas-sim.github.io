@@ -423,6 +423,17 @@ export const FORMATS = Object.freeze([
     schema: 'catalog-1.schema.json',
   },
   {
+    name: 'gravitas.library',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'js/library/format.js checkLibrary',
+    const: ['js/library/format.js', 'FORMAT_VERSION'],
+    persisted: 'repository',
+    older: 'v1 only',
+    newer: 'refused',
+    schema: 'library-1.schema.json',
+  },
+  {
     name: 'gravitas.catalog-curation',
     fields: 'format, formatVersion',
     version: 1,

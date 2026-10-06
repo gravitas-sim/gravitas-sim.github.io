@@ -23,6 +23,7 @@ current, and the orchestrator checks it.
 | `build-investigation-manifest.js` | Generate js/data/investigations/manifest.js | `npm run manifest` |
 | `build-irreversibility-audit.mjs` | npm run audit:irreversible  /  npm run audit:irreversible -- --check | `npm run audit:irreversible` |
 | `build-lesson-translation-skeleton.mjs` | Skeleton for a lesson translation |  |
+| `build-library.mjs` | The Library: one index of everything a student or instructor can open |  |
 | `build-manual.mjs` | Build the user manual | `npm run manual` |
 | `build-sdss-spectra.mjs` | The four SDSS DR18 spectra, as a data pack | `npm run spectra:data`, `npm run spectra:provenance`, `npm run spectra:check` |
 | `build-service-worker.mjs` | Generate the service worker's precache manifest. | `npm run build`, `npm run build:ci`, `npm run sw:manifest` |
@@ -40,6 +41,7 @@ current, and the orchestrator checks it.
 | `check-test-policy.mjs` | A skip has to be a capability, and it has to be on the record | `npm run test:policy` |
 | `checks.mjs` | One list of what has to pass |  |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
+| `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |
@@ -68,6 +70,7 @@ current, and the orchestrator checks it.
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |
+| `library-routes.mjs` | Does a Library route open what it names? |  |
 | `make-social-card.js` | Generate social-card.png (1200x630) for the Open Graph / Twitter preview. | `npm run build`, `npm run social-card`, `npm run build:ci` |
 | `measure-validate.mjs` | The measurement tools' recovery and residual tables | `npm run measure:validate` |
 | `mission-lab-key.mjs` | The mission lab's answer key: a reference run of every guide | `npm run mission:key` |

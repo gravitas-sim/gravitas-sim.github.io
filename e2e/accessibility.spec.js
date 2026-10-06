@@ -269,6 +269,25 @@ const SURFACES = [
     standalone: true,
   },
   {
+    // Its cards, grouped by sequence too, so the headings are checked.
+    name: 'library',
+    open: async ({ page }) => {
+      await page.goto('/library/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'html[data-ready="true"] .lib-card',
+    standalone: true,
+  },
+  {
+    name: 'library by sequence',
+    open: async ({ page }) => {
+      await page.goto('/library/?group=sequence', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: 'html[data-ready="true"] .lib-group',
+    standalone: true,
+  },
+  {
     name: 'experiment runner',
     open: async ({ page }) => {
       await page.goto('/experiments/', { waitUntil: 'domcontentloaded' });

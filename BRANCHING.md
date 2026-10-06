@@ -58,6 +58,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 | `js/data/investigations/manifest.js`, `js/data/investigations/manifest.es.js`, `js/data/investigations/browseData.js` | `node tools/build-investigation-manifest.js` |  |
 | `images/investigations` | `node tools/generate-lesson-cards.mjs` |  |
 | `js/data/teachingGenerated.js` | `node tools/build-teaching-demos.mjs` |  |
+| `library/library.json` | `node tools/build-library.mjs` |  |
 | `images/scenarios` | `node tools/generate-scenario-thumbnails.mjs` |  |
 | `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md`, `js/data/investigations/provenance.js` | `node tools/lesson-scene-audit.mjs --write` |  |
 | `js/data/irreversible.js` | `node tools/build-irreversibility-audit.mjs` |  |

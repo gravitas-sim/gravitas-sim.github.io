@@ -14,7 +14,7 @@
     "format": "prettier --write \"js/**/*.js\" \"tools/**/*.{js,mjs}\" \"sdk/**/*.{js,mjs}\" \"extensions/**/*.mjs\" \"e2e/**/*.js\" \"tests/**/*.js\" sw.js playwright.config.js eslint.config.js build.js",
     "format:check": "prettier --check \"js/**/*.js\" \"tools/**/*.{js,mjs}\" \"sdk/**/*.{js,mjs}\" \"extensions/**/*.mjs\" \"e2e/**/*.js\" \"tests/**/*.js\" sw.js playwright.config.js eslint.config.js build.js",
     "dev": "npx http-server . -p 8003 -c-1 -o",
-    "deps:audit": "npm audit --audit-level=moderate && npm audit --omit=dev",
+    "deps:audit": "node tools/deps-audit.mjs",
     "serve": "npx http-server . -p 8003 -c-1",
     "build": "node tools/make-social-card.js && node tools/build-instructor-materials.js && node tools/build-service-worker.mjs && node build.js",
     "build:watch": "node build.js --watch",

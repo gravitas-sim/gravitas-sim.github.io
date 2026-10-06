@@ -60,6 +60,7 @@ export const WORDS = {
   make: ['Make', 'Crear'],
   teach: ['Teach', 'Enseñar'],
   about: ['About', 'Acerca de'],
+  library: ['Library', 'Biblioteca'],
   investigations: ['Investigations', 'Investigaciones'],
   courses: ['Courses', 'Cursos'],
   observatory: ['Observatory', 'Observatorio'],
@@ -91,6 +92,7 @@ export const NAV = [
   [
     'learn',
     [
+      ['library', '/library/'],
       ['investigations', '/#investigations'],
       ['courses', '/course/'],
       ['observatory', '/observatory/'],
