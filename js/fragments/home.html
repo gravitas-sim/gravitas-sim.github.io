@@ -1,0 +1,150 @@
+<div id="welcomeSections">
+  <!--
+    Home below its heading (js/welcome.js writes the heading and the three
+    buttons under it, so the panel has a name the moment it opens). Fetched
+    with js/welcome.js and moved into #welcomeBody when it arrives: markup is
+    no part of the deferred JavaScript budget (INDEX_DECOMPOSITION.md).
+    Elements marked data-slot are filled from the live registries.
+  -->
+  <section
+    class="wel-section"
+    id="welContinue"
+    aria-labelledby="welContinueTitle"
+    hidden
+  >
+    <h2 id="welContinueTitle" class="wel-h2">
+      <span class="gs-en">Continue where you left off</span
+      ><span class="gs-es" lang="es">Continuar donde lo dejó</span>
+    </h2>
+    <ul class="wel-lessons" data-slot="continue"></ul>
+  </section>
+
+  <section class="wel-section wel-what" aria-labelledby="welWhat">
+    <h2 id="welWhat" class="wel-h2">What Gravitas is</h2>
+    <p class="wel-say">
+      A gravity simulation you can steer, paired with guided astronomy lessons
+      that use it. Change a system, predict what will happen, run it, measure
+      the result, and connect that back to the physics. Nothing here is a
+      recorded animation: every orbit on screen is being integrated as you
+      watch.
+    </p>
+    <div class="wel-triad">
+      <div class="wel-point">
+        <h3>Build</h3>
+        <p>
+          Place stars, planets and black holes by dragging, and change any
+          object's mass, velocity or position while it moves.
+        </p>
+      </div>
+      <div class="wel-point">
+        <h3>Explore</h3>
+        <p>
+          Load <span data-slot="scenario-count"></span> scenarios, from the
+          Solar System and TRAPPIST-1 to the GW150914 black-hole merger and a
+          star torn apart by tides.
+        </p>
+      </div>
+      <div class="wel-point">
+        <h3>Learn</h3>
+        <p>
+          Work through <span data-lesson-count>guided</span> investigations
+          with predictions, measurements, plots and a lab report you can hand
+          in.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wel-section" aria-labelledby="welDoors">
+    <h2 id="welDoors" class="wel-h2">Three ways in</h2>
+    <div class="wel-doors" data-slot="doors"></div>
+  </section>
+
+  <section class="wel-section" aria-labelledby="welLibrary">
+    <div class="wel-section-head">
+      <h2 id="welLibrary" class="wel-h2">
+        <span class="gs-en">In the Library</span
+        ><span class="gs-es" lang="es">En la Biblioteca</span>
+      </h2>
+      <a class="wel-quiet" href="/library/"
+        ><span class="gs-en">Open the Library</span
+        ><span class="gs-es" lang="es">Abrir la Biblioteca</span></a
+      >
+    </div>
+    <!-- library:home -->
+<div class="wel-links">
+<a class="wel-link" href="/library/?kind=investigation"><span class="wel-link-label"><span class="gs-en">Investigations (41)</span><span class="gs-es" lang="es">Investigaciones (41)</span></span><span class="wel-link-note"><span class="gs-en">Kepler's Laws · Why Mars Goes Backwards</span><span class="gs-es" lang="es">Las leyes de Kepler · Por qué Marte va hacia atrás</span></span></a>
+<a class="wel-link" href="/library/?kind=activity"><span class="wel-link-label"><span class="gs-en">Classroom activities (6)</span><span class="gs-es" lang="es">Actividades de clase (6)</span></span><span class="wel-link-note"><span class="gs-en">Orbital motion: why do planets change speed? (Demonstration) · Orbital motion: why do planets change speed? (Short route)</span><span class="gs-es" lang="es">Movimiento orbital: ¿por qué cambian de velocidad los planetas? (Demostración) · Movimiento orbital: ¿por qué cambian de velocidad los planetas? (Ruta corta)</span></span></a>
+<a class="wel-link" href="/library/?kind=scenario"><span class="wel-link-label"><span class="gs-en">Scenarios (59)</span><span class="gs-es" lang="es">Escenarios (59)</span></span><span class="wel-link-note"><span class="gs-en">Solar System · Retrograde Mars: the loop that needed epicycles</span><span class="gs-es" lang="es">Sistema solar · Marte retrógrado: el bucle que exigió epiciclos</span></span></a>
+<a class="wel-link" href="/library/?kind=dataset"><span class="wel-link-label"><span class="gs-en">Datasets (13)</span><span class="gs-es" lang="es">Conjuntos de datos (13)</span></span><span class="wel-link-note"><span class="gs-en">HD 209458: TESS light curve, sector 56 · SDSS DR18: an A star</span><span class="gs-es" lang="es">HD 209458: curva de luz de TESS, sector 56 · SDSS DR18: una estrella A</span></span></a>
+<a class="wel-link" href="/library/?kind=course"><span class="wel-link-label"><span class="gs-en">Courses (2)</span><span class="gs-es" lang="es">Cursos (2)</span></span><span class="wel-link-note"><span class="gs-en">Introductory astronomy: gravity, starlight and other worlds · Pulsating stars: a course</span><span class="gs-es" lang="es">Astronomía introductoria: gravedad, luz de las estrellas y otros mundos · Estrellas pulsantes: un curso</span></span></a>
+<a class="wel-link" href="/library/?kind=experiment"><span class="wel-link-label"><span class="gs-en">Experiments (4)</span><span class="gs-es" lang="es">Experimentos (4)</span></span><span class="wel-link-note"><span class="gs-en">Binary Planet Lab · Circumbinary Planet Lab</span><span class="gs-es" lang="es">Laboratorio de planeta en binaria · Laboratorio de planeta circumbinario</span></span></a>
+</div>
+<!-- /library:home -->
+  </section>
+
+  <section class="wel-section" aria-labelledby="welScenarios">
+    <div class="wel-section-head">
+      <h2 id="welScenarios" class="wel-h2">Featured scenarios</h2>
+      <button type="button" class="wel-quiet" data-action="scenarios">
+        Browse all <span data-slot="scenario-count"></span> scenarios
+      </button>
+    </div>
+    <div class="wel-scenarios" data-slot="scenarios"></div>
+  </section>
+
+  <section class="wel-section wel-lessons-block" aria-labelledby="welLessons">
+    <h2 id="welLessons" class="wel-h2">Guided investigations</h2>
+    <p class="wel-say">
+      Structured undergraduate astronomy activities built into the simulation
+      rather than bolted on beside it. Each one asks for a prediction before it
+      shows you anything, hands you an instrument to measure with, plots your
+      own readings back to you, saves your progress, and exports a lab report
+      as a PDF.
+    </p>
+    <ul class="wel-lessons" data-slot="lessons"></ul>
+    <button
+      type="button"
+      class="ui-button wel-secondary"
+      data-action="investigations"
+    >
+      Browse investigations
+    </button>
+  </section>
+
+  <section class="wel-section" aria-labelledby="welWho">
+    <h2 id="welWho" class="wel-h2">Who it is for</h2>
+    <div class="wel-audiences" data-slot="audiences"></div>
+  </section>
+
+  <section class="wel-section wel-teaching" aria-labelledby="welTeaching">
+    <h2 id="welTeaching" class="wel-h2">Teaching with Gravitas</h2>
+    <p class="wel-say">
+      Written for introductory undergraduate astronomy, including
+      general-education and non-science-major courses. Every investigation
+      ships with an instructor guide, stated learning objectives, expected
+      measurements and a generated answer key. The simulation's assumptions and
+      approximations are documented in public.
+    </p>
+    <div class="wel-links" data-slot="links"></div>
+  </section>
+
+  <footer class="wel-foot">
+    <button type="button" class="ui-button wel-primary" data-action="enter">
+      Enter the sandbox
+    </button>
+    <p class="wel-foot-note">
+      This introduction appears once. You can reopen it any time from
+      <strong>About Gravitas</strong>, under <strong>Learn</strong> at the
+      bottom of the control panel.
+    </p>
+    <button
+      type="button"
+      class="wel-quiet wel-reset"
+      data-action="reset"
+      hidden
+    >
+      Show this again on my next visit
+    </button>
+  </footer>
+</div>

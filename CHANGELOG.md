@@ -15,6 +15,26 @@ the release rather than in the tag.
 
 ### Added
 
+- **The Library** (Roadmap II Prompt 54, [LIBRARY.md](LIBRARY.md)). One
+  index of everything a student or instructor can open, at `/library/`: the
+  lessons and the guided investigations of the Observatory, the 3-D lab and
+  the mission lab, the classroom activities, the scenarios, the datasets,
+  the courses and the experiments, 125 entries with the same fields.
+  - `library/library.json` (`gravitas.library/1`, with a schema) is
+    generated from the sources that own each thing, checked fresh by the
+    gate, and every route it emits is resolved by `validate:links`. A field
+    a source does not declare is left empty and counted per kind.
+  - The page searches and filters it with the lesson browser's own
+    functions, plus kind, format and level; groups it by subject, course
+    level or sequence; keeps its filters in the address; shows the progress
+    each surface saved; and gives every kind one card that links to the
+    page that runs it.
+  - Every guide now declares its level and subjects, and every Observatory
+    observation its subjects.
+  - Home leads into it: a "continue where you left off" strip for lessons
+    started and not finished, and a card per kind of thing in the Library.
+    Its sections became a fragment of markup, which paid for both.
+  - Every page's Learn group, and the lesson browser, link it.
 - **Home** (Roadmap II Prompt 50, item 3). The front door is a page of
   the shell now, not a layer over it: it opens below the bar, and the bar
   stays live, with its navigation, switches and Tab order, while it is up.
@@ -1539,7 +1559,7 @@ listed here because this is the release that first carries it.
   cycle or on a low-level module importing a coordinator.
 - **A bundle budget.** `npm run budget` holds the initial download to a written
   ceiling; raising it means saying why in the same commit.
-- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->31<!--/fact--> surfaces in both
+- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->33<!--/fact--> surfaces in both
   languages and both themes, plus keyboard, focus-trap, reflow and reduced-motion tests.
   See [ACCESSIBILITY.md](ACCESSIBILITY.md).
 

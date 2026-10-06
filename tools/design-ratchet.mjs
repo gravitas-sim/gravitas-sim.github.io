@@ -39,6 +39,7 @@ export const RECORD = path.join(ROOT, 'tools', 'design-ratchet.json');
 export const TOOL_PAGES = [
   'observatory/index.html',
   'catalog/index.html',
+  'library/index.html',
   'experiments/index.html',
   'figure/index.html',
   'studio/index.html',

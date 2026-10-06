@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/library-1.schema.json",
+  "title": "gravitas.library/1",
+  "description": "The Library (library/library.json): one record for everything a student or instructor can open - investigations (lessons and the guided investigations of the Observatory, the 3-D lab and the mission lab), classroom activities, scenarios, datasets, courses and experiments - with the subjects and sequences it is browsed by. tools/build-library.mjs writes it from the sources that own each thing and --check holds the committed file to what it writes; js/libraryPage.js and the Home page read it. A field a source does not declare is null; LIBRARY.md counts them per kind. route is the canonical link to the surface that runs the entry. LIBRARY.md describes it; FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "kinds",
+    "subjects",
+    "sequences",
+    "entries"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "gravitas.library"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "kinds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "investigation",
+          "activity",
+          "scenario",
+          "dataset",
+          "course",
+          "experiment"
+        ]
+      }
+    },
+    "subjects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "count"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z-]*$"
+          },
+          "label": {
+            "$ref": "#/$defs/words"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "sequences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "blurb",
+          "entries"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "title": {
+            "$ref": "#/$defs/words"
+          },
+          "blurb": {
+            "$ref": "#/$defs/words"
+          },
+          "entries": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "words": {
+      "type": "object",
+      "required": [
+        "en",
+        "es"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        },
+        "es": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^(investigation|activity|scenario|dataset|course|experiment):[a-z0-9][a-z0-9./-]*$"
+    },
+    "entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "format",
+        "source",
+        "title",
+        "summary",
+        "level",
+        "duration",
+        "length",
+        "mathematics",
+        "calculation",
+        "subjects",
+        "prerequisites",
+        "steps",
+        "thumbnail",
+        "route"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "investigation",
+            "activity",
+            "scenario",
+            "dataset",
+            "course",
+            "experiment"
+          ]
+        },
+        "format": {
+          "enum": [
+            "lesson",
+            "observatory",
+            "lab3d",
+            "mission",
+            "demonstration",
+            "route",
+            "guided",
+            "lab",
+            "sandbox",
+            "observation",
+            "data-pack",
+            "course",
+            "course-pack",
+            "sweep"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^[a-z0-9][A-Za-z0-9_./-]*\\.(js|json)$"
+        },
+        "title": {
+          "$ref": "#/$defs/words"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/words"
+            }
+          ]
+        },
+        "level": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "beginner",
+                "intro"
+              ]
+            }
+          ]
+        },
+        "duration": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "min",
+                "max"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "min": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          ]
+        },
+        "length": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "demo",
+                "period",
+                "long"
+              ]
+            }
+          ]
+        },
+        "mathematics": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "none",
+                "arithmetic",
+                "algebra",
+                "logarithms"
+              ]
+            }
+          ]
+        },
+        "calculation": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "none",
+                "some",
+                "lots"
+              ]
+            }
+          ]
+        },
+        "subjects": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z-]*$"
+              }
+            }
+          ]
+        },
+        "prerequisites": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          ]
+        },
+        "steps": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        },
+        "thumbnail": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^images/[a-z0-9/_-]+\\.(webp|png|jpg)$"
+            }
+          ]
+        },
+        "route": {
+          "type": "string",
+          "pattern": "^/"
+        }
+      }
+    }
+  }
+}

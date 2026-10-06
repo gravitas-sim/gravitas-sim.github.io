@@ -32,6 +32,8 @@ const STATIC_FILES = [
   'social-card.png',
   // The curated catalog's index; its archives are in catalog/packages below.
   'catalog/catalog.json',
+  // The Library's index (LIBRARY.md), which /library/ and Home read.
+  'library/library.json',
 ];
 
 // Directories copied whole. Lesson figures are photographs used under licenses
@@ -75,6 +77,7 @@ const DOC_PAGES = [
   'experiments',
   'observatory',
   'catalog',
+  'library',
   'studio',
   'studio/lesson',
   'studio/course',
@@ -710,6 +713,21 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'catalog-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // The Library: its own entry, like the catalog. Nothing in the simulation
+  // imports it, and its index is a JSON file it fetches (LIBRARY.md).
+  if (existsSync('js/libraryPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/libraryPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'libraryPage.js'),
       legalComments: 'none',
     });
   }

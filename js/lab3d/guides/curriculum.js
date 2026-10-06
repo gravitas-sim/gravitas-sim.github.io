@@ -365,6 +365,8 @@ export const GUIDES = [
   {
     id: 'l3-planes',
     minutes: { intro: 20, advanced: 30 },
+    level: 'intro',
+    tags: ['orbits'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -456,6 +458,8 @@ export const GUIDES = [
   {
     id: 'l3-eclipse',
     minutes: { intro: 25, advanced: 35 },
+    level: 'intro',
+    tags: ['exoplanets', 'observing', 'orbits'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -574,6 +578,8 @@ export const GUIDES = [
   {
     id: 'l3-mutual',
     minutes: { intro: 20, advanced: 30 },
+    level: 'intro',
+    tags: ['exoplanets', 'orbits'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
@@ -677,6 +683,8 @@ export const GUIDES = [
   {
     id: 'l3-kozai',
     minutes: { intro: 25, advanced: 35 },
+    level: 'intro',
+    tags: ['gravity', 'orbits'],
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
