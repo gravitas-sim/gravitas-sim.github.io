@@ -104,6 +104,7 @@ export const FRAGMENTS = [
       'investigationPlot',
       'investigationEllipse',
       'investigationTool',
+      'investigationDockTabs',
     ],
   },
   {
