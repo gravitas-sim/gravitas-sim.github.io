@@ -23,7 +23,7 @@
 // mis-clicked can carry on, which is the thing being claimed.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, openObjectsList } from './fixtures.js';
 
 /** Open a lesson through its own link, the way a student arrives at one. */
 async function open(page, app, id) {
@@ -387,6 +387,7 @@ test.describe('the required action stays possible at every size', () => {
 
       // The chip is not merely present in the DOM: it can be scrolled to,
       // it is big enough to hit, and nothing is painted on top of it.
+      await openObjectsList(page);
       const chip = page.locator('.inv-object').first();
       await chip.scrollIntoViewIfNeeded();
       await expect(chip).toBeVisible();

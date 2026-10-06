@@ -13,7 +13,7 @@
 // reader would press, and drive the controls by keyboard as well as by value.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, openObjectsList } from './fixtures.js';
 import { scrollLikeAReader } from './reach.js';
 
 const LESSON = 'a-universe-of-stars';
@@ -140,6 +140,7 @@ for (const size of SIZES) {
 
       // The step tells the reader to select each star and read a radius, so
       // all three of these have to be usable at once.
+      await openObjectsList(page);
       for (const sel of [
         '#investigationToolControls [data-tool="focus"]',
         '#investigationToolReadout',
@@ -250,6 +251,7 @@ test.describe('the stars a step asks a reader to click', () => {
       await goTo(page, 'Measure it');
       await cardReady(page);
 
+      await openObjectsList(page);
       // The step names three ways to choose a star and only one of them is the
       // canvas. On a narrow window the canvas is behind the panels, so these
       // two are not a fallback - they are how the step is done.

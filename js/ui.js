@@ -2718,13 +2718,13 @@ const setOverlayMinimized = (overlay, btn, minimized) => {
  * Measure what is on screen and move the inspector out of its way.
  *
  * The decision itself lives in computeDockPosition; this half only gathers the
- * rectangles. The bottom-sheet layout under 620px is left alone: there the
+ * rectangles. The bottom-sheet layout on a phone (767px and under) is left alone: there the
  * panel is meant to cover things.
  *
  * @param {HTMLElement} panel - The inspector element
  */
 const dockInspector = panel => {
-  if (window.innerWidth <= 620) return;
+  if (window.innerWidth <= 767) return;
 
   const visible = sel => {
     const el = document.querySelector(sel);
@@ -2888,10 +2888,10 @@ const layoutPinnedCards = () => {
   const CARD_W = 300;
   const open = main && getComputedStyle(main).display !== 'none';
 
-  // Under 620px the inspector is a bottom sheet, so there is no "beside" to
+  // On a phone (767px and under) the inspector is a bottom sheet, so there is no "beside" to
   // work with: the cards take the top of the screen and the sheet keeps the
   // bottom. Anchoring to the sheet would stack them straight onto it.
-  if (window.innerWidth <= 620) {
+  if (window.innerWidth <= 767) {
     let y = GAP;
     for (const pin of pinnedInspectors) {
       if (pin.placed) continue;

@@ -293,6 +293,36 @@ The Library is a tool page, `/library/`, over one generated index of everything 
 
 The lesson browser inside the application is the Library's view of its lessons by data and by filter: the same tables, the same order, the same filtering functions, held together by `tests/library.test.js`. It keeps its own card and stays a modal: rendering the Library's card and kinds inside the application needs about 9.7 KB of deferred JavaScript, and the deferred total had 2.8 KB of room after Home's sections moved to a fragment (D-LIB-01). The teaching page's activity list and the scenario gallery are still their own lists.
 
+## As built (Prompt 55)
+
+**One breakpoint scale.** Four tiers, one per layout width, each width inside its tier: phone to 767 px (laid out at 375), tablet 768 to 900 (at 768), laptop 901 to 1200 (at 1024), desktop from 1201 (at 1440). They replaced twenty media-query widths; the computed styles at the four widths did not change in the move. `tests/breakpoints.test.js` refuses a width off the scale, and DESIGN_SYSTEM.md has the table (D-RESP-01).
+
+**The application with a lesson open,** by tier:
+
+| Tier | The lesson | What the step docks |
+|---|---|---|
+| desktop | docked left at its width | instrument and graph side by side in the column beside it |
+| laptop | docked left, narrower (340 px) | one at a time: two radio buttons over the column choose the instrument or the graph |
+| tablet | canvas above; a sheet across the bottom, the step on its left half | on the sheet's right half, beside the step, with the same tabs |
+| phone | canvas above; a sheet on the transport bar, with the close button, title and progress on one row, the objects list folded and Next and Back at its foot | a second sheet stacked on the first, with the same tabs |
+
+An observing panel a step opens (the pause-at-event form, the light curve, the radial-velocity curve) takes the instrument's place: beside the step on a tablet, the second sheet on a phone. `js/observationLayout.js` stacks them from the foot of the room the stylesheet gives it rather than from a fixed 120 px, where on a phone they used to lie over the sheet's Next button.
+
+In every arrangement the lesson's panels, the shell bar and the transport bar leave at least a third of the window to the canvas, no panel lies over the transport bar, and Next and Back can be pressed without scrolling. The footer keeps the bottom edge on a tablet and a laptop, with the transport bar standing on it, so its links no longer run under the elapsed time at 1024 px; on a phone it steps out for the lesson.
+
+**Touch.** On a touch screen every control the application, the shell and the page components draw is at least 44 by 44 px (sliders by padding round a thin track). Two fingers on the canvas zoom the simulation and the browser starts no gesture of its own there; a pinch anywhere else zooms the page. Precise placement is in the rail at every width, reached through Menu below the desktop.
+
+**The other surfaces.** The Observatory's plot, image and table stack inside the window below the laptop, its selection linkage holds at every width and its transform controls stay behind a closed disclosure. The Library and Teach hold at every width. The Studio pages are read-only on a phone: the editor and the toolbars that change or save the document step out, what reads it stays, and a note in both languages says so.
+
+**Measured** by `e2e/responsiveLayout.spec.js` at 375 (the phone project), 768 (the tablet project), 1024 and 1440 (the desktop project), and the investigation walker runs every step of every lesson in the phone and tablet projects as well as the desktop one.
+
+**Frame times by width** (`npm run perf -- --tier auto --viewport WxH`, six scenarios, 2026-10-06, an idle Mac, uncapped by vsync): the mean frame is 3.1 ms at 375x812, 4.4 ms at 768x1024, 4.4 ms at 1024x768 and 4.5 ms at 1440x900; the heaviest scene, star-cluster, is 12.8, 17.6, 17.9 and 19.1 ms. A narrower window draws fewer pixels, so no width is slower than the desktop one and the documented tiers hold at all four.
+
+**Not built,** and why (D-RESP-02):
+- The phone's lesson is a bottom sheet, not a full-screen step with a "Look" button: Prompt 55 allows either, and only the sheet keeps a third of the window for the canvas in every arrangement.
+- The tablet's sheet is not draggable to full height. Dragging needs script on the lesson's path, which has about 2.7 KB of deferred room, and a full-height sheet would cover the canvas.
+- The Observatory keeps its stacked views at 1440 (the table below the plot and image, not beside them), keeps its "What you are seeing" card open on a tablet, and shows its views together on a phone rather than one at a time by tab. The prompt's own requirement is the stack, and the linkage holds in it.
+
 ## Rejected alternatives
 
 - **A framework** (React, Vue, Lit). It would cost far more than the whole

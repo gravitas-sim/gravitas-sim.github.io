@@ -1,7 +1,6 @@
-/* The shared shell (Roadmap II Prompt 50; markup from tools/shell.mjs,
-   behaviour from js/shell.js). Design tokens only, so every theme applies. */
+/* The shared shell (P50; tools/shell.mjs, js/shell.js). Tokens only. */
 
-/* Each label is written in both languages; the page's <html lang> picks. */
+/* Labels are in both languages; <html lang> picks. */
 html:not(:lang(es)) .gs-es,
 html:lang(es) .gs-en {
   display: none;
@@ -151,8 +150,7 @@ html:lang(es) .gs-en {
   }
 }
 
-/* Under 768 px, once the script is here, the groups stack behind one Menu
-   button. Without it they stay in view: a menu nobody can open is worse. */
+/* Under 768 px, with the script, groups stack behind one Menu button. */
 @media (max-width: 767px) {
   .gs-toggle {
     margin-left: auto;
@@ -172,6 +170,14 @@ html:lang(es) .gs-en {
   .gs-nav > ul {
     flex-direction: column;
   }
+  /* Without the script the groups stay in view, sharing rows. */
+  .gs-shell:not(.gs-js) .gs-nav > ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  }
+  .gs-shell:not(.gs-js) .gs-nav > ul > li:has(> details[open]) {
+    grid-column: 1 / -1;
+  }
   .gs-nav details ul {
     position: static;
     min-width: 0;
@@ -183,10 +189,25 @@ html:lang(es) .gs-en {
   }
 }
 
-/* The application template (tools/shell.mjs APPLICATION): fixed over the
-   full-bleed canvas, one row tall. Everything the application anchors to the
-   top of the window adds --shell-height, so it sits below the bar rather
-   than under it; the canvas itself does not move. */
+/* Touch: every control and open-group link is 44 px tall (WCAG 2.5.5). */
+@media (pointer: coarse) {
+  .gs-shell summary,
+  .gs-shell button,
+  .gs-shell select,
+  .gs-brand,
+  .gs-nav details a {
+    box-sizing: border-box;
+    min-height: 44px;
+  }
+  .gs-brand,
+  .gs-nav details a {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* The application bar (tools/shell.mjs): fixed over the canvas, one row.
+   Chrome anchored at the top adds --shell-height. */
 body:has(> .gs-app) {
   --shell-height: 48px;
 }
@@ -203,11 +224,8 @@ body:has(> .gs-app) {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-/* Where the control rail is a column at the right edge (above 1024 px,
-   css/components.css), the bar stops at the rail's inner edge: the rail is
-   beside the canvas, not above it, and keeps the whole height of the window
-   that its sections are sized for. */
-@media (min-width: 1025px) {
+/* Above 1200 px the rail is a column: the bar stops at its inner edge. */
+@media (min-width: 1201px) {
   .gs-shell.gs-app {
     right: calc(var(--rail-width) + 2 * var(--space-4));
     border-bottom-right-radius: var(--radius-md);
@@ -215,19 +233,16 @@ body:has(> .gs-app) {
   }
 }
 
-/* Solid for a reader who has asked for less transparency (css/tokens.css
-   turns off the blur; this sheet is unlayered, so it sets its own ground). */
+/* Solid ground for reduced transparency (this sheet is unlayered). */
 @media (prefers-reduced-transparency: reduce) {
   .gs-shell.gs-app {
     background: var(--surface-1);
   }
 }
 
-/* Below 1100 px the groups and switches do not fit one row beside the
-   application's own controls: they fold behind Menu. Open, the bar grows
-   into a panel over the canvas; --shell-height is set on body, so nothing
-   the application placed moves. */
-@media (max-width: 1099px) {
+/* At 1200 px and under the groups fold behind Menu; open, the bar is a
+   panel over the canvas. */
+@media (max-width: 1200px) {
   .gs-shell.gs-app .gs-toggle:not([hidden]) {
     display: inline-flex;
     margin-left: auto;
@@ -259,8 +274,7 @@ body:has(> .gs-app) {
   }
 }
 
-/* A figure embedded in someone else's page is the figure alone
-   (EMBEDDING.md), and a lecture is the canvas and its own bar. */
+/* An embedded figure is the figure alone; a lecture, canvas and its bar. */
 body.presentation-embed,
 body[data-presentation='lecture'] {
   --shell-height: 0px;

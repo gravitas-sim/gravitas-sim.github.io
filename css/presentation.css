@@ -128,7 +128,7 @@
      reading its mass is most of what makes the figure interactive. It becomes a
      sheet against the edge rather than a floating window, because at 320px
      there is no "beside" for it to float in. */
-  @media (max-width: 560px) {
+  @media (max-width: 767px) {
     body.presentation-embed #objectInspector {
       left: 0 !important;
       right: 0 !important;
@@ -145,7 +145,7 @@
      Blackboard's Ultra content frame is often around 700px; below about 560 the
      transport bar's labels are what overflow first, so they go and the icons
      stay. */
-  @media (max-width: 560px) {
+  @media (max-width: 767px) {
     body.presentation-embed .timeline-bar {
       padding: var(--space-1) var(--space-2);
     }
@@ -171,7 +171,7 @@
      this width it is a stub that reads as a progress bar nobody can use. Play,
      step and the clock survive, which is enough to make the figure a figure
      rather than a picture. */
-  @media (max-width: 400px) {
+  @media (max-width: 375px) {
     body.presentation-embed .timeline-bar input[type='range'] {
       display: none;
     }
@@ -549,7 +549,7 @@
 
   /* Narrow projectors and 4:3 in portrait: the bar wraps onto two rows rather
      than overflowing the viewport, which is why it carries flex-wrap above. */
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     body.presentation-lecture .lecture-bar {
       width: auto;
       border-radius: var(--radius-lg);
@@ -710,7 +710,7 @@
     text-overflow: ellipsis;
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     .settings-grid {
       grid-template-columns: 1fr;
       gap: var(--space-2) 0;
@@ -767,7 +767,7 @@
      two half-sentences rather than as one list.
      =========================================================================== */
 
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     .attribution {
       row-gap: 2px;
     }
@@ -786,7 +786,7 @@
 
      Two rules were disagreeing across a cascade layer. css/styles.css, in the
      `legacy` layer, pins the card with `left: 10px; right: 10px;
-     transform: none` below 1025px. css/components.css, in `components`, gives
+     transform: none` below 1201px. css/components.css, in `components`, gives
      it `left: 50%` and a transform that centers it in the band between the
      readout and the rail. Layer order means the component transform wins while
      the legacy `left` also applies, so the card was translated by half its own
@@ -796,7 +796,7 @@
      whole fix; the insets that were always intended then apply.
      =========================================================================== */
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     #scenarioInfoBox,
     .scenario-info-box {
       transform: none;

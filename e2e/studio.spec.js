@@ -605,13 +605,16 @@ test.describe('the Scenario Studio', () => {
     });
   }
 
-  test('fits a phone: nothing scrolls sideways, and every control is on screen', async ({
+  test('on a phone it reads and says so: nothing scrolls sideways, and every control shown is on screen', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await openStudio(page);
-    await validStarCluster(page);
-    await page.locator('#st-system-add').click();
+    // PLATFORM_MODEL.md: read-only under 768 px, with a note. The editor and
+    // the controls that change the document are not there.
+    await expect(page.locator('.st-narrow')).toBeVisible();
+    await expect(page.locator('#st-from')).toBeHidden();
+    await expect(page.locator('#st-system-add')).toBeHidden();
     const overflow = await page.evaluate(() => ({
       page: document.scrollingElement.scrollWidth - window.innerWidth,
       off: [...document.querySelectorAll('button, input, select, textarea')]

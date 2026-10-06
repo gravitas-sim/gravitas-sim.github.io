@@ -15,6 +15,23 @@ the release rather than in the tag.
 
 ### Added
 
+- **Every width designed** (Roadmap II Prompt 55, PLATFORM_MODEL.md "As
+  built (Prompt 55)"). One breakpoint scale of four tiers replaces twenty
+  media-query widths, and a test refuses any other (DESIGN_SYSTEM.md,
+  "Breakpoints").
+  - A lesson on a laptop shows one docked panel at a time, as tabs; on a
+    tablet the step and its instrument share a sheet across the bottom; on
+    a phone the instrument is a second sheet on the step's. The canvas keeps
+    a third of the window in every arrangement, Next and Back never need
+    scrolling, and no panel covers the transport bar.
+  - The footer's links no longer run under the elapsed time at 1024 px, and
+    without a lesson the scenario card leaves the top corners to the readout
+    and the Menu button.
+  - On a touch screen every control is at least 44 px, and the canvas keeps
+    a two-finger zoom for itself while the page stays zoomable.
+  - The Studio pages are read-only on a phone, and say so.
+  - The browser suite runs the investigation walker and a layout spec at
+    the phone and a tablet size as well as on a desktop.
 - **The Library** (Roadmap II Prompt 54, [LIBRARY.md](LIBRARY.md)). One
   index of everything a student or instructor can open, at `/library/`: the
   lessons and the guided investigations of the Observatory, the 3-D lab and

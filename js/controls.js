@@ -652,7 +652,7 @@ function setupPlacementHint() {
  * covers most of a 375px screen, and the simulation is the point.
  */
 export function collapseReadoutOnSmallScreens() {
-  if (window.innerWidth > 720) return;
+  if (window.innerWidth > 767) return;
   const overlay = document.getElementById('overlay');
   const btn = document.getElementById('overlayMinimize');
   if (!overlay || !btn || overlay.classList.contains('minimized')) return;

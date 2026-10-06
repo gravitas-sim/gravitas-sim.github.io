@@ -314,7 +314,7 @@
   }
 
   /* --- Narrow screens ---------------------------------------------------- */
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     .doc-main {
       padding: var(--space-6) var(--space-4) var(--space-8);
     }
@@ -670,7 +670,7 @@
     color: var(--text-primary) !important;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 900px) {
     .portal-login {
       grid-template-columns: 1fr;
       gap: var(--space-5);
@@ -1296,7 +1296,7 @@
     border: 1px solid var(--danger);
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 767px) {
     .val-lane {
       grid-template-columns: 66px 1fr;
     }
@@ -1800,7 +1800,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  @media (min-width: 64rem) {
+  @media (min-width: 901px) {
     .ui-split {
       grid-template-columns: minmax(0, 1fr) minmax(0, var(--ui-split-aside, 26rem));
       align-items: start;
@@ -2216,7 +2216,7 @@
     padding-inline-start: var(--space-4);
   }
 
-  @media (max-width: 30rem) {
+  @media (max-width: 767px) {
     .ui-meta {
       grid-template-columns: minmax(0, 1fr);
       row-gap: 0;
@@ -2500,5 +2500,59 @@
   .ow-brush {
     fill: color-mix(in srgb, var(--hue-star) 15%, transparent);
     stroke: var(--hue-star);
+  }
+}
+
+/* --- Touch targets (Roadmap II Prompt 55) ---------------------------------------
+   On a touch screen every control of the component language is at least 44
+   CSS pixels tall (WCAG 2.2, 2.5.5); a button at least as wide. A link inside
+   running text is the inline exception the criterion makes and stays text. */
+@layer components {
+  @media (pointer: coarse) {
+    :is(.ui-button, button.ui-link, .ui-choice, details.ui-disclosure > summary),
+    :is(input, select):is(.ui-input, .ui-select) {
+      box-sizing: border-box;
+      min-height: 44px;
+    }
+    .ui-button {
+      min-width: 44px;
+    }
+  }
+}
+
+/* --- The Studio on a phone (Roadmap II Prompt 55) ------------------------------
+   PLATFORM_MODEL.md: the Studio pages are read-only under 768 px, with a note
+   saying so. An editor this dense is not usable on a phone, and a half-usable
+   one loses work. So on the phone tier the editor, the raw text and every
+   toolbar that changes or saves the document step out; what reads it stays:
+   the checks, the preview and the differences, the language switch, the
+   buttons that copy, export or open what it holds, and opening a saved
+   draft to read it. Nothing is disabled behind the
+   reader's back; the controls are not there, and the note says why. */
+@layer components {
+  .st-narrow {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .st-wrap > .st-narrow {
+      display: block;
+    }
+    .st-wrap
+      > .ui-toolbar:not(#langSwitch)
+      > :not(
+        #st-copy,
+        #st-open-app,
+        #cp-export,
+        #cp-export-es,
+        #cb-manifest,
+        #cb-syllabus,
+        [for$='-drafts'],
+        [id$='-drafts'],
+        [id$='-drafts-open']
+      ),
+    .st-wrap > .ui-split > :first-child {
+      display: none;
+    }
   }
 }
