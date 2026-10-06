@@ -316,6 +316,8 @@ In every arrangement the lesson's panels, the shell bar and the transport bar le
 
 **Measured** by `e2e/responsiveLayout.spec.js` at 375 (the phone project), 768 (the tablet project), 1024 and 1440 (the desktop project), and the investigation walker runs every step of every lesson in the phone and tablet projects as well as the desktop one.
 
+**Frame times by width** (`npm run perf -- --tier auto --viewport WxH`, six scenarios, 2026-10-06, an idle Mac, uncapped by vsync): the mean frame is 3.1 ms at 375x812, 4.4 ms at 768x1024, 4.4 ms at 1024x768 and 4.5 ms at 1440x900; the heaviest scene, star-cluster, is 12.8, 17.6, 17.9 and 19.1 ms. A narrower window draws fewer pixels, so no width is slower than the desktop one and the documented tiers hold at all four.
+
 **Not built,** and why (D-RESP-02):
 - The phone's lesson is a bottom sheet, not a full-screen step with a "Look" button: Prompt 55 allows either, and only the sheet keeps a third of the window for the canvas in every arrangement.
 - The tablet's sheet is not draggable to full height. Dragging needs script on the lesson's path, which has about 2.7 KB of deferred room, and a full-height sheet would cover the canvas.
