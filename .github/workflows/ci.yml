@@ -108,7 +108,7 @@ on:
       scheduled:
         description: Also run a scheduled job (a dry run of it)
         type: choice
-        options: [none, provenance, timings, observatory]
+        options: [none, provenance, timings, observatory, tablet-walk]
         default: none
 
 # A second push to the same branch makes the first one irrelevant. Never cancel
@@ -959,6 +959,43 @@ jobs:
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           npm run bench:observatory -- --check 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+  # Every lesson walked at tablet size (768x1024, touch), weekly rather than on
+  # every pull request: about 29 minutes of runner time for a second walk of
+  # the lessons the phone project already walks, where the tablet's layout spec
+  # runs on every pull request. Not required by the `ci` job below; a failure
+  # here is a finding for the week, and the release gate walks it too.
+  tablet-walk:
+    name: Lessons walked at tablet size
+    if: ${{ github.event.schedule == '0 6 * * 1' || inputs.scheduled == 'tablet-walk' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Playwright browsers
+        uses: ./.github/actions/playwright-browsers
+        with:
+          browser: chromium
+
+      - name: Walk every lesson at tablet size
+        run: npm run e2e:tablet-walk
+
+      - name: Upload traces and screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-artifacts-tablet-walk
+          path: test-results
+          retention-days: 7
+          if-no-files-found: ignore
 
   # A single job to require in branch protection, so the rule does not have to be
   # edited every time a job is added or a matrix entry changes. It fails if any

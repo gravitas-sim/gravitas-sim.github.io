@@ -254,9 +254,18 @@ const MOBILE_SPEC = /mobile\.spec\.js/;
  *
  * e2e/responsiveLayout.spec.js picks its width from the project: 375 in the
  * phone project, 768 in the tablet, 1024 and 1440 in the desktop ones.
+ *
+ * The tablet's walk is the exception, on cost: it is about 29 minutes of
+ * runner time, on every pull request and push, for a second walk of the same
+ * lessons at a layout the tablet's layout spec already measures. So the tablet
+ * walks the lessons only when GRAVITAS_E2E_TABLET_WALK is set, which the
+ * weekly `tablet-walk` CI job and the release gate (`npm run e2e:release`) do.
+ * A pull request still walks every lesson on the phone and runs the tablet's
+ * layout spec.
  */
 const WALKTHROUGH_SPEC = /authorWalk\.spec\.js/;
 const LAYOUT_SPEC = /responsiveLayout\.spec\.js/;
+const TABLET_WALK = Boolean(process.env.GRAVITAS_E2E_TABLET_WALK);
 
 /**
  * A tablet held upright, in Chromium: 768 by 1024 CSS pixels, a touch screen
@@ -382,7 +391,9 @@ export default defineConfig({
           {
             name: 'tablet',
             use: TABLET,
-            testMatch: [WALKTHROUGH_SPEC, LAYOUT_SPEC],
+            testMatch: TABLET_WALK
+              ? [WALKTHROUGH_SPEC, LAYOUT_SPEC]
+              : [LAYOUT_SPEC],
           },
         ]),
   ],
