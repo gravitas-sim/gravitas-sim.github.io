@@ -138,6 +138,36 @@ test.describe('the observatory', () => {
     );
   });
 
+  test('the plot answers the keyboard: along the axis, Shift extends, Space and Escape', async ({
+    page,
+  }) => {
+    // PLOT_COMPONENT.md, D1: the plot's own keys, which no test pressed.
+    await openPage(page);
+    await openFixture(page, 'tess-light-curve');
+    const plot = page.locator('#obsPlot');
+    const readout = page.locator('#obsReadout');
+    await plot.focus();
+    await page.keyboard.press('Home');
+    await expect(readout).toContainText(/^Row 1 of 1882: time/);
+    await page.keyboard.press('ArrowRight');
+    await expect(readout).toContainText(/^Row 2 of 1882: time/);
+    await page.keyboard.press('Shift+ArrowRight');
+    await page.keyboard.press('Shift+ArrowRight');
+    await expect(page.locator('#obsSelected')).toHaveText('3 selected');
+    expect(await selectedRows(page)).toBe(3);
+    await expect(plot.locator('.ow-pt.is-selected')).toHaveCount(3);
+    await expect(plot.locator('.ow-focus')).toHaveCount(1);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#obsSelected')).toHaveText('0 selected');
+    await page.keyboard.press('End');
+    await expect(readout).toContainText(/^Row 1882 of 1882: time/);
+    await page.keyboard.press('Space');
+    await expect(page.locator('#obsSelected')).toHaveText('1 selected');
+    await expect(
+      page.locator('#obsTable tr[data-row="1881"][aria-selected="true"]')
+    ).toHaveCount(1);
+  });
+
   test('a pixel chosen in the image is a row in the table, decoded', async ({
     page,
   }) => {

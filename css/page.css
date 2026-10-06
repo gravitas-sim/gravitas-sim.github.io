@@ -1969,7 +1969,7 @@
   }
 
   /* Selectable rows: a grid whose rows carry aria-selected (the Observatory's
-     table, the analysis lab's trials; js/observatory/table.js gives them the
+     table, the analysis lab's trials; js/plot/table.js gives them the
      keys). Selected is a tint and a bar at the row's start, so it is not
      color alone even before the words a screen reader is given. */
   :is(.ui-table, .ui-table-wrap > table) tr[aria-selected] {
@@ -2407,7 +2407,7 @@
 /* =============================================================================
    Observation plots
    -----------------------------------------------------------------------------
-   The marks js/observatory/plot.js draws, on the Observatory and in the
+   The marks js/plot/plot.js draws, on the Observatory and in the
    experiment runner's analysis laboratory, which shares it. One copy here, so
    the two pages draw one plot: on the sky, in the object hues. The selected
    points are the star's amber, near the lighter amber the image view
@@ -2454,6 +2454,11 @@
   }
 
   .ow-pt {
+    fill: var(--hue-comet);
+  }
+
+  /* A histogram's bins (js/plot/bars.js). */
+  .ow-bin {
     fill: var(--hue-comet);
   }
 

@@ -119,6 +119,17 @@ export const SCENARIO_SUBJECTS = Object.freeze({
 /** The seed every scenario link names, so a Library link is one world. */
 export const SCENARIO_SEED = 'library';
 
+/**
+ * A world link in its uncompressed form ("1r", which js/shareState.js reads
+ * exactly as it reads "1z"). The application's encodeTagged() deflates when
+ * that is shorter, and deflate's bytes are zlib's to choose: Node 20 and
+ * Node 24 compress the same payload differently, so an index written with it
+ * is fresh on one and stale on the other. These payloads are a scenario key
+ * and a seed, where deflate saves a few characters at most.
+ */
+export const rawWorldLink = payload =>
+  `1r${Buffer.from(JSON.stringify(payload)).toString('base64url')}`;
+
 const sorted = list => [...new Set(list)].sort();
 const both = (en, es) => ({ en, es: es ?? en });
 const words = (en, es, key) => {
@@ -347,7 +358,6 @@ export async function buildLibrary() {
 
   // --- Scenarios ---------------------------------------------------------------
   const { SCENARIO_INFO } = await load('js/data/scenarioInfo.js');
-  const { encodeTagged } = await load('js/shareState.js');
   const { parseSeed, formatSeed } = await load('js/rng.js');
   const seed = formatSeed(parseSeed(SCENARIO_SEED));
   for (const [key, info] of Object.entries(SCENARIO_INFO)) {
@@ -366,7 +376,7 @@ export async function buildLibrary() {
         summary: words(EN, ES, `scenario.${key}.summary`),
         subjects,
         thumbnail: info.thumbnail,
-        route: `/#${await encodeTagged('', 1, { v: 1, s: key, seed })}`,
+        route: `/#${rawWorldLink({ v: 1, s: key, seed })}`,
       })
     );
   }
