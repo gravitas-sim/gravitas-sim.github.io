@@ -65,12 +65,12 @@ try {
 
     <main class="doc-main is-wide" id="main">
       <div class="doc-hero">
-        <p class="doc-eyebrow">Validation</p>
-        <h1>What Gravitas Has Been Checked Against</h1>
+        <p class="doc-eyebrow"><span class="gs-en">Validation</span><span class="gs-es" lang="es">Validación</span></p>
+        <h1><span class="gs-en">What Gravitas Has Been Checked Against</span><span class="gs-es" lang="es">Contra qué se ha comprobado Gravitas</span></h1>
         <p class="doc-lede">
-          Not a claim that the physics is right. A list of quantities, the value
+          <span class="gs-en">Not a claim that the physics is right. A list of quantities, the value
           this engine produces for each one, the value it should have, where
-          that value came from, and how much error was allowed.
+          that value came from, and how much error was allowed.</span><span class="gs-es" lang="es">No afirma que la física sea correcta. Es una lista de magnitudes, el valor que produce este motor para cada una, el valor que debería tener, de dónde sale ese valor y cuánto error se permitió.</span>
         </p>
       </div>
 
@@ -83,26 +83,26 @@ try {
         </div>
         <dl class="val-facts">
           <div>
-            <dt>Last run</dt>
+            <dt><span class="gs-en">Last run</span><span class="gs-es" lang="es">Última ejecución</span></dt>
             <dd id="valDate">—</dd>
           </div>
           <div>
-            <dt>Took</dt>
+            <dt><span class="gs-en">Took</span><span class="gs-es" lang="es">Duración</span></dt>
             <dd id="valElapsed">—</dd>
           </div>
           <div>
-            <dt>Areas covered</dt>
+            <dt><span class="gs-en">Areas covered</span><span class="gs-es" lang="es">Áreas cubiertas</span></dt>
             <dd id="valGroups">—</dd>
           </div>
           <div>
-            <dt>Sources cited</dt>
+            <dt><span class="gs-en">Sources cited</span><span class="gs-es" lang="es">Fuentes citadas</span></dt>
             <dd id="valSources">—</dd>
           </div>
         </dl>
       </section>
 
       <p>
-        Every number on this page came out of
+        <span class="gs-en">Every number on this page came out of
         <a
           href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/js/validation/physicsChecks.js"
           rel="noopener"
@@ -112,20 +112,20 @@ try {
         reader prints and the suite that gates a commit cannot drift apart. You
         do not have to take the table's word for it either: the button below
         runs the entire suite again, here, on your machine, against the same
-        modules the simulation itself loads.
+        modules the simulation itself loads.</span><span class="gs-es" lang="es">Cada número de esta página salió de <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/js/validation/physicsChecks.js" rel="noopener" >un solo archivo</a > que leen tanto esta página como las pruebas del proyecto, de modo que la tabla que se imprime y las pruebas que controlan cada cambio no pueden separarse. Tampoco hace falta fiarse de la tabla: el botón de abajo vuelve a ejecutar todo el conjunto aquí, en tu equipo, contra los mismos módulos que carga la propia simulación.</span>
       </p>
 
       <section class="val-run" aria-label="Run the suite">
         <div class="val-run-head">
           <div>
-            <h2>Run it yourself</h2>
+            <h2><span class="gs-en">Run it yourself</span><span class="gs-es" lang="es">Ejecútalo tú mismo</span></h2>
             <p id="valRunNote">
-              About ten seconds. Nothing is sent anywhere; the whole suite
-              executes in a background thread in this tab.
+              <span class="gs-en">About ten seconds. Nothing is sent anywhere; the whole suite
+              executes in a background thread in this tab.</span><span class="gs-es" lang="es">Unos diez segundos. No se envía nada a ningún sitio; todo el conjunto se ejecuta en un hilo en segundo plano de esta pestaña.</span>
             </p>
           </div>
           <button type="button" class="val-run-btn" id="valRunBtn">
-            Run all checks
+            <span class="gs-en">Run all checks</span><span class="gs-es" lang="es">Ejecutar todas las comprobaciones</span>
           </button>
         </div>
         <div class="val-run-bar" id="valRunBar" hidden>
@@ -135,50 +135,50 @@ try {
       </section>
 
       <nav class="doc-toc" aria-label="Contents">
-        <h2>On this page</h2>
+        <h2><span class="gs-en">On this page</span><span class="gs-es" lang="es">En esta página</span></h2>
         <ol>
-          <li><a href="#kinds">Five kinds of check</a></li>
-          <li><a href="#margin">How much room was left</a></li>
-          <li><a href="#areas">Every check, by area</a></li>
-          <li><a href="#limits">What this does not establish</a></li>
+          <li><span class="gs-en"><a href="#kinds">Five kinds of check</a></span><span class="gs-es" lang="es"><a href="#kinds">Cinco tipos de comprobación</a></span></li>
+          <li><span class="gs-en"><a href="#margin">How much room was left</a></span><span class="gs-es" lang="es"><a href="#margin">Cuánto margen quedó</a></span></li>
+          <li><span class="gs-en"><a href="#areas">Every check, by area</a></span><span class="gs-es" lang="es"><a href="#areas">Cada comprobación, por área</a></span></li>
+          <li><span class="gs-en"><a href="#limits">What this does not establish</a></span><span class="gs-es" lang="es"><a href="#limits">Lo que esto no establece</a></span></li>
         </ol>
       </nav>
 
-      <h2 id="kinds">Five kinds of check</h2>
+      <h2 id="kinds"><span class="gs-en">Five kinds of check</span><span class="gs-es" lang="es">Cinco tipos de comprobación</span></h2>
       <p>
-        These do not mean the same thing, and a suite that mixed them would be
+        <span class="gs-en">These do not mean the same thing, and a suite that mixed them would be
         able to hide a weak result behind a strong one. Each check is labeled
-        with its kind everywhere it appears.
+        with its kind everywhere it appears.</span><span class="gs-es" lang="es">No significan lo mismo, y un conjunto que los mezclara podría esconder un resultado débil detrás de uno fuerte. Cada comprobación lleva etiquetado su tipo en todos los sitios donde aparece.</span>
       </p>
       <div class="val-kinds" id="valKinds"></div>
 
-      <h2 id="margin">How much room was left</h2>
+      <h2 id="margin"><span class="gs-en">How much room was left</span><span class="gs-es" lang="es">Cuánto margen quedó</span></h2>
       <p>
-        Passing is a yes or no. The more useful question is by how much, so
+        <span class="gs-en">Passing is a yes or no. The more useful question is by how much, so
         every check is plotted below at its measured error as a fraction of the
         tolerance it was allowed. A dot at the right-hand edge only just passed.
         A dot at the far left came out at machine precision, meaning the code
         reproduces its own equation to fifteen decimal places and the tolerance
-        never came into it.
+        never came into it.</span><span class="gs-es" lang="es">Aprobar es un sí o un no. La pregunta más útil es por cuánto, así que cada comprobación se representa abajo con su error medido como fracción de la tolerancia permitida. Un punto en el borde derecho apenas aprobó. Un punto en el extremo izquierdo salió con precisión de máquina: el código reproduce su propia ecuación con quince decimales y la tolerancia nunca llegó a intervenir.</span>
       </p>
       <figure class="val-chart-wrap">
         <div class="val-chart" id="valChart" role="img" aria-label=""></div>
         <figcaption id="valChartCaption"></figcaption>
       </figure>
       <p class="doc-note">
-        Checks held to an exact match are not on this chart: dividing by a
+        <span class="gs-en">Checks held to an exact match are not on this chart: dividing by a
         tolerance of zero has no meaning. They are counted separately below and
-        every one of them is exact.
+        every one of them is exact.</span><span class="gs-es" lang="es">Las comprobaciones con coincidencia exacta no aparecen en este gráfico: dividir entre una tolerancia de cero no tiene sentido. Se cuentan aparte más abajo y todas son exactas.</span>
       </p>
       <div class="val-exact" id="valExact"></div>
 
-      <h2 id="areas">Every check, by area</h2>
+      <h2 id="areas"><span class="gs-en">Every check, by area</span><span class="gs-es" lang="es">Cada comprobación, por área</span></h2>
       <p>
-        Measured against expected, with the error and the tolerance it was held
+        <span class="gs-en">Measured against expected, with the error and the tolerance it was held
         to. Open a row to see why that tolerance is what it is, and where the
         expected value came from when it is a published one. A tolerance with no
         stated reason is a number chosen to make a test pass, so every one here
-        carries its reason with it.
+        carries its reason with it.</span><span class="gs-es" lang="es">Medido frente a lo esperado, con el error y la tolerancia exigida. Abre una fila para ver por qué esa tolerancia es la que es y de dónde salió el valor esperado cuando es uno publicado. Una tolerancia sin motivo declarado es un número elegido para que una prueba pase, así que cada una de las de aquí lleva su motivo.</span>
       </p>
       <div
         class="val-filters"
@@ -188,51 +188,51 @@ try {
       ></div>
       <div class="val-groups" id="valGroups2"></div>
 
-      <h2 id="limits">What this does not establish</h2>
+      <h2 id="limits"><span class="gs-en">What this does not establish</span><span class="gs-es" lang="es">Lo que esto no establece</span></h2>
       <p>
-        A validation suite is only worth as much as its statement of what it
-        leaves out.
+        <span class="gs-en">A validation suite is only worth as much as its statement of what it
+        leaves out.</span><span class="gs-es" lang="es">Un conjunto de validación solo vale lo que valga su declaración de lo que deja fuera.</span>
       </p>
       <ul>
         <li>
-          <strong>Nothing here tests rendering.</strong> No check reads a pixel.
+          <span class="gs-en"><strong>Nothing here tests rendering.</strong> No check reads a pixel.
           Every one is a number in and a number out, so a failure names a
-          quantity rather than a screenshot.
+          quantity rather than a screenshot.</span><span class="gs-es" lang="es"><strong>Nada de esto prueba el dibujado.</strong> Ninguna comprobación lee un píxel. Todas son un número de entrada y un número de salida, así que un fallo nombra una magnitud y no una captura de pantalla.</span>
         </li>
         <li>
-          <strong>An approximation check never compares with reality.</strong>
+          <span class="gs-en"><strong>An approximation check never compares with reality.</strong>
           The inspiral model is phenomenological: it is validated against the
           equation it says it uses, and it would not reproduce a real
           gravitational-wave chirp. It is labeled so that the two can never be
-          confused.
+          confused.</span><span class="gs-es" lang="es"><strong>Una comprobación de aproximación nunca compara con la realidad.</strong> El modelo de espiral final es fenomenológico: se valida contra la ecuación que dice usar, y no reproduciría un chirrido real de ondas gravitacionales. Está etiquetado así para que nunca se confundan.</span>
         </li>
         <li>
-          <strong
+          <span class="gs-en"><strong
             >Passing a tolerance is not the same as being accurate.</strong
           >
           An integrated check is held to the discretization error of the
           integrator at a stated timestep, which is a real and sometimes large
           number. The chart above is there so that size is visible rather than
-          hidden behind a verdict.
+          hidden behind a verdict.</span><span class="gs-es" lang="es"><strong >Pasar una tolerancia no es lo mismo que ser exacto.</strong > Una comprobación integrada se mide con el error de discretización del integrador a un paso de tiempo indicado, que es un número real y a veces grande. El gráfico de arriba está para que ese tamaño se vea y no quede escondido tras un veredicto.</span>
         </li>
         <li>
-          <strong>Coverage is not completeness.</strong> These are the
+          <span class="gs-en"><strong>Coverage is not completeness.</strong> These are the
           quantities that have been checked. Parts of the engine with no entry
           in the table below have not been checked by it, and the honest reading
-          of a blank is that nobody has looked.
+          of a blank is that nobody has looked.</span><span class="gs-es" lang="es"><strong>Cobertura no es exhaustividad.</strong> Estas son las magnitudes que se han comprobado. Las partes del motor sin entrada en la tabla de abajo no se han comprobado con ella, y la lectura honesta de un hueco es que nadie lo ha mirado.</span>
         </li>
       </ul>
       <p>
-        The reasoning behind the model itself, including what it deliberately
+        <span class="gs-en">The reasoning behind the model itself, including what it deliberately
         simplifies, is on <a href="/model/">the model page</a>. The full
         write-up of this suite, with every literature source, is in
         <a
           href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/PHYSICS_VALIDATION.md"
           rel="noopener"
           >PHYSICS_VALIDATION.md</a
-        >. To run it in a terminal instead of a browser:
+        >. To run it in a terminal instead of a browser:</span><span class="gs-es" lang="es">El razonamiento del modelo en sí, incluido lo que simplifica a propósito, está en <a href="/model/">la página del modelo</a>. La redacción completa de este conjunto, con todas las fuentes de la literatura, está en <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/PHYSICS_VALIDATION.md" rel="noopener" >PHYSICS_VALIDATION.md</a >. Para ejecutarlo en una terminal en lugar de un navegador:</span>
       </p>
-      <p class="doc-eq-block">npm run validate:physics</p>
+      <p class="doc-eq-block"><span class="gs-en">npm run validate:physics</span><span class="gs-es" lang="es">npm run validate:physics</span></p>
 
     </main>
 

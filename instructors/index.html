@@ -52,24 +52,24 @@ try {
     <main class="doc-main is-wide" id="main">
       <p class="portal-bar">
         <button type="button" id="logoutBtn" class="ui-button is-quiet" hidden>
-          Log out
+          <span class="gs-en">Log out</span><span class="gs-es" lang="es">Cerrar sesión</span>
         </button>
       </p>
-      <p id="portalLoading" class="portal-loading">Loading…</p>
+      <p id="portalLoading" class="portal-loading"><span class="gs-en">Loading…</span><span class="gs-es" lang="es">Cargando…</span></p>
 
       <!-- Login -->
       <section id="loginScreen" class="portal-login" hidden>
         <div class="portal-login-card">
-          <p class="doc-eyebrow">Gravitas</p>
-          <h1>Instructor Resources</h1>
+          <p class="doc-eyebrow"><span class="gs-en">Gravitas</span><span class="gs-es" lang="es">Gravitas</span></p>
+          <h1><span class="gs-en">Instructor Resources</span><span class="gs-es" lang="es">Recursos para docentes</span></h1>
           <p class="doc-lede">
-            Teaching guides, learning objectives, answer keys and classroom
-            materials for the Gravitas investigations.
+            <span class="gs-en">Teaching guides, learning objectives, answer keys and classroom
+            materials for the Gravitas investigations.</span><span class="gs-es" lang="es">Materiales de enseñanza, objetivos de aprendizaje, claves de respuestas y materiales de aula para las investigaciones de Gravitas.</span>
           </p>
 
           <form id="loginForm" novalidate>
             <label class="portal-field" for="passwordInput">
-              <span>Instructor passphrase</span>
+              <span><span class="gs-en">Instructor passphrase</span><span class="gs-es" lang="es">Frase de acceso para docentes</span></span>
               <span class="portal-input-row">
                 <input
                   type="password"
@@ -87,21 +87,20 @@ try {
                   id="togglePassword"
                   class="ui-button is-quiet"
                   aria-pressed="false"
-                  aria-label="Show or hide the passphrase"
                 >
-                  Show
+                  <span class="gs-en">Show</span><span class="gs-es" lang="es">Mostrar</span>
                 </button>
               </span>
             </label>
             <p id="loginError" class="portal-error" role="alert" hidden></p>
             <button type="submit" id="loginSubmit" class="ui-button is-primary">
-              Enter Instructor Resources
+              <span class="gs-en">Enter Instructor Resources</span><span class="gs-es" lang="es">Entrar a los recursos para docentes</span>
             </button>
           </form>
 
           <p id="loginHint" class="portal-hint">
-            One shared passphrase, distributed to instructors. Contact the
-            project if you need it for your course.
+            <span class="gs-en">One shared passphrase, distributed to instructors. Contact the
+            project if you need it for your course.</span><span class="gs-es" lang="es">Una frase de acceso compartida, distribuida a los docentes. Contacta con el proyecto si la necesitas para tu curso.</span>
           </p>
         </div>
 
@@ -113,45 +112,45 @@ try {
              It keeps its heading, so it is still reachable by heading
              navigation. -->
         <section class="portal-aside" aria-labelledby="portalProtection">
-          <h2 id="portalProtection">How this is protected</h2>
+          <h2 id="portalProtection"><span class="gs-en">How this is protected</span><span class="gs-es" lang="es">Cómo se protege esto</span></h2>
           <p>
-            Gravitas is a static site with no server, so there is nowhere to
+            <span class="gs-en">Gravitas is a static site with no server, so there is nowhere to
             check a password. Instead the materials are
             <strong>encrypted</strong>. The file your browser downloads is
             ciphertext; the passphrase you type derives the key that decrypts
             it, here in the browser. A wrong passphrase does not fail a check
-            that could be bypassed, it simply cannot produce the key.
+            that could be bypassed, it simply cannot produce the key.</span><span class="gs-es" lang="es">Gravitas es un sitio estático sin servidor, así que no hay dónde comprobar una contraseña. En su lugar, los materiales están <strong>cifrados</strong>. El archivo que descarga tu navegador es texto cifrado; la frase que escribes deriva la clave que lo descifra, aquí mismo en el navegador. Una frase incorrecta no falla una comprobación que pueda eludirse: sencillamente no puede producir la clave.</span>
           </p>
           <p>
-            The honest limit: the encrypted file is publicly downloadable, so
+            <span class="gs-en">The honest limit: the encrypted file is publicly downloadable, so
             its security is the strength of the passphrase against an offline
             attack. The key derivation is deliberately slow to make guessing
             expensive. Please do not post the passphrase where it can be
-            indexed.
+            indexed.</span><span class="gs-es" lang="es">El límite, con franqueza: el archivo cifrado se puede descargar públicamente, así que su seguridad es la fortaleza de la frase frente a un ataque sin conexión. La derivación de la clave es deliberadamente lenta para encarecer los intentos. Por favor, no publiques la frase donde pueda indexarse.</span>
           </p>
           <p>
-            <a href="/teaching/">Teaching with Gravitas</a> and
+            <span class="gs-en"><a href="/teaching/">Teaching with Gravitas</a> and
             <a href="/model/">How Gravitas Models the Universe</a> are public and
-            need no passphrase. Share them with students and colleagues freely.
+            need no passphrase. Share them with students and colleagues freely.</span><span class="gs-es" lang="es"><a href="/teaching/">Enseñar con Gravitas</a> y <a href="/model/">Cómo modela Gravitas el universo</a> son públicas y no necesitan frase de acceso. Compártelas libremente con estudiantes y colegas.</span>
           </p>
           <p>
-            Collecting the work needs no passphrase either. Drop the lab
+            <span class="gs-en">Collecting the work needs no passphrase either. Drop the lab
             reports your students hand in on the
             <a href="/instructors/submissions/">submission review page</a>
             and it shows which questions the class found hardest. It reads the
             PDF, a progress file or a pasted submission token, keeps nothing,
             and sends nothing anywhere. It is not a gradebook: there is no
-            roster, and it checks answers, not identity.
+            roster, and it checks answers, not identity.</span><span class="gs-es" lang="es">Recoger el trabajo tampoco necesita frase de acceso. Suelta los informes de laboratorio que entregan tus estudiantes en la <a href="/instructors/submissions/">página de revisión de entregas</a> y mostrará qué preguntas le resultaron más difíciles al grupo. Lee el PDF, un archivo de progreso o un token de entrega pegado, no guarda nada y no envía nada a ningún sitio. No es un libro de calificaciones: no hay lista de estudiantes, y comprueba respuestas, no identidades.</span>
           </p>
           <p>
-            If you are evaluating a section rather than just teaching it, the
+            <span class="gs-en">If you are evaluating a section rather than just teaching it, the
             <a href="/evaluation/">classroom evidence kit</a> has printable
             forms: an implementation checklist, a twelve-item pilot pre/post
             assessment, a usability questionnaire, an anonymous
             participant-code workflow, and de-identified CSV and JSON
             templates. They are project-developed and unvalidated, they collect
             no names or email addresses, and nothing they produce is sent
-            anywhere.
+            anywhere.</span><span class="gs-es" lang="es">Si estás evaluando una sección y no solo enseñándola, el <a href="/evaluation/">kit de evidencia para el aula</a> tiene formularios imprimibles: una lista de verificación de implementación, una evaluación piloto previa y posterior de doce preguntas, un cuestionario de usabilidad, un flujo de códigos anónimos de participante y plantillas CSV y JSON sin identificar. Son desarrollos del proyecto y no están validados, no recogen nombres ni correos electrónicos, y nada de lo que producen se envía a ningún sitio.</span>
           </p>
         </section>
       </section>
@@ -159,11 +158,11 @@ try {
       <!-- Dashboard -->
       <section id="dashboard" hidden>
         <div class="doc-hero">
-          <p class="doc-eyebrow">Gravitas</p>
-          <h1>Instructor Resources</h1>
+          <p class="doc-eyebrow"><span class="gs-en">Gravitas</span><span class="gs-es" lang="es">Gravitas</span></p>
+          <h1><span class="gs-en">Instructor Resources</span><span class="gs-es" lang="es">Recursos para docentes</span></h1>
           <p class="doc-lede">
-            Everything needed to assign Gravitas investigations in an
-            introductory astronomy course.
+            <span class="gs-en">Everything needed to assign Gravitas investigations in an
+            introductory astronomy course.</span><span class="gs-es" lang="es">Todo lo necesario para asignar investigaciones de Gravitas en un curso introductorio de astronomía.</span>
           </p>
           <p class="portal-version" id="materialsVersion"></p>
         </div>
@@ -178,20 +177,20 @@ try {
           aria-live="polite"
         ></p>
 
-        <h2>General resources</h2>
+        <h2><span class="gs-en">General resources</span><span class="gs-es" lang="es">Recursos generales</span></h2>
         <div class="res-grid" id="generalResources"></div>
 
         <h2 id="activitiesHeading">
-          Classroom activities
+          <span class="gs-en">Classroom activities</span><span class="gs-es" lang="es">Actividades de aula</span>
           <span class="res-count" id="activityCount"></span>
         </h2>
         <p>
-          Shorter than an investigation and built from its steps: a five-minute
+          <span class="gs-en">Shorter than an investigation and built from its steps: a five-minute
           demonstration, a twenty-minute guided pair task, a full lab. Each
           format has its own instructor guide, and most have a student worksheet. These
           are in the ZIP as well, but they are downloadable one at a time here
           because an instructor planning one period does not want the other
-          fifty-three documents.
+          fifty-three documents.</span><span class="gs-es" lang="es">Más cortas que una investigación y construidas con sus pasos: una demostración de cinco minutos, una actividad guiada en parejas de veinte minutos, un laboratorio completo. Cada formato tiene su propia guía para docentes y la mayoría tiene una hoja de trabajo para estudiantes. También están en el ZIP, pero aquí se descargan de una en una porque quien planea una sesión no quiere los otros cincuenta y tres documentos.</span>
         </p>
         <div
           class="res-grid is-stacked"
@@ -200,18 +199,18 @@ try {
         ></div>
 
         <h2 id="investigationsHeading">
-          Investigation materials
+          <span class="gs-en">Investigation materials</span><span class="gs-es" lang="es">Materiales de las investigaciones</span>
           <span class="res-count" id="investigationCount"></span>
         </h2>
         <p>
-          Each investigation has an instructor guide and a separate answer key.
+          <span class="gs-en">Each investigation has an instructor guide and a separate answer key.
           Answer keys are generated from the live investigation definitions and checked
           against the same rule the website uses to mark student work, so they
-          cannot disagree with what students see.
+          cannot disagree with what students see.</span><span class="gs-es" lang="es">Cada investigación tiene una guía para docentes y una clave de respuestas aparte. Las claves se generan a partir de las definiciones vivas de las investigaciones y se comprueban con la misma regla que usa el sitio para calificar el trabajo estudiantil, así que no pueden contradecir lo que ven los estudiantes.</span>
         </p>
         <div class="res-search">
           <label class="res-search-label" for="resourceSearch"
-            >Search investigations</label
+            ><span class="gs-en">Search investigations</span><span class="gs-es" lang="es">Buscar investigaciones</span></label
           >
           <input
             type="search"
@@ -229,7 +228,7 @@ try {
         ></div>
         <div class="res-grid is-stacked" id="investigationResources"></div>
         <p id="noMatches" class="portal-hint" hidden>
-          No investigations match that filter.
+          <span class="gs-en">No investigations match that filter.</span><span class="gs-es" lang="es">Ninguna investigación coincide con ese filtro.</span>
         </p>
       </section>
     </main>
