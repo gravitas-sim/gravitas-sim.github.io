@@ -257,7 +257,7 @@ export function render() {
     )}</p>`
   );
   out.push(
-    '<div class="doc-table-wrap" tabindex="0" role="region" aria-labelledby="retired-h">'
+    '<div class="doc-table-wrap" tabindex="0">'
   );
   out.push('<table class="doc-table">');
   out.push(
