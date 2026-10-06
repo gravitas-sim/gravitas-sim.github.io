@@ -314,7 +314,7 @@ In every arrangement the lesson's panels, the shell bar and the transport bar le
 
 **The other surfaces.** The Observatory's plot, image and table stack inside the window below the laptop, its selection linkage holds at every width and its transform controls stay behind a closed disclosure. The Library and Teach hold at every width. The Studio pages are read-only on a phone: the editor and the toolbars that change or save the document step out, what reads it stays, and a note in both languages says so.
 
-**Measured** by `e2e/responsiveLayout.spec.js` at 375 (the phone project), 768 (the tablet project), 1024 and 1440 (the desktop project), and the investigation walker runs every step of every lesson in the phone and tablet projects as well as the desktop one.
+**Measured** by `e2e/responsiveLayout.spec.js` at 375 (the phone project), 768 (the tablet project), 1024 and 1440 (the desktop project), and the investigation walker runs every step of every lesson in the phone and desktop projects on every pull request, and in the tablet project weekly (CI's `tablet-walk` job) and in the release gate.
 
 **Frame times by width** (`npm run perf -- --tier auto --viewport WxH`, six scenarios, 2026-10-06, an idle Mac, uncapped by vsync): the mean frame is 3.1 ms at 375x812, 4.4 ms at 768x1024, 4.4 ms at 1024x768 and 4.5 ms at 1440x900; the heaviest scene, star-cluster, is 12.8, 17.6, 17.9 and 19.1 ms. A narrower window draws fewer pixels, so no width is slower than the desktop one and the documented tiers hold at all four.
 
