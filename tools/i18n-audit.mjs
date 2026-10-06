@@ -330,7 +330,13 @@ for (const page of readdirSync(ROOT)
       return false;
     }
   })) {
-  const doc = parse5.parse(readFileSync(join(ROOT, page), 'utf8'));
+  const doc = parse5.parse(
+    // Generated fact blocks are rows scanned out of the source, in English.
+    readFileSync(join(ROOT, page), 'utf8').replace(
+      /<!--fact-block:[^>]*-->[\s\S]*?<!--\/fact-block-->/g,
+      ''
+    )
+  );
   const required = REQUIRED_BILINGUAL.includes(page.split('/')[0]);
   let main;
   (function find(n) {
