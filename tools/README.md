@@ -41,6 +41,7 @@ current, and the orchestrator checks it.
 | `check-test-policy.mjs` | A skip has to be a capability, and it has to be on the record | `npm run test:policy` |
 | `checks.mjs` | One list of what has to pass |  |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
+| `deps-audit.mjs` | The dependency audit | `npm run deps:audit` |
 | `design-ratchet.mjs` | Four migrations to the design system that may only go one way |  |
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |

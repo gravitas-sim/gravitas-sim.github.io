@@ -907,10 +907,6 @@ export const CI_EQUIVALENTS = {
   'npm run docs:check:build': 'docs-full',
   'node tools/check-links.mjs --root dist': 'links-dist',
   'node tools/validate-citation.mjs': 'citation',
-  // One npm script in the gate, two lines of a shell block in CI. Same two
-  // commands, same thresholds.
-  'npm audit --audit-level=moderate': 'deps',
-  'npm audit --omit=dev': 'deps',
   // The accessibility job runs two specs that are already inside the full
   // browser suite the gate runs, so `e2e-sources` covers them. Kept as its own
   // CI job because it uploads its own report and can fail independently;
