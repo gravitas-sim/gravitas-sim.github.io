@@ -400,7 +400,8 @@ test.describe('what it reports', () => {
       };
     });
 
-    expect(sweepOut.scenario).toBe('Binary Planet Lab');
+    // A sweep names its world by id, like every other written scenario.
+    expect(sweepOut.scenario).toBe('binary-planet-lab');
     expect(sweepOut.parameter).toBe('binary_lab_planet_a');
     // The point of a guided example is that something visibly depends on the
     // parameter. If nothing moved, the example teaches nothing.
