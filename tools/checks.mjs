@@ -924,6 +924,9 @@ export const CI_EQUIVALENTS = {
     'e2e-sources',
   'npx playwright test --test-list shard-tests.txt': 'e2e-sources',
   'node tools/e2e-shards.mjs verify --report e2e-results.json': 'e2e-sources',
+  // The tablet's lesson walk: weekly in CI as its own job, and inside the
+  // gate's whole browser suite, which sets GRAVITAS_E2E_TABLET_WALK.
+  'npm run e2e:tablet-walk': 'e2e-sources',
   'npm run e2e:dist': 'e2e-dist',
   // One matrix job per engine in CI; one registry entry per engine here, and
   // the engine comes from GRAVITAS_E2E_BROWSERS in both.
