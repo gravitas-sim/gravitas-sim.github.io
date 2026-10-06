@@ -1737,6 +1737,13 @@
       right: var(--space-3);
       bottom: var(--transport-reserve, 76px);
     }
+    /* The help button stands at the right edge, where the rail's last row
+       ends on a short screen: the rail stops above it. */
+    .ui-container {
+      max-height: calc(
+        100vh - var(--space-10) - 64px - var(--transport-space) - var(--shell-height, 0px) - 68px
+      );
+    }
   }
 
   /* --- Laptop: a narrower lesson ------------------------------------------ */
@@ -2092,6 +2099,7 @@
     .rail-icon-btn,
     .inv-dock-tabs label,
     .floating-close-chip,
+    .ui-container :is(.ui-button, #objectTypeBtn),
     :is(.investigation-panel, .inv-plot-panel)
       :is(button, select, input[type='text'], input[type='number']) {
       min-width: 44px;

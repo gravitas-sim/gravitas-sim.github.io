@@ -194,9 +194,40 @@ async function expectPressable(page, selector) {
  * screen is at least 44 by 44. A link inside a line of text is the
  * criterion's inline exception; a slider is measured by its height alone.
  */
-async function expectFingerSized(page, roots) {
-  const small = await page.evaluate(roots => {
-    if (!window.matchMedia('(pointer: coarse)').matches) return null;
+async function expectFingerSized(page, roots, { required = [] } = {}) {
+  if (
+    !(await page.evaluate(() => window.matchMedia('(pointer: coarse)').matches))
+  ) {
+    return;
+  }
+  // A region that is still opening is measured at a scale and an opacity it
+  // will not keep, and its controls are skipped as not yet shown: the check
+  // then passes on nothing. So wait for it to settle, and for the controls
+  // the caller names, scroll to them and insist they were measured.
+  await page.waitForFunction(
+    roots =>
+      roots.every(r => {
+        const el = document.querySelector(r);
+        return (
+          !el ||
+          (el.checkVisibility({ opacityProperty: true }) &&
+            // Only what will end: a pulse that repeats for ever never settles.
+            el
+              .getAnimations({ subtree: true })
+              .every(
+                a =>
+                  a.playState !== 'running' ||
+                  a.effect.getComputedTiming().endTime === Infinity
+              ))
+        );
+      }),
+    roots
+  );
+  for (const sel of required) {
+    await page.locator(sel).first().scrollIntoViewIfNeeded();
+  }
+  const { small, measured } = await page.evaluate(roots => {
+    const measured = [];
     const out = [];
     const controls = roots.flatMap(r => [
       ...document.querySelectorAll(
@@ -232,6 +263,7 @@ async function expectFingerSized(page, roots) {
       if (!hit || !(el.contains(hit) || hit.contains(el))) continue;
       const style = getComputedStyle(el);
       if (el.matches('a') && style.display === 'inline') continue;
+      if (el.id) measured.push(`#${el.id}`);
       const range = el.matches('input[type=range]');
       if (r.height < 43.5 || (!range && r.width < 43.5)) {
         out.push(
@@ -239,10 +271,12 @@ async function expectFingerSized(page, roots) {
         );
       }
     }
-    return out;
+    return { small: out, measured };
   }, roots);
-  if (small === null) return;
   expect(small, 'controls smaller than a fingertip').toEqual([]);
+  for (const sel of required) {
+    expect(measured, `${sel} was measured, not skipped`).toContain(sel);
+  }
 }
 
 /** Boot a lesson step at this size, with nothing in storage. */
@@ -576,7 +610,9 @@ test.describe('a finger on the canvas', () => {
         if (await menu.isVisible()) await menu.click();
         const open = page.locator('#precisePlaceBtn');
         await expect(open).toBeVisible();
-        await expectFingerSized(page, ['#mainControls']);
+        await expectFingerSized(page, ['#mainControls'], {
+          required: ['#loadScenarioBtn', '#objectTypeBtn', '#precisePlaceBtn'],
+        });
         await open.click();
         const form = page.locator('#precisePlaceDialog');
         await expect(form).toBeVisible();
