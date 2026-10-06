@@ -105,7 +105,7 @@ export async function lightCurveObservation(
   citations = citations || linkedCitations(P.citations);
   const o = await decode(mod);
   if (!/^BTJD = BJD - 2457000$/.test(P.time.reference)) {
-    throw new Error(`the pack counts time as ${P.time.reference}, not BTJD`);
+    throw new Error(`the dataset counts time as ${P.time.reference}, not BTJD`);
   }
   return {
     ...base,

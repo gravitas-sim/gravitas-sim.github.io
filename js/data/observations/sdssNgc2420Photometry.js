@@ -97,7 +97,7 @@ export const PACK = {
     "Of the stars dropped as not clean, 38 are brighter than g = 14.5, where SDSS saturates: the cluster's brightest giants are not in this table.",
     "SDSS's standard photometry has almost nothing at the cluster's center: 3 detections of any kind within 2 arcmin and 15 within 3 (DR18 PhotoObjAll), because its pipeline does not separate stars in so crowded a field (An et al. 2008 remeasured such fields for that reason). The core is missing from this table, not from the sky.",
     'Positions are rounded to 0.00001 degree (0.04 arcsec), magnitudes to 1 mmag and their errors to 0.5 mmag.',
-    "The SDSS object ids are left out; the query in the pack's manifest returns them.",
+    "The SDSS object ids are left out; the query in the dataset's manifest returns them.",
   ],
   citations: [
     {

@@ -845,7 +845,7 @@ const WHEN_ORBITS_LOCK = {
 
              \n\nOver a long enough run, Callisto's 7:3 argument completes a
              circuit: it circulates, with a period of roughly three thousand Io
-             orbits. Within a lesson-length run the instrument cannot see that
+             orbits. Within a class-length run the instrument cannot see that
              and says so.`,
       prompt:
         'A colleague says the instrument should have called Callisto resonant, because its angle stayed within 100° for the whole run. What is the best reply?',

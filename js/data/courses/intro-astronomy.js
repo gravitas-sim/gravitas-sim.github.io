@@ -36,9 +36,9 @@ export const INTRO_ASTRONOMY = {
     esOf: '59954bdf',
   },
   teacherGuide: {
-    en: "Run the units in order: each one uses a result from the one before. The core path fits five or six fifty-minute class meetings, with some of the work at home. Every investigation has an instructor guide and an answer key in the instructors' portal; the assignment's steps are covered by the guide to Finding Planets by Their Shadows. Students need nothing installed: every link opens in a browser, and once a student has opened Gravitas it works without a network.",
-    es: 'Hagan las unidades en orden: cada una usa un resultado de la anterior. El camino principal ocupa cinco o seis clases de cincuenta minutos, con parte del trabajo en casa. Cada investigación tiene una guía para el profesor y una clave de respuestas en el portal para docentes; los pasos de la tarea están cubiertos por la guía de Encontrar planetas por sus sombras. Los estudiantes no necesitan instalar nada: cada enlace se abre en un navegador y, una vez abierto Gravitas, funciona sin red.',
-    esOf: '8d925bed',
+    en: "Run the units in order: each one uses a result from the one before. The core path fits five or six fifty-minute class meetings, with some of the work at home. Every investigation has an instructor guide and an answer key in the instructors' portal; the activity's steps are covered by the instructor guide to Finding Planets by Their Shadows. Students need nothing installed: every link opens in a browser, and once a student has opened Gravitas it works without a network.",
+    es: 'Hagan las unidades en orden: cada una usa un resultado de la anterior. El camino principal ocupa cinco o seis clases de cincuenta minutos, con parte del trabajo en casa. Cada investigación tiene una guía para el profesor y una clave de respuestas en el portal para docentes; los pasos de la actividad están cubiertos por la guía para docentes de Encontrar planetas por sus sombras. Los estudiantes no necesitan instalar nada: cada enlace se abre en un navegador y, una vez abierto Gravitas, funciona sin red.',
+    esOf: '34709e04',
   },
   objectives: [
     {

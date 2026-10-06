@@ -50,6 +50,7 @@ current, and the orchestrator checks it.
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
 | `experiment-bench.mjs` | npm run bench:experiments - how fast experiments run, and what they cost | `npm run bench:experiments` |
 | `formats.mjs` | Every versioned format Gravitas reads or writes, and FORMATS.md from them |  |
+| `glossary.mjs` | The eight nouns, the words retired for them, and the body of /glossary/ in both languages |  |
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |

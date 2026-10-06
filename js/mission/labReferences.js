@@ -54,10 +54,10 @@ export const LAB_CASES = [
   {
     id: 'E1',
     kind: 'independent',
-    title: 'The pack against held-out Horizons states',
+    title: 'The dataset against held-out Horizons states',
     source:
       'JPL Horizons (DE441) states at 12:00 TDB, which the fit never saw: the committed check set, every 73rd day of 2025 to 2045 for each body',
-    why: 'The pack states its own bound for each body, the worst of the fitted and the held-out errors when it was built (tools/build-ephemeris.mjs); the check set must be inside it. The bounds are a few km and a hundredth of a m/s at most: a thousandth of the patched conic’s own error.',
+    why: 'The dataset states its own bound for each body, the worst of the fitted and the held-out errors when it was built (tools/build-ephemeris.mjs); the check set must be inside it. The bounds are a few km and a hundredth of a m/s at most: a thousandth of the patched conic’s own error.',
     run() {
       const eph = ephemeris();
       const out = [];
@@ -82,7 +82,7 @@ export const LAB_CASES = [
   {
     id: 'E2',
     kind: 'independent',
-    title: 'The pack is continuous where its segments meet',
+    title: 'The dataset is continuous where its segments meet',
     source:
       'Every seam between two Chebyshev segments, each side evaluated at the seam',
     why: 'Each segment is fitted on its own, so a seam could jump. The jump must be inside the body’s stated error, twice over (one error from each side).',
@@ -128,7 +128,7 @@ export const LAB_CASES = [
     title: 'The planets’ orbits against their published mean elements',
     source:
       'E. M. Standish, Keplerian Elements for Approximate Positions of the Major Planets (JPL): J2000 mean inclinations to the ecliptic, Venus 3.39468°, Mars 1.84969°, Jupiter 1.30440°; semi-major axes 0.72333566, 1.52371034 and 5.20288700 AU',
-    why: 'The pack’s osculating orbit at 2025-01-01 is not the mean orbit: planets perturb each other by a few thousandths of a degree and a few parts in ten thousand of the axis. 0.02° and 0.2% are that with room, and would catch a wrong frame (the equator is 23.4° away) or a wrong unit at once. Jupiter’s axis is the system barycenter’s, perturbed by Saturn by about 0.5%, so its bound is 1%.',
+    why: 'The dataset’s osculating orbit at 2025-01-01 is not the mean orbit: planets perturb each other by a few thousandths of a degree and a few parts in ten thousand of the axis. 0.02° and 0.2% are that with room, and would catch a wrong frame (the equator is 23.4° away) or a wrong unit at once. Jupiter’s axis is the system barycenter’s, perturbed by Saturn by about 0.5%, so its bound is 1%.',
     run() {
       const eph = ephemeris();
       const jd = PACK.range.startJd;
@@ -166,7 +166,7 @@ export const LAB_CASES = [
   {
     id: 'S1',
     kind: 'independent',
-    title: 'Lambert between the pack’s positions, flown by the kernel',
+    title: 'Lambert between the dataset’s positions, flown by the kernel',
     source:
       'The lab’s default departure, 2026-11-01, 309 days to Mars: the Lambert solution from the Earth’s center, flown under the Sun alone',
     why: 'This is the patched conic’s heliocentric leg exactly, so the kernel must land on Mars’s ephemeris position to its own accuracy: 1e-12 of 2e8 km is a fraction of a meter, and the bound is 10 m.',

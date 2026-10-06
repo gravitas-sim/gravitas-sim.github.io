@@ -48,7 +48,7 @@ instrument to measure with, plots their own readings back to them, saves progres
 locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
-**Instructor materials.** A guide and a generated answer key for each of
+**Instructor materials.** An instructor guide and a generated answer key for each of
 the <!--fact:investigations-->24<!--/fact--> investigations — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
@@ -268,7 +268,7 @@ number is also in tables that work without WebGL, and the keyboard does
 everything the pointer does. `/lab3d/` is the kernel's diagnostic page
 ([LAB3D.md](LAB3D.md)).
 
-The lab has four guides, each asking what a flat model cannot hold:
+The lab's investigations each ask what a flat model cannot hold:
 - an orbit's plane;
 - whether a tilted orbit eclipses its star;
 - two orbits' planes;
@@ -354,7 +354,7 @@ npm run manual            # rebuild the user manual PDF from manual/*.tex
 `npm run build` needs the instructor passphrase, because it re-encrypts the
 teaching materials on the way past. Without one it stops and says so, which is
 what a fresh clone or a release archive will see. Build with `npm run build:ci`
-instead: it renders every guide and answer key for real and encrypts them with a
+instead: it renders every instructor guide and answer key for real and encrypts them with a
 random throwaway secret, so the site builds and the materials in it cannot be
 opened by anyone — including us. `npm run archive:check` restores the archive
 into a temporary directory and does exactly this, end to end.
@@ -460,7 +460,7 @@ overrides`. Component rules win on layer order alone, which is why they need
   attribute; `js/i18n/es.js` carries the Spanish. A string added to one catalog
   and not the other fails `npm test`.
 
-The guided-lesson system is roughly half the application by weight and loads only
+The guided-investigation system is roughly half the application by weight and loads only
 when someone asks for it; so do Three.js and Chart.js, which back the spacetime
 view and the chart panels.
 
@@ -538,7 +538,7 @@ Two things worth knowing if you are working on CI itself:
   difference is the instructor materials, which are normally encrypted with a
   passphrase that is not in the repository — and a pull request from a fork
   cannot read repository secrets, so every external contribution would fail.
-  `build:ci` renders every guide and answer key for real, which is where
+  `build:ci` renders every instructor guide and answer key for real, which is where
   breakage actually happens, and encrypts them with a random throwaway secret.
   The result is deliberately undecryptable and is never published.
 - Branch protection should require the single `CI` job rather than the
@@ -591,7 +591,7 @@ the investigations at build time and live at
 
 - <!--fact:investigations-->24<!--/fact--> instructor guides
 - <!--fact:investigations-->24<!--/fact--> answer keys
-- <!--fact:activityDocuments-->8<!--/fact--> classroom-activity guides and
+- <!--fact:activityDocuments-->8<!--/fact--> classroom-activity instructor guides and
   student worksheets, across <!--fact:activities-->3<!--/fact--> activities
 - an adopter's guide and a curriculum map
 
@@ -633,8 +633,8 @@ part was built:
 | [`CHAOS_INVESTIGATION.md`](CHAOS_INVESTIGATION.md)                 | The chaos investigation: why the Lagrange equilateral configuration, the divergence definition, and the evidence it is not a timestep artifact |
 | [`RESONANCE_INVESTIGATION.md`](RESONANCE_INVESTIGATION.md)         | The resonance investigation: the resonant angles, the three verdicts and why one of them is a refusal, the four scenarios and their measured values |
 | [`EXOPLANET_OBSERVING.md`](EXOPLANET_OBSERVING.md)                 | The transit, radial-velocity and astrometry panels and the shared observer                                                                     |
-| [`EXOPLANET_OBSERVATORY.md`](EXOPLANET_OBSERVATORY.md)             | Five guides with real TESS light curves in the Observatory: what each checks, the data and licenses, and the approximations left               |
-| [`STELLAR_POPULATIONS.md`](STELLAR_POPULATIONS.md)                 | Five guides with SDSS spectra and photometry, SEGUE, MIST and TESS: what each checks, the platform they reuse, the data and licenses           |
+| [`EXOPLANET_OBSERVATORY.md`](EXOPLANET_OBSERVATORY.md)             | Investigations with real TESS light curves in the Observatory: what each checks, the data and licenses, and the approximations left               |
+| [`STELLAR_POPULATIONS.md`](STELLAR_POPULATIONS.md)                 | Investigations with SDSS spectra and photometry, SEGUE, MIST and TESS: what each checks, the platform they reuse, the data and licenses           |
 | [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                                                                                |
 | [`DARK_MATTER.md`](DARK_MATTER.md)                                 | The halo, the rotation-curve panel and the investigation built on them                                                                                |
 | [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md)                       | The per-body readout and its orbital elements                                                                                                  |
@@ -643,7 +643,7 @@ part was built:
 | [`COMPOSER.md`](COMPOSER.md)                                       | The Investigation Composer: the package and bank formats, variants from vetted relations, remediation, translation, and what it does not do     |
 | [`COURSE_PACKS.md`](COURSE_PACKS.md)                               | Course packages: the format, pins and the reviewed upgrade, the checks, links, the course home, the manifest and the course Gravitas ships      |
 | [`LAB3D.md`](LAB3D.md)                                             | The 3-D small-N kernel: its state format, integrators, runs, API, experiments, validation and limits                                         |
-| [`LAB3D_CURRICULUM.md`](LAB3D_CURRICULUM.md)                       | Orbits in three dimensions: the 3-D lab's four guides, their concept map, the physics that checks them and the model's limits              |
+| [`LAB3D_CURRICULUM.md`](LAB3D_CURRICULUM.md)                       | Orbits in three dimensions: the 3-D lab's investigations, their concept map, the physics that checks them and the model's limits              |
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md)                             | The shared controls: field, input, select, textarea, file, range, toolbar, buttons; their states, tokens and accessibility                     |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
@@ -681,7 +681,7 @@ particularly:
 - **Translations.** The interface is fully extracted into message catalogs and
   Spanish is shipped, so a new language is now a copy of `js/i18n/en.js` with
   its values translated, plus a row in `LOCALES`. Investigation translations are
-  separate, per-lesson, and optional.
+  separate, per-investigation, and optional.
 - **Scenarios.** New ones, or better initial conditions for an existing one:
   every scenario is a data entry in `js/data/scenarioInfo.js` plus its settings.
 

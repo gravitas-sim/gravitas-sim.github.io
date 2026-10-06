@@ -499,7 +499,7 @@ const DESIGN_THE_SCHEDULE = {
       body: `You have run two schedules on the same planet, lost a fortnight
              out of the middle of one, and typed a set of dates of your own.`,
       prompt:
-        'In two or three sentences, say which schedule you would actually run on a night-assignment committee\u2019s time, and what about the sampling — not the telescope — decides whether the period comes out.',
+        'In two or three sentences, say which schedule you would actually run on a telescope-time committee\u2019s time, and what about the sampling — not the telescope — decides whether the period comes out.',
       rubric:
         'The answer that earns credit is about sampling rather than about aperture or exposure time: a run that samples at almost exactly the planet\u2019s period, or an integer fraction of it, revisits the same phase every night and constrains almost nothing, however good the photometry. Spreading observations over a long baseline with irregular spacing breaks the aliasing and pins the period. Losing the middle of a run costs less than losing the ends, because the baseline is what sets the precision. A strong answer names the trade explicitly: a longer baseline buys period precision, more nights per unit time buy the ability to tell aliases apart, and a committee gives you neither for free.',
     },

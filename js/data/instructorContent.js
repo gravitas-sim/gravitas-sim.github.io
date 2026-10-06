@@ -1138,7 +1138,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     teachingNotes: [
       'The observing at step 4 takes a few minutes of wall clock. Raise the simulation speed rather than shortening the baseline - but watch for the panel\u2019s warning that frames are too far apart for the schedule, which means measurements are being read across the curve instead of on it, and is a real defect in the data rather than a cosmetic complaint.',
-      'Collect the step 3 prediction as a show of hands before anybody runs anything. The investigation\u2019s whole structure depends on the prediction existing before the result does, and the reading step declares the prediction as a prerequisite so an assignment cannot include one without the other.',
+      'Collect the step 3 prediction as a show of hands before anybody runs anything. The investigation\u2019s whole structure depends on the prediction existing before the result does, and the reading step declares the prediction as a prerequisite so an activity cannot include one without the other.',
       'Numbers will differ slightly between machines: the frames land differently at different simulation speeds, so the fitted values move. The story does not - the comb sees a nearly constant velocity on every machine and every seed.',
       'Step 11 is the one to let run long if there is time. Students who know the period can design a list of times that beats both built-in shapes, which is the most useful thing in the investigation and the closest to what a real second season of observing does.',
       'If a class is short of time, steps 9 and 10 can be dropped without breaking anything later; steps 12 and 13 cannot, because they are where the result becomes reportable.',
@@ -3694,7 +3694,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'The third answer, and why an instrument needs one',
-        body: 'A short record of a slowly circulating angle and a short record of a slowly librating one are indistinguishable. The instrument therefore reports libration, circulation or inconclusive, and it is willing to stay inconclusive for the whole of a lesson-length run. When it does, it reports the bound it has established - "any circulation would take more than a thousand conjunction cycles" - which is a real result. Students often read the refusal as a malfunction; it is the most transferable idea in the investigation.',
+        body: 'A short record of a slowly circulating angle and a short record of a slowly librating one are indistinguishable. The instrument therefore reports libration, circulation or inconclusive, and it is willing to stay inconclusive for the whole of a class-length run. When it does, it reports the bound it has established - "any circulation would take more than a thousand conjunction cycles" - which is a real result. Students often read the refusal as a malfunction; it is the most transferable idea in the investigation.',
       },
       {
         heading: 'The rotating frame',
@@ -4139,7 +4139,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         steps: '7-11',
-        text: 'The diagram, and what a point on it means — All five screens are in free-cursor mode. Expect the reversed temperature axis to catch most of the room on screen 7; the validation catches a student who moved the wrong way and says why. Screen 11 turns on the constant-radius guides, which are straight lines on these axes - worth showing on the board as log L = 2 log R + 4 log T.',
+        text: 'The diagram, and what a point on it means — All five screens are in free-cursor mode. Expect the reversed temperature axis to catch most of the room on screen 7; the validation catches a student who moved the wrong way and says why. Screen 11 turns on the constant-radius reference lines, which are straight lines on these axes - worth showing on the board as log L = 2 log R + 4 log T.',
       },
       {
         steps: '12-16',
@@ -4209,7 +4209,7 @@ export const INSTRUCTOR_CONTENT = {
       7: 'Anywhere within about 15 per cent of 10,000 K and 100 solar luminosities. The common failure is moving right to get hotter.',
       8: 'A radius of 1.00 solar, give or take the precision of the placement.',
       9: 'About 100 solar radii. Four decades of luminosity at fixed temperature is two decades of radius, every time.',
-      11: 'Any two points on the 1 R-sun guide. A good pair might be 3,000 K at 0.073 L-sun and 12,000 K at 18.7 L-sun: the temperature ratio is 4 and the luminosity ratio is 256, which is 4 to the fourth.',
+      11: 'Any two points on the 1 R-sun reference line. A good pair might be 3,000 K at 0.073 L-sun and 12,000 K at 18.7 L-sun: the temperature ratio is 4 and the luminosity ratio is 256, which is 4 to the fourth.',
       13: 'Luminosities of about 0.0066 and 58,550 solar, a ratio near nine million, for a mass ratio of 100.',
       15: 'About 1.2, 726 and 58,550 solar luminosities, giving a slope near 3.6 between the ends.',
       18: 'Radii 0.24 and 101.6 solar, a ratio of 426; luminosities 0.0066 and 1,146 solar, a ratio of about 173,000. The square of 426 is 181,000 and the gap is the 40 K difference in temperature.',
@@ -4307,7 +4307,7 @@ export const INSTRUCTOR_CONTENT = {
     difficulty:
       'Beginner. No prior physics, and the only arithmetic is a ratio',
     placement:
-      'Thirty to forty minutes, and it can be the first thing a class ever does on this subject: it assumes only that things orbit. It is the first of a pair - Listening to Spacetime follows it and goes considerably further - but neither requires the other to have been completed, and this one is self-contained. It works as a single investigation, as the opening of a two-lesson unit, or as a remedial half-hour for students who found the advanced investigation too fast. Nothing in it needs sound.',
+      'Thirty to forty minutes, and it can be the first thing a class ever does on this subject: it assumes only that things orbit. It is the first of a pair - Listening to Spacetime follows it and goes considerably further - but neither requires the other to have been completed, and this one is self-contained. It works as a single investigation, as the opening of a two-class unit, or as a remedial half-hour for students who found the advanced investigation too fast. Nothing in it needs sound.',
     overview: `Twenty-four short screens, built around two objects standing on the main canvas rather
       than a curve in a panel. The binary is a pair of selectable bodies driven by the same model
       the waveform is drawn from, so a student can click each object, read its mass, and watch the

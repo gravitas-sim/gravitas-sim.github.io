@@ -483,7 +483,7 @@ export const ES = {
 
   'tutorial.done.title': 'Ya está',
   'tutorial.done.body':
-    'Pulsa <kbd>?</kbd> en cualquier momento para ver la lista completa de atajos de teclado, o vuelve a abrir esta visita desde el botón <strong>?</strong> de la esquina. Nada de lo que hagas aquí puede romper nada: Reiniciar deja el escenario como venía.',
+    'Pulsa <kbd>?</kbd> en cualquier momento para ver la lista completa de atajos de teclado, o vuelve a abrir esta visita desde el botón <strong>?</strong> de la esquina. Nada de lo que hagas aquí puede romper nada: Reiniciar deja el escenario como venía. Si una palabra no te suena, el <a href="/glossary/">glosario</a> define cada término.',
   'tutorial.done.tip':
     'Un buen primer experimento: carga el Sistema Solar, abre la curva de rotación y comprueba que cae exactamente como dice Kepler. Después carga Rotación de la Vía Láctea y comprueba que no.',
   'rotation.mode.label': 'Gravedad en las afueras',

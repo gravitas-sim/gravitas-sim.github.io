@@ -747,7 +747,7 @@ export const EN = {
 
   'tutorial.done.title': 'You are set',
   'tutorial.done.body':
-    'Press <kbd>?</kbd> at any time for the full list of keyboard shortcuts, or reopen this tour from the <strong>?</strong> button in the corner. Nothing you do here can break anything — Reset restores the scenario as it shipped.',
+    'Press <kbd>?</kbd> at any time for the full list of keyboard shortcuts, or reopen this tour from the <strong>?</strong> button in the corner. Nothing you do here can break anything — Reset restores the scenario as it shipped. If a word is unfamiliar, the <a href="/glossary/">glossary</a> defines every term.',
   'tutorial.done.tip':
     'A good first experiment: load the Solar System, open the rotation curve, and see that it falls exactly as Kepler says. Then load Milky Way Rotation and see that it does not.',
   'rotation.mode.label': 'Gravity in the outskirts',
