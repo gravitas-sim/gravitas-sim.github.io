@@ -37,7 +37,7 @@
         "path": "units[0].lessons[2].lesson",
         "line": 40,
         "column": 21,
-        "message": "Gravitas has no lesson \"no-such-lesson\""
+        "message": "Gravitas has no investigation \"no-such-lesson\""
       }
     ]
   },

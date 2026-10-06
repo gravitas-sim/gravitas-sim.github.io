@@ -220,7 +220,7 @@ const WHEN_ORBITS_LOCK = {
              \n\nPay attention to the last figure on each row. It says how much
              closer the measured ratio is to a small whole-number ratio than an
              arbitrary number would have been. That figure is the one this
-             lesson is about.`,
+             investigation is about.`,
       checklist: [
         'Let the simulation run for about 150 Io orbits',
         'Read the four periods',
@@ -594,7 +594,7 @@ const WHEN_ORBITS_LOCK = {
              not the same as a resonance.
 
              \n\nHold on to this. In a few steps you are going to meet a body
-             whose angle stays inconclusive for the whole lesson, and the
+             whose angle stays inconclusive for the whole investigation, and the
              temptation to call it resonant will be considerable.`,
     },
     {

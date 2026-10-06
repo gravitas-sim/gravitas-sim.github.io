@@ -211,7 +211,7 @@ export function instructorGuide(inv, { version = '' } = {}) {
   doc.rule({ gap: 6, shade: 0.85 });
   doc.paragraph(
     `The answer key for this investigation is a separate document. ` +
-      `Every answer in it is generated from the lesson itself and checked against ` +
+      `Every answer in it is generated from the investigation itself and checked against ` +
       `the same grading rule the website applies.`,
     { size: 8.5, color: '0.4 0.4 0.46' }
   );
@@ -242,7 +242,7 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
 
   const doc = createDocument({
     title: `${plainText(inv.title)}: Answer Key`,
-    subject: `Answer key for the Gravitas investigation "${plainText(inv.title)}", derived from the lesson definitions and verified against the site's own grader.`,
+    subject: `Answer key for the Gravitas investigation "${plainText(inv.title)}", derived from the investigation definitions and verified against the site's own grader.`,
     footer: `Gravitas Answer Key  |  ${plainText(inv.title)}  |  Instructor copy${version ? `  |  ${version}` : ''}`,
   });
 
@@ -253,7 +253,7 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
   });
 
   doc.paragraph(
-    'Instructor copy. Every answer below is generated from the live lesson definition and ' +
+    'Instructor copy. Every answer below is generated from the live investigation definition and ' +
       'verified against the same rule the website uses to mark it, so this key and the site ' +
       'cannot disagree. Steps that only ask students to read or watch are omitted, ' +
       'unless there is an observation to expect on them.',
@@ -406,7 +406,7 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
       'account to create.'
   );
   doc.paragraph(
-    'An investigation is a guided lesson that runs in a panel beside the live simulation. Students ' +
+    'An investigation is a guided investigation that runs in a panel beside the live simulation. Students ' +
       'read a short screen, commit to a prediction, run an experiment, measure something, and answer ' +
       'a question that is checked immediately. At the end they can download a lab report containing ' +
       'their own answers, which is what an instructor collects.'
@@ -530,8 +530,8 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
   doc.bullets([
     'A current version of Chrome, Firefox, Safari or Edge. No plugins, no installation, no account.',
     'An internet connection to load the site. Once loaded, an investigation runs locally.',
-    'A laptop or desktop is strongly recommended. The lessons work on a tablet and are usable on a phone, but the instrument panels share the screen with the lesson text on small displays.',
-    'A screen of at least 1000 pixels wide gives the intended side-by-side layout of lesson and instrument.',
+    'A laptop or desktop is strongly recommended. The investigations work on a tablet and are usable on a phone, but the instrument panels share the screen with the investigation text on small displays.',
+    'A screen of at least 1000 pixels wide gives the intended side-by-side layout of investigation and instrument.',
     'Sound is optional and off by default.',
     'Downloading the lab report requires the browser to be allowed to save files.',
   ]);
@@ -554,7 +554,7 @@ export function adoptersGuide(investigations, { version = '' } = {}) {
     'Gravitas simulates Newtonian gravity between point masses in two dimensions, integrated ' +
       'numerically. Collisions merge objects. A number of features are analytic models evaluated for ' +
       'display rather than dynamical simulations, and a few are illustrative visuals. All of this is ' +
-      'documented publicly and in detail, with a per-investigation note about which parts each lesson ' +
+      'documented publicly and in detail, with a per-investigation note about which parts each investigation ' +
       'relies on.'
   );
   doc.link('How Gravitas Models the Universe', `${SITE}/model/`);

@@ -86,7 +86,7 @@ export const ES_SETTINGSHELP = {
   'setHelp.planet_base_color':
     'Color de las trazas de los planetas (en el modo «Por tipo») y de los restos cuando un agujero negro se traga un planeta, para los planetas a los que el escenario no ha dado color. Surte efecto de inmediato.',
   'setHelp.interactive_add':
-    'Activado, después de elegir un tipo con «Añadir objeto», un clic en una zona vacía del lienzo coloca un cuerpo nuevo y arrastrar fija su velocidad inicial. Desactivado, la colocación queda bloqueada; las lecciones lo desactivan para fijar una escena. Surte efecto de inmediato.',
+    'Activado, después de elegir un tipo con «Añadir objeto», un clic en una zona vacía del lienzo coloca un cuerpo nuevo y arrastrar fija su velocidad inicial. Desactivado, la colocación queda bloqueada; las investigaciones lo desactivan para fijar una escena. Surte efecto de inmediato.',
   'setHelp.follow_mode':
     'Mantiene la cámara centrada en un cuerpo del tipo elegido, o en el centro de masas de todos los cuerpos de ese tipo cuando hay varios; «Ninguno» deja la cámara libre. Solo afecta a la cámara, no al movimiento. Surte efecto de inmediato.',
   'setHelp.show_dynamic_overlays':
@@ -94,7 +94,7 @@ export const ES_SETTINGSHELP = {
   'setHelp.show_gravitational_waves':
     'Dibuja anillos que se expanden y ondulan el campo de estrellas de fondo cuando se fusionan o colapsan agujeros negros, estrellas de neutrones, enanas blancas o estrellas. Es solo un efecto visual: no cambia el movimiento, y la espiral de acercamiento proviene de la tasa de decaimiento orbital. El nivel de calidad Baja lo desactiva; surte efecto de inmediato.',
   'setHelp.habitable_zone_optimism':
-    'Elige qué definición publicada de zona habitable (Kopparapu et al., 2013) muestra el anillo de una estrella: por debajo de 1,3, la zona conservadora (del efecto invernadero desbocado al invernadero máximo); desde 1,3, la optimista (del Venus reciente al Marte temprano); los valores dentro de cada intervalo son equivalentes. El anillo solo aparece en las estrellas con la zona habitable activada en el inspector del objeto o por una lección. Surte efecto de inmediato.',
+    'Elige qué definición publicada de zona habitable (Kopparapu et al., 2013) muestra el anillo de una estrella: por debajo de 1,3, la zona conservadora (del efecto invernadero desbocado al invernadero máximo); desde 1,3, la optimista (del Venus reciente al Marte temprano); los valores dentro de cada intervalo son equivalentes. El anillo solo aparece en las estrellas con la zona habitable activada en el inspector del objeto o por una investigación. Surte efecto de inmediato.',
   'setHelp.integrator':
     'El método numérico con el que avanzan los cuerpos. Euler simpléctico (el valor por defecto, con el que se ajustaron todos los escenarios) y Verlet de velocidades mantienen acotado el error de energía, mucho menor en Verlet; RK4 es más preciso durante unas pocas órbitas, pero su energía deriva de forma sostenida a lo largo de miles. Surte efecto de inmediato; Verlet y RK4 siempre suman la gravedad directamente, nunca con Barnes-Hut, y los agujeros negros conservan su propio paso de primer orden.',
   'setHelp.show_conservation_diagnostics':

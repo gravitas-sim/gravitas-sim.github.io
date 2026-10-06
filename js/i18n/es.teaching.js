@@ -51,7 +51,7 @@ export const ES_TEACHING = {
 
   // --- The cycle -------------------------------------------------------------
   'teach.cycle.intro':
-    'Toda investigación se apoya en los mismos cinco movimientos, y la interfaz impone el orden: la predicción se registra antes de que exista la evidencia, y después no se puede editar. Quien se equivocó sigue teniendo su respuesta a la vista cuando llega la medición, que es el momento del que trata realmente la lección.',
+    'Toda investigación se apoya en los mismos cinco movimientos, y la interfaz impone el orden: la predicción se registra antes de que exista la evidencia, y después no se puede editar. Quien se equivocó sigue teniendo su respuesta a la vista cuando llega la medición, que es el momento del que trata realmente la investigación.',
   'teach.cycle.predict.verb': 'Predecir',
   'teach.cycle.predict.student':
     'Comprometerse con una respuesta antes de que algo se ejecute: en una frase, un número o una elección entre resultados esbozados.',
@@ -86,7 +86,7 @@ export const ES_TEACHING = {
     'Un enlace de Gravitas lleva el mundo entero en la barra de direcciones: escenario, semilla, ajustes, cámara y reloj. No hay cuenta que crear, nada que instalar y nada que subir. Pegue el enlace en una página del campus virtual y todo el mundo que lo siga obtendrá el sistema idéntico.',
   'teach.journey.predict.title': 'Registra una predicción',
   'teach.journey.predict.text':
-    'La lección pregunta primero y muestra después. Las predicciones se responden en la página y se guardan en el navegador con identificadores de paso que no cambian cuando se edita la lección, así que revisarla a mitad de semestre no descarta el trabajo ya hecho.',
+    'La investigación pregunta primero y muestra después. Las predicciones se responden en la página y se guardan en el navegador con identificadores de paso que no cambian cuando se edita la investigación, así que revisarla a mitad de semestre no descarta el trabajo ya hecho.',
   'teach.journey.evidence.title': 'Genera evidencia',
   'teach.journey.evidence.text':
     'Ejecuta el sistema, lo pausa en un evento, lo mide, corre una comparación A/B controlada o barre un parámetro por unos pocos valores. Cada una de esas cosas produce números y no impresiones.',
@@ -95,14 +95,14 @@ export const ES_TEACHING = {
     'Una captura toma la medición junto con las condiciones que la produjeron — integrador, paso temporal, subpasos, marco, geometría del observador, tiempo simulado, semilla del mundo — como una sola entrada atómica. Una entrada no puede quedar a medio escribir.',
   'teach.journey.submit.title': 'Entrega un informe',
   'teach.journey.submit.text':
-    'El cuaderno exporta un informe en PDF o CSV, con las entradas, su procedencia y las limitaciones de la ejecución declaradas dentro. Quien prefiera una unidad de trabajo más pequeña puede recortar una tarea corta de cualquier lección con el constructor de tareas y obtener la misma exportación.',
+    'El cuaderno exporta un informe en PDF o CSV, con las entradas, su procedencia y las limitaciones de la ejecución declaradas dentro. Quien prefiera una unidad de trabajo más pequeña puede recortar una actividad corta de cualquier investigación con el constructor de actividades y obtener la misma exportación.',
 
   // --- Instruments -----------------------------------------------------------
   'teach.instruments.intro':
     'Estas son las piezas entre las que elige un docente. Cada una existe para hacer posible, para alguien de primer año, una pieza concreta de la práctica científica.',
   'teach.instruments.investigations.name': 'Investigaciones guiadas',
   'teach.instruments.investigations.text':
-    'Lecciones de varios pasos que montan sus propios mundos. Los pasos están numerados, se califican cuando tienen una respuesta correcta y llevan objetivos de aprendizaje. Los prerrequisitos entre lecciones se declaran en vez de suponerse.',
+    'Investigaciones de varios pasos que montan sus propios mundos. Los pasos están numerados, se califican cuando tienen una respuesta correcta y llevan objetivos de aprendizaje. Los prerrequisitos entre investigaciones se declaran en vez de suponerse.',
   'teach.instruments.notebook.name': 'El cuaderno de evidencia',
   'teach.instruments.notebook.text':
     'Un registro continuo de qué midió el estudiantado y bajo qué condiciones. Es la diferencia entre «la órbita parecía estable» y una tabla de separaciones con el paso temporal que las produjo.',
@@ -144,7 +144,7 @@ export const ES_TEACHING = {
   'teach.activities.lede':
     'Formatos de enseñanza preparados, elegidos por lo que quieres que hagan los estudiantes y por el tiempo del que dispones. Cada uno abre una investigación real recortada a su duración: los mismos pasos, las mismas mediciones, las mismas pruebas en el cuaderno.',
   'teach.activities.vs.investigations':
-    '¿Buscas el tema completo? Las investigaciones son las lecciones íntegras, y se pueden explorar por materia.',
+    '¿Buscas el tema completo? Las investigaciones son las investigaciones íntegras, y se pueden explorar por materia.',
   'teach.activities.browse': 'Ver todas las investigaciones',
   'teach.activities.fallback.activity':
     'No existe ninguna actividad de clase llamada «{id}». Estas son las que hay.',
@@ -206,7 +206,7 @@ export const ES_TEACHING = {
   'teach.demo.rotation.predict':
     'Esbocen la curva de rotación: rapidez frente a distancia al centro.',
   'teach.demo.rotation.visible':
-    'La masa visible por sí sola predice una curva que cae. La medida no cae. Esa brecha es la observación que la materia oscura se propuso explicar, y la lección también ejecuta la alternativa de gravedad modificada.',
+    'La masa visible por sí sola predice una curva que cae. La medida no cae. Esa brecha es la observación que la materia oscura se propuso explicar, y la investigación también ejecuta la alternativa de gravedad modificada.',
   'teach.demo.tides.question':
     'La Luna atrae el océano hacia sí, así que hay una sola marea alta, en el lado que mira a la Luna.',
   'teach.demo.tides.instructor':
@@ -226,7 +226,7 @@ export const ES_TEACHING = {
 
   // --- Course patterns -------------------------------------------------------
   'teach.patterns.intro':
-    'Cinco formas en que esto se ha usado de verdad. Las lecciones nombradas en cada una se eligen al dibujar la página según la duración que cada lección declara, así que una lección que crece sale sola de la lista de espacios cortos.',
+    'Cinco formas en que esto se ha usado de verdad. Las investigaciones nombradas en cada una se eligen al dibujar la página según la duración que cada investigación declara, así que una investigación que crece sale sola de la lista de espacios cortos.',
   'teach.patterns.fits': 'Hoy caben en este espacio',
   'teach.patterns.prep': 'Preparación',
   'teach.patterns.handin': 'Qué se entrega',
@@ -239,16 +239,16 @@ export const ES_TEACHING = {
   'teach.pattern.lecture.handin': 'Nada: esta es hablada.',
   'teach.pattern.activity.title': 'Una actividad corta en clase',
   'teach.pattern.activity.text':
-    'De quince a veinticinco minutos en portátiles o teléfonos. Una investigación corta, o un puñado de pasos recortados de una más larga con el constructor de tareas, que termina en una medición y una frase.',
+    'De quince a veinticinco minutos en portátiles o teléfonos. Una investigación corta, o un puñado de pasos recortados de una más larga con el constructor de actividades, que termina en una medición y una frase.',
   'teach.pattern.activity.prep':
-    'Construya la tarea una vez y reparta un enlace. Los prerrequisitos entre pasos se comprueban por usted.',
+    'Construya la actividad una vez y reparta un enlace. Los prerrequisitos entre pasos se comprueban por usted.',
   'teach.pattern.activity.handin':
     'Un informe corto exportado del cuaderno, o un solo número con su incertidumbre.',
-  'teach.pattern.homework.title': 'Tarea para casa',
+  'teach.pattern.homework.title': 'Actividad para casa',
   'teach.pattern.homework.text':
     'Una investigación completa, en solitario, al ritmo que sea. El progreso se guarda en el navegador, así que se puede parar a la mitad y volver. No se sube nada y no existe ninguna cuenta que perder.',
   'teach.pattern.homework.prep':
-    'Publique el enlace de la lección. La guía docente y la clave de respuestas de cada investigación están en el área para docentes.',
+    'Publique el enlace de la investigación. La guía docente y la clave de respuestas de cada investigación están en el área para docentes.',
   'teach.pattern.homework.handin':
     'El informe en PDF exportado, que lleva los pasos calificados y las condiciones bajo las que se hizo cada medición.',
   'teach.pattern.laboratory.title': 'Sesión de laboratorio',
@@ -260,7 +260,7 @@ export const ES_TEACHING = {
     'Una exportación completa del cuaderno: la tabla del barrido, la comparación A/B, la comprobación de fiabilidad y un relato escrito de qué sostienen los números.',
   'teach.pattern.inquiry.title': 'Indagación abierta',
   'teach.pattern.inquiry.text':
-    'Ninguna lección. El modo libre, la galería completa de escenarios y una pregunta elegida por la propia persona. Cada estado al que llegue es un enlace que puede enviarle, y eso es lo que hace calificable un proyecto abierto sin mirar por encima del hombro.',
+    'Ninguna investigación. El modo libre, la galería completa de escenarios y una pregunta elegida por la propia persona. Cada estado al que llegue es un enlace que puede enviarle, y eso es lo que hace calificable un proyecto abierto sin mirar por encima del hombro.',
   'teach.pattern.inquiry.prep':
     'Acuerden la pregunta. Pida el enlace del estado del que partieron y el del que llegaron.',
   'teach.pattern.inquiry.handin':
@@ -271,19 +271,19 @@ export const ES_TEACHING = {
     'Lo que sigue describe lo que se ha construido y probado, no afirma nada sobre lo bien que le sirve a un lector concreto. Si algo de esto no funciona para su clase, es un defecto que vale la pena reportar.',
   'teach.access.keyboard.title': 'Teclado y lector de pantalla',
   'teach.access.keyboard.text':
-    'La interfaz se opera desde el teclado, incluidas las lecciones, las herramientas de medición y los diálogos, que atrapan el foco y lo devuelven. Las mediciones y los cambios de estado se anuncian por una región activa, y el lienzo lleva una descripción textual de lo que hay en él que se actualiza según evoluciona el sistema. Comprobaciones automáticas (axe-core) y un conjunto de recorridos manuales por teclado se ejecutan en integración continua en cada cambio.',
+    'La interfaz se opera desde el teclado, incluidas las investigaciones, las herramientas de medición y los diálogos, que atrapan el foco y lo devuelven. Las mediciones y los cambios de estado se anuncian por una región activa, y el lienzo lleva una descripción textual de lo que hay en él que se actualiza según evoluciona el sistema. Comprobaciones automáticas (axe-core) y un conjunto de recorridos manuales por teclado se ejecutan en integración continua en cada cambio.',
   'teach.access.motion.title': 'Movimiento y tema',
   'teach.access.motion.text':
     'La animación de la interfaz respeta la preferencia de movimiento reducido del sistema operativo. Hay cuatro temas, incluido uno claro pensado para proyectores y uno oscuro de alto contraste. Nada de esta página se mueve hasta que usted lo pida.',
   'teach.access.language.title': 'Español',
   'teach.access.language.text':
-    'La interfaz, el navegador de lecciones y todas las investigaciones están disponibles en español además de en inglés, incluido el texto de los pasos que el estudiantado lee y responde. El idioma se elige en la interfaz y se recuerda; el texto en español de las lecciones se descarga solo si se pide.',
+    'La interfaz, el navegador de investigaciones y todas las investigaciones están disponibles en español además de en inglés, incluido el texto de los pasos que el estudiantado lee y responde. El idioma se elige en la interfaz y se recuerda; el texto en español de las investigaciones se descarga solo si se pide.',
   'teach.access.offline.title': 'Red, costo y privacidad',
   'teach.access.offline.text':
     'Es un sitio estático. No hay servidor, ni cuenta, ni inicio de sesión, ni analítica, ni subida de datos: las respuestas y las entradas del cuaderno se quedan en el navegador donde se hicieron. Una vez cargada la página, funciona sin conexión, lo que importa en un aula con wifi institucional. Es gratuito y tiene licencia MIT.',
   'teach.access.reproducible.title': 'Enlaces reproducibles',
   'teach.access.reproducible.text':
-    'Cualquier estado puede convertirse en una URL, y la URL lo reconstruye exactamente: a partir de la semilla, si el mundo fue generado, o cuerpo por cuerpo una vez ejecutado. Eso es lo que hace citable una demostración, idéntica una tarea para todo el mundo, y comprobable la afirmación de un estudiante.',
+    'Cualquier estado puede convertirse en una URL, y la URL lo reconstruye exactamente: a partir de la semilla, si el mundo fue generado, o cuerpo por cuerpo una vez ejecutado. Eso es lo que hace citable una demostración, idéntica una actividad para todo el mundo, y comprobable la afirmación de un estudiante.',
 
   // --- Evidence --------------------------------------------------------------
   'teach.evidence.intro':
@@ -328,7 +328,7 @@ export const ES_TEACHING = {
     'El trabajo se guarda en el navegador del alumno y no sale de ahí por su cuenta. Lo exporta cada persona — un informe en PDF, o el cuaderno como archivo — y lo entrega como ya recojas tú el trabajo. No se sube nada, y no hay cuentas que crear ni listas que gestionar.',
   'teach.quickstart.resources.title': 'Qué hay para ti',
   'teach.quickstart.resources.text':
-    'Una guía docente por investigación con observaciones esperadas, ideas previas frecuentes y preguntas de discusión; una clave de respuestas; y un generador de tareas que recorta una lección a los pasos que quieras y produce un enlace.',
+    'Una guía docente por investigación con observaciones esperadas, ideas previas frecuentes y preguntas de discusión; una clave de respuestas; y un generador de actividades que recorta una investigación a los pasos que quieras y produce un enlace.',
 
   // --- Una plantilla para una evaluación que nadie ha hecho ------------------
   'teach.section.evaluate': 'Si quieres evaluarlo',
@@ -365,7 +365,7 @@ export const ES_TEACHING = {
     'Este software no recoge nada. No hay analítica, ni telemetría, ni cuenta, ni servidor al que enviar nada, lo que también significa que aquí nadie se entera de que algo no funciona si no lo cuentas.',
   'teach.feedback.issue.title': 'Informar de algo que falla',
   'teach.feedback.issue.text':
-    'Abre una incidencia en el repositorio. Basta con el nombre de un escenario o el enlace de una lección, qué esperabas y qué pasó; un enlace compartido reproduce el estado exacto que estabas viendo.',
+    'Abre una incidencia en el repositorio. Basta con el nombre de un escenario o el enlace de una investigación, qué esperabas y qué pasó; un enlace compartido reproduce el estado exacto que estabas viendo.',
   'teach.feedback.issue.link': 'Abrir una incidencia',
   'teach.feedback.contact.title': 'Contar cómo fue enseñar con ello',
   'teach.feedback.contact.text':

@@ -29,7 +29,7 @@ export default {
   steps: [
     {
       title: 'Doce noches',
-      body: 'Un comité de asignación de tiempo te ha dado <strong>doce noches</strong> sobre una estrella: HD&nbsp;209458, desde <strong>La&nbsp;Silla</strong>, en Chile, repartidas como quieras a lo largo de una campaña de veinte noches en septiembre. Una medida por noche, de 8&nbsp;m/s cada una. Puedes elegir las noches y puedes elegir la hora.\n\nHay una trampa, y no es pequeña. HD&nbsp;209458 está a declinación <strong>+18,9&deg;</strong> y La&nbsp;Silla a latitud <strong>&minus;29,3&deg;</strong>. El objetivo nunca sube más de <strong>41,9&deg;</strong> sobre el horizonte, así que nunca se ve a través de menos de una atmósfera y media, y solo está por encima del límite habitual de <strong>masa de aire&nbsp;2</strong> durante parte de cada noche.\n\nConviene dejar clara una cosa antes de empezar, porque el resto de la lección depende de ella. <strong>Aquí el cielo es real y la estrella no.</strong> Las ventanas de observación se calculan para el sitio real, el objetivo real y fechas reales de septiembre de 2026, contra efemérides publicadas. Las velocidades que vas a recoger salen de la simulación en pantalla. Lo único que cruza de un lado al otro es la lista de tiempos, que es exactamente lo que cruza entre una herramienta de planificación y un telescopio.',
+      body: 'Un comité de asignación de tiempo te ha dado <strong>doce noches</strong> sobre una estrella: HD&nbsp;209458, desde <strong>La&nbsp;Silla</strong>, en Chile, repartidas como quieras a lo largo de una campaña de veinte noches en septiembre. Una medida por noche, de 8&nbsp;m/s cada una. Puedes elegir las noches y puedes elegir la hora.\n\nHay una trampa, y no es pequeña. HD&nbsp;209458 está a declinación <strong>+18,9&deg;</strong> y La&nbsp;Silla a latitud <strong>&minus;29,3&deg;</strong>. El objetivo nunca sube más de <strong>41,9&deg;</strong> sobre el horizonte, así que nunca se ve a través de menos de una atmósfera y media, y solo está por encima del límite habitual de <strong>masa de aire&nbsp;2</strong> durante parte de cada noche.\n\nConviene dejar clara una cosa antes de empezar, porque el resto de la investigación depende de ella. <strong>Aquí el cielo es real y la estrella no.</strong> Las ventanas de observación se calculan para el sitio real, el objetivo real y fechas reales de septiembre de 2026, contra efemérides publicadas. Las velocidades que vas a recoger salen de la simulación en pantalla. Lo único que cruza de un lado al otro es la lista de tiempos, que es exactamente lo que cruza entre una herramienta de planificación y un telescopio.',
       tip: 'Gravitas no modela la rotación de la Tierra. js/observingWindow.js la calcula aparte, con la misma trigonometría esférica que usa un observatorio, y entrega el calendario como una lista de números.',
     },
     {
@@ -103,7 +103,7 @@ export default {
     },
     {
       title: 'Antes de observar',
-      body: 'El planeta es HD&nbsp;209458&nbsp;b, y su periodo es de <strong>3,5247 días</strong>. Se te dice porque el objetivo de esta lección está en otra parte.\n\nUn peine a 1,00274 ciclos al día pone un alias de ese planeta en cada frecuencia <em>f</em>&nbsp;&plusmn;&nbsp;<em>n</em>&nbsp;&times;&nbsp;1,00274. Calculando los dos más cercanos: <strong>1,391 d</strong> y <strong>0,777 d</strong>.\n\nEstás a punto de ejecutar los dos planes en el espectrógrafo en vivo, con la misma estrella, los mismos errores de 8 m/s y la misma semilla de ruido. Solo cambian los doce tiempos.',
+      body: 'El planeta es HD&nbsp;209458&nbsp;b, y su periodo es de <strong>3,5247 días</strong>. Se te dice porque el objetivo de esta investigación está en otra parte.\n\nUn peine a 1,00274 ciclos al día pone un alias de ese planeta en cada frecuencia <em>f</em>&nbsp;&plusmn;&nbsp;<em>n</em>&nbsp;&times;&nbsp;1,00274. Calculando los dos más cercanos: <strong>1,391 d</strong> y <strong>0,777 d</strong>.\n\nEstás a punto de ejecutar los dos planes en el espectrógrafo en vivo, con la misma estrella, los mismos errores de 8 m/s y la misma semilla de ruido. Solo cambian los doce tiempos.',
       prompt: '¿Qué van a devolver las dos campañas?',
       options: [
         'Las dos devuelven 3,5247 días: el planeta es real y doce medidas sobran',
@@ -112,7 +112,7 @@ export default {
         'Ninguna devuelve nada: doce puntos no pueden acotar un periodo en absoluto',
       ],
       because:
-        'Una potencia de ventana de casi exactamente 1 significa que el alias ajusta los datos igual de bien que la verdad, así que cuál de los dos sale más bajo lo decide el ruido y no el planeta. En 0,7 la verdad suele ganar. Fíjate en el «suele»: el pico es más pequeño, no ha desaparecido, y esta es una lección sobre mejorar tus probabilidades, no sobre eliminar un problema.',
+        'Una potencia de ventana de casi exactamente 1 significa que el alias ajusta los datos igual de bien que la verdad, así que cuál de los dos sale más bajo lo decide el ruido y no el planeta. En 0,7 la verdad suele ganar. Fíjate en el «suele»: el pico es más pequeño, no ha desaparecido, y esta es una investigación sobre mejorar tus probabilidades, no sobre eliminar un problema.',
     },
     {
       title: 'Confirma el calendario',

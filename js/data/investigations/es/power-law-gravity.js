@@ -23,7 +23,7 @@ export default {
   duration: '45-60 min',
   level: 'Astronomía introductoria',
   summary:
-    'Newton dijo que la gravedad decae como uno partido por la distancia al cuadrado. No a la primera, no al cubo: al cuadrado, exactamente. Esta investigación pregunta qué está haciendo ese «exactamente». Subirás y bajarás el exponente y medirás tres cosas: si la órbita sigue cerrándose, cómo depende el periodo orbital de la distancia y qué leyes de conservación sobreviven. Dos de ellas cambian de inmediato. Una no cambia en absoluto, y la razón de que no lo haga es lo más útil de la lección.',
+    'Newton dijo que la gravedad decae como uno partido por la distancia al cuadrado. No a la primera, no al cubo: al cuadrado, exactamente. Esta investigación pregunta qué está haciendo ese «exactamente». Subirás y bajarás el exponente y medirás tres cosas: si la órbita sigue cerrándose, cómo depende el periodo orbital de la distancia y qué leyes de conservación sobreviven. Dos de ellas cambian de inmediato. Una no cambia en absoluto, y la razón de que no lo haga es lo más útil de la investigación.',
   objectives: [
     'Enunciar qué es el exponente de una ley de la inversa del cuadrado, y por qué cambiarlo exige una distancia de referencia para significar algo',
     'Medir la precesión absidal de una órbita simulada y distinguirla del error de integración refinando el paso temporal',
@@ -53,7 +53,7 @@ export default {
     {
       title: 'Por qué el experimento necesita un anclaje',
       body: `Hay una trampa en la forma obvia de hacer esto, y esquivarla es la
-             razón de que esta lección tenga un número más de lo que parecería
+             razón de que esta investigación tenga un número más de lo que parecería
              necesario.
 
              \n\nSupón que escribieras simplemente la ley como
@@ -68,7 +68,7 @@ export default {
 
              \n\nAsí que la ley que se usa aquí está anclada. Está escrita de
              modo que a una distancia elegida —el <strong>radio de referencia
-             r₀</strong>, que en esta lección es <strong>1 UA</strong>— la
+             r₀</strong>, que en esta investigación es <strong>1 UA</strong>— la
              atracción es <em>exactamente newtoniana sea cual sea n</em>. Más
              adentro de 1 UA una ley más empinada tira más fuerte; más afuera
              tira más flojo; y justo en 1 UA no cambia nada.
@@ -76,7 +76,7 @@ export default {
              \n\nEso convierte a n en una afirmación sobre la <em>forma</em> del
              campo gravitatorio y no sobre su intensidad global, que es la única
              versión de esta pregunta que merece la pena plantear.`,
-      tip: 'r₀ = 1 UA es fijo durante toda la lección. Todos los instrumentos lo muestran.',
+      tip: 'r₀ = 1 UA es fijo durante toda la investigación. Todos los instrumentos lo muestran.',
     },
     {
       title: '¿Importa un cambio pequeño?',
@@ -437,7 +437,7 @@ export default {
              ninguna dependió nunca del exponente.
 
              \n\nEsa segunda lista tiene un origen más profundo del que esta
-             lección puede demostrar: hay un teorema, debido a Emmy Noether en
+             investigación puede demostrar: hay un teorema, debido a Emmy Noether en
              1918, que conecta cada ley de conservación con una simetría —el
              momento lineal con que el espacio no tenga ningún lugar especial, el
              angular con que no tenga ninguna dirección especial—. Lo que has
@@ -482,7 +482,7 @@ export default {
                 temporal nunca fue física. Una precesión que se queda quieta ha
                 sobrevivido a la única prueba que podía matarla, y sólo entonces
                 merece la pena preguntar qué la causa. Has usado exactamente esta
-                prueba en esta lección, y es la costumbre que más vale la pena
+                prueba en esta investigación, y es la costumbre que más vale la pena
                 llevarse de ella.`,
     },
     {

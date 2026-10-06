@@ -118,7 +118,7 @@ const TWELVE_NIGHTS = {
              it is above the usual <strong>airmass&nbsp;2</strong> limit for
              only part of each night.
              \n\nOne thing to be clear about before you start, because the rest
-             of the lesson depends on it. <strong>The sky here is real and the
+             of the investigation depends on it. <strong>The sky here is real and the
              star is not.</strong> The observing windows are computed for the
              real site, the real target and real dates in September 2026,
              against published ephemerides. The velocities you will collect
@@ -347,7 +347,7 @@ const TWELVE_NIGHTS = {
       title: 'Before you observe',
       body: `The planet is HD&nbsp;209458&nbsp;b, and its period is
              <strong>3.5247 days</strong>. You are being told because the point
-             of this lesson is elsewhere.
+             of this investigation is elsewhere.
              \n\nA comb at 1.00274 cycles a day puts an alias of that planet at
              every frequency <em>f</em>&nbsp;&plusmn;&nbsp;<em>n</em>&nbsp;&times;&nbsp;1.00274.
              Working the nearest two out: <strong>1.391 d</strong> and
@@ -367,7 +367,7 @@ const TWELVE_NIGHTS = {
                 data as well as the truth does, so which one comes out lowest is
                 decided by the noise rather than by the planet. At 0.7 the truth
                 usually wins. Note the word "usually": the peak is smaller, not
-                gone, and this is a lesson about improving your odds rather than
+                gone, and this is an investigation about improving your odds rather than
                 about removing a problem.`,
     },
     {

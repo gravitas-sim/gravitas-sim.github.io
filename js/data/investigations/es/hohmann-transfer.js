@@ -41,7 +41,7 @@ export default {
              que llevas. La pregunta no es si <em>puedes</em>, sino cuál es la
              forma más barata y cuánto tarda.
              \n\nNo hay nada más en este sistema. Ni otros planetas, ni cinturón,
-             ni lunas. Es deliberado, y al final de la lección sabrás
+             ni lunas. Es deliberado, y al final de la investigación sabrás
              exactamente cuál de tus respuestas dependía de ello.`,
       tip: 'Selecciona la nave y mira el inspector: el botón ▲ junto al alfiler abre el planificador de maniobras.',
     },
@@ -345,7 +345,7 @@ export default {
              previsión del planificador dice lo mismo de sí misma: muestra la
              órbita de dos cuerpos, y en un sistema donde una tercera masa cuenta
              la trayectoria real se aparta de la predicción.
-             \n\nUna cosa más que esta lección ha pasado por alto: la estación
+             \n\nUna cosa más que esta investigación ha pasado por alto: la estación
              tiene que <em>estar allí</em> cuando llegues. Acertar con el momento
              es un problema aparte con su propia aritmética, y es la razón de que
              los lanzamientos a Marte ocurran unas pocas semanas cada veintiséis

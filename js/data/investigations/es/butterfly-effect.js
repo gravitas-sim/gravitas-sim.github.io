@@ -48,7 +48,7 @@ export default {
              futuros completamente distintos, y la diferencia crece de forma
              <em>exponencial</em>.
 
-             \n\nTodo en esta lección apunta a distinguir eso de tres cosas con
+             \n\nTodo en esta investigación apunta a distinguir eso de tres cosas con
              las que se confunde habitualmente.`,
       tip: 'La simulación está en pausa. No se moverá nada hasta que la dejes correr.',
     },
@@ -74,7 +74,7 @@ export default {
                 en el mismo navegador. No hay ninguna tirada de dados en el
                 motor. Lo que estás a punto de ver no es aleatoriedad, y
                 demostrarlo <em>primero</em> es lo que hace que el resto de la
-                lección signifique algo.`,
+                investigación signifique algo.`,
     },
     {
       title: 'Cómo ejecutar lo mismo dos veces',
@@ -94,7 +94,7 @@ export default {
              experimento un nombre que reconozcas y pulsa
              <strong>Capturar inicio</strong>. Después marca
              <strong>Posición</strong> y <strong>Energía total</strong> para que
-             las ejecuciones lleven lo que esta lección necesita.`,
+             las ejecuciones lleven lo que esta investigación necesita.`,
       tip: 'El banco mantiene las dos ejecuciones sobre el mismo eje de tiempo simulado, que es lo que las hace comparables.',
     },
     {
@@ -103,7 +103,7 @@ export default {
              <em>nada</em> entre una y otra.
 
              \n\nAbre el <strong>Banco A/B</strong> y busca <em>El par
-             controlado de la lección</em>. Pulsa <strong>Ejecutarlo dos veces,
+             controlado de la investigación</em>. Pulsa <strong>Ejecutarlo dos veces,
              sin cambios</strong>. Captura el inicio, graba la ejecución A
              durante cuarenta segundos simulados, vuelve a ese mismo inicio y
              graba la ejecución B durante los mismos cuarenta: el experimento
@@ -171,7 +171,7 @@ export default {
              el empujón es de una parte en cuatrocientas mil del sistema.
 
              \n\nUna nota práctica: este par tarda cuatro años en dar una vuelta,
-             así que la lección ha subido la velocidad de simulación para esta
+             así que la investigación ha subido la velocidad de simulación para esta
              sección. Eso cambia la rapidez con la que lo miras y nada de la
              física: ambas ejecuciones usan el mismo paso, así que la comparación
              entre ellas no se ve afectada.`,
@@ -450,7 +450,7 @@ export default {
 
              \n\n<strong>La mitad del paso maximo.</strong> No la mitad de la
              velocidad de reproducción: esa era la instrucción que daba antes
-             esta lección y no era fiable. El motor divide el avance de cada
+             esta investigación y no era fiable. El motor divide el avance de cada
              fotograma en un numero maximo de trozos, ninguno mayor que un tope,
              y cual de esos dos límites manda depende del escenario: donde el
              tope no es el que manda, reducir la velocidad a la mitad reduce el

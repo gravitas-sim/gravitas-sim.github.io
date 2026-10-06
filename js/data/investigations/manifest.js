@@ -142,7 +142,7 @@ export const MANIFEST = [
     duration: '35-45 min',
     level: 'Introductory astronomy',
     summary:
-      'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole lesson is built on that one subtraction: take the pull on the center away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
+      'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole investigation is built on that one subtraction: take the pull on the center away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
     thumbnail: 'images/scenarios/earth-moon-system.webp',
     stepCount: 30,
     gradedCount: 16,
@@ -337,7 +337,7 @@ export const MANIFEST = [
     duration: '45-60 min',
     level: 'Introductory astronomy',
     summary:
-      'Newton said gravity falls off as one over the distance squared. Not one over the distance, not one over the cube — squared, exactly. This investigation asks what that exactly is doing. You will turn the exponent up and down and measure three things: whether the orbit still closes, how the orbital period depends on distance, and which conservation laws survive. Two of those change immediately. One of them does not change at all, and the reason it does not is the most useful thing in the lesson.',
+      'Newton said gravity falls off as one over the distance squared. Not one over the distance, not one over the cube — squared, exactly. This investigation asks what that exactly is doing. You will turn the exponent up and down and measure three things: whether the orbit still closes, how the orbital period depends on distance, and which conservation laws survive. Two of those change immediately. One of them does not change at all, and the reason it does not is the most useful thing in the investigation.',
     thumbnail: 'images/scenarios/solar-system.webp',
     stepCount: 21,
     gradedCount: 14,

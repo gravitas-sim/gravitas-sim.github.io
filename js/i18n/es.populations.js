@@ -11,7 +11,7 @@
 
 export const ES_POPULATIONS = {
   'gd.suite.populations.intro':
-    'Cinco guías con observaciones reales: cuatro espectros de SDSS, la fotometría de SDSS y la espectroscopia de SEGUE del cúmulo abierto NGC 2420, las isócronas del modelo MIST y una curva de luz de TESS de una estrella RR Lyrae. Van de lo que dice un espectro, pasando por el diagrama color–magnitud de un cúmulo y quién pertenece a él, hasta las edades que dan los modelos y una estrella que varía. Cada número que comprueba un paso sale de los datos o de una fuente citada que el paso nombra; las isócronas son un modelo, y se comparan con las estrellas, nunca se confunden con ellas.',
+    'Un conjunto de investigaciones con observaciones reales: cuatro espectros de SDSS, la fotometría de SDSS y la espectroscopia de SEGUE del cúmulo abierto NGC 2420, las isócronas del modelo MIST y una curva de luz de TESS de una estrella RR Lyrae. Van de lo que dice un espectro, pasando por el diagrama color–magnitud de un cúmulo y quién pertenece a él, hasta las edades que dan los modelos y una estrella que varía. Cada número que comprueba un paso sale de los datos o de una fuente citada que el paso nombra; las isócronas son un modelo, y se comparan con las estrellas, nunca se confunden con ellas.',
   'gd.target.sdss-a': 'el espectro de la estrella A (SDSS)',
   'gd.target.sdss-g': 'el espectro de la estrella G (SDSS)',
   'gd.target.sdss-k': 'el espectro de la estrella K (SDSS)',
@@ -233,7 +233,7 @@ export const ES_POPULATIONS = {
     'SDSS no pudo medir estrellas tan apiñadas',
   'gd.pop-cmd.why-core.opt.dust': 'El polvo oculta el centro',
   'gd.pop-cmd.why-core.ok':
-    'El apiñamiento. El procesado fotométrico de SDSS se hizo para campos con las estrellas bien separadas; donde sus imágenes se solapan encuentra pocas, y la marca de limpieza con la que se recortó esta tabla descarta las que midió mal. Los detalles del paquete lo dicen, y An et al. (2008) volvieron a medir cúmulos así por esa razón. El núcleo falta en la tabla, no en el cielo.',
+    'El apiñamiento. El procesado fotométrico de SDSS se hizo para campos con las estrellas bien separadas; donde sus imágenes se solapan encuentra pocas, y la marca de limpieza con la que se recortó esta tabla descarta las que midió mal. Los detalles del conjunto de datos lo dicen, y An et al. (2008) volvieron a medir cúmulos así por esa razón. El núcleo falta en la tabla, no en el cielo.',
   'gd.pop-cmd.why-core.no':
     'Gaia, cuyas posiciones no necesitan una imagen limpia de un campo apiñado, cuenta la mitad de los miembros a menos de 3,2 minutos de arco. ¿Qué puede hacer que un cartografiado pierda las estrellas más apiñadas?',
   'gd.pop-cmd.field.title': 'Estrellas que no son del cúmulo',
@@ -252,19 +252,19 @@ export const ES_POPULATIONS = {
     'Describe la columna g: su valor menor es la estrella más brillante.',
   'gd.pop-cmd.why-bright.title': '¿Dónde están las gigantes?',
   'gd.pop-cmd.why-bright.text':
-    'La cámara de SDSS se satura cerca de g = 14: una estrella más brillante llena sus píxeles más allá de lo que pueden contar. De las estrellas que el paquete descartó por no limpias, sus detalles dicen cuántas eran más brillantes que g = 14,5. ¿Qué les pasó a las gigantes más brillantes del cúmulo?',
+    'La cámara de SDSS se satura cerca de g = 14: una estrella más brillante llena sus píxeles más allá de lo que pueden contar. De las estrellas que el conjunto de datos descartó por no limpias, sus detalles dicen cuántas eran más brillantes que g = 14,5. ¿Qué les pasó a las gigantes más brillantes del cúmulo?',
   'gd.pop-cmd.why-bright.opt.none': 'El cúmulo no tiene',
   'gd.pop-cmd.why-bright.opt.saturated': 'Se saturaron y se descartaron',
   'gd.pop-cmd.why-bright.opt.far': 'Están demasiado lejos para verlas',
   'gd.pop-cmd.why-bright.ok':
     'Saturadas. La parte de arriba de este diagrama la corta la cámara, el centro el apiñamiento y la de abajo lo débil que SDSS puede medir: cada una es una selección, y ninguna es el cúmulo.',
   'gd.pop-cmd.why-bright.no':
-    'Los detalles del paquete dan la razón: busca la reducción sobre las estrellas más brillantes que g = 14,5.',
+    'Los detalles del conjunto de datos dan la razón: busca la reducción sobre las estrellas más brillantes que g = 14,5.',
   'gd.pop-cmd.faint.title': 'El extremo débil',
   'gd.pop-cmd.faint.text':
-    'El propio paquete cortó la tabla en g = 22,5, donde la fotometría de SDSS deja de estar completa. ¿Cuántas estrellas descartó ese corte? Lo dicen las reducciones.',
+    'El propio conjunto de datos cortó la tabla en g = 22,5, donde la fotometría de SDSS deja de estar completa. ¿Cuántas estrellas descartó ese corte? Lo dicen las reducciones.',
   'gd.pop-cmd.faint.ok':
-    '{value} estrellas, casi tantas como las que guarda la tabla. El límite débil es una elección que hizo el paquete y que declara: el borde débil de un diagrama es el del cartografiado, o el de quien lo construyó, nunca el del cúmulo.',
+    '{value} estrellas, casi tantas como las que guarda la tabla. El límite débil es una elección que hizo el conjunto de datos y que declara: el borde débil de un diagrama es el del cartografiado, o el de quien lo construyó, nunca el del cúmulo.',
   'gd.pop-cmd.faint.no':
     'Busca en los detalles la reducción que empieza por «psfMag_g:».',
   'gd.pop-cmd.wrap.title': 'De qué está hecho el diagrama',
@@ -531,7 +531,7 @@ export const ES_POPULATIONS = {
     'Una caída breve no es una sinusoide: la búsqueda se quedó con un armónico',
   'gd.pop-variable.harmonic.opt.noise': 'Ruido, por azar',
   'gd.pop-variable.harmonic.ok':
-    'Un armónico. Un tránsito es una caída corta una vez por órbita, y ninguna sinusoide sola se ajusta a él; su potencia se reparte entre los armónicos, y ganó este. La búsqueda de caja de las guías de exoplanetas busca una caída, y encuentra la órbita. La respuesta de un método es tan buena como su modelo de la señal.',
+    'Un armónico. Un tránsito es una caída corta una vez por órbita, y ninguna sinusoide sola se ajusta a él; su potencia se reparte entre los armónicos, y ganó este. La búsqueda de caja de las investigaciones de exoplanetas busca una caída, y encuentra la órbita. La respuesta de un método es tan buena como su modelo de la señal.',
   'gd.pop-variable.harmonic.no':
     'El cociente es casi exactamente 2, y HD 209458 tiene un planeta en tránsito conocido. ¿Qué pasa al ajustar una sinusoide a una caída breve?',
   'gd.pop-variable.wrap.title': 'El tiempo como medida',

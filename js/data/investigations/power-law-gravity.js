@@ -65,7 +65,7 @@ const POWER_LAW_GRAVITY = {
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'gravity'],
   summary:
-    'Newton said gravity falls off as one over the distance squared. Not one over the distance, not one over the cube — squared, exactly. This investigation asks what that exactly is doing. You will turn the exponent up and down and measure three things: whether the orbit still closes, how the orbital period depends on distance, and which conservation laws survive. Two of those change immediately. One of them does not change at all, and the reason it does not is the most useful thing in the lesson.',
+    'Newton said gravity falls off as one over the distance squared. Not one over the distance, not one over the cube — squared, exactly. This investigation asks what that exactly is doing. You will turn the exponent up and down and measure three things: whether the orbit still closes, how the orbital period depends on distance, and which conservation laws survive. Two of those change immediately. One of them does not change at all, and the reason it does not is the most useful thing in the investigation.',
   objectives: [
     'State what the exponent in an inverse-square law is, and why changing it needs a reference distance to mean anything',
     'Measure apsidal precession from a simulated orbit and distinguish it from integration error by refining the timestep',
@@ -103,7 +103,7 @@ const POWER_LAW_GRAVITY = {
       type: 'read',
       title: 'Why the experiment needs an anchor',
       body: `There is a trap in the obvious way to do this, and stepping around
-             it is the reason this lesson has one extra number in it.
+             it is the reason this investigation has one extra number in it.
 
              \n\nSuppose you simply wrote the law as
              <strong>a = GM / r<sup>n</sup></strong> and turned n from 2 to
@@ -116,7 +116,7 @@ const POWER_LAW_GRAVITY = {
 
              \n\nSo the law used here is anchored. It is written so that at one
              chosen distance — the <strong>reference radius r₀</strong>, which
-             is <strong>1 AU</strong> in this lesson — the pull is
+             is <strong>1 AU</strong> in this investigation — the pull is
              <em>exactly Newtonian no matter what n is</em>. Further in than
              1 AU a steeper law pulls harder; further out it pulls more weakly;
              and at 1 AU itself, nothing changes.
@@ -124,7 +124,7 @@ const POWER_LAW_GRAVITY = {
              \n\nThat makes n a statement about the <em>shape</em> of the
              gravitational field rather than its overall strength, which is the
              only version of this question worth asking.`,
-      tip: 'r₀ = 1 AU is fixed for the whole lesson. Every instrument shows it.',
+      tip: 'r₀ = 1 AU is fixed for the whole investigation. Every instrument shows it.',
     },
     {
       sid: 'predict-does-small-matter',
@@ -595,7 +595,7 @@ const POWER_LAW_GRAVITY = {
              and conservation of energy. None of them moved at all, because none
              of them ever depended on the exponent.
 
-             \n\nThat second list has a deeper origin than this lesson can
+             \n\nThat second list has a deeper origin than this investigation can
              demonstrate: there is a theorem, due to Emmy Noether in 1918,
              connecting each conservation law to a symmetry — momentum to the
              fact that space has no special place, angular momentum to the fact
@@ -645,7 +645,7 @@ const POWER_LAW_GRAVITY = {
                 when the timestep shrinks was never physics. Precession that
                 stays put survived the one test that could have killed it, and
                 only then is it worth asking what is causing it. You used
-                exactly this test in this lesson, and it is the habit most worth
+                exactly this test in this investigation, and it is the habit most worth
                 carrying out of it.`,
     },
     {

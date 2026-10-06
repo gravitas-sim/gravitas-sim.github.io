@@ -36,7 +36,7 @@ const NOTES = {
   ],
   'exo-planet': [
     'Passing the odd/even and secondary tests does not prove a planet; it removes two ways an eclipsing binary would give itself away. The blend limit on the advanced path removes the cataloged neighbors, and says what it cannot remove.',
-    'The mass needs radial velocities, which no Gravitas pack holds for a transiting star; the radial-velocity lesson works with a simulated survey. As an extension, a class can combine the fitted radius with Stassun et al. (2017)’s mass, 0.73 +/- 0.04 Jupiter masses, labeled as adopted, for a density of about 0.36 g/cm3.',
+    'The mass needs radial velocities, which no Gravitas pack holds for a transiting star; the radial-velocity investigation works with a simulated survey. As an extension, a class can combine the fitted radius with Stassun et al. (2017)’s mass, 0.73 +/- 0.04 Jupiter masses, labeled as adopted, for a density of about 0.36 g/cm3.',
     'The simulation step compares a built world with a measurement: the simulation uses rounded published values, and the two need not agree to the last digit.',
   ],
 };

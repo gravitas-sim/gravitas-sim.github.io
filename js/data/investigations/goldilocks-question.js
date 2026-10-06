@@ -192,7 +192,7 @@ const GOLDILOCKS = {
       sid: 'one-earth-of-starlight',
       type: 'read',
       title: 'One Earth of starlight',
-      body: `Rather than carrying watts per square meter around, this lesson
+      body: `Rather than carrying watts per square meter around, this investigation
              uses Earth itself as the ruler. Earth sits one astronomical unit
              from the Sun, which is 150 million kilometers, and receives what we
              will call <strong>one Earth</strong> of starlight.
@@ -571,7 +571,7 @@ const GOLDILOCKS = {
       ],
       answer: 1,
       because:
-        'Earth and Mars. Venus at 0.72 AU is inside the inner edge, receiving about 1.9 Earths of starlight; Ceres at 2.77 AU is far beyond the outer edge. Mars, at 1.52 AU, is comfortably within the conservative zone. That last one usually comes as a surprise, and it is the most useful fact in this lesson.',
+        'Earth and Mars. Venus at 0.72 AU is inside the inner edge, receiving about 1.9 Earths of starlight; Ceres at 2.77 AU is far beyond the outer edge. Mars, at 1.52 AU, is comfortably within the conservative zone. That last one usually comes as a surprise, and it is the most useful fact in this investigation.',
     },
     {
       sid: 'the-mars-problem',
@@ -727,7 +727,7 @@ const GOLDILOCKS = {
       kind: 'numeric',
       body: `You do not need a climate model to see why Venus is a hard case.
              Venus orbits at 0.72 AU. Use the rule from the first half of this
-             lesson: starlight goes as 1 / d².
+             investigation: starlight goes as 1 / d².
              \n\n0.72 squared is about 0.52.`,
       prompt: 'Starlight at Venus, in Earths',
       unit: 'Earths',
@@ -743,7 +743,7 @@ const GOLDILOCKS = {
       title: 'A year on a circular orbit',
       body: `One thing has been quietly assumed so far: that a planet has
              <em>a</em> distance from its star. Most of the planets you have met
-             in these lessons are on nearly circular orbits, and for those it is
+             in these investigations are on nearly circular orbits, and for those it is
              very nearly true.
              \n\nThe panel shows a planet on a perfectly circular orbit at
              1.2 AU. Underneath it is a graph of the starlight it receives
@@ -906,7 +906,7 @@ const GOLDILOCKS = {
       type: 'explore',
       title: 'All seven planets',
       body: `Here is the real system, with the habitable zone from the same
-             model you have been using all lesson, calculated from TRAPPIST-1's
+             model you have been using all investigation, calculated from TRAPPIST-1's
              measured luminosity and temperature.
              \n\nThe distance axis is compressed, because otherwise the inner
              planets would pile up on top of the star. Read the numbers, not the
@@ -1060,7 +1060,7 @@ const GOLDILOCKS = {
       body: `To see how much room that leaves, consider three planets that all
              receive close to one Earth of starlight and all sit inside their
              star's habitable zone.
-             \n\nOn the one number this lesson has spent forty minutes on, they
+             \n\nOn the one number this investigation has spent forty minutes on, they
              are identical. Look at what else is known about each.
              \n\nFor context from our own system: Venus and Earth are nearly the
              same size and receive starlight within a factor of two of each

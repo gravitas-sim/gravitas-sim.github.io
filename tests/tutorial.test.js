@@ -124,8 +124,9 @@ describe('the tour does not describe an interface that is gone', () => {
   });
 
   test('it mentions the investigations, which are half the project', () => {
-    expect(bodies).toMatch(/twelve/i);
-    expect(bodies).toMatch(/investigation/i);
+    // No count: the tour once said twelve, and the library has 24.
+    expect(bodies).toMatch(/structured investigations/i);
+    expect(bodies).not.toMatch(/twelve (structured )?investigations/i);
   });
 
   test('it does not assert that either dark-matter explanation is right', () => {

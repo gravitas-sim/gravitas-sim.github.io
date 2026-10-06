@@ -116,7 +116,7 @@ const RADIAL_VELOCITY = {
       body: `In <em>Finding Planets by Their Shadows</em> you watched HD 209458 b
              cross its star and used the depth of the dip to work out how big the
              planet is. Here is the same system again.
-             \n\nThere is something that lesson did not mention. When the transit
+             \n\nThere is something that investigation did not mention. When the transit
              was first seen in 1999, astronomers already knew the planet was
              there. They had been watching the star for months, and the star had
              been telling them.`,
@@ -212,7 +212,7 @@ const RADIAL_VELOCITY = {
              \n\nThen try the Earth preset. The physical wobble becomes tiny, and
              the magnification has to go up by a factor of thousands before you
              can see it at all. It is still there.
-             \n\nThat is the whole idea behind this lesson. A planet does not have
+             \n\nThat is the whole idea behind this investigation. A planet does not have
              to be bright to be found, or visible at all. It only has to be heavy
              enough to move its star by an amount we can measure.`,
       tool: {
@@ -879,7 +879,7 @@ const RADIAL_VELOCITY = {
       type: 'question',
       kind: 'choice',
       title: 'The point of all this',
-      body: `You began this lesson unable to see a planet at all.`,
+      body: `You began this investigation unable to see a planet at all.`,
       prompt: 'The single most important idea here is that…',
       options: [
         'radial velocity is the best way to find planets',
@@ -915,7 +915,7 @@ const RADIAL_VELOCITY = {
              the disc is close to edge-on by construction, so sin i is near 1 and
              the lower limit becomes a mass. The transit also gives a radius,
              which radial velocity never can, and a mass with a radius is a
-             density - the first number in the lesson that says anything about
+             density - the first number in the investigation that says anything about
              what the planet is made of.
              \n\n<strong>Astrometry watches the same reflex motion side-on</strong>,
              and prefers the opposite systems: heavy planets far out around nearby

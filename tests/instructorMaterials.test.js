@@ -519,7 +519,7 @@ describe('instructor content matches the one schema', () => {
         ...c,
         flow: [...c.flow, { steps: '900-901', text: 'C'.repeat(40) }],
       }),
-      /flow names screen 900, and the lesson has \d+/,
+      /flow names screen 900, and the investigation has \d+/,
     ],
     [
       'a blank cell',

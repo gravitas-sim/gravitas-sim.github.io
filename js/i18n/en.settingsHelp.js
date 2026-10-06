@@ -88,7 +88,7 @@ export const EN_SETTINGSHELP = {
   'setHelp.planet_base_color':
     'Color of planet trails (in By type mode) and of the debris when a black hole swallows a planet, for planets the scenario has not colored. Takes effect at once.',
   'setHelp.interactive_add':
-    'When on, after a type is chosen with Add object, a click on empty canvas places a new body and a drag sets its starting velocity. When off, placement is disabled; lessons turn it off to lock a scene. Takes effect at once.',
+    'When on, after a type is chosen with Add object, a click on empty canvas places a new body and a drag sets its starting velocity. When off, placement is disabled; investigations turn it off to lock a scene. Takes effect at once.',
   'setHelp.follow_mode':
     'Keeps the camera centered on a body of the chosen type, or on the center of mass of all bodies of that type when there are several; None leaves the camera free. Camera only; it does not change the motion. Takes effect at once.',
   'setHelp.show_dynamic_overlays':
@@ -96,7 +96,7 @@ export const EN_SETTINGSHELP = {
   'setHelp.show_gravitational_waves':
     'Draws expanding rings that ripple the background starfield when black holes, neutron stars, white dwarfs or stars merge or collapse. It is a drawn effect only: it does not change the motion, and the inspiral itself comes from Orbit Decay Rate. The Low quality tier turns it off; takes effect at once.',
   'setHelp.habitable_zone_optimism':
-    "Chooses which published habitable-zone definition (Kopparapu et al. 2013) a star's ring shows: below 1.3 the conservative zone (runaway to maximum greenhouse), 1.3 and above the optimistic zone (recent Venus to early Mars); values within each range are equivalent. The ring appears only for stars whose habitable zone is switched on in the object inspector or by a lesson. Takes effect at once.",
+    "Chooses which published habitable-zone definition (Kopparapu et al. 2013) a star's ring shows: below 1.3 the conservative zone (runaway to maximum greenhouse), 1.3 and above the optimistic zone (recent Venus to early Mars); values within each range are equivalent. The ring appears only for stars whose habitable zone is switched on in the object inspector or by an investigation. Takes effect at once.",
   'setHelp.integrator':
     "The numerical method that advances the bodies. Symplectic Euler (the default, which every scenario was tuned for) and Velocity Verlet keep the energy error bounded, Verlet's far smaller; RK4 is more accurate over a few orbits but its energy drifts steadily over thousands. Takes effect at once; Verlet and RK4 always sum gravity directly, never with Barnes-Hut, and black holes keep their own first-order step.",
   'setHelp.show_conservation_diagnostics':

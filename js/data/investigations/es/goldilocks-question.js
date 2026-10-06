@@ -36,7 +36,7 @@ export default {
     },
     {
       title: 'Una Tierra de luz estelar',
-      body: 'En lugar de arrastrar vatios por metro cuadrado, esta lección usa la propia Tierra como regla. La Tierra está a una unidad astronómica del Sol, que son 150 millones de kilómetros, y recibe lo que llamaremos <strong>una Tierra</strong> de luz estelar.\n\nEl panel contiguo muestra exactamente eso: el Sol a la izquierda, un planeta a 1 UA, y una barra para la energía que llega allí. La barra está en la marca etiquetada «lo que recibe la Tierra», porque el planeta está donde está la Tierra.\n\nTodo lo que viene a partir de aquí se mide frente a ese único número.',
+      body: 'En lugar de arrastrar vatios por metro cuadrado, esta investigación usa la propia Tierra como regla. La Tierra está a una unidad astronómica del Sol, que son 150 millones de kilómetros, y recibe lo que llamaremos <strong>una Tierra</strong> de luz estelar.\n\nEl panel contiguo muestra exactamente eso: el Sol a la izquierda, un planeta a 1 UA, y una barra para la energía que llega allí. La barra está en la marca etiquetada «lo que recibe la Tierra», porque el planeta está donde está la Tierra.\n\nTodo lo que viene a partir de aquí se mide frente a ese único número.',
       tool: {
         title: 'La Tierra, a una unidad astronómica',
         note: 'Las líneas que se abren en abanico desde la estrella son su luz, saliendo hacia fuera. El planeta intercepta lo que cruza su propio trozo de cielo.',
@@ -228,7 +228,7 @@ export default {
         'Los cuatro',
       ],
       because:
-        'La Tierra y Marte. Venus, a 0,72 UA, está dentro del borde interior, recibiendo unas 1,9 Tierras de luz estelar; Ceres, a 2,77 UA, está muy lejos, más allá del borde exterior. Marte, a 1,52 UA, está cómodamente dentro de la zona conservadora. Esto último suele sorprender, y es el dato más útil de esta lección.',
+        'La Tierra y Marte. Venus, a 0,72 UA, está dentro del borde interior, recibiendo unas 1,9 Tierras de luz estelar; Ceres, a 2,77 UA, está muy lejos, más allá del borde exterior. Marte, a 1,52 UA, está cómodamente dentro de la zona conservadora. Esto último suele sorprender, y es el dato más útil de esta investigación.',
     },
     {
       title: 'El problema de Marte',
@@ -304,7 +304,7 @@ export default {
     },
     {
       title: 'Venus, con la regla que ya tienes',
-      body: 'No necesitas un modelo climático para ver por qué Venus es un caso difícil. Venus orbita a 0,72 UA. Usa la regla de la primera mitad de esta lección: la luz estelar va como 1 / d².\n\n0,72 al cuadrado es alrededor de 0,52.',
+      body: 'No necesitas un modelo climático para ver por qué Venus es un caso difícil. Venus orbita a 0,72 UA. Usa la regla de la primera mitad de esta investigación: la luz estelar va como 1 / d².\n\n0,72 al cuadrado es alrededor de 0,52.',
       prompt: 'Luz estelar en Venus, en Tierras',
       unit: 'Tierras',
       because:
@@ -312,7 +312,7 @@ export default {
     },
     {
       title: 'Un año en una órbita circular',
-      body: 'Hasta ahora se ha supuesto calladamente una cosa: que un planeta tiene <em>una</em> distancia a su estrella. La mayoría de los planetas que has conocido en estas lecciones están en órbitas casi circulares, y para esos es casi cierto.\n\nEl panel muestra un planeta en una órbita perfectamente circular a 1,2 UA. Debajo hay una gráfica de la luz estelar que recibe a lo largo de un año completo, con un marcador que sigue el ritmo del planeta.\n\nObserva la gráfica. Es una línea plana.',
+      body: 'Hasta ahora se ha supuesto calladamente una cosa: que un planeta tiene <em>una</em> distancia a su estrella. La mayoría de los planetas que has conocido en estas investigaciones están en órbitas casi circulares, y para esos es casi cierto.\n\nEl panel muestra un planeta en una órbita perfectamente circular a 1,2 UA. Debajo hay una gráfica de la luz estelar que recibe a lo largo de un año completo, con un marcador que sigue el ritmo del planeta.\n\nObserva la gráfica. Es una línea plana.',
       tool: {
         title: 'Un año circular',
         note: 'El marcador de la gráfica es la posición actual del planeta en su año. En una órbita circular la distancia no cambia nunca, así que la luz estelar tampoco.',
@@ -392,7 +392,7 @@ export default {
     },
     {
       title: 'Los siete planetas',
-      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo que has estado usando toda la lección, calculada a partir de la luminosidad y la temperatura medidas de TRAPPIST-1.\n\nEl eje de distancias está comprimido, porque si no los planetas interiores se amontonarían encima de la estrella. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
+      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo que has estado usando toda la investigación, calculada a partir de la luminosidad y la temperatura medidas de TRAPPIST-1.\n\nEl eje de distancias está comprimido, porque si no los planetas interiores se amontonarían encima de la estrella. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
       tool: {
         title: 'TRAPPIST-1',
         note: 'Cada planeta está listado debajo con la luz estelar que recibe y dónde cae respecto a la zona modelada.',
@@ -449,7 +449,7 @@ export default {
     },
     {
       title: 'Tres planetas que parecen prometedores',
-      body: 'Para ver cuánto margen deja eso, considera tres planetas que reciben todos cerca de una Tierra de luz estelar y están todos dentro de la zona habitable de su estrella.\n\nEn el único número al que esta lección ha dedicado cuarenta minutos, son idénticos. Mira qué más se sabe de cada uno.\n\nComo referencia de nuestro propio sistema: Venus y la Tierra son casi del mismo tamaño y reciben luz estelar dentro de un factor dos la una de la otra, y sus superficies difieren en más de cuatrocientos grados. Marte recibe 0,43 Tierras y tiene una superficie que estaría mucho más caliente con una atmósfera más gruesa que la fina que tiene. La distancia importa enormemente, y no es lo único que importa.',
+      body: 'Para ver cuánto margen deja eso, considera tres planetas que reciben todos cerca de una Tierra de luz estelar y están todos dentro de la zona habitable de su estrella.\n\nEn el único número al que esta investigación ha dedicado cuarenta minutos, son idénticos. Mira qué más se sabe de cada uno.\n\nComo referencia de nuestro propio sistema: Venus y la Tierra son casi del mismo tamaño y reciben luz estelar dentro de un factor dos la una de la otra, y sus superficies difieren en más de cuatrocientos grados. Marte recibe 0,43 Tierras y tiene una superficie que estaría mucho más caliente con una atmósfera más gruesa que la fina que tiene. La distancia importa enormemente, y no es lo único que importa.',
       tool: {
         title: 'Tres candidatos',
         note: 'Los tres reciben luz estelar parecida y los tres están dentro de la zona modelada. Todo lo demás sobre ellos difiere.',

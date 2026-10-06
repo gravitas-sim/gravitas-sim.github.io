@@ -23,7 +23,7 @@ export const EN_COURSEHOME = {
   'courseHome.empty.text':
     'A course opens from the link your instructor gave you, or from a course file. Gravitas also has an example course.',
   'courseHome.empty.example': 'Open the example course: introductory astronomy',
-  'courseHome.empty.builder': 'Make a course in the course-pack builder',
+  'courseHome.empty.builder': 'Make a course in the course-package builder',
   'courseHome.refused.heading': 'This course cannot be opened',
   'courseHome.refused.text':
     'The link or file is not a course Gravitas can read. It may have been cut short when it was copied. Ask for the link again, or for the course file.',
@@ -43,20 +43,20 @@ export const EN_COURSEHOME = {
   'courseHome.objectives': 'What you will be able to do',
   'courseHome.prerequisites': 'Before you start',
   'courseHome.unit': 'Unit {n}: {title}',
-  'courseHome.kind.lesson': 'Lesson',
-  'courseHome.kind.assignment': 'Assignment',
+  'courseHome.kind.lesson': 'Investigation',
+  'courseHome.kind.assignment': 'Activity',
   'courseHome.kind.scenario': 'Simulation',
   'courseHome.kind.dataset': 'Data',
   'courseHome.kind.reading': 'Reading',
-  'courseHome.open.lesson': 'Open the lesson',
-  'courseHome.open.assignment': 'Open the assignment',
+  'courseHome.open.lesson': 'Open the investigation',
+  'courseHome.open.assignment': 'Open the activity',
   'courseHome.open.scenario': 'Open the simulation',
   'courseHome.open.dataset': 'Open the data',
   'courseHome.open.reading': 'Open the reading',
   'courseHome.openNamed': '{action}: {title}',
   'courseHome.after': 'After: {list}',
   'courseHome.missing':
-    'This version of Gravitas does not have this lesson. Ask your instructor what to do instead.',
+    'This version of Gravitas does not have this investigation. Ask your instructor what to do instead.',
   'courseHome.install':
     'Install this data from the catalog first; after that it opens without a network.',
   'courseHome.catalog': 'Open the catalog',
@@ -67,5 +67,5 @@ export const EN_COURSEHOME = {
   'courseHome.made':
     'Version {version} of this course, made with Gravitas platform {platform}.',
   'courseHome.printNote':
-    'Open the assignments and simulations from the course home: their links are too long to print.',
+    'Open the activities and simulations from the course home: their links are too long to print.',
 };

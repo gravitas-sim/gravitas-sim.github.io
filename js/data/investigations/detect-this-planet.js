@@ -139,7 +139,7 @@ const DETECT_THIS_PLANET = {
              knows which star you mean. Somewhere around it, too faint
              to see, there may or may not be a planet. Your twelve measurements
              of the star's velocity are all the evidence you are going to get.
-             \n\nThe usual question is <em>is there a planet</em>. This lesson
+             \n\nThe usual question is <em>is there a planet</em>. This investigation
              asks a different one, and it is the question an observer actually
              has to answer first: <strong>would this schedule find it if there
              were?</strong>`,
@@ -264,7 +264,7 @@ const DETECT_THIS_PLANET = {
              A χ²/dof near 49 says that if the star's velocity had really been
              constant, a scatter this large would essentially never happen by
              chance.
-             \n\nBe careful with the next step. It is the one this whole lesson
+             \n\nBe careful with the next step. It is the one this whole investigation
              is built around.`,
       prompt:
         'The most that these twelve measurements establish on their own is:',
@@ -462,7 +462,7 @@ const DETECT_THIS_PLANET = {
                 second is wrong in the other direction: there <em>is</em> a
                 planet, and one this survey happened to be blind to, so
                 "no evidence" understates what the data cannot say. The fourth is
-                the specific error this lesson exists to prevent - an
+                the specific error this investigation exists to prevent - an
                 amplitude-to-noise ratio is not a significance, because it does
                 not account for how many points there are, how they are
                 distributed, or how many other periods you implicitly searched.`,
@@ -661,7 +661,7 @@ const DETECT_THIS_PLANET = {
                 night-to-night wander of the atmosphere is now the largest term
                 in the budget. Three nights is not many, though — the next
                 screen asks what happens with three hundred, and the answer is
-                not the one this lesson used to give.`,
+                not the one this investigation used to give.`,
     },
     {
       sid: 'the-floor',
@@ -884,7 +884,7 @@ const DETECT_THIS_PLANET = {
                 measured shallower transits than that. It is below what
                 <em>this</em> instrument can reach around <em>this</em> star, and
                 the difference between those two statements is the whole subject
-                of this lesson.`,
+                of this investigation.`,
     },
 
     {
@@ -892,7 +892,7 @@ const DETECT_THIS_PLANET = {
       bind: TARGET,
       type: 'read',
       title: 'What you decided before you looked',
-      body: `Two methods, and the same lesson twice.
+      body: `Two methods, and the same investigation twice.
              \n\nTwelve measurements. One instrument. One planet, which was there
              the whole time.
              \n\nSchedule A established beyond reasonable argument that this

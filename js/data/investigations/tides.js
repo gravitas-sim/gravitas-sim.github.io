@@ -122,7 +122,7 @@ const TIDES = {
   tags: ['gravity', 'solar-system'],
   lock: { placement: true, inspector: true },
   summary:
-    'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole lesson is built on that one subtraction: take the pull on the center away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
+    'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole investigation is built on that one subtraction: take the pull on the center away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
   objectives: [
     'Explain why an extended object feels a different gravitational pull at each point in it',
     'State that a tide is the difference between the local pull and the pull on the center, and use that to say why there are two ocean bulges rather than one',
@@ -147,10 +147,10 @@ const TIDES = {
              \n\nOn screen is the real Earth-Moon system: the Earth at the
              center and the Moon, <strong>Luna</strong>, on its 27.3 day orbit.
              The simulation is a straightforward Newtonian one, and that turns
-             out to be all you need. Nothing in this lesson requires a force
+             out to be all you need. Nothing in this investigation requires a force
              that is not already in that picture. What it requires is
              subtraction.`,
-      tip: 'While a lesson is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
+      tip: 'While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
       setup: TIDES_EARTH_MOON,
       probe: ctx => {
         const moon = ctx.find('Luna');
@@ -329,7 +329,7 @@ const TIDES = {
       title: 'What the far-side arrow means',
       kind: 'choice',
       body: `On the bottom row, the far-side arrow points away from the Moon.
-             That is the thing most worth getting right in this entire lesson,
+             That is the thing most worth getting right in this entire investigation,
              so it is worth stating carefully.`,
       prompt: 'The outward-pointing far-side arrow means that…',
       options: [
@@ -557,7 +557,7 @@ const TIDES = {
              \n\nOne honest caveat: this is an approximation, good when the
              object is small compared with its distance. It is excellent for the
              Moon on the Earth, and it gets worse as a body closes in on
-             something. Later in this lesson, where that matters, the exact
+             something. Later in this investigation, where that matters, the exact
              difference is used instead.`,
       tip: 'The 2 is not important. The three letters and where they sit are.',
     },
@@ -773,7 +773,7 @@ const TIDES = {
              under mutual gravity. It does not deform bodies, does not model the
              internal friction that makes tidal braking work, and does not
              evolve rotation from tidal torques. Every tidal number in this
-             lesson is computed from the positions and masses in the picture,
+             investigation is computed from the positions and masses in the picture,
              which is legitimate, and the deformation you are shown is drawn
              rather than simulated. That distinction is worth keeping.`,
       tip: 'Tidal locking is the normal outcome, not the exception: most large moons in the Solar System are locked to their planets, and Pluto and Charon are locked to each other.',
@@ -785,7 +785,7 @@ const TIDES = {
       type: 'question',
       title: 'Say it in your own words',
       kind: 'short',
-      body: `Halfway. Before the lesson moves from tides that move water to
+      body: `Halfway. Before the investigation moves from tides that move water to
              tides that destroy things, put the core idea into a sentence of
              your own.`,
       prompt:
@@ -969,7 +969,7 @@ const TIDES = {
       bind: EARTH_MOON,
       type: 'read',
       title: 'What a Roche limit does not tell you',
-      body: `Four qualifications, because this is the idea in the lesson most
+      body: `Four qualifications, because this is the idea in the investigation most
              likely to be over-applied.
              \n\n<strong>It is about self-gravity, not glue.</strong> The whole
              argument compares the tide against a body’s own gravity. Small
@@ -1017,7 +1017,7 @@ const TIDES = {
              fact that closer passages do more damage, and the fact that the
              debris ends up on a spread of different orbits because different
              parts of the body were at different distances when it came apart.
-             That last one is the same subtraction you started the lesson with.
+             That last one is the same subtraction you started the investigation with.
              \n\nThe readout below is that subtraction, on this scene: the pull
              of the hole at the near side of the doomed star, at its center and
              at its far side. Watch the difference grow as the star falls in.
@@ -1076,7 +1076,7 @@ const TIDES = {
              tidal radius grows only as the cube root of it.
              \n\n<strong>The approximation, stated.</strong> Both radii here are
              Newtonian estimates, and the tidal radius uses the same
-             self-gravity balance as the rest of the lesson. Real tidal
+             self-gravity balance as the rest of the investigation. Real tidal
              disruption events are hydrodynamic: the star is compressed as well
              as stretched, the debris shocks and radiates, and general
              relativity matters near the horizon. None of that is modeled here
@@ -1096,7 +1096,7 @@ const TIDES = {
       sid: 'the-whole-lesson-in-three',
       bind: DISRUPTION,
       type: 'question',
-      title: 'The whole lesson in three sentences',
+      title: 'The whole investigation in three sentences',
       kind: 'short',
       body: `You have gone from a beach to a black hole using one idea and two
              measured relationships. Write it down.`,

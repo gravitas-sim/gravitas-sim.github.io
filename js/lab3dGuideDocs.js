@@ -22,7 +22,7 @@ const NOTES = {
   'l3-eclipse': [
     'The key relation is one line: at conjunction the planet passes a sin i from the star on the sky, and there is an eclipse only when that is below the two radii’s sum. Half a degree of tilt is enough to lose it for a Sun-like star at 1 AU.',
     'The enlarged-size step is deliberate: drawn at ten times their radii, the planet appears to cross a star it misses. Discuss which scale cues a picture carries and which it cannot; the legend says the size is enlarged.',
-    'The advanced path’s critical inclination leads to the geometric transit probability, about (R* + Rp) / a for random orientations: a useful bridge to the transit lessons and to why transit surveys watch many stars.',
+    'The advanced path’s critical inclination leads to the geometric transit probability, about (R* + Rp) / a for random orientations: a useful bridge to the transit investigations and to why transit surveys watch many stars.',
   ],
   'l3-mutual': [
     'Equal inclinations are not a shared plane: the two planets here are both at 10 degrees, with nodes 90 degrees apart, and their orbits are 14.1 degrees apart. Students who predict “the same plane” are reasoning from one number where two are needed.',
@@ -38,8 +38,8 @@ const NOTES = {
 
 /** What the guides report that is still an educational approximation. */
 export const APPROXIMATIONS = [
-  'Point masses under Newtonian gravity, integrated by the validated 3-D kernel (LAB3D.md): no general relativity, tides, spin or radiation. General-relativistic precession would damp the Kozai-Lidov cycle for a tight inner orbit; this one is not tight enough for that to matter to the lesson, and the guide says it is left out.',
-  'The orbital elements are osculating: the two-body orbit the positions and velocities would follow at that moment. With a third body they drift, and in the Kozai-Lidov guide that drift is the lesson.',
+  'Point masses under Newtonian gravity, integrated by the validated 3-D kernel (LAB3D.md): no general relativity, tides, spin or radiation. General-relativistic precession would damp the Kozai-Lidov cycle for a tight inner orbit; this one is not tight enough for that to matter to the investigation, and the guide says it is left out.',
+  'The orbital elements are osculating: the two-body orbit the positions and velocities would follow at that moment. With a third body they drift, and in the Kozai-Lidov guide that drift is the investigation.',
   'Radii are used for contacts and for drawing, not for light: an eclipse here is the geometry of the sky separation against the sum of the radii, with no light curve, limb darkening or transit duration.',
   'The secular formula e_max = sqrt(1 - (5/3) cos^2 i0) is the lowest-order (quadrupole, test-particle) theory. The kernel integrates the full three-body problem, so its peak differs from the formula’s by a few thousandths, as the advanced path shows.',
   'The systems made for the guides are built from orbital elements once, in the browser, and then run as numbers; their last digits may differ between browsers, far below every tolerance.',

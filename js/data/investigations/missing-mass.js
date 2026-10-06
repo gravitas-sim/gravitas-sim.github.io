@@ -188,8 +188,8 @@ const DARK_MATTER = {
              radius together give you the mass that must be inside. This is the
              dynamical mass.
              \n\nThe two ways are measuring the same thing, so they had better
-             agree. This lesson is about three systems. In the first, they do.`,
-      tip: 'Open the Rotation Curve panel from the Tools section of the right-hand rail. Leave it open: you will use it for the whole lesson.',
+             agree. This investigation is about three systems. In the first, they do.`,
+      tip: 'Open the Rotation Curve panel from the Tools section of the right-hand rail. Leave it open: you will use it for the whole investigation.',
     },
     {
       sid: 'put-the-mass-somewhere',
@@ -211,7 +211,7 @@ const DARK_MATTER = {
         'On "Spiral disc", notice the curve rises, peaks and then falls: still not flat',
         'On "What galaxies do", read the outer slope and compare it with the first preset',
       ],
-      tip: 'The "outer slope" number is the exponent in v ∝ rⁿ. Keplerian is −0.5. Flat is 0. It is the single number this whole lesson turns on.',
+      tip: 'The "outer slope" number is the exponent in v ∝ rⁿ. Keplerian is −0.5. Flat is 0. It is the single number this whole investigation turns on.',
     },
     {
       sid: 'which-arrangement-gives-a-flat',
@@ -470,7 +470,7 @@ const DARK_MATTER = {
       body: `Read the panel. The shaded strip on the left of the plot is the
              inner region, which is excluded from the fit: inside the bulge the
              curve rises with radius for reasons that have nothing to do with
-             this lesson, and including it would drag the slope towards zero.
+             this investigation, and including it would drag the slope towards zero.
              \n\nRecord the slope and the shape the panel reports.`,
       fields: [
         { id: 'exp_slope', label: 'Outer slope (the exponent)', unit: '' },
@@ -517,7 +517,7 @@ const DARK_MATTER = {
              outer disc star - from the canvas, or from the list below - and read
              the last two lines of the readout: how fast it is actually moving,
              and how fast the visible mass inside its orbit says it should be.
-             The ratio between those is the whole of this lesson, measured on one
+             The ratio between those is the whole of this investigation, measured on one
              object you chose rather than read off a curve somebody drew.`,
       probe: tracerRows,
       fields: [

@@ -8,11 +8,11 @@
 export const ES_COMPOSER = {
   'composer.title': 'Compositor de investigaciones',
   'composer.intro':
-    'Compón una investigación guiada como datos: lo que los estudiantes leen, predicen, prueban, miden y responden, qué escenario e instrumento abre cada paso y qué ven cuando una respuesta es incorrecta. La comprueban las mismas reglas que cada lección que trae Gravitas, y nunca ejecuta nada de lo que escribes.',
+    'Compón una investigación guiada como datos: lo que los estudiantes leen, predicen, prueban, miden y responden, qué escenario e instrumento abre cada paso y qué ven cuando una respuesta es incorrecta. La comprueban las mismas reglas que cada investigación que trae Gravitas, y nunca ejecuta nada de lo que escribes.',
   'composer.toolbar.label': 'Archivo de la investigación',
   'composer.action.new': 'Investigación nueva',
   'composer.action.saveBank': 'Guardar el banco de preguntas',
-  'composer.action.export': 'Exportar el archivo de la lección',
+  'composer.action.export': 'Exportar el archivo de la investigación',
   'composer.action.exportEs': 'Exportar su archivo en español',
   'composer.raw.label': 'El archivo de la investigación, en JSON',
 
@@ -28,7 +28,7 @@ export const ES_COMPOSER = {
   'composer.state.stale': 'Español desactualizado',
   'composer.field.id': 'Identificador',
   'composer.hint.id':
-    'Palabras en minúsculas unidas por guiones. No puede ser el identificador de una lección que Gravitas ya tiene.',
+    'Palabras en minúsculas unidas por guiones. No puede ser el identificador de una investigación que Gravitas ya tiene.',
   'composer.field.version': 'Versión',
   'composer.field.title': 'Título',
   'composer.field.subtitle': 'Subtítulo',
@@ -36,7 +36,7 @@ export const ES_COMPOSER = {
   'composer.field.level': 'Nivel',
   'composer.field.duration': 'Duración',
   'composer.hint.duration':
-    'Un intervalo como 20-25 min, tal como lo imprime la tarjeta de la lección.',
+    'Un intervalo como 20-25 min, tal como lo imprime la tarjeta de la investigación.',
   'composer.field.thumbnail': 'Imagen de la tarjeta',
   'composer.thumbnail.first': 'El escenario del primer paso',
   'composer.field.objectives': 'Objetivos',
@@ -44,7 +44,7 @@ export const ES_COMPOSER = {
   'composer.objective.add': 'Añadir un objetivo',
   'composer.objective.remove': 'Quitar el objetivo {n}',
   'composer.field.prerequisites': 'Antes de esto',
-  'composer.prereq.lesson': 'Una lección de Gravitas',
+  'composer.prereq.lesson': 'Una investigación de Gravitas',
   'composer.prereq.text': 'Otra cosa, en palabras',
   'composer.prereq.add': 'Añadir un requisito',
   'composer.prereq.remove': 'Quitar el requisito {n}',
@@ -180,7 +180,7 @@ export const ES_COMPOSER = {
     'Cada texto está en los dos idiomas y al día.',
   'composer.translation.item': '{where}: {state}',
   'composer.preview.hint':
-    'La investigación en el motor de lecciones de verdad, solo desde este navegador: allí no se guarda nada y no se publica nada.',
+    'La investigación en el motor de investigaciones de verdad, solo desde este navegador: allí no se guarda nada y no se publica nada.',
   'composer.preview.student': 'Vista previa como estudiante',
   'composer.preview.author': 'Abrir con la barra de autoría',
   'composer.preview.frame':
@@ -204,9 +204,9 @@ export const ES_COMPOSER = {
   'composer.report.made': 'El informe de muestra está listo.',
   'composer.report.failed': 'No se pudo hacer el informe de muestra: {error}',
   'composer.checks.format':
-    'Resuelve esto primero; las comprobaciones de la lección se hacen cuando el archivo está en orden.',
+    'Resuelve esto primero; las comprobaciones de la investigación se hacen cuando el archivo está en orden.',
   'composer.checks.rule': 'Paso {n}: {message}',
-  'composer.checks.lesson': 'La lección: {message}',
+  'composer.checks.lesson': 'La investigación: {message}',
   'composer.checks.count':
     '{count} problema(s) que resolver antes de poder guardar la investigación.',
   'composer.checks.valid': 'La investigación es válida.',
@@ -219,7 +219,7 @@ export const ES_COMPOSER = {
   'composer.status.saved': 'Se guardó {file}.',
   'composer.status.bankSaved': 'Se guardó {file}.',
   'composer.status.exported':
-    'Se guardó {file}: la lección, para js/data/investigations/.',
+    'Se guardó {file}: la investigación, para js/data/investigations/.',
   'composer.status.exportedEs':
     'Se guardó {file}: su español, para js/data/investigations/es/ (renómbralo {id}.js allí).',
   'composer.status.previewed':
@@ -233,7 +233,7 @@ export const ES_COMPOSER = {
   'composer.error.textUnsafe':
     'Solo las etiquetas strong, em, sub y sup; ningún otro marcado y ninguna dirección web.',
   'composer.error.entity':
-    '&{entity}; no es una de las entidades que usan las lecciones.',
+    '&{entity}; no es una de las entidades que usan las investigaciones.',
   'composer.error.esOf':
     'El registro de qué inglés traduce el español está dañado.',
   'composer.error.tooLarge':
@@ -243,12 +243,12 @@ export const ES_COMPOSER = {
   'composer.error.unsafeKey': '«{key}» no puede ser una clave.',
   'composer.error.notData': 'Esto no son datos simples.',
   'composer.error.idTaken':
-    'Ese es el identificador de una lección que Gravitas ya tiene.',
+    'Ese es el identificador de una investigación que Gravitas ya tiene.',
   'composer.error.duration': 'Un intervalo como 20-25 min.',
   'composer.error.scenario': 'Elige un escenario que Gravitas tenga.',
   'composer.error.objectives': 'De uno a ocho objetivos.',
-  'composer.error.prerequisite': 'O una lección o un texto.',
-  'composer.error.lesson': 'Elige una lección que Gravitas tenga.',
+  'composer.error.prerequisite': 'O una investigación o un texto.',
+  'composer.error.lesson': 'Elige una investigación que Gravitas tenga.',
   'composer.error.steps': 'De 2 a {max} pasos.',
   'composer.error.repeat': 'Otro ya tiene este identificador.',
   'composer.error.closing':

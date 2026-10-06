@@ -103,7 +103,7 @@ const BUTTERFLY_EFFECT = {
              lead to futures that are completely different, and the difference
              grows <em>exponentially</em>.
 
-             \n\nEverything in this lesson is aimed at telling that apart from
+             \n\nEverything in this investigation is aimed at telling that apart from
              three things it is regularly confused with.`,
       tip: 'The simulation is paused. Nothing will move until you let it.',
     },
@@ -133,7 +133,7 @@ const BUTTERFLY_EFFECT = {
                 order give the same answer every time, on the same machine and
                 in the same browser. There is no dice roll anywhere in the
                 engine. Whatever you are about to see is not randomness, and
-                proving that <em>first</em> is what makes the rest of the lesson
+                proving that <em>first</em> is what makes the rest of the investigation
                 mean anything.`,
     },
     {
@@ -156,7 +156,7 @@ const BUTTERFLY_EFFECT = {
              \n\nOpen the bench now (Tools → A/B Bench), name the experiment
              something you will recognize, and press <strong>Capture start</strong>.
              Then tick <strong>Position</strong> and <strong>Total energy</strong>
-             so the runs carry what this lesson needs.`,
+             so the runs carry what this investigation needs.`,
       tip: 'The bench keeps the two runs on the same simulated-time axis, which is what makes them comparable at all.',
     },
     {
@@ -168,7 +168,7 @@ const BUTTERFLY_EFFECT = {
       body: `Run the identical experiment twice, changing <em>nothing</em>
              between the runs.
 
-             \n\nOpen the <strong>A/B Bench</strong> and find <em>The lesson's
+             \n\nOpen the <strong>A/B Bench</strong> and find <em>The investigation's
              controlled pair</em>. Press <strong>Run it twice,
              unchanged</strong>. It captures the start, records Run A for forty
              simulated seconds, returns to that same start, and records Run B
@@ -194,7 +194,7 @@ const BUTTERFLY_EFFECT = {
                instrument should say "the two runs are identical". Full credit
                for reporting zero and recognizing what it establishes: the
                engine is deterministic, so any difference seen later in the
-               lesson has a cause that can be pointed at. Partial credit for
+               investigation has a cause that can be pointed at. Partial credit for
                reporting zero without connecting it to what follows. If a
                student reports a nonzero separation here, something was changed
                between the runs; the section's own "what changed between the
@@ -257,7 +257,7 @@ const BUTTERFLY_EFFECT = {
              in four hundred thousand of the system.
 
              \n\nOne housekeeping note: this pair takes four years to go round
-             once, so the lesson has turned the simulation speed up for this
+             once, so the investigation has turned the simulation speed up for this
              section. That changes how fast you watch it and nothing about the
              physics — both runs use the same step, so the comparison between
              them is unaffected.`,
@@ -653,7 +653,7 @@ const BUTTERFLY_EFFECT = {
              control</strong>, then choose the other one and press it again.
 
              \n\n<strong>Half the largest step.</strong> Not half the playback
-             speed — that is the instruction this lesson used to give and it was
+             speed — that is the instruction this investigation used to give and it was
              not reliable. The engine splits each frame's advance into at most a
              fixed number of pieces, no larger than a cap, and which of those
              two limits binds depends on the scenario: where the cap is not the
@@ -720,7 +720,7 @@ const BUTTERFLY_EFFECT = {
                 <em>reliability check</em> that reports whether a run's
                 aggregate quantities survive refinement, and it is a useful
                 thing that answers a different question. It cannot tell you that
-                a separation grew exponentially, and a lesson that quoted it in
+                a separation grew exponentially, and an investigation that quoted it in
                 place of an e-folding time would have reported that the
                 arithmetic is sound and called it evidence of chaos.`,
     },

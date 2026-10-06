@@ -179,6 +179,6 @@ export const ES_MISSIONLABGUIDES = {
     'Correcto: {value} kg, varias veces la masa en seco de la propia nave. La ecuación del cohete es exponencial en el delta-v, y por eso se cuenta cada m/s.',
   'gd.ml-cruise.limits.title': 'Lo que el vuelo directo sigue dejando fuera',
   'gd.ml-cruise.limits.body':
-    'El vuelo directo es un modelo mejor que la cónica empalmada, no uno real: quedan fuera la Luna, los otros planetas, la forma de la Tierra y la presión de la luz solar, cada impulso es instantáneo y cada estado se conoce exactamente. La lista bajo «Lo que este modelo deja fuera» los nombra todos. Esa es la diferencia con el software operativo: aquí los límites del modelo son la lección; allí, eliminarlos es para lo que existen las herramientas.',
+    'El vuelo directo es un modelo mejor que la cónica empalmada, no uno real: quedan fuera la Luna, los otros planetas, la forma de la Tierra y la presión de la luz solar, cada impulso es instantáneo y cada estado se conoce exactamente. La lista bajo «Lo que este modelo deja fuera» los nombra todos. Esa es la diferencia con el software operativo: aquí los límites del modelo son la investigación; allí, eliminarlos es para lo que existen las herramientas.',
   'gd.ml-cruise.limits.ok': '',
 };

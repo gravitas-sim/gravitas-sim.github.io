@@ -34,9 +34,9 @@ export const EN_EXOPLANET = {
   'gd.show.simStar': 'The simulation’s star: radius',
   'gd.show.simPlanet': 'The simulation’s planet: radius',
   'gd.show.rsunRjup': 'Jupiter radii in one solar radius',
-  'gd.show.simLink': 'Open the transit lesson in Gravitas',
+  'gd.show.simLink': 'Open the transit investigation in Gravitas',
   'gd.show.how.crowding':
-    'HD 209458’s value is from the header of the SPOC file its pack was made from; Kepler-13’s is from its pack; A’s share is from the TESS Input Catalog’s magnitudes.',
+    'HD 209458’s value is from the header of the SPOC file its dataset was made from; Kepler-13’s is from its dataset; A’s share is from the TESS Input Catalog’s magnitudes.',
   'gd.show.how.stellarRadius':
     'Adopted, not measured here: a light curve gives k, and the radius has to come from the star.',
   'gd.show.how.depths':
@@ -64,9 +64,9 @@ export const EN_EXOPLANET = {
     'Open. The list of reductions in its details is the light curve’s history.',
   'gd.exo-star.quality.title': 'What the quality flags removed',
   'gd.exo-star.quality.text':
-    'TESS marks the cadences it does not trust in a QUALITY column: those taken while the spacecraft unloaded its reaction wheels, or while scattered light swamped the camera, among others. This pack drops every flagged cadence before it averages the rest into 20-minute bins.\n\nHow many cadences did the QUALITY mask drop? The reduction that begins “QUALITY:” says.',
+    'TESS marks the cadences it does not trust in a QUALITY column: those taken while the spacecraft unloaded its reaction wheels, or while scattered light swamped the camera, among others. This package drops every flagged cadence before it averages the rest into 20-minute bins.\n\nHow many cadences did the QUALITY mask drop? The reduction that begins “QUALITY:” says.',
   'gd.exo-star.quality.ok':
-    '{value} cadences. The pack drops every flagged cadence rather than deciding which flags are harmless, and it says how many.',
+    '{value} cadences. The dataset drops every flagged cadence rather than deciding which flags are harmless, and it says how many.',
   'gd.exo-star.quality.no':
     'That is not what the reductions say. Find the one that begins “QUALITY:” in the observation’s details.',
   'gd.exo-star.aperture.title': 'The pixels that were summed',
@@ -203,7 +203,7 @@ export const EN_EXOPLANET = {
     'Copy beta from the list of statistics under the results table.',
   'gd.exo-fit.radius.title': 'From a ratio to a radius',
   'gd.exo-fit.radius.text':
-    'k is a ratio: the planet’s radius is k times the star’s, and the star’s radius is not in the light curve. This guide adopts R* = 1.19 ± 0.02 solar radii (Stassun et al. 2017). Enter it and its uncertainty in the fit panel’s fields for the star’s radius, and fit again.',
+    'k is a ratio: the planet’s radius is k times the star’s, and the star’s radius is not in the light curve. This investigation adopts R* = 1.19 ± 0.02 solar radii (Stassun et al. 2017). Enter it and its uncertainty in the fit panel’s fields for the star’s radius, and fit again.',
   'gd.exo-fit.radius.ok':
     'Fitted with the star’s radius: the fit now derives the planet’s radius, Rp = {value} Jupiter radii, with the star’s uncertainty added to the fit’s.',
   'gd.exo-fit.planet-radius.title': 'The planet’s radius',
@@ -339,7 +339,7 @@ export const EN_EXOPLANET = {
     'The other stars hold one minus CROWDSAP of the light.',
   'gd.exo-planet.simulation.title': 'The simulation’s HD 209458',
   'gd.exo-planet.simulation.text':
-    'Gravitas’s transit lesson and its Transit Lab simulate HD 209458 with a star 1.155 solar radii across and a planet 1.38 Jupiter radii across: rounded values from the literature. What radius ratio k does the simulation use? A solar radius is 9.7312 Jupiter radii.',
+    'Gravitas’s transit investigation and its Transit Lab simulate HD 209458 with a star 1.155 solar radii across and a planet 1.38 Jupiter radii across: rounded values from the literature. What radius ratio k does the simulation use? A solar radius is 9.7312 Jupiter radii.',
   'gd.exo-planet.simulation.ok':
     '{value}. Set it beside the k your fit found in Investigation 3: the simulation is built from published values, your fit from this light curve, and they need not agree to the last digit.',
   'gd.exo-planet.simulation.no': 'Divide 1.38 by 1.155 × 9.7312.',
@@ -351,12 +351,12 @@ export const EN_EXOPLANET = {
     'The star’s radial velocity: its wobble toward and away from us as the planet orbits',
   'gd.exo-planet.mass.opt.depth': 'A more precise transit depth',
   'gd.exo-planet.mass.ok':
-    'Yes. A transit gives a size; the star’s motion gives a mass (so, for planets pulling on one another, can the timing of their transits). Stassun et al. (2017) give HD 209458 b 0.73 ± 0.04 Jupiter masses, from radial velocities. No radial velocities of a transiting star ship with Gravitas yet, so here the planet’s density stays unmeasured; the radial-velocity lesson works with a simulated survey instead.',
+    'Yes. A transit gives a size; the star’s motion gives a mass (so, for planets pulling on one another, can the timing of their transits). Stassun et al. (2017) give HD 209458 b 0.73 ± 0.04 Jupiter masses, from radial velocities. No radial velocities of a transiting star ship with Gravitas yet, so here the planet’s density stays unmeasured; the radial-velocity investigation works with a simulated survey instead.',
   'gd.exo-planet.mass.no':
     'Which measurement responds to the planet’s pull on its star?',
   'gd.exo-planet.wrap.title': 'From photons to a planet',
   'gd.exo-planet.wrap.text':
     'From a record of photons you found a period, a radius ratio and, with an adopted star, a radius; you tested the dip against two ways an eclipsing binary gives itself away; and you saw a crowded aperture hide half a transit and leave its host undecided. What is left is the planet’s mass, which needs the star’s motion. Every number you checked came from the data by a stated method, or was adopted from a cited source and named as adopted.',
   'gd.suite.exoplanet.intro':
-    'Five guides with real TESS light curves, meant to be done in order: whose light a light curve holds, finding a transit, fitting it, a star whose light is not all its own, and whether the dip is a planet at all. Each uses this page’s own tools, and every number a step checks comes from the data or from a cited source it names. The introductory path is the core; the advanced path adds steps to it.',
+    'A set of investigations with real TESS light curves, meant to be done in order: whose light a light curve holds, finding a transit, fitting it, a star whose light is not all its own, and whether the dip is a planet at all. Each uses this page’s own tools, and every number a step checks comes from the data or from a cited source it names. The introductory path is the core; the advanced path adds steps to it.',
 };

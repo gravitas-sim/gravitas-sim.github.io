@@ -32,9 +32,9 @@ export const ES_EXOPLANET = {
   'gd.show.simStar': 'La estrella de la simulación: radio',
   'gd.show.simPlanet': 'El planeta de la simulación: radio',
   'gd.show.rsunRjup': 'Radios de Júpiter en un radio solar',
-  'gd.show.simLink': 'Abrir la lección de tránsitos en Gravitas',
+  'gd.show.simLink': 'Abrir la investigación de tránsitos en Gravitas',
   'gd.show.how.crowding':
-    'El valor de HD 209458 viene de la cabecera del archivo de SPOC del que se hizo su paquete; el de Kepler-13, de su paquete; la parte de A, de las magnitudes del TESS Input Catalog.',
+    'El valor de HD 209458 viene de la cabecera del archivo de SPOC del que se hizo su conjunto de datos; el de Kepler-13, de su conjunto de datos; la parte de A, de las magnitudes del TESS Input Catalog.',
   'gd.show.how.stellarRadius':
     'Adoptado, no medido aquí: una curva de luz da k, y el radio tiene que venir de la estrella.',
   'gd.show.how.depths':
@@ -64,7 +64,7 @@ export const ES_EXOPLANET = {
   'gd.exo-star.quality.text':
     'TESS marca en una columna QUALITY las cadencias en las que no confía: las tomadas mientras la nave descargaba sus ruedas de reacción, o mientras la luz dispersa inundaba la cámara, entre otras. Este paquete descarta cada cadencia marcada antes de promediar el resto en intervalos de 20 minutos.\n\n¿Cuántas cadencias descartó la máscara QUALITY? Lo dice la reducción que empieza por «QUALITY:».',
   'gd.exo-star.quality.ok':
-    '{value} cadencias. El paquete descarta cada cadencia marcada en lugar de decidir qué marcas son inofensivas, y dice cuántas.',
+    '{value} cadencias. El conjunto de datos descarta cada cadencia marcada en lugar de decidir qué marcas son inofensivas, y dice cuántas.',
   'gd.exo-star.quality.no':
     'Eso no es lo que dicen las reducciones. Busca la que empieza por «QUALITY:» en los detalles de la observación.',
   'gd.exo-star.aperture.title': 'Los píxeles que se sumaron',
@@ -204,7 +204,7 @@ export const ES_EXOPLANET = {
     'Copia beta de la lista de estadísticos bajo la tabla de resultados.',
   'gd.exo-fit.radius.title': 'De un cociente a un radio',
   'gd.exo-fit.radius.text':
-    'k es un cociente: el radio del planeta es k veces el de la estrella, y el radio de la estrella no está en la curva de luz. Esta guía adopta R* = 1,19 ± 0,02 radios solares (Stassun et al. 2017). Escríbelo, con su incertidumbre, en los campos del radio de la estrella del panel de ajuste, y ajusta de nuevo.',
+    'k es un cociente: el radio del planeta es k veces el de la estrella, y el radio de la estrella no está en la curva de luz. Esta investigación adopta R* = 1,19 ± 0,02 radios solares (Stassun et al. 2017). Escríbelo, con su incertidumbre, en los campos del radio de la estrella del panel de ajuste, y ajusta de nuevo.',
   'gd.exo-fit.radius.ok':
     'Ajustado con el radio de la estrella: el ajuste deriva ahora el radio del planeta, Rp = {value} radios de Júpiter, con la incertidumbre de la estrella sumada a la del ajuste.',
   'gd.exo-fit.planet-radius.title': 'El radio del planeta',
@@ -343,7 +343,7 @@ export const ES_EXOPLANET = {
     'Las otras estrellas tienen uno menos CROWDSAP de la luz.',
   'gd.exo-planet.simulation.title': 'El HD 209458 de la simulación',
   'gd.exo-planet.simulation.text':
-    'La lección de tránsitos de Gravitas y su Transit Lab simulan HD 209458 con una estrella de 1,155 radios solares y un planeta de 1,38 radios de Júpiter: valores redondeados de la bibliografía. ¿Qué cociente de radios k usa la simulación? Un radio solar son 9,7312 radios de Júpiter.',
+    'La investigación de tránsitos de Gravitas y su Transit Lab simulan HD 209458 con una estrella de 1,155 radios solares y un planeta de 1,38 radios de Júpiter: valores redondeados de la bibliografía. ¿Qué cociente de radios k usa la simulación? Un radio solar son 9,7312 radios de Júpiter.',
   'gd.exo-planet.simulation.ok':
     '{value}. Ponlo junto al k que encontró tu ajuste en la investigación 3: la simulación se construye con valores publicados, tu ajuste con esta curva de luz, y no tienen por qué coincidir hasta la última cifra.',
   'gd.exo-planet.simulation.no': 'Divide 1,38 entre 1,155 × 9,7312.',
@@ -355,12 +355,12 @@ export const ES_EXOPLANET = {
     'La velocidad radial de la estrella: su bamboleo hacia nosotros y alejándose mientras el planeta orbita',
   'gd.exo-planet.mass.opt.depth': 'Una profundidad de tránsito más precisa',
   'gd.exo-planet.mass.ok':
-    'Sí. Un tránsito da un tamaño; el movimiento de la estrella da una masa (también, en planetas que tiran unos de otros, el momento de sus tránsitos). Stassun et al. (2017) dan a HD 209458 b 0,73 ± 0,04 masas de Júpiter, a partir de velocidades radiales. Gravitas todavía no trae velocidades radiales de una estrella con tránsitos, así que aquí la densidad del planeta queda sin medir; la lección de velocidad radial trabaja con un sondeo simulado.',
+    'Sí. Un tránsito da un tamaño; el movimiento de la estrella da una masa (también, en planetas que tiran unos de otros, el momento de sus tránsitos). Stassun et al. (2017) dan a HD 209458 b 0,73 ± 0,04 masas de Júpiter, a partir de velocidades radiales. Gravitas todavía no trae velocidades radiales de una estrella con tránsitos, así que aquí la densidad del planeta queda sin medir; la investigación de velocidad radial trabaja con un sondeo simulado.',
   'gd.exo-planet.mass.no':
     '¿Qué medida responde al tirón del planeta sobre su estrella?',
   'gd.exo-planet.wrap.title': 'De los fotones a un planeta',
   'gd.exo-planet.wrap.text':
     'A partir de un registro de fotones encontraste un periodo, un cociente de radios y, con una estrella adoptada, un radio; pusiste la caída a prueba frente a dos maneras en que se delata una binaria eclipsante; y viste cómo una apertura contaminada oculta medio tránsito y deja sin decidir la estrella del planeta. Falta la masa del planeta, que necesita el movimiento de la estrella. Cada número que comprobaste salió de los datos por un método explicado, o se adoptó de una fuente citada y se nombró como adoptado.',
   'gd.suite.exoplanet.intro':
-    'Cinco guías con curvas de luz reales de TESS, pensadas para hacerse en orden: de quién es la luz que guarda una curva de luz, cómo encontrar un tránsito, cómo ajustarlo, una estrella cuya luz no es toda suya, y si la caída es de verdad un planeta. Cada una usa las herramientas de esta página, y cada número que comprueba un paso sale de los datos o de una fuente citada que el paso nombra. El itinerario introductorio es el núcleo; el avanzado le añade pasos.',
+    'Un conjunto de investigaciones con curvas de luz reales de TESS, pensadas para hacerse en orden: de quién es la luz que guarda una curva de luz, cómo encontrar un tránsito, cómo ajustarlo, una estrella cuya luz no es toda suya, y si la caída es de verdad un planeta. Cada una usa las herramientas de esta página, y cada número que comprueba un paso sale de los datos o de una fuente citada que el paso nombra. El itinerario introductorio es el núcleo; el avanzado le añade pasos.',
 };

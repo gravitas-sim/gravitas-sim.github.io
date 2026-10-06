@@ -123,7 +123,7 @@ const HOHMANN_TRANSFER = {
              the fuel you brought. The question is not <em>can</em> you — it is
              what is the cheapest way, and how long does it take.
              \n\nNothing else is in this system. No other planets, no belt, no
-             moon. That is deliberate, and by the end of the lesson you will
+             moon. That is deliberate, and by the end of the investigation you will
              know exactly which of your answers depended on it.`,
       tip: 'Select the Spacecraft and look at the inspector: the ▲ button beside the pin opens the maneuver planner.',
     },
@@ -617,7 +617,7 @@ const HOHMANN_TRANSFER = {
              preview says the same thing about itself: it shows the two-body
              orbit, and in a system where a third mass matters the real path
              leaves the prediction.
-             \n\nOne more thing this lesson quietly ignored: the station has to
+             \n\nOne more thing this investigation quietly ignored: the station has to
              be <em>there</em> when you arrive. Getting the timing right is a
              separate problem with its own arithmetic, and it is why launches to
              Mars happen in a few weeks every twenty-six months rather than

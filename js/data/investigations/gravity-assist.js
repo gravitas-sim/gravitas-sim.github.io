@@ -239,7 +239,7 @@ const GRAVITY_ASSIST = {
              spacecraft behind the planet, and the encounter takes about nine
              seconds to watch.
              \n\nPress <strong>Fly it</strong>. Watch the path bend. Then read
-             the two columns — they are the whole lesson, and they disagree.`,
+             the two columns — they are the whole investigation, and they disagree.`,
       checklist: [
         'Watch the trail bend as the spacecraft rounds the planet',
         'Read the left column: the speed relative to the planet, before and after',
@@ -610,7 +610,7 @@ const GRAVITY_ASSIST = {
       kind: 'choice',
       title: 'Whose frame, exactly?',
       body: `One loose end, and it is the interesting kind.
-             \n\nThe whole lesson rests on the left-hand column: the speed
+             \n\nThe whole investigation rests on the left-hand column: the speed
              relative to the planet does not change. But the planet you are
              measuring against is not the same planet before and after — it
              recoiled. The comparison's caveat says by how much: about four

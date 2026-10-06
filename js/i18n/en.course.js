@@ -8,9 +8,9 @@
 // =============================================================================
 
 export const EN_COURSE = {
-  'course.title': 'Course-pack builder',
+  'course.title': 'Course-package builder',
   'course.intro':
-    'Assemble a course from what Gravitas has: lessons, assignments cut from them, simulations, data and readings, in units, with objectives, time, optional introductory and advanced paths, and notes for students and instructors in English and Spanish. It checks what the course depends on and pins every lesson, so an archived course can say what it was made with. Nothing needs an account: the course is a file and a link.',
+    'Assemble a course from what Gravitas has: investigations, activities cut from them, simulations, data and readings, in units, with objectives, time, optional introductory and advanced paths, and notes for students and instructors in English and Spanish. It checks what the course depends on and pins every investigation, so an archived course can say what it was made with. Nothing needs an account: the course is a file and a link.',
   'course.toolbar.label': 'Course file',
   'course.action.new': 'New course',
   'course.action.example': 'Open the example course',
@@ -19,7 +19,7 @@ export const EN_COURSE = {
   'course.action.upgrade': 'Upgrade the reviewed items',
   'course.action.addObjective': 'Add an objective',
   'course.action.addPrereqText': 'Add a prerequisite in words',
-  'course.action.addPrereqLesson': 'Add a prerequisite lesson',
+  'course.action.addPrereqLesson': 'Add a prerequisite investigation',
   'course.action.addUnit': 'Add a unit',
   'course.action.addItem': 'Add it',
   'course.action.remove': 'Remove',
@@ -34,7 +34,7 @@ export const EN_COURSE = {
   'course.hint.id':
     'Lower-case words joined by hyphens. It names the file and the drafts.',
   'course.hint.pinning':
-    "Exact: an archive; any change to a lesson it names waits for your review. Compatible: changes within a lesson package's major version are accepted, and anything larger waits.",
+    "Exact: an archive; any change to an investigation it names waits for your review. Compatible: changes within an investigation package's major version are accepted, and anything larger waits.",
   'course.hint.teacherGuide':
     'How to run the course, for another instructor. Shown on the course home only when "Notes for instructors" is ticked.',
   'course.hint.objectives':
@@ -42,7 +42,7 @@ export const EN_COURSE = {
   'course.hint.units':
     'Units run in order, and items in order within them. There are no dates: an instructor sets those. An item on the introductory or advanced path is optional, and the core may not depend on one.',
   'course.hint.minutesDerived':
-    "Leave blank to use the lesson's own time (for an assignment, its share of the lesson's steps).",
+    "Leave blank to use the investigation's own time (for an activity, its share of the investigation's steps).",
   'course.hint.seed':
     'A word such as orbit-1: the same word always builds the same world.',
   'course.hint.dataset':
@@ -62,7 +62,7 @@ export const EN_COURSE = {
   'course.field.objective': 'Objective',
   'course.field.objectives': 'Objectives it serves',
   'course.field.prerequisite': 'Prerequisite',
-  'course.field.lesson': 'Lesson',
+  'course.field.lesson': 'Investigation',
   'course.field.unitTitle': 'Unit title',
   'course.field.addKind': 'New item',
   'course.field.path': 'Path',
@@ -70,8 +70,8 @@ export const EN_COURSE = {
   'course.field.needs': 'Comes after',
   'course.field.studentNote': 'Note for students',
   'course.field.teacherNote': 'Note for instructors',
-  'course.field.assignmentTitle': 'Assignment title',
-  'course.field.assignmentIntro': 'Assignment introduction',
+  'course.field.assignmentTitle': 'Activity title',
+  'course.field.assignmentIntro': 'Activity introduction',
   'course.field.steps': 'Steps',
   'course.field.scenario': 'Scenario',
   'course.field.seed': 'Seed word',
@@ -97,8 +97,8 @@ export const EN_COURSE = {
   'course.state.done': 'Translated',
   'course.state.missing': 'No Spanish yet',
   'course.state.stale': 'Spanish out of date',
-  'course.kind.lesson': 'Lesson',
-  'course.kind.assignment': 'Assignment',
+  'course.kind.lesson': 'Investigation',
+  'course.kind.assignment': 'Activity',
   'course.kind.scenario': 'Simulation',
   'course.kind.dataset': 'Data',
   'course.kind.reading': 'Reading',
@@ -120,7 +120,7 @@ export const EN_COURSE = {
   'course.standing.moved': 'now comes from another package.',
   'course.standing.unpinned': 'not pinned yet.',
   'course.standing.missing': 'no longer in Gravitas.',
-  'course.steps.loading': "Loading the lesson's steps.",
+  'course.steps.loading': "Loading the investigation's steps.",
   'course.steps.needed': '(needed by a chosen step)',
   'course.checks.running': 'Checking.',
   'course.checks.valid': 'Nothing to fix.',
@@ -129,9 +129,9 @@ export const EN_COURSE = {
   'course.checks.warnings': 'Nothing to fix; {count} to look at.',
   'course.review.heading': 'Pins and upgrades',
   'course.review.hint':
-    "How each lesson stands against this version of Gravitas. Tick what you have looked at, then upgrade: the pins move to the lessons as they are, and the course's version goes up.",
+    "How each investigation stands against this version of Gravitas. Tick what you have looked at, then upgrade: the pins move to the investigations as they are, and the course's version goes up.",
   'course.review.summary': '{count} to review ({pinning} pinning).',
-  'course.review.clear': 'All {count} lessons are as pinned.',
+  'course.review.clear': 'All {count} investigations are as pinned.',
   'course.review.steps': 'Steps: {then} then, {now} now.',
   'course.review.missingSteps': 'Assigned steps that are gone: {list}.',
   'course.review.changedSteps': 'Assigned steps that were rewritten: {list}.',
@@ -154,7 +154,7 @@ export const EN_COURSE = {
   'course.translation.item': '{where}: {state}',
   'course.graph.heading': 'What it depends on',
   'course.graph.summary':
-    '{nodes} parts, {edges} dependencies: what each item needs and opens, and what each lesson uses.',
+    '{nodes} parts, {edges} dependencies: what each item needs and opens, and what each investigation uses.',
   'course.edge.needs': 'comes after',
   'course.edge.opens': 'opens',
   'course.edge.uses': 'uses',
@@ -197,7 +197,7 @@ export const EN_COURSE = {
   'course.file.refused': 'This file cannot be opened: {why}',
   'course.file.tooLarge': 'The file is larger than any course needs.',
   'course.file.migrated':
-    'Opened {id}, a course of lessons from the catalog. It is now a course pack of this version: add objectives and times, and pin its lessons by upgrading them.',
+    'Opened {id}, a course of investigations from the catalog. It is now a course package of this version: add objectives and times, and pin its investigations by upgrading them.',
   'course.audit.missing': 'Gravitas no longer has what this item opens.',
   'course.audit.review': '{title}: {status} It waits for review.',
   'course.audit.assumes':
@@ -205,7 +205,7 @@ export const EN_COURSE = {
   'course.audit.prerequisiteIncluded':
     '{lessonTitle} is both a prerequisite and in the course.',
   'course.audit.assignmentNeeds':
-    'The assignment also needs these steps: {sids}.',
+    'The activity also needs these steps: {sids}.',
   'course.audit.datasetIncompatible':
     'This version of Gravitas cannot open this dataset (it needs {range}).',
   'course.audit.install':
@@ -236,7 +236,7 @@ export const EN_COURSE = {
   'course.error.seed': 'A word such as orbit-1.',
   'course.error.tooMany': 'At most {max} items.',
   'course.error.access': 'Free online, through a library, or in print.',
-  'course.error.assignmentId': "The assignment's id and the date it was made.",
+  'course.error.assignmentId': "The activity's id and the date it was made.",
   'course.error.boolean': 'Yes or no.',
   'course.error.cite': 'Who wrote it, when and where.',
   'course.error.count': 'At most {max}.',
@@ -253,8 +253,8 @@ export const EN_COURSE = {
   'course.error.hash': 'Eight hexadecimal digits.',
   'course.error.items': 'From 1 to {max} items.',
   'course.error.kind': 'One of: {kinds}.',
-  'course.error.lesson': 'Choose a lesson Gravitas has.',
-  'course.error.lessonTwice': 'This lesson is already in the course.',
+  'course.error.lesson': 'Choose an investigation Gravitas has.',
+  'course.error.lessonTwice': 'This investigation is already in the course.',
   'course.error.license': 'The license or terms, in words.',
   'course.error.locales': 'The languages must include English.',
   'course.error.minutes': 'A whole number of minutes from 1 to 600.',
@@ -268,13 +268,13 @@ export const EN_COURSE = {
   'course.error.package': 'The package and its version.',
   'course.error.path': 'Core, introductory or advanced.',
   'course.error.pinRequired':
-    'An exact course pins every lesson it names: upgrade it to pin it.',
+    'An exact course pins every investigation it names: upgrade it to pin it.',
   'course.error.pinning': 'Exact or compatible.',
   'course.error.plain': 'Plain text only: no markup or entities.',
-  'course.error.prerequisite': 'A lesson or a text.',
+  'course.error.prerequisite': 'An investigation or a text.',
   'course.error.scenario': 'Choose a scenario Gravitas has.',
   'course.error.sid': 'A step id.',
-  'course.error.stepCount': "The lesson's number of steps.",
+  'course.error.stepCount': "The investigation's number of steps.",
   'course.error.stepHashes': 'One hash for each assigned step.',
   'course.error.steps': 'From 1 to {max} steps.',
   'course.error.stepsTwice': 'A step is named twice.',

@@ -31,8 +31,8 @@ export default {
   steps: [
     {
       title: 'Dos maneras de pesar algo que no puedes tocar',
-      body: 'No puedes poner una galaxia en una balanza. Hay dos maneras de averiguar cuánto pesa un sistema en el espacio, y son completamente independientes entre sí.\n\nLa primera es <strong>sumar lo que puedes ver</strong>. Cuenta las estrellas, deduce la masa de cada una a partir de su brillo y su color, y suma. Esto es lo que los astrónomos llaman masa visible, o masa luminosa.\n\nLa segunda es <strong>observar cómo se mueven las cosas</strong>. La gravedad fija la velocidad de una órbita, así que una velocidad orbital y un radio orbital juntos te dan la masa que tiene que haber dentro. Esta es la masa dinámica.\n\nLas dos maneras miden lo mismo, así que más vale que coincidan. Esta lección trata de tres sistemas. En el primero, coinciden.',
-      tip: 'Abre el panel Curva de rotación en la sección Herramientas del panel derecho. Déjalo abierto: lo usarás durante toda la lección.',
+      body: 'No puedes poner una galaxia en una balanza. Hay dos maneras de averiguar cuánto pesa un sistema en el espacio, y son completamente independientes entre sí.\n\nLa primera es <strong>sumar lo que puedes ver</strong>. Cuenta las estrellas, deduce la masa de cada una a partir de su brillo y su color, y suma. Esto es lo que los astrónomos llaman masa visible, o masa luminosa.\n\nLa segunda es <strong>observar cómo se mueven las cosas</strong>. La gravedad fija la velocidad de una órbita, así que una velocidad orbital y un radio orbital juntos te dan la masa que tiene que haber dentro. Esta es la masa dinámica.\n\nLas dos maneras miden lo mismo, así que más vale que coincidan. Esta investigación trata de tres sistemas. En el primero, coinciden.',
+      tip: 'Abre el panel Curva de rotación en la sección Herramientas del panel derecho. Déjalo abierto: lo usarás durante toda la investigación.',
     },
     {
       title: 'Pon la masa en algún sitio',
@@ -44,7 +44,7 @@ export default {
         'En «Disco espiral», fíjate en que la curva sube, alcanza un máximo y luego cae: sigue sin ser plana',
         'En «Lo que hacen las galaxias», lee la pendiente exterior y compárala con el primer ajuste',
       ],
-      tip: 'El número de «pendiente exterior» es el exponente de v ∝ rⁿ. Kepleriano es −0,5. Plano es 0. Es el único número sobre el que gira toda esta lección.',
+      tip: 'El número de «pendiente exterior» es el exponente de v ∝ rⁿ. Kepleriano es −0,5. Plano es 0. Es el único número sobre el que gira toda esta investigación.',
     },
     {
       title: '¿Qué disposición da una curva plana?',
@@ -143,7 +143,7 @@ export default {
     },
     {
       title: 'Mide la curva esperada',
-      body: 'Lee el panel. La franja sombreada de la izquierda de la gráfica es la región interior, excluida del ajuste: dentro del bulbo la curva sube con el radio por razones que no tienen nada que ver con esta lección, e incluirla arrastraría la pendiente hacia cero.\n\nAnota la pendiente y la forma que informa el panel.',
+      body: 'Lee el panel. La franja sombreada de la izquierda de la gráfica es la región interior, excluida del ajuste: dentro del bulbo la curva sube con el radio por razones que no tienen nada que ver con esta investigación, e incluirla arrastraría la pendiente hacia cero.\n\nAnota la pendiente y la forma que informa el panel.',
       fields: [
         { label: 'Pendiente exterior (el exponente)', unit: '' },
         { label: 'Forma que informa el panel', unit: '' },

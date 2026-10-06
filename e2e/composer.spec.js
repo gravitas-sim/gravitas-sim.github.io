@@ -529,7 +529,7 @@ test.describe('the Investigation Composer', () => {
       expect(await page.evaluate(() => window.__injected)).toBeUndefined();
       // Refused rather than drawn, and said so.
       await expect(page.locator('#gravitasToast')).toHaveText(
-        'That lesson could not be loaded. Try again.'
+        'That investigation could not be loaded. Try again.'
       );
       await expect(page.locator('#investigationPanel')).toBeHidden();
     });

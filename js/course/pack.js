@@ -284,14 +284,14 @@ export function validateCoursePack(c, api) {
         (p.lesson === undefined) !== (p.text === undefined),
         at,
         'prerequisite',
-        'a lesson or a text'
+        'an investigation or a text'
       );
       if (p.lesson !== undefined)
         need(
           lessons.has(p.lesson),
           `${at}.lesson`,
           'lesson',
-          `Gravitas has no lesson "${p.lesson}"`,
+          `Gravitas has no investigation "${p.lesson}"`,
           {
             lesson: p.lesson,
           }
@@ -454,7 +454,7 @@ function checkKind(item, at, ctx) {
         known,
         `${at}.lesson`,
         'lesson',
-        `Gravitas has no lesson "${item.lesson}"`,
+        `Gravitas has no investigation "${item.lesson}"`,
         {
           lesson: item.lesson,
         }
@@ -481,7 +481,7 @@ function checkKind(item, at, ctx) {
           ctx.pinning !== 'exact',
           `${at}.pin`,
           'pinRequired',
-          'an exact pack pins every lesson it names'
+          'an exact pack pins every investigation it names'
         );
       return;
     }
@@ -609,7 +609,7 @@ function checkPin(item, at, { need, fields }) {
     Number.isInteger(p.n) && p.n >= 1,
     `${at}.pin.n`,
     'stepCount',
-    "the lesson's number of steps"
+    "the investigation's number of steps"
   );
   if (p.pkg !== undefined)
     need(

@@ -96,7 +96,7 @@ const KEPLER = {
         text: 'Because these eight minutes could not be ignored, they alone have led the way toward reforming the whole of astronomy.',
         by: 'Johannes Kepler, Astronomia Nova, 1609',
       },
-      tip: 'While a lesson is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
+      tip: 'While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
       setup: {
         scenario: "Kepler's 2nd Law",
         seed: 'kepler-lab',

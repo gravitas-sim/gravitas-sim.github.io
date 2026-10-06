@@ -277,7 +277,7 @@ test.describe('the course-pack builder', () => {
       'The example course: introductory astronomy.'
     );
     await expect(page.locator('#cb-review-summary')).toHaveText(
-      'All 8 lessons are as pinned.'
+      'All 8 investigations are as pinned.'
     );
     await expect(page.locator('#cb-estimate li').first()).toHaveText(
       /^Core: 250–300 min \(4\.2–5\.0 h\)$/
@@ -399,7 +399,7 @@ test.describe('the course-pack builder', () => {
       '1 upgraded; the course is now version 1.1.0, a minor version.'
     );
     await expect(page.locator('#cb-review-summary')).toHaveText(
-      'All 8 lessons are as pinned.'
+      'All 8 investigations are as pinned.'
     );
     expect((await current(page)).units[0].items[2].pin.fp).toBe(
       INTRO_ASTRONOMY.units[0].items[2].pin.fp
@@ -415,7 +415,7 @@ test.describe('the course-pack builder', () => {
     );
     await upload(page, '#cb-file', 'course.json', v1);
     await expect(page.locator('#cb-status')).toContainText(
-      'Opened pulsating-stars, a course of lessons from the catalog.'
+      'Opened pulsating-stars, a course of investigations from the catalog.'
     );
     const review = page.locator('#cb-review li');
     await expect(review).toHaveCount(v1.units.flatMap(u => u.lessons).length, {

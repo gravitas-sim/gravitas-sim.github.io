@@ -59,7 +59,7 @@ of the fixtures:
 
 ```text
 sdk/fixtures/course-content/course.json:21:16  error  units[0].title.es: is missing: every string needs every declared locale
-sdk/fixtures/course-content/course.json:40:21  error  units[0].lessons[2].lesson: Gravitas has no lesson "no-such-lesson"
+sdk/fixtures/course-content/course.json:40:21  error  units[0].lessons[2].lesson: Gravitas has no investigation "no-such-lesson"
 sdk/fixtures/course-content: course-pack, 2 errors
 sdk/fixtures/wrong-platform/gravitas-extension.json:7:15  error  gravitas: accepts ^2.0.0; this Gravitas implements platform 1.0.0
 sdk/fixtures/wrong-platform: course-pack, 1 error

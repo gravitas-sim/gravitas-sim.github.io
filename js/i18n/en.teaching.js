@@ -68,7 +68,7 @@ export const EN_TEACHING = {
 
   // --- The cycle -------------------------------------------------------------
   'teach.cycle.intro':
-    'Every investigation is built on the same five moves, and the interface enforces the order: the prediction is recorded before the evidence exists, and it is not editable afterwards. A student who guessed wrong still has their guess in front of them when the measurement arrives, which is the moment the lesson is actually about.',
+    'Every investigation is built on the same five moves, and the interface enforces the order: the prediction is recorded before the evidence exists, and it is not editable afterwards. A student who guessed wrong still has their guess in front of them when the measurement arrives, which is the moment the investigation is actually about.',
   'teach.cycle.predict.verb': 'Predict',
   'teach.cycle.predict.student':
     'Commit to an answer before anything runs — in a sentence, a number, or a choice between sketched outcomes.',
@@ -78,7 +78,7 @@ export const EN_TEACHING = {
   'teach.cycle.test.student':
     'Set the system up and run it — or change exactly one thing and run it twice.',
   'teach.cycle.test.tool':
-    'A lesson step can set the scenario, the seed and the settings itself, so twenty students start from the identical world rather than from twenty attempts at the same slider.',
+    'An investigation step can set the scenario, the seed and the settings itself, so twenty students start from the identical world rather than from twenty attempts at the same slider.',
   'teach.cycle.measure.verb': 'Measure',
   'teach.cycle.measure.student':
     'Read a number off the simulation with a ruler, a protractor, a stopwatch, a light curve or a velocity plot.',
@@ -103,7 +103,7 @@ export const EN_TEACHING = {
     'A Gravitas link carries the whole world in the address bar: scenario, seed, settings, camera, and the clock. There is no account to create, nothing to install, and no upload. Paste the link into an LMS page and every student who follows it gets the identical system.',
   'teach.journey.predict.title': 'They record a prediction',
   'teach.journey.predict.text':
-    'The lesson asks first and shows second. Predictions are answered in the page and stored in the browser against step ids that do not change when the lesson is edited, so a lesson revised mid-semester does not throw away work already done.',
+    'The investigation asks first and shows second. Predictions are answered in the page and stored in the browser against step ids that do not change when the investigation is edited, so an investigation revised mid-semester does not throw away work already done.',
   'teach.journey.evidence.title': 'They generate evidence',
   'teach.journey.evidence.text':
     'They run the system, pause it at an event, measure it, run a controlled A/B comparison, or sweep one parameter across a handful of values. Each of those produces numbers rather than an impression.',
@@ -112,14 +112,14 @@ export const EN_TEACHING = {
     'A capture takes the measurement together with the conditions that produced it — integrator, timestep, substeps, frame, observer geometry, simulated time, world seed — as one atomic entry. An entry cannot be half-written.',
   'teach.journey.submit.title': 'They hand in a report',
   'teach.journey.submit.text':
-    'The notebook exports a report as PDF or CSV, with the entries, their provenance and the limitations of the run stated in it. Instructors who prefer a smaller unit of work can cut a short assignment out of any lesson with the assignment builder and take the same export.',
+    'The notebook exports a report as PDF or CSV, with the entries, their provenance and the limitations of the run stated in it. Instructors who prefer a smaller unit of work can cut a short activity out of any investigation with the activity builder and take the same export.',
 
   // --- Instruments -----------------------------------------------------------
   'teach.instruments.intro':
     'These are the parts an instructor is choosing between. Each exists to make one specific piece of scientific practice possible for a first-year student.',
   'teach.instruments.investigations.name': 'Guided investigations',
   'teach.instruments.investigations.text':
-    'Multi-step lessons that set up their own worlds. Steps are numbered, marked where they have a right answer, and carry learning objectives. Prerequisites between lessons are declared rather than assumed.',
+    'Multi-step investigations that set up their own worlds. Steps are numbered, marked where they have a right answer, and carry learning objectives. Prerequisites between investigations are declared rather than assumed.',
   'teach.instruments.notebook.name': 'The evidence notebook',
   'teach.instruments.notebook.text':
     'A running record of what the student measured and under what conditions. It is the difference between "the orbit looked stable" and a table of separations with the timestep that produced them.',
@@ -165,7 +165,7 @@ export const EN_TEACHING = {
   'teach.activities.lede':
     'Prepared teaching formats, chosen by what you want students to do and how long you have. Each one opens a real investigation cut to length — the same steps, the same measurements, the same evidence in the notebook.',
   'teach.activities.vs.investigations':
-    'Looking for the whole topic instead? The investigations are the complete lessons, browsable by subject.',
+    'Looking for the whole topic instead? The investigations are the complete investigations, browsable by subject.',
   'teach.activities.browse': 'Browse all investigations',
   'teach.activities.fallback.activity':
     'There is no classroom activity called “{id}”. The ones that exist are below.',
@@ -227,7 +227,7 @@ export const EN_TEACHING = {
   'teach.demo.rotation.predict':
     'Sketch the rotation curve: speed against distance from the center.',
   'teach.demo.rotation.visible':
-    'The visible mass alone predicts a falling curve. The measured one does not fall. The gap is the observation that dark matter was proposed to explain — and the lesson also runs the modified-gravity alternative.',
+    'The visible mass alone predicts a falling curve. The measured one does not fall. The gap is the observation that dark matter was proposed to explain — and the investigation also runs the modified-gravity alternative.',
   'teach.demo.tides.question':
     'The Moon pulls the ocean towards it, so there is one high tide, on the side facing the Moon.',
   'teach.demo.tides.instructor':
@@ -247,7 +247,7 @@ export const EN_TEACHING = {
 
   // --- Course patterns -------------------------------------------------------
   'teach.patterns.intro':
-    'Five shapes this has actually been used in. The lessons named under each are chosen at render time by the length each one declares, so a lesson that grows leaves the short-slot list on its own.',
+    'Five shapes this has actually been used in. The investigations named under each are chosen at render time by the length each one declares, so an investigation that grows leaves the short-slot list on its own.',
   'teach.patterns.fits': 'Fits this slot today',
   'teach.patterns.prep': 'Preparation',
   'teach.patterns.handin': 'What is handed in',
@@ -260,16 +260,16 @@ export const EN_TEACHING = {
   'teach.pattern.lecture.handin': 'Nothing — this one is spoken.',
   'teach.pattern.activity.title': 'A short in-class activity',
   'teach.pattern.activity.text':
-    'Fifteen to twenty-five minutes at laptops or phones. A short investigation, or a handful of steps cut out of a longer one with the assignment builder, ending in one measurement and one sentence.',
+    'Fifteen to twenty-five minutes at laptops or phones. A short investigation, or a handful of steps cut out of a longer one with the activity builder, ending in one measurement and one sentence.',
   'teach.pattern.activity.prep':
-    'Build the assignment once, hand out one link. Prerequisites between steps are checked for you.',
+    'Build the activity once, hand out one link. Prerequisites between steps are checked for you.',
   'teach.pattern.activity.handin':
     'A short report exported from the notebook, or a single number and its uncertainty.',
   'teach.pattern.homework.title': 'Homework',
   'teach.pattern.homework.text':
     'A full investigation, done alone, at whatever pace. Progress is kept in the browser, so a student can stop halfway and come back. Nothing is uploaded and no account exists to lose.',
   'teach.pattern.homework.prep':
-    'Post the lesson link. The instructor guide and the answer key for each investigation are in the instructor area.',
+    'Post the investigation link. The instructor guide and the answer key for each investigation are in the instructor area.',
   'teach.pattern.homework.handin':
     'The exported PDF report, which carries the marked steps and the conditions each measurement was made under.',
   'teach.pattern.laboratory.title': 'Laboratory session',
@@ -281,7 +281,7 @@ export const EN_TEACHING = {
     'A full notebook export: the sweep table, the A/B comparison, the reliability check, and a written account of what the numbers support.',
   'teach.pattern.inquiry.title': 'Open inquiry',
   'teach.pattern.inquiry.text':
-    'No lesson at all. The sandbox, the whole scenario gallery, and a question the student chose. Every state they reach is a link they can send you, which is what makes an open-ended project markable without watching over their shoulder.',
+    'No investigation at all. The sandbox, the whole scenario gallery, and a question the student chose. Every state they reach is a link they can send you, which is what makes an open-ended project markable without watching over their shoulder.',
   'teach.pattern.inquiry.prep':
     'Agree the question. Ask for the link to the state they started from and the link to the one they ended at.',
   'teach.pattern.inquiry.handin':
@@ -292,19 +292,19 @@ export const EN_TEACHING = {
     'What follows is a description of what has been built and tested, not a claim about how well it serves any particular reader. If something here does not work for your class, that is a defect worth reporting.',
   'teach.access.keyboard.title': 'Keyboard and screen reader',
   'teach.access.keyboard.text':
-    'The interface is operable from the keyboard, including the lessons, the measuring tools and the dialogs, which trap focus and return it. Measurements and state changes are announced through a live region, and the canvas carries a text description of what is on it that updates as the system evolves. Automated checks (axe-core) and a set of manual keyboard walkthroughs run in continuous integration on every change.',
+    'The interface is operable from the keyboard, including the investigations, the measuring tools and the dialogs, which trap focus and return it. Measurements and state changes are announced through a live region, and the canvas carries a text description of what is on it that updates as the system evolves. Automated checks (axe-core) and a set of manual keyboard walkthroughs run in continuous integration on every change.',
   'teach.access.motion.title': 'Motion and theme',
   'teach.access.motion.text':
     'Interface animation follows the operating system’s reduced-motion setting. Four themes are provided, including a light one built for projectors and a high-contrast dark one. Nothing on this page moves until you ask it to.',
   'teach.access.language.title': 'Spanish',
   'teach.access.language.text':
-    'The interface, the lesson browser and every investigation are available in Spanish as well as English, including the step text students read and answer. The language is chosen in the interface and remembered; the Spanish lesson text is downloaded only if it is asked for.',
+    'The interface, the Library and every investigation are available in Spanish as well as English, including the step text students read and answer. The language is chosen in the interface and remembered; the Spanish investigation text is downloaded only if it is asked for.',
   'teach.access.offline.title': 'Network, cost and privacy',
   'teach.access.offline.text':
     'It is a static site. There is no server, no account, no login, no analytics and no upload: student answers and notebook entries stay in the browser they were made in. Once a student has loaded the page, it works offline, which matters for a classroom on institutional wifi. It is free and MIT licensed.',
   'teach.access.reproducible.title': 'Reproducible links',
   'teach.access.reproducible.text':
-    'Any state can be turned into a URL, and the URL rebuilds it exactly — from the seed, when the world was generated, or body by body once it has been run. That is what makes a demonstration citable, an assignment identical for everyone, and a student’s claim checkable.',
+    'Any state can be turned into a URL, and the URL rebuilds it exactly — from the seed, when the world was generated, or body by body once it has been run. That is what makes a demonstration citable, an activity identical for everyone, and a student’s claim checkable.',
 
   // --- Evidence --------------------------------------------------------------
   'teach.evidence.intro':
@@ -349,7 +349,7 @@ export const EN_TEACHING = {
     'Work is kept in the student\u2019s own browser and never leaves it on its own. They export it themselves — a lab report as a PDF, or the notebook as a file — and hand that in however you already collect work. Nothing is uploaded, and there is no account to create or roster to manage.',
   'teach.quickstart.resources.title': 'What is there for you',
   'teach.quickstart.resources.text':
-    'An instructor guide per investigation with expected observations, common misconceptions and discussion questions; an answer key; and an assignment builder that cuts a lesson down to the steps you want and produces a link.',
+    'An instructor guide per investigation with expected observations, common misconceptions and discussion questions; an answer key; and an activity builder that cuts an investigation down to the steps you want and produces a link.',
 
   // --- A template for an evaluation nobody has run --------------------------
   'teach.section.evaluate': 'If you want to evaluate it',
@@ -374,7 +374,7 @@ export const EN_TEACHING = {
     'Sit behind three or four students and write down where they stop. Ten minutes of that is worth more than a hundred satisfaction ratings, and it is the only way to find the step whose instruction names a control that is off the bottom of their screen.',
   'teach.evaluate.limits.title': 'Say what it cannot show',
   'teach.evaluate.limits.text':
-    'The integrator is Newtonian and the model pages say where that stops. Some lesson screens place a body from a published model rather than integrating it, and say so on the screen. An evaluation that treats every picture as a simulation will draw a conclusion the software does not support.',
+    'The integrator is Newtonian and the model pages say where that stops. Some investigation screens place a body from a published model rather than integrating it, and say so on the screen. An evaluation that treats every picture as a simulation will draw a conclusion the software does not support.',
   'teach.evaluate.review.title': 'Clear it first',
   'teach.evaluate.review.text':
     'Research on students, including classroom research by their own instructor, generally needs institutional review before any data is collected — and consent that is genuinely optional when the person asking also assigns the grade. Check with your board early; retrospective approval is usually not a thing.',
@@ -385,7 +385,7 @@ export const EN_TEACHING = {
     'This software collects nothing. There is no analytics, no telemetry, no account and no server to send anything to, which also means nobody here finds out when something does not work unless you say so.',
   'teach.feedback.issue.title': 'Report something broken',
   'teach.feedback.issue.text':
-    'Open an issue on the repository. A scenario name or a lesson link, what you expected and what happened is enough; a share link reproduces the exact state you were looking at.',
+    'Open an issue on the repository. A scenario name or an investigation link, what you expected and what happened is enough; a share link reproduces the exact state you were looking at.',
   'teach.feedback.issue.link': 'Open an issue',
   'teach.feedback.contact.title': 'Say something about teaching with it',
   'teach.feedback.contact.text':
