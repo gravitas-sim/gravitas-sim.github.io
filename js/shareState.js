@@ -437,6 +437,36 @@ export async function encodeTagged(tag, version, payload) {
 }
 
 /**
+ * JSON.parse for a link's payload or a file the studios open, refusing a prototype key or nesting past
+ * 24 deep, as js/platform/common.js parseDocument does for a file. A copy
+ * because this module is on every page's start-up path and that one is not:
+ * a link's size is already capped by MAX_INFLATED_BYTES, so what is left to
+ * check is its shape. tests/hostileInput.test.js holds the two to the same
+ * fixtures.
+ * @param {string} text
+ * @returns {*} The parsed value; throws a SyntaxError with code 'notPlainData'
+ */
+export function parseDocument(text) {
+  const value = JSON.parse(text);
+  const plain = (v, depth) =>
+    typeof v !== 'object' || v === null
+      ? typeof v !== 'number' || Number.isFinite(v)
+      : depth > 0 &&
+        Object.keys(v).every(
+          k =>
+            k !== '__proto__' &&
+            k !== 'constructor' &&
+            k !== 'prototype' &&
+            plain(v[k], depth - 1)
+        );
+  if (!plain(value, 24))
+    throw Object.assign(new SyntaxError('not plain data'), {
+      code: 'notPlainData',
+    });
+  return value;
+}
+
+/**
  * Decode a tagged fragment, refusing one of the wrong kind.
  *
  * @param {string} tag - The kind expected
@@ -463,7 +493,7 @@ export async function decodeTagged(tag, fragment, maxVersion) {
   if (!raw) throw new Error('corrupt');
   let payload;
   try {
-    payload = JSON.parse(new TextDecoder().decode(raw));
+    payload = parseDocument(new TextDecoder().decode(raw));
   } catch {
     throw new Error('corrupt');
   }
@@ -505,9 +535,13 @@ export async function decodePayload(fragment) {
 
   let payload;
   try {
-    payload = JSON.parse(json);
-  } catch {
-    throw new Error('That link is incomplete or was cut short in transit.');
+    payload = parseDocument(json);
+  } catch (err) {
+    throw new Error(
+      err?.code === 'notPlainData'
+        ? 'That link holds data Gravitas will not read.'
+        : 'That link is incomplete or was cut short in transit.'
+    );
   }
   if (!payload || typeof payload !== 'object' || !payload.s) {
     throw new Error('That link does not contain a simulation.');

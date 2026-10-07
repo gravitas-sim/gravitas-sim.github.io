@@ -24,6 +24,7 @@
 // one. What it removes is transcription, not dishonesty.
 // =============================================================================
 
+import { parseDocument } from './platform/common.js';
 import {
   isSubmissionToken,
   readSubmissionToken,
@@ -136,7 +137,7 @@ async function takeFile(file) {
   if (isSubmissionToken(text.trim())) return accept(name, text.trim(), 'token');
   let parsed;
   try {
-    parsed = JSON.parse(text);
+    parsed = parseDocument(text);
   } catch {
     return refuse(name, 'notJson');
   }

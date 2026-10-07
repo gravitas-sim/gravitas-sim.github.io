@@ -22,6 +22,7 @@
 // notebook means reading all of it anyway.
 // =============================================================================
 
+import { parseDocument } from '../platform/common.js';
 import { drop, put } from '../storage/local.js';
 
 /** Bumped when the stored envelope changes. */
@@ -120,7 +121,7 @@ export function load() {
   }
   if (!raw) return { ok: true, entries: [], reason: FAILURE.OK };
   try {
-    const parsed = JSON.parse(raw);
+    const parsed = parseDocument(raw);
     if (Number(parsed?.v) > SCHEMA_VERSION) {
       return { ok: false, entries: [], reason: 'from-a-newer-version' };
     }

@@ -76,6 +76,29 @@ export function plainDataProblem(value, limits = {}, path = '') {
   return null;
 }
 
+/** What a saved document may be: far above any real one, far below a bomb. */
+const DOCUMENT_LIMITS = { depth: 24, items: 200_000, text: 5_000_000 };
+
+/**
+ * JSON.parse for a document a student opens, a file or a link: the same
+ * errors for the same bad text, and a SyntaxError of its own, code
+ * 'notPlainData', for text that parses but is not plain, bounded data with no
+ * prototype key (plainDataProblem, at the limits above). Every reader that
+ * already catches a parse failure refuses it the same way.
+ * @param {string} text
+ * @returns {*} The parsed value
+ * @throws {SyntaxError} not JSON, or code 'notPlainData' with the path
+ */
+export function parseDocument(text) {
+  const value = JSON.parse(text);
+  const why = plainDataProblem(value, DOCUMENT_LIMITS);
+  if (why)
+    throw Object.assign(new SyntaxError(`not plain data (${why})`), {
+      code: 'notPlainData',
+    });
+  return value;
+}
+
 /**
  * A problem reporter in the shape every validator returns.
  * @returns {{problems: Array<{path: string, code: string, vars: object,

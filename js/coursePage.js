@@ -24,6 +24,7 @@
 // Studio's (js/studio/model.js).
 // =============================================================================
 
+import { parseDocument } from './shareState.js';
 import {
   t,
   setLocale,
@@ -1746,7 +1747,7 @@ async function openFile(file) {
   if (file.size > MAX_FILE) return setStatus(t('course.file.tooLarge'));
   let data;
   try {
-    data = JSON.parse(await file.text());
+    data = parseDocument(await file.text());
   } catch {
     return setStatus(t('studio.file.unreadable'));
   }
@@ -1797,7 +1798,7 @@ function applyRaw() {
   const note = $('cb-raw-error');
   let data;
   try {
-    data = JSON.parse($('st-raw-text').value);
+    data = parseDocument($('st-raw-text').value);
   } catch (err) {
     note.textContent = t('studio.raw.notJson', { error: err.message });
     note.hidden = false;
