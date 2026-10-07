@@ -202,6 +202,28 @@
     --hud-text: var(--text-secondary);
     --hud-text-strong: var(--text-primary);
     --hud-border: var(--border-subtle);
+
+    /* Literal palette: colours the stylesheets used as bare literals three
+       or more times, numbered by use, most used first. They are the same in every theme
+       on purpose - each stands where a literal stood, so a rule that moves
+       onto one renders exactly what it did. A colour that should follow the
+       theme belongs under a semantic token above, not here. */
+    --c1: rgba(0, 0, 0, 0.3);
+    --c2: #9aa4b2;
+    --c3: #fff;
+    --c4: rgba(0, 0, 0, 0.2);
+    --c5: rgb(0 0 0 / 18%);
+    --c6: #e8b04b;
+    --c7: #5b9bd5;
+    --c8: rgb(255 255 255 / 6%);
+    --c9: rgba(255, 255, 255, 0.3);
+    --c10: rgba(0, 170, 255, 0.3);
+    --c11: rgba(0, 255, 136, 0.4);
+    --c12: #f2a65a;
+    --c13: #e0e0e0;
+    --c14: #00aaff;
+    --c15: rgba(255, 255, 255, 0.2);
+    --c16: rgba(0, 180, 255, 0.35);
   }
 
   /* ---------------------------------------------------------------------

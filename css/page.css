@@ -161,7 +161,7 @@
      oranges that read well on near-black drop to under 2:1 on white. */
   :root {
     --badge-simulated: #6fd08a;
-    --badge-approximate: #f2a65a;
+    --badge-approximate: var(--c12);
     --badge-illustrative: #c58cf0;
     --badge-measured: #5ec8d8;
   }

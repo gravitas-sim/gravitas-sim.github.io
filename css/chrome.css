@@ -1118,7 +1118,7 @@
   .nb-title:hover,
   .nb-title:focus {
     border-color: var(--border);
-    background: rgb(0 0 0 / 18%);
+    background: var(--c5);
   }
   .nb-title:focus-visible {
     outline: var(--focus-ring);
@@ -1238,7 +1238,7 @@
     padding: var(--space-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    background: rgb(0 0 0 / 18%);
+    background: var(--c5);
     color: var(--text);
     font: inherit;
     font-size: var(--text-xs);
@@ -1390,7 +1390,7 @@
     padding: var(--space-1) var(--space-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    background: rgb(0 0 0 / 18%);
+    background: var(--c5);
     color: var(--text);
     font: inherit;
     font-size: var(--text-xs);
@@ -2543,7 +2543,7 @@
 }
 
 .sonification-toggle[data-state='blocked'] {
-  color: var(--warn, #f2a65a);
+  color: var(--warn, var(--c12));
 }
 
 /*

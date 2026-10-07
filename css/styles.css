@@ -239,21 +239,16 @@
   #overlay {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
-    color: #e0e0e0;
+    color: var(--c13);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     pointer-events: none;
     line-height: 1.6;
     max-width: 384px; /* ~1.2x wider than previous 320px */
     word-wrap: break-word;
     overflow-wrap: anywhere;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--c1);
     padding: 10px;
     transition: all 0.3s ease;
-  }
-
-  /* Enable pointer events for the minimize button */
-  #overlay .overlay-minimize-btn {
-    pointer-events: auto !important;
   }
 
   /* When minimized, enable pointer events for the entire overlay */
@@ -263,21 +258,24 @@
 
   /* Overlay minimize button */
   .overlay-minimize-btn {
-    background: rgba(255, 255, 255, 0.3);
+    background: var(--c9);
     cursor: pointer;
     transition: all 0.2s ease;
-    pointer-events: auto !important;
+    /* The button's own declaration beats the overlay's inherited
+       pointer-events: none, and no other rule sets pointer-events, opacity or
+       visibility on it, so none of the three needs !important. */
+    pointer-events: auto;
     display: flex !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     /* Ensure button is always visible when overlay is visible */
-    opacity: 1 !important;
+    opacity: 1;
     /* Force visibility */
-    visibility: visible !important;
+    visibility: visible;
   }
 
   .overlay-minimize-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: var(--c9);
+    box-shadow: 0 2px 8px var(--c1);
   }
 
   .overlay-minimize-btn:active {
@@ -426,7 +424,7 @@
 
   .mobile-menu-toggle:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px var(--c1);
   }
 
   .mobile-menu-toggle .hamburger {
@@ -473,7 +471,7 @@
       transform: translate(-50%, -50%);
       background: rgba(13, 13, 26, 0.95);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(0, 170, 255, 0.3);
+      border: 1px solid var(--c10);
       border-radius: 15px;
       padding: 20px;
       z-index: 2000;
@@ -691,12 +689,12 @@
     height: 6px;
     background: linear-gradient(
       90deg,
-      rgba(0, 170, 255, 0.3),
+      var(--c10),
       rgba(0, 170, 255, 0.1)
     );
     border-radius: 10px;
     outline: none;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 2px 4px var(--c1);
   }
   .setting-control input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -708,7 +706,7 @@
     cursor: pointer;
     box-shadow:
       0 2px 8px rgba(0, 170, 255, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      inset 0 1px 0 var(--c9);
     transition: all 0.2s ease;
   }
   .setting-control input[type='range']::-webkit-slider-thumb:hover {
@@ -733,7 +731,7 @@
     border-radius: 8px;
     padding: 8px 14px;
     background: #23233a;
-    color: #fff;
+    color: var(--c3);
     font-size: 15px;
     transition: background 0.18s;
   }
@@ -741,8 +739,8 @@
   .setting-control select option:checked,
   .setting-control select option:focus,
   .setting-control select option:active {
-    background: #00aaff;
-    color: #fff;
+    background: var(--c14);
+    color: var(--c3);
   }
 
   .setting-control input[type='color'] {
@@ -752,16 +750,16 @@
     width: 50px;
     height: 30px;
     background-color: transparent;
-    border: 2px solid rgba(0, 170, 255, 0.3);
+    border: 2px solid var(--c10);
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px var(--c4);
   }
   .setting-control input[type='color']:hover {
     border-color: rgba(0, 170, 255, 0.5);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px var(--c1);
   }
   .setting-control input[type='color']::-webkit-color-swatch {
     border-radius: 6px;
@@ -782,11 +780,11 @@
     font-size: 16px;
     background: rgba(40, 40, 40, 0.8);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 170, 255, 0.3);
+    border: 1px solid var(--c10);
     border-radius: 10px;
     transition: all 0.3s ease;
     box-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.2),
+      0 2px 8px var(--c4),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
   .footer-button:hover {
@@ -794,7 +792,7 @@
     border-color: rgba(0, 170, 255, 0.5);
     transform: translateY(-2px);
     box-shadow:
-      0 6px 16px rgba(0, 0, 0, 0.3),
+      0 6px 16px var(--c1),
       inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
   #settingsApply {
@@ -964,7 +962,7 @@
     border-radius: 8px;
     border: 1.5px solid rgba(0, 170, 255, 0.25);
     background: rgba(34, 34, 44, 0.95);
-    color: #e0e0e0;
+    color: var(--c13);
     font-size: 15px;
     font-family: 'Inter', sans-serif;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -982,7 +980,7 @@
   #settingsGrid select:focus,
   .settings-grid select:focus,
   .setting-control select:focus {
-    border-color: #00aaff;
+    border-color: var(--c14);
     box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.18);
     background: rgba(34, 34, 64, 1);
   }
@@ -991,7 +989,7 @@
   .settings-grid select:hover,
   .setting-control select:hover {
     background: rgba(44, 44, 64, 1);
-    border-color: #00aaff;
+    border-color: var(--c14);
   }
 
   /* Option hover/focus workaround for modern browsers */
@@ -999,7 +997,7 @@
   .settings-grid select option:checked,
   .setting-control select option:checked {
     background: #1e293b;
-    color: #fff;
+    color: var(--c3);
   }
 
   /* For browsers that support it, highlight hovered option */
@@ -1007,7 +1005,7 @@
   .settings-grid select option:hover,
   .setting-control select option:hover {
     background: #2563eb !important;
-    color: #fff !important;
+    color: var(--c3) !important;
   }
 
   /* Add a dropdown arrow (optional, for style) */
@@ -1079,7 +1077,7 @@
   }
 
   #closeScenarioList:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px var(--c1);
   }
   #scenarioListItems {
     margin-top: 8px;
@@ -1249,7 +1247,7 @@
   .sonification-toggle[data-state='active'] {
     background: rgba(79, 172, 254, 0.25);
     border-color: rgba(79, 172, 254, 0.9);
-    color: #fff;
+    color: var(--c3);
     box-shadow: 0 0 0 1px var(--accent);
   }
 
@@ -1290,7 +1288,7 @@
   }
 
   .scenario-info-close:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
+    background: var(--c15) !important;
     color: var(--primary-color) !important;
     box-shadow: 0 0 8px rgba(79, 172, 254, 0.3) !important;
     transform: scale(1.1) !important;
@@ -1298,7 +1296,7 @@
   }
 
   .scenario-info-close:active {
-    background: rgba(255, 255, 255, 0.2) !important;
+    background: var(--c15) !important;
     box-shadow: none !important;
     transform: none !important;
     text-shadow: none !important;
@@ -1472,7 +1470,7 @@
     margin-left: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px var(--c4);
     position: relative;
     z-index: 10;
   }
@@ -1481,13 +1479,13 @@
     background: linear-gradient(135deg, #3a8be8 0%, #00d0e0 100%);
     transform: scale(1.1);
     box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.3),
+      0 4px 8px var(--c1),
       0 0 10px rgba(0, 255, 255, 0.3);
   }
 
   .setting-info-icon:active {
     transform: scale(0.95);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px var(--c4);
   }
 
   .setting-info-icon:focus-visible {
@@ -1537,7 +1535,7 @@
       rgba(0, 170, 255, 0.95),
       rgba(0, 255, 170, 0.95)
     );
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid var(--c9);
     border-radius: 12px;
     padding: 15px 20px;
     color: white;
@@ -1569,7 +1567,7 @@
   }
 
   .transformation-text {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 4px var(--c1);
   }
 
   @keyframes sparkle {
@@ -1606,7 +1604,7 @@
 
   .energy-chart-header h3 {
     margin: 0;
-    color: #fff;
+    color: var(--c3);
     font-size: 16px;
     font-weight: 600;
   }
@@ -1614,7 +1612,7 @@
   /* Refresh button specific styling */
   #refreshEnergyChart {
     background: rgba(0, 255, 136, 0.2);
-    border-color: rgba(0, 255, 136, 0.4);
+    border-color: var(--c11);
   }
 
   #refreshEnergyChart:hover {
@@ -1623,20 +1621,20 @@
   }
 
   #refreshEnergyChart:active {
-    background: rgba(0, 255, 136, 0.4);
+    background: var(--c11);
   }
 
   #refreshEnergyChart.auto-refresh-active {
     background: rgba(0, 255, 136, 0.3);
     border-color: rgba(0, 255, 136, 0.8);
-    box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+    box-shadow: 0 0 8px var(--c11);
     animation: pulse 2s infinite;
   }
 
   @keyframes pulse {
     0%,
     100% {
-      box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+      box-shadow: 0 0 8px var(--c11);
     }
     50% {
       box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
@@ -1651,7 +1649,7 @@
     display: none;
     text-align: center;
     padding: 40px 20px;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--c4);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     margin: 15px 0;
@@ -1667,14 +1665,14 @@
   .collecting-spinner {
     width: 30px;
     height: 30px;
-    border: 3px solid rgba(255, 255, 255, 0.2);
+    border: 3px solid var(--c15);
     border-top: 3px solid #00ff88;
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
 
   .collecting-text {
-    color: #e0e0e0;
+    color: var(--c13);
     font-size: 14px;
     font-weight: 500;
   }
@@ -1818,7 +1816,7 @@
 
   .three-view-hint {
     text-align: center;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--c4);
     flex-shrink: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -1909,7 +1907,7 @@
   .light-curve-btn {
     background: rgba(9, 15, 32, 0.75) !important;
     border-radius: 6px !important;
-    border: 1px solid rgba(0, 180, 255, 0.35) !important;
+    border: 1px solid var(--c16) !important;
     color: #dff5ff !important;
     font-size: 11px !important;
     padding: 4px 10px !important;
@@ -1947,7 +1945,7 @@
 
   .light-curve-info-btn {
     background: transparent !important;
-    border: 1px solid rgba(0, 180, 255, 0.35) !important;
+    border: 1px solid var(--c16) !important;
     border-radius: 50% !important;
     color: #9cd4ff !important;
     font-size: 13px !important;
@@ -1999,7 +1997,7 @@
   .light-curve-info-overlay .lc-info-close {
     align-self: flex-end;
     background: rgba(9, 15, 32, 0.75) !important;
-    border: 1px solid rgba(0, 180, 255, 0.35) !important;
+    border: 1px solid var(--c16) !important;
     border-radius: 6px !important;
     color: #dff5ff !important;
     font-size: 11px !important;
