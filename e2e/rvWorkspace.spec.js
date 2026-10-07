@@ -1,7 +1,7 @@
 // =============================================================================
 // The radial velocity analysis workspace
 // -----------------------------------------------------------------------------
-// The arithmetic is proved in tests/rvFit.test.js and the state machine in
+// The arithmetic is proved in tests/rvCircular.test.js and the state machine in
 // tests/rvWorkspace.test.js. What only a browser can show is that the chunk
 // really is deferred, that the panel is reachable from a recording, and that
 // the truth stays hidden until somebody presses the button.
@@ -50,7 +50,7 @@ test.describe('the workspace', () => {
       await bridge.openRvWorkspace(rec);
       const ws = await import('/js/rvWorkspace.js');
       const before = ws.trialParameters();
-      const search = ws.runSearch({ minPeriod: 1.5, maxPeriod: 9 });
+      const search = await ws.runSearch({ minPeriod: 1.5, maxPeriod: 9 });
       const a = ws.analysis();
       return {
         loaded: bridge.rvWorkspaceLoaded(),
@@ -88,7 +88,7 @@ test.describe('the workspace', () => {
       const bridge = await import('/js/rvWorkspaceBridge.js');
       await bridge.openRvWorkspace(rec);
       const ws = await import('/js/rvWorkspace.js');
-      ws.runSearch({ minPeriod: 1.5, maxPeriod: 9 });
+      await ws.runSearch({ minPeriod: 1.5, maxPeriod: 9 });
       const panel = await import('/js/rvWorkspacePanel.js');
       panel.setRvWorkspaceEnabled(false);
       panel.setRvWorkspaceEnabled(true);
@@ -145,7 +145,7 @@ test.describe('the workspace', () => {
       const bridge = await import('/js/rvWorkspaceBridge.js');
       await bridge.openRvWorkspace(rec);
       const ws = await import('/js/rvWorkspace.js');
-      ws.runSearch({ minPeriod: 1.5, maxPeriod: 9 });
+      await ws.runSearch({ minPeriod: 1.5, maxPeriod: 9 });
       const panel = await import('/js/rvWorkspacePanel.js');
       panel.setRvWorkspaceEnabled(true);
     }, RECORDING);

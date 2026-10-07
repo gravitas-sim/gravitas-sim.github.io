@@ -35,7 +35,8 @@ import {
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
-import { MC_LIMITS, runMonteCarlo } from './rvUncertainty.js';
+import { MC_LIMITS } from './inference/rvCircular.js';
+import { runMonteCarlo } from './inference/rvClient.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { captureToNotebook, snapshot } from './notebookBridge.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
@@ -230,6 +231,27 @@ function render() {
 }
 
 /**
+ * Run one of the workspace's Worker tasks for a button: a second press while
+ * it is out is ignored, and a failed realm is logged, not thrown into the
+ * click. Resolves undefined when the task did not answer.
+ */
+const busy = new Set();
+async function work(button, task) {
+  if (busy.has(button)) return undefined;
+  busy.add(button);
+  button.setAttribute('aria-busy', 'true');
+  try {
+    return await task();
+  } catch (err) {
+    console.warn('[rv] the inference Worker did not answer:', err);
+    return undefined;
+  } finally {
+    busy.delete(button);
+    button.removeAttribute('aria-busy');
+  }
+}
+
+/**
  * Open or close the panel.
  * @param {boolean} on - Whether to show it
  * @returns {void}
@@ -295,19 +317,22 @@ export function initRvWorkspacePanel({ signal } = {}) {
     });
   }
 
-  e.snap?.addEventListener('click', () => {
-    snapToBestAtPeriod();
+  e.snap?.addEventListener('click', async () => {
+    await work(e.snap, snapToBestAtPeriod);
     render();
   });
 
-  e.search?.addEventListener('click', () => {
+  e.search?.addEventListener('click', async () => {
     // Bounded, always, and by the reader. An unbounded search is not a
     // meaningful request and choosing the bounds for somebody would hide the
     // most consequential decision in the analysis.
     const minPeriod = Number(e.minP?.value);
     const maxPeriod = Number(e.maxP?.value);
-    const result = runSearch({ minPeriod, maxPeriod });
-    if (!result && e.status) e.status.textContent = t('rvfit.badBounds');
+    const result = await work(e.search, () =>
+      runSearch({ minPeriod, maxPeriod })
+    );
+    if (result === null && e.status)
+      e.status.textContent = t('rvfit.badBounds');
     render();
   });
 
@@ -389,7 +414,7 @@ export function teardownRvWorkspacePanel() {
 export const analyzedRecording = () => currentRecording();
 
 // --- The optional uncertainty analysis ----------------------------------------
-// The interface over js/rvUncertainty.js. Everything it prints comes from the
+// The interface over js/inference/rvMonteCarlo.js. Everything it prints comes from the
 // report that module returns, including which numbers it is allowed to print:
 // the report's `period` field is null whenever the refits split into families,
 // so the single-interval line below simply has nothing to render and the family

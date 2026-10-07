@@ -374,7 +374,7 @@ test.describe('recordings that are not clean', () => {
         config: {},
       });
       const ws = await import('/js/rvWorkspace.js');
-      ws.snapToBestAtPeriod();
+      await ws.snapToBestAtPeriod();
       const a = ws.analysis();
       return {
         finitePeriod: Number.isFinite(ws.trialParameters().period),

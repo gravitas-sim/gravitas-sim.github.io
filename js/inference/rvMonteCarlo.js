@@ -1,5 +1,7 @@
 // =============================================================================
 // How well is that period actually determined?
+// (An uncertainty method of the inference core, 'monte-carlo-refit' 1.0.0: it
+// runs in the inference Worker, js/inference/rvTasks.js, never on a page.)
 // -----------------------------------------------------------------------------
 // A parametric Monte Carlo over the recorded epochs. The recipe is four lines
 // long and every one of them matters:
@@ -38,49 +40,26 @@
 // Not imported, not read, not passed in. The synthetic runs are generated from
 // the student's own fit, because that is what a real observer would have to do,
 // and an interval that quietly used the answer would be a demonstration of
-// nothing. tests/rvUncertainty.test.js asserts this structurally as well.
+// nothing. tests/rvMonteCarlo.test.js asserts this structurally as well.
 //
 // No second fitting implementation
 // -----------------------------------------------------------------------------
-// Every trial goes through periodSearch() and fitAtPeriod() from js/rvFit.js -
+// Every trial goes through periodSearch() and fitAtPeriod() from
+// ./rvCircular.js -
 // the same functions, the same weighting, the same grid. A private copy of the
 // arithmetic would drift from the one the student is looking at, and then the
 // interval would be about a fit nobody ran.
 // =============================================================================
 
-import { mulberry32, normalizeSeed } from './rng.js';
+import { mulberry32, normalizeSeed } from '../rng.js';
 import {
   fitAtPeriod,
   periodSearch,
   usablePoints,
   weightsFor,
+  MC_LIMITS,
   WEIGHTING,
-} from './rvFit.js';
-
-/** How many trials may be asked for, and what to ask for by default. */
-export const MC_LIMITS = Object.freeze({
-  minTrials: 50,
-  maxTrials: 2000,
-  defaultTrials: 400,
-  /**
-   * The most grid points one trial may use.
-   *
-   * A cap, not a target. Left to itself periodSearch picks about ten samples
-   * across the narrowest peak the baseline can resolve, which is the right
-   * number and is usually a few hundred; the student's own search may push
-   * that to 20000, which is affordable once and not four hundred times. So
-   * the Monte Carlo takes the natural resolution and caps it here, and the
-   * report states the number it actually used.
-   *
-   * Forcing a fixed 1500 instead cost 15ms a trial on a fourteen-day baseline
-   * for a grid eleven times finer than the data supports.
-   */
-  maxSamples: 2000,
-  /** Trials per batch between yields. Small enough to keep a frame free. */
-  batchSize: 12,
-  /** The smallest run this is worth doing at all. */
-  minPoints: 4,
-});
+} from './rvCircular.js';
 
 /** What became of a whole run. */
 export const OUTCOME = Object.freeze({
@@ -609,13 +588,12 @@ const defaultYield = () =>
 /**
  * Run the analysis in cancelable batches.
  *
- * Batches with a yield between them rather than a worker. The arithmetic never
- * touches the simulation or the DOM, so a worker would be defensible - but it
- * would also mean shipping a second copy of js/rvFit.js into a worker bundle,
- * and "reuse the same fitting implementation" is a stronger requirement than
- * "use a thread". Four hundred trials on a coarse grid is a couple of hundred
- * milliseconds of arithmetic spread across frames, and the cancel button works
- * on the next batch rather than the next trial, which is soon enough.
+ * Batches with a yield between them, so the realm it runs in can hear a cancel
+ * message between two of them: the Worker (./rvTasks.js) passes a yield that
+ * lets its message queue run, and `shouldCancel` reads a flag that message
+ * sets. A canceled run still reports the trials it managed. The arithmetic is
+ * the same code, in the same order, wherever it runs, so a seed gives the
+ * same interval in a Worker, a test and any other realm.
  *
  * @param {object} spec - points, params, minPeriod, maxPeriod, trials, seed
  * @param {object} [hooks] - onProgress, shouldCancel, yieldTo

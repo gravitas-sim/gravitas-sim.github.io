@@ -33,6 +33,7 @@ import {
   validateBackup,
 } from '../js/notebook/notebook.js';
 import * as store from '../js/notebook/store.js';
+import { installRealm } from './rvRealm.js';
 import { provenanceRows } from '../js/notebook/report.js';
 import { registerMessages } from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
@@ -1833,7 +1834,8 @@ describe('provenance survives the chain the application actually uses', () => {
     const { fromRvFit } = await import('../js/notebook/capture.js');
     ws.resetWorkspace();
     ws.loadRecording(recording);
-    ws.runSearch({ minPeriod: 1, maxPeriod: 8 });
+    await installRealm();
+    await ws.runSearch({ minPeriod: 1, maxPeriod: 8 });
     const report = ws.exportReport();
     const analysis = ws.analysis();
     return fromRvFit({ analysis, report, provenance: live });

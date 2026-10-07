@@ -35,10 +35,10 @@ export const FEATURES = [
     id: 'workers',
     name: 'Web Workers (module Workers)',
     purpose:
-      'Barnes–Hut gravity, the chart feed, the validation suite, the experiment runner, the Mission lab, the 3-D lab and the Observatory fitter.',
+      'Barnes–Hut gravity, the chart feed, the validation suite, the experiment runner, the Mission lab, the 3-D lab, the Observatory fitter and the RV workspace.',
     token: /new Worker\(/,
     without:
-      'Optional uses degrade: gravity is summed on the main thread, charts update directly, and the validation and experiment pages say they cannot run here. The Mission lab, the 3-D lab and the Observatory fitter have no main-thread fallback and need module Workers.',
+      'Optional uses degrade: gravity is summed on the main thread, charts update directly, and the validation and experiment pages say they cannot run here. The Mission lab, the 3-D lab, the Observatory fitter and the RV workspace search, fit and Monte Carlo have no main-thread fallback and need module Workers.',
     uses: [
       {
         file: 'js/physics.js',
@@ -82,6 +82,11 @@ export const FEATURES = [
       },
       {
         file: 'js/observatory/fitPanel.js',
+        detect: /new Worker\(/,
+        note: 'no fallback',
+      },
+      {
+        file: 'js/inference/rvClient.js',
         detect: /new Worker\(/,
         note: 'no fallback',
       },
