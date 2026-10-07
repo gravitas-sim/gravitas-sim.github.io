@@ -3,7 +3,7 @@
   "generated": "2026-10-07",
   "documents": 66,
   "sourceFiles": 83,
-  "sourceDigest": "980bb65a9977e8310a8df71fae2a12970a766e61b364d9282eb89f2aaa2c901d",
+  "sourceDigest": "56bc7ee1f7982eb426952e060275e5e17da8c69148d3419fe4999f7faf3ed54b",
   "sources": {
     "js/activities/activities.js": "831a7712f2372ff8b54693d6669abfe9a185e677cd43411cac355fef979b8937",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -60,7 +60,7 @@
     "js/i18n/en.lab3dGuides.js": "e2d4eaa678c6872969f358dffd125dad34953900f83a822de71391ba906e6bc7",
     "js/i18n/en.missionLabGuides.js": "6c859aefad385c14245218a4d53514fb35ce1443c1fcb3b055575137a6a6d086",
     "js/i18n/en.populations.js": "92787374886a07f7394ef1a38cade1b208200ddb95c6b909b725e81555e91ec3",
-    "js/i18n/en.teaching.js": "0f49124fae6914d0456ba1d20850f502fa08865ead3f58f0eff7e3fb3f208d63",
+    "js/i18n/en.teaching.js": "7ff770aa281aed33e8f7bccb0c2a1f7e3826b203afa705c337225ba753a645ce",
     "js/i18n/index.js": "4981d4c0865b096b44df29900e4ba20637965c10a2f8ce2fe76d6e5908d59139",
     "js/instructorDocs.js": "10154a43985d7496f5d9d7f36710faf5f9bdb28541e5630e19ede773f6bcd9e2",
     "js/instructorExpectations.js": "09b1aeac6b3fa134374f0286029cdda1cbe68c9e3d7885afdc75387a4f5d6282",
