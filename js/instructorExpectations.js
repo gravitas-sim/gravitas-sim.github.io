@@ -12,7 +12,7 @@
 import expectations from './data/instructorExpectations.js';
 import { readVersioned } from './platform/common.js';
 
-export const EXPECTATIONS_FORMAT = 'gravitas.instructor-expectations';
+export const EXPECTATIONS_NAME = 'gravitas.instructor-expectations';
 
 /**
  * Read a record of any version into the sid-keyed form.
@@ -23,7 +23,7 @@ export const EXPECTATIONS_FORMAT = 'gravitas.instructor-expectations';
  */
 export function readExpectations(doc, stepsFor) {
   return readVersioned(doc, {
-    format: EXPECTATIONS_FORMAT,
+    format: EXPECTATIONS_NAME,
     current: 2,
     min: 1,
     migrations: {
