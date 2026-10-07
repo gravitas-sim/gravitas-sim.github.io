@@ -237,7 +237,6 @@ const CATEGORY_LABEL = {
  * @returns {Uint8Array} PDF bytes
  */
 export function answerKeyDocument(inv, { version = '' } = {}) {
-  const c = plainContent(instructorContentFor(inv.id));
   const expectations = plainContent(expectationsFor(inv));
   const key = answerKeyFor(inv);
   const counts = questionCounts(inv);
