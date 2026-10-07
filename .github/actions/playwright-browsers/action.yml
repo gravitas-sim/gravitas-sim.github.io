@@ -48,7 +48,14 @@ runs:
             exit 0
           fi
           echo "::warning::install-deps attempt $attempt failed or ran past five minutes"
-          sudo pkill -9 -f 'apt-get|dpkg' || true
+          # By exact process name, and by the locks themselves: a `pkill -f`
+          # pattern also matches the `sudo pkill` running it, which killed
+          # itself and left the hung apt-get holding the lock (2026-10-07).
+          sudo pkill -9 -x apt-get || true
+          sudo pkill -9 -x apt || true
+          sudo pkill -9 -x dpkg || true
+          sudo fuser -k -9 /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock \
+            /var/lib/apt/lists/lock /var/cache/apt/archives/lock || true
           sudo dpkg --configure -a || true
         done
         echo "::error::install-deps failed three times"
