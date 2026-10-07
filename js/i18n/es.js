@@ -244,11 +244,13 @@ export const ES = {
   'rail.toggleExperiments': 'Banco A/B',
   'rail.toggleExperiments.hint':
     'Abrir el banco de experimentos A/B: captura un estado inicial, graba una ejecución de referencia, vuelve exactamente a ese inicio, cambia una variable y graba una segunda ejecución, y compara ambas sobre el mismo eje de tiempo simulado.',
-  'bench.error.load': 'No se pudo cargar el banco de experimentos.',
+  'failure.load': 'No se pudo cargar. Comprueba tu conexión.',
+  'failure.retry': 'Reintentar',
+  'failure.reload':
+    'Sigue sin cargar. Recarga la página; tu trabajo se conserva.',
   'rail.toggleNotebook': 'Cuaderno de pruebas',
   'rail.toggleNotebook.hint':
     'Abrir el cuaderno de pruebas: las mediciones que has guardado desde los instrumentos, el espacio de análisis y el banco, cada una congelada con las condiciones en que se tomó y con espacio para tu afirmación, tus pruebas y las limitaciones que veas.',
-  'nb.error.load': 'No se pudo cargar el cuaderno de pruebas.',
   'rail.toggleAstrometry': 'Astrometría',
   'rail.slowDown': 'Lento',
   'rail.speedUp': 'Rápido',
@@ -1330,8 +1332,6 @@ export const ES = {
   'summary.announce.scenario': '{name} cargado.',
   'summary.announce.selected': '{name} seleccionado.',
   'view3d.close.label': 'Cerrar la vista del espacio-tiempo',
-  'view3d.loadFailed':
-    'No se pudo cargar la vista del espacio-tiempo. Comprueba tu conexión.',
   'tutorial.welcome': 'Bienvenido a Gravitas',
   'tutorial.place': 'Coloca un objeto arrastrando',
   'tutorial.choose': 'Elige qué estás colocando',

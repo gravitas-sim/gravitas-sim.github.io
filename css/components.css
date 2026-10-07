@@ -1622,6 +1622,11 @@
     transform: translate(-50%, 0);
   }
 
+  /* A toast with a button in it has to be clickable. */
+  .toast:has(button) {
+    pointer-events: auto;
+  }
+
   /* ==========================================================================
      Shortcut cheatsheet
      ====================================================================== */

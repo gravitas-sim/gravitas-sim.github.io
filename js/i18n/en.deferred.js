@@ -438,7 +438,7 @@ export const EN_DEFERRED = {
   // Moved out of the start-up catalog. The bench is loaded on first press
   // and most visitors never press it, so its prose has no business being
   // downloaded by everyone; js/experimentsBridge.js registers this before the
-  // panel builds its markup. bench.error.load stays in the base catalog,
+  // panel builds its markup. failure.load stays in the base catalog,
   // because it is what the bridge says when this very import fails.
   'bench.title': 'A/B Experiment',
   'bench.untitled': 'Untitled experiment',
@@ -3049,9 +3049,9 @@ export const EN_DEFERRED = {
   'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
   'export.truncated':
     'Exported the first {n} rows: the recording was larger than one file.',
+  'inv.load.failed': 'That investigation could not be loaded. Try again.',
   'inv.link.unknown':
     'That investigation link does not match an investigation.',
-  'inv.load.failed': 'That investigation could not be loaded. Try again.',
   'activity.error.noActivity':
     'There is no classroom activity called “{id}”. The teaching page lists the ones that exist.',
   'activity.error.noFormat':

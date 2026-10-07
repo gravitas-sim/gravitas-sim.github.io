@@ -43,6 +43,7 @@ function ensureDialog() {
         mod.initExportDialog({ signal: signal ?? undefined });
         return mod;
       });
+    loading.catch(() => (loading = null));
   }
   return loading;
 }

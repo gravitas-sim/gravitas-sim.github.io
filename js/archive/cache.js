@@ -109,7 +109,10 @@ export function idbStore(name = 'gravitas-archive') {
       const req = indexedDB.open(name, 1);
       req.onupgradeneeded = () => req.result.createObjectStore('answers');
       req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
+      req.onerror = () => {
+        opening = null; // a refused open is retried by the next call
+        reject(req.error);
+      };
     }));
   const run = (mode, fn) =>
     db().then(
@@ -123,8 +126,13 @@ export function idbStore(name = 'gravitas-archive') {
         })
     );
   return {
-    get: key => run('readonly', s => s.get(key)),
+    // The cache is an optimisation: a database the browser refuses is a miss
+    // and a skipped write, never a failed query.
+    get: key => run('readonly', s => s.get(key)).catch(() => undefined),
     set: (key, value) =>
-      run('readwrite', s => s.put(value, key)).then(() => {}),
+      run('readwrite', s => s.put(value, key)).then(
+        () => {},
+        () => {}
+      ),
   };
 }

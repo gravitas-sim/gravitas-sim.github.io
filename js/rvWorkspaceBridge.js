@@ -43,6 +43,7 @@ export function ensureRvWorkspace() {
       dataExport.setRvFitReporter(() => workspace.exportReport());
       return { workspace, panel };
     })();
+    loading.catch(() => (loading = null));
   }
   return loading;
 }

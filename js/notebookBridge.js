@@ -23,7 +23,6 @@
 // are in hand does anything get fetched.
 // =============================================================================
 
-import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 // Statically imported, and that is the point of this module's existence.
 //
@@ -64,6 +63,7 @@ export function ensureNotebook() {
       panel.ensurePanel();
       return { panel, capture };
     })();
+    loading.catch(() => (loading = null));
   }
   return loading;
 }
@@ -290,8 +290,7 @@ export function watchForNotebook() {
       btn.dataset.state = open ? 'on' : 'off';
     } catch (err) {
       console.error('The evidence notebook could not be loaded:', err);
-      const { toast } = await import('./notify.js');
-      toast(t('nb.error.load'));
+      (await import('./notify.js')).loadFailed(() => btn.click());
     } finally {
       btn.disabled = false;
     }

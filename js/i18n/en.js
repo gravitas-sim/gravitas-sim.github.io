@@ -287,11 +287,12 @@ export const EN = {
   'rail.toggleExperiments': 'A/B Bench',
   'rail.toggleExperiments.hint':
     'Open the A/B experiment bench: capture a starting state, record a baseline run, return to exactly that start, change one variable and record a second run, then compare the two on the same simulated-time axis.',
-  'bench.error.load': 'The experiment bench could not be loaded.',
+  'failure.load': 'That could not be loaded. Check your connection.',
+  'failure.retry': 'Retry',
+  'failure.reload': 'Still not loaded. Reload the page; saved work is kept.',
   'rail.toggleNotebook': 'Evidence Notebook',
   'rail.toggleNotebook.hint':
     'Open the evidence notebook: readings you have saved from the instruments, the analysis workspace and the bench, each one frozen with the conditions it was taken under, and each with room for your claim, your evidence and the limitations you can see.',
-  'nb.error.load': 'The evidence notebook could not be loaded.',
   'rail.toggleAstrometry': 'Astrometry',
   'rail.slowDown': 'Slow',
   'rail.speedUp': 'Fast',
@@ -1348,8 +1349,6 @@ export const EN = {
   'summary.announce.scenario': 'Loaded {name}.',
   'summary.announce.selected': 'Selected {name}.',
   'view3d.close.label': 'Close the spacetime view',
-  'view3d.loadFailed':
-    'The spacetime view could not be loaded. Check your connection.',
   'tutorial.welcome': 'Welcome to Gravitas',
   'tutorial.place': 'Place an object by dragging',
   'tutorial.choose': 'Choose what you are placing',

@@ -32,7 +32,8 @@ globalThis.TextDecoder ??= TextDecoder;
 const { fetchLimited, sha256Hex } = await import('../js/archive/net.js');
 const { parseVotable } = await import('../js/archive/votable.js');
 const cds = await import('../js/archive/cds.js');
-const { cachedFetch, memoryStore } = await import('../js/archive/cache.js');
+const { cachedFetch, memoryStore, idbStore } =
+  await import('../js/archive/cache.js');
 const { toObservation, tcbToTdb, UnitError, BANDS } =
   await import('../js/archive/gaiaEpochs.js');
 
@@ -865,6 +866,31 @@ describe("every failure has words in both of the page's languages", () => {
       );
       expect(ids).toHaveLength(1);
       expect(EN_ARCHIVE[ids[0]]).toBeDefined();
+    }
+  });
+});
+
+describe('a database the browser refuses is a miss, and is tried again', () => {
+  test('get answers undefined, set is skipped, and the next call reopens', async () => {
+    let opens = 0;
+    globalThis.indexedDB = {
+      open() {
+        opens++;
+        const req = {};
+        queueMicrotask(() => {
+          req.error = new Error('blocked');
+          req.onerror();
+        });
+        return req;
+      },
+    };
+    try {
+      const store = idbStore('refused');
+      expect(await store.get('k')).toBeUndefined();
+      await expect(store.set('k', 1)).resolves.toBeUndefined();
+      expect(opens).toBe(2);
+    } finally {
+      delete globalThis.indexedDB;
     }
   });
 });
