@@ -78,7 +78,8 @@
           "enum": [
             "pack",
             "builtin",
-            "import"
+            "import",
+            "experiment"
           ]
         },
         "id": {
@@ -93,6 +94,17 @@
         },
         "file": {
           "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "description": "An experiment's table: the digest of the trials it summarizes (js/analysis/seams.js trialsDigest)"
+        },
+        "engine": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "An experiment's table: the engine fingerprint the trials were run with"
         }
       }
     },

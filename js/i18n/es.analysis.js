@@ -12,9 +12,32 @@ export const ES_ANALYSIS = {
     'Aún no hay resultado: ejecuta un experimento arriba o abre uno guardado desde esta página.',
   'lab.source.run': 'La última ejecución: {title}, {trials} ensayos ({hash}).',
   'lab.source.file': 'Abierto {name}: {title}, {trials} ensayos ({hash}).',
-  'lab.open': 'Abrir un resultado guardado',
+  'lab.open': 'Abrir un resultado o análisis guardado',
   'lab.open.bad':
-    'Ese archivo no es un resultado de experimento guardado: {reason}',
+    'Ese archivo no es un resultado de experimento ni un análisis guardado: {reason}',
+  'lab.open.analysis':
+    'Abierto el análisis {name}: {cells} ajustes, {metric} ({hash}). No contiene ensayos, así que no se dibuja ninguno; abre el resultado para verlos.',
+  'lab.open.analysisBad': 'Ese análisis no se puede abrir: {reason}',
+  'lab.trials.absent':
+    'Un análisis guardado contiene los resúmenes, no los ensayos. Abre el resultado del experimento con el que se hizo para ver cada ensayo.',
+  'lab.save.observation': 'Guardar como observación (para el Observatorio)',
+  'lab.observation.saved':
+    'Resultado guardado como tabla de observación. En el Observatorio, ábrela como archivo; su origen nombra este experimento y sus ensayos.',
+  'lab.nb.result': 'Guardar el resultado en el cuaderno',
+  'lab.nb.analysis': 'Guardar el análisis en el cuaderno',
+  'lab.nb.added':
+    'Guardado en el cuaderno de evidencia, con el resumen de sus datos. Abre el cuaderno en la aplicación principal para escribir sobre él.',
+  'lab.nb.failed': 'No se pudo guardar en el cuaderno: {why}.',
+  'lab.nb.title.result': 'Experimento: {title}, {metric}',
+  'lab.nb.title.analysis': 'Análisis de {metric}: {title}',
+  'lab.nb.untitled': 'sin título',
+  'lab.nb.q.mean': 'Media',
+  'lab.nb.q.median': 'Mediana',
+  'lab.nb.q.slope': 'Pendiente de la tendencia',
+  'lab.nb.q.rho': 'Correlación de rangos (Spearman)',
+  'lab.nb.q.eta2': 'Parte de la dispersión debida al ajuste',
+  'lab.nb.note.interval':
+    'Con su intervalo del 95 %, de los ensayos que terminaron.',
   'lab.metric': 'Medida',
   'lab.resamples': 'Remuestreos',
   'lab.seed': 'Semilla del remuestreo',

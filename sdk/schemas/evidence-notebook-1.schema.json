@@ -214,6 +214,26 @@
                   }
                 },
                 "description": "For a measurement on real data, what the data were and what was done to them (js/notebook/observed.js), in place of a simulation's conditions."
+              },
+              "artifact": {
+                "type": "object",
+                "required": [
+                  "format",
+                  "source",
+                  "quantities"
+                ],
+                "properties": {
+                  "format": {
+                    "const": "gravitas.artifact"
+                  },
+                  "formatVersion": {
+                    "const": 1
+                  },
+                  "quantities": {
+                    "type": "array"
+                  }
+                },
+                "description": "For a fit, a sweep analysis or an experiment result, the gravitas.artifact/1 envelope it was made as; its source.digest names the data it read (js/notebook/artifactEntry.js)."
               }
             }
           },

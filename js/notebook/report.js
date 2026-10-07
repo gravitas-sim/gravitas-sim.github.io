@@ -22,6 +22,7 @@
 import { createDocument } from '../pdf.js';
 import { t } from '../i18n/index.js';
 import { KIND } from './entry.js';
+import { citationRows } from './artifactEntry.js';
 
 /**
  * A translated string, or a fallback when the id is not in the catalog.
@@ -301,6 +302,13 @@ export function buildEvidenceReport({
       doc.heading(t('nb.report.data'), { size: 10, spaceBefore: 8 });
       for (const [label, value] of snap.observed.rows || []) {
         doc.row(String(label), String(value));
+      }
+    } else if (snap.artifact) {
+      // A fit, an analysis or an experiment result: what made it, from what
+      // data (by digest), and a line to cite it by (./artifactEntry.js).
+      doc.heading(t('nb.entry.cite'), { size: 10, spaceBefore: 8 });
+      for (const [label, value] of citationRows(snap.artifact, t)) {
+        doc.row(label, value);
       }
     } else {
       doc.heading(t('nb.report.conditions'), { size: 10, spaceBefore: 8 });
