@@ -11,7 +11,7 @@ import {
   residualStructure,
   fitReport,
   MODEL_PARAMETERS,
-} from '../js/rvFit.js';
+} from '../js/inference/rvCircular.js';
 
 /** A measurement in the shape js/rvSurvey.js produces. */
 const point = (day, rv, sigma = 1, quality = 'ok') => ({

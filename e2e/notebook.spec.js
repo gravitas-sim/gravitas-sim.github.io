@@ -76,7 +76,7 @@ async function analyzeSynthetic(
         recordedAt: Date.now(),
       });
       const ws = await import('/js/rvWorkspace.js');
-      ws.snapToBestAtPeriod();
+      await ws.snapToBestAtPeriod();
     },
     [target, seed]
   );

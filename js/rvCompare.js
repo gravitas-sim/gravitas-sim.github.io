@@ -29,7 +29,11 @@
 //     would show the reader a coverage they could not have computed.
 // =============================================================================
 
-import { MODEL_PARAMETERS, periodSearch, usablePoints } from './rvFit.js';
+import {
+  MODEL_PARAMETERS,
+  periodSearch,
+  usablePoints,
+} from './inference/rvCircular.js';
 import {
   phaseCoverageDetail,
   scheduleFingerprint,

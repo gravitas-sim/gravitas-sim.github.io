@@ -2,7 +2,6 @@ import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import {
   ASSUMPTIONS,
-  MC_LIMITS,
   OUTCOME,
   REFUSED,
   TRIAL,
@@ -16,8 +15,12 @@ import {
   runMonteCarlo,
   summarize,
   validateSpec,
-} from '../js/rvUncertainty.js';
-import { periodSearch, weightsFor } from '../js/rvFit.js';
+} from '../js/inference/rvMonteCarlo.js';
+import {
+  MC_LIMITS,
+  periodSearch,
+  weightsFor,
+} from '../js/inference/rvCircular.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 
@@ -689,7 +692,7 @@ describe('the simulation truth is not in the inference', () => {
     // Not a stylistic check. An interval computed from the answer would look
     // exactly like a good one and would be a demonstration of nothing, so the
     // absence is asserted rather than trusted.
-    const source = readFileSync('js/rvUncertainty.js', 'utf8');
+    const source = readFileSync('js/inference/rvMonteCarlo.js', 'utf8');
     const code = source
       .split('\n')
       .filter(
