@@ -686,23 +686,18 @@ export function fromSweepSpec(spec, { profile = 'desktop', nav = {} } = {}) {
   };
 }
 
-// --- Retired ids: gravitas-experiment and gravitas-reliability-check are version 0
-// of gravitas.experiment (kind comparison) and gravitas.experiment-result (kind
-// reliability-check); TO_VERSION_1 migrates them.
+// --- Retired ids: version 0 of their replacements; TO_VERSION_1 migrates them.
 
-/** Retired id -> the id that replaced it. */
 export const RETIRED_FORMATS = Object.freeze({
   'gravitas-experiment': 'gravitas.experiment',
   'gravitas-reliability-check': 'gravitas.experiment-result',
 });
 
-/** A document under a retired id, as version 0 of its replacement; else as is. */
 export function underCurrentId(d) {
-  const id = RETIRED_FORMATS[d?.format] ?? RETIRED_FORMATS[d?.kind];
+  const id = d?.format ? RETIRED_FORMATS[d.format] : RETIRED_FORMATS[d?.kind];
   return id ? { ...d, format: id, formatVersion: d.version > 1 ? 99 : 0 } : d;
 }
 
-/** Version 0 (a retired id) into version 1. */
 export const TO_VERSION_1 = Object.freeze({
   0: ({ version: _old, kind, ...rest }) => ({
     ...rest,
@@ -728,7 +723,9 @@ export function fromComparison(c) {
         ? `${key} is not a setting the runner can vary here`
         : !metrics.length || !span
           ? 'it recorded no run, or measured nothing the runner measures'
-          : null;
+          : from === to
+            ? `${key} did not change`
+            : null;
   if (error) return { manifest: null, notes: [], error };
   const manifest = fromSweepSpec({
     scenario,
@@ -899,8 +896,11 @@ function engineReason(then, now) {
 /** An analysis document, judged in the same words (`here.digests` by id). */
 function analysisVerdict(doc, here) {
   const reasons = [];
-  if (doc.engine?.fingerprint !== here.engine)
-    reasons.push(engineReason(doc.engine?.fingerprint, here.engine));
+  if (!doc.engine) reasons.push('its engine was not recorded');
+  else if (doc.engine.fingerprint !== here.engine)
+    reasons.push(engineReason(doc.engine.fingerprint, here.engine));
+  if (doc.consumed?.length && !here.digests)
+    reasons.push('its data cannot be checked here');
   for (const c of doc.consumed ?? []) {
     const now = here.digests?.[c.id];
     if (now !== undefined && now !== c.digest)
@@ -920,6 +920,8 @@ export function reproducibility(result, here) {
   const reasons = [];
   if (result?.format === 'gravitas.analysis')
     return analysisVerdict(result, here);
+  if (['comparison', 'reliability-check'].includes(result?.kind))
+    return { reproducible: false, reasons: ['not a sweep result'], notes: [] };
   if (
     result?.format !== RESULT_FORMAT ||
     result.formatVersion !== RESULT_VERSION

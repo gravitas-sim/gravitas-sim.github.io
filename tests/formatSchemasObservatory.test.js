@@ -393,6 +393,16 @@ describe('the analysis schema', () => {
     );
   });
 
+  test('an analysis written before engine and consumed existed still fits', async () => {
+    const { sweep, models } = await both();
+    for (const d of [sweep, models]) {
+      const v2 = clone(d);
+      delete v2.engine;
+      delete v2.consumed;
+      expect(valid(s, v2)).toBe(true);
+    }
+  });
+
   test('and refuses what neither page would write', async () => {
     const { sweep, models } = await both();
     // Nothing in Gravitas reads one: these are the writers' rules alone.

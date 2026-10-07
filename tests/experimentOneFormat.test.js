@@ -290,3 +290,40 @@ describe('analysis documents and reproducibility (step 5)', () => {
     ).toBe(true);
   });
 });
+
+describe('review fixes', () => {
+  test('a stray kind does not reclassify a retired manifest', () => {
+    const d = { format: 'gravitas-experiment', version: 1, kind: 'x' };
+    expect(underCurrentId(d).format).toBe('gravitas.experiment');
+  });
+  test('a comparison or check is not a sweep result', () => {
+    for (const kind of ['comparison', 'reliability-check']) {
+      const r = reproducibility(
+        { format: RESULT_FORMAT, formatVersion: 1, kind },
+        { engine: 'a' }
+      );
+      expect(r.reasons).toEqual(['not a sweep result']);
+    }
+  });
+  test('an analysis without an engine, or without digests, is not reproducible', () => {
+    const a = {
+      format: 'gravitas.analysis',
+      consumed: [{ id: 'h', digest: 'd' }],
+    };
+    expect(reproducibility(a, { engine: 'a' }).reasons.join()).toMatch(
+      /not recorded/
+    );
+    const b = { ...a, engine: { fingerprint: 'a' } };
+    expect(reproducibility(b, { engine: 'a' }).reproducible).toBe(false);
+  });
+  test('a comparison that changed nothing, and its dropped parts, are reported', () => {
+    const m = fixture('v2-2617570-manifest.json');
+    const same = {
+      ...m,
+      parameterChange: {
+        variables: [{ key: 'binary_lab_planet_a', from: 1, to: 1 }],
+      },
+    };
+    expect(migrateExperiment(same).error).toMatch(/did not change/);
+  });
+});
