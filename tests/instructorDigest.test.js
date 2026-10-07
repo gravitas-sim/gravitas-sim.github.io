@@ -184,7 +184,10 @@ describe('the digest the derived closure produces', () => {
     // demand a bundle rebuild with the real passphrase.
     expect(current).not.toContain('js/render.js');
     expect(current).not.toContain('js/ui.js');
-    expect(current.length).toBeLessThan(80);
+    // 80 before the expectations record became its own module (+ its reader and
+    // platform/common.js, which the instructor bundle really does read); the
+    // failure this guards against is the two-hundred-file closure above.
+    expect(current.length).toBeLessThan(90);
   });
 
   // The claim the static walk rests on, checked against a real run rather than
