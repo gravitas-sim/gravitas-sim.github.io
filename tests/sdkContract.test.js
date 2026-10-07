@@ -33,12 +33,16 @@ const EXAMPLES = [
   'finding-exoplanets',
   'figure-eight',
   'kepler-third-law',
+  'orbits-first-week',
+  'reading-an-orbit',
 ];
 const TYPES = {
   'tess-hd209458-one-transit': 'data-pack',
   'finding-exoplanets': 'course-pack',
   'figure-eight': 'scenario-pack',
   'kepler-third-law': 'capability',
+  'orbits-first-week': 'course-pack',
+  'reading-an-orbit': 'investigation-pack',
 };
 const example = name => path.join('sdk', 'examples', name);
 const sha256 = b => createHash('sha256').update(b).digest('hex');
@@ -100,13 +104,16 @@ describe('the public surface', () => {
     expect(api.FORMATS).toMatchObject({
       'gravitas.capability-package': 1,
       'gravitas.observation-data-pack': 1,
-      'gravitas.course-pack': 1,
+      // It reads /1 and /2: the highest it reads.
+      'gravitas.course-pack': 2,
+      'gravitas.investigation-pack': 1,
       'gravitas.scenario-pack': 1,
     });
     expect(Object.keys(api.EXTENSION_TYPES).sort()).toEqual([
       'capability',
       'course-pack',
       'data-pack',
+      'investigation-pack',
       'scenario-pack',
     ]);
     expect(api.acceptsPlatform('^1.0.0')).toBe(true);
@@ -280,9 +287,14 @@ describe('what is wrong, where', () => {
 });
 
 describe('init', () => {
-  test('a course pack, a scenario pack and a capability start valid; a data pack starts as a list of what to fill in', async () => {
+  test('a course pack, an investigation pack, a scenario pack and a capability start valid; a data pack starts as a list of what to fill in', async () => {
     const root = tmp();
-    for (const type of ['course-pack', 'scenario-pack', 'capability']) {
+    for (const type of [
+      'course-pack',
+      'investigation-pack',
+      'scenario-pack',
+      'capability',
+    ]) {
       const dir = path.join(root, type);
       expect((await sdk('init', type, `my-${type}`, '--dir', dir)).code).toBe(
         0
@@ -484,6 +496,17 @@ describe('the JSON Schemas describe what the validators accept', () => {
         )
       )
     ).toBe(true);
+    for (const [file, name, doc] of [
+      ['course-pack-2', 'orbits-first-week', 'course.json'],
+      ['investigation-pack-1', 'reading-an-orbit', 'investigation.json'],
+    ])
+      expect([
+        file,
+        valid(
+          schema(file),
+          JSON.parse(readFileSync(path.join(example(name), doc), 'utf8'))
+        ),
+      ]).toEqual([file, true]);
     expect(
       valid(
         schema('scenario-pack-1'),
@@ -542,6 +565,8 @@ describe('the JSON Schemas describe what the validators accept', () => {
       ['capability-package-1', 'gravitas.capability-package/1'],
       ['observation-data-pack-1', 'gravitas.observation-data-pack/1'],
       ['course-pack-1', 'gravitas.course-pack/1'],
+      ['course-pack-2', 'gravitas.course-pack/2'],
+      ['investigation-pack-1', 'gravitas.investigation-pack/1'],
       ['scenario-pack-1', 'gravitas.scenario-pack/1'],
       ['artifact-1', 'gravitas.artifact/1'],
     ]) {
@@ -560,8 +585,208 @@ describe('the command line', () => {
     const { code, out } = await sdk('frobnicate');
     expect(code).toBe(2);
     expect(out).toMatch(
-      /init <data-pack\|course-pack\|scenario-pack\|capability> <id>/
+      /init <data-pack\|course-pack\|investigation-pack\|scenario-pack\|capability> <id>/
     );
     expect((await sdk()).code).toBe(0);
+  });
+});
+
+// Roadmap II Prompt 61, repaired in R-F (P68 checkpoint, item 3): the SDK reads
+// the course pack the builder writes, and the investigation pack the composer
+// writes, and says where each is wrong.
+describe('course packs /2 and investigation packs, as extensions', () => {
+  /** A copy of an example in a temp directory, with one of its files edited. */
+  function edited(name, file, change) {
+    const dir = tmp();
+    cpSync(example(name), dir, { recursive: true });
+    const doc = JSON.parse(readFileSync(path.join(dir, file), 'utf8'));
+    change(doc);
+    writeFileSync(path.join(dir, file), JSON.stringify(doc, null, 2));
+    return dir;
+  }
+  const findings = async dir =>
+    JSON.parse((await sdk('validate', dir, '--json')).out)[0].findings;
+  const where = list => list.map(f => `${f.severity} ${f.path}`);
+
+  test('a /2 pack is read as a /2 pack: what /1 refuses, it reads', async () => {
+    const course = JSON.parse(
+      readFileSync(
+        path.join(example('orbits-first-week'), 'course.json'),
+        'utf8'
+      )
+    );
+    expect(course.formatVersion).toBe(2);
+    expect(course.units[0].items.some(i => i.pin)).toBe(true);
+    const out = await findings(example('orbits-first-week'));
+    expect(out).toEqual([]);
+    // The same file said to be /1 is judged as /1, which has no items.
+    const asV1 = edited('orbits-first-week', 'course.json', c => {
+      c.formatVersion = 1;
+    });
+    expect(where(await findings(asV1))).toContain('error units[0].lessons');
+  });
+
+  test('a /1 pack still validates and tests, as it did', async () => {
+    const out = await sdk('test', example('finding-exoplanets'));
+    expect(out.code).toBe(0);
+    expect(out.out).toMatch(/0 failed/);
+  });
+
+  test('a /2 pack’s mistakes are named by field, with a line', async () => {
+    const dir = edited('orbits-first-week', 'course.json', c => {
+      c.units[0].items[2].lesson = 'no-such-lesson';
+      c.units[0].items[3].needs = ['nothing-before-it'];
+      c.units[0].title.es = '<b>Movimientos</b>';
+    });
+    const list = await findings(dir);
+    const errors = list.filter(f => f.severity === 'error');
+    expect([...new Set(errors.map(f => f.path))].sort()).toEqual(
+      [
+        'units[0].items[2].lesson',
+        'units[0].items[3].needs[0]',
+        'units[0].title.es',
+      ].sort()
+    );
+    for (const f of errors) {
+      expect(f.file).toBe('course.json');
+      expect(f.line).toBeGreaterThan(1);
+    }
+    expect(
+      errors.find(f => f.path === 'units[0].items[2].lesson').message
+    ).toBe('Gravitas has no lesson "no-such-lesson"');
+  });
+
+  test('a pin that no longer matches is a warning to validate and a failure to test', async () => {
+    const dir = edited('orbits-first-week', 'course.json', c => {
+      c.units[0].items[2].pin.fp = 'deadbeef';
+    });
+    const list = await findings(dir);
+    expect(list.filter(f => f.severity === 'error')).toEqual([]);
+    expect(where(list)).toEqual(['warning units[0].items[2]']);
+    expect(list[0].message).toMatch(
+      /"keplers-laws" is changed since the pack pinned it/
+    );
+    const { code, out } = await sdk('test', dir);
+    expect(code).toBe(1);
+    expect(out).toMatch(
+      /FAIL\s+keplers-laws is pinned to the lesson as this build has it \(changed\)/
+    );
+    expect(out).toMatch(
+      /retrograde-motion is pinned to the lesson as this build has it/
+    );
+  });
+
+  test('an exact /2 pack with a lesson unpinned is refused, and a compatible one is not', async () => {
+    const strip = pinning => c => {
+      c.pinning = pinning;
+      delete c.units[0].items[2].pin;
+    };
+    const exact = await findings(
+      edited('orbits-first-week', 'course.json', strip('exact'))
+    );
+    expect(where(exact)).toContain('error units[0].items[2].pin');
+    const compatible = await findings(
+      edited('orbits-first-week', 'course.json', strip('compatible'))
+    );
+    expect(compatible.filter(f => f.severity === 'error')).toEqual([]);
+  });
+
+  test('a /2 pack names a data pack Gravitas has, and one it lacks is an error', async () => {
+    const add = dataset => c => {
+      c.units[0].items.push({
+        id: 'a-dataset',
+        kind: 'dataset',
+        dataset,
+        minutes: 5,
+      });
+    };
+    expect(
+      (
+        await findings(
+          edited('orbits-first-week', 'course.json', add('sdss-g'))
+        )
+      ).filter(f => f.severity === 'error')
+    ).toEqual([]);
+    expect(
+      where(
+        await findings(
+          edited('orbits-first-week', 'course.json', add('no-such-set'))
+        )
+      )
+    ).toContain('error units[0].items[4].dataset');
+  });
+
+  test('a /2 pack inspects with every kind of item, and packs and reads back from its archive', async () => {
+    const { out } = await sdk(
+      'inspect',
+      example('orbits-first-week'),
+      '--preview'
+    );
+    expect(out).toMatch(/reading Astronomy 2e/);
+    expect(out).toMatch(/scenario solar-system/);
+    expect(out).toMatch(/keplers-laws: Kepler's Laws/);
+    const dir = tmp();
+    await sdk('pack', example('orbits-first-week'), '--out', dir);
+    const archive = path.join(dir, readdirSync(dir)[0]);
+    expect((await sdk('validate', archive)).code).toBe(0);
+    expect((await sdk('test', archive)).out).toMatch(/6 passed, 0 failed/);
+  });
+
+  test('an investigation pack is validated by the format and by the lesson checker', async () => {
+    expect(await findings(example('reading-an-orbit'))).toEqual([]);
+    const reused = edited('reading-an-orbit', 'investigation.json', p => {
+      p.steps[0].setup.scenario = 'Nowhere';
+      p.locales = ['es'];
+    });
+    const errors = (await findings(reused)).filter(f => f.severity === 'error');
+    expect(errors.map(f => f.path)).toEqual(
+      expect.arrayContaining(['locales', 'steps[0].setup.scenario'])
+    );
+    for (const f of errors) {
+      expect(f.file).toBe('investigation.json');
+      expect(f.line).toBeGreaterThan(1);
+    }
+  });
+
+  test('an investigation pack may not take a lesson’s id, and a stale translation is a warning', async () => {
+    const dir = path.join(tmp(), 'taken');
+    await sdk('init', 'investigation-pack', 'keplers-laws', '--dir', dir);
+    expect(where(await findings(dir))).toContain(
+      'error provides.investigations[0].id'
+    );
+    const stale = edited('reading-an-orbit', 'investigation.json', p => {
+      p.title.en = 'Reading an orbit, revised';
+    });
+    const list = await findings(stale);
+    expect(list.filter(f => f.severity === 'error')).toEqual([]);
+    expect(where(list)).toEqual(['warning title']);
+    // test says it too, and names the language.
+    const { code, out } = await sdk('test', stale);
+    expect(code).toBe(1);
+    expect(out).toMatch(/FAIL\s+every text is there in es/);
+  });
+
+  test('an investigation pack from a newer Gravitas, and a file that is no pack, are said so', async () => {
+    const newer = edited('reading-an-orbit', 'investigation.json', p => {
+      p.formatVersion = 2;
+    });
+    expect((await findings(newer)).map(f => f.message)).toEqual([
+      'is gravitas.investigation-pack/2; this SDK reads up to /1',
+    ]);
+    const other = edited('reading-an-orbit', 'investigation.json', p => {
+      p.format = 'gravitas.course-pack';
+    });
+    expect((await findings(other)).map(f => f.message)).toEqual([
+      'is not a gravitas.investigation-pack file',
+    ]);
+  });
+
+  test('one type at a time: an investigation beside a data pack is refused', async () => {
+    const dir = edited('reading-an-orbit', 'gravitas-extension.json', m => {
+      m.provides.courses = [{ id: 'x', file: 'investigation.json' }];
+    });
+    expect((await findings(dir)).map(f => f.message)).toEqual([
+      'provides course-pack and investigation-pack; an extension is exactly one type',
+    ]);
   });
 });
