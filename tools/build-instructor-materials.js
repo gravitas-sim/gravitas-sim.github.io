@@ -60,6 +60,7 @@ import { EN_TEACHING } from '../js/i18n/en.teaching.js';
 import { plainText as plainTextOf } from '../js/answerKey.js';
 import { INSTRUCTOR_CONTENT } from '../js/data/instructorContent.js';
 import { checkInstructorCatalog } from '../js/authoring/instructorSchema.js';
+import { expectationsFor } from '../js/instructorExpectations.js';
 import { createDocument } from '../js/pdf.js';
 import {
   exoplanetAnswerKey,
@@ -280,7 +281,18 @@ function requireCanonicalContent() {
   const steps = Object.fromEntries(
     INVESTIGATIONS.map(inv => [inv.id, inv.steps.length])
   );
-  const problems = checkInstructorCatalog(INSTRUCTOR_CONTENT, steps);
+  const problems = checkInstructorCatalog(
+    Object.fromEntries(
+      Object.entries(INSTRUCTOR_CONTENT).map(([id, guide]) => {
+        const inv = INVESTIGATIONS.find(i => i.id === id);
+        return [
+          id,
+          inv ? { ...guide, expectations: expectationsFor(inv) } : guide,
+        ];
+      })
+    ),
+    steps
+  );
   if (!problems.length) return;
   console.error(
     [

@@ -25,6 +25,7 @@ import {
 import { checkInstructorCatalog } from '../js/authoring/instructorSchema.js';
 import { textWidth, toWinAnsi } from '../js/pdf.js';
 import { plural } from '../js/format.js';
+import { expectationsFor } from '../js/instructorExpectations.js';
 import { ACTIVITIES } from '../js/data/activities.js';
 import { activityWorksheet } from '../js/activityDocs.js';
 import { activityLaunchUrl } from '../js/activities/activityBridge.js';
@@ -197,8 +198,8 @@ describe('instructor content lines up with the lessons', () => {
     '%s: every step an expectation names really is one that needs one',
     (id, inv) => {
       const c = instructorContentFor(id);
-      for (const [num, text] of Object.entries(c.expectations || {})) {
-        const step = inv.steps[Number(num) - 1];
+      for (const [sid, text] of Object.entries(expectationsFor(inv))) {
+        const step = inv.steps.find(s => s.sid === sid);
         expect(step).toBeTruthy();
         // Expectations exist for screens where a student observes something:
         // measurements, activities, and reading screens that put something in
@@ -239,7 +240,7 @@ describe('instructor content lines up with the lessons', () => {
       const c = instructorContentFor(id);
       for (const [i, step] of inv.steps.entries()) {
         if (step.type !== 'measure') continue;
-        expect(c.expectations?.[i + 1]).toBeTruthy();
+        expect(expectationsFor(inv)[step.sid]).toBeTruthy();
       }
     }
   );
@@ -477,7 +478,15 @@ describe('instructor content matches the one schema', () => {
   );
 
   test('the whole catalog is canonical', () => {
-    expect(checkInstructorCatalog(INSTRUCTOR_CONTENT, steps)).toEqual([]);
+    // expectations live in their own module now; the schema judges the
+    // guide with them attached, as the author check does
+    const guides = Object.fromEntries(
+      INVESTIGATIONS.map(inv => [
+        inv.id,
+        { ...INSTRUCTOR_CONTENT[inv.id], expectations: expectationsFor(inv) },
+      ])
+    );
+    expect(checkInstructorCatalog(guides, steps)).toEqual([]);
   });
 
   // The checker has to fail on the shapes that actually shipped, or it is a
@@ -675,9 +684,8 @@ describe('the generated documents', () => {
           at: text.indexOf(ascii(`Step ${e.step}: ${e.title}`)),
         }))
         .filter(h => h.at >= 0);
-      for (const [n, expectation] of Object.entries(
-        instructorContentFor(id).expectations || {}
-      )) {
+      for (const [sid, expectation] of Object.entries(expectationsFor(inv))) {
+        const n = String(inv.steps.findIndex(s => s.sid === sid) + 1);
         const i = headings.findIndex(h => h.n === n);
         const under =
           i < 0 ? '' : text.slice(headings[i].at, headings[i + 1]?.at);
@@ -879,7 +887,10 @@ describe('the generated documents', () => {
   test('reading-only steps are left out of the key, unless they carry an expectation', () => {
     const inv = getInvestigation('black-holes');
     const text = flat(answerKeyDocument(inv));
-    const { expectations } = instructorContentFor(inv.id);
+    const bySid = expectationsFor(inv);
+    const expectations = Object.fromEntries(
+      inv.steps.map((s, i) => [i + 1, bySid[s.sid]])
+    );
     const reading = answerKeyFor(inv).entries.filter(
       e => e.category === 'reading'
     );
