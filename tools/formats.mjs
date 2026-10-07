@@ -363,9 +363,10 @@ export const FORMATS = Object.freeze([
     version: 2,
     const: ['js/course/pack.js', 'FORMAT_VERSION'],
     owner: 'js/course/pack.js migrateCoursePack',
-    persisted: 'download, localStorage, repository',
+    persisted: 'download, localStorage, repository, extension archive',
     older: 'migrates v1',
     newer: 'refused, in words',
+    schema: 'course-pack-2.schema.json',
   },
   {
     name: 'course home link',

@@ -1,13 +1,15 @@
 // =============================================================================
 // What `sdk init` writes
 // -----------------------------------------------------------------------------
-// A course pack, a scenario pack and a capability start valid: a course needs
+// A course pack, an investigation pack, a scenario pack and a capability start valid: a course needs
 // only lessons Gravitas already has, a scenario only settings it already
 // understands, and an instrument can start as one working readout.
 // A data pack cannot, because its whole point is data the author brings: it
 // starts as a record with every field present and empty, and `sdk validate`
 // lists what to fill in, by file and line. Nothing here invents a number.
 // =============================================================================
+
+import { EXAMPLE_INVESTIGATION } from '../../js/composer/example.js';
 
 const json = v => `${JSON.stringify(v, null, 2)}\n`;
 const camel = id => id.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
@@ -109,6 +111,25 @@ throw new Error('write the transformation for ${id}');
       ],
     }),
     'README.md': `# ${title(id)}\n\nA course-pack extension: an ordering of lessons Gravitas already has.\n`,
+  }),
+
+  // The composer's own example investigation, under the new id: a pack that
+  // passes every check, which is the best place for an author to start from.
+  'investigation-pack': id => ({
+    'gravitas-extension.json': json({
+      ...base(id, 'declarative'),
+      provides: { investigations: [{ id, file: 'investigation.json' }] },
+      assets: [
+        { path: 'investigation.json', role: 'data', offline: 'optional' },
+      ],
+      citations: [],
+      licenses: [{ scope: 'investigation.json', license: 'CC-BY-4.0' }],
+      offline: { policy: 'precache' },
+      validation: [],
+      migrations: [],
+    }),
+    'investigation.json': json({ ...EXAMPLE_INVESTIGATION, id }),
+    'README.md': `# ${title(id)}\n\nAn investigation-pack extension: a guided investigation as data. The Studio's lesson composer (/studio/lesson/) writes \`investigation.json\`.\n`,
   }),
 
   // `from` is a pack the Scenario Studio exported (/studio/), written as it is:
