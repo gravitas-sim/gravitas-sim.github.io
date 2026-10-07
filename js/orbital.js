@@ -10,8 +10,10 @@
 //   caller                      start E0                  tol    cap
 //   ui.js wedges                e < 0.8 ? M : pi          1e-13  40
 //   systemSpec.js               e > 0.8 ? pi sign(M) : M  1e-15  60
-// A start at pi converges for M in [0, 2 pi] only; below that, at e >= 0.8, it
-// diverges (ui.js can pass M < 0). Kept as it was. habitability.js and binaryWidgets.js (e < 0.8 ? M : pi, 1e-12, 60 and 40),
+// A start at pi is tested over M in [-6, 7] at e = 0.8, 0.9 and 0.95 and
+// converged each time, but convergence from pi is not guaranteed for M outside
+// [0, 2 pi] (ui.js can pass M < 0 with e up to 0.999). Kept as it was.
+// habitability.js and binaryWidgets.js (e < 0.8 ? M : pi, 1e-12, 60 and 40),
 // inference/rv.js (M + e sin M, 1e-13, 50), resonance/systems.js (M, 1e-14, 100)
 // and lab3d/elements.js (bracketed, hyperbolic) keep their own: the routes that
 // load them do not load this module and each would pay its 6.7 KB;

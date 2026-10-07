@@ -74,9 +74,10 @@ export function loadRecording(recording) {
   onRecordingChanged?.();
   if (!source?.points?.length) return;
 
-  // An honest guess, not the truth and not a fit (first act: move something): a quarter of the baseline for the period, and
-  // for K half the peak-to-peak, an approximation of K (a lower bound, noise-
-  // biased up; see js/exoplanetObservables.js).
+  // An honest guess, not the truth and not a fit (first act: move something):
+  // a quarter of the baseline for the period, and for K half the peak-to-peak,
+  // an approximation of K (a lower bound, noise-biased up; see
+  // js/exoplanetObservables.js).
   const { usable } = usablePoints(source.points);
   if (usable.length) {
     const values = usable.map(p => p.rv);

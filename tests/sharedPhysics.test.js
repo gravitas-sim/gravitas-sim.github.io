@@ -71,7 +71,7 @@ describe('Kepler: every solver agrees with the bracketed reference', () => {
   test('the Newton callers agree for M in [0, 2 pi], e up to 0.95', () => {
     const profiles = {
       'habitability (own copy)': (M, e) => eccentricAnomaly(M, e),
-      'ui.js and binaryWidgets.js': (M, e) =>
+      'ui.js (a copy of its parameters; the test does not call it)': (M, e) =>
         keplerNewton(M, e, e < 0.8 ? M : Math.PI, 1e-13, 40),
       'inference/rv.js (own copy)': (M, e) => solveKeplerRv(M, e),
       'systemSpec.js': (M, e) =>
