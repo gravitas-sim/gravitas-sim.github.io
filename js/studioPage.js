@@ -67,6 +67,7 @@ import {
   semanticDiff,
   serialize,
 } from './studio/model.js';
+import { drop, put } from './storage/local.js';
 
 const $ = id => document.getElementById(id);
 const LOCAL = { en: [EN_STUDIO, EN_BUILDER, EN_PLACEMENT] };
@@ -1297,7 +1298,16 @@ function wire() {
 async function init() {
   let store;
   try {
-    store = window.localStorage;
+    const raw = window.localStorage;
+    store = {
+      get length() {
+        return raw.length;
+      },
+      key: i => raw.key(i),
+      getItem: k => raw.getItem(k),
+      setItem: (k, v) => put(k, v, 'drafts', raw),
+      removeItem: k => drop(k, raw),
+    };
   } catch {
     store = null;
   }

@@ -54,7 +54,7 @@ export function createGuidePanel({ els, t, lab }) {
     return readJson(STORE(guide.id, path), {});
   }
   function save() {
-    writeJson(STORE(guide.id, path), progress); // refused: this visit only
+    writeJson(STORE(guide.id, path), progress, 'progress'); // refused: this visit only
   }
   const steps = () => stepsOn(guide, path);
   const words = (s, part, vars) => t(`gd.${guide.id}.${s.id}.${part}`, vars);

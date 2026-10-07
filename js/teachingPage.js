@@ -49,7 +49,7 @@ import {
   EVIDENCE,
 } from './data/teaching.js';
 import { DEMO_LINKS, SCENARIO_COUNT } from './data/teachingGenerated.js';
-import { readJson, writeJson } from './storage/local.js';
+import { drop, readJson, writeJson } from './storage/local.js';
 import { mountShell } from './shell.js';
 import {
   LANGUAGES,
@@ -889,7 +889,7 @@ const FEEDBACK_KEY = 'gravitas_teaching_notes_v1';
 const readNotes = () => readJson(FEEDBACK_KEY, {});
 
 /** Write them back, and say nothing if storage is unavailable. */
-const writeNotes = notes => writeJson(FEEDBACK_KEY, notes);
+const writeNotes = notes => writeJson(FEEDBACK_KEY, notes, 'drafts');
 
 /**
  * The classroom feedback form.
@@ -986,7 +986,7 @@ function renderFeedbackForm() {
     clearBtn.textContent = tr('teach.feedback.form.clear');
     clearBtn.onclick = () => {
       try {
-        window.localStorage.removeItem(FEEDBACK_KEY);
+        drop(FEEDBACK_KEY);
       } catch {
         /* nothing was stored, so nothing needs removing */
       }

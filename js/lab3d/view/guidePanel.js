@@ -40,6 +40,7 @@ import {
 } from '../../observatory/guides/core.js';
 import { EN_LAB3DGUIDES } from '../../i18n/en.lab3dGuides.js';
 import { ES_LAB3DGUIDES } from '../../i18n/es.lab3dGuides.js';
+import { put, readJson } from '../../storage/local.js';
 
 export const REPORT_FORMAT = 'gravitas.lab3d-guide-report';
 export const REPORT_VERSION = 1;
@@ -151,7 +152,7 @@ export function createGuidePanel(root, lab) {
   const key = () => `${STORE}${guide.id}_${path}`;
   const load = () => {
     try {
-      const saved = JSON.parse(window.localStorage.getItem(key()) || 'null');
+      const saved = readJson(key());
       if (saved && saved.curriculum === CURRICULUM_VERSION) {
         const records = {};
         for (const [k, r] of Object.entries(saved.records || {}))
@@ -168,14 +169,15 @@ export function createGuidePanel(root, lab) {
       const records = {};
       for (const [k, r] of Object.entries(progress.records))
         records[k] = serialize(r);
-      window.localStorage.setItem(
+      put(
         key(),
         JSON.stringify({
           curriculum: CURRICULUM_VERSION,
           answers: progress.answers,
           records,
           at,
-        })
+        }),
+        'progress'
       );
     } catch {
       /* progress will not survive a reload; the guide still works */
