@@ -35,6 +35,7 @@
 // lazy chunk of a page that loads the status module at start, and sharing it
 // would split it into a chunk of its own (see ./stats.js).
 const OK = 'ok';
+import { canonicalJson, fnvHex8 } from '../hash.js';
 import {
   LEVEL,
   bootstrap,
@@ -352,6 +353,15 @@ export async function analyzeSweep(result, o = {}) {
       })),
     },
     source: sourceOf(result),
+    // The engine, and a digest of the trials read (the hash covers the manifest).
+    engine: result.engine ?? null,
+    consumed: [
+      {
+        kind: 'experiment-result',
+        id: result.hash,
+        digest: fnvHex8(canonicalJson(result.trials ?? [])),
+      },
+    ],
     cells,
     pooled,
     sensitivity,

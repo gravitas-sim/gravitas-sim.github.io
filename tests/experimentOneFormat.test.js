@@ -30,6 +30,7 @@ import {
   RETIRED_FORMATS,
   TO_VERSION_1,
   migrateExperiment,
+  reproducibility,
   underCurrentId,
   validateExperiment,
 } from '../js/experiments/experimentManifest.js';
@@ -255,5 +256,37 @@ describe('the published schemas hold what the bench writes', () => {
     const stored = { ...record };
     delete stored.runs;
     expect(valid(schema('experiment-result-1'), stored)).toBe(false);
+  });
+});
+
+describe('analysis documents and reproducibility (step 5)', () => {
+  const doc = {
+    format: 'gravitas.analysis',
+    engine: { fingerprint: 'aaaa0000' },
+    consumed: [{ kind: 'experiment-result', id: 'h1', digest: 'd1' }],
+  };
+  test('one sentence for an engine mismatch, in results and analyses alike', () => {
+    const a = reproducibility(doc, { engine: 'bbbb1111' }).reasons[0];
+    const b = reproducibility(
+      {
+        format: RESULT_FORMAT,
+        formatVersion: 1,
+        engine: { fingerprint: 'aaaa0000' },
+        manifest: {},
+        hash: 'x',
+      },
+      { engine: 'bbbb1111', app: 'x' }
+    ).reasons.find(r => /integrates differently/.test(r));
+    expect(a).toBe(b);
+  });
+  test('a changed digest is named; a matching one reproduces', () => {
+    const here = { engine: 'aaaa0000', digests: { h1: 'd2' } };
+    expect(reproducibility(doc, here).reasons.join()).toMatch(
+      /digest d1 then, d2/
+    );
+    expect(
+      reproducibility(doc, { engine: 'aaaa0000', digests: { h1: 'd1' } })
+        .reproducible
+    ).toBe(true);
   });
 });

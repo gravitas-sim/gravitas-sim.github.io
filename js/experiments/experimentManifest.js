@@ -686,13 +686,9 @@ export function fromSweepSpec(spec, { profile = 'desktop', nav = {} } = {}) {
   };
 }
 
-// --- Retired ids -----------------------------------------------------------------
-// The bench wrote `gravitas-experiment` (a `version` field) and a reliability
-// check as `kind: gravitas-reliability-check`; the runner wrote
-// `gravitas.experiment`. One format now: `gravitas.experiment/1`, `kind:
-// comparison` for the bench's export, and `gravitas.experiment-result/1`, `kind:
-// reliability-check`. The one place the retired ids are read: a document under
-// one is version 0 of its replacement, and TO_VERSION_1 migrates it.
+// --- Retired ids: gravitas-experiment and gravitas-reliability-check are version 0
+// of gravitas.experiment (kind comparison) and gravitas.experiment-result (kind
+// reliability-check); TO_VERSION_1 migrates them.
 
 /** Retired id -> the id that replaced it. */
 export const RETIRED_FORMATS = Object.freeze({
@@ -715,12 +711,7 @@ export const TO_VERSION_1 = Object.freeze({
   }),
 });
 
-/**
- * A bench comparison (kind `comparison`) as a sweep: its two runs become the
- * two values of the one setting it changed. A comparison that changed more, or
- * a setting the runner cannot vary, says so; its captured start is not carried,
- * because the runner builds every trial from the scenario and its settings.
- */
+/** A bench comparison of one setting, as a two-value sweep; else why not. */
 export function fromComparison(c) {
   const scenario = c.provenance?.scenario;
   const changed = c.parameterChange?.variables ?? [];
@@ -901,6 +892,25 @@ export function summarizeExperiment(m, trials) {
   return out;
 }
 
+function engineReason(then, now) {
+  return `the engine integrates differently now (fingerprint ${then} then, ${now} here): the same manifest will give different numbers, and that difference is the change to the engine, not to the experiment`;
+}
+
+/** An analysis document, judged in the same words (`here.digests` by id). */
+function analysisVerdict(doc, here) {
+  const reasons = [];
+  if (doc.engine?.fingerprint !== here.engine)
+    reasons.push(engineReason(doc.engine?.fingerprint, here.engine));
+  for (const c of doc.consumed ?? []) {
+    const now = here.digests?.[c.id];
+    if (now !== undefined && now !== c.digest)
+      reasons.push(
+        `${c.kind} ${c.id} is different data now (digest ${c.digest} then, ${now} here)`
+      );
+  }
+  return { reproducible: !reasons.length, reasons, notes: [] };
+}
+
 /**
  * Whether a saved result can be reproduced here, and if not, why not.
  * @param {object} result - A gravitas.experiment-result/1
@@ -908,6 +918,8 @@ export function summarizeExperiment(m, trials) {
  */
 export function reproducibility(result, here) {
   const reasons = [];
+  if (result?.format === 'gravitas.analysis')
+    return analysisVerdict(result, here);
   if (
     result?.format !== RESULT_FORMAT ||
     result.formatVersion !== RESULT_VERSION
@@ -925,9 +937,7 @@ export function reproducibility(result, here) {
       `its manifest is no longer valid here: ${problems[0].path} ${problems[0].message}`
     );
   if (result.engine?.fingerprint !== here.engine) {
-    reasons.push(
-      `the engine integrates differently now (fingerprint ${result.engine?.fingerprint} then, ${here.engine} here): the same manifest will give different numbers, and that difference is the change to the engine, not to the experiment`
-    );
+    reasons.push(engineReason(result.engine?.fingerprint, here.engine));
   }
   const notes = [];
   if (result.engine?.app !== here.app) {

@@ -347,6 +347,10 @@ describe('the analysis schema', () => {
         rows: c.data?.rows ?? 0,
         key: c.data?.key ?? null,
       },
+      engine: { fingerprint: fits[0].document.engine.fingerprint },
+      consumed: [
+        { kind: 'observation', id: 'synthetic:rv', digest: c.data?.key ?? null },
+      ],
       comparison: c,
       methods: 'Compared by AIC and BIC.',
       sources: fits.map(h => ({ label: h.label, document: h.document })),
