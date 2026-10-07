@@ -27,6 +27,7 @@ import {
   requestObservationLayout,
 } from './observationLayout.js';
 import { KIND, annotate } from './notebook/entry.js';
+import { citationRows } from './notebook/artifactEntry.js';
 import {
   addEntry,
   backupFilename,
@@ -343,8 +344,8 @@ function entryHtml(entry, index, total) {
       }
       ${proseHtml(entry)}
       <details class="nb-details">
-        <summary>${esc(t(snap.observed ? 'nb.entry.data' : 'nb.entry.conditions'))}</summary>
-        ${snap.observed ? rowsHtml(snap.observed.rows) : provenanceHtml(snap.provenance)}
+        <summary>${esc(t(snap.observed ? 'nb.entry.data' : snap.artifact ? 'nb.entry.cite' : 'nb.entry.conditions'))}</summary>
+        ${snap.observed ? rowsHtml(snap.observed.rows) : snap.artifact ? rowsHtml(citationRows(snap.artifact, t)) : provenanceHtml(snap.provenance)}
       </details>
     </li>`;
 }
