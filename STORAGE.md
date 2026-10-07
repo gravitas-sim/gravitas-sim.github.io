@@ -61,7 +61,7 @@ These are the student's own work, and what an "export everything" would carry:
 | sessionStorage `gravitas_instructor_key` | The instructor materials' key, for the session only | `js/instructorPortal.js` |
 | IndexedDB `gravitas-catalog` | Installed catalog extensions: their archives' files | `js/catalog/store.js` |
 | IndexedDB `gravitas-archive` | The archive import's cached answers | `js/archive/cache.js` |
-| IndexedDB `gravitas-store` | The storage module's collections (Prompt 65): one object store, `records`, keyed by collection and name. Nothing writes to it yet; step 3 moves the writers above onto it | `js/storage/index.js` |
+| IndexedDB `gravitas-store` | The storage module's collections (Prompt 65): one object store, `records`, keyed by collection and name. Nothing writes to it yet: the keys above keep their own formats, and step 3 moves their readers and writers over only as the route ceilings allow (below) | `js/storage/index.js` |
 | `gravitas_store:<collection>:<name>` | The same records, one key each, when IndexedDB is unavailable | `js/storage/index.js` |
 | Cache Storage `gravitas-<build>` | The service worker's precache; an older build's cache is deleted when a new one activates | `sw.js` |
 
@@ -71,3 +71,9 @@ These are the student's own work, and what an "export everything" would carry:
 
 - **Only the experiment store states a budget:** 512 KB per experiment and 2 MB in total (`js/experiments/store.js`, `LIMITS`), with checkpoints of up to 1.5 million characters (`js/experimentsPage.js`).
 - **Every other key relies on the browser's quota.** Nothing else calls `navigator.storage.estimate()`, and a full quota is handled where a write fails, in a few catch blocks.
+
+## Moving the writers (Prompt 65, step 3)
+
+Existing keys keep their key and their stored text; none is migrated. `js/storage/local.js` (`readJson`, `writeJson`) is the shared form of the try/catch for no storage, a damaged value and a full quota. Moved so far: the Observatory guides (`gravitas_guides`), the mission lab's guides (`gravitas_missionlab_*`) and the teaching page's notes (`gravitas_teaching_notes_v1`).
+
+The rest are not moved, because the helper is a module and a module is a request. Adding it to a route that did not load it took the lesson routes (build) one request over their ceilings, the composer and course builder (sources) likewise, the evaluation, library and 3-D guide routes over by 0.3 to 0.6 KB, and the experiment runner sat at its request ceiling already. No ceiling was raised. Still on their own handling: `js/notebook/store.js`, `js/experiments/store.js`, `js/library/progress.js`, `js/studio/model.js` drafts, `js/lab3d/view/guidePanel.js`, `js/evaluationKit.js`, `js/platform/resolver.js`, `js/lecture.js`, `js/controls.js`, `js/composerPage.js` and `js/coursePage.js` drafts, `js/investigations.js`, `js/catalog/store.js`.

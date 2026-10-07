@@ -440,7 +440,7 @@ export function rvFitCsv() {
   );
   comment(`residual_rms_ms: ${report.fit?.rms ?? ''}`);
   // The dof convention travels with the numbers, because a reduced chi-square
-  // is not interpretable without it. See evaluateModel in rvFit.js.
+  // is not interpretable without it. See evaluateModel in inference/rvCircular.js.
   comment(`degrees_of_freedom: ${report.fit?.dof ?? ''}`);
   comment(
     `parameters_estimated_from_data: ${report.fit?.estimatedParameters ?? 0}` +

@@ -309,9 +309,6 @@ const guide = `
     extensions: ['Where a student who finishes early can go'],
     modelNotes:
       'What the simulation simplifies, and where that matters for this lesson.',
-    // Keyed by the 1-based step number - the number the panel shows and the
-    // answer key prints. What an instructor should expect to see at that step.
-    expectations: {},
   },
 `;
 

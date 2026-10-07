@@ -68,9 +68,6 @@ export function ensureNotebook() {
   return loading;
 }
 
-/** @returns {boolean} Whether the notebook has already been loaded */
-export const notebookLoaded = () => loading !== null;
-
 /**
  * Where the build identifier comes from, and whether it is real.
  *

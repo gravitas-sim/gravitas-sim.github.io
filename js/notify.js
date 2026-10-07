@@ -50,23 +50,22 @@ export function toast(message, action) {
     document.body.appendChild(el);
   }
   const hide = () => {
-    el.classList.remove('is-visible', 'has-action');
+    el.classList.remove('is-visible');
     document.removeEventListener('keydown', onKey);
   };
   const onKey = e => e.key === 'Escape' && hide();
   el.textContent = message;
   el.classList.add('is-visible');
-  el.classList.toggle('has-action', !!action);
   if (action) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'ui-button';
-    b.textContent = action.label;
-    b.onclick = () => {
-      hide();
-      action.run();
-    };
-    el.append(' ', b);
+    el.append(
+      ' ',
+      Object.assign(document.createElement('button'), {
+        type: 'button',
+        className: 'ui-button',
+        textContent: action.label,
+        onclick: () => (hide(), action.run()),
+      })
+    );
     document.addEventListener('keydown', onKey);
   }
   announce(message);
@@ -80,12 +79,21 @@ let failedAt = 0;
  * A load failed: offer it again. A browser keeps a failed module for the life of
  * the page, so a second failure within 15 s offers a reload instead.
  * @param {Function} retry - Does the request again
+ * @param {Error} [err] - What the request threw; only a TypeError (the
+ *   browser's failed fetch or import) is a load failure
  */
-export function loadFailed(retry) {
-  const again = Date.now() - failedAt > 15000;
-  failedAt = Date.now();
+export function loadFailed(retry, err) {
+  // A refusal (a draft the panel rejects) is not a network failure, and a
+  // Retry could not succeed: say so plainly.
+  if (err && !(err instanceof TypeError)) {
+    toast(t('inv.load.failed'));
+    return;
+  }
+  const now = Date.now();
+  const again = now - failedAt > 15000;
+  failedAt = now;
   toast(t(again ? 'failure.load' : 'failure.reload'), {
-    label: t(again ? 'failure.retry' : 'failure.reloadNow'),
+    label: t(again ? 'failure.retry' : 'update.apply'),
     run: again ? retry : () => location.reload(),
   });
 }

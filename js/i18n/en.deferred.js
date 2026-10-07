@@ -1132,11 +1132,11 @@ export const EN_DEFERRED = {
   'rvfit.mc.cancel': 'Cancel',
   'rvfit.mc.running': 'Trial {done} of {total}…',
   'rvfit.mc.idle': 'Not run yet.',
-  'rvfit.mc.stale':
-    'The recording, the fit or the search range has changed since this analysis ran, so its intervals no longer describe what is on screen. Run it again.',
   'rvfit.mc.outcome.complete': 'Every trial ran and produced a fit.',
   'rvfit.mc.outcome.canceled': 'Stopped by you after {done} of {total} trials.',
   'rvfit.mc.outcome.partial': '{done} of {total} trials produced a fit.',
+  'rvfit.mc.stale':
+    'The recording, the fit or the search range has changed since this analysis ran, so its intervals no longer describe what is on screen. Run it again.',
 
   'rvfit.mc.refused.noFit':
     'There is no fit on screen to resample around. Set a period first.',
@@ -2508,7 +2508,6 @@ export const EN_DEFERRED = {
   'gwW.axis.merger': 'merger',
   'gwW.plot.isco': 'the model stops here',
   'gwW.local.span': '{ms} ms across',
-  'gwW.source.notToScale': 'schematic: separation is modeled, sizes are not',
   'gwW.overlay.legend':
     'Each ring is one wave crest, where it would be now after leaving the source. The outer ones left earlier, when the orbit was slower, so they are further apart. Distances compressed, amplitude exaggerated, propagation slowed and rescaled as the frequency climbs. The center is left out: a far-field formula does not describe it.',
   'gwW.overlay.legendStill':
@@ -3050,6 +3049,7 @@ export const EN_DEFERRED = {
   'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
   'export.truncated':
     'Exported the first {n} rows: the recording was larger than one file.',
+  'inv.load.failed': 'That investigation could not be loaded. Try again.',
   'inv.link.unknown':
     'That investigation link does not match an investigation.',
   'activity.error.noActivity':
@@ -3626,7 +3626,6 @@ export const EN_DEFERRED = {
   'nb.stellar.initialMass': 'Initial mass',
   'nb.stellar.age': 'Age',
   'nb.stellar.mainSequence': 'Total main-sequence lifetime',
-  'nb.stellar.pinnedRadius': 'Pinned star {n}: radius',
   'nb.stellar.pinnedNth': 'star {n}',
   'nb.stellar.pinnedRadiusOf': '{name}: radius',
   'nb.stellar.pinnedTeffOf': '{name}: temperature',
@@ -3635,7 +3634,6 @@ export const EN_DEFERRED = {
     'The compared stars are {n} of the {of} standing on the canvas for this step, read from the scene rather than pinned by hand.',
   'nb.stellar.limit.someHypothetical':
     'Not every star here is a model. {names} ({n}) are points chosen on the diagram: their temperature and luminosity are chosen, their radius follows from those two, and they have no mass, no age and no lifetime.',
-  'nb.stellar.pinnedTeff': 'Pinned star {n}: temperature',
   'nb.stellar.limit.model':
     'A model, not an observation: {grid}. No rotation, no binarity, no magnetic fields, and one composition.',
   'nb.stellar.limit.incomplete':

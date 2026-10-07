@@ -467,7 +467,10 @@ describe('it catches missing instructor material', () => {
     const copy = { ...inputs, instructor: { ...inputs.instructor } };
     copy.instructor.tides = {
       ...copy.instructor.tides,
-      expectations: { ...copy.instructor.tides.expectations, 999: 'stale' },
+      expectations: {
+        ...copy.instructor.tides.expectations,
+        'no-such-step': 'stale',
+      },
     };
     expect(rulesFired(checkCatalog(copy))).toContain('instructor/expectations');
   });

@@ -1122,36 +1122,23 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
         }
       }
-      // Keyed by step index, which is exactly the kind of reference that goes
-      // stale the moment a step is inserted above it.
-      // Keyed by the 1-based step number - the same number js/answerKey.js
-      // puts in `entry.step` and js/instructorDocs.js looks up. Reading them
-      // 0-based shifts every expectation by one step, which is exactly the
-      // silent failure this rule exists to catch, so the convention is stated
-      // rather than inferred.
-      for (const key of Object.keys(guide.expectations || {})) {
-        const number = Number(key);
-        const idx = number - 1;
-        if (!Number.isInteger(number) || idx < 0 || idx >= steps.length) {
+      // Keyed by step sid (js/data/instructorExpectations.js): a number goes
+      // stale the moment a step is inserted above it. It must name a step
+      // and say something.
+      const sids = steps.map(s => s.sid);
+      for (const [key, text] of Object.entries(guide.expectations || {})) {
+        const idx = sids.indexOf(key);
+        if (idx < 0) {
           err(
             'instructor/expectations',
             null,
-            `expectations has an entry for step ${key}, which this lesson does not have`
+            `expectations has an entry for step "${key}", which this lesson does not have`
           );
-          continue;
-        }
-        // Any step type may carry an expected observation, and "what to look
-        // for" is most of what an explore step is for. js/instructorDocs.js
-        // prints one under its step in the answer key whatever the step asks,
-        // including a reading step, which the key leaves out only when it has
-        // no expectation either. So the check is that the number lands on a
-        // step and says something - which is what goes stale when a step is
-        // inserted or removed.
-        if (!isNonEmptyString(guide.expectations[key])) {
+        } else if (!isNonEmptyString(text)) {
           err(
             'instructor/expectations',
             idx,
-            `expectations for step ${key} is empty`
+            `expectations for step "${key}" is empty`
           );
         }
       }

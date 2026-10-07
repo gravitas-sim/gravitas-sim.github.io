@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 46 of them. 24 have a JSON Schema in `sdk/schemas`, and 9 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 45 of them. 24 have a JSON Schema in `sdk/schemas`, and 9 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -33,10 +33,9 @@ The columns:
 | gravitas.orbital-system | format, version | 1 | js/systemSpec.js systemFromFile | download | v1 only | refused, in words | [yes](sdk/schemas/orbital-system-1.schema.json) |
 | gravitas.system3d | format, formatVersion | 1 | js/lab3d/state.js migrateSystem | file, repository | v1 only; reads orbital-system/1 | refused, in words | no |
 | gravitas.lab3d.snapshot | format, formatVersion | 1 | js/lab3d/snapshot.js snapshotProblem | memory | v1 only | refused | no |
-| gravitas.experiment | format, formatVersion | 1 | js/experiments/experimentManifest.js migrateExperiment | memory, inside results | converts an unversioned sweep spec | refused, in words | [yes](sdk/schemas/experiment-1.schema.json) |
-| gravitas.experiment-result | format, formatVersion | 1 | js/experiments/experimentManifest.js reproducibility | download, localStorage | v1 only | refused; the analysis panel does not check | [yes](sdk/schemas/experiment-result-1.schema.json) |
-| gravitas-experiment | format, version | 1 | js/experiments/exports.js importManifest | download | v1 only | refused by reason code | no |
-| experiment store | v | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2 | refused by reason code | no |
+| gravitas.experiment | format, formatVersion | 1 | js/experiments/experimentManifest.js migrateExperiment | download (the runner’s manifest, and the bench’s comparison), memory, inside results | converts an unversioned sweep spec; the retired id gravitas-experiment is version 0 | refused, in words | [yes](sdk/schemas/experiment-1.schema.json) |
+| gravitas.experiment-result | format, formatVersion | 1 | js/experiments/experimentManifest.js reproducibility; the bench’s records, js/experiments/store.js migrate | download, localStorage (the bench’s saved comparisons and reliability checks) | the store’s v1 to v3 and the retired gravitas-reliability-check are version 0 | refused; the analysis panel does not check | [yes](sdk/schemas/experiment-result-1.schema.json) |
+| experiment store | v, beside format and formatVersion | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2; a record without a format is read by v | refused by reason code | no |
 | gravitas.mission-plan | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.ephemeris-pack | format, formatVersion | 1 | js/mission/ephemeris.js createEphemeris | repository | v1 only | refused | no |
 | gravitas.investigation-pack | format, formatVersion | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words | [yes](sdk/schemas/investigation-pack-1.schema.json) |
@@ -76,7 +75,7 @@ The columns:
   - a link prefix.
 
   Prompt 61 makes `format` and `formatVersion` the one convention, and `readVersioned()` reads the older pairs by name for one major version.
-- **Confusable ids.** `gravitas-experiment` and `gravitas.experiment` are different formats. `gravitas.course-pack` is two: /1, which extensions and the catalog carry, and /2, which the builder writes. The /1 validator refuses a /2 pack with the same message it gives any other version.
+- **Confusable ids.** `gravitas-experiment` is no longer a format: it is the retired name of `gravitas.experiment/1`, which the A/B bench writes (`kind: comparison`) and the runner reads, as it reads the retired name, as version 0. The bench’s reliability check is `gravitas.experiment-result/1` of `kind: reliability-check`, the retired `gravitas-reliability-check` its version 0. `gravitas.course-pack` is two: /1, which extensions and the catalog carry, and /2, which the builder writes. The /1 validator refuses a /2 pack with the same message it gives any other version.
 - **Written but never read:** `gravitas.analysis`, the two guide reports, `gravitas.mission-plan` and `gravitas.course-manifest`. A student's file in any of them cannot be opened again.
 - **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled `newer`, `newerVersion`, `tooNew`, `schemaTooNew` and `from-a-newer-version`), and not at all in the link blocks, `gravitas.observed` and the catalog curation.
 

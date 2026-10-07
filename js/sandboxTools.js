@@ -50,7 +50,6 @@ import {
 import {
   scaleBar,
   angleAtVertex,
-  bearingDegrees,
   LatchStopwatch,
   INSTRUMENT_MONO,
 } from './instruments.js';
@@ -218,9 +217,6 @@ export function toolsPointerUp() {
   tools.drag = null;
   return held;
 }
-
-/** @returns {boolean} True while a handle is held */
-export const toolsDragging = () => !!tools.drag;
 
 // --- The stopwatch ------------------------------------------------------------
 
@@ -842,12 +838,6 @@ export const protractorReading = () =>
     tools.protractor.arm1,
     tools.protractor.arm2
   );
-
-/** Exposed for the same reason: the bearing of each arm, in degrees. */
-export const protractorArms = () => ({
-  arm1: bearingDegrees(tools.protractor.vertex, tools.protractor.arm1),
-  arm2: bearingDegrees(tools.protractor.vertex, tools.protractor.arm2),
-});
 
 /** Exposed so a test can read the ruler's length without a canvas. */
 export const rulerLengthUnits = () =>

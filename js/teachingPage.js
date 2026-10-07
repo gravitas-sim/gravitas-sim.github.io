@@ -49,6 +49,7 @@ import {
   EVIDENCE,
 } from './data/teaching.js';
 import { DEMO_LINKS, SCENARIO_COUNT } from './data/teachingGenerated.js';
+import { readJson, writeJson } from './storage/local.js';
 import { mountShell } from './shell.js';
 import {
   LANGUAGES,
@@ -885,23 +886,10 @@ function renderFeedbackRoutes() {
 const FEEDBACK_KEY = 'gravitas_teaching_notes_v1';
 
 /** Read the notes, tolerating a browser that refuses storage. */
-function readNotes() {
-  try {
-    return JSON.parse(window.localStorage.getItem(FEEDBACK_KEY) || '{}') || {};
-  } catch {
-    return {};
-  }
-}
+const readNotes = () => readJson(FEEDBACK_KEY, {});
 
 /** Write them back, and say nothing if storage is unavailable. */
-function writeNotes(notes) {
-  try {
-    window.localStorage.setItem(FEEDBACK_KEY, JSON.stringify(notes));
-    return true;
-  } catch {
-    return false;
-  }
-}
+const writeNotes = notes => writeJson(FEEDBACK_KEY, notes);
 
 /**
  * The classroom feedback form.

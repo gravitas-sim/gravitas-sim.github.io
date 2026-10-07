@@ -114,7 +114,6 @@ export const ES_ANALYSIS = {
     'Los valores abarcan un factor de {ratio}. La mediana y su intervalo dicen más que la media.',
 
   'lab.col.trial': 'Ensayo',
-  'lab.col.value': 'Ajuste',
   'lab.col.trials': 'Ensayos',
   'lab.col.n': 'Terminados',
   'lab.col.mean': 'Media',

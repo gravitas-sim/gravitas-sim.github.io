@@ -50,6 +50,8 @@ setting, is to sample every frame.
 **Migration.**
 - A bench sweep specification (the Experiments panel's own) converts to a
   manifest with `fromSweepSpec()`.
+- A bench comparison (`kind: comparison`) that changed one setting converts
+  with `fromComparison()`; the retired id `gravitas-experiment` is version 0.
 - `migrateExperiment()` reads any manifest this build knows. A newer
   `formatVersion` is refused with a reason, never read in part.
 

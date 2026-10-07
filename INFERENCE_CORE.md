@@ -92,6 +92,28 @@ One planet on a Keplerian orbit (`js/inference/rv.js`).
 | `jitter` | nuisance | the velocity column's | 0 – 200 | added in quadrature to every error bar; found by a golden-section search on −2 ln L outside the least squares |
 | e, ω | derived | —, deg | — | |
 
+### `rv-circular` 1.0.0
+
+The sandbox RV workspace's model: `v = gamma + K sin(2 pi t / P + phi)`, one
+component, four parameters, nothing eccentric (`js/inference/rvCircular.js`;
+the workspace's teaching UI is `js/rvWorkspace.js` and `js/rvWorkspacePanel.js`).
+It is not in the registry above, which is what the Observatory's fit panel
+offers and its Levenberg–Marquardt engine fits: at a fixed period the model is
+linear in `gamma`, `A`, `B` (`K = hypot(A, B)`), so the engine here is
+`grid-linear` 1.0.0, one 3 × 3 weighted normal equation at each period of a
+grid uniform in frequency, with every alias minimum kept. Its uncertainty is
+the `monte-carlo-refit` 1.0.0 method (`js/inference/rvMonteCarlo.js`): seeded
+synthetic runs around the fit at the recorded epochs, each refit by the same
+search, grouped into alias families.
+
+All three tasks (`rv-search`, `rv-fit`, `rv-mc`, `js/inference/rvTasks.js`) run
+in the inference Worker through the scheduler (`js/inference/rvClient.js`), so
+the workspace no longer searches or fits on the page's thread. A reader's
+cancel is a message to the realm, which answers with the trials it finished.
+They were moved, not rewritten: `tests/rvCircularMove.test.js` holds every
+search, fit and Monte Carlo of five fixtures to the SHA-256 of results written
+by `js/rvFit.js` and `js/rvUncertainty.js` before the move, bit for bit.
+
 ## The algorithm, `grid-lm` 1.0.0
 
 `js/inference/fit.js` and `js/inference/infer.js`.

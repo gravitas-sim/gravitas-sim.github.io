@@ -49,30 +49,6 @@ export function chartColors() {
 }
 
 /**
- * Apply the current theme to an existing Chart.js instance.
- *
- * @param {object} chart - A Chart.js chart
- * @param {object} [options] - Which dataset colors to refresh
- * @param {boolean} [options.recolorDatasets] - Restyle dataset 0 with the accent
- */
-export function applyChartTheme(chart, { recolorDatasets = true } = {}) {
-  if (!chart) return;
-  const t = chartColors();
-  if (recolorDatasets && chart.data?.datasets?.[0]) {
-    chart.data.datasets[0].borderColor = t.accent;
-    chart.data.datasets[0].backgroundColor = t.accentSoft;
-  }
-  for (const key of Object.keys(chart.options?.scales ?? {})) {
-    const axis = chart.options.scales[key];
-    if (!axis) continue;
-    if (axis.title) axis.title.color = t.label;
-    if (axis.ticks) axis.ticks.color = t.tick;
-    if (axis.grid) axis.grid.color = t.grid;
-  }
-  chart.update('none');
-}
-
-/**
  * The axis configuration every observing chart shares.
  *
  * @param {string} titleText - Axis label

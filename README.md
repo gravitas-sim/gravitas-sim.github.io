@@ -304,7 +304,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->7791<!--/fact--> strings, and
+of <!--fact:uiStrings-->7757<!--/fact--> strings, and
 all <!--fact:investigations-->24<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->8034<!--/fact--> tests across <!--fact:jestSuites-->248<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->8144<!--/fact--> tests across <!--fact:jestSuites-->253<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -665,6 +665,8 @@ and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
 | --- | --- |
 | Something is wrong | [`SUPPORT.md`](SUPPORT.md) — what makes a bug report fixable here |
 | I want to use this in a class | [`SUPPORT.md`](SUPPORT.md), and [/teaching/](https://gravitas-sim.online/teaching/) |
+| Which browsers are supported | [`SUPPORT.md`](SUPPORT.md#supported-browsers-and-devices) — generated from what CI runs |
+| What happens if the maintainer is away | [`CONTINUITY.md`](CONTINUITY.md), and [`TOOLCHAIN.md`](TOOLCHAIN.md) for how versions move |
 | I want to change something | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | I found a security problem | [`SECURITY.md`](SECURITY.md) — please do not open an issue |
 | How people are expected to behave | [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) |

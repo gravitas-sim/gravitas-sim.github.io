@@ -1,0 +1,40 @@
+{
+  "well sampled, forty epochs over a fortnight": {
+    "search": "b6ded561a76afcf16c781e138fd4f998884a371af7a43b118d3313aea391d413",
+    "fitAtPeriod": "a07780f4a71495b93cbf5ba50a668f7fc8da83412ad6d16051add96e33820e23",
+    "bestPeriod": 3.495745424874694,
+    "bestChi2": 41.19307236386287,
+    "monteCarlo": "36a76042281f03393bd2c099ee02a979487a60c67137120ceb15be3b9c78376f",
+    "mcOutcome": "complete"
+  },
+  "the workspace recording, 24 epochs at 0.37 d": {
+    "search": "eedc73ddae4af7648fb8774afccc4e288503dfbae9e02939f6d13763c9ee4861",
+    "fitAtPeriod": "f8d4971824f0cecce3a067781576761a05411f3ab9bcdc427d9863687a077385",
+    "bestPeriod": 3.1967871485943777,
+    "bestChi2": 21.758718444979095,
+    "monteCarlo": "fe6bd702344f77741ecd21817689e0d2fe2863c2b0ba9840212ed619dedc63c9",
+    "mcOutcome": "complete"
+  },
+  "twelve sparse epochs, aliases": {
+    "search": "ef61d5f5122cf89290e3435632307e9a5b885db9db9dda188b8fe1935ca6db13",
+    "fitAtPeriod": "7db1cde2c5a4951e21e7227b0194a35f7915afb92ebcc00c67d7fcbc5ba00a43",
+    "bestPeriod": 4.764150943396226,
+    "bestChi2": 6.127223575230347,
+    "monteCarlo": "45d22a9112c4b86d2502930d53e56ab778baa586bb17eb9248c9f45346d8230c",
+    "mcOutcome": "complete"
+  },
+  "no uncertainties, uniform weights": {
+    "search": "6882c4bcb994b8f0e92c77860df55a6365a287b47f68672c418a21a893064ced",
+    "fitAtPeriod": "67803571b98afb636c4b6794916d242b3b59973d9d5ada458c4d87ec50c1af6f",
+    "bestPeriod": 2.194852941176471,
+    "bestChi2": 3.490416059113757
+  },
+  "with a missed epoch and a degraded one": {
+    "search": "d7b165a0a77d982355cbad7fa5097705a71f784033acc3ed3762b06117b5626e",
+    "fitAtPeriod": "e25055b4c4b7ed631a7c7d153ad8f887e757438168d51bbbbc32fa50b064f3a8",
+    "bestPeriod": 5.984962406015038,
+    "bestChi2": 4.771977780021474,
+    "monteCarlo": "bd0f62bf13e50c889245bd23e33ad221e73cd083dfced3eb6352237b89744241",
+    "mcOutcome": "complete"
+  }
+}

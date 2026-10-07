@@ -247,8 +247,7 @@ export const ES = {
   'failure.load': 'No se pudo cargar. Comprueba tu conexión.',
   'failure.retry': 'Reintentar',
   'failure.reload':
-    'Sigue sin cargarse. Recarga la página; el trabajo guardado se conserva.',
-  'failure.reloadNow': 'Recargar',
+    'Sigue sin cargar. Recarga la página; tu trabajo se conserva.',
   'rail.toggleNotebook': 'Cuaderno de pruebas',
   'rail.toggleNotebook.hint':
     'Abrir el cuaderno de pruebas: las mediciones que has guardado desde los instrumentos, el espacio de análisis y el banco, cada una congelada con las condiciones en que se tomó y con espacio para tu afirmación, tus pruebas y las limitaciones que veas.',
@@ -257,7 +256,6 @@ export const ES = {
   'rail.speedUp': 'Rápido',
   'rail.resetView': 'Restablecer vista',
   'rail.shortcuts': 'Atajos',
-  'rail.objectType': 'Añadir objeto',
   'rail.objectType.choose': 'Añadir objeto',
   'rail.objectType.placing': 'Haz clic para colocar · Esc',
   'rail.objectType.stop': 'Dejar de añadir',
@@ -1348,26 +1346,6 @@ export const ES = {
   // --- Lesson instruments ----------------------------------------------------
   // Los rótulos, títulos de ejes y nombres de ajustes de los instrumentos
   // incrustados en las lecciones.
-  'bhP.manhattanEndToEnd': 'Manhattan, de punta a punta',
-  'bhP.earthSRadius': 'el radio de la Tierra',
-  'bhP.theSunSRadius': 'el radio del Sol',
-  'bhP.mercurySOrbit': 'la órbita de Mercurio',
-  'bhP.airAtSeaLevel': 'Aire a nivel del mar',
-  'bhP.water': 'Agua',
-  'bhP.theSunOnAverage': 'El Sol, en promedio',
-  'bhP.rock': 'Roca',
-  'bhP.lead': 'Plomo',
-  'bhP.aWhiteDwarf': 'Una enana blanca',
-  'bhP.anAtomicNucleus': 'Un núcleo atómico',
-  'bhP.theSurfaceOfTheSun': 'La superficie del Sol',
-  'bhP.roomTemperature': 'Temperatura ambiente',
-  'bhP.liquidNitrogen': 'Nitrógeno líquido',
-  'bhP.theMicrowaveBackground': 'El fondo de microondas',
-  'bhP.theColdestLabExperiment': 'El experimento de laboratorio más frío',
-  'bhP.aHumanLifetime': 'Una vida humana',
-  'bhP.sinceTheDinosaurs': 'Desde los dinosaurios',
-  'bhP.ageOfTheUniverse': 'Edad del universo',
-  'bhP.theLastStarBurnsOut': 'Se apaga la última estrella',
   // --- ¿Puedes detectar este planeta? ----------------------------------------
   // --- El presupuesto de ruido de un tránsito ----------------------------------
   'energyChart.kineticEnergy': 'Energía cinética',

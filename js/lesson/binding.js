@@ -420,18 +420,3 @@ export function leaveScope(scope) {
   scope.saved.clear();
   return out;
 }
-
-/**
- * Forget a scope without restoring it.
- *
- * For the case where the thing that was saved no longer exists to be put back:
- * a camera belonging to a world that has been torn down, a selection of a body
- * that has merged. Putting those back is worse than not.
- *
- * @param {object} scope - A scope
- * @returns {void}
- */
-export function abandonScope(scope) {
-  scope.entered = false;
-  scope.saved.clear();
-}

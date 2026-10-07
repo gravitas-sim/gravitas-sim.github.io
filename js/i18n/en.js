@@ -289,9 +289,7 @@ export const EN = {
     'Open the A/B experiment bench: capture a starting state, record a baseline run, return to exactly that start, change one variable and record a second run, then compare the two on the same simulated-time axis.',
   'failure.load': 'That could not be loaded. Check your connection.',
   'failure.retry': 'Retry',
-  'failure.reload':
-    'It still could not be loaded. Reload the page; saved work is kept.',
-  'failure.reloadNow': 'Reload',
+  'failure.reload': 'Still not loaded. Reload the page; saved work is kept.',
   'rail.toggleNotebook': 'Evidence Notebook',
   'rail.toggleNotebook.hint':
     'Open the evidence notebook: readings you have saved from the instruments, the analysis workspace and the bench, each one frozen with the conditions it was taken under, and each with room for your claim, your evidence and the limitations you can see.',
@@ -300,7 +298,6 @@ export const EN = {
   'rail.speedUp': 'Fast',
   'rail.resetView': 'Reset View',
   'rail.shortcuts': 'Shortcuts',
-  'rail.objectType': 'Add object',
   'rail.objectType.choose': 'Add object',
   'rail.objectType.placing': 'Click to place · Esc',
   'rail.objectType.stop': 'Stop adding',
@@ -1366,26 +1363,6 @@ export const EN = {
   // --- Lesson instruments ----------------------------------------------------
   // The labels, axis titles and preset names on the widgets embedded in the
   // lessons. Read through getters so a language change repaints them.
-  'bhP.manhattanEndToEnd': 'Manhattan, end to end',
-  'bhP.earthSRadius': "Earth's radius",
-  'bhP.theSunSRadius': "the Sun's radius",
-  'bhP.mercurySOrbit': "Mercury's orbit",
-  'bhP.airAtSeaLevel': 'Air at sea level',
-  'bhP.water': 'Water',
-  'bhP.theSunOnAverage': 'The Sun, on average',
-  'bhP.rock': 'Rock',
-  'bhP.lead': 'Lead',
-  'bhP.aWhiteDwarf': 'A white dwarf',
-  'bhP.anAtomicNucleus': 'An atomic nucleus',
-  'bhP.theSurfaceOfTheSun': 'The surface of the Sun',
-  'bhP.roomTemperature': 'Room temperature',
-  'bhP.liquidNitrogen': 'Liquid nitrogen',
-  'bhP.theMicrowaveBackground': 'The microwave background',
-  'bhP.theColdestLabExperiment': 'The coldest lab experiment',
-  'bhP.aHumanLifetime': 'A human lifetime',
-  'bhP.sinceTheDinosaurs': 'Since the dinosaurs',
-  'bhP.ageOfTheUniverse': 'Age of the universe',
-  'bhP.theLastStarBurnsOut': 'The last star burns out',
   // --- Can You Detect This Planet? -------------------------------------------
   // --- The transit noise budget -----------------------------------------------
   'energyChart.kineticEnergy': 'Kinetic Energy',

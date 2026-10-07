@@ -1,7 +1,7 @@
 // =============================================================================
 // The RV workspace's uncertainty analysis, through the panel
 // -----------------------------------------------------------------------------
-// tests/rvUncertainty.test.js covers the arithmetic against fixed inputs. This
+// tests/rvMonteCarlo.test.js covers the arithmetic against fixed inputs. This
 // file covers the things a unit test cannot: that the button runs it, that the
 // panel prints an interval when there is one and refuses to print one when
 // there is not, that canceling works, that the seed shown is the seed used,
@@ -21,7 +21,7 @@ async function analyze(page, { days, period, K, sigma, bounds, seed = 'd' }) {
   await page.evaluate(
     async ([schedule, truth, noise, range, noiseSeed]) => {
       const bridge = await import('/js/rvWorkspaceBridge.js');
-      const { gaussianStream } = await import('/js/rvUncertainty.js');
+      const { gaussianStream } = await import('/js/inference/rvMonteCarlo.js');
       const g = gaussianStream(noiseSeed);
       const points = schedule.map(day => ({
         day,
@@ -42,7 +42,7 @@ async function analyze(page, { days, period, K, sigma, bounds, seed = 'd' }) {
         worldGeneration: 1,
       });
       const ws = await import('/js/rvWorkspace.js');
-      ws.runSearch(range);
+      await ws.runSearch(range);
     },
     [days, { period, K, gamma: -3, phase: 1.1 }, sigma, bounds, seed]
   );

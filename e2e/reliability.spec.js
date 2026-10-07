@@ -346,7 +346,8 @@ test.describe('what it reports', () => {
     });
     const doc = JSON.parse(text);
 
-    expect(doc.kind).toBe('gravitas-reliability-check');
+    expect(doc.format).toBe('gravitas.experiment-result');
+    expect(doc.kind).toBe('reliability-check');
     // Provenance: which start, which seed, which integrator.
     expect(doc.experiment.initialStateHash).toMatch(/^[0-9a-f]{8}$/);
     expect(doc.experiment.seed).toBeTruthy();

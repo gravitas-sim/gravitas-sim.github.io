@@ -1,3 +1,4 @@
+import { beforeAll, afterAll } from '@jest/globals';
 import {
   loadRecording,
   currentRecording,
@@ -13,6 +14,7 @@ import {
   exportReport,
   resetWorkspace,
 } from '../js/rvWorkspace.js';
+import { installRealm, uninstallRealm } from './rvRealm.js';
 
 const point = (day, rv, sigma = 1, quality = 'ok') => ({
   day,
@@ -49,6 +51,8 @@ function recording({
   };
 }
 
+beforeAll(installRealm);
+afterAll(uninstallRealm);
 afterEach(resetWorkspace);
 
 describe('loading a recording', () => {
@@ -133,10 +137,10 @@ describe('adjusting parameters by hand', () => {
 });
 
 describe('the two kinds of help', () => {
-  test('snapping fixes amplitude, phase and offset but leaves the period alone', () => {
+  test('snapping fixes amplitude, phase and offset but leaves the period alone', async () => {
     loadRecording(recording({ period: 3.2, K: 45, gamma: 5 }));
     setTrial('period', 3.2);
-    const fit = snapToBestAtPeriod();
+    const fit = await snapToBestAtPeriod();
     expect(fit).not.toBeNull();
     const trial = trialParameters();
     expect(trial.period).toBeCloseTo(3.2, 9);
@@ -144,16 +148,16 @@ describe('the two kinds of help', () => {
     expect(trial.gamma).toBeCloseTo(5, 6);
   });
 
-  test('the search needs bounds and refuses without them', () => {
+  test('the search needs bounds and refuses without them', async () => {
     loadRecording(recording());
-    expect(runSearch({})).toBeNull();
-    expect(runSearch({ minPeriod: 5, maxPeriod: 1 })).toBeNull();
+    expect(await runSearch({})).toBeNull();
+    expect(await runSearch({ minPeriod: 5, maxPeriod: 1 })).toBeNull();
     expect(lastSearch()).toBeNull();
   });
 
-  test('a bounded search adopts its best fit and keeps the whole curve', () => {
+  test('a bounded search adopts its best fit and keeps the whole curve', async () => {
     loadRecording(recording({ period: 3.2, K: 45 }));
-    const s = runSearch({ minPeriod: 1.5, maxPeriod: 8 });
+    const s = await runSearch({ minPeriod: 1.5, maxPeriod: 8 });
     expect(s.bestPeriod).toBeCloseTo(3.2, 1);
     expect(trialParameters().period).toBeCloseTo(s.bestPeriod, 9);
     expect(s.grid.length).toBeGreaterThan(100);
@@ -161,9 +165,9 @@ describe('the two kinds of help', () => {
     expect(lastSearch()).toBe(s);
   });
 
-  test('the search never reports outside the bounds it was given', () => {
+  test('the search never reports outside the bounds it was given', async () => {
     loadRecording(recording());
-    const s = runSearch({ minPeriod: 2, maxPeriod: 5 });
+    const s = await runSearch({ minPeriod: 2, maxPeriod: 5 });
     expect(s.bestPeriod).toBeGreaterThanOrEqual(2);
     expect(s.bestPeriod).toBeLessThanOrEqual(5);
     for (const m of s.minima) {
@@ -319,17 +323,17 @@ describe('the export', () => {
     expect(epochs.unusable).toBe(1);
   });
 
-  test('it includes the search bounds when a search was run', () => {
+  test('it includes the search bounds when a search was run', async () => {
     loadRecording(recording());
-    runSearch({ minPeriod: 1, maxPeriod: 10 });
+    await runSearch({ minPeriod: 1, maxPeriod: 10 });
     const out = exportReport();
     expect(out.search.bounds).toEqual({ minPeriod: 1, maxPeriod: 10 });
     expect(out.search.minima.length).toBeGreaterThan(0);
   });
 
-  test('nothing in it claims a detection or a significance', () => {
+  test('nothing in it claims a detection or a significance', async () => {
     loadRecording(recording());
-    runSearch({ minPeriod: 1, maxPeriod: 10 });
+    await runSearch({ minPeriod: 1, maxPeriod: 10 });
     revealTruth();
     const text = JSON.stringify(exportReport()).toLowerCase();
     expect(text).not.toMatch(/detect/);
@@ -365,12 +369,12 @@ describe('recordings that are hard to analyze', () => {
     expect(a.used).toBe(2);
   });
 
-  test('zero-uncertainty data fits, and says the chi-square is not one', () => {
+  test('zero-uncertainty data fits, and says the chi-square is not one', async () => {
     const r = recording();
     r.points = r.points.map(p => ({ ...p, sigma: 0 }));
     loadRecording(r);
     setTrial('period', 3.2);
-    snapToBestAtPeriod();
+    await snapToBestAtPeriod();
     const a = analysis();
     expect(a.atTrial.weighting).toBe('uniform');
     expect(a.atTrial.reducedChi2).toBeNull();

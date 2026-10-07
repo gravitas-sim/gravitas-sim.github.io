@@ -263,9 +263,6 @@ let lockedSettings = null;
 // nothing is written back to it.
 let authoring = null;
 
-/** @returns {boolean} True while the panel is an authoring preview */
-export const isAuthoringPreview = () => authoring !== null;
-
 // --- Persistence --------------------------------------------------------------
 
 const storageKey = id => `${STORAGE_PREFIX}${id}`;
@@ -350,9 +347,6 @@ function keyForAssignment(a) {
  * was told nothing at all and found out when they closed the tab.
  */
 let saveState = { status: 'idle', at: null };
-
-/** @returns {{status: string, at: ?number}} The last write's outcome */
-export const progressSaveState = () => ({ ...saveState });
 
 function setSaveState(status) {
   if (saveState.status === status) {
@@ -3983,9 +3977,6 @@ export function closeInvestigation() {
   active = null;
 }
 
-/** @returns {boolean} True while a lesson panel is open */
-export const isInvestigationOpen = () => Boolean(active);
-
 function startProbeLoop() {
   stopProbeLoop();
   // Four times a second: fast enough that a changing speed reads as live, slow
@@ -4187,9 +4178,6 @@ export function resetBrowserFilters() {
   browserFilters = { ...NO_FILTERS };
 }
 
-/** The current filter set, for tests. */
-export const browserFilterState = () => ({ ...browserFilters });
-
 /** Options for one select: an "any" row, then the values. */
 function fillSelect(select, values, labelOf, anyLabel, current) {
   if (!select) return;
@@ -4343,7 +4331,7 @@ function openCardLesson(btn, id = btn.dataset.investigation) {
   const wasCta = cta?.textContent;
   if (cta) cta.textContent = t('inv.card.loading');
   return openInvestigation(id)
-    .catch(() => loadFailed(() => openCardLesson(btn, id)))
+    .catch(err => loadFailed(() => openCardLesson(btn, id), err))
     .finally(() => {
       btn.removeAttribute('aria-busy');
       if (cta && wasCta) cta.textContent = wasCta;
@@ -4931,8 +4919,8 @@ function openInvestigationFromHash() {
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id).catch(() =>
-    loadFailed(() => openInvestigation(id).catch(() => {}))
+  openInvestigation(id).catch(err =>
+    loadFailed(() => openInvestigation(id).catch(() => {}), err)
   );
 }
 
@@ -5256,8 +5244,8 @@ export function initInvestigations({ signal } = {}) {
             : (inv, index) => preview.renderAuthorBar(inv, index),
         };
         if (!student) preview.mountAuthorBar(index => goToStep(index));
-        openInvestigation(request.lesson).catch(() =>
-          loadFailed(() => location.reload())
+        openInvestigation(request.lesson).catch(err =>
+          loadFailed(() => location.reload(), err)
         );
       })
       .catch(() => {

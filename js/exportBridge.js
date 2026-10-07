@@ -92,13 +92,3 @@ export async function unmountExport() {
   handedOver = false;
   return unmountFragment('export');
 }
-
-/**
- * Whether the dialog has been loaded.
- *
- * Asked by anything that wants to publish into the export catalog without
- * pulling the chunk in for somebody who has never opened it.
- *
- * @returns {boolean} True once the chunk has been fetched
- */
-export const exportDialogLoaded = () => loading !== null;

@@ -204,17 +204,6 @@ export function formatTime(simTime) {
   return withUnit(sig(seconds / 3600), 'h');
 }
 
-/**
- * Format an energy.
- * @param {number} joules - Energy in joules
- * @returns {string} Formatted energy with unit
- */
-export function formatEnergy(joules) {
-  if (!isFinite(joules)) return '-';
-  if (!isPhysical()) return sig(joules);
-  return withUnit(sig(joules), 'J');
-}
-
 /** @returns {string} Short label for the active mode, for buttons and chips */
 export const unitModeLabel = () =>
   mode === 'physical' ? 'Physical units' : 'Sim units';

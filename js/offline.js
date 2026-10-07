@@ -42,9 +42,6 @@ let registration = null;
 /** Set once a reload has been decided, so no tab does it twice. */
 let reloading = false;
 
-/** @returns {object} A snapshot of the worker's state */
-export const offlineStatus = () => ({ ...status });
-
 /** @returns {boolean} Whether a whole new version is installed and waiting */
 export const updateReady = () => Boolean(registration?.waiting);
 
