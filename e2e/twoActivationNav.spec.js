@@ -82,7 +82,8 @@ const FULL = Boolean(process.env.GRAVITAS_E2E_NAV_FULL);
 for (const width of [375, 1024]) {
   for (const input of ['keyboard', 'touch']) {
     test.describe(`from Home at ${width} px by ${input}`, () => {
-      test.beforeEach(({}, testInfo) => {
+      test.beforeEach(() => {
+        const testInfo = test.info();
         const cell =
           testInfo.project.name === 'mobile-chrome'
             ? '375/touch'
