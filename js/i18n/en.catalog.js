@@ -32,7 +32,7 @@ export const EN_CATALOG = {
   'cat.filter.type.built-in': 'Built into Gravitas',
   'cat.filter.type.installed': 'Installed here',
   'cat.count': '{shown} of {total} shown.',
-  'cat.none': 'Nothing matches.',
+  'cat.none': 'Nothing matches. Clear the search and pick Everything.',
   'cat.type.data-pack': 'Dataset package',
   'cat.type.course-pack': 'Course',
   'cat.type.built-in': 'Built in',

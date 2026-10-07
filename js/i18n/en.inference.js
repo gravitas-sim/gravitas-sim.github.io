@@ -40,6 +40,8 @@ export const EN_INFERENCE = {
   'obs.fit.fixed': 'fixed',
   'obs.fit.derived': 'derived',
   'obs.fit.run': 'Fit',
+  'obs.fit.empty':
+    'No fit yet. Choose a model above and press Fit; the result and its uncertainties appear here.',
   'obs.fit.cancel': 'Cancel',
   'obs.fit.export': 'Save the fit (JSON)',
   'obs.fit.running': 'Fitting…',

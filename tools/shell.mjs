@@ -24,7 +24,7 @@
 // holds every page but the exempt ones to having them, current.
 // =============================================================================
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -86,6 +86,16 @@ export const WORDS = {
   source: ['Source code', 'Código fuente'],
   cite: ['Cite Gravitas', 'Citar Gravitas'],
   license: ['MIT licensed', 'Licencia MIT'],
+  offline: ['You are offline.', 'Estás sin conexión.'],
+  saved: [
+    'These pages are saved on this device:',
+    'Estas páginas están guardadas en este dispositivo:',
+  ],
+  elsewhere: [
+    'Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.',
+    'Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.',
+  ],
+  dismiss: ['Dismiss', 'Cerrar'],
 };
 
 /** The five groups and their links: every entry page, and nothing twice. */
@@ -164,6 +174,35 @@ const say = key => {
     : `<span class="gs-en">${en}</span><span class="gs-es" lang="es">${es}</span>`;
 };
 
+/**
+ * The pages the service worker precaches, read from the manifest it generates
+ * (tools/build-service-worker.mjs), so the offline note lists what is saved
+ * and nothing it merely hopes is. Only the set of paths is used, and stamping
+ * a page does not change it, so the two generated files do not chase each other.
+ */
+export function precachedPages() {
+  const file = path.join(ROOT, 'sw-manifest.js');
+  const text = existsSync(file) ? readFileSync(file, 'utf8') : '';
+  return new Set(
+    [...text.matchAll(/'\.\/(.*?)index\.html'/g)].map(m => '/' + m[1])
+  );
+}
+
+/** The offline note: inert until the head script shows it, once, when offline. */
+function offlineNote() {
+  const saved = precachedPages();
+  const links = NAV.flatMap(([, items]) => items)
+    .filter(([, href]) => saved.has(href))
+    .map(([key, href]) => `<a href="${href}">${say(key)}</a>`)
+    .join(', ');
+  return [
+    `<div class="gs-offline" role="status"><template><div class="gs-offline-box">`,
+    `<p><strong>${say('offline')}</strong> ${say('saved')} ${links}. ${say('elsewhere')}</p>`,
+    `<button type="button" class="ui-button">${say('dismiss')}</button>`,
+    `</div></template></div>`,
+  ].join('\n');
+}
+
 /** The URL path a page is served at. */
 export const pathOf = page =>
   '/' + page.replace(/(^|\/)index\.html$/, '$1').replace(/^\/$/, '');
@@ -201,6 +240,7 @@ export function shellFor(page, { main }) {
     `<label><span class="gs-vh">${say('theme')}</span><select data-gs-theme>${themes}</select></label>`,
     `</div>`,
     `</header>`,
+    ...(app ? [] : [offlineNote()]),
   ].join('\n');
   const footer = [
     `<footer class="gs-foot">`,
@@ -232,6 +272,26 @@ export const HEAD = [
   `} catch {`,
   `  /* storage unavailable: the default theme is correct */`,
   `}`,
+  `/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */`,
+  `(() => {`,
+  `  const sync = () => {`,
+  `    const el = document.querySelector('.gs-offline');`,
+  `    const box = el && el.querySelector('.gs-offline-box');`,
+  `    if (!el) return;`,
+  `    if (navigator.onLine) return box && box.remove();`,
+  `    if (box) return;`,
+  `    el.append(el.querySelector('template').content.cloneNode(true));`,
+  `    el.querySelector('button').onclick = () =>`,
+  `      el.querySelector('.gs-offline-box').remove();`,
+  `  };`,
+  `  addEventListener('offline', sync);`,
+  `  addEventListener('online', sync);`,
+  `  addEventListener('DOMContentLoaded', sync);`,
+  `  addEventListener('keydown', e => {`,
+  `    const box = document.querySelector('.gs-offline-box');`,
+  `    if (e.key === 'Escape' && box) box.remove();`,
+  `  });`,
+  `})();`,
   `</script>`,
 ].join('\n');
 

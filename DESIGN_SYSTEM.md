@@ -36,6 +36,12 @@ with no class, and
 count rises. [`e2e/accessibility.spec.js`](e2e/accessibility.spec.js) runs axe
 on every tool page in all four themes and both languages.
 
+The legacy stylesheets' repeated literals (three or more uses) now stand on
+`--c1` to `--c16`, a literal palette at the end of the default block in
+`css/tokens.css`. Each holds exactly the value it replaced and is the same in
+every theme, so a rule that moved onto one renders what it did; they are a
+step toward the semantic tokens above, not a substitute for them.
+
 ### Rules every component follows
 
 - **Focus is visible.** One ring, `--focus-ring` in `--focus-ring-color`,

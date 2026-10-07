@@ -1,7 +1,15 @@
 # The Playwright browsers, cached and installed. Every browser job needs the
 # same four steps, and they were written out four times: the version the
 # browsers are keyed on, the cache, the install on a miss, and the system
-# libraries on a hit (the cache does not hold those; they take seconds).
+# libraries (the cache does not hold those; they normally take about a minute).
+#
+# The system libraries are the step that hangs. `playwright install-deps` is
+# apt-get as root, and on some runners it stalls with no output until the
+# job's timeout - 30 minutes of a shard spent on nothing, after which the
+# coverage job fails for the missing shard (2026-09-30, and three runs on
+# 2026-10-07). So each attempt gets five minutes, a hung apt or dpkg is
+# killed and its half-done state repaired, and it is tried three times before
+# the job gives up. Carl approved the change on 2026-10-07.
 name: Playwright browsers
 description: Restore or install one Playwright browser, keyed on the pinned version
 inputs:
@@ -28,9 +36,20 @@ runs:
     - name: Install the browser
       if: steps.browsers.outputs.cache-hit != 'true'
       shell: bash
-      run: npx playwright install --with-deps ${{ inputs.browser }}
+      run: npx playwright install ${{ inputs.browser }}
 
     - name: Install browser dependencies
-      if: steps.browsers.outputs.cache-hit == 'true'
       shell: bash
-      run: npx playwright install-deps ${{ inputs.browser }}
+      env:
+        BROWSER: ${{ inputs.browser }}
+      run: |
+        for attempt in 1 2 3; do
+          if timeout --kill-after=30 300 npx playwright install-deps "$BROWSER"; then
+            exit 0
+          fi
+          echo "::warning::install-deps attempt $attempt failed or ran past five minutes"
+          sudo pkill -9 -f 'apt-get|dpkg' || true
+          sudo dpkg --configure -a || true
+        done
+        echo "::error::install-deps failed three times"
+        exit 1
