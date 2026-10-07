@@ -149,6 +149,7 @@ export const TOOLS = Object.freeze({
   period: {
     kinds: ['time-series'],
     version: PERIOD_VERSION,
+    params: { minPeriod: 'n', maxPeriod: 'n', oversample: 'n' },
     expensive: true,
     async run(o, p, hooks) {
       const d = series(
@@ -189,6 +190,7 @@ export const TOOLS = Object.freeze({
   box: {
     kinds: ['time-series'],
     version: PERIOD_VERSION,
+    params: { minPeriod: 'n', maxPeriod: 'n', durations: ['n', 1, 1000] },
     expensive: true,
     async run(o, p, hooks) {
       const d = series(
@@ -229,6 +231,14 @@ export const TOOLS = Object.freeze({
   line: {
     kinds: ['spectrum'],
     version: LINE_VERSION,
+    params: {
+      blue: ['n', 2, 2],
+      line: ['n', 2, 2],
+      red: ['n', 2, 2],
+      rest: '?n',
+      restMedium: '?s',
+      restCite: '?s',
+    },
     async run(o, p) {
       const d = series(o, o.axes.x, o.axes.y);
       if (
@@ -273,6 +283,12 @@ export const TOOLS = Object.freeze({
   band: {
     kinds: ['spectrum'],
     version: BAND_VERSION,
+    params: {
+      band: ['n', 2, 2],
+      reference: [['n', 2, 2], 1, 100],
+      medium: '?s',
+      cite: '?s',
+    },
     async run(o, p) {
       const d = series(o, o.axes.x, o.axes.y);
       const r = measureBand(
@@ -310,6 +326,25 @@ export const TOOLS = Object.freeze({
   curve: {
     kinds: ['table'],
     version: CURVE_VERSION,
+    params: {
+      model: {
+        id: 's',
+        color: ['s', 2, 2],
+        magnitude: 's',
+        by: 's',
+        segments: '?s',
+        where: 'o',
+      },
+      x: '?s',
+      y: '?s',
+      dm: ['n', 3, 3],
+      E: ['n', 3, 3],
+      R: 'n',
+      RCite: '?s',
+      scale: ['n', 2, 2],
+      cap: 'n',
+      tolerance: 'n',
+    },
     expensive: true,
     async run(o, p, hooks = {}) {
       // The columns plotted, which the parameters name: a reader's choice of
@@ -409,6 +444,7 @@ export const TOOLS = Object.freeze({
   describe: {
     kinds: ['table', 'time-series', 'spectrum'],
     version: DESCRIBE_VERSION,
+    params: { column: 's' },
     async run(o, p) {
       const c = col(o, p.column);
       if (!c || c.role === 'label')
@@ -437,6 +473,16 @@ export const TOOLS = Object.freeze({
   aperture: {
     kinds: ['image'],
     version: APERTURE_VERSION,
+    params: {
+      mode: 's',
+      bit: '?i',
+      x: '?n',
+      y: '?n',
+      r: '?n',
+      rIn: 'n',
+      rOut: 'n',
+      gain: '?n',
+    },
     /**
      * Pixels here are FITS pixels, 1 at the center of the first, as the
      * image's own x and y columns count them; ./aperture.js counts from 0.
@@ -526,6 +572,10 @@ export const TOOLS = Object.freeze({
   filter: {
     kinds: ['table'],
     version: TABLE_VERSION,
+    params: {
+      conditions: [{ column: 's', op: 's', value: 'ns', unit: '?s' }, 0, 100],
+      join: 's',
+    },
     async run(o, p) {
       const r = filterRows(o, p.conditions, { join: p.join });
       return {
@@ -545,6 +595,9 @@ export const TOOLS = Object.freeze({
     kinds: ['table'],
     version: TABLE_VERSION,
     needsSecondTable: true,
+    params: {
+      how: { by: 's', a: 'as', b: 'as', radiusArcsec: 'n', tolerance: 'n' },
+    },
     async run(o, p, hooks = {}) {
       if (!hooks.second)
         throw new PipelineError(
@@ -564,6 +617,69 @@ export const TOOLS = Object.freeze({
     },
   },
 });
+
+const KIND_WORDS = {
+  n: 'a number',
+  i: 'a whole number',
+  s: 'text',
+  b: 'true or false',
+  a: 'a list',
+  o: 'an object',
+  '?': 'null',
+};
+
+/**
+ * The first way a value departs from a tool's declared parameter schema, as
+ * "path: expected ...", or null. A schema is a string of kinds (n number, i
+ * whole number, s text, b boolean, a list, o object, ? null - any one will
+ * do), `[item, min, max]` for a list, or an object of schemas for the keys it
+ * names. A key left out is the tool's own to complain about, and a key the
+ * schema does not name is not read.
+ * @param {string|Array|object} spec
+ * @param {*} v
+ * @param {string} path
+ * @returns {string|null}
+ */
+export function paramProblem(spec, v, path) {
+  if (typeof spec === 'string') {
+    const ok = [...spec].some(c =>
+      c === '?'
+        ? v === null
+        : c === 'n'
+          ? typeof v === 'number'
+          : c === 'i'
+            ? Number.isInteger(v)
+            : c === 's'
+              ? typeof v === 'string'
+              : c === 'b'
+                ? typeof v === 'boolean'
+                : c === 'a'
+                  ? Array.isArray(v)
+                  : isObject(v)
+    );
+    return ok
+      ? null
+      : `${path}: expected ${[...spec].map(c => KIND_WORDS[c]).join(' or ')}`;
+  }
+  if (Array.isArray(spec)) {
+    const [item, min, max] = spec;
+    if (!Array.isArray(v)) return `${path}: expected a list`;
+    if (v.length < min || v.length > max)
+      return `${path}: expected ${min === max ? min : `${min} to ${max}`} items, found ${v.length}`;
+    for (let i = 0; i < v.length; i++) {
+      const why = paramProblem(item, v[i], `${path}[${i}]`);
+      if (why) return why;
+    }
+    return null;
+  }
+  if (!isObject(v)) return `${path}: expected an object`;
+  for (const k of Object.keys(spec)) {
+    if (v[k] === undefined) continue;
+    const why = paramProblem(spec[k], v[k], `${path}.${k}`);
+    if (why) return why;
+  }
+  return null;
+}
 
 /** The tools that can measure an observation of this kind. */
 export const toolsFor = o =>
@@ -787,6 +903,19 @@ export function readPipeline(text) {
         ok: false,
         code: 'badNode',
         detail: { id: n.id, why: why ?? 'params: not an object' },
+      };
+    // And to the tool's declared schema, with the path of the first value
+    // that does not fit it.
+    const bad = paramProblem(
+      TOOLS[n.tool].params ?? {},
+      n.params ?? {},
+      'params'
+    );
+    if (bad)
+      return {
+        ok: false,
+        code: 'badParams',
+        detail: { id: n.id, why: bad, path: bad.split(':')[0] },
       };
     nodes.push(n);
   }
