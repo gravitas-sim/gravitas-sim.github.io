@@ -547,9 +547,6 @@ export function clearRadialVelocity() {
   renderReadout();
 }
 
-/** @returns {boolean} Whether the panel is open */
-export const isRadialVelocityEnabled = () => enabled;
-
 function cacheElements() {
   if (els) return els;
   els = {
@@ -1607,6 +1604,3 @@ export function initRadialVelocity() {
 
   if (e.container) e.container.style.display = 'none';
 }
-
-/** @returns {number} Current inclination, for panels that report geometry */
-export const observerInclination = () => getInclination();

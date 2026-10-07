@@ -37,31 +37,6 @@ export const lerpColor = (color1, color2, factor) => {
 };
 
 /**
- * Get star color based on mass (original smooth interpolation method)
- * @param {number} massInSuns - Mass in solar masses
- * @returns {string} Hex color string
- */
-export const getStarColor = massInSuns => {
-  const lowMassColor = { r: 255, g: 180, b: 100 }; // Reddish-Orange for ~0.2 Msun
-  const sunColor = { r: 255, g: 255, b: 240 }; // Creamy White for 1.0 Msun
-  const highMassColor = { r: 170, g: 200, b: 255 }; // Bluish-White for ~3.0+ Msun
-
-  let r, g, b;
-  if (massInSuns <= 1.0) {
-    const t = (massInSuns - 0.2) / (1.0 - 0.2);
-    r = lerp(lowMassColor.r, sunColor.r, t);
-    g = lerp(lowMassColor.g, sunColor.g, t);
-    b = lerp(lowMassColor.b, sunColor.b, t);
-  } else {
-    const t = (massInSuns - 1.0) / (3.0 - 1.0);
-    r = lerp(sunColor.r, highMassColor.r, t);
-    g = lerp(sunColor.g, highMassColor.g, t);
-    b = lerp(sunColor.b, highMassColor.b, t);
-  }
-  return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
-};
-
-/**
  * Compute dynamic color based on proximity to black holes
  * @param {string} base_color_hex - Base color in hex format
  * @param {Object} pos - Position object with x, y properties
@@ -136,47 +111,9 @@ export const distance = (p1, p2) => {
   return Math.sqrt(dx * dx + dy * dy);
 };
 
-/**
- * Calculate vector magnitude
- * @param {Object} vector - Vector with x, y properties
- * @returns {number} Magnitude
- */
-export const vectorMagnitude = vector =>
-  Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-
 // =============================================================================
 // RANDOM UTILITIES
 // =============================================================================
-
-/**
- * Generate random number between min and max
- * @param {number} min - Minimum value
- * @param {number} max - Maximum value
- * @returns {number} Random number
- */
-export const randomRange = (min, max) => Math.random() * (max - min) + min;
-
-/**
- * Generate random angle in radians
- * @returns {number} Random angle (0 to 2π)
- */
-export const randomAngle = () => Math.random() * 2 * Math.PI;
-
-/**
- * Generate Gaussian (normal) distributed random number
- * @param {number} mean - Mean value
- * @param {number} stdDev - Standard deviation
- * @returns {number} Gaussian random number
- */
-export const randomGaussian = (mean = 0, stdDev = 1) => {
-  // Box-Muller transform
-  let u = 0,
-    v = 0;
-  while (u === 0) u = Math.random(); // Converting [0,1) to (0,1)
-  while (v === 0) v = Math.random();
-  const z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-  return z * stdDev + mean;
-};
 
 // =============================================================================
 // COORDINATE TRANSFORMATION UTILITIES
@@ -358,22 +295,6 @@ export const deepClone = obj => {
 export const kineticEnergy = body => {
   const velocity = Math.sqrt(body.vel.x * body.vel.x + body.vel.y * body.vel.y);
   return 0.5 * body.mass * velocity * velocity;
-};
-
-/**
- * Calculate gravitational potential energy between two bodies
- * @param {Object} body1 - First body
- * @param {Object} body2 - Second body
- * @returns {number} Gravitational potential energy
- */
-export const potentialEnergyPair = (body1, body2) => {
-  const dx = body1.pos.x - body2.pos.x;
-  const dy = body1.pos.y - body2.pos.y;
-  const distance = Math.sqrt(dx * dx + dy * dy);
-  if (distance === 0) return 0; // Avoid division by zero
-  return (
-    (-CONSTANTS.GRAVITATIONAL_CONSTANT * body1.mass * body2.mass) / distance
-  );
 };
 
 // =============================================================================

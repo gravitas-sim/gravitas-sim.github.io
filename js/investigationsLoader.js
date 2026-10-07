@@ -79,9 +79,6 @@ export async function unmountInvestigations() {
   return was;
 }
 
-/** @returns {boolean} True once the system has been asked for */
-export const investigationsRequested = () => loading !== null;
-
 /**
  * Whether the address bar names a lesson.
  *

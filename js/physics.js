@@ -1476,9 +1476,6 @@ const setLiveBodyCount = n => {
   liveBodyCount = n;
 };
 
-/** The current marker floor in screen pixels. Exported for the tests. */
-export const currentMarkerFloorPx = () => markerFloorPx(liveBodyCount);
-
 /**
  * Radius to draw a body at, in world units.
  *

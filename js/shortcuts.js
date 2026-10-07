@@ -31,14 +31,6 @@ export function registerShortcut(spec) {
   registry.push(spec);
 }
 
-/** @returns {Array} All registered shortcuts */
-export const getShortcuts = () => registry.slice();
-
-/** Enable or disable global shortcut handling. */
-export const setShortcutsEnabled = v => {
-  enabled = !!v;
-};
-
 /**
  * True when the event came from somewhere that owns the keyboard: * a text field, a select, or anything contenteditable.
  */

@@ -127,18 +127,3 @@ export function roundTripError(period, referencePeriod) {
   );
   return Math.abs(recovered - period) / period;
 }
-
-/**
- * The interval between two periods, which is the reference-free form.
- *
- * periodToCents(a, b) already computes this; the name exists because a ratio of
- * two orbits is the thing a student is usually being asked to hear, and reading
- * one of the two as a "reference" misdescribes what is going on.
- *
- * @param {number} periodA - The first period
- * @param {number} periodB - The second period
- * @returns {number} Cents from B to A, positive when A is the longer
- */
-export function ratioToCents(periodA, periodB) {
-  return periodToCents(periodA, periodB);
-}

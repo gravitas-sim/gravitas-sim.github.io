@@ -113,7 +113,6 @@ export const EN_ANALYSIS = {
     'The values span a factor of {ratio}. The median and its interval say more than the mean.',
 
   'lab.col.trial': 'Trial',
-  'lab.col.value': 'Setting',
   'lab.col.trials': 'Trials',
   'lab.col.n': 'Finished',
   'lab.col.mean': 'Mean',

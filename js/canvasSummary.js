@@ -28,7 +28,7 @@
 // simulation legible, which is what most of the interface's controls act on.
 // =============================================================================
 
-import { state, SETTINGS, current_scenario_name } from './appState.js';
+import { state, current_scenario_name } from './appState.js';
 import {
   planets,
   gas_giants,
@@ -211,26 +211,4 @@ export function updateCanvasSummary(now = Date.now()) {
   el.textContent = text;
 
   announceChanges();
-}
-
-/** Forget everything, so a new world is described from scratch. */
-export function resetCanvasSummary() {
-  lastText = '';
-  lastAt = 0;
-  announced = { scenario: null, running: null, selected: null };
-}
-
-/** @returns {object} What the description is built from, for the tests */
-export function summaryFacts() {
-  return {
-    scenario: current_scenario_name,
-    paused: Boolean(state.paused),
-    counts: Object.fromEntries(
-      KINDS.map(([key, count]) => [key.split('.').pop(), count()]).filter(
-        ([, n]) => n > 0
-      )
-    ),
-    selected: state.selectedObject?.object?.name ?? null,
-    overlaysVisible: Boolean(SETTINGS.show_dynamic_overlays),
-  };
 }

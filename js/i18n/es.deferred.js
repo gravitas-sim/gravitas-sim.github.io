@@ -367,8 +367,6 @@ export const ES_DEFERRED = {
   'reliability.run': 'Comprobar con el paso a la mitad',
   'reliability.cancel': 'Detener',
   'reliability.running': 'Ejecutando {phase} de 2, {percent}% completado',
-  'reliability.phase.coarse': 'la pasada con el paso actual',
-  'reliability.phase.fine': 'la pasada con la mitad del paso',
   'reliability.cost':
     'Dos pasadas de {duration} unidades simuladas tardaron {seconds}s: {coarseSub} subpasos por fotograma y luego {fineSub}.',
   'reliability.steps': 'Paso {coarse} frente a {fine}',
@@ -1144,13 +1142,13 @@ export const ES_DEFERRED = {
   'rvfit.mc.cancel': 'Cancelar',
   'rvfit.mc.running': 'Prueba {done} de {total}…',
   'rvfit.mc.idle': 'Sin ejecutar todavía.',
-  'rvfit.mc.stale':
-    'La grabación, el ajuste o el rango de búsqueda han cambiado desde que se ejecutó este análisis, así que sus intervalos ya no describen lo que hay en pantalla. Vuelve a ejecutarlo.',
   'rvfit.mc.outcome.complete':
     'Todas las pruebas se ejecutaron y dieron ajuste.',
   'rvfit.mc.outcome.canceled':
     'Detenido por ti tras {done} de {total} pruebas.',
   'rvfit.mc.outcome.partial': '{done} de {total} pruebas dieron ajuste.',
+  'rvfit.mc.stale':
+    'La grabación, el ajuste o el rango de búsqueda han cambiado desde que se ejecutó este análisis, así que sus intervalos ya no describen lo que hay en pantalla. Vuelve a ejecutarlo.',
 
   'rvfit.mc.refused.noFit':
     'No hay ningún ajuste en pantalla alrededor del cual remuestrear. Fija primero un período.',
@@ -1210,7 +1208,6 @@ export const ES_DEFERRED = {
   'rvfit.mc.plot.amplitude': 'Amplitudes recuperadas',
   'rvfit.mc.plot.periodAxis': 'Período (días)',
   'rvfit.mc.plot.amplitudeAxis': 'K (m/s)',
-  'rvfit.mc.plot.count': 'Pruebas por intervalo',
   'rvfit.mc.plot.none': 'Todavía no hay nada que dibujar.',
 
   'rvfit.mc.guidance.heading': 'La precisión no es la corrección',
@@ -2119,8 +2116,6 @@ export const ES_DEFERRED = {
   'exoW.row.whatYouAreLookingAt': 'Los dos paneles',
   'exoW.value.twoPanels':
     'Izquierda: tus medidas frente a la fecha, con la señal ideal superpuesta en discontinua como capa didáctica; esa línea no son datos. Derecha: las mismas medidas plegadas con el periodo verdadero, que es lo que una búsqueda produciría solo si ya conociera el periodo.',
-  'exoW.idealSignalOverlay': 'discontinua: señal ideal (capa didáctica)',
-  'exoW.foldedOnTheTruePeriod': 'plegada con el periodo verdadero',
   'exoW.measurementsTaken': 'Medidas',
   'exoW.phaseCoverage': 'Cobertura en fase',
   'exoW.binsOfTheCycle': 'intervalos del ciclo',
@@ -2546,8 +2541,6 @@ export const ES_DEFERRED = {
   'gwW.axis.merger': 'fusión',
   'gwW.plot.isco': 'aquí se detiene el modelo',
   'gwW.local.span': '{ms} ms de ancho',
-  'gwW.source.notToScale':
-    'esquema: la separación está modelada, los tamaños no',
   'gwW.overlay.legend':
     'Cada anillo es una cresta, donde estaría ahora tras salir de la fuente. Los de fuera salieron antes, cuando la órbita era más lenta, y por eso están más separados. Distancias comprimidas, amplitud exagerada, propagación ralentizada y reescalada según sube la frecuencia. El centro se omite: una fórmula de campo lejano no lo describe.',
   'gwW.overlay.legendStill':
@@ -3544,7 +3537,6 @@ export const ES_DEFERRED = {
   'nb.stellar.initialMass': 'Masa inicial',
   'nb.stellar.age': 'Edad',
   'nb.stellar.mainSequence': 'Vida total en la secuencia principal',
-  'nb.stellar.pinnedRadius': 'Estrella fijada {n}: radio',
   'nb.stellar.pinnedNth': 'estrella {n}',
   'nb.stellar.pinnedRadiusOf': '{name}: radio',
   'nb.stellar.pinnedTeffOf': '{name}: temperatura',
@@ -3553,7 +3545,6 @@ export const ES_DEFERRED = {
     'Las estrellas comparadas son {n} de las {of} que están en el lienzo en este paso, leídas de la escena y no fijadas a mano.',
   'nb.stellar.limit.someHypothetical':
     'No todas las estrellas aquí son modelos. {names} ({n}) son puntos elegidos en el diagrama: su temperatura y su luminosidad son elegidas, su radio se deduce de ambas, y no tienen masa, ni edad, ni tiempo de vida.',
-  'nb.stellar.pinnedTeff': 'Estrella fijada {n}: temperatura',
   'nb.stellar.limit.model':
     'Un modelo, no una observación: {grid}. Sin rotación, sin binaridad, sin campos magnéticos y con una sola composición.',
   'nb.stellar.limit.incomplete':
@@ -3587,7 +3578,6 @@ export const ES_DEFERRED = {
   'lessonFn.closestApproachIsLargerThanFurthest70':
     'El máximo acercamiento es mayor que la distancia máxima: parecen intercambiados.',
   'lessonFn.eccentric9': 'Excéntrico',
-  'lessonFn.semiMajorAxis15': 'semieje mayor',
   'lessonFn.clickAPlanetToSelectIt27': 'Pulsa un planeta para seleccionarlo',
   'lessonFn.body4': 'Cuerpo',
   'lessonFn.noOrbitFound14': 'no se encontró órbita',
@@ -3730,9 +3720,6 @@ export const ES_DEFERRED = {
     'Pon 3 en ambas casillas: el par está a 3 UA con un periodo de 3 años.',
   'lessonFn.333Is27And102':
     '3 × 3 × 3 es 27, y 3 × 3 es 9, y 27 dividido entre 9 es 3. Tres masas solares entre las dos.',
-  'lessonFn.isProportionalTo18': 'es proporcional a',
-  'lessonFn.howConcentratedIsThisThingOn63':
-    'cómo de concentrada está esta cosa, a la escala de su propio horizonte',
   'lessonFn.whatEarthGets15': 'lo que recibe la Tierra',
   'lessonFn.distancesAndStarlightAreBothPositive50':
     'Las distancias y la luz estelar son ambas números positivos.',
@@ -3748,7 +3735,6 @@ export const ES_DEFERRED = {
   'lessonFn.innermost9': 'El más interior',
   'lessonFn.outermost9': 'El más exterior',
   'lessonFn.fittedSlope12': 'Pendiente ajustada',
-  'lessonFn.proportionalToRadius22': 'proporcional al radio',
   'lessonFn.halo4': 'Halo',
   'lessonFn.outermostStar14': 'Estrella más exterior',
   'lessonFn.slope5': 'Pendiente',

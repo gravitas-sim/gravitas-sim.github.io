@@ -286,9 +286,6 @@ export function closeTutorial() {
   els.btn?.focus();
 }
 
-/** @returns {boolean} True while the tour is showing */
-export const isTutorialOpen = () => open;
-
 function go(delta) {
   const next = step + delta;
   if (next < 0) return;
