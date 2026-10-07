@@ -3,12 +3,17 @@
 // -----------------------------------------------------------------------------
 // An extension is a directory (or a .gxp archive of one) whose
 // gravitas-extension.json is a gravitas.capability-package/1 manifest, plus
-// the files that manifest names. Three types, told apart by what it provides:
+// the files that manifest names. Five types, told apart by what it provides:
 //
 //   data-pack     declarative. provides.dataPacks: one pack, a
 //                 gravitas.observation-data-pack/1 record and its series.
 //   course-pack   declarative. provides.courses: one gravitas.course-pack/1
-//                 sequence of lessons Gravitas already has.
+//                 sequence of lessons Gravitas already has, or one /2 pack
+//                 (items, objectives, pins; what the course-pack builder
+//                 writes).
+//   investigation-pack  declarative. provides.investigations: one
+//                 gravitas.investigation-pack/1, a guided investigation as
+//                 data (the Studio's lesson composer writes one).
 //   capability    built-in: curated, executable. provides.widgetFamilies: an
 //                 instrument family whose code is reviewed, vendored into
 //                 Gravitas and compiled with it. Never installed at run time.
@@ -45,7 +50,18 @@ import {
   foldedDepth,
   harmonicPeriod,
 } from '../../tools/data-packs/tess-light-curve.mjs';
-import { validateCoursePack } from './course.mjs';
+import {
+  courseApi2,
+  itemsOf,
+  reviewPins,
+  validateCoursePack,
+  validateCoursePack2,
+} from './course.mjs';
+import {
+  checkInvestigationPack,
+  collectTexts,
+  migrateInvestigationPack,
+} from './investigation.mjs';
 import {
   checkPack,
   packCautions,
@@ -199,6 +215,9 @@ export function extensionType(m) {
   if (p.dataPacks?.length) kinds.push('data-pack');
   if (p.courses?.length) kinds.push('course-pack');
   if (p.scenarios?.length) kinds.push('scenario-pack');
+  // An investigation with a `file` is a pack; one with an `entry` is a
+  // built-in lesson a capability package names.
+  if (p.investigations?.some(i => !i?.entry)) kinds.push('investigation-pack');
   if (p.widgetFamilies?.length) kinds.push('capability');
   return kinds;
 }
@@ -231,7 +250,7 @@ export async function validateExtension(ext) {
       'provides',
       types.length
         ? `provides ${types.join(' and ')}; an extension is exactly one type`
-        : 'provides no dataPacks, courses, scenarios or widgetFamilies, so it is no extension type'
+        : 'provides no dataPacks, courses, scenarios, investigations or widgetFamilies, so it is no extension type'
     );
     return { type: null, manifest: m, findings: report.list };
   }
@@ -347,6 +366,7 @@ export async function validateExtension(ext) {
     'data-pack': validateDataPackExtension,
     'course-pack': validateCourseExtension,
     'scenario-pack': validateScenarioExtension,
+    'investigation-pack': validateInvestigationExtension,
     capability: validateCapabilityExtension,
   }[type];
   const extra = (await checkType(ext, m, report, ids)) || [];
@@ -466,16 +486,99 @@ async function validateCourseExtension(ext, m, report, ids) {
     return report.error(M, 'provides.courses[0].file', 'the course file');
   const course = parseJson(ext, entry.file, report);
   if (!course) return [];
-  for (const e of validateCoursePack(course, {
-    lessons: ids.lessons,
-    locales: [...LOCALES],
-  }))
-    report.error(entry.file, e.path, e.message);
+  // /1 and /2 are told apart by the number the file says; anything else goes
+  // to /1's validator, which says what it reads.
+  if (course.formatVersion === 2) {
+    const errors = validateCoursePack2(course, await courseApi2(ids.dataPacks));
+    for (const e of errors) report.error(entry.file, e.path, e.message);
+    // The pins, against this build: a lesson that has changed since the pack
+    // was made is something a reviewer will ask about, not a fault in the file.
+    if (!errors.length)
+      for (const r of await reviewPins(course))
+        if (r.needsReview)
+          report.warn(
+            entry.file,
+            r.path,
+            `"${r.id}" is ${r.status} since the pack pinned it; an instructor reviews it before students are sent to it`
+          );
+  } else {
+    for (const e of validateCoursePack(course, {
+      lessons: ids.lessons,
+      locales: [...LOCALES],
+    }))
+      report.error(entry.file, e.path, e.message);
+  }
   if (course.id !== entry.id)
     report.error(
       entry.file,
       'id',
       `is "${course.id}"; the extension provides "${entry.id}"`
+    );
+  if (!(m.assets || []).some(a => a?.path === entry.file))
+    report.error(
+      M,
+      'assets',
+      `${entry.file} is provided but not declared as an asset`
+    );
+  return [];
+}
+
+async function validateInvestigationExtension(ext, m, report, ids) {
+  const M = MANIFEST_ENTRY;
+  const entries = m.provides.investigations;
+  if (entries.length !== 1)
+    report.error(
+      M,
+      'provides.investigations',
+      'an investigation-pack extension provides exactly one investigation'
+    );
+  const entry = entries[0] || {};
+  if (ids.lessons.has(entry.id))
+    report.error(
+      M,
+      'provides.investigations[0].id',
+      `"${entry.id}" is a lesson Gravitas already has`
+    );
+  if (typeof entry.file !== 'string')
+    return report.error(
+      M,
+      'provides.investigations[0].file',
+      'the investigation file'
+    );
+  const pack = parseJson(ext, entry.file, report);
+  if (!pack) return [];
+  const read = migrateInvestigationPack(pack);
+  if (!read.ok)
+    return report.error(
+      entry.file,
+      '',
+      read.code === 'newer'
+        ? `is gravitas.investigation-pack/${read.vars.version}; this SDK reads up to /1`
+        : 'is not a gravitas.investigation-pack file'
+    );
+  // The format's own rules, then the compiled lesson through the checker every
+  // lesson in the repository passes.
+  const { errors, findings } = await checkInvestigationPack(read.pack);
+  for (const e of errors) report.error(entry.file, e.path, e.message);
+  for (const f of findings)
+    (f.level === 'error' ? report.error : report.warn)(
+      entry.file,
+      f.step == null ? '' : `steps[${f.step}]`,
+      `${f.message} (${f.rule})`
+    );
+  if (!errors.length)
+    for (const t of collectTexts(pack))
+      if (t.status === 'stale')
+        report.warn(
+          entry.file,
+          t.path,
+          'its Spanish was written from English that has since changed'
+        );
+  if (pack.id !== entry.id)
+    report.error(
+      entry.file,
+      'id',
+      `is "${pack.id}"; the extension provides "${entry.id}"`
     );
   if (!(m.assets || []).some(a => a?.path === entry.file))
     report.error(
@@ -650,16 +753,47 @@ export async function testExtension(ext, { type, manifest: m }) {
   } else if (type === 'course-pack') {
     const ids = await publicIds();
     const course = json(m.provides.courses[0].file);
-    for (const unit of course.units || []) {
-      for (const { lesson } of unit.lessons || []) {
-        const titles = ids.lessonTitles.get(lesson) || {};
-        for (const l of course.locales || [])
-          check(
-            Boolean(titles[l]),
-            `${lesson} opens in ${l}${titles[l] ? ` as "${titles[l]}"` : ': Gravitas has no translation'}`
+    const lessonsOf =
+      course.formatVersion === 2
+        ? itemsOf(course)
+            .filter(({ item }) => item.lesson)
+            .map(({ item }) => item.lesson)
+        : (course.units || []).flatMap(u =>
+            (u.lessons || []).map(l => l.lesson)
           );
-      }
+    for (const lesson of lessonsOf) {
+      const titles = ids.lessonTitles.get(lesson) || {};
+      for (const l of course.locales || [])
+        check(
+          Boolean(titles[l]),
+          `${lesson} opens in ${l}${titles[l] ? ` as "${titles[l]}"` : ': Gravitas has no translation'}`
+        );
     }
+    // A /2 pack's pins, held to this build: the digest of each pinned
+    // lesson's steps, and of each step an assignment names.
+    if (course.formatVersion === 2)
+      for (const r of await reviewPins(course))
+        if (r.kind === 'lesson' || r.kind === 'assignment')
+          check(
+            !r.needsReview,
+            `${r.id} is pinned to the lesson as this build has it${r.needsReview ? ` (${r.status})` : ''}`
+          );
+  } else if (type === 'investigation-pack') {
+    const pack = json(m.provides.investigations[0].file);
+    const { errors, findings, compiled } = await checkInvestigationPack(pack);
+    check(
+      !errors.length,
+      `the pack is valid${errors.length ? `: ${errors[0].path}: ${errors[0].message}` : ''}`
+    );
+    check(
+      Boolean(compiled) && !findings.some(f => f.level === 'error'),
+      'it compiles to a lesson the repository checker accepts'
+    );
+    for (const l of pack.locales || [])
+      check(
+        collectTexts(pack).every(t => l === 'en' || t.status === 'done'),
+        `every text is there in ${l}, translated from the English beside it`
+      );
   } else if (type === 'scenario-pack') {
     // Opened the way the application opens the pack's link: built under its
     // seed, run for a few seconds of simulated time, and built again.
@@ -830,11 +964,21 @@ export async function describeExtension(
       const course = json(m.provides.courses[0].file);
       for (const u of course.units) {
         say(`  unit       ${u.title.en}`);
-        for (const { lesson } of u.lessons)
+        for (const x of u.items ?? u.lessons) {
+          // /2 has items of five kinds; /1 has lessons.
+          const kind = x.kind ?? 'lesson';
+          const id = x.lesson ?? x.scenario ?? x.dataset ?? x.title?.en ?? x.id;
           say(
-            `               ${lesson}: ${ids.lessonTitles.get(lesson)?.en ?? '?'}`
+            `               ${kind === 'lesson' ? `${id}: ${ids.lessonTitles.get(id)?.en ?? '?'}` : `${kind} ${id}`}`
           );
+        }
       }
+    } else if (type === 'investigation-pack') {
+      const pack = json(m.provides.investigations[0].file);
+      say(
+        `  lesson     ${pack.title.en}: ${pack.steps.length} steps, ${pack.duration}`
+      );
+      for (const s of pack.steps) say(`               ${s.sid}  ${s.type}`);
     } else if (type === 'scenario-pack') {
       const pack = json(m.provides.scenarios[0].file);
       const built = buildPackWorld(pack);

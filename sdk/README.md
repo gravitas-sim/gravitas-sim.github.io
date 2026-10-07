@@ -1,10 +1,11 @@
 # The Gravitas Extension SDK
 
-A command line, a small library and four formats for contributors who want to
+A command line, a small library and five formats for contributors who want to
 add to Gravitas without learning its internals first:
 
 - **observation data packs:** measured data with its record;
-- **course packs:** sequences of lessons Gravitas already has;
+- **course packs:** sequences of lessons Gravitas already has, in the form the catalog installs (`/1`) or the form the course-pack builder writes (`/2`);
+- **investigation packs:** a guided investigation as data, which the Studio's lesson composer writes;
 - **scenario packs:** a scenario as data, which the Scenario Studio writes;
 - **capability packages:** new instruments.
 
@@ -18,20 +19,21 @@ declarative: data and text, never script. That is the security boundary the
 platform draws ([PLATFORM_PACKAGE_RFC.md](../PLATFORM_PACKAGE_RFC.md)), and
 the SDK enforces it rather than working around it.
 
-## The four types
+## The five types
 
 | Type | Kind | What it holds | What Gravitas does with it today |
 |---|---|---|---|
 | `data-pack` | declarative | one observation: a `gravitas.observation-data-pack/1` record (`pack.json`) and its encoded series (`series.json`) | validated, tested and archived by the SDK. A maintainer turns an accepted one into a built-in pack ([DATA_PACKS.md](../DATA_PACKS.md)) |
-| `course-pack` | declarative | a `gravitas.course-pack/1` sequence (`course.json`): units of existing lessons, by id, with notes, in every declared language | validated, tested and archived. The course-pack builder opens one and migrates it to /2 (COURSE_PACKS.md) |
+| `course-pack` | declarative | a `gravitas.course-pack/1` sequence (`course.json`): units of existing lessons, by id, with notes, in every declared language; or a `gravitas.course-pack/2`, what the builder writes: units of items (lessons, assignments, scenarios, datasets, readings) with objectives, times and a pin on each lesson | validated, tested and archived, /1 and /2 alike (since 1.8.0). The course-pack builder opens a /1 pack and migrates it to /2 (COURSE_PACKS.md); the catalog installs /1 |
+| `investigation-pack` | declarative | a `gravitas.investigation-pack/1` guided investigation (`investigation.json`): steps that read, predict, explore, measure and ask, with held predictions and remediation, in every declared language | validated through the format's rules and the lesson checker every built-in lesson passes, tested and archived (since 1.8.0). The Studio composer (`/studio/lesson/`) opens and writes the same file |
 | `scenario-pack` | declarative | a `gravitas.scenario-pack/1` scenario (`scenario.json`): settings Gravitas understands, a seed, the instruments it opens with, and bodies as an orbital system or typed states, in every declared language | validated, tested and archived. Gravitas opens one as a link: the Scenario Studio (`/studio/`) compiles it into the share link the application already reads |
 | `capability` | built-in | an instrument family: one JavaScript module and its manifest | validated and contract-tested by the SDK, then reviewed and vendored by a maintainer |
 
 Every extension is a directory with `gravitas-extension.json` at its root. That
 file is a `gravitas.capability-package/1` manifest, the same format as the
 packages in [`capabilities/`](../capabilities/). The type is what it
-`provides`: `dataPacks`, `courses`, `scenarios` or `widgetFamilies`, exactly
-one.
+`provides`: `dataPacks`, `courses`, `investigations` (with a `file`),
+`scenarios` or `widgetFamilies`, exactly one.
 
 ## The workflow, from nothing to a pull request
 
@@ -92,7 +94,9 @@ What the preview shows depends on the type:
 
 - **Data pack:** the series' range and a sparkline of it.
 - **Capability:** each instrument's readout at its default controls.
-- **Course pack:** the units, with each lesson's title as Gravitas shows it.
+- **Course pack:** the units, with each lesson's title as Gravitas shows it
+  (a /2 pack also lists its readings, scenarios and datasets).
+- **Investigation pack:** its title, its length and each step's id and type.
 - **Scenario pack:** its title, its body count under its seed, the settings it
   sets and the instruments it opens.
 
@@ -110,7 +114,12 @@ The tests run the extension against the public API, as Gravitas will use it:
   record's `validation.rule` is re-run: `folded-depth`, a transit's depth at
   the published period, or `harmonic-period`, a pulsating star's period from
   a Fourier series near the published one.
-- **Course pack:** every lesson opens in every declared language.
+- **Course pack:** every lesson opens in every declared language. For a /2
+  pack, every pinned lesson is the lesson as this build has it: its steps'
+  digest, its step count and its package version (the pins).
+- **Investigation pack:** the pack is valid, it compiles to a lesson the
+  repository's checker accepts, and every Spanish text was written from the
+  English beside it.
 - **Scenario pack:** its world builds under its seed, as the application
   builds it from the pack's link; after six simulated time units every body is
   still finite; and building it again gives the same world, body for body.
@@ -188,6 +197,47 @@ Gravitas lesson id (`publicIds().lessons`).
 
 The example is [`finding-exoplanets`](examples/finding-exoplanets/).
 
+**A course pack /2** (since 1.8.0) is the builder's form: `course.json` with
+`formatVersion: 2`, a `pinning` of `exact` or `compatible`, optional
+`objectives`, `prerequisites` and `teacherGuide`, and `units` of `items`.
+An item is a lesson, an assignment cut from one, a scenario, a dataset or a
+reading, each with its own fields (`sdk/schemas/course-pack-2.schema.json`,
+and `js/course/pack.js`, the validator). A lesson or assignment carries a
+`pin`: the digest of the lesson's steps, its step count and its package. An
+`exact` pack must pin every lesson.
+
+- **Errors:** what the format refuses, by field: an unknown lesson, scenario
+  or dataset, a need on an item that comes later, a path a student on the
+  core could not take, a missing pin in an exact pack.
+- **Pins:** a lesson that has changed since it was pinned is a warning in
+  `validate` and a failure in `test`, because an instructor reviews it before
+  students are sent to it; the course-pack builder offers the reviewed
+  upgrade.
+- **Data packs:** a dataset may name an installed data pack as well as the
+  Observatory's own observations.
+
+The example is [`orbits-first-week`](examples/orbits-first-week/).
+
+**An investigation pack** (since 1.8.0) is `investigation.json`, a
+`gravitas.investigation-pack/1` file: a scenario and seed per step, held
+predictions, measurements with units, questions inline or from a bank, and a
+remediation step for a wrong answer, in English and Spanish
+(`sdk/schemas/investigation-pack-1.schema.json`). `npm run sdk -- init
+investigation-pack my-orbit` starts from the composer's own example.
+
+- **Errors:** the format's rules, by field, then the compiled lesson through
+  `js/authoring/rules.js`, the checker every built-in lesson passes; a
+  finding the checker calls a warning stays one.
+- **No lesson ids:** the pack's id may not be one of a built-in lesson.
+- **Stale Spanish:** a text whose Spanish was written from English that has
+  since changed is a warning, and a failure in `test`.
+
+An investigation pack carries no code, so it never needs vendoring to be read
+by the composer; making it a built-in lesson is a maintainer's edit (the
+Studio's roundtrip gate, STUDIO_ROUNDTRIP_GATE.md).
+
+The example is [`reading-an-orbit`](examples/reading-an-orbit/).
+
 **A scenario pack**
 
 A scenario pack is `scenario.json`: `locales`, a `title` and a `summary`, up to
@@ -246,7 +296,7 @@ The example is [`kepler-third-law`](examples/kepler-third-law/).
 | API compatibility | a `gravitas` range this platform does not satisfy; a `requires` package that is not installed or not in range; a `uses` id Gravitas does not have |
 | Public ids | a package id, data-pack id, course id, built-in scenario id or instrument id Gravitas already has |
 | Licences and provenance | an asset no licence covers; a data pack's record failing its validator, or not matching its series file byte for byte |
-| Localization | a course or scenario string missing a declared locale; a locale Gravitas has no interface in. A title without Spanish is a warning |
+| Localization | a course, investigation or scenario string missing a declared locale; a locale Gravitas has no interface in. A title without Spanish is a warning |
 | Scenario content | a setting a pack cannot set, or one of the wrong type or outside its bounds; an instrument the rail does not have; a body of a type a pack cannot hold; a population generated alongside the pack's own bodies |
 | Offline | an asset that is not there; a declarative asset marked `core` (a failed fetch must never break the install for everybody); `locale` on anything but a translation |
 | Validation references | a `validation` check that names no release-gate step and no existing test |
@@ -286,10 +336,10 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.7.0` |
+| `SDK_VERSION` | this SDK, `1.8.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
-| `FORMATS` | each format this SDK reads and writes, with its version |
-| `EXTENSION_TYPES`, `LOCALES` | the four types and their kinds; the interface languages (`en`, `es`) |
+| `FORMATS` | each format this SDK reads and writes, with the highest version it reads (`gravitas.course-pack` is 2: it reads /1 too) |
+| `EXTENSION_TYPES`, `LOCALES` | the five types and their kinds; the interface languages (`en`, `es`) |
 | `publicIds()` | every lesson, instrument, scenario, data pack, course and package id, and each lesson's title in each language |
 | `acceptsPlatform(range)` | whether a `gravitas` range accepts this platform |
 | `installedDataPack(id)` | an installed pack's record, runtime module and decoded observation |
@@ -321,9 +371,12 @@ anything else.
   5. Route its strings through the catalogs.
   6. Run `npm run capabilities`.
 - **A course pack** opens in the course-pack builder (`/studio/course/`,
-  COURSE_PACKS.md), which migrates it to `gravitas.course-pack/2` with its
-  lessons unpinned until an instructor upgrades them. The catalog still
-  installs and shows /1.
+  COURSE_PACKS.md), which migrates a /1 pack to `gravitas.course-pack/2` with
+  its lessons unpinned until an instructor upgrades them, and opens a /2 pack
+  as it is. The catalog still installs and shows /1.
+- **An investigation pack** opens in the Studio's lesson composer
+  (`/studio/lesson/`); a maintainer turns an accepted one into a built-in
+  lesson by the Studio's roundtrip (STUDIO_ROUNDTRIP_GATE.md).
 - **A scenario pack** needs no vendoring to be used: its link opens it. Making
   one a built-in scenario, listed in the gallery with a thumbnail, is a
   maintainer's edit: a row of the preset table in `js/scenarios.js` and its
@@ -343,6 +396,18 @@ anything else.
 | 1.5.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with the `catalog` data type | 1 | 1 | 1 |
 | 1.6.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with synthetic packs that record their model, and the optional runtime fields `model` and `citations` | 1 | 1 | 1 |
 | 1.7.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with synthetic packs that record their model, and the optional runtime fields `model` and `citations` | 1 | 1, with the optional `scenario` | 1 |
+| 1.8.0 | 1.0.0 | 1 (with `file` on `provides.courses`, `provides.scenarios` and `provides.investigations`) | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
+
+SDK 1.8.0 adds, and removes nothing, the two formats the SDK did not read
+(Roadmap II Prompt 61, repaired in R-F of the P68 checkpoint):
+
+- **`gravitas.course-pack/2`**, what the course-pack builder writes, as a
+  course-pack extension, with its JSON Schema
+  (`sdk/schemas/course-pack-2.schema.json`). `FORMATS['gravitas.course-pack']`
+  is 2, the highest it reads; a /1 pack is read exactly as before.
+- **`gravitas.investigation-pack/1`** as a new extension type,
+  `investigation-pack` (`provides.investigations` with a `file`), with
+  `init`, `validate`, `test`, `inspect` and `pack`.
 
 SDK 1.7.0 adds, and removes nothing, what giving the built-in scenarios ids
 needed (Roadmap II Prompt 63):
@@ -475,11 +540,11 @@ repository from shipping an extension end to end:
    widget registry and the authoring inputs. `lib/api.mjs` is the seam: it can
    keep its promises while those change under it, but only if they are updated
    together, in this repository.
-8. **A course cannot name a data pack.** `gravitas.course-pack/1` sequences
+8. **A /1 course cannot name a data pack.** `gravitas.course-pack/1` sequences
    lessons, so the pulsating-stars course names the SU Draconis pack in a
-   note's words, and nothing checks that the pack exists. The builder's
-   `gravitas.course-pack/2` can name one (COURSE_PACKS.md), but the SDK and
-   the catalog read /1 only.
+   note's words, and nothing checks that the pack exists. A `gravitas.course-pack/2`
+   can name one (COURSE_PACKS.md), and the SDK reads /2 since 1.8.0, but the
+   catalog installs /1 only.
 9. **A data pack cannot bring its own check.** The SDK runs `folded-depth` and
    `harmonic-period`; a pack of another kind of variable needs another check
    added to the SDK, which is a core change.

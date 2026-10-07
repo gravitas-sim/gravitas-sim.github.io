@@ -410,7 +410,7 @@ describe('readJson and writeJson', () => {
 
   test('write stores plain JSON text under the key, and read returns it', () => {
     const s = fake();
-    expect(writeJson('k', { a: [1, 2] }, s)).toBe(true);
+    expect(writeJson('k', { a: [1, 2] }, undefined, s)).toBe(true);
     expect(s.data.get('k')).toBe('{"a":[1,2]}');
     expect(readJson('k', null, s)).toEqual({ a: [1, 2] });
   });
@@ -441,7 +441,7 @@ describe('readJson and writeJson', () => {
       },
     });
     expect(readJson('k', 7, s)).toBe(7);
-    expect(writeJson('k', 1, s)).toBe(false);
+    expect(writeJson('k', 1, undefined, s)).toBe(false);
   });
 
   test('with no store given it uses the page localStorage', () => {
