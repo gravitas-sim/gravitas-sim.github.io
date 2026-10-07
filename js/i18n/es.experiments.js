@@ -110,6 +110,8 @@ export const ES_EXPERIMENTS = {
     'Este navegador no puede ejecutar procesos de fondo, así que aquí no se pueden ejecutar experimentos.',
 
   'exp.results.title': 'Resultados',
+  'exp.results.empty':
+    'Aún no hay resultados. Elige un escenario y un parámetro arriba y pulsa Ejecutar; el gráfico, la tabla y las descargas aparecen aquí.',
   'exp.plot.label':
     '{metric} frente a {param}: {ok} ensayos con medida, {failed} sin ella. La tabla de abajo tiene los mismos números.',
   'exp.plot.log': '(escala logarítmica)',

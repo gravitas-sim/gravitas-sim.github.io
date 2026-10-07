@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-UFvwQtoB4BYCwISX9k+Dflq/BGyi3hKGCLORsw9kcb8='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta
       name="viewport"
@@ -98,6 +98,26 @@ try {
 } catch {
   /* storage unavailable: the default theme is correct */
 }
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
 </script>
 <!-- /shell:head -->
   </head>
