@@ -180,6 +180,12 @@ export function validateInference(m) {
     }
   }
   const s = m.settings || {};
+  if (model.centered)
+    need(
+      Number.isFinite(s.x0),
+      'settings.x0',
+      'is the x the polynomial is centered on'
+    );
   if (model.id === 'transit-quadratic') {
     need(
       s.exposure === undefined || s.exposure >= 0,

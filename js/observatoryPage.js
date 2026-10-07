@@ -347,12 +347,13 @@ $('obsFitPanel').addEventListener('toggle', async () => {
 });
 function renderFit(o) {
   // Whether a model suits it is known without loading one: a time series of
-  // a ratio or a velocity.
+  // a ratio or a velocity, or any table of x against y.
   const y = o.columns.find(c => c.id === o.axes.y);
   const dim = dimensionOf(parseUnit(y?.unit).unit);
   fit.suits =
-    o.kind === 'time-series' &&
-    (dim === 'ratio' || dim === 'velocity' || dim === null);
+    o.kind === 'table' ||
+    (o.kind === 'time-series' &&
+      (dim === 'ratio' || dim === 'velocity' || dim === null));
   $('obsFitPanel').hidden = !fit.suits;
   if (fit.suits && fit.panel && $('obsFitPanel').open) fit.panel.update(o);
 }

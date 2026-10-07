@@ -10,11 +10,15 @@
 
 export const EN_INFERENCE = {
   'obs.fit.intro':
-    'Fits the series in view with a transit or an orbit, in background workers, by weighted least squares: a bounded grid, then refinement. Every uncertainty the fit gives is shown separately, with what it assumes.',
+    'Fits the series in view with a transit or an orbit, or a table with a line, a quadratic or a power law, in background workers, by weighted least squares: a bounded grid, then refinement. Every uncertainty the fit gives is shown separately, with what it assumes.',
   'obs.fit.model': 'Model',
   'obs.fit.model.transit-quadratic':
     'A transit (circular orbit, quadratic limb darkening)',
   'obs.fit.model.rv-keplerian': 'A radial-velocity orbit (Keplerian)',
+  'obs.fit.model.poly-1': 'A straight line (y against x)',
+  'obs.fit.model.poly-2': 'A quadratic (y against x)',
+  'obs.fit.model.power-law': 'A power law (y = A x^p)',
+  'obs.fit.center': 'Center of x, x0 ({unit})',
   'obs.fit.exposure': 'Exposure of each point ({unit})',
   'obs.fit.dilution': "Other stars' share of the light, 0 to 1",
   'obs.fit.stellarRadius':
@@ -53,6 +57,8 @@ export const EN_INFERENCE = {
   'obs.fit.done': 'Fitted in {seconds} s.',
   'obs.fit.failed': 'The fit did not finish ({status}). {why}',
   'obs.fit.canceled': 'canceled by the reader',
+  'obs.fit.refuse.xPositive':
+    'A power law needs every x above zero. Mask the rows where x is zero or negative, or choose another model.',
   'obs.fit.refuse.tooManyRows':
     '{rows} rows is more than this device fits ({max} at most).',
   'obs.fit.refuse.tooManyEvaluations':
@@ -124,6 +130,11 @@ export const EN_INFERENCE = {
   'obs.fit.param.sqrtEcosw': '√e cos ω',
   'obs.fit.param.sqrtEsinw': '√e sin ω',
   'obs.fit.param.jitter': 'Jitter',
+  'obs.fit.param.c0': 'Value at the center',
+  'obs.fit.param.c1': 'Slope at the center',
+  'obs.fit.param.c2': 'Curvature term',
+  'obs.fit.param.A': 'Value at x = 1',
+  'obs.fit.param.p': 'Exponent',
   'obs.fit.param.depth': 'Depth at mid-transit',
   'obs.fit.param.T14': 'Total duration',
   'obs.fit.param.inclination': 'Inclination',

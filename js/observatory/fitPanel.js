@@ -21,7 +21,7 @@
 
 import { parseNumber } from '../answerParse.js';
 import { dataFrom } from '../inference/infer.js';
-import { fitArtifact, rowsDigest } from '../analysis/seams.js';
+import { fitArtifact, modelUnit, rowsDigest } from '../analysis/seams.js';
 import { artifactEntry } from '../notebook/artifactEntry.js';
 import { SOURCE } from '../notebook/entry.js';
 import {
@@ -65,12 +65,15 @@ const el = (tag, attrs = {}, ...children) => {
 
 /**
  * Which models suit an observation: a transit for a flux, an orbit for a
- * velocity.
+ * velocity, and for a table of x against y - an experiment's means, say -
+ * the models that claim nothing about what the numbers are: a line, a
+ * quadratic and a power law (js/inference/models.js).
  * @param {object} o - gravitas.observation/1
  * @param {(unit: string|null) => string|null} dimensionOfText - The value
  *   column's dimension from its unit as written (the page's units module)
  */
 export function modelsFor(o, dimensionOfText) {
+  if (o.kind === 'table') return ['poly-1', 'poly-2', 'power-law'];
   if (o.kind !== 'time-series') return [];
   const y = o.columns.find(c => c.id === o.axes.y);
   const dim = dimensionOfText(y?.unit ?? null);
@@ -80,8 +83,35 @@ export function modelsFor(o, dimensionOfText) {
   return out;
 }
 
+const round3 = v => Number(v.toPrecision(3));
+const extent = a =>
+  a.reduce(
+    ([l, h], v) => [Math.min(l, v), Math.max(h, v)],
+    [Infinity, -Infinity]
+  );
+
 /** Sensible starting bounds from the data itself. */
 function defaults(modelId, data) {
+  if (modelId === 'power-law' || modelId.startsWith('poly-')) {
+    const [yl, yh] = extent(data.y);
+    const [xl, xh] = extent(data.x);
+    const Y = 10 * (Math.max(Math.abs(yl), Math.abs(yh)) + (yh - yl)) || 1;
+    if (modelId === 'power-law') {
+      // A is y over x^p, for p within the exponent's range.
+      const A = Math.max(...data.x.flatMap(v => [v ** 6, v ** -6]));
+      return {
+        p: { lo: -6, hi: 6 },
+        A: { lo: -round3(Y * A), hi: round3(Y * A) },
+      };
+    }
+    const w = xh - xl || 1;
+    return Object.fromEntries(
+      [0, 1, 2].map(k => [
+        `c${k}`,
+        { lo: -round3(Y / w ** k), hi: round3(Y / w ** k) },
+      ])
+    );
+  }
   const x0 = data.x[0];
   const span = data.x[data.x.length - 1] - x0;
   if (modelId === 'transit-quadratic') {
@@ -163,6 +193,13 @@ export function mountFitPanel(root, ctx) {
     inputmode: 'numeric',
     value: '5',
   });
+  // Where a polynomial is centered: recorded in the manifest, not guessed.
+  const center = el('input', {
+    id: 'fitCenter',
+    class: 'ui-input',
+    type: 'text',
+    inputmode: 'decimal',
+  });
   const profiles = el('input', { id: 'fitProfiles', type: 'checkbox' });
   profiles.checked = true;
   const run = el('button', {
@@ -221,8 +258,7 @@ export function mountFitPanel(root, ctx) {
   // A parameter's name in the reader's language, and its unit in the data's:
   // a model's times are the time column's, its velocities the value column's.
   const nameOf = p => t(`obs.fit.param.${p.name}`);
-  const unitOf = (p, units) =>
-    p.unit === 'd' ? units.x : p.unit === 'm/s' ? units.y : p.unit;
+  const unitOf = (p, units) => modelUnit(p.unit, units);
   const labelOf = (p, units) => {
     const u = unitOf(p, units);
     return u ? `${nameOf(p)} (${u})` : nameOf(p);
@@ -236,6 +272,7 @@ export function mountFitPanel(root, ctx) {
       { class: 'ui-grid is-end' },
       label(t('obs.fit.model'), modelSelect),
       label('', exposure),
+      label('', center),
       label(t('obs.fit.supersample'), supersample),
       label(t('obs.fit.dilution'), dilution),
       label(t('obs.fit.stellarRadius'), stellarRadius),
@@ -323,6 +360,17 @@ export function mountFitPanel(root, ctx) {
     exposure.previousElementSibling.textContent = t('obs.fit.exposure', {
       unit: d.units.x || '—',
     });
+    center.previousElementSibling.textContent = t('obs.fit.center', {
+      unit: d.units.x || '—',
+    });
+    center.value = model.centered
+      ? String(
+          Number(
+            (d.x.reduce((a, b) => a + b, 0) / (d.x.length || 1)).toPrecision(6)
+          )
+        )
+      : '';
+    center.closest('label').hidden = !model.centered;
     for (const c of [
       exposure,
       supersample,
@@ -364,8 +412,9 @@ export function mountFitPanel(root, ctx) {
               ...(num('Value') !== undefined ? { value: num('Value') } : {}),
             };
     }
-    const settings =
-      id === 'transit-quadratic'
+    const settings = model.centered
+      ? { x0: read(center) }
+      : id === 'transit-quadratic'
         ? {
             exposure: read(exposure) || 0,
             supersample: Math.round(read(supersample)) || 5,
@@ -420,6 +469,9 @@ export function mountFitPanel(root, ctx) {
         })
       : '';
     const reasons = [
+      ...(MODELS[modelSelect.value].requires?.(data())
+        ? [t('obs.fit.refuse.xPositive')]
+        : []),
       ...problems.map(p => `${p.path} ${p.message}`),
       ...(e?.refusals || []).map(r =>
         t(`obs.fit.refuse.${r.reason}`, r.detail)

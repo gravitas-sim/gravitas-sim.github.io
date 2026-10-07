@@ -83,6 +83,28 @@ export function trialsDigest(result) {
   return fnvHex8(canonicalJson(result?.trials ?? []));
 }
 
+/**
+ * A model parameter's unit, as the data states it. A model names units in the
+ * data's own terms: 'd' is the argument's (a time series' days), 'm/s' the
+ * value's, and for the table models (js/inference/models.js) 'y' is the value
+ * column's, 'y/x' and 'y/x^2' its ratios to the argument and its square, and
+ * 'y/x^p' a power law's, whose unit depends on the exponent fitted. Null when
+ * the data does not state the unit needed.
+ * @param {string} unit - The model's
+ * @param {{x?: string|null, y?: string|null}} [units] - The columns'
+ */
+export function modelUnit(unit, units) {
+  const x = units?.x ?? null;
+  const y = units?.y ?? null;
+  if (unit === 'd') return x;
+  if (unit === 'm/s' || unit === 'y') return y;
+  const m = /^y\/x(?:\^(2|p))?$/.exec(unit);
+  if (!m) return unit;
+  if (y === null || x === null) return null;
+  if (y === '' && x === '') return '';
+  return `${y || '1'}/${x || '1'}${m[1] ? `^${m[1]}` : ''}`;
+}
+
 /** The digest of the rows a fit read (./infer.js dataFrom). */
 export function rowsDigest(data) {
   return fnvHex8(
@@ -546,12 +568,7 @@ export function analysisArtifact(a, o = {}) {
 export function fitArtifact(doc, o = {}) {
   const fit = doc?.results?.fit;
   if (!fit) throw new SeamError('notAFit', 'this document holds no fit');
-  const unitFor = p =>
-    p.unit === 'd'
-      ? (o.units?.x ?? null)
-      : p.unit === 'm/s'
-        ? (o.units?.y ?? null)
-        : p.unit;
+  const unitFor = p => modelUnit(p.unit, o.units);
   const quantities = [];
   const warnings = [];
   for (const p of [...fit.parameters, ...(fit.derived ?? [])]) {
@@ -579,9 +596,29 @@ export function fitArtifact(doc, o = {}) {
   const values = canonicalJson(quantities.map(q => [q.id, q.value]));
   return artifact({
     id: `fit:${doc.model.id}:${fnvHex8(values)}`,
-    made: doc.engine?.fingerprint
-      ? { engineFingerprint: doc.engine.fingerprint }
-      : {},
+    made: {
+      ...(doc.engine?.fingerprint
+        ? { engineFingerprint: doc.engine.fingerprint }
+        : {}),
+      // What the rows were taken from, beside the digest of the rows
+      // themselves: a fit to an experiment's table names the experiment.
+      ...(doc.data?.observation
+        ? {
+            observation: {
+              id: doc.data.observation,
+              ...(doc.data.source?.kind
+                ? {
+                    source: {
+                      kind: doc.data.source.kind,
+                      id: doc.data.source.id ?? null,
+                      digest: doc.data.source.digest ?? null,
+                    },
+                  }
+                : {}),
+            },
+          }
+        : {}),
+    },
     source: {
       kind: 'inference',
       id: doc.model.id,

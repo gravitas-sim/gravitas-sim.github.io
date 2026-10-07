@@ -6,11 +6,15 @@
 
 export const ES_INFERENCE = {
   'obs.fit.intro':
-    'Ajusta la serie a la vista con un tránsito o una órbita, en procesos en segundo plano, por mínimos cuadrados ponderados: una rejilla acotada y después un refinamiento. Cada incertidumbre que da el ajuste se muestra por separado, con lo que supone.',
+    'Ajusta la serie a la vista con un tránsito o una órbita, o una tabla con una recta, una parábola o una ley de potencias, en procesos en segundo plano, por mínimos cuadrados ponderados: una rejilla acotada y después un refinamiento. Cada incertidumbre que da el ajuste se muestra por separado, con lo que supone.',
   'obs.fit.model': 'Modelo',
   'obs.fit.model.transit-quadratic':
     'Un tránsito (órbita circular, oscurecimiento al limbo cuadrático)',
   'obs.fit.model.rv-keplerian': 'Una órbita de velocidad radial (kepleriana)',
+  'obs.fit.model.poly-1': 'Una recta (y frente a x)',
+  'obs.fit.model.poly-2': 'Una parábola (y frente a x)',
+  'obs.fit.model.power-law': 'Una ley de potencias (y = A x^p)',
+  'obs.fit.center': 'Centro de x, x0 ({unit})',
   'obs.fit.exposure': 'Exposición de cada punto ({unit})',
   'obs.fit.dilution': 'Parte de la luz que viene de otras estrellas, de 0 a 1',
   'obs.fit.stellarRadius':
@@ -50,6 +54,8 @@ export const ES_INFERENCE = {
   'obs.fit.done': 'Ajustado en {seconds} s.',
   'obs.fit.failed': 'El ajuste no terminó ({status}). {why}',
   'obs.fit.canceled': 'cancelado por el lector',
+  'obs.fit.refuse.xPositive':
+    'Una ley de potencias necesita que todas las x sean mayores que cero. Enmascara las filas en que x es cero o negativa, o elige otro modelo.',
   'obs.fit.refuse.tooManyRows':
     '{rows} filas son más de las que ajusta este dispositivo (como máximo {max}).',
   'obs.fit.refuse.tooManyEvaluations':
@@ -121,6 +127,11 @@ export const ES_INFERENCE = {
   'obs.fit.param.sqrtEcosw': '√e cos ω',
   'obs.fit.param.sqrtEsinw': '√e sen ω',
   'obs.fit.param.jitter': 'Jitter',
+  'obs.fit.param.c0': 'Valor en el centro',
+  'obs.fit.param.c1': 'Pendiente en el centro',
+  'obs.fit.param.c2': 'Término de curvatura',
+  'obs.fit.param.A': 'Valor en x = 1',
+  'obs.fit.param.p': 'Exponente',
   'obs.fit.param.depth': 'Profundidad en mitad del tránsito',
   'obs.fit.param.T14': 'Duración total',
   'obs.fit.param.inclination': 'Inclinación',
