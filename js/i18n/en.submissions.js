@@ -40,6 +40,9 @@ export const EN_SUBMISSIONS = {
   'sub.written.rubric': 'Marking note',
   'sub.refused.title': 'Not read',
   'sub.reason.empty': 'nothing to read',
+  'sub.reason.unreadable': 'the browser could not read the file',
+  'sub.reason.lessonLoad':
+    'its investigation could not be loaded; check the connection and add it again',
   'sub.reason.wrongKind': 'not a Gravitas submission token',
   'sub.reason.newerVersion': 'made by a newer version of Gravitas',
   'sub.reason.tooLarge': 'larger than a submission can be',
