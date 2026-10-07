@@ -51,7 +51,7 @@ import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS } from './appState.js';
 import { barycenterOf } from './lesson/barycenter.js';
-import { extentOf, sceneFor } from './lesson/evolutionScene.js';
+import { sceneFor } from './lesson/evolutionScene.js';
 import { updateCanvasSummary } from './canvasSummary.js';
 
 /**
@@ -263,18 +263,6 @@ function drawEvolutionScene(ctx) {
   ctx.restore();
 }
 
-/** How far the current illustration reaches, in screen pixels. For tests. */
-export function evolutionSceneExtent() {
-  const overlay = state.evolutionOverlay;
-  if (!overlay?.active || !overlay.frame) return 0;
-  return extentOf(
-    sceneFor(overlay.frame, {
-      seed: overlay.seed,
-      stillFrame: Boolean(overlay.stillFrame),
-      lostFraction: overlay.lostFraction,
-    })
-  );
-}
 import {
   getDragPreview,
   getOrbitPreview,
@@ -2759,9 +2747,6 @@ let fixedStepSeconds = 0;
 export function setFixedStep(seconds) {
   fixedStepSeconds = Number.isFinite(seconds) && seconds > 0 ? seconds : 0;
 }
-
-/** @returns {boolean} Whether the loop is stepping deterministically */
-export const isFixedStep = () => fixedStepSeconds > 0;
 
 export { MAX_SUBSTEPS, substepPlan };
 

@@ -166,11 +166,6 @@ function mondA0() {
   );
 }
 
-/** @returns {boolean} Whether this scenario is one MOND may be applied to */
-export function mondAvailable() {
-  return mondA0() > 0;
-}
-
 /**
  * The current state of the plot: points, center, fit, and the two predictions.
  *

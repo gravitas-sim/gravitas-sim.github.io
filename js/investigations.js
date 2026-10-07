@@ -263,9 +263,6 @@ let lockedSettings = null;
 // nothing is written back to it.
 let authoring = null;
 
-/** @returns {boolean} True while the panel is an authoring preview */
-export const isAuthoringPreview = () => authoring !== null;
-
 // --- Persistence --------------------------------------------------------------
 
 const storageKey = id => `${STORAGE_PREFIX}${id}`;
@@ -350,9 +347,6 @@ function keyForAssignment(a) {
  * was told nothing at all and found out when they closed the tab.
  */
 let saveState = { status: 'idle', at: null };
-
-/** @returns {{status: string, at: ?number}} The last write's outcome */
-export const progressSaveState = () => ({ ...saveState });
 
 function setSaveState(status) {
   if (saveState.status === status) {
@@ -3983,9 +3977,6 @@ export function closeInvestigation() {
   active = null;
 }
 
-/** @returns {boolean} True while a lesson panel is open */
-export const isInvestigationOpen = () => Boolean(active);
-
 function startProbeLoop() {
   stopProbeLoop();
   // Four times a second: fast enough that a changing speed reads as live, slow
@@ -4186,9 +4177,6 @@ let browserFilters = { ...NO_FILTERS };
 export function resetBrowserFilters() {
   browserFilters = { ...NO_FILTERS };
 }
-
-/** The current filter set, for tests. */
-export const browserFilterState = () => ({ ...browserFilters });
 
 /** Options for one select: an "any" row, then the values. */
 function fillSelect(select, values, labelOf, anyLabel, current) {

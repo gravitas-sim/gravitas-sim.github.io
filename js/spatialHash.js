@@ -140,6 +140,3 @@ export function forEachCandidatePair(objects, visit) {
     }
   }
 }
-
-/** @returns {{cells:number, cellSize:number}} Grid stats, for diagnostics */
-export const getGridStats = () => ({ cells: buckets.size, cellSize });

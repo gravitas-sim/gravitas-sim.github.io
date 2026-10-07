@@ -33,7 +33,6 @@ import {
   syncReportedMass,
 } from './physics.js';
 import { state } from './appState.js';
-import { debugLog } from './utils.js';
 
 // --- Layout of one object row -------------------------------------------------
 const STRIDE = 9;
@@ -369,12 +368,6 @@ export function resumeLive() {
   syncUI();
 }
 
-/** Toggle between paused-on-a-frame and running live. */
-export function toggleScrub() {
-  if (scrubbing) resumeLive();
-  else scrubTo(0);
-}
-
 /** Register the transport bar so the module can keep it in sync. */
 export function bindTimelineUI(handlers) {
   ui = handlers;
@@ -461,11 +454,4 @@ export function recordedExtent() {
     bodies: newest ? newest.length / STRIDE : 0,
     simTime: Math.max(0, newestT - oldestT),
   };
-}
-
-export function getTimelineStats() {
-  let bytes = 0;
-  for (const f of frames) if (f) bytes += f.byteLength;
-  debugLog('timeline frames', frames.length, 'bytes', bytes);
-  return { frames: frameCount, bytes };
 }
