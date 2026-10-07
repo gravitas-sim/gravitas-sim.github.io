@@ -244,6 +244,10 @@ async function work(button, task) {
     return await task();
   } catch (err) {
     console.warn('[rv] the inference Worker did not answer:', err);
+    if (els?.status)
+      els.status.textContent = t('failure.error', {
+        message: err?.message ?? '',
+      });
     return undefined;
   } finally {
     busy.delete(button);
@@ -405,6 +409,7 @@ export function initRvWorkspacePanel({ signal } = {}) {
 export function teardownRvWorkspacePanel() {
   if (!unsubscribeLocale) return;
   setRvWorkspaceEnabled(false);
+  clearUncertainty();
   unsubscribeLocale();
   unsubscribeLocale = null;
   els = null;
@@ -884,6 +889,7 @@ export async function runUncertainty() {
   const mayPublish = () => owns() && generation === mcGeneration;
 
   let outcome = null;
+  let failure = null;
   try {
     outcome = await runMonteCarlo(
       {
@@ -913,6 +919,7 @@ export async function runUncertainty() {
   } catch (err) {
     console.warn('[rv] the uncertainty analysis did not finish:', err);
     outcome = null;
+    failure = err;
   } finally {
     // Two separate decisions, and running them together is what broke this.
     //
@@ -927,7 +934,10 @@ export async function runUncertainty() {
     if (held) {
       mcRun = null;
       if (publish) mcReport = outcome;
-      if (e.mcStatus) e.mcStatus.textContent = '';
+      if (e.mcStatus)
+        e.mcStatus.textContent = failure
+          ? t('failure.error', { message: failure.message ?? '' })
+          : '';
       renderUncertainty();
     }
   }
