@@ -2536,8 +2536,6 @@ export const ES_DEFERRED = {
   'gwW.axis.merger': 'fusión',
   'gwW.plot.isco': 'aquí se detiene el modelo',
   'gwW.local.span': '{ms} ms de ancho',
-  'gwW.source.notToScale':
-    'esquema: la separación está modelada, los tamaños no',
   'gwW.overlay.legend':
     'Cada anillo es una cresta, donde estaría ahora tras salir de la fuente. Los de fuera salieron antes, cuando la órbita era más lenta, y por eso están más separados. Distancias comprimidas, amplitud exagerada, propagación ralentizada y reescalada según sube la frecuencia. El centro se omite: una fórmula de campo lejano no lo describe.',
   'gwW.overlay.legendStill':
@@ -3534,7 +3532,6 @@ export const ES_DEFERRED = {
   'nb.stellar.initialMass': 'Masa inicial',
   'nb.stellar.age': 'Edad',
   'nb.stellar.mainSequence': 'Vida total en la secuencia principal',
-  'nb.stellar.pinnedRadius': 'Estrella fijada {n}: radio',
   'nb.stellar.pinnedNth': 'estrella {n}',
   'nb.stellar.pinnedRadiusOf': '{name}: radio',
   'nb.stellar.pinnedTeffOf': '{name}: temperatura',
@@ -3543,7 +3540,6 @@ export const ES_DEFERRED = {
     'Las estrellas comparadas son {n} de las {of} que están en el lienzo en este paso, leídas de la escena y no fijadas a mano.',
   'nb.stellar.limit.someHypothetical':
     'No todas las estrellas aquí son modelos. {names} ({n}) son puntos elegidos en el diagrama: su temperatura y su luminosidad son elegidas, su radio se deduce de ambas, y no tienen masa, ni edad, ni tiempo de vida.',
-  'nb.stellar.pinnedTeff': 'Estrella fijada {n}: temperatura',
   'nb.stellar.limit.model':
     'Un modelo, no una observación: {grid}. Sin rotación, sin binaridad, sin campos magnéticos y con una sola composición.',
   'nb.stellar.limit.incomplete':
@@ -3577,7 +3573,6 @@ export const ES_DEFERRED = {
   'lessonFn.closestApproachIsLargerThanFurthest70':
     'El máximo acercamiento es mayor que la distancia máxima: parecen intercambiados.',
   'lessonFn.eccentric9': 'Excéntrico',
-  'lessonFn.semiMajorAxis15': 'semieje mayor',
   'lessonFn.clickAPlanetToSelectIt27': 'Pulsa un planeta para seleccionarlo',
   'lessonFn.body4': 'Cuerpo',
   'lessonFn.noOrbitFound14': 'no se encontró órbita',
@@ -3720,9 +3715,6 @@ export const ES_DEFERRED = {
     'Pon 3 en ambas casillas: el par está a 3 UA con un periodo de 3 años.',
   'lessonFn.333Is27And102':
     '3 × 3 × 3 es 27, y 3 × 3 es 9, y 27 dividido entre 9 es 3. Tres masas solares entre las dos.',
-  'lessonFn.isProportionalTo18': 'es proporcional a',
-  'lessonFn.howConcentratedIsThisThingOn63':
-    'cómo de concentrada está esta cosa, a la escala de su propio horizonte',
   'lessonFn.whatEarthGets15': 'lo que recibe la Tierra',
   'lessonFn.distancesAndStarlightAreBothPositive50':
     'Las distancias y la luz estelar son ambas números positivos.',
@@ -3738,7 +3730,6 @@ export const ES_DEFERRED = {
   'lessonFn.innermost9': 'El más interior',
   'lessonFn.outermost9': 'El más exterior',
   'lessonFn.fittedSlope12': 'Pendiente ajustada',
-  'lessonFn.proportionalToRadius22': 'proporcional al radio',
   'lessonFn.halo4': 'Halo',
   'lessonFn.outermostStar14': 'Estrella más exterior',
   'lessonFn.slope5': 'Pendiente',

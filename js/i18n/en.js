@@ -297,7 +297,6 @@ export const EN = {
   'rail.speedUp': 'Fast',
   'rail.resetView': 'Reset View',
   'rail.shortcuts': 'Shortcuts',
-  'rail.objectType': 'Add object',
   'rail.objectType.choose': 'Add object',
   'rail.objectType.placing': 'Click to place · Esc',
   'rail.objectType.stop': 'Stop adding',

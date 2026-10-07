@@ -254,7 +254,6 @@ export const ES = {
   'rail.speedUp': 'Rápido',
   'rail.resetView': 'Restablecer vista',
   'rail.shortcuts': 'Atajos',
-  'rail.objectType': 'Añadir objeto',
   'rail.objectType.choose': 'Añadir objeto',
   'rail.objectType.placing': 'Haz clic para colocar · Esc',
   'rail.objectType.stop': 'Dejar de añadir',
