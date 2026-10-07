@@ -26,7 +26,7 @@ import {
 import expectationsDoc from '../js/data/instructorExpectations.js';
 
 /** What the allowlist holds; lower it when an entry is converted, never raise it. */
-const UNCHECKED_COUNT = 34;
+const UNCHECKED_COUNT = 7;
 
 const literals = numericLiterals(INVESTIGATIONS);
 const byKey = Object.fromEntries(literals.map(l => [l.key, l]));
