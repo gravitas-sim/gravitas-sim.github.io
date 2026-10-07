@@ -125,7 +125,7 @@ export function load() {
     const entries = Array.isArray(parsed?.entries) ? parsed.entries : [];
     return { ok: true, entries, reason: FAILURE.OK };
   } catch {
-    return { ok: false, entries: [], reason: 'unreadable' };
+    return { ok: false, entries: [], reason: 'unreadable', raw };
   }
 }
 

@@ -91,13 +91,32 @@ export const lastSaveResult = () => lastSave;
  * evidence is safe.
  */
 function persist() {
+  if (held) return lastSave;
   lastSave = store.save(entries);
   return lastSave;
 }
 
+// An unreadable stored notebook is left exactly as it is until the reader has
+// chosen: nothing is written over it.
+let held = false;
+
 /** Read the stored notebook into memory. Called once, when the panel loads. */
 export function loadNotebook() {
   const result = store.load();
+  held = result.reason === 'unreadable';
+  if (held)
+    import('./corruptState.js').then(m =>
+      m.recoverCorrupt({
+        raw: result.raw,
+        filename: 'gravitas-notebook-unreadable.txt',
+        discard: () => {
+          store.clear();
+          held = false;
+          lastSave = { ok: true };
+          render();
+        },
+      })
+    );
   entries = result.ok ? result.entries : [];
   if (!result.ok) lastSave = { ok: false, reason: result.reason };
   return entries;

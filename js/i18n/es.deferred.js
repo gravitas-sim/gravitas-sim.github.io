@@ -1493,7 +1493,13 @@ export const ES_DEFERRED = {
   'nb.save.from-a-newer-version':
     'El cuaderno almacenado lo escribió una versión más nueva de Gravitas y no se ha abierto, así que no se ha sobrescrito nada.',
   'nb.save.unreadable':
-    'No se pudo leer el cuaderno almacenado. No se ha sobrescrito nada; restaura desde un archivo si tienes uno.',
+    'No se pudo leer el cuaderno almacenado. Está intacto; las entradas nuevas no se guardan hasta que decidas.',
+  'failure.corrupt.title': 'No se pueden leer los datos guardados',
+  'failure.corrupt.body':
+    'No se ha modificado. Consérvalos, exporta una copia o descártalos una vez exportados.',
+  'failure.corrupt.keep': 'Conservar',
+  'failure.corrupt.export': 'Exportar una copia',
+  'failure.corrupt.discard': 'Descartar',
   'nb.save.tooLarge': 'Ese archivo es demasiado grande para ser un cuaderno.',
   'nb.save.notJson': 'Ese archivo no se puede leer como un cuaderno.',
   'nb.save.notAnObject': 'Ese archivo no es un cuaderno.',
