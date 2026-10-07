@@ -66,18 +66,29 @@ export let MANIFEST = MANIFEST_EN;
  * summaries.js, and fetched here only when the lesson browser asks for the
  * catalog, so opening a lesson never pays for twenty-four of them.
  */
-const withSummaries = (cards, summaries) =>
-  cards.map(card => ({ ...card, summary: summaries[card.id] }));
+const withSummaries = (cards, summaries, fallback = {}) =>
+  cards.map(card => ({
+    ...card,
+    summary: summaries[card.id] || fallback[card.id],
+  }));
+// A summaries file that fails to load leaves the cards (and their titles)
+// whole, only without the paragraph.
+const noSummaries = () => ({});
 
 const MANIFESTS = {
   en: () =>
-    import('./summaries.js').then(s => ({
-      MANIFEST: withSummaries(MANIFEST_EN, s.SUMMARIES),
-    })),
+    import('./summaries.js')
+      .then(s => s.SUMMARIES)
+      .catch(noSummaries)
+      .then(s => ({ MANIFEST: withSummaries(MANIFEST_EN, s) })),
   es: () =>
-    Promise.all([import('./manifest.es.js'), import('./summaries.es.js')]).then(
-      ([m, s]) => ({ MANIFEST: withSummaries(m.MANIFEST, s.SUMMARIES_ES) })
-    ),
+    Promise.all([
+      import('./manifest.es.js'),
+      import('./summaries.es.js').then(s => s.SUMMARIES_ES, noSummaries),
+      import('./summaries.js').then(s => s.SUMMARIES, noSummaries),
+    ]).then(([m, es, en]) => ({
+      MANIFEST: withSummaries(m.MANIFEST, es, en),
+    })),
 };
 
 /**

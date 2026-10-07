@@ -3382,6 +3382,7 @@
   .inv-card-summary {
     font-size: var(--text-xs);
     line-height: 1.55;
+    min-height: calc(3 * 1.55em);
     color: var(--text-muted);
     /* Clamped, not rewritten: the full summary stays in the catalog and reaches
        the card's title attribute. */
