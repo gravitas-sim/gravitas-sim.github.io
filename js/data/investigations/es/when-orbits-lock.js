@@ -93,7 +93,7 @@ export default {
              \n\nFíjate en la última cifra de cada fila. Dice cuánto más cerca
              está la razón medida de una razón de enteros pequeños de lo que
              habría estado un número cualquiera. Esa cifra es de lo que trata
-             esta lección.`,
+             esta investigación.`,
       checklist: [
         'Deja correr la simulación unas 150 órbitas de Ío',
         'Lee los cuatro periodos',
@@ -367,7 +367,7 @@ export default {
              y no lo mismo que una resonancia.
 
              \n\nRetén esto. Dentro de unos pasos vas a conocer un cuerpo cuyo
-             ángulo se queda en no concluyente durante toda la lección, y la
+             ángulo se queda en no concluyente durante toda la investigación, y la
              tentación de llamarlo resonante será considerable.`,
     },
     {

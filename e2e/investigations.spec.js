@@ -626,7 +626,7 @@ test.describe('lesson loading', () => {
     // Every card carries a step count and a duration, and all of it came out of
     // the manifest: the cards are drawn, and no lesson has been fetched.
     await expect(page.locator('#investigationBrowserCount')).toContainText(
-      /\d+ lessons · \d+ steps/
+      /\d+ investigations · \d+ steps/
     );
     expect(await lessonsFetched(page)).toEqual([]);
   });

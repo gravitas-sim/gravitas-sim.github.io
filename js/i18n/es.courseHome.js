@@ -46,20 +46,20 @@ export const ES_COURSEHOME = {
   'courseHome.objectives': 'Lo que podrás hacer',
   'courseHome.prerequisites': 'Antes de empezar',
   'courseHome.unit': 'Unidad {n}: {title}',
-  'courseHome.kind.lesson': 'Lección',
-  'courseHome.kind.assignment': 'Tarea',
+  'courseHome.kind.lesson': 'Investigación',
+  'courseHome.kind.assignment': 'Actividad',
   'courseHome.kind.scenario': 'Simulación',
   'courseHome.kind.dataset': 'Datos',
   'courseHome.kind.reading': 'Lectura',
-  'courseHome.open.lesson': 'Abrir la lección',
-  'courseHome.open.assignment': 'Abrir la tarea',
+  'courseHome.open.lesson': 'Abrir la investigación',
+  'courseHome.open.assignment': 'Abrir la actividad',
   'courseHome.open.scenario': 'Abrir la simulación',
   'courseHome.open.dataset': 'Abrir los datos',
   'courseHome.open.reading': 'Abrir la lectura',
   'courseHome.openNamed': '{action}: {title}',
   'courseHome.after': 'Después de: {list}',
   'courseHome.missing':
-    'Esta versión de Gravitas no tiene esta lección. Pregunta a tu docente qué hacer en su lugar.',
+    'Esta versión de Gravitas no tiene esta investigación. Pregunta a tu docente qué hacer en su lugar.',
   'courseHome.install':
     'Instala primero estos datos desde el catálogo; después se abren sin red.',
   'courseHome.catalog': 'Abrir el catálogo',
@@ -70,5 +70,5 @@ export const ES_COURSEHOME = {
   'courseHome.made':
     'Versión {version} de este curso, hecha con la plataforma {platform} de Gravitas.',
   'courseHome.printNote':
-    'Abre las tareas y las simulaciones desde la página del curso: sus enlaces son demasiado largos para imprimirlos.',
+    'Abre las actividades y las simulaciones desde la página del curso: sus enlaces son demasiado largos para imprimirlos.',
 };

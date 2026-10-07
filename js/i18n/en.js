@@ -169,7 +169,7 @@ export const EN = {
   'rail.loadScenario.hint':
     'Browse the built-in scenarios by image, concept or keyword: from the Solar System to the GW150914 black-hole merger.',
   'rail.investigations.hint':
-    'Guided lessons that walk you through a concept step by step, with questions and an optional lab report you can submit',
+    'Guided investigations that walk you through a concept step by step, with questions and an optional lab report you can submit',
   'rail.settings.hint':
     'Open the full settings panel: object counts, gravity, visuals and performance. Structural changes restart the simulation; the rest apply live.',
   'rail.refreshScenario.hint':
@@ -184,7 +184,7 @@ export const EN = {
   'rail.load.hint': 'Restore the simulation you last saved in this browser.',
   'rail.undo.hint': 'Remove the last object you placed (Z)',
   'rail.share.hint':
-    'Create a link that reopens this exact simulation: hand it out as an assignment, or send back what you built (K)',
+    'Create a link that reopens this exact simulation: hand it out as an activity, or send back what you built (K)',
   'rail.exportData.hint':
     'Download the recorded simulation as CSV: positions, velocities and energies over time, and the light curve if it is running. Open them in Excel, or in the companion Python notebook (E)',
   'rail.railTools.hint': 'Show or hide the tools controls',
@@ -657,7 +657,7 @@ export const EN = {
   // Those are labeled wherever they appear, and the claim here now says the
   // same thing the instrument readouts do.
   'tutorial.welcome.body':
-    "A sandbox for gravity, and a set of instruments for measuring it. The bodies you place and the scenarios you load are integrated from Newton's law of gravitation in real time — nothing there is on rails, pre-animated or scripted, and if two stars merge it is because their orbits actually brought them together. A few lesson screens instead place a body where a published model says it should be, such as a star moving along an evolutionary track; those say so on the screen that shows them.",
+    "A sandbox for gravity, and a set of instruments for measuring it. The bodies you place and the scenarios you load are integrated from Newton's law of gravitation in real time — nothing there is on rails, pre-animated or scripted, and if two stars merge it is because their orbits actually brought them together. A few investigation screens instead place a body where a published model says it should be, such as a star moving along an evolutionary track; those say so on the screen that shows them.",
   'tutorial.welcome.tip':
     'This tour is sixteen steps and takes about three minutes. Use ← and → to move through it, or Escape to leave at any point.',
 
@@ -699,9 +699,9 @@ export const EN = {
 
   'tutorial.investigations.title': 'Guided investigations',
   'tutorial.investigations.body':
-    'Twelve structured lessons that use the simulation as evidence rather than illustration. You measure something, predict what follows, and are told whether the prediction held. They cover Kepler’s laws, tides, black holes, exoplanet transits, chaos, orbital resonance and the case for dark matter.',
+    'Structured investigations that use the simulation as evidence rather than illustration. You measure something, predict what follows, and are told whether the prediction held. They cover Kepler’s laws, tides, black holes, exoplanet transits, chaos, orbital resonance and the case for dark matter.',
   'tutorial.investigations.tip':
-    'Each one ends with a report you can export as a PDF, including your own measurements and answers. Progress is kept if you close the lesson and come back.',
+    'Each one ends with a report you can export as a PDF, including your own measurements and answers. Progress is kept if you close the investigation and come back.',
 
   'tutorial.measure.title': 'Measure it yourself',
   'tutorial.measure.body':
@@ -719,7 +719,7 @@ export const EN = {
   'tutorial.rotation.body':
     'The rotation-curve panel plots orbital speed against radius for every body, live, against what the visible mass alone predicts. In the galaxy scenarios you can choose which law governs the outskirts: visible matter only, visible matter plus a dark-matter halo, or MOND. They are mutually exclusive, and the panel labels which parameters were fitted and which are fixed.',
   'tutorial.rotation.tip':
-    'Both the halo and MOND can be made to match the same curve. That is the point of the comparison, and the lesson says plainly that fitting a rotation curve does not establish which explanation is right.',
+    'Both the halo and MOND can be made to match the same curve. That is the point of the comparison, and the investigation says plainly that fitting a rotation curve does not establish which explanation is right.',
 
   'tutorial.bench.title': 'Compare two runs properly',
   'tutorial.bench.body':
@@ -747,7 +747,7 @@ export const EN = {
 
   'tutorial.done.title': 'You are set',
   'tutorial.done.body':
-    'Press <kbd>?</kbd> at any time for the full list of keyboard shortcuts, or reopen this tour from the <strong>?</strong> button in the corner. Nothing you do here can break anything — Reset restores the scenario as it shipped.',
+    'Press <kbd>?</kbd> at any time for the full list of keyboard shortcuts, or reopen this tour from the <strong>?</strong> button in the corner. Nothing you do here can break anything — Reset restores the scenario as it shipped. If a word is unfamiliar, the <a href="/glossary/">glossary</a> defines every term.',
   'tutorial.done.tip':
     'A good first experiment: load the Solar System, open the rotation curve, and see that it falls exactly as Kepler says. Then load Milky Way Rotation and see that it does not.',
   'rotation.mode.label': 'Gravity in the outskirts',
@@ -1401,10 +1401,11 @@ export const EN = {
   // so they take the word the other hands-on screens already use rather than
   // introducing two more for a reader to learn.
   'inv.action.restart': 'Restart',
-  'inv.action.restart.hint': 'Clear every answer and start this lesson again',
+  'inv.action.restart.hint':
+    'Clear every answer and start this investigation again',
   'inv.action.back': 'Back',
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
-  'inv.body.label': 'Lesson step',
+  'inv.body.label': 'Investigation step',
   'inv.backup.summary': 'Progress backup',
   'inv.backup.download': 'Download progress backup',
   'inv.backup.download.hint':
@@ -1464,7 +1465,7 @@ export const EN = {
   'update.ready': 'A new version is ready',
   'update.apply': 'Reload',
   'update.apply.hint':
-    'Reload to finish updating. Your place in the lesson is kept.',
+    'Reload to finish updating. Your place in the investigation is kept.',
   'update.dismiss.label': 'Not now',
   'update.dismiss.hint': 'Keep the current version for now',
 };

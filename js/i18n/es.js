@@ -113,7 +113,7 @@ export const ES = {
   'rail.loadScenario.hint':
     'Explorar los escenarios incluidos por imagen, concepto o palabra clave: desde el sistema solar hasta la fusión de agujeros negros GW150914.',
   'rail.investigations.hint':
-    'Lecciones guiadas que recorren un concepto paso a paso, con preguntas y un informe de laboratorio opcional que se puede entregar',
+    'Investigaciones guiadas que recorren un concepto paso a paso, con preguntas y un informe de laboratorio opcional que se puede entregar',
   'rail.settings.hint':
     'Abrir el panel completo de ajustes: número de objetos, gravedad, aspecto visual y rendimiento. Los cambios estructurales reinician la simulación; el resto se aplica en directo.',
   'rail.refreshScenario.hint':
@@ -131,7 +131,7 @@ export const ES = {
     'Restaurar la última simulación guardada en este navegador.',
   'rail.undo.hint': 'Quitar el último objeto colocado (Z)',
   'rail.share.hint':
-    'Crear un enlace que vuelva a abrir esta misma simulación: para repartirlo como tarea, o para devolver lo que se ha construido (K)',
+    'Crear un enlace que vuelva a abrir esta misma simulación: para repartirlo como actividad, o para devolver lo que se ha construido (K)',
   'rail.exportData.hint':
     'Descargar la simulación registrada en CSV: posiciones, velocidades y energías a lo largo del tiempo, y la curva de luz si está activa. Se abren en Excel o en el cuaderno de Python que acompaña al programa (E)',
 
@@ -393,7 +393,7 @@ export const ES = {
 
   'tutorial.welcome.title': 'Bienvenido a Gravitas',
   'tutorial.welcome.body':
-    'Un laboratorio de gravedad y un conjunto de instrumentos para medirla. Los cuerpos que colocas y los escenarios que cargas se integran en tiempo real a partir de la ley de gravitación de Newton: ahí nada va sobre raíles ni está animado de antemano, y si dos estrellas se fusionan es porque sus órbitas las juntaron de verdad. Unas pocas pantallas de las lecciones, en cambio, colocan un cuerpo donde dice un modelo publicado — por ejemplo una estrella recorriendo una traza evolutiva — y lo indican en la propia pantalla.',
+    'Un laboratorio de gravedad y un conjunto de instrumentos para medirla. Los cuerpos que colocas y los escenarios que cargas se integran en tiempo real a partir de la ley de gravitación de Newton: ahí nada va sobre raíles ni está animado de antemano, y si dos estrellas se fusionan es porque sus órbitas las juntaron de verdad. Unas pocas pantallas de las investigaciones, en cambio, colocan un cuerpo donde dice un modelo publicado — por ejemplo una estrella recorriendo una traza evolutiva — y lo indican en la propia pantalla.',
   'tutorial.welcome.tip':
     'Esta visita tiene dieciséis pasos y dura unos tres minutos. Usa ← y → para avanzar, o Escape para salir en cualquier momento.',
 
@@ -435,9 +435,9 @@ export const ES = {
 
   'tutorial.investigations.title': 'Investigaciones guiadas',
   'tutorial.investigations.body':
-    'Doce lecciones estructuradas que usan la simulación como evidencia y no como ilustración. Mides algo, predices qué se sigue y se te dice si la predicción se cumplió. Cubren las leyes de Kepler, las mareas, los agujeros negros, los tránsitos de exoplanetas, el caos, la resonancia orbital y el caso de la materia oscura.',
+    'Investigaciones estructuradas que usan la simulación como evidencia y no como ilustración. Mides algo, predices qué se sigue y se te dice si la predicción se cumplió. Cubren las leyes de Kepler, las mareas, los agujeros negros, los tránsitos de exoplanetas, el caos, la resonancia orbital y el caso de la materia oscura.',
   'tutorial.investigations.tip':
-    'Cada una termina con un informe que puedes exportar en PDF, con tus propias medidas y respuestas. El progreso se guarda si cierras la lección y vuelves.',
+    'Cada una termina con un informe que puedes exportar en PDF, con tus propias medidas y respuestas. El progreso se guarda si cierras la investigación y vuelves.',
 
   'tutorial.measure.title': 'Mídelo tú mismo',
   'tutorial.measure.body':
@@ -455,7 +455,7 @@ export const ES = {
   'tutorial.rotation.body':
     'El panel de curva de rotación representa en vivo la velocidad orbital frente al radio para cada cuerpo, frente a lo que predice la masa visible por sí sola. En los escenarios de galaxia puedes elegir qué ley gobierna las afueras: solo materia visible, materia visible más un halo de materia oscura, o MOND. Son mutuamente excluyentes, y el panel indica qué parámetros se ajustaron y cuáles son fijos.',
   'tutorial.rotation.tip':
-    'Tanto el halo como MOND pueden hacerse coincidir con la misma curva. Ese es el sentido de la comparación, y la lección dice con claridad que ajustar una curva de rotación no establece cuál explicación es correcta.',
+    'Tanto el halo como MOND pueden hacerse coincidir con la misma curva. Ese es el sentido de la comparación, y la investigación dice con claridad que ajustar una curva de rotación no establece cuál explicación es correcta.',
 
   'tutorial.bench.title': 'Compara dos ejecuciones como es debido',
   'tutorial.bench.body':
@@ -483,7 +483,7 @@ export const ES = {
 
   'tutorial.done.title': 'Ya está',
   'tutorial.done.body':
-    'Pulsa <kbd>?</kbd> en cualquier momento para ver la lista completa de atajos de teclado, o vuelve a abrir esta visita desde el botón <strong>?</strong> de la esquina. Nada de lo que hagas aquí puede romper nada: Reiniciar deja el escenario como venía.',
+    'Pulsa <kbd>?</kbd> en cualquier momento para ver la lista completa de atajos de teclado, o vuelve a abrir esta visita desde el botón <strong>?</strong> de la esquina. Nada de lo que hagas aquí puede romper nada: Reiniciar deja el escenario como venía. Si una palabra no te suena, el <a href="/glossary/">glosario</a> define cada término.',
   'tutorial.done.tip':
     'Un buen primer experimento: carga el Sistema Solar, abre la curva de rotación y comprueba que cae exactamente como dice Kepler. Después carga Rotación de la Vía Láctea y comprueba que no.',
   'rotation.mode.label': 'Gravedad en las afueras',
@@ -1378,10 +1378,10 @@ export const ES = {
   // --- Lesson panel chrome ---------------------------------------------------
   'inv.action.restart': 'Reiniciar',
   'inv.action.restart.hint':
-    'Borrar todas las respuestas y volver a empezar esta lección',
+    'Borrar todas las respuestas y volver a empezar esta investigación',
   'inv.action.back': 'Atrás',
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
-  'inv.body.label': 'Paso de la lección',
+  'inv.body.label': 'Paso de la investigación',
   'inv.backup.summary': 'Copia del progreso',
   'inv.backup.download': 'Descargar copia del progreso',
   'inv.backup.download.hint':
@@ -1437,7 +1437,7 @@ export const ES = {
   'update.ready': 'Hay una versión nueva',
   'update.apply': 'Recargar',
   'update.apply.hint':
-    'Recarga para terminar de actualizar. Se conserva tu punto en la lección.',
+    'Recarga para terminar de actualizar. Se conserva tu punto en la investigación.',
   'update.dismiss.label': 'Ahora no',
   'update.dismiss.hint': 'Mantener la versión actual por ahora',
 };

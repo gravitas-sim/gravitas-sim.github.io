@@ -7,7 +7,7 @@ export const EN_LAB3DGUIDES = {
   // --- The runner
   'g3.heading': 'Guided investigations',
   'g3.intro':
-    'Four guides to what a flat model cannot hold: an orbit’s plane, how it looks from outside, two orbits’ planes, and a distant third body. Each asks for a prediction, has you change something and measure, and says where the model stops. Every answer is checked against the lab’s own numbers.',
+    'A set of investigations on what a flat model cannot hold: an orbit’s plane, how it looks from outside, two orbits’ planes, and a distant third body. Each asks for a prediction, has you change something and measure, and says where the model stops. Every answer is checked against the lab’s own numbers.',
   'g3.meta': 'About {intro} minutes; {advanced} on the advanced path.',
   'g3.startIntro': 'Start',
   'g3.startAdvanced': 'Start the advanced path',
@@ -58,10 +58,10 @@ export const EN_LAB3DGUIDES = {
   'gd.target.R1': 'An inclined Kepler orbit (R1)',
   'gd.target.R3': 'A star and two planets (R3)',
   'gd.target.R6': 'Kozai-Lidov cycles (R6)',
-  'gd.target.tilt-0': 'Guide: a planet in the reference plane',
-  'gd.target.tilt-02': 'Guide: the same orbit tilted 0.2°',
-  'gd.target.tilt-05': 'Guide: the same orbit tilted 0.5°',
-  'gd.target.same-tilt': 'Guide: two planets, both inclined 10°',
+  'gd.target.tilt-0': 'Investigation: a planet in the reference plane',
+  'gd.target.tilt-02': 'Investigation: the same orbit tilted 0.2°',
+  'gd.target.tilt-05': 'Investigation: the same orbit tilted 0.5°',
+  'gd.target.same-tilt': 'Investigation: two planets, both inclined 10°',
 
   // --- l3-planes
   'gd.l3-planes.title': 'An orbit’s plane',
@@ -167,7 +167,7 @@ export const EN_LAB3DGUIDES = {
   'gd.l3-eclipse.open-flat.title':
     'An orbit in the reference plane, seen along it',
   'gd.l3-eclipse.open-flat.text':
-    'Open “Guide: a planet in the reference plane” and look “Along the reference plane”, from -y: the observer. Choose the instrument “On the sky, seen from here” on the star and the planet.',
+    'Open “Investigation: a planet in the reference plane” and look “Along the reference plane”, from -y: the observer. Choose the instrument “On the sky, seen from here” on the star and the planet.',
   'gd.l3-eclipse.open-flat.ok':
     'Seen from here, the orbit is edge-on: once an orbit, the planet passes straight in front of the star.',
   'gd.l3-eclipse.predict.title': 'Predict: tilt it by half a degree',
@@ -177,7 +177,7 @@ export const EN_LAB3DGUIDES = {
   'gd.l3-eclipse.predict.opt.no': 'No',
   'gd.l3-eclipse.open-tilted.title': 'Open the tilted orbit',
   'gd.l3-eclipse.open-tilted.text':
-    'Open “Guide: the same orbit tilted 0.5°”, still seen along the reference plane, and put the instrument “Orbit” on the planet.',
+    'Open “Investigation: the same orbit tilted 0.5°”, still seen along the reference plane, and put the instrument “Orbit” on the planet.',
   'gd.l3-eclipse.open-tilted.ok':
     'The tilted orbit is open, with the orbit instrument on the planet.',
   'gd.l3-eclipse.impact.title': 'How close does it pass?',
@@ -211,7 +211,7 @@ export const EN_LAB3DGUIDES = {
     'Watch again with the body size at radius × 10: the enlarged discs overlap as the planet passes, although the true ones do not.',
   'gd.l3-eclipse.open-slight.title': 'A smaller tilt',
   'gd.l3-eclipse.open-slight.text':
-    'Open “Guide: the same orbit tilted 0.2°”, seen along the reference plane, with the orbit instrument on the planet.',
+    'Open “Investigation: the same orbit tilted 0.2°”, seen along the reference plane, with the orbit instrument on the planet.',
   'gd.l3-eclipse.open-slight.ok': 'The 0.2° orbit is open.',
   'gd.l3-eclipse.impact-slight.title': 'How close now?',
   'gd.l3-eclipse.impact-slight.text':
@@ -251,7 +251,7 @@ export const EN_LAB3DGUIDES = {
     'Each orbit has its own plane. The angle between two planes is their mutual inclination, and it is what governs how the orbits disturb each other. The inclination alone measures each against the reference plane.',
   'gd.l3-mutual.open.title': 'Two planets, both inclined',
   'gd.l3-mutual.open.text':
-    'Open “Guide: two planets, both inclined 10°” and put the instrument “Orbit” on planet b.',
+    'Open “Investigation: two planets, both inclined 10°” and put the instrument “Orbit” on planet b.',
   'gd.l3-mutual.open.ok':
     'The two planets are open, with the orbit instrument on planet b.',
   'gd.l3-mutual.inclination-b.title': 'Planet b’s inclination',
@@ -321,7 +321,7 @@ export const EN_LAB3DGUIDES = {
   'gd.l3-mutual.flat-enough.ok':
     'Right. With a mutual inclination near 1°, a 2-D model errs by a few parts in ten thousand in distance, and this is why the 2-D sandbox can model the Solar System’s planets well.',
   'gd.l3-mutual.flat-enough.no':
-    'Compare the error with the precision you need: two parts in ten thousand is below what most lessons measure.',
+    'Compare the error with the precision you need: two parts in ten thousand is below what most investigations measure.',
   'gd.l3-mutual.flat.title': 'What a flat model keeps, and loses',
   'gd.l3-mutual.flat.text':
     'A 2-D model puts every orbit in one plane: its mutual inclinations are all zero. That is a good model of a nearly flat system like ours, and a wrong one wherever orbits are strongly inclined to each other, as the next investigation shows.',

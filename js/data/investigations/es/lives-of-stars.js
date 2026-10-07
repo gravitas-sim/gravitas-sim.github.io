@@ -25,7 +25,7 @@ export default {
     'Comparar lo que duran las fases de verdad con lo que les concede una animación',
     'Explicar por qué las estrellas más pesadas terminan de otro modo que el Sol, y por qué no todas terminan igual entre sí',
     'Decir por qué un agujero negro no tiene sitio en este diagrama',
-    'Nombrar una limitación de los modelos sobre los que se apoya toda la lección',
+    'Nombrar una limitación de los modelos sobre los que se apoya toda la investigación',
   ],
   steps: [
     {
@@ -43,7 +43,7 @@ export default {
       ],
       because:
         'La más pesada, con muchísima diferencia: su secuencia principal dura 8,7 millones de años frente a los 9.900 millones del Sol y al billón y pico de la enana roja. «Pierde energía más deprisa» es la razón correcta: es cien mil veces más luminosa que el Sol, y la luz es combustible que se va. Las respuestas sobre las otras dos son las dos imágenes equivocadas más comunes y las dos se corrigen más adelante: la enana roja no se consume rápido, apenas cambia, y el Sol no explota.',
-      tip: 'Si has hecho «Un universo de estrellas» este escenario te resultará familiar. Si no, los seis pasos siguientes repasan todo lo que esta lección necesita de aquella.',
+      tip: 'Si has hecho «Un universo de estrellas» este escenario te resultará familiar. Si no, los seis pasos siguientes repasan todo lo que esta investigación necesita de aquella.',
     },
     {
       stage: { stars: [{ name: 'La estrella' }] },
@@ -121,7 +121,7 @@ export default {
         { label: 'Luminosidad' },
         { label: 'Radio' },
       ],
-      tip: 'Temperatura superficial, no temperatura del núcleo. El núcleo del Sol está a unos 15 millones de K; su superficie, a 5.772. Nada en esta lección dibuja nunca una temperatura de núcleo.',
+      tip: 'Temperatura superficial, no temperatura del núcleo. El núcleo del Sol está a unos 15 millones de K; su superficie, a 5.772. Nada en esta investigación dibuja nunca una temperatura de núcleo.',
     },
     {
       stage: { stars: [{ name: 'La estrella' }] },
@@ -143,9 +143,9 @@ export default {
         ],
       },
       title: 'Entonces y ahora, lado a lado',
-      body: 'En el escenario de comparación hay dos versiones de la misma estrella: el modelo de masa solar al llegar, y el mismo modelo al final de su secuencia principal.\n\nLee los dos radios y guarda la comparación en el cuaderno. Este es el cambio más pequeño de toda la lección y aun así es una estrella casi tres cuartas partes más grande.',
+      body: 'En el escenario de comparación hay dos versiones de la misma estrella: el modelo de masa solar al llegar, y el mismo modelo al final de su secuencia principal.\n\nLee los dos radios y guarda la comparación en el cuaderno. Este es el cambio más pequeño de toda la investigación y aun así es una estrella casi tres cuartas partes más grande.',
       fields: [{ label: 'Radio al llegar' }, { label: 'Radio al final' }],
-      tip: 'Las dos son la misma estrella. Nada más en esta lección fija un modelo a dos edades, y merece la pena notar que al escenario de comparación no le importa.',
+      tip: 'Las dos son la misma estrella. Nada más en esta investigación fija un modelo a dos edades, y merece la pena notar que al escenario de comparación no le importa.',
     },
     {
       stage: { stars: [{ name: 'La estrella' }] },
@@ -241,7 +241,7 @@ export default {
         'deja de cambiar hasta que muere',
       ],
       because:
-        'Cae y se mueve a la izquierda, y luego vuelve a subir por la rama asintótica de las gigantes. El núcleo se sostiene ahora quemando helio en vez de contrayéndose, y una estrella sostenida de otra manera se sitúa en otro sitio. Este paso existe porque «y luego se hace cada vez más grande y más roja hasta que muere» es una historia más ordenada que la verdad, y esta lección sigue la secuencia real de cada traza en vez de enderezarla. Masas distintas hacen cosas distintas aquí; el modelo de 5 masas solares se desvía más a la izquierda que este.',
+        'Cae y se mueve a la izquierda, y luego vuelve a subir por la rama asintótica de las gigantes. El núcleo se sostiene ahora quemando helio en vez de contrayéndose, y una estrella sostenida de otra manera se sitúa en otro sitio. Este paso existe porque «y luego se hace cada vez más grande y más roja hasta que muere» es una historia más ordenada que la verdad, y esta investigación sigue la secuencia real de cada traza en vez de enderezarla. Masas distintas hacen cosas distintas aquí; el modelo de 5 masas solares se desvía más a la izquierda que este.',
       tip: 'La propia etapa de encendido del helio dura menos de dos millones de años: la fila «Esta fase» de la lectura la sitúa en torno al 0,02 por ciento de la vida de la estrella.',
     },
     {
@@ -442,7 +442,7 @@ export default {
         'D: no hay nada del paquete ni remotamente cerca',
       ],
       because:
-        'La A, y no por poco. Cinco modelos pasan cerca de ese punto: una estrella de masa solar en la rama de las gigantes rojas, la misma en el encendido del helio, la misma en la rama asintótica temprana, la misma durante sus pulsos térmicos, y una estrella de dos masas solares en SUS pulsos térmicos. Cuatro etapas y dos masas, y todas dan los mismos tres números. La B es lo contrario: pasa cerca un solo modelo, porque nada salvo una enana blanca es tan caliente y tan débil a la vez, y la temperatura y la luminosidad juntas la obligan a ser diminuta. La D también es inequívoca dentro de este paquete: una estrella de masa solar todavía en contracción, de unos 15 millones de años. La C es el caso intermedio interesante: la masa queda fijada en 0,2 masas solares porque no vive nada más ahí, pero la ETAPA no: podría estar en la secuencia principal o todavía contrayéndose hacia ella, y los números no las separan. «No hay información suficiente» es una respuesta real, y una lección que nunca la da enseña el hábito equivocado.',
+        'La A, y no por poco. Cinco modelos pasan cerca de ese punto: una estrella de masa solar en la rama de las gigantes rojas, la misma en el encendido del helio, la misma en la rama asintótica temprana, la misma durante sus pulsos térmicos, y una estrella de dos masas solares en SUS pulsos térmicos. Cuatro etapas y dos masas, y todas dan los mismos tres números. La B es lo contrario: pasa cerca un solo modelo, porque nada salvo una enana blanca es tan caliente y tan débil a la vez, y la temperatura y la luminosidad juntas la obligan a ser diminuta. La D también es inequívoca dentro de este paquete: una estrella de masa solar todavía en contracción, de unos 15 millones de años. La C es el caso intermedio interesante: la masa queda fijada en 0,2 masas solares porque no vive nada más ahí, pero la ETAPA no: podría estar en la secuencia principal o todavía contrayéndose hacia ella, y los números no las separan. «No hay información suficiente» es una respuesta real, y una investigación que nunca la da enseña el hábito equivocado.',
       tip: 'Por eso las regiones del diagrama están sombreadas en vez de delimitadas, y por eso el laboratorio enumera todos los modelos cercanos en vez de elegir uno. Una estrella no es gigante por cruzar una línea.',
     },
     {
@@ -459,12 +459,12 @@ export default {
     },
     {
       rubric:
-        'Califica por las conexiones y por la limitación, no por la cobertura. Busca: la masa fija la luminosidad, y de forma muy pronunciada, y por tanto fija el tiempo de vida, porque la vida es combustible dividido por el ritmo de gasto; dejar la secuencia principal es agotar el hidrógeno del núcleo y no es el final de la estrella; lo que ocurre después depende de la masa, con una enana blanca para el caso solar, una estrella de neutrones para diez masas solares y un agujero negro para cuarenta; y la enana roja no hace nada de esto en ninguna escala de tiempo transcurrida hasta ahora. Una buena respuesta cita los 1,14 billones frente a 8,65 millones de años de vida, o el recorrido de 0,90 a 173 radios solares de una misma estrella.\n\nPara la limitación, acepta cualquiera de estas: las trazas son de estrellas individuales sin compañera, así que no hay transferencia de masa ni fusiones; se detienen antes del colapso del núcleo, así que todo remanente más allá de una enana blanca es una prescripción citada y no un resultado calculado; son de una sola composición y sin rotación; el desenlace a cuarenta masas solares es un rango que abarca un factor de tres; el tiempo de vida de 1,1 billones de años es inverificable en principio. NO aceptes «la animación no está a escala en el tiempo» por sí sola: eso es una propiedad de la presentación, que la lección declara repetidamente, y no de los modelos.\n\nDa crédito tanto a quien revise su predicción del paso 1 como a quien la defienda, siempre que la defensa se apoye en lo que midió.',
+        'Califica por las conexiones y por la limitación, no por la cobertura. Busca: la masa fija la luminosidad, y de forma muy pronunciada, y por tanto fija el tiempo de vida, porque la vida es combustible dividido por el ritmo de gasto; dejar la secuencia principal es agotar el hidrógeno del núcleo y no es el final de la estrella; lo que ocurre después depende de la masa, con una enana blanca para el caso solar, una estrella de neutrones para diez masas solares y un agujero negro para cuarenta; y la enana roja no hace nada de esto en ninguna escala de tiempo transcurrida hasta ahora. Una buena respuesta cita los 1,14 billones frente a 8,65 millones de años de vida, o el recorrido de 0,90 a 173 radios solares de una misma estrella.\n\nPara la limitación, acepta cualquiera de estas: las trazas son de estrellas individuales sin compañera, así que no hay transferencia de masa ni fusiones; se detienen antes del colapso del núcleo, así que todo remanente más allá de una enana blanca es una prescripción citada y no un resultado calculado; son de una sola composición y sin rotación; el desenlace a cuarenta masas solares es un rango que abarca un factor de tres; el tiempo de vida de 1,1 billones de años es inverificable en principio. NO aceptes «la animación no está a escala en el tiempo» por sí sola: eso es una propiedad de la presentación, que la investigación declara repetidamente, y no de los modelos.\n\nDa crédito tanto a quien revise su predicción del paso 1 como a quien la defienda, siempre que la defensa se apoye en lo que midió.',
       stage: {
         stars: [{ name: '0,2 M☉' }, { name: '1 M☉' }, { name: '20 M☉' }],
       },
       title: 'De vuelta a las tres estrellas',
-      body: 'En el paso 1 se te mostraron una enana roja, una estrella tipo Sol y una de veinte masas solares y se te preguntó cuál cambia más deprisa y cómo termina cada una. Tu respuesta está guardada y nada la ha sobrescrito.\n\nAhora has seguido a las tres, más un modelo de cuarenta masas solares que termina como agujero negro. Escribe el relato que darías ahora.\n\nUn requisito: nombra una limitación de los modelos sobre los que se apoya toda esta lección. Hay varias y las lecturas te las han ido contando.',
+      body: 'En el paso 1 se te mostraron una enana roja, una estrella tipo Sol y una de veinte masas solares y se te preguntó cuál cambia más deprisa y cómo termina cada una. Tu respuesta está guardada y nada la ha sobrescrito.\n\nAhora has seguido a las tres, más un modelo de cuarenta masas solares que termina como agujero negro. Escribe el relato que darías ahora.\n\nUn requisito: nombra una limitación de los modelos sobre los que se apoya toda esta investigación. Hay varias y las lecturas te las han ido contando.',
       prompt:
         'Explica qué determina cómo vive una estrella y cómo termina, citando al menos dos de tus propias medidas, y nombra una cosa que estos modelos no te dicen.',
       tip: 'Tu cuaderno tiene cada medida con el modelo del que salió, la etapa en la que se tomó y —cuando un final se citó en vez de calcularse— el artículo del que se citó.',
@@ -474,7 +474,7 @@ export default {
         stars: [{ name: '0,2 M☉' }, { name: '1 M☉' }, { name: '20 M☉' }],
       },
       title: 'Lo que has seguido',
-      body: '<strong>La masa fija la luminosidad, y la luminosidad fija la vida.</strong> La vida es combustible dividido por el ritmo al que se gasta, y como el ritmo sube mucho más deprisa que la reserva, la estrella más pesada que seguiste vivió una diezmilésima de lo que vive la más ligera. Una enana roja apenas ha empezado.\n\n<strong>Salir de la secuencia principal es que se acabe el hidrógeno del núcleo, no el hidrógeno.</strong> Cuando ocurre, la mayor parte del hidrógeno de la estrella sigue ahí; simplemente no está donde está la fusión. Por eso empieza la etapa siguiente en lugar de terminar la estrella.\n\n<strong>Lo que queda depende de la masa con la que empezó</strong>: una enana blanca para una estrella como el Sol, una estrella de neutrones más arriba, un agujero negro más arriba todavía. Las fronteras no son nítidas, y a cuarenta masas solares la propia respuesta del modelo abarca un factor tres.\n\n<strong>Un agujero negro no tiene sitio en este diagrama.</strong> Los ejes son temperatura superficial y luminosidad, y no tiene ninguna de las dos. Eso no es un hueco del gráfico: es de lo que trata el gráfico.\n\n<strong>Y esto son modelos.</strong> Estrellas solas, una composición, sin rotación, sin compañera a la que quitar masa o darle masa. Las trazas se detienen antes del colapso del núcleo, así que todo remanente más allá de una enana blanca es una prescripción citada de un artículo y no algo que esta lección haya calculado. Los indicadores lo dijeron cada vez, y esa es la costumbre que merece la pena conservar.',
+      body: '<strong>La masa fija la luminosidad, y la luminosidad fija la vida.</strong> La vida es combustible dividido por el ritmo al que se gasta, y como el ritmo sube mucho más deprisa que la reserva, la estrella más pesada que seguiste vivió una diezmilésima de lo que vive la más ligera. Una enana roja apenas ha empezado.\n\n<strong>Salir de la secuencia principal es que se acabe el hidrógeno del núcleo, no el hidrógeno.</strong> Cuando ocurre, la mayor parte del hidrógeno de la estrella sigue ahí; simplemente no está donde está la fusión. Por eso empieza la etapa siguiente en lugar de terminar la estrella.\n\n<strong>Lo que queda depende de la masa con la que empezó</strong>: una enana blanca para una estrella como el Sol, una estrella de neutrones más arriba, un agujero negro más arriba todavía. Las fronteras no son nítidas, y a cuarenta masas solares la propia respuesta del modelo abarca un factor tres.\n\n<strong>Un agujero negro no tiene sitio en este diagrama.</strong> Los ejes son temperatura superficial y luminosidad, y no tiene ninguna de las dos. Eso no es un hueco del gráfico: es de lo que trata el gráfico.\n\n<strong>Y esto son modelos.</strong> Estrellas solas, una composición, sin rotación, sin compañera a la que quitar masa o darle masa. Las trazas se detienen antes del colapso del núcleo, así que todo remanente más allá de una enana blanca es una prescripción citada de un artículo y no algo que esta investigación haya calculado. Los indicadores lo dijeron cada vez, y esa es la costumbre que merece la pena conservar.',
       tip: 'Una traza que se detiene no es una estrella que se detiene. Es un modelo que llega al final de lo que fue construido para decir, que es otra cosa y merece distinguirse.',
     },
   ],

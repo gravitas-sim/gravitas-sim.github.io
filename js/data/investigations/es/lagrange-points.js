@@ -39,7 +39,7 @@ export default {
              círculo. Es el sistema más simple en el que dejan de valer las
              respuestas de dos cuerpos, y casi todo lo interesante que tiene lo
              resolvieron Euler, Lagrange y Jacobi antes de 1840.`,
-      tip: 'El panel de tres cuerpos restringido se abrió con el escenario. Todo lo que esta lección te pide leer está ahí.',
+      tip: 'El panel de tres cuerpos restringido se abrió con el escenario. Todo lo que esta investigación te pide leer está ahí.',
     },
     {
       title: 'Viaja con ellas',

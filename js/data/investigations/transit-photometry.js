@@ -173,7 +173,7 @@ const TRANSITS = {
              Pegasus, with a planet on a three and a half day orbit. The star and
              the planet are drawn at their true relative sizes, which is why the
              view is zoomed so far in.`,
-      tip: 'Everything in this lesson is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
+      tip: 'Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
       setup: TRANSIT_LAB,
     },
     {
@@ -233,7 +233,7 @@ const TRANSITS = {
       ],
       answer: 1,
       because:
-        'It drops by a small amount and recovers. The planet blocks a fraction of the star’s disk equal to the ratio of their areas, and even a Jupiter in front of a Sun-like star only covers about 1% of it. Everything in this lesson follows from that one number being small but perfectly measurable.',
+        'It drops by a small amount and recovers. The planet blocks a fraction of the star’s disk equal to the ratio of their areas, and even a Jupiter in front of a Sun-like star only covers about 1% of it. Everything in this investigation follows from that one number being small but perfectly measurable.',
     },
     {
       sid: 'your-first-transit',
@@ -315,7 +315,7 @@ const TRANSITS = {
       body: `The instrument on the right draws the silhouette to scale on the
              left and the transit it produces on the right, on a fixed vertical
              scale so that changes read as changes.
-             \n\nWork through the presets. The lesson is in the two extremes: an
+             \n\nWork through the presets. The investigation is in the two extremes: an
              Earth in front of the Sun is 84 parts per million, a depth that took
              a dedicated space telescope to reach, while the same Earth in front
              of TRAPPIST-1 is nearly 1%, easily within reach of a small ground
@@ -941,7 +941,7 @@ const TRANSITS = {
              gap is thought to be carved by atmospheric escape, and it is a
              feature nobody predicted before the data showed it. Finding it
              required thousands of planet radii to be accurate, which is where the
-             last section of this lesson goes.`,
+             last section of this investigation goes.`,
       tip: 'The TRAPPIST-1 planets got their masses a third way: they perturb each other enough to shift each other’s transits by minutes, and those transit timing variations are a mass measurement.',
     },
     {

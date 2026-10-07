@@ -1252,7 +1252,7 @@ function bindStepRoles() {
 
     for (const [role, reason] of Object.entries(problems)) {
       console.warn(
-        `Lesson "${active?.id}" step "${step.sid}": staged star "${role}" - ${reason}`
+        `Investigation "${active?.id}" step "${step.sid}": staged star "${role}" - ${reason}`
       );
     }
     return;
@@ -1267,7 +1267,7 @@ function bindStepRoles() {
   });
   for (const [role, reason] of Object.entries(problems)) {
     console.warn(
-      `Lesson "${active?.id}" step "${step.sid}": role "${role}" is unbound - ${reason}`
+      `Investigation "${active?.id}" step "${step.sid}": role "${role}" is unbound - ${reason}`
     );
   }
 }
@@ -3714,7 +3714,7 @@ export async function openInvestigation(id, opts = {}) {
   const unsafe = inv.steps.find(s => !isValidSid(s.sid));
   if (unsafe) {
     throw new Error(
-      `Lesson "${id}" has a step id that is not a safe key: ${JSON.stringify(unsafe.sid)}`
+      `Investigation "${id}" has a step id that is not a safe key: ${JSON.stringify(unsafe.sid)}`
     );
   }
 
@@ -3831,7 +3831,10 @@ export async function openInvestigation(id, opts = {}) {
           forExperiment: true,
         });
       } catch (err) {
-        console.warn('Could not save the sandbox before the lesson:', err);
+        console.warn(
+          'Could not save the sandbox before the investigation:',
+          err
+        );
         return null;
       }
     })(),
@@ -3874,7 +3877,7 @@ function restoreSandbox(saved) {
     applyShareState(JSON.parse(JSON.stringify(payload)));
     return true;
   } catch (err) {
-    console.warn('Could not restore the sandbox after the lesson:', err);
+    console.warn('Could not restore the sandbox after the investigation:', err);
     return false;
   }
 }

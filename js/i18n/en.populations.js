@@ -11,7 +11,7 @@
 
 export const EN_POPULATIONS = {
   'gd.suite.populations.intro':
-    'Five guides with real observations: four SDSS spectra, SDSS photometry and SEGUE spectroscopy of the open cluster NGC 2420, MIST’s model isochrones, and a TESS light curve of an RR Lyrae star. They go from what a spectrum says, through a cluster’s color–magnitude diagram and who belongs to it, to ages from models and a star that varies. Every number a step checks comes from the data or from a cited source it names; the isochrones are a model, and are compared with the stars, never mistaken for them.',
+    'A set of investigations with real observations: four SDSS spectra, SDSS photometry and SEGUE spectroscopy of the open cluster NGC 2420, MIST’s model isochrones, and a TESS light curve of an RR Lyrae star. They go from what a spectrum says, through a cluster’s color–magnitude diagram and who belongs to it, to ages from models and a star that varies. Every number a step checks comes from the data or from a cited source it names; the isochrones are a model, and are compared with the stars, never mistaken for them.',
   'gd.target.sdss-a': 'the A star’s spectrum (SDSS)',
   'gd.target.sdss-g': 'the G star’s spectrum (SDSS)',
   'gd.target.sdss-k': 'the K star’s spectrum (SDSS)',
@@ -228,7 +228,7 @@ export const EN_POPULATIONS = {
     'SDSS could not measure stars so crowded together',
   'gd.pop-cmd.why-core.opt.dust': 'Dust hides the center',
   'gd.pop-cmd.why-core.ok':
-    'Crowding. SDSS’s photometric pipeline was built for fields where stars are well apart; where their images overlap it finds few of them, and the clean flag this table was cut on drops those it measured badly. The pack’s details say so, and An et al. (2008) remeasured such clusters for that reason. The core is missing from the table, not from the sky.',
+    'Crowding. SDSS’s photometric pipeline was built for fields where stars are well apart; where their images overlap it finds few of them, and the clean flag this table was cut on drops those it measured badly. The dataset’s details say so, and An et al. (2008) remeasured such clusters for that reason. The core is missing from the table, not from the sky.',
   'gd.pop-cmd.why-core.no':
     'Gaia, whose positions do not need a clean picture of a crowded field, counts half the members within 3.2 arcminutes. What could make a survey miss the most crowded stars?',
   'gd.pop-cmd.field.title': 'Stars that are not the cluster’s',
@@ -247,24 +247,24 @@ export const EN_POPULATIONS = {
     'Describe the column g: its smallest value is the brightest star.',
   'gd.pop-cmd.why-bright.title': 'Where are the giants?',
   'gd.pop-cmd.why-bright.text':
-    'SDSS’s camera saturates near g = 14: a brighter star fills its pixels past what they can count. Of the stars the pack dropped as not clean, its details say how many were brighter than g = 14.5. What happened to the cluster’s brightest giants?',
+    'SDSS’s camera saturates near g = 14: a brighter star fills its pixels past what they can count. Of the stars the dataset dropped as not clean, its details say how many were brighter than g = 14.5. What happened to the cluster’s brightest giants?',
   'gd.pop-cmd.why-bright.opt.none': 'The cluster has none',
   'gd.pop-cmd.why-bright.opt.saturated': 'They saturated, and were dropped',
   'gd.pop-cmd.why-bright.opt.far': 'They are too far away to see',
   'gd.pop-cmd.why-bright.ok':
     'Saturated. The top of this diagram is cut by the camera, its center by crowding, and its bottom by how faint SDSS can measure: each a selection, and none of them the cluster.',
   'gd.pop-cmd.why-bright.no':
-    'The pack’s details give the reason: find the reduction about the stars brighter than g = 14.5.',
+    'The dataset’s details give the reason: find the reduction about the stars brighter than g = 14.5.',
   'gd.pop-cmd.faint.title': 'The faint end',
   'gd.pop-cmd.faint.text':
-    'The pack itself cut the table at g = 22.5, where SDSS’s photometry becomes incomplete. How many stars did that cut drop? The reductions say.',
+    'The dataset itself cut the table at g = 22.5, where SDSS’s photometry becomes incomplete. How many stars did that cut drop? The reductions say.',
   'gd.pop-cmd.faint.ok':
-    '{value} stars, about as many as the table keeps. The faint limit is a choice the pack made and states: a diagram’s faint edge is the survey’s, or its builder’s, never the cluster’s.',
+    '{value} stars, about as many as the table keeps. The faint limit is a choice the dataset made and states: a diagram’s faint edge is the survey’s, or its builder’s, never the cluster’s.',
   'gd.pop-cmd.faint.no':
     'Find the reduction that begins “psfMag_g:” in the details.',
   'gd.pop-cmd.wrap.title': 'What the diagram is made of',
   'gd.pop-cmd.wrap.text':
-    'The diagram you made is NGC 2420 seen through SDSS: without its crowded core, without its brightest giants, cut at g = 22.5, and mostly field stars in the ring about it. None of that is hidden, each is written in the pack’s details, and none of it is the cluster.\n\nNext: telling the cluster’s stars from the field’s.',
+    'The diagram you made is NGC 2420 seen through SDSS: without its crowded core, without its brightest giants, cut at g = 22.5, and mostly field stars in the ring about it. None of that is hidden, each is written in the package’s details, and none of it is the cluster.\n\nNext: telling the cluster’s stars from the field’s.',
 
   // --- 3. Who belongs? --------------------------------------------------------------
 
@@ -523,7 +523,7 @@ export const EN_POPULATIONS = {
     'A brief dip is not a sine: the search locked on a harmonic',
   'gd.pop-variable.harmonic.opt.noise': 'Noise, by chance',
   'gd.pop-variable.harmonic.ok':
-    'A harmonic. A transit is a short dip once an orbit, and no single sinusoid fits it; its power is spread over the harmonics, and this one won. The box search of the exoplanet guides looks for a dip instead, and finds the orbit. A method’s answer is only as good as its model of the signal.',
+    'A harmonic. A transit is a short dip once an orbit, and no single sinusoid fits it; its power is spread over the harmonics, and this one won. The box search of the exoplanet investigations looks for a dip instead, and finds the orbit. A method’s answer is only as good as its model of the signal.',
   'gd.pop-variable.harmonic.no':
     'The ratio is nearly exactly 2, and HD 209458 has one known transiting planet. What does fitting a sine to a brief dip do?',
   'gd.pop-variable.wrap.title': 'Time as a measurement',

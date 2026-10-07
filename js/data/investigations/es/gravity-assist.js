@@ -90,7 +90,7 @@ export default {
              <strong>+40</strong>, que hace pasar a la nave por detrás del
              planeta, y el encuentro dura unos nueve segundos.
              \n\nPulsa <strong>Lanzarla</strong>. Mira cómo se curva la
-             trayectoria. Después lee las dos columnas: son toda la lección, y
+             trayectoria. Después lee las dos columnas: son toda la investigación, y
              no coinciden.`,
       checklist: [
         'Observa cómo se curva la estela mientras la nave rodea el planeta',
@@ -309,7 +309,7 @@ export default {
     {
       title: '¿El sistema de quién, exactamente?',
       body: `Un cabo suelto, y del tipo interesante.
-             \n\nToda la lección se apoya en la columna izquierda: la rapidez
+             \n\nToda la investigación se apoya en la columna izquierda: la rapidez
              relativa al planeta no cambia. Pero el planeta contra el que mides
              no es el mismo planeta antes y después: retrocedió. La advertencia
              de la comparación dice cuánto: unos cuatro milímetros por segundo,

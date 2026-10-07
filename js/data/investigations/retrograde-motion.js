@@ -78,7 +78,7 @@ const RETROGRADE = {
         text: 'The planets appear sometimes to move forward, sometimes backward, and sometimes to stand still.',
         by: 'Claudius Ptolemy, Almagest, c. 150 CE',
       },
-      tip: 'This lesson leaves the inspector switched on: you will need it to read numbers off Earth and Mars. Placing new objects is off, so a stray click cannot alter the system you are measuring.',
+      tip: 'This investigation leaves the inspector switched on: you will need it to read numbers off Earth and Mars. Placing new objects is off, so a stray click cannot alter the system you are measuring.',
       setup: {
         scenario: 'Retrograde Mars',
         seed: 'retrograde-lab',
@@ -615,7 +615,7 @@ const RETROGRADE = {
       prompt:
         'In two or three sentences, explain why Mars appears to reverse, without saying anything about what Mars does differently during those weeks.',
       rubric:
-        'A good answer says that Mars moves steadily throughout, and that the reversal is produced by the observer’s own motion: Earth is on a smaller, faster orbit, and near opposition it overtakes Mars, so the direction from Earth to Mars swings backwards against the distant stars. Credit for naming opposition, for connecting it to Earth passing between the Sun and Mars, and for noting that this also makes Mars closest and brightest at that time. An answer that has Mars slowing down, stopping or being pulled back has missed the point of the lesson.',
+        'A good answer says that Mars moves steadily throughout, and that the reversal is produced by the observer’s own motion: Earth is on a smaller, faster orbit, and near opposition it overtakes Mars, so the direction from Earth to Mars swings backwards against the distant stars. Credit for naming opposition, for connecting it to Earth passing between the Sun and Mars, and for noting that this also makes Mars closest and brightest at that time. An answer that has Mars slowing down, stopping or being pulled back has missed the point of the investigation.',
     },
     {
       sid: 'what-it-cost-to-explain',
@@ -838,7 +838,7 @@ const RETROGRADE = {
       ],
       answer: 2,
       because:
-        'A null result from an instrument eighty times too coarse tells you nothing about the effect. Tycho’s reasoning was sound and his data were excellent; what he lacked was any way to know how far away the stars were, so he could not tell a small effect from an absent one. This is a general hazard worth carrying out of the lesson: a measurement that finds nothing constrains a theory only once you know what the measurement could have detected.',
+        'A null result from an instrument eighty times too coarse tells you nothing about the effect. Tycho’s reasoning was sound and his data were excellent; what he lacked was any way to know how far away the stars were, so he could not tell a small effect from an absent one. This is a general hazard worth carrying out of the investigation: a measurement that finds nothing constrains a theory only once you know what the measurement could have detected.',
     },
     {
       sid: 'how-long-does-a-loop',
@@ -912,7 +912,7 @@ const RETROGRADE = {
              planets on circular orbits, under an inverse-square force from a
              star. Every loop, cusp and reversal came out of subtracting one
              body's position from another's.
-             \n\nThat is worth holding onto beyond this lesson. A great many
+             \n\nThat is worth holding onto beyond this investigation. A great many
              things that look like anomalies in the sky turn out to be statements
              about where the observer is standing, and the first question to ask
              of a strange motion is always: measured against what?`,

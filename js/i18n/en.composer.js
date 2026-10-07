@@ -11,11 +11,11 @@
 export const EN_COMPOSER = {
   'composer.title': 'Investigation Composer',
   'composer.intro':
-    'Compose a guided investigation as data: what students read, predict, try, measure and answer, which scenario and instrument each step opens, and what they see when an answer is wrong. It is checked by the same rules as every lesson Gravitas ships, and it never runs anything you write.',
+    'Compose a guided investigation as data: what students read, predict, try, measure and answer, which scenario and instrument each step opens, and what they see when an answer is wrong. It is checked by the same rules as every investigation Gravitas ships, and it never runs anything you write.',
   'composer.toolbar.label': 'Investigation file',
   'composer.action.new': 'New investigation',
   'composer.action.saveBank': 'Save the question bank',
-  'composer.action.export': 'Export the lesson file',
+  'composer.action.export': 'Export the investigation file',
   'composer.action.exportEs': 'Export its Spanish file',
   'composer.raw.label': 'The investigation file, as JSON',
 
@@ -31,7 +31,7 @@ export const EN_COMPOSER = {
   'composer.state.stale': 'Spanish out of date',
   'composer.field.id': 'Identifier',
   'composer.hint.id':
-    'Lower-case words joined by hyphens. It may not be the id of a lesson Gravitas already has.',
+    'Lower-case words joined by hyphens. It may not be the id of an investigation Gravitas already has.',
   'composer.field.version': 'Version',
   'composer.field.title': 'Title',
   'composer.field.subtitle': 'Subtitle',
@@ -39,7 +39,7 @@ export const EN_COMPOSER = {
   'composer.field.level': 'Level',
   'composer.field.duration': 'Duration',
   'composer.hint.duration':
-    'A range such as 20-25 min, as the lesson card prints it.',
+    'A range such as 20-25 min, as the investigation card prints it.',
   'composer.field.thumbnail': 'Card picture',
   'composer.thumbnail.first': 'The first step’s scenario',
   'composer.field.objectives': 'Objectives',
@@ -47,7 +47,7 @@ export const EN_COMPOSER = {
   'composer.objective.add': 'Add an objective',
   'composer.objective.remove': 'Remove objective {n}',
   'composer.field.prerequisites': 'Before this',
-  'composer.prereq.lesson': 'A Gravitas lesson',
+  'composer.prereq.lesson': 'A Gravitas investigation',
   'composer.prereq.text': 'Something else, in words',
   'composer.prereq.add': 'Add a prerequisite',
   'composer.prereq.remove': 'Remove prerequisite {n}',
@@ -182,7 +182,7 @@ export const EN_COMPOSER = {
     'Every text is in both languages and up to date.',
   'composer.translation.item': '{where}: {state}',
   'composer.preview.hint':
-    'The investigation in the real lesson engine, from this browser only: nothing is saved there, and nothing is published.',
+    'The investigation in the real investigation engine, from this browser only: nothing is saved there, and nothing is published.',
   'composer.preview.student': 'Preview as a student',
   'composer.preview.author': 'Open with the author bar',
   'composer.preview.frame':
@@ -206,9 +206,9 @@ export const EN_COMPOSER = {
   'composer.report.made': 'The sample report is ready.',
   'composer.report.failed': 'The sample report could not be made: {error}',
   'composer.checks.format':
-    'Fix these first; the lesson checks run once the file is sound.',
+    'Fix these first; the investigation checks run once the file is sound.',
   'composer.checks.rule': 'Step {n}: {message}',
-  'composer.checks.lesson': 'The lesson: {message}',
+  'composer.checks.lesson': 'The investigation: {message}',
   'composer.checks.count':
     '{count} problem(s) to fix before the investigation can be saved.',
   'composer.checks.valid': 'The investigation is valid.',
@@ -221,7 +221,7 @@ export const EN_COMPOSER = {
   'composer.status.saved': 'Saved {file}.',
   'composer.status.bankSaved': 'Saved {file}.',
   'composer.status.exported':
-    'Saved {file}: the lesson, for js/data/investigations/.',
+    'Saved {file}: the investigation, for js/data/investigations/.',
   'composer.status.exportedEs':
     'Saved {file}: its Spanish, for js/data/investigations/es/ (rename it {id}.js there).',
   'composer.status.previewed':
@@ -234,7 +234,8 @@ export const EN_COMPOSER = {
 
   'composer.error.textUnsafe':
     'Only the tags strong, em, sub and sup; no other markup and no web addresses.',
-  'composer.error.entity': '&{entity}; is not one of the entities lessons use.',
+  'composer.error.entity':
+    '&{entity}; is not one of the entities investigations use.',
   'composer.error.esOf':
     'The record of which English the Spanish translates is damaged.',
   'composer.error.tooLarge': 'The file is larger than any investigation needs.',
@@ -242,12 +243,13 @@ export const EN_COMPOSER = {
     'The file is nested deeper than any investigation is.',
   'composer.error.unsafeKey': '“{key}” may not be a key.',
   'composer.error.notData': 'This is not plain data.',
-  'composer.error.idTaken': 'That is the id of a lesson Gravitas already has.',
+  'composer.error.idTaken':
+    'That is the id of an investigation Gravitas already has.',
   'composer.error.duration': 'A range such as 20-25 min.',
   'composer.error.scenario': 'Choose a scenario Gravitas has.',
   'composer.error.objectives': 'From one to eight objectives.',
-  'composer.error.prerequisite': 'Either a lesson or a text.',
-  'composer.error.lesson': 'Choose a lesson Gravitas has.',
+  'composer.error.prerequisite': 'Either an investigation or a text.',
+  'composer.error.lesson': 'Choose an investigation Gravitas has.',
   'composer.error.steps': 'From 2 to {max} steps.',
   'composer.error.repeat': 'Another one already has this id.',
   'composer.error.closing':

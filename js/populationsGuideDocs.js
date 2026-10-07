@@ -15,7 +15,7 @@ import { EN_POPULATIONS } from './i18n/en.populations.js';
 // What an instructor should know before a class runs each investigation.
 const NOTES = {
   'pop-spectra': [
-    'The four spectra are the ones the stellar lessons use (REAL_SPECTRA_EXPERIMENT.md), whose classroom criterion has not yet been run with students: treat this investigation as a first use, not a tested one.',
+    'The four spectra are the ones the stellar investigations use (REAL_SPECTRA_EXPERIMENT.md), whose classroom criterion has not yet been run with students: treat this investigation as a first use, not a tested one.',
     'Equivalent width is the idea most students find hardest: a strength that does not depend on how bright the star is. The rank step’s wrong answer about distance is the place to discuss it.',
     'The A star’s gravity and metallicity are the pipeline’s nearest ELODIE template’s, not a measurement of this star. The guide says so, and the conclusion it draws, a star more luminous than its type suggests and most probably of the halo, is stated as probable.',
   ],

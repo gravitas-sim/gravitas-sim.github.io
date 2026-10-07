@@ -29,7 +29,7 @@ export default {
     {
       title: 'Ni un agujero, ni una aspiradora',
       body: 'En pantalla hay un agujero negro de diez masas solares, y cuatro objetos girando a su alrededor. Obsérvalos un momento.\n\nNada está cayendo dentro. Merece la pena detenerse en eso, porque lo que más gente cree sobre los agujeros negros es que atraen hacia sí todo lo que hay cerca. No lo hacen. La gravedad lejos de un agujero negro es exactamente la misma gravedad que en cualquier otro sitio: un objeto con movimiento lateral entra en órbita alrededor de un agujero negro de diez masas solares exactamente igual que orbitaría una estrella de diez masas solares. Si se cambiara el Sol por un agujero negro de la misma masa, la órbita de la Tierra no cambiaría en absoluto. Solo se quedaría muy oscuro.\n\nUn agujero negro tampoco es un agujero en el espacio. Es masa, comprimida en un espacio lo bastante pequeño como para que la gravedad gane.\n\nEsta investigación trata de una sola pregunta: ¿qué cambia cuando haces esa masa mayor?',
-      tip: 'Pulsa el agujero negro para abrir su ficha informativa. Todo lo que calcula esta lección está también en esa ficha, deducido por la simulación a partir de las mismas fórmulas.',
+      tip: 'Pulsa el agujero negro para abrir su ficha informativa. Todo lo que calcula esta investigación está también en esa ficha, deducido por la simulación a partir de las mismas fórmulas.',
     },
     {
       title: '¿Qué podría significar «tamaño»?',
@@ -52,7 +52,7 @@ export default {
         title: 'Un agujero negro de diez masas solares',
         note: 'La línea azul es el radio de Schwarzschild: del centro al horizonte de sucesos.',
       },
-      tip: 'Todo agujero negro de esta lección se trata como uno simple: sin rotación y sin carga eléctrica. Los agujeros negros reales suelen rotar, lo que cambia la forma del horizonte, pero no las tendencias que estás a punto de encontrar.',
+      tip: 'Todo agujero negro de esta investigación se trata como uno simple: sin rotación y sin carga eléctrica. Los agujeros negros reales suelen rotar, lo que cambia la forma del horizonte, pero no las tendencias que estás a punto de encontrar.',
     },
     {
       title: 'Treinta kilómetros no es mucho',
@@ -174,7 +174,7 @@ export default {
         'un valor demasiado grande para calcularlo',
       ],
       because:
-        'Exactamente la velocidad de la luz. Y fíjate en el número: 2,95 kilómetros es el radio de Schwarzschild de una masa solar, el mismo número que llevas usando toda la lección. Comprime cualquier masa hasta su propio radio de Schwarzschild y este cálculo dice que la luz necesita la velocidad de la luz para escapar, lo que significa que no puede.',
+        'Exactamente la velocidad de la luz. Y fíjate en el número: 2,95 kilómetros es el radio de Schwarzschild de una masa solar, el mismo número que llevas usando toda la investigación. Comprime cualquier masa hasta su propio radio de Schwarzschild y este cálculo dice que la luz necesita la velocidad de la luz para escapar, lo que significa que no puede.',
       tool: {
         title: 'Una masa solar, comprimida a 2,95 km',
         note: 'El indicador ha alcanzado la línea naranja.',
@@ -182,7 +182,7 @@ export default {
     },
     {
       title: 'La respuesta correcta por la razón equivocada',
-      body: 'Ese argumento merece la pena conocerlo, y es como se imaginó la idea por primera vez, por John Michell en 1783. Pero necesita una advertencia, y aquí está.\n\nEl cálculo que acabas de ver es gravedad newtoniana corriente, la que describe balas de cañón. Da exactamente el radio correcto. No da la razón correcta. Un agujero negro real <strong>no</strong> es un objeto cuya velocidad de escape ordinaria ha superado por casualidad la velocidad de la luz, con la luz haciendo un intento valiente y cayendo de vuelta como una pelota lanzada.\n\nLo que ocurre de verdad lo describe la relatividad general de Einstein, en la que la masa curva la geometría del espacio y del tiempo a su alrededor. Lo bastante cerca de un agujero negro, esa geometría está tan curvada que todas las direcciones que se alejan del agujero han dejado de existir. La luz no fracasa al escapar. Sencillamente ya no hay adónde escapar.\n\nHasta ahí llega esta lección con ese tema, y basta.\n\nEl lienzo ha cambiado para hacer concreta una parte de esto. Ahora hay dos sistemas en él, uno al lado del otro: un agujero negro de ocho masas solares a la izquierda, y una estrella corriente de ocho masas solares a la derecha. Cada uno tiene un cuerpo pequeño en órbita a la misma distancia de su centro.\n\nObsérvalos unas cuantas vueltas antes de responder. Solo una cosa difiere entre los dos sistemas, y las órbitas son la medida.',
+      body: 'Ese argumento merece la pena conocerlo, y es como se imaginó la idea por primera vez, por John Michell en 1783. Pero necesita una advertencia, y aquí está.\n\nEl cálculo que acabas de ver es gravedad newtoniana corriente, la que describe balas de cañón. Da exactamente el radio correcto. No da la razón correcta. Un agujero negro real <strong>no</strong> es un objeto cuya velocidad de escape ordinaria ha superado por casualidad la velocidad de la luz, con la luz haciendo un intento valiente y cayendo de vuelta como una pelota lanzada.\n\nLo que ocurre de verdad lo describe la relatividad general de Einstein, en la que la masa curva la geometría del espacio y del tiempo a su alrededor. Lo bastante cerca de un agujero negro, esa geometría está tan curvada que todas las direcciones que se alejan del agujero han dejado de existir. La luz no fracasa al escapar. Sencillamente ya no hay adónde escapar.\n\nHasta ahí llega esta investigación con ese tema, y basta.\n\nEl lienzo ha cambiado para hacer concreta una parte de esto. Ahora hay dos sistemas en él, uno al lado del otro: un agujero negro de ocho masas solares a la izquierda, y una estrella corriente de ocho masas solares a la derecha. Cada uno tiene un cuerpo pequeño en órbita a la misma distancia de su centro.\n\nObsérvalos unas cuantas vueltas antes de responder. Solo una cosa difiere entre los dos sistemas, y las órbitas son la medida.',
       checklist: [
         'Observa los dos orbitadores durante varias vueltas',
         'Busca cualquier diferencia en la rapidez con que giran los dos',
@@ -275,7 +275,7 @@ export default {
     },
     {
       title: 'Qué es la radiación de Hawking, y de qué hay que tener cuidado',
-      body: 'Mantengamos esto modesto, porque la versión honesta es bastante técnica.\n\nLos efectos cuánticos cerca de un agujero negro hacen que se comporte como si tuviera una temperatura y que emita una radiación muy tenue. Esa es la afirmación, y basta para esta lección.\n\nQuizá hayas oído una historia sobre pares de partículas que aparecen en el horizonte, una cayendo dentro y otra escapando. Es una imagen que el propio Hawking usó, y es bastante menos precisa de lo que suena; el cálculo real trata de campos cuánticos en un espacio-tiempo curvo y no funciona realmente así. Se menciona aquí solo para que no te sorprenda encontrártela en otra parte.\n\nUna cosa más que merece decirse: esto no se ha observado nunca. Las temperaturas implicadas son tan bajas que ningún experimento puede acercarse hoy a ellas, como dejará dolorosamente claro la pantalla siguiente.\n\nY una nota sobre lo que estás mirando. El agujero negro sigue en el lienzo, y la simulación que mueve sus orbitadores es gravedad newtoniana, que no sabe absolutamente nada de campos cuánticos, temperatura ni evaporación. Los paneles de las próximas pantallas son <strong>cálculos</strong>, evaluados a partir de las fórmulas de Hawking, no lecturas tomadas de la escena. Nada en el lienzo se está evaporando, y nada de allí podría decirte si lo estuviera.',
+      body: 'Mantengamos esto modesto, porque la versión honesta es bastante técnica.\n\nLos efectos cuánticos cerca de un agujero negro hacen que se comporte como si tuviera una temperatura y que emita una radiación muy tenue. Esa es la afirmación, y basta para esta investigación.\n\nQuizá hayas oído una historia sobre pares de partículas que aparecen en el horizonte, una cayendo dentro y otra escapando. Es una imagen que el propio Hawking usó, y es bastante menos precisa de lo que suena; el cálculo real trata de campos cuánticos en un espacio-tiempo curvo y no funciona realmente así. Se menciona aquí solo para que no te sorprenda encontrártela en otra parte.\n\nUna cosa más que merece decirse: esto no se ha observado nunca. Las temperaturas implicadas son tan bajas que ningún experimento puede acercarse hoy a ellas, como dejará dolorosamente claro la pantalla siguiente.\n\nY una nota sobre lo que estás mirando. El agujero negro sigue en el lienzo, y la simulación que mueve sus orbitadores es gravedad newtoniana, que no sabe absolutamente nada de campos cuánticos, temperatura ni evaporación. Los paneles de las próximas pantallas son <strong>cálculos</strong>, evaluados a partir de las fórmulas de Hawking, no lecturas tomadas de la escena. Nada en el lienzo se está evaporando, y nada de allí podría decirte si lo estuviera.',
       tip: 'Hawking consideraba este su resultado más importante, y pidió que la ecuación de la entropía de un agujero negro, que sale del mismo trabajo, se grabara en su lápida conmemorativa en la Abadía de Westminster.',
     },
     {
@@ -434,7 +434,7 @@ export default {
         title: 'Sagitario A*',
         note: 'El círculo de puntos es la órbita de Mercurio, dibujada a la misma escala que el horizonte.',
       },
-      tip: 'El agujero negro más simple de todos, y el que ha usado esta lección de principio a fin, es un agujero negro de Schwarzschild: sin rotación, sin carga. Los reales rotan, a veces muy rápido, y un agujero negro en rotación se describe con la solución de Kerr. El horizonte cambia de forma y de tamaño; todas las tendencias que encontraste aquí sobreviven.',
+      tip: 'El agujero negro más simple de todos, y el que ha usado esta investigación de principio a fin, es un agujero negro de Schwarzschild: sin rotación, sin carga. Los reales rotan, a veces muy rápido, y un agujero negro en rotación se describe con la solución de Kerr. El horizonte cambia de forma y de tamaño; todas las tendencias que encontraste aquí sobreviven.',
     },
   ],
 };

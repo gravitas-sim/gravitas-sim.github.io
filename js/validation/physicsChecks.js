@@ -835,7 +835,7 @@ export async function runChecks() {
       expected: 1.5,
       unit: 'slope',
       tolerance: 2e-3,
-      why: 'The number the Kepler investigation asks a student to recover. Measured from four integrated orbits by the same periapsis timer the lesson uses, not from the analytic formula. The residual is the timing resolution at each radius; 0.2% on the slope is well inside what a student could read off a plot and far outside anything a broken force law would produce.',
+      why: 'The number the Kepler investigation asks a student to recover. Measured from four integrated orbits by the same periapsis timer the investigation uses, not from the analytic formula. The residual is the timing resolution at each radius; 0.2% on the slope is well inside what a student could read off a plot and far outside anything a broken force law would produce.',
     });
   }
 
@@ -1362,7 +1362,7 @@ export async function runChecks() {
       expected: 10,
       unit: 'ratio of worst errors, 60 orbits to 6',
       tolerance: 0.25,
-      why: 'The other half of the lesson, and the reason the most accurate scheme in the list is not the default. RK4 is not symplectic: its energy error grows linearly with the number of steps rather than oscillating, so ten times the run gives ten times the error. Over a few orbits it is by far the most accurate of the three; over a few thousand it is the only one that is still getting worse.',
+      why: 'The other half of the investigation, and the reason the most accurate scheme in the list is not the default. RK4 is not symplectic: its energy error grows linearly with the number of steps rather than oscillating, so ten times the run gives ten times the error. Over a few orbits it is by far the most accurate of the three; over a few thousand it is the only one that is still getting worse.',
     });
     add({
       group: 'Numerical integrators',
@@ -1493,23 +1493,23 @@ export async function runChecks() {
     add({
       group: 'Binary stars',
       kind: 'analytic',
-      name: "Lesson widget: Kepler's third law in AU, years and solar masses",
+      name: "Investigation widget: Kepler's third law in AU, years and solar masses",
       measured: facts.period,
       expected: Math.sqrt(2.4 ** 3 / 2.0),
       unit: 'years',
       tolerance: 1e-12,
-      why: 'a^3 = P^2 M is exact in these units by construction; the check is that the widget the "Weighing the Stars" lesson uses implements it and not something else.',
+      why: 'a^3 = P^2 M is exact in these units by construction; the check is that the widget the "Weighing the Stars" investigation uses implements it and not something else.',
     });
 
     add({
       group: 'Binary stars',
       kind: 'analytic',
-      name: 'Lesson widget: barycenter distances match the mass ratio',
+      name: 'Investigation widget: barycenter distances match the mass ratio',
       measured: facts.r1 / facts.r2,
       expected: facts.m2 / facts.m1,
       unit: '',
       tolerance: 1e-12,
-      why: 'The relation the lesson asks a student to discover, checked in the instrument that shows it to them.',
+      why: 'The relation the investigation asks a student to discover, checked in the instrument that shows it to them.',
     });
 
     // The Sun and Jupiter, as the archetype: the barycenter is outside the Sun.
@@ -1556,7 +1556,7 @@ export async function runChecks() {
       expected: REF.earthEscapeKms,
       unit: 'km/s',
       tolerance: 2e-3,
-      why: 'The lesson quotes this number to a student, so it has to be the real one. Published to four figures; 0.2% covers the difference between the equatorial radius used here and the mean radius the published figure uses.',
+      why: 'The investigation quotes this number to a student, so it has to be the real one. Published to four figures; 0.2% covers the difference between the equatorial radius used here and the mean radius the published figure uses.',
       source: 'NASA Earth fact sheet',
     });
 
@@ -1627,7 +1627,7 @@ export async function runChecks() {
       name: 'Just below escape speed the orbit is bound',
       measured: at(0.999).bound,
       expected: true,
-      why: 'The sign of the specific energy is the whole content of the lesson. A tenth of a percent below escape must still come back.',
+      why: 'The sign of the specific energy is the whole content of the investigation. A tenth of a percent below escape must still come back.',
     });
 
     add({
@@ -1898,7 +1898,7 @@ export async function runChecks() {
       expected: Math.sin((30 * Math.PI) / 180),
       unit: '',
       tolerance: 1e-12,
-      why: 'The M sin i degeneracy, in the projection code rather than in the formula. Both have to carry it or the panel and the lesson disagree.',
+      why: 'The M sin i degeneracy, in the projection code rather than in the formula. Both have to carry it or the panel and the investigation disagree.',
     });
 
     // Transit depth. The instrument integrates over a limb-darkened disk, so
@@ -1940,7 +1940,7 @@ export async function runChecks() {
         transitWidgets.blockedFraction(0.9, k, 220) <
         transitWidgets.blockedFraction(0, k, 220),
       expected: true,
-      why: 'Limb darkening plus partial overlap. The lesson asks students to explain why impact parameter changes depth as well as duration, so the instrument has to actually do it.',
+      why: 'Limb darkening plus partial overlap. The investigation asks students to explain why impact parameter changes depth as well as duration, so the instrument has to actually do it.',
     });
 
     add({
@@ -2352,7 +2352,7 @@ export async function runChecks() {
         '/' +
         habitability.habitableZoneStatus(0.723, sunHz).status,
       expected: 'inside/inner',
-      why: "The result that makes the lesson worth teaching, and the one that catches an outer edge placed by intuition rather than by the model. Kopparapu's maximum-greenhouse edge is at 1.69 AU, beyond Mars: by insolation alone Mars is in the habitable zone. It is not habitable, and the reason has nothing to do with how much sunlight it gets. Venus, at 0.723 AU, is inside the inner edge - which is the half of the Solar System comparison the intuition does get right.",
+      why: "The result that makes the investigation worth teaching, and the one that catches an outer edge placed by intuition rather than by the model. Kopparapu's maximum-greenhouse edge is at 1.69 AU, beyond Mars: by insolation alone Mars is in the habitable zone. It is not habitable, and the reason has nothing to do with how much sunlight it gets. Venus, at 0.723 AU, is inside the inner edge - which is the half of the Solar System comparison the intuition does get right.",
       source: 'Kopparapu et al. (2013, 2014)',
     });
 
@@ -2423,7 +2423,7 @@ export async function runChecks() {
         .map(p => p.name)
         .join(''),
       expected: 'efg',
-      why: "The result the literature reports for this system, reproduced from the stored semi-major axes and the model's own zone rather than asserted. This is the single claim the Goldilocks lesson rests on.",
+      why: "The result the literature reports for this system, reproduced from the stored semi-major axes and the model's own zone rather than asserted. This is the single claim the Goldilocks investigation rests on.",
       source: 'Gillon et al. (2017) Nature 542, 456',
     });
 
@@ -2450,7 +2450,7 @@ export async function runChecks() {
       expected: ((1 + 0.4) / (1 - 0.4)) ** 2,
       unit: '',
       tolerance: 1e-12,
-      why: 'The inverse-square law applied at the two turning points. At e = 0.4 that is a factor of 5.4 between the hottest and coldest part of the year, which is the number the eccentricity part of the lesson turns on.',
+      why: 'The inverse-square law applied at the two turning points. At e = 0.4 that is a factor of 5.4 between the hottest and coldest part of the year, which is the number the eccentricity part of the investigation turns on.',
     });
 
     add({
@@ -2483,7 +2483,7 @@ export async function runChecks() {
       expected: 0.6,
       unit: 'fraction of the year',
       tolerance: 5e-2,
-      why: "Kepler's second law, in the form the lesson uses it: a planet dawdles through the cold outer half of an eccentric orbit and rushes through the hot inner half. Sampling evenly in mean anomaly samples evenly in time, which is the step that makes this a statement about the year rather than about the path. The exact figure for e = 0.4 is 0.632; 5% covers the sampling.",
+      why: "Kepler's second law, in the form the investigation uses it: a planet dawdles through the cold outer half of an eccentric orbit and rushes through the hot inner half. Sampling evenly in mean anomaly samples evenly in time, which is the step that makes this a statement about the year rather than about the path. The exact figure for e = 0.4 is 0.632; 5% covers the sampling.",
     });
   }
 
@@ -2516,7 +2516,7 @@ export async function runChecks() {
       expected: 1,
       unit: '',
       tolerance: 1e-2,
-      why: 'The claim the lesson makes - that the curve goes flat - stated as a bound rather than as an identity. 1% is the analytic shortfall pi/(4x) at x = 100, so this is the tightest bound the profile permits.',
+      why: 'The claim the investigation makes - that the curve goes flat - stated as a bound rather than as an identity. 1% is the analytic shortfall pi/(4x) at x = 100, so this is the tightest bound the profile permits.',
     });
 
     add({
@@ -2582,7 +2582,7 @@ export async function runChecks() {
       expected: 1,
       unit: '',
       tolerance: 1e-14,
-      why: 'The enclosed mass is read straight off the circular speed, so inverting it must give the speed back. Round-off tolerance. The mass matters because the lesson asks how much dark matter there is, not just how fast things go.',
+      why: 'The enclosed mass is read straight off the circular speed, so inverting it must give the speed back. Round-off tolerance. The mass matters because the investigation asks how much dark matter there is, not just how fast things go.',
     });
 
     add({
@@ -2604,7 +2604,7 @@ export async function runChecks() {
       expected: -0.5,
       unit: 'slope',
       tolerance: 1e-12,
-      why: "The prediction the flat rotation curve refutes, and the number the Solar System actually shows. Fitted by the same least-squares routine the lesson uses, so a bug in the fit would break this before it broke a student's measurement.",
+      why: "The prediction the flat rotation curve refutes, and the number the Solar System actually shows. Fitted by the same least-squares routine the investigation uses, so a bug in the fit would break this before it broke a student's measurement.",
     });
 
     add({
@@ -2628,7 +2628,7 @@ export async function runChecks() {
       unit: 'slope',
       tolerance: 8e-2,
       toleranceKind: 'absolute',
-      why: 'The lesson\'s claim is "flat, not -0.5", and this measures how flat. The residual is not zero and should not be: the pseudo-isothermal speed still rises toward its asymptote as sqrt(1 - pi/(2x)), which contributes a slope of about pi/(4x). Over 400 to 2000 units at a 60-unit core that averages 0.05, so 0.08 is the analytic residual with a little room. The distance from the Keplerian -0.5 is the entire point, and it is a factor of ten.',
+      why: 'The investigation\'s claim is "flat, not -0.5", and this measures how flat. The residual is not zero and should not be: the pseudo-isothermal speed still rises toward its asymptote as sqrt(1 - pi/(2x)), which contributes a slope of about pi/(4x). Over 400 to 2000 units at a 60-unit core that averages 0.05, so 0.08 is the analytic residual with a little room. The distance from the Keplerian -0.5 is the entire point, and it is a factor of ten.',
       source: 'Rubin & Ford (1970) ApJ 159, 379',
     });
 
@@ -2825,7 +2825,7 @@ export async function runChecks() {
       expected: 7,
       unit: 'ratio of residuals',
       tolerance: 0.3,
-      why: "The claim the lesson's fitting exercise is built on, measured rather than asserted: no disc mass at any scale length reproduces the curve. Swept over the whole range of both sliders a student can reach, the best halo-free residual is 14.5 km/s against 2.1 km/s for the decomposition with a halo - and against measurement errors of 4.7. A tolerance of 0.3 on the ratio would catch either the sweep narrowing or the target curve drifting.",
+      why: "The claim the investigation's fitting exercise is built on, measured rather than asserted: no disc mass at any scale length reproduces the curve. Swept over the whole range of both sliders a student can reach, the best halo-free residual is 14.5 km/s against 2.1 km/s for the decomposition with a halo - and against measurement errors of 4.7. A tolerance of 0.3 on the ratio would catch either the sweep narrowing or the target curve drifting.",
     });
 
     // The halo inside the real integrator: a body launched on the halo's own
@@ -2933,7 +2933,7 @@ export async function runChecks() {
       unit: 'ratio',
       tolerance: 1e-9,
       toleranceKind: 'absolute',
-      why: 'Definitional, and worth pinning because every claim the lesson makes about MOND predicting a flat speed from the visible mass reduces to it.',
+      why: 'Definitional, and worth pinning because every claim the investigation makes about MOND predicting a flat speed from the visible mass reduces to it.',
     });
 
     add({
@@ -2956,7 +2956,7 @@ export async function runChecks() {
       expected: 150,
       unit: 'km/s',
       tolerance: 0.1,
-      why: "The lesson's synthetic curve flattens at 150 km/s, which is NGC 3198's published asymptotic speed, and the halo decomposition needs two fitted parameters to put it there. MOND gets 152 from the baryonic mass with nothing fitted. That agreement is the reason the comparison is worth making; it is not evidence that MOND is correct, and neither the lesson nor this suite says it is.",
+      why: "The investigation's synthetic curve flattens at 150 km/s, which is NGC 3198's published asymptotic speed, and the halo decomposition needs two fitted parameters to put it there. MOND gets 152 from the baryonic mass with nothing fitted. That agreement is the reason the comparison is worth making; it is not evidence that MOND is correct, and neither the investigation nor this suite says it is.",
       source: 'Begeman 1989, A&A 223, 47',
     });
 
@@ -3125,7 +3125,7 @@ export async function runChecks() {
       expected: 1,
       unit: '',
       tolerance: 1e-14,
-      why: 'The pedagogical squeeze-the-Sun panel gets the right radius for the wrong reason: sqrt(2GM/r) = c at r = 2GM/c^2 identically. The lesson makes that point explicitly rather than letting a student think Newtonian gravity predicts event horizons, and this check confirms the arithmetic the point rests on.',
+      why: 'The pedagogical squeeze-the-Sun panel gets the right radius for the wrong reason: sqrt(2GM/r) = c at r = 2GM/c^2 identically. The investigation makes that point explicitly rather than letting a student think Newtonian gravity predicts event horizons, and this check confirms the arithmetic the point rests on.',
     });
 
     add({
@@ -3150,7 +3150,7 @@ export async function runChecks() {
       expected: 100,
       unit: '',
       tolerance: 1e-12,
-      why: 'The counterintuitive scaling the lesson is built around: bigger holes are colder.',
+      why: 'The counterintuitive scaling the investigation is built around: bigger holes are colder.',
     });
 
     add({
@@ -3161,7 +3161,7 @@ export async function runChecks() {
       expected: REF.evaporationSolarYears,
       unit: 'years',
       tolerance: 2e-2,
-      why: 't = 5120 pi G^2 M^3 / (hbar c^4). The commonly quoted figure is "about 2.1e67 years", stated to two figures; 2% is finer than that. The coefficient assumes emission of massless species only, which is the version the lesson states.',
+      why: 't = 5120 pi G^2 M^3 / (hbar c^4). The commonly quoted figure is "about 2.1e67 years", stated to two figures; 2% is finer than that. The coefficient assumes emission of massless species only, which is the version the investigation states.',
       source: 'Page (1976) Phys. Rev. D 13, 198',
     });
 
@@ -3188,7 +3188,7 @@ export async function runChecks() {
       expected: 1e6,
       unit: '',
       tolerance: 1e-9,
-      why: 'M / R_s^3 with R_s linear in M. The reason a supermassive hole can be less dense than water, which is the single most surprising number in the lesson.',
+      why: 'M / R_s^3 with R_s linear in M. The reason a supermassive hole can be less dense than water, which is the single most surprising number in the investigation.',
     });
 
     add({
@@ -3197,7 +3197,7 @@ export async function runChecks() {
       name: 'A supermassive hole is less dense than water',
       measured: blackHole.blackHoleFacts(1e9).density < 1000,
       expected: true,
-      why: 'The consequence of the scaling above, stated as the claim the lesson actually makes.',
+      why: 'The consequence of the scaling above, stated as the claim the investigation actually makes.',
     });
 
     add({
@@ -3230,7 +3230,7 @@ export async function runChecks() {
         blackHole.blackHoleCategory(4e6),
       ].join('|'),
       expected: 'Primordial|Stellar-Mass|Intermediate|Supermassive',
-      why: 'Conventions rather than physics, and the lesson says so, but they still have to be the conventions the lesson states.',
+      why: 'Conventions rather than physics, and the investigation says so, but they still have to be the conventions the investigation states.',
     });
   }
 
@@ -3752,7 +3752,7 @@ export async function runChecks() {
         unit: 'length units',
         tolerance: 0,
         toleranceKind: 'absolute',
-        why: 'Exactly zero, not approximately: the engine is deterministic, so the same initial numbers integrated by the same code give the same trajectory. The chaos investigation rests on this - it is what lets a student attribute a later divergence to the perturbation rather than to the machine - and the lesson opens by having them measure it.',
+        why: 'Exactly zero, not approximately: the engine is deterministic, so the same initial numbers integrated by the same code give the same trajectory. The chaos investigation rests on this - it is what lets a student attribute a later divergence to the perturbation rather than to the machine - and the investigation opens by having them measure it.',
       });
     }
 
@@ -3814,7 +3814,7 @@ export async function runChecks() {
         unit: 'r-squared',
         tolerance: 0.02,
         toleranceKind: 'absolute',
-        why: 'The same perturbation applied to a two-body orbit separates the two runs in proportion to elapsed time, because a slightly displaced star has a slightly different period and the two runs drift out of phase. A straight line fits it to better than r-squared 0.98. This is the control that stops the lesson mistaking any divergence for chaos.',
+        why: 'The same perturbation applied to a two-body orbit separates the two runs in proportion to elapsed time, because a slightly displaced star has a slightly different period and the two runs drift out of phase. A straight line fits it to better than r-squared 0.98. This is the control that stops the investigation mistaking any divergence for chaos.',
       });
 
       add({
@@ -3826,7 +3826,7 @@ export async function runChecks() {
         unit: 'estimates produced',
         tolerance: 0,
         toleranceKind: 'absolute',
-        why: 'A log-linear fit can be forced through any increasing series and will produce a confident number with units of time. The analysis in js/chaos/divergence.js refuses, because the growth is not exponential and a straight line fits better. If this ever starts producing a number, the lesson is teaching that ordinary phase drift is chaos.',
+        why: 'A log-linear fit can be forced through any increasing series and will produce a confident number with units of time. The analysis in js/chaos/divergence.js refuses, because the growth is not exponential and a straight line fits better. If this ever starts producing a number, the investigation is teaching that ordinary phase drift is chaos.',
       });
     }
 
@@ -3840,7 +3840,7 @@ export async function runChecks() {
       unit: 'r-squared of the log-linear fit',
       tolerance: 0.02,
       toleranceKind: 'absolute',
-      why: 'Over the lesson\u2019s own 200 simulated seconds, the separation between the perturbed and unperturbed runs grows by seven orders of magnitude, and the logarithm of it is a straight line in time to better than r-squared 0.98. That is what sensitive dependence looks like when it is measured rather than asserted.',
+      why: 'Over the investigation\u2019s own 200 simulated seconds, the separation between the perturbed and unperturbed runs grows by seven orders of magnitude, and the logarithm of it is a straight line in time to better than r-squared 0.98. That is what sensitive dependence looks like when it is measured rather than asserted.',
     });
 
     add({
@@ -3870,7 +3870,7 @@ export async function runChecks() {
         unit: 'fractional spread in the e-folding time',
         tolerance: 0.2,
         toleranceKind: 'absolute',
-        why: 'The lesson\u2019s conclusion is that the divergence is physical, and the only evidence for that is refinement. Symplectic Euler at dt = 0.1 and at dt = 0.025, and Velocity Verlet at dt = 0.1, must agree about the e-folding time. Twenty per cent is the same threshold the widget uses to tell a student their result is resolved, so this check and the classroom verdict cannot disagree.',
+        why: 'The investigation\u2019s conclusion is that the divergence is physical, and the only evidence for that is refinement. Symplectic Euler at dt = 0.1 and at dt = 0.025, and Velocity Verlet at dt = 0.1, must agree about the e-folding time. Twenty per cent is the same threshold the widget uses to tell a student their result is resolved, so this check and the classroom verdict cannot disagree.',
       });
     }
 
@@ -3878,19 +3878,19 @@ export async function runChecks() {
     add({
       group: 'Three-body sensitivity',
       kind: 'integration',
-      name: 'Energy drift over the lesson run',
+      name: 'Energy drift over the investigation run',
       measured: base.a.energyDrift,
       expected: 0,
       unit: 'relative',
       tolerance: 2e-3,
       toleranceKind: 'absolute',
-      why: 'Symplectic Euler at dt = 0.1 over 200 simulated seconds, which is what a student runs. The bound is set by the measured drift of 5e-4 with room for the close passages that appear once the triangle breaks up, and it is two thousand times smaller than the divergence signal the lesson measures - so the conclusion cannot be an artifact of energy leaking out of the integrator.',
+      why: 'Symplectic Euler at dt = 0.1 over 200 simulated seconds, which is what a student runs. The bound is set by the measured drift of 5e-4 with room for the close passages that appear once the triangle breaks up, and it is two thousand times smaller than the divergence signal the investigation measures - so the conclusion cannot be an artifact of energy leaking out of the integrator.',
     });
 
     add({
       group: 'Three-body sensitivity',
       kind: 'integration',
-      name: 'Angular momentum drift over the lesson run',
+      name: 'Angular momentum drift over the investigation run',
       measured: base.a.angularDrift,
       expected: 0,
       unit: 'relative',
@@ -3903,7 +3903,7 @@ export async function runChecks() {
     add({
       group: 'Three-body sensitivity',
       kind: 'integration',
-      name: 'All three stars survive the lesson run',
+      name: 'All three stars survive the investigation run',
       measured: base.a.survivors,
       expected: 3,
       unit: 'bodies',
@@ -3920,7 +3920,7 @@ export async function runChecks() {
       expected: SIDE,
       unit: 'length units',
       tolerance: 0.6,
-      why: 'Two stars of drawn radius 8 collide inside 16 units. The closest the three ever come during the lesson run is about 80, five times that, so no collision rule fires and the result does not depend on the merger settings. The tolerance is wide because the closest approach is a chaotic quantity; what matters is the order of magnitude, and the check would fail loudly if the configuration ever started grazing.',
+      why: 'Two stars of drawn radius 8 collide inside 16 units. The closest the three ever come during the investigation run is about 80, five times that, so no collision rule fires and the result does not depend on the merger settings. The tolerance is wide because the closest approach is a chaotic quantity; what matters is the order of magnitude, and the check would fail loudly if the configuration ever started grazing.',
     });
   }
 
@@ -4158,7 +4158,7 @@ export async function runChecks() {
         (p, i) => i === 0 || p.a > trappist.TRAPPIST1_PLANETS[i - 1].a
       ),
       expected: true,
-      why: 'b through h, in order. A table that had drifted out of order would still pass every arithmetic check above, and the lesson names the planets by letter.',
+      why: 'b through h, in order. A table that had drifted out of order would still pass every arithmetic check above, and the investigation names the planets by letter.',
       source: 'Agol et al. (2021) PSJ 2, 1',
     });
 
@@ -4174,7 +4174,7 @@ export async function runChecks() {
       expected: hd.star.massSolar,
       unit: 'M_sun',
       tolerance: 5e-3,
-      why: 'Same test as TRAPPIST-1, on the system the transit lesson uses. The stored axis carries four figures, so half a percent is the rounding it inherits.',
+      why: 'Same test as TRAPPIST-1, on the system the transit investigation uses. The stored axis carries four figures, so half a percent is the rounding it inherits.',
       source: 'Torres, Winn & Holman (2008) ApJ 677, 1324',
     });
 
@@ -4189,7 +4189,7 @@ export async function runChecks() {
       expected: REF.hd209458DepthPercent,
       unit: '%',
       tolerance: 3e-2,
-      why: 'The geometric depth (Rp/Rs)^2, computed from the stored planet and stellar radii, against the measured depth the lesson quotes. They agree to 0.5%, which is the point: a student who measures 1.5% and solves for a radius gets the stored radius back. 3% is the spread in published depths across instruments and bandpasses.',
+      why: 'The geometric depth (Rp/Rs)^2, computed from the stored planet and stellar radii, against the measured depth the investigation quotes. They agree to 0.5%, which is the point: a student who measures 1.5% and solves for a radius gets the stored radius back. 3% is the spread in published depths across instruments and bandpasses.',
       source: 'Charbonneau et al. (2000) ApJ 529, L45',
     });
 
@@ -4426,7 +4426,7 @@ export async function runChecks() {
             meanPeriod(galilean.rows, outer) / meanPeriod(galilean.rows, inner),
           expected,
           tolerance: 1e-3,
-          why: "The moons are placed from their published periods, so a ratio that came out wrong would mean the mutual perturbations had moved a mean motion rather than that the table was misread. A tenth of a percent is well inside the two-tenths the resonance itself permits, and is the width of the lesson's own claim that the ratios are near but not equal to 2:1.",
+          why: "The moons are placed from their published periods, so a ratio that came out wrong would mean the mutual perturbations had moved a mean motion rather than that the table was misread. A tenth of a percent is well inside the two-tenths the resonance itself permits, and is the width of the investigation's own claim that the ratios are near but not equal to 2:1.",
           source: 'JPL Solar System Dynamics satellite mean elements',
         });
       }
@@ -4513,7 +4513,7 @@ export async function runChecks() {
       expected: 4,
       tolerance: 0,
       toleranceKind: 'absolute',
-      why: 'Every measurement in the lesson matches bodies between samples by name, so a body removed by a merge or a cull would not produce a wrong answer - it would produce no answer, silently, part way through.',
+      why: 'Every measurement in the investigation matches bodies between samples by name, so a body removed by a merge or a cull would not produce a wrong answer - it would produce no answer, silently, part way through.',
     });
 
     // 4. Refinement: the classification must not be the integrator's.
@@ -4559,7 +4559,7 @@ export async function runChecks() {
         name: 'Moving Europa one percent out makes the argument circulate',
         measured: broken.verdict.state === resonance.ANGLE_STATE.CIRCULATION,
         expected: true,
-        why: 'The paired control the lesson runs. Without it a librating angle could be an artifact of the instrument; with it, the same instrument on the same system with one number changed reports the opposite. The resonance holds Europa to about a part in a thousand, so one part in a hundred is ten times outside it.',
+        why: 'The paired control the investigation runs. Without it a librating angle could be an artifact of the instrument; with it, the same instrument on the same system with one number changed reports the opposite. The resonance holds Europa to about a part in a thousand, so one part in a hundred is ten times outside it.',
       });
 
       add({
@@ -4570,7 +4570,7 @@ export async function runChecks() {
         expected: 47,
         unit: 'Io orbits',
         tolerance: 0.25,
-        why: 'A lesson claim rather than a physical constant: the contrast is only useful if the student sees a completed circuit in the first few seconds. Forty-seven Io orbits is about nine seconds at the scenario speed. The tolerance is wide because the number is a property of how far out of resonance the control was put, which was a choice.',
+        why: 'An investigation claim rather than a physical constant: the contrast is only useful if the student sees a completed circuit in the first few seconds. Forty-seven Io orbits is about nine seconds at the scenario speed. The tolerance is wide because the number is a property of how far out of resonance the control was put, which was a choice.',
       });
     }
 
@@ -4638,7 +4638,7 @@ export async function runChecks() {
       measured: pluto.periodP / pluto.periodN,
       expected: 1.5,
       tolerance: 2e-3,
-      why: "Both periods are the mean osculating period over the whole run, so this is the engine holding Kepler's third law on a commensurability nothing told it about - not a stored ratio. Pluto is placed at a_Neptune (3/2)^(2/3) rather than at its observed 39.482 AU, because the 0.2% difference between the two is taken up in the real system by the precession of Pluto's perihelion, which a point-mass model does not reproduce at the right rate. That the placement itself is exact is a separate claim and is checked to ten decimal places in tests/resonance.test.js; what this measures is that three libration cycles of mutual perturbation at dt = 60 leave the ratio where it started. The residual is 2e-4 and is the Neptune-Pluto interaction plus the osculating-element average rather than the placement; 2e-3 is ten times that, and still an order of magnitude inside the drift a Pluto falling out of the commensurability would show. No source, deliberately: the expected 1.5 is the exact commensurability the scenario is built on, not a measurement of the solar system, and leaving 'NASA planetary fact sheets' on the row - as the first draft of this fix did - would have said this project compared itself against a published period ratio when it did not. The comparison with the observed 1.5046 belongs to the lesson.",
+      why: "Both periods are the mean osculating period over the whole run, so this is the engine holding Kepler's third law on a commensurability nothing told it about - not a stored ratio. Pluto is placed at a_Neptune (3/2)^(2/3) rather than at its observed 39.482 AU, because the 0.2% difference between the two is taken up in the real system by the precession of Pluto's perihelion, which a point-mass model does not reproduce at the right rate. That the placement itself is exact is a separate claim and is checked to ten decimal places in tests/resonance.test.js; what this measures is that three libration cycles of mutual perturbation at dt = 60 leave the ratio where it started. The residual is 2e-4 and is the Neptune-Pluto interaction plus the osculating-element average rather than the placement; 2e-3 is ten times that, and still an order of magnitude inside the drift a Pluto falling out of the commensurability would show. No source, deliberately: the expected 1.5 is the exact commensurability the scenario is built on, not a measurement of the solar system, and leaving 'NASA planetary fact sheets' on the row - as the first draft of this fix did - would have said this project compared itself against a published period ratio when it did not. The comparison with the observed 1.5046 belongs to the investigation.",
     });
 
     add({
@@ -4852,7 +4852,7 @@ export async function runChecks() {
       name: 'A probe one degree from L3 does not stay there',
       measured: trojans.classify('L3 probe').span > 100,
       expected: true,
-      why: "L3 is an equilibrium and an unstable one: the linearised growth time is about 3.2 Jupiter years, so a one degree displacement reaches a hundred and eighty in roughly twenty-five. The contrast with the L4 probe - identical construction, identical integrator, one of them motionless and the other gone - is what the lesson uses to separate 'equilibrium' from 'stable'.",
+      why: "L3 is an equilibrium and an unstable one: the linearised growth time is about 3.2 Jupiter years, so a one degree displacement reaches a hundred and eighty in roughly twenty-five. The contrast with the L4 probe - identical construction, identical integrator, one of them motionless and the other gone - is what the investigation uses to separate 'equilibrium' from 'stable'.",
       source: 'Murray & Dermott, Solar System Dynamics (1999) §3.8',
     });
 
@@ -4864,7 +4864,7 @@ export async function runChecks() {
         trojans.classify('Wide orbit probe').state ===
         resonance.ANGLE_STATE.CIRCULATION,
       expected: true,
-      why: "A body on an ordinary circular orbit a quarter again as wide. Its period ratio with Jupiter is 1.4036, which is a quarter of a percent from 7:5 - closer to a small-integer ratio than Pluto is to 3:2 - and it is in no resonance at all. It is the lesson's sharpest example of why the ratio is not the evidence.",
+      why: "A body on an ordinary circular orbit a quarter again as wide. Its period ratio with Jupiter is 1.4036, which is a quarter of a percent from 7:5 - closer to a small-integer ratio than Pluto is to 3:2 - and it is in no resonance at all. It is the investigation's sharpest example of why the ratio is not the evidence.",
     });
 
     add({
@@ -5130,7 +5130,7 @@ export async function runChecks() {
       measured: sInside.outcome,
       expected: 'survived',
       unit: 'outcome',
-      why: 'The lesson’s surviving configuration, at the timestep the scenario ships with. Measured rather than assumed: the planet completes all twenty periods, never leaves 0.62 separations and never comes within 0.45 separations of the companion. An exact comparison because "survived" is not a quantity. If this ever fails, the investigation is teaching something false.',
+      why: 'The investigation’s surviving configuration, at the timestep the scenario ships with. Measured rather than assumed: the planet completes all twenty periods, never leaves 0.62 separations and never comes within 0.45 separations of the companion. An exact comparison because "survived" is not a quantity. If this ever fails, the investigation is teaching something false.',
     });
     add({
       group: 'Planets in binary stars',
@@ -5167,7 +5167,7 @@ export async function runChecks() {
       measured: sOutside.outcome,
       expected: 'ejected',
       unit: 'outcome',
-      why: 'The lesson’s disrupted configuration, twice the radius of the surviving one and well outside the fitted boundary of 0.177. Ejected means both unbound from the pair and past ten separations, so it describes a planet that actually left rather than one briefly unbound during an encounter.',
+      why: 'The investigation’s disrupted configuration, twice the radius of the surviving one and well outside the fitted boundary of 0.177. Ejected means both unbound from the pair and past ten separations, so it describes a planet that actually left rather than one briefly unbound during an encounter.',
     });
     add({
       group: 'Planets in binary stars',
@@ -5194,7 +5194,7 @@ export async function runChecks() {
       measured: pOutside.outcome,
       expected: 'survived',
       unit: 'outcome',
-      why: 'The circumbinary survivor, outside the fitted floor of 3.61 separations. Forty binary periods is only about seven orbits of the planet, which the lesson says out loud; the claim being checked is that those seven happen without incident, not that the orbit is stable.',
+      why: 'The circumbinary survivor, outside the fitted floor of 3.61 separations. Forty binary periods is only about seven orbits of the planet, which the investigation says out loud; the claim being checked is that those seven happen without incident, not that the orbit is stable.',
     });
     add({
       group: 'Planets in binary stars',
@@ -5220,7 +5220,7 @@ export async function runChecks() {
       measured: pInside.outcome,
       expected: 'ejected',
       unit: 'outcome',
-      why: 'Well inside the fitted floor. The mechanism is different from the circumstellar ejection: this planet is never within 0.22 separations of a star, and leaves because the binary’s changing pull arrives at nearly the same phase of its orbit each time and the kicks accumulate. Both mechanisms have to work for the lesson’s two halves to teach different things.',
+      why: 'Well inside the fitted floor. The mechanism is different from the circumstellar ejection: this planet is never within 0.22 separations of a star, and leaves because the binary’s changing pull arrives at nearly the same phase of its orbit each time and the kicks accumulate. Both mechanisms have to work for the investigation’s two halves to teach different things.',
     });
     add({
       group: 'Planets in binary stars',
@@ -5408,7 +5408,7 @@ export async function runChecks() {
       measured: gaining.speedOut > gaining.speedIn,
       expected: true,
       unit: 'gain',
-      why: 'The sign of the whole effect, and the thing a student predicts at the third screen of the lesson. Compared exactly because it is a direction rather than a quantity. If this ever flips, the impact parameter convention has been inverted and the lesson is teaching the wrong side.',
+      why: 'The sign of the whole effect, and the thing a student predicts at the third screen of the investigation. Compared exactly because it is a direction rather than a quantity. If this ever flips, the impact parameter convention has been inverted and the investigation is teaching the wrong side.',
     });
 
     add({
@@ -5443,7 +5443,7 @@ export async function runChecks() {
         ) > 0.01,
       expected: true,
       unit: 'asymmetry',
-      why: 'Not a defect: speed is the length of a vector sum, and adding a fixed-length vector at two different angles does not change that length symmetrically. Checked because the lesson makes the claim explicitly and a student is entitled to expect the suite to have verified it. Measured at 2.57 units of gain against 1.68 of loss.',
+      why: 'Not a defect: speed is the length of a vector sum, and adding a fixed-length vector at two different angles does not change that length symmetrically. Checked because the investigation makes the claim explicitly and a student is entitled to expect the suite to have verified it. Measured at 2.57 units of gain against 1.68 of loss.',
     });
 
     add({
@@ -5457,7 +5457,7 @@ export async function runChecks() {
       unit: 'fractional mismatch',
       tolerance: 0,
       toleranceKind: 'bound',
-      why: 'The answer to "where did the energy come from", and the reason the lesson can rule out numerical error as the source: at the fixed step this harness uses the two momentum changes agree to about a part in 10^9. A bound at 1e-5 is four orders looser than that and still far tighter than any accumulated drift could sneak through. In the browser the figure is larger - the application sizes its step from the frame rate, and on a loaded machine the encounter is integrated in steps three times this one - which is why the lesson quotes a bound rather than a digit.',
+      why: 'The answer to "where did the energy come from", and the reason the investigation can rule out numerical error as the source: at the fixed step this harness uses the two momentum changes agree to about a part in 10^9. A bound at 1e-5 is four orders looser than that and still far tighter than any accumulated drift could sneak through. In the browser the figure is larger - the application sizes its step from the frame rate, and on a loaded machine the encounter is integrated in steps three times this one - which is why the investigation quotes a bound rather than a digit.',
     });
 
     add({
@@ -5491,7 +5491,7 @@ export async function runChecks() {
       expected: 2 * V_INF,
       unit: 'simulation speed',
       tolerance: 1e-12,
-      why: 'The ceiling the lesson asks students to compute. Trivial arithmetic, checked because the claim it encodes is not trivial: the limit is set by the approach speed and not by the planet mass, which is the single most counter-intuitive consequence of the vector picture.',
+      why: 'The ceiling the investigation asks students to compute. Trivial arithmetic, checked because the claim it encodes is not trivial: the limit is set by the approach speed and not by the planet mass, which is the single most counter-intuitive consequence of the vector picture.',
     });
   }
 
@@ -5666,7 +5666,7 @@ export async function runChecks() {
       expected: REF.siderealDayDays,
       unit: 'mean solar days',
       tolerance: 1e-8,
-      why: 'The rate constant is the reason a nightly observing window walks four minutes earlier each night, which is the central fact of the planning lesson this module was written for. Checking the rate against the published sidereal day is checking that claim at its source rather than in the lesson prose.',
+      why: 'The rate constant is the reason a nightly observing window walks four minutes earlier each night, which is the central fact of the planning investigation this module was written for. Checking the rate against the published sidereal day is checking that claim at its source rather than in the investigation prose.',
       source:
         'IAU 1982 / Aoki et al. (1982), A&A 105, 359; the sidereal day of 23h 56m 04.0905s as tabulated in the Explanatory Supplement to the Astronomical Almanac.',
     });
@@ -6297,7 +6297,7 @@ export async function runChecks() {
       expected: 90 - Math.abs(LA_SILLA.latitudeDeg - HD209458.decDeg),
       unit: 'degrees',
       tolerance: 1e-12,
-      why: "The whole reason the exercise works from this site: a target at declination +18.9 seen from latitude -29.3 is never better than airmass 1.5, so the airmass limit bites for most of every night and the usable window is a few hours rather than the whole of it. From a northern site the same target is overhead and there is no lesson. This was `data` with an expected value of 41.8595 and a source naming the catalogue entries, which was the Pluto mistake again: nobody published a culmination altitude for this pair, and 41.8595 is 90 - |phi - delta| computed from the two stored elements and written down to four places. It is the same identity as 'Culmination altitude is 90 minus the latitude-declination gap' above, instantiated at the site and target the lesson uses - so it is checked at machine precision against the closed form, and the stored elements are what it pins. The elements' own provenance is on LA_SILLA and HD209458 where they are declared.",
+      why: "The whole reason the exercise works from this site: a target at declination +18.9 seen from latitude -29.3 is never better than airmass 1.5, so the airmass limit bites for most of every night and the usable window is a few hours rather than the whole of it. From a northern site the same target is overhead and there is no investigation. This was `data` with an expected value of 41.8595 and a source naming the catalogue entries, which was the Pluto mistake again: nobody published a culmination altitude for this pair, and 41.8595 is 90 - |phi - delta| computed from the two stored elements and written down to four places. It is the same identity as 'Culmination altitude is 90 minus the latitude-declination gap' above, instantiated at the site and target the investigation uses - so it is checked at machine precision against the closed form, and the stored elements are what it pins. The elements' own provenance is on LA_SILLA and HD209458 where they are declared.",
     });
 
     add({
@@ -6317,7 +6317,7 @@ export async function runChecks() {
       unit: 'hours',
       tolerance: 0,
       toleranceKind: 'bound',
-      why: 'The budget the student is spending. Measured at 4.96 hours, which is a fifth of a day: an epoch placed anywhere in it is within about a tenth of a day of the same sidereal time on any other night, and that is the constraint the whole exercise is about. Written as a bound because the lesson claims "under five hours" and a check that pinned the digit would fail on a sensible change to the airmass limit while the claim stayed true.',
+      why: 'The budget the student is spending. Measured at 4.96 hours, which is a fifth of a day: an epoch placed anywhere in it is within about a tenth of a day of the same sidereal time on any other night, and that is the constraint the whole exercise is about. Written as a bound because the investigation claims "under five hours" and a check that pinned the digit would fail on a sensible change to the airmass limit while the claim stayed true.',
     });
 
     {
@@ -6358,7 +6358,7 @@ export async function runChecks() {
         expected: 12,
         unit: 'nights',
         tolerance: 0,
-        why: 'A check on the scenario rather than on the astronomy. The exercise hands the student twelve nights and tells them to choose; if the Moon or the season had closed one of them the lesson would be about something else, and it would close quietly - an empty window is a valid answer, not an error. Two hours is the floor at which a night is worth a visit.',
+        why: 'A check on the scenario rather than on the astronomy. The exercise hands the student twelve nights and tells them to choose; if the Moon or the season had closed one of them the investigation would be about something else, and it would close quietly - an empty window is a valid answer, not an error. Two hours is the floor at which a night is worth a visit.',
       });
     }
   }

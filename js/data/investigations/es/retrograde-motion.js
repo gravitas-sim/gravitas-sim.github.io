@@ -33,7 +33,7 @@ export default {
         text: 'Los planetas parecen a veces avanzar, a veces retroceder y a veces quedarse quietos.',
         by: 'Claudio Ptolomeo, Almagesto, h. 150 d. C.',
       },
-      tip: 'Esta lección deja el inspector activado: lo necesitarás para leer números de la Tierra y de Marte. La colocación de objetos nuevos está desactivada, así que un clic accidental no puede alterar el sistema que estás midiendo.',
+      tip: 'Esta investigación deja el inspector activado: lo necesitarás para leer números de la Tierra y de Marte. La colocación de objetos nuevos está desactivada, así que un clic accidental no puede alterar el sistema que estás midiendo.',
     },
     {
       title: 'Lo que estás mirando',
@@ -204,7 +204,7 @@ export default {
       prompt:
         'En dos o tres frases, explica por qué Marte parece invertir su marcha, sin decir nada sobre lo que Marte hace de distinto durante esas semanas.',
       rubric:
-        'Una buena respuesta dice que Marte se mueve de manera constante todo el tiempo, y que la inversión la produce el propio movimiento del observador: la Tierra está en una órbita más pequeña y más rápida, y cerca de la oposición adelanta a Marte, de modo que la dirección de la Tierra a Marte gira hacia atrás contra las estrellas lejanas. Se valora nombrar la oposición, conectarla con el paso de la Tierra entre el Sol y Marte, y señalar que eso hace además que Marte esté más cerca y más brillante en ese momento. Una respuesta en la que Marte frena, se detiene o es arrastrado hacia atrás ha perdido el sentido de la lección.',
+        'Una buena respuesta dice que Marte se mueve de manera constante todo el tiempo, y que la inversión la produce el propio movimiento del observador: la Tierra está en una órbita más pequeña y más rápida, y cerca de la oposición adelanta a Marte, de modo que la dirección de la Tierra a Marte gira hacia atrás contra las estrellas lejanas. Se valora nombrar la oposición, conectarla con el paso de la Tierra entre el Sol y Marte, y señalar que eso hace además que Marte esté más cerca y más brillante en ese momento. Una respuesta en la que Marte frena, se detiene o es arrastrado hacia atrás ha perdido el sentido de la investigación.',
     },
     {
       title: 'Lo que costó explicar esto',
@@ -293,7 +293,7 @@ export default {
         'el paralaje no existe',
       ],
       because:
-        'Un resultado nulo obtenido con un instrumento ochenta veces demasiado tosco no te dice nada sobre el efecto. El razonamiento de Tycho era sólido y sus datos excelentes; lo que le faltaba era alguna manera de saber a qué distancia estaban las estrellas, así que no podía distinguir un efecto pequeño de uno ausente. Este es un peligro general que merece la pena llevarse de la lección: una medida que no encuentra nada restringe una teoría solo cuando sabes qué habría podido detectar esa medida.',
+        'Un resultado nulo obtenido con un instrumento ochenta veces demasiado tosco no te dice nada sobre el efecto. El razonamiento de Tycho era sólido y sus datos excelentes; lo que le faltaba era alguna manera de saber a qué distancia estaban las estrellas, así que no podía distinguir un efecto pequeño de uno ausente. Este es un peligro general que merece la pena llevarse de la investigación: una medida que no encuentra nada restringe una teoría solo cuando sabes qué habría podido detectar esa medida.',
     },
     {
       title: '¿Cuánto dura un bucle?',
@@ -320,7 +320,7 @@ export default {
     },
     {
       title: 'Lo que has hecho',
-      body: 'Has medido dos periodos orbitales y has calculado un periodo sinódico a partir de ellos. Has predicho qué aspecto tendría un planeta visto desde un observador en movimiento, después has cambiado el marco y has visto cumplirse la predicción. Has situado la inversión en la oposición, la has ligado a la geometría del adelantamiento, y has encontrado el epiciclo de un año que un modelo geocéntrico tiene que aceptar como una coincidencia.\n\nLa simulación estuvo haciendo exactamente una cosa todo el tiempo: dos planetas en órbitas circulares, bajo una fuerza del inverso del cuadrado ejercida por una estrella. Todos los bucles, picos e inversiones salieron de restar la posición de un cuerpo a la de otro.\n\nEso merece la pena conservarlo más allá de esta lección. Muchísimas cosas que parecen anomalías en el cielo resultan ser afirmaciones sobre dónde está situado el observador, y la primera pregunta que hay que hacerle a un movimiento extraño es siempre: ¿medido contra qué?',
+      body: 'Has medido dos periodos orbitales y has calculado un periodo sinódico a partir de ellos. Has predicho qué aspecto tendría un planeta visto desde un observador en movimiento, después has cambiado el marco y has visto cumplirse la predicción. Has situado la inversión en la oposición, la has ligado a la geometría del adelantamiento, y has encontrado el epiciclo de un año que un modelo geocéntrico tiene que aceptar como una coincidencia.\n\nLa simulación estuvo haciendo exactamente una cosa todo el tiempo: dos planetas en órbitas circulares, bajo una fuerza del inverso del cuadrado ejercida por una estrella. Todos los bucles, picos e inversiones salieron de restar la posición de un cuerpo a la de otro.\n\nEso merece la pena conservarlo más allá de esta investigación. Muchísimas cosas que parecen anomalías en el cielo resultan ser afirmaciones sobre dónde está situado el observador, y la primera pregunta que hay que hacerle a un movimiento extraño es siempre: ¿medido contra qué?',
     },
   ],
 };

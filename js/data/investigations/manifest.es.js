@@ -146,7 +146,7 @@ export const MANIFEST = [
     duration: '35-45 min',
     level: 'Astronomía introductoria',
     summary:
-      'Las mareas no las causa una gravedad intensa. Las causa que la gravedad sea desigual a lo largo de un objeto, y toda la lección se construye sobre esa única resta: quita la atracción sobre el centro a la atracción sobre el lado cercano y el lado lejano, y todo, desde las dos pleamares diarias hasta una estrella desgarrada por un agujero negro, sale de lo que queda.',
+      'Las mareas no las causa una gravedad intensa. Las causa que la gravedad sea desigual a lo largo de un objeto, y toda la investigación se construye sobre esa única resta: quita la atracción sobre el centro a la atracción sobre el lado cercano y el lado lejano, y todo, desde las dos pleamares diarias hasta una estrella desgarrada por un agujero negro, sale de lo que queda.',
     thumbnail: 'images/scenarios/earth-moon-system.webp',
     stepCount: 30,
     gradedCount: 16,
@@ -343,7 +343,7 @@ export const MANIFEST = [
     duration: '45-60 min',
     level: 'Astronomía introductoria',
     summary:
-      'Newton dijo que la gravedad decae como uno partido por la distancia al cuadrado. No a la primera, no al cubo: al cuadrado, exactamente. Esta investigación pregunta qué está haciendo ese «exactamente». Subirás y bajarás el exponente y medirás tres cosas: si la órbita sigue cerrándose, cómo depende el periodo orbital de la distancia y qué leyes de conservación sobreviven. Dos de ellas cambian de inmediato. Una no cambia en absoluto, y la razón de que no lo haga es lo más útil de la lección.',
+      'Newton dijo que la gravedad decae como uno partido por la distancia al cuadrado. No a la primera, no al cubo: al cuadrado, exactamente. Esta investigación pregunta qué está haciendo ese «exactamente». Subirás y bajarás el exponente y medirás tres cosas: si la órbita sigue cerrándose, cómo depende el periodo orbital de la distancia y qué leyes de conservación sobreviven. Dos de ellas cambian de inmediato. Una no cambia en absoluto, y la razón de que no lo haga es lo más útil de la investigación.',
     thumbnail: 'images/scenarios/solar-system.webp',
     stepCount: 21,
     gradedCount: 14,

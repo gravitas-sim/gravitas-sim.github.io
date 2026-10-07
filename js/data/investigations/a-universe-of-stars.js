@@ -313,7 +313,7 @@ const A_UNIVERSE_OF_STARS = {
       title: 'Now the numbers',
       body: `Same three stars, labels on. Everything the picture drew is also
              in the list underneath it, which is where the measurements in this
-             lesson come from.
+             investigation come from.
              \n\nRead the three surface temperatures and write them down
              coolest first. The unit is the kelvin: the same size as a degree
              Celsius, counted from absolute zero, so a warm room is about
@@ -355,7 +355,7 @@ const A_UNIVERSE_OF_STARS = {
         pinStaged: true,
         hide: ['order', 'sun'],
       }),
-      tip: 'The list under the picture is the picture&rsquo;s own data. Every measurement in this lesson can be read from it without interpreting the image.',
+      tip: 'The list under the picture is the picture&rsquo;s own data. Every measurement in this investigation can be read from it without interpreting the image.',
     },
     {
       sid: 'temperature-makes-color',
@@ -382,7 +382,7 @@ const A_UNIVERSE_OF_STARS = {
         regions: false,
         compare: false,
       }),
-      tip: 'Click or drag on the diagram, use the arrow keys, or type into the two sliders — all three do the same thing. Nothing in this lesson is graded on which shade you see.',
+      tip: 'Click or drag on the diagram, use the arrow keys, or type into the two sliders — all three do the same thing. Nothing in this investigation is graded on which shade you see.',
     },
     {
       sid: 'same-temperature-different-light',
@@ -433,7 +433,7 @@ const A_UNIVERSE_OF_STARS = {
         pinStaged: true,
         hide: ['order'],
       }),
-      tip: 'Radius, not diameter. Every size in this lesson is a radius, in units of the Sun&rsquo;s radius — 696,000 km.',
+      tip: 'Radius, not diameter. Every size in this investigation is a radius, in units of the Sun&rsquo;s radius — 696,000 km.',
     },
     {
       sid: 'measure-the-radius-ratio',
@@ -837,7 +837,7 @@ const A_UNIVERSE_OF_STARS = {
       options: ['1 — proportional', '2', '3.5', '10'],
       answer: 2,
       because:
-        'Roughly the 3.5th power, and this measurement gives 3.5 almost exactly: nine million is a hundred to the power 3.5. It is not a law of nature - it is a summary of what stellar-structure calculations produce for stars supported the way main-sequence stars are - and the exponent is not really constant, running steeper near a solar mass and shallower at the top end. What matters for the rest of this lesson is that it is very steep. A star with ten times the mass does not put out ten times the light; it puts out thousands of times more.',
+        'Roughly the 3.5th power, and this measurement gives 3.5 almost exactly: nine million is a hundred to the power 3.5. It is not a law of nature - it is a summary of what stellar-structure calculations produce for stars supported the way main-sequence stars are - and the exponent is not really constant, running steeper near a solar mass and shallower at the top end. What matters for the rest of this investigation is that it is very steep. A star with ten times the mass does not put out ten times the light; it puts out thousands of times more.',
       tool: stage({
         pace: 'phase',
         pinStaged: ['m020', 'm100', 'm2000'],
@@ -934,7 +934,7 @@ const A_UNIVERSE_OF_STARS = {
       options: ['4', '40', '400', 'nothing — same temperature means same size'],
       answer: 2,
       because:
-        'About four hundred. The little one is 0.24 solar radii, the swollen one is 102. They are the same color and the same temperature and one would swallow the other two hundred million times over. This is why "red star" is not a useful category on its own, and it is the single clearest demonstration in the lesson that color tells you about a surface and nothing about a size. The classification that separates them is not color but luminosity: one is a red dwarf, the other a red giant.',
+        'About four hundred. The little one is 0.24 solar radii, the swollen one is 102. They are the same color and the same temperature and one would swallow the other two hundred million times over. This is why "red star" is not a useful category on its own, and it is the single clearest demonstration in the investigation that color tells you about a surface and nothing about a size. The classification that separates them is not color but luminosity: one is a red dwarf, the other a red giant.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -1086,7 +1086,7 @@ const A_UNIVERSE_OF_STARS = {
       ],
       answer: 0,
       because:
-        'Far less. Luminosity is area times what each unit of area emits, and what each unit of area emits climbs as the fourth power of temperature: at 25,000 K a square meter puts out roughly 350 times what a solar square meter does. To come out a hundred times fainter in total, the area has to be about thirty-five thousand times smaller — a radius around a two-hundredth of the Sun&rsquo;s. That is a body the size of the Earth. The last option is the one worth arguing with: mass is exactly what you do <em>not</em> need here, and reaching for it is the habit this lesson is trying to break.',
+        'Far less. Luminosity is area times what each unit of area emits, and what each unit of area emits climbs as the fourth power of temperature: at 25,000 K a square meter puts out roughly 350 times what a solar square meter does. To come out a hundred times fainter in total, the area has to be about thirty-five thousand times smaller — a radius around a two-hundredth of the Sun&rsquo;s. That is a body the size of the Earth. The last option is the one worth arguing with: mass is exactly what you do <em>not</em> need here, and reaching for it is the habit this investigation is trying to break.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -1244,7 +1244,7 @@ const A_UNIVERSE_OF_STARS = {
         return {
           level: 'ok',
           message:
-            'About 1,140,000 million years, 9,880 million and 8.7 million: a factor of 130,000 across the set. The heaviest star in this lesson finished its main sequence before the lightest had got started, and the lightest will still be on it when the Universe is a hundred times its present age.',
+            'About 1,140,000 million years, 9,880 million and 8.7 million: a factor of 130,000 across the set. The heaviest star in this investigation finished its main sequence before the lightest had got started, and the lightest will still be on it when the Universe is a hundred times its present age.',
         };
       },
       tool: lab({ mode: 'model', regions: true, capture: true }),
@@ -1523,7 +1523,7 @@ const A_UNIVERSE_OF_STARS = {
              deliberately <em>not</em> drawn in the colors of their stars: that
              would give away the question the next five screens ask.
              \n\n<strong>The three stars on the canvas are not these four.</strong>
-             They are the lesson&rsquo;s modeled stars, still where they have
+             They are the investigation&rsquo;s modeled stars, still where they have
              been since step 1, and nobody has ever observed them &mdash; they
              are points on a published track. Keep the two halves of the screen
              apart: the canvas is the model, the panel is the measurement.`,
@@ -1695,7 +1695,7 @@ const A_UNIVERSE_OF_STARS = {
              the SDSS pipeline and A1V by an independent template match; X is G2
              and G5; Y is K3 and K3V; Z is M1 and M2Vvar. Two classifications,
              agreeing on the letter in all four cases &mdash; which is why this
-             lesson is willing to call them A, G, K and M. Not one of those
+             investigation is willing to call them A, G, K and M. Not one of those
              letters was read off a color.
              \n\n<strong>A color is a good thermometer.</strong> It ordered
              these four correctly, at a glance, and it is what the simulation
@@ -1719,7 +1719,7 @@ const A_UNIVERSE_OF_STARS = {
         id: 'spectra-compare',
         values: { window: 0, focus: 0, named: 1 },
       },
-      tip: 'If you want the four in the archive rather than here: the readout gives each one’s plate, MJD and fiber, which is its permanent address in SDSS. The pipeline’s own surface gravity for star W suggests it is not a main-sequence dwarf, which is why this lesson never calls it one.',
+      tip: 'If you want the four in the archive rather than here: the readout gives each one’s plate, MJD and fiber, which is its permanent address in SDSS. The pipeline’s own surface gravity for star W suggests it is not a main-sequence dwarf, which is why this investigation never calls it one.',
     },
     {
       sid: 'the-argument',

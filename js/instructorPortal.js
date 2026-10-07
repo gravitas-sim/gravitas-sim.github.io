@@ -788,7 +788,8 @@ export async function initInstructorPortal() {
     const showing = input.type === 'text';
     input.type = showing ? 'password' : 'text';
     toggle.setAttribute('aria-pressed', String(!showing));
-    toggle.textContent = showing ? 'Show' : 'Hide';
+    for (const e of toggle.children)
+      e.hidden = (e.dataset.s === 'h') !== showing;
     input.focus();
   });
 

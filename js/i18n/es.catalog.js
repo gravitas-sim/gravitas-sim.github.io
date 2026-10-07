@@ -56,7 +56,7 @@ export const ES_CATALOG = {
   'cat.provides.dataPacks': 'datos: {ids}',
   'cat.provides.courses': 'un curso: {ids}',
   'cat.provides.widgetFamilies': 'instrumentos: {ids}',
-  'cat.provides.investigations': 'lecciones: {ids}',
+  'cat.provides.investigations': 'investigaciones: {ids}',
   'cat.provides.other': '{what}: {ids}',
   'cat.object': 'Objeto',
   'cat.install': 'Instalar para usar sin conexión',
@@ -69,7 +69,7 @@ export const ES_CATALOG = {
   'cat.installedNow': '{title} está instalado y funciona sin conexión.',
   'cat.removed': 'Se quitó {title}.',
   'cat.breaking':
-    'La versión {version} es una nueva versión principal. Lo que nombre la versión {installed}, como una tarea, puede necesitar cambios.',
+    'La versión {version} es una nueva versión principal. Lo que nombre la versión {installed}, como una actividad, puede necesitar cambios.',
   'cat.error.incompatible': 'Necesita otra versión de Gravitas.',
   'cat.error.notInstallable':
     'Viene incluido en Gravitas y no hay nada que instalar.',

@@ -106,7 +106,7 @@ export function makeChecker(input, api) {
         entities.has(m[1]),
         path,
         'entity',
-        `&${m[1]}; is not an entity lessons use`,
+        `&${m[1]}; is not an entity investigations use`,
         {
           entity: m[1],
         }

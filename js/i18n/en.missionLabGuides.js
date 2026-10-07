@@ -103,7 +103,7 @@ export const EN_MISSIONLABGUIDES = {
     'Right: {value}°. Mars’s orbit is tilted 1.85° to the Earth’s, so a transfer must leave the Earth’s plane to meet it, the more steeply the nearer its transfer angle is to 180°. The flat circles of the diagnostic page have no such angle.',
   'gd.ml-window.limits.title': 'What this part leaves out',
   'gd.ml-window.limits.body':
-    'Each cell is a two-body transfer between the planets’ centers, with a patched conic’s burn at each end: the next part flies it directly and sees what that leaves out. The positions are JPL’s, fitted to within a few km (MISSION_LAB.md has the table). The window shows one opportunity; the pack holds 2025 to 2045.',
+    'Each cell is a two-body transfer between the planets’ centers, with a patched conic’s burn at each end: the next part flies it directly and sees what that leaves out. The positions are JPL’s, fitted to within a few km (MISSION_LAB.md has the table). The window shows one opportunity; the dataset holds 2025 to 2045.',
   'gd.ml-window.limits.ok': '',
 
   'gd.ml-cruise.title':
@@ -179,6 +179,6 @@ export const EN_MISSIONLABGUIDES = {
     'Right: {value} kg, several times the spacecraft’s own dry mass. The rocket equation is exponential in delta-v, which is why every m/s is counted.',
   'gd.ml-cruise.limits.title': 'What the direct flight still leaves out',
   'gd.ml-cruise.limits.body':
-    'The direct flight is a better model than the patched conic, not a real one: the Moon, the other planets, the Earth’s shape and sunlight’s pressure are left out, every burn is instantaneous and every state is known exactly. The list under “What this model leaves out” names them all. That is the difference from operational software: here the model’s limits are the lesson; there, removing them is what the tools are for.',
+    'The direct flight is a better model than the patched conic, not a real one: the Moon, the other planets, the Earth’s shape and sunlight’s pressure are left out, every burn is instantaneous and every state is known exactly. The list under “What this model leaves out” names them all. That is the difference from operational software: here the model’s limits are the investigation; there, removing them is what the tools are for.',
   'gd.ml-cruise.limits.ok': '',
 };

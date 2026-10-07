@@ -169,7 +169,7 @@ export const EN_DEFERRED = {
   'assist.sweep.caveat.held':
     'Held for every pass: approach speed {vinf} km/s, integration step {step}, seed {seed}. Only the impact parameter changed.',
   // --- The chaos lesson's controlled pair ----------------------------------
-  'bench.chaos.title': 'The lesson\u2019s controlled pair',
+  'bench.chaos.title': 'The investigation\u2019s controlled pair',
   'bench.chaos.hint':
     'Sets the comparison up and runs both arms over the same stretch of simulated time: capture, Run A, back to the start, the nudge, Run B. Everything it does is what you would have done by hand, in the order you would have done it.',
   'bench.chaos.run': 'Set up and run both',
@@ -184,7 +184,7 @@ export const EN_DEFERRED = {
   'bench.chaos.name.binary': 'Binary control pair',
   'bench.chaos.name.triple': 'Three-body pair',
   'bench.chaos.wrongScenario':
-    'This is for the chaos lesson\u2019s two scenarios. Load the Binary Pair or the Three-Body Sensitivity Lab.',
+    'This is for the chaos investigation\u2019s two scenarios. Load the Binary Pair or the Three-Body Sensitivity Lab.',
   'bench.chaos.benchBusy':
     'The bench is holding \u201c{name}\u201d with runs recorded in it. Save it or capture a new start before running this, so nothing of yours is lost.',
   'bench.chaos.running': 'Recording run {arm}\u2026',
@@ -641,21 +641,21 @@ export const EN_DEFERRED = {
   // bridge, or the lesson panel with an assignment open - so none of them has
   // any business in a first-time visitor's download. Registered by
   // ensureDeferredMessages() before any of those render.
-  'assign.title': 'Build an assignment',
+  'assign.title': 'Build an activity',
   'assign.hint':
     'Choose the steps to set. Steps that build the world another step is about are added for you, and shown below where they land.',
   'assign.close': 'Close',
-  'assign.name': 'Assignment name',
+  'assign.name': 'Activity name',
   'assign.intro': 'Instructions for students (optional)',
   'assign.roster': 'Class or roster code (optional)',
   'assign.selectAll': 'Select all',
   'assign.selectNone': 'Clear',
   'assign.count':
-    '{chosen} chosen, {included} included, of {total} in the lesson',
+    '{chosen} chosen, {included} included, of {total} in the investigation',
   'assign.build': 'Make the link',
   'assign.print': 'Printable instructions',
   'assign.download': 'Save as a file',
-  'assign.link': 'Assignment link',
+  'assign.link': 'Activity link',
   'assign.link.ok': 'A comfortable {n} characters.',
   'assign.link.long':
     'This link is {n} characters, above the {limit} that mail clients and course systems reliably carry. Fewer steps would shorten it; a truncated link fails at the student\u2019s end, where nobody can fix it.',
@@ -665,52 +665,53 @@ export const EN_DEFERRED = {
     'Added: \u201c{step}\u201d uses what this step produces.',
   'assign.added.summary':
     '{n} step(s) were added because the steps you chose are about the worlds they build.',
-  'assign.subtitle': '{n} steps of {lesson} ({total} in the full lesson)',
+  'assign.subtitle':
+    '{n} steps of {lesson} ({total} in the full investigation)',
   'assign.print.steps': '{n} steps',
-  'assign.print.open': 'Open the assignment at this address:',
-  'assign.print.id': 'Assignment {id}, issued {date}.',
+  'assign.print.open': 'Open the activity at this address:',
+  'assign.print.id': 'Activity {id}, issued {date}.',
   'assign.print.roster': 'Class code: {code}',
 
   'assign.error.nothingSelected': 'Choose at least one step.',
-  'assign.error.noLesson': 'That lesson could not be read.',
+  'assign.error.noLesson': 'That investigation could not be read.',
   'assign.error.unknownSteps':
-    'This assignment names steps the lesson does not have.',
-  'assign.error.tooManySteps': 'An assignment can hold at most {max} steps.',
+    'This activity names steps the investigation does not have.',
+  'assign.error.tooManySteps': 'An activity can hold at most {max} steps.',
   'assign.error.titleTooLong': 'That name is too long.',
   'assign.error.introTooLong': 'Those instructions are too long.',
-  'assign.error.notAnObject': 'That link does not contain an assignment.',
-  'assign.error.wrongKind': 'That link is not an assignment link.',
-  'assign.error.badVersion': 'That assignment link is malformed.',
+  'assign.error.notAnObject': 'That link does not contain an activity.',
+  'assign.error.wrongKind': 'That link is not an activity link.',
+  'assign.error.badVersion': 'That activity link is malformed.',
   'assign.error.newerVersion':
-    'That assignment was made by a newer version of Gravitas. Reload the page and try again.',
-  'assign.error.badLesson': 'That assignment does not name a lesson.',
-  'assign.error.badId': 'That assignment has no usable identifier.',
-  'assign.error.noSteps': 'That assignment contains no steps.',
+    'That activity was made by a newer version of Gravitas. Reload the page and try again.',
+  'assign.error.badLesson': 'That activity does not name an investigation.',
+  'assign.error.badId': 'That activity has no usable identifier.',
+  'assign.error.noSteps': 'That activity contains no steps.',
   'assign.error.badStepId':
-    'That assignment names a step in a form we cannot use.',
-  'assign.error.duplicateSteps': 'That assignment lists the same step twice.',
-  'assign.error.fingerprintMismatch': 'That assignment link is incomplete.',
-  'assign.error.badText': 'That assignment link is malformed.',
+    'That activity names a step in a form we cannot use.',
+  'assign.error.duplicateSteps': 'That activity lists the same step twice.',
+  'assign.error.fingerprintMismatch': 'That activity link is incomplete.',
+  'assign.error.badText': 'That activity link is malformed.',
   'assign.error.unexpectedField':
-    'That file carries a \u201c{field}\u201d field, which an assignment never has. It was not made by this tool and has not been opened.',
-  'assign.error.notJson': 'That file is not an assignment.',
+    'That file carries a \u201c{field}\u201d field, which an activity never has. It was not made by this tool and has not been opened.',
+  'assign.error.notJson': 'That file is not an activity.',
   'assign.error.tooLarge':
-    'That link holds more than a link can carry, so it was not opened. Ask for the assignment as a file.',
+    'That link holds more than a link can carry, so it was not opened. Ask for the activity as a file.',
   'assign.error.corrupt':
     'That link looks incomplete. Mail clients sometimes break long links across lines.',
   'assign.error.noStepsLeft':
-    'None of this assignment\u2019s steps are in the lesson any more. It was probably set against an older version.',
+    'None of this activity\u2019s steps are in the investigation any more. It was probably set against an older version.',
   'assign.notice.changed':
     '{n} step(s) have been rewritten since this was set. Those start blank rather than showing an answer to a question that is no longer being asked.',
   'assign.notice.missing':
-    '{n} step(s) are no longer in the lesson and have been left out.',
+    '{n} step(s) are no longer in the investigation and have been left out.',
   'assign.notice.unpinned':
-    'This assignment was made before lessons came in versioned packages. It opens with {current}, and any step rewritten since is shown blank.',
+    'This activity was made before investigations came in versioned packages. It opens with {current}, and any step rewritten since is shown blank.',
   'assign.notice.major':
-    'This assignment was made with {pinned}; this Gravitas has {current}, a new major version. Its steps may have been rewritten, and any that were are shown blank.',
+    'This activity was made with {pinned}; this Gravitas has {current}, a new major version. Its steps may have been rewritten, and any that were are shown blank.',
   'assign.notice.moved':
-    'This assignment was made with {pinned}, which this Gravitas no longer provides the lesson from. It opens with the lesson as it is now.',
-  'assign.error.badPackage': 'That assignment link names its package wrongly.',
+    'This activity was made with {pinned}, which this Gravitas no longer provides the investigation from. It opens with the investigation as it is now.',
+  'assign.error.badPackage': 'That activity link names its package wrongly.',
 
   // --- The maneuver planner ---------------------------------------------------
   'burn.title': 'Maneuver planner',
@@ -910,13 +911,13 @@ export const EN_DEFERRED = {
   'inv.progress.steps': '{done} of {total} steps',
   'inv.scenario.reset': 'Scenario reset',
   'inv.card.loading': 'Loading…',
-  'inv.card.review': 'Review lesson',
-  'inv.card.start': 'Start lesson',
+  'inv.card.review': 'Review investigation',
+  'inv.card.start': 'Start investigation',
   'inv.card.resume': 'Resume at step {n}',
   'inv.card.complete': 'Complete',
   'inv.card.seen': '{done} of {total} steps seen',
   'inv.card.report': 'Lab report',
-  'inv.card.series': '{label}, lesson {index} of {of}',
+  'inv.card.series': '{label}, investigation {index} of {of}',
   // Habitability, binary and tidal widget prose. Same boundary and same
   // reasoning as the resW/chaosW/energyW families above: js/widgets.js is
   // reached only from the lazy js/investigations.js, and each of these three
@@ -967,7 +968,7 @@ export const EN_DEFERRED = {
     'Twice as far again, so twice as heavy again. Only the ratio of the two distances matters, not the distances themselves.',
   'binW.equal2AuEach': 'Equal, 2 AU each',
   'binW.equalDistancesMeanEqualMasses':
-    'Equal distances mean equal masses. This is the case you started the lesson with.',
+    'Equal distances mean equal masses. This is the case you started the investigation with.',
   'binW.starAIsThisFar': 'Star A is this far from the middle',
   'binW.starBIsThisFar': 'Star B is this far from the middle',
   'binW.theHeavierStarAndBy': 'The heavier star, and by how much',
@@ -1716,8 +1717,8 @@ export const EN_DEFERRED = {
   'inv.filter.progress.done': 'Finished',
   'inv.filter.clear': 'Clear filters',
   'inv.filter.count': {
-    one: '{n} of {total} lessons matches',
-    other: '{n} of {total} lessons match',
+    one: '{n} of {total} investigations matches',
+    other: '{n} of {total} investigations match',
   },
 
   'inv.tag.chaos': 'Chaos',
@@ -1736,28 +1737,28 @@ export const EN_DEFERRED = {
   'inv.tag.stars': 'Stars',
 
   'inv.empty.search': 'Nothing matches “{query}”.',
-  'inv.empty.filters': 'No lesson matches all of those at once.',
+  'inv.empty.filters': 'No investigation matches all of those at once.',
   'inv.empty.relax': {
-    one: 'Ignore {filter}: {n} lesson',
-    other: 'Ignore {filter}: {n} lessons',
+    one: 'Ignore {filter}: {n} investigation',
+    other: 'Ignore {filter}: {n} investigations',
   },
 
   // --- The curated orders -----------------------------------------------------
   'inv.seq.heading': 'Ways through',
   'inv.seq.intro':
-    'Lessons stand alone, but some build on each other. These are orders that work, with what each one assumes you have already done.',
-  'inv.seq.all': 'Every lesson',
+    'Investigations stand alone, but some build on each other. These are orders that work, with what each one assumes you have already done.',
+  'inv.seq.all': 'Every investigation',
   'inv.seq.needs': 'Assumes you have done: {lessons}.',
   'inv.seq.needs.none': 'Nothing assumed. Start here.',
   'inv.seq.fit.demo': 'Fits a demonstration',
   'inv.seq.fit.period': 'Fits a class period',
   'inv.seq.fit.long': 'Longer than a period',
   'inv.seq.assign':
-    'Cut a shorter activity out of this lesson with the assignment builder',
+    'Cut a shorter activity out of this investigation with the activity builder',
 
   'inv.seq.orbits.title': 'Orbital mechanics',
   'inv.seq.orbits.blurb':
-    'From the shape of an orbit to moving between two of them. The first two lessons measure what orbits do; the last three spend that understanding on getting somewhere.',
+    'From the shape of an orbit to moving between two of them. The first two measure what orbits do; the last three spend that understanding on getting somewhere.',
   'inv.seq.orbits.keplers-laws':
     'The three laws, measured rather than recited. Everything after this refers back to the ellipse and the period–size relation you find here.',
   'inv.seq.orbits.orbital-energy':
@@ -1765,13 +1766,13 @@ export const EN_DEFERRED = {
   'inv.seq.orbits.hohmann-transfer':
     'The cheapest way between two circular orbits, planned and flown. Short enough to run as a demonstration once the energy argument is in place.',
   'inv.seq.orbits.gravity-assist':
-    'The other way to change orbit: borrow from a planet instead of burning fuel. Reads as a companion to the transfer lesson rather than a sequel.',
+    'The other way to change orbit: borrow from a planet instead of burning fuel. Reads as a companion to the transfer investigation rather than a sequel.',
   'inv.seq.orbits.lagrange-points':
     'Where the two-body picture stops being enough. A natural place to end, and the doorway into the three-body sequence.',
 
   'inv.seq.exoplanets.title': 'Detecting exoplanets',
   'inv.seq.exoplanets.blurb':
-    'The two methods that have found nearly every known planet, then using them together on an unknown star. Longer lessons: plan on two sittings, or set part of one as homework.',
+    'The two methods that have found nearly every known planet, then using them together on an unknown star. Longer investigations: plan on two sittings, or set part of one as homework.',
   'inv.seq.exoplanets.transit-photometry':
     'Depth, duration and noise, from a light curve you measure yourself. The vocabulary the rest of the sequence uses.',
   'inv.seq.exoplanets.radial-velocity':
@@ -1781,7 +1782,7 @@ export const EN_DEFERRED = {
   'inv.seq.exoplanets.design-the-schedule':
     'The same argument on the real instrument, where the run takes minutes and cannot be rewound. Do the analytic version first; this one asks you to plan the observing yourself.',
   'inv.seq.exoplanets.goldilocks-question':
-    'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit lesson; the radial-velocity one helps.',
+    'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit investigation; the radial-velocity one helps.',
 
   'inv.seq.threebody.title': 'When two bodies are not enough',
   'inv.seq.threebody.blurb':
@@ -1789,7 +1790,7 @@ export const EN_DEFERRED = {
   'inv.seq.threebody.when-orbits-lock':
     'The gentlest introduction to a third body: repeated small tugs that add up. No prior three-body work needed.',
   'inv.seq.threebody.lagrange-points':
-    'The equilibrium points of the restricted problem, and the rotating frame they live in. Short, and the frame is what the next lesson leans on.',
+    'The equilibrium points of the restricted problem, and the rotating frame they live in. Short, and the frame is what the next investigation leans on.',
   'inv.seq.threebody.butterfly-effect':
     'Sensitive dependence, measured with a separation you watch grow. Much more convincing once you have seen an orbit that stays put.',
   'inv.seq.threebody.binary-star-planets':
@@ -1807,7 +1808,10 @@ export const EN_DEFERRED = {
   'inv.summary.range': '{l}–{h} hours',
   'inv.summary.work': '{hours} of work',
   'inv.summary.level': 'All at {level} level.',
-  'inv.summary.lessons': { one: '{n} lesson', other: '{n} lessons' },
+  'inv.summary.lessons': {
+    one: '{n} investigation',
+    other: '{n} investigations',
+  },
   'inv.summary.steps': { one: '{n} step', other: '{n} steps' },
   'inv.summary.complete': '{n} complete',
   'inv.summary.going': '{n} in progress',
@@ -1832,17 +1836,17 @@ export const EN_DEFERRED = {
   'inv.save.foreign':
     'Saved progress from a newer version of Gravitas was found and left untouched. Your answers work here but are not being saved.',
   'inv.progress.migrated':
-    'Carried {n} saved answers over from an older format, matched by position. If this lesson has changed since you last opened it, check that each answer is on the question you meant.',
+    'Carried {n} saved answers over from an older format, matched by position. If this investigation has changed since you last opened it, check that each answer is on the question you meant.',
   'inv.progress.removedSteps':
-    'Discarded {n} saved answers for steps this lesson no longer has.',
+    'Discarded {n} saved answers for steps this investigation no longer has.',
   'inv.progress.foreign':
-    'Your saved progress for this lesson was written by a newer version of Gravitas and could not be read. It has been left where it is rather than overwritten.',
+    'Your saved progress for this investigation was written by a newer version of Gravitas and could not be read. It has been left where it is rather than overwritten.',
   'inv.backup.downloaded': 'Progress backup downloaded.',
   'inv.backup.restored': 'Progress restored.',
   'inv.backup.restoredMoved':
     'Progress restored. {moved} answers were matched to steps that have moved since the backup was made.',
   'inv.backup.restoredPartly':
-    'Progress restored, but {dropped} steps in the backup are no longer in this lesson and their answers were left out.',
+    'Progress restored, but {dropped} steps in the backup are no longer in this investigation and their answers were left out.',
   'inv.backup.restoredUncertain':
     'Restored {applied} answers. {n} could not be placed because their steps have changed since the backup was made; they are still in the file you restored from.',
   'inv.backup.tooLarge': 'That file is too large to be a progress backup.',
@@ -2053,7 +2057,7 @@ export const EN_DEFERRED = {
   'exoW.starSLuminosity': 'Star’s luminosity',
   'exoW.starSTemperature': 'Star’s temperature',
   'exoW.thePlanetThisLessonMeasured':
-    'The planet this lesson measured. Large, light, and far too close to its star for the zone.',
+    'The planet this investigation measured. Large, light, and far too close to its star for the zone.',
   'exoW.planetAARockyCandidate': 'Planet A: a rocky candidate',
   'exoW.planetBPuffy': 'Planet B: puffy',
   'exoW.planetCRockyTooHot': 'Planet C: rocky, too hot',
@@ -2618,7 +2622,7 @@ export const EN_DEFERRED = {
   'gwW.audio.refused.muted':
     'Sound is off. Turn it on with the speaker at the top of the screen, then press Listen again.',
   'gwW.audio.refused.unsupported':
-    'This browser will not give the page an audio output. Everything in this lesson can be done from the plots.',
+    'This browser will not give the page an audio output. Everything in this investigation can be done from the plots.',
   'gwW.audio.refused.empty': 'There is nothing in this window to play.',
   // ---------------------------------------------------------------------------
   // The sound panel (js/ui.js). The button's own labels are in the eager
@@ -2934,7 +2938,7 @@ export const EN_DEFERRED = {
   'transitW.companionContrastM': 'Companion contrast Δm',
   'transitW.radiusYouMeasured': 'Radius you measured',
   'transitW.equalTwinM0': 'Equal twin, Δm = 0',
-  'transitW.theLessonSBinaryM': 'The lesson’s binary, Δm = 0.5',
+  'transitW.theLessonSBinaryM': 'The investigation’s binary, Δm = 0.5',
   'transitW.theCompanionInTheBlended':
     'The companion in the Blended Binary scenario. It supplies 39% of the light and shrinks the measured planet by 22%.',
   'transitW.roboAoMedianM3': 'Robo-AO median, Δm = 3',
@@ -3051,8 +3055,9 @@ export const EN_DEFERRED = {
   'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
   'export.truncated':
     'Exported the first {n} rows: the recording was larger than one file.',
-  'inv.link.unknown': 'That investigation link does not match a lesson.',
-  'inv.load.failed': 'That lesson could not be loaded. Try again.',
+  'inv.link.unknown':
+    'That investigation link does not match an investigation.',
+  'inv.load.failed': 'That investigation could not be loaded. Try again.',
   'activity.error.noActivity':
     'There is no classroom activity called “{id}”. The teaching page lists the ones that exist.',
   'activity.error.noFormat':
@@ -3070,7 +3075,7 @@ export const EN_DEFERRED = {
   'welcomeCard.sandbox.text':
     'Build a system from nothing, or load one of the built-in scenarios and change it. Drag to place an object; the drag sets its velocity.',
   'welcomeCard.sandbox.cta': 'Enter the sandbox',
-  'welcomeCard.investigations.eyebrow': 'Guided lessons',
+  'welcomeCard.investigations.eyebrow': 'Guided investigations',
   'welcomeCard.investigations.title': 'Investigations',
   'welcomeCard.investigations.text':
     'Structured astronomy activities inside the simulation: predict, experiment, measure, answer, and export a lab report.',
@@ -3095,7 +3100,8 @@ export const EN_DEFERRED = {
   'welcomeLink.model.label': 'How Gravitas models the universe',
   'welcomeLink.model.note':
     'What is calculated, what is approximated, and what is only drawn.',
-  'welcomeLink.instructors.note': 'Guides, answer keys and a curriculum map.',
+  'welcomeLink.instructors.note':
+    'Instructor guides, answer keys and a curriculum map.',
   'tideP.moonOnEarth': 'the Moon, on the Earth',
   'tideP.sunOnEarth': 'the Sun, on the Earth',
   'tideP.earthOnMoon': 'the Earth, on the Moon',
@@ -3190,21 +3196,21 @@ export const EN_DEFERRED = {
   'stelE.value.mass': '{now} now, {born} at birth — {lost} lost to its wind',
   'stelE.row.spectral': 'Spectral type',
   'summary.life.cloud':
-    'A lesson is showing this star before it formed: the canvas has a contracting cloud of gas with a brightening center, and no star, because there is not one yet.',
+    'An investigation is showing this star before it formed: the canvas has a contracting cloud of gas with a brightening center, and no star, because there is not one yet.',
   'summary.life.star':
-    'A lesson is running this star through its life; the canvas shows the star at the model age given in the instrument readout.',
+    'An investigation is running this star through its life; the canvas shows the star at the model age given in the instrument readout.',
   'summary.life.wind':
-    'A lesson is running this star through its life. Dashed shells around it stand for material it has shed — about {pct} per cent of the mass it was born with, so far.',
+    'An investigation is running this star through its life. Dashed shells around it stand for material it has shed — about {pct} per cent of the mass it was born with, so far.',
   'summary.life.explosion':
-    'A lesson has run this star to the end. Expanding rings stand for an explosion the endpoint model expects, and what is left at the center is a {kind}.',
+    'An investigation has run this star to the end. Expanding rings stand for an explosion the endpoint model expects, and what is left at the center is a {kind}.',
   'summary.life.remnant':
-    'A lesson has run this star to the end. What is left is a {kind}; there was no explosion in this model.',
+    'An investigation has run this star to the end. What is left is a {kind}; there was no explosion in this model.',
   'stelE.row.grid': 'The models behind this',
   'stelE.value.grid':
     'MIST v1.2: single stars, solar composition, no rotation, no companion. Every number here follows from those choices, and a star with a different composition or a companion does not follow this track.',
   'stelE.row.notOnlyMass': 'Mass is not the whole story',
   'stelE.value.notOnlyMass':
-    'On this grid the birth mass fixes the endpoint, because everything else was held constant. In the sky it does not: composition, rotation and above all a close companion can change what a star of a given mass leaves behind. This lesson varies one thing, which is what makes it readable and what makes it incomplete.',
+    'On this grid the birth mass fixes the endpoint, because everything else was held constant. In the sky it does not: composition, rotation and above all a close companion can change what a star of a given mass leaves behind. This investigation varies one thing, which is what makes it readable and what makes it incomplete.',
   'stelE.row.whatThisIs': 'What you are looking at',
   'stelE.value.whatThisIs.sample':
     'A stored row of the published model — numbers MIST computed and this application read in, not computed here.',

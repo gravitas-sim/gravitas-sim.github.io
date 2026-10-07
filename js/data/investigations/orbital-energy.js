@@ -162,7 +162,7 @@ const ENERGY = {
              \n\nAnd if you load even more gunpowder? At some speed it leaves and
              does not come back. Somewhere between those two outcomes there is a
              dividing line. Finding that line, and understanding what decides
-             which side of it something falls on, is the whole of this lesson.
+             which side of it something falls on, is the whole of this investigation.
              \n\nOver the next few steps you will fire Newton's cannon yourself.`,
       tip: 'Nothing needs measuring yet. The panel on the right will appear in a moment with a cannon on it.',
       setup: ENERGY_LAB,

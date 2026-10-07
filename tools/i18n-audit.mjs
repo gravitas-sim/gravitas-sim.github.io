@@ -20,6 +20,7 @@
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import * as parse5 from 'parse5';
 
 import { completeCatalogs } from './i18n-catalog.mjs';
 import { assembledIndexHtml } from './index-fragments.mjs';
@@ -274,6 +275,125 @@ for (const { id, untranslated } of perLocale) {
   show(`Not yet translated into ${labelFor(id)}`, untranslated, 15);
 }
 
+// -----------------------------------------------------------------------------
+// Document pages carry their Spanish in their own markup (D-TERM-02): every
+// run of prose is an English span and a Spanish span side by side. Two things
+// can go wrong there, and neither is visible in a catalog: a run with only one
+// of the pair, and a Spanish copy whose tags or links have drifted from the
+// English. Pages in REQUIRED_BILINGUAL must also have no prose outside a pair.
+// -----------------------------------------------------------------------------
+const REQUIRED_BILINGUAL = [
+  'glossary',
+  'validation',
+  'instructors',
+  'evaluation',
+  'model',
+];
+const pageProblems = [];
+const SKIP_TAGS = new Set([
+  'script',
+  'style',
+  'pre',
+  'code',
+  'svg',
+  'kbd',
+  'option',
+  'select',
+  'textarea',
+]);
+const shape = n => {
+  const tags = [];
+  const walk = x => {
+    for (const k of x.childNodes ?? []) {
+      if (k.tagName) {
+        tags.push(
+          k.tagName +
+            (k.tagName === 'a'
+              ? `[${k.attrs.find(a => a.name === 'href')?.value}]`
+              : '')
+        );
+        walk(k);
+      }
+    }
+  };
+  walk(n);
+  return tags.join(',');
+};
+const cls = n => n.attrs?.find(a => a.name === 'class')?.value ?? '';
+for (const page of readdirSync(ROOT)
+  .filter(d => statSync(join(ROOT, d)).isDirectory())
+  .map(d => `${d}/index.html`)
+  .filter(f => {
+    try {
+      return statSync(join(ROOT, f)).isFile();
+    } catch {
+      return false;
+    }
+  })) {
+  const doc = parse5.parse(
+    // Generated fact blocks are rows scanned out of the source, in English.
+    readFileSync(join(ROOT, page), 'utf8').replace(
+      /<!--fact-block:[^>]*-->[\s\S]*?<!--\/fact-block-->/g,
+      ''
+    )
+  );
+  const required = REQUIRED_BILINGUAL.includes(page.split('/')[0]);
+  let main;
+  (function find(n) {
+    if (n.tagName === 'main') main = n;
+    else (n.childNodes ?? []).forEach(find);
+  })(doc);
+  if (!main) continue;
+  const walk = (n, inPair) => {
+    const kids = n.childNodes ?? [];
+    kids.forEach((k, i) => {
+      if (k.tagName && SKIP_TAGS.has(k.tagName)) return;
+      if (/\bdoc-eq-block\b/.test(cls(k))) return;
+      if (/^val[A-Z]/.test(k.attrs?.find(a => a.name === 'id')?.value ?? ''))
+        return;
+      if (/\bgs-en\b/.test(cls(k))) {
+        const next = kids.slice(i + 1).find(x => x.tagName || x.value?.trim());
+        if (!next || !/\bgs-es\b/.test(cls(next)))
+          pageProblems.push(`${page}: a gs-en with no gs-es after it`);
+        else if (shape(k) !== shape(next))
+          pageProblems.push(
+            `${page}: tags or links differ between en and es near "${k.childNodes?.[0]?.value?.slice(0, 40) ?? ''}"`
+          );
+        return;
+      }
+      if (/\bgs-es\b/.test(cls(k))) {
+        const prev = kids
+          .slice(0, i)
+          .reverse()
+          .find(x => x.tagName || x.value?.trim());
+        if (!prev || !/\bgs-en\b/.test(cls(prev)))
+          pageProblems.push(`${page}: a gs-es with no gs-en before it`);
+        return;
+      }
+      if (
+        k.nodeName === '#text' &&
+        required &&
+        /[A-Za-z]{4,}/.test(k.value) &&
+        !/\b(19|20)\d\d\b/.test(k.value) &&
+        !/_|^\s*(worlds \(|[a-z]+[A-Z]\w*\b)/.test(k.value) &&
+        !inPair
+      )
+        pageProblems.push(
+          `${page}: English prose outside a pair: "${k.value.trim().slice(0, 50)}"`
+        );
+      if (k.tagName) walk(k, inPair);
+    });
+  };
+  walk(main, false);
+}
+if (pageProblems.length)
+  show(
+    'DOCUMENT PAGES (en/es markup out of step)',
+    [...new Set(pageProblems)],
+    30
+  );
+else console.log('Document pages:    every en/es pair matches');
+
 void relative;
 // An orphan is a typo and fails; an untranslated id is honest work in progress
 // and does not. That asymmetry is the same one the Spanish-only version had.
@@ -281,5 +401,10 @@ void relative;
 // work in progress, it is strings a reader can never see.
 const orphanTotal = perLocale.reduce((n, l) => n + l.orphaned.length, 0);
 process.exit(
-  layoutProblems.length || missingInEn.length || orphanTotal ? 1 : 0
+  layoutProblems.length ||
+    missingInEn.length ||
+    orphanTotal ||
+    pageProblems.length
+    ? 1
+    : 0
 );

@@ -2556,3 +2556,18 @@
     }
   }
 }
+
+/* --- The glossary (Roadmap II Prompt 56) ------------------------------------ */
+@layer components {
+  .gl-terms > div {
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .gl-terms dt {
+    font-weight: var(--weight-bold);
+  }
+  .gl-terms dd {
+    max-width: 62ch;
+    margin: var(--space-2) 0 0;
+  }
+}

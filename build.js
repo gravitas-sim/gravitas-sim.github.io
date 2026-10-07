@@ -71,6 +71,7 @@ const DOC_PAGES = [
   'instructors',
   'instructors/submissions',
   'validation',
+  'glossary',
   'teaching',
   'evaluation',
   'figure',

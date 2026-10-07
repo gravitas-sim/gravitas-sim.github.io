@@ -139,7 +139,7 @@ export function activityGuide(
         ['For', say(messages, format.forId)],
         [
           'Steps',
-          `${resolved.sids.length} of the lesson's ${lesson.steps.length}`,
+          `${resolved.sids.length} of the investigation's ${lesson.steps.length}`,
         ],
         ['Open with', activityLaunchUrl(activity.id, format.id)],
       ],

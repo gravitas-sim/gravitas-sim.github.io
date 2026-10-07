@@ -79,6 +79,7 @@ export const WORDS = {
   evaluation: ['Classroom evidence kit', 'Kit de evidencias de aula'],
   model: ['How the model works', 'Cómo funciona el modelo'],
   validation: ['Physics validation', 'Validación física'],
+  glossary: ['Glossary', 'Glosario'],
   kernel: ['3-D kernel diagnostics', 'Diagnóstico del núcleo 3-D'],
   mission: ['Mission core diagnostics', 'Diagnóstico de misiones'],
   manual: ['User manual (PDF)', 'Manual de usuario (PDF)'],
@@ -131,6 +132,7 @@ export const NAV = [
     [
       ['model', '/model/'],
       ['validation', '/validation/'],
+      ['glossary', '/glossary/'],
       ['kernel', '/lab3d/'],
       ['mission', '/mission/'],
       ['manual', '/Gravitas_User_Manual.pdf'],

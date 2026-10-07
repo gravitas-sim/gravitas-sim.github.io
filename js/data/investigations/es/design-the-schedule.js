@@ -30,8 +30,8 @@ export default {
   steps: [
     {
       title: 'Ocho noches',
-      body: 'La estrella en pantalla tiene un planeta. No se te va a decir su periodo, y no vas a tener mucho tiempo de espectrógrafo: <strong>ocho medidas</strong>, de 8 m/s cada una, a lo largo de unos veinticinco días.\n\nOcho medidas no son muchas. Pero lo que decidirá si encuentras el planeta no es cuántas tienes, sino <em>cuándo las tomas</em>, y eso hay que decidirlo antes de haber visto una sola velocidad.\n\nEl instrumento de esta lección es el de verdad. No un widget que lo sustituye: el panel de Velocidad Radial, observando esta simulación mientras corre, en tiempo real. Una campaña tarda unos minutos y no se puede deshacer.',
-      tip: 'El tiempo de telescopio se asigna con meses de antelación. El calendario se escribe antes de que nadie sepa qué aspecto tendrán los datos, que es exactamente la situación en la que te pone esta lección.',
+      body: 'La estrella en pantalla tiene un planeta. No se te va a decir su periodo, y no vas a tener mucho tiempo de espectrógrafo: <strong>ocho medidas</strong>, de 8 m/s cada una, a lo largo de unos veinticinco días.\n\nOcho medidas no son muchas. Pero lo que decidirá si encuentras el planeta no es cuántas tienes, sino <em>cuándo las tomas</em>, y eso hay que decidirlo antes de haber visto una sola velocidad.\n\nEl instrumento de esta investigación es el de verdad. No un widget que lo sustituye: el panel de Velocidad Radial, observando esta simulación mientras corre, en tiempo real. Una campaña tarda unos minutos y no se puede deshacer.',
+      tip: 'El tiempo de telescopio se asigna con meses de antelación. El calendario se escribe antes de que nadie sepa qué aspecto tendrán los datos, que es exactamente la situación en la que te pone esta investigación.',
     },
     {
       title: 'Prepara la campaña',
@@ -40,7 +40,7 @@ export default {
     },
     {
       title: 'Antes de observar',
-      body: 'Ocho observaciones repartidas uniformemente en 24,673 días ponen una cada <strong>3,525 días</strong>.\n\nEl periodo del planeta, que se supone que aún no sabes pero que esta lección te va a decir porque el asunto está en otra parte, es de <strong>3,5247 días</strong>.\n\nComprométete ahora con una respuesta. Después se te preguntará qué cambió la observación.',
+      body: 'Ocho observaciones repartidas uniformemente en 24,673 días ponen una cada <strong>3,525 días</strong>.\n\nEl periodo del planeta, que se supone que aún no sabes pero que esta investigación te va a decir porque el asunto está en otra parte, es de <strong>3,5247 días</strong>.\n\nComprométete ahora con una respuesta. Después se te preguntará qué cambió la observación.',
       prompt:
         'Ocho noches, una cada 3,525 días, sobre un planeta de periodo 3,5247 días. ¿Qué mostrará la campaña?',
       options: [
@@ -149,7 +149,7 @@ export default {
         'Nada más: el periodo es una medida de la estrella, no de la campaña',
       ],
       because:
-        'Todo lo de la segunda lista puede cambiar el número mientras la estrella sigue siendo exactamente la misma, que es lo que ha estado demostrando toda esta lección. El CSV exportado lleva todo eso: tipo de calendario, suma de comprobación, épocas planificadas, huecos, la incertidumbre declarada y la semilla, en cada fila. Eso es lo que permite a otra persona averiguar si obtuvo una respuesta distinta porque la estrella es distinta o porque miró en otros momentos.',
+        'Todo lo de la segunda lista puede cambiar el número mientras la estrella sigue siendo exactamente la misma, que es lo que ha estado demostrando toda esta investigación. El CSV exportado lleva todo eso: tipo de calendario, suma de comprobación, épocas planificadas, huecos, la incertidumbre declarada y la semilla, en cada fila. Eso es lo que permite a otra persona averiguar si obtuvo una respuesta distinta porque la estrella es distinta o porque miró en otros momentos.',
     },
     {
       title: 'Defiende el calendario que ejecutar\u00edas',

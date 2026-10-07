@@ -133,7 +133,7 @@ const LIVES_OF_STARS = {
     'Compare how long phases really last against how long an animation gives them',
     'Explain why the heaviest stars end differently from the Sun, and why not all of them end the same way as each other',
     'Say why a black hole has no place on this diagram',
-    'Name a limitation of the models the whole lesson is built on',
+    'Name a limitation of the models the whole investigation is built on',
   ],
   steps: [
     // -----------------------------------------------------------------------
@@ -166,7 +166,7 @@ const LIVES_OF_STARS = {
         pinStaged: true,
         hide: ['order'],
       }),
-      tip: 'If you have done "A Universe of Stars" — the companion lesson, which teaches the diagram this one moves across — the stage will be familiar. If not, the next six steps recap everything from it that this lesson needs.',
+      tip: 'If you have done "A Universe of Stars" — the companion investigation, which teaches the diagram this one moves across — the stage will be familiar. If not, the next six steps recap everything from it that this investigation needs.',
     },
     {
       sid: 'the-cloud',
@@ -353,7 +353,7 @@ const LIVES_OF_STARS = {
         };
       },
       tool: evol({ track: 'm100', phase: 'main-sequence', capture: true }),
-      tip: 'Surface temperature, not core temperature. The Sun&rsquo;s core is about 15 million K; its surface is 5,772. Nothing in this lesson ever plots a core temperature.',
+      tip: 'Surface temperature, not core temperature. The Sun&rsquo;s core is about 15 million K; its surface is 5,772. Nothing in this investigation ever plots a core temperature.',
     },
     {
       sid: 'across-the-main-sequence',
@@ -429,7 +429,7 @@ const LIVES_OF_STARS = {
              solar-mass model on arrival, and the same model at the end of its
              main sequence.
              \n\nRead both radii and save the comparison to your notebook. This
-             is the smallest change in this whole lesson and it still amounts
+             is the smallest change in this whole investigation and it still amounts
              to a star nearly three quarters as big again.`,
       fields: [
         { id: 'rStart', label: 'Radius on arrival', unit: 'R☉' },
@@ -448,7 +448,7 @@ const LIVES_OF_STARS = {
         return {
           level: 'ok',
           message:
-            'About 0.90 to 1.56 solar radii. Hold on to that number: three steps from now the same star is a hundred and seventy times the size of the Sun, and the contrast between those two changes is the point of this part of the lesson.',
+            'About 0.90 to 1.56 solar radii. Hold on to that number: three steps from now the same star is a hundred and seventy times the size of the Sun, and the contrast between those two changes is the point of this part of the investigation.',
         };
       },
       tool: stage({
@@ -457,7 +457,7 @@ const LIVES_OF_STARS = {
         hide: ['order'],
         capture: true,
       }),
-      tip: 'Both are the same star, and both are standing on the canvas — click either one to read it. Nothing else in this lesson puts one model on screen at two ages at once.',
+      tip: 'Both are the same star, and both are standing on the canvas — click either one to read it. Nothing else in this investigation puts one model on screen at two ages at once.',
     },
     {
       sid: 'predict-what-runs-out',
@@ -694,7 +694,7 @@ const LIVES_OF_STARS = {
       ],
       answer: 1,
       because:
-        'It falls and moves left, and then climbs again on the asymptotic giant branch. The core is now supported by burning helium rather than by contracting, and a star supported differently sits somewhere different. The reason this step exists is that "and then it just keeps getting bigger and redder until it dies" is a tidier story than the truth, and this lesson follows each track&rsquo;s actual sequence rather than straightening it. Different masses do different things here; the 5 solar-mass model loops further left than this one does.',
+        'It falls and moves left, and then climbs again on the asymptotic giant branch. The core is now supported by burning helium rather than by contracting, and a star supported differently sits somewhere different. The reason this step exists is that "and then it just keeps getting bigger and redder until it dies" is a tidier story than the truth, and this investigation follows each track&rsquo;s actual sequence rather than straightening it. Different masses do different things here; the 5 solar-mass model loops further left than this one does.',
       tool: evol({ track: 'm100', phase: 'core-helium-burning' }),
       tip: 'The helium-ignition stage itself lasts under two million years — the readout&rsquo;s "This phase" row puts it at about 0.02 per cent of the star&rsquo;s life.',
     },
@@ -1243,7 +1243,7 @@ const LIVES_OF_STARS = {
       ],
       answer: 0,
       because:
-        'A, and not by a little. Five models pass close to that point: a solar-mass star on the red-giant branch, the same star at helium ignition, the same star on the early asymptotic giant branch, the same star during its thermal pulses, and a two solar-mass star on ITS thermal pulses. Four stages and two masses, all producing the same three numbers. B is the opposite - one model passes close, because nothing except a white dwarf is that hot and that faint, and the temperature and the luminosity together force it to be tiny. D is also unambiguous within this bundle: a solar-mass star still contracting, about 15 million years old. C is the interesting middle case: the mass is pinned at 0.2 solar masses because nothing else lives there, but the STAGE is not - it could be on the main sequence or still contracting towards it, and the numbers cannot separate those. "Not enough information" is a real answer and a lesson that never gives it teaches the wrong habit.',
+        'A, and not by a little. Five models pass close to that point: a solar-mass star on the red-giant branch, the same star at helium ignition, the same star on the early asymptotic giant branch, the same star during its thermal pulses, and a two solar-mass star on ITS thermal pulses. Four stages and two masses, all producing the same three numbers. B is the opposite - one model passes close, because nothing except a white dwarf is that hot and that faint, and the temperature and the luminosity together force it to be tiny. D is also unambiguous within this bundle: a solar-mass star still contracting, about 15 million years old. C is the interesting middle case: the mass is pinned at 0.2 solar masses because nothing else lives there, but the STAGE is not - it could be on the main sequence or still contracting towards it, and the numbers cannot separate those. "Not enough information" is a real answer and an investigation that never gives it teaches the wrong habit.',
       tool: lab({ mode: 'free', regions: true, compare: false }),
       tip: 'This is why the regions on the diagram are shaded rather than outlined, and why the lab lists every nearby model instead of picking one. A star is not a giant because it crossed a line.',
     },
@@ -1312,12 +1312,12 @@ const LIVES_OF_STARS = {
              \n\nYou have now followed all three, plus a forty solar-mass model
              that ends as a black hole. Write the account you would give now.
              \n\nOne requirement: name a limitation of the models this whole
-             lesson rests on. There are several and the readouts have been
+             investigation rests on. There are several and the readouts have been
              telling you about them throughout.`,
       prompt:
         'Explain what determines how a star lives and how it ends, referring to at least two of your own measurements — and name one thing these models do not tell you.',
       rubric:
-        'Mark on the connections and on the limitation, not on coverage. Look for: mass sets the luminosity, steeply, and therefore sets the lifetime, because lifetime is fuel over the rate of spending it; leaving the main sequence is core hydrogen exhaustion and not the end of the star; what happens afterwards depends on mass, with a white dwarf for the Sun-like case, a neutron star for ten solar masses and a black hole for forty; and the red dwarf does none of it on any timescale that has yet elapsed. A strong answer cites the 1.14 trillion against 8.65 million year lifetimes, or the 0.90 to 173 solar radii swing of one star.\\n\\nFor the limitation, accept any of: the tracks are single stars with no companion, so no mass transfer and no merger; they stop before core collapse, so every remnant beyond a white dwarf is a quoted prescription rather than a computed result; they are one composition and no rotation; the endpoint at forty solar masses is a range spanning a factor of three; the 1.1 trillion year lifetime is unverifiable in principle. Do NOT accept "the animation is not to scale in time" alone - that is a property of the display, which the lesson states repeatedly, rather than of the models.\\n\\nCredit an answer that revises the step 1 prediction and credit one that defends it, provided the defense engages with what was measured.',
+        'Mark on the connections and on the limitation, not on coverage. Look for: mass sets the luminosity, steeply, and therefore sets the lifetime, because lifetime is fuel over the rate of spending it; leaving the main sequence is core hydrogen exhaustion and not the end of the star; what happens afterwards depends on mass, with a white dwarf for the Sun-like case, a neutron star for ten solar masses and a black hole for forty; and the red dwarf does none of it on any timescale that has yet elapsed. A strong answer cites the 1.14 trillion against 8.65 million year lifetimes, or the 0.90 to 173 solar radii swing of one star.\\n\\nFor the limitation, accept any of: the tracks are single stars with no companion, so no mass transfer and no merger; they stop before core collapse, so every remnant beyond a white dwarf is a quoted prescription rather than a computed result; they are one composition and no rotation; the endpoint at forty solar masses is a range spanning a factor of three; the 1.1 trillion year lifetime is unverifiable in principle. Do NOT accept "the animation is not to scale in time" alone - that is a property of the display, which the investigation states repeatedly, rather than of the models.\\n\\nCredit an answer that revises the step 1 prediction and credit one that defends it, provided the defense engages with what was measured.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -1351,7 +1351,7 @@ const LIVES_OF_STARS = {
              composition, no rotation, no companion to take mass from or give it
              to. The tracks stop before core collapse, so every remnant past a
              white dwarf is a prescription quoted from a paper rather than
-             something this lesson computed. The readouts said so each time, and
+             something this investigation computed. The readouts said so each time, and
              that is the habit worth keeping.`,
       // The instrument stays, as it does on the screen before this one; see
       // the note on the same step in a-universe-of-stars.js.

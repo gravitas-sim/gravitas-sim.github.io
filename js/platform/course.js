@@ -132,7 +132,7 @@ export function validateCoursePack(c, api) {
     need(
       Array.isArray(u.lessons) && u.lessons.length > 0,
       `${at}.lessons`,
-      'needs at least one lesson'
+      'needs at least one investigation'
     );
     (u.lessons || []).forEach((entry, j) => {
       const lat = `${at}.lessons[${j}]`;
@@ -140,7 +140,7 @@ export function validateCoursePack(c, api) {
       need(
         api.lessons.has(entry.lesson),
         `${lat}.lesson`,
-        `Gravitas has no lesson "${entry.lesson}"`
+        `Gravitas has no investigation "${entry.lesson}"`
       );
       if (seen.has(entry.lesson))
         need(

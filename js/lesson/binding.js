@@ -237,7 +237,7 @@ export function resolveMatcher(bodies, matcher = {}) {
         .slice(0, 4)
         .map(b => `${kindOf(b)} "${b.name}" #${b.id}`)
         .join(', ')}${found.length > 4 ? ', …' : ''}). ` +
-      'A lesson role has to name exactly one; add a kind, or an index if the ' +
+      'An investigation role has to name exactly one; add a kind, or an index if the ' +
       'order is part of what is being taught.',
   };
 }

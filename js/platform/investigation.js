@@ -162,7 +162,7 @@ export function validateInvestigationPack(p, api) {
     !(api.lessons || []).includes(p.id),
     'id',
     'idTaken',
-    'is the id of a lesson Gravitas already has'
+    'is the id of an investigation Gravitas already has'
   );
   need(
     SEMVER.test(p.version || ''),
@@ -234,14 +234,14 @@ export function validateInvestigationPack(p, api) {
         keys.length === 1 && ['lesson', 'text'].includes(keys[0]),
         at,
         'prerequisite',
-        'either a lesson or a text'
+        'either an investigation or a text'
       );
       if ('lesson' in r)
         need(
           (api.lessons || []).includes(r.lesson),
           `${at}.lesson`,
           'lesson',
-          'a lesson Gravitas has'
+          'an investigation Gravitas has'
         );
       if ('text' in r) text(r.text, `${at}.text`, true);
     });
@@ -310,7 +310,7 @@ export function validateInvestigationPack(p, api) {
       last.type === 'read' || last.type === 'explore',
       `steps[${list.length - 1}].type`,
       'closing',
-      'the last step closes the lesson: a read or an explore step'
+      'the last step closes the investigation: a read or an explore step'
     );
   return out;
 }

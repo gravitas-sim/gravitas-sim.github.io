@@ -26,9 +26,9 @@ export const INTRO_ASTRONOMY = {
     esOf: '95334307',
   },
   summary: {
-    en: "Four units for a first course in astronomy, built from Gravitas lessons that are already published. Students watch the sky move and explain it, find what decides whether an orbit comes back, read a star's temperature and size from its light, and measure a real planet around another star. Each unit has an optional reading or model for students who want the background first, and an advanced lesson for students who want more.",
-    es: 'Cuatro unidades para un primer curso de astronomía, hechas con lecciones de Gravitas ya publicadas. Los estudiantes ven moverse el cielo y lo explican, descubren qué decide si una órbita vuelve, leen en la luz de una estrella su temperatura y su tamaño, y miden un planeta real alrededor de otra estrella. Cada unidad tiene una lectura o un modelo opcional para quien quiera primero el contexto, y una lección avanzada para quien quiera más.',
-    esOf: '13675e13',
+    en: "Four units for a first course in astronomy, built from Gravitas investigations that are already published. Students watch the sky move and explain it, find what decides whether an orbit comes back, read a star's temperature and size from its light, and measure a real planet around another star. Each unit has an optional reading or model for students who want the background first, and an advanced investigation for students who want more.",
+    es: 'Cuatro unidades para un primer curso de astronomía, hechas con investigaciones de Gravitas ya publicadas. Los estudiantes ven moverse el cielo y lo explican, descubren qué decide si una órbita vuelve, leen en la luz de una estrella su temperatura y su tamaño, y miden un planeta real alrededor de otra estrella. Cada unidad tiene una lectura o un modelo opcional para quien quiera primero el contexto, y una investigación avanzada para quien quiera más.',
+    esOf: '456a05cb',
   },
   audience: {
     en: 'A first college course in astronomy, or an advanced high-school class. No calculus.',
@@ -36,9 +36,9 @@ export const INTRO_ASTRONOMY = {
     esOf: '59954bdf',
   },
   teacherGuide: {
-    en: "Run the units in order: each one uses a result from the one before. The core path fits five or six fifty-minute class meetings, with some of the work at home. Every lesson has an instructor guide and an answer key in the instructors' portal; the assignment's steps are covered by the guide to Finding Planets by Their Shadows. Students need nothing installed: every link opens in a browser, and once a student has opened Gravitas it works without a network.",
-    es: 'Hagan las unidades en orden: cada una usa un resultado de la anterior. El camino principal ocupa cinco o seis clases de cincuenta minutos, con parte del trabajo en casa. Cada lección tiene una guía para el profesor y una clave de respuestas en el portal para docentes; los pasos de la tarea están cubiertos por la guía de Encontrar planetas por sus sombras. Los estudiantes no necesitan instalar nada: cada enlace se abre en un navegador y, una vez abierto Gravitas, funciona sin red.',
-    esOf: '6044bc09',
+    en: "Run the units in order: each one uses a result from the one before. The core path fits five or six fifty-minute class meetings, with some of the work at home. Every investigation has an instructor guide and an answer key in the instructors' portal; the activity's steps are covered by the instructor guide to Finding Planets by Their Shadows. Students need nothing installed: every link opens in a browser, and once a student has opened Gravitas it works without a network.",
+    es: 'Hagan las unidades en orden: cada una usa un resultado de la anterior. El camino principal ocupa cinco o seis clases de cincuenta minutos, con parte del trabajo en casa. Cada investigación tiene una guía para el profesor y una clave de respuestas en el portal para docentes; los pasos de la actividad están cubiertos por la guía para docentes de Encontrar planetas por sus sombras. Los estudiantes no necesitan instalar nada: cada enlace se abre en un navegador y, una vez abierto Gravitas, funciona sin red.',
+    esOf: '34709e04',
   },
   objectives: [
     {
@@ -133,9 +133,9 @@ export const INTRO_ASTRONOMY = {
           license: 'CC BY 4.0',
           access: 'open',
           studentNote: {
-            en: "Read sections 3.1 to 3.3 before the first lesson if Kepler's laws are new to you.",
-            es: 'Lee las secciones 3.1 a 3.3 antes de la primera lección si las leyes de Kepler son nuevas para ti.',
-            esOf: 'da1e9b35',
+            en: "Read sections 3.1 to 3.3 before the first investigation if Kepler's laws are new to you.",
+            es: 'Lee las secciones 3.1 a 3.3 antes de la primera investigación si las leyes de Kepler son nuevas para ti.',
+            esOf: '1064c9cb',
           },
         },
         {
@@ -156,9 +156,9 @@ export const INTRO_ASTRONOMY = {
             esOf: 'baf4a11c',
           },
           teacherNote: {
-            en: 'Ten minutes at the start of the first meeting. The question has no wrong answer yet; the lesson that follows makes it quantitative.',
-            es: 'Diez minutos al principio de la primera clase. La pregunta todavía no tiene respuesta incorrecta; la lección siguiente la vuelve cuantitativa.',
-            esOf: 'cd17a997',
+            en: 'Ten minutes at the start of the first meeting. The question has no wrong answer yet; the next one makes it quantitative.',
+            es: 'Diez minutos al principio de la primera clase. La pregunta todavía no tiene respuesta incorrecta; la siguiente la vuelve cuantitativa.',
+            esOf: 'b1605353',
           },
         },
         {
@@ -304,9 +304,9 @@ export const INTRO_ASTRONOMY = {
             esOf: '4e151d2b',
           },
           teacherNote: {
-            en: 'A thirty-minute cut of a seventy-minute lesson. The whole lesson goes on to limb darkening, the period and a blended binary; set it instead for a longer class.',
-            es: 'Un recorte de treinta minutos de una lección de setenta. La lección completa sigue con el oscurecimiento del limbo, el período y una binaria mezclada; asígnenla completa en una clase más larga.',
-            esOf: 'd73f6d41',
+            en: 'A thirty-minute cut of a seventy-minute investigation. It goes on to limb darkening, the period and a blended binary; set it instead for a longer class.',
+            es: 'Un recorte de treinta minutos de una investigación de setenta. Sigue con el oscurecimiento del limbo, el período y una binaria mezclada; asígnenla completa en una clase más larga.',
+            esOf: '0e66eebc',
           },
           minutes: 30,
           assignment: {

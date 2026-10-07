@@ -41,8 +41,8 @@ export default {
         'Solo si algo cercano los iluminara',
       ],
       because:
-        'Sí, y por la segunda vía. La masa curva el espacio a su alrededor, y cuando la masa se mueve de la manera adecuada esa curvatura no se queda quieta: una onda en ella viaja hacia fuera, a la velocidad de la luz, llevando energía. Esa onda es una onda gravitacional, y de eso trata el resto de la lección. Las dos respuestas equivocadas que conviene nombrar: no hay sonido, porque el sonido necesita aire y no lo hay entre aquí y allí, y no hace falta que nada ilumine el par, porque lo que sale de él no es luz. Guarda la respuesta que diste; el paso 24 te la vuelve a preguntar.',
-      tip: 'Los dos discos son un dibujo de dónde dice el modelo que están los objetos. No son una fotografía, y nada en esta lección lo es.',
+        'Sí, y por la segunda vía. La masa curva el espacio a su alrededor, y cuando la masa se mueve de la manera adecuada esa curvatura no se queda quieta: una onda en ella viaja hacia fuera, a la velocidad de la luz, llevando energía. Esa onda es una onda gravitacional, y de eso trata el resto de la investigación. Las dos respuestas equivocadas que conviene nombrar: no hay sonido, porque el sonido necesita aire y no lo hay entre aquí y allí, y no hace falta que nada ilumine el par, porque lo que sale de él no es luz. Guarda la respuesta que diste; el paso 24 te la vuelve a preguntar.',
+      tip: 'Los dos discos son un dibujo de dónde dice el modelo que están los objetos. No son una fotografía, y nada en esta investigación lo es.',
     },
     {
       title: 'Conoce a los dos objetos',
@@ -53,7 +53,7 @@ export default {
         'Fíjate en que las dos fichas dicen lo mismo: una masa y una posición',
         'Di en voz alta cuál es más pesado, y aproximadamente por cuánto',
       ],
-      tip: 'La separación en pantalla se mide en radios de Schwarzschild de las dos masas juntas —una unidad honesta— y se irá encogiendo a lo largo de la lección. El tamaño de cada disco no es la medida de nada.',
+      tip: 'La separación en pantalla se mide en radios de Schwarzschild de las dos masas juntas —una unidad honesta— y se irá encogiendo a lo largo de la investigación. El tamaño de cada disco no es la medida de nada.',
     },
     {
       stage: { gwSource: { name: 'La fuente' } },
@@ -68,7 +68,7 @@ export default {
         'Una onda, pero solo si el observador se mueve',
       ],
       because:
-        'Una atracción constante, y nada más. Esta es la distinción sobre la que gira toda la lección: un <em>campo</em> gravitacional es lo que ya hay alrededor de cualquier masa, y una <em>onda</em> gravitacional es un cambio en él que viaja. Una estrella quieta tiene lo primero y no produce nada de lo segundo. Qué hace falta para producir lo segundo es el tema del paso siguiente.',
+        'Una atracción constante, y nada más. Esta es la distinción sobre la que gira toda la investigación: un <em>campo</em> gravitacional es lo que ya hay alrededor de cualquier masa, y una <em>onda</em> gravitacional es un cambio en él que viaja. Una estrella quieta tiene lo primero y no produce nada de lo segundo. Qué hace falta para producir lo segundo es el tema del paso siguiente.',
       tip: 'Compáralo con una lámpara: la luz que ya hay en la habitación no es una emisión de radio. Las dos son electromagnéticas, y solo una es una señal que va a alguna parte.',
     },
     {
@@ -124,7 +124,7 @@ export default {
     },
     {
       title: 'Observa el par',
-      body: 'Déjalo correr. Pulsa <strong>Reproducir / pausar</strong> y observa a los dos objetos dar vueltas en el lienzo.\n\nFíjate en lo que le pasa a la <em>disposición</em>, no a cada objeto. En un momento el par está alineado de izquierda a derecha; un cuarto de vuelta después está alineado de arriba abajo. La masa tiene otra forma vista desde aquí fuera, y no deja de tener otra forma, una y otra vez.\n\nEsa es la fuente. Todo lo demás en esta lección es una consecuencia de ello.',
+      body: 'Déjalo correr. Pulsa <strong>Reproducir / pausar</strong> y observa a los dos objetos dar vueltas en el lienzo.\n\nFíjate en lo que le pasa a la <em>disposición</em>, no a cada objeto. En un momento el par está alineado de izquierda a derecha; un cuarto de vuelta después está alineado de arriba abajo. La masa tiene otra forma vista desde aquí fuera, y no deja de tener otra forma, una y otra vez.\n\nEsa es la fuente. Todo lo demás en esta investigación es una consecuencia de ello.',
       checklist: [
         'Pulsa Reproducir / pausar y observa varias órbitas completas',
         'Pausa cuando los dos objetos estén uno al lado del otro',
@@ -145,7 +145,7 @@ export default {
         'Dos órbitas completas',
       ],
       because:
-        'Media órbita. Intercambia dos objetos idénticos y no lo notas: el par alineado de izquierda a derecha al principio vuelve a estar alineado de izquierda a derecha a mitad de camino, con los dos objetos cambiados. Así que el patrón que la fuente le presenta al mundo exterior se repite dos veces por órbita, y la onda que emite también. Por eso la frecuencia de la onda para un par así es el <em>doble</em> de la frecuencia orbital, un hecho que el paso 16 te hace contar por ti mismo. Para dos objetos de masas distintas no es tan limpio, y esa complicación esta lección la deja de lado.',
+        'Media órbita. Intercambia dos objetos idénticos y no lo notas: el par alineado de izquierda a derecha al principio vuelve a estar alineado de izquierda a derecha a mitad de camino, con los dos objetos cambiados. Así que el patrón que la fuente le presenta al mundo exterior se repite dos veces por órbita, y la onda que emite también. Por eso la frecuencia de la onda para un par así es el <em>doble</em> de la frecuencia orbital, un hecho que el paso 16 te hace contar por ti mismo. Para dos objetos de masas distintas no es tan limpio, y esa complicación esta investigación la deja de lado.',
       tip: 'Usa el cabezal en pasos pequeños. La lectura da la fase orbital, así que puedes comprobar tu respuesta con un número en vez de a ojo.',
     },
     {
@@ -220,12 +220,12 @@ export default {
         },
         { label: 'Amplitud de deformación, de la lectura' },
       ],
-      body: 'Aquí está el único vocabulario que necesita esta lección.\n\nCuando pasa una onda, una longitud <em>L</em> cambia en una cantidad pequeña. El número útil no es el cambio sino la <strong>fracción</strong>: cuánto cambió dividido entre cuánto medía. Esa fracción se llama <strong>deformación</strong> (strain).\n\nEmpieza con números que puedas sostener. Un brazo de 4 kilómetros que cambia 4 milímetros tiene una deformación de 0,004 entre 4000, o sea 0,000001: una parte en un millón.\n\nAhora la de verdad. Lee <strong>Amplitud de deformación</strong> en la lectura —la fracción más grande que alcanza esta onda— y anótala.',
+      body: 'Aquí está el único vocabulario que necesita esta investigación.\n\nCuando pasa una onda, una longitud <em>L</em> cambia en una cantidad pequeña. El número útil no es el cambio sino la <strong>fracción</strong>: cuánto cambió dividido entre cuánto medía. Esa fracción se llama <strong>deformación</strong> (strain).\n\nEmpieza con números que puedas sostener. Un brazo de 4 kilómetros que cambia 4 milímetros tiene una deformación de 0,004 entre 4000, o sea 0,000001: una parte en un millón.\n\nAhora la de verdad. Lee <strong>Amplitud de deformación</strong> en la lectura —la fracción más grande que alcanza esta onda— y anótala.',
       tip: 'La deformación es una fracción, así que no tiene unidades: una deformación de 10⁻²¹ significa lo mismo tanto si la longitud es un metro como si es un año luz.',
     },
     {
       title: '¿Puede el espacio llevar un sonido?',
-      body: 'Puede que hayas oído una onda gravitacional reproducida como sonido. Esta lección puede ponerte una: pulsa <strong>Escuchar</strong> si tienes sonido, y mira el marcador cruzar la gráfica si no. Aquí nada necesita sonido, y nada en esta lección se califica por oír algo.\n\nMerece la pena ser exactos sobre qué pasa cuando lo pulsas. La aplicación coge la señal cambiante y la convierte en un sonido para ti. Es una traducción, hecha aquí, en tu máquina.\n\nUn micrófono junto a los dos objetos no oiría <strong>nada</strong>. El sonido es una onda en un material —aire, agua, roca— y no hay material entre aquí y allí. Lo que llega es un cambio de distancia, no un cambio de presión. «Oír la fusión de dos agujeros negros» es una manera de hablar.',
+      body: 'Puede que hayas oído una onda gravitacional reproducida como sonido. Esta investigación puede ponerte una: pulsa <strong>Escuchar</strong> si tienes sonido, y mira el marcador cruzar la gráfica si no. Aquí nada necesita sonido, y nada en esta investigación se califica por oír algo.\n\nMerece la pena ser exactos sobre qué pasa cuando lo pulsas. La aplicación coge la señal cambiante y la convierte en un sonido para ti. Es una traducción, hecha aquí, en tu máquina.\n\nUn micrófono junto a los dos objetos no oiría <strong>nada</strong>. El sonido es una onda en un material —aire, agua, roca— y no hay material entre aquí y allí. Lo que llega es un cambio de distancia, no un cambio de presión. «Oír la fusión de dos agujeros negros» es una manera de hablar.',
       tip: 'El panel imprime exactamente lo que hizo para volverla audible: cuánto la aceleró y cuánto desplazó eso el tono. Una traducción que esconde lo que hizo no es una que puedas comprobar.',
     },
     {
@@ -279,11 +279,11 @@ export default {
       ],
       because:
         'El modelo se apagó. En ese instante no ocurre nada físico; el cálculo simplemente deja de ser de fiar, así que se detiene. En esta gráfica no hay fusión ni timbre posterior, y el último ciclo que ves no es el último ciclo que tuvo la binaria. Un modelo que dice dónde se detiene es más útil que uno que sigue sin más, y es la razón honesta de que la imagen acabe de golpe en vez de con suavidad.',
-      tip: 'La lectura da la frecuencia a la que se detiene. Para este par son unos 68 Hz, y el suceso real se siguió hasta unos 250 Hz, con instrumentos y cálculos muy por encima de los que usa esta lección.',
+      tip: 'La lectura da la frecuencia a la que se detiene. Para este par son unos 68 Hz, y el suceso real se siguió hasta unos 250 Hz, con instrumentos y cálculos muy por encima de los que usa esta investigación.',
     },
     {
       title: 'Otros pares compactos',
-      body: 'Los agujeros negros no son lo único que hace esto. Dos estrellas de neutrones también pueden caer en espiral la una hacia la otra, y también una de cada.\n\nLos dos objetos del lienzo son ahora un par de estrellas de neutrones, de aproximadamente 1,4 masas solares cada una. Selecciónalas, mira la ficha y compara la señal con la que venías viendo.\n\nUna advertencia sobre hasta dónde llega esto. El modelo detrás de estas gráficas trata a los dos objetos como puntos con una masa y nada más. No puede decirte de qué están hechos, y no dice nada de lo que ocurre cuando dos estrellas de neutrones se tocan de verdad, que es una física rica y violenta que esta lección no intenta.\n\nEn esta pantalla están abiertos los dos controles de masa y también el de distancia. Míralos los tres cuando pulses un preajuste: cada uno pone su par a una distancia distinta, así que la altura de la traza no es una comparación justa entre ellos. La pantalla siguiente cambia la distancia sola, que es la manera de ver qué hace.',
+      body: 'Los agujeros negros no son lo único que hace esto. Dos estrellas de neutrones también pueden caer en espiral la una hacia la otra, y también una de cada.\n\nLos dos objetos del lienzo son ahora un par de estrellas de neutrones, de aproximadamente 1,4 masas solares cada una. Selecciónalas, mira la ficha y compara la señal con la que venías viendo.\n\nUna advertencia sobre hasta dónde llega esto. El modelo detrás de estas gráficas trata a los dos objetos como puntos con una masa y nada más. No puede decirte de qué están hechos, y no dice nada de lo que ocurre cuando dos estrellas de neutrones se tocan de verdad, que es una física rica y violenta que esta investigación no intenta.\n\nEn esta pantalla están abiertos los dos controles de masa y también el de distancia. Míralos los tres cuando pulses un preajuste: cada uno pone su par a una distancia distinta, así que la altura de la traza no es una comparación justa entre ellos. La pantalla siguiente cambia la distancia sola, que es la manera de ver qué hace.',
       checklist: [
         'Selecciona cada estrella de neutrones y lee su masa en la ficha',
         'Compara la frecuencia al principio con la del par de agujeros negros que tenías antes',
@@ -334,7 +334,7 @@ export default {
              \n\nNo se te pide que lo analices. Míralo y fíjate en que tiene
              la forma que llevas veinte pantallas aprendiendo a esperar: una
              oscilación que se acelera y crece. Ese es el asunto. El modelo que
-             has estado usando es lo bastante simple para una primera lección,
+             has estado usando es lo bastante simple para una primera investigación,
              y la cosa real se le parece.
              \n\nLos controles del propio panel te dejan desplazar en el
              tiempo la traza de un detector e invertir su signo, que es lo que
@@ -362,7 +362,7 @@ export default {
     },
     {
       rubric:
-        'Una respuesta completa tiene la cadena: dos objetos en órbita son una distribución de masa desigual que no deja de cambiar; eso envía una perturbación hacia fuera a la velocidad de la luz; la perturbación estira y comprime distancias perpendicularmente a su avance; un instrumento en forma de L mide la diferencia entre dos brazos y así lo nota. Da crédito a una respuesta que tenga cuatro de esos cinco eslabones. Busca, y premia, cualquier mención a que el efecto es minúsculo o a la diferencia entre un dibujo y una medida: las dos son la mitad más difícil de esta lección. No exijas ningún vocabulario técnico: «la separación entre las cosas cambia» es una respuesta completa al tercer eslabón. Que revisen la pantalla 1 importa más que acertar: quien diga «dije que no, y me equivocaba porque solo estaba pensando en la luz» ha entendido la lección.',
+        'Una respuesta completa tiene la cadena: dos objetos en órbita son una distribución de masa desigual que no deja de cambiar; eso envía una perturbación hacia fuera a la velocidad de la luz; la perturbación estira y comprime distancias perpendicularmente a su avance; un instrumento en forma de L mide la diferencia entre dos brazos y así lo nota. Da crédito a una respuesta que tenga cuatro de esos cinco eslabones. Busca, y premia, cualquier mención a que el efecto es minúsculo o a la diferencia entre un dibujo y una medida: las dos son la mitad más difícil de esta investigación. No exijas ningún vocabulario técnico: «la separación entre las cosas cambia» es una respuesta completa al tercer eslabón. Que revisen la pantalla 1 importa más que acertar: quien diga «dije que no, y me equivocaba porque solo estaba pensando en la luz» ha entendido la investigación.',
       title: 'Cuenta la historia',
       body: 'Último paso. Júntalo todo con tus palabras.\n\nTienes un par de objetos girando uno alrededor del otro, algo que sale de ellos y viaja hacia fuera, y un instrumento muy lejos cuyos dos brazos cambian de longitud en cantidades distintas.\n\nVuelve un momento al paso 1. Te preguntaron si podríamos averiguar que dos objetos oscuros se mueven. Mira qué respondiste.',
       prompt:

@@ -162,9 +162,9 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 1,
       because:
-        'Yes, and by the second route. Mass curves the space around it, and when the mass moves in the right way that curvature does not simply sit there - a ripple in it travels outwards, at the speed of light, carrying energy. That ripple is a gravitational wave, and it is what the rest of this lesson is about. The two wrong answers worth naming: there is no sound, because sound needs air and there is none between here and there, and nothing has to light the pair up, because what leaves them is not light. Keep the answer you gave; screen 24 asks you about it again.',
+        'Yes, and by the second route. Mass curves the space around it, and when the mass moves in the right way that curvature does not simply sit there - a ripple in it travels outwards, at the speed of light, carrying energy. That ripple is a gravitational wave, and it is what the rest of this investigation is about. The two wrong answers worth naming: there is no sound, because sound needs air and there is none between here and there, and nothing has to light the pair up, because what leaves them is not light. Keep the answer you gave; screen 24 asks you about it again.',
       tool: lab({ view: 'source', autoplay: false, hide: ALL_HIDDEN }),
-      tip: 'The two discs are a drawing of where the model says the objects are. They are not a photograph, and nothing in this lesson is.',
+      tip: 'The two discs are a drawing of where the model says the objects are. They are not a photograph, and nothing in this investigation is.',
     },
     {
       sid: 'meet-the-two-objects',
@@ -188,7 +188,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         'Say out loud which is heavier, and by roughly how much',
       ],
       tool: lab({ view: 'source', autoplay: false, hide: ALL_HIDDEN }),
-      tip: 'The separation on screen is measured in Schwarzschild radii of the two masses together — one honest unit — and it will shrink as the lesson goes on. The size of each disc is not a measurement of anything.',
+      tip: 'The separation on screen is measured in Schwarzschild radii of the two masses together — one honest unit — and it will shrink as the investigation goes on. The size of each disc is not a measurement of anything.',
     },
     {
       sid: 'gravity-is-already-here',
@@ -215,7 +215,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 0,
       because:
-        'A steady pull, and nothing else. This is the distinction the whole lesson turns on: a gravitational <em>field</em> is what is already there around any mass, and a gravitational <em>wave</em> is a change in it that travels. A star sitting still has the first and produces none of the second. What it takes to produce the second is the subject of the next screen.',
+        'A steady pull, and nothing else. This is the distinction the whole investigation turns on: a gravitational <em>field</em> is what is already there around any mass, and a gravitational <em>wave</em> is a change in it that travels. A star sitting still has the first and produces none of the second. What it takes to produce the second is the subject of the next screen.',
       tool: lab({
         view: 'source',
         autoplay: false,
@@ -328,7 +328,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              a quarter of a turn later it is lined up top-to-bottom. The mass
              is in a different shape as seen from out here, and it keeps
              becoming a different shape, over and over.
-             \n\nThat is the source. Everything else in this lesson is a
+             \n\nThat is the source. Everything else in this investigation is a
              consequence of it.`,
       checklist: [
         'Press Play / pause and watch several complete orbits',
@@ -363,7 +363,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 1,
       because:
-        'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact screen 16 has you count for yourself. For two objects of different masses it is not quite so clean, which is a complication this lesson leaves alone.',
+        'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact screen 16 has you count for yourself. For two objects of different masses it is not quite so clean, which is a complication this investigation leaves alone.',
       tool: lab({ view: 'source', autoplay: false }),
       tip: 'Use the playhead in small steps. The readout gives the orbital phase, so you can check your answer against a number rather than by eye.',
     },
@@ -563,7 +563,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       stage: PAIR,
       type: 'measure',
       title: 'Measure a change in length',
-      body: `Here is the one piece of vocabulary this lesson needs.
+      body: `Here is the one piece of vocabulary this investigation needs.
              \n\nWhen a wave passes, a length <em>L</em> changes by a small
              amount. The useful number is not the change itself but the
              <strong>fraction</strong>: how much it changed, divided by how
@@ -632,9 +632,9 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       type: 'read',
       title: 'Can space carry a sound?',
       body: `You may have heard a gravitational wave played as a sound. This
-             lesson can play you one: press <strong>Listen</strong> if you have
+             investigation can play you one: press <strong>Listen</strong> if you have
              sound available, and watch the marker cross the plot if you do
-             not. Nothing here needs sound, and nothing in this lesson is
+             not. Nothing here needs sound, and nothing in this investigation is
              graded on hearing anything.
              \n\nWhat is happening when you press it is worth being exact
              about. The application takes the changing signal and turns it into
@@ -809,7 +809,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       because:
         'The model was switched off. Nothing physical happens at that instant; the calculation simply stops being trustworthy, so it stops. There is no merger in this plot and no ringing afterwards, and the last visible cycle is not the last cycle the binary had. A model that says where it stops is more useful than one that carries on regardless - and it is the honest reason the picture ends abruptly rather than tidily.',
       tool: lab({ view: 'both', autoplay: false }),
-      tip: 'The readout gives the frequency where it stops. For this pair it is about 68 Hz, and the real event was followed to around 250 Hz — by instruments and calculations well beyond what this lesson uses.',
+      tip: 'The readout gives the frequency where it stops. For this pair it is about 68 Hz, and the real event was followed to around 250 Hz — by instruments and calculations well beyond what this investigation uses.',
     },
 
     // -----------------------------------------------------------------------
@@ -830,7 +830,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              plots treats both objects as points with a mass and nothing else.
              It cannot tell you what they are made of, and it says nothing
              about what happens when two neutron stars actually touch - which
-             is a rich and violent piece of physics this lesson does not
+             is a rich and violent piece of physics this investigation does not
              attempt.
              \n\nThe two mass controls are open on this screen, and so is the
              distance. Watch all three when you press a preset: each one puts
@@ -958,7 +958,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              \n\nYou are not asked to analyze it. Look at it, and notice that
              it has the shape you have spent twenty screens learning to
              expect — a wobble that speeds up and grows. That is the point. The
-             model you have been using is simple enough for a first lesson, and
+             model you have been using is simple enough for a first investigation, and
              the real thing looks like it.
              \n\nThe panel&rsquo;s own controls let you shift one detector&rsquo;s
              trace in time and flip its sign, which is what it takes to lay the
@@ -1049,7 +1049,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       prompt:
         'In four or five sentences, explain how the motion of two objects ends up as a measurement in an instrument on Earth. Then say whether your answer on screen 1 still stands, and what you would change about it.',
       rubric:
-        'A full answer has the chain: two objects orbiting means an uneven arrangement of mass that keeps changing; that sends a disturbance outwards at the speed of light; the disturbance stretches and squeezes distances at right angles to its travel; an L-shaped instrument measures the difference between two arms and so notices it. Credit an answer that has four of those five links. Look for, and credit, any mention of the effect being tiny or of the difference between a drawing and a measurement - both are the harder half of this lesson. Do not require any technical vocabulary at all; "the gap between things changes" is a complete answer to the third link. The revisit of screen 1 matters more than its correctness: a student who says "I said no, and I was wrong because I was thinking only about light" has understood the lesson.',
+        'A full answer has the chain: two objects orbiting means an uneven arrangement of mass that keeps changing; that sends a disturbance outwards at the speed of light; the disturbance stretches and squeezes distances at right angles to its travel; an L-shaped instrument measures the difference between two arms and so notices it. Credit an answer that has four of those five links. Look for, and credit, any mention of the effect being tiny or of the difference between a drawing and a measurement - both are the harder half of this investigation. Do not require any technical vocabulary at all; "the gap between things changes" is a complete answer to the third link. The revisit of screen 1 matters more than its correctness: a student who says "I said no, and I was wrong because I was thinking only about light" has understood the investigation.',
       tool: lab({ view: 'both', autoplay: false, capture: true }),
     },
     {

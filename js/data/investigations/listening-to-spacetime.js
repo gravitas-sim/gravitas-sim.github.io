@@ -134,7 +134,7 @@ const LISTENING_TO_SPACETIME = {
              machine, just now, and nobody has told you what the model is of.
              That matters and it is said here rather than at the end: this is
              not a recording of an astronomical event, and no conclusion you
-             reach in this lesson is evidence that anything happened anywhere.
+             reach in this investigation is evidence that anything happened anywhere.
              What it is good for is the same thing a laboratory standard is
              good for - working out what a signal of that shape would have to
              have come from.
@@ -142,7 +142,7 @@ const LISTENING_TO_SPACETIME = {
              the bottom one is its frequency. Press <strong>Play / pause</strong>
              and watch the marker cross both. If you have sound on, press
              <strong>Listen</strong> as well; if you do not, you will not miss
-             anything — everything this lesson asks for can be read off the
+             anything — everything this investigation asks for can be read off the
              plots.
              \n\nThe pattern speeds up. It gets stronger. Then it stops.
              \n\nBefore you are told anything, commit to an answer. You are not
@@ -157,7 +157,7 @@ const LISTENING_TO_SPACETIME = {
       ],
       answer: 1,
       because:
-        'Two objects circling each other. Nothing else on that list produces a frequency that climbs smoothly by a factor of three and then stops: an explosion has no reason to have a rising frequency at all, and a spinning or pulsing star has nothing to make it speed up in a fraction of a second. A pair of objects losing energy does, because losing energy means falling closer together, and closer together means going round faster. That is what the rest of this lesson is about. If you chose something else, keep the reason you had - you will be asked at the end whether it still stands.',
+        'Two objects circling each other. Nothing else on that list produces a frequency that climbs smoothly by a factor of three and then stops: an explosion has no reason to have a rising frequency at all, and a spinning or pulsing star has nothing to make it speed up in a fraction of a second. A pair of objects losing energy does, because losing energy means falling closer together, and closer together means going round faster. That is what the rest of this investigation is about. If you chose something else, keep the reason you had - you will be asked at the end whether it still stands.',
       tool: lab({
         view: 'signal',
         preset: 'bbh',
@@ -204,7 +204,7 @@ const LISTENING_TO_SPACETIME = {
              \n\n<strong>The plots</strong> are the model. A real calculation,
              in real units, of what a detector would record. It is good over a
              stated range and it stops at a stated boundary, and finding both is
-             part of this lesson.
+             part of this investigation.
              \n\nWhat is arriving at the detector is not a sound, and it is not
              light. It is a change in the distances between things. The ring of
              dots on the right is what a circle of free-floating test masses
@@ -1126,7 +1126,7 @@ const LISTENING_TO_SPACETIME = {
         'Read the "What is left" line in the readout',
       ],
       tool: real({ mode: 'reconstruction', window: [0.29, 0.45] }),
-      tip: 'The rapid die-away at the end is the ringdown: a single newly formed black hole settling into shape. Nothing in this lesson’s own model produces it, and nothing in this lesson pretended to.',
+      tip: 'The rapid die-away at the end is the ringdown: a single newly formed black hole settling into shape. Nothing in this investigation’s own model produces it, and nothing in this investigation pretended to.',
     },
 
     // -----------------------------------------------------------------------
@@ -1469,7 +1469,7 @@ const LISTENING_TO_SPACETIME = {
       prompt:
         'Write a short account of what a chirp signal reveals about its source and what it leaves undetermined. Mention at least one thing you measured, and at least one thing this model cannot tell you. Say whether your prediction in step 1 still stands.',
       rubric:
-        'Look for three things. First, at least one measured relationship stated correctly - the wave frequency being twice the orbital frequency, the chirp mass rather than the individual masses governing the inspiral, strain going as one over distance, or lighter pairs staying in band longer. Second, a real limitation, correctly reasoned: the distance-inclination degeneracy (amplitude alone cannot separate a distant face-on source from a nearby edge-on one), the model stopping before the merger, or the chirp mass not determining the two masses separately. Third, an honest revisit of step 1 rather than a claim to have known all along. A student who says the ninety-second signal was a low-mass pair - neutron stars, or something like them - has used the lesson correctly; a student who says it was definitely neutron stars has over-claimed, since the signal constrains the chirp mass and not the composition, and that distinction is worth pointing out in feedback rather than penalizing heavily. Do NOT credit "louder means closer" stated without the inclination caveat, or any claim that hearing the sound identifies the source.',
+        'Look for three things. First, at least one measured relationship stated correctly - the wave frequency being twice the orbital frequency, the chirp mass rather than the individual masses governing the inspiral, strain going as one over distance, or lighter pairs staying in band longer. Second, a real limitation, correctly reasoned: the distance-inclination degeneracy (amplitude alone cannot separate a distant face-on source from a nearby edge-on one), the model stopping before the merger, or the chirp mass not determining the two masses separately. Third, an honest revisit of step 1 rather than a claim to have known all along. A student who says the ninety-second signal was a low-mass pair - neutron stars, or something like them - has used the investigation correctly; a student who says it was definitely neutron stars has over-claimed, since the signal constrains the chirp mass and not the composition, and that distinction is worth pointing out in feedback rather than penalizing heavily. Do NOT credit "louder means closer" stated without the inclination caveat, or any claim that hearing the sound identifies the source.',
       tool: lab({
         view: 'signal',
         preset: 'bns',
@@ -1499,7 +1499,7 @@ const LISTENING_TO_SPACETIME = {
              separately. A signal that stays in band for ninety seconds and
              climbs past a kilohertz is a light pair. On that evidence alone it
              is not yet a pair of neutron stars, and the difference between
-             those two sentences is most of what this lesson was for.
+             those two sentences is most of what this investigation was for.
              \n\n<strong>Amplitude alone is not a distance.</strong> A far
              source seen face-on and a nearer one seen edge-on write the same
              strain. Separating them takes more than one detector.
@@ -1509,7 +1509,7 @@ const LISTENING_TO_SPACETIME = {
              claim is a coincident signal in separated detectors with a
              false-alarm rate attached to it - and everything on this screen is
              a model of a thing, labeled as one.`,
-      tip: 'The distinction you have been making all lesson — measurement, model, illustration — is the one the observatories make in public. A candidate event is published with its false-alarm rate precisely so that readers can make it too.',
+      tip: 'The distinction you have been making all investigation — measurement, model, illustration — is the one the observatories make in public. A candidate event is published with its false-alarm rate precisely so that readers can make it too.',
     },
   ],
 };

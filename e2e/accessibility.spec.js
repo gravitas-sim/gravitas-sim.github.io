@@ -232,6 +232,14 @@ const SURFACES = [
     standalone: true,
   },
   {
+    name: 'glossary',
+    open: async ({ page }) => {
+      await page.goto('/glossary/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: '#nouns',
+    standalone: true,
+  },
+  {
     name: 'evaluation kit',
     open: async ({ page }) => {
       await page.goto('/evaluation/', { waitUntil: 'domcontentloaded' });

@@ -140,11 +140,11 @@ const DESIGN_THE_SCHEDULE = {
              whether you find the planet is not how many you have - it is
              <em>when you take them</em>, and you have to decide that before you
              have seen a single velocity.
-             \n\nThe instrument in this lesson is the real one. Not a widget
+             \n\nThe instrument in this investigation is the real one. Not a widget
              standing in for it: the Radial Velocity panel, observing this
              simulation as it runs, in real time. A run takes a few minutes and
              cannot be undone.`,
-      tip: 'Telescope time is allocated months ahead. The schedule is written before anybody knows what the data will look like — which is exactly the situation this lesson puts you in.',
+      tip: 'Telescope time is allocated months ahead. The schedule is written before anybody knows what the data will look like — which is exactly the situation this investigation puts you in.',
     },
     {
       sid: 'set-the-run-up',
@@ -177,7 +177,7 @@ const DESIGN_THE_SCHEDULE = {
       body: `Eight observations spread evenly across 24.673 days puts one every
              <strong>3.525 days</strong>.
              \n\nThe planet's period, which you are not supposed to know yet but
-             which this lesson will tell you because the point is elsewhere, is
+             which this investigation will tell you because the point is elsewhere, is
              <strong>3.5247 days</strong>.
              \n\nCommit to an answer now. You will be asked afterwards what the
              observation changed.`,
@@ -478,7 +478,7 @@ const DESIGN_THE_SCHEDULE = {
       ],
       answer: 1,
       because: `Everything on the second list can change the number while the
-                star stays exactly the same - which is what this whole lesson
+                star stays exactly the same - which is what this whole investigation
                 has been demonstrating. The exported CSV carries all of it:
                 schedule kind, schedule checksum, planned epochs, gaps, the
                 stated uncertainty and the seed, on every row. That is what lets
@@ -499,7 +499,7 @@ const DESIGN_THE_SCHEDULE = {
       body: `You have run two schedules on the same planet, lost a fortnight
              out of the middle of one, and typed a set of dates of your own.`,
       prompt:
-        'In two or three sentences, say which schedule you would actually run on a night-assignment committee\u2019s time, and what about the sampling — not the telescope — decides whether the period comes out.',
+        'In two or three sentences, say which schedule you would actually run on a telescope-time committee\u2019s time, and what about the sampling — not the telescope — decides whether the period comes out.',
       rubric:
         'The answer that earns credit is about sampling rather than about aperture or exposure time: a run that samples at almost exactly the planet\u2019s period, or an integer fraction of it, revisits the same phase every night and constrains almost nothing, however good the photometry. Spreading observations over a long baseline with irregular spacing breaks the aliasing and pins the period. Losing the middle of a run costs less than losing the ends, because the baseline is what sets the precision. A strong answer names the trade explicitly: a longer baseline buys period precision, more nights per unit time buy the ability to tell aliases apart, and a committee gives you neither for free.',
     },

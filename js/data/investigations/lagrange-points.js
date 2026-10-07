@@ -139,7 +139,7 @@ const LAGRANGE_POINTS = {
              is the simplest system in which the two-body answers stop working,
              and almost everything interesting about it was worked out by
              Euler, Lagrange and Jacobi before 1840.`,
-      tip: 'The Restricted Three-Body panel opened with the scenario. Everything this lesson asks you to read is in it.',
+      tip: 'The Restricted Three-Body panel opened with the scenario. Everything this investigation asks you to read is in it.',
     },
     {
       sid: 'the-rotating-frame',

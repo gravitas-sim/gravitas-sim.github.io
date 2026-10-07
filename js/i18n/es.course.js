@@ -10,7 +10,7 @@
 export const ES_COURSE = {
   'course.title': 'Creador de paquetes de curso',
   'course.intro':
-    'Arma un curso con lo que tiene Gravitas: lecciones, tareas recortadas de ellas, simulaciones, datos y lecturas, en unidades, con objetivos, tiempos, caminos opcionales introductorios y avanzados, y notas para estudiantes y docentes en inglés y español. Comprueba de qué depende el curso y fija cada lección, para que un curso archivado pueda decir con qué se hizo. No hace falta ninguna cuenta: el curso es un archivo y un enlace.',
+    'Arma un curso con lo que tiene Gravitas: investigaciones, actividades recortadas de ellas, simulaciones, datos y lecturas, en unidades, con objetivos, tiempos, caminos opcionales introductorios y avanzados, y notas para estudiantes y docentes en inglés y español. Comprueba de qué depende el curso y fija cada investigación, para que un curso archivado pueda decir con qué se hizo. No hace falta ninguna cuenta: el curso es un archivo y un enlace.',
   'course.toolbar.label': 'Archivo del curso',
   'course.action.new': 'Curso nuevo',
   'course.action.example': 'Abrir el curso de ejemplo',
@@ -19,7 +19,7 @@ export const ES_COURSE = {
   'course.action.upgrade': 'Actualizar lo revisado',
   'course.action.addObjective': 'Añadir un objetivo',
   'course.action.addPrereqText': 'Añadir un requisito en palabras',
-  'course.action.addPrereqLesson': 'Añadir una lección como requisito',
+  'course.action.addPrereqLesson': 'Añadir una investigación como requisito',
   'course.action.addUnit': 'Añadir una unidad',
   'course.action.addItem': 'Añadirlo',
   'course.action.remove': 'Quitar',
@@ -34,7 +34,7 @@ export const ES_COURSE = {
   'course.hint.id':
     'Palabras en minúscula unidas por guiones. Da nombre al archivo y a los borradores.',
   'course.hint.pinning':
-    'Exacto: un archivo histórico; cualquier cambio en una lección que nombra espera tu revisión. Compatible: se aceptan los cambios dentro de la versión principal del paquete de una lección, y lo mayor espera.',
+    'Exacto: un archivo histórico; cualquier cambio en una investigación que nombra espera tu revisión. Compatible: se aceptan los cambios dentro de la misma versión principal, y lo mayor espera.',
   'course.hint.teacherGuide':
     'Cómo impartir el curso, para otro docente. La página del curso lo muestra solo si se marca «Notas para docentes».',
   'course.hint.objectives':
@@ -42,7 +42,7 @@ export const ES_COURSE = {
   'course.hint.units':
     'Las unidades van en orden, y los elementos en orden dentro de ellas. No hay fechas: esas las pone el docente. Un elemento del camino introductorio o avanzado es opcional, y lo principal no puede depender de él.',
   'course.hint.minutesDerived':
-    'Déjalo en blanco para usar el tiempo de la propia lección (en una tarea, su parte de los pasos de la lección).',
+    'Déjalo en blanco para usar su propio tiempo (en una actividad, su parte de los pasos).',
   'course.hint.seed':
     'Una palabra como orbit-1: la misma palabra construye siempre el mismo mundo.',
   'course.hint.dataset':
@@ -63,7 +63,7 @@ export const ES_COURSE = {
   'course.field.objective': 'Objetivo',
   'course.field.objectives': 'Objetivos a los que sirve',
   'course.field.prerequisite': 'Requisito',
-  'course.field.lesson': 'Lección',
+  'course.field.lesson': 'Investigación',
   'course.field.unitTitle': 'Título de la unidad',
   'course.field.addKind': 'Elemento nuevo',
   'course.field.path': 'Camino',
@@ -71,8 +71,8 @@ export const ES_COURSE = {
   'course.field.needs': 'Va después de',
   'course.field.studentNote': 'Nota para estudiantes',
   'course.field.teacherNote': 'Nota para docentes',
-  'course.field.assignmentTitle': 'Título de la tarea',
-  'course.field.assignmentIntro': 'Introducción de la tarea',
+  'course.field.assignmentTitle': 'Título de la actividad',
+  'course.field.assignmentIntro': 'Introducción de la actividad',
   'course.field.steps': 'Pasos',
   'course.field.scenario': 'Escenario',
   'course.field.seed': 'Palabra semilla',
@@ -98,8 +98,8 @@ export const ES_COURSE = {
   'course.state.done': 'Traducido',
   'course.state.missing': 'Aún sin español',
   'course.state.stale': 'Español desactualizado',
-  'course.kind.lesson': 'Lección',
-  'course.kind.assignment': 'Tarea',
+  'course.kind.lesson': 'Investigación',
+  'course.kind.assignment': 'Actividad',
   'course.kind.scenario': 'Simulación',
   'course.kind.dataset': 'Datos',
   'course.kind.reading': 'Lectura',
@@ -121,7 +121,7 @@ export const ES_COURSE = {
   'course.standing.moved': 'ahora viene de otro paquete.',
   'course.standing.unpinned': 'aún sin fijar.',
   'course.standing.missing': 'ya no está en Gravitas.',
-  'course.steps.loading': 'Cargando los pasos de la lección.',
+  'course.steps.loading': 'Cargando los pasos.',
   'course.steps.needed': '(lo necesita un paso elegido)',
   'course.checks.running': 'Comprobando.',
   'course.checks.valid': 'Nada que corregir.',
@@ -130,9 +130,9 @@ export const ES_COURSE = {
   'course.checks.warnings': 'Nada que corregir; {count} por revisar.',
   'course.review.heading': 'Fijaciones y actualizaciones',
   'course.review.hint':
-    'Cómo está cada lección frente a esta versión de Gravitas. Marca lo que hayas revisado y actualiza: las fijaciones pasan a las lecciones tal como son y la versión del curso sube.',
+    'Cómo está cada investigación frente a esta versión de Gravitas. Marca lo que hayas revisado y actualiza: las fijaciones pasan a ellas tal como son y la versión del curso sube.',
   'course.review.summary': '{count} por revisar (fijación {pinning}).',
-  'course.review.clear': 'Las {count} lecciones están como se fijaron.',
+  'course.review.clear': 'Las {count} investigaciones están como se fijaron.',
   'course.review.steps': 'Pasos: {then} entonces, {now} ahora.',
   'course.review.missingSteps': 'Pasos asignados que ya no están: {list}.',
   'course.review.changedSteps': 'Pasos asignados que se reescribieron: {list}.',
@@ -156,7 +156,7 @@ export const ES_COURSE = {
   'course.translation.item': '{where}: {state}',
   'course.graph.heading': 'De qué depende',
   'course.graph.summary':
-    '{nodes} partes, {edges} dependencias: lo que cada elemento necesita y abre, y lo que usa cada lección.',
+    '{nodes} partes, {edges} dependencias: lo que cada elemento necesita y abre, y lo que usa cada una.',
   'course.edge.needs': 'va después de',
   'course.edge.opens': 'abre',
   'course.edge.uses': 'usa',
@@ -201,7 +201,7 @@ export const ES_COURSE = {
   'course.file.tooLarge':
     'El archivo es más grande de lo que necesita cualquier curso.',
   'course.file.migrated':
-    'Se abrió {id}, un curso de lecciones del catálogo. Ahora es un paquete de curso de esta versión: añade objetivos y tiempos, y fija sus lecciones actualizándolas.',
+    'Se abrió {id}, un curso de investigaciones del catálogo. Ahora es un paquete de curso de esta versión: añade objetivos y tiempos, y fija sus investigaciones actualizándolas.',
   'course.audit.missing': 'Gravitas ya no tiene lo que abre este elemento.',
   'course.audit.review': '{title}: {status} Espera revisión.',
   'course.audit.assumes':
@@ -209,7 +209,7 @@ export const ES_COURSE = {
   'course.audit.prerequisiteIncluded':
     '{lessonTitle} es a la vez requisito y parte del curso.',
   'course.audit.assignmentNeeds':
-    'La tarea necesita también estos pasos: {sids}.',
+    'La actividad necesita también estos pasos: {sids}.',
   'course.audit.datasetIncompatible':
     'Esta versión de Gravitas no puede abrir este conjunto de datos (necesita {range}).',
   'course.audit.install':
@@ -243,7 +243,7 @@ export const ES_COURSE = {
   'course.error.access':
     'Libre en línea, a través de una biblioteca o impreso.',
   'course.error.assignmentId':
-    'El identificador de la tarea y la fecha en que se hizo.',
+    'El identificador de la actividad y la fecha en que se hizo.',
   'course.error.boolean': 'Sí o no.',
   'course.error.cite': 'Quién lo escribió, cuándo y dónde.',
   'course.error.count': 'Como mucho {max}.',
@@ -260,8 +260,8 @@ export const ES_COURSE = {
   'course.error.hash': 'Ocho dígitos hexadecimales.',
   'course.error.items': 'De 1 a {max} elementos.',
   'course.error.kind': 'Uno de: {kinds}.',
-  'course.error.lesson': 'Elige una lección que tenga Gravitas.',
-  'course.error.lessonTwice': 'Esta lección ya está en el curso.',
+  'course.error.lesson': 'Elige una investigación que tenga Gravitas.',
+  'course.error.lessonTwice': 'Esta investigación ya está en el curso.',
   'course.error.license': 'La licencia o las condiciones, en palabras.',
   'course.error.locales': 'Los idiomas deben incluir el inglés.',
   'course.error.minutes': 'Un número entero de minutos de 1 a 600.',
@@ -275,13 +275,13 @@ export const ES_COURSE = {
   'course.error.package': 'El paquete y su versión.',
   'course.error.path': 'Principal, introductorio o avanzado.',
   'course.error.pinRequired':
-    'Un curso exacto fija cada lección que nombra: actualízala para fijarla.',
+    'Un curso exacto fija cada investigación que nombra: actualízala para fijarla.',
   'course.error.pinning': 'Exacta o compatible.',
   'course.error.plain': 'Solo texto sin formato: sin marcas ni entidades.',
-  'course.error.prerequisite': 'Una lección o un texto.',
+  'course.error.prerequisite': 'Una investigación o un texto.',
   'course.error.scenario': 'Elige un escenario que tenga Gravitas.',
   'course.error.sid': 'Un identificador de paso.',
-  'course.error.stepCount': 'El número de pasos de la lección.',
+  'course.error.stepCount': 'El número de pasos de la investigación.',
   'course.error.stepHashes': 'Un hash por cada paso asignado.',
   'course.error.steps': 'De 1 a {max} pasos.',
   'course.error.stepsTwice': 'Un paso aparece dos veces.',

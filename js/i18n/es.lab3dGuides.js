@@ -6,7 +6,7 @@ export const ES_LAB3DGUIDES = {
   // --- El ejecutor
   'g3.heading': 'Investigaciones guiadas',
   'g3.intro':
-    'Cuatro guías sobre lo que un modelo plano no puede contener: el plano de una órbita, cómo se ve desde fuera, los planos de dos órbitas y un tercer cuerpo lejano. Cada una pide una predicción, te hace cambiar algo y medir, y dice dónde se detiene el modelo. Cada respuesta se comprueba con los números del propio laboratorio.',
+    'Un conjunto de investigaciones sobre lo que un modelo plano no puede contener: el plano de una órbita, cómo se ve desde fuera, los planos de dos órbitas y un tercer cuerpo lejano. Cada una pide una predicción, te hace cambiar algo y medir, y dice dónde se detiene el modelo. Cada respuesta se comprueba con los números del propio laboratorio.',
   'g3.meta': 'Unos {intro} minutos; {advanced} en el recorrido avanzado.',
   'g3.startIntro': 'Empezar',
   'g3.startAdvanced': 'Empezar el recorrido avanzado',
@@ -57,10 +57,10 @@ export const ES_LAB3DGUIDES = {
   'gd.target.R1': 'Una órbita de Kepler inclinada (R1)',
   'gd.target.R3': 'Una estrella y dos planetas (R3)',
   'gd.target.R6': 'Ciclos de Kozai-Lidov (R6)',
-  'gd.target.tilt-0': 'Guía: un planeta en el plano de referencia',
-  'gd.target.tilt-02': 'Guía: la misma órbita inclinada 0,2°',
-  'gd.target.tilt-05': 'Guía: la misma órbita inclinada 0,5°',
-  'gd.target.same-tilt': 'Guía: dos planetas, ambos inclinados 10°',
+  'gd.target.tilt-0': 'Investigación: un planeta en el plano de referencia',
+  'gd.target.tilt-02': 'Investigación: la misma órbita inclinada 0,2°',
+  'gd.target.tilt-05': 'Investigación: la misma órbita inclinada 0,5°',
+  'gd.target.same-tilt': 'Investigación: dos planetas, ambos inclinados 10°',
 
   // --- l3-planes
   'gd.l3-planes.title': 'El plano de una órbita',
@@ -169,7 +169,7 @@ export const ES_LAB3DGUIDES = {
   'gd.l3-eclipse.open-flat.title':
     'Una órbita en el plano de referencia, vista a lo largo de él',
   'gd.l3-eclipse.open-flat.text':
-    'Abre «Guía: un planeta en el plano de referencia» y mira «A lo largo del plano de referencia», desde -y: el observador. Elige el instrumento «En el cielo, visto desde aquí» sobre la estrella y el planeta.',
+    'Abre «Investigación: un planeta en el plano de referencia» y mira «A lo largo del plano de referencia», desde -y: el observador. Elige el instrumento «En el cielo, visto desde aquí» sobre la estrella y el planeta.',
   'gd.l3-eclipse.open-flat.ok':
     'Visto desde aquí, la órbita está de canto: una vez por órbita, el planeta pasa justo por delante de la estrella.',
   'gd.l3-eclipse.predict.title': 'Predice: inclínala medio grado',
@@ -179,7 +179,7 @@ export const ES_LAB3DGUIDES = {
   'gd.l3-eclipse.predict.opt.no': 'No',
   'gd.l3-eclipse.open-tilted.title': 'Abre la órbita inclinada',
   'gd.l3-eclipse.open-tilted.text':
-    'Abre «Guía: la misma órbita inclinada 0,5°», todavía vista a lo largo del plano de referencia, y pon el instrumento «Órbita» sobre el planeta.',
+    'Abre «Investigación: la misma órbita inclinada 0,5°», todavía vista a lo largo del plano de referencia, y pon el instrumento «Órbita» sobre el planeta.',
   'gd.l3-eclipse.open-tilted.ok':
     'La órbita inclinada está abierta, con el instrumento de órbita sobre el planeta.',
   'gd.l3-eclipse.impact.title': '¿A qué distancia pasa?',
@@ -213,7 +213,7 @@ export const ES_LAB3DGUIDES = {
     'Vuelve a mirar con el tamaño en radio × 10: los discos aumentados se superponen cuando pasa el planeta, aunque los verdaderos no.',
   'gd.l3-eclipse.open-slight.title': 'Una inclinación menor',
   'gd.l3-eclipse.open-slight.text':
-    'Abre «Guía: la misma órbita inclinada 0,2°», vista a lo largo del plano de referencia, con el instrumento de órbita sobre el planeta.',
+    'Abre «Investigación: la misma órbita inclinada 0,2°», vista a lo largo del plano de referencia, con el instrumento de órbita sobre el planeta.',
   'gd.l3-eclipse.open-slight.ok': 'La órbita de 0,2° está abierta.',
   'gd.l3-eclipse.impact-slight.title': '¿A qué distancia ahora?',
   'gd.l3-eclipse.impact-slight.text':
@@ -255,7 +255,7 @@ export const ES_LAB3DGUIDES = {
     'Cada órbita tiene su propio plano. El ángulo entre dos planos es su inclinación mutua, y es lo que determina cómo se perturban las órbitas entre sí. La inclinación por sí sola mide cada una respecto del plano de referencia.',
   'gd.l3-mutual.open.title': 'Dos planetas, ambos inclinados',
   'gd.l3-mutual.open.text':
-    'Abre «Guía: dos planetas, ambos inclinados 10°» y pon el instrumento «Órbita» sobre el planeta b.',
+    'Abre «Investigación: dos planetas, ambos inclinados 10°» y pon el instrumento «Órbita» sobre el planeta b.',
   'gd.l3-mutual.open.ok':
     'Los dos planetas están abiertos, con el instrumento de órbita sobre el planeta b.',
   'gd.l3-mutual.inclination-b.title': 'La inclinación del planeta b',
@@ -327,7 +327,7 @@ export const ES_LAB3DGUIDES = {
   'gd.l3-mutual.flat-enough.ok':
     'Correcto. Con una inclinación mutua de cerca de 1°, un modelo 2-D se equivoca en unas pocas partes en diez mil en la distancia, y por eso el sandbox 2-D puede modelar bien los planetas del Sistema Solar.',
   'gd.l3-mutual.flat-enough.no':
-    'Compara el error con la precisión que necesitas: dos partes en diez mil está por debajo de lo que miden la mayoría de las lecciones.',
+    'Compara el error con la precisión que necesitas: dos partes en diez mil está por debajo de lo que miden la mayoría de las investigaciones.',
   'gd.l3-mutual.flat.title': 'Lo que un modelo plano conserva, y lo que pierde',
   'gd.l3-mutual.flat.text':
     'Un modelo 2-D pone todas las órbitas en un plano: todas sus inclinaciones mutuas son cero. Es un buen modelo de un sistema casi plano como el nuestro, y uno equivocado allí donde las órbitas están muy inclinadas entre sí, como muestra la siguiente investigación.',

@@ -31,7 +31,7 @@ export default {
         text: 'Puesto que estos ocho minutos no podían ignorarse, ellos solos han abierto el camino a la reforma de toda la astronomía.',
         by: 'Johannes Kepler, Astronomia Nova, 1609',
       },
-      tip: 'Mientras una lección está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.',
+      tip: 'Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.',
     },
     {
       title: 'Lo que estás mirando',
