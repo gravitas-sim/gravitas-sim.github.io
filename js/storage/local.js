@@ -1,21 +1,45 @@
-// One localStorage key as JSON (STORAGE.md, Prompt 65): the try/catch every
-// writer repeated, for no storage, a damaged value and a full quota. Neither
-// function throws; `store` defaults to the page's own.
+// Student data in localStorage (STORAGE.md): every writer's way in. Keys and
+// formats are unchanged; adds a size limit per record.
 const area = s => s ?? (globalThis.window ?? globalThis).localStorage;
 
-/** The value under `key`, or `fallback` if there is none or it is damaged. */
+// Most one record may hold, in KiB (index.js COLLECTIONS has the same).
+export const ITEM = {
+  progress: 1024,
+  evidence: 2048,
+  experiments: 512,
+  drafts: 2048,
+  assignments: 1024,
+  courses: 1024,
+  settings: 256,
+  preferences: 64,
+};
+
+export const get = (key, store) => area(store).getItem(key);
+
+// Over a collection's limit is a QuotaExceededError, as a full disk is.
+export const put = (key, text, collection, store) => {
+  if (text.length > ITEM[collection] * 1024) {
+    const error = new Error(`${collection}: record too large`);
+    throw Object.assign(error, { name: 'QuotaExceededError', collection });
+  }
+  area(store).setItem(key, text);
+};
+
+export const drop = (key, store) => area(store).removeItem(key);
+
+// The value, or `fallback` if there is none or it is damaged.
 export const readJson = (key, fallback = null, store) => {
   try {
-    return JSON.parse(area(store).getItem(key)) ?? fallback;
+    return JSON.parse(get(key, store)) ?? fallback;
   } catch {
     return fallback;
   }
 };
 
-/** Keep `value` under `key`; whether the browser kept it. */
-export const writeJson = (key, value, store) => {
+// Whether the browser kept it.
+export const writeJson = (key, value, collection, store) => {
   try {
-    area(store).setItem(key, JSON.stringify(value));
+    put(key, JSON.stringify(value), collection, store);
     return true;
   } catch {
     return false;

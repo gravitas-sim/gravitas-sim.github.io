@@ -162,6 +162,7 @@ import {
   stepBindings,
 } from './assignments/assignment.js';
 import { stepFingerprint } from './investigations/progressBackup.js';
+import { drop, get, put } from './storage/local.js';
 import {
   helpTaken,
   hintsFor,
@@ -298,6 +299,7 @@ export const activeAssignmentBinding = () => assignmentBinding;
  * @returns {string} Storage key
  */
 const progressKey = id => (assignment ? assignmentKey : storageKey(id));
+const progressArea = () => (assignment ? 'assignments' : 'progress');
 
 /** The open assignment's progress key; set with `assignment`. */
 let assignmentKey = null;
@@ -316,7 +318,7 @@ function keyForAssignment(a) {
   const key = `gravitas_assignment_${hash}`;
   if (authoring) return key;
   try {
-    if (localStorage.getItem(key) === null) {
+    if (get(key) === null) {
       const old = Object.keys(localStorage)
         .filter(
           k =>
@@ -326,8 +328,8 @@ function keyForAssignment(a) {
         .sort()
         .pop();
       if (old) {
-        localStorage.setItem(key, localStorage.getItem(old));
-        localStorage.removeItem(old);
+        put(key, get(old), 'assignments');
+        drop(old);
       }
     }
   } catch {
@@ -414,7 +416,7 @@ function save() {
   sessionProgress.set(progressKey(active.id), payload);
 
   try {
-    localStorage.setItem(progressKey(active.id), JSON.stringify(payload));
+    put(progressKey(active.id), JSON.stringify(payload), progressArea());
     setSaveState('saved');
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
@@ -646,7 +648,7 @@ function load(id, lesson = null) {
 
   if (!data) {
     try {
-      const raw = localStorage.getItem(progressKey(id));
+      const raw = get(progressKey(id));
       if (!raw) return null;
       data = JSON.parse(raw);
     } catch {
@@ -674,7 +676,7 @@ function load(id, lesson = null) {
   // looked at their answers.
   if (isLegacy && progress.migrated) {
     try {
-      localStorage.setItem(legacyKey(id), JSON.stringify(data));
+      put(legacyKey(id), JSON.stringify(data), progressArea());
     } catch {
       /* the migration still stands; only the safety copy is lost */
     }
@@ -685,7 +687,7 @@ function load(id, lesson = null) {
 /** @returns {string} The student's saved name, if they have given one */
 export function getStudentName() {
   try {
-    return localStorage.getItem(NAME_KEY) || '';
+    return get(NAME_KEY) || '';
   } catch {
     return '';
   }
@@ -693,7 +695,7 @@ export function getStudentName() {
 
 function setStudentName(name) {
   try {
-    localStorage.setItem(NAME_KEY, name);
+    put(NAME_KEY, name, 'settings');
   } catch {
     /* ignore */
   }
@@ -4860,7 +4862,7 @@ function resetProgress() {
   visited = new Set();
   startedAt = new Date().toISOString();
   try {
-    if (!authoring) localStorage.removeItem(storageKey(active.id));
+    if (!authoring) drop(storageKey(active.id));
   } catch {
     /* ignore */
   }
@@ -5040,7 +5042,7 @@ export function initInvestigations({ signal } = {}) {
     // comes first on a sheet that small. Not remembered, being no choice.
     let quiet = false;
     try {
-      const kept = window.localStorage?.getItem(OBJECTS_OPEN_KEY);
+      const kept = get(OBJECTS_OPEN_KEY);
       quiet = kept == null && window.innerWidth <= 767;
       if (kept === '0' || quiet) objectsDisclosure.open = false;
     } catch {
@@ -5049,9 +5051,10 @@ export function initInvestigations({ signal } = {}) {
     objectsDisclosure.addEventListener('toggle', () => {
       if (quiet) return void (quiet = false);
       try {
-        window.localStorage?.setItem(
+        put(
           OBJECTS_OPEN_KEY,
-          objectsDisclosure.open ? '1' : '0'
+          objectsDisclosure.open ? '1' : '0',
+          'preferences'
         );
       } catch {
         /* the list still folds; the choice just will not outlive the page */

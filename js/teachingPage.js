@@ -889,7 +889,7 @@ const FEEDBACK_KEY = 'gravitas_teaching_notes_v1';
 const readNotes = () => readJson(FEEDBACK_KEY, {});
 
 /** Write them back, and say nothing if storage is unavailable. */
-const writeNotes = notes => writeJson(FEEDBACK_KEY, notes);
+const writeNotes = notes => writeJson(FEEDBACK_KEY, notes, 'drafts');
 
 /**
  * The classroom feedback form.

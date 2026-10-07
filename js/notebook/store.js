@@ -22,6 +22,8 @@
 // notebook means reading all of it anyway.
 // =============================================================================
 
+import { drop, put } from '../storage/local.js';
+
 /** Bumped when the stored envelope changes. */
 export const SCHEMA_VERSION = 1;
 
@@ -176,7 +178,7 @@ export function save(entries) {
     };
   }
   try {
-    s.setItem(KEY, text);
+    put(KEY, text, 'evidence', s);
   } catch (err) {
     // QuotaExceededError, or a private-mode refusal. Either way the student
     // needs to hear "your browser will not keep this", not a stack trace.
@@ -196,7 +198,7 @@ export function clear() {
   const s = storage();
   if (!s) return false;
   try {
-    s.removeItem(KEY);
+    drop(KEY, s);
     return true;
   } catch {
     return false;
