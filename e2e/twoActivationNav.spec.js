@@ -72,9 +72,26 @@ async function activate(page, loc, input) {
   }
 }
 
+// A pull request runs one cell per input method (keyboard at 1024 px in the
+// desktop project, touch at 375 px in the phone project) and the first Library
+// route; the whole matrix (both widths, both inputs, every route, both
+// projects) runs when GRAVITAS_E2E_NAV_FULL is set: the weekly CI job and
+// `npm run e2e:release`, as the tablet walk does with GRAVITAS_E2E_TABLET_WALK.
+const FULL = Boolean(process.env.GRAVITAS_E2E_NAV_FULL);
+
 for (const width of [375, 1024]) {
   for (const input of ['keyboard', 'touch']) {
     test.describe(`from Home at ${width} px by ${input}`, () => {
+      test.beforeEach(({}, testInfo) => {
+        const cell =
+          testInfo.project.name === 'mobile-chrome'
+            ? '375/touch'
+            : '1024/keyboard';
+        test.skip(
+          !FULL && `${width}/${input}` !== cell,
+          'the full matrix runs when GRAVITAS_E2E_NAV_FULL is set'
+        );
+      });
       test.use({
         viewport: { width, height: 800 },
         hasTouch: input === 'touch',
@@ -199,7 +216,7 @@ for (const width of [375, 1024]) {
           .filter(r => !cards.some(c => c.ok && c.href === r));
         expect(orphanRoutes).toEqual([]);
 
-        for (const [i, base] of bases.entries()) {
+        for (const [i, base] of (FULL ? bases : bases.slice(0, 1)).entries()) {
           if (i > 0) {
             await page.goBack({ waitUntil: 'domcontentloaded' });
             await open();

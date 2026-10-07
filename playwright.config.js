@@ -268,6 +268,8 @@ const LAYOUT_SPEC = /responsiveLayout\.spec\.js/;
 // Sets its own viewports and touch per test; the phone profile adds the real
 // device's user agent and touch screen to the same walk (P58 R-A).
 const NAV_SPEC = /twoActivationNav\.spec\.js/;
+// The spec runs one cell per input method per pull request; the whole matrix
+// when GRAVITAS_E2E_NAV_FULL is set (the weekly job and `npm run e2e:release`).
 const TABLET_WALK = Boolean(process.env.GRAVITAS_E2E_TABLET_WALK);
 
 /**
