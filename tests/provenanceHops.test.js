@@ -37,7 +37,20 @@ import { BUILTINS } from '../js/platform/builtins.js';
 
 // Jest's realm has no WebCrypto of its own (as tests/measure.test.js).
 if (!globalThis.crypto?.subtle)
-  Object.defineProperty(globalThis, 'crypto', { value: webcrypto });
+  Object.defineProperty(globalThis, 'crypto', {
+    value: {
+      subtle: {
+        digest: (alg, data) =>
+          webcrypto.subtle.digest(
+            alg,
+            Buffer.from(
+              new Uint8Array(data.buffer, data.byteOffset, data.byteLength)
+            )
+          ),
+      },
+    },
+    configurable: true,
+  });
 
 const schema = name =>
   JSON.parse(readFileSync(`sdk/schemas/${name}.schema.json`, 'utf8'));
