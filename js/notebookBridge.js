@@ -63,7 +63,6 @@ export function ensureNotebook() {
       panel.ensurePanel();
       return { panel, capture };
     })();
-    // A failed import is not kept: the next request tries again.
     loading.catch(() => (loading = null));
   }
   return loading;

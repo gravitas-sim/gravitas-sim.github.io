@@ -65,7 +65,6 @@ export function ensureBench() {
       panel.setShareHandler(() => share.openShareDialog());
       return { bench, panel };
     })();
-    // A failed import is not kept: the next request tries again.
     loading.catch(() => (loading = null));
   }
   return loading;

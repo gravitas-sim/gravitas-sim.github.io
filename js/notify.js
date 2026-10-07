@@ -35,13 +35,7 @@ export function announce(message, again = true) {
 let toastTimer = null;
 
 /**
- * Show a brief status message.
- *
- * With an action - a failed load, say - the message waits for the reader: ten
- * seconds, a button that does the thing again, and Escape to dismiss it. The
- * message is announced once, by the same call, and the button is reachable
- * because the toast stays in the DOM until it hides.
- *
+ * Show a brief status message; with an action, wait ten seconds for it.
  * @param {string} message - Text to display
  * @param {{label: string, run: Function}} [action] - A button to offer
  */
@@ -83,14 +77,8 @@ export function toast(message, action) {
 let failedAt = 0;
 
 /**
- * Say that something the reader asked for could not be loaded, and offer the
- * request again. The one presentation a failed lazy chunk gets.
- *
- * A browser keeps a failed module fetch for the life of the page, so asking
- * again at once for the same module cannot work; a second failure within
- * fifteen seconds offers a reload instead of a button that would fail the same
- * way. Saved work is in storage and survives it.
- *
+ * A load failed: offer it again. A browser keeps a failed module for the life of
+ * the page, so a second failure within 15 s offers a reload instead.
  * @param {Function} retry - Does the request again
  */
 export function loadFailed(retry) {

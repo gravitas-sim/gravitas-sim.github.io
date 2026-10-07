@@ -52,7 +52,6 @@ export function ensureView3D() {
         return mod;
       }
     );
-    // A failed import is not kept: the next request tries again.
     loading.catch(() => (loading = null));
   }
   return loading;
@@ -105,7 +104,7 @@ export function watchFor3DView() {
       console.error('The spacetime view could not be loaded:', err);
       btn.textContent = previous;
       btn.disabled = false;
-      btn.addEventListener('click', firstClick); // the retry
+      btn.addEventListener('click', firstClick);
       (await import('./notify.js')).loadFailed(() => btn.click());
     }
   };
