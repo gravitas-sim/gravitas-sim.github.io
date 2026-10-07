@@ -34,7 +34,7 @@ export const ES_COURSE = {
   'course.hint.id':
     'Palabras en minúscula unidas por guiones. Da nombre al archivo y a los borradores.',
   'course.hint.pinning':
-    'Exacto: un archivo histórico; cualquier cambio en una investigación que nombra espera tu revisión. Compatible: se aceptan los cambios dentro de la versión principal del paquete de una investigación, y lo mayor espera.',
+    'Exacto: un archivo histórico; cualquier cambio en una investigación que nombra espera tu revisión. Compatible: se aceptan los cambios dentro de la misma versión principal, y lo mayor espera.',
   'course.hint.teacherGuide':
     'Cómo impartir el curso, para otro docente. La página del curso lo muestra solo si se marca «Notas para docentes».',
   'course.hint.objectives':
@@ -42,7 +42,7 @@ export const ES_COURSE = {
   'course.hint.units':
     'Las unidades van en orden, y los elementos en orden dentro de ellas. No hay fechas: esas las pone el docente. Un elemento del camino introductorio o avanzado es opcional, y lo principal no puede depender de él.',
   'course.hint.minutesDerived':
-    'Déjalo en blanco para usar el tiempo de la propia investigación (en una actividad, su parte de los pasos de la investigación).',
+    'Déjalo en blanco para usar su propio tiempo (en una actividad, su parte de los pasos).',
   'course.hint.seed':
     'Una palabra como orbit-1: la misma palabra construye siempre el mismo mundo.',
   'course.hint.dataset':
@@ -121,7 +121,7 @@ export const ES_COURSE = {
   'course.standing.moved': 'ahora viene de otro paquete.',
   'course.standing.unpinned': 'aún sin fijar.',
   'course.standing.missing': 'ya no está en Gravitas.',
-  'course.steps.loading': 'Cargando los pasos de la investigación.',
+  'course.steps.loading': 'Cargando los pasos.',
   'course.steps.needed': '(lo necesita un paso elegido)',
   'course.checks.running': 'Comprobando.',
   'course.checks.valid': 'Nada que corregir.',
@@ -130,7 +130,7 @@ export const ES_COURSE = {
   'course.checks.warnings': 'Nada que corregir; {count} por revisar.',
   'course.review.heading': 'Fijaciones y actualizaciones',
   'course.review.hint':
-    'Cómo está cada investigación frente a esta versión de Gravitas. Marca lo que hayas revisado y actualiza: las fijaciones pasan a las investigaciones tal como son y la versión del curso sube.',
+    'Cómo está cada investigación frente a esta versión de Gravitas. Marca lo que hayas revisado y actualiza: las fijaciones pasan a ellas tal como son y la versión del curso sube.',
   'course.review.summary': '{count} por revisar (fijación {pinning}).',
   'course.review.clear': 'Las {count} investigaciones están como se fijaron.',
   'course.review.steps': 'Pasos: {then} entonces, {now} ahora.',
@@ -156,7 +156,7 @@ export const ES_COURSE = {
   'course.translation.item': '{where}: {state}',
   'course.graph.heading': 'De qué depende',
   'course.graph.summary':
-    '{nodes} partes, {edges} dependencias: lo que cada elemento necesita y abre, y lo que usa cada investigación.',
+    '{nodes} partes, {edges} dependencias: lo que cada elemento necesita y abre, y lo que usa cada una.',
   'course.edge.needs': 'va después de',
   'course.edge.opens': 'abre',
   'course.edge.uses': 'usa',

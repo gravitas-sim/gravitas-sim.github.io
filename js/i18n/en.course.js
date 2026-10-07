@@ -34,7 +34,7 @@ export const EN_COURSE = {
   'course.hint.id':
     'Lower-case words joined by hyphens. It names the file and the drafts.',
   'course.hint.pinning':
-    "Exact: an archive; any change to an investigation it names waits for your review. Compatible: changes within an investigation package's major version are accepted, and anything larger waits.",
+    "Exact: an archive; any change to an investigation it names waits for your review. Compatible: changes within the same major version are accepted; larger ones wait.",
   'course.hint.teacherGuide':
     'How to run the course, for another instructor. Shown on the course home only when "Notes for instructors" is ticked.',
   'course.hint.objectives':
@@ -42,7 +42,7 @@ export const EN_COURSE = {
   'course.hint.units':
     'Units run in order, and items in order within them. There are no dates: an instructor sets those. An item on the introductory or advanced path is optional, and the core may not depend on one.',
   'course.hint.minutesDerived':
-    "Leave blank to use the investigation's own time (for an activity, its share of the investigation's steps).",
+    "Leave blank to use its own time (for an activity, its share of the steps).",
   'course.hint.seed':
     'A word such as orbit-1: the same word always builds the same world.',
   'course.hint.dataset':
@@ -120,7 +120,7 @@ export const EN_COURSE = {
   'course.standing.moved': 'now comes from another package.',
   'course.standing.unpinned': 'not pinned yet.',
   'course.standing.missing': 'no longer in Gravitas.',
-  'course.steps.loading': "Loading the investigation's steps.",
+  'course.steps.loading': "Loading the steps.",
   'course.steps.needed': '(needed by a chosen step)',
   'course.checks.running': 'Checking.',
   'course.checks.valid': 'Nothing to fix.',
@@ -129,7 +129,7 @@ export const EN_COURSE = {
   'course.checks.warnings': 'Nothing to fix; {count} to look at.',
   'course.review.heading': 'Pins and upgrades',
   'course.review.hint':
-    "How each investigation stands against this version of Gravitas. Tick what you have looked at, then upgrade: the pins move to the investigations as they are, and the course's version goes up.",
+    "How each investigation stands against this version of Gravitas. Tick what you have looked at, then upgrade: the pins move to them as they are, and the course's version goes up.",
   'course.review.summary': '{count} to review ({pinning} pinning).',
   'course.review.clear': 'All {count} investigations are as pinned.',
   'course.review.steps': 'Steps: {then} then, {now} now.',
@@ -154,7 +154,7 @@ export const EN_COURSE = {
   'course.translation.item': '{where}: {state}',
   'course.graph.heading': 'What it depends on',
   'course.graph.summary':
-    '{nodes} parts, {edges} dependencies: what each item needs and opens, and what each investigation uses.',
+    '{nodes} parts, {edges} dependencies: what each item needs and opens, and what each uses.',
   'course.edge.needs': 'comes after',
   'course.edge.opens': 'opens',
   'course.edge.uses': 'uses',

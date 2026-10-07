@@ -156,9 +156,9 @@ export const INTRO_ASTRONOMY = {
             esOf: 'baf4a11c',
           },
           teacherNote: {
-            en: 'Ten minutes at the start of the first meeting. The question has no wrong answer yet; the investigation that follows makes it quantitative.',
-            es: 'Diez minutos al principio de la primera clase. La pregunta todavía no tiene respuesta incorrecta; la investigación siguiente la vuelve cuantitativa.',
-            esOf: '338437af',
+            en: 'Ten minutes at the start of the first meeting. The question has no wrong answer yet; the next one makes it quantitative.',
+            es: 'Diez minutos al principio de la primera clase. La pregunta todavía no tiene respuesta incorrecta; la siguiente la vuelve cuantitativa.',
+            esOf: 'b1605353',
           },
         },
         {
@@ -304,9 +304,9 @@ export const INTRO_ASTRONOMY = {
             esOf: '4e151d2b',
           },
           teacherNote: {
-            en: 'A thirty-minute cut of a seventy-minute investigation. The whole investigation goes on to limb darkening, the period and a blended binary; set it instead for a longer class.',
-            es: 'Un recorte de treinta minutos de una investigación de setenta. La investigación completa sigue con el oscurecimiento del limbo, el período y una binaria mezclada; asígnenla completa en una clase más larga.',
-            esOf: 'bf1b4889',
+            en: 'A thirty-minute cut of a seventy-minute investigation. It goes on to limb darkening, the period and a blended binary; set it instead for a longer class.',
+            es: 'Un recorte de treinta minutos de una investigación de setenta. Sigue con el oscurecimiento del limbo, el período y una binaria mezclada; asígnenla completa en una clase más larga.',
+            esOf: '0e66eebc',
           },
           minutes: 30,
           assignment: {
