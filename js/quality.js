@@ -108,9 +108,6 @@ let listeners = [];
 /** @returns {string} The tier currently in force */
 export const currentTier = () => tier;
 
-/** @returns {boolean} Whether the tier is being chosen by measurement */
-export const isAuto = () => auto;
-
 /**
  * The median of the current window, in frames per second.
  *

@@ -211,6 +211,9 @@ the panel can offer the thing that actually helps, which is exporting to a file.
   selected objects and metrics, the parameter change, and the build version —
   and deliberately _not_ the samples. A manifest small enough to paste into a
   lab report is worth more than one carrying a megabyte the CSV already has.
+  The manifest is `gravitas.experiment/1` of `kind: comparison`; the retired
+  name `gravitas-experiment` still opens, as version 0, and the experiment
+  runner opens a comparison of one setting as a two-value sweep.
   Reopening a manifest restores the definition and the setup, not the results:
   enough to re-run the experiment, not enough to hand in someone else's
   measurements.

@@ -16,15 +16,6 @@ const SPEED_STOPS = [
   [253, 231, 37],
 ];
 
-// Diverging: bound (blue) → marginal (gray) → unbound (red).
-const ENERGY_STOPS = [
-  [49, 104, 178],
-  [138, 176, 219],
-  [225, 225, 225],
-  [232, 145, 118],
-  [190, 46, 42],
-];
-
 function sample(stops, t) {
   const x = Math.max(0, Math.min(1, t)) * (stops.length - 1);
   const i = Math.min(stops.length - 2, Math.floor(x));
@@ -54,24 +45,3 @@ export function speedTrailColor(speed) {
   const s = Math.max(SPEED_MIN, Math.abs(speed) || SPEED_MIN);
   return sample(SPEED_STOPS, (Math.log(s) - LOG_MIN) / LOG_SPAN);
 }
-
-/**
- * Map a normalized total energy onto the diverging ramp.
- * @param {number} t - 0 = deeply bound, 0.5 = marginal, 1 = unbound
- * @returns {{r:number,g:number,b:number}} RGB color
- */
-export function energyColor(t) {
-  return sample(ENERGY_STOPS, t);
-}
-
-/**
- * Color ramp legend stops, for drawing a key.
- * @param {number} n - Number of samples
- * @returns {Array<{r:number,g:number,b:number}>} Ramp samples
- */
-export function speedRamp(n = 8) {
-  return Array.from({ length: n }, (_, i) => sample(SPEED_STOPS, i / (n - 1)));
-}
-
-/** @returns {{min:number,max:number}} The speed range the ramp covers */
-export const speedRange = () => ({ min: SPEED_MIN, max: SPEED_MAX });

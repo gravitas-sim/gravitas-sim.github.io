@@ -61,7 +61,7 @@ at `e5a26d4`:
 | **Experiment ensembles** (Prompt 14) | `js/experiments/trialRunner.js` | frames × substeps of the whole engine, up to 400 trials | a Worker a trial | `terminate()` |
 | **The simulation** | `js/physics.js` | direct forces, O(N × sources), every substep; about 930 bodies in Galactic Collision; Barnes-Hut optional | main thread (the tree in `physicsWorker.js`) | n/a |
 | **Q-scan, PSD, match** | `js/gw/qscan.js`, `psd.js`, `match.js` | one FFT and 48 inverse FFTs of 4,096 to 8,192 points | main thread, memoized | none |
-| **RV period search and Monte Carlo** | `js/rvFit.js`, `js/rvUncertainty.js` | 20,000 frequencies × N; up to 2,000 trials × 2,000 grid points × N | main thread; the Monte Carlo yields | the Monte Carlo only |
+| **RV period search and Monte Carlo** | `js/inference/rvCircular.js`, `js/inference/rvMonteCarlo.js` | 20,000 frequencies × N; up to 2,000 trials × 2,000 grid points × N | a Worker a task (`inferenceWorker.js`, through `rvClient.js`); the Monte Carlo yields to its message queue | a cancel message (the Monte Carlo answers with its finished trials), `terminate()` after 3 s |
 
 And what is coming:
 

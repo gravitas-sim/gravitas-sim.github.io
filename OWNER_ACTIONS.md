@@ -133,6 +133,67 @@ are, and each is given here with its exact path.
       beside **About** → Description (the suggested text above) and Topics (the
       suggested list above) → Save changes.
 
+### Settings status, read from the API (Prompt 111, 2026-10-06)
+
+Read-only `gh api` calls against the repository, restated here so the plan
+above is judged against what is true today. Nothing was changed. Re-read it
+before acting: a setting can move between this line and your click.
+
+| Setting | Status | Read with | Plan above |
+| --- | --- | --- | --- |
+| Description | empty | `repos/{repo}` `.description` | Description and topics |
+| Homepage | `https://gravitas-sim.online/` | `repos/{repo}` `.homepage` | done |
+| Topics | none | `repos/{repo}` `.topics` | Description and topics |
+| Branch protection on `main` | none (`Branch not protected`) | `repos/{repo}/branches/main/protection` | Protect `main` |
+| Repository rulesets | none | `repos/{repo}/rulesets` | Protect `main` |
+| Branch protection on `v2` | none, as intended | `repos/{repo}/branches/v2` `.protected` | leave unprotected |
+| `github-pages` environment | custom branch policies; one policy, `main` | `repos/{repo}/environments`, `.../deployment-branch-policies` | already as planned |
+| Private vulnerability reporting | disabled | `repos/{repo}/private-vulnerability-reporting` | Turn it on |
+| Discussions | disabled | `repos/{repo}` `.has_discussions` | Discussions, or edit SUPPORT.md |
+| Secret scanning, push protection | enabled | `repos/{repo}` `.security_and_analysis` | nothing to do |
+| Dependabot security updates | disabled | `repos/{repo}` `.security_and_analysis` | not in the plan; worth enabling beside the monthly version updates |
+| Pages | served from `main`, `/`; custom domain `gravitas-sim.online`; HTTPS enforced | `repos/{repo}/pages` | nothing to do |
+| Collaborators | 1 | `repos/{repo}/collaborators` | see the bus-factor checklist |
+| Actions secrets | none stored in the repository | `repos/{repo}/actions/secrets` (names only) | nothing to do |
+
+## Bus factor: what only Carl holds
+
+For [`CONTINUITY.md`](CONTINUITY.md). A checklist, documentation only: each
+line names a thing and what to arrange, **never the thing itself**. No
+password, passphrase, recovery code or token belongs in this file, in the
+repository, or in a session's conversation. Tick a box when the arrangement
+exists, not when it is planned.
+
+- [ ] **Organization owner.** The GitHub organization `gravitas-sim` has one
+      account that can change anything. Add a second owner who is trusted with
+      that (a colleague or the co-maintainer), or write down who would be asked.
+- [ ] **GitHub account recovery.** The owner account's two-factor recovery
+      codes and a recovery email that is not only the work address (the
+      university can close it). Store them where a named person can reach them
+      if you cannot (a password manager's emergency access, or a sealed copy).
+- [ ] **The domain `gravitas-sim.online`.** The registrar account, its renewal
+      date and whether auto-renew is on, and who holds the DNS. If the domain
+      lapses the site still serves at `gravitas-sim.github.io` once the
+      `CNAME` is removed, and every link that uses the domain breaks: renewal is
+      the single date that hurts most.
+- [ ] **The instructor passphrase.** Where it is kept (the git-ignored
+      `.instructor-password` file on one machine, and whatever else), and who can
+      get it. It is also what [`SUPPORT.md`](SUPPORT.md) says to email you for:
+      the email address is part of this item. A second holder, or an emergency
+      copy, is the whole point.
+- [ ] **Zenodo.** The account that holds the integration and the record's
+      ownership, and a second person added as an owner of the record if
+      Zenodo's settings allow. Without it nobody else can publish a version to
+      the concept DOI.
+- [ ] **ORCID and the citation identity.** The ORCID in `CITATION.cff` and
+      `.zenodo.json` is yours; note who could correct a record if it needed
+      correcting.
+- [ ] **Repository secrets.** None are stored today (the list above was read
+      by name only). If one is ever added, add it here by name, with what it is
+      for and where the value can be regenerated.
+- [ ] **A named contact.** One person who is told this file exists and what it
+      is for. Everything above is only useful if someone knows to look.
+
 ## The release itself
 
 - [x] **Create the tag and the GitHub release.** Done for v1.0.0. The annotated

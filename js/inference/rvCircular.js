@@ -45,6 +45,31 @@
 /** How many parameters the circular model has: gamma, K, phase, period. */
 export const MODEL_PARAMETERS = 4;
 
+/** How many Monte Carlo trials may be asked for, and what to ask for by default. */
+export const MC_LIMITS = Object.freeze({
+  minTrials: 50,
+  maxTrials: 2000,
+  defaultTrials: 400,
+  /**
+   * The most grid points one trial may use.
+   *
+   * A cap, not a target. Left to itself periodSearch picks about ten samples
+   * across the narrowest peak the baseline can resolve, which is the right
+   * number and is usually a few hundred; the student's own search may push
+   * that to 20000, which is affordable once and not four hundred times. So
+   * the Monte Carlo takes the natural resolution and caps it here, and the
+   * report states the number it actually used.
+   *
+   * Forcing a fixed 1500 instead cost 15ms a trial on a fourteen-day baseline
+   * for a grid eleven times finer than the data supports.
+   */
+  maxSamples: 2000,
+  /** Trials per batch between yields. Small enough to keep a frame free. */
+  batchSize: 12,
+  /** The smallest run this is worth doing at all. */
+  minPoints: 4,
+});
+
 /** What a fit did about the error bars it was given. */
 export const WEIGHTING = Object.freeze({
   /** Inverse-variance, the usual case. */

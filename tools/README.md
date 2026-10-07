@@ -15,6 +15,7 @@ current, and the orchestrator checks it.
 | `blackhole-profile.mjs` | What a black hole costs to draw |  |
 | `blackhole-shots.mjs` | Captures of the black holes |  |
 | `body-shots.mjs` | Reference captures of the bodies, for a before-and-after on their drawing |  |
+| `browser-support.mjs` | The supported-browser statement, generated (Prompt 111) | `npm run support:sync`, `npm run support:check` |
 | `build-data-packs.mjs` | Observation data packs: build, check, reproduce | `npm run packs:data`, `npm run packs:provenance`, `npm run packs:check` |
 | `build-ephemeris.mjs` | The educational ephemeris pack, from JPL Horizons | `npm run ephemeris:data`, `npm run ephemeris:check`, `npm run ephemeris:provenance` |
 | `build-gw-data.mjs` | The published GW150914 figure data, as a data pack | `npm run gw:data`, `npm run gw:provenance`, `npm run gw:check` |
@@ -49,6 +50,7 @@ current, and the orchestrator checks it.
 | `evaluation-summary.mjs` | npm run evaluation:summary -- <files...> | `npm run evaluation:summary` |
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
 | `experiment-bench.mjs` | npm run bench:experiments - how fast experiments run, and what they cost | `npm run bench:experiments` |
+| `feature-inventory.mjs` | The feature-detection inventory (Prompt 111) |  |
 | `formats.mjs` | Every versioned format Gravitas reads or writes, and FORMATS.md from them |  |
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
@@ -74,6 +76,7 @@ current, and the orchestrator checks it.
 | `library-routes.mjs` | Does a Library route open what it names? |  |
 | `make-social-card.js` | Generate social-card.png (1200x630) for the Open Graph / Twitter preview. | `npm run build`, `npm run social-card`, `npm run build:ci` |
 | `measure-validate.mjs` | The measurement tools' recovery and residual tables | `npm run measure:validate` |
+| `migrate-expectations.mjs` | One-off: move the instructor expectations out of instructorContent.js into |  |
 | `mission-lab-key.mjs` | The mission lab's answer key: a reference run of every guide | `npm run mission:key` |
 | `module-load-hook.mjs` | Write down every module Node loads |  |
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |

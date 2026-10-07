@@ -228,11 +228,6 @@ export class LatchStopwatch {
     }
   }
 
-  /** Run or pause the clock without disturbing the current interval. */
-  toggleRun() {
-    this.running = !this.running;
-  }
-
   /**
    * The interval currently being displayed.
    * @returns {number|null} Elapsed simulated time, or null before the first mark

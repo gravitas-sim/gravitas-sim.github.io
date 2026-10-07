@@ -70,7 +70,7 @@ import {
   GAS_GIANT_TO_STAR_THRESHOLD,
   MIN_INTERACTION_DISTANCE,
 } from './physics.js';
-import { orbitalElements } from './orbital.js';
+import { orbitalElements, keplerNewton } from './orbital.js';
 import { hashState } from './experiments/canonicalState.js';
 import { MASS_FIELD, TYPE_NAME_KEY } from './place/preciseFields.js';
 
@@ -264,12 +264,13 @@ export function keplerState({ a, e, omegaDeg, phaseDeg, mu, retrograde }) {
   if (M > Math.PI) M -= 2 * Math.PI;
   if (M <= -Math.PI) M += 2 * Math.PI;
 
-  let E = e > 0.8 ? Math.PI * Math.sign(M || 1) : M;
-  for (let i = 0; i < 60; i++) {
-    const step = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-    E -= step;
-    if (Math.abs(step) < 1e-15) break;
-  }
+  const E = keplerNewton(
+    M,
+    e,
+    e > 0.8 ? Math.PI * Math.sign(M || 1) : M,
+    1e-15,
+    60
+  );
 
   const cosE = Math.cos(E);
   const sinE = Math.sin(E);

@@ -1164,5 +1164,3 @@ function encodeLatin1(text) {
   for (let i = 0; i < text.length; i++) out[i] = text.charCodeAt(i) & 0xff;
   return out;
 }
-
-export const PAGE_METRICS = { PAGE_W, PAGE_H, MARGIN, CONTENT_W };

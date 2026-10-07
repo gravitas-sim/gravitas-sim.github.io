@@ -60,7 +60,6 @@ import {
 } from './physics.js';
 import { bindRoles, releaseModelOwnership, selectBody } from './lessonScene.js';
 import { barycenterOf, circularBinary } from './lesson/barycenter.js';
-import { trackBounds, trackIds } from './stellar/tracks.js';
 import { populationOf, resolveStarSpec } from './stellarLab.js';
 import { brightSubset } from './stellar/population.js';
 import { applySelection } from './lesson/starState.js';
@@ -191,8 +190,6 @@ export function stagePresence() {
  * @returns {string} The current stage key
  */
 export const stageKey = () => stagedKey;
-
-export const stagedDeclaration = () => lastDeclaration;
 
 /** Which scale the stage is drawn at. @returns {string} */
 export const stageScale = () => stagedScale;
@@ -1921,10 +1918,3 @@ export function centerOnSelected() {
   state.pan = { x: -body.pos.x * state.zoom, y: -body.pos.y * state.zoom };
   return true;
 }
-
-/** Every bundled track, lightest first, with its birth mass. For a stage. */
-export const trackCatalog = () =>
-  trackIds().map(id => ({
-    id,
-    initialMassSun: trackBounds(id).initialMassSun,
-  }));

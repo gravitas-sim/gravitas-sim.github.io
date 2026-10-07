@@ -15,6 +15,15 @@ the release rather than in the tag.
 
 ### Added
 
+- **Platform baseline and stewardship** (Roadmap II Prompt 111). A supported-browser
+  statement in SUPPORT.md and on the Teach hub, generated from
+  `playwright.config.js` and the locked Playwright's browser builds
+  (`npm run support:sync`), with a feature-detection inventory held to the code in
+  both directions; TOOLCHAIN.md (Node, exact pins, ranges, the quarterly
+  checkpoint); CONTINUITY.md (the archive, hosting a copy, adding a
+  co-maintainer, what a fork keeps); a bus-factor checklist and the repository
+  settings' current status in OWNER_ACTIONS.md. `esbuild` is now an exact pin
+  (it was `^0.28.2`; the lockfile already held 0.28.2).
 - **Every width designed** (Roadmap II Prompt 55, PLATFORM_MODEL.md "As
   built (Prompt 55)"). One breakpoint scale of four tiers replaces twenty
   media-query widths, and a test refuses any other (DESIGN_SYSTEM.md,

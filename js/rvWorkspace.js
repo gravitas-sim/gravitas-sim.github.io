@@ -34,14 +34,13 @@
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
 import {
   evaluateModel,
-  fitAtPeriod,
   foldOnPeriod,
-  periodSearch,
   residualStructure,
   usablePoints,
   fitReport,
   WEIGHTING,
-} from './rvFit.js';
+} from './inference/rvCircular.js';
+import { runRv } from './inference/rvClient.js';
 import { formatNumber } from './format.js';
 import { t } from './i18n/index.js';
 
@@ -53,6 +52,13 @@ let trial = { period: 3, K: 50, phase: 0, gamma: 0 };
 let search = null;
 /** Whether the generating parameters have been asked for. */
 let revealed = false;
+/**
+ * Counts recordings and resets. A search or fit that comes back after one has
+ * gone is about a recording nobody is looking at, and writes nothing.
+ */
+let epoch = 0;
+/** Searches started; only the latest may write its answer back. */
+let searches = 0;
 
 /**
  * Hand the workspace a recording to work on.
@@ -65,6 +71,7 @@ let revealed = false;
  * @returns {void}
  */
 export function loadRecording(recording) {
+  epoch++;
   source = recording || null;
   revealed = false;
   search = null;
@@ -74,10 +81,10 @@ export function loadRecording(recording) {
   onRecordingChanged?.();
   if (!source?.points?.length) return;
 
-  // A starting guess that is honest about being a guess: the midpoint of the
-  // searched range for the period, and the scatter of the data for the
-  // amplitude. Deliberately not the truth, and deliberately not a fit - the
-  // student's first act should be to move something.
+  // An honest guess, not the truth and not a fit (first act: move something):
+  // a quarter of the baseline for the period, and for K half the peak-to-peak,
+  // an approximation of K (a lower bound, noise-biased up; see
+  // js/exoplanetObservables.js).
   const { usable } = usablePoints(source.points);
   if (usable.length) {
     const values = usable.map(p => p.rv);
@@ -120,15 +127,21 @@ export function setTrial(key, value) {
  * here is the best amplitude, phase and offset", which leaves the judgment
  * that matters with the student.
  *
- * @returns {?object} The fit
+ * Solved in the inference Worker (js/inference/rvTasks.js), so it answers
+ * later, and not at all when the recording changed meanwhile.
+ *
+ * @returns {Promise<?object>} The fit
  */
-export function snapToBestAtPeriod() {
-  const { usable } = usablePoints(source?.points || []);
+export async function snapToBestAtPeriod() {
+  const mine = epoch;
+  const fit = await runRv('rv-fit', {
+    points: source?.points || [],
+    period: trial.period,
+  });
   // Null when the normal equations are singular - every point at the same
   // phase, or fewer than three of them. The trial is left exactly as it was
   // rather than being overwritten with nothing.
-  const fit = fitAtPeriod(usable, trial.period);
-  if (fit) {
+  if (fit && mine === epoch) {
     trial = {
       period: fit.period,
       K: fit.K,
@@ -147,12 +160,23 @@ export function snapToBestAtPeriod() {
  * and the longest by its baseline - and silently choosing bounds for somebody
  * would hide the most consequential decision in the whole analysis.
  *
+ * Runs in the inference Worker (js/inference/rvTasks.js); a search that comes
+ * back after the recording changed, or after a newer search, is dropped.
+ *
  * @param {object} bounds - minPeriod and maxPeriod, in days
- * @returns {?object} The search, also retained for drawing
+ * @returns {Promise<?object>} The search, also retained for drawing: null
+ * when none can be made (bad bounds, too few points), undefined when it was
+ * dropped
  */
-export function runSearch(bounds) {
-  const { usable } = usablePoints(source?.points || []);
-  search = periodSearch(usable, bounds);
+export async function runSearch(bounds) {
+  const mine = epoch;
+  const asked = ++searches;
+  const found = await runRv('rv-search', {
+    points: source?.points || [],
+    bounds,
+  });
+  if (mine !== epoch || asked !== searches) return undefined;
+  search = found;
   if (search?.best) {
     trial = {
       period: search.best.period,
@@ -714,6 +738,7 @@ export function drawPeriodogram(canvas) {
 
 /** Forget everything. Used by the scenario loader and by tests. */
 export function resetWorkspace() {
+  epoch++;
   source = null;
   search = null;
   revealed = false;

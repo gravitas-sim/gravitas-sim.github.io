@@ -6,7 +6,6 @@
 // =============================================================================
 
 export const ES_COURSEHOME = {
-  'courseHome.doc.title': 'Curso | Gravitas',
   'courseHome.doc.titleOf': '{title} | Gravitas',
   'courseHome.label': 'Página del curso',
   'courseHome.lang': 'Idioma',

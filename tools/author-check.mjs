@@ -24,6 +24,14 @@
 import { loadAuthoringInputs } from './authoring/inputs.mjs';
 import { checkCatalog, RULE_INDEX } from '../js/authoring/rules.js';
 import { realSystemFindings } from './authoring/realSystems.mjs';
+import {
+  MODELS,
+  SOURCED,
+  UNCHECKED,
+  RULE_ID as MODEL_RULE,
+  RULE_DESCRIPTION as MODEL_RULE_DESCRIPTION,
+  modelCheckFindings,
+} from './authoring/modelChecked.mjs';
 
 const argv = process.argv.slice(2);
 const has = flag => argv.includes(flag);
@@ -48,7 +56,11 @@ if (has('--rules')) {
       'argue with its rule in js/authoring/rules.js.\n'
   );
   const groups = new Map();
-  for (const [id, description] of Object.entries(RULE_INDEX)) {
+  for (const [id, description] of Object.entries({
+    ...RULE_INDEX,
+    // Node-only rule: kept out of js/authoring/rules.js, which ships on the Composer route
+    [MODEL_RULE]: MODEL_RULE_DESCRIPTION,
+  })) {
     const family = id.split('/')[0];
     if (!groups.has(family)) groups.set(family, []);
     groups.get(family).push([id, description]);
@@ -75,6 +87,22 @@ for (const f of await realSystemFindings()) {
     rule: 'instructor/attribution',
     lesson: f.where,
     step: null,
+    message: f.message,
+  });
+}
+
+// The model-checked rule (Prompt 66): a literal numeric answer is recomputed
+// from the lesson's own model, sourced, or on the shrinking allowlist.
+for (const f of modelCheckFindings(inputs.investigations, {
+  models: MODELS,
+  sourced: SOURCED,
+  unchecked: UNCHECKED,
+})) {
+  findings.push({
+    level: 'error',
+    rule: MODEL_RULE,
+    lesson: f.where,
+    step: f.step,
     message: f.message,
   });
 }
