@@ -5,8 +5,9 @@
 // over the memory and localStorage backends. What only a browser has is here:
 // IndexedDB, a quota estimate, and a second tab hearing a change.
 //
-// Sources only: no page loads the module yet (step 3 moves the writers onto
-// it), so the build has nothing to bundle and dist/ has no copy to test.
+// Sources only: pages load js/storage/local.js (the writers' way in) but not
+// index.js, so the build bundles the first and dist/ has no copy of the second
+// to test. The last test is the student's own keys through both.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -116,6 +117,62 @@ test.describe('the storage module', () => {
       expect(got.fallback.persistent).toBe(true);
       expect(got.ok).toBe(true);
       expect(got.keys).toEqual(['gravitas_store:preferences:units']);
+    }
+  );
+
+  test(
+    'the student’s own keys export and import unchanged, and a full browser refuses a write without losing the old one',
+    { tag: '@cross-browser' },
+    async ({ page }) => {
+      await page.goto(PAGE, { waitUntil: 'load' });
+      const got = await page.evaluate(async () => {
+        const storage = await import('/js/storage/index.js');
+        const local = await import('/js/storage/local.js');
+        const seeded = {
+          gravitas_investigation_kepler: '{"visited":[0,1],"responses":{}}',
+          gravitas_student_name: 'Ada Lovelace',
+          gravitas_evidence_notebook: '{"v":1,"entries":[]}',
+        };
+        for (const [k, v] of Object.entries(seeded)) localStorage.setItem(k, v);
+        const store = storage.openStudentStore();
+        const file = JSON.parse(JSON.stringify(await store.exportAll()));
+        for (const k of Object.keys(seeded)) localStorage.removeItem(k);
+        const imported = await store.importAll(file);
+        const back = Object.fromEntries(
+          Object.keys(seeded).map(k => [k, localStorage.getItem(k)])
+        );
+        // Fill the origin's localStorage until the browser says no.
+        for (const size of [1 << 20, 1 << 16, 1 << 10, 1]) {
+          for (let i = 0; ; i++) {
+            try {
+              localStorage.setItem(`filler_${size}_${i}`, 'x'.repeat(size));
+            } catch {
+              break;
+            }
+          }
+        }
+        let refusal = null;
+        try {
+          local.put('gravitas_student_name', 'G'.repeat(500), 'settings');
+        } catch (e) {
+          refusal = e.name;
+        }
+        const kept = localStorage.getItem('gravitas_student_name');
+        const written = local.writeJson(
+          'gravitas_guides',
+          { a: 1 },
+          'progress'
+        );
+        for (const k of Object.keys(localStorage)) {
+          if (k.startsWith('filler_')) localStorage.removeItem(k);
+        }
+        return { seeded, back, ok: imported.ok, refusal, kept, written };
+      });
+      expect(got.ok).toBe(true);
+      expect(got.back).toEqual(got.seeded);
+      expect(got.refusal).toBe('QuotaExceededError');
+      expect(got.kept).toBe('Ada Lovelace');
+      expect(got.written).toBe(false);
     }
   );
 });

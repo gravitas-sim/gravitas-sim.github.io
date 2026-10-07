@@ -20,7 +20,8 @@ export const get = (key, store) => area(store).getItem(key);
 export const put = (key, text, collection, store) => {
   if (text.length > ITEM[collection] * 1024) {
     const error = new Error(`${collection}: record too large`);
-    throw Object.assign(error, { name: 'QuotaExceededError', collection });
+    const name = 'QuotaExceededError';
+    throw Object.assign(error, { name, reason: 'itemTooLarge', collection });
   }
   area(store).setItem(key, text);
 };

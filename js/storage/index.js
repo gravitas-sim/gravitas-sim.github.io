@@ -26,6 +26,7 @@
 
 import { canonicalJson } from '../hash.js';
 import { isObject, readVersioned } from '../platform/common.js';
+import { drop, put as putText } from './local.js';
 
 export const EXPORT_FORMAT = 'gravitas.student-data';
 export const EXPORT_VERSION = 1;
@@ -132,6 +133,95 @@ export function localBackend(storage = globalThis.localStorage) {
   };
 }
 
+/**
+ * Which collection each of the student's own localStorage keys belongs to, by
+ * prefix, first match (STORAGE.md). null is state that is kept but not the
+ * student's work, so it is not exported: previews handed to another page and
+ * the platform's own stamps.
+ */
+export const KEYS = [
+  ['gravitas_experiment_checkpoint_', 'drafts'],
+  ['gravitas_experiment', 'experiments'],
+  ['gravitas_investigation_', 'progress'],
+  ['gravitas_guides', 'progress'],
+  ['gravitas_lab3d_guide_', 'progress'],
+  ['gravitas_missionlab_', 'progress'],
+  ['gravitas_assignment_', 'assignments'],
+  ['gravitas_evidence_notebook', 'evidence'],
+  ['gravitas_course_level', 'preferences'],
+  ['gravitas_course_preview', null],
+  ['gravitas_course_', 'courses'],
+  ['gravitas_composer_preview', null],
+  ['gravitas_composer_', 'drafts'],
+  ['gravitas_studio_', 'drafts'],
+  ['gravitas_simulation_save', 'drafts'],
+  ['gravitas_evaluation_draft_', 'drafts'],
+  ['gravitas_teaching_notes_', 'drafts'],
+  ['gravitas_student_name', 'settings'],
+  ['gravitas_capability_versions', null],
+  ['gravitas_locale', 'preferences'],
+  ['gravitas_theme', 'preferences'],
+  ['gravitas_units', 'preferences'],
+  ['gravitas_lesson_objects_open', 'preferences'],
+  ['gravitas_rail_sections', 'preferences'],
+  ['gravitas_lecture_sequence', 'preferences'],
+  ['gravitas_welcome_seen_', 'preferences'],
+  ['mobile_instructions_shown', 'preferences'],
+];
+
+/** The collection a key belongs to; null if it is not exported, else undefined. */
+export const collectionOf = key => KEYS.find(([p]) => key.startsWith(p))?.[1];
+
+/**
+ * The student's own keys as a backend: the id of a record is its key, and its
+ * value is what the key holds, parsed (text that is not JSON is kept as that
+ * text). The keys keep their names and formats, so the pages and every earlier
+ * build read what this writes, and nothing is migrated or removed. Writes go
+ * through local.js, so a record over its collection's limit is refused here as
+ * it is for the writers.
+ */
+export function legacyBackend(storage = globalThis.localStorage) {
+  const record = (c, id) => {
+    if (collectionOf(id) !== c) return null;
+    const raw = storage.getItem(id);
+    if (raw === null) return null;
+    let value = raw;
+    try {
+      const v = JSON.parse(raw);
+      if (typeof v !== 'string') value = v;
+    } catch {
+      /* not JSON: kept as the text it is */
+    }
+    return { id, version: 1, saved: null, bytes: raw.length, value };
+  };
+  return {
+    mode: 'legacy',
+    async get(c, id) {
+      return record(c, id);
+    },
+    async put(c, id, rec) {
+      if (collectionOf(id) !== c) {
+        throw Object.assign(new Error(`"${id}" is not a ${c} key`), {
+          reason: 'unknownKey',
+        });
+      }
+      const v = rec.value;
+      putText(id, typeof v === 'string' ? v : JSON.stringify(v), c, storage);
+    },
+    async delete(c, id) {
+      if (collectionOf(id) === c) drop(id, storage);
+    },
+    async list(c) {
+      const out = [];
+      for (let i = 0; i < storage.length; i++) {
+        const r = record(c, storage.key(i));
+        if (r) out.push(r);
+      }
+      return out;
+    },
+  };
+}
+
 /** The IndexedDB database the store uses (STORAGE.md). */
 export const DB_NAME = 'gravitas-store';
 const DB_VERSION = 1;
@@ -228,6 +318,57 @@ export async function openStore({
   });
   if (!chosen) chosen = memoryBackend();
   return new Store(chosen, { estimate, channel, tried });
+}
+
+/**
+ * The store over the student's own keys (legacyBackend): what export-all and
+ * import-all carry today, because it is where the writers keep their work.
+ * Another tab's write is heard through the browser's `storage` event.
+ */
+export function openStudentStore({
+  storage = globalThis.localStorage,
+  estimate = () => globalThis.navigator?.storage?.estimate?.() ?? null,
+  channel = null,
+} = {}) {
+  const store = new Store(legacyBackend(storage), { estimate, channel });
+  globalThis.addEventListener?.('storage', e => {
+    if (e.storageArea && e.storageArea !== storage) return;
+    const collection = e.key && collectionOf(e.key);
+    if (collection) {
+      store._emit(
+        { collection, id: e.key, op: e.newValue === null ? 'delete' : 'put' },
+        true
+      );
+    }
+  });
+  return store;
+}
+
+/**
+ * Copy what the writers keep (the legacy keys) into another store's
+ * collections, once per record: a record the store already holds is left as it
+ * is, and no key is removed or changed. No page runs this: the writers keep
+ * their work in the keys themselves, and a second copy would spend quota. It
+ * is the way in for a store that becomes the home of the work (Prompt 69 and
+ * after).
+ *
+ * @returns {Promise<{copied: string[], present: string[], refused: object[]}>}
+ */
+export async function adoptLegacy(store, storage = globalThis.localStorage) {
+  const from = legacyBackend(storage);
+  const out = { copied: [], present: [], refused: [] };
+  for (const name of Object.keys(COLLECTIONS)) {
+    for (const r of await from.list(name)) {
+      if (await store.backend.get(name, r.id)) {
+        out.present.push(r.id);
+        continue;
+      }
+      const w = await store._put(name, r.id, r.value, r.version);
+      if (w.ok) out.copied.push(r.id);
+      else out.refused.push({ id: r.id, reason: w.reason });
+    }
+  }
+  return out;
 }
 
 /**
@@ -412,6 +553,10 @@ export class Store extends EventTarget {
     try {
       await this.backend.put(name, id, record);
     } catch (err) {
+      // A refusal that names its reason (the legacy keys') is reported as is.
+      if (err?.reason) {
+        return { ok: false, reason: err.reason, message: err.message };
+      }
       // The estimate is advisory; the browser has the last word.
       if (err?.name === 'QuotaExceededError') {
         return {

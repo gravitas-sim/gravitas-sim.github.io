@@ -61,7 +61,7 @@ These are the student's own work, and what an "export everything" would carry:
 | sessionStorage `gravitas_instructor_key` | The instructor materials' key, for the session only | `js/instructorPortal.js` |
 | IndexedDB `gravitas-catalog` | Installed catalog extensions: their archives' files | `js/catalog/store.js` |
 | IndexedDB `gravitas-archive` | The archive import's cached answers | `js/archive/cache.js` |
-| IndexedDB `gravitas-store` | The storage module's collections (Prompt 65): one object store, `records`, keyed by collection and name. Nothing writes to it yet: the keys above keep their own formats, and step 3 moves their readers and writers over only as the route ceilings allow (below) | `js/storage/index.js` |
+| IndexedDB `gravitas-store` | The storage module's collections (Prompt 65): one object store, `records`, keyed by collection and name. Nothing writes to it yet: the keys above keep their own formats and the writers go through `js/storage/local.js` (below) | `js/storage/index.js` |
 | `gravitas_store:<collection>:<name>` | The same records, one key each, when IndexedDB is unavailable | `js/storage/index.js` |
 | Cache Storage `gravitas-<build>` | The service worker's precache; an older build's cache is deleted when a new one activates | `sw.js` |
 
@@ -74,6 +74,14 @@ These are the student's own work, and what an "export everything" would carry:
 
 ## Moving the writers (Prompt 65, step 3)
 
-Existing keys keep their key and their stored text; none is migrated. `js/storage/local.js` (`readJson`, `writeJson`) is the shared form of the try/catch for no storage, a damaged value and a full quota. Moved so far: the Observatory guides (`gravitas_guides`), the mission lab's guides (`gravitas_missionlab_*`) and the teaching page's notes (`gravitas_teaching_notes_v1`).
+Existing keys keep their key and their stored text, and none is removed or migrated: the key is where the work lives, so every earlier build reads what a later one writes. The writers go through `js/storage/local.js` (`get`, `put`, `drop`, `readJson`, `writeJson`), which states each collection's per-record limit (`ITEM`, equal to `COLLECTIONS` in `js/storage/index.js`; a test holds them together) and throws a `QuotaExceededError` with `reason: 'itemTooLarge'` for a record over it, as a full disk does. `js/storage/index.js` maps every key to its collection (`KEYS`, `collectionOf`) and reads and writes them as a backend (`legacyBackend`, `openStudentStore`), so `exportAll`, `importAll` (keep both, replace, skip, dry run) and `deleteAll` work over the keys the writers use. `adoptLegacy` copies them once into another store's collections without touching a key; no page runs it. The reserve and the collection total are the Store's checks: the writers get the record limit and the browser's own quota. In-tab change events are not on the writers' path (they cost every route bytes); another tab hears a write through the browser's `storage` event, which `openStudentStore` re-emits.
 
-The rest are not moved, because the helper is a module and a module is a request. Adding it to a route that did not load it took the lesson routes (build) one request over their ceilings, the composer and course builder (sources) likewise, the evaluation, library and 3-D guide routes over by 0.3 to 0.6 KB, and the experiment runner sat at its request ceiling already. No ceiling was raised. Still on their own handling: `js/notebook/store.js`, `js/experiments/store.js`, `js/library/progress.js`, `js/studio/model.js` drafts, `js/lab3d/view/guidePanel.js`, `js/evaluationKit.js`, `js/platform/resolver.js`, `js/lecture.js`, `js/controls.js`, `js/composerPage.js` and `js/coursePage.js` drafts, `js/investigations.js`, `js/catalog/store.js`.
+Moved: lesson progress, assignment progress, the student's name and the objects-list preference (`js/investigations.js`); the evidence notebook; the Observatory, 3-D lab and mission lab guides; the teaching page's notes; the Studio's drafts.
+
+Still direct, and why (`tests/studentStorage.test.js` lists them and fails on any other):
+- `js/experiments/store.js`, `js/experimentsPage.js`, `js/composerPage.js`, `js/coursePage.js`: their source routes sit at their request ceiling, and the module is a request.
+- `js/evaluationKit.js`: 0.7 KB of room on its route; the module is 1.4 KB.
+- `js/ui.js` (saved world), `js/controls.js`, `js/lecture.js`, `js/main.js`, `js/welcomeGate.js`, `js/settingsSchema.js`: reached from the start-up entry as well as from lazy chunks, which makes the module a shared chunk and costs every lesson route one request (0 free).
+- `js/theme.js`, `js/units.js`, `js/shell.js` and the per-page `i18n.js` files (locale, theme, units): preferences on every route.
+- `js/studio/model.js` writes to the Storage a page hands it (the Studio hands a guarded one; the Composer and course builder hand the raw one).
+- `js/platform/resolver.js` (platform stamps), `js/instructorPortal.js` (sessionStorage), the notebook's availability probe; IndexedDB `gravitas-catalog` and `gravitas-archive`; `js/library/progress.js` and `js/authoring/preview.js` read only.
