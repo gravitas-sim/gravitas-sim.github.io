@@ -175,7 +175,8 @@ test.describe('the inference core', () => {
     await expect(page.locator('#obsSeeing')).toContainText(
       'Folded on a period'
     );
-    await expect(page.locator('#fitResults')).toBeEmpty();
+    await expect(page.locator('#fitResults')).toHaveText(/No fit yet/);
+    await expect(page.locator('#fitStats')).toHaveCount(0);
     await expect(page.locator('#fitExport')).toBeHidden();
   });
 });
