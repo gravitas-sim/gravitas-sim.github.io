@@ -18,11 +18,7 @@
 
 import { onPhysicsStep, planets, gas_giants, state } from './physics.js';
 import { SETTINGS, current_scenario_name } from './appState.js';
-import {
-  deflectionAngle,
-  maximumDeltaV,
-  periapsisDistance,
-} from './gravityAssist.js';
+import { deflectionAngle, maximumDeltaV } from './gravityAssist.js';
 import {
   currentAssist,
   startAssistWatch,
@@ -434,20 +430,6 @@ export function setAssistEnabled(on) {
   }
   layoutObservationPanels();
 }
-
-/** @returns {boolean} Whether the panel is open */
-export const isAssistEnabled = () => enabled;
-
-/** The predicted closest approach, for the lesson and for tests. */
-export const predictedPeriapsis = () => {
-  const parts = bodies();
-  if (!parts) return null;
-  return periapsisDistance(
-    SETTINGS.gravitational_constant * parts.planet.mass,
-    SETTINGS.assist_impact_parameter,
-    SETTINGS.assist_v_infinity
-  );
-};
 
 /** The scenario the panel last matched itself to. */
 let lastScenario = null;
@@ -1112,7 +1094,6 @@ export const assistExperimentRefusal = () =>
 
 /** For the lesson and the tests: run either experiment as the button does. */
 export const startAssistComparison = () => runAssistExperiment('comparison');
-export const startAssistSweep = () => runAssistExperiment('sweep');
 
 /**
  * Show the experiments only where they mean something.

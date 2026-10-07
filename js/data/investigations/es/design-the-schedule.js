@@ -16,8 +16,6 @@ export default {
     'Ocho noches en el instrumento real, y los tiempos que elijas deciden la respuesta',
   duration: '35-40 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Tienes ocho noches y una estrella. Planifica tú mismo la campaña en el panel de Velocidad Radial, comprométete con una predicción y luego observa dos calendarios en paralelo sobre la misma estrella, con el mismo instrumento y el mismo ruido: uno recupera un Júpiter y el otro ni siquiera puede establecer que la velocidad cambie. Después rompe tu propio resultado — cambia la semilla, pierde quince días por mal tiempo y escribe una lista de fechas a mano — hasta que puedas decir qué debe acompañar a un periodo publicado para que otra persona pueda comprobarlo.',
   objectives: [
     'Configurar una campaña por sus tiempos y no solo por su cadencia',
     'Comprometerse con una predicción antes de observar, y decir después qué cambió la observación',

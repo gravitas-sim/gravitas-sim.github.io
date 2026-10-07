@@ -401,9 +401,6 @@ export function setPauseAtEventEnabled(on) {
   layoutObservationPanels();
 }
 
-/** @returns {boolean} Whether the panel is open */
-export const isPauseAtEventEnabled = () => enabled;
-
 /** What the watcher has to say. */
 function handleEvent(payload) {
   if (payload.type === 'fired') {

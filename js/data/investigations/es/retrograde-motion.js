@@ -15,8 +15,6 @@ export default {
   subtitle: 'Cambia el marco y catorce siglos de epiciclos se vienen abajo',
   duration: '35-45 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Dos veces cada tres años Marte se detiene en el cielo, invierte su marcha y traza un bucle sobre sí mismo. Visto desde fuera no ocurre nada de eso: la Tierra y Marte giran alrededor del Sol en el mismo sentido y no retroceden jamás. Medirás ambas órbitas, predecirás qué hace Marte visto desde la Tierra, y después cambiarás el sistema de referencia y verás cómo el bucle se dibuja solo. Nada de la física cambia al hacerlo. Ese es todo el asunto, y es lo que llevó a la astronomía de Ptolomeo a Copérnico.',
   objectives: [
     'Describir el movimiento retrógrado como una observación, aparte de cualquier explicación de él',
     'Calcular un periodo sinódico a partir de dos periodos orbitales y decir qué cuenta',

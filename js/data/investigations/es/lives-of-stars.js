@@ -16,8 +16,6 @@ export default {
   duration: '80-100 min',
   subtitle: 'De las nubes a los restos cósmicos, por ocho trazas publicadas',
   level: 'Astronomía introductoria',
-  summary:
-    'Una estrella no es tanto una cosa como un proceso que lleva su tiempo. A lo largo de treinta y cuatro pasos sigues tres de ellos desde una nube en contracción hasta lo que dejan atrás: una estrella de masa solar hasta una enana blanca, una de diez masas solares hasta una estrella de neutrones y una de cuarenta hasta un agujero negro, leyendo cada etapa en el mismo diagrama y las mismas trazas publicadas. También conocerás a la estrella que no hace nada de esto: una enana roja que seguirá quemando hidrógeno cuando el Universo tenga cien veces su edad actual.',
   objectives: [
     'Seguir una estrella por el diagrama H-R desde antes de formarse hasta después de apagarse',
     'Decir qué alimenta una estrella en cada etapa y qué significa que una etapa termine',

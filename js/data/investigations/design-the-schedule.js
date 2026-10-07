@@ -113,8 +113,6 @@ const DESIGN_THE_SCHEDULE = {
   prerequisites: ['radial-velocity', 'detect-this-planet'],
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
-  summary:
-    'You have eight nights and one star. Plan the run yourself in the live Radial Velocity panel, commit to a prediction, then observe two schedules side by side against the same star with the same instrument and the same noise — and watch one of them recover a Jupiter while the other cannot establish that the velocity changes at all. Then break your own result: change the seed, lose a fortnight to weather, and type a list of dates by hand, until you can say what a reported period has to carry before anybody else can check it.',
   objectives: [
     'Configure an observing run by its times rather than only by its cadence',
     'Commit to a prediction before observing, and say afterwards what the observation changed',

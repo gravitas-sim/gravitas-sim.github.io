@@ -156,8 +156,6 @@ const GOLDILOCKS = {
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'habitability'],
   lock: { placement: true, inspector: true, areaSweep: false },
-  summary:
-    'Work out for yourself why a planet twice as far from its star receives a quarter as much energy, why dim stars have their habitable zones tucked in close, and why an eccentric orbit means a planet does not receive one steady amount of light all year. Then finish with the harder question the phrase "habitable zone" invites people to skip: what does being inside it actually tell you?',
   objectives: [
     'Explain why the starlight reaching a planet falls off rapidly with distance, and use the twice-as-far, one-quarter rule',
     'Explain why a dim star’s habitable zone lies close in and a luminous star’s lies far out',

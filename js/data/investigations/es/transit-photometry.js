@@ -17,8 +17,6 @@ export default {
     'Mide un tránsito, calibra lo que te dice y descubre lo que se esconde',
   duration: '50-70 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Recorre el método del tránsito desde los primeros principios con HD 209458 b, el primer planeta al que se pilló cruzando su estrella: mide una profundidad y conviértela en un radio, corrígela por el oscurecimiento del limbo, cronometra dos tránsitos para obtener un periodo, lee una atmósfera en el color de la caída, y termina encontrando la estrella compañera oculta que hace que el planeta parezca más pequeño de lo que es.',
   objectives: [
     'Explicar por qué casi todos los exoplanetas conocidos se encontraron de forma indirecta, y qué mide realmente cada método',
     'Deducir la relación entre profundidad del tránsito y cociente de radios, y usarla en una curva de luz medida',

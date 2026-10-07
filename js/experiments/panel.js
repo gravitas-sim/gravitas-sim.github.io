@@ -583,9 +583,6 @@ let chaosPairResult = null;
  */
 let chaosControls = [];
 
-/** @returns {boolean} Whether the chaos pair is running */
-export const isChaosPairRunning = () => chaosRunning;
-
 /** What the section is holding, for the lesson, the notebook and the tests. */
 export function chaosPairReport() {
   return chaosPairResult ? JSON.parse(JSON.stringify(chaosPairResult)) : null;

@@ -1196,14 +1196,6 @@ let wavefrontTimes = [];
 let wavefrontSpeed = 1;
 let wavefrontReach = 40;
 
-/** Forget the memoised wavefronts. Tests only. */
-export const resetWavefrontsForTests = () => {
-  wavefrontKey = '';
-  wavefrontTimes = [];
-  wavefrontSpeed = 1;
-  wavefrontReach = 40;
-};
-
 /**
  * The three sources the beginner lesson compares, in control order.
  *

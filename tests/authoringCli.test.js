@@ -250,6 +250,8 @@ describe('npm run author:new', () => {
   const TOUCHES = [
     'js/data/investigations.js',
     'js/data/investigations/registry.js',
+    'js/data/investigations/summaries.js',
+    'js/data/investigations/summaries.es.js',
     'js/data/instructorContent.js',
   ];
 

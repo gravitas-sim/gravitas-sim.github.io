@@ -86,7 +86,6 @@ import {
 } from './canonicalState.js';
 import {
   METRICS,
-  METRIC_ARITY,
   METRIC_UNITS,
   SCALAR_METRICS,
   sampleFrame,
@@ -444,11 +443,6 @@ export const currentScenarioName = () => host.getScenario?.() || '';
 
 /** @returns {Object|null} The experiment being worked on */
 export const activeExperiment = () => current;
-
-/** @param {Object|null} exp - Replace the working experiment */
-export function setActiveExperiment(exp) {
-  current = exp;
-}
 
 // =============================================================================
 // The numerical reliability check
@@ -1615,15 +1609,6 @@ export function metricLabel(id) {
 
 /** @param {string} id - Metric id @returns {string} Unit string */
 export const metricUnit = id => METRIC_UNITS[id] || '';
-
-/**
- * Whether the current selection can answer every chosen metric.
- * @returns {Array<string>} Metric ids that need more bodies selected
- */
-export function unsatisfiedMetrics() {
-  const n = (current?.objects || []).length;
-  return (current?.metrics || []).filter(m => (METRIC_ARITY[m] || 0) > n);
-}
 
 // --- Persistence and export --------------------------------------------------------
 

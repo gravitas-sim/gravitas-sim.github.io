@@ -111,8 +111,6 @@ const LAGRANGE_POINTS = {
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'gravity', 'spaceflight'],
   lock: { placement: true },
-  summary:
-    'Two stars on a circular orbit and a speck of dust that feels them both. There is one number you can compute about the speck that tells you where it is forbidden to be — and as you make it go faster, walls open one at a time in a fixed order. Find the five places where the speck could sit still, work out which of them it can reach, and then find out why "can reach" is three different questions wearing the same coat.',
   objectives: [
     'State the normalization and sign convention of the Jacobi constant',
     'Predict how the forbidden region changes as the tracer speeds up',

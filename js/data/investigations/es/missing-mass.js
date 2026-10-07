@@ -16,8 +16,6 @@ export default {
     'Pesa un sistema dos veces y descubre que las dos respuestas no coinciden',
   duration: '45-60 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Hay dos maneras de pesar un sistema en el espacio: sumar la luz, u observar cómo se mueven las cosas. Para el Sistema Solar coinciden. Para una galaxia no, y para un cúmulo de galaxias difieren en más de un factor diez. Los estudiantes reparten masa y observan la curva de rotación que produce, convierten una velocidad medida en una masa encerrada, y después toman una curva de rotación construida con los parámetros publicados de una galaxia real e intentan ajustarla solo con estrellas —y fracasan, exactamente como fracasó el campo durante una década— antes de añadir un halo y acertar. Cierra con el cúmulo de Zwicky y el presupuesto de masa del universo. Así se encontró la materia oscura, y es una medida, no una teoría.',
   objectives: [
     'Explicar por qué la velocidad orbital cae como la inversa de la raíz del radio cuando la masa está concentrada en el centro',
     'Leer una curva de rotación y describir qué dice su pendiente sobre dónde está la masa',

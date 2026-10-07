@@ -188,11 +188,6 @@ export async function install(entry, { catalog, store, fetchBytes, base }) {
   return record;
 }
 
-/** Remove an installed pack. */
-export async function uninstall(id, { store }) {
-  await store.remove(id);
-}
-
 /** An installed data pack's observation, decoded with the platform's reader. */
 export function installedObservation(record) {
   const d = record.manifest.provides.dataPacks[0];

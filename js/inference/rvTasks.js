@@ -16,25 +16,6 @@
 import { fitAtPeriod, periodSearch, usablePoints } from './rvCircular.js';
 import { runMonteCarlo } from './rvMonteCarlo.js';
 
-/**
- * The model, as the inference core names it (INFERENCE_CORE.md). Not in
- * ./models.js's registry, which is what the Observatory's fit panel offers and
- * which its Levenberg-Marquardt engine fits: this one is solved in closed form
- * at each period of a grid, in ./rvCircular.js, by `grid-linear` 1.0.0.
- */
-export const RV_CIRCULAR = Object.freeze({
-  id: 'rv-circular',
-  version: '1.0.0',
-  quantity: 'radial velocity against time',
-  parameters: Object.freeze([
-    { name: 'period', kind: 'searched' },
-    { name: 'K', kind: 'linear', note: 'hypot(A, B)' },
-    { name: 'phase', kind: 'linear', note: 'atan2(A, B)' },
-    { name: 'gamma', kind: 'linear' },
-  ]),
-  uncertainty: Object.freeze({ id: 'monte-carlo-refit', version: '1.0.0' }),
-});
-
 /** The task kinds this module answers. */
 export const RV_TASKS = Object.freeze(['rv-search', 'rv-fit', 'rv-mc']);
 

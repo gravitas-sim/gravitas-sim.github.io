@@ -186,10 +186,17 @@ function entry(e) {
  * @returns {Promise<object>} A gravitas.library/1 document
  */
 export async function buildLibrary() {
-  const { MANIFEST } = await load('js/data/investigations/manifest.js');
-  const { MANIFEST: MANIFEST_ES } = await load(
-    'js/data/investigations/manifest.es.js'
-  );
+  const cards = (await load('js/data/investigations/manifest.js')).MANIFEST;
+  const cardsEs = (await load('js/data/investigations/manifest.es.js'))
+    .MANIFEST;
+  const { SUMMARIES } = await load('js/data/investigations/summaries.js');
+  const { SUMMARIES_ES } = await load('js/data/investigations/summaries.es.js');
+  // Cards carry no summary; each one is read from its own file, once.
+  const MANIFEST = cards.map(m => ({ ...m, summary: SUMMARIES[m.id] }));
+  const MANIFEST_ES = cardsEs.map(m => ({
+    ...m,
+    summary: SUMMARIES_ES[m.id],
+  }));
   const { BROWSE_META } = await load('js/data/investigations/browseData.js');
   const { DISCOVERY } = await load('js/data/investigations/discovery.js');
   const {

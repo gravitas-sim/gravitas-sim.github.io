@@ -74,8 +74,6 @@ const BLACK_HOLES = {
   // the object card already computes, and letting a student check the lesson
   // against the simulation is the point rather than a distraction.
   lock: { placement: true, inspector: false, areaSweep: false },
-  summary:
-    'Change one thing about a black hole, its mass, and watch four completely different properties respond. Its event horizon grows in step with the mass. Its average density falls. It gets colder. It lives dramatically longer. Two of those four surprise almost everybody, and you will predict them before you measure them.',
   objectives: [
     'Say what the event horizon of a black hole is, and what it is not',
     'Describe how the Schwarzschild radius changes when the mass changes',

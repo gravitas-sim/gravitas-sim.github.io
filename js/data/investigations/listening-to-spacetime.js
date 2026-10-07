@@ -107,8 +107,6 @@ const LISTENING_TO_SPACETIME = {
   // sandbox, and a student who clicks a black hole to see what it is should be
   // allowed to. Placement is locked until the open challenge at step 30.
   lock: { placement: true, inspector: false, areaSweep: false },
-  summary:
-    'A pattern arrives with no label on it: a wiggle that gets faster and louder and then stops. You work out what could produce it, measure the two relationships that give it away, find out which questions the model can answer and which it cannot, compare your answer with what two detectors recorded in September 2015, and then measure five more mergers from the open archive yourself. You can do all of it with the sound off.',
   objectives: [
     'Read a strain-against-time plot and a frequency-against-time plot of the same signal',
     'Explain why the wave frequency is twice the orbital frequency',

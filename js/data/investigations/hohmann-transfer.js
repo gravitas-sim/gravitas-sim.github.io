@@ -96,8 +96,6 @@ const HOHMANN_TRANSFER = {
   // the whole set without a second list to keep in step.
   tags: ['spaceflight', 'orbits'],
   lock: { placement: true },
-  summary:
-    'A spacecraft at 1 AU, a station at 2.5 AU, and no fuel to waste. Work out both burns and the coast between them with a pencil, then fly the maneuver and see whether the engine agrees with you. It does — to a part in a thousand — which is what makes the two surprises in it worth trusting: you speed up to go further out, and you have to speed up again on arrival or you fall straight back.',
   objectives: [
     'Predict which way a burn moves an orbit, and where the change appears',
     'Distinguish a radial burn from a transverse one by what each conserves',

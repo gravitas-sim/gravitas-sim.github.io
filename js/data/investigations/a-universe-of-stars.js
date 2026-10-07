@@ -258,8 +258,6 @@ const A_UNIVERSE_OF_STARS = {
   prerequisites: [],
   tags: ['stars', 'observing'],
   lock: { placement: true, inspector: false, areaSweep: false },
-  summary:
-    'Three stars, no labels, and a guess about which is biggest. You separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organizes them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and count a synthetic population twice to see why the stars you can see are not the stars there are. Everything to that point is built on published models. The last stretch is not: four real spectra, observed by SDSS, and what a color turns out not to be able to tell you.',
   objectives: [
     'Tell mass, radius, temperature, luminosity and apparent brightness apart',
     'Read a position on an H-R diagram, including why temperature runs backwards',

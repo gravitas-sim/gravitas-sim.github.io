@@ -63,8 +63,6 @@ const BUTTERFLY_EFFECT = {
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['chaos', 'orbits'],
-  summary:
-    'Two runs of the same three stars, started from positions differing by fifteen hundred kilometers in a system a hundred and thirty million kilometers across, end up somewhere completely different. Nothing random happens in between: the simulation is deterministic, and running it twice from exactly the same numbers gives exactly the same answer both times. Along the way you will measure a case that looks like chaos and is not, put a number on how fast prediction fails, and check that the number is a property of the physics rather than of the computer.',
   objectives: [
     'Show that a deterministic system can be unpredictable, and say why those are not the same thing',
     'Distinguish exponential divergence from the linear drift two nearly identical orbits show anyway',

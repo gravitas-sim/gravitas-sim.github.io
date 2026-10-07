@@ -9,6 +9,7 @@ import {
   hasInvestigation,
   loadInvestigation,
   loadAllInvestigations,
+  lessonCatalogReady,
   loadedInvestigation,
   setLessonLocale,
   seriesPosition as registrySeriesPosition,
@@ -84,7 +85,11 @@ describe('the manifest', () => {
     // does not run `npm run manifest`, so the browser quietly shows the old
     // title and the old step count. Compared as data rather than as text, so
     // this fails for a stale manifest and not for a reformatted one.
-    expect(MANIFEST).toEqual(manifestEntries());
+    // The registry joins each card's summary on from summaries.js, which the
+    // generator does not write; the next test holds that join to the lessons.
+    expect(MANIFEST.map(({ summary, ...card }) => card)).toEqual(
+      manifestEntries()
+    );
   });
 
   test('the filter metadata is what the generator would write today', () => {
@@ -110,7 +115,9 @@ describe('the manifest', () => {
     expect(investigationIds()).toEqual(INVESTIGATIONS.map(i => i.id));
   });
 
-  test('carries the same values as the lessons it describes', () => {
+  test('carries the same values as the lessons it describes', async () => {
+    // The summaries arrive with the catalog, not with the manifest.
+    await lessonCatalogReady();
     for (const inv of INVESTIGATIONS) {
       const m = investigationMeta(inv.id);
       expect(m.title).toBe(inv.title);
@@ -164,6 +171,7 @@ describe('loading a lesson', () => {
       [
         ...lessons,
         ...TRANSLATED_LOCALES.map(l => `manifest.${l}.js`),
+        ...TRANSLATED_LOCALES.map(l => `summaries.${l}.js`),
         // The lesson machinery. Anything else in this directory is a lesson,
         // and a file here that is neither is either a stray or something the
         // registry does not know to load.
@@ -181,6 +189,9 @@ describe('loading a lesson', () => {
         'provenance.js',
         'registry.js',
         'sequences.js',
+        // The card paragraph of every lesson, written once; the lesson and
+        // the registry's catalog both read it.
+        'summaries.js',
       ].sort()
     );
   });
