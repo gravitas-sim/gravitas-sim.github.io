@@ -108,7 +108,7 @@ on:
       scheduled:
         description: Also run a scheduled job (a dry run of it)
         type: choice
-        options: [none, provenance, timings, observatory, tablet-walk]
+        options: [none, provenance, timings, observatory, tablet-walk, nav-matrix]
         default: none
 
 # A second push to the same branch makes the first one irrelevant. Never cancel
@@ -993,6 +993,44 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: playwright-artifacts-tablet-walk
+          path: test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # The two-activation navigation criterion over its whole matrix - both
+  # widths, keyboard and touch, every Library card - weekly. A pull request
+  # runs one cell per input method (52 tests, about 6 runner-minutes); the
+  # whole matrix is about 24, which Carl decided (2026-10-07) is a weekly cost,
+  # like the tablet walk above. Not required by the `ci` job; the release gate
+  # runs it too (`e2e:release` sets GRAVITAS_E2E_NAV_FULL).
+  nav-matrix:
+    name: Navigation, the whole matrix
+    if: ${{ github.event.schedule == '0 6 * * 1' || inputs.scheduled == 'nav-matrix' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Playwright browsers
+        uses: ./.github/actions/playwright-browsers
+        with:
+          browser: chromium
+
+      - name: Every navigation cell, keyboard and touch
+        run: npm run e2e:nav-full
+
+      - name: Upload traces and screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-artifacts-nav-matrix
           path: test-results
           retention-days: 7
           if-no-files-found: ignore
