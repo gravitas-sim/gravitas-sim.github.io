@@ -14,8 +14,32 @@ export const EN_ANALYSIS = {
     'No result yet: run an experiment above, or open one saved from this page.',
   'lab.source.run': 'The last run: {title}, {trials} trials ({hash}).',
   'lab.source.file': 'Opened {name}: {title}, {trials} trials ({hash}).',
-  'lab.open': 'Open a saved result',
-  'lab.open.bad': 'That file is not a saved experiment result: {reason}',
+  'lab.open': 'Open a saved result or analysis',
+  'lab.open.bad':
+    'That file is not a saved experiment result or analysis: {reason}',
+  'lab.open.analysis':
+    'Opened the analysis {name}: {cells} settings, {metric} ({hash}). It holds no trials, so none are drawn; open the result to see them.',
+  'lab.open.analysisBad': 'That analysis cannot be opened: {reason}',
+  'lab.trials.absent':
+    'A saved analysis holds the summaries, not the trials. Open the experiment result it was made from to see every trial.',
+  'lab.save.observation': 'Save as an observation (for the Observatory)',
+  'lab.observation.saved':
+    'Saved the result as an observation table. In the Observatory, open it as a file; its source names this experiment and its trials.',
+  'lab.nb.result': 'Keep the result in the notebook',
+  'lab.nb.analysis': 'Keep the analysis in the notebook',
+  'lab.nb.added':
+    'Kept in the evidence notebook, with the digest of its data. Open the notebook in the main application to write about it.',
+  'lab.nb.failed': 'It could not be kept in the notebook: {why}.',
+  'lab.nb.title.result': 'Experiment: {title}, {metric}',
+  'lab.nb.title.analysis': 'Analysis of {metric}: {title}',
+  'lab.nb.untitled': 'untitled',
+  'lab.nb.q.mean': 'Mean',
+  'lab.nb.q.median': 'Median',
+  'lab.nb.q.slope': 'Slope of the trend',
+  'lab.nb.q.rho': 'Rank correlation (Spearman)',
+  'lab.nb.q.eta2': 'Share of the scatter due to the setting',
+  'lab.nb.note.interval':
+    'With its 95% interval, from the trials that finished.',
   'lab.metric': 'Measurement',
   'lab.resamples': 'Resamples',
   'lab.seed': 'Seed for the resampling',

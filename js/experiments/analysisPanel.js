@@ -36,6 +36,19 @@ import { createPlot } from '../plot/plot.js';
 import { createTable } from '../plot/table.js';
 import { createSelection, interact } from '../plot/select.js';
 import { histogram } from '../plot/bars.js';
+import {
+  analysisArtifact,
+  experimentArtifact,
+  observationText,
+  readAnalysis,
+  resultToObservation,
+} from '../analysis/seams.js';
+import { artifactEntry } from '../notebook/artifactEntry.js';
+import { SOURCE } from '../notebook/entry.js';
+import {
+  load as loadNotebook,
+  save as saveNotebook,
+} from '../notebook/store.js';
 
 // The page's own modules - its translator, the metrics' units, the CSV writer
 // - arrive in `ctx`, as the Observatory's fit panel has them: a module both
@@ -142,6 +155,20 @@ export function mountAnalysis(root, ctx) {
     hidden: true,
     text: t('lab.cancel'),
   });
+  const saveObs = el('button', {
+    id: 'labObservation',
+    class: 'ui-button',
+    type: 'button',
+    hidden: true,
+    text: t('lab.save.observation'),
+  });
+  const keepResult = el('button', {
+    id: 'labKeepResult',
+    class: 'ui-button',
+    type: 'button',
+    hidden: true,
+    text: t('lab.nb.result'),
+  });
   const progress = el('progress', {
     id: 'labProgress',
     max: 1000,
@@ -191,6 +218,7 @@ export function mountAnalysis(root, ctx) {
     forecast,
     refusals,
     el('div', { class: 'ui-toolbar' }, run, cancel),
+    el('div', { class: 'ui-toolbar' }, saveObs, keepResult),
     progress,
     status,
     out
@@ -305,6 +333,10 @@ export function mountAnalysis(root, ctx) {
     if (!f) return;
     try {
       const parsed = JSON.parse(await f.text());
+      if (parsed?.format === ANALYSIS_FORMAT) {
+        openSaved(f.name, parsed);
+        return;
+      }
       if (parsed?.format !== 'gravitas.experiment-result' || !designOf(parsed))
         throw new Error(t('lab.refuse.notAResult'));
       opened = { name: f.name, result: parsed };
@@ -544,10 +576,27 @@ export function mountAnalysis(root, ctx) {
         'text/csv'
       )
     );
+    const keepAnalysis = el('button', {
+      id: 'labKeepAnalysis',
+      class: 'ui-button',
+      type: 'button',
+      text: t('lab.nb.analysis'),
+    });
+    keepAnalysis.addEventListener('click', () =>
+      keep(
+        SOURCE.SWEEP_ANALYSIS,
+        analysisArtifact(a, { metricUnits: ctx.metricUnits }),
+        t('lab.nb.title.analysis', {
+          metric: metricName(m),
+          title: a.source.manifest?.title || t('lab.nb.untitled'),
+        }),
+        m
+      )
+    );
     kids.push(
       el('h3', { text: t('lab.h.methods') }),
       el('p', { id: 'labMethods', text: methods }),
-      el('div', { class: 'ui-toolbar' }, saveJson, saveCsv)
+      el('div', { class: 'ui-toolbar' }, saveJson, saveCsv, keepAnalysis)
     );
 
     out.replaceChildren(...kids);
@@ -884,6 +933,12 @@ export function mountAnalysis(root, ctx) {
   /** The trials as an observation, for the workspace's plot and table. */
   function trialsView(box, a, result, keys, m, unit) {
     const trials = result.trials;
+    if (!trials) {
+      box.replaceChildren(
+        el('p', { class: 'ui-hint', text: t('lab.trials.absent') })
+      );
+      return;
+    }
     const known = ['AU', 'km/s', 'days', '%'].includes(unit);
     const o = {
       id: 'trials',
@@ -1048,6 +1103,98 @@ export function mountAnalysis(root, ctx) {
     return `${comment}\n${ctx.toCsv([head, ...rows])}`;
   }
 
+  /** A saved analysis, shown as it was written (it holds no trials). */
+  function openSaved(name, doc) {
+    const r = readAnalysis(doc);
+    if (!r.ok) {
+      status.textContent = t('lab.open.analysisBad', { reason: r.message });
+      return;
+    }
+    const a = r.analysis;
+    analysis = {
+      a,
+      result: {
+        hash: a.source.hash,
+        manifest: a.source.manifest,
+        trials: null,
+      },
+    };
+    status.textContent = t('lab.open.analysis', {
+      name,
+      cells: a.cells.length,
+      metric: metricName(a.options.metric),
+      hash: a.source.hash,
+    });
+    render();
+  }
+
+  const titleOf = r => r?.manifest?.title || t('lab.nb.untitled');
+  /** A quantity id such as "mean|a=3" in the reader's words. */
+  function quantityLabel(q, metricId) {
+    const [head, ...pairs] = q.id.split('|');
+    const where = pairs
+      .map(p => {
+        const [k, v] = p.split('=');
+        return `${paramName(k)} ${num(Number(v))}`;
+      })
+      .join(', ');
+    if (!pairs.length) return t(`lab.nb.q.${head}`);
+    const what = metricId === null ? metricName(head) : t(`lab.nb.q.${head}`);
+    return `${what}, ${where}`.slice(0, 80);
+  }
+  function keep(source, envelope, title, metricId) {
+    try {
+      const entry = artifactEntry({
+        source,
+        envelope,
+        title,
+        labels: {
+          quantity: q => quantityLabel(q, metricId),
+          note: q =>
+            q.uncertainty.kind === 'interval' ? t('lab.nb.note.interval') : '',
+        },
+      });
+      const loaded = loadNotebook();
+      if (!loaded.ok) throw new Error(loaded.reason);
+      const saved = saveNotebook([...loaded.entries, entry]);
+      if (!saved.ok) throw new Error(saved.reason);
+      status.textContent = t('lab.nb.added');
+    } catch (err) {
+      status.textContent = t('lab.nb.failed', { why: err.message });
+    }
+  }
+  saveObs.addEventListener('click', () => {
+    const r = current();
+    if (!r) return;
+    const ms = r.manifest.observables.metrics;
+    const keys = r.manifest.vary.map(v => v.parameter);
+    const o = resultToObservation(r, {
+      metricUnits: ctx.metricUnits,
+      names: {
+        params: Object.fromEntries(keys.map(k => [k, paramName(k)])),
+        metrics: Object.fromEntries(ms.map(m => [m, metricName(m)])),
+      },
+      title: r.manifest.title || undefined,
+    });
+    ctx.download(
+      `experiment-${r.hash}.observation.json`,
+      observationText(o),
+      'application/json'
+    );
+    status.textContent = t('lab.observation.saved');
+  });
+  keepResult.addEventListener('click', () => {
+    const r = current();
+    if (!r) return;
+    const m = metric.value || r.manifest.observables.metrics[0];
+    keep(
+      SOURCE.EXPERIMENT_RESULT,
+      experimentArtifact(r, { metricUnits: ctx.metricUnits, metrics: [m] }),
+      t('lab.nb.title.result', { title: titleOf(r), metric: metricName(m) }),
+      null
+    );
+  });
+
   function update() {
     const r = ctx.result();
     if (r?.hash && r.hash !== lastRun) {
@@ -1060,11 +1207,14 @@ export function mountAnalysis(root, ctx) {
     fillMetrics();
     fillReferences();
     price();
+    saveObs.hidden = keepResult.hidden = !current();
   }
 
   /** The language changed: every string again. */
   function rebuild() {
     run.textContent = t('lab.run');
+    saveObs.textContent = t('lab.save.observation');
+    keepResult.textContent = t('lab.nb.result');
     cancel.textContent = t('lab.cancel');
     root.firstElementChild.textContent = t('lab.intro');
     const labels = root.querySelectorAll('.ui-grid > .ui-field > span');

@@ -13,7 +13,9 @@
 //     id, title,
 //     object:  { name, ra, dec, frame } | null,      degrees
 //     facility, origin: 'observed' | 'model' | 'compilation' | 'imported',
-//     source:  { kind: 'pack' | 'builtin' | 'import', id, version, file? },
+//     source:  { kind: 'pack' | 'builtin' | 'import' | 'experiment', id,
+//                version, file?, digest?, engine? },    an experiment's table
+//                names its result's hash and the digest of its trials
 //     credit, license, retrieved, citations: [{ text, url? }],
 //     reductions: [text],       what was done to it before it arrived
 //     columns: [{ id, name, unit, role, of?, level?, bits?, values }],
@@ -81,7 +83,12 @@ export const ORIGINS = Object.freeze([
   'compilation',
   'imported',
 ]);
-export const SOURCE_KINDS = Object.freeze(['pack', 'builtin', 'import']);
+export const SOURCE_KINDS = Object.freeze([
+  'pack',
+  'builtin',
+  'import',
+  'experiment',
+]);
 export const MEDIA = Object.freeze(['vacuum', 'air', 'unknown']);
 
 /** Roles a column may only have alongside the column they are `of`. */

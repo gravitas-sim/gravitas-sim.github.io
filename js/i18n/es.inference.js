@@ -41,6 +41,11 @@ export const ES_INFERENCE = {
     'Aún no hay ajuste. Elige un modelo arriba y pulsa Ajustar; el resultado y sus incertidumbres aparecen aquí.',
   'obs.fit.cancel': 'Cancelar',
   'obs.fit.export': 'Guardar el ajuste (JSON)',
+  'obs.fit.keep': 'Guardar el ajuste en el cuaderno',
+  'obs.fit.nb.title': 'Ajuste: {model}',
+  'obs.fit.nb.added':
+    'Guardado en el cuaderno de evidencia, con el resumen de las filas que leyó.',
+  'obs.fit.nb.failed': 'No se pudo guardar en el cuaderno: {why}.',
   'obs.fit.running': 'Ajustando…',
   'obs.fit.done': 'Ajustado en {seconds} s.',
   'obs.fit.failed': 'El ajuste no terminó ({status}). {why}',

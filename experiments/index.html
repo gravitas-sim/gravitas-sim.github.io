@@ -299,7 +299,12 @@ try {
             Each dot is one trial; the line joins the mean at each value.
           </figcaption>
         </figure>
-        <div class="ui-table-wrap is-numeric">
+        <div
+          class="ui-table-wrap is-numeric"
+          role="region"
+          tabindex="0"
+          aria-labelledby="xpSummaryCaption"
+        >
           <table>
             <caption id="xpSummaryCaption"></caption>
             <thead>
@@ -324,9 +329,14 @@ try {
             Download the trials (CSV)
           </button>
         </div>
-        <div class="ui-table-wrap is-numeric">
+        <div
+          class="ui-table-wrap is-numeric"
+          role="region"
+          tabindex="0"
+          aria-labelledby="xpTrialsCaption"
+        >
           <table>
-            <caption data-i18n="exp.trials.caption">
+            <caption id="xpTrialsCaption" data-i18n="exp.trials.caption">
               Every trial, in the order it was planned
             </caption>
             <thead>
