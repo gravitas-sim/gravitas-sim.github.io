@@ -20,6 +20,8 @@ import {
   wordCount,
 } from './curriculum.js';
 
+import { readJson, writeJson } from '../../storage/local.js';
+
 export const REPORT_FORMAT = 'gravitas.mission-lab-report';
 const STORE = (guide, path) => `gravitas_missionlab_${guide}_${path}`;
 
@@ -49,25 +51,10 @@ export function createGuidePanel({ els, t, lab }) {
   let feedback = '';
 
   function load() {
-    try {
-      return (
-        JSON.parse(
-          window.localStorage?.getItem(STORE(guide.id, path)) || '{}'
-        ) || {}
-      );
-    } catch {
-      return {};
-    }
+    return readJson(STORE(guide.id, path), {});
   }
   function save() {
-    try {
-      window.localStorage?.setItem(
-        STORE(guide.id, path),
-        JSON.stringify(progress)
-      );
-    } catch {
-      /* progress lasts for this visit only */
-    }
+    writeJson(STORE(guide.id, path), progress); // refused: this visit only
   }
   const steps = () => stepsOn(guide, path);
   const words = (s, part, vars) => t(`gd.${guide.id}.${s.id}.${part}`, vars);
@@ -300,14 +287,7 @@ export function createGuidePanel({ els, t, lab }) {
   function report() {
     const state = lab.state();
     const guides = GUIDES.map(g => {
-      let p = {};
-      try {
-        p =
-          JSON.parse(window.localStorage?.getItem(STORE(g.id, path)) || '{}') ||
-          {};
-      } catch {
-        /* nothing kept */
-      }
+      let p = readJson(STORE(g.id, path), {});
       if (g.id === guide.id) p = progress;
       return {
         guide: g.id,
