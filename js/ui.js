@@ -138,7 +138,7 @@ import {
 } from './sandboxTools.js';
 import { setBodySelector } from './widgetRuntime.js';
 import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
-import { orbitalElements, dominantPrimary } from './orbital.js';
+import { orbitalElements, dominantPrimary, keplerNewton } from './orbital.js';
 import {
   timeUnitSeconds,
   formatSpeed,
@@ -601,28 +601,6 @@ const setAreaSweepSuppressed = on => {
 const isAreaSweepSuppressed = () => areaSweepSuppressed;
 
 /**
- * Solve Kepler's equation M = E - e sin(E) for the eccentric anomaly.
- *
- * Newton's method, which converges in a handful of iterations for every
- * eccentricity a bound orbit can have.
- *
- * @param {number} M - Mean anomaly, radians
- * @param {number} e - Eccentricity
- * @returns {number} Eccentric anomaly, radians
- */
-function solveKepler(M, e) {
-  let E = e < 0.8 ? M : Math.PI;
-  for (let i = 0; i < 40; i++) {
-    const f = E - e * Math.sin(E) - M;
-    const fp = 1 - e * Math.cos(E);
-    const dE = f / fp;
-    E -= dE;
-    if (Math.abs(dE) < 1e-13) break;
-  }
-  return E;
-}
-
-/**
  * Build the equal-area wedges for a body's orbit.
  *
  * The orbit is constructed analytically from the orbital elements rather than
@@ -706,7 +684,7 @@ function computeAreaSweep(obj, wedgeCount = areaSweepWedges) {
   const sinW = Math.sin(omega);
 
   const at = M => {
-    const E = solveKepler(M, e);
+    const E = keplerNewton(M, e, e < 0.8 ? M : Math.PI, 1e-13, 40);
     // Perifocal coordinates, then rotated into the simulation frame.
     const xp = a * (Math.cos(E) - e);
     const yp = b * Math.sin(E) * dir;

@@ -1,11 +1,9 @@
 // =============================================================================
 // The radial-velocity instrument
 // -----------------------------------------------------------------------------
-// A spectrograph, roughly. It watches one star, projects that star's actual
-// simulated velocity onto the shared line of sight, and plots the result
-// against time. The number on screen is the same quantity an astronomer means
-// by radial velocity: the component of the *star's* motion toward or away from
-// us, not the planet's orbital speed and not the planet's mass.
+// A spectrograph, roughly: it projects one star's simulated velocity onto the
+// shared line of sight and plots it against time - the *star's* motion toward
+// or away from us, not the planet's speed or mass.
 //
 // Two decisions worth stating, because both are places this could quietly
 // teach something false:
@@ -44,7 +42,10 @@ import { chartColors, observationAxis } from './observationChart.js';
 import { mountObserverControls } from './observerControls.js';
 import { ensureChartJs } from './chartjs.js';
 import { formatNumber, withUnit } from './format.js';
-import { halfRangeOfSeries } from './exoplanetObservables.js';
+import {
+  halfRangeOfSeries,
+  rvSemiAmplitudeFromAxis,
+} from './exoplanetObservables.js';
 import { orbitalElements } from './orbital.js';
 import { SETTINGS, current_scenario_name } from './appState.js';
 import {
@@ -217,9 +218,12 @@ function computeTruth() {
     if (!(el.e >= 0) || el.e >= 1) return null;
     const total = star.mass + body.mass;
     const aStar = (el.a * body.mass) / total;
-    const k =
-      (2 * Math.PI * aStar * Math.sin(inclination)) /
-      (el.period * Math.sqrt(1 - el.e * el.e));
+    const k = rvSemiAmplitudeFromAxis(
+      aStar,
+      el.period,
+      Math.sin(inclination),
+      el.e
+    );
     return { el, k: k * velocityUnitToMs() };
   };
 
