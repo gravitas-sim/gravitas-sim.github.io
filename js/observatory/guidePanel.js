@@ -353,7 +353,7 @@ export function mountGuidePanel(root, ctx) {
       at: run.at,
       record: run.record,
     };
-    writeJson(STORAGE_KEY, saved); // refused: progress lasts as long as the page
+    writeJson(STORAGE_KEY, saved, 'progress'); // refused: progress lasts as long as the page
   }
 
   function start(id, path) {
