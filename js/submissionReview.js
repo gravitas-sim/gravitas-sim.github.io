@@ -72,7 +72,8 @@ async function lessonById(id) {
     const mod = await import(`./data/investigations/${id}.js`);
     lesson = mod.default || mod[Object.keys(mod)[0]] || null;
   } catch {
-    lesson = null;
+    // Not remembered, and not "this build lacks it": adding the file again retries.
+    return undefined;
   }
   lessons.set(id, lesson);
   return lesson;
@@ -111,6 +112,7 @@ async function accept(label, thing, kind) {
     submission = { v: 1, a: null, r: null, fl: 'en', b: thing };
   }
   const lesson = await lessonById(submission.b.lesson.id);
+  if (lesson === undefined) return refuse(label, 'lessonLoad');
   if (!lesson) return refuse(label, 'unknownLesson');
   graded.push(gradeSubmission(submission, lesson, { kind, label }));
   render();
@@ -122,12 +124,15 @@ async function takeFile(file) {
   if (/\.pdf$/i.test(name)) {
     // The token rides in the PDF's /Keywords entry, which is why it is there:
     // reading the bytes cannot be mangled the way copying text off a page can.
-    const text = new TextDecoder('latin1').decode(await file.arrayBuffer());
+    const text = new TextDecoder('latin1').decode(
+      await file.arrayBuffer().catch(() => '')
+    );
     const match = /\/Keywords\s*\(([^)]*)\)/.exec(text);
     if (!match) return refuse(name, 'noTokenInPdf');
     return accept(name, match[1], 'pdf');
   }
-  const text = await file.text();
+  const text = await file.text().catch(() => null);
+  if (text === null) return refuse(name, 'unreadable');
   if (isSubmissionToken(text.trim())) return accept(name, text.trim(), 'token');
   let parsed;
   try {
