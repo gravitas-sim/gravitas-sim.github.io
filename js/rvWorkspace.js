@@ -59,6 +59,19 @@ let revealed = false;
 let epoch = 0;
 /** Searches started; only the latest may write its answer back. */
 let searches = 0;
+/** Slider moves; an answer computed before the latest one may not overwrite it. */
+let edits = 0;
+/** Worker requests started, and the newest one whose answer was applied. */
+let requests = 0;
+let applied = 0;
+
+/**
+ * Whether a Worker answer asked for before (seq, edit count, epoch) may still
+ * move the sliders: not after a move of one, a recording change, or a newer
+ * request's answer.
+ */
+const mayApply = (seq, edit, mine) =>
+  mine === epoch && edit === edits && seq > applied;
 
 /**
  * Hand the workspace a recording to work on.
@@ -117,6 +130,7 @@ export const trialParameters = () => ({ ...trial });
 export function setTrial(key, value) {
   if (!(key in trial) || !Number.isFinite(value)) return;
   trial[key] = key === 'period' ? Math.max(1e-6, value) : value;
+  edits++;
 }
 
 /**
@@ -134,6 +148,8 @@ export function setTrial(key, value) {
  */
 export async function snapToBestAtPeriod() {
   const mine = epoch;
+  const seq = ++requests;
+  const edit = edits;
   const fit = await runRv('rv-fit', {
     points: source?.points || [],
     period: trial.period,
@@ -141,7 +157,8 @@ export async function snapToBestAtPeriod() {
   // Null when the normal equations are singular - every point at the same
   // phase, or fewer than three of them. The trial is left exactly as it was
   // rather than being overwritten with nothing.
-  if (fit && mine === epoch) {
+  if (fit && mayApply(seq, edit, mine)) {
+    applied = seq;
     trial = {
       period: fit.period,
       K: fit.K,
@@ -171,13 +188,16 @@ export async function snapToBestAtPeriod() {
 export async function runSearch(bounds) {
   const mine = epoch;
   const asked = ++searches;
+  const seq = ++requests;
+  const edit = edits;
   const found = await runRv('rv-search', {
     points: source?.points || [],
     bounds,
   });
   if (mine !== epoch || asked !== searches) return undefined;
   search = found;
-  if (search?.best) {
+  if (search?.best && mayApply(seq, edit, mine)) {
+    applied = seq;
     trial = {
       period: search.best.period,
       K: search.best.K,
