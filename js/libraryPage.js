@@ -328,6 +328,7 @@ async function start() {
   } catch {
     status.className = 'ui-state is-error';
     status.textContent = t('lib.loadFailed');
+    $('main').removeAttribute('aria-busy');
     document.documentElement.dataset.ready = 'error';
     return;
   }
