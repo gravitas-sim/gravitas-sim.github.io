@@ -1,11 +1,11 @@
 {
   "note": "Per file: colour literals and !important rules outside css/tokens.css (stylesheets and pages’ own <style>), emoji in the message catalogs and page markup, and unstyled native controls on the tool pages. Written by node tools/design-ratchet.mjs --record; a file may not rise above its count, and one that falls has its count lowered here.",
   "colors": {
-    "css/chrome.css": 22,
-    "css/components.css": 11,
+    "css/chrome.css": 14,
+    "css/components.css": 7,
     "css/page.css": 13,
     "css/presentation.css": 1,
-    "css/styles.css": 104,
+    "css/styles.css": 47,
     "course/index.html": 5,
     "evaluation/index.html": 2
   },

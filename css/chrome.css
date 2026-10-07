@@ -533,12 +533,12 @@
     color: var(--text-primary);
     background: color-mix(
       in srgb,
-      var(--accent-primary, #38bdf8) 20%,
+      var(--accent) 20%,
       transparent
     );
     border-color: color-mix(
       in srgb,
-      var(--accent-primary, #38bdf8) 55%,
+      var(--accent) 55%,
       transparent
     );
   }
@@ -661,12 +661,12 @@
     max-width: min(24rem, calc(100vw - 24px));
     padding: 6px 8px 6px 12px;
     border-radius: 999px;
-    background: var(--surface-raised, rgba(16, 18, 26, 0.92));
+    background: var(--surface-2);
     border: 1px solid var(--border-subtle);
     color: var(--text-primary);
     font-size: var(--text-2xs, 11px);
     line-height: 1.5;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--shadow);
     backdrop-filter: blur(4px);
   }
 
@@ -1072,7 +1072,7 @@
     padding: var(--space-3);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    background: rgb(255 255 255 / 2%);
+    background: var(--surface-2);
   }
 
   .nb-entry-head {
@@ -1206,7 +1206,7 @@
     color: var(--text-muted);
   }
   .nb-kind.is-truth {
-    border-color: var(--warning-line, rgb(255 176 84 / 55%));
+    border-color: var(--warning);
     color: var(--warning);
   }
 
@@ -1290,7 +1290,7 @@
     padding: var(--space-3);
     border: 1px solid var(--accent-line);
     border-radius: var(--radius-md);
-    background: rgb(255 255 255 / 4%);
+    background: var(--surface-2);
   }
   .nb-draft h4 {
     margin: 0;
@@ -1432,7 +1432,7 @@
     margin: var(--space-2) 0 0;
     padding: var(--space-2);
     border-left: 2px solid var(--warning);
-    background: rgb(255 255 255 / 3%);
+    background: var(--surface-2);
     color: var(--text);
   }
   .rvfit-mc-refused {
