@@ -181,6 +181,8 @@ let lessonLocale = requestedLessonLocale() || 'en';
 
 /** The in-flight catalog fetch, if there is one. See lessonCatalogReady. */
 let manifestLoad = null;
+/** Whether the browser has asked for the cards with their summaries. */
+let summariesWanted = false;
 
 /**
  * Choose the language lessons are loaded in.
@@ -194,6 +196,12 @@ let manifestLoad = null;
  */
 export function setLessonLocale(locale) {
   lessonLocale = locale || 'en';
+  // English cards need no fetch until the browser asks for them with their
+  // summaries; a lesson opened by link never does.
+  if (lessonLocale === 'en' && !summariesWanted) {
+    MANIFEST = MANIFEST_EN;
+    return (manifestLoad = Promise.resolve(MANIFEST));
+  }
   // The catalog follows the lessons. Fetched rather than bundled, so a
   // reader who never switches language never pays for the other one.
   const load = MANIFESTS[lessonLocale] || MANIFESTS.en;
@@ -231,6 +239,10 @@ export const getLessonLocale = () => lessonLocale;
  * @returns {Promise<Array>} The manifest for the current language
  */
 export function lessonCatalogReady() {
+  if (!summariesWanted) {
+    summariesWanted = true;
+    return setLessonLocale(lessonLocale);
+  }
   return manifestLoad || setLessonLocale(lessonLocale);
 }
 
