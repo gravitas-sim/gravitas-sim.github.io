@@ -927,6 +927,9 @@ export const CI_EQUIVALENTS = {
   // The tablet's lesson walk: weekly in CI as its own job, and inside the
   // gate's whole browser suite, which sets GRAVITAS_E2E_TABLET_WALK.
   'npm run e2e:tablet-walk': 'e2e-sources',
+  // The navigation matrix: weekly in CI as its own job, and inside the gate's
+  // whole browser suite, which sets GRAVITAS_E2E_NAV_FULL.
+  'npm run e2e:nav-full': 'e2e-sources',
   'npm run e2e:dist': 'e2e-dist',
   // One matrix job per engine in CI; one registry entry per engine here, and
   // the engine comes from GRAVITAS_E2E_BROWSERS in both.
