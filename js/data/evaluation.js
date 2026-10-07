@@ -32,21 +32,6 @@ export const EVALUATION_SCHEMA = 1;
 export const EVALUATION_KIND = 'gravitas.evaluation';
 
 /**
- * The sequence these items are written against.
- *
- * Three introductory investigations, 35-45 minutes each, which is two or three
- * class meetings. The items below are tied to the objectives these three state
- * on their own cards; run a different sequence and the items stop matching what
- * was taught, which is the most common way an instrument of this kind ends up
- * measuring nothing.
- */
-export const SEQUENCE = Object.freeze([
-  'keplers-laws',
-  'orbital-energy',
-  'weighing-stars',
-]);
-
-/**
  * What the instructor records about how the session actually went.
  *
  * Fidelity, not opinion. An evaluation without this cannot tell a result from

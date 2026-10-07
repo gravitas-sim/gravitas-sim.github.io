@@ -17,8 +17,6 @@ export default {
     'Observa el bamboleo de una estrella, pesa su planeta y combina las pistas',
   duration: '45-55 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Un planeta que no puedes ver sigue tirando de su estrella, y la estrella se mueve. Mide ese movimiento de dos maneras distintas, conviértelo en una masa y combínalo con el radio que te dio un tránsito para deducir qué clase de mundo es.',
   objectives: [
     'Explicar por qué una estrella y su planeta orbitan ambos su centro de masas común',
     'Leer una curva de velocidad radial e identificar su periodo y su semiamplitud K',

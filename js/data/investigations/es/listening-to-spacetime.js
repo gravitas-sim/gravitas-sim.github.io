@@ -17,8 +17,6 @@ export default {
   subtitle: 'Averigua qué produjo una señal y compárala luego con la cosa real',
   duration: '75-90 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. Averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, comparas tu respuesta con lo que registraron dos detectores en septiembre de 2015, y luego mides tú mismo cinco fusiones más del archivo abierto. Puedes hacerlo todo con el sonido apagado.',
   objectives: [
     'Leer una gráfica de deformación frente al tiempo y otra de frecuencia frente al tiempo de la misma señal',
     'Explicar por qué la frecuencia de la onda es el doble de la frecuencia orbital',

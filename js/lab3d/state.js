@@ -350,28 +350,6 @@ export function placeByElements(
   };
 }
 
-/** Move a system to its barycenter at rest: a view many problems start from. */
-export function atBarycenter(system) {
-  let M = 0;
-  const c = [0, 0, 0];
-  const w = [0, 0, 0];
-  for (const b of system.bodies) {
-    M += b.m;
-    for (let k = 0; k < 3; k++) {
-      c[k] += b.m * b.x[k];
-      w[k] += b.m * b.v[k];
-    }
-  }
-  return {
-    ...system,
-    bodies: system.bodies.map(b => ({
-      ...b,
-      x: b.x.map((q, k) => q - c[k] / M),
-      v: b.v.map((q, k) => q - w[k] / M),
-    })),
-  };
-}
-
 /**
  * Nudge every body by a seeded offset, for an experiment's seed set. Only
  * + - * / on mulberry32's output: a direction is found by rejection in the

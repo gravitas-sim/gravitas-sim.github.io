@@ -15,8 +15,6 @@ export default {
   subtitle: 'Mide la forma, el ritmo y la duración de órbitas reales',
   duration: '35-45 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Recorre las tres leyes de Kepler midiendo órbitas en lugar de que te las enseñen: encuentra el foco de una elipse, observa cómo se barren áreas iguales en tiempos iguales y recupera la ley de la potencia tres medios trazándola tú mismo.',
   objectives: [
     'Indicar dónde se sitúa el cuerpo principal en una órbita elíptica, y respaldarlo con una medida',
     'Explicar por qué un cuerpo en órbita se mueve más rápido en el periastro, en términos de momento angular',

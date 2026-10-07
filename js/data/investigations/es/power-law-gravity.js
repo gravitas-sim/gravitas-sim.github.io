@@ -22,8 +22,6 @@ export default {
   subtitle: 'Cambia el exponente y descubre qué dependía de él',
   duration: '45-60 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Newton dijo que la gravedad decae como uno partido por la distancia al cuadrado. No a la primera, no al cubo: al cuadrado, exactamente. Esta investigación pregunta qué está haciendo ese «exactamente». Subirás y bajarás el exponente y medirás tres cosas: si la órbita sigue cerrándose, cómo depende el periodo orbital de la distancia y qué leyes de conservación sobreviven. Dos de ellas cambian de inmediato. Una no cambia en absoluto, y la razón de que no lo haga es lo más útil de la investigación.',
   objectives: [
     'Enunciar qué es el exponente de una ley de la inversa del cuadrado, y por qué cambiarlo exige una distancia de referencia para significar algo',
     'Medir la precesión absidal de una órbita simulada y distinguirla del error de integración refinando el paso temporal',

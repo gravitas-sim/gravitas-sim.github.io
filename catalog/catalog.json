@@ -445,7 +445,7 @@
       ],
       "citations": [],
       "offline": "on-demand",
-      "bytes": 795390
+      "bytes": 794645
     },
     {
       "id": "gravitas.lesson.power-law-gravity",
@@ -485,7 +485,7 @@
       ],
       "citations": [],
       "offline": "precache",
-      "bytes": 63030
+      "bytes": 61969
     },
     {
       "id": "gravitas.mission",
@@ -532,7 +532,7 @@
         }
       ],
       "offline": "on-demand",
-      "bytes": 448134
+      "bytes": 448033
     },
     {
       "id": "gravitas.power-law-instruments",
@@ -572,7 +572,7 @@
       ],
       "citations": [],
       "offline": "precache",
-      "bytes": 54496
+      "bytes": 54312
     },
     {
       "id": "gravitas.sdss-dr18-spectra",

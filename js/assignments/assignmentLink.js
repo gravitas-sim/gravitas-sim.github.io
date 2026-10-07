@@ -27,10 +27,6 @@ import {
   validateAssignment,
 } from './assignment.js';
 
-/** @param {string} hash - A location hash @returns {boolean} Whether it is one */
-export const isAssignmentFragment = hash =>
-  /^#?a\d+[zr]./.test(String(hash || ''));
-
 /**
  * Encode an assignment and say whether the link is a comfortable size.
  *

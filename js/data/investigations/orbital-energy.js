@@ -132,8 +132,6 @@ const ENERGY = {
   // The equal-area wedges belong to the lesson this scenario was built for,
   // not to this one.
   lock: { placement: true, inspector: true, areaSweep: false },
-  summary:
-    'Fire something off a planet and find out what decides whether it falls back, circles forever, or leaves and never returns. Work up from the experiment to the idea behind it: every object near a star carries an amount of energy, and the sign of that one number settles the question. Finish on a real interstellar visitor and decide for yourself whether it will be back.',
   objectives: [
     'Describe what happens to a launched object as its speed is raised past the escape point',
     'Explain in your own words why total energy below zero means an object is trapped',

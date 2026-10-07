@@ -15,8 +15,6 @@ export default {
   subtitle: 'Usa una órbita para medir algo que no puedes poner en una balanza',
   duration: '35-45 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Las leyes de Kepler terminan con la corrección de Newton, y para esto sirve esa corrección. Observa dos estrellas girando una alrededor de la otra, encuentra el punto de equilibrio que ambas rodean, y usa nada más que el tamaño y la duración de su órbita para deducir cuánto pesa cada una. Ningún telescopio ha puesto jamás una estrella en una balanza; así es como se hace de verdad.',
   objectives: [
     'Explicar por qué se mueven ambas estrellas de una binaria, en lugar de girar una alrededor de la otra',
     'Decir qué es el baricentro y dónde se sitúa cuando una estrella es más pesada',

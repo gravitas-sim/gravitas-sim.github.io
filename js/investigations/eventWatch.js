@@ -58,9 +58,7 @@ let unsubscribe = null;
 let ourEvent = null;
 /** State, for the step's own readout. */
 let state = WATCH.IDLE;
-let refusal = null;
 /** The world our watch was armed in, so a rebuild invalidates it. */
-let armedWorld = null;
 /**
  * Whether a lesson step is currently offering this tool.
  *
@@ -103,9 +101,6 @@ async function ensureLoaded() {
 
 /** @returns {string} What the lesson's watch is doing */
 export const lessonWatchState = () => state;
-
-/** @returns {?string} Why the tool refused, when it did */
-export const lessonWatchRefusal = () => refusal;
 
 /**
  * The event our own watch produced.
@@ -181,11 +176,9 @@ export async function openToolFor(spec) {
       activity.armed = true;
       activity.preexisting = false;
       state = WATCH.ARMED;
-      refusal = null;
     } else if (payload?.type === 'disarmed') {
       activity.armed = false;
       if (state === WATCH.ARMED) state = WATCH.IDLE;
-      refusal = payload.reason ?? null;
     }
   });
 
@@ -225,7 +218,6 @@ export async function armForLesson(
 ) {
   if (!force && (await foreignWatchArmed())) {
     state = WATCH.FOREIGN;
-    refusal = 'foreignWatch';
     return { ok: false, reason: 'foreignWatch' };
   }
 
@@ -235,16 +227,13 @@ export async function armForLesson(
     await openToolFor(spec);
   }
   activity.onFired = onFired;
-  armedWorld = activity.world;
   const resolved = await armThroughPanel(spec);
   if (!resolved.ok) {
     state = WATCH.REFUSED;
-    refusal = resolved.reason ?? 'unknown';
     release({ keepEvent: true });
     return resolved;
   }
   state = WATCH.ARMED;
-  refusal = null;
   return { ok: true };
 }
 
@@ -277,13 +266,11 @@ export function release({ keepEvent = false } = {}) {
   // that pre-dated the activity was never ours and is left alone.
   const wasOurs = Boolean(activity && activity.armed && !activity.preexisting);
   activity = null;
-  armedWorld = null;
   unsubscribe?.();
   unsubscribe = null;
   if (!keepEvent) {
     ourEvent = null;
     state = WATCH.IDLE;
-    refusal = null;
   }
   if (wasOurs && loaded) {
     // Fire-and-forget: the modules are already resolved by the time a watch of
@@ -292,18 +279,4 @@ export function release({ keepEvent = false } = {}) {
       if (events.armedEvent()) events.disarm('lessonLeft');
     });
   }
-}
-
-/** For tests: the world generation our watch was armed in. */
-export const armedWorldGeneration = () => armedWorld;
-
-/** Forget everything, for tests. */
-export function resetLessonWatch() {
-  activity = null;
-  release();
-  ourEvent = null;
-  state = WATCH.IDLE;
-  refusal = null;
-  generation = 0;
-  loaded = null;
 }

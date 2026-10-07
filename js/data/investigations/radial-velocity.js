@@ -94,8 +94,6 @@ const RADIAL_VELOCITY = {
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true, areaSweep: false },
-  summary:
-    'A planet you cannot see still pulls on its star, and the star moves. Measure that motion two different ways, turn it into a mass, and combine it with the radius a transit gave you to work out what kind of world it is.',
   objectives: [
     'Explain why a star and its planet both orbit their common center of mass',
     'Read a radial-velocity curve and identify its period and semi-amplitude K',

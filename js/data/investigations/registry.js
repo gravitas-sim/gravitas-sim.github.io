@@ -59,9 +59,36 @@ export { gradedSteps };
  */
 export let MANIFEST = MANIFEST_EN;
 
+/**
+ * The cards of a language with their summaries.
+ *
+ * The manifest carries no summary: the paragraph is written once, in
+ * summaries.js, and fetched here only when the lesson browser asks for the
+ * catalog, so opening a lesson never pays for twenty-four of them.
+ */
+const withSummaries = (cards, summaries, fallback = {}) =>
+  cards.map(card => ({
+    ...card,
+    summary: summaries[card.id] || fallback[card.id],
+  }));
+// A summaries file that fails to load leaves the cards (and their titles)
+// whole, only without the paragraph.
+const noSummaries = () => ({});
+
 const MANIFESTS = {
-  en: () => Promise.resolve({ MANIFEST: MANIFEST_EN }),
-  es: () => import('./manifest.es.js'),
+  en: () =>
+    import('./summaries.js')
+      .then(s => s.SUMMARIES)
+      .catch(noSummaries)
+      .then(s => ({ MANIFEST: withSummaries(MANIFEST_EN, s) })),
+  es: () =>
+    Promise.all([
+      import('./manifest.es.js'),
+      import('./summaries.es.js').then(s => s.SUMMARIES_ES, noSummaries),
+      import('./summaries.js').then(s => s.SUMMARIES, noSummaries),
+    ]).then(([m, es, en]) => ({
+      MANIFEST: withSummaries(m.MANIFEST, es, en),
+    })),
 };
 
 /**
@@ -140,10 +167,6 @@ const TRANSLATIONS = {
   },
 };
 
-/** @returns {boolean} True if this locale has lesson translations at all */
-export const hasLessonTranslations = locale =>
-  Object.hasOwn(TRANSLATIONS, locale);
-
 // Keyed by `${locale}:${id}`, so switching language and switching back does not
 // re-merge, and so a lesson open in Spanish and the same lesson opened again in
 // Spanish are the same object.
@@ -165,6 +188,8 @@ let lessonLocale = requestedLessonLocale() || 'en';
 
 /** The in-flight catalog fetch, if there is one. See lessonCatalogReady. */
 let manifestLoad = null;
+/** Whether the browser has asked for the cards with their summaries. */
+let summariesWanted = false;
 
 /**
  * Choose the language lessons are loaded in.
@@ -178,6 +203,12 @@ let manifestLoad = null;
  */
 export function setLessonLocale(locale) {
   lessonLocale = locale || 'en';
+  // English cards need no fetch until the browser asks for them with their
+  // summaries; a lesson opened by link never does.
+  if (lessonLocale === 'en' && !summariesWanted) {
+    MANIFEST = MANIFEST_EN;
+    return (manifestLoad = Promise.resolve(MANIFEST));
+  }
   // The catalog follows the lessons. Fetched rather than bundled, so a
   // reader who never switches language never pays for the other one.
   const load = MANIFESTS[lessonLocale] || MANIFESTS.en;
@@ -215,7 +246,11 @@ export const getLessonLocale = () => lessonLocale;
  * @returns {Promise<Array>} The manifest for the current language
  */
 export function lessonCatalogReady() {
-  return manifestLoad || Promise.resolve(MANIFEST);
+  if (!summariesWanted) {
+    summariesWanted = true;
+    return setLessonLocale(lessonLocale);
+  }
+  return manifestLoad || setLessonLocale(lessonLocale);
 }
 
 // And fetch the card-level catalog for that language, now, without waiting to

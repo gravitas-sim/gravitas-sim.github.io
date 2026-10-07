@@ -19,7 +19,7 @@
 import { dopri5, makeState } from '../lab3d/kernel.js';
 import { toElements } from '../lab3d/elements.js';
 import { canonical } from './bodies.js';
-import { norm, scale, sub } from './twobody.js';
+import { norm, scale } from './twobody.js';
 
 /** The kernel's tolerance for these checks. */
 export const KERNEL_TOL = 1e-13;
@@ -84,6 +84,3 @@ export function integrateTracked(mu, r, v, span, length = norm(r), steps = 1) {
     elements: toElements(end.r, end.v, mu),
   };
 }
-
-/** |a - b| relative to a scale. */
-export const relMiss = (a, b, of) => norm(sub(a, b)) / of;

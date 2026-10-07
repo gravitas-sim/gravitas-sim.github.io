@@ -43,8 +43,6 @@ const RETROGRADE = {
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'solar-system', 'observing'],
   lock: { placement: true, inspector: false },
-  summary:
-    'Twice every three years Mars stops in the sky, reverses, and loops back on itself. Watched from outside, nothing of the sort happens: Earth and Mars both go round the Sun the same way and never turn back. You will measure both orbits, predict what Mars does when seen from Earth, then switch the reference frame and watch the loop draw itself. Nothing in the physics changes when you do. That is the entire point, and it is what took astronomy from Ptolemy to Copernicus.',
   objectives: [
     'Describe retrograde motion as an observation, separately from any explanation of it',
     'Compute a synodic period from two orbital periods and say what it counts',

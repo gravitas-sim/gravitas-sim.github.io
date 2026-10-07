@@ -176,7 +176,7 @@ describe('the service worker manifest is current', () => {
     // the course-planning metadata generated with the manifest.
     const bodies = lessons.filter(
       p =>
-        !/\/(manifest|manifest\.es|registry|i18n|catalog|browse|browseData|discovery|sequences|provenance)\.js$/.test(
+        !/\/(manifest|manifest\.es|summaries|summaries\.es|registry|i18n|catalog|browse|browseData|discovery|sequences|provenance)\.js$/.test(
           p
         )
     );

@@ -149,8 +149,6 @@ const GRAVITY_ASSIST = {
   // the whole set without a second list to keep in step.
   tags: ['spaceflight', 'orbits'],
   lock: { placement: true },
-  summary:
-    'Voyager 2 arrived at Jupiter traveling ten kilometers a second and left traveling twenty-six. Jupiter did not burn any fuel for it. Fly the same maneuver yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
   objectives: [
     'Predict whether a flyby gains or loses speed from which side of the planet it passes',
     'State what a gravity assist changes and what it cannot change, in the planet’s frame and in an inertial one',

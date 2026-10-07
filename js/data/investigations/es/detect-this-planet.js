@@ -16,8 +16,6 @@ export default {
     'El mismo planeta, las mismas doce noches, dos respuestas distintas',
   duration: '30-35 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Un planeta está ahí o no está, pero que lo encuentres depende de decisiones que tomas antes de hacer una sola medida. Planifica dos campañas de observación de la misma estrella, con el mismo instrumento y el mismo número de noches, y descubre que una encuentra un Júpiter y la otra no puede decirte absolutamente nada.',
   objectives: [
     'Predecir si un calendario de observación puede detectar un planeta dado, y decir cuál de los tres factores (cadencia, intervalo total y precisión) lo decide',
     'Explicar por qué más medidas a lo largo de un intervalo más largo pueden ser peores que menos medidas en uno más corto',

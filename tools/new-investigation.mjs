@@ -147,7 +147,8 @@ const lesson = `// =============================================================
 // -----------------------------------------------------------------------------
 // Content only, no imports: every step that needs a live number is handed a
 // \`ctx\` by the engine, so a lesson stays a description of what is being taught
-// rather than a piece of the simulation.
+// rather than a piece of the simulation. The card paragraph is not here; it is
+// written once in summaries.js (and summaries.es.js).
 //
 // Every step carries a \`sid\`: an opaque, stable id that student progress is
 // keyed by. Reword a step, move it, translate it - but never change its sid, or
@@ -174,8 +175,6 @@ const ${constName} = {
   // tests/investigationBrowse.test.js checks.
   tags: ['orbits'],
   lock: { placement: true, inspector: true },
-  summary:
-    'A paragraph for the lesson card: what the student measures, and what it lets them conclude.',
   objectives: [
     'State what the student will be able to do, in a verb they can be tested on',
     'One objective per thing the lesson actually asks for',
@@ -284,7 +283,6 @@ const shadow = `// =============================================================
 export default {
   title: '',
   subtitle: '',
-  summary: '',
   objectives: [],
   steps: [
     // { title: '', body: '' },
@@ -314,6 +312,25 @@ const guide = `
 
 await writeNew(`js/data/investigations/${id}.js`, lesson);
 await writeNew(`js/data/investigations/es/${id}.js`, shadow);
+
+// The card paragraph, in both languages, at the end of each summaries file.
+for (const [file, text] of [
+  [
+    'js/data/investigations/summaries.js',
+    'A paragraph for the lesson card: what the student measures, and what it lets them conclude.',
+  ],
+  ['js/data/investigations/summaries.es.js', ''],
+]) {
+  const source = await readFile(file, 'utf8');
+  if (source.includes(`'${id}':`)) {
+    skipped.push(`${file} (already has a summary)`);
+  } else {
+    const end = source.lastIndexOf('};');
+    const next = `${source.slice(0, end)}  '${id}': ${JSON.stringify(text)},\n${source.slice(end)}`;
+    if (!dryRun) await writeFile(file, next);
+    done.push(`${file} (summary stub)`);
+  }
+}
 
 // The two registry maps, each before its closing brace.
 {

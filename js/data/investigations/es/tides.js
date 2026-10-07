@@ -16,8 +16,6 @@ export default {
     'Estira un mundo, mueve una luna y descubre por qué la gravedad puede desgarrar objetos',
   duration: '35-45 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Las mareas no las causa una gravedad intensa. Las causa que la gravedad sea desigual a lo largo de un objeto, y toda la investigación se construye sobre esa única resta: quita la atracción sobre el centro a la atracción sobre el lado cercano y el lado lejano, y todo, desde las dos pleamares diarias hasta una estrella desgarrada por un agujero negro, sale de lo que queda.',
   objectives: [
     'Explicar por qué un objeto extenso siente una atracción gravitatoria distinta en cada uno de sus puntos',
     'Enunciar que una marea es la diferencia entre la atracción local y la atracción sobre el centro, y usarlo para decir por qué hay dos abultamientos oceánicos y no uno',

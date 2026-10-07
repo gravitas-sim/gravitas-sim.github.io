@@ -620,9 +620,6 @@ export function closeWelcome() {
   else setTimeout(finish, 260);
 }
 
-/** @returns {boolean} True while the front door is showing */
-export const isWelcomeOpen = () => open;
-
 // --- Wiring ------------------------------------------------------------------
 
 /**

@@ -17,8 +17,6 @@ export default {
     'Mueve un planeta, cambia su estrella y decide qué significa de verdad «habitable»',
   duration: '40-50 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Deduce tú mismo por qué un planeta al doble de distancia de su estrella recibe la cuarta parte de energía, por qué las estrellas tenues tienen sus zonas habitables muy pegadas, y por qué una órbita excéntrica implica que un planeta no recibe una cantidad de luz constante todo el año. Después termina con la pregunta más difícil que la expresión «zona habitable» invita a saltarse: ¿qué te dice realmente estar dentro de ella?',
   objectives: [
     'Explicar por qué la luz estelar que llega a un planeta decae rápidamente con la distancia, y usar la regla del doble de lejos, la cuarta parte',
     'Explicar por qué la zona habitable de una estrella tenue está muy cerca y la de una luminosa muy lejos',
