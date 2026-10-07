@@ -1022,7 +1022,17 @@ const importer = () => (importing ??= import('./observatory/import.js'));
 $('obsFile').addEventListener('change', async e => {
   const file = e.target.files?.[0];
   if (!file) return;
-  const text = await file.text();
+  let text;
+  try {
+    text = await file.text();
+  } catch {
+    // Said by the alert list; the page stays as it was.
+    state.imported = null;
+    $('obsImport').hidden = false;
+    $('obsImportForm').hidden = true;
+    showProblems([{ message: 'The browser could not read that file.' }]);
+    return;
+  }
   state.imported = { text, name: file.name, bytes: file.size };
   readImport();
 });

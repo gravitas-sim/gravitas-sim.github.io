@@ -37,6 +37,9 @@ export const ES_SUBMISSIONS = {
   'sub.written.summary': 'Respuestas escritas: {n}',
   'sub.written.rubric': 'Nota para corregir',
   'sub.refused.title': 'No leídas',
+  'sub.reason.unreadable': 'el navegador no pudo leer el archivo',
+  'sub.reason.lessonLoad':
+    'no se pudo cargar su investigación; comprueba la conexión y vuelve a añadirlo',
   'sub.reason.empty': 'no hay nada que leer',
   'sub.reason.wrongKind': 'no es un código de entrega de Gravitas',
   'sub.reason.newerVersion': 'lo creó una versión más reciente de Gravitas',
