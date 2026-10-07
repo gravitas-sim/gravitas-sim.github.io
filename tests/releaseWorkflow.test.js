@@ -85,6 +85,7 @@ describe('the deploy job only runs behind the gate', () => {
       'e2e-timings',
       'observatory-report',
       'tablet-walk',
+      'nav-matrix',
     ]);
     const aggregated = new Set(gate.needs);
     for (const name of Object.keys(workflow.jobs)) {

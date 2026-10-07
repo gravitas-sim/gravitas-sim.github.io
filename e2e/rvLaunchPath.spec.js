@@ -196,7 +196,16 @@ test.describe('the sliders and the file', () => {
       const slider = page.locator(`#rvFit_${key}`);
       await expect(slider).toBeVisible();
 
+      // The search runs in a Worker and answers later. The button is
+      // aria-busy until it has, and the answer is on screen by the time the
+      // next check can run; reading the RMS before that read the previous
+      // fit, and the search then landed over the slider move below.
       await page.locator('#rvFitSearch').click();
+      await expect(page.locator('#rvFitSearch')).not.toHaveAttribute(
+        'aria-busy',
+        'true',
+        { timeout: 60000 }
+      );
       await expect.poll(shownRms, { timeout: 20000 }).not.toBeNull();
       const rmsBefore = await shownRms();
 
