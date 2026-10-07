@@ -21,6 +21,13 @@
 
 import { parseNumber } from '../answerParse.js';
 import { dataFrom } from '../inference/infer.js';
+import { fitArtifact, rowsDigest } from '../analysis/seams.js';
+import { artifactEntry } from '../notebook/artifactEntry.js';
+import { SOURCE } from '../notebook/entry.js';
+import {
+  load as loadNotebook,
+  save as saveNotebook,
+} from '../notebook/store.js';
 import { MODELS } from '../inference/models.js';
 import { runInference } from '../inference/run.js';
 import {
@@ -203,6 +210,13 @@ export function mountFitPanel(root, ctx) {
     text: t('obs.fit.export'),
   });
   exportBtn.hidden = true;
+  const keepBtn = el('button', {
+    id: 'fitKeep',
+    class: 'ui-button',
+    type: 'button',
+    text: t('obs.fit.keep'),
+  });
+  keepBtn.hidden = true;
 
   // A parameter's name in the reader's language, and its unit in the data's:
   // a model's times are the time column's, its velocities the value column's.
@@ -242,7 +256,7 @@ export function mountFitPanel(root, ctx) {
     el('div', { class: 'ui-table-wrap is-numeric' }, table),
     cost,
     refusals,
-    el('div', { class: 'ui-toolbar' }, run, cancel, exportBtn),
+    el('div', { class: 'ui-toolbar' }, run, cancel, exportBtn, keepBtn),
     progress,
     status,
     results
@@ -438,6 +452,7 @@ export function mountFitPanel(root, ctx) {
     progress.value = 0;
     results.replaceChildren();
     exportBtn.hidden = true;
+    keepBtn.hidden = true;
     status.textContent = t('obs.fit.running');
     // Against the page, /observatory/, rather than this module: in dist/ this
     // file is a hashed chunk in js/, in the sources it is in js/observatory/,
@@ -484,10 +499,11 @@ export function mountFitPanel(root, ctx) {
         price();
         return;
       }
-      last = { manifest: m, out };
+      last = { manifest: m, out, data: d };
       status.textContent = t('obs.fit.done', { seconds });
       render(out, d);
       exportBtn.hidden = false;
+      keepBtn.hidden = false;
       // The measurement pipeline lists a fit the reader ran, as exported.
       const doc = exported();
       ctx.record?.(doc);
@@ -766,6 +782,35 @@ export function mountFitPanel(root, ctx) {
     };
   }
 
+  keepBtn.addEventListener('click', () => {
+    if (!last) return;
+    try {
+      const doc = exported();
+      const entry = artifactEntry({
+        source: SOURCE.INFERENCE_FIT,
+        envelope: fitArtifact(doc, {
+          digest: rowsDigest(last.data),
+          units: last.data.units,
+        }),
+        title: t('obs.fit.nb.title', {
+          model: t(`obs.fit.model.${doc.model.id}`),
+        }),
+        labels: {
+          quantity: q => nameOf({ name: q.id }),
+          note: q =>
+            t(`obs.fit.${q.origin === 'fitted' ? 'fitted' : q.origin}`),
+        },
+      });
+      const loaded = loadNotebook();
+      if (!loaded.ok) throw new Error(loaded.reason);
+      const saved = saveNotebook([...loaded.entries, entry]);
+      if (!saved.ok) throw new Error(saved.reason);
+      status.textContent = t('obs.fit.nb.added');
+    } catch (err) {
+      status.textContent = t('obs.fit.nb.failed', { why: err.message });
+    }
+  });
+
   exportBtn.addEventListener('click', () => {
     if (!last) return;
     const doc = exported();
@@ -1026,6 +1071,7 @@ export function mountFitPanel(root, ctx) {
         last = null;
         emptyFit();
         exportBtn.hidden = true;
+        keepBtn.hidden = true;
       }
       o = next;
       renderCompare();

@@ -67,6 +67,11 @@ export const SOURCE = Object.freeze({
   // carries an `observed` group instead of a simulation's conditions: see
   // js/notebook/observed.js.
   OBSERVATORY: 'observatory',
+  // A fit, a sweep analysis and an experiment result, each kept as the
+  // gravitas.artifact/1 envelope it was made as (js/notebook/artifactEntry.js).
+  INFERENCE_FIT: 'inference-fit',
+  SWEEP_ANALYSIS: 'sweep-analysis',
+  EXPERIMENT_RESULT: 'experiment-result',
 });
 
 /** The sources this build can capture from. */
@@ -80,6 +85,9 @@ export const SOURCES = [
   SOURCE.BINARY_ORBIT,
   SOURCE.HORIZON_TRIALS,
   SOURCE.OBSERVATORY,
+  SOURCE.INFERENCE_FIT,
+  SOURCE.SWEEP_ANALYSIS,
+  SOURCE.EXPERIMENT_RESULT,
 ];
 
 /** How long a student's prose may be, per field. */
@@ -453,6 +461,9 @@ export function snapshotFingerprint(snapshot) {
  * @param {?object} [spec.observed] - For a measurement on real data, what
  *   the data were and what was done to them (js/notebook/observed.js); a
  *   simulation's entry has none
+ * @param {?object} [spec.artifact] - For a fit, an analysis or an experiment
+ *   result, the gravitas.artifact/1 envelope it was made as, with the digest of
+ *   what it read (js/notebook/artifactEntry.js); a simulation's entry has none
  * @param {object} [spec.prose] - claim, evidence, limitations
  * @param {number} [spec.capturedAt] - Epoch ms; defaults to now
  * @param {string} [spec.id] - Reuse an id, for restore
@@ -465,6 +476,7 @@ export function buildEntry({
   figure: fig = null,
   provenance = null,
   observed = null,
+  artifact = null,
   prose: written = null,
   capturedAt = Date.now(),
   id = null,
@@ -481,6 +493,7 @@ export function buildEntry({
     // Only present when there is one, so every simulation entry's snapshot,
     // and so its fingerprint, is exactly what it was.
     ...(observed ? { observed: JSON.parse(JSON.stringify(observed)) } : {}),
+    ...(artifact ? { artifact: JSON.parse(JSON.stringify(artifact)) } : {}),
   });
   return {
     id: id || newEntryId(),

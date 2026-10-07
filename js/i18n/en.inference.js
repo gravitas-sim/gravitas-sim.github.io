@@ -44,6 +44,11 @@ export const EN_INFERENCE = {
     'No fit yet. Choose a model above and press Fit; the result and its uncertainties appear here.',
   'obs.fit.cancel': 'Cancel',
   'obs.fit.export': 'Save the fit (JSON)',
+  'obs.fit.keep': 'Keep the fit in the notebook',
+  'obs.fit.nb.title': 'Fit: {model}',
+  'obs.fit.nb.added':
+    'Kept in the evidence notebook, with the digest of the rows it read.',
+  'obs.fit.nb.failed': 'It could not be kept in the notebook: {why}.',
   'obs.fit.running': 'Fitting…',
   'obs.fit.done': 'Fitted in {seconds} s.',
   'obs.fit.failed': 'The fit did not finish ({status}). {why}',
