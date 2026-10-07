@@ -37,6 +37,8 @@ export const ES_INFERENCE = {
   'obs.fit.fixed': 'fijo',
   'obs.fit.derived': 'derivado',
   'obs.fit.run': 'Ajustar',
+  'obs.fit.empty':
+    'Aún no hay ajuste. Elige un modelo arriba y pulsa Ajustar; el resultado y sus incertidumbres aparecen aquí.',
   'obs.fit.cancel': 'Cancelar',
   'obs.fit.export': 'Guardar el ajuste (JSON)',
   'obs.fit.running': 'Ajustando…',

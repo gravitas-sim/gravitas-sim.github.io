@@ -394,7 +394,8 @@ export const ES_TEACHING = {
   'teach.feedback.form.saved':
     'Guardado en este navegador. No se ha enviado nada.',
   'teach.feedback.form.cleared': 'Borrado.',
-  'teach.feedback.form.empty': 'Todavía no hay nada que guardar.',
+  'teach.feedback.form.empty':
+    'Todavía no hay nada que guardar. Escribe en cualquier campo de arriba; las notas se quedan en este navegador hasta que las guardes.',
   'teach.feedback.form.exported': 'Guardado como {name}.',
   'teach.feedback.form.privacy':
     'Sin nombre, sin correo, sin institución y sin telemetría. Se guarda solo en este navegador, bajo una clave que puedes borrar arriba.',

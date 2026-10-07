@@ -486,6 +486,7 @@ function renderResult(result) {
   const key = m.vary[0].parameter;
   const key2 = m.vary[1]?.parameter;
   $('xpResults').hidden = false;
+  $('xpResultsEmpty').hidden = true;
   const unit = METRIC_UNITS[metric];
   const groups = result.summary.metrics[metric];
 

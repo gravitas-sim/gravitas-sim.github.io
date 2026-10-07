@@ -17,11 +17,14 @@ export const ES_ARCHIVE = {
   'obs.arc.asking.vizier': 'Preguntando a VizieR por fuentes de Gaia DR3 allí…',
   'obs.arc.asking.epochs':
     'Preguntando a VizieR por su fotometría de épocas de Gaia…',
-  'obs.arc.notFound': 'Sesame no conoce ningún objeto llamado «{name}».',
+  'obs.arc.notFound':
+    'Sesame no conoce ningún objeto llamado «{name}». Revisa la ortografía o prueba una designación de catálogo, como HD 189733.',
+  'obs.arc.empty':
+    'Aún no has buscado nada. Escribe el nombre de una estrella, como Kepler-13, y pulsa Buscar.',
   'obs.arc.position': '{name}: AR {ra}°, Dec {dec}° ({type})',
   'obs.arc.sky': 'Ver esta posición en Aladin Lite, en el CDS (abre su sitio)',
   'obs.arc.noSource':
-    'No hay ninguna fuente de Gaia DR3 a menos de 2″ de esa posición.',
+    'No hay ninguna fuente de Gaia DR3 a menos de 2″ de esa posición. Revisa el nombre o prueba la designación de catálogo de la estrella.',
   'obs.arc.sources': 'Fuentes de Gaia DR3 a menos de 2″: {n}',
   'obs.arc.source': 'Gaia DR3 {id}, G {g}',
   'obs.arc.sourceVariable': 'Gaia DR3 {id}, G {g}, marcada como variable',

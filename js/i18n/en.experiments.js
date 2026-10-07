@@ -105,6 +105,8 @@ export const EN_EXPERIMENTS = {
     'This browser cannot run background workers, so experiments cannot run here.',
 
   'exp.results.title': 'Results',
+  'exp.results.empty':
+    'No results yet. Choose a scenario and a parameter above, then press Run; the plot, the table and the downloads appear here.',
   'exp.plot.label':
     '{metric} against {param}: {ok} trials with a measurement, {failed} without. The table below has the same numbers.',
   'exp.plot.log': '(log scale)',
