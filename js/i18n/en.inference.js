@@ -57,6 +57,8 @@ export const EN_INFERENCE = {
   'obs.fit.done': 'Fitted in {seconds} s.',
   'obs.fit.failed': 'The fit did not finish ({status}). {why}',
   'obs.fit.canceled': 'canceled by the reader',
+  'obs.fit.refuse.fewRows':
+    'A fit needs at least five rows, and {rows} can be used. Unmask rows or open a larger table.',
   'obs.fit.refuse.xPositive':
     'A power law needs every x above zero. Mask the rows where x is zero or negative, or choose another model.',
   'obs.fit.refuse.tooManyRows':

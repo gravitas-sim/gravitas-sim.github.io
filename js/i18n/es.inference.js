@@ -54,6 +54,8 @@ export const ES_INFERENCE = {
   'obs.fit.done': 'Ajustado en {seconds} s.',
   'obs.fit.failed': 'El ajuste no terminó ({status}). {why}',
   'obs.fit.canceled': 'cancelado por el lector',
+  'obs.fit.refuse.fewRows':
+    'Un ajuste necesita al menos cinco filas y solo se pueden usar {rows}. Desenmascara filas o abre una tabla mayor.',
   'obs.fit.refuse.xPositive':
     'Una ley de potencias necesita que todas las x sean mayores que cero. Enmascara las filas en que x es cero o negativa, o elige otro modelo.',
   'obs.fit.refuse.tooManyRows':

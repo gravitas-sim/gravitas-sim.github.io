@@ -300,7 +300,14 @@ export function mountFitPanel(root, ctx) {
   );
 
   function data() {
-    return dataFrom(o);
+    const d = dataFrom(o);
+    // An uncertainty column with nothing usable - an experiment run with one
+    // seed per setting has no standard error - leaves no rows at all: fit
+    // them unweighted, which the result says (its 'unweighted' warning),
+    // rather than none.
+    return d.counts.used === 0 && d.counts.withoutUncertainty > 0
+      ? dataFrom(o, { sigma: null })
+      : d;
   }
 
   function renderParams() {
@@ -469,6 +476,9 @@ export function mountFitPanel(root, ctx) {
         })
       : '';
     const reasons = [
+      ...(m.data.used < 5
+        ? [t('obs.fit.refuse.fewRows', { rows: m.data.used })]
+        : []),
       ...(MODELS[modelSelect.value].requires?.(data())
         ? [t('obs.fit.refuse.xPositive')]
         : []),
