@@ -16,11 +16,11 @@ export const EN_ARCHIVE = {
   'obs.arc.asking.vizier': 'Asking VizieR for Gaia DR3 sources there…',
   'obs.arc.asking.epochs': 'Asking VizieR for its Gaia epoch photometry…',
   'obs.arc.notFound':
-    'Sesame knows no object called “{name}”. Check the spelling, or try a catalogue designation such as HD 189733.',
+    'Sesame knows no object called “{name}”. Check the spelling, or try a catalog designation such as HD 189733.',
   'obs.arc.position': '{name}: RA {ra}°, Dec {dec}° ({type})',
   'obs.arc.sky': 'View this position in Aladin Lite at CDS (opens their site)',
   'obs.arc.noSource':
-    'No Gaia DR3 source within 2″ of that position. Check the name for a typo, or try the star’s catalogue designation.',
+    'No Gaia DR3 source within 2″ of that position. Check the name for a typo, or try the star’s catalog designation.',
   'obs.arc.empty':
     'Nothing looked up yet. Type a star’s name, such as Kepler-13, and press Find.',
   'obs.arc.sources': 'Gaia DR3 sources within 2″: {n}',
