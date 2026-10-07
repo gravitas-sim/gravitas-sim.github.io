@@ -21,6 +21,23 @@ import {
   ARCSEC_PER_RADIAN,
 } from './constants.js';
 
+// The one definition of the radial-velocity semi-amplitude K: exactly half the
+// peak-to-peak of v = gamma + K [cos(nu + omega) + e cos(omega)], at every e
+// and omega, in two equivalent forms. A sampled (max - min) / 2 only
+// approximates it (a lower bound, biased up by noise): halfRangeOfSeries.
+
+/** K = 2 pi a1 sin i / (P sqrt(1 - e^2)), a1 the star's own semi-major axis. */
+export function rvSemiAmplitudeFromAxis(aStar, period, sinI, e) {
+  return (2 * Math.PI * aStar * sinI) / (period * Math.sqrt(1 - e * e));
+}
+
+/** The same K from the masses (in the units of G) and the period. */
+export function rvSemiAmplitudeFromMasses(G, period, mStar, mPlanet, sinI, e) {
+  const scale = Math.cbrt((2 * Math.PI * G) / period);
+  const total = Math.pow(mStar + mPlanet, 2 / 3);
+  return (scale * (mPlanet * sinI)) / total / Math.sqrt(1 - e * e);
+}
+
 /**
  * Radial-velocity semi-amplitude of a star pulled by one companion.
  *
@@ -52,9 +69,7 @@ export function radialVelocitySemiAmplitude({
     return NaN;
 
   const sinI = Math.sin((Number(inclinationDeg) * Math.PI) / 180);
-  const scale = Math.cbrt((2 * Math.PI * G_SI) / P);
-  const total = Math.pow(mStar + mPlanet, 2 / 3);
-  return (scale * (mPlanet * sinI)) / total / Math.sqrt(1 - e * e);
+  return rvSemiAmplitudeFromMasses(G_SI, P, mStar, mPlanet, sinI, e);
 }
 
 /**
@@ -273,11 +288,8 @@ export { ARCSEC_PER_RADIAN };
  * therefore 2K and the half-range is K, exactly, for every eccentricity and
  * every argument of periastron.
  *
- * This file used to say the half-range equalled K "only for a circular orbit",
- * and that is simply wrong. Eccentricity changes the curve's *shape* - it stops
- * being a sinusoid, the extremes stop being half a period apart, and the star
- * spends very little time near the sharp one - but it does not change how far
- * the curve travels between them.
+ * Eccentricity changes the curve's *shape* (not a sinusoid, extremes not half
+ * a period apart) but not how far it travels between them.
  *
  * The real reasons a measured half-range may not be K:
  *
@@ -323,17 +335,8 @@ export { ARCSEC_PER_RADIAN };
  * noisy sample just inside the end of a rising run does not read as a turning
  * point.
  *
- * An earlier version also demanded two crossings of the midline, which sounds
- * stricter and is simply wrong: a sinusoid sampled over exactly one period
- * beginning at the midline crosses it once in the interior and twice at the
- * endpoints, so the most complete run imaginable was reported as partial. The
- * count is still returned, for diagnostics only.
- *
- * The test *that* replaced was "the samples include both signs", which is not a
- * statement about coverage at all: a few minutes either side of a zero crossing
- * satisfies it while sampling a few per cent of the amplitude, and a system
- * whose systemic velocity keeps the curve one-signed can never satisfy it
- * however long it is watched.
+ * Midline crossings are not required (a full period from the midline crosses it
+ * once inside) and "both signs" is not coverage; the count is diagnostic only.
  *
  * @param {Array<{y: number}>} series - Samples, in order
  * @param {object} [options]

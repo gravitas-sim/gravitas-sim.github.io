@@ -1,63 +1,38 @@
-// =============================================================================
-// A transiting planet's light curve, computed so it can be checked
-// -----------------------------------------------------------------------------
-// The planet is a dark disk of radius k (in stellar radii) crossing a star
-// whose brightness falls toward its edge by the quadratic law
+// A transiting planet's light curve, computed so it can be checked: a dark disk
+// of radius k (stellar radii) crossing a star with quadratic limb darkening
+// (js/limbDarkening.js). The blocked fraction at separation z is the light in
+// the rings of the star the planet covers over the star's total light; the
+// wholly covered inner disk (r <= k - z) is integrated in closed form, the
+// partly covered annulus by the midpoint rule on nodes clustered toward both
+// ends, where the integrand's derivative is singular. This is Mandel & Agol's
+// (2002) quantity by direct quadrature, slower with every step visible; error
+// falls fourfold per doubling of nodes. Against 4,096 nodes, for HD 209458 b
+// across every separation: 64 nodes at most 5e-5 of the depth (0.9 ppm); the
+// default 32, 2e-4 (3.5 ppm), worst near z = k/2. tests/inference.test.js holds
+// it to the exact overlap area of two circles for a uniform star.
 //
-//   I(mu) = 1 - u1 (1 - mu) - u2 (1 - mu)^2,    mu = sqrt(1 - r^2).
-//
-// The fraction of the star's light the planet blocks at a separation z is the
-// light in the rings of the stellar disk it covers:
-//
-//   delta(z) = [ integral of I(r) * (arc of the ring inside the planet) dr ]
-//              / [ integral of I(r) * 2 pi r dr ]
-//
-// where the ring of radius r lies wholly inside the planet (arc 2 pi r) when
-// r <= k - z, partly inside when |z - k| < r < z + k, and outside otherwise.
-// The wholly covered inner disk is integrated in closed form; the partly
-// covered annulus by the midpoint rule on nodes clustered toward both of its
-// ends, where the integrand's derivative is singular (the planet's edge and the
-// star's). This is Mandel & Agol's (2002) quantity by direct quadrature rather
-// than their elliptic integrals: slower, and every step visible. The error
-// falls fourfold with each doubling of nodes. Against 4,096 nodes, for HD
-// 209458 b across every separation: at 64, at most 5 x 10^-5 of the depth
-// (0.9 ppm); at the 32 a fit asks for by default, 2 x 10^-4 (3.5 ppm), worst
-// near z = k/2, against noise of hundreds. tests/inference.test.js holds it to
-// the exact overlap area of two circles for a uniform star.
-//
-// The orbit is circular: at phase phi = 2 pi (t - t0) / P the planet is at
-//   z = (a/R*) sqrt(sin^2 phi + cos^2 i cos^2 phi),    cos i = b / (a/R*),
-// in front of the star when cos phi > 0. Eccentricity changes a transit's
-// duration and shape and is not modeled here; a fit says so.
-//
-// An exposure integrates the light over its length. A 20-minute bin is not a
-// 20-minute snapshot: each point is the mean of `supersample` instants spread
-// across its exposure (Kipping 2010), and a light curve binned from shorter
-// cadences is modeled by its bin width.
-//
-// Pure: no DOM, no state.
-// =============================================================================
+// The orbit is circular: z = (a/R*) sqrt(sin^2 phi + cos^2 i cos^2 phi),
+// cos i = b / (a/R*), phi = 2 pi (t - t0) / P, in front when cos phi > 0.
+// Eccentricity is not modeled; a fit says so. An exposure is the mean of
+// `supersample` instants across it (Kipping 2010). Pure: no DOM, no state.
+
+import {
+  kippingToQuadratic,
+  quadraticToKipping,
+  quadraticIntensity,
+  diskAverage,
+} from '../limbDarkening.js';
 
 // Bound once, not read as globals: in Jest's vm context every free global read
 // goes through the context, which made these loops 8-25x slower than in Node.
 const { Math, Number, Float64Array } = globalThis;
 
-/** The quadratic coefficients from Kipping's (2013) q1, q2 in [0, 1]. */
-export function limbDarkening(q1, q2) {
-  const s = Math.sqrt(q1);
-  return { u1: 2 * s * q2, u2: s * (1 - 2 * q2) };
-}
+// The law and its Kipping (2013) pair are in js/limbDarkening.js.
+export const limbDarkening = kippingToQuadratic;
+export const kippingQ = quadraticToKipping;
 
-/** And back. */
-export function kippingQ(u1, u2) {
-  const q1 = (u1 + u2) ** 2;
-  return { q1, q2: q1 > 0 ? u1 / (2 * (u1 + u2)) : 0 };
-}
-
-const intensity = (r, u1, u2) => {
-  const m = 1 - Math.sqrt(Math.max(0, 1 - r * r));
-  return 1 - u1 * m - u2 * m * m;
-};
+const intensity = (r, u1, u2) =>
+  quadraticIntensity(Math.sqrt(Math.max(0, 1 - r * r)), u1, u2);
 
 /**
  * The star's light inside radius R: the integral of I(r) 2 pi r dr from 0.
@@ -73,7 +48,7 @@ function lightWithin(R, u1, u2) {
 }
 
 /** The whole star's light: pi (1 - u1/3 - u2/6). */
-export const totalLight = (u1, u2) => Math.PI * (1 - u1 / 3 - u2 / 6);
+export const totalLight = (u1, u2) => Math.PI * diskAverage(u1, u2);
 
 /**
  * The fraction of the star's light a planet of radius k at separation z hides.
