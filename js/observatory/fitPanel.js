@@ -22,6 +22,7 @@
 import { parseNumber } from '../answerParse.js';
 import { dataFrom } from '../inference/infer.js';
 import { fitArtifact, rowsDigest } from '../analysis/seams.js';
+import { observationDigest } from './identity.js';
 import { artifactEntry } from '../notebook/artifactEntry.js';
 import { SOURCE } from '../notebook/entry.js';
 import {
@@ -463,6 +464,8 @@ export function mountFitPanel(root, ctx) {
         { type: 'module' }
       );
     const started = performance.now();
+    // Hashed while the fit runs; the fit's document names what it read.
+    const identity = observationDigest(o);
     job = runInference({
       request: req,
       data: {
@@ -485,7 +488,7 @@ export function mountFitPanel(root, ctx) {
         progress.value = Math.round(p.fraction * 1000);
       },
     });
-    job.done.then(out => {
+    Promise.all([job.done, identity]).then(([out, digest]) => {
       job = null;
       cancel.hidden = true;
       progress.hidden = true;
@@ -499,7 +502,11 @@ export function mountFitPanel(root, ctx) {
         price();
         return;
       }
-      last = { manifest: m, out, data: d };
+      last = {
+        manifest: { ...m, data: { ...m.data, digest } },
+        out,
+        data: d,
+      };
       status.textContent = t('obs.fit.done', { seconds });
       render(out, d);
       exportBtn.hidden = false;

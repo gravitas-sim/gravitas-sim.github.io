@@ -92,6 +92,9 @@ async function tessLightCurve() {
   return lightCurveObservation(await loadPack('data/tess-hd209458-s56'), {});
 }
 
+// How a pack's `time.reference` reads, as a format of js/observatory/units.js.
+const TIME_REFERENCES = { 'BTJD = BJD - 2457000': 'BTJD' };
+
 /**
  * A TESS light-curve pack module as a gravitas.observation/1: this one, and
  * one installed from the catalog (js/catalog/installed.js, prefix `installed`).
@@ -104,7 +107,10 @@ export async function lightCurveObservation(
   const P = mod.PACK;
   citations = citations || linkedCitations(P.citations);
   const o = await decode(mod);
-  if (!/^BTJD = BJD - 2457000$/.test(P.time.reference)) {
+  // The pack says how its time column counts; the observation names the
+  // format that is, and keeps the pack's own words beside it.
+  const format = TIME_REFERENCES[P.time.reference];
+  if (!format) {
     throw new Error(`the dataset counts time as ${P.time.reference}, not BTJD`);
   }
   return {
@@ -138,8 +144,7 @@ export async function lightCurveObservation(
           ]
         : []),
     ],
-    // The pack's own record, structured, for a guide to read (not exported:
-    // gravitas.observation/1 keeps only the fields it knows).
+    // The pack's own record, structured, for a guide to read; a save keeps it.
     pack: { masks: P.masks, crowding: P.crowding ?? null },
     columns: [
       { id: 'time', name: 'time', unit: 'd', role: 'x', values: o.x.values },
@@ -154,7 +159,12 @@ export async function lightCurveObservation(
       },
     ],
     axes: { x: 'time', y: 'flux' },
-    time: { column: 'time', format: 'BTJD', scale: P.time.scale },
+    time: {
+      column: 'time',
+      format,
+      scale: P.time.scale,
+      reference: P.time.reference,
+    },
   };
 }
 

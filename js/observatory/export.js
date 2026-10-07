@@ -23,7 +23,11 @@
 // =============================================================================
 
 import { toCsv } from '../csv.js';
+import { observationDigest } from './identity.js';
 import { FORMAT, FORMAT_VERSION, maskedRows, rowCount } from './schema.js';
+
+/** The digest the page writes into a save: of the observation as opened. */
+export const openedDigest = observationDigest;
 
 const numberOrNull = v =>
   typeof v === 'number' && Number.isFinite(v) ? v : null;
@@ -46,6 +50,7 @@ const OBSERVATION_KEYS = [
   'retrieved',
   'citations',
   'reductions',
+  'pack',
   'axes',
   'time',
   'spectral',
@@ -55,20 +60,19 @@ const OBSERVATION_KEYS = [
 /**
  * The observation as it stands, with how it got there.
  * @param {object} o - After the changes (transforms.replay)
- * @param {{source: object, changes: object[]}} workspace - What it was opened
- *   as, and the changes, in order
+ * @param {{source: object, changes: object[], digest?: string}} workspace -
+ *   What it was opened as, and the changes, in order; `digest` is what
+ *   ./identity.js observationDigest() gives for the observation as opened
  * @returns {string} JSON, two-space indented, with a final newline
  */
-export function observationJson(o, { source, changes }) {
+export function observationJson(o, { source, changes, digest }) {
   const doc = {
     ...plain(o),
     workspace: {
-      openedFrom: ordered(source.source || {}, [
-        'kind',
-        'id',
-        'version',
-        'file',
-      ]),
+      openedFrom: {
+        ...ordered(source.source || {}, ['kind', 'id', 'version', 'file']),
+        ...(digest ? { digest } : {}),
+      },
       openedAs: source.id,
       changes: changes.map(ch => ({ ...ch })),
       // The observation as it was opened, so the file replays: read back,
