@@ -367,8 +367,6 @@ export const ES_DEFERRED = {
   'reliability.run': 'Comprobar con el paso a la mitad',
   'reliability.cancel': 'Detener',
   'reliability.running': 'Ejecutando {phase} de 2, {percent}% completado',
-  'reliability.phase.coarse': 'la pasada con el paso actual',
-  'reliability.phase.fine': 'la pasada con la mitad del paso',
   'reliability.cost':
     'Dos pasadas de {duration} unidades simuladas tardaron {seconds}s: {coarseSub} subpasos por fotograma y luego {fineSub}.',
   'reliability.steps': 'Paso {coarse} frente a {fine}',
@@ -1146,11 +1144,6 @@ export const ES_DEFERRED = {
   'rvfit.mc.idle': 'Sin ejecutar todavía.',
   'rvfit.mc.stale':
     'La grabación, el ajuste o el rango de búsqueda han cambiado desde que se ejecutó este análisis, así que sus intervalos ya no describen lo que hay en pantalla. Vuelve a ejecutarlo.',
-  'rvfit.mc.outcome.complete':
-    'Todas las pruebas se ejecutaron y dieron ajuste.',
-  'rvfit.mc.outcome.canceled':
-    'Detenido por ti tras {done} de {total} pruebas.',
-  'rvfit.mc.outcome.partial': '{done} de {total} pruebas dieron ajuste.',
 
   'rvfit.mc.refused.noFit':
     'No hay ningún ajuste en pantalla alrededor del cual remuestrear. Fija primero un período.',
@@ -1210,7 +1203,6 @@ export const ES_DEFERRED = {
   'rvfit.mc.plot.amplitude': 'Amplitudes recuperadas',
   'rvfit.mc.plot.periodAxis': 'Período (días)',
   'rvfit.mc.plot.amplitudeAxis': 'K (m/s)',
-  'rvfit.mc.plot.count': 'Pruebas por intervalo',
   'rvfit.mc.plot.none': 'Todavía no hay nada que dibujar.',
 
   'rvfit.mc.guidance.heading': 'La precisión no es la corrección',
@@ -2119,8 +2111,6 @@ export const ES_DEFERRED = {
   'exoW.row.whatYouAreLookingAt': 'Los dos paneles',
   'exoW.value.twoPanels':
     'Izquierda: tus medidas frente a la fecha, con la señal ideal superpuesta en discontinua como capa didáctica; esa línea no son datos. Derecha: las mismas medidas plegadas con el periodo verdadero, que es lo que una búsqueda produciría solo si ya conociera el periodo.',
-  'exoW.idealSignalOverlay': 'discontinua: señal ideal (capa didáctica)',
-  'exoW.foldedOnTheTruePeriod': 'plegada con el periodo verdadero',
   'exoW.measurementsTaken': 'Medidas',
   'exoW.phaseCoverage': 'Cobertura en fase',
   'exoW.binsOfTheCycle': 'intervalos del ciclo',

@@ -365,8 +365,6 @@ export const EN_DEFERRED = {
   'reliability.run': 'Check against a halved step',
   'reliability.cancel': 'Stop',
   'reliability.running': 'Running {phase} of 2, {percent}% of the way',
-  'reliability.phase.coarse': 'the run at the current step',
-  'reliability.phase.fine': 'the run at half the step',
   'reliability.cost':
     'Two runs of {duration} simulated units took {seconds}s: {coarseSub} substeps per frame, then {fineSub}.',
   'reliability.steps': 'Step {coarse} against {fine}',
@@ -1136,9 +1134,6 @@ export const EN_DEFERRED = {
   'rvfit.mc.idle': 'Not run yet.',
   'rvfit.mc.stale':
     'The recording, the fit or the search range has changed since this analysis ran, so its intervals no longer describe what is on screen. Run it again.',
-  'rvfit.mc.outcome.complete': 'Every trial ran and produced a fit.',
-  'rvfit.mc.outcome.canceled': 'Stopped by you after {done} of {total} trials.',
-  'rvfit.mc.outcome.partial': '{done} of {total} trials produced a fit.',
 
   'rvfit.mc.refused.noFit':
     'There is no fit on screen to resample around. Set a period first.',
@@ -1197,7 +1192,6 @@ export const EN_DEFERRED = {
   'rvfit.mc.plot.amplitude': 'Recovered amplitudes',
   'rvfit.mc.plot.periodAxis': 'Period (days)',
   'rvfit.mc.plot.amplitudeAxis': 'K (m/s)',
-  'rvfit.mc.plot.count': 'Trials per bin',
   'rvfit.mc.plot.none': 'Nothing to plot yet.',
 
   // The guidance the whole feature exists for. Printed under the results, not
@@ -2094,8 +2088,6 @@ export const EN_DEFERRED = {
   'exoW.row.whatYouAreLookingAt': 'The two panels',
   'exoW.value.twoPanels':
     'Left: your measurements against date, with the ideal signal dashed over them as a teaching overlay — that dashed line is not data. Right: the same measurements folded on the true period, which is what a search would produce only if it already knew the period.',
-  'exoW.idealSignalOverlay': 'dashed: ideal signal (teaching overlay)',
-  'exoW.foldedOnTheTruePeriod': 'folded on the true period',
   'exoW.measurementsTaken': 'Measurements',
   'exoW.phaseCoverage': 'Phase coverage',
   'exoW.binsOfTheCycle': 'bins of the cycle',
