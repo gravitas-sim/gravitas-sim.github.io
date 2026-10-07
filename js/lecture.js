@@ -349,9 +349,6 @@ export function toggleLecture() {
   isLecture() ? exitLecture() : enterLecture();
 }
 
-/** @returns {?string} The theme Lecture Mode is holding, for tests */
-export const borrowedFrom = () => themeBeforeLecture;
-
 // --- The sequence editor ------------------------------------------------------
 
 /**

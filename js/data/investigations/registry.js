@@ -156,10 +156,6 @@ const TRANSLATIONS = {
   },
 };
 
-/** @returns {boolean} True if this locale has lesson translations at all */
-export const hasLessonTranslations = locale =>
-  Object.hasOwn(TRANSLATIONS, locale);
-
 // Keyed by `${locale}:${id}`, so switching language and switching back does not
 // re-merge, and so a lesson open in Spanish and the same lesson opened again in
 // Spanish are the same object.

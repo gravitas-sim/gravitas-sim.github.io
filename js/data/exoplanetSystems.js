@@ -109,13 +109,6 @@ export const EXOPLANET_SYSTEMS = {
 };
 
 /**
- * Look up a system by id.
- * @param {string} id - System id
- * @returns {object|null} The system, or null
- */
-export const getExoplanetSystem = id => EXOPLANET_SYSTEMS[id] || null;
-
-/**
  * Flatten a system into the shape the observables functions take.
  *
  * Saves every caller from spelling out the same five-line object, and means a

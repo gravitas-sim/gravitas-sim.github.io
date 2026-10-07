@@ -18,11 +18,7 @@
 // whether the simulation is broken.
 // =============================================================================
 
-import {
-  EXPONENT_RANGE,
-  LESSON_ECCENTRICITY,
-  STABILITY_EXPONENT,
-} from './powerLawGravity.js';
+import { EXPONENT_RANGE, STABILITY_EXPONENT } from './powerLawGravity.js';
 import {
   PRESETS,
   conservationRows,
@@ -379,5 +375,3 @@ export const POWER_LAW_WIDGETS = [PRECESSION, REFINEMENT, KEPLER, CONSERVATION];
 
 /** Test seam: the exponent the instruments refuse to reach. @returns {number} The boundary */
 export const stabilityBoundary = () => STABILITY_EXPONENT;
-/** Test seam: the eccentricity the precession bench runs at. @returns {number} Eccentricity */
-export const benchEccentricity = () => LESSON_ECCENTRICITY;

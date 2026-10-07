@@ -419,11 +419,6 @@ function firstSampleOf(trackId) {
   };
 }
 
-/** Forget which stage the protagonist was last written at. Tests only. */
-export const resetProtagonistForTests = () => {
-  boundStage = null;
-};
-
 /** The live playback, for tests. @returns {?object} state */
 export const activePlayback = () => play;
 

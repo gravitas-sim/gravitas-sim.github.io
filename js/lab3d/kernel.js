@@ -43,19 +43,6 @@ export function makeState(bodies, { G = 1 } = {}) {
   return s;
 }
 
-export const copyState = s => ({
-  ...s,
-  m: s.m.slice(),
-  radius: s.radius.slice(),
-  x: s.x.slice(),
-  v: s.v.slice(),
-  merged: [...s.merged],
-  alive: s.alive.slice(),
-  cx: s.cx?.slice(),
-  cv: s.cv?.slice(),
-  work: undefined,
-});
-
 /** Accelerations of every body from positions x, into a (3n). Pairwise and symmetric. */
 export function accelerations(s, x, a) {
   const { n, m, G } = s;
