@@ -55,11 +55,13 @@ const HEADER = `// =============================================================
 // -----------------------------------------------------------------------------
 // Written by tools/build-investigation-manifest.js from the lesson files in
 // this directory. Run \`npm run manifest\` after changing a lesson's title,
-// subtitle, duration, level, summary, thumbnail, series, steps or objectives.
+// subtitle, duration, level, thumbnail, series, steps or objectives. A summary
+// is edited in summaries.js (summaries.es.js for Spanish) and needs no run.
 //
-// This is what the lesson browser reads. It carries exactly what a card shows
-// and nothing else, so ten cards cost a few kilobytes instead of the 225KB the
-// ten lessons weigh. The counts are counts rather than the arrays themselves:
+// This is what the lesson browser reads. It carries what a card shows, except
+// the summary, which lives once in summaries.js (the lesson reads it from
+// there too) and is joined on by registry.js. Ten cards cost a few kilobytes
+// instead of the 225KB the ten lessons weigh. The counts are counts rather than the arrays themselves:
 // a card quotes "35 steps", it does not render them.
 // =============================================================================
 `;
@@ -71,7 +73,6 @@ const entryOf = inv => ({
   subtitle: inv.subtitle,
   duration: inv.duration,
   level: inv.level,
-  summary: inv.summary,
   thumbnail: inv.thumbnail,
   ...(inv.series ? { series: inv.series } : {}),
   stepCount: inv.steps.length,

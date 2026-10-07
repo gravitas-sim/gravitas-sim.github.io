@@ -62,8 +62,6 @@ const WEIGHING = {
   // the whole set without a second list to keep in step.
   tags: ['stars', 'gravity', 'orbits'],
   lock: { placement: true, inspector: true, areaSweep: false },
-  summary:
-    'Kepler’s laws end with Newton’s correction, and this is what that correction is for. Watch two stars circle each other, find the balance point they are both going round, and use nothing but the size and the timing of their orbit to work out how much each one weighs. No telescope has ever put a star on a scale; this is how it is actually done.',
   objectives: [
     'Explain why both stars in a binary move, rather than one going round the other',
     'Say what the barycenter is and where it sits when one star is heavier',

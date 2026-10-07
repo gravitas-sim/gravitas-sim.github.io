@@ -402,9 +402,6 @@ export function setCr3bpEnabled(on) {
   render();
 }
 
-/** @returns {boolean} Whether the teaching mode is on */
-export const isCr3bpEnabled = () => enabled;
-
 /** Build the panel once. */
 function mount() {
   if (root) return;
@@ -615,9 +612,6 @@ export function neckPairReport() {
       : null,
   };
 }
-
-/** For the lesson and the tests: run the pair as the button does. */
-export const startNeckPair = () => runNeckPair();
 
 /** Ask the run in progress to stop after the arm it is on. */
 export function cancelNeckPair() {

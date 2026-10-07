@@ -56,8 +56,6 @@ let tickUnsub = null;
 // and honored within a scenario so it does not reappear on every rebuild
 // after being told to go away.
 let dismissed = false;
-/** The previous finished run, kept so a halved-step repeat can be compared. */
-let previous = null;
 
 /** The two scenarios this panel is for. */
 const SCENARIOS = {
@@ -186,8 +184,7 @@ export function armBinaryRun() {
       onStep: onPhysicsStep,
       bodies,
       G,
-      onFinish: run => {
-        previous = run;
+      onFinish: () => {
         state.paused = true;
         render();
       },
@@ -399,12 +396,6 @@ export function setBinaryRunEnabled(on) {
   }
   layoutObservationPanels();
 }
-
-/** @returns {boolean} Whether the panel is open */
-export const isBinaryRunEnabled = () => enabled;
-
-/** @returns {?object} The last finished run, for the lesson and the bench */
-export const lastFinishedRun = () => (previous ? { ...previous } : null);
 
 /**
  * Match the panel to whatever scenario is loaded now.

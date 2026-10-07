@@ -77,9 +77,6 @@ export function setRevisionSource(fn) {
 /** The entries, for tests and for the report. @returns {Array<object>} */
 export const notebookEntries = () => entries;
 
-/** The last write's outcome. @returns {object} */
-export const lastSaveResult = () => lastSave;
-
 // --- Persistence ---------------------------------------------------------------
 
 /**
@@ -693,13 +690,3 @@ export function setNotebookEnabled(on) {
 
 /** @returns {boolean} Whether the panel is open */
 export const isNotebookEnabled = () => enabled;
-
-/** Forget everything, for tests. */
-export function resetPanel() {
-  root?.remove();
-  root = null;
-  entries = [];
-  draft = null;
-  enabled = false;
-  lastSave = { ok: true, reason: store.FAILURE.OK };
-}

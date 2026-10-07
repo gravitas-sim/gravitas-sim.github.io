@@ -64,8 +64,6 @@ const KEPLER = {
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'solar-system'],
   lock: { placement: true, inspector: true },
-  summary:
-    'Work through all three of Kepler’s laws by measuring orbits rather than being shown them: find the focus of an ellipse, watch equal areas sweep out in equal times, and recover the three-halves power law by plotting it yourself.',
   objectives: [
     'State where the primary sits in an elliptical orbit, and support it with a measurement',
     'Explain why an orbiting body moves fastest at periapsis, in terms of angular momentum',

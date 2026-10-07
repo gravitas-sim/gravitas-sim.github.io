@@ -21,8 +21,6 @@ export default {
   subtitle: 'Una razón es una pista. Descubre qué cuenta como prueba',
   duration: '55-70 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Tres de las lunas de Júpiter se marcan el compás unas a otras, Plutón cruza la órbita de Neptuno y jamás se le ha acercado, y miles de asteroides se mantienen sesenta grados por delante de Júpiter sin moverse de ahí. Los tres casos son el mismo fenómeno, y ninguno queda explicado por lo que todo el mundo cita: la razón entre los periodos. Medirás esas razones, descubrirás que la más limpia de todo el sistema pertenece a una luna que no está en ninguna resonancia, y luego medirás la magnitud que sí resuelve la cuestión: un ángulo que o bien oscila o bien da la vuelta.',
   objectives: [
     'Medir periodos orbitales y razones de periodos a partir de las propias órbitas, y hallar la razón de enteros pequeños más cercana a cada una',
     'Explicar por qué una razón casi racional es una prueba débil, usando un caso en el que la razón más limpia del sistema pertenece a un cuerpo sin resonancia alguna',

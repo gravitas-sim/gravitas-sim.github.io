@@ -271,12 +271,6 @@ export function setRvWorkspaceEnabled(on) {
   layoutObservationPanels();
 }
 
-/** @returns {boolean} Whether the panel is open */
-export const isRvWorkspaceEnabled = () => enabled;
-
-/** @returns {?object} The exportable report, for the export dialog */
-export const currentReport = () => exportReport();
-
 /** Undoes the locale subscription init made; null while not wired. */
 let unsubscribeLocale = null;
 
@@ -414,9 +408,6 @@ export function teardownRvWorkspacePanel() {
   unsubscribeLocale = null;
   els = null;
 }
-
-/** @returns {?object} The recording under analysis, for the export dialog */
-export const analyzedRecording = () => currentRecording();
 
 // --- The optional uncertainty analysis ----------------------------------------
 // The interface over js/inference/rvMonteCarlo.js. Everything it prints comes from the
@@ -573,12 +564,6 @@ export function clearUncertainty() {
   }
   renderUncertainty();
 }
-
-/** For tests: which generation the panel is on. @returns {number} */
-export const uncertaintyGeneration = () => mcGeneration;
-
-/** For tests: whether the held report is stale. @returns {boolean} */
-export const isUncertaintyStale = () => mcStale();
 
 /** A number for reading, at a sensible number of figures. */
 const fig = (v, sig = 5) =>

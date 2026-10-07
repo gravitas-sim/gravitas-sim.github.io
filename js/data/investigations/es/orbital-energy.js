@@ -15,8 +15,6 @@ export default {
   subtitle: 'Descubre qué decide si algo vuelve o no',
   duration: '35-45 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Lanza algo desde un planeta y descubre qué decide si vuelve a caer, gira para siempre o se marcha y no regresa jamás. Avanza desde el experimento hasta la idea que hay detrás: todo objeto cercano a una estrella lleva consigo una cantidad de energía, y el signo de ese único número resuelve la cuestión. Termina con un visitante interestelar real y decide por ti mismo si volverá.',
   objectives: [
     'Describir qué le ocurre a un objeto lanzado a medida que su velocidad supera el punto de escape',
     'Explicar con tus propias palabras por qué una energía total menor que cero significa que un objeto está atrapado',

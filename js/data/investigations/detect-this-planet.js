@@ -105,8 +105,6 @@ const DETECT_THIS_PLANET = {
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
-  summary:
-    'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two radial-velocity runs of the same star with the same instrument and the same number of nights, and find that one detects a Jupiter and the other cannot tell you anything. Then do it again with transits, where the same planet is a 587-sigma certainty from space and a 4-sigma maybe from three nights on the ground — and work out how many more nights would fix that, and where the answer stops improving.',
   objectives: [
     'Predict whether an observing schedule can detect a given planet, and say which of cadence, baseline and precision decides it',
     'Explain why more measurements over a longer baseline can be worse than fewer over a shorter one',

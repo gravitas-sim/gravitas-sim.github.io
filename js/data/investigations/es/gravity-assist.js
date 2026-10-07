@@ -20,8 +20,6 @@ export default {
     'El mismo sobrevuelo, medido en dos sistemas de referencia, con dos respuestas distintas',
   duration: '15-20 min',
   level: 'Astronomía introductoria',
-  summary:
-    'La Voyager 2 llegó a Júpiter a diez kilómetros por segundo y se marchó a veintiséis. Júpiter no quemó combustible por ella. Haz tú mismo la misma maniobra, mídela en el sistema del planeta y en uno inercial, lánzala por los dos lados del planeta a la vez, y averigua por qué las dos medidas no coinciden, y quién pagó en realidad.',
   objectives: [
     'Predecir si un sobrevuelo gana o pierde velocidad según por qué lado del planeta pase',
     'Decir qué cambia y qué no puede cambiar una asistencia gravitatoria, en el sistema del planeta y en uno inercial',

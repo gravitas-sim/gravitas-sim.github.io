@@ -127,8 +127,6 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
   tags: ['gravity', 'waves'],
   series: 'Gravitational waves',
   lock: { placement: true, inspector: false, areaSweep: false },
-  summary:
-    'Two objects circle each other on screen and emit no light at all. Over twenty-four short screens you work out what leaves them, what it does to anything it passes, and how an instrument could notice - and you learn to tell the three kinds of picture apart: the drawing, the calculation and the measurement. No equations, no prior physics, and it can be done with the sound off.',
   objectives: [
     'Say how a gravitational wave differs from light, from sound, and from the gravity that is already there',
     'Say what a source has to be doing: changing, and not the same in every direction',

@@ -134,8 +134,6 @@ const TRANSITS = {
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
-  summary:
-    'Work through the transit method from first principles on HD 209458 b, the first planet ever caught crossing its star: measure a depth and turn it into a radius, correct it for limb darkening, time two transits to get a period, read an atmosphere out of the color of the dip, and finish by finding the hidden companion star that makes the planet look smaller than it is.',
   objectives: [
     'Explain why almost every known exoplanet was found indirectly, and what each method actually measures',
     'Derive the relation between transit depth and radius ratio, and use it on a measured light curve',

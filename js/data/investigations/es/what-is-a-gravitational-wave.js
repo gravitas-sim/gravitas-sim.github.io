@@ -18,8 +18,6 @@ export default {
   series: 'Ondas gravitacionales',
   duration: '30-40 min',
   level: 'Principiante, sin conocimientos previos de física',
-  summary:
-    'Dos objetos giran uno alrededor del otro en pantalla y no emiten nada de luz. A lo largo de veinticuatro pasos cortos averiguas qué sale de ellos, qué le hace a todo lo que atraviesa y cómo podría notarlo un instrumento; y aprendes a distinguir los tres tipos de imagen: el dibujo, el cálculo y la medida. Sin ecuaciones, sin física previa, y se puede hacer con el sonido apagado.',
   objectives: [
     'Decir en qué se diferencia una onda gravitacional de la luz, del sonido y de la gravedad que ya está ahí',
     'Decir qué tiene que estar haciendo una fuente: cambiar, y no ser igual en todas las direcciones',
