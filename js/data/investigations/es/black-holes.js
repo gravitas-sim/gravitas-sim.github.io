@@ -16,8 +16,6 @@ export default {
     'Haz un agujero negro más grande y descubre algunas reglas sorprendentes',
   duration: '35-45 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Cambia una sola cosa de un agujero negro, su masa, y observa cómo responden cuatro propiedades completamente distintas. Su horizonte de sucesos crece al mismo paso que la masa. Su densidad media baja. Se vuelve más frío. Vive muchísimo más. Dos de esas cuatro sorprenden a casi todo el mundo, y las predecirás antes de medirlas.',
   objectives: [
     'Decir qué es el horizonte de sucesos de un agujero negro, y qué no es',
     'Describir cómo cambia el radio de Schwarzschild cuando cambia la masa',

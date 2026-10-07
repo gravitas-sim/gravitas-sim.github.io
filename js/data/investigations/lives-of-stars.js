@@ -124,8 +124,6 @@ const LIVES_OF_STARS = {
   prerequisites: [],
   tags: ['stars', 'stellar-evolution'],
   lock: { placement: true, inspector: false, areaSweep: false },
-  summary:
-    'A star is not a thing so much as a process that takes a while. Over thirty-four steps you follow three of them from a contracting cloud to what they leave behind — a solar-mass star to a white dwarf, a ten solar-mass star to a neutron star, and a forty solar-mass star to a black hole — reading every stage off the same diagram and the same published tracks. You will also meet the star that does none of this: a red dwarf that will still be burning hydrogen when the Universe is a hundred times its present age.',
   objectives: [
     'Follow one star across the H-R diagram from before it forms to after it stops',
     'Say what powers a star at each stage, and what it means when a stage ends',

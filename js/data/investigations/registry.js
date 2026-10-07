@@ -59,9 +59,25 @@ export { gradedSteps };
  */
 export let MANIFEST = MANIFEST_EN;
 
+/**
+ * The cards of a language with their summaries.
+ *
+ * The manifest carries no summary: the paragraph is written once, in
+ * summaries.js, and fetched here only when the lesson browser asks for the
+ * catalog, so opening a lesson never pays for twenty-four of them.
+ */
+const withSummaries = (cards, summaries) =>
+  cards.map(card => ({ ...card, summary: summaries[card.id] }));
+
 const MANIFESTS = {
-  en: () => Promise.resolve({ MANIFEST: MANIFEST_EN }),
-  es: () => import('./manifest.es.js'),
+  en: () =>
+    import('./summaries.js').then(s => ({
+      MANIFEST: withSummaries(MANIFEST_EN, s.SUMMARIES),
+    })),
+  es: () =>
+    Promise.all([import('./manifest.es.js'), import('./summaries.es.js')]).then(
+      ([m, s]) => ({ MANIFEST: withSummaries(m.MANIFEST, s.SUMMARIES_ES) })
+    ),
 };
 
 /**
@@ -215,7 +231,7 @@ export const getLessonLocale = () => lessonLocale;
  * @returns {Promise<Array>} The manifest for the current language
  */
 export function lessonCatalogReady() {
-  return manifestLoad || Promise.resolve(MANIFEST);
+  return manifestLoad || setLessonLocale(lessonLocale);
 }
 
 // And fetch the card-level catalog for that language, now, without waiting to

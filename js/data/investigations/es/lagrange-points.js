@@ -16,8 +16,6 @@ export default {
     'Regiones prohibidas, cinco puntos de equilibrio y un número conservado',
   duration: '25-30 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Dos estrellas en órbita circular y una mota de polvo que siente a las dos. Hay un número que puedes calcular sobre la mota y que te dice dónde tiene prohibido estar, y a medida que la aceleras se abren muros de uno en uno, en un orden fijo. Encuentra los cinco lugares donde la mota podría quedarse quieta, averigua a cuáles puede llegar y descubre después por qué «puede llegar» son tres preguntas distintas con el mismo abrigo.',
   objectives: [
     'Enunciar la normalización y el convenio de signo de la constante de Jacobi',
     'Predecir cómo cambia la región prohibida cuando el trazador acelera',

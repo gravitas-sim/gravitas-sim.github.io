@@ -119,8 +119,6 @@ const BINARY_STAR_PLANETS = {
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'stars', 'chaos'],
   lock: { placement: true },
-  summary:
-    'Most stars come in pairs, so most planets have to make a living in a system with two suns. Some orbits work and some do not, and the line between them is sharper than you would guess. Find it twice — once for a planet around one star, once for a planet around both — and then find out how much of what you just measured was the physics and how much was the arithmetic.',
   objectives: [
     'Predict which planetary orbits in a binary survive an integration, for a planet around one star and for a planet around both',
     'Distinguish a physical outcome — ejection, collision, survival — from a numerical failure of the integration that produced it',

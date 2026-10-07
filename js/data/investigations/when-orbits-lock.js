@@ -124,8 +124,6 @@ const WHEN_ORBITS_LOCK = {
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'resonance', 'solar-system'],
-  summary:
-    'Three of Jupiter’s moons keep time with each other, Pluto crosses Neptune’s orbit and has never come near it, and thousands of asteroids sit sixty degrees ahead of Jupiter and stay there. All three are the same phenomenon, and none of them is explained by the thing everybody quotes: the ratio of the periods. You will measure the ratios, find that the tidiest one in the system belongs to a moon in no resonance at all, and then measure the quantity that actually settles it — an angle that either swings or goes round.',
   objectives: [
     'Measure orbital periods and period ratios from the orbits themselves, and find the nearest small-integer ratio to each',
     'Explain why a near-rational period ratio is weak evidence, using a case where the closest ratio in the system belongs to a body in no resonance',

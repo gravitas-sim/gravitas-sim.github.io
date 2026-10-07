@@ -64,8 +64,6 @@ const POWER_LAW_GRAVITY = {
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'gravity'],
-  summary:
-    'Newton said gravity falls off as one over the distance squared. Not one over the distance, not one over the cube — squared, exactly. This investigation asks what that exactly is doing. You will turn the exponent up and down and measure three things: whether the orbit still closes, how the orbital period depends on distance, and which conservation laws survive. Two of those change immediately. One of them does not change at all, and the reason it does not is the most useful thing in the investigation.',
   objectives: [
     'State what the exponent in an inverse-square law is, and why changing it needs a reference distance to mean anything',
     'Measure apsidal precession from a simulated orbit and distinguish it from integration error by refining the timestep',

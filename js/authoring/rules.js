@@ -82,7 +82,6 @@ const MANIFEST_MIRRORED = [
   'subtitle',
   'duration',
   'level',
-  'summary',
   'thumbnail',
 ];
 

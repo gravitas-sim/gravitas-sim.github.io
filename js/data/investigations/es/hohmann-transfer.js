@@ -19,8 +19,6 @@ export default {
   subtitle: 'Dos impulsos, una larga travesía y la aritmética que decide ambos',
   duration: '20-25 min',
   level: 'Astronomía introductoria',
-  summary:
-    'Una nave a 1 UA, una estación a 2,5 UA y nada de combustible que desperdiciar. Calcula con lápiz los dos impulsos y la travesía entre ellos, y después vuela la maniobra a ver si el motor de física te da la razón. Te la da, con un error de una parte entre mil, y eso es lo que hace fiables las dos sorpresas que contiene: aceleras para alejarte, y al llegar tienes que acelerar otra vez o te caes de vuelta.',
   objectives: [
     'Predecir en qué sentido mueve una órbita un impulso, y dónde aparece el cambio',
     'Distinguir un impulso radial de uno transversal por lo que conserva cada uno',

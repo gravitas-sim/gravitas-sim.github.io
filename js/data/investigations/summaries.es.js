@@ -1,0 +1,61 @@
+// =============================================================================
+// Lesson card summaries (Spanish)
+// -----------------------------------------------------------------------------
+// The one place a lesson's summary paragraph is written. The lesson files carry
+// none and the generated manifest carries none: the lesson browser fetches this
+// file when it draws its cards, and the static catalog (../investigations.js)
+// attaches it for tools and tests, so the paragraph is shipped once instead of
+// in the lesson and again in the manifest. Edit it here; no generator run is
+// needed.
+// =============================================================================
+
+export const SUMMARIES_ES = {
+  'keplers-laws':
+    'Recorre las tres leyes de Kepler midiendo órbitas en lugar de que te las enseñen: encuentra el foco de una elipse, observa cómo se barren áreas iguales en tiempos iguales y recupera la ley de la potencia tres medios trazándola tú mismo.',
+  'retrograde-motion':
+    'Dos veces cada tres años Marte se detiene en el cielo, invierte su marcha y traza un bucle sobre sí mismo. Visto desde fuera no ocurre nada de eso: la Tierra y Marte giran alrededor del Sol en el mismo sentido y no retroceden jamás. Medirás ambas órbitas, predecirás qué hace Marte visto desde la Tierra, y después cambiarás el sistema de referencia y verás cómo el bucle se dibuja solo. Nada de la física cambia al hacerlo. Ese es todo el asunto, y es lo que llevó a la astronomía de Ptolomeo a Copérnico.',
+  'transit-photometry':
+    'Recorre el método del tránsito desde los primeros principios con HD 209458 b, el primer planeta al que se pilló cruzando su estrella: mide una profundidad y conviértela en un radio, corrígela por el oscurecimiento del limbo, cronometra dos tránsitos para obtener un periodo, lee una atmósfera en el color de la caída, y termina encontrando la estrella compañera oculta que hace que el planeta parezca más pequeño de lo que es.',
+  'orbital-energy':
+    'Lanza algo desde un planeta y descubre qué decide si vuelve a caer, gira para siempre o se marcha y no regresa jamás. Avanza desde el experimento hasta la idea que hay detrás: todo objeto cercano a una estrella lleva consigo una cantidad de energía, y el signo de ese único número resuelve la cuestión. Termina con un visitante interestelar real y decide por ti mismo si volverá.',
+  'weighing-stars':
+    'Las leyes de Kepler terminan con la corrección de Newton, y para esto sirve esa corrección. Observa dos estrellas girando una alrededor de la otra, encuentra el punto de equilibrio que ambas rodean, y usa nada más que el tamaño y la duración de su órbita para deducir cuánto pesa cada una. Ningún telescopio ha puesto jamás una estrella en una balanza; así es como se hace de verdad.',
+  'black-holes':
+    'Cambia una sola cosa de un agujero negro, su masa, y observa cómo responden cuatro propiedades completamente distintas. Su horizonte de sucesos crece al mismo paso que la masa. Su densidad media baja. Se vuelve más frío. Vive muchísimo más. Dos de esas cuatro sorprenden a casi todo el mundo, y las predecirás antes de medirlas.',
+  'radial-velocity':
+    'Un planeta que no puedes ver sigue tirando de su estrella, y la estrella se mueve. Mide ese movimiento de dos maneras distintas, conviértelo en una masa y combínalo con el radio que te dio un tránsito para deducir qué clase de mundo es.',
+  'goldilocks-question':
+    'Deduce tú mismo por qué un planeta al doble de distancia de su estrella recibe la cuarta parte de energía, por qué las estrellas tenues tienen sus zonas habitables muy pegadas, y por qué una órbita excéntrica implica que un planeta no recibe una cantidad de luz constante todo el año. Después termina con la pregunta más difícil que la expresión «zona habitable» invita a saltarse: ¿qué te dice realmente estar dentro de ella?',
+  'missing-mass':
+    'Hay dos maneras de pesar un sistema en el espacio: sumar la luz, u observar cómo se mueven las cosas. Para el Sistema Solar coinciden. Para una galaxia no, y para un cúmulo de galaxias difieren en más de un factor diez. Los estudiantes reparten masa y observan la curva de rotación que produce, convierten una velocidad medida en una masa encerrada, y después toman una curva de rotación construida con los parámetros publicados de una galaxia real e intentan ajustarla solo con estrellas —y fracasan, exactamente como fracasó el campo durante una década— antes de añadir un halo y acertar. Cierra con el cúmulo de Zwicky y el presupuesto de masa del universo. Así se encontró la materia oscura, y es una medida, no una teoría.',
+  tides:
+    'Las mareas no las causa una gravedad intensa. Las causa que la gravedad sea desigual a lo largo de un objeto, y toda la investigación se construye sobre esa única resta: quita la atracción sobre el centro a la atracción sobre el lado cercano y el lado lejano, y todo, desde las dos pleamares diarias hasta una estrella desgarrada por un agujero negro, sale de lo que queda.',
+  'butterfly-effect':
+    'Dos ejecuciones de las mismas tres estrellas, partiendo de posiciones que difieren en mil quinientos kilómetros dentro de un sistema de ciento treinta millones de kilómetros, acaban en sitios completamente distintos. Entremedias no ocurre nada aleatorio: la simulación es determinista, y ejecutarla dos veces con exactamente los mismos números da exactamente el mismo resultado. Por el camino medirás un caso que parece caos y no lo es, pondrás un número a la rapidez con la que falla la predicción, y comprobarás que ese número es una propiedad de la física y no del ordenador.',
+  'when-orbits-lock':
+    'Tres de las lunas de Júpiter se marcan el compás unas a otras, Plutón cruza la órbita de Neptuno y jamás se le ha acercado, y miles de asteroides se mantienen sesenta grados por delante de Júpiter sin moverse de ahí. Los tres casos son el mismo fenómeno, y ninguno queda explicado por lo que todo el mundo cita: la razón entre los periodos. Medirás esas razones, descubrirás que la más limpia de todo el sistema pertenece a una luna que no está en ninguna resonancia, y luego medirás la magnitud que sí resuelve la cuestión: un ángulo que o bien oscila o bien da la vuelta.',
+  'detect-this-planet':
+    'Un planeta está ahí o no está, pero que lo encuentres depende de decisiones que tomas antes de hacer una sola medida. Planifica dos campañas de observación de la misma estrella, con el mismo instrumento y el mismo número de noches, y descubre que una encuentra un Júpiter y la otra no puede decirte absolutamente nada.',
+  'design-the-schedule':
+    'Tienes ocho noches y una estrella. Planifica tú mismo la campaña en el panel de Velocidad Radial, comprométete con una predicción y luego observa dos calendarios en paralelo sobre la misma estrella, con el mismo instrumento y el mismo ruido: uno recupera un Júpiter y el otro ni siquiera puede establecer que la velocidad cambie. Después rompe tu propio resultado — cambia la semilla, pierde quince días por mal tiempo y escribe una lista de fechas a mano — hasta que puedas decir qué debe acompañar a un periodo publicado para que otra persona pueda comprobarlo.',
+  'binary-star-planets':
+    'La mayoría de las estrellas vienen de dos en dos, así que la mayoría de los planetas tienen que arreglárselas en un sistema con dos soles. Algunas órbitas funcionan y otras no, y la línea que las separa es más nítida de lo que imaginarías. Encuéntrala dos veces —una para un planeta alrededor de una estrella y otra para un planeta alrededor de las dos— y averigua después cuánto de lo que acabas de medir era la física y cuánto la aritmética.',
+  'gravity-assist':
+    'La Voyager 2 llegó a Júpiter a diez kilómetros por segundo y se marchó a veintiséis. Júpiter no quemó combustible por ella. Haz tú mismo la misma maniobra, mídela en el sistema del planeta y en uno inercial, lánzala por los dos lados del planeta a la vez, y averigua por qué las dos medidas no coinciden, y quién pagó en realidad.',
+  'hohmann-transfer':
+    'Una nave a 1 UA, una estación a 2,5 UA y nada de combustible que desperdiciar. Calcula con lápiz los dos impulsos y la travesía entre ellos, y después vuela la maniobra a ver si el motor de física te da la razón. Te la da, con un error de una parte entre mil, y eso es lo que hace fiables las dos sorpresas que contiene: aceleras para alejarte, y al llegar tienes que acelerar otra vez o te caes de vuelta.',
+  'lagrange-points':
+    'Dos estrellas en órbita circular y una mota de polvo que siente a las dos. Hay un número que puedes calcular sobre la mota y que te dice dónde tiene prohibido estar, y a medida que la aceleras se abren muros de uno en uno, en un orden fijo. Encuentra los cinco lugares donde la mota podría quedarse quieta, averigua a cuáles puede llegar y descubre después por qué «puede llegar» son tres preguntas distintas con el mismo abrigo.',
+  'what-is-a-gravitational-wave':
+    'Dos objetos giran uno alrededor del otro en pantalla y no emiten nada de luz. A lo largo de veinticuatro pasos cortos averiguas qué sale de ellos, qué le hace a todo lo que atraviesa y cómo podría notarlo un instrumento; y aprendes a distinguir los tres tipos de imagen: el dibujo, el cálculo y la medida. Sin ecuaciones, sin física previa, y se puede hacer con el sonido apagado.',
+  'listening-to-spacetime':
+    'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. Averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, comparas tu respuesta con lo que registraron dos detectores en septiembre de 2015, y luego mides tú mismo cinco fusiones más del archivo abierto. Puedes hacerlo todo con el sonido apagado.',
+  'a-universe-of-stars':
+    'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. Separas las cuatro cosas que siempre se confunden entre sí —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes, supergigantes y enanas blancas en el lugar que ocupan realmente, averiguas por qué las estrellas más pesadas viven menos tiempo y cuentas dos veces una población sintética para ver por qué las estrellas que puedes ver no son las estrellas que hay. Todo eso se apoya en modelos publicados. El último tramo no: cuatro espectros reales, observados por SDSS, y lo que resulta que un color no te puede decir.',
+  'lives-of-stars':
+    'Una estrella no es tanto una cosa como un proceso que lleva su tiempo. A lo largo de treinta y cuatro pasos sigues tres de ellos desde una nube en contracción hasta lo que dejan atrás: una estrella de masa solar hasta una enana blanca, una de diez masas solares hasta una estrella de neutrones y una de cuarenta hasta un agujero negro, leyendo cada etapa en el mismo diagrama y las mismas trazas publicadas. También conocerás a la estrella que no hace nada de esto: una enana roja que seguirá quemando hidrógeno cuando el Universo tenga cien veces su edad actual.',
+  'twelve-nights':
+    'Un comité te concede doce noches sobre una estrella desde un telescopio en Chile. La estrella está por encima del límite de masa de aire cinco horas cada noche y la ventana se abre cuatro minutos antes cada vez, así que tus doce medidas caen sobre un peine cuyo espaciado no elegiste. Planifica la campaña en el planificador de observación, mira la ventana espectral antes de tener una sola velocidad, y luego lleva dos planes al espectrógrafo en vivo y descubre que uno de ellos devuelve un planeta con el periodo equivocado. Termina averiguando qué lo arreglaría de verdad, y por qué más noches no lo harían.',
+  'power-law-gravity':
+    'Newton dijo que la gravedad decae como uno partido por la distancia al cuadrado. No a la primera, no al cubo: al cuadrado, exactamente. Esta investigación pregunta qué está haciendo ese «exactamente». Subirás y bajarás el exponente y medirás tres cosas: si la órbita sigue cerrándose, cómo depende el periodo orbital de la distancia y qué leyes de conservación sobreviven. Dos de ellas cambian de inmediato. Una no cambia en absoluto, y la razón de que no lo haga es lo más útil de la investigación.',
+};

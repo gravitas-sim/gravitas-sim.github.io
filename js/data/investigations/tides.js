@@ -121,8 +121,6 @@ const TIDES = {
   // the whole set without a second list to keep in step.
   tags: ['gravity', 'solar-system'],
   lock: { placement: true, inspector: true },
-  summary:
-    'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole investigation is built on that one subtraction: take the pull on the center away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
   objectives: [
     'Explain why an extended object feels a different gravitational pull at each point in it',
     'State that a tide is the difference between the local pull and the pull on the center, and use that to say why there are two ocean bulges rather than one',

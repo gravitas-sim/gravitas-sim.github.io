@@ -3,11 +3,13 @@
 // -----------------------------------------------------------------------------
 // Written by tools/build-investigation-manifest.js from the lesson files in
 // this directory. Run `npm run manifest` after changing a lesson's title,
-// subtitle, duration, level, summary, thumbnail, series, steps or objectives.
+// subtitle, duration, level, thumbnail, series, steps or objectives. A summary
+// is edited in summaries.js (summaries.es.js for Spanish) and needs no run.
 //
-// This is what the lesson browser reads. It carries exactly what a card shows
-// and nothing else, so ten cards cost a few kilobytes instead of the 225KB the
-// ten lessons weigh. The counts are counts rather than the arrays themselves:
+// This is what the lesson browser reads. It carries what a card shows, except
+// the summary, which lives once in summaries.js (the lesson reads it from
+// there too) and is joined on by registry.js. Ten cards cost a few kilobytes
+// instead of the 225KB the ten lessons weigh. The counts are counts rather than the arrays themselves:
 // a card quotes "35 steps", it does not render them.
 // =============================================================================
 
@@ -18,8 +20,6 @@ export const MANIFEST = [
     subtitle: 'Mide la forma, el ritmo y la duración de órbitas reales',
     duration: '35-45 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Recorre las tres leyes de Kepler midiendo órbitas en lugar de que te las enseñen: encuentra el foco de una elipse, observa cómo se barren áreas iguales en tiempos iguales y recupera la ley de la potencia tres medios trazándola tú mismo.',
     thumbnail: 'images/scenarios/keplers-2nd-law.webp',
     stepCount: 23,
     gradedCount: 13,
@@ -31,8 +31,6 @@ export const MANIFEST = [
     subtitle: 'Cambia el marco y catorce siglos de epiciclos se vienen abajo',
     duration: '35-45 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Dos veces cada tres años Marte se detiene en el cielo, invierte su marcha y traza un bucle sobre sí mismo. Visto desde fuera no ocurre nada de eso: la Tierra y Marte giran alrededor del Sol en el mismo sentido y no retroceden jamás. Medirás ambas órbitas, predecirás qué hace Marte visto desde la Tierra, y después cambiarás el sistema de referencia y verás cómo el bucle se dibuja solo. Nada de la física cambia al hacerlo. Ese es todo el asunto, y es lo que llevó a la astronomía de Ptolomeo a Copérnico.',
     thumbnail: 'images/scenarios/retrograde-mars.webp',
     stepCount: 33,
     gradedCount: 18,
@@ -45,8 +43,6 @@ export const MANIFEST = [
       'Mide un tránsito, calibra lo que te dice y descubre lo que se esconde',
     duration: '50-70 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Recorre el método del tránsito desde los primeros principios con HD 209458 b, el primer planeta al que se pilló cruzando su estrella: mide una profundidad y conviértela en un radio, corrígela por el oscurecimiento del limbo, cronometra dos tránsitos para obtener un periodo, lee una atmósfera en el color de la caída, y termina encontrando la estrella compañera oculta que hace que el planeta parezca más pequeño de lo que es.',
     thumbnail: 'images/scenarios/transit-lab.webp',
     series: 'Detección de exoplanetas',
     stepCount: 29,
@@ -59,8 +55,6 @@ export const MANIFEST = [
     subtitle: 'Descubre qué decide si algo vuelve o no',
     duration: '35-45 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Lanza algo desde un planeta y descubre qué decide si vuelve a caer, gira para siempre o se marcha y no regresa jamás. Avanza desde el experimento hasta la idea que hay detrás: todo objeto cercano a una estrella lleva consigo una cantidad de energía, y el signo de ese único número resuelve la cuestión. Termina con un visitante interestelar real y decide por ti mismo si volverá.',
     thumbnail: 'images/scenarios/interstellar-visitor.webp',
     stepCount: 24,
     gradedCount: 10,
@@ -73,8 +67,6 @@ export const MANIFEST = [
       'Usa una órbita para medir algo que no puedes poner en una balanza',
     duration: '35-45 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Las leyes de Kepler terminan con la corrección de Newton, y para esto sirve esa corrección. Observa dos estrellas girando una alrededor de la otra, encuentra el punto de equilibrio que ambas rodean, y usa nada más que el tamaño y la duración de su órbita para deducir cuánto pesa cada una. Ningún telescopio ha puesto jamás una estrella en una balanza; así es como se hace de verdad.',
     thumbnail: 'images/investigations/weighing-stars.webp',
     stepCount: 36,
     gradedCount: 18,
@@ -87,8 +79,6 @@ export const MANIFEST = [
       'Haz un agujero negro más grande y descubre algunas reglas sorprendentes',
     duration: '35-45 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Cambia una sola cosa de un agujero negro, su masa, y observa cómo responden cuatro propiedades completamente distintas. Su horizonte de sucesos crece al mismo paso que la masa. Su densidad media baja. Se vuelve más frío. Vive muchísimo más. Dos de esas cuatro sorprenden a casi todo el mundo, y las predecirás antes de medirlas.',
     thumbnail: 'images/investigations/black-holes.webp',
     stepCount: 30,
     gradedCount: 18,
@@ -101,8 +91,6 @@ export const MANIFEST = [
       'Observa el bamboleo de una estrella, pesa su planeta y combina las pistas',
     duration: '45-55 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Un planeta que no puedes ver sigue tirando de su estrella, y la estrella se mueve. Mide ese movimiento de dos maneras distintas, conviértelo en una masa y combínalo con el radio que te dio un tránsito para deducir qué clase de mundo es.',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detección de exoplanetas',
     stepCount: 38,
@@ -116,8 +104,6 @@ export const MANIFEST = [
       'Mueve un planeta, cambia su estrella y decide qué significa de verdad «habitable»',
     duration: '40-50 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Deduce tú mismo por qué un planeta al doble de distancia de su estrella recibe la cuarta parte de energía, por qué las estrellas tenues tienen sus zonas habitables muy pegadas, y por qué una órbita excéntrica implica que un planeta no recibe una cantidad de luz constante todo el año. Después termina con la pregunta más difícil que la expresión «zona habitable» invita a saltarse: ¿qué te dice realmente estar dentro de ella?',
     thumbnail: 'images/scenarios/habitable-zone-lab.webp',
     series: 'Detección de exoplanetas',
     stepCount: 37,
@@ -131,8 +117,6 @@ export const MANIFEST = [
       'Pesa un sistema dos veces y descubre que las dos respuestas no coinciden',
     duration: '45-60 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Hay dos maneras de pesar un sistema en el espacio: sumar la luz, u observar cómo se mueven las cosas. Para el Sistema Solar coinciden. Para una galaxia no, y para un cúmulo de galaxias difieren en más de un factor diez. Los estudiantes reparten masa y observan la curva de rotación que produce, convierten una velocidad medida en una masa encerrada, y después toman una curva de rotación construida con los parámetros publicados de una galaxia real e intentan ajustarla solo con estrellas —y fracasan, exactamente como fracasó el campo durante una década— antes de añadir un halo y acertar. Cierra con el cúmulo de Zwicky y el presupuesto de masa del universo. Así se encontró la materia oscura, y es una medida, no una teoría.',
     thumbnail: 'images/scenarios/milky-way-rotation.webp',
     stepCount: 33,
     gradedCount: 17,
@@ -145,8 +129,6 @@ export const MANIFEST = [
       'Estira un mundo, mueve una luna y descubre por qué la gravedad puede desgarrar objetos',
     duration: '35-45 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Las mareas no las causa una gravedad intensa. Las causa que la gravedad sea desigual a lo largo de un objeto, y toda la investigación se construye sobre esa única resta: quita la atracción sobre el centro a la atracción sobre el lado cercano y el lado lejano, y todo, desde las dos pleamares diarias hasta una estrella desgarrada por un agujero negro, sale de lo que queda.',
     thumbnail: 'images/scenarios/earth-moon-system.webp',
     stepCount: 30,
     gradedCount: 16,
@@ -159,8 +141,6 @@ export const MANIFEST = [
       'Ejecuta el mismo sistema dos veces y descubre cuánto dura la respuesta',
     duration: '55-70 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Dos ejecuciones de las mismas tres estrellas, partiendo de posiciones que difieren en mil quinientos kilómetros dentro de un sistema de ciento treinta millones de kilómetros, acaban en sitios completamente distintos. Entremedias no ocurre nada aleatorio: la simulación es determinista, y ejecutarla dos veces con exactamente los mismos números da exactamente el mismo resultado. Por el camino medirás un caso que parece caos y no lo es, pondrás un número a la rapidez con la que falla la predicción, y comprobarás que ese número es una propiedad de la física y no del ordenador.',
     thumbnail: 'images/scenarios/three-body-sensitivity-lab.webp',
     stepCount: 28,
     gradedCount: 13,
@@ -172,8 +152,6 @@ export const MANIFEST = [
     subtitle: 'Una razón es una pista. Descubre qué cuenta como prueba',
     duration: '55-70 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Tres de las lunas de Júpiter se marcan el compás unas a otras, Plutón cruza la órbita de Neptuno y jamás se le ha acercado, y miles de asteroides se mantienen sesenta grados por delante de Júpiter sin moverse de ahí. Los tres casos son el mismo fenómeno, y ninguno queda explicado por lo que todo el mundo cita: la razón entre los periodos. Medirás esas razones, descubrirás que la más limpia de todo el sistema pertenece a una luna que no está en ninguna resonancia, y luego medirás la magnitud que sí resuelve la cuestión: un ángulo que o bien oscila o bien da la vuelta.',
     thumbnail: 'images/scenarios/galilean-resonance.webp',
     stepCount: 34,
     gradedCount: 17,
@@ -186,8 +164,6 @@ export const MANIFEST = [
       'El mismo planeta, las mismas doce noches, dos respuestas distintas',
     duration: '30-35 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Un planeta está ahí o no está, pero que lo encuentres depende de decisiones que tomas antes de hacer una sola medida. Planifica dos campañas de observación de la misma estrella, con el mismo instrumento y el mismo número de noches, y descubre que una encuentra un Júpiter y la otra no puede decirte absolutamente nada.',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detección de exoplanetas',
     stepCount: 26,
@@ -201,8 +177,6 @@ export const MANIFEST = [
       'Ocho noches en el instrumento real, y los tiempos que elijas deciden la respuesta',
     duration: '35-40 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Tienes ocho noches y una estrella. Planifica tú mismo la campaña en el panel de Velocidad Radial, comprométete con una predicción y luego observa dos calendarios en paralelo sobre la misma estrella, con el mismo instrumento y el mismo ruido: uno recupera un Júpiter y el otro ni siquiera puede establecer que la velocidad cambie. Después rompe tu propio resultado — cambia la semilla, pierde quince días por mal tiempo y escribe una lista de fechas a mano — hasta que puedas decir qué debe acompañar a un periodo publicado para que otra persona pueda comprobarlo.',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detección de exoplanetas',
     stepCount: 15,
@@ -215,8 +189,6 @@ export const MANIFEST = [
     subtitle: 'Qué sobrevive alrededor de dos estrellas, y cómo lo sabrías',
     duration: '40-50 min',
     level: 'Astronomía introductoria',
-    summary:
-      'La mayoría de las estrellas vienen de dos en dos, así que la mayoría de los planetas tienen que arreglárselas en un sistema con dos soles. Algunas órbitas funcionan y otras no, y la línea que las separa es más nítida de lo que imaginarías. Encuéntrala dos veces —una para un planeta alrededor de una estrella y otra para un planeta alrededor de las dos— y averigua después cuánto de lo que acabas de medir era la física y cuánto la aritmética.',
     thumbnail: 'images/scenarios/binary-planet-lab.webp',
     stepCount: 37,
     gradedCount: 21,
@@ -229,8 +201,6 @@ export const MANIFEST = [
       'El mismo sobrevuelo, medido en dos sistemas de referencia, con dos respuestas distintas',
     duration: '15-20 min',
     level: 'Astronomía introductoria',
-    summary:
-      'La Voyager 2 llegó a Júpiter a diez kilómetros por segundo y se marchó a veintiséis. Júpiter no quemó combustible por ella. Haz tú mismo la misma maniobra, mídela en el sistema del planeta y en uno inercial, lánzala por los dos lados del planeta a la vez, y averigua por qué las dos medidas no coinciden, y quién pagó en realidad.',
     thumbnail: 'images/scenarios/gravity-assist-lab.webp',
     stepCount: 22,
     gradedCount: 13,
@@ -243,8 +213,6 @@ export const MANIFEST = [
       'Dos impulsos, una larga travesía y la aritmética que decide ambos',
     duration: '20-25 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Una nave a 1 UA, una estación a 2,5 UA y nada de combustible que desperdiciar. Calcula con lápiz los dos impulsos y la travesía entre ellos, y después vuela la maniobra a ver si el motor de física te da la razón. Te la da, con un error de una parte entre mil, y eso es lo que hace fiables las dos sorpresas que contiene: aceleras para alejarte, y al llegar tienes que acelerar otra vez o te caes de vuelta.',
     thumbnail: 'images/scenarios/orbital-transfer-lab.webp',
     stepCount: 22,
     gradedCount: 14,
@@ -257,8 +225,6 @@ export const MANIFEST = [
       'Regiones prohibidas, cinco puntos de equilibrio y un número conservado',
     duration: '25-30 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Dos estrellas en órbita circular y una mota de polvo que siente a las dos. Hay un número que puedes calcular sobre la mota y que te dice dónde tiene prohibido estar, y a medida que la aceleras se abren muros de uno en uno, en un orden fijo. Encuentra los cinco lugares donde la mota podría quedarse quieta, averigua a cuáles puede llegar y descubre después por qué «puede llegar» son tres preguntas distintas con el mismo abrigo.',
     thumbnail: 'images/scenarios/lagrange-point-lab.webp',
     stepCount: 20,
     gradedCount: 9,
@@ -271,8 +237,6 @@ export const MANIFEST = [
       'Una primera mirada a qué se mueve, qué viaja y qué siente un detector',
     duration: '30-40 min',
     level: 'Principiante, sin conocimientos previos de física',
-    summary:
-      'Dos objetos giran uno alrededor del otro en pantalla y no emiten nada de luz. A lo largo de veinticuatro pasos cortos averiguas qué sale de ellos, qué le hace a todo lo que atraviesa y cómo podría notarlo un instrumento; y aprendes a distinguir los tres tipos de imagen: el dibujo, el cálculo y la medida. Sin ecuaciones, sin física previa, y se puede hacer con el sonido apagado.',
     thumbnail: 'images/investigations/what-is-a-gravitational-wave.webp',
     series: 'Ondas gravitacionales',
     stepCount: 28,
@@ -286,8 +250,6 @@ export const MANIFEST = [
       'Averigua qué produjo una señal y compárala luego con la cosa real',
     duration: '75-90 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. Averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, comparas tu respuesta con lo que registraron dos detectores en septiembre de 2015, y luego mides tú mismo cinco fusiones más del archivo abierto. Puedes hacerlo todo con el sonido apagado.',
     thumbnail: 'images/investigations/listening-to-spacetime.webp',
     series: 'Ondas gravitacionales',
     stepCount: 32,
@@ -301,8 +263,6 @@ export const MANIFEST = [
       'Tamaño, color y el diagrama H-R, a partir de ocho estrellas modeladas',
     duration: '70-90 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. Separas las cuatro cosas que siempre se confunden entre sí —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes, supergigantes y enanas blancas en el lugar que ocupan realmente, averiguas por qué las estrellas más pesadas viven menos tiempo y cuentas dos veces una población sintética para ver por qué las estrellas que puedes ver no son las estrellas que hay. Todo eso se apoya en modelos publicados. El último tramo no: cuatro espectros reales, observados por SDSS, y lo que resulta que un color no te puede decir.',
     thumbnail: 'images/investigations/a-universe-of-stars.webp',
     stepCount: 37,
     gradedCount: 31,
@@ -314,8 +274,6 @@ export const MANIFEST = [
     subtitle: 'De las nubes a los restos cósmicos, por ocho trazas publicadas',
     duration: '80-100 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Una estrella no es tanto una cosa como un proceso que lleva su tiempo. A lo largo de treinta y cuatro pasos sigues tres de ellos desde una nube en contracción hasta lo que dejan atrás: una estrella de masa solar hasta una enana blanca, una de diez masas solares hasta una estrella de neutrones y una de cuarenta hasta un agujero negro, leyendo cada etapa en el mismo diagrama y las mismas trazas publicadas. También conocerás a la estrella que no hace nada de esto: una enana roja que seguirá quemando hidrógeno cuando el Universo tenga cien veces su edad actual.',
     thumbnail: 'images/investigations/lives-of-stars.webp',
     stepCount: 35,
     gradedCount: 29,
@@ -328,8 +286,6 @@ export const MANIFEST = [
       'Tú eliges cuándo mirar, y la mayor parte de la elección ya está hecha',
     duration: '40-50 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Un comité te concede doce noches sobre una estrella desde un telescopio en Chile. La estrella está por encima del límite de masa de aire cinco horas cada noche y la ventana se abre cuatro minutos antes cada vez, así que tus doce medidas caen sobre un peine cuyo espaciado no elegiste. Planifica la campaña en el planificador de observación, mira la ventana espectral antes de tener una sola velocidad, y luego lleva dos planes al espectrógrafo en vivo y descubre que uno de ellos devuelve un planeta con el periodo equivocado. Termina averiguando qué lo arreglaría de verdad, y por qué más noches no lo harían.',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detección de exoplanetas',
     stepCount: 13,
@@ -342,8 +298,6 @@ export const MANIFEST = [
     subtitle: 'Cambia el exponente y descubre qué dependía de él',
     duration: '45-60 min',
     level: 'Astronomía introductoria',
-    summary:
-      'Newton dijo que la gravedad decae como uno partido por la distancia al cuadrado. No a la primera, no al cubo: al cuadrado, exactamente. Esta investigación pregunta qué está haciendo ese «exactamente». Subirás y bajarás el exponente y medirás tres cosas: si la órbita sigue cerrándose, cómo depende el periodo orbital de la distancia y qué leyes de conservación sobreviven. Dos de ellas cambian de inmediato. Una no cambia en absoluto, y la razón de que no lo haga es lo más útil de la investigación.',
     thumbnail: 'images/scenarios/solar-system.webp',
     stepCount: 21,
     gradedCount: 14,

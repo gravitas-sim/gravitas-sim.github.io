@@ -73,6 +73,7 @@ import A_UNIVERSE_OF_STARS from './investigations/a-universe-of-stars.js';
 import LIVES_OF_STARS from './investigations/lives-of-stars.js';
 import TWELVE_NIGHTS from './investigations/twelve-nights.js';
 import { gradedSteps, positionIn } from './investigations/catalog.js';
+import { SUMMARIES } from './investigations/summaries.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
 // lessons form a sequence. Shadows measures a radius, Tug measures a mass and
@@ -118,6 +119,10 @@ export const INVESTIGATIONS = [
   // the thing this one takes apart, so it cannot come before them.
   POWER_LAW,
 ];
+
+// The lessons carry no card summary; it is written once in summaries.js and
+// attached here for the build tools and tests that read lessons statically.
+for (const inv of INVESTIGATIONS) inv.summary = SUMMARIES[inv.id];
 
 /**
  * Find an investigation by id.
