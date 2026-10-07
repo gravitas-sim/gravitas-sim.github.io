@@ -20,6 +20,14 @@ const PAGES = [
 ];
 
 test.describe('the offline note', () => {
+  // Pictures load as they scroll into view; a real page would fail them
+  // offline, which is not what is under test.
+  test.beforeEach(({ page }) =>
+    page.route(/\.(webp|png|jpg|svg)$/, route =>
+      route.fulfill({ status: 200, contentType: 'image/webp', body: '' })
+    )
+  );
+
   for (const url of PAGES) {
     test(`${url} says what is saved, once, and goes when the connection returns`, async ({
       page,
@@ -66,12 +74,13 @@ test.describe('the offline note', () => {
     page,
     context,
   }) => {
-    await page.goto('/evaluation/', { waitUntil: 'load' });
+    await page.goto('/library/', { waitUntil: 'load' });
     await page.evaluate(() => {
       localStorage.setItem('gravitas_locale', 'es');
       document.documentElement.lang = 'es';
     });
     await page.reload({ waitUntil: 'load' });
+    await expect(page.locator('html')).toHaveAttribute('lang', 'es');
     await context.setOffline(true);
     const box = page.locator('.gs-offline-box');
     await expect(box).toContainText('Estás sin conexión.');
