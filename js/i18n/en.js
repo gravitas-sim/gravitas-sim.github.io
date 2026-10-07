@@ -289,9 +289,7 @@ export const EN = {
     'Open the A/B experiment bench: capture a starting state, record a baseline run, return to exactly that start, change one variable and record a second run, then compare the two on the same simulated-time axis.',
   'failure.load': 'That could not be loaded. Check your connection.',
   'failure.retry': 'Retry',
-  'failure.reload':
-    'It still could not be loaded. Reload the page; saved work is kept.',
-  'failure.reloadNow': 'Reload',
+  'failure.reload': 'Still not loaded. Reload the page; saved work is kept.',
   'rail.toggleNotebook': 'Evidence Notebook',
   'rail.toggleNotebook.hint':
     'Open the evidence notebook: readings you have saved from the instruments, the analysis workspace and the bench, each one frozen with the conditions it was taken under, and each with room for your claim, your evidence and the limitations you can see.',

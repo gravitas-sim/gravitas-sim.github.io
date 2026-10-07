@@ -247,8 +247,7 @@ export const ES = {
   'failure.load': 'No se pudo cargar. Comprueba tu conexión.',
   'failure.retry': 'Reintentar',
   'failure.reload':
-    'Sigue sin cargarse. Recarga la página; el trabajo guardado se conserva.',
-  'failure.reloadNow': 'Recargar',
+    'Sigue sin cargar. Recarga la página; tu trabajo se conserva.',
   'rail.toggleNotebook': 'Cuaderno de pruebas',
   'rail.toggleNotebook.hint':
     'Abrir el cuaderno de pruebas: las mediciones que has guardado desde los instrumentos, el espacio de análisis y el banco, cada una congelada con las condiciones en que se tomó y con espacio para tu afirmación, tus pruebas y las limitaciones que veas.',

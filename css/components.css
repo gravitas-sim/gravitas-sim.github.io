@@ -1623,7 +1623,7 @@
   }
 
   /* A toast with a button in it has to be clickable. */
-  .toast.has-action {
+  .toast:has(button) {
     pointer-events: auto;
   }
 

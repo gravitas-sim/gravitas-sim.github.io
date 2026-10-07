@@ -3083,6 +3083,7 @@ export const ES_DEFERRED = {
   },
   'export.truncated':
     'Se exportaron las primeras {n} filas: la grabación no cabía en un solo archivo.',
+  'inv.load.failed': 'No se pudo cargar esa investigación. Inténtalo de nuevo.',
   'inv.link.unknown':
     'Ese enlace de investigación no corresponde a ninguna investigación.',
   'activity.error.noActivity':

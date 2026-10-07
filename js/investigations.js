@@ -4343,7 +4343,7 @@ function openCardLesson(btn, id = btn.dataset.investigation) {
   const wasCta = cta?.textContent;
   if (cta) cta.textContent = t('inv.card.loading');
   return openInvestigation(id)
-    .catch(() => loadFailed(() => openCardLesson(btn, id)))
+    .catch(err => loadFailed(() => openCardLesson(btn, id), err))
     .finally(() => {
       btn.removeAttribute('aria-busy');
       if (cta && wasCta) cta.textContent = wasCta;
@@ -4931,8 +4931,8 @@ function openInvestigationFromHash() {
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id).catch(() =>
-    loadFailed(() => openInvestigation(id).catch(() => {}))
+  openInvestigation(id).catch(err =>
+    loadFailed(() => openInvestigation(id).catch(() => {}), err)
   );
 }
 
@@ -5256,8 +5256,8 @@ export function initInvestigations({ signal } = {}) {
             : (inv, index) => preview.renderAuthorBar(inv, index),
         };
         if (!student) preview.mountAuthorBar(index => goToStep(index));
-        openInvestigation(request.lesson).catch(() =>
-          loadFailed(() => location.reload())
+        openInvestigation(request.lesson).catch(err =>
+          loadFailed(() => location.reload(), err)
         );
       })
       .catch(() => {

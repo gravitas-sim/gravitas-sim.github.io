@@ -3050,6 +3050,7 @@ export const EN_DEFERRED = {
   'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
   'export.truncated':
     'Exported the first {n} rows: the recording was larger than one file.',
+  'inv.load.failed': 'That investigation could not be loaded. Try again.',
   'inv.link.unknown':
     'That investigation link does not match an investigation.',
   'activity.error.noActivity':
