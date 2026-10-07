@@ -349,7 +349,11 @@ describe('the analysis schema', () => {
       },
       engine: { fingerprint: fits[0].document.engine.fingerprint },
       consumed: [
-        { kind: 'observation', id: 'synthetic:rv', digest: c.data?.key ?? null },
+        {
+          kind: 'observation',
+          id: 'synthetic:rv',
+          digest: c.data?.key ?? null,
+        },
       ],
       comparison: c,
       methods: 'Compared by AIC and BIC.',
