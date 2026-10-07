@@ -1514,8 +1514,12 @@ function initSurveyControls() {
 async function openWorkspaceOnCurrentRun() {
   const run = radialVelocitySurvey();
   if (!run.measurements.length) return;
-  const { openRvWorkspace } = await import('./rvWorkspaceBridge.js');
-  await openRvWorkspace(recordingPayload(run));
+  try {
+    const { openRvWorkspace } = await import('./rvWorkspaceBridge.js');
+    await openRvWorkspace(recordingPayload(run));
+  } catch {
+    (await import('./notify.js')).loadFailed(openWorkspaceOnCurrentRun);
+  }
 }
 
 /**

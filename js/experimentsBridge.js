@@ -11,8 +11,6 @@
 // student has pressed anything.
 // =============================================================================
 
-import { t } from './i18n/index.js';
-
 let loading = null;
 
 /**
@@ -67,6 +65,8 @@ export function ensureBench() {
       panel.setShareHandler(() => share.openShareDialog());
       return { bench, panel };
     })();
+    // A failed import is not kept: the next request tries again.
+    loading.catch(() => (loading = null));
   }
   return loading;
 }
@@ -103,8 +103,7 @@ export function watchForBench() {
     } catch (err) {
       console.error('The experiment bench could not be loaded:', err);
       btn.textContent = previous;
-      const { toast } = await import('./controls.js');
-      toast(t('bench.error.load'));
+      (await import('./notify.js')).loadFailed(() => btn.click());
     } finally {
       btn.disabled = false;
     }

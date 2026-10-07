@@ -43,6 +43,8 @@ function ensureDialog() {
         mod.initExportDialog({ signal: signal ?? undefined });
         return mod;
       });
+    // A failed import is not kept: the next request tries again.
+    loading.catch(() => (loading = null));
   }
   return loading;
 }

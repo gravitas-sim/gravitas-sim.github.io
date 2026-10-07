@@ -14,7 +14,6 @@
 // updater is handed over here once the module has loaded.
 // =============================================================================
 
-import { t } from './i18n/index.js';
 import {
   loadFragment,
   mountFragment,
@@ -53,6 +52,8 @@ export function ensureView3D() {
         return mod;
       }
     );
+    // A failed import is not kept: the next request tries again.
+    loading.catch(() => (loading = null));
   }
   return loading;
 }
@@ -104,8 +105,8 @@ export function watchFor3DView() {
       console.error('The spacetime view could not be loaded:', err);
       btn.textContent = previous;
       btn.disabled = false;
-      const { toast } = await import('./controls.js');
-      toast(t('view3d.loadFailed'));
+      btn.addEventListener('click', firstClick); // the retry
+      (await import('./notify.js')).loadFailed(() => btn.click());
     }
   };
 

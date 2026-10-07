@@ -144,7 +144,7 @@ import { normalizeSeed, formatSeed } from './rng.js';
 // dynamic-imports the loader, the loader dynamic-imports this - and although
 // every edge in it was lazy, a cycle that exists only because of a convenience
 // re-export is not one worth keeping.
-import { toast, announce } from './notify.js';
+import { toast, announce, loadFailed } from './notify.js';
 import { buildLabReport, downloadPdf, reportMessages } from './labReport.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
@@ -4343,7 +4343,7 @@ function openCardLesson(btn, id = btn.dataset.investigation) {
   const wasCta = cta?.textContent;
   if (cta) cta.textContent = t('inv.card.loading');
   return openInvestigation(id)
-    .catch(() => toast(t('inv.load.failed')))
+    .catch(() => loadFailed(() => openCardLesson(btn, id)))
     .finally(() => {
       btn.removeAttribute('aria-busy');
       if (cta && wasCta) cta.textContent = wasCta;
@@ -4931,7 +4931,9 @@ function openInvestigationFromHash() {
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id).catch(() => toast(t('inv.load.failed')));
+  openInvestigation(id).catch(() =>
+    loadFailed(() => openInvestigation(id).catch(() => {}))
+  );
 }
 
 // A language change swaps the manifest the cards are drawn from, and rewrites
@@ -5231,7 +5233,7 @@ export function initInvestigations({ signal } = {}) {
         .then(([loaded, builder]) => {
           if (loaded) builder.openBuilder(loaded);
         })
-        .catch(() => toast(t('inv.load.failed')));
+        .catch(() => loadFailed(() => location.reload()));
     }
   }
 
@@ -5255,7 +5257,7 @@ export function initInvestigations({ signal } = {}) {
         };
         if (!student) preview.mountAuthorBar(index => goToStep(index));
         openInvestigation(request.lesson).catch(() =>
-          toast(t('inv.load.failed'))
+          loadFailed(() => location.reload())
         );
       })
       .catch(() => {

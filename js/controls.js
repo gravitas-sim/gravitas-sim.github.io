@@ -19,7 +19,7 @@ import {
 import { state, SETTINGS, current_scenario_name } from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
 import { ensurePauseAtEvent, renderEventMarker } from './pauseAtEventBridge.js';
-import { toast, announce } from './notify.js';
+import { toast, announce, loadFailed } from './notify.js';
 export { toast, announce };
 import {
   tickTimeline,
@@ -458,7 +458,11 @@ function setupShortcuts() {
     run: () => {
       // Through the bridge, which initialises the dialog first; lazily, for the
       // same reason as the two above (exportDialog.js imports this module).
-      import('./exportBridge.js').then(m => m.openExport());
+      const open = () =>
+        import('./exportBridge.js')
+          .then(m => m.openExport())
+          .catch(() => loadFailed(open));
+      open();
     },
   });
   registerShortcut({
