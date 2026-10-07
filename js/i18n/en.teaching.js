@@ -413,7 +413,8 @@ export const EN_TEACHING = {
   'teach.feedback.form.clear': 'Clear them',
   'teach.feedback.form.saved': 'Kept in this browser. Nothing has been sent.',
   'teach.feedback.form.cleared': 'Cleared.',
-  'teach.feedback.form.empty': 'Nothing to save yet.',
+  'teach.feedback.form.empty':
+    'Nothing to save yet. Write in any field above; notes stay in this browser until you save them.',
   'teach.feedback.form.exported': 'Saved as {name}.',
   'teach.feedback.form.privacy':
     'No name, no email, no institution and no telemetry. Stored in this browser only, under one key you can clear above.',

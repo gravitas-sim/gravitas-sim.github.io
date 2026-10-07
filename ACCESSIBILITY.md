@@ -125,6 +125,19 @@ literal durations and had four loops that never stopped. It does now.
 **Two headings competing for the top level.** The splash wordmark was an `h1`
 alongside the page's own. It is a paragraph.
 
+**Empty and offline states (Prompt 57, F and G).** An empty list now says what
+to press: the Observatory archive and fit panel, the experiments results, a
+catalog search that finds nothing, the instructor filter, the validation page
+when its results file cannot be read, and the teaching notes export. They are
+`.ui-state.is-empty` blocks in both languages, static text a reader meets in
+place, not announced. The offline note is one block the shell stamps into every
+page: when the connection drops it is inserted once into a `role="status"`
+region (so a screen reader hears it once), it lists the pages the service worker
+precaches (read from `sw-manifest.js`, not hand-written), says other pages work
+only if opened before, and goes when the connection returns. Its Dismiss button
+and Escape close it. `e2e/offlineStates.spec.js` and `e2e/emptyStates.spec.js`
+induce each state; `e2e/accessibility.spec.js` covers the touched pages.
+
 ## The canvas
 
 The simulation canvas has an accessible name and points, through

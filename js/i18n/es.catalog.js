@@ -29,7 +29,7 @@ export const ES_CATALOG = {
   'cat.filter.type.built-in': 'Incluido en Gravitas',
   'cat.filter.type.installed': 'Instalado aquí',
   'cat.count': 'Se muestran {shown} de {total}.',
-  'cat.none': 'No hay coincidencias.',
+  'cat.none': 'No hay coincidencias. Borra la búsqueda y elige Todo.',
   'cat.type.data-pack': 'Paquete de datos',
   'cat.type.course-pack': 'Curso',
   'cat.type.built-in': 'Incluido',

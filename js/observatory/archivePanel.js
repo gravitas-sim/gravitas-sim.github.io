@@ -166,6 +166,13 @@ function build(root, ctx, initialName) {
     hidden: true,
   });
   const results = el('div', { id: 'arcResults' });
+  results.append(
+    el('p', {
+      class: 'ui-state is-empty',
+      'data-arc-empty': '',
+      text: t('obs.arc.empty'),
+    })
+  );
   // The root is the panel's <details>: its summary stays, the rest is ours.
   const body = el(
     'div',
@@ -220,7 +227,11 @@ function build(root, ctx, initialName) {
       if (!pos) {
         busy(false);
         results.append(
-          el('p', { id: 'arcNotFound', text: t('obs.arc.notFound', { name }) })
+          el('p', {
+            id: 'arcNotFound',
+            class: 'ui-state is-empty',
+            text: t('obs.arc.notFound', { name }),
+          })
         );
         ctx.status(t('obs.arc.notFound', { name }));
         return;
@@ -265,7 +276,11 @@ function build(root, ctx, initialName) {
     }
     if (!sources.length) {
       results.append(
-        el('p', { id: 'arcNoSource', text: t('obs.arc.noSource') })
+        el('p', {
+          id: 'arcNoSource',
+          class: 'ui-state is-empty',
+          text: t('obs.arc.noSource'),
+        })
       );
       ctx.status(t('obs.arc.noSource'));
       return;

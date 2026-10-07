@@ -186,6 +186,16 @@ export function mountFitPanel(root, ctx) {
   const refusals = el('ul', { id: 'fitRefusals', class: 'ui-alert is-error' });
   const cost = el('p', { id: 'fitEstimate', class: 'ui-hint' });
   const results = el('div', { id: 'fitResults' });
+  // Nothing fitted yet: say what to press, until a fit is asked for.
+  const emptyFit = () =>
+    results.replaceChildren(
+      el('p', {
+        class: 'ui-state is-empty',
+        id: 'fitEmpty',
+        text: t('obs.fit.empty'),
+      })
+    );
+  emptyFit();
   const exportBtn = el('button', {
     id: 'fitExport',
     class: 'ui-button',
@@ -1014,7 +1024,7 @@ export function mountFitPanel(root, ctx) {
       if (next !== o) {
         job?.cancel('the data changed');
         last = null;
-        results.replaceChildren();
+        emptyFit();
         exportBtn.hidden = true;
       }
       o = next;
