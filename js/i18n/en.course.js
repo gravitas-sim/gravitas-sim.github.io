@@ -34,7 +34,7 @@ export const EN_COURSE = {
   'course.hint.id':
     'Lower-case words joined by hyphens. It names the file and the drafts.',
   'course.hint.pinning':
-    "Exact: an archive; any change to an investigation it names waits for your review. Compatible: changes within the same major version are accepted; larger ones wait.",
+    'Exact: an archive; any change to an investigation it names waits for your review. Compatible: changes within the same major version are accepted; larger ones wait.',
   'course.hint.teacherGuide':
     'How to run the course, for another instructor. Shown on the course home only when "Notes for instructors" is ticked.',
   'course.hint.objectives':
@@ -42,7 +42,7 @@ export const EN_COURSE = {
   'course.hint.units':
     'Units run in order, and items in order within them. There are no dates: an instructor sets those. An item on the introductory or advanced path is optional, and the core may not depend on one.',
   'course.hint.minutesDerived':
-    "Leave blank to use its own time (for an activity, its share of the steps).",
+    'Leave blank to use its own time (for an activity, its share of the steps).',
   'course.hint.seed':
     'A word such as orbit-1: the same word always builds the same world.',
   'course.hint.dataset':
@@ -120,7 +120,7 @@ export const EN_COURSE = {
   'course.standing.moved': 'now comes from another package.',
   'course.standing.unpinned': 'not pinned yet.',
   'course.standing.missing': 'no longer in Gravitas.',
-  'course.steps.loading': "Loading the steps.",
+  'course.steps.loading': 'Loading the steps.',
   'course.steps.needed': '(needed by a chosen step)',
   'course.checks.running': 'Checking.',
   'course.checks.valid': 'Nothing to fix.',
