@@ -36,7 +36,8 @@ export interface CapabilityPackage {
     routes?: Array<{ path: string }>;
     models?: Array<{ id: string }>;
     scenarios?: Array<{ id: string; file?: string }>;
-    investigations?: Array<{ id: string; entry?: string }>;
+    /** `file`: an investigation-pack extension's gravitas.investigation-pack/1 file. */
+    investigations?: Array<{ id: string; entry?: string; file?: string }>;
     translations?: Array<{ locale: string; investigation?: string; entry?: string }>;
   };
   assets?: Array<{ path: string; role: AssetRole; offline: Offline }>;
@@ -61,6 +62,74 @@ export interface CoursePack {
     title: Localized;
     lessons: Array<{ lesson: string; teacherNote?: Localized; studentNote?: Localized }>;
   }>;
+}
+
+/** A text in each locale, in plain words, with the digest of the English the Spanish was written from. */
+export type PlainText = Localized & { esOf?: string };
+
+/** What a lesson was when a course pack /2 named it. */
+export interface LessonPin {
+  /** The digest of the lesson's steps. */
+  fp: string;
+  /** How many steps it had. */
+  n: number;
+  /** The package it came from, and its version. */
+  pkg?: [string, string];
+  /** An assignment's pin: the digest of each assigned step, in order. */
+  f?: string[];
+}
+
+/** One item of a course pack /2 (sdk/schemas/course-pack-2.schema.json). */
+export type CourseItem = {
+  id: string;
+  path?: 'core' | 'intro' | 'advanced';
+  minutes?: number;
+  objectives?: string[];
+  needs?: string[];
+  studentNote?: PlainText;
+  teacherNote?: PlainText;
+} & (
+  | { kind: 'lesson'; lesson: string; pin?: LessonPin }
+  | {
+      kind: 'assignment';
+      lesson: string;
+      steps: string[];
+      title?: PlainText;
+      intro?: PlainText;
+      assignment: { id: string; created: string };
+      pin?: LessonPin;
+    }
+  | { kind: 'scenario'; scenario: string; seed: string; paused?: boolean; title?: PlainText }
+  | { kind: 'dataset'; dataset: string; title?: PlainText }
+  | {
+      kind: 'reading';
+      title: PlainText;
+      cite: { authors: string; year: number; source: string; doi?: string; url?: string };
+      license?: string;
+      access: 'open' | 'library' | 'print';
+    }
+);
+
+/**
+ * gravitas.course-pack/2: what the course-pack builder writes. A course-pack
+ * extension may carry this or the /1 form (CoursePack).
+ */
+export interface CoursePack2 {
+  format: 'gravitas.course-pack';
+  formatVersion: 2;
+  id: string;
+  version: string;
+  /** The platform version it was made with. */
+  gravitas: string;
+  locales: string[];
+  pinning: 'exact' | 'compatible';
+  title: PlainText;
+  summary?: PlainText;
+  audience?: PlainText;
+  teacherGuide?: PlainText;
+  objectives?: Array<{ id: string; text: PlainText }>;
+  prerequisites?: Array<{ lesson: string } | { text: PlainText }>;
+  units: Array<{ id: string; title: PlainText; summary?: PlainText; items: CourseItem[] }>;
 }
 
 /** gravitas.scenario-pack/1 (sdk/schemas/scenario-pack-1.schema.json). */
@@ -189,7 +258,7 @@ export interface Instrument<V = Record<string, number>> {
 export const SDK_VERSION: string;
 export const PLATFORM_API: string;
 export const FORMATS: Readonly<Record<string, number>>;
-export const EXTENSION_TYPES: Readonly<Record<'data-pack' | 'course-pack' | 'scenario-pack' | 'capability', { kind: 'declarative' | 'built-in'; code: boolean }>>;
+export const EXTENSION_TYPES: Readonly<Record<'data-pack' | 'course-pack' | 'investigation-pack' | 'scenario-pack' | 'capability', { kind: 'declarative' | 'built-in'; code: boolean }>>;
 export const LOCALES: readonly string[];
 
 export function publicIds(): Promise<{

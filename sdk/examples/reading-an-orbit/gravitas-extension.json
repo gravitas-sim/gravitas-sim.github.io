@@ -1,0 +1,43 @@
+{
+  "format": "gravitas.capability-package",
+  "formatVersion": 1,
+  "id": "example.reading-an-orbit",
+  "version": "1.0.0",
+  "kind": "declarative",
+  "gravitas": "^1.0.0",
+  "title": {
+    "en": "Reading an orbit: a guided investigation",
+    "es": "Leer una órbita: una investigación guiada"
+  },
+  "provides": {
+    "investigations": [
+      {
+        "id": "reading-an-orbit",
+        "file": "investigation.json"
+      }
+    ]
+  },
+  "assets": [
+    {
+      "path": "investigation.json",
+      "role": "data",
+      "offline": "optional"
+    }
+  ],
+  "citations": [],
+  "licenses": [
+    {
+      "scope": "investigation.json",
+      "license": "CC-BY-4.0"
+    }
+  ],
+  "offline": {
+    "policy": "precache"
+  },
+  "validation": [
+    {
+      "check": "registry:sdk-extensions"
+    }
+  ],
+  "migrations": []
+}

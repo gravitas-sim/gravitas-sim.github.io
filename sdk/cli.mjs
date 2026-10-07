@@ -2,7 +2,7 @@
 // =============================================================================
 // The Gravitas Extension SDK
 // -----------------------------------------------------------------------------
-//   npm run sdk -- init <data-pack|course-pack|scenario-pack|capability> <id>
+//   npm run sdk -- init <data-pack|course-pack|investigation-pack|scenario-pack|capability> <id>
 //     [--dir <path>] [--from <studio-export.json>]
 //   npm run sdk -- validate <extension-dir|archive.gxp>... | --all [--json]
 //   npm run sdk -- test <extension-dir|archive.gxp>... | --all

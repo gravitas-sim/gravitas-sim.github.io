@@ -168,6 +168,10 @@
             "properties": {
               "id": {
                 "type": "string"
+              },
+              "file": {
+                "type": "string",
+                "description": "For an investigation-pack extension: the gravitas.investigation-pack/1 file (sdk/schemas/investigation-pack-1.schema.json)."
               }
             }
           }
@@ -210,6 +214,10 @@
             "properties": {
               "id": {
                 "type": "string"
+              },
+              "file": {
+                "type": "string",
+                "description": "For a course-pack extension: the gravitas.course-pack/1 or /2 file (sdk/schemas/course-pack-1.schema.json, course-pack-2.schema.json)."
               }
             }
           }
