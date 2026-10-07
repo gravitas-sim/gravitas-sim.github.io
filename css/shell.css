@@ -296,3 +296,29 @@ body[data-presentation='lecture'] .gs-shell {
     display: none;
   }
 }
+
+/* The offline note (tools/shell.mjs): a bordered block under the header while
+   the connection is down. */
+.gs-offline-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin: var(--space-2) var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  color: var(--text-primary);
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.gs-offline-box p {
+  flex: 1 1 24rem;
+  margin: 0;
+}
+
+@media print {
+  .gs-offline {
+    display: none;
+  }
+}
