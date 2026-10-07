@@ -265,6 +265,9 @@ const MOBILE_SPEC = /mobile\.spec\.js/;
  */
 const WALKTHROUGH_SPEC = /authorWalk\.spec\.js/;
 const LAYOUT_SPEC = /responsiveLayout\.spec\.js/;
+// Sets its own viewports and touch per test; the phone profile adds the real
+// device's user agent and touch screen to the same walk (P58 R-A).
+const NAV_SPEC = /twoActivationNav\.spec\.js/;
 const TABLET_WALK = Boolean(process.env.GRAVITAS_E2E_TABLET_WALK);
 
 /**
@@ -386,7 +389,7 @@ export default defineConfig({
           {
             name: 'mobile-chrome',
             use: { ...devices['Pixel 7'] },
-            testMatch: [MOBILE_SPEC, WALKTHROUGH_SPEC, LAYOUT_SPEC],
+            testMatch: [MOBILE_SPEC, WALKTHROUGH_SPEC, LAYOUT_SPEC, NAV_SPEC],
           },
           {
             name: 'tablet',
