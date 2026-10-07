@@ -1,0 +1,44 @@
+{
+  "kind": "gravitas-reliability-check",
+  "appVersion": "2026.09.3",
+  "ranAt": 1700000003000,
+  "experiment": {
+    "name": "Planet a doubled",
+    "scenario": "Binary Planet Lab",
+    "seed": "2a",
+    "initialStateHash": "deadbeef"
+  },
+  "method": {
+    "description": "The same captured start, run twice over the same simulated duration: once at the step the engine was taking and once at half of it. The frame advance is identical in both, so both runs sample the same instants.",
+    "integrator": "Symplectic Euler",
+    "duration": 125,
+    "tolerance": 0.05,
+    "steps": {
+      "full": 0.0166,
+      "half": 0.0083
+    },
+    "substeps": 4
+  },
+  "verdict": {
+    "outcome": "converging",
+    "reason": "halving the step moved the outcome by 0.2%",
+    "outcomeMetric": "separation",
+    "pathMetric": "separation",
+    "meaning": "Halving the step did not move the measured outcome. This is not a statement that the result is correct."
+  },
+  "conclusions": [
+    {
+      "metric": "separation",
+      "agreement": 0.998
+    }
+  ],
+  "conservation": {
+    "energy": 0.001,
+    "note": "Reported as separate evidence. Conservation does not establish trajectory accuracy and was not used to compute the verdict."
+  },
+  "series": [],
+  "cost": {
+    "substeps": 4
+  },
+  "explanation": "fixture"
+}

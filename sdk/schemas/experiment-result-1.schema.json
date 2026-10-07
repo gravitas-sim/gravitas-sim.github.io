@@ -2,17 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/experiment-result-1.schema.json",
   "title": "gravitas.experiment-result/1",
-  "description": "A finished run of a gravitas.experiment/1, as the experiment runner (/experiments/, js/experimentsPage.js) saves one: the manifest and its hash, the engine's fingerprint and the build, the device, when it ran and how it ended, every trial in planned order, and the summary per parameter value. js/experiments/experimentManifest.js reproducibility() reads it, and says whether it can be reproduced here; js/analysis/sweepAnalysis.js analyses it. Neither refuses a field it does not know, so neither does this schema. EXPERIMENTS.md describes it; FORMATS.md lists it.",
+  "description": "A finished run of a gravitas.experiment/1, as the experiment runner (/experiments/, js/experimentsPage.js) saves one: the manifest and its hash, the engine's fingerprint and the build, the device, when it ran and how it ended, every trial in planned order, and the summary per parameter value. js/experiments/experimentManifest.js reproducibility() reads it, and says whether it can be reproduced here; js/analysis/sweepAnalysis.js analyses it. Neither refuses a field it does not know, so neither does this schema. EXPERIMENTS.md describes it; FORMATS.md lists it. Two further shapes are the bench's: a saved A/B comparison (`kind` comparison, what the experiment store keeps, with its `runs`), and a reliability check (`kind` reliability-check, the same start run at the engine's step and at half of it). The id `gravitas-reliability-check` (a `kind` and no format) is the retired name of the second: readers accept it as version 0.",
   "type": "object",
   "required": [
     "format",
-    "formatVersion",
-    "hash",
-    "manifest",
-    "engine",
-    "status",
-    "trials",
-    "summary"
+    "formatVersion"
   ],
   "properties": {
     "format": {
@@ -271,5 +265,108 @@
         }
       }
     }
-  }
+  },
+  "anyOf": [
+    {
+      "title": "a sweep result (the experiment runner)",
+      "type": "object",
+      "required": [
+        "format",
+        "formatVersion",
+        "hash",
+        "manifest",
+        "engine",
+        "status",
+        "trials",
+        "summary"
+      ]
+    },
+    {
+      "title": "a saved A/B comparison (js/experiments/store.js)",
+      "type": "object",
+      "required": [
+        "kind",
+        "id",
+        "name",
+        "runs",
+        "provenance"
+      ],
+      "properties": {
+        "kind": {
+          "const": "comparison"
+        },
+        "v": {
+          "const": 3,
+          "description": "The store's own version, kept beside formatVersion so a build from before the format had an id still reads the record."
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "runs": {
+          "type": "object",
+          "properties": {
+            "A": {
+              "type": "object",
+              "required": [
+                "samples"
+              ]
+            },
+            "B": {
+              "type": "object",
+              "required": [
+                "samples"
+              ]
+            }
+          }
+        },
+        "provenance": {
+          "type": "object"
+        }
+      }
+    },
+    {
+      "title": "a reliability check (js/experiments/exports.js reliabilityJson)",
+      "type": "object",
+      "required": [
+        "kind",
+        "ranAt",
+        "experiment",
+        "method",
+        "verdict",
+        "conclusions"
+      ],
+      "properties": {
+        "kind": {
+          "const": "reliability-check"
+        },
+        "appVersion": {
+          "type": "string"
+        },
+        "ranAt": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "experiment": {
+          "type": "object"
+        },
+        "method": {
+          "type": "object"
+        },
+        "verdict": {
+          "type": "object",
+          "required": [
+            "outcome"
+          ]
+        },
+        "conclusions": {
+          "type": "array"
+        }
+      }
+    }
+  ]
 }

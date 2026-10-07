@@ -177,8 +177,10 @@ export const FORMATS = Object.freeze([
     version: 1,
     const: ['js/experiments/experimentManifest.js', 'FORMAT_VERSION'],
     owner: 'js/experiments/experimentManifest.js migrateExperiment',
-    persisted: 'memory, inside results',
-    older: 'converts an unversioned sweep spec',
+    persisted:
+      'download (the runner’s manifest, and the bench’s comparison), memory, inside results',
+    older:
+      'converts an unversioned sweep spec; the retired id gravitas-experiment is version 0',
     newer: 'refused, in words',
     schema: 'experiment-1.schema.json',
   },
@@ -186,28 +188,22 @@ export const FORMATS = Object.freeze([
     name: 'gravitas.experiment-result',
     fields: 'format, formatVersion',
     version: 1,
-    owner: 'js/experiments/experimentManifest.js reproducibility',
-    persisted: 'download, localStorage',
-    older: 'v1 only',
+    owner:
+      'js/experiments/experimentManifest.js reproducibility; the bench’s records, js/experiments/store.js migrate',
+    persisted:
+      'download, localStorage (the bench’s saved comparisons and reliability checks)',
+    older:
+      'the store’s v1 to v3 and the retired gravitas-reliability-check are version 0',
     newer: 'refused; the analysis panel does not check',
     schema: 'experiment-result-1.schema.json',
   },
   {
-    name: 'gravitas-experiment',
-    fields: 'format, version',
-    version: 1,
-    owner: 'js/experiments/exports.js importManifest',
-    persisted: 'download',
-    older: 'v1 only',
-    newer: 'refused by reason code',
-  },
-  {
     name: 'experiment store',
-    fields: 'v',
+    fields: 'v, beside format and formatVersion',
     version: 3,
     owner: 'js/experiments/store.js migrate',
     persisted: 'localStorage',
-    older: 'migrates v1 and v2',
+    older: 'migrates v1 and v2; a record without a format is read by v',
     newer: 'refused by reason code',
   },
   {
@@ -540,7 +536,7 @@ ${rows.join('\n')}
   - a link prefix.
 
   Prompt 61 makes \`format\` and \`formatVersion\` the one convention, and \`readVersioned()\` reads the older pairs by name for one major version.
-- **Confusable ids.** \`gravitas-experiment\` and \`gravitas.experiment\` are different formats. \`gravitas.course-pack\` is two: /1, which extensions and the catalog carry, and /2, which the builder writes. The /1 validator refuses a /2 pack with the same message it gives any other version.
+- **Confusable ids.** \`gravitas-experiment\` is no longer a format: it is the retired name of \`gravitas.experiment/1\`, which the A/B bench writes (\`kind: comparison\`) and the runner reads, as it reads the retired name, as version 0. The bench’s reliability check is \`gravitas.experiment-result/1\` of \`kind: reliability-check\`, the retired \`gravitas-reliability-check\` its version 0. \`gravitas.course-pack\` is two: /1, which extensions and the catalog carry, and /2, which the builder writes. The /1 validator refuses a /2 pack with the same message it gives any other version.
 - **Written but never read:** \`gravitas.analysis\`, the two guide reports, \`gravitas.mission-plan\` and \`gravitas.course-manifest\`. A student's file in any of them cannot be opened again.
 - **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled \`newer\`, \`newerVersion\`, \`tooNew\`, \`schemaTooNew\` and \`from-a-newer-version\`), and not at all in the link blocks, \`gravitas.observed\` and the catalog curation.
 

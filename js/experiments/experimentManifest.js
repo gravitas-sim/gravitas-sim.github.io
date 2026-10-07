@@ -686,16 +686,101 @@ export function fromSweepSpec(spec, { profile = 'desktop', nav = {} } = {}) {
   };
 }
 
+// --- Retired ids -----------------------------------------------------------------
+// The bench wrote `gravitas-experiment` (a `version` field) and a reliability
+// check as `kind: gravitas-reliability-check`; the runner wrote
+// `gravitas.experiment`. One format now: `gravitas.experiment/1`, `kind:
+// comparison` for the bench's export, and `gravitas.experiment-result/1`, `kind:
+// reliability-check`. The one place the retired ids are read: a document under
+// one is version 0 of its replacement, and TO_VERSION_1 migrates it.
+
+/** Retired id -> the id that replaced it. */
+export const RETIRED_FORMATS = Object.freeze({
+  'gravitas-experiment': 'gravitas.experiment',
+  'gravitas-reliability-check': 'gravitas.experiment-result',
+});
+
+/** A document under a retired id, as version 0 of its replacement; else as is. */
+export function underCurrentId(d) {
+  const id = RETIRED_FORMATS[d?.format] ?? RETIRED_FORMATS[d?.kind];
+  return id ? { ...d, format: id, formatVersion: d.version > 1 ? 99 : 0 } : d;
+}
+
+/** Version 0 (a retired id) into version 1. */
+export const TO_VERSION_1 = Object.freeze({
+  0: ({ version: _old, kind, ...rest }) => ({
+    ...rest,
+    formatVersion: 1,
+    kind: kind ? 'reliability-check' : 'comparison',
+  }),
+});
+
+/**
+ * A bench comparison (kind `comparison`) as a sweep: its two runs become the
+ * two values of the one setting it changed. A comparison that changed more, or
+ * a setting the runner cannot vary, says so; its captured start is not carried,
+ * because the runner builds every trial from the scenario and its settings.
+ */
+export function fromComparison(c) {
+  const scenario = c.provenance?.scenario;
+  const changed = c.parameterChange?.variables ?? [];
+  const { key, from, to } = changed[0] ?? {};
+  const metrics = (c.selection?.metrics ?? []).filter(m =>
+    EXPERIMENT_METRICS.includes(m)
+  );
+  const span = Math.max(0, ...(c.runs ?? []).map(r => r.simulatedSeconds || 0));
+  const error = !sweepLab(scenario)
+    ? `the comparison ran in ${scenario}, which the runner cannot sweep`
+    : changed.length !== 1
+      ? `it changed ${changed.length} settings, and the runner opens one`
+      : !parameterFor(scenario, key)
+        ? `${key} is not a setting the runner can vary here`
+        : !metrics.length || !span
+          ? 'it recorded no run, or measured nothing the runner measures'
+          : null;
+  if (error) return { manifest: null, notes: [], error };
+  const manifest = fromSweepSpec({
+    scenario,
+    parameter: key,
+    values: [from, to],
+    seed: c.provenance.seed,
+    metrics,
+    duration: Math.min(MAX_DURATION, Math.max(MIN_DURATION, Math.round(span))),
+  });
+  manifest.title = c.experiment?.name || manifest.title;
+  return {
+    manifest,
+    notes: [
+      `converted from a bench comparison: its two runs are the two values of ${key}`,
+    ],
+    error: null,
+  };
+}
+
 /**
  * Read a manifest of any version this build knows, or say why not.
  * @returns {{manifest: object|null, notes: string[], error: string|null}}
  */
-export function migrateExperiment(input) {
+export function migrateExperiment(raw) {
+  // Under the retired id (gravitas-experiment) a manifest is version 0.
+  const input = underCurrentId(raw);
   if (!isObject(input))
     return { manifest: null, notes: [], error: 'not an object' };
   if (input.format === FORMAT) {
+    if (input !== raw) {
+      // The retired id, which is version 0 of this one (js/experiments/metrics.js).
+      return input.formatVersion === 0
+        ? fromComparison(TO_VERSION_1[0](input))
+        : {
+            manifest: null,
+            notes: [],
+            error: `${raw.format} version ${raw.version} is newer than this Gravitas reads; open it in a newer version`,
+          };
+    }
     if (input.formatVersion === FORMAT_VERSION)
-      return { manifest: input, notes: [], error: null };
+      return input.kind === 'comparison'
+        ? fromComparison(input)
+        : { manifest: input, notes: [], error: null };
     return {
       manifest: null,
       notes: [],
