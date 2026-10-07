@@ -650,7 +650,33 @@ describe('the JSON export', () => {
       'points_possible',
       'points_unmarked',
     ]);
-    expect(QUESTION_COLUMNS.slice(-2)).toEqual(['points', 'points_possible']);
+    expect(QUESTION_COLUMNS.slice(-3)).toEqual([
+      'points',
+      'points_possible',
+      'unit',
+    ]);
+  });
+
+  test('a numeric step’s unit travels with its answer, in both exports', () => {
+    const records = annotate([grade(submission())]);
+    const q = sid => records[0].questions.find(x => x.sid === sid);
+    expect(q('use-the-law').unit).toBe('years');
+    expect(q('weighing-another-star').unit).toBe('M_sun');
+    expect(q('where-is-the-star').unit).toBeNull();
+    const csv = fromCsv(questionCsv(records));
+    const col = csv[0].indexOf('unit');
+    expect(col).toBe(csv[0].length - 1);
+    const row = sid => csv.find(r => r[csv[0].indexOf('step_id')] === sid);
+    expect(row('use-the-law')[col]).toBe('years');
+    expect(row('where-is-the-star')[col]).toBe('');
+    const json = JSON.parse(resultsJson(records, { now }));
+    expect(
+      json.submissions[0].questions.find(x => x.stepId === 'use-the-law').unit
+    ).toBe('years');
+    // A version 2 file written before the column reads as it was.
+    for (const sub of json.submissions)
+      for (const x of sub.questions) delete x.unit;
+    expect(readResults(json)).toEqual({ ok: true, doc: json });
   });
 
   test('a version 1 file is still read, with points it never had as null', () => {
