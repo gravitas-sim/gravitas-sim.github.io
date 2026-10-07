@@ -23,6 +23,7 @@ import { createDocument } from './pdf.js';
 import { answerKeyFor, questionCounts, plainText } from './answerKey.js';
 import { plural } from './format.js';
 import { instructorContentFor } from './data/instructorContent.js';
+import { expectationsFor } from './instructorExpectations.js';
 
 const SITE = 'https://gravitas-sim.online';
 
@@ -237,6 +238,7 @@ const CATEGORY_LABEL = {
  */
 export function answerKeyDocument(inv, { version = '' } = {}) {
   const c = plainContent(instructorContentFor(inv.id));
+  const expectations = plainContent(expectationsFor(inv));
   const key = answerKeyFor(inv);
   const counts = questionCounts(inv);
 
@@ -273,7 +275,7 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
     // they should see there is the expectation. Skipping every reading step
     // dropped those from the key, and the guide prints no expectations, so
     // they reached no document at all.
-    const expected = c?.expectations?.[e.step];
+    const expected = expectations[inv.steps[e.step - 1].sid];
     if (e.category === 'reading' && !expected) continue;
 
     doc.heading(`Step ${e.step}: ${e.title}`, {
