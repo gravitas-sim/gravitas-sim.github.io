@@ -20,6 +20,7 @@ import {
   reserveFor,
   sizeOf,
 } from '../js/storage/index.js';
+import { readJson, writeJson } from '../js/storage/local.js';
 
 const memoryStore = (estimate = () => null) =>
   new Store(memoryBackend(), { estimate, channel: null });
@@ -394,3 +395,60 @@ function stripSaved(before, after) {
   }
   return out;
 }
+
+// The one-key helper the existing writers moved onto: same key, same text.
+describe('readJson and writeJson', () => {
+  const fake = (over = {}) => {
+    const data = new Map();
+    return {
+      getItem: k => (data.has(k) ? data.get(k) : null),
+      setItem: (k, v) => data.set(k, v),
+      data,
+      ...over,
+    };
+  };
+
+  test('write stores plain JSON text under the key, and read returns it', () => {
+    const s = fake();
+    expect(writeJson('k', { a: [1, 2] }, s)).toBe(true);
+    expect(s.data.get('k')).toBe('{"a":[1,2]}');
+    expect(readJson('k', null, s)).toEqual({ a: [1, 2] });
+  });
+
+  test('a value an older build wrote is read unchanged', () => {
+    const s = fake();
+    s.setItem('k', '["a","b"]');
+    expect(readJson('k', [], s)).toEqual(['a', 'b']);
+  });
+
+  test('absent, damaged, empty and literal null all give the fallback', () => {
+    const s = fake();
+    expect(readJson('k', {}, s)).toEqual({});
+    for (const text of ['{oops', '', 'null']) {
+      s.setItem('k', text);
+      expect(readJson('k', { d: 1 }, s)).toEqual({ d: 1 });
+    }
+    expect(readJson('k', undefined, s)).toBeNull();
+  });
+
+  test('a store that throws, on a read or a full-quota write, is not fatal', () => {
+    const s = fake({
+      getItem: () => {
+        throw new Error('blocked');
+      },
+      setItem: () => {
+        throw new DOMException('full', 'QuotaExceededError');
+      },
+    });
+    expect(readJson('k', 7, s)).toBe(7);
+    expect(writeJson('k', 1, s)).toBe(false);
+  });
+
+  test('with no store given it uses the page localStorage', () => {
+    localStorage.clear();
+    expect(writeJson('gravitas_t', { n: 1 })).toBe(true);
+    expect(localStorage.getItem('gravitas_t')).toBe('{"n":1}');
+    expect(readJson('gravitas_t', {})).toEqual({ n: 1 });
+    localStorage.clear();
+  });
+});

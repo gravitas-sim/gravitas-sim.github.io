@@ -26,6 +26,7 @@
 // does the fit and measurement panels (js/observatory/fitPanel.js says why).
 // =============================================================================
 
+import { readJson, writeJson } from '../storage/local.js';
 import { SUITES, suiteOf } from './guides/suites.js';
 import {
   PATHS,
@@ -83,7 +84,7 @@ export function mountGuidePanel(root, ctx) {
     es: { ...ES_GUIDES, ...ES_CATALOG },
   });
   const { t } = ctx;
-  const saved = readSaved();
+  const saved = readJson(STORAGE_KEY, {});
   const run = {
     suite: null,
     guide: null,
@@ -344,15 +345,6 @@ export function mountGuidePanel(root, ctx) {
 
   // --- Progress -------------------------------------------------------------------
 
-  function readSaved() {
-    try {
-      return (
-        JSON.parse(window.localStorage?.getItem(STORAGE_KEY) || '{}') || {}
-      );
-    } catch {
-      return {};
-    }
-  }
   function save() {
     if (!run.guide) return;
     saved[run.guide.id] = {
@@ -361,11 +353,7 @@ export function mountGuidePanel(root, ctx) {
       at: run.at,
       record: run.record,
     };
-    try {
-      window.localStorage?.setItem(STORAGE_KEY, JSON.stringify(saved));
-    } catch {
-      /* progress lasts as long as the page, then */
-    }
+    writeJson(STORAGE_KEY, saved); // refused: progress lasts as long as the page
   }
 
   function start(id, path) {
