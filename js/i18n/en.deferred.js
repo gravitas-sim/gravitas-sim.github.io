@@ -1479,7 +1479,13 @@ export const EN_DEFERRED = {
   'nb.save.from-a-newer-version':
     'The stored notebook was written by a newer Gravitas and has not been opened, so nothing has been overwritten.',
   'nb.save.unreadable':
-    'The stored notebook could not be read. Nothing has been overwritten; restore from a file if you have one.',
+    'The stored notebook could not be read. It is untouched; new entries are not saved until you decide.',
+  'failure.corrupt.title': 'Saved data cannot be read',
+  'failure.corrupt.body':
+    'It has not been changed. Keep it, export a copy, or discard it once exported.',
+  'failure.corrupt.keep': 'Keep it',
+  'failure.corrupt.export': 'Export a copy',
+  'failure.corrupt.discard': 'Discard',
   'nb.save.tooLarge': 'That file is too large to be a notebook.',
   'nb.save.notJson': 'That file is not readable as a notebook.',
   'nb.save.notAnObject': 'That file is not a notebook.',

@@ -17,6 +17,77 @@ const expected = errors => {
   );
 };
 
+const KEY = 'gravitas_evidence_notebook';
+const JUNK = '{"v":1,"entries":[{"id":';
+
+async function openNotebook(page, app) {
+  await page.addInitScript(
+    ([k, v]) => {
+      if (!window.sessionStorage.getItem('seeded')) {
+        localStorage.setItem(k, v);
+        window.sessionStorage.setItem('seeded', '1');
+      }
+    },
+    [KEY, JUNK]
+  );
+  await app.boot();
+  await app.dismissFrontDoor();
+  await app.railControl('toggleNotebook');
+  await page.locator('#toggleNotebook').click();
+}
+
+test.describe('saved data the build cannot read', () => {
+  test('Escape keeps it, and the next save does not write over it', async ({
+    page,
+    app,
+  }) => {
+    await openNotebook(page, app);
+    const dialog = page.locator('#corruptStateDialog');
+    await expect(dialog).toBeVisible();
+    await expect(
+      dialog.getByRole('button', { name: 'Discard' })
+    ).toBeDisabled();
+    await expect(page.locator('#srStatus')).toContainText('not been changed');
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await page.evaluate(async () => {
+      const m = await import('/js/notebookPanel.js');
+      m.offerDraft({
+        id: 'e2e',
+        capturedAt: Date.now(),
+        createdAt: Date.now(),
+        kind: 'measured',
+        title: 't',
+        prose: {},
+        snapshot: { capturedAt: Date.now(), quantities: [], provenance: {} },
+        fingerprint: 'x',
+        quantities: [],
+      });
+    });
+    await page.locator('#nbDraftSave').click();
+    expect(await page.evaluate(k => localStorage.getItem(k), KEY)).toBe(JUNK);
+  });
+
+  test('discard is possible only after an export has been taken', async ({
+    page,
+    app,
+  }) => {
+    await openNotebook(page, app);
+    const dialog = page.locator('#corruptStateDialog');
+    const discard = dialog.getByRole('button', { name: 'Discard' });
+    await expect(discard).toBeDisabled();
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      dialog.getByRole('button', { name: 'Export a copy' }).click(),
+    ]);
+    expect(download.suggestedFilename()).toContain('unreadable');
+    await expect(discard).toBeEnabled();
+    await discard.click();
+    await expect(dialog).toBeHidden();
+    expect(await page.evaluate(k => localStorage.getItem(k), KEY)).toBeNull();
+  });
+});
+
 test.describe('a Worker that does not start', () => {
   test('the experiments page says the trial could not be built', async ({
     page,
