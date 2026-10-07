@@ -24,6 +24,23 @@
 //   alert that says "failed".
 // =============================================================================
 
+/**
+ * A record is a gravitas.experiment-result/1 of kind `comparison`, with `v`
+ * kept beside it: `v` is the store's own version, and migrate() reads it, so a
+ * record from before the format had an id and one from after open the same way.
+ */
+/** A read that found nothing usable, and why. */
+const refuse = reason => ({ ok: false, record: null, reason });
+
+/** A write that did not happen, and why. */
+const failed = (reason, bytes, limit) => ({ ok: false, reason, bytes, limit });
+
+const STAMP = {
+  format: 'gravitas.experiment-result',
+  formatVersion: 1,
+  kind: 'comparison',
+};
+
 /** Bumped when the record shape changes. See migrate(). */
 export const SCHEMA_VERSION = 3;
 
@@ -145,11 +162,11 @@ export function usedBytes() {
  */
 export function migrate(record) {
   if (!record || typeof record !== 'object') {
-    return { ok: false, record: null, reason: 'not-an-experiment' };
+    return refuse('not-an-experiment');
   }
   const v = Number(record.v) || 1;
-  if (v > SCHEMA_VERSION) {
-    return { ok: false, record: null, reason: 'from-a-newer-version' };
+  if (v > SCHEMA_VERSION || record.formatVersion > 1) {
+    return refuse('from-a-newer-version');
   }
   let out = record;
   if (v < 2) {
@@ -164,7 +181,11 @@ export function migrate(record) {
     };
   }
   if (v < 3) out = withdrawMisrecordedDrift(out);
-  return { ok: true, record: { ...out, v: SCHEMA_VERSION }, reason: '' };
+  return {
+    ok: true,
+    record: { ...out, ...STAMP, v: SCHEMA_VERSION },
+    reason: '',
+  };
 }
 
 /**
@@ -243,13 +264,13 @@ function normalizeRun(run) {
  */
 export function loadExperiment(id) {
   const s = storage();
-  if (!s) return { ok: false, record: null, reason: FAILURE.UNAVAILABLE };
+  if (!s) return refuse(FAILURE.UNAVAILABLE);
   try {
     const raw = s.getItem(KEY_PREFIX + id);
-    if (!raw) return { ok: false, record: null, reason: 'not-found' };
+    if (!raw) return refuse('not-found');
     return migrate(JSON.parse(raw));
   } catch (err) {
-    return { ok: false, record: null, reason: err.message || 'unreadable' };
+    return refuse(err.message || 'unreadable');
   }
 }
 
@@ -267,39 +288,29 @@ export function loadExperiment(id) {
 export function saveExperiment(record) {
   const s = storage();
   if (!s) {
-    return { ok: false, reason: FAILURE.UNAVAILABLE, bytes: 0, limit: 0 };
+    return failed(FAILURE.UNAVAILABLE, 0, 0);
   }
-  const stamped = { ...record, v: SCHEMA_VERSION, updated: Date.now() };
+  const stamped = {
+    ...record,
+    ...STAMP,
+    v: SCHEMA_VERSION,
+    updated: Date.now(),
+  };
   const text = JSON.stringify(stamped);
   const bytes = text.length;
 
   if (bytes > LIMITS.perExperiment) {
-    return {
-      ok: false,
-      reason: FAILURE.TOO_LARGE,
-      bytes,
-      limit: LIMITS.perExperiment,
-    };
+    return failed(FAILURE.TOO_LARGE, bytes, LIMITS.perExperiment);
   }
 
   const index = listExperiments();
   const existing = index.find(e => e.id === record.id);
   if (!existing && index.length >= LIMITS.maxExperiments) {
-    return {
-      ok: false,
-      reason: FAILURE.TOO_MANY,
-      bytes,
-      limit: LIMITS.maxExperiments,
-    };
+    return failed(FAILURE.TOO_MANY, bytes, LIMITS.maxExperiments);
   }
   const after = usedBytes() - (existing?.bytes || 0) + bytes;
   if (after > LIMITS.total) {
-    return {
-      ok: false,
-      reason: FAILURE.TOTAL_EXCEEDED,
-      bytes: after,
-      limit: LIMITS.total,
-    };
+    return failed(FAILURE.TOTAL_EXCEEDED, after, LIMITS.total);
   }
 
   try {
@@ -331,7 +342,7 @@ export function saveExperiment(record) {
     } catch {
       /* nothing further to try */
     }
-    return { ok: false, reason: FAILURE.QUOTA, bytes, limit: LIMITS.total };
+    return failed(FAILURE.QUOTA, bytes, LIMITS.total);
   }
 
   return { ok: true, reason: FAILURE.OK, bytes, limit: LIMITS.perExperiment };

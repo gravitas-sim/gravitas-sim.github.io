@@ -25,6 +25,7 @@ import { MODELS } from '../inference/models.js';
 import { runInference } from '../inference/run.js';
 import {
   deviceProfile,
+  engineFingerprint,
   estimate,
   inferenceManifest,
   PROFILES,
@@ -703,6 +704,15 @@ export function mountFitPanel(root, ctx) {
           rows: c.data?.rows ?? 0,
           key: c.data?.key ?? null,
         },
+        // The engine that fitted, and the rows each fit read (a dataKey).
+        engine: { fingerprint: engineFingerprint() },
+        consumed: [
+          {
+            kind: 'observation',
+            id: o.id ?? null,
+            digest: c.data?.key ?? null,
+          },
+        ],
         comparison: c,
         methods,
         // Each fit whole, as the inference core wrote it: how to rerun it.

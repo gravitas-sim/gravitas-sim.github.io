@@ -46,6 +46,54 @@
     "methods": {
       "description": "What was done, in words, for a methods section.",
       "type": "string"
+    },
+    "engine": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "fingerprint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "description": "The engine that made it: a sweep analysis carries its source result's (the n-body realm's); a model comparison the inference core's. reproducibility() compares it with this build's, in the same words as for a result. Optional: analyses written before it was recorded still fit."
+    },
+    "consumed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "id",
+          "digest"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "experiment-result",
+              "observation"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "digest": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "FNV-1a of the trials (experiment-result) or the fit's dataKey (observation)."
+          }
+        }
+      },
+      "description": "The data it read, each with a digest."
     }
   },
   "anyOf": [

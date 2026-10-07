@@ -2,12 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/experiment-1.schema.json",
   "title": "gravitas.experiment/1",
-  "description": "An experiment written down so it can be run again: the model, the fixed settings, the seed set, the one or two parameters varied, the observables, when a trial stops, the numerics, the scheduler's limits and the summaries wanted. Two shapes share the format: a 2-D laboratory scenario, which js/experiments/experimentManifest.js validateExperiment() is the authority on, and a 3-D system, which js/lab3d/experiment.js validateLab3dExperiment() is. Both validators also hold every number to its bounds, a varied parameter to its scenario, and the trial count to a ceiling, which this schema does not. Neither refuses a field it does not know, so neither does this schema. EXPERIMENTS.md and LAB3D.md describe it; FORMATS.md lists it.",
+  "description": "An experiment written down so it can be run again: the model, the fixed settings, the seed set, the one or two parameters varied, the observables, when a trial stops, the numerics, the scheduler's limits and the summaries wanted. Three shapes share the format: a 2-D laboratory scenario, which js/experiments/experimentManifest.js validateExperiment() is the authority on, a 3-D system, which js/lab3d/experiment.js validateLab3dExperiment() is, and a bench comparison, which the A/B bench (js/experiments/exports.js experimentManifest()) writes, `kind` comparison, and which the runner opens as a sweep of the one setting it changed (js/experiments/experimentManifest.js fromComparison()). The id `gravitas-experiment` (a `version` field) is the retired name of this format: readers accept it as version 0 and migrate it. Both validators also hold every number to its bounds, a varied parameter to its scenario, and the trial count to a ceiling, which this schema does not. Neither refuses a field it does not know, so neither does this schema. EXPERIMENTS.md and LAB3D.md describe it; FORMATS.md lists it.",
   "type": "object",
   "required": [
     "format",
-    "formatVersion",
-    "model"
+    "formatVersion"
   ],
   "anyOf": [
     {
@@ -442,6 +441,160 @@
             }
           }
         }
+      }
+    },
+    {
+      "title": "a bench comparison (js/experiments/exports.js)",
+      "type": "object",
+      "required": [
+        "kind",
+        "experiment",
+        "provenance",
+        "selection",
+        "parameterChange",
+        "runs"
+      ],
+      "properties": {
+        "kind": {
+          "const": "comparison"
+        },
+        "exported": {
+          "type": "string"
+        },
+        "app": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "experiment": {
+          "type": "object",
+          "required": [
+            "id",
+            "name"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "created": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "required": [
+            "scenario",
+            "seed",
+            "integrator",
+            "timestep",
+            "simSpeed",
+            "units",
+            "initialStateHash",
+            "referenceFrame",
+            "observer"
+          ],
+          "description": "What a repeat needs: the scenario, seed, integrator, step and the hash of the captured start."
+        },
+        "selection": {
+          "type": "object",
+          "required": [
+            "objects",
+            "primary",
+            "metrics"
+          ],
+          "properties": {
+            "objects": {
+              "type": "array"
+            },
+            "primary": {},
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "initialState": {
+          "description": "The captured start, as a share link carries it."
+        },
+        "parameterChange": {
+          "type": "object",
+          "required": [
+            "variables",
+            "incidental"
+          ],
+          "properties": {
+            "variables": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "key",
+                  "from",
+                  "to"
+                ]
+              }
+            },
+            "incidental": {
+              "type": "array"
+            },
+            "context": {
+              "type": "array"
+            },
+            "multivariable": {
+              "type": "boolean"
+            },
+            "confirmed": {
+              "type": "boolean"
+            }
+          }
+        },
+        "runs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "run",
+              "samples"
+            ],
+            "properties": {
+              "run": {
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              },
+              "samples": {
+                "type": "integer"
+              },
+              "recordedAt": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "simulatedSeconds": {
+                "type": "number"
+              },
+              "results": {}
+            }
+          }
+        },
+        "comparison": {}
       }
     }
   ],

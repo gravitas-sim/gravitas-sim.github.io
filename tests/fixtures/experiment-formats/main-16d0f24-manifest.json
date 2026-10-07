@@ -1,0 +1,96 @@
+{
+  "app": {
+    "version": "2026.09.3"
+  },
+  "comparison": {
+    "diff": {},
+    "rows": [],
+    "warnings": []
+  },
+  "experiment": {
+    "created": 1700000000000,
+    "id": "xfixture-0",
+    "name": "Planet a doubled",
+    "notes": "Does a wider orbit change the period?"
+  },
+  "exported": "2023-11-14T22:13:29.000Z",
+  "format": "gravitas-experiment",
+  "initialState": {
+    "s": "Binary Planet Lab",
+    "seed": "2a",
+    "v": 1
+  },
+  "parameterChange": {
+    "confirmed": false,
+    "context": [],
+    "incidental": [],
+    "multivariable": false,
+    "variables": [
+      {
+        "from": 0.1,
+        "key": "binary_lab_planet_a",
+        "to": 0.2
+      }
+    ]
+  },
+  "provenance": {
+    "initialStateHash": "deadbeef",
+    "integrator": "Symplectic Euler",
+    "observer": {
+      "inclination": 90,
+      "positionAngle": 0
+    },
+    "referenceFrame": {
+      "mode": "world",
+      "objectId": null
+    },
+    "scenario": "Binary Planet Lab",
+    "seed": "2a",
+    "simSpeed": 1,
+    "timestep": 0,
+    "units": {
+      "length": "AU",
+      "speed": "km/s",
+      "time": "days"
+    }
+  },
+  "runs": [
+    {
+      "recordedAt": 1700000001000,
+      "results": {
+        "separation": {
+          "kind": "mean",
+          "value": 0.1
+        }
+      },
+      "run": "A",
+      "samples": 2,
+      "simulatedSeconds": 125
+    },
+    {
+      "recordedAt": 1700000002000,
+      "results": {
+        "separation": {
+          "kind": "mean",
+          "value": 0.2
+        }
+      },
+      "run": "B",
+      "samples": 2,
+      "simulatedSeconds": 125
+    }
+  ],
+  "selection": {
+    "metrics": [
+      "separation",
+      "energy_drift",
+      "orbital_period"
+    ],
+    "objects": [
+      3,
+      1
+    ],
+    "primary": 1
+  },
+  "version": 1
+}

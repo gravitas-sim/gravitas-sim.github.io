@@ -39,6 +39,7 @@ import {
   estimate,
   experimentHash,
   migrateExperiment,
+  underCurrentId,
   planTrials,
   refusals,
   reproducibility,
@@ -615,7 +616,10 @@ async function checkSaved() {
     out.textContent = t('exp.check.notJson');
     return;
   }
-  if (parsed?.format === FORMAT || typeof parsed?.parameter === 'string') {
+  if (
+    underCurrentId(parsed)?.format === FORMAT ||
+    typeof parsed?.parameter === 'string'
+  ) {
     const { manifest, error, notes } = migrateExperiment(parsed);
     out.textContent = error
       ? t('exp.check.cannot', { reason: error })

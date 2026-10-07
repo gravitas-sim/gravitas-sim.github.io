@@ -686,16 +686,89 @@ export function fromSweepSpec(spec, { profile = 'desktop', nav = {} } = {}) {
   };
 }
 
+// --- Retired ids: version 0 of their replacements; TO_VERSION_1 migrates them.
+
+export const RETIRED_FORMATS = Object.freeze({
+  'gravitas-experiment': 'gravitas.experiment',
+  'gravitas-reliability-check': 'gravitas.experiment-result',
+});
+
+export function underCurrentId(d) {
+  const id = d?.format ? RETIRED_FORMATS[d.format] : RETIRED_FORMATS[d?.kind];
+  return id ? { ...d, format: id, formatVersion: d.version > 1 ? 99 : 0 } : d;
+}
+
+export const TO_VERSION_1 = Object.freeze({
+  0: ({ version: _old, kind, ...rest }) => ({
+    ...rest,
+    formatVersion: 1,
+    kind: kind ? 'reliability-check' : 'comparison',
+  }),
+});
+
+/** A bench comparison of one setting, as a two-value sweep; else why not. */
+export function fromComparison(c) {
+  const scenario = c.provenance?.scenario;
+  const changed = c.parameterChange?.variables ?? [];
+  const { key, from, to } = changed[0] ?? {};
+  const metrics = (c.selection?.metrics ?? []).filter(m =>
+    EXPERIMENT_METRICS.includes(m)
+  );
+  const span = Math.max(0, ...(c.runs ?? []).map(r => r.simulatedSeconds || 0));
+  const error = !sweepLab(scenario)
+    ? `the comparison ran in ${scenario}, which the runner cannot sweep`
+    : changed.length !== 1
+      ? `it changed ${changed.length} settings, and the runner opens one`
+      : !parameterFor(scenario, key)
+        ? `${key} is not a setting the runner can vary here`
+        : !metrics.length || !span
+          ? 'it recorded no run, or measured nothing the runner measures'
+          : from === to
+            ? `${key} did not change`
+            : null;
+  if (error) return { manifest: null, notes: [], error };
+  const manifest = fromSweepSpec({
+    scenario,
+    parameter: key,
+    values: [from, to],
+    seed: c.provenance.seed,
+    metrics,
+    duration: Math.min(MAX_DURATION, Math.max(MIN_DURATION, Math.round(span))),
+  });
+  manifest.title = c.experiment?.name || manifest.title;
+  return {
+    manifest,
+    notes: [
+      `converted from a bench comparison: its two runs are the two values of ${key}`,
+    ],
+    error: null,
+  };
+}
+
 /**
  * Read a manifest of any version this build knows, or say why not.
  * @returns {{manifest: object|null, notes: string[], error: string|null}}
  */
-export function migrateExperiment(input) {
+export function migrateExperiment(raw) {
+  // Under the retired id (gravitas-experiment) a manifest is version 0.
+  const input = underCurrentId(raw);
   if (!isObject(input))
     return { manifest: null, notes: [], error: 'not an object' };
   if (input.format === FORMAT) {
+    if (input !== raw) {
+      // The retired id, which is version 0 of this one (js/experiments/metrics.js).
+      return input.formatVersion === 0
+        ? fromComparison(TO_VERSION_1[0](input))
+        : {
+            manifest: null,
+            notes: [],
+            error: `${raw.format} version ${raw.version} is newer than this Gravitas reads; open it in a newer version`,
+          };
+    }
     if (input.formatVersion === FORMAT_VERSION)
-      return { manifest: input, notes: [], error: null };
+      return input.kind === 'comparison'
+        ? fromComparison(input)
+        : { manifest: input, notes: [], error: null };
     return {
       manifest: null,
       notes: [],
@@ -816,6 +889,28 @@ export function summarizeExperiment(m, trials) {
   return out;
 }
 
+function engineReason(then, now) {
+  return `the engine integrates differently now (fingerprint ${then} then, ${now} here): the same manifest will give different numbers, and that difference is the change to the engine, not to the experiment`;
+}
+
+/** An analysis document, judged in the same words (`here.digests` by id). */
+function analysisVerdict(doc, here) {
+  const reasons = [];
+  if (!doc.engine) reasons.push('its engine was not recorded');
+  else if (doc.engine.fingerprint !== here.engine)
+    reasons.push(engineReason(doc.engine.fingerprint, here.engine));
+  if (doc.consumed?.length && !here.digests)
+    reasons.push('its data cannot be checked here');
+  for (const c of doc.consumed ?? []) {
+    const now = here.digests?.[c.id];
+    if (now !== undefined && now !== c.digest)
+      reasons.push(
+        `${c.kind} ${c.id} is different data now (digest ${c.digest} then, ${now} here)`
+      );
+  }
+  return { reproducible: !reasons.length, reasons, notes: [] };
+}
+
 /**
  * Whether a saved result can be reproduced here, and if not, why not.
  * @param {object} result - A gravitas.experiment-result/1
@@ -823,6 +918,10 @@ export function summarizeExperiment(m, trials) {
  */
 export function reproducibility(result, here) {
   const reasons = [];
+  if (result?.format === 'gravitas.analysis')
+    return analysisVerdict(result, here);
+  if (['comparison', 'reliability-check'].includes(result?.kind))
+    return { reproducible: false, reasons: ['not a sweep result'], notes: [] };
   if (
     result?.format !== RESULT_FORMAT ||
     result.formatVersion !== RESULT_VERSION
@@ -840,9 +939,7 @@ export function reproducibility(result, here) {
       `its manifest is no longer valid here: ${problems[0].path} ${problems[0].message}`
     );
   if (result.engine?.fingerprint !== here.engine) {
-    reasons.push(
-      `the engine integrates differently now (fingerprint ${result.engine?.fingerprint} then, ${here.engine} here): the same manifest will give different numbers, and that difference is the change to the engine, not to the experiment`
-    );
+    reasons.push(engineReason(result.engine?.fingerprint, here.engine));
   }
   const notes = [];
   if (result.engine?.app !== here.app) {

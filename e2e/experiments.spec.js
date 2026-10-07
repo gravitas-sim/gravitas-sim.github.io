@@ -285,7 +285,8 @@ test.describe('the A/B experiment bench', () => {
     const jsonPath = join(OUT, 'experiment.json');
     await jsonFile.saveAs(jsonPath);
     const manifest = JSON.parse(readFileSync(jsonPath, 'utf8'));
-    expect(manifest.format).toBe('gravitas-experiment');
+    expect(manifest.format).toBe('gravitas.experiment');
+    expect(manifest.kind).toBe('comparison');
     expect(manifest.provenance.scenario).toBe('binary-bh');
     expect(manifest.provenance.seed).toBeTruthy();
     expect(manifest.provenance.integrator).toBeTruthy();

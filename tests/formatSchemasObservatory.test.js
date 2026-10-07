@@ -347,6 +347,14 @@ describe('the analysis schema', () => {
         rows: c.data?.rows ?? 0,
         key: c.data?.key ?? null,
       },
+      engine: { fingerprint: fits[0].document.engine.fingerprint },
+      consumed: [
+        {
+          kind: 'observation',
+          id: 'synthetic:rv',
+          digest: c.data?.key ?? null,
+        },
+      ],
       comparison: c,
       methods: 'Compared by AIC and BIC.',
       sources: fits.map(h => ({ label: h.label, document: h.document })),
@@ -383,6 +391,16 @@ describe('the analysis schema', () => {
     expect(read('js/experiments/analysisPanel.js')).toContain(
       'JSON.stringify({ ...a, methods }, null, 2)'
     );
+  });
+
+  test('an analysis written before engine and consumed existed still fits', async () => {
+    const { sweep, models } = await both();
+    for (const d of [sweep, models]) {
+      const v2 = clone(d);
+      delete v2.engine;
+      delete v2.consumed;
+      expect(valid(s, v2)).toBe(true);
+    }
   });
 
   test('and refuses what neither page would write', async () => {

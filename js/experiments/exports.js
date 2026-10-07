@@ -26,7 +26,7 @@ import { METRIC_UNITS, SCALAR_METRICS } from './metrics.js';
 import { canonicalJson } from './canonicalState.js';
 import { plainDataProblem } from '../platform/common.js';
 
-/** The manifest format, versioned separately from the storage schema. */
+/** gravitas.experiment/1, versioned separately from the storage schema. */
 export const MANIFEST_VERSION = 1;
 
 /**
@@ -95,6 +95,18 @@ function round(v) {
   return Number(v.toPrecision(6));
 }
 
+/** The provenance fields a manifest carries, in order; `units` is its own. */
+const PROVENANCE = [
+  'scenario',
+  'seed',
+  'integrator',
+  'timestep',
+  'simSpeed',
+  'initialStateHash',
+  'referenceFrame',
+  'observer',
+];
+
 /**
  * The manifest: everything needed to say what this experiment was.
  *
@@ -112,8 +124,9 @@ export function experimentManifest(experiment, { appVersion = 'dev' } = {}) {
   const p = experiment?.provenance || {};
   const diff = experiment?.diff || { variables: [], incidental: [] };
   return {
-    format: 'gravitas-experiment',
-    version: MANIFEST_VERSION,
+    format: 'gravitas.experiment',
+    formatVersion: MANIFEST_VERSION,
+    kind: 'comparison',
     exported: new Date().toISOString(),
     app: { version: appVersion },
     experiment: {
@@ -123,15 +136,8 @@ export function experimentManifest(experiment, { appVersion = 'dev' } = {}) {
       notes: experiment?.notes || '',
     },
     provenance: {
-      scenario: p.scenario ?? null,
-      seed: p.seed ?? null,
-      integrator: p.integrator ?? null,
-      timestep: p.timestep ?? null,
-      simSpeed: p.simSpeed ?? null,
+      ...Object.fromEntries(PROVENANCE.map(k => [k, p[k] ?? null])),
       units: p.units || { length: 'AU', speed: 'km/s', time: 'days' },
-      initialStateHash: p.initialStateHash ?? null,
-      referenceFrame: p.referenceFrame ?? null,
-      observer: p.observer ?? null,
     },
     selection: {
       objects: experiment?.objects || [],
@@ -208,7 +214,9 @@ export function reliabilityJson(experiment, { appVersion = 'dev' } = {}) {
   if (!r?.ok) return null;
   return `${JSON.stringify(
     {
-      kind: 'gravitas-reliability-check',
+      format: 'gravitas.experiment-result',
+      formatVersion: 1,
+      kind: 'reliability-check',
       appVersion,
       ranAt: r.ranAt,
       experiment: {
@@ -383,19 +391,26 @@ export function exportBasename(experiment) {
  * @returns {{ok:boolean, experiment:Object|null, reason:string}} The import
  */
 export function importManifest(text) {
+  const no = reason => ({ ok: false, experiment: null, reason });
   let parsed;
   try {
     parsed = JSON.parse(text);
   } catch {
-    return { ok: false, experiment: null, reason: 'not-json' };
+    return no('not-json');
   }
   if (plainDataProblem(parsed, { depth: 6, items: 10_000, text: 10_000 }))
-    return { ok: false, experiment: null, reason: 'not-plain-data' };
-  if (parsed?.format !== 'gravitas-experiment') {
-    return { ok: false, experiment: null, reason: 'not-an-experiment' };
+    return no('not-plain-data');
+  // `gravitas-experiment` and its `version` are the retired id of
+  // gravitas.experiment/1; the runner reads both (experimentManifest.js).
+  const old = parsed?.format === 'gravitas-experiment';
+  if (
+    !old &&
+    !(parsed?.format === 'gravitas.experiment' && parsed.kind === 'comparison')
+  ) {
+    return no('not-an-experiment');
   }
-  if (Number(parsed.version) > MANIFEST_VERSION) {
-    return { ok: false, experiment: null, reason: 'from-a-newer-version' };
+  if (Number(old ? parsed.version : parsed.formatVersion) > MANIFEST_VERSION) {
+    return no('from-a-newer-version');
   }
   return {
     ok: true,
