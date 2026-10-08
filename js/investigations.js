@@ -3433,10 +3433,16 @@ function bindStepInputs() {
         els.body.querySelector('.inv-held')?.textContent ||
           (checkAnswer(step, choice)
             ? t('inv.answer.correct')
-            : `${t('inv.answer.recorded')} ${spoken(
-                matchMisconception(step, choice, 0) &&
-                  misconceptionText(matchMisconception(step, choice, 0))
-              )} ${spoken(step.because)}`)
+            : [
+                t('inv.answer.recorded'),
+                spoken(
+                  matchMisconception(step, choice, 0) &&
+                    misconceptionText(matchMisconception(step, choice, 0))
+                ),
+                spoken(step.because),
+              ]
+                .filter(Boolean)
+                .join(' '))
       );
     });
   });
