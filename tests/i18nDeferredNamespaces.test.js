@@ -11,10 +11,7 @@
 // So it is regenerated here from the catalogs themselves and compared.
 // =============================================================================
 
-import {
-  DEFERRED_NAMESPACES,
-  mayBeDeferred,
-} from '../js/i18n/index.js';
+import { DEFERRED_NAMESPACES, mayBeDeferred } from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 
