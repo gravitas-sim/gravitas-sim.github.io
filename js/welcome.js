@@ -309,7 +309,8 @@ function endOrient(focus) {
   document.body.classList.remove('wel-orienting');
   const box = orientEl();
   if (box) box.hidden = true;
-  if (focus) els.body?.querySelector('.wel-primary[data-action]')?.focus();
+  if (focus)
+    els.body?.querySelector('.wel-hero [data-action="enter"]')?.focus();
 }
 
 /** Put the sections in place and fill them. Runs once, after build(). */

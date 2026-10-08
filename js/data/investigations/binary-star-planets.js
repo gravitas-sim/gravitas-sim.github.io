@@ -818,6 +818,15 @@ This is the same test you did by hand at 0.25, applied to the
         'That the simulation is broken and the runs should be discarded',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'finerAlwaysRight',
+          option: 1,
+          say: `A finer step is more accurate, but a changing answer means the
+                answer is still moving. You would have to know the run had
+                converged before trusting it, and nothing here says so.`,
+        },
+      ],
       because: `Neither run establishes anything on its own. The finer step is
                 more accurate and that is a reason to prefer it, not a reason to
                 trust it: what a changing answer tells you is that the answer is

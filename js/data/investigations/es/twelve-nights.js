@@ -96,6 +96,11 @@ export default {
         'Porque el periodo orbital del planeta no es un número entero de días',
         'Porque el Sol se mueve, así que el crepúsculo astronómico llega cuatro minutos más tarde cada noche',
       ],
+      misconceptions: [
+        {
+          say: 'Esa es la trampa: el Sol sí se mueve a lo largo de la temporada, pero lo que abre la ventana es que el objetivo alcance el límite de masa de aire, y eso lo marcan las estrellas, no el Sol.',
+        },
+      ],
       because:
         'La ventana se abre cuando el objetivo alcanza el límite de masa de aire, y eso es una afirmación sobre dónde está el objetivo, no sobre dónde está el Sol. La Tierra tarda 23h56m04s en devolver una estrella al mismo ángulo horario y 24h en devolver al Sol, y los cuatro minutos de diferencia son el desplazamiento que mediste en el paso 3.\n\nMerece la pena fijarse en esto en vez de archivarlo: el peine de tu calendario lleva grabado el periodo de rotación de la Tierra respecto a las estrellas fijas. No vino de tus costumbres. Vino del cielo.',
     },
