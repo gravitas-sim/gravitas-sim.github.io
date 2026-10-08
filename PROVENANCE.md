@@ -76,6 +76,10 @@ Three mappings lose something. Each says so where it happens:
 | Inference results | `fitArtifact()` in `js/analysis/seams.js`; the manifest names the observation's digest in `data.digest` | `tests/analysisSeams.test.js`, `tests/provenanceHops.test.js` |
 | Observatory guide answers | an `observed` entry (`js/notebook/observed.js`), not an envelope: the pack in `observation.source`, the observation's digest, its citations and retrieval date | `tests/provenanceHops.test.js`; `e2e/exoplanetGuides.spec.js` |
 | Forward-model outputs | none yet: the origin `synthetic` is reserved for Prompt 84 | |
+| Lesson measure fields | none: they are step responses (`lesson:sid` keys), not notebook entries, so they add nothing to a report's evidence digest. A student who only does lessons has an empty evidence section, which the report omits (P75 L-1; content gap for Prompt 97) | |
+| Mission lab and 3-D lab guides | none: their own progress keys, no notebook entry (P75 L-1; Prompts 105 and 106) | |
+
+`tests/evidenceLedger.test.js` builds one entry of every notebook `SOURCE` (all twelve, including the observatory, the sweep analysis and the experiment result) and checks that each carries a valid envelope and its context; a test there fails if a new source is added without one.
 
 ## Where a datum travels
 
