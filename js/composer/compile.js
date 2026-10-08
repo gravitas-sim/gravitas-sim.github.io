@@ -257,6 +257,7 @@ export function compileInvestigation(pack, api) {
     }
     if (s.tool) out.tool = { id: s.tool.id };
     if (s.requires) out.requires = [...s.requires];
+    if (s.depth && s.depth !== 'core') out.depth = s.depth;
     if (s.when) out.when = { sid: s.when.sid, is: s.when.is };
 
     if (s.type === 'explore') {
@@ -296,9 +297,31 @@ export function compileInvestigation(pack, api) {
     lesson.steps.push(out);
     shadow.steps.push(w);
   }
+  const deeper = new Set(pack.steps.map(s => s.depth));
+  if (deeper.has('quantitative') || deeper.has('advanced'))
+    lesson.depths = ['core', 'quantitative', 'advanced'].filter(
+      d => d === 'core' || deeper.has(d)
+    );
 
   const translated = collectTexts(pack).some(t => t.es !== null);
   return { lesson, shadow: translated ? shadow : null, scoring, variants };
+}
+
+/**
+ * Where the Spanish stands at each depth: texts translated and in all, for the
+ * depths the pack has steps at.
+ * @returns {Record<string, {done: number, total: number}>}
+ */
+export function translationByDepth(pack) {
+  const out = {};
+  for (const x of collectTexts(pack)) {
+    const step = /^steps\[(\d+)\]/.exec(x.path);
+    const d = (step && pack.steps[step[1]]?.depth) || 'core';
+    const row = (out[d] ??= { done: 0, total: 0 });
+    row.total++;
+    if (x.status === 'done') row.done++;
+  }
+  return out;
 }
 
 /**

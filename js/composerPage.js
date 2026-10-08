@@ -56,6 +56,7 @@ import {
 } from './platform/relations.js';
 import {
   collectTexts,
+  translationByDepth,
   digest,
   estimate,
   lessonModule,
@@ -881,6 +882,7 @@ const STEP_KEEP = [
   'tool',
   'when',
   'requires',
+  'depth',
 ];
 
 function switchQuestion(x, i, value) {
@@ -1046,6 +1048,24 @@ function fillStep(card, s, i, d) {
     if (s.from === undefined) card.append(...questionParts(base, s));
   }
 
+  // How deep a reading it belongs to: core for everyone, or only for readers
+  // who go deeper. The first and last steps are every reader's.
+  if (i > 0 && i < d.steps.length - 1 && !s.setup)
+    card.append(
+      field(
+        idOf(`${base}.depth`),
+        t('composer.step.depth'),
+        select(
+          ['core', 'quantitative', 'advanced'].map(d => [
+            d,
+            t(`composer.depth.${d}`),
+          ]),
+          s.depth || 'core',
+          v =>
+            commit(x => setAt(x, `${base}.depth`, v === 'core' ? undefined : v))
+        )
+      )
+    );
   card.append(
     pair(`${base}.tip`, t('composer.step.tip'), {
       multiline: true,
@@ -1794,6 +1814,20 @@ function renderTranslation(d) {
       : t('composer.translation.complete');
   const list = $('cp-translation');
   list.textContent = '';
+  const byDepth = Object.entries(translationByDepth(d));
+  if (byDepth.length > 1)
+    for (const [depth, n] of byDepth)
+      list.append(
+        el(
+          'li',
+          {},
+          t('composer.translation.depth', {
+            depth: t(`composer.depth.${depth}`),
+            done: n.done,
+            total: n.total,
+          })
+        )
+      );
   for (const x of texts.filter(x => x.status !== 'done').slice(0, 40)) {
     const node = controlFor(`${x.path}.en`);
     const where =
