@@ -136,5 +136,5 @@ new use of one of these APIs with no row, fails the build.
 | MediaRecorder and canvas captureStream | Recording a clip of the simulation. | `js/utils.js`, `js/capture.js`, `js/ui.js` | The record button is hidden. Nothing else depends on it, and Playwright’s WebKit is one build where it is hidden. |
 | Web Audio | Sonification and the optional sounds. | `js/audio.js`, `js/gwAudio.js` | No sound. Every sonification has a text equivalent on the page. |
 | BroadcastChannel | Telling other tabs that saved work changed. | `js/storage/index.js` | Other open tabs do not hear about a change until they reload; nothing is lost. |
-| Web Crypto (a secure context) | The instructor portal’s decryption and the SHA-256 digests that check downloaded files. | `js/instructorPortal.js`, `js/hash.js`, `js/archive/net.js`, `js/catalog/archive.js`, `js/lab3d/kernel.js`, `js/measure/pipeline.js` | No fallback is implemented: it needs https or localhost. The student-facing simulations do not depend on it. |
+| Web Crypto (a secure context) | The instructor portal’s decryption and the SHA-256 digests that check downloaded files. | `js/instructorPortal.js`, `js/hash.js`, `js/archive/net.js`, `js/catalog/archive.js`, `js/lab3d/kernel.js` | No fallback is implemented: it needs https or localhost. The student-facing simulations do not depend on it. |
 <!-- feature-inventory:end -->
