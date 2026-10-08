@@ -115,7 +115,6 @@ import {
   widgetDefaults,
 } from './widgets.js';
 import {
-  DEPTHS,
   inDepth,
   indexOfSid,
   isValidSid,
@@ -241,12 +240,11 @@ let visited = new Set();
  */
 let progressNotes = [];
 let startedAt = null;
-// The depth this lesson is read at (Prompt 72, DEPTH.md), what the student
-// chose if they did, and the deepest they have been. Answers are keyed by step
-// id, so changing any of them loses nothing.
+// Depth (DEPTH.md): read at, chosen by the student, deepest reached, label.
 let depth = 'core';
 let depthChoice = null;
 let deepest = 'core';
+let depthName = '';
 let probeTimer = null;
 let els = {};
 let plotCanvas = null;
@@ -624,22 +622,10 @@ async function restoreProgressBackup(file) {
 
 /**
  * This tab's copy of every lesson's progress, whether or not the disk took it.
- *
- * When localStorage refuses a write the answers stay in the working variables,
- * which is enough while the panel is open and useless the moment it closes:
- * reopening the lesson read storage, found nothing or something stale, and the
- * reader was back at step one with their work gone. Reproduced before the fix -
- * answer to step 3 with writes failing, close, reopen, and the panel says step
- * 1. Closing a panel is not a decision to discard.
- *
- * So every save lands here first. It is authoritative for this tab: it is
- * written on every save and storage is not, so it can never be the older of the
- * two. It dies with the tab, which is exactly what the unsaved warning already
- * promises.
- *
- * Authoring previews never reach it, for the same reason they never reach
- * storage: an author looking at step 30 must not become the progress a student
- * finds when they open the lesson.
+ * Written on every save, so never the older of the two: when localStorage
+ * refuses a write, closing and reopening the lesson still finds the work. It
+ * dies with the tab, as the unsaved warning promises. Authoring previews never
+ * reach it, as they never reach storage.
  *
  * @type {Map<string, object>}
  */
@@ -1598,8 +1584,7 @@ function recomputeFields(step, id) {
     if (!f.compute) continue;
     let next;
     try {
-      // The second argument reads a field an earlier step recorded, so a
-      // deeper step works from the numbers already measured.
+      // The second argument reads an earlier step's field.
       next = f.compute(vals, (sid, field) => {
         const key = `${stepKey(active.id, sid)}:${field}`;
         return parseFieldNumber(
@@ -2432,20 +2417,12 @@ function renderStep() {
 }
 
 /**
- * Open the pause-at-event tool for a step that asks a student to catch a moment.
- *
- * A step declares `pauseAt: {kind, body, primary, label, note}`. This opens the
- * tool with those bodies and that event already chosen and arms NOTHING: the
- * reader presses Arm in the tool, or the step's own button, and that press is
- * the interaction the lesson is asking for.
- *
- * Everything heavier than this is behind a dynamic import, so a lesson that
- * never reaches one of these steps never fetches the tool or its prose.
- *
- * The release on the way out is the important half. A watch armed on one step
- * must not fire into the next one, and a step that has finished with the tool
- * has to drop its listener - see js/investigations/eventWatch.js, which holds
- * the generation and the world check that make that true.
+ * Open the pause-at-event tool for a step that asks a student to catch a
+ * moment. A step declares `pauseAt: {kind, body, primary, label, note}`; the
+ * tool opens with those chosen and arms NOTHING, so the reader's press of Arm
+ * is the interaction asked for. All of it is behind a dynamic import. The
+ * release on the way out matters: a watch armed on one step must not fire into
+ * the next (js/investigations/eventWatch.js).
  *
  * @param {Object} step - Step definition
  */
@@ -2860,19 +2837,12 @@ function clearToolInstrument() {
 }
 
 /**
- * Let a widget be driven by pointing at its canvas, if it asks to be.
- *
- * Opt-in, and gated on the widget declaring `pick`: every other instrument in
- * the catalog is a canvas with sliders under it and stays exactly that. The
- * hook is handed a position in CSS pixels and the size it was measured
- * against, writes whatever it likes into the values, and then goes through
- * paintTool like a slider does - so the sliders move to match, the setting is
- * remembered with the step, and the redraw is the same one.
- *
- * The keyboard half is not a courtesy. A diagram you can only drive by
- * dragging is a diagram some students cannot drive, so a widget that declares
- * `pick` also names which two controls the arrow keys should step, and the
- * canvas becomes focusable. The sliders remain, and are the numeric entry.
+ * Let a widget be driven by pointing at its canvas, if it declares `pick`.
+ * The hook gets a position in CSS pixels, writes into the values, and goes
+ * through paintTool like a slider, so the sliders move to match. A widget that
+ * declares `pick` also names the two controls the arrow keys step, and its
+ * canvas becomes focusable: a diagram only a drag can drive is closed to some
+ * students.
  *
  * @param {Object} widget - The widget being shown
  * @param {Object} spec - The step's tool spec
@@ -3188,19 +3158,9 @@ const OBJECT_LIST_MAX = 12;
  * @returns {void}
  */
 /**
- * A reader-facing name for a lesson's role key.
- *
- * Roles are the lesson author's handles for the objects a step talks about,
- * and they were being shown to the reader raw. In English that mostly reads as
- * a terse label and gets away with it; in Spanish it is an untranslated
- * English word sitting beside a translated body name, which is the one place
- * in the interface where the two languages are visibly mixed.
- *
- * A translation wins where there is one. Where there is not, the key is
- * derived rather than tabulated: `starA` becomes "star A" and `m2000` becomes
- * "20 M☉", which is right in both languages and means a lesson that invents a
- * role gets a sensible label for free instead of a bare identifier. Only the
- * roles derivation would get wrong carry an English entry.
+ * A reader-facing name for a lesson's role key. A translation wins; otherwise
+ * the key is derived (`starA` becomes "star A", `m2000` "20 M☉"), right in both
+ * languages, so a role a lesson invents still gets a sensible label.
  *
  * @param {string} key - The role as the lesson wrote it
  * @returns {string} What to show in the object list
@@ -3693,21 +3653,11 @@ function setupInForceAt(index) {
  * @param {boolean} [opts.rebuild] - Reload the scenario in force at that step
  */
 /**
- * Release any sound a lesson started.
- *
- * A waveform the lab is playing belongs to the step that started it. Move on,
- * go back, close the lesson or rebuild the world underneath it and what is
- * still coming out of the speakers is a measurement of something that is no
- * longer on screen - which is worse than silence, because it sounds like an
- * answer.
- *
- * Sent as an event rather than a call: js/gwAudio.js pulls in the whole
- * waveform model, and importing it here would put that on every page load for
- * the sake of a stop. The scope is the prefix js/gwWidgets.js owns, so this
- * cannot silence something a reader started outside a lesson, and the single
- * listener on the other side means no amount of stepping accumulates handlers.
- * Stopping also un-ducks the ordinary sonification bus, because js/audio.js
- * un-ducks when the signal ends however it ends.
+ * Release any sound a lesson started: a waveform belongs to the step that
+ * started it, and one still playing after the step is gone sounds like an
+ * answer. Sent as an event, because js/gwAudio.js pulls in the whole waveform
+ * model; the scope is the prefix js/gwWidgets.js owns, so it cannot silence
+ * sound started outside a lesson.
  *
  * @returns {void}
  */
@@ -3765,62 +3715,27 @@ function goToStep(index, { rebuild = false } = {}) {
   els.panel.scrollTop = 0;
 }
 
-/**
- * The depth control: where the reader is, and the way to a deeper or shallower
- * reading. Shown only for a lesson that has deeper steps; an assignment states
- * its depth and does not offer to change it, because the instructor chose it.
- */
 function renderDepth() {
-  const row = els.depth;
-  if (!row) return;
-  const offered = active.depths || [];
-  row.hidden = offered.length < 2;
-  if (row.hidden) return;
-  const at = DEPTHS.indexOf(depth);
-  const top = Math.max(...offered.map(d => DEPTHS.indexOf(d)));
-  els.depthState.textContent = t('inv.depth.state', {
-    depth: t(`inv.depth.${depth}`),
-  });
-  els.deeper.hidden = Boolean(assignment) || at >= top;
-  els.shallower.hidden = Boolean(assignment) || at <= 0;
+  const o = active.depths;
+  if (!els.depth) return;
+  els.depth.hidden = !o;
+  const i = o ? o.indexOf(depth) : 0;
+  els.depthState.textContent = depthName;
+  els.deeper.hidden = !o || Boolean(assignment) || i >= o.length - 1;
+  els.shallower.hidden = !o || Boolean(assignment) || i < 1;
 }
 
-/**
- * Read at another depth. Going deeper loads the lesson's deeper steps the
- * first time, then moves on to the deeper step that follows this one. Going
- * shallower leaves a deeper step for the nearest one that still shows. Nothing
- * is cleared: answers are keyed by step id.
- * @param {number} by - 1 for one level deeper, -1 for one shallower
- */
 async function changeDepth(by) {
   if (!active || assignment) return;
-  const to = DEPTHS[DEPTHS.indexOf(depth) + by];
-  if (!to || !active.depths.includes(to)) return;
-  const here = currentStep()?.sid;
-  if (by > 0 && !active.depthLaid) {
-    const laid = await (
-      await import('./investigations/depth.js')
-    ).withDepth(active, getLocale());
-    // Closed, or another lesson opened, while the steps were on their way.
-    if (!active || active.id !== laid.id) return;
-    active = laid;
-    stepIndex = Math.max(0, indexOfSid(active, here));
-  }
-  const was = depth;
-  depth = depthChoice = to;
-  if (DEPTHS.indexOf(to) > DEPTHS.indexOf(deepest)) deepest = to;
-  let at = stepIndex;
-  if (by > 0) {
-    // On to the deeper step that follows this one, if there is one: the
-    // button is how a reader gets to what Next had been passing over. Where
-    // none follows, they stay, and the next one comes up in its turn.
-    const after = active.steps[stepIndex + 1];
-    if (after && !inDepth(after, was)) at = stepIndex + 1;
-  } else {
-    while (at > 0 && !inDepth(active.steps[at], depth)) at--;
-  }
-  announce(t('inv.depth.changed', { depth: t(`inv.depth.${to}`) }));
-  goToStep(at);
+  const r = await (
+    await import('./investigations/depth.js')
+  ).change({ active, depth, deepest, stepIndex, by, locale: getLocale() });
+  if (!r || r.lesson.id !== active?.id) return;
+  ({ depth, deepest, depthName } = r);
+  depthChoice = depth;
+  active = r.lesson;
+  announce(r.said);
+  goToStep(r.at);
 }
 
 /**
@@ -3872,25 +3787,13 @@ function next() {
 // top of them when it lands.
 let openGeneration = 0;
 
-const LEVEL_DEPTH = { majors: 'quantitative', advanced: 'advanced' };
-
-/** The course level the reader chose, if the browser kept it. */
-function levelOnDisk() {
-  try {
-    return get('gravitas_course_level');
-  } catch {
-    return null;
-  }
-}
-
-/** The depth fields of a lesson's saved progress, read before the lesson is. */
 function peekDepth(id) {
   try {
-    return (
-      sessionProgress.get(storageKey(id)) ?? JSON.parse(get(storageKey(id)))
-    );
+    const p =
+      sessionProgress.get(storageKey(id)) ?? JSON.parse(get(storageKey(id)));
+    return { ...p, level: get('gravitas_course_level') };
   } catch {
-    return null;
+    return {};
   }
 }
 
@@ -3906,38 +3809,23 @@ export async function openInvestigation(id, opts = {}) {
   // lesson might not be there yet.
   let inv = await loadInvestigation(id);
   if (!inv || generation !== openGeneration) return;
-  // The depth to read at: an assignment's, else the student's own choice, else
-  // the course level's. A lesson read at core never loads the deeper steps; one
-  // that has been deeper loads them so its answers are still read.
-  const raw =
-    inv.depths && !authoring && !opts.assignment ? peekDepth(id) : null;
-  const want = inv.depths
-    ? opts.assignment
-      ? opts.assignment.d
-      : (raw?.depth ?? LEVEL_DEPTH[levelOnDisk()])
-    : null;
-  if (DEPTHS.indexOf(want) > 0 || DEPTHS.indexOf(raw?.deepest) > 0) {
-    inv = await (
+  depth = 'core';
+  depthChoice = null;
+  deepest = 'core';
+  depthName = '';
+  const mem = inv.depths && !authoring && peekDepth(id);
+  if (
+    opts.assignment?.d ||
+    mem?.depth ||
+    mem?.deepest ||
+    /^[ma]/.test(mem?.level)
+  ) {
+    const m = await (
       await import('./investigations/depth.js')
-    ).withDepth(inv, getLocale());
+    ).openDepth(inv, mem, opts.assignment, getLocale());
     if (generation !== openGeneration) return;
+    ({ inv, depth, depthChoice, deepest, depthName } = m);
   }
-  depth = inv.depths?.includes(want) ? want : 'core';
-  depthChoice = DEPTHS.includes(raw?.depth) ? raw.depth : null;
-  deepest = DEPTHS.includes(raw?.deepest) ? raw.deepest : 'core';
-  if (DEPTHS.indexOf(deepest) < DEPTHS.indexOf(depth)) deepest = depth;
-  // Every step key is written into the panel's attributes and selectors. The
-  // pack validator and the lesson checker refuse a sid that could end an
-  // attribute; this refuses a lesson that reached the panel without passing
-  // either - a Composer preview staged before they did, for one - rather than
-  // rendering it.
-  const unsafe = inv.steps.find(s => !isValidSid(s.sid));
-  if (unsafe) {
-    throw new Error(
-      `Investigation "${id}" has a step id that is not a safe key: ${JSON.stringify(unsafe.sid)}`
-    );
-  }
-
   // An assignment is the same lesson with most of its steps taken out. It is
   // built here rather than being a second kind of thing the panel has to know
   // about: everything below works on `active`, and `active.id` stays the
@@ -4071,17 +3959,10 @@ export async function openInvestigation(id, opts = {}) {
 }
 
 /**
- * Put the reader's own world back, if it is still theirs to put back.
- *
- * The guard is the point. Closing a lesson is not the only thing that happens
- * at that moment: a reader can load a scenario from the rail, follow a share
- * link, or start another lesson, and a restore that fired regardless would
- * replace the thing they had just chosen with a world from ten minutes ago.
- *
- * So it only restores when the world on screen is still the one the lesson
- * built - which it can tell because a stage was up, or because the world
- * generation has not moved past the lesson's own rebuilds. Anything else and
- * the reader has taken the scene somewhere deliberate and it is left alone.
+ * Put the reader's own world back, if it is still theirs to put back: only
+ * when the world on screen is still the one the lesson built (a stage was up,
+ * or the world generation has not moved past the lesson's rebuilds). A reader
+ * who loaded a scenario or followed a link has taken it somewhere deliberate.
  *
  * @param {object} saved - The pairs handed back by leaveLessonScope()
  * @returns {boolean} Whether the sandbox was put back
@@ -4104,17 +3985,10 @@ function restoreSandbox(saved) {
 }
 
 /**
- * Put the reader's selection back on the body it was on.
- *
- * Only after a successful restore, and only by id: the payload rebuilds the
- * world from packed states that carry the ids they were saved with, so the
- * body that comes back is the same body as far as anything that records a
- * measurement is concerned. A selection restored into a world that was not
- * restored would point at whatever happened to share the number.
- *
- * Silent when the body is not there. A reader who had a lesson-staged object
- * selected when they opened the panel has nothing to come back to, and
- * selecting something arbitrary instead would be worse than selecting nothing.
+ * Put the reader's selection back on the body it was on, by id, only after a
+ * successful restore (the restored world carries the ids it was saved with).
+ * Silent when the body is not there: selecting something arbitrary instead
+ * would be worse than nothing.
  *
  * @param {?object} selection - {id} as saved on entry
  * @returns {boolean} Whether a body was reselected
@@ -4892,15 +4766,9 @@ function closeFinish() {
 
 /**
  * The submission token for what is on record now, or '' if it cannot be made.
- *
- * The return channel. Both modules are dynamic imports for the same reason
- * the backup one is: a reader who never hands anything in never pays for the
- * encoder, and the lesson engine is already the heaviest thing here.
- *
- * The roster id comes off the assignment link's query string rather than from
- * any roster the application keeps, because it keeps none - an instructor who
- * wants the class sorted puts ?roster=<whatever> on the link they hand out and
- * it rides home in the token.
+ * Both modules are dynamic imports, so a reader who hands nothing in never pays
+ * for the encoder. The roster id comes off the assignment link's ?roster=
+ * query, because the application keeps no roster.
  *
  * @param {string} name - The name the student typed
  * @returns {Promise<string>} The token

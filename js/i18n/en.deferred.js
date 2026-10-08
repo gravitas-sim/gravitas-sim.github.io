@@ -906,13 +906,8 @@ export const EN_DEFERRED = {
     "Each slice is <strong>{share}%</strong> of the orbit's area, and the planet spends <strong>{time}</strong> traversing every one of them.",
   'inv.import.added': 'Added {value}.',
   'inv.progress.cleared': 'Progress cleared',
-  'inv.depth.core': 'Core',
-  'inv.depth.quantitative': 'Quantitative',
-  'inv.depth.advanced': 'Advanced',
-  'inv.depth.state': 'Depth: {depth}',
   'inv.depth.deeper': 'Go deeper',
   'inv.depth.shallower': 'Fewer steps',
-  'inv.depth.changed': 'Now reading at {depth} depth.',
   'inv.answer.needsUncertainty':
     'Give your value and its uncertainty, for example 8.1 ± 0.2.',
   'inv.progress.steps': '{done} of {total} steps',

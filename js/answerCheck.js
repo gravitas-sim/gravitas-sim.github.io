@@ -104,12 +104,7 @@ export function gradeAnswer(step, value, { locale = 'en' } = {}) {
 }
 
 /**
- * What a student typed as a number or, for a step with `uncertainty: true`, as
- * "value ± uncertainty" (also +/- or +-). The uncertainty must be there and
- * positive; each side takes the step's units.
- * @param {*} value - The student's answer
- * @param {Object} step - Step definition
- * @param {string} locale - For the decimal separator
+ * A number, or for `uncertainty: true` steps "value ± uncertainty" (also +/-).
  * @returns {Object} parseAnswer()'s result, plus `u` when one was read
  */
 function readValue(value, step, locale) {
@@ -124,10 +119,9 @@ function readValue(value, step, locale) {
 }
 
 /**
- * Whether a number is inside the step's tolerance. With an uncertainty, whether
- * the interval it gives overlaps the one the tolerance allows and is no wider
- * than `maxUncertainty` (default twice the tolerance): an uncertainty big
- * enough to overlap anything is not a result.
+ * Whether a number is inside the step's tolerance; with an uncertainty,
+ * whether its interval overlaps the tolerance's and is no wider than
+ * `maxUncertainty` (default twice the tolerance).
  *
  * The slack is because binary floating point does not represent most decimals
  * exactly: |7.6 - 8| evaluates to 0.4000000000000004, so a student who worked

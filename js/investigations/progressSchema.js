@@ -76,19 +76,10 @@ export const isValidSid = sid =>
   /^[a-z0-9]+(-[a-z0-9]+)*$/.test(sid) &&
   !/^\d+$/.test(sid);
 
-/**
- * The depths a step may be at, shallowest first. A step without one is core;
- * a lesson is read at the depth its reader chose and shows no step deeper.
- */
+/** Depths, shallowest first; a step without one is core (DEPTH.md). */
 export const DEPTHS = Object.freeze(['core', 'quantitative', 'advanced']);
 
-/**
- * Whether a step is shown at a depth. An unknown depth counts as core, so a
- * step is never lost to a typo.
- * @param {object} step - A step
- * @param {string} [depth] - The depth being read at
- * @returns {boolean} Whether the step belongs to it
- */
+/** Whether a step shows at a depth; an unknown one counts as core. */
 export const inDepth = (step, depth = 'core') =>
   Math.max(0, DEPTHS.indexOf(step?.depth)) <=
   Math.max(0, DEPTHS.indexOf(depth));
@@ -271,7 +262,6 @@ export function readProgress(data, lesson) {
     ? data.stepSid
     : (sidsOf(lesson)[0] ?? null);
   out.startedAt = typeof data.startedAt === 'string' ? data.startedAt : null;
-  // Optional, so a build without them reads the payload as it always did.
   if (DEPTHS.includes(data.depth)) out.depth = data.depth;
   if (DEPTHS.includes(data.deepest)) out.deepest = data.deepest;
 
@@ -307,8 +297,6 @@ export function writeProgress({
     attempts: { ...attempts },
     visited: [...(visited || [])],
     startedAt: startedAt ?? null,
-    // Only once a reader has left core, so a core reader's payload is the one
-    // an older build wrote; `deepest` is what keeps their deeper answers read.
     ...(depth && depth !== 'core' ? { depth } : {}),
     ...(deepest && deepest !== 'core' ? { deepest } : {}),
   };

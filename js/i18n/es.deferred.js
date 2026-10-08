@@ -914,13 +914,8 @@ export const ES_DEFERRED = {
     'Cada porción es el <strong>{share} %</strong> del área de la órbita, y el planeta tarda <strong>{time}</strong> en recorrer cada una.',
   'inv.import.added': 'Añadido: {value}.',
   'inv.progress.cleared': 'Progreso borrado',
-  'inv.depth.core': 'Básico',
-  'inv.depth.quantitative': 'Cuantitativo',
-  'inv.depth.advanced': 'Avanzado',
-  'inv.depth.state': 'Profundidad: {depth}',
   'inv.depth.deeper': 'Profundizar',
   'inv.depth.shallower': 'Menos pasos',
-  'inv.depth.changed': 'Ahora en profundidad {depth}.',
   'inv.answer.needsUncertainty':
     'Da tu valor y su incertidumbre, por ejemplo 8,1 ± 0,2.',
   'inv.progress.steps': '{done} de {total} pasos',

@@ -57,6 +57,7 @@ const KEPLER = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'logarithms',
   prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
