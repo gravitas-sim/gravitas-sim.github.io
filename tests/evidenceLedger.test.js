@@ -10,6 +10,7 @@ import { describe, test, expect } from '@jest/globals';
 // =============================================================================
 
 import { webcrypto } from 'node:crypto';
+import { TextDecoder } from 'node:util';
 import { registerMessages, setLocale } from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
@@ -231,7 +232,7 @@ describe('an entry kept before envelopes were written', () => {
 
   test('an old observed entry with rows is read from its fields', () => {
     const e = every().find(x => x.source === 'observatory');
-    const t = (id, v) => (id.startsWith('led.') ? EN_REPORT[id] : id);
+    const t = id => (id.startsWith('led.') ? EN_REPORT[id] : id);
     const rows = observedRows(e.snapshot.observed, t);
     expect(rows.map(r => r[0])).toContain('Tool');
     expect(observedRows({ rows: [['a', 'b']] }, t)).toEqual([['a', 'b']]);
