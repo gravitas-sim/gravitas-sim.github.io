@@ -18,7 +18,6 @@
 
 import { createDocument } from './pdf.js';
 import { registerMessages } from './i18n/index.js';
-import { helpStages, helpTaken } from './answerFeedback.js';
 
 /** The report's strings, both languages, fetched the first time one is built. */
 let text = null;
@@ -119,6 +118,9 @@ const plain = text =>
  * @param {string} [opts.locale] - That language, for the dates
  * @param {Array<[string, string]>} [opts.meta] - More rows for the title block:
  *   the application and format versions, the engine fingerprint, the depth
+ * @param {(id: string) => ?{hints: number, revealed: boolean, stages: string[]}} [opts.helpFor] -
+ *   How much help a step was given (helpTaken() of js/answerFeedback.js),
+ *   passed in so this file does not pull the grader into the report's chunk
  * @param {(doc: object) => void} [opts.evidence] - Prints the evidence ledger's
  *   sections (js/notebook/report.js evidenceSections()) after the summary
  * @returns {Uint8Array} PDF bytes
@@ -142,6 +144,7 @@ export function buildLabReport({
   locale = 'en',
   meta = [],
   evidence = null,
+  helpFor = () => null,
 }) {
   const inv = investigation;
   const stepsDone = t('rp.nOf', {
@@ -220,8 +223,8 @@ export function buildLabReport({
 
   // How much help a step was given: a fact beside the answer, never a mark.
   const helpRow = id => {
-    const taken = helpTaken(helpStages(responses[`${id}:help`]));
-    if (taken.stages.length)
+    const taken = helpFor(id);
+    if (taken?.stages.length)
       doc.row(
         t('rp.help'),
         t('rp.helpV', { n: taken.hints }) +

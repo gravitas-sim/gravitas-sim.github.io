@@ -4874,6 +4874,7 @@ async function generateReport() {
     ).ledgerForReport();
 
     const bytes = buildLabReport({
+      helpFor: id => helpTaken(helpStages(responses[`${id}:help`])),
       investigation: active,
       plot,
       name,
