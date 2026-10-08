@@ -17,7 +17,6 @@
 // =============================================================================
 
 import { getLocale, t } from '../i18n/index.js';
-import { inDepth } from '../investigations/progressSchema.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import {
   MAX_INTRO,
@@ -50,6 +49,10 @@ const esc = text =>
         "'": '&#39;',
       })[c]
   );
+
+const RANK = ['core', 'quantitative', 'advanced'];
+const inDepth = (s, d = 'core') =>
+  Math.max(0, RANK.indexOf(s.depth)) <= RANK.indexOf(d);
 
 /** The steps at the depth being set: all of them for a lesson with one depth. */
 const shown = () => lesson.steps.filter(s => inDepth(s, depth ?? undefined));

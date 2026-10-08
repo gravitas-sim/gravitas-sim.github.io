@@ -70,19 +70,19 @@ export default {
       type: 'measure',
       title: 'How sure is a period?',
       body: `Every number you have recorded so far is one reading, and a
-             reading is not the same as the truth. Here the period of an orbit
-             is read from the planet's motion at that moment, and the planets
-             tug on one another, so reading it at three different moments gives
-             three slightly different answers.
-             \n\nSelect one planet and press the button three times, a few
-             seconds apart, so each reading is from a different moment. The
-             spread of the three is the scale of your uncertainty. The
-             uncertainty of their <em>mean</em> is the standard deviation
-             divided by √3, and it cannot be smaller than the readout itself
-             can resolve: a number shown to four decimals is good to half a
-             unit in the last one.
-             \n\nThe fraction at the bottom is how uncertain <em>any one</em>
-             of your periods is, as a share of itself. The next step uses it.`,
+ reading is not the same as the truth. Here the period of an orbit
+ is read from the planet's motion at that moment, and the planets
+ tug on one another, so reading it at three different moments gives
+ three slightly different answers.
+ \n\nSelect one planet and press the button three times, a few
+ seconds apart, so each reading is from a different moment. The
+ spread of the three is the scale of your uncertainty. The
+ uncertainty of their <em>mean</em> is the standard deviation
+ divided by √3, and it cannot be smaller than the readout itself
+ can resolve: a number shown to four decimals is good to half a
+ unit in the last one.
+ \n\nThe fraction at the bottom is how uncertain <em>any one</em>
+ of your periods is, as a share of itself. The next step uses it.`,
       importLabel: 'Take a reading',
       importFromSelection: ctx => {
         const b = ctx.selected;
@@ -149,19 +149,19 @@ export default {
       type: 'measure',
       title: 'Fit the law with weights',
       body: `Nothing new to measure: this step works on the table you filled
-             in and the uncertainty you just found.
-             \n\nStraightening the data as before, P² against a³ should be a
-             line through the origin with slope k. Two ways to find it. The
-             plain least-squares slope treats every planet alike. But a period
-             uncertain by the same <em>fraction</em> makes P² uncertain by twice
-             that fraction <em>of itself</em>, so the outer planets, with large
-             P², are known less well in absolute terms, and a weighted fit
-             counts each row by one over the square of its uncertainty.
-             \n\nThe two should agree within the uncertainty. If they do not, a
-             row is wrong. The last two boxes use the weighted constant to
-             predict the period of the planet at 4 AU from the earlier step,
-             with its uncertainty carried through: P = √(k·a³), so
-             σ<sub>P</sub> = a<sup>3/2</sup>·σ<sub>k</sub> / (2√k).`,
+ in and the uncertainty you just found.
+ \n\nStraightening the data as before, P² against a³ should be a
+ line through the origin with slope k. Two ways to find it. The
+ plain least-squares slope treats every planet alike. But a period
+ uncertain by the same <em>fraction</em> makes P² uncertain by twice
+ that fraction <em>of itself</em>, so the outer planets, with large
+ P², are known less well in absolute terms, and a weighted fit
+ counts each row by one over the square of its uncertainty.
+ \n\nThe two should agree within the uncertainty. If they do not, a
+ row is wrong. The last two boxes use the weighted constant to
+ predict the period of the planet at 4 AU from the earlier step,
+ with its uncertainty carried through: P = √(k·a³), so
+ σ<sub>P</sub> = a<sup>3/2</sup>·σ<sub>k</sub> / (2√k).`,
       fields: [
         {
           id: 'n',
@@ -237,13 +237,13 @@ export default {
       uncertainty: true,
       title: 'Predict, with an error bar',
       body: `A prediction without an uncertainty cannot be tested: any
-             measurement would be "close". Report the period of the planet at
-             4 AU the way a result is reported: the value, then ±, then its
-             uncertainty, from the last two boxes of the previous step.
-             \n\nIt counts as right when the range you give overlaps the range
-             the law allows, and is no wider than twice that range's half-width,
-             because an uncertainty large enough to overlap anything has not
-             told anyone anything.`,
+ measurement would be "close". Report the period of the planet at
+ 4 AU the way a result is reported: the value, then ±, then its
+ uncertainty, from the last two boxes of the previous step.
+ \n\nIt counts as right when the range you give overlaps the range
+ the law allows, and is no wider than twice that range's half-width,
+ because an uncertainty large enough to overlap anything has not
+ told anyone anything.`,
       prompt: 'Period at a = 4 AU, with its uncertainty',
       unit: 'years',
       placeholder: 'e.g. 8.0 ± 0.1',
@@ -252,13 +252,13 @@ export default {
       expect: { dimension: 'time', unit: 'yr', accept: ['yr', 'years'] },
       hints: {
         concept: `The weighted fit gives a constant k and how well it is
-                  known. The law turns that into a period and an uncertainty
-                  on the period.`,
+ known. The law turns that into a period and an uncertainty
+ on the period.`,
         method: `Copy the predicted period and its uncertainty from the
-                 weighted-fit step, and write them as value ± uncertainty.`,
+ weighted-fit step, and write them as value ± uncertainty.`,
       },
       worked: `The weighted constant is close to 1, so P = √(k·64) is close to
-               8 years, with an uncertainty of a few hundredths.`,
+ 8 years, with an uncertainty of a few hundredths.`,
       because:
         'The law, fitted with weights, gives about 8 years with an uncertainty of a few hundredths of a year, which overlaps the 8 years the unweighted law gives. Two ways of finding the constant agreeing, with an honest error bar on each, is what makes the law a measurement rather than a slogan.',
     },
@@ -272,16 +272,16 @@ export default {
       uncertainty: true,
       title: 'Weigh a real planet’s star',
       body: `The canvas still shows the Solar System; this step uses numbers
-             only. They are the ones the transit and radial-velocity
-             investigations use for HD 209458 b: an orbital period of
-             <strong>3.5247 ± 0.0001 days</strong> and an orbit of
-             <strong>0.0475 ± 0.0005 AU</strong>.
-             \n\nNewton's form of the third law gives the star's mass in solar
-             masses from a in AU and P in years: M = a³ / P². Convert the
-             period first. The uncertainty of a product of powers adds the
-             fractional uncertainties in quadrature, each multiplied by its
-             power: σ<sub>M</sub>/M = √((3σ<sub>a</sub>/a)² +
-             (2σ<sub>P</sub>/P)²).`,
+ only. They are the ones the transit and radial-velocity
+ investigations use for HD 209458 b: an orbital period of
+ <strong>3.5247 ± 0.0001 days</strong> and an orbit of
+ <strong>0.0475 ± 0.0005 AU</strong>.
+ \n\nNewton's form of the third law gives the star's mass in solar
+ masses from a in AU and P in years: M = a³ / P². Convert the
+ period first. The uncertainty of a product of powers adds the
+ fractional uncertainties in quadrature, each multiplied by its
+ power: σ<sub>M</sub>/M = √((3σ<sub>a</sub>/a)² +
+ (2σ<sub>P</sub>/P)²).`,
       prompt: 'Mass of HD 209458, with its uncertainty',
       unit: 'M☉',
       placeholder: 'e.g. 1.15 ± 0.04',
@@ -289,13 +289,13 @@ export default {
       tolerance: 0.06,
       hints: {
         concept: `Kepler's third law in years, AU and solar masses: the mass
-                  is a cubed divided by P squared.`,
+ is a cubed divided by P squared.`,
         method: `P = 3.5247 / 365.25 years. Work out M, then the two
-                 fractional uncertainties, combine them, and multiply by M.`,
+ fractional uncertainties, combine them, and multiply by M.`,
       },
       worked: `P = 0.009650 yr, so M = 0.0475³ / 0.009650² = 1.151. The
-               fractions are 3 × 0.0105 = 0.032 and 2 × 0.00003, so σ is about
-               0.036: M = 1.15 ± 0.04 solar masses.`,
+ fractions are 3 × 0.0105 = 0.032 and 2 × 0.00003, so σ is about
+ 0.036: M = 1.15 ± 0.04 solar masses.`,
       because:
         'About 1.15 solar masses, uncertain by about 0.04. Almost all of that comes from the orbit size, because a is cubed: a 1% uncertainty in a is a 3% uncertainty in the mass, while the period, known to a few parts in a hundred thousand, hardly contributes.',
     },
@@ -308,11 +308,11 @@ export default {
       kind: 'choice',
       title: 'Two methods, one period',
       body: `That 3.52-day period can be found two independent ways: from the
-             star's wobble towards and away from us (the radial-velocity
-             analysis built into Gravitas, under Tools) and from the dip each
-             time the planet crosses the star (the transit investigation, and
-             real light curves such as TESS's). Where the two disagree, one of
-             them is wrong.`,
+ star's wobble towards and away from us (the radial-velocity
+ analysis built into Gravitas, under Tools) and from the dip each
+ time the planet crosses the star (the transit investigation, and
+ real light curves such as TESS's). Where the two disagree, one of
+ them is wrong.`,
       prompt: 'What does agreement between two independent methods give you?',
       options: [
         'A smaller uncertainty on the period, and nothing else',

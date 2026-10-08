@@ -49,6 +49,21 @@ import {
 import { validateBackup } from './investigations/progressBackup.js';
 import { MANIFEST } from './data/investigations/manifest.js';
 import { decodeEntities } from './lessonMarkup.js';
+import { layDepth } from './investigations/depthPure.js';
+
+// The deeper steps by lesson, English only: grading never needs the Spanish.
+const DEEPER = {
+  'keplers-laws': () => import('./data/investigations/depth/keplers-laws.js'),
+  'transit-photometry': () =>
+    import('./data/investigations/depth/transit-photometry.js'),
+  'weighing-stars': () =>
+    import('./data/investigations/depth/weighing-stars.js'),
+  'missing-mass': () => import('./data/investigations/depth/missing-mass.js'),
+};
+const deepen = async lesson =>
+  lesson.depthLaid || !DEEPER[lesson.id]
+    ? lesson
+    : layDepth(lesson, (await DEEPER[lesson.id]()).default.steps);
 import { mountShell } from './shell.js';
 
 const $ = id => document.getElementById(id);
@@ -120,9 +135,7 @@ async function accept(label, thing, kind) {
   if (!lesson) return refuse(label, 'unknownLesson');
   // Read at a deeper depth: its steps are laid in, or their answers are stale.
   if (lesson.depths && submission.dp && submission.dp !== 'core')
-    lesson = await (
-      await import('./investigations/depth.js')
-    ).withDepth(lesson, 'en');
+    lesson = await deepen(lesson);
   // The evidence behind the answers, checked against its digest here: the
   // table in front of the instructor is recomputed, not taken as stated.
   const evidence = await checkEvidence(submission.ev);

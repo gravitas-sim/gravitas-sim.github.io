@@ -32,17 +32,17 @@ export default {
       requires: ['correct-it-and-get-a'],
       title: 'How sure is the radius?',
       body: `Your radius came from one depth, and a depth is a difference of
-             two brightnesses, each averaged over many exposures. Suppose each
-             exposure scatters by 3 × 10⁻⁴ of the star's brightness, a transit
-             has 90 exposures inside it and the baseline has 450. The
-             uncertainty of the depth is then
-             σ<sub>δ</sub> = σ·√(1/n<sub>in</sub> + 1/n<sub>out</sub>).
-             \n\nThe radius goes as √δ, so its fractional uncertainty is half
-             the depth's: σ<sub>R</sub>/R = σ<sub>δ</sub> / (2δ). The depth and
-             star radius are the ones you entered in the previous measurement;
-             only the three numbers above are new. The star's own radius is
-             taken as exact here, which is the next thing a real analysis would
-             not do.`,
+ two brightnesses, each averaged over many exposures. Suppose each
+ exposure scatters by 3 × 10⁻⁴ of the star's brightness, a transit
+ has 90 exposures inside it and the baseline has 450. The
+ uncertainty of the depth is then
+ σ<sub>δ</sub> = σ·√(1/n<sub>in</sub> + 1/n<sub>out</sub>).
+ \n\nThe radius goes as √δ, so its fractional uncertainty is half
+ the depth's: σ<sub>R</sub>/R = σ<sub>δ</sub> / (2δ). The depth and
+ star radius are the ones you entered in the previous measurement;
+ only the three numbers above are new. The star's own radius is
+ taken as exact here, which is the next thing a real analysis would
+ not do.`,
       fields: [
         {
           id: 'sig',
@@ -110,9 +110,9 @@ export default {
       uncertainty: true,
       title: 'Report it with an error bar',
       body: `Give the planet's radius as a result: the value, ±, and the
-             uncertainty from the step before. It counts when the range you
-             give overlaps the range the measurement supports and is no wider
-             than twice that range's half-width.`,
+ uncertainty from the step before. It counts when the range you
+ give overlaps the range the measurement supports and is no wider
+ than twice that range's half-width.`,
       prompt: 'Planet radius, with its uncertainty',
       unit: 'R_Jupiter',
       placeholder: 'e.g. 1.37 ± 0.01',
@@ -128,10 +128,10 @@ export default {
       hints: {
         concept: `A result is a value and how well it is known.`,
         method: `Copy the radius and its uncertainty from the previous step
-                 and write them as value ± uncertainty.`,
+ and write them as value ± uncertainty.`,
       },
       worked: `About 1.37 Jupiter radii, uncertain by a few thousandths from
-               the photometry alone.`,
+ the photometry alone.`,
       because:
         'About 1.37 Jupiter radii. The photometric scatter alone makes the uncertainty tiny; the published value, 1.38, differs from it by more than that, because the star’s radius and the limb-darkening model carry uncertainty too. Reporting the error bar you can justify, and saying what it leaves out, is the honest form of the result.',
     },
@@ -144,14 +144,14 @@ export default {
       uncertainty: true,
       title: 'Run it forwards',
       body: `Go the other way: from a planet to the dip it would make. A
-             forward model takes the radii and predicts the depth, so it can be
-             held against what was measured.
-             \n\nSuppose the planet's radius is known to be 1.38 R<sub>Jupiter</sub>
-             to 1.5%, and the star's 1.155 R<sub>☉</sub> to 1.2%. For a transit
-             across the middle of the star, the depth is δ = k²·1.2146 with
-             k = R<sub>p</sub>/R<sub>★</sub>. Because δ goes as k², its
-             fractional uncertainty is twice that of k, and the two radii's add
-             in quadrature.`,
+ forward model takes the radii and predicts the depth, so it can be
+ held against what was measured.
+ \n\nSuppose the planet's radius is known to be 1.38 R<sub>Jupiter</sub>
+ to 1.5%, and the star's 1.155 R<sub>☉</sub> to 1.2%. For a transit
+ across the middle of the star, the depth is δ = k²·1.2146 with
+ k = R<sub>p</sub>/R<sub>★</sub>. Because δ goes as k², its
+ fractional uncertainty is twice that of k, and the two radii's add
+ in quadrature.`,
       prompt: 'Predicted depth, with its uncertainty',
       unit: '',
       placeholder: 'e.g. 0.0183 ± 0.0007',
@@ -160,11 +160,11 @@ export default {
       hints: {
         concept: `The model is the depth relation you used backwards.`,
         method: `k = 1.38 / (1.155 × 9.7311). Square it, multiply by 1.2146,
-                 then take twice the combined fractional uncertainty of k.`,
+ then take twice the combined fractional uncertainty of k.`,
       },
       worked: `k = 0.1228, so δ = 0.01508 × 1.2146 = 0.0183. The fractional
-               uncertainty of k is √(0.015² + 0.012²) = 0.0192, so of δ it is
-               0.0384, which is 0.0007.`,
+ uncertainty of k is √(0.015² + 0.012²) = 0.0192, so of δ it is
+ 0.0384, which is 0.0007.`,
       because:
         'The model predicts a depth of 0.0183, uncertain by about 0.0007. That is the number a measured depth is compared with: not whether the two are equal, which they never exactly are, but whether they differ by more than their combined uncertainty.',
     },
@@ -176,8 +176,8 @@ export default {
       kind: 'choice',
       title: 'Does the model agree?',
       body: `A measurement gave a depth of 0.0179 ± 0.0004. The forward model
-             predicted 0.0183 ± 0.0007. The two differ by 0.0004, and their
-             uncertainties combine in quadrature.`,
+ predicted 0.0183 ± 0.0007. The two differ by 0.0004, and their
+ uncertainties combine in quadrature.`,
       prompt: 'Taking the combined uncertainty into account, the two…',
       options: [
         'disagree: the numbers are not equal',

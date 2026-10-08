@@ -26,10 +26,15 @@
 // answer-key build, the author checks and the tests. It imports only data.
 // =============================================================================
 
-import { DEPTHS, inDepth } from './progressSchema.js';
-import { depthsOf, layDepth, lessonAt, stepCounts } from './depthPure.js';
-import { mergeTranslation } from '../data/investigations/i18n.js';
-import { COURSE_LEVELS } from '../settingsSchema.js';
+import {
+  DEPTHS,
+  depthsOf,
+  inDepth,
+  layDepth,
+  lessonAt,
+  overlay,
+  stepCounts,
+} from './depthPure.js';
 import { registerMessages, t } from '../i18n/index.js';
 
 export { DEPTHS, inDepth, depthsOf, layDepth, lessonAt, stepCounts };
@@ -58,6 +63,9 @@ const WORDS = {
   },
 };
 
+/** What each course level reads at (js/settingsSchema.js COURSE_LEVELS; a test holds them equal). */
+const LEVEL_DEPTH = { majors: 'quantitative', advanced: 'advanced' };
+
 /** The lessons that have deeper steps. */
 export const DEPTH_LESSONS = Object.freeze(Object.keys(EXTENSIONS));
 
@@ -77,7 +85,7 @@ export async function loadDepthSteps(id, locale = 'en') {
         () => null
       )
     : null;
-  return (words ? mergeTranslation(base, words) : base).steps;
+  return (words ? overlay(base, words) : base).steps;
 }
 
 /**
@@ -129,9 +137,7 @@ export const messages = () =>
 export async function openDepth(lesson, mem, assignment, locale) {
   const offered = lesson.depths || [];
   const choice = DEPTHS.includes(mem?.depth) ? mem.depth : null;
-  const want = assignment
-    ? assignment.d
-    : (choice ?? COURSE_LEVELS[mem?.level]?.depth);
+  const want = assignment ? assignment.d : (choice ?? LEVEL_DEPTH[mem?.level]);
   const depth = offered.includes(want) ? want : 'core';
   const deepest = [depth, mem?.deepest].reduce(
     (a, b) => (DEPTHS.indexOf(b) > DEPTHS.indexOf(a) ? b : a),

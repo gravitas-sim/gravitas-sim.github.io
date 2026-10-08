@@ -19,13 +19,13 @@ export default {
       requires: [FIT],
       title: 'How sure is that number?',
       body: `The ratio of halo to visible mass has two uncertainties in it.
-             The halo mass goes as the square of the flat speed, so the fit's
-             average miss, as a fraction of that speed, counts twice. And the
-             visible mass is not weighed: it is worked out from light, with an
-             assumption about how much mass each unit of light carries, which
-             is good to perhaps 20%.
-             \n\nThe fit numbers are the ones you recorded; only the 20% is
-             new. The fractional uncertainties add in quadrature.`,
+ The halo mass goes as the square of the flat speed, so the fit's
+ average miss, as a fraction of that speed, counts twice. And the
+ visible mass is not weighed: it is worked out from light, with an
+ assumption about how much mass each unit of light carries, which
+ is good to perhaps 20%.
+ \n\nThe fit numbers are the ones you recorded; only the 20% is
+ new. The fractional uncertainties add in quadrature.`,
       fields: [
         {
           id: 'vis_frac',
@@ -78,9 +78,9 @@ export default {
       uncertainty: true,
       title: 'Give the ratio an error bar',
       body: `Write the ratio the way it is reported: the value, ±, and the
-             uncertainty from the previous step. It counts when the range you
-             give overlaps the range the measurement supports and is no wider
-             than twice that range's half-width.`,
+ uncertainty from the previous step. It counts when the range you
+ give overlaps the range the measurement supports and is no wider
+ than twice that range's half-width.`,
       prompt:
         'Halo mass inside 30 kpc, divided by visible mass, with its uncertainty',
       unit: '×',
@@ -92,7 +92,7 @@ export default {
         method: `Copy the ratio and its uncertainty from the previous step.`,
       },
       worked: `About 3.4, uncertain by about 0.7, nearly all of it from the
-               visible mass.`,
+ visible mass.`,
       because:
         'About 3.4 with an uncertainty of about 0.7. Even at the edge of that range the halo outweighs the visible mass by more than two to one, which is why the conclusion survives an uncertainty this large.',
     },
@@ -104,9 +104,9 @@ export default {
       kind: 'choice',
       title: 'Why not report one number?',
       body: `The fit's tip said the two halo sliders trade off: a faster halo
-             with a bigger core fits almost as well as a slower one with a
-             smaller one. Say two fits, 150 km/s with a 6 kpc core and 160 km/s
-             with a 9 kpc core, both miss by 2 km/s.`,
+ with a bigger core fits almost as well as a slower one with a
+ smaller one. Say two fits, 150 km/s with a 6 kpc core and 160 km/s
+ with a 9 kpc core, both miss by 2 km/s.`,
       prompt: 'What should a published result say?',
       options: [
         'the one with the smaller core, because it is simpler',
@@ -126,7 +126,7 @@ export default {
       kind: 'short',
       title: 'What would tell two models apart?',
       body: `A halo and a modified law of gravity can fit the same rotation
-             curve. Your fit's uncertainty says how much room each model has.`,
+ curve. Your fit's uncertainty says how much room each model has.`,
       prompt:
         'In a few sentences: what would you need to measure to tell them apart, and why is a better fit of this one curve not enough?',
       rubric:

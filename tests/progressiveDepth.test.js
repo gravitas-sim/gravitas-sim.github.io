@@ -3,11 +3,8 @@
 // uncertainty, progress that survives a change of depth, and the keys, reports
 // and assignments that state the depth.
 import { describe, test, expect } from '@jest/globals';
-import {
-  INVESTIGATIONS,
-  DEEPER,
-  withAllDepths,
-} from '../js/data/investigations.js';
+import { INVESTIGATIONS } from '../js/data/investigations.js';
+import { DEEPER, withAllDepths } from '../js/data/investigations/depthAll.js';
 import { mergeTranslation } from '../js/data/investigations/i18n.js';
 import { checkDepth } from '../js/authoring/depthRules.js';
 import {

@@ -5,7 +5,40 @@
 // the tests can lay a lesson out synchronously. See DEPTH.md.
 // =============================================================================
 
-import { DEPTHS, inDepth } from './progressSchema.js';
+// Duplicates the two names of ./progressSchema.js on purpose: a module shared
+// between the lesson panel and this lazy one is its own file, and a request on
+// every lesson route (tests/progressiveDepth.test.js holds them equal).
+export const DEPTHS = Object.freeze(['core', 'quantitative', 'advanced']);
+export const inDepth = (step, depth = 'core') =>
+  Math.max(0, DEPTHS.indexOf(step?.depth)) <=
+  Math.max(0, DEPTHS.indexOf(depth));
+
+/** The Spanish laid over a deeper step list: strings only, by index, never the machinery. */
+const KEEP = new Set([
+  'sid',
+  'after',
+  'depth',
+  'restates',
+  'unit',
+  'id',
+  'kind',
+  'type',
+  'at',
+]);
+export function overlay(base, over) {
+  if (over === undefined || over === null) return base;
+  if (typeof base === 'string') return typeof over === 'string' ? over : base;
+  if (Array.isArray(base))
+    return Array.isArray(over) ? base.map((b, i) => overlay(b, over[i])) : base;
+  if (base && typeof base === 'object' && typeof over === 'object') {
+    const out = { ...base };
+    for (const k of Object.keys(over))
+      if (Object.hasOwn(base, k) && !KEEP.has(k))
+        out[k] = overlay(base[k], over[k]);
+    return out;
+  }
+  return base;
+}
 
 /**
  * A lesson with its deeper steps laid in. Each goes right after the step it

@@ -46,7 +46,8 @@ import {
   sourcePathsFor,
 } from './instructor-freshness.mjs';
 
-import { INVESTIGATIONS, withAllDepths } from '../js/data/investigations.js';
+import { INVESTIGATIONS } from '../js/data/investigations.js';
+import { withAllDepths } from '../js/data/investigations/depthAll.js';
 import { verifyKey } from '../js/answerKey.js';
 import {
   instructorGuide,
