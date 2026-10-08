@@ -23,6 +23,7 @@
 import {
   LANGUAGES,
   language,
+  loadLanguage,
   preferred,
   setLanguage,
   t,
@@ -480,7 +481,8 @@ function renderLanguages() {
         text: l.endonym,
         'aria-pressed': String(language() === l.id),
       });
-      b.addEventListener('click', () => {
+      b.addEventListener('click', async () => {
+        await loadLanguage(l.id);
         setLanguage(l.id);
         translateAll();
       });
@@ -522,6 +524,8 @@ async function start() {
   document.documentElement.dataset.ready = 'true';
 }
 
-setLanguage(preferred());
-translateAll();
-start();
+loadLanguage(preferred()).then(() => {
+  setLanguage(preferred());
+  translateAll();
+  start();
+});

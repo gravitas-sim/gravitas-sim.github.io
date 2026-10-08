@@ -13,6 +13,7 @@
 import {
   LANGUAGES,
   language,
+  loadLanguage,
   preferred,
   setLanguage,
   t,
@@ -461,7 +462,10 @@ function languageSwitch() {
         text: endonym,
       });
       b.setAttribute('aria-pressed', String(language() === id));
-      b.addEventListener('click', () => useLanguage(id));
+      b.addEventListener('click', async () => {
+        await loadLanguage(id);
+        useLanguage(id);
+      });
       return b;
     })
   );
@@ -483,6 +487,9 @@ $('lb-file').addEventListener('change', () =>
   openFile($('lb-file').files?.[0])
 );
 $('lb-bench-go').addEventListener('click', bench);
-useLanguage(preferred());
-status(t('lab3d.status.idle'));
-document.documentElement.dataset.ready = 'true';
+// A Spanish reader's catalog, before anything is written in it.
+loadLanguage(preferred()).then(() => {
+  useLanguage(preferred());
+  status(t('lab3d.status.idle'));
+  document.documentElement.dataset.ready = 'true';
+});

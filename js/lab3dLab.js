@@ -1215,6 +1215,7 @@ async function init() {
     const b = e.target.closest('button[data-lang]');
     if (!b) return;
     await loadLanguage(b.dataset.lang);
+    await guidePanel?.loadLanguage(b.dataset.lang);
     setLanguage(b.dataset.lang);
     retranslate();
   });

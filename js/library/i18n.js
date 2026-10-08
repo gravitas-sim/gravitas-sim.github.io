@@ -9,10 +9,22 @@
 // =============================================================================
 
 import { EN_LIBRARY } from '../i18n/en.library.js';
-import { ES_LIBRARY } from '../i18n/es.library.js';
 
 const STORAGE_KEY = 'gravitas_locale';
-const CATALOGS = { en: EN_LIBRARY, es: ES_LIBRARY };
+// English is the page's own; Spanish loads when a reader arrives with it or
+// chooses it (loadLanguage), so an English reader never downloads it.
+const CATALOGS = { en: EN_LIBRARY, es: {} };
+const LOADERS = {
+  es: () => import('../i18n/es.library.js').then(m => m.ES_LIBRARY),
+};
+const loaded = new Set(['en']);
+
+/** Load a language's catalog, if it is not loaded yet. */
+export async function loadLanguage(id) {
+  if (loaded.has(id) || !LOADERS[id]) return;
+  CATALOGS[id] = await LOADERS[id]();
+  loaded.add(id);
+}
 const DEFAULT = 'en';
 let current = DEFAULT;
 

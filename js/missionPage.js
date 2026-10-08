@@ -14,6 +14,7 @@
 import {
   LANGUAGES,
   language,
+  loadLanguage,
   preferred,
   setLanguage,
   t,
@@ -907,7 +908,10 @@ function languageSwitch() {
         text: endonym,
       });
       b.setAttribute('aria-pressed', String(language() === id));
-      b.addEventListener('click', () => useLanguage(id));
+      b.addEventListener('click', async () => {
+        await loadLanguage(id);
+        useLanguage(id);
+      });
       return b;
     })
   );
@@ -940,5 +944,8 @@ for (const sid of [
   'mn-flyby',
 ])
   $(`${sid}-export`).addEventListener('click', () => save(sid));
-useLanguage(preferred());
-document.documentElement.dataset.ready = 'true';
+// A Spanish reader's catalog, before anything is written in it.
+loadLanguage(preferred()).then(() => {
+  useLanguage(preferred());
+  document.documentElement.dataset.ready = 'true';
+});

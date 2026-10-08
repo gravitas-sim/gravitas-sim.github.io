@@ -485,7 +485,9 @@ async function buildDocPages() {
       entryPoints: ['js/evaluationKit.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing here reads a function's name, and each wrapper
+      // is bytes on a page the budget holds to 11.7 KB.
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'evaluationKit.js'),
@@ -562,7 +564,9 @@ async function buildDocPages() {
       entryPoints: ['js/missionPage.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing in this page reads a function's name, and the
+      // helper would be a chunk of its own once Spanish is lazy (one request).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
@@ -579,7 +583,9 @@ async function buildDocPages() {
       entryPoints: ['js/missionLabPage.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing in this page reads a function's name, and the
+      // helper would be a chunk of its own once Spanish is lazy (one request).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
@@ -597,7 +603,9 @@ async function buildDocPages() {
       entryPoints: ['js/lab3dPage.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing in this page reads a function's name, and the
+      // helper would be a chunk of its own once Spanish is lazy (one request).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
@@ -616,7 +624,9 @@ async function buildDocPages() {
       entryPoints: ['js/lab3dLab.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing in it reads a function's name, and the helper
+      // is a chunk of its own beside the lazy Spanish catalog (one request).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
@@ -636,7 +646,9 @@ async function buildDocPages() {
       entryPoints: ['js/lab3d/view/guidePanel.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing in it reads a function's name, and the helper
+      // is a chunk of its own beside the lazy Spanish catalog (one request).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js/lab3d/view/guidePanel.js'),
@@ -708,7 +720,9 @@ async function buildDocPages() {
       entryPoints: ['js/catalogPage.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing in this page reads a function's name, and the
+      // helper would be a chunk of its own once Spanish is lazy (one request).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
@@ -725,10 +739,15 @@ async function buildDocPages() {
       entryPoints: ['js/libraryPage.js'],
       bundle: true,
       minify: true,
+      // Split, so Spanish is a chunk of its own that only a Spanish reader
+      // fetches (js/library/i18n.js). No keepNames: nothing here reads a
+      // function's name, and the helper would be one more request.
       keepNames: false,
       format: 'esm',
       target: ['es2022'],
-      outfile: path.join(OUT, 'js', 'libraryPage.js'),
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'library-[hash]',
       legalComments: 'none',
     });
   }
