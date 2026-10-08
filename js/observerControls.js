@@ -136,10 +136,10 @@ export function mountObserverControls(host, { inclination = true } = {}) {
   };
 
   paSlider?.addEventListener('input', e =>
-    setPositionAngle(parseFloat(e.target.value))
+    setPositionAngle(e.target.valueAsNumber)
   );
   incSlider?.addEventListener('input', e =>
-    setInclination(parseFloat(e.target.value))
+    setInclination(e.target.valueAsNumber)
   );
 
   const unsubscribe = onObserverChange(render);

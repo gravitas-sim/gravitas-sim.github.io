@@ -1244,7 +1244,7 @@ async function init() {
   for (const id of ['l3-preset', 'l3-projection'])
     $(id).addEventListener('change', resetView);
   $('l3-follow').addEventListener('change', e => {
-    state.follow = Number(e.target.value);
+    state.follow = +e.target.value;
     state.scene?.clearTrails();
     resetView();
   });

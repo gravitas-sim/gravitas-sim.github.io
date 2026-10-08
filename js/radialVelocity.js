@@ -1037,9 +1037,9 @@ export function radialVelocitySurvey() {
 function readSurveyControls(kindOverride = null) {
   const e = cacheElements();
   const base = {
-    cadenceDays: Number(e.surveyCadence?.value ?? 0.32),
-    baselineDays: Number(e.surveyBaseline?.value ?? 3.52),
-    sigmaMs: Number(e.surveySigma?.value ?? 8),
+    cadenceDays: (e.surveyCadence?.valueAsNumber ?? 0.32) || 0,
+    baselineDays: (e.surveyBaseline?.valueAsNumber ?? 3.52) || 0,
+    sigmaMs: (e.surveySigma?.valueAsNumber ?? 8) || 0,
     seed: String(e.surveySeed?.value ?? 'survey-1'),
   };
 
@@ -1417,8 +1417,8 @@ function syncScheduleFields() {
   if (e.surveyEpochs && !e.surveyEpochs.value) {
     e.surveyEpochs.value = String(
       controlsLib.epochCount({
-        cadenceDays: Number(e.surveyCadence?.value ?? 0.32),
-        baselineDays: Number(e.surveyBaseline?.value ?? 3.52),
+        cadenceDays: (e.surveyCadence?.valueAsNumber ?? 0.32) || 0,
+        baselineDays: (e.surveyBaseline?.valueAsNumber ?? 3.52) || 0,
       })
     );
   }

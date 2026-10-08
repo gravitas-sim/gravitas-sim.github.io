@@ -145,7 +145,7 @@ function setupTransport() {
     const frames = getFrameCount();
     if (frames < 2) return;
     // Slider runs oldest (0) → newest (max); the timeline counts backwards.
-    const offset = Number(scrubberEl.max) - Number(scrubberEl.value);
+    const offset = Number(scrubberEl.max) - scrubberEl.valueAsNumber;
     scrubTo(offset);
   });
 
@@ -678,7 +678,7 @@ function paintRangeFill(el) {
   const min = Number(el.min || 0);
   const max = Number(el.max || 100);
   const span = max - min;
-  const pct = span > 0 ? ((Number(el.value) - min) / span) * 100 : 0;
+  const pct = span > 0 ? ((el.valueAsNumber - min) / span) * 100 : 0;
   el.style.setProperty('--range-fill', `${Math.max(0, Math.min(100, pct))}%`);
 }
 

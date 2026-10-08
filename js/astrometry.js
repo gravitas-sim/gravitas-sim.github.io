@@ -616,7 +616,7 @@ export function initAstrometry() {
   e.close?.addEventListener('click', () => setAstrometryEnabled(false));
   e.clear?.addEventListener('click', () => clearAstrometry());
   e.distance?.addEventListener('input', ev => {
-    setAssumedDistance(parseFloat(ev.target.value));
+    setAssumedDistance(ev.target.valueAsNumber);
     distanceIsMeasured = false;
     render();
   });

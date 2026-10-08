@@ -230,7 +230,7 @@ async function buildChart(chartCanvas) {
 function wireLightCurveControls() {
   if (angleSlider) {
     angleSlider.addEventListener('input', e => {
-      setPositionAngle(parseFloat(e.target.value));
+      setPositionAngle(e.target.valueAsNumber);
       const observerAngleDeg = getPositionAngle();
       if (angleDisplay)
         angleDisplay.textContent = `${Math.round(observerAngleDeg)}°`;

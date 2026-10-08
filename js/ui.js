@@ -1780,7 +1780,7 @@ const showObjectInspector = (object, type) => {
       state.selectedObject.object &&
       sliderObjectId === currentObjectId &&
       Math.abs(
-        parseFloat(existingMassSlider.value) - state.selectedObject.object.mass
+        existingMassSlider.valueAsNumber - state.selectedObject.object.mass
       ) < 0.1;
 
     if (isNewObject && !isMassUpdate) {
@@ -3077,7 +3077,7 @@ const wireBlackHoleAppearance = () => {
   const tiltOut = document.getElementById('bhInclinationOut');
   if (tilt && isHole && bh) {
     tilt.oninput = () => {
-      const deg = Number(tilt.value);
+      const deg = tilt.valueAsNumber;
       bh.setAppearance({ inclinationDeg: deg });
       if (tiltOut) tiltOut.textContent = `${deg}\u00b0`;
     };
@@ -3466,7 +3466,7 @@ const setupMassSliderListeners = () => {
   let isDragging = false;
 
   const updateMass = () => {
-    const newMass = parseFloat(massSlider.value);
+    const newMass = massSlider.valueAsNumber;
     if (!isFinite(newMass) || newMass <= 0) return;
     const object = state.selectedObject.object;
     const type = state.selectedObject.type;
@@ -4484,7 +4484,7 @@ if (sonificationToggleBtn) {
   });
 
   document.getElementById('soundPanelVolume')?.addEventListener('input', e => {
-    setSonificationVolume(Number(e.target.value));
+    setSonificationVolume(e.target.valueAsNumber);
   });
 
   document.getElementById('soundPanelStop')?.addEventListener('click', () => {
@@ -5461,8 +5461,8 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
         slider.oninput = () => {
           const val =
             item.type === 'int'
-              ? parseInt(slider.value)
-              : parseFloat(slider.value);
+              ? Math.trunc(slider.valueAsNumber)
+              : slider.valueAsNumber;
           localSettings[item.key] = val;
           valueDisplay.textContent = val.toFixed(
             item.precision || (item.type === 'float' ? 1 : 0)
@@ -5718,11 +5718,11 @@ const showIndivBHMassMenu = async () => {
 
     const valueDisplay = document.createElement('span');
     valueDisplay.className = 'value-display';
-    valueDisplay.innerHTML = solarHTML(Number(slider.value).toFixed(1));
+    valueDisplay.innerHTML = solarHTML(slider.valueAsNumber.toFixed(1));
 
     slider.oninput = e => {
       const index = parseInt(e.target.dataset.index, 10);
-      const val = parseFloat(e.target.value);
+      const val = e.target.valueAsNumber;
       localSettings.bh_masses[index] = val;
       valueDisplay.innerHTML = solarHTML(val.toFixed(1));
     };

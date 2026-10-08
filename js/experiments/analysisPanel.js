@@ -296,7 +296,7 @@ export function mountAnalysis(root, ctx) {
     }
     const plan = planSweepAnalysis(r, {
       metric: metric.value || undefined,
-      resamples: Number(resamples.value),
+      resamples: resamples.valueAsNumber,
       profile: ctx.profile,
       rate,
     });
@@ -383,7 +383,7 @@ export function mountAnalysis(root, ctx) {
     try {
       const a = await analyzeSweep(r, {
         metric: metric.value,
-        resamples: Number(resamples.value),
+        resamples: resamples.valueAsNumber,
         seed: seed.value.trim() || 'analysis',
         reference: reference ?? undefined,
         signal: job.signal,
