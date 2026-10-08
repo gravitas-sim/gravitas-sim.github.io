@@ -29,6 +29,7 @@ jest.unstable_mockModule('../js/notebookPanel.js', () => ({
 }));
 jest.unstable_mockModule('../js/notebook/capture.js', () => ({
   __esModule: true,
+  withContext: (context, fn) => fn(),
 }));
 
 const bridge = await import('../js/notebookBridge.js');

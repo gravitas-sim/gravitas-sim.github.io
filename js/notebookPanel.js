@@ -41,8 +41,9 @@ import {
   MAX_BACKUP_BYTES,
 } from './notebook/notebook.js';
 import * as store from './notebook/store.js';
-import { buildEvidenceReport, reportFilename } from './notebook/report.js';
-import { downloadPdf } from './labReport.js';
+import { buildLedgerReport, reportFilename } from './notebook/report.js';
+import { observedRows, ARTIFACT_SOURCES } from './notebook/ledger.js';
+import { downloadPdf, reportMessages } from './labReport.js';
 
 const PANEL_ID = 'evidenceNotebook';
 
@@ -279,6 +280,7 @@ function proseHtml(entry) {
 /** One entry. */
 function entryHtml(entry, index, total) {
   const snap = entry.snapshot;
+  const cited = snap.artifact && ARTIFACT_SOURCES.includes(entry.source);
   const source = t(`nb.source.${entry.source}`);
   return `<li class="nb-entry" data-entry="${esc(entry.id)}">
       <div class="nb-entry-head">
@@ -345,8 +347,8 @@ function entryHtml(entry, index, total) {
       }
       ${proseHtml(entry)}
       <details class="nb-details">
-        <summary>${esc(t(snap.observed ? 'nb.entry.data' : snap.artifact ? 'nb.entry.cite' : 'nb.entry.conditions'))}</summary>
-        ${snap.observed ? rowsHtml(snap.observed.rows) : snap.artifact ? rowsHtml(citationRows(snap.artifact, t)) : provenanceHtml(snap.provenance)}
+        <summary>${esc(t(snap.observed ? 'nb.entry.data' : cited ? 'nb.entry.cite' : 'nb.entry.conditions'))}</summary>
+        ${snap.observed ? rowsHtml(observedRows(snap.observed, t)) : cited ? rowsHtml(citationRows(snap.artifact, t)) : provenanceHtml(snap.provenance)}
       </details>
     </li>`;
 }
@@ -616,8 +618,9 @@ export function downloadNotebook() {
 }
 
 /** Download the report. */
-export function downloadReport() {
-  const bytes = buildEvidenceReport({ entries, revision: revisionOf() });
+export async function downloadReport() {
+  await reportMessages();
+  const bytes = await buildLedgerReport({ entries, revision: revisionOf() });
   downloadPdf(bytes, reportFilename());
 }
 

@@ -864,6 +864,7 @@ export function mountFitPanel(root, ctx) {
           note: q =>
             t(`obs.fit.${q.origin === 'fitted' ? 'fitted' : q.origin}`),
         },
+        context: { page: 'observatory', observation: doc.data?.observation },
       });
       const loaded = loadNotebook();
       if (!loaded.ok) throw new Error(loaded.reason);

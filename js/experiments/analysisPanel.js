@@ -1153,6 +1153,7 @@ export function mountAnalysis(root, ctx) {
           note: q =>
             q.uncertainty.kind === 'interval' ? t('lab.nb.note.interval') : '',
         },
+        context: { page: 'experiments' },
       });
       const loaded = loadNotebook();
       if (!loaded.ok) throw new Error(loaded.reason);
