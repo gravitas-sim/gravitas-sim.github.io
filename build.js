@@ -207,6 +207,12 @@ async function buildJs() {
     chunkNames: 'chunk-[hash]',
     sourcemap: true,
     metafile: true,
+    // Emit non-ASCII characters as themselves. esbuild's default writes each
+    // as an escape (\xE9 for e-acute, \u2014 for an em dash), four to six
+    // bytes where UTF-8 takes two or three, and the Spanish catalogs and
+    // lesson shadows are full of them. Module scripts are always decoded as
+    // UTF-8, so the program is the same one; only the bytes are fewer.
+    charset: 'utf8',
     // NOTE: three and chart.js are no longer external. They are imported by
     // relative path from vendor/, so esbuild follows them into the deferred
     // chunks for the 3-D view and the charts. See tools/vendor-deps.mjs.

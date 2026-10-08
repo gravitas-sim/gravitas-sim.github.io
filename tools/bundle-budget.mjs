@@ -542,7 +542,17 @@ const BUDGETS = [
       'sentence unchanged when the locale has no entry, rendered exactly the ' +
       'same English without them. They are gone; the Spanish translations ' +
       'keep the same ids. Every lesson route is 13.6 KB lighter with them, ' +
-      'because the lesson engine awaits this catalog before its first step.',
+      'because the lesson engine awaits this catalog before its first step.\n\n' +
+      'Then 49.7 KB back, measured from fresh builds: 4164.5 KB to 4114.8, ' +
+      'with no ceiling touched. esbuild writes every non-ASCII character as an ' +
+      'escape by default - six bytes for an em dash, four for an accented ' +
+      'vowel - and the Spanish catalogs and lesson shadows are made of them. ' +
+      'build.js now sets charset: utf8 for the application bundle, so the ' +
+      'characters are written as themselves, two or three bytes each. Module ' +
+      'scripts are always decoded as UTF-8, so it is the same program. The ' +
+      'figure is the raw bytes this budget counts; compressed, the escapes ' +
+      'were already cheap, so the saving on the wire is a good deal smaller. ' +
+      'The initial download went 796.8 to 796.2 KB.',
   },
 ];
 
