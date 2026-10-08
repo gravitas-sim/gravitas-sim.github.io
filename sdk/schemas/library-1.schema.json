@@ -350,6 +350,12 @@
               }
             }
           }
+        },
+        "depths": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 3,
+          "description": "How many depths the investigation can be read at (Prompt 72)."
         }
       }
     }

@@ -77,6 +77,7 @@ export const ES_LIBRARY = {
   'lib.progress.done': 'Terminado',
   'lib.card.minutes': '{n} min',
   'lib.card.range': 'De {min} a {max} min',
+  'lib.card.depths': '{n} profundidades',
   'lib.card.steps': '{n} pasos',
   'lib.count.all': '{total} cosas para abrir.',
   'lib.count': 'Coinciden {n} de {total}.',

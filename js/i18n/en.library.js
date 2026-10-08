@@ -80,6 +80,7 @@ export const EN_LIBRARY = {
   'lib.progress.done': 'Finished',
   'lib.card.minutes': '{n} min',
   'lib.card.range': '{min} to {max} min',
+  'lib.card.depths': '{n} depths',
   'lib.card.steps': '{n} steps',
   'lib.count.all': '{total} things to open.',
   'lib.count': '{n} of {total} match.',
