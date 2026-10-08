@@ -3814,6 +3814,7 @@ export async function openInvestigation(id, opts = {}) {
   deepest = 'core';
   depthName = '';
   const mem = inv.depths && !authoring && peekDepth(id);
+  if (mem && opts.depth) mem.depth = opts.depth;
   if (
     opts.assignment?.d ||
     mem?.depth ||
@@ -5016,8 +5017,8 @@ export function currentPlotData() {
 /** Wire up the investigations panel. Safe to call once, from init. */
 /** Lesson id named in the address bar, if there is one. */
 function investigationFromHash() {
-  const m = /^#investigation=([\w-]+)$/.exec(window.location.hash || '');
-  return m ? decodeURIComponent(m[1]) : null;
+  const m = /^#investigation=([\w-]+)(?:\/(\w+))?$/.exec(location.hash);
+  return m ? [decodeURIComponent(m[1]), m[2]] : [];
 }
 
 /**
@@ -5027,15 +5028,15 @@ function investigationFromHash() {
  * assignment lands the student on the right lesson rather than on the browser.
  */
 function openInvestigationFromHash() {
-  const id = investigationFromHash();
+  const [id, depth] = investigationFromHash();
   if (!id) return;
   if (!hasInvestigation(id)) {
     toast(t('inv.link.unknown'));
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id).catch(err =>
-    loadFailed(() => openInvestigation(id).catch(() => {}), err)
+  openInvestigation(id, { depth }).catch(err =>
+    loadFailed(() => openInvestigation(id, { depth }).catch(() => {}), err)
   );
 }
 

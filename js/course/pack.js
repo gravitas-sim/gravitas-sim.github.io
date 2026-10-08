@@ -92,8 +92,16 @@ const COMMON_ITEM = [
   'teacherNote',
 ];
 const ITEM_FIELDS = {
-  lesson: ['lesson', 'pin'],
-  assignment: ['lesson', 'steps', 'title', 'intro', 'assignment', 'pin'],
+  lesson: ['lesson', 'pin', 'depth'],
+  assignment: [
+    'lesson',
+    'steps',
+    'title',
+    'intro',
+    'assignment',
+    'pin',
+    'depth',
+  ],
   scenario: ['scenario', 'seed', 'paused', 'title'],
   dataset: ['dataset', 'title'],
   reading: ['title', 'cite', 'license', 'access'],
@@ -474,6 +482,13 @@ function checkKind(item, at, ctx) {
         );
         ctx.seenLessons.set(item.lesson, at);
       }
+      if (item.depth !== undefined)
+        need(
+          ['core', 'quantitative', 'advanced'].includes(item.depth),
+          `${at}.depth`,
+          'depth',
+          'core, quantitative or advanced'
+        );
       if (item.kind === 'assignment') checkAssignment(item, at, ctx);
       if (item.pin !== undefined) checkPin(item, at, ctx);
       else

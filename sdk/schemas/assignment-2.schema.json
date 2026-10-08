@@ -85,6 +85,14 @@
     "answers": false,
     "attempts": false,
     "r": false,
-    "a": false
+    "a": false,
+    "d": {
+      "enum": [
+        "core",
+        "quantitative",
+        "advanced"
+      ],
+      "description": "The depth the item is set at (Prompt 72); steps deeper than it are not shown."
+    }
   }
 }

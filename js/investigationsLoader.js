@@ -88,7 +88,7 @@ export async function unmountInvestigations() {
  * @returns {boolean} True for a `#investigation=<id>` fragment
  */
 export const lessonInHash = () =>
-  /^#investigation=[\w-]+$/.test(window.location.hash || '');
+  /^#investigation=[\w-]+(\/\w+)?$/.test(window.location.hash || '');
 
 /**
  * Whether the address bar is asking for the authoring preview.
