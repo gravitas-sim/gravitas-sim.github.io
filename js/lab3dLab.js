@@ -27,8 +27,12 @@ import {
 import { createLiveSession } from './lab3d/liveClient.js';
 import { migrateSystem, validateSystem, gravityOf } from './lab3d/state.js';
 import { REFERENCES } from './lab3d/references.js';
-import { drawnAt, exactFrame, snapshotProblem } from './lab3d/snapshot.js';
-import { restartFrom } from './lab3d/live.js';
+import {
+  drawnAt,
+  exactFrame,
+  restartFrom,
+  snapshotProblem,
+} from './lab3d/snapshot.js';
 import { toFrame, trailToFrame, frameKey } from './lab3d/view/frames.js';
 import {
   bounds,

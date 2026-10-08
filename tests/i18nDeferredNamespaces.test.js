@@ -1,7 +1,7 @@
 // =============================================================================
 // The list of late namespaces has to be the real one
 // -----------------------------------------------------------------------------
-// js/i18n/deferredNamespaces.js decides which missing ids are worth reporting
+// js/i18n/index.js decides which missing ids are worth reporting
 // at start-up and which are merely early. A list that has drifted fails in the
 // quietest possible way: a namespace added to the deferred catalog and not to
 // the list brings the false warnings back, and one removed from the catalog
@@ -14,7 +14,7 @@
 import {
   DEFERRED_NAMESPACES,
   mayBeDeferred,
-} from '../js/i18n/deferredNamespaces.js';
+} from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 

@@ -18,6 +18,12 @@
 import { CEILINGS, createRun, runProblems } from './engine.js';
 import { SNAPSHOT_FORMAT, SNAPSHOT_VERSION } from './snapshot.js';
 
+// Kept in ./snapshot.js, which the page loads anyway: the page needs this and
+// nothing else of this module, and importing it from here would bring the
+// engine and the kernel (34 KB, three requests) to the page, whose Worker is
+// the only place they run. Re-exported so this module's API is unchanged.
+export { restartFrom } from './snapshot.js';
+
 export const MAX_INTERVALS_PER_ADVANCE = 256;
 export const SESSION_INTERVALS = CEILINGS.maxSamples;
 
@@ -121,23 +127,4 @@ export function createLive(system, o = {}) {
       cancel: () => run.cancel(),
     },
   };
-}
-
-/**
- * The system a stopped session would continue as: its bodies still alive,
- * with the snapshot's numbers, at the snapshot's time.
- */
-export function restartFrom(system, snap) {
-  const bodies = [];
-  system.bodies.forEach((b, i) => {
-    if (!snap.alive[i]) return;
-    bodies.push({
-      ...b,
-      m: snap.m[i],
-      radius: snap.radius[i],
-      x: [snap.x[3 * i], snap.x[3 * i + 1], snap.x[3 * i + 2]],
-      v: [snap.v[3 * i], snap.v[3 * i + 1], snap.v[3 * i + 2]],
-    });
-  });
-  return { ...system, t: snap.t, bodies };
 }
