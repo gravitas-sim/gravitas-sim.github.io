@@ -767,7 +767,12 @@ describe('the fixtures are the data they say they are', () => {
   test('the light curve and the aperture are the packs, decoded', async () => {
     const lc = await openFixture('tess-light-curve');
     expect(rowCount(lc)).toBe(1882);
-    expect(lc.time).toEqual({ column: 'time', format: 'BTJD', scale: 'TDB' });
+    expect(lc.time).toEqual({
+      column: 'time',
+      format: 'BTJD',
+      scale: 'TDB',
+      reference: 'BTJD = BJD - 2457000',
+    });
     expect(lc.reductions.join(' ')).toMatch(/20-minute bins/);
     const ap = await openFixture('tess-aperture');
     expect(ap.image.width * ap.image.height).toBe(rowCount(ap));

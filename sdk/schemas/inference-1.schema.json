@@ -94,6 +94,10 @@
               "type": "null"
             }
           ]
+        },
+        "digest": {
+          "type": "string",
+          "description": "The content digest of the observation the fit read (js/observatory/identity.js observationDigest), whichever way it arrived; absent from a file written before it was recorded."
         }
       }
     },
@@ -107,7 +111,10 @@
         "id": {
           "enum": [
             "transit-quadratic",
-            "rv-keplerian"
+            "rv-keplerian",
+            "poly-1",
+            "poly-2",
+            "power-law"
           ]
         },
         "version": {
@@ -433,6 +440,117 @@
                   "maximum": 200
                 }
               }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "poly-1"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "c0",
+            "c1"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "c0": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "c1": {
+              "$ref": "#/$defs/unbounded"
+            }
+          }
+        },
+        "settings": {
+          "required": [
+            "x0"
+          ],
+          "properties": {
+            "x0": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "poly-2"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "c0",
+            "c1",
+            "c2"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "c0": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "c1": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "c2": {
+              "$ref": "#/$defs/unbounded"
+            }
+          }
+        },
+        "settings": {
+          "required": [
+            "x0"
+          ],
+          "properties": {
+            "x0": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "model": {
+          "properties": {
+            "id": {
+              "const": "power-law"
+            },
+            "version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "parameters": {
+          "required": [
+            "A",
+            "p"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "A": {
+              "$ref": "#/$defs/unbounded"
+            },
+            "p": {
+              "$ref": "#/$defs/unbounded"
             }
           }
         }

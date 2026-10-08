@@ -122,13 +122,9 @@ describe('FNV-1a', () => {
   });
 
   test('the copies that are not exported run the same loop', () => {
-    // The lab report's completion code, an import's fingerprint, the analysis
-    // stream's seed: the same basis, the same prime, over charCodeAt.
-    for (const file of [
-      'js/labReport.js',
-      'js/observatory/import.js',
-      'js/analysis/stats.js',
-    ]) {
+    // The lab report's completion code and the analysis stream's seed (the
+    // import's fingerprint and the engine's now use js/hash.js): the same basis, the same prime, over charCodeAt.
+    for (const file of ['js/labReport.js', 'js/analysis/stats.js']) {
       const src = readFileSync(file, 'utf8');
       expect({ file, basis: src.includes('0x811c9dc5') }).toEqual({
         file,

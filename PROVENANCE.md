@@ -70,13 +70,23 @@ Three mappings lose something. Each says so where it happens:
 | Producer | Function | Test |
 |---|---|---|
 | The measurement pipeline: every node | `nodeArtifact()` in `js/measure/envelope.js` | `tests/measure.test.js`: the period, box, line and aperture results on their real fixtures, and the scaling and citation rules |
+| Notebook captures of a fit, an analysis or an experiment | `artifactEntry()` in `js/notebook/artifactEntry.js` | `tests/notebookSeams.test.js` |
+| Experiment results | `experimentArtifact()` in `js/analysis/seams.js` | `tests/analysisSeams.test.js` |
+| Analysis documents (with a reader and validator) | `analysisArtifact()`, `readAnalysis()` in `js/analysis/seams.js` | `tests/analysisSeams.test.js` |
+| Inference results | `fitArtifact()` in `js/analysis/seams.js`; the manifest names the observation's digest in `data.digest` | `tests/analysisSeams.test.js`, `tests/provenanceHops.test.js` |
+| Observatory guide answers | an `observed` entry (`js/notebook/observed.js`), not an envelope: the pack in `observation.source`, the observation's digest, its citations and retrieval date | `tests/provenanceHops.test.js`; `e2e/exoplanetGuides.spec.js` |
+| Forward-model outputs | none yet: the origin `synthetic` is reserved for Prompt 84 | |
 
-The remaining producers adopt it in the order of Roadmap II Prompt 60:
-1. the notebook's quantities and observed group, with the report rendering envelopes;
-2. inference results, with a data digest;
-3. experiment trial summaries;
-4. analysis documents;
-5. the Observatory guides' answers;
-6. forward-model outputs.
+## Where a datum travels
 
-Each adoption adds its row here and a test that holds the producer to the schema.
+Prompt 60's audit found ten places where provenance was dropped. Each row says where the datum goes now. Every change adds a field; an older file reads as it did.
+
+| Datum | Carried in | Held by |
+|---|---|---|
+| The observation's identity | `observationDigest()` in `js/observatory/identity.js`: SHA-256 of the source (kind, id, version), the data, and the time and spectral metadata. It sits beside the id and never replaces it, so a saved id still matches. A save writes it as `workspace.openedFrom.digest`; a fit as `data.digest`; a guide's notebook entry as `observed.observation.digest`. `contentDigest()` in `js/measure/pipeline.js` is of the data alone and is unchanged. | `tests/provenanceHops.test.js` |
+| The pack's own record | `pack` in `gravitas.observation/1` (masks, crowding), kept by a save | `tests/provenanceHops.test.js` |
+| How time counts | `time.reference`, the pack's own words, beside `time.format`; the format is read from it | `tests/provenanceHops.test.js` |
+| Citations and retrieval date | `observed.observation.citations` and `.retrieved` in a notebook entry | `tests/provenanceHops.test.js` |
+| A numeric answer's unit | `unit`, the last column of the question CSV, and a field of each question in the JSON | `tests/submissionResults.test.js` |
+
+Still open: the answer key for the guides (`js/data/exoplanetAnswerKey.js`, generated) names no pack, version or digest, and an observation's id still differs by how it arrived (`pack:`, `installed:`, `builtin:`, `import:`). The digest agrees across the pack paths; an imported file differs by its source, as it should, and has the same `contentDigest()`.

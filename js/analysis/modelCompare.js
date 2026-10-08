@@ -198,12 +198,16 @@ const sameSettings = (a, b) =>
  * degrees of freedom between them, and whether a fixed value is on the edge
  * of the range the fuller model searched.
  */
-export function nestedIn(simple, full, modelParams) {
+export function nestedIn(simple, full, modelParams, model) {
   // A constant is every model here with its signal set to zero (a transit's
   // depth, an orbit's semi-amplitude), which is the edge of that parameter's
   // range: nested, and on the boundary.
   if (simple.fit.model.id === 'constant')
-    return { nested: true, boundary: true, constant: true };
+    return {
+      nested: true,
+      boundary: model?.nullAtBoundary !== false,
+      constant: true,
+    };
   if (simple.fit.model.id !== full.fit.model.id) return { nested: false };
   if (!sameSettings(simple.request, full.request)) return { nested: false };
   const a = modesOf(simple.request, modelParams);
@@ -332,7 +336,7 @@ export function compareModels(entries, o = {}) {
         ...(o.models?.[b.fit.model.id]?.parameters || []),
         ...(o.models?.[b.fit.model.id]?.nuisance || []),
       ];
-      const rel = nestedIn(a, b, params);
+      const rel = nestedIn(a, b, params, o.models?.[b.fit.model.id]);
       if (!rel.nested) continue;
       const ra = rows[usable.indexOf(a)];
       const rb = rows[usable.indexOf(b)];
