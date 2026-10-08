@@ -19,7 +19,7 @@ import {
   t,
   translatePage,
 } from './mission/lab/i18n.js';
-import { typedNumber } from './answerParse.js';
+import { typedNumber } from './numberParse.js';
 import { MISSION_API, createMission } from './mission/api.js';
 import { DEFAULT_PLAN, PULLER_IDS } from './mission/lab/defaults.js';
 import { DEFAULT_WINDOW, bestOf, turnCost } from './mission/lab/curriculum.js';

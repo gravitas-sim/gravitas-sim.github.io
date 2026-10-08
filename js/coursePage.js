@@ -33,7 +33,6 @@ import {
   registerMessages,
   hasMessage,
 } from './i18n/index.js';
-import { typedNumber } from './answerParse.js';
 import { EN_STUDIO } from './i18n/en.studio.js';
 import { EN_COURSE } from './i18n/en.course.js';
 import { SCENARIO_INFO, scenarioId } from './data/scenarioInfo.js';
@@ -208,7 +207,9 @@ function setAt(o, path, value) {
   else delete cur[last];
 }
 
-const numberOf = text => {
+// The reader of a typed number is fetched with the first number typed: the
+// builder's route has no room for another module.
+const numberOf = (text, typedNumber) => {
   const s = String(text).trim();
   if (s === '') return undefined;
   const n = typedNumber(s, getLocale());
@@ -394,14 +395,18 @@ function plain(path, label, { hint = '', numeric = false, blankIs } = {}) {
     label,
     textInput(
       v,
-      s =>
+      async s => {
+        const reader = numeric
+          ? (await import('./numberParse.js')).typedNumber
+          : null;
         commit(x =>
           setAt(
             x,
             path,
-            s.trim() === '' ? blankIs : numeric ? numberOf(s) : s.trim()
+            s.trim() === '' ? blankIs : numeric ? numberOf(s, reader) : s.trim()
           )
-        ),
+        );
+      },
       { numeric }
     ),
     hint

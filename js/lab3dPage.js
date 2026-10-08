@@ -19,7 +19,7 @@ import {
   t,
   translatePage,
 } from './lab3d/i18n.js';
-import { typedNumber } from './answerParse.js';
+import { typedNumber } from './numberParse.js';
 import { createLab3d } from './lab3d/api.js';
 import { migrateSystem, validateSystem } from './lab3d/state.js';
 import { REFERENCES } from './lab3d/references.js';

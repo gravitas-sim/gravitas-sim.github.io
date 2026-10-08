@@ -17,7 +17,7 @@
 //   seriesOf       the x, value and uncertainty columns a view shows
 // =============================================================================
 
-import { typedNumber } from '../../answerParse.js';
+import { typedNumber } from '../../numberParse.js';
 
 export const PATHS = ['intro', 'advanced'];
 

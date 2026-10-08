@@ -20,7 +20,7 @@ import {
   t,
   translatePage,
 } from './mission/i18n.js';
-import { typedNumber } from './answerParse.js';
+import { typedNumber } from './numberParse.js';
 import { MISSION_API, createMission } from './mission/api.js';
 import { BODIES, CENTRAL, PLANETS, dateOf, daysOf } from './mission/bodies.js';
 import { budgetOf, planBytes, planFile, timelineOf } from './mission/plan.js';
