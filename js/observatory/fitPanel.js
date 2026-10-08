@@ -23,6 +23,7 @@ import { parseNumber } from '../answerParse.js';
 import { dataFrom } from '../inference/infer.js';
 import { fitArtifact, modelUnit, rowsDigest } from '../analysis/seams.js';
 import { observationDigest } from './identity.js';
+import { roundSig } from '../format.js';
 import { artifactEntry } from '../notebook/artifactEntry.js';
 import { SOURCE } from '../notebook/entry.js';
 import {
@@ -84,7 +85,7 @@ export function modelsFor(o, dimensionOfText) {
   return out;
 }
 
-const round3 = v => Number(v.toPrecision(3));
+const round3 = v => roundSig(v, 3);
 const extent = a =>
   a.reduce(
     ([l, h], v) => [Math.min(l, v), Math.max(h, v)],
@@ -362,9 +363,7 @@ export function mountFitPanel(root, ctx) {
       el('tbody', {}, ...rows)
     );
     exposure.value =
-      id === 'transit-quadratic'
-        ? String(Number(spacing(d.x).toPrecision(6)))
-        : '';
+      id === 'transit-quadratic' ? String(roundSig(spacing(d.x), 6)) : '';
     exposure.previousElementSibling.textContent = t('obs.fit.exposure', {
       unit: d.units.x || '—',
     });
@@ -372,11 +371,7 @@ export function mountFitPanel(root, ctx) {
       unit: d.units.x || '—',
     });
     center.value = model.centered
-      ? String(
-          Number(
-            (d.x.reduce((a, b) => a + b, 0) / (d.x.length || 1)).toPrecision(6)
-          )
-        )
+      ? String(roundSig(d.x.reduce((a, b) => a + b, 0) / (d.x.length || 1), 6))
       : '';
     center.closest('label').hidden = !model.centered;
     for (const c of [
@@ -649,7 +644,7 @@ export function mountFitPanel(root, ctx) {
     const f = v =>
       v === null || v === undefined || !Number.isFinite(v)
         ? '—'
-        : number(Number(v.toPrecision(5)));
+        : number(roundSig(v, 5));
     const name = r => (r.builtIn ? t('obs.fit.cmp.constant') : r.label);
     const table = (id, caption, head, rows) =>
       el(

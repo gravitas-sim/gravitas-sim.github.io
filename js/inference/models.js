@@ -249,6 +249,20 @@ export const RV = {
 
 const { Math: M, Float64Array: F64 } = globalThis;
 
+/**
+ * The table models name their units in the data's own terms: these are unit
+ * expressions over the value column (y) and the argument (x), which
+ * js/analysis/seams.js modelUnit() resolves against the columns' real units.
+ * They are not registry units, and perXp depends on the exponent fitted, so it
+ * resolves to a warning rather than a unit.
+ */
+const DATA_UNIT = {
+  y: 'y',
+  perX: 'y/x',
+  perX2: 'y/x^2',
+  perXp: 'y/x^p',
+};
+
 /** Weighted normal equations of y = sum c_j u^j, u = x - x0, or null. */
 function polynomialStart(data, degree, x0) {
   const n = degree + 1;
@@ -284,7 +298,7 @@ function polynomial(degree, label) {
     nullAtBoundary: false,
     parameters: names.map((n, j) => ({
       name: n,
-      unit: j === 0 ? 'y' : j === 1 ? 'y/x' : 'y/x^2',
+      unit: [DATA_UNIT.y, DATA_UNIT.perX, DATA_UNIT.perX2][j],
       label: ['value at the center', 'slope at the center', 'curvature term'][
         j
       ],
@@ -326,7 +340,7 @@ export const POWER_LAW = {
   quantity: 'y as a power of x',
   tabular: true,
   parameters: [
-    { name: 'A', unit: 'y/x^p', label: 'value at x = 1' },
+    { name: 'A', unit: DATA_UNIT.perXp, label: 'value at x = 1' },
     { name: 'p', unit: '', label: 'exponent' },
   ],
   linear: [],
