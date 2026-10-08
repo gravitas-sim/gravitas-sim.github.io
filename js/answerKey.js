@@ -214,7 +214,7 @@ export function verifyKey(inv) {
         problems.push(`${where}: the derived value is not accepted`);
       }
       const outside = e.answerValue + e.tolerance * 1.001 + 1e-12;
-      if (checkAnswer(step, asGiven(step, outside, e.tolerance / 1e3))) {
+      if (checkAnswer(step, asGiven(step, outside, e.tolerance / 1e4))) {
         problems.push(
           `${where}: the quoted tolerance is narrower than the site's`
         );

@@ -297,7 +297,7 @@ export function writeProgress({
     attempts: { ...attempts },
     visited: [...(visited || [])],
     startedAt: startedAt ?? null,
-    ...(depth && depth !== 'core' ? { depth } : {}),
+    ...(DEPTHS.includes(depth) ? { depth } : {}),
     ...(deepest && deepest !== 'core' ? { deepest } : {}),
   };
 }
