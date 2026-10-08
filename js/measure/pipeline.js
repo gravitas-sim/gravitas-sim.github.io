@@ -48,6 +48,8 @@ import {
   VERSION as TABLE_VERSION,
 } from './tableOps.js';
 import { isObject, plainDataProblem } from '../platform/common.js';
+import { sha256Hex } from '../hash.js';
+import { contentPayload } from '../observatory/identity.js';
 
 export const FORMAT = 'gravitas.pipeline';
 export const FORMAT_VERSION = 1;
@@ -571,41 +573,13 @@ export const toolsFor = o =>
 
 // --- Digests -----------------------------------------------------------------
 
-async function sha256Hex(text) {
-  const d = await crypto.subtle.digest(
-    'SHA-256',
-    new TextEncoder().encode(text)
-  );
-  return Array.from(new Uint8Array(d), b =>
-    b.toString(16).padStart(2, '0')
-  ).join('');
-}
-const numbers = values =>
-  Array.from(values, v =>
-    Number.isFinite(v) ? v : typeof v === 'number' ? null : v
-  );
-
 /**
  * The SHA-256 of what an observation holds: its columns (ids, units, roles,
  * values), its masks and its axes. The same data gives the same digest in
  * every browser; a title or a note does not change it.
  */
 export function contentDigest(o) {
-  return sha256Hex(
-    JSON.stringify({
-      kind: o.kind,
-      columns: o.columns.map(c => [
-        c.id,
-        c.unit ?? null,
-        c.role,
-        c.of ?? null,
-        numbers(c.values),
-      ]),
-      masks: (o.masks || []).map(m => [m.id, m.rows]),
-      axes: o.axes,
-      image: o.image ? [o.image.width, o.image.height] : null,
-    })
-  );
+  return sha256Hex(JSON.stringify(contentPayload(o)));
 }
 
 // --- Nodes ---------------------------------------------------------------------

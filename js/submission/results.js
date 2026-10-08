@@ -143,6 +143,7 @@ export const QUESTION_COLUMNS = Object.freeze([
   'response',
   'points',
   'points_possible',
+  'unit',
 ]);
 
 /**
@@ -279,6 +280,7 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
       title: step.title || step.sid,
       verdict,
       pointsPossible: worth,
+      unit: typeof step.unit === 'string' ? step.unit : null,
       points: verdict === 'correct' ? worth : verdict === 'unmarked' ? null : 0,
       attempts: attempts.get(step.sid) ?? null,
       locale: has ? answer.locale : null,
@@ -298,6 +300,7 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
       title: sid,
       verdict: 'stale',
       pointsPossible: null,
+      unit: null,
       points: null,
       attempts: attempts.get(sid) ?? null,
       locale: answer.locale,
@@ -532,6 +535,7 @@ export function questionCsv(records, { includeWritten = false } = {}) {
         response: response.text,
         points: q.points,
         points_possible: q.pointsPossible,
+        unit: q.unit,
       };
       rows.push(QUESTION_COLUMNS.map(c => cells[c]));
     }
@@ -620,6 +624,7 @@ export function resultsJson(
           response: response.text,
           points: q.points,
           pointsPossible: q.pointsPossible,
+          unit: q.unit,
         };
       }),
     })),

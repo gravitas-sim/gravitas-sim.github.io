@@ -369,9 +369,12 @@ describe('the submission results schema', () => {
       expect(Object.keys(all[0]).sort()).toEqual(
         [...s.$defs.submission.required].sort()
       );
+      // `unit` was added after the file's first release: optional in the
+      // schema, so a file without it still fits, and always written now.
       expect(Object.keys(all[0].questions[0]).sort()).toEqual(
-        [...s.$defs.question.required].sort()
+        [...s.$defs.question.required, 'unit'].sort()
       );
+      expect(s.$defs.question.required).not.toContain('unit');
     }
   });
 

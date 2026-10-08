@@ -275,11 +275,6 @@ export const FEATURES = [
         detect: /crypto\.subtle\.digest/,
         note: 'no fallback',
       },
-      {
-        file: 'js/measure/pipeline.js',
-        detect: /crypto\.subtle\.digest/,
-        note: 'no fallback',
-      },
     ],
   },
 ];

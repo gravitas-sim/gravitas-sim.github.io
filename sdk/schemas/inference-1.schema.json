@@ -94,6 +94,10 @@
               "type": "null"
             }
           ]
+        },
+        "digest": {
+          "type": "string",
+          "description": "The content digest of the observation the fit read (js/observatory/identity.js observationDigest), whichever way it arrived; absent from a file written before it was recorded."
         }
       }
     },

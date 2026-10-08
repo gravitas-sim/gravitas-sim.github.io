@@ -148,6 +148,10 @@ test.describe('the Exoplanet Observatory guides', () => {
     page,
   }) => {
     await openGuide(page, 'guide=exo-planet');
+    // The real light curve is open when the answers are kept.
+    await jump(page, 3);
+    await page.locator('#gdGo').click();
+    await opens(page, 1);
     await jump(page, 6);
     await expect(title(page)).toContainText('The simulation’s HD 209458');
     await page.locator('#gdAnswer').fill('0.1228');
@@ -164,6 +168,13 @@ test.describe('the Exoplanet Observatory guides', () => {
     });
     expect(entry.source).toBe('observatory');
     expect(entry.snapshot.observed.tool.id).toBe('guide:exo-planet');
+    // It names the pack it was read from and a digest of what that pack held,
+    // with the citations and the retrieval date the data came with.
+    const seen = entry.snapshot.observed.observation;
+    expect(seen.source).toMatchObject({ kind: 'pack', id: expect.any(String) });
+    expect(seen.digest).toMatch(/^[0-9a-f]{64}$/);
+    expect(seen.retrieved).toEqual(expect.any(String));
+    expect(seen.citations.length).toBeGreaterThan(0);
     expect(entry.snapshot.quantities).toEqual([
       expect.objectContaining({ value: 0.1228, kind: 'measured' }),
     ]);
