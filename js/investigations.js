@@ -115,6 +115,8 @@ import {
   widgetDefaults,
 } from './widgets.js';
 import {
+  DEPTHS,
+  inDepth,
   indexOfSid,
   isValidSid,
   readProgress,
@@ -239,6 +241,12 @@ let visited = new Set();
  */
 let progressNotes = [];
 let startedAt = null;
+// The depth this lesson is read at (Prompt 72, DEPTH.md), what the student
+// chose if they did, and the deepest they have been. Answers are keyed by step
+// id, so changing any of them loses nothing.
+let depth = 'core';
+let depthChoice = null;
+let deepest = 'core';
 let probeTimer = null;
 let els = {};
 let plotCanvas = null;
@@ -413,6 +421,8 @@ function save() {
     visited,
     stepSid: active.steps[stepIndex]?.sid ?? null,
     startedAt,
+    depth: depthChoice,
+    deepest,
   });
 
   // This tab's copy, always, and before the disk is asked. It is what makes
@@ -1409,6 +1419,8 @@ function unreadableMessage(step, graded) {
           });
     case 'trailingText':
       return t('inv.answer.trailingText', { text: d.text || '' });
+    case 'needsUncertainty':
+      return t('inv.answer.needsUncertainty');
     default:
       return t('inv.answer.notANumber');
   }
@@ -1494,6 +1506,8 @@ const SHORT_ANSWER_MIN = 40;
  * fingerprint was enough.
  */
 const stepId = index => stepKey(active.id, active.steps[index]?.sid);
+/** The steps this reader sees: none deeper than the depth being read at. */
+const shown = () => active.steps.filter(s => inDepth(s, depth));
 const currentStep = () => active?.steps[stepIndex] ?? null;
 
 /**
@@ -1584,7 +1598,15 @@ function recomputeFields(step, id) {
     if (!f.compute) continue;
     let next;
     try {
-      next = f.compute(vals);
+      // The second argument reads a field an earlier step recorded, so a
+      // deeper step works from the numbers already measured.
+      next = f.compute(vals, (sid, field) => {
+        const key = `${stepKey(active.id, sid)}:${field}`;
+        return parseFieldNumber(
+          responses[key],
+          localeOfAnswer(responses, key, getLocale())
+        );
+      });
     } catch {
       next = NaN;
     }
@@ -2068,7 +2090,10 @@ function renderStep() {
 
   const parts = [
     `<p class="inv-step-count">${escape(
-      t('inv.step.counter', { n: stepIndex + 1, total: active.steps.length })
+      t('inv.step.counter', {
+        n: shown().indexOf(step) + 1,
+        total: shown().length,
+      })
     )}
        <span class="inv-step-kind">${escape(t(`inv.step.kind.${step.type}`))}</span></p>`,
     `<h3 class="inv-step-title">${escape(step.title)}</h3>`,
@@ -3130,12 +3155,14 @@ function renderFooter() {
     stepIndex === active.steps.length - 1
       ? t('inv.action.finish')
       : t('inv.action.next');
-  const pct = Math.round((visited.size / active.steps.length) * 100);
-  els.progressBar.style.width = `${pct}%`;
+  const seen = shown();
+  const done = seen.filter(s => visited.has(s.sid)).length;
+  els.progressBar.style.width = `${Math.round((done / seen.length) * 100)}%`;
   els.progressText.textContent = t('inv.progress.steps', {
-    done: visited.size,
-    total: active.steps.length,
+    done,
+    total: seen.length,
   });
+  renderDepth();
   els.probeWrap.hidden = !step?.probe;
 }
 
@@ -3739,6 +3766,64 @@ function goToStep(index, { rebuild = false } = {}) {
 }
 
 /**
+ * The depth control: where the reader is, and the way to a deeper or shallower
+ * reading. Shown only for a lesson that has deeper steps; an assignment states
+ * its depth and does not offer to change it, because the instructor chose it.
+ */
+function renderDepth() {
+  const row = els.depth;
+  if (!row) return;
+  const offered = active.depths || [];
+  row.hidden = offered.length < 2;
+  if (row.hidden) return;
+  const at = DEPTHS.indexOf(depth);
+  const top = Math.max(...offered.map(d => DEPTHS.indexOf(d)));
+  els.depthState.textContent = t('inv.depth.state', {
+    depth: t(`inv.depth.${depth}`),
+  });
+  els.deeper.hidden = Boolean(assignment) || at >= top;
+  els.shallower.hidden = Boolean(assignment) || at <= 0;
+}
+
+/**
+ * Read at another depth. Going deeper loads the lesson's deeper steps the
+ * first time, then moves on to the deeper step that follows this one. Going
+ * shallower leaves a deeper step for the nearest one that still shows. Nothing
+ * is cleared: answers are keyed by step id.
+ * @param {number} by - 1 for one level deeper, -1 for one shallower
+ */
+async function changeDepth(by) {
+  if (!active || assignment) return;
+  const to = DEPTHS[DEPTHS.indexOf(depth) + by];
+  if (!to || !active.depths.includes(to)) return;
+  const here = currentStep()?.sid;
+  if (by > 0 && !active.depthLaid) {
+    const laid = await (
+      await import('./investigations/depth.js')
+    ).withDepth(active, getLocale());
+    // Closed, or another lesson opened, while the steps were on their way.
+    if (!active || active.id !== laid.id) return;
+    active = laid;
+    stepIndex = Math.max(0, indexOfSid(active, here));
+  }
+  const was = depth;
+  depth = depthChoice = to;
+  if (DEPTHS.indexOf(to) > DEPTHS.indexOf(deepest)) deepest = to;
+  let at = stepIndex;
+  if (by > 0) {
+    // On to the deeper step that follows this one, if there is one: the
+    // button is how a reader gets to what Next had been passing over. Where
+    // none follows, they stay, and the next one comes up in its turn.
+    const after = active.steps[stepIndex + 1];
+    if (after && !inDepth(after, was)) at = stepIndex + 1;
+  } else {
+    while (at > 0 && !inDepth(active.steps[at], depth)) at--;
+  }
+  announce(t('inv.depth.changed', { depth: t(`inv.depth.${to}`) }));
+  goToStep(at);
+}
+
+/**
  * Whether a step is for this student. A remediation step (`when`, from an
  * investigation pack: js/platform/investigation.js) is shown only when the
  * graded step it names has an answer that is wrong - or right - now. One not
@@ -3749,6 +3834,7 @@ function goToStep(index, { rebuild = false } = {}) {
  * compiled before it did must not give the answer away by skipping one.
  */
 function stepApplies(index) {
+  if (!inDepth(active.steps[index], depth)) return false;
   const w = active.steps[index]?.when;
   if (!w) return true;
   const target = active.steps.find(x => x.sid === w.sid);
@@ -3786,6 +3872,28 @@ function next() {
 // top of them when it lands.
 let openGeneration = 0;
 
+const LEVEL_DEPTH = { majors: 'quantitative', advanced: 'advanced' };
+
+/** The course level the reader chose, if the browser kept it. */
+function levelOnDisk() {
+  try {
+    return get('gravitas_course_level');
+  } catch {
+    return null;
+  }
+}
+
+/** The depth fields of a lesson's saved progress, read before the lesson is. */
+function peekDepth(id) {
+  try {
+    return (
+      sessionProgress.get(storageKey(id)) ?? JSON.parse(get(storageKey(id)))
+    );
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Start or resume an investigation.
  * @param {string} id - Investigation id
@@ -3796,8 +3904,28 @@ export async function openInvestigation(id, opts = {}) {
   // The one await in the panel's life. Everything below it runs against a
   // lesson that is fully in hand, so no other code path had to learn that a
   // lesson might not be there yet.
-  const inv = await loadInvestigation(id);
+  let inv = await loadInvestigation(id);
   if (!inv || generation !== openGeneration) return;
+  // The depth to read at: an assignment's, else the student's own choice, else
+  // the course level's. A lesson read at core never loads the deeper steps; one
+  // that has been deeper loads them so its answers are still read.
+  const raw =
+    inv.depths && !authoring && !opts.assignment ? peekDepth(id) : null;
+  const want = inv.depths
+    ? opts.assignment
+      ? opts.assignment.d
+      : (raw?.depth ?? LEVEL_DEPTH[levelOnDisk()])
+    : null;
+  if (DEPTHS.indexOf(want) > 0 || DEPTHS.indexOf(raw?.deepest) > 0) {
+    inv = await (
+      await import('./investigations/depth.js')
+    ).withDepth(inv, getLocale());
+    if (generation !== openGeneration) return;
+  }
+  depth = inv.depths?.includes(want) ? want : 'core';
+  depthChoice = DEPTHS.includes(raw?.depth) ? raw.depth : null;
+  deepest = DEPTHS.includes(raw?.deepest) ? raw.deepest : 'core';
+  if (DEPTHS.indexOf(deepest) < DEPTHS.indexOf(depth)) deepest = depth;
   // Every step key is written into the panel's attributes and selectors. The
   // pack validator and the lesson checker refuse a sid that could end an
   // attribute; this refuses a lesson that reached the panel without passing
@@ -3864,6 +3992,7 @@ export async function openInvestigation(id, opts = {}) {
   stepIndex = saved?.stepSid
     ? Math.max(0, indexOfSid(active, saved.stepSid))
     : 0;
+  while (stepIndex > 0 && !inDepth(active.steps[stepIndex], depth)) stepIndex--;
   progressNotes = saved?.notes || [];
   if (authoring?.step) {
     stepIndex = Math.min(Math.max(authoring.step - 1, 0), inv.steps.length - 1);
@@ -4716,7 +4845,7 @@ const isBrowserOpen = () =>
 
 function openFinish() {
   if (!els.finish) return;
-  const graded = gradedSteps(active);
+  const graded = gradedSteps({ steps: shown() });
   const answered = graded.filter(s => {
     const i = active.steps.indexOf(s);
     const id = stepId(i);
@@ -4733,8 +4862,8 @@ function openFinish() {
   els.finishProgress.hidden = Boolean(authoring);
   els.finishSummary.innerHTML = `
     <p>${t('inv.finish.summary', {
-      visited: visited.size,
-      steps: active.steps.length,
+      visited: shown().filter(s => visited.has(s.sid)).length,
+      steps: shown().length,
       answered,
       graded: graded.length,
     })}</p>
@@ -5101,6 +5230,10 @@ export function initInvestigations({ signal } = {}) {
     fitBtn: document.getElementById('investigationFit'),
     followBtn: document.getElementById('investigationFollow'),
     scaleBtn: document.getElementById('investigationScale'),
+    depth: document.getElementById('investigationDepth'),
+    depthState: document.getElementById('investigationDepthState'),
+    deeper: document.getElementById('investigationDeeper'),
+    shallower: document.getElementById('investigationShallower'),
     prev: document.getElementById('investigationPrev'),
     next: document.getElementById('investigationNext'),
     close: document.getElementById('investigationClose'),
@@ -5198,6 +5331,8 @@ export function initInvestigations({ signal } = {}) {
     goToStep(applyingFrom(stepIndex, -1))
   );
   els.next?.addEventListener('click', next);
+  els.deeper?.addEventListener('click', () => changeDepth(1), opts);
+  els.shallower?.addEventListener('click', () => changeDepth(-1), opts);
   els.close?.addEventListener('click', closeInvestigation);
   wireExplainer(
     els.toolExplain,

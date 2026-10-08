@@ -142,6 +142,12 @@ export const STRUCTURAL = new Set([
   // The sid of the step where a held prediction is marked. A translated one
   // would point at nothing, and the prediction would stay unmarked forever.
   'reveal',
+  // Where a deeper step is laid in, and which depth it belongs to, and which
+  // core step it restates (js/investigations/depth.js): identifiers.
+  'after',
+  'depth',
+  'depths',
+  'restates',
   // A remediation step's condition: the sid of the graded step it follows and
   // whether it is for a wrong or a right answer. Machinery, never words.
   'when',
