@@ -67,6 +67,28 @@ export const placeholders = text =>
   );
 
 /**
+ * A `unit` field names a unit of the registry (`api.isUnit`), or is empty.
+ * One error, one code, on the field's own path; an api without `isUnit`
+ * (a caller that has no registry) is not asked.
+ *
+ * @param {unknown} unit - The field
+ * @param {string} path - Where it sits
+ * @param {object} ctx
+ * @param {Function} ctx.need - (ok, path, code, message, vars) from the caller
+ * @param {object} ctx.api - What Gravitas has: `isUnit` (text -> boolean)
+ */
+export function checkUnitName(unit, path, { need, api }) {
+  if (typeof unit !== 'string' || unit.length > 16 || !api.isUnit) return;
+  need(
+    api.isUnit(unit),
+    path,
+    'unitUnknown',
+    `"${unit}" is not a unit Gravitas knows (for example days, km/s or AU)`,
+    { unit }
+  );
+}
+
+/**
  * Judge one bank item.
  *
  * @param {unknown} item
@@ -187,6 +209,8 @@ export function checkBankItem(item, path, { need, text, api }) {
         'unit',
         'a unit such as "km/s"'
       );
+    if (item.unit !== undefined)
+      checkUnitName(item.unit, `${path}.unit`, { need, api });
     if (item.expect !== undefined)
       checkExpect(item.expect, `${path}.expect`, { need, api });
     if (item.misconceptions !== undefined) {

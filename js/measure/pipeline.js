@@ -49,6 +49,7 @@ import {
 } from './tableOps.js';
 import { isObject, plainDataProblem } from '../platform/common.js';
 import { sha256Hex } from '../hash.js';
+import { isUnit } from '../units/registry.js';
 import { contentPayload } from '../observatory/identity.js';
 
 export const FORMAT = 'gravitas.pipeline';
@@ -143,8 +144,8 @@ const q = (id, value, unit, kind, extra = {}) => ({
   ...extra,
 });
 
-/** The params-schema kind for text or null (see paramProblem). */
-const NULLABLE_TEXT = '?s';
+/** The kind for a unit of js/units/registry.js, or null. */
+const NULLABLE_UNIT = '?u';
 
 /**
  * The tools. Each: which kinds of observation it measures, its version, how
@@ -579,7 +580,7 @@ export const TOOLS = Object.freeze({
     version: TABLE_VERSION,
     params: {
       conditions: [
-        { column: 's', op: 's', value: 'ns', unit: NULLABLE_TEXT },
+        { column: 's', op: 's', value: 'ns', unit: NULLABLE_UNIT },
         0,
         100,
       ],
@@ -631,6 +632,7 @@ const KIND_WORDS = {
   n: 'a number',
   i: 'a whole number',
   s: 'text',
+  u: 'a unit of the registry',
   b: 'true or false',
   a: 'a list',
   o: 'an object',
@@ -640,8 +642,8 @@ const KIND_WORDS = {
 /**
  * The first way a value departs from a tool's declared parameter schema, as
  * "path: expected ...", or null. A schema is a string of kinds (n number, i
- * whole number, s text, b boolean, a list, o object, ? null - any one will
- * do), `[item, min, max]` for a list, or an object of schemas for the keys it
+ * whole number, s text, u a unit of the registry, b boolean, a list, o
+ * object, ? null - any one will do), `[item, min, max]` for a list, or an object of schemas for the keys it
  * names. A key left out is the tool's own to complain about, and a key the
  * schema does not name is not read.
  * @param {string|Array|object} spec
@@ -660,11 +662,13 @@ export function paramProblem(spec, v, path) {
             ? Number.isInteger(v)
             : c === 's'
               ? typeof v === 'string'
-              : c === 'b'
-                ? typeof v === 'boolean'
-                : c === 'a'
-                  ? Array.isArray(v)
-                  : isObject(v)
+              : c === 'u'
+                ? typeof v === 'string' && isUnit(v)
+                : c === 'b'
+                  ? typeof v === 'boolean'
+                  : c === 'a'
+                    ? Array.isArray(v)
+                    : isObject(v)
     );
     return ok
       ? null

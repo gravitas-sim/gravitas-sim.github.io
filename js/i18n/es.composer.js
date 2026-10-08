@@ -263,6 +263,8 @@ export const ES_COMPOSER = {
   'composer.error.fields': 'De uno a seis números que anotar.',
   'composer.error.fieldId': 'Un nombre corto como periodo, usado una sola vez.',
   'composer.error.unit': 'Una unidad como days.',
+  'composer.error.unitUnknown':
+    '«{unit}» no es una unidad que Gravitas conozca. Usa una como days, km/s o AU.',
   'composer.error.options': 'De {min} a {max} opciones.',
   'composer.error.choiceAnswer': 'Marca la opción correcta.',
   'composer.error.reveal':
