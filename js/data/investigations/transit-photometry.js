@@ -343,6 +343,20 @@ const TRANSITS = {
       tolerance: 0.015,
       because:
         'The square root of 0.01 is 0.1: the planet is a tenth of the star’s radius. Around a Sun-like star that is roughly Jupiter-sized, which is exactly why every transiting planet found before about 2005 was a hot Jupiter. They were the only ones anybody could see.',
+      hints: [
+        'The depth is the fraction of the starlight that is blocked. What part of the star’s disc does the planet cover?',
+        'Blocked light goes as area, and area goes as the square of a radius.',
+        'So the depth is the radius ratio squared. Undo that to get the ratio.',
+      ],
+      feedback: {
+        close:
+          'Near, but outside the tolerance. Square your answer and compare it with the depth you were given.',
+        'wrong-order-of-magnitude':
+          'A power of ten out. Check whether you used the depth itself as the radius ratio, or squared where a root was needed.',
+        off: 'Test it: square your radius ratio. If that does not return the depth, work backwards from the depth with the opposite operation.',
+        correct:
+          'To check a result like this, square it and see that the depth comes back.',
+      },
     },
     {
       sid: 'measure-the-dip',
@@ -678,6 +692,18 @@ const TRANSITS = {
       tolerance: 40,
       because:
         'R★/a = 0.00465, or about 1 in 215. That is the single hardest fact about the transit method: even a survey with perfect photometry watching every star in the sky forever would find fewer than one in two hundred of the Earth-like planets out there. Everything the method reports about how common planets are has to be divided by this geometric factor before it means anything.',
+      hints: [
+        'The chance is a ratio of two lengths that the step gives you.',
+        'Divide the star’s radius by the size of the orbit, in the same unit.',
+        'That gives a fraction. The question asks one chance in how many, so think about what to do to a fraction to get that.',
+      ],
+      feedback: {
+        close:
+          'Close. Re-check the division, and that both lengths are in the same unit.',
+        'wrong-order-of-magnitude':
+          'Out by a large factor. If you have 0.00465, that is the chance as a fraction; the question asks one chance in how many, so turn it over. Otherwise check both lengths are in AU.',
+        off: 'Write the chance as a fraction first, then ask how many of them make one.',
+      },
     },
     {
       sid: 'what-the-method-misses',

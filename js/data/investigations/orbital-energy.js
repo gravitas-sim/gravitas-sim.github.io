@@ -332,6 +332,10 @@ const ENERGY = {
       answer: 1,
       because:
         'From the cannon it is 10.9 km/s, so 12 is much the closest. From the ground itself it is 11.2 km/s, and that is the number worth carrying around: roughly 25,000 miles per hour, or about forty times the speed of sound. Every spacecraft that has ever left for another planet had to be given at least this much. Notice that the two differ, and that the cannon on its tower needs slightly less. That is a clue you will come back to.',
+      hints: [
+        'Escape speed depends on how strong gravity is where you start and how far you must go.',
+        'It is fast by everyday standards: compare it with a jet airliner and with a rifle bullet.',
+      ],
     },
     {
       sid: 'what-is-actually-deciding-this',
@@ -399,6 +403,10 @@ const ENERGY = {
       answer: 0,
       because:
         'Below zero means bound. To get infinitely far away, an object would need a total of at least zero, because that is what the energy of position becomes out there and the energy of motion cannot be negative to make up the difference. Below zero it simply cannot reach, so gravity always wins in the end and turns it round.',
+      hints: [
+        'Think about what the energy of position becomes infinitely far away.',
+        'If the total is less than that, can the object ever get there?',
+      ],
     },
     {
       sid: 'around-a-real-orbit',
@@ -452,6 +460,10 @@ const ENERGY = {
       answer: 2,
       because:
         'The total. The other two traded back and forth by large amounts and their sum did not move, which is what allowed you to read off a single number and know the orbit was closed. An orbit cannot decide to become unbound on its own: something would have to come along and add energy to it.',
+      hints: [
+        'Watch the energy readout through one whole orbit.',
+        'Two of the three trade energy back and forth. What would a trade leave unchanged?',
+      ],
     },
     {
       sid: 'escape-speed',
@@ -497,6 +509,22 @@ const ENERGY = {
       answer: 1,
       because:
         'Still pulling, and still slowing it. Escaping does not switch gravity off, and there is no distance at which gravity stops. What escaping means is that the spacecraft has enough energy that the slowing never quite brings it to a halt: it keeps losing speed forever and never runs out. Below escape speed, the same slowing does bring it to a halt, and then everything happens in reverse.',
+      hints: [
+        'Does gravity have a distance beyond which it is zero?',
+        'Escape is about whether the slowing ever brings the craft to rest.',
+      ],
+      misconceptions: [
+        {
+          id: 'gravityStopsAtEscape',
+          option: 0,
+          say: 'Gravity has no range limit: it weakens with distance but never reaches zero.',
+        },
+        {
+          id: 'gravityPushesAway',
+          option: 2,
+          say: 'Gravity only ever pulls toward the mass. Escaping means the pull never wins, not that it reverses.',
+        },
+      ],
     },
     {
       sid: 'somewhere-else-entirely',
@@ -570,6 +598,17 @@ const ENERGY = {
       answer: 1,
       because:
         'Less. Escape speed is not a property of a planet on its own, it is a property of a planet and a place. The higher you start, the less of the climb is left, so the less speed you need to finish it. This is one reason interplanetary missions are often assembled in orbit rather than launched in one go.',
+      hints: [
+        'Escape speed depends on where you start, not only on which planet.',
+        'Starting higher, how much of the climb out of gravity is left?',
+      ],
+      misconceptions: [
+        {
+          id: 'zeroGravityUp',
+          option: 3,
+          say: 'Gravity is weaker up there, not zero: the space station is still held by Earth’s pull.',
+        },
+      ],
     },
     {
       sid: 'three-shapes-one-law',

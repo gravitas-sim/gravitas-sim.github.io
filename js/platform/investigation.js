@@ -110,6 +110,8 @@ const STEP_FIELDS = {
     'hints',
     'worked',
     'misconceptions',
+    'feedback',
+    'reflect',
     'rubric',
     'scoring',
   ],

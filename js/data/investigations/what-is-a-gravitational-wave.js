@@ -227,6 +227,22 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         hide: ['m1', 'm2', 'distance', 'inclination', 'cursor', 'amplify'],
       }),
       tip: 'Compare it with a lamp: the light already in the room is not a radio broadcast. Both are electromagnetic, and only one of them is a signal going somewhere.',
+      hints: [
+        'A field and a wave are different: one is always there, the other is a change that travels.',
+        'Does anything about this mass change?',
+      ],
+      misconceptions: [
+        {
+          id: 'stillMassWaves',
+          option: 1,
+          say: 'A mass at rest makes a field, not a wave: a wave needs the field to change.',
+        },
+        {
+          id: 'gravityNeedsMotion',
+          option: 2,
+          say: 'A still mass does pull on things. What it lacks is a wave.',
+        },
+      ],
     },
     {
       sid: 'a-sphere-that-breathes',
@@ -364,6 +380,10 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact screen 16 has you count for yourself. For two objects of different masses it is not quite so clean, which is a complication this investigation leaves alone.',
       tool: lab({ view: 'source', autoplay: false }),
       tip: 'Use the playhead in small steps. The readout gives the orbital phase, so you can check your answer against a number rather than by eye.',
+      hints: [
+        'Imagine the pair as two identical objects. What happens to the picture if you swap them?',
+        'Count how often the arrangement repeats, not how often each object returns.',
+      ],
     },
     {
       sid: 'follow-a-disturbance-outward',
@@ -460,6 +480,10 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         values: { inclination: 90 },
       }),
       tip: 'Move the playhead in small steps and watch the ring rather than the plot. The oval is easiest to see at its most extreme.',
+      hints: [
+        'The wave stretches space in one direction. What does it do at right angles to that?',
+        'The ring becomes an oval, not a bigger circle.',
+      ],
     },
     {
       sid: 'now-swap',
@@ -808,6 +832,10 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         'The model was switched off. Nothing physical happens at that instant; the calculation simply stops being trustworthy, so it stops. There is no merger in this plot and no ringing afterwards, and the last visible cycle is not the last cycle the binary had. A model that says where it stops is more useful than one that carries on regardless - and it is the honest reason the picture ends abruptly rather than tidily.',
       tool: lab({ view: 'both', autoplay: false }),
       tip: 'The readout gives the frequency where it stops. For this pair it is about 68 Hz, and the real event was followed to around 250 Hz — by instruments and calculations well beyond what this investigation uses.',
+      hints: [
+        'Is the plot showing what happened, or how far a model can be trusted?',
+        'Consider what chose where to stop drawing.',
+      ],
     },
 
     // -----------------------------------------------------------------------

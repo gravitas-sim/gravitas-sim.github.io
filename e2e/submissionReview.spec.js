@@ -347,6 +347,9 @@ test.describe('the submission review page', () => {
       points: 2,
       pointsPossible: 13,
       pointsUnmarked: 1,
+      // What the scaffolding records as facts, not marks.
+      hintsTaken: 0,
+      workedShown: 0,
     });
     expect(sub.warnings).toEqual(['noRosterId']);
     const q = sid => sub.questions.find(x => x.stepId === sid);

@@ -261,6 +261,14 @@ const HOHMANN_TRANSFER = {
       ],
       worked:
         'The major axis spans r₁ + r₂ = 1 + 2.5 = 3.5 AU, so a = 3.5 / 2 = 1.75 AU.',
+      feedback: {
+        close:
+          'Close. Add the two distances at the ends of the ellipse and halve the sum.',
+        'wrong-unit': 'That looks like kilometers. The question wants AU.',
+        'wrong-order-of-magnitude':
+          'A power of ten out; both ends of the ellipse are within a few AU of the star.',
+        off: 'The long axis runs from one orbit, through the star, to the other. The semi-major axis is half of it.',
+      },
     },
     {
       sid: 'vis-viva-departure',
@@ -289,6 +297,13 @@ const HOHMANN_TRANSFER = {
       ],
       worked:
         'v = v_circ × sqrt(2 − r/a) = 29.787 × sqrt(2 − 1/1.75) = 29.787 × 1.1952 = 35.60 km/s.',
+      feedback: {
+        close:
+          'Close. Check the square root, and which distance is r (where you are now) and which is a (the ellipse’s semi-major axis).',
+        'wrong-order-of-magnitude':
+          'A power of ten out: km/s and m/s differ by a thousand.',
+        off: 'Check which distance goes where: r is where you are now, a is the transfer ellipse’s semi-major axis.',
+      },
     },
     {
       sid: 'first-burn-size',
@@ -311,6 +326,15 @@ const HOHMANN_TRANSFER = {
         'Both speeds are in the same direction, so this is a subtraction rather than anything vectorial.',
       ],
       worked: 'Δv₁ = 35.60 − 29.787 = 5.815 km/s.',
+      feedback: {
+        close:
+          'Close. The burn is a difference of two speeds in the same direction; check the subtraction.',
+        'wrong-sign':
+          'The burn speeds you up, so it is a positive change: take the later speed minus the earlier one.',
+        'wrong-order-of-magnitude':
+          'A power of ten out; compare it with the speeds you were given.',
+        off: 'Subtract the circular speed you start with from the speed the transfer needs, both in km/s.',
+      },
     },
     {
       sid: 'apply-the-first-burn',
@@ -383,6 +407,14 @@ const HOHMANN_TRANSFER = {
       ],
       worked:
         'T = 1.75^1.5 = 2.315 years for the whole ellipse. Half of it is 1.157 years, or 423 days.',
+      feedback: {
+        close:
+          'Close. The coast is half an orbit: check that you halved the period.',
+        'wrong-unit': 'That looks like years. The question wants days.',
+        'wrong-order-of-magnitude':
+          'A power of ten out. Get the period from a in AU and years, then convert.',
+        off: 'Kepler’s third law gives the whole period of the transfer ellipse from its semi-major axis; the coast is half of it.',
+      },
     },
     {
       sid: 'predict-do-nothing',
@@ -513,6 +545,15 @@ const HOHMANN_TRANSFER = {
         'You are too slow for the orbit you want, so this is another acceleration.',
       ],
       worked: 'Δv₂ = 18.840 − 14.242 = 4.598 km/s.',
+      feedback: {
+        close:
+          'Close. Compare the speed you arrive with and the speed of the target orbit, along the same direction.',
+        'wrong-sign':
+          'Both burns speed you up here: take the larger speed minus the smaller.',
+        'wrong-order-of-magnitude':
+          'A power of ten out; compare it with the speeds you were given.',
+        off: 'Subtract your arrival speed on the transfer ellipse from the circular speed of the outer orbit.',
+      },
     },
     {
       sid: 'apply-the-second-burn',
@@ -560,6 +601,12 @@ const HOHMANN_TRANSFER = {
                  before this one. Both are already in km/s.`,
       },
       worked: 'Δv = 5.815 + 4.598 = 10.41 km/s.',
+      feedback: {
+        close: 'Close. Add the two burns, each as a size.',
+        'wrong-order-of-magnitude':
+          'A power of ten out; the total should be about the size of the burns you found.',
+        off: 'The total cost is the sum of both burns, each counted as a speed change.',
+      },
     },
     {
       sid: 'both-burns-forward',

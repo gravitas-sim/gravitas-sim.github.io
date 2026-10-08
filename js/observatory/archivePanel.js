@@ -475,6 +475,7 @@ function build(root, ctx, initialName) {
         ctx
           .createPlot(svg, {
             number: ctx.number,
+            explain: 'observatory-archive',
             labels: { notStated: t('obs.arc.unit.notStated') },
           })
           .draw(current, { xColumn: 'time', yColumn: 'mag' });

@@ -32,6 +32,10 @@ export const EN_REPORT = {
   'rp.right': 'correct',
   'rp.wrong': 'incorrect',
   'rp.tries': ', {n} attempts',
+  'rp.help': 'Help taken',
+  'rp.helpV': '{n} hint(s)',
+  'rp.helpWorked': 'worked answer shown',
+  'rp.reflect': 'Reflection (not marked):',
   'rp.rubric': 'Marking note: {note}',
   'rp.plot': 'Your measurements, plotted',
   'rp.plotNote':

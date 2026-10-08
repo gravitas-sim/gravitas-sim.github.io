@@ -268,10 +268,18 @@ const LAGRANGE_POINTS = {
       tolerance: 0.02,
       hints: [
         'Equilateral means all three sides are the same length.',
-        'The side joining the two stars has length 1.',
+        'The side joining the two stars is one of the three sides. Compare it with the distance you want.',
       ],
       worked:
         'All three sides of an equilateral triangle are equal, and the side between the stars is 1 by definition of the units — so L4 is 1 from each. It is not on the line between them, and it is not at the midpoint.',
+      feedback: {
+        close:
+          'Near. In an equilateral triangle, how does each side compare with the side between the stars?',
+        'wrong-sign': 'A distance cannot be negative: give its size.',
+        'wrong-order-of-magnitude':
+          'Out by a large factor. The answer is a ratio of two lengths of the same triangle, so it should be modest in size.',
+        off: 'Sketch the triangle of two stars and L4. Which sides are equal, and what is the length of the side you were given?',
+      },
     },
     {
       sid: 'critical-order',

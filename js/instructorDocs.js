@@ -366,6 +366,48 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
       doc.paragraph(expected, { size: 9.5 });
     }
 
+    if (e.reflect) {
+      doc.paragraph(
+        'A reflection: kept with the work and printed in the student’s report. Nothing marks it.',
+        { size: 9, color: '0.35 0.35 0.42' }
+      );
+    }
+
+    if (e.help?.hints?.length) {
+      doc.paragraph('Hints, shown one at a time when a student asks:', {
+        size: 9,
+        gap: 3,
+        color: '0.35 0.35 0.42',
+      });
+      doc.bullets(e.help.hints, { size: 9, gap: 1 });
+    }
+
+    if (e.feedback?.length) {
+      doc.paragraph('What a wrong number is told, by kind of miss:', {
+        size: 9,
+        gap: 3,
+        color: '0.35 0.35 0.42',
+      });
+      doc.bullets(
+        e.feedback.map(f => `${FEEDBACK_LABEL[f.class]}: ${f.text}`),
+        { size: 9, gap: 1 }
+      );
+    }
+
+    if (e.mistakes?.length) {
+      doc.paragraph('Mistakes the step names:', {
+        size: 9,
+        gap: 3,
+        color: '0.35 0.35 0.42',
+      });
+      doc.bullets(
+        e.mistakes.map(
+          m => `${m.option ? `Option ${m.option}: ` : ''}${m.text}`
+        ),
+        { size: 9, gap: 1 }
+      );
+    }
+
     if (e.explanation) {
       doc.paragraph('Why:', { size: 9, gap: 3, color: '0.35 0.35 0.42' });
       doc.paragraph(e.explanation, { size: 9.5 });
@@ -374,6 +416,15 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
 
   return doc.build();
 }
+
+const FEEDBACK_LABEL = {
+  correct: 'Right',
+  close: 'Close',
+  'wrong-sign': 'Wrong sign',
+  'wrong-unit': 'Wrong unit',
+  'wrong-order-of-magnitude': 'Out by a power of ten',
+  off: 'Otherwise off',
+};
 
 const round = v =>
   Number.isInteger(v) ? String(v) : String(Number(v.toPrecision(4)));

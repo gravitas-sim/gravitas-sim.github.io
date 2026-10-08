@@ -160,6 +160,28 @@ export function createPlot(svg, hooks) {
   const clipId = `owPlotClip${++plots}`;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   let state = null;
+  // The help affordance: a button after the plot that opens "What am I looking
+  // at?" (js/explainers.js, fetched on the first press). `hooks.explain` is
+  // the explainer's key, or a function of the data drawn; the label is the
+  // page's language, read where the interface keeps it.
+  if (hooks.explain) {
+    const help = document.createElement('button');
+    help.type = 'button';
+    help.className = 'ui-button subtle plot-help';
+    help.textContent =
+      document.documentElement.lang === 'es'
+        ? '¿Qué estoy viendo?'
+        : 'What am I looking at?';
+    help.setAttribute('aria-expanded', 'false');
+    help.addEventListener('click', async () => {
+      const key =
+        typeof hooks.explain === 'function'
+          ? hooks.explain(state)
+          : hooks.explain;
+      (await import('../explainers.js')).toggleExplainer(help, key);
+    });
+    svg.after(help);
+  }
   let sx;
   let sy;
   const dot = (i, r, cls) =>

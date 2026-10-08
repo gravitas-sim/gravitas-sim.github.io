@@ -186,6 +186,13 @@ export default {
       },
       worked:
         'A 90 grados y con un periodo de 3,52 días, K es proporcional a la masa del planeta: una Tierra da 0,38 m/s y un planeta de cinco Júpiter da 609. Por tanto 84 m/s corresponde a unas 0,69 masas de Júpiter, que es el valor publicado.',
+      feedback: {
+        close:
+          'Cerca. Mueve el deslizador de masa hasta que la K de la lectura coincida con la que mediste.',
+        'wrong-order-of-magnitude':
+          'Te alejas por un factor grande. Para un planeta tan ligero, K crece en proporción a su masa, así que una masa diez veces mayor da unas diez veces la K.',
+        off: 'Haz coincidir una cosa: la K de la lectura con la K que mediste, dejando la inclinación en 90 grados.',
+      },
     },
     {
       title: 'Ahora inclina todo el sistema',
@@ -335,6 +342,13 @@ export default {
       },
       worked:
         '0,69 masas de Júpiter dentro de una esfera de 1,38 radios de Júpiter dan unos 0,33 g/cm³: un tercio de la densidad del agua y una decimosexta parte de la de la Tierra. Nada rocoso es tan ligero, así que el planeta tiene que ser sobre todo gas.',
+      feedback: {
+        close:
+          'Cerca. Lee la fila del propio planeta y comprueba la unidad que muestra.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez. Kilogramos por metro cúbico y gramos por centímetro cúbico difieren en mil; comprueba la unidad de la fila que leíste.',
+        off: 'Lee la fila del propio planeta, no la que lo compara con la Tierra.',
+      },
     },
     {
       title: '¿Dónde se sitúa HD 209458 b?',

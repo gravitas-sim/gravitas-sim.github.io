@@ -1660,7 +1660,11 @@ export function mountMeasurePanel(root, ctx) {
       })
     );
     ctx
-      .createPlot(svg, { number: ctx.number, labels: { notStated: '' } })
+      .createPlot(svg, {
+        number: ctx.number,
+        explain: 'observatory-measure',
+        labels: { notStated: '' },
+      })
       .draw(o, { xColumn: 'period', yColumn: 'power' });
     const gridCsv = el('button', {
       class: 'ui-button is-small',

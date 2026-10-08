@@ -1083,6 +1083,7 @@ export function mountFitPanel(root, ctx) {
     );
     createPlot(svg, {
       number,
+      explain: 'observatory-fit',
       labels: { notStated: t('obs.unit.notStated') },
     }).draw(residualObs, { xColumn: 'x', yColumn: 'r' });
     results.replaceChildren(

@@ -455,6 +455,13 @@ const RADIAL_VELOCITY = {
                which is the published value.`,
       because: `About 0.69 Jupiter masses, which is the published value. The star’s
                 speed told you the mass of a planet nobody had seen.`,
+      feedback: {
+        close:
+          'Close. Nudge the mass slider until the readout’s K matches the K you measured.',
+        'wrong-order-of-magnitude':
+          'Out by a large factor. For a planet this light, K grows in proportion to its mass, so a mass ten times too big gives about ten times the K.',
+        off: 'Match one thing: the readout’s K against the K you measured, with the inclination left at 90 degrees.',
+      },
     },
 
     // --- Part 7: the inclination problem ------------------------------------
@@ -770,6 +777,12 @@ const RADIAL_VELOCITY = {
       because: `About 0.33 grams per cubic centimeter: roughly a third the density of
                 water, and about a sixteenth of Earth’s. A Jupiter-sized planet with
                 two thirds of Jupiter’s mass has to be dominated by gas.`,
+      feedback: {
+        close: 'Close. Read the planet’s own row, and check the unit shown.',
+        'wrong-order-of-magnitude':
+          'Out by a power of ten. Kilograms per cubic meter and grams per cubic centimeter differ by a thousand; check the unit on the row you read.',
+        off: 'Read the row for the planet itself, not the row that compares it with Earth.',
+      },
     },
 
     // --- Part 11: the habitability question ---------------------------------

@@ -735,6 +735,51 @@ function expectFields(base, s) {
   return el('div', { className: 'ui-grid' }, ...out);
 }
 
+/**
+ * The hint ladder: the hints there are, and one more to write while there is
+ * room, up to three. A question written with the original idea and method
+ * hints keeps those two fields; everything new is a ladder.
+ */
+function hintFields(base, s) {
+  if (s.hints && !Array.isArray(s.hints))
+    return ['concept', 'method'].map(k =>
+      pair(`${base}.hints.${k}`, t(`composer.hints.${k}`), {
+        multiline: true,
+        required: false,
+      })
+    );
+  const have = Math.min((s.hints || []).length, 3);
+  return Array.from({ length: Math.min(have + 1, 3) }, (_, i) =>
+    pair(`${base}.hints[${i}]`, t('composer.hints.n', { n: i + 1 }), {
+      multiline: true,
+      required: false,
+    })
+  );
+}
+
+/** What to say for each kind of wrong number, one disclosure for the six. */
+function feedbackFields(base) {
+  const classes = [
+    'correct',
+    'close',
+    'wrong-sign',
+    'wrong-unit',
+    'wrong-order-of-magnitude',
+    'off',
+  ];
+  return el(
+    'details',
+    { className: 'ui-disclosure' },
+    el('summary', {}, t('composer.feedback.legend')),
+    ...classes.map(k =>
+      pair(`${base}.feedback.${k}`, t(`composer.feedback.${k}`), {
+        multiline: true,
+        required: false,
+      })
+    )
+  );
+}
+
 /** A question's parts, whether it is a step's own or a bank item. */
 function questionParts(base, s, { bankItem = false } = {}) {
   const parts = [
@@ -776,18 +821,7 @@ function questionParts(base, s, { bankItem = false } = {}) {
       )
     );
     parts.push(grid, expectFields(base, s));
-    parts.push(
-      pair(`${base}.hints.concept`, t('composer.hints.concept'), {
-        multiline: true,
-        required: false,
-      })
-    );
-    parts.push(
-      pair(`${base}.hints.method`, t('composer.hints.method'), {
-        multiline: true,
-        required: false,
-      })
-    );
+    parts.push(...hintFields(base, s), feedbackFields(base));
     parts.push(
       pair(`${base}.worked`, t('composer.step.worked'), {
         multiline: true,
@@ -795,10 +829,37 @@ function questionParts(base, s, { bankItem = false } = {}) {
       })
     );
   }
-  if (s.kind === 'short')
-    parts.push(
-      pair(`${base}.rubric`, t('composer.step.rubric'), { multiline: true })
+  if (s.kind === 'short') {
+    const reflect = el('input', {
+      type: 'checkbox',
+      id: idOf(`${base}.reflect`),
+    });
+    reflect.checked = s.reflect === true;
+    reflect.addEventListener('change', () =>
+      commit(x => {
+        const item = getAt(x, base);
+        if (reflect.checked) {
+          item.reflect = true;
+          delete item.rubric;
+        } else {
+          delete item.reflect;
+          item.rubric ??= { en: '' };
+        }
+      })
     );
+    parts.push(
+      el(
+        'label',
+        { className: 'ui-choice' },
+        reflect,
+        t('composer.step.reflect')
+      )
+    );
+    if (!s.reflect)
+      parts.push(
+        pair(`${base}.rubric`, t('composer.step.rubric'), { multiline: true })
+      );
+  }
   parts.push(
     pair(`${base}.because`, t('composer.step.because'), {
       multiline: true,

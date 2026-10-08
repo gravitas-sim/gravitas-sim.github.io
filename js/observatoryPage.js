@@ -183,6 +183,13 @@ const labels = () => ({
 
 const plot = createPlot($('obsPlot'), {
   number,
+  // A table of objects is a scatter of one point each; a series is a curve.
+  explain: s =>
+    s?.scale
+      ? 'plot-log'
+      : s?.o?.kind === 'table'
+        ? 'plot-table'
+        : 'plot-series',
   get labels() {
     return labels();
   },

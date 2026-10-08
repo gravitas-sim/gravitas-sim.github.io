@@ -110,6 +110,17 @@ export const ES_COMPOSER = {
   'composer.expect.none': 'Solo la unidad de arriba',
   'composer.expect.unit': 'Se corrige en',
   'composer.expect.accept': 'También se aceptan (separadas por comas)',
+  'composer.hints.n': 'Pista {n}',
+  'composer.feedback.legend': 'Respuesta para cada tipo de número incorrecto',
+  'composer.feedback.correct': 'Si es correcto: cómo comprobarlo',
+  'composer.feedback.close': 'Si se acerca',
+  'composer.feedback.wrong-sign': 'Si el signo es incorrecto',
+  'composer.feedback.wrong-unit': 'Si la unidad es incorrecta',
+  'composer.feedback.wrong-order-of-magnitude':
+    'Si se aleja una potencia de diez',
+  'composer.feedback.off': 'Si simplemente no coincide',
+  'composer.step.reflect':
+    'Una reflexión: se guarda con el trabajo y no se califica',
   'composer.hints.concept': 'Pista: la idea',
   'composer.hints.method': 'Pista: el método',
   'composer.step.worked': 'Respuesta resuelta',
@@ -291,6 +302,13 @@ export const ES_COMPOSER = {
     'Un número positivo, en la unidad de la respuesta.',
   'composer.error.misconception':
     'O un factor por el que se desvía la respuesta, o el número al que equivale.',
+  'composer.error.hintsLadder': 'Una escalera tiene de una a {max} pistas.',
+  'composer.error.feedbackClass':
+    'La respuesta es para una de estas clases: {options}.',
+  'composer.error.misconceptionOption':
+    'El número de una opción incorrecta, contando desde 0.',
+  'composer.error.reflect':
+    'Una reflexión es una respuesta escrita sin rúbrica, pistas ni respuesta resuelta.',
   'composer.error.hintsOrder':
     'Una pista de método va después de una pista de idea.',
   'composer.error.scoring': 'Cuántos puntos, y qué intento cuenta.',

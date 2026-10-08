@@ -109,6 +109,10 @@ export default {
       options: ['8 km/s', '12 km/s', '20 km/s', '40 km/s'],
       because:
         'Desde el cañón es 10,9 km/s, así que 12 es con diferencia la más próxima. Desde el suelo mismo es 11,2 km/s, y ese es el número que merece la pena llevar encima: unas 25.000 millas por hora, o unas cuarenta veces la velocidad del sonido. Toda nave espacial que haya partido hacia otro planeta tuvo que recibir al menos esto. Fíjate en que ambas cifras difieren, y en que el cañón sobre su torre necesita algo menos. Esa es una pista a la que volverás.',
+      hints: [
+        'La velocidad de escape depende de lo fuerte que es la gravedad donde empiezas y de lo lejos que debes llegar.',
+        'Es rápida para lo cotidiano: compárala con un avión de pasajeros y con una bala de fusil.',
+      ],
     },
     {
       title: '¿Qué es lo que decide esto en realidad?',
@@ -139,6 +143,10 @@ export default {
       ],
       because:
         'Menor que cero significa ligado. Para llegar infinitamente lejos, un objeto necesitaría un total de al menos cero, porque eso es en lo que se convierte la energía de posición allí fuera y la energía de movimiento no puede ser negativa para compensar la diferencia. Por debajo de cero simplemente no puede llegar, así que la gravedad acaba ganando siempre y le da la vuelta.',
+      hints: [
+        'Piensa en en qué se convierte la energía de posición infinitamente lejos.',
+        'Si el total es menor que eso, ¿puede el objeto llegar alguna vez?',
+      ],
     },
     {
       title: 'Alrededor de una órbita real',
@@ -165,6 +173,10 @@ export default {
       ],
       because:
         'El total. Las otras dos se intercambiaron cantidades grandes de un lado a otro y su suma no se movió, que es lo que te permitió leer un único número y saber que la órbita era cerrada. Una órbita no puede decidir por sí sola volverse no ligada: algo tendría que llegar y añadirle energía.',
+      hints: [
+        'Observa la lectura de energía durante una órbita completa.',
+        'Dos de las tres se intercambian energía. ¿Qué dejaría sin cambiar un intercambio?',
+      ],
     },
     {
       title: 'Velocidad de escape',
@@ -183,6 +195,18 @@ export default {
       ],
       because:
         'Sigue tirando, y sigue frenándola. Escapar no apaga la gravedad, y no hay ninguna distancia a la que la gravedad se detenga. Lo que escapar significa es que la nave tiene energía suficiente para que ese frenado nunca llegue a detenerla del todo: sigue perdiendo velocidad para siempre y nunca se le acaba. Por debajo de la velocidad de escape, ese mismo frenado sí la detiene, y entonces todo ocurre al revés.',
+      hints: [
+        '¿Tiene la gravedad una distancia más allá de la cual es cero?',
+        'Escapar es que el frenado nunca llegue a detener la nave.',
+      ],
+      misconceptions: [
+        {
+          say: 'La gravedad no tiene alcance límite: se debilita con la distancia pero nunca llega a cero.',
+        },
+        {
+          say: 'La gravedad solo tira hacia la masa. Escapar significa que el tirón nunca gana, no que se invierta.',
+        },
+      ],
     },
     {
       title: 'En otro lugar completamente distinto',
@@ -229,6 +253,15 @@ export default {
       ],
       because:
         'Menos. La velocidad de escape no es una propiedad de un planeta por sí solo, es una propiedad de un planeta y de un lugar. Cuanto más alto empieces, menos subida queda, así que menos velocidad necesitas para terminarla. Esta es una razón por la que las misiones interplanetarias a menudo se ensamblan en órbita en lugar de lanzarse de una vez.',
+      hints: [
+        'La velocidad de escape depende de dónde empiezas, no solo de qué planeta.',
+        'Empezando más alto, ¿cuánto queda de la subida fuera de la gravedad?',
+      ],
+      misconceptions: [
+        {
+          say: 'La gravedad es más débil allí, no cero: la estación espacial sigue sujeta por la atracción de la Tierra.',
+        },
+      ],
     },
     {
       title: 'Tres formas, una sola ley',

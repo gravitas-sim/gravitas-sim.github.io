@@ -261,6 +261,14 @@
             "pointsUnmarked": {
               "description": "What the written answers are worth, which are the instructor's to mark.",
               "$ref": "#/$defs/count"
+            },
+            "hintsTaken": {
+              "description": "Hints the student asked for, across the investigation. A fact beside the answers, not a penalty. Absent from a file written before hints existed.",
+              "$ref": "#/$defs/count"
+            },
+            "workedShown": {
+              "description": "How many steps had their worked answer shown. Absent from a file written before hints existed.",
+              "$ref": "#/$defs/count"
             }
           }
         },
@@ -515,6 +523,14 @@
             "null"
           ],
           "description": "The unit the step's answer is in, as the lesson states it; null when it states none or the step has no numeric answer. Absent from a file written before the column existed."
+        },
+        "hintsTaken": {
+          "description": "Hints the student asked for at this step. A fact, not a penalty. Absent from a file written before hints existed.",
+          "$ref": "#/$defs/count"
+        },
+        "workedShown": {
+          "description": "Whether the worked answer was shown at this step. Absent from a file written before hints existed.",
+          "type": "boolean"
         }
       }
     }

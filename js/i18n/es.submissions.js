@@ -34,6 +34,8 @@ export const ES_SUBMISSIONS = {
   'sub.read.noName': '(sin nombre)',
   'sub.read.duplicate': 'duplicado exacto de la n.º {n}',
   'sub.read.attempt': 'intento {n} de {of}',
+  'sub.read.help':
+    'ayuda usada: {hints} pista(s), respuesta resuelta mostrada en {shown} paso(s)',
   'sub.written.summary': 'Respuestas escritas: {n}',
   'sub.written.rubric': 'Nota para corregir',
   'sub.refused.title': 'No leídas',

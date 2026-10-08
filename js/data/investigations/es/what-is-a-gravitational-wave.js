@@ -68,6 +68,16 @@ export default {
       because:
         'Una atracción constante, y nada más. Esta es la distinción sobre la que gira toda la investigación: un <em>campo</em> gravitacional es lo que ya hay alrededor de cualquier masa, y una <em>onda</em> gravitacional es un cambio en él que viaja. Una estrella quieta tiene lo primero y no produce nada de lo segundo. Qué hace falta para producir lo segundo es el tema del paso siguiente.',
       tip: 'Compáralo con una lámpara: la luz que ya hay en la habitación no es una emisión de radio. Las dos son electromagnéticas, y solo una es una señal que va a alguna parte.',
+      hints: [
+        'Un campo y una onda son distintos: uno siempre está ahí, la otra es un cambio que viaja.',
+        '¿Cambia algo en esta masa?',
+      ],
+      misconceptions: [
+        {
+          say: 'Una masa en reposo crea un campo, no una onda: una onda necesita que el campo cambie.',
+        },
+        { say: 'Una masa quieta sí atrae. Lo que le falta es una onda.' },
+      ],
     },
     {
       stage: { gwSource: { name: 'La fuente' } },
@@ -145,6 +155,10 @@ export default {
       because:
         'Media órbita. Intercambia dos objetos idénticos y no lo notas: el par alineado de izquierda a derecha al principio vuelve a estar alineado de izquierda a derecha a mitad de camino, con los dos objetos cambiados. Así que el patrón que la fuente le presenta al mundo exterior se repite dos veces por órbita, y la onda que emite también. Por eso la frecuencia de la onda para un par así es el <em>doble</em> de la frecuencia orbital, un hecho que el paso 16 te hace contar por ti mismo. Para dos objetos de masas distintas no es tan limpio, y esa complicación esta investigación la deja de lado.',
       tip: 'Usa el cabezal en pasos pequeños. La lectura da la fase orbital, así que puedes comprobar tu respuesta con un número en vez de a ojo.',
+      hints: [
+        'Imagina la pareja como dos objetos idénticos. ¿Qué pasa con la imagen si los intercambias?',
+        'Cuenta cada cuánto se repite la disposición, no cada cuánto vuelve cada objeto.',
+      ],
     },
     {
       title: 'Sigue una perturbación hacia fuera',
@@ -176,6 +190,10 @@ export default {
       because:
         'Más juntos. Eso es lo característico que hace una onda gravitacional, y por eso el anillo se convierte en un óvalo y no en un círculo más grande: estira en una dirección y comprime en la perpendicular, las dos cosas a la vez. Nada ha crecido en conjunto. Y las dos direcciones son perpendiculares a la dirección en la que viaja la onda, y por eso se llama onda <em>transversal</em>.',
       tip: 'Mueve el cabezal en pasos pequeños y mira el anillo, no la gráfica. El óvalo se ve mejor en su punto más extremo.',
+      hints: [
+        'La onda estira el espacio en una dirección. ¿Qué hace en ángulo recto a ella?',
+        'El anillo se vuelve un óvalo, no un círculo más grande.',
+      ],
     },
     {
       title: 'Ahora al revés',
@@ -278,6 +296,10 @@ export default {
       because:
         'El modelo se apagó. En ese instante no ocurre nada físico; el cálculo simplemente deja de ser de fiar, así que se detiene. En esta gráfica no hay fusión ni timbre posterior, y el último ciclo que ves no es el último ciclo que tuvo la binaria. Un modelo que dice dónde se detiene es más útil que uno que sigue sin más, y es la razón honesta de que la imagen acabe de golpe en vez de con suavidad.',
       tip: 'La lectura da la frecuencia a la que se detiene. Para este par son unos 68 Hz, y el suceso real se siguió hasta unos 250 Hz, con instrumentos y cálculos muy por encima de los que usa esta investigación.',
+      hints: [
+        '¿Muestra el gráfico lo que ocurrió, o hasta dónde se puede confiar en un modelo?',
+        'Piensa qué decidió dónde dejar de dibujar.',
+      ],
     },
     {
       title: 'Otros pares compactos',
