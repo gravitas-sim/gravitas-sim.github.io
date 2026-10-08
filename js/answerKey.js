@@ -17,7 +17,7 @@
 // mixed into the derivation.
 // =============================================================================
 
-import { checkAnswer, toleranceFor } from './answerCheck.js';
+import { asGiven, checkAnswer, toleranceFor } from './answerCheck.js';
 import { FEEDBACK_CLASSES, hintLadder } from './answerFeedback.js';
 import { decodeEntities } from './lessonMarkup.js';
 
@@ -203,11 +203,11 @@ export function verifyKey(inv) {
     }
 
     if (e.answerValue !== undefined) {
-      if (!checkAnswer(step, e.answerValue)) {
+      if (!checkAnswer(step, asGiven(step, e.answerValue))) {
         problems.push(`${where}: the derived value is not accepted`);
       }
       const outside = e.answerValue + e.tolerance * 1.001 + 1e-12;
-      if (checkAnswer(step, outside)) {
+      if (checkAnswer(step, asGiven(step, outside, e.tolerance / 1e3))) {
         problems.push(
           `${where}: the quoted tolerance is narrower than the site's`
         );

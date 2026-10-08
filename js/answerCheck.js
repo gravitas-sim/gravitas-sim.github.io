@@ -138,6 +138,10 @@ function withinTolerance({ value: n, u }, step) {
   return Math.abs(n - step.answer) <= (tol + (u ?? 0)) * (1 + 1e-9) + 1e-12;
 }
 
+/** A number as a student would give it for this step: with an uncertainty if asked. */
+export const asGiven = (step, n, u = toleranceFor(step) / 2) =>
+  step.uncertainty ? `${n} ± ${u}` : n;
+
 /**
  * The tolerance a numeric step actually applies, including the default.
  * @param {Object} step - Step definition

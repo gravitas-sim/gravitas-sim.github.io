@@ -27,7 +27,7 @@
 // a checker that cries wolf gets a --no-verify and then it is checking nothing.
 // =============================================================================
 
-import { checkAnswer, toleranceFor } from '../answerCheck.js';
+import { asGiven, checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
 import { parseNumber } from '../answerParse.js';
@@ -1067,7 +1067,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             `tolerance resolves to ${tol}, which grades nothing`
           );
         } else {
-          if (checkAnswer(step, step.answer) !== true) {
+          if (checkAnswer(step, asGiven(step, step.answer)) !== true) {
             E(
               'answer/accepted',
               'the grader rejects the answer this step declares'

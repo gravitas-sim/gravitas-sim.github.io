@@ -80,6 +80,18 @@ export async function loadDepthSteps(id, locale = 'en') {
 }
 
 /**
+ * A lesson's deeper steps as written, with their Spanish shadow, for the
+ * checks that judge them.
+ * @param {string} id - Lesson id
+ * @returns {Promise<{steps: object[], words: ?object}>}
+ */
+export async function depthSources(id) {
+  const steps = (await EXTENSIONS[id]()).default.steps;
+  const words = await WORDS.es[id]?.().then(m => m.default);
+  return { steps, words: words ?? null };
+}
+
+/**
  * A lesson with its deeper steps laid in. Each goes right after the step it
  * names (`after`), in the order given, so the core steps keep their order and
  * their ids; nothing is renumbered, since a step is known by its id.
