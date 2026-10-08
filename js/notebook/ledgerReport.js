@@ -10,7 +10,7 @@
 // =============================================================================
 
 import { t, getLocale } from '../i18n/index.js';
-import { formatNumber, withUncertainty } from '../format.js';
+import { formatNumber, roundSig, withUncertainty } from '../format.js';
 import { ensureDeferredMessages } from '../i18n/deferredMessages.js';
 import { load } from './store.js';
 import {
@@ -50,7 +50,7 @@ export function valueText(value, unit) {
       ? '0'
       : abs < 1e-4 || abs >= 1e6
         ? value.toExponential(3)
-        : String(Number(value.toPrecision(6)));
+        : String(roundSig(value, 6));
   return unit ? `${digits} ${unit}` : String(digits);
 }
 
