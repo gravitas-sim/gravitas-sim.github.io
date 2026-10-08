@@ -26,6 +26,7 @@
 // does the fit and measurement panels (js/observatory/fitPanel.js says why).
 // =============================================================================
 
+import { typedNumber } from '../answerParse.js';
 import { readJson, writeJson } from '../storage/local.js';
 import { SUITES, suiteOf } from './guides/suites.js';
 import {
@@ -34,7 +35,6 @@ import {
   answerMatches,
   correctOption,
   evaluateCheck,
-  parseAnswer,
   stepsOn,
 } from './guides/core.js';
 import { installedPack } from '../catalog/installed.js';
@@ -247,8 +247,8 @@ export function mountGuidePanel(root, ctx) {
 
   async function checkAnswer(step, text) {
     await prepare(step);
-    const typed = parseAnswer(text);
-    if (typed === null) return say(false, t('gd.check.notANumber'));
+    const typed = typedNumber(text, ctx.language());
+    if (Number.isNaN(typed)) return say(false, t('gd.check.notANumber'));
     const want = expected(step);
     if (want === null) return say(false, t('gd.check.notYet'));
     const ok = answerMatches(typed, want, step.expect.tolerance);

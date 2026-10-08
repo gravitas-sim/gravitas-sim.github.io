@@ -310,7 +310,7 @@ export function initRvWorkspacePanel({ signal } = {}) {
     input.max = String(s.max);
     input.step = String(s.step);
     input.addEventListener('input', () => {
-      setTrial(s.key, Number(input.value));
+      setTrial(s.key, input.valueAsNumber);
       render();
     });
   }
@@ -324,8 +324,8 @@ export function initRvWorkspacePanel({ signal } = {}) {
     // Bounded, always, and by the reader. An unbounded search is not a
     // meaningful request and choosing the bounds for somebody would hide the
     // most consequential decision in the analysis.
-    const minPeriod = Number(e.minP?.value);
-    const maxPeriod = Number(e.maxP?.value);
+    const minPeriod = Number(e.minP?.valueAsNumber);
+    const maxPeriod = Number(e.maxP?.valueAsNumber);
     const result = await work(e.search, () =>
       runSearch({ minPeriod, maxPeriod })
     );
@@ -887,7 +887,7 @@ export async function runUncertainty() {
         // decision in the analysis.
         minPeriod: bounds?.minPeriod ?? Math.max(0.05, a.trial.period / 4),
         maxPeriod: bounds?.maxPeriod ?? a.trial.period * 4,
-        trials: Number(e.mcTrials?.value) || MC_LIMITS.defaultTrials,
+        trials: Number(e.mcTrials?.valueAsNumber) || MC_LIMITS.defaultTrials,
         seed: e.mcSeed?.value || 'mc-1',
         inputsKey,
       },

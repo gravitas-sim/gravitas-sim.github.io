@@ -120,7 +120,7 @@ const kms = v => formatNumber(v * (velocityUnitToMs() / 1000), { sig: 4 });
 function beginRun() {
   if (!activeMode()) return;
   const e = cacheElements();
-  const b = Number(e.impact?.value);
+  const b = Number(e.impact?.valueAsNumber);
   if (Number.isFinite(b) && b !== 0) SETTINGS.assist_impact_parameter = b;
   window.dispatchEvent(new CustomEvent('gravitasRequestRebuild'));
 }
@@ -128,7 +128,7 @@ function beginRun() {
 /** Send the spacecraft past the other side of the planet. */
 function flipSide() {
   const e = cacheElements();
-  const b = Number(e.impact?.value) || SETTINGS.assist_impact_parameter;
+  const b = Number(e.impact?.valueAsNumber) || SETTINGS.assist_impact_parameter;
   if (e.impact) e.impact.value = String(-b);
   beginRun();
 }

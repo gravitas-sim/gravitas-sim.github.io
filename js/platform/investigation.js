@@ -34,7 +34,7 @@
 // =============================================================================
 
 import { isObject, makeChecker } from './checker.js';
-import { checkItems } from './questionBank.js';
+import { checkItems, checkUnitName } from './questionBank.js';
 
 export { makeChecker };
 
@@ -130,6 +130,7 @@ const STEP_FIELDS = {
  *   had, so a pack made before ids, which names one in English, still reads
  * @param {string[]} api.widgets - Instrument ids a step may dock
  * @param {string[]} api.lessons - Built-in lesson ids, which a pack may not reuse
+ * @param {Function} [api.isUnit] - Whether text names a unit of the registry
  * @param {Record<string, string[]>} api.units - Answer-parser units by dimension
  * @returns {Array<{path: string, code: string, vars: object, message: string}>}
  */
@@ -439,13 +440,15 @@ function checkStep(s, path, index, ctx) {
       );
       seen.add(f.id);
       text(f.label, `${at}.label`, true);
-      if (f.unit !== undefined)
+      if (f.unit !== undefined) {
         need(
           typeof f.unit === 'string' && f.unit.length <= 16,
           `${at}.unit`,
           'unit',
           'a unit such as "days"'
         );
+        checkUnitName(f.unit, `${at}.unit`, { need, api });
+      }
     });
   }
   if (s.type === 'predict') {

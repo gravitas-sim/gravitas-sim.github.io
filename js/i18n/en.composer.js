@@ -264,6 +264,8 @@ export const EN_COMPOSER = {
   'composer.error.fields': 'From one to six numbers to record.',
   'composer.error.fieldId': 'A short name such as period, used once.',
   'composer.error.unit': 'A unit such as days.',
+  'composer.error.unitUnknown':
+    '“{unit}” is not a unit Gravitas knows. Use one such as days, km/s or AU.',
   'composer.error.options': 'From {min} to {max} options.',
   'composer.error.choiceAnswer': 'Mark the right option.',
   'composer.error.reveal':

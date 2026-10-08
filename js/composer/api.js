@@ -42,6 +42,35 @@ export function packApi() {
   return api;
 }
 
+/** Whether the answer parser reads a unit, which is the common case. */
+const parserReads = text =>
+  text === '' ||
+  Object.values(UNITS).some(t => Object.hasOwn(t, String(text).toLowerCase()));
+
+/** Every `unit` a pack states: measure fields and bank items. */
+function unitTexts(pack) {
+  const fields = Array.isArray(pack?.steps)
+    ? pack.steps.flatMap(s => (Array.isArray(s?.fields) ? s.fields : []))
+    : [];
+  const items = Array.isArray(pack?.bank?.items) ? pack.bank.items : [];
+  return [...fields, ...items].map(f => f?.unit).filter(u => u !== undefined);
+}
+
+/**
+ * The `isUnit` the validators ask. The registry is a module the Studio's
+ * composer page does not otherwise carry (a request and some kilobytes on a
+ * route with no room), so it is fetched only for a pack that states a unit the
+ * answer parser does not already read; every unit the parser reads is in it.
+ *
+ * @param {object} pack - A parsed pack
+ * @returns {Promise<(text: string) => boolean>}
+ */
+async function unitCheck(pack) {
+  if (unitTexts(pack).every(u => typeof u !== 'string' || parserReads(u)))
+    return parserReads;
+  return (await import('../units/registry.js')).isUnit;
+}
+
 /**
  * The whole verdict on a pack.
  *
@@ -52,7 +81,10 @@ export function packApi() {
  *   is not compiled.
  */
 export async function checkInvestigationPack(pack) {
-  const errors = validateInvestigationPack(pack, packApi());
+  const errors = validateInvestigationPack(pack, {
+    ...packApi(),
+    isUnit: await unitCheck(pack),
+  });
   if (errors.length) return { errors, findings: [], compiled: null };
   const compiled = compileInvestigation(pack, {
     scenarios: SCENARIO_INFO,

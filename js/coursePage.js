@@ -207,10 +207,12 @@ function setAt(o, path, value) {
   else delete cur[last];
 }
 
-const numberOf = text => {
+// typedNumber (js/answerParse.js) is fetched with the first number typed: the
+// builder's route has no room for another module.
+const numberOf = (text, typedNumber) => {
   const s = String(text).trim();
   if (s === '') return undefined;
-  const n = Number(s.replace(',', '.'));
+  const n = typedNumber(s, getLocale());
   return Number.isFinite(n) ? n : s;
 };
 
@@ -393,14 +395,18 @@ function plain(path, label, { hint = '', numeric = false, blankIs } = {}) {
     label,
     textInput(
       v,
-      s =>
+      async s => {
+        const reader = numeric
+          ? (await import('./answerParse.js')).typedNumber
+          : null;
         commit(x =>
           setAt(
             x,
             path,
-            s.trim() === '' ? blankIs : numeric ? numberOf(s) : s.trim()
+            s.trim() === '' ? blankIs : numeric ? numberOf(s, reader) : s.trim()
           )
-        ),
+        );
+      },
       { numeric }
     ),
     hint

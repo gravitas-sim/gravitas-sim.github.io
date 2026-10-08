@@ -213,7 +213,7 @@ function arm() {
     separation:
       kind === EVENT_KINDS.SEPARATION_INWARD ||
       kind === EVENT_KINDS.SEPARATION_OUTWARD
-        ? auToSim(Number(e.separation?.value))
+        ? auToSim(Number(e.separation?.valueAsNumber))
         : null,
   };
 
