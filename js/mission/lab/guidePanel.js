@@ -76,7 +76,7 @@ export function createGuidePanel({ els, t, lab }) {
 
   async function checkStep(s, input) {
     const state = lab.state();
-    const r = evaluate(s, state, input);
+    const r = evaluate(s, state, input, lab.language());
     record(s, { input: input ?? null, passed: r.passed });
     if (r.passed)
       feedback = words(s, 'ok', {

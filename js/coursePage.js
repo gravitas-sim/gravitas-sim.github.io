@@ -33,6 +33,7 @@ import {
   registerMessages,
   hasMessage,
 } from './i18n/index.js';
+import { typedNumber } from './answerParse.js';
 import { EN_STUDIO } from './i18n/en.studio.js';
 import { EN_COURSE } from './i18n/en.course.js';
 import { SCENARIO_INFO, scenarioId } from './data/scenarioInfo.js';
@@ -210,7 +211,7 @@ function setAt(o, path, value) {
 const numberOf = text => {
   const s = String(text).trim();
   if (s === '') return undefined;
-  const n = Number(s.replace(',', '.'));
+  const n = typedNumber(s, getLocale());
   return Number.isFinite(n) ? n : s;
 };
 

@@ -511,7 +511,9 @@ describe('the reference run against the literature', () => {
 describe('the runner', () => {
   test('a typed answer: a point or a comma, and nothing else', () => {
     expect(P.parseAnswer('0.5')).toBe(0.5);
-    expect(P.parseAnswer(' 0,558 ')).toBe(0.558);
+    expect(P.parseAnswer(' 0,558 ', 'es')).toBe(0.558);
+    expect(P.parseAnswer('0,91', 'es')).toBe(0.91);
+    expect(P.parseAnswer('0,91')).toBe(0.91);
     expect(P.parseAnswer('3.52e0')).toBe(3.52);
     expect(P.parseAnswer('')).toBeNull();
     expect(P.parseAnswer('about 3')).toBeNull();
@@ -613,6 +615,7 @@ describe('the runner', () => {
         ),
       number: v => String(v),
       registerMessages: parts => Object.assign(messages, parts.en),
+      language: () => 'en',
       open: () => {},
       status: text => said.push(text),
       state: {

@@ -19,6 +19,7 @@ import {
   t,
   translatePage,
 } from './mission/lab/i18n.js';
+import { typedNumber } from './answerParse.js';
 import { MISSION_API, createMission } from './mission/api.js';
 import { DEFAULT_PLAN, PULLER_IDS } from './mission/lab/defaults.js';
 import { DEFAULT_WINDOW, bestOf, turnCost } from './mission/lab/curriculum.js';
@@ -125,10 +126,7 @@ const FIELDS = {
   'vehicle.dryKg': 'ml-dry',
   'vehicle.ispS': 'ml-isp',
 };
-const numberIn = id => {
-  const s = $(id).value.trim().replace(',', '.');
-  return s === '' ? NaN : Number(s);
-};
+const numberIn = id => typedNumber($(id).value, language());
 
 function readPlan() {
   return {
@@ -244,7 +242,7 @@ function renderTimeline() {
   }
   slider.disabled = false;
   slider.max = String(state.plan.depart.tofDays);
-  if (Number(slider.value) > state.plan.depart.tofDays) slider.value = '0';
+  if (slider.valueAsNumber > state.plan.depart.tofDays) slider.value = '0';
   const burn = Object.fromEntries(m.burns.map(b => [b.id, b]));
   const rows = m.events.map(e => {
     const day = e.jd - m.patched.departJd;

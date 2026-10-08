@@ -19,6 +19,7 @@ import {
   t,
   translatePage,
 } from './lab3d/i18n.js';
+import { typedNumber } from './answerParse.js';
 import { createLab3d } from './lab3d/api.js';
 import { migrateSystem, validateSystem } from './lab3d/state.js';
 import { REFERENCES } from './lab3d/references.js';
@@ -100,7 +101,7 @@ function syncControls() {
 function integratorAsked() {
   const scheme = $('lb-scheme').value;
   if (!scheme) return undefined;
-  const value = Number($('lb-step').value.replace(',', '.'));
+  const value = typedNumber($('lb-step').value, language());
   if (!(value > 0)) return null;
   return scheme === 'dopri5' ? { scheme, tol: value } : { scheme, h: value };
 }
@@ -123,8 +124,10 @@ async function go() {
   try {
     if (problem === 'file') {
       const system = integrator ? { ...fileSystem, integrator } : fileSystem;
-      const span = Number($('lb-span').value.replace(',', '.'));
-      const samples = Math.round(Number($('lb-samples').value));
+      const span = typedNumber($('lb-span').value, language());
+      const samples = Math.round(
+        typedNumber($('lb-samples').value, language())
+      );
       current = lab.run(
         system,
         { span, samples, positions: true },

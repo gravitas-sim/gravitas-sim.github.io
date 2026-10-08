@@ -20,6 +20,7 @@ import {
   t,
   translatePage,
 } from './mission/i18n.js';
+import { typedNumber } from './answerParse.js';
 import { MISSION_API, createMission } from './mission/api.js';
 import { BODIES, CENTRAL, PLANETS, dateOf, daysOf } from './mission/bodies.js';
 import { budgetOf, planBytes, planFile, timelineOf } from './mission/plan.js';
@@ -110,20 +111,17 @@ const facts = (caption, pairs) =>
   table(caption, [t('mission.col.quantity'), t('mission.col.value')], pairs);
 
 /** A number the reader typed; a comma may be the decimal mark. */
-const read = id => {
-  const s = $(id).value.trim().replace(',', '.');
-  return s === '' ? NaN : Number(s);
-};
+const read = id => typedNumber($(id).value, language());
 /**
  * A vector the reader typed: three numbers separated by commas, or by
  * semicolons when commas are decimal marks.
  */
 const readVector = id => {
   const s = $(id).value.trim();
-  const parts = s.includes(';')
-    ? s.split(';').map(p => p.replace(',', '.'))
-    : s.split(',');
-  const v = parts.map(p => (p.trim() === '' ? NaN : Number(p.trim())));
+  // Semicolons mean the commas are decimal marks.
+  const v = (s.includes(';') ? s.split(';') : s.split(',')).map(p =>
+    typedNumber(p, s.includes(';') ? 'es' : 'en')
+  );
   return v.length === 3 && v.every(Number.isFinite) ? v : null;
 };
 const say = (sid, text) => ($(`${sid}-status`).textContent = text);

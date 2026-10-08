@@ -17,6 +17,8 @@
 //   seriesOf       the x, value and uncertainty columns a view shows
 // =============================================================================
 
+import { typedNumber } from '../../answerParse.js';
+
 export const PATHS = ['intro', 'advanced'];
 
 /** A guide's steps on one path. */
@@ -24,14 +26,10 @@ export function stepsOn(guide, path) {
   return guide.steps.filter(s => s.path === 'both' || s.path === path);
 }
 
-/** A typed number, with a decimal comma as well as a point. */
-export function parseAnswer(text) {
-  const s = String(text ?? '')
-    .trim()
-    .replace(/\s+/g, '')
-    .replace(',', '.');
-  if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(s)) return null;
-  return Number(s);
+/** A typed number, read under the locale's decimal mark. */
+export function parseAnswer(text, locale = 'en') {
+  const n = typedNumber(text, locale);
+  return Number.isFinite(n) ? n : null;
 }
 
 /** Whether a typed answer is the expected one, to its tolerance. */

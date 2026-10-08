@@ -247,7 +247,7 @@ export function mountGuidePanel(root, ctx) {
 
   async function checkAnswer(step, text) {
     await prepare(step);
-    const typed = parseAnswer(text);
+    const typed = parseAnswer(text, ctx.language());
     if (typed === null) return say(false, t('gd.check.notANumber'));
     const want = expected(step);
     if (want === null) return say(false, t('gd.check.notYet'));
