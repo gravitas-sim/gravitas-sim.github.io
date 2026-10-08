@@ -138,7 +138,7 @@ import {
   transitAnalysis,
   transitGeometry,
 } from './lightCurve.js';
-import { encodePayload, shareUrl } from './shareState.js';
+import { encodePayload, parseDocument, shareUrl } from './shareState.js';
 import { normalizeSeed, formatSeed } from './rng.js';
 // From js/notify.js rather than through js/controls.js, which only re-exports
 // them. Going through controls put this module in a cycle - controls
@@ -559,7 +559,7 @@ async function restoreProgressBackup(file) {
 
   let data;
   try {
-    data = JSON.parse(await file.text());
+    data = parseDocument(await file.text());
   } catch {
     toast(t('inv.backup.notJson'));
     return;
