@@ -822,7 +822,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             typed.length > 0 && Object.keys(hints).length === typed.length;
           if (fullyHinted) {
             for (const f of step.fields) {
-              if (typeof f.compute !== 'function') continue;
+              if (typeof f.compute !== 'function' || f.compute.length > 1)
+                continue;
               try {
                 const v = f.compute(hints);
                 if (

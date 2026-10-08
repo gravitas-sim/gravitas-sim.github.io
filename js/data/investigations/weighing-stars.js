@@ -55,6 +55,7 @@ const WEIGHING = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'arithmetic',
   prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary
