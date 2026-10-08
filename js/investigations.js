@@ -146,6 +146,7 @@ import { normalizeSeed, formatSeed } from './rng.js';
 // re-export is not one worth keeping.
 import { toast, announce, loadFailed } from './notify.js';
 import { buildLabReport, downloadPdf, reportMessages } from './labReport.js';
+import { setEvidenceContext } from './widgetRuntime.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer, gradeAnswer, toleranceFor } from './answerCheck.js';
@@ -4955,6 +4956,16 @@ onLocaleChange(() => {
  */
 export function initInvestigations({ signal } = {}) {
   const opts = signal ? { signal } : undefined;
+  // Where a notebook capture is made: the lesson and step the student is on.
+  setEvidenceContext(() =>
+    active
+      ? {
+          lesson: active.id,
+          step: active.steps[stepIndex]?.sid ?? null,
+          ...(assignment ? { assignment: assignment.i } : {}),
+        }
+      : null
+  );
   els = {
     browser: document.getElementById('investigationBrowser'),
     list: document.getElementById('investigationList'),

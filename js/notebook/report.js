@@ -23,6 +23,17 @@ import { createDocument } from '../pdf.js';
 import { t } from '../i18n/index.js';
 import { KIND } from './entry.js';
 import { citationRows } from './artifactEntry.js';
+import {
+  ARTIFACT_SOURCES,
+  contextText,
+  envelopeOf,
+  evidenceRows,
+  ledgerDigest,
+  ledgerRecord,
+  observedRows,
+} from './ledger.js';
+import { formatNumber, withUncertainty } from '../format.js';
+import { getLocale } from '../i18n/index.js';
 
 /**
  * A translated string, or a fallback when the id is not in the catalog.
@@ -178,16 +189,37 @@ export function provenanceRows(p) {
  * @param {string} [spec.revision] - The build writing the file
  * @returns {Uint8Array} PDF bytes
  */
-export function buildEvidenceReport({
-  entries,
-  student = null,
-  revision = 'dev',
-}) {
-  const doc = createDocument({
+export function buildEvidenceReport(spec) {
+  const doc = newDocument();
+  fillEvidenceReport(doc, spec);
+  return doc.build();
+}
+
+/**
+ * The same report with the ledger's sections after the entries: the evidence
+ * table, methods, figures with their data, limitations and sources.
+ * @param {object} spec - As buildEvidenceReport
+ * @returns {Promise<Uint8Array>} PDF bytes
+ */
+export async function buildLedgerReport(spec) {
+  const doc = newDocument();
+  fillEvidenceReport(doc, spec);
+  await evidenceSections(doc, spec.entries);
+  return doc.build();
+}
+
+const newDocument = () =>
+  createDocument({
     title: t('nb.report.title'),
     footer: t('nb.report.footer'),
+    tagged: true,
+    lang: getLocale() === 'es' ? 'es-ES' : 'en-US',
   });
 
+function fillEvidenceReport(
+  doc,
+  { entries, student = null, revision = 'dev' }
+) {
   doc
     .heading(t('nb.report.title'), { size: 19, spaceBefore: 0 })
     .paragraph(t('nb.report.subtitle'), {
@@ -300,10 +332,10 @@ export function buildEvidenceReport({
     // describe it.
     if (snap.observed) {
       doc.heading(t('nb.report.data'), { size: 10, spaceBefore: 8 });
-      for (const [label, value] of snap.observed.rows || []) {
+      for (const [label, value] of observedRows(snap.observed, t)) {
         doc.row(String(label), String(value));
       }
-    } else if (snap.artifact) {
+    } else if (snap.artifact && ARTIFACT_SOURCES.includes(entry.source)) {
       // A fit, an analysis or an experiment result: what made it, from what
       // data (by digest), and a line to cite it by (./artifactEntry.js).
       doc.heading(t('nb.entry.cite'), { size: 10, spaceBefore: 8 });
@@ -317,8 +349,6 @@ export function buildEvidenceReport({
       }
     }
   });
-
-  return doc.build();
 }
 
 /**
@@ -329,4 +359,180 @@ export function buildEvidenceReport({
  */
 export function reportFilename(now = new Date()) {
   return `gravitas-evidence-${now.toISOString().slice(0, 10)}.pdf`;
+}
+
+/** A value with its uncertainty at the uncertainty's precision, no unit. */
+export function rowValue(r, locale = getLocale()) {
+  return r.half > 0
+    ? withUncertainty(r.value, r.half, { locale })
+    : formatNumber(r.value, { sig: 6, locale });
+}
+
+/** The settings of every distinct way the entries were made, as sentences. */
+function methodLines(entries, t, locale) {
+  const seen = new Set();
+  const lines = [];
+  for (const e of entries) {
+    const env = envelopeOf(e);
+    const s = env.provenance?.settings;
+    if (!s) continue;
+    const parts = [
+      s.scenario && `${t('nb.prov.scenario')}: ${scenarioName(s.scenario)}`,
+      s.integrator && `${t('led.m.integrator')}: ${s.integrator}`,
+      Number.isFinite(s.step) &&
+        `${t('led.m.step')}: ${formatNumber(s.step, { sig: 4, locale })}`,
+      s.frame && `${t('nb.prov.frame')}: ${s.frame}`,
+      s.seed && `${t('nb.prov.seed')}: ${s.seed}`,
+      s.observer &&
+        `${t('nb.prov.geometry')}: ${t('nb.prov.geometryValue', {
+          pa: valueText(s.observer.positionAngleDeg, ''),
+          inc: valueText(s.observer.inclinationDeg, ''),
+        })}`,
+      s.schedule && `${t('led.m.schedule')}: ${s.schedule}`,
+      s.params &&
+        `${t('led.obs.params')}: ${Object.entries(s.params)
+          .map(([k, v]) => `${k} ${Array.isArray(v) ? v.join('-') : v}`)
+          .join(', ')}`,
+    ].filter(Boolean);
+    const line = `${env.source.kind} ${env.source.id}: ${parts.join('; ')}`;
+    if (parts.length && !seen.has(line)) {
+      seen.add(line);
+      lines.push(line);
+    }
+  }
+  return lines;
+}
+
+/**
+ * The part of a report that is made from the ledger: the evidence table, the
+ * methods the numbers were made by, the figures with their data, the
+ * limitations and the provenance of every source. Said in the reader's
+ * language, now; the numbers are the envelopes' own.
+ *
+ * @param {object} doc - A pdf.js document
+ * @param {Array<object>} entries - The notebook, in the student's order
+ * @param {{locale?: string}} [opts]
+ * @returns {Promise<{ids: string[], digest: string, rows: number}>} What it
+ *   printed, for the submission token to state
+ */
+export async function evidenceSections(
+  doc,
+  entries,
+  { locale = getLocale() } = {}
+) {
+  if (!entries.length) return { ids: [], digest: '', rows: 0 };
+  const rows = evidenceRows(entries, t, locale);
+  const record = ledgerRecord(entries);
+  const digest = await ledgerDigest(record);
+
+  doc.heading(t('led.evidence'), { size: 14 });
+  doc.paragraph(
+    t('led.evidenceNote', { n: rows.length, entries: entries.length }),
+    {
+      size: 9,
+      color: '0.35 0.35 0.42',
+    }
+  );
+  doc.table({
+    columns: [
+      t('nb.report.colQuantity'),
+      t('nb.report.colValue'),
+      t('led.col.unit'),
+      t('nb.report.colKind'),
+      t('led.col.origin'),
+    ],
+    widths: [0.28, 0.2, 0.1, 0.12, 0.3],
+    rows: rows.map(r => [
+      `${r.n}. ${r.label}`,
+      rowValue(r, locale),
+      r.unit,
+      r.kind,
+      `${r.source.kind} ${r.source.id}${
+        r.source.digest ? ` ${r.source.digest.slice(0, 12)}` : ''
+      }`,
+    ]),
+  });
+  doc.row(t('led.digest'), digest.slice(0, 16));
+
+  const lines = methodLines(entries, t, locale);
+  if (lines.length) {
+    doc.heading(t('led.methods'), { size: 12, spaceBefore: 10 });
+    doc.bullets(lines, { size: 9 });
+  }
+
+  const figures = entries.filter(e => e.snapshot.figure?.series?.length);
+  if (figures.length) {
+    doc.heading(t('led.figures'), { size: 12, spaceBefore: 10 });
+    for (const e of figures) {
+      const f = e.snapshot.figure;
+      const say = (id, vars, text) =>
+        id && orRaw(id, '') ? t(id, vars) : text;
+      doc.heading(say(f.tid, f.tv, f.title) || t('nb.report.figure'), {
+        size: 10,
+        spaceBefore: 8,
+      });
+      doc.figure({
+        series: f.series,
+        xLabel: say(f.xid, f.xv, f.xLabel),
+        yLabel: say(f.yid, f.yv, f.yLabel),
+        logX: f.logX,
+      });
+      // The data under the figure: what a reader who cannot see it is given.
+      const first = f.series[0];
+      doc.table({
+        columns: [say(f.xid, f.xv, f.xLabel), say(f.yid, f.yv, f.yLabel)],
+        rows: first.points
+          .filter((_, i) => i % Math.ceil(first.points.length / 12) === 0)
+          .map(([x, y]) => [
+            formatNumber(x, { sig: 5, locale }),
+            formatNumber(y, { sig: 5, locale }),
+          ]),
+      });
+    }
+  }
+
+  const limits = [];
+  for (const e of entries) {
+    const env = envelopeOf(e);
+    for (const w of env.warnings ?? []) {
+      if (/^(truncated|novalue|unit):/.test(w)) continue;
+      limits.push(`${entries.indexOf(e) + 1}. ${orRaw(`nb.flag.${w}`, w)}`);
+    }
+    if (e.prose.limitations)
+      limits.push(
+        `${entries.indexOf(e) + 1}. ${e.prose.limitations.replace(/\s+/g, ' ')}`
+      );
+  }
+  if (limits.length) {
+    doc.heading(t('led.limits'), { size: 12, spaceBefore: 10 });
+    doc.bullets([...new Set(limits)], { size: 9 });
+  }
+
+  const cites = [];
+  const seen = new Set();
+  for (const e of entries) {
+    const env = envelopeOf(e);
+    const p = env.provenance ?? {};
+    const key = `${env.source.kind}|${env.source.id}|${env.source.digest}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const where = contextText(p.context, t);
+    cites.push(
+      [
+        `${env.source.kind} ${env.source.id}${env.source.version ? ` ${env.source.version}` : ''}`,
+        env.source.digest && `${t('nb.cite.digest')}: ${env.source.digest}`,
+        p.license && `${t('led.obs.license')}: ${p.license.status}`,
+        p.credit,
+        p.retrieved && `${t('led.retrieved')}: ${p.retrieved}`,
+        ...(p.citations ?? []),
+        where && `${t('led.kept')}: ${where}`,
+      ]
+        .filter(Boolean)
+        .join('. ')
+    );
+  }
+  doc.heading(t('led.sources'), { size: 12, spaceBefore: 10 });
+  doc.bullets(cites, { size: 9 });
+
+  return { ids: record.ids, digest, rows: rows.length };
 }

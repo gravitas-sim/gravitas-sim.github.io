@@ -18,7 +18,7 @@
 // reach for a body that has since been rebuilt.
 // =============================================================================
 
-import { t } from '../i18n/index.js';
+import { t as translate } from '../i18n/index.js';
 import {
   KIND,
   SOURCE,
@@ -27,7 +27,20 @@ import {
   figureSeries,
   provenanceOf,
   quantity,
+  say,
+  withContext,
 } from './entry.js';
+
+export { withContext };
+
+/**
+ * The translator, remembering which message made each piece of text so the
+ * entry can be said again in another language (./entry.js say()).
+ * @param {string} id - Message id
+ * @param {object} [vars] - Its variables
+ * @returns {string} The text
+ */
+const t = (id, vars) => say(translate(id, vars), id, vars);
 
 /**
  * The provenance a recording carries, which outranks the live world's.

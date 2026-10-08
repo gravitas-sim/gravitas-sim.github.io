@@ -1585,42 +1585,6 @@ export function mountMeasurePanel(root, ctx) {
     const { t } = ctx;
     const w = words();
     const src = ctx.state.source;
-    const c = changes().slice(0, n.at);
-    const rows = [
-      [t('obs.ms.nb.observation'), `${src.title} (${src.id})`],
-      [
-        t('obs.ms.nb.source'),
-        [src.source?.kind, src.source?.id, src.source?.version]
-          .filter(Boolean)
-          .join(' '),
-      ],
-      [t('obs.ms.nb.digest'), n.input.digest],
-      [
-        t('obs.ms.nb.license'),
-        [src.license?.status, src.credit].filter(Boolean).join('; '),
-      ],
-      [t('obs.ms.nb.tool'), `${w.toolName(n.tool)}, ${n.version}`],
-      [t('obs.ms.nb.params'), w.params(n.params)],
-      [
-        t('obs.ms.nb.changes'),
-        c.length
-          ? c.map(x => `${t(`obs.op.${x.op}`)} (${w.params(x)})`).join('; ')
-          : t('obs.ms.nb.noChanges'),
-      ],
-    ];
-    const assumed = (n.quantities || []).filter(q => q.kind === 'assumed');
-    if (assumed.length)
-      rows.push([
-        t('obs.ms.nb.assumed'),
-        assumed
-          .map(
-            q =>
-              `${w.quantityName(q)} ${w.value(q)}${q.cite ? ` (${q.cite})` : ''}`
-          )
-          .join('; '),
-      ]);
-    if (n.warnings?.length)
-      rows.push([t('obs.ms.nb.warnings'), n.warnings.map(w.warning).join(' ')]);
     // A periodogram goes in as the entry's figure: at most 400 points, each
     // the highest power in its stretch of trial periods, so no peak is lost.
     let fig = null;
@@ -1666,8 +1630,8 @@ export function mountMeasurePanel(root, ctx) {
           ]
             .filter(Boolean)
             .join('; '),
-        rows,
       },
+      context: { page: 'observatory', observation: src.id },
     });
     const loaded = loadNotebook();
     if (!loaded.ok) {

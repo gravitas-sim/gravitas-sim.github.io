@@ -65,7 +65,7 @@ const plusMinus = u =>
  * An entry for a result, from its envelope.
  * @param {{source: string, envelope: object, title: string,
  *   labels?: {quantity?: (q: object) => string, note?: (q: object) => string},
- *   figure?: ?object, capturedAt?: number}} a - `source` is one of
+ *   figure?: ?object, capturedAt?: number, context?: ?object}} a - `source` is one of
  *   SOURCE.INFERENCE_FIT, SWEEP_ANALYSIS, EXPERIMENT_RESULT; `labels` are the
  *   reader's words for the quantities, made by the caller's translator at
  *   capture, as for an observed entry
@@ -79,6 +79,7 @@ export function artifactEntry({
   labels = {},
   figure = null,
   capturedAt,
+  context = null,
 }) {
   const problems = validateArtifact(envelope);
   if (problems.length)
@@ -110,6 +111,7 @@ export function artifactEntry({
     })),
     provenance: provenanceOf(),
     artifact: env,
+    ...(context ? { context } : {}),
   });
 }
 

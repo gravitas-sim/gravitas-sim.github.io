@@ -16,13 +16,18 @@
 //     tool: { id, version, params, at },
 //     changes: [op, ...],       the workspace changes the measurement saw
 //     assumptions: [...],       values the measurement took as given
-//     rows: [[label, value]],   all of it in words, in the reader's language
-//   }                           at capture, as the quantities' labels are
+//     warnings: [{code, ...}],  what the tool said of its result, as codes
+//     steps: [[id, state]],     a guide's steps and where each stood
+//   }
 //
-// The panel and the report print `rows` where they would print conditions.
+// Nothing here is a sentence. Before the evidence ledger the group also held
+// `rows`, all of it in words in the language of the capture; no producer
+// writes them now and an entry that has them is read from the fields above
+// like any other (./ledger.js observedRows()), in its reader's language.
+// The panel and the report print those rows where they would print conditions.
 // Every quantity is MEASURED: a value derived from measured data is still
 // from the data, and says in its note how it was derived. An ASSUMED value is
-// not a measurement and is not a quantity: it is in `assumptions` and `rows`.
+// not a measurement and is not a quantity: it is in `assumptions`.
 //
 // Pure: no DOM, no storage.
 // =============================================================================
@@ -35,10 +40,10 @@ export const OBSERVED_VERSION = 1;
 /**
  * @param {{node: object, source: object, digest: string, changes: object[],
  *   title: string, labels: {quantity: (q: object) => string,
- *   note: (q: object) => string, rows: Array<[string, string]>},
- *   figure?: object|null, capturedAt?: number}} a - `labels` are the
- *   reader's words for the quantities and the observed rows, made by the
- *   caller's translator; `figure` is from entry.js figure(), if there is one
+ *   note: (q: object) => string}, steps?: Array<[string, string]>,
+ *   figure?: object|null, capturedAt?: number, context?: ?object}} a -
+ *   `labels` are the reader's words for the quantities, made by the caller's
+ *   translator; `figure` is from entry.js figure(), if there is one
  * @returns {object} A notebook entry (js/notebook/entry.js)
  */
 export function observedEntry({
@@ -50,6 +55,8 @@ export function observedEntry({
   labels,
   figure = null,
   capturedAt,
+  context = null,
+  steps = null,
 }) {
   const measured = node.quantities.filter(
     q => q.kind !== 'assumed' && Number.isFinite(q.value)
@@ -67,10 +74,16 @@ export function observedEntry({
       kind: KIND.MEASURED,
       uncertainty: Number.isFinite(q.error) ? q.error : null,
       note: labels.note(q),
+      // Its own id and origin, so a report names it in its reader's language
+      // and tells a derived value from a measured one (./ledger.js).
+      qid: q.id,
+      og: q.kind === 'derived' ? 'derived' : 'measured',
+      ub: q.errorKind === 'assumed' ? 'assumed' : 'data',
     })),
     // The simulation's conditions do not apply; the flag says why they are
     // empty, and `observed` says what does apply.
     provenance: provenanceOf({ flags: ['observed'] }),
+    ...(context ? { context } : {}),
     observed: {
       format: OBSERVED_FORMAT,
       formatVersion: OBSERVED_VERSION,
@@ -106,7 +119,10 @@ export function observedEntry({
         unit: q.unit ?? '',
         cite: q.cite ?? null,
       })),
-      rows: labels.rows,
+      ...(node.warnings?.length
+        ? { warnings: JSON.parse(JSON.stringify(node.warnings)) }
+        : {}),
+      ...(steps ? { steps } : {}),
     },
   });
 }

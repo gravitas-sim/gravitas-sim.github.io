@@ -42,7 +42,7 @@ import { SETTINGS } from './appState.js';
 import { timeUnitSeconds } from './units.js';
 import { SECONDS_PER_DAY } from './constants.js';
 
-import { setCaptureSink } from './widgetRuntime.js';
+import { evidenceContext, setCaptureSink } from './widgetRuntime.js';
 
 let loading = null;
 
@@ -59,6 +59,8 @@ export function ensureNotebook() {
         import('./notebookPanel.js'),
         import('./notebook/capture.js'),
       ]);
+      // The ledger's words (led.*), which the panel's rows and the report use.
+      await panel.loadWords().catch(() => {});
       panel.setRevisionSource(buildRevision);
       panel.ensurePanel();
       return { panel, capture };
@@ -317,9 +319,12 @@ export function captureToNotebook(make) {
   // `make` is called afterwards, and that is safe on one condition the callers
   // meet: what it closes over has already been copied. See snapshot().
   const provenance = liveProvenance();
+  // Where the student is, read in the same task as the click for the same
+  // reason: a step answered a moment later is another step.
+  const context = evidenceContext() ?? { page: 'sandbox' };
   return (async () => {
     const { panel, capture } = await ensureNotebook();
-    const entry = make(capture, provenance);
+    const entry = capture.withContext(context, () => make(capture, provenance));
     if (!entry) return false;
     panel.offerDraft(entry);
     return true;
