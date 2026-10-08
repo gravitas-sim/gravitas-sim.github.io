@@ -110,6 +110,15 @@ export function realizeItem(item, seed) {
     step.options = order.map(k => en(item.options[k]));
     words.options = order.map(k => es(item.options[k]));
     step.answer = order.indexOf(item.answer);
+    if (item.misconceptions) {
+      // Bound to an option by its number; a pack that shuffles has none.
+      step.misconceptions = item.misconceptions.map(m => ({
+        id: m.id,
+        option: m.option,
+        say: en(m.say),
+      }));
+      words.misconceptions = item.misconceptions.map(m => ({ say: es(m.say) }));
+    }
   } else if (item.kind === 'numeric') {
     const rel = item.variants?.relation;
     if (rel) {
@@ -144,7 +153,16 @@ export function realizeItem(item, seed) {
       });
       words.misconceptions = item.misconceptions.map(m => ({ say: es(m.say) }));
     }
+    if (item.feedback) {
+      step.feedback = {};
+      words.feedback = {};
+      for (const [k, v] of Object.entries(item.feedback)) {
+        step.feedback[k] = fill(en(v), values, 'en');
+        words.feedback[k] = es(v) === null ? null : fill(es(v), values, 'es');
+      }
+    }
   }
+  if (item.reflect) step.reflect = true;
   step.prompt = fill(en(item.prompt), values, 'en');
   words.prompt =
     es(item.prompt) === null ? null : fill(es(item.prompt), values, 'es');
@@ -156,7 +174,12 @@ export function realizeItem(item, seed) {
     step.rubric = en(item.rubric);
     words.rubric = es(item.rubric);
   }
-  if (item.hints) {
+  if (Array.isArray(item.hints)) {
+    step.hints = item.hints.map(h => fill(en(h), values, 'en'));
+    words.hints = item.hints.map(h =>
+      es(h) === null ? null : fill(es(h), values, 'es')
+    );
+  } else if (item.hints) {
     step.hints = {};
     words.hints = {};
     for (const k of ['concept', 'method']) {

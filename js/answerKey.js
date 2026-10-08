@@ -18,6 +18,7 @@
 // =============================================================================
 
 import { checkAnswer, toleranceFor } from './answerCheck.js';
+import { FEEDBACK_CLASSES, hintLadder } from './answerFeedback.js';
 import { decodeEntities } from './lessonMarkup.js';
 
 /**
@@ -88,15 +89,39 @@ export function entryFor(step, index) {
     entry.acceptedUnits = step.expect?.accept ? [...step.expect.accept] : null;
   }
 
-  // Whether help was on offer. Not a mark against anyone - it is context for
-  // reading a class's answers, and the report records what each student took.
-  if (step.hints || step.worked) {
+  // The help on offer, in words: the ladder in the order students are shown
+  // it, and the worked answer behind it. Context for reading a class's
+  // answers, and not a mark against anyone - the report records what each
+  // student took.
+  const ladder = hintLadder(step);
+  if (ladder.length || step.worked) {
     entry.help = {
-      concept: Boolean(step.hints?.concept),
-      method: Boolean(step.hints?.method),
-      worked: Boolean(step.worked),
+      hints: ladder.map(h => plainText(h.text)),
+      worked: step.worked ? plainText(step.worked) : null,
     };
   }
+
+  // What a wrong number is told, by class: the check each one teaches.
+  if (step.feedback) {
+    entry.feedback = FEEDBACK_CLASSES.filter(k => step.feedback[k]).map(k => ({
+      class: k,
+      text: plainText(step.feedback[k]),
+    }));
+  }
+
+  // A wrong option or number that names a mistake, with what it says.
+  const named = (step.misconceptions || []).filter(m => m?.say);
+  if (named.length) {
+    entry.mistakes = named.map(m => ({
+      id: m.id,
+      option: Number.isInteger(m.option)
+        ? String.fromCharCode(65 + m.option)
+        : null,
+      text: plainText(m.say),
+    }));
+  }
+
+  if (step.reflect) entry.reflect = true;
 
   if (step.kind === 'short')
     entry.rubric = step.rubric ? plainText(step.rubric) : null;
@@ -192,7 +217,7 @@ export function verifyKey(inv) {
       }
     }
 
-    if (e.category === 'written' && !e.rubric) {
+    if (e.category === 'written' && !e.rubric && !e.reflect) {
       problems.push(`${where}: short answer with no rubric for the instructor`);
     }
     if (

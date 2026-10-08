@@ -29,6 +29,20 @@
 
 import { RELATIONS, evaluateRelation } from './relations.js';
 
+// The same lists as js/answerFeedback.js, written out here because this module
+// serves routes that do not otherwise load the lesson engine's grader, and a
+// shared import would cost each of them a request. tests/scaffoldRules.test.js
+// holds the two equal.
+export const FEEDBACK_CLASSES = Object.freeze([
+  'correct',
+  'close',
+  'wrong-sign',
+  'wrong-unit',
+  'wrong-order-of-magnitude',
+  'off',
+]);
+export const HINT_LIMIT = 3;
+
 export const BANK_FORMAT = 'gravitas.question-bank';
 export const BANK_FORMAT_VERSION = 1;
 
@@ -54,6 +68,8 @@ const ITEM_FIELDS = new Set([
   'hints',
   'worked',
   'misconceptions',
+  'feedback',
+  'reflect',
   'rubric',
   'scoring',
   'a11y',
@@ -158,6 +174,49 @@ export function checkBankItem(item, path, { need, text, api }) {
       'choiceAnswer',
       'the number of the right option, counting from 0'
     );
+    // A wrong option can name the mistake it is: `option` is its number, and
+    // shuffled options have no fixed number.
+    if (item.misconceptions !== undefined) {
+      const list = Array.isArray(item.misconceptions)
+        ? item.misconceptions
+        : null;
+      need(
+        list && list.length <= 6 && !(isObject(v) && v.shuffle),
+        `${path}.misconceptions`,
+        'list',
+        'a list of at most six, on options that are not shuffled'
+      );
+      (list || []).forEach((m, i) => {
+        const at = `${path}.misconceptions[${i}]`;
+        if (!isObject(m))
+          return need(false, at, 'notObject', 'is not an object');
+        for (const k of Object.keys(m))
+          need(
+            ['id', 'option', 'say'].includes(k),
+            `${at}.${k}`,
+            'unknownField',
+            `"${k}" is not a misconception field`,
+            { key: k }
+          );
+        need(
+          typeof m.id === 'string' && PUBLIC_ID.test(m.id),
+          `${at}.id`,
+          'id',
+          'a public id'
+        );
+        need(
+          Number.isInteger(m.option) &&
+            opts &&
+            m.option >= 0 &&
+            m.option < opts.length &&
+            m.option !== item.answer,
+          `${at}.option`,
+          'misconceptionOption',
+          'the number of a wrong option, counting from 0'
+        );
+        text(m.say, `${at}.say`, true);
+      });
+    }
     if (isObject(v)) {
       for (const k of Object.keys(v))
         need(
@@ -213,6 +272,21 @@ export function checkBankItem(item, path, { need, text, api }) {
       checkUnitName(item.unit, `${path}.unit`, { need, api });
     if (item.expect !== undefined)
       checkExpect(item.expect, `${path}.expect`, { need, api });
+    if (item.feedback !== undefined) {
+      if (!isObject(item.feedback))
+        need(false, `${path}.feedback`, 'notObject', 'is not an object');
+      else
+        for (const k of Object.keys(item.feedback)) {
+          need(
+            FEEDBACK_CLASSES.includes(k),
+            `${path}.feedback.${k}`,
+            'feedbackClass',
+            `one of ${FEEDBACK_CLASSES.join(', ')}`,
+            { options: FEEDBACK_CLASSES.join(', ') }
+          );
+          text(item.feedback[k], `${path}.feedback.${k}`, true);
+        }
+    }
     if (item.misconceptions !== undefined) {
       const list = Array.isArray(item.misconceptions)
         ? item.misconceptions
@@ -254,7 +328,18 @@ export function checkBankItem(item, path, { need, text, api }) {
       });
     }
   } else if (kind === 'short') {
-    text(item.rubric, `${path}.rubric`, true);
+    // A reflection has no rubric, because nothing marks it.
+    if (item.reflect !== undefined)
+      need(
+        item.reflect === true &&
+          item.rubric === undefined &&
+          item.hints === undefined &&
+          item.worked === undefined,
+        `${path}.reflect`,
+        'reflect',
+        'true, on a written answer with no rubric, hints or worked answer'
+      );
+    else text(item.rubric, `${path}.rubric`, true);
     for (const k of [
       'options',
       'answer',
@@ -262,6 +347,7 @@ export function checkBankItem(item, path, { need, text, api }) {
       'unit',
       'expect',
       'misconceptions',
+      'feedback',
     ])
       need(
         item[k] === undefined,
@@ -278,8 +364,18 @@ export function checkBankItem(item, path, { need, text, api }) {
   }
 
   if (item.hints !== undefined) {
-    if (!isObject(item.hints))
-      need(false, `${path}.hints`, 'notObject', 'is not an object');
+    if (Array.isArray(item.hints)) {
+      // The ladder: up to three, each shown when asked for.
+      need(
+        item.hints.length >= 1 && item.hints.length <= HINT_LIMIT,
+        `${path}.hints`,
+        'hintsLadder',
+        `from one to ${HINT_LIMIT} hints`,
+        { max: HINT_LIMIT }
+      );
+      item.hints.forEach((h, i) => text(h, `${path}.hints[${i}]`, true));
+    } else if (!isObject(item.hints))
+      need(false, `${path}.hints`, 'notObject', 'is not an object or a list');
     else {
       for (const k of Object.keys(item.hints))
         need(

@@ -31,7 +31,11 @@ import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
 import { parseNumber } from '../answerParse.js';
-import { STANDARD_MISCONCEPTIONS } from '../answerFeedback.js';
+import {
+  FEEDBACK_CLASSES,
+  HINT_LIMIT,
+  STANDARD_MISCONCEPTIONS,
+} from '../answerFeedback.js';
 import {
   mergeTranslation,
   translationCoverage,
@@ -101,6 +105,11 @@ export const RULE_INDEX = {
   'content/placeholder': 'A placeholder does not give away the expected value',
   'content/hints':
     'Staged hints are ordered and the reveal has something to reveal',
+  'content/hint-leak':
+    'A hint, feedback text or named mistake does not contain the expected value',
+  'content/feedback':
+    'Feedback is by outcome class, on a numeric step, and says something',
+  'content/reflect': 'A reflection asks, and is never marked',
   'ref/scenario': 'setup.scenario names a scenario in the catalog',
   'ref/widget': 'tool.id names a registered widget',
   'ref/control': 'tool.values and tool.hide name controls the widget has',
@@ -531,6 +540,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         const known = Object.hasOwn(STANDARD_MISCONCEPTIONS, rule?.id ?? '');
         if (
           !known &&
+          !Number.isInteger(rule?.option) &&
           !Number.isFinite(rule?.factor) &&
           !Number.isFinite(rule?.equals)
         ) {
@@ -540,6 +550,9 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
         }
       }
+
+      for (const f of scaffoldProblems(step))
+        (f.level === 'error' ? E : W)(f.rule, f.message);
 
       const asks = ['predict', 'question'].includes(step.type);
       if (asks && !isNonEmptyString(step.prompt)) {
@@ -1085,7 +1098,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       }
 
       if (kind === 'short') {
-        if (!isNonEmptyString(step.rubric)) {
+        if (!step.reflect && !isNonEmptyString(step.rubric)) {
           E(
             'answer/rubric',
             'a short answer carries no rubric for the instructor'
@@ -1263,6 +1276,13 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         add(level, 'i18n/machinery', id, step, message)
       );
 
+      // What a Spanish reader sees must not give the answer away either.
+      const merged = mergeTranslation(inv, data);
+      merged.steps?.forEach((st, si) => {
+        for (const f of scaffoldProblems(st, false))
+          add(f.level, f.rule, id, si, `${locale}: ${f.message}`);
+      });
+
       const cov = translationCoverage(inv, data);
       const done = cov.translated ?? cov.done ?? 0;
       const total = cov.total ?? 0;
@@ -1286,6 +1306,142 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
   return skip.length === 0
     ? findings
     : findings.filter(f => !skip.some(prefix => f.rule.startsWith(prefix)));
+}
+
+/** Numbers in a text, as a reader in either convention writes them. */
+const numbersIn = text =>
+  [...String(text ?? '').matchAll(/\d+(?:[.,]\d+)?/g)].map(m =>
+    Number(m[0].replace(',', '.'))
+  );
+
+const plainWords = text =>
+  String(text ?? '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+/**
+ * The texts a student sees before answering correctly, each with where it is.
+ * Hints, feedback by class (not the one for a correct answer, which is only
+ * seen after) and the words of a named mistake.
+ */
+function scaffoldTexts(step) {
+  const out = [];
+  const h = step.hints;
+  if (Array.isArray(h)) h.forEach((x, i) => out.push([`hint ${i + 1}`, x]));
+  else if (h && typeof h === 'object')
+    for (const k of ['concept', 'method']) out.push([`${k} hint`, h[k]]);
+  for (const [k, v] of Object.entries(step.feedback || {}))
+    if (k !== 'correct') out.push([`"${k}" feedback`, v]);
+  for (const m of step.misconceptions || [])
+    out.push([`misconception "${m?.id}"`, m?.say]);
+  return out;
+}
+
+/**
+ * Whether a text gives the expected value away: for a number, any number in it
+ * the step would accept; for a choice, the right option's own words.
+ * @param {string} text - A hint or feedback text
+ * @param {object} step - The step it belongs to
+ * @returns {boolean} Whether it leaks
+ */
+export function leaksAnswer(text, step) {
+  if (typeof text !== 'string') return false;
+  if (step.kind === 'numeric' && Number.isFinite(step.answer)) {
+    const tol = Math.abs(toleranceFor(step) ?? 0);
+    return numbersIn(text).some(
+      n => Math.abs(n - Math.abs(step.answer)) <= tol * (1 + 1e-9) + 1e-12
+    );
+  }
+  if (Array.isArray(step.options) && Number.isInteger(step.answer)) {
+    const right = plainWords(step.options[step.answer]);
+    return right.length >= 8 && plainWords(text).includes(right);
+  }
+  return false;
+}
+
+/**
+ * Problems with a step's scaffolding in one language.
+ * @param {object} step - The step, as that language reads it
+ * @param {boolean} [english] - Whether this is the lesson as written (the
+ *   structure is judged once, there)
+ * @returns {Array<{rule: string, level: string, message: string}>} Findings
+ */
+export function scaffoldProblems(step, english = true) {
+  const out = [];
+  const add = (rule, level, message) => out.push({ rule, level, message });
+  for (const [where, text] of scaffoldTexts(step)) {
+    if (leaksAnswer(text, step))
+      add(
+        'content/hint-leak',
+        'error',
+        `the ${where} contains the expected value; teach the check to make, not the answer`
+      );
+  }
+  if (!english) return out;
+  if (Array.isArray(step.hints)) {
+    if (step.hints.length > HINT_LIMIT)
+      add('content/hints', 'error', `a ladder has at most ${HINT_LIMIT} hints`);
+    step.hints.forEach((x, i) => {
+      if (!isNonEmptyString(x))
+        add('content/hints', 'error', `hint ${i + 1} is empty`);
+    });
+  }
+  if (step.feedback !== undefined) {
+    if (!isPlainObject(step.feedback) || step.kind !== 'numeric') {
+      add(
+        'content/feedback',
+        'error',
+        'feedback by outcome class belongs on a numeric question'
+      );
+    } else {
+      for (const [k, v] of Object.entries(step.feedback)) {
+        if (!FEEDBACK_CLASSES.includes(k))
+          add('content/feedback', 'error', `"${k}" is not an outcome class`);
+        else if (!isNonEmptyString(v))
+          add('content/feedback', 'error', `the "${k}" feedback is empty`);
+      }
+    }
+  }
+  for (const m of step.misconceptions || []) {
+    if (Number.isInteger(m?.option)) {
+      if (!Array.isArray(step.options) || m.option >= step.options.length)
+        add(
+          'content/feedback',
+          'error',
+          `misconception "${m.id}" names no such option`
+        );
+      else if (m.option === step.answer)
+        add(
+          'content/feedback',
+          'error',
+          `misconception "${m.id}" is bound to the right option`
+        );
+      if (!isNonEmptyString(m.say))
+        add(
+          'content/feedback',
+          'error',
+          `misconception "${m.id}" is bound to an option and says nothing`
+        );
+    }
+  }
+  if (step.reflect !== undefined) {
+    if (step.kind !== 'short' || step.reflect !== true)
+      add(
+        'content/reflect',
+        'error',
+        'reflect: true belongs on a short written step'
+      );
+    for (const k of ['answer', 'because', 'rubric', 'hints', 'worked'])
+      if (step[k] !== undefined)
+        add(
+          'content/reflect',
+          'error',
+          `a reflection has no ${k}: nothing marks it`
+        );
+  }
+  return out;
 }
 
 /**

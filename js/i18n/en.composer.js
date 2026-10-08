@@ -113,6 +113,15 @@ export const EN_COMPOSER = {
   'composer.expect.none': 'Only the unit above',
   'composer.expect.unit': 'Graded in',
   'composer.expect.accept': 'Also accepted (comma-separated)',
+  'composer.hints.n': 'Hint {n}',
+  'composer.feedback.legend': 'Feedback for each kind of wrong number',
+  'composer.feedback.correct': 'When right: how to check it',
+  'composer.feedback.close': 'When close',
+  'composer.feedback.wrong-sign': 'When the sign is wrong',
+  'composer.feedback.wrong-unit': 'When the unit is wrong',
+  'composer.feedback.wrong-order-of-magnitude': 'When a power of ten out',
+  'composer.feedback.off': 'When just off',
+  'composer.step.reflect': 'A reflection: kept with the work, never marked',
   'composer.hints.concept': 'Hint: the idea',
   'composer.hints.method': 'Hint: the method',
   'composer.step.worked': 'Worked answer',
@@ -291,6 +300,12 @@ export const EN_COMPOSER = {
   'composer.error.tolerance': 'A positive number, in the unit of the answer.',
   'composer.error.misconception':
     'Either a factor the answer is off by, or the number it equals.',
+  'composer.error.hintsLadder': 'A ladder has from one to {max} hints.',
+  'composer.error.feedbackClass': 'Feedback is for one of: {options}.',
+  'composer.error.misconceptionOption':
+    'The number of a wrong option, counting from 0.',
+  'composer.error.reflect':
+    'A reflection is a written answer with no rubric, hints or worked answer.',
   'composer.error.hintsOrder': 'A method hint comes after an idea hint.',
   'composer.error.scoring': 'How many points, and which attempt counts.',
   'composer.error.points': 'A whole number from 1 to {max}.',

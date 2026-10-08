@@ -374,28 +374,41 @@
       }
     },
     "hints": {
-      "description": "Staged hints: the idea, then the method, never the method alone.",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "concept": {
-          "$ref": "#/$defs/text"
-        },
-        "method": {
-          "$ref": "#/$defs/text"
-        }
-      },
+      "description": "Hints: a ladder of one to three, each shown when asked for, or the original object of an idea hint then a method hint (never the method alone). A hint teaches the check to make and never contains the expected value (author:check).",
       "anyOf": [
         {
-          "not": {
-            "required": [
-              "method"
-            ]
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/text"
           }
         },
         {
-          "required": [
-            "concept"
+          "description": "Staged hints: the idea, then the method, never the method alone.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "concept": {
+              "$ref": "#/$defs/text"
+            },
+            "method": {
+              "$ref": "#/$defs/text"
+            }
+          },
+          "anyOf": [
+            {
+              "not": {
+                "required": [
+                  "method"
+                ]
+              }
+            },
+            {
+              "required": [
+                "concept"
+              ]
+            }
           ]
         }
       ]
@@ -566,53 +579,79 @@
       ]
     },
     "misconception": {
-      "description": "A wrong answer worth naming: either the factor it is off by or the number it equals, and what to say.",
-      "type": "object",
-      "required": [
-        "id",
-        "say"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "id": {
-          "$ref": "#/$defs/publicId"
-        },
-        "factor": {},
-        "equals": {},
-        "say": {
-          "$ref": "#/$defs/text"
-        }
-      },
+      "description": "A wrong answer worth naming: either the factor it is off by or the number it equals, and what to say. On a choice, `option` is the number of the wrong option that is this mistake, in place of a factor or a number.",
       "anyOf": [
         {
+          "description": "A wrong answer worth naming: either the factor it is off by or the number it equals, and what to say.",
+          "type": "object",
           "required": [
-            "factor"
+            "id",
+            "say"
           ],
+          "additionalProperties": false,
           "properties": {
-            "factor": {
-              "type": "number",
-              "exclusiveMinimum": 0
+            "id": {
+              "$ref": "#/$defs/publicId"
             },
-            "equals": {
-              "not": {
-                "type": "number"
+            "factor": {},
+            "equals": {},
+            "say": {
+              "$ref": "#/$defs/text"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "factor"
+              ],
+              "properties": {
+                "factor": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "equals": {
+                  "not": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "equals"
+              ],
+              "properties": {
+                "equals": {
+                  "type": "number"
+                },
+                "factor": {
+                  "not": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                }
               }
             }
-          }
+          ]
         },
         {
+          "type": "object",
           "required": [
-            "equals"
+            "id",
+            "option",
+            "say"
           ],
+          "additionalProperties": false,
           "properties": {
-            "equals": {
-              "type": "number"
+            "id": {
+              "$ref": "#/$defs/publicId"
             },
-            "factor": {
-              "not": {
-                "type": "number",
-                "exclusiveMinimum": 0
-              }
+            "option": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "say": {
+              "$ref": "#/$defs/text"
             }
           }
         }
@@ -1022,6 +1061,13 @@
           "items": {
             "$ref": "#/$defs/misconception"
           }
+        },
+        "feedback": {
+          "$ref": "#/$defs/feedback"
+        },
+        "reflect": {
+          "description": "True on a written answer that is a reflection: kept with the student's work, read by a person and never marked, so it carries no rubric.",
+          "const": true
         },
         "rubric": {
           "$ref": "#/$defs/text"
@@ -1665,6 +1711,13 @@
                 "$ref": "#/$defs/misconception"
               }
             },
+            "feedback": {
+              "$ref": "#/$defs/feedback"
+            },
+            "reflect": {
+              "description": "True on a written answer that is a reflection: kept with the student's work, read by a person and never marked, so it carries no rubric.",
+              "const": true
+            },
             "rubric": {
               "$ref": "#/$defs/text"
             },
@@ -1675,6 +1728,31 @@
           "$ref": "#/$defs/questionRules"
         }
       ]
+    },
+    "feedback": {
+      "description": "What to say for each kind of wrong number, teaching the check to make and never the answer. The classes are those of js/answerFeedback.js.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "correct": {
+          "$ref": "#/$defs/text"
+        },
+        "close": {
+          "$ref": "#/$defs/text"
+        },
+        "wrong-sign": {
+          "$ref": "#/$defs/text"
+        },
+        "wrong-unit": {
+          "$ref": "#/$defs/text"
+        },
+        "wrong-order-of-magnitude": {
+          "$ref": "#/$defs/text"
+        },
+        "off": {
+          "$ref": "#/$defs/text"
+        }
+      }
     }
   }
 }

@@ -133,7 +133,7 @@ export default {
         'La distancia de L4 a cualquiera de las estrellas, en unidades de la separación',
       hints: [
         'Equilátero significa que los tres lados miden lo mismo.',
-        'El lado que une las dos estrellas mide 1.',
+        'El lado que une las dos estrellas es uno de los tres lados. Compáralo con la distancia que buscas.',
       ],
       worked:
         'Los tres lados de un triángulo equilátero son iguales, y el lado entre las estrellas mide 1 por definición de las unidades, así que L4 está a 1 de cada una. No está en la recta que las une, y no está en el punto medio.',
