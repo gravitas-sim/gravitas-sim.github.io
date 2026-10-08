@@ -1,0 +1,927 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/course-pack-2.schema.json",
+  "title": "gravitas.course-pack/2",
+  "description": "A course as data, as the course-pack builder (/studio/course/) writes it: units of items (lessons, assignments cut from a lesson, scenarios, datasets and readings) with objectives, prerequisites, times, optional introductory and advanced paths, notes for the teacher and the student, and a pin on each lesson it names so an archived pack says what it was made with. Content only: nothing in it is run. js/course/pack.js validateCoursePack() is the authority; /1 packs (course-pack-1.schema.json) are migrated to this by migrateCoursePack(). Beyond this schema the reader holds every text to the file's own locales, the rules across items (see item), at most 120 items in all, and, before any rule reads it, a file to plain data no deeper or larger than any pack needs. FORMATS.md lists it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "version",
+    "gravitas",
+    "locales",
+    "pinning",
+    "title",
+    "units"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.course-pack"
+    },
+    "formatVersion": {
+      "const": 2
+    },
+    "id": {
+      "$ref": "#/$defs/publicId"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "gravitas": {
+      "description": "The platform version the pack was made with.",
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "locales": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "en",
+          "es"
+        ]
+      },
+      "contains": {
+        "const": "en"
+      }
+    },
+    "pinning": {
+      "description": "exact: every lesson is pinned and any change needs review. compatible: only a change that can break does.",
+      "enum": [
+        "exact",
+        "compatible"
+      ]
+    },
+    "title": {
+      "$ref": "#/$defs/text120"
+    },
+    "summary": {
+      "$ref": "#/$defs/text2000"
+    },
+    "audience": {
+      "$ref": "#/$defs/text300"
+    },
+    "teacherGuide": {
+      "$ref": "#/$defs/text4000"
+    },
+    "objectives": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/publicId"
+          },
+          "text": {
+            "$ref": "#/$defs/text300"
+          }
+        }
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "lesson"
+            ],
+            "properties": {
+              "lesson": {
+                "$ref": "#/$defs/lesson"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "$ref": "#/$defs/text300"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "$ref": "#/$defs/unit"
+      }
+    }
+  },
+  "$defs": {
+    "publicId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "plain": {
+      "description": "Course texts are written as text: no angle bracket and no entity.",
+      "type": "string",
+      "not": {
+        "pattern": "[<>]|&[a-zA-Z#0-9]+;"
+      }
+    },
+    "text120": {
+      "description": "A text in plain words, up to 120 characters: no markup and no entity. The English is required and not blank; the Spanish and the digest of the English it was written from are optional. A key must be one of the file's own locales, which a schema cannot hold it to.",
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "en": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 120,
+          "pattern": "\\S"
+        },
+        "es": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 120
+        },
+        "esOf": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        }
+      }
+    },
+    "text200": {
+      "description": "A text in plain words, up to 200 characters: no markup and no entity. The English is required and not blank; the Spanish and the digest of the English it was written from are optional. A key must be one of the file's own locales, which a schema cannot hold it to.",
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "en": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "es": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 200
+        },
+        "esOf": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        }
+      }
+    },
+    "text300": {
+      "description": "A text in plain words, up to 300 characters: no markup and no entity. The English is required and not blank; the Spanish and the digest of the English it was written from are optional. A key must be one of the file's own locales, which a schema cannot hold it to.",
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "en": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 300,
+          "pattern": "\\S"
+        },
+        "es": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 300
+        },
+        "esOf": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        }
+      }
+    },
+    "text1200": {
+      "description": "A text in plain words, up to 1200 characters: no markup and no entity. The English is required and not blank; the Spanish and the digest of the English it was written from are optional. A key must be one of the file's own locales, which a schema cannot hold it to.",
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "en": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 1200,
+          "pattern": "\\S"
+        },
+        "es": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 1200
+        },
+        "esOf": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        }
+      }
+    },
+    "text2000": {
+      "description": "A text in plain words, up to 2000 characters: no markup and no entity. The English is required and not blank; the Spanish and the digest of the English it was written from are optional. A key must be one of the file's own locales, which a schema cannot hold it to.",
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "en": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 2000,
+          "pattern": "\\S"
+        },
+        "es": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 2000
+        },
+        "esOf": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        }
+      }
+    },
+    "text4000": {
+      "description": "A text in plain words, up to 4000 characters: no markup and no entity. The English is required and not blank; the Spanish and the digest of the English it was written from are optional. A key must be one of the file's own locales, which a schema cannot hold it to.",
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "en": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 4000,
+          "pattern": "\\S"
+        },
+        "es": {
+          "$ref": "#/$defs/plain",
+          "maxLength": 4000
+        },
+        "esOf": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}$"
+        }
+      }
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}$"
+    },
+    "sid": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "lesson": {
+      "description": "A lesson Gravitas has: this build's.",
+      "type": "string",
+      "enum": [
+        "keplers-laws",
+        "retrograde-motion",
+        "transit-photometry",
+        "orbital-energy",
+        "weighing-stars",
+        "black-holes",
+        "radial-velocity",
+        "goldilocks-question",
+        "missing-mass",
+        "tides",
+        "butterfly-effect",
+        "when-orbits-lock",
+        "detect-this-planet",
+        "design-the-schedule",
+        "binary-star-planets",
+        "gravity-assist",
+        "hohmann-transfer",
+        "lagrange-points",
+        "what-is-a-gravitational-wave",
+        "listening-to-spacetime",
+        "a-universe-of-stars",
+        "lives-of-stars",
+        "twelve-nights",
+        "power-law-gravity"
+      ]
+    },
+    "pkg": {
+      "description": "The package a pinned lesson came from, and its version.",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(\\.[a-z0-9-]+)+$"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      ]
+    },
+    "pin": {
+      "description": "What a lesson was when the pack named it: the digest of its steps, how many it had, and the package.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fp",
+        "n"
+      ],
+      "properties": {
+        "fp": {
+          "$ref": "#/$defs/hash"
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "pkg": {
+          "$ref": "#/$defs/pkg"
+        }
+      }
+    },
+    "assignmentPin": {
+      "description": "A pin on an assignment: the same, and the digest of each assigned step, in order (one for each step: a rule across fields that the reader holds).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fp",
+        "n",
+        "f"
+      ],
+      "properties": {
+        "fp": {
+          "$ref": "#/$defs/hash"
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "pkg": {
+          "$ref": "#/$defs/pkg"
+        },
+        "f": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hash"
+          }
+        }
+      }
+    },
+    "itemLesson": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "lesson"
+      ],
+      "properties": {
+        "kind": {
+          "const": "lesson"
+        },
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "path": {
+          "enum": [
+            "core",
+            "intro",
+            "advanced"
+          ]
+        },
+        "minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "studentNote": {
+          "$ref": "#/$defs/text1200"
+        },
+        "teacherNote": {
+          "$ref": "#/$defs/text2000"
+        },
+        "lesson": {
+          "$ref": "#/$defs/lesson"
+        },
+        "pin": {
+          "$ref": "#/$defs/pin"
+        }
+      }
+    },
+    "itemAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "lesson",
+        "steps",
+        "assignment"
+      ],
+      "properties": {
+        "kind": {
+          "const": "assignment"
+        },
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "path": {
+          "enum": [
+            "core",
+            "intro",
+            "advanced"
+          ]
+        },
+        "minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "studentNote": {
+          "$ref": "#/$defs/text1200"
+        },
+        "teacherNote": {
+          "$ref": "#/$defs/text2000"
+        },
+        "lesson": {
+          "$ref": "#/$defs/lesson"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 60,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/sid"
+          }
+        },
+        "title": {
+          "$ref": "#/$defs/text120"
+        },
+        "intro": {
+          "$ref": "#/$defs/text1200"
+        },
+        "assignment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "created"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,32}$"
+            },
+            "created": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          }
+        },
+        "pin": {
+          "$ref": "#/$defs/assignmentPin"
+        }
+      }
+    },
+    "itemScenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "scenario",
+        "seed",
+        "minutes"
+      ],
+      "properties": {
+        "kind": {
+          "const": "scenario"
+        },
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "path": {
+          "enum": [
+            "core",
+            "intro",
+            "advanced"
+          ]
+        },
+        "minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "studentNote": {
+          "$ref": "#/$defs/text1200"
+        },
+        "teacherNote": {
+          "$ref": "#/$defs/text2000"
+        },
+        "scenario": {
+          "description": "A built-in scenario by its id, or by the English name a pack made before ids used.",
+          "enum": [
+            "solar-system",
+            "retrograde-mars",
+            "earth-moon-system",
+            "trappist-1-system",
+            "three-body-sensitivity-lab",
+            "galilean-resonance",
+            "broken-laplace-resonance",
+            "pluto-and-neptune",
+            "jupiter-trojans",
+            "binary-pair",
+            "interstellar-visitor",
+            "transit-lab",
+            "spiral-galaxy",
+            "milky-way-rotation",
+            "coma-cluster",
+            "exoplanet-characterization-lab",
+            "blended-binary",
+            "gravity-assist-lab",
+            "gravity-assist-heliocentric",
+            "lagrange-point-lab",
+            "orbital-transfer-lab",
+            "binary-planet-lab",
+            "circumbinary-planet-lab",
+            "black-hole-lab",
+            "habitable-zone-lab",
+            "keplers-2nd-law",
+            "gw150914",
+            "binary-bh",
+            "triple-bh-system",
+            "supermassive-bh",
+            "star-cluster",
+            "kuiper-belt",
+            "sagittarius-a",
+            "binary-star-system",
+            "slingshot",
+            "rogue-encounter",
+            "neutron-star-collision",
+            "pulsar-system",
+            "white-dwarf-binary",
+            "stellar-graveyard",
+            "galactic-center",
+            "supernova-remnant",
+            "compact-object-zoo",
+            "millisecond-pulsar",
+            "tidal-disruption-event",
+            "intermediate-mass-bh",
+            "galactic-collision",
+            "micro-bh-swarm",
+            "exoplanet-lab",
+            "quasar-cannon",
+            "the-pinwheel-galaxy-core",
+            "star-frisbee",
+            "kessler-cascade",
+            "alien-dyson-swarm-collapse",
+            "tidal-arm-tango",
+            "hungry-hungry-holes",
+            "slingshot-gauntlet",
+            "black-hole-billiards",
+            "stellar-nursery",
+            "Solar System",
+            "Retrograde Mars",
+            "Earth-Moon System",
+            "TRAPPIST-1 System",
+            "Three-Body Sensitivity Lab",
+            "Galilean Resonance",
+            "Broken Laplace Resonance",
+            "Pluto and Neptune",
+            "Jupiter Trojans",
+            "Binary Pair",
+            "Interstellar Visitor",
+            "Transit Lab",
+            "Spiral Galaxy",
+            "Milky Way Rotation",
+            "Coma Cluster",
+            "Exoplanet Characterization Lab",
+            "Blended Binary",
+            "Gravity Assist Lab",
+            "Gravity Assist: Heliocentric",
+            "Lagrange Point Lab",
+            "Orbital Transfer Lab",
+            "Binary Planet Lab",
+            "Circumbinary Planet Lab",
+            "Black Hole Lab",
+            "Habitable Zone Lab",
+            "Kepler's 2nd Law",
+            "GW150914",
+            "Binary BH",
+            "Triple BH System",
+            "Supermassive BH",
+            "Star Cluster",
+            "Kuiper Belt",
+            "Sagittarius A*",
+            "Binary Star System",
+            "Slingshot",
+            "Rogue Encounter",
+            "Neutron Star Collision",
+            "Pulsar System",
+            "White Dwarf Binary",
+            "Stellar Graveyard",
+            "Galactic Center",
+            "Supernova Remnant",
+            "Compact Object Zoo",
+            "Millisecond Pulsar",
+            "Tidal Disruption Event",
+            "Intermediate Mass BH",
+            "Galactic Collision",
+            "Micro BH Swarm",
+            "Exoplanet Lab",
+            "Quasar Cannon",
+            "The Pinwheel Galaxy Core",
+            "Star Frisbee",
+            "Kessler Cascade",
+            "Alien Dyson Swarm Collapse",
+            "Tidal Arm Tango",
+            "Hungry Hungry Holes",
+            "Slingshot Gauntlet",
+            "Black Hole Billiards",
+            "Stellar Nursery"
+          ]
+        },
+        "seed": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,39}$"
+        },
+        "paused": {
+          "type": "boolean"
+        },
+        "title": {
+          "$ref": "#/$defs/text120"
+        }
+      }
+    },
+    "itemDataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "dataset",
+        "minutes"
+      ],
+      "properties": {
+        "kind": {
+          "const": "dataset"
+        },
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "path": {
+          "enum": [
+            "core",
+            "intro",
+            "advanced"
+          ]
+        },
+        "minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "studentNote": {
+          "$ref": "#/$defs/text1200"
+        },
+        "teacherNote": {
+          "$ref": "#/$defs/text2000"
+        },
+        "dataset": {
+          "description": "An observation the Observatory opens by name, or a data pack the catalog has: the validator's list, which a build with another catalog does not share.",
+          "$ref": "#/$defs/publicId"
+        },
+        "title": {
+          "$ref": "#/$defs/text120"
+        }
+      }
+    },
+    "cite": {
+      "description": "Who wrote a reading, when and where. An address is https, with a host and no credentials, in the canonical form (js/course/pack.js safeUrl); the pattern states the shape and the reader holds the rest.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authors",
+        "year",
+        "source"
+      ],
+      "properties": {
+        "authors": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "[<>]"
+          }
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1500,
+          "maximum": 2100
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "[<>]"
+          }
+        },
+        "doi": {
+          "type": "string",
+          "pattern": "^10\\.\\d{4,9}/[^\\s<>\"]{1,200}$"
+        },
+        "url": {
+          "type": "string",
+          "maxLength": 500,
+          "pattern": "^https://[^\\s/@]+(/\\S*)?$"
+        }
+      }
+    },
+    "itemReading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "cite",
+        "access",
+        "minutes"
+      ],
+      "properties": {
+        "kind": {
+          "const": "reading"
+        },
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "path": {
+          "enum": [
+            "core",
+            "intro",
+            "advanced"
+          ]
+        },
+        "minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "studentNote": {
+          "$ref": "#/$defs/text1200"
+        },
+        "teacherNote": {
+          "$ref": "#/$defs/text2000"
+        },
+        "title": {
+          "$ref": "#/$defs/text200"
+        },
+        "cite": {
+          "$ref": "#/$defs/cite"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S",
+          "not": {
+            "pattern": "[<>]"
+          }
+        },
+        "access": {
+          "enum": [
+            "open",
+            "library",
+            "print"
+          ]
+        }
+      }
+    },
+    "item": {
+      "description": "One thing a course asks of a student, of one of five kinds. Beyond this schema the reader holds the rules across fields: every id unique, an item's needs and objectives to ones that exist (and a path a student on its own path may take), a lesson named once as a lesson, a pin on every lesson in an exact pack, one step hash for each assigned step, and every reference to a lesson, scenario or dataset Gravitas has.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/itemLesson"
+        },
+        {
+          "$ref": "#/$defs/itemAssignment"
+        },
+        {
+          "$ref": "#/$defs/itemScenario"
+        },
+        {
+          "$ref": "#/$defs/itemDataset"
+        },
+        {
+          "$ref": "#/$defs/itemReading"
+        }
+      ]
+    },
+    "unit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "items"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "title": {
+          "$ref": "#/$defs/text120"
+        },
+        "summary": {
+          "$ref": "#/$defs/text2000"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        }
+      }
+    }
+  }
+}

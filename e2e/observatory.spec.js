@@ -370,7 +370,12 @@ test.describe('the observatory', () => {
     const fresh = (await scripts()).filter(p => !before.has(p)).sort();
     expect(fresh.length).toBeGreaterThan(0);
     if (!DIST)
-      expect(fresh).toEqual(['/js/csv.js', '/js/observatory/export.js']);
+      expect(fresh).toEqual([
+        '/js/csv.js',
+        '/js/hash.js',
+        '/js/observatory/export.js',
+        '/js/observatory/identity.js',
+      ]);
   });
 
   test('speaks Spanish, and has no accessibility violations in either language', async ({

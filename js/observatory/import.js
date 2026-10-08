@@ -33,6 +33,7 @@
 
 import { FORMAT, FORMAT_VERSION, validateObservation } from './schema.js';
 import { plainDataProblem } from '../platform/common.js';
+import { fnvHex8 } from '../hash.js';
 import { TIME_FORMATS, TIME_SCALES, dimensionOf, parseUnit } from './units.js';
 
 export const LIMITS = Object.freeze({
@@ -442,15 +443,8 @@ function revive(data) {
 }
 
 /** A stable identity for what a reader imported: FNV-1a of the rows. */
-function fingerprint(table) {
-  let h = 0x811c9dc5;
-  const text = JSON.stringify([table.header, table.rows]);
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 0x01000193) >>> 0;
-  }
-  return h.toString(16).padStart(8, '0');
-}
+const fingerprint = table =>
+  fnvHex8(JSON.stringify([table.header, table.rows]));
 
 const KIND_OF_X = { 'time-series': 'time', spectrum: null, table: null };
 

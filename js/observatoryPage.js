@@ -1339,6 +1339,7 @@ $('obsExportJson').addEventListener('click', async () => {
     x.observationJson(state.view, {
       source: state.source,
       changes: state.history.changes(),
+      digest: await x.openedDigest(state.source),
     }),
     'application/json'
   );

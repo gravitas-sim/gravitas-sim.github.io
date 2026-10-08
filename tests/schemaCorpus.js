@@ -63,10 +63,12 @@ export function holds(s, good, accepts, cases) {
  * @param {string} file - Under sdk/schemas, without .schema.json
  * @param {string} name - The row's format
  * @param {number} version - The code's own constant
+ * @param {string} [rowName] - The row's name when it says more than the
+ *   format does ("gravitas.course-pack (builder form)")
  */
-export function isItsRow(file, name, version) {
+export function isItsRow(file, name, version, rowName = name) {
   const s = JSON.parse(readFileSync(`sdk/schemas/${file}.schema.json`, 'utf8'));
-  const row = FORMATS.find(f => f.name === name);
+  const row = FORMATS.find(f => f.name === rowName);
   expect({
     schema: row?.schema,
     version: row?.version,

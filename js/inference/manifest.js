@@ -28,6 +28,7 @@
 import { MODELS } from './models.js';
 import { transitFlux } from './transit.js';
 import { rvCurve } from './rv.js';
+import { fnvHex8 } from '../hash.js';
 
 export const FORMAT = 'gravitas.inference';
 export const FORMAT_VERSION = 1;
@@ -369,13 +370,7 @@ export function engineFingerprint() {
     t.map(x => x * 20),
     { P: 3.5, tc: 0, K: 85, sqrtEcosw: 0.2, sqrtEsinw: 0.3 }
   );
-  let h = 0x811c9dc5;
-  const text = [...f, ...v].map(x => x.toFixed(12)).join(',');
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 0x01000193) >>> 0;
-  }
-  return h.toString(16).padStart(8, '0');
+  return fnvHex8([...f, ...v].map(x => x.toFixed(12)).join(','));
 }
 
 /**
@@ -384,7 +379,7 @@ export function engineFingerprint() {
  * @param {object} data - ./infer.js dataFrom()
  * @param {object} request - { model, parameters, settings, algorithm }
  */
-export function inferenceManifest(observation, data, request, limits) {
+export function inferenceManifest(observation, data, request, limits, digest) {
   const model = MODELS[request.model.id];
   return {
     format: FORMAT,
@@ -393,6 +388,9 @@ export function inferenceManifest(observation, data, request, limits) {
       observation: observation.id,
       title: observation.title,
       source: observation.source,
+      // What the rows were, whatever the id says: the observation's content
+      // digest (js/observatory/identity.js), when the caller has it.
+      ...(digest ? { digest } : {}),
       columns: data.columns,
       units: data.units,
       rows: data.counts.total,

@@ -10,7 +10,9 @@
 //
 //   snapshot.observed = {
 //     format: 'gravitas.observed', formatVersion: 1,
-//     observation: { id, title, source, digest, license, credit },
+//     observation: { id, title, source, digest, license, credit,
+//                    retrieved?, citations? },   the last two, since the
+//                    first release, are what the report cites the data by
 //     tool: { id, version, params, at },
 //     changes: [op, ...],       the workspace changes the measurement saw
 //     assumptions: [...],       values the measurement took as given
@@ -79,6 +81,17 @@ export function observedEntry({
         digest,
         license: source.license?.status ?? null,
         credit: source.credit ?? null,
+        // What the data are cited by and when they were fetched: kept as the
+        // observation states them, not re-derived from the id.
+        ...(source.retrieved ? { retrieved: source.retrieved } : {}),
+        ...(source.citations?.length
+          ? {
+              citations: source.citations.map(c => ({
+                text: c.text,
+                ...(c.url ? { url: c.url } : {}),
+              })),
+            }
+          : {}),
       },
       tool: {
         id: node.tool,
