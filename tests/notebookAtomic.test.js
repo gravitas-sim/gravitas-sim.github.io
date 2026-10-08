@@ -20,6 +20,7 @@ jest.unstable_mockModule('../js/i18n/deferredMessages.js', () => ({
 /** Every entry the panel was offered, in order. */
 const offered = [];
 jest.unstable_mockModule('../js/notebookPanel.js', () => ({
+  loadWords: async () => {},
   setRevisionSource: () => {},
   ensurePanel: () => {},
   offerDraft: entry => offered.push(entry),

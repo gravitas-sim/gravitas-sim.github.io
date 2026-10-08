@@ -429,9 +429,7 @@ export function observedRows(o, t) {
     [t('led.obs.params'), pairs(o.tool.params) || none],
     [
       t('led.obs.changes'),
-      o.changes?.length
-        ? o.changes.map(c => word(`led.op.${c}`, c)).join('; ')
-        : t('led.obs.noChanges'),
+      o.changes?.length ? o.changes.join('; ') : t('led.obs.noChanges'),
     ],
   ];
   if (o.assumptions?.length)
@@ -452,9 +450,7 @@ export function observedRows(o, t) {
   if (o.steps?.length)
     rows.push([
       t('led.obs.steps'),
-      o.steps
-        .map(([id, state]) => `${id}: ${t(`led.state.${state}`)}`)
-        .join('; '),
+      o.steps.map(([id, state]) => `${id}: ${state}`).join('; '),
     ]);
   return rows;
 }

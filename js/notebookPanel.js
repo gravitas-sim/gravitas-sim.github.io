@@ -617,6 +617,9 @@ export function downloadNotebook() {
   saveText(JSON.stringify(payload, null, 2), backupFilename());
 }
 
+/** Fetch the strings the ledger's rows and the report are said in. */
+export const loadWords = reportMessages;
+
 /** Download the report. */
 export async function downloadReport() {
   await reportMessages();

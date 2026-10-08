@@ -55,14 +55,12 @@ export function ensureNotebook() {
   if (!loading) {
     loading = (async () => {
       await ensureDeferredMessages().catch(() => {});
-      // The ledger's words (led.*), which the panel's rows and the report use.
-      await import('./labReport.js')
-        .then(m => m.reportMessages())
-        .catch(() => {});
       const [panel, capture] = await Promise.all([
         import('./notebookPanel.js'),
         import('./notebook/capture.js'),
       ]);
+      // The ledger's words (led.*), which the panel's rows and the report use.
+      await panel.loadWords().catch(() => {});
       panel.setRevisionSource(buildRevision);
       panel.ensurePanel();
       return { panel, capture };
