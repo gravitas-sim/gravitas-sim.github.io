@@ -1310,8 +1310,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
 
 /** Numbers in a text, as a reader in either convention writes them. */
 const numbersIn = text =>
-  [...String(text ?? '').matchAll(/\d+(?:[.,]\d+)?/g)].map(m =>
-    Number(m[0].replace(',', '.'))
+  [...String(text ?? '').matchAll(/(\d+)(?:[.,](\d+))?/g)].map(
+    m => parseNumber(m[2] === undefined ? m[1] : `${m[1]}.${m[2]}`).value
   );
 
 const plainWords = text =>
