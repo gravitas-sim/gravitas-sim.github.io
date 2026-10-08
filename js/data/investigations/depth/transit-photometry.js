@@ -130,10 +130,8 @@ export default {
         method: `Copy the radius and its uncertainty from the previous step
  and write them as value ± uncertainty.`,
       },
-      worked: `About 1.37 Jupiter radii, uncertain by a few thousandths from
- the photometry alone.`,
       because:
-        'About 1.37 Jupiter radii. The photometric scatter alone makes the uncertainty tiny; the published value, 1.38, differs from it by more than that, because the star’s radius and the limb-darkening model carry uncertainty too. Reporting the error bar you can justify, and saying what it leaves out, is the honest form of the result.',
+        'About 1.37 Jupiter radii. The photometric scatter alone makes the uncertainty tiny; the published value, 1.38, differs from it by more than that, because the star’s radius and the limb-darkening model carry uncertainty too.',
     },
     {
       sid: 'forward-model-the-dip',
@@ -162,9 +160,6 @@ export default {
         method: `k = 1.38 / (1.155 × 9.7311). Square it, multiply by 1.2146,
  then take twice the combined fractional uncertainty of k.`,
       },
-      worked: `k = 0.1228, so δ = 0.01508 × 1.2146 = 0.0183. The fractional
- uncertainty of k is √(0.015² + 0.012²) = 0.0192, so of δ it is
- 0.0384, which is 0.0007.`,
       because:
         'The model predicts a depth of 0.0183, uncertain by about 0.0007. That is the number a measured depth is compared with: not whether the two are equal, which they never exactly are, but whether they differ by more than their combined uncertainty.',
     },

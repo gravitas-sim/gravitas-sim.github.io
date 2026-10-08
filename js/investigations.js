@@ -240,7 +240,7 @@ let visited = new Set();
  */
 let progressNotes = [];
 let startedAt = null;
-// Depth (DEPTH.md): read at, chosen by the student, deepest reached, label.
+// Depth (DEPTH.md).
 let depth = 'core';
 let depthChoice = null;
 let deepest = 'core';
@@ -1492,7 +1492,6 @@ const SHORT_ANSWER_MIN = 40;
  * fingerprint was enough.
  */
 const stepId = index => stepKey(active.id, active.steps[index]?.sid);
-/** The steps this reader sees: none deeper than the depth being read at. */
 const shown = () => active.steps.filter(s => inDepth(s, depth));
 const currentStep = () => active?.steps[stepIndex] ?? null;
 

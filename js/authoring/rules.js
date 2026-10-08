@@ -27,7 +27,7 @@
 // a checker that cries wolf gets a --no-verify and then it is checking nothing.
 // =============================================================================
 
-import { asGiven, checkAnswer, toleranceFor } from '../answerCheck.js';
+import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
 import { parseNumber } from '../answerParse.js';
@@ -40,6 +40,10 @@ import {
   mergeTranslation,
   translationCoverage,
 } from '../data/investigations/i18n.js';
+
+// A number as a student gives it: with an uncertainty if the step asks for one.
+const asGiven = (step, n, u = toleranceFor(step) / 2) =>
+  step.uncertainty ? `${n} ± ${u}` : n;
 
 /**
  * Step types the engine knows how to render.

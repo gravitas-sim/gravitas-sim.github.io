@@ -37,10 +37,8 @@ export default {
         method:
           'Copia el periodo previsto y su incertidumbre del paso del ajuste ponderado y escríbelos como valor ± incertidumbre.',
       },
-      worked:
-        'La constante ponderada es cercana a 1, así que P = √(k·64) es cercano a 8 años, con una incertidumbre de unas centésimas.',
       because:
-        'La ley, ajustada con pesos, da unos 8 años con una incertidumbre de unas centésimas de año, que se solapa con los 8 años que da la ley sin pesos. Que dos maneras de hallar la constante coincidan, con una barra de error honesta en cada una, es lo que convierte la ley en una medida y no en un eslogan.',
+        'La ley, ajustada con pesos, da unos 8 años con una incertidumbre de unas centésimas de año, que se solapa con los 8 años que da la ley sin pesos.',
     },
     {
       title: 'Pesa la estrella de un planeta real',
@@ -53,8 +51,6 @@ export default {
         method:
           'P = 3,5247 / 365,25 años. Calcula M, luego las dos incertidumbres fraccionarias, combínalas y multiplica por M.',
       },
-      worked:
-        'P = 0,009650 años, así que M = 0,0475³ / 0,009650² = 1,151. Las fracciones son 3 × 0,0105 = 0,032 y 2 × 0,00003, así que σ es de unos 0,036: M = 1,15 ± 0,04 masas solares.',
       because:
         'Unas 1,15 masas solares, con incertidumbre de unas 0,04. Casi toda viene del tamaño de la órbita, porque a se eleva al cubo: una incertidumbre del 1 % en a es del 3 % en la masa, mientras que el periodo, conocido con unas pocas partes en cien mil, apenas contribuye.',
     },

@@ -47,7 +47,7 @@ import {
 } from './instructor-freshness.mjs';
 
 import { INVESTIGATIONS } from '../js/data/investigations.js';
-import { withAllDepths } from '../js/data/investigations/depthAll.js';
+import { withAllDepths } from '../js/investigations/depthAll.js';
 import { verifyKey } from '../js/answerKey.js';
 import {
   instructorGuide,

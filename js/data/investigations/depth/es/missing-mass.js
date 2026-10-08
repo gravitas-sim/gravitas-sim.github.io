@@ -21,8 +21,6 @@ export default {
         concept: 'La razón que hallaste, ahora con lo bien que se conoce.',
         method: 'Copia la razón y su incertidumbre del paso anterior.',
       },
-      worked:
-        'Unos 3,4, con incertidumbre de unos 0,7, casi toda por la masa visible.',
       because:
         'Unos 3,4 con una incertidumbre de unos 0,7. Incluso en el extremo de ese rango el halo pesa más del doble que lo visible, y por eso la conclusión sobrevive a una incertidumbre tan grande.',
     },

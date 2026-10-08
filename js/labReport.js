@@ -18,7 +18,10 @@
 
 import { createDocument } from './pdf.js';
 import { registerMessages } from './i18n/index.js';
-import { inDepth } from './investigations/progressSchema.js';
+// Depths, shallowest first (as in investigations/progressSchema.js).
+const LEVELS = ['core', 'quantitative', 'advanced'];
+const rank = d => Math.max(0, LEVELS.indexOf(d));
+const inDepth = (s, d) => rank(s?.depth) <= rank(d);
 
 /** The report's strings, both languages, fetched the first time one is built. */
 let text = null;

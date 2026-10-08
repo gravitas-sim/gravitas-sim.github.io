@@ -91,8 +91,6 @@ export default {
         concept: `The ratio you found, now with how well it is known.`,
         method: `Copy the ratio and its uncertainty from the previous step.`,
       },
-      worked: `About 3.4, uncertain by about 0.7, nearly all of it from the
- visible mass.`,
       because:
         'About 3.4 with an uncertainty of about 0.7. Even at the edge of that range the halo outweighs the visible mass by more than two to one, which is why the conclusion survives an uncertainty this large.',
     },

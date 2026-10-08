@@ -76,10 +76,8 @@ export const isValidSid = sid =>
   /^[a-z0-9]+(-[a-z0-9]+)*$/.test(sid) &&
   !/^\d+$/.test(sid);
 
-/** Depths, shallowest first; a step without one is core (DEPTH.md). */
 export const DEPTHS = Object.freeze(['core', 'quantitative', 'advanced']);
 
-/** Whether a step shows at a depth; an unknown one counts as core. */
 export const inDepth = (step, depth = 'core') =>
   Math.max(0, DEPTHS.indexOf(step?.depth)) <=
   Math.max(0, DEPTHS.indexOf(depth));

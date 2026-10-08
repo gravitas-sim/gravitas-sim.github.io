@@ -4,7 +4,7 @@
 // and assignments that state the depth.
 import { describe, test, expect } from '@jest/globals';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
-import { DEEPER, withAllDepths } from '../js/data/investigations/depthAll.js';
+import { DEEPER, withAllDepths } from '../js/investigations/depthAll.js';
 import { mergeTranslation } from '../js/data/investigations/i18n.js';
 import { checkDepth } from '../js/authoring/depthRules.js';
 import {
@@ -20,8 +20,8 @@ import {
   writeProgress,
 } from '../js/investigations/progressSchema.js';
 import { stepFingerprint } from '../js/investigations/progressBackup.js';
-import { asGiven, checkAnswer, gradeAnswer } from '../js/answerCheck.js';
-import { answerKeyFor, verifyKey } from '../js/answerKey.js';
+import { checkAnswer, gradeAnswer } from '../js/answerCheck.js';
+import { answerKeyFor, asGiven, verifyKey } from '../js/answerKey.js';
 import {
   buildAssignment,
   resolveSelection,

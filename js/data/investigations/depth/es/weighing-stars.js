@@ -22,10 +22,7 @@ export default {
         concept: 'Una masa es un valor y lo bien que se conoce.',
         method: 'Copia el total y su incertidumbre del paso anterior.',
       },
-      worked:
-        'a = 4 y P = 4 dan 64 / 16 = 4 masas solares. Con las incertidumbres sugeridas, 2,5 % en a y 5 % en P, el resultado es 4,0 ± 0,5.',
-      because:
-        'Cuatro masas solares, con incertidumbre de media. Las binarias reales se pesan igual, y la incertidumbre que acompaña a cada masa es lo que permite a dos astrónomos decir si sus resultados concuerdan.',
+      because: 'Cuatro masas solares, con incertidumbre de media.',
     },
     {
       title: '¿Qué medida te limita?',
@@ -50,8 +47,6 @@ export default {
         method:
           'm = 0,75 × 4,0. Las fracciones son 0,3/4,0 y 0,02/0,75; combínalas y multiplica por m.',
       },
-      worked:
-        'm = 3,0. Las fracciones son 0,075 y 0,027, que se combinan en 0,080, y 0,080 × 3,0 = 0,24.',
       because:
         'Tres masas solares, con incertidumbre de un cuarto. El reparto de la masa se conoce mejor que la masa misma, porque la razón de las dos distancias se mide directamente, mientras que el total depende de a al cubo.',
     },

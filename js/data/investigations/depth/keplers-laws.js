@@ -74,8 +74,7 @@ export default {
  is read from the planet's motion at that moment, and the planets
  tug on one another, so reading it at three different moments gives
  three slightly different answers.
- \n\nSelect one planet and press the button three times, a few
- seconds apart, so each reading is from a different moment. The
+ \n\nSelect a planet and press the button three times, seconds apart. The
  spread of the three is the scale of your uncertainty. The
  uncertainty of their <em>mean</em> is the standard deviation
  divided by √3, and it cannot be smaller than the readout itself
@@ -128,16 +127,6 @@ export default {
           level: 'ok',
           message: `The mean is ${mean3(v).toFixed(4)} yr, uncertain by ${(f * 100).toFixed(3)}% of itself. Quote it as ${mean3(v).toFixed(4)} ± ${sem3(v).toFixed(4)} yr.`,
         };
-      },
-      probe: ctx => {
-        const b = ctx.selected;
-        if (!b) return [{ label: 'Click a planet to read it', value: '-' }];
-        const el = ctx.elements(b);
-        if (!el) return [{ label: b.name || 'Body', value: 'no orbit found' }];
-        return [
-          { label: 'Selected', value: b.name || 'Body', emphasis: true },
-          { label: 'Period P', value: ctx.time(el.period), emphasis: true },
-        ];
       },
     },
     {
@@ -257,10 +246,8 @@ export default {
         method: `Copy the predicted period and its uncertainty from the
  weighted-fit step, and write them as value ± uncertainty.`,
       },
-      worked: `The weighted constant is close to 1, so P = √(k·64) is close to
- 8 years, with an uncertainty of a few hundredths.`,
       because:
-        'The law, fitted with weights, gives about 8 years with an uncertainty of a few hundredths of a year, which overlaps the 8 years the unweighted law gives. Two ways of finding the constant agreeing, with an honest error bar on each, is what makes the law a measurement rather than a slogan.',
+        'The law, fitted with weights, gives about 8 years with an uncertainty of a few hundredths of a year, which overlaps the 8 years the unweighted law gives.',
     },
     {
       sid: 'weigh-the-host-star',
@@ -293,9 +280,6 @@ export default {
         method: `P = 3.5247 / 365.25 years. Work out M, then the two
  fractional uncertainties, combine them, and multiply by M.`,
       },
-      worked: `P = 0.009650 yr, so M = 0.0475³ / 0.009650² = 1.151. The
- fractions are 3 × 0.0105 = 0.032 and 2 × 0.00003, so σ is about
- 0.036: M = 1.15 ± 0.04 solar masses.`,
       because:
         'About 1.15 solar masses, uncertain by about 0.04. Almost all of that comes from the orbit size, because a is cubed: a 1% uncertainty in a is a 3% uncertainty in the mass, while the period, known to a few parts in a hundred thousand, hardly contributes.',
     },

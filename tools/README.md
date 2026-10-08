@@ -70,6 +70,8 @@ current, and the orchestrator checks it.
 | `instructor-fixture.mjs` | Is the disposable instructor fixture the one these sources would build? |  |
 | `instructor-freshness.mjs` | Was the committed instructor bundle built from these sources? |  |
 | `instrument-families.mjs` | Which instrument families a script the page fetched contains |  |
+| `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
+| `key-groups.mjs` | Key groups: write a shared key prefix once, in the bundle only |  |
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |

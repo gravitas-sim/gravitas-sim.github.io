@@ -24,10 +24,8 @@ export default {
         method:
           'Copia el radio y su incertidumbre del paso anterior y escríbelos como valor ± incertidumbre.',
       },
-      worked:
-        'Unos 1,37 radios de Júpiter, con una incertidumbre de unas milésimas solo por la fotometría.',
       because:
-        'Unos 1,37 radios de Júpiter. La dispersión fotométrica sola hace la incertidumbre minúscula; el valor publicado, 1,38, difiere más que eso, porque el radio de la estrella y el modelo de oscurecimiento del limbo también tienen incertidumbre. Dar la barra de error que puedes justificar, y decir qué deja fuera, es la forma honesta del resultado.',
+        'Unos 1,37 radios de Júpiter. La dispersión fotométrica sola hace la incertidumbre minúscula; el valor publicado, 1,38, difiere más que eso, porque el radio de la estrella y el modelo de oscurecimiento del limbo también tienen incertidumbre.',
     },
     {
       title: 'Hazlo hacia delante',
@@ -39,8 +37,6 @@ export default {
         method:
           'k = 1,38 / (1,155 × 9,7311). Elévalo al cuadrado, multiplica por 1,2146 y toma el doble de la incertidumbre fraccionaria combinada de k.',
       },
-      worked:
-        'k = 0,1228, así que δ = 0,01508 × 1,2146 = 0,0183. La incertidumbre fraccionaria de k es √(0,015² + 0,012²) = 0,0192, así que la de δ es 0,0384, que es 0,0007.',
       because:
         'El modelo predice una profundidad de 0,0183, con incertidumbre de unos 0,0007. Es el número con el que se compara una profundidad medida: no si los dos son iguales, que nunca lo son exactamente, sino si difieren más que su incertidumbre combinada.',
     },

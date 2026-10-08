@@ -6,11 +6,11 @@
 // that must reach a reader only when they read at a deeper depth.
 // =============================================================================
 
-import { layDepth } from '../../investigations/depthPure.js';
-import KEPLER_DEEPER from './depth/keplers-laws.js';
-import TRANSIT_DEEPER from './depth/transit-photometry.js';
-import WEIGHING_DEEPER from './depth/weighing-stars.js';
-import MISSING_MASS_DEEPER from './depth/missing-mass.js';
+import { layDepth } from './depthPure.js';
+import KEPLER_DEEPER from '../data/investigations/depth/keplers-laws.js';
+import TRANSIT_DEEPER from '../data/investigations/depth/transit-photometry.js';
+import WEIGHING_DEEPER from '../data/investigations/depth/weighing-stars.js';
+import MISSING_MASS_DEEPER from '../data/investigations/depth/missing-mass.js';
 
 /** The deeper steps of the lessons that have them, by lesson id (DEPTH.md). */
 export const DEEPER = Object.freeze({

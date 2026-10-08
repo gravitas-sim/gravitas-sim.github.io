@@ -101,11 +101,7 @@ export default {
         concept: `A mass is a value and how well it is known.`,
         method: `Copy the total and its uncertainty from the previous step.`,
       },
-      worked: `a = 4 and P = 4 give 64 / 16 = 4 solar masses. With the
- uncertainties suggested, 2.5% in a and 5% in P, the result is
- 4.0 ± 0.5.`,
-      because:
-        'Four solar masses, uncertain by about half of one. Real binaries are weighed the same way, and the uncertainty quoted with each mass is what lets two astronomers say whether their results agree.',
+      because: 'Four solar masses, uncertain by about half of one.',
     },
     {
       sid: 'which-measurement-limits-you',
@@ -151,8 +147,6 @@ export default {
         method: `m = 0.75 × 4.0. The fractions are 0.3/4.0 and 0.02/0.75;
  combine them and multiply by m.`,
       },
-      worked: `m = 3.0. The fractions are 0.075 and 0.027, which combine to
- 0.080, and 0.080 × 3.0 = 0.24.`,
       because:
         'Three solar masses, uncertain by about a quarter of one. The split of the mass is known better than the mass itself, because the ratio of the two distances is measured directly, while the total depends on a cubed.',
     },

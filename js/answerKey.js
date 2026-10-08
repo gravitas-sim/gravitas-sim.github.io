@@ -17,10 +17,17 @@
 // mixed into the derivation.
 // =============================================================================
 
-import { inDepth } from './investigations/progressSchema.js';
-import { asGiven, checkAnswer, toleranceFor } from './answerCheck.js';
+// Depths, shallowest first (as in investigations/progressSchema.js).
+const LEVELS = ['core', 'quantitative', 'advanced'];
+const rank = d => Math.max(0, LEVELS.indexOf(d));
+const inDepth = (s, d) => rank(s?.depth) <= rank(d);
+import { checkAnswer, toleranceFor } from './answerCheck.js';
 import { FEEDBACK_CLASSES, hintLadder } from './answerFeedback.js';
 import { decodeEntities } from './lessonMarkup.js';
+
+// A number as a student gives it: with an uncertainty if the step asks for one.
+export const asGiven = (step, n, u = toleranceFor(step) / 2) =>
+  step.uncertainty ? `${n} ± ${u}` : n;
 
 /**
  * Lesson prose as plain text, for the PDFs: the inline tags stripped, and the

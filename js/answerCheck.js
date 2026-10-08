@@ -103,10 +103,7 @@ export function gradeAnswer(step, value, { locale = 'en' } = {}) {
   };
 }
 
-/**
- * A number, or for `uncertainty: true` steps "value ± uncertainty" (also +/-).
- * @returns {Object} parseAnswer()'s result, plus `u` when one was read
- */
+// A number, or "value ± uncertainty" (also +/-) when the step asks for one.
 function readValue(value, step, locale) {
   if (!step.uncertainty) return parseAnswer(value, step, locale);
   const [a, b, ...more] = String(value ?? '').split(/\s*(?:±|\+\/-|\+-)\s*/);
@@ -119,28 +116,15 @@ function readValue(value, step, locale) {
 }
 
 /**
- * Whether a number is inside the step's tolerance; with an uncertainty,
- * whether its interval overlaps the tolerance's and is no wider than
- * `maxUncertainty` (default twice the tolerance).
- *
- * The slack is because binary floating point does not represent most decimals
- * exactly: |7.6 - 8| evaluates to 0.4000000000000004, so a student who worked
- * out exactly the value at the edge of the stated tolerance was being told they
- * were wrong by four parts in 10^16.
- *
- * @param {{value: number, u?: number}} read - The parsed answer
- * @param {Object} step - Step definition
- * @returns {boolean} Whether it counts
+ * Whether a number is inside the step's tolerance (with `u`: overlaps it, and
+ * is no wider than `maxUncertainty`). The slack is for binary floating point:
+ * |7.6 - 8| is 0.4000000000000004, and the edge of the tolerance must pass.
  */
 function withinTolerance({ value: n, u }, step) {
   const tol = toleranceFor(step);
   if (u !== undefined && u > (step.maxUncertainty ?? 2 * tol)) return false;
   return Math.abs(n - step.answer) <= (tol + (u ?? 0)) * (1 + 1e-9) + 1e-12;
 }
-
-/** A number as a student would give it for this step: with an uncertainty if asked. */
-export const asGiven = (step, n, u = toleranceFor(step) / 2) =>
-  step.uncertainty ? `${n} ± ${u}` : n;
 
 /**
  * The tolerance a numeric step actually applies, including the default.
