@@ -277,7 +277,7 @@ function render() {
         ));
   const list = sections();
   for (const [id, items] of Object.entries(list)) fill(id, items);
-  fillPackages();
+  showMade();
   const e = s.estimate;
   const last = lastExport();
   const rows = [
@@ -345,33 +345,27 @@ function fill(id, items) {
     : '';
 }
 
-async function fillPackages() {
-  const box = $('mwPackages');
-  box.hidden = false;
-  try {
-    s.packages ??= await (
-      await import('./catalog/store.js')
+/** The scenarios and experiments made, and the installed packages: lazy. */
+function showMade() {
+  import('./myWork/madeView.js')
+    .then(m =>
+      m.show({
+        item,
+        L,
+        esc,
+        day,
+        size,
+        pick,
+        state: s,
+        refresh,
+        say: msg => {
+          s.say = msg;
+          render();
+        },
+        download,
+      })
     )
-      .openStore()
-      .then(st => st.list());
-  } catch {
-    s.packages = [];
-  }
-  box.querySelector('.mw-none').hidden = s.packages.length > 0;
-  box.querySelector('.mw-body').innerHTML = s.packages.length
-    ? `<ul class="mw-list">${s.packages
-        .map(p =>
-          item({
-            title: pick(p.title) || p.id,
-            facts: [p.type, p.version, size(p.bytes || 0)],
-            href: '/catalog/',
-            open: L('Open the Catalog', 'Abrir el Catálogo'),
-            ids: [],
-            buttons: false,
-          })
-        )
-        .join('')}</ul>`
-    : '';
+    .catch(() => {});
 }
 
 // --- Files -------------------------------------------------------------------
@@ -443,6 +437,7 @@ const labelOf = (model, key) => {
     ...model.experiments,
     ...model.saved,
     ...model.drafts,
+    ...model.made,
   ].find(x => x.key === key);
   if (all) return pick(all.title) || (all.kind && kind(all.kind)) || key;
   if (model.evidence.notebook?.key === key)

@@ -24,7 +24,7 @@
 // equivalent.
 // =============================================================================
 
-import { parseDocument } from './shareState.js';
+import { parseDocument, encodePayload } from './shareState.js';
 import { t, getLocale, registerMessages } from './i18n/index.js';
 import { openDialog, closeDialog } from './dialog.js';
 import { announce } from './notify.js';
@@ -838,6 +838,33 @@ function saveFile() {
   setStatus(t('builder.file.saved', { file }));
 }
 
+/** Keep the system in My work: its file, and the link that rebuilds it. */
+async function saveMine() {
+  if (!readyOrExplain()) return;
+  const { verdict, built } = current;
+  const data = systemToFile(verdict.bodies, built);
+  const [link, made] = await Promise.all([
+    import('./scenarioPackLink.js'),
+    import('./myWork/made.js'),
+  ]);
+  const read = link.packFromOrbitalSystem(data);
+  const payload = read.ok && link.compileScenarioPack(read.pack);
+  if (!payload) return setStatus(t('builder.mine.failed'));
+  // The builder made it: no scenario's identity rides on the link.
+  delete payload.x;
+  const name = verdict.bodies[0].name || t('builder.mine.default');
+  const done = made.saveMade(
+    made.scenarioRecord({
+      name,
+      from: 'builder',
+      payload,
+      fragment: await encodePayload(payload),
+      system: data,
+    })
+  ).ok;
+  setStatus(t(done ? 'builder.mine.saved' : 'builder.mine.failed', { name }));
+}
+
 async function openFile(file) {
   let data;
   try {
@@ -1039,6 +1066,11 @@ function mount() {
       className: 'ui-button',
     }),
     el('button', {
+      id: 'systemBuilderMine',
+      type: 'button',
+      className: 'ui-button',
+    }),
+    el('button', {
       id: 'systemBuilderOpen',
       type: 'button',
       className: 'ui-button',
@@ -1136,6 +1168,7 @@ function mount() {
   $('systemBuilderAdd').addEventListener('click', addCompanion);
   $('systemBuilderBuild').addEventListener('click', build);
   $('systemBuilderSave').addEventListener('click', saveFile);
+  $('systemBuilderMine').addEventListener('click', saveMine);
   $('systemBuilderOpen').addEventListener('click', () => fileInput.click());
   fileInput.addEventListener('change', () => {
     const file = fileInput.files?.[0];
@@ -1165,6 +1198,7 @@ function localize() {
     systemBuilderProof: 'builder.note.proof',
     systemBuilderBuild: 'builder.build',
     systemBuilderSave: 'builder.export',
+    systemBuilderMine: 'builder.mine',
     systemBuilderOpen: 'builder.import',
     systemBuilderClose: 'builder.close',
     systemBuilderStudioNote: 'builder.studio.note',

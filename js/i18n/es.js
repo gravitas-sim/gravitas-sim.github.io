@@ -808,6 +808,13 @@ export const ES = {
   'share.shareReroll': 'Nueva',
   'share.shareContent.4':
     'La semilla decide cada detalle aleatorio de este escenario. Repartiendo la misma semilla, todo el mundo obtiene el mismo sistema para medir.',
+  'share.mine.name': 'Nombre en Mi trabajo',
+  'share.mine.save': 'Guardar en Mi trabajo',
+  'share.mine.note':
+    'Guarda en este navegador el nombre, la semilla, los ajustes y el enlace. Ábrelo de nuevo, añádelo a tu informe o entrégalo desde Mi trabajo.',
+  'share.mine.saved': 'Guardado en Mi trabajo',
+  'share.mine.failed':
+    'Este navegador no lo guardó. Libera espacio o descarga una copia desde Mi trabajo.',
   'share.link.copied': 'Enlace copiado',
   'share.link.copyFailed': 'Pulsar Ctrl/Cmd + C para copiar el enlace',
   'share.link.failed': 'No se pudo abrir ese enlace.',

@@ -587,6 +587,22 @@ function download(name, text, type) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+/** Keep the result in My work: its manifest, its engine and its trials. */
+async function saveMine() {
+  if (!lastResult) return;
+  const made = await import('./myWork/made.js');
+  const done = made.saveMade(
+    made.experimentRecord(lastResult, lastResult.manifest.title)
+  );
+  $('xpStatus').textContent = t(
+    done.ok
+      ? done.slim
+        ? 'exp.mine.slim'
+        : 'exp.mine.saved'
+      : 'exp.mine.failed'
+  );
+}
+
 // --- The analysis laboratory: its own chunk, loaded when it is opened -----------
 
 let analysis = null;
@@ -741,6 +757,7 @@ async function start() {
         'text/csv'
       )
   );
+  $('xpSaveMine').addEventListener('click', saveMine);
   $('xpCheckBtn').addEventListener('click', checkSaved);
   refresh();
 }

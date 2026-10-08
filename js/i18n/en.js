@@ -423,6 +423,13 @@ export const EN = {
   'toast.placement.armed': 'Drag to aim \u00b7 release to place {object}',
 
   // --- Sharing ---------------------------------------------------------------
+  'share.mine.name': 'Name in My work',
+  'share.mine.save': 'Save to My work',
+  'share.mine.note':
+    'Keeps the name, seed, settings and link in this browser. Open it again, add it to your report or hand it in from My work.',
+  'share.mine.saved': 'Saved to My work',
+  'share.mine.failed':
+    'This browser would not keep it. Free some room or download a backup from My work.',
   'share.link.copied': 'Link copied',
   'share.link.copyFailed': 'Press Ctrl/Cmd + C to copy the link',
   'share.link.failed': 'That link could not be opened.',

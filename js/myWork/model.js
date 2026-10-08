@@ -60,6 +60,7 @@ export function describe(records, library = new Map()) {
     experiments: [],
     saved: [],
     drafts: [],
+    made: [],
     name: null,
   };
   const progress = new Map();
@@ -183,6 +184,8 @@ export function describe(records, library = new Map()) {
         when: null,
         href: '/teaching/',
       });
+    } else if (key.startsWith('gravitas_made_')) {
+      out.made.push({ key, title: text(value?.name) || key, kind: null });
     } else if (key === 'gravitas_student_name') {
       out.name = text(value) || null;
     }
@@ -214,4 +217,5 @@ export const total = d =>
   d.experiments.length +
   d.saved.length +
   d.drafts.length +
+  d.made.length +
   Object.values(d.evidence.groups).reduce((n, g) => n + g.length, 0);

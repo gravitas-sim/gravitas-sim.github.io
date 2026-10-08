@@ -49,6 +49,9 @@ let lastUrl = '';
 // from the payload rather than from the live simulation so the title always
 // names what the iframe will actually show.
 let lastScenario = '';
+// What the dialog shows, as My work keeps it (js/myWork/made.js).
+let lastPayload = null;
+let lastFragment = '';
 
 // True only while a link is being applied. The rebuild a link performs fires
 // the same reset event as a user changing scenario, and the two have to be
@@ -221,6 +224,8 @@ async function refresh() {
   });
 
   const fragment = await encodePayload(payload);
+  lastPayload = payload;
+  lastFragment = fragment;
   lastUrl = shareUrl(fragment);
   lastScenario = said(payload.s) || '';
   // The figure builder opens on the state the dialog is showing.
@@ -280,6 +285,23 @@ async function copyLink() {
     }
     toast(copied ? t('share.link.copied') : t('share.link.copyFailed'));
   }
+}
+
+/** Keep the world the dialog shows in My work, under the name typed. */
+async function saveMine() {
+  if (!lastFragment) return;
+  const made = await import('./myWork/made.js');
+  const done = made.saveMade(
+    made.scenarioRecord({
+      name: els.mineName.value.trim() || lastScenario,
+      from: 'sandbox',
+      payload: lastPayload,
+      fragment: lastFragment,
+    })
+  ).ok;
+  const message = t(done ? 'share.mine.saved' : 'share.mine.failed');
+  toast(message);
+  announce(message);
 }
 
 /**
@@ -400,6 +422,8 @@ export function initShare() {
     seedRow: document.getElementById('shareSeedRow'),
     reroll: document.getElementById('shareRerollBtn'),
     embed: document.getElementById('shareEmbedBtn'),
+    mine: document.getElementById('shareMineBtn'),
+    mineName: document.getElementById('shareMineName'),
     figure: document.getElementById('shareFigureLink'),
     close: document.getElementById('shareCloseBtn'),
     chip: document.getElementById('shareCloseChip'),
@@ -414,6 +438,7 @@ export function initShare() {
   button?.addEventListener('focus', primeDialogs, { once: true });
   els.copy?.addEventListener('click', copyLink);
   els.embed?.addEventListener('click', copyEmbed);
+  els.mine?.addEventListener('click', saveMine);
   els.close?.addEventListener('click', closeShareDialog);
   els.chip?.addEventListener('click', closeShareDialog);
   els.seeded?.addEventListener('click', () => setKind('seeded'));

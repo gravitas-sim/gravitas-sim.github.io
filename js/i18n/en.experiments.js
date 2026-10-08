@@ -129,6 +129,13 @@ export const EN_EXPERIMENTS = {
   'exp.trials.result': 'Measurement',
   'exp.trials.steps': 'Steps',
   'exp.trials.wall': 'Time (ms)',
+  'exp.mine.save': 'Save to My work',
+  'exp.mine.saved':
+    'Saved to My work: the manifest, the engine and every trial.',
+  'exp.mine.slim':
+    'Saved to My work without the trials (too many to keep here). Download the result file for them.',
+  'exp.mine.failed':
+    'This browser would not keep it. Free some room, or download the result.',
   'exp.download.json': 'Download the result (JSON)',
   'exp.download.csv': 'Download the trials (CSV)',
   'exp.manifest.title': 'The experiment as a file',

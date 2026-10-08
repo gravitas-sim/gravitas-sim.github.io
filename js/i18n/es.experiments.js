@@ -134,6 +134,13 @@ export const ES_EXPERIMENTS = {
   'exp.trials.result': 'Medida',
   'exp.trials.steps': 'Pasos',
   'exp.trials.wall': 'Tiempo (ms)',
+  'exp.mine.save': 'Guardar en Mi trabajo',
+  'exp.mine.saved':
+    'Guardado en Mi trabajo: el manifiesto, el motor y todos los ensayos.',
+  'exp.mine.slim':
+    'Guardado en Mi trabajo sin los ensayos (son demasiados para guardarlos aquí). Descarga el archivo del resultado para tenerlos.',
+  'exp.mine.failed':
+    'Este navegador no lo guardó. Libera espacio o descarga el resultado.',
   'exp.download.json': 'Descargar el resultado (JSON)',
   'exp.download.csv': 'Descargar los ensayos (CSV)',
   'exp.manifest.title': 'El experimento como archivo',

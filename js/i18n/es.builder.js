@@ -145,6 +145,11 @@ export const ES_BUILDER = {
   'builder.file.loaded': 'Se abrió un sistema de {count} cuerpos.',
   'builder.file.drift':
     'El estado inicial guardado en el archivo no coincide con el que esta versión de Gravitas calcula a partir de sus elementos. Se han usado los elementos.',
+  'builder.mine': 'Guardar en Mi trabajo',
+  'builder.mine.saved': 'Se guardó {name} en Mi trabajo.',
+  'builder.mine.failed':
+    'Este navegador no lo guardó. Libera espacio o guárdalo como archivo.',
+  'builder.mine.default': 'Mi sistema',
   'builder.file.saved': 'Se guardó {file}.',
 
   'builder.error.tooFew':
