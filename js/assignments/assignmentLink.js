@@ -18,6 +18,7 @@ import {
   COMFORTABLE_URL_LENGTH,
   decodeTagged,
   encodeTagged,
+  parseDocument,
   shareUrl,
 } from '../shareState.js';
 import {
@@ -106,7 +107,7 @@ export async function readAssignmentLink(fragment) {
 export function readAssignmentFile(text) {
   let data;
   try {
-    data = JSON.parse(String(text || ''));
+    data = parseDocument(String(text || ''));
   } catch {
     return { ok: false, assignment: null, reason: 'notJson', detail: null };
   }

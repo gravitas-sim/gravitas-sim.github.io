@@ -201,6 +201,8 @@ export const ES_MEASURE = {
     'Ese flujo usa una herramienta que este Gravitas no tiene: {tool}.',
   'obs.ms.open.badNode':
     'Una medida de ese flujo no tiene posición entre los cambios.',
+  'obs.ms.open.badParams':
+    'Una medida de ese flujo ({id}) tiene un ajuste que su herramienta no admite, en {path}, así que no se abrió nada.',
   'obs.ms.open.workspace': 'No se pudo leer la observación de ese flujo: {why}',
   'obs.ms.notebook.added':
     'Añadida a tu cuaderno. Está en el panel del cuaderno, y en su informe, en Gravitas.',

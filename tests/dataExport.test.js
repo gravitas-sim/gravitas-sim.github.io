@@ -1,4 +1,5 @@
 import { describe, test, expect, jest, beforeEach } from '@jest/globals';
+import { readFileSync, readdirSync } from 'node:fs';
 
 // The serializers read two live modules. Both are mocked so the tests describe
 // what comes out of the writer for a known recording, rather than depending on
@@ -167,6 +168,30 @@ describe('CSV field writing', () => {
     // missed both, and now uses this one).
     expect(csvField('\u200b=1+1')).toBe('"\'\u200b=1+1"');
     expect(csvField('\u00a0@x')).toBe('"\'\u00a0@x"');
+    // Every other character a spreadsheet skips: the zero-width non-joiner and
+    // joiner, the direction marks, the Unicode spaces, the ideographic space,
+    // the word joiner, and each of them in front of a full-width trigger.
+    for (const skip of [
+      '\u200c',
+      '\u200d',
+      '\u200e',
+      '\u200f',
+      '\u2060',
+      '\u2002',
+      '\u2009',
+      '\u202f',
+      '\u3000',
+      '\u2028',
+      '\u202e',
+      '\ufeff',
+    ]) {
+      expect(csvField(`${skip}=1+1`)).toBe(`"'${skip}=1+1"`);
+      expect(csvField(`${skip}\uff1dSUM(A1)`)).toBe(`"'${skip}\uff1dSUM(A1)"`);
+      expect(csvField(`${skip}${skip}\uff20x`)).toBe(
+        `"'${skip}${skip}\uff20x"`
+      );
+      expect(fromCsv(toCsv([[`${skip}-1+1`]]))).toEqual([[`${skip}-1+1`]]);
+    }
     // Not a number and not a formula: left alone.
     expect(csvField('Infinity')).toBe('Infinity');
     // Not finite, and a leading minus makes it a formula to Excel.
@@ -690,5 +715,52 @@ describe('the radial-velocity export', () => {
     expect(s.rvMeasurements).toBe(0);
     expect(s.rvRunning).toBe(false);
     expect(radialVelocityCsv().rows).toBe(0);
+  });
+});
+
+describe('every CSV the application writes', () => {
+  // Where a file is offered as text/csv, and how its text is made safe. A new
+  // writer has to be added here, which is the moment to send it through
+  // js/csv.js (Roadmap II Prompt 67 item 4).
+  const WRITERS = {
+    'js/dataExport.js': 'imports csv.js',
+    'js/evaluationKit.js': 'imports csv.js',
+    'js/experimentsPage.js': 'imports csv.js',
+    'js/observatory/measurePanel.js': 'imports csv.js (toCsv)',
+    'js/experiments/analysisPanel.js': 'ctx.toCsv, which is toCsv from csv.js',
+    'js/experiments/panel.js': 'text from js/experiments/exports.js',
+    'js/observatoryPage.js': 'text from js/observatory/export.js',
+    'js/submissionReview.js': 'text from js/submission/results.js',
+    'js/missionPage.js':
+      'numbers, a date and a fixed set of status names; nothing a student types',
+  };
+  const walk = dir =>
+    readdirSync(dir, { withFileTypes: true }).flatMap(e =>
+      e.isDirectory()
+        ? walk(`${dir}/${e.name}`)
+        : e.name.endsWith('.js') && !/\/i18n\//.test(`${dir}/`)
+          ? [`${dir}/${e.name}`]
+          : []
+    );
+
+  test('the files that offer a CSV are the ones accounted for', () => {
+    const found = walk('js')
+      .filter(f => /text\/csv/.test(readFileSync(f, 'utf8')))
+      .sort();
+    expect(found).toEqual(Object.keys(WRITERS).sort());
+  });
+
+  test('the ones that say they import csv.js do', () => {
+    for (const [f, how] of Object.entries(WRITERS))
+      if (how.startsWith('imports csv.js'))
+        expect(readFileSync(f, 'utf8')).toMatch(/from '\.\.?\/csv\.js'/);
+  });
+
+  test('none carries a local disarmer of its own', () => {
+    for (const f of walk('js'))
+      if (f !== 'js/csv.js')
+        expect(readFileSync(f, 'utf8')).not.toMatch(
+          /function\s+(escapeCsv|csvEscape|disarmCsv)|\[=\+\\?-@\]/
+        );
   });
 });

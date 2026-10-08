@@ -24,6 +24,7 @@
 // equivalent.
 // =============================================================================
 
+import { parseDocument } from './shareState.js';
 import { t, getLocale, registerMessages } from './i18n/index.js';
 import { openDialog, closeDialog } from './dialog.js';
 import { announce } from './notify.js';
@@ -840,7 +841,7 @@ function saveFile() {
 async function openFile(file) {
   let data;
   try {
-    data = JSON.parse(await file.text());
+    data = parseDocument(await file.text(), true);
   } catch {
     setStatus(t('builder.file.unreadable'));
     return;

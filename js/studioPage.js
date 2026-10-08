@@ -39,7 +39,7 @@ import { INTEGRATORS } from './physics.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { TAG_ORDER } from './data/scenarioTags.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
-import { encodePayload } from './shareState.js';
+import { encodePayload, parseDocument } from './shareState.js';
 import { randomSeed } from './rng.js';
 import {
   SETTING_RULES,
@@ -1146,7 +1146,7 @@ function download() {
 async function openFile(file) {
   let data;
   try {
-    data = JSON.parse(await file.text());
+    data = parseDocument(await file.text(), true);
   } catch {
     setStatus(t('studio.file.unreadable'));
     return;
@@ -1205,7 +1205,7 @@ function applyRaw() {
   const note = $('st-raw-error');
   let data;
   try {
-    data = JSON.parse($('st-raw-text').value);
+    data = parseDocument($('st-raw-text').value, true);
   } catch (err) {
     note.textContent = t('studio.raw.notJson', { error: err.message });
     note.hidden = false;
