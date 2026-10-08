@@ -9,9 +9,6 @@
 // no account. The prose that does not change is in the page's markup, in both
 // languages; the strings built here come as English/Spanish pairs.
 //
-// Packages installed from the Catalog live in IndexedDB (js/catalog/store.js),
-// which the store does not cover: they are listed through that module and are
-// not in a backup file.
 // =============================================================================
 
 import { EXPORT_FORMAT, openStudentStore } from './storage/index.js';
@@ -278,6 +275,7 @@ function render() {
   const list = sections();
   for (const [id, items] of Object.entries(list)) fill(id, items);
   fillPackages();
+  showMade();
   const e = s.estimate;
   const last = lastExport();
   const rows = [
@@ -346,8 +344,6 @@ function fill(id, items) {
 }
 
 async function fillPackages() {
-  const box = $('mwPackages');
-  box.hidden = false;
   try {
     s.packages ??= await (
       await import('./catalog/store.js')
@@ -357,21 +353,27 @@ async function fillPackages() {
   } catch {
     s.packages = [];
   }
-  box.querySelector('.mw-none').hidden = s.packages.length > 0;
-  box.querySelector('.mw-body').innerHTML = s.packages.length
-    ? `<ul class="mw-list">${s.packages
-        .map(p =>
-          item({
-            title: pick(p.title) || p.id,
-            facts: [p.type, p.version, size(p.bytes || 0)],
-            href: '/catalog/',
-            open: L('Open the Catalog', 'Abrir el Catálogo'),
-            ids: [],
-            buttons: false,
-          })
-        )
-        .join('')}</ul>`
-    : '';
+  fill(
+    'mwPackages',
+    s.packages.map(p =>
+      item({
+        title: pick(p.title) || p.id,
+        facts: [p.type, p.version, size(p.bytes || 0)],
+        href: '/catalog/',
+        open: L('Open the Catalog', 'Abrir el Catálogo'),
+        ids: [],
+        buttons: false,
+      })
+    )
+  );
+}
+
+/** The scenarios and experiments made: drawn by a lazy module, when there are any. */
+function showMade() {
+  if (s.model.made.length)
+    import('./myWork/madeView.js').then(m =>
+      m.show({ item, state: s, refresh })
+    );
 }
 
 // --- Files -------------------------------------------------------------------
@@ -443,6 +445,7 @@ const labelOf = (model, key) => {
     ...model.experiments,
     ...model.saved,
     ...model.drafts,
+    ...model.made,
   ].find(x => x.key === key);
   if (all) return pick(all.title) || (all.kind && kind(all.kind)) || key;
   if (model.evidence.notebook?.key === key)

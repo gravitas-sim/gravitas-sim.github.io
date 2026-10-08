@@ -10,6 +10,7 @@ export const ITEM = {
   drafts: 2048,
   assignments: 1024,
   courses: 1024,
+  made: 512,
   settings: 256,
   preferences: 64,
 };

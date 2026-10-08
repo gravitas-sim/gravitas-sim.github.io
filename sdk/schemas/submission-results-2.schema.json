@@ -334,6 +334,18 @@
             "$ref": "#/$defs/question"
           }
         },
+        "systems": {
+          "description": "Scenarios and experiments the student attached to the evidence, as the token carried them (its `sy`): k sc or ex, n name, s seed, p [scenario id, version] it was made from, a build, f engine fingerprint, h digest, l share link or null, e evidence entry numbers. A report with none says []. Optional: a file written before this has none.",
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": [
+              "k",
+              "n"
+            ]
+          }
+        },
         "evidence": {
           "description": "The evidence the report's token carried (version 2 tokens; a report without one says `none`). state: verified when the table matches the digest the token states, mismatch when it does not, partial when the token carries fewer rows than the ledger had and the digest cannot be recomputed. It proves the table is the one the digest was made from, not who made it. Optional: a file written before the ledger has none.",
           "type": "object",

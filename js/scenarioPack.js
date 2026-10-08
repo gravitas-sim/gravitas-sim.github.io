@@ -16,7 +16,8 @@
 // pack's bodies.
 //
 // Used by the Scenario Studio (/studio/), by the SDK's test of a scenario
-// pack, and by the tests. Never by the application itself.
+// pack, by the tests, and, lazily, by the Orbital System Builder, which keeps
+// a system as a link in My work (js/myWork/made.js).
 // =============================================================================
 
 import { DEFAULT_SETTINGS } from './appState.js';

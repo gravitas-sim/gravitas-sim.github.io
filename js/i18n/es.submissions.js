@@ -92,6 +92,23 @@ export const ES_SUBMISSIONS = {
   'sub.notice':
     'Un código de entrega dice qué respondió un estudiante. No prueba quién respondió: se calcula en un navegador, y cualquiera que controle el navegador puede falsificar lo que este calcula. Lo que le ahorra es escribir.',
   'sub.reason.badEvidence': 'su registro de evidencia está mal formado',
+  'sub.systems.title': 'Escenarios y experimentos entregados',
+  'sub.systems.note':
+    'Adjuntados por cada estudiante a su evidencia. Abre el enlace para ver el mismo mundo. El escenario del que salió, la versión y la huella del motor dicen con qué compararlo; lo que es demasiado largo para un enlace llega como archivo.',
+  'sub.systems.caption': 'Escenarios y experimentos entregados por {name}',
+  'sub.systems.none': 'ninguno',
+  'sub.systems.open': 'Abrir en la simulación libre',
+  'sub.systems.file': 'entregado como archivo',
+  'sub.systems.kind.sc': 'escenario',
+  'sub.systems.kind.ex': 'experimento',
+  'sub.systems.col.name': 'Nombre',
+  'sub.systems.col.kind': 'Tipo',
+  'sub.systems.col.seed': 'Semilla',
+  'sub.systems.col.from': 'Hecho a partir del escenario',
+  'sub.systems.col.build': 'Versión',
+  'sub.systems.col.engine': 'Motor',
+  'sub.systems.col.digest': 'Resumen',
+  'sub.systems.col.open': 'Abrir',
   'sub.evidence.title': 'La evidencia detrás de las respuestas',
   'sub.evidence.note':
     'Un informe de versión 2 lleva la tabla de medidas y resultados que tenía el cuaderno del estudiante, y un resumen criptográfico de ella. La comprobación recalcula ese resumen a partir de la tabla que tienes delante. Que coincida indica que la tabla es aquella con la que se hizo el resumen; no indica quién la hizo: cualquiera puede construir un código coherente consigo mismo.',

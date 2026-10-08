@@ -111,6 +111,8 @@ export function buildSubmission({
           },
         }
       : {}),
+    // Scenarios and experiments attached to the evidence (js/myWork/made.js).
+    ...(record?.sy?.length ? { sy: record.sy.slice(0, 4) } : {}),
     a: assignmentId ? String(assignmentId).slice(0, 120) : null,
     r: rosterId ? String(rosterId).slice(0, 120) : null,
     fl: String(fallbackLocale || 'en'),
@@ -244,6 +246,16 @@ export function validateSubmission(payload) {
     )
   )
     return { ok: false, reason: 'badEvidence' };
+  const sy = payload.sy;
+  if (
+    sy !== undefined &&
+    !(
+      Array.isArray(sy) &&
+      sy.length <= 4 &&
+      sy.every(x => x && typeof x.n === 'string')
+    )
+  )
+    return { ok: false, reason: 'badSystems' };
   return { ok: true };
 }
 

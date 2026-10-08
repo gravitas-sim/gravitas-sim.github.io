@@ -148,6 +148,11 @@ export const EN_BUILDER = {
   'builder.file.loaded': 'Opened a system of {count} bodies.',
   'builder.file.drift':
     'The starting state recorded in the file differs from the one this version of Gravitas computes from its elements. The elements have been used.',
+  'builder.mine': 'Save to My work',
+  'builder.mine.saved': 'Saved {name} to My work.',
+  'builder.mine.failed':
+    'This browser would not keep it. Free some room, or save it as a file.',
+  'builder.mine.default': 'My system',
   'builder.file.saved': 'Saved {file}.',
 
   'builder.error.tooFew':

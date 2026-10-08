@@ -33,8 +33,31 @@ Installed Packages are in IndexedDB (`js/catalog/store.js`), which the store doe
 | courses | built-in course progress is derived from lesson records; `gravitas_course_draft:*` | per-unit progress; drafts under drafts | yes | drafts yes |
 | evidence | `gravitas_evidence_notebook` | yes, grouped by the page that made each entry, each with a link to it | yes (the notebook whole) | yes (the notebook whole) |
 | experiments | `gravitas_experiment_<id>`, `gravitas_experiments_index` | yes | yes (with its index row) | yes (the index row is removed too) |
+| made | `gravitas_made_<id>` | yes, with link, seed, scenario it came from, build and attachments | yes, per item and all | yes |
 | drafts | Studio, Composer, course drafts, `gravitas_simulation_save`, evaluation draft, teaching notes, experiment checkpoints | yes | yes | yes |
 | settings | `gravitas_student_name` | yes (storage panel) | yes | with delete-all |
 | preferences | locale, theme, units, flags, `gravitas_last_export` | no | yes; imported only if ticked | no |
 | installs | IndexedDB `gravitas-catalog` | yes, listed | no | no (the Catalog removes them) |
 | not student work | `gravitas-archive` (cached archive answers), platform stamps, previews, sessionStorage key | no | no | no |
+
+## Scenarios and experiments (Prompt 74)
+
+What a student builds or runs has a home in the `made` collection (`gravitas_made_<id>`, `gravitas.made/1`, `js/myWork/made.js`). The page lists it in "Scenarios and experiments you made" (`js/myWork/madeView.js`, loaded only when something was made, so the page's route stays at its ceiling).
+
+| Kind | Saved from | Holds | Opens |
+|---|---|---|---|
+| scenario, `from: sandbox` | the Sandbox's share dialog ("Save to My work", with a name) | name, seed, the settings that differ from the defaults, object count, the link the dialog shows, build, and `derivedFrom` {id, version} when the world was opened from a scenario made in the Studio (the identity a link carries in `x.pack`) | `/#<link>` in the Sandbox |
+| scenario, `from: builder` | the Orbital System Builder ("Save to My work") | the above plus the builder file (`gravitas.orbital-system/1`); the link is the Studio's own compile of that file, with no scenario identity | `/#<link>`; the file downloads as `.gravitas-system.json` |
+| experiment, `from: runner` | the experiment runner, beside the downloads | the result (`gravitas.experiment-result/1`: manifest, engine fingerprint, summary, trials; the trials are left out, and the record says so, when they would not fit 512 KB) | the runner |
+
+The A/B bench's saved comparisons keep their own keys and are listed under "Experiments and saved comparisons"; a comparison becomes evidence through the bench's notebook buttons, as before.
+
+**Attaching.** Each item lists the evidence entries as checkboxes ("the system I measured"). `attachedTo` holds entry ids; nothing in the notebook changes, so entry fingerprints and the evidence digest are untouched.
+
+**Handing in.** A report that has attached items prints them (name, kind, seed, the scenario made from, build and engine, entry numbers, and the link). Its submission token carries up to four as `sy` (`submission-token-2.schema.json`): a link of up to 1500 characters rides in the token, a longer one is handed in as a file (Download file, or the export file of the item). The review page shows a table per report with the scenario identity, build, engine fingerprint (experiments), a digest of the link and an "Open in the Sandbox" link, and the results JSON export carries `systems`. Importing the student's item file in the instructor's own My work does the same for a file.
+
+**Limits, said plainly.**
+- A world carries the build that saved it (the `gravitas-revision` stamp), not an engine fingerprint: the fingerprint is made by integrating a reference world in the experiment worker (`engineFingerprint`), which the Sandbox cannot do without replacing the live world. Experiments carry it. The review page shows `none` where there is none.
+- The token is not authentication: a student can attach anything. It transports the identity; it does not vouch for it (PROVENANCE.md).
+- There is no rename; save again under another name and delete the first.
+- No Studio editing surface was added for students: a pack opened from a link is changed in the Sandbox and saved there, and the copy records what it came from.
