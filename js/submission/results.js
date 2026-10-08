@@ -443,6 +443,8 @@ export function gradeSubmission(
     hintsTaken: [...help.values()].reduce((a, h) => a + h.hints, 0),
     workedShown: [...help.values()].filter(h => h.revealed).length,
     evidence: evidenceBlock(evidence),
+    // What the student attached to the evidence (js/myWork/made.js): as handed in.
+    systems: Array.isArray(submission.sy) ? submission.sy : [],
     questions,
   };
 }
@@ -748,6 +750,7 @@ export function resultsJson(
             },
       warnings: r.warnings,
       evidence: r.evidence,
+      systems: r.systems,
       questions: r.questions.map(q => {
         const response = responseFor(q, includeWritten);
         return {

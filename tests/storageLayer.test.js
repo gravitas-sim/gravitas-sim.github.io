@@ -109,6 +109,7 @@ describe('a collection', () => {
         'evidence',
         'experiments',
         'installs',
+        'made',
         'preferences',
         'settings',
         'progress',

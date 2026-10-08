@@ -324,6 +324,51 @@ function evidenceSections(records) {
     .join('')}`;
 }
 
+/**
+ * What each report handed in alongside its evidence: scenarios and experiments,
+ * with the scenario they were made from, the build and the engine, and the
+ * link that opens the same world. A link is followed only if it is a world
+ * link's own characters; a long one was handed in as a file.
+ *
+ * @param {Array<object>} records - Annotated records
+ * @returns {string} A table per report that has any, or ''
+ */
+function systemSections(records) {
+  const shown = records.filter(r => r.systems?.length);
+  if (!shown.length) return '';
+  const none = t('sub.systems.none');
+  return `<h2>${esc(t('sub.systems.title'))}</h2><p class="ui-note">${esc(
+    t('sub.systems.note')
+  )}</p>${shown
+    .map(r => {
+      const name = r.nameAsTyped || t('sub.read.noName');
+      const rows = r.systems
+        .map(x => {
+          const link =
+            typeof x.l === 'string' && /^[0-9][A-Za-z0-9_-]{0,1500}$/.test(x.l)
+              ? `<a href="/#${esc(x.l)}">${esc(t('sub.systems.open'))}</a>`
+              : esc(t('sub.systems.file'));
+          return `<tr><td>${esc(x.n)}</td><td>${esc(t(`sub.systems.kind.${x.k}`))}</td><td>${esc(x.s ?? none)}</td><td>${esc(Array.isArray(x.p) ? x.p.join(' ') : none)}</td><td>${esc(x.a ?? none)}</td><td>${esc(x.f ?? none)}</td><td>${esc(x.h ?? '')}</td><td>${link}</td></tr>`;
+        })
+        .join('');
+      return `<div class="ui-table-wrap" tabindex="0" role="region" aria-label="${esc(
+        t('sub.systems.caption', { name })
+      )}"><table class="ui-table sr-table"><thead><tr>${[
+        'name',
+        'kind',
+        'seed',
+        'from',
+        'build',
+        'engine',
+        'digest',
+        'open',
+      ]
+        .map(c => `<th scope="col">${esc(t(`sub.systems.col.${c}`))}</th>`)
+        .join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+    })
+    .join('')}`;
+}
+
 /** Announce something to a screen reader and show it. */
 function say(message) {
   const status = $('exportStatus');
@@ -405,7 +450,7 @@ function render() {
         .join('')}</ol>`
     : '';
 
-  $('evidence').innerHTML = evidenceSections(records);
+  $('evidence').innerHTML = evidenceSections(records) + systemSections(records);
 
   $('refused').innerHTML = refused.length
     ? `<h2>${esc(t('sub.refused.title'))}</h2><ul class="ui-note">${refused

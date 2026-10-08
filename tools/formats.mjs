@@ -491,6 +491,16 @@ export const FORMATS = Object.freeze([
     newer: 'refused, with a reason',
   },
   {
+    name: 'gravitas.made',
+    fields: 'format, formatVersion, kind',
+    version: 1,
+    const: ['js/myWork/made.js', 'MADE_VERSION'],
+    owner: 'js/myWork/made.js readMade',
+    persisted: 'localStorage, inside gravitas.student-data',
+    older: 'v1 only',
+    newer: 'left out of the list, not overwritten',
+  },
+  {
     name: 'gravitas.evaluation',
     fields: 'kind, schema',
     version: 1,

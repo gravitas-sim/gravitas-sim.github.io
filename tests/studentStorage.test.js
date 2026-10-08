@@ -412,6 +412,8 @@ describe('no writer slips back to a direct write', () => {
     'js/shell.js': 'the shell’s own theme and language choice, every route',
     'js/experiments/store.js': 'route at its request ceiling (STORAGE.md)',
     'js/experimentsPage.js': 'route at its request ceiling (STORAGE.md)',
+    'js/myWork/made.js':
+      'reached from the Sandbox: a second importer would split storage/local.js into a chunk every lesson fetches (STORAGE.md)',
     'js/composerPage.js': 'route at its request ceiling (STORAGE.md)',
     'js/coursePage.js': 'route at its request ceiling (STORAGE.md)',
     'js/evaluationKit.js': 'route has 0.7 KB of room (STORAGE.md)',

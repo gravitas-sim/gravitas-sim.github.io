@@ -89,6 +89,23 @@ export const EN_SUBMISSIONS = {
   'sub.notice':
     'A submission token says what a student answered. It is not proof of who answered: it is computed in a browser, and anything a browser computes, whoever controls the browser can forge. What it saves you is typing.',
   'sub.reason.badEvidence': 'its evidence record is malformed',
+  'sub.systems.title': 'Scenarios and experiments handed in',
+  'sub.systems.note':
+    'Attached by each student to their evidence. Open the link to see the same world. The scenario it was made from, the build and the engine fingerprint say what to compare it with; a thing too long for a link comes as a file.',
+  'sub.systems.caption': 'Scenarios and experiments handed in by {name}',
+  'sub.systems.none': 'none',
+  'sub.systems.open': 'Open in the Sandbox',
+  'sub.systems.file': 'handed in as a file',
+  'sub.systems.kind.sc': 'scenario',
+  'sub.systems.kind.ex': 'experiment',
+  'sub.systems.col.name': 'Name',
+  'sub.systems.col.kind': 'Kind',
+  'sub.systems.col.seed': 'Seed',
+  'sub.systems.col.from': 'Made from scenario',
+  'sub.systems.col.build': 'Build',
+  'sub.systems.col.engine': 'Engine',
+  'sub.systems.col.digest': 'Digest',
+  'sub.systems.col.open': 'Open',
   'sub.evidence.title': 'Evidence behind the answers',
   'sub.evidence.note':
     'A version 2 report carries the table of measurements and results the student’s notebook held, and a digest of it. The check below recomputes the digest from the table in front of you. A match says the table is the one the digest was made from. It does not say who made it: anyone can build a token that agrees with itself.',

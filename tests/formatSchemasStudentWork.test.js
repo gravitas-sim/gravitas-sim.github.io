@@ -320,7 +320,7 @@ describe('the submission token schema', () => {
     // Every field the code writes, the evidence included, and nothing else.
     const withEvidence = ST.buildSubmission({
       backup: written,
-      record: { ids: ['e1'], rows: [], total: 0 },
+      record: { ids: ['e1'], rows: [], total: 0, sy: [{ k: 'sc', n: 'x' }] },
       digest: 'a'.repeat(64),
       depth: 'quantitative',
     });
@@ -329,7 +329,7 @@ describe('the submission token schema', () => {
     );
     expect(Object.keys(report()).sort()).toEqual(
       Object.keys(withEvidence)
-        .filter(k => k !== 'ev' && k !== 'dp')
+        .filter(k => !['ev', 'dp', 'sy'].includes(k))
         .sort()
     );
   });
@@ -378,9 +378,10 @@ describe('the submission results schema', () => {
       expect(valid(s, doc)).toBe(true);
       // Every field it writes is one the schema requires.
       expect(Object.keys(doc).sort()).toEqual([...s.required].sort());
-      // `evidence` came with the ledger: optional in the schema, always written.
+      // `evidence` came with the ledger and `systems` with Prompt 74: optional
+      // in the schema, always written.
       expect(Object.keys(all[0]).sort()).toEqual(
-        [...s.$defs.submission.required, 'evidence'].sort()
+        [...s.$defs.submission.required, 'evidence', 'systems'].sort()
       );
       expect(s.$defs.submission.required).not.toContain('evidence');
       // `unit` was added after the file's first release: optional in the

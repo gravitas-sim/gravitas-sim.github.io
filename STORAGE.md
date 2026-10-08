@@ -28,6 +28,7 @@ These are the student's own work, and what an "export everything" would carry:
 | `gravitas_composer_draft:<id>`, `gravitas_composer_last` | Composer drafts, and the one last open | `js/composerPage.js`, through `js/studio/model.js` | investigation pack 1 | none recorded; a file opened is migrated (`migrateInvestigationPack`) |
 | `gravitas_studio_draft:<id>`, `gravitas_studio_last` | Studio scenario drafts, and the one last open | `js/studio/model.js` | scenario pack 1 | none recorded |
 | `gravitas_course_draft:<id>`, `gravitas_course_last` | Course builder drafts, and the one last open | `js/coursePage.js` | course pack 2 | reads course pack 1 |
+| `gravitas_made_<id>` | A scenario or experiment the student made: a world saved from the Sandbox, a system built in the builder, a scenario opened from a link and changed (with the scenario it came from), or a runner result; its name, seed, link, build and the evidence entries it is attached to | `js/myWork/made.js` | `gravitas.made/1` (FORMATS.md) | none yet; a newer record is left out of the list and not overwritten |
 | `gravitas_evaluation_draft_v1` | The evaluation kit's unsent draft | `js/evaluationKit.js` | evaluation 1 | none |
 | `gravitas_teaching_notes_v1` | A teacher's notes on the teaching page | `js/teachingPage.js` | a JSON object | none |
 
@@ -70,7 +71,7 @@ These are the student's own work, and what an "export everything" would carry:
 
 ## Size policies
 
-**The storage module** (`js/storage/index.js`, Prompt 65 step 2) states a policy for each of its nine collections: the most one record and the collection may hold (`COLLECTIONS`). It refuses a write that would leave less than a reserve free: 5 MiB or a tenth of the origin's quota, whichever is more, as `navigator.storage.estimate()` reports it. Until step 3 moves the writers over, the keys above keep their own handling:
+**The storage module** (`js/storage/index.js`, Prompt 65 step 2) states a policy for each of its ten collections: the most one record and the collection may hold (`COLLECTIONS`). It refuses a write that would leave less than a reserve free: 5 MiB or a tenth of the origin's quota, whichever is more, as `navigator.storage.estimate()` reports it. Until step 3 moves the writers over, the keys above keep their own handling:
 
 - **Only the experiment store states a budget:** 512 KB per experiment and 2 MB in total (`js/experiments/store.js`, `LIMITS`), with checkpoints of up to 1.5 million characters (`js/experimentsPage.js`).
 - **Every other key relies on the browser's quota.** Nothing else calls `navigator.storage.estimate()`, and a full quota is handled where a write fails, in a few catch blocks.
@@ -86,5 +87,6 @@ Still direct, and why (`tests/studentStorage.test.js` lists them and fails on an
 - `js/evaluationKit.js`: 0.7 KB of room on its route; the module is 1.4 KB.
 - `js/ui.js` (saved world), `js/controls.js`, `js/lecture.js`, `js/main.js`, `js/welcomeGate.js`, `js/settingsSchema.js`: reached from the start-up entry as well as from lazy chunks, which makes the module a shared chunk and costs every lesson route one request (0 free).
 - `js/theme.js`, `js/units.js`, `js/shell.js` and the per-page `i18n.js` files (locale, theme, units): preferences on every route.
+- `js/myWork/made.js` (Prompt 74): reached from the Sandbox's share dialog and the builder, where a second importer would split `js/storage/local.js` into a chunk every lesson fetches. It states the collection's record limit itself (512 KB, equal to `ITEM.made`) and writes with `setItem`.
 - `js/studio/model.js` writes to the Storage a page hands it (the Studio hands a guarded one; the Composer and course builder hand the raw one).
 - `js/platform/resolver.js` (platform stamps), `js/instructorPortal.js` (sessionStorage), the notebook's availability probe; IndexedDB `gravitas-catalog` and `gravitas-archive`; `js/library/progress.js` and `js/authoring/preview.js` read only.
