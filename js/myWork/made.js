@@ -21,13 +21,11 @@
 // Lazy: nothing on a lesson's path imports this. No DOM.
 // =============================================================================
 
-import { canonicalJsonExact, sha256Hex } from '../hash.js';
-import { drop, get, put } from '../storage/local.js';
-
 export const MADE_FORMAT = 'gravitas.made';
 export const MADE_VERSION = 1;
 export const MADE_PREFIX = 'gravitas_made_';
 export const MADE_COLLECTION = 'made';
+const ITEM_LIMIT = 512 * 1024;
 
 /** The most links a token carries whole; longer ones travel as a file. */
 export const TOKEN_LINK_MAX = 1500;
@@ -216,7 +214,17 @@ const reasonOf = e =>
 export function saveMade(record, storage) {
   const attempt = r => {
     try {
-      put(keyOf(r.id), JSON.stringify(r), MADE_COLLECTION, storage);
+      const text = JSON.stringify(r);
+      // The limit local.js states for the collection. Written here rather than
+      // reached through it: this module is imported from the Sandbox, and a
+      // second importer would split local.js into a chunk of its own that
+      // every lesson then fetches (STORAGE.md, "Still direct").
+      if (text.length > ITEM_LIMIT)
+        throw Object.assign(new Error('made: record too large'), {
+          name: 'QuotaExceededError',
+          reason: 'itemTooLarge',
+        });
+      (storage ?? globalThis.localStorage).setItem(keyOf(r.id), text);
       return null;
     } catch (e) {
       return reasonOf(e);
@@ -248,7 +256,7 @@ export function listMade(storage) {
       const k = s.key(i);
       if (!k?.startsWith(MADE_PREFIX)) continue;
       try {
-        const r = readMade(JSON.parse(get(k, s)));
+        const r = readMade(JSON.parse(s.getItem(k)));
         if (r.ok) out.push(r.record);
       } catch {
         /* a damaged record is skipped */
@@ -259,15 +267,6 @@ export function listMade(storage) {
   }
   return out.sort((a, b) => String(b.savedAt).localeCompare(String(a.savedAt)));
 }
-
-/** Change which notebook entries a record is attached to. */
-export function attach(record, entryId, on, storage) {
-  const set = new Set(record.attachedTo);
-  on ? set.add(entryId) : set.delete(entryId);
-  return saveMade({ ...record, attachedTo: [...set] }, storage);
-}
-
-export const removeMade = (id, storage) => drop(keyOf(id), storage);
 
 /** Where a record opens: the Sandbox on its link, or the experiment runner. */
 export const hrefOf = r =>
@@ -300,30 +299,4 @@ export function fileOf(r) {
 export function attachedTo(entryIds, storage) {
   const want = new Set(entryIds);
   return listMade(storage).filter(r => r.attachedTo.some(id => want.has(id)));
-}
-
-/**
- * One record as a report and a submission token carry it: the name, the seed,
- * the scenario it came from, the build, the engine fingerprint, a digest, and
- * the link when it is short enough to travel in a token. A longer link is
- * handed in as a file.
- * @param {object} r - A record
- * @returns {Promise<object>} Short keys: k kind, n name, s seed, p identity
- *   [id, version], a build, f engine fingerprint, h digest, l link, e entries
- */
-export async function tokenForm(r, entryNumbers = []) {
-  const sc = r.scenario;
-  const link = sc && sc.link.length <= TOKEN_LINK_MAX ? sc.link : null;
-  const basis = sc ? sc.link : r.experiment.hash;
-  return {
-    k: r.kind === 'scenario' ? 'sc' : 'ex',
-    n: r.name.slice(0, 80),
-    s: sc ? sc.seed.slice(0, 40) : null,
-    p: sc?.derivedFrom ? [sc.derivedFrom.id, sc.derivedFrom.version] : null,
-    a: r.app,
-    f: r.experiment?.engine?.fingerprint ?? null,
-    h: (await sha256Hex(canonicalJsonExact(basis))).slice(0, 16),
-    l: link,
-    e: entryNumbers,
-  };
 }

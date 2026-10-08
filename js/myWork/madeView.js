@@ -1,18 +1,44 @@
 // =============================================================================
-// My work's lists of what was made, and the installed packages
+// My work's list of what was made
 // -----------------------------------------------------------------------------
 // Roadmap II Prompt 74 (MY_WORK.md). The page (js/myWorkPage.js) loads this
-// after it has drawn, so its own route stays small: it draws the section of
+// after it has drawn, and only when something was made, so its own route stays
+// small: it draws the section of
 // scenarios and experiments (js/myWork/made.js), each with its facts, a link
 // that opens it, the evidence entries it can be attached to, a copy of its
 // link and its file. Export and delete are the page's own buttons, which act
 // on the record's key like any other item.
 //
-// `page` is what the page hands over: its drawing of one item, its two-language
-// helper and its records. Strings are English and Spanish pairs, as the page's.
+// `page` is what the page hands over: its drawing of one item, its state (the
+// store and the records) and its refresh. Strings are English and Spanish pairs.
 // =============================================================================
 
 import { MADE_PREFIX, fileOf, hrefOf, readMade } from './made.js';
+
+const es = () => document.documentElement.lang.startsWith('es');
+const L = (en, sp) => (es() ? sp : en);
+const esc = s =>
+  String(s ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+const day = iso => {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime())
+    ? ''
+    : d.toLocaleDateString(es() ? 'es' : 'en', { dateStyle: 'medium' });
+};
+const say = text => {
+  document.getElementById('mwSummary').textContent = text;
+};
+function download(json, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(
+    new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' })
+  );
+  a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
 
 const NOTEBOOK = 'gravitas_evidence_notebook';
 
@@ -25,42 +51,10 @@ export const madeIn = records =>
     .map(r => r.record)
     .sort((a, b) => String(b.savedAt).localeCompare(String(a.savedAt)));
 
-/** Installed packages and the things made, drawn into their sections. */
-export async function show(page) {
-  await Promise.all([packages(page), made(page)]);
-}
+/** The things made, drawn into their section. */
+export const show = page => made(page);
 
-async function packages({ item, L, pick, size, state }) {
-  const box = document.getElementById('mwPackages');
-  box.hidden = false;
-  try {
-    state.packages ??= await (
-      await import('../catalog/store.js')
-    )
-      .openStore()
-      .then(st => st.list());
-  } catch {
-    state.packages = [];
-  }
-  const list = state.packages;
-  box.querySelector('.mw-none').hidden = list.length > 0;
-  box.querySelector('.mw-body').innerHTML = list.length
-    ? `<ul class="mw-list">${list
-        .map(p =>
-          item({
-            title: pick(p.title) || p.id,
-            facts: [p.type, p.version, size(p.bytes || 0)],
-            href: '/catalog/',
-            open: L('Open the Catalog', 'Abrir el Catálogo'),
-            ids: [],
-            buttons: false,
-          })
-        )
-        .join('')}</ul>`
-    : '';
-}
-
-function facts(r, { L, day }) {
+function facts(r) {
   const when = r.savedAt
     ? L(`saved ${day(r.savedAt)}`, `guardado el ${day(r.savedAt)}`)
     : '';
@@ -109,7 +103,7 @@ const entriesOf = records => {
   return Array.isArray(v?.entries) ? v.entries : [];
 };
 
-function attachControl(r, entries, { L, esc }) {
+function attachControl(r, entries) {
   if (!entries.length)
     return `<p class="ui-hint">${esc(
       L(
@@ -138,9 +132,8 @@ function attachControl(r, entries, { L, esc }) {
 let wired = false;
 
 async function made(page) {
-  const { item, L, esc, state } = page;
+  const { item, state } = page;
   const box = document.getElementById('mwMade');
-  box.hidden = false;
   const list = madeIn(state.records);
   const entries = entriesOf(state.records);
   box.querySelector('.mw-none').hidden = list.length > 0;
@@ -149,7 +142,7 @@ async function made(page) {
         .map(r =>
           item({
             title: r.name,
-            facts: facts(r, page),
+            facts: facts(r),
             href: hrefOf(r),
             open:
               r.kind === 'scenario'
@@ -164,7 +157,7 @@ async function made(page) {
               fileOf(r)
                 ? `<button type="button" class="ui-button is-small" data-made="file" data-key="${esc(`${MADE_PREFIX}${r.id}`)}" aria-label="${esc(`${L('Download file', 'Descargar archivo')}: ${r.name}`)}">${esc(L('Download file', 'Descargar archivo'))}</button>`
                 : ''
-            }</div>${attachControl(r, entries, page)}`,
+            }</div>${attachControl(r, entries)}`,
           })
         )
         .join('')}</ul>`
@@ -199,13 +192,13 @@ async function made(page) {
       const url = new URL(hrefOf(rec), location.origin).href;
       try {
         await navigator.clipboard.writeText(url);
-        page.say(L('Link copied.', 'Enlace copiado.'));
+        say(L('Link copied.', 'Enlace copiado.'));
       } catch {
-        page.say(url);
+        say(url);
       }
     } else {
       const f = fileOf(rec);
-      page.download(f.json, f.name);
+      download(f.json, f.name);
     }
   });
 }

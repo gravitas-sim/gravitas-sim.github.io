@@ -13,6 +13,7 @@ import { t, getLocale } from '../i18n/index.js';
 import { formatNumber, roundSig, withUncertainty } from '../format.js';
 import { ensureDeferredMessages } from '../i18n/deferredMessages.js';
 import { load } from './store.js';
+import { canonicalJsonExact, sha256Hex } from '../hash.js';
 import {
   contextText,
   envelopeOf,
@@ -236,6 +237,61 @@ export function evidenceSections(
 }
 
 /**
+ * One record as a report and a submission token carry it: the name, the seed,
+ * the scenario it came from, the build, the engine fingerprint, a digest, and
+ * the link when it is short enough to travel in a token. A longer link is
+ * handed in as a file.
+ * @param {object} r - A record
+ * @returns {Promise<object>} Short keys: k kind, n name, s seed, p identity
+ *   [id, version], a build, f engine fingerprint, h digest, l link, e entries
+ */
+async function tokenForm(r, entryNumbers, linkMax) {
+  const sc = r.scenario;
+  const link = sc && sc.link.length <= linkMax ? sc.link : null;
+  const basis = sc ? sc.link : r.experiment.hash;
+  return {
+    k: r.kind === 'scenario' ? 'sc' : 'ex',
+    n: r.name.slice(0, 80),
+    s: sc ? sc.seed.slice(0, 40) : null,
+    p: sc?.derivedFrom ? [sc.derivedFrom.id, sc.derivedFrom.version] : null,
+    a: r.app,
+    f: r.experiment?.engine?.fingerprint ?? null,
+    h: (await sha256Hex(canonicalJsonExact(basis))).slice(0, 16),
+    l: link,
+    e: entryNumbers,
+  };
+}
+
+/** The scenarios and experiments attached to the evidence, printed. */
+function systemSections(doc, systems) {
+  if (!systems.length) return;
+  doc.heading(t('led.systems'), { size: 12, spaceBefore: 10 });
+  doc.paragraph(t('led.systemsNote'), { size: 9, color: '0.35 0.35 0.42' });
+  const none = t('led.obs.noChanges');
+  doc.table({
+    columns: ['name', 'kind', 'seed', 'from', 'build', 'entries'].map(c =>
+      t(`led.sys.col.${c}`)
+    ),
+    widths: [0.22, 0.1, 0.12, 0.22, 0.22, 0.12],
+    rows: systems.map(x => [
+      x.n,
+      t(`led.sys.kind.${x.k}`),
+      x.s || none,
+      x.p ? `${x.p[0]} ${x.p[1]}` : none,
+      [x.a, x.f && `${t('nb.cite.engine')} ${x.f}`]
+        .filter(Boolean)
+        .join(', ') || none,
+      x.e.join(', '),
+    ]),
+  });
+  for (const x of systems)
+    doc.row(
+      `${x.n} (${x.h})`,
+      x.l ? new URL(`/#${x.l}`, location.origin).href : t('led.sys.file')
+    );
+}
+
+/**
  * The ledger a lab report and its submission token are made from: the kept
  * entries, their record and digest, the rows for the title block, and the
  * function that prints the evidence sections. Null when nothing is kept.
@@ -250,6 +306,23 @@ export async function ledgerForReport() {
   await ensureDeferredMessages().catch(() => {});
   const record = ledgerRecord(entries);
   const digest = await ledgerDigest(record);
+  // Scenarios and experiments attached to these entries (js/myWork/made.js).
+  const made = await import('../myWork/made.js');
+  const systems = await Promise.all(
+    made
+      .attachedTo(entries.map(e => e.id))
+      .slice(0, made.TOKEN_MADE)
+      .map(r =>
+        tokenForm(
+          r,
+          entries.flatMap((e, i) =>
+            r.attachedTo.includes(e.id) ? [i + 1] : []
+          ),
+          made.TOKEN_LINK_MAX
+        )
+      )
+  );
+  if (systems.length) record.sy = systems;
   const meta = document.querySelector('meta[name="gravitas-revision"]');
   const engines = [
     ...new Set(
@@ -264,6 +337,9 @@ export async function ledgerForReport() {
       [t('led.formats'), 'artifact/1, report/2, token/2'],
       ...(engines.length ? [[t('nb.cite.engine'), engines.join(', ')]] : []),
     ],
-    print: doc => evidenceSections(doc, entries, { digest }),
+    print: doc => {
+      evidenceSections(doc, entries, { digest });
+      systemSections(doc, systems);
+    },
   };
 }

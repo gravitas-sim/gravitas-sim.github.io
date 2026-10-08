@@ -185,7 +185,7 @@ export function describe(records, library = new Map()) {
         href: '/teaching/',
       });
     } else if (key.startsWith('gravitas_made_')) {
-      out.made.push({ key, title: text(value?.name) || key, kind: null });
+      out.made.push({ key, title: text(value?.name) || key });
     } else if (key === 'gravitas_student_name') {
       out.name = text(value) || null;
     }

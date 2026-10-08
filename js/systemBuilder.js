@@ -844,7 +844,7 @@ async function saveMine() {
   const { verdict, built } = current;
   const data = systemToFile(verdict.bodies, built);
   const [link, made] = await Promise.all([
-    import('./scenarioPackLink.js'),
+    import('./scenarioPack.js'),
     import('./myWork/made.js'),
   ]);
   const read = link.packFromOrbitalSystem(data);
