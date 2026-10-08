@@ -7438,6 +7438,17 @@
     border-left-color: var(--accent);
   }
 
+  .inv-hint:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .inv-reflect-note {
+    color: var(--text-dim, var(--c2));
+    font-size: 0.8rem;
+    margin: 0 0 0.4rem;
+  }
+
   .inv-hint-row {
     align-items: center;
     display: flex;

@@ -619,6 +619,9 @@ describe('the JSON export', () => {
       points: 5,
       pointsPossible: 13,
       pointsUnmarked: 1,
+      // Help taken is a fact beside the answers; this fixture took none.
+      hintsTaken: 0,
+      workedShown: 0,
     });
   });
 
@@ -647,18 +650,23 @@ describe('the JSON export', () => {
 
   test('the CSVs end with the points columns, after everything version 1 had', () => {
     // The evidence columns came after, at the end, as additions do.
-    expect(SUMMARY_COLUMNS.slice(-6)).toEqual([
+    // The hint columns came after the evidence ones, at the end.
+    expect(SUMMARY_COLUMNS.slice(-8)).toEqual([
       'points',
       'points_possible',
       'points_unmarked',
       'evidence_state',
       'evidence_rows',
       'evidence_digest',
+      'hints_taken',
+      'worked_shown',
     ]);
-    expect(QUESTION_COLUMNS.slice(-3)).toEqual([
+    expect(QUESTION_COLUMNS.slice(-5)).toEqual([
       'points',
       'points_possible',
       'unit',
+      'hints_taken',
+      'worked_shown',
     ]);
   });
 
@@ -712,7 +720,8 @@ describe('the JSON export', () => {
     expect(q('where-is-the-star').unit).toBeNull();
     const csv = fromCsv(questionCsv(records));
     const col = csv[0].indexOf('unit');
-    expect(col).toBe(csv[0].length - 1);
+    // Then the two help columns, added after it.
+    expect(col).toBe(csv[0].length - 3);
     const row = sid => csv.find(r => r[csv[0].indexOf('step_id')] === sid);
     expect(row('use-the-law')[col]).toBe('years');
     expect(row('where-is-the-star')[col]).toBe('');

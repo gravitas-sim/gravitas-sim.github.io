@@ -49,7 +49,7 @@ import { checkAnswer } from '../answerCheck.js';
 import { toCsv } from '../csv.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
-import { answersOf, attemptsOf } from './submissionToken.js';
+import { answersOf, attemptsOf, helpOf } from './submissionToken.js';
 import { plainDataProblem } from '../platform/common.js';
 import { symbolOf } from '../units/registry.js';
 
@@ -127,6 +127,8 @@ export const SUMMARY_COLUMNS = Object.freeze([
   'evidence_state',
   'evidence_rows',
   'evidence_digest',
+  'hints_taken',
+  'worked_shown',
 ]);
 
 /** One row per evidence-table row of every submission that carried a ledger. */
@@ -211,6 +213,8 @@ export const QUESTION_COLUMNS = Object.freeze([
   'points',
   'points_possible',
   'unit',
+  'hints_taken',
+  'worked_shown',
 ]);
 
 /**
@@ -304,6 +308,7 @@ export function gradeSubmission(
   // that is undone, so nothing here reads a stored key directly.
   const answers = new Map(answersOf(submission, lesson).map(a => [a.sid, a]));
   const attempts = attemptsOf(submission);
+  const help = helpOf(submission);
 
   // Which steps have been rewritten under their own id since the report was
   // saved. The backup keeps each step's fingerprint for exactly this.
@@ -356,6 +361,8 @@ export function gradeSubmission(
       unit: typeof step.unit === 'string' ? step.unit : null,
       points: verdict === 'correct' ? worth : verdict === 'unmarked' ? null : 0,
       attempts: attempts.get(step.sid) ?? null,
+      hints: help.get(step.sid)?.hints ?? 0,
+      workedShown: help.get(step.sid)?.revealed ?? false,
       locale: has ? answer.locale : null,
       changed: changed.has(step.sid),
       response: has ? String(answer.value) : null,
@@ -376,6 +383,8 @@ export function gradeSubmission(
       unit: null,
       points: null,
       attempts: attempts.get(sid) ?? null,
+      hints: help.get(sid)?.hints ?? 0,
+      workedShown: help.get(sid)?.revealed ?? false,
       locale: answer.locale,
       changed: false,
       response: String(answer.value ?? ''),
@@ -425,6 +434,8 @@ export function gradeSubmission(
     points: sum(q => q.points),
     pointsPossible: sum(q => q.pointsPossible),
     pointsUnmarked: sum(q => (q.points === null ? q.pointsPossible : 0)),
+    hintsTaken: [...help.values()].reduce((a, h) => a + h.hints, 0),
+    workedShown: [...help.values()].filter(h => h.revealed).length,
     evidence: evidenceBlock(evidence),
     questions,
   };
@@ -557,6 +568,8 @@ export function summaryCsv(records) {
       points: r.points,
       points_possible: r.pointsPossible,
       points_unmarked: r.pointsUnmarked,
+      hints_taken: r.hintsTaken,
+      worked_shown: r.workedShown,
       evidence_state: r.evidence.state,
       evidence_rows: r.evidence.rows.length,
       evidence_digest: r.evidence.digest,
@@ -651,6 +664,8 @@ export function questionCsv(records, { includeWritten = false } = {}) {
         points: q.points,
         points_possible: q.pointsPossible,
         unit: q.unit,
+        hints_taken: q.hints,
+        worked_shown: q.workedShown ? 'yes' : 'no',
       };
       rows.push(QUESTION_COLUMNS.map(c => cells[c]));
     }
@@ -713,6 +728,8 @@ export function resultsJson(
         points: r.points,
         pointsPossible: r.pointsPossible,
         pointsUnmarked: r.pointsUnmarked,
+        hintsTaken: r.hintsTaken,
+        workedShown: r.workedShown,
       },
       duplicateOf: r.duplicateOf,
       attempt:
@@ -741,6 +758,8 @@ export function resultsJson(
           points: q.points,
           pointsPossible: q.pointsPossible,
           unit: q.unit,
+          hintsTaken: q.hints,
+          workedShown: q.workedShown,
         };
       }),
     })),

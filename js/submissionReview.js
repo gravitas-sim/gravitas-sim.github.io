@@ -372,6 +372,12 @@ function render() {
                   of: s.attemptsInGroup,
                 })
               : null,
+            s.hintsTaken > 0 || s.workedShown > 0
+              ? t('sub.read.help', {
+                  hints: s.hintsTaken,
+                  shown: s.workedShown,
+                })
+              : null,
           ].filter(Boolean);
           return `<li>${esc(s.nameAsTyped || t('sub.read.noName'))} &mdash; ${esc(
             s.lessonTitle

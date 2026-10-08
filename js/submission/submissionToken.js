@@ -36,6 +36,7 @@
 
 import { decodeTagged, encodeTagged } from '../shareState.js';
 import { LOCALE_SUFFIX } from '../answerParse.js';
+import { helpStages, helpTaken } from '../answerFeedback.js';
 
 /** Kind marker. A world is '', an assignment 'a', a submission 's'. */
 export const SUBMISSION_TAG = 's';
@@ -384,6 +385,29 @@ export function attemptsOf(submission) {
   const out = new Map();
   for (const [sid, entry] of steps) {
     if (entry.key !== null) out.set(sid, entry.value);
+  }
+  return out;
+}
+
+/**
+ * How much help was taken at each step, by sid: the number of hints and
+ * whether the worked answer was shown. Read from the `:help` sub-key the
+ * engine keeps beside each answer, so a report from before hints existed has
+ * none and says so by having no entry. A fact beside the answer, never a mark.
+ *
+ * @param {object} submission - A validated payload
+ * @returns {Map<string, {hints: number, revealed: boolean}>} Steps that took any
+ */
+export function helpOf(submission) {
+  const steps = byStep(
+    submission?.b?.progress?.responses,
+    submission?.b?.lesson?.id
+  );
+  const out = new Map();
+  for (const [sid, entry] of steps) {
+    const taken = helpTaken(helpStages(entry.sub.help));
+    if (taken.stages.length)
+      out.set(sid, { hints: taken.hints, revealed: taken.revealed });
   }
   return out;
 }

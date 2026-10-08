@@ -1912,6 +1912,9 @@ export const EN_DEFERRED = {
   'inv.hint.concept': 'Think about:',
   'inv.hint.method': 'How to get at it:',
   'inv.hint.worked': 'Worked through:',
+  'inv.hint.n': 'Hint {n} of {total}:',
+  'inv.reflect.note':
+    'Not marked. It is kept with your work for you and your instructor to read.',
   'inv.hint.given': 'Hint shown.',
   'inv.hint.revealed': 'Worked explanation shown.',
   'inv.hint.taken': '{n} hint(s) taken',

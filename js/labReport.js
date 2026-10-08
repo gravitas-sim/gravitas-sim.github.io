@@ -18,6 +18,7 @@
 
 import { createDocument } from './pdf.js';
 import { registerMessages } from './i18n/index.js';
+import { helpStages, helpTaken } from './answerFeedback.js';
 
 /** The report's strings, both languages, fetched the first time one is built. */
 let text = null;
@@ -217,6 +218,17 @@ export function buildLabReport({
   // --- Responses -------------------------------------------------------------
   doc.heading(t('rp.resp'), { size: 14 });
 
+  // How much help a step was given: a fact beside the answer, never a mark.
+  const helpRow = id => {
+    const taken = helpTaken(helpStages(responses[`${id}:help`]));
+    if (taken.stages.length)
+      doc.row(
+        t('rp.help'),
+        t('rp.helpV', { n: taken.hints }) +
+          (taken.revealed ? `; ${t('rp.helpWorked')}` : '')
+      );
+  };
+
   let autoTotal = 0;
   let autoRight = 0;
   const canonical = [`${inv.id}|${name}`];
@@ -331,6 +343,7 @@ export function buildLabReport({
               ? t('rp.right')
               : t('rp.wrong')) + (tries > 1 ? t('rp.tries', { n: tries }) : '')
       );
+      helpRow(id);
       canonical.push(`${id}=${value}`);
       return;
     }
@@ -351,13 +364,20 @@ export function buildLabReport({
         (!answered ? t('rp.none') : right ? t('rp.right') : t('rp.wrong')) +
           (tries > 1 ? t('rp.tries', { n: tries }) : '')
       );
+      helpRow(id);
       canonical.push(`${id}=${value}`);
       return;
     }
 
     if (step.kind === 'short') {
-      doc.field(lessonPlain(step.prompt), plain(value));
-      if (step.rubric) {
+      // A reflection is printed as written and marked by no one.
+      doc.field(
+        step.reflect
+          ? `${t('rp.reflect')} ${lessonPlain(step.prompt)}`
+          : lessonPlain(step.prompt),
+        plain(value)
+      );
+      if (step.rubric && !step.reflect) {
         doc.paragraph(t('rp.rubric', { note: lessonPlain(step.rubric) }), {
           size: 8.5,
           indent: 10,

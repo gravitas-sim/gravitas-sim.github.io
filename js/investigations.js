@@ -165,6 +165,9 @@ import {
 import { stepFingerprint } from './investigations/progressBackup.js';
 import { drop, get, put } from './storage/local.js';
 import {
+  answerClass,
+  feedbackFor,
+  helpStages,
   helpTaken,
   hintsFor,
   matchMisconception,
@@ -1431,20 +1434,22 @@ function hintBlock(step, id) {
   const hints = hintsFor(step);
   if (!hints) return '';
 
-  const used = String(responses[`${id}:help`] || '')
-    .split(',')
-    .filter(Boolean);
+  const used = helpStages(responses[`${id}:help`]);
+  const total = hints.ladder.length;
   const shown = [];
-  for (const stage of ['concept', 'method']) {
-    if (used.includes(stage) && hints[stage]) {
-      shown.push(
-        `<p class="inv-hint" data-stage="${stage}"><strong>${escape(t(`inv.hint.${stage}`))}</strong> ${prose(hints[stage])}</p>`
-      );
-    }
-  }
+  hints.ladder.forEach((h, i) => {
+    if (!used.includes(h.id)) return;
+    const label =
+      h.id === 'concept' || h.id === 'method'
+        ? t(`inv.hint.${h.id}`)
+        : t('inv.hint.n', { n: i + 1, total });
+    shown.push(
+      `<p class="inv-hint" data-stage="${h.id}" tabindex="-1"><strong>${escape(label)}</strong> ${prose(h.text)}</p>`
+    );
+  });
   if (used.includes('reveal') && hints.worked) {
     shown.push(
-      `<div class="inv-hint is-worked"><strong>${escape(t('inv.hint.worked'))}</strong> ${prose(hints.worked)}</div>`
+      `<div class="inv-hint is-worked" data-stage="reveal" tabindex="-1"><strong>${escape(t('inv.hint.worked'))}</strong> ${prose(hints.worked)}</div>`
     );
   }
 
@@ -1468,6 +1473,10 @@ function hintBlock(step, id) {
 
   return `<div class="inv-hints">${shown.join('')}<div class="inv-hint-row">${button}${tally}</div></div>`;
 }
+
+/** Text as it is read aloud: the markup lesson prose carries taken out. */
+const spoken = text =>
+  decodeEntities(String(text ?? '').replace(/<\/?(strong|em|sub|sup)>/g, ''));
 
 // --- Step helpers -------------------------------------------------------------
 
@@ -2178,6 +2187,13 @@ function renderStep() {
         )}</p>`
       );
     }
+    // A wrong option the author bound to a named mistake says which one.
+    const missed = marked ? matchMisconception(step, Number(saved), 0) : null;
+    if (missed) {
+      parts.push(
+        `<p class="inv-feedback is-wrong"><em class="inv-misconception">${prose(misconceptionText(missed))}</em></p>`
+      );
+    }
     if (marked && step.because) {
       parts.push(`<p class="inv-because">${prose(step.because)}</p>`);
     }
@@ -2212,6 +2228,13 @@ function renderStep() {
 
   if (step.kind === 'short') {
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
+    // A reflection is kept with the student's work and read by a person; it
+    // has no model answer and nothing marks it, and it says so.
+    if (step.reflect) {
+      parts.push(
+        `<p class="inv-reflect-note">${escape(t('inv.reflect.note'))}</p>`
+      );
+    }
     // Where the number this step asks about came from. Four sources, and the
     // difference is the thing this application is most often misread about: a
     // Schwarzschild radius is a closed-form panel and a period is the
@@ -2282,28 +2305,38 @@ function renderStep() {
     if (graded?.status === 'unreadable') {
       // Not "wrong". The student answered something the step cannot read, and
       // which of the several reasons that is decides what is worth saying.
+      const unit = feedbackFor(step, answerClass(step, graded));
       parts.push(
-        `<p class="inv-feedback is-unreadable">${escape(unreadableMessage(step, graded))}</p>`
+        `<p class="inv-feedback is-unreadable">${escape(unreadableMessage(step, graded))}${unit ? ` ${prose(unit)}` : ''}</p>`
       );
     } else if (graded?.correct === true) {
       const note = graded.converted
         ? ` ${escape(t('inv.answer.converted', { unit: graded.unit, value: formatNumber(graded.value, { sig: 4 }), target: step.unit ?? '' }))}`
         : '';
       parts.push(
-        `<p class="inv-feedback is-right">${escape(t('inv.answer.matches'))}${note} ${prose(step.because || '')}</p>`
+        `<p class="inv-feedback is-right">${escape(t('inv.answer.matches'))}${note} ${prose(step.because || '')} ${prose(feedbackFor(step, 'correct') || '')}</p>`
       );
     } else if (graded?.correct === false) {
-      // A named misconception, and only a named one. Everything else is simply
-      // not the right number, which is what it says.
-      const missed = matchMisconception(step, graded.value, toleranceFor(step));
-      const named = missed
-        ? `<br /><em class="inv-misconception">${prose(misconceptionText(missed))}</em>`
+      // A named misconception, and only a named one; failing that, what the
+      // author wrote for this kind of miss. Everything else is simply not the
+      // right number, which is what it says.
+      const tol = toleranceFor(step);
+      const missed = matchMisconception(step, graded.value, tol);
+      const said = missed
+        ? misconceptionText(missed)
+        : feedbackFor(step, answerClass(step, graded, tol));
+      const named = said
+        ? `<br /><em class="inv-misconception">${prose(said)}</em>`
         : '';
       parts.push(
         `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p>`
       );
     }
 
+    parts.push(hintBlock(step, id));
+  } else if (step.kind !== 'short' || !step.reflect) {
+    // A choice, a prediction or a measurement can carry a ladder too; a
+    // reflection has no right answer to be helped towards.
     parts.push(hintBlock(step, id));
   }
 
@@ -3357,12 +3390,10 @@ function bindStepInputs() {
         els.body.querySelector('.inv-held')?.textContent ||
           (checkAnswer(step, choice)
             ? t('inv.answer.correct')
-            : `${t('inv.answer.recorded')} ${decodeEntities(
-                String(step.because ?? '').replace(
-                  /<\/?(strong|em|sub|sup)>/g,
-                  ''
-                )
-              )}`)
+            : `${t('inv.answer.recorded')} ${spoken(
+                matchMisconception(step, choice, 0) &&
+                  misconceptionText(matchMisconception(step, choice, 0))
+              )} ${spoken(step.because)}`)
       );
     });
   });
@@ -3396,15 +3427,20 @@ function bindStepInputs() {
   els.body.querySelectorAll('[data-hint]').forEach(btn => {
     btn.addEventListener('click', () => {
       const key = `${stepId(stepIndex)}:help`;
-      const used = String(responses[key] || '')
-        .split(',')
-        .filter(Boolean);
+      const used = helpStages(responses[key]);
       const stage = btn.dataset.hint;
       if (!used.includes(stage)) used.push(stage);
       responses[key] = used.join(',');
       save();
       renderStep();
-      announce(t(stage === 'reveal' ? 'inv.hint.revealed' : 'inv.hint.given'));
+      // Said aloud in full, and the reader's place kept: the step is drawn
+      // again, so focus is put on the hint just shown (the next press is one
+      // Tab away) rather than left on a button that no longer exists.
+      const shown = els.body.querySelector(`[data-stage="${stage}"]`);
+      shown?.focus();
+      announce(
+        `${t(stage === 'reveal' ? 'inv.hint.revealed' : 'inv.hint.given')} ${shown?.textContent ?? ''}`
+      );
     });
   });
 
@@ -3476,6 +3512,9 @@ function bindStepInputs() {
       attempts[id] = (attempts[id] || 0) + 1;
       save();
       renderStep();
+      // What the panel now says under the box, read out: a result that only
+      // appears is one a screen reader never hears.
+      announce(els.body.querySelector('.inv-feedback')?.textContent ?? '');
     };
     checkBtn.addEventListener('click', submit);
     numeric.addEventListener('keydown', e => {
