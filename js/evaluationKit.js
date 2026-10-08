@@ -16,14 +16,16 @@
 // =============================================================================
 
 import {
-  AGREE_SCALE,
+  AGREE_POINTS,
   CONCEPT_COLUMNS,
-  CONCEPT_ITEMS,
+  CONCEPT_IDS,
   EVALUATION_KIND,
   EVALUATION_SCHEMA,
-  FIDELITY_ITEMS,
-  USABILITY_ITEMS,
-} from './data/evaluation.js';
+  FIDELITY_CHOICES,
+  FIDELITY_IDS,
+  USABILITY_IDS,
+  USABILITY_RATED,
+} from './data/evaluationShape.js';
 import { csvField } from './csv.js';
 
 const STORE_KEY = 'gravitas_evaluation_draft_v1';
@@ -149,17 +151,10 @@ function enhance() {
 
   // Concept items: the static markup gives each an id, so the control lands
   // under the question it belongs to rather than in a parallel form.
-  for (const item of CONCEPT_ITEMS) {
-    const host = document.getElementById(item.id);
+  for (const id of CONCEPT_IDS) {
+    const host = document.getElementById(id);
     if (!host) continue;
-    host.append(
-      radios(
-        item.id,
-        item.options.map((_, i) => String.fromCharCode(97 + i)),
-        draft,
-        onChange
-      )
-    );
+    host.append(radios(id, ['a', 'b', 'c', 'd'], draft, onChange));
   }
 
   // Fidelity and usability are appended to their lists in order, because their
@@ -169,28 +164,28 @@ function enhance() {
   const usabilityList = lists[lists.length - 1];
   if (fidelityList) {
     [...fidelityList.children].forEach((li, i) => {
-      const item = FIDELITY_ITEMS[i];
-      if (!item) return;
+      const id = FIDELITY_IDS[i];
+      if (!id) return;
       li.append(
-        item.kind === 'choice'
-          ? radios(item.id, item.options, draft, onChange)
-          : textField(item.id, draft, onChange)
+        FIDELITY_CHOICES[id]
+          ? radios(id, FIDELITY_CHOICES[id], draft, onChange)
+          : textField(id, draft, onChange)
       );
     });
   }
   if (usabilityList && usabilityList !== fidelityList) {
     [...usabilityList.children].forEach((li, i) => {
-      const item = USABILITY_ITEMS[i];
-      if (!item) return;
+      const id = USABILITY_IDS[i];
+      if (!id) return;
       li.append(
-        item.kind === 'agree'
+        i < USABILITY_RATED
           ? radios(
-              item.id,
-              AGREE_SCALE.map((s, k) => `${k + 1}`),
+              id,
+              Array.from({ length: AGREE_POINTS }, (_, k) => `${k + 1}`),
               draft,
               onChange
             )
-          : textField(item.id, draft, onChange)
+          : textField(id, draft, onChange)
       );
     });
   }
@@ -255,11 +250,9 @@ function wire(draft) {
   $('ekJson')?.addEventListener('click', () => {
     const occasion = $('ekOccasion')?.value || 'pre';
     const participant = ($('ekParticipant')?.value || '').trim();
-    const pick = items =>
+    const pick = ids =>
       Object.fromEntries(
-        items
-          .filter(i => draft[i.id] !== undefined)
-          .map(i => [i.id, draft[i.id]])
+        ids.filter(id => draft[id] !== undefined).map(id => [id, draft[id]])
       );
     const doc = {
       kind: EVALUATION_KIND,
@@ -271,21 +264,21 @@ function wire(draft) {
           instrument: 'concept',
           occasion,
           participant,
-          ...pick(CONCEPT_ITEMS),
+          ...pick(CONCEPT_IDS),
         },
         {
           schema: EVALUATION_SCHEMA,
           instrument: 'fidelity',
           occasion,
           participant: '',
-          ...pick(FIDELITY_ITEMS),
+          ...pick(FIDELITY_IDS),
         },
         {
           schema: EVALUATION_SCHEMA,
           instrument: 'usability',
           occasion,
           participant,
-          ...pick(USABILITY_ITEMS),
+          ...pick(USABILITY_IDS),
         },
       ],
     };

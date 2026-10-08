@@ -25,11 +25,17 @@
 // it, and changes nothing about what is currently known.
 // =============================================================================
 
-/** Bumped when the shape of an exported record changes. */
-export const EVALUATION_SCHEMA = 1;
+// The page reads only the shape (evaluationShape.js), so its ids, its fidelity
+// choices, its schema and its columns are defined there, and held to these
+// items by tests/evaluationKit.test.js.
+import {
+  CONCEPT_COLUMNS,
+  EVALUATION_KIND,
+  EVALUATION_SCHEMA,
+  FIDELITY_CHOICES,
+} from './evaluationShape.js';
 
-/** The kind marker every export carries, so an importer can refuse a stranger. */
-export const EVALUATION_KIND = 'gravitas.evaluation';
+export { CONCEPT_COLUMNS, EVALUATION_KIND, EVALUATION_SCHEMA };
 
 /**
  * What the instructor records about how the session actually went.
@@ -53,7 +59,7 @@ export const FIDELITY_ITEMS = Object.freeze([
     id: 'setting',
     kind: 'choice',
     label: 'Instructional setting',
-    options: ['lecture', 'lab', 'recitation', 'homework', 'mixed', 'other'],
+    options: FIDELITY_CHOICES.setting,
   },
   {
     id: 'minutes',
@@ -65,18 +71,13 @@ export const FIDELITY_ITEMS = Object.freeze([
     id: 'grouping',
     kind: 'choice',
     label: 'How students worked',
-    options: ['alone', 'pairs', 'small groups', 'mixed'],
+    options: FIDELITY_CHOICES.grouping,
   },
   {
     id: 'intervention',
     kind: 'choice',
     label: 'Did you demonstrate or work through answers?',
-    options: [
-      'no',
-      'demonstrated the interface only',
-      'worked some answers',
-      'worked most answers',
-    ],
+    options: FIDELITY_CHOICES.intervention,
     hint: 'This changes what the scores mean. It is not a failing to say yes.',
   },
   {
@@ -349,22 +350,6 @@ export const INSTRUMENTS = Object.freeze({
   concept: { items: CONCEPT_ITEMS, respondent: 'student' },
   usability: { items: USABILITY_ITEMS, respondent: 'either' },
 });
-
-/**
- * The columns a concept-assessment CSV carries, in order.
- *
- * `participant` is the anonymous code and may be blank. There is deliberately
- * no column for a name, an email address, a student number or an institution:
- * a column that exists gets filled in, and a spreadsheet with a name column is
- * a spreadsheet that cannot be handed to anybody.
- */
-export const CONCEPT_COLUMNS = Object.freeze([
-  'schema',
-  'instrument',
-  'occasion',
-  'participant',
-  ...CONCEPT_ITEMS.map(i => i.id),
-]);
 
 /** Score one response sheet against the key. @returns {object} counts */
 export function scoreConcept(responses) {

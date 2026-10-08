@@ -29,7 +29,9 @@ import {
   FIDELITY_ITEMS,
   USABILITY_ITEMS,
   scoreConcept,
+  AGREE_SCALE,
 } from '../js/data/evaluation.js';
+import * as shape from '../js/data/evaluationShape.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(here, '..');
@@ -48,6 +50,42 @@ const htmlText = html
   .replace(/&rsquo;/g, '\u2019')
   .replace(/&mdash;/g, '\u2014');
 
+describe('the page reads the shape, the tools read the items', () => {
+  // The page downloads js/data/evaluationShape.js and not the questions it
+  // already prints; these are what keep the two from disagreeing.
+  test("every id, kind, choice and count in the shape is an item's", () => {
+    expect(shape.CONCEPT_IDS).toEqual(CONCEPT_ITEMS.map(i => i.id));
+    for (const item of CONCEPT_ITEMS) expect(item.options).toHaveLength(4);
+    expect(shape.FIDELITY_IDS).toEqual(FIDELITY_ITEMS.map(i => i.id));
+    for (const item of FIDELITY_ITEMS) {
+      expect(shape.FIDELITY_CHOICES[item.id]).toEqual(
+        item.kind === 'choice' ? item.options : undefined
+      );
+    }
+    expect(shape.USABILITY_IDS).toEqual(USABILITY_ITEMS.map(i => i.id));
+    expect(shape.USABILITY_RATED).toBe(
+      USABILITY_ITEMS.filter(i => i.kind === 'agree').length
+    );
+    USABILITY_ITEMS.forEach((item, i) =>
+      expect(item.kind).toBe(i < shape.USABILITY_RATED ? 'agree' : 'text')
+    );
+    expect(shape.AGREE_POINTS).toBe(AGREE_SCALE.length);
+  });
+
+  test("the schema, the kind and the columns are the shape's own", () => {
+    expect(EVALUATION_SCHEMA).toBe(shape.EVALUATION_SCHEMA);
+    expect(EVALUATION_KIND).toBe(shape.EVALUATION_KIND);
+    expect(CONCEPT_COLUMNS).toBe(shape.CONCEPT_COLUMNS);
+    expect(CONCEPT_COLUMNS).toEqual([
+      'schema',
+      'instrument',
+      'occasion',
+      'participant',
+      ...CONCEPT_ITEMS.map(i => i.id),
+    ]);
+  });
+});
+
 describe('nothing is transmitted', () => {
   test('the page and its module contain no network call', () => {
     // The module graph is small and flat - the kit imports one data module -
@@ -60,6 +98,7 @@ describe('nothing is transmitted', () => {
     const sources = [
       strip(read('js/evaluationKit.js')),
       strip(read('js/data/evaluation.js')),
+      strip(read('js/data/evaluationShape.js')),
     ];
     for (const src of sources) {
       for (const api of [
