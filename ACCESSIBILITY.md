@@ -21,7 +21,7 @@ scenario gallery, object inspector, investigations browser, active
 investigation, lesson measurement screen, share dialog, A/B bench, observing
 panels, lecture mode, model page, instructor portal, teaching page, figure
 builder, evaluation kit, glossary, validation report, observatory, catalog, library,
-library by sequence, experiment runner, scenario studio, investigation composer, course builder,
+library by sequence, my work, experiment runner, scenario studio, investigation composer, course builder,
 course home, 3-D kernel diagnostics, 3-D lab, 3-D lab guide, mission
 diagnostics, mission lab, submission review. (The figure builder is checked
 without its live preview, which is the application in a frame and is
