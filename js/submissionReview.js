@@ -29,8 +29,10 @@ import {
   isSubmissionToken,
   readSubmissionToken,
 } from './submission/submissionToken.js';
+import { checkEvidence } from './submission/ledgerDigest.js';
 import {
   annotate,
+  evidenceCsv,
   gradeSubmission,
   questionCsv,
   resultsJson,
@@ -40,6 +42,7 @@ import {
   applyTranslations,
   has,
   preferred,
+  language,
   setLanguage,
   t,
 } from './submission/i18n.js';
@@ -115,7 +118,10 @@ async function accept(label, thing, kind) {
   const lesson = await lessonById(submission.b.lesson.id);
   if (lesson === undefined) return refuse(label, 'lessonLoad');
   if (!lesson) return refuse(label, 'unknownLesson');
-  graded.push(gradeSubmission(submission, lesson, { kind, label }));
+  // The evidence behind the answers, checked against its digest here: the
+  // table in front of the instructor is recomputed, not taken as stated.
+  const evidence = await checkEvidence(submission.ev);
+  graded.push(gradeSubmission(submission, lesson, { kind, label, evidence }));
   render();
 }
 
@@ -231,6 +237,75 @@ function writtenAnswers(s) {
     .join('')}</dl></details>`;
 }
 
+/** A number for reading, in the page's language, to six figures. */
+const num = v =>
+  v === null
+    ? '-'
+    : v.toLocaleString(language(), { maximumSignificantDigits: 6 });
+
+/**
+ * Each report's evidence table, with the verdict of its check against the
+ * digest the token states. A table that does not match is open and says so in
+ * words; a match says what it does not show.
+ *
+ * @param {Array<object>} records - Annotated records
+ * @returns {string} Disclosures, or '' when nothing was read
+ */
+function evidenceSections(records) {
+  if (!records.length) return '';
+  const word = (kind, id) =>
+    has(`sub.evidence.${kind}.${id}`) ? t(`sub.evidence.${kind}.${id}`) : id;
+  return `<h2>${esc(t('sub.evidence.title'))}</h2><p class="ui-note">${esc(
+    t('sub.evidence.note')
+  )}</p>${records
+    .map(s => {
+      const e = s.evidence;
+      const name = s.nameAsTyped || t('sub.read.noName');
+      const said =
+        e.state === 'none'
+          ? t('sub.evidence.none')
+          : t(`sub.evidence.${e.state}`, {
+              digest: String(e.digest ?? '').slice(0, 16),
+              n: e.rows.length,
+              total: e.total,
+            });
+      const table = e.rows.length
+        ? `<div class="ui-table-wrap" tabindex="0" role="region" aria-label="${esc(
+            t('sub.evidence.caption', { name })
+          )}"><table class="ui-table sr-table"><thead><tr>${[
+            'envelope',
+            'quantity',
+            'value',
+            'unit',
+            'uncertainty',
+            'origin',
+            'source',
+          ]
+            .map(c => `<th scope="col">${esc(t(`sub.evidence.col.${c}`))}</th>`)
+            .join('')}</tr></thead><tbody>${e.rows
+            .map(
+              r => `<tr><td>${esc(r.envelope)}</td><td>${esc(r.quantity)}</td>
+                <td>${esc(num(r.value))}</td><td>${esc(r.unit)}</td>
+                <td>${esc(num(r.half))}</td><td>${esc(word('origin', r.origin))}</td>
+                <td>${esc(`${r.sourceKind} ${r.sourceId}${r.sourceDigest ? ` ${r.sourceDigest}` : ''}`)}</td></tr>`
+            )
+            .join('')}</tbody></table></div>`
+        : '';
+      return `<details class="ui-disclosure sr-evidence"${
+        e.state === 'mismatch' ? ' open' : ''
+      }><summary>${esc(
+        t('sub.evidence.summary', {
+          name,
+          state: t(`sub.evidence.state.${e.state}`),
+          n: e.rows.length,
+        })
+      )}</summary><p${
+        e.state === 'mismatch' ? ' class="ui-state is-error" role="alert"' : ''
+      }>${esc(said)}</p>${table}</details>`;
+    })
+    .join('')}`;
+}
+
 /** Announce something to a screen reader and show it. */
 function say(message) {
   const status = $('exportStatus');
@@ -285,6 +360,9 @@ function render() {
           const notes = [
             s.rosterId,
             s.assignmentId,
+            s.evidence.state === 'mismatch'
+              ? t('sub.evidence.mismatchNote')
+              : null,
             s.duplicateOf !== null
               ? t('sub.read.duplicate', { n: s.duplicateOf })
               : null,
@@ -302,6 +380,8 @@ function render() {
         .join('')}</ol>`
     : '';
 
+  $('evidence').innerHTML = evidenceSections(records);
+
   $('refused').innerHTML = refused.length
     ? `<h2>${esc(t('sub.refused.title'))}</h2><ul class="ui-note">${refused
         .map(r => `<li>${esc(r.label)}: ${esc(reasonText(r.reason))}</li>`)
@@ -310,7 +390,12 @@ function render() {
 
   // The downloads exist only when there is something to download, and say why
   // when there is not rather than producing a file of headers.
-  for (const id of ['exportSummary', 'exportQuestions', 'exportJson']) {
+  for (const id of [
+    'exportSummary',
+    'exportQuestions',
+    'exportEvidence',
+    'exportJson',
+  ]) {
     const button = $(id);
     if (button) button.disabled = n === 0;
   }
@@ -343,7 +428,7 @@ function stamp(now = new Date()) {
 
 /**
  * Build one export and save it.
- * @param {'summary'|'questions'|'json'} which - Which file
+ * @param {'summary'|'questions'|'evidence'|'json'} which - Which file
  */
 function exportResults(which) {
   const records = annotate(graded);
@@ -362,6 +447,9 @@ function exportResults(which) {
         file,
         'text/csv;charset=utf-8'
       );
+    } else if (which === 'evidence') {
+      file = `gravitas-results-evidence-${day}.csv`;
+      download(evidenceCsv(records), file, 'text/csv;charset=utf-8');
     } else {
       file = `gravitas-results-${day}.json`;
       download(
@@ -429,6 +517,9 @@ function wire() {
   $('exportSummary')?.addEventListener('click', () => exportResults('summary'));
   $('exportQuestions')?.addEventListener('click', () =>
     exportResults('questions')
+  );
+  $('exportEvidence')?.addEventListener('click', () =>
+    exportResults('evidence')
   );
   $('exportJson')?.addEventListener('click', () => exportResults('json'));
 

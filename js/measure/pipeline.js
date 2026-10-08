@@ -716,6 +716,61 @@ export const nextId = nodes =>
   `m${nodes.reduce((m, x) => Math.max(m, Number(String(x.id).slice(1)) || 0), 0) + 1}`;
 
 /**
+ * The rows of a pipeline's results CSV. The first eleven columns are the file
+ * as it was; the last three say what the number came from (the digest of the
+ * data the tool read, whether its error was derived from the data or assumed,
+ * and the citation of a quantity that only cites one), so a spreadsheet keeps
+ * what the envelope says (PROVENANCE.md). A reader that stops at `kind` reads
+ * the same file.
+ * @param {Array<object>} nodes - Pipeline nodes
+ * @param {(node: object) => string} [statusOf] - A node's current status
+ * @returns {Array<Array<*>>} Header row, then one row per quantity
+ */
+export function resultsRows(nodes, statusOf = n => n.status) {
+  const rows = [
+    [
+      'node',
+      'tool',
+      'version',
+      'at',
+      'status',
+      'quantity',
+      'value',
+      'error',
+      'error_kind',
+      'unit',
+      'kind',
+      'input_digest',
+      'error_basis',
+      'citation',
+    ],
+  ];
+  for (const n of nodes)
+    for (const q of n.quantities || [])
+      rows.push([
+        n.id,
+        n.tool,
+        n.version,
+        n.at,
+        statusOf(n),
+        q.id,
+        q.value,
+        q.error ?? '',
+        q.errorKind ?? '',
+        q.unit ?? '',
+        q.kind,
+        n.input?.digest ?? '',
+        Number.isFinite(q.error)
+          ? q.errorKind === KIND.ASSUMED
+            ? 'assumed'
+            : 'data'
+          : '',
+        q.cite ?? '',
+      ]);
+  return rows;
+}
+
+/**
  * Run a tool on an observation, as a node.
  * @param {object} view - The observation at the node's position
  * @param {{tool: string, params: object, at: number, id?: string}} spec

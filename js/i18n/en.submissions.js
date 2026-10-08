@@ -83,4 +83,39 @@ export const EN_SUBMISSIONS = {
   'sub.export.failed': 'The file could not be made: {reason}',
   'sub.notice':
     'A submission token says what a student answered. It is not proof of who answered: it is computed in a browser, and anything a browser computes, whoever controls the browser can forge. What it saves you is typing.',
+  'sub.reason.badEvidence': 'its evidence record is malformed',
+  'sub.evidence.title': 'Evidence behind the answers',
+  'sub.evidence.note':
+    'A version 2 report carries the table of measurements and results the student’s notebook held, and a digest of it. The check below recomputes the digest from the table in front of you. A match says the table is the one the digest was made from. It does not say who made it: anyone can build a token that agrees with itself.',
+  'sub.evidence.summary': 'Evidence for {name}: {state}, {n} rows',
+  'sub.evidence.state.none': 'none carried',
+  'sub.evidence.state.verified': 'matches its digest',
+  'sub.evidence.state.partial': 'cannot be fully checked',
+  'sub.evidence.state.mismatch': 'DOES NOT MATCH its digest',
+  'sub.evidence.none':
+    'This report carries no evidence record. It was made before reports carried one, or the student had kept nothing.',
+  'sub.evidence.verified':
+    'The table matches the digest the token states ({digest}).',
+  'sub.evidence.partial':
+    'The token carries {n} of {total} rows, so its digest cannot be recomputed. The rows shown are as the token states them.',
+  'sub.evidence.mismatch':
+    'The table does not match the digest the token states ({digest}). The token was changed after the report was made, or was damaged on the way. Do not rely on these numbers.',
+  'sub.evidence.col.envelope': 'Envelope',
+  'sub.evidence.col.quantity': 'Quantity',
+  'sub.evidence.col.value': 'Value',
+  'sub.evidence.col.unit': 'Unit',
+  'sub.evidence.col.uncertainty': 'Uncertainty',
+  'sub.evidence.col.origin': 'Origin',
+  'sub.evidence.col.source': 'Source',
+  'sub.evidence.caption': 'Evidence table of {name}',
+  'sub.evidence.mismatchNote': 'evidence does not match its digest',
+  'sub.export.evidenceCsv': 'Evidence table (CSV)',
+  'sub.evidence.origin.measured': 'measured',
+  'sub.evidence.origin.derived': 'derived',
+  'sub.evidence.origin.assumed': 'assumed',
+  'sub.evidence.origin.fitted': 'fitted',
+  'sub.evidence.origin.fixed': 'held fixed',
+  'sub.evidence.origin.truth': 'simulation truth',
+  'sub.evidence.origin.analytic': 'analytic',
+  'sub.evidence.origin.synthetic': 'synthetic',
 };

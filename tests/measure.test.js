@@ -693,6 +693,60 @@ describe('the pipeline: digests, staleness, the document, reading it back', () =
     expect(pipe.sameResult(edited, again)).toBe(false);
   });
 
+  test('the results CSV keeps its first eleven columns and adds what the numbers came from', async () => {
+    const n = await pipe.runNode(o, {
+      id: 'm1',
+      tool: 'box',
+      params: BOX,
+      at: 0,
+    });
+    const rows = pipe.resultsRows([n], () => 'fresh');
+    const [head, ...body] = rows;
+    expect(head.slice(0, 11)).toEqual([
+      'node',
+      'tool',
+      'version',
+      'at',
+      'status',
+      'quantity',
+      'value',
+      'error',
+      'error_kind',
+      'unit',
+      'kind',
+    ]);
+    expect(head.slice(11)).toEqual(['input_digest', 'error_basis', 'citation']);
+    expect(body.length).toBe(n.quantities.length);
+    for (const r of body) {
+      expect(r.length).toBe(head.length);
+      expect(r[4]).toBe('fresh');
+      expect(r[11]).toBe(n.input.digest);
+      expect(r[11]).toMatch(/^[0-9a-f]{64}$/);
+    }
+    for (const r of body) expect(r[12]).toBe(r[7] === '' ? '' : 'data');
+    // An error the tool had to assume says so, and a citation travels.
+    const assumed = pipe.resultsRows([
+      {
+        id: 'm2',
+        tool: 'line',
+        version: 1,
+        at: 0,
+        input: { digest: 'd' },
+        quantities: [
+          {
+            id: 'slope',
+            value: 1,
+            error: 0.1,
+            errorKind: pipe.KIND.ASSUMED,
+            kind: pipe.KIND.MEASURED,
+            cite: 'Smith 2020',
+          },
+        ],
+      },
+    ])[1];
+    expect(assumed.slice(11)).toEqual(['d', 'assumed', 'Smith 2020']);
+  });
+
   test('migrations: an Observatory save opens as a pipeline; a newer format or an unknown tool is refused', async () => {
     const { observationJson } = await import('../js/observatory/export.js');
     const save = observationJson(o, { source: o, changes: [] });

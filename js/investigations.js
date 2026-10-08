@@ -4692,6 +4692,10 @@ async function makeSubmissionToken(name) {
   try {
     const backupMod = await import('./investigations/progressBackup.js');
     const tokenMod = await import('./submission/submissionToken.js');
+    // The evidence the report prints: its record and digest ride in the token.
+    const ledger = await (
+      await import('./notebook/report.js')
+    ).ledgerForReport();
     const encoded = await tokenMod.encodeSubmission(
       tokenMod.buildSubmission({
         backup: backupMod.buildBackup({
@@ -4706,6 +4710,8 @@ async function makeSubmissionToken(name) {
         assignmentId: assignment?.i ?? null,
         rosterId: new URLSearchParams(location.search).get('roster') || null,
         fallbackLocale: getLocale(),
+        record: ledger?.record,
+        digest: ledger?.digest,
       })
     );
     if (!encoded.comfortable) {
@@ -4824,6 +4830,9 @@ async function generateReport() {
     const submissionToken = await makeSubmissionToken(name);
     showToken(submissionToken);
     await reportMessages();
+    const ledger = await (
+      await import('./notebook/report.js')
+    ).ledgerForReport();
 
     const bytes = buildLabReport({
       investigation: active,
@@ -4849,6 +4858,8 @@ async function generateReport() {
       decodeEntities,
       t,
       locale: getLocale(),
+      meta: ledger?.meta,
+      evidence: ledger?.print,
     });
 
     downloadPdf(bytes, `${reportSlug(name)}.pdf`);

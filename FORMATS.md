@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 45 of them. 25 have a JSON Schema in `sdk/schemas`, and 9 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 46 of them. 25 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -43,13 +43,14 @@ The columns:
 | gravitas.assignment | k, v (link prefix a) | 2 | js/assignments/assignment.js validateAssignment | link, download | reads v1 as it is | refused, in words | [yes](sdk/schemas/assignment-2.schema.json) |
 | investigation progress | schema | 2 | js/investigations/progressSchema.js readProgress | localStorage | migrates v1 (migrateFromV1) | kept and not overwritten, in words | no |
 | gravitas.investigation.progress | kind, version | 2 | js/investigations/progressBackup.js restoreProgress | download | migrates v1 | refused, in words | no |
-| submission token | v (link prefix s) | 1 | js/submission/submissionToken.js readSubmissionToken | pasted text | v1 only | refused, in words | [yes](sdk/schemas/submission-token-1.schema.json) |
+| submission token | v (link prefix s) | 2 | js/submission/submissionToken.js readSubmissionToken | pasted text | reads v1 | refused, in words | [yes](sdk/schemas/submission-token-2.schema.json) |
 | gravitas.submission-results | kind, version | 2 | js/submission/results.js readResults | download | migrates v1 | refused by reason code | [yes](sdk/schemas/submission-results-2.schema.json) |
 | gravitas.lab3d-guide-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.mission-lab-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | notebook store | v | 1 | js/notebook/store.js load | localStorage | v1 only | kept and not overwritten, in words | no |
 | notebook entry snapshot | snapshot.v | 1 | js/notebook/entry.js validateEntry | localStorage, download | v1 only | refused by reason code | no |
 | gravitas.evidence.notebook | kind, version | 1 | js/notebook/notebook.js validateBackup | download | v1 only | refused, in words | [yes](sdk/schemas/evidence-notebook-1.schema.json) |
+| gravitas.ledger | LEDGER_FORMAT (a record, not a file) | 1 | js/submission/ledgerDigest.js checkEvidence | inside a submission token (ev), never alone | v1 only | checked as a mismatch, in words | no |
 | gravitas.course-pack (extension form) | format, formatVersion | 1 | js/platform/course.js validateCoursePack | repository, extension archive, IndexedDB | v1 only | a validation problem, which /2 gets too | [yes](sdk/schemas/course-pack-1.schema.json) |
 | gravitas.course-pack (builder form) | format, formatVersion | 2 | js/course/pack.js migrateCoursePack | download, localStorage, repository, extension archive | migrates v1 | refused, in words | [yes](sdk/schemas/course-pack-2.schema.json) |
 | course home link | link prefix c | 2 | js/course/links.js readCourseFragment | link | migrates c1 | refused by reason code | no |

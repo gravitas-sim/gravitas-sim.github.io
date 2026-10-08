@@ -279,13 +279,13 @@ export const FORMATS = Object.freeze([
   {
     name: 'submission token',
     fields: 'v (link prefix s)',
-    version: 1,
+    version: 2,
     const: ['js/submission/submissionToken.js', 'SUBMISSION_SCHEMA'],
     owner: 'js/submission/submissionToken.js readSubmissionToken',
     persisted: 'pasted text',
-    older: 'v1 only',
+    older: 'reads v1',
     newer: 'refused, in words',
-    schema: 'submission-token-1.schema.json',
+    schema: 'submission-token-2.schema.json',
   },
   {
     name: 'gravitas.submission-results',
@@ -344,6 +344,16 @@ export const FORMATS = Object.freeze([
     older: 'v1 only',
     newer: 'refused, in words',
     schema: 'evidence-notebook-1.schema.json',
+  },
+  {
+    name: 'gravitas.ledger',
+    fields: 'LEDGER_FORMAT (a record, not a file)',
+    version: 1,
+    const: ['js/notebook/ledger.js', 'LEDGER_VERSION'],
+    owner: 'js/submission/ledgerDigest.js checkEvidence',
+    persisted: 'inside a submission token (ev), never alone',
+    older: 'v1 only',
+    newer: 'checked as a mismatch, in words',
   },
   // --- Courses, packages and the catalog ---
   {

@@ -51,6 +51,7 @@ import { gradedSteps } from '../data/investigations/catalog.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import { answersOf, attemptsOf } from './submissionToken.js';
 import { plainDataProblem } from '../platform/common.js';
+import { symbolOf } from '../units/registry.js';
 
 /** What the JSON export says it is. */
 export const RESULTS_KIND = 'gravitas.submission-results';
@@ -83,6 +84,7 @@ export const WARNINGS = Object.freeze([
   'repeatedAttempt',
   'changedSteps',
   'staleAnswers',
+  'evidenceMismatch',
 ]);
 
 /** One row per accepted submission. */
@@ -122,7 +124,72 @@ export const SUMMARY_COLUMNS = Object.freeze([
   'points',
   'points_possible',
   'points_unmarked',
+  'evidence_state',
+  'evidence_rows',
+  'evidence_digest',
 ]);
+
+/** One row per evidence-table row of every submission that carried a ledger. */
+export const EVIDENCE_COLUMNS = Object.freeze([
+  'schema',
+  'submission',
+  'roster_id',
+  'assignment_id',
+  'lesson_id',
+  'evidence_state',
+  'envelope',
+  'quantity',
+  'value',
+  'unit',
+  'unit_id',
+  'uncertainty',
+  'origin',
+  'source_kind',
+  'source_id',
+  'source_digest',
+]);
+
+/**
+ * A row of a token's evidence table as an object, with its unit written as the
+ * registry writes it. The row is numbers and short codes (js/notebook/ledger.js
+ * ledgerRecord()); nothing in it is a sentence, so it reads the same in
+ * either language.
+ * @param {Array<*>} row - [envelope, quantity, value, unit id, half-width,
+ *   origin, source kind, source id, source digest prefix]
+ * @returns {object} The row by name
+ */
+export function evidenceRowOf(row) {
+  const [envelope, quantity, value, unitId, half, origin, kind, id, digest] =
+    row;
+  return {
+    envelope: String(envelope ?? ''),
+    quantity: String(quantity ?? ''),
+    value: Number.isFinite(value) ? value : null,
+    unitId: typeof unitId === 'string' ? unitId : null,
+    unit: typeof unitId === 'string' && unitId ? symbolOf(unitId, 'en') : '',
+    half: Number.isFinite(half) ? half : null,
+    origin: String(origin ?? ''),
+    sourceKind: String(kind ?? ''),
+    sourceId: String(id ?? ''),
+    sourceDigest: digest ? String(digest) : null,
+  };
+}
+
+/**
+ * What a record says of its evidence: the check's verdict, the digest the
+ * token stated and the table, by name. A report with no ledger says `none`.
+ * @param {?object} check - checkEvidence() from ./ledgerDigest.js
+ * @returns {object} The evidence block of a graded record
+ */
+function evidenceBlock(check) {
+  return {
+    state: check?.state ?? 'none',
+    digest: check?.digest ?? null,
+    total: check?.total ?? 0,
+    envelopes: check?.ids?.length ?? 0,
+    rows: (check?.rows ?? []).map(evidenceRowOf),
+  };
+}
 
 /** One row per graded step of every accepted submission. */
 export const QUESTION_COLUMNS = Object.freeze([
@@ -219,9 +286,15 @@ export function lessonVersionOf(steps) {
  * @param {object} source - Where it came from
  * @param {'token'|'pdf'|'backup'} source.kind - What was handed in
  * @param {string} source.label - The file name, or "pasted token"
+ * @param {?object} [source.evidence] - checkEvidence() of the token's ledger,
+ *   which is asynchronous and so is done by the caller
  * @returns {object} The graded record
  */
-export function gradeSubmission(submission, lesson, { kind, label }) {
+export function gradeSubmission(
+  submission,
+  lesson,
+  { kind, label, evidence = null }
+) {
   const backup = submission.b;
   const steps = lesson.steps || [];
   const graded = gradedSteps(lesson);
@@ -352,6 +425,7 @@ export function gradeSubmission(submission, lesson, { kind, label }) {
     points: sum(q => q.points),
     pointsPossible: sum(q => q.pointsPossible),
     pointsUnmarked: sum(q => (q.points === null ? q.pointsPossible : 0)),
+    evidence: evidenceBlock(evidence),
     questions,
   };
 }
@@ -428,6 +502,7 @@ export function annotate(records) {
     if (r.attemptGroup !== null) w.push('repeatedAttempt');
     if (r.changedSteps > 0) w.push('changedSteps');
     if (r.stale > 0) w.push('staleAnswers');
+    if (r.evidence?.state === 'mismatch') w.push('evidenceMismatch');
     r.warnings = w;
   }
   return out;
@@ -482,8 +557,48 @@ export function summaryCsv(records) {
       points: r.points,
       points_possible: r.pointsPossible,
       points_unmarked: r.pointsUnmarked,
+      evidence_state: r.evidence.state,
+      evidence_rows: r.evidence.rows.length,
+      evidence_digest: r.evidence.digest,
     };
     rows.push(SUMMARY_COLUMNS.map(c => cells[c]));
+  }
+  return toCsv(rows);
+}
+
+/**
+ * The evidence CSV: one row per quantity in each report's evidence table, with
+ * its unit and the half-width of its uncertainty, and the verdict of the check
+ * of that table against its digest on every row, so a filtered sheet cannot
+ * lose it.
+ *
+ * @param {Array<object>} records - From annotate()
+ * @returns {string} CSV with CRLF line endings, header first
+ */
+export function evidenceCsv(records) {
+  const rows = [EVIDENCE_COLUMNS];
+  for (const r of records) {
+    for (const e of r.evidence.rows) {
+      const cells = {
+        schema: RESULTS_SCHEMA_ID,
+        submission: r.submission,
+        roster_id: r.rosterId,
+        assignment_id: r.assignmentId,
+        lesson_id: r.lessonId,
+        evidence_state: r.evidence.state,
+        envelope: e.envelope,
+        quantity: e.quantity,
+        value: e.value,
+        unit: e.unit,
+        unit_id: e.unitId,
+        uncertainty: e.half,
+        origin: e.origin,
+        source_kind: e.sourceKind,
+        source_id: e.sourceId,
+        source_digest: e.sourceDigest,
+      };
+      rows.push(EVIDENCE_COLUMNS.map(c => cells[c]));
+    }
   }
   return toCsv(rows);
 }
@@ -609,6 +724,7 @@ export function resultsJson(
               of: r.attemptsInGroup,
             },
       warnings: r.warnings,
+      evidence: r.evidence,
       questions: r.questions.map(q => {
         const response = responseFor(q, includeWritten);
         return {

@@ -28,6 +28,7 @@ import {
   nextId,
   pipelineJson,
   readPipeline,
+  resultsRows,
   runNode,
   sameResult,
   toolsFor,
@@ -1486,36 +1487,7 @@ export function mountMeasurePanel(root, ctx) {
   function saveCsv() {
     // Through js/csv.js, which disarms what a spreadsheet would run as a
     // formula, full-width and behind a zero-width space included.
-    const rows = [
-      [
-        'node',
-        'tool',
-        'version',
-        'at',
-        'status',
-        'quantity',
-        'value',
-        'error',
-        'error_kind',
-        'unit',
-        'kind',
-      ],
-    ];
-    for (const n of nodes())
-      for (const q of n.quantities || [])
-        rows.push([
-          n.id,
-          n.tool,
-          n.version,
-          n.at,
-          model.status.get(n.id) ?? n.status,
-          q.id,
-          q.value,
-          q.error ?? '',
-          q.errorKind ?? '',
-          q.unit ?? '',
-          q.kind,
-        ]);
+    const rows = resultsRows(nodes(), n => model.status.get(n.id) ?? n.status);
     download(`${fileBase()}-results.csv`, toCsv(rows), 'text/csv');
   }
 

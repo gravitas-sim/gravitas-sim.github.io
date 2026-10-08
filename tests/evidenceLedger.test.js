@@ -38,6 +38,15 @@ import {
 } from '../js/notebook/ledger.js';
 import { buildLedgerReport } from '../js/notebook/report.js';
 import { artifact, validateArtifact } from '../js/platform/artifact.js';
+import {
+  TOKEN_ROWS,
+  buildSubmission,
+  encodeSubmission,
+  readSubmissionToken,
+  validateSubmission,
+} from '../js/submission/submissionToken.js';
+import { checkEvidence } from '../js/submission/ledgerDigest.js';
+import { buildBackup } from '../js/investigations/progressBackup.js';
 
 Object.defineProperty(globalThis, 'crypto', {
   configurable: true,
@@ -321,5 +330,82 @@ describe('the report', () => {
       expect(out).toContain('3.5247'.replace('.', loc === 'es' ? ',' : '.'));
     }
     await setLocale('en', { persist: false });
+  });
+});
+
+describe('the submission token carries the ledger', () => {
+  const lesson = {
+    id: 'keplers-laws',
+    title: "Kepler's Laws",
+    steps: [{ sid: 'one', type: 'read', title: 'A step' }],
+  };
+  const backup = () =>
+    buildBackup({
+      lesson,
+      responses: {},
+      attempts: {},
+      visited: ['one'],
+      stepSid: 'one',
+      startedAt: '2026-09-01T10:00:00.000Z',
+      studentName: 'A Student',
+    });
+  const withLedger = async () => {
+    const record = ledgerRecord(every());
+    const digest = await ledgerDigest(record);
+    return {
+      record,
+      digest,
+      sub: buildSubmission({ backup: backup(), record, digest }),
+    };
+  };
+  const back = async sub => {
+    const { token } = await encodeSubmission(sub);
+    const read = await readSubmissionToken(token);
+    expect(read.ok).toBe(true);
+    return read.submission;
+  };
+
+  test('a v2 token states the digest, the ids and the rows, and reads back verified', async () => {
+    const { sub, digest, record } = await withLedger();
+    expect(sub.v).toBe(2);
+    const read = await back(sub);
+    const check = await checkEvidence(read.ev);
+    expect(check.state).toBe('verified');
+    expect(check.digest).toBe(digest);
+    expect(check.ids).toEqual(record.ids);
+    expect(check.rows.length).toBe(Math.min(record.rows.length, TOKEN_ROWS));
+  });
+
+  test('a v1 token, which has no evidence, is still read and says so', async () => {
+    const v1 = { ...buildSubmission({ backup: backup() }), v: 1 };
+    expect(validateSubmission(v1).ok).toBe(true);
+    const read = await back(v1);
+    expect(read.v).toBe(1);
+    expect((await checkEvidence(read.ev)).state).toBe('none');
+  });
+
+  test('a table with one value changed no longer matches its digest', async () => {
+    const { sub } = await withLedger();
+    const read = await back(sub);
+    const edited = JSON.parse(JSON.stringify(read.ev));
+    const i = edited.r[0].findIndex(v => typeof v === 'number');
+    edited.r[0][i] += 1;
+    expect((await checkEvidence(edited)).state).toBe('mismatch');
+    const dropped = { ...read.ev, r: read.ev.r.slice(1) };
+    expect((await checkEvidence(dropped)).state).not.toBe('verified');
+  });
+
+  test('a token cut to its row limit says the rest cannot be checked', async () => {
+    const { sub } = await withLedger();
+    const cut = { ...sub, ev: { ...sub.ev, n: TOKEN_ROWS + 5, r: sub.ev.r } };
+    expect((await checkEvidence(cut.ev)).state).toBe('partial');
+  });
+
+  test('a malformed ev is refused by name', async () => {
+    const { sub } = await withLedger();
+    expect(validateSubmission({ ...sub, ev: { d: 1 } })).toEqual({
+      ok: false,
+      reason: 'badEvidence',
+    });
   });
 });

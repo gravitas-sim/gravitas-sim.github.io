@@ -86,4 +86,39 @@ export const ES_SUBMISSIONS = {
   'sub.export.failed': 'No se pudo crear el archivo: {reason}',
   'sub.notice':
     'Un código de entrega dice qué respondió un estudiante. No prueba quién respondió: se calcula en un navegador, y cualquiera que controle el navegador puede falsificar lo que este calcula. Lo que le ahorra es escribir.',
+  'sub.reason.badEvidence': 'su registro de evidencia está mal formado',
+  'sub.evidence.title': 'La evidencia detrás de las respuestas',
+  'sub.evidence.note':
+    'Un informe de versión 2 lleva la tabla de medidas y resultados que tenía el cuaderno del estudiante, y un resumen criptográfico de ella. La comprobación recalcula ese resumen a partir de la tabla que tienes delante. Que coincida indica que la tabla es aquella con la que se hizo el resumen; no indica quién la hizo: cualquiera puede construir un código coherente consigo mismo.',
+  'sub.evidence.summary': 'Evidencia de {name}: {state}, {n} filas',
+  'sub.evidence.state.none': 'no incluida',
+  'sub.evidence.state.verified': 'coincide con su resumen',
+  'sub.evidence.state.partial': 'no se puede comprobar entera',
+  'sub.evidence.state.mismatch': 'NO COINCIDE con su resumen',
+  'sub.evidence.none':
+    'Este informe no incluye registro de evidencia. Se hizo antes de que los informes lo llevaran, o el estudiante no había guardado nada.',
+  'sub.evidence.verified':
+    'La tabla coincide con el resumen que indica el código ({digest}).',
+  'sub.evidence.partial':
+    'El código lleva {n} de {total} filas, así que su resumen no se puede recalcular. Las filas mostradas son las que el código indica.',
+  'sub.evidence.mismatch':
+    'La tabla no coincide con el resumen que indica el código ({digest}). El código se cambió después de hacer el informe, o se dañó por el camino. No te fíes de estos números.',
+  'sub.evidence.col.envelope': 'Sobre',
+  'sub.evidence.col.quantity': 'Magnitud',
+  'sub.evidence.col.value': 'Valor',
+  'sub.evidence.col.unit': 'Unidad',
+  'sub.evidence.col.uncertainty': 'Incertidumbre',
+  'sub.evidence.col.origin': 'Origen',
+  'sub.evidence.col.source': 'Fuente',
+  'sub.evidence.caption': 'Tabla de evidencia de {name}',
+  'sub.evidence.mismatchNote': 'la evidencia no coincide con su resumen',
+  'sub.export.evidenceCsv': 'Tabla de evidencia (CSV)',
+  'sub.evidence.origin.measured': 'medido',
+  'sub.evidence.origin.derived': 'derivado',
+  'sub.evidence.origin.assumed': 'supuesto',
+  'sub.evidence.origin.fitted': 'ajustado',
+  'sub.evidence.origin.fixed': 'fijado',
+  'sub.evidence.origin.truth': 'valor de la simulación',
+  'sub.evidence.origin.analytic': 'analítico',
+  'sub.evidence.origin.synthetic': 'sintético',
 };

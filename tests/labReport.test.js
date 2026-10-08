@@ -172,7 +172,7 @@ describe('a number typed under another convention', () => {
       'weighing-another-star'
     );
     expect(says).toMatch(/0,910/);
-    expect(says).toMatch(/correct - expected 0\.91/);
+    expect(says).toMatch(/Result\s*correct/);
     expect(says).not.toMatch(/incorrect/);
   });
 
@@ -186,7 +186,25 @@ describe('a number typed under another convention', () => {
       report({ responses, visited, locale: 'en' }),
       'weighing-another-star'
     );
-    expect(says).toMatch(/incorrect - expected 0\.91/);
+    expect(says).toMatch(/Result\s*incorrect/);
+  });
+});
+
+describe('the answer key', () => {
+  test('a wrong answer says it is incorrect and never prints the expected value', () => {
+    const responses = {};
+    recordAnswer(responses, key('weighing-another-star'), '5', 'en');
+    const says = text(
+      report({
+        responses,
+        visited: new Set(kepler.steps.map(s => s.sid)),
+        locale: 'en',
+      }),
+      'weighing-another-star'
+    );
+    expect(says).toMatch(/Result\s*incorrect/);
+    expect(says).not.toMatch(/expected/);
+    expect(says).not.toMatch(/0\.91/);
   });
 });
 

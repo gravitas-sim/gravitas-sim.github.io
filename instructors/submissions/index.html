@@ -43,6 +43,10 @@
         text-align: right;
         font-variant-numeric: tabular-nums;
       }
+      .sr-evidence td,
+      .sr-evidence th {
+        white-space: nowrap;
+      }
       .sr-hot td {
         color: var(--danger);
       }
@@ -181,6 +185,7 @@ try {
       <div id="rates"></div>
       <h2 data-i18n="sub.read.title">Read</h2>
       <div id="who"></div>
+      <div id="evidence"></div>
       <div id="refused"></div>
       <section class="sr-export" aria-labelledby="exportTitle">
         <h2 id="exportTitle" data-i18n="sub.export.title">
@@ -229,6 +234,15 @@ try {
             data-i18n="sub.export.questionsCsv"
           >
             Question by question (CSV)
+          </button>
+          <button
+            id="exportEvidence"
+            type="button"
+            class="ui-button"
+            disabled
+            data-i18n="sub.export.evidenceCsv"
+          >
+            Evidence table (CSV)
           </button>
           <button
             id="exportJson"
