@@ -318,6 +318,9 @@ function render() {
           )
         : L('none made yet', 'ninguno todavía'),
     ],
+    ...(s.model.name
+      ? [[L('Name for reports', 'Nombre para los informes'), s.model.name]]
+      : []),
     ...Object.keys(s.file.collections).map(c => [c, size(bytesOf(c))]),
   ];
   $('mwStorageList').innerHTML = rows
@@ -697,6 +700,12 @@ const memory = () => {
 };
 
 async function start() {
+  try {
+    const stored = getText('gravitas_locale') || navigator.language;
+    document.documentElement.lang = stored.startsWith('es') ? 'es' : 'en';
+  } catch {
+    /* the page's own language stands */
+  }
   mountShell({ onLanguage: () => s.model && render() });
   $('mwPreviewTitle').tabIndex = -1;
   $('mwSummary').tabIndex = -1;

@@ -284,6 +284,7 @@ for (const { id, untranslated } of perLocale) {
 // -----------------------------------------------------------------------------
 const REQUIRED_BILINGUAL = [
   'glossary',
+  'my-work',
   'validation',
   'instructors',
   'evaluation',

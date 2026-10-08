@@ -172,7 +172,7 @@ try {
       <p id="mwSummary" class="ui-hint" role="status" aria-live="polite"></p>
       <div id="mwNotice" class="ui-alert is-warning" role="alert" hidden></div>
 
-      <section class="ui-card mw-card" aria-labelledby="mwWhereTitle">
+      <section id="mwWhere" class="ui-card mw-card" aria-labelledby="mwWhereTitle">
         <h2 id="mwWhereTitle"><span class="gs-en">What is on this device, and what is not</span><span class="gs-es" lang="es">Qué hay en este dispositivo y qué no</span></h2>
         <ul>
           <li><span class="gs-en">Your work is saved in this browser, on this device. Gravitas has no accounts and no server that keeps it, so nothing you make is sent anywhere, and nobody at Gravitas can see it or get it back for you.</span><span class="gs-es" lang="es">Tu trabajo se guarda en este navegador, en este dispositivo. Gravitas no tiene cuentas ni un servidor que lo guarde, así que nada de lo que haces se envía a ningún sitio, y nadie en Gravitas puede verlo ni recuperarlo por ti.</span></li>
@@ -182,12 +182,12 @@ try {
         </ul>
       </section>
 
-      <section class="ui-card mw-card" aria-labelledby="mwStorageTitle">
+      <section id="mwStorage" class="ui-card mw-card" aria-labelledby="mwStorageTitle">
         <h2 id="mwStorageTitle"><span class="gs-en">Storage on this device</span><span class="gs-es" lang="es">Almacenamiento en este dispositivo</span></h2>
         <dl id="mwStorageList" class="mw-facts-list"></dl>
       </section>
 
-      <section class="ui-card mw-card" aria-labelledby="mwTransferTitle">
+      <section id="mwTransfer" class="ui-card mw-card" aria-labelledby="mwTransferTitle">
         <h2 id="mwTransferTitle"><span class="gs-en">Back up, move or clear</span><span class="gs-es" lang="es">Copia, traslado y borrado</span></h2>
         <div class="mw-actions">
           <button type="button" class="ui-button is-primary" id="mwExport"><span class="gs-en">Download everything</span><span class="gs-es" lang="es">Descargar todo</span></button>
@@ -223,47 +223,47 @@ try {
         </details>
       </section>
 
-      <section class="ui-card mw-card" aria-labelledby="mwLessonsTitle" data-section="mwLessons" hidden>
+      <section id="mwLessons" class="ui-card mw-card" aria-labelledby="mwLessonsTitle" data-section="mwLessons" hidden>
         <h2 id="mwLessonsTitle"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></h2>
         <p class="ui-state is-empty mw-none" hidden><span class="gs-en">You have not started an investigation on this device.</span><span class="gs-es" lang="es">No has empezado ninguna investigación en este dispositivo.</span></p>
         <div class="mw-body"></div>
       </section>
 
-      <section class="ui-card mw-card" aria-labelledby="mwAssignmentsTitle" data-section="mwAssignments" hidden>
+      <section id="mwAssignments" class="ui-card mw-card" aria-labelledby="mwAssignmentsTitle" data-section="mwAssignments" hidden>
         <h2 id="mwAssignmentsTitle"><span class="gs-en">Activities from your instructor</span><span class="gs-es" lang="es">Actividades de tu docente</span></h2>
         <p class="ui-hint"><span class="gs-en">These open from the link your instructor gave you; this device keeps your answers under it.</span><span class="gs-es" lang="es">Se abren desde el enlace que te dio tu docente; este dispositivo guarda tus respuestas asociadas a él.</span></p>
         <p class="ui-state is-empty mw-none" hidden><span class="gs-en">No activities from an instructor here.</span><span class="gs-es" lang="es">No hay actividades de un docente aquí.</span></p>
         <div class="mw-body"></div>
       </section>
 
-      <section class="ui-card mw-card" aria-labelledby="mwCoursesTitle" data-section="mwCourses" hidden>
+      <section id="mwCourses" class="ui-card mw-card" aria-labelledby="mwCoursesTitle" data-section="mwCourses" hidden>
         <h2 id="mwCoursesTitle"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></h2>
         <p class="ui-hint"><span class="gs-en">A course is counted once you begin one of its investigations. Courses opened from a link are not kept here.</span><span class="gs-es" lang="es">Un curso cuenta cuando empiezas una de sus investigaciones. Los cursos abiertos desde un enlace no se guardan aquí.</span></p>
         <p class="ui-state is-empty mw-none" hidden><span class="gs-en">No course begun.</span><span class="gs-es" lang="es">Ningún curso empezado.</span></p>
         <div class="mw-body"></div>
       </section>
 
-      <section class="ui-card mw-card" aria-labelledby="mwEvidenceTitle" data-section="mwEvidence" hidden>
+      <section id="mwEvidence" class="ui-card mw-card" aria-labelledby="mwEvidenceTitle" data-section="mwEvidence" hidden>
         <h2 id="mwEvidenceTitle"><span class="gs-en">Evidence</span><span class="gs-es" lang="es">Evidencia</span></h2>
         <p class="ui-hint"><span class="gs-en">Your evidence notebook, by the page that made each entry.</span><span class="gs-es" lang="es">Tu cuaderno de evidencia, según la página que hizo cada entrada.</span></p>
         <p class="ui-state is-empty mw-none" hidden><span class="gs-en">Your evidence notebook is empty.</span><span class="gs-es" lang="es">Tu cuaderno de evidencia está vacío.</span></p>
         <div class="mw-body"></div>
       </section>
 
-      <section class="ui-card mw-card" aria-labelledby="mwExperimentsTitle" data-section="mwExperiments" hidden>
+      <section id="mwExperiments" class="ui-card mw-card" aria-labelledby="mwExperimentsTitle" data-section="mwExperiments" hidden>
         <h2 id="mwExperimentsTitle"><span class="gs-en">Experiments and saved comparisons</span><span class="gs-es" lang="es">Experimentos y comparaciones guardadas</span></h2>
         <p class="ui-state is-empty mw-none" hidden><span class="gs-en">No saved experiments.</span><span class="gs-es" lang="es">No hay experimentos guardados.</span></p>
         <div class="mw-body"></div>
       </section>
 
-      <section class="ui-card mw-card" aria-labelledby="mwDraftsTitle" data-section="mwDrafts" hidden>
+      <section id="mwDrafts" class="ui-card mw-card" aria-labelledby="mwDraftsTitle" data-section="mwDrafts" hidden>
         <h2 id="mwDraftsTitle"><span class="gs-en">Saved worlds and drafts</span><span class="gs-es" lang="es">Mundos guardados y borradores</span></h2>
         <p class="ui-hint"><span class="gs-en">Scenario, investigation and course drafts from the Studio, your saved world, and notes.</span><span class="gs-es" lang="es">Borradores del Estudio, mundo guardado y notas.</span></p>
         <p class="ui-state is-empty mw-none" hidden><span class="gs-en">Nothing saved here.</span><span class="gs-es" lang="es">No hay nada guardado aquí.</span></p>
         <div class="mw-body"></div>
       </section>
 
-      <section class="ui-card mw-card" aria-labelledby="mwPackagesTitle" data-section="mwPackages" hidden>
+      <section id="mwPackages" class="ui-card mw-card" aria-labelledby="mwPackagesTitle" data-section="mwPackages" hidden>
         <h2 id="mwPackagesTitle"><span class="gs-en">Installed packages</span><span class="gs-es" lang="es">Paquetes instalados</span></h2>
         <p class="ui-hint"><span class="gs-en">From the Catalog. They are kept in this browser but are not in a backup file: install them again from the Catalog on another device.</span><span class="gs-es" lang="es">Del Catálogo. Se guardan en este navegador pero no van en el archivo de copia: instálalos de nuevo desde el Catálogo en otro dispositivo.</span></p>
         <p class="ui-state is-empty mw-none" hidden><span class="gs-en">No packages installed.</span><span class="gs-es" lang="es">No hay paquetes instalados.</span></p>
