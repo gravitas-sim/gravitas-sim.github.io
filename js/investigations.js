@@ -642,12 +642,6 @@ const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
 /**
  * Read a lesson's saved progress, migrating an older save if that is what is
  * there.
- *
- * Needs the lesson, because a stable id is only meaningful against the step
- * list that defines it, and a v1 payload can only be re-keyed against the
- * current order. Callers that have no lesson in hand - the browser cards - get
- * the counts they need from `progressFor` instead.
- *
  * @param {string} id - Lesson id
  * @param {?object} lesson - The merged lesson, when the caller has it
  * @returns {?object} The progress, or null when there is none
@@ -870,16 +864,6 @@ function probeContext() {
     mode: modeDescription,
     /**
      * The stars this step stood on the canvas, as values.
-     *
-     * The authoritative sample, and the reason there is only one: the H-R
-     * diagram, the comparison card and the object list all read this rather
-     * than resolving the step's declaration for themselves. A star is here
-     * once, with the model state the canvas is drawn from and the id of the
-     * body it is drawn as, so "the same star" is a fact rather than an
-     * agreement between two pieces of arithmetic.
-     *
-     * Values only. No PhysicsObject leaves through this: an instrument that
-     * could reach a body could move one.
      */
     stagedSample: () =>
       stagedStars().map(entry => ({
@@ -893,16 +877,6 @@ function probeContext() {
     stageKey: () => stageKey(),
     /**
      * Draw the stage of a star's life around a staged body.
-     *
-     * The main scene's half of the evolution playback. What is handed over is
-     * the model moment - which stage, how far through, and the endpoint
-     * prescription where there is one - and js/render.js turns that into a
-     * bounded, seeded illustration around that body. Nothing is integrated and
-     * nothing here has mass.
-     *
-     * Called every tick while the step is up, and cleared when the step
-     * changes or the lesson closes, so no illustration can outlive the screen
-     * that asked for it.
      */
     showEvolutionScene: (role, frame, opts = {}) => {
       const body = roleBody(role);
@@ -1026,17 +1000,6 @@ function probeContext() {
     /**
      * Where the observed star is in its orbit, and what the spectrograph is
      * reading at that instant.
-     *
-     * The two halves of the same fact, which the lesson previously showed in
-     * two places that could not be compared: `phaseDeg` is where the star
-     * actually is around the barycenter, measured off the scene, and `velocity`
-     * is the line-of-sight component the instrument reports. `towards` is the
-     * sign, spelled out, because the whole difficulty of reading these curves
-     * is that a negative number means approaching.
-     *
-     * Null when the scenario pins its star: a pinned star has no reflex motion,
-     * and js/radialVelocity.js refuses to report a velocity for one rather than
-     * returning an artifact that looks like a measurement.
      */
     rvNow: () => {
       const star = observedStar();
@@ -1063,17 +1026,6 @@ function probeContext() {
     },
     /**
      * Where a planet sits against its own star's habitable zone, right now.
-     *
-     * Computed with habitableZoneBounds() and habitableZoneStatus() - the same
-     * two functions js/render.js draws the ring with and the hz-* instruments
-     * quote - and with the zone definition read from the same setting. The
-     * lesson and the picture cannot disagree about where the edges are,
-     * because there is one place that decides.
-     *
-     * `insolation` is in Earths, which is the unit the whole lesson works in.
-     * The status word is deliberately not a boolean: a planet just past an edge
-     * is a different kind of object from one ten times too close, and neither
-     * is a statement about whether anything lives there.
      */
     habitability: body => {
       const planet = body || selected;
@@ -1100,16 +1052,6 @@ function probeContext() {
     },
     /**
      * How far the whole world's conserved quantities have moved.
-     *
-     * The distinction "Orbital Energy" is built on and could not previously
-     * make: a total energy that changes because a burn added some is physics,
-     * and a total energy that changes because the integrator is approximating
-     * is not. The engine keeps a baseline from the moment the world was built
-     * and reports both, so a step can show the drift beside the change and let
-     * a reader see which one they are looking at.
-     *
-     * Null before a baseline exists, which is the honest answer during the
-     * frame a world is being rebuilt.
      */
     conservation: () => conservationDrift(),
     /**
@@ -1149,15 +1091,6 @@ function probeContext() {
     },
     /**
      * Whether a recorded run still describes the scene on the canvas.
-     *
-     * A sweep result stays on screen after the reader changes something, and
-     * nothing used to say that the two no longer match. The engine bumps its
-     * world generation on every rebuild, so comparing the run's stamp with the
-     * current one answers it exactly: `false` means the numbers are about an
-     * arrangement that is gone.
-     *
-     * `null` when there is nothing to judge - no run, or a run recorded before
-     * this stamp existed - because "we cannot tell" is not the same as "stale".
      */
     runMatchesScene: run => {
       const stamped = run?.worldGeneration;
@@ -1223,17 +1156,6 @@ function applySetup(setup) {
  */
 /**
  * Resolve this step's `bind` against the world that is on screen.
- *
- * Run on every step change rather than once per lesson, for two reasons. A
- * step that carries a `setup` has just rebuilt the world, so every id from the
- * previous step is meaningless - that is what the world generation in a
- * binding records. And a step's roles are the step's: the one before it may
- * have bound something else, or nothing.
- *
- * A role that cannot be resolved is a warning in the console and nothing else.
- * It has to be visible to whoever is writing the lesson, and it must not stop
- * the lesson running for whoever is taking it.
- *
  * @returns {void}
  */
 function bindStepRoles() {
@@ -1502,13 +1424,6 @@ const currentStep = () => active?.steps[stepIndex] ?? null;
 
 /**
  * The prediction, if any, that this step is where the answer arrives.
- *
- * A predict step names `reveal: '<sid>'` when its answer should wait for the
- * experiment; this is the other end of that, and it is what makes the wait
- * worth anything. Returns null when no earlier step points here, when the
- * reader never committed to an answer, or when the prediction carries no
- * answer key to mark against.
- *
  * @param {Object} step - The step being rendered
  * @returns {?{chose: string, answer: string, right: boolean, because: string}}
  */
@@ -1841,12 +1756,6 @@ function logSlope(pts) {
  */
 /**
  * The plot's points, as a table.
- *
- * The accessible equivalent of the scatter beside it, and the thing that makes
- * "read your fourth point off the graph" answerable without the graph. Hidden
- * when there is nothing plotted, because an empty table is worse than no
- * table: it announces a structure with nothing in it.
- *
  * @param {Object} spec - The step's plot specification
  * @param {Array<{x:number,y:number,label?:string}>} points - What is drawn
  * @param {Object} opts - {transform, useLog} - which labels apply
@@ -2809,16 +2718,6 @@ function stopToolLoop() {
 
 /**
  * Take the last step's instrument off the panel while this step's is fetched.
- *
- * The title and the note are this step's by then, so whatever else is left up
- * is the old instrument passed off as this one. Lives of Stars read its size
- * comparison out on the first evolution step for as long as the fetch took,
- * and the canvas told a screen reader those were the measured values of the
- * instrument on screen; its buttons still drove the old widget. The readout
- * is emptied and forgotten, so the paint after the fetch writes it even if the
- * rows match. The picture is blanked rather than hidden, so the panel keeps its
- * height, and loses the name and role a pickable instrument gave it: the note
- * is what says what is happening, and the paint gives the canvas its name back.
  */
 function clearToolInstrument() {
   els.toolReadout.innerHTML = '';
@@ -2847,7 +2746,6 @@ function clearToolInstrument() {
  * declares `pick` also names the two controls the arrow keys step, and its
  * canvas becomes focusable: a diagram only a drag can drive is closed to some
  * students.
- *
  * @param {Object} widget - The widget being shown
  * @param {Object} spec - The step's tool spec
  * @param {Function} applied - The runner's own "a control moved" path
@@ -3116,7 +3014,8 @@ function refreshMeasurements() {
 /** Count the time since the last tick, unless the page was hidden or idle. */
 function clock() {
   const now = Date.now();
-  if (lastTick && !document.hidden) spent += Math.min(now - lastTick, 6e4) / 1e3;
+  if (lastTick && !document.hidden)
+    spent += Math.min(now - lastTick, 6e4) / 1e3;
   lastTick = now;
 }
 
@@ -3173,14 +3072,6 @@ const OBJECT_LIST_MAX = 12;
 
 /**
  * The keyboard's way to select the objects a step is about.
- *
- * Only for steps that bind roles, and deliberately so. A list of every body in
- * a five-hundred-star cluster is not an accessibility feature, it is a wall;
- * what a reader needs is the two or three objects this activity names, which
- * is exactly what the bindings are. Selecting from here goes through the same
- * call a click on the canvas goes through, so the canvas, this list, the
- * inspector and any instrument reading ctx.selected all move together.
- *
  * @returns {void}
  */
 /**
@@ -4429,7 +4320,7 @@ function renderSequences() {
   els.sequenceList.innerHTML = SEQUENCES.map(sequence => {
     const steps = resolveSequence(sequence, MANIFEST);
     if (!steps.length) return '';
-    return `<section class="inv-seq">
+    return `<section class="inv-seq" data-seq="${sequence.id}">
         <h5 class="inv-seq-title">${escape(t(sequence.titleId))}</h5>
         <p class="inv-seq-blurb">${escape(t(sequence.blurbId))}</p>
         <ol class="inv-seq-steps">${steps
@@ -4443,9 +4334,20 @@ function renderSequences() {
   // tests select on it bare, and a second element answering to it made those
   // selectors ambiguous rather than wrong. The sequence rows say what they are.
   els.sequenceList.querySelectorAll('[data-sequence-lesson]').forEach(btn => {
-    btn.addEventListener('click', () =>
-      openCardLesson(btn, btn.dataset.sequenceLesson)
-    );
+    btn.addEventListener('click', () => {
+      try {
+        localStorage.setItem(
+          'gravitas_next_context',
+          JSON.stringify({
+            k: 'seq',
+            id: btn.closest('[data-seq]').dataset.seq,
+          })
+        );
+      } catch {
+        /* no storage: no next offered */
+      }
+      openCardLesson(btn, btn.dataset.sequenceLesson);
+    });
   });
 }
 
@@ -4776,6 +4678,16 @@ function openFinish() {
     })}</p>
     <p class="inv-finish-note">${escape(t('inv.finish.note'))}</p>`;
   els.nameInput.value = getStudentName();
+  import('./investigations/next.js').then(m =>
+    m.whatNext(document.getElementById('investigationNextList'), {
+      id: active.id,
+      deeper: active.depths && !els.deeper.hidden && els.deeper.textContent,
+      onDeeper: () => {
+        closeFinish();
+        changeDepth(1);
+      },
+    })
+  );
   // Modal: the lesson behind it inert, Escape and the backdrop closing it,
   // and focus back on Next, where the reader asked to finish.
   const trigger = document.activeElement;
@@ -5145,6 +5057,8 @@ export function initInvestigations({ signal } = {}) {
     progressBar: document.getElementById('investigationProgressBar'),
     progressText: document.getElementById('investigationProgressText'),
     where: document.getElementById('investigationWhere'),
+    help: document.getElementById('investigationHelp'),
+    helpPanel: document.getElementById('investigationHelpPanel'),
     saveStatus: document.getElementById('investigationSaveStatus'),
     progressNotice: document.getElementById('investigationProgressNotice'),
     backupDownload: document.getElementById('investigationBackupDownload'),
@@ -5238,6 +5152,27 @@ export function initInvestigations({ signal } = {}) {
   );
   els.next?.addEventListener('click', next);
   setInterval(() => active && renderWhere(shown()), 3e4);
+  els.help?.addEventListener(
+    'click',
+    async () => {
+      const on = els.help.getAttribute('aria-expanded') !== 'true';
+      els.help.setAttribute('aria-expanded', on);
+      els.helpPanel.hidden = !on;
+      if (on)
+        (await import('./investigations/guidance.js')).help(() => ({
+          lesson: active,
+          n: stepIndex,
+          total: shown().length,
+          depth,
+          spent,
+          link: async () => {
+            const s = currentStep()?.setup;
+            return s ? shareUrl(await encodePayload(payloadFromSetup(s))) : '';
+          },
+        }));
+    },
+    opts
+  );
   els.deeper?.addEventListener('click', () => changeDepth(1), opts);
   els.shallower?.addEventListener('click', () => changeDepth(-1), opts);
   els.close?.addEventListener('click', closeInvestigation);

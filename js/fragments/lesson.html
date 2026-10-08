@@ -13,6 +13,14 @@
       <p id="investigationSubtitle"></p>
     </div>
     <button
+      id="investigationHelp"
+      class="ui-button"
+      aria-expanded="false"
+      aria-controls="investigationHelpPanel"
+    >
+      <span class="gs-en">Help</span><span class="gs-es" lang="es">Ayuda</span>
+    </button>
+    <button
       id="investigationClose"
       class="ui-button"
       title="Close this investigation. Your progress is saved."
@@ -39,6 +47,53 @@
       ↺
     </button>
   </div>
+
+  <section
+    id="investigationHelpPanel"
+    class="inv-help"
+    aria-label="Help"
+    hidden=""
+  >
+    <h3><span class="gs-en">Keyboard</span><span class="gs-es" lang="es">Teclado</span></h3>
+    <ul class="inv-help-keys">
+      <li><kbd>Shift</kbd> + <kbd>→</kbd> <span class="gs-en">next step</span><span class="gs-es" lang="es">paso siguiente</span></li>
+      <li><kbd>Shift</kbd> + <kbd>←</kbd> <span class="gs-en">previous step</span><span class="gs-es" lang="es">paso anterior</span></li>
+      <li><kbd>Esc</kbd> <span class="gs-en">closes the open card or dialog</span><span class="gs-es" lang="es">cierra la ficha o el cuadro abierto</span></li>
+      <li><kbd>Tab</kbd> <span class="gs-en">moves between controls</span><span class="gs-es" lang="es">pasa de un control a otro</span></li>
+      <li><kbd>?</kbd> <span class="gs-en">lists every shortcut</span><span class="gs-es" lang="es">muestra todos los atajos</span></li>
+    </ul>
+    <h3><span class="gs-en">What the instruments show</span><span class="gs-es" lang="es">Qué muestran los instrumentos</span></h3>
+    <ul id="investigationHelpTools" class="inv-help-tools"></ul>
+    <p id="investigationHelpNone" class="inv-help-note" hidden="">
+      <span class="gs-en">No instrument is docked on this step.</span><span class="gs-es" lang="es">Ningún instrumento está acoplado en este paso.</span>
+    </p>
+    <h3><span class="gs-en">Report a problem</span><span class="gs-es" lang="es">Informar de un problema</span></h3>
+    <p class="inv-help-note">
+      <span class="gs-en">This makes a note with a link to this step and your app and browser versions. Nothing is sent: copy it into an issue or an email yourself.</span><span class="gs-es" lang="es">Esto genera una nota con un enlace a este paso y las versiones de la aplicación y del navegador. No se envía nada: cópiala tú en una incidencia o en un correo.</span>
+    </p>
+    <button type="button" id="investigationHelpReport" class="ui-button">
+      <span class="gs-en">Make the problem note</span><span class="gs-es" lang="es">Crear la nota del problema</span>
+    </button>
+    <div id="investigationHelpNote" hidden="">
+      <textarea
+        id="investigationHelpText"
+        rows="9"
+        readonly=""
+        spellcheck="false"
+        aria-label="Problem note"
+      ></textarea>
+      <button type="button" id="investigationHelpCopy" class="ui-button primary">
+        <span class="gs-en">Copy</span><span class="gs-es" lang="es">Copiar</span>
+      </button>
+      <a
+        class="ui-button"
+        href="https://github.com/gravitas-sim/gravitas-sim.github.io/issues/new"
+        target="_blank"
+        rel="noopener"
+        ><span class="gs-en">Open an issue form</span><span class="gs-es" lang="es">Abrir el formulario de incidencias</span></a
+      >
+    </div>
+  </section>
 
   <p
     id="investigationWhere"

@@ -178,11 +178,11 @@ const cards = rows =>
     .join('');
 
 /** A titled list of cards; `ordered` for a sequence, whose order means something. */
-function section(title, blurb, rows, ordered = false) {
+function section(title, blurb, rows, ordered = false, seq = '') {
   const tag = ordered ? 'ol' : 'ul';
   return `<section class="lib-group"><h2>${escape(title)}</h2>${
     blurb ? `<p class="ui-note">${escape(blurb)}</p>` : ''
-  }<${tag} class="lib-list">${cards(rows)}</${tag}></section>`;
+  }<${tag} class="lib-list"${seq ? ` data-seq="${escape(seq)}"` : ''}>${cards(rows)}</${tag}></section>`;
 }
 
 function grouped(rows) {
@@ -212,7 +212,9 @@ function grouped(rows) {
     const out = lib.sequences
       .map(s => [s, s.entries.map(id => shown.get(id)).filter(Boolean)])
       .filter(([, list]) => list.length)
-      .map(([s, list]) => section(pick(s.title), pick(s.blurb), list, true));
+      .map(([s, list]) =>
+        section(pick(s.title), pick(s.blurb), list, true, s.id)
+      );
     return out.length
       ? out.join('')
       : `<p class="ui-state is-empty">${escape(t('lib.group.noSequence'))}</p>`;
@@ -284,6 +286,20 @@ function wire() {
   const search = $('libSearch');
   search.value = state.filters.query;
   let timer = null;
+  // A lesson opened from a sequence remembers which, so finishing it can offer
+  // the next one (js/investigations/next.js).
+  $('libResults').addEventListener('click', e => {
+    const seq = e.target.closest('.lib-link')?.closest('[data-seq]');
+    try {
+      if (seq)
+        localStorage.setItem(
+          'gravitas_next_context',
+          JSON.stringify({ k: 'seq', id: seq.dataset.seq })
+        );
+    } catch {
+      /* no storage: no next offered */
+    }
+  });
   search.addEventListener('input', () => {
     clearTimeout(timer);
     timer = setTimeout(() => setFilter('query', search.value.trim()), 150);
