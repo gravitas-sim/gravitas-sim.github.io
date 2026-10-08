@@ -158,6 +158,7 @@ export const KEYS = [
   ['gravitas_evaluation_draft_', 'drafts'],
   ['gravitas_teaching_notes_', 'drafts'],
   ['gravitas_student_name', 'settings'],
+  ['gravitas_last_export', 'preferences'],
   ['gravitas_capability_versions', null],
   ['gravitas_locale', 'preferences'],
   ['gravitas_theme', 'preferences'],

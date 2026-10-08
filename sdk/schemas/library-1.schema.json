@@ -328,6 +328,28 @@
         "route": {
           "type": "string",
           "pattern": "^/"
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "lessons"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "object"
+              },
+              "lessons": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         }
       }
     }

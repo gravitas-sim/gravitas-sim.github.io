@@ -42,7 +42,7 @@ test('it finds what it is looking for, so it cannot pass by matching nothing', (
     0
   );
   expect(seen).toBeGreaterThan(200);
-  expect(TOOL_PAGES).toHaveLength(14);
+  expect(TOOL_PAGES).toHaveLength(15);
 });
 
 describe('what is counted', () => {

@@ -6876,7 +6876,9 @@
   .inv-author-bar {
     border-bottom: 1px solid var(--border);
     background: color-mix(in srgb, var(--accent) 8%, transparent);
-    padding: var(--space-2, 8px) var(--space-3, 12px);
+    /* The top padding keeps the step buttons clear of the shell's open menu,
+       which reaches down over the top of the panel. */
+    padding: var(--space-8, 40px) var(--space-3, 12px) var(--space-2, 8px);
     font-size: 11px;
     display: flex;
     flex-direction: column;

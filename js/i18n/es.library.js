@@ -83,6 +83,9 @@ export const ES_LIBRARY = {
   'lib.empty.search': 'Nada coincide con «{query}».',
   'lib.empty.filters': 'Nada coincide con estos filtros.',
   'lib.empty.relax': 'Quitar «{filter}» para ver {n}',
+  'lib.continue.title': 'Continuar donde lo dejaste',
+  'lib.continue.all': 'Todo lo que has hecho: Mi trabajo',
+  'lib.continue.of': '{n} de {total} pasos vistos',
   'lib.loading': 'Cargando la Biblioteca…',
   'lib.loadFailed':
     'La Biblioteca no se cargó. Compruebe la conexión y vuelva a cargar la página.',

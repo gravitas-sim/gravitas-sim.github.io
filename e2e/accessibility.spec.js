@@ -286,6 +286,14 @@ const SURFACES = [
     standalone: true,
   },
   {
+    name: 'my work',
+    open: async ({ page }) => {
+      await page.goto('/my-work/', { waitUntil: 'domcontentloaded' });
+    },
+    expect: 'html[data-ready="true"] .mw-card',
+    standalone: true,
+  },
+  {
     name: 'library by sequence',
     open: async ({ page }) => {
       await page.goto('/library/?group=sequence', {

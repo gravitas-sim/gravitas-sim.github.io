@@ -154,6 +154,38 @@ test.describe('the built site', () => {
     expect(failures).toEqual([]);
   });
 
+  test('My work ships: it reads the storage module from its own bundle, lists a saved lesson and makes a backup', async ({
+    page,
+  }) => {
+    const failures = watchRequests(page);
+    await page.goto('/model/', { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() =>
+      localStorage.setItem(
+        'gravitas_investigation_keplers-laws',
+        JSON.stringify({
+          schema: 2,
+          lesson: 'keplers-laws',
+          stepSid: 'x',
+          visited: ['a', 'b'],
+          responses: { a: 1 },
+          attempts: {},
+          startedAt: '2026-10-01T10:00:00.000Z',
+        })
+      )
+    );
+    await page.goto('/my-work/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
+      timeout: 30_000,
+    });
+    await expect(page.locator('#mwLessons .mw-item')).toHaveCount(1);
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#mwExport').click(),
+    ]);
+    expect(download.suggestedFilename()).toMatch(/^gravitas-.*\.json$/);
+    expect(failures).toEqual([]);
+  });
+
   test('the teaching page ships, with its own stylesheet and bundle', async ({
     page,
   }) => {

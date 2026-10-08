@@ -35,7 +35,7 @@ abstract: >-
   It runs entirely client-side as a static site, requires no account or
   installation, and encodes any simulation state into a shareable URL. It
   works offline after a first visit, targets WCAG 2.2 Level AA with
-  axe-core run over 34 surfaces in 2 languages and up to 4 themes on every
+  axe-core run over 35 surfaces in 2 languages and up to 4 themes on every
   build, and is published in English and Spanish.
 
   The physics is checked in public: 286 checks of the engine against

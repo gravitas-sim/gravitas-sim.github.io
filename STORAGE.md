@@ -46,6 +46,7 @@ These are the student's own work, and what an "export everything" would carry:
 | `gravitas_theme` | The theme | `js/theme.js` |
 | `gravitas_units` | Physical or simulation units | `js/units.js` |
 | `gravitas_course_level` | The course level: introductory, majors or advanced (sets the readout precision) | `js/settingsSchema.js` |
+| `gravitas_last_export` | When My work last made a backup file, and what it held (the file is the student's; this only remembers that one was made) | `js/myWorkPage.js`, through `js/storage/local.js` |
 | `gravitas_lesson_objects_open` | Whether the lesson panel's objects list was left open | `js/investigations.js` |
 | `gravitas_rail_sections` | Which rail sections are open | `js/controls.js` |
 | `gravitas_lecture_sequence` | Lecture mode's sequence | `js/lecture.js` |

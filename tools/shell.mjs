@@ -61,6 +61,7 @@ export const WORDS = {
   teach: ['Teach', 'Enseñar'],
   about: ['About', 'Acerca de'],
   library: ['Library', 'Biblioteca'],
+  myWork: ['My work', 'Mi trabajo'],
   investigations: ['Investigations', 'Investigaciones'],
   courses: ['Courses', 'Cursos'],
   observatory: ['Observatory', 'Observatorio'],
@@ -104,6 +105,7 @@ export const NAV = [
     'learn',
     [
       ['library', '/library/'],
+      ['myWork', '/my-work/'],
       ['investigations', '/#investigations'],
       ['courses', '/course/'],
       ['observatory', '/observatory/'],
