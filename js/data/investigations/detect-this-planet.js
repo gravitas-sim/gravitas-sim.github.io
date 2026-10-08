@@ -273,6 +273,15 @@ const DETECT_THIS_PLANET = {
         'Nothing, because twelve measurements are too few',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'planetOverreach',
+          option: 1,
+          say: `The scatter shows the velocity is not constant; it does not say
+                why. A planet is the likeliest cause, but a companion star,
+                spots or the instrument can do the same.`,
+        },
+      ],
       because: `The velocity is not constant. That is all the scatter can carry
                 by itself. A planet is the most likely explanation and it is not
                 the only one: a faint companion star, pulsations, spots rotating

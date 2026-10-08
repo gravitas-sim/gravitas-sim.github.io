@@ -42,6 +42,7 @@ import {
   rootOf,
 } from './course/links.js';
 import { DATASETS } from './course/datasets.js';
+import { progressOf } from './library/progress.js';
 import { BUILTIN_COURSES } from './data/courses/index.js';
 import { PLATFORM_API } from './platform/catalog.generated.js';
 
@@ -69,6 +70,35 @@ function el(tag, attrs = {}, ...children) {
 const words = v => (v && (v[language()] || v.en)) || '';
 const lessonMeta = id =>
   (LESSONS[language()] || LESSONS.en).get(id) || LESSONS.en.get(id);
+
+/** Where this browser has got to in an investigation: new, going or done. */
+function status(id) {
+  const p = progressOf({
+    id,
+    format: 'lesson',
+    steps: lessonMeta(id)?.stepCount || 0,
+  });
+  return !p.started ? 'new' : p.total && p.done >= p.total ? 'done' : 'going';
+}
+
+/** Leave where the student is in this course, for the finish panel's next step. */
+function remember(item) {
+  const items = itemsOf(pack).map(x => x.item);
+  try {
+    localStorage.setItem(
+      'gravitas_next_context',
+      JSON.stringify({
+        k: 'course',
+        home: location.href,
+        t: words(pack.title),
+        i: items.indexOf(item),
+        items: items.map(x => [x.lesson || '', x.depth || '', titleOf(x)]),
+      })
+    );
+  } catch {
+    /* no storage: no next offered */
+  }
+}
 
 /** What an item is called, in the reader's language. */
 function titleOf(item) {
@@ -196,8 +226,43 @@ function render() {
   const has = new Set(MANIFEST.map(m => m.id));
   document.title = t('courseHome.doc.titleOf', { title: words(pack.title) });
 
+  const lessons = all.filter(({ item }) => item.lesson && has.has(item.lesson));
+  const finished = lessons.filter(({ item }) => status(item.lesson) === 'done');
+  const next = lessons.find(({ item }) => status(item.lesson) !== 'done')?.item;
+  const progress = lessons.length
+    ? el(
+        'p',
+        { className: 'ui-note', id: 'ch-progress' },
+        t('courseHome.progress', {
+          done: finished.length,
+          total: lessons.length,
+        }),
+        next
+          ? [
+              ' ',
+              // A button, not a #link: the pack itself lives in this page's fragment.
+              Object.assign(
+                el('button', {
+                  type: 'button',
+                  className: 'ui-button subtle',
+                  text: t('courseHome.continue', { title: titleOf(next) }),
+                }),
+                {
+                  onclick: () => {
+                    const at = $(`ch-item-${next.id}`);
+                    at.scrollIntoView();
+                    at.querySelector('a, h3')?.focus?.();
+                  },
+                }
+              ),
+            ]
+          : null
+      )
+    : null;
+
   const head = [
     el('h1', { id: 'ch-title', text: words(pack.title) }),
+    progress,
     pack.summary ? el('p', { text: words(pack.summary) }) : null,
     pack.audience
       ? el('p', { className: 'ui-note', text: words(pack.audience) })
@@ -312,6 +377,12 @@ function render() {
                   text: t(`courseHome.kind.${item.kind}`),
                 }),
                 el('h3', { text: titleOf(item) }),
+                missing || !item.lesson || status(item.lesson) === 'new'
+                  ? null
+                  : el('span', {
+                      className: 'ui-badge',
+                      text: t(`courseHome.status.${status(item.lesson)}`),
+                    }),
                 path !== 'core'
                   ? el('span', {
                       className: 'ui-badge',
@@ -410,6 +481,7 @@ async function fillLinks(pending) {
     if (!link) continue;
     open.href = link.href;
     open.hidden = false;
+    open.addEventListener('click', () => remember(item));
     // A short address is worth printing; a fragment of a thousand characters
     // is not, and the printed syllabus says where to open it instead.
     if (link.href.length <= 120) open.dataset.print = link.href;

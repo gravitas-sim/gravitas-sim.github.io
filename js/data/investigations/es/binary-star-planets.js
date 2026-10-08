@@ -453,6 +453,11 @@ export default {
         'Que esta configuración no está resuelta con ninguno de los dos pasos, así que ninguna ejecución establece un resultado',
         'Que la simulación está rota y hay que descartar las ejecuciones',
       ],
+      misconceptions: [
+        {
+          say: 'Un paso más fino es más exacto, pero una respuesta que cambia sigue moviéndose. Habría que saber que la ejecución convergió antes de fiarse de ella, y nada aquí lo dice.',
+        },
+      ],
       because: `Ninguna de las dos ejecuciones establece nada por sí sola. El paso
                 más fino es más preciso y eso es una razón para preferirlo, no
                 para fiarse de él: lo que te dice una respuesta que cambia es que

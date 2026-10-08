@@ -325,6 +325,15 @@ const TWELVE_NIGHTS = {
         'Because the Sun moves, so astronomical twilight is four minutes later each night',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'sunMoves',
+          option: 3,
+          say: `That is the trap: the Sun does move through the season, but what
+                opens the window is the target reaching the airmass limit, and
+                that is kept by the stars, not the Sun.`,
+        },
+      ],
       because: `The window opens when the target reaches the airmass limit, and
                 that is a statement about where the target is, not about where
                 the Sun is. The Earth takes 23h56m04s to bring a star back to

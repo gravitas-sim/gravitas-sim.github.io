@@ -40,6 +40,115 @@
     </button>
   </div>
 
+  <section
+    id="investigationHelpPanel"
+    class="inv-help"
+    aria-label="Help"
+    hidden=""
+  >
+    <h3>
+      <span class="gs-en">Keyboard</span
+      ><span class="gs-es" lang="es">Teclado</span>
+    </h3>
+    <ul class="inv-help-keys">
+      <li>
+        <kbd>Shift</kbd> + <kbd>→</kbd> <span class="gs-en">next step</span
+        ><span class="gs-es" lang="es">paso siguiente</span>
+      </li>
+      <li>
+        <kbd>Shift</kbd> + <kbd>←</kbd> <span class="gs-en">previous step</span
+        ><span class="gs-es" lang="es">paso anterior</span>
+      </li>
+      <li>
+        <kbd>Esc</kbd> <span class="gs-en">closes the open card or dialog</span
+        ><span class="gs-es" lang="es"
+          >cierra la ficha o el cuadro abierto</span
+        >
+      </li>
+      <li>
+        <kbd>Tab</kbd> <span class="gs-en">moves between controls</span
+        ><span class="gs-es" lang="es">pasa de un control a otro</span>
+      </li>
+      <li>
+        <kbd>?</kbd> <span class="gs-en">lists every shortcut</span
+        ><span class="gs-es" lang="es">muestra todos los atajos</span>
+      </li>
+    </ul>
+    <h3>
+      <span class="gs-en">What the instruments show</span
+      ><span class="gs-es" lang="es">Qué muestran los instrumentos</span>
+    </h3>
+    <ul id="investigationHelpTools" class="inv-help-tools"></ul>
+    <p id="investigationHelpNone" class="inv-help-note" hidden="">
+      <span class="gs-en">No instrument is docked on this step.</span
+      ><span class="gs-es" lang="es"
+        >Ningún instrumento está acoplado en este paso.</span
+      >
+    </p>
+    <h3>
+      <span class="gs-en">Report a problem</span
+      ><span class="gs-es" lang="es">Informar de un problema</span>
+    </h3>
+    <p class="inv-help-note">
+      <span class="gs-en"
+        >This makes a note with a link to this step and your app and browser
+        versions. Nothing is sent: copy it into an issue or an email
+        yourself.</span
+      ><span class="gs-es" lang="es"
+        >Esto genera una nota con un enlace a este paso y las versiones de la
+        aplicación y del navegador. No se envía nada: cópiala tú en una
+        incidencia o en un correo.</span
+      >
+    </p>
+    <button type="button" id="investigationHelpReport" class="ui-button">
+      <span class="gs-en">Make the problem note</span
+      ><span class="gs-es" lang="es">Crear la nota del problema</span>
+    </button>
+    <div id="investigationHelpNote" hidden="">
+      <textarea
+        id="investigationHelpText"
+        rows="9"
+        readonly=""
+        spellcheck="false"
+        aria-label="Problem note"
+      ></textarea>
+      <button
+        type="button"
+        id="investigationHelpCopy"
+        class="ui-button primary"
+      >
+        <span class="gs-en">Copy</span
+        ><span class="gs-es" lang="es">Copiar</span>
+      </button>
+      <a
+        class="ui-button"
+        href="https://github.com/gravitas-sim/gravitas-sim.github.io/issues/new"
+        target="_blank"
+        rel="noopener"
+        ><span class="gs-en">Open an issue form</span
+        ><span class="gs-es" lang="es"
+          >Abrir el formulario de incidencias</span
+        ></a
+      >
+    </div>
+  </section>
+
+  <div class="inv-where-row">
+    <p
+      id="investigationWhere"
+      class="inv-where"
+      data-en="Step {n} of {total}{depth} · {m} min of {planned}"
+      data-es="Paso {n} de {total}{depth} · {m} min de {planned}"
+    ></p>
+    <button
+      id="investigationHelp"
+      class="ui-button subtle"
+      aria-expanded="false"
+      aria-controls="investigationHelpPanel"
+    >
+      <span class="gs-en">Help</span><span class="gs-es" lang="es">Ayuda</span>
+    </button>
+  </div>
   <!-- Authoring preview only: hidden unless ?author= put the panel in it.
        See js/authoring/preview.js. -->
   <div id="investigationAuthorBar" class="inv-author-bar" hidden="">
@@ -101,37 +210,41 @@
   <div id="investigationObjectsWrap" class="inv-probe-wrap" hidden="">
     <!-- Collapsible, and remembered: a reader who folds it away is not
          handed it back open on the next step or the next visit. -->
-    <details id="investigationObjectsDisclosure" class="inv-objects-disclosure" open="">
-    <summary class="inv-probe-title" data-i18n="inv.objects.title">
-      Objects in this activity
-    </summary>
-    <div
-      id="investigationObjects"
-      class="inv-objects"
-      role="group"
-      data-i18n-aria-label="inv.objects.label"
-      aria-label="Objects in this activity"
-    ></div>
-    <!-- Camera and scale, for a step that stands objects on the canvas.
+    <details
+      id="investigationObjectsDisclosure"
+      class="inv-objects-disclosure"
+      open=""
+    >
+      <summary class="inv-probe-title" data-i18n="inv.objects.title">
+        Objects in this activity
+      </summary>
+      <div
+        id="investigationObjects"
+        class="inv-objects"
+        role="group"
+        data-i18n-aria-label="inv.objects.label"
+        aria-label="Objects in this activity"
+      ></div>
+      <!-- Camera and scale, for a step that stands objects on the canvas.
          Both cameras act once, on request: a view that re-framed itself
          every frame would take the scene back every time a reader looked
          somewhere else. -->
-    <div id="investigationStageTools" class="inv-objects" hidden="">
-      <button type="button" id="investigationFit" class="inv-stage-btn">
-        <span data-i18n="inv.stage.fit">Fit comparison</span>
-      </button>
-      <button type="button" id="investigationFollow" class="inv-stage-btn">
-        <span data-i18n="inv.stage.follow">Follow selected</span>
-      </button>
-      <button
-        type="button"
-        id="investigationScale"
-        class="inv-stage-btn"
-        aria-pressed="false"
-      >
-        <span data-i18n="inv.stage.scale">True scale</span>
-      </button>
-    </div>
+      <div id="investigationStageTools" class="inv-objects" hidden="">
+        <button type="button" id="investigationFit" class="inv-stage-btn">
+          <span data-i18n="inv.stage.fit">Fit comparison</span>
+        </button>
+        <button type="button" id="investigationFollow" class="inv-stage-btn">
+          <span data-i18n="inv.stage.follow">Follow selected</span>
+        </button>
+        <button
+          type="button"
+          id="investigationScale"
+          class="inv-stage-btn"
+          aria-pressed="false"
+        >
+          <span data-i18n="inv.stage.scale">True scale</span>
+        </button>
+      </div>
     </details>
   </div>
 
@@ -288,11 +401,7 @@
        using a screen reader, or to one who cannot separate two colors.
        Every point the canvas draws is in this table, in the order the
        student recorded them. Kept in step by js/investigations.js. -->
-  <div
-    id="investigationPlotTableWrap"
-    class="inv-plot-table-wrap"
-    hidden=""
-  >
+  <div id="investigationPlotTableWrap" class="inv-plot-table-wrap" hidden="">
     <table id="investigationPlotTable" class="inv-plot-table"></table>
   </div>
 </aside>
@@ -366,11 +475,7 @@
        the canvas points at it. -->
   <dl id="investigationToolReadout" class="inv-tool-readout"></dl>
   <div id="investigationToolControls" class="inv-tool-controls"></div>
-  <div
-    id="investigationToolActions"
-    class="inv-tool-actions"
-    hidden=""
-  ></div>
+  <div id="investigationToolActions" class="inv-tool-actions" hidden=""></div>
   <div id="investigationToolPresets" class="inv-presets"></div>
   <p id="investigationToolPresetNote" class="inv-preset-note"></p>
 </aside>
@@ -391,15 +496,20 @@
     ><span class="gs-es" lang="es">Mostrar</span></span
   >
   <label
-    ><input type="radio" name="investigationDock" id="investigationDockTool" checked="" /><span
-      class="gs-en"
-      >Instrument</span
+    ><input
+      type="radio"
+      name="investigationDock"
+      id="investigationDockTool"
+      checked=""
+    /><span class="gs-en">Instrument</span
     ><span class="gs-es" lang="es">Instrumento</span></label
   >
   <label
-    ><input type="radio" name="investigationDock" id="investigationDockPlot" /><span
-      class="gs-en"
-      >Graph</span
+    ><input
+      type="radio"
+      name="investigationDock"
+      id="investigationDockPlot"
+    /><span class="gs-en">Graph</span
     ><span class="gs-es" lang="es">Gráfica</span></label
   >
 </div>

@@ -150,6 +150,7 @@ export const KEYS = [
   ['gravitas_evidence_notebook', 'evidence'],
   ['gravitas_course_level', 'preferences'],
   ['gravitas_course_preview', null],
+  ['gravitas_next_context', null],
   ['gravitas_course_', 'courses'],
   ['gravitas_composer_preview', null],
   ['gravitas_composer_', 'drafts'],
@@ -167,6 +168,7 @@ export const KEYS = [
   ['gravitas_rail_sections', 'preferences'],
   ['gravitas_lecture_sequence', 'preferences'],
   ['gravitas_welcome_seen_', 'preferences'],
+  ['gravitas_orientation_seen_', 'preferences'],
   ['mobile_instructions_shown', 'preferences'],
 ];
 

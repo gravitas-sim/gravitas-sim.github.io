@@ -75,6 +75,11 @@ export default {
         'La velocidad de la estrella no es constante',
         'Nada, porque doce medidas son demasiado pocas',
       ],
+      misconceptions: [
+        {
+          say: 'La dispersión muestra que la velocidad no es constante; no dice por qué. Un planeta es la causa más probable, pero una estrella compañera, las manchas o el instrumento pueden hacer lo mismo.',
+        },
+      ],
       because:
         'La velocidad no es constante. Eso es todo lo que la dispersión puede sostener por sí misma. Un planeta es la explicación más probable y no es la única: una compañera estelar tenue, pulsaciones, manchas que rotan por la superficie o un fallo del instrumento producen también variaciones de velocidad. Convertir «no es constante» en «un planeta, de esta masa, con este periodo» necesita más que una dispersión: necesita que la variación se repita con un periodo definido, y necesita descartar las demás explicaciones.',
       tip: 'El panel de resultados dice lo mismo bajo «Lo que eso no dice». Está ahí a propósito.',

@@ -41,7 +41,13 @@ export {
   shouldShowWelcome,
 } from './welcomeGate.js';
 
-import { markWelcomeSeen, resetWelcomePreference } from './welcomeGate.js';
+import {
+  isOrientationSeen,
+  markOrientationSeen,
+  markWelcomeSeen,
+  resetWelcomePreference,
+} from './welcomeGate.js';
+import { announce } from './notify.js';
 
 // This module's prose lives in the deferred half of the catalog - see the
 // note in js/i18n/en.deferred.js. Registered from here rather than left to the
@@ -277,6 +283,36 @@ async function fillLessonPreviews() {
 const sections = loadFragment('home');
 sections.catch(() => {});
 
+// The first-run introduction: three screens inside Home, so Home's place in
+// the order (PLATFORM_MODEL.md, "First run") is the introduction's too.
+let orienting = false;
+const orientEl = () => els.body?.querySelector('#welOrient');
+
+function showOrient(i) {
+  const box = orientEl();
+  if (!box) return;
+  box.hidden = false;
+  box.querySelectorAll('[data-orient]').forEach(s => {
+    s.hidden = Number(s.dataset.orient) !== i;
+  });
+  box.querySelectorAll('[data-n]').forEach(n => (n.textContent = i + 1));
+  const h = box.querySelector(`[data-orient="${i}"] [data-orient-h]`);
+  h?.focus();
+  announce(`${box.querySelector('#welOrientCount').innerText}. ${h.innerText}`);
+}
+
+/** Skip, finish or leave Home: the introduction is over and is not shown again. */
+function endOrient(focus) {
+  if (!orienting) return;
+  orienting = false;
+  markOrientationSeen();
+  document.body.classList.remove('wel-orienting');
+  const box = orientEl();
+  if (box) box.hidden = true;
+  if (focus)
+    els.body?.querySelector('.wel-hero [data-action="enter"]')?.focus();
+}
+
 /** Put the sections in place and fill them. Runs once, after build(). */
 async function fillSections() {
   mountFragment('home', await sections);
@@ -305,6 +341,7 @@ async function fillSections() {
       .join('')
   );
   syncReset();
+  if (orienting) showOrient(0);
   // The same treatment the gallery gives a capture that fails to load.
   wireThumbnailFallbacks(node);
   // The lesson titles and the count come from the registry, fetched
@@ -427,8 +464,27 @@ function wireBody() {
       runAction('lesson', lesson.dataset.lesson);
       return;
     }
+    const o = e.target.closest('[data-orient-act]');
+    if (o) {
+      const i = Number(o.closest('[data-orient]').dataset.orient);
+      const a = o.dataset.orientAct;
+      if (a === 'next') showOrient(i + 1);
+      else if (a === 'back') showOrient(i - 1);
+      else endOrient(true);
+      return;
+    }
     const action = e.target.closest('[data-action]');
     if (action) runAction(action.dataset.action);
+  });
+  els.body.addEventListener('keydown', e => {
+    const s = e.target.closest?.('[data-orient]');
+    if (!s || e.altKey || e.ctrlKey || e.metaKey) return;
+    const i = Number(s.dataset.orient);
+    const to = { ArrowRight: i + 1, ArrowLeft: i - 1 }[e.key];
+    if (to >= 0 && to < 3) {
+      e.preventDefault();
+      showOrient(to);
+    }
   });
 }
 
@@ -532,6 +588,10 @@ export function openWelcome(opts = {}) {
   if (opts.onEnter) onEnter = opts.onEnter;
   lastFocus = document.activeElement;
 
+  // Only a first, automatic Home carries it; the page then shows nothing else
+  // until it ends (css: .wel-orienting).
+  orienting = auto && !isOrientationSeen();
+  document.body.classList.toggle('wel-orienting', orienting);
   build();
   els.screen.hidden = false;
   // The class carries two jobs: it lets the scenario card in ui.js know not to
@@ -577,6 +637,7 @@ export function closeWelcome() {
   // Only an intentional pass through the front door records it. A door skipped
   // by a deep link never opens, so it can never mark itself seen here.
   markWelcomeSeen();
+  endOrient(false);
   // Leaving Home by name leaves its name out of the address, so a reload
   // lands in the sandbox the reader chose.
   if (location.hash === '#home')

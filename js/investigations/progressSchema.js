@@ -104,6 +104,7 @@ const EMPTY = () => ({
   startedAt: null,
   depth: null,
   deepest: null,
+  spent: 0,
   schema: PROGRESS_SCHEMA,
   migrated: false,
   notes: [],
@@ -262,6 +263,7 @@ export function readProgress(data, lesson) {
   out.startedAt = typeof data.startedAt === 'string' ? data.startedAt : null;
   if (DEPTHS.includes(data.depth)) out.depth = data.depth;
   if (DEPTHS.includes(data.deepest)) out.deepest = data.deepest;
+  if (data.spent > 0) out.spent = Math.floor(data.spent);
 
   // A step that has been removed from the lesson since the save. The answer is
   // gone from the working set and the reader is told how much.
@@ -286,6 +288,7 @@ export function writeProgress({
   startedAt,
   depth,
   deepest,
+  spent,
 }) {
   return {
     schema: PROGRESS_SCHEMA,
@@ -297,5 +300,6 @@ export function writeProgress({
     startedAt: startedAt ?? null,
     ...(DEPTHS.includes(depth) ? { depth } : {}),
     ...(deepest && deepest !== 'core' ? { deepest } : {}),
+    ...(spent > 0 ? { spent: Math.floor(spent) } : {}),
   };
 }

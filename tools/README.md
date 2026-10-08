@@ -91,6 +91,7 @@ current, and the orchestrator checks it.
 | `precache-inventory.mjs` | What the service worker precaches, measured |  |
 | `prepare-pages.mjs` | Assemble the tree that gets published |  |
 | `project-metadata.mjs` | The project's own description of itself |  |
+| `prose-whitespace.mjs` | Prose whitespace: write a lesson's line wrapping once, in the source only |  |
 | `release-check.mjs` | npm run release:check | `npm run release:check` |
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |

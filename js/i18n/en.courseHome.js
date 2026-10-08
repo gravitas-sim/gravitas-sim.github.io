@@ -53,6 +53,10 @@ export const EN_COURSEHOME = {
   'courseHome.open.dataset': 'Open the data',
   'courseHome.open.reading': 'Open the reading',
   'courseHome.openNamed': '{action}: {title}',
+  'courseHome.progress': '{done} of {total} investigations finished',
+  'courseHome.status.going': 'In progress',
+  'courseHome.status.done': 'Finished',
+  'courseHome.continue': 'Continue: {title}',
   'courseHome.after': 'After: {list}',
   'courseHome.missing':
     'This version of Gravitas does not have this investigation. Ask your instructor what to do instead.',

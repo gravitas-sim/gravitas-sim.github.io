@@ -425,6 +425,11 @@ describe('no writer slips back to a direct write', () => {
     'js/theme.js': 'preference, same chunk cost',
     'js/units.js': 'preference, same chunk cost',
     'js/i18n/index.js': 'the language, each page’s catalog loader',
+    'js/courseHome.js':
+      'gravitas_next_context: where a lesson was opened from, not student work (STORAGE.md)',
+    'js/libraryPage.js': 'gravitas_next_context, as above',
+    'js/investigations.js': 'gravitas_next_context, as above',
+    'js/investigations/next.js': 'gravitas_next_context, as above',
   };
   test('the files that call setItem or removeItem on a Storage are exactly the listed ones', () => {
     const lines = execFileSync(
