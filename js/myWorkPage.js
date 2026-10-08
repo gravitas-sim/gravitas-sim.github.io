@@ -15,7 +15,11 @@
 // =============================================================================
 
 import { EXPORT_FORMAT, openStudentStore } from './storage/index.js';
-import { put as putText } from './storage/local.js';
+import {
+  drop as dropText,
+  get as getText,
+  put as putText,
+} from './storage/local.js';
 import { SURFACE_ROUTE, describe, surfaceOf, total } from './myWork/model.js';
 import {
   INDEX_KEY,
@@ -66,9 +70,12 @@ let everything = false;
 
 const KINDS = {
   lesson: ['Investigation', 'Investigación'],
-  observatory: ['Observatory guide', 'Guía del Observatorio'],
-  lab3d: ['3-D lab guide', 'Guía del laboratorio 3-D'],
-  mission: ['Mission lab guide', 'Guía del laboratorio de misiones'],
+  observatory: ['Observatory investigation', 'Investigación del Observatorio'],
+  lab3d: ['3-D lab investigation', 'Investigación del laboratorio 3-D'],
+  mission: [
+    'Mission lab investigation',
+    'Investigación del laboratorio de misiones',
+  ],
   studio: ['Scenario draft', 'Borrador de escenario'],
   composer: ['Investigation draft', 'Borrador de investigación'],
   course: ['Course draft', 'Borrador de curso'],
@@ -700,8 +707,10 @@ async function start() {
     /* items list under their ids */
   }
   try {
-    localStorage.setItem('gravitas_probe', '1');
-    localStorage.removeItem('gravitas_probe');
+    // Write back what is there (or nothing) under the note's own key.
+    const was = getText(LAST_EXPORT_KEY);
+    putText(LAST_EXPORT_KEY, was ?? '', 'preferences');
+    if (was === null) dropText(LAST_EXPORT_KEY);
   } catch {
     s.kept = false;
   }
