@@ -31,10 +31,6 @@ import { artifact } from '../platform/artifact.js';
 import { symbolOf, unitIdOf } from '../units/registry.js';
 import { canonicalJsonExact, sha256Hex } from '../hash.js';
 
-/** What a ledger record says it is. */
-export const LEDGER_FORMAT = 'gravitas.ledger';
-export const LEDGER_VERSION = 1;
-
 /** How many evidence rows a submission token carries; the digest covers all. */
 export const TOKEN_ROWS = 40;
 
