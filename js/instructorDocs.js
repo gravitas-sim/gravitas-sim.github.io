@@ -240,6 +240,10 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
   const expectations = plainContent(expectationsFor(inv));
   const key = answerKeyFor(inv);
   const counts = questionCounts(inv);
+  // A lesson with deeper steps prints each depth's key: the core steps numbered
+  // as every student sees them, and the steps a deeper reading adds marked by
+  // the depth that adds them (DEPTH.md).
+  const depths = [...new Set(key.entries.map(e => e.depth).filter(Boolean))];
 
   const doc = createDocument({
     title: `${plainText(inv.title)}: Answer Key`,
@@ -250,7 +254,7 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
   doc.titleBlock({
     kicker: 'Gravitas Investigation | Answer Key',
     title: plainText(inv.title),
-    subtitle: `${plural(inv.steps.length, 'step')}  |  ${plainText(inv.duration)}  |  ${plural(counts.graded, 'graded question')}, ${plural(counts.predictions, 'prediction')}`,
+    subtitle: `${plural(inv.steps.length - key.entries.filter(e => e.depth).length, 'step')}${depths.map(d => `, ${key.entries.filter(e => e.depth === d).length} more at ${d} depth`).join('')}  |  ${plainText(inv.duration)}  |  ${plural(counts.graded, 'graded question')}, ${plural(counts.predictions, 'prediction')}`,
   });
 
   doc.paragraph(
@@ -274,14 +278,17 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
     // they should see there is the expectation. Skipping every reading step
     // dropped those from the key, and the guide prints no expectations, so
     // they reached no document at all.
-    const expected = expectations[inv.steps[e.step - 1].sid];
+    const expected = expectations[e.sid];
     if (e.category === 'reading' && !expected) continue;
 
-    doc.heading(`Step ${e.step}: ${e.title}`, {
-      size: 11,
-      spaceBefore: 16,
-      keepWith: 60,
-    });
+    doc.heading(
+      `${e.depth ? `${e.depth[0].toUpperCase()}${e.depth.slice(1)} depth` : `Step ${key.entries.filter(x => !x.depth && x.step <= e.step).length}`}: ${e.title}`,
+      {
+        size: 11,
+        spaceBefore: 16,
+        keepWith: 60,
+      }
+    );
     doc.paragraph(CATEGORY_LABEL[e.category] ?? e.category, {
       size: 8,
       gap: 5,

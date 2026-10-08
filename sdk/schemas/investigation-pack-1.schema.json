@@ -1381,6 +1381,14 @@
               "items": {
                 "$ref": "#/$defs/sid"
               }
+            },
+            "depth": {
+              "enum": [
+                "core",
+                "quantitative",
+                "advanced"
+              ],
+              "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
         },
@@ -1434,6 +1442,14 @@
               "items": {
                 "$ref": "#/$defs/text"
               }
+            },
+            "depth": {
+              "enum": [
+                "core",
+                "quantitative",
+                "advanced"
+              ],
+              "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
         },
@@ -1506,6 +1522,14 @@
                   }
                 }
               }
+            },
+            "depth": {
+              "enum": [
+                "core",
+                "quantitative",
+                "advanced"
+              ],
+              "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
         },
@@ -1578,6 +1602,14 @@
             "reveal": {
               "description": "The later step, one every student reaches, where the prediction is marked.",
               "$ref": "#/$defs/sid"
+            },
+            "depth": {
+              "enum": [
+                "core",
+                "quantitative",
+                "advanced"
+              ],
+              "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
         },
@@ -1627,6 +1659,14 @@
             "from": {
               "description": "An item in the pack's bank, asked by no other step.",
               "type": "string"
+            },
+            "depth": {
+              "enum": [
+                "core",
+                "quantitative",
+                "advanced"
+              ],
+              "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           }
         },
@@ -1723,6 +1763,14 @@
             },
             "scoring": {
               "$ref": "#/$defs/scoring"
+            },
+            "depth": {
+              "enum": [
+                "core",
+                "quantitative",
+                "advanced"
+              ],
+              "description": "The depth the step belongs to; core when absent (Prompt 72)."
             }
           },
           "$ref": "#/$defs/questionRules"

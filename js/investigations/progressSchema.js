@@ -76,6 +76,12 @@ export const isValidSid = sid =>
   /^[a-z0-9]+(-[a-z0-9]+)*$/.test(sid) &&
   !/^\d+$/.test(sid);
 
+export const DEPTHS = Object.freeze(['core', 'quantitative', 'advanced']);
+
+export const inDepth = (step, depth = 'core') =>
+  Math.max(0, DEPTHS.indexOf(step?.depth)) <=
+  Math.max(0, DEPTHS.indexOf(depth));
+
 /** @param {object} lesson - A merged lesson @returns {Array<string>} Its sids, in order */
 export const sidsOf = lesson =>
   Array.isArray(lesson?.steps) ? lesson.steps.map(s => s?.sid) : [];
@@ -96,6 +102,8 @@ const EMPTY = () => ({
   visited: new Set(),
   stepSid: null,
   startedAt: null,
+  depth: null,
+  deepest: null,
   schema: PROGRESS_SCHEMA,
   migrated: false,
   notes: [],
@@ -252,6 +260,8 @@ export function readProgress(data, lesson) {
     ? data.stepSid
     : (sidsOf(lesson)[0] ?? null);
   out.startedAt = typeof data.startedAt === 'string' ? data.startedAt : null;
+  if (DEPTHS.includes(data.depth)) out.depth = data.depth;
+  if (DEPTHS.includes(data.deepest)) out.deepest = data.deepest;
 
   // A step that has been removed from the lesson since the save. The answer is
   // gone from the working set and the reader is told how much.
@@ -274,6 +284,8 @@ export function writeProgress({
   visited,
   stepSid,
   startedAt,
+  depth,
+  deepest,
 }) {
   return {
     schema: PROGRESS_SCHEMA,
@@ -283,5 +295,7 @@ export function writeProgress({
     attempts: { ...attempts },
     visited: [...(visited || [])],
     startedAt: startedAt ?? null,
+    ...(DEPTHS.includes(depth) ? { depth } : {}),
+    ...(deepest && deepest !== 'core' ? { deepest } : {}),
   };
 }

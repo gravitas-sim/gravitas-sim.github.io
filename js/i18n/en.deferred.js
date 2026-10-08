@@ -670,6 +670,7 @@ export const EN_DEFERRED = {
   'assign.print.id': 'Activity {id}, issued {date}.',
   'assign.print.roster': 'Class code: {code}',
 
+  'assign.depth': 'Depth',
   'assign.error.nothingSelected': 'Choose at least one step.',
   'assign.error.noLesson': 'That investigation could not be read.',
   'assign.error.unknownSteps':
@@ -906,6 +907,10 @@ export const EN_DEFERRED = {
     "Each slice is <strong>{share}%</strong> of the orbit's area, and the planet spends <strong>{time}</strong> traversing every one of them.",
   'inv.import.added': 'Added {value}.',
   'inv.progress.cleared': 'Progress cleared',
+  'inv.depth.deeper': 'Go deeper',
+  'inv.depth.shallower': 'Fewer steps',
+  'inv.answer.needsUncertainty':
+    'Give your value and its uncertainty, for example 8.1 ± 0.2.',
   'inv.progress.steps': '{done} of {total} steps',
   'inv.scenario.reset': 'Scenario reset',
   'inv.card.loading': 'Loading…',

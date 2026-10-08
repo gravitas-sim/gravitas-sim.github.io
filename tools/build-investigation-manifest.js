@@ -75,6 +75,8 @@ const entryOf = inv => ({
   level: inv.level,
   thumbnail: inv.thumbnail,
   ...(inv.series ? { series: inv.series } : {}),
+  // How many depths it can be read at (core, quantitative, advanced), if more than one.
+  ...(inv.depths ? { depths: inv.depths.length } : {}),
   stepCount: inv.steps.length,
   gradedCount: gradedSteps(inv).length,
   objectiveCount: inv.objectives?.length || 0,

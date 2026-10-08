@@ -41,6 +41,10 @@ import {
   translationCoverage,
 } from '../data/investigations/i18n.js';
 
+// A number as a student gives it: with an uncertainty if the step asks for one.
+const asGiven = (step, n, u = toleranceFor(step) / 2) =>
+  step.uncertainty ? `${n} ± ${u}` : n;
+
 /**
  * Step types the engine knows how to render.
  *
@@ -822,7 +826,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             typed.length > 0 && Object.keys(hints).length === typed.length;
           if (fullyHinted) {
             for (const f of step.fields) {
-              if (typeof f.compute !== 'function') continue;
+              if (typeof f.compute !== 'function' || f.compute.length > 1)
+                continue;
               try {
                 const v = f.compute(hints);
                 if (
@@ -1067,7 +1072,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             `tolerance resolves to ${tol}, which grades nothing`
           );
         } else {
-          if (checkAnswer(step, step.answer) !== true) {
+          if (checkAnswer(step, asGiven(step, step.answer)) !== true) {
             E(
               'answer/accepted',
               'the grader rejects the answer this step declares'

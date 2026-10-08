@@ -23,6 +23,12 @@
 
 import { loadAuthoringInputs } from './authoring/inputs.mjs';
 import { checkCatalog, RULE_INDEX } from '../js/authoring/rules.js';
+import { checkDepth, DEPTH_RULES } from '../js/authoring/depthRules.js';
+import {
+  DEPTH_LESSONS,
+  depthSources,
+  layDepth,
+} from '../js/investigations/depth.js';
 import { realSystemFindings } from './authoring/realSystems.mjs';
 import {
   MODELS,
@@ -58,6 +64,7 @@ if (has('--rules')) {
   const groups = new Map();
   for (const [id, description] of Object.entries({
     ...RULE_INDEX,
+    ...DEPTH_RULES,
     // Node-only rule: kept out of js/authoring/rules.js, which ships on the Composer route
     [MODEL_RULE]: MODEL_RULE_DESCRIPTION,
   })) {
@@ -77,6 +84,26 @@ if (has('--rules')) {
 
 const inputs = await loadAuthoringInputs();
 let findings = checkCatalog(inputs);
+// Deeper steps (Prompt 72): each is judged by every per-step rule the core
+// ones pass, laid into its lesson, and by the rules of DEPTH.md.
+for (const core of inputs.investigations) {
+  if (!core.depths && !DEPTH_LESSONS.includes(core.id)) continue;
+  const { steps, words } = await depthSources(core.id).catch(() => ({
+    steps: [],
+    words: null,
+  }));
+  const laid = layDepth(core, steps);
+  const added = new Set(
+    laid.steps.map((s, i) => (steps.includes(s) ? i : -1)).filter(i => i >= 0)
+  );
+  findings.push(
+    ...checkCatalog(
+      { ...inputs, investigations: [laid] },
+      { skip: ['agree/', 'i18n/', 'instructor/', 'id/file', 'id/lesson'] }
+    ).filter(f => added.has(f.step)),
+    ...checkDepth(core, laid, steps, words)
+  );
+}
 // The attribution rule reaches the data a lesson stands on: every real-system
 // parameter object names where each value comes from, or says it is
 // approximate and unsourced (tools/authoring/realSystems.mjs). Node-only, so

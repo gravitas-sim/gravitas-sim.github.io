@@ -42,6 +42,7 @@ export function libraryCardHtml(entry, { t, pick, progress }) {
     entry.steps && entry.kind !== 'course'
       ? t('lib.card.steps', { n: entry.steps })
       : '',
+    entry.depths ? t('lib.card.depths', { n: entry.depths }) : '',
     entry.level ? t(`lib.level.${entry.level}`) : '',
     entry.calculation ? t(`lib.calculation.${entry.calculation}`) : '',
   ].filter(Boolean);

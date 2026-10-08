@@ -36,12 +36,12 @@ export function checkAnswer(step, value, { locale = 'en' } = {}) {
     return Number(value) === step.answer;
   }
   if (step.kind === 'numeric') {
-    const read = parseAnswer(value, step, locale);
+    const read = readValue(value, step, locale);
     // Unreadable is not correct. gradeAnswer() below is what a caller uses when
     // it wants to tell the student *why*; this keeps the boolean contract the
     // report, the answer key and every existing caller already rely on.
     if (!read.ok) return false;
-    return withinTolerance(read.value, step);
+    return withinTolerance(read, step);
   }
   return null;
 }
@@ -80,7 +80,7 @@ export function gradeAnswer(step, value, { locale = 'en' } = {}) {
 
   if (step.kind !== 'numeric') return blank;
 
-  const read = parseAnswer(value, step, locale);
+  const read = readValue(value, step, locale);
   if (!read.ok) {
     return {
       ...blank,
@@ -91,7 +91,7 @@ export function gradeAnswer(step, value, { locale = 'en' } = {}) {
     };
   }
 
-  const correct = withinTolerance(read.value, step);
+  const correct = withinTolerance(read, step);
   return {
     status: correct ? 'correct' : 'incorrect',
     correct,
@@ -103,21 +103,27 @@ export function gradeAnswer(step, value, { locale = 'en' } = {}) {
   };
 }
 
+// A number, or "value ± uncertainty" (also +/-) when the step asks for one.
+function readValue(value, step, locale) {
+  if (!step.uncertainty) return parseAnswer(value, step, locale);
+  const [a, b, ...more] = String(value ?? '').split(/\s*(?:±|\+\/-|\+-)\s*/);
+  const v = parseAnswer(a, step, locale);
+  if (!v.ok) return v;
+  const u = b === undefined || more.length ? v : parseAnswer(b, step, locale);
+  if (!u.ok || u === v || !(u.value > 0))
+    return u.ok ? { ok: false, reason: 'needsUncertainty' } : u;
+  return { ...v, u: u.value };
+}
+
 /**
- * Whether a number is inside the step's tolerance.
- *
- * The slack is because binary floating point does not represent most decimals
- * exactly: |7.6 - 8| evaluates to 0.4000000000000004, so a student who worked
- * out exactly the value at the edge of the stated tolerance was being told they
- * were wrong by four parts in 10^16.
- *
- * @param {number} n - The parsed answer
- * @param {Object} step - Step definition
- * @returns {boolean} Whether it counts
+ * Whether a number is inside the step's tolerance (with `u`: overlaps it, and
+ * is no wider than `maxUncertainty`). The slack is for binary floating point:
+ * |7.6 - 8| is 0.4000000000000004, and the edge of the tolerance must pass.
  */
-function withinTolerance(n, step) {
+function withinTolerance({ value: n, u }, step) {
   const tol = toleranceFor(step);
-  return Math.abs(n - step.answer) <= tol * (1 + 1e-9) + 1e-12;
+  if (u !== undefined && u > (step.maxUncertainty ?? 2 * tol)) return false;
+  return Math.abs(n - step.answer) <= (tol + (u ?? 0)) * (1 + 1e-9) + 1e-12;
 }
 
 /**

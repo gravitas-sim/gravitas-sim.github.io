@@ -49,6 +49,8 @@ export const STEP_TYPES = Object.freeze([
   'question',
 ]);
 export const QUESTION_KINDS = Object.freeze(['choice', 'numeric', 'short']);
+/** A step's depth: core when it says nothing (Prompt 72). */
+export const DEPTH_NAMES = Object.freeze(['core', 'quantitative', 'advanced']);
 export const WHEN_STATES = Object.freeze(['incorrect', 'correct']);
 
 const PUBLIC_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -91,6 +93,7 @@ const COMMON_STEP = [
   'tool',
   'when',
   'requires',
+  'depth',
 ];
 const STEP_FIELDS = {
   read: [],
@@ -357,6 +360,23 @@ function checkStep(s, path, index, ctx) {
   text(s.body, `${path}.body`, true);
   text(s.tip, `${path}.tip`, false);
 
+  if (s.depth !== undefined) {
+    need(
+      DEPTH_NAMES.includes(s.depth),
+      `${path}.depth`,
+      'depth',
+      'core, quantitative or advanced'
+    );
+    // A deeper step reads the world already on screen, and is never the
+    // first or the closing step, which every depth shares.
+    if (s.depth !== 'core')
+      need(
+        index > 0 && index < steps.length - 1 && s.setup === undefined,
+        `${path}.depth`,
+        'depthPlace',
+        'a deeper step is neither first nor last and opens no scenario'
+      );
+  }
   if (s.setup !== undefined) checkSetup(s.setup, `${path}.setup`, ctx);
   if (index === 0)
     need(

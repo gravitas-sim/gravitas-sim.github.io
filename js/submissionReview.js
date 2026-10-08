@@ -49,6 +49,21 @@ import {
 import { validateBackup } from './investigations/progressBackup.js';
 import { MANIFEST } from './data/investigations/manifest.js';
 import { decodeEntities } from './lessonMarkup.js';
+import { layDepth } from './investigations/depthPure.js';
+
+// The deeper steps by lesson, English only: grading never needs the Spanish.
+const DEEPER = {
+  'keplers-laws': () => import('./data/investigations/depth/keplers-laws.js'),
+  'transit-photometry': () =>
+    import('./data/investigations/depth/transit-photometry.js'),
+  'weighing-stars': () =>
+    import('./data/investigations/depth/weighing-stars.js'),
+  'missing-mass': () => import('./data/investigations/depth/missing-mass.js'),
+};
+const deepen = async lesson =>
+  lesson.depthLaid || !DEEPER[lesson.id]
+    ? lesson
+    : layDepth(lesson, (await DEEPER[lesson.id]()).default.steps);
 import { mountShell } from './shell.js';
 
 const $ = id => document.getElementById(id);
@@ -115,9 +130,12 @@ async function accept(label, thing, kind) {
     if (!check.ok) return refuse(label, check.reason);
     submission = { v: 1, a: null, r: null, fl: 'en', b: thing };
   }
-  const lesson = await lessonById(submission.b.lesson.id);
+  let lesson = await lessonById(submission.b.lesson.id);
   if (lesson === undefined) return refuse(label, 'lessonLoad');
   if (!lesson) return refuse(label, 'unknownLesson');
+  // Read at a deeper depth: its steps are laid in, or their answers are stale.
+  if (lesson.depths && submission.dp && submission.dp !== 'core')
+    lesson = await deepen(lesson);
   // The evidence behind the answers, checked against its digest here: the
   // table in front of the instructor is recomputed, not taken as stated.
   const evidence = await checkEvidence(submission.ev);
@@ -360,6 +378,7 @@ function render() {
           const notes = [
             s.rosterId,
             s.assignmentId,
+            s.depth ? t(`sub.depth.${s.depth}`) : null,
             s.evidence.state === 'mismatch'
               ? t('sub.evidence.mismatchNote')
               : null,

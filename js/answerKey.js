@@ -17,9 +17,17 @@
 // mixed into the derivation.
 // =============================================================================
 
+// Depths, shallowest first (as in investigations/progressSchema.js).
+const LEVELS = ['core', 'quantitative', 'advanced'];
+const rank = d => Math.max(0, LEVELS.indexOf(d));
+const inDepth = (s, d) => rank(s?.depth) <= rank(d);
 import { checkAnswer, toleranceFor } from './answerCheck.js';
 import { FEEDBACK_CLASSES, hintLadder } from './answerFeedback.js';
 import { decodeEntities } from './lessonMarkup.js';
+
+// A number as a student gives it: with an uncertainty if the step asks for one.
+export const asGiven = (step, n, u = toleranceFor(step) / 2) =>
+  step.uncertainty ? `${n} ± ${u}` : n;
 
 /**
  * Lesson prose as plain text, for the PDFs: the inline tags stripped, and the
@@ -63,6 +71,8 @@ export function entryFor(step, index) {
     step: index + 1,
     type: step.type,
     kind: step.kind ?? null,
+    sid: step.sid,
+    ...(step.depth ? { depth: step.depth } : {}),
     title: plainText(step.title),
     category: categoryOf(step),
     prompt: step.prompt ? plainText(step.prompt) : null,
@@ -150,18 +160,22 @@ export function entryFor(step, index) {
 /**
  * The answer key for one investigation.
  * @param {Object} inv - Investigation definition
+ * @param {string} [depth] - Only the steps a student reads at this depth,
+ *   numbered as they see them (DEPTH.md); every step when omitted
  * @returns {Object} Metadata plus one entry per step
  */
-export function answerKeyFor(inv) {
+export function answerKeyFor(inv, depth) {
+  const steps = depth ? inv.steps.filter(s => inDepth(s, depth)) : inv.steps;
   return {
+    depth: depth ?? null,
     id: inv.id,
     title: plainText(inv.title),
     subtitle: plainText(inv.subtitle),
     duration: plainText(inv.duration),
     level: plainText(inv.level),
-    stepCount: inv.steps.length,
+    stepCount: steps.length,
     objectives: (inv.objectives || []).map(plainText),
-    entries: inv.steps.map(entryFor),
+    entries: steps.map(entryFor),
   };
 }
 
@@ -203,11 +217,11 @@ export function verifyKey(inv) {
     }
 
     if (e.answerValue !== undefined) {
-      if (!checkAnswer(step, e.answerValue)) {
+      if (!checkAnswer(step, asGiven(step, e.answerValue))) {
         problems.push(`${where}: the derived value is not accepted`);
       }
       const outside = e.answerValue + e.tolerance * 1.001 + 1e-12;
-      if (checkAnswer(step, outside)) {
+      if (checkAnswer(step, asGiven(step, outside, e.tolerance / 1e4))) {
         problems.push(
           `${where}: the quoted tolerance is narrower than the site's`
         );

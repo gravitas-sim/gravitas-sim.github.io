@@ -176,6 +176,7 @@ function entry(e) {
     subjects: e.subjects?.length ? sorted(e.subjects) : null,
     prerequisites: e.prerequisites ?? null,
     steps: e.steps ?? null,
+    ...(e.depths ? { depths: e.depths } : {}),
     thumbnail: e.thumbnail ?? null,
     route: e.route,
     // A built-in course's units, for /my-work/'s per-unit progress.
@@ -254,6 +255,7 @@ export async function buildLibrary() {
         subjects: BROWSE_META[m.id]?.tags,
         prerequisites: (d?.prerequisites || []).map(p => `investigation:${p}`),
         steps: m.stepCount,
+        ...(m.depths ? { depths: m.depths } : {}),
         thumbnail: m.thumbnail,
         route: `/#investigation=${m.id}`,
       })

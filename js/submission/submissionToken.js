@@ -85,6 +85,7 @@ export const isSubmissionToken = text =>
  * @param {?{ids: string[], rows: Array<Array<*>>, total: number}} [args.record]
  *   - The ledger record the report printed (notebook/ledger.js ledgerRecord())
  * @param {?string} [args.digest] - Its digest
+ * @param {?string} [args.depth] - core, quantitative or advanced, if offered
  * @returns {object} The payload, with short keys because it is a fragment
  */
 export function buildSubmission({
@@ -94,9 +95,12 @@ export function buildSubmission({
   fallbackLocale = 'en',
   record = null,
   digest = null,
+  depth = null,
 }) {
   return {
     v: SUBMISSION_SCHEMA,
+    // The depth it was read at, when the investigation has more than one.
+    ...(depth ? { dp: depth } : {}),
     ...(record && digest
       ? {
           ev: {

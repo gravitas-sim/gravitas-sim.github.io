@@ -149,6 +149,7 @@ const DARK_MATTER = {
   duration: '45-60 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary

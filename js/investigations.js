@@ -115,6 +115,7 @@ import {
   widgetDefaults,
 } from './widgets.js';
 import {
+  inDepth,
   indexOfSid,
   isValidSid,
   readProgress,
@@ -239,6 +240,11 @@ let visited = new Set();
  */
 let progressNotes = [];
 let startedAt = null;
+// Depth (DEPTH.md).
+let depth = 'core';
+let depthChoice = null;
+let deepest = 'core';
+let depthName = '';
 let probeTimer = null;
 let els = {};
 let plotCanvas = null;
@@ -413,6 +419,8 @@ function save() {
     visited,
     stepSid: active.steps[stepIndex]?.sid ?? null,
     startedAt,
+    depth: depthChoice,
+    deepest,
   });
 
   // This tab's copy, always, and before the disk is asked. It is what makes
@@ -614,22 +622,10 @@ async function restoreProgressBackup(file) {
 
 /**
  * This tab's copy of every lesson's progress, whether or not the disk took it.
- *
- * When localStorage refuses a write the answers stay in the working variables,
- * which is enough while the panel is open and useless the moment it closes:
- * reopening the lesson read storage, found nothing or something stale, and the
- * reader was back at step one with their work gone. Reproduced before the fix -
- * answer to step 3 with writes failing, close, reopen, and the panel says step
- * 1. Closing a panel is not a decision to discard.
- *
- * So every save lands here first. It is authoritative for this tab: it is
- * written on every save and storage is not, so it can never be the older of the
- * two. It dies with the tab, which is exactly what the unsaved warning already
- * promises.
- *
- * Authoring previews never reach it, for the same reason they never reach
- * storage: an author looking at step 30 must not become the progress a student
- * finds when they open the lesson.
+ * Written on every save, so never the older of the two: when localStorage
+ * refuses a write, closing and reopening the lesson still finds the work. It
+ * dies with the tab, as the unsaved warning promises. Authoring previews never
+ * reach it, as they never reach storage.
  *
  * @type {Map<string, object>}
  */
@@ -1409,6 +1405,8 @@ function unreadableMessage(step, graded) {
           });
     case 'trailingText':
       return t('inv.answer.trailingText', { text: d.text || '' });
+    case 'needsUncertainty':
+      return t('inv.answer.needsUncertainty');
     default:
       return t('inv.answer.notANumber');
   }
@@ -1494,6 +1492,7 @@ const SHORT_ANSWER_MIN = 40;
  * fingerprint was enough.
  */
 const stepId = index => stepKey(active.id, active.steps[index]?.sid);
+const shown = () => active.steps.filter(s => inDepth(s, depth));
 const currentStep = () => active?.steps[stepIndex] ?? null;
 
 /**
@@ -1584,7 +1583,14 @@ function recomputeFields(step, id) {
     if (!f.compute) continue;
     let next;
     try {
-      next = f.compute(vals);
+      // The second argument reads an earlier step's field.
+      next = f.compute(vals, (sid, field) => {
+        const key = `${stepKey(active.id, sid)}:${field}`;
+        return parseFieldNumber(
+          responses[key],
+          localeOfAnswer(responses, key, getLocale())
+        );
+      });
     } catch {
       next = NaN;
     }
@@ -2068,7 +2074,10 @@ function renderStep() {
 
   const parts = [
     `<p class="inv-step-count">${escape(
-      t('inv.step.counter', { n: stepIndex + 1, total: active.steps.length })
+      t('inv.step.counter', {
+        n: shown().indexOf(step) + 1,
+        total: shown().length,
+      })
     )}
        <span class="inv-step-kind">${escape(t(`inv.step.kind.${step.type}`))}</span></p>`,
     `<h3 class="inv-step-title">${escape(step.title)}</h3>`,
@@ -2407,20 +2416,12 @@ function renderStep() {
 }
 
 /**
- * Open the pause-at-event tool for a step that asks a student to catch a moment.
- *
- * A step declares `pauseAt: {kind, body, primary, label, note}`. This opens the
- * tool with those bodies and that event already chosen and arms NOTHING: the
- * reader presses Arm in the tool, or the step's own button, and that press is
- * the interaction the lesson is asking for.
- *
- * Everything heavier than this is behind a dynamic import, so a lesson that
- * never reaches one of these steps never fetches the tool or its prose.
- *
- * The release on the way out is the important half. A watch armed on one step
- * must not fire into the next one, and a step that has finished with the tool
- * has to drop its listener - see js/investigations/eventWatch.js, which holds
- * the generation and the world check that make that true.
+ * Open the pause-at-event tool for a step that asks a student to catch a
+ * moment. A step declares `pauseAt: {kind, body, primary, label, note}`; the
+ * tool opens with those chosen and arms NOTHING, so the reader's press of Arm
+ * is the interaction asked for. All of it is behind a dynamic import. The
+ * release on the way out matters: a watch armed on one step must not fire into
+ * the next (js/investigations/eventWatch.js).
  *
  * @param {Object} step - Step definition
  */
@@ -2835,19 +2836,12 @@ function clearToolInstrument() {
 }
 
 /**
- * Let a widget be driven by pointing at its canvas, if it asks to be.
- *
- * Opt-in, and gated on the widget declaring `pick`: every other instrument in
- * the catalog is a canvas with sliders under it and stays exactly that. The
- * hook is handed a position in CSS pixels and the size it was measured
- * against, writes whatever it likes into the values, and then goes through
- * paintTool like a slider does - so the sliders move to match, the setting is
- * remembered with the step, and the redraw is the same one.
- *
- * The keyboard half is not a courtesy. A diagram you can only drive by
- * dragging is a diagram some students cannot drive, so a widget that declares
- * `pick` also names which two controls the arrow keys should step, and the
- * canvas becomes focusable. The sliders remain, and are the numeric entry.
+ * Let a widget be driven by pointing at its canvas, if it declares `pick`.
+ * The hook gets a position in CSS pixels, writes into the values, and goes
+ * through paintTool like a slider, so the sliders move to match. A widget that
+ * declares `pick` also names the two controls the arrow keys step, and its
+ * canvas becomes focusable: a diagram only a drag can drive is closed to some
+ * students.
  *
  * @param {Object} widget - The widget being shown
  * @param {Object} spec - The step's tool spec
@@ -3130,12 +3124,14 @@ function renderFooter() {
     stepIndex === active.steps.length - 1
       ? t('inv.action.finish')
       : t('inv.action.next');
-  const pct = Math.round((visited.size / active.steps.length) * 100);
-  els.progressBar.style.width = `${pct}%`;
+  const seen = shown();
+  const done = seen.filter(s => visited.has(s.sid)).length;
+  els.progressBar.style.width = `${Math.round((done / seen.length) * 100)}%`;
   els.progressText.textContent = t('inv.progress.steps', {
-    done: visited.size,
-    total: active.steps.length,
+    done,
+    total: seen.length,
   });
+  renderDepth();
   els.probeWrap.hidden = !step?.probe;
 }
 
@@ -3161,19 +3157,9 @@ const OBJECT_LIST_MAX = 12;
  * @returns {void}
  */
 /**
- * A reader-facing name for a lesson's role key.
- *
- * Roles are the lesson author's handles for the objects a step talks about,
- * and they were being shown to the reader raw. In English that mostly reads as
- * a terse label and gets away with it; in Spanish it is an untranslated
- * English word sitting beside a translated body name, which is the one place
- * in the interface where the two languages are visibly mixed.
- *
- * A translation wins where there is one. Where there is not, the key is
- * derived rather than tabulated: `starA` becomes "star A" and `m2000` becomes
- * "20 M☉", which is right in both languages and means a lesson that invents a
- * role gets a sensible label for free instead of a bare identifier. Only the
- * roles derivation would get wrong carry an English entry.
+ * A reader-facing name for a lesson's role key. A translation wins; otherwise
+ * the key is derived (`starA` becomes "star A", `m2000` "20 M☉"), right in both
+ * languages, so a role a lesson invents still gets a sensible label.
  *
  * @param {string} key - The role as the lesson wrote it
  * @returns {string} What to show in the object list
@@ -3666,21 +3652,11 @@ function setupInForceAt(index) {
  * @param {boolean} [opts.rebuild] - Reload the scenario in force at that step
  */
 /**
- * Release any sound a lesson started.
- *
- * A waveform the lab is playing belongs to the step that started it. Move on,
- * go back, close the lesson or rebuild the world underneath it and what is
- * still coming out of the speakers is a measurement of something that is no
- * longer on screen - which is worse than silence, because it sounds like an
- * answer.
- *
- * Sent as an event rather than a call: js/gwAudio.js pulls in the whole
- * waveform model, and importing it here would put that on every page load for
- * the sake of a stop. The scope is the prefix js/gwWidgets.js owns, so this
- * cannot silence something a reader started outside a lesson, and the single
- * listener on the other side means no amount of stepping accumulates handlers.
- * Stopping also un-ducks the ordinary sonification bus, because js/audio.js
- * un-ducks when the signal ends however it ends.
+ * Release any sound a lesson started: a waveform belongs to the step that
+ * started it, and one still playing after the step is gone sounds like an
+ * answer. Sent as an event, because js/gwAudio.js pulls in the whole waveform
+ * model; the scope is the prefix js/gwWidgets.js owns, so it cannot silence
+ * sound started outside a lesson.
  *
  * @returns {void}
  */
@@ -3738,6 +3714,29 @@ function goToStep(index, { rebuild = false } = {}) {
   els.panel.scrollTop = 0;
 }
 
+function renderDepth() {
+  const o = active.depths;
+  if (!els.depth) return;
+  els.depth.hidden = !o;
+  const i = o ? o.indexOf(depth) : 0;
+  els.depthState.textContent = depthName;
+  els.deeper.hidden = !o || Boolean(assignment) || i >= o.length - 1;
+  els.shallower.hidden = !o || Boolean(assignment) || i < 1;
+}
+
+async function changeDepth(by) {
+  if (!active || assignment) return;
+  const r = await (
+    await import('./investigations/depth.js')
+  ).change({ active, depth, deepest, stepIndex, by, locale: getLocale() });
+  if (!r || r.lesson.id !== active?.id) return;
+  ({ depth, deepest, depthName } = r);
+  depthChoice = depth;
+  active = r.lesson;
+  announce(r.said);
+  goToStep(r.at);
+}
+
 /**
  * Whether a step is for this student. A remediation step (`when`, from an
  * investigation pack: js/platform/investigation.js) is shown only when the
@@ -3749,6 +3748,7 @@ function goToStep(index, { rebuild = false } = {}) {
  * compiled before it did must not give the answer away by skipping one.
  */
 function stepApplies(index) {
+  if (!inDepth(active.steps[index], depth)) return false;
   const w = active.steps[index]?.when;
   if (!w) return true;
   const target = active.steps.find(x => x.sid === w.sid);
@@ -3786,6 +3786,16 @@ function next() {
 // top of them when it lands.
 let openGeneration = 0;
 
+function peekDepth(id) {
+  try {
+    const p =
+      sessionProgress.get(storageKey(id)) ?? JSON.parse(get(storageKey(id)));
+    return { ...p, level: get('gravitas_course_level') };
+  } catch {
+    return {};
+  }
+}
+
 /**
  * Start or resume an investigation.
  * @param {string} id - Investigation id
@@ -3796,8 +3806,26 @@ export async function openInvestigation(id, opts = {}) {
   // The one await in the panel's life. Everything below it runs against a
   // lesson that is fully in hand, so no other code path had to learn that a
   // lesson might not be there yet.
-  const inv = await loadInvestigation(id);
+  let inv = await loadInvestigation(id);
   if (!inv || generation !== openGeneration) return;
+  depth = 'core';
+  depthChoice = null;
+  deepest = 'core';
+  depthName = '';
+  const mem = inv.depths && !authoring && peekDepth(id);
+  if (mem && opts.depth) mem.depth = opts.depth;
+  if (
+    opts.assignment?.d ||
+    mem?.depth ||
+    mem?.deepest ||
+    /^[ma]/.test(mem?.level)
+  ) {
+    const m = await (
+      await import('./investigations/depth.js')
+    ).openDepth(inv, mem, opts.assignment, getLocale());
+    if (generation !== openGeneration) return;
+    ({ inv, depth, depthChoice, deepest, depthName } = m);
+  }
   // Every step key is written into the panel's attributes and selectors. The
   // pack validator and the lesson checker refuse a sid that could end an
   // attribute; this refuses a lesson that reached the panel without passing
@@ -3849,21 +3877,14 @@ export async function openInvestigation(id, opts = {}) {
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
   startedAt = saved?.startedAt || new Date().toISOString();
-  // Resolved against `active`, which for an assignment is the SUBSET, not
-  // against the whole investigation.
-  //
-  // This read indexOfSid(inv, ...), so a student resuming an eight-step
-  // assignment cut from a thirty-step lesson was sent to the position that sid
-  // holds in the LESSON - past the end of their assignment, and clamped to
-  // whatever step happened to be there. Their saved answers were intact and
-  // they were dropped in the wrong place to find them.
-  //
-  // A sid that is not in the subset at all means the assignment was recut
-  // since they last worked on it; starting at the beginning of what they
-  // actually have is the honest fallback, and their responses are unaffected.
+  // Resolved against `active`, which for an assignment is the SUBSET: against
+  // the whole lesson, a student resuming an eight-step assignment was sent to
+  // the position that sid holds in the lesson, past its end. A sid not in the
+  // subset means the assignment was recut: start at the beginning.
   stepIndex = saved?.stepSid
     ? Math.max(0, indexOfSid(active, saved.stepSid))
     : 0;
+  while (stepIndex > 0 && !inDepth(active.steps[stepIndex], depth)) stepIndex--;
   progressNotes = saved?.notes || [];
   if (authoring?.step) {
     stepIndex = Math.min(Math.max(authoring.step - 1, 0), inv.steps.length - 1);
@@ -3942,17 +3963,10 @@ export async function openInvestigation(id, opts = {}) {
 }
 
 /**
- * Put the reader's own world back, if it is still theirs to put back.
- *
- * The guard is the point. Closing a lesson is not the only thing that happens
- * at that moment: a reader can load a scenario from the rail, follow a share
- * link, or start another lesson, and a restore that fired regardless would
- * replace the thing they had just chosen with a world from ten minutes ago.
- *
- * So it only restores when the world on screen is still the one the lesson
- * built - which it can tell because a stage was up, or because the world
- * generation has not moved past the lesson's own rebuilds. Anything else and
- * the reader has taken the scene somewhere deliberate and it is left alone.
+ * Put the reader's own world back, if it is still theirs to put back: only
+ * when the world on screen is still the one the lesson built (a stage was up,
+ * or the world generation has not moved past the lesson's rebuilds). A reader
+ * who loaded a scenario or followed a link has taken it somewhere deliberate.
  *
  * @param {object} saved - The pairs handed back by leaveLessonScope()
  * @returns {boolean} Whether the sandbox was put back
@@ -3975,17 +3989,10 @@ function restoreSandbox(saved) {
 }
 
 /**
- * Put the reader's selection back on the body it was on.
- *
- * Only after a successful restore, and only by id: the payload rebuilds the
- * world from packed states that carry the ids they were saved with, so the
- * body that comes back is the same body as far as anything that records a
- * measurement is concerned. A selection restored into a world that was not
- * restored would point at whatever happened to share the number.
- *
- * Silent when the body is not there. A reader who had a lesson-staged object
- * selected when they opened the panel has nothing to come back to, and
- * selecting something arbitrary instead would be worse than selecting nothing.
+ * Put the reader's selection back on the body it was on, by id, only after a
+ * successful restore (the restored world carries the ids it was saved with).
+ * Silent when the body is not there: selecting something arbitrary instead
+ * would be worse than nothing.
  *
  * @param {?object} selection - {id} as saved on entry
  * @returns {boolean} Whether a body was reselected
@@ -4716,7 +4723,7 @@ const isBrowserOpen = () =>
 
 function openFinish() {
   if (!els.finish) return;
-  const graded = gradedSteps(active);
+  const graded = gradedSteps({ steps: shown() });
   const answered = graded.filter(s => {
     const i = active.steps.indexOf(s);
     const id = stepId(i);
@@ -4733,8 +4740,8 @@ function openFinish() {
   els.finishProgress.hidden = Boolean(authoring);
   els.finishSummary.innerHTML = `
     <p>${t('inv.finish.summary', {
-      visited: visited.size,
-      steps: active.steps.length,
+      visited: shown().filter(s => visited.has(s.sid)).length,
+      steps: shown().length,
       answered,
       graded: graded.length,
     })}</p>
@@ -4763,15 +4770,9 @@ function closeFinish() {
 
 /**
  * The submission token for what is on record now, or '' if it cannot be made.
- *
- * The return channel. Both modules are dynamic imports for the same reason
- * the backup one is: a reader who never hands anything in never pays for the
- * encoder, and the lesson engine is already the heaviest thing here.
- *
- * The roster id comes off the assignment link's query string rather than from
- * any roster the application keeps, because it keeps none - an instructor who
- * wants the class sorted puts ?roster=<whatever> on the link they hand out and
- * it rides home in the token.
+ * Both modules are dynamic imports, so a reader who hands nothing in never pays
+ * for the encoder. The roster id comes off the assignment link's ?roster=
+ * query, because the application keeps no roster.
  *
  * @param {string} name - The name the student typed
  * @returns {Promise<string>} The token
@@ -4800,6 +4801,7 @@ async function makeSubmissionToken(name) {
         fallbackLocale: getLocale(),
         record: ledger?.record,
         digest: ledger?.digest,
+        depth: assignment?.d ?? (active.depths ? depth : null),
       })
     );
     if (!encoded.comfortable) {
@@ -4915,6 +4917,8 @@ async function generateReport() {
     }
     stepIndex = here;
 
+    if (active.depths)
+      await (await import('./investigations/depth.js')).messages();
     const submissionToken = await makeSubmissionToken(name);
     showToken(submissionToken);
     await reportMessages();
@@ -4940,6 +4944,7 @@ async function generateReport() {
       // defaults to English, so every Spanish numeric answer was re-read under
       // English rules on its way into the PDF and a student could be marked
       // correct on screen and incorrect on the document they hand in.
+      depth: assignment?.d ?? (active.depths ? depth : null),
       checkAnswer: (step, value, key) =>
         checkAnswer(step, value, {
           locale: localeOfAnswer(responses, key, getLocale()),
@@ -5011,8 +5016,8 @@ export function currentPlotData() {
 /** Wire up the investigations panel. Safe to call once, from init. */
 /** Lesson id named in the address bar, if there is one. */
 function investigationFromHash() {
-  const m = /^#investigation=([\w-]+)$/.exec(window.location.hash || '');
-  return m ? decodeURIComponent(m[1]) : null;
+  const m = /^#investigation=([\w-]+)(?:\/(\w+))?$/.exec(location.hash);
+  return m ? [decodeURIComponent(m[1]), m[2]] : [];
 }
 
 /**
@@ -5022,15 +5027,15 @@ function investigationFromHash() {
  * assignment lands the student on the right lesson rather than on the browser.
  */
 function openInvestigationFromHash() {
-  const id = investigationFromHash();
+  const [id, depth] = investigationFromHash();
   if (!id) return;
   if (!hasInvestigation(id)) {
     toast(t('inv.link.unknown'));
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id).catch(err =>
-    loadFailed(() => openInvestigation(id).catch(() => {}), err)
+  openInvestigation(id, { depth }).catch(err =>
+    loadFailed(() => openInvestigation(id, { depth }).catch(() => {}), err)
   );
 }
 
@@ -5101,6 +5106,10 @@ export function initInvestigations({ signal } = {}) {
     fitBtn: document.getElementById('investigationFit'),
     followBtn: document.getElementById('investigationFollow'),
     scaleBtn: document.getElementById('investigationScale'),
+    depth: document.getElementById('investigationDepth'),
+    depthState: document.getElementById('investigationDepthState'),
+    deeper: document.getElementById('investigationDeeper'),
+    shallower: document.getElementById('investigationShallower'),
     prev: document.getElementById('investigationPrev'),
     next: document.getElementById('investigationNext'),
     close: document.getElementById('investigationClose'),
@@ -5198,6 +5207,8 @@ export function initInvestigations({ signal } = {}) {
     goToStep(applyingFrom(stepIndex, -1))
   );
   els.next?.addEventListener('click', next);
+  els.deeper?.addEventListener('click', () => changeDepth(1), opts);
+  els.shallower?.addEventListener('click', () => changeDepth(-1), opts);
   els.close?.addEventListener('click', closeInvestigation);
   wireExplainer(
     els.toolExplain,

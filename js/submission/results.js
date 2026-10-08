@@ -49,6 +49,9 @@ import { checkAnswer } from '../answerCheck.js';
 import { toCsv } from '../csv.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
+const DEPTHS = ['core', 'quantitative', 'advanced'];
+const rank = d => Math.max(0, DEPTHS.indexOf(d));
+const inDepth = (s, d) => rank(s?.depth) <= rank(d);
 import { answersOf, attemptsOf, helpOf } from './submissionToken.js';
 import { plainDataProblem } from '../platform/common.js';
 import { symbolOf } from '../units/registry.js';
@@ -300,8 +303,10 @@ export function gradeSubmission(
   { kind, label, evidence = null }
 ) {
   const backup = submission.b;
-  const steps = lesson.steps || [];
-  const graded = gradedSteps(lesson);
+  // At the depth it was read at: the steps a student there sees, and no more.
+  const depth = DEPTHS.includes(submission.dp) ? submission.dp : null;
+  const steps = (lesson.steps || []).filter(s => !depth || inDepth(s, depth));
+  const graded = gradedSteps({ steps });
   const gradedIds = new Set(graded.map(s => s.sid));
   // By sid. The engine stores both under `<lesson>:<sid>`, with sub-keys
   // beside them that are not answers; answersOf() and attemptsOf() are where
@@ -408,6 +413,7 @@ export function gradeSubmission(
     rosterId: submission.r || null,
     assignmentId: submission.a || null,
     nameAsTyped: backup.student || null,
+    depth,
     lessonId: lesson.id,
     lessonTitle: lesson.title || lesson.id,
     lessonVersion: lessonVersionOf(steps),

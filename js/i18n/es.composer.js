@@ -63,6 +63,11 @@ export const ES_COMPOSER = {
     'Lo que identifica las respuestas guardadas. Consérvalo una vez que los estudiantes hayan usado la investigación.',
   'composer.step.title': 'Título',
   'composer.step.body': 'Texto',
+  'composer.step.depth': 'Profundidad',
+  'composer.depth.core': 'Básico: todos los lectores',
+  'composer.depth.quantitative': 'Cuantitativo: especialidad',
+  'composer.depth.advanced': 'Avanzado',
+  'composer.translation.depth': '{depth}: {done} de {total} textos traducidos',
   'composer.step.tip': 'Consejo (opcional)',
   'composer.step.setup': 'Escenario',
   'composer.setup.keep': 'Mantener la escena del paso anterior',
@@ -249,6 +254,9 @@ export const ES_COMPOSER = {
     'El registro de qué inglés traduce el español está dañado.',
   'composer.error.tooLarge':
     'El archivo es más grande de lo que necesita cualquier investigación.',
+  'composer.error.depth': 'Una profundidad es core, quantitative o advanced.',
+  'composer.error.depthPlace':
+    'Un paso más profundo no es el primero ni el último, y no abre ningún escenario.',
   'composer.error.tooDeep':
     'El archivo está anidado más hondo de lo que está cualquier investigación.',
   'composer.error.unsafeKey': '«{key}» no puede ser una clave.',

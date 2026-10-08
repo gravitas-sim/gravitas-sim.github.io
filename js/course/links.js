@@ -53,7 +53,7 @@ const text = (v, locale) => (v && (v[locale] || v.en)) || '';
 export function assignmentPayload(item, locale) {
   return {
     k: ASSIGNMENT_KIND,
-    v: item.pin?.pkg ? 2 : 1,
+    v: item.pin?.pkg || item.depth ? 2 : 1,
     i: item.assignment.id,
     l: item.lesson,
     t: text(item.title, locale),
@@ -62,6 +62,7 @@ export function assignmentPayload(item, locale) {
     ...(item.pin?.f ? { f: [...item.pin.f] } : {}),
     c: item.assignment.created,
     ...(item.pin?.pkg ? { p: [...item.pin.pkg] } : {}),
+    ...(item.depth ? { d: item.depth } : {}),
   };
 }
 
@@ -86,7 +87,7 @@ export async function itemLink(item, { root, locale = 'en' }) {
   switch (item.kind) {
     case 'lesson':
       return {
-        href: `${root}#investigation=${encodeURIComponent(item.lesson)}`,
+        href: `${root}#investigation=${encodeURIComponent(item.lesson)}${item.depth ? `/${item.depth}` : ''}`,
         kind: 'app',
       };
     case 'assignment': {

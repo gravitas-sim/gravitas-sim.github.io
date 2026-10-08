@@ -18,6 +18,10 @@
 
 import { createDocument } from './pdf.js';
 import { registerMessages } from './i18n/index.js';
+// Depths, shallowest first (as in investigations/progressSchema.js).
+const LEVELS = ['core', 'quantitative', 'advanced'];
+const rank = d => Math.max(0, LEVELS.indexOf(d));
+const inDepth = (s, d) => rank(s?.depth) <= rank(d);
 
 /** The report's strings, both languages, fetched the first time one is built. */
 let text = null;
@@ -139,6 +143,7 @@ export function buildLabReport({
   assignment = null,
   binding = null,
   submissionToken = '',
+  depth = null,
   decodeEntities,
   t,
   locale = 'en',
@@ -146,9 +151,17 @@ export function buildLabReport({
   evidence = null,
   helpFor = () => null,
 }) {
-  const inv = investigation;
+  // At a depth, the steps are those a student reads there, numbered as they
+  // see them (DEPTH.md); `stepIdFor` still takes the index in the whole lesson.
+  const home = new Map(investigation.steps.map((s, i) => [s, i]));
+  const inv = depth
+    ? {
+        ...investigation,
+        steps: investigation.steps.filter(s => inDepth(s, depth)),
+      }
+    : investigation;
   const stepsDone = t('rp.nOf', {
-    n: visited.size,
+    n: inv.steps.filter(s => visited.has(s.sid)).length,
     total: inv.steps.length,
   });
   // For what the lesson says. What a student wrote goes through plain() as
@@ -178,6 +191,7 @@ export function buildLabReport({
     .row(t('rp.start'), dateText(startedAt, locale))
     .row(t('rp.made'), dateText(new Date().toISOString(), locale))
     .row(t('rp.steps'), stepsDone);
+  if (depth) doc.row(t('rp.depth'), t(`inv.depth.${depth}`));
   for (const [label, value] of meta) doc.row(label, value);
 
   // --- Which activity this is ------------------------------------------------
@@ -237,7 +251,7 @@ export function buildLabReport({
   const canonical = [`${inv.id}|${name}`];
 
   inv.steps.forEach((step, index) => {
-    const id = stepIdFor(index);
+    const id = stepIdFor(home.get(step));
     const reached = visited.has(step.sid);
 
     // Reading steps ask for nothing, so listing them here leaves a heading with

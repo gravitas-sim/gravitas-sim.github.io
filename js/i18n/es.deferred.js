@@ -674,6 +674,7 @@ export const ES_DEFERRED = {
   'assign.print.id': 'Actividad {id}, emitida el {date}.',
   'assign.print.roster': 'Código de clase: {code}',
 
+  'assign.depth': 'Profundidad',
   'assign.error.nothingSelected': 'Elige al menos un paso.',
   'assign.error.noLesson': 'No se pudo leer esa investigación.',
   'assign.error.unknownSteps':
@@ -914,6 +915,10 @@ export const ES_DEFERRED = {
     'Cada porción es el <strong>{share} %</strong> del área de la órbita, y el planeta tarda <strong>{time}</strong> en recorrer cada una.',
   'inv.import.added': 'Añadido: {value}.',
   'inv.progress.cleared': 'Progreso borrado',
+  'inv.depth.deeper': 'Profundizar',
+  'inv.depth.shallower': 'Menos pasos',
+  'inv.answer.needsUncertainty':
+    'Da tu valor y su incertidumbre, por ejemplo 8,1 ± 0,2.',
   'inv.progress.steps': '{done} de {total} pasos',
   'inv.scenario.reset': 'Escenario reiniciado',
   'inv.card.loading': 'Cargando…',
