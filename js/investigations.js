@@ -477,6 +477,13 @@ function renderSaveStatus() {
   }[status];
 
   el.textContent = text || '';
+  // The block is a status and a way to everything saved on this device (My work).
+  if (text && ['saved', 'full', 'unavailable'].includes(status)) {
+    const link = document.createElement('a');
+    link.href = '/my-work/';
+    link.textContent = t('inv.save.link');
+    el.append(' ', link);
+  }
   el.hidden = !text;
   el.dataset.state = status;
   // Only a problem interrupts. aria-live is set rather than removed so the

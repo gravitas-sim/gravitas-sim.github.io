@@ -220,10 +220,30 @@ function grouped(rows) {
   return `<ul class="lib-list">${cards(rows)}</ul>`;
 }
 
+/** The lessons begun and not finished, from the records My work lists too. */
+function fillContinue() {
+  const going = localized
+    .map(e => ({ e, p: progressFor(e.id) }))
+    .filter(
+      ({ e, p }) => e.format === 'lesson' && p.started && p.done < p.total
+    )
+    .slice(0, 3);
+  $('libContinue').hidden = going.length === 0;
+  $('libContinueList').innerHTML = going
+    .map(
+      ({ e, p }) =>
+        `<li><a href="${escape(e.route)}">${escape(e.title)}</a> ${escape(
+          t('lib.continue.of', { n: p.done, total: p.total })
+        )}</li>`
+    )
+    .join('');
+}
+
 function render() {
   if (!state.library) return;
   translatePage();
   localize();
+  fillContinue();
   fillMenus();
   const f = state.filters;
   const narrowed = isFiltered(f);

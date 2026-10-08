@@ -1850,6 +1850,7 @@ export const ES_DEFERRED = {
   'inv.step.kind.question': 'pregunta',
   'inv.step.kind.ellipse': 'exploración',
   'inv.step.kind.wedges': 'exploración',
+  'inv.save.link': 'Ver todo en Mi trabajo',
   'inv.save.saved': 'Progreso guardado en este dispositivo',
   'inv.save.full':
     'No se pudo guardar el progreso: el almacenamiento de este navegador est\u00e1 lleno. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',

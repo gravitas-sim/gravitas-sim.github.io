@@ -1829,6 +1829,7 @@ export const EN_DEFERRED = {
   'inv.step.kind.question': 'question',
   'inv.step.kind.ellipse': 'explore',
   'inv.step.kind.wedges': 'explore',
+  'inv.save.link': 'See everything in My work',
   'inv.save.saved': 'Progress saved on this device',
   'inv.save.full':
     'Progress could not be saved: this browser\u2019s storage is full. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',

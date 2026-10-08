@@ -86,6 +86,9 @@ export const EN_LIBRARY = {
   'lib.empty.search': 'Nothing matches “{query}”.',
   'lib.empty.filters': 'Nothing matches these filters.',
   'lib.empty.relax': 'Drop “{filter}” to see {n}',
+  'lib.continue.title': 'Continue where you left off',
+  'lib.continue.all': 'Everything you have made: My work',
+  'lib.continue.of': '{n} of {total} steps seen',
   'lib.loading': 'Loading the Library…',
   'lib.loadFailed':
     'The Library did not load. Check the connection, then reload the page.',
