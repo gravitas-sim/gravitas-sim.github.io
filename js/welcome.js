@@ -659,6 +659,11 @@ export function closeWelcome() {
       const fn = onEnter;
       onEnter = null;
       fn();
+      // The layer held focus until a moment ago; leaving it on <body> would
+      // send a keyboard user back to the top of the page. The shell's brand
+      // link is the first stop of the interface that has just been revealed.
+      if (!document.activeElement || document.activeElement === document.body)
+        document.querySelector('.gs-brand')?.focus?.({ preventScroll: true });
     } else if (!auto) {
       // Reopened from the footer: hand focus back where it came from. A
       // programmatic open leaves lastFocus on <body>, which cannot take focus,
