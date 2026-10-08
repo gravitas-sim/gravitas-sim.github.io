@@ -86,6 +86,20 @@ export default {
       unit: '',
       because:
         'La raíz cuadrada de 0,01 es 0,1: el planeta es una décima parte del radio de la estrella. Alrededor de una estrella parecida al Sol eso es aproximadamente del tamaño de Júpiter, y es exactamente por lo que todos los planetas en tránsito encontrados antes de 2005 aproximadamente eran júpiteres calientes. Eran los únicos que alguien podía ver.',
+      hints: [
+        'La profundidad es la fracción de luz estelar que se bloquea. ¿Qué parte del disco de la estrella cubre el planeta?',
+        'La luz bloqueada va con el área, y el área va con el cuadrado de un radio.',
+        'Así que la profundidad es la razón de radios al cuadrado. Deshaz eso para obtener la razón.',
+      ],
+      feedback: {
+        close:
+          'Cerca, pero fuera de la tolerancia. Eleva tu respuesta al cuadrado y compárala con la profundidad dada.',
+        'wrong-order-of-magnitude':
+          'Te pasas o te quedas en una potencia de diez. Comprueba si usaste la profundidad como razón de radios, o si elevaste al cuadrado donde hacía falta una raíz.',
+        off: 'Compruébalo: eleva tu razón de radios al cuadrado. Si no devuelve la profundidad, parte de la profundidad con la operación contraria.',
+        correct:
+          'Para comprobar un resultado así, elévalo al cuadrado y verifica que recuperas la profundidad.',
+      },
     },
     {
       title: 'Mide la caída',
@@ -174,6 +188,18 @@ export default {
       unit: 'a una',
       because:
         'R★/a = 0,00465, o alrededor de 1 entre 215. Ese es el hecho más duro del método del tránsito: incluso un sondeo con fotometría perfecta observando todas las estrellas del cielo para siempre encontraría menos de uno entre doscientos de los planetas tipo Tierra que hay. Todo lo que el método informa sobre lo comunes que son los planetas tiene que dividirse por este factor geométrico antes de significar algo.',
+      hints: [
+        'La probabilidad es una razón entre dos longitudes que da el paso.',
+        'Divide el radio de la estrella entre el tamaño de la órbita, en la misma unidad.',
+        'Eso da una fracción. La pregunta pide una oportunidad entre cuántas, así que piensa qué hacer con una fracción para obtenerlo.',
+      ],
+      feedback: {
+        close:
+          'Cerca. Revisa la división y que ambas longitudes estén en la misma unidad.',
+        'wrong-order-of-magnitude':
+          'Te alejas por un factor grande. Si tienes 0,00465, esa es la probabilidad como fracción; la pregunta pide una oportunidad entre cuántas, así que dale la vuelta. Si no, comprueba que ambas longitudes estén en UA.',
+        off: 'Escribe primero la probabilidad como fracción y pregúntate cuántas de ellas hacen una.',
+      },
     },
     {
       title: 'Lo que el método se pierde',

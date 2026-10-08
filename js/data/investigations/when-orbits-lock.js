@@ -694,6 +694,20 @@ const WHEN_ORBITS_LOCK = {
                 every time it happened, and the configuration would not
                 survive. The resonance is the arrangement that makes the meeting
                 impossible.`,
+      hints: [
+        'After the substitution only two longitudes are left. What combination of them remains?',
+        'The expression is twice the angle between Ganymede and Europa.',
+        'It must equal the angle φ holds. Divide by whatever multiplies the angle you want.',
+      ],
+      feedback: {
+        close:
+          'Close, but this one is exact. Substitute your angle back: does it give the angle φ must hold?',
+        'wrong-sign': 'Give the size of the angle, not its direction.',
+        'wrong-unit': 'That looks like radians. The question wants degrees.',
+        'wrong-order-of-magnitude':
+          'Out by a power of ten. An angle between two bodies in orbit is at most a few hundred degrees.',
+        off: 'Look at the collapsed expression: it is a multiple of one angle. Set it equal to the value φ holds and solve for the angle.',
+      },
     },
 
     // --- Act 4: breaking it, and the awkward case ----------------------------

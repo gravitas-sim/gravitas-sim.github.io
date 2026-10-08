@@ -144,6 +144,14 @@ export default {
       ],
       worked:
         'El eje mayor abarca r₁ + r₂ = 1 + 2,5 = 3,5 UA, así que a = 3,5 / 2 = 1,75 UA.',
+      feedback: {
+        close:
+          'Cerca. Suma las dos distancias de los extremos de la elipse y divide la suma entre dos.',
+        'wrong-unit': 'Eso parece kilómetros. La pregunta pide UA.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez; ambos extremos de la elipse están a pocas UA de la estrella.',
+        off: 'El eje largo va de una órbita, pasando por la estrella, hasta la otra. El semieje mayor es su mitad.',
+      },
     },
     {
       title: '¿A qué velocidad tienes que ir?',
@@ -161,6 +169,13 @@ export default {
       ],
       worked:
         'v = v_circ × sqrt(2 − r/a) = 29,787 × sqrt(2 − 1/1,75) = 29,787 × 1,1952 = 35,60 km/s.',
+      feedback: {
+        close:
+          'Cerca. Revisa la raíz cuadrada y cuál distancia es r (donde estás ahora) y cuál es a (el semieje mayor de la elipse).',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez: km/s y m/s difieren en mil.',
+        off: 'Revisa qué distancia va dónde: r es donde estás ahora y a es el semieje mayor de la elipse de transferencia.',
+      },
     },
     {
       title: 'Entonces, ¿de cuánto es el primer impulso?',
@@ -171,6 +186,15 @@ export default {
         'Las dos velocidades van en la misma dirección, así que esto es una resta y no algo vectorial.',
       ],
       worked: 'Δv₁ = 35,60 − 29,787 = 5,815 km/s.',
+      feedback: {
+        close:
+          'Cerca. El impulso es la diferencia de dos velocidades en la misma dirección; revisa la resta.',
+        'wrong-sign':
+          'El impulso te acelera, así que es un cambio positivo: resta la velocidad anterior a la posterior.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez; compáralo con las velocidades que te dieron.',
+        off: 'Resta la velocidad circular de partida a la que necesita la transferencia, ambas en km/s.',
+      },
     },
     {
       title: 'Hazlo',
@@ -218,6 +242,14 @@ export default {
       ],
       worked:
         'T = 1,75^1,5 = 2,315 años para la elipse completa. La mitad son 1,157 años, o 423 días.',
+      feedback: {
+        close:
+          'Cerca. La travesía es media órbita: comprueba que dividiste el periodo entre dos.',
+        'wrong-unit': 'Eso parece años. La pregunta pide días.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez. Obtén el periodo con a en UA y años, y luego convierte.',
+        off: 'La tercera ley de Kepler da el periodo completo de la elipse de transferencia a partir de su semieje mayor; la travesía es la mitad.',
+      },
     },
     {
       title: '¿Y si no haces nada?',
@@ -276,6 +308,15 @@ export default {
         'Vas demasiado despacio para la órbita que quieres, así que esto es otra aceleración.',
       ],
       worked: 'Δv₂ = 18,840 − 14,242 = 4,598 km/s.',
+      feedback: {
+        close:
+          'Cerca. Compara la velocidad con que llegas y la de la órbita de destino, en la misma dirección.',
+        'wrong-sign':
+          'Aquí ambos impulsos te aceleran: resta la velocidad menor a la mayor.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez; compáralo con las velocidades que te dieron.',
+        off: 'Resta tu velocidad de llegada en la elipse de transferencia a la velocidad circular de la órbita exterior.',
+      },
     },
     {
       title: 'Circularizar',
@@ -304,6 +345,12 @@ export default {
                  pasos anteriores. Los dos están ya en km/s.`,
       },
       worked: 'Δv = 5,815 + 4,598 = 10,41 km/s.',
+      feedback: {
+        close: 'Cerca. Suma los dos impulsos, cada uno como tamaño.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez; el total debe ser de un tamaño parecido al de los impulsos que hallaste.',
+        off: 'El coste total es la suma de ambos impulsos, cada uno contado como un cambio de velocidad.',
+      },
     },
     {
       title: 'Los dos impulsos fueron aceleraciones',

@@ -406,6 +406,20 @@ export default {
                 dirección cada vez que ocurriera, y la configuración no
                 sobreviviría. La resonancia es la disposición que hace imposible
                 el encuentro.`,
+      hints: [
+        'Tras la sustitución solo quedan dos longitudes. ¿Qué combinación de ellas permanece?',
+        'La expresión es el doble del ángulo entre Ganimedes y Europa.',
+        'Debe igualar el ángulo que φ mantiene. Divide entre lo que multiplica al ángulo que buscas.',
+      ],
+      feedback: {
+        close:
+          'Cerca, pero este es exacto. Sustituye tu ángulo: ¿da el ángulo que φ debe mantener?',
+        'wrong-sign': 'Da el tamaño del ángulo, no su sentido.',
+        'wrong-unit': 'Eso parece radianes. La pregunta pide grados.',
+        'wrong-order-of-magnitude':
+          'Te pasas en una potencia de diez. Un ángulo entre dos cuerpos en órbita es como mucho de unos cientos de grados.',
+        off: 'Mira la expresión simplificada: es un múltiplo de un ángulo. Iguálala al valor que mantiene φ y despeja el ángulo.',
+      },
     },
     {
       title: 'Un uno por ciento',
