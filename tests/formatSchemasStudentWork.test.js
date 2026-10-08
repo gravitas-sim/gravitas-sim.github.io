@@ -377,9 +377,11 @@ describe('the submission results schema', () => {
       expect(valid(s, doc)).toBe(true);
       // Every field it writes is one the schema requires.
       expect(Object.keys(doc).sort()).toEqual([...s.required].sort());
+      // `evidence` came with the ledger: optional in the schema, always written.
       expect(Object.keys(all[0]).sort()).toEqual(
-        [...s.$defs.submission.required].sort()
+        [...s.$defs.submission.required, 'evidence'].sort()
       );
+      expect(s.$defs.submission.required).not.toContain('evidence');
       // `unit` was added after the file's first release: optional in the
       // schema, so a file without it still fits, and always written now.
       expect(Object.keys(all[0].questions[0]).sort()).toEqual(

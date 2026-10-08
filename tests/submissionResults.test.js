@@ -16,6 +16,7 @@ import {
   SUMMARY_COLUMNS,
   annotate,
   canonicalJson,
+  evidenceCsv,
   fingerprintOf,
   gradeSubmission,
   questionCsv,
@@ -108,8 +109,8 @@ function submission({
   });
 }
 
-const grade = (sub, lesson = kepler, label = 'report.pdf') =>
-  gradeSubmission(sub, lesson, { kind: 'pdf', label });
+const grade = (sub, lesson = kepler, label = 'report.pdf', evidence = null) =>
+  gradeSubmission(sub, lesson, { kind: 'pdf', label, evidence });
 
 describe('grading one submission', () => {
   test('counts every graded step, answered or not', () => {
@@ -645,16 +646,62 @@ describe('the JSON export', () => {
   });
 
   test('the CSVs end with the points columns, after everything version 1 had', () => {
-    expect(SUMMARY_COLUMNS.slice(-3)).toEqual([
+    // The evidence columns came after, at the end, as additions do.
+    expect(SUMMARY_COLUMNS.slice(-6)).toEqual([
       'points',
       'points_possible',
       'points_unmarked',
+      'evidence_state',
+      'evidence_rows',
+      'evidence_digest',
     ]);
     expect(QUESTION_COLUMNS.slice(-3)).toEqual([
       'points',
       'points_possible',
       'unit',
     ]);
+  });
+
+  test('evidence: a verified, a tampered and an absent ledger are told apart in every export', () => {
+    const row = [
+      'e1',
+      'period',
+      3.52,
+      'd',
+      0.01,
+      'measured',
+      'pipeline',
+      'box',
+      'abcd',
+    ];
+    const ev = state => ({
+      state,
+      digest: 'f'.repeat(64),
+      total: 1,
+      ids: ['e1'],
+      rows: [row],
+    });
+    const records = annotate([
+      grade(submission(), kepler, 'a.pdf', ev('verified')),
+      grade(submission({ roster: 'x2' }), kepler, 'b.pdf', ev('mismatch')),
+      grade(submission({ roster: 'x3' })),
+    ]);
+    expect(records.map(r => r.evidence.state)).toEqual([
+      'verified',
+      'mismatch',
+      'none',
+    ]);
+    expect(records[1].warnings).toContain('evidenceMismatch');
+    expect(records[0].warnings).not.toContain('evidenceMismatch');
+    const lines = evidenceCsv(records).trim().split('\r\n');
+    expect(lines.length).toBe(3);
+    expect(lines[0]).toContain('unit,unit_id,uncertainty');
+    expect(lines[1]).toContain('verified');
+    expect(lines[2]).toContain('mismatch');
+    expect(lines[1]).toMatch(/3\.52,d,d,0\.01,measured,pipeline,box,abcd/);
+    const json = JSON.parse(resultsJson(records));
+    expect(json.submissions[1].evidence.state).toBe('mismatch');
+    expect(json.submissions[2].evidence.rows).toEqual([]);
   });
 
   test('a numeric step’s unit travels with its answer, in both exports', () => {

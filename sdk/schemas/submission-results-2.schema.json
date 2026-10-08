@@ -315,7 +315,8 @@
               "exactDuplicate",
               "repeatedAttempt",
               "changedSteps",
-              "staleAnswers"
+              "staleAnswers",
+              "evidenceMismatch"
             ]
           }
         },
@@ -323,6 +324,103 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/question"
+          }
+        },
+        "evidence": {
+          "description": "The evidence the report's token carried (version 2 tokens; a report without one says `none`). state: verified when the table matches the digest the token states, mismatch when it does not, partial when the token carries fewer rows than the ledger had and the digest cannot be recomputed. It proves the table is the one the digest was made from, not who made it. Optional: a file written before the ledger has none.",
+          "type": "object",
+          "required": [
+            "state",
+            "digest",
+            "total",
+            "envelopes",
+            "rows"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "none",
+                "verified",
+                "partial",
+                "mismatch"
+              ]
+            },
+            "digest": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "total": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "envelopes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "envelope",
+                  "quantity",
+                  "value",
+                  "unitId",
+                  "unit",
+                  "half",
+                  "origin",
+                  "sourceKind",
+                  "sourceId",
+                  "sourceDigest"
+                ],
+                "properties": {
+                  "envelope": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "unitId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "half": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string"
+                  },
+                  "sourceKind": {
+                    "type": "string"
+                  },
+                  "sourceId": {
+                    "type": "string"
+                  },
+                  "sourceDigest": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              }
+            }
           }
         }
       }
