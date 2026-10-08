@@ -40,6 +40,7 @@ export const TOOL_PAGES = [
   'observatory/index.html',
   'catalog/index.html',
   'library/index.html',
+  'my-work/index.html',
   'experiments/index.html',
   'figure/index.html',
   'studio/index.html',

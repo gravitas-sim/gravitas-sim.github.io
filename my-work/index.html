@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My work | Gravitas</title>
+    <meta
+      name="description"
+      content="Everything you have made in Gravitas, in one place on this device: investigations in progress, evidence, experiments and drafts, with a backup file to keep it or move it. No account needed."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to this page: the lists of what a student has made (MY_WORK.md). */
+      .mw-card {
+        margin-block: var(--space-4);
+      }
+      .mw-list {
+        display: grid;
+        gap: var(--space-3);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .mw-item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-2) var(--space-4);
+        padding: var(--space-3);
+        background: var(--surface-1);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+      .mw-what {
+        flex: 1 1 16rem;
+        min-width: 0;
+      }
+      .mw-title {
+        font-weight: var(--weight-semibold);
+        color: var(--text-primary);
+        overflow-wrap: anywhere;
+      }
+      .mw-facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-1) var(--space-3);
+        font-size: var(--text-sm);
+        color: var(--text-secondary);
+      }
+      .mw-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+      }
+      .mw-units {
+        flex-basis: 100%;
+        margin: 0;
+        padding-left: var(--space-5);
+        font-size: var(--text-sm);
+      }
+      .mw-facts-list {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: var(--space-1) var(--space-4);
+        margin: 0;
+      }
+      .mw-facts-list dt {
+        color: var(--text-secondary);
+      }
+      .mw-facts-list dd {
+        margin: 0;
+      }
+      .mw-choices {
+        margin: var(--space-3) 0;
+      }
+      .mw-preview {
+        margin-top: var(--space-3);
+      }
+      .mw-step {
+        margin-block: var(--space-2);
+      }
+      #mwDialog {
+        max-width: min(36rem, calc(100vw - 2rem));
+        color: var(--text-primary);
+        background: var(--surface-1);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius);
+      }
+      #mwDialog::backdrop {
+        background: color-mix(in srgb, var(--surface-0) 70%, transparent);
+      }
+      @media (max-width: 480px) {
+        .mw-facts-list {
+          grid-template-columns: 1fr;
+        }
+        .mw-actions .ui-button {
+          flex: 1 1 auto;
+        }
+      }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group" data-here><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/" aria-current="page"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main
+      id="main"
+      class="ui-page is-wide"
+      aria-labelledby="mwTitle"
+      aria-busy="true"
+    >
+      <h1 id="mwTitle"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></h1>
+      <p><span class="gs-en">Everything you have made in Gravitas, in one place: investigations you have started, measurements and notes, experiments and drafts. You do not need an account.</span><span class="gs-es" lang="es">Todo lo que has hecho en Gravitas, en un solo lugar: investigaciones empezadas, mediciones y notas, experimentos y borradores. No necesitas una cuenta.</span></p>
+      <p id="mwSummary" class="ui-hint" role="status" aria-live="polite"></p>
+      <div id="mwNotice" class="ui-alert is-warning" role="alert" hidden></div>
+
+      <section class="ui-card mw-card" aria-labelledby="mwWhereTitle">
+        <h2 id="mwWhereTitle"><span class="gs-en">What is on this device, and what is not</span><span class="gs-es" lang="es">Qué hay en este dispositivo y qué no</span></h2>
+        <ul>
+          <li><span class="gs-en">Your work is saved in this browser, on this device. Gravitas has no accounts and no server that keeps it, so nothing you make is sent anywhere, and nobody at Gravitas can see it or get it back for you.</span><span class="gs-es" lang="es">Tu trabajo se guarda en este navegador, en este dispositivo. Gravitas no tiene cuentas ni un servidor que lo guarde, así que nada de lo que haces se envía a ningún sitio, y nadie en Gravitas puede verlo ni recuperarlo por ti.</span></li>
+          <li><span class="gs-en">It is not on another browser, another computer or a phone, and it is gone if you clear this browser's site data or work in a private window. A backup file is how you keep it or move it.</span><span class="gs-es" lang="es">No está en otro navegador, otro ordenador ni un teléfono, y desaparece si borras los datos de sitios de este navegador o trabajas en una ventana privada. Un archivo de copia es la forma de conservarlo o llevarlo a otro lugar.</span></li>
+          <li><span class="gs-en">A backup file holds your investigations, evidence, experiments, drafts, saved world and name. It does not hold packages you installed from the Catalog (they download again from the Catalog), or reports you saved as PDF or CSV.</span><span class="gs-es" lang="es">Un archivo de copia contiene tus investigaciones, evidencias, experimentos, borradores, mundo guardado y nombre. No contiene los paquetes que instalaste desde el Catálogo (se descargan de nuevo desde el Catálogo) ni los informes que guardaste como PDF o CSV.</span></li>
+          <li><span class="gs-en">Some pages save straight to this browser without checking how much room is left, and say nothing if the save fails. If this device is nearly full, download a backup before you rely on it.</span><span class="gs-es" lang="es">Algunas páginas guardan directamente en este navegador sin comprobar cuánto espacio queda, y no avisan si el guardado falla. Si este dispositivo está casi lleno, descarga una copia antes de fiarte de él.</span></li>
+        </ul>
+      </section>
+
+      <section class="ui-card mw-card" aria-labelledby="mwStorageTitle">
+        <h2 id="mwStorageTitle"><span class="gs-en">Storage on this device</span><span class="gs-es" lang="es">Almacenamiento en este dispositivo</span></h2>
+        <dl id="mwStorageList" class="mw-facts-list"></dl>
+      </section>
+
+      <section class="ui-card mw-card" aria-labelledby="mwTransferTitle">
+        <h2 id="mwTransferTitle"><span class="gs-en">Back up, move or clear</span><span class="gs-es" lang="es">Copia, traslado y borrado</span></h2>
+        <div class="mw-actions">
+          <button type="button" class="ui-button is-primary" id="mwExport"><span class="gs-en">Download everything</span><span class="gs-es" lang="es">Descargar todo</span></button>
+          <label class="ui-button" for="mwFile"><span class="gs-en">Import from a file</span><span class="gs-es" lang="es">Importar desde un archivo</span></label>
+          <input id="mwFile" class="ui-file" type="file" accept="application/json,.json" hidden />
+          <button type="button" class="ui-button" id="mwDelete"><span class="gs-en">Delete everything here</span><span class="gs-es" lang="es">Borrar todo aquí</span></button>
+        </div>
+        <div id="mwPreview" class="mw-preview" role="region" aria-live="polite" aria-labelledby="mwPreviewTitle" hidden>
+          <h3 id="mwPreviewTitle"><span class="gs-en">Check the file before it is imported</span><span class="gs-es" lang="es">Revisa el archivo antes de importarlo</span></h3>
+          <div id="mwPreviewBody"></div>
+          <fieldset class="mw-choices">
+            <legend><span class="gs-en">If something is already here</span><span class="gs-es" lang="es">Si ya hay algo aquí</span></legend>
+            <label class="ui-choice"><input type="radio" name="mwMode" value="replace" checked />
+              <span><span class="gs-en">Use the file's version</span><span class="gs-es" lang="es">Usar la versión del archivo</span></span></label>
+            <label class="ui-choice"><input type="radio" name="mwMode" value="skip" />
+              <span><span class="gs-en">Keep what is here</span><span class="gs-es" lang="es">Conservar lo que hay aquí</span></span></label>
+            <label class="ui-choice"><input type="checkbox" id="mwPrefs" />
+              <span><span class="gs-en">Also bring the language and theme</span><span class="gs-es" lang="es">Traer también el idioma y el tema</span></span></label>
+          </fieldset>
+          <div class="mw-actions">
+            <button type="button" class="ui-button is-primary" id="mwApply"><span class="gs-en">Import</span><span class="gs-es" lang="es">Importar</span></button>
+            <button type="button" class="ui-button" id="mwCancel"><span class="gs-en">Cancel</span><span class="gs-es" lang="es">Cancelar</span></button>
+          </div>
+        </div>
+        <details class="ui-disclosure">
+          <summary><span class="gs-en">Move to another device</span><span class="gs-es" lang="es">Llevar tu trabajo a otro dispositivo</span></summary>
+          <ol>
+            <li class="mw-step"><span class="gs-en">On this device, press Download everything. A file is saved; Gravitas sends it nowhere.</span><span class="gs-es" lang="es">En este dispositivo, pulsa Descargar todo. Se guarda un archivo; Gravitas no lo envía a ningún sitio.</span></li>
+            <li class="mw-step"><span class="gs-en">Take the file to the other device yourself: email it to yourself, copy it to a USB drive or put it in a drive you already use.</span><span class="gs-es" lang="es">Lleva tú mismo el archivo al otro dispositivo: envíatelo por correo, cópialo en una memoria USB o ponlo en un almacenamiento que ya uses.</span></li>
+            <li class="mw-step"><span class="gs-en">On the other device, open this page, press Import from a file and choose it. You see what it holds and what it would change before anything is imported.</span><span class="gs-es" lang="es">En el otro dispositivo, abre esta página, pulsa Importar desde un archivo y elígelo. Verás qué contiene y qué cambiaría antes de importar nada.</span></li>
+            <li class="mw-step"><span class="gs-en">Open an investigation from the list: it continues at the step where you left it.</span><span class="gs-es" lang="es">Abre una investigación de la lista: continúa en el paso donde la dejaste.</span></li>
+          </ol>
+        </details>
+      </section>
+
+      <section class="ui-card mw-card" aria-labelledby="mwLessonsTitle" data-section="mwLessons" hidden>
+        <h2 id="mwLessonsTitle"><span class="gs-en">Investigations and guides</span><span class="gs-es" lang="es">Investigaciones y guías</span></h2>
+        <p class="ui-state is-empty mw-none" hidden><span class="gs-en">You have not started an investigation on this device.</span><span class="gs-es" lang="es">No has empezado ninguna investigación en este dispositivo.</span></p>
+        <div class="mw-body"></div>
+      </section>
+
+      <section class="ui-card mw-card" aria-labelledby="mwAssignmentsTitle" data-section="mwAssignments" hidden>
+        <h2 id="mwAssignmentsTitle"><span class="gs-en">Assignments</span><span class="gs-es" lang="es">Tareas</span></h2>
+        <p class="ui-hint"><span class="gs-en">These open from the link your instructor gave you; this device keeps your answers under it.</span><span class="gs-es" lang="es">Se abren desde el enlace que te dio tu docente; este dispositivo guarda tus respuestas asociadas a él.</span></p>
+        <p class="ui-state is-empty mw-none" hidden><span class="gs-en">No assignments here.</span><span class="gs-es" lang="es">No hay tareas aquí.</span></p>
+        <div class="mw-body"></div>
+      </section>
+
+      <section class="ui-card mw-card" aria-labelledby="mwCoursesTitle" data-section="mwCourses" hidden>
+        <h2 id="mwCoursesTitle"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></h2>
+        <p class="ui-hint"><span class="gs-en">A course is counted once you begin one of its investigations. Courses opened from a link are not kept here.</span><span class="gs-es" lang="es">Un curso cuenta cuando empiezas una de sus investigaciones. Los cursos abiertos desde un enlace no se guardan aquí.</span></p>
+        <p class="ui-state is-empty mw-none" hidden><span class="gs-en">No course begun.</span><span class="gs-es" lang="es">Ningún curso empezado.</span></p>
+        <div class="mw-body"></div>
+      </section>
+
+      <section class="ui-card mw-card" aria-labelledby="mwEvidenceTitle" data-section="mwEvidence" hidden>
+        <h2 id="mwEvidenceTitle"><span class="gs-en">Evidence</span><span class="gs-es" lang="es">Evidencia</span></h2>
+        <p class="ui-hint"><span class="gs-en">Your evidence notebook, by the page that made each entry.</span><span class="gs-es" lang="es">Tu cuaderno de evidencia, según la página que hizo cada entrada.</span></p>
+        <p class="ui-state is-empty mw-none" hidden><span class="gs-en">Your evidence notebook is empty.</span><span class="gs-es" lang="es">Tu cuaderno de evidencia está vacío.</span></p>
+        <div class="mw-body"></div>
+      </section>
+
+      <section class="ui-card mw-card" aria-labelledby="mwExperimentsTitle" data-section="mwExperiments" hidden>
+        <h2 id="mwExperimentsTitle"><span class="gs-en">Experiments and saved comparisons</span><span class="gs-es" lang="es">Experimentos y comparaciones guardadas</span></h2>
+        <p class="ui-state is-empty mw-none" hidden><span class="gs-en">No saved experiments.</span><span class="gs-es" lang="es">No hay experimentos guardados.</span></p>
+        <div class="mw-body"></div>
+      </section>
+
+      <section class="ui-card mw-card" aria-labelledby="mwDraftsTitle" data-section="mwDrafts" hidden>
+        <h2 id="mwDraftsTitle"><span class="gs-en">Saved worlds and drafts</span><span class="gs-es" lang="es">Mundos guardados y borradores</span></h2>
+        <p class="ui-hint"><span class="gs-en">Scenario, investigation and course drafts from the Studio, your saved world, and notes.</span><span class="gs-es" lang="es">Borradores del Estudio, mundo guardado y notas.</span></p>
+        <p class="ui-state is-empty mw-none" hidden><span class="gs-en">Nothing saved here.</span><span class="gs-es" lang="es">No hay nada guardado aquí.</span></p>
+        <div class="mw-body"></div>
+      </section>
+
+      <section class="ui-card mw-card" aria-labelledby="mwPackagesTitle" data-section="mwPackages" hidden>
+        <h2 id="mwPackagesTitle"><span class="gs-en">Installed packages</span><span class="gs-es" lang="es">Paquetes instalados</span></h2>
+        <p class="ui-hint"><span class="gs-en">From the Catalog. They are kept in this browser but are not in a backup file: install them again from the Catalog on another device.</span><span class="gs-es" lang="es">Del Catálogo. Se guardan en este navegador pero no van en el archivo de copia: instálalos de nuevo desde el Catálogo en otro dispositivo.</span></p>
+        <p class="ui-state is-empty mw-none" hidden><span class="gs-en">No packages installed.</span><span class="gs-es" lang="es">No hay paquetes instalados.</span></p>
+        <div class="mw-body"></div>
+      </section>
+      <dialog id="mwDialog" aria-labelledby="mwDialogTitle">
+        <form method="dialog">
+          <h2 id="mwDialogTitle"></h2>
+          <div id="mwDialogBody"></div>
+          <div class="mw-actions">
+            <button type="button" class="ui-button" id="mwDialogExport"></button>
+            <button type="button" class="ui-button is-primary" id="mwDialogGo" disabled></button>
+            <button type="submit" class="ui-button" value="cancel" id="mwDialogCancel"></button>
+          </div>
+        </form>
+      </dialog>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module" src="/js/myWorkPage.js"></script>
+  </body>
+</html>

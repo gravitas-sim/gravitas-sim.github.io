@@ -79,6 +79,7 @@ const DOC_PAGES = [
   'observatory',
   'catalog',
   'library',
+  'my-work',
   'studio',
   'studio/lesson',
   'studio/course',
@@ -748,6 +749,23 @@ async function buildDocPages() {
       outdir: path.join(OUT, 'js'),
       splitting: true,
       chunkNames: 'library-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // My work: its own entry, like the Library. It is the only page that reads
+  // the storage module, so that module is this bundle's and nothing else's.
+  if (existsSync('js/myWorkPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/myWorkPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      splitting: true,
+      chunkNames: 'my-work-[hash]',
       legalComments: 'none',
     });
   }

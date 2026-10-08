@@ -130,6 +130,8 @@ const FILES = [
   // it links to is precached, or not, by the page that runs it.
   { path: 'library/index.html', core: false },
   { path: 'library/library.json', core: false },
+  // My work: the page, to open offline what the student made on this device.
+  { path: 'my-work/index.html', core: false },
   // The course home: a course link opens offline once Gravitas has been
   // opened, since the pack is in the link and the page's modules are under
   // js/. Optional, as the catalog is. The builder (studio/course/) is not.

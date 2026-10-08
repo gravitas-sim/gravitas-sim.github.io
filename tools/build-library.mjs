@@ -178,6 +178,8 @@ function entry(e) {
     steps: e.steps ?? null,
     thumbnail: e.thumbnail ?? null,
     route: e.route,
+    // A built-in course's units, for /my-work/'s per-unit progress.
+    ...(e.units ? { units: e.units } : {}),
   };
 }
 
@@ -455,6 +457,10 @@ export async function buildLibrary() {
         length: lengthFor(duration),
         subjects: named.flatMap(l => BROWSE_META[l]?.tags || []),
         steps: items.length,
+        units: pack.units.map(u => ({
+          title: both(u.title.en, u.title.es),
+          lessons: u.items.filter(i => i.lesson).map(i => i.lesson),
+        })),
         route: `/course/?course=${id}`,
       })
     );
