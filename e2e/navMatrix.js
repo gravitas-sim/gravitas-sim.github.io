@@ -49,6 +49,11 @@ const bases = [
 ];
 
 async function goHome(page) {
+  // These specs are about Home's links, not the first-run introduction that
+  // stands over them on a fresh profile (e2e/onboarding.spec.js owns that).
+  await page.addInitScript(() =>
+    window.localStorage.setItem('gravitas_orientation_seen_v1', '1')
+  );
   await page.goto('/#home', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.splashScreenEnded === true, null, {
     timeout: 60_000,
