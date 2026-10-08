@@ -425,8 +425,6 @@ export const EN = {
   // --- Sharing ---------------------------------------------------------------
   'share.mine.name': 'Name in My work',
   'share.mine.save': 'Save to My work',
-  'share.mine.note':
-    'Keeps the name, seed, settings and link in this browser. Open it again, add it to your report or hand it in from My work.',
   'share.mine.saved': 'Saved to My work',
   'share.mine.failed':
     'This browser would not keep it. Free some room or download a backup from My work.',
