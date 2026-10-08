@@ -780,7 +780,7 @@ const RADIAL_VELOCITY = {
       feedback: {
         close: 'Close. Read the planet’s own row, and check the unit shown.',
         'wrong-order-of-magnitude':
-          'Out by a power of ten. Kilograms per cubic metre and grams per cubic centimetre differ by a thousand; check the unit on the row you read.',
+          'Out by a power of ten. Kilograms per cubic meter and grams per cubic centimeter differ by a thousand; check the unit on the row you read.',
         off: 'Read the row for the planet itself, not the row that compares it with Earth.',
       },
     },

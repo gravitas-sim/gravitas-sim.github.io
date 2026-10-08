@@ -264,7 +264,7 @@ const HOHMANN_TRANSFER = {
       feedback: {
         close:
           'Close. Add the two distances at the ends of the ellipse and halve the sum.',
-        'wrong-unit': 'That looks like kilometres. The question wants AU.',
+        'wrong-unit': 'That looks like kilometers. The question wants AU.',
         'wrong-order-of-magnitude':
           'A power of ten out; both ends of the ellipse are within a few AU of the star.',
         off: 'The long axis runs from one orbit, through the star, to the other. The semi-major axis is half of it.',

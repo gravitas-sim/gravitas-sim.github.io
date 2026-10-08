@@ -2325,8 +2325,10 @@ function renderStep() {
       const said = missed
         ? misconceptionText(missed)
         : feedbackFor(step, answerClass(step, graded, tol));
+      // A named mistake and the author's words for a kind of miss are different
+      // claims, and are told apart: only the first says what the student did.
       const named = said
-        ? `<br /><em class="inv-misconception">${prose(said)}</em>`
+        ? `<br /><em class="${missed ? 'inv-misconception' : 'inv-class'}">${prose(said)}</em>`
         : '';
       parts.push(
         `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p>`
