@@ -188,7 +188,7 @@ describe('grading one submission', () => {
       lessonId: 'keplers-laws',
       lessonSteps: kepler.steps.length,
       recordedSteps: kepler.steps.length,
-      submissionSchema: 1,
+      submissionSchema: 2,
       source: { kind: 'pdf', label: 'report.pdf' },
     });
     expect(r.lessonVersion).toMatch(/^[0-9a-f]{14}$/);

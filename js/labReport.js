@@ -116,6 +116,10 @@ const plain = text =>
  * @param {Function} opts.t - The translator, passed in like checkAnswer: the
  *   report is written in the language the student worked in
  * @param {string} [opts.locale] - That language, for the dates
+ * @param {Array<[string, string]>} [opts.meta] - More rows for the title block:
+ *   the application and format versions, the engine fingerprint, the depth
+ * @param {(doc: object) => void} [opts.evidence] - Prints the evidence ledger's
+ *   sections (js/notebook/report.js evidenceSections()) after the summary
  * @returns {Uint8Array} PDF bytes
  */
 export function buildLabReport({
@@ -135,6 +139,8 @@ export function buildLabReport({
   decodeEntities,
   t,
   locale = 'en',
+  meta = [],
+  evidence = null,
 }) {
   const inv = investigation;
   const stepsDone = t('rp.nOf', {
@@ -150,6 +156,8 @@ export function buildLabReport({
     // The machine-readable copy. See the note beside /Keywords in js/pdf.js
     // for why the instructor page prefers this to the printed block.
     keywords: submissionToken || '',
+    tagged: true,
+    lang: locale === 'es' ? 'es-ES' : 'en-US',
   });
 
   // --- Header ----------------------------------------------------------------
@@ -166,6 +174,7 @@ export function buildLabReport({
     .row(t('rp.start'), dateText(startedAt, locale))
     .row(t('rp.made'), dateText(new Date().toISOString(), locale))
     .row(t('rp.steps'), stepsDone);
+  for (const [label, value] of meta) doc.row(label, value);
 
   // --- Which activity this is ------------------------------------------------
   // An assignment is a subset of a lesson, so "12 of 12 steps" on its own is
@@ -286,6 +295,16 @@ export function buildLabReport({
         t('rp.pred', { prompt: lessonPlain(step.prompt) }),
         lessonPlain(chosen)
       );
+      // The outcome it was held against, where the lesson names one.
+      const out = step.reveal && inv.steps.find(x => x.sid === step.reveal);
+      if (out)
+        doc.row(
+          t('rp.outcome'),
+          `${t('rp.link', {
+            n: inv.steps.indexOf(out) + 1,
+            title: lessonPlain(out.title),
+          })} (${t(visited.has(out.sid) ? 'rp.reached' : 'rp.notReached')})`
+        );
       canonical.push(`${id}=${value}`);
       return;
     }
@@ -299,18 +318,18 @@ export function buildLabReport({
         if (right) autoRight++;
       }
       doc.field(lessonPlain(step.prompt), lessonPlain(chosen));
-      // A choice can be changed, as a number can be re-checked, so it says
-      // how many tries it took as a number does.
+      // The verdict class, and how many tries it took. Never the key: a report
+      // is handed round, and the answer is the instructor's.
       const tries = attempts[id] || 0;
       doc.row(
         t('rp.result'),
-        !answered
+        (!answered
           ? t('rp.none')
-          : (right
+          : right === null
+            ? '-'
+            : right
               ? t('rp.right')
-              : t('rp.wrongChoice', {
-                  answer: lessonPlain(step.options[step.answer]),
-                })) + (tries > 1 ? t('rp.tries', { n: tries }) : '')
+              : t('rp.wrong')) + (tries > 1 ? t('rp.tries', { n: tries }) : '')
       );
       canonical.push(`${id}=${value}`);
       return;
@@ -329,14 +348,8 @@ export function buildLabReport({
       const tries = attempts[id] || 0;
       doc.row(
         t('rp.result'),
-        !answered
-          ? t('rp.none')
-          : t('rp.expected', {
-              verdict: t(right ? 'rp.right' : 'rp.wrong'),
-              answer: `${step.answer}${
-                step.tolerance ? ` +/- ${step.tolerance}` : ''
-              }`,
-            }) + (tries > 1 ? t('rp.tries', { n: tries }) : '')
+        (!answered ? t('rp.none') : right ? t('rp.right') : t('rp.wrong')) +
+          (tries > 1 ? t('rp.tries', { n: tries }) : '')
       );
       canonical.push(`${id}=${value}`);
       return;
@@ -383,6 +396,8 @@ export function buildLabReport({
   doc.row(t('rp.code'), code);
   doc.space(4);
   doc.paragraph(t('rp.codeNote'), { size: 8.5, color: '0.45 0.45 0.52' });
+
+  if (evidence) evidence(doc);
 
   // --- Submission token ------------------------------------------------------
   //

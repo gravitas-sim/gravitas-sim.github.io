@@ -52,7 +52,7 @@ describe('each schema', () => {
     ['investigation-pack-1', 'gravitas.investigation-pack', IP.FORMAT_VERSION],
     ['question-bank-1', 'gravitas.question-bank', QB.BANK_FORMAT_VERSION],
     ['assignment-2', 'gravitas.assignment', AS.ASSIGNMENT_SCHEMA],
-    ['submission-token-1', 'submission token', ST.SUBMISSION_SCHEMA],
+    ['submission-token-2', 'submission token', ST.SUBMISSION_SCHEMA],
     ['submission-results-2', 'gravitas.submission-results', RS.RESULTS_VERSION],
   ])('%s is its row in FORMATS.md, at the version the code writes', isItsRow);
 });
@@ -205,7 +205,7 @@ function report({
 }
 
 describe('the submission token schema', () => {
-  const s = schema('submission-token-1');
+  const s = schema('submission-token-2');
   const reads = d => ST.validateSubmission(d).ok;
 
   test('a report, through its token and back, fits it', async () => {
@@ -248,7 +248,7 @@ describe('the submission token schema', () => {
       ['both', 'an array', d => as([d])],
       ['both', 'no version', d => delete d.v],
       ['both', 'version 0', d => (d.v = 0)],
-      ['both', 'version 2', d => (d.v = 2)],
+      ['both', 'version 3', d => (d.v = 3)],
       ['both', 'a version as text', d => (d.v = '1')],
       ['both', 'no backup', d => delete d.b],
       ['both', 'no lesson', d => delete d.b.lesson],
@@ -296,7 +296,7 @@ describe('the submission token schema', () => {
   });
 
   test('its tables are the code’s', () => {
-    expect(s.properties.v.const).toBe(ST.SUBMISSION_SCHEMA);
+    expect(s.properties.v.enum).toEqual([1, ST.SUBMISSION_SCHEMA]);
     expect(s.$defs.token.pattern.startsWith(`^#?${ST.SUBMISSION_TAG}`)).toBe(
       true
     );
@@ -317,8 +317,19 @@ describe('the submission token schema', () => {
     expect(Object.keys(b.steps.items.properties).sort()).toEqual(
       Object.keys(written.steps[0]).sort()
     );
+    // Every field the code writes, the evidence included, and nothing else.
+    const withEvidence = ST.buildSubmission({
+      backup: written,
+      record: { ids: ['e1'], rows: [], total: 0 },
+      digest: 'a'.repeat(64),
+    });
     expect(Object.keys(s.properties).sort()).toEqual(
-      Object.keys(report()).sort()
+      Object.keys(withEvidence).sort()
+    );
+    expect(Object.keys(report()).sort()).toEqual(
+      Object.keys(withEvidence)
+        .filter(k => k !== 'ev')
+        .sort()
     );
   });
 });

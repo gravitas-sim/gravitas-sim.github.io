@@ -29,10 +29,10 @@
 
 import { artifact } from '../platform/artifact.js';
 import { symbolOf, unitIdOf } from '../units/registry.js';
-import { canonicalJsonExact, sha256Hex } from '../hash.js';
 
-/** How many evidence rows a submission token carries; the digest covers all. */
-export const TOKEN_ROWS = 40;
+/** What a ledger record says it is. */
+export const LEDGER_FORMAT = 'gravitas.ledger';
+export const LEDGER_VERSION = 1;
 
 const HEX = /^[0-9a-f]{8,64}$/;
 
@@ -350,16 +350,7 @@ export function ledgerRecord(entries) {
   return { ids, rows, total: rows.length };
 }
 
-/**
- * The digest a token states for its ledger: SHA-256 of the record's canonical
- * form, so the same evidence gives the same digest on every machine and one
- * changed value gives another.
- * @param {{ids: string[], rows: Array<Array<*>>}} record - From ledgerRecord()
- * @returns {Promise<string>} 64 hex digits
- */
-export function ledgerDigest(record) {
-  return sha256Hex(canonicalJsonExact({ ids: record.ids, rows: record.rows }));
-}
+export { ledgerDigest } from '../submission/ledgerDigest.js';
 
 /**
  * The words of a context, for a reader: where in the student's work it was

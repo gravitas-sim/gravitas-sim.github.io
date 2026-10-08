@@ -40,8 +40,12 @@ import { LOCALE_SUFFIX } from '../answerParse.js';
 /** Kind marker. A world is '', an assignment 'a', a submission 's'. */
 export const SUBMISSION_TAG = 's';
 
-/** Schema version of the payload below. */
-export const SUBMISSION_SCHEMA = 1;
+/**
+ * Schema version of the payload below. 2 added `ev`, the evidence ledger's
+ * digest, envelope ids and table (./ledgerDigest.js); a version 1 token is read
+ * as it was, with no evidence to check.
+ */
+export const SUBMISSION_SCHEMA = 2;
 
 /**
  * The length past which a token stops being safely pasteable.
@@ -53,6 +57,9 @@ export const SUBMISSION_SCHEMA = 1;
  * this, so the bound is the one this project already uses for links.
  */
 export const COMFORTABLE_TOKEN_LENGTH = 8000;
+
+/** How many evidence rows a token carries; the digest covers them all. */
+export const TOKEN_ROWS = 40;
 
 /** @param {string} text - Anything @returns {boolean} Whether it looks like one */
 export const isSubmissionToken = text =>
@@ -74,6 +81,9 @@ export const isSubmissionToken = text =>
  * @param {?string} [args.assignmentId] - The assignment's id, if this is one
  * @param {?string} [args.rosterId] - Whatever the instructor wants to sort by
  * @param {string} [args.fallbackLocale] - For answers with no recorded locale
+ * @param {?{ids: string[], rows: Array<Array<*>>, total: number}} [args.record]
+ *   - The ledger record the report printed (notebook/ledger.js ledgerRecord())
+ * @param {?string} [args.digest] - Its digest
  * @returns {object} The payload, with short keys because it is a fragment
  */
 export function buildSubmission({
@@ -81,9 +91,21 @@ export function buildSubmission({
   assignmentId = null,
   rosterId = null,
   fallbackLocale = 'en',
+  record = null,
+  digest = null,
 }) {
   return {
     v: SUBMISSION_SCHEMA,
+    ...(record && digest
+      ? {
+          ev: {
+            d: digest,
+            i: record.ids,
+            n: record.total,
+            r: record.rows.slice(0, TOKEN_ROWS),
+          },
+        }
+      : {}),
     a: assignmentId ? String(assignmentId).slice(0, 120) : null,
     r: rosterId ? String(rosterId).slice(0, 120) : null,
     fl: String(fallbackLocale || 'en'),
@@ -204,6 +226,19 @@ export function validateSubmission(payload) {
     return { ok: false, reason: 'noResponses' };
   }
   if (!Array.isArray(b.steps)) return { ok: false, reason: 'noSteps' };
+  const ev = payload.ev;
+  if (
+    ev !== undefined &&
+    !(
+      ev &&
+      typeof ev === 'object' &&
+      typeof ev.d === 'string' &&
+      Array.isArray(ev.i) &&
+      Array.isArray(ev.r) &&
+      ev.r.every(Array.isArray)
+    )
+  )
+    return { ok: false, reason: 'badEvidence' };
   return { ok: true };
 }
 
