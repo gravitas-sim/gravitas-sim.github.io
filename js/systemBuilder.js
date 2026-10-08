@@ -841,7 +841,7 @@ function saveFile() {
 async function openFile(file) {
   let data;
   try {
-    data = parseDocument(await file.text());
+    data = parseDocument(await file.text(), true);
   } catch {
     setStatus(t('builder.file.unreadable'));
     return;

@@ -1747,7 +1747,7 @@ async function openFile(file) {
   if (file.size > MAX_FILE) return setStatus(t('course.file.tooLarge'));
   let data;
   try {
-    data = parseDocument(await file.text());
+    data = parseDocument(await file.text(), true);
   } catch {
     return setStatus(t('studio.file.unreadable'));
   }
@@ -1798,7 +1798,7 @@ function applyRaw() {
   const note = $('cb-raw-error');
   let data;
   try {
-    data = parseDocument($('st-raw-text').value);
+    data = parseDocument($('st-raw-text').value, true);
   } catch (err) {
     note.textContent = t('studio.raw.notJson', { error: err.message });
     note.hidden = false;

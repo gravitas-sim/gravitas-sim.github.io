@@ -444,9 +444,11 @@ export async function encodeTagged(tag, version, payload) {
  * check is its shape. tests/hostileInput.test.js holds the two to the same
  * fixtures.
  * @param {string} text
+ * @param {boolean} [allowKeys] - A prototype key passes, for a reader whose
+ *   validator already refuses one and says which
  * @returns {*} The parsed value; throws a SyntaxError with code 'notPlainData'
  */
-export function parseDocument(text) {
+export function parseDocument(text, allowKeys = false) {
   const value = JSON.parse(text);
   const plain = (v, depth) =>
     typeof v !== 'object' || v === null
@@ -454,9 +456,10 @@ export function parseDocument(text) {
       : depth > 0 &&
         Object.keys(v).every(
           k =>
-            k !== '__proto__' &&
-            k !== 'constructor' &&
-            k !== 'prototype' &&
+            (allowKeys ||
+              (k !== '__proto__' &&
+                k !== 'constructor' &&
+                k !== 'prototype')) &&
             plain(v[k], depth - 1)
         );
   if (!plain(value, 24))

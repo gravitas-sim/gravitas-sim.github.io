@@ -222,6 +222,17 @@ describe('the guard on every document a student opens', () => {
     },
   });
 
+  test('allowKeys lets a prototype key through to the validator that names it, and nothing else', () => {
+    const hostile = '{"units":[{"__proto__":{"x":1}}]}';
+    expect(() => parseLink(hostile)).toThrow(/plain data/);
+    const read = parseLink(hostile, true);
+    expect(Object.keys(read.units[0])).toEqual(['__proto__']);
+    expect({}.x).toBeUndefined();
+    let deep = '1';
+    for (let i = 0; i < 30; i++) deep = `[${deep}]`;
+    expect(() => parseLink(deep, true)).toThrow(/plain data/);
+  });
+
   test('parseDocument reads what JSON.parse reads and refuses the rest', () => {
     expect(parseDocument('{"a": [1, "x", null, true]}')).toEqual({
       a: [1, 'x', null, true],

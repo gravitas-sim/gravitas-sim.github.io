@@ -1146,7 +1146,7 @@ function download() {
 async function openFile(file) {
   let data;
   try {
-    data = parseDocument(await file.text());
+    data = parseDocument(await file.text(), true);
   } catch {
     setStatus(t('studio.file.unreadable'));
     return;
@@ -1205,7 +1205,7 @@ function applyRaw() {
   const note = $('st-raw-error');
   let data;
   try {
-    data = parseDocument($('st-raw-text').value);
+    data = parseDocument($('st-raw-text').value, true);
   } catch (err) {
     note.textContent = t('studio.raw.notJson', { error: err.message });
     note.hidden = false;

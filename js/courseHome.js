@@ -132,7 +132,7 @@ async function openFromAddress() {
       } catch {
         /* no storage: nothing to preview */
       }
-      if (text) return accept(parseDocument(text), 'draft');
+      if (text) return accept(parseDocument(text, true), 'draft');
     }
     if (/^#c\d+[zr]/.test(location.hash))
       return accept(await readCourseFragment(location.hash), 'link');
@@ -148,7 +148,7 @@ async function openFile(file) {
   if (file.size > MAX_FILE)
     return showRefusal({ path: '', message: t('courseHome.error.tooLarge') });
   try {
-    accept(parseDocument(await file.text()), 'file');
+    accept(parseDocument(await file.text(), true), 'file');
   } catch {
     showRefusal({ path: '', message: t('courseHome.error.notJson') });
   }
