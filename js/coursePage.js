@@ -207,7 +207,7 @@ function setAt(o, path, value) {
   else delete cur[last];
 }
 
-// The reader of a typed number is fetched with the first number typed: the
+// typedNumber (js/answerParse.js) is fetched with the first number typed: the
 // builder's route has no room for another module.
 const numberOf = (text, typedNumber) => {
   const s = String(text).trim();
@@ -397,7 +397,7 @@ function plain(path, label, { hint = '', numeric = false, blankIs } = {}) {
       v,
       async s => {
         const reader = numeric
-          ? (await import('./numberParse.js')).typedNumber
+          ? (await import('./answerParse.js')).typedNumber
           : null;
         commit(x =>
           setAt(

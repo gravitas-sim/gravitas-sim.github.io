@@ -19,7 +19,6 @@ import {
   t,
   translatePage,
 } from './lab3d/i18n.js';
-import { typedNumber } from './numberParse.js';
 import { createLab3d } from './lab3d/api.js';
 import { migrateSystem, validateSystem } from './lab3d/state.js';
 import { REFERENCES } from './lab3d/references.js';
@@ -98,7 +97,7 @@ function syncControls() {
 }
 
 /** The integrator the controls ask for, or undefined for the problem's own. */
-function integratorAsked() {
+function integratorAsked(typedNumber) {
   const scheme = $('lb-scheme').value;
   if (!scheme) return undefined;
   const value = typedNumber($('lb-step').value, language());
@@ -109,7 +108,10 @@ function integratorAsked() {
 // --- Running --------------------------------------------------------------------
 
 async function go() {
-  const integrator = integratorAsked();
+  // The reader of typed numbers is fetched when a run is asked for: the
+  // page's route has no room for it at load.
+  const { typedNumber } = await import('./answerParse.js');
+  const integrator = integratorAsked(typedNumber);
   if (integrator === null)
     return status(t('lab3d.status.refused', { why: t('lab3d.step') }));
   const started = performance.now();

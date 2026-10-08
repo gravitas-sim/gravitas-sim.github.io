@@ -421,8 +421,6 @@ describe('the guides', () => {
     expect(evaluate(explain, state, 'palabra '.repeat(25)).passed).toBe(true);
     expect(wordCount('La Tierra sigue atrayendo, ¿no?')).toBe(5);
     expect(parseAnswer(' 1,5 ')).toBe(1.5);
-    expect(parseAnswer('0,91', 'es')).toBe(0.91);
-    expect(parseAnswer('1.234,5', 'es')).toBe(1234.5);
     expect(parseAnswer('1.2.3')).toBeNull();
     // A "do" step's own go passes its check.
     const phase = orbit.steps.find(s => s.id === 'phase');

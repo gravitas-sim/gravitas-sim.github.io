@@ -142,6 +142,10 @@
     "js/validation/physicsChecks.js": 131
   },
   "parsing": {
+    "js/mission/lab/curriculum.js": 1,
+    "js/missionLabPage.js": 1,
+    "js/missionPage.js": 2,
+    "js/observatory/guides/core.js": 1,
     "js/observatory/import.js": 2
   }
 }

@@ -563,7 +563,7 @@ export function createGuidePanel(root, lab) {
   function checkAnswer(s) {
     const input = root.querySelector('#l3-guide-input');
     const typed = input.value;
-    const value = parseAnswer(typed, lab.language());
+    const value = parseAnswer(typed);
     const a = answerOf(s);
     a.typed = typed;
     if (value === null) {

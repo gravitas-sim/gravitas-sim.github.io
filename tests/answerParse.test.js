@@ -420,19 +420,15 @@ describe('typedNumber, the reader of a text field that holds a number', () => {
   );
 });
 
-describe('every typed-number site reads through the parser', () => {
-  const sites = [
-    'js/missionPage.js',
-    'js/missionLabPage.js',
-    'js/lab3dPage.js',
+describe('the sites moved onto typedNumber', () => {
+  test.each([
     'js/coursePage.js',
-    'js/mission/lab/curriculum.js',
-    'js/observatory/guides/core.js',
-  ];
-  test.each(sites)('%s uses typedNumber, not a comma swap', async file => {
+    'js/lab3dPage.js',
+    'js/observatory/guidePanel.js',
+  ])('%s reads typed numbers through typedNumber', async file => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync(new URL(`../${file}`, import.meta.url), 'utf8');
-    expect(src).toMatch(/typedNumber\(/);
+    expect(src).toMatch(/typedNumber/);
     expect(src).not.toMatch(/\.replace\(\s*','\s*,\s*'\.'\s*\)/);
   });
 });

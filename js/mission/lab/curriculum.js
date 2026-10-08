@@ -27,7 +27,6 @@
 // (computeMission), and the last transfer window.
 // =============================================================================
 
-import { typedNumber } from '../../numberParse.js';
 import { BODIES } from '../bodies.js';
 import { planeChange } from '../transfers.js';
 import { dateOfJd, jdOfDate, JD_J2000 } from '../ephemeris.js';
@@ -361,10 +360,14 @@ export function turnCost(s) {
 export const stepsOn = (guide, path) =>
   guide.steps.filter(s => s.path === 'both' || s.path === path);
 
-/** A typed number, read under the locale's decimal mark. */
-export function parseAnswer(text, locale = 'en') {
-  const n = typedNumber(text, locale);
-  return Number.isFinite(n) ? n : null;
+/** A typed number: a decimal comma as well as a point. */
+export function parseAnswer(text) {
+  const s = String(text ?? '')
+    .trim()
+    .replace(/\s+/g, '')
+    .replace(',', '.');
+  if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(s)) return null;
+  return Number(s);
 }
 
 /** Words in an explanation, in any script. */
@@ -381,7 +384,7 @@ export function correctOption(step, state) {
  * Whether a step is passed, for a reader's input and state.
  * @returns {{passed: boolean, expected?: number|string}}
  */
-export function evaluate(step, state, input, locale = 'en') {
+export function evaluate(step, state, input) {
   if (step.kind === 'read') return { passed: true };
   if (step.kind === 'do') return { passed: !!step.check(state) };
   if (step.kind === 'explain')
@@ -396,7 +399,7 @@ export function evaluate(step, state, input, locale = 'en') {
   }
   if (!state.mission?.ok) return { passed: false };
   const expected = step.answer(state);
-  const typed = parseAnswer(input, locale);
+  const typed = parseAnswer(input);
   return {
     passed:
       typed !== null &&

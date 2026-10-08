@@ -19,7 +19,6 @@ import {
   t,
   translatePage,
 } from './mission/lab/i18n.js';
-import { typedNumber } from './numberParse.js';
 import { MISSION_API, createMission } from './mission/api.js';
 import { DEFAULT_PLAN, PULLER_IDS } from './mission/lab/defaults.js';
 import { DEFAULT_WINDOW, bestOf, turnCost } from './mission/lab/curriculum.js';
@@ -126,7 +125,10 @@ const FIELDS = {
   'vehicle.dryKg': 'ml-dry',
   'vehicle.ispS': 'ml-isp',
 };
-const numberIn = id => typedNumber($(id).value, language());
+const numberIn = id => {
+  const s = $(id).value.trim().replace(',', '.');
+  return s === '' ? NaN : Number(s);
+};
 
 function readPlan() {
   return {
