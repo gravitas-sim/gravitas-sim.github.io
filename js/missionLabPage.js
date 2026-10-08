@@ -244,7 +244,7 @@ function renderTimeline() {
   }
   slider.disabled = false;
   slider.max = String(state.plan.depart.tofDays);
-  if (Number(slider.value) > state.plan.depart.tofDays) slider.value = '0';
+  if (slider.valueAsNumber > state.plan.depart.tofDays) slider.value = '0';
   const burn = Object.fromEntries(m.burns.map(b => [b.id, b]));
   const rows = m.events.map(e => {
     const day = e.jd - m.patched.departJd;

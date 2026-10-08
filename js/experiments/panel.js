@@ -433,7 +433,7 @@ function renderBodies(exp) {
   }
   primary.onchange = () => {
     if (!exp) return;
-    exp.primary = primary.value === '' ? null : Number(primary.value);
+    exp.primary = primary.value === '' ? null : +primary.value;
   };
 }
 

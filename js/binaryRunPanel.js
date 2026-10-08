@@ -134,9 +134,9 @@ function beginRun() {
   if (!mode) return;
   const e = cacheElements();
 
-  const planetA = Number(e.planetA?.value);
-  const periods = Number(e.periods?.value);
-  const timestep = Number(e.timestep?.value);
+  const planetA = Number(e.planetA?.valueAsNumber);
+  const periods = Number(e.periods?.valueAsNumber);
+  const timestep = Number(e.timestep?.valueAsNumber);
   if (planetA > 0) SETTINGS.binary_lab_planet_a = planetA;
   if (periods >= 1) SETTINGS.binary_lab_periods = Math.round(periods);
   if (timestep > 0) SETTINGS.max_timestep = timestep;
@@ -196,7 +196,8 @@ export function armBinaryRun() {
 /** Repeat the run exactly, at half the integration step. */
 function halveAndRepeat() {
   const e = cacheElements();
-  const current = Number(e.timestep?.value) || SETTINGS.max_timestep || 1;
+  const current =
+    Number(e.timestep?.valueAsNumber) || SETTINGS.max_timestep || 1;
   if (e.timestep) e.timestep.value = String(current / 2);
   beginRun();
 }
@@ -916,7 +917,7 @@ export function initBinaryRun() {
   });
 
   e.sweepRecheckRun?.addEventListener('click', () => {
-    const value = Number(e.sweepRecheck?.value);
+    const value = +e.sweepRecheck?.value;
     if (!Number.isFinite(value)) return;
     // Half the step the sweep itself ran at, which is the check the lesson
     // already makes by hand for a single configuration.

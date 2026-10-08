@@ -142,28 +142,10 @@
     "js/validation/physicsChecks.js": 131
   },
   "parsing": {
-    "js/assistPanel.js": 2,
-    "js/astrometry.js": 1,
-    "js/authoring/preview.js": 3,
-    "js/binaryRunPanel.js": 5,
-    "js/controls.js": 2,
-    "js/coursePage.js": 1,
-    "js/experiments/analysisPanel.js": 2,
-    "js/experiments/panel.js": 1,
-    "js/investigations.js": 2,
-    "js/lab3dLab.js": 1,
-    "js/lab3dPage.js": 2,
-    "js/lightCurve.js": 1,
     "js/mission/lab/curriculum.js": 1,
-    "js/missionLabPage.js": 2,
+    "js/missionLabPage.js": 1,
     "js/missionPage.js": 2,
     "js/observatory/guides/core.js": 1,
-    "js/observatory/import.js": 2,
-    "js/observerControls.js": 2,
-    "js/pauseAtEventPanel.js": 1,
-    "js/radialVelocity.js": 5,
-    "js/rotationCurve.js": 2,
-    "js/rvWorkspacePanel.js": 4,
-    "js/ui.js": 8
+    "js/observatory/import.js": 2
   }
 }

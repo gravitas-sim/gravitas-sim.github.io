@@ -225,6 +225,20 @@ export function recordAnswer(responses, key, raw, locale) {
 }
 
 /**
+ * A typed number as a plain number, or NaN: the whole text read by
+ * parseNumber under the locale's decimal mark, nothing left over, ambiguous
+ * input refused. The one reader for a text field that holds only a number.
+ *
+ * @param {string} raw - What was typed
+ * @param {string} [locale] - For the decimal separator
+ * @returns {number} The value, or NaN
+ */
+export function typedNumber(raw, locale = 'en') {
+  const r = parseNumber(raw, locale);
+  return r.ok && !r.rest ? r.value : NaN;
+}
+
+/**
  * Read the numeric part of a string.
  *
  * Returns the number and whatever text followed it, so the caller can decide

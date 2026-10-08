@@ -613,6 +613,7 @@ describe('the runner', () => {
         ),
       number: v => String(v),
       registerMessages: parts => Object.assign(messages, parts.en),
+      language: () => 'en',
       open: () => {},
       status: text => said.push(text),
       state: {

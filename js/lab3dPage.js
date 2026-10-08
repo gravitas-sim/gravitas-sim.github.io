@@ -97,10 +97,10 @@ function syncControls() {
 }
 
 /** The integrator the controls ask for, or undefined for the problem's own. */
-function integratorAsked() {
+function integratorAsked(typedNumber) {
   const scheme = $('lb-scheme').value;
   if (!scheme) return undefined;
-  const value = Number($('lb-step').value.replace(',', '.'));
+  const value = typedNumber($('lb-step').value, language());
   if (!(value > 0)) return null;
   return scheme === 'dopri5' ? { scheme, tol: value } : { scheme, h: value };
 }
@@ -108,7 +108,10 @@ function integratorAsked() {
 // --- Running --------------------------------------------------------------------
 
 async function go() {
-  const integrator = integratorAsked();
+  // The reader of typed numbers is fetched when a run is asked for: the
+  // page's route has no room for it at load.
+  const { typedNumber } = await import('./answerParse.js');
+  const integrator = integratorAsked(typedNumber);
   if (integrator === null)
     return status(t('lab3d.status.refused', { why: t('lab3d.step') }));
   const started = performance.now();
@@ -123,8 +126,10 @@ async function go() {
   try {
     if (problem === 'file') {
       const system = integrator ? { ...fileSystem, integrator } : fileSystem;
-      const span = Number($('lb-span').value.replace(',', '.'));
-      const samples = Math.round(Number($('lb-samples').value));
+      const span = typedNumber($('lb-span').value, language());
+      const samples = Math.round(
+        typedNumber($('lb-samples').value, language())
+      );
       current = lab.run(
         system,
         { span, samples, positions: true },

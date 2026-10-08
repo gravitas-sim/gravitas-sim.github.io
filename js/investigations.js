@@ -2636,7 +2636,7 @@ function syncToolPanel(step) {
 
   els.toolControls.querySelectorAll('[data-tool]').forEach(input => {
     input.addEventListener('input', () => {
-      toolValues[input.dataset.tool] = Number(input.value);
+      toolValues[input.dataset.tool] = input.valueAsNumber;
       els.toolPresetNote.textContent = '';
       applied();
     });
@@ -3436,7 +3436,7 @@ function bindStepInputs() {
     const out = els.body.querySelector('[data-wedges-out]');
     const readout = els.body.querySelector('[data-wedges-readout]');
     const apply = () => {
-      const n = Number(wedgeSlider.value);
+      const n = wedgeSlider.valueAsNumber;
       out.textContent = String(n);
       setAreaSweepWedges(n);
       const ov = state.areaSweepOverlay;

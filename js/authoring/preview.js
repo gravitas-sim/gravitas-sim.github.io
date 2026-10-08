@@ -132,11 +132,11 @@ export function mountAuthorBar(jump) {
   document.body.classList.add('authoring-preview');
 
   els.step.addEventListener('change', () => {
-    const n = Number(els.step.value);
+    const n = els.step.valueAsNumber;
     if (Number.isInteger(n) && n >= 1) onJump(n - 1);
   });
-  els.prev.addEventListener('click', () => onJump(Number(els.step.value) - 2));
-  els.next.addEventListener('click', () => onJump(Number(els.step.value)));
+  els.prev.addEventListener('click', () => onJump(els.step.valueAsNumber - 2));
+  els.next.addEventListener('click', () => onJump(els.step.valueAsNumber));
 }
 
 /** Cached per lesson: the rules are pure, and the lesson does not change. */
