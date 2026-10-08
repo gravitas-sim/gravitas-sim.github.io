@@ -2477,6 +2477,7 @@ function syncPlotPanel(step) {
     if (els.plotTableWrap) els.plotTableWrap.hidden = true;
     return;
   }
+  resetExplainer(els.plotExplain);
   els.plotTitle.textContent = spec.title || t('inv.plot.title');
   els.plotNote.innerHTML = spec.note ? prose(spec.note) : '';
   els.plotNote.hidden = !spec.note;
@@ -2491,6 +2492,44 @@ function syncPlotPanel(step) {
 }
 
 /**
+ * The "What am I looking at?" button of a docked panel.
+ *
+ * Its label and its closed state are set each time the panel is drawn for a
+ * step, so a region opened on one step is not left under the next. The words
+ * are a lazy module fetched on the first press (js/explainers.js).
+ *
+ * @param {?HTMLElement} button - The panel header's button
+ * @returns {void}
+ */
+function resetExplainer(button) {
+  if (!button) return;
+  const host = button.closest('header');
+  if (host?.nextElementSibling?.classList.contains('explainer'))
+    host.nextElementSibling.remove();
+  button.setAttribute('aria-expanded', 'false');
+  button.removeAttribute('aria-controls');
+  button.textContent = t('inv.explain.open');
+}
+
+/**
+ * Wire a panel's explainer button once.
+ * @param {?HTMLElement} button - The button
+ * @param {(m: object) => ?string} keyOf - The explainer for what is showing now
+ * @param {object} [opts] - Listener options (the unmount signal)
+ */
+function wireExplainer(button, keyOf, opts) {
+  button?.addEventListener(
+    'click',
+    async () => {
+      const m = await import('./explainers.js');
+      const key = keyOf(m);
+      if (key) m.toggleExplainer(button, key, button.closest('header'));
+    },
+    opts
+  );
+}
+
+/**
  * Show or hide the ellipse explorer panel for the current step.
  * @param {Object} step - Step definition
  */
@@ -2499,6 +2538,7 @@ function syncEllipsePanel(step) {
   const on = step?.type === 'ellipse';
   els.ellipsePanel.hidden = !on;
   if (!on) return;
+  resetExplainer(els.ellipseExplain);
   const id = stepId(stepIndex);
   const e = Number(responses[`${id}:e`] ?? step.start ?? 0.5);
   els.ecc.value = String(e);
@@ -2592,6 +2632,7 @@ function syncToolPanel(step) {
     }
   }
 
+  resetExplainer(els.toolExplain);
   els.toolTitle.textContent = spec.title || widget.title;
   els.toolNote.innerHTML = prose(spec.note ?? widget.note ?? '');
   els.toolNote.hidden = !els.toolNote.innerHTML;
@@ -5085,6 +5126,9 @@ export function initInvestigations({ signal } = {}) {
     plotLog: document.getElementById('investigationPlotLog'),
     toolPanel: document.getElementById('investigationTool'),
     toolTitle: document.getElementById('investigationToolTitle'),
+    toolExplain: document.getElementById('investigationToolExplain'),
+    plotExplain: document.getElementById('investigationPlotExplain'),
+    ellipseExplain: document.getElementById('investigationEllipseExplain'),
     toolCanvas: document.getElementById('investigationToolCanvas'),
     toolNote: document.getElementById('investigationToolNote'),
     toolReadout: document.getElementById('investigationToolReadout'),
@@ -5147,6 +5191,13 @@ export function initInvestigations({ signal } = {}) {
   );
   els.next?.addEventListener('click', next);
   els.close?.addEventListener('click', closeInvestigation);
+  wireExplainer(
+    els.toolExplain,
+    m => m.explainerKeyFor(currentStep()?.tool?.id),
+    opts
+  );
+  wireExplainer(els.plotExplain, () => 'plot-measure', opts);
+  wireExplainer(els.ellipseExplain, () => 'plot-ellipse', opts);
   // The stage's camera and scale. Both cameras act once, on the press: a view
   // that re-framed itself would take the scene back every time a reader looked
   // somewhere else, and the whole point of standing objects on the canvas is

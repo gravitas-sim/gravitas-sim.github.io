@@ -1935,6 +1935,7 @@ export const ES_DEFERRED = {
   'inv.hint.concept': 'Piensa en:',
   'inv.hint.method': 'Cómo abordarlo:',
   'inv.hint.worked': 'Resuelto paso a paso:',
+  'inv.explain.open': '¿Qué estoy viendo?',
   'inv.hint.n': 'Pista {n} de {total}:',
   'inv.reflect.note':
     'No se califica. Se guarda con tu trabajo para que lo lean tú y tu profesor.',

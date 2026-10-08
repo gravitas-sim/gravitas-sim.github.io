@@ -57,7 +57,11 @@ export function drawResult(svg, result, metric, key, words) {
   };
   const log = wantsLog(ys);
   const means = result.summary.metrics[metric].filter(g => g.mean !== null);
-  const plot = createPlot(svg, { number, labels: { notStated: '' } });
+  const plot = createPlot(svg, {
+    number,
+    explain: 'plot-experiment',
+    labels: { notStated: '' },
+  });
   plot.draw(o, {
     xColumn: 'x',
     yColumn: 'y',

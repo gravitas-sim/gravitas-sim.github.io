@@ -1003,6 +1003,7 @@ export function mountAnalysis(root, ctx) {
     const hooks = {
       announce: text => (live.textContent = text),
       describe: describeRow,
+      explain: 'analysis-sweep',
       labels,
       number: num,
       range: vars => t('lab.table.rows', vars),

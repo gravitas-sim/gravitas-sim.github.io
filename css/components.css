@@ -7443,6 +7443,23 @@
     outline-offset: 2px;
   }
 
+  .explainer {
+    border-left: 3px solid var(--accent);
+    font-size: 0.8rem;
+    line-height: 1.45;
+    margin: 0.4rem 0;
+    padding: 0.2rem 0 0.2rem 0.6rem;
+  }
+
+  .explainer dt {
+    font-weight: 600;
+    margin-top: 0.3rem;
+  }
+
+  .explainer dd {
+    margin: 0;
+  }
+
   .inv-reflect-note {
     color: var(--text-dim, var(--c2));
     font-size: 0.8rem;
