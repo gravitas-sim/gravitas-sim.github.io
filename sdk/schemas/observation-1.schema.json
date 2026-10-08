@@ -97,7 +97,7 @@
         },
         "digest": {
           "type": "string",
-          "description": "An experiment's table: the digest of the trials it summarizes (js/analysis/seams.js trialsDigest)"
+          "description": "The content digest of the observation as opened (js/observatory/identity.js observationDigest): its source, data, time and spectral metadata, whichever way it arrived. An experiment's table: the digest of the trials it summarizes (js/analysis/seams.js trialsDigest)."
         },
         "engine": {
           "type": [
@@ -137,6 +137,12 @@
     "reductions": {
       "type": "array"
     },
+    "pack": {
+      "type": [
+        "object"
+      ],
+      "description": "A data pack's own record, structured: its masks and, for a light curve, its crowding (js/observatory/fixtures.js). Kept on a save so a guide that reads it still can."
+    },
     "axes": {
       "type": "object",
       "required": [
@@ -175,6 +181,10 @@
             "UTC",
             "unknown"
           ]
+        },
+        "reference": {
+          "type": "string",
+          "description": "The pack's own words for how time counts, e.g. BTJD = BJD - 2457000."
         }
       }
     },
@@ -342,7 +352,7 @@
     },
     "workspace": {
       "type": "object",
-      "description": "What the file was opened from, the changes made to it in order, and the observation as opened, so a read-back replays them."
+      "description": "What the file was opened from, the changes made to it in order, and the observation as opened, so a read-back replays them. `openedFrom.digest` is the content digest of the observation as opened."
     }
   }
 }

@@ -410,6 +410,13 @@
         },
         "pointsPossible": {
           "$ref": "#/$defs/countOrNull"
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The unit the step's answer is in, as the lesson states it; null when it states none or the step has no numeric answer. Absent from a file written before the column existed."
         }
       }
     }

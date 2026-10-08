@@ -18,9 +18,11 @@
 //                names its result's hash and the digest of its trials
 //     credit, license, retrieved, citations: [{ text, url? }],
 //     reductions: [text],       what was done to it before it arrived
+//     pack?:     { masks, crowding },    the data pack's own record, kept on a save
 //     columns: [{ id, name, unit, role, of?, level?, bits?, values }],
 //     axes: { x, y },           the column ids a plot draws by default
-//     time?:     { column, format, scale },           time-series
+//     time?:     { column, format, scale, reference? },  time-series; the
+//                reference is the pack's own words for how time counts
 //     spectral?: { column, quantity, medium, frame },  spectrum
 //     image?:    { width, height, wcs, x, y, value },  image
 //     masks: [{ id, label, source: 'source' | 'reader', rows }],

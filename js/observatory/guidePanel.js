@@ -41,6 +41,7 @@ import { installedPack } from '../catalog/installed.js';
 import { install } from '../catalog/install.js';
 import { openStore } from '../catalog/store.js';
 import { observedEntry } from '../notebook/observed.js';
+import { observationDigest } from './identity.js';
 import {
   load as loadNotebook,
   save as saveNotebook,
@@ -384,7 +385,7 @@ export function mountGuidePanel(root, ctx) {
 
   // --- Notebook -------------------------------------------------------------------
 
-  function toNotebook() {
+  async function toNotebook() {
     const g = run.guide;
     const main = [...seen.values()].at(-1) ?? ctx.state.source;
     const answered = steps().filter(
@@ -408,7 +409,8 @@ export function mountGuidePanel(root, ctx) {
         quantities,
       },
       source: main ?? { id: g.id, title: words.guide(g) },
-      digest: null,
+      // Of the observation itself, whichever way it arrived (identity.js).
+      digest: main?.columns ? await observationDigest(main) : null,
       changes: [],
       title: t('gd.nb.title', { guide: words.guide(g) }),
       labels: {
