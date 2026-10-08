@@ -39,12 +39,17 @@ import {
   stepsOn,
 } from '../../observatory/guides/core.js';
 import { EN_LAB3DGUIDES } from '../../i18n/en.lab3dGuides.js';
-import { ES_LAB3DGUIDES } from '../../i18n/es.lab3dGuides.js';
 import { put, readJson } from '../../storage/local.js';
 
 export const REPORT_FORMAT = 'gravitas.lab3d-guide-report';
 export const REPORT_VERSION = 1;
-const CATALOGS = { en: EN_LAB3DGUIDES, es: ES_LAB3DGUIDES };
+// Spanish arrives with a reader who has it chosen (loadLanguage), not with
+// the panel: an English reader never downloads it.
+const CATALOGS = { en: EN_LAB3DGUIDES, es: {} };
+const loadSpanish = async () => {
+  if (!Object.keys(CATALOGS.es).length)
+    CATALOGS.es = (await import('../../i18n/es.lab3dGuides.js')).ES_LAB3DGUIDES;
+};
 const STORE = 'gravitas_lab3d_guide_';
 
 /** The report a reader hands in: plain data, in a fixed order, no clock. */
@@ -717,7 +722,12 @@ export function createGuidePanel(root, lab) {
   }
 
   return {
+    /** Have the words of a language ready before the lab switches to it. */
+    async loadLanguage(lang) {
+      if (lang === 'es') await loadSpanish();
+    },
     async show({ id, path: p } = {}) {
+      await this.loadLanguage(lab.language());
       if (id) await begin(id, p);
       else chooser();
     },

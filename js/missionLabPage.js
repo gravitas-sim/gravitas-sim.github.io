@@ -13,6 +13,7 @@
 import {
   LANGUAGES,
   language,
+  loadLanguage,
   preferred,
   setLanguage,
   t,
@@ -847,7 +848,10 @@ function languageSwitch() {
         text: endonym,
       });
       b.setAttribute('aria-pressed', String(language() === id));
-      b.addEventListener('click', () => useLanguage(id));
+      b.addEventListener('click', async () => {
+        await loadLanguage(id);
+        useLanguage(id);
+      });
       return b;
     })
   );
@@ -898,24 +902,27 @@ $('ml-save-plan').addEventListener('click', () => {
   a.remove();
 });
 
-setLanguage(preferred());
-fillControls();
-writePlan(state.plan);
-guide = createGuidePanel({
-  els: {
-    pick: $('ml-guide-pick'),
-    step: $('ml-step'),
-    list: $('ml-step-list'),
-    name: $('ml-name'),
-    report: $('ml-report'),
-  },
-  t,
-  lab: { state: () => state, apply, language, num: v => num(v, 6) },
+// A Spanish reader's catalog, before anything is written in it.
+loadLanguage(preferred()).then(() => {
+  setLanguage(preferred());
+  fillControls();
+  writePlan(state.plan);
+  guide = createGuidePanel({
+    els: {
+      pick: $('ml-guide-pick'),
+      step: $('ml-step'),
+      list: $('ml-step-list'),
+      name: $('ml-name'),
+      report: $('ml-report'),
+    },
+    t,
+    lab: { state: () => state, apply, language, num: v => num(v, 6) },
+  });
+  const params = new URLSearchParams(location.search);
+  guide.open(
+    params.get('guide') || 'ml-orbit',
+    params.get('path') === 'advanced' ? 'advanced' : 'intro'
+  );
+  useLanguage(language());
+  compute().then(() => (document.documentElement.dataset.ready = 'true'));
 });
-const params = new URLSearchParams(location.search);
-guide.open(
-  params.get('guide') || 'ml-orbit',
-  params.get('path') === 'advanced' ? 'advanced' : 'intro'
-);
-useLanguage(language());
-compute().then(() => (document.documentElement.dataset.ready = 'true'));

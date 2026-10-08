@@ -8,9 +8,7 @@
 // =============================================================================
 
 import { EN_MISSIONLAB } from '../../i18n/en.missionLab.js';
-import { ES_MISSIONLAB } from '../../i18n/es.missionLab.js';
 import { EN_MISSIONLABGUIDES } from '../../i18n/en.missionLabGuides.js';
-import { ES_MISSIONLABGUIDES } from '../../i18n/es.missionLabGuides.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
@@ -19,10 +17,24 @@ export const LANGUAGES = Object.freeze([
   { id: 'es', endonym: 'Español' },
 ]);
 
-const CATALOGS = {
-  en: { ...EN_MISSIONLAB, ...EN_MISSIONLABGUIDES },
-  es: { ...ES_MISSIONLAB, ...ES_MISSIONLABGUIDES },
+// English is the page's own; Spanish loads when a reader arrives with it or
+// chooses it (loadLanguage), so an English reader never downloads it.
+const CATALOGS = { en: { ...EN_MISSIONLAB, ...EN_MISSIONLABGUIDES }, es: {} };
+const LOADERS = {
+  es: () =>
+    Promise.all([
+      import('../../i18n/es.missionLab.js'),
+      import('../../i18n/es.missionLabGuides.js'),
+    ]).then(([a, b]) => ({ ...a.ES_MISSIONLAB, ...b.ES_MISSIONLABGUIDES })),
 };
+const loaded = new Set(['en']);
+
+/** Load a language's catalog, if it is not loaded yet. */
+export async function loadLanguage(id) {
+  if (loaded.has(id) || !LOADERS[id]) return;
+  CATALOGS[id] = await LOADERS[id]();
+  loaded.add(id);
+}
 const DEFAULT = 'en';
 let current = DEFAULT;
 

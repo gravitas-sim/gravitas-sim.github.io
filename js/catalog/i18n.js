@@ -12,7 +12,6 @@
 // =============================================================================
 
 import { EN_CATALOG } from '../i18n/en.catalog.js';
-import { ES_CATALOG } from '../i18n/es.catalog.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
@@ -22,7 +21,20 @@ export const LANGUAGES = Object.freeze([
   { id: 'es', endonym: 'Español' },
 ]);
 
-const CATALOGS = { en: EN_CATALOG, es: ES_CATALOG };
+// English is the page's own; Spanish loads when a reader arrives with it or
+// chooses it (loadLanguage), so an English reader never downloads it.
+const CATALOGS = { en: EN_CATALOG, es: {} };
+const LOADERS = {
+  es: () => import('../i18n/es.catalog.js').then(m => m.ES_CATALOG),
+};
+const loaded = new Set(['en']);
+
+/** Load a language's catalog, if it is not loaded yet. */
+export async function loadLanguage(id) {
+  if (loaded.has(id) || !LOADERS[id]) return;
+  CATALOGS[id] = await LOADERS[id]();
+  loaded.add(id);
+}
 const DEFAULT = 'en';
 let current = DEFAULT;
 

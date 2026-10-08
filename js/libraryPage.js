@@ -27,6 +27,7 @@ import { checkLibrary } from './library/format.js';
 import { progressOf } from './library/progress.js';
 import {
   pick,
+  loadLanguage,
   preferred,
   setLanguage,
   t,
@@ -311,10 +312,13 @@ async function load() {
 }
 
 async function start() {
-  setLanguage(preferred());
+  const lang = preferred();
+  await loadLanguage(lang);
+  setLanguage(lang);
   translatePage();
   mountShell({
-    onLanguage: lang => {
+    onLanguage: async lang => {
+      await loadLanguage(lang);
       setLanguage(lang);
       translatePage();
       render();
