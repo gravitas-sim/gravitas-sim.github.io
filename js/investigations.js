@@ -3826,6 +3826,18 @@ export async function openInvestigation(id, opts = {}) {
     if (generation !== openGeneration) return;
     ({ inv, depth, depthChoice, deepest, depthName } = m);
   }
+  // Every step key is written into the panel's attributes and selectors. The
+  // pack validator and the lesson checker refuse a sid that could end an
+  // attribute; this refuses a lesson that reached the panel without passing
+  // either - a Composer preview staged before they did, for one - rather than
+  // rendering it.
+  const unsafe = inv.steps.find(s => !isValidSid(s.sid));
+  if (unsafe) {
+    throw new Error(
+      `Investigation "${id}" has a step id that is not a safe key: ${JSON.stringify(unsafe.sid)}`
+    );
+  }
+
   // An assignment is the same lesson with most of its steps taken out. It is
   // built here rather than being a second kind of thing the panel has to know
   // about: everything below works on `active`, and `active.id` stays the
@@ -3865,18 +3877,10 @@ export async function openInvestigation(id, opts = {}) {
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
   startedAt = saved?.startedAt || new Date().toISOString();
-  // Resolved against `active`, which for an assignment is the SUBSET, not
-  // against the whole investigation.
-  //
-  // This read indexOfSid(inv, ...), so a student resuming an eight-step
-  // assignment cut from a thirty-step lesson was sent to the position that sid
-  // holds in the LESSON - past the end of their assignment, and clamped to
-  // whatever step happened to be there. Their saved answers were intact and
-  // they were dropped in the wrong place to find them.
-  //
-  // A sid that is not in the subset at all means the assignment was recut
-  // since they last worked on it; starting at the beginning of what they
-  // actually have is the honest fallback, and their responses are unaffected.
+  // Resolved against `active`, which for an assignment is the SUBSET: against
+  // the whole lesson, a student resuming an eight-step assignment was sent to
+  // the position that sid holds in the lesson, past its end. A sid not in the
+  // subset means the assignment was recut: start at the beginning.
   stepIndex = saved?.stepSid
     ? Math.max(0, indexOfSid(active, saved.stepSid))
     : 0;

@@ -670,6 +670,7 @@ export const EN_DEFERRED = {
   'assign.print.id': 'Activity {id}, issued {date}.',
   'assign.print.roster': 'Class code: {code}',
 
+  'assign.depth': 'Depth',
   'assign.error.nothingSelected': 'Choose at least one step.',
   'assign.error.noLesson': 'That investigation could not be read.',
   'assign.error.unknownSteps':

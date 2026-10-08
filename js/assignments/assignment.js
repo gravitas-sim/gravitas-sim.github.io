@@ -44,6 +44,11 @@
 // the interface but has its stored response withheld - see stepBindings().
 // =============================================================================
 
+/** Depths, shallowest first (js/investigations/progressSchema.js has the same). */
+const DEPTHS = ['core', 'quantitative', 'advanced'];
+const inDepth = (s, d) =>
+  Math.max(0, DEPTHS.indexOf(s.depth)) <= DEPTHS.indexOf(d);
+
 /** What kind of thing a payload claims to be. */
 export const ASSIGNMENT_KIND = 'gravitas.assignment';
 
@@ -58,7 +63,7 @@ export const ASSIGNMENT_KIND = 'gravitas.assignment';
 export const ASSIGNMENT_SCHEMA = 2;
 
 /** 2 only with a package pin (`p`), all 2 added, so a build that knows 1 opens the rest. */
-export const assignmentVersion = payload => (payload?.p ? 2 : 1);
+export const assignmentVersion = payload => (payload?.p || payload?.d ? 2 : 1);
 
 /** The tag that marks an assignment fragment, so a world link is never one. */
 export const ASSIGNMENT_TAG = 'a';
@@ -133,7 +138,7 @@ export function setupIndexFor(lesson, index) {
  * @returns {{sids: Array<string>, added: Array<object>, unknown: Array<string>,
  *   ok: boolean}} The resolved selection
  */
-export function resolveSelection(lesson, chosen) {
+export function resolveSelection(lesson, chosen, depth = DEPTHS[2]) {
   const steps = lesson?.steps || [];
   const indexOf = new Map(steps.map((s, i) => [s.sid, i]));
   const wanted = new Set();
@@ -147,21 +152,10 @@ export function resolveSelection(lesson, chosen) {
     wanted.add(sid);
   }
 
-  // Pull in what each chosen step needs, and what THOSE need in turn.
-  //
-  // Two kinds of prerequisite, resolved to a fixed point rather than one level
-  // deep. The first version pulled in each step's setup and stopped, so a step
-  // whose question refers to a measurement made three steps earlier - "the
-  // period you found above" - was handed to a student with the measurement
-  // step missing, and the setup that measurement needed was never considered
-  // either because it was reached through a step that had itself been added.
-  //
-  //   setup     the world the step is about, found by walking backwards.
-  //   requires  a dependency the lesson declares by sid: a measurement a later
-  //             step computes from, an import a later field is filled by.
-  //
-  // The loop runs until nothing new is added. A cycle cannot spin it, because
-  // a sid is only ever added once.
+  // Pull in what each chosen step needs, and what those need in turn, to a
+  // fixed point: the `setup` that built the step's world (found by walking
+  // backwards) and each `requires` the lesson declares by sid. A sid is only
+  // added once, so a cycle cannot spin the loop.
   const added = [];
   const explain = (sid, reason, forSid, scenario = null) => {
     if (wanted.has(sid)) return;
@@ -202,7 +196,10 @@ export function resolveSelection(lesson, chosen) {
     }
   }
 
-  const sids = steps.map(s => s.sid).filter(sid => wanted.has(sid));
+  // Nothing deeper than the depth it is assigned at.
+  const sids = steps
+    .filter(s => wanted.has(s.sid) && inDepth(s, depth))
+    .map(s => s.sid);
   return { sids, added, unknown, ok: sids.length >= MIN_STEPS };
 }
 
@@ -219,7 +216,7 @@ export function validateSelection(lesson, spec) {
   if (!Array.isArray(spec?.chosen) || !spec.chosen.length) {
     return fail('nothingSelected');
   }
-  const resolved = resolveSelection(lesson, spec.chosen);
+  const resolved = resolveSelection(lesson, spec.chosen, spec.depth);
   if (resolved.unknown.length) {
     return fail('unknownSteps', { sids: resolved.unknown });
   }
@@ -250,13 +247,14 @@ export function buildAssignment({
   now = new Date(),
   fingerprint,
   provider = null,
+  depth = null,
 }) {
-  const resolved = resolveSelection(lesson, chosen);
+  const resolved = resolveSelection(lesson, chosen, depth ?? undefined);
   const byId = new Map((lesson.steps || []).map(s => [s.sid, s]));
   return {
     // Short keys: this is a URL fragment before it is anything else.
     k: ASSIGNMENT_KIND,
-    v: provider ? 2 : 1,
+    v: provider || depth ? 2 : 1,
     i:
       id ||
       assignmentIdFor({ lesson: lesson.id, sids: resolved.sids, title }, now),
@@ -272,6 +270,8 @@ export function buildAssignment({
     // The package the lesson came from, and its version, when it came from
     // one: two short strings, and the link can then say what changed.
     ...(provider ? { p: [provider.id, provider.version] } : {}),
+    // The depth it was set at: its steps stop there and the review says so.
+    ...(depth ? { d: depth } : {}),
   };
 }
 
@@ -359,6 +359,7 @@ export function validateAssignment(data) {
       /^\d+\.\d+\.\d+$/.test(data.p[1]);
     if (!ok) return fail('badPackage');
   }
+  if (data.d !== undefined && !DEPTHS.includes(data.d)) return fail('badDepth');
   if ((data.t || '').length > MAX_TITLE) return fail('titleTooLong');
   if ((data.n || '').length > MAX_INTRO) return fail('introTooLong');
 

@@ -164,7 +164,7 @@ export const stepCounts = lesson =>
 
 let words = null;
 /** The labels this module speaks, fetched the first time one is needed. */
-const messages = () =>
+export const messages = () =>
   (words ??= Promise.all([
     import('../i18n/en.depth.js'),
     import('../i18n/es.depth.js'),

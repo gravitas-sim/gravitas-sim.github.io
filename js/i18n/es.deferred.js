@@ -674,6 +674,7 @@ export const ES_DEFERRED = {
   'assign.print.id': 'Actividad {id}, emitida el {date}.',
   'assign.print.roster': 'Código de clase: {code}',
 
+  'assign.depth': 'Profundidad',
   'assign.error.nothingSelected': 'Elige al menos un paso.',
   'assign.error.noLesson': 'No se pudo leer esa investigación.',
   'assign.error.unknownSteps':

@@ -16,7 +16,8 @@
 // built from the same payload, so there is one thing to check rather than two.
 // =============================================================================
 
-import { t } from '../i18n/index.js';
+import { getLocale, t } from '../i18n/index.js';
+import { inDepth } from '../investigations/progressSchema.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import {
   MAX_INTRO,
@@ -30,6 +31,8 @@ import { assignmentLink } from './assignmentLink.js';
 
 let root = null;
 let lesson = null;
+/** The depth being set, or null for a lesson with one. */
+let depth = null;
 let chosen = new Set();
 let built = null;
 /** The encoded link for the assignment just built, for the printable page. */
@@ -48,6 +51,9 @@ const esc = text =>
       })[c]
   );
 
+/** The steps at the depth being set: all of them for a lesson with one depth. */
+const shown = () => lesson.steps.filter(s => inDepth(s, depth ?? undefined));
+
 const $ = id => root?.querySelector(`#${id}`);
 
 /**
@@ -56,8 +62,18 @@ const $ = id => root?.querySelector(`#${id}`);
  * @param {object} loaded - The merged lesson
  * @returns {void}
  */
-export function openBuilder(loaded) {
-  lesson = loaded;
+export async function openBuilder(loaded) {
+  // A lesson with deeper steps is set at one depth: they are laid in so the
+  // instructor sees what each depth adds.
+  depth = null;
+  if (loaded.depths) {
+    const m = await import('../investigations/depth.js');
+    [lesson] = await Promise.all([
+      m.withDepth(loaded, getLocale()),
+      m.messages(),
+    ]);
+    depth = 'core';
+  } else lesson = loaded;
   chosen = new Set();
   built = null;
   builtLink = null;
@@ -88,6 +104,10 @@ function mount() {
       <label class="assignment-field">
         <span>${esc(t('assign.intro'))}</span>
         <textarea id="assignIntro" rows="3" maxlength="${MAX_INTRO}"></textarea>
+      </label>
+      <label class="assignment-field" id="assignDepthRow" hidden>
+        <span>${esc(t('assign.depth'))}</span>
+        <select id="assignDepth"></select>
       </label>
       <label class="assignment-field">
         <span>${esc(t('assign.roster'))}</span>
@@ -121,8 +141,15 @@ function mount() {
   document.body.appendChild(root);
 
   $('assignClose').onclick = () => close();
+  $('assignDepth').onchange = e => {
+    depth = e.target.value;
+    chosen = new Set(
+      [...chosen].filter(sid => shown().some(s => s.sid === sid))
+    );
+    render();
+  };
   $('assignAll').onclick = () => {
-    chosen = new Set(lesson.steps.map(s => s.sid));
+    chosen = new Set(shown().map(s => s.sid));
     render();
   };
   $('assignNone').onclick = () => {
@@ -143,13 +170,21 @@ export function close() {
 /** Redraw the list, the additions and the counts. */
 function render() {
   if (!root) return;
-  const resolved = resolveSelection(lesson, [...chosen]);
+  const picker = $('assignDepth');
+  $('assignDepthRow').hidden = !depth;
+  if (depth && picker.value !== depth) {
+    picker.innerHTML = lesson.depths
+      .map(d => `<option value="${d}">${esc(t(`inv.depth.${d}`))}</option>`)
+      .join('');
+    picker.value = depth;
+  }
+  const resolved = resolveSelection(lesson, [...chosen], depth ?? undefined);
   const included = new Set(resolved.sids);
   const addedFor = new Map(resolved.added.map(a => [a.sid, a]));
 
   const list = $('assignSteps');
   list.innerHTML = '';
-  lesson.steps.forEach((step, i) => {
+  shown().forEach((step, i) => {
     const li = document.createElement('li');
     li.className = 'assignment-step';
     if (included.has(step.sid)) li.dataset.included = 'true';
@@ -204,7 +239,7 @@ function render() {
   $('assignCount').textContent = t('assign.count', {
     chosen: chosen.size,
     included: resolved.sids.length,
-    total: lesson.steps.length,
+    total: shown().length,
   });
 
   const added = $('assignAdded');
@@ -214,6 +249,7 @@ function render() {
 
   const check = validateSelection(lesson, {
     chosen: [...chosen],
+    depth: depth ?? undefined,
     title: $('assignName').value,
     intro: $('assignIntro').value,
   });
@@ -227,6 +263,7 @@ function render() {
 async function build() {
   const check = validateSelection(lesson, {
     chosen: [...chosen],
+    depth: depth ?? undefined,
     title: $('assignName').value,
     intro: $('assignIntro').value,
   });
@@ -251,6 +288,7 @@ async function build() {
     intro: $('assignIntro').value,
     fingerprint: stepFingerprint,
     provider: lessonProvider(lesson.id),
+    depth,
   });
 
   const link = await assignmentLink(built);
@@ -319,7 +357,7 @@ function printInstructions() {
       code { word-break: break-all; font-size: 10px; }
     </style></head><body>
     <h1>${esc(built.t || t('assign.title'))}</h1>
-    <p class="sub">${esc(lesson.title)} — ${esc(t('assign.print.steps', { n: built.s.length }))}</p>
+    <p class="sub">${esc(lesson.title)} — ${esc(t('assign.print.steps', { n: built.s.length }))}${built.d ? ` — ${esc(t('inv.depth.state', { depth: t(`inv.depth.${built.d}`) }))}` : ''}</p>
     ${built.n ? `<p>${esc(built.n)}</p>` : ''}
     <ol>${rows}</ol>
     <div class="meta">
