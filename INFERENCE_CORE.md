@@ -92,6 +92,45 @@ One planet on a Keplerian orbit (`js/inference/rv.js`).
 | `jitter` | nuisance | the velocity column's | 0 – 200 | added in quadrature to every error bar; found by a golden-section search on −2 ln L outside the least squares |
 | e, ω | derived | —, deg | — | |
 
+### Models for a table, 1.0.0
+
+A `table` observation - an experiment's means against a setting
+(`js/analysis/seams.js resultToObservation`), or any other x against y - has
+no physics of its own, so the Observatory's fit panel offers it three models
+that claim only what their formulas say (`js/inference/models.js`). Each is
+fitted by the same weighted least squares as the models above, through the
+same scheduler and Worker, and its uncertainty is the same three kept apart
+(the covariance's sigma, that scaled by a reduced chi-square above 1, and the
+profile's Delta chi-square = 1 interval). The error bars are the
+observation's standard-error column; where that column has no usable value
+(a run with one seed per setting) the rows are fitted unweighted and the
+result says so.
+
+| Model | Formula | Parameters (unit) | Reference |
+|---|---|---|---|
+| `poly-1` | y = c0 + c1 (x − x0) | c0 (y), c1 (y/x) | textbook regression, x = 1…5, y = 2, 4, 5, 4, 5: slope 0.6, error √(0.8/10); weighted closed form |
+| `poly-2` | y = c0 + c1 (x − x0) + c2 (x − x0)² | c0 (y), c1 (y/x), c2 (y/x²) | noise-free parabola, 10⁻⁶ |
+| `power-law` | y = A x^p, x > 0 | A (y/x^p), p (none) | y = 3 x^1.5 and y = 10 x⁻², 10⁻⁶; Kepler's third law from the experiment fixture, p = 1.5 to 10⁻³ |
+
+x0 is a setting recorded in the manifest (the mean of x, rounded), not a
+fitted parameter: centering keeps the coefficients from being the same number
+twice. Each model starts from an exact answer (the normal equations; a
+log-log line and three exponents for the power law) and is bounded by the
+reader's bounds, which the panel seeds from the data. For a model linear in
+its parameters the Delta chi-square = 1 interval equals the covariance's
+sigma exactly; `tests/tableFit.test.js` holds that, and holds the slope's
+coverage over 300 seeded lines at 68% to three binomial deviations. A power
+law refuses an x at or below zero, in the panel and in the fit. There is no
+red-noise factor for a table (its x is not a time), and the time-unit warning
+does not apply. In the model comparison the built-in constant is nested in a
+line or a power law at an interior point of the range (the slope or exponent
+at zero), so its likelihood-ratio test is not on a boundary
+(`nullAtBoundary: false`, `js/analysis/modelCompare.js nestedIn()`). A's unit
+depends on the fitted exponent, so the notebook envelope gives it no unit and
+says so (`unit:A`); a fit's envelope also names the observation it read and,
+for an experiment table, the digest of the experiment's trials
+(`made.observation`), beside the digest of the rows (`source.digest`).
+
 ### `rv-circular` 1.0.0
 
 The sandbox RV workspace's model: `v = gamma + K sin(2 pi t / P + phi)`, one
@@ -517,6 +556,10 @@ were set from this run and the CPU-time run together.
     numbering;
   - the manifest's validation, provenance and fingerprint, and the price
     and its refusals.
+- `tests/tableFit.test.js`, the table models: the textbook regression,
+  the weighted closed form, a noise-free parabola and power laws, the profile
+  against the covariance, slope coverage over seeds, the nested constant, and
+  Kepler's third law through result, observation, fit and envelope.
 - `e2e/inference.spec.js`, the panel in a browser, against the sources and
   `dist/`:
   - nothing of the core loads before the panel is opened;

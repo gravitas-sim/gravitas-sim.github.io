@@ -460,9 +460,12 @@ export function fitOnce(request, data, hooks = {}) {
   const model = MODELS[request.model.id];
   if (!model) throw new Error(`there is no model "${request.model.id}"`);
   if (data.x.length < 5) throw new Error('fewer than five rows to fit');
+  const refusal = model.requires?.(data);
+  if (refusal) throw new Error(refusal);
   const search = {};
-  const starts =
-    model === MODELS['transit-quadratic']
+  const starts = model.starts
+    ? model.starts(data, request)
+    : model === MODELS['transit-quadratic']
       ? transitStarts(request, data, hooks, search)
       : rvStarts(request, data, hooks, search);
   hooks.onProgress?.(0.35);
@@ -539,7 +542,10 @@ export function fitOnce(request, data, hooks = {}) {
     residuals[i] = fit.data.y[i] - result.fit[i];
     rss += residuals[i] ** 2;
   }
-  const redNoise = timeCorrelated(fit.data, residuals, request);
+  // The beta factor is about noise correlated in time: a table's x is not.
+  const redNoise = model.tabular
+    ? null
+    : timeCorrelated(fit.data, residuals, request);
   const out = {
     status: 'ok',
     model: { id: model.id, version: model.version },
@@ -745,7 +751,7 @@ function warningsFor(out, model, data, values, request) {
     const exposure = request.settings?.exposure;
     if (!exposure) w.push({ code: 'noExposure' });
   }
-  if (!data.perDay && request.parameters?.P?.mode !== 'fixed')
+  if (!model.tabular && !data.perDay && request.parameters?.P?.mode !== 'fixed')
     w.push({ code: 'timeUnitAssumed' });
   return w;
 }

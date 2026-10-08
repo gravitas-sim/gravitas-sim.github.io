@@ -18,6 +18,7 @@
 
 import { halfDuration, limbDarkening, transitFlux } from './transit.js';
 import { eccentricity, rvCurve } from './rv.js';
+import { solveSpd } from './fit.js';
 
 /**
  * A transit: circular orbit, quadratic limb darkening, a baseline flux.
@@ -234,4 +235,183 @@ export const RV = {
   },
 };
 
-export const MODELS = Object.freeze({ [TRANSIT.id]: TRANSIT, [RV.id]: RV });
+// --- Models for a table of x against y --------------------------------------------
+// A table - an experiment's means against a setting, a measured series that is
+// not a time series - has no physics of its own to claim, so these say only
+// what their formula says. Units are sentinels the panel and the notebook
+// envelope resolve from the data's own (js/analysis/seams.js modelUnit()):
+// 'y' is the value column's unit, 'x' the argument's.
+//
+// Every one is fitted by the same weighted least squares as the others, from
+// an exact or log-log start, with the covariance, the profile interval and the
+// scaled uncertainty of ./infer.js. Each `starts()` is only a start: the
+// search is bounded by the reader's bounds, so a start never decides a result.
+
+const { Math: M, Float64Array: F64 } = globalThis;
+
+/**
+ * The table models name their units in the data's own terms: these are unit
+ * expressions over the value column (y) and the argument (x), which
+ * js/analysis/seams.js modelUnit() resolves against the columns' real units.
+ * They are not registry units, and perXp depends on the exponent fitted, so it
+ * resolves to a warning rather than a unit.
+ */
+const DATA_UNIT = {
+  y: 'y',
+  perX: 'y/x',
+  perX2: 'y/x^2',
+  perXp: 'y/x^p',
+};
+
+/** Weighted normal equations of y = sum c_j u^j, u = x - x0, or null. */
+function polynomialStart(data, degree, x0) {
+  const n = degree + 1;
+  const A = Array.from({ length: n }, () => new Array(n).fill(0));
+  const b = new Array(n).fill(0);
+  for (let i = 0; i < data.x.length; i++) {
+    const w = data.sigma ? 1 / (data.sigma[i] * data.sigma[i]) : 1;
+    const u = data.x[i] - x0;
+    for (let j = 0; j < n; j++) {
+      b[j] += w * data.y[i] * u ** j;
+      for (let k = 0; k < n; k++) A[j][k] += w * u ** (j + k);
+    }
+  }
+  return solveSpd(A, b);
+}
+
+/**
+ * A polynomial in the distance from a center x0, which the manifest records
+ * (settings.x0): centering is what keeps the coefficients from being all but
+ * the same number, and it is a setting rather than a guess.
+ */
+function polynomial(degree, label) {
+  const names = ['c0', 'c1', 'c2'].slice(0, degree + 1);
+  return {
+    id: `poly-${degree}`,
+    version: '1.0.0',
+    quantity: `${label} of y against x`,
+    tabular: true,
+    centered: true,
+    // The constant is this model with the slope(s) at zero, an interior point
+    // of their range, so the likelihood-ratio test against it is not on a
+    // boundary (js/analysis/modelCompare.js nestedIn()).
+    nullAtBoundary: false,
+    parameters: names.map((n, j) => ({
+      name: n,
+      unit: [DATA_UNIT.y, DATA_UNIT.perX, DATA_UNIT.perX2][j],
+      label: ['value at the center', 'slope at the center', 'curvature term'][
+        j
+      ],
+    })),
+    linear: [],
+    notClaimed: [
+      `Why y changes with x: ${label} describes the table, and does not say what produced it.`,
+      'Anything beyond the range of x measured: the polynomial has no reason to hold there.',
+      'That the error bars are right: they are taken as given, and a reduced chi-square above 1 says they may not be.',
+    ],
+    assumptions: [
+      `y = ${names.map((n, j) => (j === 0 ? n : `${n} (x - x0)${j > 1 ? `^${j}` : ''}`)).join(' + ')}, with x0 recorded in the settings.`,
+      'The uncertainty column is the standard deviation of each y, independent between rows; without one every row weighs the same.',
+    ],
+    predict(v, x, settings) {
+      const x0 = settings.x0 ?? 0;
+      const out = new F64(x.length);
+      for (let i = 0; i < x.length; i++) {
+        const u = x[i] - x0;
+        let y = 0;
+        for (let j = degree; j >= 0; j--) y = y * u + v[`c${j}`];
+        out[i] = y;
+      }
+      return out;
+    },
+    solveLinear: (data, w, shape) => ({ fit: shape, linear: {} }),
+    starts(data, request) {
+      const c = polynomialStart(data, degree, request.settings?.x0 ?? 0);
+      return [Object.fromEntries(names.map((n, j) => [n, c ? c[j] : 0]))];
+    },
+    derived: () => ({}),
+  };
+}
+
+/** y = A x^p for x > 0. */
+export const POWER_LAW = {
+  id: 'power-law',
+  version: '1.0.0',
+  quantity: 'y as a power of x',
+  tabular: true,
+  parameters: [
+    { name: 'A', unit: DATA_UNIT.perXp, label: 'value at x = 1' },
+    { name: 'p', unit: '', label: 'exponent' },
+  ],
+  linear: [],
+  notClaimed: [
+    'That the relation is a law: a power law is the straight line on log-log axes, and a curve that is not a power law can look like one over a short range.',
+    "The exponent's uncertainty away from the data: it is the fit's own, at the rows given, with the error bars as given.",
+    "A has the unit of y over the unit of x to the power p: it is the value at x = 1 in the column's unit, so it moves with the unit chosen for x.",
+  ],
+  assumptions: [
+    'y = A x^p, fitted to y itself by weighted least squares, not to its logarithm: each row keeps the weight its uncertainty gives it.',
+    'Every x is positive.',
+    'The uncertainty column is the standard deviation of each y, independent between rows; without one every row weighs the same.',
+  ],
+  /** x must be positive, or x^p is not a real number for every p. */
+  requires(data) {
+    for (const v of data.x)
+      if (!(v > 0)) return 'a power law needs every x above zero';
+    return null;
+  },
+  predict(v, x) {
+    const out = new F64(x.length);
+    for (let i = 0; i < x.length; i++) out[i] = v.A * M.pow(x[i], v.p);
+    return out;
+  },
+  solveLinear: (data, w, shape) => ({ fit: shape, linear: {} }),
+  starts(data) {
+    const n = data.x.length;
+    const out = [];
+    // A, for a given p, is linear: exactly the weighted fit of y to x^p.
+    const at = p => {
+      let a = 0;
+      let c = 0;
+      for (let i = 0; i < n; i++) {
+        const w = data.sigma ? 1 / (data.sigma[i] * data.sigma[i]) : 1;
+        const g = M.pow(data.x[i], p);
+        a += w * data.y[i] * g;
+        c += w * g * g;
+      }
+      return { A: c > 0 ? a / c : 0, p };
+    };
+    // The straight line through ln y against ln x, where y is positive.
+    if (data.y.every(v => v > 0)) {
+      const lx = Array.from(data.x, M.log);
+      const ly = Array.from(data.y, M.log);
+      const w = Array.from(data.y, (v, i) =>
+        data.sigma ? (v / data.sigma[i]) ** 2 : 1
+      );
+      const S = w.reduce((a, b) => a + b, 0);
+      const mx = w.reduce((a, b, i) => a + b * lx[i], 0) / S;
+      const my = w.reduce((a, b, i) => a + b * ly[i], 0) / S;
+      let sxy = 0;
+      let sxx = 0;
+      for (let i = 0; i < n; i++) {
+        sxy += w[i] * (lx[i] - mx) * (ly[i] - my);
+        sxx += w[i] * (lx[i] - mx) ** 2;
+      }
+      if (sxx > 0) out.push({ A: M.exp(my - (sxy / sxx) * mx), p: sxy / sxx });
+    }
+    for (const p of [1, -1, 2]) out.push(at(p));
+    return out;
+  },
+  derived: () => ({}),
+};
+
+export const POLY_1 = polynomial(1, 'a straight line');
+export const POLY_2 = polynomial(2, 'a quadratic');
+
+export const MODELS = Object.freeze({
+  [TRANSIT.id]: TRANSIT,
+  [RV.id]: RV,
+  [POLY_1.id]: POLY_1,
+  [POLY_2.id]: POLY_2,
+  [POWER_LAW.id]: POWER_LAW,
+});

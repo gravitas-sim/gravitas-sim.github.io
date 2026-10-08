@@ -95,6 +95,12 @@ holds:
 3. It says node by node whether each gives the number it saved, and which
    saved node came from another version of its tool.
 
+Before step 1, each node's parameters are checked against its tool's declared
+schema (`TOOLS[...].params` in `js/measure/pipeline.js`); a value of the wrong
+kind is refused, with its path (`params.blue[1]`), and nothing is opened. A
+key left out is the tool's own to report, and a key the schema does not name
+is not read.
+
 What it accepts:
 
 - **An Observatory save** (a `gravitas.observation/1` with its workspace)

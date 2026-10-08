@@ -1531,6 +1531,7 @@ export function mountMeasurePanel(root, ctx) {
         incomplete: 'obs.ms.open.incomplete',
         unknownTool: 'obs.ms.open.unknownTool',
         badNode: 'obs.ms.open.badNode',
+        badParams: 'obs.ms.open.badParams',
       }[r.code];
       ui.problem.textContent = key ? t(key, r.detail || {}) : r.code;
       return;

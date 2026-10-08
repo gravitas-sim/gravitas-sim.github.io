@@ -196,6 +196,19 @@ export function fixed(value, decimals, locale) {
 }
 
 /**
+ * A number rounded to significant figures, as a number: the value a field or a
+ * starting bound should hold, where `decimal()` would return grouped text.
+ * @param {number} value
+ * @param {number} [sig] - Significant figures, default 3
+ * @returns {number} The value unchanged when it is not finite
+ */
+export function roundSig(value, sig = 3) {
+  return Number.isFinite(value)
+    ? Number(value.toPrecision(Math.max(1, Math.min(21, Math.round(sig)))))
+    : value;
+}
+
+/**
  * A value and its uncertainty at the uncertainty's precision: "1.234 ± 0.012",
  * or, with `interval`, the range it spans, "[1.222, 1.246]" ("[1,222; 1,246]"
  * in Spanish, whose comma is taken). Which uncertainty it is - one sigma, a

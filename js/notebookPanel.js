@@ -20,6 +20,7 @@
 // neighbor, not sorting a table.
 // =============================================================================
 
+import { parseDocument } from './platform/common.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { formatNumber } from './format.js';
 import {
@@ -640,7 +641,7 @@ export async function restoreFrom(file) {
   }
   let data;
   try {
-    data = JSON.parse(await file.text());
+    data = parseDocument(await file.text());
   } catch {
     lastSave = { ok: false, reason: 'notJson' };
     render();

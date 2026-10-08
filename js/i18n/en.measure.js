@@ -197,6 +197,8 @@ export const EN_MEASURE = {
     'That pipeline uses a tool this Gravitas does not have: {tool}.',
   'obs.ms.open.badNode':
     'A measurement in that pipeline has no position in the changes.',
+  'obs.ms.open.badParams':
+    'A measurement in that pipeline ({id}) has a setting its tool cannot take, at {path}, so nothing was opened.',
   'obs.ms.open.workspace':
     "That pipeline's observation could not be read: {why}",
   'obs.ms.notebook.added':

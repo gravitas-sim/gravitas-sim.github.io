@@ -38,7 +38,8 @@ const FORMULA_CHARS = new Set([
 /**
  * The first character a spreadsheet will look at, once it has skipped what it
  * skips: spaces and other whitespace, control characters, a no-break space, a
- * zero-width space and a byte-order mark.
+ * zero-width space, joiner and non-joiner, the other Unicode spaces and
+ * direction marks, an ideographic space, a word joiner and a byte-order mark.
  * @param {string} s - Field text
  * @returns {string} That character, or ''
  */
@@ -47,7 +48,19 @@ function firstSignificant(s) {
   while (i < s.length) {
     const c = s.charCodeAt(i);
     const skipped =
-      c <= 0x20 || c === 0x7f || c === 0xa0 || c === 0x200b || c === 0xfeff;
+      c <= 0x20 ||
+      c === 0x7f ||
+      c === 0xa0 ||
+      c === 0x1680 ||
+      (c >= 0x2000 && c <= 0x200f) ||
+      c === 0x2028 ||
+      c === 0x2029 ||
+      (c >= 0x202a && c <= 0x202e) ||
+      c === 0x202f ||
+      c === 0x205f ||
+      c === 0x2060 ||
+      c === 0x3000 ||
+      c === 0xfeff;
     if (!skipped) break;
     i++;
   }

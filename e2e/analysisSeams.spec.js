@@ -197,6 +197,89 @@ test.describe('the analysis seams', () => {
     expect(entry.snapshot.artifact.source.digest).toMatch(/^[0-9a-f]{8}$/);
   });
 
+  /** An experiment's table, saved and opened in the Observatory. */
+  async function openTable(page, info) {
+    await runExperiment(page);
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#labObservation').click(),
+    ]);
+    const path = info.outputPath('experiment.observation.json');
+    await download.saveAs(path);
+    await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
+      timeout: 30_000,
+    });
+    await page.locator('#obsFile').setInputFiles(path);
+    await expect(page.locator('#obsWork')).toBeVisible({ timeout: 30_000 });
+    return JSON.parse(readFileSync(path, 'utf8'));
+  }
+
+  test('an experiment table is fitted in the Observatory and the fit is kept with the digest of its rows and the experiment', async ({
+    page,
+  }, info) => {
+    const doc = await openTable(page, info);
+    await page.locator('#obsFitPanel summary').click();
+    await expect(page.locator('#fitRun')).toBeVisible({ timeout: 30_000 });
+    // A table is offered the models that claim nothing about its numbers.
+    await expect(page.locator('#fitModel option')).toHaveText([
+      /straight line/,
+      /quadratic/,
+      /power law/,
+    ]);
+    await page.locator('#fitModel').selectOption('poly-1');
+    await expect(page.locator('#fitCenter')).toBeVisible();
+    await page.locator('#fitProfiles').uncheck();
+    await expect(page.locator('#fitRun')).toBeEnabled();
+    await page.locator('#fitRun').click();
+    await expect(page.locator('#fitStatus')).toContainText(/Fitted in/, {
+      timeout: 120_000,
+    });
+    await expect(page.locator('#fitTable tbody tr')).toHaveCount(2);
+    await page.locator('#fitKeep').click();
+    await expect(page.locator('#fitStatus')).toContainText(
+      'Kept in the evidence notebook'
+    );
+    const [entry] = await notebook(page);
+    expect(entry.source).toBe('inference-fit');
+    const env = entry.snapshot.artifact;
+    expect(env.source).toMatchObject({ kind: 'inference', id: 'poly-1' });
+    expect(env.source.digest).toMatch(/^[0-9a-f]{8}$/);
+    // The rows' digest is the fit's; the experiment's own is beside it.
+    expect(env.made.observation).toMatchObject({
+      id: doc.id,
+      source: { kind: 'experiment', digest: doc.source.digest },
+    });
+    expect(env.quantities.map(q => q.id)).toEqual(['c0', 'c1']);
+  });
+
+  for (const width of [375, 1024]) {
+    test(`the table fit panel fits at ${width} px and has no axe violations`, async ({
+      page,
+    }, info) => {
+      await page.setViewportSize({ width, height: 900 });
+      await openTable(page, info);
+      await page.locator('#obsFitPanel summary').click();
+      await expect(page.locator('#fitRun')).toBeVisible({ timeout: 30_000 });
+      await page.locator('#fitModel').selectOption('poly-2');
+      await page.locator('#fitProfiles').uncheck();
+      await page.locator('#fitRun').click();
+      await expect(page.locator('#fitStatus')).toContainText(/Fitted in/, {
+        timeout: 120_000,
+      });
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth
+      );
+      expect(overflow).toBeLessThanOrEqual(0);
+      const violations = (
+        await new AxeBuilder({ page }).withTags(TAGS).analyze()
+      ).violations.map(v => `${v.id}: ${v.nodes.map(n => n.target).join(' ')}`);
+      expect(violations).toEqual([]);
+    });
+  }
+
   for (const width of [375, 1024]) {
     test(`the new controls fit at ${width} px and have no axe violations`, async ({
       page,
