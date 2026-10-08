@@ -374,7 +374,7 @@ export default {
     {
       title: 'Dónde te deja esto',
       body: 'Has medido la forma de una órbita, has visto a un planeta cambiar velocidad por distancia conservando el momento angular, y has recuperado una ley de potencias a partir de ocho medidas que tomaste tú mismo. Después la has usado para pesar una estrella que nunca visitarás.\n\nTodo esto salió de posiciones a simple vista registradas antes de que existiera el telescopio, por un observador que se negó a redondear ocho minutos de arco.',
-      tip: 'Si vas a entregar esto para una calificación, pulsa Siguiente una vez más para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.',
+      tip: 'Si vas a entregar esto para una calificación, pulsa Terminar para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.',
     },
   ],
 };

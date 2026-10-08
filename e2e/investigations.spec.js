@@ -537,7 +537,7 @@ test.describe('the student report', () => {
       'Terminado'
     );
     await expect(page.locator('#investigationFinishSummary')).toContainText(
-      /Has recorrido\s+\d+\s+de\s+\d+\s+pasos/
+      /Has abierto\s+\d+\s+de\s+\d+\s+pasos/
     );
     for (const english of ['Keep working', 'Finished', 'Your name']) {
       await expect(dialog).not.toContainText(english);

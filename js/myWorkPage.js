@@ -265,8 +265,8 @@ function render() {
     s.say ||
     (n
       ? L(
-          `${n} things saved on this device.`,
-          `${n} cosas guardadas en este dispositivo.`
+          `${n} thing${n === 1 ? '' : 's'} saved on this device.`,
+          `${n} ${n === 1 ? 'cosa guardada' : 'cosas guardadas'} en este dispositivo.`
         )
       : L(
           'Nothing is saved on this device yet.',
