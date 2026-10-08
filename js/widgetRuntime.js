@@ -85,6 +85,22 @@ export function captureToNotebook(make) {
   return sink(make);
 }
 
+// --- Where a capture is made --------------------------------------------------
+
+/** What the lesson engine says of where the student is. @type {?Function} */
+let contextSource = null;
+
+/**
+ * Install the lesson engine's answer to "where is the student?".
+ * @param {?Function} fn - Returns {lesson, step, assignment} or null
+ */
+export function setEvidenceContext(fn) {
+  contextSource = typeof fn === 'function' ? fn : null;
+}
+
+/** @returns {?object} The lesson and step a capture is made in, or null */
+export const evidenceContext = () => contextSource?.() ?? null;
+
 // --- Signal audio -----------------------------------------------------------
 
 /**

@@ -397,9 +397,9 @@ export function mountGuidePanel(root, ctx) {
       unit: s.expect.unit ?? '',
       kind: 'measured',
     }));
-    const rows = steps()
+    const states = steps()
       .filter(s => s.kind !== 'read')
-      .map(s => [words.step(s, 'title'), t(`gd.state.${stateOf(s)}`)]);
+      .map(s => [s.id, stateOf(s)]);
     const entry = observedEntry({
       node: {
         tool: `guide:${g.id}`,
@@ -427,8 +427,9 @@ export function mountGuidePanel(root, ctx) {
                 ? 'gd.nb.checked'
                 : 'gd.nb.unchecked'
           ),
-        rows,
       },
+      steps: states,
+      context: { page: 'observatory', guide: g.id, path: run.path },
     });
     const loaded = loadNotebook();
     if (!loaded.ok)

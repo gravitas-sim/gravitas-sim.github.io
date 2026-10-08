@@ -348,7 +348,14 @@ test.describe('the measurement pipeline', () => {
     expect(entry.snapshot.quantities.map(q => q.kind)).toEqual(
       entry.snapshot.quantities.map(() => 'measured')
     );
-    expect(entry.snapshot.observed.rows.length).toBeGreaterThan(4);
+    // The evidence is the ledger envelope now, not rows beside the entry: the
+    // tool, the observation's data digest and the measured quantities.
+    const env = entry.snapshot.artifact;
+    expect(env.source).toMatchObject({ kind: 'pipeline', id: 'box' });
+    expect(env.source.digest).toMatch(/^[0-9a-f]{8,64}$/);
+    expect(env.quantities.length).toBeGreaterThan(0);
+    expect(env.quantities.some(q => q.origin === 'measured')).toBe(true);
+    expect(entry.snapshot.observed.rows).toBeUndefined();
     // The periodogram goes in as its figure, within the notebook's limit.
     expect(entry.snapshot.figure.series[0].points.length).toBeLessThanOrEqual(
       400
