@@ -17,6 +17,7 @@ import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { keyGroupsPlugin } from './tools/key-groups.mjs';
+import { proseWhitespacePlugin } from './tools/prose-whitespace.mjs';
 
 const OUT = 'dist';
 const watch = process.argv.includes('--watch');
@@ -215,7 +216,7 @@ async function buildJs() {
     // UTF-8, so the program is the same one; only the bytes are fewer.
     charset: 'utf8',
     // Message catalogs write a shared key prefix once (tools/key-groups.mjs).
-    plugins: [keyGroupsPlugin()],
+    plugins: [keyGroupsPlugin(), proseWhitespacePlugin()],
     // NOTE: three and chart.js are no longer external. They are imported by
     // relative path from vendor/, so esbuild follows them into the deferred
     // chunks for the 3-D view and the charts. See tools/vendor-deps.mjs.

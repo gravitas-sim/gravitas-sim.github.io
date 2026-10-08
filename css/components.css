@@ -3581,6 +3581,13 @@
     font-size: var(--text-lg);
   }
 
+  .inv-where {
+    margin: 0;
+    padding: var(--space-1) var(--space-4);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+  }
+
   .inv-progress {
     display: flex;
     align-items: center;
@@ -5146,6 +5153,18 @@
   }
 
   /* --- Hero ---------------------------------------------------------------- */
+
+  /* First-run introduction: nothing else on Home until it ends. */
+  .wel-orienting .wel-hero,
+  .wel-orienting #welcomeSections > :not(.wel-orient) {
+    display: none;
+  }
+
+  .wel-orient {
+    max-width: 40rem;
+    margin-inline: auto;
+    text-align: center;
+  }
 
   .wel-hero {
     padding: clamp(var(--space-6), 6vh, var(--space-10)) 0

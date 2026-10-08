@@ -240,6 +240,9 @@ let visited = new Set();
  */
 let progressNotes = [];
 let startedAt = null;
+// Seconds this reader has had the lesson open and in view (the where line).
+let spent = 0;
+let lastTick = 0;
 // Depth (DEPTH.md).
 let depth = 'core';
 let depthChoice = null;
@@ -399,6 +402,7 @@ function classifyStorageError(err) {
 
 function save() {
   if (!active) return;
+  clock();
   // A payload from a newer build was left unread; overwriting it would destroy
   // progress this version does not understand. The reader is told, and their
   // answers stay usable in memory for the rest of the session.
@@ -421,6 +425,7 @@ function save() {
     startedAt,
     depth: depthChoice,
     deepest,
+    spent,
   });
 
   // This tab's copy, always, and before the disk is asked. It is what makes
@@ -3108,6 +3113,27 @@ function refreshMeasurements() {
   drawPlot(step, id);
 }
 
+/** Count the time since the last tick, unless the page was hidden or idle. */
+function clock() {
+  const now = Date.now();
+  if (lastTick && !document.hidden) spent += Math.min(now - lastTick, 6e4) / 1e3;
+  lastTick = now;
+}
+
+/** The where line: step, depth and time against what the lesson declares. */
+function renderWhere(seen) {
+  const w = els.where;
+  if (!w) return;
+  clock();
+  const tpl = w.dataset[getLocale() === 'es' ? 'es' : 'en'];
+  w.textContent = tpl
+    .replace('{n}', seen.indexOf(currentStep()) + 1)
+    .replace('{total}', seen.length)
+    .replace('{depth}', depthName ? ` · ${depthName}` : '')
+    .replace('{m}', Math.floor(spent / 60))
+    .replace('{planned}', active.duration || '');
+}
+
 function renderFooter() {
   const step = currentStep();
   if (authoring?.render) authoring.render(active, stepIndex);
@@ -3132,6 +3158,7 @@ function renderFooter() {
     total: seen.length,
   });
   renderDepth();
+  renderWhere(seen);
   els.probeWrap.hidden = !step?.probe;
 }
 
@@ -3877,6 +3904,8 @@ export async function openInvestigation(id, opts = {}) {
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
   startedAt = saved?.startedAt || new Date().toISOString();
+  spent = saved?.spent || 0;
+  lastTick = Date.now();
   // Resolved against `active`, which for an assignment is the SUBSET: against
   // the whole lesson, a student resuming an eight-step assignment was sent to
   // the position that sid holds in the lesson, past its end. A sid not in the
@@ -5115,6 +5144,7 @@ export function initInvestigations({ signal } = {}) {
     close: document.getElementById('investigationClose'),
     progressBar: document.getElementById('investigationProgressBar'),
     progressText: document.getElementById('investigationProgressText'),
+    where: document.getElementById('investigationWhere'),
     saveStatus: document.getElementById('investigationSaveStatus'),
     progressNotice: document.getElementById('investigationProgressNotice'),
     backupDownload: document.getElementById('investigationBackupDownload'),
@@ -5207,6 +5237,7 @@ export function initInvestigations({ signal } = {}) {
     goToStep(applyingFrom(stepIndex, -1))
   );
   els.next?.addEventListener('click', next);
+  setInterval(() => active && renderWhere(shown()), 3e4);
   els.deeper?.addEventListener('click', () => changeDepth(1), opts);
   els.shallower?.addEventListener('click', () => changeDepth(-1), opts);
   els.close?.addEventListener('click', closeInvestigation);

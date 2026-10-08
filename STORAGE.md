@@ -37,6 +37,7 @@ These are the student's own work, and what an "export everything" would carry:
 |---|---|---|
 | `gravitas_composer_preview` | The lesson the Composer hands to its preview | `js/composerPage.js`, `js/authoring/preview.js` |
 | `gravitas_course_preview` | The course the builder hands to the course home | `js/course/links.js` |
+| `gravitas_next_context` | The sequence or course a lesson was opened from, so its finish panel can offer the next one | `js/investigations/next.js` |
 
 ## Preferences
 
@@ -51,6 +52,7 @@ These are the student's own work, and what an "export everything" would carry:
 | `gravitas_rail_sections` | Which rail sections are open | `js/controls.js` |
 | `gravitas_lecture_sequence` | Lecture mode's sequence | `js/lecture.js` |
 | `gravitas_welcome_seen_v1` | That the welcome was seen | `js/welcomeGate.js` |
+| `gravitas_orientation_seen_v1` | That the first-run introduction on Home was shown (once, however it ended) | `js/welcomeGate.js` |
 | `mobile_instructions_shown` | That the phone instructions were shown | `js/main.js` |
 | `gravitasDebug` | Developer logging | `js/utils.js` |
 

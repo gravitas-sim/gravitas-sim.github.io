@@ -56,6 +56,23 @@ export function resetWelcomePreference() {
   }
 }
 
+/** The three-screen introduction on Home: once, whatever ends it (Prompt 73). */
+export const ORIENTATION_SEEN_KEY = 'gravitas_orientation_seen_v1';
+export const isOrientationSeen = () => {
+  try {
+    return window.localStorage.getItem(ORIENTATION_SEEN_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
+export const markOrientationSeen = () => {
+  try {
+    window.localStorage.setItem(ORIENTATION_SEEN_KEY, '1');
+  } catch {
+    /* shown again next load */
+  }
+};
+
 // --- Should it open? ---------------------------------------------------------
 
 /**
