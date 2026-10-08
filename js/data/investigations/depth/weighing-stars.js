@@ -6,6 +6,8 @@
 // each carried into the mass, and the split of that mass into two.
 // =============================================================================
 
+import { fixed } from '../../../format.js';
+
 const mass = (a, p) => a ** 3 / p ** 2;
 const fraction = (a, sa, p, sp) =>
   Math.sqrt(((3 * sa) / a) ** 2 + ((2 * sp) / p) ** 2);
@@ -75,7 +77,7 @@ export default {
           return null;
         return {
           level: 'ok',
-          message: `The pair weighs ${v.m_tot.toFixed(2)} ± ${v.s_tot.toFixed(2)} solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's.`,
+          message: `The pair weighs ${fixed(v.m_tot, 2)} ± ${fixed(v.s_tot, 2)} solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's.`,
         };
       },
     },

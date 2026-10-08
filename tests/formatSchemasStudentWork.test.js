@@ -322,13 +322,14 @@ describe('the submission token schema', () => {
       backup: written,
       record: { ids: ['e1'], rows: [], total: 0 },
       digest: 'a'.repeat(64),
+      depth: 'quantitative',
     });
     expect(Object.keys(s.properties).sort()).toEqual(
       Object.keys(withEvidence).sort()
     );
     expect(Object.keys(report()).sort()).toEqual(
       Object.keys(withEvidence)
-        .filter(k => k !== 'ev')
+        .filter(k => k !== 'ev' && k !== 'dp')
         .sort()
     );
   });

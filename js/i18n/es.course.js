@@ -285,6 +285,7 @@ export const ES_COURSE = {
   'course.error.stepHashes': 'Un hash por cada paso asignado.',
   'course.error.steps': 'De 1 a {max} pasos.',
   'course.error.stepsTwice': 'Un paso aparece dos veces.',
+  'course.error.depth': 'Una profundidad es core, quantitative o advanced.',
   'course.error.tooDeep':
     'El archivo está anidado más hondo que cualquier curso.',
   'course.error.tooLarge':

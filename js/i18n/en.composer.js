@@ -253,6 +253,9 @@ export const EN_COMPOSER = {
   'composer.error.esOf':
     'The record of which English the Spanish translates is damaged.',
   'composer.error.tooLarge': 'The file is larger than any investigation needs.',
+  'composer.error.depth': 'A depth is core, quantitative or advanced.',
+  'composer.error.depthPlace':
+    'A deeper step is neither first nor last, and opens no scenario.',
   'composer.error.tooDeep':
     'The file is nested deeper than any investigation is.',
   'composer.error.unsafeKey': '“{key}” may not be a key.',

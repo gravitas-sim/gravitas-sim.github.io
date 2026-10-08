@@ -8,6 +8,8 @@
 // =============================================================================
 
 /** The lesson's limb-darkening factor and the Jupiter-to-Sun radius ratio. */
+import { fixed } from '../../../format.js';
+
 const LIMB = 1.2146;
 const RJ_PER_RSUN = 9.7311;
 
@@ -78,15 +80,15 @@ export default {
         },
         {
           id: 'rp',
-          label: 'Planet radius',
-          unit: 'R_Jupiter',
+          label: 'Planet radius (R_Jupiter)',
+          unit: '',
           compute: (v, e) => radius(entered(e)),
           decimals: 3,
         },
         {
           id: 's_rp',
-          label: 'Its uncertainty',
-          unit: 'R_Jupiter',
+          label: 'Its uncertainty (R_Jupiter)',
+          unit: '',
           compute: (v, e) =>
             (radius(entered(e)) * depthError(v)) / (2 * entered(e).d),
           decimals: 4,
@@ -97,7 +99,7 @@ export default {
         if (!Number.isFinite(v.s_rp)) return null;
         return {
           level: 'ok',
-          message: `The radius is ${v.rp.toFixed(3)} ± ${v.s_rp.toFixed(4)} R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about.`,
+          message: `The radius is ${fixed(v.rp, 3)} ± ${fixed(v.s_rp, 4)} R_Jupiter. The photometric scatter is a small part of the true uncertainty: the star's radius and limb darkening matter more, which is what the next steps are about.`,
         };
       },
     },
@@ -113,8 +115,8 @@ export default {
  uncertainty from the step before. It counts when the range you
  give overlaps the range the measurement supports and is no wider
  than twice that range's half-width.`,
-      prompt: 'Planet radius, with its uncertainty',
-      unit: 'R_Jupiter',
+      prompt: 'Planet radius in R_Jupiter, with its uncertainty',
+      unit: '',
       placeholder: 'e.g. 1.37 ± 0.01',
       answer: 1.37,
       tolerance: 0.1,

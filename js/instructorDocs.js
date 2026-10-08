@@ -244,7 +244,6 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
   // as every student sees them, and the steps a deeper reading adds marked by
   // the depth that adds them (DEPTH.md).
   const depths = [...new Set(key.entries.map(e => e.depth).filter(Boolean))];
-  let coreNumber = 0;
 
   const doc = createDocument({
     title: `${plainText(inv.title)}: Answer Key`,
@@ -282,9 +281,8 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
     const expected = expectations[e.sid];
     if (e.category === 'reading' && !expected) continue;
 
-    if (!e.depth) coreNumber++;
     doc.heading(
-      `${e.depth ? `${e.depth[0].toUpperCase()}${e.depth.slice(1)} depth` : `Step ${coreNumber}`}: ${e.title}`,
+      `${e.depth ? `${e.depth[0].toUpperCase()}${e.depth.slice(1)} depth` : `Step ${key.entries.filter(x => !x.depth && x.step <= e.step).length}`}: ${e.title}`,
       {
         size: 11,
         spaceBefore: 16,

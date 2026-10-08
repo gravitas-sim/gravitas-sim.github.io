@@ -14,6 +14,8 @@
 //                 two independent methods agreeing on a period matters
 // =============================================================================
 
+import { fixed } from '../../../format.js';
+
 const SOLAR = {
   sun: { name: 'Sun' },
   mercury: { name: 'Mercury' },
@@ -88,7 +90,7 @@ export default {
         const el = b && ctx.elements(b);
         if (!el || !el.bound) return null;
         const P = ctx.years(el.period);
-        return Number.isFinite(P) ? [P.toFixed(4)] : null;
+        return Number.isFinite(P) ? [fixed(P, 4)] : null;
       },
       importGroups: [['t1'], ['t2'], ['t3']],
       fields: [
@@ -125,7 +127,7 @@ export default {
         const f = sem3(v) / mean3(v);
         return {
           level: 'ok',
-          message: `The mean is ${mean3(v).toFixed(4)} yr, uncertain by ${(f * 100).toFixed(3)}% of itself. Quote it as ${mean3(v).toFixed(4)} ± ${sem3(v).toFixed(4)} yr.`,
+          message: `The mean is ${fixed(mean3(v), 4)} yr, uncertain by ${fixed(f * 100, 3)}% of itself. Quote it as ${fixed(mean3(v), 4)} ± ${fixed(sem3(v), 4)} yr.`,
         };
       },
     },
@@ -161,8 +163,8 @@ export default {
         },
         {
           id: 'k_ols',
-          label: 'Least-squares constant k',
-          unit: 'yr²/AU³',
+          label: 'Least-squares constant k (yr²/AU³)',
+          unit: '',
           compute: (v, e) => {
             const rows = table(e);
             return rows.length < 2
@@ -174,15 +176,15 @@ export default {
         },
         {
           id: 'k_w',
-          label: 'Weighted constant k',
-          unit: 'yr²/AU³',
+          label: 'Weighted constant k (yr²/AU³)',
+          unit: '',
           compute: (v, e) => weighted(e).k,
           decimals: 4,
         },
         {
           id: 's_k',
-          label: 'Its uncertainty',
-          unit: 'yr²/AU³',
+          label: 'Its uncertainty (yr²/AU³)',
+          unit: '',
           compute: (v, e) => weighted(e).s,
           decimals: 4,
         },
@@ -207,11 +209,11 @@ export default {
         return apart <= 2
           ? {
               level: 'ok',
-              message: `The weighted constant, ${v.k_w.toFixed(3)} ± ${v.s_k.toFixed(3)}, and the plain one, ${v.k_ols.toFixed(3)}, differ by ${apart.toFixed(1)} of its uncertainties: the same law, found two ways.`,
+              message: `The weighted constant, ${fixed(v.k_w, 3)} ± ${fixed(v.s_k, 3)}, and the plain one, ${fixed(v.k_ols, 3)}, differ by ${fixed(apart, 1)} of its uncertainties: the same law, found two ways.`,
             }
           : {
               level: 'warn',
-              message: `The two constants differ by ${apart.toFixed(1)} uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet.`,
+              message: `The two constants differ by ${fixed(apart, 1)} uncertainties. One row of your table is probably wrong: a period in days, or a distance from another planet.`,
             };
       },
     },

@@ -19,9 +19,9 @@ export default {
       body: 'No hay nada nuevo que medir: este paso trabaja con la tabla que rellenaste y la incertidumbre que acabas de hallar.\n\nEnderezando los datos como antes, P² frente a a³ debe ser una recta por el origen con pendiente k. Hay dos maneras de hallarla. La pendiente de mínimos cuadrados simples trata igual a todos los planetas. Pero un periodo incierto en la misma <em>fracción</em> hace que P² sea incierto en el doble de esa fracción <em>de sí mismo</em>, así que los planetas exteriores, con P² grande, se conocen peor en términos absolutos, y un ajuste ponderado cuenta cada fila por uno entre el cuadrado de su incertidumbre.\n\nLas dos deben coincidir dentro de la incertidumbre. Si no, hay una fila equivocada. Las dos últimas casillas usan la constante ponderada para predecir el periodo del planeta a 4 UA del paso anterior, propagando su incertidumbre: P = √(k·a³), así que σ<sub>P</sub> = a<sup>3/2</sup>·σ<sub>k</sub> / (2√k).',
       fields: [
         { label: 'Planetas usados de tu tabla' },
-        { label: 'Constante k de mínimos cuadrados' },
-        { label: 'Constante k ponderada' },
-        { label: 'Su incertidumbre' },
+        { label: 'Constante k de mínimos cuadrados (yr²/AU³)' },
+        { label: 'Constante k ponderada (yr²/AU³)' },
+        { label: 'Su incertidumbre (yr²/AU³)' },
         { label: 'Periodo previsto a 4 UA' },
         { label: 'Su incertidumbre' },
       ],

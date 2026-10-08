@@ -6,6 +6,8 @@
 // uncertainty of the light-to-mass conversion carried through to it.
 // =============================================================================
 
+import { fixed, TIMES } from '../../../format.js';
+
 const FIT = 'record-the-fit-that-works';
 
 export default {
@@ -36,7 +38,7 @@ export default {
         {
           id: 'ratio',
           label: 'Halo mass ÷ visible mass',
-          unit: '×',
+          unit: '',
           compute: (v, e) => e(FIT, 'fit_halo') / e(FIT, 'fit_visible'),
           decimals: 2,
         },
@@ -50,7 +52,7 @@ export default {
         {
           id: 's_ratio',
           label: 'Uncertainty of the ratio',
-          unit: '×',
+          unit: '',
           compute: (v, e) =>
             (e(FIT, 'fit_halo') / e(FIT, 'fit_visible')) *
             Math.hypot(
@@ -64,7 +66,7 @@ export default {
         if (!(v.vis_frac > 0) || !Number.isFinite(v.s_ratio)) return null;
         return {
           level: 'ok',
-          message: `The halo holds ${v.ratio.toFixed(2)} ± ${v.s_ratio.toFixed(2)} times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars.`,
+          message: `The halo holds ${fixed(v.ratio, 2)} ± ${fixed(v.s_ratio, 2)} times the visible mass. Almost all of that uncertainty is the visible mass: the speed is measured far better than the light can be turned into stars.`,
         };
       },
     },
@@ -83,7 +85,7 @@ export default {
  than twice that range's half-width.`,
       prompt:
         'Halo mass inside 30 kpc, divided by visible mass, with its uncertainty',
-      unit: '×',
+      unit: TIMES,
       placeholder: 'e.g. 3.4 ± 0.7',
       answer: 3.4,
       tolerance: 0.9,

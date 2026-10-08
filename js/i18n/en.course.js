@@ -278,6 +278,7 @@ export const EN_COURSE = {
   'course.error.stepHashes': 'One hash for each assigned step.',
   'course.error.steps': 'From 1 to {max} steps.',
   'course.error.stepsTwice': 'A step is named twice.',
+  'course.error.depth': 'A depth is core, quantitative or advanced.',
   'course.error.tooDeep': 'The file is nested deeper than any course is.',
   'course.error.tooLarge': 'The file is larger than any course needs.',
   'course.error.units': 'From 1 to {max} units.',

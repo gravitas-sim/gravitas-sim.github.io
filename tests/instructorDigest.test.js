@@ -186,8 +186,9 @@ describe('the digest the derived closure produces', () => {
     expect(current).not.toContain('js/ui.js');
     // 80 before the expectations record became its own module (+ its reader and
     // platform/common.js, which the instructor bundle really does read); the
-    // failure this guards against is the two-hundred-file closure above.
-    expect(current.length).toBeLessThan(90);
+    // failure this guards against is the two-hundred-file closure above. 100
+    // after the deeper steps (depthAll.js and its four ext files, Prompt 72).
+    expect(current.length).toBeLessThan(100);
   });
 
   // The claim the static walk rests on, checked against a real run rather than

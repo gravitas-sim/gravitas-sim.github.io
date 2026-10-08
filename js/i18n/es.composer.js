@@ -254,6 +254,9 @@ export const ES_COMPOSER = {
     'El registro de qué inglés traduce el español está dañado.',
   'composer.error.tooLarge':
     'El archivo es más grande de lo que necesita cualquier investigación.',
+  'composer.error.depth': 'Una profundidad es core, quantitative o advanced.',
+  'composer.error.depthPlace':
+    'Un paso más profundo no es el primero ni el último, y no abre ningún escenario.',
   'composer.error.tooDeep':
     'El archivo está anidado más hondo de lo que está cualquier investigación.',
   'composer.error.unsafeKey': '«{key}» no puede ser una clave.',

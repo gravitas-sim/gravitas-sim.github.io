@@ -10,14 +10,14 @@ export default {
         { label: 'Exposiciones en la línea base' },
         { label: 'Profundidad que mediste' },
         { label: 'Incertidumbre de la profundidad' },
-        { label: 'Radio del planeta' },
-        { label: 'Su incertidumbre' },
+        { label: 'Radio del planeta (R_Jupiter)' },
+        { label: 'Su incertidumbre (R_Jupiter)' },
       ],
     },
     {
       title: 'Dalo con barra de error',
       body: 'Da el radio del planeta como un resultado: el valor, ±, y la incertidumbre del paso anterior. Cuenta como correcto cuando el rango que das se solapa con el que respalda la medición y no es más ancho que el doble de la semianchura de ese rango.',
-      prompt: 'Radio del planeta, con su incertidumbre',
+      prompt: 'Radio del planeta en R_Jupiter, con su incertidumbre',
       placeholder: 'p. ej. 1,37 ± 0,01',
       hints: {
         concept: 'Un resultado es un valor y lo bien que se conoce.',
