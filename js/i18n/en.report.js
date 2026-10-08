@@ -11,6 +11,7 @@ export const EN_REPORT = {
   'rp.inv': 'Investigation',
   'rp.start': 'Started',
   'rp.made': 'Report generated',
+  'rp.depth': 'Depth',
   'rp.steps': 'Steps completed',
   'rp.nOf': '{n} of {total}',
   'rp.asg': 'Activity',

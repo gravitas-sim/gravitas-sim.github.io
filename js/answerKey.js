@@ -17,6 +17,7 @@
 // mixed into the derivation.
 // =============================================================================
 
+import { inDepth } from './investigations/progressSchema.js';
 import { asGiven, checkAnswer, toleranceFor } from './answerCheck.js';
 import { FEEDBACK_CLASSES, hintLadder } from './answerFeedback.js';
 import { decodeEntities } from './lessonMarkup.js';
@@ -63,6 +64,8 @@ export function entryFor(step, index) {
     step: index + 1,
     type: step.type,
     kind: step.kind ?? null,
+    sid: step.sid,
+    ...(step.depth ? { depth: step.depth } : {}),
     title: plainText(step.title),
     category: categoryOf(step),
     prompt: step.prompt ? plainText(step.prompt) : null,
@@ -150,18 +153,22 @@ export function entryFor(step, index) {
 /**
  * The answer key for one investigation.
  * @param {Object} inv - Investigation definition
+ * @param {string} [depth] - Only the steps a student reads at this depth,
+ *   numbered as they see them (DEPTH.md); every step when omitted
  * @returns {Object} Metadata plus one entry per step
  */
-export function answerKeyFor(inv) {
+export function answerKeyFor(inv, depth) {
+  const steps = depth ? inv.steps.filter(s => inDepth(s, depth)) : inv.steps;
   return {
+    depth: depth ?? null,
     id: inv.id,
     title: plainText(inv.title),
     subtitle: plainText(inv.subtitle),
     duration: plainText(inv.duration),
     level: plainText(inv.level),
-    stepCount: inv.steps.length,
+    stepCount: steps.length,
     objectives: (inv.objectives || []).map(plainText),
-    entries: inv.steps.map(entryFor),
+    entries: steps.map(entryFor),
   };
 }
 

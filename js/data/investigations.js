@@ -62,6 +62,11 @@ import BUTTERFLY from './investigations/butterfly-effect.js';
 import RESONANCE from './investigations/when-orbits-lock.js';
 import POWER_LAW from './investigations/power-law-gravity.js';
 import DETECT_THIS_PLANET from './investigations/detect-this-planet.js';
+import { layDepth } from '../investigations/depthPure.js';
+import KEPLER_DEEPER from './investigations/depth/keplers-laws.js';
+import TRANSIT_DEEPER from './investigations/depth/transit-photometry.js';
+import WEIGHING_DEEPER from './investigations/depth/weighing-stars.js';
+import MISSING_MASS_DEEPER from './investigations/depth/missing-mass.js';
 import DESIGN_THE_SCHEDULE from './investigations/design-the-schedule.js';
 import BINARY_PLANETS from './investigations/binary-star-planets.js';
 import GRAVITY_ASSIST from './investigations/gravity-assist.js';
@@ -129,6 +134,18 @@ for (const inv of INVESTIGATIONS) inv.summary = SUMMARIES[inv.id];
  * @param {string} id - Investigation id
  * @returns {Object|undefined} The investigation
  */
+/** The deeper steps of the lessons that have them, by lesson id (DEPTH.md). */
+export const DEEPER = Object.freeze({
+  [KEPLER_DEEPER.id]: KEPLER_DEEPER.steps,
+  [TRANSIT_DEEPER.id]: TRANSIT_DEEPER.steps,
+  [WEIGHING_DEEPER.id]: WEIGHING_DEEPER.steps,
+  [MISSING_MASS_DEEPER.id]: MISSING_MASS_DEEPER.steps,
+});
+
+/** A lesson with every depth laid in; one without deeper steps as it is. */
+export const withAllDepths = inv =>
+  DEEPER[inv.id] ? layDepth(inv, DEEPER[inv.id]) : inv;
+
 export const getInvestigation = id => INVESTIGATIONS.find(i => i.id === id);
 
 /**

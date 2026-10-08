@@ -11,6 +11,7 @@ export const ES_REPORT = {
   'rp.inv': 'Investigación',
   'rp.start': 'Comenzado',
   'rp.made': 'Informe generado',
+  'rp.depth': 'Profundidad',
   'rp.steps': 'Pasos completados',
   'rp.nOf': '{n} de {total}',
   'rp.asg': 'Actividad',

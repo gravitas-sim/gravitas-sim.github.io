@@ -46,7 +46,7 @@ import {
   sourcePathsFor,
 } from './instructor-freshness.mjs';
 
-import { INVESTIGATIONS } from '../js/data/investigations.js';
+import { INVESTIGATIONS, withAllDepths } from '../js/data/investigations.js';
 import { verifyKey } from '../js/answerKey.js';
 import {
   instructorGuide,
@@ -502,7 +502,7 @@ function renderDocuments(version, { stub = false } = {}) {
       `${s} - Answer Key.pdf`,
       'key',
       inv.id,
-      answerKeyDocument(inv, { version })
+      answerKeyDocument(withAllDepths(inv), { version })
     );
   }
 
@@ -715,7 +715,7 @@ export async function main(args) {
   // A key that disagrees with the site is worse than no key, so nothing is
   // built until every derived answer has been re-checked against the site's
   // own grading function.
-  const problems = INVESTIGATIONS.flatMap(verifyKey);
+  const problems = INVESTIGATIONS.map(withAllDepths).flatMap(verifyKey);
   if (problems.length) {
     console.error('Answer keys do not agree with the lessons:');
     for (const p of problems) console.error('  ' + p);

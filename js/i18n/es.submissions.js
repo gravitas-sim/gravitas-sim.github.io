@@ -33,6 +33,9 @@ export const ES_SUBMISSIONS = {
   'sub.read.title': 'Leídas',
   'sub.read.noName': '(sin nombre)',
   'sub.read.duplicate': 'duplicado exacto de la n.º {n}',
+  'sub.depth.core': 'profundidad básica',
+  'sub.depth.quantitative': 'profundidad cuantitativa',
+  'sub.depth.advanced': 'profundidad avanzada',
   'sub.read.attempt': 'intento {n} de {of}',
   'sub.read.help':
     'ayuda usada: {hints} pista(s), respuesta resuelta mostrada en {shown} paso(s)',

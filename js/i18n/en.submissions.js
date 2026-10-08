@@ -35,6 +35,9 @@ export const EN_SUBMISSIONS = {
   'sub.read.title': 'Read',
   'sub.read.noName': '(no name)',
   'sub.read.duplicate': 'exact duplicate of #{n}',
+  'sub.depth.core': 'Core depth',
+  'sub.depth.quantitative': 'Quantitative depth',
+  'sub.depth.advanced': 'Advanced depth',
   'sub.read.attempt': 'attempt {n} of {of}',
   'sub.read.help':
     'help taken: {hints} hint(s), worked answer shown at {shown} step(s)',

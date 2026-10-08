@@ -4801,6 +4801,7 @@ async function makeSubmissionToken(name) {
         fallbackLocale: getLocale(),
         record: ledger?.record,
         digest: ledger?.digest,
+        depth: assignment?.d ?? (active.depths ? depth : null),
       })
     );
     if (!encoded.comfortable) {
@@ -4916,6 +4917,8 @@ async function generateReport() {
     }
     stepIndex = here;
 
+    if (active.depths)
+      await (await import('./investigations/depth.js')).messages();
     const submissionToken = await makeSubmissionToken(name);
     showToken(submissionToken);
     await reportMessages();
@@ -4941,6 +4944,7 @@ async function generateReport() {
       // defaults to English, so every Spanish numeric answer was re-read under
       // English rules on its way into the PDF and a student could be marked
       // correct on screen and incorrect on the document they hand in.
+      depth: assignment?.d ?? (active.depths ? depth : null),
       checkAnswer: (step, value, key) =>
         checkAnswer(step, value, {
           locale: localeOfAnswer(responses, key, getLocale()),
