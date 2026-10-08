@@ -22,7 +22,7 @@ The columns:
 | gravitas.observation | format, formatVersion | 1 | js/observatory/schema.js validateObservation | download | v1 only | refused: "reads /1" | [yes](sdk/schemas/observation-1.schema.json) |
 | gravitas.pipeline | format, formatVersion | 1 | js/measure/pipeline.js readPipeline | download | v1 only | refused, in words | [yes](sdk/schemas/pipeline-1.schema.json) |
 | gravitas.inference | format, formatVersion | 1 | js/inference/manifest.js validateInference | download | v1 only | a validation problem | [yes](sdk/schemas/inference-1.schema.json) |
-| gravitas.analysis | format, formatVersion, kind | 1 | none: written, never read | download | v1 only | nothing reads it | [yes](sdk/schemas/analysis-1.schema.json) |
+| gravitas.analysis | format, formatVersion, kind | 1 | js/analysis/seams.js readAnalysis (the analysis lab) | download | v1 only | refused, in words | [yes](sdk/schemas/analysis-1.schema.json) |
 | gravitas.artifact | format, formatVersion | 1 | js/platform/artifact.js validateArtifact | memory | v1 only | a validation problem | [yes](sdk/schemas/artifact-1.schema.json) |
 | gravitas.observed | format, formatVersion | 1 | js/notebook/observed.js (inside a notebook entry) | localStorage | v1 only | not checked | no |
 | gravitas.observation-data-pack | format, formatVersion | 1 | tools/data-packs/schema.mjs validateDataPack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/observation-data-pack-1.schema.json) |

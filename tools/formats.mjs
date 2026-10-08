@@ -64,10 +64,10 @@ export const FORMATS = Object.freeze([
     fields: 'format, formatVersion, kind',
     version: 1,
     const: ['js/analysis/sweepAnalysis.js', 'ANALYSIS_VERSION'],
-    owner: 'none: written, never read',
+    owner: 'js/analysis/seams.js readAnalysis (the analysis lab)',
     persisted: 'download',
     older: 'v1 only',
-    newer: 'nothing reads it',
+    newer: 'refused, in words',
     schema: 'analysis-1.schema.json',
   },
   {
