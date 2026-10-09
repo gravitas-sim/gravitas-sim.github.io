@@ -1,0 +1,673 @@
+[
+ {
+  "id": "T1.1a",
+  "what": "existing julianDate vs Meeus ch.7",
+  "value": 0,
+  "unit": "d",
+  "limit": 1e-9,
+  "pass": true
+ },
+ {
+  "id": "T1.1b",
+  "what": "existing julianDate vs ERFA cal2jd, weekly 1900-2100",
+  "value": 0,
+  "unit": "d",
+  "limit": 1e-9,
+  "pass": true
+ },
+ {
+  "id": "T1.1c",
+  "what": "calendarDate round-trip mismatches",
+  "value": 0,
+  "unit": "dates",
+  "limit": 0,
+  "pass": true
+ },
+ {
+  "id": "T1.2a",
+  "what": "existing GMST vs ERFA gmst06, 1900-2100",
+  "value": 0.019049373629968613,
+  "unit": "s of time",
+  "limit": 1,
+  "pass": true
+ },
+ {
+  "id": "T1.2b",
+  "what": "existing GMST vs Meeus 12.a",
+  "value": 0.000021806863514939323,
+  "unit": "s of time",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T1.2c",
+  "what": "existing GMST vs Meeus 12.b",
+  "value": 0.000021360290702432394,
+  "unit": "s of time",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T1.3a",
+  "what": "spike apparent sidereal time vs ERFA gst06a",
+  "value": 0.019702370860613883,
+  "unit": "s of time",
+  "limit": 1,
+  "pass": true
+ },
+ {
+  "id": "T1.3b",
+  "what": "spike apparent sidereal time vs Meeus 12.a",
+  "value": 0.00014402061060536653,
+  "unit": "s of time",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T1.3c",
+  "what": "nutation dpsi (20 terms) vs ERFA nut06a, max",
+  "value": 0.026375200736916682,
+  "unit": "arcsec",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T1.3d",
+  "what": "nutation deps (20 terms) vs ERFA nut06a, max",
+  "value": 0.014120409152397428,
+  "unit": "arcsec",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T1.3e",
+  "what": "Meeus 12.a dpsi/deps (-3.788, +9.443), ours",
+  "value": "-3.791, 9.444",
+  "unit": "arcsec",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T1.4a",
+  "what": "table + interpolation, all half-years 1972-2023",
+  "value": 0.06872353627652217,
+  "unit": "s",
+  "limit": 1,
+  "pass": true
+ },
+ {
+  "id": "T1.4b",
+  "what": "table, interpolated July points only",
+  "value": 0.06872353627652217,
+  "unit": "s",
+  "limit": 1,
+  "pass": true
+ },
+ {
+  "id": "T1.4c",
+  "what": "Espenak-Meeus polynomial alone, max error 1972-2023",
+  "value": 4.696101200000001,
+  "unit": "s",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T1.4d",
+  "what": "polynomial alone, error at 2020",
+  "value": 2.513262249999997,
+  "unit": "s",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T1.5a",
+  "what": "IAU 1976 rigorous vs ERFA pmat06, 1900-2100",
+  "value": 0.3040691219827023,
+  "unit": "arcsec",
+  "limit": 2,
+  "pass": true
+ },
+ {
+  "id": "T1.5b",
+  "what": "first order (m, n) vs ERFA, |T| <= 50 yr",
+  "value": 0.33166388312364453,
+  "unit": "arcmin",
+  "limit": 1,
+  "pass": true,
+  "n": 1022
+ },
+ {
+  "id": "T1.5c",
+  "what": "first order, |dec| < 80 deg only (where RA is well defined)",
+  "value": 0.2575387832113282,
+  "unit": "arcmin",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T1.6",
+  "what": "two-term TDB-TT vs ERFA dtdb",
+  "value": 0.039544209243114234,
+  "unit": "ms",
+  "limit": 0.2,
+  "pass": true
+ },
+ {
+  "id": "T2.1a",
+  "what": "existing altAz vs Meeus 13.b altitude",
+  "value": 0.00002626148273954243,
+  "unit": "deg",
+  "limit": 0.001,
+  "pass": true
+ },
+ {
+  "id": "T2.1b",
+  "what": "existing altAz vs Meeus 13.b azimuth",
+  "value": 0.000006526579454657622,
+  "unit": "deg",
+  "limit": 0.001,
+  "pass": true
+ },
+ {
+  "id": "T2.1c",
+  "what": "existing altAz vs ERFA hd2ae",
+  "value": 2.5444437451708134e-13,
+  "unit": "deg",
+  "limit": 0.000001,
+  "pass": true
+ },
+ {
+  "id": "T2.1d",
+  "what": "spike toHorizontal vs hd2ae",
+  "value": 2.5444437451708134e-13,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T2.1e",
+  "what": "horizontal -> equatorial round trip",
+  "value": 2.926389021880909e-13,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T2.2",
+  "what": "J2000 -> ecliptic of date vs ERFA eqec06",
+  "value": 0.3017415082275479,
+  "unit": "arcsec",
+  "limit": 2,
+  "pass": true
+ },
+ {
+  "id": "T2.2b",
+  "what": "existing eclipticToEquatorial round trip",
+  "value": 6.99391556860334e-10,
+  "unit": "arcsec",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T2.3a",
+  "what": "chain vs atco13, observed alt >= 5 deg (n=894)",
+  "value": 0.4318044435561812,
+  "unit": "arcmin",
+  "limit": 1,
+  "pass": true
+ },
+ {
+  "id": "T2.3b",
+  "what": "chain vs atco13, observed alt 0-5 deg (n=92)",
+  "value": 19.10500923763722,
+  "unit": "arcmin",
+  "limit": 4,
+  "pass": false
+ },
+ {
+  "id": "T2.3c",
+  "what": "chain geometry only (no refraction) vs atco13 p=0, alt >= 5",
+  "value": 0.00730757136487297,
+  "unit": "arcmin",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T2.3xc",
+  "what": "chain geometry only (no refraction) vs atco13 p=0, alt >= 5",
+  "value": 0.35181925298755756,
+  "unit": "arcmin",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T2.3mc",
+  "what": "chain geometry only (no refraction) vs atco13 p=0, alt >= 5",
+  "value": 0.0073072696230810546,
+  "unit": "arcmin",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T2.3f",
+  "what": "renderer matrix frame (no aberration) vs atco13, observed alt >= 5 deg",
+  "value": 0.6661687798836476,
+  "unit": "arcmin",
+  "limit": 1,
+  "pass": true
+ },
+ {
+  "id": "T2.3g",
+  "what": "matrix frame vs the full chain without aberration (same physics, two codings)",
+  "value": 0.015253493945508626,
+  "unit": "arcsec",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T2.4",
+  "what": "refraction true->apparent->true round trip",
+  "value": 0.061637123596653964,
+  "unit": "arcmin",
+  "limit": 0.1,
+  "pass": true
+ },
+ {
+  "id": "T2.4b",
+  "what": "refraction at true altitude 0 deg, 10 deg, 45 deg",
+  "value": "28.98 / 5.41 / 1.01",
+  "unit": "arcmin",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T2.5a",
+  "what": "airmass at horizon vs 37.92",
+  "value": 0.0003916221636686146,
+  "unit": "",
+  "limit": 0.005,
+  "pass": true
+ },
+ {
+  "id": "T2.5b",
+  "what": "airmass at z=60 vs 1.995",
+  "value": 0.0007071474707498471,
+  "unit": "",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T2.5c",
+  "what": "airmass at z=70 vs 2.904",
+  "value": 0.0008533511968993324,
+  "unit": "",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T5.1a",
+  "what": "apparent Sun (series+nut+aberr), TT given, vs ERFA",
+  "value": 0.009548426825010536,
+  "unit": "deg",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T5.1b",
+  "what": "apparent Sun, UT passed as TT",
+  "value": 0.008838384577035327,
+  "unit": "deg",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T5.1c",
+  "what": "existing solarPosition as is (no nutation/aberration), TT given",
+  "value": 0.016226315452800396,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T5.1d",
+  "what": "Sun distance error, max",
+  "value": 0.00007652527496782024,
+  "unit": "au",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T5.1e",
+  "what": "apparent Sun vs Meeus 25.a (VSOP87 values)",
+  "value": 0.0026076634474364066,
+  "unit": "deg",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T5.1f",
+  "what": "Meeus 25.a low-accuracy lambda vs ours",
+  "value": 0.0003625299359555356,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T5.2",
+  "what": "equinox/solstice instants vs USNO 2024 (minutes)",
+  "value": 7.801658883690834,
+  "unit": "min",
+  "limit": 15,
+  "pass": true,
+  "each": [
+   -3.06,
+   -2.78,
+   -7.8,
+   -7.7
+  ]
+ },
+ {
+  "id": "T5.3a",
+  "what": "existing lunarPosition vs Meeus 47.a longitude",
+  "value": 3.148409462028212e-7,
+  "unit": "deg",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T5.3b",
+  "what": "vs Meeus 47.a latitude / distance km",
+  "value": "-6.66e-5 deg / 6.95 km",
+  "unit": "",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T5.3c",
+  "what": "existing lunarPosition vs Meeus 47.a distance",
+  "value": 6.95182630175259,
+  "unit": "km",
+  "limit": 10,
+  "pass": true
+ },
+ {
+  "id": "T5.3d",
+  "what": "apparent Moon vs Meeus 47.a RA/Dec",
+  "value": 0.00006720009660051378,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T5.3e",
+  "what": "Moon apparent longitude vs ERFA moon98, TT given",
+  "value": 0.00021346419043766218,
+  "unit": "deg",
+  "limit": 0.02,
+  "pass": true
+ },
+ {
+  "id": "T5.3f",
+  "what": "Moon latitude vs ERFA moon98, TT given",
+  "value": 0.002584675037081305,
+  "unit": "deg",
+  "limit": 0.02,
+  "pass": true
+ },
+ {
+  "id": "T5.3g",
+  "what": "Moon longitude, UT passed as TT",
+  "value": 0.011583806632188498,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T5.3h",
+  "what": "Moon distance error, max",
+  "value": 8.751997987332288,
+  "unit": "km",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T5.4a",
+  "what": "phase angle vs ERFA-based, TT given",
+  "value": 0.009732210539752373,
+  "unit": "deg",
+  "limit": 0.5,
+  "pass": true
+ },
+ {
+  "id": "T5.4b",
+  "what": "phase angle, UT passed as TT",
+  "value": 0.019129579700276622,
+  "unit": "deg",
+  "limit": 0.5,
+  "pass": true
+ },
+ {
+  "id": "T5.4c",
+  "what": "illuminated fraction vs ERFA-based",
+  "value": 0.00008411259710905394,
+  "unit": "",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T5.4d",
+  "what": "existing lunarPhase as is, phase angle",
+  "value": 0.013825882759604724,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T5.5a",
+  "what": "new Moon instants vs ERFA-based 2000-2050 (n=619)",
+  "value": 1.047942414879799,
+  "unit": "min",
+  "limit": 5,
+  "pass": true
+ },
+ {
+  "id": "T5.5b",
+  "what": "full Moon instants vs ERFA-based 2000-2050 (n=618)",
+  "value": 1.067495048046112,
+  "unit": "min",
+  "limit": 5,
+  "pass": true
+ },
+ {
+  "id": "T5.5c",
+  "what": "new Moon vs Meeus 49.a",
+  "value": 0.5829539895057678,
+  "unit": "min",
+  "limit": 5,
+  "pass": true
+ },
+ {
+  "id": "T5.5d",
+  "what": "solver started 3 days off the true new Moon, worst error",
+  "value": 0.9192734956741333,
+  "unit": "min",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T5.6",
+  "what": "topocentric Moon alt/az vs ERFA-based, above horizon (n=985)",
+  "value": 0.0022318309064839298,
+  "unit": "deg",
+  "limit": 0.1,
+  "pass": true
+ },
+ {
+  "id": "T6.1-mercury",
+  "what": "Standish series vs ERFA plan94, 1900-2050",
+  "value": 0.014453755327131458,
+  "unit": "deg",
+  "limit": 0.2,
+  "pass": true
+ },
+ {
+  "id": "T6.1-venus",
+  "what": "Standish series vs ERFA plan94, 1900-2050",
+  "value": 0.023404673297937675,
+  "unit": "deg",
+  "limit": 0.2,
+  "pass": true
+ },
+ {
+  "id": "T6.1-mars",
+  "what": "Standish series vs ERFA plan94, 1900-2050",
+  "value": 0.05105411151092482,
+  "unit": "deg",
+  "limit": 0.2,
+  "pass": true
+ },
+ {
+  "id": "T6.1-jupiter",
+  "what": "Standish series vs ERFA plan94, 1900-2050",
+  "value": 0.17509021547572942,
+  "unit": "deg",
+  "limit": 0.2,
+  "pass": true
+ },
+ {
+  "id": "T6.1-saturn",
+  "what": "Standish series vs ERFA plan94, 1900-2050",
+  "value": 0.20433579728469026,
+  "unit": "deg",
+  "limit": 0.2,
+  "pass": false
+ },
+ {
+  "id": "T6.1-uranus",
+  "what": "Standish series vs ERFA plan94 (not required)",
+  "value": 0.03341078246960735,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T6.1-neptune",
+  "what": "Standish series vs ERFA plan94 (not required)",
+  "value": 0.01864645962919578,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T6.1m-jupiter",
+  "what": "median / 95th percentile error",
+  "value": "0.0424 / 0.1161",
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T6.1m-saturn",
+  "what": "median / 95th percentile error",
+  "value": "0.0830 / 0.1765",
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T6.3a",
+  "what": "pack bodies",
+  "value": "venus, earth, mars, jupiter",
+  "unit": "",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T6.2-venus",
+  "what": "Standish series vs DE441 pack, 2025-2045",
+  "value": 0.025054892218141837,
+  "unit": "deg",
+  "limit": 0.1,
+  "pass": true
+ },
+ {
+  "id": "T6.2-mars",
+  "what": "Standish series vs DE441 pack, 2025-2045",
+  "value": 0.039538565731876404,
+  "unit": "deg",
+  "limit": 0.1,
+  "pass": true
+ },
+ {
+  "id": "T6.2-jupiter",
+  "what": "Standish series vs DE441 pack, 2025-2045",
+  "value": 0.06981687416783625,
+  "unit": "deg",
+  "limit": 0.1,
+  "pass": true
+ },
+ {
+  "id": "T6.3-venus",
+  "what": "pack reader vs its raw DE441 rows (n=101)",
+  "value": 0.000003923244371372119,
+  "unit": "deg",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T6.3-mars",
+  "what": "pack reader vs its raw DE441 rows (n=101)",
+  "value": 0.0000014160055771098446,
+  "unit": "deg",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T6.3-jupiter",
+  "what": "pack reader vs its raw DE441 rows (n=101)",
+  "value": 3.247183969121337e-7,
+  "unit": "deg",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T6.3x-venus",
+  "what": "pack vs ERFA plan94 (plan94 is the looser of the two)",
+  "value": 0.0020859792386122887,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T6.3x-mars",
+  "what": "pack vs ERFA plan94 (plan94 is the looser of the two)",
+  "value": 0.014230862279050547,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T6.3x-jupiter",
+  "what": "pack vs ERFA plan94 (plan94 is the looser of the two)",
+  "value": 0.009922399409845697,
+  "unit": "deg",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T6.4",
+  "what": "Standish series vs Meeus 33.a Venus apparent",
+  "value": 0.004054559931056985,
+  "unit": "deg",
+  "limit": 0.2,
+  "pass": true
+ },
+ {
+  "id": "T6.4b",
+  "what": "Meeus 33.a distance error",
+  "value": 0.00009287179299488635,
+  "unit": "au",
+  "limit": null,
+  "pass": null
+ }
+]

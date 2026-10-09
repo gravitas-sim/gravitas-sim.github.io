@@ -1,0 +1,85 @@
+PASS T1.1a   existing julianDate vs Meeus ch.7: 0.000 d (limit 1e-9)
+PASS T1.1b   existing julianDate vs ERFA cal2jd, weekly 1900-2100: 0.000 d (limit 1e-9)
+PASS T1.1c   calendarDate round-trip mismatches: 0.000 dates (limit 0)
+PASS T1.2a   existing GMST vs ERFA gmst06, 1900-2100: 0.01905 s of time (limit 1)
+PASS T1.2b   existing GMST vs Meeus 12.a: 0.00002181 s of time (limit 0.01)
+PASS T1.2c   existing GMST vs Meeus 12.b: 0.00002136 s of time (limit 0.01)
+PASS T1.3a   spike apparent sidereal time vs ERFA gst06a: 0.01970 s of time (limit 1)
+PASS T1.3b   spike apparent sidereal time vs Meeus 12.a: 0.0001440 s of time (limit 0.01)
+INFO T1.3c   nutation dpsi (20 terms) vs ERFA nut06a, max: 0.02638 arcsec
+INFO T1.3d   nutation deps (20 terms) vs ERFA nut06a, max: 0.01412 arcsec
+INFO T1.3e   Meeus 12.a dpsi/deps (-3.788, +9.443), ours: -3.791, 9.444 arcsec
+PASS T1.4a   table + interpolation, all half-years 1972-2023: 0.06872 s (limit 1)
+PASS T1.4b   table, interpolated July points only: 0.06872 s (limit 1)
+INFO T1.4c   Espenak-Meeus polynomial alone, max error 1972-2023: 4.696 s
+INFO T1.4d   polynomial alone, error at 2020: 2.513 s
+PASS T1.5a   IAU 1976 rigorous vs ERFA pmat06, 1900-2100: 0.3041 arcsec (limit 2)
+PASS T1.5b   first order (m, n) vs ERFA, |T| <= 50 yr: 0.3317 arcmin (limit 1)
+INFO T1.5c   first order, |dec| < 80 deg only (where RA is well defined): 0.2575 arcmin
+PASS T1.6    two-term TDB-TT vs ERFA dtdb: 0.03954 ms (limit 0.2)
+PASS T2.1a   existing altAz vs Meeus 13.b altitude: 0.00002626 deg (limit 0.001)
+PASS T2.1b   existing altAz vs Meeus 13.b azimuth: 0.000006527 deg (limit 0.001)
+PASS T2.1c   existing altAz vs ERFA hd2ae: 2.544e-13 deg (limit 0.000001)
+INFO T2.1d   spike toHorizontal vs hd2ae: 2.544e-13 deg
+INFO T2.1e   horizontal -> equatorial round trip: 2.926e-13 deg
+PASS T2.2    J2000 -> ecliptic of date vs ERFA eqec06: 0.3017 arcsec (limit 2)
+INFO T2.2b   existing eclipticToEquatorial round trip: 6.994e-10 arcsec
+PASS T2.3a   chain vs atco13, observed alt >= 5 deg (n=894): 0.4318 arcmin (limit 1)
+FAIL T2.3b   chain vs atco13, observed alt 0-5 deg (n=92): 19.11 arcmin (limit 4)
+INFO T2.3c   chain geometry only (no refraction) vs atco13 p=0, alt >= 5: 0.007308 arcmin
+INFO T2.3xc  chain geometry only (no refraction) vs atco13 p=0, alt >= 5: 0.3518 arcmin
+INFO T2.3mc  chain geometry only (no refraction) vs atco13 p=0, alt >= 5: 0.007307 arcmin
+PASS T2.3f   renderer matrix frame (no aberration) vs atco13, observed alt >= 5 deg: 0.6662 arcmin (limit 1)
+INFO T2.3g   matrix frame vs the full chain without aberration (same physics, two codings): 0.01525 arcsec
+PASS T2.4    refraction true->apparent->true round trip: 0.06164 arcmin (limit 0.1)
+INFO T2.4b   refraction at true altitude 0 deg, 10 deg, 45 deg: 28.98 / 5.41 / 1.01 arcmin
+PASS T2.5a   airmass at horizon vs 37.92: 0.0003916  (limit 0.005)
+PASS T2.5b   airmass at z=60 vs 1.995: 0.0007071  (limit 0.01)
+PASS T2.5c   airmass at z=70 vs 2.904: 0.0008534  (limit 0.01)
+PASS T5.1a   apparent Sun (series+nut+aberr), TT given, vs ERFA: 0.009548 deg (limit 0.01)
+PASS T5.1b   apparent Sun, UT passed as TT: 0.008838 deg (limit 0.01)
+INFO T5.1c   existing solarPosition as is (no nutation/aberration), TT given: 0.01623 deg
+INFO T5.1d   Sun distance error, max: 0.00007653 au
+PASS T5.1e   apparent Sun vs Meeus 25.a (VSOP87 values): 0.002608 deg (limit 0.01)
+INFO T5.1f   Meeus 25.a low-accuracy lambda vs ours: 0.0003625 deg
+PASS T5.2    equinox/solstice instants vs USNO 2024 (minutes): 7.802 min (limit 15)
+PASS T5.3a   existing lunarPosition vs Meeus 47.a longitude: 3.148e-7 deg (limit 0.01)
+INFO T5.3b   vs Meeus 47.a latitude / distance km: -6.66e-5 deg / 6.95 km 
+PASS T5.3c   existing lunarPosition vs Meeus 47.a distance: 6.952 km (limit 10)
+INFO T5.3d   apparent Moon vs Meeus 47.a RA/Dec: 0.00006720 deg
+PASS T5.3e   Moon apparent longitude vs ERFA moon98, TT given: 0.0002135 deg (limit 0.02)
+PASS T5.3f   Moon latitude vs ERFA moon98, TT given: 0.002585 deg (limit 0.02)
+INFO T5.3g   Moon longitude, UT passed as TT: 0.01158 deg
+INFO T5.3h   Moon distance error, max: 8.752 km
+PASS T5.4a   phase angle vs ERFA-based, TT given: 0.009732 deg (limit 0.5)
+PASS T5.4b   phase angle, UT passed as TT: 0.01913 deg (limit 0.5)
+PASS T5.4c   illuminated fraction vs ERFA-based: 0.00008411  (limit 0.01)
+INFO T5.4d   existing lunarPhase as is, phase angle: 0.01383 deg
+PASS T5.5a   new Moon instants vs ERFA-based 2000-2050 (n=619): 1.048 min (limit 5)
+PASS T5.5b   full Moon instants vs ERFA-based 2000-2050 (n=618): 1.067 min (limit 5)
+PASS T5.5c   new Moon vs Meeus 49.a: 0.5830 min (limit 5)
+INFO T5.5d   solver started 3 days off the true new Moon, worst error: 0.9193 min
+PASS T5.6    topocentric Moon alt/az vs ERFA-based, above horizon (n=985): 0.002232 deg (limit 0.1)
+PASS T6.1-mercury Standish series vs ERFA plan94, 1900-2050: 0.01445 deg (limit 0.2)
+PASS T6.1-venus Standish series vs ERFA plan94, 1900-2050: 0.02340 deg (limit 0.2)
+PASS T6.1-mars Standish series vs ERFA plan94, 1900-2050: 0.05105 deg (limit 0.2)
+PASS T6.1-jupiter Standish series vs ERFA plan94, 1900-2050: 0.1751 deg (limit 0.2)
+FAIL T6.1-saturn Standish series vs ERFA plan94, 1900-2050: 0.2043 deg (limit 0.2)
+INFO T6.1-uranus Standish series vs ERFA plan94 (not required): 0.03341 deg
+INFO T6.1-neptune Standish series vs ERFA plan94 (not required): 0.01865 deg
+INFO T6.1m-jupiter median / 95th percentile error: 0.0424 / 0.1161 deg
+INFO T6.1m-saturn median / 95th percentile error: 0.0830 / 0.1765 deg
+INFO T6.3a   pack bodies: venus, earth, mars, jupiter 
+PASS T6.2-venus Standish series vs DE441 pack, 2025-2045: 0.02505 deg (limit 0.1)
+PASS T6.2-mars Standish series vs DE441 pack, 2025-2045: 0.03954 deg (limit 0.1)
+PASS T6.2-jupiter Standish series vs DE441 pack, 2025-2045: 0.06982 deg (limit 0.1)
+PASS T6.3-venus pack reader vs its raw DE441 rows (n=101): 0.000003923 deg (limit 0.01)
+PASS T6.3-mars pack reader vs its raw DE441 rows (n=101): 0.000001416 deg (limit 0.01)
+PASS T6.3-jupiter pack reader vs its raw DE441 rows (n=101): 3.247e-7 deg (limit 0.01)
+INFO T6.3x-venus pack vs ERFA plan94 (plan94 is the looser of the two): 0.002086 deg
+INFO T6.3x-mars pack vs ERFA plan94 (plan94 is the looser of the two): 0.01423 deg
+INFO T6.3x-jupiter pack vs ERFA plan94 (plan94 is the looser of the two): 0.009922 deg
+PASS T6.4    Standish series vs Meeus 33.a Venus apparent: 0.004055 deg (limit 0.2)
+INFO T6.4b   Meeus 33.a distance error: 0.00009287 au
+
+49 pass, 2 fail, 32 info

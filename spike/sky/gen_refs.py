@@ -241,8 +241,8 @@ for t in pg:
     pvh, pvb = erfa.epv00(t, 0.0)
     E = pvh[0]
     for n in range(1, 9):
-        pv, st = erfa.plan94(t, 0.0, n)
-        g = pv[0] - E
+        pp = erfa.plan94(t, 0.0, n)[0]   # heliocentric position, au, equatorial J2000
+        g = pp - E
         r, d = raDec(g)
         planets[str(n)].append([r, d, float(np.linalg.norm(g))])
 out['planets'] = {'jdTdb': pg.tolist(), 'bodies': planets}

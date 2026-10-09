@@ -2,21 +2,38 @@
 // Moon, and the instants of the Sun's longitude and of the lunar syzygies. The
 // series themselves are js/observingWindow.js's (the Almanac low-precision Sun,
 // Meeus ch. 47 Moon); this file adds what the gate needs on top of them.
-import { solarPosition, lunarPosition, eclipticToEquatorial } from '../../../js/observingWindow.js';
+import { lunarPosition, eclipticToEquatorial } from '../../../js/observingWindow.js';
 import { nutation, meanObliquityDeg, wrap360, gastDeg } from './time.js';
 import { toHorizontal } from './coords.js';
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
 const wrap180 = d => wrap360(d + 180) - 180;
 
-/** Sun, apparent, geocentric, of date: the series plus nutation and aberration. */
+/**
+ * Sun, apparent, geocentric, of date. Meeus ch. 25 (low accuracy): mean
+ * longitude and anomaly with the secular terms, a three-term equation of the
+ * centre, the true distance; then nutation in longitude and annual aberration.
+ * js/observingWindow.js's solarPosition uses the Almanac's two-term form, whose
+ * constant (280.4606) folds the aberration offset in and misses 0.01 degree
+ * (measured); this is the replacement the gate proposes.
+ */
 export function apparentSun(jdTt) {
-  const s = solarPosition(jdTt);
+  const t = (jdTt - 2451545.0) / 36525;
+  const L0 = 280.46646 + 36000.76983 * t + 0.0003032 * t * t;
+  const M = 357.52911 + 35999.05029 * t - 0.0001537 * t * t;
+  const sM = Math.sin(M * DEG);
+  const C =
+    (1.914602 - 0.004817 * t - 0.000014 * t * t) * sM +
+    (0.019993 - 0.000101 * t) * Math.sin(2 * M * DEG) +
+    0.000289 * Math.sin(3 * M * DEG);
+  const e = 0.016708634 - 0.000042037 * t - 0.0000001267 * t * t;
+  const nu = M + C;
+  const R = (1.000001018 * (1 - e * e)) / (1 + e * Math.cos(nu * DEG));
   const { dpsiArcsec, depsArcsec } = nutation(jdTt);
-  const lon = wrap360(s.longitudeDeg + dpsiArcsec / 3600 - 20.4898 / 3600 / s.distanceAu);
+  const lon = wrap360(L0 + C + dpsiArcsec / 3600 - 20.4898 / 3600 / R);
   const eps = meanObliquityDeg(jdTt) + depsArcsec / 3600;
   const eq = eclipticToEquatorial(lon, 0, eps);
-  return { ...eq, longitudeDeg: lon, distanceAu: s.distanceAu };
+  return { ...eq, longitudeDeg: lon, distanceAu: R };
 }
 
 /** Moon, geocentric, of date, with nutation in longitude. */

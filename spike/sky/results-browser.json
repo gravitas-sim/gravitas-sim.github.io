@@ -1,0 +1,175 @@
+[
+ {
+  "id": "T3.1a",
+  "what": "drawn values vs table cells, 500 instants (253426 objects)",
+  "value": 0,
+  "unit": "mismatches",
+  "limit": 0,
+  "pass": true
+ },
+ {
+  "id": "T3.1b",
+  "what": "drawn objects vs table rows, set equality",
+  "value": 0,
+  "unit": "instants differing",
+  "limit": 0,
+  "pass": true
+ },
+ {
+  "id": "T3.1c",
+  "what": "drawn position (x, y) vs its altitude/azimuth, angular, max",
+  "value": 0.007914067887703742,
+  "unit": "deg",
+  "limit": 0.01,
+  "pass": true
+ },
+ {
+  "id": "T3.2-axe-1440",
+  "what": "axe violations at 1440px (26 rules passed)",
+  "value": 0,
+  "unit": "violations",
+  "limit": 0,
+  "pass": true,
+  "ids": []
+ },
+ {
+  "id": "T3.2-axe-360",
+  "what": "axe violations at 360px (26 rules passed)",
+  "value": 0,
+  "unit": "violations",
+  "limit": 0,
+  "pass": true,
+  "ids": []
+ },
+ {
+  "id": "T3.2b",
+  "what": "keyboard sort by name: aria-sort and order",
+  "value": "ascending, first 1 Del Oph, sorted=true",
+  "unit": "",
+  "limit": "ascending + sorted",
+  "pass": true
+ },
+ {
+  "id": "T3.2c",
+  "what": "table semantics (caption, 6 col heads, row heads) and named figure",
+  "value": "{\"caption\":true,\"colHeads\":6,\"rowHeads\":true,\"imgName\":true}",
+  "unit": "",
+  "limit": "all true",
+  "pass": true
+ },
+ {
+  "id": "T3.3a",
+  "what": "horizon redraw (1,000 stars + Sun, Moon, 5 planets), median, 4x CPU throttle (n=1000 stars)",
+  "value": 13.5,
+  "unit": "ms",
+  "limit": 16,
+  "pass": true,
+  "p95": 19.40000009536743
+ },
+ {
+  "id": "T3.3b",
+  "what": "same, 95th percentile at 4x",
+  "value": 19.40000009536743,
+  "unit": "ms",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T3.3b2",
+  "what": "median split at 4x: compute / attribute writes (the rest is style and layout)",
+  "value": "2.40 / 4.80",
+  "unit": "ms",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T3.3c",
+  "what": "same, median unthrottled",
+  "value": 3.100000023841858,
+  "unit": "ms",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T3.3d",
+  "what": "full update including 500-row table and equatorial map, median at 4x",
+  "value": 141.79999995231628,
+  "unit": "ms",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T3.3e",
+  "what": "full update, 95th percentile at 4x",
+  "value": 166.69999992847443,
+  "unit": "ms",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T3.3f",
+  "what": "time-lapse, 60 frames through the play loop at 4x: redraws per frame (60 redraws, 60 frames)",
+  "value": 1,
+  "unit": "per frame",
+  "limit": 1,
+  "pass": true
+ },
+ {
+  "id": "T3.3g",
+  "what": "time-lapse median / max frame interval at 4x",
+  "value": "33.3 / 66.6",
+  "unit": "ms",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T3.4a",
+  "what": "horizontal page scroll at 360 px (scrollWidth - 360)",
+  "value": 0,
+  "unit": "px",
+  "limit": 0,
+  "pass": true
+ },
+ {
+  "id": "T3.4b",
+  "what": "interactive controls smaller than 24 x 24 CSS px",
+  "value": 0,
+  "unit": "controls",
+  "limit": 0,
+  "pass": true,
+  "small": []
+ },
+ {
+  "id": "T3.4c",
+  "what": "smallest drawing label as rendered at 360 px",
+  "value": 12.000011200000001,
+  "unit": "px",
+  "limit": ">= 11",
+  "pass": true
+ },
+ {
+  "id": "T3.4d",
+  "what": "drawing fits the width (svg width <= 360)",
+  "value": 328,
+  "unit": "px",
+  "limit": 360,
+  "pass": true
+ },
+ {
+  "id": "T7.3",
+  "what": "Spanish page title",
+  "value": "Laboratorio del cielo (prototipo)",
+  "unit": "",
+  "limit": null,
+  "pass": null
+ },
+ {
+  "id": "T3.5",
+  "what": "page errors in the console",
+  "value": 0,
+  "unit": "errors",
+  "limit": 0,
+  "pass": true,
+  "errors": []
+ }
+]
