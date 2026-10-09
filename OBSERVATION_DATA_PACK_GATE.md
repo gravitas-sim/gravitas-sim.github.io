@@ -141,6 +141,8 @@ Rules the validator enforces beyond presence:
   for the record.
 - **`attribution-requested` and `no-license-stated` need a `basis`.** That is
   the argument for why redistribution is defensible.
+  (Later: `cc-by-nc-3.0-igo` needs one too, and a marker `license.nonCommercial`;
+  DATA_PACKS.md, D-RAD-01.)
 - **A compilation may have no raw files.** Its citations are its source, but it
   still needs URLs, a retrieval date and a script.
 

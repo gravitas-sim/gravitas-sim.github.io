@@ -51,7 +51,7 @@ export const PACK = {
     statement:
       'Response functions are measured, tabulated instrument properties published by their teams or archives (BM12 Table 1; the SDSS, TESS and 2MASS archives), shipped here resampled to a uniform grid with the AB - Vega offsets computed from the public-domain CALSPEC Vega spectrum. The TESS and 2MASS archives and the SDSS publish them for use with acknowledgement; no licence text accompanies the BM12 table or the SVO copy of the 2MASS curves.',
     basis:
-      "A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. The Gaia passbands were not included because Gaia data are CC BY-NC 3.0 IGO. If Carl prefers no reproduction of the BM12 table, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md).",
+      "A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. If Carl prefers no reproduction of the BM12 table, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md).",
   },
   retrieved: '2026-10-09',
   columns: [

@@ -421,7 +421,7 @@ ngc3198-synthetic-curve: NGC 3198: a synthetic rotation curve
 radiation-bandpasses: Photometric bandpasses (Johnson-Cousins UBVRI, SDSS ugriz, TESS, 2MASS JHK) and their AB - Vega zero points
   File: js/data/radiation/bandpasses.js (compilation)
   Licence: no license; attribution requested. Response functions are measured, tabulated instrument properties published by their teams or archives (BM12 Table 1; the SDSS, TESS and 2MASS archives), shipped here resampled to a uniform grid with the AB - Vega offsets computed from the public-domain CALSPEC Vega spectrum. The TESS and 2MASS archives and the SDSS publish them for use with acknowledgement; no licence text accompanies the BM12 table or the SVO copy of the 2MASS curves.
-  Basis: A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. The Gaia passbands were not included because Gaia data are CC BY-NC 3.0 IGO. If Carl prefers no reproduction of the BM12 table, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md).
+  Basis: A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. If Carl prefers no reproduction of the BM12 table, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md).
   Cite:
     Bessell & Murphy 2012, PASP 124, 140, Table 1 (photon-counting UBVRI), doi:10.1086/664083
     Fukugita et al. 1996, AJ 111, 1748 (the SDSS photometric system), doi:10.1086/117915
@@ -449,6 +449,15 @@ radiation-extinction: The Cardelli, Clayton & Mathis (1989) interstellar extinct
   Cite:
     Cardelli, Clayton & Mathis 1989, ApJ 345, 245, doi:10.1086/167900
     O'Donnell 1994, ApJ 422, 158 (a later revision of the optical coefficients, not used), doi:10.1086/173713
+
+radiation-gaia-bandpasses: Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial license)
+  File: js/data/radiation/gaiaBandpasses.js (compilation)
+  Licence: CC BY-NC 3.0 IGO (non-commercial use only). ESA's Gaia data licence page (https://www.cosmos.esa.int/web/gaia-users/license, read 2026-10-09) says: "Gaia data are distributed under the CC BY-NC 3.0 IGO license." and refers to ESA's Terms and Conditions for the use of data in the ESA space science archives for commercial use. ESA's page for these passbands (https://www.cosmos.esa.int/web/gaia/edr3-passbands, read 2026-10-09) credits the table to "ESA/Gaia/DPAC" and states no terms of its own; the CDS record J/A+A/649/A3 (read 2026-10-09) carries no licence text. This pack and its derived file are therefore offered under CC BY-NC 3.0 IGO: attribute ESA/Gaia/DPAC, do not use commercially, and say that the data were rescaled (each curve is normalised to a peak of 1 and rounded to 1/100000 of it).
+  Basis: CC BY-NC 3.0 IGO permits copying, redistribution and adaptation with attribution for non-commercial purposes, and Gravitas is a free educational tool, so shipping the table with its licence and credit is permitted. It is the one pack under non-commercial terms, shipped by the project owner's explicit instruction ("ship the gaia passbands but note their license"; "add the NC license to the data pack schema", 2026-10-09; DECISION_REGISTER.md). The terms are those ESA states for "Gaia data"; reading them as covering this DPAC table is the project's inference, since neither ESA's passband page nor the CDS record repeats them. The pack is separate so that no other band is covered by the NC licence, and it must not be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md).
+  Cite:
+    Riello et al. 2021, A&A 649, A3: Gaia Early Data Release 3. Photometric content and validation (passbands, zero points and Table 3), doi:10.1051/0004-6361/202039587
+    Casagrande & VandenBerg 2018, MNRAS 479, L102: On the use of Gaia magnitudes and new tables of bolometric corrections (the Sun and Vega in the Gaia system, the check), bibcode 2018MNRAS.479L.102C
+    Bohlin 2014, AJ 147, 127 (the CALSPEC Vega spectrum alpha_lyr_stis_008, used only to check the passbands against Vega), doi:10.1088/0004-6256/147/6/127
 
 radiation-lines: The strongest optical spectral lines: rest wavelengths in air and vacuum
   File: js/data/radiation/lines.js (compilation)

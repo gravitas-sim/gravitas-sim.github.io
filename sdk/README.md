@@ -178,6 +178,9 @@ refuses the following:
   `model.parameters` and `model.scatter`, since 1.6.0);
 - restricted data;
 - a status that is not a licence, without a stated `basis`;
+- a non-commercial licence status (`cc-by-nc-3.0-igo`): the status exists for
+  one pack Gravitas ships itself, by its owner's exception, and a contributed
+  pack is refused it;
 - an unpinned raw input;
 - a transformation without a version;
 - a time series without a time system;

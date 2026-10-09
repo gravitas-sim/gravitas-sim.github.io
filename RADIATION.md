@@ -79,6 +79,7 @@ at install, loaded only on request.
 | `radiation-lines` | 22 lines: H-alpha to H9, Ca II H and K, Ca I 4227, Na D, Mg b, Fe I, He I, He II; air and vacuum | NIST Atomic Spectra Database, one query per line, pinned | public domain (NIST SRD 78) |
 | `radiation-extinction` | the CCM89 coefficients | Cardelli, Clayton & Mathis 1989, ApJ 345, 245 | attribution-requested: the coefficients of a published law |
 | `radiation-bolometric` | `BC_V(log Teff)`, three polynomials | Torres 2010, Table 1 (Flower 1996, corrected) | attribution-requested: thirteen coefficients |
+| `radiation-gaia-bandpasses` | Gaia (E)DR3 G, G_BP, G_RP and their zero points (AB - Vega, Vega = 0 mag) | Riello et al. 2021, CDS J/A+A/649/A3 | **non-commercial**, `cc-by-nc-3.0-igo` (CC BY-NC 3.0 IGO), by Carl's exception; see Blockers 1 |
 
 `dataType` is `model-grid` for the bandpasses, the law and the polynomials and
 `catalog` for the lines: the format has no type for a tabulated response
@@ -220,16 +221,47 @@ own prompt.
 
 ## Blockers and decisions for Carl
 
-1. **Gaia G, G_BP, G_RP are not shipped.** The ESA/DPAC EDR3 passband table is
-   Gaia data, licensed CC BY-NC 3.0 IGO (cosmos.esa.int/web/gaia-users/license,
-   read 2026-10-09), and the project does not redistribute NC terms (the same
-   position as `VO_ARCHIVE_GATE.md`: an NC answer never becomes a pack). The
-   smallest honest alternative would be an analytic approximation of a band whose
-   shape is not analytic, which would be inventing numbers, so Gaia is absent. The
-   Gaia zero points (Riello et al. 2021, Table 3: Vega 25.6874, 25.3385, 24.7479;
-   AB 25.8010, 25.3540, 25.1040) are numbers in a paper and could be added
-   if the bands become shippable. **Decision for Carl:** accept the NC terms for
-   one data pack (it would be the first), or leave Gaia out.
+1. **Gaia G, G_BP, G_RP ship as a separate, non-commercial pack** (decided by
+   Carl 2026-10-09: "ship the gaia passbands but note their license"; the
+   schema status was approved in the same words as "add the NC license to the
+   data pack schema"; recorded as D-RAD-01 in `DECISION_REGISTER.md`). The
+   ESA/DPAC EDR3 table is Gaia data, licensed CC BY-NC 3.0 IGO
+   (cosmos.esa.int/web/gaia-users/license, read 2026-10-09: "Gaia data are
+   distributed under the CC BY-NC 3.0 IGO license."), and `VO_ARCHIVE_GATE.md`
+   says NC data is not redistributed; this pack is the owner's explicit
+   exception to that, for this one pack. It is `radiation-gaia-bandpasses`, apart
+   from `radiation-bandpasses`, so no other band is under NC terms, and its
+   licence status is the new `cc-by-nc-3.0-igo` (a statement, a basis and
+   `license.nonCommercial: true` are required; `DATA_PACKS.md`). It is optional
+   and lazy (`loadGaiaBandpasses` in `js/kernels/radiation/packs.js`), in no
+   route, with no budget effect. The catalog and `sdk review` still refuse every
+   non-commercial licence (`ACCEPTED_LICENSES` is unchanged), and the validator
+   refuses the status in a contributed pack.
+   What is in it (Riello et al. 2021, A&A 649, A3, CDS J/A+A/649/A3; ESA's zip
+   holds the same files byte for byte): the one EDR3 set of G, G_BP and G_RP
+   (also the DR3 set; the DR2 nominal, revised and Weiler sets and the pre-launch
+   curves are different and absent, and the source has no second EDR3 G), each
+   normalised to a peak of 1 and rounded to 1/100000, on the CDS 1 nm grid.
+   Photon-counting, as the paper's Eqs. 13-15 weight by wavelength (the CDS
+   column header says "transmissivity" in "mag", which is a labelling slip). The
+   AB - Vega offsets are Gaia's own, from `zeropt.dat` (Vega 0 mag in each band;
+   0.1137, 0.0154, 0.3561 mag for G, G_BP, G_RP; from 25.6874/25.3385/24.7479 and
+   25.8010/25.3540/25.1040), which is not the Vega = 0.03 convention of
+   `radiation-bandpasses`. G and G_RP are cut off where the source stops defining
+   them (1050 and 1080 nm, 0.3 and 0.04 percent of the peak) and no ramp is
+   invented. Measured against the tolerances written first (in
+   `tools/data-packs/radiation.mjs`): pivot wavelengths 621.76, 510.97, 776.90 nm
+   against Table 3's 621.79, 510.97, 776.91 (tolerance 0.1); mean photon
+   wavelengths 639.02, 518.26, 782.51 against 639.07, 518.26, 782.51 (0.1); FWHM
+   454.82, 265.90, 292.83 against 454.82, 265.90, 292.75 (1 nm); offsets within
+   0.0001 of Table 3 (0.00015); CALSPEC Vega is 0.021, 0.020, 0.023 mag in the Gaia
+   system (within 0.04; Casagrande & VandenBerg 2018 find 0.033 in G); a 5772 K
+   blackbody has G_BP - G_RP = 0.868 against the real Sun's 0.82 (0.06, for line
+   blanketing; this one is a loose check: it catches a wrong band or zero point,
+   not a fourth decimal). The licence is an inference to be aware of: ESA states
+   it for "Gaia data", and neither ESA's passband page nor the CDS record repeats
+   it for this table (CDS's own page says J/A+A tables are free for scientific
+   use), so the pack's statement says so. If ESA says otherwise, remove the pack.
 2. **TiO band heads are not in the line list.** No retrievable, citable table of
    band-head wavelengths was found (a search turned up 7053, 7589, 8432 A in
    passing, without a table). A band head is not a line: it needs a source that

@@ -60,10 +60,27 @@ export const LICENSE_STATUS = [
   'cc-by-4.0',
   'attribution-requested', // public, with cite-us terms and no licence text
   'no-license-stated',
+  // Non-commercial: redistribution is permitted with credit, but not for
+  // commercial use. The first and so far only such pack is the Gaia passbands,
+  // by the owner's exception (DECISION_REGISTER.md). It is labelled wherever it
+  // is shown (NON_COMMERCIAL, RUNTIME) and is never an accepted licence for a
+  // contributed package or catalog entry.
+  'cc-by-nc-3.0-igo',
   'restricted',
 ];
 /** Not licences: a manifest with one of these must argue for redistribution. */
-const NEEDS_BASIS = new Set(['attribution-requested', 'no-license-stated']);
+const NEEDS_BASIS = new Set([
+  'attribution-requested',
+  'no-license-stated',
+  'cc-by-nc-3.0-igo',
+]);
+/**
+ * Statuses that forbid commercial use. A pack with one carries the licence
+ * statement and the marker `license.nonCommercial: true` in its runtime copy,
+ * so an interface can say so beside the data, and DATA_PACKS.md says such a
+ * pack must not be bundled into a commercial redistribution.
+ */
+export const NON_COMMERCIAL = new Set(['cc-by-nc-3.0-igo']);
 /** The capability package's offline classes, less `locale`, which is for text. */
 export const OFFLINE = ['core', 'optional', 'none'];
 /** How a raw product not stable byte for byte is pinned; see pinned.mjs. */
@@ -222,6 +239,20 @@ export function validateDataPack(m, { derivedUnder = 'js/data/' } = {}) {
   text(m.license?.statement, 'license.statement');
   if (NEEDS_BASIS.has(m.license?.status))
     text(m.license?.basis, 'license.basis');
+  // Gravitas's own packs only: an extension's record (derivedUnder '') is a
+  // contribution, and the catalog accepts no non-commercial licence.
+  if (NON_COMMERCIAL.has(m.license?.status))
+    need(
+      derivedUnder,
+      'license.status',
+      'a non-commercial licence is not accepted for a contributed pack'
+    );
+  if (NON_COMMERCIAL.has(m.license?.status))
+    need(
+      m.license?.nonCommercial === true,
+      'license.nonCommercial',
+      'true: a non-commercial licence is marked as one, for the interface'
+    );
 
   // A compilation's source is its citations; there is no file to hash. Nor
   // for synthetic numbers, whose source is the model the manifest records.

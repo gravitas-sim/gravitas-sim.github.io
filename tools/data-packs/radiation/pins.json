@@ -47,6 +47,24 @@
     "bytes": 2054407,
     "sha256": "5152b4e6f064483f3407d672eef491f025b9b3f076d69959e13cf33094c7d357"
   },
+  "cds-gaia-edr3-passband.dat": {
+    "file": "cds-gaia-edr3-passband.dat",
+    "url": "https://cdsarc.cds.unistra.fr/ftp/J/A+A/649/A3/passband.dat",
+    "bytes": 81224,
+    "sha256": "46160d3b84dc0b78530d1ef3d18c0cf632fdaeb27876c0773c7a62033127f301"
+  },
+  "cds-gaia-edr3-zeropt.dat": {
+    "file": "cds-gaia-edr3-zeropt.dat",
+    "url": "https://cdsarc.cds.unistra.fr/ftp/J/A+A/649/A3/zeropt.dat",
+    "bytes": 196,
+    "sha256": "6370f5f9efe1d6c87b8922dea41ecd7e97e981d5dc2ad0f01f24f33f8044cec9"
+  },
+  "cds-gaia-edr3-readme.txt": {
+    "file": "cds-gaia-edr3-readme.txt",
+    "url": "https://cdsarc.cds.unistra.fr/ftp/J/A+A/649/A3/ReadMe",
+    "bytes": 7702,
+    "sha256": "10e8c76959cec1871406950621f0b3424a787f61c01f89d72162f8d8d5cd4b34"
+  },
   "ccm89-apj-345-245.pdf": {
     "file": "ccm89-apj-345-245.pdf",
     "url": "https://articles.adsabs.harvard.edu/pdf/1989ApJ...345..245C",

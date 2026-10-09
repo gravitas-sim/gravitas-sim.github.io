@@ -25,6 +25,11 @@ import { BANDS } from '../js/data/radiation/bandpasses.js';
 import { LINES } from '../js/data/radiation/lines.js';
 import { LAW as CCM } from '../js/data/radiation/extinction.js';
 import { LAW as BC } from '../js/data/radiation/bolometric.js';
+import {
+  PACK as GAIA_PACK,
+  BANDS as GAIA_BANDS,
+  ZERO_POINTS as GAIA_ZP,
+} from '../js/data/radiation/gaiaBandpasses.js';
 import { UNITS, isUnit } from '../js/units/registry.js';
 
 const ROOT = process.cwd();
@@ -672,7 +677,7 @@ describe('the kernel is pure: no DOM, Worker-importable', () => {
         expect({ f, to: m[1] }).toEqual({
           f,
           to: expect.stringMatching(
-            /^(\.\/[a-z]+\.js|\.\.\/\.\.\/units\/registry\.js|\.\.\/\.\.\/data\/radiation\/[a-z]+\.js)$/
+            /^(\.\/[a-z]+\.js|\.\.\/\.\.\/units\/registry\.js|\.\.\/\.\.\/data\/radiation\/[A-Za-z]+\.js)$/
           ),
         });
       }
@@ -689,5 +694,142 @@ describe('the kernel is pure: no DOM, Worker-importable', () => {
     near(out.sigma, K.SIGMA_SB, 0, 'sigma in a Worker');
     near(out.mu, 10, 1e-12, 'modulus in a Worker');
     near(out.ab, 0, 0, 'AB zero in a Worker');
+  });
+});
+
+// =============================================================================
+// The Gaia passbands: the one pack under a non-commercial licence
+// -----------------------------------------------------------------------------
+// Published numbers are Riello et al. 2021, A&A 649, A3, Table 3. Tolerances were
+// written into tools/data-packs/radiation.mjs before the pack was built, and are
+// repeated here with their reasons.
+// =============================================================================
+
+describe('Gaia G, G_BP and G_RP (radiation-gaia-bandpasses)', () => {
+  const gb = id => K.decodeBand(GAIA_BANDS.find(b => b.id === id));
+  const T3 = {
+    pivot: { G: 621.79, G_BP: 510.97, G_RP: 776.91 },
+    mean: { G: 639.07, G_BP: 518.26, G_RP: 782.51 },
+    vega: { G: 25.6874, G_BP: 25.3385, G_RP: 24.7479 },
+    ab: { G: 25.801, G_BP: 25.354, G_RP: 25.104 },
+  };
+  const manifest = JSON.parse(
+    readFileSync(
+      path.join(ROOT, 'data-packs/radiation-gaia-bandpasses.json'),
+      'utf8'
+    )
+  );
+
+  test('pivot and mean photon wavelengths reproduce Table 3 to 0.1 nm (the table prints 0.01; the quadrature is unstated)', () => {
+    for (const id of ['G', 'G_BP', 'G_RP']) {
+      near(K.pivotWavelength(gb(id)), T3.pivot[id], 0.1, `pivot ${id}`);
+      near(K.meanPhotonWavelength(gb(id)), T3.mean[id], 0.1, `mean ${id}`);
+    }
+  });
+
+  test('AB - Vega is the published AB zero point minus the VEGAMAG one, to 1.5e-4 mag (two 4-decimal roundings)', () => {
+    for (const id of ['G', 'G_BP', 'G_RP']) {
+      const b = GAIA_BANDS.find(x => x.id === id);
+      near(b.abMinusVega, T3.ab[id] - T3.vega[id], 1.5e-4, `AB-Vega ${id}`);
+      near(GAIA_ZP.vegamag[id], T3.vega[id], 5e-5, `ZP Vega ${id}`);
+      near(GAIA_ZP.ab[id], T3.ab[id], 5e-5, `ZP AB ${id}`);
+    }
+    // The values the task and the paper quote.
+    expect(GAIA_BANDS.map(b => b.abMinusVega)).toEqual([
+      0.1137, 0.0154, 0.3561,
+    ]);
+  });
+
+  test('a flat-f_nu source has AB = 0 and Vega-system magnitude equal to the offset (the definition)', () => {
+    for (const id of ['G', 'G_BP', 'G_RP']) {
+      near(K.abMag(gb(id), K.flatFnuSed()), 0, 1e-12, `AB of ${id}`);
+      near(
+        K.vegaMag(gb(id), K.flatFnuSed()),
+        -GAIA_BANDS.find(b => b.id === id).abMinusVega,
+        1e-12,
+        `Vega mag of ${id}`
+      );
+    }
+  });
+
+  test('the Sun: a 5772 K blackbody has G_BP - G_RP = 0.82 +- 0.06 on the Vega scale (the real Sun; blanketing is the 0.06)', () => {
+    // Casagrande & VandenBerg 2018, Table 1: 0.815-0.828 for the real Sun with the DR2
+    // passbands. A Planck curve keeps blue light a real G dwarf's lines absorb, so the
+    // tolerance is 0.06 mag, fixed before the colour was computed.
+    const c = K.blackbodyColor(5772, gb('G_BP'), gb('G_RP'), 'vega');
+    near(c, 0.82, 0.06, 'G_BP - G_RP of a 5772 K blackbody');
+  });
+
+  test('colours order with temperature, and a hot star is blue in every Gaia colour', () => {
+    let prev = -Infinity;
+    for (const T of [30000, 10000, 6000, 4000, 3000]) {
+      const c = K.blackbodyColor(T, gb('G_BP'), gb('G_RP'), 'vega');
+      expect(c).toBeGreaterThan(prev);
+      prev = c;
+    }
+    expect(K.blackbodyColor(30000, gb('G_BP'), gb('G'), 'vega')).toBeLessThan(
+      0
+    );
+    expect(K.blackbodyColor(3000, gb('G'), gb('G_RP'), 'vega')).toBeGreaterThan(
+      0.5
+    );
+  });
+
+  test('the bands order by wavelength, and G is the widest', () => {
+    const p = id => K.pivotWavelength(gb(id));
+    expect(p('G_BP')).toBeLessThan(p('G'));
+    expect(p('G')).toBeLessThan(p('G_RP'));
+    for (const id of ['G', 'G_BP', 'G_RP']) {
+      const d = gb(id);
+      expect(Math.max(...d.s)).toBe(1);
+    }
+  });
+
+  test('licence: the manifest and the runtime copy carry the non-commercial status, statement, basis and credit', () => {
+    const lic = manifest.license;
+    expect(lic.status).toBe('cc-by-nc-3.0-igo');
+    expect(lic.nonCommercial).toBe(true);
+    expect(lic.statement).toMatch(/CC BY-NC 3\.0 IGO/);
+    expect(lic.statement).toMatch(
+      /https:\/\/www\.cosmos\.esa\.int\/web\/gaia-users\/license/
+    );
+    expect(lic.statement).toMatch(/read 2026-10-09/);
+    expect(lic.basis.length).toBeGreaterThan(200);
+    expect(manifest.credit).toMatch(/ESA\/Gaia\/DPAC/);
+    expect(manifest.credit).toMatch(/NON-COMMERCIAL/);
+    expect(manifest.source.acknowledgement).toMatch(/non-commercial/i);
+    // What an interface reads is the manifest's licence, whole.
+    expect(GAIA_PACK.license).toEqual(lic);
+    expect(GAIA_PACK.credit).toBe(manifest.credit);
+    expect(GAIA_PACK.id).toBe('radiation-gaia-bandpasses');
+  });
+
+  test('licence: no other pack is under a non-commercial status, and the bandpass pack does not hold Gaia', () => {
+    const dir2 = path.join(ROOT, 'data-packs');
+    const nc = readdirSync(dir2)
+      .filter(f => f.endsWith('.json'))
+      .map(f => JSON.parse(readFileSync(path.join(dir2, f), 'utf8')))
+      .filter(m => m.license?.status === 'cc-by-nc-3.0-igo')
+      .map(m => m.id);
+    expect(nc).toEqual(['radiation-gaia-bandpasses']);
+    expect(BANDS.map(b => b.id)).not.toContain('G_BP');
+    expect(BANDS.map(b => b.id)).not.toContain('G');
+  });
+
+  test('provenance: the raw files are pinned, the response is photon-counting and the version is stated', () => {
+    expect(manifest.raw.map(r => r.file)).toEqual([
+      'cds-gaia-edr3-passband.dat',
+      'cds-gaia-edr3-zeropt.dat',
+      'cds-gaia-edr3-readme.txt',
+      'calspec-alpha-lyr-stis-008.fits',
+    ]);
+    expect(manifest.raw[0].sha256).toBe(
+      '46160d3b84dc0b78530d1ef3d18c0cf632fdaeb27876c0773c7a62033127f301'
+    );
+    expect(manifest.raw[1].sha256).toBe(
+      '6370f5f9efe1d6c87b8922dea41ecd7e97e981d5dc2ad0f01f24f33f8044cec9'
+    );
+    expect(manifest.assumptions.join(' ')).toMatch(/photon-counting/);
+    expect(manifest.assumptions.join(' ')).toMatch(/EDR3/);
   });
 });
