@@ -103,6 +103,7 @@ current, and the orchestrator checks it.
 | `starfield-probe.mjs` | Starfield phase profile |  |
 | `static-server.mjs` | A static file server with no dependencies | `npm run serve:dist` |
 | `stellar-shots.mjs` | Captures of the Stellar Lab |  |
+| `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |
 | `thumbnail-config.mjs` | Thumbnail capture settings |  |
 | `ui-shots.mjs` | The interface, at every size and in both languages |  |
 | `validate-citation.mjs` | Validating CITATION.cff and .zenodo.json |  |
