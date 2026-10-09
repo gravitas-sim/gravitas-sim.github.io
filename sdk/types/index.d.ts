@@ -48,6 +48,16 @@ export interface CapabilityPackage {
   migrations?: Array<{ from: string; to: string; renames?: Record<string, Record<string, string>> }>;
 }
 
+/**
+ * A written answer's rubric criterion (investigation packs and question banks,
+ * Prompt 79): a name and two to five levels, best first. Up to six per answer;
+ * every text in each of the file's locales.
+ */
+export interface RubricCriterion {
+  name: Localized;
+  levels: Array<{ label: Localized; text: Localized; points?: number }>;
+}
+
 /** gravitas.course-pack/1. */
 export interface CoursePack {
   format: 'gravitas.course-pack';

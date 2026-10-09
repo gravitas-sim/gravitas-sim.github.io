@@ -2,25 +2,11 @@
 // gravitas.question-bank/1: questions an investigation can draw on, as data
 // -----------------------------------------------------------------------------
 // A bank item is one question - a choice, a number or a short written answer -
-// with everything a lesson's own question step carries (its prompt, its
-// answer, its tolerance and unit, its staged hints, its misconceptions, its
-// rubric), and three things a step in a lesson file does not:
-//
-//   identity   a stable id and an integer version. The version goes up with
-//              any change that could change a grade, so a recorded answer can
-//              always be matched to the question it answered.
-//   scoring    how many points it is worth, and whether the first attempt or
-//              the best one counts. Explicit, because "correct" is not a score.
-//   variants   controlled ways of asking the same question. A choice question
-//              may shuffle its options; a numeric one may take its numbers from
-//              a vetted relation (./relations.js) with a list of inputs, so
-//              every variant's answer is computed by Gravitas and none is typed
-//              or evaluated from text. Which variant a lesson gets is decided
-//              by a recorded seed, so the same seed always builds the same
-//              lesson (js/composer/compile.js).
-//
-// and accessibility metadata: whether the question can be answered from its
-// text alone, and a note for a reader who cannot use the simulation.
+// with what a lesson's own question step carries, and a stable id and version
+// (raised with any change that could change a grade), explicit scoring, and
+// controlled variants (a shuffled choice, or a number's inputs from a vetted
+// relation, ./relations.js, so every answer is computed and none is typed),
+// picked by a recorded seed (js/composer/compile.js). COMPOSER.md has the rest.
 //
 // A bank is its own file, or embedded in an investigation pack
 // (./investigation.js). Pure, so the Studio, the SDK and the tests share it;
@@ -28,6 +14,7 @@
 // =============================================================================
 
 import { RELATIONS, evaluateRelation } from './relations.js';
+import { knownKeys } from './checker.js';
 
 // The same lists as js/answerFeedback.js, written out here because this module
 // serves routes that do not otherwise load the lesson engine's grader, and a
@@ -71,6 +58,7 @@ const ITEM_FIELDS = new Set([
   'feedback',
   'reflect',
   'rubric',
+  'rubricCriteria',
   'scoring',
   'a11y',
   'variants',
@@ -104,6 +92,45 @@ export function checkUnitName(unit, path, { need, api }) {
   );
 }
 
+/** A written answer's rubric criteria (Prompt 79, js/rubric.js): the shape only. */
+function checkCriteria(list, path, { need, text }) {
+  if (list === undefined) return;
+  const ok = Array.isArray(list) && list.length > 0 && list.length < 7;
+  need(ok, path, 'list', 'one to six');
+  const walk = (v, at, names, then) => {
+    need(isObject(v), at, 'notObject', 'is not an object');
+    if (!isObject(v)) return;
+    knownKeys(need, v, names, at, 'a field');
+    then(v);
+  };
+  (ok ? list : []).forEach((c, i) =>
+    walk(c, `${path}[${i}]`, ['name', 'levels'], () => {
+      const at = `${path}[${i}]`;
+      text(c.name, `${at}.name`, true);
+      const lv = Array.isArray(c.levels) ? c.levels : [];
+      need(
+        lv.length > 1 && lv.length < 6,
+        `${at}.levels`,
+        'list',
+        'two to five'
+      );
+      lv.forEach((l, j) =>
+        walk(l, `${at}.levels[${j}]`, ['label', 'text', 'points'], () => {
+          const a = `${at}.levels[${j}]`;
+          text(l.label, `${a}.label`, true);
+          text(l.text, `${a}.text`, true);
+          need(
+            l.points === undefined || l.points >= 0,
+            `${a}.points`,
+            'number',
+            'points'
+          );
+        })
+      );
+    })
+  );
+}
+
 /**
  * Judge one bank item.
  *
@@ -117,14 +144,7 @@ export function checkUnitName(unit, path, { need, api }) {
 export function checkBankItem(item, path, { need, text, api }) {
   if (!isObject(item))
     return need(false, path, 'notObject', 'is not an object');
-  for (const k of Object.keys(item))
-    need(
-      ITEM_FIELDS.has(k),
-      `${path}.${k}`,
-      'unknownField',
-      `"${k}" is not a bank-item field`,
-      { key: k }
-    );
+  knownKeys(need, item, [...ITEM_FIELDS], path, 'a bank-item field');
   need(
     typeof item.id === 'string' && PUBLIC_ID.test(item.id),
     `${path}.id`,
@@ -151,6 +171,12 @@ export function checkBankItem(item, path, { need, text, api }) {
   text(item.because, `${path}.because`, kind !== 'short');
   text(item.worked, `${path}.worked`, false);
 
+  need(
+    kind === 'short' || item.rubricCriteria === undefined,
+    `${path}.rubricCriteria`,
+    'notHere',
+    'only a written answer has them'
+  );
   const v = item.variants;
   if (v !== undefined && !isObject(v))
     need(false, `${path}.variants`, 'notObject', 'is not an object');
@@ -190,14 +216,13 @@ export function checkBankItem(item, path, { need, text, api }) {
         const at = `${path}.misconceptions[${i}]`;
         if (!isObject(m))
           return need(false, at, 'notObject', 'is not an object');
-        for (const k of Object.keys(m))
-          need(
-            ['id', 'option', 'say'].includes(k),
-            `${at}.${k}`,
-            'unknownField',
-            `"${k}" is not a misconception field`,
-            { key: k }
-          );
+        knownKeys(
+          need,
+          m,
+          ['id', 'option', 'say'],
+          at,
+          'a misconception field'
+        );
         need(
           typeof m.id === 'string' && PUBLIC_ID.test(m.id),
           `${at}.id`,
@@ -218,14 +243,7 @@ export function checkBankItem(item, path, { need, text, api }) {
       });
     }
     if (isObject(v)) {
-      for (const k of Object.keys(v))
-        need(
-          k === 'shuffle',
-          `${path}.variants.${k}`,
-          'unknownField',
-          `"${k}" is not a choice variant`,
-          { key: k }
-        );
+      knownKeys(need, v, ['shuffle'], `${path}.variants`, 'a choice variant');
       need(
         v.shuffle === true,
         `${path}.variants.shuffle`,
@@ -301,14 +319,13 @@ export function checkBankItem(item, path, { need, text, api }) {
         const at = `${path}.misconceptions[${i}]`;
         if (!isObject(m))
           return need(false, at, 'notObject', 'is not an object');
-        for (const k of Object.keys(m))
-          need(
-            ['id', 'factor', 'equals', 'say'].includes(k),
-            `${at}.${k}`,
-            'unknownField',
-            `"${k}" is not a misconception field`,
-            { key: k }
-          );
+        knownKeys(
+          need,
+          m,
+          ['id', 'factor', 'equals', 'say'],
+          at,
+          'a misconception field'
+        );
         need(
           typeof m.id === 'string' && PUBLIC_ID.test(m.id),
           `${at}.id`,
@@ -340,6 +357,10 @@ export function checkBankItem(item, path, { need, text, api }) {
         'true, on a written answer with no rubric, hints or worked answer'
       );
     else text(item.rubric, `${path}.rubric`, true);
+    checkCriteria(item.rubricCriteria, `${path}.rubricCriteria`, {
+      need,
+      text,
+    });
     for (const k of [
       'options',
       'answer',
@@ -377,14 +398,13 @@ export function checkBankItem(item, path, { need, text, api }) {
     } else if (!isObject(item.hints))
       need(false, `${path}.hints`, 'notObject', 'is not an object or a list');
     else {
-      for (const k of Object.keys(item.hints))
-        need(
-          ['concept', 'method'].includes(k),
-          `${path}.hints.${k}`,
-          'unknownField',
-          `"${k}" is not a hint stage`,
-          { key: k }
-        );
+      knownKeys(
+        need,
+        item.hints,
+        ['concept', 'method'],
+        `${path}.hints`,
+        'a hint stage'
+      );
       text(item.hints.concept, `${path}.hints.concept`, false);
       text(item.hints.method, `${path}.hints.method`, false);
       need(
@@ -405,14 +425,13 @@ export function checkBankItem(item, path, { need, text, api }) {
       'how many points, and which attempt counts'
     );
   else {
-    for (const k of Object.keys(s))
-      need(
-        ['points', 'attempts'].includes(k),
-        `${path}.scoring.${k}`,
-        'unknownField',
-        `"${k}" is not a scoring field`,
-        { key: k }
-      );
+    knownKeys(
+      need,
+      s,
+      ['points', 'attempts'],
+      `${path}.scoring`,
+      'a scoring field'
+    );
     need(
       Number.isInteger(s.points) && s.points >= 1 && s.points <= MAX_POINTS,
       `${path}.scoring.points`,
@@ -437,14 +456,13 @@ export function checkBankItem(item, path, { need, text, api }) {
       'whether it can be answered from its text alone'
     );
   else {
-    for (const k of Object.keys(a))
-      need(
-        ['textOnly', 'note'].includes(k),
-        `${path}.a11y.${k}`,
-        'unknownField',
-        `"${k}" is not an accessibility field`,
-        { key: k }
-      );
+    knownKeys(
+      need,
+      a,
+      ['textOnly', 'note'],
+      `${path}.a11y`,
+      'an accessibility field'
+    );
     need(
       typeof a.textOnly === 'boolean',
       `${path}.a11y.textOnly`,
@@ -458,14 +476,7 @@ export function checkBankItem(item, path, { need, text, api }) {
 /** The answer parser's unit expectation: a dimension, a unit and what else is accepted. */
 function checkExpect(e, path, { need, api }) {
   if (!isObject(e)) return need(false, path, 'notObject', 'is not an object');
-  for (const k of Object.keys(e))
-    need(
-      ['dimension', 'unit', 'accept'].includes(k),
-      `${path}.${k}`,
-      'unknownField',
-      `"${k}" is not an expect field`,
-      { key: k }
-    );
+  knownKeys(need, e, ['dimension', 'unit', 'accept'], path, 'an expect field');
   const units = api.units?.[e.dimension];
   need(
     Boolean(units),
@@ -521,14 +532,13 @@ function checkExpect(e, path, { need, api }) {
 function checkRelationVariants(item, itemPath, { need }) {
   const v = item.variants;
   const path = `${itemPath}.variants`;
-  for (const k of Object.keys(v))
-    need(
-      ['relation', 'values', 'tolerancePct'].includes(k),
-      `${path}.${k}`,
-      'unknownField',
-      `"${k}" is not a numeric variant field`,
-      { key: k }
-    );
+  knownKeys(
+    need,
+    v,
+    ['relation', 'values', 'tolerancePct'],
+    path,
+    'a numeric variant field'
+  );
   const r = Object.hasOwn(RELATIONS, v.relation) ? RELATIONS[v.relation] : null;
   need(
     Boolean(r),

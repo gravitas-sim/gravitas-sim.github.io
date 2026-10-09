@@ -45,6 +45,9 @@ export const EN_COMPOSER = {
   'composer.status.remixed':
     'Remixed {id}: a faithful copy you can edit. The science stays the original’s.',
   'composer.status.remixFailed': 'Gravitas could not load that investigation.',
+  'composer.key.en': 'Answer key (PDF)',
+  'composer.key.es': 'Spanish answer key (PDF)',
+  'composer.key.failed': 'No key was made. Reload the page and try again.',
   'composer.publish.heading': 'Publish',
   'composer.publish.hint':
     'A link a student opens in Gravitas, and the file the link is made from. Nothing is uploaded: the link carries the investigation itself.',

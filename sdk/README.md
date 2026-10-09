@@ -227,6 +227,7 @@ predictions, measurements with units, questions inline or from a bank, and a
 remediation step for a wrong answer, in English and Spanish
 (`sdk/schemas/investigation-pack-1.schema.json`). `npm run sdk -- init
 investigation-pack my-orbit` starts from the composer's own example.
+A written answer may carry `rubricCriteria` (one to six criteria of two to five levels each, best first, in every locale); the instructor's answer key prints them.
 
 - **Errors:** the format's rules, by field, then the compiled lesson through
   `js/authoring/rules.js`, the checker every built-in lesson passes; a

@@ -2053,7 +2053,10 @@ const ctx = () => ({
   setStatus,
   doc,
   start,
+  verdict: () => verdict,
   ok: () => verdict && !blocking(verdict),
+  compiled: () => verdict.compiled,
+  texts: () => collectTexts(doc()),
   taken: () => drafts.list().map(d => d.id),
 });
 
@@ -2346,6 +2349,8 @@ function wire() {
     ['cp-preview-go', 'preview'],
     ['cp-remix', 'remix'],
     ['cp-publish', 'publishLink'],
+    ['cp-pdf-key', 'keyEn'],
+    ['cp-pdf-key-es', 'keyEs'],
   ])
     $(id).addEventListener('click', () => panel().then(m => m[fn](ctx())));
   $('cp-preview-author').addEventListener('click', () => stagePreview());

@@ -53,6 +53,16 @@ const en = t => (isObject(t) ? t.en : undefined);
 const es = t =>
   isObject(t) && typeof t.es === 'string' && t.es.trim() ? t.es : null;
 
+/** A tree of texts as one language's strings, numbers (points) as they are. */
+const lang = (v, f) =>
+  Array.isArray(v)
+    ? v.map(x => lang(x, f))
+    : isObject(v) && typeof v.en === 'string'
+      ? f(v)
+      : isObject(v)
+        ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, lang(x, f)]))
+        : v;
+
 /** A number as a lesson in this locale writes it: a decimal comma in Spanish. */
 export const localNumber = (v, locale) =>
   locale === 'es' ? String(v).replace('.', ',') : String(v);
@@ -173,6 +183,10 @@ export function realizeItem(item, seed) {
   if (item.rubric) {
     step.rubric = en(item.rubric);
     words.rubric = es(item.rubric);
+  }
+  if (item.rubricCriteria) {
+    step.rubricCriteria = lang(item.rubricCriteria, en);
+    words.rubricCriteria = lang(item.rubricCriteria, es);
   }
   if (Array.isArray(item.hints)) {
     step.hints = item.hints.map(h => fill(en(h), values, 'en'));

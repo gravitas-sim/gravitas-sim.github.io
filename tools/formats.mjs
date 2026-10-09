@@ -576,6 +576,10 @@ ${rows.join('\n')}
 - **Written but never read:** ${neverRead}. A student's file in any of them cannot be opened again.
 - **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled \`newer\`, \`newerVersion\`, \`tooNew\`, \`schemaTooNew\` and \`from-a-newer-version\`), and not at all in the link blocks, \`gravitas.observed\` and the catalog curation.
 
+## Fields added inside a version
+
+- **\`rubricCriteria\` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its \`rubric\`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so \`investigation-pack/1\` and \`question-bank/1\` stay version 1: a reader that does not know the field refuses the file, in words, as an unknown field. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (\`REMIX.md\`), the answer key prints it and the review page shows it.
+
 ## Scenarios by id
 
 Roadmap II Prompt 63 gave every built-in scenario a public id: lower case, words joined by hyphens, permanent (\`sdk/schemas/scenario-id-1.schema.json\`). Until then a scenario was keyed by its English name, and that name is what every link, lesson, course pack and experiment made before carries. The rule \`scenarioId()\` reads both: an id is its old name lower-cased, with apostrophes dropped and every other run of spaces and punctuation one hyphen (\`"Kepler's 2nd Law"\` is \`keplers-2nd-law\`). \`tests/scenarioIds.test.js\` holds the rule to all 59 old names. A title is a translation of the id and never a key.

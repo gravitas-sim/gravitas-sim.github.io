@@ -42,7 +42,11 @@ const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
  * editable here) or 'refused' (a change is an error naming the field).
  */
 export const REMIX_FIELDS = Object.freeze([
-  ['title, body, tip, prompt, because, worked, rubric', 'editable', 'words'],
+  [
+    'title, body, tip, prompt, because, worked, rubric, rubricCriteria (with points)',
+    'editable',
+    'words',
+  ],
   ['options (the text of each)', 'editable', 'reword, translate'],
   ['hints, feedback, misconception notes', 'editable', 'words'],
   ['checklist of an explore step', 'editable', 'add, remove, reword'],
@@ -145,6 +149,19 @@ function text(en, es) {
   return out;
 }
 
+/** A tree of strings as texts; numbers stay. */
+const textTree = (en, es) =>
+  typeof en === 'string'
+    ? text(en, es)
+    : en && typeof en === 'object'
+      ? Object.assign(
+          Array.isArray(en) ? [] : {},
+          Object.fromEntries(
+            Object.entries(en).map(([k, x]) => [k, textTree(x, es?.[k])])
+          )
+        )
+      : en;
+
 /** A list of strings as a list of texts. */
 const texts = (list, spanish) =>
   Array.isArray(list) ? list.map((x, i) => text(x, spanish?.[i])) : undefined;
@@ -182,6 +199,7 @@ const CARRIED = {
     'feedback',
     'reflect',
     'rubric',
+    'rubricCriteria',
   ],
 };
 
@@ -267,6 +285,8 @@ function stepToPack(s, es = {}) {
     }
     put('worked', text(s.worked, es.worked));
     put('rubric', text(s.rubric, es.rubric));
+    if (Array.isArray(s.rubricCriteria))
+      out.rubricCriteria = textTree(s.rubricCriteria, es.rubricCriteria);
     if (s.reflect) out.reflect = true;
     if (Array.isArray(s.misconceptions))
       out.misconceptions = s.misconceptions.map((m, i) => {
@@ -883,6 +903,7 @@ export function compileRemix(pack, original, originalEs, api) {
       'tip',
       'worked',
       'rubric',
+      'rubricCriteria',
       'because',
       'hints',
       'feedback',

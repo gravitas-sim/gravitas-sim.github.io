@@ -186,6 +186,8 @@ A problem blocks saving, exporting and the preview. A warning does not.
 - **Answer key.** What an instructor sees: every graded step, its answer
   (tolerance and unit, the variant, where a prediction is marked, or the
   rubric) and its points.
+- **Answer key as a file.** Publish makes the key in English or Spanish in the page
+  (`js/composer/packKey.js`), with the translation status; nothing is uploaded.
 - **Report evidence.** A sample of the lab report a student hands in
   (`js/labReport.js`), made from the answer key, as a PDF.
 

@@ -27,6 +27,7 @@ import {
 import { STATUS, pinFor, reviewCoursePack } from './review.js';
 import { PLATFORM_API, courseApi, courseFacts, lessonFacts } from './api.js';
 import { openedLink, openedPack } from './packItems.js';
+import { collectTexts } from '../composer/compile.js';
 
 export const WORDS = {
   en: {
@@ -40,6 +41,7 @@ export const WORDS = {
       'The course item: paste it into the course builder’s item for an instructor’s investigation',
     'mk.copy': 'Copy the item',
     'mk.copied': 'Copied.',
+    'mk.fail': 'No key made.',
     'mk.facts':
       '“{title}” ({id} {version}): {steps} steps{from}. Pinned to {fp}.',
     'mk.from': ', made from “{original}”',
@@ -90,6 +92,7 @@ export const WORDS = {
       'El elemento de curso: pégalo en el elemento del creador de cursos para la investigación de un instructor',
     'mk.copy': 'Copiar el elemento',
     'mk.copied': 'Copiado.',
+    'mk.fail': 'Sin clave.',
     'mk.facts': '«{title}» ({id} {version}): {steps} pasos{from}. Ficha: {fp}.',
     'mk.from': ', hecha a partir de «{original}»',
     'ck.h': 'Comprobar un curso',
@@ -187,7 +190,7 @@ async function make() {
     title,
     pin: pinFor({ kind: 'pack' }, facts),
   };
-  made = { item, pack, facts };
+  made = { item, pack, facts, compiled: got.compiled };
   $('pkItem').value = JSON.stringify(item, null, 2);
   showFacts();
   $('pkMade').hidden = false;
@@ -206,6 +209,17 @@ function showFacts() {
       ? T('mk.from', { original: pack.derivedFrom.id })
       : '',
   });
+}
+
+/** The key of the opened investigation, made here (js/composer/packKey.js). */
+async function key(locale) {
+  const { saveKey } = await import('../composer/packKey.js');
+  const { pack, compiled } = made;
+  try {
+    await saveKey(pack, compiled, collectTexts(pack), locale);
+  } catch {
+    $('pkStatus').textContent = T('mk.fail');
+  }
 }
 
 async function copy() {
@@ -329,6 +343,8 @@ function showCheck() {
 function wire() {
   $('pkMake').addEventListener('click', make);
   $('pkCopy').addEventListener('click', copy);
+  $('pkKeyEn').addEventListener('click', () => key('en'));
+  $('pkKeyEs').addEventListener('click', () => key('es'));
   $('pkCheck').addEventListener('click', () => check($('pkCourse').value));
   $('pkFile').addEventListener('change', async e => {
     const file = e.target.files?.[0];
