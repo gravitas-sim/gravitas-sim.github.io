@@ -4918,7 +4918,17 @@ async function generateReport() {
       decodeEntities,
       t,
       locale: getLocale(),
-      meta: ledger?.meta,
+      meta: [
+        ...(active.pack?.from
+          ? [
+              [
+                t('rp.remix'),
+                `${active.pack.from.id} ${active.pack.from.version} (${active.pack.from.digest})`,
+              ],
+            ]
+          : []),
+        ...(ledger?.meta || []),
+      ],
       evidence: ledger?.print,
     });
 

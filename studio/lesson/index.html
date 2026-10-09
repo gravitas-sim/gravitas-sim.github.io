@@ -169,6 +169,9 @@ try {
       >
         <button id="cp-new" type="button" class="ui-button" data-i18n="composer.action.new"></button>
         <button id="cp-open" type="button" class="ui-button" data-i18n="studio.action.open"></button>
+        <label for="cp-remix-from" data-i18n="composer.remix.label"></label>
+        <select class="ui-select" id="cp-remix-from"></select>
+        <button id="cp-remix" type="button" class="ui-button" data-i18n="composer.remix.go"></button>
         <input class="ui-file" id="cp-file" type="file" accept="application/json,.json" hidden />
         <button id="cp-save" type="button" class="ui-button is-primary" data-i18n="studio.action.save"></button>
         <button id="cp-save-bank" type="button" class="ui-button" data-i18n="composer.action.saveBank"></button>
@@ -230,6 +233,21 @@ try {
               title="Gravitas, running this investigation as a student meets it"
               data-i18n-aria-label="composer.preview.frame"
             ></iframe>
+          </section>
+          <section class="ui-card" aria-labelledby="cp-publish-h">
+            <h2 id="cp-publish-h" data-i18n="composer.publish.heading"></h2>
+            <p class="ui-hint" data-i18n="composer.publish.hint"></p>
+            <div class="ui-toolbar">
+              <button id="cp-publish" type="button" class="ui-button" data-i18n="composer.publish.go"></button>
+            </div>
+            <label for="cp-link" data-i18n="composer.publish.link"></label>
+            <input id="cp-link" class="ui-input" type="text" readonly />
+            <p id="cp-link-note" class="ui-hint" role="status"></p>
+          </section>
+          <section class="ui-card" aria-labelledby="cp-kept-h" id="cp-kept-card" hidden>
+            <h2 id="cp-kept-h" data-i18n="composer.kept.heading"></h2>
+            <p class="ui-hint" data-i18n="composer.kept.hint"></p>
+            <ul id="cp-kept" class="ui-issues"></ul>
           </section>
           <section class="ui-card" aria-labelledby="cp-key-h">
             <h2 id="cp-key-h" data-i18n="composer.key.heading"></h2>

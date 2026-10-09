@@ -9,6 +9,58 @@
 // =============================================================================
 
 export const EN_COMPOSER = {
+  'composer.error.derivedId':
+    'An investigation Gravitas has, which this was remixed from.',
+  'composer.error.digest':
+    'Eight hexadecimal digits: the digest of the original’s steps.',
+  'composer.error.remixType':
+    'A remix keeps each step of the original the kind of step it is.',
+  'composer.error.remixFrom':
+    'A step that is the original’s keeps its own question; add a new step to ask one from the bank.',
+  'composer.error.remixKind': 'A remix keeps a question’s kind.',
+  'composer.error.remixSetup':
+    'A remix does not change the world a step opens.',
+  'composer.error.remixScenario': 'A remix does not change the scenario.',
+  'composer.error.remixSeed': 'A remix does not change the seed.',
+  'composer.error.remixTool':
+    'A remix does not change an instrument or its model.',
+  'composer.error.remixValue': 'A remix does not change an expected value.',
+  'composer.error.remixOptions':
+    'Options may be reworded, but not added, removed or moved: the answer is the number of an option.',
+  'composer.error.remixMisconceptions':
+    'A misconception’s target and factor are the original’s; its wording is yours.',
+  'composer.error.remixFields':
+    'A measure step keeps the numbers it records; a label is yours.',
+  'composer.error.remixAdded': 'A remix adds read, explore and question steps.',
+  'composer.error.remixAddedSetup':
+    'An added step opens no scenario; it reads the world already on screen.',
+  'composer.error.remixAddedTool': 'An added step docks no instrument.',
+  'composer.error.noOriginal': 'Gravitas has no such investigation to remix.',
+  'composer.error.originalId':
+    'The remix is checked against the investigation it names.',
+  'composer.error.originalChanged':
+    'The original has changed since this was remixed; remix it again.',
+  'composer.remix.label': 'Remix a built-in investigation',
+  'composer.remix.go': 'Remix',
+  'composer.status.remixed':
+    'Remixed {id}: a faithful copy you can edit. The science stays the original’s.',
+  'composer.status.remixFailed': 'Gravitas could not load that investigation.',
+  'composer.publish.heading': 'Publish',
+  'composer.publish.hint':
+    'A link a student opens in Gravitas, and the file the link is made from. Nothing is uploaded: the link carries the investigation itself.',
+  'composer.publish.go': 'Make the link',
+  'composer.publish.link': 'Link for students',
+  'composer.publish.ok':
+    'The link is {length} characters. A remix carries only what you changed.',
+  'composer.publish.long':
+    'The link is {length} characters, past the {limit} that mail and learning-system text fields reliably keep. Send the exported file instead.',
+  'composer.publish.fixFirst':
+    'Fix the checks first: a link is made only from a valid investigation.',
+  'composer.kept.heading': 'Kept from the original, not editable here',
+  'composer.kept.hint':
+    'This investigation was remixed. Its expected values, scenarios, seeds and instruments, and the code that reads the simulation, stay the original’s; they are listed here. Editing one is refused, naming the field.',
+  'composer.kept.lesson': 'The investigation itself',
+  'composer.kept.step': 'Step {sid}',
   'composer.title': 'Investigation Composer',
   'composer.intro':
     'Compose a guided investigation as data: what students read, predict, try, measure and answer, which scenario and instrument each step opens, and what they see when an answer is wrong. It is checked by the same rules as every investigation Gravitas ships, and it never runs anything you write.',

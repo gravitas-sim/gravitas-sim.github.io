@@ -474,6 +474,7 @@ describe('the composer’s words', () => {
       'js/platform/investigation.js',
       'js/platform/questionBank.js',
       'js/platform/relations.js',
+      'js/platform/remix.js',
     ])
       visit(
         parse(readFileSync(file, 'utf8'), {
