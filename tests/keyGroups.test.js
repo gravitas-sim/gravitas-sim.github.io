@@ -43,6 +43,58 @@ describe('keyGroups', () => {
     expect(out.code).not.toContain('"0":');
   });
 
+  test('a group of groups rebuilds the same keys in the same order', () => {
+    const out = keyGroups([
+      'a.',
+      {
+        0: [
+          'x.',
+          { p: '1', q: '2' },
+          'lone',
+          ['v'],
+          'y.',
+          { r: { one: 'o', other: 'n' } },
+        ],
+      },
+      'b',
+      'three',
+    ]);
+    expect(Object.entries(out)).toEqual([
+      ['a.x.p', '1'],
+      ['a.x.q', '2'],
+      ['a.lone', 'v'],
+      ['a.y.r', { one: 'o', other: 'n' }],
+      ['b', 'three'],
+    ]);
+  });
+
+  test('the build nests a group whose members run in prefixed neighbourhoods', () => {
+    const src = `export const X = {
+      'a.x.p': 'one', 'a.x.q': 'two', 'a.x.r': 'three', 'a.y.s': 'four',
+      'a.y.t': 'five', 'a.y.u': 'six', 'a.z.v': 'seven', 'a.z.w': 'eight',
+      'a.z.k': 'nine', 'b.c': 'ten' };`;
+    const out = factorSource(src);
+    expect(out.code).toContain('{0:[');
+    const list = out.code.slice(
+      out.code.indexOf('__keyGroups(') + 12,
+      out.code.lastIndexOf(');')
+    );
+    const rebuilt = keyGroups(Function(`return ${list}`)());
+    expect(Object.entries(rebuilt).map(([k]) => k)).toEqual([
+      'a.x.p',
+      'a.x.q',
+      'a.x.r',
+      'a.y.s',
+      'a.y.t',
+      'a.y.u',
+      'a.z.v',
+      'a.z.w',
+      'a.z.k',
+      'b.c',
+    ]);
+    expect(rebuilt['a.z.k']).toBe('nine');
+  });
+
   test('a file it cannot prove safe is left alone', () => {
     expect(
       factorSource(

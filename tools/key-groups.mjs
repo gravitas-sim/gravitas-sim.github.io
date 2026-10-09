@@ -107,6 +107,40 @@ function plan(keys) {
 }
 
 /**
+ * One group's entries as source text: a plain object of its members, or, when
+ * its members themselves run in prefixed neighbourhoods, a list holding
+ * further groups ({0: [key, entry, ...]}, read back by keyGroups). Whichever
+ * writes fewer bytes.
+ * @param {{key: string, text: string, isString: boolean}[]} members
+ */
+function encodeGroup(members) {
+  const flat = `{${members
+    .map(m => `${IDENT.test(m.key) ? m.key : JSON.stringify(m.key)}:${m.text}`)
+    .join(',')}}`;
+  const subs = plan(members.map(m => m.key));
+  if (!subs.length) return flat;
+  const parts = [];
+  const single = m =>
+    parts.push(JSON.stringify(m.key), m.isString ? m.text : `[${m.text}]`);
+  let at = 0;
+  for (const g of subs) {
+    for (; at < g.start; at++) single(members[at]);
+    parts.push(
+      JSON.stringify(g.prefix),
+      encodeGroup(
+        members
+          .slice(g.start, g.end)
+          .map(m => ({ ...m, key: m.key.slice(g.prefix.length) }))
+      )
+    );
+    at = g.end;
+  }
+  for (; at < members.length; at++) single(members[at]);
+  const nested = `{0:[${parts.join(',')}]}`;
+  return nested.length < flat.length ? nested : flat;
+}
+
+/**
  * Rewrite the object literals in one module. Returns null when nothing changed.
  * @param {string} source
  * @returns {{code: string, objects: number} | null}
@@ -166,13 +200,16 @@ export function factorSource(source, owner = false) {
       };
       for (const g of groups) {
         for (; at < g.start; at++) single(at);
-        const inner = [];
-        for (let t = g.start; t < g.end; t++) {
-          inner.push(
-            `${JSON.stringify(keys[t].slice(g.prefix.length))}:${src(obj.properties[t])}`
-          );
-        }
-        parts.push(JSON.stringify(g.prefix), `{${inner.join(',')}}`);
+        const members = [];
+        for (let t = g.start; t < g.end; t++)
+          members.push({
+            key: keys[t].slice(g.prefix.length),
+            text: src(obj.properties[t]),
+            isString:
+              obj.properties[t].value.type === 'Literal' &&
+              typeof obj.properties[t].value.value === 'string',
+          });
+        parts.push(JSON.stringify(g.prefix), encodeGroup(members));
         at = g.end;
       }
       for (; at < keys.length; at++) single(at);
