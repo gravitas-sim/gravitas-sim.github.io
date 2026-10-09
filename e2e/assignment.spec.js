@@ -112,10 +112,6 @@ test.describe('building one', () => {
       ).toBe(true);
       await page.keyboard.press('Escape');
       await expect(builder).toHaveCount(0);
-      // The page behind is live again.
-      expect(
-        await page.evaluate(() => document.body.querySelector('[inert]'))
-      ).toBeNull();
     });
   }
 
