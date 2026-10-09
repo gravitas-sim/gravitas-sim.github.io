@@ -336,6 +336,16 @@ const SURFACES = [
     standalone: true,
   },
   {
+    name: 'investigations in a course',
+    open: async ({ page }) => {
+      await page.goto('/studio/course/packs/', {
+        waitUntil: 'domcontentloaded',
+      });
+    },
+    expect: 'body[data-ready="true"]',
+    standalone: true,
+  },
+  {
     name: 'course home',
     open: async ({ page }) => {
       await page.goto('/course/?course=intro-astronomy', {
