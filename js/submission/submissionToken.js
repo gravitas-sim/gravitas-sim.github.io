@@ -34,6 +34,7 @@
 // realistic lesson crosses the limit below.
 // =============================================================================
 
+import { readVersioned } from '../platform/common.js';
 import { decodeTagged, encodeTagged } from '../shareState.js';
 import { LOCALE_SUFFIX } from '../answerParse.js';
 import { helpStages, helpTaken } from '../answerFeedback.js';
@@ -218,12 +219,17 @@ export function validateSubmission(payload) {
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
     return { ok: false, reason: 'notAnObject' };
   }
-  if (!Number.isInteger(payload.v) || payload.v < 1) {
-    return { ok: false, reason: 'noVersion' };
-  }
-  if (payload.v > SUBMISSION_SCHEMA) {
-    return { ok: false, reason: 'newerVersion' };
-  }
+  const r = readVersioned(payload, {
+    current: SUBMISSION_SCHEMA,
+    min: 1,
+    versionField: 'v',
+    migrations: { 1: d => d },
+  });
+  if (!r.ok)
+    return {
+      ok: false,
+      reason: r.reason === 'newer' ? 'newerVersion' : 'noVersion',
+    };
   const b = payload.b;
   if (!b || typeof b !== 'object') return { ok: false, reason: 'noBackup' };
   if (!b.lesson || typeof b.lesson.id !== 'string') {
