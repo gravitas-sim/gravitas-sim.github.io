@@ -102,6 +102,15 @@ export type CourseItem = {
   | { kind: 'scenario'; scenario: string; seed: string; paused?: boolean; title?: PlainText }
   | { kind: 'dataset'; dataset: string; title?: PlainText }
   | {
+      /** An investigation pack, carried as its link (the fragment after #). Pinned by the digest of its compiled steps. */
+      kind: 'pack';
+      pack: string;
+      version: string;
+      link: string;
+      title?: PlainText;
+      pin?: LessonPin;
+    }
+  | {
       kind: 'reading';
       title: PlainText;
       cite: { authors: string; year: number; source: string; doi?: string; url?: string };

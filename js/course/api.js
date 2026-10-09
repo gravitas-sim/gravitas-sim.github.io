@@ -6,7 +6,8 @@
 //
 //   courseApi()      the languages, lessons, scenarios and datasets a pack may
 //                    name, for the format's reference checks;
-//   courseFacts()    every lesson a pack names, loaded (its steps' hashes and
+//   courseFacts()    every lesson a pack names (and every investigation pack
+//                    it carries, opened as a link is: ./packItems.js), loaded (its steps' hashes and
 //                    digest, its package, its languages, what its steps use,
 //                    whether it has an instructor guide), with the sequences
 //                    Gravitas puts lessons in and the datasets' licenses.
@@ -29,7 +30,7 @@ import {
 } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import { DATASETS, GUIDED } from './datasets.js';
-import { itemsOf } from './pack.js';
+import { itemsOf, lessonKeyOf } from './pack.js';
 import { lessonDigest, minutesRange } from './review.js';
 
 export { PLATFORM_API };
@@ -144,6 +145,26 @@ export async function courseFacts(pack, { load, catalog, known = new Map() }) {
     if (!have.has(id)) continue;
     if (!known.has(id)) known.set(id, lessonFacts(await load(id)));
     lessons.set(id, known.get(id));
+  }
+
+  // An investigation pack travels in its item as a link: opened here as the
+  // application opens it, in a lazy module a course with none never fetches
+  // (Prompt 78). One that does not open is a lesson Gravitas does not have.
+  const packs = itemsOf(pack).filter(({ item }) => item?.kind === 'pack');
+  if (packs.length) {
+    const { openedPack } = await import('./packItems.js');
+    for (const { item } of packs) {
+      const key = lessonKeyOf(item);
+      // Cached by link: the same id and version can name another pack.
+      if (known.get(key)?.link !== item.link) {
+        const got = await openedPack(item);
+        known.set(key, {
+          link: item.link,
+          ...(got.ok ? lessonFacts(got.lesson) : { failed: got.reason }),
+        });
+      }
+      if (!known.get(key).failed) lessons.set(key, known.get(key));
+    }
   }
 
   return {

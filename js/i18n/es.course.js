@@ -43,6 +43,23 @@ export const ES_COURSE = {
     'Las unidades van en orden, y los elementos en orden dentro de ellas. No hay fechas: esas las pone el docente. Un elemento del camino introductorio o avanzado es opcional, y lo principal no puede depender de él.',
   'course.hint.minutesDerived':
     'Déjalo en blanco para usar su propio tiempo (en una actividad, su parte de los pasos).',
+  'course.hint.packLink':
+    'Pega el enlace que hizo Publicar en el Compositor. El curso guarda la investigación dentro del enlace, así que llega a los estudiantes con el curso. Su ficha es el resumen de los pasos del paquete.',
+  'course.status.packFailed': 'Ese enlace no se puede usar: {why}',
+  'course.status.packRead': 'Se leyó «{id}» y se fijó su ficha.',
+  'course.pack.corrupt': 'está incompleto o dañado.',
+  'course.pack.wrongKind': 'no es un enlace de investigación.',
+  'course.pack.newerVersion': 'lo hizo una versión más nueva de Gravitas.',
+  'course.pack.tooLarge': 'contiene más de lo que un enlace puede llevar.',
+  'course.pack.notPack': 'no contiene ninguna investigación.',
+  'course.pack.installed':
+    'nombra un paquete instalado en un solo navegador; publica la investigación como enlace.',
+  'course.pack.noOriginal':
+    'se hizo a partir de «{what}», que esta versión de Gravitas no tiene.',
+  'course.pack.delta': 'sus cambios no se aplican al original: {what}',
+  'course.pack.invalid': 'no es una investigación válida: {what}',
+  'course.pack.identity':
+    'contiene «{what}», no la investigación que nombra este elemento.',
   'course.hint.seed':
     'Una palabra como orbit-1: la misma palabra construye siempre el mismo mundo.',
   'course.hint.dataset':
@@ -66,6 +83,7 @@ export const ES_COURSE = {
   'course.field.lesson': 'Investigación',
   'course.field.unitTitle': 'Título de la unidad',
   'course.field.addKind': 'Elemento nuevo',
+  'course.field.packLink': 'Enlace de la investigación',
   'course.field.path': 'Camino',
   'course.field.minutes': 'Minutos',
   'course.field.needs': 'Va después de',
@@ -103,6 +121,7 @@ export const ES_COURSE = {
   'course.kind.scenario': 'Simulación',
   'course.kind.dataset': 'Datos',
   'course.kind.reading': 'Lectura',
+  'course.kind.pack': 'Investigación del instructor',
   'course.path.core': 'Principal',
   'course.path.intro': 'Introductorio',
   'course.path.advanced': 'Avanzado',
@@ -261,6 +280,10 @@ export const ES_COURSE = {
   'course.error.items': 'De 1 a {max} elementos.',
   'course.error.kind': 'Uno de: {kinds}.',
   'course.error.lesson': 'Elige una investigación que tenga Gravitas.',
+  'course.error.packId':
+    'El identificador público del paquete de investigación.',
+  'course.error.packLink':
+    'El enlace de la investigación: lo que sigue a #, como lo hace Publicar en el Compositor, hasta {max} caracteres.',
   'course.error.lessonTwice': 'Esta investigación ya está en el curso.',
   'course.error.license': 'La licencia o las condiciones, en palabras.',
   'course.error.locales': 'Los idiomas deben incluir el inglés.',

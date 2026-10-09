@@ -54,11 +54,14 @@ describe('the course pack /2 schema', () => {
     expect(INTRO_ASTRONOMY.formatVersion).toBe(2);
     expect(reads(INTRO_ASTRONOMY)).toBe(true);
     expect(valid(s, INTRO_ASTRONOMY)).toBe(true);
-    // The five kinds are all in it, or this proves less than it says.
+    // Every kind but the pack (tests/remixCourse.test.js) is in it, or this
+    // proves less than it says.
     const kinds = new Set(
       INTRO_ASTRONOMY.units.flatMap(u => u.items.map(i => i.kind))
     );
-    expect([...kinds].sort()).toEqual([...CP.ITEM_KINDS].sort());
+    expect([...kinds].sort()).toEqual(
+      CP.ITEM_KINDS.filter(k => k !== 'pack').sort()
+    );
     // The SDK's example, an exact pack with every lesson pinned.
     const example = JSON.parse(
       read('sdk/examples/orbits-first-week/course.json')

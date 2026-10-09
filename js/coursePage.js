@@ -68,6 +68,7 @@ import {
   courseApi,
   courseFacts,
   datasetsOf,
+  lessonFacts,
   newAssignmentId,
 } from './course/api.js';
 import { PREVIEW_KEY, courseLink, itemLink, rootOf } from './course/links.js';
@@ -570,6 +571,7 @@ const itemName = item => {
   const own = item.title?.[getLocale()] || item.title?.en;
   if (own) return own;
   if (item.lesson) return lessonTitle(item.lesson);
+  if (item.kind === 'pack') return item.pack || item.id;
   if (item.kind === 'dataset')
     return (
       datasetsOf(catalog).get(item.dataset)?.title?.[getLocale()] ||
@@ -623,6 +625,15 @@ function newItem(x, kind) {
         minutes: 15,
         dataset: 'tess-light-curve',
       };
+    case 'pack':
+      // Filled when its link is pasted (readPackLink).
+      return {
+        ...base,
+        id: freshId(x, 'investigation'),
+        pack: '',
+        version: '1.0.0',
+        link: '',
+      };
     case 'reading':
       return {
         ...base,
@@ -659,6 +670,46 @@ async function repin(path) {
     }
     it.pin = pinFor(it, lesson);
   });
+}
+
+/**
+ * A pasted investigation link (or its address): kept as the fragment, then
+ * opened as the application opens it, which says which pack it is and what
+ * to pin (the digest of its compiled steps).
+ */
+async function readPackLink(base, text) {
+  const link = String(text)
+    .trim()
+    .replace(/^[^#]*#/, '');
+  commit(x => {
+    const it = getAt(x, base);
+    if (it?.kind === 'pack') it.link = link;
+  });
+  const { openedLink } = await import('./course/packItems.js');
+  const got = await openedLink(link);
+  if (!got.ok)
+    return setStatus(
+      t('course.status.packFailed', {
+        why: t(`course.pack.${got.reason}`, { what: got.message || '' }),
+      })
+    );
+  const lesson = lessonFacts(got.lesson);
+  commit(x => {
+    const it = getAt(x, base);
+    if (it?.kind !== 'pack' || it.link !== link) return;
+    it.pack = got.pack.id;
+    it.version = got.pack.version;
+    // A text in every language the course has, and plain.
+    const plain = s => String(s).replace(/[<>&]/g, '').slice(0, 120);
+    it.title = Object.fromEntries(
+      (x.locales || ['en']).map(l => [
+        l,
+        plain(got.pack.title?.[l] || got.pack.title?.en || got.pack.id),
+      ])
+    );
+    it.pin = pinFor(it, lesson);
+  });
+  setStatus(t('course.status.packRead', { id: got.pack.id }));
 }
 
 function unitsSection(d) {
@@ -911,6 +962,19 @@ function kindFields(d, item, base) {
   switch (item.kind) {
     case 'lesson':
       return [lessonPick(), pinLine(item)];
+    case 'pack':
+      return [
+        field(
+          idOf(`${base}.link`),
+          t('course.field.packLink'),
+          textInput(item.link ? `${ROOT}#${item.link}` : '', v =>
+            readPackLink(base, v)
+          ),
+          t('course.hint.packLink')
+        ),
+        pair(`${base}.title`, t('course.field.title'), { required: false }),
+        pinLine(item),
+      ];
     case 'assignment':
       return [
         lessonPick(),

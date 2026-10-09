@@ -33,6 +33,7 @@ import {
   migrateCoursePack,
   validateCoursePack,
   itemsOf,
+  lessonKeyOf,
 } from './course/pack.js';
 import { estimate, minutesRange } from './course/review.js';
 import {
@@ -72,12 +73,8 @@ const lessonMeta = id =>
   (LESSONS[language()] || LESSONS.en).get(id) || LESSONS.en.get(id);
 
 /** Where this browser has got to in an investigation: new, going or done. */
-function status(id) {
-  const p = progressOf({
-    id,
-    format: 'lesson',
-    steps: lessonMeta(id)?.stepCount || 0,
-  });
+function status(id, steps = lessonMeta(id)?.stepCount || 0) {
+  const p = progressOf({ id, format: 'lesson', steps });
   return !p.started ? 'new' : p.total && p.done >= p.total ? 'done' : 'going';
 }
 
@@ -105,6 +102,7 @@ function titleOf(item) {
   const own = words(item.title);
   if (own) return own;
   if (item.lesson) return lessonMeta(item.lesson)?.title || item.lesson;
+  if (item.kind === 'pack') return item.pack;
   if (item.kind === 'dataset')
     return words(DATA.get(item.dataset)?.title) || item.dataset;
   return item.scenario || item.id;
@@ -377,11 +375,15 @@ function render() {
                   text: t(`courseHome.kind.${item.kind}`),
                 }),
                 el('h3', { text: titleOf(item) }),
-                missing || !item.lesson || status(item.lesson) === 'new'
+                missing ||
+                  !(item.lesson || item.kind === 'pack') ||
+                  status(lessonKeyOf(item), item.pin?.n) === 'new'
                   ? null
                   : el('span', {
                       className: 'ui-badge',
-                      text: t(`courseHome.status.${status(item.lesson)}`),
+                      text: t(
+                        `courseHome.status.${status(lessonKeyOf(item), item.pin?.n)}`
+                      ),
                     }),
                 path !== 'core'
                   ? el('span', {
