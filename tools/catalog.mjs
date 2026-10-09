@@ -82,6 +82,16 @@ export const ARCHIVE_TYPES = Object.freeze([
 const sha256 = b => createHash('sha256').update(b).digest('hex');
 const json = v => `${JSON.stringify(v, null, 2)}\n`;
 
+/** The archive files among `files` that no archive entry of `catalog` names. */
+export function unnamedArchives(catalog, files) {
+  const named = new Set(
+    catalog.entries
+      .filter(x => x.delivery === 'archive')
+      .map(x => path.basename(x.archiveFile))
+  );
+  return files.filter(f => !named.has(f));
+}
+
 /** The archives on disk in catalog/packages/. */
 const listArchives = () =>
   existsSync(path.join(CATALOG_DIR, 'packages'))
@@ -394,16 +404,10 @@ export async function checkCatalog() {
   }
   // An archive nothing names is never served as the catalog's: a package that
   // was withdrawn or never accepted leaves with its entry.
-  const named = new Set(
-    built.catalog.entries
-      .filter(x => x.delivery === 'archive')
-      .map(x => path.basename(x.archiveFile))
-  );
-  for (const f of listArchives())
-    if (!named.has(f))
-      problems.push(
-        `catalog/packages/${f} is in no catalog entry: accept it in catalog/curation.json, or run \`npm run catalog\` to remove it`
-      );
+  for (const f of unnamedArchives(built.catalog, listArchives()))
+    problems.push(
+      `catalog/packages/${f} is in no catalog entry: accept it in catalog/curation.json, or run \`npm run catalog\` to remove it`
+    );
   // With each archive judged by its content, the rest of the text must match.
   const normalize = c =>
     c &&
@@ -533,9 +537,8 @@ async function main(argv) {
     }
     // An archive the catalog no longer names (a withdrawn package) is removed:
     // catalog/packages/ holds what the catalog serves and nothing else.
-    const named = new Set([...archives.keys()].map(k => path.basename(k)));
-    for (const f of listArchives())
-      if (!named.has(f)) unlinkSync(path.join(CATALOG_DIR, 'packages', f));
+    for (const f of unnamedArchives(JSON.parse(text), listArchives()))
+      unlinkSync(path.join(CATALOG_DIR, 'packages', f));
     // Record the bytes actually on disk, which may be an unchanged older pack.
     const catalog = JSON.parse(text);
     for (const e of catalog.entries.filter(x => x.delivery === 'archive')) {
