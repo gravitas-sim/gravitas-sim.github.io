@@ -100,7 +100,7 @@ export const INSTRUCTOR_CONTENT = {
       'Compare the blackbody g − r of the Sun with a measured value and say what the lines do to it.',
     ],
     modelNotes:
-      'Planck’s law with the exact SI constants; colors by integrating the blackbody through the Bessell & Murphy 2012 B and V and the SDSS g and r curves, photon-counting, with the Vega and AB zero points stated in RADIATION.md. The displayed color uses the Wyman, Sloan and Shirley 2013 fit to the CIE 1931 curves. A real star has absorption lines and edges that this model leaves out, and the lesson says so.',
+      'Planck’s law with the exact SI constants; colors by integrating the blackbody through the Bessell & Murphy 2012 B and V and the SDSS g and r curves, photon-counting, with the Vega and AB zero points stated in RADIATION.md. The displayed color uses the Wyman, Sloan and Shirley 2013 fit to the CIE 1931 curves. A real star has absorption lines and edges that this model leaves out, and the investigation says so.',
   },
 
   'twelve-nights': {
