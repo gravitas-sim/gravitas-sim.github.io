@@ -388,6 +388,15 @@ export const FORMATS = Object.freeze([
     newer: 'refused by reason code',
   },
   {
+    name: 'investigation link',
+    fields: 'link prefix i',
+    version: 1,
+    owner: 'js/composer/packLink.js readPackFragment',
+    persisted: 'link',
+    older: 'v1 only',
+    newer: 'refused by reason code',
+  },
+  {
     name: 'gravitas.course-manifest',
     fields: 'format, formatVersion',
     version: 1,

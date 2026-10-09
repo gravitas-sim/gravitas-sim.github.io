@@ -91,17 +91,6 @@ export const lessonInHash = () =>
   /^#investigation=[\w-]+(\/\w+)?$/.test(window.location.hash || '');
 
 /**
- * Whether the address bar is asking for the authoring preview.
- *
- * `?author=<lesson>` is a lesson link like any other as far as loading goes:
- * the system is wanted immediately, and js/investigations.js decides what to do
- * with it. Kept here rather than in the preview module because this is the file
- * that stays resident, and it is a regular-expression test rather than an
- * import.
- *
- * @returns {boolean} True for an authoring request in the query or the hash
- */
-/**
  * Whether the URL asks for the assignment builder.
  *
  * Needed for the same reason as the authoring test below, and it is the same
@@ -124,6 +113,9 @@ export const assignmentInUrl = () =>
  */
 export const assignmentInHash = () => /^#a\d+[zr]./.test(location.hash || '');
 
+/** An investigation link (#i1z..., js/composer/packLink.js). */
+export const packInHash = () => /^#i\d+[zr]./.test(location.hash || '');
+
 /**
  * Does the address bar name a classroom activity?
  *
@@ -138,19 +130,10 @@ export const activityInHash = () =>
   /^#activity=[a-z0-9-]+(\/[a-z0-9-]+)?$/i.test(location.hash || '');
 
 /**
- * Open whatever assignment the address bar names, now or later.
- *
- * The predicates live here and the machinery does not: keeping the bridge out
- * of the start-up graph is worth the indirection, because a first-time visitor
- * who has never been handed an assignment should not download the codec that
- * reads one.
- *
- * The hashchange half is not optional. Pasting a link into a tab that is
- * already on the site changes the fragment and navigates nothing, so a
- * boot-time check alone leaves that student with no assignment and no
- * explanation - the same trap js/share.js documents for lesson links.
- *
- * @returns {void}
+ * Open whatever assignment, activity or investigation link the address bar
+ * names, now or later. The predicates live here and the machinery does not, so
+ * a first-time visitor never downloads the codecs. The hashchange half is
+ * needed: pasting a link into an open tab navigates nothing.
  */
 export function watchForAssignments() {
   // The engine first, then the bridge. Doing it in this order is what lets the
@@ -173,8 +156,15 @@ export function watchForAssignments() {
         console.warn('That activity link could not be opened:', err)
       );
 
+  const openPack = () =>
+    ensureInvestigations()
+      .then(() => import('./remix/open.js'))
+      .then(m => m.openPackFromUrl())
+      .catch(() => {});
+
   if (assignmentInHash()) open();
   else if (activityInHash()) openActivity();
+  else if (packInHash()) openPack();
 
   let last = location.hash;
   window.addEventListener('hashchange', () => {
@@ -182,6 +172,7 @@ export function watchForAssignments() {
     last = location.hash;
     if (assignmentInHash()) open();
     else if (activityInHash()) openActivity();
+    else if (packInHash()) openPack();
   });
 }
 

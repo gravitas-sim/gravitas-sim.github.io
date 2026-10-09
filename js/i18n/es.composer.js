@@ -6,6 +6,63 @@
 // =============================================================================
 
 export const ES_COMPOSER = {
+  'composer.error.derivedId':
+    'Una investigación que Gravitas tiene y de la que esta es versión.',
+  'composer.error.digest':
+    'Ocho dígitos hexadecimales: el resumen de los pasos del original.',
+  'composer.error.remixType':
+    'Una versión propia conserva el tipo de cada paso del original.',
+  'composer.error.remixFrom':
+    'Un paso del original conserva su propia pregunta; añade un paso nuevo para preguntar una del banco.',
+  'composer.error.remixKind':
+    'Una versión propia conserva el tipo de pregunta.',
+  'composer.error.remixSetup':
+    'Una versión propia no cambia el mundo que abre un paso.',
+  'composer.error.remixScenario': 'Una versión propia no cambia el escenario.',
+  'composer.error.remixSeed': 'Una versión propia no cambia la semilla.',
+  'composer.error.remixTool':
+    'Una versión propia no cambia un instrumento ni su modelo.',
+  'composer.error.remixValue':
+    'Una versión propia no cambia un valor esperado.',
+  'composer.error.remixOptions':
+    'Las opciones se pueden reescribir, pero no añadir, quitar ni mover: la respuesta es el número de una opción.',
+  'composer.error.remixMisconceptions':
+    'El objetivo y el factor de una idea errónea son los del original; su redacción es tuya.',
+  'composer.error.remixFields':
+    'Un paso de medición conserva los números que registra; la etiqueta es tuya.',
+  'composer.error.remixAdded':
+    'Una versión propia añade pasos de lectura, exploración y pregunta.',
+  'composer.error.remixAddedSetup':
+    'Un paso añadido no abre ningún escenario; lee el mundo que ya está en pantalla.',
+  'composer.error.remixAddedTool':
+    'Un paso añadido no acopla ningún instrumento.',
+  'composer.error.noOriginal':
+    'Gravitas no tiene esa investigación para hacer una versión.',
+  'composer.error.originalId':
+    'La versión se comprueba contra la investigación que nombra.',
+  'composer.error.originalChanged':
+    'El original ha cambiado desde que se hizo esta versión; hazla de nuevo.',
+  'composer.remix.label': 'Hacer una versión propia de una investigación',
+  'composer.remix.go': 'Hacer versión',
+  'composer.status.remixed':
+    'Versión de {id}: una copia fiel que puedes editar. La ciencia sigue siendo la del original.',
+  'composer.status.remixFailed': 'Gravitas no pudo cargar esa investigación.',
+  'composer.publish.heading': 'Publicar',
+  'composer.publish.hint':
+    'Un enlace que un estudiante abre en Gravitas, y el archivo con el que se hace. No se sube nada: el enlace lleva la propia investigación.',
+  'composer.publish.go': 'Crear el enlace',
+  'composer.publish.link': 'Enlace para estudiantes',
+  'composer.publish.ok':
+    'El enlace tiene {length} caracteres. Una versión propia lleva solo lo que cambiaste.',
+  'composer.publish.long':
+    'El enlace tiene {length} caracteres, más de los {limit} que los campos de correo y de los sistemas de aprendizaje conservan con fiabilidad. Envía mejor el archivo exportado.',
+  'composer.publish.fixFirst':
+    'Corrige primero las comprobaciones: el enlace solo se crea de una investigación válida.',
+  'composer.kept.heading': 'Se conserva del original, no editable aquí',
+  'composer.kept.hint':
+    'Esta investigación es una versión propia. Sus valores esperados, escenarios, semillas e instrumentos, y el código que lee la simulación, siguen siendo los del original; se enumeran aquí. Editar uno se rechaza, nombrando el campo.',
+  'composer.kept.lesson': 'La investigación en sí',
+  'composer.kept.step': 'Paso {sid}',
   'composer.title': 'Compositor de investigaciones',
   'composer.intro':
     'Compón una investigación guiada como datos: lo que los estudiantes leen, predicen, prueban, miden y responden, qué escenario e instrumento abre cada paso y qué ven cuando una respuesta es incorrecta. La comprueban las mismas reglas que cada investigación que trae Gravitas, y nunca ejecuta nada de lo que escribes.',

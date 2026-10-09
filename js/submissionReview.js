@@ -156,6 +156,19 @@ async function accept(label, thing, kind) {
   }
   let lesson = await lessonById(submission.b.lesson.id);
   if (lesson === undefined) return refuse(label, 'lessonLoad');
+  if (!lesson && submission.b.lesson.pack) {
+    // An instructor's investigation (Prompt 78): named, not graded here, because
+    // the pack that holds its questions is not in this build.
+    const k = submission.b.lesson.pack;
+    refused.push({
+      label,
+      reason: 'remix',
+      detail: {
+        message: `${k.id} ${k.version}${k.from ? `, ${k.from.id} ${k.from.version}` : ''}`,
+      },
+    });
+    return render();
+  }
   if (!lesson) return refuse(label, 'unknownLesson');
   // Read at a deeper depth: its steps are laid in, or their answers are stale.
   if (lesson.depths && submission.dp && submission.dp !== 'core')

@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 47 of them. 25 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 48 of them. 25 have a JSON Schema in `sdk/schemas`, and 10 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -54,6 +54,7 @@ The columns:
 | gravitas.course-pack (extension form) | format, formatVersion | 1 | js/platform/course.js validateCoursePack | repository, extension archive, IndexedDB | v1 only | a validation problem, which /2 gets too | [yes](sdk/schemas/course-pack-1.schema.json) |
 | gravitas.course-pack (builder form) | format, formatVersion | 2 | js/course/pack.js migrateCoursePack | download, localStorage, repository, extension archive | migrates v1 | refused, in words | [yes](sdk/schemas/course-pack-2.schema.json) |
 | course home link | link prefix c | 2 | js/course/links.js readCourseFragment | link | migrates c1 | refused by reason code | no |
+| investigation link | link prefix i | 1 | js/composer/packLink.js readPackFragment | link | v1 only | refused by reason code | no |
 | gravitas.course-manifest | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
 | gravitas.capability-package | format, formatVersion | 1 | js/platform/manifest.js validateManifest | repository, IndexedDB | v1 only | refused, in words | [yes](sdk/schemas/capability-package-1.schema.json) |
 | gravitas.scenario-pack | format, formatVersion | 1 | js/platform/scenario.js migrateScenarioPack | download, localStorage, link | v1 only; reads orbital-system/1 | refused, in words | [yes](sdk/schemas/scenario-pack-1.schema.json) |

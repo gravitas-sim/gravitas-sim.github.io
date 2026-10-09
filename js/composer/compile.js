@@ -261,15 +261,16 @@ export function compileInvestigation(pack, api) {
     if (s.when) out.when = { sid: s.when.sid, is: s.when.is };
 
     if (s.type === 'explore') {
-      out.checklist = s.checklist.map(en);
-      w.checklist = s.checklist.map(es);
+      // `|| []`: a remix's explore step may be one the original gives no list.
+      out.checklist = (s.checklist || []).map(en);
+      w.checklist = (s.checklist || []).map(es);
     } else if (s.type === 'measure') {
-      out.fields = s.fields.map(f => {
+      out.fields = (s.fields || []).map(f => {
         const field = { id: f.id, label: en(f.label) };
         if (f.unit !== undefined) field.unit = f.unit;
         return field;
       });
-      w.fields = s.fields.map(f => ({ label: es(f.label) }));
+      w.fields = (s.fields || []).map(f => ({ label: es(f.label) }));
     } else if (s.type === 'predict') {
       Object.assign(out, {
         prompt: en(s.prompt),

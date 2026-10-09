@@ -312,6 +312,17 @@
       "minimum": 0,
       "maximum": 4294967295
     },
+    "derivedFrom": {
+      "description": "A remix: the built-in investigation it was made from, its version and a digest of its steps (js/platform/remix.js). A remix may reorder, remove, reword and translate steps, change hints, feedback, depth and instructions, and add read, explore and question steps; it may not change a step's scenario, seed, instrument or expected value. A step with an id of the original's keeps the original's code by reference, and may be a kind of step (ellipse, wedges) only the original's engine code knows.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/publicId" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "digest": { "type": "string", "pattern": "^[0-9a-f]{8}$" }
+      }
+    },
     "bank": {
       "type": "object",
       "required": [

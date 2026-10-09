@@ -81,15 +81,23 @@ async function unitCheck(pack) {
  *   is not compiled.
  */
 export async function checkInvestigationPack(pack) {
-  const errors = validateInvestigationPack(pack, {
+  let errors = validateInvestigationPack(pack, {
     ...packApi(),
     isUnit: await unitCheck(pack),
   });
+  // A remix is also judged against the built-in it was made from
+  // (./remixApi.js, loaded only for a pack that says it has one).
+  const remix =
+    pack && typeof pack.derivedFrom === 'object' && pack.derivedFrom
+      ? await import('./remixApi.js')
+      : null;
+  let original = null;
+  if (remix)
+    ({ errors, original } = await remix.judgeRemix(pack, errors, packApi()));
   if (errors.length) return { errors, findings: [], compiled: null };
-  const compiled = compileInvestigation(pack, {
-    scenarios: SCENARIO_INFO,
-    scenarioId,
-  });
+  const compiled = remix
+    ? remix.compileRemixed(pack, original)
+    : compileInvestigation(pack, { scenarios: SCENARIO_INFO, scenarioId });
   // The instrument registry only when a step docks one: importing it fetches
   // the deferred catalogs of words (./widgetIds.js), and a pack with no
   // instrument has nothing for the rules to look up.

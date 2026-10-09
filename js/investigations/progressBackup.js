@@ -155,6 +155,7 @@ export function buildBackup({
       id: lesson?.id ?? null,
       title: lesson?.title ?? null,
       stepCount: steps.length,
+      ...(lesson?.pack ? { pack: lesson.pack } : {}),
     },
     student: studentName || null,
     progress: {

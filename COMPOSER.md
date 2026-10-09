@@ -22,6 +22,9 @@ computed field. The composer writes the data part, which is 77% of the steps
 the built-in lessons have, using the step types the engine already runs and
 the answer checks it already has.
 
+A built-in investigation can be remixed into a pack, and a pack reaches students
+by a link the Composer makes (Publish); see [REMIX.md](REMIX.md).
+
 ## What an investigation holds
 
 | Field | What it is |
