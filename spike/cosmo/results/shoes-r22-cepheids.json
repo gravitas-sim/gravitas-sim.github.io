@@ -1,0 +1,43 @@
+{
+  "rowsShipped": {
+    "LMC": 339,
+    "N4258": 111,
+    "M101": 65
+  },
+  "bytes": {
+    "raw": 6739,
+    "gzip": 2744,
+    "sha256": "588772f6afbd60213bf526e405b2fd71b5b9cb3f18f55be507ac3b22b1901567"
+  },
+  "ceilings": {
+    "rawKiB": 8,
+    "gzipKiB": 4
+  },
+  "hostFits": {
+    "LMC": {
+      "n": 339,
+      "slope": -3.2903052585740076,
+      "seSlope": 0.01857592763332166,
+      "intercept": 12.599204669190017
+    },
+    "N4258": {
+      "n": 111,
+      "slope": -3.455748111407659,
+      "seSlope": 0.16356498024151908,
+      "intercept": 23.531422607100257
+    },
+    "M101": {
+      "n": 65,
+      "slope": -2.8452546201560813,
+      "seSlope": 0.2698121957488924,
+      "intercept": 23.2604382278168
+    }
+  },
+  "published": {
+    "lmcSlope": -3.284,
+    "err": 0.017,
+    "ref": "Riess et al. 2022, ApJL 934, L7, section on P-L slopes (arXiv:2112.04510)"
+  },
+  "r6Pass": true,
+  "noteTableCaveat": "R22 table 2 notes: errors omit covariance; selections need new artificial-star tests."
+}

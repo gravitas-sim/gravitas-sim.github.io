@@ -1,0 +1,32 @@
+{
+  "rows": 24,
+  "bytes": {
+    "raw": 741,
+    "gzip": 340,
+    "sha256": "070fbfd823d14244da65975ed920599aad4574a37c98328a443c1647be537c26"
+  },
+  "ceilings": {
+    "rawKiB": 2,
+    "gzipKiB": 1,
+    "rawOk": true,
+    "gzipOk": true
+  },
+  "printedColumnCheck": {
+    "rowsCheckedAgainstPrintedMt": 24,
+    "worstAbsDifferenceMag": 0.0712,
+    "rowsDifferingByMoreThanRounding": 3,
+    "meanRecomputed": -15.4833,
+    "printedMean": -15.5,
+    "meanDifference": 0.0167
+  },
+  "fits": {
+    "interceptSlopeOLS": {
+      "v0_kms": -40.784,
+      "K_kms_per_Mpc": 454.158,
+      "seK": 75.237
+    },
+    "throughOriginK_kms_per_Mpc": 423.937,
+    "hubble1929PrintedK": "465 +- 50 (24 objects, with solar motion), 513 +- 60 (9 groups), round value 500"
+  },
+  "names": 24
+}

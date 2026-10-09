@@ -82,7 +82,7 @@ export const closedForms = {
   edsComoving: (H0, z) => (2 * C_KMS / H0) * (1 - 1 / Math.sqrt(1 + z)),
   /** Open matter-only luminosity distance (Mattig), Om < 1, OL = 0. */
   mattigLuminosity: (H0, Om, z) =>
-    ((C_KMS / H0) / (Om * Om)) * (Om * z + (Om - 2) * (Math.sqrt(1 + Om * z) - 1)),
+    ((2 * C_KMS / H0) / (Om * Om)) * (Om * z + (Om - 2) * (Math.sqrt(1 + Om * z) - 1)),
   /** Flat LCDM lookback time, Gyr. */
   flatLambdaLookback: (H0, Om, z) => {
     const OL = 1 - Om;

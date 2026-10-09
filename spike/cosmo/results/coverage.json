@@ -1,0 +1,14 @@
+{
+  "seeds": 200,
+  "finiteIntervals": 200,
+  "covered": 139,
+  "coverage": 0.695,
+  "coverageAmongFinite": 0.695,
+  "meanBias": 0.0015798369676666762,
+  "threshold": [
+    0.6,
+    0.76
+  ],
+  "pass": true,
+  "seconds": 27.39050001
+}

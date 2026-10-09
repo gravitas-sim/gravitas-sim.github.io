@@ -1,0 +1,51 @@
+{
+  "chosen": "all rows, survey bit kept",
+  "bytes": {
+    "raw": 29334,
+    "gzip": 11743,
+    "sha256": "cd833cf9283283487fe571cec1a41b4e635290e29c16d65c708c946aa133005f"
+  },
+  "ceilings": {
+    "rawKiB": 32,
+    "gzipKiB": 14
+  },
+  "candidates": [
+    {
+      "name": "all rows, survey bit kept",
+      "raw": 29334,
+      "gzip": 11743,
+      "ok": true
+    },
+    {
+      "name": "all rows, survey bit dropped",
+      "raw": 27496,
+      "gzip": 11700,
+      "ok": true
+    },
+    {
+      "name": "every second row",
+      "raw": 14163,
+      "gzip": 6248,
+      "ok": true
+    }
+  ],
+  "stats": {
+    "n": 1829,
+    "meanZ": 0.46896943138327013,
+    "meanMu": 41.58381984691082,
+    "meanErr": 7.162277692728251
+  },
+  "fidelity": {
+    "meanZ": {
+      "shipped": 0.46896943138327013,
+      "raw": 0.46896943138326985,
+      "rel": 5.91841893271406e-16
+    },
+    "meanMu": {
+      "shipped": 41.58381984691082,
+      "raw": 41.58381984691087,
+      "rel": 1.196090010160572e-15
+    }
+  },
+  "rawRows": 1829
+}

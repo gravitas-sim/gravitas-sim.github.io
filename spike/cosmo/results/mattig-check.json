@@ -1,0 +1,11 @@
+{
+  "points": 180,
+  "pointsOver1e10KernelVsFormula": 3,
+  "worstDoubleFormulaVsDecimal": 1.5160178217595598e-10,
+  "at": {
+    "h0": 50,
+    "om": 0.05,
+    "z": 0.001
+  },
+  "worstKernelVsDecimal": 5.051511283184234e-16
+}

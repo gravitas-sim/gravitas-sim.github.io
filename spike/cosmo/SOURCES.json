@@ -1,0 +1,74 @@
+{
+ "retrieved": "2026-10-09",
+ "note": "Pins for the cosmology gate. sha256 is of the stored file; for the SDSS answers it is of the decompressed CSV (see results/verify-sdss.log).",
+ "sources": [
+  {
+   "id": "hubble-1929",
+   "file": [
+    [
+     "sources/pnas01016-0007.png",
+     "cc3f720d33dbe0d54e916c542e15fd60c15cc860f986896343631382624e4c31"
+    ],
+    [
+     "sources/pnas01016-0008.png",
+     "8f15b0e04a4697b11daf901cf774a7b01459ea6afc9e3c8e01c3027f57e03d3b"
+    ]
+   ],
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC522427/ (page images on cdn.ncbi.nlm.nih.gov/pmc/blobs/45f4/522427/)",
+   "citation": "Hubble, E. 1929, PNAS 15, 168, doi:10.1073/pnas.15.3.168",
+   "licence": "US public domain: published in the United States in 1929; US Copyright Office Circular 15A (sources/us-copyright-circular-15a.pdf, sha256 6ff3c5612e1cd56469b3eb7d35eba7fd3374843d82744c63ab909225f53b7aef): works published in the US before 1 Jan 1931 are in the public domain"
+  },
+  {
+   "id": "des-sn5yr-hd",
+   "file": [
+    [
+     "sources/DES-SN5YR_HD.csv",
+     "95ab1e9f5460a056de37d2b4e28df73ce0c7fd471baba9fb37f1667f41b7901c"
+    ],
+    [
+     "sources/DES-SN5YR_4_DISTANCES_COVMAT_README.md",
+     "c89a5c8e742202bd5df74d784b7c7dbf29e46966a1553b2c0eb6f457b624223a"
+    ]
+   ],
+   "url": "https://doi.org/10.5281/zenodo.12720778 (DES-SN5YR-1.2.zip, md5 9019a6ddc569553bc323e9e1b68a55bf, member DES-SN5YR-1.2/4_DISTANCES_COVMAT/DES-SN5YR_HD.csv)",
+   "citation": "Sanchez et al. 2024 (arXiv:2406.05046) and DES Collaboration 2024, ApJL 973, L14 (doi:10.3847/2041-8213/ad6f9f); the record asks that both be cited",
+   "licence": "CC BY 4.0 (Zenodo record metadata, sources/rights/zenodo-12720778.json; legal code sources/rights/cc-by-4.0-legalcode.txt)"
+  },
+  {
+   "id": "sdss-dr18",
+   "file": [
+    [
+     "sources/sdss-dr18-redshift-slice.csv.gz",
+     "effdcbe30a289eb5a863bc5478432851f51622c3c139a8f199d96470d624fdc6"
+    ],
+    [
+     "sources/sdss-dr18-early-types.csv.gz",
+     "35c6a08f7fc8033f7987276216179e10fbae02e4094e5dd63a873b2a2ef24ff1"
+    ],
+    [
+     "sources/sdss-dr18-coma-field.csv.gz",
+     "bf3f8ec5ad5ed85d1f2820665a31f6697d1286cf43b3cc29b94b1064af053732"
+    ]
+   ],
+   "url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch (queries in fetch-sdss.mjs)",
+   "citation": "Almeida et al. 2023, ApJS 267, 44 (DR18); Strauss et al. 2002, AJ 124, 1810 (main sample); acknowledgement by phase per sdss.org/collaboration/citing-sdss",
+   "licence": "public domain: SDSS image-use-policy page states all data in public data releases are considered public domain (sources/rights/sdss-image-use-policy.txt)"
+  },
+  {
+   "id": "shoes-r22-table2",
+   "file": [
+    [
+     "sources/shoes-r22-table2.tex",
+     "d4b9af2b5d65118f7ac44a41b7e8cd662dfd42a63b5c359ca402d8be3b4dbba4"
+    ],
+    [
+     "sources/shoes-r22-table2.README",
+     "3747acd166dcb77eab2e6145a17116bc04f1d7283e972ec2db0ff823bcfcb8bf"
+    ]
+   ],
+   "url": "https://github.com/PantheonPlusSH0ES/DataRelease/blob/c447f0fea703fcd0fff57de5000947b5ca81286b/SH0ES_Data/table2.tex",
+   "citation": "Riess et al. 2022, ApJL 934, L7, doi:10.3847/2041-8213/ac5c5b, Table 2",
+   "licence": "CC BY 4.0 on the paper (publisher page text: original content may be used under CC BY 4.0; Crossref licence record); the repository copy carries no licence of its own"
+  }
+ ]
+}

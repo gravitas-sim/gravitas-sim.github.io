@@ -1,0 +1,32 @@
+{
+  "fieldRows": 1380,
+  "inWindowWithin1p5deg": 713,
+  "members": 711,
+  "meanCz": 6979.807760226233,
+  "sigmaCzClippedSd": 956.1007701359508,
+  "sigmaCz": 972.6355749094108,
+  "sigmaRestFrame": 950.5057734529423,
+  "published": {
+    "sigmaCz": 1038,
+    "err": 60,
+    "meanCz": 6917,
+    "meanErr": 47,
+    "n": 465,
+    "ref": "Colless & Dunn 1996, ApJ 458, 435"
+  },
+  "r6Pass": false,
+  "fidelity": {
+    "sigmaShipped": 972.6355749094107,
+    "rel": 1.1688533779180817e-16
+  },
+  "bytes": {
+    "raw": 13641,
+    "gzip": 6397,
+    "sha256": "fdd9d7b861076408b2997444fa8bbb1cb40cd8f9567f910c88cbdfbdf11edfa5"
+  },
+  "ceilings": {
+    "rawKiB": 16,
+    "gzipKiB": 7,
+    "ok": true
+  }
+}

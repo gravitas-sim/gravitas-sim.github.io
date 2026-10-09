@@ -1,0 +1,37 @@
+{
+  "queryRows": 2518,
+  "volumeLimitedRows": 718,
+  "fullFit": {
+    "n": 718,
+    "slope": -0.12267437835428478,
+    "a": 0.30668594588571196,
+    "seA": 0.011489829045963084
+  },
+  "thinning": {
+    "k": 1,
+    "n": 718,
+    "raw": 7918,
+    "gzip": 3031,
+    "ok": true
+  },
+  "shippedFit": {
+    "n": 718,
+    "a": 0.3067437554790669,
+    "seA": 0.011489914719059711
+  },
+  "published": {
+    "a": 0.25,
+    "err": 0.012,
+    "ref": "Bernardi et al. 2003, astro-ph/0301624 (Paper II), abstract"
+  },
+  "r6Pass": false,
+  "bytes": {
+    "raw": 7918,
+    "gzip": 3031,
+    "sha256": "9d463d7cf0352dd030072021e13078bff79bf5d5079512feda107c0b8ba12666"
+  },
+  "ceilings": {
+    "rawKiB": 12,
+    "gzipKiB": 5
+  }
+}
