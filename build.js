@@ -88,6 +88,7 @@ const DOC_PAGES = [
   'studio',
   'studio/lesson',
   'studio/course',
+  'studio/course/packs',
   'course',
   'lab3d',
   'mission',
@@ -528,6 +529,26 @@ async function buildDocPages() {
       outbase: 'js',
       splitting: true,
       chunkNames: 'kit-[hash]',
+      legalComments: 'none',
+    });
+  }
+
+  // Investigations in a course (/studio/course/packs/, REMIX.md): an entry of
+  // its own. It opens an instructor's investigation as the application does
+  // and judges it, which needs the lesson checker the course builder's route
+  // has no room for; nothing else imports it.
+  if (existsSync('js/course/packsPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/course/packsPage.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      outbase: 'js',
+      splitting: true,
+      chunkNames: 'course-packs-[hash]',
       legalComments: 'none',
     });
   }
