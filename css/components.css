@@ -4382,6 +4382,11 @@
     .inv-browser-header .ui-button {
       display: none;
     }
+    /* The floating close chip is pinned over this corner: keep the heading
+       and the paragraphs out from under it. */
+    .inv-browser-header {
+      padding-inline-end: calc(34px + var(--space-2));
+    }
     .inv-finish-actions {
       flex-direction: column-reverse;
     }
@@ -5130,7 +5135,9 @@
 
   .welcome-close {
     position: fixed;
-    top: var(--space-4);
+    /* Below the shell bar, not under it: the bar's Menu button sits at the
+       same corner and the close button used to cover most of it. */
+    top: calc(var(--shell-height, 0px) + var(--space-3));
     right: var(--space-4);
     z-index: 1;
 
@@ -5651,7 +5658,7 @@
     }
 
     .welcome-close {
-      top: var(--space-2);
+      top: calc(var(--shell-height, 0px) + var(--space-2));
       right: var(--space-2);
     }
   }
