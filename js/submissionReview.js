@@ -302,6 +302,22 @@ const esc = s =>
     c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]
   );
 
+/** A step's rubric criteria as a list (Prompt 79), or '' when it has none. */
+const criteriaHtml = step =>
+  Array.isArray(step?.rubricCriteria) && step.rubricCriteria.length
+    ? `<ul class="sr-criteria">${step.rubricCriteria
+        .map(
+          c =>
+            `<li>${esc(plain(c.name))}: ${(c.levels || [])
+              .map(
+                l =>
+                  `${esc(plain(l.label))}${Number.isFinite(l.points) ? ` (${l.points})` : ''} ${esc(plain(l.text))}`
+              )
+              .join(' / ')}</li>`
+        )
+        .join('')}</ul>`
+    : '';
+
 /** Lesson prose as text: its markup dropped and its entities read. */
 const plain = s => decodeEntities(String(s ?? '').replace(/<[^>]*>/g, ''));
 
@@ -330,7 +346,7 @@ function writtenAnswers(s) {
         rubric
           ? `<dd class="sr-rubric">${esc(t('sub.written.rubric'))}: ${esc(plain(rubric))}</dd>`
           : ''
-      }`;
+      }${criteriaHtml(steps.get(q.sid)) && `<dd>${criteriaHtml(steps.get(q.sid))}</dd>`}`;
     })
     .join('')}</dl></details>`;
 }
@@ -590,7 +606,7 @@ function judgmentSection(records) {
           step?.rubric
             ? `<p class="sr-rubric">${esc(t('sub.written.rubric'))}: ${esc(plain(step.rubric))}</p>`
             : ''
-        }
+        }${criteriaHtml(step)}
         <label for="mk-${i}">${esc(t('sub.judge.mark', { max: q.pointsPossible }))}</label>
         <input id="mk-${i}" class="ui-input is-compact" type="number" min="0" max="${q.pointsPossible}" step="0.5" ${data} data-field="mark" value="${esc(m?.points ?? '')}" />
         <label for="mc-${i}">${esc(t('sub.judge.comment'))}</label>

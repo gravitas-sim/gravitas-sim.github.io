@@ -133,8 +133,11 @@ export function entryFor(step, index) {
 
   if (step.reflect) entry.reflect = true;
 
-  if (step.kind === 'short')
+  if (step.kind === 'short') {
     entry.rubric = step.rubric ? plainText(step.rubric) : null;
+    // Criteria and levels (Prompt 79, js/rubric.js), raw: the documents plain them.
+    if (step.rubricCriteria) entry.criteria = step.rubricCriteria;
+  }
 
   if (step.type === 'measure') {
     entry.fields = (step.fields || []).map(f => ({
