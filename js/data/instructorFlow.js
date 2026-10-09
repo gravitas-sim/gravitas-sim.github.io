@@ -15,6 +15,23 @@ export default {
   format: 'gravitas.instructor-flow',
   formatVersion: 2,
   lessons: {
+    'color-and-temperature': [
+      {
+        from: 'everything-glows',
+        to: 'three-peaks',
+        text: 'A blackbody and its peak. Students predict how heating moves the peak, then measure three peaks and see that peak times temperature is constant.',
+      },
+      {
+        from: 'peak-of-4000',
+        to: 'why-not-green',
+        text: 'Wien’s law in both directions, then the Sun’s green peak and why it does not look green.',
+      },
+      {
+        from: 'three-colors',
+        to: 'what-you-worked-out',
+        text: 'A color index as a thermometer: three B − V readings, a temperature recovered from a color, the limits of a blackbody, and a written comparison of the two methods.',
+      },
+    ],
     'keplers-laws': [
       {
         from: 'eight-minutes-of-arc',

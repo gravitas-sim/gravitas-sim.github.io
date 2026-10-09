@@ -16,6 +16,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'binary-star-planets': 'engine',
   'black-holes': 'model',
   'butterfly-effect': 'engine',
+  'color-and-temperature': 'model',
   'design-the-schedule': 'engine',
   'detect-this-planet': 'model',
   'goldilocks-question': 'model',

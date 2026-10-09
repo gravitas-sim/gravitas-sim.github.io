@@ -307,4 +307,16 @@ export const MANIFEST = [
     gradedCount: 14,
     objectiveCount: 5,
   },
+  {
+    id: 'color-and-temperature',
+    title: 'Color y temperatura',
+    subtitle: 'Predice y luego mide cómo se ve algo caliente que brilla',
+    duration: '30-40 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/scenarios/solar-system.webp',
+    depths: 3,
+    stepCount: 11,
+    gradedCount: 9,
+    objectiveCount: 5,
+  },
 ];

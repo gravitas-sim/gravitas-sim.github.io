@@ -3938,4 +3938,12 @@ export const ES_DEFERRED = {
   'assign.kit': 'Abrir el kit de distribución',
   'assign.preview': 'Abrir como estudiante',
   'assign.addCourse': 'Añadir a un curso',
+  'lessonFn.eachDoublingOfTheTemperatureHalves159':
+    'Cada vez que se duplica la temperatura, la longitud de onda del máximo se reduce a la mitad, así que máximo × temperatura es siempre igual: unos 2,9 millones de nm·K. Esa constante es la ley de Wien.',
+  'lessonFn.readThePeakWavelengthRowAt100':
+    'Lee la fila «Longitud de onda del máximo» a cada temperatura, en nm. Al duplicar la temperatura debería reducirse a la mitad.',
+  'lessonFn.theCoolerTheBlackbodyTheLarger163':
+    'Cuanto más frío el cuerpo negro, mayor el índice de color. Un color es un termómetro y, a diferencia de la longitud de onda del máximo, solo necesita dos medidas ordinarias de brillo.',
+  'lessonFn.setTheBandsToBV94':
+    'Pon las bandas en B − V y lee la fila del índice de color. Lo más frío es más rojo, es decir, mayor.',
 };

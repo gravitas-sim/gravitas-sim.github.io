@@ -11,106 +11,306 @@
 // every answer already saved against it is orphaned. See
 // js/investigations/progressSchema.js.
 //
-// Scaffolded by tools/new-investigation.mjs. Run `npm run author:check` as you
-// write - it validates every step against the widget registry, the scenario
-// catalog and the grader - and `?author=color-and-temperature&step=<n>` to look at one.
+// Every expected value is computed from the radiation kernel (RADIATION.md) and
+// held to it by tests/lightInvestigations.test.js, which also grades each step
+// headlessly with the lesson's own checker.
 // =============================================================================
+
+/** Three hypothetical stars on the canvas: a display, not an orbit. */
+const STARS = {
+  spacing: 95,
+  fit: true,
+  stars: [
+    { role: 'cool', name: 'Cool', teffK: 3000, lumSun: 0.073 },
+    { role: 'sun', name: 'The Sun', teffK: 5772, lumSun: 1 },
+    { role: 'hot', name: 'Hot', teffK: 10000, lumSun: 9 },
+  ],
+};
+const BB = (extra = {}) => ({ id: 'blackbody', ...extra });
 
 const COLOR_AND_TEMPERATURE = {
   id: 'color-and-temperature',
   thumbnail: 'images/scenarios/solar-system.webp',
-  title: "Color and Temperature",
-  subtitle: "One line on what the student will measure",
+  title: 'Color and Temperature',
+  subtitle: 'Predict, then measure, what a hot glowing thing looks like',
   duration: '30-40 min',
   level: 'Introductory astronomy',
-  // Subject tags, for the browser's filters. Pick from the vocabulary the
-  // other lessons already use - chaos, compact-objects, exoplanets, galaxies,
-  // gravity, habitability, observing, orbits, resonance, solar-system,
-  // spaceflight, stars - and add a new one only with a name for it in both
-  // js/i18n/en.deferred.js and js/i18n/es.deferred.js as inv.tag.<tag>, which
-  // tests/investigationBrowse.test.js checks.
-  tags: ['orbits'],
+  audience: 'intro',
+  textbook: { chapter: 5, section: '5.2' },
+  courseLevel: 'survey',
+  depths: ['core', 'quantitative', 'advanced'],
+  mathematics: 'algebra',
+  prerequisites: [],
+  tags: ['stars', 'observing'],
   lock: { placement: true, inspector: true },
   objectives: [
-    'State what the student will be able to do, in a verb they can be tested on',
-    'One objective per thing the lesson actually asks for',
+    'Predict how the peak wavelength of a glowing object changes with its temperature, then measure it',
+    'Use Wien’s law to find a temperature from a peak wavelength',
+    'Explain why the peak wavelength is not the color the eye sees',
+    'Recover a temperature from a color index',
+    'Say where a real star departs from a blackbody',
   ],
   steps: [
     {
-      sid: 'where-this-starts',
+      sid: 'everything-glows',
+      stage: STARS,
       type: 'read',
-      title: 'Where this starts',
-      body: `Set the scene. Two or three short paragraphs; separate them with a
-             blank line.`,
-      setup: {
-        scenario: 'solar-system',
-        seed: 'color-and-temperature',
-        camera: { zoom: 1, pan: { x: 0, y: 0 } },
-        paused: false,
-      },
+      title: 'Everything glows',
+      body: `A hot stove ring goes dull red, then orange, then yellow-white. The
+             light it gives off depends on its temperature and on almost
+             nothing else. An object that absorbs everything and gives off
+             light by temperature alone is a <strong>blackbody</strong>, and a
+             star is close enough to one to be worth studying as one.
+             \n\nThe instrument draws a blackbody's light against wavelength.
+             It is a computed curve (Planck's law), not a measurement of a
+             star. The three stars on the canvas are hypothetical, set to 3,000,
+             5,772 and 10,000&nbsp;K.`,
+      tool: BB({ values: { T: 5772 } }),
     },
     {
-      sid: 'commit-before-you-measure',
+      sid: 'predict-the-peak',
+      stage: STARS,
       type: 'predict',
-      title: 'Commit before you measure',
-      body: `Ask for a commitment before there is any evidence. The point is the
-             commitment, so these are recorded whether or not they are right.`,
-      prompt: 'What do you expect to happen?',
+      reveal: 'three-peaks',
+      title: 'Predict the peak',
+      body: `Every blackbody curve has a peak: the wavelength at which it gives
+             off the most light per unit of wavelength. Do not move the slider
+             yet.`,
+      prompt:
+        'If a blackbody is heated from 3,000 K to 6,000 K, its peak wavelength&hellip;',
       options: [
-        'The first possibility',
-        'The second possibility',
-        'The third possibility',
+        'doubles',
+        'is cut in half',
+        'stays where it is, and only the curve grows',
+        'drops to about 70 percent of what it was',
       ],
       answer: 1,
-      because:
-        'Why that is the answer, and why the plausible wrong ones are wrong.',
-    },
-    {
-      sid: 'look-at-it',
-      type: 'explore',
-      title: 'Look at it',
-      body: `Free play, with a checklist of things worth noticing.`,
-      checklist: [
-        'Something specific to watch for',
-        'Something else, that the next question depends on',
+      hints: [
+        'Hotter things give off light of shorter wavelength: think of a metal going from red to white.',
       ],
+      because:
+        'Cut in half. The peak wavelength is inversely proportional to temperature (Wien’s law): twice as hot, half the wavelength. The next step measures it.',
+      tool: BB({ values: { T: 3000 } }),
     },
     {
-      sid: 'write-down-what-you-measured',
+      sid: 'three-peaks',
+      stage: STARS,
       type: 'measure',
-      title: 'Write down what you measured',
-      body: `Ask for numbers. Every field needs an id, a label and a unit; a
-             \`hint\` is the value you expect, and \`npm run author:check\` feeds
-             the hints through \`validate\` to prove it accepts your own answer.`,
+      title: 'Measure three peaks',
+      body: `Set the temperature to each value below and read the peak
+             wavelength from the list under the plot.`,
       fields: [
-        { id: 'value', label: 'The thing measured', unit: 'AU', hint: '1' },
+        { id: 'p3', label: 'Peak at 3,000 K', unit: 'nm', hint: '965.9' },
+        { id: 'p6', label: 'Peak at 6,000 K', unit: 'nm', hint: '483' },
+        { id: 'p12', label: 'Peak at 12,000 K', unit: 'nm', hint: '241.5' },
+        {
+          id: 'prod',
+          label: 'Peak × temperature at 6,000 K',
+          unit: 'nm·K',
+          decimals: 0,
+          compute: v => v.p6 * 6000,
+        },
       ],
       validate: v => {
-        if (!Number.isFinite(v.value)) return null;
-        if (v.value <= 0) {
-          return { level: 'error', message: 'That has to be a positive number.' };
+        if (![v.p3, v.p6, v.p12].every(Number.isFinite)) return null;
+        const ok = (x, want) => Math.abs(x - want) <= 0.015 * want;
+        if (ok(v.p3, 965.9) && ok(v.p6, 483) && ok(v.p12, 241.5)) {
+          return {
+            level: 'ok',
+            message:
+              'Each doubling of the temperature halves the peak wavelength, so peak × temperature is the same every time: about 2.9 million nm·K. That constant is Wien’s law.',
+          };
         }
-        return { level: 'ok', message: 'That is the right sort of value.' };
+        return {
+          level: 'error',
+          message:
+            'Read the “Peak wavelength” row at each temperature, in nm. Doubling the temperature should halve it.',
+        };
       },
+      tool: BB({ values: { T: 3000 } }),
     },
     {
-      sid: 'use-it',
+      sid: 'peak-of-4000',
+      stage: STARS,
       type: 'question',
       kind: 'numeric',
-      title: 'Use it',
-      body: `Ask them to do something with the number they measured.`,
-      prompt: 'What do you get?',
-      answer: 1,
-      tolerance: 0.1,
-      unit: 'AU',
-      because: 'The working, in a sentence or two.',
+      title: 'Use the rule',
+      body: `Peak × temperature is a constant, about 2.898 million nm·K. Use it
+             before you check it with the instrument.`,
+      prompt: 'Peak wavelength of a 4,000 K blackbody',
+      unit: 'nm',
+      answer: 724.4,
+      tolerance: 15,
+      hints: [
+        'Divide the constant by the temperature.',
+        'The units come out in nm because the constant is in nm·K.',
+      ],
+      worked: '2,897,772 nm·K ÷ 4,000 K = 724.4 nm.',
+      feedback: {
+        close:
+          'Close. Divide the constant by the temperature, with no other factor.',
+        'wrong-order-of-magnitude':
+          'A power of ten out. The peak of a star-like blackbody is in or near the visible, hundreds of nanometers.',
+        off: 'Wien’s law gives wavelength = constant ÷ temperature.',
+      },
+      tool: BB({ values: { T: 4000 } }),
+    },
+    {
+      sid: 'temperature-from-peak',
+      stage: STARS,
+      type: 'question',
+      kind: 'numeric',
+      title: 'Run it backwards',
+      body: `A star’s spectrum peaks at 380&nbsp;nm, at the violet edge of the
+             visible. Wien’s law works either way round.`,
+      prompt: 'Temperature of a blackbody whose spectrum peaks at 380 nm',
+      unit: 'K',
+      answer: 7626,
+      tolerance: 150,
+      hints: [
+        'Temperature = constant ÷ peak wavelength.',
+        'Keep the wavelength in nm so the units match the constant.',
+      ],
+      worked: '2,897,772 nm·K ÷ 380 nm = 7,626 K.',
+      feedback: {
+        close:
+          'Close. Divide the constant by the wavelength, not the other way round.',
+        'wrong-order-of-magnitude':
+          'A power of ten out. Star surfaces run from a few thousand to a few tens of thousands of kelvin.',
+        off: 'Temperature = constant ÷ wavelength, with the wavelength in nm.',
+      },
+      tool: BB({ values: { T: 7626 } }),
+    },
+    {
+      sid: 'why-not-green',
+      stage: STARS,
+      type: 'question',
+      kind: 'choice',
+      title: 'The Sun’s peak is green',
+      body: `Set the Sun’s temperature. Its peak is at about 502&nbsp;nm, which
+             is green. The Sun does not look green.`,
+      prompt: 'Why not?',
+      options: [
+        'The peak is a single wavelength; the eye adds up all the visible light, and the curve is broad',
+        'The Sun is not a blackbody, so Wien’s law does not apply',
+        'Earth’s atmosphere turns the light white',
+        'The peak is really in the infrared',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'peak-is-color',
+          option: 3,
+          say: 'The peak is in the visible; check the position of the dashed line against the shaded band.',
+        },
+      ],
+      hints: ['Look at how wide the curve is next to the shaded visible band.'],
+      because:
+        'The curve is broad: the Sun gives off plenty of light across the whole visible range, and the eye mixes it into a near-white. The peak wavelength says where the most light is, not what color a thing looks.',
+      tool: BB({ values: { T: 5772 } }),
+    },
+    {
+      sid: 'three-colors',
+      stage: STARS,
+      type: 'measure',
+      title: 'Measure a color index',
+      body: `Astronomers measure color as a difference of magnitudes through two
+             filters. With the bands set to <strong>B &minus; V</strong>, read
+             the color index at each temperature. A larger number is redder.
+             The swatch shows roughly how the blackbody looks.`,
+      fields: [
+        { id: 'c3', label: 'B − V at 3,000 K', unit: '', hint: '1.69' },
+        { id: 'c6', label: 'B − V at 6,000 K', unit: '', hint: '0.6' },
+        { id: 'c10', label: 'B − V at 10,000 K', unit: '', hint: '0.15' },
+      ],
+      validate: v => {
+        if (![v.c3, v.c6, v.c10].every(Number.isFinite)) return null;
+        const ok = (x, want) => Math.abs(x - want) <= 0.05;
+        if (ok(v.c3, 1.69) && ok(v.c6, 0.6) && ok(v.c10, 0.15)) {
+          return {
+            level: 'ok',
+            message:
+              'The cooler the blackbody, the larger the color index. A color is a thermometer, and unlike a peak wavelength it needs only two ordinary measurements of brightness.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Set the bands to B − V and read the color index row. Cooler should be redder, which is larger.',
+        };
+      },
+      tool: BB({ values: { T: 3000, pair: 0 } }),
+    },
+    {
+      sid: 'temperature-from-color',
+      stage: STARS,
+      type: 'question',
+      kind: 'numeric',
+      title: 'Find the temperature from the color',
+      body: `A star has B &minus; V = 0.82. Move the temperature until the
+             explorer gives that color index.`,
+      prompt: 'Temperature of the blackbody with B − V = 0.82',
+      unit: 'K',
+      answer: 5000,
+      tolerance: 250,
+      hints: [
+        'The index falls as the temperature rises, so move the slider until the row reads 0.82.',
+      ],
+      worked:
+        'At the temperature where the B − V row reads 0.82, the blackbody is a little cooler than the Sun.',
+      feedback: {
+        close: 'Close. Nudge the slider and watch the color index row.',
+        'wrong-order-of-magnitude':
+          'A power of ten out. Set the slider first, then read the temperature from its label.',
+        off: 'Cooler is redder is larger. If your index is too large, raise the temperature.',
+      },
+      tool: BB({ values: { T: 6000, pair: 0 } }),
+    },
+    {
+      sid: 'real-stars-differ',
+      stage: STARS,
+      type: 'question',
+      kind: 'choice',
+      title: 'Where the model stops',
+      body: `A real star is not a perfect blackbody. Its atmosphere absorbs at
+             many wavelengths (the lines of the next investigation) and its
+             color is measured through real filters.`,
+      prompt: 'A color temperature found this way is best described as&hellip;',
+      options: [
+        'the temperature of the blackbody that would have this color',
+        'exactly the star’s surface temperature',
+        'the temperature of the star’s core',
+        'meaningless, because stars are not blackbodies',
+      ],
+      answer: 0,
+      hints: ['It is the answer to “which blackbody matches?”'],
+      because:
+        'It is the blackbody temperature that matches the color. It is close to the surface (effective) temperature for many stars and differs from it by the effects of the lines and edges in the real spectrum.',
+      tool: BB({ values: { T: 5000, pair: 0 } }),
+    },
+    {
+      sid: 'one-sentence',
+      stage: STARS,
+      type: 'question',
+      kind: 'short',
+      reflect: true,
+      title: 'In your own words',
+      body: `Two ways to take a temperature from light have appeared: a peak
+             wavelength and a color index.`,
+      prompt:
+        'Which would you rather use on a faint star, and why? Say what each needs from the observation.',
+      tool: BB({ values: { T: 5772 } }),
     },
     {
       sid: 'what-you-worked-out',
+      stage: STARS,
       type: 'read',
       title: 'What you worked out',
-      body: `Close the lesson. Say what they established, and what it does not
-             yet settle.`,
+      body: `A blackbody’s peak wavelength is the constant 2.898 million nm·K
+             divided by its temperature. Its color index also falls steadily
+             with temperature, and it is easier to measure on a faint star.
+             Neither is the whole story: a real spectrum has lines in it, and
+             the next investigation reads them.`,
     },
   ],
 };

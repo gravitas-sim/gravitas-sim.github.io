@@ -47,6 +47,8 @@ const EXTENSIONS = {
   'weighing-stars': () =>
     import('../data/investigations/depth/weighing-stars.js'),
   'missing-mass': () => import('../data/investigations/depth/missing-mass.js'),
+  'color-and-temperature': () =>
+    import('../data/investigations/depth/color-and-temperature.js'),
 };
 
 /** Their Spanish, loaded only for a Spanish reader. */
@@ -58,6 +60,8 @@ const WORDS = {
       import('../data/investigations/depth/es/transit-photometry.js'),
     'weighing-stars': () =>
       import('../data/investigations/depth/es/weighing-stars.js'),
+    'color-and-temperature': () =>
+      import('../data/investigations/depth/es/color-and-temperature.js'),
     'missing-mass': () =>
       import('../data/investigations/depth/es/missing-mass.js'),
   },

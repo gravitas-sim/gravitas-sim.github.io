@@ -108,4 +108,8 @@ export const BROWSE_META = {
     tags: ['gravity', 'orbits'],
     numericCount: 1,
   },
+  'color-and-temperature': {
+    tags: ['observing', 'stars'],
+    numericCount: 3,
+  },
 };

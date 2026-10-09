@@ -17,21 +17,51 @@ const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
   'color-and-temperature': {
-    topic: 'The one-line topic, for the curriculum map',
+    topic:
+      'Blackbody radiation: Wien’s law, color indices, and where a blackbody stops being a star',
     difficulty: 'Introductory',
-    placement: 'Where this sits in a course, and what it follows',
+    placement:
+      'After students have met the idea of a star’s temperature (the H-R diagram) and before they read spectral lines (Lines and Motion). It supports OpenStax Astronomy 2e section 5.2 (radiation laws) and section 17.2 (colors of stars).',
     overview:
-      'A paragraph for the instructor: what the lesson does and what it is for.',
-    priorKnowledge: ['What a student needs before starting'],
-    keyConcepts: ['The ideas the lesson is built on'],
-    flow: ['A sentence per phase of the lesson'],
-    features: ['Which parts of Gravitas the lesson uses'],
-    misconceptions: ['A wrong idea students bring, and what corrects it'],
-    teachingNotes: ['Something worth saying to a class'],
-    discussion: ['A question worth asking out loud'],
-    extensions: ['Where a student who finishes early can go'],
+      'Students predict how a blackbody’s peak wavelength moves with temperature, measure it on a computed Planck curve, and use Wien’s law in both directions. They then measure a B − V color index, recover a temperature from it, and are asked why the Sun’s green peak does not make it look green and how far a blackbody is a model of a star. Every value comes from the radiation kernel (RADIATION.md); the curve is computed, never presented as an observation.',
+    priorKnowledge: [
+      'That hot objects glow, and that a star has a surface temperature',
+      'Dividing one number by another, and reading a logarithmic wavelength axis',
+    ],
+    keyConcepts: [
+      'Wien’s law: peak wavelength × temperature is constant',
+      'The peak is not the color: the curve is broad and the eye adds the whole visible range',
+      'A color index is a difference of two magnitudes through two filters, and falls as temperature rises',
+      'A color temperature is the temperature of the blackbody that matches the color, not the surface temperature itself',
+    ],
+    flow: [
+      'Open the explorer on a hypothetical star set, predict the peak of a heated blackbody, then measure three peaks and find the constant.',
+      'Use the constant in both directions, then ask why a green peak is not a green Sun.',
+      'Measure B − V at three temperatures, recover a temperature from a color, and name the limits of the model.',
+    ],
+    features: [
+      'The blackbody explorer of the Light Lab, with bandpass overlays, a computed color swatch and the Wien peak in wavelength and in frequency',
+      'Quantitative depth: the Stefan–Boltzmann law and luminosity–radius–temperature. Advanced depth: g − r and B − V from the real filter curves.',
+    ],
+    misconceptions: [
+      'The peak wavelength is the color a thing looks. The Sun’s peak is green and it is white; the curve is broad.',
+      'The peak per unit frequency is c divided by the peak per unit wavelength. It is not: the readout gives both and says so.',
+      'A color temperature is the surface temperature. It is the matching blackbody’s, which differs through the lines and edges of the real spectrum.',
+    ],
+    teachingNotes: [
+      'The swatch is a display aid computed from the CIE 1931 curves; a blackbody hotter than about 9,000 K is bluer than sRGB can show, and the readout says so.',
+      'The explorer is a model. Do not let students quote its numbers as measurements of a star.',
+    ],
+    discussion: [
+      'Why does a color index need only two ordinary brightness measurements, while a peak wavelength needs a whole spectrum?',
+      'Two stars have the same B − V in different filter systems. Are they the same color?',
+    ],
+    extensions: [
+      'Lines and Motion reads the lines a blackbody does not have.',
+      'Compare the blackbody g − r with the Sun’s measured g − r and say what the lines do to it.',
+    ],
     modelNotes:
-      'What the simulation simplifies, and where that matters for this lesson.',
+      'Planck’s law with the exact SI constants; colors by integrating the blackbody through the Bessell & Murphy 2012 B and V and the SDSS g and r curves, photon-counting, Vega and AB zero points as stated in RADIATION.md. The displayed color uses the Wyman, Sloan and Shirley 2013 fit to the CIE 1931 curves. A real star has absorption lines and edges that this model leaves out.',
   },
 
   'twelve-nights': {
