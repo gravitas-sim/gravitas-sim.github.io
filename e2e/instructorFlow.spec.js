@@ -48,7 +48,7 @@ async function take(page, id) {
 }
 
 /** Build an activity from the adoption page, and return what the builder offers. */
-async function build(page, app) {
+async function build(page) {
   await quiet(page);
   await page.goto(`/teaching/investigation/${LESSON}/`);
   await expect(
@@ -75,8 +75,8 @@ async function build(page, app) {
 }
 
 test.describe('the instructor flow', () => {
-  test('from an adoption page to a gradebook file', async ({ page, app }) => {
-    const { link, kit, course } = await build(page, app);
+  test('from an adoption page to a gradebook file', async ({ page }) => {
+    const { link, kit, course } = await build(page);
     expect(new URL(link).searchParams.get('roster')).toBe('PHYS 101');
     expect(course).toContain('/studio/course/?activity=');
 
@@ -240,7 +240,7 @@ test.describe('the instructor flow', () => {
     page,
     app,
   }) => {
-    const { link } = await build(page, app);
+    const { link } = await build(page);
     await page.goto('/teaching/kit/');
     await page.locator('#kitPaste').fill(link);
     await page.locator('#kitGo').click();
@@ -269,14 +269,14 @@ test.describe('the instructor flow', () => {
     page,
     app,
   }) => {
-    const { kit } = await build(page, app);
+    const { kit } = await build(page);
     await page.goto(kit);
     await expect(page.locator('#kit')).toBeVisible();
     await expect(page.locator('#handout .kit-handout')).toHaveCount(1);
     const r = await new AxeBuilder({ page }).analyze();
     expect(r.violations.map(v => v.id)).toEqual([]);
     const wide = await page.evaluate(
-      () => document.documentElement.scrollWidth > innerWidth + 1
+      () => document.documentElement.scrollWidth > window.innerWidth + 1
     );
     expect(wide).toBe(false);
     await page.goto('/instructors/submissions/');
