@@ -1,0 +1,136 @@
+{
+  "schema": "gravitas.gradebook-result/1",
+  "identifier": "roster",
+  "policy": "latest",
+  "activities": [
+    {
+      "key": "a:wk3",
+      "id": "wk3",
+      "title": "Week 3: Kepler",
+      "pointsPossible": 13
+    },
+    {
+      "key": "a:wk4",
+      "id": "wk4",
+      "title": "Week 4",
+      "pointsPossible": 13
+    }
+  ],
+  "rows": [
+    {
+      "identifier": "S-1",
+      "nameAsTyped": "Ada Lovelace",
+      "rosterId": "S-1",
+      "activityKey": "a:wk3",
+      "activity": "Week 3: Kepler",
+      "lessonId": "keplers-laws",
+      "submission": 1,
+      "fingerprint": "10df065b333557",
+      "savedAt": "2026-09-02T10:00:00.000Z",
+      "attemptsConsidered": 1,
+      "attemptUsed": 1,
+      "checked": 5,
+      "correct": 5,
+      "autoPoints": 5,
+      "instructorPoints": 1,
+      "instructorMarked": 1,
+      "awaiting": 0,
+      "instructorComments": [
+        "Names the speed-up."
+      ],
+      "points": 6,
+      "pointsPossible": 13,
+      "percent": 0.46153846153846156,
+      "completion": 0.2608695652173913,
+      "changedSteps": 0,
+      "evidenceMismatch": false
+    },
+    {
+      "identifier": "S-2",
+      "nameAsTyped": "=HYPERLINK(\"http://example.invalid\",\"x\")",
+      "rosterId": "S-2",
+      "activityKey": "a:wk3",
+      "activity": "Week 3: Kepler",
+      "lessonId": "keplers-laws",
+      "submission": 2,
+      "fingerprint": "07014fe725f362",
+      "savedAt": "2026-09-02T10:00:00.000Z",
+      "attemptsConsidered": 1,
+      "attemptUsed": 1,
+      "checked": 2,
+      "correct": 1,
+      "autoPoints": 1,
+      "instructorPoints": null,
+      "instructorMarked": 0,
+      "awaiting": 0,
+      "instructorComments": [],
+      "points": 1,
+      "pointsPossible": 13,
+      "percent": 0.07692307692307693,
+      "completion": 0.2608695652173913,
+      "changedSteps": 0,
+      "evidenceMismatch": false
+    },
+    {
+      "identifier": "S-3",
+      "nameAsTyped": "Cleo",
+      "rosterId": "S-3",
+      "activityKey": "a:wk3",
+      "activity": "Week 3: Kepler",
+      "lessonId": "keplers-laws",
+      "submission": 4,
+      "fingerprint": "16de52563031f5",
+      "savedAt": "2026-09-03T09:00:00.000Z",
+      "attemptsConsidered": 2,
+      "attemptUsed": 2,
+      "checked": 5,
+      "correct": 5,
+      "autoPoints": 5,
+      "instructorPoints": 0.5,
+      "instructorMarked": 1,
+      "awaiting": 0,
+      "instructorComments": [
+        "=Needs the second law"
+      ],
+      "points": 5.5,
+      "pointsPossible": 13,
+      "percent": 0.4230769230769231,
+      "completion": 0.2608695652173913,
+      "changedSteps": 0,
+      "evidenceMismatch": false
+    },
+    {
+      "identifier": "S-1",
+      "nameAsTyped": "Ada Lovelace",
+      "rosterId": "S-1",
+      "activityKey": "a:wk4",
+      "activity": "Week 4",
+      "lessonId": "keplers-laws",
+      "submission": 6,
+      "fingerprint": "0ec246baba9375",
+      "savedAt": "2026-09-02T10:00:00.000Z",
+      "attemptsConsidered": 1,
+      "attemptUsed": 1,
+      "checked": 1,
+      "correct": 1,
+      "autoPoints": 1,
+      "instructorPoints": null,
+      "instructorMarked": 0,
+      "awaiting": 0,
+      "instructorComments": [],
+      "points": 1,
+      "pointsPossible": 13,
+      "percent": 0.07692307692307693,
+      "completion": 0.2608695652173913,
+      "changedSteps": 0,
+      "evidenceMismatch": false
+    }
+  ],
+  "skipped": [
+    {
+      "submission": 5,
+      "name": "Dev",
+      "activity": "Week 3: Kepler"
+    }
+  ]
+}
