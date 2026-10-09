@@ -427,6 +427,7 @@ const STATUS_WORDS = {
   'cc-by-4.0': 'CC BY 4.0',
   'attribution-requested': 'no license; attribution requested',
   'no-license-stated': 'no license stated',
+  'cc-by-nc-3.0-igo': 'CC BY-NC 3.0 IGO (non-commercial use only)',
 };
 
 /** What a citation points at, as plain text. */

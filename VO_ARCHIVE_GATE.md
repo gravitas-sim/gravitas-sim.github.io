@@ -314,6 +314,10 @@ IndexedDB.
 - The curated catalog's license allowlist (`tools/catalog.mjs`) does not
   accept NC terms, so an import can never become a catalog pack. That is
   deliberate.
+  One exception was made later, for one pack and by the owner in so many
+  words (2026-10-09, `DECISION_REGISTER.md` D-RAD-01): the Gaia G, G_BP and
+  G_RP passbands ship as `radiation-gaia-bandpasses`, labelled non-commercial.
+  The catalog's allowlist is unchanged, and no archive answer becomes a pack.
 - The two fixtures on the spike branch are 14.6 KB of CDS answers, kept for
   tests. They carry the same terms.
 

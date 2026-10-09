@@ -28,6 +28,7 @@ const LICENSE_WORDS = {
   'public-domain': 'public domain',
   'cc-by-4.0': 'CC BY 4.0',
   'no-license-stated': 'no license stated',
+  'cc-by-nc-3.0-igo': 'CC BY-NC 3.0 IGO (non-commercial use only)',
 };
 
 /** The license an item's content is under, in words. */

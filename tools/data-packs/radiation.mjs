@@ -1,5 +1,5 @@
 // =============================================================================
-// The radiation kernel's data: four packs (Roadmap II, Prompt 82)
+// The radiation kernel's data: five packs (Roadmap II, Prompt 82)
 // -----------------------------------------------------------------------------
 //   radiation-bandpasses   Johnson-Cousins UBVRI, SDSS ugriz, TESS, 2MASS JHK:
 //                          photon-counting responses, and the AB - Vega offset of
@@ -7,6 +7,11 @@
 //   radiation-lines        the strongest optical lines, from NIST ASD
 //   radiation-extinction   the Cardelli, Clayton & Mathis 1989 law's coefficients
 //   radiation-bolometric   Flower 1996 BC_V(Teff) as corrected by Torres 2010
+//   radiation-gaia-bandpasses  the Gaia (E)DR3 G, G_BP, G_RP passbands and zero
+//                          points (Riello et al. 2021). A pack of its own because
+//                          it is the one pack under a non-commercial licence
+//                          (CC BY-NC 3.0 IGO, status `cc-by-nc-3.0-igo`), by the
+//                          owner's explicit exception; no other band is covered.
 //
 // Each goes through the same build, check and rebuild as every other data pack
 // (tools/build-data-packs.mjs, DATA_PACKS.md). Raw products are fetched once into
@@ -15,10 +20,11 @@
 // number is read from a pinned file, or typed from a cited table and then held to
 // that table's other published numbers by validate().
 //
-// Not shipped, and why (RADIATION.md, "Blockers"): the Gaia G, G_BP and G_RP
-// passbands (the ESA/DPAC table is CC BY-NC 3.0 IGO, which the project does not
-// redistribute; see VO_ARCHIVE_GATE.md) and TiO band-head wavelengths (no
-// retrievable, citable table was found).
+// Not shipped, and why (RADIATION.md, "Blockers"): TiO band-head wavelengths (no
+// retrievable, citable table was found). The Gaia passbands were held back at
+// first for their CC BY-NC 3.0 IGO licence (VO_ARCHIVE_GATE.md: an NC answer is
+// not redistributed) and are shipped as the one exception the owner made in so
+// many words (DECISION_REGISTER.md, prompt 82).
 // =============================================================================
 
 import { Buffer } from 'node:buffer';
@@ -33,6 +39,7 @@ import {
   abMag,
   decodeBand,
   pivotWavelength,
+  meanPhotonWavelength,
   sedFromSamples,
   blackbodySed,
   refineBand,
@@ -481,7 +488,7 @@ const bandsPack = {
         statement:
           'Response functions are measured, tabulated instrument properties published by their teams or archives (BM12 Table 1; the SDSS, TESS and 2MASS archives), shipped here resampled to a uniform grid with the AB - Vega offsets computed from the public-domain CALSPEC Vega spectrum. The TESS and 2MASS archives and the SDSS publish them for use with acknowledgement; no licence text accompanies the BM12 table or the SVO copy of the 2MASS curves.',
         basis:
-          "A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. The Gaia passbands were not included because Gaia data are CC BY-NC 3.0 IGO. If Carl prefers no reproduction of the BM12 table, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md).",
+          "A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. If Carl prefers no reproduction of the BM12 table, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md).",
       },
       retrieved: '2026-10-09',
       columns: [
@@ -562,7 +569,7 @@ const bandsPack = {
         'The AB - Vega offset is computed here against the Vega spectrum of Bohlin 2014 with Vega = 0.03 mag in every band. It is not the zero point any survey published, except where the validation says it reproduces one. SDSS and 2MASS reproduce Willmer 2018 to better than 0.01 mag; UBVRI to 0.01 as well (the spectrum is integrated at steps of at most 1 nm; the Balmer jump and lines of Vega alias if it is sampled only at the 50 and 100 A nodes of the BM12 tables). BM12 own Table 3 offsets for U and B (0.784, -0.107) differ from those of Willmer by 0.02 to 0.03 and are not reproduced. TESS has no published AB - Vega offset and none is quoted.',
         "The SDSS curves are the 2001 preliminary curves of J. Gunn and include the atmosphere at 1.3 airmasses. Magnitudes through them are true AB magnitudes (the kernel integrates f_nu against the curve); native SDSS u and z magnitudes differ from AB by about -0.04 and +0.02 mag (the survey's AB offsets) and the kernel does not apply them. They are not the Doi et al. 2010 curves.",
         "2MASS: here Vega is 0.03 mag in every band, as for the other systems; real 2MASS catalogue magnitudes put Vega near 0 in J, H and Ks, so a catalogue magnitude differs from this kernel's Vega magnitude by 0.024 to 0.03 mag.",
-        'Gaia G, G_BP and G_RP are not here (RADIATION.md, Blockers).',
+        'Gaia G, G_BP and G_RP are not here: they are in radiation-gaia-bandpasses, a pack of its own because it is under a non-commercial licence (RADIATION.md, Blockers).',
       ],
       ...COMMON,
     };
@@ -1198,9 +1205,426 @@ const bolometricPack = {
   },
 };
 
+// =============================================================================
+// 5. The Gaia (E)DR3 passbands and zero points: the one non-commercial pack
+// =============================================================================
+//
+// Source: CDS J/A+A/649/A3, Riello et al. 2021, A&A 649, A3 (ESA's
+// GaiaEDR3_passbands_zeropoints.zip holds the same two files byte for byte).
+// One G, one G_BP and one G_RP curve: these are the passbands Gaia EDR3 and DR3
+// used and the zero points below belong to them. The DR2 passbands (nominal,
+// "revised" and Weiler's) and the pre-launch curves of Jordi et al. 2010 are
+// different sets and are not here; the source offers no second EDR3 version of G.
+//
+// Convention. Riello et al. 2021 Eqs. 13-16 weight the passband S by lambda
+// (mean energy flux = Int f S lambda dlambda / Int S lambda dlambda), so S is a
+// photon-counting response, the convention of the kernel and of every other pack.
+// The CDS column is labelled "transmissivity" and its unit "mag", which is a
+// labelling error in the ReadMe (the numbers peak at 0.72, 0.67 and 0.74).
+// Each curve is shipped normalised to a peak of 1, as the other bands are.
+//
+// Tolerances, fixed here BEFORE any number below was compared with its published
+// counterpart (measured afterwards; RADIATION.md records the results):
+//
+//  - Zero points. The AB - Vega offset of a band is ZP_AB - ZP_VEGAMAG of
+//    zeropt.dat. The paper's Table 3 prints the zero points to 4 decimals, so
+//    the two sources agree to 1.5e-4 mag at most (two rounded values subtracted).
+const GAIA_ZP_TOL = 0.00015;
+//  - Pivot wavelength and mean photon wavelength vs Riello Table 3: 0.1 nm. The
+//    table prints two decimals; our integral is the kernel's trapezoid on the
+//    1 nm table and theirs is of unstated quadrature, so a tenth of the step.
+const GAIA_LAMBDA_TOL_NM = 0.1;
+//  - FWHM vs Table 3: 1 nm, the grid step. The width between the outermost
+//    half-maximum crossings, found by linear interpolation; the paper does not
+//    say how it found its own.
+const GAIA_FWHM_TOL_NM = 1;
+//  - Rounding the response to 1/100000 of its peak moves a blackbody or Vega
+//    magnitude by less than 0.001 mag (the radiation-bandpasses guard is 0.003;
+//    this one is tighter because the grid is not resampled, only rounded).
+const GAIA_ROUNDING_TOL = 0.001;
+//  - The Sun's G_BP - G_RP from a 5772 K blackbody, on the Vega scale, against
+//    the real Sun's 0.82 (Casagrande & VandenBerg 2018, MNRAS 479, L102, Table 1:
+//    0.815 to 0.828 over three solar spectra and three passband realisations;
+//    those are the DR2 passbands, EDR3's differ by mmag). A blackbody is not the
+//    Sun: line blanketing takes blue light that a Planck curve keeps, which moves
+//    a G dwarf's BP - RP by a few hundredths of a mag, so the tolerance is 0.06
+//    and the check catches a wrong band or zero point (an error of 0.1 mag or
+//    more), not the fourth decimal.
+const GAIA_SUN_COLOUR = 0.82;
+const GAIA_SUN_COLOUR_TOL = 0.06;
+const SUN_TEFF_K = 5772;
+//  - Vega, in the Gaia system, is 0 by definition. Through these bands the CALSPEC
+//    spectrum alpha_lyr_stis_008 gives a Gaia Vega magnitude, AB(Vega) minus the
+//    published offset, that must be within 0.04 mag of zero in each of the three
+//    bands: Gaia ties Vega to its flux scale to 1 percent (Riello Sect. 7, 0.011
+//    mag) and uses a different Kurucz model, and Casagrande & VandenBerg 2018
+//    Table 1 find 0.033 to 0.035 mag for G.
+//    CALSPEC Vega is therefore NOT used to make the offsets (Gaia's own are
+//    used): the check is of the passbands and zero points against each other,
+//    through a spectrum neither was derived from.
+const GAIA_VEGA_TOL = 0.04;
+
+const GAIA_SCALE = 100000;
+// id, name, column of the CDS table (lambda, then value and error pairs)
+const GAIA_BANDS = [
+  ['G', 'Gaia G', 1],
+  ['G_BP', 'Gaia G_BP', 3],
+  ['G_RP', 'Gaia G_RP', 5],
+];
+// Riello et al. 2021, Table 3 (A&A 649, A3; arXiv:2012.01916), typed from the
+// paper; the zero points are also in the pinned zeropt.dat and are checked there.
+const RIELLO_T3 = {
+  zpVega: { G: 25.6874, G_BP: 25.3385, G_RP: 24.7479 },
+  zpAb: { G: 25.801, G_BP: 25.354, G_RP: 25.104 },
+  fwhmNm: { G: 454.82, G_BP: 265.9, G_RP: 292.75 },
+  meanPhotonNm: { G: 639.07, G_BP: 518.26, G_RP: 782.51 },
+  pivotNm: { G: 621.79, G_BP: 510.97, G_RP: 776.91 },
+};
+const GAIA_RAW = [
+  'cds-gaia-edr3-passband.dat',
+  'cds-gaia-edr3-zeropt.dat',
+  'cds-gaia-edr3-readme.txt',
+  'calspec-alpha-lyr-stis-008.fits',
+].map(pin);
+
+/** passband.dat: rows of lambda and three (value, error) pairs, 99.99 = undefined. */
+function gaiaPassbands(bytes) {
+  const rows = text(bytes)
+    .split('\n')
+    .filter(l => l.trim())
+    .map(l => l.trim().split(/\s+/).map(Number));
+  if (rows.length !== 781 || rows.some(r => r.length !== 7))
+    throw new Error('passband.dat is not 781 rows of 7 columns');
+  rows.forEach((r, i) => {
+    if (r[0] !== 320 + i) throw new Error(`passband.dat row ${i} is not 1 nm`);
+  });
+  const out = {};
+  for (const [id, , c] of GAIA_BANDS) {
+    const defined = rows.filter(r => r[c] !== 99.99);
+    if (defined.some(r => !(r[c] > 0)))
+      throw new Error(`${id}: a non-positive response`);
+    for (let i = 1; i < defined.length; i++)
+      if (defined[i][0] - defined[i - 1][0] !== 1)
+        throw new Error(`${id}: the defined wavelengths are not contiguous`);
+    out[id] = { lam: defined.map(r => r[0]), s: defined.map(r => r[c]) };
+  }
+  return out;
+}
+
+/** zeropt.dat: VEGAMAG then AB, three zero points and their errors each. */
+function gaiaZeroPoints(bytes) {
+  const out = {};
+  for (const l of text(bytes)
+    .split('\n')
+    .filter(x => x.trim())) {
+    const f = l.trim().split(/\s+/);
+    const system = f[f.length - 1];
+    const v = f.slice(0, 6).map(Number);
+    out[system] = {
+      G: { zp: v[0], err: v[1] },
+      G_BP: { zp: v[2], err: v[3] },
+      G_RP: { zp: v[4], err: v[5] },
+    };
+  }
+  if (!out.VEGAMAG || !out.AB) throw new Error('zeropt.dat lacks a system');
+  return out;
+}
+
+/** Width between the outermost half-maximum crossings, linear interpolation, nm. */
+function fwhmNm({ lambdaNm: l, s }) {
+  const half = Math.max(...s) / 2;
+  const at = i =>
+    l[i - 1] + ((half - s[i - 1]) / (s[i] - s[i - 1])) * (l[i] - l[i - 1]);
+  let a = -1;
+  let b = -1;
+  for (let i = 1; i < s.length; i++) {
+    if (a < 0 && s[i - 1] < half && s[i] >= half) a = at(i);
+    if (s[i - 1] >= half && s[i] < half) b = at(i);
+  }
+  return b - a;
+}
+
+function gaiaSunColour(mod) {
+  const d = Object.fromEntries(mod.BANDS.map(b => [b.id, decodeBand(b)]));
+  const sed = blackbodySed(SUN_TEFF_K);
+  const vega = id => abMag(d[id], sed) - d[id].abMinusVega;
+  return vega('G_BP') - vega('G_RP');
+}
+
+function buildGaia(bytes) {
+  const [passband, zeropt, , calspec] = bytes;
+  const nat = gaiaPassbands(passband);
+  const zp = gaiaZeroPoints(zeropt);
+  const vega = vegaSed(calspec);
+  const bands = [];
+  const record = { rounding: {}, vegaInGaiaSystem: {} };
+  for (const [id, name] of GAIA_BANDS) {
+    const { lam, s } = nat[id];
+    const peak = Math.max(...s);
+    let response = s.map(v => Math.round((v / peak) * GAIA_SCALE));
+    // Drop the rounded-to-zero tails, keeping one zero node. Where the source
+    // stops defining a passband the table simply ends (G at 1050 nm, 0.3 percent
+    // of its peak; G_RP at 1080 nm, 0.04 percent), as Gaia's own integral does.
+    let lo = 0;
+    while (response[lo + 1] === 0) lo++;
+    let hi = response.length - 1;
+    while (response[hi - 1] === 0) hi--;
+    response = response.slice(lo, hi + 1);
+    const band = {
+      id,
+      system: 'Gaia',
+      name,
+      source: 'riello2021',
+      startNm: lam[lo],
+      stepNm: 1,
+      scale: GAIA_SCALE,
+      response,
+      abMinusVega: r4(zp.AB[id].zp - zp.VEGAMAG[id].zp),
+    };
+    const dec = decodeBand(band);
+    const ref = decodeBand({ id, lambdaNm: lam, response: s, scale: peak });
+    let worst = 0;
+    for (const sed of [...TEST_T.map(T => blackbodySed(T)), vega])
+      worst = Math.max(worst, Math.abs(abMag(dec, sed) - abMag(ref, sed)));
+    record.rounding[id] = Number(worst.toFixed(5));
+    if (worst > GAIA_ROUNDING_TOL)
+      throw new Error(`${id}: rounding moves a test magnitude by ${worst}`);
+    const vegaMagnitude = abMag(dec, vega) - band.abMinusVega;
+    record.vegaInGaiaSystem[id] = r3(vegaMagnitude);
+    if (Math.abs(vegaMagnitude) > GAIA_VEGA_TOL)
+      throw new Error(
+        `${id}: CALSPEC Vega is ${vegaMagnitude} mag in the Gaia system, not within ${GAIA_VEGA_TOL} of 0`
+      );
+    bands.push(band);
+  }
+  return { bands, zp, record };
+}
+
+const GAIA_LICENCE_URL = 'https://www.cosmos.esa.int/web/gaia-users/license';
+const GAIA_PAGE_URL = 'https://www.cosmos.esa.int/web/gaia/edr3-passbands';
+
+const gaiaPack = {
+  id: 'radiation-gaia-bandpasses',
+  label: 'Gaia G, G_BP and G_RP passbands (non-commercial)',
+  manifest: 'data-packs/radiation-gaia-bandpasses.json',
+  capability: null,
+  module: 'js/data/radiation/gaiaBandpasses.js',
+  transformVersion: TRANSFORM_VERSION,
+  raw: GAIA_RAW,
+  namedBy: ['js/kernels/radiation/packs.js'],
+  async build(bytes) {
+    const { bands, zp, record } = buildGaia(bytes);
+    const meta = {
+      id: this.id,
+      version: '1.0.0',
+      title:
+        'Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial licence)',
+      object: {
+        name: 'Gaia photometric system',
+        identifiers: bands.map(b => b.id),
+      },
+      facility: {
+        observatory: 'ESA Gaia, Data Processing and Analysis Consortium (CU5)',
+        pipeline: 'tools/data-packs/radiation.mjs 1.0.0',
+      },
+      dataType: 'model-grid',
+      origin: 'compilation',
+      credit:
+        'ESA/Gaia/DPAC; P. Montegriffo, F. De Angeli, M. Bellazzini, E. Pancino, C. Cacciari, D. W. Evans and the CU5/PhotPipe team; Riello et al. 2021 (A&A 649, A3); CDS J/A+A/649/A3. NON-COMMERCIAL: CC BY-NC 3.0 IGO.',
+      license: {
+        status: 'cc-by-nc-3.0-igo',
+        statement: `ESA's Gaia data licence page (${GAIA_LICENCE_URL}, read 2026-10-09) says: "Gaia data are distributed under the CC BY-NC 3.0 IGO license." and refers to ESA's Terms and Conditions for the use of data in the ESA space science archives for commercial use. ESA's page for these passbands (${GAIA_PAGE_URL}, read 2026-10-09) credits the table to "ESA/Gaia/DPAC" and states no terms of its own; the CDS record J/A+A/649/A3 (read 2026-10-09) carries no licence text. This pack and its derived file are therefore offered under CC BY-NC 3.0 IGO: attribute ESA/Gaia/DPAC, do not use commercially, and say that the data were rescaled (each curve is normalised to a peak of 1 and rounded to 1/100000 of it).`,
+        basis:
+          'CC BY-NC 3.0 IGO permits copying, redistribution and adaptation with attribution for non-commercial purposes, and Gravitas is a free educational tool, so shipping the table with its licence and credit is permitted. It is the one pack under non-commercial terms, shipped by the project owner\'s explicit instruction ("ship the gaia passbands but note their license"; "add the NC license to the data pack schema", 2026-10-09; DECISION_REGISTER.md). The terms are those ESA states for "Gaia data"; reading them as covering this DPAC table is the project\'s inference, since neither ESA\'s passband page nor the CDS record repeats them. The pack is separate so that no other band is covered by the NC licence, and it must not be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md).',
+        nonCommercial: true,
+      },
+      retrieved: '2026-10-09',
+      columns: [
+        { name: 'wavelength', unit: 'nm', description: 'startNm + i * stepNm' },
+        {
+          name: 'response',
+          unit: '',
+          description:
+            'photon-counting relative response, integer in units of 1/scale of the peak',
+        },
+        {
+          name: 'abMinusVega',
+          unit: 'mag',
+          description:
+            'm_AB - m_VEGAMAG of the band in the Gaia system (Vega = 0 mag), from the published zero points',
+        },
+      ],
+    };
+    const manifestRest = {
+      source: {
+        archive: 'CDS VizieR J/A+A/649/A3, from ESA/Gaia/DPAC',
+        urls: [...this.raw.map(r => r.url), GAIA_LICENCE_URL, GAIA_PAGE_URL],
+        citations: [
+          {
+            text: 'Riello et al. 2021, A&A 649, A3: Gaia Early Data Release 3. Photometric content and validation (passbands, zero points and Table 3)',
+            doi: '10.1051/0004-6361/202039587',
+            bibcode: '2021A&A...649A...3R',
+          },
+          {
+            text: 'Casagrande & VandenBerg 2018, MNRAS 479, L102: On the use of Gaia magnitudes and new tables of bolometric corrections (the Sun and Vega in the Gaia system, the check)',
+            bibcode: '2018MNRAS.479L.102C',
+          },
+          {
+            text: 'Bohlin 2014, AJ 147, 127 (the CALSPEC Vega spectrum alpha_lyr_stis_008, used only to check the passbands against Vega)',
+            doi: '10.1088/0004-6256/147/6/127',
+          },
+        ],
+        acknowledgement:
+          'Gaia (E)DR3 passbands and zero points: ESA/Gaia/DPAC, CU5/PhotPipe team, via CDS (J/A+A/649/A3). Licence CC BY-NC 3.0 IGO: non-commercial use only.',
+      },
+      raw: this.raw,
+      transformation: {
+        script: 'tools/data-packs/radiation.mjs',
+        version: TRANSFORM_VERSION,
+        options: {
+          scale: GAIA_SCALE,
+          rounding: GAIA_ROUNDING_TOL,
+          vegaTolerance: GAIA_VEGA_TOL,
+        },
+        steps: [
+          'Read passband.dat: 781 rows at 1 nm from 320 to 1100 nm, columns G, G_BP and G_RP with their errors; 99.99 marks a wavelength where a passband is not defined. G is defined on 320-1050 nm, G_BP on 325-750 nm and G_RP on 610-1080 nm, each as one unbroken run.',
+          'Normalise each curve to a peak of 1 and round to 1/100000 of the peak; drop the tails that round to zero, keeping one zero node. G is cut off at 1050 nm at 0.3 percent of its peak and G_RP at 1080 nm at 0.04 percent, where the source stops defining them: the table ends there, as the integral of Gaia does, and no ramp is invented. Refuse any band for which the rounding moves the AB magnitude of Vega, or of a blackbody from 3000 K to 30000 K, by more than 0.001 mag. The errors column is not shipped.',
+          'Read zeropt.dat; the AB - Vega offset of a band is its AB zero point minus its VEGAMAG zero point, which puts Vega at 0 mag in every band (the Gaia definition). The zero points themselves convert Gaia fluxes in e-/s and are shipped as ZERO_POINTS for a caller that works with Gaia fluxes, not for synthetic photometry (Riello et al. 2021, Sect. 7).',
+          'Check the passbands and zero points against each other through the CALSPEC Vega spectrum: AB(Vega) minus the offset must be within 0.04 mag of zero in each band. That spectrum is read for this check only and nothing of it is shipped.',
+        ],
+        record,
+      },
+      assumptions: [
+        'Each response is photon-counting: Riello et al. 2021 weight the passband by wavelength in their mean-flux definitions (Eqs. 13-15), which is the photon-counting convention. The CDS column header says "transmissivity" in "mag"; the numbers are a dimensionless response peaking at 0.72 (G), 0.67 (G_BP) and 0.74 (G_RP) before the pack normalises each to 1.',
+        'These are the Gaia EDR3 passbands, which DR3 also uses. They are not the DR2 passbands (nominal, revised or Weiler), and not the pre-launch curves of Jordi et al. 2010. Passbands of different Gaia releases are not comparable (ESA; Riello et al. 2021, Sect. 7).',
+        "The AB - Vega offset here is Gaia's own: Vega is 0 mag in each band, with Gaia's reference Vega (a Kurucz model rescaled to 3.62286e-11 W m^-2 nm^-1 at 550 nm). It is NOT the convention of radiation-bandpasses, where Vega is 0.03 mag in every band. Through these bands the CALSPEC Vega spectrum gives its Gaia-system magnitudes in the record above.",
+        "The published zero points convert Gaia's internal fluxes in e-/s to magnitudes. Riello et al. say they are not suitable for synthetic magnitudes: the kernel computes the AB magnitude and subtracts the shipped abMinusVega.",
+        'Non-commercial: the data are CC BY-NC 3.0 IGO. The pack carries `license.nonCommercial: true`, and an interface that shows it says so.',
+      ],
+      ...COMMON,
+    };
+    return {
+      meta,
+      manifestRest,
+      render: renderer(
+        this,
+        'The Gaia bandpasses, as startNm/stepNm and an integer response; abMinusVega is m_AB - m_VEGAMAG in the Gaia system (Vega = 0 mag). NON-COMMERCIAL USE ONLY: CC BY-NC 3.0 IGO, credit ESA/Gaia/DPAC.',
+        {
+          BANDS: bands,
+          SOURCES: {
+            riello2021:
+              'Riello et al. 2021, A&A 649, A3: Gaia EDR3 passbands (ESA/Gaia/DPAC, CU5), CDS J/A+A/649/A3',
+          },
+          // The published zero points (e-/s to mag), for a caller that works with
+          // Gaia fluxes; not for synthetic photometry.
+          ZERO_POINTS: {
+            vegamag: Object.fromEntries(
+              GAIA_BANDS.map(([id]) => [id, zp.VEGAMAG[id].zp])
+            ),
+            ab: Object.fromEntries(
+              GAIA_BANDS.map(([id]) => [id, zp.AB[id].zp])
+            ),
+            note: 'Riello et al. 2021, zeropt.dat: they convert Gaia fluxes in e-/s to magnitudes. They are not for synthetic photometry; use abMinusVega with the kernel.',
+          },
+          LICENSE_NOTICE:
+            'NON-COMMERCIAL USE ONLY. CC BY-NC 3.0 IGO, credit ESA/Gaia/DPAC. Not for a commercial redistribution.',
+        }
+      ),
+    };
+  },
+  decode: mod => mod,
+  async check(mod) {
+    const out = [];
+    if (mod.BANDS.map(b => b.id).join() !== 'G,G_BP,G_RP')
+      out.push('the pack does not hold G, G_BP and G_RP');
+    for (const b of mod.BANDS) {
+      const r = b.response;
+      // G and G_RP are cut off where the passband stops being defined, at 0.3
+      // and 0.04 percent of their peak (the source marks the rest "not
+      // defined"): the integral stops there, as Gaia's does, and no ramp to zero
+      // is invented. So the ends need only be small, not zero.
+      if (!(
+        r.length > 3 &&
+        r[0] <= 0.005 * b.scale &&
+        r[r.length - 1] <= 0.005 * b.scale
+      ))
+        out.push(`${b.id}: the response does not start and end near zero`);
+      if (Math.max(...r) !== b.scale) out.push(`${b.id}: the peak is not 1`);
+      if (r.some(v => !Number.isInteger(v) || v < 0))
+        out.push(`${b.id}: a response is not a non-negative integer`);
+      if (b.stepNm !== 1 || !(b.startNm >= 320))
+        out.push(`${b.id}: the grid is not the CDS 1 nm grid`);
+      if (!Number.isFinite(b.abMinusVega))
+        out.push(`${b.id}: no AB - Vega offset`);
+    }
+    if (mod.PACK?.license?.status !== 'cc-by-nc-3.0-igo')
+      out.push('the licence status is not cc-by-nc-3.0-igo');
+    if (!mod.PACK?.license?.nonCommercial)
+      out.push('the runtime copy does not carry the non-commercial marker');
+    return out;
+  },
+  validate(mod) {
+    const against = [];
+    const result = {
+      pivotNm: {},
+      meanPhotonNm: {},
+      fwhmNm: {},
+      offsetVsTable: {},
+      sunBpRp: null,
+    };
+    let ok = true;
+    const dec = Object.fromEntries(mod.BANDS.map(b => [b.id, decodeBand(b)]));
+    for (const [id] of GAIA_BANDS) {
+      const piv = pivotWavelength(dec[id]);
+      const mean = meanPhotonWavelength(dec[id]);
+      const fw = fwhmNm(dec[id]);
+      const off = mod.BANDS.find(b => b.id === id).abMinusVega;
+      const pubOff = RIELLO_T3.zpAb[id] - RIELLO_T3.zpVega[id];
+      for (const [quantity, value, unit] of [
+        [`pivot wavelength of ${id}`, RIELLO_T3.pivotNm[id], 'nm'],
+        [`mean photon wavelength of ${id}`, RIELLO_T3.meanPhotonNm[id], 'nm'],
+        [`FWHM of ${id}`, RIELLO_T3.fwhmNm[id], 'nm'],
+        [`AB - Vega of ${id} (ZP_AB - ZP_VEGAMAG)`, r4(pubOff), 'mag'],
+      ])
+        against.push({
+          quantity,
+          value,
+          unit,
+          ref: 'Riello et al. 2021, Table 3',
+        });
+      result.pivotNm[id] = Number(piv.toFixed(2));
+      result.meanPhotonNm[id] = Number(mean.toFixed(2));
+      result.fwhmNm[id] = Number(fw.toFixed(2));
+      result.offsetVsTable[id] = Number((off - pubOff).toFixed(5));
+      ok &&=
+        Math.abs(piv - RIELLO_T3.pivotNm[id]) <= GAIA_LAMBDA_TOL_NM &&
+        Math.abs(mean - RIELLO_T3.meanPhotonNm[id]) <= GAIA_LAMBDA_TOL_NM &&
+        Math.abs(fw - RIELLO_T3.fwhmNm[id]) <= GAIA_FWHM_TOL_NM &&
+        Math.abs(off - pubOff) <= GAIA_ZP_TOL;
+    }
+    const sun = gaiaSunColour(mod);
+    result.sunBpRp = r3(sun);
+    against.push({
+      quantity: `G_BP - G_RP of a ${SUN_TEFF_K} K blackbody, Vega system`,
+      value: GAIA_SUN_COLOUR,
+      unit: 'mag',
+      ref: 'Casagrande & VandenBerg 2018, MNRAS 479, L102, Table 1 (the real Sun; tolerance 0.06 for a blackbody)',
+    });
+    ok &&= Math.abs(sun - GAIA_SUN_COLOUR) <= GAIA_SUN_COLOUR_TOL;
+    return {
+      check:
+        "each band reproduces the published pivot and mean photon wavelengths, FWHM and AB - Vega offset (Riello et al. 2021, Table 3), and a 5772 K blackbody has the Sun's G_BP - G_RP within 0.06 mag, within the tolerances stated in tools/data-packs/radiation.mjs",
+      against,
+      result,
+      ok,
+    };
+  },
+};
+
 export const RADIATION_PACKS = [
   bandsPack,
   linesPack,
   extinctionPack,
   bolometricPack,
+  gaiaPack,
 ];

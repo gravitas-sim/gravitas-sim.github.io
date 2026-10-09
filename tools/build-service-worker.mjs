@@ -166,6 +166,7 @@ const OBSERVATORY_ONLY = new Set([
   'js/data/radiation/lines.js',
   'js/data/radiation/extinction.js',
   'js/data/radiation/bolometric.js',
+  'js/data/radiation/gaiaBandpasses.js',
 ]);
 
 /**

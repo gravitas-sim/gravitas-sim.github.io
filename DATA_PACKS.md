@@ -27,8 +27,9 @@ and the model page their badges, all generated from the manifests.
 | `radiation-lines` | 22 strong optical lines, air and vacuum, from NIST | compilation | `js/data/radiation/lines.js` | `packs:*` |
 | `radiation-extinction` | the Cardelli, Clayton & Mathis 1989 law | compilation | `js/data/radiation/extinction.js` | `packs:*` |
 | `radiation-bolometric` | Flower 1996 `BC_V(Teff)` as Torres 2010 corrected it | compilation | `js/data/radiation/bolometric.js` | `packs:*` |
+| `radiation-gaia-bandpasses` | Gaia (E)DR3 G, G_BP and G_RP passbands and zero points; **non-commercial** | compilation | `js/data/radiation/gaiaBandpasses.js` | `packs:*` |
 
-The last four are the radiation kernel's (`RADIATION.md`). They are `dataType`
+The last five are the radiation kernel's (`RADIATION.md`). They are `dataType`
 `model-grid` and `catalog` for want of a type for a response function or a law,
 they name their own loader (`js/kernels/radiation/packs.js`) in place of the
 Observatory's fixtures, and they are built by `tools/data-packs/radiation.mjs`
@@ -375,9 +376,25 @@ The rules are in `tools/data-packs/schema.mjs`; the tests are
     a mismatch is never cached (`tools/data-packs/pinned.mjs`).
   - A VizieR response dates itself in its header, so its pin is taken over
     `data-lines`: the lines that are not `#` comments.
-- **Two licence statuses need a stated basis.** `attribution-requested` and
-  `no-license-stated` must say why redistribution is defensible. `restricted`
-  is refused.
+- **Licences.** A pack's `license.status` is one of `public-domain`, `cc0`,
+  `cc-by-4.0`, `attribution-requested`, `no-license-stated`,
+  `cc-by-nc-3.0-igo` or `restricted`, and `license.statement` is always required.
+  - `attribution-requested` and `no-license-stated` must say why
+    redistribution is defensible (`license.basis`).
+  - `restricted` is refused.
+  - **Non-commercial: `cc-by-nc-3.0-igo`** (CC BY-NC 3.0 IGO, the Gaia data
+    licence) needs the statement (quoting the terms with their URL and the date
+    read), a `basis`, and the marker `license.nonCommercial: true`, which is in
+    the runtime copy (`license` is a runtime field), so an interface shows it
+    beside the data. It exists for one pack, `radiation-gaia-bandpasses`, by the
+    owner's exception (`DECISION_REGISTER.md` D-RAD-01), and is accepted only for
+    Gravitas's own packs: the validator refuses it in a contributed pack, and
+    the catalog's and `sdk review`'s accepted licences (`ACCEPTED_LICENSES`)
+    contain no non-commercial licence. A non-commercial pack is labelled
+    wherever it is shown, is kept in a pack of its own so that no other data is
+    covered by its terms, and must not be bundled into a commercial
+    redistribution of Gravitas: take it out (its loader, its
+    service-worker entry and its module).
 - **Transformations carry a version.** A tool that changes what it writes
   bumps its `TRANSFORM_VERSION`. `packs:check` fails when a manifest names a
   different version from the tool's.

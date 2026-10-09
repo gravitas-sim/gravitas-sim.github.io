@@ -207,6 +207,27 @@ describe('the manifest format', () => {
     expect(validateDataPack(cited)).toEqual([]);
   });
 
+  test('a non-commercial licence needs its statement, its basis and the marker the interface shows', () => {
+    const m = clone(manifest);
+    m.license = { status: 'cc-by-nc-3.0-igo', statement: 'CC BY-NC 3.0 IGO' };
+    expect(paths(validateDataPack(m)).sort()).toEqual([
+      'license.basis',
+      'license.nonCommercial',
+    ]);
+    m.license.basis =
+      'redistribution with credit is allowed; commercial use is not';
+    m.license.nonCommercial = false;
+    expect(paths(validateDataPack(m))).toEqual(['license.nonCommercial']);
+    m.license.nonCommercial = true;
+    expect(validateDataPack(m)).toEqual([]);
+    // A contributed pack (an extension's record) is refused the status.
+    expect(paths(validateDataPack(m, { derivedUnder: '' }))).toEqual([
+      'license.status',
+    ]);
+    delete m.license.statement;
+    expect(paths(validateDataPack(m))).toEqual(['license.statement']);
+  });
+
   test('a time series without a time system, and a transformation without a version, are refused', () => {
     const m = clone(manifest);
     delete m.time.scale;
