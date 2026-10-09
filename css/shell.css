@@ -252,6 +252,9 @@ body:has(> .gs-app) {
     display: none;
   }
   .gs-shell.gs-app.gs-js.is-open {
+    /* Over Home (z-welcome, 75), which now starts below the bar: an open
+       Menu is a panel that has to be reachable on top of it. */
+    z-index: 80;
     height: auto;
     max-height: 100vh;
     overflow-y: auto;
