@@ -306,6 +306,54 @@ test.describe('the instructor flow', () => {
     expect(named.text.trim().split('\r\n').length).toBe(5);
   });
 
+  test('kit and course packs open in the browser language, with Spanish tab titles (P81 L-1, T-1)', async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({ locale: 'es-ES' });
+    const page = await context.newPage();
+    for (const route of ['/teaching/kit/', '/studio/course/packs/']) {
+      await page.goto(route);
+      await expect(page.locator('body[data-ready="true"]')).toBeVisible();
+      await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+      await expect(page.locator('[data-gs-lang]')).toHaveValue('es');
+    }
+    await page.goto('/teaching/kit/');
+    expect(await page.title()).not.toMatch(/Distribution kit/);
+    await page.addInitScript(() =>
+      localStorage.setItem('gravitas_locale', 'es')
+    );
+    for (const [route, english] of [
+      ['/teaching/investigation/keplers-laws/', "Kepler's Laws | Gravitas"],
+      ['/teaching/find/', 'Find content to teach | Gravitas'],
+      ['/teaching/', 'Teaching with Gravitas'],
+    ]) {
+      await page.goto(route);
+      await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+      await expect.poll(() => page.title()).not.toBe(english);
+    }
+    await context.close();
+    // And an English browser is unchanged.
+    const en = await browser.newContext({ locale: 'en-US' });
+    const p2 = await en.newPage();
+    await p2.goto('/teaching/kit/');
+    await expect(p2.locator('html')).toHaveAttribute('lang', 'en');
+    await en.close();
+  });
+
+  test('the portal says how to ask for the passphrase, and each adoption page says where the key is (P81 A-1)', async ({
+    page,
+  }) => {
+    await quiet(page);
+    await page.goto('/instructors/');
+    const hint = page.locator('#loginHint');
+    await expect(hint.locator('a[href^="mailto:"]')).toHaveCount(2);
+    await expect(hint.locator('a[href*="/issues/new"]').first()).toBeAttached();
+    await page.goto(`/teaching/investigation/${LESSON}/`);
+    await expect(page.locator('#materials-h').locator('..')).toContainText(
+      'Where the key is'
+    );
+  });
+
   test('the course builder opens with the item in place', async ({ page }) => {
     await quiet(page);
     await page.goto('/studio/course/?add=keplers-laws');
