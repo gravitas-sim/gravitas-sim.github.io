@@ -82,6 +82,8 @@ const TWELVE_NIGHTS = {
   duration: '40-50 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 4, section: '4.3' },
+  courseLevel: 'majors',
   mathematics: 'arithmetic',
   prerequisites: [],
   tags: ['exoplanets', 'observing'],

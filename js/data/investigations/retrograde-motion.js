@@ -36,6 +36,8 @@ const RETROGRADE = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 3, section: '3.1' },
+  courseLevel: 'survey',
   mathematics: 'algebra',
   prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary

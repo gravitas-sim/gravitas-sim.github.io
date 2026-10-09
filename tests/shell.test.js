@@ -199,7 +199,29 @@ describe('the navigation', () => {
     const hrefs = new Set(
       NAV.flatMap(([, links]) => links.map(([, href]) => href.split('#')[0]))
     );
-    expect([...served].filter(p => !hrefs.has(p))).toEqual([]);
+    // The adoption pages (ADOPTION.md) are forty-four, generated, and one
+    // click from /teaching/find/ rather than each in the menu; the next test
+    // holds that index to listing them all and each of them to leading back.
+    const adoption = p =>
+      /^\/teaching\/(investigation|activity|find)\//.test(p);
+    expect([...served].filter(p => !adoption(p) && !hrefs.has(p))).toEqual([]);
+  });
+
+  test('the adoption pages are reached from their index, and lead back to it', () => {
+    const index = read('teaching/find/index.html');
+    const pages = [...served].filter(p =>
+      /^\/teaching\/(investigation|activity)\//.test(p)
+    );
+    expect(pages.length).toBeGreaterThan(40);
+    for (const p of pages) {
+      expect({ p, linked: index.includes(`href="${p}"`) }).toEqual({
+        p,
+        linked: true,
+      });
+      expect(read(`${p.slice(1)}index.html`)).toContain(
+        'href="/teaching/find/"'
+      );
+    }
   });
 
   test('marks the page it is on, and only that one', () => {

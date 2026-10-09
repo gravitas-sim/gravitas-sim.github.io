@@ -138,6 +138,8 @@
         "calculation",
         "subjects",
         "prerequisites",
+        "textbook",
+        "courseLevel",
         "steps",
         "thumbnail",
         "route"
@@ -302,6 +304,55 @@
               }
             }
           ]
+        },
+        "textbook": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "chapter",
+                "section"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "chapter": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                },
+                "section": {
+                  "anyOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9]{1,2}\\.[0-9]{1,2}$"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "description": "The OpenStax Astronomy 2e chapter (and section, when one fits) that covers it (Prompt 76)."
+        },
+        "courseLevel": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "survey",
+                "majors",
+                "upper"
+              ]
+            }
+          ],
+          "description": "The course it suits: a survey for non-majors, an introductory course for science majors, or upper division (Prompt 76)."
         },
         "steps": {
           "anyOf": [

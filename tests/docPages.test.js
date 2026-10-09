@@ -86,7 +86,12 @@ describe('the production build copies every static page', () => {
   // Copied byte for byte instead of processed: the first Gravitas, kept as it
   // was. Either list gets a page into dist/.
   const archival = pageList('ARCHIVAL_PAGES');
-  const listed = [...docs, ...archival];
+  // The adoption pages are generated, one directory each, and build.js reads
+  // them from the tree (adoptionDirs); the test holds it to doing so.
+  const adoption = pageDirs().filter(d =>
+    /^teaching\/(investigation|activity)\//.test(d)
+  );
+  const listed = [...docs, ...archival, ...adoption];
 
   test('the lists parse', () => {
     // Guards the parser: an empty list would make the assertion below
@@ -99,6 +104,13 @@ describe('the production build copies every static page', () => {
   test('every page directory in the tree is in DOC_PAGES or ARCHIVAL_PAGES', () => {
     const missing = pageDirs().filter(d => !listed.includes(d));
     expect(missing).toEqual([]);
+  });
+
+  test('build.js reads the adoption pages from the tree', () => {
+    expect(adoption.length).toBeGreaterThan(40);
+    const text = readFileSync(path.join(REPO, 'build.js'), 'utf8');
+    expect(text).toContain('const adoptionDirs = ');
+    expect(text).toContain('...adoptionDirs()');
   });
 
   test('every entry in either list is a page that exists', () => {

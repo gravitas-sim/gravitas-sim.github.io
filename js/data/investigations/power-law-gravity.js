@@ -58,6 +58,8 @@ const POWER_LAW_GRAVITY = {
   duration: '45-60 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 3, section: '3.3' },
+  courseLevel: 'majors',
   mathematics: 'logarithms',
   prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary

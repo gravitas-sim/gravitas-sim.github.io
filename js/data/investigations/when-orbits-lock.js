@@ -118,6 +118,8 @@ const WHEN_ORBITS_LOCK = {
   duration: '55-70 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 12, section: null },
+  courseLevel: 'survey',
   mathematics: 'algebra',
   prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary

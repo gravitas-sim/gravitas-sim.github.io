@@ -122,6 +122,8 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
   duration: '30-40 min',
   level: 'Beginner, no physics background needed',
   audience: 'beginner',
+  textbook: { chapter: 24, section: '24.7' },
+  courseLevel: 'survey',
   mathematics: 'arithmetic',
   prerequisites: [],
   tags: ['gravity', 'waves'],

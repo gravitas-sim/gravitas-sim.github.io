@@ -136,6 +136,16 @@ const ROUTES = [
         )
       ).MANIFEST.map(entry => entry.id),
   },
+  // An activity launch link (`#activity=<activity>/<format>`, which the
+  // adoption pages carry): resolved against the activities and their formats.
+  {
+    pattern: /^activity=([\w-]+\/\w+)$/,
+    what: 'activity format',
+    load: async () =>
+      (
+        await import(pathToFileURL(join(REPO, 'js/data/activities.js')).href)
+      ).ACTIVITIES.flatMap(a => a.formats.map(f => `${a.id}/${f.id}`)),
+  },
 ];
 
 /**

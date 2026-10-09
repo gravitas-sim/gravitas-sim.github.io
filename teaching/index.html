@@ -118,53 +118,84 @@ try {
 
       <nav class="doc-toc" aria-labelledby="tocHeading">
         <h2 id="tocHeading" data-i18n="teach.toc">On this page</h2>
-        <ol>
-          <li>
+        <p class="teach-fineprint"><span class="gs-en">The instructor path, in the order most instructors need it.</span><span class="gs-es" lang="es">El recorrido del docente, en el orden en que la mayoría lo necesita.</span></p>
+        <ol class="teach-path">
+<li><a href="#path-why"><span class="gs-en">Why and how it works</span><span class="gs-es" lang="es">Por qué y cómo funciona</span></a>
+<ol>
+<li>
             <a href="#cycle" data-i18n="teach.section.cycle">The cycle</a>
           </li>
-          <li>
+<li>
             <a href="#journey" data-i18n="teach.section.journey">The journey</a>
           </li>
-          <li>
+<li>
             <a href="#instruments" data-i18n="teach.section.instruments"
               >Instruments</a
             >
           </li>
-          <li>
-            <a href="#activities" data-i18n="teach.activities.heading"
-              >Classroom activities</a
-            >
-          </li>
-          <li>
+<li><a href="#access" data-i18n="teach.section.access">Access</a></li>
+</ol></li>
+<li><a href="#path-start"><span class="gs-en">Quick start</span><span class="gs-es" lang="es">Inicio rápido</span></a>
+<ol>
+<li>
             <a href="#quickstart" data-i18n="teach.section.quickstart"
               >Quick start</a
             >
           </li>
-          <li>
-            <a href="#demos" data-i18n="teach.section.demos">Demonstrations</a>
+</ol></li>
+<li><a href="#path-find"><span class="gs-en">Find content</span><span class="gs-es" lang="es">Encontrar contenido</span></a>
+<ol>
+<li><a href="#find"><span class="gs-en">Find something to teach</span><span class="gs-es" lang="es">Encontrar algo que enseñar</span></a></li>
+<li>
+            <a href="#activities" data-i18n="teach.activities.heading"
+              >Classroom activities</a
+            >
           </li>
-          <li>
+</ol></li>
+<li><a href="#path-build"><span class="gs-en">Build an activity or a course</span><span class="gs-es" lang="es">Crear una actividad o un curso</span></a>
+<ol>
+<li><a href="#build"><span class="gs-en">Build your own</span><span class="gs-es" lang="es">Crear lo propio</span></a></li>
+<li>
             <a href="#patterns" data-i18n="teach.section.patterns"
               >In a course</a
             >
           </li>
-          <li><a href="#access" data-i18n="teach.section.access">Access</a></li>
-          <li>
+</ol></li>
+<li><a href="#path-collect"><span class="gs-en">Collect and review work</span><span class="gs-es" lang="es">Recoger y revisar el trabajo</span></a>
+<ol>
+<li><a href="#collect"><span class="gs-en">Collecting the work</span><span class="gs-es" lang="es">Recoger el trabajo</span></a></li>
+</ol></li>
+<li><a href="#path-materials"><span class="gs-en">Materials and answer keys</span><span class="gs-es" lang="es">Materiales y claves de respuestas</span></a>
+<ol>
+<li><a href="#materials"><span class="gs-en">Materials and keys</span><span class="gs-es" lang="es">Materiales y claves</span></a></li>
+</ol></li>
+<li><a href="#path-present"><span class="gs-en">Embed and present</span><span class="gs-es" lang="es">Insertar y presentar</span></a>
+<ol>
+<li><a href="#embed"><span class="gs-en">Embedding a figure</span><span class="gs-es" lang="es">Insertar una figura</span></a></li>
+<li>
+            <a href="#demos" data-i18n="teach.section.demos">Demonstrations</a>
+          </li>
+</ol></li>
+<li><a href="#path-cite"><span class="gs-en">Cite and evaluate</span><span class="gs-es" lang="es">Citar y evaluar</span></a>
+<ol>
+<li><a href="#cite"><span class="gs-en">Citing Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a></li>
+<li>
             <a href="#evidence" data-i18n="teach.section.evidence"
               >The physics</a
             >
           </li>
-          <li>
+<li>
             <a href="#evaluate" data-i18n="teach.section.evaluate"
               >Evaluating it</a
             >
           </li>
-          <li>
+<li>
             <a href="#feedback" data-i18n="teach.section.feedback">Feedback</a>
           </li>
+</ol></li>
         </ol>
       </nav>
-
+      <p class="doc-eyebrow" id="path-why"><span class="gs-en">Step 1 of 8</span><span class="gs-es" lang="es">Paso 1 de 8</span>: <span class="gs-en">Why and how it works</span><span class="gs-es" lang="es">Por qué y cómo funciona</span></p>
       <h2 id="cycle" data-i18n="teach.section.cycle">
         The cycle a student works through
       </h2>
@@ -182,57 +213,6 @@ try {
       </h2>
       <p data-i18n="teach.instruments.intro"></p>
       <div class="teach-instruments" id="teachInstruments"></div>
-
-      <!--
-        Classroom activities. One activity in three teaching formats, each of
-        which opens a real investigation cut to length by the assignment
-        machinery in js/assignments/ - not a second lesson runner and not a
-        copy of the catalog. js/teachingPage.js fills this in from
-        js/data/activities.js, which is loaded on demand.
-      -->
-      <h2 id="activities" data-i18n="teach.activities.heading">
-        Classroom activities
-      </h2>
-      <p data-i18n="teach.activities.lede"></p>
-      <p
-        class="doc-note teach-activity-fallback"
-        id="activityFallback"
-        role="status"
-        hidden
-      ></p>
-      <div class="teach-activities" id="teachActivities"></div>
-      <p class="teach-fineprint">
-        <span data-i18n="teach.activities.vs.investigations"></span>
-        <a href="/#investigationBrowser" data-i18n="teach.activities.browse"
-          >Browse all investigations</a
-        >
-      </p>
-
-      <h2 id="quickstart" data-i18n="teach.section.quickstart">
-        Quick start for instructors
-      </h2>
-      <p data-i18n="teach.quickstart.intro"></p>
-      <div class="teach-quickstart" id="teachQuickstart"></div>
-
-      <h2 id="demos" data-i18n="teach.section.demos">
-        Six demonstrations you can run here
-      </h2>
-      <p data-i18n="teach.demos.intro"></p>
-      <p class="doc-note" data-i18n="teach.demos.note"></p>
-      <div class="teach-demos" id="teachDemos"></div>
-      <div class="teach-sequence">
-        <button type="button" class="ui-button" id="teachCopySequence">
-          Copy all six as a lecture sequence
-        </button>
-        <p class="teach-fineprint" data-i18n="teach.demos.sequence.note"></p>
-        <pre class="teach-sequence-text" id="teachSequenceText" hidden></pre>
-      </div>
-
-      <h2 id="patterns" data-i18n="teach.section.patterns">
-        Five ways to use it in a course
-      </h2>
-      <p data-i18n="teach.patterns.intro"></p>
-      <div class="teach-patterns" id="teachPatterns"></div>
 
       <h2 id="access" data-i18n="teach.section.access">
         Access, language and reproducibility
@@ -283,6 +263,87 @@ try {
         </section>
       </div>
 
+      <p class="doc-eyebrow" id="path-start"><span class="gs-en">Step 2 of 8</span><span class="gs-es" lang="es">Paso 2 de 8</span>: <span class="gs-en">Quick start</span><span class="gs-es" lang="es">Inicio rápido</span></p>
+      <h2 id="quickstart" data-i18n="teach.section.quickstart">
+        Quick start for instructors
+      </h2>
+      <p data-i18n="teach.quickstart.intro"></p>
+      <div class="teach-quickstart" id="teachQuickstart"></div>
+
+      <p class="doc-eyebrow" id="path-find"><span class="gs-en">Step 3 of 8</span><span class="gs-es" lang="es">Paso 3 de 8</span>: <span class="gs-en">Find content</span><span class="gs-es" lang="es">Encontrar contenido</span></p>
+      <h2 id="find"><span class="gs-en">Find something to teach</span><span class="gs-es" lang="es">Encontrar algo que enseñar</span></h2>
+      <p><span class="gs-en">Every investigation and every classroom activity has an adoption page: who it is for, how long it takes, what students should know first, what is marked and what needs your judgment, the data it uses with its licenses and citations, and how to hand it out. The index filters them by level, format, time, mathematics, subject, textbook chapter, kind of data and whether they work offline.</span><span class="gs-es" lang="es">Cada investigación y cada actividad de clase tiene una página de adopción: a quién va dirigida, cuánto dura, qué debe saber antes el estudiantado, qué se califica y qué requiere su criterio, los datos que usa con sus licencias y citas, y cómo repartirla. El índice las filtra por nivel, formato, tiempo, matemáticas, tema, capítulo del libro, tipo de datos y si funcionan sin conexión.</span></p>
+      <p class="teach-find-links"><a class="ui-button is-primary" href="/teaching/find/"><span class="gs-en">Browse the adoption pages</span><span class="gs-es" lang="es">Explorar las páginas de adopción</span></a>
+        <a class="ui-button" href="/library/"><span class="gs-en">The Library: scenarios, datasets, courses and experiments too</span><span class="gs-es" lang="es">La Biblioteca: también escenarios, conjuntos de datos, cursos y experimentos</span></a></p>
+      <!--
+        Classroom activities. One activity in three teaching formats, each of
+        which opens a real investigation cut to length by the assignment
+        machinery in js/assignments/ - not a second lesson runner and not a
+        copy of the catalog. js/teachingPage.js fills this in from
+        js/data/activities.js, which is loaded on demand.
+      -->
+      <h2 id="activities" data-i18n="teach.activities.heading">
+        Classroom activities
+      </h2>
+      <p data-i18n="teach.activities.lede"></p>
+      <p
+        class="doc-note teach-activity-fallback"
+        id="activityFallback"
+        role="status"
+        hidden
+      ></p>
+      <div class="teach-activities" id="teachActivities"></div>
+      <p class="teach-fineprint">
+        <span data-i18n="teach.activities.vs.investigations"></span>
+        <a href="/#investigationBrowser" data-i18n="teach.activities.browse"
+          >Browse all investigations</a
+        >
+      </p>
+
+      <p class="doc-eyebrow" id="path-build"><span class="gs-en">Step 4 of 8</span><span class="gs-es" lang="es">Paso 4 de 8</span>: <span class="gs-en">Build an activity or a course</span><span class="gs-es" lang="es">Crear una actividad o un curso</span></p>
+      <h2 id="build"><span class="gs-en">Build your own</span><span class="gs-es" lang="es">Crear lo propio</span></h2>
+      <p><span class="gs-en">Open any adoption page and choose “Make an activity from it” to pick the steps, add a note and a roster name, and share one link. To write new material, the Investigation Composer makes an investigation, the course builder orders investigations and activities into a course, and the Scenario Studio makes the worlds they start from.</span><span class="gs-es" lang="es">Abra cualquier página de adopción y elija «Crear una actividad a partir de ella» para escoger los pasos, añadir una nota y un nombre de grupo, y compartir un solo enlace. Para escribir material nuevo, el Compositor de investigaciones crea una investigación, el creador de cursos ordena investigaciones y actividades en un curso, y el Estudio de escenarios crea los mundos de los que parten.</span></p>
+      <ul>
+        <li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li>
+        <li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li>
+        <li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li>
+      </ul>
+      <h2 id="patterns" data-i18n="teach.section.patterns">
+        Five ways to use it in a course
+      </h2>
+      <p data-i18n="teach.patterns.intro"></p>
+      <div class="teach-patterns" id="teachPatterns"></div>
+
+      <p class="doc-eyebrow" id="path-collect"><span class="gs-en">Step 5 of 8</span><span class="gs-es" lang="es">Paso 5 de 8</span>: <span class="gs-en">Collect and review work</span><span class="gs-es" lang="es">Recoger y revisar el trabajo</span></p>
+      <h2 id="collect"><span class="gs-en">Collecting the work</span><span class="gs-es" lang="es">Recoger el trabajo</span></h2>
+      <p><span class="gs-en">Student work stays in the browser it was made in. Students hand in the lab report PDF, a progress file or a submission token; the submission review page reads them, shows which questions the class found hardest, keeps nothing and sends nothing anywhere. It is not a gradebook: there is no roster, and it checks answers, not identity.</span><span class="gs-es" lang="es">El trabajo del estudiantado se queda en el navegador donde se hizo. Entregan el informe de laboratorio en PDF, un archivo de progreso o una ficha de entrega; la página de revisión de entregas los lee, muestra qué preguntas le costaron más a la clase, no guarda nada y no envía nada a ninguna parte. No es un libro de calificaciones: no hay lista de grupo, y comprueba respuestas, no identidad.</span></p>
+      <p><a class="ui-button" href="/instructors/submissions/"><span class="gs-en">Open submission review</span><span class="gs-es" lang="es">Abrir la revisión de entregas</span></a></p>
+      <p class="doc-eyebrow" id="path-materials"><span class="gs-en">Step 6 of 8</span><span class="gs-es" lang="es">Paso 6 de 8</span>: <span class="gs-en">Materials and answer keys</span><span class="gs-es" lang="es">Materiales y claves de respuestas</span></p>
+      <h2 id="materials"><span class="gs-en">Materials and answer keys</span><span class="gs-es" lang="es">Materiales y claves de respuestas</span></h2>
+      <p><span class="gs-en">The public part is on each adoption page: the topic, where it fits in a course, what students should already know and the wrong turns they take. The answer keys, the worked values and the teaching notes are in the instructor resources, which are encrypted: the site is static, so a passphrase, shared with instructors on request, decrypts them in your browser.</span><span class="gs-es" lang="es">La parte pública está en cada página de adopción: el tema, dónde encaja en un curso, qué debería saber ya el estudiantado y los errores que comete. Las claves de respuestas, los valores resueltos y las notas docentes están en los recursos para docentes, que están cifrados: el sitio es estático, así que una frase de acceso, compartida con docentes a petición, los descifra en su navegador.</span></p>
+      <p><a class="ui-button" href="/instructors/"><span class="gs-en">Open the instructor resources</span><span class="gs-es" lang="es">Abrir los recursos para docentes</span></a></p>
+      <p class="doc-eyebrow" id="path-present"><span class="gs-en">Step 7 of 8</span><span class="gs-es" lang="es">Paso 7 de 8</span>: <span class="gs-en">Embed and present</span><span class="gs-es" lang="es">Insertar y presentar</span></p>
+      <h2 id="embed"><span class="gs-en">Embedding a figure</span><span class="gs-es" lang="es">Insertar una figura</span></h2>
+      <p><span class="gs-en">Any state of the simulation can sit in your own course page as an interactive figure that remembers nothing and sends nothing. The figure builder writes the markup; each adoption page also carries ready-made figures for the worlds its investigation uses. The six demonstrations below are the quickest way to present one live.</span><span class="gs-es" lang="es">Cualquier estado de la simulación puede incluirse en la página de su curso como una figura interactiva que no recuerda ni envía nada. El creador de figuras escribe el código; cada página de adopción lleva además figuras listas para los mundos que usa su investigación. Las seis demostraciones de abajo son la forma más rápida de presentar una en directo.</span></p>
+      <p><a class="ui-button" href="/figure/"><span class="gs-en">Open the figure builder</span><span class="gs-es" lang="es">Abrir el creador de figuras</span></a></p>
+      <h2 id="demos" data-i18n="teach.section.demos">
+        Six demonstrations you can run here
+      </h2>
+      <p data-i18n="teach.demos.intro"></p>
+      <p class="doc-note" data-i18n="teach.demos.note"></p>
+      <div class="teach-demos" id="teachDemos"></div>
+      <div class="teach-sequence">
+        <button type="button" class="ui-button" id="teachCopySequence">
+          Copy all six as a lecture sequence
+        </button>
+        <p class="teach-fineprint" data-i18n="teach.demos.sequence.note"></p>
+        <pre class="teach-sequence-text" id="teachSequenceText" hidden></pre>
+      </div>
+
+      <p class="doc-eyebrow" id="path-cite"><span class="gs-en">Step 8 of 8</span><span class="gs-es" lang="es">Paso 8 de 8</span>: <span class="gs-en">Cite and evaluate</span><span class="gs-es" lang="es">Citar y evaluar</span></p>
+      <h2 id="cite"><span class="gs-en">Citing Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></h2>
+      <p><span class="gs-en">Gravitas is free and MIT licensed. To cite it, use the citation file in the repository, which GitHub turns into BibTeX and APA. Every dataset an adoption page lists carries its own license and the citation its publisher asks for.</span><span class="gs-es" lang="es">Gravitas es gratuito y tiene licencia MIT. Para citarlo, use el archivo de citas del repositorio, que GitHub convierte en BibTeX y APA. Cada conjunto de datos que enumera una página de adopción lleva su propia licencia y la cita que pide su editor.</span></p>
+      <p><a class="ui-button" href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">The citation file</span><span class="gs-es" lang="es">El archivo de citas</span></a></p>
       <h2 id="evidence" data-i18n="teach.section.evidence">
         Where to check the physics
       </h2>

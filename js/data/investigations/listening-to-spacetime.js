@@ -96,6 +96,8 @@ const LISTENING_TO_SPACETIME = {
   duration: '75-90 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 24, section: '24.7' },
+  courseLevel: 'majors',
   mathematics: 'arithmetic',
   prerequisites: ['what-is-a-gravitational-wave'],
   tags: ['compact-objects', 'gravity', 'observing', 'waves'],

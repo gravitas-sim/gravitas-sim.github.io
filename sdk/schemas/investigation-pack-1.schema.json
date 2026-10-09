@@ -280,6 +280,33 @@
         ]
       }
     },
+    "textbook": {
+      "type": "object",
+      "required": [
+        "chapter"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "chapter": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "section": {
+          "type": "string",
+          "pattern": "^[0-9]{1,2}\\.[0-9]{1,2}$"
+        }
+      },
+      "description": "The OpenStax Astronomy 2e chapter, and a section of it, that covers this investigation. The section must begin with the chapter's number."
+    },
+    "courseLevel": {
+      "enum": [
+        "survey",
+        "majors",
+        "upper"
+      ],
+      "description": "The course it suits: a survey for non-majors, an introductory course for science majors, or upper division."
+    },
     "seed": {
       "type": "integer",
       "minimum": 0,

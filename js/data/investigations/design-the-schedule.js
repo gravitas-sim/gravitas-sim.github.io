@@ -109,6 +109,8 @@ const DESIGN_THE_SCHEDULE = {
   duration: '35-40 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 21, section: '21.4' },
+  courseLevel: 'majors',
   mathematics: 'arithmetic',
   prerequisites: ['radial-velocity', 'detect-this-planet'],
   tags: ['exoplanets', 'observing'],

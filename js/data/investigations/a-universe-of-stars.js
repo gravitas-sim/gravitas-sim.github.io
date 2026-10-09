@@ -254,6 +254,8 @@ const A_UNIVERSE_OF_STARS = {
   duration: '70-90 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 18, section: '18.1' },
+  courseLevel: 'survey',
   mathematics: 'logarithms',
   prerequisites: [],
   tags: ['stars', 'observing'],

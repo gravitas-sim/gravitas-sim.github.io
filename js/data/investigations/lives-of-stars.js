@@ -120,6 +120,8 @@ const LIVES_OF_STARS = {
   duration: '80-100 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 22, section: '22.1' },
+  courseLevel: 'survey',
   mathematics: 'logarithms',
   prerequisites: [],
   tags: ['stars', 'stellar-evolution'],

@@ -16,6 +16,7 @@ current, and the orchestrator checks it.
 | `blackhole-shots.mjs` | Captures of the black holes |  |
 | `body-shots.mjs` | Reference captures of the bodies, for a before-and-after on their drawing |  |
 | `browser-support.mjs` | The supported-browser statement, generated (Prompt 111) | `npm run support:sync`, `npm run support:check` |
+| `build-adoption-pages.mjs` | The adoption pages: one for every investigation and activity |  |
 | `build-data-packs.mjs` | Observation data packs: build, check, reproduce | `npm run packs:data`, `npm run packs:provenance`, `npm run packs:check` |
 | `build-ephemeris.mjs` | The educational ephemeris pack, from JPL Horizons | `npm run ephemeris:data`, `npm run ephemeris:check`, `npm run ephemeris:provenance` |
 | `build-gw-data.mjs` | The published GW150914 figure data, as a data pack | `npm run gw:data`, `npm run gw:provenance`, `npm run gw:check` |

@@ -558,3 +558,24 @@
     color: var(--text-secondary);
   }
 }
+
+/* The instructor path (ADOPTION.md): the contents list is the eight steps,
+   each holding the sections that belong to it. */
+@layer components {
+  .teach-path {
+    padding-left: var(--space-5);
+  }
+  .teach-path > li {
+    margin-bottom: var(--space-2);
+  }
+  .teach-path ol {
+    margin: var(--space-1) 0 var(--space-2);
+    padding-left: var(--space-5);
+    font-size: var(--text-sm);
+  }
+  .teach-find-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+}

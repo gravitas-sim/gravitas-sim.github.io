@@ -114,6 +114,8 @@ const TIDES = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 4, section: '4.6' },
+  courseLevel: 'survey',
   mathematics: 'logarithms',
   prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary

@@ -502,6 +502,47 @@ function aboutSection(d) {
         )
       ),
       field(
+        idOf('textbook'),
+        t('composer.field.textbook'),
+        textInput(
+          d.textbook?.chapter,
+          v =>
+            commit(x => {
+              const n = numberOf(v);
+              if (v.trim() === '') delete x.textbook;
+              else x.textbook = { ...x.textbook, chapter: n };
+            }),
+          { numeric: true }
+        ),
+        t('composer.hint.textbook')
+      ),
+      field(
+        idOf('textbook.section'),
+        t('composer.field.textbookSection'),
+        textInput(d.textbook?.section, v =>
+          commit(x => {
+            if (!x.textbook) return;
+            if (v.trim()) x.textbook.section = v.trim();
+            else delete x.textbook.section;
+          })
+        )
+      ),
+      field(
+        idOf('courseLevel'),
+        t('composer.field.courseLevel'),
+        select(
+          [
+            ['', t('composer.courseLevel.none')],
+            ...['survey', 'majors', 'upper'].map(l => [
+              l,
+              t(`composer.courseLevel.${l}`),
+            ]),
+          ],
+          d.courseLevel,
+          v => commit(x => (v ? (x.courseLevel = v) : delete x.courseLevel))
+        )
+      ),
+      field(
         idOf('seed'),
         t('composer.field.seed'),
         textInput(d.seed, v => commit(x => (x.seed = numberOf(v))), {

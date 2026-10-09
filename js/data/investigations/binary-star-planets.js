@@ -112,6 +112,8 @@ const BINARY_STAR_PLANETS = {
   duration: '40-50 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 21, section: '21.5' },
+  courseLevel: 'majors',
   mathematics: 'algebra',
   prerequisites: ['butterfly-effect'],
   // Subject tags, for the browser's filters. A fixed vocabulary

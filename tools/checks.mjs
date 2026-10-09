@@ -617,6 +617,18 @@ export const CHECKS = [
       'runs `build-library.mjs --check`); a step of its own is a workflow change',
     group: 'generated',
   },
+  // The adoption pages (ADOPTION.md), against the Library and the sources.
+  {
+    id: 'adoption',
+    label: 'the adoption pages and their index',
+    command: ['node', 'tools/generate.mjs', '--check', '--only', 'adoption'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same check inside the unit tests (tests/adoptionPages.test.js ' +
+      'runs `build-adoption-pages.mjs --check`); a step of its own is a workflow change',
+    group: 'generated',
+  },
   {
     id: 'activities',
     label: 'activity formats and their step lists',

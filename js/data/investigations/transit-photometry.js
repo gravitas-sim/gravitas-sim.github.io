@@ -127,6 +127,8 @@ const TRANSITS = {
   duration: '50-70 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 21, section: '21.4' },
+  courseLevel: 'survey',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: [],

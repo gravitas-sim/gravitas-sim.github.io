@@ -57,6 +57,8 @@ const KEPLER = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 3, section: '3.1' },
+  courseLevel: 'survey',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'logarithms',
   prerequisites: [],
