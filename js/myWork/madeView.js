@@ -137,6 +137,17 @@ async function made(page) {
   const list = madeIn(state.records);
   const entries = entriesOf(state.records);
   box.querySelector('.mw-none').hidden = list.length > 0;
+  // What the student has open and where the focus is survive the redraw: a
+  // refresh closed the group they had just opened and dropped the tick from
+  // sight (and from a keyboard user's place).
+  const same = (a, b) =>
+    a.dataset.made === b.dataset.made &&
+    a.dataset.key === b.dataset.key &&
+    a.dataset.entry === b.dataset.entry;
+  const controls = () => [...box.querySelectorAll('[data-made]')];
+  const was = controls();
+  const opened = was.filter(c => c.closest('details[open]'));
+  const focused = was.find(c => c === document.activeElement);
   box.querySelector('.mw-body').innerHTML = list.length
     ? `<ul class="mw-list">${list
         .map(r =>
@@ -162,6 +173,10 @@ async function made(page) {
         )
         .join('')}</ul>`
     : '';
+  for (const c of controls()) {
+    if (opened.some(o => same(o, c))) c.closest('details').open = true;
+    if (focused && same(focused, c)) c.focus({ preventScroll: true });
+  }
   if (wired) return;
   wired = true;
   box.addEventListener('change', async e => {

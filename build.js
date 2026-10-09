@@ -515,7 +515,11 @@ async function buildDocPages() {
       entryPoints: ['js/studioPage.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing this page bundles reads a function's name (the
+      // engine compares classes by identity, tests/buildIntegrity.test.js), and
+      // the helper would be a chunk of its own beside the lazy chunks: one more
+      // request on the route (tools/route-budgets.json).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
@@ -534,7 +538,11 @@ async function buildDocPages() {
       entryPoints: ['js/composerPage.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing this page bundles reads a function's name (the
+      // engine compares classes by identity, tests/buildIntegrity.test.js), and
+      // the helper would be a chunk of its own beside the lazy chunks: one more
+      // request on the route (tools/route-budgets.json).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
@@ -557,7 +565,11 @@ async function buildDocPages() {
       entryPoints: [entry],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing this page bundles reads a function's name (the
+      // engine compares classes by identity, tests/buildIntegrity.test.js), and
+      // the helper would be a chunk of its own beside the lazy chunks: one more
+      // request on the route (tools/route-budgets.json).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),
@@ -693,7 +705,11 @@ async function buildDocPages() {
       entryPoints: ['js/experimentsPage.js'],
       bundle: true,
       minify: true,
-      keepNames: true,
+      // No keepNames: nothing this page bundles reads a function's name (the
+      // engine compares classes by identity, tests/buildIntegrity.test.js), and
+      // the helper would be a chunk of its own beside the lazy chunks: one more
+      // request on the route (tools/route-budgets.json).
+      keepNames: false,
       format: 'esm',
       target: ['es2022'],
       outdir: path.join(OUT, 'js'),

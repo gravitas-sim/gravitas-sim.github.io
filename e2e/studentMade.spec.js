@@ -91,6 +91,12 @@ test.describe('scenarios made, in My work', () => {
     await item.locator('summary').click();
     await item.getByRole('checkbox', { name: /Period of the planet/ }).check();
     await expect(item.locator('summary')).toContainText('1 attached');
+    // The redraw after the write leaves the group open and the tick in view:
+    // the box is visible, still checked and still holds the focus.
+    const tick = item.getByRole('checkbox', { name: /Period of the planet/ });
+    await expect(tick).toBeVisible();
+    await expect(tick).toBeChecked();
+    await expect(tick).toBeFocused();
 
     // One item exports as a backup file that holds it.
     const [download] = await Promise.all([

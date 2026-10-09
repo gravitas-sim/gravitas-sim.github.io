@@ -222,3 +222,22 @@ export const exactFrame = s => ({
   x: s.x,
   v: s.v,
 });
+
+/**
+ * The system a stopped session would continue as: its bodies still alive,
+ * with the snapshot's numbers, at the snapshot's time.
+ */
+export function restartFrom(system, snap) {
+  const bodies = [];
+  system.bodies.forEach((b, i) => {
+    if (!snap.alive[i]) return;
+    bodies.push({
+      ...b,
+      m: snap.m[i],
+      radius: snap.radius[i],
+      x: [snap.x[3 * i], snap.x[3 * i + 1], snap.x[3 * i + 2]],
+      v: [snap.v[3 * i], snap.v[3 * i + 1], snap.v[3 * i + 2]],
+    });
+  });
+  return { ...system, t: snap.t, bodies };
+}
