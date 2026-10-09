@@ -24,13 +24,14 @@ const LIBRARY = JSON.parse(readFileSync('library/library.json', 'utf8'));
 const MAX = 2;
 // REAL FINDING (not fixed here: no shipped changes). Up to 1024 px the shell
 // folds behind Menu, which counts as an activation, so a nav target that Home
-// does not link itself costs three; by touch the welcome screen's close button
-// sits over Menu, so the welcome must be closed first, four. At both widths. Exact counts, asserted, so the excess can only shrink.
+// does not link itself costs three, by touch and keyboard alike (the welcome's
+// close button used to cover Menu by touch, which made it four; it no longer
+// does, P75 F-1). Exact counts, asserted, so the excess can only shrink.
 const OVER = {
   '375/keyboard': 3,
-  '375/touch': 4,
+  '375/touch': 3,
   '1024/keyboard': 3,
-  '1024/touch': 4,
+  '1024/touch': 3,
 };
 
 // Allowlists (each entry justified; the count is asserted).
