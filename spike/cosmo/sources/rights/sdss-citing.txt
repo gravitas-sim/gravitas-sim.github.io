@@ -1,0 +1,123 @@
+How to Cite SDSS - SDSS
+Skip to content
+NEW:
+SDSS planetarium films
+Primary Menu
+Data
+Mappers
+Expand Mappers submenu
+Collapse Mappers submenu
+About Milky Way Mapper
+About Local Volume Mapper
+About Black Hole Mapper
+Instruments
+Collaboration
+Science
+Expand Science submenu
+Collapse Science submenu
+Results
+News
+Image Gallery
+Publications
+EPO
+Future
+Contact
+Collaboration
+How to Cite SDSS
+Search
+Theme -> Customize -> Widgets -->
+How to Cite SDSS
+Acknowledging and Citing SDSS
+We request that the following acknowledgement be included in any paper using data or software from SDSS-V:
+Funding for the Sloan Digital Sky Survey V has been provided by the Alfred P. Sloan Foundation, the Heising-Simons Foundation, the National Science Foundation, and the Participating Institutions. SDSS acknowledges support and resources from the Center for High-Performance Computing at the University of Utah. SDSS telescopes are located at Apache Point Observatory, funded by the Astrophysical Research Consortium and operated by New Mexico State University, and at Las Campanas Observatory, operated by the Carnegie Institution for Science. The SDSS web site is
+www.sdss.org
+.
+SDSS is managed by the Astrophysical Research Consortium for the Participating Institutions of the SDSS Collaboration, including the Carnegie Institution for Science, Chilean National Time Allocation Committee (CNTAC) ratified researchers, Caltech, the Gotham Participation Group, Harvard University, Heidelberg University, The Flatiron Institute,  The Johns Hopkins University, L’Ecole polytechnique fédérale de Lausanne (EPFL), Leibniz-Institut für Astrophysik Potsdam (AIP), Max-Planck-Institut für Astronomie (MPIA Heidelberg), Max-Planck-Institut für Extraterrestrische Physik (MPE), Nanjing University, National Astronomical Observatories of China (NAOC), New Mexico State University, The Ohio State University, Pennsylvania State University, Smithsonian Astrophysical Observatory, Space Telescope Science Institute (STScI), the Stellar Astrophysics Participation Group, Universidad Nacional Autónoma de México (UNAM), University of Arizona, University of Colorado Boulder, University of Illinois at Urbana-Champaign, University of Toronto, University of Utah, University of Virginia, Yale University, and Yunnan University.
+Or the Latex version of the Acknowledgement:
+Funding for the Sloan Digital Sky Survey V has been provided by the Alfred P. Sloan Foundation, the Heising-Simons Foundation, the National Science Foundation, and the Participating Institutions. SDSS acknowledges support and resources from the Center for High-Performance Computing at the University of Utah. SDSS telescopes are located at Apache Point Observatory, funded by the Astrophysical Research Consortium and operated by New Mexico State University, and at Las Campanas Observatory, operated by the Carnegie Institution for Science. The SDSS web site is \url{www.sdss.org}.
+SDSS is managed by the Astrophysical Research Consortium for the Participating Institutions of the SDSS Collaboration, including the Carnegie Institution for Science, Chilean National Time Allocation Committee (CNTAC) ratified researchers, Caltech, the Gotham Participation Group, Harvard University, Heidelberg University, The Flatiron Institute, The Johns Hopkins University, L'Ecole polytechnique f\'{e}d\'{e}rale de Lausanne (EPFL), Leibniz-Institut f\"{u}r Astrophysik Potsdam (AIP), Max-Planck-Institut f\"{u}r Astronomie (MPIA Heidelberg), Max-Planck-Institut f\"{u}r Extraterrestrische Physik (MPE), Nanjing University, National Astronomical Observatories of China (NAOC), New Mexico State University, The Ohio State University, Pennsylvania State University, Smithsonian Astrophysical Observatory, Space Telescope Science Institute (STScI), the Stellar Astrophysics Participation Group, Universidad Nacional Aut\'{o}noma de M\'{e}xico, University of Arizona, University of Colorado Boulder, University of Illinois at Urbana-Champaign, University of Toronto, University of Utah, University of Virginia, Yale University, and Yunnan University.
+Technical Publications to cite
+We also ask that these papers cite the key technical publications of SDSS-V relevant to the data or software being used. This list will be updated over time.
+The Full List of Technical Papers
+All technical publications are automatically updated and can be found
+here
+.
+Overview
+All SDSS-V papers should cite the SDSS-V Overview Paper
+Kollmeier et al. (2026)
+.
+MWM / BHM
+All Milky Way Mapper and Black Hole Mapper papers should cite:
+Gunn et al. (2006),
+AJ, 131, 2332
+(the SDSS Telescope)
+Bowen & Vaughan (1973),
+ApOpt, 12, 1430
+(the Irénée du Pont Telescope)
+Smee et al. (2013),
+AJ, 126, 32
+(the SDSS/BOSS spectrographs)
+Wilson et al. (2019),
+PASP, 131, 055001
+(the APOGEE spectrographs)
+LVM
+All Local Volume Mapper papers should cite:
+Drory et al. (2024),
+AJ, 168, 198
+(overview)
+Blanc et al. (2024),
+SPIE, 1309403
+(instrument)
+Herbst et al. (2024),
+AJ, 168, 267
+(telescope)
+Sánchez et al. (2025),
+AJ, 169, 52
+(data analysis pipeline)
+Perruchot, S., et al. (2018),
+SPIE, 10702, 7
+(DESI Spectrographs)
+For a full list of current LVM technical papers, see the DR20
+LVM Technical Papers
+page.
+Previous phases of SDSS (SDSS-I, II, III and IV)
+For previous phases of SDSS, the appropriate acknowledgment(s) for the survey and data releases that were used should be included in the Acknowledgments section:
+SDSS-I/II acknowledgment
+(SDSS-I, SDSS-II Legacy, SDSS-II SEGUE-1, SDSS-II Supernova, DR 1-7)
+SDSS-III acknowledgment
+(APOGEE-1, BOSS, MARVELS, SEGUE-2, DR 8-12)
+SDSS-IV acknowledgment
+(APOGEE-2, eBOSS, MaNGA, MaStar, DR 13-17)
+Collaboration
+Overview
+How to Cite SDSS
+Image Use Policy
+Affiliate Institutions
+Key People
+Architects
+Collaboration Council
+Advisory Council
+Committee on Inclusiveness
+SDSS People
+For SDSS-V Collaboration Members
+Code of Conduct
+Publication Policy
+External Collaborator Policy
+Explore
+Data Release 20
+Data Access
+Tutorials
+Value Added Catalogs
+Learn
+Mappers
+Instruments
+Education
+Science
+Connect
+Contact Us
+Email Helpdesk
+Facebook
+Bluesky
+SDSS is supported by:
+Copyright 2022 | Sloan Digital Sky Survey
+Back to Top
