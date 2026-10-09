@@ -209,6 +209,10 @@ export const ES_SUBMISSIONS = {
     '{students} estudiantes, {activities} actividades, {rows} calificaciones.',
   'sub.gb.skipped':
     '{n} informes no tienen identificador y se dejan fuera: {list}.',
+  'sub.gb.autoName':
+    'Se usa el nombre escrito en el informe, porque un mismo identificador de lista ({id}) abarca {n} nombres distintos y usarlo uniría a todos en un solo estudiante. Puede cambiarlo arriba.',
+  'sub.gb.merged':
+    'Aviso: un mismo identificador de lista ({id}) abarca {n} nombres distintos. Si se usa el identificador, todos quedan en un solo estudiante con una sola calificación. Use el nombre escrito, salvo que eso sea lo que quiere.',
   'sub.gb.partial':
     '{n} respuestas escritas aún no tienen nota, así que esas calificaciones son parciales.',
   'sub.gb.possible.title':

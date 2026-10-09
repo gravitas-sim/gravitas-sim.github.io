@@ -206,6 +206,10 @@ export const EN_SUBMISSIONS = {
     '{students} students, {activities} activities, {rows} scores.',
   'sub.gb.skipped':
     '{n} reports have no id to match on and are left out: {list}.',
+  'sub.gb.autoName':
+    'Matching by the name typed in the report, because one roster id ({id}) covers {n} different names and matching on it would merge them into one student. You can change this above.',
+  'sub.gb.merged':
+    'Warning: one roster id ({id}) covers {n} different names. Matching on the roster id merges them into one student with one score. Match by the typed name unless that is what you want.',
   'sub.gb.partial':
     '{n} written answers have no mark yet, so those scores are partial.',
   'sub.gb.possible.title': 'Points possible, for setting up the grade items',

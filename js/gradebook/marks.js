@@ -80,6 +80,24 @@ export function setMark(marks, fingerprint, sid, value, possible = Infinity) {
 }
 
 /**
+ * Whether a question is a written answer an instructor has to read and mark.
+ *
+ * checkAnswer() returns null for anything that is not a choice or a number, so
+ * "unmarked" also covers a measure step, whose answer is a row of fields such
+ * as `circ_e=1.5; ...`. That is a record of what the student measured, not
+ * prose to mark, and counting it overstated the marking load (P81 R-2). A
+ * record that does not say what kind of step it came from (older fixtures) is
+ * a written answer unless its step type is `measure`.
+ *
+ * @param {object} q - A question from gradeSubmission()
+ * @returns {boolean} Whether to ask the instructor for a mark
+ */
+export const isWrittenAnswer = q =>
+  q.verdict === 'unmarked' &&
+  q.response !== null &&
+  (q.kind ? q.kind === 'short' : q.type !== 'measure');
+
+/**
  * The written answers a person has to read: every question the machine could
  * not judge and that has an answer.
  * @param {Array<object>} records - From annotate()
@@ -90,7 +108,7 @@ export const needsJudgment = records =>
     .filter(r => r.duplicateOf === null || r.duplicateOf === undefined)
     .flatMap(record =>
       record.questions
-        .filter(q => q.verdict === 'unmarked' && q.response !== null)
+        .filter(isWrittenAnswer)
         .map(question => ({ record, question }))
     );
 
