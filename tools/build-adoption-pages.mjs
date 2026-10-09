@@ -205,8 +205,8 @@ const W = {
     'Dónde está la clave: en la tarjeta de esta investigación de la página de recursos para docentes, en «Answer Key» e «Instructor Guide». Una actividad recortada de ella hace las mismas preguntas, así que sirve la misma clave. La página explica cómo pedir la frase de acceso.',
   ],
   actKey: [
-    'Where the key is: each investigation’s card on the instructor resources page holds its answer key and guide, and an activity cut from it uses the same key. The page explains how to ask for the passphrase.',
-    'Dónde está la clave: la tarjeta de cada investigación en la página de recursos para docentes tiene su clave de respuestas y su guía, y una actividad recortada de ella usa la misma clave. La página explica cómo pedir la frase de acceso.',
+    'Where the key is: each investigation’s card on the instructor resources page holds its answer key and teaching notes, and an activity cut from it uses the same key. The page explains how to ask for the passphrase.',
+    'Dónde está la clave: la tarjeta de cada investigación en la página de recursos para docentes tiene su clave de respuestas y sus notas docentes, y una actividad recortada de ella usa la misma clave. La página explica cómo pedir la frase de acceso.',
   ],
   materialsLink: [
     'Open the instructor resources',
