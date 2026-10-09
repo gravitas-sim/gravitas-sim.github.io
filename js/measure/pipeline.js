@@ -47,7 +47,11 @@ import {
   crossMatch,
   VERSION as TABLE_VERSION,
 } from './tableOps.js';
-import { isObject, plainDataProblem } from '../platform/common.js';
+import {
+  isObject,
+  plainDataProblem,
+  readVersioned,
+} from '../platform/common.js';
 import { sha256Hex } from '../hash.js';
 import { isUnit } from '../units/registry.js';
 import { contentPayload } from '../observatory/identity.js';
@@ -919,12 +923,11 @@ export function readPipeline(text) {
     };
   }
   if (doc?.format !== FORMAT) return { ok: false, code: 'notPipeline' };
-  if (doc.formatVersion > FORMAT_VERSION)
-    return { ok: false, code: 'newer', detail: { version: doc.formatVersion } };
-  if (doc.formatVersion !== FORMAT_VERSION)
+  const v = readVersioned(doc, { current: FORMAT_VERSION });
+  if (!v.ok)
     return {
       ok: false,
-      code: 'unknownVersion',
+      code: v.reason === 'newer' ? 'newer' : 'unknownVersion',
       detail: { version: doc.formatVersion },
     };
   if (!doc.workspace || !Array.isArray(doc.nodes))

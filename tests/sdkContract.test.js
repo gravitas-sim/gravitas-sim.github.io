@@ -560,24 +560,49 @@ describe('the JSON Schemas describe what the validators accept', () => {
     expect(valid(schema('course-pack-1'), noUnits)).toBe(false);
   });
 
-  test('each schema is a JSON Schema, named for its format', () => {
-    for (const [file, format] of [
-      ['capability-package-1', 'gravitas.capability-package/1'],
-      ['observation-data-pack-1', 'gravitas.observation-data-pack/1'],
-      ['course-pack-1', 'gravitas.course-pack/1'],
-      ['course-pack-2', 'gravitas.course-pack/2'],
-      ['investigation-pack-1', 'gravitas.investigation-pack/1'],
-      ['scenario-pack-1', 'gravitas.scenario-pack/1'],
-      ['artifact-1', 'gravitas.artifact/1'],
-    ]) {
-      const s = schema(file);
-      expect(s.$schema).toBe('https://json-schema.org/draft/2020-12/schema');
-      expect(s.title).toBe(format);
-      expect(statSync(`sdk/schemas/${file}.schema.json`).size).toBeGreaterThan(
-        1000
-      );
-    }
+  // Every row of FORMATS.md with a schema, not a list kept beside it: a schema
+  // added to the table is held to this at once (R-F2, P58-P68 recheck).
+  const withSchema = readFileSync('FORMATS.md', 'utf8')
+    .split('\n')
+    .filter(l => l.startsWith('| ') && /\]\(sdk\/schemas\//.test(l))
+    .map(l => {
+      const c = l
+        .split('|')
+        .slice(1, -1)
+        .map(x => x.trim());
+      return {
+        name: c[0].replace(/\s*\(.*\)$/, ''),
+        version: c[2],
+        file: /sdk\/schemas\/([^)]+)\)/.exec(c[7])[1],
+      };
+    });
+
+  test('FORMATS.md names every schema file, and every row with a schema names a file', () => {
+    expect(withSchema.length).toBeGreaterThan(20);
+    expect(withSchema.map(f => f.file).sort()).toEqual(
+      readdirSync('sdk/schemas').sort()
+    );
   });
+
+  test.each(withSchema.map(f => [f.file, f]))(
+    '%s is a JSON Schema, named for its format, and turns away what is not one',
+    (_, f) => {
+      const s = JSON.parse(readFileSync(`sdk/schemas/${f.file}`, 'utf8'));
+      expect(s.$schema).toBe('https://json-schema.org/draft/2020-12/schema');
+      expect(s.title).toBe(`${f.name}/${f.version}`);
+      expect(s.$id.endsWith(`/sdk/schemas/${f.file}`)).toBe(true);
+      expect(statSync(`sdk/schemas/${f.file}`).size).toBeGreaterThan(1000);
+      // Not an object, and an object with nothing in it, are no document.
+      expect(valid(s, null)).toBe(false);
+      expect(valid(s, 'not a document')).toBe(false);
+      if (s.type === 'object') {
+        expect(valid(s, {})).toBe(false);
+        const named = s.properties?.format?.const;
+        if (named)
+          expect(valid(s, { format: named, formatVersion: 99 })).toBe(false);
+      }
+    }
+  );
 });
 
 describe('the command line', () => {

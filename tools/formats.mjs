@@ -520,6 +520,12 @@ export function render(formats = FORMATS) {
   const migrating = formats.filter(f =>
     /^migrates|^reads v1|^converts/.test(f.older)
   ).length;
+  // Whatever the table says has no reader, so the sentence below cannot
+  // outlive a reader being written (gravitas.analysis had one added).
+  const neverRead = formats
+    .filter(f => /^none: written/.test(f.owner))
+    .map(f => `\`${f.name}\``)
+    .join(', ');
   const rows = formats.map(
     f =>
       `| ${cell(f.name)} | ${cell(f.fields)} | ${f.version} | ${cell(f.owner)} | ${cell(f.persisted)} | ${cell(f.older)} | ${cell(f.newer)} | ${f.schema ? `[yes](sdk/schemas/${f.schema})` : 'no'} |`
@@ -558,7 +564,7 @@ ${rows.join('\n')}
 
   Prompt 61 makes \`format\` and \`formatVersion\` the one convention, and \`readVersioned()\` reads the older pairs by name for one major version.
 - **Confusable ids.** \`gravitas-experiment\` is no longer a format: it is the retired name of \`gravitas.experiment/1\`, which the A/B bench writes (\`kind: comparison\`) and the runner reads, as it reads the retired name, as version 0. The bench’s reliability check is \`gravitas.experiment-result/1\` of \`kind: reliability-check\`, the retired \`gravitas-reliability-check\` its version 0. \`gravitas.course-pack\` is two: /1, which extensions and the catalog carry, and /2, which the builder writes. The /1 validator refuses a /2 pack with the same message it gives any other version.
-- **Written but never read:** \`gravitas.analysis\`, the two guide reports, \`gravitas.mission-plan\` and \`gravitas.course-manifest\`. A student's file in any of them cannot be opened again.
+- **Written but never read:** ${neverRead}. A student's file in any of them cannot be opened again.
 - **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled \`newer\`, \`newerVersion\`, \`tooNew\`, \`schemaTooNew\` and \`from-a-newer-version\`), and not at all in the link blocks, \`gravitas.observed\` and the catalog curation.
 
 ## Scenarios by id

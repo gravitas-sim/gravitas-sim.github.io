@@ -78,7 +78,7 @@ The columns:
 
   Prompt 61 makes `format` and `formatVersion` the one convention, and `readVersioned()` reads the older pairs by name for one major version.
 - **Confusable ids.** `gravitas-experiment` is no longer a format: it is the retired name of `gravitas.experiment/1`, which the A/B bench writes (`kind: comparison`) and the runner reads, as it reads the retired name, as version 0. The bench’s reliability check is `gravitas.experiment-result/1` of `kind: reliability-check`, the retired `gravitas-reliability-check` its version 0. `gravitas.course-pack` is two: /1, which extensions and the catalog carry, and /2, which the builder writes. The /1 validator refuses a /2 pack with the same message it gives any other version.
-- **Written but never read:** `gravitas.analysis`, the two guide reports, `gravitas.mission-plan` and `gravitas.course-manifest`. A student's file in any of them cannot be opened again.
+- **Written but never read:** `gravitas.mission-plan`, `gravitas.lab3d-guide-report`, `gravitas.mission-lab-report`, `gravitas.course-manifest`. A student's file in any of them cannot be opened again.
 - **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled `newer`, `newerVersion`, `tooNew`, `schemaTooNew` and `from-a-newer-version`), and not at all in the link blocks, `gravitas.observed` and the catalog curation.
 
 ## Scenarios by id
