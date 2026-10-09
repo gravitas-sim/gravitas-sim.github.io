@@ -340,7 +340,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->8729<!--/fact--> tests across <!--fact:jestSuites-->276<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->8780<!--/fact--> tests across <!--fact:jestSuites-->277<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -366,7 +366,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->208<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->584<!--/fact--> KB           | <!--fact:buildStartupFiles-->52<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->4171<!--/fact--> KB         | <!--fact:buildDeferredChunks-->237<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->4172<!--/fact--> KB         | <!--fact:buildDeferredChunks-->237<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->792<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
