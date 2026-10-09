@@ -331,9 +331,13 @@ export function remixInvestigation(lesson, spanish, options) {
     locales: ['en', 'es'],
     title: text(lesson.title, es.title),
     subtitle: text(lesson.subtitle, es.subtitle),
+    // From the summaries file when it was given: a lesson holds none of its
+    // own, but js/data/investigations.js writes the English one onto every
+    // lesson object it imports, and a Spanish lesson built afterwards from
+    // that object carries the English summary as its own.
     summary: text(
-      lesson.summary ?? options.summary?.en,
-      es.summary || options.summary?.es
+      options.summary?.en ?? lesson.summary,
+      options.summary?.es ?? (es.summary !== lesson.summary ? es.summary : '')
     ),
     level: text(lesson.level, es.level),
     duration: lesson.duration,

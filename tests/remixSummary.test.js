@@ -51,12 +51,18 @@ describe('where the Spanish summary comes from', () => {
     expect(pack.summary).toMatchObject({ en: summary.en, es: summary.es });
   });
 
-  test('a Spanish lesson’s own summary still wins', () => {
+  test('a Spanish lesson’s own summary is used when no source is given', () => {
     const { pack } = remixInvestigation(
       lesson,
       { summary: 'El del propio archivo.' },
-      { id: 'my-x', summary }
+      { id: 'my-x' }
     );
-    expect(pack.summary.es).toBe('El del propio archivo.');
+    expect(pack.summary).toBeUndefined();
+    const own = remixInvestigation(
+      { ...lesson, summary: 'Own.' },
+      { summary: 'El del propio archivo.' },
+      { id: 'my-x' }
+    );
+    expect(own.pack.summary.es).toBe('El del propio archivo.');
   });
 });
