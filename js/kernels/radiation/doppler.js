@@ -3,9 +3,10 @@
 // -----------------------------------------------------------------------------
 // Two forms, with their ranges stated.
 //
-//   Non-relativistic   z = v / c.  Error against the relativistic form is
-//     about (3/2) beta^2 in z: below 1e-4 for v < 0.008 c (2,400 km/s), where a
-//     radial velocity measured on a star or a galaxy's rotation lives.
+//   Non-relativistic   z = v / c.  It differs from the relativistic form by about
+//     beta^2 / 2 in z (the series of sqrt((1+b)/(1-b))): under 1e-4 for
+//     v < 0.014 c (4,200 km/s) and under 1e-6 for a star's 30 km/s, where a
+//     stellar radial velocity or a galaxy's rotation lives.
 //   Relativistic       1 + z = sqrt((1 + beta) / (1 - beta)), beta = v/c.
 //     Exact for a source in uniform motion along the line of sight in flat
 //     spacetime. A transverse-only motion gives 1 + z = gamma.
