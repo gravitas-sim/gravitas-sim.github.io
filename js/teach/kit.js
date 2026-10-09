@@ -367,16 +367,15 @@ function wire() {
 }
 
 async function init() {
-  // First load follows the saved choice, then the browser, as Teach does; the
-  // page's own lang attribute is only the English default (P81 L-1).
+  // P81 L-1: saved choice, else the browser's, as Teach does.
   try {
     document.documentElement.lang = /^es/i.test(
-      localStorage.getItem('gravitas_locale') || navigator.language || ''
+      localStorage.getItem('gravitas_locale') || navigator.language
     )
       ? 'es'
       : 'en';
   } catch {
-    /* storage blocked: the page's own lang stands */
+    /* English */
   }
   wire();
   words();

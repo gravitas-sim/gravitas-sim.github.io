@@ -33,7 +33,7 @@ export const WORDS = {
   en: {
     'page.title': 'Investigations in a course | Gravitas',
     h1: 'Investigations in a course',
-    lede: 'An instructor’s version of an investigation reaches students as a link. A course can carry that link as one of its items. Here the link is opened as a student’s browser opens it, judged by the format and by what a remix may not change, and either made into a course item with its pin, or checked inside a course you already have. Nothing is uploaded.',
+    lede: 'An instructor’s version of an investigation reaches students as a link. Here the link is opened as a student’s browser opens it, judged by the format, then made into a course item with its pin, or checked inside a course you already have. Nothing is uploaded.',
     'mk.h': 'Make a course item',
     'mk.label': 'Paste the investigation link the Composer’s Publish made',
     'mk.go': 'Open and check it',
@@ -83,7 +83,7 @@ export const WORDS = {
   es: {
     'page.title': 'Investigaciones en un curso | Gravitas',
     h1: 'Investigaciones en un curso',
-    lede: 'La versión de un instructor de una investigación llega a los estudiantes como un enlace. Un curso puede llevar ese enlace como uno de sus elementos. Aquí el enlace se abre como lo abre el navegador de un estudiante, se juzga con el formato y con lo que una versión propia no puede cambiar, y se convierte en un elemento de curso con su ficha, o se comprueba dentro de un curso que ya tienes. No se sube nada.',
+    lede: 'La versión de un instructor de una investigación llega a los estudiantes como un enlace. Aquí el enlace se abre como lo abre el navegador de un estudiante, se juzga con el formato y se convierte en un elemento de curso con su ficha, o se comprueba dentro de un curso que ya tienes. No se sube nada.',
     'mk.h': 'Hacer un elemento de curso',
     'mk.label':
       'Pega el enlace de investigación que hizo Publicar en el Compositor',
@@ -355,16 +355,15 @@ function wire() {
 }
 
 function init() {
-  // First load follows the saved choice, then the browser, as Teach does; the
-  // page's own lang attribute is only the English default (P81 L-1).
+  // P81 L-1: saved choice, else the browser's, as Teach does.
   try {
     document.documentElement.lang = /^es/i.test(
-      localStorage.getItem('gravitas_locale') || navigator.language || ''
+      localStorage.getItem('gravitas_locale') || navigator.language
     )
       ? 'es'
       : 'en';
   } catch {
-    /* storage blocked: the page's own lang stands */
+    /* English */
   }
   wire();
   words();

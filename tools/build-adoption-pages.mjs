@@ -367,7 +367,7 @@ const pageHtml = ({
     es: `${title.es ?? title.en} | Gravitas`,
   }).replace(/</g, '\\u003c');
   const retitled = script.replace(
-    /\n      (const refresh = mountFind\(\);\n      )?mountShell\(\{ onLanguage: (.*?) \}\);/,
+    /\n {6}(const refresh = mountFind\(\);\n {6})?mountShell\(\{ onLanguage: (.*?) \}\);/,
     (_, setup = '', handler) =>
       `\n      const titles = ${titles};\n      const retitle = () => {\n        document.title =\n          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];\n      };\n      retitle();\n      ${setup}mountShell({\n        onLanguage: ${
         handler === '() => {}'
