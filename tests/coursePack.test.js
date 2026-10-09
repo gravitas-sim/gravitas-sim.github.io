@@ -564,6 +564,8 @@ describe('pins against the lessons as they are', () => {
       ['moved', true, true],
       ['unpinned', true, false],
       ['missing', true, true],
+      // An investigation pack no page here opened: said, not asked about.
+      ['unchecked', false, false],
     ]);
   });
 

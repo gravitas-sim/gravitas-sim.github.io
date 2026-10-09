@@ -43,9 +43,10 @@ export const EN_COURSE = {
     'Units run in order, and items in order within them. There are no dates: an instructor sets those. An item on the introductory or advanced path is optional, and the core may not depend on one.',
   'course.hint.minutesDerived':
     'Leave blank to use its own time (for an activity, its share of the steps).',
-  'course.hint.packLink':
-    'Paste the link the Composer’s Publish made. The course keeps the investigation inside the link, so it reaches students with the course. Its pin is the digest of the pack’s steps.',
-  'course.status.packFailed': 'That link cannot be used: {why}',
+  'course.hint.packItem':
+    'Paste the item made at the investigations check (it holds the investigation as a link, and its pin). That page opens the link and judges it; this one cannot.',
+  'course.status.packNotItem':
+    'That is not a course item for an investigation.',
   'course.status.packRead': 'Read “{id}” and pinned it.',
   'course.pack.corrupt': 'it is incomplete or damaged.',
   'course.pack.wrongKind': 'it is not an investigation link.',
@@ -82,7 +83,9 @@ export const EN_COURSE = {
   'course.field.lesson': 'Investigation',
   'course.field.unitTitle': 'Unit title',
   'course.field.addKind': 'New item',
-  'course.field.packLink': 'Investigation link',
+  'course.field.packItem': 'Investigation item',
+  'course.field.packOpen': 'Make or check one',
+  'course.action.packOpen': 'Open the investigations check',
   'course.field.path': 'Path',
   'course.field.minutes': 'Minutes',
   'course.field.needs': 'Comes after',
@@ -139,6 +142,8 @@ export const EN_COURSE = {
   'course.standing.moved': 'now comes from another package.',
   'course.standing.unpinned': 'not pinned yet.',
   'course.standing.missing': 'no longer in Gravitas.',
+  'course.standing.unchecked':
+    'not checked here: open it in the investigations check.',
   'course.steps.loading': 'Loading the steps.',
   'course.steps.needed': '(needed by a chosen step)',
   'course.checks.running': 'Checking.',
@@ -245,6 +250,8 @@ export const EN_COURSE = {
   'course.audit.noObjectives': 'The course has no objectives.',
   'course.audit.objectiveUnserved': 'No core item serves the objective "{id}".',
   'course.audit.noTime': 'This item has no time.',
+  'course.audit.packUnchecked':
+    'This investigation pack has not been opened and checked. Do that at /studio/course/packs/ before sending the course.',
   'course.audit.needs':
     'This item comes after "{id}", which the course does not have.',
   'course.audit.noGuide': '{lessonTitle} has no instructor guide yet.',

@@ -43,9 +43,10 @@ export const ES_COURSE = {
     'Las unidades van en orden, y los elementos en orden dentro de ellas. No hay fechas: esas las pone el docente. Un elemento del camino introductorio o avanzado es opcional, y lo principal no puede depender de él.',
   'course.hint.minutesDerived':
     'Déjalo en blanco para usar su propio tiempo (en una actividad, su parte de los pasos).',
-  'course.hint.packLink':
-    'Pega el enlace que hizo Publicar en el Compositor. El curso guarda la investigación dentro del enlace, así que llega a los estudiantes con el curso. Su ficha es el resumen de los pasos del paquete.',
-  'course.status.packFailed': 'Ese enlace no se puede usar: {why}',
+  'course.hint.packItem':
+    'Pega el elemento hecho en la comprobación de investigaciones (contiene la investigación como enlace, y su ficha). Esa página abre el enlace y lo juzga; esta no puede.',
+  'course.status.packNotItem':
+    'Eso no es un elemento de curso para una investigación.',
   'course.status.packRead': 'Se leyó «{id}» y se fijó su ficha.',
   'course.pack.corrupt': 'está incompleto o dañado.',
   'course.pack.wrongKind': 'no es un enlace de investigación.',
@@ -83,7 +84,9 @@ export const ES_COURSE = {
   'course.field.lesson': 'Investigación',
   'course.field.unitTitle': 'Título de la unidad',
   'course.field.addKind': 'Elemento nuevo',
-  'course.field.packLink': 'Enlace de la investigación',
+  'course.field.packItem': 'Elemento de investigación',
+  'course.field.packOpen': 'Hacer o comprobar uno',
+  'course.action.packOpen': 'Abrir la comprobación de investigaciones',
   'course.field.path': 'Camino',
   'course.field.minutes': 'Minutos',
   'course.field.needs': 'Va después de',
@@ -140,6 +143,8 @@ export const ES_COURSE = {
   'course.standing.moved': 'ahora viene de otro paquete.',
   'course.standing.unpinned': 'aún sin fijar.',
   'course.standing.missing': 'ya no está en Gravitas.',
+  'course.standing.unchecked':
+    'no se comprueba aquí: ábrelo en la comprobación de investigaciones.',
   'course.steps.loading': 'Cargando los pasos.',
   'course.steps.needed': '(lo necesita un paso elegido)',
   'course.checks.running': 'Comprobando.',
@@ -250,6 +255,8 @@ export const ES_COURSE = {
   'course.audit.objectiveUnserved':
     'Ningún elemento principal sirve al objetivo «{id}».',
   'course.audit.noTime': 'Este elemento no tiene tiempo.',
+  'course.audit.packUnchecked':
+    'Este paquete de investigación no se ha abierto ni comprobado. Hazlo en /studio/course/packs/ antes de enviar el curso.',
   'course.audit.needs':
     'Este elemento va después de «{id}», que el curso no tiene.',
   'course.audit.noGuide': '{lessonTitle} aún no tiene guía para docentes.',

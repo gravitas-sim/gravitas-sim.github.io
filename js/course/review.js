@@ -22,7 +22,9 @@
 //   major       the package moved a major version;
 //   moved       the lesson now comes from another package, or none;
 //   unpinned    the item carries no pin (a /1 pack, migrated);
-//   missing     Gravitas no longer has the lesson, scenario or dataset.
+//   missing     Gravitas no longer has the lesson, scenario or dataset;
+//   unchecked   an investigation pack no page here has opened (the builder
+//               cannot: /studio/course/packs/ does).
 //
 // Whether that needs an instructor to look depends on the pack's pinning. An
 // exact pack is an archive: anything but "same" needs review. A compatible
@@ -50,6 +52,7 @@ export const STATUS = Object.freeze({
   MOVED: 'moved',
   UNPINNED: 'unpinned',
   MISSING: 'missing',
+  UNCHECKED: 'unchecked',
 });
 
 /**
@@ -115,6 +118,8 @@ export function reviewItem(item, facts, pinning) {
       return verdict(STATUS.SAME);
   }
   const lesson = facts.lessons.get(lessonKeyOf(item));
+  if (!lesson && facts.unchecked?.has(lessonKeyOf(item)))
+    return verdict(STATUS.UNCHECKED);
   if (!lesson) return verdict(STATUS.MISSING);
   const steps = item.kind === 'assignment' ? stepStates(item, lesson) : [];
   const detail = {
@@ -144,6 +149,7 @@ export function needsReview(status, pinning, detail = {}) {
   // A rewritten or removed assigned step changes what the link asks, which no
   // pack accepts silently, whatever the lesson's digest says.
   if (detail.missingSteps?.length || detail.changedSteps?.length) return true;
+  if (status === STATUS.UNCHECKED) return false;
   if (status === STATUS.SAME) return false;
   if (pinning === 'exact') return true;
   return (
@@ -494,9 +500,13 @@ export function auditCourse(pack, facts) {
       add('warning', 'objectiveUnserved', `objectives[${i}]`, { id: o.id });
   }
   const time = estimate(pack, facts);
-  for (const { item, path } of all)
-    if (!time.items.get(item.id))
+  for (const { item, path } of all) {
+    // A pack nobody opened has no time to give yet; it says so on its own.
+    if (item.kind === 'pack' && facts.unchecked?.has(lessonKeyOf(item)))
+      add('note', 'packUnchecked', path, { id: item.id });
+    else if (!time.items.get(item.id))
       add('warning', 'noTime', path, { id: item.id });
+  }
   for (const { item, path } of all)
     for (const need of item.needs || [])
       if (order.get(need) === undefined)

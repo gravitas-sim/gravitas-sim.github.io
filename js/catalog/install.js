@@ -25,7 +25,6 @@ import { MANIFEST_ENTRY, readArchive } from './archive.js';
 import { PLATFORM_API, validateManifest } from '../platform/manifest.js';
 import { parseVersion, satisfies } from '../platform/semver.js';
 import { validateCoursePack } from '../platform/course.js';
-import { parseDocument } from '../shareState.js';
 import { checkObservation, observationOf } from '../observation.js';
 
 /** An install refused, with why. */
@@ -66,6 +65,18 @@ export function statusOf(entry, installed) {
 /** Whether an update changes a major version, which may break what uses it. */
 export const breaking = (from, to) =>
   Number(String(from).split('.')[0]) !== Number(String(to).split('.')[0]);
+
+/**
+ * A JSON.parse reviver that refuses a prototype key: the pack is only read
+ * here, never merged into anything, and js/remix/open.js reads it again with
+ * the full document guard. (shareState's parseDocument is on a request budget
+ * this page has no room for.)
+ */
+function noPrototypeKeys(key, value) {
+  if (key === '__proto__' || key === 'constructor' || key === 'prototype')
+    throw new SyntaxError(`"${key}" may not be a key`);
+  return value;
+}
 
 const text = bytes => new TextDecoder('utf-8', { fatal: true }).decode(bytes);
 
@@ -129,7 +140,7 @@ function checkContents(entry, files, catalog) {
     const i = manifest.provides.investigations[0];
     let pack;
     try {
-      pack = parseDocument(out[i.file]);
+      pack = JSON.parse(out[i.file], noPrototypeKeys);
     } catch (err) {
       throw new InstallError('content', `${i.file}: ${err.message}`);
     }

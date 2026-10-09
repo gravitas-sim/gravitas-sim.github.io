@@ -116,7 +116,7 @@ describe('the pin is the digest of the pack’s steps', () => {
   });
 
   test('reviews as the same, and a pin that has moved needs review', async () => {
-    const facts = await courseFacts(course, { load });
+    const facts = await courseFacts(course, { load, openPack: openedPack });
     expect(facts.lessons.has('rx-my-tides-1-0-0')).toBe(true);
     expect(reviewCoursePack(course, facts)[0].status).toBe(STATUS.SAME);
     const moved = clone(course);
@@ -139,7 +139,7 @@ describe('the pin is the digest of the pack’s steps', () => {
     expect(l2).toBeTruthy();
     const c = clone(course);
     c.units[0].items[0].link = l2;
-    const facts = await courseFacts(c, { load });
+    const facts = await courseFacts(c, { load, openPack: openedPack });
     expect(reviewCoursePack(c, facts)[0].status).toBe(STATUS.CHANGED);
     const up = upgradeCoursePack(c, facts, ['tides-mine'], {
       today: '2026-10-09',
@@ -147,7 +147,7 @@ describe('the pin is the digest of the pack’s steps', () => {
     });
     expect(up.upgraded).toEqual(['tides-mine']);
     expect(up.pack.units[0].items[0].pin.n).toBe(item.pin.n - 1);
-    const again = await courseFacts(up.pack, { load });
+    const again = await courseFacts(up.pack, { load, openPack: openedPack });
     expect(reviewCoursePack(up.pack, again)[0].status).toBe(STATUS.SAME);
   });
 
@@ -161,7 +161,7 @@ describe('the pin is the digest of the pack’s steps', () => {
     expect(delta).toBeTruthy();
     const c = clone(course);
     c.units[0].items[0].link = evil;
-    const facts = await courseFacts(c, { load });
+    const facts = await courseFacts(c, { load, openPack: openedPack });
     expect(facts.lessons.has('rx-my-tides-1-0-0')).toBe(false);
     expect(reviewCoursePack(c, facts)[0].status).toBe(STATUS.MISSING);
     expect(
@@ -183,9 +183,21 @@ describe('the pin is the digest of the pack’s steps', () => {
   });
 });
 
+describe('a page that cannot open it', () => {
+  test('says unchecked, not missing, and does not ask for a review', async () => {
+    const facts = await courseFacts(course, { load });
+    const r = reviewCoursePack(course, facts)[0];
+    expect(r.status).toBe(STATUS.UNCHECKED);
+    expect(r.needsReview).toBe(false);
+    const audit = auditCourse(course, facts);
+    expect(audit.filter(f => f.level === 'error')).toEqual([]);
+    expect(audit.some(f => f.code === 'packUnchecked')).toBe(true);
+  });
+});
+
 describe('the rest of the review reads it as a lesson', () => {
   test('time comes from the pack’s own duration', async () => {
-    const facts = await courseFacts(course, { load });
+    const facts = await courseFacts(course, { load, openPack: openedPack });
     const t = estimate(course, facts).items.get('tides-mine');
     expect(t.lo).toBeGreaterThan(0);
     const audit = auditCourse(course, facts);
@@ -193,7 +205,7 @@ describe('the rest of the review reads it as a lesson', () => {
   });
 
   test('the graph opens the pack’s lesson id and its scenarios', async () => {
-    const facts = await courseFacts(course, { load });
+    const facts = await courseFacts(course, { load, openPack: openedPack });
     const g = dependencyGraph(course, facts);
     expect(g.nodes.some(n => n.id === 'lesson:rx-my-tides-1-0-0')).toBe(true);
     expect(g.nodes.some(n => n.type === 'scenario-source')).toBe(true);
