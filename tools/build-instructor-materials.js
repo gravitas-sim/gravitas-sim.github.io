@@ -61,8 +61,15 @@ import { EN_TEACHING } from '../js/i18n/en.teaching.js';
 import { plainText as plainTextOf } from '../js/answerKey.js';
 import { INSTRUCTOR_CONTENT } from '../js/data/instructorContent.js';
 import { checkInstructorCatalog } from '../js/authoring/instructorSchema.js';
-import { expectationsFor } from '../js/instructorExpectations.js';
 import { createDocument } from '../js/pdf.js';
+import { guideSource } from '../js/instructorSource.js';
+import { checkFlow } from '../js/instructorFlow.js';
+import { lessonFacts, lessonVersion } from '../js/instructorFacts.js';
+import { labelsFor } from '../js/data/instructorLabels.js';
+import { spanishLesson, lessonCoverage } from '../js/instructorLocale.js';
+import { depthsOf } from '../js/investigations/depthPure.js';
+import { ES_TEACHING } from '../js/i18n/es.teaching.js';
+import { gzipSync } from 'node:zlib';
 import {
   exoplanetAnswerKey,
   exoplanetInstructorGuide,
@@ -219,7 +226,7 @@ function passphrase(unpublishable) {
   process.exit(1);
 }
 
-async function encrypt(plaintext, secret) {
+async function encrypt(plaintext, secret, { compressed = false } = {}) {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const base = await crypto.subtle.importKey(
@@ -242,7 +249,11 @@ async function encrypt(plaintext, secret) {
     plaintext
   );
   return {
-    v: 1,
+    // v2 is v1 whose plaintext is gzipped before it is encrypted (Prompt 79:
+    // the inventory passed 150 documents and ciphertext does not compress, so
+    // the file would have been 11 MB). The portal reads both.
+    v: compressed ? 2 : 1,
+    ...(compressed ? { compress: 'gzip' } : {}),
     cipher: 'AES-GCM',
     kdf: { name: 'PBKDF2', hash: 'SHA-256', iterations: ITERATIONS },
     salt: b64(salt),
@@ -262,6 +273,8 @@ function hasRealSecret() {
 
 const slug = title =>
   title
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/[’']/g, '')
     .replace(/[^A-Za-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
@@ -282,18 +295,32 @@ function requireCanonicalContent() {
   const steps = Object.fromEntries(
     INVESTIGATIONS.map(inv => [inv.id, inv.steps.length])
   );
-  const problems = checkInstructorCatalog(
-    Object.fromEntries(
-      Object.entries(INSTRUCTOR_CONTENT).map(([id, guide]) => {
-        const inv = INVESTIGATIONS.find(i => i.id === id);
-        return [
-          id,
-          inv ? { ...guide, expectations: expectationsFor(inv) } : guide,
-        ];
-      })
-    ),
-    steps
+  const sources = Object.fromEntries(
+    INVESTIGATIONS.map(inv => [inv.id, guideSource(inv)])
   );
+  const problems = [
+    ...checkInstructorCatalog(
+      Object.fromEntries(
+        Object.entries(INSTRUCTOR_CONTENT).map(([id, guide]) => {
+          const src = sources[id];
+          return src
+            ? [
+                id,
+                {
+                  ...guide,
+                  flow: src.flow.map(f => ({ steps: f.steps, text: f.text })),
+                  expectations: src.expectations,
+                },
+              ]
+            : [id, guide];
+        })
+      ),
+      steps
+    ),
+    // The flow is keyed by step id now; a block naming a step the lesson lacks,
+    // two blocks on one step or a step in none is a guide with a hole in it.
+    ...INVESTIGATIONS.flatMap(inv => checkFlow(inv)),
+  ];
   if (!problems.length) return;
   console.error(
     [
@@ -360,17 +387,25 @@ function stubPdf(label) {
  * @param {object} [options] - `stub` to substitute placeholder pages
  * @returns {Array<object>} One entry per document, with base64 bytes
  */
-function renderDocuments(version, { stub = false } = {}) {
+export function renderDocuments(version, { stub = false } = {}) {
   const files = [];
-  const add = (id, name, kind, investigation, bytes) => {
-    if (stub) bytes = stubPdf(name.replace(/\.pdf$/, ''));
+  /**
+   * One document. `bytes` is a thunk, so a fixture's placeholder never pays for
+   * the real render. `meta` is what the portal lists it by: its locale, the
+   * depth or activity it is cut to, the investigation's version and how much of
+   * it is in the language.
+   */
+  const add = (id, name, kind, investigation, bytes, meta = {}) => {
+    const made = stub ? stubPdf(name.replace(/\.pdf$/, '')) : bytes();
     files.push({
       id,
       name,
       kind,
       investigation,
-      size: bytes.length,
-      bytes: b64(bytes),
+      locale: 'en',
+      ...meta,
+      size: made.length,
+      bytes: b64(made),
     });
   };
 
@@ -379,89 +414,77 @@ function renderDocuments(version, { stub = false } = {}) {
     'Teaching with Gravitas - Adopters Guide.pdf',
     'general',
     null,
-    adoptersGuide(INVESTIGATIONS, { version })
+    () => adoptersGuide(INVESTIGATIONS, { version })
   );
   add(
     'curriculum-map',
     'Gravitas Investigation Curriculum Map.pdf',
     'general',
     null,
-    curriculumMap(INVESTIGATIONS, { version })
+    () => curriculumMap(INVESTIGATIONS, { version })
   );
 
-  // The Exoplanet Observatory's guided investigations (EXOPLANET_OBSERVATORY.md)
-  // live in /observatory/, not in the lesson registry, so they have documents
-  // of their own. Their key is the committed js/data/exoplanetAnswerKey.js,
-  // which tools/exoplanet-reference.mjs writes from a reference run.
   add(
     'exoplanet-observatory-guide',
     'The Exoplanet Observatory - Instructor Guide.pdf',
     'guide',
     null,
-    exoplanetInstructorGuide({ version })
+    () => exoplanetInstructorGuide({ version })
   );
   add(
     'exoplanet-observatory-key',
     'The Exoplanet Observatory - Answer Key.pdf',
     'key',
     null,
-    exoplanetAnswerKey(EXOPLANET_KEY, { version })
+    () => exoplanetAnswerKey(EXOPLANET_KEY, { version })
   );
-  // And the stellar-populations suite's (STELLAR_POPULATIONS.md), whose key
-  // tools/populations-reference.mjs writes the same way.
   add(
     'populations-observatory-guide',
     'Stars and Their Populations - Instructor Guide.pdf',
     'guide',
     null,
-    populationsInstructorGuide({ version })
+    () => populationsInstructorGuide({ version })
   );
   add(
     'populations-observatory-key',
     'Stars and Their Populations - Answer Key.pdf',
     'key',
     null,
-    populationsAnswerKey(POPULATIONS_KEY, { version })
+    () => populationsAnswerKey(POPULATIONS_KEY, { version })
   );
-  // And the 3-D lab's curriculum (LAB3D_CURRICULUM.md), whose key
-  // tools/lab3d-guides-key.mjs writes from a reference run.
   add(
     'lab3d-curriculum-guide',
     'Orbits in Three Dimensions - Instructor Guide.pdf',
     'guide',
     null,
-    lab3dInstructorGuide({ version })
+    () => lab3dInstructorGuide({ version })
   );
   add(
     'lab3d-curriculum-key',
     'Orbits in Three Dimensions - Answer Key.pdf',
     'key',
     null,
-    lab3dAnswerKey(LAB3D_KEY, { version })
+    () => lab3dAnswerKey(LAB3D_KEY, { version })
   );
-  // And the mission lab's (MISSION_LAB.md), whose key tools/mission-lab-key.mjs
-  // writes from a reference run.
   add(
     'mission-lab-guide',
     'A Mission to Mars - Instructor Guide.pdf',
     'guide',
     null,
-    missionLabInstructorGuide({ version })
+    () => missionLabInstructorGuide({ version })
   );
   add(
     'mission-lab-key',
     'A Mission to Mars - Answer Key.pdf',
     'key',
     null,
-    missionLabAnswerKey(MISSION_LAB_KEY, { version })
+    () => missionLabAnswerKey(MISSION_LAB_KEY, { version })
   );
 
-  // Classroom activities. One guide per activity covering all three formats,
-  // and a worksheet for each format that has students writing something down -
-  // generated from the resolved steps, so paper and screen agree on the order
-  // and the wording. No separate answer key: the investigation's own covers
-  // every question these formats contain, and a second copy would be a second
-  // thing to keep correct.
+  // The classroom activities: the guide and a worksheet per format as before,
+  // and now a key per format cut to that format's steps, in both languages.
+  // The guide and the worksheets stay English (their teaching text has a
+  // Spanish catalog, their layout does not yet; PROMPT 79 staged).
   for (const activity of ACTIVITIES) {
     const lesson = INVESTIGATIONS.find(l => l.id === activity.lesson);
     if (!lesson) continue;
@@ -473,41 +496,223 @@ function renderDocuments(version, { stub = false } = {}) {
       `${name} - Classroom Activity Guide.pdf`,
       'guide',
       activity.lesson,
-      activityGuide(activity, lesson, EN_TEACHING, { version })
+      () => activityGuide(activity, lesson, EN_TEACHING, { version }),
+      { activity: activity.id }
     );
     for (const format of activity.formats) {
-      // A demonstration is projected and answered aloud; a worksheet for it
-      // would be a page of blank boxes nobody fills in.
-      if (format.context === 'projection') continue;
-      add(
-        `activity-${activity.id}-${format.id}-worksheet`,
-        `${name} - ${plainTextOf(EN_TEACHING[format.nameId])} Worksheet.pdf`,
-        'worksheet',
-        activity.lesson,
-        activityWorksheet(activity, format, lesson, EN_TEACHING, { version })
-      );
+      if (format.context !== 'projection')
+        add(
+          `activity-${activity.id}-${format.id}-worksheet`,
+          `${name} - ${plainTextOf(EN_TEACHING[format.nameId])} Worksheet.pdf`,
+          'worksheet',
+          activity.lesson,
+          () =>
+            activityWorksheet(activity, format, lesson, EN_TEACHING, {
+              version,
+            }),
+          { activity: activity.id, format: format.id }
+        );
+      for (const locale of ['en', 'es']) {
+        const teaching = locale === 'es' ? ES_TEACHING : EN_TEACHING;
+        const title = plainTextOf(
+          teaching[format.nameId] || EN_TEACHING[format.nameId]
+        );
+        const activityTitle = plainTextOf(
+          teaching[activity.titleId] || EN_TEACHING[activity.titleId]
+        );
+        const L = labelsFor(locale);
+        const inv =
+          locale === 'es' ? spanishLesson(lesson) : withAllDepths(lesson);
+        const source = guideSource(lesson, locale);
+        add(
+          `activity-${activity.id}-${format.id}-key${locale === 'es' ? '-es' : ''}`,
+          `${name} - ${slug(title)} - ${locale === 'es' ? 'Clave de respuestas' : 'Answer Key'}.pdf`,
+          'key',
+          activity.lesson,
+          () =>
+            answerKeyDocument(inv, {
+              version,
+              locale,
+              activity: {
+                title: `${activityTitle}: ${title}`,
+                steps: format.steps,
+              },
+              source,
+              status: statusOf(lesson, 'key', source, locale),
+            }),
+          {
+            locale,
+            variant: 'activity',
+            activity: activity.id,
+            format: format.id,
+            lessonVersion: lessonVersion(lesson),
+            ...(locale === 'es'
+              ? { status: statusOf(lesson, 'key', source, locale) }
+              : {}),
+            title: `${activityTitle}: ${title}`,
+            label: L('doc.keyActivity', {
+              title: plainTextOf(lesson.title),
+              activity: title,
+            }),
+          }
+        );
+      }
     }
   }
 
-  for (const inv of INVESTIGATIONS) {
-    const s = slug(inv.title);
-    add(
-      `${inv.id}-guide`,
-      `${s} - Instructor Guide.pdf`,
-      'guide',
-      inv.id,
-      instructorGuide(inv, { version })
-    );
-    add(
-      `${inv.id}-key`,
-      `${s} - Answer Key.pdf`,
-      'key',
-      inv.id,
-      answerKeyDocument(withAllDepths(inv), { version })
-    );
+  // Every investigation: a guide and a key in each language, and for a lesson
+  // with deeper steps a key for each depth, so a class reading at core is not
+  // handed a key with the advanced steps in it.
+  for (const base of INVESTIGATIONS) {
+    const full = withAllDepths(base);
+    const depths = depthsOf(full);
+    const version_ = lessonVersion(base);
+    for (const locale of ['en', 'es']) {
+      const inv = locale === 'es' ? spanishLesson(base) : full;
+      // The guide counts and numbers the steps every student has; the key the
+      // steps of every depth.
+      const core = locale === 'es' ? spanishLesson(base, false) : base;
+      const L = labelsFor(locale);
+      const title = plainTextOf(inv.title);
+      const s = slug(title);
+      const source = guideSource(base, locale);
+      const words =
+        locale === 'es' ? ' - Clave de respuestas' : ' - Answer Key';
+      const suffix = locale === 'es' ? '-es' : '';
+      const facts = lessonFacts(base, id =>
+        plainTextOf(
+          locale === 'es'
+            ? spanishLesson(INVESTIGATIONS.find(i => i.id === id)).title
+            : INVESTIGATIONS.find(i => i.id === id).title
+        )
+      );
+      const common = {
+        locale,
+        lessonVersion: version_,
+        title,
+      };
+      add(
+        `${base.id}-guide${suffix}`,
+        `${s} - ${locale === 'es' ? 'Guia para docentes' : 'Instructor Guide'}.pdf`,
+        'guide',
+        base.id,
+        () =>
+          instructorGuide(core, {
+            version,
+            locale,
+            source,
+            facts,
+            status: statusOf(base, 'guide', source, locale),
+          }),
+        {
+          ...common,
+          variant: 'full',
+          label: L('doc.guide', { title }),
+          ...(locale === 'es'
+            ? { status: statusOf(base, 'guide', source, locale) }
+            : {}),
+        }
+      );
+      add(
+        `${base.id}-key${suffix}`,
+        `${s}${words}.pdf`,
+        'key',
+        base.id,
+        () =>
+          answerKeyDocument(inv, {
+            version,
+            locale,
+            source,
+            status: statusOf(base, 'key', source, locale),
+          }),
+        {
+          ...common,
+          variant: 'full',
+          label: L('doc.key', { title }),
+          ...(locale === 'es'
+            ? { status: statusOf(base, 'key', source, locale) }
+            : {}),
+        }
+      );
+      if (depths.length > 1)
+        for (const depth of depths)
+          add(
+            `${base.id}-key-${depth}${suffix}`,
+            `${s}${words} - ${depth}.pdf`,
+            'key',
+            base.id,
+            () =>
+              answerKeyDocument(inv, {
+                version,
+                locale,
+                depth,
+                source,
+                status: statusOf(base, 'key', source, locale),
+              }),
+            {
+              ...common,
+              variant: 'depth',
+              depth,
+              label: L('doc.keyDepth', {
+                title,
+                depth: L(`key.depth.${depth}`),
+              }),
+              ...(locale === 'es'
+                ? { status: statusOf(base, 'key', source, locale) }
+                : {}),
+            }
+          );
+    }
   }
 
   return files;
+}
+
+/**
+ * How much of a Spanish document is in Spanish: the lesson's own words, plus
+ * the instructor prose a guide prints or the expectations a key prints.
+ * English documents have no status.
+ */
+function statusOf(base, kind, source, locale) {
+  if (locale !== 'es') return null;
+  const lesson = lessonCoverage(base);
+  const own =
+    kind === 'guide' ? source.status.guide : source.status.expectations;
+  return {
+    lesson,
+    guide: source.status.guide,
+    expectations: source.status.expectations,
+    done: lesson.translated + own.translated,
+    total: lesson.total + own.total,
+  };
+}
+
+/**
+ * What the bundle holds, counted, for the public record beside it and for the
+ * PR that changes it: by language, by kind and by how the document is cut.
+ * Names no document and carries nothing from inside the ciphertext.
+ *
+ * @param {Array<object>} files - From renderDocuments()
+ * @returns {{documents: number, byLocale: object, byKind: object,
+ *   byVariant: object}} The counts
+ */
+export function inventoryOf(files) {
+  const count = pick =>
+    Object.fromEntries(
+      Object.entries(
+        files.reduce((m, f) => {
+          const k = pick(f);
+          m[k] = (m[k] ?? 0) + 1;
+          return m;
+        }, {})
+      ).sort(([a], [b]) => a.localeCompare(b))
+    );
+  return {
+    documents: files.length,
+    byLocale: count(f => f.locale ?? 'en'),
+    byKind: count(f => f.kind),
+    byVariant: count(f => f.variant ?? 'general'),
+  };
 }
 
 /**
@@ -732,8 +937,9 @@ export async function main(args) {
   };
 
   const payload = await encrypt(
-    new TextEncoder().encode(JSON.stringify(manifest)),
-    secret
+    gzipSync(new TextEncoder().encode(JSON.stringify(manifest))),
+    secret,
+    { compressed: true }
   );
   if (isFixture) {
     mkdirSync(dirname(fixtureOut), { recursive: true });
@@ -786,6 +992,7 @@ export async function main(args) {
           version,
           generated: manifest.generated,
           documents: files.length,
+          inventory: inventoryOf(files),
           sourceFiles: sourceCount,
           sourceDigest: digest,
           // Every input by name, with its own hash. The digest above is what
