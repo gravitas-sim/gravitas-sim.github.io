@@ -8,13 +8,13 @@ export const ES_SUBMISSIONS = {
   'sub.doc.title': 'Revisión de entregas | Gravitas',
   'sub.title': 'Revisión de entregas',
   'sub.intro':
-    'Suelte aquí los informes de laboratorio que entregaron sus estudiantes y esta página le dirá qué pregunta falló la clase. Lee el propio PDF, la copia de seguridad del progreso en JSON o un código pegado desde la última página de un informe.',
+    'Suelte aquí los informes de laboratorio que entregaron sus estudiantes y esta página le dirá qué pregunta falló la clase. Lee el propio PDF, la copia de seguridad del progreso en JSON o un código pegado desde la última página de un informe. También acepta el archivo de actividad o de curso que usted hizo, o un enlace a uno, para agrupar los informes bajo los nombres que les dio.',
   'sub.privacy':
-    'Nada sale de su navegador y nada se guarda. Al cerrar la pestaña, desaparece. Lo que lea aquí puede descargarse como hoja de cálculo o como JSON; no hay lista de clase ni libro de calificaciones.',
+    'Nada sale de su navegador y nada se guarda. Al cerrar la pestaña, desaparece. Lo que lea aquí puede descargarse como hoja de cálculo, como JSON o como un archivo para importar en Canvas, Moodle o D2L Brightspace; no hay cuentas ni conexión con ninguno de ellos.',
   'sub.drop.title': 'Suelte aquí informes, copias de seguridad o códigos',
   'sub.drop.picker':
-    'Elegir informes, copias de seguridad o archivos de código',
-  'sub.paste.label': 'o pegue un código',
+    'Elegir informes, copias de seguridad, archivos de código, o un archivo de actividad o de curso',
+  'sub.paste.label': 'o pegue un código, o un enlace de actividad o de curso',
   'sub.paste.go': 'Leer este código',
   'sub.clear': 'Borrar todo',
   'sub.count.none': 'nada todavía',
@@ -143,4 +143,87 @@ export const ES_SUBMISSIONS = {
   'sub.evidence.origin.truth': 'valor de la simulación',
   'sub.evidence.origin.analytic': 'analítico',
   'sub.evidence.origin.synthetic': 'sintético',
+  'sub.ctx.title': 'Nombres tomados de:',
+  'sub.ctx.activity': 'Actividad “{name}” ({n})',
+  'sub.ctx.course': 'Curso “{name}”: {n} actividades',
+  'sub.reason.ctx.notJson':
+    'no es un enlace de actividad ni de curso, ni un archivo JSON',
+  'sub.reason.ctx.unknownKind': 'no es una actividad ni un curso',
+  'sub.reason.ctx.badCourse': 'ese archivo de curso tiene un problema',
+  'sub.reason.ctx.tooLarge':
+    'mayor de lo que puede ser una actividad o un curso',
+  'sub.reason.ctx.corrupt': 'truncado o alterado en el camino',
+  'sub.reason.ctx.wrongKind': 'no es un enlace de actividad ni de curso',
+  'sub.reason.ctx.newerVersion': 'hecho con una versión más nueva de Gravitas',
+  'sub.act.title': 'Por actividad',
+  'sub.act.note':
+    'Los informes se agrupan por el código de actividad que traía el enlace. Los nombres y los cursos salen de la actividad o del curso que abrió arriba; sin uno se muestra el código. Los puntos medios cuentan las respuestas que Gravitas comprobó, no las escritas.',
+  'sub.act.none': 'Sin actividad asignada',
+  'sub.act.col.activity': 'Actividad',
+  'sub.act.col.course': 'Curso y unidad',
+  'sub.act.col.reports': 'Informes',
+  'sub.act.col.students': 'Estudiantes',
+  'sub.act.col.mean': 'Puntos medios',
+  'sub.act.col.hardest': 'Pregunta más difícil',
+  'sub.judge.title': 'Criterio del docente',
+  'sub.judge.note':
+    'Las respuestas escritas las lee usted; Gravitas no las califica. Ábralas aquí, ponga una nota a cada una y, si quiere, un comentario. Las notas se quedan en esta página y solo salen en el archivo de notas que guarde. Se marcan como escritas por el docente y solo se suman a una calificación en los archivos de calificaciones de abajo.',
+  'sub.judge.open': 'Leer las respuestas escritas y calificarlas',
+  'sub.judge.close': 'Ocultar las respuestas escritas',
+  'sub.judge.none': 'Ningún informe tiene una respuesta escrita que calificar.',
+  'sub.judge.summary': '{marked} de {n} respuestas escritas calificadas',
+  'sub.judge.report': '{name} ({activity})',
+  'sub.judge.mark': 'Nota (de 0 a {max})',
+  'sub.judge.comment': 'Comentario',
+  'sub.judge.badMark': 'La nota debe ser un número de 0 a {max}.',
+  'sub.judge.save': 'Guardar el archivo de notas',
+  'sub.judge.load': 'Abrir un archivo de notas',
+  'sub.judge.loaded': 'Se leyeron {read} notas de {file}; {skipped} sin usar.',
+  'sub.judge.reason.notMarks': 'no es un archivo de notas',
+  'sub.judge.reason.wrongSchema': 'un archivo de notas de otra versión',
+  'sub.gb.title': 'Archivos de calificaciones',
+  'sub.gb.note':
+    'Una calificación por estudiante y actividad, escrita para Canvas, Moodle o D2L Brightspace. Importe primero a un solo estudiante para comprobar el archivo con su plataforma; las columnas están en el documento del flujo del docente.',
+  'sub.gb.identifier': 'Identificar a los estudiantes por',
+  'sub.gb.identifier.roster': 'el identificador de lista del enlace',
+  'sub.gb.identifier.name': 'el nombre escrito en el informe',
+  'sub.gb.identifierNote':
+    'Un código muestra qué navegador produjo las respuestas, no quién las escribió. Use el identificador de lista cuando cada estudiante tenga su propio enlace. Use el nombre escrito cuando un solo código de clase sirva a todos y haya pedido que escribieran su usuario o su número de estudiante donde el informe pide un nombre. El texto se compara tal cual.',
+  'sub.gb.policy': 'Si un estudiante entregó más de una vez',
+  'sub.gb.policy.latest': 'usar la última',
+  'sub.gb.policy.best': 'usar la mejor',
+  'sub.gb.policy.first': 'usar la primera',
+  'sub.gb.canvas': 'Archivo para Canvas (CSV)',
+  'sub.gb.moodle': 'Archivo para Moodle (CSV)',
+  'sub.gb.d2l': 'Archivo para D2L Brightspace (CSV)',
+  'sub.gb.match': 'Identificar con',
+  'sub.gb.scale': 'Calificación como',
+  'sub.gb.scale.points': 'puntos',
+  'sub.gb.scale.percent': 'porcentaje',
+  'sub.gb.d2lNote': 'Solo puntos, como los admite D2L.',
+  'sub.gb.summary':
+    '{students} estudiantes, {activities} actividades, {rows} calificaciones.',
+  'sub.gb.skipped':
+    '{n} informes no tienen identificador y se dejan fuera: {list}.',
+  'sub.gb.partial':
+    '{n} respuestas escritas aún no tienen nota, así que esas calificaciones son parciales.',
+  'sub.gb.possible.title':
+    'Puntos posibles, para crear las columnas de calificación',
+  'sub.gb.possible.col': 'Puntos posibles',
+  'sub.gb.empty':
+    'Lea al menos un informe para hacer un archivo de calificaciones.',
+  'sub.gb.marks.title': 'Notas del docente',
+  'sub.gb.marks.note':
+    'Las notas que ponga a las respuestas escritas se guardan solo en este archivo, con cada fila marcada como escrita por el docente. Ábralo de nuevo más tarde para continuar.',
+  'sub.gb.fb.auto':
+    'Gravitas comprobó {checked} respuestas y {correct} eran correctas ({points} de {possible} puntos).',
+  'sub.gb.fb.written':
+    'Respuestas escritas calificadas por el docente: {n}, {points} puntos (puestos por el docente, no comprobados por Gravitas).',
+  'sub.gb.fb.awaiting':
+    'Respuestas escritas aún sin nota: {n}; esta calificación es parcial.',
+  'sub.gb.fb.attempts': 'Se contó el intento {used} de {n}.',
+  'sub.gb.fb.comment': 'Comentario del docente: {text}',
+  'sub.gb.fb.changed':
+    'Algunos pasos cambiaron después de guardar este informe.',
+  'sub.gb.fb.evidence': 'La tabla de evidencia no coincidía con su resumen.',
 };

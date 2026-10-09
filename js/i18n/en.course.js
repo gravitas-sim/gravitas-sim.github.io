@@ -286,4 +286,8 @@ export const EN_COURSE = {
   'course.error.url': 'An https address.',
   'course.error.words': 'A text of up to {max} characters.',
   'course.error.year': 'A year.',
+  'course.add.failed':
+    'Could not add that to the course: it is not an investigation or activity this version knows.',
+  'course.add.done':
+    'Added to the course. Its pin was recorded; check the course, then save it.',
 };

@@ -76,6 +76,7 @@ const DOC_PAGES = [
   'glossary',
   'teaching',
   'teaching/find',
+  'teaching/kit',
   'evaluation',
   'figure',
   'experiments',
@@ -507,6 +508,25 @@ async function buildDocPages() {
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'teach', 'find.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The distribution kit (/teaching/kit/, INSTRUCTOR_FLOW.md): an entry of its
+  // own, split so the registry it loads to read an activity's step titles, and
+  // the QR encoder, arrive only when a link is given, and nothing else imports it.
+  if (existsSync('js/teach/kit.js')) {
+    await esbuild.build({
+      entryPoints: ['js/teach/kit.js'],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outdir: path.join(OUT, 'js'),
+      outbase: 'js',
+      splitting: true,
+      chunkNames: 'kit-[hash]',
       legalComments: 'none',
     });
   }

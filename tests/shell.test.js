@@ -202,8 +202,10 @@ describe('the navigation', () => {
     // The adoption pages (ADOPTION.md) are forty-four, generated, and one
     // click from /teaching/find/ rather than each in the menu; the next test
     // holds that index to listing them all and each of them to leading back.
+    // The kit is reached from Teach and the activity builder
+    // (tests/instructorFlow.test.js holds both links).
     const adoption = p =>
-      /^\/teaching\/(investigation|activity|find)\//.test(p);
+      /^\/teaching\/(investigation|activity|find|kit)\//.test(p);
     expect([...served].filter(p => !adoption(p) && !hrefs.has(p))).toEqual([]);
   });
 

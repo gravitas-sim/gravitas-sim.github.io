@@ -270,7 +270,7 @@ const LAYOUT_SPEC = /responsiveLayout\.spec\.js/;
 const NAV_TOUCH_SPEC = /twoActivationNavTouch\.spec\.js/;
 // The adoption pages and the instructor path (Prompt 76) also run on the
 // phone profile: the layout and the preview are what a finger meets.
-const ADOPTION_SPEC = /adoption\.spec\.js/;
+const ADOPTION_SPEC = /adoption\.spec\.js|instructorFlow\.spec\.js/;
 // The desktop half (twoActivationNav.spec.js) runs in the desktop projects, the
 // touch half in the phone project; each defines one cell per pull request; the whole matrix
 // when GRAVITAS_E2E_NAV_FULL is set (the weekly job and `npm run e2e:release`).

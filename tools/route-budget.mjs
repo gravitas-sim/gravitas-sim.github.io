@@ -95,6 +95,7 @@ export const ROUTES = [
     page: true,
   },
   { id: 'teach-find', url: '/teaching/find/', page: true },
+  { id: 'teach-kit', url: '/teaching/kit/', page: true },
   { id: 'my-work', url: '/my-work/', page: true },
   { id: 'studio', url: '/studio/', page: true },
   { id: 'composer', url: '/studio/lesson/', page: true },

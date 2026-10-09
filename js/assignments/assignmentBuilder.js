@@ -114,8 +114,9 @@ function mount() {
       </label>
       <label class="assignment-field">
         <span>${esc(t('assign.roster'))}</span>
-        <input id="assignRoster" type="text" maxlength="120" />
+        <input id="assignRoster" type="text" maxlength="120" aria-describedby="assignRosterHelp" />
       </label>
+      <p id="assignRosterHelp" class="assignment-hint">${esc(t('assign.roster.help'))}</p>
 
       <div class="assignment-row">
         <button id="assignAll" class="ui-button">${esc(t('assign.selectAll'))}</button>
@@ -139,6 +140,11 @@ function mount() {
           <input id="assignLink" type="text" readonly />
         </label>
         <p id="assignLinkNote" class="assignment-hint"></p>
+        <div class="assignment-row">
+          <a id="assignKit" class="ui-button" target="_blank" rel="noopener">${esc(t('assign.kit'))}</a>
+          <a id="assignPreview" class="ui-button" target="_blank" rel="noopener">${esc(t('assign.preview'))}</a>
+          <a id="assignCourse" class="ui-button" target="_blank" rel="noopener">${esc(t('assign.addCourse'))}</a>
+        </div>
       </div>
     </div>`;
   document.body.appendChild(root);
@@ -306,6 +312,16 @@ async function build() {
     link.comfortable = link.length <= link.limit;
   }
   builtLink = link;
+  // What to do with the link: the kit that hands it out, the student's view of
+  // it, and the course builder with this activity already in it.
+  const kit = new URL('/teaching/kit/', location.origin);
+  if (roster) kit.searchParams.set('roster', roster);
+  kit.hash = link.fragment;
+  $('assignKit').href = kit.href;
+  $('assignPreview').href = link.url;
+  const course = new URL('/studio/course/', location.origin);
+  course.searchParams.set('activity', link.fragment);
+  $('assignCourse').href = course.href;
   $('assignResult').hidden = false;
   $('assignLink').value = link.url;
   // Said while the instructor can still act on it. A link that a mail client

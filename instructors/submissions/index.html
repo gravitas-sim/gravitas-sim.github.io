@@ -64,6 +64,23 @@
       .sr-export {
         margin-top: var(--space-8);
       }
+      .sr-gb-options,
+      .sr-gb-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-3);
+        align-items: center;
+        margin: var(--space-3) 0;
+      }
+      .sr-mark {
+        margin: var(--space-3) 0;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: var(--space-3);
+      }
+      .sr-response {
+        white-space: pre-wrap;
+      }
     </style>
     <!-- shell:head -->
 <link rel="stylesheet" href="/css/shell.css" />
@@ -123,12 +140,15 @@ try {
       <p data-i18n="sub.intro">
         Drop the lab reports your students handed in and this page will tell you
         which question the class got wrong. It reads the PDF itself, the JSON
-        progress backup, or a token pasted out of the last page of a report.
+        progress backup, or a token pasted out of the last page of a report. It
+        also takes the activity file or course file you made, or a link to one,
+        so the reports are grouped under the names you gave them.
       </p>
       <p data-i18n="sub.privacy">
         Nothing leaves your browser and nothing is saved. Close the tab and it
-        is gone. What you read here can be downloaded as a spreadsheet or as
-        JSON; there is no roster and no gradebook.
+        is gone. What you read here can be downloaded as a spreadsheet, as JSON,
+        or as a file for Canvas, Moodle or D2L Brightspace to import; there are
+        no accounts and no connection to any of them.
       </p>
       <div id="drop" class="sr-drop">
         <p>
@@ -143,11 +163,11 @@ try {
           type="file"
           multiple
           accept=".pdf,.json,.txt,application/pdf,application/json,text/plain"
-          aria-label="Choose reports, backups or token files"
+          aria-label="Choose reports, backups, token files, or an activity or course file"
           data-i18n-aria-label="sub.drop.picker"
         />
         <label for="paste" class="ui-note" data-i18n="sub.paste.label"
-          >or paste one token</label
+          >or paste one token, or an activity or course link</label
         >
         <textarea
           id="paste"
@@ -175,6 +195,8 @@ try {
           <span id="count" class="ui-note" role="status">nothing yet</span>
         </div>
       </div>
+      <div id="context"></div>
+      <div id="byActivity"></div>
       <h2 data-i18n="sub.rates.title">Per-question failure rate</h2>
       <p class="ui-note" data-i18n="sub.rates.note">
         Hardest first. &ldquo;Marked&rdquo; counts only the answers Gravitas can
@@ -186,6 +208,7 @@ try {
       <h2 data-i18n="sub.read.title">Read</h2>
       <div id="who"></div>
       <div id="evidence"></div>
+      <div id="judge"></div>
       <div id="refused"></div>
       <section class="sr-export" aria-labelledby="exportTitle">
         <h2 id="exportTitle" data-i18n="sub.export.title">
@@ -263,6 +286,147 @@ try {
           role="status"
           aria-live="polite"
         ></p>
+      </section>
+      <section class="sr-export" aria-labelledby="gbTitle">
+        <h2 id="gbTitle" data-i18n="sub.gb.title">Gradebook files</h2>
+        <p class="ui-note" data-i18n="sub.gb.note">
+          One score per student per activity, written for Canvas, Moodle or D2L
+          Brightspace. Import one student first to check the file against your
+          platform; the columns are listed in the instructor-flow document.
+        </p>
+        <div class="sr-gb-options">
+          <label for="gbIdentifier" data-i18n="sub.gb.identifier"
+            >Match students by</label
+          >
+          <select id="gbIdentifier" class="ui-select">
+            <option value="roster" data-i18n="sub.gb.identifier.roster">
+              the roster id on the link
+            </option>
+            <option value="name" data-i18n="sub.gb.identifier.name">
+              the name typed in the report
+            </option>
+          </select>
+          <label for="gbPolicy" data-i18n="sub.gb.policy"
+            >When a student handed in more than once</label
+          >
+          <select id="gbPolicy" class="ui-select">
+            <option value="latest" data-i18n="sub.gb.policy.latest">
+              use the latest
+            </option>
+            <option value="best" data-i18n="sub.gb.policy.best">
+              use the best
+            </option>
+            <option value="first" data-i18n="sub.gb.policy.first">
+              use the first
+            </option>
+          </select>
+        </div>
+        <p class="ui-note" data-i18n="sub.gb.identifierNote">
+          A token shows which browser made the answers, not who typed them. Use
+          the roster id when each student has a link of their own. Use the typed
+          name when one class code covers everyone and you asked students to
+          type their login or student number where the report asks for a name.
+          Text is matched exactly.
+        </p>
+        <div class="sr-gb-row">
+          <button
+            id="exportCanvas"
+            type="button"
+            class="ui-button"
+            disabled
+            data-i18n="sub.gb.canvas"
+          >
+            Canvas file (CSV)
+          </button>
+          <label for="gbCanvasId" data-i18n="sub.gb.match">Match on</label>
+          <select id="gbCanvasId" class="ui-select">
+            <option>SIS Login ID</option>
+            <option>SIS User ID</option>
+            <option>ID</option>
+          </select>
+          <label for="gbCanvasScale" data-i18n="sub.gb.scale">Score as</label>
+          <select id="gbCanvasScale" class="ui-select">
+            <option value="points" data-i18n="sub.gb.scale.points">
+              points
+            </option>
+            <option value="percent" data-i18n="sub.gb.scale.percent">
+              a percentage
+            </option>
+          </select>
+        </div>
+        <div class="sr-gb-row">
+          <button
+            id="exportMoodle"
+            type="button"
+            class="ui-button"
+            disabled
+            data-i18n="sub.gb.moodle"
+          >
+            Moodle file (CSV)
+          </button>
+          <label for="gbMoodleId" data-i18n="sub.gb.match">Match on</label>
+          <select id="gbMoodleId" class="ui-select">
+            <option>ID number</option>
+            <option>Username</option>
+            <option>Email address</option>
+          </select>
+          <label for="gbMoodleScale" data-i18n="sub.gb.scale">Score as</label>
+          <select id="gbMoodleScale" class="ui-select">
+            <option value="percent" data-i18n="sub.gb.scale.percent">
+              a percentage
+            </option>
+            <option value="points" data-i18n="sub.gb.scale.points">
+              points
+            </option>
+          </select>
+        </div>
+        <div class="sr-gb-row">
+          <button
+            id="exportD2l"
+            type="button"
+            class="ui-button"
+            disabled
+            data-i18n="sub.gb.d2l"
+          >
+            D2L Brightspace file (CSV)
+          </button>
+          <label for="gbD2lId" data-i18n="sub.gb.match">Match on</label>
+          <select id="gbD2lId" class="ui-select">
+            <option>OrgDefinedId</option>
+            <option>Username</option>
+          </select>
+          <span class="ui-note" data-i18n="sub.gb.d2lNote"
+            >Points only, as D2L takes them.</span
+          >
+        </div>
+        <p id="gbSummary" class="ui-note" role="status" aria-live="polite"></p>
+        <div id="gbPossible"></div>
+        <h3 data-i18n="sub.gb.marks.title">Instructor marks</h3>
+        <p class="ui-note" data-i18n="sub.gb.marks.note">
+          Marks you enter on the written answers are saved only as this file,
+          every row labelled as entered by the instructor. Open it again later
+          to carry on.
+        </p>
+        <div class="sr-gb-row">
+          <button
+            id="marksSave"
+            type="button"
+            class="ui-button"
+            disabled
+            data-i18n="sub.judge.save"
+          >
+            Save the marks file
+          </button>
+          <label for="marksOpen" data-i18n="sub.judge.load"
+            >Open a marks file</label
+          >
+          <input
+            class="ui-file is-compact"
+            id="marksOpen"
+            type="file"
+            accept=".csv,text/csv,text/plain"
+          />
+        </div>
       </section>
       <hr />
       <p class="ui-note" data-i18n="sub.notice">

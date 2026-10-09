@@ -171,6 +171,7 @@ const W = {
     'Las respuestas escritas en el espacio de trabajo se comprueban con los datos al enviarlas; las opciones que son predicciones se registran y las responde un paso posterior.',
   ],
   assign: ['Hand it out', 'Cómo repartirla'],
+  addCourse: ['Add it to a course', 'Añadirla a un curso'],
   assignBuilder: [
     'Make an activity from it',
     'Crear una actividad a partir de ella',
@@ -895,7 +896,7 @@ function investigationPage(S, entry) {
   const assignHtml = section(
     'assign',
     w('assign'),
-    `${lesson ? `<p><a class="ui-button" href="/?assign=${id}">${w('assignBuilder')}</a></p>\n<p>${w('assignBuilderNote')}</p>` : `<p>${w('assignNone')}</p>`}
+    `${lesson ? `<p><a class="ui-button" href="/?assign=${id}">${w('assignBuilder')}</a> <a class="ui-button" href="/studio/course/?add=${id}">${w('addCourse')}</a></p>\n<p>${w('assignBuilderNote')}</p>` : `<p>${w('assignNone')}</p>`}
 ${templates.length ? `<h3>${w('templates')}</h3>\n${list(templates)}` : ''}`
   );
 
