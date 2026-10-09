@@ -756,7 +756,6 @@ function investigationPage(S, entry) {
   const datasets = datasetsOf(S, entry, lesson, guide);
   const offlineKey = datasets.installs ? 'afterInstall' : OFFLINE[entry.format];
   const instr = instrumentsOf(S, outline);
-  const deeper = outline.some(o => o.depth !== 'core') && lesson;
 
   const facts = [
     rowOf(w('format'), plain(fmtWords)),
