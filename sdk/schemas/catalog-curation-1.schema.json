@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/catalog-curation-1.schema.json",
   "title": "gravitas.catalog-curation/1",
-  "description": "The maintainers' record of which declarative extensions the catalog serves (catalog/curation.json): the catalog's version, and for each accepted extension its directory under extensions/ and the review it passed, with the date and the checks. tools/catalog.mjs reads it with no check of its own, so this schema is the only statement of its shape; `catalog check` (CATALOG.md) holds each extension it names to the catalog's rules. Nothing refuses a field it does not know, so neither does this schema. FORMATS.md lists it.",
+  "description": "The maintainers' record of which declarative extensions the catalog serves (catalog/curation.json): the catalog's version, and for each accepted extension its directory under extensions/ and the review it passed, with the date and the checks, and for a contributed one the author's attribution, the reviewer, their conflict-of-interest statement and the history, then the packages withdrawn. tools/catalog.mjs reads it with no check of its own, so this schema is the only statement of its shape; `catalog check` (CATALOG.md) holds each extension it names to the catalog's rules. Nothing refuses a field it does not know, so neither does this schema. FORMATS.md lists it.",
   "type": "object",
   "required": [
     "format",
@@ -54,12 +54,128 @@
               },
               "notes": {
                 "type": "string"
+              },
+              "reviewer": {
+                "type": "string"
+              },
+              "interest": {
+                "type": "string",
+                "description": "The reviewer's conflict-of-interest statement, \"none\" or what it is."
+              },
+              "confirmed": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "The human items of the review the reviewer answered."
               }
             }
           },
           "history": {
             "type": "array",
-            "description": "Carried into the catalog entry's history as written."
+            "description": "Carried into the catalog entry's history as written: { version, date, change: { en, es? } }.",
+            "items": {
+              "type": "object",
+              "required": [
+                "version",
+                "date",
+                "change"
+              ]
+            }
+          },
+          "origin": {
+            "const": "contributed",
+            "description": "Absent for a package the maintainers built themselves."
+          },
+          "attribution": {
+            "type": "object",
+            "required": [
+              "en"
+            ],
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {
+              "en": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "withdrawn": {
+      "type": "array",
+      "description": "Packages taken out of the catalog; each becomes a tombstone entry (delivery \"withdrawn\"). Its extensions/ directory and archive are removed.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "version",
+          "type",
+          "title",
+          "withdrawn"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "data-pack",
+              "course-pack",
+              "investigation-pack"
+            ]
+          },
+          "title": {
+            "type": "object",
+            "required": [
+              "en"
+            ],
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {
+              "en": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "origin": {
+            "const": "contributed"
+          },
+          "attribution": {
+            "type": "object",
+            "required": [
+              "en"
+            ],
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {
+              "en": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "withdrawn": {
+            "type": "object",
+            "required": [
+              "date",
+              "reason"
+            ]
+          },
+          "history": {
+            "type": "array"
+          },
+          "review": {
+            "type": "object"
           }
         }
       }

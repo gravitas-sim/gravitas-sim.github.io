@@ -37,7 +37,14 @@
 // =============================================================================
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -48,11 +55,11 @@ import { pinnedBytes } from './data-packs/pinned.mjs';
 import { LOCALES, publicIds } from '../sdk/lib/api.mjs';
 import { pack, read } from '../sdk/lib/archive.mjs';
 import {
-  loadExtension,
-  packFiles,
-  testExtension,
-  validateExtension,
-} from '../sdk/lib/extension.mjs';
+  ACCEPTED_LICENSES,
+  isAcceptedLicense,
+  reviewExtension,
+} from '../sdk/lib/review.mjs';
+import { loadExtension, packFiles } from '../sdk/lib/extension.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CATALOG_DIR = path.join(REPO, 'catalog');
@@ -61,23 +68,9 @@ export const CURATION_FILE = path.join(CATALOG_DIR, 'curation.json');
 export const FORMAT = 'gravitas.catalog';
 export const FORMAT_VERSION = 1;
 
-/**
- * The licenses an entry may carry, and why each is acceptable: a reader must be
- * able to use, share and adapt what they install in a class. Anything else is
- * refused until CATALOG.md says why it belongs.
- */
-export const ACCEPTED_LICENSES = Object.freeze([
-  {
-    match: /^CC-BY-4\.0$/,
-    why: "the license of Gravitas's own teaching material",
-  },
-  { match: /^CC0-1\.0$/, why: 'no conditions at all' },
-  { match: /^MIT$/, why: 'the license of Gravitas itself' },
-  {
-    match: /^public domain \(NASA mission data\)/,
-    why: 'NASA mission data carry no copyright; the archive asks for acknowledgment',
-  },
-]);
+// ACCEPTED_LICENSES moved to the SDK's review (sdk/lib/review.mjs), which the
+// catalog and `sdk review` share, so neither can accept what the other refuses.
+export { ACCEPTED_LICENSES };
 
 /** The extension types the catalog serves as archives: declarative ones only. */
 export const ARCHIVE_TYPES = Object.freeze([
@@ -88,10 +81,71 @@ export const ARCHIVE_TYPES = Object.freeze([
 
 const sha256 = b => createHash('sha256').update(b).digest('hex');
 const json = v => `${JSON.stringify(v, null, 2)}\n`;
-const accepted = license => ACCEPTED_LICENSES.some(l => l.match.test(license));
+
+/** The archives on disk in catalog/packages/. */
+const listArchives = () =>
+  existsSync(path.join(CATALOG_DIR, 'packages'))
+    ? readdirSync(path.join(CATALOG_DIR, 'packages')).filter(f =>
+        f.endsWith('.gxp')
+      )
+    : [];
 
 export function readCuration(file = CURATION_FILE) {
   return JSON.parse(readFileSync(file, 'utf8'));
+}
+
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+const SEMVER = /^\d+\.\d+\.\d+$/;
+const text = v => typeof v === 'string' && v.trim().length > 0;
+const localizedText = v => v && typeof v === 'object' && text(v.en);
+
+/**
+ * What the maintainers' acceptance record owes the catalog (CONTRIBUTING_CONTENT.md,
+ * "The acceptance record"): for any entry a review date and checks; for a
+ * contributed one besides the author's stated attribution, who reviewed it and
+ * their conflict-of-interest statement, each human item the review prints
+ * answered, and a history that reaches the version listed.
+ */
+function acceptanceProblems(item, review) {
+  const problems = [];
+  const at = `${item.path}: acceptance`;
+  const r = item.review || {};
+  if (!DATE.test(r.date || ''))
+    problems.push(`${at}: review.date is a date, YYYY-MM-DD`);
+  if (!Array.isArray(r.checks) || !r.checks.length)
+    problems.push(`${at}: review.checks names the checks that were run`);
+  for (const [i, h] of (item.history || []).entries()) {
+    if (
+      !SEMVER.test(h?.version || '') ||
+      !DATE.test(h?.date || '') ||
+      !localizedText(h?.change)
+    )
+      problems.push(
+        `${at}: history[${i}] has a version, a date and a change in English`
+      );
+  }
+  if (item.origin === undefined) return problems;
+  if (item.origin !== 'contributed')
+    return [...problems, `${at}: origin is "contributed" or absent`];
+  if (!localizedText(item.attribution))
+    problems.push(
+      `${at}: attribution is the author's own words, in English (and Spanish if they gave it)`
+    );
+  if (!text(r.reviewer))
+    problems.push(`${at}: review.reviewer says who accepted it`);
+  if (!text(r.interest))
+    problems.push(
+      `${at}: review.interest says "none" or what the reviewer's interest is`
+    );
+  const confirmed = new Set(r.confirmed || []);
+  for (const h of review.human)
+    if (!confirmed.has(h.id))
+      problems.push(`${at}: review.confirmed does not include "${h.id}"`);
+  if (!(item.history || []).some(h => h.version === review.version))
+    problems.push(
+      `${at}: history has no entry for the version listed, ${review.version}`
+    );
+  return problems;
 }
 
 /** The English and Spanish of a pack's text, without its translation bookkeeping. */
@@ -134,29 +188,23 @@ function builtInEntry({ manifest: m }) {
 export async function archiveEntry(item) {
   const dir = path.join(REPO, item.path);
   const ext = loadExtension(dir);
-  const { type, manifest: m, findings } = await validateExtension(ext);
-  const errors = findings.filter(f => f.severity === 'error');
-  const problems = errors.map(f => `${item.path}: ${f.message}`);
+  const contributed = item.origin === 'contributed';
+  // The same review `sdk review` runs. A package a contributor brought also
+  // carries a README that says who wrote it; the maintainers' own do not.
+  const review = await reviewExtension(ext, { readme: contributed });
+  const { type, manifest: m } = review;
+  const problems = [];
+  for (const c of review.checks)
+    for (const p of c.problems) problems.push(`${item.path}: ${c.id}: ${p}`);
   if (m && !ARCHIVE_TYPES.includes(type))
     problems.push(
       `${item.path}: a ${type} runs code; the catalog serves only declarative packs`
     );
-  if (!problems.length) {
-    const { failed } = await testExtension(ext, { type, manifest: m });
-    for (const f of failed) problems.push(`${item.path}: test: ${f}`);
-  }
-  for (const l of m?.licenses || []) {
-    if (!accepted(l.license))
-      problems.push(
-        `${item.path}: license "${l.license}" is not one CATALOG.md accepts`
-      );
-  }
-  if (type === 'data-pack' && !(m.citations || []).length)
-    problems.push(`${item.path}: a data pack cites its sources`);
   if (m && !satisfies(PLATFORM_API, m.gravitas))
     problems.push(
       `${item.path}: needs Gravitas ${m.gravitas}; this is ${PLATFORM_API}`
     );
+  problems.push(...acceptanceProblems(item, review));
   if (problems.length) throw new Error(problems.join('\n'));
 
   const files = packFiles(ext, m);
@@ -211,10 +259,53 @@ export async function archiveEntry(item) {
         )
         .map(([p, b]) => ({ path: p, bytes: b.length, sha256: sha256(b) })),
       unpackedBytes: [...files.values()].reduce((a, b) => a + b.length, 0),
-      review: item.review,
+      ...(contributed
+        ? { origin: 'contributed', attribution: item.attribution }
+        : {}),
+      review: { ...item.review, mechanical: review.mechanical },
       source: item.path,
       history: item.history || [],
     },
+  };
+}
+
+/**
+ * A withdrawn package's tombstone (CONTRIBUTING_CONTENT.md, "Withdrawing a
+ * package"): no archive, so nothing can be installed from it, but the id, the
+ * version, the author's attribution, the reason and the history stay, so a
+ * reader who installed it is told, and the copy they hold keeps working.
+ */
+export function withdrawnEntry(w) {
+  const at = `withdrawn ${w?.id ?? '(no id)'}`;
+  const problems = [];
+  if (!text(w?.id)) problems.push(`${at}: an id`);
+  if (!SEMVER.test(w?.version || ''))
+    problems.push(`${at}: the version that was listed`);
+  if (!ARCHIVE_TYPES.includes(w?.type))
+    problems.push(`${at}: type is one of ${ARCHIVE_TYPES.join(', ')}`);
+  if (!localizedText(w?.title)) problems.push(`${at}: a title in English`);
+  if (
+    !DATE.test(w?.withdrawn?.date || '') ||
+    !localizedText(w?.withdrawn?.reason)
+  )
+    problems.push(`${at}: withdrawn has a date and a reason in English`);
+  if (w?.origin === 'contributed' && !localizedText(w.attribution))
+    problems.push(`${at}: a contributed package keeps its attribution`);
+  if (problems.length) throw new Error(problems.join('\n'));
+  return {
+    id: w.id,
+    version: w.version,
+    kind: 'declarative',
+    type: w.type,
+    delivery: 'withdrawn',
+    title: w.title,
+    ...(w.summary ? { summary: w.summary } : {}),
+    ...(w.origin === 'contributed'
+      ? { origin: 'contributed', attribution: w.attribution }
+      : {}),
+    withdrawn: w.withdrawn,
+    ...(w.review ? { review: w.review } : {}),
+    history: w.history || [],
   };
 }
 
@@ -227,6 +318,7 @@ export async function buildCatalog(curation = readCuration()) {
     entries.push(entry);
     archives.set(entry.archiveFile, archive);
   }
+  for (const w of curation.withdrawn || []) entries.push(withdrawnEntry(w));
   const seen = new Set();
   for (const e of entries) {
     if (seen.has(e.id)) throw new Error(`${e.id} is in the catalog twice`);
@@ -300,6 +392,18 @@ export async function checkCatalog() {
         `${e.archiveFile} does not hold what ${e.source} packs to today: run \`npm run catalog\``
       );
   }
+  // An archive nothing names is never served as the catalog's: a package that
+  // was withdrawn or never accepted leaves with its entry.
+  const named = new Set(
+    built.catalog.entries
+      .filter(x => x.delivery === 'archive')
+      .map(x => path.basename(x.archiveFile))
+  );
+  for (const f of listArchives())
+    if (!named.has(f))
+      problems.push(
+        `catalog/packages/${f} is in no catalog entry: accept it in catalog/curation.json, or run \`npm run catalog\` to remove it`
+      );
   // With each archive judged by its content, the rest of the text must match.
   const normalize = c =>
     c &&
@@ -427,6 +531,11 @@ async function main(argv) {
       }
       writeFileSync(file, bytes);
     }
+    // An archive the catalog no longer names (a withdrawn package) is removed:
+    // catalog/packages/ holds what the catalog serves and nothing else.
+    const named = new Set([...archives.keys()].map(k => path.basename(k)));
+    for (const f of listArchives())
+      if (!named.has(f)) unlinkSync(path.join(CATALOG_DIR, 'packages', f));
     // Record the bytes actually on disk, which may be an unchanged older pack.
     const catalog = JSON.parse(text);
     for (const e of catalog.entries.filter(x => x.delivery === 'archive')) {
