@@ -80,6 +80,7 @@ current, and the orchestrator checks it.
 | `make-social-card.js` | Generate social-card.png (1200x630) for the Open Graph / Twitter preview. | `npm run build`, `npm run social-card`, `npm run build:ci` |
 | `measure-validate.mjs` | The measurement tools' recovery and residual tables | `npm run measure:validate` |
 | `migrate-expectations.mjs` | One-off: move the instructor expectations out of instructorContent.js into |  |
+| `migrate-flow.mjs` | One-off: move the investigation flow out of instructorContent.js into |  |
 | `mission-lab-key.mjs` | The mission lab's answer key: a reference run of every guide | `npm run mission:key` |
 | `module-load-hook.mjs` | Write down every module Node loads |  |
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |
