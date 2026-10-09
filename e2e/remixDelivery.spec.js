@@ -19,6 +19,8 @@ import { remixBuiltin } from '../js/composer/remixApi.js';
 import { packLink } from '../js/composer/packLink.js';
 import { courseLink } from '../js/course/links.js';
 import { archiveEntry } from '../tools/catalog.mjs';
+import { loadInvestigation } from '../js/data/investigations/registry.js';
+import { collectTexts } from '../js/composer/compile.js';
 
 const REPO = path.resolve('.');
 const seen = async page =>
@@ -32,9 +34,16 @@ const seen = async page =>
 
 /** A remix of Tides with a reworded step, as a pack. */
 async function tidesRemix() {
+  // Link both languages of the original one at a time first: remixBuiltin
+  // loads them together and reads a language that failed to link as absent,
+  // which on a cold process leaves the Spanish missing.
+  await loadInvestigation('tides', 'en');
+  await loadInvestigation('tides', 'es');
   const made = await remixBuiltin('tides', { id: 'my-tides-e2e' });
   const base = JSON.parse(JSON.stringify(made.pack));
   made.pack.steps[1].title = { en: 'Reworded by me', es: 'Reformulado por mí' };
+  // Every text must be there in Spanish, or the catalog refuses the package.
+  expect(collectTexts(made.pack).filter(t => t.status !== 'done')).toEqual([]);
   return { pack: made.pack, base };
 }
 
