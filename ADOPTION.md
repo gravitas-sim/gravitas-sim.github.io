@@ -38,7 +38,7 @@ definitions:
 - **The steps,** in order, with what each asks (read, predict, question,
   measure, explore, an instrument) and the depth a deeper step belongs to.
 - **Instruments** the steps dock.
-- **Data it uses,** each dataset with its kind, licence, credit and citations,
+- **Data it uses,** each dataset with its kind, license, credit and citations,
   read from its manifest (`data-packs/`) or its catalog entry. An investigation
   that runs on worlds the simulation builds says so.
 - **Common wrong turns:** the claims the instructor notes record, never the

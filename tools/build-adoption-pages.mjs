@@ -140,7 +140,7 @@ const W = {
     'No measured dataset: it runs on worlds the simulation builds.',
     'Ningún conjunto de datos medidos: funciona con mundos que construye la simulación.',
   ],
-  license: ['Licence', 'Licencia'],
+  license: ['License', 'Licencia'],
   credit: ['Credit', 'Crédito'],
   cite: ['Cite', 'Citar'],
   wrong: ['Common wrong turns', 'Errores frecuentes'],
@@ -838,7 +838,7 @@ function investigationPage(S, entry) {
     'data',
     w('datasets'),
     datasets.packs.length || datasets.notes.length
-      ? `${datasets.packs.length ? `<div class="doc-table-wrap" tabindex="0"><table class="doc-table"><thead><tr><th scope="col">${bi({ en: 'Dataset', es: 'Conjunto de datos' })}</th><th scope="col">${bi({ en: 'Kind', es: 'Tipo' })}</th><th scope="col">${bi({ en: 'Licence and credit', es: 'Licencia y crédito' })}</th><th scope="col">${w('cite')}</th></tr></thead><tbody>\n${datasets.packs.map(datasetRow).join('\n')}\n</tbody></table></div>` : ''}${datasets.notes.map(n => `<p>${bi({ en: n.en, es: n.es })}</p>`).join('')}`
+      ? `${datasets.packs.length ? `<div class="doc-table-wrap" tabindex="0"><table class="doc-table"><thead><tr><th scope="col">${bi({ en: 'Dataset', es: 'Conjunto de datos' })}</th><th scope="col">${bi({ en: 'Kind', es: 'Tipo' })}</th><th scope="col">${bi({ en: 'License and credit', es: 'Licencia y crédito' })}</th><th scope="col">${w('cite')}</th></tr></thead><tbody>\n${datasets.packs.map(datasetRow).join('\n')}\n</tbody></table></div>` : ''}${datasets.notes.map(n => `<p>${bi({ en: n.en, es: n.es })}</p>`).join('')}`
       : `<p>${w('datasetsNone')}</p>`
   );
 

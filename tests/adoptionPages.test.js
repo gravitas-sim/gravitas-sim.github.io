@@ -215,13 +215,13 @@ describe('what each page says', () => {
     }
   });
 
-  test('the data a page lists comes with a licence', () => {
+  test('the data a page lists comes with a license', () => {
     const html = built.pages.find(p =>
       p.file.endsWith('investigation/exo-star/index.html')
     ).html;
     expect(html).toContain('MAST');
     expect(html).toMatch(
-      /<th scope="col"><span class="gs-en">Licence and credit/
+      /<th scope="col"><span class="gs-en">License and credit/
     );
   });
 
