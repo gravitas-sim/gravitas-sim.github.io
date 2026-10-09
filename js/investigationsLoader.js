@@ -125,6 +125,16 @@ export const assignmentInUrl = () =>
 export const assignmentInHash = () => /^#a\d+[zr]./.test(location.hash || '');
 
 /**
+ * Whether the address bar holds an investigation link: a pack an instructor
+ * made, in the fragment (#i1z..., js/composer/packLink.js). The fourth kind
+ * of fragment that names a lesson rather than a world; the reader loads only
+ * when one is here.
+ *
+ * @returns {boolean} True for an investigation-pack fragment
+ */
+export const packInHash = () => /^#i\d+[zr]./.test(location.hash || '');
+
+/**
  * Does the address bar name a classroom activity?
  *
  * `#activity=orbital-speed/guided`. Short and readable on purpose - it goes on
@@ -173,8 +183,17 @@ export function watchForAssignments() {
         console.warn('That activity link could not be opened:', err)
       );
 
+  const openPack = () =>
+    ensureInvestigations()
+      .then(() => import('./remix/open.js'))
+      .then(m => m.openPackFromUrl())
+      .catch(err =>
+        console.warn('That investigation link could not be opened:', err)
+      );
+
   if (assignmentInHash()) open();
   else if (activityInHash()) openActivity();
+  else if (packInHash()) openPack();
 
   let last = location.hash;
   window.addEventListener('hashchange', () => {
@@ -182,6 +201,7 @@ export function watchForAssignments() {
     last = location.hash;
     if (assignmentInHash()) open();
     else if (activityInHash()) openActivity();
+    else if (packInHash()) openPack();
   });
 }
 
@@ -234,7 +254,8 @@ export function watchForInvestigations() {
   if (authoringInUrl()) ensureInvestigations();
 
   // And the assignment builder, and a student opening an assignment link.
-  if (assignmentInUrl() || assignmentInHash()) ensureInvestigations();
+  if (assignmentInUrl() || assignmentInHash() || packInHash())
+    ensureInvestigations();
 
   // Pasting a lesson link into an already-open tab changes only the fragment,
   // which navigates nothing.
@@ -243,7 +264,8 @@ export function watchForInvestigations() {
       lessonInHash() ||
       authoringInUrl() ||
       assignmentInUrl() ||
-      assignmentInHash()
+      assignmentInHash() ||
+      packInHash()
     ) {
       ensureInvestigations();
     }

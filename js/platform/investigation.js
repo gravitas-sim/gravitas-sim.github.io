@@ -82,6 +82,7 @@ const PACK_FIELDS = new Set([
   'textbook',
   'courseLevel',
   'seed',
+  'derivedFrom',
   'bank',
   'steps',
 ]);
@@ -216,6 +217,43 @@ export function validateInvestigationPack(p, api) {
     'seed',
     'a whole number from 0 to 4294967295'
   );
+
+  // Where a remix came from (Prompt 78, js/platform/remix.js): the built-in
+  // investigation, its version, and a digest of its steps. This is the shape;
+  // that the pack keeps to what a remix may change is checkRemix's.
+  if (p.derivedFrom !== undefined) {
+    const d = p.derivedFrom;
+    if (!isObject(d))
+      need(false, 'derivedFrom', 'notObject', 'is not an object');
+    else {
+      for (const k of Object.keys(d))
+        need(
+          ['id', 'version', 'digest'].includes(k),
+          `derivedFrom.${k}`,
+          'unknownField',
+          `"${k}" is not a derivedFrom field`,
+          { key: k }
+        );
+      need(
+        (api.lessons || []).includes(d.id),
+        'derivedFrom.id',
+        'derivedId',
+        'an investigation Gravitas has'
+      );
+      need(
+        SEMVER.test(d.version || ''),
+        'derivedFrom.version',
+        'version',
+        'a version such as "1.0.0"'
+      );
+      need(
+        /^[0-9a-f]{8}$/.test(d.digest || ''),
+        'derivedFrom.digest',
+        'digest',
+        'eight hexadecimal digits'
+      );
+    }
+  }
 
   const objectives = Array.isArray(p.objectives) ? p.objectives : null;
   need(

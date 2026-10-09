@@ -28,6 +28,7 @@ import {
 } from './share.js';
 import {
   assignmentInHash,
+  packInHash,
   watchForAssignments,
 } from './investigationsLoader.js';
 import { initExportBridge } from './exportBridge.js';
@@ -574,7 +575,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // machinery that reads one is behind a dynamic import in the loader.
     watchForAssignments();
 
-    if (assignmentInHash()) {
+    if (assignmentInHash() || packInHash()) {
       initialize_simulation();
       embedWorldBuilt();
     } else if (hasSharedLink()) {
