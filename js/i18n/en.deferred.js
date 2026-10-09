@@ -3695,4 +3695,9 @@ export const EN_DEFERRED = {
   // own source, which is what all 139 of them did. The Spanish catalog keeps
   // its translations under the same ids (js/i18n/es.deferred.js), and
   // tools/i18n-audit.mjs does not count them as orphans.
+  'assign.roster.help':
+    'The code rides on the link into every report, so one code can cover a whole class; it does not say which student made a report. To tell students apart, ask them to type their login or student number where the report asks for a name, or make one link per student.',
+  'assign.kit': 'Open the distribution kit',
+  'assign.preview': 'Open as a student',
+  'assign.addCourse': 'Add to a course',
 };

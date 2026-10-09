@@ -295,4 +295,8 @@ export const ES_COURSE = {
   'course.error.url': 'Una dirección https.',
   'course.error.words': 'Un texto de hasta {max} caracteres.',
   'course.error.year': 'Un año.',
+  'course.add.failed':
+    'No se pudo añadir al curso: no es una investigación ni una actividad que esta versión conozca.',
+  'course.add.done':
+    'Añadido al curso. Se registró su versión fijada; revise el curso y guárdelo.',
 };

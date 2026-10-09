@@ -3933,4 +3933,9 @@ export const ES_DEFERRED = {
   'failure.error': 'Algo falló: {message}',
   'failure.worker.physics':
     'El proceso de gravedad se detuvo, así que la gravedad se calcula ahora en el hilo principal. La simulación sigue siendo correcta, pero puede ir más lenta.',
+  'assign.roster.help':
+    'El código viaja en el enlace a todos los informes, así que un solo código puede cubrir una clase entera; no dice qué estudiante hizo un informe. Para distinguirlos, pídales que escriban su usuario o su número de estudiante donde el informe pide un nombre, o haga un enlace por estudiante.',
+  'assign.kit': 'Abrir el kit de distribución',
+  'assign.preview': 'Abrir como estudiante',
+  'assign.addCourse': 'Añadir a un curso',
 };

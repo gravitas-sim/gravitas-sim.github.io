@@ -1990,6 +1990,61 @@ function wire() {
   $('cb-raw-revert').addEventListener('click', () => render());
 }
 
+/**
+ * Add what the address names to the course being edited, or to a new one:
+ * ?add=<investigation id> a whole investigation, ?activity=<fragment of an
+ * activity link> that activity with its code kept, so the link already handed
+ * out still opens it. Used from the adoption pages, the Library and the
+ * activity builder (INSTRUCTOR_FLOW.md).
+ * @param {boolean} hadDraft - Whether a draft was restored
+ * @returns {Promise<?string>} A status message, or null when nothing was asked
+ */
+async function addFromAddress(hadDraft) {
+  const params = new URLSearchParams(location.search);
+  const lessonId = params.get('add');
+  const fragment = params.get('activity');
+  if (!lessonId && !fragment) return null;
+  let item;
+  if (fragment) {
+    const { readSource } = await import('./teach/activity.js');
+    const r = await readSource(`#${fragment}`);
+    if (!r.ok || r.kind !== 'activity') return t('course.add.failed');
+    const a = r.activity;
+    item = {
+      kind: 'assignment',
+      id: 'pending',
+      lesson: a.l,
+      steps: [...a.s],
+      ...(a.t ? { title: { en: a.t } } : {}),
+      ...(a.n ? { intro: { en: a.n } } : {}),
+      assignment: { id: a.i, created: a.c },
+      ...(a.d ? { depth: a.d } : {}),
+    };
+  } else if (LESSONS.some(l => l.id === lessonId)) {
+    item = { kind: 'lesson', id: 'pending', lesson: lessonId };
+  } else return t('course.add.failed');
+  if (!hadDraft) start(blankCourse());
+  const path = `units[0].items[${doc().units[0].items.length}]`;
+  commit(x => {
+    item.id = freshId(
+      x,
+      item.kind === 'lesson' ? item.lesson : `${item.lesson}-activity`
+    );
+    x.units[0].items.push(item);
+  });
+  const facts = await courseFacts(
+    { units: [{ items: [item] }] },
+    { load: id => loadInvestigation(id, 'en'), catalog, known }
+  );
+  const lesson = facts.lessons.get(item.lesson);
+  if (lesson)
+    commit(x => {
+      const it = getAt(x, path);
+      if (it) it.pin = pinFor(it, lesson);
+    });
+  return t('course.add.done');
+}
+
 async function init() {
   let store = null;
   try {
@@ -2035,6 +2090,8 @@ async function init() {
       ? t('studio.status.restored', { id: draft.doc.id })
       : t('course.status.example')
   );
+  const added = await addFromAddress(Boolean(draft));
+  if (added) setStatus(added);
   document.body.dataset.ready = 'true';
 }
 
