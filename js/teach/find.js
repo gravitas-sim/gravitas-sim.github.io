@@ -13,11 +13,14 @@
 const holds = (row, key, value) =>
   (row.dataset[key] || '').split(' ').includes(value);
 
-/** Filter the table, and say how many rows remain. */
+/**
+ * Filter the table, and say how many rows remain.
+ * @returns {?Function} Re-applies the choices, for a change of language
+ */
 export function mountFind(root = document) {
   const form = root.getElementById('adFilters');
   const rows = [...root.querySelectorAll('#adTable tbody tr')];
-  if (!form || !rows.length) return;
+  if (!form || !rows.length) return null;
   const selects = [...form.querySelectorAll('select[data-filter]')];
   const params = new URLSearchParams(location.search);
   for (const s of selects) {
@@ -27,7 +30,14 @@ export function mountFind(root = document) {
   const count = root.getElementById('adCount');
   const empty = root.getElementById('adEmpty');
   const clear = root.getElementById('adClear');
+  // An <option> holds text only, so each carries both languages.
+  const words = () => {
+    const key = root.documentElement.lang === 'es' ? 'es' : 'en';
+    for (const o of form.querySelectorAll('option[data-en]'))
+      o.textContent = o.dataset[key];
+  };
   const apply = () => {
+    words();
     const chosen = selects.filter(s => s.value);
     let shown = 0;
     for (const row of rows) {
@@ -54,4 +64,5 @@ export function mountFind(root = document) {
     selects[0].focus();
   });
   apply();
+  return apply;
 }

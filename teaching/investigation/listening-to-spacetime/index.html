@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-obuQMKcsFo4nGkw9dHqOhN5PotGrvXwXB54lJw4Ga5c='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-qKaDc8mJ2wgJE/t4FWk2Ljr0hmG+PMFt81y7klan1I4='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Listening to Spacetime | Gravitas</title>
@@ -257,7 +257,14 @@ try {
 <!-- /shell:footer -->
     <script type="module">
       import { mountShell } from '/js/shell.js';
-      mountShell();
+      // The page is written in both languages: show the one this browser chose.
+      try {
+        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))
+          document.documentElement.lang = 'es';
+      } catch {
+        /* storage blocked: English */
+      }
+      mountShell({ onLanguage: () => {} });
     </script>
   </body>
 </html>

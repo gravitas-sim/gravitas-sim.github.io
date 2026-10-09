@@ -11,8 +11,8 @@
 // revision the whole arrangement exists to prevent. The 133 optional
 // entries are pictures; a missing one is reported and does not cost the reader
 // the version.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-4e68aa141255';
-self.__GRAVITAS_PRECACHE_BYTES = 15415332;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-f08f06ee2261';
+self.__GRAVITAS_PRECACHE_BYTES = 15415704;
 self.__GRAVITAS_PRECACHE_CORE = [
   './css/chrome.css',
   './css/components.css',

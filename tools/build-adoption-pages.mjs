@@ -964,7 +964,7 @@ ${templates.length ? `<h3>${w('templates')}</h3>\n${list(templates)}` : ''}`
     eyebrow: w('eyebrowInv'),
     lede: plain(entry.summary),
     body,
-    script: `    <script type="module">\n      import { mountShell } from '/js/shell.js';\n      mountShell();\n    </script>\n`,
+    script: `    <script type="module">\n      import { mountShell } from '/js/shell.js';\n      // The page is written in both languages: show the one this browser chose.\n      try {\n        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))\n          document.documentElement.lang = 'es';\n      } catch {\n        /* storage blocked: English */\n      }\n      mountShell({ onLanguage: () => {} });\n    </script>\n`,
   });
   return {
     file,
@@ -1038,7 +1038,7 @@ ${section('formats', w('actFormats'), `<div class="doc-table-wrap" tabindex="0">
     eyebrow: w('eyebrowAct'),
     lede: plain(question),
     body,
-    script: `    <script type="module">\n      import { mountShell } from '/js/shell.js';\n      mountShell();\n    </script>\n`,
+    script: `    <script type="module">\n      import { mountShell } from '/js/shell.js';\n      // The page is written in both languages: show the one this browser chose.\n      try {\n        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))\n          document.documentElement.lang = 'es';\n      } catch {\n        /* storage blocked: English */\n      }\n      mountShell({ onLanguage: () => {} });\n    </script>\n`,
   });
   return {
     file,
@@ -1073,8 +1073,12 @@ ${section('formats', w('actFormats'), `<div class="doc-table-wrap" tabindex="0">
 // The index
 // ----------------------------------------------------------------------------
 
-const opt = (value, label) =>
-  `<option value="${html(value)}">${label}</option>`;
+/**
+ * A menu choice. An <option> holds text and nothing else, so it carries both
+ * languages as attributes and js/teach/find.js writes the one the page is in.
+ */
+const opt = (value, { en, es }) =>
+  `<option value="${html(value)}" data-en="${html(en)}" data-es="${html(es ?? en)}">${html(en)}</option>`;
 
 function findPage(S, rows) {
   const file = `${BASE}/find/index.html`;
@@ -1100,56 +1104,53 @@ function findPage(S, rows) {
     const key = id.replace('f-', '');
     const has = new Set(rows.flatMap(FIELD[key]));
     const kept = options.filter(o => has.has(/value="([^"]*)"/.exec(o)[1]));
-    return `<label>${label}<select class="ui-select" id="${id}" data-filter="${key}">${opt('', w('fAny'))}${kept.join('')}</select></label>`;
+    return `<label>${label}<select class="ui-select" id="${id}" data-filter="${key}">${opt('', wt('fAny'))}${kept.join('')}</select></label>`;
   };
   const filters = `<form class="ad-find" id="adFilters" role="search" aria-label="${html(W.filterTitle[0])}">
 ${sel(
   'f-level',
   w('fLevel'),
-  ['beginner', 'intro'].map(l => opt(l, plain(lib(S, `lib.level.${l}`))))
+  ['beginner', 'intro'].map(l => opt(l, lib(S, `lib.level.${l}`)))
 )}
 ${sel(
   'f-course',
   w('fCourse'),
-  ['survey', 'majors', 'upper'].map(l => opt(l, bi(wt(CL_KEY[l]))))
+  ['survey', 'majors', 'upper'].map(l => opt(l, wt(CL_KEY[l])))
 )}
 ${sel(
   'f-format',
   w('fFormat'),
   ['lesson', 'observatory', 'lab3d', 'mission', 'activity'].map(f =>
-    opt(
-      f,
-      f === 'activity' ? bi(wt('kindAct')) : plain(lib(S, `lib.format.${f}`))
-    )
+    opt(f, f === 'activity' ? wt('kindAct') : lib(S, `lib.format.${f}`))
   )
 )}
 ${sel(
   'f-length',
   w('fTime'),
-  ['demo', 'period', 'long'].map(l => opt(l, plain(lib(S, `lib.length.${l}`))))
+  ['demo', 'period', 'long'].map(l => opt(l, lib(S, `lib.length.${l}`)))
 )}
 ${sel(
   'f-math',
   w('fMath'),
-  Object.keys(MATH_KEY).map(m => opt(m, bi(wt(MATH_KEY[m]))))
+  Object.keys(MATH_KEY).map(m => opt(m, wt(MATH_KEY[m])))
 )}
 ${sel(
   'f-subject',
   w('fSubject'),
-  subjects.map(s => opt(s.id, plain(s.label)))
+  subjects.map(s => opt(s.id, s.label))
 )}
 ${sel(
   'f-chapter',
   w('fChapter'),
   chapters.map(c =>
-    opt(
-      String(c),
-      `${bi(wt('chapter'))} ${c}: <span lang="en">${html(S.curation.textbookChapters[String(c)])}</span>`
-    )
+    opt(String(c), {
+      en: `${W.chapter[0]} ${c}: ${S.curation.textbookChapters[String(c)]}`,
+      es: `${W.chapter[1]} ${c}: ${S.curation.textbookChapters[String(c)]}`,
+    })
   )
 )}
-${sel('f-data', w('fData'), [opt('none', w('fNoData')), ...DATA_KINDS.map(k => opt(k, bi(wt2(DATA_KIND_WORDS[k]))))])}
-${sel('f-offline', w('fOffline'), [opt('yes', w('fOfflineOnly'))])}
+${sel('f-data', w('fData'), [opt('none', wt('fNoData')), ...DATA_KINDS.map(k => opt(k, wt2(DATA_KIND_WORDS[k])))])}
+${sel('f-offline', w('fOffline'), [opt('yes', wt('fOfflineOnly'))])}
 <button type="button" class="ui-button is-quiet" id="adClear" hidden>${w('fClear')}</button>
 </form>
 <p id="adCount" class="doc-note" role="status" aria-live="polite"></p>`;
@@ -1182,7 +1183,7 @@ ${sel('f-offline', w('fOffline'), [opt('yes', w('fOfflineOnly'))])}
     eyebrow: w('crumbTeach'),
     lede: plain(wt('findLede')),
     body,
-    script: `    <script type="module">\n      import { mountShell } from '/js/shell.js';\n      mountShell();\n      import { mountFind } from '/js/teach/find.js';\n      mountFind();\n    </script>\n`,
+    script: `    <script type="module">\n      import { mountShell } from '/js/shell.js';\n      import { mountFind } from '/js/teach/find.js';\n      // The page is written in both languages: show the one this browser chose.\n      try {\n        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))\n          document.documentElement.lang = 'es';\n      } catch {\n        /* storage blocked: English */\n      }\n      const refresh = mountFind();\n      mountShell({ onLanguage: () => refresh?.() });\n    </script>\n`,
   }).replace(/<p class="ad-crumb">.*<\/p>\n/, '');
   return { file, html: finish(file, text) };
 }

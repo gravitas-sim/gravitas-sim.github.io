@@ -270,7 +270,14 @@ export const orphans = async () => {
     ...targets.map(t => t.replace(/[?#].*/, '')),
     ...bases,
   ]);
-  for (const f of ['index.html', 'library/index.html']) {
+  // The adoption pages (ADOPTION.md): Teach is a navigation target and links
+  // the index, and the index links every one of them.
+  for (const f of [
+    'index.html',
+    'library/index.html',
+    'teaching/index.html',
+    'teaching/find/index.html',
+  ]) {
     for (const m of readFileSync(f, 'utf8').matchAll(/href="(\/[^"#?]*)/g))
       inbound.add(m[1]);
   }
