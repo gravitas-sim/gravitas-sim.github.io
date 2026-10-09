@@ -1,5 +1,5 @@
 // =============================================================================
-// Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial licence)
+// Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial license)
 // -----------------------------------------------------------------------------
 // GENERATED FILE. Do not edit. Written by tools/build-data-packs.mjs
 // (tools/data-packs/radiation.mjs) from cds-gaia-edr3-passband.dat, cds-gaia-edr3-zeropt.dat, cds-gaia-edr3-readme.txt, calspec-alpha-lyr-stis-008.fits; `npm run packs:check` verifies
@@ -17,7 +17,7 @@ export const PACK = {
   id: 'radiation-gaia-bandpasses',
   version: '1.0.0',
   title:
-    'Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial licence)',
+    'Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial license)',
   object: {
     name: 'Gaia photometric system',
     identifiers: ['G', 'G_BP', 'G_RP'],

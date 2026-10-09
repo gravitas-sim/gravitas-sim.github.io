@@ -1418,7 +1418,7 @@ const gaiaPack = {
       id: this.id,
       version: '1.0.0',
       title:
-        'Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial licence)',
+        'Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial license)',
       object: {
         name: 'Gaia photometric system',
         identifiers: bands.map(b => b.id),

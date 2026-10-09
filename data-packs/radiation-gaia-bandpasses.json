@@ -3,7 +3,7 @@
   "formatVersion": 1,
   "id": "radiation-gaia-bandpasses",
   "version": "1.0.0",
-  "title": "Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial licence)",
+  "title": "Gaia (E)DR3 G, G_BP and G_RP passbands and zero points (non-commercial license)",
   "object": {
     "name": "Gaia photometric system",
     "identifiers": [
@@ -140,7 +140,7 @@
   "derived": {
     "file": "js/data/radiation/gaiaBandpasses.js",
     "bytes": 17610,
-    "sha256": "b3b32d28edecf47b6cfbef37faefa9c3e5b5a4e6e58a79356644be57b7d1e98c"
+    "sha256": "95094a65d32e07acb70cb6cfdfbabcc4b6c5d803b67ed82a998161f0e5987743"
   },
   "validation": {
     "check": "each band reproduces the published pivot and mean photon wavelengths, FWHM and AB - Vega offset (Riello et al. 2021, Table 3), and a 5772 K blackbody has the Sun's G_BP - G_RP within 0.06 mag, within the tolerances stated in tools/data-packs/radiation.mjs",
