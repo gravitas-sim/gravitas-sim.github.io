@@ -49,6 +49,8 @@ export const ES_COMPOSER = {
   'composer.status.remixFailed': 'Gravitas no pudo cargar esa investigación.',
   'composer.key.en': 'Clave de respuestas (PDF)',
   'composer.key.es': 'Clave en español (PDF)',
+  'composer.key.failed':
+    'No se hizo la clave. Recarga la página e inténtalo de nuevo.',
   'composer.publish.heading': 'Publicar',
   'composer.publish.hint':
     'Un enlace que un estudiante abre en Gravitas, y el archivo con el que se hace. No se sube nada: el enlace lleva la propia investigación.',

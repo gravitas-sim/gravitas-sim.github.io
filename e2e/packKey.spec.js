@@ -89,3 +89,33 @@ test('the course page makes the key of an investigation link', async ({
   expect(download.suggestedFilename()).toBe('my-tides-key-key-es.pdf');
   await pdfOf(download);
 });
+
+test('a key that cannot be made says so, in the status, in both languages', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await seen(page);
+  // A module that loads and cannot make a key: the handler's catch.
+  await page.route(/\/packKey[^/]*\.js$/, route =>
+    route.fulfill({
+      contentType: 'text/javascript',
+      body: 'export const nothing = 1;',
+    })
+  );
+  await page.goto('/studio/lesson/', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('body')).toHaveAttribute('data-ready', 'true', {
+    timeout: 30_000,
+  });
+  await expect(page.locator('#cp-checks-summary')).toHaveText(/valid|válida/, {
+    timeout: 30_000,
+  });
+  await page.click('#cp-pdf-key');
+  await expect(page.locator('#cp-status')).toHaveText(/No key was made/, {
+    timeout: 30_000,
+  });
+  await page.locator('#langSwitch button[lang="es"]').click();
+  await page.click('#cp-pdf-key-es');
+  await expect(page.locator('#cp-status')).toHaveText(/No se hizo la clave/, {
+    timeout: 30_000,
+  });
+});

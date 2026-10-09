@@ -96,11 +96,11 @@ export function checkUnitName(unit, path, { need, api }) {
 function checkCriteria(list, path, { need, text }) {
   if (list === undefined) return;
   const ok = Array.isArray(list) && list.length > 0 && list.length < 7;
-  need(ok, path, 'list', 'one to six criteria');
+  need(ok, path, 'list', 'one to six');
   const walk = (v, at, names, then) => {
     need(isObject(v), at, 'notObject', 'is not an object');
     if (!isObject(v)) return;
-    knownKeys(need, v, names, at, 'a field here');
+    knownKeys(need, v, names, at, 'a field');
     then(v);
   };
   (ok ? list : []).forEach((c, i) =>
@@ -112,7 +112,7 @@ function checkCriteria(list, path, { need, text }) {
         lv.length > 1 && lv.length < 6,
         `${at}.levels`,
         'list',
-        'two to five levels'
+        'two to five'
       );
       lv.forEach((l, j) =>
         walk(l, `${at}.levels[${j}]`, ['label', 'text', 'points'], () => {
@@ -123,7 +123,7 @@ function checkCriteria(list, path, { need, text }) {
             l.points === undefined || l.points >= 0,
             `${a}.points`,
             'number',
-            'points from 0'
+            'points'
           );
         })
       );

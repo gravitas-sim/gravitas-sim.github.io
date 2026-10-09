@@ -66,11 +66,21 @@ export async function preview(c) {
   c.setStatus(c.t('composer.status.previewed'));
 }
 
-/** The answer key for this pack, as a download: nothing leaves the page. */
+/**
+ * The answer key for this pack, as a download: nothing leaves the page. A key
+ * asked for while the check that follows an edit (a remix just made, say) is
+ * still running waits for it, and one that cannot be made says so in the status.
+ */
 async function key(c, locale) {
-  if (!c.ok()) return c.setStatus(c.t('studio.status.fixFirst'));
-  const { saveKey } = await import('./packKey.js');
-  await saveKey(c.doc(), c.compiled(), c.texts(), locale);
+  try {
+    for (let i = 0; i < 150 && !c.verdict(); i++)
+      await new Promise(r => setTimeout(r, 100));
+    if (!c.ok()) return c.setStatus(c.t('studio.status.fixFirst'));
+    const { saveKey } = await import('./packKey.js');
+    await saveKey(c.doc(), c.compiled(), c.texts(), locale);
+  } catch {
+    c.setStatus(c.t('composer.key.failed'));
+  }
 }
 export const keyEn = c => key(c, 'en');
 export const keyEs = c => key(c, 'es');

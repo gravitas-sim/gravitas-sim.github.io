@@ -2053,6 +2053,7 @@ const ctx = () => ({
   setStatus,
   doc,
   start,
+  verdict: () => verdict,
   ok: () => verdict && !blocking(verdict),
   compiled: () => verdict.compiled,
   texts: () => collectTexts(doc()),

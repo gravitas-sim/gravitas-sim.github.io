@@ -41,6 +41,7 @@ export const WORDS = {
       'The course item: paste it into the course builder’s item for an instructor’s investigation',
     'mk.copy': 'Copy the item',
     'mk.copied': 'Copied.',
+    'mk.fail': 'No key made.',
     'mk.facts':
       '“{title}” ({id} {version}): {steps} steps{from}. Pinned to {fp}.',
     'mk.from': ', made from “{original}”',
@@ -91,6 +92,7 @@ export const WORDS = {
       'El elemento de curso: pégalo en el elemento del creador de cursos para la investigación de un instructor',
     'mk.copy': 'Copiar el elemento',
     'mk.copied': 'Copiado.',
+    'mk.fail': 'Sin clave.',
     'mk.facts': '«{title}» ({id} {version}): {steps} pasos{from}. Ficha: {fp}.',
     'mk.from': ', hecha a partir de «{original}»',
     'ck.h': 'Comprobar un curso',
@@ -213,7 +215,11 @@ function showFacts() {
 async function key(locale) {
   const { saveKey } = await import('../composer/packKey.js');
   const { pack, compiled } = made;
-  await saveKey(pack, compiled, collectTexts(pack), locale);
+  try {
+    await saveKey(pack, compiled, collectTexts(pack), locale);
+  } catch {
+    $('pkStatus').textContent = T('mk.fail');
+  }
 }
 
 async function copy() {
