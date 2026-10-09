@@ -48,12 +48,15 @@ export function compare(a, b) {
 
 /**
  * Where an entry stands for this reader.
- * @returns {'built-in'|'incompatible'|'available'|'installed'|'update'|'newer'}
+ * @returns {'built-in'|'withdrawn'|'incompatible'|'available'|'installed'|'update'|'newer'}
  *   `update`: a newer version is in the catalog; `newer`: the installed one is
  *   newer than the catalog's, which a downgrade of the catalog can leave
  */
 export function statusOf(entry, installed) {
   if (entry.delivery === 'built-in') return 'built-in';
+  // Taken out of the catalog: nothing to install, and a copy a reader holds is
+  // theirs and keeps working (CATALOG.md, "Withdrawn").
+  if (entry.delivery === 'withdrawn') return 'withdrawn';
   if (!satisfies(PLATFORM_API, entry.gravitas)) return 'incompatible';
   if (!installed) return 'available';
   const c = compare(installed.version, entry.version);
@@ -174,7 +177,7 @@ export async function install(entry, { catalog, store, fetchBytes, base }) {
   if (entry.delivery !== 'archive' || entry.kind !== 'declarative')
     throw new InstallError(
       'notInstallable',
-      `${entry.id} is built in, not installed`
+      `${entry.id} is ${entry.delivery === 'withdrawn' ? 'withdrawn' : 'built in'}, not installed`
     );
   if (!satisfies(PLATFORM_API, entry.gravitas))
     throw new InstallError(

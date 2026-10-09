@@ -7,6 +7,7 @@ import {
   unnamedArchives,
   withdrawnEntry,
 } from '../tools/catalog.mjs';
+import { InstallError, install, statusOf } from '../js/catalog/install.js';
 import { valid } from './jsonSchemaSubset.js';
 import { readFileSync } from 'node:fs';
 
@@ -233,5 +234,28 @@ describe('a withdrawn package', () => {
     expect(unnamedArchives(catalog, ['a-1.0.0.gxp', 'gone-1.2.0.gxp'])).toEqual(
       ['gone-1.2.0.gxp']
     );
+  });
+
+  test('cannot be installed, and its status does not depend on a copy', async () => {
+    const e = withdrawnEntry(tombstone);
+    expect(statusOf(e, null)).toBe('withdrawn');
+    expect(statusOf(e, { version: '1.2.0', sha256: 'x' })).toBe('withdrawn');
+    const store = { put: () => Promise.reject(new Error('stored')) };
+    await expect(
+      install(e, {
+        catalog: {},
+        store,
+        fetchBytes: () => null,
+        base: 'file:///',
+      })
+    ).rejects.toMatchObject({ code: 'notInstallable' });
+    await expect(
+      install(e, {
+        catalog: {},
+        store,
+        fetchBytes: () => null,
+        base: 'file:///',
+      })
+    ).rejects.toBeInstanceOf(InstallError);
   });
 });
