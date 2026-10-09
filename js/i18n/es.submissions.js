@@ -60,6 +60,8 @@ export const ES_SUBMISSIONS = {
   'sub.reason.noSteps': 'no trae la lista de pasos con la que comprobar',
   'sub.reason.notABackup':
     'no es una copia de seguridad del progreso de Gravitas',
+  'sub.reason.remix':
+    'es una investigación de un instructor, que esta página nombra pero no puede calificar',
   'sub.reason.unknownLesson':
     'menciona una investigación que esta versión no tiene',
   'sub.reason.noTokenInPdf': 'este PDF no contiene ningún código',

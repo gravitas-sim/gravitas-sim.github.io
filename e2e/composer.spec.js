@@ -47,6 +47,22 @@ async function openComposer(page, { locale } = {}) {
   await valid(page);
 }
 
+/**
+ * The author's view of the draft in the preview frame, with step jumps: the
+ * Composer's own preview is the student's link (Prompt 78), which starts at
+ * step 1, so the tests that go straight to a step stage the draft as the
+ * author's link does and point the frame at it.
+ */
+async function stageAuthorPreview(page) {
+  await page.evaluate(() => {
+    const a = document.getElementById('cp-preview-author');
+    a.addEventListener('click', e => e.preventDefault(), { once: true });
+    a.click();
+    document.getElementById('cp-preview').src =
+      `${location.origin}/?author=draft-reading-an-orbit&view=student`;
+  });
+}
+
 /** The checks have run on the edit just made and found nothing. */
 const valid = page =>
   expect(page.locator('#cp-checks-summary')).toHaveText(
@@ -182,7 +198,7 @@ test.describe('the Investigation Composer', () => {
     page,
   }) => {
     await openComposer(page);
-    await page.locator('#cp-preview-go').click();
+    await stageAuthorPreview(page);
     await expect(page.locator('#cp-preview')).toHaveAttribute(
       'src',
       /\/\?author=draft-reading-an-orbit&view=student$/
@@ -276,7 +292,7 @@ test.describe('the Investigation Composer', () => {
     page,
   }) => {
     await openComposer(page);
-    await page.locator('#cp-preview-go').click();
+    await stageAuthorPreview(page);
     await expect(page.locator('#cp-preview')).toHaveAttribute(
       'src',
       /\/\?author=draft-reading-an-orbit&view=student$/
@@ -480,7 +496,7 @@ test.describe('the Investigation Composer', () => {
       // Stage the example, then give it the sid an earlier Composer compiled
       // verbatim: that draft is still in storage after an upgrade.
       await openComposer(page);
-      await page.locator('#cp-preview-go').click();
+      await stageAuthorPreview(page);
       await expect(page.locator('#cp-preview')).toHaveAttribute(
         'src',
         /draft-reading-an-orbit/

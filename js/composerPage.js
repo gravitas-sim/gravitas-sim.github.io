@@ -1793,6 +1793,8 @@ function renderVerdict() {
   if (ok) $('cp-preview-author').href = previewUrl(d, 'author');
   renderEstimate(r, d);
   renderKey(r);
+  if (d.derivedFrom) panel().then(m => m.renderKept(ctx(), d));
+  else $('cp-kept-card').hidden = true;
 }
 
 function renderEstimate(r, d) {
@@ -2036,13 +2038,24 @@ function stagePreview() {
   }
 }
 
-function preview() {
-  if (!verdict || blocking(verdict))
-    return setStatus(t('studio.status.fixFirst'));
-  if (!stagePreview()) return;
-  $('cp-preview').src = previewUrl(doc(), 'student');
-  setStatus(t('composer.status.previewed'));
+/** The built-in investigations a remix may start from. */
+function fillRemixChoices() {
+  const s = $('cp-remix-from');
+  for (const m of MANIFEST) s.append(el('option', { value: m.id }, m.title));
 }
+
+const panel = () => import('./composer/publish.js');
+/** What js/composer/publish.js needs of this page. */
+const ctx = () => ({
+  $,
+  el,
+  t,
+  setStatus,
+  doc,
+  start,
+  ok: () => verdict && !blocking(verdict),
+  taken: () => drafts.list().map(d => d.id),
+});
 
 /** A lab report as a student would hand it in, with every answer the key's. */
 async function sampleReport() {
@@ -2328,7 +2341,13 @@ function wire() {
   $('cp-save-bank').addEventListener('click', saveBank);
   $('cp-export').addEventListener('click', () => exportModule('en'));
   $('cp-export-es').addEventListener('click', () => exportModule('es'));
-  $('cp-preview-go').addEventListener('click', preview);
+  fillRemixChoices();
+  for (const [id, fn] of [
+    ['cp-preview-go', 'preview'],
+    ['cp-remix', 'remix'],
+    ['cp-publish', 'publishLink'],
+  ])
+    $(id).addEventListener('click', () => panel().then(m => m[fn](ctx())));
   $('cp-preview-author').addEventListener('click', () => stagePreview());
   $('cp-report-go').addEventListener('click', sampleReport);
   $('cp-undo').addEventListener('click', () => {

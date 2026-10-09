@@ -26,6 +26,7 @@ import {
   activityInHash,
   assignmentInHash,
   lessonInHash,
+  packInHash,
 } from './investigationsLoader.js';
 import { t } from './i18n/index.js';
 import { scenarioTitle } from './i18n/scenario.js';
@@ -177,6 +178,7 @@ function watchForDivergence() {
     // js/investigationsLoader.js so that a fourth kind has somewhere obvious
     // to be added.
     if (activityInHash()) return;
+    if (packInHash()) return;
     if (location.hash) {
       history.replaceState(null, '', location.pathname + location.search);
     }
