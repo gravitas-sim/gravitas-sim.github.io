@@ -346,8 +346,9 @@ test.describe('the instructor flow', () => {
     await quiet(page);
     await page.goto('/instructors/');
     const hint = page.locator('#loginHint');
-    await expect(hint.locator('a[href^="mailto:"]')).toHaveCount(2);
-    await expect(hint.locator('a[href*="/issues/new"]').first()).toBeAttached();
+    await expect(hint.locator('a[href^="mailto:"]')).toHaveCount(0);
+    await expect(hint.locator('a[href*="/issues/new"]')).toHaveCount(2);
+    await expect(hint).toContainText('Instructor access request');
     await page.goto(`/teaching/investigation/${LESSON}/`);
     await expect(page.locator('#materials-h').locator('..')).toContainText(
       'Where the key is'
