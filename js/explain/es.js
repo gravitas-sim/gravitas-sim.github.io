@@ -103,6 +103,12 @@ export default {
     'El tono y la rapidez de la subida, que dependen de las masas.',
     'La masa y la distancia se compensan; una señal sola no fija las dos.',
   ],
+  light: [
+    'Brillo por unidad de longitud de onda (vertical) frente a la longitud de onda en escala logarítmica (horizontal).',
+    'El máximo se mueve a longitudes de onda más cortas al subir la temperatura, y toda la curva sube con él.',
+    'Dónde está el máximo, cómo muestrean la curva las dos bandas y el índice de color que dan.',
+    'Una estrella real no es un cuerpo negro: sus líneas y saltos cambian el color medido respecto de este.',
+  ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',
     'Una traza ascendente en el mapa es el chirrido de una espiral.',

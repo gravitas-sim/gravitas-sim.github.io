@@ -16,6 +16,24 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'color-and-temperature': {
+    topic: 'The one-line topic, for the curriculum map',
+    difficulty: 'Introductory',
+    placement: 'Where this sits in a course, and what it follows',
+    overview:
+      'A paragraph for the instructor: what the lesson does and what it is for.',
+    priorKnowledge: ['What a student needs before starting'],
+    keyConcepts: ['The ideas the lesson is built on'],
+    flow: ['A sentence per phase of the lesson'],
+    features: ['Which parts of Gravitas the lesson uses'],
+    misconceptions: ['A wrong idea students bring, and what corrects it'],
+    teachingNotes: ['Something worth saying to a class'],
+    discussion: ['A question worth asking out loud'],
+    extensions: ['Where a student who finishes early can go'],
+    modelNotes:
+      'What the simulation simplifies, and where that matters for this lesson.',
+  },
+
   'twelve-nights': {
     topic:
       'Observability, the sidereal day, and why a once-a-night schedule aliases',
