@@ -50,8 +50,8 @@ describe('the digits a literal is written to', () => {
 });
 
 describe('the allowlist only shrinks', () => {
-  test('there are 37 numeric literals, and each is in exactly one table', () => {
-    expect(literals).toHaveLength(37);
+  test('there are 38 numeric literals, and each is in exactly one table', () => {
+    expect(literals).toHaveLength(38);
     for (const l of literals) {
       const homes = [MODELS, SOURCED, UNCHECKED].filter(t => t[l.key]);
       expect({ key: l.key, homes: homes.length }).toEqual({
@@ -67,7 +67,7 @@ describe('the allowlist only shrinks', () => {
     expect(UNCHECKED_CEILING).toBe(34);
     expect(
       Object.keys(MODELS).length + Object.keys(SOURCED).length + UNCHECKED_COUNT
-    ).toBe(37);
+    ).toBe(38);
   });
 
   test('every entry names a real literal and gives a reason', () => {
@@ -192,7 +192,7 @@ describe('the instructor expectations record', () => {
         expect(text.length).toBeGreaterThan(20);
       }
     }
-    expect(total).toBe(240);
+    expect(total).toBe(241);
   });
 
   test('a /1 record keyed by step number migrates to the same text', () => {

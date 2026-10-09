@@ -106,8 +106,8 @@ export default {
   light: [
     'Brillo por unidad de longitud de onda (vertical) frente a la longitud de onda en escala logarítmica (horizontal).',
     'El máximo se mueve a longitudes de onda más cortas al subir la temperatura, y toda la curva sube con él.',
-    'Dónde está el máximo, cómo muestrean la curva las dos bandas y el índice de color que dan.',
-    'Una estrella real no es un cuerpo negro: sus líneas y saltos cambian el color medido respecto de este.',
+    'Dónde está el máximo, cómo muestrean la curva las dos bandas y el índice de color que dan; en el visor de espectros, dónde está una línea y cuánto se ha movido de su longitud de onda en reposo.',
+    'Una estrella real no es un cuerpo negro: sus líneas y saltos cambian el color medido respecto de este. El corrimiento de una línea da solo la velocidad a lo largo de la visual, nunca el movimiento transversal.',
   ],
   gwEvents: [
     'Deformación real del detector frente al tiempo, y un mapa de tono frente al tiempo.',

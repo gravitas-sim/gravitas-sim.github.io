@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 25 investigations and 694 steps: 644 steps
+Across 26 investigations and 705 steps: 655 steps
 declare a scene, 157 let a reader change one, 163 read the
-running integration, 260 show a prescribed model result, 94 draw
-on a stored dataset, 139 put a self-contained panel beside the text,
-117 keep something, and 30 are prose.
-Of 89 prediction loops, 89 are returned to,
-89 produce a measurement before they are answered, and
+running integration, 271 show a prescribed model result, 106 draw
+on a stored dataset, 150 put a self-contained panel beside the text,
+118 keep something, and 30 are prose.
+Of 90 prediction loops, 90 are returned to,
+90 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-89 hold their marking until the experiment settles them.
+90 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -52,11 +52,11 @@ Of 89 prediction loops, 89 are returned to,
 ## Finding Planets by Their Shadows (`transit-photometry`)
 
 - **Steps:** 29. Scene declared on 29; a reader can change something on 5; 24 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 6 live engine, 5 prescribed model, 0 stored dataset, 5 self-contained panel.
+- **Where the numbers come from:** 6 live engine, 5 prescribed model, 1 stored dataset, 5 self-contained panel.
 - **What students do:** read, commit-a-prediction, open-a-body-inspector, select-a-body, run-the-simulation, record-a-light-curve, view-from-a-set-angle, tick-a-checklist, move-an-instrument-control, press-an-instrument-preset, record-values, import-from-the-selection, run-to-an-armed-event, choose-an-option, answer-in-words.
 - **Objects the steps declare:** star, planet.
 - **Instruments:** depth-size, geometry, spectrum, dilution, resolve.
-- **Stored data:** none.
+- **Stored data:** Four observed stellar spectra, SDSS DR18 (observation).
 - **Evidence kept:** notebook-fields, imported-from-scene.
 - **Prediction loops:** what-will-the-brightness-do → your-first-transit, try-it-on-some-real, measure-the-dip, correct-it-and-get-a, the-shape-of-the-dip, the-angle-you-happen-to → your-first-transit; getting-the-period → time-two-transits, from-a-period-to-an, read-an-atmosphere, a-star-you-did-not, go-and-look, now-measure-it, recover-the-real-planet → time-two-transits.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; wrong body: select another and import again, which overwrites; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at transit.
@@ -370,4 +370,18 @@ Of 89 prediction loops, 89 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:blackbody`, control blackbody/T, measures the peak wavelength at three temperatures, and its product with the temperature, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+
+## Lines and Motion (`lines-and-motion`)
+
+- **Steps:** 11. Scene declared on 11; a reader can change something on 0; 11 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 11 prescribed model, 11 stored dataset, 11 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, choose-an-option, commit-a-prediction, record-values, answer-in-words.
+- **Objects the steps declare:** one, two, three.
+- **Instruments:** spectrum.
+- **Stored data:** Four observed stellar spectra, SDSS DR18 (observation).
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** predict-the-shift → measure-one-shift, which-way, doppler-arithmetic, star-three, sideways-motion, one-sentence, what-you-worked-out → measure-one-shift.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:spectrum`, control spectrum/src, measures the Doppler velocity of two synthetic stars from their H-alpha lines, one receding and one approaching, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

@@ -110,6 +110,8 @@ const RUNTIME_FIELDS = [
   'mjd',
   'fiberID',
   'observed',
+  'z',
+  'zErr',
   'url',
   'count',
   'scale',
@@ -804,6 +806,8 @@ export function decodeSpectrum(id) {
     mjd: spec.mjd,
     fiberID: spec.fiberID,
     observed: spec.observed,
+    z: spec.z,
+    zErr: spec.zErr,
     url: spec.url,
   };
   cache.set(id, decoded);

@@ -13,6 +13,10 @@ export default {
   format: 'gravitas.instructor-expectations',
   formatVersion: 2,
   lessons: {
+    'lines-and-motion': {
+      'measure-one-shift':
+        'Synthetic star 1 reads about +86 ± 5 km/s and star 2 about −143 ± 5 km/s from H-alpha. The true values, +85 and −142, are accepted within 12 km/s. The velocity is positive for a redshift (a line at a longer wavelength than rest): a student who reports star 2 as +143 has dropped the sign.',
+    },
     'color-and-temperature': {
       'three-peaks':
         'Peaks near 966, 483 and 241.5 nm: each doubling of temperature halves the peak, and peak × temperature comes out near 2.9 million nm·K. The validator accepts readings within 1.5 percent.',

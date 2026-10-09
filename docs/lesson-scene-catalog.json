@@ -795,15 +795,23 @@
   "spectrum": {
    "live": false,
    "controls": [
-    "lambda",
-    "clouds",
-    "H"
+    "src",
+    "view",
+    "line"
    ],
-   "presets": 4,
+   "presets": 2,
    "buttons": [],
    "engineReads": [],
    "mutates": [],
-   "datasets": []
+   "datasets": [
+    {
+     "name": "Four observed stellar spectra, SDSS DR18",
+     "origin": "observation",
+     "dataset": "js/data/spectra/sdssSpectra.js",
+     "via": "js/data/spectra/sdssSpectra.js",
+     "binding": ".wavelengths"
+    }
+   ]
   },
   "stellar-compare": {
    "live": true,
@@ -6413,7 +6421,8 @@
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
       "move-an-instrument-control",
@@ -7085,7 +7094,7 @@
     "student": 5,
     "engine": 6,
     "model": 5,
-    "data": 0,
+    "data": 1,
     "diagram": 5,
     "evidence": 5,
     "declaredButInert": 24,
@@ -52083,26 +52092,932 @@
     "mismatched": 0,
     "rebuilds": 0
    }
+  },
+  {
+   "id": "lines-and-motion",
+   "title": "Lines and Motion",
+   "lock": {
+    "placement": true,
+    "inspector": true
+   },
+   "steps": [
+    {
+     "sid": "light-by-wavelength",
+     "index": 1,
+     "type": "read",
+     "title": "Light split by wavelength",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "inherits the world already on screen",
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "hydrogen-in-the-a-star",
+     "index": 2,
+     "type": "question",
+     "title": "Name the lines",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "calcium-in-the-g-star",
+     "index": 3,
+     "type": "question",
+     "title": "A different star, a different list",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "predict-the-shift",
+     "index": 4,
+     "type": "predict",
+     "title": "Predict the shift",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "commit-a-prediction",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": "measure-one-shift",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "measure-one-shift",
+     "index": 5,
+     "type": "measure",
+     "title": "Measure two shifts",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "which-way",
+     "index": 6,
+     "type": "question",
+     "title": "Which way is it going?",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "doppler-arithmetic",
+     "index": 7,
+     "type": "question",
+     "title": "From a shift to a speed",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": true,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "star-three",
+     "index": 8,
+     "type": "question",
+     "title": "How sure is the shift?",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "sideways-motion",
+     "index": 9,
+     "type": "question",
+     "title": "Across, not along",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "choose-an-option",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "one-sentence",
+     "index": 10,
+     "type": "question",
+     "title": "In your own words",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "answer-in-words",
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": true,
+      "rubric": true,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "what-you-worked-out",
+     "index": 11,
+     "type": "read",
+     "title": "What you worked out",
+     "declares": {
+      "stage": {
+       "objects": 3,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "one",
+       "two",
+       "three"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "imported-data"
+     ],
+     "actions": [
+      "move-an-instrument-control",
+      "press-an-instrument-preset"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "spectrum",
+      "capture": false
+     },
+     "evidence": [],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    }
+   ],
+   "loops": [
+    {
+     "predict": "predict-the-shift",
+     "predictCollects": true,
+     "heldUntil": "measure-one-shift",
+     "experiment": [
+      "measure-one-shift",
+      "which-way",
+      "doppler-arithmetic",
+      "star-three",
+      "sideways-motion",
+      "one-sentence",
+      "what-you-worked-out"
+     ],
+     "measure": [
+      "measure-one-shift",
+      "which-way",
+      "doppler-arithmetic",
+      "star-three",
+      "sideways-motion",
+      "one-sentence",
+      "what-you-worked-out"
+     ],
+     "evidence": [
+      "measure-one-shift"
+     ],
+     "interpret": "measure-one-shift",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    }
+   ],
+   "totals": {
+    "steps": 11,
+    "declared": 11,
+    "student": 0,
+    "engine": 0,
+    "model": 11,
+    "data": 11,
+    "diagram": 11,
+    "evidence": 1,
+    "declaredButInert": 11,
+    "prose": 0,
+    "mismatched": 0,
+    "rebuilds": 0
+   }
   }
  ],
  "totals": {
-  "steps": 694,
-  "declared": 644,
+  "steps": 705,
+  "declared": 655,
   "student": 157,
   "engine": 163,
-  "model": 260,
-  "data": 94,
-  "diagram": 139,
-  "evidence": 117,
-  "declaredButInert": 487,
+  "model": 271,
+  "data": 106,
+  "diagram": 150,
+  "evidence": 118,
+  "declaredButInert": 498,
   "prose": 30,
   "mismatched": 0,
   "rebuilds": 71,
-  "lessons": 25,
-  "loops": 89,
-  "closedLoops": 89,
+  "lessons": 26,
+  "loops": 90,
+  "closedLoops": 90,
   "explainedLoops": 0,
-  "heldLoops": 89,
-  "completeLoops": 89
+  "heldLoops": 90,
+  "completeLoops": 90
  }
 }

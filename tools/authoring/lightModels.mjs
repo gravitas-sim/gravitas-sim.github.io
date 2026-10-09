@@ -19,6 +19,19 @@ import {
   decodeBand,
 } from '../../js/kernels/radiation/index.js';
 import { BANDS } from '../../js/data/radiation/bandpasses.js';
+import { LINES } from '../../js/data/radiation/lines.js';
+import * as SDSS from '../../js/data/spectra/sdssSpectra.js';
+import {
+  velocityFromWavelengths,
+  velocityFromZ,
+} from '../../js/kernels/radiation/doppler.js';
+import {
+  syntheticFlux,
+  syntheticGrid,
+  SYNTH_STARS,
+  VIEW_LINES,
+  measureViewLine,
+} from '../../js/light/model.js';
 
 const band = id => decodeBand(BANDS.find(b => b.id === id));
 
@@ -37,6 +50,67 @@ export const bMinusV = T => blackbodyColor(T, band('B'), band('V'), 'vega');
 /** g - r (AB system) of a blackbody. */
 export const gMinusR = T => blackbodyColor(T, band('g'), band('r'), 'ab');
 
+/**
+ * What the spectrum viewer reports for one line of one source: the measurement
+ * node's result on the very spectrum the viewer draws (js/lightWidgets.js
+ * builds the same arrays), with the star's catalogue velocity for a real one.
+ * @param {string} src - 'a', 'g', 'k', 'm' or 's1' to 's3'
+ * @param {string} lineId - A line-list id the viewer measures
+ */
+export function viewerMeasurement(src, lineId) {
+  const win = VIEW_LINES.find(w => w.id === lineId);
+  const restA = LINES.find(l => l.id === lineId).vacuum * 10;
+  let x;
+  let y;
+  if (src.startsWith('s')) {
+    x = syntheticGrid(restA);
+    y = Array.from(
+      syntheticFlux(
+        x,
+        SYNTH_STARS.find(s => s.id === src)
+      )
+    );
+  } else {
+    x = Array.from(SDSS.wavelengths());
+    y = Array.from(SDSS.decodeSpectrum(src).flux);
+  }
+  return measureViewLine(x, y, restA, win);
+}
+
+/** Inverse-variance weighted mean of (value, sigma) pairs, and its sigma. */
+export function weightedMean(pairs) {
+  const w = pairs.map(([, e]) => 1 / (e * e));
+  const sum = w.reduce((a, b) => a + b, 0);
+  return {
+    mean: pairs.reduce((a, [v], i) => a + v * w[i], 0) / sum,
+    sigma: Math.sqrt(1 / sum),
+  };
+}
+
+/** The Lines and Motion values the lesson writes as literals. */
+export const MOTION_VALUES = {
+  arithmetic: () => velocityFromWavelengths(4865.0, 4862.7, 'classical'),
+  star1Halpha: () => viewerMeasurement('s1', 'h-alpha').velocity,
+  star2Halpha: () => viewerMeasurement('s2', 'h-alpha').velocity,
+  star1Combined: () =>
+    weightedMean(
+      ['h-alpha', 'h-beta'].map(id => {
+        const m = viewerMeasurement('s1', id);
+        return [m.velocity, m.velocityError];
+      })
+    ).mean,
+  aHbetaEw: () => viewerMeasurement('a', 'h-beta').ew,
+  z01Relativistic: () => velocityFromZ(0.1),
+  aCombined: () =>
+    weightedMean(
+      ['h-alpha', 'h-beta'].map(id => {
+        const m = viewerMeasurement('a', id);
+        return [m.velocity, m.velocityError];
+      })
+    ).mean,
+  aCatalogue: () => SDSS.decodeSpectrum('a').z * 299792.458,
+};
+
 export const LIGHT_MODELS = {
   'color-and-temperature/peak-of-4000': {
     via: 'js/kernels/radiation planck.js wienPeakLambda at 4,000 K, in nm',
@@ -49,6 +123,10 @@ export const LIGHT_MODELS = {
   'color-and-temperature/temperature-from-color': {
     via: 'js/kernels/radiation photometry.js blackbodyColor (Johnson B - V, Vega system, bandpass pack), inverted for B - V = 0.82',
     value: () => solve(bMinusV, 0.82, 3000, 12000),
+  },
+  'lines-and-motion/doppler-arithmetic': {
+    via: 'js/kernels/radiation doppler.js velocityFromWavelengths, classical form, observed 4,865.0 A against a rest 4,862.7 A',
+    value: () => MOTION_VALUES.arithmetic(),
   },
 };
 
