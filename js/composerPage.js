@@ -2348,8 +2348,8 @@ function wire() {
     ['cp-preview-go', 'preview'],
     ['cp-remix', 'remix'],
     ['cp-publish', 'publishLink'],
-    ['cp-key', 'keyEn'],
-    ['cp-key-es', 'keyEs'],
+    ['cp-pdf-key', 'keyEn'],
+    ['cp-pdf-key-es', 'keyEs'],
   ])
     $(id).addEventListener('click', () => panel().then(m => m[fn](ctx())));
   $('cp-preview-author').addEventListener('click', () => stagePreview());

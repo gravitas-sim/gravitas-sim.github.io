@@ -85,15 +85,33 @@ them with `npm run build:instructors`. Everything else was exercised through the
 disposable fixture (`--fixture`, published passphrase, placeholder pages) and
 `--validate` (real render, throwaway key, nothing written).
 
+## A key from a pack, in the browser
+
+The author holds the pack, so the key needs no passphrase and nothing leaves the
+page. The Composer's Publish card ("Answer key", "Spanish key") and the course
+page that opens an investigation's link (`/studio/course/packs/`) download it as a
+PDF. `js/composer/packKey.js` is a lazy module (the build keeps it out of both
+routes' start-up: it is handed the result of the page's own check rather than
+importing the checker, which would have hoisted shared chunks onto every visit);
+it lays the key out with `js/answerKeyDocument.js`, the key's layout split out of
+`js/instructorDocs.js` so that it does not carry the 360 KB of guide prose. A
+faithful remix prints exactly the shipped key (`tests/packKey.test.js` compares
+the drawn text). A remix prints the original's expectations by reference, by
+step id; a step the author added has none. The Spanish key carries the
+translation status: the pack's texts that have Spanish, and the original's
+expectations (none are translated yet). No route was added and no ceiling moved.
+
+## Rubric criteria in packs
+
+`rubricCriteria` is on a written answer in `investigation-pack/1` and
+`question-bank/1` (both schemas, `sdk/types`, FORMATS.md, the validator, the
+compile with its Spanish shadow, and the remix table). A remix carries the
+original's criteria, in both languages, and compiles back to them. A pack's
+level order is not checked (a lesson's is, by the build): the order is print
+layout, not a rule.
+
 ## Staged
 
-- **A key from a pack, in the browser.** Not built. The portal's bundle is a
-  single file and the key needs the pack reader, the key generator and the PDF
-  writer; the clean route is a lazy chunk (`splitting` on the portal build) or a
-  page of its own with a measured route row (D-BIND-07).
-- **Rubric criteria in packs.** `investigation-pack/1` and `question-bank/1` carry
-  `rubric` only; `rubricCriteria` needs both schemas, the SDK types, the composer
-  compile and the remix field table. Lessons carry it today.
 - Spanish activity guides and worksheets, the adopter's guide and the curriculum
   map (the activity teaching text has a Spanish catalog; the layout does not read it).
 - The Spanish instructor prose itself.

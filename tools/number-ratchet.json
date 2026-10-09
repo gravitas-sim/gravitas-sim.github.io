@@ -1,6 +1,7 @@
 {
   "note": "Per file under js/: toFixed/toPrecision calls outside js/format.js, unit literals js/units/registry.js does not know, and typed numbers read without js/answerParse.js (Number/parseFloat/parseInt of a .value, or a one-shot comma swap). Written by node tools/number-ratchet.mjs --record; a file may not rise above its count, and one that falls has its count lowered here.",
   "formatting": {
+    "js/answerKeyDocument.js": 1,
     "js/assistPanel.js": 2,
     "js/binaryRunPanel.js": 1,
     "js/binaryWidgets.js": 23,
@@ -44,7 +45,6 @@
     "js/hash.js": 1,
     "js/inference/manifest.js": 1,
     "js/inference/rvMonteCarlo.js": 1,
-    "js/instructorDocs.js": 1,
     "js/instruments.js": 1,
     "js/investigations.js": 9,
     "js/lab3d/view/guidePanel.js": 2,
