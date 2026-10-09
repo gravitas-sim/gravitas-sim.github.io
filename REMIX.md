@@ -35,7 +35,7 @@ Spanish, with no finding from the lesson checker.
 
 | Field | Status | Meaning |
 |---|---|---|
-| title, body, tip, prompt, because, worked, rubric | editable | words |
+| title, body, tip, prompt, because, worked, rubric, rubricCriteria (with points) | editable | words |
 | options (the text of each) | editable | reword, translate |
 | hints, feedback, misconception notes | editable | words |
 | checklist of an explore step | editable | add, remove, reword |

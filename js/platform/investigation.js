@@ -33,7 +33,7 @@
 // arrives as `api`.
 // =============================================================================
 
-import { isObject, makeChecker } from './checker.js';
+import { isObject, knownKeys, makeChecker } from './checker.js';
 import { checkItems, checkUnitName } from './questionBank.js';
 
 export { makeChecker };
@@ -119,6 +119,7 @@ const STEP_FIELDS = {
     'feedback',
     'reflect',
     'rubric',
+    'rubricCriteria',
     'scoring',
   ],
 };
@@ -146,14 +147,7 @@ export function validateInvestigationPack(p, api) {
   const { out, need, text, guard, locales } = makeChecker(p, api);
   if (!guard()) return out;
 
-  for (const k of Object.keys(p))
-    need(
-      PACK_FIELDS.has(k),
-      k,
-      'unknownField',
-      `"${k}" is not an investigation-pack field`,
-      { key: k }
-    );
+  knownKeys(need, p, [...PACK_FIELDS], '', 'an investigation-pack field');
   need(p.format === FORMAT, 'format', 'format', `must be "${FORMAT}"`);
   need(
     p.formatVersion === FORMAT_VERSION,
@@ -226,14 +220,13 @@ export function validateInvestigationPack(p, api) {
     if (!isObject(d))
       need(false, 'derivedFrom', 'notObject', 'is not an object');
     else {
-      for (const k of Object.keys(d))
-        need(
-          ['id', 'version', 'digest'].includes(k),
-          `derivedFrom.${k}`,
-          'unknownField',
-          `"${k}" is not a derivedFrom field`,
-          { key: k }
-        );
+      knownKeys(
+        need,
+        d,
+        ['id', 'version', 'digest'],
+        'derivedFrom',
+        'a derivedFrom field'
+      );
       need(
         (api.lessons || []).includes(d.id),
         'derivedFrom.id',
@@ -324,14 +317,7 @@ export function validateInvestigationPack(p, api) {
   if (p.bank !== undefined) {
     if (!isObject(p.bank)) need(false, 'bank', 'notObject', 'is not an object');
     else {
-      for (const k of Object.keys(p.bank))
-        need(
-          k === 'items',
-          `bank.${k}`,
-          'unknownField',
-          `"${k}" is not a bank field`,
-          { key: k }
-        );
+      knownKeys(need, p.bank, ['items'], 'bank', 'a bank field');
       checkItems(p.bank.items, 'bank.items', { need, text, api });
       for (const item of Array.isArray(p.bank.items) ? p.bank.items : [])
         if (isObject(item) && typeof item.id === 'string')
@@ -408,14 +394,7 @@ function checkStep(s, path, index, ctx) {
     }
   );
   const allowed = new Set([...COMMON_STEP, ...(STEP_FIELDS[s.type] || [])]);
-  for (const k of Object.keys(s))
-    need(
-      allowed.has(k),
-      `${path}.${k}`,
-      'unknownField',
-      `"${k}" is not a field of a ${s.type} step`,
-      { key: k }
-    );
+  knownKeys(need, s, [...allowed], path, `a field of a ${s.type} step`);
   need(
     isValidSid(s.sid),
     `${path}.sid`,
@@ -456,14 +435,7 @@ function checkStep(s, path, index, ctx) {
     if (!isObject(s.tool))
       need(false, `${path}.tool`, 'notObject', 'is not an object');
     else {
-      for (const k of Object.keys(s.tool))
-        need(
-          k === 'id',
-          `${path}.tool.${k}`,
-          'unknownField',
-          `"${k}" is not a tool field`,
-          { key: k }
-        );
+      knownKeys(need, s.tool, ['id'], `${path}.tool`, 'a tool field');
       need(
         api.widgets.includes(s.tool.id),
         `${path}.tool.id`,
@@ -513,14 +485,13 @@ function checkStep(s, path, index, ctx) {
     (list || []).forEach((f, j) => {
       const at = `${path}.fields[${j}]`;
       if (!isObject(f)) return need(false, at, 'notObject', 'is not an object');
-      for (const k of Object.keys(f))
-        need(
-          ['id', 'label', 'unit'].includes(k),
-          `${at}.${k}`,
-          'unknownField',
-          `"${k}" is not a field of a measurement`,
-          { key: k }
-        );
+      knownKeys(
+        need,
+        f,
+        ['id', 'label', 'unit'],
+        at,
+        'a field of a measurement'
+      );
       need(
         FIELD_ID.test(f.id || '') && !seen.has(f.id),
         `${at}.id`,
@@ -633,14 +604,13 @@ const isScenario = (api, key) =>
 function checkSetup(setup, path, { need, api }) {
   if (!isObject(setup))
     return need(false, path, 'notObject', 'is not an object');
-  for (const k of Object.keys(setup))
-    need(
-      ['scenario', 'seed', 'paused', 'zoom'].includes(k),
-      `${path}.${k}`,
-      'unknownField',
-      `"${k}" is not a setup field`,
-      { key: k }
-    );
+  knownKeys(
+    need,
+    setup,
+    ['scenario', 'seed', 'paused', 'zoom'],
+    path,
+    'a setup field'
+  );
   need(
     isScenario(api, setup.scenario),
     `${path}.scenario`,
@@ -684,14 +654,7 @@ function checkWhen(s, path, index, { need, steps, sidAt }) {
   const w = s.when;
   const at = `${path}.when`;
   if (!isObject(w)) return need(false, at, 'notObject', 'is not an object');
-  for (const k of Object.keys(w))
-    need(
-      ['sid', 'is'].includes(k),
-      `${at}.${k}`,
-      'unknownField',
-      `"${k}" is not a when field`,
-      { key: k }
-    );
+  knownKeys(need, w, ['sid', 'is'], at, 'a when field');
   need(
     WHEN_STATES.includes(w.is),
     `${at}.is`,

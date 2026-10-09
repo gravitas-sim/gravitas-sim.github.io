@@ -1585,7 +1585,7 @@ listed here because this is the release that first carries it.
   cycle or on a low-level module importing a coordinator.
 - **A bundle budget.** `npm run budget` holds the initial download to a written
   ceiling; raising it means saying why in the same commit.
-- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->35<!--/fact--> surfaces in both
+- **Accessibility checks in CI.** axe-core over <!--fact:axeSurfaces-->36<!--/fact--> surfaces in both
   languages and both themes, plus keyboard, focus-trap, reflow and reduced-motion tests.
   See [ACCESSIBILITY.md](ACCESSIBILITY.md).
 

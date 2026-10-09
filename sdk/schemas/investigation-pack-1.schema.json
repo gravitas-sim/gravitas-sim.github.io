@@ -389,6 +389,50 @@
         }
       }
     },
+    "rubricCriteria": {
+      "description": "What to look for in a written answer, as a table the instructor reads down: one to six criteria, each a name and two to five levels, best first. A level has a label, what it looks like and, optionally, its points. On a reflection the criteria guide reading and mark nothing; the answer key prints them and the review page shows them beside the response. The validator also holds the levels of a criterion to best first when they carry points.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "levels"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "levels": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "items": {
+              "type": "object",
+              "required": [
+                "label",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "$ref": "#/$defs/text"
+                },
+                "text": {
+                  "$ref": "#/$defs/text"
+                },
+                "points": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "scoring": {
       "description": "How many points, and which attempt counts.",
       "type": "object",
@@ -1110,6 +1154,9 @@
         "rubric": {
           "$ref": "#/$defs/text"
         },
+        "rubricCriteria": {
+          "$ref": "#/$defs/rubricCriteria"
+        },
         "scoring": {
           "$ref": "#/$defs/scoring"
         },
@@ -1798,6 +1845,9 @@
             },
             "rubric": {
               "$ref": "#/$defs/text"
+            },
+            "rubricCriteria": {
+              "$ref": "#/$defs/rubricCriteria"
             },
             "scoring": {
               "$ref": "#/$defs/scoring"

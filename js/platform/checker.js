@@ -13,6 +13,18 @@ const PROSE_TAG = /<\/?(strong|em|sub|sup)>/g;
 /** Anything else that looks like markup, a script URL or a link. */
 const UNSAFE = /<[a-z!/?]|javascript:|data:|vbscript:|https?:\/\/|www\./i;
 
+/** Each key of `obj` is one of `names`, or an unknownField problem naming it. */
+export function knownKeys(need, obj, names, at, what) {
+  for (const k of Object.keys(obj))
+    need(
+      names.includes(k),
+      at ? `${at}.${k}` : k,
+      'unknownField',
+      `"${k}" is not ${what}`,
+      { key: k }
+    );
+}
+
 /**
  * The rules both formats share: a problem list, the structural guard that
  * runs before anything reads a field, and the text rules.
