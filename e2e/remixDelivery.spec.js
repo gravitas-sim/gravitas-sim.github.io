@@ -13,6 +13,7 @@
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from './fixtures.js';
 import { remixBuiltin } from '../js/composer/remixApi.js';
 import { packLink } from '../js/composer/packLink.js';
@@ -261,4 +262,38 @@ test('My work opens the draft it names, not the one saved last', async ({
   await expect(page.locator('#cp-status')).toContainText(/draft-one/, {
     timeout: 60_000,
   });
+});
+
+test('the investigations check has no accessibility violations, in English and in Spanish', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await seen(page);
+  const { pack, base } = await tidesRemix();
+  const link = (await packLink(pack, { root: 'https://x.test/', base }))
+    .fragment;
+  for (const lang of ['en', 'es']) {
+    await page.goto('/studio/course/packs/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('body')).toHaveAttribute('data-ready', 'true');
+    if (lang === 'es') {
+      await page.selectOption('[data-gs-lang]', 'es');
+      await expect(page.locator('h1')).toContainText('Investigaciones');
+    }
+    await page.fill('#pkLink', link);
+    await page.click('#pkMake');
+    await expect(page.locator('#pkItem')).toHaveValue(/"pin"/, {
+      timeout: 90_000,
+    });
+    const found = await new AxeBuilder({ page })
+      .withTags([
+        'wcag2a',
+        'wcag2aa',
+        'wcag21a',
+        'wcag21aa',
+        'wcag22aa',
+        'best-practice',
+      ])
+      .analyze();
+    expect(found.violations.map(v => v.id)).toEqual([]);
+  }
 });
