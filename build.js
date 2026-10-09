@@ -14,7 +14,7 @@
 
 import * as esbuild from 'esbuild';
 import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { keyGroupsPlugin } from './tools/key-groups.mjs';
 import { proseWhitespacePlugin } from './tools/prose-whitespace.mjs';
@@ -75,6 +75,7 @@ const DOC_PAGES = [
   'validation',
   'glossary',
   'teaching',
+  'teaching/find',
   'evaluation',
   'figure',
   'experiments',
@@ -91,6 +92,19 @@ const DOC_PAGES = [
   'mission/lab',
   '3d',
 ];
+
+/**
+ * The adoption pages (ADOPTION.md): one directory per investigation and per
+ * activity, written by tools/build-adoption-pages.mjs, so they are read from
+ * the tree rather than listed here by hand. tests/docPages.test.js holds this
+ * to the tree like the list above.
+ */
+const adoptionDirs = () =>
+  ['investigation', 'activity'].flatMap(kind =>
+    existsSync(`teaching/${kind}`)
+      ? readdirSync(`teaching/${kind}`).map(d => `teaching/${kind}/${d}`)
+      : []
+  );
 
 // Archival pages: copied byte for byte, and never processed.
 //
@@ -380,7 +394,7 @@ async function buildHtml() {
  * shares the lesson data with the app but none of the simulation.
  */
 async function buildDocPages() {
-  for (const dir of DOC_PAGES) {
+  for (const dir of [...DOC_PAGES, ...adoptionDirs()]) {
     if (!existsSync(dir)) continue;
     await mkdir(path.join(OUT, dir), { recursive: true });
     let html = await readFile(path.join(dir, 'index.html'), 'utf8');
@@ -479,6 +493,20 @@ async function buildDocPages() {
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'shell.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The filters on /teaching/find/ (ADOPTION.md): a module of its own that the
+  // generated page loads by URL, and nothing else imports.
+  if (existsSync('js/teach/find.js')) {
+    await esbuild.build({
+      entryPoints: ['js/teach/find.js'],
+      bundle: true,
+      minify: true,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'teach', 'find.js'),
       legalComments: 'none',
     });
   }

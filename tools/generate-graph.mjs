@@ -101,6 +101,36 @@ export const GRAPH = Object.freeze([
     after: ['manifest', 'catalog', 'teaching'],
   },
   {
+    // Roadmap II Prompt 76 (ADOPTION.md): one adoption page for every
+    // investigation and activity, and the index with its filters, from the
+    // Library's record and the sources behind it. Never the instructor bundle.
+    id: 'adoption',
+    generate: 'node tools/build-adoption-pages.mjs',
+    check: 'node tools/build-adoption-pages.mjs --check',
+    inputs: [
+      'library/library.json',
+      'tools/library-curation.json',
+      'js/data/investigations',
+      'js/data/instructorContent.js',
+      'js/data/activities.js',
+      'js/data/scenarioInfo.js',
+      'js/observatory/guides',
+      'js/lab3d/guides',
+      'js/mission/lab',
+      'js/i18n',
+      'data-packs',
+      'catalog/catalog.json',
+      'tools/shell.mjs',
+      'tools/csp.mjs',
+      'tools/build-adoption-pages.mjs',
+    ],
+    outputs: ['teaching/investigation', 'teaching/activity', 'teaching/find'],
+    regions: ['sitemap.xml'],
+    after: ['library', 'catalog', 'manifest'],
+    notes:
+      'Whole files, each stamped with the shared shell and its policy as the repository holds it, so shell.mjs --write and csp.mjs --write find nothing to change.',
+  },
+  {
     id: 'thumbnails',
     generate: 'node tools/generate-scenario-thumbnails.mjs',
     check: 'node tools/generate-scenario-thumbnails.mjs --check',

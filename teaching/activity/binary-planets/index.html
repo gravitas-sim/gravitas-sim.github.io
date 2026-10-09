@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-obuQMKcsFo4nGkw9dHqOhN5PotGrvXwXB54lJw4Ga5c='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Planets around two stars: where can an orbit survive? | Gravitas</title>
+    <meta name="description" content="Planets around two stars: where can an orbit survive?: A planet orbits one star of a close binary pair. How far out can it start and still be there twenty binary periods later?" />
+    <link rel="canonical" href="https://gravitas-sim.online/teaching/activity/binary-planets/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Planets around two stars: where can an orbit survive? | Gravitas" />
+    <meta property="og:description" content="Planets around two stars: where can an orbit survive?: A planet orbits one star of a close binary pair. How far out can it start and still be there twenty binary periods later?" />
+    <meta property="og:url" content="https://gravitas-sim.online/teaching/activity/binary-planets/" />
+    <meta property="og:image" content="https://gravitas-sim.online/social-card.png" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to the adoption pages (ADOPTION.md). */
+      .ad-facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: var(--space-3) var(--space-5); margin: var(--space-5) 0; }
+      .ad-facts dt { font-size: var(--text-2xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); }
+      .ad-facts dd { margin: 0 0 var(--space-2); }
+      .ad-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin: var(--space-4) 0; }
+      .ad-steps { padding-left: var(--space-6); }
+      .ad-steps li { margin-bottom: var(--space-2); }
+      .ad-type { color: var(--text-secondary); font-size: var(--text-sm); }
+      .ad-deeper { font-size: var(--text-sm); color: var(--text-secondary); }
+      .ad-embed pre { overflow-x: auto; padding: var(--space-3); background: var(--surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: var(--text-sm); }
+      .ad-find { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--space-3); margin: var(--space-4) 0; }
+      .ad-find label { display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-sm); }
+      .ad-crumb { font-size: var(--text-sm); margin: 0 0 var(--space-3); }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/teaching/find/"><span class="gs-en">Find content to teach</span><span class="gs-es" lang="es">Encontrar contenido para enseñar</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main class="doc-main is-wide" id="main">
+<!-- Generated by tools/build-adoption-pages.mjs. Do not edit by hand: node tools/build-adoption-pages.mjs -->
+<p class="ad-crumb"><a href="/teaching/"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a> / <a href="/teaching/find/"><span class="gs-en">Find content to teach</span><span class="gs-es" lang="es">Encontrar contenido para enseñar</span></a></p>
+<div class="doc-hero">
+<p class="doc-eyebrow"><span class="gs-en">Adoption page: classroom activity</span><span class="gs-es" lang="es">Página de adopción: actividad de clase</span></p>
+<h1><span class="gs-en">Planets around two stars: where can an orbit survive?</span><span class="gs-es" lang="es">Planetas alrededor de dos estrellas: ¿dónde sobrevive una órbita?</span></h1>
+<p class="doc-lede"><span class="gs-en">A planet orbits one star of a close binary pair. How far out can it start and still be there twenty binary periods later?</span><span class="gs-es" lang="es">Un planeta orbita una de las estrellas de un par binario cerrado. ¿Hasta dónde puede empezar y seguir ahí veinte periodos binarios después?</span></p>
+</div>
+<dl class="ad-facts">
+<div><dt><span class="gs-en">Written for</span><span class="gs-es" lang="es">Escrita para</span></dt><dd><span class="gs-en">Introductory</span><span class="gs-es" lang="es">Introductorio</span></dd></div>
+<div><dt><span class="gs-en">Course it suits</span><span class="gs-es" lang="es">Curso al que se ajusta</span></dt><dd><span class="gs-en">An introductory course for science majors</span><span class="gs-es" lang="es">Un curso introductorio para estudiantes de ciencias</span></dd></div>
+<div><dt><span class="gs-en">Mathematics asked</span><span class="gs-es" lang="es">Matemáticas que se piden</span></dt><dd><span class="gs-en">algebra</span><span class="gs-es" lang="es">álgebra</span></dd></div>
+<div><dt><span class="gs-en">Subjects</span><span class="gs-es" lang="es">Temas</span></dt><dd><span class="gs-en">Chaos</span><span class="gs-es" lang="es">Caos</span>, <span class="gs-en">Exoplanets</span><span class="gs-es" lang="es">Exoplanetas</span>, <span class="gs-en">Stars</span><span class="gs-es" lang="es">Estrellas</span></dd></div>
+<div><dt><span class="gs-en">Cut from this investigation</span><span class="gs-es" lang="es">Sacada de esta investigación</span></dt><dd><a href="/teaching/investigation/binary-star-planets/"><span class="gs-en">Planets in Binary Stars</span><span class="gs-es" lang="es">Planetas en estrellas binarias</span></a></dd></div>
+</dl>
+<section aria-labelledby="question-h">
+<h2 id="question-h"><span class="gs-en">The question it asks</span><span class="gs-es" lang="es">La pregunta que plantea</span></h2>
+<p><span class="gs-en">A planet orbits one star of a close binary pair. How far out can it start and still be there twenty binary periods later?</span><span class="gs-es" lang="es">Un planeta orbita una de las estrellas de un par binario cerrado. ¿Hasta dónde puede empezar y seguir ahí veinte periodos binarios después?</span></p>
+</section>
+<section aria-labelledby="formats-h">
+<h2 id="formats-h"><span class="gs-en">The formats</span><span class="gs-es" lang="es">Los formatos</span></h2>
+<div class="doc-table-wrap" tabindex="0"><table class="doc-table"><thead><tr><th scope="col"><span class="gs-en">Where it runs</span><span class="gs-es" lang="es">Dónde se ejecuta</span></th><th scope="col"><span class="gs-en">Time</span><span class="gs-es" lang="es">Tiempo</span></th><th scope="col"><span class="gs-en">Steps</span><span class="gs-es" lang="es">Pasos</span></th><th scope="col"><span class="gs-vh"><span class="gs-en">Open it</span><span class="gs-es" lang="es">Abrirla</span></span></th></tr></thead><tbody>
+<tr><td><span class="gs-en">A short route</span><span class="gs-es" lang="es">Una ruta corta</span></td><td>5 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span></td><td>4</td><td><a class="ui-button" href="/?activity=binary-planets&amp;format=route#activity=binary-planets/route"><span class="gs-en">Open it</span><span class="gs-es" lang="es">Abrirla</span></a></td></tr>
+</tbody></table></div>
+</section>
+<p><span class="gs-en">Everything for this activity is on its investigation page.</span><span class="gs-es" lang="es">Todo lo de esta actividad está en la página de su investigación.</span></p>
+<p><a href="/teaching/find/"><span class="gs-en">Back to Teach</span><span class="gs-es" lang="es">Volver a Enseñar</span></a></p>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module">
+      import { mountShell } from '/js/shell.js';
+      mountShell();
+    </script>
+  </body>
+</html>

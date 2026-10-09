@@ -39,7 +39,8 @@
         "max": 30
       },
       "mathematics": "arithmetic",
-      "prerequisites": []
+      "prerequisites": [],
+      "pack": "tess-hd209458-s56-lc"
     },
     "tess-aperture": {
       "kind": "image",
@@ -53,7 +54,8 @@
         "max": 10
       },
       "mathematics": "none",
-      "prerequisites": []
+      "prerequisites": [],
+      "pack": "tess-hd209458-s56-aperture"
     },
     "sdss-a": {
       "kind": "spectrum",
@@ -67,7 +69,8 @@
         "max": 10
       },
       "mathematics": "none",
-      "prerequisites": []
+      "prerequisites": [],
+      "pack": "sdss-dr18-stellar-spectra"
     },
     "sdss-g": {
       "kind": "spectrum",
@@ -81,7 +84,8 @@
         "max": 10
       },
       "mathematics": "none",
-      "prerequisites": []
+      "prerequisites": [],
+      "pack": "sdss-dr18-stellar-spectra"
     },
     "sdss-k": {
       "kind": "spectrum",
@@ -95,7 +99,8 @@
         "max": 10
       },
       "mathematics": "none",
-      "prerequisites": []
+      "prerequisites": [],
+      "pack": "sdss-dr18-stellar-spectra"
     },
     "sdss-m": {
       "kind": "spectrum",
@@ -109,7 +114,8 @@
         "max": 10
       },
       "mathematics": "none",
-      "prerequisites": []
+      "prerequisites": [],
+      "pack": "sdss-dr18-stellar-spectra"
     },
     "gwosc-events": {
       "kind": "table",
@@ -123,7 +129,10 @@
         "max": 20
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:what-is-a-gravitational-wave"]
+      "prerequisites": [
+        "investigation:what-is-a-gravitational-wave"
+      ],
+      "pack": "gwosc-five-events"
     },
     "ngc2420-photometry": {
       "kind": "table",
@@ -137,7 +146,10 @@
         "max": 30
       },
       "mathematics": "logarithms",
-      "prerequisites": ["investigation:pop-spectra"]
+      "prerequisites": [
+        "investigation:pop-spectra"
+      ],
+      "pack": "sdss-dr18-ngc2420-photometry"
     },
     "ngc2420-segue": {
       "kind": "table",
@@ -151,7 +163,10 @@
         "max": 30
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:pop-cmd"]
+      "prerequisites": [
+        "investigation:pop-cmd"
+      ],
+      "pack": "sdss-dr18-ngc2420-segue"
     },
     "mist-isochrones": {
       "kind": "model",
@@ -165,7 +180,10 @@
         "max": 40
       },
       "mathematics": "logarithms",
-      "prerequisites": ["investigation:pop-members"]
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
+      "pack": "mist-sdss-isochrones"
     },
     "community.kepler-13-tess-s14-pdcsap": {
       "kind": "time-series",
@@ -179,8 +197,13 @@
         "max": 35
       },
       "mathematics": "algebra",
-      "prerequisites": ["investigation:exo-fit"],
-      "subjects": ["exoplanets", "observing"]
+      "prerequisites": [
+        "investigation:exo-fit"
+      ],
+      "subjects": [
+        "exoplanets",
+        "observing"
+      ]
     },
     "community.kepler-13-tess-s14-sap": {
       "kind": "time-series",
@@ -194,8 +217,13 @@
         "max": 35
       },
       "mathematics": "algebra",
-      "prerequisites": ["investigation:exo-fit"],
-      "subjects": ["exoplanets", "observing"]
+      "prerequisites": [
+        "investigation:exo-fit"
+      ],
+      "subjects": [
+        "exoplanets",
+        "observing"
+      ]
     },
     "community.su-dra-tess-s15": {
       "kind": "time-series",
@@ -210,7 +238,10 @@
       },
       "mathematics": "logarithms",
       "prerequisites": [],
-      "subjects": ["observing", "stars"]
+      "subjects": [
+        "observing",
+        "stars"
+      ]
     }
   },
   "experiments": {
@@ -221,7 +252,9 @@
         "max": 40
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:binary-star-planets"]
+      "prerequisites": [
+        "investigation:binary-star-planets"
+      ]
     },
     "circumbinary-planet-lab": {
       "level": "intro",
@@ -230,7 +263,9 @@
         "max": 40
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:binary-star-planets"]
+      "prerequisites": [
+        "investigation:binary-star-planets"
+      ]
     },
     "gravity-assist-lab": {
       "level": "intro",
@@ -239,7 +274,9 @@
         "max": 40
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:gravity-assist"]
+      "prerequisites": [
+        "investigation:gravity-assist"
+      ]
     },
     "gravity-assist-heliocentric": {
       "level": "intro",
@@ -248,7 +285,9 @@
         "max": 40
       },
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:gravity-assist"]
+      "prerequisites": [
+        "investigation:gravity-assist"
+      ]
     }
   },
   "guides": {
@@ -263,7 +302,9 @@
     },
     "exo-find": {
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:exo-star"],
+      "prerequisites": [
+        "investigation:exo-star"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.4"
@@ -272,7 +313,9 @@
     },
     "exo-fit": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:exo-find"],
+      "prerequisites": [
+        "investigation:exo-find"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.4"
@@ -281,7 +324,9 @@
     },
     "exo-dilution": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:exo-fit"],
+      "prerequisites": [
+        "investigation:exo-fit"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.5"
@@ -290,7 +335,9 @@
     },
     "exo-planet": {
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:exo-find"],
+      "prerequisites": [
+        "investigation:exo-find"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.5"
@@ -308,7 +355,9 @@
     },
     "pop-cmd": {
       "mathematics": "logarithms",
-      "prerequisites": ["investigation:pop-spectra"],
+      "prerequisites": [
+        "investigation:pop-spectra"
+      ],
       "textbook": {
         "chapter": 18,
         "section": "18.4"
@@ -317,7 +366,9 @@
     },
     "pop-members": {
       "mathematics": "arithmetic",
-      "prerequisites": ["investigation:pop-cmd"],
+      "prerequisites": [
+        "investigation:pop-cmd"
+      ],
       "textbook": {
         "chapter": 22,
         "section": "22.2"
@@ -326,7 +377,9 @@
     },
     "pop-age": {
       "mathematics": "logarithms",
-      "prerequisites": ["investigation:pop-members"],
+      "prerequisites": [
+        "investigation:pop-members"
+      ],
       "textbook": {
         "chapter": 22,
         "section": "22.3"
@@ -353,7 +406,9 @@
     },
     "l3-eclipse": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:l3-planes"],
+      "prerequisites": [
+        "investigation:l3-planes"
+      ],
       "textbook": {
         "chapter": 21,
         "section": "21.4"
@@ -362,7 +417,9 @@
     },
     "l3-mutual": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:l3-planes"],
+      "prerequisites": [
+        "investigation:l3-planes"
+      ],
       "textbook": {
         "chapter": 3,
         "section": "3.6"
@@ -371,7 +428,9 @@
     },
     "l3-kozai": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:l3-mutual"],
+      "prerequisites": [
+        "investigation:l3-mutual"
+      ],
       "textbook": {
         "chapter": 3,
         "section": "3.6"
@@ -389,7 +448,9 @@
     },
     "ml-window": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:ml-orbit"],
+      "prerequisites": [
+        "investigation:ml-orbit"
+      ],
       "textbook": {
         "chapter": 3,
         "section": "3.5"
@@ -398,12 +459,64 @@
     },
     "ml-cruise": {
       "mathematics": "algebra",
-      "prerequisites": ["investigation:ml-window"],
+      "prerequisites": [
+        "investigation:ml-window"
+      ],
       "textbook": {
         "chapter": 3,
         "section": "3.5"
       },
       "courseLevel": "upper"
+    }
+  },
+  "textbookChapters": {
+    "1": "Science and the Universe: A Brief Tour",
+    "2": "Observing the Sky: The Birth of Astronomy",
+    "3": "Orbits and Gravity",
+    "4": "Earth, Moon, and Sky",
+    "5": "Radiation and Spectra",
+    "6": "Astronomical Instruments",
+    "7": "Other Worlds: An Introduction to the Solar System",
+    "8": "Earth as a Planet",
+    "9": "Cratered Worlds",
+    "10": "Earthlike Planets: Venus and Mars",
+    "11": "The Giant Planets",
+    "12": "Rings, Moons, and Pluto",
+    "13": "Comets and Asteroids: Debris of the Solar System",
+    "14": "Cosmic Samples and the Origin of the Solar System",
+    "15": "The Sun: A Garden-Variety Star",
+    "16": "The Sun: A Nuclear Powerhouse",
+    "17": "Analyzing Starlight",
+    "18": "The Stars: A Celestial Census",
+    "19": "Celestial Distances",
+    "20": "Between the Stars: Gas and Dust in Space",
+    "21": "The Birth of Stars and the Discovery of Planets outside the Solar System",
+    "22": "Stars from Adolescence to Old Age",
+    "23": "The Death of Stars",
+    "24": "Black Holes and Curved Spacetime",
+    "25": "The Milky Way Galaxy",
+    "26": "Galaxies",
+    "27": "Active Galaxies, Quasars, and Supermassive Black Holes",
+    "28": "The Evolution and Distribution of Galaxies",
+    "29": "The Big Bang",
+    "30": "Life in the Universe"
+  },
+  "scenarioPacks": {
+    "Exoplanet Characterization Lab": [
+      "exoplanet-systems"
+    ],
+    "TRAPPIST-1 System": [
+      "trappist-1-system"
+    ]
+  },
+  "scenarioNotes": {
+    "Solar System": {
+      "en": "The planets' sizes, masses and orbits are the published values, from NASA's planetary fact sheets and JPL's approximate positions of the planets; the model page lists each source.",
+      "es": "Los tamaños, las masas y las órbitas de los planetas son los valores publicados, de las fichas planetarias de la NASA y de las posiciones aproximadas de los planetas del JPL; la página del modelo enumera cada fuente."
+    },
+    "Retrograde Mars": {
+      "en": "The planets' sizes, masses and orbits are the published values, from NASA's planetary fact sheets and JPL's approximate positions of the planets; the model page lists each source.",
+      "es": "Los tamaños, las masas y las órbitas de los planetas son los valores publicados, de las fichas planetarias de la NASA y de las posiciones aproximadas de los planetas del JPL; la página del modelo enumera cada fuente."
     }
   }
 }

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-obuQMKcsFo4nGkw9dHqOhN5PotGrvXwXB54lJw4Ga5c='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kepler's Laws | Gravitas</title>
+    <meta name="description" content="Kepler's Laws: Work through all three of Kepler’s laws by measuring orbits rather than being shown them: find the focus of an ellipse, watch equal areas sweep out in equal times, and recover the three-halves power law by plotting it yourself." />
+    <link rel="canonical" href="https://gravitas-sim.online/teaching/investigation/keplers-laws/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Kepler's Laws | Gravitas" />
+    <meta property="og:description" content="Kepler's Laws: Work through all three of Kepler’s laws by measuring orbits rather than being shown them: find the focus of an ellipse, watch equal areas sweep out in equal times, and recover the three-halves power law by plotting it yourself." />
+    <meta property="og:url" content="https://gravitas-sim.online/teaching/investigation/keplers-laws/" />
+    <meta property="og:image" content="https://gravitas-sim.online/social-card.png" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <style>
+      /* Local to the adoption pages (ADOPTION.md). */
+      .ad-facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: var(--space-3) var(--space-5); margin: var(--space-5) 0; }
+      .ad-facts dt { font-size: var(--text-2xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); }
+      .ad-facts dd { margin: 0 0 var(--space-2); }
+      .ad-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin: var(--space-4) 0; }
+      .ad-steps { padding-left: var(--space-6); }
+      .ad-steps li { margin-bottom: var(--space-2); }
+      .ad-type { color: var(--text-secondary); font-size: var(--text-sm); }
+      .ad-deeper { font-size: var(--text-sm); color: var(--text-secondary); }
+      .ad-embed pre { overflow-x: auto; padding: var(--space-3); background: var(--surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: var(--text-sm); }
+      .ad-find { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--space-3); margin: var(--space-4) 0; }
+      .ad-find label { display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-sm); }
+      .ad-crumb { font-size: var(--text-sm); margin: 0 0 var(--space-3); }
+    </style>
+    <!-- shell:head -->
+<link rel="stylesheet" href="/css/shell.css" />
+<script>
+try {
+  const t = localStorage.getItem('gravitas_theme');
+  if (['deep', 'observatory', 'daylight'].includes(t)) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme =
+      t === 'daylight' ? 'light' : 'dark';
+  }
+} catch {
+  /* storage unavailable: the default theme is correct */
+}
+/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+(() => {
+  const sync = () => {
+    const el = document.querySelector('.gs-offline');
+    const box = el && el.querySelector('.gs-offline-box');
+    if (!el) return;
+    if (navigator.onLine) return box && box.remove();
+    if (box) return;
+    el.append(el.querySelector('template').content.cloneNode(true));
+    el.querySelector('button').onclick = () =>
+      el.querySelector('.gs-offline-box').remove();
+  };
+  addEventListener('offline', sync);
+  addEventListener('online', sync);
+  addEventListener('DOMContentLoaded', sync);
+  addEventListener('keydown', e => {
+    const box = document.querySelector('.gs-offline-box');
+    if (e.key === 'Escape' && box) box.remove();
+  });
+})();
+</script>
+<!-- /shell:head -->
+  </head>
+  <body class="doc-page">
+    <!-- shell:header main=main -->
+<a class="gs-skip" href="#main"><span class="gs-en">Skip to content</span><span class="gs-es" lang="es">Saltar al contenido</span></a>
+<header class="gs-shell">
+<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
+<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
+<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><details class="gs-group"><summary><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></summary><ul><li><a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a></li><li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/#investigations"><span class="gs-en">Investigations</span><span class="gs-es" lang="es">Investigaciones</span></a></li><li><a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a></li><li><a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a></li><li><a href="/experiments/"><span class="gs-en">Experiments</span><span class="gs-es" lang="es">Experimentos</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Labs</span><span class="gs-es" lang="es">Laboratorios</span></summary><ul><li><a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a></li><li><a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a></li><li><a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Make</span><span class="gs-es" lang="es">Crear</span></summary><ul><li><a href="/studio/"><span class="gs-en">Scenario Studio</span><span class="gs-es" lang="es">Estudio de escenarios</span></a></li><li><a href="/studio/lesson/"><span class="gs-en">Investigation Composer</span><span class="gs-es" lang="es">Compositor de investigaciones</span></a></li><li><a href="/studio/course/"><span class="gs-en">Course builder</span><span class="gs-es" lang="es">Creador de cursos</span></a></li><li><a href="/figure/"><span class="gs-en">Figure builder</span><span class="gs-es" lang="es">Creador de figuras</span></a></li><li><a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></summary><ul><li><a href="/teaching/"><span class="gs-en">Teaching with Gravitas</span><span class="gs-es" lang="es">Enseñar con Gravitas</span></a></li><li><a href="/teaching/find/"><span class="gs-en">Find content to teach</span><span class="gs-es" lang="es">Encontrar contenido para enseñar</span></a></li><li><a href="/instructors/"><span class="gs-en">Instructor resources</span><span class="gs-es" lang="es">Recursos para docentes</span></a></li><li><a href="/instructors/submissions/"><span class="gs-en">Submission review</span><span class="gs-es" lang="es">Revisión de entregas</span></a></li><li><a href="/evaluation/"><span class="gs-en">Classroom evidence kit</span><span class="gs-es" lang="es">Kit de evidencias de aula</span></a></li></ul></details></li><li><details class="gs-group"><summary><span class="gs-en">About</span><span class="gs-es" lang="es">Acerca de</span></summary><ul><li><a href="/model/"><span class="gs-en">How the model works</span><span class="gs-es" lang="es">Cómo funciona el modelo</span></a></li><li><a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a></li><li><a href="/glossary/"><span class="gs-en">Glossary</span><span class="gs-es" lang="es">Glosario</span></a></li><li><a href="/lab3d/"><span class="gs-en">3-D kernel diagnostics</span><span class="gs-es" lang="es">Diagnóstico del núcleo 3-D</span></a></li><li><a href="/mission/"><span class="gs-en">Mission core diagnostics</span><span class="gs-es" lang="es">Diagnóstico de misiones</span></a></li><li><a href="/Gravitas_User_Manual.pdf"><span class="gs-en">User manual (PDF)</span><span class="gs-es" lang="es">Manual de usuario (PDF)</span></a></li></ul></details></li></ul></nav>
+<div class="gs-controls" hidden>
+<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
+<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
+</div>
+</header>
+<div class="gs-offline" role="status"><template><div class="gs-offline-box">
+<p><strong><span class="gs-en">You are offline.</span><span class="gs-es" lang="es">Estás sin conexión.</span></strong> <span class="gs-en">These pages are saved on this device:</span><span class="gs-es" lang="es">Estas páginas están guardadas en este dispositivo:</span> <a href="/library/"><span class="gs-en">Library</span><span class="gs-es" lang="es">Biblioteca</span></a>, <a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a>, <a href="/course/"><span class="gs-en">Courses</span><span class="gs-es" lang="es">Cursos</span></a>, <a href="/observatory/"><span class="gs-en">Observatory</span><span class="gs-es" lang="es">Observatorio</span></a>, <a href="/"><span class="gs-en">Sandbox</span><span class="gs-es" lang="es">Simulación libre</span></a>, <a href="/3d/"><span class="gs-en">3-D lab</span><span class="gs-es" lang="es">Laboratorio 3-D</span></a>, <a href="/mission/lab/"><span class="gs-en">Mission lab</span><span class="gs-es" lang="es">Laboratorio de misiones</span></a>, <a href="/catalog/"><span class="gs-en">Catalog</span><span class="gs-es" lang="es">Catálogo</span></a>. <span class="gs-en">Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.</span><span class="gs-es" lang="es">Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.</span></p>
+<button type="button" class="ui-button"><span class="gs-en">Dismiss</span><span class="gs-es" lang="es">Cerrar</span></button>
+</div></template></div>
+<!-- /shell:header -->
+    <main class="doc-main is-wide" id="main">
+<!-- Generated by tools/build-adoption-pages.mjs. Do not edit by hand: node tools/build-adoption-pages.mjs -->
+<p class="ad-crumb"><a href="/teaching/"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a> / <a href="/teaching/find/"><span class="gs-en">Find content to teach</span><span class="gs-es" lang="es">Encontrar contenido para enseñar</span></a></p>
+<div class="doc-hero">
+<p class="doc-eyebrow"><span class="gs-en">Adoption page: investigation</span><span class="gs-es" lang="es">Página de adopción: investigación</span></p>
+<h1><span class="gs-en">Kepler's Laws</span><span class="gs-es" lang="es">Las leyes de Kepler</span></h1>
+<p class="doc-lede"><span class="gs-en">Work through all three of Kepler’s laws by measuring orbits rather than being shown them: find the focus of an ellipse, watch equal areas sweep out in equal times, and recover the three-halves power law by plotting it yourself.</span><span class="gs-es" lang="es">Recorre las tres leyes de Kepler midiendo órbitas en lugar de que te las enseñen: encuentra el foco de una elipse, observa cómo se barren áreas iguales en tiempos iguales y recupera la ley de la potencia tres medios trazándola tú mismo.</span></p>
+</div>
+<dl class="ad-facts">
+<div><dt><span class="gs-en">Where it runs</span><span class="gs-es" lang="es">Dónde se ejecuta</span></dt><dd><span class="gs-en">In the simulation</span><span class="gs-es" lang="es">En la simulación</span></dd></div>
+<div><dt><span class="gs-en">Written for</span><span class="gs-es" lang="es">Escrita para</span></dt><dd><span class="gs-en">Introductory</span><span class="gs-es" lang="es">Introductorio</span></dd></div>
+<div><dt><span class="gs-en">Course it suits</span><span class="gs-es" lang="es">Curso al que se ajusta</span></dt><dd><span class="gs-en">A survey course for non-majors</span><span class="gs-es" lang="es">Un curso general para quienes no estudian ciencias</span></dd></div>
+<div><dt><span class="gs-en">Time</span><span class="gs-es" lang="es">Tiempo</span></dt><dd>35 to 45 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span><br><span class="ad-type"><span class="gs-en">One class period (up to 50 minutes)</span><span class="gs-es" lang="es">Una clase (hasta 50 minutos)</span></span></dd></div>
+<div><dt><span class="gs-en">Mathematics asked</span><span class="gs-es" lang="es">Matemáticas que se piden</span></dt><dd><span class="gs-en">logarithms</span><span class="gs-es" lang="es">logaritmos</span></dd></div>
+<div><dt><span class="gs-en">Arithmetic</span><span class="gs-es" lang="es">Aritmética</span></dt><dd><span class="gs-en">A few numbers to work out</span><span class="gs-es" lang="es">Algunos números que calcular</span></dd></div>
+<div><dt><span class="gs-en">Subjects</span><span class="gs-es" lang="es">Temas</span></dt><dd><span class="gs-en">Orbits</span><span class="gs-es" lang="es">Órbitas</span>, <span class="gs-en">The solar system</span><span class="gs-es" lang="es">El sistema solar</span></dd></div>
+<div><dt><span class="gs-en">Steps</span><span class="gs-es" lang="es">Pasos</span></dt><dd>23 (core,quantitative,advanced depths)</dd></div>
+<div><dt><span class="gs-en">Offline</span><span class="gs-es" lang="es">Sin conexión</span></dt><dd><span class="gs-en">Yes: after Gravitas has been opened once, it works without a network.</span><span class="gs-es" lang="es">Sí: después de abrir Gravitas una vez, funciona sin red.</span></dd></div>
+</dl>
+<div class="ad-actions">
+<a class="ui-button is-primary" href="/#investigation=keplers-laws"><span class="gs-en">Open it</span><span class="gs-es" lang="es">Abrirla</span></a>
+<a class="ui-button" href="/?author=keplers-laws&amp;view=student" data-preview><span class="gs-en">Preview as a student</span><span class="gs-es" lang="es">Vista previa como estudiante</span></a>
+</div>
+<p class="doc-note"><span class="gs-en">Opens it clean, from the first step, and reads and writes none of the progress saved in this browser.</span><span class="gs-es" lang="es">La abre limpia, desde el primer paso, y no lee ni escribe nada del progreso guardado en este navegador.</span></p>
+<section aria-labelledby="objectives-h">
+<h2 id="objectives-h"><span class="gs-en">What students will be able to do</span><span class="gs-es" lang="es">Lo que el estudiantado podrá hacer</span></h2>
+<ul>
+<li><span class="gs-en">State where the primary sits in an elliptical orbit, and support it with a measurement</span><span class="gs-es" lang="es">Indicar dónde se sitúa el cuerpo principal en una órbita elíptica, y respaldarlo con una medida</span></li>
+<li><span class="gs-en">Explain why an orbiting body moves fastest at periapsis, in terms of angular momentum</span><span class="gs-es" lang="es">Explicar por qué un cuerpo en órbita se mueve más rápido en el periastro, en términos de momento angular</span></li>
+<li><span class="gs-en">Measure the semi-major axis and period of several planets and show that P² ∝ a³</span><span class="gs-es" lang="es">Medir el semieje mayor y el periodo de varios planetas y demostrar que P² ∝ a³</span></li>
+<li><span class="gs-en">Use the third law to predict an orbital period, and say what its constant depends on</span><span class="gs-es" lang="es">Usar la tercera ley para predecir un periodo orbital, y decir de qué depende su constante</span></li>
+</ul>
+</section>
+<section aria-labelledby="guide-h">
+<h2 id="guide-h"><span class="gs-en">Where it fits</span><span class="gs-es" lang="es">Dónde encaja</span></h2>
+<p><strong><span class="gs-en">What it is about</span><span class="gs-es" lang="es">De qué trata</span>.</strong> <span class="gs-en">Orbital motion</span><span class="gs-es" lang="en">Orbital motion</span></p>
+<p><span class="gs-en">During the gravity and orbits unit, after students have met the idea of an orbit but before or instead of a lecture derivation of the three laws.</span><span class="gs-es" lang="en">During the gravity and orbits unit, after students have met the idea of an orbit but before or instead of a lecture derivation of the three laws.</span></p>
+<p class="ad-type"><span class="gs-en">In English only.</span><span class="gs-es" lang="es">Solo en inglés.</span></p>
+</section>
+<section aria-labelledby="prereq-h">
+<h2 id="prereq-h"><span class="gs-en">Before this</span><span class="gs-es" lang="es">Antes de esto</span></h2>
+<h3><span class="gs-en">Investigations to have done first</span><span class="gs-es" lang="es">Investigaciones previas</span></h3>
+<p><span class="gs-en">None declared: it can be opened cold.</span><span class="gs-es" lang="es">Ninguna declarada: puede abrirse sin más.</span></p>
+<h3><span class="gs-en">What students should already know</span><span class="gs-es" lang="es">Lo que el estudiantado debería saber ya</span></h3>
+<ul>
+<li><span class="gs-en">That planets orbit the Sun and moons orbit planets</span><span class="gs-es" lang="en">That planets orbit the Sun and moons orbit planets</span></li>
+<li><span class="gs-en">Reading values off a graph, and plotting a point</span><span class="gs-es" lang="en">Reading values off a graph, and plotting a point</span></li>
+<li><span class="gs-en">Squaring and cubing a number on a calculator</span><span class="gs-es" lang="en">Squaring and cubing a number on a calculator</span></li>
+<li><span class="gs-en">No calculus, and no trigonometry beyond the idea of an angle</span><span class="gs-es" lang="en">No calculus, and no trigonometry beyond the idea of an angle</span></li>
+</ul><p class="ad-type"><span class="gs-en">In English only.</span><span class="gs-es" lang="es">Solo en inglés.</span></p>
+</section>
+<section aria-labelledby="outline-h">
+<h2 id="outline-h"><span class="gs-en">The steps</span><span class="gs-es" lang="es">Los pasos</span></h2>
+<p><span class="gs-en">In order, with what each asks of a student. Deeper steps are laid in only at the depth a student chooses.</span><span class="gs-es" lang="es">En orden, con lo que cada uno pide. Los pasos más profundos solo se añaden en la profundidad que elige el estudiante.</span></p>
+<ol class="ad-steps">
+<li><span class="gs-en">Eight minutes of arc</span><span class="gs-es" lang="es">Ocho minutos de arco</span> <span class="ad-type">(<span class="gs-en">Read</span><span class="gs-es" lang="es">Leer</span>)</span></li>
+<li><span class="gs-en">What you are looking at</span><span class="gs-es" lang="es">Lo que estás mirando</span> <span class="ad-type">(<span class="gs-en">Read</span><span class="gs-es" lang="es">Leer</span>)</span></li>
+<li><span class="gs-en">Where is the star?</span><span class="gs-es" lang="es">¿Dónde está la estrella?</span> <span class="ad-type">(<span class="gs-en">Predict</span><span class="gs-es" lang="es">Predecir</span>)</span></li>
+<li><span class="gs-en">The First Law, and the anatomy of an ellipse</span><span class="gs-es" lang="es">La primera ley, y la anatomía de una elipse</span> <span class="ad-type">(<span class="gs-en">Read</span><span class="gs-es" lang="es">Leer</span>)</span></li>
+<li><span class="gs-en">Change the shape</span><span class="gs-es" lang="es">Cambia la forma</span> <span class="ad-type">(<span class="gs-en">Instrument</span><span class="gs-es" lang="es">Instrumento</span>)</span></li>
+<li><span class="gs-en">What sits at the other focus?</span><span class="gs-es" lang="es">¿Qué hay en el otro foco?</span> <span class="ad-type">(<span class="gs-en">Question</span><span class="gs-es" lang="es">Pregunta</span>)</span></li>
+<li><span class="gs-en">Measure the two orbits</span><span class="gs-es" lang="es">Mide las dos órbitas</span> <span class="ad-type">(<span class="gs-en">Measure</span><span class="gs-es" lang="es">Medir</span>)</span></li>
+<li><span class="gs-en">Where does it move fastest?</span><span class="gs-es" lang="es">¿Dónde se mueve más rápido?</span> <span class="ad-type">(<span class="gs-en">Predict</span><span class="gs-es" lang="es">Predecir</span>)</span></li>
+<li><span class="gs-en">Watch it happen</span><span class="gs-es" lang="es">Míralo suceder</span> <span class="ad-type">(<span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span>)</span></li>
+<li><span class="gs-en">Equal areas, however you slice it</span><span class="gs-es" lang="es">Áreas iguales, sea cual sea el corte</span> <span class="ad-type">(<span class="gs-en">Instrument</span><span class="gs-es" lang="es">Instrumento</span>)</span></li>
+<li><span class="gs-en">Fast and slow, in numbers</span><span class="gs-es" lang="es">Rápido y lento, en números</span> <span class="ad-type">(<span class="gs-en">Measure</span><span class="gs-es" lang="es">Medir</span>)</span></li>
+<li><span class="gs-en">Why the speed changes</span><span class="gs-es" lang="es">Por qué cambia la velocidad</span> <span class="ad-type">(<span class="gs-en">Question</span><span class="gs-es" lang="es">Pregunta</span>)</span></li>
+<li><span class="gs-en">Kepler's third law</span><span class="gs-es" lang="es">La tercera ley de Kepler</span> <span class="ad-type">(<span class="gs-en">Read</span><span class="gs-es" lang="es">Leer</span>)</span></li>
+<li><span class="gs-en">Measure four planets</span><span class="gs-es" lang="es">Mide cuatro planetas</span> <span class="ad-type">(<span class="gs-en">Measure</span><span class="gs-es" lang="es">Medir</span>)</span></li>
+<li><span class="gs-en">Work the law out, step by step</span><span class="gs-es" lang="es">Deduce la ley, paso a paso</span> <span class="ad-type">(<span class="gs-en">Measure</span><span class="gs-es" lang="es">Medir</span>)</span></li>
+<li><span class="gs-en">Use the law</span><span class="gs-es" lang="es">Usa la ley</span> <span class="ad-type">(<span class="gs-en">Question</span><span class="gs-es" lang="es">Pregunta</span>)</span></li>
+<li><span class="gs-en">How sure is a period?</span><span class="gs-es" lang="es">¿Qué tan seguro es un periodo?</span> <span class="ad-type">(<span class="gs-en">Measure</span><span class="gs-es" lang="es">Medir</span>; <span class="ad-deeper"><span class="gs-en">quantitative</span><span class="gs-es" lang="es">cuantitativo</span></span>)</span></li>
+<li><span class="gs-en">Fit the law with weights</span><span class="gs-es" lang="es">Ajusta la ley con pesos</span> <span class="ad-type">(<span class="gs-en">Measure</span><span class="gs-es" lang="es">Medir</span>; <span class="ad-deeper"><span class="gs-en">quantitative</span><span class="gs-es" lang="es">cuantitativo</span></span>)</span></li>
+<li><span class="gs-en">Predict, with an error bar</span><span class="gs-es" lang="es">Predice, con barra de error</span> <span class="ad-type">(<span class="gs-en">Question</span><span class="gs-es" lang="es">Pregunta</span>; <span class="ad-deeper"><span class="gs-en">quantitative</span><span class="gs-es" lang="es">cuantitativo</span></span>)</span></li>
+<li><span class="gs-en">Weigh a real planet’s star</span><span class="gs-es" lang="es">Pesa la estrella de un planeta real</span> <span class="ad-type">(<span class="gs-en">Question</span><span class="gs-es" lang="es">Pregunta</span>; <span class="ad-deeper"><span class="gs-en">advanced</span><span class="gs-es" lang="es">avanzado</span></span>)</span></li>
+<li><span class="gs-en">Two methods, one period</span><span class="gs-es" lang="es">Dos métodos, un periodo</span> <span class="ad-type">(<span class="gs-en">Question</span><span class="gs-es" lang="es">Pregunta</span>; <span class="ad-deeper"><span class="gs-en">advanced</span><span class="gs-es" lang="es">avanzado</span></span>)</span></li>
+<li><span class="gs-en">What the constant depends on</span><span class="gs-es" lang="es">De qué depende la constante</span> <span class="ad-type">(<span class="gs-en">Question</span><span class="gs-es" lang="es">Pregunta</span>)</span></li>
+<li><span class="gs-en">What Newton added</span><span class="gs-es" lang="es">Lo que añadió Newton</span> <span class="ad-type">(<span class="gs-en">Read</span><span class="gs-es" lang="es">Leer</span>)</span></li>
+<li><span class="gs-en">The same laws, forty light years away</span><span class="gs-es" lang="es">Las mismas leyes, a cuarenta años luz</span> <span class="ad-type">(<span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span>)</span></li>
+<li><span class="gs-en">Weigh TRAPPIST-1 yourself</span><span class="gs-es" lang="es">Pesa TRAPPIST-1 tú mismo</span> <span class="ad-type">(<span class="gs-en">Measure</span><span class="gs-es" lang="es">Medir</span>)</span></li>
+<li><span class="gs-en">Weighing another star</span><span class="gs-es" lang="es">Pesar otra estrella</span> <span class="ad-type">(<span class="gs-en">Question</span><span class="gs-es" lang="es">Pregunta</span>)</span></li>
+<li><span class="gs-en">Where Kepler's version breaks</span><span class="gs-es" lang="es">Dónde falla la versión de Kepler</span> <span class="ad-type">(<span class="gs-en">Question</span><span class="gs-es" lang="es">Pregunta</span>)</span></li>
+<li><span class="gs-en">Where this leaves you</span><span class="gs-es" lang="es">Dónde te deja esto</span> <span class="ad-type">(<span class="gs-en">Read</span><span class="gs-es" lang="es">Leer</span>)</span></li>
+</ol>
+</section>
+<section aria-labelledby="instruments-h">
+<h2 id="instruments-h"><span class="gs-en">Instruments students use</span><span class="gs-es" lang="es">Instrumentos que usa el estudiantado</span></h2>
+<p><code>ellipse</code>, <code>wedges</code></p>
+</section>
+<section aria-labelledby="data-h">
+<h2 id="data-h"><span class="gs-en">Data it uses</span><span class="gs-es" lang="es">Datos que usa</span></h2>
+<div class="doc-table-wrap" tabindex="0"><table class="doc-table"><thead><tr><th scope="col"><span class="gs-en">Dataset</span><span class="gs-es" lang="es">Conjunto de datos</span></th><th scope="col"><span class="gs-en">Kind</span><span class="gs-es" lang="es">Tipo</span></th><th scope="col"><span class="gs-en">Licence and credit</span><span class="gs-es" lang="es">Licencia y crédito</span></th><th scope="col"><span class="gs-en">Cite</span><span class="gs-es" lang="es">Citar</span></th></tr></thead><tbody>
+<tr><td>TRAPPIST-1: the star and its seven planets, compiled from the literature</td><td><span class="gs-en">A table of values</span><span class="gs-es" lang="es">Una tabla de valores</span></td><td>Published values, each cited to its paper; the NASA Exoplanet Archive and SIMBAD ask that work using them acknowledge them (NOTICE).<br><span class="gs-en">Credit</span><span class="gs-es" lang="es">Crédito</span>: Compiled from Agol et al. 2021; Gillon et al. 2016; Gaia EDR3 parallax; Gillon et al. 2017; Ducrot et al. 2020; Grimm et al. 2018</td><td><ul><li><a href="https://doi.org/10.3847/PSJ/abd022">Agol et al. 2021, PSJ 2, 1</a></li><li><a href="https://doi.org/10.1038/nature17448">Gillon et al. 2016, Nature 533, 221</a></li><li><a href="https://doi.org/10.1051/0004-6361/202039657">Gaia EDR3 parallax, 80.2123 mas, via SIMBAD (Gaia Collaboration 2021, A&amp;A 649, A1)</a></li><li><a href="https://doi.org/10.1038/nature21360">Gillon et al. 2017, Nature 542, 456</a></li><li><a href="https://doi.org/10.1051/0004-6361/201937392">Ducrot et al. 2020, A&amp;A 640, A112</a></li><li><a href="https://doi.org/10.1051/0004-6361/201732233">Grimm et al. 2018, A&amp;A 613, A68</a></li><li><a href="https://doi.org/10.26133/NEA12">NASA Exoplanet Archive, Planetary Systems table (NASA Exoplanet Science Institute 2020)</a></li><li><a href="https://doi.org/10.3847/psj/ade3c2">Christiansen et al. 2025, PSJ 6, 186 (the NASA Exoplanet Archive)</a></li><li><a href="https://doi.org/10.1051/aas:2000332">Wenger et al. 2000, A&amp;AS 143, 9 (SIMBAD)</a></li></ul></td></tr>
+</tbody></table></div><p><span class="gs-en">The planets' sizes, masses and orbits are the published values, from NASA's planetary fact sheets and JPL's approximate positions of the planets; the model page lists each source.</span><span class="gs-es" lang="es">Los tamaños, las masas y las órbitas de los planetas son los valores publicados, de las fichas planetarias de la NASA y de las posiciones aproximadas de los planetas del JPL; la página del modelo enumera cada fuente.</span></p>
+</section>
+<section aria-labelledby="wrong-h">
+<h2 id="wrong-h"><span class="gs-en">Common wrong turns</span><span class="gs-es" lang="es">Errores frecuentes</span></h2>
+<p><span class="gs-en">What students most often get wrong here, from the instructor materials. What to say to them, and the answers, are in the materials behind the passphrase.</span><span class="gs-es" lang="es">Lo que el estudiantado suele hacer mal aquí, según los materiales docentes. Qué decirles, y las respuestas, están en los materiales protegidos con contraseña.</span></p>
+<ul>
+<li><span class="gs-en">Planets move at a constant speed around their orbits.</span><span class="gs-es" lang="en">Planets move at a constant speed around their orbits.</span></li>
+<li><span class="gs-en">The Sun sits at the center of the ellipse.</span><span class="gs-es" lang="en">The Sun sits at the center of the ellipse.</span></li>
+<li><span class="gs-en">Something is at the other focus.</span><span class="gs-es" lang="en">Something is at the other focus.</span></li>
+<li><span class="gs-en">Orbits are strongly elliptical, as textbook figures show.</span><span class="gs-es" lang="en">Orbits are strongly elliptical, as textbook figures show.</span></li>
+<li><span class="gs-en">Kepler’s third law constant is the same everywhere.</span><span class="gs-es" lang="en">Kepler’s third law constant is the same everywhere.</span></li>
+</ul><p class="ad-type"><span class="gs-en">In English only.</span><span class="gs-es" lang="es">Solo en inglés.</span></p>
+</section>
+<section aria-labelledby="scoring-h">
+<h2 id="scoring-h"><span class="gs-en">What is marked, and what is not</span><span class="gs-es" lang="es">Qué se califica y qué no</span></h2>
+<ul>
+<li><span class="gs-en">Checked automatically</span><span class="gs-es" lang="es">Se comprueban automáticamente</span>: <strong>8</strong></li>
+<li><span class="gs-en">Needs your judgment</span><span class="gs-es" lang="es">Requiere su criterio</span>: <strong>1</strong></li>
+<li><span class="gs-en">Recorded, not marked</span><span class="gs-es" lang="es">Se registran, no se califican</span>: <strong>2</strong></li>
+</ul>
+<p><span class="gs-en">A choice or a number is checked against the answer; a written answer is shown to you with the points to look for, never graded by the page.</span><span class="gs-es" lang="es">Una opción o un número se compara con la respuesta; una respuesta escrita se le muestra con los puntos que conviene buscar, y la página nunca la califica.</span></p>
+</section>
+<section aria-labelledby="access-h">
+<h2 id="access-h"><span class="gs-en">Accessibility</span><span class="gs-es" lang="es">Accesibilidad</span></h2>
+<p><span class="gs-en">The interface is operable from the keyboard, including the investigations, the measuring tools and the dialogs, which trap focus and return it. Measurements and state changes are announced through a live region, and the canvas carries a text description of what is on it that updates as the system evolves. Automated checks (axe-core) and a set of manual keyboard walkthroughs run in continuous integration on every change.</span><span class="gs-es" lang="es">La interfaz se opera desde el teclado, incluidas las investigaciones, las herramientas de medición y los diálogos, que atrapan el foco y lo devuelven. Las mediciones y los cambios de estado se anuncian por una región activa, y el lienzo lleva una descripción textual de lo que hay en él que se actualiza según evoluciona el sistema. Comprobaciones automáticas (axe-core) y un conjunto de recorridos manuales por teclado se ejecutan en integración continua en cada cambio.</span></p>
+<p><span class="gs-en">Interface animation follows the operating system’s reduced-motion setting. Four themes are provided, including a light one built for projectors and a high-contrast dark one. Nothing on this page moves until you ask it to.</span><span class="gs-es" lang="es">La animación de la interfaz respeta la preferencia de movimiento reducido del sistema operativo. Hay cuatro temas, incluido uno claro pensado para proyectores y uno oscuro de alto contraste. Nada de esta página se mueve hasta que usted lo pida.</span></p>
+<p><span class="gs-en">The interface, the Library and every investigation are available in Spanish as well as English, including the step text students read and answer. The language is chosen in the interface and remembered; the Spanish investigation text is downloaded only if it is asked for.</span><span class="gs-es" lang="es">La interfaz, el navegador de investigaciones y todas las investigaciones están disponibles en español además de en inglés, incluido el texto de los pasos que el estudiantado lee y responde. El idioma se elige en la interfaz y se recuerda; el texto en español de las investigaciones se descarga solo si se pide.</span></p>
+<p><span class="gs-en">The accessibility statement, with what was tested and how:</span><span class="gs-es" lang="es">La declaración de accesibilidad, con lo que se probó y cómo:</span> <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/ACCESSIBILITY.md">ACCESSIBILITY.md</a></p>
+</section>
+<section aria-labelledby="assign-h">
+<h2 id="assign-h"><span class="gs-en">Hand it out</span><span class="gs-es" lang="es">Cómo repartirla</span></h2>
+<p><a class="ui-button" href="/?assign=keplers-laws"><span class="gs-en">Make an activity from it</span><span class="gs-es" lang="es">Crear una actividad a partir de ella</span></a></p>
+<p><span class="gs-en">Choose steps, add a note and a roster name, and share one link; results come back as a token you can review.</span><span class="gs-es" lang="es">Elija pasos, añada una nota y un nombre de grupo, y comparta un enlace; los resultados vuelven como una ficha que puede revisar.</span></p>
+<h3><span class="gs-en">Ready-made cuts</span><span class="gs-es" lang="es">Cortes ya preparados</span></h3>
+<ul>
+<li><a href="/teaching/activity/orbital-speed/"><span class="gs-en">Orbital motion: why do planets change speed? (Demonstration)</span><span class="gs-es" lang="es">Movimiento orbital: ¿por qué cambian de velocidad los planetas? (Demostración)</span></a> (5 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>; <a href="/?activity=orbital-speed&amp;format=demonstration#activity=orbital-speed/demonstration"><span class="gs-en">Open it</span><span class="gs-es" lang="es">Abrirla</span></a>)</li>
+<li><a href="/teaching/activity/orbital-speed/"><span class="gs-en">Orbital motion: why do planets change speed? (Short route)</span><span class="gs-es" lang="es">Movimiento orbital: ¿por qué cambian de velocidad los planetas? (Ruta corta)</span></a> (5 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>; <a href="/?activity=orbital-speed&amp;format=route#activity=orbital-speed/route"><span class="gs-en">Open it</span><span class="gs-es" lang="es">Abrirla</span></a>)</li>
+<li><a href="/teaching/activity/orbital-speed/"><span class="gs-en">Orbital motion: why do planets change speed? (Guided activity)</span><span class="gs-es" lang="es">Movimiento orbital: ¿por qué cambian de velocidad los planetas? (Actividad guiada)</span></a> (20 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>; <a href="/?activity=orbital-speed&amp;format=guided#activity=orbital-speed/guided"><span class="gs-en">Open it</span><span class="gs-es" lang="es">Abrirla</span></a>)</li>
+<li><a href="/teaching/activity/orbital-speed/"><span class="gs-en">Orbital motion: why do planets change speed? (Full lab)</span><span class="gs-es" lang="es">Movimiento orbital: ¿por qué cambian de velocidad los planetas? (Práctica completa)</span></a> (50 <span class="gs-en">minutes</span><span class="gs-es" lang="es">minutos</span>; <a href="/?activity=orbital-speed&amp;format=lab#activity=orbital-speed/lab"><span class="gs-en">Open it</span><span class="gs-es" lang="es">Abrirla</span></a>)</li>
+</ul>
+</section>
+<section aria-labelledby="embed-h">
+<h2 id="embed-h"><span class="gs-en">Embed a figure</span><span class="gs-es" lang="es">Insertar una figura</span></h2>
+<p><span class="gs-en">An interactive figure of a world this investigation uses, for your own course page. Paste the markup; the figure remembers nothing and sends nothing.</span><span class="gs-es" lang="es">Una figura interactiva de un mundo que usa esta investigación, para la página de su curso. Pegue el código; la figura no recuerda ni envía nada.</span></p>
+<div class="ad-embed">
+<details><summary><span class="gs-en">Kepler's 2nd Law - Equal Areas</span><span class="gs-es" lang="es">Segunda ley de Kepler: áreas iguales</span></summary><pre>&lt;iframe src=&quot;https://gravitas-sim.online/?embed=1&amp;ev=1&amp;reset=scenario#1reyJ2IjoxLCJzIjoia2VwbGVycy0ybmQtbGF3Iiwic2VlZCI6IjE0ODBnazAifQ&quot; title=&quot;Kepler's 2nd Law - Equal Areas&quot; loading=&quot;lazy&quot; style=&quot;width:100%;aspect-ratio:16/10;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;</pre></details>
+<details><summary><span class="gs-en">Solar System</span><span class="gs-es" lang="es">Sistema solar</span></summary><pre>&lt;iframe src=&quot;https://gravitas-sim.online/?embed=1&amp;ev=1&amp;reset=scenario#1reyJ2IjoxLCJzIjoic29sYXItc3lzdGVtIiwic2VlZCI6IjE0ODBnazAifQ&quot; title=&quot;Solar System&quot; loading=&quot;lazy&quot; style=&quot;width:100%;aspect-ratio:16/10;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;</pre></details>
+<details><summary><span class="gs-en">TRAPPIST-1 System</span><span class="gs-es" lang="es">Sistema TRAPPIST-1</span></summary><pre>&lt;iframe src=&quot;https://gravitas-sim.online/?embed=1&amp;ev=1&amp;reset=scenario#1reyJ2IjoxLCJzIjoidHJhcHBpc3QtMS1zeXN0ZW0iLCJzZWVkIjoiMTQ4MGdrMCJ9&quot; title=&quot;TRAPPIST-1 System&quot; loading=&quot;lazy&quot; style=&quot;width:100%;aspect-ratio:16/10;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;</pre></details>
+</div>
+</section>
+<section aria-labelledby="materials-h">
+<h2 id="materials-h"><span class="gs-en">Instructor materials</span><span class="gs-es" lang="es">Materiales docentes</span></h2>
+<p><span class="gs-en">The instructor notes with the answer key is behind the instructor passphrase. The topic, placement, prior knowledge and wrong turns above are the public part.</span><span class="gs-es" lang="es">Las notas docentes con las respuestas está protegida con la contraseña docente. El tema, la ubicación, los conocimientos previos y los errores frecuentes de arriba son la parte pública.</span></p>
+<p><a class="ui-button" href="/instructors/"><span class="gs-en">Open the instructor resources</span><span class="gs-es" lang="es">Abrir los recursos para docentes</span></a></p>
+</section>
+<p><a href="/teaching/find/"><span class="gs-en">Back to Teach</span><span class="gs-es" lang="es">Volver a Enseñar</span></a></p>
+    </main>
+    <!-- shell:footer -->
+<footer class="gs-foot">
+<a href="/validation/"><span class="gs-en">Physics validation</span><span class="gs-es" lang="es">Validación física</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io"><span class="gs-en">Source code</span><span class="gs-es" lang="es">Código fuente</span></a>
+<a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/CITATION.cff"><span class="gs-en">Cite Gravitas</span><span class="gs-es" lang="es">Citar Gravitas</span></a>
+<span><span class="gs-en">MIT licensed</span><span class="gs-es" lang="es">Licencia MIT</span></span>
+</footer>
+<!-- /shell:footer -->
+    <script type="module">
+      import { mountShell } from '/js/shell.js';
+      mountShell();
+    </script>
+  </body>
+</html>

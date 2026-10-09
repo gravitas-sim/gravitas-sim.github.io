@@ -75,6 +75,7 @@ export const WORDS = {
   figure: ['Figure builder', 'Creador de figuras'],
   catalog: ['Catalog', 'Catálogo'],
   teaching: ['Teaching with Gravitas', 'Enseñar con Gravitas'],
+  find: ['Find content to teach', 'Encontrar contenido para enseñar'],
   instructors: ['Instructor resources', 'Recursos para docentes'],
   submissions: ['Submission review', 'Revisión de entregas'],
   evaluation: ['Classroom evidence kit', 'Kit de evidencias de aula'],
@@ -134,6 +135,7 @@ export const NAV = [
     'teach',
     [
       ['teaching', '/teaching/'],
+      ['find', '/teaching/find/'],
       ['instructors', '/instructors/'],
       ['submissions', '/instructors/submissions/'],
       ['evaluation', '/evaluation/'],
