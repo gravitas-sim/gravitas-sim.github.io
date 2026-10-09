@@ -66,6 +66,18 @@ export function statusOf(entry, installed) {
 export const breaking = (from, to) =>
   Number(String(from).split('.')[0]) !== Number(String(to).split('.')[0]);
 
+/**
+ * A JSON.parse reviver that refuses a prototype key: the pack is only read
+ * here, never merged into anything, and js/remix/open.js reads it again with
+ * the full document guard. (shareState's parseDocument is on a request budget
+ * this page has no room for.)
+ */
+function noPrototypeKeys(key, value) {
+  if (key === '__proto__' || key === 'constructor' || key === 'prototype')
+    throw new SyntaxError(`"${key}" may not be a key`);
+  return value;
+}
+
 const text = bytes => new TextDecoder('utf-8', { fatal: true }).decode(bytes);
 
 /** Check what an archive holds against its entry and the platform. */
@@ -120,6 +132,26 @@ function checkContents(entry, files, catalog) {
       throw new InstallError(
         'content',
         `${c.file}: ${bad[0].path} ${bad[0].message}`
+      );
+  } else if (entry.type === 'investigation-pack') {
+    // The format's own rules and the remix rules judge it when it is opened,
+    // where the lesson engine is (js/remix/open.js); here it must be a pack
+    // the package names, so nothing half-installs (Prompt 78, REMIX.md).
+    const i = manifest.provides.investigations[0];
+    let pack;
+    try {
+      pack = JSON.parse(out[i.file], noPrototypeKeys);
+    } catch (err) {
+      throw new InstallError('content', `${i.file}: ${err.message}`);
+    }
+    if (
+      pack?.format !== 'gravitas.investigation-pack' ||
+      pack.formatVersion !== 1 ||
+      pack.id !== i.id
+    )
+      throw new InstallError(
+        'content',
+        `${i.file}: is not the investigation pack "${i.id}" (version 1)`
       );
   } else {
     throw new InstallError(

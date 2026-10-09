@@ -6,7 +6,9 @@
 //
 //   courseApi()      the languages, lessons, scenarios and datasets a pack may
 //                    name, for the format's reference checks;
-//   courseFacts()    every lesson a pack names, loaded (its steps' hashes and
+//   courseFacts()    every lesson a pack names, loaded (and every investigation
+//                    pack it carries, when the page gives it ./packItems.js's
+//                    openedPack to open them with) (its steps' hashes and
 //                    digest, its package, its languages, what its steps use,
 //                    whether it has an instructor guide), with the sequences
 //                    Gravitas puts lessons in and the datasets' licenses.
@@ -29,7 +31,7 @@ import {
 } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import { DATASETS, GUIDED } from './datasets.js';
-import { itemsOf } from './pack.js';
+import { itemsOf, lessonKeyOf } from './pack.js';
 import { lessonDigest, minutesRange } from './review.js';
 
 export { PLATFORM_API };
@@ -133,7 +135,10 @@ export function lessonFacts(lesson) {
  *   merged English lesson (the registry's loadInvestigation)
  * @returns {Promise<object>}
  */
-export async function courseFacts(pack, { load, catalog, known = new Map() }) {
+export async function courseFacts(
+  pack,
+  { load, catalog, known = new Map(), openPack = null }
+) {
   const ids = new Set();
   for (const { item } of itemsOf(pack)) if (item?.lesson) ids.add(item.lesson);
   const have = new Set(MANIFEST.map(m => m.id));
@@ -146,10 +151,34 @@ export async function courseFacts(pack, { load, catalog, known = new Map() }) {
     lessons.set(id, known.get(id));
   }
 
+  // An investigation pack travels in its item as a link. Opening one needs
+  // the lesson engine's checks (./packItems.js), which the builder's route has
+  // no room for: a page that has them hands `openPack` in, and a pack nobody
+  // opened is `unchecked` (./review.js), not missing.
+  const unchecked = new Set();
+  for (const { item } of itemsOf(pack)) {
+    if (item?.kind !== 'pack') continue;
+    const key = lessonKeyOf(item);
+    if (!openPack) {
+      unchecked.add(key);
+      continue;
+    }
+    // Cached by link: the same id and version can name another pack.
+    if (known.get(key)?.link !== item.link) {
+      const got = await openPack(item);
+      known.set(key, {
+        link: item.link,
+        ...(got.ok ? lessonFacts(got.lesson) : { failed: got.reason }),
+      });
+    }
+    if (!known.get(key).failed) lessons.set(key, known.get(key));
+  }
+
   return {
     platform: PLATFORM_API,
     locales: [...LOCALES],
     lessons,
+    unchecked,
     scenarios: new Map(Object.keys(SCENARIO_INFO).map(k => [k, {}])),
     scenarioId,
     datasets: datasetsOf(catalog),

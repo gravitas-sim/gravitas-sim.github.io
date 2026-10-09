@@ -99,6 +99,7 @@ export const ROUTES = [
   { id: 'my-work', url: '/my-work/', page: true },
   { id: 'studio', url: '/studio/', page: true },
   { id: 'composer', url: '/studio/lesson/', page: true },
+  { id: 'course-packs', url: '/studio/course/packs/', page: true },
   { id: 'course-builder', url: '/studio/course/', page: true },
   { id: 'course-home', url: '/course/?course=intro-astronomy', page: true },
   { id: 'lab3d', url: '/lab3d/', page: true },

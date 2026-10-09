@@ -15,13 +15,25 @@ import {
   remixInvestigation,
 } from '../platform/remix.js';
 
-/** The `summary` a card shows, which a lesson does not hold. */
+/**
+ * The `summary` a card shows, which a lesson does not hold.
+ *
+ * One module at a time: the two files are read in turn, not together, so a
+ * runtime that links several dynamic imports at once (the race
+ * tests/jestConcurrentImport notes) cannot hand one of them back empty. A
+ * built-in that has an English summary and no Spanish one is a mistake in the
+ * data, said here rather than left to drop a language from the remix.
+ */
 export async function summaryOf(id) {
-  const [{ SUMMARIES }, { SUMMARIES_ES }] = await Promise.all([
-    import('../data/investigations/summaries.js'),
-    import('../data/investigations/summaries.es.js'),
-  ]);
-  return { en: SUMMARIES[id], es: SUMMARIES_ES[id] };
+  const { SUMMARIES } = await import('../data/investigations/summaries.js');
+  const { SUMMARIES_ES } =
+    await import('../data/investigations/summaries.es.js');
+  const out = { en: SUMMARIES[id], es: SUMMARIES_ES[id] };
+  if (typeof out.en === 'string' && typeof out.es !== 'string')
+    throw new Error(
+      `summary of ${id}: English is there, Spanish is ${typeof out.es} (${Object.keys(SUMMARIES_ES).length} Spanish summaries, ${Object.keys(SUMMARIES).length} English)`
+    );
+  return out;
 }
 
 /**

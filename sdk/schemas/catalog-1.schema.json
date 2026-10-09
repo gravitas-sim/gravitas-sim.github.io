@@ -273,7 +273,8 @@
               "type": {
                 "enum": [
                   "data-pack",
-                  "course-pack"
+                  "course-pack",
+                  "investigation-pack"
                 ]
               },
               "summary": {

@@ -43,6 +43,24 @@ export const ES_COURSE = {
     'Las unidades van en orden, y los elementos en orden dentro de ellas. No hay fechas: esas las pone el docente. Un elemento del camino introductorio o avanzado es opcional, y lo principal no puede depender de él.',
   'course.hint.minutesDerived':
     'Déjalo en blanco para usar su propio tiempo (en una actividad, su parte de los pasos).',
+  'course.hint.packItem':
+    'Pega el elemento hecho en la comprobación de investigaciones (contiene la investigación como enlace, y su ficha). Esa página abre el enlace y lo juzga; esta no puede.',
+  'course.status.packNotItem':
+    'Eso no es un elemento de curso para una investigación.',
+  'course.status.packRead': 'Se leyó «{id}» y se fijó su ficha.',
+  'course.pack.corrupt': 'está incompleto o dañado.',
+  'course.pack.wrongKind': 'no es un enlace de investigación.',
+  'course.pack.newerVersion': 'lo hizo una versión más nueva de Gravitas.',
+  'course.pack.tooLarge': 'contiene más de lo que un enlace puede llevar.',
+  'course.pack.notPack': 'no contiene ninguna investigación.',
+  'course.pack.installed':
+    'nombra un paquete instalado en un solo navegador; publica la investigación como enlace.',
+  'course.pack.noOriginal':
+    'se hizo a partir de «{what}», que esta versión de Gravitas no tiene.',
+  'course.pack.delta': 'sus cambios no se aplican al original: {what}',
+  'course.pack.invalid': 'no es una investigación válida: {what}',
+  'course.pack.identity':
+    'contiene «{what}», no la investigación que nombra este elemento.',
   'course.hint.seed':
     'Una palabra como orbit-1: la misma palabra construye siempre el mismo mundo.',
   'course.hint.dataset':
@@ -66,6 +84,9 @@ export const ES_COURSE = {
   'course.field.lesson': 'Investigación',
   'course.field.unitTitle': 'Título de la unidad',
   'course.field.addKind': 'Elemento nuevo',
+  'course.field.packItem': 'Elemento de investigación',
+  'course.field.packOpen': 'Hacer o comprobar uno',
+  'course.action.packOpen': 'Abrir la comprobación de investigaciones',
   'course.field.path': 'Camino',
   'course.field.minutes': 'Minutos',
   'course.field.needs': 'Va después de',
@@ -103,6 +124,7 @@ export const ES_COURSE = {
   'course.kind.scenario': 'Simulación',
   'course.kind.dataset': 'Datos',
   'course.kind.reading': 'Lectura',
+  'course.kind.pack': 'Investigación del instructor',
   'course.path.core': 'Principal',
   'course.path.intro': 'Introductorio',
   'course.path.advanced': 'Avanzado',
@@ -121,6 +143,8 @@ export const ES_COURSE = {
   'course.standing.moved': 'ahora viene de otro paquete.',
   'course.standing.unpinned': 'aún sin fijar.',
   'course.standing.missing': 'ya no está en Gravitas.',
+  'course.standing.unchecked':
+    'no se comprueba aquí: ábrelo en la comprobación de investigaciones.',
   'course.steps.loading': 'Cargando los pasos.',
   'course.steps.needed': '(lo necesita un paso elegido)',
   'course.checks.running': 'Comprobando.',
@@ -231,6 +255,8 @@ export const ES_COURSE = {
   'course.audit.objectiveUnserved':
     'Ningún elemento principal sirve al objetivo «{id}».',
   'course.audit.noTime': 'Este elemento no tiene tiempo.',
+  'course.audit.packUnchecked':
+    'Esta investigación no se ha abierto ni comprobado. Compruébala en la página de comprobación de investigaciones antes de enviar el curso.',
   'course.audit.needs':
     'Este elemento va después de «{id}», que el curso no tiene.',
   'course.audit.noGuide': '{lessonTitle} aún no tiene guía para docentes.',
@@ -261,6 +287,9 @@ export const ES_COURSE = {
   'course.error.items': 'De 1 a {max} elementos.',
   'course.error.kind': 'Uno de: {kinds}.',
   'course.error.lesson': 'Elige una investigación que tenga Gravitas.',
+  'course.error.packId': 'El identificador público de la investigación.',
+  'course.error.packLink':
+    'El enlace de la investigación: lo que sigue a #, como lo hace Publicar en el Compositor, hasta {max} caracteres.',
   'course.error.lessonTwice': 'Esta investigación ya está en el curso.',
   'course.error.license': 'La licencia o las condiciones, en palabras.',
   'course.error.locales': 'Los idiomas deben incluir el inglés.',

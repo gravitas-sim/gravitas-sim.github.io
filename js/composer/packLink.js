@@ -27,6 +27,8 @@ import { remixDelta } from '../platform/remix.js';
 
 export const PACK_TAG = 'i';
 export const PACK_LINK_VERSION = 1;
+/** A catalog package id (js/platform/manifest.js ID). */
+export const PACKAGE_KEY = /^[a-z0-9]+(\.[a-z0-9]+(-[a-z0-9]+)*)+$/;
 
 /** Whether a fragment is an investigation link, without decoding it. */
 export const isPackFragment = hash => /^#?i\d+[zr]./.test(String(hash || ''));
@@ -64,7 +66,8 @@ export async function packLink(pack, { root, base = null }) {
  * Never throws: a link is something a person pasted.
  *
  * @param {string} hash - The address's fragment
- * @returns {Promise<{ok: true, pack?: object, delta?: object}|
+ * @returns {Promise<{ok: true, pack?: object, delta?: object,
+ *   installed?: string}|
  *   {ok: false, reason: string}>} A reason is wrongKind, newerVersion,
  *   corrupt, tooLarge or notPack
  */
@@ -88,5 +91,10 @@ export async function readPackFragment(hash) {
     return { ok: true, pack: p.p };
   if (only('d') && p.d && typeof p.d === 'object')
     return { ok: true, delta: p.d };
+  // An installed package, by id (the catalog's Open): `k` names a record in
+  // this browser's IndexedDB store, so a link made on one machine opens
+  // nothing on another and says so (js/remix/open.js).
+  if (only('k') && typeof p.k === 'string' && PACKAGE_KEY.test(p.k))
+    return { ok: true, installed: p.k };
   return { ok: false, reason: 'notPack' };
 }

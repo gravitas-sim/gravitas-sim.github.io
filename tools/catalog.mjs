@@ -80,7 +80,11 @@ export const ACCEPTED_LICENSES = Object.freeze([
 ]);
 
 /** The extension types the catalog serves as archives: declarative ones only. */
-export const ARCHIVE_TYPES = Object.freeze(['data-pack', 'course-pack']);
+export const ARCHIVE_TYPES = Object.freeze([
+  'data-pack',
+  'course-pack',
+  'investigation-pack',
+]);
 
 const sha256 = b => createHash('sha256').update(b).digest('hex');
 const json = v => `${JSON.stringify(v, null, 2)}\n`;
@@ -89,6 +93,12 @@ const accepted = license => ACCEPTED_LICENSES.some(l => l.match.test(license));
 export function readCuration(file = CURATION_FILE) {
   return JSON.parse(readFileSync(file, 'utf8'));
 }
+
+/** The English and Spanish of a pack's text, without its translation bookkeeping. */
+const localized = t =>
+  Object.fromEntries(
+    ['en', 'es'].filter(l => typeof t?.[l] === 'string').map(l => [l, t[l]])
+  );
 
 /** What a built-in package costs to load: its assets, by offline class. */
 function assetBytes(manifest) {
@@ -155,7 +165,11 @@ export async function archiveEntry(item) {
   const summary =
     type === 'course-pack'
       ? JSON.parse(files.get(m.provides.courses[0].file)).summary
-      : null;
+      : type === 'investigation-pack'
+        ? localized(
+            JSON.parse(files.get(m.provides.investigations[0].file)).summary
+          )
+        : null;
   const record =
     type === 'data-pack'
       ? JSON.parse(files.get(m.provides.dataPacks[0].provenance))

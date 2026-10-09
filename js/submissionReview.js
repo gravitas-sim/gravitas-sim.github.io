@@ -157,17 +157,25 @@ async function accept(label, thing, kind) {
   let lesson = await lessonById(submission.b.lesson.id);
   if (lesson === undefined) return refuse(label, 'lessonLoad');
   if (!lesson && submission.b.lesson.pack) {
-    // An instructor's investigation (Prompt 78): named, not graded here, because
-    // the pack that holds its questions is not in this build.
+    // An instructor's version of an investigation (Prompt 78): its questions
+    // are the original's, so it is graded against the original by reference
+    // (js/remix/grade.js); one written from scratch is named, not graded.
     const k = submission.b.lesson.pack;
-    refused.push({
-      label,
-      reason: 'remix',
-      detail: {
-        message: `${k.id} ${k.version}${k.from ? `, ${k.from.id} ${k.from.version}` : ''}`,
-      },
-    });
-    return render();
+    const raw = k.from ? await lessonById(k.from.id) : null;
+    const view = await (
+      await import('./remix/grade.js')
+    ).remixLesson(submission.b, raw);
+    if (!view.ok) {
+      refused.push({
+        label,
+        reason: view.reason,
+        detail: {
+          message: `${k.id} ${k.version}${k.from ? `, ${k.from.id} ${k.from.version}` : ''}`,
+        },
+      });
+      return render();
+    }
+    lesson = view.lesson;
   }
   if (!lesson) return refuse(label, 'unknownLesson');
   // Read at a deeper depth: its steps are laid in, or their answers are stale.

@@ -110,9 +110,9 @@ const PARSES = {
   'js/lab3dLab.js': [1, 'none', 'route room: a system file'],
   'js/experiments/analysisPanel.js': [2, 'none', 'route room: a result file'],
   'js/catalog/install.js': [
-    4,
+    5,
     'none',
-    'route room: an archive already checked against its digest and validated (three); a record written after install (one)',
+    'route room: an archive already checked against its digest and validated (three, one of them with a reviver that refuses a prototype key); a record written after install (one)',
   ],
   'js/catalog/installed.js': [1, 'none', 'a record written after install'],
   'js/catalogPage.js': [1, 'none', 'a record written after install'],

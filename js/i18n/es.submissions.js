@@ -61,7 +61,9 @@ export const ES_SUBMISSIONS = {
   'sub.reason.notABackup':
     'no es una copia de seguridad del progreso de Gravitas',
   'sub.reason.remix':
-    'es una investigación de un instructor, que esta página nombra pero no puede calificar',
+    'es una investigación escrita desde cero por un instructor, que esta página nombra pero no puede calificar',
+  'sub.reason.remixChanged':
+    'es la versión de un instructor de una investigación que ha cambiado desde entonces, así que sus valores esperados pueden haber cambiado: no se califica',
   'sub.reason.unknownLesson':
     'menciona una investigación que esta versión no tiene',
   'sub.reason.noTokenInPdf': 'este PDF no contiene ningún código',

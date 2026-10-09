@@ -11,6 +11,8 @@
 //                opened a year later makes the link it made then; one per
 //                language, since an assignment's title and introduction are
 //                one language's words
+//   pack         the investigation link the item carries (#i1z...), as the
+//                Composer's Publish made it
 //   scenario     a world link (#2z...): the scenario and its seed word, as
 //                Share writes one, and the figure embed of the same world
 //   dataset      /observatory/?open=<id> for a built-in observation, and
@@ -90,6 +92,9 @@ export async function itemLink(item, { root, locale = 'en' }) {
         href: `${root}#investigation=${encodeURIComponent(item.lesson)}${item.depth ? `/${item.depth}` : ''}`,
         kind: 'app',
       };
+    case 'pack':
+      // The investigation travels in the item as its own link (Prompt 78).
+      return { href: `${root}#${item.link}`, kind: 'app' };
     case 'assignment': {
       const a = assignmentPayload(item, locale);
       return {

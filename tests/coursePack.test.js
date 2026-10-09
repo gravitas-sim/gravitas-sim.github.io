@@ -158,7 +158,11 @@ describe('the proving course', () => {
     expect(INTRO_ASTRONOMY.units).toHaveLength(4);
     expect(INTRO_ASTRONOMY.locales).toEqual(['en', 'es']);
     const kinds = new Set(itemsOf(INTRO_ASTRONOMY).map(e => e.item.kind));
-    expect([...kinds].sort()).toEqual([...ITEM_KINDS].sort());
+    // The proving course names no instructor's investigation: a pack item
+    // carries its investigation, and tests/remixCourse.test.js proves that kind.
+    expect([...kinds].sort()).toEqual(
+      ITEM_KINDS.filter(k => k !== 'pack').sort()
+    );
     expect(
       new Set(itemsOf(INTRO_ASTRONOMY).map(e => e.item.path || 'core'))
     ).toEqual(new Set(['core', 'intro', 'advanced']));
@@ -560,6 +564,8 @@ describe('pins against the lessons as they are', () => {
       ['moved', true, true],
       ['unpinned', true, false],
       ['missing', true, true],
+      // An investigation pack no page here opened: said, not asked about.
+      ['unchecked', false, false],
     ]);
   });
 

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/course-pack-2.schema.json",
   "title": "gravitas.course-pack/2",
-  "description": "A course as data, as the course-pack builder (/studio/course/) writes it: units of items (lessons, assignments cut from a lesson, scenarios, datasets and readings) with objectives, prerequisites, times, optional introductory and advanced paths, notes for the teacher and the student, and a pin on each lesson it names so an archived pack says what it was made with. Content only: nothing in it is run. js/course/pack.js validateCoursePack() is the authority; /1 packs (course-pack-1.schema.json) are migrated to this by migrateCoursePack(). Beyond this schema the reader holds every text to the file's own locales, the rules across items (see item), at most 120 items in all, and, before any rule reads it, a file to plain data no deeper or larger than any pack needs. FORMATS.md lists it.",
+  "description": "A course as data, as the course-pack builder (/studio/course/) writes it: units of items (lessons, assignments cut from a lesson, scenarios, datasets, readings and investigation packs carried as links) with objectives, prerequisites, times, optional introductory and advanced paths, notes for the teacher and the student, and a pin on each lesson it names so an archived pack says what it was made with. Content only: nothing in it is run. js/course/pack.js validateCoursePack() is the authority; /1 packs (course-pack-1.schema.json) are migrated to this by migrateCoursePack(). Beyond this schema the reader holds every text to the file's own locales, the rules across items (see item), at most 120 items in all, and, before any rule reads it, a file to plain data no deeper or larger than any pack needs. FORMATS.md lists it.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -891,8 +891,79 @@
         }
       }
     },
+    "itemPack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "pack",
+        "version",
+        "link"
+      ],
+      "properties": {
+        "kind": {
+          "const": "pack"
+        },
+        "id": {
+          "$ref": "#/$defs/publicId"
+        },
+        "path": {
+          "enum": [
+            "core",
+            "intro",
+            "advanced"
+          ]
+        },
+        "minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publicId"
+          }
+        },
+        "studentNote": {
+          "$ref": "#/$defs/text1200"
+        },
+        "teacherNote": {
+          "$ref": "#/$defs/text2000"
+        },
+        "pack": {
+          "$ref": "#/$defs/publicId",
+          "description": "The investigation pack's public id (its progress is kept under rx-<id>-<version>)."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "link": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 4000,
+          "pattern": "^i\\d{1,3}[zr][A-Za-z0-9_-]+$",
+          "description": "The investigation as a link's fragment (the part after #, js/composer/packLink.js): a remix as its difference from the faithful copy of its original, a pack written from scratch whole. The reader opens it as the application does, judges it by the format and the remix rules, and compares the pin with the digest of its compiled steps."
+        },
+        "title": {
+          "$ref": "#/$defs/text120"
+        },
+        "pin": {
+          "$ref": "#/$defs/pin"
+        }
+      },
+      "description": "An investigation pack carried in the course as its link (Prompt 78). The pin is the digest of its compiled steps, as a lesson's is."
+    },
     "item": {
-      "description": "One thing a course asks of a student, of one of five kinds. Beyond this schema the reader holds the rules across fields: every id unique, an item's needs and objectives to ones that exist (and a path a student on its own path may take), a lesson named once as a lesson, a pin on every lesson in an exact pack, one step hash for each assigned step, and every reference to a lesson, scenario or dataset Gravitas has.",
+      "description": "One thing a course asks of a student, of one of six kinds. Beyond this schema the reader holds the rules across fields: every id unique, an item's needs and objectives to ones that exist (and a path a student on its own path may take), a lesson named once as a lesson, a pin on every lesson in an exact pack, one step hash for each assigned step, and every reference to a lesson, scenario or dataset Gravitas has.",
       "anyOf": [
         {
           "$ref": "#/$defs/itemLesson"
@@ -908,6 +979,9 @@
         },
         {
           "$ref": "#/$defs/itemReading"
+        },
+        {
+          "$ref": "#/$defs/itemPack"
         }
       ]
     },

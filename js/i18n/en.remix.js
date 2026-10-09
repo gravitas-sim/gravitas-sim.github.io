@@ -14,6 +14,8 @@ export const EN_REMIX = {
   'remix.error.tooLarge':
     'That link holds more than a link can carry. Ask for it as a file.',
   'remix.error.notPack': 'That link does not hold an investigation.',
+  'remix.error.notInstalled':
+    '“{id}” is not installed in this browser. Install it from the catalog first.',
   'remix.error.noOriginal':
     'That investigation was made from “{id}”, which this Gravitas does not have.',
   'remix.error.invalid':

@@ -43,6 +43,24 @@ export const EN_COURSE = {
     'Units run in order, and items in order within them. There are no dates: an instructor sets those. An item on the introductory or advanced path is optional, and the core may not depend on one.',
   'course.hint.minutesDerived':
     'Leave blank to use its own time (for an activity, its share of the steps).',
+  'course.hint.packItem':
+    'Paste the item made at the investigations check (it holds the investigation as a link, and its pin). That page opens the link and judges it; this one cannot.',
+  'course.status.packNotItem':
+    'That is not a course item for an investigation.',
+  'course.status.packRead': 'Read “{id}” and pinned it.',
+  'course.pack.corrupt': 'it is incomplete or damaged.',
+  'course.pack.wrongKind': 'it is not an investigation link.',
+  'course.pack.newerVersion': 'it was made by a newer Gravitas.',
+  'course.pack.tooLarge': 'it holds more than a link can carry.',
+  'course.pack.notPack': 'it holds no investigation.',
+  'course.pack.installed':
+    'it names a package installed in one browser; publish the investigation as a link.',
+  'course.pack.noOriginal':
+    'it was made from “{what}”, which this Gravitas does not have.',
+  'course.pack.delta': 'its changes do not apply to the original: {what}',
+  'course.pack.invalid': 'it is not a valid investigation: {what}',
+  'course.pack.identity':
+    'it holds “{what}”, not the investigation this item names.',
   'course.hint.seed':
     'A word such as orbit-1: the same word always builds the same world.',
   'course.hint.dataset':
@@ -65,6 +83,9 @@ export const EN_COURSE = {
   'course.field.lesson': 'Investigation',
   'course.field.unitTitle': 'Unit title',
   'course.field.addKind': 'New item',
+  'course.field.packItem': 'Investigation item',
+  'course.field.packOpen': 'Make or check one',
+  'course.action.packOpen': 'Open the investigations check',
   'course.field.path': 'Path',
   'course.field.minutes': 'Minutes',
   'course.field.needs': 'Comes after',
@@ -102,6 +123,7 @@ export const EN_COURSE = {
   'course.kind.scenario': 'Simulation',
   'course.kind.dataset': 'Data',
   'course.kind.reading': 'Reading',
+  'course.kind.pack': 'Instructor’s investigation',
   'course.path.core': 'Core',
   'course.path.intro': 'Introductory',
   'course.path.advanced': 'Advanced',
@@ -120,6 +142,8 @@ export const EN_COURSE = {
   'course.standing.moved': 'now comes from another package.',
   'course.standing.unpinned': 'not pinned yet.',
   'course.standing.missing': 'no longer in Gravitas.',
+  'course.standing.unchecked':
+    'not checked here: open it in the investigations check.',
   'course.steps.loading': 'Loading the steps.',
   'course.steps.needed': '(needed by a chosen step)',
   'course.checks.running': 'Checking.',
@@ -226,6 +250,8 @@ export const EN_COURSE = {
   'course.audit.noObjectives': 'The course has no objectives.',
   'course.audit.objectiveUnserved': 'No core item serves the objective "{id}".',
   'course.audit.noTime': 'This item has no time.',
+  'course.audit.packUnchecked':
+    'This investigation has not been opened and checked. Check it on the investigations check page before sending the course.',
   'course.audit.needs':
     'This item comes after "{id}", which the course does not have.',
   'course.audit.noGuide': '{lessonTitle} has no instructor guide yet.',
@@ -254,6 +280,9 @@ export const EN_COURSE = {
   'course.error.items': 'From 1 to {max} items.',
   'course.error.kind': 'One of: {kinds}.',
   'course.error.lesson': 'Choose an investigation Gravitas has.',
+  'course.error.packId': 'The public id of the investigation.',
+  'course.error.packLink':
+    'The investigation’s link: the part after #, as the Composer’s Publish makes it, up to {max} characters.',
   'course.error.lessonTwice': 'This investigation is already in the course.',
   'course.error.license': 'The license or terms, in words.',
   'course.error.locales': 'The languages must include English.',

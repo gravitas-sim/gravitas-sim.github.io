@@ -36,6 +36,7 @@ export const ITEM_KINDS = Object.freeze([
   'scenario',
   'dataset',
   'reading',
+  'pack',
 ]);
 /** The optional paths an item may be on; everything else is the core. */
 export const PATHS = Object.freeze(['core', 'intro', 'advanced']);
@@ -59,6 +60,9 @@ const SEED_WORD = /^[A-Za-z0-9][A-Za-z0-9-]{0,39}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const ASSIGNMENT_ID = /^[A-Za-z0-9_-]{1,32}$/;
 const PACKAGE_ID = /^[a-z0-9]+(\.[a-z0-9-]+)+$/;
+/** An investigation link's fragment (js/composer/packLink.js), without its '#'. */
+const PACK_LINK = /^i\d{1,3}[zr][A-Za-z0-9_-]+$/;
+export const MAX_PACK_LINK = 4000;
 const DOI = /^10\.\d{4,9}\/[^\s<>"]{1,200}$/;
 /** Markup of any kind, or an entity: course texts are written as text. */
 const MARKUP = /[<>]|&[a-zA-Z#0-9]+;/;
@@ -105,9 +109,21 @@ const ITEM_FIELDS = {
   scenario: ['scenario', 'seed', 'paused', 'title'],
   dataset: ['dataset', 'title'],
   reading: ['title', 'cite', 'license', 'access'],
+  // An investigation pack, carried in the item as its link (Prompt 78 (c)).
+  pack: ['pack', 'version', 'link', 'title', 'pin'],
 };
 /** Kinds whose time the builder derives from the lesson; the rest declare it. */
-const DERIVED_TIME = new Set(['lesson', 'assignment']);
+const DERIVED_TIME = new Set(['lesson', 'assignment', 'pack']);
+
+/**
+ * The id the lesson engine knows an item's investigation by: a lesson's own,
+ * or a pack's namespaced id (js/platform/remix.js remixLessonId, which has the
+ * same rule: the progress keys of a pack stay `rx-<id>-<version>`).
+ */
+export const lessonKeyOf = item =>
+  item?.kind === 'pack'
+    ? `rx-${item.pack}-${String(item.version).replace(/\./g, '-')}`
+    : item?.lesson;
 
 /** Every item of a pack, in order, with where it is. */
 export function itemsOf(pack) {
@@ -500,6 +516,38 @@ function checkKind(item, at, ctx) {
         );
       return;
     }
+    case 'pack':
+      need(
+        PUBLIC_ID.test(item.pack || ''),
+        `${at}.pack`,
+        'packId',
+        "the investigation pack's public id"
+      );
+      need(
+        SEMVER.test(item.version || ''),
+        `${at}.version`,
+        'version',
+        'a version such as "1.0.0"'
+      );
+      need(
+        typeof item.link === 'string' &&
+          PACK_LINK.test(item.link) &&
+          item.link.length <= MAX_PACK_LINK,
+        `${at}.link`,
+        'packLink',
+        `an investigation link's fragment (the part after #, up to ${MAX_PACK_LINK} characters)`,
+        { max: MAX_PACK_LINK }
+      );
+      text(item.title, `${at}.title`, false, 120);
+      if (item.pin !== undefined) checkPin(item, at, ctx);
+      else
+        need(
+          ctx.pinning !== 'exact',
+          `${at}.pin`,
+          'pinRequired',
+          'an exact pack pins every investigation it names'
+        );
+      return;
     case 'scenario':
       need(
         scenarios.has(item.scenario),

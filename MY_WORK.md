@@ -34,7 +34,7 @@ Installed Packages are in IndexedDB (`js/catalog/store.js`), which the store doe
 | evidence | `gravitas_evidence_notebook` | yes, grouped by the page that made each entry, each with a link to it | yes (the notebook whole) | yes (the notebook whole) |
 | experiments | `gravitas_experiment_<id>`, `gravitas_experiments_index` | yes | yes (with its index row) | yes (the index row is removed too) |
 | made | `gravitas_made_<id>` | yes, with link, seed, scenario it came from, build and attachments | yes, per item and all | yes |
-| drafts | Studio, Composer, course drafts, `gravitas_simulation_save`, evaluation draft, teaching notes, experiment checkpoints | yes | yes | yes |
+| drafts | Studio, Composer, course drafts (each listed draft opens in its page with `?open=<id>`, Prompt 78), `gravitas_simulation_save`, evaluation draft, teaching notes, experiment checkpoints | yes | yes | yes |
 | settings | `gravitas_student_name` | yes (storage panel) | yes | with delete-all |
 | preferences | locale, theme, units, flags, `gravitas_last_export` | no | yes; imported only if ticked | no |
 | installs | IndexedDB `gravitas-catalog` | yes, listed | no | no (the Catalog removes them) |

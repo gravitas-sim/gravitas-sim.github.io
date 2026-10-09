@@ -6,7 +6,7 @@
 // archived last year is well formed and may name a lesson that has since been
 // rewritten, or a package that has moved on a major version.
 //
-// Pins. Every lesson and assignment item may carry a pin: an eight-digit
+// Pins. Every lesson, assignment and investigation-pack item may carry a pin: an eight-digit
 // digest of the lesson's steps (each step's sid and the fingerprint
 // js/investigations/progressBackup.js gives it - its type, instrument,
 // scenario, fields and the shape of its answer, never its words, so a
@@ -22,7 +22,9 @@
 //   major       the package moved a major version;
 //   moved       the lesson now comes from another package, or none;
 //   unpinned    the item carries no pin (a /1 pack, migrated);
-//   missing     Gravitas no longer has the lesson, scenario or dataset.
+//   missing     Gravitas no longer has the lesson, scenario or dataset;
+//   unchecked   an investigation pack no page here has opened (the builder
+//               cannot: /studio/course/packs/ does).
 //
 // Whether that needs an instructor to look depends on the pack's pinning. An
 // exact pack is an archive: anything but "same" needs review. A compatible
@@ -38,7 +40,7 @@
 // =============================================================================
 
 import { shortHash } from '../assignments/assignment.js';
-import { itemsOf, PATHS } from './pack.js';
+import { itemsOf, lessonKeyOf, PATHS } from './pack.js';
 
 export { shortHash };
 
@@ -50,6 +52,7 @@ export const STATUS = Object.freeze({
   MOVED: 'moved',
   UNPINNED: 'unpinned',
   MISSING: 'missing',
+  UNCHECKED: 'unchecked',
 });
 
 /**
@@ -114,7 +117,9 @@ export function reviewItem(item, facts, pinning) {
     case 'reading':
       return verdict(STATUS.SAME);
   }
-  const lesson = facts.lessons.get(item.lesson);
+  const lesson = facts.lessons.get(lessonKeyOf(item));
+  if (!lesson && facts.unchecked?.has(lessonKeyOf(item)))
+    return verdict(STATUS.UNCHECKED);
   if (!lesson) return verdict(STATUS.MISSING);
   const steps = item.kind === 'assignment' ? stepStates(item, lesson) : [];
   const detail = {
@@ -144,6 +149,7 @@ export function needsReview(status, pinning, detail = {}) {
   // A rewritten or removed assigned step changes what the link asks, which no
   // pack accepts silently, whatever the lesson's digest says.
   if (detail.missingSteps?.length || detail.changedSteps?.length) return true;
+  if (status === STATUS.UNCHECKED) return false;
   if (status === STATUS.SAME) return false;
   if (pinning === 'exact') return true;
   return (
@@ -187,9 +193,9 @@ export function upgradeCoursePack(pack, facts, accepted, opts) {
   let breaking = false;
   for (const { item } of itemsOf(out)) {
     if (!want.has(item.id)) continue;
-    if (item.kind !== 'lesson' && item.kind !== 'assignment') continue;
+    if (!['lesson', 'assignment', 'pack'].includes(item.kind)) continue;
     const v = reviewItem(item, facts, out.pinning);
-    const lesson = facts.lessons.get(item.lesson);
+    const lesson = facts.lessons.get(lessonKeyOf(item));
     if (!lesson) {
       refused.push(item.id);
       continue;
@@ -269,7 +275,7 @@ export function estimate(pack, facts) {
     if (Number.isInteger(item.minutes))
       r = { lo: item.minutes, hi: item.minutes };
     else {
-      const lesson = facts.lessons.get(item.lesson);
+      const lesson = facts.lessons.get(lessonKeyOf(item));
       if (lesson?.duration) {
         const share =
           item.kind === 'assignment' ? (item.steps?.length || 0) / lesson.n : 1;
@@ -494,9 +500,13 @@ export function auditCourse(pack, facts) {
       add('warning', 'objectiveUnserved', `objectives[${i}]`, { id: o.id });
   }
   const time = estimate(pack, facts);
-  for (const { item, path } of all)
-    if (!time.items.get(item.id))
+  for (const { item, path } of all) {
+    // A pack nobody opened has no time to give yet; it says so on its own.
+    if (item.kind === 'pack' && facts.unchecked?.has(lessonKeyOf(item)))
+      add('note', 'packUnchecked', path, { id: item.id });
+    else if (!time.items.get(item.id))
       add('warning', 'noTime', path, { id: item.id });
+  }
   for (const { item, path } of all)
     for (const need of item.needs || [])
       if (order.get(need) === undefined)
@@ -534,10 +544,11 @@ export function dependencyGraph(pack, facts) {
   for (const { item } of itemsOf(pack)) {
     const me = node(`item:${item.id}`, item.kind, item.id);
     for (const need of item.needs || []) edge(me, `item:${need}`, 'needs');
-    if (item.lesson) {
-      const l = node(`lesson:${item.lesson}`, 'lesson-source', item.lesson);
+    if (item.lesson || item.kind === 'pack') {
+      const key = lessonKeyOf(item);
+      const l = node(`lesson:${key}`, 'lesson-source', key);
       edge(me, l, 'opens');
-      const lesson = facts.lessons.get(item.lesson);
+      const lesson = facts.lessons.get(key);
       for (const s of lesson?.uses?.scenarios || [])
         edge(l, node(`scenario:${s}`, 'scenario-source', s), 'uses');
       for (const w of lesson?.uses?.widgets || [])

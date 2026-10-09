@@ -570,6 +570,7 @@ const itemName = item => {
   const own = item.title?.[getLocale()] || item.title?.en;
   if (own) return own;
   if (item.lesson) return lessonTitle(item.lesson);
+  if (item.kind === 'pack') return item.pack || item.id;
   if (item.kind === 'dataset')
     return (
       datasetsOf(catalog).get(item.dataset)?.title?.[getLocale()] ||
@@ -623,6 +624,15 @@ function newItem(x, kind) {
         minutes: 15,
         dataset: 'tess-light-curve',
       };
+    case 'pack':
+      // Filled when its link is pasted (readPackItem).
+      return {
+        ...base,
+        id: freshId(x, 'investigation'),
+        pack: '',
+        version: '1.0.0',
+        link: '',
+      };
     case 'reading':
       return {
         ...base,
@@ -659,6 +669,38 @@ async function repin(path) {
     }
     it.pin = pinFor(it, lesson);
   });
+}
+
+/**
+ * A pasted course item for an investigation pack, as /studio/course/packs/
+ * makes it: the pack, its version, its link and its pin. The builder reads no
+ * more of it than the format has fields for; that page is where the link is
+ * opened and judged, which needs the lesson engine this route has no room for.
+ */
+function readPackItem(base, text) {
+  let v = null;
+  try {
+    v = parseDocument(text);
+  } catch {
+    /* said below */
+  }
+  if (!v || typeof v !== 'object' || v.kind !== 'pack')
+    return setStatus(t('course.status.packNotItem'));
+  commit(x => {
+    const it = getAt(x, base);
+    if (it?.kind !== 'pack') return;
+    for (const k of ['pack', 'version', 'link', 'pin'])
+      if (v[k] !== undefined) it[k] = v[k];
+    // A text in every language the course has.
+    if (v.title && typeof v.title === 'object')
+      it.title = Object.fromEntries(
+        (x.locales || ['en']).map(l => [
+          l,
+          String(v.title[l] ?? v.title.en ?? ''),
+        ])
+      );
+  });
+  setStatus(t('course.status.packRead', { id: String(v.pack) }));
 }
 
 function unitsSection(d) {
@@ -911,6 +953,38 @@ function kindFields(d, item, base) {
   switch (item.kind) {
     case 'lesson':
       return [lessonPick(), pinLine(item)];
+    case 'pack':
+      return [
+        field(
+          idOf(`${base}.item`),
+          t('course.field.packItem'),
+          textInput(
+            item.link
+              ? JSON.stringify({
+                  kind: 'pack',
+                  pack: item.pack,
+                  version: item.version,
+                  link: item.link,
+                  ...(item.pin ? { pin: item.pin } : {}),
+                })
+              : '',
+            v => readPackItem(base, v),
+            { multiline: true }
+          ),
+          t('course.hint.packItem')
+        ),
+        field(
+          idOf(`${base}.open`),
+          t('course.field.packOpen'),
+          el(
+            'a',
+            { className: 'ui-button', href: `${ROOT}studio/course/packs/` },
+            t('course.action.packOpen')
+          )
+        ),
+        pair(`${base}.title`, t('course.field.title'), { required: false }),
+        pinLine(item),
+      ];
     case 'assignment':
       return [
         lessonPick(),
@@ -2074,7 +2148,9 @@ async function init() {
   }
   await useLanguage(preferredLocale());
   wire();
-  const last = drafts.last();
+  // ?open=<id>: the draft My work names, else the one saved last.
+  const named = new URLSearchParams(location.search).get('open');
+  const last = named && drafts.load(named) ? named : drafts.last();
   const draft = last ? drafts.load(last) : null;
   // A first visit opens the example course; New starts from nothing.
   history = createHistory(
