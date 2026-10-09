@@ -17,5 +17,6 @@ npm run sdk -- test sdk/examples/kepler-third-law
 npm run sdk -- inspect sdk/examples/kepler-third-law --preview
 ```
 
-Its strings are English only. An instrument translates through Gravitas's
-catalogs, which are not part of the SDK's public API yet.
+Its strings are in `strings.en.json` and `strings.es.json`, declared in the
+manifest and read through `gravitas:instrument/strings`; its colors come from
+`gravitas:instrument/tokens` (the SDK's instrument API, sdk/README.md).

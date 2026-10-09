@@ -8,6 +8,7 @@ import {
   withdrawnEntry,
 } from '../tools/catalog.mjs';
 import { InstallError, install, statusOf } from '../js/catalog/install.js';
+import { archivesIn } from '../tools/catalog-review.mjs';
 import { valid } from './jsonSchemaSubset.js';
 import { readFileSync } from 'node:fs';
 
@@ -257,5 +258,19 @@ describe('a withdrawn package', () => {
         base: 'file:///',
       })
     ).rejects.toBeInstanceOf(InstallError);
+  });
+});
+
+describe('the CI review', () => {
+  test('looks only at archives added directly to catalog/packages', () => {
+    expect(
+      archivesIn([
+        'catalog/packages/b-1.0.0.gxp',
+        'catalog/packages/a-1.0.0.gxp',
+        'catalog/packages/sub/c.gxp',
+        'catalog/catalog.json',
+        'extensions/x/course.json',
+      ])
+    ).toEqual(['catalog/packages/a-1.0.0.gxp', 'catalog/packages/b-1.0.0.gxp']);
   });
 });

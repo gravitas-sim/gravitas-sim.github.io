@@ -54,11 +54,7 @@ import { readPackages } from './capabilities.mjs';
 import { pinnedBytes } from './data-packs/pinned.mjs';
 import { LOCALES, publicIds } from '../sdk/lib/api.mjs';
 import { pack, read } from '../sdk/lib/archive.mjs';
-import {
-  ACCEPTED_LICENSES,
-  isAcceptedLicense,
-  reviewExtension,
-} from '../sdk/lib/review.mjs';
+import { ACCEPTED_LICENSES, reviewExtension } from '../sdk/lib/review.mjs';
 import { loadExtension, packFiles } from '../sdk/lib/extension.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');

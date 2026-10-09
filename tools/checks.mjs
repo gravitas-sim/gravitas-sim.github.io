@@ -409,6 +409,16 @@ export const CHECKS = [
     ci: 'checks',
     group: 'correctness',
   },
+  // `sdk review` on every archive in catalog/packages; CI also passes the pull
+  // request's base, so the log and summary name what the branch adds.
+  {
+    id: 'catalog-review',
+    label: 'the catalog archives pass the mechanical review',
+    command: ['npm', 'run', 'catalog:review'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
   // The Extension SDK's own examples, validated and tested as an author's
   // would be (sdk/README.md). The contract suite in jest covers the SDK
   // itself; this is the command an extension's `validation` names.

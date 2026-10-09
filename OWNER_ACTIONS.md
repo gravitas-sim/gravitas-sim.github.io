@@ -194,6 +194,41 @@ exists, not when it is planned.
 - [ ] **A named contact.** One person who is told this file exists and what it
       is for. Everything above is only useful if someone knows to look.
 
+## Contributed content (Prompt 80)
+
+The rules for accepting a package someone else wrote. They are
+recommendations adopted by delegation (D-CONTRIB-01) and stay yours to change.
+The author-facing side is [`CONTRIBUTING_CONTENT.md`](CONTRIBUTING_CONTENT.md).
+
+- [ ] **Who may accept.** You, and one named co-maintainer you appoint. One
+      maintainer accepts by adding the entry to `catalog/curation.json`. A
+      second maintainer must accept when the first is the author, or is
+      affiliated with the author, or has any other interest in the package.
+      Until you name a second person, such a package waits for you.
+- [ ] **How long review takes.** Published, so contributors can plan: an
+      acknowledgment within 7 days, a decision within 30. A package that needs
+      changes starts the 30 days again. A package unanswered after 30 days may
+      be closed with a note, and resubmitted.
+- [ ] **Conflict of interest.** The reviewer states it in the acceptance
+      record (`review.interest`: `none` or what it is). Affiliation, a
+      collaboration in the last three years, a financial tie, or a
+      supervisory relationship each count. Stating one does not bar a package;
+      it moves the decision to the second maintainer.
+- [ ] **Attribution.** Printed as the author wrote it, in the catalog, the
+      archive's manifest and the archive's README. A name or an organization
+      only; no email or phone number is ever published. An author may change
+      their attribution by a new version, and may ask for it to be removed
+      from the page (the package then lists as "Anonymous" in the author's
+      words); the archived copy cannot change.
+- [ ] **The archival consequence.** An accepted package is part of the
+      repository at the next release, so the Zenodo archive (Workflow A) holds
+      it, with its attribution, permanently. Withdrawal removes it from the
+      site, not from an archived release. Before accepting, confirm the author
+      has read that paragraph of CONTRIBUTING_CONTENT.md ("What acceptance
+      means") and agreed in the pull request.
+- [ ] **A withdrawal request** is handled as in CONTRIBUTING_CONTENT.md; a
+      withdrawal for a license or privacy reason is done the same day.
+
 ## The release itself
 
 - [x] **Create the tag and the GitHub release.** Done for v1.0.0. The annotated

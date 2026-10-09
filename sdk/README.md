@@ -9,6 +9,9 @@ add to Gravitas without learning its internals first:
 - **scenario packs:** a scenario as data, which the Scenario Studio writes;
 - **capability packages:** new instruments.
 
+To contribute one for the catalog, [CONTRIBUTING_CONTENT.md](../CONTRIBUTING_CONTENT.md)
+is the path, and `npm run sdk -- review <package>` runs its checklist.
+
 The SDK scaffolds an extension, checks it the way a reviewer would, tests it
 against Gravitas's public API, and packs it into one deterministic archive.
 
@@ -281,10 +284,25 @@ A capability is one module exporting an array of instruments, declared as a
 - **Imports:** an instrument that imports nothing is entirely within the SDK's
   promises. One that imports a Gravitas module gets a warning, because nothing
   promises that module will stay the same.
-- **Language:** its strings are English. Translation goes through Gravitas's
-  catalogs, which are not public yet.
+- **Language:** its strings go through `gravitas:instrument/strings` and the
+  catalogs its manifest declares (since 1.9.0); an instrument that declares
+  none speaks English.
 
 The example is [`kepler-third-law`](examples/kepler-third-law/).
+
+## Review: the checklist a maintainer runs
+
+```bash
+npm run sdk -- review extensions/my-course
+```
+
+`review` runs six mechanical checks (`validate`, `tests`, `licenses`,
+`provenance`, `locales`, `content`) and prints the human items it cannot
+decide. It exits 1 on any failure; `--json` prints the result as data;
+`--maintainer-built` drops the README's Author and Sources lines, for the
+packages the maintainers wrote themselves. `npm run catalog` runs the same
+function and records the checks passed in the catalog entry.
+CONTRIBUTING_CONTENT.md says what each check holds.
 
 ## What `validate` checks
 
@@ -336,7 +354,7 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.8.0` |
+| `SDK_VERSION` | this SDK, `1.9.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with the highest version it reads (`gravitas.course-pack` is 2: it reads /1 too) |
 | `EXTENSION_TYPES`, `LOCALES` | the five types and their kinds; the interface languages (`en`, `es`) |
@@ -346,7 +364,26 @@ declares all of it, and the contract suite fails if the two differ.
 | `observationOf(pack)`, `checkObservation(o)` | the decoder every pack shares, and the check that a series is clean |
 | `readFits(bytes, opts)` | a FITS file's header-data units: header cards, and a binary table's columns. It checks every header against the file before it reads any data, and refuses more than `opts.maxUnits` units (16) (1.2.0) |
 | `binTessLightCurve(units, opts)` | a TESS SPOC light curve masked, normalized, binned and encoded as every built-in pack is; with `fluxStepPpm`, as `binned-relative-flux/2` (1.2.0); with `flux: 'SAP'`, the aperture's light before SPOC's corrections, and with `crowding: true`, the header's CROWDSAP and FLFRCSAP recorded (1.3.0) |
+| `INSTRUMENT_API`, `translator()`, `checkCatalogs()`, `COLOR_TOKENS` | the instrument API above (1.9.0) |
 | `foldedDepth(o, periodDays)` | the depth of the deepest phase slot when an observation is folded on a period: the transit check `sdk test` runs (1.3.0) |
+
+**The instrument API** (since 1.9.0) is for a capability's code. Its
+specifiers are not paths: `sdk test` runs the instrument with each rewritten
+to the file it names, and a maintainer rewrites them to the paths when
+vendoring. `INSTRUMENT_API` lists them.
+
+| Specifier | Exports | What it is |
+|---|---|---|
+| `gravitas:instrument/strings` | `translator(catalogs, locale)`, `checkCatalogs(catalogs)` | the instrument's own `t()`, built from the catalogs its manifest declares. The lookup is the application's: the language, then English, then the key |
+| `gravitas:instrument/tokens` | `COLOR_TOKENS`, `colorToken(name, fallback)` | the theme colours an instrument may read, each defined by `css/tokens.css` |
+| `gravitas:instrument/plot` | `createPlot(svg, hooks)`, `ticks(lo, hi, count)` | the accessible SVG plotting component (PLOT_COMPONENT.md) and its tick chooser |
+
+The catalogs are declared in the manifest: one JSON file per language
+(`{ key: "text with {name}" }`) as `provides.translations` entries with a
+`file` and an asset with the role `translation`. `validate` requires English,
+holds every other language to its keys and placeholders, and warns when
+Spanish is missing. The example
+[`kepler-third-law`](examples/kepler-third-law/) uses the first two.
 
 The JSON formats have JSON Schemas (draft 2020-12) in [`schemas/`](schemas/)
 for editors. The schemas describe structure. The validators are the
@@ -397,6 +434,17 @@ anything else.
 | 1.6.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with synthetic packs that record their model, and the optional runtime fields `model` and `citations` | 1 | 1 | 1 |
 | 1.7.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with synthetic packs that record their model, and the optional runtime fields `model` and `citations` | 1 | 1, with the optional `scenario` | 1 |
 | 1.8.0 | 1.0.0 | 1 (with `file` on `provides.courses`, `provides.scenarios` and `provides.investigations`) | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
+| 1.9.0 | 1.0.0 | 1 (with `file` on `provides.translations`) | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
+
+SDK 1.9.0 adds, and removes nothing, what an independent author needed
+(Roadmap II Prompt 80):
+
+- **`sdk review <package>`**: the mechanical review (CONTRIBUTING_CONTENT.md),
+  also run by the catalog generator.
+- **The instrument API:** `gravitas:instrument/strings`, `/tokens` and `/plot`,
+  declared translation catalogs and their validation. A capability that
+  imports one of them no longer gets the private-import warning; an
+  unknown `gravitas:instrument/` specifier is an error.
 
 SDK 1.8.0 adds, and removes nothing, the two formats the SDK did not read
 (Roadmap II Prompt 61, repaired in R-F of the P68 checkpoint):
@@ -515,36 +563,48 @@ SDK 1.1.0 adds, and removes nothing:
 
 ## What still stands in an independent author's way
 
-These are the private APIs and missing pieces that stop someone outside the
-repository from shipping an extension end to end:
+The adequacy report: what stopped someone outside the repository from
+shipping an extension end to end, what Prompt 80 closed in 1.9.0, and what
+stays closed on purpose. Each remaining item is a deliberate limit with its
+reason, not a gap waiting for a date.
+
+**Closed**
 
 1. **A declarative extension reaches readers only through the curated
-   catalog.** Once a maintainer accepts it into `catalog/curation.json`, a
-   reader installs it at `/catalog/` (CATALOG.md). There is still no way to
-   import an archive nobody has reviewed, and that is on purpose.
-2. **An instrument cannot be translated through a public API.** `t()` and the
-   catalogs in `js/i18n/` are private, so an extension instrument's strings are
-   English.
-3. **An instrument cannot draw with Gravitas's canvas helpers through a public
-   API.** `js/widgetCanvas.js`, `js/format.js` and the colour tokens are private.
-   The example draws with the bare canvas, so it will not look like the
-   built-in instruments.
-4. **Registering an instrument family is a core edit.** It needs lines in
-   `js/widgets.js` and `js/platform/builtins.js`.
-5. **A lesson cannot be declarative.** Lessons carry functions (`validate`,
-   `probe`), so there is no JSON lesson format. A course pack is as far as
-   lesson content goes without code.
-6. **A capability cannot be previewed in the running app without vendoring
-   it.** `inspect --preview` is text.
-7. **The SDK itself reads private modules**, such as the lesson manifest, the
-   widget registry and the authoring inputs. `lib/api.mjs` is the seam: it can
-   keep its promises while those change under it, but only if they are updated
-   together, in this repository.
-8. **A /1 course cannot name a data pack.** `gravitas.course-pack/1` sequences
-   lessons, so the pulsating-stars course names the SU Draconis pack in a
-   note's words, and nothing checks that the pack exists. A `gravitas.course-pack/2`
-   can name one (COURSE_PACKS.md), and the SDK reads /2 since 1.8.0, but the
-   catalog installs /1 only.
-9. **A data pack cannot bring its own check.** The SDK runs `folded-depth` and
-   `harmonic-period`; a pack of another kind of variable needs another check
-   added to the SDK, which is a core change.
+   catalog.** Since Prompt 17 a maintainer accepts one and a reader installs
+   it at `/catalog/` (CATALOG.md); CONTRIBUTING_CONTENT.md is the path and
+   `sdk review` its checklist.
+2. **An instrument's strings can be translated** through
+   `gravitas:instrument/strings` and the catalogs its manifest declares (1.9.0).
+3. **An instrument can follow the theme** through
+   `gravitas:instrument/tokens` (1.9.0). The plotting component is public as
+   `gravitas:instrument/plot` (1.9.0) for what builds DOM.
+4. **A /1 course cannot name a data pack**; a `course-pack/2` can
+   (COURSE_PACKS.md), and the SDK reads /2 since 1.8.0.
+
+**Deliberate limits**
+
+5. **Code is never installed into a running copy.** An instrument is reviewed
+   and vendored; that is the security boundary (PLATFORM_PACKAGE_RFC.md).
+6. **Registering an instrument family is a core edit** (`js/widgets.js`,
+   `js/platform/builtins.js`), by the same boundary: the registry is how
+   Gravitas knows which code it compiled.
+7. **The canvas helpers stay private** (`js/widgetCanvas.js`: `surface`,
+   `responsiveHeight`, the type scale). They size the host's canvas and
+   change with the layout; an instrument draws on the canvas it is handed.
+   `js/format.js` stays private too: numbers go through the units registry
+   (MASS_UNITS.md, NUMBER_TYPOGRAPHY.md), which is still moving.
+8. **The plotting component is SVG and DOM-owning,** so a lesson instrument's
+   `draw(canvas, values)` cannot use it; it is for a vendored panel or page.
+9. **A lesson cannot be declarative.** Lessons carry functions (`validate`,
+   `probe`); an investigation pack is as far as data goes, and a maintainer
+   vendors one into a built-in lesson through the Studio's roundtrip.
+10. **A capability cannot be previewed in the running app without vendoring
+    it;** `inspect --preview` is text.
+11. **The SDK reads private modules** (the lesson manifest, the widget
+    registry, the authoring inputs). `lib/api.mjs` is the seam: its promises
+    hold while those change underneath, because they are updated together in
+    this repository.
+12. **A data pack cannot bring its own scientific check.** The SDK runs
+    `folded-depth` and `harmonic-period`; another kind of variable needs a
+    check added to the SDK, which is a core change and a minor version.
