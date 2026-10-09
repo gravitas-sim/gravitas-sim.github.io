@@ -297,6 +297,34 @@ export default {
         '¿Acabará ʻOumuamua por frenarse hasta detenerse, dar la vuelta y entrar en órbita alrededor del Sol? Di por qué sí o por qué no, usando lo que has medido.',
       rubric:
         'No. Su energía total es mayor que cero, así que no está ligado: la atracción del Sol lo sigue frenando pero no puede detenerlo nunca, y seguirá alejándose cuando esté arbitrariamente lejos. Se valora señalar que su trayectoria es abierta en lugar de un bucle cerrado, o que su excentricidad es mayor que 1. Una respuesta errónea frecuente es que la gravedad deja de actuar sobre él una vez que está lo bastante lejos, y merece la pena corregirla: la gravedad sigue tirando para siempre, y el objeto escapa de todos modos.',
+      rubricCriteria: [
+        {
+          name: 'Llega a la respuesta correcta',
+          levels: [
+            {
+              label: 'Completo',
+              text: 'No: la energía total es mayor que cero, así que el visitante no está ligado.',
+            },
+            {
+              label: 'Aún no',
+              text: 'Dice que volverá, o no da respuesta.',
+            },
+          ],
+        },
+        {
+          name: 'Usa lo que se midió',
+          levels: [
+            {
+              label: 'Completo',
+              text: 'Cita la energía o la velocidad medidas, o que la trayectoria es abierta.',
+            },
+            {
+              label: 'Aún no',
+              text: 'Argumenta solo con la atracción del Sol.',
+            },
+          ],
+        },
+      ],
     },
     {
       title: 'Lo que has deducido',

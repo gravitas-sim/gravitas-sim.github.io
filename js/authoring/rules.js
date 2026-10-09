@@ -28,7 +28,7 @@
 // =============================================================================
 
 import { checkAnswer, toleranceFor } from '../answerCheck.js';
-import { verifyKey, rubricProblems } from '../answerKey.js';
+import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
 import { parseNumber } from '../answerParse.js';
 import {
@@ -1109,7 +1109,6 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             'a short answer carries no rubric for the instructor'
           );
         }
-        for (const problem of rubricProblems(step)) E('answer/rubric', problem);
         if (step.answer !== undefined) {
           W(
             'answer/shape',

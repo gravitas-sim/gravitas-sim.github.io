@@ -193,38 +193,6 @@ export default {
         'En una o dos frases, explica por qué el planeta acelera al acercarse a la estrella. ¿Qué magnitud se mantiene constante, y por qué la gravedad no la cambia?',
       rubric:
         'El momento angular L = m·v·r·sen(ángulo) se conserva porque la gravedad es una fuerza central: actúa a lo largo de la línea que une los dos cuerpos y por tanto no ejerce par respecto a la estrella. Al caer r, v debe subir para mantener el producto constante. (La energía también se conserva, con la potencial convirtiéndose en cinética; cualquiera de los dos argumentos puntúa, pero el momento angular es el que da directamente la regla de las áreas iguales.)',
-      rubricCriteria: [
-        {
-          name: 'Nombra lo que se conserva',
-          levels: [
-            {
-              label: 'Completo',
-              text: 'El momento angular, o la regla de áreas iguales que se deriva de él; también vale la energía, con la potencial convirtiéndose en cinética.',
-            },
-            {
-              label: 'Parcial',
-              text: 'Dice que el planeta acelera cerca de la estrella sin nombrar una magnitud conservada.',
-            },
-            {
-              label: 'Aún no',
-              text: 'Dice que la estrella tira más fuerte y por eso va más rápido, sin nada que se mantenga constante.',
-            },
-          ],
-        },
-        {
-          name: 'Explica por qué la gravedad no la cambia',
-          levels: [
-            {
-              label: 'Completo',
-              text: 'La gravedad actúa a lo largo de la línea hacia la estrella, así que no hay par de fuerzas respecto a ella.',
-            },
-            {
-              label: 'Aún no',
-              text: 'No da ninguna razón, o dice que la gravedad es demasiado débil para importar.',
-            },
-          ],
-        },
-      ],
     },
     {
       title: 'La tercera ley de Kepler',

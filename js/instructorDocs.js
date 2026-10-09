@@ -23,6 +23,7 @@ import { createDocument } from './pdf.js';
 import { answerKeyFor, questionCounts, plainText } from './answerKey.js';
 import { plural } from './format.js';
 import { instructorContentFor } from './data/instructorContent.js';
+import { criteriaOf } from './rubric.js';
 import { labelsFor } from './data/instructorLabels.js';
 import { guideSource } from './instructorSource.js';
 import { lessonAt } from './investigations/depthPure.js';
@@ -536,7 +537,7 @@ export function answerKeyDocument(
       doc.table({
         columns: [L('key.rubric.criterion'), L('key.rubric.levels')],
         widths: [1.4, 4.2],
-        rows: e.criteria.map(c => [
+        rows: criteriaOf({ rubricCriteria: e.criteria }).map(c => [
           c.name,
           c.levels
             .map(

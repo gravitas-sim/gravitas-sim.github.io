@@ -695,6 +695,38 @@ const ENERGY = {
         'Will ʻOumuamua eventually slow to a stop, turn round, and come back into orbit around the Sun? Say why or why not, using what you have measured.',
       rubric:
         'No. Its total energy is above zero, so it is unbound: the Sun’s pull keeps slowing it but can never bring it to a halt, and it will still be moving away when it is arbitrarily far off. Credit for noting that its path is open rather than a closed loop, or that its eccentricity is greater than 1. A common wrong answer is that gravity stops acting on it once it is far enough away, which is worth correcting: gravity keeps pulling forever, and the object escapes anyway.',
+      rubricCriteria: [
+        {
+          name: 'Reaches the right answer',
+          levels: [
+            {
+              label: 'Full',
+              points: 2,
+              text: 'No: the total energy is above zero, so the visitor is unbound.',
+            },
+            {
+              label: 'Not yet',
+              points: 0,
+              text: 'Says it will come back, or gives no answer.',
+            },
+          ],
+        },
+        {
+          name: 'Uses what was measured',
+          levels: [
+            {
+              label: 'Full',
+              points: 1,
+              text: 'Cites the measured energy or speed, or that the path is open.',
+            },
+            {
+              label: 'Not yet',
+              points: 0,
+              text: 'Argues from the Sun’s pull alone.',
+            },
+          ],
+        },
+      ],
     },
     {
       sid: 'what-you-worked-out',

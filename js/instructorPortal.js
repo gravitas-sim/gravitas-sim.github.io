@@ -615,13 +615,19 @@ function renderInvestigations() {
       actions.append(btn);
     }
     // Spanish and per-depth documents (Prompt 79), each labelled with what it is.
-    for (const f of manifest.files.filter(
+    const extras = manifest.files.filter(
       f =>
         f.investigation === inv.id &&
         f.kind !== 'worksheet' &&
         !f.activity &&
         !(f.locale === 'en' && f.variant === 'full')
-    )) {
+    );
+    const more = document.createElement('details');
+    more.className = 'res-more';
+    const summary = document.createElement('summary');
+    summary.textContent = `More documents: Spanish, and a key for each depth (${extras.length})`;
+    more.append(summary);
+    for (const f of extras) {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'ui-button is-quiet';
@@ -631,13 +637,12 @@ function renderInvestigations() {
           : '';
       btn.textContent = `${f.label || f.name}${f.locale === 'es' ? ' (es)' : ''}${st} (PDF)`;
       btn.addEventListener('click', () => download(f));
-      actions.append(btn);
+      more.append(btn);
     }
     const stamp = document.createElement('p');
     stamp.className = 'res-meta';
     const first = byId(`${inv.id}-guide`);
     stamp.textContent = `Generated ${manifest.generated}${first?.lessonVersion ? `, investigation version ${first.lessonVersion}` : ''}`;
-    card.append(stamp);
     const preview = document.createElement('a');
     preview.className = 'ui-button is-quiet';
     preview.href = `/#investigation=${encodeURIComponent(inv.id)}`;
@@ -649,6 +654,8 @@ function renderInvestigations() {
     adoption.textContent = 'Adoption page';
     actions.append(adoption);
     card.append(actions);
+    if (extras.length) card.append(more);
+    card.append(stamp);
     list.append(card);
   }
 

@@ -552,43 +552,6 @@ const KEPLER = {
         'In one or two sentences, explain why the planet speeds up as it approaches the star. What quantity stays constant, and why does gravity not change it?',
       rubric:
         'Angular momentum L = m·v·r·sin(angle) is conserved because gravity is a central force: it acts along the line joining the two bodies and so exerts no torque about the star. As r falls, v must rise to keep the product constant. (Energy is also conserved, with potential converting to kinetic; either argument earns credit, but angular momentum is the one that gives the equal-areas rule directly.)',
-      rubricCriteria: [
-        {
-          name: 'Names what is conserved',
-          levels: [
-            {
-              label: 'Full',
-              points: 2,
-              text: 'Angular momentum, or the equal-areas rule it gives; energy with potential turning to kinetic also earns this.',
-            },
-            {
-              label: 'Partial',
-              points: 1,
-              text: 'Says the planet speeds up near the star without naming a conserved quantity.',
-            },
-            {
-              label: 'Not yet',
-              points: 0,
-              text: 'Says the star pulls harder so it goes faster, with nothing held constant.',
-            },
-          ],
-        },
-        {
-          name: 'Says why gravity leaves it alone',
-          levels: [
-            {
-              label: 'Full',
-              points: 1,
-              text: 'Gravity acts along the line to the star, so there is no torque about it.',
-            },
-            {
-              label: 'Not yet',
-              points: 0,
-              text: 'Gives no reason, or says gravity is too weak to matter.',
-            },
-          ],
-        },
-      ],
     },
     {
       sid: 'kepler-s-third-law',

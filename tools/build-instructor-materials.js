@@ -64,6 +64,7 @@ import { checkInstructorCatalog } from '../js/authoring/instructorSchema.js';
 import { createDocument } from '../js/pdf.js';
 import { guideSource } from '../js/instructorSource.js';
 import { checkFlow } from '../js/instructorFlow.js';
+import { rubricProblems } from '../js/rubric.js';
 import { lessonFacts, lessonVersion } from '../js/instructorFacts.js';
 import { labelsFor } from '../js/data/instructorLabels.js';
 import { spanishLesson, lessonCoverage } from '../js/instructorLocale.js';
@@ -320,6 +321,11 @@ function requireCanonicalContent() {
     // The flow is keyed by step id now; a block naming a step the lesson lacks,
     // two blocks on one step or a step in none is a guide with a hole in it.
     ...INVESTIGATIONS.flatMap(inv => checkFlow(inv)),
+    ...INVESTIGATIONS.flatMap(inv =>
+      withAllDepths(inv).steps.flatMap(s =>
+        rubricProblems(s).map(p => `${inv.id} ${s.sid}: ${p}`)
+      )
+    ),
   ];
   if (!problems.length) return;
   console.error(

@@ -15,7 +15,8 @@ import expectationsEs from '../js/data/instructorExpectations.es.js';
 import { INSTRUCTOR_CONTENT } from '../js/data/instructorContent.js';
 import expectations from '../js/data/instructorExpectations.js';
 import { spanishLesson, SHADOWS } from '../js/instructorLocale.js';
-import { answerKeyFor, rubricProblems, verifyKey } from '../js/answerKey.js';
+import { answerKeyFor, verifyKey } from '../js/answerKey.js';
+import { criteriaOf, rubricProblems } from '../js/rubric.js';
 import { answerKeyDocument, instructorGuide } from '../js/instructorDocs.js';
 import { lessonFacts, lessonVersion } from '../js/instructorFacts.js';
 import {
@@ -175,23 +176,30 @@ describe('rubrics with criteria and levels', () => {
     expect(rubricProblems(break_(step())).join()).toMatch(pattern);
   });
 
-  test('Kepler’s written answer carries criteria in English and Spanish', () => {
-    const inv = INVESTIGATIONS.find(i => i.id === 'keplers-laws');
-    const en = answerKeyFor(inv).entries.find(e => e.criteria);
-    expect(en.criteria.length).toBe(2);
-    const es = answerKeyFor(spanishLesson(inv)).entries.find(e => e.criteria);
-    expect(es.criteria[0].name).toMatch(/Nombra/);
-    expect(es.criteria[0].levels.map(l => l.points)).toEqual(
-      en.criteria[0].levels.map(l => l.points)
+  test('Orbital Energy’s written answer carries criteria in English and Spanish', () => {
+    const inv = INVESTIGATIONS.find(i => i.id === 'orbital-energy');
+    const of = lesson =>
+      criteriaOf({
+        rubricCriteria: answerKeyFor(lesson).entries.find(e => e.criteria)
+          .criteria,
+      });
+    const en = of(inv);
+    const es = of(spanishLesson(inv));
+    expect(en.length).toBe(2);
+    expect(es[0].name).toMatch(/Llega/);
+    expect(es[0].levels.map(l => l.points)).toEqual(
+      en[0].levels.map(l => l.points)
     );
     expect(verifyKey(withAllDepths(inv))).toEqual([]);
+    for (const i of INVESTIGATIONS)
+      for (const s of i.steps) expect(rubricProblems(s)).toEqual([]);
   });
 
   test('the key prints the criteria and the levels', () => {
-    const inv = INVESTIGATIONS.find(i => i.id === 'keplers-laws');
+    const inv = INVESTIGATIONS.find(i => i.id === 'orbital-energy');
     const text = drawn(answerKeyDocument(inv, { version: 'T' }));
     expect(text).toMatch(/Rubric:/);
-    expect(text).toMatch(/Names what is conserved/);
+    expect(text).toMatch(/Reaches the right answer/);
     expect(text).toMatch(/Full \(2 pts\)/);
   });
 });
