@@ -22,7 +22,7 @@
     }
   },
   "sourceFiles": 134,
-  "sourceDigest": "9bc6a408a03abdf9b0490d09ad78fb50f34e7c77dd57477cca94b667cffd6300",
+  "sourceDigest": "6aa41512d90a354850126c6a123c775804573f6633fa4ff48d56a09009642b09",
   "sources": {
     "js/activities/activities.js": "831a7712f2372ff8b54693d6669abfe9a185e677cd43411cac355fef979b8937",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -117,7 +117,7 @@
     "js/i18n/en.activities.js": "f20cf171d13a956aed5e7f15319f7ef93a918ccbc803fd441e5b08394488d5d5",
     "js/i18n/en.exoplanet.js": "f7d834d396e30716ea395efee77e99bfc90c6f159c094e5623272ce83ba8704c",
     "js/i18n/en.guides.js": "6462bfa9a931d5901393a19fdab9d5f3a27ba0969799f2dfbd7d61e501a43252",
-    "js/i18n/en.js": "ed0383eedb9b7f555c884d7daecfec779da9d58cd024e2d3021a7b6b4088918c",
+    "js/i18n/en.js": "d9012b76cbe933130292951ba5026e0f493fff78be6b985d558e601656b4ca72",
     "js/i18n/en.lab3dGuides.js": "e2d4eaa678c6872969f358dffd125dad34953900f83a822de71391ba906e6bc7",
     "js/i18n/en.missionLabGuides.js": "6c859aefad385c14245218a4d53514fb35ce1443c1fcb3b055575137a6a6d086",
     "js/i18n/en.populations.js": "92787374886a07f7394ef1a38cade1b208200ddb95c6b909b725e81555e91ec3",
