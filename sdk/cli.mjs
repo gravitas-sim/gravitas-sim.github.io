@@ -3,7 +3,7 @@
 // The Gravitas Extension SDK
 // -----------------------------------------------------------------------------
 //   npm run sdk -- init <data-pack|course-pack|investigation-pack|scenario-pack|capability> <id>
-//     [--dir <path>] [--from <studio-export.json>]
+//     [--dir <path>] [--from <pack.json> [--author <text>] [--sources <text>]]
 //   npm run sdk -- validate <extension-dir|archive.gxp>... | --all [--json]
 //   npm run sdk -- test <extension-dir|archive.gxp>... | --all
 //   npm run sdk -- pack <extension-dir> [--out <dir>]
@@ -36,12 +36,13 @@ import {
   validateExtension,
 } from './lib/extension.mjs';
 import { formatReview, reviewExtension } from './lib/review.mjs';
+import { FromError, PACK_FORMATS, reminders } from './lib/fromPack.mjs';
 import { scaffold, TEMPLATES } from './lib/templates.mjs';
 import { SDK_VERSION } from './lib/api.mjs';
 
 const USAGE = `Gravitas Extension SDK ${SDK_VERSION}
 
-  init <${Object.keys(TEMPLATES).join('|')}> <id> [--dir <path>] [--from <file>]
+  init <${Object.keys(TEMPLATES).join('|')}> <id> [--dir <path>] [--from <pack.json> [--author <text>] [--sources <text>]]
   validate <extension-dir|archive.gxp>... | --all [--json]
   test <extension-dir|archive.gxp>... | --all
   pack <extension-dir> [--out <dir>]
@@ -65,7 +66,10 @@ const option = (argv, name) =>
 const positional = argv =>
   argv.filter(
     (a, i) =>
-      !a.startsWith('--') && !['--dir', '--out', '--from'].includes(argv[i - 1])
+      !a.startsWith('--') &&
+      !['--dir', '--out', '--from', '--author', '--sources'].includes(
+        argv[i - 1]
+      )
   );
 
 async function validateAll(sources, { json = false, log = console.log } = {}) {
@@ -111,13 +115,19 @@ export async function run(argv, { log = console.log } = {}) {
     }
     let from;
     const fromFile = option(rest, '--from');
+    const author = option(rest, '--author')?.trim() || undefined;
+    const sources = option(rest, '--sources')?.trim() || undefined;
+    if (!fromFile && (author || sources)) {
+      log('--author and --sources go with --from');
+      return 2;
+    }
+    if (fromFile && !PACK_FORMATS[type]) {
+      log(
+        '--from is for an investigation-pack, a course-pack or a scenario-pack: the file the Composer, the course builder or the Scenario Studio saved'
+      );
+      return 2;
+    }
     if (fromFile) {
-      if (type !== 'scenario-pack') {
-        log(
-          '--from is for a scenario-pack: the file the Scenario Studio exported'
-        );
-        return 2;
-      }
       try {
         from = JSON.parse(readFileSync(fromFile, 'utf8'));
       } catch (err) {
@@ -125,7 +135,21 @@ export async function run(argv, { log = console.log } = {}) {
         return 2;
       }
     }
-    const files = scaffold(type, id, { from });
+    let files;
+    const notes = [];
+    try {
+      const source = fromFile && path.basename(fromFile);
+      files = scaffold(type, id, { from, source, author, sources });
+      if (from && from.id !== id)
+        notes.push(
+          `${source}: its id "${from.id}" is written as "${id}", the id of the package`
+        );
+      if (from) notes.push(...reminders({ author }));
+    } catch (err) {
+      if (!(err instanceof FromError)) throw err;
+      log(err.message);
+      return 2;
+    }
     for (const [name, body] of Object.entries(files)) {
       mkdirSync(path.dirname(path.join(dir, name)), { recursive: true });
       writeFileSync(path.join(dir, name), body);
@@ -133,6 +157,7 @@ export async function run(argv, { log = console.log } = {}) {
     log(
       `${dir}: a ${type} named ${id}, ${Object.keys(files).length} files. Next: npm run sdk -- validate ${dir}`
     );
+    for (const n of notes) log(`  note: ${n}`);
     return 0;
   }
   if (command === 'validate') {

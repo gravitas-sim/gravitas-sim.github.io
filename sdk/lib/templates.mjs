@@ -10,6 +10,7 @@
 // =============================================================================
 
 import { EXAMPLE_INVESTIGATION } from '../../js/composer/example.js';
+import { readmeFor, readPack } from './fromPack.mjs';
 
 const json = v => `${JSON.stringify(v, null, 2)}\n`;
 const camel = id => id.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
@@ -82,95 +83,120 @@ throw new Error('write the transformation for ${id}');
     'README.md': `# ${title(id)}\n\nA data-pack extension. \`npm run sdk -- validate .\` lists what is still to fill in.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
   }),
 
-  'course-pack': id => ({
-    'gravitas-extension.json': json({
-      ...base(id, 'declarative'),
-      provides: { courses: [{ id, file: 'course.json' }] },
-      assets: [{ path: 'course.json', role: 'data', offline: 'optional' }],
-      citations: [],
-      licenses: [{ scope: 'course.json', license: 'CC-BY-4.0' }],
-      offline: { policy: 'precache' },
-      validation: [],
-      migrations: [],
-    }),
-    'course.json': json({
-      format: 'gravitas.course-pack',
-      formatVersion: 1,
-      id,
-      version: '0.1.0',
-      locales: ['en'],
-      title: { en: title(id) },
-      units: [
-        {
-          id: 'orbits',
-          title: { en: 'Orbits' },
-          lessons: [
-            { lesson: 'keplers-laws', teacherNote: { en: 'Start here.' } },
-          ],
-        },
-      ],
-    }),
-    'README.md': `# ${title(id)}\n\nA course-pack extension: an ordering of lessons Gravitas already has.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
-  }),
+  // `from` is a pack the course builder saved (/studio/course/): /1 or /2.
+  'course-pack': (id, { from, source, author, sources } = {}) => {
+    const info = from && readPack('course-pack', id, from, source);
+    return {
+      'gravitas-extension.json': json({
+        ...base(id, 'declarative'),
+        ...(info && { version: info.version, title: info.title }),
+        provides: { courses: [{ id, file: 'course.json' }] },
+        assets: [{ path: 'course.json', role: 'data', offline: 'optional' }],
+        citations: [],
+        licenses: [{ scope: 'course.json', license: 'CC-BY-4.0' }],
+        offline: { policy: 'precache' },
+        validation: [],
+        migrations: [],
+      }),
+      'course.json': info
+        ? json(info.pack)
+        : json({
+            format: 'gravitas.course-pack',
+            formatVersion: 1,
+            id,
+            version: '0.1.0',
+            locales: ['en'],
+            title: { en: title(id) },
+            units: [
+              {
+                id: 'orbits',
+                title: { en: 'Orbits' },
+                lessons: [
+                  {
+                    lesson: 'keplers-laws',
+                    teacherNote: { en: 'Start here.' },
+                  },
+                ],
+              },
+            ],
+          }),
+      'README.md': info
+        ? readmeFor('course-pack', id, source, info, { author, sources })
+        : `# ${title(id)}\n\nA course-pack extension: an ordering of lessons Gravitas already has.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
+    };
+  },
 
   // The composer's own example investigation, under the new id: a pack that
   // passes every check, which is the best place for an author to start from.
-  'investigation-pack': id => ({
-    'gravitas-extension.json': json({
-      ...base(id, 'declarative'),
-      provides: { investigations: [{ id, file: 'investigation.json' }] },
-      assets: [
-        { path: 'investigation.json', role: 'data', offline: 'optional' },
-      ],
-      citations: [],
-      licenses: [{ scope: 'investigation.json', license: 'CC-BY-4.0' }],
-      offline: { policy: 'precache' },
-      validation: [],
-      migrations: [],
-    }),
-    'investigation.json': json({ ...EXAMPLE_INVESTIGATION, id }),
-    'README.md': `# ${title(id)}\n\nAn investigation-pack extension: a guided investigation as data. The Studio's lesson composer (/studio/lesson/) writes \`investigation.json\`.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
-  }),
+  // `from` is a pack the Composer saved (a remix too): wrapped as it is, under
+  // the package's id (sdk/lib/fromPack.mjs).
+  'investigation-pack': (id, { from, source, author, sources } = {}) => {
+    const info = from && readPack('investigation-pack', id, from, source);
+    return {
+      'gravitas-extension.json': json({
+        ...base(id, 'declarative'),
+        ...(info && { version: info.version, title: info.title }),
+        provides: { investigations: [{ id, file: 'investigation.json' }] },
+        assets: [
+          { path: 'investigation.json', role: 'data', offline: 'optional' },
+        ],
+        citations: info?.citations ?? [],
+        licenses: [{ scope: 'investigation.json', license: 'CC-BY-4.0' }],
+        offline: { policy: 'precache' },
+        validation: [],
+        migrations: [],
+      }),
+      'investigation.json': json(
+        info ? info.pack : { ...EXAMPLE_INVESTIGATION, id }
+      ),
+      'README.md': info
+        ? readmeFor('investigation-pack', id, source, info, { author, sources })
+        : `# ${title(id)}\n\nAn investigation-pack extension: a guided investigation as data. The Studio's lesson composer (/studio/lesson/) writes \`investigation.json\`.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
+    };
+  },
 
   // `from` is a pack the Scenario Studio exported (/studio/), written as it is:
   // the Studio's file is the scenario, and the manifest is the wrapper.
-  'scenario-pack': (id, { from } = {}) => ({
-    'gravitas-extension.json': json({
-      ...base(id, 'declarative'),
-      title: from?.title
-        ? { en: from.title.en, es: from.title.es ?? '' }
-        : { en: title(id), es: '' },
-      provides: { scenarios: [{ id, file: 'scenario.json' }] },
-      assets: [{ path: 'scenario.json', role: 'data', offline: 'optional' }],
-      citations: [],
-      licenses: [{ scope: 'scenario.json', license: 'CC-BY-4.0' }],
-      offline: { policy: 'precache' },
-      validation: [{ check: 'registry:sdk-extensions' }],
-      migrations: [],
-    }),
-    'scenario.json': from
-      ? json(from)
-      : json({
-          format: 'gravitas.scenario-pack',
-          formatVersion: 1,
-          id,
-          version: '0.1.0',
-          locales: ['en'],
-          title: { en: title(id) },
-          summary: { en: 'Five planets on circular orbits round a star.' },
-          seed: 1,
-          settings: {
-            num_black_holes: 0,
-            num_stars: 1,
-            num_planets: 5,
-            num_gas_giants: 0,
-            enable_asteroids: false,
-            num_asteroids: 0,
-            placement: 'Circular',
-          },
-        }),
-    'README.md': `# ${title(id)}\n\nA scenario-pack extension: settings, a seed and bodies, as data. The Scenario Studio (/studio/) writes \`scenario.json\`; \`npm run sdk -- init scenario-pack ${id} --from <export.json>\` wraps one.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
-  }),
+  'scenario-pack': (id, { from, source, author, sources } = {}) => {
+    const info = from && readPack('scenario-pack', id, from, source);
+    return {
+      'gravitas-extension.json': json({
+        ...base(id, 'declarative'),
+        ...(info && { version: info.version, title: info.title }),
+        provides: { scenarios: [{ id, file: 'scenario.json' }] },
+        assets: [{ path: 'scenario.json', role: 'data', offline: 'optional' }],
+        citations: [],
+        licenses: [{ scope: 'scenario.json', license: 'CC-BY-4.0' }],
+        offline: { policy: 'precache' },
+        validation: [{ check: 'registry:sdk-extensions' }],
+        migrations: [],
+      }),
+      'scenario.json': info
+        ? json(info.pack)
+        : json({
+            format: 'gravitas.scenario-pack',
+            formatVersion: 1,
+            id,
+            version: '0.1.0',
+            locales: ['en'],
+            title: { en: title(id) },
+            summary: { en: 'Five planets on circular orbits round a star.' },
+            seed: 1,
+            settings: {
+              num_black_holes: 0,
+              num_stars: 1,
+              num_planets: 5,
+              num_gas_giants: 0,
+              enable_asteroids: false,
+              num_asteroids: 0,
+              placement: 'Circular',
+            },
+          }),
+      'README.md': info
+        ? readmeFor('scenario-pack', id, source, info, { author, sources })
+        : `# ${title(id)}\n\nA scenario-pack extension: settings, a seed and bodies, as data. The Scenario Studio (/studio/) writes \`scenario.json\`; \`npm run sdk -- init scenario-pack ${id} --from <export.json>\` wraps one.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
+    };
+  },
 
   capability: id => ({
     'gravitas-extension.json': json({
@@ -225,7 +251,9 @@ export const ${constant(id)}_WIDGETS = [READOUT];
  * The files for a new extension.
  * @param {keyof typeof TEMPLATES} type
  * @param {string} id - A kebab-case public id
- * @param {{from?: object}} [opts] - A scenario-pack's exported scenario
+ * @param {{from?: object, source?: string, author?: string, sources?: string}} [opts]
+ *   - `from`: the parsed pack a studio saved, `source` its file name, and the
+ *   author's words for the README (sdk/lib/fromPack.mjs)
  */
 export function scaffold(type, id, opts = {}) {
   if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id))
