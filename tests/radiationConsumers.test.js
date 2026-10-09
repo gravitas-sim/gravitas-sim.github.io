@@ -29,24 +29,33 @@ const band = id => K.decodeBand(BANDS.find(b => b.id === id));
 const C = 299792.458;
 
 describe('the Stellar Lab: the three sizes of a star', () => {
-  test('the solar constants are the kernel\'s (IAU 2015 B3)', () => {
+  test("the solar constants are the kernel's (IAU 2015 B3)", () => {
     expect(TEFF_SUN_K).toBe(K.TEFF_SUN_K);
     expect(R_SUN_M).toBe(K.R_SUN_M);
   });
-  test('L = R^2 T^4 in solar units is the kernel\'s Stefan-Boltzmann law, to the four digits of the nominal values', () => {
+  test("L = R^2 T^4 in solar units is the kernel's Stefan-Boltzmann law, to the four digits of the nominal values", () => {
     // 1e-4: the nominal L, R, T are four-digit numbers that agree to 5e-5 (the kernel gives
     // 1.00005 L_sun for a nominal Sun). Two radii and temperatures apart, to 1e-12 of each other.
-    for (const [R, T] of [[1, 5772], [10, 4500], [0.2, 3200], [5, 15000]]) {
+    for (const [R, T] of [
+      [1, 5772],
+      [10, 4500],
+      [0.2, 3200],
+      [5, 15000],
+    ]) {
       const kernel = K.luminosity(R * K.R_SUN_M, T) / K.L_SUN_W;
-      expect(Math.abs(kernel / luminosityFromRadiusAndTemperature(R, T) - 1)).toBeLessThan(1e-4);
+      expect(
+        Math.abs(kernel / luminosityFromRadiusAndTemperature(R, T) - 1)
+      ).toBeLessThan(1e-4);
     }
   });
 });
 
 describe('the spectra screens', () => {
-  test('airToVacuum (Angstrom) is the kernel\'s Morton 2000 (nm): the same formula to rounding', () => {
+  test("airToVacuum (Angstrom) is the kernel's Morton 2000 (nm): the same formula to rounding", () => {
     for (const a of [3500, 4861.35, 5892.94, 6562.8, 9000]) {
-      expect(Math.abs(airToVacuum(a) / (K.airToVacuumNm(a / 10) * 10) - 1)).toBeLessThan(1e-12);
+      expect(
+        Math.abs(airToVacuum(a) / (K.airToVacuumNm(a / 10) * 10) - 1)
+      ).toBeLessThan(1e-12);
     }
   });
 
@@ -70,15 +79,22 @@ describe('the spectra screens', () => {
     expect(worst).toBeLessThan(1.8);
   });
 
-  test('the feature labels point where the kernel\'s lines are, to 0.05 A (the windows are tens of Angstroms wide)', () => {
+  test("the feature labels point where the kernel's lines are, to 0.05 A (the windows are tens of Angstroms wide)", () => {
     const ids = { cak: 'ca2-k', hbeta: 'h-beta' };
     for (const f of SPECTRAL_FEATURES.filter(x => ids[x.id])) {
       const k = LINES.find(l => l.id === ids[f.id]);
       expect(Math.abs(f.centerAir - k.air * 10)).toBeLessThan(0.05);
     }
     // The sodium label is the doublet's mean.
-    const d = ['na1-d1', 'na1-d2'].map(id => LINES.find(l => l.id === id).air * 10);
-    expect(Math.abs(SPECTRAL_FEATURES.find(f => f.id === 'nad').centerAir - (d[0] + d[1]) / 2)).toBeLessThan(0.05);
+    const d = ['na1-d1', 'na1-d2'].map(
+      id => LINES.find(l => l.id === id).air * 10
+    );
+    expect(
+      Math.abs(
+        SPECTRAL_FEATURES.find(f => f.id === 'nad').centerAir -
+          (d[0] + d[1]) / 2
+      )
+    ).toBeLessThan(0.05);
   });
 });
 
@@ -96,7 +112,7 @@ describe('the Observatory: reddening in the cluster-fit tool', () => {
     expect(R).toBeLessThan(3.65);
     expect((R - 3.245) * 0.1).toBeGreaterThan(0.02);
   });
-  test('its distance modulus is the kernel\'s: 5 log10(d / 10 pc)', () => {
+  test("its distance modulus is the kernel's: 5 log10(d / 10 pc)", () => {
     expect(K.distanceModulus(1585)).toBeCloseTo(5 * Math.log10(158.5), 12);
   });
 });

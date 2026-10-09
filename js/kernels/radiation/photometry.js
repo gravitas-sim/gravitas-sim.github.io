@@ -99,9 +99,7 @@ export function abMag(band, sed) {
 
 /** Vega-system magnitude; NaN when the band states no AB-Vega offset. */
 export function vegaMag(band, sed) {
-  return band.abMinusVega === null
-    ? NaN
-    : abMag(band, sed) - band.abMinusVega;
+  return band.abMinusVega === null ? NaN : abMag(band, sed) - band.abMinusVega;
 }
 
 /** A source given as samples (nm, W m^-2 nm^-1), linearly interpolated. */

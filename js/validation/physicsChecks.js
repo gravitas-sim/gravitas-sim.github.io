@@ -6463,7 +6463,7 @@ export async function runChecks() {
       unit: 'mag',
       tolerance: 1e-12,
       toleranceKind: 'absolute',
-      why: 'Pogson\'s definition of the scale. Every magnitude difference in the kernel is built on it.',
+      why: "Pogson's definition of the scale. Every magnitude difference in the kernel is built on it.",
     });
     add({
       group: G,
@@ -6518,7 +6518,7 @@ export async function runChecks() {
       unit: 'ratio',
       tolerance: 0.015,
       toleranceKind: 'absolute',
-      why: 'CCM89 Table 3 prints 0.479. The tolerance is the residual of the paper\'s own fit to that table (0.012 at B, under 0.003 elsewhere), so it is not rounding; tests/radiationKernel.test.js compares all eight filters.',
+      why: "CCM89 Table 3 prints 0.479. The tolerance is the residual of the paper's own fit to that table (0.012 at B, under 0.003 elsewhere), so it is not rounding; tests/radiationKernel.test.js compares all eight filters.",
     });
     add({
       group: G,
@@ -6545,7 +6545,7 @@ export async function runChecks() {
     add({
       group: G,
       kind: 'approximation',
-      name: 'Non-relativistic Doppler at a star\'s 30 km/s',
+      name: "Non-relativistic Doppler at a star's 30 km/s",
       measured: R.zFromVelocityClassical(30),
       expected: R.zFromVelocity(30),
       unit: 'z',

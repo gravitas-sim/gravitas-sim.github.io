@@ -738,8 +738,12 @@ async function main(argv) {
   }
   // Every pack this command builds from the network: the ones with commands
   // of their own are fetched by those, unless --all.
-  const named = argv.find(a => a.startsWith('--only='))?.slice(7).split(',');
-  const only = named || PACKS.filter(p => all || !OWN_PROVENANCE(p)).map(p => p.id);
+  const named = argv
+    .find(a => a.startsWith('--only='))
+    ?.slice(7)
+    .split(',');
+  const only =
+    named || PACKS.filter(p => all || !OWN_PROVENANCE(p)).map(p => p.id);
   await write({ only, offline: argv.includes('--offline') });
 }
 

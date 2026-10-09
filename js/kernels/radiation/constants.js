@@ -45,7 +45,8 @@ export const WIEN_X_LAMBDA = wienRoot(5);
 /** 2.8214393721..., the root for the spectrum per unit frequency. */
 export const WIEN_X_NU = wienRoot(3);
 /** Wien displacement constant b = hc / (k x), m K (2.897771955e-3). */
-export const WIEN_B_LAMBDA = (H_PLANCK * C_LIGHT) / (K_BOLTZMANN * WIEN_X_LAMBDA);
+export const WIEN_B_LAMBDA =
+  (H_PLANCK * C_LIGHT) / (K_BOLTZMANN * WIEN_X_LAMBDA);
 /** Wien constant for B_nu, Hz/K (5.878925757e10): nu_peak = this * T. */
 export const WIEN_B_NU = (WIEN_X_NU * K_BOLTZMANN) / H_PLANCK;
 

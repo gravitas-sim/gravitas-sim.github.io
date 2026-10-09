@@ -7,7 +7,10 @@
 // its loader". Each loader is a dynamic import: one request, on first use.
 // =============================================================================
 
-export const loadBandpasses = () => import('../../data/radiation/bandpasses.js');
+export const loadBandpasses = () =>
+  import('../../data/radiation/bandpasses.js');
 export const loadLines = () => import('../../data/radiation/lines.js');
-export const loadExtinction = () => import('../../data/radiation/extinction.js');
-export const loadBolometric = () => import('../../data/radiation/bolometric.js');
+export const loadExtinction = () =>
+  import('../../data/radiation/extinction.js');
+export const loadBolometric = () =>
+  import('../../data/radiation/bolometric.js');

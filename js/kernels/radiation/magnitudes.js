@@ -5,13 +5,7 @@
 // magnitude is the apparent magnitude at 10 pc. All functions are pure.
 // =============================================================================
 
-import {
-  AU_M,
-  L_BOL_ZERO_W,
-  L_SUN_W,
-  M_BOL_SUN,
-  PC_M,
-} from './constants.js';
+import { AU_M, L_BOL_ZERO_W, L_SUN_W, M_BOL_SUN, PC_M } from './constants.js';
 
 /** Magnitude difference of two fluxes: -2.5 log10(f / fRef). */
 export const fluxToMag = (f, fRef = 1) => -2.5 * Math.log10(f / fRef);

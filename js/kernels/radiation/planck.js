@@ -21,9 +21,7 @@ export function planckLambda(lambdaM, T) {
   if (!(lambdaM > 0) || !(T > 0)) return 0;
   const x = (H_PLANCK * C_LIGHT) / (lambdaM * K_BOLTZMANN * T);
   if (x > 700) return 0;
-  return (
-    (2 * H_PLANCK * C_LIGHT * C_LIGHT) / (lambdaM ** 5 * Math.expm1(x))
-  );
+  return (2 * H_PLANCK * C_LIGHT * C_LIGHT) / (lambdaM ** 5 * Math.expm1(x));
 }
 
 /** B_nu(T), W m^-2 Hz^-1 sr^-1. nuHz in hertz. */

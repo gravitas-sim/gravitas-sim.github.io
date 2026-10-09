@@ -27,7 +27,8 @@ const FNU_TO_SI = JY; // W m^-2 Hz^-1 per registry base unit
 export function convertFlux(value, from, to, lambdaNm) {
   const a = UNITS[from];
   const b = UNITS[to];
-  const flux = u => u?.dim === 'flux-per-wavelength' || u?.dim === 'flux-per-frequency';
+  const flux = u =>
+    u?.dim === 'flux-per-wavelength' || u?.dim === 'flux-per-frequency';
   if (!flux(a) || !flux(b)) return NaN;
   if (a.dim === b.dim) return (value * a.factor) / b.factor;
   const lam = lambdaNm * 1e-9;
