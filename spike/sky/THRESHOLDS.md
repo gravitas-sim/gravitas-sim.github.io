@@ -137,3 +137,35 @@ recorded. The gate's overall verdict for Prompts 88-89 is the worst piece among
 those a foundation cannot ship without: time kernel, coordinates, renderer and
 catalogue. Sun/Moon and planets may be B or C and the foundation ships without
 the failing body. A threshold is not relaxed after measuring.
+
+## Corrections to this file, made before any candidate was run
+
+Written after the first prototype modules and the ERFA reference values were
+generated, and before any candidate was run against any reference or fixture
+(the first run of `measure.mjs` comes after this commit). Two of the lines above
+were wrong as written; the original text is left in place and these replace it.
+Nothing else changes, and nothing here follows from a measurement.
+
+1. **T2.2** said "within 1 arcsecond of ERFA". That contradicts T1.5, which
+   allows the IAU 1976 precession 2 arcseconds against ERFA's IAU 2006 matrix
+   (the two models differ by that order over a century). **T2.2 is now: within
+   2 arcseconds**, the same as T1.5.
+2. **T2.5** said the Kasten and Young fit must give X(30 degrees altitude) =
+   2.000 within 0.005. 2.000 is sec z, not a table value; the fit gives about
+   1.994, which is the published value. **T2.5 is now:** the horizon airmass is
+   37.92 within 0.005, X at zenith angle 60 degrees is 1.995 within 0.01, and X
+   at zenith angle 70 degrees is 2.904 within 0.01 (Bemporad's tabulated
+   atmosphere, as reproduced in Kasten and Young 1989).
+3. **Scope of T1.1.** The supported range is 1900-2100, so the Julian-calendar
+   examples of Meeus ch. 7 (year 333, year 837, negative years) are outside it
+   and are not pinned; the Gregorian ones are.
+4. **How T1.4 is read.** The delta-T candidate carries the IERS series itself as
+   a table at 1 January of each year, so those nodes are not independent; the
+   test points are every half year and the July points are the interpolated
+   ones. Both are reported. The pure polynomial (no table) is reported beside
+   it, since the table is only a data decision.
+5. **Time argument of the Sun and Moon series.** `js/observingWindow.js` takes a
+   Julian date it treats as TT. T5.1, T5.3, T5.4 and T5.5 are judged with TT
+   given (the time kernel in the same production slice supplies it from UT).
+   The figures with UT passed as TT, which is how the module is called today,
+   are reported next to them.
