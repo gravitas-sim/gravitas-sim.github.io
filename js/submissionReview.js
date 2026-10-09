@@ -53,7 +53,7 @@ import {
 } from './submission/i18n.js';
 import { validateBackup } from './investigations/progressBackup.js';
 import { activitiesOf, fragmentOf, readSource } from './teach/activity.js';
-import { gradebookModel } from './gradebook/model.js';
+import { gradebookModel, rosterMerges } from './gradebook/model.js';
 import { ADAPTERS } from './gradebook/index.js';
 import {
   marksCsv,
@@ -96,6 +96,9 @@ const context = new Map();
 const contexts = [];
 /** Marks the instructor entered, by report and step. Never stored. */
 const marks = marksIndex();
+/** Whether the instructor has picked how to match students (then it is theirs). */
+let identifierChosen = false;
+
 /** Whether the written answers are open for marking (an opt-in, per visit). */
 let judging = false;
 
@@ -647,6 +650,15 @@ function gradebook(records) {
 
 /** Say what the gradebook files will hold, while the instructor can still change it. */
 function renderGradebook(records) {
+  // One class code on every link is what the builder asks for, and matching on
+  // it would merge the class into a single grade row. Until the instructor
+  // chooses, the page matches on the typed name whenever a roster id covers
+  // more than one name, and says so; once they choose, it keeps their choice
+  // and warns instead (P81 R-1).
+  const merges = rosterMerges(records);
+  const picker = $('gbIdentifier');
+  if (picker && !identifierChosen)
+    picker.value = merges.length ? 'name' : 'roster';
   const model = gradebook(records);
   const students = new Set(model.rows.map(r => r.identifier)).size;
   const awaiting = model.rows.reduce((a, r) => a + r.awaiting, 0);
@@ -670,6 +682,17 @@ function renderGradebook(records) {
         })
       );
     if (awaiting) lines.push(t('sub.gb.partial', { n: awaiting }));
+    if (merges.length) {
+      const worst = merges.reduce((a, m) =>
+        m.names.length > a.names.length ? m : a
+      );
+      lines.push(
+        t(picker?.value === 'roster' ? 'sub.gb.merged' : 'sub.gb.autoName', {
+          id: worst.rosterId,
+          n: worst.names.length,
+        })
+      );
+    }
   }
   $('gbSummary').textContent = lines.join(' ');
   $('gbPossible').innerHTML = model.activities.length
@@ -1011,7 +1034,10 @@ function wire() {
     e.target.value = '';
   });
   for (const id of ['gbIdentifier', 'gbPolicy'])
-    $(id)?.addEventListener('change', () => renderGradebook(annotate(graded)));
+    $(id)?.addEventListener('change', () => {
+      if (id === 'gbIdentifier') identifierChosen = true;
+      renderGradebook(annotate(graded));
+    });
   $('judge')?.addEventListener('change', judged);
   $('judge')?.addEventListener('click', e => {
     if (!e.target.closest?.('#judgeToggle')) return;

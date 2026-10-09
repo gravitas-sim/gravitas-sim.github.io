@@ -34,7 +34,7 @@
 // No DOM, no storage, no network.
 // =============================================================================
 
-import { markKey } from './marks.js';
+import { isWrittenAnswer, markKey } from './marks.js';
 
 /** What the canonical rows say they are. */
 export const GRADEBOOK_SCHEMA = 'gravitas.gradebook-result/1';
@@ -59,6 +59,35 @@ export const ENGLISH = Object.freeze({
   changed: 'Some steps changed after this report was saved.',
   evidence: 'The evidence table did not match its digest.',
 });
+
+/**
+ * The roster ids that more than one typed name sits under.
+ *
+ * The activity builder asks for a class code, and every student of the class
+ * then carries the same one. Matching on it merges the class into a single
+ * grade row, the worst outcome of the flow (P81 R-1). So before an export the
+ * page asks whether any roster id covers more than one name, and defaults to
+ * the typed name when it does. Names compare as the gradebook compares them,
+ * trimmed, and ignoring case here only so "Ada" and "ada" are not called two
+ * people; an exact-text match is still what the export uses.
+ *
+ * @param {Array<object>} records - From annotate()
+ * @returns {Array<{rosterId: string, names: string[]}>} Ids with several names
+ */
+export function rosterMerges(records) {
+  const byRoster = new Map();
+  for (const r of records) {
+    if (r.duplicateOf !== null && r.duplicateOf !== undefined) continue;
+    const id = String(r.rosterId ?? '').trim();
+    const name = String(r.nameAsTyped ?? '').trim();
+    if (!id || !name) continue;
+    if (!byRoster.has(id)) byRoster.set(id, new Map());
+    byRoster.get(id).set(name.toLowerCase(), name);
+  }
+  return [...byRoster]
+    .filter(([, names]) => names.size > 1)
+    .map(([rosterId, names]) => ({ rosterId, names: [...names.values()] }));
+}
 
 const fill = (text, vars) =>
   text.replace(/\{(\w+)\}/g, (whole, k) =>
@@ -136,7 +165,7 @@ export function gradebookModel(
     let awaiting = 0;
     const comments = [];
     for (const q of r.questions) {
-      if (q.verdict !== 'unmarked' || q.response === null) continue;
+      if (!isWrittenAnswer(q)) continue;
       const m = marks.get(markKey(r.fingerprint, q.sid));
       if (m && m.points !== null) {
         manual += Math.min(Math.max(m.points, 0), q.pointsPossible ?? m.points);

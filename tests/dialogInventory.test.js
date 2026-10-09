@@ -50,9 +50,6 @@ const NOT_MODAL = {
   // The tour's scrim lets every press through (pointer-events: none): a
   // reader is meant to try the control each step spotlights.
   tutorialPopup: 'the guided tour, which leaves the interface live under it',
-  // Reached by URL (?assign=) as a full-screen instructor tool: a page with
-  // nothing behind it to return to, and no aria-modal.
-  assignmentBuilder: 'the assignment builder, a full-screen tool by URL',
 };
 
 /** Every role="dialog" element in index.html, with its aria-modal. */

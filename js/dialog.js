@@ -166,9 +166,12 @@ export function openDialog(
   if (reducedMotion() || getComputedStyle(host).display === 'none')
     host.classList.remove('hidden');
   else
-    requestAnimationFrame(
-      () => wired.get(panel).closing || host.classList.remove('hidden')
-    );
+    requestAnimationFrame(() => {
+      // Released as well as closed counts: a builder that removes its panel
+      // on close has no record left by the next frame.
+      const record = wired.get(panel);
+      if (record && !record.closing) host.classList.remove('hidden');
+    });
 
   if (!wired.get(panel).keydown) {
     // Where a Tab pressed inside the panel wraps to if the browser takes it

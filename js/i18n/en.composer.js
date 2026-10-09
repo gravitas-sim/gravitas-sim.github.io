@@ -127,6 +127,8 @@ export const EN_COMPOSER = {
   'composer.type.explore': 'Explore',
   'composer.type.measure': 'Measure',
   'composer.type.question': 'Question',
+  'composer.type.ellipse': 'Ellipse instrument',
+  'composer.type.wedges': 'Equal-areas instrument',
   'composer.step.legend': '{n}. {type}',
   'composer.step.sid': 'Step id',
   'composer.hint.sid':

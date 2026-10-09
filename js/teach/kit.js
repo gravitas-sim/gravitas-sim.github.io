@@ -367,6 +367,16 @@ function wire() {
 }
 
 async function init() {
+  // P81 L-1: saved choice, else the browser's, as Teach does.
+  try {
+    document.documentElement.lang = /^es/i.test(
+      localStorage.getItem('gravitas_locale') || navigator.language
+    )
+      ? 'es'
+      : 'en';
+  } catch {
+    /* English */
+  }
   wire();
   words();
   mountShell({

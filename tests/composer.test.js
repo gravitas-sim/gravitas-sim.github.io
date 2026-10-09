@@ -1,6 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import {
   readFileSync,
+  readdirSync,
   writeFileSync,
   mkdtempSync,
   realpathSync,
@@ -445,6 +446,24 @@ describe('the composer’s words', () => {
       ...['added', 'removed', 'changed'].map(k => `studio.diff.${k}`),
     ];
     expect(missing(tables, built)).toEqual({ en: [], es: [] });
+  });
+
+  test('every step type a built-in uses has a name, so a remix never shows a raw key (P81 C-1)', async () => {
+    const tables = await read();
+    const dir = 'js/data/investigations';
+    const used = new Set();
+    for (const f of readdirSync(dir).filter(f => f.endsWith('.js')))
+      for (const m of readFileSync(`${dir}/${f}`, 'utf8').matchAll(
+        /^\s{6}type: '([a-z]+)',?$/gm
+      ))
+        used.add(m[1]);
+    expect([...used]).toEqual(expect.arrayContaining(['ellipse', 'wedges']));
+    expect(
+      missing(
+        tables,
+        [...used].map(k => `composer.type.${k}`)
+      )
+    ).toEqual({ en: [], es: [] });
   });
 
   test('every complaint the formats make has words in both languages', async () => {

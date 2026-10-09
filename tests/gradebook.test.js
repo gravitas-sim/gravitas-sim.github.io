@@ -13,6 +13,7 @@ import path from 'node:path';
 import { fromCsv } from '../js/csv.js';
 import {
   gradebookModel,
+  rosterMerges,
   feedbackOf,
   ENGLISH,
   wide,
@@ -30,7 +31,13 @@ import {
   readMarksCsv,
   setMark,
 } from '../js/gradebook/marks.js';
-import { WRITTEN_SID, pile } from './gradebookFixtures.js';
+import {
+  RIGHT,
+  WRITTEN_SID,
+  pile,
+  recordsOf,
+  submission,
+} from './gradebookFixtures.js';
 
 const DIR = path.join(
   path.dirname(new URL(import.meta.url).pathname),
@@ -318,5 +325,53 @@ describe('instructor marks', () => {
     const back = readMarksCsv(text);
     expect(back.skipped).toBe(1);
     expect(back.read).toBe(1);
+  });
+});
+
+describe('a class code on every report (P81 R-1, R-2)', () => {
+  const MEASURE = 'measure-the-two-orbits';
+  const classPile = () =>
+    recordsOf(
+      ['Ada', 'Ben', 'Cy'].map((name, i) =>
+        submission({
+          name,
+          roster: 'PHYS 101',
+          assignment: 'wk3',
+          responses: {
+            ...RIGHT,
+            [MEASURE]: 'circ_e=1.5; ecc_e=0.7',
+            ...(i === 0 ? { [WRITTEN_SID]: 'It speeds up.' } : {}),
+          },
+        })
+      )
+    );
+
+  test('one roster id over three names is reported, and matching on it is one student', () => {
+    const records = classPile();
+    const merges = rosterMerges(records);
+    expect(merges).toHaveLength(1);
+    expect(merges[0].rosterId).toBe('PHYS 101');
+    expect(merges[0].names.sort()).toEqual(['Ada', 'Ben', 'Cy']);
+    const byRoster = gradebookModel(records, { identifier: 'roster' });
+    expect(new Set(byRoster.rows.map(r => r.identifier)).size).toBe(1);
+    const byName = gradebookModel(records, { identifier: 'name' });
+    expect(new Set(byName.rows.map(r => r.identifier)).size).toBe(3);
+  });
+
+  test('a link of their own per student is not a merge, and neither is one name twice', () => {
+    expect(rosterMerges(pile())).toEqual([]);
+    const again = recordsOf([
+      submission({ name: 'Ada', roster: 'R', assignment: 'wk3' }),
+      submission({ name: ' ada ', roster: 'R', assignment: 'wk3' }),
+    ]);
+    expect(rosterMerges(again)).toEqual([]);
+  });
+
+  test('only prose is a written answer to mark; a measure step is not', () => {
+    const records = classPile();
+    const items = needsJudgment(records);
+    expect(items.map(i => i.question.sid)).toEqual([WRITTEN_SID]);
+    const rows = gradebookModel(records, { identifier: 'name' }).rows;
+    expect(rows.reduce((a, r) => a + r.awaiting, 0)).toBe(1);
   });
 });

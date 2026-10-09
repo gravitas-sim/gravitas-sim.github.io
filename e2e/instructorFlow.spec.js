@@ -165,9 +165,17 @@ test.describe('the instructor flow', () => {
       'Week 3: Kepler'
     );
 
-    // One class code is on both reports, so by roster id they are one student
-    // (and the later report is the score); by the name each typed they are two.
+    // One class code is on both reports, so by roster id they would be one
+    // student. The page notices a roster id that covers two names and matches
+    // on the typed name until the instructor chooses (P81 R-1); choosing the
+    // roster id keeps that choice and warns.
+    await expect(page.locator('#gbIdentifier')).toHaveValue('name');
+    await expect(page.locator('#gbSummary')).toContainText('2 students');
+    await page.locator('#gbIdentifier').selectOption('roster');
     await expect(page.locator('#gbSummary')).toContainText('1 students');
+    await expect(page.locator('#gbSummary')).toContainText(
+      'Warning: one roster id'
+    );
     await page.locator('#gbIdentifier').selectOption('name');
     await expect(page.locator('#gbSummary')).toContainText('2 students');
 
@@ -221,6 +229,130 @@ test.describe('the instructor flow', () => {
         .slice(1)
         .every(l => l.endsWith(',#'))
     ).toBe(true);
+  });
+
+  test('a class code on three students is three students, and measures are not written answers', async ({
+    page,
+  }) => {
+    // P81 R-1 and R-2. The builder asks for a class code, so every report has
+    // the same roster id. Before: one student in the gradebook, and every
+    // measure step offered for marking.
+    const { link } = await build(page);
+    const read = await readSource(link);
+    const a = read.activity;
+    const token = async (name, responses) => {
+      const stored = Object.fromEntries(
+        Object.entries(responses).map(([sid, v]) => [stepKey(LESSON, sid), v])
+      );
+      const backup = buildBackup({
+        lesson: kepler,
+        responses: stored,
+        attempts: {},
+        visited: a.s.slice(0, 3),
+        stepSid: a.s[0],
+        startedAt: '2026-09-01T10:00:00.000Z',
+        studentName: name,
+      });
+      return (
+        await encodeSubmission(
+          buildSubmission({ backup, assignmentId: a.i, rosterId: 'PHYS 101' })
+        )
+      ).token;
+    };
+    const measure = 'circ_e=1.5; ecc_e=0.7';
+    const tokens = [
+      await token('ada01', {
+        'where-is-the-star': '1',
+        'measure-the-two-orbits': measure,
+        'why-the-speed-changes': 'It speeds up near the star.',
+      }),
+      await token('ben02', {
+        'where-is-the-star': '0',
+        'measure-the-two-orbits': measure,
+      }),
+      await token('cy03', {
+        'where-is-the-star': '1',
+        'fast-and-slow-in-numbers': measure,
+      }),
+    ];
+    await page.goto('/instructors/submissions/');
+    for (const t of tokens) {
+      await page.locator('#paste').fill(t);
+      await page.locator('#paste-go').click();
+    }
+    await expect(page.locator('#count')).toHaveText('3 submissions');
+    await expect(page.locator('#gbIdentifier')).toHaveValue('name');
+    await expect(page.locator('#gbSummary')).toContainText('3 students');
+    await expect(page.locator('#gbSummary')).toContainText(
+      'one roster id (PHYS 101) covers 3 different names'
+    );
+    // One prose answer, however many measures were handed in.
+    await expect(page.locator('#gbSummary')).toContainText(
+      '1 written answers have no mark yet'
+    );
+    await page.locator('#judgeToggle').click();
+    await expect(page.locator('#judgeSummary')).toContainText(
+      '0 of 1 written answers marked'
+    );
+    await expect(page.locator('.sr-mark')).toHaveCount(1);
+    // A deliberate choice of the roster id is kept, with a warning.
+    await page.locator('#gbIdentifier').selectOption('roster');
+    await expect(page.locator('#gbSummary')).toContainText('1 students');
+    await expect(page.locator('#gbSummary')).toContainText('Warning');
+    const canvas = await take(page, 'exportCanvas');
+    expect(canvas.text.trim().split('\r\n').length).toBe(3);
+    await page.locator('#gbIdentifier').selectOption('name');
+    const named = await take(page, 'exportCanvas');
+    expect(named.text.trim().split('\r\n').length).toBe(5);
+  });
+
+  test('kit and course packs open in the browser language, with Spanish tab titles (P81 L-1, T-1)', async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({ locale: 'es-ES' });
+    const page = await context.newPage();
+    for (const route of ['/teaching/kit/', '/studio/course/packs/']) {
+      await page.goto(route);
+      await expect(page.locator('body[data-ready="true"]')).toBeVisible();
+      await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+      await expect(page.locator('[data-gs-lang]')).toHaveValue('es');
+    }
+    await page.goto('/teaching/kit/');
+    expect(await page.title()).not.toMatch(/Distribution kit/);
+    await page.addInitScript(() =>
+      localStorage.setItem('gravitas_locale', 'es')
+    );
+    for (const [route, english] of [
+      ['/teaching/investigation/keplers-laws/', "Kepler's Laws | Gravitas"],
+      ['/teaching/find/', 'Find content to teach | Gravitas'],
+      ['/teaching/', 'Teaching with Gravitas'],
+    ]) {
+      await page.goto(route);
+      await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+      await expect.poll(() => page.title()).not.toBe(english);
+    }
+    await context.close();
+    // And an English browser is unchanged.
+    const en = await browser.newContext({ locale: 'en-US' });
+    const p2 = await en.newPage();
+    await p2.goto('/teaching/kit/');
+    await expect(p2.locator('html')).toHaveAttribute('lang', 'en');
+    await en.close();
+  });
+
+  test('the portal says how to ask for the passphrase, and each adoption page says where the key is (P81 A-1)', async ({
+    page,
+  }) => {
+    await quiet(page);
+    await page.goto('/instructors/');
+    const hint = page.locator('#loginHint');
+    await expect(hint.locator('a[href^="mailto:"]')).toHaveCount(0);
+    await expect(hint.locator('a[href*="/issues/new"]')).toHaveCount(2);
+    await expect(hint).toContainText('Instructor access request');
+    await page.goto(`/teaching/investigation/${LESSON}/`);
+    await expect(page.locator('#materials-h').locator('..')).toContainText(
+      'Where the key is'
+    );
   });
 
   test('the course builder opens with the item in place', async ({ page }) => {

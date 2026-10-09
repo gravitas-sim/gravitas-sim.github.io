@@ -78,6 +78,43 @@ async function makeLink(page, name = 'Week 3') {
 }
 
 test.describe('building one', () => {
+  for (const size of [
+    { width: 1024, height: 768 },
+    { width: 375, height: 800 },
+  ]) {
+    test(`the builder is a dialog a keyboard reader is moved into (${size.width} px)`, async ({
+      page,
+      app,
+    }) => {
+      // P81 K-1: focus stayed on the page behind, the fields were fourteen
+      // Tabs in, Escape did nothing and nothing said "dialog".
+      await page.setViewportSize(size);
+      await openBuilder(page, app);
+      const builder = page.locator('#assignmentBuilder');
+      await expect(builder).toHaveAttribute('role', 'dialog');
+      await expect(builder).toHaveAttribute('aria-modal', 'true');
+      await expect(page.locator('#assignName')).toBeFocused();
+      // Tab never leaves it, however many times it is pressed.
+      for (let i = 0; i < 30; i++) {
+        await page.keyboard.press('Tab');
+        const inside = await page.evaluate(
+          () =>
+            !!document.activeElement?.closest('#assignmentBuilder') &&
+            document.activeElement !== document.body
+        );
+        expect(inside).toBe(true);
+      }
+      await page.keyboard.press('Shift+Tab');
+      expect(
+        await page.evaluate(
+          () => !!document.activeElement?.closest('#assignmentBuilder')
+        )
+      ).toBe(true);
+      await page.keyboard.press('Escape');
+      await expect(builder).toHaveCount(0);
+    });
+  }
+
   test('a class code rides on the link, where the submission token reads it', async ({
     page,
     app,

@@ -200,6 +200,14 @@ const W = {
     'The instructor notes with the answer key is behind the instructor passphrase. The topic, placement, prior knowledge and wrong turns above are the public part.',
     'Las notas docentes con las respuestas está protegida con la contraseña docente. El tema, la ubicación, los conocimientos previos y los errores frecuentes de arriba son la parte pública.',
   ],
+  materialsKey: [
+    'Where the key is: on this investigation’s card on the instructor resources page, under “Answer Key” and “Instructor Guide”. An activity cut from it asks the same questions, so the same key applies. The page explains how to ask for the passphrase.',
+    'Dónde está la clave: en la tarjeta de esta investigación de la página de recursos para docentes, en «Answer Key» e «Instructor Guide». Una actividad recortada de ella hace las mismas preguntas, así que sirve la misma clave. La página explica cómo pedir la frase de acceso.',
+  ],
+  actKey: [
+    'Where the key is: each investigation’s card on the instructor resources page holds its answer key and teaching notes, and an activity cut from it uses the same key. The page explains how to ask for the passphrase.',
+    'Dónde está la clave: la tarjeta de cada investigación en la página de recursos para docentes tiene su clave de respuestas y sus notas docentes, y una actividad recortada de ella usa la misma clave. La página explica cómo pedir la frase de acceso.',
+  ],
   materialsLink: [
     'Open the instructor resources',
     'Abrir los recursos para docentes',
@@ -351,6 +359,22 @@ const pageHtml = ({
   root = 'main',
 }) => {
   const url = `${SITE}/${path.dirname(file)}/`;
+  // The tab title follows the page's language like the rest of it (P81 T-1):
+  // the script below sets it from the language the browser chose and again
+  // when the reader switches.
+  const titles = JSON.stringify({
+    en: `${title.en} | Gravitas`,
+    es: `${title.es ?? title.en} | Gravitas`,
+  }).replace(/</g, '\\u003c');
+  const retitled = script.replace(
+    /\n {6}(const refresh = mountFind\(\);\n {6})?mountShell\(\{ onLanguage: (.*?) \}\);/,
+    (_, setup = '', handler) =>
+      `\n      const titles = ${titles};\n      const retitle = () => {\n        document.title =\n          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];\n      };\n      retitle();\n      ${setup}mountShell({\n        onLanguage: ${
+        handler === '() => {}'
+          ? 'retitle'
+          : `() => {\n          retitle();\n          ${handler.replace(/^\(\) => /, '')};\n        }`
+      },\n      });`
+  );
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -389,7 +413,7 @@ ${body}
     </main>
     <!-- shell:footer -->
     <!-- /shell:footer -->
-${script}  </body>
+${retitled}  </body>
 </html>
 `;
 };
@@ -934,7 +958,7 @@ ${templates.length ? `<h3>${w('templates')}</h3>\n${list(templates)}` : ''}`
   const materialsHtml = section(
     'materials',
     w('materials'),
-    `<p>${w('materialsNote')}</p>\n<p><a class="ui-button" href="/instructors/">${w('materialsLink')}</a></p>`
+    `<p>${w('materialsNote')}</p>\n<p>${w('materialsKey')}</p>\n<p><a class="ui-button" href="/instructors/">${w('materialsLink')}</a></p>`
   );
 
   const body = [
@@ -959,7 +983,7 @@ ${templates.length ? `<h3>${w('templates')}</h3>\n${list(templates)}` : ''}`
 
   const text = pageHtml({
     file,
-    title: { en: title.en, html: plain(title) },
+    title: { en: title.en, es: title.es, html: plain(title) },
     description: `${title.en}: ${entry.summary.en}`,
     eyebrow: w('eyebrowInv'),
     lede: plain(entry.summary),
@@ -1030,10 +1054,11 @@ ${rowOf(w('actFrom'), `<a href="/${BASE}/investigation/${a.lesson}/">${plain(inv
 ${section('question', w('actQuestion'), `<p>${plain(question)}</p>`)}
 ${section('formats', w('actFormats'), `<div class="doc-table-wrap" tabindex="0"><table class="doc-table"><thead><tr><th scope="col">${w('format')}</th><th scope="col">${w('time')}</th><th scope="col">${w('steps')}</th><th scope="col"><span class="gs-vh">${w('start')}</span></th></tr></thead><tbody>\n${rows}\n</tbody></table></div>`)}
 <p>${w('readMore')}</p>
+<p>${w('actKey')}</p>
 <p><a href="/teaching/find/">${w('back')}</a></p>`;
   const text = pageHtml({
     file,
-    title: { en: title.en, html: plain(title) },
+    title: { en: title.en, es: title.es, html: plain(title) },
     description: `${title.en}: ${question.en}`,
     eyebrow: w('eyebrowAct'),
     lede: plain(question),
@@ -1178,7 +1203,11 @@ ${sel('f-offline', w('fOffline'), [opt('yes', wt('fOfflineOnly'))])}
   const body = `${section('filters', w('filterTitle'), filters)}\n${table}`;
   const text = pageHtml({
     file,
-    title: { en: W.crumbFind[0], html: plain(wt('crumbFind')) },
+    title: {
+      en: W.crumbFind[0],
+      es: W.crumbFind[1],
+      html: plain(wt('crumbFind')),
+    },
     description: W.findLede[0],
     eyebrow: w('crumbTeach'),
     lede: plain(wt('findLede')),
