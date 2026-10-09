@@ -26,10 +26,16 @@ const ID = 'color-and-temperature';
 async function toThreeColors(page, app, locale) {
   await openInvestigation(page, app, ID);
   if (locale) {
+    // The language is chosen, then the page reloaded, so the lesson is served
+    // in it from the start: an open lesson is not re-translated in place.
     await page.evaluate(async l => {
       const i18n = await import('/js/i18n/index.js');
-      await i18n.setLocale(l, { persist: false });
+      await i18n.setLocale(l, { persist: true });
     }, locale);
+    await page.reload();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+    await page.waitForFunction(() => window.splashScreenEnded === true);
   }
   const plan = await lessonPlan(page, ID);
   await walkToSid(page, plan, 'three-colors');
