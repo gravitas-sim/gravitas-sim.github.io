@@ -6549,7 +6549,8 @@ export async function runChecks() {
       measured: R.zFromVelocityClassical(30),
       expected: R.zFromVelocity(30),
       unit: 'z',
-      tolerance: 1e-6,
+      tolerance: 1e-7,
+      toleranceKind: 'absolute',
       why: 'z_rel - z_classical is about beta^2 / 2, 5e-9 at 30 km/s; the classical form is the right one for a stellar radial velocity and the wrong one beyond a few thousand km/s. The kernel keeps both and says which applies.',
     });
     add({
