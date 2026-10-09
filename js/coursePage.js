@@ -2148,7 +2148,9 @@ async function init() {
   }
   await useLanguage(preferredLocale());
   wire();
-  const last = drafts.last();
+  // ?open=<id>: the draft My work names, else the one saved last.
+  const named = new URLSearchParams(location.search).get('open');
+  const last = named && drafts.load(named) ? named : drafts.last();
   const draft = last ? drafts.load(last) : null;
   // A first visit opens the example course; New starts from nothing.
   history = createHistory(

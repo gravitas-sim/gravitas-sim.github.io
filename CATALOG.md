@@ -65,7 +65,8 @@ in this order:
    version the catalog names.
 6. The content passes the platform's own checks:
    - a data pack's series decodes and is clean;
-   - a course is a valid `gravitas.course-pack/1` whose lessons all exist.
+   - a course is a valid `gravitas.course-pack/1` whose lessons all exist;
+   - an investigation pack is a `gravitas.investigation-pack/1` file the manifest names, with the id it provides (the format and remix rules judge it when it is opened, where the lesson engine is; the SDK and `catalog:check` judge it before it is listed). It opens from the entry's Open button through an investigation link that names the installed package (REMIX.md).
 
 Only then is it stored, in IndexedDB, in one transaction. A failure at any
 step leaves what was installed before untouched. Each refusal has a stable

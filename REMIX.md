@@ -94,12 +94,60 @@ version's, and a new version starts fresh. The token's backup also carries
 submission and says it cannot grade it, because the pack's questions are not in
 its build.
 
-**Not built in this slice (see D-REMIX-01):** (b) installing a pack from
-IndexedDB through `provideLessonLoaders` and listing it in the catalog; (c) a
-course-pack item that references a pack; grading a remix on the review page;
-the report's "made from" row (the lesson routes had no bytes for it). In-place
-editing of repository files, which the Studio round-trip gate licensed, is
-deferred until an author asks for it.
+**(b) A package from the catalog.** An investigation pack (a remix, or one
+written from scratch) is an `investigation-pack` extension the SDK validates and
+archives (`npm run sdk -- validate`, `test`, `pack`; a remix is judged by the
+remix rules, against this build's original). The catalog serves it as an archive
+(`type: investigation-pack`, summary in both languages), lists it with the
+Investigation filter, and installs it into IndexedDB (`js/catalog/store.js`) after
+checking that the archive holds the pack its manifest names; the full judgment
+waits for the engine. **Open** takes the browser to an investigation link of the
+form `#i1r<{"k": "<package id>"}>`, which `js/remix/open.js` reads from the store
+(`installedPack`), judges by the format and the remix rules, compiles, and hands to
+the engine through `provideLessonLoaders`, under the same `rx-<id>-<version>`
+id. A package that is not installed, or whose file is not a pack, says so; a link
+made on one machine opens nothing on another. No curated entry ships: the catalog
+lists what its curation names, and that is a content decision.
+
+**(c) A course item.** A course-pack /2 item of kind `pack` carries the
+investigation as its own link: `{kind: "pack", pack, version, link, title?, pin}`
+(`link` is the fragment, at most 4,000 characters, the cap every text in a course
+has). The pin is the digest of the compiled steps, the hash a lesson's pin is
+(`fp`, `n`), so a faithful remix pins to its original's digest, a reordered or
+shortened one to its own, and a pack whose original has since changed no longer
+opens (its `derivedFrom.digest` fails) and shows as missing. Progress keys stay
+`rx-<id>-<version>` (`lessonKeyOf` in `js/course/pack.js`). The course home opens
+the item's link; the review and audit read it as a lesson (time from the pack's
+duration, the dependency graph, the reviewed upgrade re-pins it).
+
+Opening a link needs the lesson checker, which the course builder's route has no
+room for: a lazy import there split its bundle into nine more requests. So the
+check is a page of its own, **/studio/course/packs/**: *make* turns a link into
+the course item with its pin; *check* opens each pack of a course file and says
+as pinned / steps changed / does not open (and why), with the item re-pinned to
+what the pack has now. The builder takes the item pasted from that page, keeps
+its fields, and reports the pack as `unchecked` (not missing, not needing review)
+until the check has run; the audit adds a note.
+
+**Grading a remix on the review page.** The report carries `lesson.pack`
+(`{id, version, from: {id, version, digest}}` and the list of steps the student
+was asked. `js/remix/grade.js` grades it against the **original**: its steps by
+reference, its own `checkAnswer` and expected values, restricted to the steps the
+report lists, never an expected value from the pack (the report has none). If the
+original's digest is no longer the one the remix was made from, the report is named
+and not graded. Steps the instructor added have no expected value here and are
+not graded; a pack written from scratch is still named, not graded.
+
+**Studio drafts from My work.** A draft listed on My work links to its page with
+`?open=<id>`; the Scenario Studio, Composer and course builder open that draft
+rather than the one saved last.
+
+**Not built (see D-REMIX-01):** the report's "made from" row (the lesson routes
+have no room: the report is built on them); the Library listing of investigation
+packs (the Library's index lists only course packs from the catalog); a scenario
+remix with `derivedFrom` (the scenario pack format is a document, so it travels
+as a link already; a record of the built-in it came from is not cheap and nobody
+has asked); a curated catalog entry; in-place editing of repository files.
 
 ## Budgets
 
@@ -108,4 +156,4 @@ and imports it dynamically, as every bridge does: a second route to the registry
 or the scenario catalog, or a static import, splits chunks a lesson loads, and
 the route budgets count them. Measured: the lesson routes and the composer
 stay inside their ceilings (no ceiling raised); the deferred JavaScript budget
-goes from 4116 to about 4171 of 4180 KB.
+goes from 4116 to about 4171 of 4180 KB (4107 after budget recovery 5 and the work below). The delivery stage adds one route, /studio/course/packs/ (its row was measured and added by hand), and no ceiling was raised.

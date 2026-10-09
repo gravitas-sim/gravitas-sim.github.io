@@ -162,11 +162,14 @@ export function describe(records, library = new Map()) {
         title:
           text(value?.doc?.title?.en ?? value?.doc?.title) || key.split(':')[1],
         when: iso(value?.savedAt),
-        href: {
-          composer: '/studio/lesson/',
-          studio: '/studio/',
-          course: '/studio/course/',
-        }[kind],
+        // Opens this draft, not the one saved last (?open=<id> in each page).
+        href: `${
+          {
+            composer: '/studio/lesson/',
+            studio: '/studio/',
+            course: '/studio/course/',
+          }[kind]
+        }?open=${encodeURIComponent(key.slice(key.indexOf(':') + 1))}`,
       });
     } else if (key.startsWith('gravitas_evaluation_draft_')) {
       out.drafts.push({

@@ -106,6 +106,8 @@ suite('what My work lists', () => {
     expect(d.evidence.groups.observatory).toHaveLength(1);
     expect(d.experiments).toHaveLength(1);
     expect(d.drafts[0]).toMatchObject({ kind: 'studio', title: 'Draft' });
+    // It opens that draft (?open=<id>), not the one saved last (Prompt 78).
+    expect(d.drafts[0].href).toBe('/studio/?open=d');
     expect(d.saved).toHaveLength(1);
     expect(d.name).toBe('Ada');
     expect(d.courses[0].units[0]).toMatchObject({

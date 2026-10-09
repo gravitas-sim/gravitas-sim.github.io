@@ -228,3 +228,37 @@ test('the course builder takes the item, keeps its pin, and says the pack is not
     }
   );
 });
+
+test('My work opens the draft it names, not the one saved last', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await seen(page);
+  const one = (await remixBuiltin('tides', { id: 'draft-one' })).pack;
+  const two = (await remixBuiltin('tides', { id: 'draft-two' })).pack;
+  await page.addInitScript(
+    ([a, b]) => {
+      try {
+        const at = n => new Date(Date.now() - n * 60000).toISOString();
+        window.localStorage.setItem(
+          'gravitas_composer_draft:draft-one',
+          JSON.stringify({ doc: a, savedAt: at(60) })
+        );
+        window.localStorage.setItem(
+          'gravitas_composer_draft:draft-two',
+          JSON.stringify({ doc: b, savedAt: at(1) })
+        );
+      } catch {
+        /* storage unavailable */
+      }
+    },
+    [one, two]
+  );
+  await page.goto('/my-work/', { waitUntil: 'domcontentloaded' });
+  const link = page.locator('a[href*="studio/lesson/?open=draft-one"]');
+  await expect(link).toHaveCount(1, { timeout: 30_000 });
+  await link.click();
+  await expect(page.locator('#cp-status')).toContainText(/draft-one/, {
+    timeout: 60_000,
+  });
+});

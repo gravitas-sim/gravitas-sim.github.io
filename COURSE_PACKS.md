@@ -48,6 +48,7 @@ when its English changes.
 | `assignment` | Some of a lesson's steps, as the teaching page's assignment link | The lesson, the steps, a title and introduction in each language, the assignment's id and date, and its pin |
 | `scenario` | A built-in scenario at a seed | The scenario, a seed word such as `orbit-1`, whether it opens paused, a title |
 | `dataset` | An observation in the Observatory | A built-in observation's id (`sdss-g`, `tess-light-curve` and the rest), or a catalog data pack's |
+| `pack` | An instructor's investigation (a remix, or one written from scratch), from its link | The pack's id and version, the link itself (the fragment the Composer's Publish makes, at most 4,000 characters), a title, and its pin: the digest of the compiled steps, as a lesson's (REMIX.md). Its progress is kept as `rx-<id>-<version>`. The builder cannot open the link (the checker has no room on its route), so it takes the item made at `/studio/course/packs/`, which also checks a whole course's packs; until then the pack is `unchecked`. Time is the pack's own duration |
 | `reading` | A text outside Gravitas | A title, who wrote it, when and where, a DOI or an https address, its license, and how students reach it (free online, through a library, in print) |
 
 Every item may also have:
