@@ -240,7 +240,9 @@ jobs:
       # (CONTRIBUTING_CONTENT.md). Outside a pull request there is no base and
       # it reviews every archive there.
       - name: The catalog archives pass the mechanical review
-        run: npm run catalog:review -- --base "${{ github.base_ref }}"
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: npm run catalog:review -- --base "$BASE_REF"
 
       # The showcase page's six demonstration links, which are share payloads
       # generated from the spec in js/data/teaching.js. Stale ones would open
