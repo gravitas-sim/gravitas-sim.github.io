@@ -1002,6 +1002,8 @@ function renderFeedbackForm() {
 function renderAll() {
   document.documentElement.setAttribute('lang', language());
   applyTranslations();
+  // The tab title, which the sweep above cannot reach (P81 T-1).
+  document.title = tr('teach.title');
   // The <meta> description is what a link preview and a search result show, and
   // a reader who has chosen Spanish should get a Spanish one. Set here rather
   // than swept, because a meta element has no text node to translate.

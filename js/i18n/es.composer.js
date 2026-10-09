@@ -132,6 +132,8 @@ export const ES_COMPOSER = {
   'composer.type.explore': 'Explorar',
   'composer.type.measure': 'Medir',
   'composer.type.question': 'Pregunta',
+  'composer.type.ellipse': 'Instrumento de la elipse',
+  'composer.type.wedges': 'Instrumento de áreas iguales',
   'composer.step.legend': '{n}. {type}',
   'composer.step.sid': 'Identificador del paso',
   'composer.hint.sid':

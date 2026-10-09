@@ -16,6 +16,7 @@
 // built from the same payload, so there is one thing to check rather than two.
 // =============================================================================
 
+import { closeDialog, openDialog, releaseDialog } from '../dialog.js';
 import { getLocale, t } from '../i18n/index.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import {
@@ -92,11 +93,14 @@ function mount() {
   root.className = 'assignment-builder';
   root.setAttribute('role', 'dialog');
   root.setAttribute('aria-labelledby', 'assignTitle');
+  // Hidden until the shared dialog opens it: openDialog() does nothing for a
+  // panel that is already shown.
+  root.hidden = true;
   root.innerHTML = `
     <div class="assignment-inner">
       <div class="assignment-head">
         <h2 id="assignTitle">${esc(t('assign.title'))}</h2>
-        <button id="assignClose" class="ui-button" title="${esc(t('assign.close'))}">✕</button>
+        <button id="assignClose" class="ui-button" title="${esc(t('assign.close'))}" aria-label="${esc(t('assign.close'))}">✕</button>
       </div>
       <p class="assignment-hint">${esc(t('assign.hint'))}</p>
 
@@ -148,6 +152,21 @@ function mount() {
       </div>
     </div>`;
   document.body.appendChild(root);
+  // The shared dialog behaviour (js/dialog.js): focus moves to the name field,
+  // Tab stays inside, Escape closes, the page behind is inert, and focus goes
+  // back to what opened it. The builder used to open behind a focus that
+  // stayed on the page, so a keyboard or screen-reader instructor worked in a
+  // dialog they were never moved into (P81 K-1).
+  openDialog(root, {
+    initialFocus: '#assignName',
+    isolate: true,
+    onClose: () => {
+      const gone = root;
+      root = null;
+      if (gone) releaseDialog(gone);
+      gone?.remove();
+    },
+  });
 
   $('assignClose').onclick = () => close();
   $('assignDepth').onchange = e => {
@@ -172,8 +191,7 @@ function mount() {
 
 /** Take the builder off the screen. @returns {void} */
 export function close() {
-  root?.remove();
-  root = null;
+  if (root) closeDialog(root, 'close');
 }
 
 /** Redraw the list, the additions and the counts. */

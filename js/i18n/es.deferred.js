@@ -645,7 +645,7 @@ export const ES_DEFERRED = {
   // ensureDeferredMessages() before any of those render.
   'assign.title': 'Crear una actividad',
   'assign.hint':
-    'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se anaden solos, y se indican donde corresponden.',
+    'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se añaden solos, y se indican donde corresponden.',
   'assign.close': 'Cerrar',
   'assign.name': 'Nombre de la actividad',
   'assign.intro': 'Instrucciones para el alumnado (opcional)',
@@ -658,9 +658,9 @@ export const ES_DEFERRED = {
   'assign.print': 'Instrucciones imprimibles',
   'assign.download': 'Guardar como archivo',
   'assign.link': 'Enlace de la actividad',
-  'assign.link.ok': 'Son {n} caracteres, un tamano comodo.',
+  'assign.link.ok': 'Son {n} caracteres, un tamaño cómodo.',
   'assign.link.long':
-    'Este enlace tiene {n} caracteres, por encima de los {limit} que los clientes de correo y las plataformas de curso transportan con fiabilidad. Con menos pasos seria mas corto; un enlace truncado falla en el lado del alumnado, donde nadie puede arreglarlo.',
+    'Este enlace tiene {n} caracteres, por encima de los {limit} que los clientes de correo y las plataformas de curso transportan con fiabilidad. Con menos pasos sería más corto; un enlace truncado falla en el lado del alumnado, donde nadie puede arreglarlo.',
   'assign.added.setup':
     'Anadido: construye el mundo {scenario} del que trata \u201c{step}\u201d.',
   'assign.added.requires':
@@ -670,7 +670,7 @@ export const ES_DEFERRED = {
   'assign.subtitle':
     '{n} pasos de {lesson} ({total} en la investigación completa)',
   'assign.print.steps': '{n} pasos',
-  'assign.print.open': 'Abre la actividad en esta direccion:',
+  'assign.print.open': 'Abre la actividad en esta dirección:',
   'assign.print.id': 'Actividad {id}, emitida el {date}.',
   'assign.print.roster': 'Código de clase: {code}',
 
@@ -679,32 +679,32 @@ export const ES_DEFERRED = {
   'assign.error.noLesson': 'No se pudo leer esa investigación.',
   'assign.error.unknownSteps':
     'Esta actividad nombra pasos que la investigación no tiene.',
-  'assign.error.tooManySteps': 'Una actividad admite como maximo {max} pasos.',
+  'assign.error.tooManySteps': 'Una actividad admite como máximo {max} pasos.',
   'assign.error.titleTooLong': 'Ese nombre es demasiado largo.',
   'assign.error.introTooLong': 'Esas instrucciones son demasiado largas.',
   'assign.error.notAnObject': 'Ese enlace no contiene una actividad.',
   'assign.error.wrongKind': 'Ese enlace no es un enlace de actividad.',
-  'assign.error.badVersion': 'Ese enlace de actividad esta mal formado.',
+  'assign.error.badVersion': 'Ese enlace de actividad está mal formado.',
   'assign.error.newerVersion':
-    'Esa actividad se creo con una version mas nueva de Gravitas. Recarga la pagina e intentalo de nuevo.',
+    'Esa actividad se creó con una versión más nueva de Gravitas. Recarga la página e inténtalo de nuevo.',
   'assign.error.badLesson': 'Esa actividad no nombra ninguna investigación.',
   'assign.error.badId': 'Esa actividad no tiene un identificador utilizable.',
-  'assign.error.noSteps': 'Esa actividad no contiene ningun paso.',
+  'assign.error.noSteps': 'Esa actividad no contiene ningún paso.',
   'assign.error.badStepId':
     'Esa actividad nombra un paso en un formato que no podemos usar.',
   'assign.error.duplicateSteps': 'Esa actividad lista el mismo paso dos veces.',
   'assign.error.fingerprintMismatch':
-    'Ese enlace de actividad esta incompleto.',
-  'assign.error.badText': 'Ese enlace de actividad esta mal formado.',
+    'Ese enlace de actividad está incompleto.',
+  'assign.error.badText': 'Ese enlace de actividad está mal formado.',
   'assign.error.unexpectedField':
-    'Ese archivo lleva un campo \u201c{field}\u201d, que una actividad nunca tiene. No lo creo esta herramienta y no se ha abierto.',
+    'Ese archivo lleva un campo \u201c{field}\u201d, que una actividad nunca tiene. No lo creó esta herramienta y no se ha abierto.',
   'assign.error.notJson': 'Ese archivo no es una actividad.',
   'assign.error.tooLarge':
     'Ese enlace contiene más de lo que un enlace puede llevar, así que no se abrió. Pide la actividad como archivo.',
   'assign.error.corrupt':
     'Ese enlace parece incompleto. Algunos clientes de correo parten los enlaces largos en varias lineas.',
   'assign.error.noStepsLeft':
-    'Ninguno de los pasos de esta actividad sigue en la investigación. Probablemente se creo con una version anterior.',
+    'Ninguno de los pasos de esta actividad sigue en la investigación. Probablemente se creó con una versión anterior.',
   'assign.notice.changed':
     'Se han reescrito {n} paso(s) desde que se asigno esto. Esos empiezan en blanco en lugar de mostrar una respuesta a una pregunta que ya no se hace.',
   'assign.notice.missing':
