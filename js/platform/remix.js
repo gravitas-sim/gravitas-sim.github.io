@@ -333,7 +333,7 @@ export function remixInvestigation(lesson, spanish, options) {
     subtitle: text(lesson.subtitle, es.subtitle),
     summary: text(
       lesson.summary ?? options.summary?.en,
-      es.summary ?? options.summary?.es
+      es.summary || options.summary?.es
     ),
     level: text(lesson.level, es.level),
     duration: lesson.duration,
