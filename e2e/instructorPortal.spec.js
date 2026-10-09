@@ -145,10 +145,14 @@ test.describe('the instructor portal, signed in', () => {
         .locator('#investigationCount')
         .evaluate(el => el.textContent.trim());
       expect(count).toBe(`${LESSONS} investigations, ${DOCUMENTS} documents`);
-      // Two download buttons and one "open" link on each card.
+      // Two download buttons and two links on each card: "open" the
+      // investigation, and its public adoption page (ADOPTION.md).
       const first = cards.first();
       await expect(first.locator('button.ui-button')).toHaveCount(2);
-      await expect(first.locator('a.ui-button')).toHaveCount(1);
+      await expect(first.locator('a.ui-button')).toHaveCount(2);
+      await expect(
+        first.locator('a.ui-button[href^="/teaching/investigation/"]')
+      ).toHaveCount(1);
     });
 
     test('all eight activity documents are individually reachable', async ({
