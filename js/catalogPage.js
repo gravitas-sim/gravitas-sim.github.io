@@ -142,7 +142,11 @@ async function refreshInstalled() {
 
 // --- The list ------------------------------------------------------------------------
 
+/** A withdrawn package is listed only for a reader who has it installed. */
+const listed = e => e.delivery !== 'withdrawn' || state.installed.has(e.id);
+
 function matches(e, q, type) {
+  if (!listed(e)) return false;
   if (type === 'installed' && !state.installed.has(e.id)) return false;
   if (type !== 'all' && type !== 'installed' && typeOf(e) !== type)
     return false;
@@ -151,6 +155,7 @@ function matches(e, q, type) {
     e.id,
     pick(e.title),
     pick(e.summary),
+    pick(e.attribution),
     e.object,
     e.facility,
     ...(e.licenses || []).map(l => l.license),
@@ -182,6 +187,11 @@ function providesText(p) {
 }
 
 function statusText(e, s, installed) {
+  if (s === 'withdrawn')
+    return `${t('cat.status.withdrawn', {
+      date: e.withdrawn.date,
+      reason: pick(e.withdrawn.reason),
+    })} ${t('cat.status.withdrawn.copy', { installed: installed.version })}`;
   const vars = {
     version: e.version,
     installed: installed?.version,
@@ -201,22 +211,27 @@ function entryItem(e) {
     if (!value) return;
     meta.append(el('dt', { text: label }), el('dd', {}, value));
   };
-  row(
-    t('cat.size'),
-    e.delivery === 'archive'
-      ? t('cat.size.archive', {
-          download: size(e.bytes),
-          unpacked: size(e.unpackedBytes),
-        })
-      : t('cat.size.builtIn', { bytes: size(e.bytes) })
-  );
-  row(t('cat.object'), e.object);
-  row(
-    t('cat.works'),
-    t('cat.works.value', { range: e.gravitas, platform: PLATFORM_API })
-  );
-  row(t('cat.provides'), providesText(e.provides));
-  row(t('cat.license'), (e.licenses || []).map(l => l.license).join('; '));
+  const gone = e.delivery === 'withdrawn';
+  if (!gone) {
+    row(
+      t('cat.size'),
+      e.delivery === 'archive'
+        ? t('cat.size.archive', {
+            download: size(e.bytes),
+            unpacked: size(e.unpackedBytes),
+          })
+        : t('cat.size.builtIn', { bytes: size(e.bytes) })
+    );
+    row(t('cat.object'), e.object);
+    row(
+      t('cat.works'),
+      t('cat.works.value', { range: e.gravitas, platform: PLATFORM_API })
+    );
+    row(t('cat.provides'), providesText(e.provides));
+    row(t('cat.license'), (e.licenses || []).map(l => l.license).join('; '));
+  }
+  if (e.origin === 'contributed')
+    row(t('cat.contributedBy'), pick(e.attribution));
   if ((e.citations || []).length) {
     const list = el('ul', { class: 'cw-cites' });
     for (const c of e.citations) {
@@ -232,7 +247,7 @@ function entryItem(e) {
     }
     row(t('cat.cite'), list);
   }
-  if (e.review)
+  if (e.review?.date)
     row(
       t('cat.reviewed'),
       t('cat.reviewed.value', {
@@ -240,6 +255,20 @@ function entryItem(e) {
         checks: (e.review.checks || []).join(', '),
       })
     );
+  if ((e.history || []).length) {
+    const list = el('ul', { class: 'cw-history' });
+    for (const h of e.history)
+      list.append(
+        el('li', {
+          text: t('cat.history.item', {
+            version: h.version,
+            date: h.date,
+            change: pick(h.change),
+          }),
+        })
+      );
+    row(t('cat.history'), list);
+  }
 
   const actions = el('div', { class: 'ui-toolbar' });
   const busy = state.busy.has(e.id);
@@ -345,7 +374,13 @@ function entryItem(e) {
         el('span', {
           class: 'ui-badge',
           text: t('cat.version', { version: e.version }),
-        })
+        }),
+        e.origin === 'contributed'
+          ? el('span', { class: 'ui-badge', text: t('cat.badge.contributed') })
+          : null,
+        gone
+          ? el('span', { class: 'ui-badge', text: t('cat.badge.withdrawn') })
+          : null
       ),
       e.summary ? el('p', { text: pick(e.summary) }) : null,
       el('p', { class: 'ui-hint', text: statusText(e, s, installed) }),
@@ -362,9 +397,22 @@ function render() {
   const q = $('catSearch').value.trim();
   const type = $('catType').value || 'all';
   const shown = c.entries.filter(e => matches(e, q, type));
-  $('catList').replaceChildren(...shown.map(entryItem));
+  const contributed = shown.filter(e => e.origin === 'contributed');
+  $('catList').replaceChildren(
+    ...shown.filter(e => e.origin !== 'contributed').map(entryItem)
+  );
+  // The contributed section is always there once the catalog has loaded, so a
+  // visitor can see that the catalog takes them and where; while none are
+  // listed it says so instead of showing an empty list.
+  const anyContributed = c.entries.some(
+    e => e.origin === 'contributed' && listed(e)
+  );
+  $('catContributed').replaceChildren(...contributed.map(entryItem));
+  $('catContributedNone').hidden = anyContributed;
+  $('catContributedSection').hidden = false;
+  const total = c.entries.filter(listed).length;
   $('catCount').textContent = shown.length
-    ? t('cat.count', { shown: shown.length, total: c.entries.length })
+    ? t('cat.count', { shown: shown.length, total })
     : t('cat.none');
   $('catStorage').textContent = t(
     state.store?.persistent ? 'cat.storage.persistent' : 'cat.storage.memory'

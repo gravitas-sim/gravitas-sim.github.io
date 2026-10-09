@@ -183,7 +183,15 @@
           "catalog check",
           "rebuilt from the pinned MAST file"
         ],
-        "notes": "PDCSAP depth 0.00812 folded on Esteves et al. 2015's period, against their (Rp/R*)^2 0.00763 within 0.0015; CROWDSAP 0.549 and FLFRCSAP 0.921 recorded; the pack says the correction assumes the planet orbits A."
+        "notes": "PDCSAP depth 0.00812 folded on Esteves et al. 2015's period, against their (Rp/R*)^2 0.00763 within 0.0015; CROWDSAP 0.549 and FLFRCSAP 0.921 recorded; the pack says the correction assumes the planet orbits A.",
+        "mechanical": [
+          "validate",
+          "tests",
+          "licenses",
+          "provenance",
+          "locales",
+          "content"
+        ]
       },
       "source": "extensions/kepler-13-tess-s14-pdcsap",
       "history": []
@@ -265,7 +273,15 @@
           "catalog check",
           "rebuilt from the pinned MAST file"
         ],
-        "notes": "SAP depth 0.00475, the corrected depth times CROWDSAP (0.00446) within 0.001; the same pinned MAST file as the corrected pack; the pack says which star is the host is not in these data."
+        "notes": "SAP depth 0.00475, the corrected depth times CROWDSAP (0.00446) within 0.001; the same pinned MAST file as the corrected pack; the pack says which star is the host is not in these data.",
+        "mechanical": [
+          "validate",
+          "tests",
+          "licenses",
+          "provenance",
+          "locales",
+          "content"
+        ]
       },
       "source": "extensions/kepler-13-tess-s14-sap",
       "history": []
@@ -329,7 +345,15 @@
           "sdk test",
           "catalog check"
         ],
-        "notes": "Three existing lessons in both languages; every lesson id resolves and every note is translated."
+        "notes": "Three existing lessons in both languages; every lesson id resolves and every note is translated.",
+        "mechanical": [
+          "validate",
+          "tests",
+          "licenses",
+          "provenance",
+          "locales",
+          "content"
+        ]
       },
       "source": "extensions/pulsating-stars",
       "history": []
@@ -407,7 +431,15 @@
           "catalog check",
           "rebuilt from the pinned MAST file"
         ],
-        "notes": "Period within 1.2e-5 d of Monson et al. 2017; CROWDSAP 0.985; the pack records why RR Lyrae itself was not used."
+        "notes": "Period within 1.2e-5 d of Monson et al. 2017; CROWDSAP 0.985; the pack records why RR Lyrae itself was not used.",
+        "mechanical": [
+          "validate",
+          "tests",
+          "licenses",
+          "provenance",
+          "locales",
+          "content"
+        ]
       },
       "source": "extensions/su-dra-tess-s15",
       "history": []

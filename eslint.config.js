@@ -47,12 +47,16 @@ export default [
     // is handed, so no browser global either.
     files: ['sdk/**/*.mjs', 'sdk/**/*.js'],
     languageOptions: {
-      ecmaVersion: 2022,
+      // 2025 for import attributes: an instrument imports its declared
+      // catalogs as JSON (sdk/examples/kepler-third-law).
+      ecmaVersion: 2025,
       sourceType: 'module',
       globals: {
         process: 'readonly',
         console: 'readonly',
         URL: 'readonly',
+        TextDecoder: 'readonly',
+        document: 'readonly',
       },
     },
     plugins: { prettier },

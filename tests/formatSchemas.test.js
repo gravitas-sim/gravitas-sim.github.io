@@ -59,6 +59,7 @@ import {
 } from '../js/data/evaluation.js';
 import { KINDS as PACKAGE_KINDS } from '../js/platform/manifest.js';
 import { LOCALES } from '../sdk/lib/api.mjs';
+import { REVIEW_CHECKS } from '../sdk/lib/review.mjs';
 import {
   ARCHIVE_TYPES,
   FORMAT as CATALOG_FORMAT,
@@ -734,19 +735,30 @@ describe('the catalog schemas', () => {
     expect(s.properties.format.const).toBe(CATALOG_FORMAT);
     expect(s.properties.formatVersion.const).toBe(CATALOG_VERSION);
     expect(s.properties.locales.items.enum).toEqual([...LOCALES]);
-    const [builtIn, archive] = s.properties.entries.items.anyOf;
+    const [builtIn, archive, withdrawn] = s.properties.entries.items.anyOf;
     for (const e of [builtIn, archive])
       expect(e.properties.kind.enum).toEqual(PACKAGE_KINDS);
     expect(archive.properties.type.enum).toEqual([...ARCHIVE_TYPES]);
+    expect(withdrawn.properties.type.enum).toEqual([...ARCHIVE_TYPES]);
+    expect(c.properties.withdrawn.items.properties.type.enum).toEqual([
+      ...ARCHIVE_TYPES,
+    ]);
+    // `sdk review`'s checks, which the catalog records as passed.
+    expect(archive.properties.review.properties.mechanical.items.enum).toEqual([
+      ...REVIEW_CHECKS,
+    ]);
     // An entry's offline policy is its manifest's, or 'none' without one.
     expect(builtIn.properties.offline.enum).toEqual([
       ...schema('capability-package-1').properties.offline.properties.policy
         .enum,
       'none',
     ]);
-    // The curation's review is what the catalog carries into each entry.
-    expect(c.properties.extensions.items.properties.review).toEqual(
-      archive.properties.review
+    // The curation's review is what the catalog carries into each entry, and
+    // the catalog adds what the generator itself ran: `mechanical`.
+    const { mechanical: _mechanical, ...carried } =
+      archive.properties.review.properties;
+    expect(c.properties.extensions.items.properties.review.properties).toEqual(
+      carried
     );
     expect(c.properties.catalogVersion).toEqual(s.properties.catalogVersion);
   });

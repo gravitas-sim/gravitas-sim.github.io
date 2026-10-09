@@ -77,6 +77,9 @@ describe('the public surface', () => {
       for (const spec of importsOf(file)) {
         const ok =
           spec.startsWith('node:') ||
+          // The public instrument modules and the catalogs the manifest declares.
+          /^gravitas:instrument\/(strings|tokens|plot)$/.test(spec) ||
+          /^\.\/strings\.[a-z]+\.json$/.test(spec) ||
           spec === '@jest/globals' ||
           /(^|\/)sdk\/examples\//.test(spec) ||
           /(^|\/)sdk\/(cli|lib\/api)\.mjs$/.test(spec) ||

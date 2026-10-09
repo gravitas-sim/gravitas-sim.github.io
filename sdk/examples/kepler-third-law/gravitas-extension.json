@@ -13,15 +13,58 @@
     "widgetFamilies": [
       {
         "id": "kepler-third-law",
-        "widgets": ["third-law-period"],
+        "widgets": [
+          "third-law-period"
+        ],
         "entry": "builtin:widgets/kepler-third-law"
+      }
+    ],
+    "translations": [
+      {
+        "locale": "en",
+        "file": "strings.en.json"
+      },
+      {
+        "locale": "es",
+        "file": "strings.es.json"
       }
     ]
   },
-  "assets": [{ "path": "keplerThirdLawWidgets.js", "role": "code", "offline": "core" }],
+  "assets": [
+    {
+      "path": "keplerThirdLawWidgets.js",
+      "role": "code",
+      "offline": "core"
+    },
+    {
+      "path": "strings.en.json",
+      "role": "translation",
+      "offline": "core"
+    },
+    {
+      "path": "strings.es.json",
+      "role": "translation",
+      "offline": "locale"
+    }
+  ],
   "citations": [],
-  "licenses": [{ "scope": "*.js", "license": "MIT" }],
-  "offline": { "policy": "precache" },
-  "validation": [{ "check": "jest:tests/sdkContract.test.js" }],
+  "licenses": [
+    {
+      "scope": "*.js",
+      "license": "MIT"
+    },
+    {
+      "scope": "*.json",
+      "license": "MIT"
+    }
+  ],
+  "offline": {
+    "policy": "precache"
+  },
+  "validation": [
+    {
+      "check": "jest:tests/sdkContract.test.js"
+    }
+  ],
   "migrations": []
 }

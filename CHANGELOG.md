@@ -15,6 +15,20 @@ the release rather than in the tag.
 
 ### Added
 
+- **Sharing and governance for contributed content** (Roadmap II Prompt 80).
+  CONTRIBUTING_CONTENT.md (how to submit a package, the license and provenance
+  rules, the review checklist, the acceptance record, versioning, withdrawal,
+  what acceptance means for the Zenodo archive); `sdk review <package>` (six
+  mechanical checks and the human items), which `npm run catalog` runs and
+  records, which refuses a contributed entry with a short acceptance record, and
+  which CI runs on archives a pull request adds (`npm run catalog:review`);
+  /catalog/ lists contributed packages under their own heading with
+  attribution, review date and history, and a withdrawn package stays as a
+  tombstone, with a notice and a working copy for a reader who installed it;
+  SDK 1.9.0's public instrument API (declared translation catalogs and
+  `translator`, `COLOR_TOKENS`, the plot component's entry) and the adequacy
+  report in sdk/README.md rewritten as closed items and deliberate limits;
+  OWNER_ACTIONS.md says who may accept and what it implies; D-CONTRIB-01.
 - **Platform baseline and stewardship** (Roadmap II Prompt 111). A supported-browser
   statement in SUPPORT.md and on the Teach hub, generated from
   `playwright.config.js` and the locked Playwright's browser builds

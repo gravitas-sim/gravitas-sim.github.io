@@ -8,6 +8,7 @@
 //   npm run sdk -- test <extension-dir|archive.gxp>... | --all
 //   npm run sdk -- pack <extension-dir> [--out <dir>]
 //   npm run sdk -- inspect <extension-dir|archive.gxp> [--preview]
+//   npm run sdk -- review <extension-dir|archive.gxp>... [--json] [--maintainer-built]
 //
 // Exit status: 0 when everything asked for passed, 1 when anything failed,
 // 2 when the command itself was wrong. sdk/README.md is the author's guide.
@@ -34,6 +35,7 @@ import {
   testExtension,
   validateExtension,
 } from './lib/extension.mjs';
+import { formatReview, reviewExtension } from './lib/review.mjs';
 import { scaffold, TEMPLATES } from './lib/templates.mjs';
 import { SDK_VERSION } from './lib/api.mjs';
 
@@ -44,6 +46,7 @@ const USAGE = `Gravitas Extension SDK ${SDK_VERSION}
   test <extension-dir|archive.gxp>... | --all
   pack <extension-dir> [--out <dir>]
   inspect <extension-dir|archive.gxp> [--preview]
+  review <extension-dir|archive.gxp>... [--json] [--maintainer-built]
 
 sdk/README.md has the whole workflow.`;
 
@@ -195,6 +198,21 @@ export async function run(argv, { log = console.log } = {}) {
     );
     for (const f of result.findings) log(formatFinding(f, source));
     return result.findings.some(f => f.severity === 'error') ? 1 : 0;
+  }
+  if (command === 'review') {
+    if (!args.length) return (log(USAGE), 2);
+    let failed = false;
+    const reviews = [];
+    for (const source of args) {
+      const review = await reviewExtension(loadExtension(source), {
+        readme: !flag(rest, '--maintainer-built'),
+      });
+      reviews.push({ source, ...review, manifest: undefined });
+      if (!review.passed) failed = true;
+      if (!flag(rest, '--json')) log(formatReview(review, source));
+    }
+    if (flag(rest, '--json')) log(JSON.stringify(reviews, null, 2));
+    return failed ? 1 : 0;
   }
   log(USAGE);
   return command ? 2 : 0;

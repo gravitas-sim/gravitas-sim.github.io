@@ -36,6 +36,7 @@ current, and the orchestrator checks it.
 | `bundle-budget.mjs` | npm run budget  /  npm run budget:check | `npm run budget`, `npm run budget:check` |
 | `bundle-composition.mjs` | What is in the bundle, module by module | `npm run budget:composition` |
 | `capabilities.mjs` | Capability packages at build time | `npm run capabilities` |
+| `catalog-review.mjs` | `sdk review` on the archives a pull request adds to catalog/packages | `npm run catalog:review` |
 | `catalog.mjs` | The curated catalog: generated at release time, checked on every change | `npm run packs:data`, `npm run packs:provenance`, `npm run catalog` |
 | `check-activities.mjs` | Are the classroom activities coherent? | `npm run activities:check` |
 | `check-architecture.mjs` | The module graph, and the rules it has to obey. | `npm run check:architecture`, `npm run check:architecture:report` |

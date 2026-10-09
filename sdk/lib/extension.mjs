@@ -33,6 +33,7 @@ import {
   writeFileSync,
   mkdirSync,
 } from 'node:fs';
+import { Buffer } from 'node:buffer';
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -75,7 +76,9 @@ import { MANIFEST_ENTRY, read as readArchive } from './archive.mjs';
 import {
   acceptsPlatform,
   checkObservation,
+  checkCatalogs,
   EXTENSION_TYPES,
+  INSTRUMENT_API,
   LOCALES,
   observationOf,
   PLATFORM_API,
@@ -666,6 +669,42 @@ async function validateCapabilityExtension(ext, m, report, ids) {
       );
     }
   });
+  // Strings the instrument declares: provides.translations entries with a
+  // `file` (JSON of key to text), English required, every other language held
+  // to English's keys and placeholders.
+  const declared = (m.provides.translations || []).filter(t => t.file);
+  if (declared.length) {
+    const catalogs = {};
+    for (const [i, t] of declared.entries()) {
+      const at = `provides.translations[${i}]`;
+      if (!LOCALES.includes(t.locale))
+        report.error(
+          M,
+          `${at}.locale`,
+          `"${t.locale}" is not a language Gravitas has`
+        );
+      const doc = parseJson(ext, t.file, report);
+      if (doc) catalogs[t.locale] = doc;
+      if (
+        !(m.assets || []).some(
+          a => a.path === t.file && a.role === 'translation'
+        )
+      )
+        report.error(
+          M,
+          `${at}.file`,
+          `${t.file} is declared as an asset with the role translation`
+        );
+    }
+    for (const problem of checkCatalogs(catalogs))
+      report.error(M, 'provides.translations', problem);
+    if (!catalogs.es)
+      report.warn(
+        M,
+        'provides.translations',
+        'no Spanish catalog: the instrument speaks English to a Spanish reader'
+      );
+  }
   const code = (m.assets || []).filter(a => a?.role === 'code');
   if (!code.length)
     report.error(
@@ -683,7 +722,14 @@ async function validateCapabilityExtension(ext, m, report, ids) {
         !path.posix
           .normalize(path.posix.join(path.posix.dirname(a.path), spec))
           .startsWith('..');
-      if (!inside) {
+      if (spec.startsWith('gravitas:instrument/')) {
+        if (!INSTRUMENT_API[spec])
+          report.error(
+            a.path,
+            '',
+            `imports ${spec}: not a public instrument module (${Object.keys(INSTRUMENT_API).join(', ')})`
+          );
+      } else if (!inside) {
         report.warn(
           a.path,
           '',
@@ -812,7 +858,7 @@ export async function testExtension(ext, { type, manifest: m }) {
       'the same pack builds the same world again'
     );
   } else if (type === 'capability') {
-    const dir = ext.archive ? materialize(ext) : ext.source;
+    const dir = materialize(ext, { rewrite: true });
     for (const family of m.provides.widgetFamilies) {
       const asset = (m.assets || []).find(a => a.role === 'code');
       const mod = await import(
@@ -840,11 +886,29 @@ export async function testExtension(ext, { type, manifest: m }) {
 }
 
 /** An archive's files on disk, so its code can be imported to be tested. */
-function materialize(ext) {
+function materialize(ext, { rewrite = false } = {}) {
   const dir = mkdtempSync(path.join(tmpdir(), 'gravitas-ext-'));
   for (const [name, body] of ext.files) {
     mkdirSync(path.dirname(path.join(dir, name)), { recursive: true });
-    writeFileSync(path.join(dir, name), body);
+    let out = body;
+    // The public instrument specifiers become the files they name.
+    if (
+      rewrite &&
+      name.endsWith('.js') &&
+      body.includes('gravitas:instrument/')
+    )
+      out = Buffer.from(
+        body
+          .toString('utf8')
+          .replace(
+            /(['"])(gravitas:instrument\/[a-z]+)\1/g,
+            (whole, q, spec) =>
+              INSTRUMENT_API[spec]
+                ? `${q}${pathToFileURL(path.join(REPO, INSTRUMENT_API[spec].module)).href}${q}`
+                : whole
+          )
+      );
+    writeFileSync(path.join(dir, name), out);
   }
   return dir;
 }
@@ -990,7 +1054,7 @@ export async function describeExtension(
       const open = [...(pack.open || []), ...(pack.tools || [])];
       if (open.length) say(`  opens      ${open.join(', ')}`);
     } else if (type === 'capability') {
-      const dir = ext.archive ? materialize(ext) : ext.source;
+      const dir = materialize(ext, { rewrite: true });
       const asset = m.assets.find(a => a.role === 'code');
       const mod = await import(
         pathToFileURL(path.resolve(dir, asset.path)).href

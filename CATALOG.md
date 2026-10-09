@@ -42,6 +42,29 @@ outside the core with the SDK alone.
   guides install them the first time a step opens one
   (EXOPLANET_OBSERVATORY.md).
 
+## Contributed, and withdrawn
+
+An entry has an `origin`. The maintainers' own have none. A package written
+outside the team is `contributed`, and /catalog/ lists it under **Contributed**
+with:
+
+- its author's attribution, in the author's words, in each language they gave;
+- the review: date, checks, and the checks `sdk review` ran and passed
+  (`review.mechanical`);
+- its history: each version listed, with its date and what changed.
+
+How a package becomes one, and what the maintainers' acceptance record must
+hold, is CONTRIBUTING_CONTENT.md; the rules for who accepts are OWNER_ACTIONS.md.
+
+**Withdrawn.** A package taken out of the catalog stays as a tombstone entry
+(`delivery: "withdrawn"`): no archive, so nothing can be installed from it,
+but its id, version, attribution, the withdrawal's date and reason, and its
+history. A reader who installed it sees it listed with the notice, keeps a copy
+that works (data in the observatory, a course's units) and can remove it. A
+reader who has no copy never sees it. `npm run catalog` deletes the archive
+from `catalog/packages/`, and `catalog check` fails on an archive no entry
+names.
+
 ## What installing does, and refuses
 
 `js/catalog/install.js` fetches the archive, and `js/catalog/archive.js` reads
@@ -140,14 +163,18 @@ packs and the built-in ones alike, where the file is cached.
    value, with a tolerance.
 5. **Licensed for classrooms.** Every license is one of CC-BY-4.0, CC0-1.0,
    MIT, or public domain for NASA mission data (`ACCEPTED_LICENSES` in
-   `tools/catalog.mjs`, with a reason for each). LICENSES.md covers the
+   `sdk/lib/review.mjs`, with a reason for each; authored text is CC-BY-4.0). LICENSES.md covers the
    directory, and a data pack cites its sources.
 6. **Compatible, and unique.** Its platform range accepts this Gravitas, and
    no public id collides with one the core or another entry uses.
 7. **Reviewed, on the record.** The curation entry records the date and the
-   checks it passed. The pull request that adds it records the review. Any
-   scientific caveat belongs in the pack's own record: SU Draconis's says why
-   RR Lyrae itself was not used.
+   checks it passed, and `npm run catalog` runs `sdk review` and records the
+   mechanical checks it passed (`review.mechanical`); it refuses the entry if
+   any fails. A contributed entry also names the reviewer, their
+   conflict-of-interest statement and each human item confirmed. The pull
+   request that adds it records the review. Any scientific caveat belongs in
+   the pack's own record: SU Draconis's says why RR Lyrae itself was not
+   used.
 8. **Versioned honestly.** A change to an accepted entry is a new version. A
    change that breaks what names it is a new major version, and says so in
    its migrations. The catalog's own `catalogVersion` rises with any change to
@@ -234,4 +261,10 @@ the check is robust, and the light curve's sharp rise needs many terms.
   - an installed pack opening offline (sources only).
 - **`e2e/assignment.spec.js`:** a link that predates pinning, and one pinned
   to an older major version, each open with the notice that says so.
+- **`tests/catalogGovernance.test.js`:** a contributed entry and its
+  record, each refusal of a short record, a withdrawn tombstone, an archive no
+  entry names.
+- **`e2e/catalogGovernance.spec.js`:** the Contributed section empty and
+  filled, installing a contributed package, a withdrawn one shown to a reader
+  who holds it (whose course still opens) and hidden from one who does not.
 - **`npm run catalog:check`,** in CI.

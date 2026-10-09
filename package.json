@@ -91,6 +91,7 @@
     "validate:links:dist": "node tools/check-links.mjs --root dist",
     "catalog": "node tools/catalog.mjs generate",
     "archive:live": "node tools/archive-live-check.mjs",
+    "catalog:review": "node tools/catalog-review.mjs",
     "catalog:check": "node tools/generate.mjs --check --only catalog",
     "sw:manifest": "node tools/build-service-worker.mjs",
     "generate": "node tools/generate.mjs",

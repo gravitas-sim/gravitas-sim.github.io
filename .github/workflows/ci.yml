@@ -235,6 +235,15 @@ jobs:
       - name: The curated catalog is true
         run: npm run catalog:check
 
+      # `sdk review` on the archives a pull request adds to catalog/packages:
+      # the log and the job summary carry the checklist, human items included
+      # (CONTRIBUTING_CONTENT.md). Outside a pull request there is no base and
+      # it reviews every archive there.
+      - name: The catalog archives pass the mechanical review
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: npm run catalog:review -- --base "$BASE_REF"
+
       # The showcase page's six demonstration links, which are share payloads
       # generated from the spec in js/data/teaching.js. Stale ones would open
       # the wrong scenario, or a scenario that no longer exists, from a page
