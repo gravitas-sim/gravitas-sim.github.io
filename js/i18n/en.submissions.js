@@ -63,7 +63,9 @@ export const EN_SUBMISSIONS = {
   'sub.reason.noSteps': 'no step list to check against',
   'sub.reason.notABackup': 'not a Gravitas progress backup',
   'sub.reason.remix':
-    'is an instructor’s investigation, which this page names but cannot grade',
+    'is an investigation written from scratch by an instructor, which this page names but cannot grade',
+  'sub.reason.remixChanged':
+    'is an instructor’s version of an investigation that has changed since, so its expected values may have: it is not graded',
   'sub.reason.unknownLesson': 'names an investigation this build does not have',
   'sub.reason.noTokenInPdf': 'no token in this PDF',
   'sub.reason.notJson': 'not JSON and not a token',
