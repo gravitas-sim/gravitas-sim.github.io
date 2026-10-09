@@ -292,14 +292,11 @@ async function copyLink() {
 /** Keep the world the dialog shows in My work, under the name typed. */
 async function saveMine() {
   if (!lastFragment) return;
+  const name = els.mineName.value.trim() || lastScenario;
+  const [payload, fragment] = [lastPayload, lastFragment]; // as pressed
   const made = await import('./myWork/made.js');
   const done = made.saveMade(
-    made.scenarioRecord({
-      name: els.mineName.value.trim() || lastScenario,
-      from: 'sandbox',
-      payload: lastPayload,
-      fragment: lastFragment,
-    })
+    made.scenarioRecord({ name, from: 'sandbox', payload, fragment })
   ).ok;
   const message = t(done ? 'share.mine.saved' : 'share.mine.failed');
   toast(message);
@@ -392,7 +389,11 @@ export async function openShareDialog() {
     trigger: document.getElementById('shareBtn'),
     initialFocus: els.url,
   });
-  refresh().then(() => els.url?.focus());
+  // Not if the student is already typing in another field.
+  refresh().then(() => {
+    if (!document.activeElement?.matches('input:not([readonly])'))
+      els.url?.focus();
+  });
   markup().catch(() => {
     markupModule = null; // fetched again on the press, which says if it fails
   });
