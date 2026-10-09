@@ -43,6 +43,20 @@ export const ES_COMPOSER = {
   'composer.objective': 'Objetivo {n}',
   'composer.objective.add': 'Añadir un objetivo',
   'composer.objective.remove': 'Quitar el objetivo {n}',
+  'composer.field.textbook': 'Capítulo del libro (OpenStax Astronomy 2e)',
+  'composer.field.textbookSection': 'Sección de ese capítulo',
+  'composer.field.courseLevel': 'Curso al que se ajusta',
+  'composer.hint.textbook':
+    'Un capítulo del 1 al 30. Déjelo vacío si ninguno encaja.',
+  'composer.courseLevel.none': 'Sin indicar',
+  'composer.courseLevel.survey':
+    'Un curso general para quienes no estudian ciencias',
+  'composer.courseLevel.majors':
+    'Un curso introductorio para estudiantes de ciencias',
+  'composer.courseLevel.upper': 'Un curso de nivel avanzado',
+  'composer.error.textbook':
+    'Un capítulo del 1 al 30, y una sección que empiece por él, como 3.1.',
+  'composer.error.courseLevel': 'General, ciencias o avanzado.',
   'composer.field.prerequisites': 'Antes de esto',
   'composer.prereq.lesson': 'Una investigación de Gravitas',
   'composer.prereq.text': 'Otra cosa, en palabras',

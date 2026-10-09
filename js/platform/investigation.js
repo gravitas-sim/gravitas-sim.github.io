@@ -79,6 +79,8 @@ const PACK_FIELDS = new Set([
   'thumbnail',
   'objectives',
   'prerequisites',
+  'textbook',
+  'courseLevel',
   'seed',
   'bank',
   'steps',
@@ -252,6 +254,33 @@ export function validateInvestigationPack(p, api) {
       if ('text' in r) text(r.text, `${at}.text`, true);
     });
   }
+
+  // Where a textbook covers it and the course it suits (Prompt 76): the
+  // Library's alignment filters read both. Optional.
+  if (p.textbook !== undefined) {
+    const t = p.textbook;
+    need(
+      isObject(t) &&
+        Object.keys(t).every(k => k === 'chapter' || k === 'section') &&
+        Number.isInteger(t.chapter) &&
+        t.chapter >= 1 &&
+        t.chapter <= 30 &&
+        (t.section === undefined ||
+          (typeof t.section === 'string' &&
+            t.section.startsWith(`${t.chapter}.`) &&
+            /^\d{1,2}\.\d{1,2}$/.test(t.section))),
+      'textbook',
+      'textbook',
+      'a chapter from 1 to 30 of OpenStax Astronomy 2e, and a section of it such as 3.1'
+    );
+  }
+  if (p.courseLevel !== undefined)
+    need(
+      ['survey', 'majors', 'upper'].includes(p.courseLevel),
+      'courseLevel',
+      'courseLevel',
+      'survey, majors or upper'
+    );
 
   const bankIds = new Map();
   if (p.bank !== undefined) {

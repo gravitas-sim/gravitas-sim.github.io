@@ -202,7 +202,8 @@ describe('the navigation', () => {
     // The adoption pages (ADOPTION.md) are forty-four, generated, and one
     // click from /teaching/find/ rather than each in the menu; the next test
     // holds that index to listing them all and each of them to leading back.
-    const adoption = p => /^\/teaching\/(investigation|activity)\//.test(p);
+    const adoption = p =>
+      /^\/teaching\/(investigation|activity|find)\//.test(p);
     expect([...served].filter(p => !adoption(p) && !hrefs.has(p))).toEqual([]);
   });
 

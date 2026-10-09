@@ -87,6 +87,14 @@ export const ROUTES = [
   { id: 'observatory', url: '/observatory/', page: true },
   { id: 'catalog', url: '/catalog/', page: true },
   { id: 'library', url: '/library/', page: true },
+  // The generated adoption pages (ADOPTION.md): one measured, since every
+  // page is the same markup and the same shell, and the index with its filters.
+  {
+    id: 'adoption',
+    url: '/teaching/investigation/keplers-laws/',
+    page: true,
+  },
+  { id: 'teach-find', url: '/teaching/find/', page: true },
   { id: 'my-work', url: '/my-work/', page: true },
   { id: 'studio', url: '/studio/', page: true },
   { id: 'composer', url: '/studio/lesson/', page: true },

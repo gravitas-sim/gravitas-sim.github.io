@@ -762,6 +762,7 @@ function investigationPage(S, entry) {
     rowOf(w('format'), plain(fmtWords)),
     rowOf(w('level'), plain(lib(S, `lib.level.${entry.level}`))),
     rowOf(w('courseLevel'), bi(wt(CL_KEY[entry.courseLevel]))),
+    rowOf(w('textbook'), tbText),
     rowOf(
       w('time'),
       `${durationText} ${bi(wt('minutes'))}<br><span class="ad-type">${plain(lib(S, `lib.length.${entry.length}`))}</span>`
@@ -1021,6 +1022,7 @@ function activityPage(S, a) {
   const body = `<dl class="ad-facts">
 ${rowOf(w('level'), plain(lib(S, `lib.level.${inv.level}`)))}
 ${rowOf(w('courseLevel'), bi(wt(CL_KEY[inv.courseLevel])))}
+${rowOf(w('textbook'), inv.textbook ? `${bi(wt('chapter'))} ${inv.textbook.chapter}: <span lang="en">${html(S.curation.textbookChapters[String(inv.textbook.chapter)])}</span>` : bi(wt('tbNone')))}
 ${rowOf(w('math'), bi(wt(MATH_KEY[inv.mathematics])))}
 ${rowOf(w('subjects'), (inv.subjects || []).map(sid => plain(S.library.subjects.find(x => x.id === sid).label)).join(', '))}
 ${rowOf(w('actFrom'), `<a href="/${BASE}/investigation/${a.lesson}/">${plain(inv.title)}</a>`)}
@@ -1082,9 +1084,25 @@ function findPage(S, rows) {
   const chapters = [...new Set(rows.map(r => r.chapter).filter(Boolean))].sort(
     (a, b) => a - b
   );
-  const sel = (id, label, options) =>
-    `<label>${label}<select class="ui-select" id="${id}" data-filter="${id.replace('f-', '')}">${opt('', w('fAny'))}${options.join('')}</select></label>`;
-  const filters = `<form class="ad-find" id="adFilters" role="search" aria-label="${html(W.filterTitle[0])}" onsubmit="return false">
+  // A choice no row has would be a filter that finds nothing: left out.
+  const FIELD = {
+    level: r => [r.level],
+    course: r => [r.courseLevel],
+    format: r => [r.format],
+    length: r => [r.length],
+    math: r => [r.mathematics],
+    subject: r => r.subjects,
+    chapter: r => [String(r.chapter)],
+    data: r => (r.data.length ? r.data : ['none']),
+    offline: r => (r.offline ? ['yes'] : []),
+  };
+  const sel = (id, label, options) => {
+    const key = id.replace('f-', '');
+    const has = new Set(rows.flatMap(FIELD[key]));
+    const kept = options.filter(o => has.has(/value="([^"]*)"/.exec(o)[1]));
+    return `<label>${label}<select class="ui-select" id="${id}" data-filter="${key}">${opt('', w('fAny'))}${kept.join('')}</select></label>`;
+  };
+  const filters = `<form class="ad-find" id="adFilters" role="search" aria-label="${html(W.filterTitle[0])}">
 ${sel(
   'f-level',
   w('fLevel'),

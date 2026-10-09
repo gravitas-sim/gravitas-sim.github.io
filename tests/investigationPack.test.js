@@ -36,6 +36,15 @@ const codesAt = p => problems(p).map(e => `${e.path} ${e.code}`);
 const step = (p, sid) => p.steps.find(s => s.sid === sid);
 
 describe('the example', () => {
+  test('may name a textbook chapter, a section of it and a course level', () => {
+    const p = good();
+    p.textbook = { chapter: 3, section: '3.1' };
+    p.courseLevel = 'majors';
+    expect(problems(p)).toEqual([]);
+    p.textbook = { chapter: 3 };
+    expect(problems(p)).toEqual([]);
+  });
+
   test('is a valid pack', () => {
     expect(problems(good())).toEqual([]);
   });
@@ -69,6 +78,21 @@ describe('what a pack may hold', () => {
       'a prerequisite lesson that does not exist',
       p => (p.prerequisites = [{ lesson: 'nope' }]),
       'prerequisites[0].lesson lesson',
+    ],
+    [
+      'a textbook chapter the book does not have',
+      p => (p.textbook = { chapter: 31 }),
+      'textbook textbook',
+    ],
+    [
+      'a textbook section of another chapter',
+      p => (p.textbook = { chapter: 3, section: '4.1' }),
+      'textbook textbook',
+    ],
+    [
+      'a course level that is not one',
+      p => (p.courseLevel = 'graduate'),
+      'courseLevel courseLevel',
     ],
     [
       'a first step with no scenario',

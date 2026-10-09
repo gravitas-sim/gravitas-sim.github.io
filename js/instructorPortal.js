@@ -596,6 +596,11 @@ function renderInvestigations() {
     preview.href = `/#investigation=${encodeURIComponent(inv.id)}`;
     preview.textContent = 'Open the investigation';
     actions.append(preview);
+    const adoption = document.createElement('a');
+    adoption.className = 'ui-button is-quiet';
+    adoption.href = `/teaching/investigation/${encodeURIComponent(inv.id)}/`;
+    adoption.textContent = 'Adoption page';
+    actions.append(adoption);
     card.append(actions);
     list.append(card);
   }
