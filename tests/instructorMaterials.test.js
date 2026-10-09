@@ -26,6 +26,16 @@ import { checkInstructorCatalog } from '../js/authoring/instructorSchema.js';
 import { textWidth, toWinAnsi } from '../js/pdf.js';
 import { plural } from '../js/format.js';
 import { expectationsFor } from '../js/instructorExpectations.js';
+import { guideSource } from '../js/instructorSource.js';
+import { checkFlow } from '../js/instructorFlow.js';
+
+/** A lesson's instructor content with its flow, which lives in its own file. */
+const contentFor = id => ({
+  ...instructorContentFor(id),
+  flow: guideSource(INVESTIGATIONS.find(i => i.id === id)).flow.map(
+    ({ steps, text }) => ({ steps, text })
+  ),
+});
 import { ACTIVITIES } from '../js/data/activities.js';
 import { activityWorksheet } from '../js/activityDocs.js';
 import { activityLaunchUrl } from '../js/activities/activityBridge.js';
@@ -112,7 +122,7 @@ describe('answer keys are derived, not written', () => {
 describe('instructor content lines up with the lessons', () => {
   test('every implemented investigation has instructor content', () => {
     for (const inv of INVESTIGATIONS) {
-      expect(instructorContentFor(inv.id)).toBeTruthy();
+      expect(contentFor(inv.id)).toBeTruthy();
     }
   });
 
@@ -125,7 +135,7 @@ describe('instructor content lines up with the lessons', () => {
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: every section a guide needs is present and specific',
     (id, inv) => {
-      const c = instructorContentFor(id);
+      const c = contentFor(id);
       expect(c.topic).toBeTruthy();
       expect(c.placement.length).toBeGreaterThan(40);
       expect(c.overview.length).toBeGreaterThan(200);
@@ -179,25 +189,14 @@ describe('instructor content lines up with the lessons', () => {
     (id, inv) => {
       // A guide whose roadmap skips steps sends an instructor looking for a
       // section of the lesson that is not where the guide says it is.
-      const seen = new Set();
-      for (const block of instructorContentFor(id).flow) {
-        const [a, b] = block.steps.split(/[–-]/).map(s => Number(s.trim()));
-        const end = Number.isFinite(b) ? b : a;
-        expect(a).toBeGreaterThanOrEqual(1);
-        expect(end).toBeLessThanOrEqual(inv.steps.length);
-        for (let n = a; n <= end; n++) {
-          expect(seen.has(n)).toBe(false);
-          seen.add(n);
-        }
-      }
-      expect(seen.size).toBe(inv.steps.length);
+      expect(checkFlow(inv)).toEqual([]);
     }
   );
 
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: every step an expectation names really is one that needs one',
     (id, inv) => {
-      const c = instructorContentFor(id);
+      const c = contentFor(id);
       for (const [sid, text] of Object.entries(expectationsFor(inv))) {
         const step = inv.steps.find(s => s.sid === sid);
         expect(step).toBeTruthy();
@@ -237,7 +236,7 @@ describe('instructor content lines up with the lessons', () => {
     (id, inv) => {
       // A measure step with no stated expectation is the one place an
       // instructor is left without an answer to give.
-      const c = instructorContentFor(id);
+      const c = contentFor(id);
       for (const [i, step] of inv.steps.entries()) {
         if (step.type !== 'measure') continue;
         expect(expectationsFor(inv)[step.sid]).toBeTruthy();
@@ -248,7 +247,7 @@ describe('instructor content lines up with the lessons', () => {
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: teaching notes that cite a step cite one that exists',
     (id, inv) => {
-      const c = instructorContentFor(id);
+      const c = contentFor(id);
       const prose = [...c.teachingNotes, ...c.features.map(f => f.name)].join(
         ' '
       );
@@ -483,7 +482,7 @@ describe('instructor content matches the one schema', () => {
     const guides = Object.fromEntries(
       INVESTIGATIONS.map(inv => [
         inv.id,
-        { ...INSTRUCTOR_CONTENT[inv.id], expectations: expectationsFor(inv) },
+        { ...contentFor(inv.id), expectations: expectationsFor(inv) },
       ])
     );
     expect(checkInstructorCatalog(guides, steps)).toEqual([]);
@@ -541,7 +540,7 @@ describe('instructor content matches the one schema', () => {
   ])('it catches %s', (_label, breakIt, expected) => {
     const broken = {
       ...INSTRUCTOR_CONTENT,
-      'keplers-laws': breakIt(INSTRUCTOR_CONTENT['keplers-laws']),
+      'keplers-laws': breakIt(contentFor('keplers-laws')),
     };
     const problems = checkInstructorCatalog(broken, steps);
     expect(problems.join('\n')).toMatch(expected);
@@ -591,10 +590,12 @@ describe('the generated documents', () => {
         '5. Investigation flow',
         '6. Interactive features',
         '7. Common misconceptions',
-        '8. Teaching notes',
-        '9. Discussion questions',
-        '10. Optional extensions',
-        '11. Model notes',
+        '8. What is scored automatically',
+        '9. Accessibility',
+        '10. Teaching notes',
+        '11. Discussion questions',
+        '12. Optional extensions',
+        '13. Model notes',
       ]) {
         expect(text).toContain(heading);
       }
@@ -632,7 +633,7 @@ describe('the generated documents', () => {
   test.each(INVESTIGATIONS.map(i => [i.id, i]))(
     '%s: the guide prints something under every heading',
     (id, inv) => {
-      const c = instructorContentFor(id);
+      const c = contentFor(id);
       const text = flat(instructorGuide(inv, { version: 'Test 2026' }));
       for (const [i, f] of c.flow.entries()) {
         expect({
@@ -766,7 +767,7 @@ describe('the generated documents', () => {
           .filter(Boolean);
       expect({ id, printed: paragraphs(body.join('\n')) }).toEqual({
         id,
-        printed: paragraphs(instructorContentFor(id).overview),
+        printed: paragraphs(contentFor(id).overview),
       });
 
       // Overviews print at 10 pt. A line with room for the next word, measured

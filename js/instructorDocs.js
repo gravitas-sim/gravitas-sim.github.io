@@ -23,9 +23,14 @@ import { createDocument } from './pdf.js';
 import { answerKeyFor, questionCounts, plainText } from './answerKey.js';
 import { plural } from './format.js';
 import { instructorContentFor } from './data/instructorContent.js';
-import { expectationsFor } from './instructorExpectations.js';
+import { criteriaOf } from './rubric.js';
+import { labelsFor } from './data/instructorLabels.js';
+import { guideSource } from './instructorSource.js';
+import { lessonAt } from './investigations/depthPure.js';
 
 const SITE = 'https://gravitas-sim.online';
+const ACCESSIBILITY_URL =
+  'https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/ACCESSIBILITY.md';
 
 /**
  * Instructor prose as plain text, paragraph by paragraph.
@@ -70,77 +75,158 @@ const plainContent = value => {
 const section = (doc, n, title) =>
   doc.heading(`${n}. ${title}`, { size: 12.5, spaceBefore: 20, keepWith: 46 });
 
+/** The depth names a key prints, from the label table. */
+const depthLabel = (L, d) => L(`key.depth.${d}`);
+const capital = s => `${s[0].toUpperCase()}${s.slice(1)}`;
+
+/** A translation-status block: what is in the language and what is not. */
+function statusBlock(doc, L, kind, status) {
+  const base = kind === 'key' ? 'key' : 'guide';
+  doc.heading(L(`${base}.status.title`), { size: 10.5, spaceBefore: 14 });
+  if (L.locale === 'en' || !status) {
+    doc.paragraph(L(`${base}.status.none`), { size: 9, color: '0.4 0.4 0.46' });
+    return;
+  }
+  const rows = [];
+  const add = (label, part) =>
+    rows.push([
+      label,
+      `${part.translated} / ${part.total}`,
+      part.translated >= part.total
+        ? L('guide.status.done')
+        : L('guide.status.english'),
+    ]);
+  add(L('guide.status.lesson'), status.lesson);
+  if (kind === 'guide') add(L('guide.status.prose'), status.guide);
+  add(L('guide.status.expectations'), status.expectations);
+  doc.paragraph(
+    L(`${base}.status.some`, {
+      done: status.done,
+      total: status.total,
+      rest: status.total - status.done,
+    }),
+    { size: 9, color: '0.4 0.4 0.46' }
+  );
+  doc.table({
+    columns: [
+      L('guide.status.col.part'),
+      L('guide.status.col.count'),
+      L('guide.status.col.state'),
+    ],
+    widths: [3.4, 0.9, 1.1],
+    rows,
+    size: 8.5,
+  });
+}
+
 /**
  * The instructor guide for one investigation.
- * @param {Object} inv - Investigation definition
- * @param {Object} [opts] - {version}
+ * @param {Object} inv - Investigation definition, in the document's language
+ * @param {Object} [opts]
+ * @param {string} [opts.version] - The stamp printed in the footer
+ * @param {string} [opts.locale] - 'en' or 'es'
+ * @param {Object} [opts.source] - guideSource(inv, locale), by default
+ * @param {Object} [opts.facts] - lessonFacts(): textbook, level, mathematics,
+ *   prerequisite titles and the investigation's version
+ * @param {Object} [opts.status] - How much of the document is in the language
  * @returns {Uint8Array} PDF bytes
  */
-export function instructorGuide(inv, { version = '' } = {}) {
-  const c = plainContent(instructorContentFor(inv.id));
+export function instructorGuide(
+  inv,
+  { version = '', locale = 'en', source, facts = {}, status } = {}
+) {
+  const L = labelsFor(locale);
+  const src = source ?? guideSource(inv, locale);
+  const c = plainContent(src.content);
   if (!c) throw new Error(`No instructor content for ${inv.id}`);
   const key = answerKeyFor(inv);
   const counts = questionCounts(inv);
+  const title = plainText(inv.title);
 
   const doc = createDocument({
-    title: `${plainText(inv.title)}: Instructor Guide`,
-    subject: `Instructor guide for the Gravitas investigation "${plainText(inv.title)}": objectives, flow, misconceptions, discussion prompts and model notes.`,
-    footer: `Gravitas Instructor Guide  |  ${plainText(inv.title)}${version ? `  |  ${version}` : ''}`,
+    title: L('guide.docTitle', { title }),
+    subject: L('guide.subject', { title }),
+    footer: `${L('guide.footer', { title })}${version ? `  |  ${version}` : ''}`,
+    lang: locale === 'es' ? 'es' : 'en-US',
   });
 
   doc.titleBlock({
-    kicker: 'Gravitas Investigation | Instructor Guide',
-    title: plainText(inv.title),
+    kicker: L('guide.kicker'),
+    title,
     subtitle: plainText(inv.subtitle),
   });
 
-  doc.table({
-    columns: ['', ''],
-    widths: [1, 2],
-    rows: [
-      ['Estimated time', plainText(inv.duration)],
-      ['Student level', plainText(inv.level)],
-      ['Primary topic', c.topic],
-      ['Difficulty', c.difficulty],
-      ['Length', plural(inv.steps.length, 'step')],
-      [
-        'Student input',
-        `${plural(counts.graded, 'graded question')}, ` +
-          `${plural(counts.predictions, 'prediction')}, ` +
-          `${plural(counts.measurements, 'measurement screen')}, ` +
-          `${plural(counts.written, 'written answer')}`,
-      ],
-      ['Recommended placement', c.placement],
+  const rows = [
+    [L('guide.row.time'), plainText(inv.duration)],
+    [L('guide.row.level'), plainText(inv.level)],
+    [L('guide.row.topic'), c.topic],
+    [L('guide.row.difficulty'), c.difficulty],
+    [L('guide.row.length'), L.count(inv.steps.length, 'step')],
+    [
+      L('guide.row.input'),
+      `${L.count(counts.graded, 'graded')}, ` +
+        `${L.count(counts.predictions, 'prediction')}, ` +
+        `${L.count(counts.measurements, 'measurement')}, ` +
+        `${L.count(counts.written, 'written')}`,
     ],
-    size: 9,
-  });
+    [L('guide.row.placement'), c.placement],
+  ];
+  if (facts.courseLevel)
+    rows.push([
+      L('guide.row.courseLevel'),
+      L(`fact.courseLevel.${facts.courseLevel}`),
+    ]);
+  if (facts.textbook)
+    rows.push([
+      L('guide.row.textbook'),
+      facts.textbook.section
+        ? L('guide.textbook', facts.textbook)
+        : L('guide.textbookChapter', facts.textbook),
+    ]);
+  if (facts.mathematics)
+    rows.push([
+      L('guide.row.mathematics'),
+      L(`fact.math.${facts.mathematics}`),
+    ]);
+  if (facts.prerequisites)
+    rows.push([
+      L('guide.row.prerequisites'),
+      facts.prerequisites.length
+        ? facts.prerequisites.join('; ')
+        : L('guide.none'),
+    ]);
+  if (facts.depths?.length > 1)
+    rows.push([
+      L('guide.row.depths'),
+      L('guide.depthsValue', {
+        depths: facts.depths.map(d => depthLabel(L, d)).join(', '),
+      }),
+    ]);
+  if (facts.version) rows.push([L('guide.row.version'), facts.version]);
+  doc.table({ columns: ['', ''], widths: [1, 2], rows, size: 9 });
 
-  section(doc, 1, 'Overview');
+  section(doc, 1, L('guide.s.overview'));
   doc.paragraph(c.overview);
 
-  section(doc, 2, 'Learning objectives');
-  doc.paragraph(
-    'After completing this investigation, students should be able to:',
-    {
-      gap: 6,
-    }
-  );
+  section(doc, 2, L('guide.s.objectives'));
+  doc.paragraph(L('guide.objectivesIntro'), { gap: 6 });
   doc.bullets(key.objectives);
 
-  section(doc, 3, 'Prior knowledge');
+  section(doc, 3, L('guide.s.prior'));
   doc.bullets(c.priorKnowledge);
 
-  section(doc, 4, 'Key concepts');
+  section(doc, 4, L('guide.s.concepts'));
   for (const k of c.keyConcepts) {
     doc.heading(k.heading, { size: 10.5, spaceBefore: 8, keepWith: 34 });
     doc.paragraph(k.body, { size: 9.5 });
   }
 
-  section(doc, 5, 'Investigation flow');
+  section(doc, 5, L('guide.s.flow'));
   doc.table({
-    columns: ['Steps', 'What students do'],
+    columns: [L('guide.flow.steps'), L('guide.flow.what')],
     widths: [1, 5.4],
-    rows: c.flow.map(f => [f.steps, f.text]),
+    // Printed from the sids the block names, so the numbers follow the lesson.
+    rows: src.flow.map(f => [f.steps, plainProse(f.text)]),
   });
 
   // Generated from the lesson rather than written per lesson, because it is a
@@ -151,128 +237,232 @@ export function instructorGuide(inv, { version = '' } = {}) {
     .map((s, i) => ({ s, n: i + 1 }))
     .filter(({ s }) => s.reveal);
   if (held.length) {
-    doc.paragraph(
-      'Predictions in this investigation are recorded when they are made and ' +
-        'marked later, at the step where the result arrives. Until then the ' +
-        'panel says only that the answer is recorded and where it will be ' +
-        'settled. This is deliberate: a prediction marked on commit is settled ' +
-        'by the answer key rather than by the experiment.',
-      { size: 9.5, gap: 6, color: '0.35 0.35 0.42' }
-    );
+    doc.paragraph(L('guide.held.note'), {
+      size: 9.5,
+      gap: 6,
+      color: '0.35 0.35 0.42',
+    });
     doc.table({
-      columns: ['Prediction', 'Marked at'],
+      columns: [L('guide.held.prediction'), L('guide.held.markedAt')],
       widths: [1, 1],
       rows: held.map(({ s, n }) => {
         const at = inv.steps.findIndex(x => x.sid === s.reveal);
         return [
-          `Step ${n}: ${plainText(s.title)}`,
-          at < 0 ? '—' : `Step ${at + 1}: ${plainText(inv.steps[at].title)}`,
+          L('guide.held.step', { n, title: plainText(s.title) }),
+          at < 0
+            ? '—'
+            : L('guide.held.step', {
+                n: at + 1,
+                title: plainText(inv.steps[at].title),
+              }),
         ];
       }),
       size: 9,
     });
   }
 
-  section(doc, 6, 'Interactive features');
+  section(doc, 6, L('guide.s.features'));
   doc.table({
-    columns: ['Feature', 'Notes'],
+    columns: [L('guide.features.feature'), L('guide.features.notes')],
     widths: [1.5, 4.2],
     rows: c.features.map(f => [f.name, f.text]),
   });
 
-  section(doc, 7, 'Common misconceptions');
+  section(doc, 7, L('guide.s.misconceptions'));
   doc.table({
-    columns: ['Students often think', 'How to address it'],
+    columns: [L('guide.misc.think'), L('guide.misc.address')],
     widths: [1.8, 3.4],
     rows: c.misconceptions.map(m => [m.claim, m.response]),
   });
 
-  section(doc, 8, 'Teaching notes');
+  section(doc, 8, L('guide.s.scoring'));
+  doc.paragraph(L('guide.scoring.intro'), {
+    size: 9.5,
+    gap: 6,
+    color: '0.35 0.35 0.42',
+  });
+  doc.table({
+    columns: [
+      L('guide.scoring.kind'),
+      L('guide.scoring.count'),
+      L('guide.scoring.who'),
+    ],
+    widths: [1.3, 0.7, 3.6],
+    rows: scoringRows(key, L),
+    size: 9,
+  });
+
+  section(doc, 9, L('guide.s.accessibility'));
+  const tools = inv.steps.filter(s => s.tool).length;
+  doc.bullets(
+    [
+      tools
+        ? L('guide.access.instruments', { n: tools })
+        : L('guide.access.noInstruments'),
+      L('guide.access.simulation'),
+      L('guide.access.report'),
+    ],
+    { size: 9.5 }
+  );
+  doc.paragraph(L('guide.access.statement'), { size: 9.5, gap: 3 });
+  doc.link(L('guide.access.link'), ACCESSIBILITY_URL);
+
+  section(doc, 10, L('guide.s.notes'));
   doc.bullets(c.teachingNotes);
 
-  section(doc, 9, 'Discussion questions');
-  doc.paragraph(
-    'Optional. Suitable before the investigation, during class, or as a wrap-up.',
-    { size: 9.5, gap: 6, color: '0.35 0.35 0.42' }
-  );
+  section(doc, 11, L('guide.s.discussion'));
+  doc.paragraph(L('guide.discussion.hint'), {
+    size: 9.5,
+    gap: 6,
+    color: '0.35 0.35 0.42',
+  });
   doc.bullets(c.discussion);
 
-  section(doc, 10, 'Optional extensions');
-  doc.paragraph(
-    'For interested or advanced students. None of these is a prerequisite for the investigation itself.',
-    { size: 9.5, gap: 6, color: '0.35 0.35 0.42' }
-  );
+  section(doc, 12, L('guide.s.extensions'));
+  doc.paragraph(L('guide.extensions.hint'), {
+    size: 9.5,
+    gap: 6,
+    color: '0.35 0.35 0.42',
+  });
   doc.bullets(c.extensions);
 
-  section(doc, 11, 'Model notes');
+  section(doc, 13, L('guide.s.model'));
   doc.paragraph(c.modelNotes);
-  doc.link('How Gravitas Models the Universe', `${SITE}/model/`);
+  doc.link(L('guide.modelLink'), `${SITE}/model/`);
 
   doc.space(14);
   doc.rule({ gap: 6, shade: 0.85 });
-  doc.paragraph(
-    `The answer key for this investigation is a separate document. ` +
-      `Every answer in it is generated from the investigation itself and checked against ` +
-      `the same grading rule the website applies.`,
-    { size: 8.5, color: '0.4 0.4 0.46' }
-  );
+  doc.paragraph(L('guide.closing'), { size: 8.5, color: '0.4 0.4 0.46' });
+  statusBlock(doc, L, 'guide', status);
 
   return doc.build();
 }
 
-/** How an entry is introduced in the key. */
-const CATEGORY_LABEL = {
-  graded: 'Question',
-  prediction: 'Prediction',
-  measurement: 'Measurement',
-  activity: 'Activity',
-  written: 'Written answer',
-  reading: 'Reading',
-};
+/** The rows of "what is scored automatically", counted from the key. */
+function scoringRows(key, L) {
+  const n = pick => key.entries.filter(pick).length;
+  const choice = n(e => e.category === 'graded' && e.options);
+  const numeric = n(
+    e => e.category === 'graded' && e.answerValue !== undefined
+  );
+  const prediction = n(e => e.category === 'prediction');
+  const measurement = n(e => e.category === 'measurement');
+  const written = n(e => e.category === 'written' && !e.reflect);
+  const reflect = n(e => e.reflect);
+  return [
+    [L('guide.scoring.choice'), String(choice), L('guide.scoring.site')],
+    [L('guide.scoring.numeric'), String(numeric), L('guide.scoring.site')],
+    [
+      L('guide.scoring.prediction'),
+      String(prediction),
+      L('guide.scoring.recorded'),
+    ],
+    [
+      L('guide.scoring.measurement'),
+      String(measurement),
+      L('guide.scoring.checked'),
+    ],
+    [L('guide.scoring.written'), String(written), L('guide.scoring.person')],
+    [
+      L('guide.scoring.reflect'),
+      String(reflect),
+      L('guide.scoring.reflection'),
+    ],
+  ].filter(r => r[1] !== '0');
+}
 
 /**
- * The answer key for one investigation.
- * @param {Object} inv - Investigation definition
- * @param {Object} [opts] - {version}
+ * The answer key for one investigation, or for one cut of it.
+ *
+ * @param {Object} inv - Investigation definition, every depth laid in, in the
+ *   document's language
+ * @param {Object} [opts]
+ * @param {string} [opts.version] - The stamp printed in the footer
+ * @param {string} [opts.locale] - 'en' or 'es'
+ * @param {string} [opts.depth] - A key for a student reading at this depth: only
+ *   the steps at or above none deeper, numbered as that student sees them
+ * @param {{title: string, steps: string[]}} [opts.activity] - A key cut to an
+ *   activity's steps (sids), numbered as in the full key
+ * @param {Object} [opts.source] - guideSource(inv, locale), by default
+ * @param {Object} [opts.status] - How much of the document is in the language
  * @returns {Uint8Array} PDF bytes
  */
-export function answerKeyDocument(inv, { version = '' } = {}) {
-  const expectations = plainContent(expectationsFor(inv));
-  const key = answerKeyFor(inv);
-  const counts = questionCounts(inv);
+export function answerKeyDocument(
+  inv,
+  { version = '', locale = 'en', depth, activity, source, status } = {}
+) {
+  const L = labelsFor(locale);
+  const expectations = plainContent(
+    (source ?? guideSource(inv, locale)).expectations
+  );
+  const whole = answerKeyFor(inv);
+  const key = depth ? answerKeyFor(inv, depth) : whole;
+  const counts = questionCounts(depth ? lessonAt(inv, depth) : inv);
+  const title = plainText(inv.title);
   // A lesson with deeper steps prints each depth's key: the core steps numbered
   // as every student sees them, and the steps a deeper reading adds marked by
   // the depth that adds them (DEPTH.md).
-  const depths = [...new Set(key.entries.map(e => e.depth).filter(Boolean))];
+  const depths = depth
+    ? []
+    : [...new Set(key.entries.map(e => e.depth).filter(Boolean))];
+  const cut = activity ? new Set(activity.steps) : null;
+  const entries = cut ? key.entries.filter(e => cut.has(e.sid)) : key.entries;
+  const nameOf = depth ? depthLabel(L, depth) : '';
 
   const doc = createDocument({
-    title: `${plainText(inv.title)}: Answer Key`,
-    subject: `Answer key for the Gravitas investigation "${plainText(inv.title)}", derived from the investigation definitions and verified against the site's own grader.`,
-    footer: `Gravitas Answer Key  |  ${plainText(inv.title)}  |  Instructor copy${version ? `  |  ${version}` : ''}`,
+    title: activity
+      ? L('key.docTitleActivity', { title, activity: activity.title })
+      : depth
+        ? L('key.docTitleDepth', { title, depth: nameOf })
+        : L('key.docTitle', { title }),
+    subject: L('key.subject', { title }),
+    footer: `${
+      activity
+        ? L('key.footerActivity', { title, activity: activity.title })
+        : depth
+          ? L('key.footerDepth', { title, depth: nameOf })
+          : L('key.footer', { title })
+    }${version ? `  |  ${version}` : ''}`,
+    lang: locale === 'es' ? 'es' : 'en-US',
   });
 
+  const shallow = key.entries.filter(e => !e.depth).length;
   doc.titleBlock({
-    kicker: 'Gravitas Investigation | Answer Key',
-    title: plainText(inv.title),
-    subtitle: `${plural(inv.steps.length - key.entries.filter(e => e.depth).length, 'step')}${depths.map(d => `, ${key.entries.filter(e => e.depth === d).length} more at ${d} depth`).join('')}  |  ${plainText(inv.duration)}  |  ${plural(counts.graded, 'graded question')}, ${plural(counts.predictions, 'prediction')}`,
+    kicker: L('key.kicker'),
+    title,
+    subtitle: `${L.count(depth ? key.entries.length : shallow, 'step')}${depths
+      .map(
+        d =>
+          `, ${L('key.subtitle.depths', {
+            n: key.entries.filter(e => e.depth === d).length,
+            depth: depthLabel(L, d),
+          })}`
+      )
+      .join('')}  |  ${plainText(inv.duration)}  |  ${L('key.subtitle.graded', {
+      graded: L.count(counts.graded, 'graded'),
+      pred: L.count(counts.predictions, 'prediction'),
+    })}`,
   });
 
-  doc.paragraph(
-    'Instructor copy. Every answer below is generated from the live investigation definition and ' +
-      'verified against the same rule the website uses to mark it, so this key and the site ' +
-      'cannot disagree. Steps that only ask students to read or watch are omitted, ' +
-      'unless there is an observation to expect on them.',
-    { size: 9, color: '0.35 0.35 0.42' }
-  );
-  doc.paragraph(
-    'Predictions are recorded but never marked wrong: their purpose is to make students ' +
-      'commit before they experiment. The answer given is the conclusion they should reach ' +
-      'afterwards.',
-    { size: 9, color: '0.35 0.35 0.42' }
-  );
+  doc.paragraph(L('key.intro1'), { size: 9, color: '0.35 0.35 0.42' });
+  doc.paragraph(L('key.intro2'), { size: 9, color: '0.35 0.35 0.42' });
+  if (depth)
+    doc.paragraph(L('key.introDepth', { depth: nameOf }), {
+      size: 9,
+      color: '0.35 0.35 0.42',
+    });
+  if (activity)
+    doc.paragraph(
+      L('key.introActivity', {
+        activity: activity.title,
+        n: entries.length,
+        total: shallow,
+      }),
+      { size: 9, color: '0.35 0.35 0.42' }
+    );
   doc.rule({ gap: 8, shade: 0.85 });
 
-  for (const e of key.entries) {
+  for (const e of entries) {
     // A reading step asks for nothing, so there is no answer to print. Some
     // put an instrument or a readout in front of the class, though, and what
     // they should see there is the expectation. Skipping every reading step
@@ -281,15 +471,21 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
     const expected = expectations[e.sid];
     if (e.category === 'reading' && !expected) continue;
 
+    const number =
+      depth || !e.depth
+        ? depth
+          ? e.step
+          : key.entries.filter(x => !x.depth && x.step <= e.step).length
+        : 0;
     doc.heading(
-      `${e.depth ? `${e.depth[0].toUpperCase()}${e.depth.slice(1)} depth` : `Step ${key.entries.filter(x => !x.depth && x.step <= e.step).length}`}: ${e.title}`,
-      {
-        size: 11,
-        spaceBefore: 16,
-        keepWith: 60,
-      }
+      `${
+        e.depth && !depth
+          ? L('key.depthName', { depth: capital(depthLabel(L, e.depth)) })
+          : L('key.step', { n: number })
+      }: ${e.title}`,
+      { size: 11, spaceBefore: 16, keepWith: 60 }
     );
-    doc.paragraph(CATEGORY_LABEL[e.category] ?? e.category, {
+    doc.paragraph(L(`key.cat.${e.category}`), {
       size: 8,
       gap: 5,
       color: '0.13 0.55 0.75',
@@ -301,31 +497,31 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
       doc.bullets(
         e.options.map(
           (opt, i) =>
-            `${String.fromCharCode(65 + i)}. ${opt}${i === e.answerIndex ? '     (correct answer)' : ''}`
+            `${String.fromCharCode(65 + i)}. ${opt}${i === e.answerIndex ? `     ${L('key.correct')}` : ''}`
         ),
         { size: 9.5, gap: 1 }
       );
       doc.row(
         e.category === 'prediction'
-          ? 'Conclusion after experimenting'
-          : 'Correct answer',
+          ? L('key.rowConclusion')
+          : L('key.rowCorrect'),
         `${e.answerLabel}. ${e.answerText}`
       );
     }
 
     if (e.answerValue !== undefined) {
       doc.row(
-        'Expected value',
+        L('key.rowValue'),
         `${e.answerValue}${e.unit ? ` ${e.unit}` : ''}`
       );
       doc.row(
-        'Accepted range',
-        `${round(e.acceptedLow)} to ${round(e.acceptedHigh)}${e.unit ? ` ${e.unit}` : ''}`
+        L('key.rowRange'),
+        `${L('key.rangeTo', { low: round(e.acceptedLow), high: round(e.acceptedHigh) })}${e.unit ? ` ${e.unit}` : ''}`
       );
     }
 
     if (e.rubric) {
-      doc.paragraph('What to look for:', {
+      doc.paragraph(L('key.lookFor'), {
         size: 9,
         gap: 3,
         color: '0.35 0.35 0.42',
@@ -333,8 +529,33 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
       doc.paragraph(e.rubric, { size: 9.5 });
     }
 
+    if (e.criteria?.length) {
+      doc.paragraph(
+        e.reflect ? L('key.rubricOnReflection') : `${L('key.rubric')}:`,
+        { size: 9, gap: 3, color: '0.35 0.35 0.42' }
+      );
+      doc.table({
+        columns: [L('key.rubric.criterion'), L('key.rubric.levels')],
+        widths: [1.4, 4.2],
+        rows: criteriaOf({ rubricCriteria: e.criteria }).map(c => [
+          c.name,
+          c.levels
+            .map(
+              l =>
+                `${l.label}${
+                  l.points === null
+                    ? ''
+                    : ` (${L(l.points === 1 ? 'key.rubric.points' : 'key.rubric.pointsMany', { points: l.points })})`
+                }: ${l.text}`
+            )
+            .join('\n'),
+        ]),
+        size: 8.5,
+      });
+    }
+
     if (e.fields?.length) {
-      doc.paragraph('Fields on this screen:', {
+      doc.paragraph(L('key.fields'), {
         size: 9,
         gap: 4,
         color: '0.35 0.35 0.42',
@@ -342,21 +563,20 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
       doc.bullets(
         e.fields.map(
           f =>
-            `${f.label}${f.unit ? ` (${f.unit})` : ''}${f.derived ? ' (worked out for the student)' : ''}`
+            `${f.label}${f.unit ? ` (${f.unit})` : ''}${f.derived ? L('key.derived') : ''}`
         ),
         { size: 9, gap: 1 }
       );
       if (e.hasValidator) {
-        doc.paragraph(
-          'This screen checks the entered values as they are typed and explains what is wrong ' +
-            'when they do not hang together.',
-          { size: 8.5, color: '0.4 0.4 0.46' }
-        );
+        doc.paragraph(L('key.validator'), {
+          size: 8.5,
+          color: '0.4 0.4 0.46',
+        });
       }
     }
 
     if (e.checklist?.length) {
-      doc.paragraph('Students are asked to:', {
+      doc.paragraph(L('key.checklist'), {
         size: 9,
         gap: 4,
         color: '0.35 0.35 0.42',
@@ -365,7 +585,7 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
     }
 
     if (expected) {
-      doc.paragraph('Expected observation:', {
+      doc.paragraph(L('key.expected'), {
         size: 9,
         gap: 3,
         color: '0.35 0.35 0.42',
@@ -374,14 +594,14 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
     }
 
     if (e.reflect) {
-      doc.paragraph(
-        'A reflection: kept with the work and printed in the student’s report. Nothing marks it.',
-        { size: 9, color: '0.35 0.35 0.42' }
-      );
+      doc.paragraph(L('key.reflection'), {
+        size: 9,
+        color: '0.35 0.35 0.42',
+      });
     }
 
     if (e.help?.hints?.length) {
-      doc.paragraph('Hints, shown one at a time when a student asks:', {
+      doc.paragraph(L('key.hints'), {
         size: 9,
         gap: 3,
         color: '0.35 0.35 0.42',
@@ -390,48 +610,41 @@ export function answerKeyDocument(inv, { version = '' } = {}) {
     }
 
     if (e.feedback?.length) {
-      doc.paragraph('What a wrong number is told, by kind of miss:', {
+      doc.paragraph(L('key.feedback'), {
         size: 9,
         gap: 3,
         color: '0.35 0.35 0.42',
       });
       doc.bullets(
-        e.feedback.map(f => `${FEEDBACK_LABEL[f.class]}: ${f.text}`),
+        e.feedback.map(f => `${L(`key.fb.${f.class}`)}: ${f.text}`),
         { size: 9, gap: 1 }
       );
     }
 
     if (e.mistakes?.length) {
-      doc.paragraph('Mistakes the step names:', {
+      doc.paragraph(L('key.mistakes'), {
         size: 9,
         gap: 3,
         color: '0.35 0.35 0.42',
       });
       doc.bullets(
         e.mistakes.map(
-          m => `${m.option ? `Option ${m.option}: ` : ''}${m.text}`
+          m =>
+            `${m.option ? L('key.option', { letter: m.option }) : ''}${m.text}`
         ),
         { size: 9, gap: 1 }
       );
     }
 
     if (e.explanation) {
-      doc.paragraph('Why:', { size: 9, gap: 3, color: '0.35 0.35 0.42' });
+      doc.paragraph(L('key.why'), { size: 9, gap: 3, color: '0.35 0.35 0.42' });
       doc.paragraph(e.explanation, { size: 9.5 });
     }
   }
 
+  statusBlock(doc, L, 'key', status);
   return doc.build();
 }
-
-const FEEDBACK_LABEL = {
-  correct: 'Right',
-  close: 'Close',
-  'wrong-sign': 'Wrong sign',
-  'wrong-unit': 'Wrong unit',
-  'wrong-order-of-magnitude': 'Out by a power of ten',
-  off: 'Otherwise off',
-};
 
 const round = v =>
   Number.isInteger(v) ? String(v) : String(Number(v.toPrecision(4)));

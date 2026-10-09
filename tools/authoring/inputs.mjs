@@ -24,6 +24,7 @@ import { SCENARIO_INFO, scenarioId } from '../../js/data/scenarioInfo.js';
 import { DEFAULT_SETTINGS } from '../../js/appState.js';
 import { allWidgets, whenWidgetsReady } from '../../js/widgets.js';
 import { expectationsFor } from '../../js/instructorExpectations.js';
+import { flowFor } from '../../js/instructorFlow.js';
 import { gradedSteps } from '../../js/data/investigations/catalog.js';
 
 export const LESSON_DIR = 'js/data/investigations';
@@ -81,7 +82,7 @@ export async function loadAuthoringInputs() {
 }
 
 /**
- * The instructor guides with their expectations attached, sid-keyed. The
+ * The instructor guides with their flow and expectations attached, sid-keyed. The
  * record is its own module (js/data/instructorExpectations.js) so that no
  * route carries it; the rules read it as a guide section as before.
  */
@@ -89,7 +90,9 @@ export function instructorWithExpectations() {
   const out = {};
   for (const [id, guide] of Object.entries(INSTRUCTOR_CONTENT)) {
     const inv = INVESTIGATIONS.find(i => i.id === id);
-    out[id] = inv ? { ...guide, expectations: expectationsFor(inv) } : guide;
+    out[id] = inv
+      ? { ...guide, flow: flowFor(inv), expectations: expectationsFor(inv) }
+      : guide;
   }
   return out;
 }

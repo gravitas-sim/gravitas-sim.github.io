@@ -188,7 +188,9 @@ describe('the digest the derived closure produces', () => {
     // platform/common.js, which the instructor bundle really does read); the
     // failure this guards against is the two-hundred-file closure above. 100
     // after the deeper steps (depthAll.js and its four ext files, Prompt 72).
-    expect(current.length).toBeLessThan(100);
+    // 160 after the Spanish documents (Prompt 79): 24 lesson shadows, 4 deeper
+    // shadows, the labels, the flow and the facts the guides read.
+    expect(current.length).toBeLessThan(160);
   });
 
   // The claim the static walk rests on, checked against a real run rather than

@@ -24,6 +24,8 @@ import AxeBuilder from '@axe-core/playwright';
 
 import { test, expect } from './fixtures.js';
 import { MANIFEST } from '../js/data/investigations/manifest.js';
+import { ACTIVITIES } from '../js/data/activities.js';
+import { DEEPER } from '../js/investigations/depthAll.js';
 import { ensureFixture } from '../tools/instructor-fixture.mjs';
 
 /**
@@ -36,7 +38,7 @@ import { ensureFixture } from '../tools/instructor-fixture.mjs';
  */
 const LESSONS = MANIFEST.length;
 /** A guide and an answer key each. */
-const DOCUMENTS = LESSONS * 2;
+const BASE_DOCUMENTS = LESSONS * 2;
 /**
  * Everything the bundle holds, which is what the version line counts.
  *
@@ -49,6 +51,14 @@ const DOCUMENTS = LESSONS * 2;
  */
 const GENERAL_DOCUMENTS = 2;
 const ACTIVITY_DOCUMENTS = 8;
+// Prompt 79: a key per Activity format in each language, a guide and a key in
+// Spanish for every lesson, and a key per depth in each language for the
+// lessons that have deeper steps.
+const ACTIVITY_KEYS = ACTIVITIES.reduce((n, a) => n + a.formats.length * 2, 0);
+const SPANISH_DOCUMENTS = LESSONS * 2;
+const DEPTH_KEYS = Object.keys(DEEPER).length * 3 * 2;
+/** What the investigation cards list: both languages and every depth. */
+const DOCUMENTS = BASE_DOCUMENTS + SPANISH_DOCUMENTS + DEPTH_KEYS;
 // The Observatory suites' guides and answer keys (EXOPLANET_OBSERVATORY.md,
 // STELLAR_POPULATIONS.md): their investigations live in /observatory/, not in
 // the lesson manifest.
@@ -63,6 +73,7 @@ const ALL_DOCUMENTS =
   LAB3D_DOCUMENTS +
   MISSION_LAB_DOCUMENTS +
   ACTIVITY_DOCUMENTS +
+  ACTIVITY_KEYS +
   DOCUMENTS;
 
 const PASSPHRASE = 'gravitas-fixture-not-a-secret';
@@ -148,14 +159,20 @@ test.describe('the instructor portal, signed in', () => {
       // Two download buttons and two links on each card: "open" the
       // investigation, and its public adoption page (ADOPTION.md).
       const first = cards.first();
-      await expect(first.locator('button.ui-button')).toHaveCount(2);
+      await expect(
+        first.locator('.res-actions > button.ui-button')
+      ).toHaveCount(2);
+      // Spanish and per-depth documents sit in a disclosure, not among the two.
+      await expect(first.locator('details.res-more button')).toHaveCount(
+        2 + 3 + 3
+      );
       await expect(first.locator('a.ui-button')).toHaveCount(2);
       await expect(
         first.locator('a.ui-button[href^="/teaching/investigation/"]')
       ).toHaveCount(1);
     });
 
-    test('all eight activity documents are individually reachable', async ({
+    test('every activity document is individually reachable', async ({
       page,
     }) => {
       const cards = page.locator('#activityResources .res-card');
@@ -163,11 +180,13 @@ test.describe('the instructor portal, signed in', () => {
       const activityCount = await page
         .locator('#activityCount')
         .evaluate(el => el.textContent.trim());
-      expect(activityCount).toBe('3 activities, 8 documents');
+      expect(activityCount).toBe(
+        `3 activities, ${ACTIVITY_DOCUMENTS + ACTIVITY_KEYS} documents`
+      );
       // Three guides, five worksheets: the demonstration is projected and
       // answered aloud, and says so rather than leaving a gap.
       const buttons = page.locator('#activityResources button.ui-button');
-      await expect(buttons).toHaveCount(8);
+      await expect(buttons).toHaveCount(ACTIVITY_DOCUMENTS + ACTIVITY_KEYS);
       await expect(page.locator('#activityResources .res-none')).toHaveCount(1);
       await expect(page.locator('#activityResources .res-format')).toHaveCount(
         6
@@ -379,7 +398,9 @@ test.describe('the dashboard on a small screen and by keyboard', () => {
     }
     expect(seen.length).toBeGreaterThan(8);
     expect(
-      seen.every(s => ['BUTTON', 'A', 'INPUT', 'SELECT'].includes(s.tag))
+      seen.every(s =>
+        ['BUTTON', 'A', 'INPUT', 'SELECT', 'SUMMARY'].includes(s.tag)
+      )
     ).toBe(true);
     // Every stop draws a ring. A focus outline of `none` is the defect this
     // catches, and it is invisible in a screenshot taken without tabbing.
