@@ -69,7 +69,7 @@ export async function openedLink(link) {
   const bad = checked.findings.find(f => f.level === 'error');
   if (bad) return { ok: false, reason: 'invalid', message: bad.message };
   const lesson = { ...checked.compiled.lesson, id: remixLessonId(pack) };
-  return { ok: true, lesson, pack };
+  return { ok: true, lesson, pack, compiled: checked.compiled };
 }
 
 /** An item's investigation: its link's, if the link is the pack the item names. */

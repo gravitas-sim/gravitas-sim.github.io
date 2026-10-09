@@ -27,6 +27,7 @@ import {
 import { STATUS, pinFor, reviewCoursePack } from './review.js';
 import { PLATFORM_API, courseApi, courseFacts, lessonFacts } from './api.js';
 import { openedLink, openedPack } from './packItems.js';
+import { collectTexts } from '../composer/compile.js';
 
 export const WORDS = {
   en: {
@@ -187,7 +188,7 @@ async function make() {
     title,
     pin: pinFor({ kind: 'pack' }, facts),
   };
-  made = { item, pack, facts };
+  made = { item, pack, facts, compiled: got.compiled };
   $('pkItem').value = JSON.stringify(item, null, 2);
   showFacts();
   $('pkMade').hidden = false;
@@ -206,6 +207,13 @@ function showFacts() {
       ? T('mk.from', { original: pack.derivedFrom.id })
       : '',
   });
+}
+
+/** The key of the opened investigation, made here (js/composer/packKey.js). */
+async function key(locale) {
+  const { saveKey } = await import('../composer/packKey.js');
+  const { pack, compiled } = made;
+  await saveKey(pack, compiled, collectTexts(pack), locale);
 }
 
 async function copy() {
@@ -329,6 +337,8 @@ function showCheck() {
 function wire() {
   $('pkMake').addEventListener('click', make);
   $('pkCopy').addEventListener('click', copy);
+  $('pkKeyEn').addEventListener('click', () => key('en'));
+  $('pkKeyEs').addEventListener('click', () => key('es'));
   $('pkCheck').addEventListener('click', () => check($('pkCourse').value));
   $('pkFile').addEventListener('change', async e => {
     const file = e.target.files?.[0];

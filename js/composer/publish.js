@@ -66,6 +66,15 @@ export async function preview(c) {
   c.setStatus(c.t('composer.status.previewed'));
 }
 
+/** The answer key for this pack, as a download: nothing leaves the page. */
+async function key(c, locale) {
+  if (!c.ok()) return c.setStatus(c.t('studio.status.fixFirst'));
+  const { saveKey } = await import('./packKey.js');
+  await saveKey(c.doc(), c.compiled(), c.texts(), locale);
+}
+export const keyEn = c => key(c, 'en');
+export const keyEs = c => key(c, 'es');
+
 /** What a remix keeps from its original, listed for the author. */
 export async function renderKept(c, d) {
   c.$('cp-kept-card').hidden = false;

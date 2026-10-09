@@ -2,25 +2,11 @@
 // gravitas.question-bank/1: questions an investigation can draw on, as data
 // -----------------------------------------------------------------------------
 // A bank item is one question - a choice, a number or a short written answer -
-// with everything a lesson's own question step carries (its prompt, its
-// answer, its tolerance and unit, its staged hints, its misconceptions, its
-// rubric), and three things a step in a lesson file does not:
-//
-//   identity   a stable id and an integer version. The version goes up with
-//              any change that could change a grade, so a recorded answer can
-//              always be matched to the question it answered.
-//   scoring    how many points it is worth, and whether the first attempt or
-//              the best one counts. Explicit, because "correct" is not a score.
-//   variants   controlled ways of asking the same question. A choice question
-//              may shuffle its options; a numeric one may take its numbers from
-//              a vetted relation (./relations.js) with a list of inputs, so
-//              every variant's answer is computed by Gravitas and none is typed
-//              or evaluated from text. Which variant a lesson gets is decided
-//              by a recorded seed, so the same seed always builds the same
-//              lesson (js/composer/compile.js).
-//
-// and accessibility metadata: whether the question can be answered from its
-// text alone, and a note for a reader who cannot use the simulation.
+// with what a lesson's own question step carries, and a stable id and version
+// (raised with any change that could change a grade), explicit scoring, and
+// controlled variants (a shuffled choice, or a number's inputs from a vetted
+// relation, ./relations.js, so every answer is computed and none is typed),
+// picked by a recorded seed (js/composer/compile.js). COMPOSER.md has the rest.
 //
 // A bank is its own file, or embedded in an investigation pack
 // (./investigation.js). Pure, so the Studio, the SDK and the tests share it;
@@ -110,37 +96,39 @@ export function checkUnitName(unit, path, { need, api }) {
 function checkCriteria(list, path, { need, text }) {
   if (list === undefined) return;
   const ok = Array.isArray(list) && list.length > 0 && list.length < 7;
-  need(ok, path, 'list', 'a list of one to six criteria');
-  const obj = (v, at, names) =>
-    isObject(v)
-      ? knownKeys(need, v, names, at, 'a field here')
-      : need(false, at, 'notObject', 'is not an object');
-  (ok ? list : []).forEach((c, i) => {
-    const at = `${path}[${i}]`;
-    obj(c, at, ['name', 'levels']);
-    if (!isObject(c)) return;
-    text(c.name, `${at}.name`, true);
-    const lv = Array.isArray(c.levels) ? c.levels : [];
-    need(
-      lv.length > 1 && lv.length < 6,
-      `${at}.levels`,
-      'list',
-      'two to five levels, best first'
-    );
-    lv.forEach((l, j) => {
-      const a = `${at}.levels[${j}]`;
-      obj(l, a, ['label', 'text', 'points']);
-      if (!isObject(l)) return;
-      text(l.label, `${a}.label`, true);
-      text(l.text, `${a}.text`, true);
+  need(ok, path, 'list', 'one to six criteria');
+  const walk = (v, at, names, then) => {
+    need(isObject(v), at, 'notObject', 'is not an object');
+    if (!isObject(v)) return;
+    knownKeys(need, v, names, at, 'a field here');
+    then(v);
+  };
+  (ok ? list : []).forEach((c, i) =>
+    walk(c, `${path}[${i}]`, ['name', 'levels'], () => {
+      const at = `${path}[${i}]`;
+      text(c.name, `${at}.name`, true);
+      const lv = Array.isArray(c.levels) ? c.levels : [];
       need(
-        l.points === undefined || (Number.isFinite(l.points) && l.points >= 0),
-        `${a}.points`,
-        'number',
-        'a number of points, from 0'
+        lv.length > 1 && lv.length < 6,
+        `${at}.levels`,
+        'list',
+        'two to five levels'
       );
-    });
-  });
+      lv.forEach((l, j) =>
+        walk(l, `${at}.levels[${j}]`, ['label', 'text', 'points'], () => {
+          const a = `${at}.levels[${j}]`;
+          text(l.label, `${a}.label`, true);
+          text(l.text, `${a}.text`, true);
+          need(
+            l.points === undefined || l.points >= 0,
+            `${a}.points`,
+            'number',
+            'points from 0'
+          );
+        })
+      );
+    })
+  );
 }
 
 /**
