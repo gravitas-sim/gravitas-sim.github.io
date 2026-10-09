@@ -161,6 +161,20 @@ export const OTHER_RAW = [
     'https://irsa.ipac.caltech.edu/data/2MASS/docs/releases/allsky/doc/sec6_4a.html',
   ],
   ['bm12-arxiv-1112.2698v1.pdf', 'https://arxiv.org/pdf/1112.2698v1'],
+  // The Gaia EDR3 passbands and zero points (Riello et al. 2021), CDS J/A+A/649/A3.
+  // ESA's GaiaEDR3_passbands_zeropoints.zip holds the same two data files byte for byte.
+  [
+    'cds-gaia-edr3-passband.dat',
+    'https://cdsarc.cds.unistra.fr/ftp/J/A+A/649/A3/passband.dat',
+  ],
+  [
+    'cds-gaia-edr3-zeropt.dat',
+    'https://cdsarc.cds.unistra.fr/ftp/J/A+A/649/A3/zeropt.dat',
+  ],
+  [
+    'cds-gaia-edr3-readme.txt',
+    'https://cdsarc.cds.unistra.fr/ftp/J/A+A/649/A3/ReadMe',
+  ],
   [
     'ccm89-apj-345-245.pdf',
     'https://articles.adsabs.harvard.edu/pdf/1989ApJ...345..245C',

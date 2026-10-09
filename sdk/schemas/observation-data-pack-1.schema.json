@@ -138,6 +138,7 @@
             "cc-by-4.0",
             "attribution-requested",
             "no-license-stated",
+            "cc-by-nc-3.0-igo",
             "restricted"
           ]
         },
@@ -146,6 +147,9 @@
         },
         "basis": {
           "type": "string"
+        },
+        "nonCommercial": {
+          "type": "boolean"
         }
       }
     },

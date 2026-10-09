@@ -14,3 +14,9 @@ export const loadExtinction = () =>
   import('../../data/radiation/extinction.js');
 export const loadBolometric = () =>
   import('../../data/radiation/bolometric.js');
+
+// Non-commercial (CC BY-NC 3.0 IGO, credit ESA/Gaia/DPAC): the one pack under
+// those terms, kept apart so no other band is covered by them. Its PACK carries
+// `license.nonCommercial: true` for an interface to show.
+export const loadGaiaBandpasses = () =>
+  import('../../data/radiation/gaiaBandpasses.js');

@@ -9,6 +9,7 @@ import { loadExtension } from '../sdk/lib/extension.mjs';
 import {
   ACCEPTED_LICENSES,
   HUMAN_ITEMS,
+  isAcceptedLicense,
   REVIEW_CHECKS,
   reviewExtension,
   scanContent,
@@ -98,6 +99,34 @@ describe('a package that is rejected, one criterion at a time', () => {
     );
     const review = await reviewExtension(ext);
     expect(failed(review)).toEqual(['licenses']);
+  });
+
+  test('licenses: no non-commercial license is accepted, the Gaia one included', async () => {
+    // The data-pack format admits `cc-by-nc-3.0-igo` for one built-in pack, by
+    // the owner's exception (DECISION_REGISTER.md). That must not widen what a
+    // contributed package may carry.
+    for (const license of [
+      'cc-by-nc-3.0-igo',
+      'CC-BY-NC-3.0-IGO',
+      'CC BY-NC 3.0 IGO',
+      'CC-BY-NC-4.0',
+      'CC-BY-NC-SA-4.0',
+    ]) {
+      expect({ license, accepted: isAcceptedLicense(license) }).toEqual({
+        license,
+        accepted: false,
+      });
+      const ext = edit(
+        loadExtension(ACCEPT),
+        'gravitas-extension.json',
+        d => (d.licenses[0].license = license)
+      );
+      const review = await reviewExtension(ext);
+      expect({ license, failed: failed(review) }).toEqual({
+        license,
+        failed: ['licenses'],
+      });
+    }
   });
 
   test('licenses: authored text under a license other than CC-BY-4.0', async () => {

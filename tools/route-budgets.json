@@ -12,17 +12,17 @@
         "requests": 102
       },
       "kepler": {
-        "kb": 3292,
+        "kb": 3293.2,
         "requests": 140
       },
       "transit": {
-        "kb": 3303.4,
+        "kb": 3305.1,
         "requests": 140,
-        "toolKb": 3512.6,
+        "toolKb": 3513.2,
         "toolRequests": 142
       },
       "power-law": {
-        "kb": 3269.9,
+        "kb": 3270,
         "requests": 140,
         "toolKb": 3323.4,
         "toolRequests": 143
@@ -72,7 +72,7 @@
         "requests": 40
       },
       "composer": {
-        "kb": 472,
+        "kb": 472.3,
         "requests": 30
       },
       "course-builder": {
@@ -234,7 +234,7 @@
         "requests": 2
       },
       "course-packs": {
-        "kb": 200.8,
+        "kb": 201.6,
         "requests": 11
       }
     }
