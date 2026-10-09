@@ -418,6 +418,45 @@ ngc3198-synthetic-curve: NGC 3198: a synthetic rotation curve
     Freeman 1970, ApJ 160, 811 (the exponential disc), doi:10.1086/150474
     de Blok et al. 2008, AJ 136, 2648 (THINGS: a published NGC 3198 curve, not used here), doi:10.1088/0004-6256/136/6/2648
 
+radiation-bandpasses: Photometric bandpasses (Johnson-Cousins UBVRI, SDSS ugriz, TESS, 2MASS JHK) and their AB - Vega zero points
+  File: js/data/radiation/bandpasses.js (compilation)
+  Licence: no license; attribution requested. Response functions are measured, tabulated instrument properties published by their teams or archives (BM12 Table 1; the SDSS, TESS and 2MASS archives), shipped here resampled to a uniform grid with the AB - Vega offsets computed from the public-domain CALSPEC Vega spectrum. The TESS and 2MASS archives and the SDSS publish them for use with acknowledgement; no licence text accompanies the BM12 table or the SVO copy of the 2MASS curves.
+  Basis: A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. The Gaia passbands were not included because Gaia data are CC BY-NC 3.0 IGO. If Carl prefers no reproduction of the BM12 table, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md).
+  Cite:
+    Bessell & Murphy 2012, PASP 124, 140, Table 1 (photon-counting UBVRI), doi:10.1086/664083
+    Fukugita et al. 1996, AJ 111, 1748 (the SDSS photometric system), doi:10.1086/117915
+    SDSS 2001 filter curves of J. Gunn, column respt: QE on the sky through 1.3 airmasses at APO (sdss4.org)
+    TESS Instrument Response Function v2.0, R. Vanderspek, 2020 (NASA HEASARC)
+    Ricker et al. 2015, JATIS 1, 014003 (TESS), doi:10.1117/1.JATIS.1.1.014003
+    Cohen, Wheaton & Megeath 2003, AJ 126, 1090: relative spectral responses, photon-counting (IRSA), doi:10.1086/376474
+    Rodrigo, Solano & Bayo 2012, The SVO Filter Profile Service (the copy of the 2MASS curves)
+    Bohlin 2014, AJ 147, 127 (the Vega spectrum alpha_lyr_stis_008), doi:10.1088/0004-6256/147/6/127
+    Willmer 2018, ApJS 236, 47 (published AB - Vega offsets, the check), doi:10.3847/1538-4365/aabfdf
+    Oke & Gunn 1983, ApJ 266, 713 (the AB system), doi:10.1086/160817
+
+radiation-bolometric: Bolometric corrections BC_V(Teff): Flower (1996) with the coefficients Torres (2010) corrected
+  File: js/data/radiation/bolometric.js (compilation)
+  Licence: no license; attribution requested. The 13 coefficients of a published polynomial, cited to the paper that corrected them.
+  Basis: Thirteen numbers defining a relation, from an open arXiv preprint; no table or text of the paper is reproduced.
+  Cite:
+    Torres 2010, AJ 140, 1158: On the use of empirical bolometric corrections for stars, doi:10.1088/0004-6256/140/5/1158
+    Flower 1996, ApJ 469, 355: Transformations from theoretical Hertzsprung-Russell diagrams to color-magnitude diagrams, doi:10.1086/177785
+
+radiation-extinction: The Cardelli, Clayton & Mathis (1989) interstellar extinction law: coefficients
+  File: js/data/radiation/extinction.js (compilation)
+  Licence: no license; attribution requested. The coefficients of a published analytic law (eqs. 2 to 4 of the paper), cited to it.
+  Basis: Thirty-odd numbers that define a mathematical relation; no table, text or figure of the paper is reproduced beyond the eight published values the validation compares against. The paper is in the NASA ADS scanned archive.
+  Cite:
+    Cardelli, Clayton & Mathis 1989, ApJ 345, 245, doi:10.1086/167900
+    O'Donnell 1994, ApJ 422, 158 (a later revision of the optical coefficients, not used), doi:10.1086/173713
+
+radiation-lines: The strongest optical spectral lines: rest wavelengths in air and vacuum
+  File: js/data/radiation/lines.js (compilation)
+  Licence: public domain. NIST Standard Reference Database 78 is a work of the United States government; NIST asks that it be cited.
+  Cite:
+    Kramida, Ralchenko, Reader & NIST ASD Team, NIST Atomic Spectra Database (ver. 5.x), https://physics.nist.gov/asd
+    Morton 2000, ApJS 130, 403 (the air - vacuum relation used to check), doi:10.1086/317349
+
 sdss-dr18-ngc2420-photometry: NGC 2420: SDSS DR18 photometry
   File: js/data/observations/sdssNgc2420Photometry.js (observed)
   Licence: public domain. SDSS data are in the public domain. SDSS asks that work using them acknowledge the survey and cite the data release (NOTICE).

@@ -1,0 +1,303 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "radiation-lines",
+  "version": "1.0.0",
+  "title": "The strongest optical spectral lines: rest wavelengths in air and vacuum",
+  "object": {
+    "name": "atomic lines of stellar spectra",
+    "identifiers": [
+      "h-alpha",
+      "h-beta",
+      "h-gamma",
+      "h-delta",
+      "h-epsilon",
+      "h-8",
+      "h-9",
+      "ca2-k",
+      "ca2-h",
+      "ca1-4227",
+      "na1-d2",
+      "na1-d1",
+      "mg1-b4",
+      "mg1-b2",
+      "mg1-b1",
+      "fe1-4045",
+      "fe1-4383",
+      "fe1-4405",
+      "fe1-5270",
+      "fe1-5328",
+      "he1-4472",
+      "he1-5876",
+      "he2-4686"
+    ]
+  },
+  "facility": {
+    "observatory": "NIST Atomic Spectra Database",
+    "pipeline": "tools/data-packs/radiation.mjs 1.0.0"
+  },
+  "dataType": "catalog",
+  "origin": "compilation",
+  "credit": "NIST Atomic Spectra Database (Kramida, Ralchenko, Reader and the NIST ASD Team)",
+  "license": {
+    "status": "public-domain",
+    "statement": "NIST Standard Reference Database 78 is a work of the United States government; NIST asks that it be cited."
+  },
+  "retrieved": "2026-10-09",
+  "columns": [
+    {
+      "name": "air",
+      "unit": "nm",
+      "description": "rest wavelength in standard air"
+    },
+    {
+      "name": "vacuum",
+      "unit": "nm",
+      "description": "rest wavelength in vacuum, from the level energies"
+    }
+  ],
+  "source": {
+    "archive": "NIST Atomic Spectra Database, lines form",
+    "urls": [
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=6562.20&upp_w=6563.40&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=4860.70&upp_w=4861.90&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=4339.90&upp_w=4341.10&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=4101.10&upp_w=4102.30&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=3969.50&upp_w=3970.70&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=3888.50&upp_w=3889.70&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=3834.80&upp_w=3836.00&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Ca+II&low_w=3933.06&upp_w=3934.26&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Ca+II&low_w=3967.87&upp_w=3969.07&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Ca+I&low_w=4226.13&upp_w=4227.33&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Na+I&low_w=5889.35&upp_w=5890.55&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Na+I&low_w=5895.32&upp_w=5896.52&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Mg+I&low_w=5166.72&upp_w=5167.92&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Mg+I&low_w=5172.08&upp_w=5173.28&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Mg+I&low_w=5183.00&upp_w=5184.20&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=4045.21&upp_w=4046.41&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=4382.95&upp_w=4384.15&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=4404.15&upp_w=4405.35&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=5268.94&upp_w=5270.14&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=5327.44&upp_w=5328.64&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=He+I&low_w=4470.88&upp_w=4472.08&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=He+I&low_w=5875.02&upp_w=5876.22&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=He+II&low_w=4685.10&upp_w=4686.30&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on"
+    ],
+    "citations": [
+      {
+        "text": "Kramida, Ralchenko, Reader & NIST ASD Team, NIST Atomic Spectra Database (ver. 5.x)",
+        "url": "https://physics.nist.gov/asd"
+      },
+      {
+        "text": "Morton 2000, ApJS 130, 403 (the air - vacuum relation used to check)",
+        "doi": "10.1086/317349"
+      }
+    ],
+    "acknowledgement": "Wavelengths are from the NIST Atomic Spectra Database (physics.nist.gov/asd)."
+  },
+  "raw": [
+    {
+      "file": "nist-asd-h-alpha.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=6562.20&upp_w=6563.40&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 1537,
+      "sha256": "eaa60b28e748afb277269c960186ecbbc3de5e52df43ca51a5117efd87f6f7bb"
+    },
+    {
+      "file": "nist-asd-h-beta.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=4860.70&upp_w=4861.90&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 1494,
+      "sha256": "1f506b7d8d9391e151a19063ba6ba92813ac0cad1b307b995778879d313ebc9b"
+    },
+    {
+      "file": "nist-asd-h-gamma.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=4339.90&upp_w=4341.10&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 1325,
+      "sha256": "9d0a4f3affa92d483b7f285fd80af12c19500a7665f9d0fc82049cad928829a8"
+    },
+    {
+      "file": "nist-asd-h-delta.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=4101.10&upp_w=4102.30&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 1476,
+      "sha256": "326b734954ceb3d6d15d35f501a29e363f71495b555122fa87dfd5a5c55aab7a"
+    },
+    {
+      "file": "nist-asd-h-epsilon.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=3969.50&upp_w=3970.70&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 1335,
+      "sha256": "df0f793fa73e245bd5f898628637b7be77a2c51d4583388bc83ab53a1707637c"
+    },
+    {
+      "file": "nist-asd-h-8.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=3888.50&upp_w=3889.70&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 1593,
+      "sha256": "a82d202ea3d8395e19f0e4936f1b45345e58d3201479ccac13d9d6326fcbbb16"
+    },
+    {
+      "file": "nist-asd-h-9.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=3834.80&upp_w=3836.00&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 1335,
+      "sha256": "c9dda0e609f14e5f66647f881d1f1c07138fb4cb5a990294d05374e8b8d5a039"
+    },
+    {
+      "file": "nist-asd-ca2-k.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Ca+II&low_w=3933.06&upp_w=3934.26&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 243,
+      "sha256": "0514ec5e3aa8b68f75cffd2f674567fbec8b976b46f6cd6f701a7fd2ee785692"
+    },
+    {
+      "file": "nist-asd-ca2-h.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Ca+II&low_w=3967.87&upp_w=3969.07&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 242,
+      "sha256": "a6c51d5a4206b00aa37a09b339346afc425899f60e3c5e1d098fe9e13d2f3015"
+    },
+    {
+      "file": "nist-asd-ca1-4227.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Ca+I&low_w=4226.13&upp_w=4227.33&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 256,
+      "sha256": "1fdd79ba4aa0345e09212d5733b444a080f7d36cd9dba32957b3577dd36a3017"
+    },
+    {
+      "file": "nist-asd-na1-d2.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Na+I&low_w=5889.35&upp_w=5890.55&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 269,
+      "sha256": "33a8767829ae5d4f38cafed4eba5d7d3e953c40c00b27d302abd814fda7be09c"
+    },
+    {
+      "file": "nist-asd-na1-d1.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Na+I&low_w=5895.32&upp_w=5896.52&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 263,
+      "sha256": "8393b8edfacc54d165485bca1cb1d38a9e3abb1b6f6b8994b7a1c479f0c18cb3"
+    },
+    {
+      "file": "nist-asd-mg1-b4.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Mg+I&low_w=5166.72&upp_w=5167.92&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 244,
+      "sha256": "cd0522eb2383cfce6005f45788d20816f17f2d713d65d885d6ed31625e9d760f"
+    },
+    {
+      "file": "nist-asd-mg1-b2.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Mg+I&low_w=5172.08&upp_w=5173.28&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 346,
+      "sha256": "14e3d120ef29691737486b718359fb2e287416face44bb45b47dafd4cca3753e"
+    },
+    {
+      "file": "nist-asd-mg1-b1.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Mg+I&low_w=5183.00&upp_w=5184.20&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 345,
+      "sha256": "bce2558059f18266597be1b03be4ba5688aedef711a3a0e113f44d7ccc1fbe6f"
+    },
+    {
+      "file": "nist-asd-fe1-4045.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=4045.21&upp_w=4046.41&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 581,
+      "sha256": "01754689e6298ef5db99111766f82a7272275b36a7acc9b32299de424e5084f0"
+    },
+    {
+      "file": "nist-asd-fe1-4383.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=4382.95&upp_w=4384.15&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 266,
+      "sha256": "a4bd0339ef7fdd425f79d83ddb58a01670f55b343466ed202b54b7623e2555af"
+    },
+    {
+      "file": "nist-asd-fe1-4405.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=4404.15&upp_w=4405.35&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 408,
+      "sha256": "5f1ca334a87868b4740ae6d28795d1d0dacd395f57a918975df20e3a8590540b"
+    },
+    {
+      "file": "nist-asd-fe1-5270.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=5268.94&upp_w=5270.14&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 407,
+      "sha256": "3feb1f36cedc7e77b63a9f177292cff509fe038554463e38ab8f6cc6e25a9489"
+    },
+    {
+      "file": "nist-asd-fe1-5328.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=5327.44&upp_w=5328.64&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 423,
+      "sha256": "b6b117feb060dc8dd1b5dbec041c85824761e0f9f7c704a9b8bbe97b3de0994b"
+    },
+    {
+      "file": "nist-asd-he1-4472.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=He+I&low_w=4470.88&upp_w=4472.08&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 995,
+      "sha256": "da21d01676e509047e93e0a328e4dec6bb16f104479209a10801814a38230dc1"
+    },
+    {
+      "file": "nist-asd-he1-5876.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=He+I&low_w=5875.02&upp_w=5876.22&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 959,
+      "sha256": "875f884c6ca5e1a777d3cf97a3602ea64ac670f149f6887832200315c6edcb10"
+    },
+    {
+      "file": "nist-asd-he2-4686.tsv",
+      "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=He+II&low_w=4685.10&upp_w=4686.30&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+      "bytes": 1684,
+      "sha256": "3746660cc1d0781ecf9aa368fa0b278eaf5330e03ce439cfe82882246cf4f658"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/radiation.mjs",
+    "version": "1.0.0",
+    "options": {
+      "windowAngstrom": 0.6
+    },
+    "steps": [
+      "For each line, query NIST ASD for the species in a window of 1.2 A about the textbook wavelength; pin the answer.",
+      "Hydrogen: take the row for the whole level (2 to n), not its fine-structure components.",
+      "Other species: take the strongest row that has an observed wavelength (its observed wavelength is kept); where components share that wavelength (He I 4472, 5876), the vacuum wavelength is the mean over them. He II 4686 has no observed wavelength in NIST: air and vacuum are the mean Ritz wavelengths of its components, and the line says so (observed: false).",
+      "Vacuum wavelength is 1e8 / (E_upper - E_lower) in cm^-1, from NIST's level energies (mean over a blend's components); air is NIST's observed air wavelength. Hydrogen is the exception: its row is for the whole level and its energies are level averages, so its Ritz wavelength is not the line's centroid (H-alpha 6562.819 against the observed 6562.79, 0.03 A or 1.3 km/s); hydrogen keeps the observed air wavelength and takes its vacuum wavelength from Morton 2000 (vacuumFromFormula). For every other line the kernel's air - vacuum formula is independent of both, and validate() holds it to them."
+    ],
+    "record": {}
+  },
+  "assumptions": [
+    "The selection of lines is editorial: the lines Prompt 82 names. The wavelengths are not. TiO band heads are not here: no retrievable, citable table was found (RADIATION.md).",
+    "The air wavelength is \"standard air\" as NIST defines it for wavelengths between 200 nm and 2000 nm.",
+    "A line is a laboratory (rest) wavelength: it is the centroid of the multiplet components NIST lists at that wavelength, not a stellar line profile."
+  ],
+  "masks": [],
+  "reductions": [],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/radiation/lines.js",
+    "bytes": 7751,
+    "sha256": "a151c18d0e2bd68886c935b772871e8696f147bfaf03c2f89e85fccfba6b0622"
+  },
+  "validation": {
+    "check": "airToVacuumNm(air) reproduces the vacuum wavelength from the level energies of every non-hydrogen line with an observed wavelength to within 0.02 A",
+    "against": [
+      {
+        "quantity": "vacuum wavelength of every non-hydrogen line with an observed wavelength, from NIST level energies",
+        "value": 0,
+        "unit": "Angstrom",
+        "ref": "NIST ASD level energies; the kernel's airToVacuumNm (Morton 2000) must agree"
+      }
+    ],
+    "result": {
+      "airToVacuumMinusLevelEnergyA": {
+        "ca2-k": -0.0033,
+        "ca2-h": 0.0018,
+        "ca1-4227": 0.0024,
+        "na1-d2": 0.0004,
+        "na1-d1": 0,
+        "mg1-b4": 0.0004,
+        "mg1-b2": -0.0002,
+        "mg1-b1": -0.0003,
+        "fe1-4045": 0,
+        "fe1-4383": 0.0007,
+        "fe1-4405": 0.0003,
+        "fe1-5270": 0.0006,
+        "fe1-5328": 0.0002,
+        "he1-4472": 0.0009,
+        "he1-5876": -0.0024
+      },
+      "worst": {
+        "id": "ca2-k",
+        "offsetA": -0.0033
+      }
+    }
+  }
+}
