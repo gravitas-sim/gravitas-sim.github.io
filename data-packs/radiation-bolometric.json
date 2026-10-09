@@ -1,0 +1,110 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "radiation-bolometric",
+  "version": "1.0.0",
+  "title": "Bolometric corrections BC_V(Teff): Flower (1996) with the coefficients Torres (2010) corrected",
+  "object": {
+    "name": "stellar bolometric corrections",
+    "identifiers": [
+      "Flower 1996",
+      "Torres 2010"
+    ]
+  },
+  "facility": {
+    "observatory": "compiled from the literature",
+    "pipeline": "tools/data-packs/radiation.mjs 1.0.0"
+  },
+  "dataType": "model-grid",
+  "origin": "compilation",
+  "credit": "Torres 2010, AJ 140, 1158 (Table 1); Flower 1996, ApJ 469, 355",
+  "license": {
+    "status": "attribution-requested",
+    "statement": "The 13 coefficients of a published polynomial, cited to the paper that corrected them.",
+    "basis": "Thirteen numbers defining a relation, from an open arXiv preprint; no table or text of the paper is reproduced."
+  },
+  "retrieved": "2026-10-09",
+  "columns": [
+    {
+      "name": "law",
+      "unit": "",
+      "description": "BC_V in mag as a polynomial in log10 of Teff in K, in three ranges"
+    }
+  ],
+  "source": {
+    "archive": "arXiv",
+    "urls": [
+      "https://arxiv.org/pdf/1008.3913"
+    ],
+    "citations": [
+      {
+        "text": "Torres 2010, AJ 140, 1158: On the use of empirical bolometric corrections for stars",
+        "doi": "10.1088/0004-6256/140/5/1158"
+      },
+      {
+        "text": "Flower 1996, ApJ 469, 355: Transformations from theoretical Hertzsprung-Russell diagrams to color-magnitude diagrams",
+        "doi": "10.1086/177785"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "file": "torres10-arxiv-1008.3913.pdf",
+      "url": "https://arxiv.org/pdf/1008.3913",
+      "bytes": 162070,
+      "sha256": "1683f33a45637337399dc7fd7cc54034cd4668354bbc3582d4718d2ce326e2fd"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/radiation.mjs",
+    "version": "1.0.0",
+    "options": {},
+    "steps": [
+      "Type the three coefficient sets of Table 1 of Torres 2010 (the only table in the paper that holds them) at their printed 15 digits.",
+      "Check that the polynomial gives the published BC_V,sun = -0.080 at 5777 K and that the three fits join to within 0.03 mag."
+    ],
+    "record": {
+      "stepAtLogTeff3_70": -0.022,
+      "stepAtLogTeff3_90": 0.003
+    }
+  },
+  "assumptions": [
+    "BC_V is for the Flower scale, where BC_V,sun = -0.080; with the IAU nominal M_bol,sun = 4.74 and V_sun = -26.76 that implies M_V,sun = 4.812 and BC_V,sun = -0.072, so using this polynomial with 4.74 directly makes luminosities 0.7 percent too high. magnitudes.js absoluteVFromLuminosity() removes the offset by anchoring on the Sun, as Torres recommends.",
+    "The paper gives no range of validity for the polynomials. 3500 K to 40000 K is this pack's stated range (below 3500 K the polynomial is not used, above 40000 K it is not extrapolated); Torres states that the relations \"break down completely for the M dwarfs\", so below 4000 K the value is returned with the range flagged unreliable (reliableAboveK).",
+    "Main-sequence, giant and supergiant stars of one temperature share one BC_V here; the relations are mean empirical ones and carry no dependence on gravity or metallicity."
+  ],
+  "masks": [],
+  "reductions": [],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/radiation/bolometric.js",
+    "bytes": 3329,
+    "sha256": "2765dd3997475341ba3b6b7b5300b46dec9bac27f3839fce92e79fd72997e747"
+  },
+  "validation": {
+    "check": "BC_V at 5777 K is the published -0.080 (within 0.001), and the three fits join to within 0.03 mag",
+    "against": [
+      {
+        "quantity": "BC_V of the Sun on the Flower scale",
+        "value": -0.08,
+        "unit": "mag",
+        "ref": "Torres 2010, section 3 (Flower 1996: BC_V,sun = -0.080)"
+      },
+      {
+        "quantity": "step between adjacent fits",
+        "value": 0,
+        "unit": "mag",
+        "ref": "not constrained by Flower 1996; allowed up to 0.03"
+      }
+    ],
+    "result": {
+      "bcSun": -0.0801,
+      "joinStepAt3_70": -0.0224,
+      "joinStepAt3_90": 0.0031
+    }
+  }
+}

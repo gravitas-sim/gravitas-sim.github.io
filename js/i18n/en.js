@@ -130,7 +130,7 @@ export const EN = {
   // --- footer ----------------------------------------------------------------
   'footer.attribution.hint': 'Carl Ziegler: author of Gravitas',
   'footer.attribution.hint.2':
-    'What the physics engine has been checked against: 286 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser.',
+    'What the physics engine has been checked against: 304 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser.',
   'footer.attribution.hint.3':
     'Browse or contribute to the source code on GitHub',
   'footer.attribution': 'Validated',

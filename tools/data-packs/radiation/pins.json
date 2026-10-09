@@ -1,0 +1,200 @@
+{
+  "sdss-filter-curves.fits": {
+    "file": "sdss-filter-curves.fits",
+    "url": "https://www.sdss4.org/wp-content/uploads/2017/04/filter_curves.fits",
+    "bytes": 34560,
+    "sha256": "3b297045e877b04371f7e89a4d9c7581930509551c3fcb2a34038aaf2f81c87e"
+  },
+  "tess-response-function-v2.0.csv": {
+    "file": "tess-response-function-v2.0.csv",
+    "url": "https://heasarc.gsfc.nasa.gov/docs/tess/data/tess-response-function-v2.0.csv",
+    "bytes": 7700,
+    "sha256": "0751093d8e3384719ead1d1e82bc6423d97c52e602d80fa11176112d0b541928"
+  },
+  "svo-2mass-j.dat": {
+    "file": "svo-2mass-j.dat",
+    "url": "http://svo2.cab.inta-csic.es/theory/fps/getdata.php?format=ascii&id=2MASS/2MASS.J",
+    "bytes": 2247,
+    "sha256": "9d0c86e1279f17ff0041ab89d3e31f1eb80ba8293c1ef93638fc308d4a5cdb9c"
+  },
+  "svo-2mass-h.dat": {
+    "file": "svo-2mass-h.dat",
+    "url": "http://svo2.cab.inta-csic.es/theory/fps/getdata.php?format=ascii&id=2MASS/2MASS.H",
+    "bytes": 1218,
+    "sha256": "f6c6074ba5dae4937127c67a6c90adad84e8a1f724eb1fcf17d353ba6b0cc70d"
+  },
+  "svo-2mass-ks.dat": {
+    "file": "svo-2mass-ks.dat",
+    "url": "http://svo2.cab.inta-csic.es/theory/fps/getdata.php?format=ascii&id=2MASS/2MASS.Ks",
+    "bytes": 1596,
+    "sha256": "58969bfd998b9080dff12f9cd7f8678424e6ce2f7e1a7e22545ccf6237fd71e5"
+  },
+  "calspec-alpha-lyr-stis-008.fits": {
+    "file": "calspec-alpha-lyr-stis-008.fits",
+    "url": "https://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_008.fits",
+    "bytes": 276480,
+    "sha256": "600c8911dfb6d66a5ea52f815adc1d0366806a104b89329bd4a64d7906139830"
+  },
+  "irsa-2mass-absolute-calibration.html": {
+    "file": "irsa-2mass-absolute-calibration.html",
+    "url": "https://irsa.ipac.caltech.edu/data/2MASS/docs/releases/allsky/doc/sec6_4a.html",
+    "bytes": 6803,
+    "sha256": "100af9a9e1cef2dbf3432dc3ec8a0e9661b78306c146a43ec911821fa9110977"
+  },
+  "bm12-arxiv-1112.2698v1.pdf": {
+    "file": "bm12-arxiv-1112.2698v1.pdf",
+    "url": "https://arxiv.org/pdf/1112.2698v1",
+    "bytes": 2054407,
+    "sha256": "5152b4e6f064483f3407d672eef491f025b9b3f076d69959e13cf33094c7d357"
+  },
+  "ccm89-apj-345-245.pdf": {
+    "file": "ccm89-apj-345-245.pdf",
+    "url": "https://articles.adsabs.harvard.edu/pdf/1989ApJ...345..245C",
+    "bytes": 1292222,
+    "sha256": "e3db684021b80d7c161499f8e6257df9881251b0fb0382a3d9d30b2ae0e6fd73"
+  },
+  "torres10-arxiv-1008.3913.pdf": {
+    "file": "torres10-arxiv-1008.3913.pdf",
+    "url": "https://arxiv.org/pdf/1008.3913",
+    "bytes": 162070,
+    "sha256": "1683f33a45637337399dc7fd7cc54034cd4668354bbc3582d4718d2ce326e2fd"
+  },
+  "nist-asd-h-alpha.tsv": {
+    "file": "nist-asd-h-alpha.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=6562.20&upp_w=6563.40&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 1537,
+    "sha256": "eaa60b28e748afb277269c960186ecbbc3de5e52df43ca51a5117efd87f6f7bb"
+  },
+  "nist-asd-h-beta.tsv": {
+    "file": "nist-asd-h-beta.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=4860.70&upp_w=4861.90&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 1494,
+    "sha256": "1f506b7d8d9391e151a19063ba6ba92813ac0cad1b307b995778879d313ebc9b"
+  },
+  "nist-asd-h-gamma.tsv": {
+    "file": "nist-asd-h-gamma.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=4339.90&upp_w=4341.10&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 1325,
+    "sha256": "9d0a4f3affa92d483b7f285fd80af12c19500a7665f9d0fc82049cad928829a8"
+  },
+  "nist-asd-h-delta.tsv": {
+    "file": "nist-asd-h-delta.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=4101.10&upp_w=4102.30&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 1476,
+    "sha256": "326b734954ceb3d6d15d35f501a29e363f71495b555122fa87dfd5a5c55aab7a"
+  },
+  "nist-asd-h-epsilon.tsv": {
+    "file": "nist-asd-h-epsilon.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=3969.50&upp_w=3970.70&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 1335,
+    "sha256": "df0f793fa73e245bd5f898628637b7be77a2c51d4583388bc83ab53a1707637c"
+  },
+  "nist-asd-h-8.tsv": {
+    "file": "nist-asd-h-8.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=3888.50&upp_w=3889.70&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 1593,
+    "sha256": "a82d202ea3d8395e19f0e4936f1b45345e58d3201479ccac13d9d6326fcbbb16"
+  },
+  "nist-asd-h-9.tsv": {
+    "file": "nist-asd-h-9.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&low_w=3834.80&upp_w=3836.00&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 1335,
+    "sha256": "c9dda0e609f14e5f66647f881d1f1c07138fb4cb5a990294d05374e8b8d5a039"
+  },
+  "nist-asd-ca2-k.tsv": {
+    "file": "nist-asd-ca2-k.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Ca+II&low_w=3933.06&upp_w=3934.26&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 243,
+    "sha256": "0514ec5e3aa8b68f75cffd2f674567fbec8b976b46f6cd6f701a7fd2ee785692"
+  },
+  "nist-asd-ca2-h.tsv": {
+    "file": "nist-asd-ca2-h.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Ca+II&low_w=3967.87&upp_w=3969.07&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 242,
+    "sha256": "a6c51d5a4206b00aa37a09b339346afc425899f60e3c5e1d098fe9e13d2f3015"
+  },
+  "nist-asd-ca1-4227.tsv": {
+    "file": "nist-asd-ca1-4227.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Ca+I&low_w=4226.13&upp_w=4227.33&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 256,
+    "sha256": "1fdd79ba4aa0345e09212d5733b444a080f7d36cd9dba32957b3577dd36a3017"
+  },
+  "nist-asd-na1-d2.tsv": {
+    "file": "nist-asd-na1-d2.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Na+I&low_w=5889.35&upp_w=5890.55&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 269,
+    "sha256": "33a8767829ae5d4f38cafed4eba5d7d3e953c40c00b27d302abd814fda7be09c"
+  },
+  "nist-asd-na1-d1.tsv": {
+    "file": "nist-asd-na1-d1.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Na+I&low_w=5895.32&upp_w=5896.52&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 263,
+    "sha256": "8393b8edfacc54d165485bca1cb1d38a9e3abb1b6f6b8994b7a1c479f0c18cb3"
+  },
+  "nist-asd-mg1-b4.tsv": {
+    "file": "nist-asd-mg1-b4.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Mg+I&low_w=5166.72&upp_w=5167.92&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 244,
+    "sha256": "cd0522eb2383cfce6005f45788d20816f17f2d713d65d885d6ed31625e9d760f"
+  },
+  "nist-asd-mg1-b2.tsv": {
+    "file": "nist-asd-mg1-b2.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Mg+I&low_w=5172.08&upp_w=5173.28&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 346,
+    "sha256": "14e3d120ef29691737486b718359fb2e287416face44bb45b47dafd4cca3753e"
+  },
+  "nist-asd-mg1-b1.tsv": {
+    "file": "nist-asd-mg1-b1.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Mg+I&low_w=5183.00&upp_w=5184.20&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 345,
+    "sha256": "bce2558059f18266597be1b03be4ba5688aedef711a3a0e113f44d7ccc1fbe6f"
+  },
+  "nist-asd-fe1-4045.tsv": {
+    "file": "nist-asd-fe1-4045.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=4045.21&upp_w=4046.41&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 581,
+    "sha256": "01754689e6298ef5db99111766f82a7272275b36a7acc9b32299de424e5084f0"
+  },
+  "nist-asd-fe1-4383.tsv": {
+    "file": "nist-asd-fe1-4383.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=4382.95&upp_w=4384.15&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 266,
+    "sha256": "a4bd0339ef7fdd425f79d83ddb58a01670f55b343466ed202b54b7623e2555af"
+  },
+  "nist-asd-fe1-4405.tsv": {
+    "file": "nist-asd-fe1-4405.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=4404.15&upp_w=4405.35&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 408,
+    "sha256": "5f1ca334a87868b4740ae6d28795d1d0dacd395f57a918975df20e3a8590540b"
+  },
+  "nist-asd-fe1-5270.tsv": {
+    "file": "nist-asd-fe1-5270.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=5268.94&upp_w=5270.14&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 407,
+    "sha256": "3feb1f36cedc7e77b63a9f177292cff509fe038554463e38ab8f6cc6e25a9489"
+  },
+  "nist-asd-fe1-5328.tsv": {
+    "file": "nist-asd-fe1-5328.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Fe+I&low_w=5327.44&upp_w=5328.64&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 423,
+    "sha256": "b6b117feb060dc8dd1b5dbec041c85824761e0f9f7c704a9b8bbe97b3de0994b"
+  },
+  "nist-asd-he1-4472.tsv": {
+    "file": "nist-asd-he1-4472.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=He+I&low_w=4470.88&upp_w=4472.08&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 995,
+    "sha256": "da21d01676e509047e93e0a328e4dec6bb16f104479209a10801814a38230dc1"
+  },
+  "nist-asd-he1-5876.tsv": {
+    "file": "nist-asd-he1-5876.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=He+I&low_w=5875.02&upp_w=5876.22&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 959,
+    "sha256": "875f884c6ca5e1a777d3cf97a3602ea64ac670f149f6887832200315c6edcb10"
+  },
+  "nist-asd-he2-4686.tsv": {
+    "file": "nist-asd-he2-4686.tsv",
+    "url": "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=He+II&low_w=4685.10&upp_w=4686.30&unit=0&submit=Retrieve+Data&format=3&line_out=0&en_unit=0&output=0&bibrefs=1&page_size=100&show_obs_wl=1&show_calc_wl=1&order_out=0&show_av=2&A_out=0&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on",
+    "bytes": 1684,
+    "sha256": "3746660cc1d0781ecf9aa368fa0b278eaf5330e03ce439cfe82882246cf4f658"
+  }
+}

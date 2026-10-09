@@ -1,0 +1,388 @@
+{
+  "format": "gravitas.observation-data-pack",
+  "formatVersion": 1,
+  "id": "radiation-bandpasses",
+  "version": "1.0.0",
+  "title": "Photometric bandpasses (Johnson-Cousins UBVRI, SDSS ugriz, TESS, 2MASS JHK) and their AB - Vega zero points",
+  "object": {
+    "name": "photometric systems",
+    "identifiers": [
+      "U",
+      "B",
+      "V",
+      "R",
+      "I",
+      "u",
+      "g",
+      "r",
+      "i",
+      "z",
+      "T",
+      "J",
+      "H",
+      "Ks"
+    ]
+  },
+  "facility": {
+    "observatory": "compiled from the literature and the mission and survey archives",
+    "pipeline": "tools/data-packs/radiation.mjs 1.0.0"
+  },
+  "dataType": "model-grid",
+  "origin": "compilation",
+  "credit": "Bessell & Murphy 2012; SDSS Collaboration (J. Gunn); NASA TESS (R. Vanderspek, MIT); Cohen, Wheaton & Megeath 2003 (2MASS, IRSA, SVO Filter Profile Service); Vega: Bohlin 2014, CALSPEC (STScI)",
+  "license": {
+    "status": "attribution-requested",
+    "statement": "Response functions are measured, tabulated instrument properties published by their teams or archives (BM12 Table 1; the SDSS, TESS and 2MASS archives), shipped here resampled to a uniform grid with the AB - Vega offsets computed from the public-domain CALSPEC Vega spectrum. The TESS and 2MASS archives and the SDSS publish them for use with acknowledgement; no licence text accompanies the BM12 table or the SVO copy of the 2MASS curves.",
+    "basis": "A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. The Gaia passbands were not included because Gaia data are CC BY-NC 3.0 IGO. If Carl prefers no reproduction of the BM12 table, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md)."
+  },
+  "retrieved": "2026-10-09",
+  "columns": [
+    {
+      "name": "wavelength",
+      "unit": "nm",
+      "description": "startNm + i * stepNm"
+    },
+    {
+      "name": "response",
+      "unit": "",
+      "description": "photon-counting relative response, integer in units of 1/scale of the peak"
+    },
+    {
+      "name": "abMinusVega",
+      "unit": "mag",
+      "description": "m_AB - m_Vega of the band, with Vega = 0.03 mag in every band"
+    }
+  ],
+  "source": {
+    "archive": "journal tables and mission archives, as each band says",
+    "urls": [
+      "https://www.sdss4.org/wp-content/uploads/2017/04/filter_curves.fits",
+      "https://heasarc.gsfc.nasa.gov/docs/tess/data/tess-response-function-v2.0.csv",
+      "http://svo2.cab.inta-csic.es/theory/fps/getdata.php?format=ascii&id=2MASS/2MASS.J",
+      "http://svo2.cab.inta-csic.es/theory/fps/getdata.php?format=ascii&id=2MASS/2MASS.H",
+      "http://svo2.cab.inta-csic.es/theory/fps/getdata.php?format=ascii&id=2MASS/2MASS.Ks",
+      "https://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_008.fits",
+      "https://irsa.ipac.caltech.edu/data/2MASS/docs/releases/allsky/doc/sec6_4a.html",
+      "https://arxiv.org/pdf/1112.2698v1"
+    ],
+    "citations": [
+      {
+        "text": "Bessell & Murphy 2012, PASP 124, 140, Table 1 (photon-counting UBVRI)",
+        "doi": "10.1086/664083"
+      },
+      {
+        "text": "Fukugita et al. 1996, AJ 111, 1748 (the SDSS photometric system)",
+        "doi": "10.1086/117915"
+      },
+      {
+        "text": "SDSS 2001 filter curves of J. Gunn, column respt: QE on the sky through 1.3 airmasses at APO (sdss4.org)"
+      },
+      {
+        "text": "TESS Instrument Response Function v2.0, R. Vanderspek, 2020 (NASA HEASARC)"
+      },
+      {
+        "text": "Ricker et al. 2015, JATIS 1, 014003 (TESS)",
+        "doi": "10.1117/1.JATIS.1.1.014003"
+      },
+      {
+        "text": "Cohen, Wheaton & Megeath 2003, AJ 126, 1090: relative spectral responses, photon-counting (IRSA)",
+        "doi": "10.1086/376474"
+      },
+      {
+        "text": "Rodrigo, Solano & Bayo 2012, The SVO Filter Profile Service (the copy of the 2MASS curves)"
+      },
+      {
+        "text": "Bohlin 2014, AJ 147, 127 (the Vega spectrum alpha_lyr_stis_008)",
+        "doi": "10.1088/0004-6256/147/6/127"
+      },
+      {
+        "text": "Willmer 2018, ApJS 236, 47 (published AB - Vega offsets, the check)",
+        "doi": "10.3847/1538-4365/aabfdf"
+      },
+      {
+        "text": "Oke & Gunn 1983, ApJ 266, 713 (the AB system)",
+        "doi": "10.1086/160817"
+      }
+    ],
+    "acknowledgement": "This research has made use of the SVO Filter Profile Service \"Carlos Rodrigo\", funded by MCIN/AEI/10.13039/501100011033/ through grant PID2023-146210NB-I00. Based on CALSPEC data from the Space Telescope Science Institute."
+  },
+  "raw": [
+    {
+      "file": "sdss-filter-curves.fits",
+      "url": "https://www.sdss4.org/wp-content/uploads/2017/04/filter_curves.fits",
+      "bytes": 34560,
+      "sha256": "3b297045e877b04371f7e89a4d9c7581930509551c3fcb2a34038aaf2f81c87e"
+    },
+    {
+      "file": "tess-response-function-v2.0.csv",
+      "url": "https://heasarc.gsfc.nasa.gov/docs/tess/data/tess-response-function-v2.0.csv",
+      "bytes": 7700,
+      "sha256": "0751093d8e3384719ead1d1e82bc6423d97c52e602d80fa11176112d0b541928"
+    },
+    {
+      "file": "svo-2mass-j.dat",
+      "url": "http://svo2.cab.inta-csic.es/theory/fps/getdata.php?format=ascii&id=2MASS/2MASS.J",
+      "bytes": 2247,
+      "sha256": "9d0c86e1279f17ff0041ab89d3e31f1eb80ba8293c1ef93638fc308d4a5cdb9c"
+    },
+    {
+      "file": "svo-2mass-h.dat",
+      "url": "http://svo2.cab.inta-csic.es/theory/fps/getdata.php?format=ascii&id=2MASS/2MASS.H",
+      "bytes": 1218,
+      "sha256": "f6c6074ba5dae4937127c67a6c90adad84e8a1f724eb1fcf17d353ba6b0cc70d"
+    },
+    {
+      "file": "svo-2mass-ks.dat",
+      "url": "http://svo2.cab.inta-csic.es/theory/fps/getdata.php?format=ascii&id=2MASS/2MASS.Ks",
+      "bytes": 1596,
+      "sha256": "58969bfd998b9080dff12f9cd7f8678424e6ce2f7e1a7e22545ccf6237fd71e5"
+    },
+    {
+      "file": "calspec-alpha-lyr-stis-008.fits",
+      "url": "https://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_008.fits",
+      "bytes": 276480,
+      "sha256": "600c8911dfb6d66a5ea52f815adc1d0366806a104b89329bd4a64d7906139830"
+    },
+    {
+      "file": "irsa-2mass-absolute-calibration.html",
+      "url": "https://irsa.ipac.caltech.edu/data/2MASS/docs/releases/allsky/doc/sec6_4a.html",
+      "bytes": 6803,
+      "sha256": "100af9a9e1cef2dbf3432dc3ec8a0e9661b78306c146a43ec911821fa9110977"
+    },
+    {
+      "file": "bm12-arxiv-1112.2698v1.pdf",
+      "url": "https://arxiv.org/pdf/1112.2698v1",
+      "bytes": 2054407,
+      "sha256": "5152b4e6f064483f3407d672eef491f025b9b3f076d69959e13cf33094c7d357"
+    }
+  ],
+  "transformation": {
+    "script": "tools/data-packs/radiation.mjs",
+    "version": "1.0.0",
+    "options": {
+      "stepNm": 5,
+      "sdssStepNm": 2.5,
+      "vegaMagnitude": 0.03
+    },
+    "steps": [
+      "UBVRI: read Table 1 of Bessell & Murphy 2012 from tools/data-packs/radiation/bm12-table1.txt (transcribed with pdftotext from the pinned PDF, which is the arXiv v1 preprint 1112.2698v1, not the published PASP version; its pivot wavelengths must reproduce the paper's Table 5). Kept on the paper's own 50 A (U) and 100 A grids.",
+      "SDSS: read the five extensions of the pinned FITS file, column respt (the response on the sky at 1.3 airmasses, which includes the atmosphere).",
+      "TESS and 2MASS: read the pinned response tables (wavelength, response).",
+      "SDSS, TESS and 2MASS: resample by linear interpolation onto a uniform grid (2.5 nm for SDSS, whose curves are tabulated at that spacing; 5 nm for TESS and 2MASS), one zero point either side of the nonzero response, response to 1/10000 of the peak. Refuse any band for which the resampling moves the AB magnitude of Vega, or of a blackbody from 3000 K to 30000 K, by more than 0.003 mag. Refuse any band (UBVRI included, whose grid is not resampled) for which integrating at the kernel 1 nm step instead of 0.1 nm moves those magnitudes by more than 0.003 mag.",
+      "Zero point: the AB magnitude of the CALSPEC Vega spectrum alpha_lyr_stis_008 through the shipped band (the kernel's own photon-counting synthetic photometry), minus 0.03: Vega is 0.03 mag in every band, the convention of BM12 and Willmer 2018."
+    ],
+    "record": {
+      "resamplingWorstMagnitudeChange": {
+        "U": 0,
+        "B": 0,
+        "V": 0,
+        "R": 0,
+        "I": 0,
+        "u": 0.00002,
+        "g": 0,
+        "r": 0,
+        "i": 0,
+        "z": 0,
+        "T": 0.00045,
+        "J": 0.00078,
+        "H": 0.00006,
+        "Ks": 0.00009
+      },
+      "integrationStepWorstMagnitudeChange": {
+        "U": 0.00083,
+        "B": 0.00011,
+        "V": 0,
+        "R": 0,
+        "I": 0.00006,
+        "u": 0.00093,
+        "g": 0.00022,
+        "r": 0.0001,
+        "i": 0,
+        "z": 0.00007,
+        "T": 0.00002,
+        "J": 0.00001,
+        "H": 0,
+        "Ks": 0
+      }
+    }
+  },
+  "assumptions": [
+    "Every response is photon-counting (relative number of photons detected): BM12 Table 1 by their definition; the SDSS curve is a quantum efficiency (the 2001 preliminary curves of J. Gunn, with the atmosphere at 1.3 airmasses); the TESS function is the instrument response including QE; the 2MASS curves are Cohen et al.'s photon-counting RSRs. A band published as an energy response must be divided by wavelength before it is added.",
+    "The AB - Vega offset is computed here against the Vega spectrum of Bohlin 2014 with Vega = 0.03 mag in every band. It is not the zero point any survey published, except where the validation says it reproduces one. SDSS and 2MASS reproduce Willmer 2018 to better than 0.01 mag; UBVRI to 0.01 as well (the spectrum is integrated at steps of at most 1 nm; the Balmer jump and lines of Vega alias if it is sampled only at the 50 and 100 A nodes of the BM12 tables). BM12 own Table 3 offsets for U and B (0.784, -0.107) differ from those of Willmer by 0.02 to 0.03 and are not reproduced. TESS has no published AB - Vega offset and none is quoted.",
+    "The SDSS curves are the 2001 preliminary curves of J. Gunn and include the atmosphere at 1.3 airmasses. Magnitudes through them are true AB magnitudes (the kernel integrates f_nu against the curve); native SDSS u and z magnitudes differ from AB by about -0.04 and +0.02 mag (the survey's AB offsets) and the kernel does not apply them. They are not the Doi et al. 2010 curves.",
+    "2MASS: here Vega is 0.03 mag in every band, as for the other systems; real 2MASS catalogue magnitudes put Vega near 0 in J, H and Ks, so a catalogue magnitude differs from this kernel's Vega magnitude by 0.024 to 0.03 mag.",
+    "Gaia G, G_BP and G_RP are not here (RADIATION.md, Blockers)."
+  ],
+  "masks": [],
+  "reductions": [],
+  "compatible": {
+    "widgets": [],
+    "investigations": []
+  },
+  "offline": "optional",
+  "derived": {
+    "file": "js/data/radiation/bandpasses.js",
+    "bytes": 13547,
+    "sha256": "422ebf73efac7122f317929349e1df6452e2d779e5d25ca6fb3ed3dd07f10f3e"
+  },
+  "validation": {
+    "check": "each band reproduces the published pivot wavelength (UBVRI) and the published AB - Vega offset (Willmer 2018; 2MASS also from Cohen 2003 zero-magnitude fluxes), within the tolerances stated in tools/data-packs/radiation.mjs",
+    "against": [
+      {
+        "quantity": "pivot wavelength of U",
+        "value": 3597,
+        "unit": "Angstrom",
+        "ref": "Bessell & Murphy 2012, Table 5"
+      },
+      {
+        "quantity": "pivot wavelength of B",
+        "value": 4377,
+        "unit": "Angstrom",
+        "ref": "Bessell & Murphy 2012, Table 5"
+      },
+      {
+        "quantity": "pivot wavelength of V",
+        "value": 5488,
+        "unit": "Angstrom",
+        "ref": "Bessell & Murphy 2012, Table 5"
+      },
+      {
+        "quantity": "pivot wavelength of R",
+        "value": 6515,
+        "unit": "Angstrom",
+        "ref": "Bessell & Murphy 2012, Table 5"
+      },
+      {
+        "quantity": "pivot wavelength of I",
+        "value": 7981,
+        "unit": "Angstrom",
+        "ref": "Bessell & Murphy 2012, Table 5"
+      },
+      {
+        "quantity": "AB - Vega of U",
+        "value": 0.768,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of B",
+        "value": -0.134,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of V",
+        "value": -0.017,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of R",
+        "value": 0.168,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of I",
+        "value": 0.408,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of J",
+        "value": 0.87,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of H",
+        "value": 1.344,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of Ks",
+        "value": 1.814,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of u",
+        "value": 0.9,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of g",
+        "value": -0.125,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of r",
+        "value": 0.119,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of i",
+        "value": 0.332,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of z",
+        "value": 0.494,
+        "unit": "mag",
+        "ref": "Willmer 2018, ApJS 236, 47, Table 3"
+      },
+      {
+        "quantity": "AB - Vega of 2MASS J from its zero-magnitude flux 1594 Jy",
+        "value": 0.894,
+        "unit": "mag",
+        "ref": "Cohen et al. 2003 via IRSA (2MASS Explanatory Supplement VI.4a, Table 1)"
+      },
+      {
+        "quantity": "AB - Vega of 2MASS H from its zero-magnitude flux 1024 Jy",
+        "value": 1.374,
+        "unit": "mag",
+        "ref": "Cohen et al. 2003 via IRSA (2MASS Explanatory Supplement VI.4a, Table 1)"
+      },
+      {
+        "quantity": "AB - Vega of 2MASS Ks from its zero-magnitude flux 666.7 Jy",
+        "value": 1.84,
+        "unit": "mag",
+        "ref": "Cohen et al. 2003 via IRSA (2MASS Explanatory Supplement VI.4a, Table 1)"
+      }
+    ],
+    "result": {
+      "pivotA": {
+        "U": 3596.8,
+        "B": 4376.9,
+        "V": 5487.5,
+        "R": 6515.7,
+        "I": 7980.8
+      },
+      "offsetVsWillmer": {
+        "U": 0,
+        "B": 0.001,
+        "V": 0,
+        "R": -0.002,
+        "I": -0.001,
+        "J": 0,
+        "H": 0,
+        "Ks": 0,
+        "u": 0.001,
+        "g": -0.001,
+        "r": 0,
+        "i": 0,
+        "z": 0
+      },
+      "offsetVsCohen": {
+        "J": 0.006,
+        "H": -0.001,
+        "Ks": 0.004
+      }
+    }
+  }
+}

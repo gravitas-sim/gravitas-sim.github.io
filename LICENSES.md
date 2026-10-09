@@ -100,6 +100,10 @@ say something different from them; NOTICE lists what each one cites.
 | `js/data/observations/mistSdssIsochrones.js` | MIST v1.2 isochrones in the SDSS bands (a model) (`mist-sdss-isochrones`) | model | no license stated; see NOTICE |
 | `js/data/stellar/mistTracks.js` | MIST v1.2 evolutionary tracks: eight model stars at solar metallicity (`mist-v12-tracks`) | model | no license stated; see NOTICE |
 | `js/data/ngc3198Synthetic.js` | NGC 3198: a synthetic rotation curve (`ngc3198-synthetic-curve`) | synthetic | CC BY 4.0; see NOTICE |
+| `js/data/radiation/bandpasses.js` | Photometric bandpasses (Johnson-Cousins UBVRI, SDSS ugriz, TESS, 2MASS JHK) and their AB - Vega zero points (`radiation-bandpasses`) | compilation | no license; attribution requested; see NOTICE |
+| `js/data/radiation/bolometric.js` | Bolometric corrections BC_V(Teff): Flower (1996) with the coefficients Torres (2010) corrected (`radiation-bolometric`) | compilation | no license; attribution requested; see NOTICE |
+| `js/data/radiation/extinction.js` | The Cardelli, Clayton & Mathis (1989) interstellar extinction law: coefficients (`radiation-extinction`) | compilation | no license; attribution requested; see NOTICE |
+| `js/data/radiation/lines.js` | The strongest optical spectral lines: rest wavelengths in air and vacuum (`radiation-lines`) | compilation | public domain; see NOTICE |
 | `js/data/observations/sdssNgc2420Photometry.js` | NGC 2420: SDSS DR18 photometry (`sdss-dr18-ngc2420-photometry`) | observed | public domain; see NOTICE |
 | `js/data/observations/sdssNgc2420Segue.js` | NGC 2420: SEGUE stellar parameters (`sdss-dr18-ngc2420-segue`) | observed | public domain; see NOTICE |
 | `js/data/spectra/sdssSpectra.js` | Four observed stellar spectra: SDSS DR18, one each of A, G, K and M (`sdss-dr18-stellar-spectra`) | observed | public domain; see NOTICE |

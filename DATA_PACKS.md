@@ -5,7 +5,7 @@ the record of where it came from and what was done to it. The data might be an
 observation, a published model grid, or values compiled from papers. The format
 is `gravitas.observation-data-pack/1`, decided by
 [OBSERVATION_DATA_PACK_GATE.md](OBSERVATION_DATA_PACK_GATE.md). Every dataset
-Gravitas shows as coming from outside it is a pack: twelve are built in, and
+Gravitas shows as coming from outside it is a pack: sixteen are built in, and
 the table below lists them. LICENSES.md and NOTICE carry the licence inventory,
 and the model page their badges, all generated from the manifests.
 
@@ -23,6 +23,16 @@ and the model page their badges, all generated from the manifests.
 | `exoplanet-systems` | HD 209458, and the Sun and Jupiter | compilation | `js/data/exoplanetSystems.js` | `packs:*` |
 | `trappist-1-system` | TRAPPIST-1 and its seven planets | compilation | `js/data/trappist1.js` | `packs:*` |
 | `ngc3198-synthetic-curve` | the NGC 3198 curve The Missing Mass fits | **synthetic** | `js/data/ngc3198Synthetic.js` | `packs:*` |
+| `radiation-bandpasses` | UBVRI, SDSS ugriz, TESS and 2MASS bandpasses with AB - Vega offsets | compilation | `js/data/radiation/bandpasses.js` | `packs:*` |
+| `radiation-lines` | 22 strong optical lines, air and vacuum, from NIST | compilation | `js/data/radiation/lines.js` | `packs:*` |
+| `radiation-extinction` | the Cardelli, Clayton & Mathis 1989 law | compilation | `js/data/radiation/extinction.js` | `packs:*` |
+| `radiation-bolometric` | Flower 1996 `BC_V(Teff)` as Torres 2010 corrected it | compilation | `js/data/radiation/bolometric.js` | `packs:*` |
+
+The last four are the radiation kernel's (`RADIATION.md`). They are `dataType`
+`model-grid` and `catalog` for want of a type for a response function or a law,
+they name their own loader (`js/kernels/radiation/packs.js`) in place of the
+Observatory's fixtures, and they are built by `tools/data-packs/radiation.mjs`
+from raw products pinned in `tools/data-packs/radiation/pins.json`.
 
 ## Three files per pack
 
@@ -265,7 +275,7 @@ four datasets with commands of their own are rebuilt by those
 (`npm run spectra:provenance`, `gwosc:provenance`, `gw:provenance`,
 `stellar:provenance`), each a step of the same gate against its own cache, so
 an archive that is down is reported for itself; `node tools/build-data-packs.mjs
---check --require-sources --all` rebuilds all twelve at once.
+--check --require-sources --all` rebuilds all sixteen at once.
 
 ## The datasets that came before packs
 
