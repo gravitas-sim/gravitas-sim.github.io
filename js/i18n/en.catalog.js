@@ -109,5 +109,19 @@ export const EN_CATALOG = {
   'cat.course.label': 'The course: {title}',
   'cat.course.teacher': 'For the teacher',
   'cat.course.student': 'For the student',
+  'cat.badge.contributed': 'Contributed',
+  'cat.badge.withdrawn': 'Withdrawn',
+  'cat.contributed.title': 'Contributed',
+  'cat.contributed.intro':
+    'Packages written by instructors and researchers outside the Gravitas team. A maintainer reviewed each one against the same checklist as everything else here before it was listed, and it is credited as its author asked.',
+  'cat.contributed.none':
+    'Nothing has been contributed yet. CONTRIBUTING_CONTENT.md in the source repository describes how to submit a package.',
+  'cat.contributedBy': 'Contributed by',
+  'cat.history': 'History',
+  'cat.history.item': 'Version {version}, {date}: {change}',
+  'cat.status.withdrawn':
+    'Withdrawn from the catalog on {date}. Reason: {reason}',
+  'cat.status.withdrawn.copy':
+    'Your installed copy, version {installed}, keeps working on this device. It will not be updated.',
   'cat.course.open': 'Open {title}',
 };

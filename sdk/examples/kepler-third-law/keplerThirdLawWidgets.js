@@ -14,6 +14,19 @@
 // solar masses: P^2 = a^3 / M.
 // =============================================================================
 
+import { translator } from 'gravitas:instrument/strings';
+import { colorToken } from 'gravitas:instrument/tokens';
+import en from './strings.en.json' with { type: 'json' };
+import es from './strings.es.json' with { type: 'json' };
+
+// The public instrument API (sdk/README.md): strings from the catalogs the
+// manifest declares, in the reader's language, and colours from the theme.
+const t = (key, vars) =>
+  translator(
+    { en, es },
+    typeof document === 'undefined' ? 'en' : document.documentElement.lang
+  )(key, vars);
+
 /** The period, in years, of an orbit of semi-major axis a (AU) round mass M (solar masses). */
 export const periodYears = (a, M) => Math.sqrt((a * a * a) / M);
 
@@ -50,15 +63,15 @@ const PERIOD = {
     const years = periodYears(v.a, v.M);
     return [
       {
-        label: 'Orbital period',
+        label: t('period'),
         value:
           years < 2
-            ? `${(years * 365.25).toFixed(1)} days`
-            : `${years.toFixed(2)} years`,
+            ? t('days', { n: (years * 365.25).toFixed(1) })
+            : t('years', { n: years.toFixed(2) }),
       },
       {
-        label: 'Compared with Earth',
-        value: `${years.toFixed(3)} × Earth's year`,
+        label: t('compared'),
+        value: t('times', { n: years.toFixed(3) }),
       },
     ];
   },
@@ -69,11 +82,11 @@ const PERIOD = {
     ctx.clearRect(0, 0, w, h);
     const scale = (Math.min(w, h) * 0.45) / 40;
     const r = Math.max(2, v.a * scale);
-    ctx.strokeStyle = '#8aa4c8';
+    ctx.strokeStyle = colorToken('--text-muted', '#8aa4c8');
     ctx.beginPath();
     ctx.arc(w / 2, h / 2, r, 0, Math.PI * 2);
     ctx.stroke();
-    ctx.fillStyle = '#ffd27a';
+    ctx.fillStyle = colorToken('--hue-star', '#ffd27a');
     ctx.beginPath();
     ctx.arc(w / 2, h / 2, 3 + Math.sqrt(v.M), 0, Math.PI * 2);
     ctx.fill();

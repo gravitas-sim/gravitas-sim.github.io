@@ -46,6 +46,13 @@
         margin: 0;
         padding-left: var(--space-5);
       }
+      .cw-contributed {
+        margin-top: var(--space-6);
+      }
+      .cw-history {
+        margin: 0;
+        padding-left: var(--space-4);
+      }
       .cw-course li {
         margin: 0 0 var(--space-2);
       }
@@ -146,6 +153,27 @@ try {
       <p id="catCount" class="ui-hint" aria-live="polite"></p>
       <div id="catLoad"></div>
       <ul id="catList" class="cw-list"></ul>
+      <section
+        id="catContributedSection"
+        class="cw-contributed"
+        aria-labelledby="catContributedTitle"
+        hidden
+      >
+        <h2 id="catContributedTitle" data-i18n="cat.contributed.title">
+          Contributed
+        </h2>
+        <p class="ui-hint" data-i18n="cat.contributed.intro">
+          Packages written outside the Gravitas team.
+        </p>
+        <p
+          id="catContributedNone"
+          class="ui-hint"
+          data-i18n="cat.contributed.none"
+        >
+          Nothing has been contributed yet.
+        </p>
+        <ul id="catContributed" class="cw-list"></ul>
+      </section>
       <section
         id="catCourse"
         class="ui-card cw-course"

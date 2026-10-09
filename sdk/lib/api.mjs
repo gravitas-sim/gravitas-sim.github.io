@@ -60,7 +60,34 @@ export {
 // the check a transit pack states (added in 1.3.0; `sdk test` runs the same).
 
 /** This SDK. A major version changes only with a breaking change to this file. */
-export const SDK_VERSION = '1.8.0';
+export const SDK_VERSION = '1.9.0';
+
+/**
+ * The modules an extension instrument (or a vendored panel) may import, by the
+ * specifier it writes. A maintainer rewrites each to its path when vendoring;
+ * `sdk test` rewrites them to the same files to run the instrument. Added in
+ * 1.9.0, to close what sdk/README.md listed as private (translation, plotting,
+ * colour tokens). Nothing else in js/ is promised.
+ */
+export const INSTRUMENT_API = Object.freeze({
+  'gravitas:instrument/strings': {
+    module: 'js/platform/instrument/strings.js',
+    exports: ['translator', 'checkCatalogs'],
+  },
+  'gravitas:instrument/tokens': {
+    module: 'js/platform/instrument/tokens.js',
+    exports: ['COLOR_TOKENS', 'colorToken'],
+  },
+  'gravitas:instrument/plot': {
+    module: 'js/platform/instrument/plot.js',
+    exports: ['createPlot', 'ticks'],
+  },
+});
+export {
+  translator,
+  checkCatalogs,
+} from '../../js/platform/instrument/strings.js';
+export { COLOR_TOKENS } from '../../js/platform/instrument/tokens.js';
 
 /** The formats this SDK reads and writes, and the version of each. */
 export const FORMATS = Object.freeze({

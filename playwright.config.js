@@ -184,7 +184,7 @@ const PRODUCTION_SPEC = /production\.spec\.js/;
  * teaching bundle, and a module of its own for the pages that load it by URL.
  */
 const BOTH_TARGETS =
-  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js|exoplanetGuides\.spec\.js|populationsGuides\.spec\.js|systemBuilder\.spec\.js|studio\.spec\.js|composer\.spec\.js|course\.spec\.js|lab3d\.spec\.js|lab3dView\.spec\.js|lab3dGuides\.spec\.js|mission\.spec\.js|missionLab\.spec\.js|shell\.spec\.js/;
+  /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|catalogGovernance\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js|exoplanetGuides\.spec\.js|populationsGuides\.spec\.js|systemBuilder\.spec\.js|studio\.spec\.js|composer\.spec\.js|course\.spec\.js|lab3d\.spec\.js|lab3dView\.spec\.js|lab3dGuides\.spec\.js|mission\.spec\.js|missionLab\.spec\.js|shell\.spec\.js/;
 
 /**
  * Which engines to run.

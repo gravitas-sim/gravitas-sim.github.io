@@ -79,7 +79,7 @@ export const TEMPLATES = {
 // one; sdk/README.md, "Writing a data pack", says what it must record.
 throw new Error('write the transformation for ${id}');
 `,
-    'README.md': `# ${title(id)}\n\nA data-pack extension. \`npm run sdk -- validate .\` lists what is still to fill in.\n`,
+    'README.md': `# ${title(id)}\n\nA data-pack extension. \`npm run sdk -- validate .\` lists what is still to fill in.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
   }),
 
   'course-pack': id => ({
@@ -110,7 +110,7 @@ throw new Error('write the transformation for ${id}');
         },
       ],
     }),
-    'README.md': `# ${title(id)}\n\nA course-pack extension: an ordering of lessons Gravitas already has.\n`,
+    'README.md': `# ${title(id)}\n\nA course-pack extension: an ordering of lessons Gravitas already has.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
   }),
 
   // The composer's own example investigation, under the new id: a pack that
@@ -129,7 +129,7 @@ throw new Error('write the transformation for ${id}');
       migrations: [],
     }),
     'investigation.json': json({ ...EXAMPLE_INVESTIGATION, id }),
-    'README.md': `# ${title(id)}\n\nAn investigation-pack extension: a guided investigation as data. The Studio's lesson composer (/studio/lesson/) writes \`investigation.json\`.\n`,
+    'README.md': `# ${title(id)}\n\nAn investigation-pack extension: a guided investigation as data. The Studio's lesson composer (/studio/lesson/) writes \`investigation.json\`.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
   }),
 
   // `from` is a pack the Scenario Studio exported (/studio/), written as it is:
@@ -169,7 +169,7 @@ throw new Error('write the transformation for ${id}');
             placement: 'Circular',
           },
         }),
-    'README.md': `# ${title(id)}\n\nA scenario-pack extension: settings, a seed and bodies, as data. The Scenario Studio (/studio/) writes \`scenario.json\`; \`npm run sdk -- init scenario-pack ${id} --from <export.json>\` wraps one.\n`,
+    'README.md': `# ${title(id)}\n\nA scenario-pack extension: settings, a seed and bodies, as data. The Scenario Studio (/studio/) writes \`scenario.json\`; \`npm run sdk -- init scenario-pack ${id} --from <export.json>\` wraps one.\n\n## Author\n\nWho wrote this, in the words you want printed.\n\n## Sources\n\nWhat it is based on ("original work" is a complete answer).\n`,
   }),
 
   capability: id => ({
