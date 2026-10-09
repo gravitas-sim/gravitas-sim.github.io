@@ -265,8 +265,10 @@ function render() {
     s.say ||
     (n
       ? L(
-          `${n} things saved on this device.`,
-          `${n} cosas guardadas en este dispositivo.`
+          // The count after the noun: it has no singular to get wrong, and the
+          // My work route has no room for a plural rule on a single line.
+          `Things saved on this device: ${n}.`,
+          `Cosas guardadas en este dispositivo: ${n}.`
         )
       : L(
           'Nothing is saved on this device yet.',

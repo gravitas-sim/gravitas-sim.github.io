@@ -879,7 +879,7 @@ export const EN_DEFERRED = {
   'inv.finish.title': 'Finished',
   'inv.finish.close': 'Close without downloading',
   'inv.finish.summary':
-    'You have worked through <strong>{visited} of {steps}</strong> steps and answered <strong>{answered} of {graded}</strong> questions.',
+    'You have opened <strong>{visited} of {steps}</strong> steps and answered <strong>{answered} of {graded}</strong> questions.',
   'inv.finish.note':
     'A report is only needed if you are submitting this for credit. If you are here for your own interest, you can simply close the panel: your progress is saved either way.',
   'inv.finish.name': 'Your name, as it should appear on the report',

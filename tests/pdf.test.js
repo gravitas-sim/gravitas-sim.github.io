@@ -96,7 +96,7 @@ describe('toWinAnsi', () => {
   });
 
   test('spells out symbols that have no glyph', () => {
-    expect(toWinAnsi('P² ∝ a³')).toContain('proportional to');
+    expect(toWinAnsi('P² ∝ a³')).toBe('P^2 ~ a^3');
     expect(toWinAnsi('√2')).toBe('sqrt2');
     expect(toWinAnsi('M ≫ m')).toContain('>>');
   });
@@ -158,6 +158,17 @@ describe('createDocument', () => {
       .build();
     expect(xrefIsSound(bytes)).toBe(true);
     expect(asText(bytes)).toContain('\\(km/s\\)');
+  });
+
+  test('numbers its pages in the language of the document (P75 F-3)', () => {
+    const body = lang =>
+      asText(createDocument({ lang }).paragraph('P² ∝ a³').build());
+    expect(body('es-ES')).toContain('(P\xe1gina 1 de 1)');
+    expect(body('es-ES')).not.toContain('Page 1');
+    expect(body('en-US')).toContain('(Page 1 of 1)');
+    // No English word stands in for a symbol in a Spanish report.
+    expect(body('es-ES')).not.toContain('proportional');
+    expect(xrefIsSound(createDocument({ lang: 'es-ES' }).build())).toBe(true);
   });
 
   test('breaks into more pages as content grows', () => {

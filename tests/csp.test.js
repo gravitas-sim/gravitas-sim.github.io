@@ -9,6 +9,7 @@
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
+import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 import { inlineScripts, pages, policyFor, withPolicy } from '../tools/csp.mjs';
@@ -70,6 +71,30 @@ describe('every published page', () => {
         beyond: page === 'observatory/index.html' ? [...ALLOW].sort() : [],
       });
     }
+  });
+
+  test('worker-src admits blob: for two browser specs only; no shipped script needs it', () => {
+    for (const page of all)
+      expect(
+        directives(policyOf(readFileSync(page, 'utf8')))['worker-src']
+      ).toEqual(["'self'", 'blob:']);
+    // A Worker made from a Blob URL, in anything the site ships.
+    const shipped = execFileSync('git', ['ls-files', 'js', 'sdk/lib'], {
+      encoding: 'utf8',
+    })
+      .split('\n')
+      .filter(f => f.endsWith('.js') || f.endsWith('.mjs'));
+    const blobWorkers = shipped.filter(f =>
+      /new Worker\([^)]*(?:blob|Blob|createObjectURL)/s.test(
+        readFileSync(f, 'utf8')
+      )
+    );
+    expect(blobWorkers).toEqual([]);
+    for (const spec of [
+      'e2e/workerRealm.spec.js',
+      'e2e/experimentRunner.spec.js',
+    ])
+      expect(readFileSync(spec, 'utf8')).toMatch(/new Worker\(/);
   });
 });
 

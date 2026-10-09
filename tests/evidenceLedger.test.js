@@ -18,6 +18,7 @@ import { EN_REPORT } from '../js/i18n/en.report.js';
 import { ES_REPORT } from '../js/i18n/es.report.js';
 import {
   SOURCE,
+  SOURCES,
   annotate,
   buildEntry,
   provenanceOf,
@@ -177,6 +178,32 @@ const every = () => [
       ],
     }),
   }),
+  // A sweep's analysis and an experiment's result, which js/experiments/
+  // analysisPanel.js keeps as envelopes (P75 R-5: the list used to omit them).
+  ...[
+    [SOURCE.SWEEP_ANALYSIS, 'sweep-analysis', 'Sweep analysis'],
+    [SOURCE.EXPERIMENT_RESULT, 'experiment-result', 'Experiment result'],
+  ].map(([kind, id, title]) =>
+    artifactEntry({
+      source: kind,
+      title,
+      capturedAt: at,
+      context: { page: 'experiments' },
+      envelope: artifact({
+        id: `${id}-1`,
+        source: { kind: 'experiment', id, version: '1', digest },
+        quantities: [
+          {
+            id: 'mean|P',
+            value: 1.0004,
+            unit: 'd',
+            uncertainty: { kind: 'sigma', sigma: 0.0002, basis: 'data' },
+            origin: 'derived',
+          },
+        ],
+      }),
+    })
+  ),
 ];
 
 describe('every producer writes an envelope with where it was kept', () => {
@@ -188,6 +215,12 @@ describe('every producer writes an envelope with where it was kept', () => {
       expect(env.provenance.context).toBeTruthy();
       expect(envelopeOf(e)).toBe(env);
     }
+  });
+
+  test('the list covers every notebook source there is', () => {
+    expect([...new Set(every().map(e => e.source))].sort()).toEqual(
+      [...SOURCES].sort()
+    );
   });
 
   test('a lesson capture names the lesson, the step and the assignment', () => {

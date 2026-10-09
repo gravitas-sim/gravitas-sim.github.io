@@ -138,7 +138,7 @@ import {
   transitAnalysis,
   transitGeometry,
 } from './lightCurve.js';
-import { encodePayload, shareUrl } from './shareState.js';
+import { encodePayload, parseDocument, shareUrl } from './shareState.js';
 import { normalizeSeed, formatSeed } from './rng.js';
 // From js/notify.js rather than through js/controls.js, which only re-exports
 // them. Going through controls put this module in a cycle - controls
@@ -559,7 +559,7 @@ async function restoreProgressBackup(file) {
 
   let data;
   try {
-    data = JSON.parse(await file.text());
+    data = parseDocument(await file.text());
   } catch {
     toast(t('inv.backup.notJson'));
     return;
@@ -3019,6 +3019,29 @@ function clock() {
   lastTick = now;
 }
 
+/** The steps the lesson's declared time is for: the whole lesson at core depth. */
+let fullSteps = 0;
+
+/**
+ * The lesson's declared time ("35-45 min") scaled to what is on offer: an
+ * assignment is part of the lesson, and a deeper level is more of it. Whole
+ * minutes, and the declared text untouched when nothing is scaled.
+ *
+ * @param {string} duration - The lesson's range, e.g. '35-45 min'
+ * @param {number} count - Steps on offer now
+ * @returns {string} The range to show
+ */
+function plannedTime(duration, count) {
+  const base =
+    fullSteps || active.steps.filter(s => inDepth(s, 'core')).length || 0;
+  const m = /^(\d+)\s*-\s*(\d+)(.*)$/.exec(duration || '');
+  const f = base ? count / base : 1;
+  if (!m || !(f > 0) || Math.abs(f - 1) < 0.03) return duration || '';
+  const lo = Math.max(1, Math.round(m[1] * f));
+  const hi = Math.max(lo, Math.round(m[2] * f));
+  return `${lo === hi ? lo : `${lo}-${hi}`}${m[3]}`;
+}
+
 /** The where line: step, depth and time against what the lesson declares. */
 function renderWhere(seen) {
   const w = els.where;
@@ -3030,7 +3053,7 @@ function renderWhere(seen) {
     .replace('{total}', seen.length)
     .replace('{depth}', depthName ? ` · ${depthName}` : '')
     .replace('{m}', Math.floor(spent / 60))
-    .replace('{planned}', active.duration || '');
+    .replace('{planned}', plannedTime(active.duration, seen.length));
 }
 
 function renderFooter() {
@@ -3772,7 +3795,9 @@ export async function openInvestigation(id, opts = {}) {
     }
     active = { ...inv, steps: assignmentBinding.steps };
     assignmentKey = keyForAssignment(assignment);
+    fullSteps = inv.steps.filter(s => inDepth(s, 'core')).length;
   } else {
+    fullSteps = 0;
     active = inv;
   }
   // In an authoring preview the saved progress is not read at all: an author is

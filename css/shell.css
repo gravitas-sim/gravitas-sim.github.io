@@ -252,6 +252,7 @@ body:has(> .gs-app) {
     display: none;
   }
   .gs-shell.gs-app.gs-js.is-open {
+    z-index: 80; /* over Home (75) */
     height: auto;
     max-height: 100vh;
     overflow-y: auto;
@@ -274,7 +275,7 @@ body:has(> .gs-app) {
   }
 }
 
-/* An embedded figure is the figure alone; a lecture, canvas and its bar. */
+/* An embedded figure is the figure alone. */
 body.presentation-embed,
 body[data-presentation='lecture'] {
   --shell-height: 0px;

@@ -18,6 +18,11 @@
 //     (js/archive/cds.js ALLOW; tests/csp.test.js holds the page to that list);
 //   - workers from this origin and blob:. A blob: URL can only be made by a
 //     script the page already runs, so it admits no code 'self' does not;
+//     the owners of `worker-src blob:` are the two browser specs that make a
+//     probe Worker from a Blob (e2e/workerRealm.spec.js and
+//     e2e/experimentRunner.spec.js); no shipped script does, and
+//     tests/csp.test.js fails if one starts. Dropping it is a change to those
+//     two specs first (R-H2, P58-P68 recheck);
 //   - no plugins, no <base> elsewhere, forms back to this origin.
 // frame-ancestors is left out: a browser ignores it in a <meta>, and says so,
 // so embedding is governed by EMBEDDING.md, not by the page.

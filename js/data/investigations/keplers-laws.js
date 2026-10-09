@@ -1147,7 +1147,7 @@ const KEPLER = {
              \n\nEverything here came out of naked-eye positions recorded before
              the telescope existed, by an observer who refused to round away eight
              minutes of arc.`,
-      tip: 'If you are submitting this for credit, press Next once more to enter your name and download your lab report. Otherwise you can simply close the panel.',
+      tip: 'If you are submitting this for credit, press Finish to enter your name and download your lab report. Otherwise you can simply close the panel.',
     },
   ],
 };

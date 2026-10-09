@@ -139,7 +139,10 @@ const TRANSLITERATE = new Map(
     // A multiplication dot, not a separator: rendering "m·v·r" as "m-v-r"
     // turns a product into a subtraction in a document about physics.
     '·': '*',
-    '∝': ' proportional to ',
+    // A symbol, not a word: this table is the only text a Spanish report
+    // gets from it, and "proportional to" is English. "~" is how a physicist
+    // writes it in plain text.
+    '∝': '~',
     // Ensemble-average brackets. <v^2> is the conventional ASCII form and is
     // what a physicist writes when the angle brackets are unavailable.
     '⟨': '<',
@@ -1131,9 +1134,11 @@ function assemble(
     const footerText = footer
       ? `BT\n0.45 0.45 0.5 rg\n/F1 8 Tf\n1 0 0 1 ${MARGIN} ${MARGIN - 14} Tm\n(${pdfString(toWinAnsi(footer))}) Tj\nET`
       : '';
-    const label = `Page ${index + 1} of ${pages.length}`;
+    const label = /^es\b/i.test(lang)
+      ? `P\u00e1gina ${index + 1} de ${pages.length}`
+      : `Page ${index + 1} of ${pages.length}`;
     const labelW = textWidth(label, 8, false);
-    const pageNum = `BT\n0.45 0.45 0.5 rg\n/F1 8 Tf\n1 0 0 1 ${PAGE_W - MARGIN - labelW} ${MARGIN - 14} Tm\n(${pdfString(label)}) Tj\nET`;
+    const pageNum = `BT\n0.45 0.45 0.5 rg\n/F1 8 Tf\n1 0 0 1 ${PAGE_W - MARGIN - labelW} ${MARGIN - 14} Tm\n(${pdfString(toWinAnsi(label))}) Tj\nET`;
 
     // Running footers are not content: a reader of the structure skips them.
     const mark = op =>

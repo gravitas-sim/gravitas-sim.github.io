@@ -886,7 +886,7 @@ export const ES_DEFERRED = {
   'inv.finish.title': 'Terminado',
   'inv.finish.close': 'Cerrar sin descargar',
   'inv.finish.summary':
-    'Has recorrido <strong>{visited} de {steps}</strong> pasos y has respondido <strong>{answered} de {graded}</strong> preguntas.',
+    'Has abierto <strong>{visited} de {steps}</strong> pasos y has respondido <strong>{answered} de {graded}</strong> preguntas.',
   'inv.finish.note':
     'Solo necesitas un informe si vas a entregar esto para una calificación. Si estás aquí por tu propio interés, puedes cerrar el panel: tu progreso se guarda de todos modos.',
   'inv.finish.name': 'Tu nombre, tal como debe aparecer en el informe',
