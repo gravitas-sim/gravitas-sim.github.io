@@ -268,11 +268,12 @@ describe('Doppler shift, redshift and air and vacuum', () => {
     near(K.velocityFromWavelengths(656.28 * (1 + 100 / c), 656.28, 'classical'), 100, 1e-9, 'H-alpha 100 km/s');
   });
 
-  test('air to vacuum (Morton 2000) against NIST level energies: H-alpha 6562.819 A air is 6564.614 A vacuum', () => {
-    // 0.002 A: the vacuum wavelength is 1e8 / (97492.304 - 82259.158) (NIST ASD, whole
-    // n=2 to n=3 level), good to 1e-5 A; the pack check in data-packs/radiation-lines.json
-    // holds all 22 lines to 0.02 A and they agree to under 0.001.
-    near(K.airToVacuumNm(656.2819) * 10, 1e8 / (97492.304 - 82259.158), 0.002, 'H-alpha');
+  test('air to vacuum (Morton 2000) against NIST level energies: Na D2, 5889.95095 A observed in air', () => {
+    // 0.002 A: NIST gives the lower level 0 and the upper 16973.36619 cm^-1 (3s 2S1/2 to
+    // 3p 2P3/2), so vacuum is 1e8 / 16973.36619 = 5891.583 A, good to 1e-5 A; the pack's
+    // own check holds all fifteen non-hydrogen lines with observed wavelengths to 0.02 A and
+    // they agree to under 0.004.
+    near(K.airToVacuumNm(588.995095) * 10, 1e8 / 16973.36619, 0.002, 'Na D2');
     // 1e-5 nm (1e-4 A): vacuumToAirNm evaluates the index at the vacuum wavelength, as its comment says.
     near(K.vacuumToAirNm(K.airToVacuumNm(500)), 500, 1e-5, 'round trip');
   });
@@ -280,7 +281,8 @@ describe('Doppler shift, redshift and air and vacuum', () => {
   test('every line of the pack: vacuum above air, and the formula agrees with NIST (the pack\'s own check, repeated)', () => {
     for (const l of LINES) {
       expect(l.vacuum).toBeGreaterThan(l.air);
-      if (l.observed) near(K.airToVacuumNm(l.air) * 10, l.vacuum * 10, 0.02, l.id);
+      if (l.observed && !l.vacuumFromFormula) near(K.airToVacuumNm(l.air) * 10, l.vacuum * 10, 0.02, l.id);
+      if (l.vacuumFromFormula) near(K.airToVacuumNm(l.air), l.vacuum, 1e-4, `${l.id} (hydrogen, from the formula)`);
     }
   });
 

@@ -711,9 +711,11 @@ describe('what a pack owes, and where it goes', () => {
       // A pack no capability package ships is the Observatory's alone, and
       // only its fixtures open it: main.js, which reaches the registry, never
       // reaches it.
+      // A pack that names its own loader (`namedBy`, the radiation kernel's) is
+      // held to exactly that: the loader module, and nothing else, may import it.
       expect({ pack: pack.id, naming }).toEqual({
         pack: pack.id,
-        naming: [
+        naming: pack.namedBy || [
           pack.capability === null
             ? 'js/observatory/fixtures.js'
             : 'js/platform/builtins.js',

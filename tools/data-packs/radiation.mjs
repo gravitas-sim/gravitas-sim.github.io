@@ -429,23 +429,32 @@ function pickLine(spec, rows) {
     }
   }
   const observed = chosen.every(r => r['obs_wl_air(A)']);
-  // The Ritz air wavelength (from the level energies) rather than the observed
-  // one: the observed wavelength of a whole hydrogen level is printed to 0.01 A
-  // and is not the energy-weighted one (H-alpha: 6562.79 against 6562.819).
-  const airA = chosen.reduce((a, r) => a + lam(r), 0) / chosen.length;
+  // Air: NIST's observed wavelength where it has one, which is what a textbook
+  // quotes (H-alpha 6562.79); else the mean Ritz wavelength of the components.
+  const airA = observed
+    ? num(chosen[0]['obs_wl_air(A)'])
+    : chosen.reduce((a, r) => a + lam(r), 0) / chosen.length;
+  // Vacuum: from the level energies, 1e8 / (Ek - Ei), mean over a blend's
+  // components, independent of any air-vacuum formula. NOT for hydrogen: NIST's
+  // row for a whole level uses level-averaged energies, whose wavelength is not the
+  // line's centroid (H-alpha: 6562.819 Ritz against the observed 6562.79 that every
+  // table uses, 0.03 A, 1.3 km/s). A hydrogen line's vacuum wavelength is therefore
+  // the formula's, and says so (`vacuumFromFormula`).
+  if (spec.n) {
+    return { airA, vacA: airToVacuumNm(airA / 10) * 10, observed, components: 1, vacuumFromFormula: true };
+  }
   const vacA = chosen.reduce((a, r) => a + 1e8 / dE(r), 0) / chosen.length;
-  return { airA, vacA, observed, components: chosen.length, intensity: chosen[0].intens ? num(chosen[0].intens) : null };
+  return { airA, vacA, observed, components: chosen.length, vacuumFromFormula: false };
 }
 
 const LINES_RAW = LINE_SPECS.map(s => pin(nistFile(s)));
 const SPECIES = { 'H I': 'H', 'He I': 'He I', 'He II': 'He II', 'Ca II': 'Ca II', 'Ca I': 'Ca I', 'Na I': 'Na I', 'Mg I': 'Mg I', 'Fe I': 'Fe I' };
 
 // The vacuum wavelength here is 1e8 / (Ek - Ei) from NIST's level energies; the
-// air wavelength is NIST's Ritz air one. The kernel's Morton 2000 air-to-vacuum
-// must bring one to the other. Tolerance 0.02 A: NIST computes its air Ritz
-// column from the same energies with its own refractive index, which differs from
-// Morton's by a few thousandths of an Angstrom, and a blend's mean adds about a
-// hundredth.
+// air wavelength is NIST's observed one. The kernel's Morton 2000 air-to-vacuum
+// must bring one to the other. Tolerance 0.02 A: NIST's observed
+// wavelengths are printed to 0.001-0.01 A, and the mean vacuum wavelength of a
+// blend (He I) adds about a hundredth. (Hydrogen is excluded, below.)
 const AIR_VACUUM_TOL_A = 0.02;
 
 const linesPack = {
@@ -469,6 +478,7 @@ const linesPack = {
         vacuum: Number((p.vacA / 10).toFixed(4)),
         observed: p.observed,
         components: p.components,
+        vacuumFromFormula: p.vacuumFromFormula,
       };
     });
     const meta = {
@@ -508,8 +518,8 @@ const linesPack = {
         steps: [
           'For each line, query NIST ASD for the species in a window of 1.2 A about the textbook wavelength; pin the answer.',
           'Hydrogen: take the row for the whole level (2 to n), not its fine-structure components.',
-          'Other species: take the strongest row that has an observed wavelength (that row\'s Ritz wavelength is what is kept); where components share that wavelength (He I 4472, 5876), the vacuum wavelength is the mean over them. He II 4686 has no observed wavelength in NIST: air and vacuum are the mean Ritz wavelengths of its components, and the line says so (observed: false).',
-          'Vacuum wavelength is 1e8 / (E_upper - E_lower) in cm^-1, from NIST\'s level energies; air is NIST\'s Ritz air wavelength (the observed one is printed to only 0.01 A for a whole hydrogen level). The two are independent of the kernel\'s air - vacuum formula, which validate() holds to them.',
+          'Other species: take the strongest row that has an observed wavelength (its observed wavelength is kept); where components share that wavelength (He I 4472, 5876), the vacuum wavelength is the mean over them. He II 4686 has no observed wavelength in NIST: air and vacuum are the mean Ritz wavelengths of its components, and the line says so (observed: false).',
+          'Vacuum wavelength is 1e8 / (E_upper - E_lower) in cm^-1, from NIST\'s level energies (mean over a blend\'s components); air is NIST\'s observed air wavelength. Hydrogen is the exception: its row is for the whole level and its energies are level averages, so its Ritz wavelength is not the line\'s centroid (H-alpha 6562.819 against the observed 6562.79, 0.03 A or 1.3 km/s); hydrogen keeps the observed air wavelength and takes its vacuum wavelength from Morton 2000 (vacuumFromFormula). For every other line the kernel\'s air - vacuum formula is independent of both, and validate() holds it to them.',
         ],
         record: {},
       },
@@ -538,19 +548,19 @@ const linesPack = {
     const worst = { id: null, offsetA: 0 };
     const against = [];
     const result = {};
-    for (const l of mod.LINES.filter(x => x.observed)) {
+    for (const l of mod.LINES.filter(x => x.observed && !x.vacuumFromFormula)) {
       const d = (airToVacuumNm(l.air) - l.vacuum) * 10;
       result[l.id] = r4(d);
       if (Math.abs(d) > Math.abs(worst.offsetA)) Object.assign(worst, { id: l.id, offsetA: d });
     }
     against.push({
-      quantity: 'vacuum wavelength of every observed line, from NIST level energies',
+      quantity: 'vacuum wavelength of every non-hydrogen line with an observed wavelength, from NIST level energies',
       value: 0,
       unit: 'Angstrom',
       ref: 'NIST ASD level energies; the kernel\'s airToVacuumNm (Morton 2000) must agree',
     });
     return {
-      check: `airToVacuumNm(air) reproduces the vacuum wavelength from the level energies of every line with an observed wavelength to within ${AIR_VACUUM_TOL_A} A`,
+      check: `airToVacuumNm(air) reproduces the vacuum wavelength from the level energies of every non-hydrogen line with an observed wavelength to within ${AIR_VACUUM_TOL_A} A`,
       against,
       result: { airToVacuumMinusLevelEnergyA: result, worst: { id: worst.id, offsetA: r4(worst.offsetA) } },
       ok: Math.abs(worst.offsetA) <= AIR_VACUUM_TOL_A,
