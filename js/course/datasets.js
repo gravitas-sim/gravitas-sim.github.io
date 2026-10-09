@@ -101,6 +101,7 @@ export const GUIDED = Object.freeze([
   'binary-star-planets',
   'black-holes',
   'butterfly-effect',
+  'color-and-temperature',
   'design-the-schedule',
   'detect-this-planet',
   'goldilocks-question',

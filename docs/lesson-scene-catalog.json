@@ -51925,7 +51925,7 @@
       "choice": false,
       "numeric": false,
       "short": true,
-      "rubric": false,
+      "rubric": true,
       "validated": false
      },
      "worldRunning": "inherited",
@@ -51938,10 +51938,11 @@
       "declared": "interpret",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
-      "mismatch": "typed question but no answer, rubric or validate to check it"
+      "mismatch": null
      },
      "scene": {
       "nameMatches": [],
@@ -52079,7 +52080,7 @@
     "evidence": 2,
     "declaredButInert": 11,
     "prose": 0,
-    "mismatched": 1,
+    "mismatched": 0,
     "rebuilds": 0
    }
   }
@@ -52095,7 +52096,7 @@
   "evidence": 117,
   "declaredButInert": 487,
   "prose": 30,
-  "mismatched": 1,
+  "mismatched": 0,
   "rebuilds": 71,
   "lessons": 25,
   "loops": 89,

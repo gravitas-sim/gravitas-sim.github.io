@@ -23,13 +23,18 @@ export default {
       },
       {
         from: 'peak-of-4000',
-        to: 'why-not-green',
-        text: 'Wien’s law in both directions, then the Sun’s green peak and why it does not look green.',
+        to: 'temperature-from-peak',
+        text: 'Wien’s law in both directions: a peak from a temperature, and a temperature from a peak.',
       },
       {
-        from: 'three-colors',
+        from: 'why-not-green',
+        to: 'temperature-from-color',
+        text: 'The Sun’s green peak and why it does not look green, then a color index as a thermometer: three B − V readings and a temperature recovered from a color.',
+      },
+      {
+        from: 'real-stars-differ',
         to: 'what-you-worked-out',
-        text: 'A color index as a thermometer: three B − V readings, a temperature recovered from a color, the limits of a blackbody, and a written comparison of the two methods.',
+        text: 'The limits of a blackbody as a model of a star, a written comparison of the two methods, and the close.',
       },
     ],
     'keplers-laws': [

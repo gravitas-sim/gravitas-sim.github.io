@@ -30,7 +30,7 @@ const BB = (extra = {}) => ({ id: 'blackbody', ...extra });
 
 const COLOR_AND_TEMPERATURE = {
   id: 'color-and-temperature',
-  thumbnail: 'images/scenarios/solar-system.webp',
+  thumbnail: 'images/investigations/color-and-temperature.webp',
   title: 'Color and Temperature',
   subtitle: 'Predict, then measure, what a hot glowing thing looks like',
   duration: '30-40 min',
@@ -293,7 +293,8 @@ const COLOR_AND_TEMPERATURE = {
       stage: STARS,
       type: 'question',
       kind: 'short',
-      reflect: true,
+      rubric:
+        'Full credit for naming a requirement of each method: a peak wavelength needs a measured spectrum across the peak, which a faint star cannot give in a short exposure; a color index needs only two brightness measurements through two filters, so it works on a faint star, but depends on the filters and the blackbody assumption. Credit an answer that picks either method and gives a reason tied to the data each needs. Do not credit an answer that only says one is better.',
       title: 'In your own words',
       body: `Two ways to take a temperature from light have appeared: a peak
              wavelength and a color index.`,
