@@ -238,7 +238,6 @@ test.describe('the instructor flow', () => {
 
   test('the kit checks an activity file against this build', async ({
     page,
-    app,
   }) => {
     const { link } = await build(page);
     await page.goto('/teaching/kit/');
@@ -267,7 +266,6 @@ test.describe('the instructor flow', () => {
 
   test('the kit and the review page pass axe, and the kit has no sideways scroll', async ({
     page,
-    app,
   }) => {
     const { kit } = await build(page);
     await page.goto(kit);
