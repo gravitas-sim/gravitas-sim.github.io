@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-tgJaMulLmNXioJgwQoHCNRJ6fgiJLxNmS+0eJyogKWc='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-4qRpXOyfatWtFWZ05H11NmGjR4ZVH2R8cUoEVHTBDrQ='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Find content to teach | Gravitas</title>
@@ -178,8 +178,19 @@ try {
       } catch {
         /* storage blocked: English */
       }
+      const titles = {"en":"Find content to teach | Gravitas","es":"Encontrar contenido para enseñar | Gravitas"};
+      const retitle = () => {
+        document.title =
+          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];
+      };
+      retitle();
       const refresh = mountFind();
-      mountShell({ onLanguage: () => refresh?.() });
+      mountShell({
+        onLanguage: () => {
+          retitle();
+          refresh?.();
+        },
+      });
     </script>
   </body>
 </html>

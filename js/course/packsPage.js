@@ -355,6 +355,17 @@ function wire() {
 }
 
 function init() {
+  // First load follows the saved choice, then the browser, as Teach does; the
+  // page's own lang attribute is only the English default (P81 L-1).
+  try {
+    document.documentElement.lang = /^es/i.test(
+      localStorage.getItem('gravitas_locale') || navigator.language || ''
+    )
+      ? 'es'
+      : 'en';
+  } catch {
+    /* storage blocked: the page's own lang stands */
+  }
   wire();
   words();
   mountShell({

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-qKaDc8mJ2wgJE/t4FWk2Ljr0hmG+PMFt81y7klan1I4='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-JTxW2E1+ZV6qWPwRbemikX/lP7styF3rUR3VZZXPBnE='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Listening to Spacetime | Gravitas</title>
@@ -243,6 +243,7 @@ try {
 <section aria-labelledby="materials-h">
 <h2 id="materials-h"><span class="gs-en">Instructor materials</span><span class="gs-es" lang="es">Materiales docentes</span></h2>
 <p><span class="gs-en">The instructor notes with the answer key is behind the instructor passphrase. The topic, placement, prior knowledge and wrong turns above are the public part.</span><span class="gs-es" lang="es">Las notas docentes con las respuestas está protegida con la contraseña docente. El tema, la ubicación, los conocimientos previos y los errores frecuentes de arriba son la parte pública.</span></p>
+<p><span class="gs-en">Where the key is: on this investigation’s card on the instructor resources page, under “Answer Key” and “Instructor Guide”. An activity cut from it asks the same questions, so the same key applies. The page explains how to ask for the passphrase.</span><span class="gs-es" lang="es">Dónde está la clave: en la tarjeta de esta investigación de la página de recursos para docentes, en «Answer Key» e «Instructor Guide». Una actividad recortada de ella hace las mismas preguntas, así que sirve la misma clave. La página explica cómo pedir la frase de acceso.</span></p>
 <p><a class="ui-button" href="/instructors/"><span class="gs-en">Open the instructor resources</span><span class="gs-es" lang="es">Abrir los recursos para docentes</span></a></p>
 </section>
 <p><a href="/teaching/find/"><span class="gs-en">Back to Teach</span><span class="gs-es" lang="es">Volver a Enseñar</span></a></p>
@@ -264,7 +265,15 @@ try {
       } catch {
         /* storage blocked: English */
       }
-      mountShell({ onLanguage: () => {} });
+      const titles = {"en":"Listening to Spacetime | Gravitas","es":"Escuchar el espacio-tiempo | Gravitas"};
+      const retitle = () => {
+        document.title =
+          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];
+      };
+      retitle();
+      mountShell({
+        onLanguage: retitle,
+      });
     </script>
   </body>
 </html>

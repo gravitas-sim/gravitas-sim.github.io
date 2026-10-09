@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-qKaDc8mJ2wgJE/t4FWk2Ljr0hmG+PMFt81y7klan1I4='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-aQYqKsKEgSXyF83Kbc4nNz2H10/+OC0U8Iw28F+8qsc='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Orbital motion: why do planets change speed? | Gravitas</title>
@@ -119,6 +119,7 @@ try {
 </tbody></table></div>
 </section>
 <p><span class="gs-en">Everything for this activity is on its investigation page.</span><span class="gs-es" lang="es">Todo lo de esta actividad está en la página de su investigación.</span></p>
+<p><span class="gs-en">Where the key is: each investigation’s card on the instructor resources page holds its answer key and guide, and an activity cut from it uses the same key. The page explains how to ask for the passphrase.</span><span class="gs-es" lang="es">Dónde está la clave: la tarjeta de cada investigación en la página de recursos para docentes tiene su clave de respuestas y su guía, y una actividad recortada de ella usa la misma clave. La página explica cómo pedir la frase de acceso.</span></p>
 <p><a href="/teaching/find/"><span class="gs-en">Back to Teach</span><span class="gs-es" lang="es">Volver a Enseñar</span></a></p>
     </main>
     <!-- shell:footer -->
@@ -138,7 +139,15 @@ try {
       } catch {
         /* storage blocked: English */
       }
-      mountShell({ onLanguage: () => {} });
+      const titles = {"en":"Orbital motion: why do planets change speed? | Gravitas","es":"Movimiento orbital: ¿por qué cambian de velocidad los planetas? | Gravitas"};
+      const retitle = () => {
+        document.title =
+          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];
+      };
+      retitle();
+      mountShell({
+        onLanguage: retitle,
+      });
     </script>
   </body>
 </html>

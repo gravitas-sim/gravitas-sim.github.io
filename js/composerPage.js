@@ -571,7 +571,12 @@ function aboutSection(d) {
 
 // --- Steps ------------------------------------------------------------------
 
-const typeName = type => t(`composer.type.${type}`);
+/** A step type in words; a type with no entry is shown as itself, never as a key. */
+const typeName = type => {
+  const id = `composer.type.${type}`;
+  const word = t(id);
+  return word === id ? String(type) : word;
+};
 /** Whether a step is one a `when` may follow: graded, and reached by everyone. */
 const gradedStep = s =>
   !s.when &&
