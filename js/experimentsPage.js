@@ -589,10 +589,11 @@ function download(name, text, type) {
 
 /** Keep the result in My work: its manifest, its engine and its trials. */
 async function saveMine() {
-  if (!lastResult) return;
+  const result = lastResult;
+  if (!result) return;
   const made = await import('./myWork/made.js');
   const done = made.saveMade(
-    made.experimentRecord(lastResult, lastResult.manifest.title)
+    made.experimentRecord(result, result.manifest.title)
   );
   $('xpStatus').textContent = t(
     done.ok
