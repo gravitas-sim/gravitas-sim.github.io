@@ -123,7 +123,7 @@ const en = {
     'The answer key for this investigation is a separate document. Every answer in it is generated from the investigation itself and checked against the same grading rule the website applies.',
   'guide.status.title': 'Translation status',
   'guide.status.none':
-    'This guide is in English. The investigation itself is available in Spanish for students.',
+    'This guide is in English. The investigation itself is available in Spanish for students, and the Spanish guide is a separate document in the portal.',
   'guide.status.some':
     'Spanish guide. The headings, the investigation’s own words and {done} of {total} prose passages of the instructor notes are translated; the other {rest} are still in English and are marked in the margin of the status table.',
   'guide.status.chrome': 'Headings and table titles',
@@ -205,7 +205,7 @@ const en = {
   'key.fb.off': 'Otherwise off',
   'key.status.title': 'Translation status',
   'key.status.none':
-    'This key is in English. The investigation is available in Spanish for students; ask for the Spanish key.',
+    'This key is in English. The investigation is available in Spanish for students, and the Spanish key is a separate document in the portal.',
   'key.status.some':
     'Spanish key. Headings are translated, and {done} of {total} strings of the investigation’s own words and instructor expectations are in Spanish; the rest print in English.',
 
