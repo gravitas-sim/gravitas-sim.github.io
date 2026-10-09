@@ -9,7 +9,6 @@
 export const ES_REPORT = {
   'rp.by': 'Entregado por',
   'rp.inv': 'Investigación',
-  'rp.remix': 'Hecha a partir de',
   'rp.start': 'Comenzado',
   'rp.made': 'Informe generado',
   'rp.depth': 'Profundidad',

@@ -178,8 +178,6 @@ function watchForDivergence() {
     // js/investigationsLoader.js so that a fourth kind has somewhere obvious
     // to be added.
     if (activityInHash()) return;
-    // And an investigation link, the fourth: stripping it would leave a
-    // student unable to reload the lesson an instructor sent.
     if (packInHash()) return;
     if (location.hash) {
       history.replaceState(null, '', location.pathname + location.search);

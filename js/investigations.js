@@ -26,7 +26,13 @@ import { evidenceFrom } from './data/investigations/provenance.js';
 import { isWrittenAnswer } from './investigations/writtenAnswer.js';
 import { getLocale, t, onLocaleChange } from './i18n/index.js';
 import { lessonText } from './i18n/lesson.js';
-import { decodeEntities, escapeHtml as escape, prose } from './lessonMarkup.js';
+import {
+  ENTITIES,
+  decodeEntities,
+  escapeHtml as escape,
+  prose,
+} from './lessonMarkup.js';
+import { SCENARIO_IDS, scenarioId } from './scenarios.js';
 // The registry, not the barrel. ../data/investigations.js pulls all ten lessons
 // in statically, which is right for a build script and wrong here: the browser
 // draws ten cards from the manifest, and opening one lesson fetches that one.
@@ -35,6 +41,7 @@ import {
   investigationMeta,
   hasInvestigation,
   loadInvestigation,
+  provideLessonLoaders,
   gradedSteps,
   seriesPosition,
   lessonCatalogReady,
@@ -152,6 +159,7 @@ import { setEvidenceContext } from './widgetRuntime.js';
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer, gradeAnswer, toleranceFor } from './answerCheck.js';
 import {
+  UNITS,
   decimalSeparatorFor,
   localeOfAnswer,
   parseNumber,
@@ -4918,17 +4926,7 @@ async function generateReport() {
       decodeEntities,
       t,
       locale: getLocale(),
-      meta: [
-        ...(active.pack?.from
-          ? [
-              [
-                t('rp.remix'),
-                `${active.pack.from.id} ${active.pack.from.version} (${active.pack.from.digest})`,
-              ],
-            ]
-          : []),
-        ...(ledger?.meta || []),
-      ],
+      meta: ledger?.meta,
       evidence: ledger?.print,
     });
 
@@ -5457,3 +5455,15 @@ export function teardownInvestigations() {
   dialogs?.releaseDialog(els.finishContent);
   els = {};
 }
+
+/** What js/remix/open.js needs of the engine. */
+export const packFacts = () => ({
+  provideLessonLoaders,
+  loadInvestigation,
+  openInvestigation,
+  ENTITIES,
+  UNITS,
+  scenarios: SCENARIO_IDS,
+  scenarioId,
+  lessons: MANIFEST.map(m => m.id),
+});

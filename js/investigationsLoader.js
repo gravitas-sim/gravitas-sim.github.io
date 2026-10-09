@@ -91,17 +91,6 @@ export const lessonInHash = () =>
   /^#investigation=[\w-]+(\/\w+)?$/.test(window.location.hash || '');
 
 /**
- * Whether the address bar is asking for the authoring preview.
- *
- * `?author=<lesson>` is a lesson link like any other as far as loading goes:
- * the system is wanted immediately, and js/investigations.js decides what to do
- * with it. Kept here rather than in the preview module because this is the file
- * that stays resident, and it is a regular-expression test rather than an
- * import.
- *
- * @returns {boolean} True for an authoring request in the query or the hash
- */
-/**
  * Whether the URL asks for the assignment builder.
  *
  * Needed for the same reason as the authoring test below, and it is the same
@@ -124,14 +113,7 @@ export const assignmentInUrl = () =>
  */
 export const assignmentInHash = () => /^#a\d+[zr]./.test(location.hash || '');
 
-/**
- * Whether the address bar holds an investigation link: a pack an instructor
- * made, in the fragment (#i1z..., js/composer/packLink.js). The fourth kind
- * of fragment that names a lesson rather than a world; the reader loads only
- * when one is here.
- *
- * @returns {boolean} True for an investigation-pack fragment
- */
+/** An investigation link (#i1z..., js/composer/packLink.js). */
 export const packInHash = () => /^#i\d+[zr]./.test(location.hash || '');
 
 /**
@@ -148,19 +130,10 @@ export const activityInHash = () =>
   /^#activity=[a-z0-9-]+(\/[a-z0-9-]+)?$/i.test(location.hash || '');
 
 /**
- * Open whatever assignment the address bar names, now or later.
- *
- * The predicates live here and the machinery does not: keeping the bridge out
- * of the start-up graph is worth the indirection, because a first-time visitor
- * who has never been handed an assignment should not download the codec that
- * reads one.
- *
- * The hashchange half is not optional. Pasting a link into a tab that is
- * already on the site changes the fragment and navigates nothing, so a
- * boot-time check alone leaves that student with no assignment and no
- * explanation - the same trap js/share.js documents for lesson links.
- *
- * @returns {void}
+ * Open whatever assignment, activity or investigation link the address bar
+ * names, now or later. The predicates live here and the machinery does not, so
+ * a first-time visitor never downloads the codecs. The hashchange half is
+ * needed: pasting a link into an open tab navigates nothing.
  */
 export function watchForAssignments() {
   // The engine first, then the bridge. Doing it in this order is what lets the
@@ -187,9 +160,7 @@ export function watchForAssignments() {
     ensureInvestigations()
       .then(() => import('./remix/open.js'))
       .then(m => m.openPackFromUrl())
-      .catch(err =>
-        console.warn('That investigation link could not be opened:', err)
-      );
+      .catch(() => {});
 
   if (assignmentInHash()) open();
   else if (activityInHash()) openActivity();
@@ -254,8 +225,7 @@ export function watchForInvestigations() {
   if (authoringInUrl()) ensureInvestigations();
 
   // And the assignment builder, and a student opening an assignment link.
-  if (assignmentInUrl() || assignmentInHash() || packInHash())
-    ensureInvestigations();
+  if (assignmentInUrl() || assignmentInHash()) ensureInvestigations();
 
   // Pasting a lesson link into an already-open tab changes only the fragment,
   // which navigates nothing.
@@ -264,8 +234,7 @@ export function watchForInvestigations() {
       lessonInHash() ||
       authoringInUrl() ||
       assignmentInUrl() ||
-      assignmentInHash() ||
-      packInHash()
+      assignmentInHash()
     ) {
       ensureInvestigations();
     }

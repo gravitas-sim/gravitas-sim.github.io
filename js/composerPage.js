@@ -1793,7 +1793,8 @@ function renderVerdict() {
   if (ok) $('cp-preview-author').href = previewUrl(d, 'author');
   renderEstimate(r, d);
   renderKey(r);
-  renderKept(d);
+  if (d.derivedFrom) panel().then(m => m.renderKept(ctx(), d));
+  else $('cp-kept-card').hidden = true;
 }
 
 function renderEstimate(r, d) {
@@ -2043,61 +2044,18 @@ function fillRemixChoices() {
   for (const m of MANIFEST) s.append(el('option', { value: m.id }, m.title));
 }
 
-async function remix() {
-  const { remixNew } = await import('./composer/publish.js');
-  const got = await remixNew(
-    $('cp-remix-from').value,
-    drafts.list().map(d => d.id)
-  );
-  if (!got) return setStatus(t('composer.status.remixFailed'));
-  start(
-    got.pack,
-    t('composer.status.remixed', { id: got.pack.derivedFrom.id })
-  );
-}
-
-async function publishLink() {
-  if (!verdict || blocking(verdict))
-    return setStatus(t('composer.publish.fixFirst'));
-  const { publish } = await import('./composer/publish.js');
-  const link = await publish(doc());
-  $('cp-link').value = link.url;
-  $('cp-link-note').textContent = t(
-    link.comfortable ? 'composer.publish.ok' : 'composer.publish.long',
-    { length: link.length, limit: link.limit }
-  );
-}
-
-/** What a remix keeps from its original, listed for the author. */
-async function renderKept(d) {
-  const card = $('cp-kept-card');
-  card.hidden = !d.derivedFrom;
-  if (!d.derivedFrom) return;
-  const { keptOf } = await import('./composer/publish.js');
-  const list = $('cp-kept');
-  list.textContent = '';
-  for (const k of await keptOf(d))
-    list.append(
-      el(
-        'li',
-        {},
-        k.sid === null
-          ? t('composer.kept.lesson')
-          : t('composer.kept.step', { sid: k.sid }),
-        ': ',
-        el('code', {}, k.fields.join(', '))
-      )
-    );
-}
-
-async function preview() {
-  if (!verdict || blocking(verdict))
-    return setStatus(t('studio.status.fixFirst'));
-  // The same delivery path a student's link takes (js/remix/open.js).
-  const { publish } = await import('./composer/publish.js');
-  $('cp-preview').src = (await publish(doc())).url;
-  setStatus(t('composer.status.previewed'));
-}
+const panel = () => import('./composer/publish.js');
+/** What js/composer/publish.js needs of this page. */
+const ctx = () => ({
+  $,
+  el,
+  t,
+  setStatus,
+  doc,
+  start,
+  ok: () => verdict && !blocking(verdict),
+  taken: () => drafts.list().map(d => d.id),
+});
 
 /** A lab report as a student would hand it in, with every answer the key's. */
 async function sampleReport() {
@@ -2383,10 +2341,13 @@ function wire() {
   $('cp-save-bank').addEventListener('click', saveBank);
   $('cp-export').addEventListener('click', () => exportModule('en'));
   $('cp-export-es').addEventListener('click', () => exportModule('es'));
-  $('cp-preview-go').addEventListener('click', preview);
   fillRemixChoices();
-  $('cp-remix').addEventListener('click', remix);
-  $('cp-publish').addEventListener('click', publishLink);
+  for (const [id, fn] of [
+    ['cp-preview-go', 'preview'],
+    ['cp-remix', 'remix'],
+    ['cp-publish', 'publishLink'],
+  ])
+    $(id).addEventListener('click', () => panel().then(m => m[fn](ctx())));
   $('cp-preview-author').addEventListener('click', () => stagePreview());
   $('cp-report-go').addEventListener('click', sampleReport);
   $('cp-undo').addEventListener('click', () => {

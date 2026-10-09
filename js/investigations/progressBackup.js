@@ -155,7 +155,6 @@ export function buildBackup({
       id: lesson?.id ?? null,
       title: lesson?.title ?? null,
       stepCount: steps.length,
-      // An instructor's investigation says which pack and version (Prompt 78).
       ...(lesson?.pack ? { pack: lesson.pack } : {}),
     },
     student: studentName || null,
