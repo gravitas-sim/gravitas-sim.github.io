@@ -100,7 +100,7 @@ Possible`. A column for an assignment that exists in Canvas must carry its numbe
 | `ID number | Username | Email address` | the identifier; the header is the field idColumn names (ID number by default) | Map this column to the same field on the import page. |
 | `Name as typed` | name_as_typed | Not an identifier; map it to Ignore. |
 | `<Activity name>` | a percentage by default, or points | Map to a new or existing grade item. |
-| `<Activity name> feedback` | the row summary in words, with the instructor-entered parts labelled | Map to that item as feedback. |
+| `<Activity name> feedback` | the row summary in words, with the instructor-entered parts labeled | Map to that item as feedback. |
 
 `idColumn` is `ID number`, `Username` or `Email address`. The default scale is a
 percentage, because a grade item made by the import has a maximum of 100.

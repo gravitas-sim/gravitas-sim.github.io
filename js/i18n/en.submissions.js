@@ -164,7 +164,7 @@ export const EN_SUBMISSIONS = {
   'sub.act.col.hardest': 'Hardest question',
   'sub.judge.title': 'Instructor judgment',
   'sub.judge.note':
-    'Written answers are yours to read, not Gravitas’s to mark. Open them here, give each a mark and, if you like, a comment. Marks stay in this page and leave only in the marks file you save. They are labelled as entered by the instructor, and are added to a score only in the gradebook files below.',
+    'Written answers are yours to read, not Gravitas’s to mark. Open them here, give each a mark and, if you like, a comment. Marks stay in this page and leave only in the marks file you save. They are labeled as entered by the instructor, and are added to a score only in the gradebook files below.',
   'sub.judge.open': 'Read the written answers and mark them',
   'sub.judge.close': 'Hide the written answers',
   'sub.judge.none': 'No report has a written answer to mark.',
@@ -209,7 +209,7 @@ export const EN_SUBMISSIONS = {
   'sub.gb.empty': 'Read at least one report to make a gradebook file.',
   'sub.gb.marks.title': 'Instructor marks',
   'sub.gb.marks.note':
-    'Marks you enter on the written answers are saved only as this file, every row labelled as entered by the instructor. Open it again later to carry on.',
+    'Marks you enter on the written answers are saved only as this file, every row labeled as entered by the instructor. Open it again later to carry on.',
   'sub.gb.fb.auto':
     'Gravitas checked {checked} answers and {correct} were correct ({points} of {possible} points).',
   'sub.gb.fb.written':
