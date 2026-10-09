@@ -14,6 +14,8 @@ export const ES_REMIX = {
   'remix.error.tooLarge':
     'Ese enlace contiene más de lo que un enlace puede llevar. Pídelo como archivo.',
   'remix.error.notPack': 'Ese enlace no contiene una investigación.',
+  'remix.error.notInstalled':
+    '«{id}» no está instalada en este navegador. Instálala primero desde el catálogo.',
   'remix.error.noOriginal':
     'Esa investigación se hizo a partir de «{id}», que esta versión de Gravitas no tiene.',
   'remix.error.invalid':

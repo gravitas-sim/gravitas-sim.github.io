@@ -71,6 +71,37 @@ async function load(id, facts, core) {
 }
 
 /**
+ * The investigation file of an installed catalog package (js/catalog/store.js,
+ * the record js/catalog/install.js wrote), read as any file is: guarded
+ * parse, then migrated by the format.
+ *
+ * @param {string} id - The package's id
+ * @param {object} [store] - js/catalog/store.js's, for a test
+ * @returns {Promise<{ok: true, pack: object}|{ok: false, reason: string}>}
+ *   The reason is notInstalled or notPack
+ */
+export async function installedPack(id, store) {
+  const [{ openStore }, { parseDocument }, { migrateInvestigationPack }] =
+    await Promise.all([
+      import('../catalog/store.js'),
+      import('../shareState.js'),
+      import('../platform/investigation.js'),
+    ]);
+  const record = await (store || (await openStore())).get(id);
+  if (!record || record.type !== 'investigation-pack')
+    return { ok: false, reason: 'notInstalled' };
+  try {
+    const file = record.manifest.provides.investigations[0].file;
+    const read = migrateInvestigationPack(parseDocument(record.files[file]));
+    return read.ok
+      ? { ok: true, pack: read.pack }
+      : { ok: false, reason: 'notPack' };
+  } catch {
+    return { ok: false, reason: 'notPack' };
+  }
+}
+
+/**
  * Open whatever investigation the address bar names.
  * @returns {Promise<boolean>} Whether one was opened
  */
@@ -92,6 +123,14 @@ export async function openPackFromUrl() {
   const read = await readPackFragment(location.hash);
   if (!read.ok) return toast(t(`remix.error.${read.reason}`)) && false;
   let pack = read.pack;
+  if (read.installed) {
+    const got = await installedPack(read.installed);
+    if (!got.ok)
+      return (
+        toast(t(`remix.error.${got.reason}`, { id: read.installed })) && false
+      );
+    pack = got.pack;
+  }
   if (read.delta) {
     const [core, { applyDelta }] = await Promise.all([
       import('../composer/remixCore.js'),

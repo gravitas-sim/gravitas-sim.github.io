@@ -25,6 +25,7 @@ import { MANIFEST_ENTRY, readArchive } from './archive.js';
 import { PLATFORM_API, validateManifest } from '../platform/manifest.js';
 import { parseVersion, satisfies } from '../platform/semver.js';
 import { validateCoursePack } from '../platform/course.js';
+import { parseDocument } from '../shareState.js';
 import { checkObservation, observationOf } from '../observation.js';
 
 /** An install refused, with why. */
@@ -120,6 +121,26 @@ function checkContents(entry, files, catalog) {
       throw new InstallError(
         'content',
         `${c.file}: ${bad[0].path} ${bad[0].message}`
+      );
+  } else if (entry.type === 'investigation-pack') {
+    // The format's own rules and the remix rules judge it when it is opened,
+    // where the lesson engine is (js/remix/open.js); here it must be a pack
+    // the package names, so nothing half-installs (Prompt 78, REMIX.md).
+    const i = manifest.provides.investigations[0];
+    let pack;
+    try {
+      pack = parseDocument(out[i.file]);
+    } catch (err) {
+      throw new InstallError('content', `${i.file}: ${err.message}`);
+    }
+    if (
+      pack?.format !== 'gravitas.investigation-pack' ||
+      pack.formatVersion !== 1 ||
+      pack.id !== i.id
+    )
+      throw new InstallError(
+        'content',
+        `${i.file}: is not the investigation pack "${i.id}" (version 1)`
       );
   } else {
     throw new InstallError(

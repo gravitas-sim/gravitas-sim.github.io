@@ -40,7 +40,14 @@ import { PLATFORM_API } from './platform/manifest.js';
 
 const $ = id => document.getElementById(id);
 const CATALOG_URL = new URL('catalog.json', document.baseURI);
-const TYPES = ['all', 'data-pack', 'course-pack', 'built-in', 'installed'];
+const TYPES = [
+  'all',
+  'data-pack',
+  'course-pack',
+  'investigation-pack',
+  'built-in',
+  'installed',
+];
 
 const state = {
   catalog: null,
@@ -50,6 +57,16 @@ const state = {
   errors: new Map(),
   course: null,
 };
+
+/**
+ * The address that opens an installed investigation in the application: an
+ * investigation link (js/composer/packLink.js, tag i, raw) naming the package.
+ */
+const openFragment = id =>
+  `i1r${btoa(JSON.stringify({ k: id }))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')}`;
 
 // --- Words ---------------------------------------------------------------------------
 
@@ -250,6 +267,15 @@ function entryItem(e) {
         el('a', {
           class: 'ui-button',
           href: `../observatory/?installed=${encodeURIComponent(e.id)}`,
+          'data-action': 'open',
+          text: t('cat.open'),
+        })
+      );
+    if (installed.type === 'investigation-pack')
+      actions.append(
+        el('a', {
+          class: 'ui-button',
+          href: `../#${openFragment(e.id)}`,
           'data-action': 'open',
           text: t('cat.open'),
         })
