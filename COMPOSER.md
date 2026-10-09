@@ -222,6 +222,26 @@ authoring preview, and nothing is published.
 Drafts are kept in this browser after every edit, with undo and redo from the
 buttons or the keys, and a raw JSON view that refuses what does not parse.
 
+## Make a Package from a pack
+
+To share a saved investigation, or a remix, with other instructors through the
+catalog, wrap the file the Save button wrote:
+
+```bash
+npm run sdk -- init investigation-pack my-orbit \
+  --from ~/Downloads/my-orbit.investigation.json --author "Your name"
+npm run sdk -- validate extensions/my-orbit
+npm run sdk -- test extensions/my-orbit
+npm run sdk -- review extensions/my-orbit
+```
+
+`init` writes `extensions/my-orbit/` with the manifest, the file and a README
+with Author and Sources, carrying both languages from the pack. If the
+investigation declares Spanish and has no Spanish title it stops and says so;
+add the title under Translation and save again. A pull request with that
+folder is the submission: CONTRIBUTING_CONTENT.md, and sdk/README.md "Make a
+Package from a pack".
+
 ## What authors may ask for that it does not do
 
 These are recorded rather than built in this change:
@@ -244,8 +264,9 @@ These are recorded rather than built in this change:
   expectations and flow are keyed by step number and written in
   `js/data/instructorContent.js`.
 - **Publishing from the browser.** An investigation reaches students through a
-  maintainer (above), not from this page. There is no catalog entry for packs
-  yet, and no SDK extension type.
+  link this page makes (Publish). Sharing it as a Package for other instructors
+  is not done from the page: it takes a clone of the repository and the SDK
+  (below), and a pull request.
 
 ## Where it lives
 

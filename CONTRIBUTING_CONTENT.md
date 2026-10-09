@@ -18,6 +18,11 @@ instrument or anything else that runs code is a different path (the SDK's
    `/studio/lesson/`, `/studio/course/`) write the files for you.
 2. **Write it, validate and test it.**
    `npm run sdk -- validate extensions/<id>` and `npm run sdk -- test extensions/<id>`.
+   Made it in the Composer, the course builder or the Scenario Studio? Do not
+   copy the file by hand: `npm run sdk -- init investigation-pack <id> --from
+   <your-file>.json --author "<name>"` writes the package, manifest and README
+   for you (also `course-pack` and `scenario-pack`; sdk/README.md, "Make a
+   Package from a pack").
 3. **Run the review yourself.** `npm run sdk -- review extensions/<id>`
    runs the checks a maintainer's tooling will run and prints the questions a
    person will answer. A package that fails here is not ready.

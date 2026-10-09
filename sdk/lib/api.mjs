@@ -60,7 +60,7 @@ export {
 // the check a transit pack states (added in 1.3.0; `sdk test` runs the same).
 
 /** This SDK. A major version changes only with a breaking change to this file. */
-export const SDK_VERSION = '1.9.0';
+export const SDK_VERSION = '1.10.0';
 
 /**
  * The modules an extension instrument (or a vendored panel) may import, by the

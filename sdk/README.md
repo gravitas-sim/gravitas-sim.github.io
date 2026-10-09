@@ -38,6 +38,40 @@ packages in [`capabilities/`](../capabilities/). The type is what it
 `provides`: `dataPacks`, `courses`, `investigations` (with a `file`),
 `scenarios` or `widgetFamilies`, exactly one.
 
+## Make a Package from a pack
+
+An investigation you built in the Composer (/studio/lesson/), a remix of a
+built-in, a course from the course builder (/studio/course/) or a scenario from
+the Scenario Studio (/studio/) is already a pack file. `init --from` turns it
+into a package that `validate`, `test` and `review` run on, with no file copied
+and no manifest edited:
+
+```bash
+# 1. A clone of the repository, then once: npm install
+# 2. The package id is the folder name and the extension's id: kebab-case,
+#    and not one of Gravitas's own lessons.
+npm run sdk -- init investigation-pack my-keplers-remix \
+  --from ~/Downloads/my-keplers-remix.investigation.json \
+  --author "Dana Reyes, State University" \
+  --sources "A remix of Kepler's laws for my section; the questions are my own."
+npm run sdk -- validate extensions/my-keplers-remix
+npm run sdk -- test extensions/my-keplers-remix
+npm run sdk -- review extensions/my-keplers-remix
+```
+
+Use `course-pack` for a course file and `scenario-pack` for a Scenario Studio
+export. `init` says what it changed: the pack is written under the package's id
+if it was saved under another. The text is `CC-BY-4.0`. A remix's Sources line
+and manifest citation name the investigation it came from. If `--author` is
+left out the README's Author line is a placeholder, and `init` says so; write
+it in the words you want printed. Then open a pull request with
+`extensions/my-keplers-remix/` and nothing else (CONTRIBUTING_CONTENT.md).
+
+Both languages come from the pack. If the pack declares English and Spanish and
+has no Spanish title, `init` stops and says so; add the title in the Composer
+(Translation) and save again, or remove `es` from the pack's `locales` to make
+an English-only package. Gravitas does not translate a package.
+
 ## The workflow, from nothing to a pull request
 
 The examples in [`examples/`](examples/) went through exactly these steps.
@@ -229,7 +263,8 @@ The example is [`orbits-first-week`](examples/orbits-first-week/).
 predictions, measurements with units, questions inline or from a bank, and a
 remediation step for a wrong answer, in English and Spanish
 (`sdk/schemas/investigation-pack-1.schema.json`). `npm run sdk -- init
-investigation-pack my-orbit` starts from the composer's own example.
+investigation-pack my-orbit` starts from the composer's own example; to start
+from a pack you saved, see "Make a Package from a pack" below.
 A written answer may carry `rubricCriteria` (one to six criteria of two to five levels each, best first, in every locale); the instructor's answer key prints them.
 
 - **Errors:** the format's rules, by field, then the compiled lesson through
@@ -358,7 +393,7 @@ declares all of it, and the contract suite fails if the two differ.
 
 | Export | What it is |
 |---|---|
-| `SDK_VERSION` | this SDK, `1.9.0` |
+| `SDK_VERSION` | this SDK, `1.10.0` |
 | `PLATFORM_API` | the platform API this Gravitas implements, `1.0.0` |
 | `FORMATS` | each format this SDK reads and writes, with the highest version it reads (`gravitas.course-pack` is 2: it reads /1 too) |
 | `EXTENSION_TYPES`, `LOCALES` | the five types and their kinds; the interface languages (`en`, `es`) |
@@ -439,6 +474,22 @@ anything else.
 | 1.7.0 | 1.0.0 | 1 (with `provides.courses`, and `file` on `provides.scenarios`) | 1, with synthetic packs that record their model, and the optional runtime fields `model` and `citations` | 1 | 1, with the optional `scenario` | 1 |
 | 1.8.0 | 1.0.0 | 1 (with `file` on `provides.courses`, `provides.scenarios` and `provides.investigations`) | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
 | 1.9.0 | 1.0.0 | 1 (with `file` on `provides.translations`) | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
+| 1.10.0 | 1.0.0 | 1, as 1.9.0 | 1, as 1.7.0 | 1 and 2 | 1, as 1.7.0 | 1 |
+
+SDK 1.10.0 adds, and removes nothing (Roadmap II P81, repair R-A5):
+
+- **`init <type> <id> --from <pack>`** accepts an investigation pack (a Composer
+  save or a remix, with `derivedFrom` and `rubricCriteria`) and a course pack
+  (`course-pack/1` or `/2`), as well as the scenario pack it already took. It
+  writes the manifest (id, the pack's version, both titles, `CC-BY-4.0`, a
+  citation naming the original of a remix) and a README with the Author and
+  Sources headings, and copies the file. `--author` and `--sources` are the
+  author's own words for those headings. A pack that declares English and
+  Spanish but has no Spanish title is refused by `init`, saying what to do,
+  instead of failing the `locales` check of `sdk review` afterwards. A pack
+  that declares English only becomes an English-only package. A scenario pack
+  now carries its own `version` and, as the others do, is refused when it
+  declares Spanish and has no Spanish title.
 
 SDK 1.9.0 adds, and removes nothing, what an independent author needed
 (Roadmap II Prompt 80):

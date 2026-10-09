@@ -15,6 +15,14 @@ the release rather than in the tag.
 
 ### Added
 
+- **A Package from the Composer** (Roadmap II P81, repair R-A5, SDK 1.10.0).
+  `sdk init <type> <id> --from <pack>` now wraps an investigation pack (a
+  Composer save or a remix) and a course pack as well as a scenario pack: it
+  writes the manifest, the CC BY 4.0 license, a citation naming a remix's
+  original and a README with Author and Sources (`--author`, `--sources`),
+  carries both languages from the pack and refuses, with what to do, a pack
+  that declares Spanish and has no Spanish title. Documented in sdk/README.md,
+  CONTRIBUTING_CONTENT.md and COMPOSER.md.
 - **Sharing and governance for contributed content** (Roadmap II Prompt 80).
   CONTRIBUTING_CONTENT.md (how to submit a package, the license and provenance
   rules, the review checklist, the acceptance record, versioning, withdrawal,
