@@ -149,6 +149,8 @@ const DARK_MATTER = {
   duration: '45-60 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 28, section: '28.4' },
+  courseLevel: 'survey',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'algebra',
   prerequisites: [],

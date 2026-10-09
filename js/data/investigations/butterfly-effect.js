@@ -57,6 +57,8 @@ const BUTTERFLY_EFFECT = {
   duration: '55-70 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 3, section: '3.6' },
+  courseLevel: 'majors',
   mathematics: 'algebra',
   prerequisites: ['lagrange-points'],
   // Subject tags, for the browser's filters. A fixed vocabulary

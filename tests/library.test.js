@@ -252,9 +252,14 @@ describe('filtering the Library', () => {
   });
 
   test('an entry without a length or arithmetic is not filed under one', () => {
-    const demo = filterCatalog(english, { ...NO_FILTERS, length: 'demo' });
+    // Every kind declares both since Prompt 76 (R-L), so the rule is held
+    // against entries made without them.
+    const bare = english.map(e =>
+      e.kind === 'scenario' ? { ...e, length: null, calculation: null } : e
+    );
+    const demo = filterCatalog(bare, { ...NO_FILTERS, length: 'demo' });
     expect(demo.some(r => r.entry.kind === 'scenario')).toBe(false);
-    const none = filterCatalog(english, { ...NO_FILTERS, calculation: 'none' });
+    const none = filterCatalog(bare, { ...NO_FILTERS, calculation: 'none' });
     expect(none.some(r => r.entry.calculation === null)).toBe(false);
   });
 
@@ -277,6 +282,41 @@ describe('filtering the Library', () => {
     const f = { ...NO_FILTERS, kind: 'course', length: 'demo' };
     expect(filterCatalog(english, f)).toEqual([]);
     expect(loosening(english, f)?.key).toBeTruthy();
+  });
+});
+
+describe('the metadata holes are filled (Prompt 76, R-L)', () => {
+  const of = kind => library.entries.filter(e => e.kind === kind);
+
+  test.each(['scenario', 'dataset', 'course', 'experiment', 'activity'])(
+    'every %s states a summary, level, duration, mathematics and prerequisites',
+    kind => {
+      for (const e of of(kind)) {
+        for (const f of ['summary', 'level', 'duration', 'mathematics'])
+          expect([e.id, f, e[f] === null]).toEqual([e.id, f, false]);
+        expect([e.id, Array.isArray(e.prerequisites)]).toEqual([e.id, true]);
+      }
+    }
+  );
+
+  test('every investigation names a textbook chapter and a course level', () => {
+    for (const e of of('investigation')) {
+      expect(e.textbook?.chapter).toBeGreaterThanOrEqual(1);
+      expect(e.textbook.chapter).toBeLessThanOrEqual(30);
+      expect(['survey', 'majors', 'upper']).toContain(e.courseLevel);
+    }
+  });
+
+  test('a course takes the most advanced of what it names', () => {
+    const course = of('course').find(e => e.id === 'course:intro-astronomy');
+    expect(course.level).toBe('intro');
+    expect(course.mathematics).toBe('logarithms');
+  });
+
+  test('the curation file names only what exists', async () => {
+    const { buildLibrary } = await import('../tools/build-library.mjs');
+    // buildLibrary throws for a record that names nothing or a source with none.
+    await expect(buildLibrary()).resolves.toBeTruthy();
   });
 });
 

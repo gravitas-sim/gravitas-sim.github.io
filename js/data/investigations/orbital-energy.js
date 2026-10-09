@@ -123,6 +123,8 @@ const ENERGY = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 3, section: '3.5' },
+  courseLevel: 'survey',
   mathematics: 'arithmetic',
   prerequisites: ['keplers-laws'],
   // Subject tags, for the browser's filters. A fixed vocabulary

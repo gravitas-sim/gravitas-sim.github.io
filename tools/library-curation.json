@@ -1,0 +1,409 @@
+{
+  "format": "gravitas.library-curation",
+  "formatVersion": 1,
+  "note": "What the Library and the adoption pages state that no source file owns. tools/build-library.mjs reads it (inputs of the generate graph's library node), checks every id and word against the sources and writes the result into library/library.json; nothing here is shipped to a reader, so it costs no route or bundle budget. A value is a declaration by the author of the entry, in the same spirit as a lesson's own audience or mathematics, and each is reviewed like any other prose. Prompt 76 (R-L, D-LIB-02). Levels are the lessons' audiences; durations are minutes of a student's time; mathematics is what a student is asked to work out in it.",
+  "scenarioLevelBySubject": {
+    "orbits": "beginner",
+    "solar-system": "beginner",
+    "gravity": "beginner",
+    "exoplanets": "beginner",
+    "habitability": "beginner",
+    "stars": "beginner",
+    "observing": "intro",
+    "chaos": "intro",
+    "resonance": "intro",
+    "galaxies": "intro",
+    "stellar-evolution": "intro",
+    "compact-objects": "intro",
+    "waves": "intro"
+  },
+  "scenarioDefaults": {
+    "duration": {
+      "min": 5,
+      "max": 15
+    },
+    "mathematics": "none",
+    "prerequisites": []
+  },
+  "activityMathematics": "the investigation each activity is cut from; an upper bound for a cut of it",
+  "datasets": {
+    "tess-light-curve": {
+      "kind": "time-series",
+      "summary": {
+        "en": "Two-minute-cadence TESS photometry of HD 209458 from sector 56, as the mission's pipeline corrected it: a bright star with a hot Jupiter crossing it every 3.5 days.",
+        "es": "Fotometría de TESS de HD 209458 con cadencia de dos minutos del sector 56, tal como la corrigió la cadena de proceso de la misión: una estrella brillante que un júpiter caliente cruza cada 3,5 días."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 15,
+        "max": 30
+      },
+      "mathematics": "arithmetic",
+      "prerequisites": []
+    },
+    "tess-aperture": {
+      "kind": "image",
+      "summary": {
+        "en": "The pixels TESS summed to make the HD 209458 light curve, with the mask drawn on them: the picture that shows which stars share the aperture.",
+        "es": "Los píxeles que TESS sumó para obtener la curva de luz de HD 209458, con la máscara dibujada encima: la imagen que muestra qué estrellas comparten la apertura."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 5,
+        "max": 10
+      },
+      "mathematics": "none",
+      "prerequisites": []
+    },
+    "sdss-a": {
+      "kind": "spectrum",
+      "summary": {
+        "en": "One SDSS DR18 optical spectrum of an A star: strong hydrogen lines and little else, as the temperature sequence says it should be.",
+        "es": "Un espectro óptico de SDSS DR18 de una estrella A: líneas de hidrógeno intensas y poco más, como indica la secuencia de temperaturas."
+      },
+      "level": "beginner",
+      "duration": {
+        "min": 5,
+        "max": 10
+      },
+      "mathematics": "none",
+      "prerequisites": []
+    },
+    "sdss-g": {
+      "kind": "spectrum",
+      "summary": {
+        "en": "One SDSS DR18 optical spectrum of a G star, the Sun's type: weaker hydrogen and many lines of metals.",
+        "es": "Un espectro óptico de SDSS DR18 de una estrella G, el tipo del Sol: hidrógeno más débil y muchas líneas de metales."
+      },
+      "level": "beginner",
+      "duration": {
+        "min": 5,
+        "max": 10
+      },
+      "mathematics": "none",
+      "prerequisites": []
+    },
+    "sdss-k": {
+      "kind": "spectrum",
+      "summary": {
+        "en": "One SDSS DR18 optical spectrum of a K star: a cooler photosphere, a redder continuum and deeper metal lines.",
+        "es": "Un espectro óptico de SDSS DR18 de una estrella K: una fotosfera más fría, un continuo más rojo y líneas de metales más profundas."
+      },
+      "level": "beginner",
+      "duration": {
+        "min": 5,
+        "max": 10
+      },
+      "mathematics": "none",
+      "prerequisites": []
+    },
+    "sdss-m": {
+      "kind": "spectrum",
+      "summary": {
+        "en": "One SDSS DR18 optical spectrum of an M star: molecular bands, titanium oxide among them, take over from the atomic lines.",
+        "es": "Un espectro óptico de SDSS DR18 de una estrella M: las bandas moleculares, entre ellas la del óxido de titanio, sustituyen a las líneas atómicas."
+      },
+      "level": "beginner",
+      "duration": {
+        "min": 5,
+        "max": 10
+      },
+      "mathematics": "none",
+      "prerequisites": []
+    },
+    "gwosc-events": {
+      "kind": "table",
+      "summary": {
+        "en": "Five gravitational-wave events from the open catalog, with each one's masses, distance, redshift and signal-to-noise ratio and the interval the catalog gives for each.",
+        "es": "Cinco eventos de ondas gravitacionales del catálogo abierto, con las masas, la distancia, el corrimiento al rojo y la relación señal-ruido de cada uno y el intervalo que da el catálogo."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 10,
+        "max": 20
+      },
+      "mathematics": "arithmetic",
+      "prerequisites": ["investigation:what-is-a-gravitational-wave"]
+    },
+    "ngc2420-photometry": {
+      "kind": "table",
+      "summary": {
+        "en": "SDSS photometry of the old open cluster NGC 2420 and the field around it: colors and magnitudes for thousands of stars, with the survey's own limits left in.",
+        "es": "Fotometría de SDSS del cúmulo abierto antiguo NGC 2420 y del campo que lo rodea: colores y magnitudes de miles de estrellas, con los límites propios del sondeo."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 30
+      },
+      "mathematics": "logarithms",
+      "prerequisites": ["investigation:pop-spectra"]
+    },
+    "ngc2420-segue": {
+      "kind": "table",
+      "summary": {
+        "en": "SEGUE stellar parameters for stars toward NGC 2420: radial velocity, temperature, surface gravity and metallicity, the table that separates the cluster from its field.",
+        "es": "Parámetros estelares de SEGUE para estrellas en la dirección de NGC 2420: velocidad radial, temperatura, gravedad superficial y metalicidad, la tabla que separa el cúmulo de su campo."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 30
+      },
+      "mathematics": "arithmetic",
+      "prerequisites": ["investigation:pop-cmd"]
+    },
+    "mist-isochrones": {
+      "kind": "model",
+      "summary": {
+        "en": "MIST model isochrones in the SDSS bands: a model, not an observation, drawn over a cluster's stars to read an age and a distance.",
+        "es": "Isócronas del modelo MIST en las bandas de SDSS: un modelo, no una observación, que se dibuja sobre las estrellas de un cúmulo para leer una edad y una distancia."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 25,
+        "max": 40
+      },
+      "mathematics": "logarithms",
+      "prerequisites": ["investigation:pop-members"]
+    },
+    "community.kepler-13-tess-s14-pdcsap": {
+      "kind": "time-series",
+      "summary": {
+        "en": "TESS sector 14 photometry of Kepler-13A with the pipeline's crowding correction applied: the transit as the pipeline says it would look if the companion's light were removed.",
+        "es": "Fotometría de TESS del sector 14 de Kepler-13A con la corrección de aglomeración de la cadena aplicada: el tránsito tal como la cadena dice que se vería sin la luz de la compañera."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 35
+      },
+      "mathematics": "algebra",
+      "prerequisites": ["investigation:exo-fit"],
+      "subjects": ["exoplanets", "observing"]
+    },
+    "community.kepler-13-tess-s14-sap": {
+      "kind": "time-series",
+      "summary": {
+        "en": "TESS sector 14 photometry of Kepler-13A as collected, with the companion's light still in the aperture: the shallower transit that the correction then deepens.",
+        "es": "Fotometría de TESS del sector 14 de Kepler-13A tal como se recogió, con la luz de la compañera aún en la apertura: el tránsito menos profundo que la corrección profundiza después."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 35
+      },
+      "mathematics": "algebra",
+      "prerequisites": ["investigation:exo-fit"],
+      "subjects": ["exoplanets", "observing"]
+    },
+    "community.su-dra-tess-s15": {
+      "kind": "time-series",
+      "summary": {
+        "en": "TESS sector 15 photometry of SU Draconis, an RR Lyrae star whose brightness nearly doubles and fades again every sixteen hours: a real light curve of a pulsating star.",
+        "es": "Fotometría de TESS del sector 15 de SU Draconis, una estrella RR Lyrae cuyo brillo casi se duplica y vuelve a apagarse cada dieciséis horas: una curva de luz real de una estrella pulsante."
+      },
+      "level": "intro",
+      "duration": {
+        "min": 15,
+        "max": 25
+      },
+      "mathematics": "logarithms",
+      "prerequisites": [],
+      "subjects": ["observing", "stars"]
+    }
+  },
+  "experiments": {
+    "binary-planet-lab": {
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 40
+      },
+      "mathematics": "arithmetic",
+      "prerequisites": ["investigation:binary-star-planets"]
+    },
+    "circumbinary-planet-lab": {
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 40
+      },
+      "mathematics": "arithmetic",
+      "prerequisites": ["investigation:binary-star-planets"]
+    },
+    "gravity-assist-lab": {
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 40
+      },
+      "mathematics": "arithmetic",
+      "prerequisites": ["investigation:gravity-assist"]
+    },
+    "gravity-assist-heliocentric": {
+      "level": "intro",
+      "duration": {
+        "min": 20,
+        "max": 40
+      },
+      "mathematics": "arithmetic",
+      "prerequisites": ["investigation:gravity-assist"]
+    }
+  },
+  "guides": {
+    "exo-star": {
+      "mathematics": "arithmetic",
+      "prerequisites": [],
+      "textbook": {
+        "chapter": 21,
+        "section": "21.4"
+      },
+      "courseLevel": "survey"
+    },
+    "exo-find": {
+      "mathematics": "arithmetic",
+      "prerequisites": ["investigation:exo-star"],
+      "textbook": {
+        "chapter": 21,
+        "section": "21.4"
+      },
+      "courseLevel": "survey"
+    },
+    "exo-fit": {
+      "mathematics": "algebra",
+      "prerequisites": ["investigation:exo-find"],
+      "textbook": {
+        "chapter": 21,
+        "section": "21.4"
+      },
+      "courseLevel": "majors"
+    },
+    "exo-dilution": {
+      "mathematics": "algebra",
+      "prerequisites": ["investigation:exo-fit"],
+      "textbook": {
+        "chapter": 21,
+        "section": "21.5"
+      },
+      "courseLevel": "majors"
+    },
+    "exo-planet": {
+      "mathematics": "arithmetic",
+      "prerequisites": ["investigation:exo-find"],
+      "textbook": {
+        "chapter": 21,
+        "section": "21.5"
+      },
+      "courseLevel": "majors"
+    },
+    "pop-spectra": {
+      "mathematics": "none",
+      "prerequisites": [],
+      "textbook": {
+        "chapter": 17,
+        "section": "17.3"
+      },
+      "courseLevel": "survey"
+    },
+    "pop-cmd": {
+      "mathematics": "logarithms",
+      "prerequisites": ["investigation:pop-spectra"],
+      "textbook": {
+        "chapter": 18,
+        "section": "18.4"
+      },
+      "courseLevel": "majors"
+    },
+    "pop-members": {
+      "mathematics": "arithmetic",
+      "prerequisites": ["investigation:pop-cmd"],
+      "textbook": {
+        "chapter": 22,
+        "section": "22.2"
+      },
+      "courseLevel": "majors"
+    },
+    "pop-age": {
+      "mathematics": "logarithms",
+      "prerequisites": ["investigation:pop-members"],
+      "textbook": {
+        "chapter": 22,
+        "section": "22.3"
+      },
+      "courseLevel": "majors"
+    },
+    "pop-variable": {
+      "mathematics": "logarithms",
+      "prerequisites": [],
+      "textbook": {
+        "chapter": 19,
+        "section": "19.3"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-planes": {
+      "mathematics": "arithmetic",
+      "prerequisites": [],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.4"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-eclipse": {
+      "mathematics": "algebra",
+      "prerequisites": ["investigation:l3-planes"],
+      "textbook": {
+        "chapter": 21,
+        "section": "21.4"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-mutual": {
+      "mathematics": "algebra",
+      "prerequisites": ["investigation:l3-planes"],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.6"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-kozai": {
+      "mathematics": "algebra",
+      "prerequisites": ["investigation:l3-mutual"],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.6"
+      },
+      "courseLevel": "upper"
+    },
+    "ml-orbit": {
+      "mathematics": "algebra",
+      "prerequisites": [],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.5"
+      },
+      "courseLevel": "majors"
+    },
+    "ml-window": {
+      "mathematics": "algebra",
+      "prerequisites": ["investigation:ml-orbit"],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.5"
+      },
+      "courseLevel": "majors"
+    },
+    "ml-cruise": {
+      "mathematics": "algebra",
+      "prerequisites": ["investigation:ml-window"],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.5"
+      },
+      "courseLevel": "upper"
+    }
+  }
+}

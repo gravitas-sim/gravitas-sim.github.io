@@ -78,32 +78,52 @@ How many entries of each kind carry each field. Generated; "none" is what
 Prompt 76 starts from.
 
 <!-- library:coverage -->
-| Kind | Entries | summary | level | duration | mathematics | calculation | subjects | prerequisites | thumbnail |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| investigation | 41 | all | all | all | 24 | all | all | 24 | 24 |
-| activity | 6 | all | all | all | **none** | all | all | **none** | all |
-| scenario | 59 | all | **none** | **none** | **none** | **none** | all | **none** | all |
-| dataset | 13 | **none** | **none** | **none** | **none** | **none** | 10 | **none** | **none** |
-| course | 2 | all | 1 | 1 | **none** | **none** | 1 | **none** | **none** |
-| experiment | 4 | all | **none** | **none** | **none** | **none** | all | **none** | all |
+| Kind | Entries | summary | level | duration | mathematics | calculation | subjects | prerequisites | textbook | courseLevel | thumbnail |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| investigation | 41 | all | all | all | all | all | all | all | all | all | 24 |
+| activity | 6 | all | all | all | all | all | all | all | all | all | all |
+| scenario | 59 | all | all | all | all | all | all | all | **none** | **none** | all |
+| dataset | 13 | all | all | all | all | all | all | all | **none** | **none** | **none** |
+| course | 2 | all | all | all | all | all | all | all | **none** | all | **none** |
+| experiment | 4 | all | all | all | all | all | all | all | **none** | **none** | all |
 <!-- /library:coverage -->
 
-What is missing, and why:
+What is left unstated, and why:
 
-- **Scenarios** have no level, duration, mathematics or prerequisites: a world
-  is open-ended, and `scenarioInfo.js` declares none of them.
-- **Datasets** have no summary, level, duration or picture. The fixtures carry
-  an id, a kind and a title in the Observatory's catalogs; the catalog's data
-  packs carry a title and no subjects.
-- **Activities** have no `mathematics` and no `prerequisites` as ids: an
-  activity's prerequisites are a sentence (`prerequisitesId`), and the
-  lesson's mathematics is an upper bound for a cut of it, not its own.
-- **Guides** have no `mathematics`, `prerequisites` or picture. Their order is
-  stated in prose; the Observatory's suites are sequences.
-- **Courses** from the catalog carry a title and a summary only; the built-in
-  course takes its level and subjects from the lessons it names.
-- **Experiments** have no level or duration, and no route of their own: the
-  experiment runner reads no query, so every one links to `/experiments/`.
+- **Thumbnails** for datasets, courses and the guides: there is no picture.
+- **Textbook and course level** are declared for every investigation and
+  activity. A scenario, dataset, experiment or catalog course has no chapter,
+  because a world or a table is not a chapter's worth of anything; a
+  built-in course takes its course level from the investigations it names.
+- A **catalog data pack's** subjects come from the curation file, because the
+  catalog entry carries none.
+
+## What no source owns (Prompt 76, R-L)
+
+`tools/library-curation.json` holds the fields no source file declares: the
+summary, level, duration, mathematics and prerequisites of each dataset and
+experiment, the mathematics, prerequisites, textbook chapter and course level
+of each guide, and the rules that give an open-ended scenario its level (the
+most advanced subject it is about), its duration (5 to 15 minutes of
+exploring), its mathematics (none: a world asks nothing to be worked out) and
+its prerequisites (none). A built-in or catalog course takes its level,
+mathematics, calculation and course level from the investigations it names
+(the highest of each) and its duration from theirs, and an activity takes its
+mathematics, prerequisites, textbook chapter and course level from the
+investigation it is cut from, as an upper bound for a cut of it. The generator
+fails for a record that names nothing, and for a source with none. Nothing in
+the file reaches a reader's download; it is read by the generator and written
+into `library/library.json`. Each value is an author's declaration, in the
+way a lesson's own `audience` is, and is reviewed like prose.
+
+**Textbook alignment** is OpenStax Astronomy 2e. Lessons declare it in their
+own source (`textbook: {chapter, section}`, `courseLevel`), the manifest
+generator carries it into `discovery.js`, and the Library reads it from there;
+the guides' alignment lives in the curation file, because their files are on
+routes with no spare bytes. The chapters were written from the book's table of
+contents without the book at hand to check: the chapter is the claim, a
+section is given only where one fits, and an instructor adopting a different
+edition should treat the field as a pointer, not a citation.
 
 ## The page
 

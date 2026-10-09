@@ -78,6 +78,9 @@ export const MATHEMATICS = Object.freeze([
   'logarithms',
 ]);
 
+/** The courses an investigation is tagged for (Prompt 76). */
+export const COURSE_LEVELS = Object.freeze(['survey', 'majors', 'upper']);
+
 /** The fields the coverage table counts, as the prompt names them. */
 export const COVERED = Object.freeze([
   'summary',
@@ -87,8 +90,13 @@ export const COVERED = Object.freeze([
   'calculation',
   'subjects',
   'prerequisites',
+  'textbook',
+  'courseLevel',
   'thumbnail',
 ]);
+
+/** What tools/library-curation.json holds: what no source file owns. */
+export const CURATION = 'tools/library-curation.json';
 
 /**
  * The scenario gallery's concept tags, as the lessons' subjects.
@@ -175,6 +183,8 @@ function entry(e) {
     calculation: e.calculation ?? null,
     subjects: e.subjects?.length ? sorted(e.subjects) : null,
     prerequisites: e.prerequisites ?? null,
+    textbook: e.textbook ?? null,
+    courseLevel: e.courseLevel ?? null,
     steps: e.steps ?? null,
     ...(e.depths ? { depths: e.depths } : {}),
     thumbnail: e.thumbnail ?? null,
@@ -211,6 +221,19 @@ export async function buildLibrary() {
     PERIOD_MINUTES,
   } = await load('js/data/investigations/sequences.js');
   const { INVESTIGATIONS } = await load('js/data/investigations.js');
+  const curation = JSON.parse(readFileSync(path.join(ROOT, CURATION), 'utf8'));
+  const usedCuration = new Set();
+  /** A curated record, once; the file is held to naming only what exists. */
+  const curated = (section, id) => {
+    const rec = curation[section]?.[id];
+    if (!rec) throw new Error(`${CURATION}: no ${section} record for "${id}"`);
+    usedCuration.add(`${section}/${id}`);
+    return rec;
+  };
+  const top = (values, vocabulary) =>
+    values.length
+      ? vocabulary[Math.max(...values.map(v => vocabulary.indexOf(v)))]
+      : null;
   const { EN } = await load('js/i18n/en.js');
   const { ES } = await load('js/i18n/es.js');
   const { EN_DEFERRED } = await load('js/i18n/en.deferred.js');
@@ -254,6 +277,8 @@ export async function buildLibrary() {
         calculation: calculationOf(m),
         subjects: BROWSE_META[m.id]?.tags,
         prerequisites: (d?.prerequisites || []).map(p => `investigation:${p}`),
+        textbook: d?.textbook,
+        courseLevel: d?.courseLevel,
         steps: m.stepCount,
         ...(m.depths ? { depths: m.depths } : {}),
         thumbnail: m.thumbnail,
@@ -304,6 +329,7 @@ export async function buildLibrary() {
         ? { min: Math.min(...minutes), max: Math.max(...minutes) }
         : null;
       const id = `investigation:${g.id}`;
+      const c = curated('guides', g.id);
       ids.push(id);
       entries.push(
         entry({
@@ -317,6 +343,10 @@ export async function buildLibrary() {
           duration,
           length: lengthFor(duration),
           calculation: bucket(g.steps.filter(s => s.kind === 'answer').length),
+          mathematics: c.mathematics,
+          prerequisites: c.prerequisites,
+          textbook: c.textbook,
+          courseLevel: c.courseLevel,
           subjects: g.tags,
           steps: g.steps.length,
           route: `${set.route}?guide=${g.id}`,
@@ -358,6 +388,13 @@ export async function buildLibrary() {
           duration,
           length: lengthFor(duration),
           calculation: bucket(numeric),
+          // The investigation's own, which a cut of it can only go below.
+          mathematics: DISCOVERY[a.lesson]?.mathematics,
+          prerequisites: (DISCOVERY[a.lesson]?.prerequisites || []).map(
+            p => `investigation:${p}`
+          ),
+          textbook: DISCOVERY[a.lesson]?.textbook,
+          courseLevel: DISCOVERY[a.lesson]?.courseLevel,
           subjects: BROWSE_META[a.lesson]?.tags,
           steps: f.steps.length,
           thumbnail: manifest?.thumbnail,
@@ -377,6 +414,7 @@ export async function buildLibrary() {
       if (!s) throw new Error(`scenario tag "${tag}" has no Library subject`);
       return s;
     });
+    const open = curation.scenarioDefaults;
     entries.push(
       entry({
         id: `scenario:${slug(key)}`,
@@ -385,6 +423,23 @@ export async function buildLibrary() {
         source: 'js/data/scenarioInfo.js',
         title: words(EN, ES, `scenario.${key}.title`),
         summary: words(EN, ES, `scenario.${key}.summary`),
+        // A world is open-ended: it asks nothing to be worked out, and a
+        // student needs no other investigation first. It is as advanced as
+        // the most advanced subject it is about.
+        level: top(
+          subjects.map(sub => {
+            const level = curation.scenarioLevelBySubject[sub];
+            if (!level)
+              throw new Error(`${CURATION}: subject "${sub}" has no level`);
+            return level;
+          }),
+          LEVELS
+        ),
+        duration: open.duration,
+        length: lengthFor(open.duration),
+        mathematics: open.mathematics,
+        calculation: 'none',
+        prerequisites: open.prerequisites,
         subjects,
         thumbnail: info.thumbnail,
         route: `/#${rawWorldLink({ v: 1, s: key, seed })}`,
@@ -396,6 +451,20 @@ export async function buildLibrary() {
   const { FIXTURES } = await load('js/observatory/fixtures.js');
   const { EN_OBSERVATORY } = await load('js/i18n/en.observatory.js');
   const { ES_OBSERVATORY } = await load('js/i18n/es.observatory.js');
+  /** A dataset's curated fields: what working with it asks of a student. */
+  const datasetFields = id => {
+    const c = curated('datasets', id);
+    return {
+      summary: c.summary,
+      level: c.level,
+      duration: c.duration,
+      length: lengthFor(c.duration),
+      mathematics: c.mathematics,
+      calculation: c.mathematics === 'none' ? 'none' : 'some',
+      prerequisites: c.prerequisites,
+      ...(c.subjects ? { subjects: c.subjects } : {}),
+    };
+  };
   for (const f of FIXTURES) {
     entries.push(
       entry({
@@ -404,6 +473,7 @@ export async function buildLibrary() {
         format: 'observation',
         source: 'js/observatory/fixtures.js',
         title: words(EN_OBSERVATORY, ES_OBSERVATORY, `obs.fixture.${f.id}`),
+        ...datasetFields(f.id),
         subjects: f.tags,
         route: `/observatory/?open=${f.id}`,
       })
@@ -412,7 +482,7 @@ export async function buildLibrary() {
   const catalog = JSON.parse(
     readFileSync(path.join(ROOT, 'catalog/catalog.json'), 'utf8')
   );
-  const fromCatalog = (e, kind, format) =>
+  const fromCatalog = (e, kind, format, more = {}) =>
     entry({
       id: `${kind}:${e.id}`,
       kind,
@@ -420,13 +490,63 @@ export async function buildLibrary() {
       source: 'catalog/catalog.json',
       title: both(e.title.en, e.title.es),
       summary: e.summary ? both(e.summary.en, e.summary.es) : null,
+      ...more,
       route: '/catalog/',
     });
   for (const e of catalog.entries.filter(x => x.type === 'data-pack'))
-    entries.push(fromCatalog(e, 'dataset', 'data-pack'));
+    entries.push(fromCatalog(e, 'dataset', 'data-pack', datasetFields(e.id)));
 
   // --- Courses -----------------------------------------------------------------
   const { BUILTIN_COURSES } = await load('js/data/courses/index.js');
+  const sum = list => list.reduce((a, b) => a + b, 0);
+  /**
+   * A course, from the investigations it names: as advanced, as mathematical
+   * and as calculating as the most of them, and starting from nothing, since a
+   * course is the order its investigations were put in.
+   */
+  const MATH_ORDER = MATHEMATICS;
+  const CALC_ORDER = ['none', 'some', 'lots'];
+  const courseEntry = (
+    id,
+    format,
+    source,
+    pack,
+    named,
+    duration,
+    units,
+    count,
+    route,
+    more = {}
+  ) =>
+    entry({
+      id,
+      kind: 'course',
+      format,
+      source,
+      title: both(pack.title.en, pack.title.es),
+      summary: both(pack.summary.en, pack.summary.es),
+      level: top(sorted(named.map(l => DISCOVERY[l]?.audience)), LEVELS),
+      duration,
+      length: lengthFor(duration),
+      mathematics: top(
+        sorted(named.map(l => DISCOVERY[l]?.mathematics)),
+        MATH_ORDER
+      ),
+      calculation: top(
+        sorted(named.map(l => bucket(BROWSE_META[l]?.numericCount))),
+        CALC_ORDER
+      ),
+      subjects: named.flatMap(l => BROWSE_META[l]?.tags || []),
+      prerequisites: [],
+      courseLevel: top(
+        sorted(named.map(l => DISCOVERY[l]?.courseLevel)),
+        COURSE_LEVELS
+      ),
+      steps: count,
+      ...(units ? { units } : {}),
+      ...more,
+      route,
+    });
   for (const [id, loader] of Object.entries(BUILTIN_COURSES)) {
     const pack = await loader();
     const items = pack.units.flatMap(u => u.items);
@@ -444,31 +564,55 @@ export async function buildLibrary() {
       max += d?.max || 0;
     }
     const duration = max ? { min, max } : null;
-    const levels = sorted(named.map(l => DISCOVERY[l]?.audience));
     entries.push(
-      entry({
-        id: `course:${id}`,
-        kind: 'course',
-        format: 'course',
-        source: 'js/data/courses/index.js',
-        title: both(pack.title.en, pack.title.es),
-        summary: both(pack.summary.en, pack.summary.es),
-        // The level its lessons share, when they share one.
-        level: levels.length === 1 ? levels[0] : null,
+      courseEntry(
+        `course:${id}`,
+        'course',
+        'js/data/courses/index.js',
+        pack,
+        named,
         duration,
-        length: lengthFor(duration),
-        subjects: named.flatMap(l => BROWSE_META[l]?.tags || []),
-        steps: items.length,
-        units: pack.units.map(u => ({
+        pack.units.map(u => ({
           title: both(u.title.en, u.title.es),
           lessons: u.items.filter(i => i.lesson).map(i => i.lesson),
         })),
-        route: `/course/?course=${id}`,
-      })
+        items.length,
+        `/course/?course=${id}`
+      )
     );
   }
-  for (const e of catalog.entries.filter(x => x.type === 'course-pack'))
-    entries.push(fromCatalog(e, 'course', 'course-pack'));
+  for (const e of catalog.entries.filter(x => x.type === 'course-pack')) {
+    // The pack's own course file, from the extension it was built from.
+    const pack = JSON.parse(
+      readFileSync(
+        path.join(ROOT, e.source, e.provides.courses[0].file),
+        'utf8'
+      )
+    );
+    const named = pack.units.flatMap(u => u.lessons.map(l => l.lesson));
+    const d = named.map(l =>
+      durationOf(MANIFEST.find(m => m.id === l)?.duration)
+    );
+    const duration = d.every(Boolean)
+      ? { min: sum(d.map(x => x.min)), max: sum(d.map(x => x.max)) }
+      : null;
+    entries.push(
+      courseEntry(
+        `course:${e.id}`,
+        'course-pack',
+        'catalog/catalog.json',
+        pack,
+        named,
+        duration,
+        null,
+        named.length,
+        '/catalog/',
+        {
+          summary: both(e.summary.en, e.summary.es),
+        }
+      )
+    );
+  }
 
   // --- Experiments -------------------------------------------------------------
   const { SWEEPABLE } = await load('js/experiments/sweep.js');
@@ -490,6 +634,17 @@ export async function buildLibrary() {
           ES_EXPERIMENTS,
           `exp.scenario.${slug(key)}`
         ),
+        ...(() => {
+          const c = curated('experiments', slug(key));
+          return {
+            level: c.level,
+            duration: c.duration,
+            length: lengthFor(c.duration),
+            mathematics: c.mathematics,
+            calculation: 'some',
+            prerequisites: c.prerequisites,
+          };
+        })(),
         // What it varies, in the runner's own words.
         summary: {
           en: params.map(p => p.en).join(' · '),
@@ -500,6 +655,13 @@ export async function buildLibrary() {
         route: '/experiments/',
       })
     );
+  }
+
+  for (const [section, records] of Object.entries(curation)) {
+    if (!['datasets', 'experiments', 'guides'].includes(section)) continue;
+    for (const id of Object.keys(records))
+      if (!usedCuration.has(`${section}/${id}`))
+        throw new Error(`${CURATION}: ${section}/${id} names nothing`);
   }
 
   // --- The vocabularies --------------------------------------------------------

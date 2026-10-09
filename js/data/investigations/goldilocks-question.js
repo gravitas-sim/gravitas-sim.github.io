@@ -149,6 +149,8 @@ const GOLDILOCKS = {
   duration: '40-50 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 30, section: null },
+  courseLevel: 'survey',
   mathematics: 'algebra',
   prerequisites: ['transit-photometry'],
   // Subject tags, for the browser's filters. A fixed vocabulary

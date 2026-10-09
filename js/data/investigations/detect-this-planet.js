@@ -98,6 +98,8 @@ const DETECT_THIS_PLANET = {
   duration: '30-35 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 21, section: '21.4' },
+  courseLevel: 'majors',
   mathematics: 'algebra',
   prerequisites: ['transit-photometry', 'radial-velocity'],
   // Subject tags, for the browser's filters. A fixed vocabulary

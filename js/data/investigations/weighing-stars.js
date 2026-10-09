@@ -55,6 +55,8 @@ const WEIGHING = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 18, section: '18.2' },
+  courseLevel: 'survey',
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'arithmetic',
   prerequisites: [],

@@ -64,6 +64,8 @@ const BLACK_HOLES = {
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 24, section: '24.5' },
+  courseLevel: 'survey',
   mathematics: 'algebra',
   prerequisites: [],
   // Subject tags, for the browser's filters. A fixed vocabulary

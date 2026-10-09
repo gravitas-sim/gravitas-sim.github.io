@@ -114,6 +114,8 @@ const discoveryOf = inv => ({
   audience: oneOf(inv, 'audience', AUDIENCES),
   mathematics: oneOf(inv, 'mathematics', MATHEMATICS),
   prerequisites: [...(inv.prerequisites || [])],
+  textbook: textbookOf(inv),
+  courseLevel: oneOf(inv, 'courseLevel', COURSE_LEVELS),
 });
 
 /** The discovery metadata as data, keyed by lesson id. */
@@ -140,6 +142,8 @@ const DISCOVERY_HEADER = `// ===================================================
 //                  they must work out, arithmetic if they record measurements
 //                  and the lesson works out the rest, none otherwise.
 //   prerequisites  lesson ids, including every \`needs\` in sequences.js.
+//   textbook       the OpenStax Astronomy 2e chapter, and section when one fits.
+//   courseLevel    the course it suits: survey, majors or upper.
 // =============================================================================
 `;
 
@@ -168,6 +172,26 @@ export const MATHEMATICS = Object.freeze([
   'algebra',
   'logarithms',
 ]);
+
+/** The courses an investigation is tagged for (Prompt 76). */
+export const COURSE_LEVELS = Object.freeze(['survey', 'majors', 'upper']);
+
+/** The textbook alignment a lesson declares: a chapter, and a section or null. */
+function textbookOf(inv) {
+  const t = inv.textbook;
+  const ok =
+    t &&
+    Number.isInteger(t.chapter) &&
+    t.chapter >= 1 &&
+    t.chapter <= 30 &&
+    (t.section === null ||
+      new RegExp(`^${t.chapter}\\.[1-9][0-9]?$`).test(t.section));
+  if (!ok)
+    throw new Error(
+      `${inv.id}: textbook must be {chapter: 1-30, section: "<chapter>.<n>" or null}`
+    );
+  return { chapter: t.chapter, section: t.section };
+}
 
 /** A declared value, or a thrown error naming the lesson. */
 function oneOf(inv, key, allowed) {

@@ -87,6 +87,8 @@ const RADIAL_VELOCITY = {
   duration: '45-55 min',
   level: 'Introductory astronomy',
   audience: 'intro',
+  textbook: { chapter: 21, section: '21.4' },
+  courseLevel: 'majors',
   mathematics: 'algebra',
   prerequisites: ['transit-photometry'],
   // Subject tags, for the browser's filters. A fixed vocabulary

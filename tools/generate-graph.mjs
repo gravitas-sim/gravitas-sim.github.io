@@ -92,6 +92,8 @@ export const GRAPH = Object.freeze([
       'js/experiments/sweep.js',
       'js/i18n',
       'catalog/catalog.json',
+      'extensions',
+      'tools/library-curation.json',
       'tools/build-library.mjs',
     ],
     outputs: ['library/library.json'],
