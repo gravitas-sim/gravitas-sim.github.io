@@ -11,9 +11,14 @@
 // one graded record per report, built in js/submission/results.js; this file is
 // only the page around it.
 //
-// Still no roster, no gradebook and nothing that survives a reload. The export
-// was decided on; those have not been, and building them here would be deciding
-// by accident. Nothing leaves the browser.
+// Still no roster, no accounts and nothing that survives a reload. What it adds
+// to the CSV and JSON (INSTRUCTOR_FLOW.md) is the instructor's side of the flow:
+// the Activity or Course the reports belong to, named from a file or a link the
+// instructor opens here; a view of the written answers in which the instructor
+// enters a mark and a comment, kept in the page and saved only as a file; and
+// gradebook files for Canvas, Moodle and D2L Brightspace, one score per student
+// per Activity from one canonical model (js/gradebook/). Nothing leaves the
+// browser.
 //
 // It is a separate esbuild entry so that none of it reaches the application's
 // start-up download. What it imports is the answer checker, the lesson data,
@@ -47,6 +52,17 @@ import {
   t,
 } from './submission/i18n.js';
 import { validateBackup } from './investigations/progressBackup.js';
+import { activitiesOf, fragmentOf, readSource } from './teach/activity.js';
+import { gradebookModel } from './gradebook/model.js';
+import { ADAPTERS } from './gradebook/index.js';
+import {
+  marksCsv,
+  marksIndex,
+  markKey,
+  needsJudgment,
+  readMarksCsv,
+  setMark,
+} from './gradebook/marks.js';
 import { MANIFEST } from './data/investigations/manifest.js';
 import { decodeEntities } from './lessonMarkup.js';
 import { layDepth } from './investigations/depthPure.js';
@@ -74,6 +90,14 @@ const graded = [];
 const refused = [];
 /** Lesson bodies, loaded once each. */
 const lessons = new Map();
+/** Activities named by a file or link the instructor opened, by activity code. */
+const context = new Map();
+/** What was opened to name them, for the list on the page. */
+const contexts = [];
+/** Marks the instructor entered, by report and step. Never stored. */
+const marks = marksIndex();
+/** Whether the written answers are open for marking (an opt-in, per visit). */
+let judging = false;
 
 /**
  * Load a lesson body by id, once.
@@ -143,6 +167,48 @@ async function accept(label, thing, kind) {
   render();
 }
 
+/**
+ * Whether text names an Activity or a Course rather than holding a report: a
+ * link to one, or the file the builder saved.
+ * @param {string} text - Trimmed text
+ * @returns {boolean}
+ */
+const isContext = text =>
+  /^#[ac]\d+[zr]/.test(fragmentOf(text)) ||
+  /"(?:k|format)"\s*:\s*"gravitas\.(?:assignment|course-pack)"/.test(text);
+
+/**
+ * Name the activities from an Activity file, a Course file or a link to one.
+ * Reports carry an activity code and nothing else, so this is where the code
+ * gets the name the instructor gave it.
+ * @param {string} label - What was handed in
+ * @param {string} text - The link or the file's text
+ * @returns {Promise<void>}
+ */
+async function takeContext(label, text) {
+  const source = await readSource(text);
+  if (!source.ok) {
+    refused.push({
+      label,
+      reason: `ctx.${source.reason}`,
+      detail: source.detail,
+    });
+    return render();
+  }
+  const found = activitiesOf(source, language());
+  for (const a of found) context.set(a.id, a);
+  contexts.push({
+    label,
+    kind: source.kind,
+    n: found.length,
+    title:
+      source.kind === 'course'
+        ? found[0]?.course || source.pack.id
+        : found[0]?.title || label,
+  });
+  render();
+}
+
 /** @param {File} file - A dropped file @returns {Promise<void>} */
 async function takeFile(file) {
   const name = file.name || 'file';
@@ -159,6 +225,7 @@ async function takeFile(file) {
   const text = await file.text().catch(() => null);
   if (text === null) return refuse(name, 'unreadable');
   if (isSubmissionToken(text.trim())) return accept(name, text.trim(), 'token');
+  if (isContext(text.trim())) return takeContext(name, text.trim());
   let parsed;
   try {
     parsed = parseDocument(text);
@@ -386,6 +453,208 @@ const reasonText = code =>
     ? t(`sub.reason.${code}`)
     : t('sub.reason.other', { code });
 
+/** An activity's name: the one the instructor gave it, else its code. */
+const activityName = id =>
+  id ? (context.get(id)?.title ?? id) : t('sub.act.none');
+
+/**
+ * What was opened to name the activities, and what could not be read.
+ * @returns {string} A list, or ''
+ */
+function contextList() {
+  if (!contexts.length) return '';
+  return `<p class="ui-note">${esc(t('sub.ctx.title'))}</p><ul class="ui-note">${contexts
+    .map(c =>
+      esc(
+        t(c.kind === 'course' ? 'sub.ctx.course' : 'sub.ctx.activity', {
+          name: c.title,
+          n: c.n,
+        })
+      )
+    )
+    .map(x => `<li>${x}</li>`)
+    .join('')}</ul>`;
+}
+
+/**
+ * One row per activity: how many reports, how many students, how they did and
+ * which question was hardest. The activity is whatever code the link carried;
+ * its name and its course are the instructor's own, from a file they opened.
+ *
+ * @param {Array<object>} records - Annotated records
+ * @returns {string} A table, or '' when nothing was read
+ */
+function byActivity(records) {
+  if (!records.length) return '';
+  const groups = new Map();
+  for (const r of records) {
+    const key = r.assignmentId || '';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(r);
+  }
+  const rows = [...groups].map(([id, list]) => {
+    const own = list.filter(r => r.duplicateOf === null);
+    const people = new Set(
+      own.map(r => r.rosterId || r.nameAsTyped || `#${r.submission}`)
+    );
+    const ratios = own
+      .filter(r => r.pointsPossible > 0)
+      .map(r => r.points / r.pointsPossible);
+    const mean = ratios.length
+      ? ratios.reduce((a, b) => a + b, 0) / ratios.length
+      : null;
+    const hardest = failureRates(own).find(x => x.rate !== null);
+    const fact = id ? context.get(id) : null;
+    return `<tr><th scope="row">${esc(activityName(id))}</th>
+      <td>${esc([fact?.course, fact?.unit].filter(Boolean).join(' · ') || '-')}</td>
+      <td>${own.length}</td><td>${people.size}</td><td>${pct(mean)}</td>
+      <td>${hardest ? `${esc(plain(hardest.title))} (${pct(hardest.rate)})` : '-'}</td></tr>`;
+  });
+  return `<h2>${esc(t('sub.act.title'))}</h2><p class="ui-note">${esc(
+    t('sub.act.note')
+  )}</p><div class="ui-table-wrap" tabindex="0" role="region" aria-label="${esc(
+    t('sub.act.title')
+  )}"><table class="ui-table sr-table"><thead><tr>${[
+    'activity',
+    'course',
+    'reports',
+    'students',
+    'mean',
+    'hardest',
+  ]
+    .map(c => `<th scope="col">${esc(t(`sub.act.col.${c}`))}</th>`)
+    .join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+}
+
+/** How many written answers have a mark, of how many there are. */
+const judgedCount = records => {
+  const items = needsJudgment(records);
+  return {
+    n: items.length,
+    marked: items.filter(
+      ({ record, question }) =>
+        marks.get(markKey(record.fingerprint, question.sid))?.points != null
+    ).length,
+  };
+};
+
+/**
+ * The instructor's side of a written answer: the words, the rubric where the
+ * investigation has one, a mark and a comment. Opened only when asked: the
+ * students' prose is on screen because the instructor chose to read it, and
+ * closing it takes it off again. Marks are kept in the page, never stored.
+ *
+ * @param {Array<object>} records - Annotated records
+ * @returns {string} The section, or '' when nothing was read
+ */
+function judgmentSection(records) {
+  if (!records.length) return '';
+  const head = `<h2>${esc(t('sub.judge.title'))}</h2><p class="ui-note">${esc(
+    t('sub.judge.note')
+  )}</p><p><button id="judgeToggle" type="button" class="ui-button" aria-expanded="${judging}" aria-controls="judgeBody">${esc(
+    t(judging ? 'sub.judge.close' : 'sub.judge.open')
+  )}</button></p>`;
+  if (!judging) return head;
+  const items = needsJudgment(records);
+  if (!items.length)
+    return `${head}<p class="ui-state is-empty" id="judgeBody">${esc(t('sub.judge.none'))}</p>`;
+  const { n, marked } = judgedCount(records);
+  return `${head}<div id="judgeBody"><p class="ui-note" id="judgeSummary" role="status">${esc(
+    t('sub.judge.summary', { marked, n })
+  )}</p>${items
+    .map(({ record: r, question: q }, i) => {
+      const step = lessons.get(r.lessonId)?.steps?.find(x => x.sid === q.sid);
+      const m = marks.get(markKey(r.fingerprint, q.sid));
+      const who = r.nameAsTyped || t('sub.read.noName');
+      const data = `data-fp="${esc(r.fingerprint)}" data-sid="${esc(q.sid)}"`;
+      return `<fieldset class="sr-mark"><legend>${esc(
+        t('sub.judge.report', {
+          name: who,
+          activity: activityName(r.assignmentId),
+        })
+      )}: ${esc(plain(q.title))}</legend>
+        <p class="sr-response">${esc(q.response)}</p>${
+          step?.rubric
+            ? `<p class="sr-rubric">${esc(t('sub.written.rubric'))}: ${esc(plain(step.rubric))}</p>`
+            : ''
+        }
+        <label for="mk-${i}">${esc(t('sub.judge.mark', { max: q.pointsPossible }))}</label>
+        <input id="mk-${i}" class="ui-input is-compact" type="number" min="0" max="${q.pointsPossible}" step="0.5" ${data} data-field="mark" value="${esc(m?.points ?? '')}" />
+        <label for="mc-${i}">${esc(t('sub.judge.comment'))}</label>
+        <input id="mc-${i}" class="ui-input" type="text" maxlength="500" ${data} data-field="comment" value="${esc(m?.comment ?? '')}" />
+      </fieldset>`;
+    })
+    .join('')}</div>`;
+}
+
+/** The words a gradebook's feedback is written in, from this page's catalog. */
+const feedbackWords = () => ({
+  auto: t('sub.gb.fb.auto'),
+  written: t('sub.gb.fb.written'),
+  awaiting: t('sub.gb.fb.awaiting'),
+  attempts: t('sub.gb.fb.attempts'),
+  comment: t('sub.gb.fb.comment'),
+  changed: t('sub.gb.fb.changed'),
+  evidence: t('sub.gb.fb.evidence'),
+});
+
+/** The canonical gradebook rows for the choices on the page now. */
+function gradebook(records) {
+  return gradebookModel(records, {
+    identifier: $('gbIdentifier')?.value === 'name' ? 'name' : 'roster',
+    policy: $('gbPolicy')?.value || 'latest',
+    marks,
+    activities: context,
+  });
+}
+
+/** Say what the gradebook files will hold, while the instructor can still change it. */
+function renderGradebook(records) {
+  const model = gradebook(records);
+  const students = new Set(model.rows.map(r => r.identifier)).size;
+  const awaiting = model.rows.reduce((a, r) => a + r.awaiting, 0);
+  const lines = [];
+  if (records.length) {
+    lines.push(
+      t('sub.gb.summary', {
+        students,
+        activities: model.activities.length,
+        rows: model.rows.length,
+      })
+    );
+    if (model.skipped.length)
+      lines.push(
+        t('sub.gb.skipped', {
+          n: model.skipped.length,
+          list: model.skipped
+            .map(x => x.name || `#${x.submission}`)
+            .slice(0, 12)
+            .join(', '),
+        })
+      );
+    if (awaiting) lines.push(t('sub.gb.partial', { n: awaiting }));
+  }
+  $('gbSummary').textContent = lines.join(' ');
+  $('gbPossible').innerHTML = model.activities.length
+    ? `<div class="ui-table-wrap" tabindex="0" role="region" aria-label="${esc(
+        t('sub.gb.possible.title')
+      )}"><table class="ui-table sr-table"><caption>${esc(
+        t('sub.gb.possible.title')
+      )}</caption><thead><tr><th scope="col">${esc(
+        t('sub.act.col.activity')
+      )}</th><th scope="col">${esc(t('sub.gb.possible.col'))}</th></tr></thead><tbody>${model.activities
+        .map(
+          a =>
+            `<tr><th scope="row">${esc(a.title)}</th><td>${a.pointsPossible}</td></tr>`
+        )
+        .join('')}</tbody></table></div>`
+    : '';
+  for (const id of ['exportCanvas', 'exportMoodle', 'exportD2l', 'marksSave']) {
+    const button = $(id);
+    if (button) button.disabled = records.length === 0;
+  }
+}
+
 function render() {
   const records = annotate(graded);
   const n = records.length;
@@ -422,7 +691,7 @@ function render() {
         .map(s => {
           const notes = [
             s.rosterId,
-            s.assignmentId,
+            s.assignmentId ? activityName(s.assignmentId) : null,
             s.depth ? t(`sub.depth.${s.depth}`) : null,
             s.evidence.state === 'mismatch'
               ? t('sub.evidence.mismatchNote')
@@ -443,7 +712,7 @@ function render() {
                 })
               : null,
           ].filter(Boolean);
-          return `<li>${esc(s.nameAsTyped || t('sub.read.noName'))} &mdash; ${esc(
+          return `<li value="${s.submission}">${esc(s.nameAsTyped || t('sub.read.noName'))} &mdash; ${esc(
             s.lessonTitle
           )}${notes.map(x => ` &mdash; ${esc(x)}`).join('')}${writtenAnswers(s)}</li>`;
         })
@@ -451,10 +720,19 @@ function render() {
     : '';
 
   $('evidence').innerHTML = evidenceSections(records) + systemSections(records);
+  $('context').innerHTML = contextList();
+  $('byActivity').innerHTML = byActivity(records);
+  $('judge').innerHTML = judgmentSection(records);
+  renderGradebook(records);
 
   $('refused').innerHTML = refused.length
     ? `<h2>${esc(t('sub.refused.title'))}</h2><ul class="ui-note">${refused
-        .map(r => `<li>${esc(r.label)}: ${esc(reasonText(r.reason))}</li>`)
+        .map(
+          r =>
+            `<li>${esc(r.label)}: ${esc(reasonText(r.reason))}${
+              r.detail?.message ? ` (${esc(r.detail.message)})` : ''
+            }</li>`
+        )
         .join('')}</ul>`
     : '';
 
@@ -540,6 +818,95 @@ function exportResults(which) {
   }
 }
 
+/**
+ * Build a gradebook file for one platform and save it.
+ * @param {'canvas'|'moodle'|'d2l'} which - The platform
+ * @returns {Promise<void>}
+ */
+async function exportGradebook(which) {
+  const records = annotate(graded);
+  if (!records.length) return say(t('sub.gb.empty'));
+  try {
+    const adapter = await ADAPTERS[which].load();
+    const model = gradebook(records);
+    const pick = id => $(id)?.value;
+    const csv =
+      which === 'canvas'
+        ? adapter.write(model, {
+            idColumn: pick('gbCanvasId'),
+            scale: pick('gbCanvasScale'),
+          })
+        : which === 'moodle'
+          ? adapter.write(model, {
+              idColumn: pick('gbMoodleId'),
+              scale: pick('gbMoodleScale'),
+              words: feedbackWords(),
+            })
+          : adapter.write(model, { idColumn: pick('gbD2lId') });
+    const file = `gravitas-gradebook-${which}-${stamp()}.csv`;
+    download(csv, file, 'text/csv;charset=utf-8');
+    say(t('sub.export.done', { file }));
+  } catch (err) {
+    say(t('sub.export.failed', { reason: err?.message || String(err) }));
+  }
+}
+
+/** Save the instructor's marks as a file of their own. */
+function saveMarks() {
+  const records = annotate(graded);
+  if (!records.length) return say(t('sub.gb.empty'));
+  const file = `gravitas-results-marks-${stamp()}.csv`;
+  download(
+    marksCsv(records, marks, {
+      includeWritten: Boolean($('includeWritten')?.checked),
+    }),
+    file,
+    'text/csv;charset=utf-8'
+  );
+  say(t('sub.export.done', { file }));
+}
+
+/** Read a marks file this page saved, into the marks held now. */
+async function openMarks(file) {
+  const text = await file.text().catch(() => null);
+  if (text === null) return say(t('sub.reason.unreadable'));
+  const r = readMarksCsv(text, marks);
+  say(
+    r.ok
+      ? t('sub.judge.loaded', {
+          read: r.read,
+          skipped: r.skipped,
+          file: file.name,
+        })
+      : `${file.name}: ${t(`sub.judge.reason.${r.reason}`)}`
+  );
+  render();
+}
+
+/** A mark or a comment changed on the written answers. */
+function judged(e) {
+  const el = e.target;
+  const { fp, sid, field } = el.dataset || {};
+  if (!field) return;
+  const current = marks.get(markKey(fp, sid)) || { points: null, comment: '' };
+  const next =
+    field === 'mark'
+      ? { ...current, points: el.value }
+      : { ...current, comment: el.value };
+  const ok = setMark(marks, fp, sid, next, Number(el.max) || Infinity);
+  el.setAttribute('aria-invalid', String(!ok));
+  if (!ok) {
+    say(t('sub.judge.badMark', { max: el.max }));
+    return;
+  }
+  say('');
+  const records = annotate(graded);
+  const summary = $('judgeSummary');
+  if (summary)
+    summary.textContent = t('sub.judge.summary', judgedCount(records));
+  renderGradebook(records);
+}
+
 /** Put every string in the chosen language. */
 function applyLanguage() {
   document.title = t('sub.doc.title');
@@ -575,12 +942,18 @@ function wire() {
   $('paste-go').addEventListener('click', async () => {
     const text = $('paste').value;
     if (!text.trim()) return;
-    await accept(t('sub.paste.source'), text, 'token');
+    if (isContext(text.trim()))
+      await takeContext(t('sub.paste.source'), text.trim());
+    else await accept(t('sub.paste.source'), text, 'token');
     $('paste').value = '';
   });
   $('clear').addEventListener('click', () => {
     graded.length = 0;
     refused.length = 0;
+    context.clear();
+    contexts.length = 0;
+    marks.clear();
+    judging = false;
     say('');
     render();
   });
@@ -592,6 +965,23 @@ function wire() {
     exportResults('evidence')
   );
   $('exportJson')?.addEventListener('click', () => exportResults('json'));
+  $('exportCanvas')?.addEventListener('click', () => exportGradebook('canvas'));
+  $('exportMoodle')?.addEventListener('click', () => exportGradebook('moodle'));
+  $('exportD2l')?.addEventListener('click', () => exportGradebook('d2l'));
+  $('marksSave')?.addEventListener('click', saveMarks);
+  $('marksOpen')?.addEventListener('change', async e => {
+    for (const file of e.target.files || []) await openMarks(file);
+    e.target.value = '';
+  });
+  for (const id of ['gbIdentifier', 'gbPolicy'])
+    $(id)?.addEventListener('change', () => renderGradebook(annotate(graded)));
+  $('judge')?.addEventListener('change', judged);
+  $('judge')?.addEventListener('click', e => {
+    if (!e.target.closest?.('#judgeToggle')) return;
+    judging = !judging;
+    render();
+    $('judgeToggle')?.focus();
+  });
 
   setLanguage(preferred());
   applyLanguage();
