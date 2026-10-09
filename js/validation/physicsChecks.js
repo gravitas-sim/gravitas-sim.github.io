@@ -6374,9 +6374,9 @@ export async function runChecks() {
   {
     const [R, extLaw, bcLaw, bandPack] = await Promise.all([
       import('../kernels/radiation/index.js'),
-      import('../data/radiation/extinction.js'),
-      import('../data/radiation/bolometric.js'),
-      import('../data/radiation/bandpasses.js'),
+      import('../kernels/radiation/packs.js').then(P => P.loadExtinction()),
+      import('../kernels/radiation/packs.js').then(P => P.loadBolometric()),
+      import('../kernels/radiation/packs.js').then(P => P.loadBandpasses()),
     ]);
     const G = 'Radiation and photometry';
     const band = id => R.decodeBand(bandPack.BANDS.find(b => b.id === id));
@@ -6385,20 +6385,22 @@ export async function runChecks() {
     add({
       group: G,
       kind: 'data',
+      source: 'CODATA 2018 (Tiesinga et al. 2021, Rev. Mod. Phys. 93, 025010)',
       name: 'Stefan-Boltzmann constant from h, c and k_B',
-      measured: R.SIGMA_SB,
-      expected: 5.670374419e-8,
-      unit: 'W m^-2 K^-4',
+      measured: R.SIGMA_SB / 5.670374419e-8,
+      expected: 1,
+      unit: 'ratio',
       tolerance: 2e-10,
       why: 'sigma = 2 pi^5 k^4 / (15 h^3 c^2) with the exact 2019 SI values of h, c and k_B. CODATA 2018 prints 5.670374419e-8; the tolerance is the half-unit of its last digit.',
     });
     add({
       group: G,
       kind: 'data',
+      source: 'CODATA 2018 (Tiesinga et al. 2021, Rev. Mod. Phys. 93, 025010)',
       name: 'Wien displacement constant, found by solving x = 5(1 - e^-x)',
-      measured: R.WIEN_B_LAMBDA,
-      expected: 2.897771955e-3,
-      unit: 'm K',
+      measured: R.WIEN_B_LAMBDA / 2.897771955e-3,
+      expected: 1,
+      unit: 'ratio',
       tolerance: 2e-10,
       why: 'The root of the transcendental equation, then hc/(kx). CODATA 2018 prints 2.897771955e-3 m K; nothing here was typed in from it.',
     });
@@ -6416,15 +6418,17 @@ export async function runChecks() {
       group: G,
       kind: 'integration',
       name: 'B_lambda integrated over wavelength is sigma T^4 / pi',
-      measured: R.bandRadiance(1e-8, 1e-2, T, 4000),
-      expected: (R.SIGMA_SB * T ** 4) / Math.PI,
-      unit: 'W m^-2 sr^-1',
+      measured:
+        R.bandRadiance(1e-8, 1e-2, T, 4000) / ((R.SIGMA_SB * T ** 4) / Math.PI),
+      expected: 1,
+      unit: 'ratio',
       tolerance: 1e-9,
       why: 'Planck and Stefan-Boltzmann are the same law: the exitance is pi times the integrated radiance. Simpson on 4000 log-spaced intervals from 10 nm to 1 cm; the part outside is about 1e-12 of the total.',
     });
     add({
       group: G,
       kind: 'data',
+      source: 'IAU 2015 Resolution B3 (Prsa et al. 2016, AJ 152, 41)',
       name: 'IAU 2015 nominal Sun: L = 4 pi R^2 sigma T^4',
       measured: R.luminosity(R.R_SUN_M, R.TEFF_SUN_K),
       expected: 3.828e26,
@@ -6435,6 +6439,8 @@ export async function runChecks() {
     add({
       group: G,
       kind: 'data',
+      source:
+        'IAU 2012 Resolution B2 (astronomical unit) and the definition of the magnitude',
       name: 'Distance modulus of the Sun at 1 AU',
       measured: R.AU_DISTANCE_MODULUS,
       expected: -31.5721,
@@ -6446,6 +6452,7 @@ export async function runChecks() {
     add({
       group: G,
       kind: 'data',
+      source: 'IAU 2015 Resolution B2 (Mamajek et al. 2015)',
       name: 'Nominal solar luminosity is M_bol = 4.74',
       measured: R.bolometricMag(R.L_SUN_W),
       expected: 4.74,
@@ -6490,6 +6497,7 @@ export async function runChecks() {
     add({
       group: G,
       kind: 'data',
+      source: 'Bessell & Murphy 2012, PASP 124, 140, Table 5',
       name: 'Pivot wavelength of Johnson V, from the pinned passband',
       measured: R.pivotWavelength(band('V')) * 10,
       expected: 5488,
@@ -6501,6 +6509,7 @@ export async function runChecks() {
     add({
       group: G,
       kind: 'data',
+      source: 'Willmer 2018, ApJS 236, 47, Table 3',
       name: 'AB - Vega offset of SDSS g, against Willmer 2018',
       measured: bandPack.BANDS.find(b => b.id === 'g').abMinusVega,
       expected: -0.125,
@@ -6512,6 +6521,7 @@ export async function runChecks() {
     add({
       group: G,
       kind: 'data',
+      source: 'Cardelli, Clayton & Mathis 1989, ApJ 345, 245, Table 3',
       name: 'Cardelli, Clayton & Mathis extinction: A_I / A_V at R_V = 3.1',
       measured: R.extinctionRatio(1000 / 1.11, 3.1, extLaw.LAW),
       expected: 0.479,
@@ -6523,6 +6533,7 @@ export async function runChecks() {
     add({
       group: G,
       kind: 'data',
+      source: 'Torres 2010, AJ 140, 1158 (Flower 1996 polynomial)',
       name: 'Bolometric correction of the Sun, Flower 1996 as Torres 2010 corrected it',
       measured: R.bolometricCorrectionV(5777, bcLaw.LAW),
       expected: -0.08,
@@ -6537,7 +6548,7 @@ export async function runChecks() {
       name: 'Relativistic Doppler: v = 0.6 c is exactly z = 1',
       measured: R.zFromVelocity(0.6 * (R.C_LIGHT / 1000)),
       expected: 1,
-      unit: 'z',
+      unit: 'ratio',
       tolerance: 1e-12,
       toleranceKind: 'absolute',
       why: 'sqrt((1 + 0.6)/(1 - 0.6)) = 2. The relativistic form is exact for motion along the line of sight; the non-relativistic form is v/c, 0.6, there.',
@@ -6548,7 +6559,7 @@ export async function runChecks() {
       name: "Non-relativistic Doppler at a star's 30 km/s",
       measured: R.zFromVelocityClassical(30),
       expected: R.zFromVelocity(30),
-      unit: 'z',
+      unit: 'ratio',
       tolerance: 1e-7,
       toleranceKind: 'absolute',
       why: 'z_rel - z_classical is about beta^2 / 2, 5e-9 at 30 km/s; the classical form is the right one for a stellar radial velocity and the wrong one beyond a few thousand km/s. The kernel keeps both and says which applies.',
@@ -6556,6 +6567,7 @@ export async function runChecks() {
     add({
       group: G,
       kind: 'data',
+      source: 'NIST Atomic Spectra Database, Na I level energies',
       name: 'Air to vacuum at the sodium D2 line, against NIST level energies',
       measured: R.airToVacuumNm(588.995095) * 10,
       expected: 1e8 / 16973.36619,

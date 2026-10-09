@@ -361,6 +361,9 @@ function copyForCheck() {
     'js/stellar/spectrumIndex.js',
     'js/gw',
     'js/rng.js',
+    // The radiation packs' checks run the kernel they are measured with.
+    'js/kernels/radiation',
+    'js/data/radiation',
     // The compilations, and the synthetic curve's model.
     'js/data/exoplanetSystems.js',
     'js/data/trappist1.js',
@@ -704,7 +707,11 @@ describe('what a pack owes, and where it goes', () => {
     for (const pack of PACKS.filter(
       p => json(p.manifest).offline === 'optional'
     )) {
-      const name = path.basename(pack.module);
+      // A pack with its own loader is named by its folder and file, since the
+      // kernel's modules share basenames (lines.js, extinction.js) with its data.
+      const name = pack.namedBy
+        ? pack.module.replace(/^js\//, '')
+        : path.basename(pack.module);
       const naming = files.filter(
         f => f !== pack.module && read(f).toString('utf8').includes(name)
       );
