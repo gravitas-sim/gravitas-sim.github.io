@@ -57,9 +57,24 @@ export function bolometricCorrectionV(teffK, law) {
   return bc;
 }
 
-/** Absolute V magnitude from luminosity (solar) and Teff via BC_V. */
+/**
+ * Absolute V magnitude from luminosity (solar units) and Teff, anchored on the
+ * Sun as Torres 2010 (eq. 8) recommends:
+ *
+ *      M_V = -2.5 log10(L/Lsun) + M_V,sun - (BC_V - BC_V,sun)
+ *
+ * with M_V,sun = V_sun - (the Sun's distance modulus at 1 AU, -31.5721). The
+ * Flower scale's own BC_V,sun is -0.080, not the -0.072 the IAU M_bol,sun = 4.74
+ * implies; anchoring on the Sun makes the two cancel instead of leaving a 0.7
+ * percent error in L. `law.solar` carries V_sun and BC_V,sun.
+ */
 export function absoluteVFromLuminosity(Lsun, teffK, law) {
-  return bolometricMagSolar(Lsun) - bolometricCorrectionV(teffK, law);
+  const MvSun = law.solar.vSun - AU_DISTANCE_MODULUS;
+  return (
+    -2.5 * Math.log10(Lsun) +
+    MvSun -
+    (bolometricCorrectionV(teffK, law) - law.solar.bcV)
+  );
 }
 
 export { L_SUN_W };

@@ -57,6 +57,7 @@ import { GW150914_FIGURES } from './data-packs/gw150914.mjs';
 import { MIST_TRACKS } from './data-packs/mist-tracks.mjs';
 import { COMPILATIONS } from './data-packs/compilations.mjs';
 import { NGC3198_SYNTHETIC } from './data-packs/ngc3198-synthetic.mjs';
+import { RADIATION_PACKS } from './data-packs/radiation.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CACHE =
@@ -430,6 +431,9 @@ export const PACKS = [
   ...COMPILATIONS,
   // The one synthetic pack: a model curve, which says so wherever it is shown.
   NGC3198_SYNTHETIC,
+  // The radiation kernel's data (Roadmap II Prompt 82): bandpasses, lines,
+  // the extinction law and bolometric corrections.
+  ...RADIATION_PACKS,
 ];
 
 // A table pack (js/tableObservation.js) is decoded and checked as a table;
@@ -734,7 +738,8 @@ async function main(argv) {
   }
   // Every pack this command builds from the network: the ones with commands
   // of their own are fetched by those, unless --all.
-  const only = PACKS.filter(p => all || !OWN_PROVENANCE(p)).map(p => p.id);
+  const named = argv.find(a => a.startsWith('--only='))?.slice(7).split(',');
+  const only = named || PACKS.filter(p => all || !OWN_PROVENANCE(p)).map(p => p.id);
   await write({ only, offline: argv.includes('--offline') });
 }
 
