@@ -207,8 +207,7 @@ export async function run(argv, { log = console.log } = {}) {
       const review = await reviewExtension(loadExtension(source), {
         readme: !flag(rest, '--maintainer-built'),
       });
-      const { manifest: _manifest, ...record } = review;
-      reviews.push({ source, ...record });
+      reviews.push({ source, ...review, manifest: undefined });
       if (!review.passed) failed = true;
       if (!flag(rest, '--json')) log(formatReview(review, source));
     }

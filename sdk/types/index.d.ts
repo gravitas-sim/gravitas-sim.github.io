@@ -269,6 +269,13 @@ export const PLATFORM_API: string;
 export const FORMATS: Readonly<Record<string, number>>;
 export const EXTENSION_TYPES: Readonly<Record<'data-pack' | 'course-pack' | 'investigation-pack' | 'scenario-pack' | 'capability', { kind: 'declarative' | 'built-in'; code: boolean }>>;
 export const LOCALES: readonly string[];
+export const INSTRUMENT_API: Readonly<Record<string, { module: string; exports: string[] }>>;
+export function translator(
+  catalogs: Record<string, Record<string, string>>,
+  locale?: string
+): (key: string, vars?: Record<string, string | number>) => string;
+export function checkCatalogs(catalogs: Record<string, Record<string, string>>): string[];
+export const COLOR_TOKENS: Readonly<Record<string, string>>;
 
 export function publicIds(): Promise<{
   lessons: Set<string>;
